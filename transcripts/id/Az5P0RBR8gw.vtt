@@ -1,0 +1,793 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:06.440
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:07.080 --> 00:00:08.900
+Apa sebenarnya basis data Azure SQL itu?
+
+00:00:09.560 --> 00:00:12.740
+Mari kita mulai dengan versi sederhana sebelum istilah-istilah teknis dilibatkan.
+
+00:00:13.100 --> 00:00:17.100
+Azure SQL Database adalah basis data relasional yang dijalankan Microsoft untuk Anda di-code mereka.
+
+00:00:17.540 --> 00:00:20.960
+Anda tidak perlu membeli mesin, tidak perlu menginstall perangkat lunak, dan tidak perlu terus menambahnya.
+
+00:00:21.640 --> 00:00:23.580
+Semua itu sekarang menjadi tanggung jawab pihak Microsoft.
+
+00:00:24.080 --> 00:00:28.260
+Anda membuat basis data mengarahkan aplikasi Anda ke sana dan sisanya terjadi secara diam-diam di latar belak.
+
+00:00:28.260 --> 00:00:32.280
+Mesin dibaliknya adalah mesin SQL Server yang sama yang telah menjalankan basis data bisnis selama puluhan tahun.
+
+00:00:32.740 --> 00:00:37.220
+SQL Anda tetap berfungsi, perangkat Anda tetap terhubung, dan keahlian yang Anda miliki langsung bisa digunakan.
+
+00:00:37.680 --> 00:00:39.980
+Ini sama sekali bukan versi SQL Server yang dikurangi fiturnya.
+
+00:00:40.940 --> 00:00:42.040
+Ini adalah mesin yang sama, mbak Rado.
+
+00:00:42.760 --> 00:00:45.400
+Itulah ide utama dibalik setelah basis data sebagai layanan atau database.
+
+00:00:45.640 --> 00:00:47.880
+Anda tidak menyewa sebuah kotak dan mengerjakan semuanya sendiri.
+
+00:00:48.200 --> 00:00:50.560
+Anda menyewa sebuah hasil dan orang lain yang memastikan semuanya tetap beri.
+
+00:00:50.760 --> 00:00:52.520
+Microsoft menyebut layanan ini sebagai evergreen.
+
+00:00:52.520 --> 00:00:58.140
+Kata itu berarti layanan ini tetap berada di versi stabil terbaru secara otomatis, jadi Anda tidak akan pernah mempunyai kendala akhir dukungan.
+
+00:00:58.480 --> 00:01:02.620
+Azure memberi Anda tiga cara untuk menjalankan mesin tersebut dan memahami perbedaannya akan menghilangkan banyak kebingungan.
+
+00:01:03.140 --> 00:01:06.480
+Azure SQL Database adalah opsi yang dikelola sepenuhnya dan itulah yang kita bahas hari ini.
+
+00:01:07.480 --> 00:01:13.180
+Azure SQL Managed Instance adalah versi yang hampir lengkap dibuat untuk memindahkan aplikasi SQL Server yang sudah ada ke cloud tanpa banyak perubahan.
+
+00:01:14.520 --> 00:01:19.700
+SQL Server di mesin virtual Azure adalah opsi di mana Anda menjalankan semuanya sendiri, persis seperti server di kantor Anda sendiri.
+
+00:01:19.700 --> 00:01:23.600
+Di dalam Azure SQL Database Anda melakukan penerapan dalam satu dari robot.
+
+00:01:23.980 --> 00:01:26.800
+Basis data tunggal memiliki sangkaian sumber daya khusus miliknya sendiri.
+
+00:01:27.920 --> 00:01:35.160
+Semuanya dikelola melalui apa yang disebut server logis yang sebenarnya hanyalah pusat administratif untuk basis data, login, dan aturan firewall Anda.
+
+00:01:36.540 --> 00:01:41.980
+Kumpulan elastis atau elastikul adalah sekelompok basis data yang berbagi satu set sumber daya dan kita akan kembali membahas mengapa hal itu sangat.
+
+00:01:42.160 --> 00:01:44.460
+Apa yang sebenarnya Anda beli dengan semua ini adalah pendiligasi yang tugas.
+
+00:01:44.860 --> 00:01:49.140
+Microsoft menambah mesin, membuat cadangan, menjaga ketersediaan, dan selalu memperbaruinya.
+
+00:01:49.140 --> 00:01:52.660
+Tidak ada mesin virtual untuk dipantau dan tidak ada sistem operasi yang harus Anda urus.
+
+00:01:53.060 --> 00:01:54.460
+Bagi seorang pemula itu adalah dari tali utama.
+
+00:01:54.980 --> 00:01:57.860
+Bagian yang biasanya harus Anda pelajari dengan susah payah kini menjadi pekerjaan orang.
+
+00:01:58.340 --> 00:02:04.540
+Apakah pertukaran itu tepat untuk Anda adalah pertanyaan yang akan dijawab menjalankan akhir saat kita membandingkannya langsung dengan menjalankan SQL Server di mesin virtual.
+
+00:02:05.260 --> 00:02:08.780
+Microsoft membingkai keseluruhan keputusan ini sebagai satu pilihan dan layak untuk diulangi.
+
+00:02:09.480 --> 00:02:14.460
+Anda bisa mengelola basis data sendiri, melakukan pembaruan dan pencadangan, atau menyerahkan tugas tersebut ke Azure.
+
+00:02:14.460 --> 00:02:17.560
+Jika jawaban jujur Anda adalah menyerahkannya, Anda berada di tempatnya.
+
+00:02:18.080 --> 00:02:23.560
+Dan jika Anda khawatir soal biaya, dokumentasi Microsoft mencantumkan titik awal sekitar lima terperbulan pada tingkat dasar.
+
+00:02:24.940 --> 00:02:25.800
+Dua cara untuk membayar.
+
+00:02:26.300 --> 00:02:29.760
+Sekarang setelah Anda tahu apa itu, keputusan nyata pertama adalah bagaimana cara Anda membayar.
+
+00:02:30.160 --> 00:02:33.180
+Karena Azure SQL Database dijual melalui dua model pembelian.
+
+00:02:33.740 --> 00:02:35.700
+Dan memilih salah satunya akan menentukan segalanya.
+
+00:02:36.400 --> 00:02:38.440
+Yang pertama adalah model DTU, dan ini adalah paketnya.
+
+00:02:38.440 --> 00:02:42.380
+Komputasi, penyimpanan, serta input dan output digabungkan menjadi satu angka.
+
+00:02:43.580 --> 00:02:48.620
+DTU adalah ukuran gabungan dari CPU, memori, baca, dan tulis, jadi Anda tidak perlu mikirkannya secara terpisah.
+
+00:02:48.880 --> 00:02:50.580
+Anda memilih ukuran tersebut menentukan semuanya.
+
+00:02:50.960 --> 00:02:54.140
+Jika Anda menyukai paket sederhana dengan angka bulanan yang dapat diprediksi, ini adalah model paket.
+
+00:02:54.600 --> 00:02:56.280
+Tingkatannya adalah basic, standard, dan premium.
+
+00:02:56.900 --> 00:02:59.400
+Pen skalanya kira-kira bersifat linear, yang membuatnya mudah dipahami.
+
+00:02:59.780 --> 00:03:03.700
+Gendakan DTU dan Anda, kira-kira menggendakan sumber daya yang tersedia untuk basis data tersebut.
+
+00:03:04.340 --> 00:03:07.900
+Basis data premium besar bisa memiliki komputasi ratusan kali lipat dari yang basic terkecil.
+
+00:03:08.440 --> 00:03:10.680
+Yang kedua adalah model V-Core, dan ini adalah model buat sendiri.
+
+00:03:11.500 --> 00:03:16.100
+V-Core adalah prosesor logis, dan model ini memungkinkan Anda memilih komputasi serta penyimpanan secara terpisah.
+
+00:03:16.640 --> 00:03:20.660
+Anda juga memilih generasi perangkat keras, dan menyesuaikan harga dengan beban kerja alih-alih menempat.
+
+00:03:21.140 --> 00:03:25.420
+Microsoft merekomendasikan model ini, dan tingkatannya adalah general purpose, business critical, dan hyperscale.
+
+00:03:25.720 --> 00:03:30.440
+Satu perbedaan di sini penting bagi dompet Anda, karena model V-Core menambahkan tiga kelebihan yang tidak dimiliki paket DTU.
+
+00:03:31.300 --> 00:03:35.320
+Ada Azure Hybrid Benefit yang memungkinkan Anda menggunakan kembali lisensi SQL Server untuk diskon,
+
+00:03:35.320 --> 00:03:38.320
+dan ada serverless, yang bisa menceder basis data saat tidak digunakan.
+
+00:03:39.620 --> 00:03:41.780
+Hyperscale adalah yang ketiga, dan dibangun skala besar.
+
+00:03:42.500 --> 00:03:44.820
+Kesenjangan itulah alasan utama tim cenderung memulai dengan V-Core.
+
+00:03:45.260 --> 00:03:46.640
+Ada satu hal lagi yang seharusnya membuat Anda.
+
+00:03:47.260 --> 00:03:51.880
+Anda tidak terkunci selamanya, karena Microsoft mengizinkan Anda mengonversi basis data dari satu model ke model lain secara online.
+
+00:03:52.420 --> 00:03:53.820
+Aplikasi Anda tetap aktif sepanjang waktu.
+
+00:03:54.240 --> 00:03:57.060
+Hal itu membuat perpindahan lebih seperti mengubah pengaturan daripada membangun ulang,
+
+00:03:57.140 --> 00:03:58.960
+jadi ini adalah keputusan, bukan hukuman seumur hidup.
+
+00:03:58.960 --> 00:04:04.160
+Jika Anda ingin awal yang paling sederhana dan angka yang tetap, DTU adalah tempat yang masuk akal untuk memulai.
+
+00:04:04.380 --> 00:04:08.000
+Jika Anda menginginkan kontrol, penghematan, atau ruang untuk berkembang, V-Core adalah tujuan lain.
+
+00:04:08.280 --> 00:04:12.400
+Dan ada satu tingkat yang tersembunyi di sini yang bisa membuat basis data kecil menjadi hampir gratis saat tidak aktif.
+
+00:04:12.520 --> 00:04:13.260
+Tekan mengbasis benter.
+
+00:04:13.960 --> 00:04:14.900
+Memilih tingkat layanan Anda.
+
+00:04:15.380 --> 00:04:17.640
+Memilih model pembelian membawa Anda ke toko yang tepat.
+
+00:04:18.280 --> 00:04:20.820
+Memilih tingkat layanan berarti mengambil barang dari rak.
+
+00:04:20.960 --> 00:04:25.000
+Di sinilah letak ukuran dan infrastrukturnya, dan ini tidak semenakutkan kedengarannya.
+
+00:04:25.000 --> 00:04:29.100
+Di sisi V-Core, tujuan umum adalah pilihan standar dan titik awal yang masuk akal.
+
+00:04:29.620 --> 00:04:32.320
+Ini ramah anggaran dan menangani sebagian besar beban kerja sehari-hari,
+
+00:04:32.720 --> 00:04:34.160
+dengan penyimpanan hingga 4 terabyte.
+
+00:04:34.600 --> 00:04:37.040
+Tingkat bisnis kritis menawarkan penyimpanan lokal yang jauh lebih cepat,
+
+00:04:37.160 --> 00:04:40.260
+dirancang untuk aplikasi yang memerlukan respons cepat pada transaksi berat.
+
+00:04:40.840 --> 00:04:44.760
+Harganya sekitar 2,7 kali lebih mahal daripada tujuan umum, dan alasannya sederhana.
+
+00:04:45.000 --> 00:04:47.880
+Ia menyimpan 3 salinan tambahan data Anda agar siap digunakan,
+
+00:04:48.000 --> 00:04:49.660
+sehingga kegagalan hampir tidak menghambat Anda.
+
+00:04:50.700 --> 00:04:54.720
+Hyperscale adalah pilihan besar, dengan penyimpanan yang dapat ditingkatkan hingga 128 terabyte.
+
+00:04:55.080 --> 00:04:58.220
+Macrosoft ini menyebutnya sebagai standar yang direkomendasikan untuk beban kerja baru dan model.
+
+00:04:58.920 --> 00:05:01.900
+Di sisi DTU, tingkatannya mulai dari basic, standar, hingga premium.
+
+00:05:02.820 --> 00:05:06.160
+Basic benar-benar kecil dengan 5 DTU dan 2 GB penyimpanan,
+
+00:05:06.300 --> 00:05:08.640
+sangat cocok untuk belajar atau proyek sampingan kecil.
+
+00:05:09.620 --> 00:05:11.180
+Standart mencakup area menengah yang luas,
+
+00:05:11.180 --> 00:05:15.120
+dan premium menambahkan kecepatan serta fitur dalam memori yang Anda butuhkan untuk pekerjaan yang lebih sibuk.
+
+00:05:15.440 --> 00:05:20.200
+Satu hal kecil yang perlu diketahui, ukuran DTU terkecil memberi Anda kurang dari 1 v-core daya pemrosesan.
+
+00:05:20.640 --> 00:05:24.360
+Jadi jika beban kerja Anda sangat membebani prosesor, Anda perlu beralih ke ukuran yang lebih besar.
+
+00:05:24.360 --> 00:05:26.060
+Hal itu membawa kita ke tingkatan yang saya janjikan.
+
+00:05:26.440 --> 00:05:29.220
+Dalam tingkat tujuan umum v-core, Anda dapat memilih serverless.
+
+00:05:29.780 --> 00:05:31.740
+Basis data serverless meskalakan komputasinya sendiri.
+
+00:05:32.200 --> 00:05:36.580
+Secara default, ia akan berhenti setelah 1 jam tidak ada aktivitas sehingga Anda hanya ditagi untuk penyimpanan sat.
+
+00:05:36.880 --> 00:05:39.520
+Saat seseorang terhubung, ia akan bangun dan kembali bekerja.
+
+00:05:40.100 --> 00:05:44.440
+Itu membuatnya ideal untuk proyek yang tidak rutin, demo, atau basis data yang sering tidak aktif di akhir pekan.
+
+00:05:44.880 --> 00:05:47.180
+Ini bukan pilihan yang tepat untuk beban kerja yang berjalan sepanjang waktu.
+
+00:05:47.900 --> 00:05:50.240
+Ini juga tidak tersedia di tingkat bisnis kritis atau dimanapun.
+
+00:05:50.240 --> 00:05:51.420
+Dalam model DTU
+
+00:05:51.420 --> 00:05:54.620
+Aturan praktis yang menyelamatkan pemula dari banyak stres adalah ini.
+
+00:05:54.840 --> 00:05:57.320
+Mulai dari yang kecil, perhatikan angkanya, dan kembangkan nanti.
+
+00:05:57.880 --> 00:06:01.740
+Mengubah ukuran adalah operasi online, jadi Anda tidak terjebak dengan pilihan yang Anda buat pada hari pertama.
+
+00:06:02.080 --> 00:06:05.740
+Mulai dengan yang murah, ukur dengan jujur, dan biarkan metik memberitahu Anda kapan harus meningkat.
+
+00:06:06.720 --> 00:06:08.000
+Elastic pool adalah trik berbagai waktu.
+
+00:06:08.500 --> 00:06:10.620
+Sejauh ini, kita telah membahas satu basis data dalam satu waktu.
+
+00:06:10.920 --> 00:06:12.620
+Masalah biaya muncul ketika Anda memiliki puluhan basis data.
+
+00:06:12.620 --> 00:06:16.100
+Penting untuk dipahami karena disinilah banyak tim tanpa sadar mengeluarkan uang terlalu banyak.
+
+00:06:16.540 --> 00:06:20.900
+Bayangkan 20 basis data kecil masing-masing sibuk hanya beberapa menit sehari dan tidak aktif sepanjang waktu lainnya.
+
+00:06:21.440 --> 00:06:26.500
+Jika Anda memberikan sumber daya tersendiri yang disesuaikan untuk puncaknya, Anda membayar kapasitas yang tidak terpakai hampir sepanjang hari.
+
+00:06:27.020 --> 00:06:30.120
+Jika Anda menyesuaikannya untuk rata-rata, mereka akan kewalahan saat terjadi lonjakan beban.
+
+00:06:30.600 --> 00:06:34.400
+Keduanya tidak ideal, dan Elastic pool mengatasi ini tidak mengubahnya menjadi sistem berbagai waktu.
+
+00:06:34.800 --> 00:06:39.700
+Anda menempatkan sekelompok basis data di satu server dan mereka berbagi satu kumpulan sumber daya tetap dengan satu hari.
+
+00:06:39.700 --> 00:06:42.560
+Yang sibuk akan meminjam, sementara yang tidak aktif akan mengembarikan.
+
+00:06:43.080 --> 00:06:48.920
+Sumber daya bersama ini diukur dalam EDTU atau V-Core, tetapi Anda bisa membayangkannya sebagai satu tangki bahan bakar yang digunakan bersama.
+
+00:06:49.480 --> 00:06:51.040
+Contoh dari Microsoft sendiri membuatnya lebih nyata.
+
+00:06:51.500 --> 00:06:56.580
+20 basis data masing-masing melonjak hingga 90 DTU, namun rata-ratanya di bawah 5 dapat berbagi 100 EDTU di antara mereka.
+
+00:06:56.800 --> 00:07:02.780
+Itu adalah pengurangan sumber daya sebanyak 20 kali lipat dan pengurangan harga sekitar 13 kali lipat dibandingkan dengan menyesuaikan masing-masing secara terpisah.
+
+00:07:03.180 --> 00:07:08.320
+Intuisinya adalah lonjakan tersebut tidak pernah terjadi bersamaan, jadi pool jarang melayani lebih dari sebagian kecil total permintaan sekaligus.
+
+00:07:08.320 --> 00:07:11.840
+Polo yang mendapatkan keuntungan itu spesifik dan inilah bagian yang sering disalahpahami orang.
+
+00:07:12.600 --> 00:07:17.780
+Pool cocok untuk basis data dengan penggunaan rata-rata rendah dan lonjakan singkat yang jarang terjadi serta tidak bersama.
+
+00:07:18.120 --> 00:07:23.480
+Penghematan bisa terlihat dengan setidaknya dua basis data tingkat standar dan semakin banyak Anda menambahkannya, perhitungannya biasanya semakin baik.
+
+00:07:23.820 --> 00:07:26.780
+Namun jika basis data Anda sibuk sepanjang hari setiap hari, jangan gabungkan ke dalam.
+
+00:07:27.100 --> 00:07:30.320
+Mereka akan saling berebut sumber daya yang sama dan Anda akan bertanya-tanya mengapa kinerjanya justru.
+
+00:07:31.380 --> 00:07:33.020
+Hal seperti ditangani agar Anda tidak perlu melakukan.
+
+00:07:33.480 --> 00:07:35.840
+Kami telah menyimpan bagian yang seharusnya membuat Anda tidurnya.
+
+00:07:35.840 --> 00:07:38.440
+Sinilah layanan terkelola benar-benar menunjukkan nilainya.
+
+00:07:39.000 --> 00:07:41.920
+Pencadangan terjadi secara otomatis dan Anda tidak bisa mematikannya secara tidak sengat.
+
+00:07:42.720 --> 00:07:48.300
+Azure mengambil cadangan penuh setiap minggu, cadangan diferensial setiap 12 hingga 24 jam, dan cadangan log sekitar setiap 10 menit.
+
+00:07:48.860 --> 00:07:50.260
+Itu memberi Anda suatu seperti tombol urut.
+
+00:07:50.720 --> 00:07:54.740
+Pemulihan titik waktu memungkinkan Anda mengembalikan basis data ke momen tertentu dalam jendela retensi.
+
+00:07:55.100 --> 00:07:58.240
+Jendela itu adalah 7Hz secara default dan dapat dikonfigurasi hingga 35 hari.
+
+00:07:58.240 --> 00:08:03.740
+Saat seseorang menghapus tabel pada Jumat sore, fitur ini menjadi pembeda antara hari yang buruk dan bencana.
+
+00:08:04.240 --> 00:08:06.020
+Jika Anda membutuhkan lebih dari itu, ada dua yang lebih sengat.
+
+00:08:06.740 --> 00:08:12.540
+GeoRestore memungkinkan Anda membangun kembali di wilayah yang benar-benar berbeda saat wilayah utama bermasalah dan ini aktif secara default.
+
+00:08:13.200 --> 00:08:18.140
+Retensi jangka panjang menyimpan cadangan penuh hingga 10 tahun, yang merupakan jenis hal yang diminta oleh tim kepatuhan.
+
+00:08:18.500 --> 00:08:21.160
+Anda hanya perlu mengaktifkannya, karena fitur ini tidak menyala secara otomatis.
+
+00:08:21.600 --> 00:08:24.260
+Ada satu kendala kecil yang sering membingungkan orang, jadi perlu dijelaskan dengan contoh.
+
+00:08:24.260 --> 00:08:26.940
+Anda tidak bisa mengunduh cadangan otomatis ini layaknya sebuah file.
+
+00:08:27.400 --> 00:08:30.760
+Cadangan ini tersimpan di penyimpanan Microsoft dan fungsinya untuk dipulihkan, bukan di ekspor.
+
+00:08:31.260 --> 00:08:35.460
+Jika Anda benar-benar butuh salinan data di luar Azure, Anda bisa mengekspor paket portable sebagai ganti.
+
+00:08:36.100 --> 00:08:39.520
+Dan bagian yang aneh adalah menghapus basis data tidak langsung menghapus cadangannya seketika.
+
+00:08:40.060 --> 00:08:43.440
+Menghapus dan membuat ulang basis data untuk menghemat biaya justru bisa membuat Anda lebih boros.
+
+00:08:44.080 --> 00:08:46.680
+Ketersediaan tinggi bekerja dengan cara yang sama dan biasanya tidak terlihat.
+
+00:08:47.400 --> 00:08:51.840
+Secara bawaan, data Anda disalin 3 kali dalam satu pusat data dan data yang telah dikomet tidak akan hilang.
+
+00:08:51.840 --> 00:08:56.620
+Jika mesin yang menjalankan basis data Anda gagal, Azure akan memindahkan Anda ke mesin baru secara otomatis.
+
+00:08:57.040 --> 00:09:01.640
+Untuk pelindungan lebih kuat, aktifkan redonasi zona yang menyebarkan basis data Anda di 2 atau 3 zona dalam satu wilayah.
+
+00:09:02.240 --> 00:09:04.700
+Dengan begitu, jika seluruh pusat data padam, sistem Anda tidak akan ikut membuat.
+
+00:09:05.120 --> 00:09:08.020
+Perlu diketahui bahwa fitur ini tidak tersedia pada tingkat basic atau standar,
+
+00:09:08.160 --> 00:09:12.060
+namun tersedia di general purpose, business critical, hyperscale, dan premium.
+
+00:09:12.060 --> 00:09:15.260
+Jaminan ketersediaan akan meningkat seiring dengan hal-hal tersebut.
+
+00:09:15.540 --> 00:09:20.380
+Perjanjian tingkat layanan Microsoft menetapkan jaminan setidaknya 99,9995%
+
+00:09:20.380 --> 00:09:23.400
+untuk basis data bisnis critical dan premium yang redondan secara zona.
+
+00:09:23.580 --> 00:09:25.300
+Ditambah, bonus menarik lainnya.
+
+00:09:25.660 --> 00:09:28.480
+Fitur ini memberi Anda salinan baca saja gratis dari basis data Anda
+
+00:09:28.480 --> 00:09:31.700
+sehingga laporan dan analitik dapat berjalan di sana tanpa mengganggu beban kerja utama.
+
+00:09:32.540 --> 00:09:33.340
+Taman tanpa isi yang rumit.
+
+00:09:33.940 --> 00:09:35.320
+Sedangkan melindungi Anda dari kecelakaan,
+
+00:09:35.400 --> 00:09:36.860
+sementara keamanan melindungi Anda dari orang lain,
+
+00:09:37.220 --> 00:09:39.760
+lebih mudah membayangkannya sebagai lapisan yang bergerak dari luar ke dalam.
+
+00:09:39.760 --> 00:09:43.000
+Lapisan terluar adalah pintu depan, dan secara bawaan pintu tersebut terkunci.
+
+00:09:43.320 --> 00:09:45.940
+Tidak ada yang bisa mencapai server Anda kecuali Anda mengizinkannya secara eksplisit.
+
+00:09:46.800 --> 00:09:49.280
+Aturan firewall mungkinkan Anda memberikan akses berdasarkan alamat Anda.
+
+00:09:49.580 --> 00:09:51.640
+Anda dapat membatasi segala yang kejadian virtual Anda sendiri
+
+00:09:51.640 --> 00:09:52.920
+sehingga hanya sistem Anda yang bisa terhubung.
+
+00:09:53.680 --> 00:09:54.940
+Lapisan berikutnya adalah identitas Anda.
+
+00:09:55.480 --> 00:09:57.440
+Anda bisa masuk menggunakan Microsoft Entra ID,
+
+00:09:57.620 --> 00:09:59.880
+sistem identitas yang dulunya bernama Azure Active Directory
+
+00:09:59.880 --> 00:10:01.900
+atau dengan nama pengguna dan kata Sandy SKO biasa.
+
+00:10:02.800 --> 00:10:04.240
+Entra pilih yang lebih baik jika Anda bisa menggunakan.
+
+00:10:04.780 --> 00:10:07.460
+Fitur ini menghadirkan masuk multifaktor, aturan akses bersyarat,
+
+00:10:07.460 --> 00:10:10.320
+dan cara untuk berhenti menyematkan kata Sandy langsung ke dalam setting koneksi.
+
+00:10:11.080 --> 00:10:13.160
+Lalu ada hal yang boleh Anda lakukan setelah Anda berada di dalam.
+
+00:10:13.560 --> 00:10:15.080
+Prinsip utamanya adalah hak akses minimum,
+
+00:10:15.380 --> 00:10:18.240
+yang artinya hanya memberikan akses sesedikit mungkin yang dibutuhkan orang untuk bekerja.
+
+00:10:18.720 --> 00:10:19.940
+Jika Anda perlu melangkah lebih jauh,
+
+00:10:20.040 --> 00:10:21.720
+keamanan tingkat baris bisa menyembunyikan baris data itu.
+
+00:10:22.260 --> 00:10:24.500
+Dengan begitu, pengguna hanya akan melihat catatan mereka sendiri,
+
+00:10:24.660 --> 00:10:26.700
+yang berguna saat banyak pelanggan berbagi satu basis data.
+
+00:10:27.400 --> 00:10:28.760
+Enkripsi muncul di tiga tempat,
+
+00:10:28.940 --> 00:10:31.260
+dan kabar baiknya adalah yang paling penting sudah aktif.
+
+00:10:31.940 --> 00:10:34.060
+Data yang sedang transit selalu dienkripsi dengan TLS.
+
+00:10:34.060 --> 00:10:37.240
+Data saat disimpan dilindungi oleh enkripsi data transparan,
+
+00:10:37.440 --> 00:10:39.400
+yang aktif secara default di setiap basis data baru.
+
+00:10:39.920 --> 00:10:41.340
+Dan untuk kolom sensitif tertentu,
+
+00:10:41.460 --> 00:10:43.100
+seperti nomor kartu kredit Always Encrypted,
+
+00:10:43.460 --> 00:10:45.880
+dapat mencegah bahkan administrator basis data Anda sendiri untuk membaca.
+
+00:10:46.020 --> 00:10:47.640
+Kunci yang sama sekali tidak pernah mencapai lantersebut.
+
+00:10:47.920 --> 00:10:49.360
+Terakhir, ada pengawasan terhadap masalah,
+
+00:10:49.460 --> 00:10:51.760
+mengaudit catatan siapa melakukan apa ke penyimpanan Anda sendiri.
+
+00:10:52.260 --> 00:10:54.500
+Dan Defender Workload memberikan peringatan pada hal-hal,
+
+00:10:54.600 --> 00:10:56.840
+seperti upaya injeksi SQL dan pola masuk yang aneh.
+
+00:10:57.560 --> 00:11:01.100
+Anda juga dapat mengklasifikasikan dan melabli data sensitif di basis data Anda,
+
+00:11:01.200 --> 00:11:03.320
+yang memberi Anda peta di mana risiko Anda sebenarnya berada.
+
+00:11:03.320 --> 00:11:06.480
+Intinya adalah bahwa pengaturan yang aman sudah menjadi pengaturan default.
+
+00:11:06.880 --> 00:11:09.160
+Tugas utama Anda adalah memutuskan siapa yang boleh masuk dan apa yang bisa mereka.
+
+00:11:09.660 --> 00:11:14.340
+Azure SQL Database atau mesin virtual sejauh ini semuanya mengasumsikan Anda menginginkan basis data terkelola.
+
+00:11:14.880 --> 00:11:17.480
+Tetapi ada pilihan nyata di sini dan layak untuk dibicarakan.
+
+00:11:18.280 --> 00:11:20.620
+Anda bisa menyerahkan kuncinya kepada Microsoft atau Anda bisa menyimpannya.
+
+00:11:20.620 --> 00:11:24.600
+Pilihlah Azure SQL Database terkelola jika Anda ingin tugas penambalan,
+
+00:11:24.700 --> 00:11:27.380
+pembaruan, cadangan, dan ketersediaan tinggi ditangani oleh sistem.
+
+00:11:28.340 --> 00:11:30.980
+Pilihlah jika Anda menginginkan jaminan ketersediaan yang lebih tinggi
+
+00:11:30.980 --> 00:11:33.140
+dan saat Anda membangun sesuatu yang baru serta ingin bergerajam.
+
+00:11:33.320 --> 00:11:35.080
+Ini dibangun untuk aplikasi yang mengutamakan cloud,
+
+00:11:35.280 --> 00:11:37.520
+dan untuk tim yang lebih memilih untuk merilis produk daripada pengelola.
+
+00:11:37.960 --> 00:11:41.060
+Ini juga memungkinkan satu orang mengelola jauh lebih banyak basis data
+
+00:11:41.060 --> 00:11:43.600
+daripada yang bisa dilakukan secara manual, yang penting saat proyek Anda melabur.
+
+00:11:43.600 --> 00:11:47.720
+Pilihlah SQL Server di mesin virtual Azure jika Anda memerlukan akses tingkat sistem operasi
+
+00:11:47.720 --> 00:11:50.080
+atau jika Anda ingin kendali penuh atas mesin tersebut.
+
+00:11:50.740 --> 00:11:53.840
+Pilihlah jika Anda harus mencocokkan pengaturan on-premises yang ada secara tepat
+
+00:11:53.840 --> 00:11:56.580
+atau saat Anda memindahkan aplikasi lama ke cloud tanpa perubahan kode.
+
+00:11:57.060 --> 00:12:00.060
+Dengan mesin virtual, Anda memutuskan kapan pembaruan dijalankan dan Anda mendapatkan kesini.
+
+00:12:00.560 --> 00:12:03.340
+Anda juga bertanggung jawab atas penambalan, cadangan, dan rencana failover.
+
+00:12:03.920 --> 00:12:08.000
+Jika aplikasi Anda bergantung pada sistem operasi atau pekerjaan terjadwal di dalam SQL Server itu sendiri,
+
+00:12:08.240 --> 00:12:10.940
+mesin virtual seringkali menjadi satu-satunya pilihan yang tidak akan menyulitkan Anda.
+
+00:12:10.940 --> 00:12:12.820
+Ada pilihan tengah yang layak untuk diketahui.
+
+00:12:13.420 --> 00:12:16.120
+Azure SQL Managed Instance memberi Anda kompatibilitas SQL Server
+
+00:12:16.120 --> 00:12:18.160
+yang hampir penuh sambil tetap mendapatkan manfaat terkelola
+
+00:12:18.160 --> 00:12:20.680
+dan Microsoft merekomendasikannya untuk sebagian besar migrasi.
+
+00:12:21.180 --> 00:12:24.360
+Jadi jika Anda memindahkan sistem yang ada dan kendali penuh sebenarnya tidak diperlukan,
+
+00:12:24.500 --> 00:12:25.880
+itu seringkali menjadi pilihan yang paling ternyata.
+
+00:12:26.160 --> 00:12:27.120
+Pertimbangan dalam satu kalimat,
+
+00:12:27.260 --> 00:12:30.940
+dikelola berarti lebih sedikit pekerjaan dan jaminan yang lebih kuat namun lebih sedia itu.
+
+00:12:31.660 --> 00:12:34.040
+Mesin virtual berarti setiap kendali yang Anda inginkan tersedia
+
+00:12:34.040 --> 00:12:35.400
+beserta tanggung jawab yang menyertainya.
+
+00:12:36.100 --> 00:12:39.740
+Jika Anda baru dalam hal ini, pilihan standar yang jujur adalah memulai dengan yang dikelola
+
+00:12:39.740 --> 00:12:42.320
+dan hanya beralih ke mesin virtual jika Anda memiliki alasan khusus.
+
+00:12:43.600 --> 00:12:44.640
+Kesalahan yang dilakukan pemula.
+
+00:12:45.080 --> 00:12:46.880
+Mengetahui pilihan yang tepat adalah setengah dari perjuang.
+
+00:12:47.060 --> 00:12:50.680
+Tengah lainnya adalah tidak terjebak pada beberapa hal yang dialami hampir semua orang.
+
+00:12:51.000 --> 00:12:51.860
+Mari kita bahas satu per satu.
+
+00:12:52.500 --> 00:12:55.360
+Pertama adalah membayar untuk kapasitas puncak yang tidak pernah Anda gunakan
+
+00:12:55.360 --> 00:12:57.760
+atau sebaliknya, atau sebaliknya mengapa kinerjanya lambat.
+
+00:12:58.460 --> 00:13:00.320
+Perhatikan penggunaan nyata Anda selama beberapa minggu
+
+00:13:00.320 --> 00:13:01.760
+dan sesuaikan ukurannya ditemukan dengan itu.
+
+00:13:02.000 --> 00:13:03.800
+Berikutnya adalah menggabungkan basis data yang salah ke dalam.
+
+00:13:04.240 --> 00:13:07.200
+Elastic Pool ditujukan untuk basis data yang penggunanya tidak menentu dan sering diam,
+
+00:13:07.200 --> 00:13:08.760
+bukan untuk beban kerja yang berjalan terus-menerus.
+
+00:13:09.020 --> 00:13:10.720
+Jika Anda menempatkan basis data yang simpul dalam satu puluh,
+
+00:13:10.800 --> 00:13:11.860
+mereka akan saling berbut sumber detengs.
+
+00:13:12.060 --> 00:13:14.760
+Ketiga adalah memilih serverless untuk aplikasi yang selalu aktif
+
+00:13:14.760 --> 00:13:17.340
+dan kemudian merasa terganggu oleh cedera saat sistem aktif kembali.
+
+00:13:17.800 --> 00:13:19.760
+Serverless ditujukan untuk penggunaan berkala, titik.
+
+00:13:20.220 --> 00:13:22.940
+Lainnya adalah lupa bahwa retensi cadangan secara standar diatur selama tujuh hari.
+
+00:13:23.120 --> 00:13:24.800
+Jika Anda perlu menyimpan riwayat lebih lama
+
+00:13:24.800 --> 00:13:28.040
+atau aturan kepatuan mengharuskannya, Anda harus mengaktifkan retensi jangka panjang sendiri.
+
+00:13:28.260 --> 00:13:30.360
+Satu lagi adalah berasumsi bahwa retensi zona sudah termasuk di dalam.
+
+00:13:30.360 --> 00:13:32.700
+Pada tingkat basic dan standar, fitur ini tidak ada sama sekali,
+
+00:13:32.800 --> 00:13:34.840
+jadi Anda harus memilih tingkat yang mendukung dan mengaktifkan.
+
+00:13:35.300 --> 00:13:37.920
+Dan yang terakhir adalah menganggap firewall sebagai sesuatu yang tidak penting.
+
+00:13:38.340 --> 00:13:40.200
+Tidak ada yang bisa masuk sampai Anda mengizinkannya.
+
+00:13:40.340 --> 00:13:42.280
+Dan kebiasaan paling aman adalah tetap seperti itu,
+
+00:13:42.360 --> 00:13:44.960
+hanya mengizinkan alamat dan jaringan yang benar-benar memerlukan akses.
+
+00:13:45.780 --> 00:13:47.200
+Semua ini bukanlah kesalahan yang aneh,
+
+00:13:47.520 --> 00:13:49.680
+hanya kesalahan yang diam-diam menguras uang dan waktu tidur orang.
+
+00:13:50.960 --> 00:13:52.180
+Sebagai penutup, apa yang perlu diingat?
+
+00:13:52.940 --> 00:13:55.260
+Mari kita rangkum ini menjadi sesuatu yang bisa Anda pahami dengan mudah.
+
+00:13:55.820 --> 00:13:58.120
+Azure SQL Database adalah mesin SQL Server
+
+00:13:58.120 --> 00:14:00.220
+yang berjalan sebagai layanan terkelola di cloud Microsoft.
+
+00:14:00.360 --> 00:14:02.580
+Anda memilih cara pembayaran,
+
+00:14:02.720 --> 00:14:04.500
+baik pakai DTU atau modal V-Core,
+
+00:14:04.660 --> 00:14:06.700
+lalu pilih tingkat dan ukurannya.
+
+00:14:07.760 --> 00:14:10.560
+Anda dapat berbagi sumber daya di berbagai basis data dengan Elastic Pool
+
+00:14:10.560 --> 00:14:13.260
+atau membiarkan basis data yang jarang digunakan berhenti sendiri dengan selesai.
+
+00:14:13.560 --> 00:14:16.400
+Cadangan ketersediaan tinggi dan enkripsi sudah aktif secara otomatis,
+
+00:14:16.500 --> 00:14:19.620
+dan Anda memilihnya daripada mesin virtual kapanpun Anda tidak ingin mengelola server sendiri.
+
+00:14:20.020 --> 00:14:21.660
+Jadi saya akan meninggalkan Anda satu pertanyaan.
+
+00:14:22.300 --> 00:14:25.440
+Jika Microsoft mengambil alih tugas penambahan pencadangan dan failover dari Anda besok,
+
+00:14:25.520 --> 00:14:27.020
+apa yang sebenarnya akan Anda lakukan dengan waktu tersebut?

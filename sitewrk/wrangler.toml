@@ -49,6 +49,13 @@ API = "https://api-dub.m365.fm"
 binding = "PAGES"   # Seiten, die der Seitenbau nach R2 laedt (pages/<pfad>/index.html), statt in GitHub Pages
 bucket_name = "m365-fm"
 
+# Workers Logs (Dashboard: Workers -> m365-dub-site -> Logs): console.log des Workers wird gespeichert und ist abfragbar. Genutzt fuer die Messung der
+# R2-only-Seiten (/entity/*, Sprachseiten): je Seitenaufruf eine JSON-Zeile {m:"r2page", p, src, ready, cache, r2, origin, colo, country} (logR2Page in index.js).
+# head_sampling_rate = 1: jede Anfrage (Verkehr ist klein). Abschalten: enabled = false.
+[observability]
+enabled = true
+head_sampling_rate = 1
+
 # ================================================================ Testumgebung (Staging) - STAGING.md
 # Eigener Worker auf staging.m365.fm. Liefert NUR Seiten aus dem eigenen Bucket m365-fm-staging (pages/<pfad>), nie GitHub Pages und nie den Live-Bucket
 # (sitewrk/index.js, stagingFetch). Alles noindex/nofollow, robots.txt sperrt alles. Deploy ausschliesslich ueber .github/workflows/site-staging.yml

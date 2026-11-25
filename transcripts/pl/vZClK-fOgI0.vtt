@@ -1,0 +1,898 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.400
+Przygotuj się na 12 dni Microsoft 365, Copilot, Azure i ludzi kształtujących przyszłość pracy.
+
+00:00:08.340 --> 00:00:11.940
+W styczniu M365 CON powraca i będzie większy.
+
+00:00:11.940 --> 00:00:18.720
+Dołącz do nas i skorzystaj z sesji na żywo, demonstracji w warunkach rzeczywistych oraz praktycznej wiedzy od MVP i ekspertów branżowych z całego świata.
+
+00:00:18.960 --> 00:00:21.780
+Bez generycznych slajdów, bez niekończących się sloganów.
+
+00:00:21.980 --> 00:00:23.760
+Stawiamy czoła prawdziwym wyzwaniom.
+
+00:00:23.940 --> 00:00:29.080
+Copilot Studio Agenci, AI Infrastruktura, Bezpieczeństwo, Zarządzanie i Automatyzacja.
+
+00:00:29.080 --> 00:00:35.100
+Niezależnie od tego, czy jesteś specjalistą i programistą, czy liderem biznesowym, mamy sesje zaprojektowane dla Ciebie.
+
+00:00:35.100 --> 00:00:40.100
+Przez 10 pełnych dni możesz zapoznać się z wieloma technologiami i nawiązać kontakt z globalną społecznością.
+
+00:00:40.780 --> 00:00:44.100
+Oglądaj na żywo i wykorzystaj praktyczne spostrzeżenia w swojej organizacji.
+
+00:00:44.960 --> 00:00:49.160
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft.
+
+00:00:49.520 --> 00:00:51.140
+Rejestracja jest już otwarta.
+
+00:00:51.780 --> 00:00:56.160
+Wejdź na m365con.net i zarezerwuj sobie miejsce już dziś.
+
+00:00:56.520 --> 00:00:58.940
+To jest m365con.net.
+
+00:00:59.080 --> 00:01:05.000
+Dołącz teraz na m365con.net, a do zobaczenia na żywo w styczniu.
+
+00:01:05.100 --> 00:01:12.540
+Czy kiedykolwiek napisałeś zapytanie L i NQ, które działało idealnie w C, ale po sprawdzeniu wygenerowanego kodu SQL zastanawiałeś się, jak to możliwe?
+
+00:01:12.540 --> 00:01:22.540
+W tej sesji dowiesz się trzech rzeczy, w szczególności jak drzewa wyrażeń kontrolują translację, jak buforowanie wpływa na wydajność i wykorzystanie pamięci oraz na co zwracać uwagę, gdy logika wartości NAL nie zachowuje się zgodnie z oczekiwaniami.
+
+00:01:23.240 --> 00:01:28.860
+Jeśli podejrzewałeś, że w Entity Framework Core kryje się magia czarnej skrzynki, prawda jest bliższa architekturze niż magii.
+
+00:01:28.860 --> 00:01:34.900
+F-Core wykorzystuje warstwowy potok zapytań, który obsługuje przekazywanie, translację, przechwytywanie i materializację w tle.
+
+00:01:35.100 --> 00:01:42.580
+Najpierw przyjrzymy się, jak L i NQ Core staje się drzewem wyrażeń, następnie roli dostawcy, buforowaniu, semantyce wartości NAL, a na końcu SQL i materializacji.
+
+00:01:42.780 --> 00:01:44.580
+A wszystko zaczyna się od samego początku.
+
+00:01:44.580 --> 00:01:48.040
+Co tak naprawdę dzieje się w momencie uruchomienia zapytania L i NQ?
+
+00:01:48.540 --> 00:01:50.580
+Od L i NQ do drzew wyrażeń.
+
+00:01:50.700 --> 00:01:54.100
+Kod napisany w L i NQ nie jest automatycznie biegły w SQL.
+
+00:01:54.380 --> 00:01:58.380
+L i NQ to po prostu potęga C, nie wie nic o bazach danych ani tabelach.
+
+00:01:58.560 --> 00:02:04.120
+Zatem dodając coś takiego jak A lub SELECT, w rzeczywistości wywołujesz metody w C, a nie wydajesz poleceń SQL.
+
+00:02:04.480 --> 00:02:11.760
+Zadaniem Entity Framework Core jest przechwytywanie tych wywołań do postaci, którą można analizować przed podjęciem jakichkolwiek decyzji dotyczących tłumaczenia lub wykonania.
+
+00:02:12.000 --> 00:02:14.360
+Przechwytywanie to odbywa się za pomocą drzew wyrażeń.
+
+00:02:14.360 --> 00:02:20.040
+Zamiast od razu kierować zapytanie do bazy danych, F Core rejestruje zapytanie jako drzewo obiektów opisujących każdą część.
+
+00:02:20.240 --> 00:02:22.760
+Klauzula WHERE nie oznacza jeszcze wierszy filtru.
+
+00:02:23.020 --> 00:02:28.840
+Staje się węzłem w drzewie, który mówi o to wywołanie metody, o to porównywana właściwość, a o to wartość stałej.
+
+00:02:28.980 --> 00:02:30.940
+Na tym etapie nic nie zostało wykonane.
+
+00:02:31.140 --> 00:02:35.320
+F po prostu dokumentuje intencje w ustrukturyzowanej formie, którą może później prześledzić.
+
+00:02:35.540 --> 00:02:38.280
+Można to sobie wyobrazić jako struktura przed znaczeniem.
+
+00:02:38.280 --> 00:02:46.940
+Podobnie jak podział zdania na podmiot i orzeczenie przed próbą tłumaczenia, F buduje drzewo, w którym łączenia, filtry, projekcje i porządkowanie są reprezentowane jako węzły.
+
+00:02:47.180 --> 00:02:50.440
+Dopiero po utworzeniu tej struktury można rozpocząć tłumaczenie SQL.
+
+00:02:50.700 --> 00:02:56.560
+F Core opiera się na drzewach wyrażeń jako podstawowym mechanizmie inspekcji zapytań Linku przed podjęciem decyzji o sposobie ich obsługi.
+
+00:02:56.560 --> 00:03:01.900
+Każda napisana klauzula, niezależnie od tego, czy jest to sprzężenie, czy filtr, dodaje nowe węzły do tego modelu obiektów.
+
+00:03:02.080 --> 00:03:11.020
+Na przykład warunek taki jak miasto Paryż staje się gałęzią z lewą i prawą częścią, z których jedna wskazuje na właściwość miasto, a druga na stały ciąg znaków Paryż.
+
+00:03:11.200 --> 00:03:16.620
+Przechodząc przez tę strukturę F może określić, które części zapytania mapują zapytanie na SQL, a które nie.
+
+00:03:16.820 --> 00:03:21.340
+W rzeczywistości drzewa te nie są abstrakcyjnymi koncepcjami, lecz rzeczywistymi obiektami w pamięci.
+
+00:03:21.340 --> 00:03:28.380
+Każdy węzeł reprezentuje wywołanie metody, właściwość lub stałą wartość elementy, które F może analizować i kategoryzować.
+
+00:03:28.560 --> 00:03:33.020
+Taka konstrukcja daje F niezawodny sposób na przekazanie zapytania bez jego wykonywania.
+
+00:03:33.280 --> 00:03:39.440
+Wewnętrznie F traktuje drzewo jak model, decydując, które konstrukcje może wysłać do SQL, a które musi obsłużyć w pamięci.
+
+00:03:39.620 --> 00:03:44.660
+Ta różnica wyjaśnia, dlaczego niektóre zapytania zachowują się w określony sposób w Linku to Object, ale kończą się niepowodzeniem w F.
+
+00:03:44.820 --> 00:03:48.000
+Wyobraź sobie, że umieszczasz niestandardową funkcję pomocniczą w filtrze Lambda.
+
+00:03:48.000 --> 00:03:56.400
+W pamięci Linku po prostu ją uruchamiasz, ale w F drzewo wyrażeń zawiera teraz węzeł odwołujący się do Twojej niestandardowej metody, a F nie ma odpowiednika w SQL dla tej metody.
+
+00:03:56.600 --> 00:04:02.020
+W tym momencie często zauważysz błąd w czasie wykonywania, ostrzeżenie lub powrót kodu SQL do ewaluacji po stronie klienta.
+
+00:04:02.240 --> 00:04:05.000
+Zazwyczaj jest to sygnał, że coś w zapytaniu nie jest przetłumaczalne.
+
+00:04:05.780 --> 00:04:11.180
+Ważne jest, aby zrozumieć, że F nie uruchamia kodu podczas pisania, lecz tworzy diagram w drzewie obiektów.
+
+00:04:11.180 --> 00:04:19.400
+A jeśli część tego drzewa nie odpowiada znanemu wzorcowi SQL, F albo zatrzymuje się, albo decyduje się przenieść tę część pracy do pamięci, co może być kosztowne.
+
+00:04:19.580 --> 00:04:21.180
+Często pojawiają się tutaj problemy z wydajnością.
+
+00:04:21.960 --> 00:04:28.740
+Zapytania, które wydają się nieszkodliwe w CSAS, nagle prowadzą do pobrania tysięcy wierszy po stronie klienta, ponieważ F nie mógł przetłumaczyć jednego małego fragmentu.
+
+00:04:28.920 --> 00:04:32.060
+Dlatego drzewa wyrażeń są ważne dla programistów pracujących z F.
+
+00:04:32.240 --> 00:04:37.640
+Nie są one tylko wewnętrznym szczegółem, ale mapą drogową, z której F korzysta, zanim SQL w ogóle pojawi się w grze.
+
+00:04:37.640 --> 00:04:42.160
+Każde zapytanie L i NQ jest najpierw przekształcane w ten strukturalny plan, który F dokładnie analizuje.
+
+00:04:42.320 --> 00:04:46.880
+To, czy zapytanie zakończy się sukcesem, niepowodzeniem, czy spowolnieniem, często zależy od tego, jak wygląda ten plan.
+
+00:04:47.040 --> 00:04:48.960
+Ale jest jeszcze jeden krok w tym procesie.
+
+00:04:49.140 --> 00:04:52.500
+Gdy F ma już takie drzewo wyrażeń, nie może go po prostu wysłać do bazy danych.
+
+00:04:52.720 --> 00:04:53.760
+Potrzebuje strażnika.
+
+00:04:53.980 --> 00:04:59.020
+Coś musi decydować, czy każda część drzewa jest zgodna z SQL, czy też nigdy nie powinna opuścić CSAS.
+
+00:04:59.180 --> 00:05:01.060
+I tu właśnie pojawia się kolejny etap.
+
+00:05:01.320 --> 00:05:03.220
+Strażnik, dostawca zapytań F-Core.
+
+00:05:03.220 --> 00:05:06.780
+Nie każde zapytanie napisane w CS jest przeznaczone do przekształcenia w SQL.
+
+00:05:07.020 --> 00:05:12.420
+W środku potoku znajduje się punkt kontrolny, którego rolą jest decydowanie, co zostanie przetworzone, a co zablokowane.
+
+00:05:12.620 --> 00:05:21.400
+Ten punkt kontrolny jest implementowany przez komponent dostawcy zapytań F-Core, który ocenia, czy węzły drzewa wyrażeń można zamapować na SQL, czy też muszą być obsługiwane w pamięci.
+
+00:05:21.660 --> 00:05:24.060
+Można wyobrazić sobie dostawcę jak ochroniarza w klubie.
+
+00:05:24.280 --> 00:05:29.040
+Wszyscy mogą ustawić się w kolejce, ale tylko zapytania ubrane w zgodne ze wzorcami SQL faktycznie dostają się do środka.
+
+00:05:29.260 --> 00:05:32.540
+Reszta albo zostaje odrzucona, albo przekierowana do obsługi po stronie klienta.
+
+00:05:32.540 --> 00:05:34.680
+Nie chodzi o wybredność ani arbitralność.
+
+00:05:34.900 --> 00:05:36.840
+Dostawca wymusza ograniczenia translacji.
+
+00:05:37.040 --> 00:05:41.120
+L i NQ może reprezentować o wiele więcej niż kiedykolwiek zrozumieją relacyjne bazy danych.
+
+00:05:41.300 --> 00:05:48.320
+F-Core musi przejrzeć drzewo wyrażeń i zadać każdemu węzłowi pytanie, czy SQL jest w stanie obsłużyć to zadanie, czy też może wykonać je sam NET.
+
+00:05:48.460 --> 00:05:51.720
+To wywołanie jest wykonywane na wczesnym etapie, jeszcze przed rozpoczęciem generowania kodu SQL,
+
+00:05:51.880 --> 00:05:55.640
+dlatego czasami błędy w czasie wykonywania pojawiają się na początku, zamiast później wprowadzać zamieszanie w wynikach.
+
+00:05:55.820 --> 00:05:58.820
+Dla programisty zaskoczeniem często jest nierównomierne wsparcie.
+
+00:05:58.820 --> 00:06:03.720
+Wiele konstrukcji mapuje się czysto, gdzie select i order by zazwyczaj tłumaczą bez problemu.
+
+00:06:03.920 --> 00:06:04.820
+Inne są bardziej skomplikowane.
+
+00:06:05.700 --> 00:06:14.280
+Na przykład gróbby może być trudniejsze do przetłumaczenia i w zależności od dostawcy i scenariusza może albo całkowicie zawieść, albo wygenerować kod SQL, który nie będzie zbyt wydajny.
+
+00:06:14.460 --> 00:06:20.640
+Programiści widzą to na tyle często, że jest to znany punkt ostrzegawczy, chociaż dokładne zachowanie zależy od reguł translacji dostawcy.
+
+00:06:20.820 --> 00:06:23.560
+Kluczowym zadaniem dostawcy jest tutaj dopasowywanie wzorców.
+
+00:06:23.560 --> 00:06:26.300
+Nie tworzy on SQL w locie w jakiś magiczny sposób.
+
+00:06:26.560 --> 00:06:30.680
+Zamiast tego porównuje drzewo wyrażeń z biblioteką zrozumiałych wzorców translacji.
+
+00:06:30.940 --> 00:06:33.960
+Rozpoznane kształty w drzewie są mapowe inna szablony SQL.
+
+00:06:34.240 --> 00:06:38.440
+Nierozpoznane zapytania są albo przekazywane do wykonania po stronie klienta, albo odrzucane.
+
+00:06:38.680 --> 00:06:43.880
+Dlatego niektóre złożone zapytania działają poprawnie, podczas gdy inne prowadzą do komunikatów o nieobsługiwanym tłumaczeniu.
+
+00:06:44.160 --> 00:06:45.760
+Decyzja jest deterministyczna.
+
+00:06:45.980 --> 00:06:49.460
+Chodzi o to, czy dany wzorzec ma znane, poprawne dane wyjściowe SQL.
+
+00:06:49.460 --> 00:06:53.060
+Jest to również etap, na którym pojawia się ocena po stronie klienta.
+
+00:06:53.260 --> 00:06:57.960
+Jeśli części zapytania nie można przekształcić w SQL, F-Core może nadal uruchomić je w pamięci po pobraniu danych.
+
+00:06:58.160 --> 00:07:00.120
+Na pierwszy rzut oka wydaje się to praktyczne.
+
+00:07:00.340 --> 00:07:06.960
+SQL dostarcza dane, net kończy zadanie, ale koszty mogą być ogromne, jeśli baza danych przekazuje tysiące, a nawet miliony wierszy.
+
+00:07:07.220 --> 00:07:09.680
+Właśnie dlatego .NET może je później filtrować.
+
+00:07:09.920 --> 00:07:10.800
+Wydajność spada.
+
+00:07:11.000 --> 00:07:15.900
+Coś, co wyglądało niewinnie w lokalnej testowej bazie danych, może się zawiesić w środowisku produkcyjnym, gdy wolumen danych rośnie.
+
+00:07:16.120 --> 00:07:18.040
+Programiści często nie doceniają tej zmiany.
+
+00:07:18.040 --> 00:07:22.980
+Pomyśl o zapytaniu, które wydaje się idealnie działać podczas tworzenia na zestawie danych składającym się z kilkuset wierszy.
+
+00:07:23.120 --> 00:07:28.420
+W środowisku produkcyjnym to samo zapytanie pobiera dziesiątki tysięcy rekordów i wykonuje powolną operację na serwerze aplikacji.
+
+00:07:28.640 --> 00:07:31.760
+Wtedy użytkownicy zaczynają narzekać, że wszystko wydaje się zablokowane.
+
+00:07:31.980 --> 00:07:37.860
+W tym przypadku zabezpieczenia dostawcy mają znaczenie i w wielu przypadkach bezpieczniej jest wystąpić błąd niż pozwolić F na nieefektywne działanie.
+
+00:07:38.100 --> 00:07:41.000
+Dla każdego, kto tworzy z F, praktyczny wniosek jest prosty.
+
+00:07:41.000 --> 00:07:47.700
+Zawsze testuj zapytania na rzeczywistych lub reprezentatywnych danych i zwracaj uwagę, czy wydajność nagle nie spada gwałtownie w środowisku produkcyjnym.
+
+00:07:47.900 --> 00:07:54.500
+Jeśli lokalnie wydaje się szybkie, ale pod obciążeniem zwalnia, często oznacza to, że dostawca przekazał część logiki do oceny po stronie klienta.
+
+00:07:54.660 --> 00:07:58.580
+Nie oznacza to automatycznie błędu, ale jest to sygnał, na który należy zwrócić większą uwagę.
+
+00:07:58.580 --> 00:08:01.660
+Dostawca pełni rolę strażnika, ale nie tylko stoi na straży.
+
+00:08:01.840 --> 00:08:11.160
+Chroni zarówno poprawność, jak i wydajność, filtrując to, co można przetłumaczyć na SQL i kontrolując, kiedy należy powrócić do wykonywania po stronie klienta, dzięki czemu potok jest przewidywalny.
+
+00:08:11.360 --> 00:08:17.800
+Jednocześnie jest pod ciągłą presją, aby szybko podejmować decyzję, bez konieczności przepisywania struktury zapytania za każdym razem od nowa.
+
+00:08:17.800 --> 00:08:25.560
+I tu właśnie kolejny element projektu F-Core staje się niezbędny system zapamiętywania i ponownego wykorzystywania decyzji, zamiast zaczynać od zera przy każdym żądaniu.
+
+00:08:25.840 --> 00:08:28.020
+Buforowanie, tajna broń wydajnościowa F.
+
+00:08:28.020 --> 00:08:30.700
+W tym miejscu wydajność przestaje być teoretyczna.
+
+00:08:30.880 --> 00:08:37.380
+Entity Framework Core opiera się na buforowaniu jako jednym z najważniejszych narzędzi wydajnościowych, a bez niego tłumaczenie zapytań byłoby niezwykle nieefektywne.
+
+00:08:37.560 --> 00:08:43.340
+Każde zapytanie L i NQ zaczyna swoje życie jako drzewo wyrażeń i musi zostać przeanalizowane, zweryfikowane i przygotowane do tłumaczenia SQL.
+
+00:08:43.340 --> 00:08:44.800
+Ta praca nie jest darmowa.
+
+00:08:45.060 --> 00:08:50.460
+Gdyby F musiał powtarzać je od zera przy każdym wykonaniu, nawet proste zapytania blokowałyby się po wielokrotnym powtórzeniu.
+
+00:08:50.460 --> 00:08:56.320
+Aby wyobrazić sobie, co to oznacza w praktyce, wyobraź sobie uruchamianie tego samego zapytania tysiące razy na sekundę w aplikacji produkcyjnej.
+
+00:08:56.500 --> 00:09:00.400
+Bez buforowania F Core musiałby przechodzić przez pełne parsowanie i tłumaczenie przy każdym wywołaniu.
+
+00:09:00.640 --> 00:09:02.340
+Baza danych niekoniecznie stanowiłaby problem.
+
+00:09:02.560 --> 00:09:05.780
+Twój procesor gwałtownie by przyspieszył z powodu samego powtarzania prac przygotowawczych przez F.
+
+00:09:05.780 --> 00:09:08.280
+Dlatego buforowanie nie jest opcjonalną optymalizacją.
+
+00:09:08.440 --> 00:09:11.520
+To fundament, który sprawia, że F Core działa w skali rzeczywistej.
+
+00:09:11.680 --> 00:09:12.720
+Jak to właściwie pomaga?
+
+00:09:12.900 --> 00:09:17.540
+F Core wykorzystuje buforowanie do rozpoznawania, kiedy kształt zapytania, który już przetworzył, pojawia się ponownie.
+
+00:09:17.740 --> 00:09:22.280
+Zamiast ponownie analizować drzewo wyrażeń węzeł po węźle, F może ponownie wykorzystać wcześniejszą pracę.
+
+00:09:22.460 --> 00:09:29.140
+Oznacza to, że filtrowanie według czegoś takiego jak identyfikator klienta trwa dłużej, ponieważ F zastanawia się, jak zmapować ten filtr do kodu SQL.
+
+00:09:29.480 --> 00:09:34.500
+Późniejsze wykonania z różnymi wartościami parametrów są szybsze, ponieważ większość operacji została już zapisana.
+
+00:09:34.500 --> 00:09:38.760
+Krótko mówiąc, pierwsze przejście buduje plan, a kolejne przejścia go ponownie wykorzystują.
+
+00:09:39.020 --> 00:09:45.240
+Szczegóły dotyczące dokładnej struktury buforowania różnią się w zależności od wersji i dostawcy F Core, ale ogólna zasada jest spójna.
+
+00:09:45.480 --> 00:09:47.840
+Bufor śledzi powtarzające się kształty zapytania.
+
+00:09:48.080 --> 00:09:53.580
+Gdy model ulega zmianie, np. dodasz właściwość do NCI, elementy buforowain przestają być prawidłowe i F je usuwa.
+
+00:09:53.800 --> 00:09:56.460
+Zapobiega to ponownemu użyciu niezgodnego kodu SQL.
+
+00:09:56.820 --> 00:10:02.880
+Szczegóły implementacji, takie jak wiele warstw buforowania lub reguły usuwania, są powiązane ze szczegółami wersji i konfiguracji
+
+00:10:02.880 --> 00:10:05.640
+i należy je sprawdzić w oficjalnej dokumentacji F Core.
+
+00:10:05.860 --> 00:10:08.200
+Z punktu widzenia programisty wynik jest prosty.
+
+00:10:08.420 --> 00:10:11.220
+Zapytania działają zauważalnie szybciej po pierwszym wykonaniu.
+
+00:10:11.420 --> 00:10:12.700
+To właśnie buforowanie działa.
+
+00:10:12.900 --> 00:10:16.080
+Korzyści są łatwe do niedocenienia, ponieważ wzrost szybkości wydaje się niewidoczny,
+
+00:10:16.160 --> 00:10:20.480
+dopóki buforowanie nie zostanie wyłączone lub nie trafi się na wzorzec, który nie jest tak efektywnie wykorzystywany ponownie.
+
+00:10:20.660 --> 00:10:24.920
+Gdy uświadomisz sobie, co to robi, zaczniesz rozumieć, dlaczego F może pozostać responsywny nawet przy dużym obciążeniu.
+
+00:10:24.920 --> 00:10:26.980
+Ale buforowanie nie jest darmową przejażdżką.
+
+00:10:27.180 --> 00:10:32.660
+Każdy wpis w pamięci podręcznej wymaga pamięci, a aplikacje z dużą liczbą unikalnych kształtów zapytań mogą odnotować wzrost wykorzystania pamięci.
+
+00:10:32.840 --> 00:10:36.760
+Jeśli w dużym stopniu polegasz na zapytaniach o dynamicznej konstrukcji, predykatach, budowaniu ciągów znaków,
+
+00:10:36.840 --> 00:10:40.680
+projekcjach generowanych w czasie wykonywania lub kodzie, który generuje nieco inne kształty przy każdym wywołaniu,
+
+00:10:40.780 --> 00:10:44.000
+wygenerujesz wiele wpisów w pamięci podręcznej, które nigdy nie zostaną ponownie wykorzystane.
+
+00:10:44.160 --> 00:10:46.760
+Wtedy pamięć podręczna staje się obciążeniem, a nie atutem.
+
+00:10:46.760 --> 00:10:49.200
+Programiści powinni zwracać uwagę na ten wzorzec.
+
+00:10:49.320 --> 00:10:53.460
+Mniejsza liczba bardziej spójnych kształtów zapytań w pełni wykorzystuje buforowanie i zapobiega marnowaniu pamięci.
+
+00:10:53.680 --> 00:10:58.840
+Sztuką dla zespołów jest zrozumienie, że buforowain zapytania są zarówno zaletą wydajnościową, jak i potencjalnym kosztem pamięci.
+
+00:10:59.060 --> 00:11:03.940
+Chcesz wykorzystać buforowanie w przypadku powtarzalnych zadań, zapytań, o których wiesz, że zostaną wykonane tysiące razy,
+
+00:11:04.020 --> 00:11:05.820
+ale pamiętaj, jak twoja aplikacja je tworzy.
+
+00:11:05.820 --> 00:11:11.420
+Jeśli generujesz zbyt wiele unikatowych zapytań, pamięć podręczna musi przechowywać kształty, które prawdopodobnie nie pojawią się ponownie.
+
+00:11:11.640 --> 00:11:15.380
+Może to dodać nieoczekiwanego obciążenia systemowi, szczególnie w dużej skali.
+
+00:11:15.660 --> 00:11:22.180
+W praktyce najlepszą radą jest umożliwienie F-Core automatycznego obsługiwania buforowania, ale świadome tworzenie zapytań.
+
+00:11:22.340 --> 00:11:25.980
+Jeśli zauważysz obciążenie pamięci w aplikacji, podczas gdy obciążenie bazy danych wygląda normalnie,
+
+00:11:26.080 --> 00:11:29.480
+zastanów się, czy problem może być związany z dużą liczbą buforowanych kształtów zapytań.
+
+00:11:29.480 --> 00:11:33.460
+Nie jest to pierwsze miejsce, na które zwracają uwagę programiści, ale często jest to cichy czynnik.
+
+00:11:33.700 --> 00:11:37.460
+Optymalizacja wzorców zapytań może być równie ważna, jak optymalizacja samej bazy danych.
+
+00:11:37.460 --> 00:11:41.500
+Buforowanie często wyjaśnia, dlaczego zapytania F wydają się szybkie po początkowym opóźnieniu.
+
+00:11:41.700 --> 00:11:44.800
+Wykonują to samo zadanie raz, a następnie pomijają narzut przy powtórzeniach.
+
+00:11:44.920 --> 00:11:46.060
+Proste, ale potężne.
+
+00:11:46.260 --> 00:11:48.660
+Mimo to, nawet gdy wykonywanie zapytania wydaje się płynne,
+
+00:11:48.740 --> 00:11:52.440
+tuż za rogiem kryje się kolejne źródło subtelnych błędów związanych z obsługą wartości null.
+
+00:11:52.620 --> 00:11:55.980
+Właśnie tutaj F-Core musi połączyć dwie bardzo różne definicje niczego.
+
+00:11:55.980 --> 00:11:58.980
+I to problem, z którym programiści spotykają się nieustannie.
+
+00:11:59.260 --> 00:12:01.920
+Semantyka wartości null, gdy nic oznacza różne rzeczy.
+
+00:12:01.920 --> 00:12:06.140
+W większości codziennego kodowania programiści mogą traktować wartość null jako prostą koncepcję,
+
+00:12:06.280 --> 00:12:11.280
+ale rzeczywistość staje się bardziej skomplikowana, gdy F-Core znajduje się pomiędzy C-kratka a bazą danych SQL.
+
+00:12:11.560 --> 00:12:14.760
+To właśnie tutaj kwestia wartości null wysuwa się na pierwszy plan.
+
+00:12:14.980 --> 00:12:20.300
+Reguły, które myślisz, że stosujesz w net, nie zawsze oznaczają to samo, gdy baza danych je ocenia.
+
+00:12:20.500 --> 00:12:22.220
+W C wartość null jest oczywista.
+
+00:12:22.480 --> 00:12:27.580
+Brakujące odwołanie do obiektu, nieprzypisany ciąg znaków, nieprzypisana właściwość, wszystko to równa się temu samemu.
+
+00:12:27.580 --> 00:12:32.720
+Jednak SQL działa inaczej. Nie używa wartości null w sposób bezpośrednio zgodny z .NET.
+
+00:12:32.920 --> 00:12:36.760
+SQL traktuje ją bardziej jak nieznaną wartość, co wpływa na zachowanie porównań.
+
+00:12:36.940 --> 00:12:41.020
+Na przykład w SQL zapisanie kolumny z wartością null nie będzie zachowywać się jak test prawda-fałsz.
+
+00:12:41.220 --> 00:12:44.940
+Zamiast tego generuje specjalną obsługę, która wymaga sprawdzenia, czy wartość null jest wartością null.
+
+00:12:45.080 --> 00:12:47.840
+To kluczowa różnica, o której programiści muszą pamiętać.
+
+00:12:48.020 --> 00:12:49.840
+Krótki przykład wyjaśnia te różnice.
+
+00:12:50.600 --> 00:12:54.600
+Załóżmy, że piszesz zapytanie do klientów, gdzie ccname jest równe null.
+
+00:12:54.600 --> 00:13:00.800
+Uruchom to zapytanie w pamięci na liście obiektów klientów, a niezawodnie zwrócisz te, których name jest faktycznie null.
+
+00:13:00.980 --> 00:13:06.420
+Przetłumacz tę samą logikę na SQL bez żadnych korekt, a spodziewasz się zobaczyć, gdzie name jest równe null.
+
+00:13:06.660 --> 00:13:08.660
+W praktyce nie zwróci to żadnych wierszy.
+
+00:13:08.880 --> 00:13:11.820
+Poprawna forma SQL to taka, gdzie name jest równe null.
+
+00:13:12.060 --> 00:13:13.820
+Świadomość tej różnicy ma znaczenie.
+
+00:13:14.100 --> 00:13:19.060
+Jako programista dobrym nawykiem jest sprawdzanie wyników SQL, gdy Twój L i NQ opiera się na porównaniach null,
+
+00:13:19.220 --> 00:13:22.200
+szczególnie aby uniknąć niespodzianek podczas przechodzenia na dane produkcyjne.
+
+00:13:22.200 --> 00:13:26.260
+Ta niezgodność leży u podstaw dziwnego zachowania zapytań null w f-core.
+
+00:13:26.440 --> 00:13:31.700
+Jeśli nie zostanie poprawiona, coś, co wydaje się przewidywalne w C+, może po cichu nie zwracać żadnych wyników w bazie danych.
+
+00:13:31.940 --> 00:13:37.600
+Czasami może nawet dawać wyniki, które wyglądają dobrze w małych testach, ale nie sprawdzają się w rzeczywistych scenariuszach, w których null pojawiają się częściej.
+
+00:13:37.680 --> 00:13:40.540
+To łatwy sposób na wkradnięcie się subtelnych błędów bez ostrzeżenia.
+
+00:13:40.780 --> 00:13:44.420
+Aby zmniejszyć to ryzyko, f-core nie tylko przepuszcza przez siebie porównania wartości null.
+
+00:13:44.620 --> 00:13:48.400
+Zamiast tego stosuje reguły, aby zapewnić spójność działania L i NQ i SQL.
+
+00:13:48.400 --> 00:13:53.640
+W przypadku kontroli równości f zazwyczaj dostosowuje je do warunków is null lub is not null.
+
+00:13:53.980 --> 00:14:02.620
+W przypadku bardziej złożonych predykatów potok często wykonuje transformacje kompensujące, aby wyniki bazy danych były zsynchronizowane z tym, co zrobiłaby logika środowiska wykonawczego .NET.
+
+00:14:02.840 --> 00:14:08.160
+Dokładne wewnętrzne mechanizmy tych dostosowań zależą od wersji i dostawcy, ale główna zasada jest spójna.
+
+00:14:08.380 --> 00:14:11.700
+Zachowaj oczekiwania programistów, normalizując logikę wartości null.
+
+00:14:11.700 --> 00:14:18.940
+Jednak to dopasowanie ma swoją cenę. Te transformacje kompensujące mogą sprawić, że zapytania SQL będą dłuższe i bardziej złożone niż się wydawało.
+
+00:14:19.100 --> 00:14:22.720
+F przedkłada poprawność nad prostotę, czasami kosztem wydajności.
+
+00:14:23.020 --> 00:14:29.080
+Dlatego czasami możesz zobaczyć wygenerowany ciąg dalszy z dodatkowymi warunkami, które nie pasują do instrukcji CleanLink.
+
+00:14:29.260 --> 00:14:33.340
+To F dyskretnie dba o to, abyś później nie obudził się z niespójnymi wynikami.
+
+00:14:33.340 --> 00:14:41.580
+Złożoność wygenerowanego zapytania jest często widocznym efektem ubocznym utrzymywania bezpiecznej semantyki wartości null w dwóch systemach z sprzecznymi definicjami.
+
+00:14:41.860 --> 00:14:46.020
+Dla programistów najważniejsze jest rozpoznanie potencjalnego ryzyka związanego z obsługą wartości null.
+
+00:14:46.220 --> 00:14:52.300
+Jeśli zapytanie wydaje się dziwne, powolne lub nadmiernie złożone, sprawdzanie wartości null jest dobrym punktem wyjścia do rozwiązywania problemów.
+
+00:14:52.300 --> 00:14:54.360
+Krótki, ale praktyczny wniosek jest taki.
+
+00:14:54.500 --> 00:14:59.680
+Jeśli zapytanie zawierające wartości null zachowuje się dziwnie, sprawdź różnicę w tłumaczeniu lub ukryte przeróbki.
+
+00:14:59.900 --> 00:15:03.000
+Nie są to błędy, a raczej wbudowane zabezpieczenia F-Core.
+
+00:15:03.340 --> 00:15:07.920
+Dziwe zagrożenie polega na założeniu, że nieszkodliwe sprawdzanie wartości null zachowuje się tak samo w obu środowiskach.
+
+00:15:08.060 --> 00:15:13.480
+Tak nie jest, a to może ujawnić się jako błędy, które pojawiają się tylko w danych produkcyjnych, a nie w uporządkowanym zestawie testowym.
+
+00:15:13.700 --> 00:15:18.680
+Na przykład możesz myśleć, że filtr wyklucza wartości null, dopóki nie zauważysz tajemniczego braku pewnych rekordów.
+
+00:15:18.680 --> 00:15:26.380
+Tego rodzaju ukryte niedopasowanie może być jednym z najtrudniejszych problemów do wykrycia, chyba że zwalidujesz wygenerowany ciąg dalszy na rzeczywistych wolumenach, danych i wzorcach.
+
+00:15:26.380 --> 00:15:32.020
+Zatem, chociaż semantyka wartości null jest uciążliwa, stanowi ona również jedną z najważniejszych interwencji F-Core.
+
+00:15:32.180 --> 00:15:38.180
+Kompensując niedopasowanie, F pomaga załagodzić lukę, która w przeciwnym razie mogłaby spowodować nieprzewidywalne awarie.
+
+00:15:38.380 --> 00:15:43.380
+Programistom może nie podobać się dodatkowa kontynuacja pojawiająca się w procesie, ale bez niej wyniki byłyby niewiarygodne.
+
+00:15:43.380 --> 00:15:51.100
+Po uporaniu się z wartościami null, F przenosi teraz zapytanie, które zostało przekazane, przefiltrowane przez dostawcę, zbuforowane i dostosowane w celu zachowania spójności logiki.
+
+00:15:51.260 --> 00:15:53.060
+Ostatnie pytanie brzmi, co dzieje się dalej?
+
+00:15:53.260 --> 00:15:57.820
+W jaki sposób to przygotowane zapytanie staje się poleceniem kontynuacji, które baza danych może faktycznie wykonać?
+
+00:15:57.920 --> 00:16:00.560
+I jak surowe dane są ponownie przekształcane w użyteczne?
+
+00:16:00.880 --> 00:16:04.180
+Oraz obiekty sieciowe do generowania i materializacji kontynuacji S.
+
+00:16:04.300 --> 00:16:11.440
+Ostatnim etapem potoku jest generowanie i materializacja kontynuacji, punkt, w którym całe to przygotowanie albo się opłaca, albo się rozpada.
+
+00:16:11.440 --> 00:16:16.460
+Do tej pory wszystko polegało na kształtowaniu intencji, walidacji wzorców i ochronie spójności.
+
+00:16:16.740 --> 00:16:22.440
+Zapytania stają się jednak użyteczne dopiero wtedy, gdy F potrafi przekształcić te intencje w polecenie kontynuacji zrozumiałe dla bazy danych,
+
+00:16:22.560 --> 00:16:26.620
+a następnie przekształcić płaskie wyniki w rozbudowane obiekty, z którymi kod może faktycznie pracować.
+
+00:16:26.820 --> 00:16:30.940
+Dwie ruchome części stanowiące większość tej pracy to generator kontynuacji i materializator.
+
+00:16:31.160 --> 00:16:33.940
+Rozwiązują one przeciwstawne problemy, ale są od siebie zależne.
+
+00:16:34.160 --> 00:16:36.180
+Generowanie kontynuacji jest świadome dostawcy.
+
+00:16:36.360 --> 00:16:40.220
+Komponenty dostawcy wpływają na sposób wyrażania zapytań dla danego dialektu bazy danych.
+
+00:16:40.220 --> 00:16:44.400
+Materializacja pobiera następnie zwrócone wiersze i buduje encje oraz projekcje.
+
+00:16:44.640 --> 00:16:46.520
+Żadna ze stron sama w sobie nie wystarczy.
+
+00:16:46.760 --> 00:16:49.960
+Generowanie kontynuacji zapewnia, że baza danych może uruchomić zapytanie.
+
+00:16:50.340 --> 00:16:53.460
+Materializacja zapewnia, że wyniki mają sens dla aplikacji.
+
+00:16:53.660 --> 00:16:56.880
+To właśnie dlatego ten etap przypomina tłumaczenie w obie strony.
+
+00:16:57.440 --> 00:16:59.920
+Filtr łączy, który wyglądał nieszkodliwie w częściach C,
+
+00:17:00.080 --> 00:17:03.600
+musi zostać napisany jako poprawny SQL dla PostgreSQL SQL Server
+
+00:17:03.600 --> 00:17:06.120
+lub dowolnego innego dostawcy, z którego korzystasz.
+
+00:17:06.120 --> 00:17:09.620
+Gdy baza danych odpowiada F, otrzymuje jedynie wiersze i kolumny,
+
+00:17:09.780 --> 00:17:12.140
+których nie może po prostu przekazać bez kontekstu.
+
+00:17:12.320 --> 00:17:15.780
+Oczekujesz, że otrzymasz encje z powiązanymi właściwościami nawigacyjnymi,
+
+00:17:15.940 --> 00:17:19.160
+wartościami wpisanymi we właściwych miejscach i nienaruszonymi relacjami.
+
+00:17:19.420 --> 00:17:21.680
+Niwelowanie tej luki jest celem tych kroków.
+
+00:17:21.860 --> 00:17:23.520
+Pomyśl o tym na prostym przykładzie.
+
+00:17:23.740 --> 00:17:26.380
+Jeśli napisałeś zapytanie zawierające powiązane encje,
+
+00:17:26.500 --> 00:17:28.480
+na przykład zamówienie z pozycjami zamówienia,
+
+00:17:28.600 --> 00:17:31.700
+nie chcesz widzieć pół tuzina częściowych wierszy i ręcznie ich sklejać.
+
+00:17:31.700 --> 00:17:35.900
+Oczekujesz obiektu zamówienia zawierającego wypełnioną kolekcję pozycji zamówienia.
+
+00:17:36.080 --> 00:17:37.620
+To materializacja w działaniu.
+
+00:17:38.200 --> 00:17:41.240
+F rekonstruuje pełny graf obiektów z zestawów wierszy.
+
+00:17:41.440 --> 00:17:42.720
+A oto praktyczny przykład.
+
+00:17:43.000 --> 00:17:44.940
+Jeśli zauważysz duplikaty śledzonych obiektów
+
+00:17:44.940 --> 00:17:46.540
+lub brakujące wartości nawigacyjne,
+
+00:17:46.660 --> 00:17:47.780
+często sprowadza się to do tego,
+
+00:17:47.900 --> 00:17:49.500
+jak te połączenia zostały ukształtowane
+
+00:17:49.500 --> 00:17:51.040
+i jak F zmaterializował wyniki.
+
+00:17:51.420 --> 00:17:54.580
+Samo generowanie SQLi podkreśla zależność F od dostawców.
+
+00:17:54.780 --> 00:17:57.860
+Framework nie próbuje na sztywno zakodować wszystkich szczegółów składni.
+
+00:17:58.060 --> 00:18:01.180
+Zamiast tego dostawcy dostarczają logikę dla swojej bazy danych.
+
+00:18:01.180 --> 00:18:06.140
+Oznacza to, że to samo zapytanie może generować nieco inny SQL w różnych środowiskach.
+
+00:18:06.300 --> 00:18:08.480
+Nawiasy kwadratowe mogą pojawiać się w SQL Server,
+
+00:18:08.620 --> 00:18:10.260
+identyfikatory w cudzysłowie w PostgreSQL,
+
+00:18:10.420 --> 00:18:12.160
+a inne wymuszenia typów w innych miejscach.
+
+00:18:12.280 --> 00:18:14.460
+Te różnice mają znaczenie, ponieważ decydują o tym,
+
+00:18:14.520 --> 00:18:17.260
+czy zapytanie jest rzeczywiście poprawne dla docelowej bazy danych.
+
+00:18:17.520 --> 00:18:21.320
+Warto zweryfikować tę zasadę w dokumentacji F-Core dla konkretnej wersji i dostawcy,
+
+00:18:21.420 --> 00:18:23.640
+z którego korzystasz, ponieważ możliwości ewoluują.
+
+00:18:23.880 --> 00:18:25.220
+Jeśli chodzi o materializację,
+
+00:18:25.300 --> 00:18:27.840
+F musi obsługiwać więcej niż tylko proste mapowania.
+
+00:18:27.840 --> 00:18:30.700
+Musi on wyrównać typy kolumn bazy danych z typami sieci,
+
+00:18:30.700 --> 00:18:33.440
+wymusić konwersję w razie potrzeby i naprawić klucze obce,
+
+00:18:33.580 --> 00:18:36.320
+aby relacje przekształciły się w rzeczywiste odwołania do obiektów.
+
+00:18:36.420 --> 00:18:38.100
+Projekcje dodają kolejny element.
+
+00:18:38.320 --> 00:18:40.920
+Zapytanie, które prosi o niestandardowy DTO lub typ anonimowy,
+
+00:18:41.080 --> 00:18:43.220
+musi zostać zbudowane bezpośrednio ze zbioru wyników,
+
+00:18:43.320 --> 00:18:44.400
+bez tworzenia pełnej encji.
+
+00:18:44.560 --> 00:18:46.980
+Ta elastyczność to obszar, w którym programiści uważają,
+
+00:18:47.100 --> 00:18:48.400
+że F dostosowuje się do ich potrzeb,
+
+00:18:48.540 --> 00:18:50.780
+ale jednocześnie dodaje realnej złożoności do silnika.
+
+00:18:51.040 --> 00:18:52.240
+Zdarzają się również przypadki,
+
+00:18:52.320 --> 00:18:54.140
+w których materializator śledzi właściwości,
+
+00:18:54.140 --> 00:18:55.920
+których użytkownik nie zdefiniował jawnie.
+
+00:18:55.920 --> 00:18:59.460
+Funkcje takie jak właściwości cienia czy haki leniwego ładowania pasują tutaj,
+
+00:18:59.620 --> 00:19:02.380
+ale różnią się one w zależności od wersji F-Core i dostawcy,
+
+00:19:02.520 --> 00:19:05.960
+dlatego przed skorzystaniem z nich należy sprawdzić dokumentację środowiska docelowego.
+
+00:19:06.260 --> 00:19:09.560
+Najważniejsze jest to, że materializacja ukrywa cały ten proces.
+
+00:19:09.800 --> 00:19:11.780
+Programiści widzą przejrzysty model obiektów,
+
+00:19:11.880 --> 00:19:15.540
+podczas gdy F włożył znaczny wysiłek w zrównoważenie wydajności z poprawnością.
+
+00:19:15.820 --> 00:19:17.900
+Relacje dają dobry obraz ukrytej pracy.
+
+00:19:17.900 --> 00:19:21.760
+Zamiast przekazywać wiersze, które odwołują się do siebie za pomocą identyfikatorów,
+
+00:19:21.840 --> 00:19:24.280
+F przekształca te odwołania we właściwości nawigacyjne.
+
+00:19:24.280 --> 00:19:25.620
+Wskazówka jest prosta.
+
+00:19:25.900 --> 00:19:28.120
+Jeśli właściwości nawigacji są puste lub niespójne,
+
+00:19:28.240 --> 00:19:31.000
+ponowne przemyślenie sposobu, w jaki zapytanie zostało ukształtowane,
+
+00:19:31.160 --> 00:19:33.000
+zwłaszcza w przypadku opcji include lub projection,
+
+00:19:33.220 --> 00:19:34.320
+często może rozwiązać problem.
+
+00:19:34.560 --> 00:19:38.960
+W praktyce generowanie i materializacja kodu SQL dają F najbardziej widoczny efekt.
+
+00:19:39.120 --> 00:19:42.780
+To właśnie te etapy decydują o różnicy między przyjaznym dla programistów środowiskiem,
+
+00:19:42.840 --> 00:19:46.440
+a przetwarzaniem danych, które w przeciwnym razie zajęłoby wiele godzin ręcznego mapowania.
+
+00:19:46.440 --> 00:19:50.100
+Podczas wykonywania zapytań w F otrzymujesz coś, co wydaje się naturalne w sieci,
+
+00:19:50.240 --> 00:19:52.400
+nie dlatego, że SQL dostarczył Ci obiekty,
+
+00:19:52.400 --> 00:19:54.400
+ale dlatego, że F przebudował je w ten sposób.
+
+00:19:54.660 --> 00:19:56.940
+Właśnie dlatego proces ten często wydaje się magiczny.
+
+00:19:57.160 --> 00:19:57.880
+Dwa różne silniki.
+
+00:19:58.040 --> 00:19:59.840
+Jeden biegle posługujący się dialektami baz danych,
+
+00:19:59.980 --> 00:20:01.280
+drugi biegle posługujący się ESARC.

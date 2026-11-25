@@ -24,6 +24,20 @@ def r2map(exts=("webp", "avif")):
     return {SBR.con_file(w, e): f"https://img.m365.fm/sidebar/attending-m365con-{w}.{e}" for w in SBR.CON_WIDTHS for e in exts}
 
 
+_IMG = None
+
+
+def setUpModule():   # Bildkarte (Rueckfall, CON_TEXT=False); seit 24.11.2026 zeigt die Seitenleiste den Text-Banner (tests/test_sidebar_con_text.py)
+    global _IMG
+    _IMG = patch.object(SBR, "CON_TEXT", False); _IMG.start()
+    import site_ads as ADS
+    globals()["_RUN"] = patch.object(ADS, "con_running", lambda today=None: True); _RUN.start()   # auch nach dem Event-Ende pruefbar
+
+
+def tearDownModule():
+    _IMG.stop(); _RUN.stop()
+
+
 def side(lang="en"):
     ix = SBR.Index()
     return SBR.render(ix, "https://www.m365.fm", lang, "Copilot", [], None, None)

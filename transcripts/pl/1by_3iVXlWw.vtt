@@ -1,0 +1,562 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.620
+Witamy w podcaście M365FM, w którym zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:06.840 --> 00:00:09.140
+Czym właściwie jest wirtualny pulpit Azure?
+
+00:00:09.600 --> 00:00:14.280
+Wirtualny pulpit uruchamia pulpity Windows w chmurze Microsoftu, a nie na laptopie przed Tobą.
+
+00:00:14.540 --> 00:00:20.220
+Nazwa sugeruje, że to jeden wielki produkt, ale tak naprawdę składa się z kilku prostych elementów, z których każdy ma swoje proste zadanie.
+
+00:00:20.400 --> 00:00:26.240
+Użytkownicy uzyskują dostęp do tych pulpitów z laptopa, telefonu, a nawet przeglądarki, a z ich miejsca wygląda to po prostu jak Windows.
+
+00:00:26.240 --> 00:00:32.820
+Problemem są koszty, ponieważ dostęp jest często objęty licencją, a infrastruktura pod spodem zmienia się wraz z systemem.
+
+00:00:33.000 --> 00:00:39.900
+Na koniec będziesz w stanie nazwać każdy element, zobaczyć, gdzie faktycznie znajdują się pliki i poznać uczciwe ograniczenia, zanim komukolwiek obiecasz numer.
+
+00:00:40.120 --> 00:00:41.880
+Zacznijmy więc od najprostszej wersji.
+
+00:00:42.120 --> 00:00:46.660
+Wirtualny pulpit Azure to usługa, która uruchamia pulpity i aplikacje Windows w chmurze Azure firmy Microsoft.
+
+00:00:46.920 --> 00:00:49.980
+Przesyła je strumieniowo na dowolne urządzenie, które akurat trzyma użytkownik.
+
+00:00:50.160 --> 00:00:53.800
+Urządzeniem tym może być cienki laptop, telefon, tablet, a nawet przeglądarka internetowa.
+
+00:00:53.800 --> 00:00:57.080
+Nie potrzebuje dużej mocy obliczeniowej, ponieważ większość zadań wykonuje się w chmurze.
+
+00:00:57.220 --> 00:01:01.880
+Pierwszą rzeczą, która wprowadza użytkowników w błąd jest to, że nie jest to jedna maszyna wirtualna, do której się logujesz.
+
+00:01:02.000 --> 00:01:05.780
+To usługa zbudowana z kilku obiektów o nazwach takich jak pula hostów i host sesji.
+
+00:01:05.980 --> 00:01:11.600
+Microsoft nadał te nazwy poszczególnym częściom z jakiegoś powodu, a gdy już wiesz, co robi każda część, cały obraz staje się prosty i przejrzysty.
+
+00:01:11.780 --> 00:01:14.040
+Usługa daje Ci również wybór, co udostępniasz.
+
+00:01:14.260 --> 00:01:19.660
+Możesz udostępnić komuś pełny pulpit systemu Windows lub opublikować tylko potrzebne aplikacje, pozostawiając resztę systemu Windows poza nim.
+
+00:01:19.660 --> 00:01:24.760
+Poniżej możesz uruchomić system Windows 11, Windows 10 lub Windows Server, w zależności od tego, co obsługują Twoje aplikacje.
+
+00:01:24.880 --> 00:01:31.880
+A ponieważ wszystko to znajduje się w usłudze Azure, nie musisz opiekować się serwerami bramy i brokera, które starsze konfiguracje pulpitu zdalnego kazały Ci uruchamiać samodzielnie.
+
+00:01:32.080 --> 00:01:34.120
+Chodzi o elementy, których faktycznie używasz.
+
+00:01:34.240 --> 00:01:36.860
+Pierwszą nazwą, którą warto zapamiętać, jest pula hostów.
+
+00:01:37.000 --> 00:01:43.980
+Pula hostów to grupa maszyn wirtualnych platformy Azure zarejestrowanych w usłudze Azure Virtual Desktop, a maszyny w niej zawarte nazywane są hostami sesji.
+
+00:01:44.200 --> 00:01:47.160
+Można to sobie wyobrazić jako małą flotę, która wykonuje to samo zadanie.
+
+00:01:47.160 --> 00:01:50.560
+Jeśli jedna maszyna jest zajęta lub wymaga przebudowy, pozostałe kontynuują pracę.
+
+00:01:50.680 --> 00:01:55.880
+Każdy host sesji w puli powinien pochodzić z tego samego obrazu, aby dwaj użytkownicy nigdy nie mieli dwóch różnych wersji systemu Windows.
+
+00:01:56.100 --> 00:02:00.020
+Host sesji to sama maszyna, rzeczywisty wirtualny pulpit, na którym użytkownik się znajduje.
+
+00:02:00.140 --> 00:02:04.840
+To szablon, na podstawie którego budowana jest maszyna, a ludzie w tym świecie nazywają go złotym obrazem.
+
+00:02:05.040 --> 00:02:09.740
+Oznacza to po prostu czysty, zatwierdzony punkt początkowy, z którego kopiuje się każdego nowego hosta.
+
+00:02:09.920 --> 00:02:13.720
+Następnie pojawia się grupa aplikacji, która decyduje, co użytkownicy faktycznie widzą.
+
+00:02:13.720 --> 00:02:19.060
+Grupa aplikacji może publikować cały pulpit lub pojedynczą aplikację, którą Microsoft nazywa aplikacją zdalną.
+
+00:02:19.260 --> 00:02:20.580
+Jeden szczegół ma tu znaczenie.
+
+00:02:20.820 --> 00:02:22.940
+Aplikacja zdalna działa tylko z pulami hostów.
+
+00:02:23.120 --> 00:02:26.360
+Jeśli więc planujesz rozdawać pojedyncze aplikacje, ten wybór jest już dokonany.
+
+00:02:26.520 --> 00:02:31.640
+Ostatnim elementem jest obszar roboczy, który grupuje grupy aplikacji, aby użytkownik mógł znaleźć swoje dane w kliencie.
+
+00:02:31.840 --> 00:02:33.940
+Obszar roboczy sam w sobie nie wykonuje żadnej pracy.
+
+00:02:34.160 --> 00:02:38.100
+To po prostu miejsce, w którym opublikowane pulpity i aplikacje są wymienione dla osób, które mają do nich dostęp.
+
+00:02:38.100 --> 00:02:41.600
+Załóżmy, że twój zespół finansowy potrzebuje jednego standardowego pulpitu ze wszystkimi swoimi narzędziami.
+
+00:02:41.800 --> 00:02:45.380
+Budujesz jedną pulę hostów z jednego złotego obrazu, a następnie dodajesz do niej hosty sesji.
+
+00:02:45.580 --> 00:02:49.100
+Następnie tworzysz grupę aplikacji pulpitu dla tych hostów i upuszczasz ją w obszarze roboczym.
+
+00:02:49.340 --> 00:02:51.640
+Następnie przypisujesz do niej użytkowników finansowych.
+
+00:02:51.840 --> 00:02:54.800
+Z ich strony otwierają klienta, widzą jeden pulpit i klikają.
+
+00:02:55.220 --> 00:02:59.160
+Interesujące jest to, że tę samą pulę można skonfigurować na dwa bardzo różne sposoby,
+
+00:02:59.280 --> 00:03:04.760
+a ten wybór zmienia prawie wszystko, co następuje, w tym miejsce, w którym trafiają pliki użytkownika i wygląd rachunku.
+
+00:03:04.760 --> 00:03:07.040
+Dwa sposoby przydzielania pulpitu.
+
+00:03:07.240 --> 00:03:08.820
+To prowadzi nas do rozwidlenia dróg.
+
+00:03:09.000 --> 00:03:11.900
+Pula hostów występuje w dwóch typach i wybierasz jeden podczas jej tworzenia.
+
+00:03:12.140 --> 00:03:14.420
+Nie możesz później zmienić zdania bez ponownego tworzenia.
+
+00:03:14.720 --> 00:03:15.880
+Warto więc zacząć od razu.
+
+00:03:16.100 --> 00:03:19.200
+Osobiste pule hostów przydzielają każdego hosta sesji jednej osobie.
+
+00:03:19.440 --> 00:03:24.520
+Jeśli masz 10 użytkowników, masz 10 hostów sesji, a każdy użytkownik zawsze ląduje na swoim własnym komputerze.
+
+00:03:24.720 --> 00:03:29.020
+Działa to jak przypisane biurko z tabliczką z nazwiskiem, ponieważ użytkownik ciągle wraca do tego samego.
+
+00:03:29.240 --> 00:03:31.960
+Maksymalny limit sesji dla osobistej puli hostów wynosi jeden.
+
+00:03:31.960 --> 00:03:36.680
+Zaletą jest to, że użytkownik może zainstalować to, co chce i zachować, ponieważ jego zmiany pozostają na tej samej maszynie.
+
+00:03:36.820 --> 00:03:38.560
+Pule hostów działają w odwrotny sposób.
+
+00:03:38.780 --> 00:03:43.240
+Tworzysz zestaw hostów sesji, a usługa równoważy obciążenie każdego użytkownika na dowolnej maszynie, która ma wolne miejsce.
+
+00:03:43.460 --> 00:03:46.200
+Kilka osób może być zalogowanych na tej samej maszynie w tym samym czasie.
+
+00:03:46.480 --> 00:03:50.660
+Stąd biorą się oszczędności, ponieważ płacisz za mniej maszyn, aby obsłużyć tę samą grupę użytkowników.
+
+00:03:50.800 --> 00:03:55.240
+Pule hostów korzystają z wybranej przez Ciebie metody równoważenia obciążenia, najpierw w szersz, a potem w głąb.
+
+00:03:55.240 --> 00:03:59.400
+Chociaż wynik wygląda tak samo dla użytkownika, jutro może on trafić na inną maszynę niż dzisiaj.
+
+00:03:59.560 --> 00:04:02.120
+Istnieje również konfigurowalny maksymalny limit sesji.
+
+00:04:02.300 --> 00:04:08.500
+Microsoft zauważa, że podczas serii jednoczesnych logowań licznik może na chwilę go przekroczyć, co wyjaśnia późniejszy dziwny problem z wydajnością.
+
+00:04:08.640 --> 00:04:11.340
+Istnieje również wielosesyjna edycja samego systemu Windows.
+
+00:04:11.580 --> 00:04:17.240
+Wersje wielosesyjne systemu Windows 21 Enterprise i Windows 10 Enterprise umożliwiają wielu użytkownikom współdzielenie jednej instalacji systemu Windows.
+
+00:04:17.420 --> 00:04:20.160
+Ta edycja jest dostępna wyłącznie w usłudze Azure Virtual Desktop.
+
+00:04:20.160 --> 00:04:22.560
+Pojedyncza sesja oznacza jednego użytkownika na maszynę.
+
+00:04:22.720 --> 00:04:26.940
+Wersja wielosesyjna oznacza, że maszyna jest zaprojektowana do obsługi wielu użytkowników, co sprawia, że pule pulowe są wydajne.
+
+00:04:27.120 --> 00:04:28.080
+Zasada jest prosta.
+
+00:04:28.260 --> 00:04:34.020
+Pule oszczędzą pieniądze i skalują się bezproblemowo, ale maszyna jest współdzielona i tymczasowa, więc wszystko, co użytkownik na niej zapisze, może zniknąć.
+
+00:04:34.120 --> 00:04:40.600
+Konto osobiste jest droższe i zapewnia każdej osobie stałą maszynę, co jest odpowiednie dla osób, które potrzebują uprawnień administratora lub uruchamiają oprogramowanie, które nie udostępnia danych.
+
+00:04:40.600 --> 00:04:45.340
+To rodzi pytanie, na które musimy odpowiedzieć i to właśnie ono stanowi problem przy prawie każdym pierwszym wdrożeniu.
+
+00:04:45.480 --> 00:04:53.340
+Jeśli użytkownik może każdego ranka korzystać z nowej maszyny, jego pliki i ustawienia muszą być przechowywane w innym miejscu niż na maszynie, na której znajdują się pliki, gdy maszyna nie należy do niego.
+
+00:04:53.540 --> 00:04:57.820
+W puli pulowej maszyna jest jednorazowa, więc nie można na niej przechowywać profilu użytkownika.
+
+00:04:57.820 --> 00:05:02.480
+Potrzebujesz profilu, który będzie śledził osobę, a nie komputer i to właśnie robi Slogix.
+
+00:05:02.700 --> 00:05:08.800
+Kontenery profili Slogix zawierają cały profil użytkownika, w tym pulpit, dokumenty, ustawienia i preferencje aplikacji.
+
+00:05:09.060 --> 00:05:13.820
+Wszystko to umieszczają w jednym pliku kontenera, zazwyczaj na dysku wirtualnym przechowywanym w udziale plików.
+
+00:05:13.820 --> 00:05:19.760
+Gdy użytkownik się loguje, kontener dołącza się do hosta sesji, na którym wylądował, a pulpit wygląda dokładnie tak, jak go zostawił.
+
+00:05:19.920 --> 00:05:21.040
+Dwie praktyczne uwagi.
+
+00:05:21.280 --> 00:05:27.280
+Slogix jest dołączony bez dodatkowych kosztów z odpowiednimi licencjami i jest dostarczany preinstalowany na obrazach wielosesyjnych.
+
+00:05:27.280 --> 00:05:31.260
+Ktoś musi go jednak skonfigurować, więc nie jest to magia, która włącza się sama.
+
+00:05:31.440 --> 00:05:38.220
+To również element, który sprawia, że nietrwały pulpit wydaje się trwały dla użytkownika, mimo że komputer pod spodem jest dla niego zupełnie nowy.
+
+00:05:38.440 --> 00:05:42.340
+Załóżmy, że użytkownik finansowy loguje się w poniedziałek i trafia na hosta sesji numer 3.
+
+00:05:42.600 --> 00:05:44.080
+Działa, a potem się wylogowuje.
+
+00:05:44.300 --> 00:05:46.420
+We wtorek trafia na hosta sesji numer 7.
+
+00:05:46.660 --> 00:05:52.600
+Ich tapeta, skróty, zakładki przeglądarki i pliki są tam, ponieważ kontener przeniósł się wraz z nimi, a maszyna nie miała znaczenia.
+
+00:05:52.600 --> 00:05:55.480
+Dlatego też pule zbiorcze są aktualizowane w taki sposób.
+
+00:05:55.480 --> 00:05:59.100
+Nie łata się ręcznie każdego hosta sesji, licząc na to, że wszystkie pozostaną identyczne.
+
+00:05:59.260 --> 00:06:04.240
+Tworzy się nowy, złoty obraz z wbudowanymi aktualizacjami, a następnie ponownie wdraża hosta z niego, dzięki czemu każda maszyna działa tak samo.
+
+00:06:04.400 --> 00:06:09.880
+Pule osobiste są inne i aktualizują się bardziej jak zwykłe komputery z systemem Windows za pośrednictwem usługi Windows Update lub narzędzi do zarządzania.
+
+00:06:10.020 --> 00:06:14.260
+Teraz, gdy elementy i dane mają sens, prześledźmy użytkownika, który faktycznie klika Połącz.
+
+00:06:14.260 --> 00:06:16.120
+Jak użytkownik faktycznie się łączy?
+
+00:06:16.320 --> 00:06:18.840
+Z punktu widzenia użytkownika jest to najprostsza część.
+
+00:06:19.040 --> 00:06:24.040
+Otwiera aplikację Windows lub klienta pulpitu zdalnego, który działa w systemach Windows, Mac, iOS i Android.
+
+00:06:24.300 --> 00:06:30.720
+Dostępna jest również opcja przeglądarki dla urządzenia, na którym nie można niczego zainstalować, ale widzi pulpit lub aplikację, któremu opublikowano i klika.
+
+00:06:30.920 --> 00:06:34.160
+W rzeczywistości połączenie działa odwrotnie niż można by się spodziewać.
+
+00:06:34.320 --> 00:06:37.040
+Urządzenie użytkownika nie akceptuje połączenia z internetu.
+
+00:06:37.220 --> 00:06:40.620
+Łączy się z usługą Azure Virtual Desktop Service, a usługa przekazuje połączenie.
+
+00:06:40.620 --> 00:06:42.840
+Microsoft nazywa to połączeniami odwrotnymi.
+
+00:06:43.060 --> 00:06:47.960
+Zaletą jest to, że nie otwiera się żadnych portów przychodzących do internetu i nie trzeba samodzielnie uruchamiać bramy ani serwera brokerskiego.
+
+00:06:48.140 --> 00:06:52.880
+To prawdziwy plus w zakresie bezpieczeństwa i w dużej mierze, dlatego jest to łatwiejsze do wdrożenia niż tradycyjny pulpit zdalny.
+
+00:06:53.080 --> 00:06:55.120
+Jeszcze jeden szczegół wyjaśnia częstą skargę.
+
+00:06:55.300 --> 00:06:59.340
+Sesja może być aktywna, rozłączona lub oczekująca, a każdy z tych stanów oznacza coś nieco innego.
+
+00:06:59.560 --> 00:07:01.980
+Aktywna oznacza, że użytkownik pracuje w danej chwili.
+
+00:07:02.240 --> 00:07:07.980
+Rozłączona oznacza, że zamyka okno bez wylogowywania się, a po powrocie usługa odsyła go bezpośrednio do tej samej sesji.
+
+00:07:08.180 --> 00:07:13.380
+Oczekująca jest interesująca, ponieważ jest to symbol zastępczy, który utrzymuje miejsce użytkownika podczas logowania.
+
+00:07:13.620 --> 00:07:18.100
+Logowanie może trwać od 30 sekund do 5 minut w zależności od rozmiaru profilu.
+
+00:07:18.260 --> 00:07:22.860
+Oznacza to, że powolne pierwsze logowanie, na które narzekają użytkownicy, zazwyczaj nie jest spowodowane siecią.
+
+00:07:23.120 --> 00:07:26.620
+Chodzi o rozmiar profilu, który jest ściągany i dołączany, a to można dostosować.
+
+00:07:26.620 --> 00:07:29.140
+Technologia działa, a bezpieczeństwo nadal się utrzymuje.
+
+00:07:29.300 --> 00:07:32.420
+A teraz część, o którą wszyscy się spierają, który rachunek jest najlepszy.
+
+00:07:32.620 --> 00:07:34.400
+Dlaczego rachunek zmienia się co miesiąc?
+
+00:07:34.540 --> 00:07:39.760
+Cennik usługi Azure Virtual Desktop składa się z dwóch oddzielnych części i rozróżnienie ich w głowie to cała sztuka.
+
+00:07:40.000 --> 00:07:43.540
+Część pierwsza to prawa dostępu użytkownika, które określają, kto może się połączyć.
+
+00:07:43.760 --> 00:07:49.080
+Część druga to infrastruktura platformy Azure, czyli zasoby obliczeniowe, pamięć masowa i sieć, które faktycznie obsługują pulpity.
+
+00:07:49.080 --> 00:07:52.720
+Część pierwsza jest często już opłacona, a część druga jest zmienna.
+
+00:07:52.720 --> 00:07:57.560
+Zacznij od dostępu, ponieważ to właśnie tutaj wiele zespołów odkrywa, że posiada coś, o czym nie wiedziało.
+
+00:07:57.740 --> 00:08:04.500
+Jeśli użytkownicy posiadają już licencję na użytkownika, mogą korzystać z pulpitów Windows 11 i Windows 10 bez dodatkowych opłat.
+
+00:08:04.680 --> 00:08:15.040
+Lista obejmuje Microsoft 365, E3 i E5, Microsoft F3 Business Premium, licencje edukacyjne A3 i A5, Windows Enterprise E3 i E5 oraz Windows VDA na użytkownika.
+
+00:08:15.260 --> 00:08:19.740
+W przypadku standardowego pakietu Microsoft 365 pytanie o dostęp często jest już rozwiązane.
+
+00:08:19.740 --> 00:08:24.340
+To miła niespodzianka dla wielu zespołów i zmienia sposób kalkulacji, zanim cokolwiek wydasz na pulpity.
+
+00:08:24.600 --> 00:08:25.940
+Dwa wyjątki mają znaczenie.
+
+00:08:26.160 --> 00:08:35.420
+Jeśli hosty sesji korzystają z systemu Windows Server zamiast Windows Client, potrzebujesz licencji Remote Desktop Services Client Access License z Active Software Assurance lub licencji subskrypcyjnej RDS.
+
+00:08:35.600 --> 00:08:41.000
+A jeśli obsługujesz osoby spoza swojej organizacji, obowiązuje inny model, zwany cennikiem za użytkownika.
+
+00:08:41.200 --> 00:08:46.280
+Kosztuje on 10 dolarów miesięcznie za użytkownika dla komputerów stacjonarnych i aplikacji lub 5 dolarów i 50 centów za same aplikacje.
+
+00:08:46.280 --> 00:08:50.140
+Opłaty naliczane są tylko za użytkowników, którzy faktycznie połączą się co najmniej raz w danym miesiącu.
+
+00:08:50.300 --> 00:08:52.760
+Następnie pojawia się infrastruktura i to ona się zmienia.
+
+00:08:52.960 --> 00:08:57.800
+Płacisz za maszyny wirtualne, przestrzeń dyskową dla obrazów i profili oraz sieć wszystko według zużycia.
+
+00:08:57.980 --> 00:08:59.320
+Pewna dziwna rzecz zaskakuje.
+
+00:08:59.560 --> 00:09:05.620
+Maszyny wirtualne Azure Virtual Desktop z systemem Windows są rozliczane według stawek obliczeniowych systemu Linux, co utrzymuje obciążenie obliczeniowe na niższym poziomie niż można by się spodziewać.
+
+00:09:05.780 --> 00:09:07.700
+Rachunek jest nieprzewidywalny z jednego powodu.
+
+00:09:07.940 --> 00:09:10.360
+Śledzi to, co uruchamiasz, a nie stałą liczbę stanowisk.
+
+00:09:10.360 --> 00:09:14.060
+Pozostaw hosty włączone na noc bez nikogo na nich, a płacisz za puste maszyny.
+
+00:09:14.240 --> 00:09:16.880
+Dobra wiadomość jest taka, że możesz pociągnąć za trzy dźwignie.
+
+00:09:17.080 --> 00:09:22.860
+W przypadku wielu sesji na każdej maszynie znajduje się więcej użytkowników, a automatyczne skalowanie wyłącza hosty lub usuwa je, gdy spada zapotrzebowanie.
+
+00:09:23.060 --> 00:09:27.820
+Rezerwacja na stale używanym wolumenie obliczeniowym może obniżyć stawkę płatności za rzeczywiste użycie nawet o 72%.
+
+00:09:27.820 --> 00:09:31.240
+Jedno ostrzeżenie dotyczące kosztów na użytkownika, które można znaleźć w internecie.
+
+00:09:31.240 --> 00:09:38.100
+Waha się on od około 10 dolarów miesięcznie dla pracownika zmianowego współdzielącego pulę skalowaną automatycznie do 170 lub więcej dolarów dla dedykowanej maszyny dla zaawansowanych użytkowników.
+
+00:09:38.200 --> 00:09:39.560
+Ten zakres nie jest błędem.
+
+00:09:39.720 --> 00:09:45.940
+To ta sama usługa przy bardzo różnych obciążeniach, więc potraktuj każdą pojedynczą kwotę jako punkt wyjścia do testów, a nie jako ofertę do powtórzenia.
+
+00:09:46.200 --> 00:09:49.180
+Model kosztów to również źródło błędów, więc przejdźmy do niego.
+
+00:09:49.440 --> 00:09:51.020
+Błędy i rzeczywiste ograniczenia.
+
+00:09:51.260 --> 00:09:57.480
+Większość problemów związanych z wdrażaniem pulpitu wirtualnego platformy Azure wynika z krótkiej listy powtarzających się problemów, a żaden z nich nie jest nietypowy.
+
+00:10:01.240 --> 00:10:06.240
+Ludzie zakładają, że określona wielkość maszyny pomieści określoną liczbę użytkowników, a potem okazuje się, że tak nie jest.
+
+00:10:06.440 --> 00:10:15.340
+Własne wytyczne firmy Microsoft opierają się na typie obciążenia, podając przybliżone przykłady, takie jak dwóch użytkowników na wirtualny procesor w przypadku standardowego obciążenia biurowego i bliżej sześciu w przypadku lekkiego obciążenia call center.
+
+00:10:15.500 --> 00:10:18.860
+Te same wytyczne nadal zalecają weryfikację w odniesieniu do własnych aplikacji.
+
+00:10:19.080 --> 00:10:21.260
+Gęstość to wynik testu, a nie arkusz specyfikacji.
+
+00:10:21.460 --> 00:10:24.140
+Kolejnym błędem jest pozostawianie hostów działających bez dostępu do nich.
+
+00:10:24.140 --> 00:10:28.620
+Bezczynność to klasyczny sposób na wyciek pieniędzy w tym modelu i najłatwiej go naprawić za pomocą automatycznego skalowania.
+
+00:10:28.820 --> 00:10:31.720
+Trzecim błędem jest traktowanie hostów sesji w puli jak zwierząt domowych.
+
+00:10:31.940 --> 00:10:37.540
+Logują się i instalują poprawki pojedynczo, a pula powoli traci spójność, przez co dwaj użytkownicy mają dwa różne doświadczenia.
+
+00:10:37.800 --> 00:10:44.420
+Rozwiązaniem jest sam model, który polega na wgraniu zmian do obrazu bazowego i ponownym wdrożeniu, dzięki czemu maszyny pozostają identyczne i jednorazowe.
+
+00:10:44.420 --> 00:10:50.400
+Do tego dochodzą ograniczenia, które są równie ważne, ponieważ nie da się ich obejść ani ominąć za pomocą własnych projektów.
+
+00:10:50.540 --> 00:10:58.440
+Nie można uaktualnić istniejącej maszyny z systemem Windows Professional lub Enterprise do wersji Windows Enterprise Multisession, ani przełączyć wdrożonej maszyny Multisession na inną edycję.
+
+00:10:58.640 --> 00:10:59.720
+Wdraża się ją ponownie.
+
+00:10:59.900 --> 00:11:07.000
+Aktualizacje systemu operacyjnego w miejscu instalacji, takie jak przenoszenie hosta sesji poolowej z systemu Windows 10 do systemu Windows 11, nie są obsługiwane, więc jest to również przebudowa.
+
+00:11:07.220 --> 00:11:10.460
+Multisession ma również regułę licencjonowania, która może być problematyczna.
+
+00:11:10.460 --> 00:11:19.000
+Windows Enterprise Multisession nie może działać w środowisku produkcyjnym poza usługą Azure Virtual Desktop Service i nie zostanie aktywowany w lokalnej usłudze zarządzania kluczami.
+
+00:11:19.220 --> 00:11:24.640
+Jeśli planujesz przenieść ten obraz na własny sprzęt, plan ten nie obowiązuje w przypadku umowy licencyjnej.
+
+00:11:24.880 --> 00:11:28.000
+Jeden termin już minął i warto sprawdzić, czy Cię dotyczył.
+
+00:11:28.200 --> 00:11:37.320
+Azure Virtual Desktop Classic, starszy model wdrażania, został wycofany 30 września 2026 roku, a połączenia z klasycznymi zasobami są teraz blokowane.
+
+00:11:37.320 --> 00:11:43.100
+Jeśli jakakolwiek część Twojego środowiska nadal działa w systemie klasycznym, jest to migracja, którą należy rozwiązać natychmiast, a nie w następnym kwartale.
+
+00:11:43.240 --> 00:11:45.160
+Platforma również jest nadal w trakcie migracji.
+
+00:11:45.360 --> 00:11:49.920
+W czerwcu 2026 roku Microsoft przeniósł trzy funkcje do powszechnej dostępności.
+
+00:11:50.180 --> 00:12:00.960
+Były to zautomatyzowane pule hostów zbudowane w oparciu o konfigurację hosta sesji, dynamiczne automatyczne skalowanie, które tworzy i usuwa hosty na żądanie oraz efemeryczne dyski systemu operacyjnego, które umieszczały system operacyjny w lokalnej pamięci masowej maszyny.
+
+00:12:00.960 --> 00:12:09.060
+Razem wskazują one kierunek rozwoju. Pule były tworzone i rozmontowywane na własnych maszynach i pozostają identyczne, ponieważ konfiguracja administratora jest źródłem prawdy.
+
+00:12:09.280 --> 00:12:17.160
+Istnieją już narzędzia, które automatyzują znaczną część operacji od harmonogramów skalowania po aktualizację obrazów i warto je ocenić, gdy już wiesz, co automatyzujesz.
+
+00:12:17.380 --> 00:12:21.320
+Wszystko to rodzi uzasadnione pytanie, kiedy wybrać to rozwiązanie zamiast alternatyw.
+
+00:12:21.320 --> 00:12:35.180
+Microsoft, pokonując Windows 365 i zwykłe VDI, oferuje więcej niż jeden sposób na umieszczenie systemu Windows w chmurze, a dwie najczęściej spotykane nazwy to Azure Virtual Desktop i Windows 365 Windows 365 to prosta opcja, która obejmuje stałą miesięczną subskrypcję na użytkownika.
+
+00:12:35.400 --> 00:12:39.760
+Każdy użytkownik otrzymuje własny komputer w chmurze, a Microsoft zarządza infrastrukturą za użytkownika.
+
+00:12:39.760 --> 00:12:46.880
+Nie ma opcji wielosesyjnej. Rozmiary maszyn pochodzą z ustalonej listy, a rachunek jest przewidywalny, ponieważ kupujesz licencję, a nie obciążenie.
+
+00:12:46.880 --> 00:12:51.940
+Dla pojedynczego użytkownika, który zawsze korzysta z pulpitu systemu Windows i potrzebuje czystego pulpitu, często jest to bardziej przejrzyste rozwiązanie.
+
+00:12:52.100 --> 00:12:58.480
+Azure Virtual Desktop jest elastyczny. Jest oparty na zużyciu i obsługuje wiele sesji, dzięki czemu wiele osób może współdzielić jedną maszynę.
+
+00:12:58.680 --> 00:13:03.860
+Zapewnia również pełny katalog maszyn wirtualnych platformy Azure oraz kontrolę nad obrazami, siecią i tożsamościami.
+
+00:13:04.100 --> 00:13:14.860
+Zaletą jest to, że masz większy wpływ na działanie, ponieważ zarządzasz hostami sesji i pulami, w przeciwieństwie do tradycyjnego podejścia, w którym budowałeś i uruchamiałeś własną infrastrukturę pulpitu wirtualnego lub farmę usług pulpitu zdalnego,
+
+00:13:14.860 --> 00:13:18.780
+ponieważ pulpit wirtualny usuwa bramę i brokera, których wcześniej trzeba było utrzymywać.
+
+00:13:18.900 --> 00:13:21.520
+To sporo pracy i ryzyka, które po prostu znika.
+
+00:13:21.780 --> 00:13:24.840
+Dlatego praktyczną zasadą jest dopasowanie obciążenia do narzędzia.
+
+00:13:25.060 --> 00:13:30.800
+Jeśli użytkownik potrzebuje dedykowanej maszyny, a zależy Ci na jak najprostszym budżecie, Windows 365 jest zazwyczaj lepszym wyborem.
+
+00:13:31.020 --> 00:13:37.480
+Jeśli masz grupę osób wykonującą podobną pracę lub potrzebujesz kontroli nad obrazem i siecią, ponieważ Twój wirtualny pulpit zarabia na swoje utrzymanie,
+
+00:13:37.580 --> 00:13:40.940
+większość organizacji korzysta z obu, ponieważ odpowiadają one na różne pytania.
+
+00:13:41.280 --> 00:13:42.720
+Co z tego wszystkiego wynieść?
+
+00:13:42.720 --> 00:13:51.140
+W skrócie wygląda to tak. Azure Virtual Desktop umieszcza pulpity i aplikacje systemu Windows na platformie Azure zbudowane z puli hostów sesji, które pochodzą z jednego obrazu.
+
+00:13:51.320 --> 00:13:58.100
+Udostępniasz je jako pełny pulpit lub pojedyncze aplikacje i wybierasz opcję osobistą dla dedykowanej maszyny lub pulę dla współdzielonych i ekonomicznych maszyn.
+
+00:13:58.280 --> 00:14:01.800
+W puli puli przechowujesz profile i logikę FS, aby podążały za użytkownikiem.
+
+00:14:01.980 --> 00:14:05.460
+Użytkownicy łączą się za pomocą połączenia zwrotnego, więc nie otwierasz żadnych portów przechodzących.
+
+00:14:05.680 --> 00:14:10.060
+Dostęp jest zazwyczaj objęty licencją, którą już posiadasz, a za infrastrukturę płacisz według zużycia.
+
+00:14:10.060 --> 00:14:16.440
+Moje pytanie brzmi, gdybyś najpierw musiał przenieść jedną grupę użytkowników do pulpitu w chmurze, kto by to był i co by cię zniechęciło?
+
+00:14:16.620 --> 00:14:24.300
+Jeśli to sprawiłoby, że temat stałby się mniej onieśmielający, zasubskrybuj M365FM, aby poznać narzędzia i sposób myślenia kształtujące przyszłość pracy.

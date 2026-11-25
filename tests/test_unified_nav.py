@@ -31,6 +31,18 @@ def cards(html):
     return out
 
 
+
+def setUpModule():   # Karte auch nach dem Event-Ende (22.01.2027) pruefbar
+    global _RUN
+    from unittest.mock import patch
+    import site_ads as ADS
+    _RUN = patch.object(ADS, "con_running", lambda today=None: True); _RUN.start()
+
+
+def tearDownModule():
+    _RUN.stop()
+
+
 class SidebarTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -66,8 +78,8 @@ class SidebarTest(unittest.TestCase):
 
     def test_fixed_banner_dimensions(self):   # kein Layout-Sprung (CLS)
         h = side(self.ix, "en")
-        self.assertIn('width="675" height="563"', h)
-        self.assertIn('width="647" height="192"', h)
+        self.assertIn('class="sb-cont"', h)   # M365Con-Karte als Text-Banner (24.11.2026), kein Bild
+        self.assertIn('class="gb gbt"', h)   # Google-Karte als Text-Banner (24.11.2026), kein Bild
 
 
 class HeaderSourceTest(unittest.TestCase):
