@@ -1,0 +1,874 @@
+WEBVTT
+
+00:00:00.210 --> 00:00:07.470
+Klaar voor 12 dagen voor Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.910 --> 00:00:12.230
+In januari is M365, kom terug en we pakken het groter aan.
+
+00:00:12.630 --> 00:00:18.670
+Doe mee aan live-sessies, praktijkdemonstraties en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.870 --> 00:00:21.630
+Geen generieke slides, geen eindeloze modewoorden.
+
+00:00:21.870 --> 00:00:23.570
+We gaan de echte uitdagingen aan.
+
+00:00:23.790 --> 00:00:29.010
+Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.010 --> 00:00:34.970
+Of je nu een IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.210 --> 00:00:40.610
+Gedurende 10 volle dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.870 --> 00:00:44.470
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.910 --> 00:00:49.150
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.690 --> 00:00:51.210
+Registratie is nu geopend.
+
+00:00:51.890 --> 00:00:55.790
+Ga naar M365.com.net en verzeker je plek vandaag nog.
+
+00:00:56.650 --> 00:00:58.910
+Dat is M365.com.net.
+
+00:00:59.010 --> 00:01:04.750
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:04.970 --> 00:01:06.450
+Hier is mijn uitdaging voor jou.
+
+00:01:06.650 --> 00:01:12.290
+Kan uw B-team elke wijziging in rapporten traceren van ontwikkeling tot productie, inclusief geregistreerde goedkeuringen en automatisering.
+
+00:01:12.490 --> 00:01:14.070
+Een korte checkpoint voordat we beginnen.
+
+00:01:14.330 --> 00:01:19.970
+Deze sessie gaat ervan uit dat u al bekend bent met de basisprincipes van PBIP en Git termen zoals branch, commit en pull request.
+
+00:01:19.970 --> 00:01:21.170
+Hier is het stappenplan.
+
+00:01:21.350 --> 00:01:26.430
+We behandelen GitHub PR-goedkeuringen, geautomatiseerde controles met acties en implementatiepipelines voor Power BI.
+
+00:01:26.610 --> 00:01:30.510
+Deze drie maken het verschil tussen hopen dat er niets misgaat en daadwerkelijk weten dat er niets misgaat.
+
+00:01:30.610 --> 00:01:31.990
+Maar laten we eerst eerlijk zijn.
+
+00:01:32.170 --> 00:01:34.890
+PBIP is niet de magische oplossing die u misschien denkt.
+
+00:01:35.130 --> 00:01:37.250
+Waarom PBIP geen wondermiddel is.
+
+00:01:37.250 --> 00:01:43.810
+De nieuwe realiteit van Power BI desktop projecten, PBP, is dat alles er meteen overzichtelijker uitziet.
+
+00:01:44.010 --> 00:01:52.530
+In plaats van een volledig rapportmodel en alle verbindingen in één grote, onoverzichtelijke PBX-box te proppen, presenteert PBIP alles als een gestructureerde map vol tekstbestanden.
+
+00:01:52.750 --> 00:01:59.070
+Het semantische model krijgt een eigen modelbeenbestand dat niet alleen leesbaar is, maar ook direct kan worden gebruikt met tools zoals Tabular Editor.
+
+00:01:59.330 --> 00:02:03.130
+Verbindingen, visualisaties en JSON metadata staan in aparte bestanden.
+
+00:02:03.330 --> 00:02:04.770
+Plotseling werkt Git hier wel.
+
+00:02:05.030 --> 00:02:06.970
+Diffs laten precies zien wat er is veranderd.
+
+00:02:06.970 --> 00:02:15.110
+Branches stellen meerdere mensen in staat om te experimenteren zonder elkaar in de weg te zitten en je ontgrendelt compatibiliteit met CI, CD-tools zoals GitHub Actions of Azure DevOps.
+
+00:02:15.370 --> 00:02:17.570
+Dat is het goede nieuws, de technische doorbraak.
+
+00:02:17.690 --> 00:02:21.110
+Het slechte nieuws is dat PBIP de teamdynamiek niet op magische wijze oplost.
+
+00:02:21.310 --> 00:02:24.010
+Het werpt eigenlijk alleen maar een licht op de chaos die er al was.
+
+00:02:24.250 --> 00:02:29.010
+Met PBIX stond elke bewerking stilzwijgend in één binair bestand dat niemand goed kon volgen.
+
+00:02:29.230 --> 00:02:34.150
+Met PBIP zijn diezelfde bewerkingen nu verspreid over tientallen kleine bestanden die om aandacht schreeuwen in Git.
+
+00:02:34.150 --> 00:02:36.190
+Ja, merge-conflicten zijn zichtbaar.
+
+00:02:36.190 --> 00:02:39.310
+Ja, je kunt eindelijk zien welke meetwaarde is gewijzigd.
+
+00:02:39.410 --> 00:02:44.110
+Maar als vijf mensen op maandagochtend aan dezelfde dataset werken, ligt Git nog steeds rood op.
+
+00:02:44.210 --> 00:02:49.170
+Het verschil is dat je er nu bestand voor bestand over kunt discussiëren in plaats van te doen alsof het probleem niet bestaat.
+
+00:02:49.350 --> 00:02:52.310
+Zie het als het inruilen van je rommeladen voor een gelabelde gereedschapskist.
+
+00:02:52.310 --> 00:02:58.130
+Tuurlijk, elke schroevendraaier heeft nu een eigen plekje, maar als de helft van het kantoor tegelijkertijd naar de kruiskopschroevendraaier grijpt, verdwijnt de wrijving niet.
+
+00:02:58.250 --> 00:03:00.570
+Het wordt alleen iets makkelijker om te zien wie wat heeft gepakt.
+
+00:03:00.770 --> 00:03:03.150
+Dat is wat PBIP brengt, duidelijkheid zonder discipline.
+
+00:03:03.370 --> 00:03:07.590
+Ik heb met teams gewerkt die volledig op PBIP waren overgestapt in de verwachting dat het conflicterende bewerkingen zou oplossen.
+
+00:03:07.830 --> 00:03:11.510
+Ze lieten regels vallen, sloegen reviews over en vertrouwden erop dat zichtbaarheid hen zou redden.
+
+00:03:11.510 --> 00:03:15.430
+Binnen een paar sprints was het resultaat en had het spoor vol onverklaarde wijzigingen.
+
+00:03:15.590 --> 00:03:21.170
+Kolommen zonder reden hernoemd, relaties zonder waarschuwing aangepast, metingen herschreven zonder enige context.
+
+00:03:21.390 --> 00:03:26.230
+Het zien van de bewerkingen maakte ze niet veiliger, het maakte de verwarring alleen maar permanent in de gitgeschiedenis.
+
+00:03:26.430 --> 00:03:28.570
+Dan is er ook nog het probleem van merge-conflicten.
+
+00:03:28.830 --> 00:03:31.610
+PBIP maakt die luid en duidelijk, soms pijnlijk duidelijk.
+
+00:03:31.790 --> 00:03:39.170
+In plaats van een stille corruptie verborgen in een PBIX-bestand, sta je naar felrode conflictmarkeringen in VS-code die drie concurrerende versies van dezelfde daksmeting laten zien.
+
+00:03:39.310 --> 00:03:40.830
+Technisch gezien is dat vooruitgang.
+
+00:03:40.830 --> 00:03:44.450
+Je weet tenminste precies wat er mis is gegaan, maar luider betekent niet dat de pijn verdwijnt.
+
+00:03:44.590 --> 00:03:47.070
+Het betekent simpelweg dat je het niet langer kunt negeren.
+
+00:03:47.250 --> 00:03:51.370
+Of dat een zegen of een vloek is, hangt af van hoe gedisciplineerd je team is wat betreft de workflow.
+
+00:03:51.670 --> 00:03:53.190
+En hier ligt de kern van de zaak.
+
+00:03:53.330 --> 00:03:56.930
+De echte doorbraak is niet PBIP zelf, maar wat PBIP mogelijk maakt.
+
+00:03:57.150 --> 00:04:03.230
+Door rapporten en modellen op te splitsen in tekst gebaseerde, versiebeheerbaar bestanden, kun je eindelijk de juiste git workflows implementeren.
+
+00:04:03.510 --> 00:04:06.950
+Branches, pull requests, reviews, CI, CD pipelines.
+
+00:04:07.410 --> 00:04:09.310
+PBIP is de deur, niet de bestemming.
+
+00:04:09.310 --> 00:04:14.030
+Het biedt je versiebeheer per component, maar het vertelt de mensen aan het stuur niet hoe ze moeten rijden.
+
+00:04:14.250 --> 00:04:19.270
+Dat betekent dat dezelfde problemen blijven bestaan als je geen structuur en automatisering rondom deze opzet creëert.
+
+00:04:19.490 --> 00:04:24.050
+Zonder goedkeuringen en reviews zie je alleen maar meer zichtbare pootafdrukken van dezelfde groep mensen.
+
+00:04:24.310 --> 00:04:30.370
+Zonder vangrail zoals geautomatiseerde controles vertrouw je er nog steeds op dat ontwikkelaars geen twijfelachtige wijzigingen rechtstreeks in productie zullen smokkelen.
+
+00:04:30.370 --> 00:04:34.450
+PBIP maakt moderne devops praktijken mogelijk in Power BI, maar het dwingt ze niet af.
+
+00:04:34.650 --> 00:04:36.270
+Dat blijft de verantwoordelijkheid van het team.
+
+00:04:36.490 --> 00:04:37.370
+Waar brengt dat ons dan?
+
+00:04:37.510 --> 00:04:39.110
+Met duidelijkheid, maar niet met orde.
+
+00:04:39.430 --> 00:04:43.790
+PBIP verwijdert de monolithische mist van PBX, maar voorkomt geen rommelige botsingen.
+
+00:04:44.050 --> 00:04:49.710
+Daarvoor heb je controlemechanismen nodig, iets om te voorkomen dat mensen elkaar overschrijven of ongeveer het testen wijzigingen er doorheen smokkelen.
+
+00:04:49.950 --> 00:04:51.730
+Daarom is de volgende stap zo belangrijk.
+
+00:04:51.970 --> 00:04:56.630
+GitHub pull requests nemen de rommelige stapel PBIP bestanden en plaatsen er verkeerslichten bovenop.
+
+00:04:56.630 --> 00:05:02.730
+In plaats van vijf ontwikkelaars die op hetzelfde kruispunt afstormen, krijg je controles, signalen en een logboek van wie wat precies heeft gedaan.
+
+00:05:02.910 --> 00:05:09.310
+En dat is waar het verhaal verandert, want hoe nuttig pull requests ook zijn, iedereen die er mee te maken heeft gehad, weet dat ze zowel een reddingslijn als een knelpunt kunnen zijn.
+
+00:05:09.490 --> 00:05:15.990
+De voor de hand liggende vraag voordat we verder gaan is dan ook, hoe behoud je de orde die ze brengen zonder van elke kleine kleurverandering een vergadering te maken?
+
+00:05:16.350 --> 00:05:19.450
+Goedkeuring van pull requests, van gaols naar gecontroleerd geknoei.
+
+00:05:19.450 --> 00:05:25.990
+Laten we het nu hebben over het echte controlepunt dat PBIP van georganiseerde gaols in iets beheersbaars verandert, de goedkeuring van pull requests.
+
+00:05:25.990 --> 00:05:29.410
+Stel je voor vijf ontwikkelaars die allemaal aan hetzelfde rapport sleutelen.
+
+00:05:29.590 --> 00:05:34.410
+De een bewerkt stax, de ander hernoemt een kolom, weer een ander verandert, de opmaak en twee andere rommelen met kleuren.
+
+00:05:34.570 --> 00:05:38.370
+Als al die bewerkingen niet worden gecontroleerd, krijg je geen samenwerking, maar een Frankenstein rapport.
+
+00:05:38.650 --> 00:05:40.470
+Daarom bestaan pull requests, PR's.
+
+00:05:40.630 --> 00:05:45.670
+Ze fungeren als poortwachter die de boel net genoeg vertraagt om te voorkomen dat vijf mensen tegelijkertijd op hetzelfde kruispunt afkomen.
+
+00:05:45.670 --> 00:05:47.730
+Zie PR's als de verkeerslichten van GitHub.
+
+00:05:47.930 --> 00:05:50.150
+Groen licht betekent samenvoegen en verder gaan.
+
+00:05:50.390 --> 00:05:54.530
+Rood licht houdt je tegen totdat reviewers bevestigen dat je werk niet botst met iets anders.
+
+00:05:54.530 --> 00:05:59.610
+Niets bijzonders, gewoon gestructureerde pauzes zodat je elkaars wijzigingen niet per ongeluk teniet doet.
+
+00:05:59.790 --> 00:06:02.030
+En ja, goedkeuringen maken mensen nerveus.
+
+00:06:02.250 --> 00:06:04.910
+Ze zullen ons niet vertragen, alleen als je ze misbruikt.
+
+00:06:05.110 --> 00:06:09.450
+Je hebt geen senior managers nodig die een kleurwijziging in een cirkeldiagram goedkeuren,
+
+00:06:09.450 --> 00:06:15.610
+maar je wilt absoluut meer dan één paar ogen hebben wanneer iemand een datasetschema herstructureert of relaties in het model aanpast.
+
+00:06:15.790 --> 00:06:19.230
+De praktische aanpak is dus koppel de strengheid van de review aan de impact.
+
+00:06:19.430 --> 00:06:23.070
+Een snelle goedkeuring is prima voor cosmetische aanpassingen of textuele wijzigingen.
+
+00:06:23.070 --> 00:06:28.790
+Meerdere reviewers zijn echter vereist bij het wijzigen van meetwaarde, het toevoegen van berekende kolommen of het aanpassen van relaties.
+
+00:06:28.990 --> 00:06:34.110
+Op die manier blijft het dagelijkse werk snel verlopen, maar kunnen belangrijke wijzigingen niet ongecontroleerd in productie terechtkomen.
+
+00:06:34.330 --> 00:06:35.930
+Dit is niet zomaar mijn voorzichtigheid.
+
+00:06:36.250 --> 00:06:40.830
+Microsoft's eigen richtlijnen voor branches en workspaces beschouwen goedkeuringen van pull requests als een controlepunt.
+
+00:06:41.010 --> 00:06:44.850
+Het is het moment waarop je officieel besluit dat een wijziging onderdeel wordt van de gedeelde versie.
+
+00:06:45.090 --> 00:06:48.810
+Zonder deze stap laat je mensen in feite alles wat ze willen in het kernmodel implementeren.
+
+00:06:49.050 --> 00:06:50.030
+Dat is geen governance.
+
+00:06:50.030 --> 00:06:51.930
+Dat is vragen om problemen.
+
+00:06:52.070 --> 00:06:54.650
+En hier is een tactisch voordeel dat mensen vaak vergeten.
+
+00:06:54.830 --> 00:06:57.250
+Pull requests genereren automatisch een audit trail.
+
+00:06:57.450 --> 00:07:00.010
+Elke commit, opmerking en goedkeuring wordt vastgelegd.
+
+00:07:00.130 --> 00:07:05.450
+Dus de volgende keer dat iemand vraagt waarom het omzetrapport vorige week niet klopte, hoef je niet als een detective door lokale bestanden te spitten.
+
+00:07:05.610 --> 00:07:07.430
+Je controleert gewoon de geschiedenis van de pull request.
+
+00:07:07.610 --> 00:07:10.230
+Wie heeft deze goedgekeurd? Wat is besproken en welke wijzigingen zijn opgenomen?
+
+00:07:10.410 --> 00:07:13.030
+Die trail is goud waard in termen van bespaarde overuren.
+
+00:07:13.030 --> 00:07:17.150
+Kortom, bij het goedkeuren van pull requests draait het niet om bureaucratie, maar om balans.
+
+00:07:17.330 --> 00:07:18.870
+Te soepel en je creëert chaos.
+
+00:07:19.070 --> 00:07:21.370
+Te streng en je loopt vast door triviale aanpassingen.
+
+00:07:21.570 --> 00:07:27.450
+De ideale balans is een systeem met schaalbare regels, lichte reviews voor kleine aanpassingen en gefaseerde goedkeuringen voor grote refactoring.
+
+00:07:27.690 --> 00:07:30.470
+Zo blijft de repository veilig zonder dat iedereen overbelast raakt.
+
+00:07:30.670 --> 00:07:34.130
+Daarbij komt dat pull requests alleen de problemen opmerken waar reviewers daadwerkelijk op letten.
+
+00:07:34.130 --> 00:07:40.890
+Mensen worden moe, lezen wijzigingen vluchtig door of klikken op goedkeuren om de wachtrij leeg te maken, waardoor veel vermijdbare problemen er toch doorheen kunnen glippen.
+
+00:07:41.010 --> 00:07:46.690
+Als je ooit slordige DAG's of een verbroken relatie hebt samengevoegd omdat niemand het tijdens de review opmerkte, dan weet je hoe frustrerend dat is.
+
+00:07:46.850 --> 00:07:50.150
+Hier komt de volgende verschuiving, het automatiseren van de meest voor de hand liggende zaken.
+
+00:07:50.370 --> 00:07:58.550
+In plaats van volledig te vertrouwen op menselijke reviewers om opmaakfouten, zwakke namen of ontbrekende beschrijvingen op te merken, laat je automatisering elke pull requests kennen voordat de goedkeuring überhaupt plaatsvindt.
+
+00:07:58.650 --> 00:08:00.050
+Mensen focussen op de context.
+
+00:08:00.350 --> 00:08:02.310
+Machines pikken de voorspelbare fouten op.
+
+00:08:02.310 --> 00:08:05.410
+De volgende logische stap is de simple pull requests brengen orde.
+
+00:08:05.850 --> 00:08:11.850
+Automatisering maakt die volgorde slimmer en die combinatie zorgt ervoor dat je hoofdbranche geen vuilnisbelt van kleine maar kostbare fouten wordt.
+
+00:08:12.550 --> 00:08:14.770
+Geautomatiseerde controles, je stille review team.
+
+00:08:14.990 --> 00:08:16.510
+Dus, hier is het volgende onderdeel.
+
+00:08:17.170 --> 00:08:19.330
+Geautomatiseerde controles, je stille review team.
+
+00:08:19.570 --> 00:08:24.210
+Dit zijn de waakhonden die niet slapen, geen pull requests, vluchtig bekijken en niet worden afgeleid door Slack.
+
+00:08:24.390 --> 00:08:28.370
+Ze zitten bij de deur van de repository en blaffen wanneer er iets slordigs probeert binnen te glippen.
+
+00:08:28.370 --> 00:08:31.450
+Het mechanisme erachter is vrij eenvoudig GitHub Actions.
+
+00:08:31.450 --> 00:08:36.550
+Elke keer dat je een commit push of een pull request opent, starten de acties en voeren ze de scripts uit die je ze hebt opgedragen.
+
+00:08:36.810 --> 00:08:38.630
+Zie ze als uitsmijters met een klembord.
+
+00:08:38.850 --> 00:08:49.350
+Nieuwe bestanden verschijnen en in plaats van ze standaard in productie te nemen, voeren de acties een reeks controles uit, scripts in PowerShell, validatietools, misschien een paar node, JS taken en pas dan geven ze groen licht.
+
+00:08:49.490 --> 00:08:53.650
+Je drukt niet zelf op play, ze worden automatisch geactiveerd op basis van gebeurtenissen die je definieert.
+
+00:08:53.830 --> 00:08:56.810
+Nu komt het, je begint niet met het toevoegen van elke mogelijke validator.
+
+00:08:57.090 --> 00:08:59.730
+Doe dat en je verandert je repository in een luchthavenbeveiliging.
+
+00:08:59.730 --> 00:09:03.250
+Ontwikkelaars zullen meer tijd kwijt zijn aan het uitritsen van hun schoenen dan aan het schrijven van code.
+
+00:09:03.430 --> 00:09:05.050
+Het is verstandiger om klein te beginnen.
+
+00:09:05.310 --> 00:09:15.010
+Kies de controles die de grootste waarden opleveren met de minste wrijving en na AMG Evans conventies, opvallende daks antipatronen, duidelijke schemafouten zoals ontbrekende relaties en misschien wat linting op JSON of modelbestanden.
+
+00:09:15.190 --> 00:09:19.270
+Op die manier voelen je ontwikkelaars zich nog steeds snel, maar heb je jezelf een aantal vangnetten ingebouwd.
+
+00:09:19.470 --> 00:09:21.170
+Laten we een paar tools op tafel leggen.
+
+00:09:21.170 --> 00:09:25.930
+Model.bim is een tekstbestand, wat betekent dat statische analyse tools er doorheen kunnen gaan.
+
+00:09:26.090 --> 00:09:31.790
+Tabular Editor kan commando-regelscripts uitvoeren om relaties, NA-aamgevingsregels of berekeningsgroepen te valideren.
+
+00:09:31.950 --> 00:09:39.490
+PowerShell-scripts van de Microsoft Power BMGT-module kunnen gegevensets opvragen of controleren of een werkruimte daadwerkelijk actief is voordat je er wijzigingen in aanbrengt.
+
+00:09:39.590 --> 00:09:44.490
+Combineer dat met de Power BI Rest API's en je kunt zelfs rooktests voor bijgewerkte rapporten automatiseren.
+
+00:09:44.490 --> 00:09:50.350
+Een validatiescript kan die API's aanroepen, metadata of gegevensbronkoppelingen controleren en fouten retourneren.
+
+00:09:50.550 --> 00:09:54.930
+Niets hiervan is hypothetisch. Het is juist dit aspect dat PBIP de moeite waard maakt.
+
+00:09:55.110 --> 00:09:59.710
+Een goed voorbeeld voor Teams is het instellen van een GitHub-actie bij het openen of bijwerken van een poolrequest.
+
+00:09:59.950 --> 00:10:04.270
+Deze workflow voert een kleine testsuite uit, bijvoorbeeld een PowerShell-script om dataset namen te controleren,
+
+00:10:04.410 --> 00:10:10.170
+een Node-JS-script om foutieve DAX-codefragmenten te detecteren en een opdrachtregel in de tabulaire editor om te controleren of het model niet crashtie.
+
+00:10:10.330 --> 00:10:12.250
+Dit zijn de basisprincipes van best practices.
+
+00:10:12.250 --> 00:10:16.970
+Als er iets misgaat, plaatst de actie direct opmerkingen in het poolrequestgesprek en markeert de beeld als rood.
+
+00:10:17.130 --> 00:10:21.330
+Geen merge, geen klik. De ontwikkelaar lost het probleem op voordat de branche überhaupt in behandeling wordt genomen.
+
+00:10:21.530 --> 00:10:22.850
+Dit is waarom het belangrijk is.
+
+00:10:23.350 --> 00:10:25.630
+Tekstverschillen waarschuwen je niet voor prestatieproblemen.
+
+00:10:25.750 --> 00:10:28.650
+Je ziet misschien een hernoemde measure of kolom en denkt dat het er prima uitziet,
+
+00:10:28.810 --> 00:10:34.110
+maar een validator kan detecteren dat iemand een index heeft verwijderd of het filter heeft gewijzigd op een manier die queries onbruikbaar maakt.
+
+00:10:34.250 --> 00:10:36.230
+Een team waarmee ik heb gewerkt, had zo'n geval.
+
+00:10:36.230 --> 00:10:41.610
+Een herbouw van een dataset zag er onschuldig uit in Git, maar een validator signaleerde een verbroken relatie voordat deze in productie ging.
+
+00:10:41.790 --> 00:10:46.650
+Die enige automatiseerde fout bespaarde hen urenlang brandjes blussen en een paar boze telefoontjes van zakelijke gebruikers.
+
+00:10:46.870 --> 00:10:49.070
+Zie automatisering als het filter voor het saaie werk.
+
+00:10:49.310 --> 00:10:52.870
+Mensen hebben een hekel aan het controleren van hoofdlettergebruik of het scannen op tabelnamen.
+
+00:10:53.010 --> 00:10:54.930
+Een script kan dat in milliseconden afhandelen.
+
+00:10:55.130 --> 00:10:58.810
+De mensen geven nog steeds hun mening, maar hun beoordelingen richten zich op strategische relevantie,
+
+00:10:58.990 --> 00:11:03.590
+bedrijfslogica en ontwerpkwaliteit in plaats van op de vraag of je klantidees consequent met hoofdletters hebt geschreven.
+
+00:11:03.590 --> 00:11:07.710
+Simpele taakverdeling. Microsoft-aandelen duwen je in feite in deze richting.
+
+00:11:07.910 --> 00:11:13.610
+GitHub Actions integreren met Power BI Services en zelfs Fabrics API's, waardoor validatie onderdeel wordt van je CI-CD-proces.
+
+00:11:13.830 --> 00:11:16.550
+Dat is geen overdaad. Het is de voor de hand liggende weg vooruit.
+
+00:11:16.810 --> 00:11:21.670
+Automatiseer repetitieve controles, zodat ontwikkelaars en reviewers geen energie verspillen aan saaie consistentiecontroles.
+
+00:11:21.830 --> 00:11:23.590
+Kortom, behandel acties als je bot-collega's.
+
+00:11:24.390 --> 00:11:29.010
+Begin met een handvol controles die de meeste waarden opleveren en breed uit naarmate je team groeit.
+
+00:11:29.390 --> 00:11:33.550
+Automatiseer controles op modelniveau, schema-validatie en NA-aangevingsregels.
+
+00:11:33.750 --> 00:11:38.230
+Laat reviewers vrij om hun tijd te besteden aan ontwerp en strategie, in plaats van aan het controleren van veldnamen.
+
+00:11:38.350 --> 00:11:43.650
+En als die controles eenmaal zijn ingevoerd, reist natuurlijk de vraag, als acties kunnen voorkomen dat slechte wijzigingen worden doorgevoerd,
+
+00:11:43.810 --> 00:11:45.570
+waarom zouden ze dan niet ook goede wijzigingen doorlaten?
+
+00:11:45.770 --> 00:11:47.590
+Dat is waar pipelines om de hoek komen kijken.
+
+00:11:47.850 --> 00:11:53.230
+Niet alleen blokkades, maar geautomatiseerde manieren om goedgekeurde beelds van ontwikkeling via testen naar productie te pushen,
+
+00:11:53.390 --> 00:11:55.290
+zonder dat je handmatig op knoppen hoeft te klikken.
+
+00:11:55.290 --> 00:11:59.850
+Die verschuiving maakt van implementaties iets waar je echt op kunt vertrouwen, in plaats van bijgeloof.
+
+00:12:00.650 --> 00:12:02.570
+Implementatiepipelines, betrouwbaarheid zonder gedoe.
+
+00:12:03.370 --> 00:12:09.970
+Implementatiepipelines zorgen ervoor dat de hele opzet verandert van een leuk experiment naar iets dat je daadwerkelijk in productie kunt draaien zonder je nagels te hoeven bijten.
+
+00:12:09.970 --> 00:12:16.630
+Dit is het onderdeel dat je zorgvuldig gecontroleerde code op een ordelijke manier tussen omgevingen verplaatst, ontwikkeling, testen en uiteindelijk productie,
+
+00:12:16.770 --> 00:12:18.750
+zonder afhankelijk te zijn van gelukkige muisklikken.
+
+00:12:18.970 --> 00:12:21.570
+Handmatig publiceren in Power BI is een chaos.
+
+00:12:21.890 --> 00:12:29.230
+Exporteer een PBX, importeer het ergens anders, bid dat je niet de verkeerde werkruimte hebt gekozen en duim dat de dataset-idees nog steeds kloppen.
+
+00:12:29.350 --> 00:12:32.030
+Het is alsof je een arm vol boodschappen draagt zonder tas.
+
+00:12:32.250 --> 00:12:35.530
+Misschien bereik je de auto, misschien versieren de eieren je oprit opnieuw.
+
+00:12:35.530 --> 00:12:40.650
+Daarom bestaan implementatie-pipelines en meer specifiek de rest APIs voor implementatie-pipelines.
+
+00:12:40.850 --> 00:12:43.770
+Ze zijn ontworpen om dat constante element van toeval te elimineren.
+
+00:12:44.010 --> 00:12:46.430
+Deze APIs zijn niet zomaar knoppen voor de volgende fase.
+
+00:12:46.670 --> 00:12:50.150
+Ze ondersteunen verschillende belangrijke scenario's die elke be-leider zou moeten kennen.
+
+00:12:50.350 --> 00:12:54.310
+Met alles implementeren wordt een volledige workspace naar de volgende fase gestuurd.
+
+00:12:54.510 --> 00:12:59.350
+Met selectief implementeren kun je individuele items selecteren, zoals een rapport of dataset,
+
+00:12:59.350 --> 00:13:06.570
+en met achterwaarts implementeren, met achterwaarts implementeren, op waar, kun je content terugzetten naar een voorrige fase als deze daar ontbreekt.
+
+00:13:07.330 --> 00:13:10.770
+Bovendien kunnen APIs ook de app bijwerken die aan de fase is gekoppeld.
+
+00:13:10.950 --> 00:13:17.430
+Dus wanneer je content naar test of productie promote, kan de gekoppelde app automatisch worden bijgewerkt en zien gebruikers de vernieuwde rapporten direct.
+
+00:13:17.670 --> 00:13:21.570
+Dat is echte controle zonder dat je als een wanhopige stagiair bestanden hoeft te verschuiven.
+
+00:13:21.770 --> 00:13:22.830
+Nu de harde waarheid.
+
+00:13:23.070 --> 00:13:26.430
+Voordat dit allemaal werkt, heb je de saaie maar cruciale voorwaarden nodig.
+
+00:13:26.430 --> 00:13:34.110
+De beller, of het nu een menselijk account of een service principle is, moet geregistreerd staan bij Microsoft Entra ID met de juiste machtigingen voor zowel de pipeline als de doelwerkruimte.
+
+00:13:34.270 --> 00:13:35.690
+Als dit niet gebeurt, werkt het niet.
+
+00:13:35.870 --> 00:13:40.890
+En wanneer je gebruik maakt van service principles, wat absoluut aan te raden is voor automatisering, loop je tegen bepaalde beperkingen aan.
+
+00:13:41.070 --> 00:13:46.990
+Service principles kunnen geen OAuth configureren voor gegevensbronnen, waardoor bepaalde datasets pas worden vernieuwd nadat een gebruiker de referenties heeft gecorrigeerd.
+
+00:13:47.170 --> 00:13:53.070
+Bovendien wordt een service principle eigenaar van de semantische modellen en gepagineerde rapporten die het implementeert, wat geplande vernieuwingen kan blokkeren.
+
+00:13:53.070 --> 00:13:55.050
+En data flows zijn helemaal niet mogelijk.
+
+00:13:55.050 --> 00:13:57.390
+Service principles kunnen die helemaal niet implementeren.
+
+00:13:57.610 --> 00:14:00.510
+Nog een valkuil, elke implementatieoproep is beperkt tot 300 items.
+
+00:14:00.710 --> 00:14:05.110
+Als je werkruimte is uitgegroeid tot een rommelige verzameling visualisaties, zul je tegen die limiet aanlopen.
+
+00:14:05.350 --> 00:14:09.150
+Dit zijn geen prettige dingen om te weten, maar valkuilen waar je vooraf rekening mee moet houden.
+
+00:14:09.330 --> 00:14:11.250
+Hoe integreer je dit dan in GitHub Actions?
+
+00:14:11.250 --> 00:14:18.790
+De slimme, beproefde methode is om je service principle client idee een geheim op te slaan in de GitHub Repository geheimen.
+
+00:14:18.990 --> 00:14:21.590
+Dat houdt ze buiten de code en weg van onbedoelde commits.
+
+00:14:21.850 --> 00:14:26.350
+Vervolgens koppel je repository mappen aan pipeline-idees met een Griekse Y-AML configuratiebestand.
+
+00:14:26.510 --> 00:14:32.370
+Elke map komt overeen met een specifieke pipeline en de GitHub Actie leest die koppeling om content naar de juiste plek te pushen.
+
+00:14:32.370 --> 00:14:33.490
+Dit verzin ik niet.
+
+00:14:33.750 --> 00:14:38.990
+Dit patroon zie je terug in community acties zoals PowerBee Pipeline deploy op de GitHub Marketplace.
+
+00:14:39.170 --> 00:14:44.010
+Het werkt goed, maar je moet weten dat deze acties van de Marketplace door derden worden aangeboden en niet door Microsoft zijn gecertificeerd.
+
+00:14:44.190 --> 00:14:46.930
+Met andere woorden, ze zijn nuttig, maar je draagt zelf het risico.
+
+00:14:47.130 --> 00:14:51.070
+Als je maximale beveiliging en ondersteuning nodig hebt, schrijf dan je eigen scripts voor de APIs.
+
+00:14:51.410 --> 00:14:53.110
+Oké, hoe ziet dit er in de praktijk uit?
+
+00:14:53.290 --> 00:14:59.730
+Je sluit een pull request, GitHub Actions wordt geactiveerd, roep de rest API van de deployment pipelines aan en verplaatst je content van de ontwikkelomgeving naar de testomgeving.
+
+00:14:59.730 --> 00:15:03.790
+Als alle controles slagen, kan dezelfde workflow de content naar PR alt pushen.
+
+00:15:03.950 --> 00:15:05.970
+De cyclus is herhaalbaar en traceerbaar.
+
+00:15:06.190 --> 00:15:09.430
+Je weet precies wat waar is gegaan, wanneer en door wie goedgekeurd.
+
+00:15:09.670 --> 00:15:12.470
+Dat vervangt geïmproviseerde nachtelijke sessies door structuur.
+
+00:15:12.650 --> 00:15:15.750
+En als je baas vraagt, hoe weten we dat er niets ongeveer het test is binnengeslopen?
+
+00:15:15.950 --> 00:15:18.210
+Dan heb je een antwoord dat verder gaat dan, vertrouw me maar.
+
+00:15:18.430 --> 00:15:20.410
+Betekent dit dat automatisering perfect is?
+
+00:15:20.610 --> 00:15:24.830
+Nee, je zult nog steeds gevallen tegenkomen waarin handmatige correcties van inloggegevens onvermijdelijk zijn,
+
+00:15:24.990 --> 00:15:27.950
+of waarin de beperkingen op items en datastromen je dwingen je structuur te herzien.
+
+00:15:27.950 --> 00:15:32.290
+Maar het verschil is dat je te maken hebt met incidentele, bekende uitzonderingen, niet met voortdurende chaos.
+
+00:15:32.530 --> 00:15:38.190
+9 van de 10 keer verloopt de implementatie vlekkeloos en hoef je geen weekenden meer te besteden aan het opsporen van ontbrekende relaties in PR.
+
+00:15:38.410 --> 00:15:42.110
+Kortom, implementatiepipelines plus acties bieden je betrouwbaarheid zonder te hoeven bidden.
+
+00:15:42.290 --> 00:15:47.910
+In plaats van te klikken en te fluisteren tot de rapportage goden, heb je een proces dat rapporten consistent de omgevingen transporteert.
+
+00:15:48.090 --> 00:15:53.910
+Je kunt het controleren, terugdraaien indien nodig en s'nachts rustig slapen in de wetenschap dat niemand per ongeluk een werkruimtenaam heeft ingevoerd.
+
+00:15:53.910 --> 00:15:57.710
+Zodra implementaties zo soepel verlopen, verschuift de echte uitdaging.
+
+00:15:57.710 --> 00:16:03.870
+Het gaat niet langer om de vraag of we veilig kunnen promoten, maar hoe we governance kunnen integreren zonder de hele opzet in bureaucratie te veranderen.
+
+00:16:04.030 --> 00:16:07.610
+Die balans, controle zonder bureaucratie, is waar we het volgende over gaan hebben.
+
+00:16:07.830 --> 00:16:14.270
+Bestuur zonder bureaucratie. Niemand heeft zich aangemeld voor CI, CD om het gevoel te hebben dat ze hun rijbewijs bij de RDW aan het verlengen zijn.
+
+00:16:14.270 --> 00:16:18.670
+Het doel is snelheid met veiligheid, niet verdrinken in procesdiagrammen en goedkeuringen.
+
+00:16:19.050 --> 00:16:24.230
+Traditioneel bestuur vergeet vaak dat het de kwaliteit probeert te verbeteren door ontwikkelaars te verstikken in formulieren en tickets.
+
+00:16:24.450 --> 00:16:28.830
+En het eindresultaat is niet veiligere code, maar gefrustreerde ontwikkelaars die om de vangrails heen rennen.
+
+00:16:29.110 --> 00:16:31.550
+Goed bestuur voelt aan als vangrails op een snelweg.
+
+00:16:31.750 --> 00:16:36.390
+Ze vertragen je niet, ze zorgen er alleen voor dat je auto niet met 130 kilometer per uur van de weg raakt.
+
+00:16:36.530 --> 00:16:39.090
+En het praktische verschil zit hem in hoe je die vangrails instelt.
+
+00:16:39.290 --> 00:16:41.370
+Niet elke repository hoeft dezelfde regels te hebben.
+
+00:16:41.370 --> 00:16:42.950
+Dat is de eerste tactische oplossing.
+
+00:16:43.190 --> 00:16:46.050
+Voor cosmetische wijzigingen in een rapport heb je geen raad van ouderen nodig.
+
+00:16:46.250 --> 00:16:49.290
+GitHub kan zo ingesteld worden dat je met één duim omhoog de wijziging kunt samenvoegen.
+
+00:16:49.450 --> 00:16:52.370
+Maar voor model-updates met grote impact die de helft van je bedrijfslogica herberekenen,
+
+00:16:52.510 --> 00:16:57.550
+is het verstandig om de controlepunten aan te scherpen met meerdere reviewers en hen te laten werken volgens een PR-schabloon waarin precies staat wat er gecontroleerd moet worden.
+
+00:16:57.750 --> 00:16:59.550
+Ligt waar mogelijk, streng waar nodig.
+
+00:16:59.810 --> 00:17:00.730
+Simpele wiskunde.
+
+00:17:00.990 --> 00:17:03.030
+Dit is waar PR-schablonen hun nut bewijzen.
+
+00:17:03.210 --> 00:17:07.110
+Een goed schabloon beschrijft de bedrijfslogica, schema-afhankelijkheden en testnotities,
+
+00:17:07.110 --> 00:17:09.430
+zodat de reviewer niet hoeft te gissen wat belangrijk is.
+
+00:17:09.610 --> 00:17:14.790
+Voeg daar geautomatiseerde controles aan toe die de saaie zaken afhandelen en plotseling kunnen je medewerkers weer menselijk werk doen.
+
+00:17:15.010 --> 00:17:16.750
+Bots controleren de hoofdlettergevoeligheid.
+
+00:17:16.930 --> 00:17:20.110
+Jij controleert of de verkoopcijfers nog steeds overeen komen met de definitie van de financiële afdeling.
+
+00:17:20.310 --> 00:17:23.410
+Het is een taakverdeling die het tempo hoog houdt zonder in te boeten aan kwaliteit.
+
+00:17:23.650 --> 00:17:26.490
+Laten we automatisering weer in beeld brengen, want dat is de sleutel.
+
+00:17:26.490 --> 00:17:33.970
+Je geautomatiseerde controles of het nu PowerShell-script zijn die gebruik maken van de validaties van de Microsoft Power, BMG, MT-tabel, editor of gerichte JSON-linting,
+
+00:17:34.130 --> 00:17:36.450
+pikken de dingen op waar een menselijke reviewer zich niet druk om hoeft te maken.
+
+00:17:36.770 --> 00:17:42.890
+Consistente naamgeving, duidelijke belastingfouten, ontbrekende relaties, alles wordt gesignaleerd voordat het polverzoek zelfs maar groen licht krijgt.
+
+00:17:43.030 --> 00:17:48.790
+Dat betekent dat reviewers zich precies richten op de intentie, het ontwerp en of het bedrijf het rapport daadwerkelijk zal vertrouwen.
+
+00:17:48.950 --> 00:17:50.310
+En dit is niet zomaar theorie.
+
+00:17:50.310 --> 00:17:58.710
+Teams die in chaos leven zonder governance, vinden vaak hun rust terug door precies dit te doen, PR-schablonen, geautomatiseerde validators en goedkeuringsniveaus afgestemd op de repository.
+
+00:17:59.070 --> 00:18:00.570
+De verandering is direct merkbaar.
+
+00:18:00.750 --> 00:18:04.710
+Het werk voelt lichter aan omdat ontwikkelaars weten dat ze niet geblokkeerd zullen worden voor het wijzigen van een titel,
+
+00:18:04.850 --> 00:18:08.810
+maar ze kunnen de controle niet omzeilen als ze de dataset aanpassen die de dashboards voor het management aanstuurt.
+
+00:18:08.970 --> 00:18:13.670
+De kwaliteit blijft hoog, maar niemand heeft het gevoel dat ze belastingformulieren moeten invullen om code te pushen.
+
+00:18:13.870 --> 00:18:17.330
+Dan is er ook nog het grotere plaatje, hoe omgevingen aan branches worden gekoppeld.
+
+00:18:17.330 --> 00:18:20.250
+De meeste teams kiezen voor een van de twee ondersteunde patronen.
+
+00:18:20.410 --> 00:18:24.830
+Optie 1 ontwikkelaars maken feature-werkruimtes die direct aan feature-branches zijn gekoppeld,
+
+00:18:24.990 --> 00:18:28.730
+zodat elke experimentele branche een gespiegelde sandbox heeft in Power BI Service.
+
+00:18:28.970 --> 00:18:35.830
+Optie 2 ontwikkelaars maken hun wijzigingen lokaal in PBIP en synchroniseren deze met een feature-branche zonder een parallele werkruimte,
+
+00:18:36.110 --> 00:18:39.910
+waardoor automatisering de implementatie-pipeline naar gedeelde omgevingen afhandelt.
+
+00:18:40.150 --> 00:18:43.670
+Beide benaderingen sluiten aan bij de CID-richtlijnen van Microsoft Fabric.
+
+00:18:43.670 --> 00:18:47.570
+De kunst is om te bepalen welke stijl het beste past bij de hoeveelheid overhead die het team bereid is te verwerken.
+
+00:18:47.730 --> 00:18:50.210
+In beide gevallen draait het om vertakkingen en werkruimtes.
+
+00:18:50.410 --> 00:18:52.310
+Je kiest er alleen voor om beide te combineren.
+
+00:18:52.490 --> 00:18:55.610
+Met deze patronen in gedachten wordt governance nog eenvoudiger schaalbaar.
+
+00:18:55.830 --> 00:18:58.590
+Lichte goedkeuringen voor aanpassingen aan content in een feature-werkruimte,
+
+00:18:58.710 --> 00:19:02.830
+uitgebreidere reviews en gescripte controles voor modelwijzigingen die naar test of productie worden gepushed.
+
+00:19:02.910 --> 00:19:04.130
+De structuur is duidelijk.
+
+00:19:04.270 --> 00:19:06.930
+Hoe verder je wijziging gaat, hoe meer controle er nodig is.
+
+00:19:07.150 --> 00:19:09.310
+Niemand verzet zich tegen regels als ze logisch zijn.
+
+00:19:09.490 --> 00:19:11.110
+En vergeet de culturele kant niet.
+
+00:19:11.110 --> 00:19:16.510
+Wanneer ontwikkelaars zien dat bots de routinematige controles uitvoeren en mensen alleen ingrijpen waar hun oordeel ertoe doet,
+
+00:19:16.730 --> 00:19:18.350
+zien ze governance niet langer als een obstakel.
+
+00:19:18.530 --> 00:19:22.770
+Ze respecteren het omdat het ruis filtert en voorkomt dat ze brandjes moeten blussen in productie.
+
+00:19:22.770 --> 00:19:24.570
+Automatisering doet het gezeur.
+
+00:19:24.770 --> 00:19:25.770
+Mensen focussen zich.
