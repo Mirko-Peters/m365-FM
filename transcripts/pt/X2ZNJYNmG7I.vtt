@@ -1,0 +1,5776 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.060
+O Defender XDR está implantado em quase todos os lugares.
+
+00:00:02.360 --> 00:00:03.880
+A maioria dos tenants o mantém ativado.
+
+00:00:04.120 --> 00:00:05.240
+A maioria das licenças é paga.
+
+00:00:05.420 --> 00:00:07.420
+E a maioria das equipes o utiliza como antivírus mais inteligente.
+
+00:00:07.580 --> 00:00:08.680
+Ele bloqueia conhecido como malicioso.
+
+00:00:09.100 --> 00:00:09.560
+Ele envia e-mail.
+
+00:00:10.000 --> 00:00:10.880
+Alguém clica em uma fila.
+
+00:00:11.420 --> 00:00:12.700
+Mas na realidade isso não é detecção.
+
+00:00:13.180 --> 00:00:16.720
+Isso é consumo, porque o modelo por trás dos padrões foi criado pelo cliente médio.
+
+00:00:17.320 --> 00:00:18.340
+E o cliente médio não existe.
+
+00:00:18.920 --> 00:00:20.100
+Não é o tenant de ninguém, nem o seu.
+
+00:00:20.500 --> 00:00:21.780
+Então hoje vamos consertar isso.
+
+00:00:22.380 --> 00:00:25.080
+Veremos como a correlação de incidência realmente decide o que pertence a um contexto.
+
+00:00:25.460 --> 00:00:27.120
+Escreveremos detecções personalizadas em KQ.
+
+00:00:27.740 --> 00:00:29.080
+Ajustaremos o ruído com o método.
+
+00:00:29.080 --> 00:00:32.560
+Adicionaremos automação, incluiremos o Sentinel, criaremos playbooks de resposta.
+
+00:00:32.660 --> 00:00:33.940
+Então mediremos se algo disso funciona.
+
+00:00:34.100 --> 00:00:38.000
+Se você trabalha com segurança, inscreva-se agora para que o próximo episódio sobre engenharia de detecção chegue até você.
+
+00:00:38.260 --> 00:00:41.580
+Mas antes de entrarmos na arquitetura, uma palavra rápida sobre quem apoia este programa.
+
+00:00:42.260 --> 00:00:42.860
+A de patrocinador.
+
+00:00:43.340 --> 00:00:44.300
+Tela Migrator for Exchange.
+
+00:00:44.780 --> 00:00:47.940
+A postura de segurança muda durante uma migração e a maioria das equipes não planeja isso.
+
+00:00:48.420 --> 00:00:51.000
+Quando as caixas de correio se movem, os sinais que o Defender vê se movem com ela.
+
+00:00:51.300 --> 00:00:52.220
+Padrões de login mudam.
+
+00:00:52.560 --> 00:00:54.020
+As permissões da caixa de correio são reconstruídas.
+
+00:00:54.280 --> 00:00:56.680
+Regras de encaminhamento e delegados aparecem em locais onde não está.
+
+00:00:56.680 --> 00:00:59.080
+Sua lógica de detecção lê tudo isso como comportamento.
+
+00:00:59.420 --> 00:01:01.180
+Portanto, uma mudança desorganizada resulta em sinais.
+
+00:01:01.480 --> 00:01:03.620
+É aí que o Stellar Migrator for Exchange se encaixa.
+
+00:01:04.480 --> 00:01:07.260
+É uma ferramenta para mover caixas de correio dentro do ecossistema Microsoft,
+
+00:01:07.460 --> 00:01:09.880
+incluindo entre ambientes Exchange para o Microsoft Resync 5.
+
+00:01:10.480 --> 00:01:11.140
+O ponto é simples.
+
+00:01:11.580 --> 00:01:14.580
+Identidade limpa e estado da caixa de correio limpo tornam a lógica de detecção mais limpa.
+
+00:01:15.020 --> 00:01:16.880
+Menos sobras estranhas significam menos falsos positivos.
+
+00:01:17.220 --> 00:01:18.100
+Isso é tudo que você vai saber.
+
+00:01:18.740 --> 00:01:20.580
+Há um link na descrição se você quiser analisar mais de perto.
+
+00:01:21.100 --> 00:01:22.200
+Agora de volta ao problema central.
+
+00:01:22.640 --> 00:01:23.800
+O que o padrão realmente significa?
+
+00:01:23.800 --> 00:01:25.760
+Premissa de detecção padrão.
+
+00:01:26.260 --> 00:01:27.620
+Comece por quem os padrões são criados.
+
+00:01:28.040 --> 00:01:29.160
+Eles são criados por tênis mediano.
+
+00:01:29.520 --> 00:01:32.740
+Amplo seguro genérico, a Microsoft precisa entregar algo que funcione
+
+00:01:32.740 --> 00:01:35.480
+para uma firma de contabilidade de 10 pessoas e para um banco com 60 mil usuários.
+
+00:01:35.780 --> 00:01:36.760
+Tanto a lógica precisa seguir a dólar.
+
+00:01:37.160 --> 00:01:39.800
+Ela não pode presumir muito sobre o seu negócio porque não sabe nada sobre ele.
+
+00:01:40.280 --> 00:01:41.520
+Aqui está o que você recebe pronto para.
+
+00:01:41.980 --> 00:01:44.500
+Alertas integrados em identidade, endpoint, e-mail, aplicativos e não.
+
+00:01:45.260 --> 00:01:46.920
+Investigação e remediação automatizadas,
+
+00:01:47.260 --> 00:01:49.720
+que analisam um alerta e decidem se as evidências são sólidas.
+
+00:01:49.720 --> 00:01:52.940
+Interrupção de ataques que pode conter um usuário ou um dispositivo
+
+00:01:52.940 --> 00:01:55.320
+enquanto um ataque ainda está em execução, tem um valor real.
+
+00:01:55.700 --> 00:01:57.960
+Não estou descartando isso, mas veja o que todos os três têm em comum.
+
+00:01:58.460 --> 00:02:00.540
+Eles reagem a padrões que ocorrem em muitos clientes.
+
+00:02:01.060 --> 00:02:03.740
+Eles são ajustados para acertar a maior parte do tempo para a maioria das pessoas.
+
+00:02:04.140 --> 00:02:06.880
+E funcionam melhor contra ataques semelhantes aos que o Microsoft já viu.
+
+00:02:07.840 --> 00:02:08.720
+Essa é a parte que importa.
+
+00:02:09.180 --> 00:02:11.180
+Porque o seu risco não se parece com o risco de todos os outros.
+
+00:02:11.760 --> 00:02:12.780
+Pense no que você realmente protege.
+
+00:02:12.780 --> 00:02:15.620
+Talvez seja uma caixa postal do financeiro que aprova transferências,
+
+00:02:15.720 --> 00:02:17.680
+talvez uma conta de administrador que acessa a produção,
+
+00:02:18.180 --> 00:02:20.600
+um compartilhamento de pesquisa que acabaria com a empresa se vazasse,
+
+00:02:21.280 --> 00:02:22.900
+uma detecção genérica, não sabe nada disso.
+
+00:02:23.360 --> 00:02:26.560
+Ela trata cada caixa postal, cada conta e cada servidor como sendo aproximadamente iguais.
+
+00:02:27.020 --> 00:02:27.840
+E essa premissa está errada.
+
+00:02:28.280 --> 00:02:29.040
+Então o que isso lhe custa?
+
+00:02:29.340 --> 00:02:30.960
+Duas coisas e elas agem em direções opostas.
+
+00:02:31.280 --> 00:02:32.580
+Primeiro silêncio onde você precisa um silêncio.
+
+00:02:33.000 --> 00:02:35.940
+O ataque que visa seu ponto fraco específico não corresponde ao modelo.
+
+00:02:35.940 --> 00:02:37.020
+Então nada é disparar.
+
+00:02:37.060 --> 00:02:38.480
+Sem alerta, sem incidente, sem chamado.
+
+00:02:38.640 --> 00:02:39.980
+Apenas um registro vicioso que ninguém lê.
+
+00:02:40.760 --> 00:02:42.460
+Segundo ruído onde você não precisa dele.
+
+00:02:43.140 --> 00:02:45.840
+Regras amplas são disparadas por comportamentos normais no seu ambiente,
+
+00:02:45.920 --> 00:02:47.180
+porque o seu normal não é a média.
+
+00:02:47.760 --> 00:02:49.700
+Sua equipe de TI executa um script que parece um ataque.
+
+00:02:50.240 --> 00:02:51.820
+Sua equipe financeira faz login de transferentes.
+
+00:02:52.440 --> 00:02:53.900
+A regra é de qualquer jeito, repetidamente.
+
+00:02:54.880 --> 00:02:55.820
+Agora, junte essas duas coisas.
+
+00:02:56.380 --> 00:02:58.640
+A nariz vocês passam um dia em alertas que não significam nada,
+
+00:02:58.660 --> 00:03:00.000
+e aquele que importa ainda nem existe.
+
+00:03:00.640 --> 00:03:02.220
+Essa é a falha mudada, não é o produto.
+
+00:03:02.700 --> 00:03:05.280
+É a suposição de que os padrões de outra pessoa podem descrever o seu risco.
+
+00:03:05.740 --> 00:03:07.620
+Portanto, este episódio é uma transição de um modelo para outro.
+
+00:03:08.400 --> 00:03:10.120
+No modelo antigo, você consome alertas,
+
+00:03:10.120 --> 00:03:12.280
+a Microsoft decide o que é suspeito e você reage.
+
+00:03:12.780 --> 00:03:14.980
+No novo modelo, você projeta detecções,
+
+00:03:15.120 --> 00:03:17.240
+decide o que importa no seu tenant, escreve a lógica,
+
+00:03:17.700 --> 00:03:20.120
+correlaciona, automatiza a resposta e mede o resultado.
+
+00:03:20.880 --> 00:03:22.660
+Mesma plataforma, relacionamento diferente com ela.
+
+00:03:23.000 --> 00:03:24.120
+Mas para projetar qualquer coisa,
+
+00:03:24.200 --> 00:03:26.040
+você precisa ver como a plataforma é realmente construída,
+
+00:03:26.120 --> 00:03:27.480
+porque não se pode mudar o que não se vê.
+
+00:03:28.160 --> 00:03:28.720
+É uma brilha.
+
+00:03:28.720 --> 00:03:31.220
+O que o Defender XDR é realmente em termos de arquitetura.
+
+00:03:31.760 --> 00:03:33.920
+A maioria das pessoas descreve o Defender XDR como um único produto.
+
+00:03:34.680 --> 00:03:36.260
+São quatro produtos usando o mesmo Spark.
+
+00:03:36.720 --> 00:03:38.520
+Cada um observa uma parte diferente do seu ambiente.
+
+00:03:39.780 --> 00:03:42.980
+O Defender for Endpoint observa dispositivos, processos, arquivos,
+
+00:03:43.100 --> 00:03:44.920
+conexões de rede e alterações no registro.
+
+00:03:44.920 --> 00:03:47.760
+O Defender for Identity observa seus controladores de domínio
+
+00:03:47.760 --> 00:03:48.800
+e sua infraestrutura de identidade.
+
+00:03:49.340 --> 00:03:51.860
+O Defender for Office 365 observa e-mail e colaboração,
+
+00:03:51.940 --> 00:03:53.460
+ou seja, fluxo de mensagens, Teams e SharePoint.
+
+00:03:53.840 --> 00:03:55.620
+E o Defender for Cloud Apps observa o que acontece
+
+00:03:55.620 --> 00:03:57.340
+dentro dos seus aplicativos SaaS e exceções na web.
+
+00:03:57.760 --> 00:03:59.760
+Quatro cargas de trabalho, quatro conjuntos de sensores,
+
+00:03:59.840 --> 00:04:00.920
+todos eles alimentam um único portal.
+
+00:04:01.340 --> 00:04:03.160
+Esse portal é o portal unificado do Defender,
+
+00:04:03.160 --> 00:04:04.920
+em security.microsoft.com.
+
+00:04:05.440 --> 00:04:08.660
+É onde incidentes, alertas, investigação e ações de resposta convivem.
+
+00:04:09.460 --> 00:04:11.440
+E aqui está a parte que está mudando a forma de tudo isso.
+
+00:04:12.020 --> 00:04:12.800
+O Sentinel está chegando.
+
+00:04:13.440 --> 00:04:15.500
+A Microsoft tem integrado seu CN no mesmo portal.
+
+00:04:16.080 --> 00:04:17.820
+Então a fila em que você trabalha não se importa mais
+
+00:04:17.820 --> 00:04:20.400
+se um alerta veio de um sensor de Endpoint ou de um Logged Firewall.
+
+00:04:20.840 --> 00:04:22.320
+Um só lugar, um modelo de incidente.
+
+00:04:22.740 --> 00:04:24.240
+Voltaremos a falar do Sentinel para a mente mais tarde.
+
+00:04:24.560 --> 00:04:26.000
+Por enquanto, apenas mantenha essa direção em mim.
+
+00:04:26.340 --> 00:04:28.260
+A fronteira entre XDR e CN está ficando mais tênue.
+
+00:04:28.640 --> 00:04:30.440
+Agora, uma visão não é a arquitetura.
+
+00:04:30.840 --> 00:04:32.260
+Para entender como a coisa realmente funciona,
+
+00:04:32.260 --> 00:04:33.660
+você precisa de um modelo de fluxo.
+
+00:04:34.100 --> 00:04:35.120
+E eu vou te dar um que funciona bem
+
+00:04:35.120 --> 00:04:36.260
+quando você não consegue ver um diagrama.
+
+00:04:37.100 --> 00:04:37.700
+Três camadas.
+
+00:04:37.820 --> 00:04:39.240
+Evento, raciocínio e orquestração.
+
+00:04:39.680 --> 00:04:40.720
+A camada 1 é a camada de evento.
+
+00:04:41.120 --> 00:04:42.020
+Esta é a telemetria bruta.
+
+00:04:42.420 --> 00:04:43.780
+Um processo inicia, um usuário entra,
+
+00:04:43.840 --> 00:04:45.960
+um e-mail chega e um arquivo é compartilhado externamente.
+
+00:04:47.100 --> 00:04:48.820
+Cada sensor em todas as quatro cargas de trabalho
+
+00:04:48.820 --> 00:04:50.720
+registra o que aconteceu com o registro de data barra hora
+
+00:04:50.720 --> 00:04:51.600
+e as entidades envolvidas.
+
+00:04:51.920 --> 00:04:52.880
+Sem opiniões ainda, penso.
+
+00:04:53.020 --> 00:04:54.520
+A camada 2 é a camada de raciocínio.
+
+00:04:54.700 --> 00:04:56.920
+É aqui que algo analisa esses fatos e decide o que ele significa.
+
+00:04:57.440 --> 00:05:00.280
+A lógica de detecção é acionada, alertas são criados
+
+00:05:00.280 --> 00:05:03.100
+e, em seguida, a correlação agrupa esses alertas e incidentes.
+
+00:05:03.800 --> 00:05:06.060
+Esta camada transforma em algo que aconteceu que importa.
+
+00:05:06.620 --> 00:05:08.040
+E aqui está com o que ela se conecta.
+
+00:05:08.540 --> 00:05:09.860
+Camada 3 é a camada de orquestração.
+
+00:05:10.280 --> 00:05:11.180
+É o que se faz a respeito disso.
+
+00:05:11.680 --> 00:05:13.580
+Investigação automatizada, interrupção de ataques,
+
+00:05:13.680 --> 00:05:15.440
+playbooks, aprovações, ações de contenção.
+
+00:05:15.940 --> 00:05:16.780
+É a camada que age.
+
+00:05:17.400 --> 00:05:19.100
+Evento, raciocínio, orquestração.
+
+00:05:19.820 --> 00:05:20.680
+Mantenha essa ordem,
+
+00:05:20.680 --> 00:05:22.660
+porque tudo neste episódio se mapeia nela.
+
+00:05:23.940 --> 00:05:26.500
+Escrever detecções KQL pertence à camada de raciocínio.
+
+00:05:26.820 --> 00:05:28.420
+Ajustar o ruído pertence à camada de raciocínio.
+
+00:05:28.420 --> 00:05:29.980
+Os playbooks pertencem à orquestração.
+
+00:05:30.380 --> 00:05:32.280
+E medir a qualidade significa olhar para todas as três.
+
+00:05:32.840 --> 00:05:34.580
+Mas as camadas precisam de um lugar para compartilhá-la.
+
+00:05:34.920 --> 00:05:36.840
+E isso nos leva à parte que a maioria das equipes nunca olha,
+
+00:05:37.320 --> 00:05:38.400
+onde os sinais realmente residem.
+
+00:05:38.800 --> 00:05:40.120
+Eles residem na caça avançada,
+
+00:05:40.220 --> 00:05:41.880
+especificamente nas tabelas de caça avançada.
+
+00:05:42.440 --> 00:05:44.940
+Pense nelas como plano de dados compartilhados sobre toda a plataforma.
+
+00:05:45.420 --> 00:05:47.400
+O Device Process Events contém atividade de processo.
+
+00:05:47.860 --> 00:05:49.520
+A Identity Logon Events contém os logins.
+
+00:05:50.120 --> 00:05:51.260
+E-mail Event contém os e-mails.
+
+00:05:51.740 --> 00:05:53.940
+Cloud App Events contém o que os usuários fazem em seus aplicativos.
+
+00:05:54.360 --> 00:05:56.520
+E há tabelas para alertas e para os próprios incidentes.
+
+00:05:56.520 --> 00:05:59.460
+Portanto, a saída da camada de raciocínio também se torna dados consultáveis.
+
+00:05:59.780 --> 00:06:00.840
+Isso importa mais do que parece.
+
+00:06:01.220 --> 00:06:03.540
+Significa que as mesmas tabelas que um analista usa para caçar
+
+00:06:03.540 --> 00:06:06.180
+são as tabelas contra as quais suas detecções personalizadas são executadas.
+
+00:06:06.340 --> 00:06:08.500
+Não existe um segundo armazenamento de dados ocultos nos bacias.
+
+00:06:08.740 --> 00:06:11.520
+E se você consegue ver na busca avançada, pode criar uma lógica sobre isso.
+
+00:06:11.880 --> 00:06:14.160
+E se você não consegue ver lá, sua detecção também não consegue.
+
+00:06:14.800 --> 00:06:16.560
+Portanto, a arquitetura lhe oferece um acordo bem direto.
+
+00:06:17.240 --> 00:06:18.300
+Microsoft Coleta os Eventos.
+
+00:06:18.300 --> 00:06:21.920
+Você obtém acesso de leitura ao mesmo plano de dados que a lógica da própria Microsoft usa.
+
+00:06:21.920 --> 00:06:27.340
+E a diferença entre o padrão e o personalizado é principalmente o trabalho que você faz sobre essa camada compartilhada.
+
+00:06:27.840 --> 00:06:28.740
+Essa é a abertura estrutural.
+
+00:06:29.400 --> 00:06:33.780
+Mas antes de criar uma lógica para essas tabelas, você precisa entender o que acontece com os alertas que essa lógica produz,
+
+00:06:33.920 --> 00:06:36.280
+porque alertas não ficam sozinhos por muito tempo.
+
+00:06:36.700 --> 00:06:39.860
+Algo os agrupa, os mescla e decide quais pertencem à mesma história.
+
+00:06:40.360 --> 00:06:41.020
+E isso é a correlação.
+
+00:06:41.460 --> 00:06:43.340
+E é a parte mais incompreendida de toda plataforma.
+
+00:06:44.100 --> 00:06:45.060
+Alertas não são incidentes.
+
+00:06:45.600 --> 00:06:49.380
+Vamos começar com uma definição, porque as pessoas usam essas duas palavras como se significassem a mesma coisa.
+
+00:06:49.380 --> 00:06:51.020
+Um alerta é uma observação.
+
+00:06:51.360 --> 00:06:54.440
+Um sensor detectou algo, uma regra foi correspondida e a plataforma registrou.
+
+00:06:54.900 --> 00:06:56.620
+Um comando suspeito do PowerShell em um laptop.
+
+00:06:57.060 --> 00:06:58.340
+Um login de um local estranho.
+
+00:06:58.600 --> 00:07:00.620
+Uma mensagem de e-mail reclassificada após a entrega.
+
+00:07:01.280 --> 00:07:02.120
+Um incidente é uma história.
+
+00:07:02.500 --> 00:07:05.680
+É um conjunto de observações que alguém ou algo decidiu que pertencem umas às outras.
+
+00:07:06.460 --> 00:07:08.800
+Essa diferença parece pequena, mas muda a forma como você trabalha.
+
+00:07:09.780 --> 00:07:11.460
+Um alerta responde o que aconteceu aqui.
+
+00:07:11.880 --> 00:07:13.760
+Um incidente responde o que o atacante está fazendo.
+
+00:07:15.000 --> 00:07:15.980
+Essas são perguntas diferentes.
+
+00:07:16.360 --> 00:07:17.620
+Atacantes não produzem apenas um e-mail.
+
+00:07:17.620 --> 00:07:23.220
+Eles produzem uma corrente, um e-mail de phishing, depois um clique, depois um login, depois uma regra de caixa de correio, depois um download de arquivo.
+
+00:07:23.680 --> 00:07:26.320
+Cada etapa é seu próprio alerta, muitas vezes vindo de sua própria carga de etapa.
+
+00:07:26.860 --> 00:07:28.300
+Por isso o Defender faz o agrupamento para você.
+
+00:07:28.920 --> 00:07:35.240
+Quando os alertas compartilham itens com o mesmo dispositivo, o mesmo usuário, a mesma caixa de correio ou o mesmo arquivo, a plataforma os vincula em um único incidente.
+
+00:07:35.640 --> 00:07:39.980
+Se abre um item em vez de sete, você vê a linha do tempo, os ativos afetados e a ordem dos eventos.
+
+00:07:40.520 --> 00:07:41.540
+Seu trabalho é economizado de verdade.
+
+00:07:41.960 --> 00:07:43.080
+É por isso que a correlação existe.
+
+00:07:43.560 --> 00:07:45.180
+Mas veja o que esse agrupamento pressupõe.
+
+00:07:45.180 --> 00:07:46.860
+Ele pressupõe que a sobreposição é a conexão.
+
+00:07:46.860 --> 00:07:50.220
+Se dois alertas tocam no mesmo usuário, eles provavelmente pertencem ao mesmo ataque.
+
+00:07:50.620 --> 00:07:52.400
+Se eles não compartilham uma entidade, provavelmente não pertencem.
+
+00:07:52.740 --> 00:07:53.640
+Esse é um palpite azulado.
+
+00:07:54.000 --> 00:07:57.600
+Também é apenas um palpite e ele é feito automaticamente antes que qualquer humano tenha analisado as evidências.
+
+00:07:58.240 --> 00:07:59.240
+Na maioria das vezes está tudo bem.
+
+00:07:59.560 --> 00:08:00.860
+Quando está errado, o erro corre-se na encenada.
+
+00:08:01.140 --> 00:08:03.620
+Ninguém vê o alerta que deveria ter se juntado à história, mas não se juntou.
+
+00:08:03.940 --> 00:08:06.980
+Ninguém vê os alertas não relacionados que foram colados juntos por um servidor compartilhado.
+
+00:08:07.680 --> 00:08:10.740
+Agora veja o que revela o quanto as equipes realmente confiam nesse agrupamento.
+
+00:08:11.360 --> 00:08:14.040
+Dentro de um incidente, os analistas ainda fazem a triagem dos alertas um por um.
+
+00:08:14.140 --> 00:08:15.660
+Abre um incidente com 12 alertas.
+
+00:08:15.660 --> 00:08:16.280
+O que acontece?
+
+00:08:16.740 --> 00:08:20.620
+Alguém clica no primeiro alerta, lê, decide se é real, clica no segundo, lê, decide.
+
+00:08:22.300 --> 00:08:25.700
+O incidente lhes deu um container, mas o trabalho dentro dele ainda é no nível do alerta.
+
+00:08:25.980 --> 00:08:28.600
+Cada um recebe seu próprio veredito, suas próprias notas, sua própria classificação.
+
+00:08:28.960 --> 00:08:29.040
+Por quê?
+
+00:08:29.500 --> 00:08:31.400
+Porque o incidente não carrega um veredito próprio.
+
+00:08:31.840 --> 00:08:32.520
+Ele é apenas uma pasta.
+
+00:08:32.780 --> 00:08:34.760
+E o significado reside nas partes.
+
+00:08:34.860 --> 00:08:39.000
+Se o analista precisa reconstruir a história manualmente para decidir se a pasta é um verdadeiro positivo ou apenas...
+
+00:08:39.000 --> 00:08:40.000
+Isso não é uma falha do analista.
+
+00:08:40.200 --> 00:08:40.900
+É uma falha do modelo.
+
+00:08:41.460 --> 00:08:43.760
+O agrupamento economizou cliques, mas não economizou julgamento.
+
+00:08:43.760 --> 00:08:45.180
+E isso nos leva a um número.
+
+00:08:45.620 --> 00:08:47.520
+A liderança adora monitorar a contagem de incidentes.
+
+00:08:47.840 --> 00:08:48.780
+Você verá isso nos painéis.
+
+00:08:49.160 --> 00:08:50.820
+Incidentes este mês, queda de 18%.
+
+00:08:50.820 --> 00:08:53.540
+Parece progresso, mas a contagem de incidentes é uma métrica de vaidade.
+
+00:08:54.020 --> 00:08:55.700
+Ela diz quantas pastas a plataforma criou.
+
+00:08:56.220 --> 00:08:58.640
+Ela não diz nada sobre se essas pastas estavam corretas.
+
+00:08:58.960 --> 00:09:00.040
+Pense no que pode mover esse número.
+
+00:09:00.780 --> 00:09:02.440
+Menos incidentes podem significar menos ataques.
+
+00:09:03.040 --> 00:09:07.200
+Pode também significar uma fusão mais ampla, onde cinco invasões separadas foram agrupadas em uma,
+
+00:09:07.200 --> 00:09:10.460
+ou que uma regra foi desativada e uma classe inteira de atividade ficou invisível.
+
+00:09:11.120 --> 00:09:13.720
+A contagem caiu nos três casos e apenas um deles é bom.
+
+00:09:14.120 --> 00:09:15.940
+Portanto, a verdadeira medida é a qualidade do incidente.
+
+00:09:16.340 --> 00:09:17.720
+O incidente conteve o ataque inteiro?
+
+00:09:18.120 --> 00:09:19.560
+Ele excluiu o ruído não relacionado?
+
+00:09:19.900 --> 00:09:22.940
+O analista chegou a um veredito mais rápido porque a história já estava montada?
+
+00:09:23.400 --> 00:09:26.660
+A qualidade é mais difícil de contar, mas é a única versão que lhe diz algo verdadeiro.
+
+00:09:27.340 --> 00:09:30.080
+E você não pode melhorar a qualidade se não souber como o agrupamento decide.
+
+00:09:30.620 --> 00:09:31.420
+Quais entidades contam?
+
+00:09:31.540 --> 00:09:32.420
+Quanto tempo a janela dura?
+
+00:09:32.460 --> 00:09:33.540
+O que acontece nas extremidades?
+
+00:09:33.540 --> 00:09:35.240
+Então é pra lá que vamos agora.
+
+00:09:35.520 --> 00:09:39.220
+Pra dentro da lógica da correlação em si, como a correlação de incidentes realmente funciona.
+
+00:09:39.820 --> 00:09:41.700
+A correlação é executada em entidades compartilhadas,
+
+00:09:41.800 --> 00:09:43.520
+e entidade é algo sobre o qual um alerta trata.
+
+00:09:43.860 --> 00:09:48.000
+Um dispositivo, uma conta de usuário, uma caixa de correio, um endereço IP, um hash de arquivo.
+
+00:09:48.660 --> 00:09:51.860
+Quando dois alertas apontam pra mesma entidade, a plataforma trata isso como um link,
+
+00:09:52.040 --> 00:09:53.540
+e os links se acumulam em um incidente.
+
+00:09:54.060 --> 00:09:55.920
+Pense nisso como correspondência, não compreensão.
+
+00:09:56.380 --> 00:09:58.740
+O motor não lê o alerta e pergunta se a história faz sentido.
+
+00:09:59.380 --> 00:10:01.220
+Ele verifica se os alertas tocam nos mesmos objetos.
+
+00:10:01.220 --> 00:10:05.060
+Um alerta de phishing cita uma caixa de correio, um alerta de login cita o mesmo usuário,
+
+00:10:05.200 --> 00:10:07.200
+um alerta de malware cita o laptop em que esse usuário trabalha.
+
+00:10:07.540 --> 00:10:09.020
+Esses três se sobrepõem, então eles se fundam.
+
+00:10:09.260 --> 00:10:09.800
+Depois é o tempo.
+
+00:10:10.080 --> 00:10:13.660
+Apenas a sobreposição não basta, pois o mesmo laptop pode aparecer em alertas com meses de intervalo.
+
+00:10:14.000 --> 00:10:16.840
+Portanto, a correlação também observa quão próximos os alertas estão no tempo
+
+00:10:16.840 --> 00:10:18.400
+se a sequência se encaixa tecnicamente.
+
+00:10:18.960 --> 00:10:22.380
+Um clique, depois um login, e então o processo no dispositivo tudo dentro de horas é lido
+
+00:10:22.380 --> 00:10:23.100
+como uma única cadeia.
+
+00:10:23.640 --> 00:10:25.660
+Os mesmos três eventos espalhados por um trimestre não são.
+
+00:10:25.660 --> 00:10:27.340
+E essa fusão funciona de caixa de trabalho.
+
+00:10:27.720 --> 00:10:28.920
+Esse é o objetivo principal do X-DEP.
+
+00:10:28.920 --> 00:10:30.620
+O alerta de e-mail veio de um produto.
+
+00:10:30.940 --> 00:10:32.300
+O alerta de identidade veio de outro.
+
+00:10:32.740 --> 00:10:34.200
+O alerta de endpoint veio de um terceiro.
+
+00:10:34.800 --> 00:10:38.000
+A correlação os reúne em uma linha do tempo, para que você veja o ataque como o invasor
+
+00:10:38.000 --> 00:10:39.600
+o viveu, não como cada sensor o detectou.
+
+00:10:39.860 --> 00:10:40.720
+Agora os pontos fracos.
+
+00:10:41.060 --> 00:10:43.040
+O cruzamento de entidades compartilhadas fala em duas direções.
+
+00:10:43.500 --> 00:10:44.860
+Ele une coisas que não deveriam ser unidas.
+
+00:10:45.100 --> 00:10:46.440
+E deixa passar coisas que deveriam ser unidas.
+
+00:10:46.820 --> 00:10:47.360
+Como é acessível?
+
+00:10:47.820 --> 00:10:50.140
+Imagine uma conta de serviço que executa backups em 40 servidores.
+
+00:10:50.880 --> 00:10:52.760
+Cada alerta em qualquer um desses servidores cessa conta.
+
+00:10:52.760 --> 00:10:57.720
+Então um alerta não relacionado no servidor 3 e outro no servidor 31 apontam para o mesmo
+
+00:10:57.720 --> 00:10:59.320
+usuário e o mecanismo os une.
+
+00:11:00.340 --> 00:11:03.300
+Agora você tem um incidente que parece uma ampla campanha, quando na verdade são dois
+
+00:11:03.300 --> 00:11:04.760
+eventos separados e comuns.
+
+00:11:05.440 --> 00:11:06.380
+O Jump Host faz uma coisa.
+
+00:11:06.840 --> 00:11:08.060
+Todo administrador passa por eles.
+
+00:11:08.180 --> 00:11:10.380
+Então a atividade de cada administrador compartilha um dispositivo.
+
+00:11:10.580 --> 00:11:11.620
+Endereços IP fazem o mesmo.
+
+00:11:12.340 --> 00:11:14.540
+Centenas de pessoas saem do seu escritório por um IP público.
+
+00:11:14.680 --> 00:11:17.600
+Então um alerta ligado a esse endereço pode vincular usuários que nunca se conheceram.
+
+00:11:17.960 --> 00:11:19.180
+O resultado é um incidente inflado.
+
+00:11:19.180 --> 00:11:23.120
+Os analistas o abrem, veem 60 alertas e não conseguem dizer quais pertencem ao ataque.
+
+00:11:23.800 --> 00:11:26.520
+Então eles gastam uma hora tentando organizar ou fecham tudo uma vez.
+
+00:11:27.200 --> 00:11:28.460
+A subfusão é o problema oposto.
+
+00:11:28.660 --> 00:11:29.400
+É mais traiçoeira.
+
+00:11:30.040 --> 00:11:33.060
+Considere um invasor que rouba uma senha e entra a partir de uma máquina limpa que
+
+00:11:33.060 --> 00:11:33.920
+você não gerencia.
+
+00:11:34.580 --> 00:11:36.340
+Nenhum dispositivo da sua rede chega a tocar na sessão.
+
+00:11:37.000 --> 00:11:40.000
+Os alertas de identidade são disparados, mas não há evento de endpoint para conectá-los.
+
+00:11:40.080 --> 00:11:41.800
+Nenhum dispositivo ou hash de arquivo compartilhado.
+
+00:11:42.060 --> 00:11:45.020
+A única entidade comum é o usuário, e se os alertas nomeiam esse usuário de formas
+
+00:11:45.020 --> 00:11:46.980
+ligeiramente diferentes, o vínculo pode nunca se formar.
+
+00:11:46.980 --> 00:11:50.500
+Então a mesma invasão permanece na sua fila como itens separados, um alerta de identidade
+
+00:11:50.500 --> 00:11:51.740
+aqui, um alerta de app em nuvem ali.
+
+00:11:52.160 --> 00:11:52.800
+Cada um parece pequeno.
+
+00:11:53.200 --> 00:11:56.700
+Ninguém vê a cadeia porque o único elemento que os uniria nunca apareceu, o que nos leva
+
+00:11:56.700 --> 00:11:58.440
+a como você deve ler um incidente após tê-lo.
+
+00:11:58.960 --> 00:12:02.280
+A maioria das pessoas trata o gráfico de incidente, como imagem, diagrama com nós e linhas.
+
+00:12:02.820 --> 00:12:05.080
+Eles dão uma olhada, concordam com a cabeça e voltam para a lista de alertas.
+
+00:12:05.660 --> 00:12:07.220
+Use como afiamento de raciocínio, meu exército.
+
+00:12:07.640 --> 00:12:09.440
+Olhe para as linhas e pergunte por que cada um existe.
+
+00:12:09.820 --> 00:12:11.360
+Qual entidade conecta este alerta àquele?
+
+00:12:11.360 --> 00:12:15.780
+É um vínculo real, mesmo usuário comprometido, ou um objeto compartilhado, como aquela conta
+
+00:12:15.780 --> 00:12:16.160
+de serviços.
+
+00:12:16.440 --> 00:12:18.300
+Cada aresta no gráfico é uma afirmação feita pelo mecanismo.
+
+00:12:18.740 --> 00:12:20.680
+Seu trabalho é verificar a afirmação e ver o que falta.
+
+00:12:21.340 --> 00:12:24.860
+Se você sabe que um ataque deveria ter afetado uma caixa postal, um dispositivo e uma seção
+
+00:12:24.860 --> 00:12:27.860
+na nuvem, e o gráfico mostra apenas dois, o terceiro é uma lacuna.
+
+00:12:28.360 --> 00:12:30.780
+A forma do gráfico lhe diz onde o mecanismo ficou sem evidências.
+
+00:12:31.620 --> 00:12:32.720
+Esse último ponto é o que mais importa.
+
+00:12:33.160 --> 00:12:36.120
+Quando a correlação falha raramente é porque a lógica de correspondência está quebrada.
+
+00:12:36.120 --> 00:12:39.260
+Ela falha porque a evidência necessária para a correspondência nunca foi criada.
+
+00:12:40.080 --> 00:12:42.260
+Sem alerta, sem entidade, sem entidade, sem vínculo.
+
+00:12:42.880 --> 00:12:45.120
+Tanto a lacuna no incidente é geralmente uma lacuna na detecção.
+
+00:12:45.720 --> 00:12:48.500
+Algo aconteceu, nada foi disparado, e a história tem um buraco no meio.
+
+00:12:48.860 --> 00:12:49.960
+É aí que precisamos olhar a seguir.
+
+00:12:50.420 --> 00:12:53.200
+Nos lugares dentro dos tenants reais onde esses buracos continuam aparecendo.
+
+00:12:54.560 --> 00:12:56.280
+Onde a correlação falha dentro de tenants reais.
+
+00:12:56.940 --> 00:12:58.820
+Comece com o ambiente que a maioria de vocês realmente opera.
+
+00:12:59.380 --> 00:13:01.660
+Híbrido parte da sua identidade ainda reside no local on-premise.
+
+00:13:02.420 --> 00:13:05.280
+Controladores de domínio, uma sala de servidores e um data center que você herdou.
+
+00:13:05.280 --> 00:13:08.300
+O Defender for Identity os monitora através de um sensor.
+
+00:13:08.500 --> 00:13:10.800
+E esse sensor alimenta a mesma plataforma que todo o resto.
+
+00:13:11.560 --> 00:13:12.260
+Mas aqui está o problema.
+
+00:13:12.580 --> 00:13:14.260
+Esses sinais nem sempre chegam na hora certa.
+
+00:13:14.720 --> 00:13:16.040
+E nem sempre chegam completos.
+
+00:13:16.620 --> 00:13:17.640
+Um sensor perde sua conexão.
+
+00:13:18.000 --> 00:13:20.480
+Um controlador de domínio fica atrás de uma regra que ninguém documentou.
+
+00:13:20.760 --> 00:13:23.020
+Um novo controlador entra em operação e ninguém instala o agente.
+
+00:13:23.400 --> 00:13:25.800
+Então o login na nuvem aparece imediatamente.
+
+00:13:25.900 --> 00:13:27.820
+E a metade local da mesma história aparece com atraso.
+
+00:13:27.900 --> 00:13:29.060
+Em partes ou nunca.
+
+00:13:29.820 --> 00:13:32.260
+Correlação depende da existência de ambas as metades no mesmo momento.
+
+00:13:32.260 --> 00:13:36.160
+Quando falta uma metade, o vínculo não tem onde se agarrar e você não verá um erro.
+
+00:13:36.560 --> 00:13:38.400
+Você verá um incidente menor do que o ataque merecia.
+
+00:13:38.940 --> 00:13:40.460
+Agora adicione os produtos que defendam o controlador.
+
+00:13:40.820 --> 00:13:41.760
+Quase tudo tem na pulse de algum.
+
+00:13:42.160 --> 00:13:43.580
+Um firewall de um fornecedor.
+
+00:13:43.660 --> 00:13:44.780
+Um web proxy de outro.
+
+00:13:45.080 --> 00:13:47.400
+Um gateway de e-mail de terceiros na frente do exchange.
+
+00:13:47.860 --> 00:13:50.340
+Uma ferramenta de acesso à nuvem que outra equipe comprou há dois anos.
+
+00:13:51.020 --> 00:13:54.760
+Cada um gera alertas e alguns desses alertas descrevem exatamente a atividade que lhe interessa.
+
+00:13:54.760 --> 00:13:57.360
+Mas o defender não vincula o que não consegue ler.
+
+00:13:57.980 --> 00:14:00.360
+Se esses alertas nunca entram na plataforma, eles nunca situam em entidades.
+
+00:14:00.940 --> 00:14:03.320
+Eles permanecem em seu próprio console, em sua própria fila, com sua própria metade.
+
+00:14:03.560 --> 00:14:06.340
+O invasor passou pelo seu firewall e entrou na sua caixa de entrada.
+
+00:14:06.560 --> 00:14:09.480
+E nenhum sistema no mundo conectou os dois, porque nunca estiveram no mesmo lugar.
+
+00:14:09.960 --> 00:14:10.920
+Então quanto isso custa pra você?
+
+00:14:11.240 --> 00:14:12.440
+Primeiro, o trabalho é feito duas vezes.
+
+00:14:13.040 --> 00:14:16.960
+Dois analistas, ou o mesmo analista em dois dias diferentes, fazem a triagem a um único evento no evento.
+
+00:14:17.560 --> 00:14:20.520
+Cada um abre seu próprio item, lê suas próprias evidências e escreve suas próprias não.
+
+00:14:20.520 --> 00:14:22.500
+Os minutos se acumulam e nada disso agrega ruins mesmo.
+
+00:14:23.080 --> 00:14:24.600
+Segundo, e pior, a corrente se quebra.
+
+00:14:25.420 --> 00:14:30.640
+Um ataque que se desenrola através de identidade, e-mail e endpoints, só parece um ataque quando você vê as três etapas juntas.
+
+00:14:31.400 --> 00:14:34.360
+Separe-se e cada peça aparecerá uma anomalia de baixa severidade.
+
+00:14:34.500 --> 00:14:36.420
+Um alerta médio aqui, um informativo ali.
+
+00:14:37.320 --> 00:14:38.360
+Ninguém escala uma anomalia.
+
+00:14:38.900 --> 00:14:39.980
+Veja como esse momento aparece.
+
+00:14:40.640 --> 00:14:42.320
+Um usuário relata um e-mail estranho na segunda-feira.
+
+00:14:42.740 --> 00:14:43.900
+Esse é o primeiro chamado da cara de e-mail.
+
+00:14:44.720 --> 00:14:47.900
+Na terça-feira, um login de um país desconhecido dispara um alerta de identidade.
+
+00:14:48.300 --> 00:14:50.660
+Esse é o segundo chamado, e ele vai pra uma análise diferente.
+
+00:14:50.660 --> 00:14:55.540
+Na quarta-feira, um firewall de outro fornecedor sinaliza tráfego de saída em comum da subrede financeira.
+
+00:14:56.020 --> 00:14:57.840
+Terceiro chamado é uma ferramenta totalmente separada.
+
+00:14:58.440 --> 00:15:01.960
+Três chamados, três proprietários, três notas de encerramento que dizem sem ações adicionais.
+
+00:15:02.700 --> 00:15:06.140
+Mas foi uma invasão, uma pessoa, uma sessão roubada, três dias de movimento silencioso.
+
+00:15:06.600 --> 00:15:09.660
+Cada chamado foi encerrado corretamente com base no que aquele analista podia ver.
+
+00:15:09.980 --> 00:15:12.060
+E a soma dessas decisões corretas resultou em uma decisão errada.
+
+00:15:12.640 --> 00:15:13.200
+Essa é a falha.
+
+00:15:13.200 --> 00:15:14.280
+Não é descuido.
+
+00:15:14.880 --> 00:15:16.740
+É uma estrutura que nunca deu a ninguém a visão completa.
+
+00:15:17.540 --> 00:15:18.880
+Então como você corrige uma lacuna como essa?
+
+00:15:19.060 --> 00:15:20.940
+Você não pode corrigir olhando pro gráfico de incidentes.
+
+00:15:21.260 --> 00:15:23.400
+O gráfico mostra apenas o que a plataforma já sabe.
+
+00:15:23.820 --> 00:15:25.180
+A correção está uma camada abaixo.
+
+00:15:25.240 --> 00:15:29.040
+Na lógica que decide o que é registrado como alerta e quais entidades esse alerta carrega.
+
+00:15:29.560 --> 00:15:31.860
+O que significa que você precisa falar a linguagem na qual essa camada opera.
+
+00:15:32.380 --> 00:15:35.780
+Aquela abaixo da busca, abaixo das detecções personalizadas, abaixo das detecções personalizadas,
+
+00:15:35.880 --> 00:15:36.980
+abaixo de quase tudo que você pode mudar.
+
+00:15:37.420 --> 00:15:38.380
+KQL, KQL.
+
+00:15:38.740 --> 00:15:40.000
+KQL como uma linguagem de detecção.
+
+00:15:40.420 --> 00:15:42.380
+A maioria das equipes trata o KQL como um passatebo de busca.
+
+00:15:42.380 --> 00:15:43.900
+Alguém na equipe gosta de...
+
+00:15:43.900 --> 00:15:46.320
+Eles escrevem consultas inteligentes em uma tarde tranquila,
+
+00:15:46.460 --> 00:15:49.220
+colam em uma nota compartilhada e todo o resto da equipe continua clicando na fila.
+
+00:15:49.420 --> 00:15:50.420
+Isso é um desperdício que realmente era.
+
+00:15:50.900 --> 00:15:52.060
+KQL é a superfície de controle.
+
+00:15:52.640 --> 00:15:55.420
+É o único lugar onde você decide o que conta com o suspeito em seu tênis.
+
+00:15:55.960 --> 00:15:57.360
+Cada detecção personalizada é uma consulta.
+
+00:15:57.720 --> 00:15:59.080
+Cada resultado de busca é uma consulta.
+
+00:15:59.240 --> 00:16:01.700
+Até a mesma maneira como você verifica se a correlação perdeu algo é uma consulta.
+
+00:16:02.140 --> 00:16:04.480
+Se você não sabe escrever, você está esperando que alguém escreva por você.
+
+00:16:04.800 --> 00:16:05.980
+Então vamos construir o modelo mental primeiro.
+
+00:16:06.420 --> 00:16:07.740
+Pense em uma tabela como um fluxo de evento.
+
+00:16:08.100 --> 00:16:10.220
+Linhas continuam chegando, cada uma sendo um fato, com regia de data.
+
+00:16:10.220 --> 00:16:12.740
+Uma consulta é uma hipótese que você executa com esse fluxo.
+
+00:16:13.740 --> 00:16:16.100
+Se um atacante fizesse isso, eu veria linhas que parecem com aquilo.
+
+00:16:17.140 --> 00:16:18.600
+Você escreve o palpite e executa.
+
+00:16:18.640 --> 00:16:19.820
+E o fluxo diz se você está certo.
+
+00:16:20.340 --> 00:16:21.440
+Essa estrutura mantém você oné.
+
+00:16:21.820 --> 00:16:22.840
+Uma consulta não a busca.
+
+00:16:23.380 --> 00:16:26.680
+É uma alegação sobre o comportamento do atacante que os dados podem confirmar ou descartar.
+
+00:16:27.460 --> 00:16:28.500
+Agora, quais fluxos existem?
+
+00:16:29.040 --> 00:16:30.980
+Cinco tabelas carregarão a maior parte do que você constrói.
+
+00:16:30.980 --> 00:16:34.220
+Eventos de processo e dispositivo guardam a criação de processo.
+
+00:16:34.320 --> 00:16:36.460
+O que foi executado, o que o iniciou e com qual linha de comando.
+
+00:16:37.380 --> 00:16:40.100
+Eventos de dispositivo é a tabela ampla para tudo mais em um dispositivo,
+
+00:16:40.180 --> 00:16:43.260
+como alterações de registro, carregamentos de drivers e ações relacionadas à segurança.
+
+00:16:44.020 --> 00:16:46.880
+Eventos de logon e de identidade guardam os acessos em todas as suas fontes de identidade.
+
+00:16:47.440 --> 00:16:50.440
+Eventos de e-mail guardam o fluxo de mensagem com remetente e destinatário virilhado.
+
+00:16:50.440 --> 00:16:54.040
+E eventos de aplicativos em nuvem guardam o que as pessoas fazem dentro dos aplicativos SaaS depois que entra.
+
+00:16:54.040 --> 00:16:58.700
+Aprenda o que cada uma registra e quais colunas identificam o usuário, o dispositivo e a caixa de correio.
+
+00:16:59.340 --> 00:17:00.480
+Essa é a leitura de esquema que importa.
+
+00:17:00.880 --> 00:17:03.560
+Os nomes das colunas dizem a quais entidades seu alerta pode se conectar.
+
+00:17:04.080 --> 00:17:07.940
+Como vimos com a correlação, entidades são o que unem a história para o padrão.
+
+00:17:08.540 --> 00:17:10.620
+E tem quatro movimentos e a ordem é a habilidade completa.
+
+00:17:11.060 --> 00:17:11.560
+Filtre cedo.
+
+00:17:11.960 --> 00:17:13.360
+Reduz a tabela antes de fazer qualquer outra coisa.
+
+00:17:13.840 --> 00:17:14.580
+Defina a janela de tempo.
+
+00:17:15.060 --> 00:17:16.220
+Nomeia a ação com a qual você se preocupa.
+
+00:17:16.220 --> 00:17:19.720
+Cada linha que você descarta nas primeiras linhas é uma linha que você nunca paga para processar.
+
+00:17:20.000 --> 00:17:20.760
+Projete forma restrita.
+
+00:17:21.020 --> 00:17:22.260
+Mantenha apenas as colunas de que você se preocupa.
+
+00:17:22.260 --> 00:17:24.560
+Uma tabela ampla carrega dezenas de campos.
+
+00:17:24.680 --> 00:17:27.740
+E arrastá-los pelo restante da consulta deixa tudo mais lento e sem motivo.
+
+00:17:28.400 --> 00:17:29.500
+Resuma, conte a GroupMess.
+
+00:17:30.200 --> 00:17:32.000
+É aqui que uma pilha de eventos se torna um padrão.
+
+00:17:32.400 --> 00:17:34.960
+Como esta conta falhou 12 vezes depois teve sucesso.
+
+00:17:35.900 --> 00:17:36.420
+Junte por último.
+
+00:17:36.840 --> 00:17:39.160
+Traga uma segunda tabela apenas quando a primeira já estiver pequena.
+
+00:17:39.700 --> 00:17:42.220
+Um join em dois conjuntos enormes é onde as consultas vão para morrer.
+
+00:17:42.600 --> 00:17:44.220
+Filtrar, projetar, resumir e juntar.
+
+00:17:45.580 --> 00:17:47.360
+Quando uma consulta está lenta ou expira,
+
+00:17:47.760 --> 00:17:50.460
+a correção é quase sempre que um desses quatro foi feito fora de ordem.
+
+00:17:50.460 --> 00:17:53.420
+E falando em erros, três deles aparecem constantemente.
+
+00:17:53.800 --> 00:17:55.440
+O primeiro é o intervalo de tempo ilimitado.
+
+00:17:55.940 --> 00:17:58.280
+Uma consulta sem filtro de tempo verifica a tabela contém.
+
+00:17:58.760 --> 00:18:02.420
+É lenta, é cara e uma detecção baseada nela pode simplesmente falhar ou ser executada.
+
+00:18:03.020 --> 00:18:04.940
+Sempre defina uma janela e faça com que ela corresponda pelo.
+
+00:18:05.340 --> 00:18:06.520
+O segundo é o join caro.
+
+00:18:07.140 --> 00:18:09.020
+Alguém combina duas tabelas grandes logo no início,
+
+00:18:09.080 --> 00:18:11.440
+antes de filtrar qualquer uma delas e se pergunta por que o portal trava.
+
+00:18:12.120 --> 00:18:13.400
+Reduzamos os lados primeiro, então.
+
+00:18:14.040 --> 00:18:15.720
+O terceiro ponto é a correspondência de strings em Q99.
+
+00:18:15.720 --> 00:18:19.320
+Pesquisar a linha de comando completa de cada evento de processo por uma palavra,
+
+00:18:19.460 --> 00:18:21.100
+usando uma verificação contém flexível,
+
+00:18:21.260 --> 00:18:23.260
+força o mecanismo a ler textos que não precisava.
+
+00:18:23.760 --> 00:18:25.360
+Combine um campo preciso sempre que porra.
+
+00:18:25.760 --> 00:18:28.340
+Filtre as linhas primeiro e depois faça a busca de texto no que restou.
+
+00:18:28.720 --> 00:18:32.000
+Corrige esses três pontos e a maioria das suas consultas lentas deixará de ser lenta,
+
+00:18:32.260 --> 00:18:33.780
+mas aqui está o limite de tudo que cobrimos.
+
+00:18:34.280 --> 00:18:36.300
+Uma boa consulta guardada em uma nota ainda é apenas uma.
+
+00:18:37.100 --> 00:18:39.320
+Ela só encontra algo quando alguém se lembra de executá-lo.
+
+00:18:39.680 --> 00:18:41.440
+O invasor não espera pela sua tarde de quinta-feira.
+
+00:18:41.440 --> 00:18:45.120
+Uma consulta se torna uma detecção quando ela é executada em uma agenda, sem você.
+
+00:18:45.800 --> 00:18:47.420
+De consulta e de busca, a regra de detecção.
+
+00:18:47.580 --> 00:18:48.660
+A detecção tem um ciclo de vida.
+
+00:18:49.080 --> 00:18:51.600
+Ela não surge simplesmente, roda para sempre e permanece correta.
+
+00:18:52.220 --> 00:18:56.780
+Ela passa por estágios, hipótese, consulta, validação, regra, ajuste e desativação.
+
+00:18:57.520 --> 00:18:58.220
+Comece com uma hipótese.
+
+00:18:58.840 --> 00:19:00.580
+Você escreve o que o invasor faz em palavras simples.
+
+00:19:01.380 --> 00:19:04.060
+Após um login roubado, ele escreve uma regra de caixa de entrada que oculta e-mail.
+
+00:19:05.120 --> 00:19:07.820
+Essa frase vem antes de qualquer código e só depois da consulta.
+
+00:19:07.820 --> 00:19:10.240
+E aí executa a suposição em QQL e a executa contra dados reais.
+
+00:19:10.240 --> 00:19:12.440
+E depois vem a validação que a maioria das equipes ignoram.
+
+00:19:12.760 --> 00:19:13.700
+Você verifica os resultados do momento.
+
+00:19:14.380 --> 00:19:15.460
+As linhas correspondem ao que você pretende.
+
+00:19:15.880 --> 00:19:16.840
+Quantas são atividades normais?
+
+00:19:17.200 --> 00:19:18.760
+Se você não consegue explicar cada linha, você não está pronto.
+
+00:19:19.300 --> 00:19:20.360
+Só então ela se torna uma regra.
+
+00:19:20.980 --> 00:19:23.280
+Depois disso vem o ajuste, porque a primeira versão nunca é a última.
+
+00:19:23.880 --> 00:19:24.780
+O fim é a desativação.
+
+00:19:25.220 --> 00:19:28.740
+Uma regra que não justifica mais sua existência deve ser removida propositalmente, não por negligência.
+
+00:19:29.140 --> 00:19:29.740
+Não tem essa sequência.
+
+00:19:30.500 --> 00:19:32.440
+A maioria das detecções falhas ignorou uma etapa.
+
+00:19:32.580 --> 00:19:33.900
+E quase sempre foi a validação.
+
+00:19:34.420 --> 00:19:38.680
+Agora, sobre a mecânica no Defender, você cria regras de detecção personalizadas na página de busca avançada.
+
+00:19:38.680 --> 00:19:42.680
+Você escreve a consulta, executa e escolhe criar uma regra de detecção a partir dela.
+
+00:19:43.140 --> 00:19:45.460
+O portal então pergunta com que frequência a regra deve rodar.
+
+00:19:45.560 --> 00:19:46.800
+E essa escolha importa mais do que parece.
+
+00:19:47.460 --> 00:19:48.520
+Tem duas famílias de opções.
+
+00:19:48.980 --> 00:19:50.000
+Agendado e quase em tempo real.
+
+00:19:50.680 --> 00:19:54.900
+As regras agendadas rodam em intervalos fixos a cada hora, a cada 3 horas, a cada 12 ou uma vez ao dia.
+
+00:19:55.460 --> 00:19:58.580
+Elas analisam uma janela de dados, encontram correspondências e geram alerta.
+
+00:19:58.660 --> 00:19:59.220
+Lá são flexíveis.
+
+00:19:59.600 --> 00:20:03.440
+Podem lidar com lógicas mais pesadas, como o Summarize com Join, pois tem tempo para processar.
+
+00:20:03.740 --> 00:20:07.260
+O modo quase em tempo real, que você verá como contínuo, roda conforme os eventos são transmitidos.
+
+00:20:07.260 --> 00:20:09.000
+Os alertas aparecem em instantes, não em hora.
+
+00:20:09.420 --> 00:20:14.020
+Essa velocidade é o que você deseja para coisas que não podem esperar, como a regra de caixa de correio criada logo após um login de risco.
+
+00:20:14.220 --> 00:20:15.000
+Mas ela vem com limites.
+
+00:20:15.460 --> 00:20:16.460
+A consulta precisa ser simples.
+
+00:20:16.940 --> 00:20:20.020
+Apenas algumas tabelas são suportadas e você não pode depender de agregações pesadas.
+
+00:20:20.300 --> 00:20:21.040
+Então a troca é clara.
+
+00:20:21.780 --> 00:20:22.880
+Velocidade versus complexidade.
+
+00:20:23.820 --> 00:20:26.480
+Use quase em tempo real para sinais de evento único de alta confiança.
+
+00:20:27.040 --> 00:20:30.180
+Use agendado para padrões que só aparecem quando você conta ou compara ao longo do tempo.
+
+00:20:30.180 --> 00:20:33.420
+A seguir, a parte que confunde as pessoas, as colunas e saída.
+
+00:20:34.300 --> 00:20:36.660
+Uma regra é uma consulta, mas a plataforma precisa de mais linhas.
+
+00:20:37.160 --> 00:20:39.280
+Ela precisa saber quando o evento aconteceu e do que se tratava.
+
+00:20:39.760 --> 00:20:45.020
+Portanto, sua consulta deve retornar uma coluna de carimbo de data barra hora e coluna de identificação das entidades envolvidas.
+
+00:20:45.960 --> 00:20:48.300
+Um ID dispositivo, conta de usuário ou ID de objeto.
+
+00:20:48.680 --> 00:20:50.180
+Endereço de e-mail, hash de arquivo.
+
+00:20:50.900 --> 00:20:55.780
+Se você omiti-los, a regra se recusa a salvar ou salva e produz alertas que não se vinculam a nada.
+
+00:20:56.380 --> 00:20:57.740
+Lembre-se do que dissemos sobre correlação.
+
+00:20:57.740 --> 00:20:59.160
+Entidades são os linhas.
+
+00:20:59.600 --> 00:21:01.020
+Um alerta sem entidade é um órfão.
+
+00:21:01.500 --> 00:21:04.700
+Ele não pode integrar um incidente, não pode acionar uma resposta no dispositivo correto
+
+00:21:04.700 --> 00:21:06.320
+e não pode dizer ao analista para quem ligar.
+
+00:21:06.980 --> 00:21:08.940
+É por isso também que um sumariz descuidado quebra as regras.
+
+00:21:09.340 --> 00:21:11.640
+Ao agregar, você descarta as colunas pelas quais não agrupou.
+
+00:21:12.400 --> 00:21:17.600
+Então os campos de entidade desaparecem, por isso você precisa mantê-los, projetá-los de volta ou agrupá-los propositalmente.
+
+00:21:18.140 --> 00:21:20.720
+Sempre verifique as linhas finais da sua consulta e pergunte uma coisa.
+
+00:21:21.120 --> 00:21:23.080
+Se isso for disparado para onde o alerta aponta.
+
+00:21:23.600 --> 00:21:24.200
+Os metadados.
+
+00:21:24.520 --> 00:21:26.040
+É isso que o analista lê às 3 da manhã.
+
+00:21:26.040 --> 00:21:28.500
+Você define um título e ele deve dizer o que aconteceu.
+
+00:21:29.020 --> 00:21:29.920
+Não como a regra é chamada.
+
+00:21:30.640 --> 00:21:34.000
+Regra de caixa de entrada oculta e-mail após login de risco é melhor que regra 47.
+
+00:21:34.640 --> 00:21:39.000
+Você define uma severidade que deve refletir o dano se for real, não o co-inteligente à consulta.
+
+00:21:39.640 --> 00:21:43.740
+Você define uma categoria para que o alerta caia na pasta certa, como persistência ou acesso a credenciais.
+
+00:21:44.080 --> 00:21:45.380
+E o mapeia para uma técnica mitre.
+
+00:21:45.900 --> 00:21:50.780
+Esse mapeamento não é decoração, é como você mede a cobertura depois e vê quais partes de um ataque você ainda não consegue detectar.
+
+00:21:50.780 --> 00:21:55.940
+Adicione uma descrição com o próximo passo para o analista e a regra estará pronta, mas escrever a regra é a parte fácil.
+
+00:21:56.440 --> 00:22:00.440
+Uma consulta pode ser perfeita e ainda ser inútil se detectar algo que ninguém precisava detectar.
+
+00:22:00.860 --> 00:22:03.640
+Tanto a pergunta mais difícil vem antes de qualquer KQL que merece uma regra.
+
+00:22:04.580 --> 00:22:05.360
+Colheu o que detectar.
+
+00:22:05.920 --> 00:22:07.180
+Priorização informada por ameaças.
+
+00:22:07.180 --> 00:22:09.400
+A maioria das equipes responde essa pergunta da maneira errada.
+
+00:22:09.880 --> 00:22:11.520
+Eles abrem a matriz mitre até TNSK.
+
+00:22:11.660 --> 00:22:13.600
+Vêm centenas de técnicas e decidem cobrir todas elas.
+
+00:22:14.200 --> 00:22:14.800
+A planilha parece.
+
+00:22:15.960 --> 00:22:18.700
+Cada célula ganha uma cor e o projeto vira preencher a grade.
+
+00:22:19.920 --> 00:22:22.300
+Mas a matriz descreve o que os atacantes fazem toda a...
+
+00:22:22.300 --> 00:22:23.820
+Ela não diz o que prejudicaria você.
+
+00:22:24.240 --> 00:22:24.740
+Isso é o básico.
+
+00:22:25.020 --> 00:22:27.440
+É um mapa mundi e você está tentando defender apenas uma casa nele.
+
+00:22:27.720 --> 00:22:28.480
+Então comece por outro lugar.
+
+00:22:28.940 --> 00:22:29.720
+Comece pelo rito de negócio.
+
+00:22:30.200 --> 00:22:30.980
+Faça uma pergunta simples.
+
+00:22:31.340 --> 00:22:34.040
+Se um atacante entrasse amanhã atrás do que ele iria, qual seria o custo disso?
+
+00:22:34.040 --> 00:22:38.000
+Não em termos técnicos, mas em dinheiro, tempo de inatividade, exposição legal, manchetes.
+
+00:22:38.660 --> 00:22:40.860
+A resposta para essa pergunta é a sua estratégia de detecção.
+
+00:22:41.320 --> 00:22:43.860
+A matriz vem depois como uma ferramenta para verificar seu trabalho.
+
+00:22:44.300 --> 00:22:45.360
+Agora torne a resposta concreta.
+
+00:22:45.660 --> 00:22:46.460
+Quatro coisas para mapear.
+
+00:22:46.920 --> 00:22:48.200
+Primeiro, as joias da coroa.
+
+00:22:48.320 --> 00:22:50.880
+Os sistemas e dados que encerram o negócio se vazarem ou pararem.
+
+00:22:50.980 --> 00:22:51.980
+A plataforma de pagamento.
+
+00:22:52.100 --> 00:22:53.060
+O banco de dados de clientes.
+
+00:22:53.400 --> 00:22:54.120
+Os arquivos de design.
+
+00:22:54.720 --> 00:22:58.840
+Anote-os por nome e observe quais dispositivos e aplicativos em nuvem os acessam.
+
+00:22:59.420 --> 00:23:00.700
+Segundo, nível de identidade.
+
+00:23:00.700 --> 00:23:04.540
+Nem toda conta é igual e sua lógica de detecção não deveria fingir que são.
+
+00:23:05.100 --> 00:23:07.540
+Um administrador de tenant está em uma categoria diferente de vendas.
+
+00:23:07.980 --> 00:23:09.700
+Assim como uma conta que executa seu serviço de civilização.
+
+00:23:10.160 --> 00:23:15.160
+Classifique as contas em níveis e decida que atividades no nível mais alto recebem regras mais rígidas e resposta mais rápida.
+
+00:23:15.520 --> 00:23:17.080
+Terceiro, caixa de e-mail de alto valor.
+
+00:23:17.240 --> 00:23:18.780
+O líder financeiro que aprova transferências.
+
+00:23:19.040 --> 00:23:20.660
+O assistente executivo que vê todas as agendas.
+
+00:23:20.760 --> 00:23:21.820
+A caixa de entrada do jurídico.
+
+00:23:22.320 --> 00:23:23.200
+Os atacantes conhecem os alvos.
+
+00:23:23.860 --> 00:23:26.520
+O comprometimento de e-mail corporativo vive aqui, então suas regras também deveriam.
+
+00:23:27.280 --> 00:23:28.560
+Quarto, funções privilegiadas.
+
+00:23:28.560 --> 00:23:33.700
+Se administrador global, administrador do exchange, qualquer um que possa criar uma regra, conceder consentimento ou alterar uma política.
+
+00:23:35.000 --> 00:23:35.380
+Conte-as.
+
+00:23:35.820 --> 00:23:39.900
+A maioria dos tenants encontra mais do que esperava e algumas dessas contas não entram no sistema um ano.
+
+00:23:40.340 --> 00:23:41.560
+Essa lista é curta de propósito.
+
+00:23:42.140 --> 00:23:44.340
+Uma tarde com as pessoas certas em uma sala pode produzi-la.
+
+00:23:44.680 --> 00:23:47.240
+E uma vez que você a tem, os candidatos a regras quase se inscrevem sozinhos.
+
+00:23:47.720 --> 00:23:50.000
+Um novo dispositivo acessando uma conta de nível zero.
+
+00:23:50.220 --> 00:23:52.000
+Uma regra de encaminhamento na caixa postal financeira.
+
+00:23:52.080 --> 00:23:53.680
+Uma atribuição de função que ninguém solicitou.
+
+00:23:53.680 --> 00:23:54.860
+Isso levanta a próxima tensão.
+
+00:23:54.960 --> 00:23:56.060
+Cobertura versus profundidade.
+
+00:23:56.820 --> 00:23:58.700
+Cobertura diz, detecte algo para cada técnica.
+
+00:23:59.480 --> 00:24:01.320
+Profundidade diz, detecte poucas coisas bem.
+
+00:24:01.460 --> 00:24:03.460
+E a resposta honesta é que a profundidade vence no início.
+
+00:24:04.360 --> 00:24:05.980
+Dez ótimas detecções superam sem genérico.
+
+00:24:06.720 --> 00:24:08.240
+Uma ótima detecção tem uma hipótese clara.
+
+00:24:08.680 --> 00:24:09.420
+Ela carrega entidades.
+
+00:24:10.020 --> 00:24:11.420
+Ela foi validada com dados reais.
+
+00:24:12.200 --> 00:24:14.300
+Ela tem um responsável que sabe como é um verdadeiro positivo.
+
+00:24:15.200 --> 00:24:18.800
+Sem regras genéricas, copiadas de um blog e ativadas em um fim de semana antes de um oposto.
+
+00:24:19.680 --> 00:24:21.160
+Ninguém sabe por que metade deles diziam.
+
+00:24:21.580 --> 00:24:22.460
+Eles dizem pares normais.
+
+00:24:23.160 --> 00:24:25.760
+Os analistas aprendem a ignorá-los e agora se criou ruído, não cobertura.
+
+00:24:26.300 --> 00:24:28.160
+Então comece pelos dez que mapeiam suas joias da cor.
+
+00:24:28.540 --> 00:24:30.160
+Torne cada um sólido e depois expanda.
+
+00:24:30.460 --> 00:24:31.380
+De onde vem os próximos dez?
+
+00:24:31.740 --> 00:24:33.720
+Você já tem a fonte e seu próprio histórico de incidentes.
+
+00:24:34.240 --> 00:24:35.920
+Cada incidente que você tratou é uma lição gratuita.
+
+00:24:36.440 --> 00:24:37.000
+Puxe o último ano.
+
+00:24:37.500 --> 00:24:38.820
+Para cada um real, pergunte três coisas.
+
+00:24:39.120 --> 00:24:39.900
+Como descobrimos?
+
+00:24:40.260 --> 00:24:41.540
+Qual atacante fez antes de notarmos?
+
+00:24:41.800 --> 00:24:43.740
+Qual etapa uma regra poderia ter quitado mais cedo?
+
+00:24:44.200 --> 00:24:46.400
+Essa segunda pergunta é útil porque aponta a lacuna.
+
+00:24:46.400 --> 00:24:50.860
+Se a intrusão durou quatro dias antes de alguém notar, houve quatro dias de comportamento
+
+00:24:50.860 --> 00:24:52.880
+sem detecção, quais acidentes também contam?
+
+00:24:53.840 --> 00:24:56.940
+O e-mail de phishing que o usuário relatou, o login que o analista marcou manualmente.
+
+00:24:57.420 --> 00:24:59.400
+Se uma pessoa pegou uma consulta, provavelmente poderia ter pegado.
+
+00:24:59.760 --> 00:25:00.620
+Agora mais uma perspectiva.
+
+00:25:01.100 --> 00:25:02.580
+Esta é para as pessoas que financiam o trabalho.
+
+00:25:03.080 --> 00:25:04.960
+Trate seu backlog de detecção com um registro de risco.
+
+00:25:05.400 --> 00:25:06.940
+Cada ideia para uma regra é um item da lista.
+
+00:25:07.500 --> 00:25:08.280
+Ele nomeia um risco.
+
+00:25:08.400 --> 00:25:10.640
+Ativa por trás dele a probabilidade e o dano.
+
+00:25:10.640 --> 00:25:13.940
+Classifique a lista pelo que ela protege, não por quão interessante é a consulta.
+
+00:25:14.340 --> 00:25:17.260
+Quando um executivo perguntar por que você está gastando três semanas em detecção
+
+00:25:17.260 --> 00:25:20.300
+de encaminhamento de e-mail em vez de algo chamativo, a resposta está na página.
+
+00:25:20.940 --> 00:25:22.580
+Isso protege a conta que movimenta o dinheiro.
+
+00:25:23.280 --> 00:25:26.360
+E o registro mostra as trocas, o que você está construindo, o que está adiando, qual
+
+00:25:26.360 --> 00:25:27.840
+risco você está aceitando ou esperar.
+
+00:25:28.680 --> 00:25:31.320
+Essa é uma conversa que a liderança entende, porque é a mesma que eles têm sobre qualquer
+
+00:25:31.320 --> 00:25:31.920
+outro risco.
+
+00:25:32.460 --> 00:25:33.700
+Então você tem as prioridades.
+
+00:25:33.800 --> 00:25:36.720
+Joias da coroa, níveis, caixa de correio, funções e um backlog classificado.
+
+00:25:37.240 --> 00:25:37.800
+Agora construa.
+
+00:25:37.800 --> 00:25:41.460
+E a primeira família de detecções a construir, porque onde a maioria dos ataques começa
+
+00:25:41.460 --> 00:25:42.260
+é a identidade.
+
+00:25:43.600 --> 00:25:45.220
+Detecções personalizadas para ataques de identidade.
+
+00:25:45.780 --> 00:25:47.500
+Identidade onde a maioria das intrusões começa agora.
+
+00:25:48.120 --> 00:25:50.740
+Em um ambiente CloudFirst não há borda de rede para romper.
+
+00:25:51.260 --> 00:25:52.460
+Perímetro é uma página de login.
+
+00:25:53.160 --> 00:25:56.560
+Um atacante não precisa de mau exploit se puder atravessar essa página com uma senha
+
+00:25:56.560 --> 00:25:58.280
+válida ou, melhor ainda, com uma sessão válida.
+
+00:25:58.780 --> 00:26:00.120
+E assim que eles entram parece um usuário comum.
+
+00:26:00.540 --> 00:26:00.960
+Esse é o problema.
+
+00:26:01.320 --> 00:26:03.760
+Portanto, detecções de identidade são a primeira família a construir.
+
+00:26:03.760 --> 00:26:07.060
+Não porque são as mais avançadas, mas porque tudo mais, e-mail, arquivos, endpoints,
+
+00:26:07.060 --> 00:26:09.160
+geralmente deriva de uma identidade, roubada.
+
+00:26:10.080 --> 00:26:12.560
+Vamos começar com um padrão que todos conhecem e quase todos fazem errado.
+
+00:26:13.060 --> 00:26:13.720
+Viagem impossível.
+
+00:26:14.140 --> 00:26:17.220
+A versão básica diz que um usuário se conectou de dois países em menos de uma hora, então
+
+00:26:17.220 --> 00:26:17.840
+dispara um alerta.
+
+00:26:18.080 --> 00:26:21.900
+E em um tenente real que dispara constantemente, alguém se conecta via VPN, um telefone entra
+
+00:26:21.900 --> 00:26:23.760
+em ROM em uma operadora móvel que roteia por outro país.
+
+00:26:24.400 --> 00:26:26.700
+Um proxy de novo e sai de um data center em outra região.
+
+00:26:27.320 --> 00:26:29.540
+Os analistas veem isso dez vezes por dia e aprendem a ignorar.
+
+00:26:29.540 --> 00:26:31.860
+Bem executadas as mudanças.
+
+00:26:32.200 --> 00:26:33.980
+Você exclui seus intervalos conhecidos de VPN e PRO.
+
+00:26:34.380 --> 00:26:37.660
+Você exige que o segundo login venha de um dispositivo ou aplicativo que o usuário
+
+00:26:37.660 --> 00:26:41.180
+nunca usou e aumenta a severidade apenas quando a conta está em um nível superior.
+
+00:26:41.760 --> 00:26:44.520
+Mesma ideia, três condições extras e o alerta começa a fazer sentido.
+
+00:26:45.360 --> 00:26:46.660
+O segundo padrão é a fadiga de MFA.
+
+00:26:47.200 --> 00:26:48.440
+Aqui o invasor já possui a 100.
+
+00:26:48.940 --> 00:26:52.440
+Eles acionam o login após login e o telefone do usuário vibra com solicitação de aprovação.
+
+00:26:52.800 --> 00:26:55.740
+Então em algum momento, cansado ou confuso, o usuário toca em aprovar.
+
+00:26:55.740 --> 00:26:59.640
+Portanto, você procura pelo surto muitas tentativas de MFA falhas ou interrompidas
+
+00:26:59.640 --> 00:27:01.020
+em um curto intervalo seguidas por um sucesso.
+
+00:27:01.720 --> 00:27:04.900
+Conte as tentativas por usuário, agrupe por um intervalo de tempo e defina um limite
+
+00:27:04.900 --> 00:27:05.700
+que se adeque ao seu tenente.
+
+00:27:06.140 --> 00:27:06.920
+A sequência é o sinal.
+
+00:27:07.520 --> 00:27:08.840
+Uma solicitação recusada não é nada.
+
+00:27:09.240 --> 00:27:11.020
+15, 10 minutos, então a aprovação é uma intrusão.
+
+00:27:11.800 --> 00:27:14.220
+O terceiro padrão une dois sinais fracos e um forte.
+
+00:27:14.960 --> 00:27:16.660
+Um novo dispositivo mais uma ação privilegiada.
+
+00:27:16.920 --> 00:27:18.300
+Login de dispositivo pela primeira vez é normal.
+
+00:27:18.800 --> 00:27:19.700
+As pessoas ganham novos leitos.
+
+00:27:20.120 --> 00:27:23.060
+Uma atribuição de função ou concessão de consentimento também é normal para a administradora.
+
+00:27:23.060 --> 00:27:26.760
+Mas ambos juntos, a partir de uma conta que nunca se comportou assim, dentro da mesma
+
+00:27:26.760 --> 00:27:28.020
+hora, isso vale a pena acordar alguém.
+
+00:27:28.540 --> 00:27:31.280
+É aqui que seus níveis de identidade da última sessão compensam.
+
+00:27:31.980 --> 00:27:35.880
+Você aplica a regra apenas ao nível superior, para que o volume permaneça baixo e a confiança
+
+00:27:35.880 --> 00:27:36.580
+permaneça alta.
+
+00:27:37.480 --> 00:27:38.800
+Agora o caso mais difícil, roubo de token.
+
+00:27:39.380 --> 00:27:41.740
+O invasor nunca precisa da senha ou da solicitação de MFA.
+
+00:27:42.700 --> 00:27:45.920
+Eles roubam um token de sessão, geralmente de um navegador e uma máquina infectada ou por
+
+00:27:45.920 --> 00:27:47.340
+meio de uma página de phishing de proxy.
+
+00:27:47.840 --> 00:27:50.100
+Então eles o reproduzem da perspectiva do sistema de identidade.
+
+00:27:50.100 --> 00:27:52.560
+O login já aconteceu, e foi legítimo.
+
+00:27:53.320 --> 00:27:55.380
+Tanto o sinal muda para o que a sessão faz depois.
+
+00:27:56.460 --> 00:27:59.480
+Você procura em eventos de aplicativos em nuvem por uma sessão que muda repentinamente.
+
+00:27:59.940 --> 00:28:03.200
+O mesmo é de sessão aparecendo de um novo endereço IP e um novo agente de usuário.
+
+00:28:03.800 --> 00:28:07.340
+Um usuário que normalmente lê e-mail, começando a baixar arquivos em massa ou alterando configurações
+
+00:28:07.340 --> 00:28:09.180
+de administrador logo após uma mudança de local.
+
+00:28:09.940 --> 00:28:11.280
+Nenhum evento isolado prova o roubo.
+
+00:28:11.700 --> 00:28:13.320
+A mudança de comportamento dentro de uma sessão sim.
+
+00:28:13.640 --> 00:28:14.940
+Isso gera falsos positivos.
+
+00:28:15.120 --> 00:28:17.400
+E a melhor solução para eles é o contexto de outra carga de trabalho.
+
+00:28:17.400 --> 00:28:20.880
+Um alerta de identidade sozinho muitas vezes não pode dizer se algo está errado, mas
+
+00:28:20.880 --> 00:28:23.040
+junte-o ao endpoint e a imagem fica clara.
+
+00:28:24.060 --> 00:28:28.020
+Pegue o evento de login e verifique se o dispositivo por trás dele é gerenciado, está em conformidade
+
+00:28:28.020 --> 00:28:28.640
+e é conhecido.
+
+00:28:29.620 --> 00:28:33.820
+Um login de risco de um dispositivo que o Defender for Endpoint nunca viu é muito mais interessante
+
+00:28:33.820 --> 00:28:36.860
+do que o mesmo login de um notebook que está na sua frota há dois anos.
+
+00:28:37.780 --> 00:28:40.560
+Então você cria o join e faz isso por último, depois de filtrar os dois lados.
+
+00:28:41.440 --> 00:28:44.760
+Eventos de identidade de um lado, inventário de dispositivos ou alertas de endpoint recentes
+
+00:28:44.760 --> 00:28:46.720
+do outro, combinados por ID de dispositivo ou conta.
+
+00:28:47.560 --> 00:28:51.100
+Alertas que sobrevivem ao join trazem mais evidências e os que não sobrevivem são descartados
+
+00:28:51.100 --> 00:28:52.340
+antes mesmo que o analista os veja.
+
+00:28:52.920 --> 00:28:55.100
+E um último ponto que decide se tudo isso funcionará.
+
+00:28:55.660 --> 00:28:56.420
+Mapeamento de identidades.
+
+00:28:56.820 --> 00:28:59.520
+Ao terminar a consulta, você escolhe qual coluna contém o usuário.
+
+00:28:59.720 --> 00:29:02.420
+Escolha errada e o alerta será vinculado ao objeto incorreto.
+
+00:29:02.840 --> 00:29:04.960
+Talvez ele caia em um nome de exibição que corresponde a três pessoas.
+
+00:29:05.520 --> 00:29:08.320
+Talvez use um nome de login em uma tabela e um ID de objeto em outra.
+
+00:29:08.740 --> 00:29:09.900
+Assim a correlação nunca se conecta.
+
+00:29:09.900 --> 00:29:13.580
+Mapeie para o identificador estável o ID do objeto da conta e verifique se todas as
+
+00:29:13.580 --> 00:29:14.940
+tabelas que você une concordam com ele.
+
+00:29:15.420 --> 00:29:17.920
+Se o alerta não cair no usuário certo, nada abaixo disso funcionará.
+
+00:29:18.560 --> 00:29:20.500
+Nem o incidente, nem a contenção, nem o playbook.
+
+00:29:21.020 --> 00:29:24.080
+Então isso é identidade sem as prompts, tokens e o contexto ao redor deles.
+
+00:29:24.540 --> 00:29:25.880
+Mas a identidade não é a única forma adiantada.
+
+00:29:26.300 --> 00:29:28.180
+A outra porta da frente é a...
+
+00:29:28.180 --> 00:29:30.720
+Detecções personalizadas para abuso de e-mail e colaboração.
+
+00:29:31.320 --> 00:29:34.160
+Uma vez que o invasor possui uma identidade, a caixa de correio é o primeiro lugar para onde
+
+00:29:34.160 --> 00:29:34.480
+ele vai.
+
+00:29:34.680 --> 00:29:36.880
+Não para ler e-mails, mas para mudar o comportamento dos e-mails.
+
+00:29:37.200 --> 00:29:38.620
+Movimento clássico é a regra de caixa de entrada.
+
+00:29:38.620 --> 00:29:41.980
+Uma nova regra que encaminha cada mensagem para um endereço externo.
+
+00:29:42.080 --> 00:29:46.540
+Ou uma regra que move tudo o que contém palavras como fatura ou alerta de segurança para uma
+
+00:29:46.540 --> 00:29:47.420
+pasta que ninguém abre.
+
+00:29:47.800 --> 00:29:49.640
+Ou uma que marca o e-mail como lido e exclui.
+
+00:29:50.200 --> 00:29:53.660
+O invasor quer ver suas conversas e quer que você permaneça cego as dele.
+
+00:29:54.520 --> 00:29:57.000
+Então você caça nos cloud de app events pelas ações de criação de regra.
+
+00:29:57.520 --> 00:29:58.560
+Nova regra de caixa de entrada.
+
+00:29:58.680 --> 00:29:59.780
+Define regra de caixa de entrada.
+
+00:29:59.880 --> 00:30:01.240
+Alterações de encaminhamento de caixa de...
+
+00:30:01.240 --> 00:30:02.780
+Então você adiciona as condições que importam.
+
+00:30:03.340 --> 00:30:05.640
+Um encaminhamento para um domínio fora do seu locatário.
+
+00:30:05.640 --> 00:30:08.200
+Uma regra sem nome ou com o nome de um único caractere.
+
+00:30:08.620 --> 00:30:09.520
+Ou apenas pontos.
+
+00:30:09.600 --> 00:30:12.920
+Uma regra que visa uma pasta como feeds, RSS e o histórico de conversas.
+
+00:30:13.020 --> 00:30:14.040
+Locais onde nenhum mano olha.
+
+00:30:14.640 --> 00:30:15.600
+Qualquer uma dessas coisas estranhas.
+
+00:30:15.960 --> 00:30:18.940
+Duas juntas e uma caixa de correio de alto valor são um sinal quase certo de intrusão.
+
+00:30:19.420 --> 00:30:20.080
+E observe o tempo.
+
+00:30:20.840 --> 00:30:24.280
+Uma regra criada dentro de uma hora após um login de risco tem muito mais peso do que
+
+00:30:24.280 --> 00:30:25.800
+uma criada em uma terça-feira tranquila.
+
+00:30:26.660 --> 00:30:29.860
+Quase tempo real funciona bem aqui porque o invasor se move rápido assim que a regra é estabelecida.
+
+00:30:30.560 --> 00:30:31.440
+Agora um tipo diferente de sinal.
+
+00:30:31.820 --> 00:30:33.360
+Um que surge depois que o e-mail já foi entregue.
+
+00:30:33.360 --> 00:30:35.360
+A filtragem e-mail toma a decisão numa entrega.
+
+00:30:35.720 --> 00:30:37.020
+Limpo, suspeito ou bloqueado.
+
+00:30:37.020 --> 00:30:38.440
+Mas o veredito muda.
+
+00:30:38.920 --> 00:30:41.720
+Um link que parecia inofensivo às 9 horas, convertido em arma às 11 horas.
+
+00:30:42.400 --> 00:30:45.960
+A plataforma reclassifica a mensagem mais tarde e a remove das caixas de entrada, mas
+
+00:30:45.960 --> 00:30:46.820
+apenas se a detectar.
+
+00:30:47.460 --> 00:30:48.560
+Até lá alguém pode ter clicado.
+
+00:30:48.980 --> 00:30:52.520
+Portanto, você analisa a lacuna, associa eventos de e-mail a eventos de clique em URL
+
+00:30:52.520 --> 00:30:55.480
+e pergunta quais usuários clicaram em um link e uma mensagem cujo veredito mudou
+
+00:30:55.480 --> 00:30:56.100
+após a entrega.
+
+00:30:56.760 --> 00:30:59.180
+Esse clique ocorreu na janela em que todos pensavam que o e-mail era seguro.
+
+00:30:59.720 --> 00:31:01.020
+Esses usuários são sua exposição.
+
+00:31:01.380 --> 00:31:03.960
+E você cria alertas para isso e verifica seus logins pelas próximas horas.
+
+00:31:04.440 --> 00:31:06.060
+Essa é uma detecção que ninguém recebe por padrão.
+
+00:31:06.060 --> 00:31:07.700
+Ela só existe porque você faz a pergunta.
+
+00:31:08.080 --> 00:31:10.300
+A colaboração é o próximo caminho, é ainda mais silencioso.
+
+00:31:10.880 --> 00:31:12.780
+Uma vez dentro, o invasor nem sempre permanece em e-mail.
+
+00:31:13.140 --> 00:31:15.760
+O Teams e o SharePoint contêm arquivos e é atrás dos arquivos que eles têm.
+
+00:31:16.220 --> 00:31:17.740
+Então você monitora pico de compartilhamento externo.
+
+00:31:18.120 --> 00:31:21.420
+Um usuário que normalmente compartilha dois documentos por mês de repente compartilha
+
+00:31:21.420 --> 00:31:25.820
+40 com o endereço externo, ou links anônimos criados em massa, ou uma única conta baixando
+
+00:31:25.820 --> 00:31:27.680
+centenas de arquivos de uma biblioteca em 10 minutos.
+
+00:31:28.320 --> 00:31:29.520
+Padrão à base de referência, um pico.
+
+00:31:30.200 --> 00:31:34.080
+Conte as ações por usuário por dia, compare hoje com os últimos 30 e sinalize o aumento.
+
+00:31:34.080 --> 00:31:37.940
+Defina o limite com base em seus próprios dados, não em um postplot.
+
+00:31:38.360 --> 00:31:41.620
+Uma equipe de vendas baixa arquivos em massa antes do fim de um trimestre e uma regra que
+
+00:31:41.620 --> 00:31:42.700
+ignora isso vai te soterrar.
+
+00:31:43.520 --> 00:31:45.520
+Agora junte tudo, porque nada disso existe isoladamente.
+
+00:31:46.520 --> 00:31:47.820
+Comprometimento incorporativo a uma cadeia.
+
+00:31:48.540 --> 00:31:50.260
+Uma senha roubada na camada de identidade.
+
+00:31:50.400 --> 00:31:52.000
+Uma regra de encaminhamento na camada de e-mail.
+
+00:31:52.100 --> 00:31:54.020
+Um download em massa na camada de aplicativos em nuvem.
+
+00:31:54.120 --> 00:31:57.000
+Em seguida, uma fatura falsa enviada de uma caixa de correio real para um cliente real.
+
+00:31:57.660 --> 00:31:58.940
+Cada elo por si só parece pequeno.
+
+00:31:58.940 --> 00:32:02.480
+Um login, uma regra, um download, três alertas, três cargas de trabalho e três possíveis
+
+00:32:02.480 --> 00:32:02.880
+proprietários.
+
+00:32:03.200 --> 00:32:05.920
+É exatamente aqui que as lacunas de correlação que cobrimos antes causam impacto.
+
+00:32:06.460 --> 00:32:08.480
+Portanto, suas detecções devem compartilhar uma entidade.
+
+00:32:08.960 --> 00:32:11.600
+O mesmo usuário deve ser mapeado da mesma forma para que a plataforma tenha algo em que
+
+00:32:11.600 --> 00:32:12.020
+se basear.
+
+00:32:12.680 --> 00:32:14.700
+Então a cadeia se torna um incidente em vez de três tickets.
+
+00:32:15.560 --> 00:32:17.180
+Construa as regras como elas, não como ele.
+
+00:32:18.060 --> 00:32:18.820
+Pergunte sobre cada um.
+
+00:32:18.860 --> 00:32:20.640
+O que vem logo antes disso e o que vem logo depois?
+
+00:32:20.640 --> 00:32:23.760
+Isso cobre as portas de entrada, identidade e e-mail.
+
+00:32:23.940 --> 00:32:26.880
+Mas o invasor geralmente acaba chegando onde os dispositivos se comunicam constantemente.
+
+00:32:26.880 --> 00:32:30.380
+Eles produzem os sinais mais ruidosos que você possui e alguns dos mais reveladores.
+
+00:32:31.440 --> 00:32:32.980
+Detecções personalizadas para comportamento de ruim.
+
+00:32:33.520 --> 00:32:36.860
+A maioria das detecções de endpoint começou com arquivos, um hash malicioso conhecido,
+
+00:32:36.920 --> 00:32:39.780
+um nome conhecido, uma assinatura que diz que este binário é malware, bloqueio.
+
+00:32:40.800 --> 00:32:42.120
+Isso ainda funciona para ameaças comuns.
+
+00:32:42.720 --> 00:32:44.780
+Mas um arquivo é a coisa mais fácil de um invasor alterar.
+
+00:32:45.340 --> 00:32:47.220
+Recompile, reempacote, renomeie e o hash é novo.
+
+00:32:47.680 --> 00:32:50.520
+Portanto, a detecção que importa muda do que o arquivo é para o que ele faz.
+
+00:32:50.960 --> 00:32:52.140
+Isso é pensamento baseado em comportamento.
+
+00:32:52.660 --> 00:32:54.060
+Você para de perguntar, este programa é ruim?
+
+00:32:54.060 --> 00:32:57.100
+E começa a perguntar, esta sequência de ações é normal aqui?
+
+00:32:57.640 --> 00:32:59.780
+A aviação mais nítida disso é o Living Off Land, usar recursos.
+
+00:33:00.000 --> 00:33:01.420
+O invasor não traz nada de novo.
+
+00:33:02.000 --> 00:33:03.360
+Eles usam ferramentas que já estão na máquina.
+
+00:33:03.840 --> 00:33:09.780
+PowerShell, CMD, ScriptWMI, MSHTA, Certutil, Rundle 32, RagsVR 32.
+
+00:33:10.540 --> 00:33:14.480
+Bênários assinados pela Microsoft, confiáveis por padrão e presentes em todos os seus dispositivos.
+
+00:33:14.920 --> 00:33:16.400
+Profissionais de segurança chamam de lobbying.
+
+00:33:17.040 --> 00:33:19.620
+O verificador de arquivos não vê nada errado, porque não há nada errado com o arquivo.
+
+00:33:20.280 --> 00:33:22.300
+Então o sinal reside na relação entre os processos.
+
+00:33:22.300 --> 00:33:23.860
+Pense no processo para aí, enfim.
+
+00:33:24.300 --> 00:33:25.320
+O Word abrindo um documento é normal.
+
+00:33:25.900 --> 00:33:27.080
+O Word iniciando o PowerShell não é.
+
+00:33:27.420 --> 00:33:31.640
+Outlook gerando um host de script, um navegador iniciando o CMD, um leitor de PDF, chamando a MSHTA.
+
+00:33:32.220 --> 00:33:34.640
+Cada um desses pares quase não tem motivo legítimo para existir.
+
+00:33:35.260 --> 00:33:38.760
+Em eventos de processo de dispositivo, você lê o processo iniciante e o novo processo lado a lado,
+
+00:33:39.000 --> 00:33:40.400
+e escreve a regra para o par.
+
+00:33:41.000 --> 00:33:41.920
+Então observe a linha de comando.
+
+00:33:42.580 --> 00:33:46.200
+PowerShell com um comando codificado, uma janela oculta e uma string de download,
+
+00:33:46.200 --> 00:33:49.900
+é um bicho diferente do PowerShell, executando o script de inventário do seu administrador.
+
+00:33:49.900 --> 00:33:52.140
+Ser tutil buscando um arquivo na internet.
+
+00:33:52.540 --> 00:33:54.920
+Randa o 32 carregando uma DRL e uma pasta temporária do Zoom.
+
+00:33:55.160 --> 00:33:55.820
+Feu a mente é com fio.
+
+00:33:56.140 --> 00:33:57.080
+A maneira como ela é usada, não.
+
+00:33:57.440 --> 00:33:59.340
+Agora persistência, porque um invasor que deseja permanecer,
+
+00:33:59.420 --> 00:34:01.200
+precisa de uma maneira de ser uma maneira de sobreviver a uma reinicialização.
+
+00:34:01.340 --> 00:34:03.540
+Você observa os locais onde o Windows executa coisas automaticamente.
+
+00:34:03.960 --> 00:34:04.900
+Chaves run no registro.
+
+00:34:05.200 --> 00:34:07.220
+Tarefas agendadas criadas a partir de uma linha de contorno.
+
+00:34:07.540 --> 00:34:09.160
+Novos serviços apontando para caminhos estranhos.
+
+00:34:09.600 --> 00:34:12.960
+Arquivos adicionados à pasta de inicialização em eventos de registro e eventos de processo.
+
+00:34:12.960 --> 00:34:15.260
+Você procura por uma escrita em um desses locais,
+
+00:34:15.360 --> 00:34:17.240
+feita por um processo que não deveria estar escrevendo ali.
+
+00:34:17.820 --> 00:34:19.940
+Uma tarefa agendada, criada por um host script,
+
+00:34:20.060 --> 00:34:22.540
+apontando para um arquivo no perfil do usuário, é um bom exemplo.
+
+00:34:23.240 --> 00:34:24.540
+Ferramenta de administração cria uma tarefa.
+
+00:34:24.860 --> 00:34:27.000
+Ferramentas de administração geralmente não são executadas a partir do app.
+
+00:34:27.100 --> 00:34:29.180
+O acesso a credenciais segue a mesma lógica.
+
+00:34:29.980 --> 00:34:32.960
+Acesso ao processo é alissado por qualquer coisa que não seja uma ferramenta de segurança com esse.
+
+00:34:33.760 --> 00:34:35.200
+Exportações de AIVs do registro de segurança.
+
+00:34:35.780 --> 00:34:37.680
+Uma ferramenta despejando memória com utilitário integral.
+
+00:34:38.020 --> 00:34:39.640
+Essas são ações raras e específicas.
+
+00:34:39.640 --> 00:34:41.820
+E raro mais específico ao formato de boas regras.
+
+00:34:42.200 --> 00:34:43.380
+Tanto você entender os comportamentos.
+
+00:34:43.880 --> 00:34:46.620
+E agora vem a parte que decide se essas regras ajudam ou atrapalham.
+
+00:34:47.000 --> 00:34:49.600
+Regras de endpoint precisam de mais ajustes do que qualquer outra coisa que você...
+
+00:34:49.600 --> 00:34:49.980
+Por quê?
+
+00:34:50.300 --> 00:34:52.740
+Porque software legítimos fazem coisas estranhas o tempo todo.
+
+00:34:53.380 --> 00:34:54.740
+O instalador inicia um host script.
+
+00:34:55.260 --> 00:34:57.300
+Um agente de gerenciamento executa PowerShell codificado,
+
+00:34:57.380 --> 00:34:58.900
+porque é assim que ele passa comandos complexos.
+
+00:34:59.440 --> 00:35:02.060
+Uma ferramenta de desenvolvedor lança processos filhos a partir de caminhos em comum.
+
+00:35:02.380 --> 00:35:05.020
+Sua própria equipe de TI escreve scripts que, para detecção,
+
+00:35:05.240 --> 00:35:06.340
+parecem exatamente um ataque.
+
+00:35:06.860 --> 00:35:08.840
+Cada um deles é uma correspondência verdadeira analógica,
+
+00:35:08.840 --> 00:35:09.960
+mas um falso positivo na prática.
+
+00:35:10.500 --> 00:35:11.640
+Portanto, o trabalho não é escrever a regra,
+
+00:35:12.060 --> 00:35:13.180
+definir o que a regra deve ignorar.
+
+00:35:13.620 --> 00:35:15.200
+E é aqui que as equipes fazem uma escolha dispendiosa.
+
+00:35:15.500 --> 00:35:16.700
+Elas criministas de permissão por hash.
+
+00:35:16.920 --> 00:35:17.560
+Um hash é exato.
+
+00:35:18.140 --> 00:35:21.080
+Isso também significa que a regra silencia para aquela versão do arquivo e quebra
+
+00:35:21.080 --> 00:35:22.760
+no momento em que o fornecedor lança uma atualização.
+
+00:35:23.060 --> 00:35:26.100
+Então a lista cresce infinitamente e alguém está sempre correndo atrás da última versão.
+
+00:35:26.620 --> 00:35:27.420
+Existe uma âncora melhor.
+
+00:35:27.740 --> 00:35:29.360
+Permita listas por editor assinado e por caminho.
+
+00:35:29.520 --> 00:35:29.700
+Em conjunto.
+
+00:35:30.260 --> 00:35:32.140
+Este processo assinado por este fornecedor,
+
+00:35:32.260 --> 00:35:34.200
+rodando desta pasta, pode ter este comportamento.
+
+00:35:34.760 --> 00:35:36.100
+O editor sozinho é muito permissivo,
+
+00:35:36.100 --> 00:35:38.580
+já que um binário assinado pode ser abusado ou copiado para outro lugar.
+
+00:35:39.160 --> 00:35:40.620
+O caminho sozinho também é muito permissivo,
+
+00:35:40.680 --> 00:35:42.160
+já que invasores escrevem em pastas comuns.
+
+00:35:42.580 --> 00:35:46.220
+A combinação é restrita o suficiente para ser segura e estável o suficiente para sobreviver a uma atualização.
+
+00:35:46.480 --> 00:35:48.480
+Mantenha o hash para casos raros que realmente precisem,
+
+00:35:48.780 --> 00:35:50.640
+mas dê um passo atrás e observe o que você acabou de criar.
+
+00:35:51.120 --> 00:35:52.680
+Regras de pai-filho, regras de linha de comando,
+
+00:35:52.780 --> 00:35:54.460
+regras de persistência, regras de credenciais.
+
+00:35:55.120 --> 00:35:55.960
+Cada uma delas está correta.
+
+00:35:56.300 --> 00:35:58.120
+Cada uma também disparará em algo inofensivo,
+
+00:35:58.300 --> 00:36:00.480
+em um tenante com milhares de dispositivos rodando o dia todo.
+
+00:36:00.880 --> 00:36:01.680
+São muitos alertas.
+
+00:36:02.000 --> 00:36:03.780
+E o volume tem o hábito de se tornar um problema por si só.
+
+00:36:03.780 --> 00:36:05.760
+Ah, porque o ruído é um problema estrutural.
+
+00:36:06.300 --> 00:36:09.260
+Vamos começar com uma afirmação que pode soar injusta para as pessoas que vivem na fila de espera.
+
+00:36:09.860 --> 00:36:11.300
+A fadiga de alertas não é uma falha do ano.
+
+00:36:11.620 --> 00:36:12.380
+É o resultado do projeto.
+
+00:36:12.820 --> 00:36:15.820
+Alguém criou um sistema que produz mais alertas do que um humano consegue ler
+
+00:36:15.820 --> 00:36:18.240
+e depois medir o desempenho dos humanos com base na leitura dele.
+
+00:36:18.740 --> 00:36:20.860
+Quando uma pessoa cansada ignora o quaresma em um alerta da manhã,
+
+00:36:20.940 --> 00:36:23.000
+o sistema está fazendo exatamente o que foi configurado para fazer.
+
+00:36:23.760 --> 00:36:25.360
+Então pare de perguntar porque a equipe não é mais de cuidadora.
+
+00:36:25.720 --> 00:36:28.140
+Pergunte o que o modelo produz e quem decidiu que deveria ser assim.
+
+00:36:28.500 --> 00:36:29.640
+Tal maneira de tornar isso visível.
+
+00:36:30.040 --> 00:36:31.620
+Um modelo de custo e apenas uma multiplicação.
+
+00:36:31.900 --> 00:36:33.740
+Pegue os minutos necessários para criar um alerta.
+
+00:36:33.780 --> 00:36:36.300
+Multiplique pelos alertas que chegam a cada dia.
+
+00:36:36.760 --> 00:36:38.720
+Multiplique pelo número de analistas que os processam.
+
+00:36:39.320 --> 00:36:40.900
+Esse é o seu custo diário, em horas.
+
+00:36:41.240 --> 00:36:42.900
+E a maioria das equipes nunca calculou isso.
+
+00:36:43.520 --> 00:36:44.560
+Faça o cálculo com números como
+
+00:36:44.560 --> 00:36:46.800
+6 minutos por alerta, 300 alertas por dia.
+
+00:36:47.440 --> 00:36:50.600
+São 30 horas de trabalho todo dia antes que alguém investigue algo real.
+
+00:36:51.300 --> 00:36:54.680
+E se 60% dos alertas forem inofensivos, 18 dessas horas não lhe trouxeram nada.
+
+00:36:55.120 --> 00:36:57.820
+Não nada na teoria, mas nada no sentido da mesma resposta de sempre.
+
+00:36:58.620 --> 00:36:59.160
+Tá tudo bem.
+
+00:37:00.020 --> 00:37:00.940
+Agora coloque um preço nisso.
+
+00:37:00.940 --> 00:37:05.980
+Essas horas saem do orçamento de salários e do tempo que você gastaria criando a próxima detecção.
+
+00:37:06.600 --> 00:37:07.680
+O ruído não é apenas desperdício.
+
+00:37:08.060 --> 00:37:12.020
+Ele consome a capacidade necessária para corrigi-lo e isso leva ao custo que mais importa.
+
+00:37:12.280 --> 00:37:13.500
+Aquele que você não vê num painel.
+
+00:37:14.280 --> 00:37:15.200
+Ruídos condizenciais.
+
+00:37:15.620 --> 00:37:18.800
+Pense no que acontece com atenção, quando a maioria dos alertas acaba não sendo nada.
+
+00:37:18.800 --> 00:37:22.500
+Pessoas aprendem corretamente que a maioria dos alertas não é nada, então ficam mais rápidas.
+
+00:37:23.040 --> 00:37:25.220
+Elas passam o olho e encerram por padrão em vez de por evidência.
+
+00:37:25.780 --> 00:37:27.660
+Essa é uma resposta racional aos dados que receberam.
+
+00:37:28.160 --> 00:37:29.040
+Então o alerta real chega.
+
+00:37:29.480 --> 00:37:30.140
+Ele parece com os outros.
+
+00:37:30.640 --> 00:37:33.420
+Mesmo formato, mesmo rótulo de severidade, mesmo estilo de título.
+
+00:37:33.980 --> 00:37:37.340
+Ele fica na fila entre dois alarmes falsos e o analista dedica a ele os mesmos 4 segundos.
+
+00:37:37.340 --> 00:37:38.780
+Ninguém foi preguiçoso.
+
+00:37:39.260 --> 00:37:41.960
+O sinal simplesmente não teve como se destacar da pina em que estava enterrado.
+
+00:37:42.900 --> 00:37:44.500
+Esse é o efeito do menino que gritou o lobo.
+
+00:37:44.580 --> 00:37:45.780
+E não há uma história sobre honestidade.
+
+00:37:46.280 --> 00:37:47.040
+É sobre taxa de base.
+
+00:37:47.560 --> 00:37:51.200
+Quando os alarmes falsos superam os verdadeiros em 50 para 1, a atenção é gasta proporcionalmente.
+
+00:37:51.980 --> 00:37:52.840
+Então de onde vem esse ruído?
+
+00:37:53.180 --> 00:37:54.000
+Principalmente em três lugares.
+
+00:37:54.580 --> 00:37:55.440
+O primeiro são a regrasão.
+
+00:37:55.900 --> 00:38:00.960
+Uma detecção escrita para pegar todas as variantes possíveis de um comportamento também pegará todas as versões inofensivas dele.
+
+00:38:01.880 --> 00:38:03.960
+PowerShell como um string de download parece preciso.
+
+00:38:03.960 --> 00:38:07.380
+Em um tena com uma ferramenta de implantação de software, ele dispara o dia todo.
+
+00:38:07.840 --> 00:38:08.680
+A regra fez o seu trabalho.
+
+00:38:09.000 --> 00:38:09.640
+O escopo foi o erro.
+
+00:38:10.200 --> 00:38:11.680
+O segundo são exclusões não gerenciadas.
+
+00:38:12.120 --> 00:38:15.000
+Alguém suprimiu um alerta na primavera passada para sobreviver a uma semana de fim.
+
+00:38:15.180 --> 00:38:17.600
+Ninguém anotou o porquê, quem aprovou ou quando deveria terminar.
+
+00:38:17.880 --> 00:38:18.520
+PowerShell está lá.
+
+00:38:18.880 --> 00:38:21.080
+Algumas exclusões são amplas demais e escondem atividades reais.
+
+00:38:21.560 --> 00:38:24.900
+Outras são estreitas demais, então o alerta quase idêntico continua disparando do próximo dispositivo.
+
+00:38:25.420 --> 00:38:27.060
+De qualquer forma, ninguém se responsabiliza para isso.
+
+00:38:27.440 --> 00:38:30.500
+O terceiro são softwares ruidosos, agentes de gerenciamento, ferramentas de backup,
+
+00:38:30.680 --> 00:38:32.440
+escaneiros de vulnerabilidade e utilitários de desenvolvedor.
+
+00:38:32.440 --> 00:38:36.280
+Eles fazem coisas que parecem ataques porque, mecanicamente, são as mesmas ações.
+
+00:38:37.240 --> 00:38:40.360
+Um scanner que sonda cada dispositivo na rede parece muito com reconhecimento.
+
+00:38:41.240 --> 00:38:42.220
+Não há nada de errado com o scanner.
+
+00:38:42.680 --> 00:38:44.640
+A detecção é que não consegue diferenciar sem ajuda.
+
+00:38:45.320 --> 00:38:46.300
+Note o que os três têm em comum.
+
+00:38:46.860 --> 00:38:47.660
+Nenhum deles é um mistério.
+
+00:38:48.060 --> 00:38:50.220
+Toda fonte de ruído tem uma causa que você pode nomear,
+
+00:38:50.320 --> 00:38:53.220
+e um lugar na configuração onde ela reside, o que significa que o ruído é corrigível,
+
+00:38:53.280 --> 00:38:55.280
+mas apenas se você parar de tratá-lo como se fosse o clima.
+
+00:38:56.060 --> 00:38:58.280
+A maioria das equipes faz ajustes como se estivessem reagindo ao mamão.
+
+00:38:58.720 --> 00:39:02.100
+O analista reclama, alguém adiciona uma exclusão, a fila fica um pouco mais silenciosa,
+
+00:39:02.100 --> 00:39:06.120
+e todos seguem em frente, sem medição, sem registro, sem plano para verificar se funcionou
+
+00:39:06.120 --> 00:39:07.420
+ou se silenciosamente quebrou outra coisa.
+
+00:39:07.840 --> 00:39:09.920
+É ajuste e adivinhação com o botão de excluir.
+
+00:39:10.960 --> 00:39:13.420
+Ajustar precisa de um método, um método de ajuste disciplinado.
+
+00:39:14.040 --> 00:39:14.580
+Comece com o número.
+
+00:39:15.060 --> 00:39:17.240
+Antes de tocar em uma única regra, colete os dados.
+
+00:39:18.000 --> 00:39:21.740
+Quais fontes de alerta produzem o maior volume e quais delas têm a pior taxa de falso positivo?
+
+00:39:22.300 --> 00:39:24.080
+Essas são duas listas diferentes e você precisa de ambas.
+
+00:39:24.560 --> 00:39:26.080
+O volume diz a você onde o tempo é gasto.
+
+00:39:26.400 --> 00:39:28.600
+A taxa de falso positivo diz a você onde o tempo é desperdiçado.
+
+00:39:28.600 --> 00:39:32.580
+Uma regra que é disparada 400 vezes por mês e acerta todas as vezes, não é um problema de ajuste.
+
+00:39:32.940 --> 00:39:35.240
+Uma regra que é disparada 40 vezes e erra 38 delas.
+
+00:39:35.820 --> 00:39:37.260
+Classifique por ambas e observe a sobreposição.
+
+00:39:37.700 --> 00:39:40.100
+As regras próximas ao topo de cada lista são seus primeiros alvos.
+
+00:39:40.340 --> 00:39:43.100
+Você pode obter isso nas visualizações de incidentes e alertas no portal,
+
+00:39:43.220 --> 00:39:44.960
+filtradas por fonte de detecção e por classificação.
+
+00:39:45.520 --> 00:39:48.180
+Ou você pode escrever uma consulta nas tabelas de alerta e agrupar por título.
+
+00:39:48.800 --> 00:39:50.680
+As classificações dos analistas são a principal entrada aqui.
+
+00:39:51.040 --> 00:39:53.720
+Toda vez que alguém marca um alerta como um falso positivo ou um verdadeiro positivo,
+
+00:39:53.840 --> 00:39:54.480
+isso é um ponto de dados.
+
+00:39:54.480 --> 00:39:57.800
+Se sua equipe pula a etapa de classificação, você não tem uma base de referência.
+
+00:39:57.900 --> 00:39:59.560
+Então faça disso o primeiro hábito a ser corrigido.
+
+00:40:00.360 --> 00:40:04.120
+Agora, a regra da mudança, uma mudança, uma hipótese, uma data de revisão.
+
+00:40:04.680 --> 00:40:07.720
+Essa é toda a disciplina e parece simples demais, mas pense no que acontece sem ela.
+
+00:40:08.680 --> 00:40:11.620
+Alguém adiciona três exclusões e edita um limite na mesma tarde.
+
+00:40:12.400 --> 00:40:13.500
+A fila cai 30%.
+
+00:40:13.500 --> 00:40:15.220
+Ótimo, mas qual mudança causou isso?
+
+00:40:15.620 --> 00:40:17.300
+E será que uma delas também silenciou algo real?
+
+00:40:17.820 --> 00:40:19.340
+Você não consegue saber porque mudou tudo de uma vez.
+
+00:40:19.960 --> 00:40:21.120
+Portanto, escreva antes de achar.
+
+00:40:21.120 --> 00:40:24.580
+Acredito que este alerta é disparado pela nossa ferramenta de implantação
+
+00:40:24.580 --> 00:40:27.280
+e se eu excluir esse processo de assinatura da ferramenta desta regra,
+
+00:40:27.480 --> 00:40:30.040
+o volume cai cerca de um terço sem perda de verdadeiros positivos.
+
+00:40:31.020 --> 00:40:31.600
+Isso é uma hipótese.
+
+00:40:31.980 --> 00:40:32.580
+Ela pode estar errada.
+
+00:40:32.960 --> 00:40:35.200
+Então marque uma data daqui a duas semanas e verifique que o volume caiu.
+
+00:40:35.940 --> 00:40:37.180
+Algum verdadeiro positivo desapareceu?
+
+00:40:37.620 --> 00:40:39.260
+Se a resposta para a segunda for, sim, você reverte a alteração.
+
+00:40:39.620 --> 00:40:40.020
+Nasceramento.
+
+00:40:40.440 --> 00:40:42.320
+O Defender oferece algumas delas e tem funções diferentes.
+
+00:40:42.680 --> 00:40:45.520
+As regras de ajuste e alerta que você encontra nas configurações de ajuste e alerta
+
+00:40:45.520 --> 00:40:46.700
+permitem que você aja sobre um padrão.
+
+00:40:46.700 --> 00:40:50.020
+Você escolhe o tipo de alerta, define condições para as entidades envolvidas
+
+00:40:50.020 --> 00:40:51.080
+e então escolhe o que acontece.
+
+00:40:51.840 --> 00:40:55.120
+Ocultar o alerta, resolvê-lo automaticamente ou marcá-lo como informativo.
+
+00:40:55.900 --> 00:40:58.720
+Elas são a ferramenta certa quando um comportamento conhecido e seguro
+
+00:40:58.720 --> 00:41:00.940
+continua disparando, uma detecção específica.
+
+00:41:01.540 --> 00:41:02.660
+A supressão é a prima menos refinada.
+
+00:41:03.100 --> 00:41:05.020
+Elas silenciam o alerta para que ele pare de gerar trabalho.
+
+00:41:05.540 --> 00:41:08.460
+Use-a com cuidado, pois um alerta é suprimido e geralmente deixa menos rastros
+
+00:41:08.460 --> 00:41:09.380
+do que um que foi resolvido.
+
+00:41:10.040 --> 00:41:11.560
+A resolução automática fica no meio do caminho.
+
+00:41:11.560 --> 00:41:16.060
+O alerta ainda é criado e registrado, mas fecha-se automaticamente com um motivo anexado
+
+00:41:16.060 --> 00:41:17.420
+que mantém o registro.
+
+00:41:17.620 --> 00:41:20.300
+Você pode contar quantas vezes ele foi disparado e ver se o padrão muda.
+
+00:41:20.920 --> 00:41:24.400
+Quando puder escolher entre esconder algo e resolvê-lo com um rastro, escolha o rastro.
+
+00:41:25.600 --> 00:41:28.500
+Seja qual for a ferramenta usada, a próxima regra importa mais do que a ferramenta.
+
+00:41:28.940 --> 00:41:29.960
+Limite o escopo das exclusões.
+
+00:41:30.460 --> 00:41:32.280
+Uma exclusão deve nomear uma entidade e uma condição.
+
+00:41:32.640 --> 00:41:36.080
+Este grupo de dispositivos e este editor assinado a esta linha de comando deste caminho
+
+00:41:36.080 --> 00:41:37.060
+nunca rega inteira.
+
+00:41:37.900 --> 00:41:39.660
+Excluir uma regra inteira não resolve ruído.
+
+00:41:39.660 --> 00:41:41.000
+Isso deleta a detecção.
+
+00:41:41.560 --> 00:41:43.480
+Você queria silenciar uma ferramenta de implantação.
+
+00:41:43.620 --> 00:41:46.880
+Em vez disso, disse a plataforma para ignorar esse comportamento em todos os lugares, para
+
+00:41:46.880 --> 00:41:47.880
+todo o usuário, para sempre.
+
+00:41:48.580 --> 00:41:52.180
+O atacante fazendo a mesma coisa em outra máquina agora passa por uma regra que tecnicamente
+
+00:41:52.180 --> 00:41:53.080
+ainda está ativada.
+
+00:41:53.720 --> 00:41:55.280
+Portanto, faça sempre a pergunta de restrição.
+
+00:41:55.900 --> 00:41:57.960
+Qual é a descrição mais específica do caso inofensivo?
+
+00:41:58.660 --> 00:42:01.740
+Escreva exclusão para corresponder apenas a isso e nada mais amplo.
+
+00:42:01.740 --> 00:42:05.420
+Se você não consegue descrever o caso inofensivo com precisão, ainda não entende o ruído.
+
+00:42:05.600 --> 00:42:06.900
+E esse é o motivo para investigar mais.
+
+00:42:07.040 --> 00:42:07.760
+Não preexclui mais.
+
+00:42:07.980 --> 00:42:09.040
+Do que quase ninguém faz?
+
+00:42:09.040 --> 00:42:10.600
+Documente toda a exclusão.
+
+00:42:11.060 --> 00:42:12.780
+Cada uma recebe três informações registradas lá.
+
+00:42:13.300 --> 00:42:15.060
+Um responsável é uma pessoa que responda por ela.
+
+00:42:15.420 --> 00:42:17.260
+Um motivo é uma frase que o estranho entenderia.
+
+00:42:17.580 --> 00:42:18.440
+Uma data de validade.
+
+00:42:19.260 --> 00:42:20.500
+Responsável é o motivo validade.
+
+00:42:21.080 --> 00:42:23.760
+O responsável importa porque as exclusões duram mais do que as pessoas quiserem.
+
+00:42:24.240 --> 00:42:27.560
+O motivo importa porque seis meses depois ninguém se lembra da semana ruim que o causou.
+
+00:42:27.560 --> 00:42:30.820
+E a validade importa mais, pois força uma decisão.
+
+00:42:31.480 --> 00:42:35.360
+Quando a data chega, alguém precisa analisar a exclusão e dizer se ainda é necessária ou removê-la.
+
+00:42:36.180 --> 00:42:37.500
+Sem uma data, o padrão é o silêncio.
+
+00:42:37.560 --> 00:42:38.920
+O silêncio significa que ela permanece.
+
+00:42:39.620 --> 00:42:40.780
+Você pode manter isso em um registro simples.
+
+00:42:41.220 --> 00:42:41.960
+A planilha funciona.
+
+00:42:42.320 --> 00:42:43.760
+Uma lista no seu sistema de chamadas funciona.
+
+00:42:44.300 --> 00:42:46.360
+O que não funciona é a memória porque é aqui que isso vai parar.
+
+00:42:46.360 --> 00:42:47.560
+Se você pular essa última etapa...
+
+00:42:48.080 --> 00:42:50.500
+Uma exclusão sem validade deixa de ser uma solução.
+
+00:42:51.220 --> 00:42:54.160
+Isso lentamente se torna um lugar onde o atacante pode operar sem ser visto.
+
+00:42:54.160 --> 00:42:55.580
+E é isso que precisamos observar agora.
+
+00:42:56.380 --> 00:42:58.240
+Exclusões, pontos cegos e ajustes ineficazes.
+
+00:42:58.560 --> 00:42:59.940
+Pensem como uma exclusão nasce.
+
+00:43:00.440 --> 00:43:01.420
+Alguém está tendo uma semana difícil.
+
+00:43:01.700 --> 00:43:03.580
+Uma regra dispara novamente em uma ferramenta de implantação.
+
+00:43:04.020 --> 00:43:06.740
+Eles adicionam uma exclusão à fila calma e eles seguem com o dia.
+
+00:43:07.620 --> 00:43:10.740
+Razoável, ninguém faz nada de errado, mas um ano depois essa exclusão ainda está lá.
+
+00:43:11.320 --> 00:43:12.680
+A pessoa que a criou mudou de equipe.
+
+00:43:13.060 --> 00:43:15.420
+A ferramenta de implantação foi substituída no outono.
+
+00:43:15.500 --> 00:43:18.400
+E a exclusão agora cobre um caminho de pasta em todo um grupo de dispositivos
+
+00:43:18.400 --> 00:43:20.240
+onde qualquer pessoa com direitos locais pode escrever.
+
+00:43:20.560 --> 00:43:22.220
+Então o atacante coloca um script nessa pasta.
+
+00:43:22.220 --> 00:43:24.380
+A regra que o teria detectado ainda está ativada.
+
+00:43:24.940 --> 00:43:27.920
+Ela simplesmente tem um buraco, exatamente no formato da sua antiga conveniência.
+
+00:43:28.520 --> 00:43:30.920
+É assim que uma exclusão permanente se torna um caminho para o atacante,
+
+00:43:31.000 --> 00:43:33.600
+não por um grande erro, mas por um acúmulo de pequenos erros razoáveis
+
+00:43:33.600 --> 00:43:34.920
+que ninguém jamais reavaliou.
+
+00:43:35.640 --> 00:43:37.020
+E aqui está a parte desconfortável.
+
+00:43:37.300 --> 00:43:38.280
+As atacantes procuram por isso.
+
+00:43:38.700 --> 00:43:40.900
+As exclusões de pasta são públicas em muitas configurações
+
+00:43:40.900 --> 00:43:43.120
+e um administrador local muitas vezes pode lê-las a partir de uma marca.
+
+00:43:43.480 --> 00:43:46.320
+Sua lista de coisas que não monitoramos é útil para qualquer um que consiga entrar.
+
+00:43:46.840 --> 00:43:48.360
+Portanto você precisa de um calendário, não de um palpite.
+
+00:43:48.360 --> 00:43:52.840
+Uma vez por trimestre, revise cada supressão, cada regra de ajuste e cada exceção.
+
+00:43:53.040 --> 00:43:53.980
+Tudo de uma só vez.
+
+00:43:54.620 --> 00:43:55.780
+Para cada uma, pergunte três coisas.
+
+00:43:56.320 --> 00:43:57.200
+O proprietário ainda está aqui.
+
+00:43:57.540 --> 00:43:58.740
+O motivo original ainda é válido?
+
+00:43:59.140 --> 00:44:01.880
+E algo no ambiente mudou que a torna mais abrangente do que costumava ser?
+
+00:44:03.080 --> 00:44:04.720
+Se você fez o trabalho da última sessão,
+
+00:44:04.800 --> 00:44:07.180
+o registro já possui uma data de validade para cada entrada.
+
+00:44:07.940 --> 00:44:10.220
+A revisão é então apenas percorrer as que venceram.
+
+00:44:10.860 --> 00:44:12.600
+Mantenha a estenda com uma nova data ou escuro.
+
+00:44:13.100 --> 00:44:13.740
+Então a quarta opção.
+
+00:44:13.740 --> 00:44:16.580
+Deixar como está porque ninguém reclamou, não é uma decisão, é negligente.
+
+00:44:16.960 --> 00:44:18.420
+Agora, um lugar merece um caminho próprio.
+
+00:44:18.580 --> 00:44:19.900
+Exclusões do Defender for Endpoint.
+
+00:44:20.680 --> 00:44:23.460
+Essas são as configurações que dizem a plataforma para ignorar um arquivo,
+
+00:44:23.620 --> 00:44:26.280
+pasta, processo ou extensão durante a verificação e monitoramento.
+
+00:44:27.040 --> 00:44:29.120
+Trate essa lista como um inventário de risco, porque é exatamente isso que é lá.
+
+00:44:29.480 --> 00:44:31.640
+Cada linha é um lugar onde você escolheu ver menos.
+
+00:44:32.180 --> 00:44:33.360
+É da mesma forma que um atacante dele.
+
+00:44:33.760 --> 00:44:35.440
+Quais caminhos podem ser gravados por usuários comuns?
+
+00:44:35.780 --> 00:44:37.080
+Quais exclusões são caracteres colímpicos?
+
+00:44:37.440 --> 00:44:39.360
+Existe uma unidade inteira ou um diretório temporário ali.
+
+00:44:39.580 --> 00:44:41.580
+Quais existem para softwares que você não usa mais?
+
+00:44:42.240 --> 00:44:43.620
+Classifique-as pela abrangência que possui.
+
+00:44:44.020 --> 00:44:45.880
+E o topo dessa lista é onde sua exceção real se encontra.
+
+00:44:46.360 --> 00:44:48.860
+Uma única exclusão ampla pode anular 50 boas detecções.
+
+00:44:49.340 --> 00:44:51.800
+Coloque ali cima a planilha, adicione o responsável e o motivo
+
+00:44:51.800 --> 00:44:53.400
+e marque cada linha que você não consegue explicar.
+
+00:44:54.020 --> 00:44:56.260
+Essas são suas primeiras remoções, o que nos leva à ideia
+
+00:44:56.260 --> 00:44:58.940
+que torna tudo isso visível para quem não vive no portal.
+
+00:44:59.900 --> 00:45:01.400
+Dívida de ajuste funciona como qualquer outra.
+
+00:45:01.760 --> 00:45:04.660
+Cada exclusão que você adiciona sem um responsável ou data de validade
+
+00:45:04.660 --> 00:45:06.700
+é um pequeno empréstimo contra sua visibilidade futura.
+
+00:45:07.340 --> 00:45:10.460
+Isso resolve o problema de hoje, e os juros aparecem depois com um ponto certo.
+
+00:45:11.160 --> 00:45:13.700
+Deixe acumular o suficiente e você pagará mais do que consegue ver e contabilizar.
+
+00:45:14.180 --> 00:45:15.460
+Quantas exclusões não tem um responsável?
+
+00:45:15.840 --> 00:45:16.420
+Data de validade.
+
+00:45:17.000 --> 00:45:17.940
+Quantas tem mais de um ano?
+
+00:45:18.280 --> 00:45:20.200
+Quantas abrange uma regra inteira em vez de apenas uma te dá?
+
+00:45:20.600 --> 00:45:22.640
+Esses quatro números acompanhados a cada trimestre
+
+00:45:22.640 --> 00:45:24.600
+dizem à liderança algo que eles já entendem.
+
+00:45:25.400 --> 00:45:27.520
+Quanto o risco não revisado o TAN está carregando
+
+00:45:27.520 --> 00:45:28.780
+e se está aumentando ou diminuindo?
+
+00:45:28.780 --> 00:45:32.380
+Um número que a liderança consegue ler em dez segundos muda a conversa.
+
+00:45:33.380 --> 00:45:35.720
+Temos 41 sessões sem donos gera uma decisão.
+
+00:45:36.580 --> 00:45:39.020
+Deveríamos organizar nossos ajustes gera apenas um aceno de cabeça.
+
+00:45:39.360 --> 00:45:40.160
+Agora, note um padrão.
+
+00:45:40.300 --> 00:45:42.740
+Tudo nesta parte foi sobre subtração, reduzir regras amplas,
+
+00:45:42.820 --> 00:45:46.500
+remover exclusões obsoletas, escrever regras restritas com responsáveis definidos.
+
+00:45:47.260 --> 00:45:50.600
+E o que sobra após esse trabalho é uma fila onde a maior parte do que aparece é real.
+
+00:45:51.320 --> 00:45:53.340
+Essa é a condição necessária antes do próximo passo,
+
+00:45:53.340 --> 00:45:55.040
+porque um sistema que age por conta própria
+
+00:45:55.040 --> 00:45:57.120
+só é tão seguro quanto os sinais nos quais ele se baseia.
+
+00:45:57.780 --> 00:46:00.500
+Alimente-o com ruído e ele cometerá erros ruidosos na velocidade da máquina.
+
+00:46:00.940 --> 00:46:01.860
+Limpe a fila primeiro, então.
+
+00:46:01.940 --> 00:46:03.580
+Automação se torna algo em que você pode confiar.
+
+00:46:04.740 --> 00:46:06.020
+Automação dentro do Defender XDR.
+
+00:46:06.740 --> 00:46:08.020
+O Defender já age por conta própria.
+
+00:46:08.500 --> 00:46:10.260
+Antes mesmo de você escrever um único playbook,
+
+00:46:10.320 --> 00:46:12.880
+a plataforma já está investigando alertas e corrigindo parte do que encontra.
+
+00:46:13.280 --> 00:46:15.340
+Isso é chamado de investigação e remediação automatizadas.
+
+00:46:15.980 --> 00:46:17.620
+Pense nisso como um analista júnior que nunca dorme.
+
+00:46:18.060 --> 00:46:20.820
+Um alerta é disparado em um dispositivo, a plataforma abre uma investigação,
+
+00:46:20.820 --> 00:46:23.720
+analisa arquivos, processos, pontos de persistência
+
+00:46:23.720 --> 00:46:26.460
+e outros dispositivos que tocaram na mesma evidência.
+
+00:46:26.860 --> 00:46:30.020
+Então ela chega a um veredito, malicioso, suspeito ou nenhuma ameaça encontrada.
+
+00:46:30.520 --> 00:46:32.320
+Se algo for malicioso, ela propõe ações.
+
+00:46:32.460 --> 00:46:34.240
+Colocar o arquivo em quarentena, parar o processo,
+
+00:46:34.360 --> 00:46:36.340
+remover a chave de registro e limpar a tarefa agendada.
+
+00:46:36.660 --> 00:46:39.060
+O que acontece a seguir depende de uma configuração, o nível de autonomia.
+
+00:46:39.500 --> 00:46:40.860
+Você escolhe esse nível por grupo de dispositivo.
+
+00:46:41.240 --> 00:46:41.920
+Ele vem a alguns níveis.
+
+00:46:42.400 --> 00:46:44.660
+No nível mais baixo, a plataforma investiga, mas não toma nenhuma ação.
+
+00:46:44.960 --> 00:46:46.920
+Ela lhe diz o que faria e uma pessoa decide.
+
+00:46:47.560 --> 00:46:50.360
+No nível intermediário, ele lida com algumas coisas sozinho e pede aprovação para o resto.
+
+00:46:50.820 --> 00:46:54.040
+No nível superior, ele corrige tudo sem pedir e uma pessoa revisa depois.
+
+00:46:54.640 --> 00:46:55.940
+Essas etapas não são inteligência.
+
+00:46:56.380 --> 00:46:57.800
+Todos os níveis executam uma investigação.
+
+00:46:58.440 --> 00:46:59.640
+Ele difere em uma única pergunta.
+
+00:46:59.860 --> 00:47:00.800
+Quem aperta o botão?
+
+00:47:01.400 --> 00:47:02.760
+Agora um tipo diferente de automação,
+
+00:47:03.160 --> 00:47:05.500
+que não espera a investigação terminar a interrupção de ataques.
+
+00:47:06.540 --> 00:47:08.500
+Isso foi criado por um momento em que um ataque já está em andamento.
+
+00:47:09.180 --> 00:47:11.780
+Digamos que o defender correlacione sinais de identidade, endpoints e mail.
+
+00:47:12.420 --> 00:47:14.720
+O quadro combinado corresponde a um padrão conhecido
+
+00:47:14.720 --> 00:47:17.740
+como preparação de ransomware ou invasão direta usando uma conta roubada.
+
+00:47:17.740 --> 00:47:21.560
+Nesse ponto, minutos importam mais do que certeza, então a plataforma age.
+
+00:47:22.040 --> 00:47:25.160
+Ela pode conter um dispositivo cortando seu acesso à rede, exceto o próprio defender.
+
+00:47:25.700 --> 00:47:29.260
+Ela pode desabilitar uma conta de usuário para que a sessão roubada pare de funcionar em todo o tempo.
+
+00:47:29.720 --> 00:47:31.300
+Você não escreveu essa regra, a Microsoft escreveu.
+
+00:47:31.700 --> 00:47:33.500
+Ela só é acionada em correspondências de alta confina.
+
+00:47:33.960 --> 00:47:34.460
+Esse é o design.
+
+00:47:34.460 --> 00:47:38.160
+A interrupção é propositalmente restrita, porque as ações são prejudiciais quando incorretas.
+
+00:47:38.500 --> 00:47:40.380
+Um laptop contido significa uma pessoa que não pode trabalhar.
+
+00:47:40.700 --> 00:47:42.260
+Uma conta desabilitada pode ser a do seu CFO.
+
+00:47:42.620 --> 00:47:43.640
+Essa atenção é a verdadeira questão.
+
+00:47:44.040 --> 00:47:47.820
+Quando a máquina deve agir sozinha, não responda com base em sentimentos, responda com base em risco.
+
+00:47:48.140 --> 00:47:50.940
+Avalie o custo da ação se ela estiver errada e o custo da espera se ela estiver certa.
+
+00:47:51.460 --> 00:47:54.620
+Um arquivo em quarentena em uma estação de trabalho padrão tem baixo custo se houver erro,
+
+00:47:54.680 --> 00:47:55.900
+já que você o restaura com um clique.
+
+00:47:56.540 --> 00:47:58.040
+Esse é um bom candidato para a automação total.
+
+00:47:58.040 --> 00:48:01.520
+Um dispositivo que executa sua linha de produção ou um controlador de domínio.
+
+00:48:01.820 --> 00:48:03.180
+Errar ali significa uma interrupção.
+
+00:48:03.800 --> 00:48:05.760
+Um analista deve aprovar primeiro, então você define níveis.
+
+00:48:06.540 --> 00:48:09.140
+Dispos de usuários padrão vão para a configuração de margem da autonomia.
+
+00:48:09.700 --> 00:48:12.260
+Servidores e sistemas críticos permanecem semi-automatizados,
+
+00:48:12.300 --> 00:48:14.120
+onde a plataforma propõe e uma pessoa confirma.
+
+00:48:14.520 --> 00:48:17.620
+Os grupos de dispositivos mais novos e incertos permanecem no nível mais baixo,
+
+00:48:17.680 --> 00:48:19.940
+até que você observe como a plataforma se comporta no seu ambiente.
+
+00:48:20.500 --> 00:48:23.220
+Último ponto leva a ideia subjacente a tudo isso, um modelo de confiança.
+
+00:48:23.580 --> 00:48:24.860
+A automação deve conquistar seu escuro.
+
+00:48:24.860 --> 00:48:27.580
+Você não entrega autoridade total ao novo sistema logo no primeiro dia.
+
+00:48:27.880 --> 00:48:30.400
+Você começa de forma restrita e analisa as evidências,
+
+00:48:30.540 --> 00:48:31.820
+verifica os resultados da investigação,
+
+00:48:32.120 --> 00:48:34.440
+quantos vereditos estavam certos e quantas correções o analista reverteu.
+
+00:48:34.560 --> 00:48:37.520
+Se a plataforma esteve correta por 60 dias em um grupo de dispositivos,
+
+00:48:37.620 --> 00:48:38.740
+esse é o motivo para ampliar sua autoridade.
+
+00:48:39.100 --> 00:48:42.380
+Se ela continua marcando sua própria ferramenta de gerenciamento como maliciosa,
+
+00:48:42.460 --> 00:48:44.460
+esse é o motivo para corrigir o sinal antes de dar mais poder a ela.
+
+00:48:45.000 --> 00:48:46.940
+A precisão vem primeiro, o escopo vem depois.
+
+00:48:47.180 --> 00:48:49.440
+E isso se conecta diretamente ao trabalho que você acabou de concluir.
+
+00:48:49.880 --> 00:48:52.200
+Uma fila silenciosa e ajustada é o que torna os números compreensíveis.
+
+00:48:52.300 --> 00:48:54.820
+Em um tênis com muito ruído, não dá para saber se a automação é precisa
+
+00:48:54.820 --> 00:48:56.760
+porque os inputs já estão misturados e usados.
+
+00:48:56.760 --> 00:49:00.800
+Limpe os sinais e a questão da confiança torna-se mensurável em vez de emocional.
+
+00:49:01.360 --> 00:49:03.740
+Mas observe o que a automação integrada pode e não pode fazer.
+
+00:49:04.320 --> 00:49:08.320
+Ela atua nas detecções da Microsoft, usando a lógica da Microsoft, na ordem da Microsoft.
+
+00:49:08.920 --> 00:49:12.300
+Ela não sabe nada sobre sua cadeia de aprovação, sua lista de VIPs ou sistema de chamada.
+
+00:49:13.240 --> 00:49:16.520
+Ela não pode desabilitar um usuário, notificar um gerente e abrir um caso em suas próprias ferramentas.
+
+00:49:17.180 --> 00:49:19.920
+Para isso, você precisa de algo que você controle, não a configuração de autonomia.
+
+00:49:20.560 --> 00:49:21.320
+Você precisa de orquestração.
+
+00:49:21.320 --> 00:49:23.080
+Por que o Sentinel entra na jogada?
+
+00:49:23.820 --> 00:49:27.040
+O Defender XDR conhece os sinais da Microsoft melhor do que qualquer outra coisa que você possui.
+
+00:49:27.560 --> 00:49:28.880
+Ele vê a árvore de processo em um laptop.
+
+00:49:29.480 --> 00:49:31.980
+Ele vê o login e a regra de caixa de correio com o sentimento alt.
+
+00:49:32.160 --> 00:49:34.520
+E os une porque a Microsoft construiu os dois lados da conexão.
+
+00:49:35.200 --> 00:49:36.040
+Essa profundidade é real.
+
+00:49:36.500 --> 00:49:39.040
+Nenhuma ferramenta de terceiro se igualará a ele dentro desse ecossistema,
+
+00:49:39.100 --> 00:49:40.160
+mas a profundidade tem um limite.
+
+00:49:40.540 --> 00:49:42.660
+O Defender só pode raciocinar sobre o que flui para ele.
+
+00:49:43.200 --> 00:49:44.320
+Muito do seu ambiente nunca flui.
+
+00:49:44.320 --> 00:49:45.680
+Então, pense no que está fora.
+
+00:49:46.000 --> 00:49:50.040
+O firewall na borda do datacenter, os switches e controladores sem fio, o concentrador VPN,
+
+00:49:50.460 --> 00:49:54.080
+o proxy que registra cada solicitação de saída, o aplicativo de linha de negócio que
+
+00:49:54.080 --> 00:49:57.300
+sua equipe financeira usa e as ferramentas SaaS às quais o Defender for Cloud Apps não
+
+00:49:57.300 --> 00:49:57.800
+se conecta.
+
+00:49:58.620 --> 00:50:02.020
+Depois, há os logs personalizados, o job in lote que escreve em um arquivo, o sistema
+
+00:50:02.020 --> 00:50:05.920
+legado que só fala syslog, o banco de dados on-premises que registra quem acessou qual
+
+00:50:05.920 --> 00:50:06.180
+linha.
+
+00:50:06.680 --> 00:50:08.220
+Nada disso chega à busca avançada.
+
+00:50:08.560 --> 00:50:11.340
+Portanto, quando o invasor se move através dessa lacuna, é defender metade da história.
+
+00:50:11.340 --> 00:50:16.280
+Uma conta roubada faz login pela VPN, acessa um aplicativo interno e extrai dados por meio
+
+00:50:16.280 --> 00:50:16.800
+de um proxy.
+
+00:50:17.420 --> 00:50:18.400
+O Defender detecta o login.
+
+00:50:18.760 --> 00:50:20.260
+O restante acontece em lugares que ele não consegue.
+
+00:50:20.620 --> 00:50:23.020
+Sua correlação, como vimos anteriormente, só pode vincular o que consegue.
+
+00:50:23.400 --> 00:50:24.220
+É que o Sentinel entra.
+
+00:50:24.640 --> 00:50:25.240
+O resumo é assim.
+
+00:50:25.800 --> 00:50:27.040
+O Defender vê o Microsoft profundamente.
+
+00:50:27.440 --> 00:50:28.540
+O Sentinel vê tudo de forma uma.
+
+00:50:29.040 --> 00:50:31.060
+O Sentinel é um CN e um nativo da nuvem.
+
+00:50:31.500 --> 00:50:36.000
+Ele recebe logs de quase qualquer fonte, armazenos em um workspace e permite executar a
+
+00:50:36.000 --> 00:50:37.280
+mesma linguagem de consulta em tudo.
+
+00:50:37.980 --> 00:50:40.560
+A tabela de firewall e a tabela de login ficam lado a lado.
+
+00:50:40.560 --> 00:50:44.840
+Uma única consulta pode seguir um endereço IP desde um log de rede até um evento de
+
+00:50:44.840 --> 00:50:46.940
+identidade e em seguida até um alerta de endpoint.
+
+00:50:47.540 --> 00:50:49.120
+Essa é uma pergunta que o Defender sozinho não pode responder.
+
+00:50:49.600 --> 00:50:51.480
+A Microsoft tem diminuído a distância entre os dois.
+
+00:50:52.200 --> 00:50:54.880
+O portal unificado do Defender agora traz o Sentinel dentro dele.
+
+00:50:55.440 --> 00:50:57.080
+Uma fila ao modelo de incidente.
+
+00:50:57.140 --> 00:51:00.420
+Um analista abre um único incidente e vê alertas das cargas de trabalho do Defender
+
+00:51:00.420 --> 00:51:03.800
+ao lado de alertas das regras do Sentinel, agrupados pela mesma lógica de correlação.
+
+00:51:04.600 --> 00:51:07.080
+Sem um segundo console, sem copiar números de casos entre sistemas.
+
+00:51:07.080 --> 00:51:10.760
+Isso muda a forma como as pessoas trabalham, mas também levanta uma questão de design que
+
+00:51:10.760 --> 00:51:12.020
+o portal não pode responder por você.
+
+00:51:12.480 --> 00:51:13.040
+Ele pertence a um.
+
+00:51:13.440 --> 00:51:14.700
+Aqui está uma estrutura que se sustenta lá.
+
+00:51:15.480 --> 00:51:17.940
+Mantendo o Defender, Turing a profundidade nativa seja o objetivo principal.
+
+00:51:18.440 --> 00:51:21.500
+Comportamento de endpoint, sinais de proteção de identidade, vereditos de e-mail, atividade
+
+00:51:21.500 --> 00:51:22.880
+de aplicativos em nuvem dos apps conectados.
+
+00:51:22.960 --> 00:51:24.640
+Essas detecções são executadas o mais próximo possível.
+
+00:51:25.040 --> 00:51:26.200
+Elas usam telemetria mais rica.
+
+00:51:26.600 --> 00:51:29.400
+Elas alimentam diretamente a investigação automatizada e a interrupção de ataque.
+
+00:51:29.820 --> 00:51:31.300
+Movê-las para fora apenas as enfraquece.
+
+00:51:31.720 --> 00:51:33.580
+Encaminhe para o Sentinel tudo o que precisar de abrangência.
+
+00:51:33.580 --> 00:51:35.480
+Detecções que unem logs de rede e identidade.
+
+00:51:35.780 --> 00:51:36.800
+Regras sob dados de terceiros.
+
+00:51:36.880 --> 00:51:38.120
+Retenção longa para conformidade.
+
+00:51:39.000 --> 00:51:41.380
+Para que você possa olhar para trás os oito meses quando alguém perguntar sobre uma
+
+00:51:41.380 --> 00:51:42.000
+violação antiga.
+
+00:51:42.500 --> 00:51:45.500
+Caça de ameaças entre fontes onde a resposta vive em três sistemas ao mesmo tempo.
+
+00:51:45.900 --> 00:51:47.020
+E um teste rápido para a área cinzana.
+
+00:51:47.520 --> 00:51:49.660
+Pergunte se a detecção precisa de dados que o Defender não possui.
+
+00:51:50.160 --> 00:51:51.980
+Se sim, ela pertence ao Sentinel porque tem que ser assim.
+
+00:51:52.540 --> 00:51:55.440
+Se não, pergunte se ela se beneficia da resposta integrada do Defender.
+
+00:51:55.860 --> 00:51:57.020
+Se sim, mantenha no Defender.
+
+00:51:57.480 --> 00:51:58.420
+Note o que essa estrutura fala.
+
+00:51:58.540 --> 00:52:00.600
+Ela acaba com a discussão sobre qual ferramenta é melhor.
+
+00:52:01.120 --> 00:52:01.860
+Elas não estão competindo.
+
+00:52:02.260 --> 00:52:03.340
+Elas cobrem superfícies diferentes.
+
+00:52:03.760 --> 00:52:05.320
+O trabalho real é decidir onde cada reside.
+
+00:52:05.980 --> 00:52:06.600
+Mas há um detalhe.
+
+00:52:07.060 --> 00:52:08.920
+Um que surpreende as pessoas após a primeira fatura.
+
+00:52:09.580 --> 00:52:10.520
+Conectar os dois não é gratuito.
+
+00:52:11.280 --> 00:52:13.920
+Cada tabela que você envia para o Sentinel custa dinheiro para ingerir e armazenar.
+
+00:52:14.500 --> 00:52:16.600
+Cada alerta duplicado custa tempo do analista.
+
+00:52:17.200 --> 00:52:20.280
+As escolhas que você faz na primeira semana, muitas vezes clicando em habilitar tudo,
+
+00:52:20.620 --> 00:52:21.920
+moldam ambas as contas por anos.
+
+00:52:22.480 --> 00:52:24.460
+Tanto a integração precisa de um design, não apenas de uma caixa de sal.
+
+00:52:24.940 --> 00:52:26.760
+Projetando a integração do Defender e do Sentinel,
+
+00:52:27.360 --> 00:52:28.740
+comece por como a conexão se compõe.
+
+00:52:28.740 --> 00:52:30.600
+É mais útil do que a maioria das pessoas esperam.
+
+00:52:30.600 --> 00:52:33.880
+O conector do Defender XDR no Sentinel sincroniza incidentes e alertas.
+
+00:52:34.340 --> 00:52:38.980
+Quando o Defender cria um incidente, ele aparece no lado do Sentinel com seus alertas e entidades anexados.
+
+00:52:39.520 --> 00:52:40.940
+E a sincronização funciona nos dois sentidos.
+
+00:52:41.300 --> 00:52:44.380
+Um analista fecha o incidente em um lugar e o status é atualizado no outro.
+
+00:52:44.380 --> 00:52:48.440
+Atribua, comente, altere a severidade e a mudança é refletida.
+
+00:52:49.240 --> 00:52:50.320
+Sincrono mantém duas filas.
+
+00:52:50.860 --> 00:52:54.500
+Você mantém uma história contada em dois sistemas, mas esse conector move apenas incidentes.
+
+00:52:55.100 --> 00:52:56.560
+Ele não move os dados brutos por trás dele.
+
+00:52:56.920 --> 00:52:58.080
+E essa é a primeira decisão real.
+
+00:52:58.580 --> 00:53:00.640
+Você pode enviar apenas os incidentes e alertas,
+
+00:53:00.680 --> 00:53:04.100
+ou também pode transmitir as tabelas brutas como eventos de processo de dispositivo,
+
+00:53:04.180 --> 00:53:07.200
+eventos de e-mail e eventos de logon de identidade para o espaço de trabalho do Sentinel.
+
+00:53:07.560 --> 00:53:08.500
+Incidentes apenas é barato.
+
+00:53:08.500 --> 00:53:11.680
+Você obtém a visão do portal, os ganchos de automação e o status entre...
+
+00:53:11.680 --> 00:53:13.340
+Você abre mão e a busca ativa hunting.
+
+00:53:13.880 --> 00:53:16.220
+A busca avançada no Defender mantém cerca de 30 dias de dados.
+
+00:53:16.820 --> 00:53:19.740
+Se a pergunta for sobre algo de 5 meses atrás, a telemetria já era.
+
+00:53:20.340 --> 00:53:21.560
+A ingestão bruta resolve isso.
+
+00:53:22.080 --> 00:53:25.300
+Você obtém retenção longa e pode unir tabelas do Defender a logs de firewall
+
+00:53:25.300 --> 00:53:27.700
+em uma única consulta, mas paga por cada gigabyte.
+
+00:53:28.340 --> 00:53:29.580
+E as tabelas endpointes são enormes.
+
+00:53:30.460 --> 00:53:33.820
+Um dispositivo gera milhares de eventos de processo por dia e milhares de dispositivos.
+
+00:53:34.340 --> 00:53:35.200
+Então a troca é clara.
+
+00:53:35.440 --> 00:53:36.460
+Capacidade contra custo.
+
+00:53:36.860 --> 00:53:38.020
+E a resposta não é tudo ou nada.
+
+00:53:38.020 --> 00:53:39.060
+É o que nos leva à estratificação.
+
+00:53:39.620 --> 00:53:40.920
+Nem todo log tem o mesmo preço.
+
+00:53:41.460 --> 00:53:42.460
+Classifique seus dados por valor.
+
+00:53:43.020 --> 00:53:45.420
+Algumas tabelas alimentam detecções que você executa todos os dias,
+
+00:53:45.520 --> 00:53:47.820
+login de identidade, eventos de apps em nuvem, eventos de e-mail.
+
+00:53:48.340 --> 00:53:51.420
+Essas vão para a camada de análise completa onde as regras podem consultá-las rapidamente.
+
+00:53:51.880 --> 00:53:54.140
+Outras tabelas importam apenas quando uma investigação comece.
+
+00:53:54.600 --> 00:53:58.320
+Logs de rede detalhados, eventos de processo bruto de dispositivos de baixo risco
+
+00:53:58.320 --> 00:54:00.240
+podem ficar em uma camada mais barata ou no Data Lake,
+
+00:54:00.320 --> 00:54:03.080
+onde você paga menos para armazená-los e consultá-los apenas quando necessário.
+
+00:54:03.600 --> 00:54:05.180
+No terceiro grupo você precisa apenas para a conformidade.
+
+00:54:05.180 --> 00:54:08.420
+Mantenha o longo e barato e nunca consulte a menos que um auditor peça.
+
+00:54:08.840 --> 00:54:10.460
+Portanto, para cada tabela, faça uma pergunta.
+
+00:54:10.560 --> 00:54:13.400
+Qual regra ou investigação seria interrompida se esses dados desaparecessem a mão?
+
+00:54:13.960 --> 00:54:16.420
+Se a resposta for nenhuma, ela não pertence à camada cara.
+
+00:54:17.220 --> 00:54:19.860
+Faça essa revisão uma vez na configuração e depois a cada trimestre,
+
+00:54:20.000 --> 00:54:22.100
+pois tanto suas detecções quanto seus volumes de dados mudam.
+
+00:54:22.460 --> 00:54:23.920
+Agora o problema que aparece na segunda semana.
+
+00:54:24.040 --> 00:54:24.900
+Incidentes duplicados.
+
+00:54:25.460 --> 00:54:25.980
+Veja como acontece.
+
+00:54:26.380 --> 00:54:28.360
+O Defender gera um alerta sobre um login suspeito.
+
+00:54:28.780 --> 00:54:30.180
+O conector traz esse alerta para o Sentinel.
+
+00:54:30.180 --> 00:54:33.860
+Então, uma regra de análise do Sentinel rodando sobre a mesma tabela bruta
+
+00:54:33.860 --> 00:54:35.280
+dispara sobre o mesmo comportamento.
+
+00:54:36.040 --> 00:54:40.240
+Dois alertas, um evento e agora dois incidentes, dois tickets e um analista trabalhando em ambos.
+
+00:54:41.040 --> 00:54:43.340
+A primeira solução é decidir quem é o responsável por causa da detecção.
+
+00:54:43.800 --> 00:54:46.720
+Se o Defender já cobra um comportamento e não cria uma regra do Sentinel para ele,
+
+00:54:47.300 --> 00:54:51.260
+desative a criação de incidentes a partir de alertas de segurança da Microsoft no Sentinel,
+
+00:54:51.400 --> 00:54:53.000
+já que o conector já traz os verdadeiros.
+
+00:54:53.600 --> 00:54:55.080
+Essa configuração evita muitas duplicadas.
+
+00:54:55.500 --> 00:54:56.560
+A segunda solução é o agrupamento.
+
+00:54:56.560 --> 00:55:01.200
+No portal unificado, a correlação mescla alertas relacionadas de ambos os sistemas em um incidente.
+
+00:55:01.280 --> 00:55:02.820
+Uma só mescla que compartilha entidades.
+
+00:55:03.680 --> 00:55:06.660
+Portanto, mantenha-se o mapeamento de entidades consistente em ambos os conjuntos de regras,
+
+00:55:06.700 --> 00:55:08.460
+mesmo identificador de usuário, mesmo identificador de dispositivo.
+
+00:55:08.700 --> 00:55:10.440
+Mapeamento descuidado é como as duplicadas sobrevivem.
+
+00:55:10.700 --> 00:55:11.880
+Isso leva à questão da autoria.
+
+00:55:12.300 --> 00:55:13.520
+Onde você escreve uma nova regra?
+
+00:55:13.840 --> 00:55:17.240
+Use detecções personalizadas do Defender quando os dados estiverem nas tabelas do Defender
+
+00:55:17.240 --> 00:55:19.100
+e você quiser que o resultado dispare uma resposta nativa.
+
+00:55:19.820 --> 00:55:22.520
+Alertas dessas regras podem alimentar investigações automatizadas,
+
+00:55:22.520 --> 00:55:25.440
+com tensão de dispositivos e a mesma lógica de incidentes dos alertas nativos.
+
+00:55:25.440 --> 00:55:28.100
+Tempo quase real também está disponível apenas lá.
+
+00:55:28.780 --> 00:55:32.500
+Use as regras de análise do Sentinel quando a consulta precisar de dados fora do Defender
+
+00:55:32.500 --> 00:55:34.960
+quando precisar de um histórico maior do que o da busca avançada
+
+00:55:34.960 --> 00:55:37.700
+ou ao executar uma regra agendada em um conjunto de tabelas vinculadas.
+
+00:55:39.060 --> 00:55:40.220
+Um teste simples funciona.
+
+00:55:40.860 --> 00:55:42.380
+A regra precisa de algo que o Defender não consegue ver.
+
+00:55:43.240 --> 00:55:45.600
+Caso contrário, então agora os dados estão em um só lugar.
+
+00:55:45.960 --> 00:55:47.180
+Os incidentes fluem para ambos os lados.
+
+00:55:47.600 --> 00:55:49.600
+Os custos têm um teto e as duplicadas têm um responsável.
+
+00:55:49.600 --> 00:55:51.920
+O que ainda falta é a parte que age.
+
+00:55:52.640 --> 00:55:54.580
+Uma fila cheia de bons incidentes é apenas uma lista mesmo.
+
+00:55:55.080 --> 00:55:55.980
+Em seguida, um outro de resposta.
+
+00:55:56.560 --> 00:55:57.940
+Playbooks de resposta do alerta a ação.
+
+00:55:58.620 --> 00:55:59.480
+Playbook é uma decisão.
+
+00:55:59.820 --> 00:56:00.260
+É só isso.
+
+00:56:01.040 --> 00:56:02.120
+Alguém em algum momento decidiu.
+
+00:56:02.320 --> 00:56:03.440
+Quando isso acontecer, faremos aquilo.
+
+00:56:03.440 --> 00:56:09.220
+E agora, na maioria das equipes, essa decisão vive em uma página wiki na cabeça de um analista sênior
+
+00:56:09.220 --> 00:56:11.340
+ou em uma mensagem no Slack de dois anos atrás.
+
+00:56:11.920 --> 00:56:15.820
+Um playbook pega essa decisão e escreve em etapas e faz com que elas funcionem por conta própria.
+
+00:56:16.420 --> 00:56:17.960
+Portanto, a pergunta não é o que podemos automatizar.
+
+00:56:18.900 --> 00:56:21.140
+É quais decisões já tomamos da mesma forma sempre.
+
+00:56:22.340 --> 00:56:23.440
+Esses são seus primeiros candidatos.
+
+00:56:23.840 --> 00:56:26.440
+Se três analistas respondessem de forma idêntica ao mesmo alerta,
+
+00:56:26.480 --> 00:56:28.140
+uma pessoa não precisa estar nesse fluxo.
+
+00:56:28.540 --> 00:56:29.280
+Para a parte mecânica.
+
+00:56:29.680 --> 00:56:31.760
+No Sentinel, os playbooks são criados no Agile Logic Apps.
+
+00:56:31.760 --> 00:56:34.900
+Um Logic App é um fluxo de trabalho, um gatilho e uma série de etapas.
+
+00:56:35.100 --> 00:56:36.160
+Cada uma chamando um serviço.
+
+00:56:37.200 --> 00:56:39.140
+Ler um usuário do Entryd, postar uma mensagem no Teams,
+
+00:56:39.220 --> 00:56:40.820
+chamar a API do Defender, abrir um ticket.
+
+00:56:41.660 --> 00:56:43.760
+Existe um conector para a maioria das ferramentas que você já possui,
+
+00:56:43.820 --> 00:56:45.080
+mas um playbook não inicia sozinho.
+
+00:56:45.640 --> 00:56:46.480
+Algo precisa dispará-lo.
+
+00:56:46.860 --> 00:56:48.320
+Essa é a função das regras de automação,
+
+00:56:48.420 --> 00:56:50.440
+que ficam à frente dos playbooks com uma camada de gatilho.
+
+00:56:50.520 --> 00:56:52.560
+Uma regra de automação monitora incidentes ou alertas,
+
+00:56:52.800 --> 00:56:54.680
+verifica condições e então executa algo.
+
+00:56:55.020 --> 00:56:57.140
+Ela pode executar um playbook e atribuir um responsável,
+
+00:56:57.140 --> 00:56:59.480
+alterar a severidade, adicionar uma tag ou fechar um incidente.
+
+00:56:59.480 --> 00:57:02.900
+Você define uma condição, como incidente criado, severidade alta,
+
+00:57:03.020 --> 00:57:04.920
+contém uma entidade e usuário de nível privilegiado,
+
+00:57:05.200 --> 00:57:07.080
+em seguida anexa o playbook e deve ser executado.
+
+00:57:07.480 --> 00:57:08.180
+Então pense em camadas.
+
+00:57:08.600 --> 00:57:10.740
+A regra decide quando o playbook decide o quê.
+
+00:57:11.280 --> 00:57:12.340
+Mantê-los separados compensa.
+
+00:57:12.720 --> 00:57:14.900
+Uma regra de automação pode chamar vários playbooks em sequência.
+
+00:57:15.400 --> 00:57:18.300
+Você pode desativar um playbook sem precisar reescrever cada gatilho que utilizava.
+
+00:57:18.600 --> 00:57:19.980
+Agora, o que as pessoas realmente criam primeiro?
+
+00:57:20.280 --> 00:57:21.740
+Quatro playbooks cobrem a maior parte do valor.
+
+00:57:22.200 --> 00:57:22.920
+Isolar um dispositivo.
+
+00:57:23.220 --> 00:57:25.660
+Quando um incidente confirma um endpoint comprometido,
+
+00:57:25.800 --> 00:57:27.440
+o playbook chama o Defender for Endpoint
+
+00:57:27.440 --> 00:57:29.080
+e corta a conexão da máquina com a rede.
+
+00:57:29.480 --> 00:57:32.520
+O próprio Defender permanece acessível para que o analista ainda possa investigar.
+
+00:57:32.960 --> 00:57:33.720
+Desabilitar um usuário.
+
+00:57:34.160 --> 00:57:36.440
+O playbook marca a conta como desabilitada no entredia
+
+00:57:36.440 --> 00:57:38.080
+e a senha roubada deixa de funcionar.
+
+00:57:38.800 --> 00:57:39.440
+Revogar a sessão.
+
+00:57:39.900 --> 00:57:41.540
+Diferente de desabilitar é muitas vezes melhor.
+
+00:57:42.240 --> 00:57:44.240
+Isso encerra todos os tokens ativos do usuário,
+
+00:57:44.540 --> 00:57:46.160
+então uma sessão replicada morre na hora,
+
+00:57:46.460 --> 00:57:49.300
+enquanto a pessoa pode entrar novamente após redefinir a senha.
+
+00:57:50.260 --> 00:57:52.880
+Bloquear um indicador, um IP malicioso, um domínio, um hash de arquivo.
+
+00:57:53.320 --> 00:57:54.740
+O playbook adiciona a lista de bloqueio
+
+00:57:54.740 --> 00:57:56.360
+para que a próxima tentativa fale na porta de ano.
+
+00:57:56.720 --> 00:57:57.740
+Cada um deles é uma ação única.
+
+00:57:58.260 --> 00:57:58.780
+Isso é proposital.
+
+00:57:58.780 --> 00:58:02.300
+Playbooks pequenos são mais fáceis de testar, de confiar e de combinar mais tarde.
+
+00:58:03.100 --> 00:58:05.520
+Mas aqui está o erro que faz muitas tentativas iniciais falharem.
+
+00:58:06.020 --> 00:58:06.940
+Eles vão direto para a ação.
+
+00:58:07.240 --> 00:58:09.280
+Um alerta chega e o playbook desabilita a conta.
+
+00:58:09.880 --> 00:58:10.780
+Sem fazer perguntas.
+
+00:58:11.080 --> 00:58:12.460
+E então descobre-se que o atacante
+
+00:58:12.460 --> 00:58:14.600
+era o CFO fazendo login de um hotel em outro país
+
+00:58:14.600 --> 00:58:17.080
+e agora o líder financeiro não consegue aprovar a folha de pagamento.
+
+00:58:18.000 --> 00:58:18.980
+Portanto, o enriquecimento vem primeiro.
+
+00:58:19.420 --> 00:58:21.140
+Obtenha o contexto e depois decida, então aja.
+
+00:58:21.140 --> 00:58:24.500
+Antes de qualquer ação, o playbook reúne o que o humano pesquisaria.
+
+00:58:24.920 --> 00:58:26.340
+Este usuário está no grupo VIP?
+
+00:58:26.820 --> 00:58:27.940
+Qual o nível de risco dele agora?
+
+00:58:28.360 --> 00:58:30.260
+O dispositivo mostrou outros alertas no último dia?
+
+00:58:30.880 --> 00:58:33.740
+O endereço IP está em um FID e ameaça a uma faixa corporativa conhecida.
+
+00:58:34.080 --> 00:58:34.660
+Quem é o gerente?
+
+00:58:35.100 --> 00:58:36.080
+Que horas são para este usuário?
+
+00:58:36.540 --> 00:58:38.940
+Cada resposta é uma chamada para uma API e cada uma leva segundos.
+
+00:58:39.600 --> 00:58:40.340
+Então vem uma condição.
+
+00:58:40.340 --> 00:58:43.180
+Se o usuário for de baixo risco, o dispositivo não for gerenciado.
+
+00:58:43.240 --> 00:58:44.800
+O indicador corresponder a uma ameaça conhecida.
+
+00:58:44.940 --> 00:58:45.260
+Prossiga.
+
+00:58:45.940 --> 00:58:47.860
+Se o usuário for um VIP, pare e pergunte a uma pessoa.
+
+00:58:48.760 --> 00:58:51.160
+A lógica é exatamente como a lista de verificação que o analista seguiria,
+
+00:58:51.240 --> 00:58:53.660
+exceto que ela é executada em 4 segundos às 3 da manhã todas as vezes.
+
+00:58:54.260 --> 00:58:55.660
+E isso traz a última parte do design.
+
+00:58:56.000 --> 00:58:56.620
+Gate de aprovação.
+
+00:58:57.120 --> 00:58:58.920
+Para ações de alto impacto, o playbook não age.
+
+00:58:59.360 --> 00:58:59.780
+Ele pergunta.
+
+00:59:00.500 --> 00:59:02.500
+Ele publica em um canal do Teams ou envia um e-mail
+
+00:59:02.500 --> 00:59:04.740
+com o resumo do incidente e as evidências coletadas
+
+00:59:04.740 --> 00:59:07.040
+e dois botões, aprovar ou rejeitar.
+
+00:59:07.720 --> 00:59:08.640
+Fluxo de trabalho aguarda.
+
+00:59:08.640 --> 00:59:10.380
+Se uma pessoa específica aprovar, ele continua.
+
+00:59:10.860 --> 00:59:14.320
+Se ninguém responder em 30 minutos, ele escala para a próxima pessoa da lista.
+
+00:59:15.020 --> 00:59:16.720
+Isso lhe dá velocidade onde o risco é baixo
+
+00:59:16.720 --> 00:59:18.200
+e uma decisão humana onde o risco é alto.
+
+00:59:18.600 --> 00:59:19.940
+O analista não está mais fazendo o trabalho manual.
+
+00:59:20.380 --> 00:59:23.000
+Ele toma a decisão, contudo, o contexto já é disponível na tela.
+
+00:59:23.760 --> 00:59:26.360
+Portanto, você tem gatilhos, playbooks, enriquecimento e aprovações.
+
+00:59:26.920 --> 00:59:28.120
+Esse é o motor de resposta funcional.
+
+00:59:28.540 --> 00:59:30.820
+Mas também é uma maneira muito eficiente de quebrar seu próprio tenant,
+
+00:59:31.200 --> 00:59:32.300
+se ninguém colocar limites nele.
+
+00:59:33.660 --> 00:59:35.620
+Rede de proteção, automação, seguro e escala.
+
+00:59:36.080 --> 00:59:38.520
+Todo playbook às vezes falha, não porque a lógica seja ruim.
+
+00:59:38.640 --> 00:59:41.100
+Mas porque os dados mudam e o ambiente oscila.
+
+00:59:42.100 --> 00:59:45.080
+Uma regra escrita em março encontra uma situação que ninguém imaginou em março.
+
+00:59:45.540 --> 00:59:47.100
+Então você não projeta para o dia em que tudo funciona.
+
+00:59:47.180 --> 00:59:48.320
+Você projeta para o dia em que algo dá errado.
+
+00:59:48.980 --> 00:59:50.040
+Isso é pensar no rádio explosão.
+
+00:59:50.640 --> 00:59:53.080
+Para cada playbook, faça uma pergunta antes de colocá-la em produção.
+
+00:59:53.760 --> 00:59:56.280
+Se ele disparar no alvo errado, até onde o dano se espalha?
+
+00:59:56.280 --> 00:59:58.320
+Considere a revogação desse sonho.
+
+00:59:59.240 --> 01:00:01.020
+Alvo errado e uma pessoa entra novamente no sistema.
+
+01:00:01.540 --> 01:00:02.600
+Irritante, 5 minutos perdido.
+
+01:00:03.040 --> 01:00:05.820
+Considere isolar um dispositivo alvo errado e um laptop fica offline.
+
+01:00:06.240 --> 01:00:07.240
+Pior, mas você pode reverter.
+
+01:00:08.000 --> 01:00:11.600
+Agora pegue um playbook que desabilita contas disparado por uma regra ampla demais.
+
+01:00:11.740 --> 01:00:14.680
+Um dia ruim resulta em 50 usuários desabilitados antes do 1.
+
+01:00:14.900 --> 01:00:15.520
+A senha é a mesma.
+
+01:00:15.920 --> 01:00:16.900
+O que mudou foi o raio de alcance.
+
+01:00:17.260 --> 01:00:18.800
+Então anote o raio ao lado de cada playbook.
+
+01:00:19.300 --> 01:00:21.780
+Um usuário, um dispositivo, um grupo ou tenente inteiro.
+
+01:00:21.780 --> 01:00:24.140
+Então ajuste salvaguardas a esse tamanho.
+
+01:00:24.800 --> 01:00:27.480
+A primeira salvaguarda é uma lista de coisas que o playbook nunca deve tocar.
+
+01:00:28.120 --> 01:00:32.740
+VIPs, executivos, aprovadores financeiros, pessoas cujo bloqueio vira um telefonema para seu chefe,
+
+01:00:32.900 --> 01:00:37.480
+contas de serviço, pois desabilitar uma pode parar um pagamento, um backup ou um aplicativo inteiro
+
+01:00:37.480 --> 01:00:39.300
+e ninguém percebe até que algo fale.
+
+01:00:39.660 --> 01:00:40.900
+E ninguém percebe até que algo fale.
+
+01:00:41.620 --> 01:00:44.440
+Serviços críticos também, controladores de domínio, hosts que rodam a produção,
+
+01:00:44.620 --> 01:00:46.300
+máquinas onde o isolamento significa uma interrupção.
+
+01:00:46.760 --> 01:00:49.380
+Mantenha-os como listas de exclusão em um outlist ou grupo de segurança
+
+01:00:49.380 --> 01:00:51.800
+e faça o playbook ler essa lista como seu primeiro passo.
+
+01:00:52.320 --> 01:00:53.100
+Este alvo está na lista?
+
+01:00:53.620 --> 01:00:54.260
+Se sim, não acho.
+
+01:00:54.680 --> 01:00:56.360
+Encaminhe para uma pessoa com uma nota clara do porquê.
+
+01:00:56.900 --> 01:00:58.940
+É a mesma ideia dos portões de aprovação, mas mais rigorosa.
+
+01:00:59.500 --> 01:01:01.480
+Alguns alvos não devem ser automatizados de forma alguma,
+
+01:01:01.580 --> 01:01:03.140
+não importa quão confiante pareça ou senão.
+
+01:01:03.800 --> 01:01:05.120
+Segundo, limites no próprio playbook.
+
+01:01:05.660 --> 01:01:09.160
+Um limite de taxa diz que este playbook pode desabilitar no máximo 5 contas por hora.
+
+01:01:09.920 --> 01:01:11.440
+A sexta solicitação para e notifica alguém.
+
+01:01:11.960 --> 01:01:15.180
+Parece pequeno, mas é o que transforma um loop desenfreado em um pequeno incidente,
+
+01:01:15.180 --> 01:01:18.080
+porque a falha que você teme geralmente não é uma decisão ruim isolada.
+
+01:01:18.080 --> 01:01:21.560
+É uma decisão ruim repetida 400 vezes na velocidade da máquina.
+
+01:01:22.700 --> 01:01:25.460
+Em seguida, um botão é um lugar que desliga a automação
+
+01:01:25.460 --> 01:01:28.100
+para a configuração que o playbook verifica no início de cada execução
+
+01:01:28.100 --> 01:01:30.520
+para que qualquer pessoa de plantão possa acioná-lo e parar tudo em segundos.
+
+01:01:31.000 --> 01:01:33.980
+Não faça as pessoas procurarem apps de lógica às 2 da manhã para encontrar o certo.
+
+01:01:34.480 --> 01:01:35.000
+Teste o botão B.
+
+01:01:35.540 --> 01:01:38.020
+Um botão de emergência que ninguém nunca apertou é uma esperança, não um controle.
+
+01:01:38.740 --> 01:01:39.340
+E depois de reversão.
+
+01:01:40.320 --> 01:01:41.760
+Para cada ação, saiba como desfazer.
+
+01:01:42.680 --> 01:01:43.420
+Isolou um dispositivo?
+
+01:01:43.420 --> 01:01:44.780
+Deve uma ação de liberação.
+
+01:01:45.200 --> 01:01:45.960
+Desabilitou um usuário?
+
+01:01:46.360 --> 01:01:46.760
+Reabilite.
+
+01:01:46.760 --> 01:01:47.840
+Bloqueio o indicador?
+
+01:01:48.360 --> 01:01:48.680
+Removo.
+
+01:01:49.120 --> 01:01:51.180
+Creva as etapas inversas, como seu próprio pequeno playbook.
+
+01:01:51.660 --> 01:01:52.280
+Reverteu um erro?
+
+01:01:52.380 --> 01:01:53.940
+Leva um clique em vez de um desespero.
+
+01:01:54.720 --> 01:01:55.480
+Quarto, um registro.
+
+01:01:56.020 --> 01:01:57.640
+Toda ação automatizada deve deixar um rastro.
+
+01:01:58.400 --> 01:01:59.280
+O que foi executado?
+
+01:01:59.360 --> 01:02:00.300
+Qual incidente o disparou?
+
+01:02:00.440 --> 01:02:00.820
+Qual o alvo?
+
+01:02:00.880 --> 01:02:01.840
+Quais evidências foram usadas?
+
+01:02:01.940 --> 01:02:03.040
+Quem aprovou e qual foi o resultado?
+
+01:02:03.860 --> 01:02:07.140
+Escreva isso nos comentários do incidente em uma tabela de logs que você possa consultar depois.
+
+01:02:07.640 --> 01:02:10.640
+Quando um auditor perguntar por que a conta de um diretor foi bloqueada em uma quinta-feira,
+
+01:02:10.640 --> 01:02:12.100
+você não precisa reconstruir a história de memória.
+
+01:02:12.500 --> 01:02:13.040
+Seria entrado.
+
+01:02:13.040 --> 01:02:16.720
+E quando algo dá errado, o log é como você encontra a causa em minutos em vez de dias.
+
+01:02:18.000 --> 01:02:18.660
+Por último, piloto.
+
+01:02:19.560 --> 01:02:21.320
+Nunca lance um novo playbook em todo o tenant.
+
+01:02:21.800 --> 01:02:22.860
+Escolha um grupo pequeno primeiro.
+
+01:02:23.020 --> 01:02:24.240
+Algumas dúzias de dispositivos.
+
+01:02:24.320 --> 01:02:27.900
+Uma equipe que saiba que está sendo usada como teste, idealmente em uma área onde um erro não seja custoso.
+
+01:02:28.620 --> 01:02:30.820
+Execute em um modo onde o playbook propõe, mas não age.
+
+01:02:31.040 --> 01:02:33.460
+E compare o que ele teria feito com o que o analista realmente fez.
+
+01:02:33.460 --> 01:02:35.980
+Depois ative ações reais apenas para aquele grupo.
+
+01:02:36.340 --> 01:02:38.380
+Amplie o escopo quando os números se mantiverem, não antes.
+
+01:02:38.700 --> 01:02:42.000
+Então agora você tem um motor de resposta com limites, listas, botões e registros.
+
+01:02:42.700 --> 01:02:44.920
+Isso levanta a questão que todo executivo faz cedo ou tarde.
+
+01:02:45.780 --> 01:02:49.800
+Não sei inteligente, mas se algo disso está funcionando, medindo a qualidade da detecção.
+
+01:02:50.180 --> 01:02:52.000
+A maioria dos relatórios de segurança começa com contagem.
+
+01:02:52.080 --> 01:02:54.440
+Alertas deste mês, incidentes fechados, tiques abertos, tiques abertos.
+
+01:02:54.560 --> 01:02:56.400
+O número vai para um slide e o slide sobe na área aqui.
+
+01:02:56.640 --> 01:02:58.600
+Mas a contagem diz apenas o quão ocupado o sistema está.
+
+01:02:58.820 --> 01:03:00.160
+Não diz nada sobre se ele funcionou.
+
+01:03:00.160 --> 01:03:04.700
+Um tenant pode dobrar seu volume de alertas e estar menos seguro porque os alertas extras eram ruído.
+
+01:03:04.900 --> 01:03:07.880
+Pode reduzir o volume pela metade e estar mais seguro porque os cortes foram certos.
+
+01:03:08.340 --> 01:03:09.280
+Mesmo número sequer do oposto.
+
+01:03:09.860 --> 01:03:11.160
+Portanto, a mudança é da atividade para o resultado.
+
+01:03:11.640 --> 01:03:14.420
+Pare de perguntar quantos alertas dispararam e comece a perguntar quantos estavam certos.
+
+01:03:14.520 --> 01:03:16.860
+Quão rápido você viu o problema e quão rápido você o interrompeu.
+
+01:03:17.760 --> 01:03:22.260
+Isso requer algumas medidas específicas e todas começam com um dado que você já tem, o veredito do analista.
+
+01:03:23.540 --> 01:03:27.920
+Cada alerta encerrado como um verdadeiro positivo, falso positivo ou informativo é um ponto de dados.
+
+01:03:27.920 --> 01:03:31.880
+Se sua equipe ignorar essa classificação, nada do que vem a seguir será possível.
+
+01:03:32.240 --> 01:03:33.480
+É seu primeiro hábito a ser estabelecido.
+
+01:03:33.980 --> 01:03:37.200
+A taxa de verdadeiro positivo é a parcela de alertas que se mostraram atividade real.
+
+01:03:37.800 --> 01:03:40.180
+A taxa de falso positivo é a parcela que se mostrou inofensiva.
+
+01:03:40.620 --> 01:03:43.880
+São dois lados da mesma moeda e você deve rastreá-los por regra, não apenas em todo o tema.
+
+01:03:44.440 --> 01:03:45.860
+Uma média geral do tema esconde tudo.
+
+01:03:46.380 --> 01:03:50.260
+Uma regra com 95% de falsos positivos desaparece dentro de um número global que parece bom.
+
+01:03:50.740 --> 01:03:52.160
+Precisão é a forma mais clara de dizer isso.
+
+01:03:52.520 --> 01:03:54.740
+Dudo que a regra sinalizou, quanto valia a pena ser sinalizado?
+
+01:03:54.740 --> 01:03:58.400
+Baixa precisão significa que os analistas passam o dia provando que nada aconteceu.
+
+01:03:58.900 --> 01:04:00.920
+Como vimos antes, é aí que incidentes reais se escondem.
+
+01:04:01.520 --> 01:04:05.000
+Agora, as duas medidas de tempo que importam mais do que a maioria das equipes admite.
+
+01:04:05.120 --> 01:04:08.940
+Tempo de detecção, intervalo ou intervalo entre o início da atividade maliciosa e o disparo do alerta.
+
+01:04:09.620 --> 01:04:12.400
+Tempo de resposta é o intervalo entre o alerta e a ação que o conteve.
+
+01:04:13.080 --> 01:04:15.300
+Rastreio-os separadamente porque eles falham por motivos diferentes.
+
+01:04:15.300 --> 01:04:19.520
+Uma detecção lenta geralmente aponta para uma regra ausente, um feed de dados atrasado,
+
+01:04:19.660 --> 01:04:21.180
+ou uma regra com agendamento lento.
+
+01:04:21.820 --> 01:04:24.740
+Uma resposta lenta aponta para filas, responsabilidades pouco claras, pouco claras,
+
+01:04:24.760 --> 01:04:26.400
+um playbook que espera demais por aprovação.
+
+01:04:27.520 --> 01:04:28.720
+Uma dica ao analisá-los.
+
+01:04:28.900 --> 01:04:30.280
+Use a mediana, não a média.
+
+01:04:31.200 --> 01:04:35.160
+Um incidente que ficou intocado durante um fim de semana de feriado levará a média ao absurdo.
+
+01:04:36.040 --> 01:04:37.780
+A mediana mostra como é um dia normal.
+
+01:04:38.160 --> 01:04:41.660
+Então observe os 10% mais lentos separadamente, pois é aí que reside a verdadeira esposa.
+
+01:04:42.140 --> 01:04:43.660
+Até agora, todas as medidas olham para trás.
+
+01:04:43.660 --> 01:04:46.660
+Elas avaliam os alertas que você já tem, mas há uma pergunta que não podem responder.
+
+01:04:47.140 --> 01:04:48.520
+Quantos ataques pelos quais você não nega?
+
+01:04:48.900 --> 01:04:50.260
+Essa é a função da métrica de cobertura.
+
+01:04:50.660 --> 01:04:54.880
+Pegue sua lista priorizada, as técnicas ligadas, as suas joias da coroa e papéis privilegiados,
+
+01:04:54.980 --> 01:04:57.300
+aquelas que você escolheu antes em vez de copiar toda a matriz.
+
+01:04:58.180 --> 01:05:01.180
+Então conte quantas delas possuem uma detecção que foi realmente testada e comprovada.
+
+01:05:02.320 --> 01:05:03.360
+Divida essa sua cobertura.
+
+01:05:03.900 --> 01:05:04.680
+Note a palavra testar.
+
+01:05:05.340 --> 01:05:07.600
+Uma regra que existe, mas nunca foi comprovada, é apenas um boato.
+
+01:05:07.600 --> 01:05:12.100
+Se você tem 40 técnicas priorizadas e 22 possuem uma regra que disparou em um teste real,
+
+01:05:12.200 --> 01:05:13.600
+sua cobertura é de 55%.
+
+01:05:13.600 --> 01:05:16.740
+Esse número diz a liderança, ou o que nenhuma contagem de alertas pode dizer.
+
+01:05:17.300 --> 01:05:19.780
+Quanto do terreno que você decidiu defender está realmente protegido?
+
+01:05:20.280 --> 01:05:21.860
+Agora traga isso para o nível da detecção individual.
+
+01:05:22.360 --> 01:05:24.200
+Cada regra recebe um placar com 4 itens.
+
+01:05:24.700 --> 01:05:26.700
+Volume com que frequência ela foi acionada nos últimos 90 dias.
+
+01:05:27.320 --> 01:05:27.680
+Resultados.
+
+01:05:27.800 --> 01:05:29.740
+Quantos foram positivos verdadeiros e quantos foram falsos?
+
+01:05:30.920 --> 01:05:31.560
+Data de revisão.
+
+01:05:31.620 --> 01:05:33.200
+Quando alguém analisou pela última vez com um novo olhar.
+
+01:05:33.800 --> 01:05:34.560
+E um responsável.
+
+01:05:34.640 --> 01:05:36.100
+Para que o placar tenha a quem recorrer.
+
+01:05:36.680 --> 01:05:39.380
+Coloque tudo isso em uma linha por regra, e os padrões se destacam.
+
+01:05:39.380 --> 01:05:43.300
+Uma regra com alto volume e zero positivos verdadeiros é candidato a ajuste ou aposentadoria.
+
+01:05:44.200 --> 01:05:47.500
+Uma regra que nunca foi acionada em um ano está perfeita ou quebrada, e você não saberá
+
+01:05:47.500 --> 01:05:48.200
+sem verificar.
+
+01:05:49.500 --> 01:05:53.140
+Uma regra com ótima precisão e sem revisão em 18 meses provavelmente está bem, mas os
+
+01:05:53.140 --> 01:05:54.800
+dados dos quais depende podem ter mudado.
+
+01:05:55.340 --> 01:05:57.620
+Esse último caso aponta o ponto fraco de tudo que foi citado assim.
+
+01:05:58.240 --> 01:06:01.460
+Cada métrica nessa sessão pressupõe que as regras funcionam como você imagina.
+
+01:06:01.840 --> 01:06:04.140
+Uma regra silenciosa parece idêntica a uma saudável em um painel.
+
+01:06:04.140 --> 01:06:08.100
+Zero alertas pode significar zero ataques, o que a consulta quebrou após uma mudança
+
+01:06:08.100 --> 01:06:09.700
+de esquema e nada foi disparado desde então.
+
+01:06:10.460 --> 01:06:13.660
+Portanto, os números só fazem sentido se as detecções forem testadas propositalmente
+
+01:06:13.660 --> 01:06:16.120
+contra comportamentos reais antes que um invasor faça isso por você.
+
+01:06:17.460 --> 01:06:19.520
+Testando detecções, validação e purple teaming.
+
+01:06:20.100 --> 01:06:21.860
+Uma regra que você nunca acionou propositalmente, apenas uma.
+
+01:06:22.180 --> 01:06:23.300
+O primeiro teste é o mais simples.
+
+01:06:24.020 --> 01:06:27.040
+Execute o comportamento que a regra deve capturar e verifique se o alerta aparece.
+
+01:06:27.700 --> 01:06:28.560
+Esta é a abordagem à toa.
+
+01:06:29.000 --> 01:06:32.600
+É uma pequena ação do invasor, uma técnica, e a reproduz isoladamente e isoladamente.
+
+01:06:32.600 --> 01:06:35.340
+PowerShell codificado de um processo filho do Word.
+
+01:06:35.660 --> 01:06:37.740
+Uma tarefa agendada criada a partir de um host script.
+
+01:06:38.020 --> 01:06:39.420
+Uma escrita no registro e uma chave de execução.
+
+01:06:39.940 --> 01:06:43.280
+Cada um é uma etapa única e controlada, com o resultado esperado conhecido.
+
+01:06:43.940 --> 01:06:46.720
+Regra é acionada ou não, e o não é o resultado útil.
+
+01:06:47.200 --> 01:06:49.560
+Essa é uma lacuna que você encontrou no seu próprio cronograma, não no de Wim.
+
+01:06:50.040 --> 01:06:53.020
+Execute-os em um dispositivo de teste e um grupo de dispositivos criado para esse fato.
+
+01:06:53.400 --> 01:06:54.200
+Então verifique três coisas.
+
+01:06:54.500 --> 01:06:55.260
+O alerta foi acionado.
+
+01:06:55.720 --> 01:06:57.260
+Ele apareceu no usuário e dispositivo corretos?
+
+01:06:57.720 --> 01:06:58.440
+E quanto tempo levou?
+
+01:06:58.440 --> 01:07:02.320
+Uma regra que dispara com 11 minutos de atraso devido ao agendamento escolhido, revela algo
+
+01:07:02.320 --> 01:07:04.300
+sobre o tempo de detecção que nenhum painel mostraria.
+
+01:07:05.060 --> 01:07:06.580
+Você não precisa criar todos os testes manualmente.
+
+01:07:07.000 --> 01:07:08.060
+O Defender já oferece parte disso.
+
+01:07:08.680 --> 01:07:12.000
+Para pontos de extremidade, você pode executar cenários de ataque pelos recursos de simulação
+
+01:07:12.000 --> 01:07:13.540
+do portal e pelo laboratório de avaliação guia.
+
+01:07:13.880 --> 01:07:17.000
+Eles reproduzem comportamentos conhecidos, como tentativas de extração de credenciais
+
+01:07:17.000 --> 01:07:19.760
+ou atividade suspeita de script, para que você veja o que as detecções nativas captou.
+
+01:07:20.060 --> 01:07:20.980
+Isso é útil como base.
+
+01:07:21.360 --> 01:07:22.320
+Mas observe o que isso comprova.
+
+01:07:22.720 --> 01:07:25.520
+Isso prova que as detecções da Microsoft funcionam nos cenários da Microsoft.
+
+01:07:25.900 --> 01:07:27.620
+Suas regras personalizadas precisam dos seus próprios tempos.
+
+01:07:27.620 --> 01:07:30.840
+Para e-mail, é o treinamento de simulação de ataque e o Defender para Office 365.
+
+01:07:31.340 --> 01:07:35.080
+Você lança uma campanha de phishing simulada com coleta de credenciais ou um link malicioso
+
+01:07:35.080 --> 01:07:36.240
+e observa o que acontece.
+
+01:07:37.020 --> 01:07:37.440
+Quem clicou?
+
+01:07:37.820 --> 01:07:38.400
+Quem denunciou?
+
+01:07:38.880 --> 01:07:41.160
+As políticas bloquearam a mensagem ou ela chegou à caixa de entrada?
+
+01:07:41.820 --> 01:07:45.120
+Isso testa as pessoas e os controles juntos e alimenta as detecções de e-mail que criamos
+
+01:07:45.120 --> 01:07:46.560
+antes com o comportamento real de cliques.
+
+01:07:47.240 --> 01:07:49.060
+Mas testar uma regra de cada vez só até certo ponto.
+
+01:07:49.600 --> 01:07:51.460
+Os atacantes não executam técnicas de isolamento.
+
+01:07:51.900 --> 01:07:52.140
+Verdade.
+
+01:07:52.560 --> 01:07:53.560
+É aí que entra o Purple Teaming.
+
+01:07:54.060 --> 01:07:55.220
+É um ciclo entre duas funções.
+
+01:07:55.220 --> 01:07:58.220
+O lado vermelho executa uma técnica da maneira que um atacante faria.
+
+01:07:58.700 --> 01:08:02.680
+O lado azul observa e registra o que viu, o que perdeu e o que disparou com atraso.
+
+01:08:03.180 --> 01:08:04.680
+Então vem a etapa que faz tudo funcionar.
+
+01:08:05.020 --> 01:08:06.940
+O lado azul faz ajustes ali mesmo, na mesma seção.
+
+01:08:07.660 --> 01:08:10.380
+Escreva a regra ausente, restringe a ruidosa, corrija o mapeamento de entidade.
+
+01:08:11.020 --> 01:08:12.560
+Então o lado vermelho executa a técnica novamente.
+
+01:08:12.560 --> 01:08:14.440
+Executar, falhar, corrige, reexecutar.
+
+01:08:15.080 --> 01:08:15.460
+Não é isso, matar.
+
+01:08:15.940 --> 01:08:17.380
+E o resultado não é um relatório que foi para o arquivo.
+
+01:08:17.860 --> 01:08:21.240
+As falhas vão direto para o backlog de detecção, classificadas pelo risco que revelam.
+
+01:08:22.000 --> 01:08:25.680
+Uma técnica que passou sem alerta e direcionada a uma função privilegiada pula para o topo.
+
+01:08:26.680 --> 01:08:29.680
+Aquela que disparou, mas com pouco contexto, fica mais abaixo com uma tarefa de ajuste.
+
+01:08:30.380 --> 01:08:34.220
+É assim que o teste se torna fonte da sua próxima regra, em vez de um exercício separado
+
+01:08:34.220 --> 01:08:35.340
+com o qual ninguém se conecta ao trauma.
+
+01:08:35.340 --> 01:08:37.460
+Se você não tem um Red Team ainda pode fazer isso?
+
+01:08:38.060 --> 01:08:40.280
+Escolha três técnicas da sua lista priorizada a cada mim.
+
+01:08:40.760 --> 01:08:42.360
+Uma pessoa se executa, outra observa a fila.
+
+01:08:42.900 --> 01:08:44.360
+Mais lento, mas ainda em conta das reais.
+
+01:08:45.120 --> 01:08:46.640
+Depois é o teste que a maioria das equipes esquece.
+
+01:08:47.080 --> 01:08:48.880
+Aquele que verifica se a regra de ontem ainda funciona.
+
+01:08:49.400 --> 01:08:50.220
+Regras quebram o seu exame.
+
+01:08:50.660 --> 01:08:53.340
+A Microsoft renomeia uma coluna ou altera com uma tabela preenchida.
+
+01:08:54.060 --> 01:08:56.460
+Uma nova versão do agente altera o que um evento de processo contém.
+
+01:08:57.320 --> 01:08:59.720
+Uma atualização de produto muda um campo de uma tabela para outra.
+
+01:09:00.140 --> 01:09:01.940
+Sua consulta ainda é executada e ainda não retorna nada.
+
+01:09:01.940 --> 01:09:04.640
+Sem erro, sem alerta, apenas um silêncio que parece segurança.
+
+01:09:04.640 --> 01:09:06.160
+Portanto, execute teste de regressão.
+
+01:09:06.640 --> 01:09:09.200
+Mantenha seus testes atômicos como um conjunto permanente, um por regra,
+
+01:09:09.240 --> 01:09:11.180
+e reexecute-os periodicamente, pelo menos mensalmente,
+
+01:09:11.260 --> 01:09:12.940
+e sempre após uma alteração de esquema ou produto.
+
+01:09:13.940 --> 01:09:15.240
+Compare os resultados com a última execução.
+
+01:09:15.820 --> 01:09:18.220
+Uma regra que disparou em março e permanece silenciosa em junho
+
+01:09:18.220 --> 01:09:20.340
+foi corrigida por sorte ou quebrada por uma atualização
+
+01:09:20.340 --> 01:09:21.460
+e você precisa saber qual.
+
+01:09:22.040 --> 01:09:23.100
+Pratico como a verificação disse.
+
+01:09:23.540 --> 01:09:24.820
+Você não testa porque espera um incêndio.
+
+01:09:25.640 --> 01:09:28.120
+Você testa porque o custo de descobrir tarde demais é perder a casa toda.
+
+01:09:28.320 --> 01:09:31.440
+Mas veja que todos esses testes criam um conjunto crescente de regras,
+
+01:09:31.560 --> 01:09:32.900
+testes, resultados e itens de backlog.
+
+01:09:32.900 --> 01:09:35.160
+Cada um precisa de um responsável.
+
+01:09:35.280 --> 01:09:37.180
+É um caminho claro do nascimento à aposentadoria.
+
+01:09:37.820 --> 01:09:40.860
+Sem isso, a regra testada hoje se torna a regra esquecida no próximo ano.
+
+01:09:41.460 --> 01:09:43.160
+Agora, detecção como código, governança e siglos.
+
+01:09:43.580 --> 01:09:46.040
+Abra o portal e veja sua lista de detecções personalizadas.
+
+01:09:46.340 --> 01:09:47.480
+Agora faça uma pergunta simples.
+
+01:09:47.560 --> 01:09:48.580
+Quem alterou a última e por quê?
+
+01:09:49.220 --> 01:09:50.700
+Na maioria dos tenants, ninguém sabe responder.
+
+01:09:51.780 --> 01:09:53.700
+Alguém editou a consulta em uma aba do navegador,
+
+01:09:53.980 --> 01:09:54.940
+salvou e seguiu em frente.
+
+01:09:55.460 --> 01:09:56.420
+A versão antiga desapareceu.
+
+01:09:56.420 --> 01:09:59.080
+Não há revisão, nem registro do que a regra fazia
+
+01:09:59.080 --> 01:10:01.540
+e nenhuma forma de reverter quando a edição se mostra errada,
+
+01:10:02.120 --> 01:10:04.240
+que a maioria das equipes trata detecções como configurações.
+
+01:10:04.600 --> 01:10:05.580
+Mas uma detecção é código.
+
+01:10:06.080 --> 01:10:08.100
+Ela tem lógica, entradas e efeitos colaterais
+
+01:10:08.100 --> 01:10:09.920
+e uma mudança ruim pode cegar você tão facilmente
+
+01:10:09.920 --> 01:10:11.180
+quanto um deploy ruim pode quebrar um app.
+
+01:10:11.640 --> 01:10:12.300
+Até dessa forma.
+
+01:10:12.720 --> 01:10:14.080
+Armazene cada regra em um controle de versão.
+
+01:10:14.480 --> 01:10:15.660
+O repositório Git funciona perfeitamente.
+
+01:10:16.120 --> 01:10:17.300
+Cada detecção vira um arquivo.
+
+01:10:17.380 --> 01:10:19.500
+A consulta, o agendamento, a severidade, os metadados,
+
+01:10:19.580 --> 01:10:20.480
+tudo em um só lugar.
+
+01:10:20.480 --> 01:10:22.740
+As mudanças passam por um público.
+
+01:10:23.220 --> 01:10:24.420
+Uma pessoa propõe, outra revisa.
+
+01:10:24.840 --> 01:10:25.860
+A consulta filtra logo no início.
+
+01:10:26.360 --> 01:10:27.400
+Ela retorna as colunas da entidade.
+
+01:10:27.780 --> 01:10:28.560
+A exclusão é restrita.
+
+01:10:29.140 --> 01:10:30.640
+E ela tem um proprietário e uma data de validade.
+
+01:10:31.360 --> 01:10:34.140
+Essa revisão detecta uma regra ampla antes mesmo dela chegar a fim.
+
+01:10:34.580 --> 01:10:35.680
+Você também ganha histórico de graça.
+
+01:10:36.040 --> 01:10:37.840
+Daqui a seis meses, quando uma regra parar de funcionar,
+
+01:10:37.900 --> 01:10:39.460
+você verá exatamente qual commit alterou.
+
+01:10:39.920 --> 01:10:40.700
+E reverterá um processo.
+
+01:10:40.980 --> 01:10:42.080
+Agora, o lado do deploy.
+
+01:10:42.660 --> 01:10:45.760
+O defender expõe detecções personalizadas através da Graph Security e PPI
+
+01:10:45.760 --> 01:10:48.120
+para que você possa criar, atualizar e desativar regras via script.
+
+01:10:48.620 --> 01:10:49.720
+Conecte isso a um pipeline.
+
+01:10:49.720 --> 01:10:53.640
+Um merge na branch principal dispara uma compilação que valida a sintaxe da consulta
+
+01:10:53.640 --> 01:10:55.820
+e o passo de deploy envia a regra ao tenant.
+
+01:10:56.300 --> 01:10:57.820
+Ninguém toca no portal para fazer uma alteração.
+
+01:10:58.280 --> 01:10:58.900
+Isso faz duas coisas.
+
+01:10:59.660 --> 01:11:03.640
+Elimina desvios, pois o repositório se torna fonte da verdade e o tenant simplesmente é espelha.
+
+01:11:04.580 --> 01:11:06.380
+Segundo, permite testar antes de implementar.
+
+01:11:06.800 --> 01:11:09.520
+Execute a consulta em um tenant teste ou em um conjunto de dados salvo.
+
+01:11:09.980 --> 01:11:12.300
+Confirme esse retorno que você espera e só então faça a promoção.
+
+01:11:12.780 --> 01:11:16.020
+Mas o código do repositório ainda precisa de regras sobre quem é o dono e como ele deve ser.
+
+01:11:16.920 --> 01:11:17.320
+Propriedade.
+
+01:11:17.320 --> 01:11:21.460
+Toda detecção recebe um responsável nomeado, uma pessoa ou equipe registrada no arquivo.
+
+01:11:21.980 --> 01:11:24.200
+Quando a regra dispara indevidamente à noite, é para isso que a pergunta é enviada.
+
+01:11:24.780 --> 01:11:28.100
+Uma regra sem responsável é degrada, pois ninguém se sente obrigado a ajustá-la.
+
+01:11:28.660 --> 01:11:32.360
+Em seguida, padrões de severidade documentam o que alto, médio e baixo significam no seu ambiente.
+
+01:11:32.900 --> 01:11:37.100
+Alto pode significar acionar alguém agora, possivelmente um comprometimento ativo de uma identidade privilegiada.
+
+01:11:37.780 --> 01:11:39.480
+Médio significa revisar dentro do horário comercial.
+
+01:11:39.480 --> 01:11:44.220
+Sem um padrão escrito, 10 autores escolherão 10 significados e sua fila voltará a ser um ruído.
+
+01:11:44.940 --> 01:11:56.680
+E sobrenomes escolha uma convenção e exija no pull request, algo como carga de trabalho, técnica, comportamento, identidade, repetição de token, ação privilegiada em novo dispositivo, facilita a classificação, a busca e informa o analista do que aconteceu antes mesmo de abrir.
+
+01:11:56.680 --> 01:11:59.320
+Atividade suspeita 4, não diz nada a isso.
+
+01:11:59.860 --> 01:12:03.100
+A última parte do ciclo de vida é a que quase ninguém documenta, a aposentadoria.
+
+01:12:03.440 --> 01:12:05.560
+Pô, uma regra deve conquistar seu lugar continuamente.
+
+01:12:06.000 --> 01:12:06.840
+Defina critérios de antemão.
+
+01:12:07.300 --> 01:12:09.640
+Disparou 0 vezes em 12 meses e seu teste ainda é aprovado.
+
+01:12:10.660 --> 01:12:12.800
+Pode ser que ela não esteja capturando nada apenas porque nada aconteceu.
+
+01:12:13.220 --> 01:12:17.620
+Dispara com frequência e os analistas a encerram como inofensiva 90% das vezes, mesmo após ajustes.
+
+01:12:18.100 --> 01:12:19.160
+O aposente ou reescreva.
+
+01:12:19.540 --> 01:12:21.320
+A fonte de dados da qual ela depende não existe mais?
+
+01:12:21.920 --> 01:12:22.220
+Emova.
+
+01:12:22.520 --> 01:12:25.080
+Técnica que ela cobre agora é melhor tratada por uma detecção nativa.
+
+01:12:25.520 --> 01:12:26.420
+Emova e anote o motivo.
+
+01:12:26.820 --> 01:12:27.700
+Aposentar não é deletar.
+
+01:12:28.520 --> 01:12:31.280
+Desative a regra, mantenha o arquivo no repositório e registre o motivo.
+
+01:12:32.280 --> 01:12:33.720
+Se a situação mudar, você poderá trazer volta.
+
+01:12:34.280 --> 01:12:37.500
+Tudo isso lhe dá um sistema revisável, repetível e honesto sobre o que está ativo.
+
+01:12:38.420 --> 01:12:40.380
+Mas um repositório e um pipeline não funcionam sozinhos.
+
+01:12:41.260 --> 01:12:45.500
+Alguém precisa escrever os pull requests, ler os vereditos e decidir o que será aposentado.
+
+01:12:46.500 --> 01:12:49.180
+Governança só funciona se as pessoas ao redor estiverem preparadas para executar.
+
+01:12:50.500 --> 01:12:53.960
+O modelo operacional por trás de uma boa detecção, tudo até aqui precisa de pessoas.
+
+01:12:53.960 --> 01:12:55.200
+E elas precisam de funções.
+
+01:12:55.200 --> 01:12:57.480
+Na maioria das equipes, uma única pessoa faz tudo.
+
+01:12:57.900 --> 01:13:01.260
+O mesmo analista faz a triagem da fila, cria consultas ocasionais, ajusta uma exceção
+
+01:13:01.260 --> 01:13:02.020
+e responde ao CISO.
+
+01:13:02.420 --> 01:13:03.540
+Isso funciona até que a fila cresça.
+
+01:13:03.840 --> 01:13:05.720
+Então a criação de regras é a primeira coisa a ser deixada de lado.
+
+01:13:05.720 --> 01:13:08.220
+Portanto, separe as funções, mesmo que uma pessoa se dê a chapéu.
+
+01:13:08.420 --> 01:13:10.180
+O engenheiro de detecção é responsável pelas regras.
+
+01:13:10.180 --> 01:13:13.620
+Ele escreve a consulta, executa os testes, mantém o repositório limpo e aposenta o tal
+
+01:13:13.620 --> 01:13:14.060
+obsoleto.
+
+01:13:14.580 --> 01:13:16.920
+O analista trabalha na fila e dá o veredito sobre cada alerta.
+
+01:13:17.280 --> 01:13:19.620
+O comandante de incidentes assume quando algo real está acontecendo.
+
+01:13:20.140 --> 01:13:23.600
+Ele decide quem contém o quê, quem fala com o negócio e quando o incidente termina.
+
+01:13:24.300 --> 01:13:28.580
+E o patrocinador executivo abre caminho, orçamento, prioridades e a autoridade para dizer sim,
+
+01:13:28.940 --> 01:13:29.980
+vamos bloquear essa conta.
+
+01:13:30.740 --> 01:13:32.480
+Quatro funções, quatro perguntas diferentes.
+
+01:13:33.120 --> 01:13:35.840
+E quando ninguém é responsável pelas primeiras, as regras ficam lá, envelhecendo.
+
+01:13:36.400 --> 01:13:38.580
+Agora a parte que une todas as quatro, o ciclo de feedback.
+
+01:13:39.340 --> 01:13:41.680
+Cada veredito que um analista insere é uma informação sobre uma regra.
+
+01:13:42.240 --> 01:13:43.920
+Verdadeiro positivo, falso positivo e informativo.
+
+01:13:44.340 --> 01:13:47.460
+Se esse veredito nunca chegar a quem criou a regra, ela nunca melhora.
+
+01:13:47.460 --> 01:13:52.240
+O analista continua fechando o mesmo alerta ruidoso semana após semana e o engenheiro acha
+
+01:13:52.240 --> 01:13:52.800
+que está tudo bem.
+
+01:13:52.800 --> 01:13:54.520
+Tanto fecha o ciclo propósito.
+
+01:13:55.080 --> 01:13:58.080
+Uma vez por semana, um engenheiro de detecção extrai os vereditos de cada regra.
+
+01:13:58.560 --> 01:14:00.940
+Quais foram fechadas como falso positivo em mais da metade das vezes.
+
+01:14:01.340 --> 01:14:03.860
+Quais ninguém conseguiu classificar porque o alerta carecia de contexto.
+
+01:14:04.700 --> 01:14:05.660
+Cada uma delas se torna um chamado.
+
+01:14:06.240 --> 01:14:09.000
+Restringe a exclusão, adicione a coluna faltante, mude o limite.
+
+01:14:09.700 --> 01:14:11.160
+Então o analista é informado sobre o que mudou.
+
+01:14:11.620 --> 01:14:12.520
+Esse último passo é importante.
+
+01:14:12.880 --> 01:14:15.800
+Quando os analistas veem se os vereditos se transformarem em correções, eles classificam
+
+01:14:15.800 --> 01:14:17.080
+com mais cuidado e os dados melhoram.
+
+01:14:17.500 --> 01:14:18.740
+A seguir as pessoas acima de tudo isso.
+
+01:14:19.060 --> 01:14:20.320
+Executivos não querem contar de regra.
+
+01:14:20.680 --> 01:14:21.680
+Eles querem três respostas.
+
+01:14:21.680 --> 01:14:22.540
+Qual reduzimos?
+
+01:14:22.800 --> 01:14:23.880
+Quanto tempo economizamos?
+
+01:14:24.320 --> 01:14:25.420
+E qual exposição eliminamos?
+
+01:14:25.800 --> 01:14:29.200
+Risco reduzido é o número de cobertura anterior, aumentando contra técnicas ligadas aos seus
+
+01:14:29.200 --> 01:14:30.160
+ativos mais importantes.
+
+01:14:30.860 --> 01:14:33.260
+Tempo economizado são horas de analista e você pode calcular.
+
+01:14:34.260 --> 01:14:38.040
+Alertas removidos por ajustes vezes os minutos por alerta, mais do que o playbook agora faz
+
+01:14:38.040 --> 01:14:38.500
+sozinho.
+
+01:14:39.380 --> 01:14:42.640
+E exposição eliminada é a dívida de ajuste caindo, mas as lacunas que seu próprio time
+
+01:14:42.640 --> 01:14:43.420
+encontrou e corrigiu.
+
+01:14:43.420 --> 01:14:45.540
+Coloque esses três em uma página uma vez por mês.
+
+01:14:45.940 --> 01:14:47.540
+Mostre uma linha de tendência, não um retrato estável.
+
+01:14:47.880 --> 01:14:51.240
+Tempo médio de resposta cair de 40 para 12 minutos é melhor do que qualquer print de
+
+01:14:51.240 --> 01:14:51.640
+dashboard.
+
+01:14:52.440 --> 01:14:54.200
+Agora, e se você tiver duas pessoas no 12?
+
+01:14:54.600 --> 01:14:55.620
+Não tente fazer tudo isso.
+
+01:14:56.080 --> 01:14:57.640
+Comece pequeno e seja rigoroso com isso.
+
+01:14:58.040 --> 01:14:58.600
+Três regras.
+
+01:14:58.600 --> 01:15:00.760
+Escolha as três detecções que cobrem seu maior risco.
+
+01:15:01.200 --> 01:15:03.320
+Provavelmente uma para a identidade, uma para e-mail, uma para a endpoint.
+
+01:15:04.400 --> 01:15:05.020
+Escreva-as bem.
+
+01:15:05.300 --> 01:15:06.600
+Teste-as e dê um responsável para cada.
+
+01:15:07.540 --> 01:15:08.100
+Um playbook.
+
+01:15:08.700 --> 01:15:11.580
+Escolha a ação mais simples e de menor raio, como revogar as sessões de um usuário
+
+01:15:11.580 --> 01:15:14.560
+comprovadamente comprometido com aprovação e botão de emergência.
+
+01:15:15.420 --> 01:15:16.480
+Uma métrica, apenas uma.
+
+01:15:17.160 --> 01:15:19.320
+Precisão nessas três regras ou tempo médio de resposta.
+
+01:15:19.880 --> 01:15:21.080
+Acompanhe todo mês e reporte.
+
+01:15:21.480 --> 01:15:22.200
+É um começo pequeno.
+
+01:15:22.440 --> 01:15:24.020
+E é suficiente porque prova que o ciclo funciona.
+
+01:15:24.580 --> 01:15:26.140
+Assim que funcionar, adicione uma regra e depois outra.
+
+01:15:26.640 --> 01:15:28.500
+O sistema cresce a partir de evidências, não de ambição.
+
+01:15:29.240 --> 01:15:30.420
+Mas observe o que você acabou de construir.
+
+01:15:30.520 --> 01:15:31.960
+Função por função e métrica por métrica.
+
+01:15:32.280 --> 01:15:34.080
+É uma forma diferente de pensar sobre toda a plataforma.
+
+01:15:34.520 --> 01:15:35.860
+Vai dar a pena dar um passo atrás para analisar.
+
+01:15:37.100 --> 01:15:37.820
+Reformulando o modelo.
+
+01:15:37.920 --> 01:15:38.760
+Veja onde tudo começou.
+
+01:15:39.300 --> 01:15:40.720
+Um locatário ativo defende este DR.
+
+01:15:41.360 --> 01:15:42.280
+Portal sem ancho de alerta.
+
+01:15:42.660 --> 01:15:44.900
+A equipe os abre um por um e reage.
+
+01:15:45.700 --> 01:15:47.100
+Alguns são reais, a maioria não.
+
+01:15:47.300 --> 01:15:49.520
+E toda operação depende de uma única crença.
+
+01:15:50.420 --> 01:15:51.640
+O fornecedor sabe o que importa.
+
+01:15:51.740 --> 01:15:53.700
+Então o trabalho é acompanhar o que o fornecedor envia.
+
+01:15:54.240 --> 01:15:54.960
+Esse é o modelo antigo.
+
+01:15:55.300 --> 01:15:56.380
+Consumir alertas, reagir.
+
+01:15:56.380 --> 01:15:58.880
+E ele falha de uma maneira muito específica.
+
+01:15:59.320 --> 01:16:01.920
+Ele trata a detecção como algo que você recebe como entrega.
+
+01:16:02.400 --> 01:16:03.720
+A caixa chega, você a abre.
+
+01:16:03.900 --> 01:16:05.800
+E o que estiver dentro se torna sua carga de trabalho.
+
+01:16:06.440 --> 01:16:08.400
+Ninguém pergunta se o conteúdo se adequa ao seu negócio.
+
+01:16:08.480 --> 01:16:10.260
+Porque o modelo nunca deu a ninguém a função de perguntar.
+
+01:16:10.940 --> 01:16:12.080
+O novo modelo inverte a direção.
+
+01:16:12.400 --> 01:16:13.140
+Se projeta com o texto.
+
+01:16:13.780 --> 01:16:17.180
+Você decide quais identidades, caixas de correio e dispositivos apresentam mais risco.
+
+01:16:17.260 --> 01:16:18.480
+E escreve detecções em torno deles.
+
+01:16:18.480 --> 01:16:22.080
+Você correlaciona para que uma invasão apareça como uma história em vez de três tickets.
+
+01:16:23.060 --> 01:16:26.480
+Automatiza as decisões que já tomam da mesma forma todas as vezes, com limites ao redor delas.
+
+01:16:27.040 --> 01:16:30.100
+E mede para que isso está funcionando, tenha uma resposta com um número.
+
+01:16:30.640 --> 01:16:32.920
+Mesma plataforma, mesmas licenças, relação diferente com ela.
+
+01:16:33.260 --> 01:16:34.600
+Agora uma armadilha se esconde nessa mudança.
+
+01:16:34.940 --> 01:16:36.720
+É fácil ouvir tudo isso e imaginar um projeto.
+
+01:16:36.960 --> 01:16:39.880
+Criar as regras, conectar os playbooks, configurar o painel e considerar concluído.
+
+01:16:40.360 --> 01:16:41.760
+Mas esse é o pensamento antigo tendo a voltar.
+
+01:16:42.420 --> 01:16:43.260
+Implementação com um marco.
+
+01:16:43.660 --> 01:16:45.020
+A qualidade da detecção não funciona assim.
+
+01:16:45.020 --> 01:16:46.800
+Os invasores mudam seus métodos.
+
+01:16:47.020 --> 01:16:48.140
+Microsoft muda seus esquemas.
+
+01:16:49.020 --> 01:16:52.360
+Seu próprio ambiente muda toda vez que alguém adota uma nova ferramenta, funde uma empresa
+
+01:16:52.360 --> 01:16:53.600
+ou reorganiza uma equipe.
+
+01:16:54.140 --> 01:16:57.200
+Uma regra que era precisa em janeiro está um pouco defasada em junho e ninguém a tocou.
+
+01:16:57.740 --> 01:16:58.380
+E aí não se moveu.
+
+01:16:58.740 --> 01:16:59.820
+Tanto qualidade é uma disciplina.
+
+01:17:00.500 --> 01:17:01.960
+Algo que você faz semanalmente em pequenas partes.
+
+01:17:02.680 --> 01:17:03.360
+Leia os vereditos.
+
+01:17:03.500 --> 01:17:04.100
+Ajuste uma regra.
+
+01:17:04.240 --> 01:17:04.860
+Teste uma técnica.
+
+01:17:05.280 --> 01:17:06.420
+Revise uma data de inspiração.
+
+01:17:07.280 --> 01:17:08.640
+Trabalho entediante, repetível.
+
+01:17:09.100 --> 01:17:11.040
+E é o único tipo que mantém o sistema honesto.
+
+01:17:11.480 --> 01:17:13.100
+E você deve ser claro sobre o limite.
+
+01:17:13.100 --> 01:17:15.440
+Porque fingir o contrário é como as equipes se tornam complacentes.
+
+01:17:16.000 --> 01:17:17.360
+Nenhum conjunto de regras está nunca finalizando.
+
+01:17:17.680 --> 01:17:20.280
+Você nunca chegará a um ponto em que a cobertura esteja completa ou o ruído tenha
+
+01:17:20.280 --> 01:17:21.540
+sumido e o backlog esteja vazio.
+
+01:17:22.140 --> 01:17:24.180
+Sempre haverá uma técnica para a qual você não escreveu.
+
+01:17:24.540 --> 01:17:27.540
+Uma exclusão que está envelhecendo e uma fonte de dados que quebrou silenciosamente.
+
+01:17:28.260 --> 01:17:29.740
+O objetivo não é a conclusão, é a direção.
+
+01:17:30.640 --> 01:17:32.760
+Todo mês os números que importam devem seguir na direção certa.
+
+01:17:33.240 --> 01:17:33.960
+Precisão subindo.
+
+01:17:34.080 --> 01:17:34.920
+Tempo de resposta caindo.
+
+01:17:35.020 --> 01:17:35.880
+Dívida de ajuste diminuindo.
+
+01:17:35.980 --> 01:17:36.940
+Cobertura testada aumentando.
+
+01:17:37.340 --> 01:17:38.820
+Se eles seguem, você está à frente de onde estava.
+
+01:17:39.180 --> 01:17:40.220
+Se eles estagam onde procurar.
+
+01:17:40.220 --> 01:17:42.700
+Essa é a mudança completa e ela cabe em uma frase.
+
+01:17:43.280 --> 01:17:45.000
+Pare de perguntar o que a plataforma detecta.
+
+01:17:45.360 --> 01:17:46.980
+Comece a perguntar o que você instruiu a procurar.
+
+01:17:47.440 --> 01:17:49.680
+E deixe apenas a questão do que acontece se você não fizer isso.
+
+01:17:51.480 --> 01:17:51.840
+Conclusão.
+
+01:17:52.060 --> 01:17:53.920
+Pedido de avaliação e chamada para ação no inquilino.
+
+01:17:54.380 --> 01:17:55.580
+Aqui está a consequência, Carmen.
+
+01:17:56.160 --> 01:17:59.120
+Um inquilino que nunca ajusta os padrões e montará seu incidente através de um alerta
+
+01:17:59.120 --> 01:17:59.780
+padrão que ninguém deu.
+
+01:18:00.340 --> 01:18:03.380
+Esse alerta fica na fila entre outros 200 marcados com média prioridade.
+
+01:18:03.380 --> 01:18:07.520
+Se esse tipo de conteúdo de engenharia de detecção ajuda você a pensar de forma diferente,
+
+01:18:07.640 --> 01:18:08.220
+deixe uma avaliação.
+
+01:18:08.620 --> 01:18:10.560
+Leva um minuto e ajuda mais pessoas a encontrá-lo.
+
+01:18:11.340 --> 01:18:13.320
+Conecte-se comigo, Mirko Peters, no LinkedIn.
+
+01:18:14.080 --> 01:18:15.420
+Diga-me qual tópico deve vir a seguir.
+
+01:18:15.520 --> 01:18:17.860
+E compartilhe isso com a equipe soterrada em ruído de alertas agora mesmo.
+
+01:18:18.240 --> 01:18:19.380
+São eles que precisam disso hoje.
+
+01:18:19.760 --> 01:18:21.280
+De padrões para detecção, essa é a mudança.
+
+01:18:21.280 --> 01:18:51.260
+Diga-me qual tópico deve vir a seguir.

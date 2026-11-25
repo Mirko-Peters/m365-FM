@@ -1,0 +1,613 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:06.720
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.920 --> 00:00:09.240
+Wat Azure Virtual Desktop nu eigenlijk is.
+
+00:00:09.420 --> 00:00:14.500
+Je virtuele desktop draait je Windows Desktops in de cloud van Microsoft, niet op de laptop die je voor je hebt.
+
+00:00:14.700 --> 00:00:20.160
+De naam doet vermoeden dat het één groot product is, maar het bestaat eigenlijk uit een handvol eenvoudige onderdelen met elk hun eigen functie.
+
+00:00:20.320 --> 00:00:25.940
+Je gebruikers hebben toegang tot die desktops vanaf een laptop, een telefoon of zelfs een browser, en vanuit hun werkplek ziet het er gewoon uit als Windows.
+
+00:00:25.940 --> 00:00:33.140
+Het punt waar mensen vaak over struikelen, is de kosten, omdat de toegang vaak al gedekt is door een licentie die je bezit, terwijl de onderliggende infrastructuur meeverhuist met wat je gebruikt.
+
+00:00:33.280 --> 00:00:40.060
+Aan het einde van deze podcast weet je precies waar elk onderdeel zich bevindt, waar de bestanden zich bevinden en ken je de werkelijke limieten voordat je iemand een bepaald aantal belooft.
+
+00:00:40.240 --> 00:00:42.020
+Laten we beginnen met de eenvoudige uitleg.
+
+00:00:42.160 --> 00:00:46.600
+Azure Virtual Desktop is een service die Windows Desktops en apps draait in Azure, de cloud van Microsoft.
+
+00:00:46.920 --> 00:00:50.100
+Deze worden vervolgens gestreamd naar elk apparaat dat een gebruiker op dat moment gebruikt.
+
+00:00:50.300 --> 00:00:53.840
+Dat apparaat kan een dunne laptop zijn, een telefoon, een tablet of zelfs een webbrowser.
+
+00:00:53.840 --> 00:00:57.240
+Het heeft niet veel rekenkracht nodig, omdat het zware werk in de cloud gebeurt.
+
+00:00:57.400 --> 00:01:01.700
+Het eerste dat mensen in de war brengt, is dat dit niet één virtuele machine is waar je op inlogt.
+
+00:01:01.800 --> 00:01:05.820
+Het is een service die is opgebouwd uit een paar objecten met namen zoals HostPo en Sessie Host.
+
+00:01:06.180 --> 00:01:11.720
+Microsoft heeft die namen niet voor niets aan de onderdelen gegeven, en zodra je weet wat elk onderdeel doet, wordt het geheel een stuk duidelijker.
+
+00:01:11.860 --> 00:01:14.080
+De service geeft je ook de keuze wat je aanbiedt.
+
+00:01:14.180 --> 00:01:19.740
+Je kunt iemand een volledig Windows-bureaublad geven of je kunt alleen de apps publiceren die ze nodig hebben en de rest van Windows weglaten.
+
+00:01:19.740 --> 00:01:24.800
+Onderliggend kun je Windows 11, Windows 10 of Windows Server draaien, afhankelijk van wat je apps ondersteunen.
+
+00:01:24.900 --> 00:01:31.520
+En omdat alles in Azure staat, hoef je niet zelf de gateway en broker servers te beheren, zoals bij oudere remote desktop configuraties.
+
+00:01:31.700 --> 00:01:34.220
+De onderdelen die je daadwerkelijk gebruikt, zijn de HostPo.
+
+00:01:34.380 --> 00:01:36.880
+De eerste naam die het waard is om te leren kennen, is HostPo.
+
+00:01:37.000 --> 00:01:41.620
+Een HostPo is een groep virtuele Azure-machines die zijn geregistreerd bij Azure Virtual Desktop.
+
+00:01:41.840 --> 00:01:44.340
+De machines in een HostPo worden Sessie Hosts genoemd.
+
+00:01:44.460 --> 00:01:47.140
+Je kunt het zien als een kleine float die allemaal hetzelfde werk doen.
+
+00:01:47.140 --> 00:01:50.460
+Als een machine bezet is of opnieuw moet worden opgebouwd, nemen de anderen het over.
+
+00:01:50.640 --> 00:01:55.960
+Elke Sessie Host in een pool moet afkomstig zijn van dezelfde image, zodat twee gebruikers nooit twee verschillende versies van Windows te zien krijgen.
+
+00:01:56.140 --> 00:02:00.100
+De Sessie Host is de machine zelf, het virtuele bureaublad waarop een gebruiker terechtkomt.
+
+00:02:00.200 --> 00:02:05.080
+De image is de schabloon waarmee die machine is gebouwd en wordt in deze wereld ook wel een golden image genoemd.
+
+00:02:05.140 --> 00:02:09.820
+Dat betekent simpelweg het schone, goedgekeurde startpunt waarvan je elke nieuwe host kopieert.
+
+00:02:10.160 --> 00:02:13.720
+Vervolgens komt de applicatiegroep die bepaalt wat gebruikers daadwerkelijk zien.
+
+00:02:13.720 --> 00:02:19.380
+Een applicatiegroep kan een volledig bureaublad publiceren of een enkele app, die Microsoft een remote app noemt.
+
+00:02:19.480 --> 00:02:22.540
+Een belangrijk detail is dat remote apps alleen werken met hostpoles.
+
+00:02:22.760 --> 00:02:26.340
+Dus als je van plan bent om afzonderlijke apps te distribueren, is die keuze al voor je gemaakt.
+
+00:02:26.540 --> 00:02:31.720
+Het laatste onderdeel is de werkruimte die applicatiegroepen groepeert zodat een gebruiker zijn of haar applicaties in de client kan vinden.
+
+00:02:31.900 --> 00:02:34.040
+Een werkruimte voert geen taken zelfstandig uit.
+
+00:02:34.260 --> 00:02:38.240
+Het is simpelweg de plek waar de gepubliceerde desktops en apps worden weergegeven voor de mensen die ze mogen zien.
+
+00:02:38.480 --> 00:02:41.680
+Stel, je financiële team heeft één standaard desktop nodig met al hun tools.
+
+00:02:41.680 --> 00:02:45.320
+Je bouwt een hostpool op basis van een golden image en voegt daar sessiehosts aan toe.
+
+00:02:45.560 --> 00:02:49.140
+Vervolgens maak je een desktop applicatiegroep voor die hosts en plaats je die in een workspace.
+
+00:02:49.540 --> 00:02:51.780
+Daarna wijs je de financiële gebruikers eraan toe.
+
+00:02:52.000 --> 00:02:54.760
+Zij openen de client, zien één desktop en klikken erop.
+
+00:02:54.960 --> 00:03:01.220
+Het interessante is dat dezelfde pool op twee heel verschillende manieren kan worden ingesteld en die keuze heeft invloed op bijna alles wat volgt,
+
+00:03:01.440 --> 00:03:04.780
+inclusief waar de bestanden van een gebruiker terechtkomen en hoe de factuur eruit ziet.
+
+00:03:05.180 --> 00:03:07.180
+Twee manieren om een desktop toe te wijzen.
+
+00:03:07.400 --> 00:03:08.800
+Dat brengt ons bij een tweesprong.
+
+00:03:08.800 --> 00:03:11.680
+Een hostpool bestaat in twee typen en je kiest er één bij het aanmaken ervan.
+
+00:03:11.840 --> 00:03:14.260
+Je kunt later niet meer van gedachten veranderen zonder de pool opnieuw aan te maken.
+
+00:03:14.440 --> 00:03:16.360
+Het is dus belangrijk om dit meteen goed te begrijpen.
+
+00:03:16.700 --> 00:03:19.340
+Persoonlijke hostpools wijzen elke sessiehost toe aan één persoon.
+
+00:03:19.500 --> 00:03:24.380
+Als je tien gebruikers hebt, heb je tien sessiehosts en komt elke gebruiker altijd op zijn of haar eigen machine terecht.
+
+00:03:24.600 --> 00:03:29.100
+Het werkt als een toegewezen bureau met een naamplaatje, omdat de gebruiker steeds naar dezelfde plek terugkeert.
+
+00:03:29.260 --> 00:03:32.000
+De maximale sessielimiet voor een persoonlijke hostpool is één.
+
+00:03:32.160 --> 00:03:36.660
+Het voordeel is dat de gebruiker kan installeren wat hij of zij wil en het kan behouden, omdat de wijzigingen op die machine blijven staan.
+
+00:03:36.660 --> 00:03:38.600
+Gepo all the hostpools werken andersom.
+
+00:03:38.780 --> 00:03:43.280
+Je bouwt een set sessiehosts en de service verdeelt de belasting over elke gebruiker, over de machine die ruimte heeft.
+
+00:03:43.500 --> 00:03:46.240
+Meerdere mensen kunnen tegelijkertijd op dezelfde machine ingelogd zijn.
+
+00:03:46.460 --> 00:03:50.660
+Daar komt de kostenbesparing vandaan, omdat je betaalt voor minder machines om dezelfde groep gebruikers te bedienen.
+
+00:03:50.860 --> 00:03:55.000
+Gepo all the pools gebruiken een load balancing methode die je zelf kiest, ofwel breedte eerst of diepte eerst.
+
+00:03:55.180 --> 00:03:59.580
+Hoewel het resultaat voor de gebruiker hetzelfde lijkt, kan hij of zij morgen op een andere machine terechtkomen dan vandaag.
+
+00:03:59.740 --> 00:04:02.100
+Er is ook een configureerbare maximale sessielimiet.
+
+00:04:02.100 --> 00:04:08.740
+Microsoft merkt op dat tijdens een piek van gelijktijdige aanmeldingen het aantal kortstondig boven deze limiet kan uitkomen, wat een vreemde prestatieklacht later verklaart.
+
+00:04:08.880 --> 00:04:11.300
+Er is ook de multi-sessie editie van Windows zelf.
+
+00:04:11.500 --> 00:04:17.520
+Windows 21 Enterprise Multi Session en Windows 10 Enterprise Multi Session stellen meerdere gebruikers in staat om één Windows installatie te delen.
+
+00:04:17.680 --> 00:04:20.120
+Deze editie is exclusief voor Azure Virtual Desktop.
+
+00:04:20.320 --> 00:04:22.400
+Een enkele sessie betekent één gebruiker per machine.
+
+00:04:22.600 --> 00:04:26.880
+Multi-session betekent dat de machine is ontworpen om meerdere gebruikers tegelijk te ondersteunen, en dat is wat PultPols efficiënt maakt.
+
+00:04:26.880 --> 00:04:34.000
+De afweging is eenvoudig. Een PultPol bespaart geld en schaalt soepel, maar de machine is gedeeld en tijdelijk, dus alles wat een gebruiker erop opslaat, kan verdwijnen.
+
+00:04:34.140 --> 00:04:40.480
+Een persoonlijke POO is duurder en geeft elke gebruiker een vaste machine, wat geschikt is voor mensen die beheerdersrechten nodig hebben of software gebruiken die niet gedeeld kan worden.
+
+00:04:40.640 --> 00:04:45.480
+Dat brengt ons bij de volgende vraag die we moeten beantwoorden, en het is de vraag die bijna elke eerste implementatie dwarsboomt.
+
+00:04:45.580 --> 00:04:53.480
+Als een gebruiker elke ochtend op een nieuwe machine terecht kan komen, moeten zijn bestanden en instellingen ergens anders worden opgeslagen dan op de machine waar jouw bestanden zich bevinden wanneer die machine niet van jou is.
+
+00:04:53.480 --> 00:04:57.720
+In een PultPol is de machine wegwerpaar, dus je kunt het gebruikersprofiel er niet op opslaan.
+
+00:04:57.840 --> 00:05:02.560
+Je hebt een profiel nodig dat de gebruiker volgt in plaats van de computer, en dat is precies wat FS Logix doet.
+
+00:05:02.720 --> 00:05:09.040
+FS Logix profielcontainers bevatten het volledige gebruikersprofiel, inclusief het bureaublad, de documenten, de instellingen en de appvoorkeuren.
+
+00:05:09.220 --> 00:05:13.820
+Ze bundelen dit alles in één containerbestand, meestal een virtuele schijf die is opgeslagen op een gedeelde map.
+
+00:05:13.980 --> 00:05:19.900
+Wanneer de gebruiker inlogt, koppelt die container zich aan de sessiehost waarop hij of zij is terechtgekomen, en het bureaublad ziet er precies zo uit als toen de gebruiker het verliet.
+
+00:05:19.900 --> 00:05:27.220
+Twee praktische opmerkingen hierbij, FS Logix is zonder extra kosten inbegrepen bij in aanmerking komende licenties en wordt vooraf geïnstalleerd op de multisessieimages.
+
+00:05:27.400 --> 00:05:31.280
+Iemand moet het echter nog steeds configureren, dus het is geen magie die zichzelf inschakelt.
+
+00:05:31.440 --> 00:05:38.300
+Het is ook het onderdeel dat ervoor zorgt dat een niet-persistent bureaublad persistent aanvoelt voor de gebruiker, zelfs als de onderliggende computer gloednieuw voor hem of haar is.
+
+00:05:38.500 --> 00:05:42.300
+Stel, de medewerker van de financiële afdeling logt op maandag in en komt terecht op sessiehost 3.
+
+00:05:42.440 --> 00:05:44.120
+Hij of zij werkt, logt vervolgens uit.
+
+00:05:44.120 --> 00:05:46.600
+Op dinsdag komt hij of zij terecht op sessiehost 7.
+
+00:05:46.780 --> 00:05:52.780
+Hun achtergrondafbeeldingen, snelkoppelingen, bladwijzers en bestanden zijn er allemaal omdat de container met hen mee verhuisde en de machine er niet toe deed.
+
+00:05:52.960 --> 00:05:55.640
+Dit is ook de reden waarom polls op deze manier worden bijgewerkt.
+
+00:05:55.800 --> 00:05:59.040
+Je patcht niet elke sessie host handmatig en hoopt dat ze allemaal identiek blijven.
+
+00:05:59.200 --> 00:06:04.380
+Je bouwt een nieuwe, transparante image met de updates erin en implementeert de host vervolgens vanuit die image, zodat elke machine hetzelfde opstart.
+
+00:06:04.660 --> 00:06:09.640
+Persoonlijke polls werken anders en worden meer bijgewerkt zoals gewone Windows-machines via Windows-update of je beheertools.
+
+00:06:09.640 --> 00:06:14.580
+Nu de onderdelen en de gegevens duidelijk zijn, gaan we kijken naar wat de gebruiker doet wanneer hij of zij op verbinden klikt.
+
+00:06:14.740 --> 00:06:16.060
+Hoe maakt een gebruiker verbinding?
+
+00:06:16.280 --> 00:06:18.800
+Vanuit het perspectief van de gebruiker is dit het eenvoudigste.
+
+00:06:19.020 --> 00:06:24.360
+Ze openen de Windows-app of de Client for Extern bureaublad, die werkt op Windows, Mac, iOS en Android.
+
+00:06:24.500 --> 00:06:30.820
+Er is ook een browseroptie voor apparaten waarop ze niets kunnen installeren, maar ze zien het bureaublad of de apps die je beschikbaar stelt en klikken.
+
+00:06:31.000 --> 00:06:33.820
+Achter de schermen werkt de verbinding anders dan je zou verwachten.
+
+00:06:34.040 --> 00:06:37.080
+Het apparaat van de gebruiker accepteert geen verbinding vanaf internet.
+
+00:06:37.080 --> 00:06:40.740
+Het maakt verbinding met de Azure Virtual Desktop Service en die service stuurt het door.
+
+00:06:41.000 --> 00:06:42.820
+Microsoft noemt dit omgekeerde verbindingen.
+
+00:06:42.960 --> 00:06:47.960
+Het voordeel hiervan is dat je geen inkomende poorten naar het internet hoeft te openen en dat je zelf geen gateway of broker-server hoeft te draaien.
+
+00:06:48.160 --> 00:06:52.980
+Dat is een echte beveiligingswinst en een belangrijke reden waarom dit gemakkelijker te implementeren is dan de traditionele remote desktop.
+
+00:06:53.140 --> 00:06:55.100
+Nog een detail verklaart een veelvoorkomende klacht.
+
+00:06:55.260 --> 00:06:59.380
+Een sessie kan actief, verbroken of in behandeling zijn en elk van deze statussen heeft een iets andere betekenis.
+
+00:06:59.560 --> 00:07:02.020
+Actief betekent dat de gebruiker op dat moment aan het werk is.
+
+00:07:02.020 --> 00:07:08.300
+Verbroken betekent dat de gebruiker het venster sluit zonder uit te loggen en dat de service de gebruiker bij terugkomst direct terugstuurt naar dezelfde sessie.
+
+00:07:08.460 --> 00:07:13.260
+In behandeling is interessant omdat het een placeholder is die de gebruiker vasthoudt terwijl hij of zij inlogt.
+
+00:07:13.440 --> 00:07:18.280
+Inloggen kan tussen de 30 seconden en 5 minuten duren afhankelijk van de grootte van het profiel.
+
+00:07:18.520 --> 00:07:22.640
+Dat betekent dat de trage eerste lak in waar mensen over klagen meestal niet aan het netwerk ligt.
+
+00:07:22.820 --> 00:07:26.840
+Het komt door de grootte van het profiel dat wordt gedownload en gekoppeld en dat is iets wat je kunt optimaliseren.
+
+00:07:26.840 --> 00:07:32.380
+De technologiewerkters en de beveiliging is ook goed. Nu komen we bij het punt waar iedereen het eigenlijk over heeft. Wat is de rekening?
+
+00:07:32.600 --> 00:07:34.320
+Waarom verandert de rekening elke maand?
+
+00:07:34.500 --> 00:07:39.760
+De prijsstelling van Azure Virtual Desktop bestaat uit twee aparte onderdelen en het is cruciaal om die twee uit elkaar te houden.
+
+00:07:39.940 --> 00:07:43.620
+Het eerste onderdeel betreft de toegangsrechten van gebruikers, oftewel wie er verbinding mag maken.
+
+00:07:43.800 --> 00:07:49.160
+Het tweede onderdeel is de Azure Infrastructuur, de rekenkracht, opslag en netwerkinfrastructuur die de desktops daadwerkelijk draaiende houden.
+
+00:07:49.320 --> 00:07:52.980
+Het eerste onderdeel is vaak al betaald. Het tweede is het onderdeel dat maandelijks verandert.
+
+00:07:52.980 --> 00:07:57.500
+Begin met de toegang, want hier ontdekken veel teams dat ze iets bezitten waar ze zich niet van bewust waren.
+
+00:07:57.660 --> 00:08:04.320
+Als uw gebruiker zal een geldige licentie per gebruiker hebben, kunnen ze Windows 11 en Windows 10 Desktops gebruiken zonder extra servicekosten.
+
+00:08:04.600 --> 00:08:15.160
+Deze lijst omvat Microsoft 365, E3 en E5, Microsoft F3 Business Premium, de educatieve A3 en A5 licenties, Windows Enterprise E3 en E5 en Windows VDA per gebruiker.
+
+00:08:15.340 --> 00:08:19.580
+Voor een doorsnee Microsoft 365 omgeving is de vraag over toegang vaak al beantwoord.
+
+00:08:19.580 --> 00:08:24.320
+Dat is een aangename verrassing voor veel teams en het verandert de berekening nog voordat u überhaupt iets aan de desktops uitgeeft.
+
+00:08:24.460 --> 00:08:26.260
+Twee uitzonderingen zijn echter belangrijk.
+
+00:08:26.460 --> 00:08:29.560
+Als uw sessie hosts Windows Server in plaats van Windows Client gebruiken,
+
+00:08:29.780 --> 00:08:35.420
+hebt u een Remote Desktop Services Client Access License met Active Software Assurance of een RDS abonnementslicentie nodig.
+
+00:08:35.640 --> 00:08:41.180
+En als u mensen buiten uw eigen organisatie bedient, geldt er een heel ander model, prijsstelling per gebruiker.
+
+00:08:41.420 --> 00:08:46.200
+Dit kost 10 dollar per gebruiker per maand voor desktops en apps, of 5 dollar en 50 cent voor alleen apps.
+
+00:08:46.200 --> 00:08:49.940
+U betaalt alleen voor gebruikers die daadwerkelijk minstens één keer in die maand verbinding maken.
+
+00:08:50.120 --> 00:08:52.760
+Dan komt de infrastructuur en dat is het onderdeel dat verandert.
+
+00:08:52.900 --> 00:08:57.920
+U betaalt voor de virtuele machines, de opslag voor images en profielen en het netwerk, allemaal op basis van verbruik.
+
+00:08:58.060 --> 00:08:59.560
+Eén eigenaardigheid verrast mensen.
+
+00:08:59.760 --> 00:09:03.800
+Azure Virtual Desktop virtuele machines die Windows draaien, worden gefactureerd tegen Linux rekentarieven,
+
+00:09:03.920 --> 00:09:05.780
+waardoor de rekenkosten lager uitvallen dan je zou verwachten.
+
+00:09:05.940 --> 00:09:10.180
+De factuur is om één reden onvoorspelbaar, er wordt bijgehouden wat u gebruikt, niet een vast aantal gebruikers.
+
+00:09:10.380 --> 00:09:14.280
+Laat hosts nachts aan staan zonder dat er iemand gebruik van maakt en u betaalt voor lege machines.
+
+00:09:14.280 --> 00:09:16.720
+Het goede nieuws is dat u drie dingen kunt veranderen.
+
+00:09:17.080 --> 00:09:22.760
+Multisessies plaatsen meer gebruikers op elke machine en automatisch schalen schakelt hosts uit of verwijdert ze wanneer de vraag afneemt.
+
+00:09:22.880 --> 00:09:27.700
+Een reservering op de rekenkracht die u altijd gebruikt, kan tot 72 procent van het PSU Go-tarief besparen.
+
+00:09:27.860 --> 00:09:31.260
+Een waarschuwing is op zijn plaats met betrekking tot de kosten per gebruiker die u online ziet.
+
+00:09:31.480 --> 00:09:35.240
+Deze variëren van ongeveer 10 dollar per maand voor een ploegendienstmedewerker die een automatisch geschaalde pool deelt
+
+00:09:35.240 --> 00:09:38.060
+tot 170 dollar of meer voor een dedicated machine voor een veel eisende gebruiker.
+
+00:09:38.280 --> 00:09:39.600
+Dat bereik is geen vergissing.
+
+00:09:39.600 --> 00:09:45.720
+Het is dezelfde service onder zeer verschillende workloads, dus beschouw elk cijfer als een startpunt om te testen, niet als een vaststaand gegeven.
+
+00:09:45.860 --> 00:09:49.280
+Het kostenmodel is ook waar de fouten zitten, dus laten we daar nu naar kijken.
+
+00:09:49.500 --> 00:09:51.340
+De fouten en de werkelijke beperkingen.
+
+00:09:51.520 --> 00:09:57.460
+De meeste problemen bij een Azure Virtual Desktop implementatie komen voortuit een korte lijst van terugkerende fouten, en geen daarvan is exotisch.
+
+00:09:57.600 --> 00:10:01.500
+Een veelgemaakte fout is het dimensioneren van sessiehosts op basis van een onderbuikgevoel in plaats van meten.
+
+00:10:01.660 --> 00:10:06.400
+Mensen gokken dat een bepaalde machine grootte een bepaald aantal gebruikers aan kan, om er vervolgens achter te komen dat dit niet het geval is.
+
+00:10:06.400 --> 00:10:15.260
+De richtlijnen van Microsoft zelf zijn gebaseerd op het type workload, met grove voorbeelden zoals twee gebruikers per virtuele CPU voor een standaard kantoor workload en ongeveer zes voor een lichte call center workload.
+
+00:10:15.460 --> 00:10:18.860
+Dezelfde richtlijnen geven nog steeds aan dat je dit moet valideren met je eigen applicaties.
+
+00:10:19.040 --> 00:10:21.440
+De dichtheid is een testresultaat, geen specificatieblad.
+
+00:10:21.580 --> 00:10:24.140
+Een andere fout is het laten draaien van hosts zonder dat er iemand op zit.
+
+00:10:24.400 --> 00:10:28.700
+Ongebruikte capaciteit is de klassieke geldverspilling in dit model en het is het gemakkelijkst op te lossen met automatisch schalen.
+
+00:10:28.880 --> 00:10:31.700
+Een derde fout is het behandelen van polled session hosts als huisdieren.
+
+00:10:31.700 --> 00:10:37.540
+Gebruikers loggen in en patchen ze een voor een, waardoor de pol langzaam uit balans raakt en twee gebruikers twee verschillende ervaringen krijgen.
+
+00:10:37.760 --> 00:10:39.420
+De oplossing zit in het model zelf.
+
+00:10:39.660 --> 00:10:44.640
+Verwerk wijzigingen in de golden image en herimplementeer deze, zodat de machines vervangbaar en identiek blijven.
+
+00:10:45.140 --> 00:10:50.000
+Dan zijn er nog de beperkingen, en die zijn net zo belangrijk omdat je die niet kunt omzeilen of omzeilen.
+
+00:10:50.220 --> 00:10:58.380
+Je kunt een bestaande Windows Professional of Enterprise machine niet upgraden naar Windows Enterprise Multisession en je kunt een geïmplementeerde multisession machine ook niet overzetten naar een andere editie.
+
+00:10:58.380 --> 00:11:07.020
+Je moet deze hier implementeren. In place upgrades van het besturingssysteem, zoals het migreren van een polled session host van Windows 10 naar Windows 11, worden niet ondersteund, dus dat vereist ook een herinstallatie.
+
+00:11:07.440 --> 00:11:10.560
+Multisession heeft bovendien een licentieregel die voor problemen kan zorgen.
+
+00:11:10.740 --> 00:11:18.820
+Windows Enterprise Multisession mag niet in productie worden gebruikt buiten de Azure Virtual Desktop Service en kan niet worden geactiveerd met een on-premises key management service.
+
+00:11:19.040 --> 00:11:24.440
+Als u van plan bent deze image naar uw eigen hardware te migreren, loopt dat plan vast vanwege de licentievoorwaarden.
+
+00:11:24.440 --> 00:11:28.540
+Een deadline is al verstreken en het is de moeite waard om te controleren of dit ook voor u geldt.
+
+00:11:28.600 --> 00:11:37.420
+Azure Virtual Desktop Classic, het oudere implementatiemodel, is op 30 september 2026 uitgefaseerd en verbindingen met klassieke resources zijn nu geblokkeerd.
+
+00:11:37.600 --> 00:11:43.380
+Als een deel van uw omgeving nog steeds op Classic draait, moet u die migratie onmiddellijk uitvoeren, en niet pas volgend kwartaal.
+
+00:11:43.500 --> 00:11:45.300
+Het platform is ook nog in ontwikkeling.
+
+00:11:45.520 --> 00:11:49.700
+In juni 2026 heeft Microsoft drie functies algemeen beschikbaar gemaakt.
+
+00:11:49.700 --> 00:11:56.620
+Het ging om geautomatiseerde hostpolls gebouwd op een sessie hostconfiguratie, dynamische automatische schaling die hosts naar behoefte aanmaakt en verwijderd,
+
+00:11:56.780 --> 00:12:00.980
+en tijdelijke besturingssysteem schrijven die het besturingssysteem op de lokale opslag van de machine plaatsen.
+
+00:12:01.160 --> 00:12:03.160
+Samen wijzen ze op de richting die dit opgaat.
+
+00:12:03.280 --> 00:12:09.000
+Polls werden gebouwd en verwijderden hun eigen machines en bleven identiek omdat de configuratie van de beheerder de bron van waarheid was.
+
+00:12:09.180 --> 00:12:13.980
+Er bestaan al tools die een groot deel van de operationele kant automatiseren, van schaalplanningen tot imageupdates,
+
+00:12:14.200 --> 00:12:17.200
+en het is de moeite waard om dat te evalueren zodra je weet wat je automatiseert.
+
+00:12:17.200 --> 00:12:21.400
+Dit alles roept de terechte vraag op wanneer je hiervoor moet kiezen in plaats van voor de alternatieven.
+
+00:12:22.280 --> 00:12:27.700
+Wanneer het beter is dan Windows 365 en gewone VDI, biedt Microsoft je meer dan één manier om Windows in de cloud te plaatsen
+
+00:12:27.700 --> 00:12:31.360
+en de twee namen die je het meest zult horen zijn Azure Virtual Desktop en Windows 365.
+
+00:12:31.640 --> 00:12:35.320
+Windows 365 is de eenvoudige optie met een vast maandelijks abonnement per gebruiker.
+
+00:12:35.520 --> 00:12:39.540
+Elke gebruiker krijgt zijn eigen cloud-pc en Microsoft beheert de infrastructuur voor je.
+
+00:12:39.700 --> 00:12:41.380
+Er is geen optie voor meerdere sessies.
+
+00:12:41.380 --> 00:12:47.060
+De machinegroottes komen uit een vaste lijst en de kosten zijn voorspelbaar omdat u een licentie koopt in plaats van een workload.
+
+00:12:47.220 --> 00:12:51.860
+Voor een gebruiker die altijd online is en alleen een schone Windows desktop nodig heeft, is dit vaak de meest nette oplossing.
+
+00:12:52.080 --> 00:12:54.000
+Azure Virtual Desktop is flexibeler.
+
+00:12:54.220 --> 00:12:58.380
+Het is gebaseerd op verbruik en ondersteunt meerdere sessies, waardoor meerdere mensen één machine kunnen delen.
+
+00:12:58.520 --> 00:13:03.940
+Het biedt u ook toegang tot de volledige Azure Virtual Machine catalogus, plus controle over images, netwerken en identiteiten.
+
+00:13:04.120 --> 00:13:08.480
+Het nadeel is dat u meer controle hebt over de operationele aspecten, omdat u zelf de sessie hosts en polls beheert,
+
+00:13:08.480 --> 00:13:14.320
+in tegenstelling tot de traditionele aanpak waarbij u uw eigen virtuele desktop, infrastructuur of een remote desktop services farm bouwde en beheerde.
+
+00:13:14.440 --> 00:13:18.880
+Uw virtuele desktop elimineert namelijk de gateway en de broker die u voorheen moest onderhouden.
+
+00:13:19.100 --> 00:13:21.700
+Dat is een hoop werk en een hoop risico dat nu verdwijnt.
+
+00:13:21.880 --> 00:13:24.800
+De praktische regel is dus om de workload af te stemmen op de tool.
+
+00:13:25.000 --> 00:13:30.880
+Als een gebruiker een dedicated machine nodig heeft en u het budget zo laag mogelijk wilt houden, is Windows 365 meestal de betere keuze.
+
+00:13:31.040 --> 00:13:36.860
+Als een groep mensen vergelijkbaar werk doet of als je controle nodig hebt over de image en het netwerk terwijl je virtuele desktop zijn nut bewijst,
+
+00:13:36.860 --> 00:13:40.960
+gebruiken de meeste organisaties uiteindelijk beide, omdat ze elk een andere vraag beantwoorden.
+
+00:13:41.260 --> 00:13:42.780
+Wat is de belangrijkste conclusie?
+
+00:13:42.920 --> 00:13:46.780
+Kort gezegd, Azure Virtual Desktop plaatst Windows desktops en apps in Azure,
+
+00:13:46.980 --> 00:13:51.000
+gebouwd op basis van een poll van sessie hosts die allemaal afkomstig zijn van één gouden image.
+
+00:13:51.160 --> 00:13:54.460
+Je deelt ze uit als een volledige desktop of als een enkele app en je kiest voor persoonlijk,
+
+00:13:54.600 --> 00:13:57.940
+voor een dedicated machine of gepolled, voor gedeelde en kostenefficiënte machines.
+
+00:13:57.940 --> 00:14:01.960
+In een gpo-olde poll behoud je profielen en FS-logics, zodat deze de gebruiker volgen.
+
+00:14:02.120 --> 00:14:05.540
+Gebruikers maken verbinding via een reverse connection, dus je hoeft geen inkomende poorten te openen.
+
+00:14:05.540 --> 00:14:10.080
+De toegang wordt meestal gedekt door een licentie die je al bezit en je betaalt voor de infrastructuur op basis van verbruik.
+
+00:14:10.240 --> 00:14:14.660
+Mijn vraag aan jou is, als je één groep gebruikers als eerste naar een cloud desktop zou moeten migreren,
+
+00:14:14.860 --> 00:14:16.540
+wie zou dat dan zijn en wat zou je doen twijfelen?
+
+00:14:16.720 --> 00:14:20.900
+Als dit het onderwerp minder intimiderend maakt, abonneer je dan op M365FM
+
+00:14:20.900 --> 00:14:24.240
+om de tools en de mindset die de toekomst van werk vormgeven onder de knie te krijgen.
+
+00:14:24.240 --> 00:14:25.240
+M365FM
+
+00:14:25.240 --> 00:14:26.240
+M365FM
+
+00:14:26.240 --> 00:14:27.240
+M365FM
+
+00:14:27.240 --> 00:14:28.240
+M365FM
+
+00:14:28.240 --> 00:14:29.240
+M365FM

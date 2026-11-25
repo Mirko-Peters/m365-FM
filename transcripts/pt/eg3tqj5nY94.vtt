@@ -1,0 +1,1273 @@
+WEBVTT
+
+00:00:00.420 --> 00:00:06.540
+Bem-vindo ao podcast M375FM, onde exploramos as pessoas, ideias e tecnologias que moldam o futuro do trabalho.
+
+00:00:07.480 --> 00:00:10.320
+Branching parece um detalhe pequeno até que duas pessoas alterem o mesmo arquivo.
+
+00:00:11.060 --> 00:00:14.180
+Então alguém precisa descobrir qual versão é verdadeira, e esse é um problema de branching.
+
+00:00:14.560 --> 00:00:20.240
+Um branching é apenas uma cópia segura do seu projeto e uma estratégia de branching é a regra da sua equipe para como essas cópias se juntam novamente.
+
+00:00:21.080 --> 00:00:26.520
+Existem três grandes, GitFlow, GitHub e Flow e Trunk Based Development, e cada uma foi criada por um tipo diferente de equipe.
+
+00:00:26.520 --> 00:00:29.660
+No final você saberá qual se encaixa na sua e quais erros evitar.
+
+00:00:30.300 --> 00:00:36.380
+Bem-vindo ao podcast M375FM, onde exploramos as pessoas, ideias e tecnologias que moldam o futuro do trabalho.
+
+00:00:37.680 --> 00:00:38.140
+O que é um branch?
+
+00:00:38.680 --> 00:00:41.340
+A palavra branch é sua técnica, mas a ideia por trás dela é simples.
+
+00:00:42.100 --> 00:00:45.060
+Um repositório é a pasta do seu projeto com todo o seu histórico salvo pelo Git.
+
+00:00:45.660 --> 00:00:52.360
+Isso significa cada versão de cada arquivo desde o primeiro dia, e um branch é uma cópia desse projeto que você pode alterar sem tocar na original.
+
+00:00:53.400 --> 00:00:55.660
+Nada é bloqueado e nada é excluído quando você cria um branch.
+
+00:00:56.040 --> 00:01:00.000
+Você está apenas dizendo que quer tentar algo sem quebrar a versão que já funciona.
+
+00:01:00.300 --> 00:01:03.460
+É por isso que criar branches começa a parecer seguro depois que você faz algumas vezes.
+
+00:01:04.320 --> 00:01:09.580
+O branch principal, que algumas equipes chamam de main e outras de master, é a cópia que todos tratam como a versão funcional do projeto.
+
+00:01:10.080 --> 00:01:14.960
+Se você viu os dois nomes e se perguntou se são coisas diferentes ou não são, main e master significam a mesma coisa.
+
+00:01:15.300 --> 00:01:19.180
+E a mudança de um nome para o outro foi uma escolha de nomenclatura, não? Novo recurso que você precisa aprender.
+
+00:01:19.860 --> 00:01:24.180
+Branches no Git também são baratos, e essa é a parte que quem vende ferramentas antigas acha mais difícil de acreditar.
+
+00:01:24.180 --> 00:01:29.480
+Nos sistemas anteriores ao Git, criar um branch era uma operação lenta e pesada que você fazia raramente com cuidado.
+
+00:01:29.960 --> 00:01:33.340
+No Git isso acontece instantaneamente, por isso equipes modernas criam branches para quase tudo.
+
+00:01:33.940 --> 00:01:38.880
+Se você ouviu pessoas mencionarem um commit, é apenas um ponto de verificação salvo uma alteração registrada com uma mensagem anexada.
+
+00:01:39.340 --> 00:01:44.500
+Um branch é realmente um rótulo móvel que aponta para uma linha desses pontos de verificação, por isso alternar entre branches é tão rápido.
+
+00:01:45.020 --> 00:01:46.240
+Mas essa única ideia é toda a fundação.
+
+00:01:46.240 --> 00:01:52.360
+Cada estratégia e cada discussão entre desenvolvedores se resume a uma única questão sobre como essas cópias são feitas e como elas se juntam novamente.
+
+00:01:53.700 --> 00:01:55.060
+Por que estratégias de branch existem?
+
+00:01:55.620 --> 00:01:58.500
+Assim que uma equipe cresce além de uma pessoa, as regras começam a importar.
+
+00:01:58.920 --> 00:02:04.140
+Git torna a criação de ramificações barata e a mesclagem fácil uma grande mudança em relação às ferramentas antigas onde mesclar parecia assustador e errado.
+
+00:02:04.500 --> 00:02:07.220
+Vincent Driessen, a pessoa por trás do GitFlow, destacou exatamente esse ponto.
+
+00:02:07.700 --> 00:02:13.200
+No Git, criar ramificações e mesclar tornou-se parte do fluxo de trabalho diário, em vez de ser um evento especial agendado com semanas de antecedência.
+
+00:02:13.620 --> 00:02:15.720
+A criação barata de ramificações cria um novo grupo.
+
+00:02:15.720 --> 00:02:20.680
+Todos fazem cópias quando querem e ninguém concorda sobre como essas cópias se juntam, trabalham ou entram em conflito.
+
+00:02:21.460 --> 00:02:26.420
+Uma alteração incompleta de alguém acaba se misturando a algo que deveria estar pronto e agora a equipe não consegue entregar nenhum dos dois.
+
+00:02:27.040 --> 00:02:31.540
+Imagine um desenvolvedor na metade de um redesenho, enquanto um colega corrige silenciosamente um bug no mesmo arquivo.
+
+00:02:32.320 --> 00:02:34.720
+Ambas as alterações caem no mesmo lugar e ninguém esperava por isso.
+
+00:02:35.100 --> 00:02:37.940
+E a ramificação é a solução. É a solução e a menos glamorosa do que pare.
+
+00:02:38.340 --> 00:02:41.320
+Nenhum software que você instala, nem uma configuração que você ativa uma vez, esquece.
+
+00:02:41.320 --> 00:02:48.740
+É um acordo compartilhado sobre quem trabalha onde, quanto tempo uma ramificação pode durar e como as mudanças são revisadas antes de irem para a versão principal.
+
+00:02:49.540 --> 00:02:51.880
+Quando esse acordo falta, você tem a bagunça do início deste episódio.
+
+00:02:52.660 --> 00:02:55.660
+Duas pessoas, um arquivo, duas versões da verdade e ninguém tem certeza de qual é a real.
+
+00:02:56.620 --> 00:02:58.760
+Uma estratégia com uma equipe impede que isso aconteça novamente.
+
+00:03:00.120 --> 00:03:01.020
+Os três blocos de construção.
+
+00:03:01.020 --> 00:03:07.180
+Quase toda estratégia é construída a partir dos mesmos três tipos de ramificações e, uma vez que você os conhece, o modelo deixa de parecer um idioma estrangeiro.
+
+00:03:07.540 --> 00:03:08.720
+A primeira é a ramificação principal.
+
+00:03:08.960 --> 00:03:10.880
+Nem a versão sempre funcional a partir da qual você faz isso.
+
+00:03:11.180 --> 00:03:12.660
+É a única ramificação que nunca desaparece.
+
+00:03:12.940 --> 00:03:15.860
+A segunda é a ramificação de funcionalidade, feature branch, e é aqui que o trabalho real conta.
+
+00:03:16.260 --> 00:03:20.340
+Você cria uma para uma tarefa única, como adicionar uma página de login ou consertar um botão quebrado.
+
+00:03:21.060 --> 00:03:23.680
+Você dá um nome de acordo com o trabalho, para que qualquer pessoa saiba rapidamente para que serve.
+
+00:03:24.680 --> 00:03:29.160
+As ramificações de funcionalidade devem ser temporárias e, no momento em que o trabalho é mesclado, a ramificação é excluída.
+
+00:03:29.160 --> 00:03:33.320
+É a ramificação de lançamento, release branch, e ela só aparece quando você entrega em versões numerais.
+
+00:03:33.720 --> 00:03:35.900
+É uma forma de congelar um snapshot para verificações finais.
+
+00:03:36.280 --> 00:03:41.620
+Você a cria quando o código está quase pronto, usa para corrigir bugs de última hora e atribuir o número de versão antes de entregá-lo aos clientes.
+
+00:03:42.040 --> 00:03:43.160
+Esse é o conjunto completo de ferramenta.
+
+00:03:43.540 --> 00:03:46.460
+O que diferencia os três grandes modelos se resume ao quanto eles utilizam ramificação.
+
+00:03:46.800 --> 00:03:49.420
+O GitFlow usa todas as três, além de uma segunda ramificação permanente.
+
+00:03:49.760 --> 00:03:52.740
+O GitHub Flow utiliza principalmente apenas as ramificações principais de funcionalidade.
+
+00:03:52.960 --> 00:03:56.820
+O desenvolvimento, baseado em TronkTrank Based Developer, envia quase tudo diretamente para a principal e a principal.
+
+00:03:56.820 --> 00:03:59.320
+Mas um componente vale ser mencionado, ainda que não seja uma branch.
+
+00:04:00.020 --> 00:04:04.640
+Um pull request é como uma branch finalizada e revisada, e ele aparece em toda estratégia moderna.
+
+00:04:05.540 --> 00:04:08.240
+Voltaremos a ele, porque é o mecanismo cotidiano que você mais usará.
+
+00:04:09.240 --> 00:04:10.180
+GitFlow estruturado.
+
+00:04:10.820 --> 00:04:14.900
+A estratégia mais famosa tem uma data de nascimento específica, e eu conhecê-la ajuda a explicar porque ela é como é.
+
+00:04:15.740 --> 00:04:20.560
+Vincent Tiresen publicou o GitFlow em janeiro de 2010, em um post chamado A Successful Git Branching Model.
+
+00:04:20.560 --> 00:04:24.680
+Por anos depois disso, foi a resposta padrão sempre que alguém perguntava como usar branches.
+
+00:04:25.460 --> 00:04:27.040
+O GitFlow opera com duas branches permanentes.
+
+00:04:27.480 --> 00:04:33.040
+A master mantém o código pronto para a produção a qualquer momento, e a develop mantém tudo o que está concluído, mas ainda não lançado.
+
+00:04:33.700 --> 00:04:36.820
+Essas duas nunca desaparecem, e todas as outras branches orbitam ao redor dela.
+
+00:04:37.440 --> 00:04:40.080
+Branches de funcionalidades saem da develop e são mescladas de volta na develop.
+
+00:04:40.460 --> 00:04:44.680
+Branches de release saem da develop e recebem o polimento final, e são mescladas tanto na develop quanto na master.
+
+00:04:45.080 --> 00:04:49.280
+Branches de hotfix saem da master para corrigir algo urgente em produção, e são mescladas de volta em ambas,
+
+00:04:49.280 --> 00:04:51.100
+para que a correção não se perca no próximo lançamento.
+
+00:04:51.880 --> 00:04:54.040
+Essa estrutura justifica seu uso quando você entrega em versões.
+
+00:04:54.760 --> 00:04:59.460
+Digamos que você suporte a versão 2, enquanto a versão 3 está em andamento, e um cliente na versão 1 precisa de um patch.
+
+00:05:00.260 --> 00:05:02.680
+O GitFlow lhe dá um lugar claro e bem demarcado para fazer esse trabalho.
+
+00:05:03.220 --> 00:05:05.060
+Mas aqui está a reviravolta, e ela surpreende quase tudo.
+
+00:05:05.840 --> 00:05:10.500
+Em março de 2020, dez anos após publicar o post, Drissen adicionou uma nota no topo de seu próprio artigo.
+
+00:05:11.340 --> 00:05:13.900
+Ele escreveu que o GitFlow estava sendo tratado como um dogma em vez de uma escolha.
+
+00:05:14.240 --> 00:05:17.460
+Ele não foi projetado para aplicativos web entregues continuamente, disse ele.
+
+00:05:17.460 --> 00:05:20.480
+Equipes que trabalham assim deveriam adotar algo mais simples, como o GitFlow Flow.
+
+00:05:20.800 --> 00:05:22.300
+Sua frase final vale a pena ser lembrada.
+
+00:05:22.820 --> 00:05:25.920
+Panaceas não existem, então considere seu próprio contexto e decida por si mesmo.
+
+00:05:26.640 --> 00:05:28.580
+Para as equipes para as quais foi criado, nada disso é um problema.
+
+00:05:29.200 --> 00:05:32.340
+Se você está criando software explicitamente versionado ou suporta várias versões em uso,
+
+00:05:32.420 --> 00:05:34.100
+o modelo ainda pode se encaixar tão bem quanto antes.
+
+00:05:36.800 --> 00:05:37.640
+GitHubFlow é simples?
+
+00:05:38.360 --> 00:05:40.600
+O GitHubFlow abordou o problema, na direção oposta.
+
+00:05:41.480 --> 00:05:43.480
+Scott Recon escreveu sobre isso em agosto de 2011,
+
+00:05:43.480 --> 00:05:46.760
+e o ponto principal era que o próprio GitHub não usava GitFlow de jeito nenhum.
+
+00:05:47.500 --> 00:05:48.220
+O motivo era simples.
+
+00:05:48.540 --> 00:05:51.860
+GitHub fazia deploy em produção todos os dias, frequentemente várias vezes ao dia,
+
+00:05:52.160 --> 00:05:55.200
+e um processo construído em torno de lançamento simplesmente não se encaixava nessa realidade.
+
+00:05:56.000 --> 00:05:58.900
+Então eles simplificaram tudo por uma regra rígida e uma lista curta de etapas.
+
+00:05:59.400 --> 00:06:01.560
+A regra é que tudo na branch main seja passível de deploy,
+
+00:06:01.640 --> 00:06:05.040
+o que significa que a main é sempre segura para lançar e sempre segura para criar novas branches.
+
+00:06:05.760 --> 00:06:09.140
+Para começar o trabalho, você cria uma nova branch a partir da main com o nome claro,
+
+00:06:09.300 --> 00:06:11.400
+algo como adicionar página de login ou corrigir botão.
+
+00:06:11.400 --> 00:06:14.820
+A partir daí, você envia seu trabalho para essa branch com frequência para que fique salvo,
+
+00:06:14.880 --> 00:06:16.680
+para que todos possam ver no que você está trabalhando.
+
+00:06:17.000 --> 00:06:19.200
+Quando você quer feedback ou acha que o trabalho terminou,
+
+00:06:19.400 --> 00:06:22.060
+você abre um pull request, alguém revisa, os testes rodam,
+
+00:06:22.280 --> 00:06:26.020
+e uma vez aprovado, você faz o merge na main e faz o deploy imediatamente,
+
+00:06:26.160 --> 00:06:28.720
+pois a main deve estar sempre pronta para ser lançada.
+
+00:06:29.380 --> 00:06:30.180
+Esse é todo o fluxo.
+
+00:06:30.860 --> 00:06:33.480
+Sem branch de desenvolvimento, sem branch de release, sem branch de hotfix,
+
+00:06:33.560 --> 00:06:34.880
+apenas a main se branch de curta duração.
+
+00:06:35.400 --> 00:06:37.220
+Na época o GitHub tinha 35 funcionários,
+
+00:06:37.220 --> 00:06:40.040
+com cerca de 15 a 20 deles trabalhando o mesmo projeto simultaneamente.
+
+00:06:40.040 --> 00:06:44.260
+A publicação de Shackle mostra 6 pessoas diferentes fazendo o deploy cerca de 24 vezes em 1.
+
+00:06:44.600 --> 00:06:47.400
+A contrapartida é que isso pressupõe que você pode fazer o deploy sob demanda
+
+00:06:47.400 --> 00:06:48.960
+e que não precisa dar suporte a versões antigas.
+
+00:06:49.320 --> 00:06:52.100
+Para um aplicativo web ou uma equipe pequena, isso geralmente é verdade,
+
+00:06:52.220 --> 00:06:54.100
+e a simplicidade vale muito quando você está começando.
+
+00:06:54.660 --> 00:06:58.760
+Se uma branch durar mais do que o esperado, a solução é fazer o merge da versão mais recente da main
+
+00:06:58.760 --> 00:07:00.760
+nela para que ela não se desvie enquanto você trabalha.
+
+00:07:02.020 --> 00:07:03.720
+Trunk-based development, o modelo rápido.
+
+00:07:03.720 --> 00:07:07.620
+Se o fluxo do GitHub é simples, o trunk-based development é a versão enxuta do simple.
+
+00:07:08.100 --> 00:07:11.060
+Todos enviam pequenas mudanças para uma branch compartilhada ao trunk,
+
+00:07:11.180 --> 00:07:12.380
+que é apenas outro nome para main.
+
+00:07:12.800 --> 00:07:15.360
+As branches, quando existem, vivem por horas em vez de semanas.
+
+00:07:16.180 --> 00:07:19.160
+Esse seguro de vida curto é a ideia central e vale a pena refletir sobre isso por um momento.
+
+00:07:19.780 --> 00:07:23.280
+Quanto mais tempo uma branch permanece ativa, mais o resto do projeto avança sem ela,
+
+00:07:23.580 --> 00:07:25.640
+e mais confuso fica o merge quando ela finalmente retorna.
+
+00:07:26.600 --> 00:07:28.580
+Branches curtas significam merges pequenos,
+
+00:07:28.620 --> 00:07:31.660
+e merges pequenos são aqueles que você resolve em um minuto em vez de uma tarde inteira.
+
+00:07:31.660 --> 00:07:33.360
+Prestes de release são opcionais aqui.
+
+00:07:33.800 --> 00:07:36.420
+Elas são apenas instantâneas que você cria quando precisa marcar uma versão.
+
+00:07:37.120 --> 00:07:39.260
+Se você faz deploy várias vezes ao dia, você não precisa delas,
+
+00:07:39.300 --> 00:07:41.540
+porque o próprio trunk está sempre pronto para ser lançado.
+
+00:07:42.120 --> 00:07:43.760
+Vale a pena conhecer as evidências por trás disso,
+
+00:07:43.860 --> 00:07:45.540
+pois é mais do que apenas uma preferência pessoal.
+
+00:07:46.020 --> 00:07:48.760
+O Dora, programa de pesquisa que estuda como as equipes entregam software,
+
+00:07:48.880 --> 00:07:51.480
+analisou seus próprios dados de 2016 e 2017.
+
+00:07:52.400 --> 00:07:54.140
+Descobriu-se que as equipes têm melhor desempenho
+
+00:07:54.140 --> 00:07:55.600
+quando mantêm três ou menos branches ativas,
+
+00:07:55.600 --> 00:07:57.400
+fazem merge no trunk pelo menos uma vez por dia,
+
+00:07:57.500 --> 00:07:59.540
+e dispensam congelamentos de código e faz de integração separada.
+
+00:07:59.540 --> 00:08:01.640
+O Goal é o exemplo famoso dessa forma de trabalho.
+
+00:08:01.740 --> 00:08:02.860
+A prática existe há muito tempo lá,
+
+00:08:02.920 --> 00:08:05.300
+mas é parte do motivo pelo qual o modelo continua aparecendo
+
+00:08:05.300 --> 00:08:06.580
+sempre que se fala em equipes ágeis.
+
+00:08:07.100 --> 00:08:09.280
+O detalhe é que ele exige mais de você do que os outros dois.
+
+00:08:09.860 --> 00:08:11.800
+Você precisa dividir seu trabalho em pequenas partes
+
+00:08:11.800 --> 00:08:13.680
+e confiar em testes automatizados rápidos,
+
+00:08:13.760 --> 00:08:15.280
+pois não há um longo período de estabilização
+
+00:08:15.280 --> 00:08:16.700
+para detectar problemas no final.
+
+00:08:17.300 --> 00:08:18.740
+Por isso que o desenvolvimento baseado em trunk
+
+00:08:18.740 --> 00:08:21.460
+funciona melhor em equipes que entregam constantemente e investirem em testes.
+
+00:08:21.460 --> 00:08:24.000
+É também um modelo com maior probabilidade de parecer estranho
+
+00:08:24.000 --> 00:08:24.740
+se você estiver começando.
+
+00:08:25.040 --> 00:08:26.340
+Não existe um branch de longa duração
+
+00:08:26.340 --> 00:08:27.560
+onde você possa esconder trabalho na cabeça.
+
+00:08:27.560 --> 00:08:29.420
+Pool Request explicado
+
+00:08:29.420 --> 00:08:32.160
+Todas as três estratégias dependem da mesma ferramenta
+
+00:08:32.160 --> 00:08:34.400
+para reunir o trabalho e é aquela que você usará todos os dias.
+
+00:08:35.340 --> 00:08:37.460
+Um Pool Request, geralmente abreviado como PR,
+
+00:08:37.560 --> 00:08:39.600
+é uma solicitação para mesclar seu branch em outro branch.
+
+00:08:40.180 --> 00:08:41.720
+E já vem com um espaço integrado para que as pessoas
+
+00:08:41.720 --> 00:08:42.740
+revisem a alteração antes.
+
+00:08:43.200 --> 00:08:44.900
+É menos um botão e mais uma conversa.
+
+00:08:45.900 --> 00:08:48.000
+Os revisores podem comentar em linhas individuais,
+
+00:08:48.000 --> 00:08:49.840
+fazer perguntas e solicitar alterações.
+
+00:08:50.340 --> 00:08:52.160
+Eu continuo enviando mais commits para o mesmo branch
+
+00:08:52.160 --> 00:08:54.160
+e o Pool Request é atualizado conforme você avança.
+
+00:08:54.560 --> 00:08:56.160
+Ele se torna um registro contínuo da discussão
+
+00:08:56.160 --> 00:08:58.860
+até que todos estejam satisfeitos e a alteração esteja pronta para se mesclar.
+
+00:08:59.200 --> 00:09:00.300
+O valor está todo no timing.
+
+00:09:00.820 --> 00:09:03.040
+Revisão acontece antes que a alteração chegue ao branch principal.
+
+00:09:03.460 --> 00:09:05.100
+Isso significa que os erros são detectados
+
+00:09:05.100 --> 00:09:06.360
+enquanto ainda são baratos de corrigir
+
+00:09:06.360 --> 00:09:08.700
+em vez de depois de chegarem aos clientes e começarem a causar problemas.
+
+00:09:09.480 --> 00:09:11.480
+O GitHub não inventou a ideia de revisar código,
+
+00:09:11.580 --> 00:09:13.020
+mas popularizou o Pool Request
+
+00:09:13.020 --> 00:09:15.180
+e o recurso remonta a cerca de 2008.
+
+00:09:15.840 --> 00:09:18.080
+Hoje, quase todos os hosts Git têm sua própria versão.
+
+00:09:18.480 --> 00:09:19.580
+Mesmo quando o nome muda um pouco.
+
+00:09:20.180 --> 00:09:21.780
+Há também um lado social que importará em breve.
+
+00:09:22.220 --> 00:09:23.500
+No momento que você abre um Pool Request,
+
+00:09:23.500 --> 00:09:25.440
+outras pessoas podem ver seu branch e começar a trabalhar nele,
+
+00:09:25.480 --> 00:09:26.740
+o que silenciosamente transforma esse branch
+
+00:09:26.740 --> 00:09:28.100
+e transforma esse branch em algo compartilhado.
+
+00:09:28.200 --> 00:09:29.020
+Guarda esse pensamento,
+
+00:09:29.140 --> 00:09:30.440
+pois é exatamente o motivo pelo qual
+
+00:09:30.440 --> 00:09:31.820
+uma das regras que virão a seguir existe.
+
+00:09:32.160 --> 00:09:33.060
+Merge versus rebase.
+
+00:09:33.580 --> 00:09:35.060
+Assim que um Pool Request é aprovado,
+
+00:09:35.360 --> 00:09:37.180
+você precisa integrar seu trabalho de volta ao principal.
+
+00:09:37.360 --> 00:09:38.420
+E há duas maneiras de fazer isso.
+
+00:09:38.820 --> 00:09:40.200
+Eles parecem semelhantes na superfície,
+
+00:09:40.260 --> 00:09:41.680
+mas se comportam de forma muito diferente para o bar.
+
+00:09:41.960 --> 00:09:43.200
+Colhe a opção errada no branch errado
+
+00:09:43.200 --> 00:09:45.040
+e você pode apagar o trabalho de um colega de equipe.
+
+00:09:45.040 --> 00:09:47.000
+Portanto, esta próxima parte importa mais do que parece.
+
+00:09:47.400 --> 00:09:48.920
+O Merge combina seu branch com o principal
+
+00:09:48.920 --> 00:09:50.420
+e adiciona um comitê de mesclagem
+
+00:09:50.420 --> 00:09:51.920
+em que registramos os históricos de uma vez.
+
+00:09:52.300 --> 00:09:53.720
+Nada é reescrito e nada é perdido.
+
+00:09:54.300 --> 00:09:55.800
+Você sempre pode ver que duas linhas de trabalho
+
+00:09:55.800 --> 00:09:56.980
+se uniram em uma determinada data.
+
+00:09:57.320 --> 00:09:58.080
+Esse registro é útil
+
+00:09:58.080 --> 00:09:59.540
+quando você está tentando descobrir mais tarde
+
+00:09:59.540 --> 00:10:00.280
+o que mudou e quando.
+
+00:10:00.980 --> 00:10:02.060
+O rebase segue um caminho diferente.
+
+00:10:02.580 --> 00:10:03.500
+Ele pega seus comits,
+
+00:10:03.720 --> 00:10:04.980
+move-os para que fiquem alinhados
+
+00:10:04.980 --> 00:10:06.020
+sobre o main mais recente
+
+00:10:06.020 --> 00:10:07.560
+e cria novos comits pelo caminho.
+
+00:10:08.420 --> 00:10:09.880
+O resultado é uma linha limpa e reta
+
+00:10:09.880 --> 00:10:10.720
+sem comits de merge,
+
+00:10:10.780 --> 00:10:12.540
+o que muitas equipes acham bem mais fácil de ler.
+
+00:10:13.000 --> 00:10:14.660
+Compromisso é a parte que os iniciantes costumam ignorar.
+
+00:10:15.420 --> 00:10:16.500
+Merge mantém a história completa
+
+00:10:16.500 --> 00:10:17.340
+exatamente como aconteceu.
+
+00:10:18.280 --> 00:10:19.840
+O rebase deixa a história mais organizada,
+
+00:10:19.840 --> 00:10:21.180
+mas substitui os comits originais,
+
+00:10:21.260 --> 00:10:23.460
+então o registro de quando o trabalho foi integrado desaparece.
+
+00:10:24.060 --> 00:10:24.920
+Isso leva a uma regra
+
+00:10:24.920 --> 00:10:26.620
+e a regra mais importante de todo este episódio.
+
+00:10:27.200 --> 00:10:28.340
+Nunca faça rebase em uma branch
+
+00:10:28.340 --> 00:10:29.540
+na qual outras pessoas estejam trabalhando.
+
+00:10:29.940 --> 00:10:30.720
+Atlassian resume isso
+
+00:10:30.720 --> 00:10:31.700
+em uma única pergunta para fazer
+
+00:10:31.700 --> 00:10:32.560
+antes de todo o rebase,
+
+00:10:32.640 --> 00:10:34.120
+se mais alguém está olhando para esta branch,
+
+00:10:34.320 --> 00:10:34.580
+se não.
+
+00:10:35.000 --> 00:10:36.480
+Se a resposta for sim, você não reescreve.
+
+00:10:37.000 --> 00:10:38.280
+O motivo de ser tão problemático
+
+00:10:38.280 --> 00:10:39.880
+é que um rebase em uma branch compartilhada
+
+00:10:39.880 --> 00:10:40.980
+quebra a cópia de todo mundo.
+
+00:10:41.980 --> 00:10:43.480
+Seu histórico não coincide mais com o deles
+
+00:10:43.480 --> 00:10:45.060
+e um push forçado para resolver isso
+
+00:10:45.060 --> 00:10:45.900
+sobrescreve o trabalho
+
+00:10:45.900 --> 00:10:47.300
+no qual eles ainda estavam construindo.
+
+00:10:47.920 --> 00:10:48.700
+Se você não tiver certeza,
+
+00:10:48.820 --> 00:10:49.460
+apenas faça um merda.
+
+00:10:49.840 --> 00:10:51.360
+Guarde o rebase para a sua branch privada,
+
+00:10:51.460 --> 00:10:52.320
+onde é uma ótima forma
+
+00:10:52.320 --> 00:10:53.480
+de organizar comits bagunçados
+
+00:10:53.480 --> 00:10:54.400
+antes de abrir um pull request
+
+00:10:54.400 --> 00:10:56.080
+e deixe as branches compartilhadas em paz.
+
+00:10:57.600 --> 00:10:58.520
+Escolhendo uma estratégia
+
+00:10:58.520 --> 00:10:59.520
+para pequenas e grandes equipes.
+
+00:11:00.040 --> 00:11:00.880
+A escolha se resume
+
+00:11:00.880 --> 00:11:01.960
+a algumas perguntas simples
+
+00:11:01.960 --> 00:11:02.640
+sobre sua equipe,
+
+00:11:02.720 --> 00:11:04.180
+não a qual modelo sua mais profissional.
+
+00:11:04.760 --> 00:11:05.460
+Primeiro, com que frequência
+
+00:11:05.460 --> 00:11:05.860
+você está no nosso?
+
+00:11:06.340 --> 00:11:07.340
+Se você oferece suporte
+
+00:11:07.340 --> 00:11:07.980
+a versões antigas
+
+00:11:07.980 --> 00:11:08.820
+que as pessoas ainda usam.
+
+00:11:09.160 --> 00:11:10.120
+Terceiro, quantas pessoas
+
+00:11:10.120 --> 00:11:11.400
+mexem no mesmo código ao mesmo tempo.
+
+00:11:11.840 --> 00:11:12.820
+Quarto, quanto você confia
+
+00:11:12.820 --> 00:11:13.940
+em seus testes automatizados.
+
+00:11:14.520 --> 00:11:15.600
+Essas quatro respostas
+
+00:11:15.600 --> 00:11:16.320
+apontam para um modelo
+
+00:11:16.320 --> 00:11:16.980
+muito mais rápido
+
+00:11:16.980 --> 00:11:18.240
+do que qualquer gráfico comparativo
+
+00:11:18.240 --> 00:11:19.740
+e são essas as perguntas que importam.
+
+00:11:19.840 --> 00:11:20.700
+Se você é uma equipe pequena
+
+00:11:20.700 --> 00:11:21.340
+ou trabalha sozinho,
+
+00:11:21.420 --> 00:11:23.080
+o GitHub Flow geralmente é suficiente.
+
+00:11:23.960 --> 00:11:24.820
+Uma branch principal
+
+00:11:24.820 --> 00:11:26.160
+e branch de funcionalidade curta
+
+00:11:26.160 --> 00:11:26.860
+te levarão longe
+
+00:11:26.860 --> 00:11:27.660
+e você sempre pode
+
+00:11:27.660 --> 00:11:28.280
+adicionar a estrutura
+
+00:11:28.280 --> 00:11:29.060
+depois se precisar.
+
+00:11:29.660 --> 00:11:30.620
+Se você lança softwares
+
+00:11:30.620 --> 00:11:31.120
+com versões
+
+00:11:31.120 --> 00:11:31.900
+ou precisa dar suporte
+
+00:11:31.900 --> 00:11:32.480
+a várias versões
+
+00:11:32.480 --> 00:11:33.440
+liberadas ao mesmo tempo,
+
+00:11:33.660 --> 00:11:34.460
+as branches de release
+
+00:11:34.460 --> 00:11:35.440
+e hotfix do Git Flow
+
+00:11:35.440 --> 00:11:36.260
+valem a pena.
+
+00:11:36.820 --> 00:11:37.240
+Esse é o mundo
+
+00:11:37.240 --> 00:11:38.000
+para o qual ele foi criado
+
+00:11:38.000 --> 00:11:38.420
+e nesse mundo
+
+00:11:38.420 --> 00:11:39.200
+ele ainda funciona bem.
+
+00:11:39.840 --> 00:11:40.820
+Se você é uma equipe maior
+
+00:11:40.820 --> 00:11:41.800
+que lança continuamente
+
+00:11:41.800 --> 00:11:42.700
+e investiu esforço real
+
+00:11:42.700 --> 00:11:43.800
+em testes automatizados,
+
+00:11:44.060 --> 00:11:44.840
+Trunk Based Development
+
+00:11:44.840 --> 00:11:46.080
+mantém seus merges pequenos
+
+00:11:46.080 --> 00:11:47.340
+e seus lançamentos frequentes
+
+00:11:47.340 --> 00:11:48.320
+e seus lançamentos frequentes.
+
+00:11:48.520 --> 00:11:49.360
+Essa é exatamente a troca
+
+00:11:49.360 --> 00:11:49.740
+que ele exige.
+
+00:11:50.320 --> 00:11:50.760
+Mais uma coisa
+
+00:11:50.760 --> 00:11:51.540
+que vale a pena guardar.
+
+00:11:51.960 --> 00:11:52.800
+Até o autor do Git Flow
+
+00:11:52.800 --> 00:11:53.380
+diz que não existe
+
+00:11:53.380 --> 00:11:54.420
+uma única resposta certa.
+
+00:11:55.420 --> 00:11:56.200
+Você escolhe o modelo
+
+00:11:56.200 --> 00:11:57.220
+que se ajusta ao seu contexto
+
+00:11:57.220 --> 00:11:57.880
+e muda a escolha
+
+00:11:57.880 --> 00:11:58.920
+quando seu contexto muda.
+
+00:11:59.740 --> 00:12:00.640
+Uma boa maneira de começar
+
+00:12:00.640 --> 00:12:01.360
+é escolher o modelo
+
+00:12:01.360 --> 00:12:02.320
+mais leve que funcione
+
+00:12:02.320 --> 00:12:03.340
+e adicionar formalidade
+
+00:12:03.340 --> 00:12:04.320
+apenas quando algo quebrar.
+
+00:12:04.900 --> 00:12:05.640
+Equipes frequentemente
+
+00:12:05.640 --> 00:12:06.360
+adotam o Git Flow
+
+00:12:06.360 --> 00:12:07.220
+que parece impressionante,
+
+00:12:07.280 --> 00:12:08.260
+mas descobrem que as ramificações
+
+00:12:08.260 --> 00:12:09.000
+extras custam mais
+
+00:12:09.000 --> 00:12:09.500
+do que economizam.
+
+00:12:10.540 --> 00:12:11.540
+Erros comuns que inicialmente.
+
+00:12:12.140 --> 00:12:13.620
+Seja qual for a estratégia escolhida,
+
+00:12:13.760 --> 00:12:14.200
+alguns erros
+
+00:12:14.200 --> 00:12:15.160
+atrapalham quase todos
+
+00:12:15.160 --> 00:12:15.780
+no primeiro ano
+
+00:12:15.780 --> 00:12:16.460
+e nenhum deles
+
+00:12:16.460 --> 00:12:17.520
+é incomum.
+
+00:12:18.660 --> 00:12:19.040
+O maior deles
+
+00:12:19.040 --> 00:12:19.600
+é deixar branches
+
+00:12:19.600 --> 00:12:20.140
+de funcionalidade
+
+00:12:20.140 --> 00:12:20.980
+fit branches por semana.
+
+00:12:21.520 --> 00:12:22.440
+Uma branch tão antiga
+
+00:12:22.440 --> 00:12:23.200
+se distancia tanto
+
+00:12:23.200 --> 00:12:23.660
+da principal
+
+00:12:23.660 --> 00:12:24.640
+que o merge vira uma briga,
+
+00:12:24.740 --> 00:12:26.240
+então mantenha as branches curtas
+
+00:12:26.240 --> 00:12:27.200
+e faça merge com frequência.
+
+00:12:27.940 --> 00:12:28.660
+Trabalhar direto
+
+00:12:28.660 --> 00:12:29.420
+na branch principal
+
+00:12:29.420 --> 00:12:29.980
+sem revisão
+
+00:12:29.980 --> 00:12:30.880
+parece mais rápido
+
+00:12:30.880 --> 00:12:31.640
+até que uma mudança
+
+00:12:31.640 --> 00:12:32.780
+com erro chega aos usuários
+
+00:12:32.780 --> 00:12:33.600
+e não há nada entre eles
+
+00:12:33.600 --> 00:12:34.100
+e o problema.
+
+00:12:34.840 --> 00:12:35.840
+Há branch que você reescreve
+
+00:12:35.840 --> 00:12:36.580
+enquanto outras pessoas
+
+00:12:36.580 --> 00:12:37.220
+ainda estão usando.
+
+00:12:37.960 --> 00:12:38.600
+Fazer rebase
+
+00:12:38.600 --> 00:12:39.260
+ou force push
+
+00:12:39.260 --> 00:12:40.320
+sobre o trabalho de outra pessoa
+
+00:12:40.320 --> 00:12:41.100
+é o erro que arruina
+
+00:12:41.100 --> 00:12:41.760
+no dia de um colega
+
+00:12:41.760 --> 00:12:42.520
+porque o histórico deles
+
+00:12:42.520 --> 00:12:43.540
+deixa de bater com o seu.
+
+00:12:44.180 --> 00:12:44.840
+Colocar mudanças
+
+00:12:44.840 --> 00:12:45.520
+não relacionadas
+
+00:12:45.520 --> 00:12:46.220
+em uma única branch
+
+00:12:46.220 --> 00:12:46.820
+ou pull request
+
+00:12:46.820 --> 00:12:47.540
+é outro erro comum.
+
+00:12:48.420 --> 00:12:49.560
+Isso torna a revisão lenta
+
+00:12:49.560 --> 00:12:50.580
+e se você precisar
+
+00:12:50.580 --> 00:12:51.420
+desfazer algo depois
+
+00:12:51.420 --> 00:12:52.300
+não consegue separar
+
+00:12:52.300 --> 00:12:53.180
+a mudança boa da ruim.
+
+00:12:54.020 --> 00:12:54.640
+Copiar a estrutura
+
+00:12:54.640 --> 00:12:55.340
+de uma grande empresa
+
+00:12:55.340 --> 00:12:56.440
+sem os processos de teste
+
+00:12:56.440 --> 00:12:57.100
+e lançamento deles
+
+00:12:57.100 --> 00:12:57.560
+é tentador
+
+00:12:57.560 --> 00:12:58.400
+mas raramente funciona
+
+00:12:58.400 --> 00:12:58.860
+pois o modelo
+
+00:12:58.860 --> 00:12:59.960
+não é mágica por si só.
+
+00:13:00.240 --> 00:13:00.720
+Por si só.
+
+00:13:01.260 --> 00:13:01.580
+As práticas
+
+00:13:01.580 --> 00:13:02.140
+não dão direcção.
+
+00:13:02.600 --> 00:13:02.920
+O último é
+
+00:13:02.920 --> 00:13:03.400
+é bem silencioso.
+
+00:13:04.100 --> 00:13:05.120
+Se você trata a estratégia
+
+00:13:05.120 --> 00:13:06.220
+como uma preferência pessoal
+
+00:13:06.220 --> 00:13:07.200
+e a única pessoa segui-la
+
+00:13:07.200 --> 00:13:07.800
+então ainda não é
+
+00:13:07.800 --> 00:13:09.080
+realmente uma estratégia
+
+00:13:09.080 --> 00:13:10.260
+é apenas um ato.
+
+00:13:10.480 --> 00:13:11.000
+Cada um desses
+
+00:13:11.000 --> 00:13:11.700
+é uma forma comum
+
+00:13:11.700 --> 00:13:12.900
+de uma equipe perder uma tarde
+
+00:13:12.900 --> 00:13:13.420
+e todos eles
+
+00:13:13.420 --> 00:13:14.680
+têm uma solução simples.
+
+00:13:15.760 --> 00:13:16.400
+Qual deles combinam?
+
+00:13:16.920 --> 00:13:17.840
+Esse é o panorama completo.
+
+00:13:18.080 --> 00:13:18.460
+Uma branch
+
+00:13:18.460 --> 00:13:18.980
+como você vê
+
+00:13:18.980 --> 00:13:19.660
+é uma cópia segura
+
+00:13:19.660 --> 00:13:20.300
+do seu trabalho
+
+00:13:20.300 --> 00:13:21.100
+e uma estratégia
+
+00:13:21.100 --> 00:13:21.760
+de ramificação
+
+00:13:21.760 --> 00:13:22.200
+é o acordo
+
+00:13:22.200 --> 00:13:22.920
+que sua equipe faz
+
+00:13:22.920 --> 00:13:23.800
+sobre como essas cópias
+
+00:13:23.800 --> 00:13:24.740
+se juntam novamente.
+
+00:13:25.880 --> 00:13:26.800
+GitFlow é estruturado
+
+00:13:26.800 --> 00:13:27.660
+criado para softwares
+
+00:13:27.660 --> 00:13:28.940
+distribuídos em versões numeradas.
+
+00:13:29.460 --> 00:13:29.980
+GitHub Flow
+
+00:13:29.980 --> 00:13:30.720
+é um modelo simples
+
+00:13:30.720 --> 00:13:31.400
+criado para equipes
+
+00:13:31.400 --> 00:13:32.440
+que fazem entregas contínuas.
+
+00:13:33.040 --> 00:13:33.880
+Trunk Based Development
+
+00:13:33.880 --> 00:13:34.640
+é um modelo rápido
+
+00:13:34.640 --> 00:13:35.460
+ideal para equipes
+
+00:13:35.460 --> 00:13:36.340
+que conseguem se comprometer
+
+00:13:36.340 --> 00:13:37.100
+com mudanças pequenas
+
+00:13:37.100 --> 00:13:37.820
+e testes robustos.
+
+00:13:38.440 --> 00:13:38.920
+Quando se trata
+
+00:13:38.920 --> 00:13:39.720
+de integrar o trabalho
+
+00:13:39.720 --> 00:13:40.440
+o merge preserva
+
+00:13:40.440 --> 00:13:40.960
+seu histórico
+
+00:13:40.960 --> 00:13:42.080
+enquanto rebase o organiza
+
+00:13:42.080 --> 00:13:42.860
+deve ser usado apenas
+
+00:13:42.860 --> 00:13:43.720
+em branches privadas.
+
+00:13:44.280 --> 00:13:45.880
+Inscreva-se no M305FM
+
+00:13:45.880 --> 00:13:46.740
+para continuar aprendendo
+
+00:13:46.740 --> 00:13:47.460
+sobre as ferramentas
+
+00:13:47.460 --> 00:13:47.960
+e a mentalidade
+
+00:13:47.960 --> 00:13:48.880
+que molda o futuro do trabalho.
+
+00:13:49.120 --> 00:13:49.800
+E aqui vai minha pergunta
+
+00:13:49.800 --> 00:13:50.140
+para você.
+
+00:13:50.500 --> 00:13:51.660
+Qual estratégia de ramificação
+
+00:13:51.660 --> 00:13:52.560
+sua equipe usa agora?
+
+00:13:52.800 --> 00:13:53.840
+Isso foi uma decisão real
+
+00:13:53.840 --> 00:13:54.480
+tomada por alguém
+
+00:13:54.480 --> 00:13:55.200
+ou apenas um hábito
+
+00:13:55.200 --> 00:13:56.120
+que ninguém questionou ainda?

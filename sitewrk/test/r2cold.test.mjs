@@ -3,6 +3,9 @@
 // im Kanten-Cache ab (/__r2c/~ready, mit Pruefzeit); ein neues Isolat liest es kurz (hoechstens READY_WAIT) und bedient die Seite gleich aus R2.
 // Kein Warten auf checkBuild (nie gecachter Abruf bei GitHub Pages), Rueckfall GitHub Pages wie bisher, R2_PRIMARY=0 unveraendert.
 // Server-Timing zeigt den Weg (src r2/pages/r2fallback, ready mem/cache/cold/off) fuer die Messung mit url-peek bzw. curl.
+// Seit 24.11.2026: ohne gueltige Kennung (cold, "nicht bereit") holt der Worker Seiten, die es nur im Bucket gibt (R2_ONLY_PAGE: /entity/*,
+// Sprachseiten ausser en/de und ausser /<l>/), gleich ueber r2Page (src=r2direct, Schluessel /__r2c, nie /__r2f) - fehlt die Seite, GitHub Pages wie bisher.
+// Dazu je Seitenaufruf dieser Pfade eine JSON-Zeile im Log (Workers Logs).
 import { test } from "node:test"; import assert from "node:assert/strict";
 const store = new Map(); let origins = 0, buildFetches = 0, readyMatches = 0, hang = false;
 const READY_URL = "https://www.m365.fm/__r2c/~ready";
@@ -10,37 +13,56 @@ globalThis.caches = { default: {
   match: async (r) => { if (r.url === READY_URL) { readyMatches++; if (hang) return new Promise(() => {}); } const x = store.get(r.url); return x ? x.clone() : undefined; },
   put: async (r, res) => { store.set(r.url, res.clone()); } } };
 const HTML = { "content-type": "text/html; charset=utf-8" };
-let ORIGIN_BUILD = "b1";
+let ORIGIN_BUILD = "b1"; const originPaths = [];
 globalThis.fetch = async (req) => {
   const r = typeof req === "string" ? new Request(req) : req, u = new URL(r.url);
   if (u.pathname === "/show/redirects.json") return new Response("{}", { headers: { "content-type": "application/json" } });
   if (u.pathname === "/r2-build.txt") { buildFetches++; return new Response(ORIGIN_BUILD + "\n", { headers: { "content-type": "text/plain" } }); }
-  origins++;
+  origins++; originPaths.push(u.pathname);
   if (u.pathname === "/show/episodes/a/") return new Response("<html>gh folge</html>", { headers: HTML });
+  if (u.pathname === "/fr/") return new Response("<html>gh fr start</html>", { headers: HTML });   // Startseite der Sprache bleibt in GitHub Pages
+  if (u.pathname === "/community/u/x/") return new Response("<html>gh profil</html>", { headers: HTML });   // englische Seite in docs/
+  if (u.pathname === "/entity/nur-gh/") return new Response("<html>gh entity</html>", { headers: HTML });   // (noch) nicht im Bucket, aber bei GitHub Pages
   return new Response("<html>404</html>", { status: 404, headers: HTML });
 };
-const { default: W, __resetR2Ready, __r2ReadyState, READY_TTL } = await import("../index.js");
+const { default: W, __resetR2Ready, __r2ReadyState, READY_TTL, R2_ONLY_PAGE } = await import("../index.js");
 const enc = (t) => new TextEncoder().encode(t).buffer;
 const obj = (body, ct, meta = {}) => ({ httpEtag: '"r2"', uploaded: new Date("2026-11-16T08:00:00Z"), httpMetadata: { contentType: ct }, customMetadata: meta, arrayBuffer: async () => enc(body), text: async () => body, get body() { return new Response(body).body; } });
 const B = {
   "pages/r2-build.txt": obj("b1\n", "text/plain; charset=utf-8"),
   "pages/entity/copilot/index.html": obj("<html>r2 entity</html>", "text/html; charset=utf-8"),   // nur im Bucket (site_entities.py)
   "pages/show/episodes/a/index.html": obj("<html>r2 folge</html>", "text/html; charset=utf-8", { src: "docs" }),
+  "pages/entity/x/index.html": obj("<html>r2 entity x</html>", "text/html; charset=utf-8"),
+  "pages/fr/blog/a/index.html": obj("<html>r2 fr blog</html>", "text/html; charset=utf-8"),
+  "pages/fr/index.html": obj("<html>r2 fr start</html>", "text/html; charset=utf-8", { src: "docs" }),
+  "pages/community/u/x/index.html": obj("<html>r2 profil</html>", "text/html; charset=utf-8", { src: "docs" }),
 };
-const PAGES = { get: async (k) => B[k] || null };
+const r2Gets = [];
+const PAGES = { get: async (k) => { r2Gets.push(k); return B[k] || null; } };
 const env = { PAGES, MIGRATED: "1", R2_PRIMARY: "1" };
 const req = (path, h = {}) => new Request("https://www.m365.fm" + path, { headers: h });
 const run = async (r, e = env) => { const w = []; const res = await W.fetch(r, e, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
 const shared = (v, t) => store.set(READY_URL, new Response(v, { headers: { "x-r2-build-t": String(t), "cache-control": "public, max-age=30" } }));
-const fresh = () => { store.clear(); __resetR2Ready(); origins = 0; buildFetches = 0; readyMatches = 0; hang = false; ORIGIN_BUILD = "b1"; };
+const fresh = () => { store.clear(); __resetR2Ready(); origins = 0; buildFetches = 0; readyMatches = 0; hang = false; ORIGIN_BUILD = "b1"; originPaths.length = 0; r2Gets.length = 0; logs.length = 0; };
 const st = (r) => r.headers.get("server-timing") || "";
+const pageGets = () => r2Gets.filter((k) => k !== "pages/r2-build.txt");   // Bucket-Abrufe ohne die Pruefung der Bau-Kennung
+// Messzeilen (console.log) mitschneiden: nur die JSON-Zeilen des Workers, alles andere unveraendert ausgeben
+const logs = [], log0 = console.log;
+console.log = (...a) => { if (typeof a[0] === "string" && a[0].startsWith('{"m":"r2page"')) logs.push(JSON.parse(a[0])); else log0(...a); };
+const withCf = (r, cf) => { Object.defineProperty(r, "cf", { value: cf }); return r; };
 
-test("Kaltes Isolat ohne geteilte Kennung: GitHub Pages (404) -> R2-Rueckfall wie bisher, Pruefung legt die Kennung im Kanten-Cache ab", async () => {
+test("Kaltes Isolat ohne geteilte Kennung: R2-only-Seite gleich aus dem Bucket (r2direct), kein GitHub Pages; Pruefung legt die Kennung im Kanten-Cache ab", async () => {
   fresh();
-  const a = await run(req("/entity/copilot/"));
+  const a = await run(withCf(req("/entity/copilot/"), { colo: "FRA", country: "DE" }));
   assert.equal(a.status, 200); assert.equal(await a.text(), "<html>r2 entity</html>");
-  assert.equal(origins, 1, "Umweg ueber GitHub Pages"); assert.equal(a.headers.get("x-m365-src"), null);
-  assert.match(st(a), /src;desc="r2fallback"/); assert.match(st(a), /ready;desc="cold"/); assert.match(st(a), /origin;dur=\d+/);
+  assert.equal(origins, 0, "kein Umweg ueber GitHub Pages"); assert.equal(a.headers.get("x-m365-src"), null);
+  assert.match(st(a), /src;desc="r2direct"/); assert.match(st(a), /ready;desc="cold"/); assert.match(st(a), /r2;dur=\d+/); assert.doesNotMatch(st(a), /origin;dur/);
+  assert.equal(a.headers.get("x-m365-cache"), "MISS");
+  assert.ok(store.has("https://www.m365.fm/__r2c/entity/copilot/"), "Schluessel /__r2c wie der Rueckfall");
+  assert.ok(![...store.keys()].some((k) => k.includes("/__r2f")), "nie /__r2f");
+  assert.equal(logs.length, 1, "eine Messzeile"); const l = logs[0];
+  assert.deepEqual([l.p, l.src, l.ready, l.st, l.cache, l.origin, l.colo, l.country], ["/entity/copilot/", "r2direct", "cold", 200, "MISS", null, "FRA", "DE"]);
+  assert.equal(typeof l.r2, "number");
   const c = store.get(READY_URL); assert.ok(c, "Kennung im Kanten-Cache"); assert.equal(await c.clone().text(), "b1");
   assert.match(c.headers.get("cache-control"), new RegExp("max-age=" + READY_TTL / 1000));
   const t = Number(c.headers.get("x-r2-build-t")); assert.ok(Math.abs(Date.now() - t) < 5000, "Pruefzeit gespeichert");
@@ -78,7 +100,57 @@ test("Geteiltes Ergebnis 'nicht bereit' (Spiegel laeuft): GitHub Pages, keine zu
   fresh(); shared("", Date.now() - 1000);
   const a = await run(req("/show/episodes/a/")); assert.equal(await a.text(), "<html>gh folge</html>"); assert.match(st(a), /ready;desc="cache"/);
   assert.equal(buildFetches, 0);
-  const e = await run(req("/entity/copilot/")); assert.equal(await e.text(), "<html>r2 entity</html>"); assert.match(st(e), /src;desc="r2fallback"/, "R2-only-Seite ueber den alten Rueckfall");
+  const e = await run(req("/entity/copilot/")); assert.equal(await e.text(), "<html>r2 entity</html>"); assert.match(st(e), /src;desc="r2direct"/, "R2-only-Seite gleich aus dem Bucket");
+  assert.match(st(e), /ready;desc="mem"/); assert.equal(origins, 1, "nur die Folge oben ging an GitHub Pages");
+});
+
+test("Regel R2_ONLY_PAGE wie site_size.r2_only: Entitaeten aller Sprachen, Sprachseiten ausser en/de und ausser /<l>/", () => {
+  for (const p of ["/entity/copilot/", "/de/entity/copilot/", "/fr/entity/copilot/", "/fr/blog/a/", "/ru/tag/%D0%BE/", "/ko/show/episodes/a/", "/ar/community/u/x/"]) assert.ok(R2_ONLY_PAGE.test(p), p);
+  for (const p of ["/fr/", "/de/", "/de/blog/a/", "/en/x/", "/community/u/x/", "/show/episodes/a/", "/entity/", "/entity/a/b/", "/entity/copilot", "/fr/blog/a", "/fr/feed.xml", "/xx/blog/a/", "/hi/blog/a/"]) assert.ok(!R2_ONLY_PAGE.test(p), p);
+});
+
+test("Nicht bereit (Kennung ''): /entity/x/ ueber r2Page mit Schluessel /__r2c, nie /__r2f", async () => {
+  fresh(); shared("", Date.now() - 1000);
+  const a = await run(req("/entity/x/"));
+  assert.equal(await a.text(), "<html>r2 entity x</html>"); assert.match(st(a), /src;desc="r2direct"/); assert.match(st(a), /ready;desc="cache"/);
+  assert.equal(origins, 0);
+  assert.deepEqual([...store.keys()].filter((k) => k !== READY_URL), ["https://www.m365.fm/__r2c/entity/x/"]);
+  const b = await run(req("/entity/x/")); assert.equal(b.headers.get("x-m365-cache"), "HIT", "zweiter Abruf aus dem Kanten-Cache");
+  assert.deepEqual(pageGets(), ["pages/entity/x/index.html"], "Bucket nur einmal gelesen");
+});
+
+test("Kalt: Sprachseite /fr/blog/a/ direkt aus R2; Startseite /fr/ und englische Seite /community/u/x/ (docs) weiter von GitHub Pages", async () => {
+  fresh();
+  const a = await run(req("/fr/blog/a/")); assert.equal(await a.text(), "<html>r2 fr blog</html>"); assert.match(st(a), /src;desc="r2direct"/);
+  assert.equal(origins, 0);
+  fresh();
+  const h = await run(req("/fr/")); assert.equal(await h.text(), "<html>gh fr start</html>"); assert.match(st(h), /src;desc="pages"/); assert.match(st(h), /ready;desc="cold"/);
+  __resetR2Ready(); store.clear();
+  const c = await run(req("/community/u/x/")); assert.equal(await c.text(), "<html>gh profil</html>"); assert.match(st(c), /src;desc="pages"/); assert.match(st(c), /ready;desc="cold"/);
+  assert.deepEqual(originPaths, ["/fr/", "/community/u/x/"]);
+  assert.deepEqual(pageGets(), [], "kein direkter Bucket-Abruf fuer /fr/ und /community/u/x/");
+  assert.equal(logs.length, 0, "keine Messzeile fuer Seiten ausserhalb von R2_ONLY_PAGE");
+});
+
+test("Kalt, r2Page liefert null: weiter ueber GitHub Pages wie bisher (Seite dort, oder 404 ohne zweites Lesen des Buckets)", async () => {
+  fresh();
+  const a = await run(withCf(req("/entity/nur-gh/"), { colo: "AMS", country: "NL" }));
+  assert.equal(await a.text(), "<html>gh entity</html>"); assert.match(st(a), /src;desc="pages"/); assert.match(st(a), /ready;desc="cold"/);
+  assert.deepEqual(originPaths, ["/entity/nur-gh/"]);
+  assert.ok(store.get("https://www.m365.fm/__r2c/entity/nur-gh/").headers.get("x-r2-miss"), "Fehlen gemerkt (wie der Rueckfall)");
+  assert.equal(logs.length, 1); assert.deepEqual([logs[0].src, logs[0].st, logs[0].cache, logs[0].r2, logs[0].colo, logs[0].country], ["pages", 200, "", null, "AMS", "NL"]);
+  assert.equal(typeof logs[0].origin, "number");
+  fresh();
+  const m = await run(req("/entity/fehlt/"));
+  assert.equal(m.status, 404); assert.deepEqual(originPaths, ["/entity/fehlt/"]);
+  assert.deepEqual(pageGets(), ["pages/entity/fehlt/index.html"], "Bucket nur einmal gefragt (direkt), nicht noch einmal im Rueckfall");
+});
+
+test("Warm (Kennung passt): R2-only-Seite weiter ueber r2First (/__r2c/@<bau>), Messzeile mit src=r2", async () => {
+  fresh(); shared("b1", Date.now() - 1000);
+  const a = await run(req("/entity/copilot/")); assert.equal(a.headers.get("x-m365-src"), "r2"); assert.match(st(a), /src;desc="r2"/);
+  assert.ok(store.has("https://www.m365.fm/__r2c/@b1/entity/copilot/"));
+  assert.equal(logs.length, 1); assert.equal(logs[0].src, "r2"); assert.equal(logs[0].ready, "cache");
 });
 
 test("Bau-Kennung passt nicht: Pruefung legt '' ab, kein R2 zuerst", async () => {
@@ -110,7 +182,7 @@ test("Notschalter R2_PRIMARY=0: kein Lesen der Kennung, kein R2 zuerst, Server-T
   const e0 = { ...env, R2_PRIMARY: "0" };
   const a = await run(req("/show/episodes/a/"), e0); assert.equal(await a.text(), "<html>gh folge</html>"); assert.equal(a.headers.get("x-m365-src"), null);
   assert.equal(readyMatches, 0); assert.equal(buildFetches, 0); assert.match(st(a), /src;desc="pages"/); assert.match(st(a), /ready;desc="off"/);
-  const r = await run(req("/entity/copilot/"), e0); assert.equal(await r.text(), "<html>r2 entity</html>"); assert.match(st(r), /src;desc="r2fallback"/);
+  const r = await run(req("/entity/copilot/"), e0); assert.equal(await r.text(), "<html>r2 entity</html>"); assert.match(st(r), /src;desc="r2fallback"/, "Notschalter: kein direkter Weg");
 });
 
 test("Interner Schluessel /__r2c/~ready ist keine oeffentliche Adresse; Dateien und Bilder lesen ihn nicht", async () => {

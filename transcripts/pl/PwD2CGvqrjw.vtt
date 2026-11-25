@@ -1,0 +1,5173 @@
+WEBVTT
+
+00:00:00.280 --> 00:00:03.920
+Większość organizacji przechodzi do Microsoft 365 z cichym założeniem.
+
+00:00:04.120 --> 00:00:06.780
+Skoro Microsoft to obsługuje, to Microsoft robi też kopie zapasowe.
+
+00:00:06.920 --> 00:00:10.300
+To przekonanie jest błędne i to w sposób, którego nie zauważysz, dopóki nie stanie się coś ważnego.
+
+00:00:10.520 --> 00:00:14.780
+Microsoft zapewnia działanie usługi, czyli dostępność, ale dostępność to nie to samo co odzyskiwalność.
+
+00:00:14.920 --> 00:00:18.740
+To dwie zupełnie różne obietnice, tylko jedna z nich jest zawarta w Twojej subskrypcji.
+
+00:00:18.920 --> 00:00:21.420
+W tym odcinku przyjrzymy się, co tak naprawdę obejmują wbudowane narzędzia,
+
+00:00:21.520 --> 00:00:25.020
+co wnosi kopia zapasowa Microsoft 365, gdzie pasuje rozwiązanie firmy trzeciej,
+
+00:00:25.080 --> 00:00:28.260
+co robi z tym wszystkim ransomware i jak przetestować przywracanie danych, zanim będzie to konieczne.
+
+00:00:28.260 --> 00:00:32.040
+A jeśli chcesz dalej się uczyć w ten sposób, zasubskrybuj podcast M365FM,
+
+00:00:32.120 --> 00:00:34.800
+abyś nigdy nie musiał się przekonać, czego nie da się przywrócić o drugiej nad ranem.
+
+00:00:34.920 --> 00:00:36.720
+Ale najpierw słowo od naszego sponsora.
+
+00:00:36.960 --> 00:00:38.380
+Segment sponsorski numer jeden.
+
+00:00:38.560 --> 00:00:41.580
+Ta część programu jest sponsorowana przez Stella Migrator for Exchange.
+
+00:00:41.740 --> 00:00:43.640
+To narzędzie do przenoszenia skrzynek pocztowych.
+
+00:00:43.880 --> 00:00:46.620
+Możesz przenosić je między środowiskami Exchange z jednego tenanta do drugiego
+
+00:00:46.620 --> 00:00:48.700
+lub ze starszych systemów do Microsoft 365.
+
+00:00:49.240 --> 00:00:52.980
+Jest stworzone do prac, przy których nie możesz pozwolić sobie na utratę żadnej wiadomości.
+
+00:00:53.180 --> 00:00:55.720
+Pomaga również w zadaniach związanych z odzyskiwaniem danych.
+
+00:00:55.720 --> 00:00:59.080
+Gdy musisz przenieść dane z jednego miejsca do drugiego, potrzebujesz narzędzia,
+
+00:00:59.220 --> 00:01:01.340
+które zajmie się strukturą skrzynki pocztowej za Ciebie.
+
+00:01:01.540 --> 00:01:02.640
+Dlaczego o tym wspominam?
+
+00:01:02.800 --> 00:01:05.180
+Ponieważ przenoszenie skrzynek to operacja na danych.
+
+00:01:05.380 --> 00:01:08.300
+Kopiujesz rzeczy, zmieniasz je, a po zakończeniu usuwasz źródło.
+
+00:01:08.540 --> 00:01:12.140
+Właśnie podczas operacji na danych pojawiają się luki w odzyskiwaniu niewzwykłe dni,
+
+00:01:12.340 --> 00:01:16.200
+ale wtedy, gdy coś jest w ruchu, a ktoś zakłada, że kopia znajduje się gdzieś indziej.
+
+00:01:16.440 --> 00:01:19.220
+Jeśli więc planujesz migrację, fuzję lub przeniesienie tenanta,
+
+00:01:19.380 --> 00:01:22.940
+traktuj kwestię odzyskiwania jako część planu, a nie coś, co dodasz później,
+
+00:01:22.940 --> 00:01:27.020
+co prowadzi nas z powrotem do głównego pytania, kto tak naprawdę odpowiada za Twoje dane?
+
+00:01:27.240 --> 00:01:28.800
+Luka wspólnej odpowiedzialności.
+
+00:01:29.060 --> 00:01:31.420
+Zacznijmy od tego, co tak naprawdę obiecuje Microsoft.
+
+00:01:31.680 --> 00:01:34.580
+Przeczytaj umowę dotyczącą usług Microsoft, a oto co znajdziesz.
+
+00:01:34.840 --> 00:01:37.320
+Zobowiązanie dotyczy usługi, czasu pracy i dostępności.
+
+00:01:37.520 --> 00:01:38.980
+Usługa działa i masz do niej dostęp.
+
+00:01:39.280 --> 00:01:40.000
+Taka jest umowa.
+
+00:01:40.240 --> 00:01:43.800
+Microsoft publikuje cele dotyczące czasu dostępności usług i ciężko pracuje, aby je osiągnąć.
+
+00:01:44.000 --> 00:01:47.120
+Dla większości obciążeń cel ten wynosi 99,9%.
+
+00:01:47.120 --> 00:01:49.700
+A teraz spójrz, co ta sama umowa mówi o Twoich danych.
+
+00:01:49.940 --> 00:01:53.600
+Mówi, że jesteś ich właścicielem i odpowiadasz za nie i nie jest to ukryte drobnym drukiem.
+
+00:01:53.800 --> 00:01:54.900
+Jest napisane wprost.
+
+00:01:55.100 --> 00:01:58.420
+Microsoft zaleca regularne tworzenie kopii zapasowych, zawartości i danych.
+
+00:01:58.600 --> 00:02:03.120
+To zalecenie znajduje się w umowie, którą większość administratorów przeklikuje, nigdy jej nie czytając.
+
+00:02:03.220 --> 00:02:05.120
+Ten układ składa się zatem z dwóch części.
+
+00:02:05.440 --> 00:02:08.520
+Microsoft dba o działanie platformy, a Ty o bezpieczeństwo swoich treści.
+
+00:02:08.720 --> 00:02:11.820
+Oto w praktyce chodzi w modelu współodpowiedzialności i właśnie tam pojawia się luka,
+
+00:02:11.940 --> 00:02:13.840
+bo większość ludzi słyszy tylko pierwszą połowę.
+
+00:02:13.840 --> 00:02:16.080
+Słyszą chmura i wyobrażają sobie sejf.
+
+00:02:16.260 --> 00:02:19.800
+Słyszą centrum danych Microsoftu i wyobrażają sobie, że ktoś inny bierze na siebie ryzyko.
+
+00:02:19.920 --> 00:02:21.920
+To trafne wyobrażenie dotyczące infrastruktury.
+
+00:02:22.060 --> 00:02:25.360
+To fatalne wyobrażenie dotyczące Twoich danych, a oto dlaczego to pomieszanie jest tak powszechne.
+
+00:02:25.700 --> 00:02:27.600
+Infrastruktura jest rzeczywiście odporna na awarię.
+
+00:02:27.780 --> 00:02:30.120
+Microsoft prowadzi wiele centrów danych w wielu regionach.
+
+00:02:30.240 --> 00:02:32.500
+Twoje treści są przechowywane w więcej niż jednym miejscu.
+
+00:02:32.680 --> 00:02:36.140
+Dyski ulegają awariom, serwery padają, całe budynki mogą zostać wyłączone, a Ty nawet tego nie zauważysz.
+
+00:02:36.260 --> 00:02:37.500
+To kawał dobrej inżynierii.
+
+00:02:37.640 --> 00:02:38.120
+To działa.
+
+00:02:38.120 --> 00:02:40.900
+Ludzie widzą tę odporność i wyciągają pochopne wnioski.
+
+00:02:41.100 --> 00:02:43.840
+Myślą, skoro przetrwa awarię sprzętu, przetrwa wszystko.
+
+00:02:44.080 --> 00:02:46.900
+Ale awaria sprzętu to tylko jeden ze sposobów utraty danych.
+
+00:02:47.100 --> 00:02:49.220
+Pomyśl o tym, co właściwie robi ta replikacja.
+
+00:02:49.440 --> 00:02:54.320
+Obserwuję Twoje treści i kopiuję każdą zmianę do innej lokalizacji, szybko i niezawodnie.
+
+00:02:54.680 --> 00:02:56.360
+Teraz zadaj sobie proste pytanie.
+
+00:02:56.620 --> 00:02:58.240
+Co kopiuje, gdy usuniesz plik?
+
+00:02:58.460 --> 00:02:59.060
+Usunięcie.
+
+00:02:59.240 --> 00:03:02.260
+Co kopiuje, gdy skrypt nadpisze 10 tysięcy dokumentów?
+
+00:03:02.260 --> 00:03:03.060
+Nadpisanie.
+
+00:03:03.220 --> 00:03:05.860
+Co kopiuje, gdy oprogramowanie ransomware zaszyfruje bibliotekę?
+
+00:03:06.080 --> 00:03:06.940
+Zaszyfrowane pliki.
+
+00:03:07.180 --> 00:03:10.640
+Replikacja w centrum danych chroni Microsoft przed awarią własnego sprzętu.
+
+00:03:10.860 --> 00:03:13.660
+Nigdy nie miała Cię chronić przed Twoim własnym usunięciem danych.
+
+00:03:13.880 --> 00:03:17.220
+Nie ma pojęcia, która zmiana była błędem, a która była efektem pracy.
+
+00:03:17.440 --> 00:03:18.580
+Oto proste stwierdzenie.
+
+00:03:18.860 --> 00:03:21.760
+Replikacja kopiuje błędy tak samo szybko jak dobre dane.
+
+00:03:21.960 --> 00:03:22.800
+To nie jest wada.
+
+00:03:22.940 --> 00:03:23.500
+To projekt.
+
+00:03:23.800 --> 00:03:26.540
+Replikacja istnieje po to, by wszystkie kopie były identyczne.
+
+00:03:26.540 --> 00:03:30.720
+Jeśli jedna kopia jest zła, wszystkie stają się złe w ciągu chwili i to jest problem strukturalny.
+
+00:03:30.720 --> 00:03:36.760
+Twoje dane są wysoce dostępne i dobrze replikołaj, ale dostępność i replikacja zakładają, że dane są poprawne w momencie kopiowania.
+
+00:03:37.040 --> 00:03:39.680
+Żadna z nich nie daje Ci drogi powrotnej do momentu sprzed uszkodzenia.
+
+00:03:39.920 --> 00:03:42.140
+W tym momencie menedżerowie zazwyczaj zaczynają oponować.
+
+00:03:42.320 --> 00:03:45.100
+Przecież Microsoft może przywrócić naszego tenanta, jeśli coś pójdzie nie tak.
+
+00:03:45.320 --> 00:03:47.800
+Szczera odpowiedź brzmi, nie w taki sposób, jak sobie wyobrażasz.
+
+00:03:47.980 --> 00:03:49.560
+Microsoft może przywrócić usługę.
+
+00:03:49.760 --> 00:03:52.000
+Może przywrócić działanie centrum danych, które uległo awarii.
+
+00:03:52.140 --> 00:03:55.780
+Nie przechowuje prywatnej kopii zapasowej Twojego tenanta, do której przywróci dane na żądanie.
+
+00:03:55.780 --> 00:04:03.780
+Jeśli administrator usunie witrynę lub atakujący wyczyści skrzynkę pocztową, stanowisko Microsoftu jest takie, że korzystasz z usługi zgodnie z projektem i to jest właśnie luka we współodpowiedzialności.
+
+00:04:04.620 --> 00:04:10.380
+Microsoft jest właścicielem platformy, Ty jesteś właścicielem treści, a w przestrzeni między nimi dochodzi do największej utraty danych.
+
+00:04:10.600 --> 00:04:17.600
+Nie z powodu awarii, lecz ludzi, kon, automatyzacji i zmian, które zostały zaakceptowane, ponieważ system zrobił dokładnie to, co mu kazano.
+
+00:04:17.600 --> 00:04:23.100
+Microsoft nie zostawił Was jednak z niczym. Istnieją natywne narzędzia stworzone, by dać Wam drogę powrotną.
+
+00:04:23.280 --> 00:04:25.740
+Kosz, okresy przechowywania, historia wersji.
+
+00:04:25.960 --> 00:04:36.780
+Każde z nich obejmuje konkretny rodzaj błędu przez określony czas, więc prawdziwe pytanie nie brzmi, czy Microsoft zapewnia ochronę, lecz co te natywne narzędzia robią, a co równie ważne, czego nie robią.
+
+00:04:37.220 --> 00:04:40.120
+Dostępność, trwałość, odzyskiwalność, trzy różne słowa.
+
+00:04:40.360 --> 00:04:43.380
+Zanim przyjrzymy się jakimkolwiek narzędziom, musimy wyjaśnić te trzy pojęcia.
+
+00:04:43.620 --> 00:04:45.520
+Brzmią niemal tak samo, ale tak nie jest.
+
+00:04:45.720 --> 00:04:48.280
+Dostępność oznacza, że możesz uzyskać dostęp do swoich danych w tej chwili.
+
+00:04:48.460 --> 00:04:51.700
+Otwierasz Outlooka, poczta się ładuje, otwierasz bibliotekę dokumentów, pliki tam są.
+
+00:04:51.920 --> 00:04:54.200
+Jeśli usługa działa, dostępność jest zapewniona.
+
+00:04:54.400 --> 00:04:56.940
+Trwałość oznacza, że Twoje dane nie znikną przypadkowo.
+
+00:04:57.180 --> 00:05:00.100
+Dyski padają, serwery padają, a zapisana kopia i tak przetrwa.
+
+00:05:00.100 --> 00:05:03.320
+Trwałość polega na tym, że dane przeżyją sprzęt, na którym się znajdują,
+
+00:05:03.320 --> 00:05:07.620
+a odzyskiwalność oznacza, że możesz wrócić do znanego, poprawnego stanu po wystąpieniu problemu.
+
+00:05:07.760 --> 00:05:10.660
+Konkretny moment, konkretna wersja, stan sprzed uszkodzenia.
+
+00:05:10.940 --> 00:05:13.200
+Zwróć uwagę, co obiecuje każde z tych słów.
+
+00:05:13.380 --> 00:05:16.820
+Pierwsze obiecuje dostęp, drugie przetrwanie, a trzecie drogę powrotną.
+
+00:05:17.020 --> 00:05:18.960
+Oto jak wygląda sytuacja z Microsoftem.
+
+00:05:19.120 --> 00:05:21.080
+W kwestii dostępności Microsoft stoi mocno.
+
+00:05:21.260 --> 00:05:24.480
+Cele dotyczące czasu pracy są publicznie znane, a platforma spełnia je w większości przypadków.
+
+00:05:24.640 --> 00:05:26.340
+W kwestii trwałości również jest silny.
+
+00:05:26.340 --> 00:05:31.440
+Twoje treści znajdują się w kilku miejscach, a szansa, że Microsoft utraci je z powodu awarii sprzętu jest bardzo mała.
+
+00:05:31.440 --> 00:05:37.700
+Jednak w kwestii odzyskiwalności na poziomie dzierżawy, tenant, sytuacja wygląda gorzej, ponieważ odzyskiwalność zależy od posiadania kopii sprzed awarii.
+
+00:05:37.780 --> 00:05:39.600
+A dzierżawa domyślnie takiej nie utrzymuje.
+
+00:05:39.780 --> 00:05:41.700
+To, co utrzymuje, to krótkie okna czasowe.
+
+00:05:41.880 --> 00:05:42.800
+Kosz, który się opróżnia.
+
+00:05:42.920 --> 00:05:44.280
+Zegar retencji, który odlicza czas.
+
+00:05:44.400 --> 00:05:46.360
+Historia wersji, która kończy się na określonej liczbie.
+
+00:05:46.540 --> 00:05:50.380
+Pomagają one, przeanalizujemy każde z nich, ale są to siatki bezpieczeństwa dla małych, niedawnych błędów.
+
+00:05:50.540 --> 00:05:53.560
+Nie są sposobem na przywrócenie całego środowiska do stanu z zeszłego wtorku.
+
+00:05:53.560 --> 00:05:56.020
+I to właśnie tutaj w zarządach pojawia się nieporozumienie.
+
+00:05:56.180 --> 00:05:59.480
+Dyrektor pyta, czy nasze dane w Microsoft 365 są bezpieczne?
+
+00:05:59.900 --> 00:06:01.980
+Administrator słyszy to jako pytanie o trwałość.
+
+00:06:02.240 --> 00:06:06.820
+Szczera odpowiedź brzmi tak, są bardzo bezpieczne przed awarią sprzętu, ale dyrektorowi chodziło o coś więcej.
+
+00:06:07.080 --> 00:06:09.840
+Chodziło mu o to, jeśli coś pójdzie nie tak, czy możemy to odzyskać?
+
+00:06:09.920 --> 00:06:13.100
+To pytanie o odzyskiwalność, a odpowiedź, tak już tu nie pasuje.
+
+00:06:13.360 --> 00:06:15.080
+Słyszy się jedno słowo, zakłada trzy.
+
+00:06:15.260 --> 00:06:16.740
+W tej rozmowie nikt nie skłamał.
+
+00:06:17.060 --> 00:06:19.100
+Administrator odpowiedział na pytanie, które usłyszał.
+
+00:06:19.220 --> 00:06:22.120
+Kierownik oparł się na odpowiedzi na pytanie, którego nigdy nie zadał.
+
+00:06:22.120 --> 00:06:27.300
+Luka między tymi dwiema rzeczami widnieje w twoim rejestrze ryzyka, niezapisana, dopóki incydent jej nie nazwie.
+
+00:06:27.540 --> 00:06:28.980
+Jak więc uczynić to konkretnym?
+
+00:06:29.140 --> 00:06:30.080
+Pomyśl o lustrze.
+
+00:06:30.320 --> 00:06:34.380
+Lustro pokazuje ci idealną kopię tego, co masz przed sobą, natychmiast i w sposób ciągły.
+
+00:06:34.540 --> 00:06:37.180
+Każdy ruch, każda zmiana odzwierciedlone w momencie, gdy się dzieją.
+
+00:06:37.340 --> 00:06:38.860
+Teraz wyobraź sobie plamę na koszuli.
+
+00:06:39.080 --> 00:06:40.240
+Lustro pokazuje te plamę.
+
+00:06:40.380 --> 00:06:42.260
+Nie przechowuje obrazu koszuli z dzisiejszego poranka.
+
+00:06:42.520 --> 00:06:43.200
+Nie ma pamięci.
+
+00:06:43.480 --> 00:06:44.880
+Odzwierciedla tylko teraźniejszość.
+
+00:06:45.080 --> 00:06:47.560
+Właśnie to replikacja i wysoka dostępność robią dla twoich danych.
+
+00:06:47.560 --> 00:06:49.020
+One tworzą lustrzane odbicie.
+
+00:06:52.120 --> 00:06:56.300
+Inna. Kopia zapasowa to zdjęcie zrobione w konkretnym czasie, przechowywane gdzie indziej i zachowane w niezmienionej formie.
+
+00:06:56.480 --> 00:06:58.340
+Kiedy coś pójdzie nie tak, nie patrzysz w lustro.
+
+00:06:58.560 --> 00:06:59.420
+Wyciągasz zdjęcie.
+
+00:06:59.660 --> 00:07:01.180
+Lustro nie jest kopią zapasową.
+
+00:07:01.420 --> 00:07:05.580
+Większość tego, co ludzie nazywają ochroną w Microsoft 365, to zachowanie lustrzane.
+
+00:07:05.800 --> 00:07:09.280
+Czas rzeczywisty, zawsze aktualne, zawsze wierne, w tym także błędom.
+
+00:07:09.500 --> 00:07:15.840
+Więc kiedy Microsoft daje ci coś, co wygląda jak zdjęcie, nawet niewielkie, ważne jest to, co to zdjęcie obejmuje i jak długo trwa.
+
+00:07:15.920 --> 00:07:18.980
+Pierwsze, z którym większość ludzi się spotyka, jest najprostsze.
+
+00:07:19.100 --> 00:07:21.180
+Usuwasz plik i trafia on gdzieś do kosza.
+
+00:07:21.180 --> 00:07:22.940
+Jak kosze faktycznie działają?
+
+00:07:23.180 --> 00:07:26.140
+SharePoint i OnDrive obsługują usuwanie w dwóch etapach.
+
+00:07:26.260 --> 00:07:27.900
+Usuwasz plik. Nie znika on.
+
+00:07:28.100 --> 00:07:31.860
+Zamiast tego trafia do kosza pierwszego etapu, który należy do użytkownika, który go usunął.
+
+00:07:31.960 --> 00:07:33.360
+Każdy użytkownik ma taki kosz.
+
+00:07:33.520 --> 00:07:36.720
+Otwierają go, widzą swoje usunięte elementy i przywracają je jednym pliknięciem.
+
+00:07:36.800 --> 00:07:38.380
+To wersja, którą zna większość ludzi.
+
+00:07:38.580 --> 00:07:39.280
+A teraz zegar.
+
+00:07:39.460 --> 00:07:43.720
+Elementy pozostają w koszu przez 93 dni, ale te 93 dni to łączny czas dla obu etapów.
+
+00:07:43.820 --> 00:07:47.300
+To nie jest 93 dni w pierwszym koszu, a potem kolejne 93 dni gdzieś indziej.
+
+00:07:47.300 --> 00:07:50.600
+To jedno wspólne okno czasowe, które zaczyna się w dniu usunięcia elementu.
+
+00:07:50.720 --> 00:07:51.960
+Czym więc jest drugi etap?
+
+00:07:52.180 --> 00:07:55.980
+Kiedy użytkownik opróżnia swój kosz lub usuwa z niego jakiś element, plik nie znika.
+
+00:07:56.220 --> 00:07:57.880
+Przechodzi do kosza drugiego etapu.
+
+00:07:58.040 --> 00:07:59.380
+Ten należy do zbioru witryn.
+
+00:07:59.580 --> 00:08:01.820
+Tylko administrator zbioru witryn może go zobaczyć.
+
+00:08:02.020 --> 00:08:04.000
+Zwykli użytkownicy nie mogą, a czas płynie dalej.
+
+00:08:04.220 --> 00:08:08.520
+Jeśli usunąłeś plik pierwszego dnia i opróżniłeś kosz dziesiątego dnia, elementowi pozostały 83 dni w drugim etapie.
+
+00:08:08.660 --> 00:08:09.660
+Ten czas się nie resetuje.
+
+00:08:09.880 --> 00:08:10.800
+Nie zaczyna się od nowa.
+
+00:08:10.920 --> 00:08:12.520
+To właśnie tutaj ludzie wpadają w pułapkę.
+
+00:08:12.520 --> 00:08:15.440
+Użytkownik mówi, usunąłem to miesiące temu, ale chyba tego potrzebuje.
+
+00:08:15.840 --> 00:08:17.700
+Administrator sprawdza kosz pierwszego stopnia.
+
+00:08:17.880 --> 00:08:18.280
+Pusty.
+
+00:08:18.620 --> 00:08:23.400
+Administrator zakłada, że plik przepadł, ale może być w drugim stopniu widoczny tylko dla kogoś z odpowiednią rolą.
+
+00:08:23.640 --> 00:08:25.860
+Sprawdzenie jednego kosza to nie to samo, co sprawdzenie obu.
+
+00:08:26.040 --> 00:08:28.800
+Są więc dwa miejsca do sprawdzenia i dwie różne osoby, które mogą to zrobić.
+
+00:08:28.960 --> 00:08:30.620
+Co dzieje się 94 dnia?
+
+00:08:30.820 --> 00:08:32.300
+Element jest trwale usuwany.
+
+00:08:32.500 --> 00:08:34.820
+Opuszcza kosz drugiego stopnia i nie trafia nigdzie indziej.
+
+00:08:35.060 --> 00:08:35.980
+Nie ma trzeciego kosza.
+
+00:08:36.180 --> 00:08:39.160
+Nie ma opcji poproś Microsoft dla treści, których czas wygasł.
+
+00:08:39.160 --> 00:08:42.880
+Gdy okno się zamyka, standardowa ścieżka odzyskania pliku również zostaje zamknięta.
+
+00:08:43.080 --> 00:08:44.440
+Zauważ, jak cicho to przebiega.
+
+00:08:44.620 --> 00:08:46.500
+Dzień wcześniej nie jest wysyłany żaden e-mail z ostrzeżeniem.
+
+00:08:46.660 --> 00:08:48.340
+Żaden raport nie wymienia tego, co zaraz wygaśnie.
+
+00:08:48.520 --> 00:08:49.580
+Element po prostu znika.
+
+00:08:49.800 --> 00:08:52.400
+Jeśli nikt go nie potrzebował przez te 93 dni, nikt nie zauważy.
+
+00:08:52.580 --> 00:08:55.380
+Jeśli ktoś potrzebował go 95 dnia, dowie się o tym właśnie wtedy.
+
+00:08:55.540 --> 00:08:57.680
+To twardy fakt dla wszystkiego, co otwiera się rzadko.
+
+00:08:57.860 --> 00:09:01.640
+Pomyśl o folderze z raportami rocznymi archiwum umów w plikach, do których zaglądasz raz w roku.
+
+00:09:01.880 --> 00:09:04.620
+Usunięcie w lutym może nie zostać odkryte aż do audytu w czerwcu.
+
+00:09:04.620 --> 00:09:06.400
+Do tego czasu okno dawno się zamknie.
+
+00:09:06.540 --> 00:09:08.460
+Teraz kolejne pytanie, kto może opróżniać te kosze?
+
+00:09:08.620 --> 00:09:10.600
+Użytkownicy mogą opróżniać własny kosz pierwszego stopnia.
+
+00:09:10.720 --> 00:09:11.680
+To oczekiwane zachowanie.
+
+00:09:11.920 --> 00:09:13.040
+Tak właśnie działa ta funkcja.
+
+00:09:13.380 --> 00:09:16.400
+Administratorzy zbioru witryn mogą opróżniać drugi stopień, co również jest oczekiwane.
+
+00:09:16.540 --> 00:09:18.620
+Ale spójrz na to z perspektywy atakującego.
+
+00:09:18.820 --> 00:09:23.060
+Jeśli ktoś przejmie konto użytkownika, otrzymuje nie tylko jego pliki, ale także jego kosz.
+
+00:09:23.300 --> 00:09:27.900
+Atakujący może usunąć zawartość, a potem opróżnić pierwszy stopień, co przesuwa wszystko do drugiego.
+
+00:09:28.160 --> 00:09:30.480
+Daje to atakującemu przewagę, ale to nie koniec.
+
+00:09:30.480 --> 00:09:33.240
+Prawdziwym problemem jest przejęte konto administratora.
+
+00:09:33.580 --> 00:09:38.480
+Administrator może opróżnić drugi stopień, co oznacza, że napastnik z tą rolą może usunąć zawartość witryny,
+
+00:09:38.600 --> 00:09:41.380
+wyczyścić oba kosze i pozbawić użytkownika tego, na co liczył.
+
+00:09:41.560 --> 00:09:42.820
+Nic w tym nie jest błędem.
+
+00:09:43.060 --> 00:09:45.720
+System robi to, o co prosi konto z odpowiednimi uprawnieniami.
+
+00:09:45.920 --> 00:09:47.700
+Kosz chroni przed uczciwymi pomyłkami.
+
+00:09:47.980 --> 00:09:50.500
+Nigdy nie był budowany, by powstrzymać kogoś, kto ma klucze.
+
+00:09:50.500 --> 00:09:53.560
+To wzorzec, o którym warto pamiętać przy omawianiu każdego natywnego narzędzia.
+
+00:09:53.740 --> 00:09:56.140
+Zakładają one, że osoba, która z nich korzysta, jest po Twojej stronie.
+
+00:09:56.340 --> 00:09:57.900
+Tyle w kwestii SharePoint i OnDrive.
+
+00:09:58.120 --> 00:10:00.140
+Dwa stopnie, jeden zegar, 93 dni.
+
+00:10:00.340 --> 00:10:05.720
+Exchange ma swoją własną wersję, ten sam pomysł, ale inny zegar, inne foldery i znacznie krótszy czas domyślny.
+
+00:10:05.900 --> 00:10:09.040
+Exchange Online, elementy możliwe do odzyskania i ich limity.
+
+00:10:09.280 --> 00:10:12.720
+Exchange nie używa kosza, korzysta z folderów, które się nakładają.
+
+00:10:12.940 --> 00:10:16.300
+Użytkownik usuwa e-mail, który trafia do folderu elementów usuniętych.
+
+00:10:16.300 --> 00:10:17.060
+To każdy zna.
+
+00:10:17.280 --> 00:10:20.460
+Można go otworzyć, znaleźć wiadomość i przeciągnąć z powrotem do skrzynki odbiorczej.
+
+00:10:20.600 --> 00:10:21.440
+Nic specjalnego.
+
+00:10:21.660 --> 00:10:25.000
+Później użytkownik opróżnia elementy usunięte lub outlook, robi to za niego przy wyjściu,
+
+00:10:25.000 --> 00:10:26.480
+zależnie od konfiguracji klienta.
+
+00:10:26.640 --> 00:10:29.220
+Wiadomość znika z widoku, ale nie znika ze skrzynki pocztowej.
+
+00:10:29.400 --> 00:10:32.180
+Przenosi się do ukrytego folderu o nazwie elementy możliwe do odzyskania.
+
+00:10:32.440 --> 00:10:34.680
+Użytkownicy nie widzą go w standardowym drzewie folderów.
+
+00:10:34.840 --> 00:10:38.700
+Dostęp uzyskują przez menu w outlooku opcję odzyskiwania usuniętych elementów z serwera.
+
+00:10:38.880 --> 00:10:40.500
+Większość ludzi nigdy w to nie klikała.
+
+00:10:40.720 --> 00:10:42.140
+Wielu nie wie nawet, że to istnieje.
+
+00:10:42.340 --> 00:10:44.480
+Wewnątrz elementów możliwych do odzyskania są podfoldery.
+
+00:10:44.480 --> 00:10:45.880
+Trzy z nich mają tu znaczenie.
+
+00:10:46.060 --> 00:10:48.460
+Pierwszy to usunięte, tam czekają opróżnione elementy.
+
+00:10:48.460 --> 00:10:51.740
+Drugi to czyszczenie, tam trafiają elementy po trwałym usunięciu.
+
+00:10:51.960 --> 00:10:56.160
+Trzeci to wersję przechowuje kopię edytowanych elementów, gdy aktywne są blokady.
+
+00:10:56.420 --> 00:11:00.140
+Każdy folder ma inne zadanie i tylko pierwszy jest widoczny dla użytkownika.
+
+00:11:00.400 --> 00:11:00.920
+Teraz zegar.
+
+00:11:01.020 --> 00:11:05.520
+Domyślnie elementy są przechowywane przez 14 dni, nie 93, tylko 14.
+
+00:11:05.520 --> 00:11:09.500
+Dwa tygodnie liczone od dnia usunięcia elementu z folderu elementów usuniętych.
+
+00:11:09.660 --> 00:11:12.100
+Administrator może zwiększyć ten limit do 30 dni.
+
+00:11:12.260 --> 00:11:17.600
+To maksymalne ustawienie realizowane jednym poleceniem PowerShell na skrzynkę lub polityką dla całego najemcy.
+
+00:11:17.600 --> 00:11:20.900
+To tanie, szybkie, a zdumiewająco wielu klientów tego nie robi.
+
+00:11:21.140 --> 00:11:22.500
+Porównajmy więc oba zegary.
+
+00:11:22.720 --> 00:11:24.800
+SharePoint i OnDrive dają 93 dni.
+
+00:11:25.000 --> 00:11:27.520
+Exchange daje 14, chyba że ktoś to zmienił.
+
+00:11:27.600 --> 00:11:31.500
+To zupełnie inny margines bezpieczeństwa w środowisku, gdzie ludzie ciągle coś gubią.
+
+00:11:31.680 --> 00:11:33.660
+Oto co dzieje się pod koniec tego okresu.
+
+00:11:33.820 --> 00:11:37.160
+Asystent folderów zarządzanych, proces w tle, przeszukuje skrzynkę.
+
+00:11:37.380 --> 00:11:42.000
+Wszystko po upływie daty retencji jest usuwane na stałe, bez ostrzeżenia i bez drugiego kosza.
+
+00:11:42.220 --> 00:11:46.020
+Istnieje funkcja o nieporęcznej nazwie odzyskiwanie pojedynczego elementu.
+
+00:11:46.020 --> 00:11:47.460
+Jej działanie jest proste.
+
+00:11:47.620 --> 00:11:52.020
+Powstrzymuje system przed czyszczeniem folderu elementów możliwych do odzyskania przed końcem okresu retencji.
+
+00:11:52.280 --> 00:11:56.600
+Bez niej użytkownik może otworzyć okno odzyskiwania, wybrać elementy i natychmiast je wyczyścić.
+
+00:11:56.720 --> 00:11:59.000
+Trafiają one prosto do czyszczenia i znikają na dobre.
+
+00:11:59.260 --> 00:12:02.440
+Z włączonym odzyskiwaniem pojedynczego elementu ten skrót zostaje zablokowany.
+
+00:12:02.640 --> 00:12:07.080
+Żądanie usunięcia jest przyjmowane, ale element zostaje w folderze, dopóki zegar retencji nie odliczy czasu.
+
+00:12:07.340 --> 00:12:08.320
+Dlaczego to ma znaczenie?
+
+00:12:08.520 --> 00:12:12.040
+Ponieważ chroni to przed błędami popełnianymi w pośpiechu i przed szybkimi atakami.
+
+00:12:12.040 --> 00:12:14.440
+Oto część, która zaskakuje administratorów.
+
+00:12:14.600 --> 00:12:19.040
+Odzyskiwanie pojedynczych elementów jest domyślnie włączone dla nowych skrzynek pocztowych w Exchange Online.
+
+00:12:19.300 --> 00:12:21.560
+Nie jest to jednak gwarantowane dla każdej skrzynki.
+
+00:12:21.800 --> 00:12:25.880
+Starsze skrzynki, skrzynki migrowane oraz te utworzone za pomocą niektórych narzędzi mogą go nie mieć.
+
+00:12:26.100 --> 00:12:29.680
+Jeśli przeniosłeś pocztę z lokalnego Exchange lub innego systemu, nie możesz zakładać, że tak jest.
+
+00:12:29.860 --> 00:12:30.700
+Musisz to sprawdzić.
+
+00:12:30.900 --> 00:12:33.100
+Jedno polecenie pokazuje ustawienie dla każdej skrzynki pocztowej.
+
+00:12:33.300 --> 00:12:34.900
+Większość organizacji nigdy go nie uruchomiła.
+
+00:12:35.040 --> 00:12:36.620
+A teraz wyobraź sobie trwałe usunięcie.
+
+00:12:36.880 --> 00:12:38.180
+Atakujący włamuje się na konto.
+
+00:12:38.400 --> 00:12:39.560
+Nie musi być nawet przebiegły.
+
+00:12:39.720 --> 00:12:43.260
+Otwiera skrzynkę, zaznacza wszystko, usuwa, a potem opróżnia folder elementów usuniętych.
+
+00:12:43.400 --> 00:12:45.840
+Następnie wchodzi do okna odzyskiwania i czyści to, co zostało.
+
+00:12:46.020 --> 00:12:48.440
+Jeśli odzyskiwanie pojedynczych elementów jest wyłączone, czyszczenie działa.
+
+00:12:48.660 --> 00:12:51.040
+Dane przepadają, a 14-dniowe okno nigdy nie miało znaczenia.
+
+00:12:51.280 --> 00:12:53.060
+Jeśli jest włączone, czyszczenie jest blokowane.
+
+00:12:53.260 --> 00:12:56.540
+Elementy pozostają w folderze elementów możliwych do odzyskania, czekając na upłynięcie czasu.
+
+00:12:56.700 --> 00:12:58.180
+Ale skrypt zmienia postać rzeczy.
+
+00:12:58.180 --> 00:13:02.640
+Skrypt z uprawnieniami administratora lub atakujący z odpowiednią rolą może zrobić więcej niż użytkownik.
+
+00:13:02.880 --> 00:13:08.280
+Mogą zmienić ustawienie retencji na zero, wyłączyć odzyskiwanie pojedynczych elementów, a potem przeprowadzić usuwanie i czyszczenie.
+
+00:13:08.520 --> 00:13:10.060
+Każdy z tych kroków jest dozwolony.
+
+00:13:10.280 --> 00:13:15.320
+Każdy krok jest rejestrowany, jeśli obserwujesz logi, ale system nie powstrzymuje żadnego z nich, bo konto ma odpowiednie uprawnienia.
+
+00:13:15.520 --> 00:13:18.540
+Foldery chronią przed zmęczonym użytkownikiem w piątkowe popołudnie.
+
+00:13:18.740 --> 00:13:22.860
+Nie sprawdzają się, gdy osoba usuwająca ma te same prawa, co osoba ustalająca zasady.
+
+00:13:22.860 --> 00:13:25.000
+A to jeszcze zanim zadamy ważniejsze pytanie.
+
+00:13:25.220 --> 00:13:30.100
+14 dni na elementy usunięte brzmi jak kopia zapasowa, sposób na odzyskanie poczty, miejsce do sprawdzenia, gdy coś zniknie.
+
+00:13:30.280 --> 00:13:31.740
+Brzmi jak kopia, ale nią nie jest.
+
+00:13:31.960 --> 00:13:33.540
+Zostało stworzone w innym celu.
+
+00:13:33.740 --> 00:13:35.260
+Retencja to nie kopia zapasowa.
+
+00:13:35.500 --> 00:13:39.340
+Zasady retencji zostały stworzone, aby odpowiedzieć na wymogi prawne, a nie operacyjne.
+
+00:13:39.540 --> 00:13:40.360
+Zespół do spraw.
+
+00:13:40.600 --> 00:13:41.620
+Zgodności tworzy regułę.
+
+00:13:41.700 --> 00:13:44.660
+Przechowuj każdą umowę przez 7 lat i maile finansowe przez 10.
+
+00:13:44.800 --> 00:13:45.660
+Usuwaj czaty po dwóch.
+
+00:13:45.660 --> 00:14:11.960
+Zabezpieczeni przed czym dokładnie?
+
+00:14:11.960 --> 00:14:12.960
+Weźmy SharePoint.
+
+00:14:13.220 --> 00:14:20.880
+Gdy zasada retencji dotyczy witryny, a ktoś edytuje lub usunie plik, SharePoint po cichu kopiuje oryginał do ukrytego miejsca zwanego biblioteką ochrony.
+
+00:14:21.140 --> 00:14:22.480
+Użytkownicy nigdy go nie widzą.
+
+00:14:22.700 --> 00:14:26.100
+Tylko administratorzy zbioru witryn mają do niej dostęp i to wyłącznie z poziomu ustawień witryny.
+
+00:14:26.300 --> 00:14:27.620
+Brzmi jak siatka bezpieczeństwa.
+
+00:14:27.800 --> 00:14:28.700
+Częściowo tak jest.
+
+00:14:28.900 --> 00:14:32.160
+Biblioteka przechwytuje zawartość zmienioną lub usuniętą w czasie obowiązywania zasady.
+
+00:14:32.380 --> 00:14:34.540
+Zachowuje wersję w stanie, w jakim była w tamtym momencie.
+
+00:14:34.820 --> 00:14:38.160
+Jeśli musisz udowodnić, co zawierał dokument przed edycją, ta kopia tam jest.
+
+00:14:38.160 --> 00:14:40.760
+Jeśli ktoś usunie plik, jego kopia również tam trafia.
+
+00:14:40.920 --> 00:14:42.720
+A teraz spójrz na to, czego nie przechwytuje.
+
+00:14:42.920 --> 00:14:44.460
+Nie przechwytuje witryny jako całości.
+
+00:14:44.740 --> 00:14:47.020
+Przechowuje luźne elementy zawartości plik po pliku.
+
+00:14:47.240 --> 00:14:48.740
+Nie towarzyszy im żadna struktura.
+
+00:14:48.960 --> 00:14:52.840
+Uprawnienia układy stron, nawigacja, widoki list i linki między elementami tam nie trafiają.
+
+00:14:52.980 --> 00:14:58.600
+A zawartość, która nigdy nie była edytowana ani usuwana, może w ogóle się tam nie znaleźć, bo biblioteka wypełnia się tylko, gdy coś się zmieni.
+
+00:14:58.800 --> 00:14:59.840
+Rośnie też po cichu.
+
+00:15:00.040 --> 00:15:04.420
+Każda edycja dodaje kopię, więc zajmuje miejsce w pamięci, a nikt nie zauważa problemu.
+
+00:15:04.420 --> 00:15:09.160
+Dopóki witrynie nie zabraknie miejsca, a tysiące plików zalegają bez narzędzia, by je przywrócić.
+
+00:15:09.340 --> 00:15:11.380
+Przywracanie z biblioteki to praca ręczna.
+
+00:15:11.580 --> 00:15:15.760
+Administrator ją otwiera, znajduje właściwy plik, kopiuje go i umieszcza z powrotem ręcznie, pojedynczo.
+
+00:15:15.880 --> 00:15:17.420
+I tu dochodzimy do sedna struktury.
+
+00:15:17.620 --> 00:15:19.280
+Retencja przechowuje kopię zawartości.
+
+00:15:19.480 --> 00:15:21.740
+Nie utrzymuje spójnego stanu z określonego momentu w czasie.
+
+00:15:21.960 --> 00:15:24.020
+To nie to samo, a różnicę łatwo przeoczyć.
+
+00:15:24.200 --> 00:15:25.640
+Kopia to pojedynczy element.
+
+00:15:25.960 --> 00:15:28.840
+Stan to wszystko naraz, tak jak wyglądało w jednej chwili.
+
+00:15:29.140 --> 00:15:33.100
+Pliki, foldery, uprawnienia i metadane, wszystko wzajemnie ze sobą zgodne.
+
+00:15:33.100 --> 00:15:35.500
+Wyobraź sobie bibliotekę dokumentów we wtorek rano.
+
+00:15:35.640 --> 00:15:40.500
+400 plików uporządkowanych w folderach z konkretnymi osobami mającymi dostęp do konkretnych folderów.
+
+00:15:40.660 --> 00:15:46.100
+Do środy po południu skrypt zmienia nazwy połowy folderów, a błąd synchronizacji nadpisuje jedną trzecią plików.
+
+00:15:46.280 --> 00:15:49.000
+Ktoś zmienił też uprawnienia, żeby naprawić inny problem.
+
+00:15:49.220 --> 00:15:51.700
+Teraz poproś retencję o przywrócenie stanu z wtorku.
+
+00:15:51.900 --> 00:15:52.440
+Nie da rady.
+
+00:15:52.680 --> 00:15:54.660
+Może dać Ci starsze kopie niektórych plików.
+
+00:15:54.840 --> 00:15:57.160
+Nie powie Ci, w jakim folderze każdy z nich się znajdował.
+
+00:15:57.360 --> 00:15:58.480
+Nie odtworzy uprawnień.
+
+00:15:58.640 --> 00:16:02.020
+Nie powie Ci, które wersje do siebie pasują, bo nigdy tego nie odnotowała.
+
+00:16:02.020 --> 00:16:06.480
+Możesz zachować każdy plik, a mimo to nie będziesz w stanie przywrócić witryny do stanu z wtorku rano.
+
+00:16:06.640 --> 00:16:08.320
+Każdy plik przetrwał, ale stan nie.
+
+00:16:08.500 --> 00:16:11.820
+Ta luka wychodzi na jaw późno, ponieważ audyty zgodności nigdy tego nie sprawdzały.
+
+00:16:11.980 --> 00:16:13.880
+Pytają tylko, czy przechowujecie te treści?
+
+00:16:14.120 --> 00:16:16.420
+Odpowiedź brzmi, tak, więc audyt zaliczony.
+
+00:16:16.660 --> 00:16:20.040
+Nikt nie pyta, czy potraficie przywrócić całość w mniej niż dwie godziny?
+
+00:16:20.220 --> 00:16:22.420
+To pytanie zadaje się tylko podczas awarii.
+
+00:16:22.580 --> 00:16:25.200
+Mamy więc dwa różne pytania i każde wymaga własnego narzędzia.
+
+00:16:25.380 --> 00:16:27.600
+Pretencja odpowiada na pytanie, czy możemy dowieść, że to istniało?
+
+00:16:27.760 --> 00:16:29.480
+Backup odpowiada na pytanie, czy możemy to przywrócić?
+
+00:16:29.480 --> 00:16:31.260
+To jest model, którego należy się trzymać.
+
+00:16:31.400 --> 00:16:33.120
+Jedno to dowód, drugie to odzyskiwanie.
+
+00:16:33.320 --> 00:16:37.520
+Firma może być świetna w pierwszym, nie mając nic w drugim, a dokumentacja i tak będzie wyglądać poprawnie.
+
+00:16:37.720 --> 00:16:40.820
+Istnieje jedna funkcja retencji, na której ludzie polegają bardziej niż na innych.
+
+00:16:41.080 --> 00:16:43.640
+Wydaje się ona najpoważniejsza, ponieważ używają jej prawnicy.
+
+00:16:43.880 --> 00:16:47.320
+Blokada prawna, litigation, hold, e-discovery i problem niewłaściwego narzędzia.
+
+00:16:47.540 --> 00:16:49.000
+Blokada prawna ma jedno zadanie.
+
+00:16:49.260 --> 00:16:51.160
+Mówi Exchange, żeby przestał usuwać pliki.
+
+00:16:51.480 --> 00:16:54.220
+Administrator nakłada blokadę na skrzynkę i wszystko w niej zostaje zachowane.
+
+00:16:54.220 --> 00:16:58.360
+Wysłane maile, odebrane, usunięte, a nawet elementy, które użytkownik celowo wyczyścił.
+
+00:16:58.480 --> 00:17:01.840
+Edycje również są zachowywane jako wcześniejsze kopie tej samej wiadomości.
+
+00:17:02.120 --> 00:17:05.180
+Blokada może trwać określoną liczbę dni lub bezterminowo.
+
+00:17:05.420 --> 00:17:09.980
+Większość zespołów prawnych wybiera drugą opcję, bo nikt nie chce tłumaczyć się sędziemu z wygasłej blokady.
+
+00:17:10.200 --> 00:17:10.920
+Więc jak długo?
+
+00:17:11.120 --> 00:17:12.200
+Odpowiedź jest prosta.
+
+00:17:12.420 --> 00:17:13.640
+Dopóki ktoś jej nie usunie.
+
+00:17:13.780 --> 00:17:14.840
+I to jest pierwszy problem.
+
+00:17:15.080 --> 00:17:15.900
+Nikt jej nie usuwa.
+
+00:17:16.120 --> 00:17:18.400
+Blokada zostaje nałożona w sprawie z 2021 roku.
+
+00:17:18.600 --> 00:17:20.360
+Sprawa kończy się w 2022 roku.
+
+00:17:20.360 --> 00:17:25.160
+Blokada zostaje, bo nikt nie powiedział id, że można ją zdjąć, a nikt w id nie chce być osobą, która usunie ją przez pomyłkę.
+
+00:17:25.340 --> 00:17:28.480
+Lata później skrzynka wciąż przechowuje każdy element, jaki kiedykolwiek przetworzyła.
+
+00:17:28.620 --> 00:17:30.120
+Pomyśl teraz o pamięci masowej.
+
+00:17:30.340 --> 00:17:34.400
+Zablokowane elementy żyją w folderze elementów możliwych do odzyskania, tym samym ukrytym folderze, który omówiliśmy.
+
+00:17:34.580 --> 00:17:35.580
+Ten folder ma limit.
+
+00:17:35.920 --> 00:17:40.160
+Standardowo to 100 GB, a po nałożeniu blokady można go zwiększyć do 110 GB.
+
+00:17:40.580 --> 00:17:44.400
+Gdy zablokowana skrzynka stale rośnie, folder się zapełnia, a wtedy zaczynają się problemy.
+
+00:17:44.660 --> 00:17:50.940
+Użytkownicy otrzymują błędy, maile przestają być usuwane, czyszczenie starych elementów nie działa, a skrzynka przestaje działać tak jak przed blokadą.
+
+00:17:51.120 --> 00:17:52.480
+Wszystko to dzieje się po cichu.
+
+00:17:52.680 --> 00:17:54.760
+Blokada działa dokładnie zgodnie z przeznaczeniem.
+
+00:17:55.000 --> 00:17:58.240
+Skutki uboczne pojawiają się miesiące później i wyglądają jak problem ze skrzynką.
+
+00:17:58.480 --> 00:18:00.860
+Nikt nie łączy ich z decyzją prawną, która je wywołała.
+
+00:18:01.000 --> 00:18:02.680
+Przejdźmy teraz do problemu niewłaściwego narzędzia.
+
+00:18:02.820 --> 00:18:06.240
+Skoro blokada prawna przechowuje wszystko, ludzie zaczynają postrzegać ją jako siatkę bezpieczeństwa.
+
+00:18:06.440 --> 00:18:08.500
+Skoro jest zablokowane, możemy to odzyskać.
+
+00:18:08.500 --> 00:18:12.860
+Technicznie tak dane można znaleźć, ale znalezienie ich i przywrócenie to zupełnie inne zadania.
+
+00:18:13.040 --> 00:18:15.720
+Aby wydobyć zawartość z blokady używasz e-discovery.
+
+00:18:15.940 --> 00:18:19.960
+Otwierasz sprawę, definiujesz wyszukiwanie, uruchamiasz je, przeglądasz wyniki i eksportujesz.
+
+00:18:20.120 --> 00:18:22.900
+Ten proces został stworzony dla prawników, którzy muszą gromadzić dowody.
+
+00:18:23.140 --> 00:18:24.100
+Zwraca on elementy.
+
+00:18:24.260 --> 00:18:25.880
+Nie umieszcza ich z powrotem tam, gdzie ich miejsce.
+
+00:18:26.120 --> 00:18:28.620
+Wyobraź sobie administratora, który używa tego do odzyskiwania danych po incydencie.
+
+00:18:28.820 --> 00:18:30.480
+Skrzynki pocztowe działu zostały wyczyszczone.
+
+00:18:30.680 --> 00:18:33.960
+Administrator uruchamia wyszukiwanie, czeka na jego zakończenie i eksportuje wyniki jako pliki.
+
+00:18:33.960 --> 00:18:36.620
+Potem musi jakoś przywrócić tę zawartość do aktywnych skrzynek.
+
+00:18:36.800 --> 00:18:38.200
+Struktura folderów jest częściowa.
+
+00:18:38.420 --> 00:18:39.560
+Status wiadomości częściowy.
+
+00:18:39.740 --> 00:18:42.180
+Niektóre elementy docierają inne nie, a nic nie trafia na miejsce automatycznie.
+
+00:18:42.380 --> 00:18:44.040
+Jest to powolne, ręczne i niekompletne.
+
+00:18:44.200 --> 00:18:45.960
+Usłyszysz, że to odpowiednik kopii zapasowej.
+
+00:18:46.140 --> 00:18:46.920
+Wcale tak nie jest.
+
+00:18:47.040 --> 00:18:49.280
+To narzędzie do zbierania danych, od którego wymaga się pracy narzędzia do przywracania.
+
+00:18:49.480 --> 00:18:51.260
+Jest też problem ludzki, który tylko pogarsza sprawę.
+
+00:18:51.420 --> 00:18:52.440
+Do kogo należą te narzędzia?
+
+00:18:52.600 --> 00:18:54.760
+W większości organizacji nie do zespołu infrastruktury.
+
+00:18:54.980 --> 00:18:58.340
+Blokadą prawną i e-discovery zarządza dział prawny, dział zgodności lub kierownik do spraw.
+
+00:18:58.340 --> 00:18:59.300
+Dokumentacji.
+
+00:18:59.440 --> 00:19:00.560
+To oni mają uprawnienia.
+
+00:19:00.740 --> 00:19:02.040
+To oni znają numery spraw.
+
+00:19:02.220 --> 00:19:04.020
+To oni decydują, co ma zostać zachowane.
+
+00:19:04.260 --> 00:19:07.840
+Ludzie, którzy na co dzień prowadzą tenanta, często nawet nie mogą otworzyć konsoli e-discovery.
+
+00:19:08.100 --> 00:19:11.300
+Rola nie jest im przypisana i słusznie, bo rozdział obowiązków ma znaczenie.
+
+00:19:11.480 --> 00:19:13.280
+Ale nagle następuje krytyczna sytuacja.
+
+00:19:13.460 --> 00:19:18.440
+Tenant jest atakowany, a treść, której potrzebujesz, jest dostępna tylko przez narzędzie należące do kogoś, kogo nie ma na rozmowie.
+
+00:19:18.680 --> 00:19:19.140
+Może śpi.
+
+00:19:19.380 --> 00:19:21.780
+Może nie wie, jak przeprowadzić wyszukiwanie pod presją czasu.
+
+00:19:21.960 --> 00:19:25.160
+A cokolwiek wyeksportuje i tak musi zostać ręcznie odbudowane przez człowieka.
+
+00:19:25.160 --> 00:19:27.240
+Zatem narzędzia prawne chronią zawartość.
+
+00:19:27.400 --> 00:19:29.880
+Nie chronią Twojej zdolności do szybkiego odzyskiwania danych.
+
+00:19:30.080 --> 00:19:33.380
+Pozostaje natywna funkcja, na którą większość liczy w razie awarii plików.
+
+00:19:33.560 --> 00:19:37.760
+Jest wbudowana w każdą bibliotekę dokumentów, a większość administratorów nigdy nie sprawdzała jej ustawień.
+
+00:19:38.020 --> 00:19:41.280
+Wersjonowanie, funkcje wersjonowania i przywracania w SharePoint oraz OnDrive.
+
+00:19:41.480 --> 00:19:44.140
+Każda biblioteka dokumentów przechowuje stare wersje plików.
+
+00:19:44.260 --> 00:19:45.260
+To historia wersji.
+
+00:19:45.420 --> 00:19:48.620
+To pierwsza rzecz, na którą wskazują administratorzy, gdy ktoś nadpisze dokument.
+
+00:19:48.900 --> 00:19:50.560
+W przypadku pojedynczego pliku działa to dobrze.
+
+00:19:50.560 --> 00:19:54.540
+Klikasz prawym przyciskiem, otwierasz historię wersji, wybierasz kopię z wtorku PRZYWRACASZ 10 sekund.
+
+00:19:54.640 --> 00:19:55.800
+Ale spójrz na ograniczenia.
+
+00:19:56.200 --> 00:19:57.940
+Wersjonowanie to licznik, a nie oś czasu.
+
+00:19:58.180 --> 00:20:01.500
+Nowe biblioteki w SharePoint Online domyślnie przechowują 500 głównych wersji.
+
+00:20:01.700 --> 00:20:04.360
+Gdy pojawia się wersja 501, najstarsza zostaje usunięta.
+
+00:20:04.520 --> 00:20:06.940
+A najstarsza nie oznacza wcale najstarszej w kalendarzu.
+
+00:20:07.120 --> 00:20:11.240
+Klik edytowany cały dzień przez aplikację z funkcją autozapisu może błyskawicznie wyczerpać ten limit.
+
+00:20:11.440 --> 00:20:14.360
+Klik, który pozostaje nietknięty, zachowuje swoją historię na zawsze.
+
+00:20:14.360 --> 00:20:16.680
+Czy więc można odzyskać wersję z zeszłego wtorku?
+
+00:20:16.820 --> 00:20:18.080
+Nie ma na to stałej odpowiedzi.
+
+00:20:18.320 --> 00:20:20.400
+Zależy to od tego, jak intensywnie pracowano nad tym plikiem.
+
+00:20:20.600 --> 00:20:21.580
+Dodajmy do tego koszty.
+
+00:20:21.780 --> 00:20:23.500
+Każda wersja zajmuje miejsce w pamięci.
+
+00:20:23.740 --> 00:20:26.940
+Microsoft przechowuje tylko zmiany dla wielu plików pakietu Office, co pomaga,
+
+00:20:27.080 --> 00:20:29.520
+ale inne typy plików zapisują pełną kopię za każdym razem.
+
+00:20:29.760 --> 00:20:33.940
+Pomnóż to przez 500 wersji dla tysięcy plików, a limit pamięci zostanie szybko osiągnięty.
+
+00:20:34.160 --> 00:20:36.080
+Dlatego administratorzy przycinają te limity.
+
+00:20:36.280 --> 00:20:41.180
+Ustawiają limit na 50 lub 10 albo włączają automatyczne usuwanie, które czyści starsze wersje według ich wieku.
+
+00:20:41.180 --> 00:20:42.860
+Każdy taki wybór oszczędza miejsce.
+
+00:20:43.140 --> 00:20:44.840
+Każdy z nich skraca też drogę powrotną.
+
+00:20:45.060 --> 00:20:48.640
+Wymieniasz głębokość odzyskiwania na koszty przechowywania i większość ludzi robi to, nigdy tego nie dokumentując.
+
+00:20:48.820 --> 00:20:50.880
+Istnieje też druga funkcja, po którą sięgają ludzie.
+
+00:20:51.100 --> 00:20:53.020
+Ma trafną nazwę i wykonuje rzeczywistą pracę.
+
+00:20:53.200 --> 00:20:54.500
+Przywracanie usługi onDrive.
+
+00:20:54.700 --> 00:20:58.240
+Pozwala ona przywrócić cały onDrive do wcześniejszego stanu niejednego pliku, a wszystkiego.
+
+00:20:58.460 --> 00:21:02.340
+Wybierasz datę, sprawdzasz wykres aktywności, a Microsoft cofa zmiany wprowadzone po tym momencie.
+
+00:21:02.600 --> 00:21:03.960
+Okno czasowe to 30 dni.
+
+00:21:04.220 --> 00:21:07.060
+Dzisiejsze przywracanie może sięgnąć do wolnego dnia w ciągu ostatniego miesiąca.
+
+00:21:11.180 --> 00:21:12.740
+Wymaga spełnienia kilku warunków.
+
+00:21:12.940 --> 00:21:15.660
+Musi to zrobić użytkownik lub administrator działający w jego imieniu.
+
+00:21:15.860 --> 00:21:18.520
+Działa to dla każdego onDrive'a z osobna, więc obsługuje jedno konto na raz.
+
+00:21:18.900 --> 00:21:21.180
+Samoprzywracanie dotyczy tylko zawartości w tym konkretnym onDrive.
+
+00:21:21.380 --> 00:21:24.560
+Nie wpłynie na to, co znajduje się w witrynie SharePoint, skrzynce pocztowej czy zespole.
+
+00:21:24.800 --> 00:21:25.840
+Czego więc to nie naprawi?
+
+00:21:26.020 --> 00:21:27.600
+Nie wykracza poza okres 30 dni.
+
+00:21:27.840 --> 00:21:32.320
+Jeśli szkoda wydarzyła się w 31 dniu lub zauważyłeś ją dopiero po 31 dniach, ta opcja jest niedostępna.
+
+00:21:32.320 --> 00:21:38.700
+Nie odbuduje usuniętego konta onDrive, ponieważ to inny proces z własnym zegarem i nie potrafi wskazać, które zmiany były tymi szkodliwymi.
+
+00:21:38.900 --> 00:21:43.360
+Wybierasz punkt w czasie i masz nadzieję, że wybrałeś właściwy moment, ponieważ przywracanie działa jak przewijanie.
+
+00:21:43.600 --> 00:21:45.700
+Wszystko po wybranym punkcie zostaje cofnięte.
+
+00:21:45.940 --> 00:21:46.900
+Dobre zmiany również.
+
+00:21:47.120 --> 00:21:52.860
+Użytkownik, który pracował normalnie przez 30 dni po wystąpieniu szkody, utraci te dni uczciwej pracy, chyba że wcześniej zapisał kopię.
+
+00:21:53.080 --> 00:21:55.160
+SharePoint ma swoją własną wersję tego rozwiązania.
+
+00:21:55.400 --> 00:21:58.240
+Nazywa się Przywróć tę bibliotekę i znajduje się w ustawieniach biblioteki.
+
+00:21:58.240 --> 00:21:59.220
+Ta sama zasada.
+
+00:21:59.220 --> 00:22:01.840
+Wybierz datę, przejrzyj zmiany i przywróć bibliotekę.
+
+00:22:02.060 --> 00:22:04.280
+Ograniczenia są podobne z kilkoma dodatkowymi.
+
+00:22:04.500 --> 00:22:06.920
+Działa na jedną bibliotekę naraz, a nie na całą witrynę.
+
+00:22:07.080 --> 00:22:13.700
+Używa tego samego 30-dniowego okna i musi zostać włączone przez osobę z odpowiednimi uprawnieniami, co oznacza, że ktoś musi być dostępny i pewny, co przywrócić.
+
+00:22:13.860 --> 00:22:16.960
+Przywracanie biblioteki obejmuje tylko to, co zawiera biblioteka.
+
+00:22:17.220 --> 00:22:23.220
+Strony witryny, listy, zmiany uprawnień i inne ustawienia nie są przywracane, co prowadzi nas do sedna problemu.
+
+00:22:23.220 --> 00:22:26.420
+Te funkcje pomagają tylko wtedy, gdy zauważysz szkody na czas.
+
+00:22:26.640 --> 00:22:28.340
+Większość organizacji tego nie robi.
+
+00:22:28.340 --> 00:22:31.580
+Użytkownik usuwa folder i nikt go nie otwiera przez 6 tygodni.
+
+00:22:31.800 --> 00:22:36.180
+Błąd synchronizacji nadpisuje pliki, a przegląd kwartalny to pierwszy moment, gdy ktoś to sprawdza.
+
+00:22:36.380 --> 00:22:41.200
+Ransomware szyfruje dane powoli, a pierwszym sygnałem jest pytanie użytkownika, dlaczego arkusz się nie otwiera.
+
+00:22:41.440 --> 00:22:42.640
+Nic Cię o tym nie informuje.
+
+00:22:42.900 --> 00:22:45.580
+Żaden panel nie pokazuje powiadomienia o konieczności przywracania.
+
+00:22:45.800 --> 00:22:51.140
+Ktoś musi dostrzec problem, zgłosić go, a ktoś inny musi użyć właściwego narzędzia w odpowiednim czasie.
+
+00:22:51.140 --> 00:22:53.720
+Każdy krok zajmuje dni, a czasem tygodnie.
+
+00:22:53.960 --> 00:22:56.700
+Do tego czasu 30-dniowy zegar już prawie wybił.
+
+00:22:56.700 --> 00:23:01.940
+Wbudowane narzędzia dają drogę powrotną, ale tylko dla szybkich odkryć, małego zakresu i niedawnych szkód.
+
+00:23:02.060 --> 00:23:03.220
+A to nadal tylko pliki.
+
+00:23:03.440 --> 00:23:06.380
+Kolejny problem jest większy, bo to wcale nie jest jedno obciążenie.
+
+00:23:06.540 --> 00:23:10.020
+To kilka usług połączonych w jedną nazwę, której ludzie używają codziennie.
+
+00:23:10.200 --> 00:23:10.540
+Teams.
+
+00:23:10.760 --> 00:23:11.120
+Teams.
+
+00:23:11.360 --> 00:23:13.500
+Problem z odzyskiwaniem, którego nikt nie rozpracował.
+
+00:23:13.740 --> 00:23:15.320
+Zapytaj kogoś, gdzie mieszka ich zespół.
+
+00:23:15.540 --> 00:23:16.320
+Większość odpowie.
+
+00:23:16.460 --> 00:23:16.800
+W Teams.
+
+00:23:16.980 --> 00:23:18.200
+Ta odpowiedź stanowi problem.
+
+00:23:18.200 --> 00:23:19.860
+Zespół nie jest jedną rzeczą.
+
+00:23:20.020 --> 00:23:21.200
+To nazwa dla pakietu.
+
+00:23:21.700 --> 00:23:27.600
+Gdy ktoś klika, utwórz zespół Microsoft budzi kilka oddzielnych części i łączy je jedną tożsamością.
+
+00:23:27.880 --> 00:23:30.360
+Aplikacja na ekranie to tylko okno na nie wszystkie.
+
+00:23:30.700 --> 00:23:32.020
+Zacznijmy od fundamentów.
+
+00:23:32.200 --> 00:23:34.560
+Każdy zespół opiera się na grupie Microsoft 365.
+
+00:23:35.120 --> 00:23:37.660
+Ta grupa przechowuje członków, właścicieli i adres e-mail.
+
+00:23:37.660 --> 00:23:40.180
+To tożsamość, na której opierają się inne elementy.
+
+00:23:40.360 --> 00:23:41.680
+Jest też witryna SharePoint.
+
+00:23:41.860 --> 00:23:43.400
+To tam wskazuje karta plików.
+
+00:23:43.580 --> 00:23:48.280
+Każdy plik udostępniony na kanale ląduje w tamtejszej bibliotece dokumentów w folderze nazwanym od kanału.
+
+00:23:48.460 --> 00:23:50.220
+Jest też skrzynka pocztowa Exchange.
+
+00:23:50.440 --> 00:23:53.420
+Grupa dostaje własną skrzynkę, która przechowuje kalendarz i kopię rozmów.
+
+00:23:53.600 --> 00:23:55.020
+Łatwo zapomnieć o jej istnieniu.
+
+00:23:55.220 --> 00:23:58.300
+Potem planer, jeśli ktoś doda plan i OneNote, jeśli ktoś doda notatnik.
+
+00:23:58.440 --> 00:24:00.520
+Planer przechowuje swoje dane we własnej usłudze.
+
+00:24:00.740 --> 00:24:03.440
+Notes jest przechowywany jako plik wewnątrz tej witryny SharePoint.
+
+00:24:03.440 --> 00:24:06.260
+A do tego czaty, które nie znajdują się w żadnym z tych miejsc.
+
+00:24:06.480 --> 00:24:10.260
+Wiadomości na kanałach są zapisywane w ukrytym obszarze skrzynki pocztowej powiązanej z grupą.
+
+00:24:10.420 --> 00:24:14.040
+Czaty indywidualne i grupowe są zapisywane w skrzynkach pocztowych uczestników.
+
+00:24:14.280 --> 00:24:16.620
+Różne kontenery, różne zasady, różne zegary.
+
+00:24:16.860 --> 00:24:21.740
+Zatem jeden zespół to grupa witryna, skrzynka pocztowa, plan, notes i dwa rodzaje magazynu wiadomości.
+
+00:24:21.980 --> 00:24:25.240
+Sześć lub siedem lokalizacji, a każda podlega własnym zasadom odzyskiwania.
+
+00:24:25.420 --> 00:24:27.520
+Pomyśl teraz, co to oznacza w sytuacji awaryjnej.
+
+00:24:27.680 --> 00:24:29.220
+Ktoś mówi, że nasz zespół nie działa.
+
+00:24:29.220 --> 00:24:32.100
+Która część? Pliki, wiadomości, członkostwo czy plan?
+
+00:24:32.260 --> 00:24:35.100
+Każdy element ma inne narzędzie, inne okno i innego właściciela.
+
+00:24:35.260 --> 00:24:36.740
+Nie da się przywrócić całego zespołu.
+
+00:24:36.960 --> 00:24:40.440
+Można odzyskiwać tylko poszczególne części i mieć nadzieję, że po wszystkim do siebie pasują.
+
+00:24:40.660 --> 00:24:43.960
+Przyjrzyjmy się jednej ścieżce odzyskiwania, którą Microsoft udostępnia dla całości.
+
+00:24:44.240 --> 00:24:47.400
+Gdy właściciel usuwa zespół, grupa trafia do stanu usunięcia nietrwałego.
+
+00:24:47.660 --> 00:24:49.720
+Znika z widoku, ale nie jest usunięta na stałe.
+
+00:24:50.120 --> 00:24:54.420
+Administratorzy mogą ją przywrócić z centrum administracyjnego Entra lub przez PowerShell przez 30 dni.
+
+00:24:54.420 --> 00:24:56.400
+30 dni, nie 93.
+
+00:24:56.680 --> 00:24:59.560
+Ten czas dotyczy grupy, a nie zawartości wewnątrz niej.
+
+00:24:59.720 --> 00:25:02.860
+Gdy grupa wraca, powiązane z nią elementy zazwyczaj również wracają.
+
+00:25:03.100 --> 00:25:06.240
+Witryna pojawia się ponownie, skrzynka się łączy, a członkostwo powraca.
+
+00:25:06.460 --> 00:25:10.420
+W przypadku czystego, szybkiego usunięcia całego zespołu jest to przydatne, ale obejmuje tylko ten jeden scenariusz.
+
+00:25:11.060 --> 00:25:12.920
+To nie pomaga, jeśli ktoś usunie kanał.
+
+00:25:13.040 --> 00:25:16.480
+Kanały mają własne krótkie okno czasowe, a to, co odzyskasz, jest niepełne.
+
+00:25:16.640 --> 00:25:21.980
+To nie pomaga, jeśli użytkownik usunie pliki z biblioteki dokumentów, ponieważ podlegają one zasadom SharePoint, o których już mówiliśmy.
+
+00:25:21.980 --> 00:25:28.400
+I nie pomaga to, jeśli zespół nadal istnieje, ale jego zawartość została zmieniona, nadpisana lub usunięta, co zdarza się częściej.
+
+00:25:28.520 --> 00:25:33.300
+Teraz część, która zaskakuje prawie każdego wiadomości z czatów i kanałów, są przez Microsoft zachowywane.
+
+00:25:33.500 --> 00:25:38.100
+Jeśli ustawisz zasady przechowywania dla Teams, kopie trafiają do ukrytych folderów w tych skrzynkach pocztowych.
+
+00:25:38.340 --> 00:25:41.580
+Zasady przechowywania mogą trzymać je przez określony czas, a potem usunąć.
+
+00:25:41.780 --> 00:25:44.780
+Narzędzia zgodności mogą je przeszukiwać, a e-discovery eksportować.
+
+00:25:45.000 --> 00:25:48.540
+Zatem ścieżka zachowania danych istnieje, ale spójrz na kierunek tego przepływu.
+
+00:25:48.540 --> 00:25:53.280
+Wszystko na tej ścieżce wyciąga zawartość z Teams do wyników wyszukiwania, plików eksportu czy narzędzi weryfikacji.
+
+00:25:53.480 --> 00:25:55.780
+Nie ma natywnego przycisku, który przenosiłby to z powrotem.
+
+00:25:55.880 --> 00:25:58.000
+Pomyśl, co oznaczałoby przywrócenie wiadomości.
+
+00:25:58.240 --> 00:25:59.720
+Wiadomość jest częścią wątku.
+
+00:25:59.940 --> 00:26:01.100
+Wątek należy do kanału.
+
+00:26:01.320 --> 00:26:04.920
+Ma nadawcę, sygnaturę czasową, reakcję, odpowiedzi, edycję i załączniki.
+
+00:26:05.140 --> 00:26:10.200
+Umieść wiadomość z powrotem w aktywnym kanale, a musi ona trafić we właściwe miejsce, we właściwej kolejności i z właściwym autorem.
+
+00:26:10.380 --> 00:26:12.580
+Produkt nie został stworzony, aby to zaakceptować.
+
+00:26:12.760 --> 00:26:14.940
+Nie można wstawić historii do rozmowy po fakcie.
+
+00:26:14.940 --> 00:26:18.320
+W najlepszym razie możesz przekazać ludziom eksport i powiedzieć o to, co powiedziano.
+
+00:26:18.480 --> 00:26:19.240
+To jest zapis.
+
+00:26:19.400 --> 00:26:19.940
+To nie jest przywrócenie.
+
+00:26:20.640 --> 00:26:25.460
+Więc kiedy ktoś pyta, czy możemy odzyskać czaty naszego zespołu, szczera odpowiedź brzmi, możemy pokazać, co powiedzieli.
+
+00:26:25.660 --> 00:26:27.560
+Nie możemy przywrócić ich do stanu pierwotnego.
+
+00:26:27.820 --> 00:26:30.580
+Większość ludzi nie zadaje tego pytania, dopóki czaty nie znikną.
+
+00:26:30.740 --> 00:26:32.060
+I wskazuje to na coś większego.
+
+00:26:32.280 --> 00:26:35.460
+Usunięcie niewłaściwej rzeczy przez użytkownika to tylko jeden ze sposobów, w jaki sprawy idą źle.
+
+00:26:35.640 --> 00:26:37.700
+Jest kilka innych i nie wyglądają one tak samo.
+
+00:26:37.880 --> 00:26:40.580
+Więc nazwijmy je prawdziwe scenariusze utraty danych.
+
+00:26:40.580 --> 00:26:43.840
+Większość utraty danych w Microsoft 365 nie wygląda jak atak.
+
+00:26:44.020 --> 00:26:45.200
+Wygląda jak zwyczajny dzień.
+
+00:26:45.420 --> 00:26:48.020
+Zacznijmy od najprostszego, przypadkowe usunięcie i nadpisanie.
+
+00:26:48.200 --> 00:26:50.200
+Użytkownik usuwa folder, aby zrobić porządek.
+
+00:26:50.380 --> 00:26:52.020
+Inny zapisuje starą kopię na nowej.
+
+00:26:52.200 --> 00:26:56.560
+Ktoś wkleja niewłaściwy arkusz kalkulacyjny do niewłaściwej biblioteki i zastępuje liczby z zeszłego kwartału.
+
+00:26:56.760 --> 00:26:57.800
+Nic nie zostało hakowane.
+
+00:26:58.060 --> 00:27:01.320
+System zrobił dokładnie to, o co go poproszono, a osoba zlecająca po prostu się pomyliła.
+
+00:27:01.440 --> 00:27:05.080
+To zdecydowanie najczęstsza utrata danych, a natywne narzędzia, które omówiliśmy, zostały do tego stworzone.
+
+00:27:05.080 --> 00:27:06.220
+To dobra wiadomość.
+
+00:27:06.360 --> 00:27:09.040
+Haczyk polega na tym, że musisz to zauważyć w odpowiednim czasie.
+
+00:27:09.220 --> 00:27:10.440
+Teraz zmieńmy intencje.
+
+00:27:10.680 --> 00:27:12.300
+Złośliwe działania osób z wewnątrz.
+
+00:27:12.460 --> 00:27:15.920
+Ktoś z uprawnionym dostępem decyduje się zabrać lub zniszczyć to, do czego ma dostęp.
+
+00:27:16.180 --> 00:27:17.640
+Może odchodzi w złej atmosferze.
+
+00:27:17.880 --> 00:27:19.580
+Może jest wściekły z powodu oceny pracy.
+
+00:27:19.840 --> 00:27:20.780
+Nie musi się włamywać.
+
+00:27:20.940 --> 00:27:23.300
+Ma już uprawnienia, więc każde usunięcie wygląda jak rutynowa praca,
+
+00:27:23.400 --> 00:27:26.260
+a logi pokazują autoryzowanego użytkownika wykonującego autoryzowane działania.
+
+00:27:26.440 --> 00:27:29.020
+Potem jest przejęte konto administratora lub konto serwisowe.
+
+00:27:29.160 --> 00:27:30.820
+To jest to, co zmienia cały obraz.
+
+00:27:30.820 --> 00:27:34.040
+Widzieliśmy wcześniej, że skradzione konto użytkownika może opróżnić własne kosze.
+
+00:27:34.180 --> 00:27:36.140
+Konto administratora może zrobić znacznie więcej.
+
+00:27:36.420 --> 00:27:39.040
+Może opróżnić kosze drugiego stopnia, skrócić ustawienia, przechowywania,
+
+00:27:39.160 --> 00:27:40.800
+usunąć blokady i usunąć całe witryny.
+
+00:27:40.980 --> 00:27:43.760
+Konto serwisowe jest jeszcze cichsze, ponieważ nikt go nie obserwuje.
+
+00:27:43.960 --> 00:27:46.300
+Ma szerokie uprawnienia, hasło, które nigdy się nie zmienia,
+
+00:27:46.400 --> 00:27:48.380
+a żaden człowiek nie zauważyłby dziwnego zachowania.
+
+00:27:48.620 --> 00:27:50.820
+Kiedy to konto upada, siatki bezpieczeństwa upadają wraz z nim,
+
+00:27:50.900 --> 00:27:52.820
+ponieważ wszystkie znajdują się za tymi samymi uprawnieniami.
+
+00:27:53.000 --> 00:27:55.200
+Kolejny scenariusz nie zakłada udziału złego aktora.
+
+00:27:55.200 --> 00:27:56.780
+Awarie klienta synchronizacji.
+
+00:27:56.920 --> 00:27:58.880
+Klient synchronizacji on-drive robi jedną rzecz dobrze.
+
+00:27:59.100 --> 00:28:00.980
+Sprawia, że chmura i laptop są ze sobą zgodne.
+
+00:28:01.100 --> 00:28:02.800
+Ta zgodność stanowi sedno problemu.
+
+00:28:02.960 --> 00:28:05.260
+Jeśli laptop ma uszkodzony dysk, złą kopię zapasową
+
+00:28:05.260 --> 00:28:06.660
+lub niedokończone przenoszenie plików,
+
+00:28:06.760 --> 00:28:08.340
+klient nie pyta, która strona ma rację.
+
+00:28:08.500 --> 00:28:09.640
+Po prostu synchronizuje.
+
+00:28:09.860 --> 00:28:12.980
+Uszkodzony plik na jednym urządzeniu może nadpisać dobrą kopię w chmurze,
+
+00:28:13.040 --> 00:28:15.580
+a chmura rozsyła to uszkodzenie na wszystkie inne urządzenia.
+
+00:28:15.800 --> 00:28:18.420
+Jeden wadliwy laptop sprawia, że plik staje się wadliwy dla wszystkich.
+
+00:28:18.660 --> 00:28:21.360
+Do tego dochodzą aplikacje firm trzecich i błędy automatyzacji.
+
+00:28:21.360 --> 00:28:24.840
+Pomyśl o przepływie Power Automate, który przenosi pliki i ma błąd logiczny,
+
+00:28:24.940 --> 00:28:27.360
+albo o skrypcie migracyjnym uruchomionym w złej witrynie
+
+00:28:27.360 --> 00:28:29.060
+czy aplikacji zatwierdzonej dwa lata temu,
+
+00:28:29.220 --> 00:28:32.420
+która teraz ma uprawnienia do odczytu i zapisu każdej biblioteki w dzierżawie.
+
+00:28:32.560 --> 00:28:34.620
+Te narzędzia działają szybko i na dużą skalę.
+
+00:28:34.780 --> 00:28:36.620
+Człowiek usuwa 10 plików przez pomyłkę.
+
+00:28:36.800 --> 00:28:39.540
+Przepływ ze złym filtrem usuwa 10 tysięcy plików przed lunchem.
+
+00:28:39.660 --> 00:28:41.280
+I działa dalej, dopóki ktoś tego nie zauważy,
+
+00:28:41.380 --> 00:28:42.780
+co często dzieje się dopiero po kilku dniach.
+
+00:28:42.900 --> 00:28:45.460
+A teraz scenariusz, który zaskakuje nawet ostrożne organizacje.
+
+00:28:45.460 --> 00:28:48.420
+Usuwanie konta byłego pracownika i pułapka związana z odebraniem licencji.
+
+00:28:48.560 --> 00:28:49.420
+Oto jak to wygląda.
+
+00:28:49.620 --> 00:28:51.840
+Pracownik odchodzi, dział HR wysyła powiadomienie.
+
+00:28:52.000 --> 00:28:55.940
+Konto zostaje wyłączone, licencja usunięta, a użytkownik ostatecznie skasowany.
+
+00:28:56.120 --> 00:28:58.460
+To standardowe odchodzenie i wydaje się odpowiedzialne,
+
+00:28:58.560 --> 00:29:02.180
+ale to licencja utrzymuje skrzynkę pocztową i on-drive w stanie używalności.
+
+00:29:02.460 --> 00:29:04.560
+Zabierz licencję, a zegar zacznie odliczać.
+
+00:29:04.740 --> 00:29:07.840
+On-drive usuniętego użytkownika jest przechowywany przez okres retencji,
+
+00:29:07.960 --> 00:29:11.300
+domyślnie 30 dni, a administratorzy mogą go wydłużyć do 10 lat.
+
+00:29:11.300 --> 00:29:16.180
+Skrzynka pocztowa bez licencji i bez blokady prawnej również zostaje usunięta po krótkim okresie karencji,
+
+00:29:16.420 --> 00:29:21.060
+więc czyjaś praca z wielu lat, e-maile i pliki może być odliczana od momentu zamknięcia zgłoszenia.
+
+00:29:21.260 --> 00:29:23.500
+A osoba, która je zamknęła, nie zrobiła nic złego.
+
+00:29:23.720 --> 00:29:25.340
+Postępowała zgodnie z listą kontrolną.
+
+00:29:25.560 --> 00:29:28.380
+Lista kontrolna po prostu nigdy nie zapytała, czy ktoś jeszcze tego potrzebuje.
+
+00:29:28.560 --> 00:29:32.180
+Miesiące później menedżer prosi o pliki byłego pracownika w związku ze sporem z klientem.
+
+00:29:32.360 --> 00:29:34.400
+On-drive przepadł, skrzynka pocztowa przepadła.
+
+00:29:34.600 --> 00:29:36.720
+Okres retencji minął po cichu kilka tygodni temu.
+
+00:29:36.720 --> 00:29:38.560
+Spójrz, co łączy te scenariusze.
+
+00:29:38.760 --> 00:29:39.940
+Żaden nie wymagał włamania.
+
+00:29:40.160 --> 00:29:43.380
+Każdy wynikał ze zwykłego działania, wykonanego z normalnymi uprawnieniami w normalnym tempie.
+
+00:29:43.580 --> 00:29:45.100
+Dlatego tak trudno się na nie przygotować.
+
+00:29:45.300 --> 00:29:47.340
+Nie można ich zablokować bez blokowania samej pracy.
+
+00:29:47.560 --> 00:29:50.020
+Ale jest jeden scenariusz, który bierze to wszystko i z wielokrotnia.
+
+00:29:50.220 --> 00:29:53.760
+Jest celowy, szybki i to właśnie on ostatecznie sprawia, że budżet zostaje zatwierdzony.
+
+00:29:54.000 --> 00:29:56.460
+Ransomware. Ransomware w Microsoft 365.
+
+00:29:57.140 --> 00:29:58.260
+Co tak naprawdę się dzieje?
+
+00:29:58.460 --> 00:30:01.100
+Większość ludzi wyobraża sobie ransomware jako problem z plikami.
+
+00:30:01.320 --> 00:30:03.840
+Folder zamienia się w bełkot, a na ekranie pojawia się notatka.
+
+00:30:03.840 --> 00:30:07.160
+Ale w Microsoft 365 to ostatni krok, a nie pierwszy.
+
+00:30:07.380 --> 00:30:08.900
+A tak zaczyna się od tożsamości.
+
+00:30:09.100 --> 00:30:14.320
+Ktoś zdobywa hasło przez phishing, kupuje je z wycieku lub nakłania użytkownika do zatwierdzenia logowania, którego nie inicjował.
+
+00:30:14.500 --> 00:30:16.640
+Nie potrzebują wirusa, potrzebują poprawnej sesji.
+
+00:30:16.860 --> 00:30:19.640
+Gdy ją zdobędą, wyglądają jak zwykły pracownik wykonujący zwykłą pracę.
+
+00:30:19.840 --> 00:30:21.160
+Stamtąd poruszają się po cichu.
+
+00:30:21.300 --> 00:30:23.280
+Czytają maile, aby dowiedzieć się, kto jest ważny.
+
+00:30:23.460 --> 00:30:27.440
+Szukają kont z szerokim dostępem, bo jedna rola administratora jest warta tysiąc kont użytkowników.
+
+00:30:27.660 --> 00:30:29.600
+Sprawdzają, jakie ustawienia stoją im na drodze.
+
+00:30:29.820 --> 00:30:31.220
+Retencja, blokady, alerty.
+
+00:30:31.220 --> 00:30:33.360
+Czasem zajmuje to godziny, czasem tygodnie.
+
+00:30:33.560 --> 00:30:35.160
+Szyfrowanie następuje celowo późno.
+
+00:30:35.360 --> 00:30:38.200
+Atakujący chce mieć mapę całej sieci, zanim stanie się coś widocznego.
+
+00:30:38.420 --> 00:30:39.520
+Więc gdzie uderzają pliki?
+
+00:30:39.760 --> 00:30:41.580
+Często przez klienta synchronizacji onDrive.
+
+00:30:41.740 --> 00:30:43.220
+A ta część jest aż zbyt prosta.
+
+00:30:43.480 --> 00:30:48.020
+Złośliwe oprogramowanie trafia na laptopa lub atakujący używa skradzionej sesji, by uruchomić kod na zalogowanym urządzeniu.
+
+00:30:48.260 --> 00:30:50.520
+Zaczyna szyfrować pliki w lokalnym folderze onDrive.
+
+00:30:50.760 --> 00:30:53.100
+Dokumenty, arkusze kalkulacyjne, całe drzewo folderów.
+
+00:30:53.240 --> 00:30:54.960
+Klient synchronizacji widzi zmienione pliki.
+
+00:30:55.220 --> 00:30:56.520
+Robi to, do czego został stworzony.
+
+00:30:56.760 --> 00:30:57.660
+Wysyła je na serwer.
+
+00:30:57.860 --> 00:30:59.280
+Nikt nie musi włamywać się do chmury.
+
+00:30:59.520 --> 00:31:02.840
+Własne urządzenie użytkownika wnosi szkody przez frontowe drzwi, plik po pliku.
+
+00:31:03.020 --> 00:31:07.120
+A jeśli użytkownik współdzieli bibliotekę z zespołem lub ma foldery zsynchronizowane z innymi maszynami,
+
+00:31:07.260 --> 00:31:09.240
+zaszyfrowane kopie rozprzestrzeniają się stamtąd dalej.
+
+00:31:09.420 --> 00:31:12.160
+Więc klient synchronizacji staje się mechanizmem dostarczania.
+
+00:31:12.400 --> 00:31:15.520
+Jest zaufany, szybki i nigdy nie pyta, czy zmiana była uzasadniona.
+
+00:31:15.520 --> 00:31:20.020
+Pomyśl teraz o wersjonowaniu, bo to tutaj wcześniejsza siatka bezpieczeństwa zderza się z planem atakującego.
+
+00:31:20.220 --> 00:31:23.420
+Widzieliśmy, że historia wersji przechowuje domyślnie 500 głównych wersji,
+
+00:31:23.520 --> 00:31:25.420
+a najstarsza znika, gdy pojawia się kolejna.
+
+00:31:25.740 --> 00:31:27.840
+Atakujący, który o tym wie, ma prosty ruch.
+
+00:31:28.040 --> 00:31:29.400
+Nie szyfruj pliku tylko raz.
+
+00:31:29.620 --> 00:31:30.900
+Nadpisuj go raz za razem.
+
+00:31:31.160 --> 00:31:32.580
+Każde przejście dodaje wersję.
+
+00:31:32.800 --> 00:31:37.600
+Kilkaset przejść później każda czysta kopia zostaje wypchnięta z historii, a zostaje 100 z zaszyfrowanych.
+
+00:31:37.680 --> 00:31:41.300
+Wolniej, ale cicho i działa szczególnie dobrze w bibliotekach z niższymi limitami wersji,
+
+00:31:41.420 --> 00:31:43.740
+które wielu administratorów ustawia, by oszczędzać miejsce.
+
+00:31:44.000 --> 00:31:45.360
+Jest też wersja brutalna.
+
+00:31:45.580 --> 00:31:46.540
+Masowe usuwanie.
+
+00:31:46.740 --> 00:31:49.780
+Usuń zawartość, opróżnij pierwszy kosz i zegar rusza.
+
+00:31:49.780 --> 00:31:53.000
+Jeśli atakujący ma rolę administratora, czyści też drugi kosz.
+
+00:31:53.120 --> 00:31:56.380
+Jeśli nie, musi tylko odczekać 93 dni lub liczyć na to, że nikt nie zauważy.
+
+00:31:56.600 --> 00:31:59.040
+Zawartość usunięta dziś i niezauważona przez 3 miesiące przepada.
+
+00:31:59.240 --> 00:32:01.280
+Bez względu na to, co mówiło okno retencji na papierze.
+
+00:32:01.440 --> 00:32:02.960
+Czasami atakujący robi obie te rzeczy.
+
+00:32:03.200 --> 00:32:05.640
+Zaszyfruj pliki, które się synchronizują, usuń te, które się nie synchronizują
+
+00:32:05.640 --> 00:32:07.020
+i wyczyść wszystko, do czego mają dostęp.
+
+00:32:07.320 --> 00:32:08.980
+Prawdopodobnie już słyszeliście to stwierdzenie.
+
+00:32:09.160 --> 00:32:11.360
+SharePoint nie może zostać zainfekowany oprogramowaniem ransomware.
+
+00:32:11.500 --> 00:32:14.020
+To półprawda, a właśnie ta połowa wyrządza tak wiele szkód.
+
+00:32:14.020 --> 00:32:15.320
+Oto ta prawdziwa połowa.
+
+00:32:15.500 --> 00:32:18.180
+Code ransomware nie może uruchomić się wewnątrz SharePoint Online.
+
+00:32:18.400 --> 00:32:21.900
+Nie ma serwera do zainfekowania ani systemu operacyjnego, który mógłby przejąć malware.
+
+00:32:22.120 --> 00:32:24.740
+Usługa Microsoft nie szyfruje Waszych witryn od wewnątrz.
+
+00:32:24.860 --> 00:32:26.440
+A oto połowa, która ma znaczenie.
+
+00:32:26.640 --> 00:32:30.980
+Prawie nic z tego nie chroni zawartości, ponieważ trafia ona do SharePointa przez ludzi i urządzenia.
+
+00:32:31.340 --> 00:32:33.280
+Zsynchronizowana biblioteka to tylko folder na laptopie,
+
+00:32:33.340 --> 00:32:36.780
+a klient synchronizacji zapisuje wszystko, co zawiera ten folder, z powrotem w bibliotece.
+
+00:32:36.780 --> 00:32:41.240
+Skradzione konto może przesyłać pliki, nadpisywać je lub usuwać przez przeglądarkę albo API.
+
+00:32:41.440 --> 00:32:44.040
+Aplikacja z szerokimi uprawnieniami może zrobić to szybciej,
+
+00:32:44.180 --> 00:32:46.660
+więc SharePoint nie łapie ransomware tak jak robi to laptop.
+
+00:32:46.880 --> 00:32:48.340
+On po prostu przechowuje rezultat.
+
+00:32:48.460 --> 00:32:51.060
+Platforma pozostaje czysta, dane wewnątrz niej nie,
+
+00:32:51.240 --> 00:32:54.960
+a zespół, który wierzy w pierwsze zdanie, pominie planowanie, którego wymaga drugie.
+
+00:32:55.120 --> 00:32:58.520
+Pytanie brzmi więc, co zrobić, gdy biblioteka jest pełna zaszyfrowanych plików,
+
+00:32:58.580 --> 00:33:00.640
+a klient synchronizacji już je rozprzestrzenił.
+
+00:33:00.820 --> 00:33:03.900
+Microsoft stworzył natywne rozwiązanie dla strony synchronizacji.
+
+00:33:03.900 --> 00:33:07.980
+Jest ograniczone, użyteczne i działa najlepiej, gdy wykryjesz problem wcześniej.
+
+00:33:08.380 --> 00:33:10.900
+Odzyskiwanie po ransomware za pomocą natywnych narzędzi instruktaż.
+
+00:33:11.680 --> 00:33:14.620
+Zacznijmy od tego, co Microsoft stworzył dla strony synchronizacji.
+
+00:33:14.860 --> 00:33:19.400
+Gdy onDrive wykryje nagłą zmianę dużej liczby plików w sposób przypominający szyfrowanie, może to oznaczyć.
+
+00:33:19.540 --> 00:33:21.120
+Użytkownik otrzymuje komunikat w stylu
+
+00:33:21.120 --> 00:33:23.220
+Uważamy, że Twoje pliki zostały zaatakowane.
+
+00:33:23.460 --> 00:33:25.200
+Następnie otwiera się proces przywracania,
+
+00:33:25.320 --> 00:33:28.080
+a Microsoft prowadzi użytkownika przez cofanie zmian w onDrive.
+
+00:33:28.260 --> 00:33:30.000
+To właśnie monit wykrywania ransomware.
+
+00:33:30.000 --> 00:33:34.080
+Jest powiązany z przywracaniem onDrive, czyli tym samym 30-dniowym cofaniem, o którym mówiliśmy wcześniej.
+
+00:33:34.320 --> 00:33:36.880
+Dla jednego użytkownika i jednego laptopa, jeśli problem wykryto wcześniej.
+
+00:33:37.140 --> 00:33:37.660
+Działa dobrze.
+
+00:33:37.900 --> 00:33:40.020
+Użytkownik wybiera punkt w czasie przed wystąpieniem szkód.
+
+00:33:40.200 --> 00:33:43.360
+Wykres aktywności pokazuje skok zmian w plikach, więc łatwo wskazać właściwy moment.
+
+00:33:43.540 --> 00:33:46.180
+Potwierdzają to, a Microsoft cofa wszystko, co wydarzyło się po tym punkcie.
+
+00:33:46.300 --> 00:33:47.380
+Ale spójrzcie na warunki.
+
+00:33:47.600 --> 00:33:49.060
+Wykrywanie musi zostać uruchomione.
+
+00:33:49.260 --> 00:33:50.220
+Nie zawsze tak się dzieje.
+
+00:33:50.460 --> 00:33:54.080
+Wolne szyfrowanie, małe partie lub pliki nadpisane przez atakującego w przeglądarce
+
+00:33:54.080 --> 00:33:57.080
+zamiast przez klienta synchronizacji mogą pozostać poniżej progu.
+
+00:33:57.240 --> 00:34:01.900
+Amonit pomaga tylko wtedy, gdy użytkownik go przeczyta, zrozumie i nie zamknie okna, by po prostu wrócić do pracy.
+
+00:34:02.080 --> 00:34:04.340
+Teraz przejdźmy od jednego użytkownika do biblioteki.
+
+00:34:04.560 --> 00:34:06.160
+SharePoint przywrócił tę bibliotekę.
+
+00:34:06.300 --> 00:34:09.420
+Przywraca pojedynczą bibliotekę dokumentów do stanu z ostatnich 30 dni.
+
+00:34:09.580 --> 00:34:13.480
+Ten sam wykres, ten sam etap przeglądu to samo potwierdzenie, ale tylko dla jednej biblioteki naraz.
+
+00:34:13.660 --> 00:34:16.680
+Witryna może mieć 6, a cały tenant może mieć 4000 witryn.
+
+00:34:16.680 --> 00:34:20.540
+Ktoś musi otworzyć każdą bibliotekę, wybrać czas, przejrzeć zmiany i potwierdzić,
+
+00:34:20.640 --> 00:34:24.620
+a do tego trzeba mieć odpowiednie uprawnienia w każdej witrynie lub najpierw dodać się do nich.
+
+00:34:24.740 --> 00:34:26.680
+Oto pytanie, od którego wszystko zależy.
+
+00:34:26.940 --> 00:34:27.860
+Który punkt w czasie?
+
+00:34:28.220 --> 00:34:29.960
+Atakujący nie ogłaszają, kiedy zaczęli.
+
+00:34:30.100 --> 00:34:33.000
+Pierwszy zaszyfrowany plik może pochodzić z poniedziałku, a ostatni z czwartku.
+
+00:34:33.220 --> 00:34:36.880
+Administrator wybierający punkt przywracania zgaduje, gdzie kończyło się czyste środowisko, a zaczynały uszkodzenia.
+
+00:34:37.120 --> 00:34:39.220
+Wybierz zbyt późno, a zaszyfrowane pliki powrócą.
+
+00:34:39.440 --> 00:34:41.580
+Wybierz zbyt wcześnie, a stracisz dni rzeczywistej pracy.
+
+00:34:41.580 --> 00:34:43.000
+A teraz dodajmy do tego liczby.
+
+00:34:43.200 --> 00:34:44.960
+Załóżmy, że zaatakowano 300 użytkowników.
+
+00:34:45.080 --> 00:34:47.680
+Każdy ma usługę on-drive i każdy on-drive wymaga osobnego przywrócenia.
+
+00:34:47.880 --> 00:34:50.480
+Wielu korzysta też ze wspólnych bibliotek w kilkunastu witrynach.
+
+00:34:50.600 --> 00:34:54.060
+To kilka tysięcy plików na użytkownika rozproszonych w setkach lokalizacji.
+
+00:34:54.320 --> 00:34:56.460
+Nie ma jednego przycisku do przywracania wszystkich.
+
+00:34:56.760 --> 00:35:01.220
+W praktyce administratorzy używają skryptów PowerShell lub przeprowadzają użytkowników przez ten proces krok po kroku.
+
+00:35:01.400 --> 00:35:04.540
+Tak czy inaczej, każde przywracanie musi zostać zakolejkowane, uruchomione i zakończone.
+
+00:35:04.540 --> 00:35:11.700
+Duże operacje trwają godzinami, a nie można ich bezpiecznie rozpocząć, dopóki atakujący jest w systemie, bo przywracanie do zainfekowanego tenanta tylko napędza kolejną rundę szyfrowania.
+
+00:35:11.880 --> 00:35:20.480
+Czas stracony jest więc nie na samo przywracanie, lecz na określenie zakresu zaatakowanych kont, zablokowanie intruza, wybór punktów przywracania, wykonanie setek operacji i sprawdzanie każdego wyniku.
+
+00:35:20.720 --> 00:35:22.260
+Dla średniej firmy to kwestia dni.
+
+00:35:22.520 --> 00:35:23.400
+Dla dużej tygodni.
+
+00:35:23.540 --> 00:35:25.300
+A to wszystko jest jeszcze tą łatwiejszą częścią.
+
+00:35:25.480 --> 00:35:26.360
+Dotyczy tylko plików.
+
+00:35:26.520 --> 00:35:28.360
+Spójrzmy teraz, gdzie kończą się możliwości natywnego przywracania.
+
+00:35:28.500 --> 00:35:29.040
+Exchange.
+
+00:35:29.040 --> 00:35:31.140
+Nie ma przycisku przewijania dla skrzynki pocztowej.
+
+00:35:31.280 --> 00:35:36.980
+Elementy możliwe do odzyskania pozwalają na przywrócenie usuniętej poczty z okresu od 14 do 30 dni, ale nic nie dają w przypadku wiadomości zmienionych, przeniesionych lub nadpisanych.
+
+00:35:37.180 --> 00:35:42.260
+Jeśli atakujący stworzył reguły przekierowania lub zmienił wiadomości, żadne natywne narzędzie nie przywróci skrzynki do poprzedniego stanu.
+
+00:35:42.420 --> 00:35:45.140
+W przypadku czatu w Teams wiemy, że nie ma ścieżki powrotu do produktu.
+
+00:35:45.320 --> 00:35:48.440
+Wiadomości można wyeksportować, ale nie da się ich przywrócić do aktywnej konwersacji.
+
+00:35:48.600 --> 00:35:50.580
+I jeszcze spójność między różnymi obszarami pracy.
+
+00:35:50.740 --> 00:35:52.020
+To ten mniej oczywisty problem.
+
+00:35:52.020 --> 00:35:56.100
+Załóżmy, że pliki w Teams zostały zaszyfrowane, kanał usunięty, a członkostwo w grupie zmienione.
+
+00:35:56.320 --> 00:35:59.960
+Możesz przywrócić bibliotekę do jednego punktu, grupę do drugiego, a skrzynkę pocztową do trzeciego.
+
+00:36:00.140 --> 00:36:02.860
+Każde narzędzie działa według własnego harmonogramu i własnych okien czasowych.
+
+00:36:03.080 --> 00:36:04.240
+Nic nie łączy ich w całość.
+
+00:36:04.420 --> 00:36:08.660
+Kończysz przywracanie i każdy element wygląda dobrze, ale witryna wskazuje na kanał, którego już nie ma.
+
+00:36:08.840 --> 00:36:11.020
+Pliki należą do osób, które nie są już członkami.
+
+00:36:11.260 --> 00:36:14.240
+Natywne narzędzia do przywracania nigdy nie zsynchronizowały stanu elementów.
+
+00:36:14.240 --> 00:36:17.400
+Nie przywracają one konkretnego momentu, a Microsoft wiedział, że to luka.
+
+00:36:17.400 --> 00:36:22.280
+Stworzył więc coś nowego, co działa poza starymi koszami i oknami retencji, wymierzone prosto w ten problem.
+
+00:36:22.560 --> 00:36:24.440
+Microsoft 365 Backup.
+
+00:36:24.560 --> 00:36:25.000
+Czym to jest?
+
+00:36:25.140 --> 00:36:27.660
+Microsoft nazywa to Microsoft 365 Backup.
+
+00:36:27.780 --> 00:36:28.240
+Prosta nazwa.
+
+00:36:28.380 --> 00:36:33.680
+To pierwszy raz, gdy Microsoft sprzedaje funkcję kopii zapasowej i przywracania dla własnej usługi, stworzoną przez tę samą firmę, która ją obsługuje.
+
+00:36:33.840 --> 00:36:36.600
+Obejmuje trzy obciążenia SharePoint, OnDrive i Exchange.
+
+00:36:36.820 --> 00:36:38.920
+Witryny, pamięć osobista i skrzynki pocztowe.
+
+00:36:38.920 --> 00:36:42.900
+To miejsca, w których natywne przywracanie nie dawało rady, więc zakres nie jest przypadkowy.
+
+00:36:43.100 --> 00:36:44.020
+Jak więc to uzyskać?
+
+00:36:44.140 --> 00:36:45.360
+Nie kupujesz tego na użytkownika.
+
+00:36:45.360 --> 00:36:46.760
+Nie ma licencji stanowiskowej.
+
+00:36:46.960 --> 00:36:49.040
+Jest rozliczane przez Azure w modelu płatności za użycie.
+
+00:36:49.220 --> 00:36:54.740
+Administrator łączy dzierżawę z subskrypcją Azure, włącza usługę w Centrum Administracyjnym Microsoft 365 i licznik rusza.
+
+00:36:54.900 --> 00:36:57.920
+Płacisz za ilość chronionych danych, mierzoną w gigabajtach na miesiąc.
+
+00:36:58.020 --> 00:37:00.280
+Ten model rozliczeniowy ma większe znaczenie niż się wydaje.
+
+00:37:00.520 --> 00:37:02.940
+Oznacza to, że możesz chronić niektóre rzeczy, a inne pominąć.
+
+00:37:03.100 --> 00:37:05.180
+Nie musisz na początku obejmować całości dzierżawy.
+
+00:37:05.180 --> 00:37:12.000
+Wybierasz witryny, konta i skrzynki, które mają być objęte polityką kopii zapasowej, a rachunek zależy od tego wyboru, co oznacza również konieczność podjęcia decyzji.
+
+00:37:12.160 --> 00:37:13.940
+Ktoś musi określić, co podlega ochronie.
+
+00:37:14.160 --> 00:37:17.900
+Jeśli nikt tego nie zrobi, nic nie jest chronione, a usługa pozostaje wyłączona i nieaktywna.
+
+00:37:18.060 --> 00:37:21.020
+A teraz część, która zmienia codzienną pracę, przywracanie do punktu w czasie.
+
+00:37:21.240 --> 00:37:25.180
+Kopia zapasowa jest tworzona regularnie, a te kopie są przechowywane jako punkty przywracania.
+
+00:37:25.180 --> 00:37:28.060
+Gdy coś pójdzie nie tak, nie musisz szukać pojedynczych plików.
+
+00:37:28.220 --> 00:37:32.960
+Wybierasz moment wtorek godzina dziewiąta, a następnie polecasz usłudze przywrócenie elementu do stanu z tamtej chwili.
+
+00:37:33.220 --> 00:37:34.680
+Są dwa sposoby, aby to zrobić.
+
+00:37:34.920 --> 00:37:36.740
+Sposób szczegółowy działa na pojedynczy element.
+
+00:37:36.960 --> 00:37:41.220
+Jedna witryna, jeden ondrive, jedna skrzynka lub nawet kilka elementów wewnątrz nich znalezionych przez wyszukiwarkę.
+
+00:37:41.340 --> 00:37:44.620
+To odpowiedź na sytuację, gdy użytkownik usunął zły folder w zeszłym tygodniu.
+
+00:37:44.860 --> 00:37:46.740
+Sposób masowy działa na wiele rzeczy naraz.
+
+00:37:46.740 --> 00:37:51.800
+Wybierasz grupę witryn, listę kont, zestaw skrzynek, a następnie przywracasz je wszystkie do tego samego punktu w czasie.
+
+00:37:52.020 --> 00:37:54.600
+To odpowiedź na przypadek ataku ransomware, który właśnie omówiliśmy.
+
+00:37:54.820 --> 00:37:57.040
+Ten z 301 dyskami i brakiem jednego przycisku.
+
+00:37:57.200 --> 00:37:58.700
+Tym razem taki przycisk istnieje.
+
+00:37:58.860 --> 00:38:00.700
+Porównaj to z możliwościami rodzimych narzędzi.
+
+00:38:00.860 --> 00:38:05.500
+30-dniowa historia zmian dla każdej biblioteki, kosz, który się opróżnia i folder przechowywania z fragmentami danych.
+
+00:38:05.680 --> 00:38:09.540
+Tutaj otrzymujesz pełny obraz stanu danych i możliwość przywrócenia całej witryny lub skrzynki pocztowej do tego punktu.
+
+00:38:09.640 --> 00:38:10.560
+A teraz szybkość.
+
+00:38:10.560 --> 00:38:14.020
+Microsoft składa tu odważne deklaracje i warto zrozumieć, co się za nimi kryje.
+
+00:38:14.180 --> 00:38:17.860
+Twierdzi się, że odzyskiwanie danych przebiega znacznie szybciej niż w przypadku narzędzi zewnętrznych.
+
+00:38:18.080 --> 00:38:19.680
+Duże wolumeny w godziny, a nie dni.
+
+00:38:19.900 --> 00:38:21.700
+Powodem jest architektura, a nie magia.
+
+00:38:21.940 --> 00:38:27.820
+Narzędzie innej firmy musi prosić usługę Microsoft o dane przez publiczny interfejs żądanie po żądaniu w ramach limitów ustalonych przez Microsoft.
+
+00:38:28.080 --> 00:38:30.960
+Microsoft 365 Backup nie stoi w tej kolejce.
+
+00:38:31.200 --> 00:38:36.140
+Działa wewnątrz platformy, blisko miejsca przechowywania danych, używając innej ścieżki do kopiowania i zwracania zawartości.
+
+00:38:36.140 --> 00:38:38.580
+Mniejszy dystans, mniej bramek, mniej ograniczeń.
+
+00:38:40.560 --> 00:38:43.520
+Usługa nie jest mądrzejsza, po prostu znajduje się w innym miejscu.
+
+00:38:43.660 --> 00:38:48.600
+Wrócimy do tego, ponieważ fizyka wyznacza górny limit każdej operacji odzyskiwania i warto to uczciwie przeanalizować.
+
+00:38:48.820 --> 00:38:50.080
+Na razie zapamiętaj tę myśl.
+
+00:38:50.240 --> 00:38:54.760
+To, gdzie znajduje się narzędzie do backupu, decyduje o szybkości jego pracy, co prowadzi nas do pojęcia pierwszej strony.
+
+00:38:55.020 --> 00:38:56.520
+Brzmi jak slogan marketingowy.
+
+00:38:56.720 --> 00:38:58.100
+W praktyce zmienia dwie rzeczy.
+
+00:38:58.300 --> 00:38:59.480
+Po pierwsze, zaufanie.
+
+00:38:59.660 --> 00:39:05.780
+Twoje dane nie muszą być przekazywane innej firmie, kopiowane do innej chmury, ani obsługiwane przez aplikacje z szerokimi uprawnieniami w Twoim środowisku.
+
+00:39:05.780 --> 00:39:10.540
+Nie ma dodatkowego dostawcy do sprawdzenia, konektora do zatwierdzenia, ani konta, które mogłoby zostać przejęte.
+
+00:39:10.680 --> 00:39:13.260
+W przeglądzie bezpieczeństwa to jedna nazwa mniej na liście.
+
+00:39:13.480 --> 00:39:14.620
+Po drugie, integracja.
+
+00:39:14.840 --> 00:39:19.600
+Usługa wie, jak SharePoint przechowuje witrynę, jak OnDrive obsługuje wersję i jak Exchange zarządza skrzynką.
+
+00:39:19.840 --> 00:39:21.940
+Przywraca dane do tych środowisk w sposób natywny.
+
+00:39:22.140 --> 00:39:25.800
+Uprawnienia, struktura i metadane wracają wraz z elementami, a nie jako oddzielne zadanie.
+
+00:39:25.960 --> 00:39:28.220
+To jest coś, czego retencja nigdy nie mogła zapewnić.
+
+00:39:28.380 --> 00:39:30.620
+Przywraca stan całej witryny, a nie tylko jej pliki.
+
+00:39:30.880 --> 00:39:33.380
+Gdy to wszystko zbierzemy, obraz staje się niemal kompletny.
+
+00:39:33.380 --> 00:39:37.260
+Jedna faktura, punkty w czasie, opcja masowa pasująca do scenariuszy ataków.
+
+00:39:37.440 --> 00:39:40.260
+Szybkość wynikająca z pozycji i statusu własnego rozwiązania Microsoftu.
+
+00:39:40.420 --> 00:39:41.520
+Więc co jest z tym nie tak?
+
+00:39:41.700 --> 00:39:43.680
+Nic, jeśli odczytasz to zgodnie z przeznaczeniem.
+
+00:39:43.880 --> 00:39:46.540
+Ale backup jest tylko tak pełny, jak wyznaczone przez niego granice.
+
+00:39:46.700 --> 00:39:51.000
+A to rozwiązanie ma granice, którym warto się przyjrzeć, zaczynając od tego, co obejmuje, a czego nie.
+
+00:39:51.260 --> 00:39:53.380
+Zakres i limity Microsoft 365 backup.
+
+00:39:54.220 --> 00:39:55.320
+Zacznijmy od zakresu.
+
+00:39:55.480 --> 00:39:57.380
+Trzy obszary SharePoint, OnDrive Exchange.
+
+00:39:58.100 --> 00:39:58.860
+To pełna lista.
+
+00:39:59.140 --> 00:40:00.880
+Cała reszta znajduje się poza tym zakresem.
+
+00:40:00.880 --> 00:40:03.100
+Usługa Teams nie jest samodzielnie chronionym obciążeniem.
+
+00:40:03.100 --> 00:40:05.800
+Pliki w zespole znajdują się w SharePoint, więc są objęte ochroną.
+
+00:40:06.000 --> 00:40:09.040
+Skrzynka pocztowa przypisana do grupy znajduje się w Exchange, więc też jest chroniona.
+
+00:40:09.240 --> 00:40:13.460
+Jednak czaty, struktura wiadomości na kanałach, planer i sam zespół jako obiekt nie są częścią tego produktu.
+
+00:40:13.640 --> 00:40:16.120
+Poświęciliśmy cały rozdział temu, z ilu elementów składa się zespół.
+
+00:40:16.300 --> 00:40:17.940
+Kopia zapasowa obejmuje tylko dwa z nich.
+
+00:40:18.140 --> 00:40:19.880
+Podobnie wygląda sytuacja z resztą dzierżawy.
+
+00:40:20.080 --> 00:40:23.860
+Obiekty EntraID, zasady dostępu warunkowego, aplikacje Power Platform lub Forums Stream.
+
+00:40:24.080 --> 00:40:25.580
+Nic z tego nie jest objęte zakresem.
+
+00:40:25.580 --> 00:40:30.880
+Jeśli Twój plan odzyskiwania zakłada, że Microsoft tworzy kopie zapasowe Microsoft 365, to w tym miejscu potrzebny jest przypis.
+
+00:40:31.040 --> 00:40:33.900
+Usługa tworzy kopie dla trzech obciążeń, a przypis dotyczy pozostałych 20.
+
+00:40:34.160 --> 00:40:34.860
+A teraz czas.
+
+00:40:35.100 --> 00:40:37.140
+Jak długo przechowywane są te punkty przywracania?
+
+00:40:37.320 --> 00:40:42.920
+Usługa przechowuje dane kopii zapasowej przez określony czas, a okres ten jest ustalony przez samą usługę, a nie przez Twoje zasady.
+
+00:40:43.160 --> 00:40:45.800
+Microsoft określa to jako do roku punktów przywracania.
+
+00:40:46.060 --> 00:40:51.660
+Sprawdź aktualną dokumentację, zanim oprzesz na tej liczbie swój plan, ponieważ takie limity zmieniają się wraz z aktualizacjami produktu.
+
+00:40:51.660 --> 00:40:54.280
+A teraz porównaj to z tym, czego faktycznie wymaga biznes.
+
+00:40:54.460 --> 00:40:57.000
+Dział finansowy może potrzebować dokumentacji z 7 lat.
+
+00:40:57.160 --> 00:40:59.160
+Branża regulowana może wymagać 10 lat.
+
+00:40:59.340 --> 00:41:02.120
+Zespół prawny chce każdą wersję umowy od dnia jej podpisania.
+
+00:41:02.340 --> 00:41:05.320
+Kopia zapasowa sięgająca rok wstecz nie rozwiązuje tych problemów.
+
+00:41:05.440 --> 00:41:06.240
+To nie jest wada.
+
+00:41:06.420 --> 00:41:07.280
+To inne zadanie.
+
+00:41:07.480 --> 00:41:09.620
+Kopia zapasowa służy do cofania niedawnych szkód.
+
+00:41:09.940 --> 00:41:13.940
+Długoterminowe przechowywanie to zadanie warstwy retencji, a już wiemy, co ta warstwa może, a czego nie.
+
+00:41:14.120 --> 00:41:16.180
+Istnieje jednak luka między tymi dwoma rozwiązaniami.
+
+00:41:16.180 --> 00:41:20.060
+Szkoda wykryta w 14 miesiącu jest zbyt stara dla kopii zapasowej i zbyt chaotyczna dla retencji.
+
+00:41:20.220 --> 00:41:24.360
+Powolna, cicha korupcja danych, której nikt nie zauważa aż do audytu, może ukrywać się w tej luce.
+
+00:41:24.600 --> 00:41:28.200
+Potrzebne punkty przywracania już wygasły, a to, co zostało, to sterta luźnych kopii.
+
+00:41:28.380 --> 00:41:31.380
+Zatem okres retencji nie jest wystarczająco długi, aby mógł być twoim jedynym planem.
+
+00:41:31.540 --> 00:41:35.500
+Jest wystarczająco długi, by pokryć większość błędów i ataków, ale niewystarczająco, by poradzić sobie z tymi cichymi.
+
+00:41:35.640 --> 00:41:39.020
+Teraz pytanie, które ludzie zadają jako drugie, a powinni jako pierwsze, gdzie żyją te dane?
+
+00:41:39.020 --> 00:41:44.260
+Microsoft twierdzi, że kopia zapasowa jest przechowywana w granicach usługi Microsoft 365 oddzielnie od bieżącej zawartości.
+
+00:41:44.480 --> 00:41:47.960
+Znajduje się w dedykowanej pamięci masowej odseparowanej od miejsca, w którym działają twoje witryny i skrzynki pocztowe,
+
+00:41:48.100 --> 00:41:50.680
+więc niefortunne usunięcie danych w bibliotece nie wpływa na punkty przywracania.
+
+00:41:50.840 --> 00:41:52.000
+To jest separacja logiczna.
+
+00:41:52.220 --> 00:41:55.320
+Jest realna i przydatna, ale przyjrzyjmy się, co oznacza separacja logiczna.
+
+00:41:55.520 --> 00:41:57.240
+Kopia zapasowa jest oddzielona od zawartości.
+
+00:41:57.460 --> 00:41:58.960
+Nie jest jednak oddzielona od dzierżawy.
+
+00:41:58.960 --> 00:42:04.220
+Jest to nadal powiązane z twoim dzierżawcą, zarządzane przez to samo centrum administracyjne i kontrolowane przez ten sam zestaw ról.
+
+00:42:04.320 --> 00:42:09.160
+Osoby, które mogą to skonfigurować, to użytkownicy w twoim środowisku posiadający odpowiednie uprawnienia, przyznane przez twój system tożsamości.
+
+00:42:09.520 --> 00:42:11.480
+Przeanalizujmy więc scenariusz, do którego zmierzaliśmy.
+
+00:42:12.040 --> 00:42:13.040
+Skompromitowany administrator.
+
+00:42:13.360 --> 00:42:16.880
+Widzieliśmy już, co takie konto może zrobić z koszami, blokadami i ustawieniami retencji.
+
+00:42:17.080 --> 00:42:23.660
+Teraz zadaj pytanie, co to samo konto może zrobić z polityką kopii zapasowych, kto może zmienić zakres ochrony, kto może usunąć witrynę z listy, kto może skasować punkt przywracania.
+
+00:42:23.660 --> 00:42:26.520
+Odpowiedzi zależą od tego, jak przypisujesz rolę i jak dobrze je chronisz.
+
+00:42:26.640 --> 00:42:28.520
+Usługa zapewnia odpowiednie mechanizmy kontroli.
+
+00:42:28.660 --> 00:42:30.020
+Nie dokonuje jednak wyborów za ciebie.
+
+00:42:30.180 --> 00:42:31.580
+I to jest kwestia jednego dostawcy.
+
+00:42:31.760 --> 00:42:33.420
+Twoje dane produkcyjne działają na platformie Microsoft.
+
+00:42:33.620 --> 00:42:35.060
+Twoja tożsamość działa na platformie Microsoft.
+
+00:42:35.280 --> 00:42:36.960
+Twoja kopia zapasowa również działa na platformie Microsoft.
+
+00:42:37.160 --> 00:42:39.540
+Jedna firma, jedna płaszczyzna kontroli, jeden zestaw poświadczeń na samym szczycie.
+
+00:42:39.700 --> 00:42:41.720
+Jeśli awaria dotyczy centrum danych, wszystko jest w porządku.
+
+00:42:41.880 --> 00:42:43.680
+Microsoft dobrze radzi sobie z takimi sytuacjami.
+
+00:42:43.680 --> 00:42:50.060
+Jeśli jednak awaria wystąpi na poziomie dzierżawcy, warstwy tożsamości lub relacji rozliczeniowej, wszystko, czego użyjesz do odzyskiwania, dzieli tę samą drogę, co to, co uległo awarii.
+
+00:42:50.400 --> 00:42:53.240
+Specjaliści do spraw bezpieczeństwa mają na to nazwę wspólny los.
+
+00:42:53.440 --> 00:42:55.960
+Jedno zdarzenie niszczy zarówno dane, jak i ścieżkę powrotu do nich.
+
+00:42:56.140 --> 00:42:57.260
+Nie czyni to produktu złym.
+
+00:42:57.460 --> 00:43:02.820
+Czyni go to solidną pierwszą warstwą, szybką, natywną i stworzoną do masowego przywracania, z czym narzędzia natywne nigdy sobie nie radziły.
+
+00:43:02.980 --> 00:43:04.540
+Nie jest to jednak niezależna kopia.
+
+00:43:04.800 --> 00:43:07.420
+Nie może nią być, ponieważ niezależność oznacza zupełnie coś innego.
+
+00:43:07.420 --> 00:43:10.080
+To inny magazyn, inne poświadczenia, inną płaszczyznę kontroli.
+
+00:43:10.240 --> 00:43:12.800
+I właśnie dlatego istnieje rynek rozwiązań innych firm.
+
+00:43:12.980 --> 00:43:14.680
+Co dodaje zewnętrzna kopia zapasowa?
+
+00:43:14.860 --> 00:43:18.400
+Produkt do kopii zapasowych od zewnętrznego dostawcy zaczyna się od jednej decyzji strukturalnej.
+
+00:43:18.580 --> 00:43:23.960
+Przechowuje Twoje dane gdzie indziej, nie w innym folderze, lecz w innym miejscu, zarządzanym przez inną firmę i pod innym zestawem kont.
+
+00:43:24.100 --> 00:43:26.880
+Kopia znajduje się w pamięci masowej, której Twój dzierżawca nie posiada.
+
+00:43:26.880 --> 00:43:29.160
+Może to być centrum danych innego dostawcy chmury.
+
+00:43:29.420 --> 00:43:31.180
+Może to być region, który sam wybrałeś.
+
+00:43:31.360 --> 00:43:35.620
+Liczy się to, że pamięć masowa nie ma nic wspólnego z usługą Microsoft 365, którą chroni.
+
+00:43:37.420 --> 00:43:39.000
+Jest część, którą ludzie pomijają.
+
+00:43:39.220 --> 00:43:42.220
+Logowanie do kopii zapasowej nie odbywa się przy użyciu konta Microsoft 365.
+
+00:43:42.760 --> 00:43:48.260
+Dane te znajdują się w systemie dostawcy, z własną polityką haseł, własnymi monitami uwierzytelniania wieloskładnikowego i własną listą osób uprawnionych.
+
+00:43:48.400 --> 00:43:51.680
+Więc skradzione konto administratora globalnego w Twoim dzierżawcy nie otwiera tam niczego.
+
+00:43:51.940 --> 00:43:55.700
+Atakujący może opróżnić każdy kosz, usunąć każdą witrynę i nadpisać każdą politykę.
+
+00:43:55.700 --> 00:43:59.400
+A kopia zapasowa tego nie zauważa, ponieważ od początku nie ufała tej tożsamości.
+
+00:43:59.580 --> 00:44:01.160
+To prowadzi do płaszczyzny sterowania.
+
+00:44:01.160 --> 00:44:06.560
+Płaszczyzna sterowania to miejsce, gdzie ustalasz zasady, co jest chronione, jak często, jak długo przechowywane i kto może to usunąć.
+
+00:44:06.760 --> 00:44:11.540
+W przypadku kopii zapasowej Microsoft 365 tym miejscem jest Twoje centrum administracyjne powiązane z Twoim tenantem.
+
+00:44:11.740 --> 00:44:15.640
+W przypadku niezależnego produktu jest to oddzielna konsola działająca całkowicie poza tenantem.
+
+00:44:15.800 --> 00:44:18.820
+I to właśnie ta separacja pozwala przetrwać w najgorszym scenariuszu.
+
+00:44:18.820 --> 00:44:26.780
+W przypadku zdarzenia na poziomie tenanta, gdy cały tenant jest zablokowany, przejęty lub zawieszony z powodu sporu o płatności, wszystko, co od niego zależy, przestaje działać.
+
+00:44:26.940 --> 00:44:31.260
+Niezależna płaszczyzna sterowania działa nadal, ponieważ od początku nie była zależna od tenanta.
+
+00:44:31.520 --> 00:44:35.460
+Nadal możesz się zalogować, widzieć swoje punkty przywracania i rozpocząć proces odzyskiwania.
+
+00:44:35.660 --> 00:44:40.540
+Przechowywanie danych natywna kopia zapasowa utrzymuje punkty przywracania przez ustalony okres określony przez usługę.
+
+00:44:40.720 --> 00:44:46.340
+Narzędzia firm trzecich zazwyczaj pozwalają na wybór rok dla większości zawartości, 7 lat dla finansów, 10 dla działów regulowanych.
+
+00:44:46.340 --> 00:44:50.540
+Niektóre pozwalają przechowywać kopie dzienne przez miesiąc, tygodniowe przez rok, a miesięczne przez dekadę.
+
+00:44:50.700 --> 00:44:53.660
+Dzięki temu koszty przechowywania pozostają rozsądne, a historia zachowana na długo.
+
+00:44:53.800 --> 00:44:56.200
+Ta elastyczność wypełnia lukę, którą opisaliśmy wcześniej.
+
+00:44:56.420 --> 00:44:59.320
+Powolne uszkodzenie wykryte w 14 miesiącu nie jest już poza zasięgiem.
+
+00:44:59.500 --> 00:45:02.000
+Punkt przywracania sprzed wystąpienia uszkodzenia nadal jest dostępny.
+
+00:45:02.140 --> 00:45:03.360
+Kolejną kwestią jest miejsce przywracania.
+
+00:45:03.460 --> 00:45:06.000
+Natywne przywracanie umieszcza zawartość z powrotem w tym samym tenancie, z którego pochodzi.
+
+00:45:06.180 --> 00:45:08.080
+To w porządku w przypadku usuniętego folderu.
+
+00:45:08.280 --> 00:45:10.320
+Staje się to problemem, gdy zawiódł sam tenant.
+
+00:45:10.320 --> 00:45:13.340
+Wiele niezależnych produktów potrafi przywracać dane między tenantami.
+
+00:45:13.500 --> 00:45:19.800
+Uruchamiasz czystego tenanta, wskazujesz na niego narzędzie i przenosisz skrzynki pocztowe oraz witryny w miejsce, którego atakujący nigdy nie dotknął.
+
+00:45:19.880 --> 00:45:24.320
+Pomaga to również w codziennych sprawach biznesowych, fuzjach, podziałach firm czy przenosinach między tenantami.
+
+00:45:24.480 --> 00:45:29.100
+Ta sama funkcja, która ratuje Cię przed katastrofą, pozwala też sprawnie przenosić dane, gdy nic złego się nie dzieje.
+
+00:45:29.280 --> 00:45:30.520
+Jest też kwestia wyjścia.
+
+00:45:30.760 --> 00:45:37.180
+Większość produktów potrafi eksportować dane w otwartych formatach, skrzynki jako pliki PST, dokumenty jako zwykłe pliki w oryginalnej strukturze folderów.
+
+00:45:37.180 --> 00:45:43.480
+Brzmi to nieistotnie, dopóki nie wyobrazisz sobie alternatywy, czyli danych, które można odczytać tylko przez oprogramowanie jednego dostawcy.
+
+00:45:43.640 --> 00:45:50.440
+Otwarte formaty oznaczają, że kopia zapasowa jest użyteczna, nawet jeśli zmienisz narzędzia, dostawca zmieni warunki lub będziesz musiał przekazać część danych do sądu.
+
+00:45:50.580 --> 00:45:53.180
+Teraz zakres ochrony, czyli miejsce, gdzie różnica jest największa.
+
+00:45:53.300 --> 00:45:56.380
+Kopia zapasowa Microsoft 365 obejmuje trzy obszary robocze.
+
+00:45:56.580 --> 00:46:05.040
+Niezależne produkty zazwyczaj obejmują więcej, jak czaty w Teams, gdzie narzędzie może zapisać historię konwersacji i pozwolić na jej odzyskanie w formie czytelnego zapisu lub przywrócenie, jeśli platforma na to pozwala.
+
+00:46:05.040 --> 00:46:15.020
+Tablice i zadania w planerze, obiekty Entra ID, takie jak użytkownicy, grupy i rejestracje aplikacji, a w coraz większej liczbie produktów także części Power Platform, w tym aplikacje, przepływy i dane w tle.
+
+00:46:15.260 --> 00:46:18.040
+Zakres ochrony różni się w zależności od dostawcy i zmienia się z każdą aktualizacją.
+
+00:46:18.720 --> 00:46:19.800
+To szczere zastrzeżenie.
+
+00:46:20.060 --> 00:46:25.440
+Dwa produkty mogą oba oferować kopię zapasową Microsoft 365, a chronić bardzo różne zestawy elementów.
+
+00:46:25.580 --> 00:46:26.880
+Kupujesz właśnie tę listę.
+
+00:46:26.880 --> 00:46:32.180
+Niezależna kopia daje Ci więc separację, dłuższą pamięć, drogę ucieczki z przejętego tenanta i szerszą siatkę bezpieczeństwa.
+
+00:46:32.340 --> 00:46:37.720
+Ale to wszystko nie ma znaczenia, dopóki nie określisz, czego potrzebujesz, jak dużą stratę możesz zaakceptować i jak długo możesz być wyłączony z pracy.
+
+00:46:37.960 --> 00:46:42.100
+Bez tych dwóch liczb nie ocenisz żadnej dostępnej opcji, ani tej od Microsoftu, ani od nikogo innego.
+
+00:46:42.260 --> 00:46:43.720
+A te liczby mają swoje nazwy.
+
+00:46:43.940 --> 00:46:46.120
+Cele odzyskiwania wyjaśnione dla kadry zarządzającej.
+
+00:46:46.120 --> 00:46:48.460
+Dwie liczby decydują o wszystkim w planie odzyskiwania danych.
+
+00:46:48.620 --> 00:46:50.420
+RPO, czyli docelowy punkt odzyskiwania.
+
+00:46:50.580 --> 00:46:52.140
+Ile danych możemy pozwolić sobie stracić?
+
+00:46:52.280 --> 00:46:53.180
+To mierzy się wstecz.
+
+00:46:53.360 --> 00:46:54.240
+System pada o 15.
+
+00:46:54.580 --> 00:46:56.340
+Twoja ostatnia dobra kopia pochodzi z południa.
+
+00:46:56.560 --> 00:46:57.660
+Straciłeś 3 godziny pracy.
+
+00:46:57.840 --> 00:47:00.040
+RPO wynoszące 4 godziny oznacza, że akceptujesz taką stratę.
+
+00:47:00.160 --> 00:47:02.020
+RPO wynoszące 15 minut oznacza, że nie.
+
+00:47:02.160 --> 00:47:03.940
+RTO, czyli docelowy czas odzyskiwania.
+
+00:47:04.140 --> 00:47:05.720
+Jak długo możemy pozwolić sobie na przestój?
+
+00:47:05.820 --> 00:47:06.720
+To mierzy się do przodu.
+
+00:47:06.960 --> 00:47:08.820
+Zegar zaczyna tykać w momencie wystąpienia awarii.
+
+00:47:08.920 --> 00:47:11.840
+Zatrzymuje się, gdy ludzie mogą znów pracować, a nie wtedy, gdy kończy się proces przywracania.
+
+00:47:11.840 --> 00:47:14.920
+Gdy prawdziwy użytkownik otwiera prawdziwy plik i wszystko działa, to są właśnie te definicje.
+
+00:47:15.120 --> 00:47:16.260
+Mieszczą się w dwóch zdaniach.
+
+00:47:16.500 --> 00:47:18.800
+Większość ludzi potakuje, ale tu pojawia się problem.
+
+00:47:19.040 --> 00:47:22.040
+Nikt w IT nie może ustalić tych liczb samodzielnie, ponieważ nie są to ustawienia techniczne.
+
+00:47:22.160 --> 00:47:24.560
+To deklaracje dotyczące tego, co firma jest w stanie przetrwać.
+
+00:47:24.720 --> 00:47:25.800
+A tylko biznes to wie.
+
+00:47:26.040 --> 00:47:28.540
+Zazwyczaj dzieje się tak, że IT wybiera ustawienia domyślne.
+
+00:47:28.720 --> 00:47:31.440
+Kopia zapasowa wykonuje się co noc, bo tak sugeruje narzędzie.
+
+00:47:31.740 --> 00:47:34.860
+Przywracanie trwa dzień lub dwa, bo tyle mniej więcej trwał ostatni test.
+
+00:47:34.860 --> 00:47:39.540
+Stają się one wartościami RPO i RTO nie dlatego, że ktoś tak zdecydował, lecz dlatego, że nikt nie podjął decyzji.
+
+00:47:39.680 --> 00:47:42.200
+A ustawienie domyślne to decyzja podjęta nieświadomie.
+
+00:47:42.380 --> 00:47:44.380
+Pomyśl, co naprawdę oznacza nocny backup.
+
+00:47:44.600 --> 00:47:50.580
+Oznacza, że każdego wtorku zgadzasz się stracić wszystko od poniedziałkowego wieczora, nawet 24 godziny edycji poczty i zatwierdzeń.
+
+00:47:50.800 --> 00:47:53.280
+Może dział finansów zamyka kwartał właśnie we wtorek.
+
+00:47:53.420 --> 00:47:55.900
+Może zespół sprzedaży podpisuje trzy umowy tego popołudnia.
+
+00:47:56.080 --> 00:47:57.520
+Ustawienie domyślne o tym nie wie.
+
+00:47:57.700 --> 00:47:59.560
+Traktuje każdy dzień i każdy dział tak samo.
+
+00:47:59.560 --> 00:48:01.900
+Dlatego za tę liczbę musi odpowiadać ktoś spoza IT.
+
+00:48:01.900 --> 00:48:05.260
+I musi to być konkretna liczba, nie najszybciej jak się da, ani minimalny przestój.
+
+00:48:05.400 --> 00:48:08.240
+Te sformułowania brzmią odpowiedzialnie, ale do niczego nie zobowiązują.
+
+00:48:08.480 --> 00:48:10.620
+Godzina to godzina, 4 godziny to 4 godziny.
+
+00:48:10.860 --> 00:48:12.420
+Możesz je wycenić i zaplanować działania.
+
+00:48:12.620 --> 00:48:14.760
+Jak więc uzyskać konkretną liczbę od szefa działu?
+
+00:48:14.900 --> 00:48:15.940
+Nie proś go o RPO.
+
+00:48:16.160 --> 00:48:17.160
+Będzie się na Ciebie gapił.
+
+00:48:17.400 --> 00:48:19.240
+Zadaj pytanie, na które naprawdę może odpowiedzieć.
+
+00:48:19.440 --> 00:48:21.160
+Ile warta jest godzina utraty poczty e-mail?
+
+00:48:21.320 --> 00:48:22.400
+Pozwól im to obliczyć.
+
+00:48:22.620 --> 00:48:24.980
+Ilu ludzi w Twoim zespole polega na e-mailu w swojej pracy?
+
+00:48:24.980 --> 00:48:26.220
+Co robią przez godzinę?
+
+00:48:26.360 --> 00:48:29.140
+Jeśli cały zespół jest zablokowany przez godzinę, jaki jest koszt samych pensji?
+
+00:48:29.300 --> 00:48:30.300
+Jakie umowy przepadają?
+
+00:48:30.480 --> 00:48:31.640
+Który klient musi czekać?
+
+00:48:31.760 --> 00:48:33.180
+Jaki termin nie zostanie dotrzymany?
+
+00:48:33.360 --> 00:48:37.180
+Dział sprzedaży może powiedzieć, 2 godziny bez maila w piątek pod koniec kwartału i tracimy umowę.
+
+00:48:37.320 --> 00:48:38.480
+Teraz masz jakiś konkret.
+
+00:48:38.720 --> 00:48:40.920
+Dział prawny może powiedzieć, możemy tolerować dzień przestoju,
+
+00:48:41.020 --> 00:48:43.540
+ale nie możemy stracić ani jednej wiadomości z ostatniego tygodnia,
+
+00:48:43.620 --> 00:48:45.160
+bo możemy być proszeni o dowód wysyłki.
+
+00:48:45.280 --> 00:48:47.400
+To oznacza rygorystyczne RPO i luźne RTO.
+
+00:48:47.600 --> 00:48:49.540
+To przeciwieństwo tego, czego potrzebuje sprzedaż.
+
+00:48:49.540 --> 00:48:52.280
+Różne odpowiedzi od różnych ludzi na temat tego samego obciążenia.
+
+00:48:52.520 --> 00:48:53.300
+Właśnie o to chodzi.
+
+00:48:53.540 --> 00:48:55.220
+Liczby nie są takie same w całej firmie.
+
+00:48:55.420 --> 00:48:56.180
+Nie powinny być.
+
+00:48:56.340 --> 00:48:59.280
+Traktowanie ich jednakowo oznacza przepłacanie za ochronę mało ważnych treści
+
+00:48:59.280 --> 00:49:01.740
+lub niedostateczną ochronę tych, które mogą położyć kwartał.
+
+00:49:01.840 --> 00:49:04.040
+A kiedy liczba zostanie zapisana, coś się zmienia.
+
+00:49:04.260 --> 00:49:05.380
+Przestaje być opinią.
+
+00:49:05.620 --> 00:49:09.000
+Menedżer może powiedzieć, nasze RTO dla poczty finansowej to 4 godziny.
+
+00:49:09.220 --> 00:49:12.380
+Wtedy IT może odpowiedzieć szczerze, nasz obecny system zapewnia 2 dni.
+
+00:49:12.600 --> 00:49:15.920
+Teraz mamy lukę, a lukę można sfinansować, zaakceptować lub zniwelować.
+
+00:49:15.920 --> 00:49:17.200
+Bez liczby nie ma luki.
+
+00:49:17.440 --> 00:49:19.860
+Jest tylko przeczucie, że prawdopodobnie wszystko jest w porządku.
+
+00:49:19.860 --> 00:49:21.740
+Zatem praca nie polega na wyborze produktu.
+
+00:49:21.860 --> 00:49:25.580
+Praca polega na uzyskaniu liczby od każdej części firmy na piśmie z nazwiskiem pod spodem.
+
+00:49:25.760 --> 00:49:30.160
+Potem zestawiasz z tym każde narzędzie liczby przestają być abstrakcyjne, gdy przypiszesz je do obciążenia.
+
+00:49:30.420 --> 00:49:34.500
+Każde zawodzi inaczej, odzyskuje się inaczej i wymaga innego czasu na przywrócenie.
+
+00:49:34.720 --> 00:49:40.700
+Zastosujmy je więc do każdego obciążenia po kolei, zaczynając od tego, którego wszyscy używają przed poranną kawą Exchange Online.
+
+00:49:40.700 --> 00:49:47.300
+Ustalając RPO i RTO dla Exchange Online, zacznij od pytania o rodzaj przywracania, bo przywracanie Exchange to nie jedno zadanie.
+
+00:49:47.480 --> 00:49:48.260
+To trzy zadania.
+
+00:49:48.480 --> 00:49:49.560
+Każde ma własny zegar.
+
+00:49:49.700 --> 00:49:52.900
+Przywracanie elementu pozwala odzyskać pojedynczą wiadomość, folder lub kilka e-maili.
+
+00:49:53.060 --> 00:49:54.660
+Użytkownik usunął niewłaściwy wątek.
+
+00:49:54.740 --> 00:49:55.660
+To ten mniejszy problem.
+
+00:49:55.920 --> 00:49:57.400
+Narzędzia natywne radzą sobie z nim dobrze.
+
+00:49:57.640 --> 00:50:00.920
+Elementy możliwe do odzyskania pozwalają użytkownikowi lub administratorowi przywrócić je w kilka minut.
+
+00:50:01.100 --> 00:50:02.900
+Przywracanie skrzynki pocztowej to większa sprawa.
+
+00:50:02.900 --> 00:50:05.320
+Cała skrzynka jest uszkodzona, opróżniona lub zniknęła.
+
+00:50:05.480 --> 00:50:06.980
+Natywne opcje są tu ograniczone.
+
+00:50:07.200 --> 00:50:09.580
+Usuniętą skrzynkę można przywrócić w okresie karencji.
+
+00:50:09.820 --> 00:50:17.600
+Skrzynkę objętą blokadą można przeszukać i wyeksportować, ale skrzynka, która została zmodyfikowana, a nieusunięta, nie ma opcji cofnięcia zmian, a przywracanie całego dzierżawcy to coś, czego nikt nie ćwiczył.
+
+00:50:17.760 --> 00:50:20.800
+Setki lub tysiące skrzynek naraz, wszystkie do tego samego momentu.
+
+00:50:20.960 --> 00:50:22.920
+Natywne narzędzia nie mają na to rozwiązania.
+
+00:50:23.180 --> 00:50:25.980
+Spójrzmy więc na to, co natywne rozwiązania oferują w liczbach.
+
+00:50:25.980 --> 00:50:31.160
+W przypadku odzyskiwania elementów RPO jest bliskie zeru, o ile element mieści się w oknie od 14 do 30 dni.
+
+00:50:31.160 --> 00:50:34.960
+RTO liczony jest w minutach. To świetny wynik dla najczęstszego błędu.
+
+00:50:35.160 --> 00:50:38.720
+W każdym innym przypadku uczciwe natywne RPO to tyle, ile przetrwało.
+
+00:50:38.880 --> 00:50:43.200
+RTO to czas potrzebny na ręczne wyeksportowanie, posortowanie i odbudowanie danych.
+
+00:50:43.480 --> 00:50:46.620
+Zazwyczaj są to dni. Czasami odpowiedź brzmi, nie da się tego zrobić.
+
+00:50:46.800 --> 00:50:49.160
+Produkt do tworzenia kopii zapasowych zmienia ten stan rzeczy.
+
+00:50:49.380 --> 00:50:51.620
+Punkty przywracania są tworzone według harmonogramu.
+
+00:50:51.760 --> 00:50:57.060
+RPO staje się odstępem między migawkami co 4 godziny lub częściej, w zależności od produktu i planu.
+
+00:50:57.060 --> 00:51:03.900
+ARTO dla skrzynki pocztowej spada z dni do godzin, ponieważ narzędzie przywraca skrzynkę jako całość, a nie jako stos wyeksportowanych elementów.
+
+00:51:04.060 --> 00:51:06.340
+Teraz przypadki, które nie pasują do standardowego obrazu.
+
+00:51:06.460 --> 00:51:10.420
+Współdzielone skrzynki pocztowe nie mają użytkownika, często nie mają licencji i nikt ich nie sprawdza.
+
+00:51:10.640 --> 00:51:13.960
+Skrzynka wsparcia lub faktur może zawierać lata historii klientów.
+
+00:51:14.160 --> 00:51:17.380
+Kiedy zostanie usunięta, nikt nie zauważy, dopóki nie zadzwoni klient.
+
+00:51:17.540 --> 00:51:21.340
+Traktuj każdą współdzieloną skrzynkę jako osobną pozycję w planie z wyznaczonym właścicielem.
+
+00:51:21.340 --> 00:51:25.720
+Skrzynki zasobów, czyli sale i sprzęt, są mniej ważne ze względu na treść, a bardziej ze względu na kalendarze.
+
+00:51:25.860 --> 00:51:27.620
+Utrata jednej oznacza utratę rezerwacji.
+
+00:51:27.860 --> 00:51:29.720
+Dane są niewielkie, ale zakłócenia dotkliwe.
+
+00:51:29.920 --> 00:51:32.980
+Są jeszcze foldery publiczne, starsze, niewygodne, a wciąż obecne w wielu organizacjach.
+
+00:51:33.160 --> 00:51:35.120
+Niektóre zawierają dziesięciolecia wspólnych zapisów.
+
+00:51:35.280 --> 00:51:36.980
+Natywna ochrona dla nich jest ograniczona.
+
+00:51:37.240 --> 00:51:39.820
+Wiele narzędzi do backupu obsługuje je inaczej lub wcale.
+
+00:51:40.120 --> 00:51:42.220
+Jeśli je masz, pytaj o nie konkretnie z nazwy.
+
+00:51:42.440 --> 00:51:43.620
+Jest jeszcze jedno pytanie.
+
+00:51:43.900 --> 00:51:45.560
+Nie każda skrzynka jest równie ważna.
+
+00:51:45.560 --> 00:51:50.740
+Skrzynka dyrektora zawiera korespondencję zarządu, rozmowy o transakcjach i decyzje, które nigdy nie zostały zapisane nigdzie indziej.
+
+00:51:50.920 --> 00:51:54.080
+Skrzynka prawna przechowuje wątek, który może zostać wykorzystany jako dowód w sądzie.
+
+00:51:54.240 --> 00:51:56.200
+Te dwa wymagają własnego poziomu ochrony.
+
+00:51:56.380 --> 00:51:59.080
+Węższe RPO, szybsze RPO, częściej testowane.
+
+00:51:59.300 --> 00:52:06.120
+Ogólna skrzynka zespołu magazynowego może być na niższym poziomie, nie dlatego, że ludzie są mniej ważni, ale koszt utraty poczty z jednego dnia jest po prostu inny.
+
+00:52:06.360 --> 00:52:08.400
+Zestaw to w tabeli, a schemat stanie się widoczny.
+
+00:52:08.560 --> 00:52:10.540
+Kierownictwo i dział prawny mają najkrótsze okna.
+
+00:52:10.540 --> 00:52:12.380
+Kluczowe zespoły biznesowe są następne.
+
+00:52:12.560 --> 00:52:15.340
+Skrzynki współdzielone i zasobowe wymagają przypisanego właściciela i konkretnej decyzji.
+
+00:52:15.480 --> 00:52:17.820
+Cała reszta korzysta z ustawień domyślnych, tym razem celowo.
+
+00:52:17.980 --> 00:52:18.920
+To właśnie Exchange.
+
+00:52:19.100 --> 00:52:21.640
+To obciążenie z najbardziej dojrzałymi, wbudowanymi zabezpieczeniami.
+
+00:52:21.880 --> 00:52:24.740
+Nadal jednak pozostawia luki między elementem, skrzynką a dzierżawą.
+
+00:52:24.960 --> 00:52:31.920
+SharePoint niesie inne ryzyko, nie dlatego, że przechowuje więcej danych, ale dlatego, że jego dane mają strukturę, a strukturę trudniej odtworzyć niż zawartość.
+
+00:52:32.080 --> 00:52:34.680
+Ustawianie RPO i RTO dla SharePoint Online.
+
+00:52:34.920 --> 00:52:37.380
+Dzierżawa SharePoint to nie sterta plików, to sieć powiązań.
+
+00:52:37.380 --> 00:52:39.100
+Zacznijmy od jednostki podstawowej.
+
+00:52:39.240 --> 00:52:40.820
+Kolekcja witryn jest kontenerem.
+
+00:52:41.080 --> 00:52:44.760
+Wewnątrz znajdują się biblioteki, listy, strony, uprawnienia i ustawienia.
+
+00:52:45.040 --> 00:52:50.180
+Następnie witryny centralne, hub, łączą te kontenery, aby nawigacja, wyszukiwanie i branding były spójne.
+
+00:52:50.400 --> 00:52:54.120
+Witryna projektu podrzędna jest wobec huba działowego, a ten wobec huba firmowego.
+
+00:52:54.300 --> 00:52:57.380
+A pod tym wszystkim znajdują się zależności, których nikt nie naniósł na diagram.
+
+00:52:57.640 --> 00:53:00.180
+Lista w jednej witrynie zasila przepływ powerautomaty w innej.
+
+00:53:00.400 --> 00:53:03.200
+Strona w intranecie prowadzi do biblioteki znajdującej się trzy witryny dalej.
+
+00:53:03.200 --> 00:53:06.740
+Folder kanału Teams wskazuje na witrynę, która służy także jako portal klienta.
+
+00:53:06.740 --> 00:53:10.580
+Więc kiedy ktoś prosi o przywrócenie witryny finansowej, pierwsze pytanie brzmi, której?
+
+00:53:10.800 --> 00:53:15.160
+A drugie, co jeszcze było od niej zależne, bo przywrócenie witryny to nie to samo, co przywrócenie plików.
+
+00:53:15.360 --> 00:53:17.580
+Widzieliśmy to przy wycofywaniu zmian w bibliotece.
+
+00:53:17.760 --> 00:53:22.200
+Pliki wracają, ale witryna to pliki plus struktura, a struktura to początek problemów.
+
+00:53:22.400 --> 00:53:23.640
+Weźmy na przykład uprawnienia.
+
+00:53:23.900 --> 00:53:26.220
+Witryna ma właścicieli, członków i odwiedzających.
+
+00:53:26.460 --> 00:53:31.260
+Wewnątrz poszczególne foldery i pliki mogą mieć unikalne uprawnienia ustawione ręcznie dwa lata temu.
+
+00:53:31.260 --> 00:53:38.040
+Jeśli przywrócenie danych zresetuje te uprawnienia, ludzie albo nie zobaczą tego, co muszą, albo zobaczą to, czego nie powinni.
+
+00:53:38.200 --> 00:53:40.980
+To drugie jest gorsze, bo nikt się na to nie poskarży.
+
+00:53:41.180 --> 00:53:42.160
+Potem są linki.
+
+00:53:42.380 --> 00:53:49.500
+Każdy udostępniony link, każdy link osadzony na stronie, każda zakładka w przeglądarce wskazuje na konkretny adres, a czasem na konkretny identyfikator elementu.
+
+00:53:49.500 --> 00:53:54.760
+Przywrócenie w inne miejsce lub jako nowa kopia sprawia, że stare linki po cichu przestają działać.
+
+00:53:54.880 --> 00:53:57.020
+Plik istnieje, ale ścieżka do niego już nie.
+
+00:53:57.220 --> 00:53:58.200
+A potem metadane.
+
+00:53:58.380 --> 00:54:03.440
+Kolumny, typy zawartości, kto utworzył plik, kto ostatnio go zmienił i kiedy etykiety przechowywania.
+
+00:54:03.660 --> 00:54:08.400
+Status zatwierdzenia przywrócenie dokumentu bez metadanych daje prawnikowi plik pozbawiony historii.
+
+00:54:08.600 --> 00:54:12.060
+Dlatego dobry wskaźnik RTO dla szerpłęta nie może kończyć się na witryna działa.
+
+00:54:12.320 --> 00:54:16.000
+Musi oznaczać, że witryna działa wraz z uprawnieniami, linkami i nienaruszonymi metadanymi.
+
+00:54:16.000 --> 00:54:20.000
+To surowszy test, a mniej narzędzi go zdaje niż sugerują to strony sprzedażowe.
+
+00:54:20.160 --> 00:54:21.920
+Oto część, która zaskakuje ludzi.
+
+00:54:22.120 --> 00:54:24.900
+Przywracanie może zakończyć się pomyślnie, a mimo to wyglądać na zepsute.
+
+00:54:25.100 --> 00:54:32.640
+Użytkownik otwiera bibliotekę, pliki są na miejscu, ale widok zniknął ten pogrupowany według projektu i posortowany według daty lub folder używany każdego ranka nie istnieje,
+
+00:54:32.700 --> 00:54:38.640
+ponieważ został przywrócony pod inną nazwą albo przepływ zasilający bibliotekę przestał działać i od czasu przywrócenia nic nowego się nie pojawiło.
+
+00:54:38.820 --> 00:54:40.940
+Technicznie rzecz biorąc, dane są z powrotem.
+
+00:54:40.940 --> 00:54:46.640
+W praktyce użytkownik nie może pracować i nie obchodzi go ta różnica, dlatego zegar nie zatrzymuje się, gdy zadanie dobiega końca.
+
+00:54:46.820 --> 00:54:49.700
+Zatrzymuje się, gdy prawdziwa osoba powie, wygląda na to, że jest w porządku.
+
+00:54:49.880 --> 00:54:53.060
+Ujmij to w samym celu jako warunek zaliczenia, a nie jako przemyślenie po fakcie.
+
+00:54:53.300 --> 00:54:56.620
+Jak zatem ustalić liczby dla czegoś, co jest ze sobą splątane, a nie ułożone obok siebie?
+
+00:54:56.880 --> 00:54:57.760
+Jest ich zbyt wiele.
+
+00:54:58.000 --> 00:54:59.980
+Podziel je na poziomy według strat dla biznesu.
+
+00:55:00.120 --> 00:55:02.900
+Poziom pierwszy to mały zbiór, którego zniknięcie wstrzymuje pracę.
+
+00:55:03.100 --> 00:55:06.960
+Strona główna intranetu, biblioteka umów, miejsce, w którym dział finansów zamyka kwartał.
+
+00:55:06.960 --> 00:55:13.140
+Tutaj cele są rygorystyczne RPO mierzone w godzinach, RTO również w godzinach, z wyznaczonymi właścicielami, którzy zaakceptowali te parametry.
+
+00:55:13.320 --> 00:55:16.280
+Poziom drugi obejmuje aktywne witryny zespołów i przestrzenie projektowe.
+
+00:55:16.480 --> 00:55:19.120
+Ważne, ale dzień utraconych zmian boli, choć nie jest krytyczny.
+
+00:55:19.320 --> 00:55:21.260
+Luźniejsze okna czasowe i standardowy proces.
+
+00:55:21.480 --> 00:55:23.020
+Poziom trzeci to wszystko pozostałe.
+
+00:55:23.200 --> 00:55:30.000
+Zarchiwizowane projekty, stare witryny wydarzeń, porzucone eksperymenty tutaj natywne narzędzia i dłuższy czas przywracania są w porządku, a przyznanie tego głośno pozwala zaoszczędzić pieniądze.
+
+00:55:30.180 --> 00:55:31.080
+Jeszcze jeden krok.
+
+00:55:31.080 --> 00:55:33.880
+Mapuj zależności dla pierwszego poziomu, zanim będą potrzebne.
+
+00:55:34.040 --> 00:55:37.560
+Wiec, do którego centrum należy, które przepływy go dotyczą i które zespoły na nim pracują.
+
+00:55:37.760 --> 00:55:40.700
+Plan przywracania, który ich nie uwzględnia, to plan połowicznego odzyskiwania danych.
+
+00:55:40.900 --> 00:55:44.460
+Taki właśnie jest SharePoint, złożona struktura, wąska tolerancja na przywracanie, które tylko wygląda na zakończone.
+
+00:55:44.620 --> 00:55:45.820
+OnDrive to przeciwieństwo.
+
+00:55:46.020 --> 00:55:47.940
+Każde konto jest proste, płaskie i osobiste.
+
+00:55:48.140 --> 00:55:50.080
+Trudność nie tkwi w kształcie pojedynczego konta.
+
+00:55:50.260 --> 00:55:52.600
+Chodzi o to, co dzieje się, gdy pomnożysz to przez całą firmę.
+
+00:55:52.760 --> 00:55:54.940
+Ustalanie RPO i RTO dla usługi OnDrive.
+
+00:55:54.940 --> 00:55:58.540
+Jeden OnDrive to mała rzecz, jedna osoba, jedno drzewo folderów, jeden zestaw plików.
+
+00:55:58.680 --> 00:56:03.240
+Ich utrata boli jedną osobę w jedno pechowe popołudnie, a natywne przywracanie, o którym mówiliśmy, radzi sobie z tym dobrze.
+
+00:56:03.440 --> 00:56:05.060
+Ale awarie nie przychodzą w ten sposób.
+
+00:56:05.380 --> 00:56:07.340
+Ransomware nie atakuje tylko jednego konta.
+
+00:56:07.500 --> 00:56:11.480
+Uderza w każdego, kto kliknął, zatwierdził monit lub czyj laptop był online, gdy uruchomił się kod.
+
+00:56:11.660 --> 00:56:14.620
+Zatem zakres dotyczy użytkownika, ale wpływ obejmuje cały tenant.
+
+00:56:14.780 --> 00:56:17.760
+50 kont, potem 200, a następnie cały dział sprzedaży.
+
+00:56:17.960 --> 00:56:20.040
+Każdy OnDrive wymaga osobnego przywrócenia.
+
+00:56:20.040 --> 00:56:27.680
+Każdy ma własny zakres szkód, punkt przywracania i właściciela, który może jeszcze nic nie zauważyć, co oznacza, że celu nie można definiować per konto.
+
+00:56:27.920 --> 00:56:30.540
+Trzeba go określić dla całej puli, a to zmienia metrykę.
+
+00:56:30.760 --> 00:56:33.520
+Większość zespołów pyta, ile trwa przywrócenie jednego OnDrive'a.
+
+00:56:33.660 --> 00:56:36.080
+To złe pytanie, bo odpowiedź jest zawsze zadowalająca.
+
+00:56:36.280 --> 00:56:38.640
+Minuty, może godzina w przypadku aktywnego użytkownika.
+
+00:56:38.880 --> 00:56:41.700
+Właściwe pytanie brzmi, jak długo potrwa przywrócenie 300 z nich?
+
+00:56:41.700 --> 00:56:47.940
+To szybkość przywracania masowego i to liczba, która decyduje, czy poniedziałkowy atak skończy się w środę, czy będzie trwał w następny piątek.
+
+00:56:48.120 --> 00:56:49.780
+Wpisz to więc do celu jako wskaźnik.
+
+00:56:49.960 --> 00:56:53.620
+Ile kąt na godzinę, przy jakim średnim rozmiarze i jakim poziomie zaangażowania człowieka?
+
+00:56:53.800 --> 00:56:58.080
+Jeśli potrzeba administratora do nadzorowania każdego zadania, wskaźnik jest niski i należy to odnotować na papierze.
+
+00:56:58.260 --> 00:57:01.280
+Jeśli jest to oskryptowane lub obsługiwane narzędziem masowym, wskaźnik rośnie.
+
+00:57:01.480 --> 00:57:04.680
+W każdym razie liczbę tę należy sprawdzić w teście, a nie odczytywać ze strony produktu.
+
+00:57:04.880 --> 00:57:06.920
+Spójrz teraz na to, co sprawia, że ta pula staje się większa.
+
+00:57:06.920 --> 00:57:11.620
+Przenoszenie znanych folderów Known Folder Move to polityka, która przekierowuje pulpit, dokumenty i zdjęcia do OnDrive.
+
+00:57:11.820 --> 00:57:14.980
+Włącza się ją, bo chroni użytkowników przed awarią laptopa i tak właśnie robi.
+
+00:57:15.140 --> 00:57:17.300
+Pomyśl jednak, co to robi z powierzchnią ataku.
+
+00:57:17.500 --> 00:57:21.880
+Wcześniej pliki robocze użytkownika znajdowały się na lokalnym dysku, więc awaria laptopa oznaczała ich utratę.
+
+00:57:22.020 --> 00:57:27.800
+Teraz te same pliki są w OnDrive i synchronizowane wszędzie, co jest świetne przy awarii laptopa, ale złe przy ataku opartym na synchronizacji.
+
+00:57:28.020 --> 00:57:32.780
+Rzecz, którą przenosisz, by chronić pliki, staje się teraz nośnikiem, przez który klient z synchronizacji rozprowadza zaszyfrowane kopie.
+
+00:57:32.780 --> 00:57:42.060
+Więc przenoszenie znanych folderów przesuwa ryzyko, nie eliminuje go, zamienia lokalną stratę w chmurową i czyni z OnDrive jedyne miejsce dla plików, które wcześniej miały drugą kopię przez przypadek.
+
+00:57:42.200 --> 00:57:45.380
+Jeśli to wdrożysz, twój RPO dla OnDrive przestaje być tylko wygodną liczbą.
+
+00:57:45.640 --> 00:57:47.680
+Staje się jedyną ochroną, jaką te foldery posiadają.
+
+00:57:47.860 --> 00:57:49.380
+Na koniec ostatni przypadek dźwignie.
+
+00:57:49.600 --> 00:57:51.280
+Widzieliśmy, jak działa pułapka licencyjna.
+
+00:57:51.440 --> 00:57:53.000
+Oto jak wygląda to od strony OnDrive.
+
+00:57:53.220 --> 00:57:56.840
+Gdy konto zostaje usunięte, jego usługa OnDrive przechodzi w okres przechowywania przed skasowaniem.
+
+00:57:56.840 --> 00:58:00.900
+Domyślnie jest to 93 dni dla witryny usuniętego użytkownika, zależnie od konfiguracji dzierżawy.
+
+00:58:01.340 --> 00:58:02.500
+Administratorzy mogą to zmienić.
+
+00:58:02.680 --> 00:58:04.700
+Menedżerowie mogą otrzymać dostęp do plików w tym czasie.
+
+00:58:04.960 --> 00:58:06.340
+Zauważ jednak, jak cicho tam jest.
+
+00:58:06.540 --> 00:58:07.280
+Nikt się nie loguje.
+
+00:58:07.500 --> 00:58:08.400
+Nikt tego nie sprawdza.
+
+00:58:08.560 --> 00:58:10.560
+Pliki tam leżą, a po upływie tego okresu są usuwane.
+
+00:58:10.740 --> 00:58:12.840
+Dlatego OnDrive odchodzącego pracownika potrzebuje własnego celu.
+
+00:58:12.960 --> 00:58:13.760
+Kto dziedziczy dostęp?
+
+00:58:14.020 --> 00:58:15.060
+Kto dokonuje przeglądu?
+
+00:58:15.240 --> 00:58:17.000
+Kto decyduje, co zachować i na jak długo?
+
+00:58:17.000 --> 00:58:23.480
+Bez tych odpowiedzi, 93 dni mijają zgodnie z harmonogramem, którego nikt nie spisał, a praca byłego pracownika znika w zwykły czwartek.
+
+00:58:23.600 --> 00:58:24.600
+To właśnie OnDrive.
+
+00:58:24.820 --> 00:58:29.120
+Prosty w formie, trudny w skali i narażony przez same zasady, które mają go chronić.
+
+00:58:29.360 --> 00:58:30.500
+Steams jest odwrotnie.
+
+00:58:30.740 --> 00:58:32.660
+Nie jest to trudne ze względu na wolumen.
+
+00:58:32.900 --> 00:58:37.280
+Jest trudne, bo nie ma jednej rzeczy do przywrócenia, a więc nie ma jednego celu do ustawienia.
+
+00:58:37.540 --> 00:58:39.780
+Ustawianie RPO i RTO dla zespołów.
+
+00:58:39.920 --> 00:58:41.960
+Nie można ustawić jednego celu dla całego zespołu.
+
+00:58:42.140 --> 00:58:44.040
+Nie ma jednego elementu, do którego można go odnieść.
+
+00:58:44.040 --> 00:58:47.260
+Więc najpierw rozbij zespół na części i określ wartości dla każdego elementu.
+
+00:58:47.380 --> 00:58:48.820
+Pliki znajdują się w SharePoint.
+
+00:58:49.000 --> 00:58:52.740
+To biblioteka za kartą plików, która podlega celom SharePoint, które już ustaliłeś.
+
+00:58:52.940 --> 00:58:55.760
+Skrzynka pocztowa i kalendarz znajdują się w Exchange za grupą.
+
+00:58:55.940 --> 00:59:01.120
+Członkostwo i własność żyją w grupie Microsoft 365, co oznacza, że są w Entra ID.
+
+00:59:01.360 --> 00:59:06.360
+Tablice Planner, notatniki OneNote i aplikacje przypięte do kanałów mają swoje własne miejsce i zasady.
+
+00:59:06.620 --> 00:59:11.100
+Zespół ma więc co najmniej pięciu właścicieli swoich danych, a każdy z nich może zawieść w innym terminie.
+
+00:59:11.320 --> 00:59:13.040
+Dobry plan wymienia je w krótkiej tabeli.
+
+00:59:13.040 --> 00:59:15.660
+Element, lokalizacja, RPO, RTO, kto zatwierdza.
+
+00:59:15.840 --> 00:59:17.300
+Napisanie tego zajmuje popołudnie.
+
+00:59:17.520 --> 00:59:19.380
+Większość organizacji nigdy tego nie sporządziła.
+
+00:59:19.520 --> 00:59:22.560
+A teraz element, o który wszyscy się martwią, czat i wiadomości na kanałach.
+
+00:59:22.700 --> 00:59:25.060
+Tutaj oczekiwania i rzeczywistość nie idą w parze.
+
+00:59:25.300 --> 00:59:29.500
+Ludzie zakładają, że jeśli wiadomość zniknie, można ją przywrócić tak jak skasowany plik.
+
+00:59:29.660 --> 00:59:32.700
+Jeśli została tylko usunięta, retencja często może zachować kopię.
+
+00:59:32.880 --> 00:59:36.340
+Kopia ta trafia do ukrytego folderu w skrzynce stworzonego do wyszukiwania i przeglądów prawnych.
+
+00:59:36.560 --> 00:59:37.960
+Możesz tam znaleźć tę wiadomość.
+
+00:59:37.960 --> 00:59:39.340
+Możesz ją wyeksportować.
+
+00:59:39.520 --> 00:59:44.360
+Czego nie możesz zrobić, to przywrócić jej na kanał w kolejności z odpowiedziami, reakcjami i zachowaniem wątku.
+
+00:59:44.560 --> 00:59:46.640
+Więc uczciwym RPO dla czatu jest pytanie.
+
+00:59:46.880 --> 00:59:49.620
+Czy potrzebujesz zachowania treści czy przywrócenia rozmowy?
+
+00:59:49.780 --> 00:59:51.560
+To inne cele o innych kosztach.
+
+00:59:51.800 --> 00:59:54.200
+Dla większości działów przeszukiwalny zapis wystarczy.
+
+00:59:54.440 --> 00:59:56.900
+Dla nielicznych utracony wątek oznacza utraconą decyzję.
+
+00:59:57.100 --> 01:00:00.340
+Odpowiedzią powinno być narzędzie, które zapisuje konwersację w czytelnej formie.
+
+01:00:00.560 --> 01:00:03.200
+Zanim wpiszesz liczbę, zapytaj zespół, o którą z nich chodzi.
+
+01:00:03.460 --> 01:00:05.780
+Następnie zapomniane elementy nagrania ze spotkań.
+
+01:00:05.900 --> 01:00:10.940
+Trafiają one do on-drive lub share puenta, w zależności od typu spotkania i podlegają zasadom przechowywania właściciela pliku.
+
+01:00:11.160 --> 01:00:14.140
+W niektórych tenantach wygasają automatycznie po określonej liczbie dni.
+
+01:00:14.360 --> 01:00:19.180
+Więc nagranie z zeszłorocznego spotkania zarządu mogło zniknąć zgodnie z planem, a nikt nie pamięta, by się na to zgodził.
+
+01:00:19.180 --> 01:00:24.580
+Karta wiki to starsza funkcja, przechowywana jako plik w bibliotece zespołu, łatwa do przeoczenia, bo nie wygląda jak plik.
+
+01:00:24.760 --> 01:00:31.000
+Jeśli zostanie usunięta, zabiera ze sobą wszystkie notatki, a także aplikacje, karty, boty, konektory i niestandardowe aplikacje przypięte do kanałów.
+
+01:00:31.120 --> 01:00:34.080
+Ich ustawienia i dane zazwyczaj znajdują się w samej aplikacji, a nie w Teams.
+
+01:00:34.280 --> 01:00:40.480
+Przywróć zespół, a karta może prowadzić donikąd albo do usługi wymagającej ponownego logowania, nowego połączenia lub zatwierdzenia przez administratora.
+
+01:00:40.600 --> 01:00:42.680
+Więc wpisz również każdy z tych elementów na listę.
+
+01:00:42.800 --> 01:00:46.360
+Nie dlatego, że są duże, ale dlatego, że bez nich przywrócony zespół wydaje się pusty.
+
+01:00:46.360 --> 01:00:49.400
+Oto stwierdzenie, które warto wypowiedzieć na głos, zanim dojdzie do awarii.
+
+01:00:49.520 --> 01:00:52.960
+Dane niektórych zespołów mogą być odzyskiwalne tylko jako eksport, a nie jako przywrócenie na żywo.
+
+01:00:53.120 --> 01:00:54.220
+Plik wraca jako plik.
+
+01:00:54.380 --> 01:00:56.640
+Element skrzynki pocztowej wraca jako element poczty.
+
+01:00:56.800 --> 01:01:02.320
+Ale konwersacja wraz z całą swoją strukturą może wrócić jako dokument, który przeszukujesz, czytasz i przekazujesz osobie, która go potrzebuje.
+
+01:01:02.440 --> 01:01:03.800
+To nie jest błąd w planowaniu.
+
+01:01:04.040 --> 01:01:05.520
+Taki jest kształt tego produktu.
+
+01:01:05.740 --> 01:01:11.600
+Błędem jest wyznaczenie celu obiecującego przywrócenie na żywo, a następnie odkrycie podczas awarii, że narzędzie dostarcza jedynie zapis.
+
+01:01:11.600 --> 01:01:14.700
+Więc określ cel w formie, którą rzeczywiście jesteś w stanie zrealizować.
+
+01:01:14.860 --> 01:01:17.940
+Przywrócone jako aktywna zawartość w ciągu 4 godzin dla plików w grupie.
+
+01:01:18.140 --> 01:01:21.000
+Odzyskane jako przeszukiwalny eksport w ciągu jednego dnia dla czatu.
+
+01:01:21.160 --> 01:01:22.100
+Oba są zasadne.
+
+01:01:22.320 --> 01:01:24.320
+Tylko jedno z nich jest uczciwe w kwestii czatu.
+
+01:01:24.500 --> 01:01:30.020
+Teraz masz cele dla każdego obciążenia Exchange, SharePoint, OnDrive, Teams, liczby, właścicieli i warunki zaliczenia.
+
+01:01:30.240 --> 01:01:34.420
+Na papierze wyglądają na gotowe i w tym tkwi niebezpieczeństwo, ponieważ liczba na papierze to tylko deklaracja.
+
+01:01:34.660 --> 01:01:37.780
+Nikt nie wie, czy narzędzia są w stanie to osiągnąć, dopóki ktoś nie wykona przywracania.
+
+01:01:37.780 --> 01:01:40.520
+Dlaczego większość planów przywracania nigdy nie została uruchomiona?
+
+01:01:40.680 --> 01:01:42.420
+Oto schemat w większości organizacji.
+
+01:01:42.620 --> 01:01:44.080
+Ktoś kupuje produkt do backupu.
+
+01:01:44.260 --> 01:01:47.700
+Jest pozycja w budżecie, telefon do dostawcy, weryfikacja koncepcji i podpisana umowa.
+
+01:01:47.920 --> 01:01:51.400
+Narzędzie zostaje włączone, pulpit nawigacyjny zmienia kolor na zielony, a projekt zostaje zamknięty.
+
+01:01:51.540 --> 01:01:54.420
+Pojawia się ciche założenie, kopia jest zrobiona, więc przywracanie zadziała.
+
+01:01:54.660 --> 01:01:56.420
+Nikt jednak nie spisał tego jako gwarancji.
+
+01:01:56.640 --> 01:01:57.640
+Nikt tego nie sprawdził.
+
+01:01:57.840 --> 01:02:00.260
+Zakup był dowodem, a ten dowód nigdy nie został przetestowany.
+
+01:02:00.260 --> 01:02:04.720
+Plan istnieje więc jedynie jako przeczucie dzielone przez wszystkich, których nie było w pokoju podczas konfiguracji narzędzia.
+
+01:02:04.860 --> 01:02:06.380
+A pulpit nawigacyjny w tym nie pomaga.
+
+01:02:06.580 --> 01:02:08.200
+Został stworzony, by dawać złudne poczucie spokoju.
+
+01:02:08.380 --> 01:02:09.860
+Zielony status oznacza, że zadanie się wykonało.
+
+01:02:10.020 --> 01:02:11.820
+Mówi, że dane zostały odczytane, skopiowane i zapisane.
+
+01:02:11.980 --> 01:02:13.600
+Nie mówi jednak, że te dane da się przywrócić.
+
+01:02:13.740 --> 01:02:16.500
+To dwie różne kwestie, a pulpit nawigacyjny potwierdza tylko pierwszą z nich.
+
+01:02:16.660 --> 01:02:21.120
+Kopia zapasowa może być wykonywana każdej nocy przez dwa lata i mimo to zawieść przy pierwszej próbie odzyskania skrzynki pocztowej.
+
+01:02:21.340 --> 01:02:22.320
+Gdzie więc tkwi błąd?
+
+01:02:22.320 --> 01:02:23.420
+Dzieje się to po cichu.
+
+01:02:23.580 --> 01:02:25.600
+Ograniczanie przepustowości to najczęstsza przyczyna.
+
+01:02:25.780 --> 01:02:31.580
+Do technicznych szczegółów przejdziemy później, ale w skrócie Microsoft ogranicza szybkość, z jaką zewnętrzne narzędzia mogą pobierać dane.
+
+01:02:31.840 --> 01:02:36.740
+Gdy kopia osiąga ten limit, zwalnia, ponawia próby, a czasem pomija elementy, do których nie dotarła na czas.
+
+01:02:36.960 --> 01:02:39.780
+Zadanie nadal zgłasza sukces, bo większość danych została zapisana.
+
+01:02:39.960 --> 01:02:42.400
+Pominięte elementy trafiają do logów, których nikt nie czyta.
+
+01:02:42.560 --> 01:02:43.940
+Kolejną kwestią są uprawnienia.
+
+01:02:43.940 --> 01:02:48.980
+Konto używane przez narzędzie do kopii może stracić prawa po zmianie roli, aktualizacji dostępu warunkowego lub zmianie polityki haseł.
+
+01:02:52.320 --> 01:02:55.520
+Witryn. Niektóre narzędzia to sygnalizują, inne po prostu kopiują mniej danych.
+
+01:02:55.740 --> 01:02:56.560
+Są też wykluczenia.
+
+01:02:56.780 --> 01:02:59.160
+Witryna została pominięta podczas konfiguracji, bo była nowa.
+
+01:02:59.360 --> 01:03:01.940
+Współdzielona skrzynka nie została dodana, bo nie miała licencji.
+
+01:03:02.160 --> 01:03:04.720
+Grupę elementów pominięto celowo, a potem o tym zapomniano.
+
+01:03:04.940 --> 01:03:07.380
+Miesiące później to właśnie tych elementów ktoś potrzebuje.
+
+01:03:07.580 --> 01:03:10.920
+Kopia zapasowa jest kompletna w tym sensie, że zawiera wszystko, co kazałeś jej zawierać.
+
+01:03:11.080 --> 01:03:13.000
+Żaden z tych przypadków nie jest wykazywany jako błąd.
+
+01:03:13.000 --> 01:03:15.960
+Pojawiają się jako luka, a luka staje się widoczna dopiero wtedy, gdy próbujesz ją wypełnić.
+
+01:03:15.960 --> 01:03:17.440
+Spójrz teraz, kto zadaje pytanie.
+
+01:03:17.660 --> 01:03:19.860
+Audytor pyta, czy macie proces tworzenia kopii zapasowych?
+
+01:03:19.980 --> 01:03:21.080
+Czy jest udokumentowany?
+
+01:03:21.260 --> 01:03:21.680
+Czy działa?
+
+01:03:21.880 --> 01:03:26.720
+To słuszne pytania, a dobrą odpowiedzią jest dokument polityki, zrzut ekranu z konsoli i niedawny log zadania.
+
+01:03:26.920 --> 01:03:29.760
+Audytor wychodzi zadowolony, a organizacja przechodzi kontrolę.
+
+01:03:29.920 --> 01:03:31.760
+Incydent stawia zupełnie inne pytania.
+
+01:03:31.920 --> 01:03:37.340
+Pyta, czy potrafisz przywrócić te 400 skrzynek na stan z wtorku w ciągu 6 godzin, podczas gdy atakujący może wciąż obserwować?
+
+01:03:37.340 --> 01:03:39.340
+Nie obchodzi go polityka bezpieczeństwa.
+
+01:03:39.560 --> 01:03:45.320
+Liczy się czas, poświadczenia i to, czy proces przywracania przetrwa pierwszy kontakt z rzeczywistym środowiskiem pod presją.
+
+01:03:45.320 --> 01:03:51.020
+Jeden z nich sprawdza, czy proces istnieje, drugi, czy działa, a większość organizacji jest budowana tak, aby przejść ten pierwszy.
+
+01:03:51.260 --> 01:03:55.400
+Efektem jest plan, który na papierze wygląda na gotowy, ale nigdy nie został użyty przez człowieka w kryzysowej sytuacji.
+
+01:03:55.640 --> 01:03:57.480
+Nikt nie wie, ile te kroki zajmują w rzeczywistości.
+
+01:03:57.700 --> 01:03:59.100
+Nikt nie wie, które konto je wykonuje.
+
+01:03:59.340 --> 01:04:01.920
+Nikt nie wie, co zrobi narzędzie, gdy dwa tysiące elementów zawiedzie jednocześnie.
+
+01:04:02.080 --> 01:04:04.760
+To jest element, który musi się zmienić, nie produkt i nie budżet.
+
+01:04:04.760 --> 01:04:07.460
+Nawyk traktowania zakupionego narzędzia jako sprawdzonego.
+
+01:04:07.620 --> 01:04:11.260
+Więc kolejne pytanie brzmi, jak to przetestować nie demem ani prezentacją dostawcy,
+
+01:04:11.260 --> 01:04:15.480
+lecz metodą, którą można powtórzyć, zmierzyć i uruchomić ponownie, gdy zmieni się środowisko.
+
+01:04:15.740 --> 01:04:17.240
+Jak przetestować przywracanie?
+
+01:04:17.400 --> 01:04:18.280
+Metoda praktyczna.
+
+01:04:18.520 --> 01:04:20.500
+Zacznij od scenariuszy, nie od funkcji.
+
+01:04:20.700 --> 01:04:23.280
+Test funkcji pyta, czy przycisk przywracania działa?
+
+01:04:23.700 --> 01:04:24.140
+Zadziała.
+
+01:04:24.380 --> 01:04:26.540
+Każdy dostawca prezentował to 100 razy.
+
+01:04:26.720 --> 01:04:28.920
+Test scenariusza pyta o coś trudniejszego.
+
+01:04:29.080 --> 01:04:31.060
+Czy przetrwamy ten konkretny kryzysowy dzień?
+
+01:04:31.300 --> 01:04:32.720
+Zapisz więc te kryzysowe dni.
+
+01:04:32.940 --> 01:04:34.340
+Cztery wystarczą na początek.
+
+01:04:34.460 --> 01:04:38.900
+Usunięta skrzynka pocztowa, najlepiej kadry zarządzającej, bo to ona zostanie zauważona jako pierwsza.
+
+01:04:38.900 --> 01:04:40.040
+Wyczyszczona witryna.
+
+01:04:40.240 --> 01:04:44.240
+Wybierz witrynę SharePoint najwyższego rzędu, bibliotekę umów lub witrynę zamknięcia finansowego.
+
+01:04:44.440 --> 01:04:45.860
+Potraktuj ją jako utraconą.
+
+01:04:46.080 --> 01:04:50.540
+Masowe szyfrowanie on-drive, niejedno konto, a grupa 50 osób, ponieważ to skala jest problemem.
+
+01:04:50.680 --> 01:04:53.200
+Pojedyncze konto niczego nie uczy o masowym problemie.
+
+01:04:53.380 --> 01:04:57.020
+Oraz usunięty zespół, pliki, grupa, skrzynka, kanały, wszystko naraz.
+
+01:04:57.220 --> 01:04:59.660
+Każdy scenariusz otrzymuje jednostronicowy skrypt.
+
+01:04:59.820 --> 01:05:00.900
+Co uległo awarii?
+
+01:05:01.100 --> 01:05:01.860
+Na jaki moment?
+
+01:05:02.120 --> 01:05:03.380
+I kto żąda przywrócenia?
+
+01:05:03.540 --> 01:05:06.780
+Teraz określ, co oznacza zaliczenie, zanim cokolwiek uruchomisz.
+
+01:05:06.780 --> 01:05:10.100
+To krok, który zespoły pomijają i dlatego ich testy niczego nie dowodzą.
+
+01:05:10.280 --> 01:05:14.800
+Jeśli określisz kryteria zaliczenia po zakończeniu przywracania, zawsze znajdziesz sposób, by uznać test za zaliczony.
+
+01:05:15.020 --> 01:05:16.260
+Wypisz więc trzy warunki.
+
+01:05:16.460 --> 01:05:16.780
+Czas.
+
+01:05:17.040 --> 01:05:19.160
+Zegar rusza w momencie ogłoszenia scenariusza.
+
+01:05:19.380 --> 01:05:23.400
+Zatrzymuje się, gdy użytkownik potwierdzi, że zawartość działa, a nie gdy zadanie oznaczy zakończono.
+
+01:05:23.620 --> 01:05:27.360
+Masz już RTO dla każdego obciążenia, więc to liczba, do której się odnosisz.
+
+01:05:27.800 --> 01:05:28.240
+Kompletność.
+
+01:05:28.440 --> 01:05:30.680
+Porównaj to, co wróciło, z tym, co powinno wrócić.
+
+01:05:30.900 --> 01:05:32.800
+Liczba elementów, liczba folderów, rozmiary.
+
+01:05:32.800 --> 01:05:34.560
+Wybierz próbkę i sprawdź ją ręcznie.
+
+01:05:34.780 --> 01:05:37.940
+Dla witryny sprawdź uprawnienia w trzech folderach, o których wiesz, że mają unikalny dostęp.
+
+01:05:38.200 --> 01:05:39.780
+Sprawdź, czy linki nadal działają.
+
+01:05:40.040 --> 01:05:41.680
+Sprawdź metadany kilku dokumentów.
+
+01:05:41.840 --> 01:05:45.800
+Kompletność oznacza strukturę, nie tylko pliki oraz użyteczność dla prawdziwego człowieka.
+
+01:05:45.940 --> 01:05:47.000
+To jest najważniejsze.
+
+01:05:47.200 --> 01:05:51.440
+Posać kogoś z działu biznesowego przed odzyskaną zawartością kogoś, kto nie brał udziału w testach.
+
+01:05:51.560 --> 01:05:55.200
+Poproś, aby wykonał swoje poranne czynności, otworzył folder i znalazł właściwy plik.
+
+01:05:55.380 --> 01:05:57.140
+Jeśli będzie się wahać, zapisz przyczynę.
+
+01:05:57.240 --> 01:05:58.800
+A teraz, gdzie przeprowadzasz przywracanie?
+
+01:05:58.960 --> 01:05:59.580
+Nie na produkcji?
+
+01:05:59.580 --> 01:06:00.920
+Przynajmniej nie za pierwszym razem.
+
+01:06:01.160 --> 01:06:05.840
+Najpierw przywróć dane do innej lokalizacji, do witryny roboczej, testowej skrzynki czy oddzielnej biblioteki.
+
+01:06:06.020 --> 01:06:12.300
+Tam sprawdzisz podstawy, czy narzędzie widzi dane, czy konto ma uprawnienia i czy kroki z notatek są tymi, które faktycznie wykonujesz.
+
+01:06:12.520 --> 01:06:15.540
+Błędy na tym etapie kosztują jedno popołudnie pracy, a nie utratę klienta.
+
+01:06:15.720 --> 01:06:17.560
+Następnie zbliż się do warunków rzeczywistych.
+
+01:06:17.720 --> 01:06:21.680
+Warunki produkcyjne oznaczają ten sam model uprawnień, tę samą objętość danych i tę samą presję czasu.
+
+01:06:21.900 --> 01:06:25.540
+Przywróć pełną witrynę tier jednej do kopii struktury dzierżawy, tenant, w środowisku stagingowym.
+
+01:06:25.540 --> 01:06:29.000
+Przeprowadź masowy scenariusz dla on-drive z prawdziwą liczbą kont, a nie tylko trzema.
+
+01:06:29.200 --> 01:06:33.340
+Odzyskiwanie, które działa przy 10 elementach, a dusi się przy 10 tysiącach, wcale nie zalicza testu.
+
+01:06:33.480 --> 01:06:35.240
+I gdy proces trwa, zapisuj wszystko.
+
+01:06:35.540 --> 01:06:37.020
+Rejestruj czas każdego kroku.
+
+01:06:37.240 --> 01:06:42.760
+Zgłoszenie, zakres, pierwsze polecenie, pierwszy odzyskany bajt, ostatni odzyskany bajt, potwierdzenie użytkownika.
+
+01:06:43.020 --> 01:06:46.460
+Zapisuj dokładne kroki w kolejności, w tym te, których nie było w planie.
+
+01:06:46.660 --> 01:06:52.980
+Wniosek o uprawnienia, który trwał 40 minut, akceptacja od osoby na urlopie, polecenie wymagające innej składni niż w dokumentacji.
+
+01:06:52.980 --> 01:06:57.140
+Zapisuj też osoby, kto wykonał, kto zatwierdził, kogo trzeba było zaangażować w ostatniej chwili.
+
+01:06:57.380 --> 01:06:59.640
+Jeśli jedno nazwisko pojawia się przy każdym kroku, nie masz planu.
+
+01:06:59.800 --> 01:07:01.000
+Masz po prostu konkretnego człowieka.
+
+01:07:01.160 --> 01:07:02.700
+Ten zapis jest prawdziwym rezultatem testu.
+
+01:07:02.880 --> 01:07:04.660
+Samo przywracanie danych to tylko metoda jego uzyskania.
+
+01:07:04.800 --> 01:07:05.600
+A teraz, jak często?
+
+01:07:05.860 --> 01:07:07.020
+Raz na kwartał to rozsądne minimum.
+
+01:07:07.160 --> 01:07:08.900
+Nie trzeba sprawdzać każdego scenariusza za każdym razem.
+
+01:07:09.100 --> 01:07:13.160
+Rotuj je tak, aby każdy został przetestowany raz w roku, a te o najwyższym ryzyku częściej.
+
+01:07:13.160 --> 01:07:21.760
+Wykonaj test ponownie po każdej zmianie w dzierżawie, nowej zasadzie dostępu warunkowego, zmianie ról administratora, nowym produkcie do backupu, włączeniu nowego obciążenia, zmianie licencji czy fuzji.
+
+01:07:21.920 --> 01:07:27.900
+Każda z nich może po cichu zerwać ścieżkę odzyskiwania, a żadna o tym nie uprzedzi, dopiero wtedy liczby na papierze zyskują znaczenie.
+
+01:07:28.140 --> 01:07:34.540
+Nawet rzetelny test może zmylić, ponieważ przywracanie, które udało się w jedno popołudnie dla 50 kont, nie przełoży się liniowo na 5000.
+
+01:07:35.040 --> 01:07:37.420
+Powodem nie jest narzędzie, zespół ani plan.
+
+01:07:37.560 --> 01:07:41.920
+To ograniczenie zewnętrzne, z którym większość zespołów spotyka się dopiero w krytycznym dniu.
+
+01:07:41.920 --> 01:07:44.720
+Dławienie przepustowości i fizyka procesu przywracania.
+
+01:07:44.860 --> 01:07:48.180
+Każde przywracanie danych napotyka sufit, którego nie wyznacza Twoje narzędzie.
+
+01:07:48.400 --> 01:07:50.880
+Microsoft chroni swoje usługi za pomocą limitów.
+
+01:07:51.080 --> 01:07:56.260
+Gdy dowolna zewnętrzna aplikacja prosi o dane przez Microsoft Graph lub interfejsy API, usługa zlicza zapytania.
+
+01:07:56.500 --> 01:08:00.200
+Jeśli pytasz zbyt szybko, otrzymasz grzeczną odmowę, zwolnij, poczekaj, spróbuj ponownie.
+
+01:08:00.320 --> 01:08:02.180
+To jest ograniczenie przepustowości, frotling.
+
+01:08:02.380 --> 01:08:03.620
+Istnieje ku temu dobry powód.
+
+01:08:03.840 --> 01:08:06.680
+Masowe zadanie jednego tenanta nie powinno spowalniać poczty wszystkich innych.
+
+01:08:06.680 --> 01:08:11.940
+Jednak w przypadku przywracania danych oznacza to, że tempo narzuca usługa, a nie moc sprzętu kupionego przez dostawcę.
+
+01:08:12.140 --> 01:08:15.440
+Limity dotyczą każdej aplikacji, każdego tenanta i każdego obciążenia.
+
+01:08:15.700 --> 01:08:22.120
+Dlatego narzędzie, które działa szybko podczas spokojnej niedzielnej kopii zapasowej, może pełzać w poniedziałek rano, gdy Twoi użytkownicy korzystają z tej samej usługi.
+
+01:08:22.300 --> 01:08:23.940
+Przyjrzyjmy się teraz konkretnym liczbom.
+
+01:08:24.160 --> 01:08:26.220
+Załóżmy, że musisz przywrócić 20 terabajtów.
+
+01:08:26.380 --> 01:08:28.960
+Tenant liczący kilka tysięcy osób może osiągnąć taki wynik bez wysiłku.
+
+01:08:29.140 --> 01:08:31.820
+W prezentacji dostawcy może widnieć informacja o 5 terabajtach dziennie.
+
+01:08:31.820 --> 01:08:35.020
+To uczciwa liczba w laboratorium z czystym tenantem i brakiem rywalizującego obciążenia.
+
+01:08:35.240 --> 01:08:36.100
+Wykonaj obliczenia.
+
+01:08:36.300 --> 01:08:39.000
+Przy takim tempie 20 terabajtów to 4 dni ciągłej pracy.
+
+01:08:39.220 --> 01:08:41.960
+Przy bardziej realistycznych 2 terabajtach dziennie to już 10 dni.
+
+01:08:42.120 --> 01:08:43.520
+I to przy założeniu, że nic nie zawiedzie.
+
+01:08:43.600 --> 01:08:49.420
+Token nie wygaśnie, a partia elementów nie utknie w pętli ponownych prób, ani nie wystąpi kolejna fala ograniczeń, bo samo przywracanie wygląda dla usługi jak atak.
+
+01:08:49.580 --> 01:08:52.700
+Uczciwa odpowiedź brzmi więc dni, nie godziny, niezależnie od tego, co mówi broszura.
+
+01:08:52.880 --> 01:08:54.600
+Jest jeszcze jedna luka, którą ludzie pomijają.
+
+01:08:54.840 --> 01:08:56.640
+Przywracanie nie jest jednym wielkim strumieniem danych.
+
+01:08:56.640 --> 01:08:58.200
+Pliki są małe i jest ich wiele.
+
+01:08:58.440 --> 01:09:04.020
+Milion małych elementów zajmuje znacznie więcej czasu niż jeden duży plik wideo, ponieważ każdy element to osobne żądanie z własnym narzutem.
+
+01:09:04.160 --> 01:09:06.720
+Terabajty mówią o rozmiarze, liczba elementów mówi o czasie.
+
+01:09:07.000 --> 01:09:10.060
+Spójrz teraz, jak Microsoft 365 Backup zmienia tę sytuację.
+
+01:09:10.260 --> 01:09:12.480
+Jak widzieliśmy, nie stoi on w kolejce do publicznych drzwi.
+
+01:09:12.700 --> 01:09:16.960
+Działa wewnątrz platformy, blisko pamięci masowej i wykorzystuje wewnętrzne ścieżki do kopiowania zawartości.
+
+01:09:17.180 --> 01:09:20.240
+Dlatego Microsoft mówi o przywracaniu dużych wolumenów w kilka godzin.
+
+01:09:20.440 --> 01:09:24.140
+W przypadku SharePoint i OnDrive Architektura ta rzeczywiście usuwa największą barierę.
+
+01:09:24.140 --> 01:09:28.860
+Ale zwróć uwagę, czego dotyczy to twierdzenie obejmuje trzy obszary robocze wewnątrz własnej granicy Microsoftu.
+
+01:09:29.020 --> 01:09:34.360
+Nie mówi nic o zewnętrznych narzędziach przywracających czaty Teams, obiekty Entra czy skrzynkę pocztową do innego tenanta.
+
+01:09:34.620 --> 01:09:39.220
+One wciąż przechodzą przez główne drzwi i nadal napotykają limity, więc te warstwy zachowują się inaczej.
+
+01:09:39.380 --> 01:09:40.960
+Ta wbudowana w platformę jest szybka.
+
+01:09:41.120 --> 01:09:43.120
+Ta niezależna jest wolniejsza, ale odseparowana.
+
+01:09:43.280 --> 01:09:46.540
+To realny kompromis i powinieneś planować w oparciu o obie prędkości, a nie wyciągać z nich średnią.
+
+01:09:46.700 --> 01:09:47.960
+O co więc zapytać dostawcę?
+
+01:09:48.140 --> 01:09:50.020
+Nie pytaj, jak szybko przebiega przywracanie.
+
+01:09:54.140 --> 01:09:58.640
+Ile gigabajtów na godzinę w środowisku podobnym do twojego, przywracając skrzynki i witryny jednocześnie?
+
+01:09:58.860 --> 01:10:00.040
+Zmierzona przez kogo i kiedy?
+
+01:10:00.240 --> 01:10:03.140
+Co dzieje się z tym wynikiem, gdy włącza się ograniczanie przepustowości?
+
+01:10:03.300 --> 01:10:04.520
+Czy narzędzie zwalnia płynnie?
+
+01:10:04.640 --> 01:10:06.700
+Czy pomija elementy i informuje o tym później?
+
+01:10:06.920 --> 01:10:08.600
+A potem zadaj najważniejsze pytanie.
+
+01:10:08.840 --> 01:10:12.360
+Czy mogę przeprowadzić masowe przywracanie na moją skalę podczas testów koncepcji poc?
+
+01:10:12.600 --> 01:10:14.580
+Dostawca, który się zgadza, jest pewny swego.
+
+01:10:14.880 --> 01:10:17.380
+Dostawca, który woli demo, też wysyła wyraźny sygnał.
+
+01:10:17.380 --> 01:10:21.320
+Wpisz otrzymaną odpowiedź do swojego RT o nie wariant optymistyczny dostawcy, lecz swój przetestowany przypadek.
+
+01:10:21.420 --> 01:10:24.700
+Ale nawet szybkie przywracanie nie pomoże, jeśli niepowołana osoba ma dostęp do narzędzi.
+
+01:10:24.900 --> 01:10:27.480
+Szybkość ma małe znaczenie, gdy napastnik wciąż ma klucze.
+
+01:10:27.660 --> 01:10:29.640
+Więc kolejne pytanie wcale nie dotyczy danych.
+
+01:10:29.900 --> 01:10:34.040
+Dotyczy tego, kto ma dostęp do kopii zapasowej i co się stanie, gdy ta tożsamość zostanie przejęta.
+
+01:10:34.220 --> 01:10:35.720
+Ochrona samej kopii zapasowej.
+
+01:10:35.920 --> 01:10:37.060
+Kopia zapasowa to cel.
+
+01:10:37.400 --> 01:10:38.480
+Napastnicy o tym wiedzą.
+
+01:10:38.700 --> 01:10:42.220
+Ci najgroźniejsi szukają jej w pierwszej kolejności, zanim dotkną choć jednego pliku,
+
+01:10:42.220 --> 01:10:45.640
+bo jeśli przejmą kopię, żądanie okupu przestaje być groźbą, a staje się ceną.
+
+01:10:45.860 --> 01:10:46.840
+Zacznij więc od kont.
+
+01:10:47.000 --> 01:10:49.900
+Osoba zarządzająca kopiami nie powinna logować się tym samym kontem,
+
+01:10:50.000 --> 01:10:54.360
+którego używa do poczty, zatwierdzania zakupów, dołączania do spotkań czy klikania w linki przez cały dzień.
+
+01:10:54.600 --> 01:10:59.480
+Nadaj warstwie backupu własne tożsamości administracyjne, oddzielne loginy i hasła używane wyłącznie do tego celu.
+
+01:10:59.660 --> 01:10:59.980
+Dlaczego?
+
+01:11:00.260 --> 01:11:02.180
+Bo codzienne konta padają ofiarą phishingu.
+
+01:11:02.300 --> 01:11:03.560
+To najczęstsza droga ataku.
+
+01:11:03.760 --> 01:11:06.360
+Konto, które czyta maile, to konto, które można oszukać.
+
+01:11:06.360 --> 01:11:10.140
+Konto służące tylko do obsługi konsoli backupu daje znacznie mniej okazji do manipulacji.
+
+01:11:10.340 --> 01:11:11.760
+Następnie zabezpiecz te konta.
+
+01:11:11.940 --> 01:11:14.640
+Użyj uwierzytelniania wieloskładnikowego i to nie w najsłabszej wersji.
+
+01:11:14.800 --> 01:11:17.460
+Kod SMS można przechwycić lub wyłudzić od użytkownika.
+
+01:11:17.660 --> 01:11:20.060
+Klucza sprzętowego lub metod odpornych na phishing nie.
+
+01:11:20.280 --> 01:11:21.800
+Dodaj do tego dostęp warunkowy.
+
+01:11:22.000 --> 01:11:26.980
+Pozwalaj na logowanie tylko z urządzeń zarządzanych, znanych lokalizacji i tylko z systemów zgodnych z polityką.
+
+01:11:27.220 --> 01:11:30.700
+Jeśli logowanie nie spełnia wymogów, zostanie odrzucone nawet przy poprawnym haśle.
+
+01:11:30.700 --> 01:11:34.900
+A jeśli produkt do backupu działa poza twoim środowiskiem, te zasady muszą obowiązywać również tam.
+
+01:11:35.080 --> 01:11:36.740
+Różne systemy, ta sama dyscyplina.
+
+01:11:36.980 --> 01:11:39.820
+Silna polityka w jednym miejscu nie może sąsiadować ze słabą w innym.
+
+01:11:39.980 --> 01:11:43.560
+Teraz same kopie pomyśl, co chce zrobić napastnik z uprawnieniami administratora.
+
+01:11:43.700 --> 01:11:47.740
+Usunąć punkty przywracania, skrócić retencję, zmienić harmonogram, aby nic nowego nie było zapisywane.
+
+01:11:47.940 --> 01:11:50.920
+Wszystko to można zrobić po cichu, kilkoma kliknięciami, jeśli nic go nie powstrzyma.
+
+01:11:51.120 --> 01:11:53.120
+Właśnie tutaj z pomocą przychodzi niezmienność danych.
+
+01:11:53.120 --> 01:11:58.660
+Niezmiennej kopii zapasowej nie można zmienić ani usunąć przez określony czas, nie zrobi tego użytkownik, administrator, a nawet zespół wsparcia producenta.
+
+01:11:58.820 --> 01:12:01.880
+Sam system pamięci masowej odrzuca takie żądanie, dopóki zegar nie odliczy czasu.
+
+01:12:02.120 --> 01:12:04.380
+Blokada retencji działa w ten sam sposób na wyższym poziomie.
+
+01:12:04.600 --> 01:12:06.160
+Zamraża ona politykę przechowywania danych.
+
+01:12:06.380 --> 01:12:09.680
+Nawet globalny administrator nie może skrócić okna retencji, gdy blokada jest już aktywna.
+
+01:12:09.860 --> 01:12:13.020
+Atakujący ma najwyższe uprawnienia w dzierżawie, a ustawienie nadal pozostaje niezmienne.
+
+01:12:13.220 --> 01:12:14.340
+Ale jest pewien haczyk.
+
+01:12:14.480 --> 01:12:16.540
+Niezmienność działa tylko wtedy, gdy ją włączysz.
+
+01:12:16.540 --> 01:12:19.520
+A jeśli nie możesz jej szybko wyłączyć, sprawdź jak twój produkt sobie z tym radzi.
+
+01:12:19.660 --> 01:12:23.380
+Niektóre narzędzia oferują to wprost, inne ukrywają, a niektóre pozwalają jednemu administratorowi wyłączyć to jednym potwierdzeniem.
+
+01:12:23.560 --> 01:12:25.480
+Zamek, który łatwo otworzyć, nie jest żadnym zamkiem.
+
+01:12:25.700 --> 01:12:26.720
+Zadaj więc proste pytanie.
+
+01:12:26.960 --> 01:12:28.360
+Kto może usunąć kopię zapasową?
+
+01:12:28.580 --> 01:12:29.820
+Nie kto powinien, lecz kto może.
+
+01:12:30.000 --> 01:12:36.600
+Policz konkretne osoby, przeanalizuj rolę administratorzy kopii, administratorzy dzierżawy mogący przypisywać rolę wsparcia producenta, właściciel rozliczeń, który może anulować subskrypcję.
+
+01:12:36.740 --> 01:12:39.280
+A anulowanie często oznacza, że dane przepadają razem z nią.
+
+01:12:39.280 --> 01:12:41.280
+Ludzie są zazwyczaj zaskoczeni wynikiem.
+
+01:12:41.440 --> 01:12:44.440
+Lista, na której spodziewali się dwóch nazwisk, okazuje się mieć ich 12.
+
+01:12:44.760 --> 01:12:47.260
+Każde nazwisko na tej liście to furtka, więc skróć ją.
+
+01:12:47.440 --> 01:12:52.440
+Ogranicz liczbę osób z prawami do usuwania i wymagaj drugiego zatwierdzenia dla działań destrukcyjnych, jeśli produkt to umożliwia.
+
+01:12:52.600 --> 01:12:55.960
+Przeglądaj tę listę regularnie, bo role się nawarstwiają, a nikt ich nie usuwa.
+
+01:12:56.160 --> 01:12:58.580
+Zaplanuj też dzień, w którym dzierżawa przestanie być twoja.
+
+01:12:58.800 --> 01:13:01.380
+Załóżmy, że atakujący jest w środku, a ty go zablokowałeś.
+
+01:13:01.500 --> 01:13:03.440
+Teraz musisz dostać się do kopii zapasowej.
+
+01:13:03.440 --> 01:13:08.300
+Ale logowanie do kopii zależy od tej samej dzierżawy, która jest w chaosie, została zawieszona lub przejęta.
+
+01:13:08.500 --> 01:13:10.500
+Do tego służy procedura stłód szybkę.
+
+01:13:10.720 --> 01:13:13.240
+Sposób dostępu, który nie zależy od tego, co jest zepsute.
+
+01:13:13.420 --> 01:13:18.780
+Przechowuj awaryjne dane logowania do warstwy kopii zapasowej poza dzierżawą wydrukowane, zapieczętowane i przechowywane w fizycznym miejscu.
+
+01:13:18.800 --> 01:13:21.140
+Lub w sejfie, do którego nie logujesz się przez Microsoft.
+
+01:13:21.380 --> 01:13:23.300
+Wyznacz dwie osoby, które mogą go otworzyć.
+
+01:13:23.520 --> 01:13:27.600
+Zapisz kontakt alarmowy do producenta wraz z numerem telefonu, ponieważ e-mail może nie działać.
+
+01:13:27.740 --> 01:13:30.420
+Testuj to w taki sam sposób, w jaki testujesz przywracanie danych.
+
+01:13:30.420 --> 01:13:34.120
+Jeśli nikt nigdy nie użył zapieczętowanej koperty, nikt nie wie, co jest w środku.
+
+01:13:34.340 --> 01:13:40.260
+Wszystko to chroni dane, pliki, skrzynki pocztowe i witryny, ale dane to tylko jedna z rzeczy, które dzierżawa traci w czarnym scenariuszu.
+
+01:13:40.580 --> 01:13:44.320
+Odzyskiwanie wykracza poza dane to także tożsamość, konfiguracja i cała reszta.
+
+01:13:44.540 --> 01:13:46.920
+Wyobraź sobie swoją dzierżawę po bardzo złym tygodniu.
+
+01:13:47.060 --> 01:13:56.800
+Pliki wróciły, skrzynki pocztowe wróciły, a nikt nie może zalogować się tak jak dawniej, ponieważ dane opierają się na pewnej warstwie tożsamości i ustawieniach, które decydują o tym, kto ma dostęp, skąd i co wolno mu zrobić.
+
+01:13:56.800 --> 01:14:02.460
+Narzędzia do tworzenia kopii zapasowych chronią głównie zawartość. Warstwa znajdująca się poniżej to element, o którym wszyscy zapominają.
+
+01:14:02.660 --> 01:14:05.840
+Zacznijmy od Entra, ID, użytkowników, grup i rejestracji aplikacji.
+
+01:14:06.040 --> 01:14:13.920
+Grupa to nie tylko lista nazwisk. Kontroluje ona dostęp do zespołu witryny, skrzynki pocztowej, przypisania licencji, jeśli zniknie wszystko, co jej ufało, traci grunt pod nogami.
+
+01:14:14.140 --> 01:14:20.580
+Niektóre usunięte obiekty można odzyskać z kosza przez krótki czas, potem znikają na dobre i wracają jako nowe obiekty z nowymi identyfikatorami.
+
+01:14:20.580 --> 01:14:31.560
+Nic, co wskazywało na stary identyfikator, nie wie o istnieniu nowego. Następnie dostęp warunkowy. To reguły określające, kto potrzebuje uwierzytelniania wieloskładnikowego, które urządzenia są zaufane i które kraje są blokowane.
+
+01:14:31.820 --> 01:14:36.340
+Większość dzierżaw ma ich dziesiątki, budowane przez lata z wykluczeniami dodawanymi po konkretnych incydentach.
+
+01:14:36.500 --> 01:14:41.960
+Atakujący z uprawnieniami administratora może je zmienić w kilka minut, a jeśli nikt ich nie wyeksportował, nikt nie pamięta dokładnej logiki.
+
+01:14:41.960 --> 01:14:44.620
+Odtwarzasz je z pamięci i udaje się to niemal idealnie.
+
+01:14:44.820 --> 01:14:47.080
+Rejestracje aplikacji niosą ze sobą ten sam problem.
+
+01:14:47.320 --> 01:14:51.100
+Każda z nich zawiera uprawnienia, klucze, adresy przekierowań i decyzje o wyrażeniu zgody.
+
+01:14:51.340 --> 01:14:54.380
+Jeśli je stracisz, każda integracja, która z nich korzystała, przestaje działać.
+
+01:14:54.520 --> 01:14:57.200
+Aplikacja biznesowa, automatyzacja, samo narzędzie do backupu.
+
+01:14:57.200 --> 01:15:02.520
+Teraz ustawienia obciążeń, reguły przepływu poczty w Exchange decydują o tym, jak wiadomości są kierowane, oznaczane, blokowane i podpisywane.
+
+01:15:02.680 --> 01:15:05.180
+Łączniki decydują o tym, jak komunikacja dociera do partnerów.
+
+01:15:05.180 --> 01:15:09.280
+Ustawienia administratora SharePoint obejmują limity udostępniania, dostęp zewnętrzny i zasady przechowywania.
+
+01:15:09.500 --> 01:15:14.080
+Zasady Teams kontrolują, kto może się spotykać, nagrywać, rozmawiać z osobami z zewnątrz i instalować określone aplikacje.
+
+01:15:14.300 --> 01:15:18.140
+Nic z tego nie jest treścią, więc nic z tego nie wraca, gdy przywracasz skrzynkę lub witrynę.
+
+01:15:18.140 --> 01:15:21.420
+Dlatego odbudowa konfiguracji trwa dłużej niż przywracanie plików.
+
+01:15:21.580 --> 01:15:23.200
+Przywrócenie pliku to po prostu kopia.
+
+01:15:23.440 --> 01:15:25.900
+Ma rozmiar i prędkość, oba te parametry można zmierzyć.
+
+01:15:26.060 --> 01:15:27.940
+Odbudowa konfiguracji to seria decyzji.
+
+01:15:28.140 --> 01:15:29.480
+Dlaczego ta reguła w ogóle istniała?
+
+01:15:29.660 --> 01:15:30.960
+Dla jakiego wyjątku była przeznaczona?
+
+01:15:35.180 --> 01:15:36.800
+W zgłoszeniu sprzed 3 lat albo nigdzie.
+
+01:15:37.020 --> 01:15:38.980
+Zegar nie odmierza więc czasu na podstawie przepustowości.
+
+01:15:39.160 --> 01:15:40.720
+Odmierza go na podstawie ludzi i pamięci.
+
+01:15:40.960 --> 01:15:45.600
+Zespół może w kilka dni odtworzyć terabajty danych, a potem tygodniami walczyć, by dzierżawa zachowywała się tak jak przed awarią.
+
+01:15:45.600 --> 01:15:49.360
+W tym czasie użytkownicy obchodzą braki, a te obejścia stają się nowymi problemami.
+
+01:15:49.520 --> 01:15:51.620
+Istnieje jednak tanie, częściowe rozwiązanie.
+
+01:15:51.800 --> 01:15:54.040
+Zapisz konfigurację w formacie czytelnym dla maszyny.
+
+01:15:54.180 --> 01:15:55.800
+To właśnie konfiguracja jako kod.
+
+01:15:55.960 --> 01:16:01.660
+Eksportuj swoje zasady dostępu warunkowego jako pliki, tak samo rób z regułami przepływu poczty, ustawieniami transportu i zasadami Teams.
+
+01:16:01.660 --> 01:16:05.660
+Wiele z nich można pobrać za pomocą PowerShell lub interfejsu Graph API w zaledwie kilku liniach.
+
+01:16:05.840 --> 01:16:10.940
+Przechowuj eksporty poza dzierżawą, najlepiej w systemie kontroli wersji, aby każda zmiana miała przypisaną datę i autora.
+
+01:16:11.120 --> 01:16:12.640
+To nie jest pełna kopia zapasowa.
+
+01:16:12.860 --> 01:16:16.900
+Eksporty nie obejmują wszystkiego, a niektórych obiektów nie da się odtworzyć z tymi samymi identyfikatorami.
+
+01:16:17.140 --> 01:16:20.600
+Mimo to nawet zwykły eksport zmienia proces odbudowy z pytania, co właściwie mieliśmy.
+
+01:16:20.780 --> 01:16:22.360
+Na zastosuj ten plik i sprawdź.
+
+01:16:22.480 --> 01:16:25.000
+To oszczędność dni pracy przy praktycznie zerowych kosztach.
+
+01:16:25.000 --> 01:16:32.560
+Zaplanuj eksport, uruchamiaj go co tydzień lub po każdej zmianie i testuj go tak samo, jak testuje się przywracanie, stosując go w testowej dzierżawie i sprawdzając, co przestanie działać.
+
+01:16:32.660 --> 01:16:34.000
+Mamy teraz wiele elementów na stole.
+
+01:16:34.140 --> 01:16:40.680
+Narzędzia natywne, kopię zapasową Microsoft 365, niezależną kopię, zawartość i konfigurację, różne obciążenia z różnym cyklem życia.
+
+01:16:40.940 --> 01:16:46.680
+Wszystko to musi składać się na jeden model decyzji, z którego można skorzystać we wtorek, mając spotkanie budżetowe w środę.
+
+01:16:46.680 --> 01:16:57.300
+Model decyzyjny, natywna kopia Microsoft 365, rozwiązania firm trzecich, trzy warstwy, nie trzy produkty do wyboru, lecz trzy poziomy ochrony, z których każdy uzasadnia swoją obecność kosztem i zakresem ochrony.
+
+01:16:57.500 --> 01:16:58.400
+Zacznij od podstaw.
+
+01:16:58.640 --> 01:17:05.540
+Poziom pierwszy to tylko narzędzia natywne, kosze, elementy do odzyskania, wersjonowanie, okno przywracania on-drive już za nie zapłaciłeś i są włączone.
+
+01:17:05.780 --> 01:17:07.860
+Dla odpowiedniej zawartości są wystarczające.
+
+01:17:08.040 --> 01:17:12.480
+Projekt, który zakończył się w zeszłym roku, współdzielony folder ze zdjęciami z imprez, zespół czatujący o lunchu.
+
+01:17:12.480 --> 01:17:15.700
+Jeśli stracisz dzień takiej pracy, ktoś będzie zirytowany, ale świat będzie kręcił się dalej.
+
+01:17:15.700 --> 01:17:16.760
+Test jest prosty.
+
+01:17:16.920 --> 01:17:20.960
+Jeśli treść ma niskie ryzyko, krótki okres przydatności lub jest łatwa do odtworzenia, narzędzia natywne są dobrym rozwiązaniem.
+
+01:17:21.160 --> 01:17:22.980
+Świadome zapisanie tego na piśmie to decyzja.
+
+01:17:23.200 --> 01:17:24.640
+Brak takiej decyzji to przypadek.
+
+01:17:24.760 --> 01:17:26.860
+Poziom drugi to kopia zapasowa Microsoft 365.
+
+01:17:27.380 --> 01:17:34.420
+Jest przeznaczony dla kluczowych obciążeń, gdzie liczy się szybkość witryny z umowami, skrzynki pocztowe działu finansów, konta on-drive, działu sprzedaży, który bez nich nie może pracować.
+
+01:17:34.560 --> 01:17:36.800
+Tu pytanie nie brzmi, czy dane da się odzyskać.
+
+01:17:36.960 --> 01:17:38.540
+Brzmi, jak szybko i w jakim stanie.
+
+01:17:38.540 --> 01:17:44.240
+Przywracanie wewnątrz dzierżawy z opcjami punktu w czasie pozwala zaoszczędzić godziny, podczas gdy narzędzia natywne zajęłyby dni.
+
+01:17:44.420 --> 01:17:48.540
+To warstwa, po którą sięgasz w typowy zły dzień, gdy ktoś usunie coś przez pomyłkę lub zawiedzie synchronizacja.
+
+01:17:49.380 --> 01:17:50.620
+To twój szybki pas ruchu.
+
+01:17:50.620 --> 01:17:55.500
+Poziom 3 to niezależna kopia zewnętrzna, osobna pamięć, osobne dane uwierzytelniające, osobny panel sterowania.
+
+01:17:55.760 --> 01:18:09.380
+Dotyczy to treści, których pod żadnym pozorem nie można stracić ewidencji regulowanej, poczty kierownictwa i działu prawnego wszystkiego, gdzie scenariusz awarii obejmuje samego najemcę, niezależnie od tego, czy jest to hakowany globalny administrator, złośliwy pracownik z kluczami, czy problem dostawcy, na który nie masz wpływu.
+
+01:18:09.540 --> 01:18:11.960
+Poziom 2 znajduje się blisko tego, co chroni.
+
+01:18:12.120 --> 01:18:14.600
+Poziom 3 nie i ten dystans to cały zamysł.
+
+01:18:14.780 --> 01:18:16.260
+A teraz pora na zmianę podejścia.
+
+01:18:16.500 --> 01:18:18.060
+Większość zespołów traktuje to jak menu.
+
+01:18:18.060 --> 01:18:21.200
+Wybierz jedną opcję, porównaj ceny, przeczytaj listę funkcji, wskaż zwycięzcę.
+
+01:18:21.320 --> 01:18:23.180
+Ale te poziomy nie są dla siebie konkurencją.
+
+01:18:23.520 --> 01:18:24.720
+Odpowiadają na różne pytania.
+
+01:18:24.980 --> 01:18:27.200
+Rozwiązanie natywne naprawia małe błędy w kilka minut.
+
+01:18:27.400 --> 01:18:30.900
+Kopia zapasowa Microsoft 365 pozwala na duże przywracanie w kilka godzin.
+
+01:18:31.120 --> 01:18:34.220
+Niezależna kopia sprawdza się w dniu, w którym dwa pierwsze nie są już godne zaufania.
+
+01:18:34.420 --> 01:18:37.140
+Usuń jeden element, a konkretny scenariusz pozostanie bez zabezpieczenia.
+
+01:18:37.360 --> 01:18:38.440
+Zatem nakładaj je na siebie.
+
+01:18:38.700 --> 01:18:40.520
+Poziom 1 dla wszystkiego, bo już tam jest.
+
+01:18:40.700 --> 01:18:43.620
+Poziom 2 dla obciążeń, które sklasyfikowałeś jako kluczowe dla biznesu.
+
+01:18:43.620 --> 01:18:49.860
+Poziom 3 dla wąskiego wycinka, gdzie cel jest rygorystyczny, nadzorca patrzy na ręce lub napastnik prawdopodobnie zaatakuje samą kopię zapasową.
+
+01:18:50.040 --> 01:18:54.720
+Każda warstwa obejmuje mniejszy zestaw treści, więc koszt warstwy maleje, gdy ochrona staje się silniejsza.
+
+01:18:54.840 --> 01:18:57.180
+I to właśnie tam zazwyczaj utyka dyskusja o budżecie.
+
+01:18:57.340 --> 01:19:00.640
+Ktoś widzi cenę za użytkownika i krzywi się, więc przedstaw to inaczej.
+
+01:19:00.800 --> 01:19:03.860
+Nie porównuj ceny do zera, porównaj ją do kosztów jednego fatalnego tygodnia.
+
+01:19:04.080 --> 01:19:05.440
+Weźmy firmy z 2000 osób.
+
+01:19:05.600 --> 01:19:10.120
+Powiedzmy, że Atac Ransomware wyłącza pocztę i pliki na 5 dni roboczych, nawet przy częściowej wydajności.
+
+01:19:10.120 --> 01:19:18.260
+Policz pensje za zablokowane godziny, policz utracone transakcje, opóźnione dokumenty, nadgodziny dla IT, zewnętrzny zespół reagowania, koszty prawne, klienta, który odchodzi.
+
+01:19:18.520 --> 01:19:20.800
+Dla większości organizacji to kwoty idące w miliony.
+
+01:19:21.020 --> 01:19:24.420
+Teraz zestaw to z warstwą ochrony, która kosztuje kilka dolarów na użytkownika miesięcznie.
+
+01:19:24.560 --> 01:19:28.020
+To nawet nie podlega porównaniu, ale zwróć uwagę, czego wymaga ta matematyka.
+
+01:19:28.260 --> 01:19:31.220
+Wymaga liczby, którą wcześniej zebrałeś z każdego działu kosztu jednej godziny.
+
+01:19:31.380 --> 01:19:33.000
+To właśnie zmienia ceny w zestawienie.
+
+01:19:33.200 --> 01:19:34.820
+I sprawdź to również w drugą stronę.
+
+01:19:34.820 --> 01:19:39.740
+Jeśli kopia poziomu 3 dla całego najemcy kosztuje więcej niż straty, którym zapobiega, chronisz niewłaściwe rzeczy.
+
+01:19:39.980 --> 01:19:41.300
+Dopasuj warstwę do poziomu.
+
+01:19:41.460 --> 01:19:44.240
+Wydawaj tam, gdzie liczba jest wysoka i przestań, gdzie nie jest.
+
+01:19:44.380 --> 01:19:45.200
+To daje Ci model.
+
+01:19:45.420 --> 01:19:48.440
+Trzy warstwy dopasowane do celów wycenione względem potencjalnych strat.
+
+01:19:48.620 --> 01:19:50.620
+Ale model na slajdzie nie przywróci niczego.
+
+01:19:50.860 --> 01:19:55.620
+Nabiera to znaczenia dopiero wtedy, gdy nadchodzi feralny dzień, a plan musi zmierzyć się z czasem, napastnikiem i niewyspanym zespołem.
+
+01:19:55.840 --> 01:19:57.420
+Zobaczmy więc, jak to wygląda w praktyce.
+
+01:19:57.640 --> 01:19:58.860
+Godzina 0, siódma rano.
+
+01:19:59.020 --> 01:20:01.200
+Oś czasu incydentu, godzina 0, siódma rano.
+
+01:20:01.200 --> 01:20:03.340
+Godzina 0 nie zaczyna się od przywracania danych.
+
+01:20:03.560 --> 01:20:04.560
+Zaczyna się od sygnału.
+
+01:20:04.720 --> 01:20:06.200
+Użytkownik nie może otworzyć pliku.
+
+01:20:06.400 --> 01:20:08.640
+Alarm bezpieczeństwa reaguje na masowe zmiany w plikach.
+
+01:20:08.780 --> 01:20:12.100
+Kolejka do helpdesku zapełnia się tymi samymi zgłoszeniami, aż w końcu ktoś łączy fakty.
+
+01:20:12.300 --> 01:20:14.440
+Potem przychodzi część, którą każdy chciałby pominąć.
+
+01:20:14.600 --> 01:20:15.780
+Nie przywracaj jeszcze niczego.
+
+01:20:16.040 --> 01:20:17.240
+Najpierw powstrzymaj szkody.
+
+01:20:17.500 --> 01:20:18.720
+Zablokuj przejęte konta.
+
+01:20:18.920 --> 01:20:20.400
+Unieważnij ich sesje i tokeny.
+
+01:20:20.600 --> 01:20:26.880
+Wstrzymaj synchronizację on-drive, gdzie to możliwe, bo przywracanie do biblioteki, która wciąż synchronizuje zaszyfrowane pliki, tylko napędza problem.
+
+01:20:26.880 --> 01:20:31.020
+Jeśli napastnik posiada uprawnienia administratora, jest to priorytet nad wszystkimi innymi punktami.
+
+01:20:31.240 --> 01:20:32.560
+Następnie określ zasięg.
+
+01:20:32.680 --> 01:20:35.800
+Które konta, które witryny, które skrzynki pocztowe i od którego momentu?
+
+01:20:35.920 --> 01:20:38.320
+Odpowiedź dają dzienniki audytu i historia logowań.
+
+01:20:38.480 --> 01:20:42.120
+Celem jest jeden, czysty znacznik czasu, ostatni punkt, w którym dane były poprawne.
+
+01:20:42.360 --> 01:20:45.980
+Bez tego przywracasz dane na chybił, trafił, a to może przywrócić również szkody.
+
+01:20:46.180 --> 01:20:47.120
+To zajmuje godziny.
+
+01:20:47.360 --> 01:20:51.920
+Zawsze wydaje się zbyt wolne, ale przywracanie rozpoczęte przed izolacją i określeniem zasięgu często trzeba powtarzać.
+
+01:20:51.920 --> 01:20:54.820
+Pojawia się napięcie, o którym nikt nie wspomina na spotkaniach planistycznych.
+
+01:20:55.000 --> 01:20:56.340
+Musisz przywrócić działanie usług.
+
+01:20:56.560 --> 01:20:57.600
+Musisz też mieć dowody.
+
+01:20:57.820 --> 01:21:05.960
+Dzienniki zmian, reguły skrzynek, napastnika, adresy przekierowań, zgody aplikacji, nadpisz je przywracaniem, a stracisz ślad prowadzący do tego, jak weszli i czy nadal mają dostęp.
+
+01:21:06.220 --> 01:21:07.920
+Najpierw wyeksportuj dane audytowe.
+
+01:21:08.160 --> 01:21:10.160
+Jeśli możesz, wykonaj migawki dotkniętych witryn.
+
+01:21:10.340 --> 01:21:15.800
+Przywracaj do lokalizacji alternatywnych, gdzie to ma sens i zachowaj oryginały w stanie nienaruszonym, dopóki dział bezpieczeństwa nie pozwoli ich usunąć.
+
+01:21:15.800 --> 01:21:20.960
+Dział prawny i ubezpieczyciel o to zapytają, podobnie jak twój zespół, gdy trzeba będzie udowodnić, że drzwi są zamknięte.
+
+01:21:21.140 --> 01:21:24.060
+Zatem przywracanie odbywa się równolegle z dochodzeniem, a nie zamiast niego.
+
+01:21:24.320 --> 01:21:26.200
+Kiedy już się zacznie, kolejność ma znaczenie.
+
+01:21:26.460 --> 01:21:27.480
+Najpierw tożsamość.
+
+01:21:27.680 --> 01:21:28.960
+Bez niej nic innego nie zadziała.
+
+01:21:29.180 --> 01:21:33.280
+Logowanie, uwierzytelnianie wieloskładnikowe, dostęp warunkowy, przynależność do grup, same role administratorów.
+
+01:21:33.440 --> 01:21:38.080
+Jeśli warstwa tożsamości jest błędna, każdy przywrócony plik trafia do środowiska, które ufa niewłaściwym osobom.
+
+01:21:38.240 --> 01:21:39.500
+Poczta w drugiej kolejności.
+
+01:21:39.500 --> 01:21:44.160
+To pierwsze miejsce, do którego sięgają ludzie, zawiera decyzje, zatwierdzenia i resety haseł.
+
+01:21:44.340 --> 01:21:47.720
+Skrzynki kadry zarządzającej i działu prawnego mają najwyższy priorytet.
+
+01:21:47.800 --> 01:21:53.140
+Następnie współpraca witryny SharePoint pierwszego poziomu, potem oparte na nich zespoły, a następnie konta on-drive w partiach,
+
+01:21:53.260 --> 01:21:56.540
+zaczynając od grup, które nie mogą pracować bez swoich plików, a na końcu reszta.
+
+01:21:56.740 --> 01:22:00.880
+Witryny trzeciego poziomu, zarchiwizowane projekty, współdzielone skrzynki pocztowe, których nikt w tym roku nie otworzył.
+
+01:22:01.000 --> 01:22:02.720
+One wracają na samym końcu, celowo.
+
+01:22:02.900 --> 01:22:05.400
+Teraz komunikacja, ponieważ milczenie też wyrządza szkody.
+
+01:22:05.400 --> 01:22:07.920
+W pierwszych godzinach przekaż użytkownikom czyste fakty.
+
+01:22:08.060 --> 01:22:10.820
+Coś jest nie tak o to, co należy zrobić, o to, czego nie wolno dotykać.
+
+01:22:10.940 --> 01:22:12.860
+Nie obiecuj terminu, którego nie możesz dotrzymać.
+
+01:22:12.980 --> 01:22:16.940
+Kierownictwu przekazuj krótkie aktualizacje zgodnie z ustalonym harmonogramem, niezależnie od tego, czy coś się zmieniło.
+
+01:22:17.080 --> 01:22:18.560
+Co dwie godziny, potem co cztery.
+
+01:22:18.760 --> 01:22:20.380
+Co wiemy, czego nie wiemy, co dalej.
+
+01:22:20.600 --> 01:22:25.460
+Lider, który otrzymuje stały rytm uczciwych aktualizacji, przestaje wydzwaniać do sztabu kryzysowego po odpowiedzi.
+
+01:22:25.680 --> 01:22:27.440
+Drugiego dnia wzorzec staje się widoczny.
+
+01:22:27.640 --> 01:22:29.560
+Przywracanie danych trwa dłużej, niż zakładał plan.
+
+01:22:29.560 --> 01:22:31.320
+Pojawiło się ograniczenie przepustowości.
+
+01:22:31.520 --> 01:22:34.940
+Grupa elementów nie została przywrócona, a nikt tego nie zauważył, bo zadanie zgłosiło sukces.
+
+01:22:35.120 --> 01:22:38.020
+Ktoś odkrywa współdzieloną skrzynkę, której nigdy nie uwzględniono w zakresie.
+
+01:22:38.180 --> 01:22:41.640
+Ktoś inny znajduje zespół, którego czat można odzyskać tylko w formie eksportu.
+
+01:22:41.820 --> 01:22:46.100
+Uprawnienia w przywróconej witrynie nie zgadzają się z tym, co pamięta właściciel, a ludzie się zmienili.
+
+01:22:46.380 --> 01:22:51.520
+Dwóch inżynierów znających kroki jest wyczerpanych, a w zapieczętowanej kopercie okazuje się być wygasłe hasło.
+
+01:22:51.740 --> 01:22:52.920
+Nic z tego nie jest pechem.
+
+01:22:52.920 --> 01:22:58.860
+Każdy element to luka, którą wykryłby test, a każdy z nich kosztuje dzień podczas rzeczywistego incydentu, co sprowadza nas z powrotem do struktury.
+
+01:22:59.000 --> 01:22:59.940
+Plan to nie narzędzie.
+
+01:23:00.200 --> 01:23:04.540
+Chodzi o to, kto podejmuje decyzje, kto ma dane dostępowe i kto może wydać polecenie przywracaj teraz.
+
+01:23:04.720 --> 01:23:07.980
+Ład organizacyjny, odpowiedzialność i pytania, które trzeba zadać w poniedziałek.
+
+01:23:08.160 --> 01:23:10.480
+Zapytaj, kto odpowiada za kopię zapasową w twojej firmie.
+
+01:23:10.660 --> 01:23:12.180
+Usłyszysz jedną z czterech odpowiedzi.
+
+01:23:12.380 --> 01:23:14.540
+Dział IT twierdzi, że to ich rola, bo zarządzają dzierżawą.
+
+01:23:14.740 --> 01:23:17.580
+Dział bezpieczeństwa twierdzi, że to ich sprawa, bo ransomware to incydent bezpieczeństwa.
+
+01:23:17.580 --> 01:23:23.840
+Dział zgodności twierdzi, że to ich zadanie, bo retencja to zasada, którą napisali, a w zaskakująco wielu firmach uczciwa odpowiedź brzmi – nikt.
+
+01:23:23.980 --> 01:23:25.560
+Każdy z nich zawodzi na swój sposób.
+
+01:23:25.800 --> 01:23:30.800
+IT posiada narzędzie, ale nie zna wymogów biznesowych, więc RPO jest takie, jakie domyślnie ustawia produkt.
+
+01:23:31.180 --> 01:23:34.860
+Bezpieczeństwo odpowiada za zagrożenie, ale nie za przywracanie, więc plan kończy się na izolacji.
+
+01:23:35.100 --> 01:23:40.560
+Zgodność odpowiada za politykę, ale nie za czas, więc potrafią udowodnić, że treść istniała, ale nie powiedzą, jak szybko wróci.
+
+01:23:40.740 --> 01:23:45.220
+A nikt oznacza, że pierwszym właścicielem staje się ten, kto akurat jest w pokoju podczas incydentu.
+
+01:23:45.220 --> 01:23:52.120
+Wybierz jedną osobę, a nie komitet jedną konkretną rolę odpowiedzialną za odtwarzanie danych, podczas gdy pozostali dostarczają liczby dostęp i wymagania.
+
+01:23:52.340 --> 01:23:53.940
+Następnie zapisz to imię i nazwisko.
+
+01:23:54.180 --> 01:23:57.520
+Teraz pięć pytań. Zadaj je w poniedziałek na zwykłym spotkaniu, bez żadnych slajdów.
+
+01:23:57.660 --> 01:24:00.080
+Co jest objęte ochroną? Nie to, co planowałeś objąć.
+
+01:24:00.220 --> 01:24:01.300
+Co jest w zakresie dzisiaj?
+
+01:24:01.500 --> 01:24:06.520
+Obciążenie po obciążeniu, włącznie ze współdzielonymi skrzynkami, czatami Teams i witrynami dodanymi w zeszłym miesiącu.
+
+01:24:06.520 --> 01:24:12.640
+Jaki jest RPO dla każdego poziomu wyrażony liczbą, a nie ogólnikowymi godzinami czy dniami z właścicielem biznesowym, który to zatwierdził?
+
+01:24:12.760 --> 01:24:14.320
+Kiedy ostatnio przywracaliśmy dane?
+
+01:24:14.500 --> 01:24:16.220
+Podaj mi datę, scenariusz i wynik.
+
+01:24:16.400 --> 01:24:20.140
+Jeśli odpowiedź brzmi, że nigdy tego nie robiliśmy, to jest to Twoja odpowiedź i jest szczera.
+
+01:24:20.300 --> 01:24:21.780
+Kto może usuwać kopie zapasowe?
+
+01:24:21.960 --> 01:24:25.760
+Policz te osoby, a potem policz jeszcze raz, wliczając właściciela rozliczeń i personel wsparcia dostawcy.
+
+01:24:25.920 --> 01:24:27.080
+A gdzie znajduje się ta kopia?
+
+01:24:27.300 --> 01:24:28.160
+W którym systemie?
+
+01:24:28.320 --> 01:24:29.380
+Z jakimi poświadczeniami?
+
+01:24:29.580 --> 01:24:30.360
+W którym tenancie?
+
+01:24:30.360 --> 01:24:37.620
+Jeśli odpowiedź brzmi, w tym samym miejscu, co wszystko inne, pod tymi samymi kątami administratora, to masz drugą kopię danych, ale ten sam pojedynczy punkt awarii.
+
+01:24:37.720 --> 01:24:38.440
+5 pytań.
+
+01:24:38.620 --> 01:24:42.440
+Zadanie każdego zajmuje minutę, a udzielenie właściwej odpowiedzi może zająć tydzień.
+
+01:24:42.540 --> 01:24:43.900
+Ta luka to Twoje ustalenie.
+
+01:24:44.080 --> 01:24:45.920
+Potem zrób to, co sprawi, że to zadziała.
+
+01:24:46.180 --> 01:24:48.260
+Zapisz odpowiedzi i przy każdej postaw datę.
+
+01:24:48.440 --> 01:24:49.740
+Nie, mamy kopię zapasową.
+
+01:24:50.000 --> 01:24:56.260
+Zamiast tego Exchange objęty ochroną RP o 4 godziny, ostatnie przywracanie testowane 12 marca, zakończone w 2 godziny 10 minut.
+
+01:24:56.260 --> 01:25:02.060
+Data zmienia twierdzenie w dokument, a nieaktualna data wskazuje, gdzie szukać dalej, bez potrzeby kłócenia się o to.
+
+01:25:02.260 --> 01:25:03.820
+Przeglądaj tę stronę co kwartał.
+
+01:25:03.980 --> 01:25:06.020
+Kiedy data się przedawnia, to jest właśnie zadanie.
+
+01:25:06.160 --> 01:25:07.260
+To jest prawdziwa zmiana.
+
+01:25:07.500 --> 01:25:09.920
+Przez lata pytanie brzmiało, czy tenant przechowuje dane.
+
+01:25:10.140 --> 01:25:13.220
+Przechowuje, czyli trzyma gdzieś zgodnie z polityką przez jakiś czas.
+
+01:25:13.360 --> 01:25:15.620
+To wygodne słowo, bo nie wymaga dowodu użycia.
+
+01:25:15.840 --> 01:25:18.340
+Nowe pytanie brzmi, czy dane są możliwe do odzyskania?
+
+01:25:18.500 --> 01:25:19.000
+Przez kogo?
+
+01:25:19.220 --> 01:25:19.800
+Jak szybko?
+
+01:25:20.000 --> 01:25:20.820
+Do jakiego stanu?
+
+01:25:20.940 --> 01:25:22.040
+I czy ktoś to sprawdził?
+
+01:25:22.300 --> 01:25:23.920
+Przechowywanie to cecha magazynu danych.
+
+01:25:23.920 --> 01:25:26.860
+Odzyskiwalność to cecha planu, który został wykonany.
+
+01:25:27.200 --> 01:25:28.360
+Podsumowanie i zakończenie.
+
+01:25:28.640 --> 01:25:31.820
+Dzień, w którym musisz przywrócić dane, to najgorszy dzień na poznawanie ograniczeń.
+
+01:25:31.960 --> 01:25:36.460
+To cały sens argumentacji, a 93 dni, 14 dni i limity przepustowości to tylko szczegóły.
+
+01:25:36.640 --> 01:25:37.920
+Wszystkie są gdzieś wydrukowane.
+
+01:25:38.160 --> 01:25:40.200
+Są jednak rzadko czytane, dopóki zegar już nie tyka.
+
+01:25:40.400 --> 01:25:42.100
+Zastosuj więc ten model w czterech krokach.
+
+01:25:42.260 --> 01:25:44.480
+Dostępność to Microsoft utrzymujący usługę w działaniu.
+
+01:25:44.680 --> 01:25:46.560
+Retencja to trzymanie kopii dla prawników.
+
+01:25:46.760 --> 01:25:50.280
+Backup to kopia, którą można przywrócić, przechowywana poza zasięgiem atakującego.
+
+01:25:50.280 --> 01:25:56.300
+A przetestowane odzyskiwanie to dowód, że pierwsze trzy elementy współdziałają w Twoim środowisku, na Twoją skalę i z Twoim zespołem.
+
+01:25:56.460 --> 01:25:59.560
+Pomiń ostatni punkt, a pozostałe trzy będą tylko nadzieją.
+
+01:25:59.820 --> 01:26:02.420
+Zanim skończymy, słówko o dzisiejszym sponsorze.
+
+01:26:02.600 --> 01:26:07.960
+Stella Migrator for Exchange służy do przenoszenia skrzynek między środowiskami i do zadań powiązanych z odzyskiwaniem.
+
+01:26:08.160 --> 01:26:12.780
+Planując odzyskiwanie i tak musisz zmapować każdą skrzynkę użytkownika, skrzynkę współdzieloną i archiwum.
+
+01:26:12.920 --> 01:26:15.280
+To ten sam spis zasobów, którego wymaga migracja.
+
+01:26:15.280 --> 01:26:20.640
+Jeśli masz w planach migrację lub potrzebujesz sposobu na bezpieczne przeniesienie danych skrzynek, warto się temu przyjrzeć.
+
+01:26:20.760 --> 01:26:26.120
+Przenoszenie danych i planowanie odzyskiwania wymagają tej samej pracy, więc zrobienie tego za jednym razem oszczędza czas.
+
+01:26:26.300 --> 01:26:29.560
+Jeśli zmieniło to Twoje podejście do planu odzyskiwania, zostaw opinię.
+
+01:26:29.720 --> 01:26:33.600
+Pomoże to innym administratorom znaleźć ten odcinek, zanim będą go potrzebować, a nie po fakcie.
+
+01:26:33.820 --> 01:26:36.980
+Większość ludzi szuka informacji na ten temat dopiero, gdy coś już pójdzie nie tak.
+
+01:26:37.200 --> 01:26:40.180
+Jeśli chcesz kontynuować, skontaktuj się ze mną, Mirko Petersem, na LinkedInie.
+
+01:26:40.180 --> 01:26:42.640
+Daj znać, jaki temat mam omówić w następnej kolejności.
+
+01:26:42.860 --> 01:26:46.360
+Backup dla Power Platform, odzyskiwanie EntraID, cokolwiek, z czym masz teraz problem.
+
+01:26:46.560 --> 01:26:53.040
+I zasubskrybuj podcast M365FM, aby dowiadywać się o wszystkim jako pierwszy, a nie o dwóch nad ranem, gdy przywracanie utknęło na 40%.

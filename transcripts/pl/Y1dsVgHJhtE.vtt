@@ -1,0 +1,553 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.180
+Kontrola dostępu oparta na rolach w Azjur to tak naprawdę po prostu karta klucz, a nie włącznik światła.
+
+00:00:04.360 --> 00:00:09.640
+Włącznik światła włącza lub wyłącza światło w całym pomieszczeniu, podczas gdy karta klucz otwiera konkretne drzwi dla konkretnej osoby.
+
+00:00:09.900 --> 00:00:15.860
+Większość z nas uczyła się uprawnień w taki sam sposób jak włącznik światła, dlatego dostęp często okazuje się szerszy niż ktokolwiek planował.
+
+00:00:16.060 --> 00:00:21.880
+Witamy w podcaście M365FM, w którym zgłębiamy ludzi pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:22.140 --> 00:00:27.500
+Dzisiaj omówimy, jak działa dostęp w Azjur, a wszystko sprowadza się do trzech ruchomych części, które możesz sobie przypomnieć.
+
+00:00:27.500 --> 00:00:34.560
+Pod koniec będziesz w stanie sprawdzić dostęp każdej osoby w swojej subskrypcji i dokładnie wiedzieć, dlaczego istnieje i do czego właściwie służy RBAC.
+
+00:00:34.820 --> 00:00:40.940
+Kontrola dostępu oparta na rolach odpowiada na trzy pytania dotyczące każdego posiadanego zasobu i zadaje je ponownie przy każdym żądaniu.
+
+00:00:41.100 --> 00:00:46.720
+Te pytania brzmią, kto może uzyskać dostęp, co może robić po wejściu i jak daleko sięga jego zasięg.
+
+00:00:46.800 --> 00:00:49.220
+Brzmi to jak mnóstwo mechanizmów, a tak nie jest.
+
+00:00:49.460 --> 00:00:56.360
+Microsoft opisuje to jako system autoryzacji oparty na usłudze Azure Resource Manager, która odbiera żądanie i decyduje, czy je zrealizować.
+
+00:00:56.360 --> 00:01:00.640
+Autoryzacja to po prostu decyzja o tym, co może zrobić osoba, która się już zalogowała.
+
+00:01:00.840 --> 00:01:04.420
+Wyobraź sobie budynek z jednymi wspólnymi drzwiami wejściowymi i wieloma zamkniętymi pokojami.
+
+00:01:04.640 --> 00:01:10.740
+Wszyscy wchodzą przez to samo wejście, ponieważ zalogowanie się potwierdza ich tożsamość, a następnie każdy nosi kartę dostępu do potrzebnych mu pomieszczeń.
+
+00:01:10.880 --> 00:01:13.900
+Niektóre karty otwierają jedną szafę, a inne całe piętro.
+
+00:01:14.140 --> 00:01:16.380
+Nic w usłudze Azure nie jest domyślnie otwarte.
+
+00:01:16.640 --> 00:01:20.760
+Dostęp istnieje, ponieważ ktoś utworzył przypisanie roli i znika, gdy ktoś je usunie.
+
+00:01:20.760 --> 00:01:25.360
+Żaden przełącznik nie włącza się automatycznie, ani żadne uprawnienie nie włącza się automatycznie, gdy nie patrzysz.
+
+00:01:25.500 --> 00:01:30.200
+Więc gdy członek zespołu nagle widzi zasób, którego nigdy nie dotykał, wyjaśnienie jest prawie zawsze takie samo.
+
+00:01:30.460 --> 00:01:34.680
+Gdzieś w hierarchii znajduje się przypisanie, a jego znalezienie wyjaśnia całą sytuację.
+
+00:01:35.080 --> 00:01:38.540
+Warto wyjaśnić na początku, że nie jest to funkcja płatna ani premium.
+
+00:01:38.820 --> 00:01:42.820
+Microsoft twierdzi, że Azure RBAC jest bezpłatny i zawarty w subskrypcji.
+
+00:01:42.820 --> 00:01:48.580
+Spotykasz to w portalu na stronie o nazwie Kontrola Dostępu, gdzie etykieta i AM pojawia się na każdym poziomie hierarchii.
+
+00:01:48.740 --> 00:01:53.600
+Korzyścią jest to, że możesz przyznać komuś dokładnie taki dostęp, jakiego wymaga jego praca i nic więcej.
+
+00:01:53.880 --> 00:01:57.720
+Jedna osoba zarządza maszynami wirtualnymi, inna dba o sieci, a zespół do spraw.
+
+00:01:57.960 --> 00:02:01.240
+Baz danych zarządza bazami danych, wszystko bez spotykania się o siebie nawzajem.
+
+00:02:01.400 --> 00:02:03.940
+Te trzy elementy to zapewniają, więc otwórzmy je.
+
+00:02:04.120 --> 00:02:06.100
+Trzy elementy każdego przypisania roli.
+
+00:02:06.100 --> 00:02:12.160
+Każde przypisanie w usłudze Azure składa się z tych samych trzech części, a Microsoft traktuje tę strukturę jako rdzeń egzekwowania uprawnień.
+
+00:02:12.160 --> 00:02:15.600
+Pominięcie jednej części powoduje, że przypisanie traci jakiekolwiek znaczenie.
+
+00:02:15.780 --> 00:02:21.200
+Portal prowadzi Cię przez wszystkie trzy za każdym razem, gdy dodajesz przypisanie z prośbą o członka, rolę i zakres, zanim zostanie zapisane.
+
+00:02:21.380 --> 00:02:25.500
+Najpierw pojawia się zasada bezpieczeństwa, czyli formalna nazwa elementu, który otrzymuje dostęp.
+
+00:02:25.760 --> 00:02:32.020
+Może to być użytkownik, grupa, tożsamość aplikacji lub tożsamość zarządzana, którą usługa Azure tworzy i zmienia w Twoim imieniu.
+
+00:02:32.240 --> 00:02:35.880
+Następnie pojawia się definicja roli, czyli zestaw działań dozwolonych przez rolę.
+
+00:02:36.080 --> 00:02:40.440
+Lista obejmuje czynności od odczytu i zapisu do usunięcia, z kilkoma setkami wariantów tych trzech.
+
+00:02:40.440 --> 00:02:45.780
+Role występują w różnym rozmiarze, od ogromnej roli właściciela po wąskie, takie jak rola czytelnika maszyn wirtualnych.
+
+00:02:45.940 --> 00:02:49.300
+Trzecim elementem jest zakres, czyli zestaw zasobów, do których odnosi się dana rola.
+
+00:02:49.520 --> 00:02:55.600
+Zakres to element decydujący o tym, jak duży obszar środowiska może objąć pojedynczy błąd, dlatego należy poświęcić mu najwięcej uwagi podczas konfiguracji.
+
+00:02:55.820 --> 00:02:59.440
+Tylko kombinacja ma znaczenie, czego zazwyczaj nie dostrzegają początkujący.
+
+00:02:59.440 --> 00:03:04.360
+Współtwórca w jednej grupie zasobów pozwala komuś zarządzać wszystkim w danym folderze i niczym poza nim.
+
+00:03:04.580 --> 00:03:11.240
+Współtwórca w całej subskrypcji pozwala tej samej osobie zarządzać wszystkimi posiadanymi przez ciebie zasobami, co jest zupełnie innym rezultatem niż to samo słowo.
+
+00:03:11.440 --> 00:03:15.360
+Dwie pozycje na tej liście brzmią dziwnie, jeśli nigdy nie administrowałeś środowiskiem chmurowym.
+
+00:03:15.360 --> 00:03:22.020
+Zasada usługi to nazwa użytkownika i hasło do aplikacji, dzięki czemu oprogramowanie może się zalogować i wykonywać swoje zadania bez obecności człowieka.
+
+00:03:22.200 --> 00:03:29.300
+Tożsamość zarządzana działa tak samo, ale bez hasła, ponieważ Azjur przechowuje twoje dane uwierzytelniające i żaden sekret nigdy nie trafi do pliku konfiguracyjnego.
+
+00:03:29.460 --> 00:03:37.200
+Pierwsze dwie części są proste. Albo wybrałeś odpowiednią osobę, albo nie, albo wybrałeś odpowiednią rolę, albo nie i obie te decyzje zazwyczaj szybko się rozwiązują.
+
+00:03:37.400 --> 00:03:40.860
+Prawdziwy problem kryje się w zakresie, więc to właśnie do niego przejdziemy dalej.
+
+00:03:40.860 --> 00:03:47.480
+Cztery rozmiary zakresu. Zakres występuje w dokładnie czterech rozmiarach, a Microsoft wymienia je od najszerszego do najwęższego.
+
+00:03:47.740 --> 00:03:51.080
+Są to grupa zarządzania, subskrypcja, grupa zasobów i zasób.
+
+00:03:51.280 --> 00:03:58.700
+Grupa zarządzania to kontener znajdujący się nad subskrypcjami, który umożliwia dużym organizacjom uporządkowanie wielu subskrypcji w jednym drzewie.
+
+00:03:59.020 --> 00:04:06.060
+Większość początkujących nigdy go nie dotyka, a mimo to musisz wiedzieć, że istnieje, ponieważ dostęp przyznany na tym poziomie obejmuje wszystkie subskrypcje poniżej.
+
+00:04:06.060 --> 00:04:10.380
+Następna w hierarchii jest subskrypcja, która zazwyczaj jest pierwszą granicą, którą napotykasz.
+
+00:04:10.380 --> 00:04:14.440
+Zawiera ona rozliczenia, limity usług i zestaw zasobów, które są ze sobą powiązane.
+
+00:04:14.600 --> 00:04:17.420
+I dla większości osób jest to jedyna granica, o której myślą.
+
+00:04:17.600 --> 00:04:25.440
+Poniżej znajduje się grupa zasobów, folder w subskrypcji, który zawiera powiązane zasoby, więc zespoły zazwyczaj organizują je według projektu, środowiska lub działu.
+
+00:04:25.600 --> 00:04:28.540
+Najmniejszą jednostką jest pojedynczy zasób, co oznacza jedno.
+
+00:04:28.780 --> 00:04:32.180
+Może to być jedno konto magazynu, jedna maszyna wirtualna lub jedna baza danych.
+
+00:04:32.180 --> 00:04:37.780
+Portal wyświetla to jako listę rozwijaną, a wybrany poziom decyduje o tym, ile zasobów w drzewie obejmuje pojedyncze przypisanie.
+
+00:04:38.000 --> 00:04:42.080
+Dziedziczenie to reguła, która nadaje tej hierarchii znaczenie i działa tylko w jednym kierunku.
+
+00:04:42.360 --> 00:04:45.540
+Dostęp na dany na poziomie nadrzędnym spływa w dół do wszystkiego poniżej.
+
+00:04:45.740 --> 00:04:51.820
+Przypisz rolę czytelnika na poziomie grupy zarządzania, a ta osoba będzie mogła odczytywać wszystkie zasoby w każdej subskrypcji w tej grupie zarządzania.
+
+00:04:52.020 --> 00:04:56.100
+Odwrotna sytuacja nigdy się nie zdarza, ponieważ dostęp na dany głęboko w drzewie nie wraca z powrotem do góry.
+
+00:04:56.100 --> 00:05:04.320
+Zasada aditywna zaskakuje jeszcze więcej osób. Ponieważ obliczasz swoje efektywne uprawnienia, sumując wszystkie posiadane przez siebie przypisania, szerokie przypisanie anuluje wąskie.
+
+00:05:04.520 --> 00:05:09.380
+Weźmy osobę, która ma uprawnienia czytelnika na poziomie subskrypcji i współautora w jednej grupie zasobów.
+
+00:05:09.560 --> 00:05:16.460
+Jej efektywny dostęp do tej subskrypcji to współautor, ponieważ suma obu ról to współautor, a przypisanie czytelnika nic nie zmienia.
+
+00:05:16.700 --> 00:05:19.980
+Dlatego dodanie małej roli w celu rozwiązania dużego problemu tak rzadko działa.
+
+00:05:19.980 --> 00:05:24.000
+Członkostwo w grupie dodaje kolejny poziom, ponieważ przypisania do grup są przechodnie.
+
+00:05:24.180 --> 00:05:31.140
+Jeśli należysz do grupy, a ta grupa znajduje się w innej grupie, która ma przypisane przypisanie, dziedziczysz te uprawnienia, niezależnie od tego, czy ktoś miał to na myśli, czy nie.
+
+00:05:31.360 --> 00:05:36.980
+Gdy już wiesz, jaki jest zasięg zakresu, kolejnym pytaniem jest to, po co tu przyszedłeś, czyli jaką rolę powinieneś mu przypisać.
+
+00:05:37.160 --> 00:05:39.320
+Rolę, z którymi faktycznie będziesz się spotykać.
+
+00:05:39.560 --> 00:05:44.820
+Microsoft oferuje ponad 100 wbudowanych ról dla platformy Azure, a 5 z nich stanowi fundament całego systemu.
+
+00:05:44.820 --> 00:05:48.760
+Z pozostałymi będziesz się spotykać po kolei, w miarę jak twoja praca będzie cię do nich zbliżać.
+
+00:05:48.940 --> 00:05:50.640
+Właściciel jest najważniejszy z pięciu.
+
+00:05:50.860 --> 00:05:55.420
+Zapewnia pełną kontrolę nad każdym zasobem w zakresie, a także daje możliwość udzielania dostępu innym osobom.
+
+00:05:55.560 --> 00:05:58.600
+Ta druga uprawnienia zmienia sposób, w jaki powinieneś z nich korzystać.
+
+00:05:58.820 --> 00:06:02.860
+Współtwórca zapewnia taką samą pełną kontrolę nad zasobami z jedną istotną różnicą.
+
+00:06:03.160 --> 00:06:08.520
+Współtwórca nie może nikomu przypisywać ról, więc może tworzyć i usuwać elementy, ale nie może otwierać drzwi innym osobom.
+
+00:06:08.680 --> 00:06:10.960
+Czytelnik jest dokładnie tym, na co wskazuje jego nazwa.
+
+00:06:10.960 --> 00:06:16.420
+Osoba z uprawnieniami czytelnika może przeglądać zasoby i nie może niczego zmienić, co czyni ją najbezpieczniejszym punktem wyjścia w każdym projekcie.
+
+00:06:16.600 --> 00:06:22.900
+Dwie ostatnie role to menedżerowie dostępu, administrator dostępu użytkowników i administrator kontroli dostępu opartej na rolach, którzy zarządzają dostępem do poszczególnych zasobów.
+
+00:06:23.060 --> 00:06:28.460
+Microsoft grupuje je z właścicielami jako role uprzywilejowane, ponieważ każdy z nich może przyznać rolę właściciela sobie lub innej osobie.
+
+00:06:28.640 --> 00:06:34.400
+Poza tymi pięcioma rolami istnieje długi ogon ról związanych z funkcjami stanowisk, z których każda jest ukierunkowana na jedną usługę lub jeden rodzaj zadania.
+
+00:06:34.400 --> 00:06:39.580
+Współtwórca maszyny wirtualnej umożliwia tworzenie i zarządzanie maszynami wirtualnymi bez dostępu do sieci i danych.
+
+00:06:39.760 --> 00:06:44.700
+Czytnik danych blobu w pamięci masowej umożliwia odczyt plików na jednym koncie magazynu bez dostępu do zapisu.
+
+00:06:44.920 --> 00:06:50.680
+Istnieje pewna subtelność w tych rolach związanych z funkcjami stanowisk, która wcześniej zwraca uwagę użytkowników i warto ją zrozumieć przed przypisaniem czegokolwiek.
+
+00:06:50.880 --> 00:06:54.600
+Zarządzanie zasobem i odczyt danych w jego obrębie to dwa oddzielne uprawnienia w usłudze Azure.
+
+00:06:54.600 --> 00:07:00.440
+Współtwórca na koncie magazynu umożliwia utworzenie i skonfigurowanie tego konta, ale nie pozwala na odczyt ani jednego pliku w jego obrębie.
+
+00:07:00.620 --> 00:07:03.720
+Odczyt danych wymaga osobnej roli, która dotyczy samych danych.
+
+00:07:03.960 --> 00:07:08.080
+Szukając odpowiedniej roli zacznij od kategorii usług, a nie od góry listy.
+
+00:07:08.260 --> 00:07:16.220
+Wbudowana strona ról firmy Microsoft jest uporządkowana według usług, więc wyszukiwanie słów takich jak blob lub maszyna wirtualna zawęża setki opcji do kilku.
+
+00:07:16.420 --> 00:07:19.800
+Wskazówki firmy Microsoft dotyczące wyboru są zaskakująco proste.
+
+00:07:19.800 --> 00:07:26.320
+Zacznij od najbardziej restrykcyjnej roli, która nadal pozwala danej osobie wykonywać jej zadania i przechodź do kolejnych tylko wtedy, gdy praca nie może być wykonana w inny sposób.
+
+00:07:26.540 --> 00:07:32.300
+Jeśli ktoś musi odczytać bloby, rola czytelnika wykona zadanie, a rola współautora zapewni mu znacznie więcej niż zażądał.
+
+00:07:32.480 --> 00:07:34.020
+Chodzi o najmniejsze uprawnienia.
+
+00:07:34.280 --> 00:07:42.920
+Najmniejsze uprawnienia to nazwa tego nawyku i oznacza on przydzielenie komuś najmniejszej roli w najmniejszym zakresie przez najkrótszy czas, który nadal pozwala mu wykonywać jego zadania.
+
+00:07:42.920 --> 00:07:45.400
+Nie chodzi o porządek ani o papierkową robotę.
+
+00:07:45.400 --> 00:07:49.840
+Ograniczenie roli i zakresu ogranicza zasięg atakującego w przypadku przejęcia konta.
+
+00:07:50.020 --> 00:07:52.400
+Zatem małe przypisanie oznacza mały promień rażenia.
+
+00:07:52.700 --> 00:07:55.000
+Wskazówki firmy Microsoft jasno to wyrażają.
+
+00:07:55.200 --> 00:08:02.520
+Unikaj przypisywania szerszych ról w szerszym zakresie, nawet jeśli szersza opcja jest wygodniejsza w danej chwili, ponieważ wygoda dzisiaj staje się zasięgiem jutro.
+
+00:08:02.780 --> 00:08:05.640
+Warto zapamiętać jedną liczbę z dokumentacji firmy Microsoft.
+
+00:08:05.640 --> 00:08:12.700
+Microsoft zaleca maksymalnie trzech właścicieli subskrypcji, ponieważ każdy dodatkowy właściciel dodaje kolejną ścieżkę rozprzestrzeniania się przejętego konta.
+
+00:08:12.880 --> 00:08:17.620
+Najmniejsze uprawnienia to nie projekt, który się planuje, a nawyk, który stosuje się w momencie tworzenia przypisania.
+
+00:08:17.820 --> 00:08:22.480
+Osoba, która potrzebuje dostępu do dwutygodniowej migracji otrzymuje rolę na dwa tygodnie, a nie na zawsze.
+
+00:08:22.720 --> 00:08:25.640
+Cofnięcie jej później to jedno usunięcie, a nie przeszukiwanie arkusza kalkulacyjnego.
+
+00:08:26.420 --> 00:08:30.340
+Innym powodem, dla którego zespoły trzymają się tego, jest to, że małe przypisania są łatwe do wyjaśnienia.
+
+00:08:30.340 --> 00:08:35.420
+Kiedy menedżer pyta, kto może dotknąć subskrypcji finansowej, wyjaśnienie kilku przypisań grupowych zajmuje minutę.
+
+00:08:35.580 --> 00:08:38.520
+400 indywidualnych przypisań wymaga popołudnia na zgłębianie.
+
+00:08:38.700 --> 00:08:41.600
+W przypadku ról uprzywilejowanych schemat staje się jeszcze bardziej ścisły.
+
+00:08:41.800 --> 00:08:46.080
+Użyj najwęższego zakrecu, który działa takiego jak pojedyncza grupa zasobów zamiast całej subskrypcji.
+
+00:08:46.320 --> 00:08:52.920
+Następnie włącz aktywację Just-in-Time za pomocą Microsoft Entra Privileged Identity Management, aby uprawnienie istniało przez krótki okres, a nie na zawsze.
+
+00:08:52.920 --> 00:08:59.260
+Ta ostatnia opcja wymaga płatnego poziomu Entra ID, więc traktuj ją jako coś, do czego możesz się dostosować, a nie jako domyślne ustawienie, którego Ci brakuje.
+
+00:08:59.400 --> 00:09:06.300
+A jeśli wbudowane role naprawdę nie pasują do Twojej sytuacji, to właśnie wtedy tworzenie własnych zaczyna mieć sens, a właśnie w tym kierunku zmierzamy.
+
+00:09:06.540 --> 00:09:08.060
+Wbudowane lub zbuduj własne.
+
+00:09:08.220 --> 00:09:13.020
+Wbudowane role są gotowe i Microsoft je utrzymuje, co jest głównym powodem, dla którego warto od tego zacząć.
+
+00:09:13.180 --> 00:09:20.140
+Role niestandardowe wypełniają lukę, w której żadna wbudowana rola nie odpowiada potrzebom zespołu i mogą być współdzielone między subskrypcjami ufającymi temu samemu dzierżawcy.
+
+00:09:20.140 --> 00:09:26.360
+Microsoft aktualizuje wbudowaną listę w miarę zmian usług, a to właśnie utrzymanie przejmujesz w momencie utworzenia własnej roli.
+
+00:09:26.580 --> 00:09:32.240
+Rola to po prostu zapisana lista dozwolonych operacji, więc rola niestandardowa oznacza, że Twój zespół od tej pory będzie właścicielem tej listy.
+
+00:09:32.460 --> 00:09:35.200
+Sam proces jest mniej przerażający niż sugeruje nazwa.
+
+00:09:35.440 --> 00:09:39.940
+Zazwyczaj zaczynasz od klonowania najbliższej roli wbudowanej i usuwania niepotrzebnych uprawnień.
+
+00:09:40.160 --> 00:09:44.540
+Następnie przypisujesz roli zestaw przypisywalnych zakresów, aby platforma Azure wiedziała, gdzie można jej używać.
+
+00:09:44.740 --> 00:09:47.820
+Następnie testujesz ją w rzeczywistym zadaniu, zanim przekażesz ją komukolwiek.
+
+00:09:47.820 --> 00:09:52.900
+Kompromisem jest własność. W momencie utworzenia roli niestandardowej staje się ona czymś, co musi utrzymywać Twój zespół.
+
+00:09:53.060 --> 00:09:57.360
+Usługi z czasem dodają nowe uprawnienia, więc rola, która idealnie pasuje do obecnej sytuacji, może się zmienić.
+
+00:09:57.500 --> 00:10:01.140
+Firma Microsoft wydała specjalne ostrzeżenie dotyczące sposobu tworzenia ról niestandardowych.
+
+00:10:01.320 --> 00:10:06.300
+Użycie gwiazdki zamiast nazwy żądanych akcji oznacza, że rola przejmuje również uprawnienia dodane później przez firmę Microsoft,
+
+00:10:06.480 --> 00:10:09.020
+a to oznacza dostęp, którego nikt nie wybrał ani nie zweryfikował.
+
+00:10:09.020 --> 00:10:11.420
+Ograniczenia zapewniają również uczciwość modelu.
+
+00:10:11.420 --> 00:10:18.100
+W dzierżawie można przechowywać do 5000 ról niestandardowych, a roli niestandardowej zawierającej akcje dotyczące danych nie można przypisać w zakresie grupy zarządzania.
+
+00:10:18.300 --> 00:10:20.580
+Dla początkujących praktyczne porady są krótkie.
+
+00:10:20.820 --> 00:10:27.040
+Najpierw sięgnij po rolę wbudowaną, a rolę niestandardową traktuj jako wyjątek, który możesz wyjaśnić, a nie jako domyślną rolę, po którą sięgasz.
+
+00:10:27.220 --> 00:10:29.220
+Rolę platformy Azure to nie rolę Entra.
+
+00:10:29.460 --> 00:10:33.260
+Jest jeszcze jedno źródło nieporozumień, które nie ma nic wspólnego z rolami niestandardowymi.
+
+00:10:33.260 --> 00:10:38.300
+Słowo rola pojawia się w świecie Microsoftu w dwóch miejscach, a są to oddzielne systemy z oddzielnymi przypisaniami.
+
+00:10:38.520 --> 00:10:44.320
+Rolę platformy Azure kontrolują dostęp do zasobów platformy Azure, czyli maszyn wirtualnych, pamięci masowej, sieci i baz danych.
+
+00:10:44.580 --> 00:10:50.640
+Rolę Microsoft Entra kontrolują dostęp do zasobów katalogowych, czyli użytkowników grup domen i licencji.
+
+00:10:50.900 --> 00:10:52.540
+Zakresy również się nie pokrywają.
+
+00:10:52.800 --> 00:10:57.820
+Rolę platformy Azure można przypisać do grupy zarządzania, subskrypcji, grupy zasobów lub zakresu zasobów.
+
+00:10:57.820 --> 00:11:03.520
+Rolę Entra przypisuje się na poziomie dzierżawy, jednostki administracyjnej lub pojedynczego obiektu, takiego jak jedna aplikacja.
+
+00:11:03.760 --> 00:11:08.040
+Jeśli kiedykolwiek nie masz pewności, w którym systemie pracujesz, zapytaj daną osobę, co musi zmienić.
+
+00:11:08.260 --> 00:11:15.040
+Zmiana osób, grup lub licencji powoduje przejście do Microsoft Entra, a zmiana maszyn wirtualnych, pamięci masowej lub sieci powoduje przejście do platformy Azure.
+
+00:11:15.320 --> 00:11:17.740
+Wiele osób pełni rolę w obu systemach jednocześnie.
+
+00:11:17.940 --> 00:11:21.080
+Potem pojawiają się konsekwencje, które dotykają ludzi najczęściej.
+
+00:11:21.280 --> 00:11:27.720
+Administrator globalny nie uzyskuje automatycznie dostępu do zasobów platformy Azure, ponieważ ta odznaka zarządza katalogiem, a nie subskrypcjami.
+
+00:11:27.820 --> 00:11:31.360
+Ta osoba może zmienić sytuację, a mechanizm ten warto znać.
+
+00:11:31.600 --> 00:11:38.380
+Administrator globalny może przełączyć przełącznik w portalu, który przyznaje mu rolę administratora dostępu użytkownika dla każdej subskrypcji w dzierżawie.
+
+00:11:38.600 --> 00:11:43.740
+Jest to działanie celowe, a nie domyślne i wiele organizacji nie zauważa tego, dopóki audyt nie zapyta, kto co posiada.
+
+00:11:43.960 --> 00:11:46.320
+Za tym wszystkim kryje się jeszcze jeden element historii.
+
+00:11:46.320 --> 00:11:49.700
+Stare, klasyczne role administratora subskrypcji zostały całkowicie wycofane.
+
+00:11:49.840 --> 00:11:53.320
+Te o nazwach administrator konta, administrator usługi i współadministrator.
+
+00:11:53.320 --> 00:11:58.200
+Oznacza to, że każda decyzja o dostępie w platformie Azure jest obecnie podejmowana w oparciu o kontrolę dostępu opartą na rolach.
+
+00:11:58.360 --> 00:12:03.100
+Kiedy można odróżnić te dwa systemy, nawyki powodujące problemy stają się znacznie łatwiejsze do wykrycia.
+
+00:12:04.000 --> 00:12:05.560
+Błędy, które popełnia każdy.
+
+00:12:05.820 --> 00:12:12.740
+Większość problemów w rzeczywistych subskrypcjach wynika z krótkiej listy nawyków, a każdy z nich jest łatwy do naprawienia, gdy wie się, na co zwracać uwagę.
+
+00:12:12.980 --> 00:12:18.060
+Ta część brzmi jak rada dla dużych firm i ma zastosowanie również do subskrypcji z trzema zasobami.
+
+00:12:18.060 --> 00:12:21.060
+Zacznij od nawyku, który prawie każdy nabywa jako pierwszy.
+
+00:12:21.280 --> 00:12:24.800
+Rola właściciela znajduje się na szczycie listy, więc staje się wyborem domyślnym.
+
+00:12:24.940 --> 00:12:31.280
+Ponieważ właściciel może rozdawać uprawnienia, jedno konto właściciela staje się sposobem na tworzenie kolejnych kąt właścicieli, podczas gdy nikt nie patrzy.
+
+00:12:31.520 --> 00:12:34.540
+Do tego dochodzi nawyk przypisywania ról osobom zamiast grupom.
+
+00:12:34.700 --> 00:12:43.260
+Przypisania grupowe łączą dziesiątki indywidualnych przypisań w jedno, a kiedy Microsoft wyjaśnia, jak naprawić subskrypcję, w której zabrakło miejsca, jest to pierwszy zalecany krok.
+
+00:12:43.460 --> 00:12:46.780
+Inny błąd łatwo przeoczyć, ponieważ nie jest to błąd popełniany celowo.
+
+00:12:46.780 --> 00:12:54.840
+Uprawnienia dziedziczą i sumują się, przez co ktoś może uzyskać dostęp do zasobu, którego nikt nie pamiętał, a przypisanie zazwyczaj znajduje się wyżej w hierarchii, niż ktokolwiek zadał sobie trud, aby je sprawdzić.
+
+00:12:55.040 --> 00:12:59.420
+Założenie, które kosztuje ludzi popołudnie, jest takie, że rola administratora w całym biurze odblokowuje Azure.
+
+00:12:59.620 --> 00:13:05.360
+Nie odblokowuje domyślnie, a administratorzy często wpatrują się w komunikat o odmowie dostępu w subskrypcji, którą myśleli, że kontrolowali.
+
+00:13:05.560 --> 00:13:13.120
+Napisanie reguły odmowy wydaje się oczywistym rozwiązaniem, a Microsoft twierdzi, że nie można bezpośrednio tworzyć własnych przypisań odmowy, ponieważ Azure tworzy je i zarządza nimi.
+
+00:13:13.120 --> 00:13:17.120
+Dostęp znika po usunięciu przypisania, którego przyznało, a nie po utworzeniu bloku.
+
+00:13:17.320 --> 00:13:19.700
+Niektóre zespoły napotykają na swojej drodze pułap.
+
+00:13:19.840 --> 00:13:25.520
+Platforma Azure pozwala na 5000 przypisań ról na subskrypcję i 500 na grupę zarządzania, a oba limity są stałe.
+
+00:13:25.740 --> 00:13:30.400
+Najczęstszą przyczyną osiągnięcia tego pułapu są tysiące indywidualnych przypisań przypisanych poszczególnym osobom.
+
+00:13:30.600 --> 00:13:34.200
+Grupy zagnieżdżone zapewniają szersze uprawnienia, niż większość osób się spodziewa.
+
+00:13:34.200 --> 00:13:40.920
+Osoba należy do grupy, ta grupa należy do większej grupy, a przypisania przypisane do większej grupy trafiają do osoby bez jej powiadomienia.
+
+00:13:41.100 --> 00:13:43.980
+Ten ostatni pojawia się w automatyzacji, a nie w portalu.
+
+00:13:44.200 --> 00:13:48.360
+Microsoft zaleca używanie unikatowego identyfikatora roli zamiast jej nazwy wyświetlanej.
+
+00:13:48.520 --> 00:13:55.060
+Nazwy się zmieniają, role w wersji zapoznawczej są zmieniane po ich wydaniu, a wszystko, co jest zautomatyzowane na podstawie starej nazwy, ulega awarii bez ostrzeżenia.
+
+00:13:55.280 --> 00:13:57.600
+Wszystko to sprowadza się do tej samej drobnej decyzji.
+
+00:13:57.600 --> 00:14:04.140
+Wybierz najmniejszą rolę, która wykonuje zadanie, przypisz ją do grupy zamiast do osoby i ustaw zakres tak nisko w drzewie, jak pozwala na to praca.
+
+00:14:04.380 --> 00:14:08.100
+Rób to konsekwentnie, a większość tych problemów nigdy nie będzie miała szansy się pojawić.
+
+00:14:08.340 --> 00:14:09.960
+Podsumowanie i jedno otwarte pytanie.
+
+00:14:10.240 --> 00:14:11.900
+Podsumujmy więc to, co omówiliśmy.
+
+00:14:12.140 --> 00:14:17.840
+Każde przypisanie roli w Azure to co i jak daleko i nic nie jest przyznawane, dopóki ktoś tego nie utworzy.
+
+00:14:18.080 --> 00:14:22.800
+Uprawnienia spływają w dół, sumują się i znikają, gdy usuwasz przypisanie zamiast je blokować.
+
+00:14:23.020 --> 00:14:25.000
+Zachowaj nawyk, a reszta pozostanie prosta.
+
+00:14:25.000 --> 00:14:28.340
+Zasadą jest najmniejsza rola w najmniejszym zakresie przypisana do grupy.
+
+00:14:28.340 --> 00:14:35.720
+Jeśli to sprawiło, że Azure wydało się trochę mniej onieśmielające, zasubskrybuj M365FM, ponieważ bierzemy jedną część stosu na raz i wyjaśniamy ją prostymi słowami.
+
+00:14:35.920 --> 00:14:38.500
+Zanim skończysz, zostawię Ci jedno pytanie do przemyślenia.
+
+00:14:38.700 --> 00:14:44.420
+Gdybyś otworzył swoją subskrypcję dzisiaj i omówił każde przypisanie, czy byłbyś w stanie wyjaśnić, dlaczego każde z nich tam jest?

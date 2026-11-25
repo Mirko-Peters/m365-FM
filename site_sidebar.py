@@ -29,6 +29,38 @@ CON_SIZES = CON_DESK + " 19.4rem, (min-width: 52.75rem) 30vw, (min-width: 36rem)
 CON_ALT = "I'm attending M365Con International 2027, January 11–22, 2027, free online event"
 
 
+# Mirko 24.11.2026: "Statt Grafik in der Sidebar lieber einen Text-Banner". Echte Besucher (Cloudflare Web Analytics, LCP-Element) sahen auf dem
+# Desktop meist das Kartenbild als LCP (3,2-22 s) statt des Inhalts. Der Text-Banner kommt ohne Bild, ohne Preload und ohne fremden Host aus;
+# Texte wie das Haus-Banner (site_ads.CON_TXT, 15 Sprachen). False = wieder das Bild (con_img/con_preload bleiben dafuer erhalten).
+CON_TEXT = True
+
+
+def con_text(lang):
+    """M365Con-Karte als reiner Text (Titel + Termin/Sessions), Link wie das Bild vorher."""
+    import site_ads as ADS
+    t1, t2 = ADS.CON_TXT.get(lang) or ADS.CON_TXT["en"]
+    return (f'<a class="sb-cont" href="{CON}" rel="noopener"><b>{esc(t1)}</b><span>{esc(t2)}</span></a>')
+
+
+# Mirko 24.11.2026: auch die Google-Karte als Text-Banner statt Bild (assets/gsource.webp, 647x192, bleibt als Datei erhalten).
+GADD = {
+    "en": "Add M365.FM as a preferred source on Google", "de": "M365.FM als bevorzugte Quelle bei Google hinzufügen",
+    "es": "Añade M365.FM como fuente preferida en Google", "fr": "Ajoutez M365.FM comme source préférée sur Google",
+    "it": "Aggiungi M365.FM come fonte preferita su Google", "pt": "Adicione a M365.FM como fonte preferida no Google",
+    "nl": "Voeg M365.FM toe als voorkeursbron in Google", "pl": "Dodaj M365.FM jako preferowane źródło w Google",
+    "id": "Tambahkan M365.FM sebagai sumber pilihan di Google", "ru": "Добавьте M365.FM в предпочитаемые источники Google",
+    "uk": "Додайте M365.FM до бажаних джерел у Google", "ar": "أضف M365.FM كمصدر مفضّل في Google",
+    "he": "הוסיפו את M365.FM כמקור מועדף ב-Google", "ja": "M365.FM を Google の優先ソースに追加",
+    "ko": "M365.FM을 Google 선호 소스로 추가",
+}
+
+
+def google_text(lang):
+    """Google-Karte als Text: Knopf-Link mit farbigem G und dem Satz in der Sprache der Seite."""
+    return (f'<a class="gb gbt" href="{GSRC}" rel="noopener" target="_blank"><span class="gg" aria-hidden="true">G</span>'
+            f'<span>{esc(GADD.get(lang) or GADD["en"])}</span></a>')
+
+
 def con_file(w, ext):
     return f"design/sidebar/attending-m365con-{w}.{ext}"
 
@@ -64,7 +96,7 @@ def con_preload(body):
     """Desktop-Preload des Kartenbilds fuer den <head>, nur wenn die Seite die Karte mit den R2-Fassungen enthaelt (faellt mit der Karte weg).
     media: nur Desktop, dort ist das Bild das LCP-Element; dieselben srcset/sizes wie im <picture>, damit der Browser dieselbe Datei waehlt.
     Mit AVIF: type=image/avif (Browser ohne AVIF ueberspringen den Preload und laden das WebP wie bisher ueber das <img>)."""
-    if '<picture class="sb-conp">' not in body:
+    if CON_TEXT or '<picture class="sb-conp">' not in body:   # Text-Banner: kein Bild, kein Preload
         return ""
     src = con_sources()
     if not src:
@@ -149,9 +181,12 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     ents = f'<section class="sb-card"><h2>{esc(topics_h or t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""
-    con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027">{con_img(BASE)}</a>'
-           f'<a class="sb-btn" href="{CON}" rel="noopener">{esc(t["seat"])}</a></section>')
-    goog = (f'<section class="sb-card sb-g"><a class="gb" href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a><p>{t["google"]}</p></section>')
+    con = (f'<section class="sb-card sb-con">' + (con_text(lang) if CON_TEXT else f'<a href="{CON}" rel="noopener" aria-label="M365Con International 2027">{con_img(BASE)}</a>')
+           + f'<a class="sb-btn" href="{CON}" rel="noopener">{esc(t["seat"])}</a></section>')
+    import site_ads as ADS
+    if not ADS.con_running():   # nach dem Event (CON_UNTIL 22.01.2027, gleiches Ende wie Haus-Banner und Kopfleiste) faellt die Karte weg; der taegliche Bau raeumt auf
+        con = ""
+    goog = (f'<section class="sb-card sb-g">' + (google_text(lang) if CON_TEXT else f'<a class="gb" href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a>') + f'<p>{t["google"]}</p></section>')
     links = " ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in LISTEN if shp.get(k))
     more = " ".join(x for x in ((f'<a href="{esc(listen_url)}">{esc(t["platforms"])}</a>' if listen_url else ""), (f'<a href="{esc(rss)}" rel="noopener">RSS</a>' if rss else "")) if x)
     foll = (f'<section class="sb-card"><h2>{esc(t["listen"])}</h2><p class="sb-links">{links}</p>' + (f'<p class="sb-links">{more}</p>' if more else "") + "</section>") if links and not home else ""

@@ -1,0 +1,637 @@
+WEBVTT
+
+00:00:00.790 --> 00:00:06.570
+Bienvenidos al podcast M365FM, donde exploramos las personas, ideas y tecnologías que dan forma al futuro del trabajo.
+
+00:00:07.410 --> 00:00:10.510
+El branching o ramificación parece un detalle menor hasta que dos personas cambian el mismo archivo.
+
+00:00:11.110 --> 00:00:14.110
+Entonces alguien tiene que averiguar qué versión es la real, y eso es un problema de ramificación.
+
+00:00:14.610 --> 00:00:20.150
+Una rama es solo una copia segura de tu proyecto y una estrategia de ramificación es la regla de tu equipo para unir esas copias.
+
+00:00:21.050 --> 00:00:26.530
+Hay tres grandes, GitFlow, GitHubFlow y el desarrollo basado en Trunk, y cada uno fue creado para un tipo de equipo distinto.
+
+00:00:26.750 --> 00:00:29.550
+Al final sabrás cuál se ajusta al tuyo y qué errores evitar.
+
+00:00:30.870 --> 00:00:36.490
+Bienvenidos al podcast M365FM, donde exploramos las personas, ideas y tecnologías que dan forma al futuro del trabajo.
+
+00:00:37.690 --> 00:00:41.370
+Es una rama. La palabra rama suena técnica, pero la idea de atrás es sencilla.
+
+00:00:42.110 --> 00:00:45.210
+Un repositorio es la carpeta de tu proyecto con todo su historial guardado por Git.
+
+00:00:45.670 --> 00:00:52.450
+Eso significa cada versión de cada archivo desde el primer día, y una rama es una copia de ese proyecto que puedes cambiar sin tocar el original.
+
+00:00:53.390 --> 00:00:55.690
+Nada se bloquea y nada se borra cuando creas una rama.
+
+00:00:55.690 --> 00:01:00.050
+En realidad solo estás diciendo que quieres probar algo sin romper la versión que ya funciona.
+
+00:01:00.610 --> 00:01:03.490
+Por eso la ramificación empieza a sentirse segura después de hacerlo un par de veces.
+
+00:01:04.310 --> 00:01:09.570
+La rama principal, que unos equipos llaman Main y otros Master, es la copia que todos tratan como la versión funcional del proyecto.
+
+00:01:09.570 --> 00:01:13.070
+Si has visto ambos nombres y te preguntaste si son cosas distintas, no lo son.
+
+00:01:13.750 --> 00:01:18.870
+Main y Master significan lo mismo, y el cambio de nombre fue una elección de nomenclatura, no una función nueva, que debas aprender.
+
+00:01:19.850 --> 00:01:24.330
+Las ramas en Git también son ligeras, y esa es la parte que a quienes vienen de herramientas antiguas les cuesta más creer.
+
+00:01:24.330 --> 00:01:29.550
+En los sistemas anteriores a Git, crear una rama era una operación lenta y pesada que hacías con poca frecuencia y cuidado.
+
+00:01:29.990 --> 00:01:33.370
+En Git sucede al instante, por lo cual los equipos modernos crean ramas para casi todo.
+
+00:01:34.010 --> 00:01:38.810
+Si has oído mencionar un commit, es solo un punto de control guardado, un cambio registrado con un mensaje adjunto.
+
+00:01:39.370 --> 00:01:44.470
+Una rama es realmente una etiqueta móvil que apunta a una línea de esos puntos de control, por lo que cambiar entre ramas es tan rápido.
+
+00:01:45.030 --> 00:01:46.170
+Pero esa uniquidez es toda la base.
+
+00:01:46.770 --> 00:01:52.350
+Cada estrategia y cada discusión entre desarrolladores se reduce a una sola pregunta sobre cómo se crean esas copias y cómo se vuelven a unir.
+
+00:01:52.350 --> 00:01:55.090
+¿Por qué existen las estrategias de ramificación?
+
+00:01:55.590 --> 00:01:58.570
+Una vez que un equipo crece más allá de una sola persona, las reglas empiezan a importar.
+
+00:01:58.890 --> 00:02:01.210
+Git hace que crear ramas sea barato y fusionarlas sea fácil.
+
+00:02:01.290 --> 00:02:04.290
+Un gran cambio frente a las herramientas antiguas donde fusionar daba miedo y era poco frecuente.
+
+00:02:04.510 --> 00:02:07.150
+Vincent Driessen, la persona detrás de GitFlow, señaló esto mismo.
+
+00:02:07.670 --> 00:02:13.270
+En Git, crear ramas y fusionar pasó a formar parte del flujo de trabajo diario, en lugar de ser un evento especial programado con semanas de enteración.
+
+00:02:13.830 --> 00:02:15.510
+Sin embargo, las ramas baratas crean un problema.
+
+00:02:15.930 --> 00:02:20.930
+Si todos hacen copias cuando quieren y nadie se pone de acuerdo en cómo volver a unirlas, el trabajo colisiona.
+
+00:02:20.930 --> 00:02:26.390
+El cambio a medio de terminar de alguien se mezcla con algo que debía estar listo y ahora el equipo no puede publicar ninguno de los dos.
+
+00:02:27.030 --> 00:02:31.370
+Imagina a un desarrollador a mitad de un rediseño mientras un compañero corrige discretamente un error en el mismo archivo.
+
+00:02:32.330 --> 00:02:34.730
+Ambos cambios aterrizan en el mismo lugar y nadie lo esperaba.
+
+00:02:35.150 --> 00:02:37.950
+Una estrategia de ramificación es la solución y es menos glamurosa de lo que parece.
+
+00:02:38.410 --> 00:02:41.310
+No es un software que instalas ni un ajuste que activas una vez y olvidas.
+
+00:02:41.310 --> 00:02:48.690
+Es un acuerdo compartido sobre quién trabaja dónde, cuánto tiempo puede vivir una rama y cómo se revisan los cambios antes de llegar a la versión principal.
+
+00:02:49.490 --> 00:02:52.170
+Cuando ese acuerdo falta, obtienes el desastre del principio de este episodio.
+
+00:02:52.650 --> 00:02:55.810
+Dos personas en un archivo, dos versiones de la verdad y nadie está seguro de cuál es la real.
+
+00:02:56.570 --> 00:02:58.830
+Una estrategia es la forma en que un equipo evita que eso ocurra dos veces.
+
+00:03:00.210 --> 00:03:00.990
+Los tres fundamentales.
+
+00:03:00.990 --> 00:03:07.150
+Casi toda estrategia se construye con los mismos tres tipos de ramas y una vez que los conoces, el modelo deja de parecer un idioma extranjero.
+
+00:03:07.550 --> 00:03:08.610
+La primera es la rama principal.
+
+00:03:09.070 --> 00:03:10.950
+Main, la versión que siempre funciona y de la cual realizas.
+
+00:03:11.210 --> 00:03:12.570
+Es la única rama que nunca desaparece.
+
+00:03:12.950 --> 00:03:15.730
+La segunda es la rama de características, Feature Branch, y aquí es donde ocurre el trabajo.
+
+00:03:16.230 --> 00:03:20.390
+Creas una para una sola tarea, como añadir una página de inicio de sesión o arreglar un botón roto.
+
+00:03:20.790 --> 00:03:23.810
+Después es el nombre de la tarea para que cualquiera pueda saber de un vistazo para qué sirve.
+
+00:03:24.750 --> 00:03:29.130
+Las ramas de características deben ser temporales y en cuanto el trabajo se fusiona, la rama se elimina.
+
+00:03:29.650 --> 00:03:30.970
+La tercera es la rama de lanzamiento.
+
+00:03:30.990 --> 00:03:33.330
+Release Branch y solo aparece cuando publicas en versiones número.
+
+00:03:33.750 --> 00:03:35.990
+Es una forma de congelar un instantáneo para las comprobaciones finales.
+
+00:03:36.330 --> 00:03:41.690
+La extra es cuando el código está casi listo, lo usas para corregir errores de última hora y le asignas un número de versión antes de que llegue a los clientes.
+
+00:03:42.150 --> 00:03:43.070
+Ese es el conjunto de herramientas.
+
+00:03:43.290 --> 00:03:46.390
+Lo que separa los tres grandes modelos se reduce a cuánto ramifican.
+
+00:03:46.910 --> 00:03:49.250
+GitFlow utiliza las tres además de una segunda rama permanente.
+
+00:03:49.950 --> 00:03:52.410
+GitHub Flow usa principalmente solo las ramas Main y Feature.
+
+00:03:52.950 --> 00:03:56.790
+El desarrollo basado en trunk y trunk base envía casi todo directamente a la rama principal y apenas utiliza rama.
+
+00:03:57.350 --> 00:03:59.430
+Vale la pena mencionar un elemento más aunque no sea una rama.
+
+00:03:59.430 --> 00:04:04.610
+Un pull request es como se revisa una rama terminada y aparece en toda estrategia moderna.
+
+00:04:05.610 --> 00:04:08.090
+Volveremos a ello porque es la mecánica cotidiana que más usarás.
+
+00:04:09.190 --> 00:04:10.090
+GitFlow la ha estructurado.
+
+00:04:10.770 --> 00:04:14.950
+La estrategia más famosa tiene una fecha de nacimiento específica y conocerla ayuda a explicar por qué es así.
+
+00:04:14.950 --> 00:04:20.830
+Vincent Driessen publicó GitFlow en enero de 2010 en un artículo llamado Un modelo de ramificación de Git exitoso.
+
+00:04:21.270 --> 00:04:24.870
+Durante años fue la respuesta predeterminada cada vez que alguien preguntaba cómo usar ramas.
+
+00:04:25.510 --> 00:04:26.990
+GitFlow se ejecuta sobre dos ramas permanentes.
+
+00:04:27.450 --> 00:04:33.230
+Master contiene código listo para producción en cualquier momento y Develop tiene lo terminado pero aún no lanzado.
+
+00:04:33.670 --> 00:04:36.870
+Esas dos nunca desaparecen y todas las demás ramas orbitan a su alrededor.
+
+00:04:36.870 --> 00:04:39.930
+Las ramas de funciones salen de Develop y se fusionan de nuevo en Develop.
+
+00:04:40.330 --> 00:04:44.750
+Las ramas de lanzamiento salen de Develop reciben sus últimos retoques y luego se fusionan tanto en Develop como en Master.
+
+00:04:45.150 --> 00:04:50.910
+Las ramas de Hotfix salen de Master para arreglar algo urgente en producción y también se fusionan en ambas para que el arreglo no se pierda.
+
+00:04:51.950 --> 00:04:54.050
+Esa estructura se justifica cuando lanzas versiones.
+
+00:04:54.790 --> 00:04:57.810
+Digamos que apoyas la versión 2 mientras la 3 está en progreso y un cliente.
+
+00:04:58.230 --> 00:04:59.550
+En la versión 1 necesita un parche.
+
+00:05:00.310 --> 00:05:02.610
+GitFlow te da un lugar claro y bien marcado para hacer ese trabajo.
+
+00:05:02.610 --> 00:05:04.950
+Pero aquí está el giro y sorprende a casi todos.
+
+00:05:05.830 --> 00:05:10.550
+En marzo de 2020, 10 años después de publicar el artículo, Trisen añadió una nota al principio de su propia publicación.
+
+00:05:11.350 --> 00:05:14.030
+Escribió que GitFlow había sido tratado como un dogma en lugar de una lección.
+
+00:05:14.690 --> 00:05:20.330
+No fue diseñado para aplicaciones web entregadas continuamente, dijo, y los equipos que operan así deberían adoptar algo más simple como GitHub Flow.
+
+00:05:20.850 --> 00:05:22.250
+Vale la pena recordar su frase final.
+
+00:05:22.890 --> 00:05:25.970
+Las panaceas no existen, así que considera tu propio contexto y decide por ti mismo.
+
+00:05:26.650 --> 00:05:28.830
+Para los equipos para los que fue construido, nada de eso es un programa.
+
+00:05:28.830 --> 00:05:34.390
+Si estás creando software versionado explícitamente o apoyas varias versiones activas, el modelón puede encajar igual de bien que siempre.
+
+00:05:36.680 --> 00:05:37.580
+GitHub Flow la simple.
+
+00:05:38.380 --> 00:05:40.680
+GitHub Flow abordó el problema desde la dirección opuesta.
+
+00:05:41.360 --> 00:05:46.600
+Scott Chacon lo escribió en agosto de 2011 y el punto central era que el propio GitHub no usaba GitFlow en absoluto.
+
+00:05:46.800 --> 00:05:48.160
+La razón era simple.
+
+00:05:48.680 --> 00:05:51.840
+GitHub desplegaba producción todos los días, a menudo varias veces al día.
+
+00:05:52.240 --> 00:05:55.080
+Y un proceso basado en lanzamientos simplemente no encajaba en esa realidad.
+
+00:05:56.000 --> 00:05:58.840
+Así que lo redujeron a una regla estricta y una lista corta de pasos.
+
+00:05:58.840 --> 00:06:05.040
+La regla es que todo lo que está en la rama principal es desplegable, lo que significa que siempre es seguro lanzar y crear nuevas ramas desde ella.
+
+00:06:05.760 --> 00:06:11.740
+Para comenzar a trabajar, creas una nueva rama desde la principal con un nombre claro como agregar página de inicio de sesión o arreglar botón roto.
+
+00:06:12.020 --> 00:06:16.280
+Desde ahí envías tu trabajo a esa rama con frecuencia para que esté respaldado y todos puedan ver en qué estás trabajando.
+
+00:06:16.980 --> 00:06:20.880
+Cuando quieres comentarios o crees que el trabajo está listo, abres una solicitud de extracción.
+
+00:06:20.880 --> 00:06:26.600
+Alguien la revisa, se ejecutan las pruebas y, una vez aprobada, la integras a la principal y despliegas de inmediato.
+
+00:06:26.960 --> 00:06:28.900
+Porque la principal siempre debe estar lista para lanzar.
+
+00:06:29.420 --> 00:06:30.140
+Ese es todo el flujo.
+
+00:06:30.760 --> 00:06:34.980
+Nada de ramas de desarrollo, de lanzamiento, de corrección, solo la principal y ramas de funciones de corta duración.
+
+00:06:35.460 --> 00:06:40.200
+Ese entonces GitHub tenía 35 empleados, con cerca de 15 a 20 de ellos trabajando en el mismo proyecto al mismo tiempo.
+
+00:06:40.580 --> 00:06:44.320
+La publicación de Sheikon muestra 6 personas diferentes desplegando unas 24 veces en un solo día.
+
+00:06:44.320 --> 00:06:48.680
+El inconveniente es que asume que puedes desplegar bajo demanda y que no tienes que dar soporte a versiones antiguas.
+
+00:06:49.300 --> 00:06:54.020
+Para una aplicación web o un equipo pequeño, eso suele ser cierto y la simplicidad vale mucho cuando estás empezando.
+
+00:06:54.740 --> 00:07:00.820
+Si una rama persiste más de lo planeado o las soluciones, integrar la versión más reciente de la principal para que no se desvíe mientras trabajas.
+
+00:07:02.220 --> 00:07:03.780
+Desarrollo basado en el tronco o la versión rápida
+
+00:07:03.780 --> 00:07:07.600
+Si el flujo de GitHub es simple, el desarrollo basado en el tronco es la versión más ágil de lo simple.
+
+00:07:08.120 --> 00:07:12.340
+Todos envían cambios pequeños a una rama compartida, el tronco, que es solo otro nombre para la rama principal.
+
+00:07:12.340 --> 00:07:15.500
+Las ramas cuando llegan a existir viven por horas en lugar de semanas.
+
+00:07:16.260 --> 00:07:19.080
+Sea corta vida útil es la idea central y vale la pena reflexionar sobre ello.
+
+00:07:19.720 --> 00:07:25.700
+Cuanto más tiempo vive una rama, más avanza el resto del proyecto sin ella y más complicada resulta la integración cuando finalmente regresa.
+
+00:07:26.660 --> 00:07:31.680
+Ramas cortas significan integraciones pequeñas y las integraciones pequeñas son las que puedes arreglar en un minuto en lugar de una tarde.
+
+00:07:32.220 --> 00:07:36.440
+Aquí las ramas de lanzamiento son solo instantáneas que generas cuando necesitas marcar una versión.
+
+00:07:37.100 --> 00:07:41.520
+Si desplegas muchas veces al día, no las necesitas en absoluto porque el tronco mismo siempre está listo para lanzarse.
+
+00:07:41.520 --> 00:07:45.540
+Vale la pena conocer la evidencia detrás de esto porque es más que una simple preferencia personal.
+
+00:07:45.940 --> 00:07:51.600
+Tora, el programa de investigación que estudia cómo los equipos entregan software, revisó sus propios datos de 2016 y 2017.
+
+00:07:52.380 --> 00:07:56.980
+Descubrió que los equipos rinden mejor cuando mantienen tres o menos ramas activas, integran al tronco al menos una vez al día,
+
+00:07:57.420 --> 00:07:59.480
+y evitan las congelaciones de código y las fases de integración separadas.
+
+00:07:59.940 --> 00:08:03.020
+Google es el ejemplo famoso de esta forma de trabajar y la práctica viene de lejos allí,
+
+00:08:03.120 --> 00:08:06.420
+pero es parte de por qué el modelo sigue apareciendo cuando la gente habla de equipos rápidos.
+
+00:08:06.420 --> 00:08:09.240
+El truco es que te exige más que los otros dos.
+
+00:08:09.900 --> 00:08:13.320
+Tienes que dividir tu trabajo en partes pequeñas y confiar en pruebas automatizadas rápidas
+
+00:08:13.320 --> 00:08:16.600
+porque no hay un largo periodo de estabilización para detectar problemas al final.
+
+00:08:17.380 --> 00:08:21.340
+Por eso el desarrollo basado en Trunk funciona mejor en equipos que lanzan constantemente y han invertido en pruebas.
+
+00:08:21.920 --> 00:08:24.700
+También es el modelo que más probabilidades tiene de parecerte extraño si estás empezando.
+
+00:08:25.100 --> 00:08:27.460
+No hay una rama de larga duración donde puedas esconder trabajo y no acabas.
+
+00:08:28.420 --> 00:08:29.680
+Explicación de las solicitudes extrañas.
+
+00:08:29.680 --> 00:08:34.220
+Las tres estrategias dependen de la misma herramienta para reunir el trabajo y es la que usarás todos los días.
+
+00:08:35.360 --> 00:08:39.400
+Una solicitud de extracción, normalmente abreviada como PR, es una petición para fusionar tu rama en otra.
+
+00:08:40.160 --> 00:08:42.640
+Viene con espacio integrado para que la gente revise el cambio primero.
+
+00:08:43.180 --> 00:08:45.020
+Es menos un botón y más una conversación.
+
+00:08:45.920 --> 00:08:49.820
+Los revisores pueden comentar líneas individuales, hacer preguntas y solicitar cambios.
+
+00:08:50.360 --> 00:08:54.400
+Sigues enviando más confirmaciones con MIDS a la misma rama y la solicitud de extracción se actualiza a Mediaclans.
+
+00:08:54.560 --> 00:08:58.980
+Se convierte en un registro continuo de la discusión hasta que todos están contentos y el cambio está listo para fusionarse.
+
+00:08:58.980 --> 00:09:00.400
+El valor está todo en el momento.
+
+00:09:00.820 --> 00:09:02.960
+La revisión ocurre antes de que el cambio llegue a la rama principal.
+
+00:09:03.260 --> 00:09:08.640
+Eso significa que los errores se detectan cuando aún son baratos de corregir, en lugar de después de enviarlos a los clientes y causar problemas.
+
+00:09:09.480 --> 00:09:15.340
+GitHub no inventó la idea de revisar código, pero popularizó la solicitud de extracción y la función data de alrededor de 2008.
+
+00:09:15.960 --> 00:09:19.580
+Hoy casi todos los servidores Git tienen su propia versión, incluso cuando el nombre cambia un poco.
+
+00:09:20.120 --> 00:09:21.920
+También hay un aspecto social que importará en un momento.
+
+00:09:22.360 --> 00:09:26.320
+En el momento en que abres una solicitud de extracción, otras personas pueden ver tu rama y empezar a trabajar sobre ella,
+
+00:09:26.320 --> 00:09:28.040
+lo que convierte discretamente esa rama en algo particular.
+
+00:09:28.040 --> 00:09:31.740
+Mantén esa idea presente porque es exactamente la razón por la que existen las reglas que veremos pronto.
+
+00:09:32.160 --> 00:09:33.040
+Merge frente a rebasa.
+
+00:09:33.660 --> 00:09:37.280
+Una vez que se aprueba una solicitud de extracción, tienes que integrar tu trabajo de nuevo en main.
+
+00:09:37.380 --> 00:09:38.420
+Y hay dos formas de hacerlo.
+
+00:09:38.840 --> 00:09:41.700
+Parecen similares en la superficie y se comportan de manera muy diferente interno.
+
+00:09:42.000 --> 00:09:44.780
+Elige la incorrecta en la rama equivocada y podrías borrar el trabajo de un compañero.
+
+00:09:45.120 --> 00:09:46.960
+Así que esta siguiente parte importa más de lo que parece.
+
+00:09:47.480 --> 00:09:51.860
+Fusionar combina tu rama con main y añade una confirmación de fusión que registra ambas historias a la vez.
+
+00:09:52.260 --> 00:09:53.640
+Nada se reescribe y nada se pierde.
+
+00:09:53.640 --> 00:09:57.120
+Siempre puedes ver que dos líneas de trabajo se unieron en una fecha determinada.
+
+00:09:57.340 --> 00:10:00.720
+Ese registro es útil cuando después intentas averiguar qué cambió y cuándo.
+
+00:10:01.020 --> 00:10:02.020
+Rebase toma un camino diferente.
+
+00:10:02.540 --> 00:10:07.540
+Toma tus commits, los mueve para que queden justo sobre el main más reciente y crea nuevos commits en el proceso.
+
+00:10:08.420 --> 00:10:12.720
+El resultado es una línea limpia y recta sin merge commits, lo que muchos equipos encuentran mucho más fácil de leer.
+
+00:10:12.980 --> 00:10:14.880
+El intercambio y la parte que los principiantes suelen pasar por él.
+
+00:10:15.260 --> 00:10:17.540
+La fusión merge mantiene la historia completa tal como sucedió.
+
+00:10:17.540 --> 00:10:23.600
+El revés hace que la historia sea más ordenada, pero reemplaza los commits originales, por lo que el registro de cuando se integró el trabajo desaparece.
+
+00:10:24.120 --> 00:10:26.780
+Eso nos lleva a una regla y es la regla más importante de todo este episodio.
+
+00:10:27.320 --> 00:10:29.340
+Nunca hagas rebase en una rama en la que otras personas están en trabajo.
+
+00:10:29.920 --> 00:10:32.620
+La acción lo resume en una sola pregunta antes de cada rebase.
+
+00:10:32.760 --> 00:10:34.560
+Alguien más está viendo esta rama.
+
+00:10:35.020 --> 00:10:36.360
+Si la respuesta es si no la reescribas.
+
+00:10:36.760 --> 00:10:40.940
+La razón por la que causa tantos problemas es que un rebase en una rama compartida rompe la copia de todos los demás.
+
+00:10:41.940 --> 00:10:43.480
+Tu historial ya no coincide con el de ellos.
+
+00:10:43.740 --> 00:10:47.380
+Y un force push para arreglarlo sobreescribe el trabajo sobre el que ellos seguían construyendo.
+
+00:10:47.940 --> 00:10:49.080
+Si de una vez no estás seguro, simplemente.
+
+00:10:49.740 --> 00:10:56.900
+Reserva el rebase para tu propia rama privada, donde es una gran forma de limpiar commits desordenados antes de abrir el pull request y deja las ramas compartidas en paz y deja las ramas compartidas en paz.
+
+00:10:57.740 --> 00:10:59.500
+Elegir una estrategia para equipos pequeños y grandes.
+
+00:11:00.060 --> 00:11:04.100
+Elegir se reduce a unas pocas preguntas simples sobre tu equipo, no a qué modelo suena más profesional.
+
+00:11:04.820 --> 00:11:05.680
+Primero, ¿con qué frecuencias?
+
+00:11:06.300 --> 00:11:08.780
+Segundo, si das soporte a versiones antiguas que la gente aún usa.
+
+00:11:09.160 --> 00:11:11.380
+Tercero, ¿cuántas personas tocan el mismo código al mismo tiempo?
+
+00:11:11.780 --> 00:11:14.000
+Cuarto, ¿cuánto confías en tus pruebas automatizadas?
+
+00:11:14.500 --> 00:11:19.360
+Esas cuatro respuestas señalan un modelo mucho más rápido que cualquier tabla comparativa y son las preguntas que importan.
+
+00:11:19.860 --> 00:11:23.120
+Si eres un equipo pequeño o trabajas solo GitHub Flow suele ser suficiente.
+
+00:11:23.920 --> 00:11:29.040
+Una rama principal y ramas de funciones cortas te llevarán lejos y siempre puedes añadir estructura más tarde si la necesitas.
+
+00:11:29.040 --> 00:11:36.460
+Si distribuyes software versionado o tienes que dar soporte a varias versiones lanzadas a la vez, las ramas de release y hotfix de GitFlow valen la pena.
+
+00:11:36.860 --> 00:11:39.380
+Es el mundo para que fue creado y en ese mundo sigue funcionando bien.
+
+00:11:39.980 --> 00:11:48.000
+Si eres un equipo más grande que lanza continuamente y has invertido un esfuerzo real en pruebas automatizadas, el desarrollo basado en Trunk mantiene tus fusiones pequeñas y tus lanzamientos frecuentes.
+
+00:11:48.520 --> 00:11:49.880
+Ese es exactamente el intercambio de portas.
+
+00:11:50.300 --> 00:11:51.760
+Una cosa más que vale la pena recordar.
+
+00:11:52.060 --> 00:11:54.560
+Incluso el autor de GitFlow dice que no hay una única respuesta correcta.
+
+00:11:55.360 --> 00:11:59.080
+Eliges el modelo que se adapta a tu contexto y cambias la elección cuando tu contexto cambie.
+
+00:11:59.800 --> 00:12:04.300
+Una buena forma de empezar es elegir el modelo más ligero que funcione y añadir complejidad solo cuando algo falle.
+
+00:12:04.940 --> 00:12:09.460
+Su equipo suele adoptar GitFlow porque parece impresionante para luego descubrir que las ramas extra cuestan más de lo que ahorran.
+
+00:12:10.540 --> 00:12:11.540
+Errores comunes de principiante.
+
+00:12:12.400 --> 00:12:17.120
+Cualquiera que sea la estrategia elegida, hay varios errores en los que casi todos caen el primer año y ningún es poco común.
+
+00:12:18.340 --> 00:12:20.960
+El más importante es dejar que las ramas de funcionalidades vivan durante semanas.
+
+00:12:20.960 --> 00:12:27.180
+Una rama tan antigua se desvía tanto de la principal que fusionarla se vuelve un problema, así que mantén las ramas cortas y fusionalas a menudo.
+
+00:12:28.040 --> 00:12:33.940
+Trabajar directamente en la principal sin revisión parece más rápido hasta que un cambio roto llega a los usuarios y no hay nada que lo detenga.
+
+00:12:34.840 --> 00:12:37.200
+Luego está la rama que reescribes mientras otros la siguen usando.
+
+00:12:37.980 --> 00:12:43.540
+Ah, hacer rebase o un force push sobre el trabajo de alguien más es el error que arruina de un compañero porque su historial deja de coincidir con el tuyo.
+
+00:12:44.180 --> 00:12:47.500
+Meter cambios sin relación en la misma rama o solicitud de extracción es otro error común.
+
+00:12:47.500 --> 00:12:53.600
+Hace que la revisión sea lenta y si necesitas deshacer algo después, no puedes separar el cambio bueno del malo.
+
+00:12:54.500 --> 00:13:00.200
+Copiar la configuración de una gran empresa sin sus procesos de prueba y lanzamiento es tentador, pero ahora a veces funciona porque el modelo no es la magia por sí solo.
+
+00:13:01.260 --> 00:13:02.320
+Las zonas prácticas que lo ordenan.
+
+00:13:02.580 --> 00:13:03.320
+El último es más silencios.
+
+00:13:04.000 --> 00:13:09.140
+Si tratas la estrategia como una preferencia personal y eres la única persona que la sigue, entonces aún no es realmente una estrategia.
+
+00:13:09.600 --> 00:13:10.080
+Es solo un hábito.
+
+00:13:10.500 --> 00:13:14.780
+Cada uno de estos es una forma normal en que un equipo pierde una tarde y todos tienen una solución sencilla.
+
+00:13:14.780 --> 00:13:16.500
+¿Cuál encaja con ti?
+
+00:13:16.840 --> 00:13:17.880
+Así que es el panorama completo.
+
+00:13:18.160 --> 00:13:20.140
+Una rama, como has visto, es una copia segura de tu trabajo.
+
+00:13:20.760 --> 00:13:24.780
+Y una estrategia de ramificación es el acuerdo que tu equipo hace sobre cómo esas copias se integran de nuevo.
+
+00:13:25.840 --> 00:13:28.940
+GitFlow es la estructurada, diseñada para software que se distribuye en versiones numeradas.
+
+00:13:29.460 --> 00:13:32.440
+GitHubFlow es la sencilla, diseñada para equipos que realizan entregas continuas.
+
+00:13:33.140 --> 00:13:37.660
+Desarrollo basado en tronco es la rápida y se adapta a equipos que pueden comprometerse a cambios pequeños y pruebas sólidas.
+
+00:13:37.660 --> 00:13:43.700
+Cuando se trata de integrar el trabajo, el merge conserva tu historial, mientras que el rebase lo organiza y solo debe usarse en ramas privadas.
+
+00:13:44.400 --> 00:13:49.080
+Suscríbete a M365FM para seguir aprendiendo sobre las herramientas y la mentalidad que dan forma al futuro del tronco.
+
+00:13:49.140 --> 00:13:50.080
+Y aquí está mi pregunta para ti.
+
+00:13:50.480 --> 00:13:56.080
+¿Qué estrategia de ramificación usa tu equipo ahora mismo y fue una decisión real tomada por alguien o simplemente un hábito que nadie ha cuestionado todavía?
+
+00:13:56.080 --> 00:14:26.060
+¿Qué estrategia de ramificación usa tu equipo ahora mismo?

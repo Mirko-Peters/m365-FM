@@ -1,0 +1,925 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.060
+O controle de acesso baseado em função do Azure é, na verdade, um cartão de acesso,
+
+00:00:03.180 --> 00:00:03.880
+não um interruptor de luz.
+
+00:00:04.040 --> 00:00:07.220
+O interruptor de luz está ligado ou desligado para uma sala inteira, enquanto um cartão
+
+00:00:07.220 --> 00:00:10.280
+de acesso abre portas específicas para uma pessoa específica e para uma pessoa específica.
+
+00:00:10.300 --> 00:00:13.180
+A maioria de nós aprendeu permissões da maneira do interruptor, por isso o acesso
+
+00:00:13.180 --> 00:00:14.980
+acaba sendo muito mais amplo do que o planejado.
+
+00:00:16.080 --> 00:00:20.560
+Bem-vindos ao podcast M365FM, onde exploramos as pessoas, ideias e tecnologias que moldam
+
+00:00:20.560 --> 00:00:21.380
+o futuro do trabalho.
+
+00:00:22.240 --> 00:00:25.960
+Hoje vamos detalhar como o acesso funciona no Azure e tudo se resume a três partes móveis
+
+00:00:25.960 --> 00:00:26.920
+que você pode memorizar.
+
+00:00:26.920 --> 00:00:31.000
+Ao final, você será capaz de avaliar o acesso de qualquer pessoa em sua assinatura
+
+00:00:31.000 --> 00:00:34.300
+e saber exatamente por que ele existe e o que o RBAC faz.
+
+00:00:34.960 --> 00:00:38.560
+O controle de acesso baseado em função responde a três perguntas sobre cada recurso que você
+
+00:00:38.560 --> 00:00:40.440
+possui e as faz novamente a cada solicitação.
+
+00:00:40.820 --> 00:00:44.520
+Essas perguntas são quem pode entrar, o que a pessoa pode fazer lá dentro e até onde
+
+00:00:44.520 --> 00:00:46.520
+seu alcance se estende e...
+
+00:00:46.520 --> 00:00:48.740
+Isso parece muita complexidade, mas não é.
+
+00:00:49.520 --> 00:00:53.640
+A Microsoft o descreve como um sistema de autorização baseado no Azure Resource Manager, o serviço
+
+00:00:53.640 --> 00:00:55.940
+que recebe uma solicitação e decide se executa.
+
+00:00:55.940 --> 00:00:59.620
+A autorização é simplesmente a decisão sobre o que uma pessoa que já se conectou
+
+00:00:59.620 --> 00:01:00.660
+tem permissão para fazer.
+
+00:01:01.200 --> 00:01:03.980
+Imagine um prédio com uma porta da frente compartilhada e muitas salas trancadas.
+
+00:01:04.560 --> 00:01:07.920
+Todos entram pela mesma porta, já que o login prova quem são e então cada pessoa carrega
+
+00:01:07.920 --> 00:01:09.760
+um cartão de acesso para as salas de que precisa.
+
+00:01:10.960 --> 00:01:13.880
+Alguns cartões abrem apenas um armário de armazenamento e outros abrem um andar inteiro.
+
+00:01:14.500 --> 00:01:15.820
+Nada no Azure é aberto por padrão.
+
+00:01:15.820 --> 00:01:19.920
+O acesso existe porque alguém criou uma atribuição de função e desaparece quando
+
+00:01:19.920 --> 00:01:20.620
+alguém a exclui.
+
+00:01:21.180 --> 00:01:23.940
+Em um interruptor é acionado por uma pessoa e nenhuma permissão é ativada por conta própria
+
+00:01:23.940 --> 00:01:24.780
+quando você não está olhando.
+
+00:01:25.380 --> 00:01:28.280
+Portanto, quando um colega de equipe pode subitamente ver um recurso que nunca acessou,
+
+00:01:28.340 --> 00:01:29.700
+a explicação é quase sempre a mesma.
+
+00:01:31.120 --> 00:01:32.800
+Em algum lugar da hierarquia existe uma atribuição.
+
+00:01:35.120 --> 00:01:38.200
+Algo que vale a pena esclarecer logo é que isso não é um extra-pago ou um recurso premium.
+
+00:01:39.300 --> 00:01:42.200
+A Microsoft afirma que o Azure RBA gratuito está incluído em sua assinatura.
+
+00:01:42.660 --> 00:01:46.560
+Você o encontra no portal, em uma página chamada Controle de Acesso, onde o rótulo IAM
+
+00:01:46.560 --> 00:01:48.160
+aparece em todos os níveis da hierarquia.
+
+00:01:48.160 --> 00:01:52.380
+A vantagem é que você pode conceder a alguém exatamente o acesso que seu trabalho exige
+
+00:01:52.380 --> 00:01:53.140
+e nada além disso.
+
+00:01:54.120 --> 00:01:58.100
+Uma pessoa gerencia máquinas virtuais, outra cuida das redes e uma equipe de banco de dados
+
+00:01:58.100 --> 00:02:00.660
+gerencia os bancos, tudo sem interferir no trabalho do outro.
+
+00:02:01.220 --> 00:02:03.460
+Essas três partes são o que o tornam possível, então vamos analisá-lo.
+
+00:02:04.520 --> 00:02:05.920
+As três partes de cada atribuição de função.
+
+00:02:06.400 --> 00:02:08.740
+Toda atribuição no Azure é composta pelas mesmas três partes.
+
+00:02:08.860 --> 00:02:11.720
+A Microsoft trata-se a estrutura como núcleo de como as permissões são aplicadas.
+
+00:02:12.500 --> 00:02:15.160
+Se faltar uma parte, a atribuição perde o sentido.
+
+00:02:15.160 --> 00:02:19.000
+O portal guia você por todas as três sempre que adiciona uma atribuição, solicitando
+
+00:02:19.000 --> 00:02:20.720
+um membro, uma função e um escopo antes de salvar.
+
+00:02:21.340 --> 00:02:24.280
+Primeiro, vem o princípio de segurança, que é o nome formal para qualquer coisa que
+
+00:02:24.280 --> 00:02:25.040
+esteja recebendo acesso.
+
+00:02:25.620 --> 00:02:29.920
+Isso pode ser um usuário, um grupo, uma identidade aplicativa ou uma identidade gerenciada
+
+00:02:29.920 --> 00:02:31.480
+que o Azure cria e alterna para você.
+
+00:02:32.320 --> 00:02:35.400
+Segundo, vem a definição de função, que é o conjunto de ações que uma função permite.
+
+00:02:36.260 --> 00:02:39.460
+A lista varia de leitura e gravação até exclusão, com algumas centenas de variações
+
+00:02:39.460 --> 00:02:40.120
+sobre essas três.
+
+00:02:40.580 --> 00:02:44.380
+As funções vêm em todos os tamanhos, desde a enorme função de proprietário até algo restrito
+
+00:02:44.380 --> 00:02:45.540
+como leitor de máquina virtual.
+
+00:02:46.160 --> 00:02:48.880
+Terceiro, vem o escopo, que é o conjunto de recursos aos quais a função se aplica.
+
+00:02:49.380 --> 00:02:52.740
+O escopo é a parte que decide quanto do seu ambiente um único erro pode atingir.
+
+00:02:53.140 --> 00:02:54.940
+Por isso, merece mais cuidado ao configurar as coisas.
+
+00:02:55.680 --> 00:02:58.660
+Somente a combinação tem significado que é o ponto que os iniciantes geralmente deixam
+
+00:02:58.660 --> 00:02:58.940
+passar.
+
+00:02:59.940 --> 00:03:03.400
+Colaborador em um grupo de recursos permite que alguém gerencie tudo dentro daquela pasta
+
+00:03:03.400 --> 00:03:04.160
+e nada fora dela.
+
+00:03:04.740 --> 00:03:08.080
+Colaborador em toda uma assinatura permite que essa mesma pessoa gerencie todos os recursos
+
+00:03:08.080 --> 00:03:10.620
+que você possui, o que é um resultado completamente diferente para a mesma palavra.
+
+00:03:10.620 --> 00:03:14.660
+Dois itens nessa lista parecem estranhos se você nunca administrou um ambiente em nuvem.
+
+00:03:15.720 --> 00:03:19.240
+Um princípio de serviço é o nome de usuário e senha para um aplicativo, para que o software
+
+00:03:19.240 --> 00:03:21.380
+possa entrar e fazer seu trabalho sem o humano presente.
+
+00:03:22.220 --> 00:03:26.040
+Uma identidade gerenciada funciona da mesma forma, sem a senha, porque o Azure mantém a
+
+00:03:26.040 --> 00:03:29.060
+credencial para você e nenhum segredo acaba em um arquivo de configuração.
+
+00:03:29.480 --> 00:03:30.820
+As duas primeiras partes são as mais fáceis.
+
+00:03:31.260 --> 00:03:35.040
+Você escolheu a pessoa certa ou não, e escolheu a função certa ou não, ambas as decisões
+
+00:03:35.040 --> 00:03:36.560
+tendem a se resolver rapidamente.
+
+00:03:37.560 --> 00:03:40.160
+O escopo é onde o verdadeiro problema se esconde, então é para lá que vamos em seguida.
+
+00:03:41.200 --> 00:03:42.260
+Os quatro tamanhos de escopo.
+
+00:03:42.700 --> 00:03:46.580
+O escopo vem em exatamente quatro tamanhos e a Microsoft os lista do mais amplo ao mais
+
+00:03:46.580 --> 00:03:47.020
+restrito.
+
+00:03:47.600 --> 00:03:50.460
+São eles grupo de gerenciamento, assinatura, grupo de recursos e recurso.
+
+00:03:51.120 --> 00:03:55.020
+Um grupo de gerenciamento é um container que fica acima das assinaturas e existe para
+
+00:03:55.020 --> 00:03:58.340
+que grandes organizações organizem muitas assinaturas em uma árvore.
+
+00:03:59.340 --> 00:04:02.460
+A maioria dos iniciantes nunca toca em um, mas você ainda precisa saber que ele existe
+
+00:04:02.460 --> 00:04:05.440
+porque o acesso concedido nesse nível atinge todas as assinaturas abaixo dele.
+
+00:04:06.740 --> 00:04:09.720
+A seguir na hierarquia vem a assinatura, que geralmente é o primeiro limite que você
+
+00:04:09.720 --> 00:04:10.080
+encontra.
+
+00:04:10.560 --> 00:04:13.400
+Ela mantém seu faturamento, seus limites de serviço e um conjunto de recursos que
+
+00:04:13.400 --> 00:04:14.140
+pertencem um ao outro.
+
+00:04:14.620 --> 00:04:16.660
+E para a maioria das pessoas, esse é o único limite em que pensam.
+
+00:04:17.840 --> 00:04:21.000
+Abaixo disso fica o grupo de recursos, uma pasta dentro de uma assinatura que contém
+
+00:04:21.000 --> 00:04:23.960
+recursos relacionados, por isso as equipes tendem a organizá-los por projeto, ambiente
+
+00:04:23.960 --> 00:04:24.640
+ou departamento.
+
+00:04:25.680 --> 00:04:28.520
+A menor unidade de todas é um recurso único e significa uma coisa só.
+
+00:04:28.940 --> 00:04:31.700
+Pode ser uma conta de armazenamento, uma máquina virtual ou um banco de dados.
+
+00:04:31.700 --> 00:04:35.580
+O portal mostra isso como um menu suspenso e o nível que você escolhe ali decide quanto
+
+00:04:35.580 --> 00:04:37.260
+da árvore uma única atribuição cobre.
+
+00:04:38.040 --> 00:04:40.000
+A herança é a regra que torna-se a herarquia importante?
+
+00:04:40.380 --> 00:04:41.680
+Ela funciona em apenas uma direção?
+
+00:04:42.360 --> 00:04:45.020
+O acesso concedido em nível pai foi para baixo para tudo que estiver abaixo.
+
+00:04:45.940 --> 00:04:49.340
+Atribua a função de leitor no nível do grupo de gerenciamento e essa pessoa poderá
+
+00:04:49.340 --> 00:04:51.900
+ler todos os recursos em todas as assinaturas dentro desse grupo de gerenciamento.
+
+00:04:52.240 --> 00:04:55.680
+O inverso nunca acontece porque o acesso concedido profundamente na árvore não sobe de volta.
+
+00:04:56.140 --> 00:04:57.780
+A regra aditiva surpreende ainda mais pessoas.
+
+00:04:57.780 --> 00:05:02.300
+Como o Azure calcula suas permissões efetivas somando cada atribuição que você possui,
+
+00:05:02.340 --> 00:05:03.880
+uma atribuição ampla no loma restrita.
+
+00:05:04.620 --> 00:05:07.440
+Considere alguém que possui a função de leitor no nível da assinatura e colaborador
+
+00:05:07.440 --> 00:05:08.540
+em um único grupo de recursos.
+
+00:05:09.300 --> 00:05:12.520
+O acesso efetivo dessa pessoa para essa assinatura é de colaborador, porque a soma
+
+00:05:12.520 --> 00:05:16.380
+das duas funções resulta em colaborador e a atribuição de leitor não altera nada.
+
+00:05:17.100 --> 00:05:19.580
+Por isso que é adicionar uma função pequena para resolver um problema grande e raramente
+
+00:05:19.580 --> 00:05:19.780
+funciona.
+
+00:05:20.120 --> 00:05:23.200
+A associação a grupos adiciona mais uma camada, já que as atribuições feitas a grupos
+
+00:05:23.200 --> 00:05:23.860
+são transitivas.
+
+00:05:23.860 --> 00:05:28.280
+Se você está em um grupo e esse grupo está dentro de outro que possui uma atribuição,
+
+00:05:28.420 --> 00:05:30.040
+você herda essas permissões querendo ou não.
+
+00:05:31.320 --> 00:05:35.300
+Uma vez que você entende o alcance do escopo, a próxima pergunta é a que você veio buscar
+
+00:05:35.300 --> 00:05:36.660
+qual função deve colocar nele.
+
+00:05:37.560 --> 00:05:38.700
+As funções que você realmente encontrar.
+
+00:05:39.200 --> 00:05:43.280
+A Microsoft oferece mais de 100 funções integradas para o Azure e 5 delas formam a
+
+00:05:43.280 --> 00:05:44.280
+base de todo o sistema.
+
+00:05:45.280 --> 00:05:48.780
+Você conhecerá o restante conforme seu trabalho ou levar a utilizar cada serviço individualmente.
+
+00:05:49.180 --> 00:05:50.140
+Proprietária maior das 5.
+
+00:05:50.140 --> 00:05:53.760
+Ela concede controle total sobre todos os recursos do escopo e também a capacidade
+
+00:05:53.760 --> 00:05:55.260
+de distribuir acesso para outras pessoas.
+
+00:05:55.760 --> 00:05:58.100
+Esse segundo poder é o que muda a forma como você deve usá-lo.
+
+00:05:58.640 --> 00:06:02.200
+O colaborador concede o mesmo controle total sobre os recursos com uma diferença importante.
+
+00:06:03.140 --> 00:06:06.160
+Um colaborador não pode atribuir funções a ninguém, então ele pode criar e excluir
+
+00:06:06.160 --> 00:06:08.260
+coisas, mas não pode abrir portas para outras pessoas.
+
+00:06:09.180 --> 00:06:10.420
+Leitor, exatamente o que o nome diz.
+
+00:06:10.800 --> 00:06:13.880
+Alguém com a função de leitor pode ver os recursos, mas não pode alterar absolutamente
+
+00:06:13.880 --> 00:06:16.260
+nada, o que o torna o ponto de partida mais seguro para qualquer projeto.
+
+00:06:16.260 --> 00:06:19.860
+Os dois últimos são o gerenciador de acesso, o administrador de acesso do usuário e o
+
+00:06:19.860 --> 00:06:22.800
+administrador de controle de acesso baseado em função, gerenciam quem pode acessar quem.
+
+00:06:22.920 --> 00:06:26.140
+A Microsoft usa a grupa com o proprietário como funções privilegiadas, pois qualquer
+
+00:06:26.140 --> 00:06:28.600
+um deles pode conceder a função de proprietário a si mesmo ou outra pessoa.
+
+00:06:28.880 --> 00:06:32.760
+Além desses 5, existe uma longa lista de funções de trabalho, cada uma voltada para um serviço,
+
+00:06:32.880 --> 00:06:33.700
+um tipo de tarefa.
+
+00:06:34.420 --> 00:06:37.760
+O colaborador de máquina virtual permite que alguém crie e gerencie máquinas virtuais sem
+
+00:06:37.760 --> 00:06:39.000
+tocar na sua rede ou nos seus dados.
+
+00:06:39.720 --> 00:06:42.940
+O leitor de dados de blob de armazenamento permite que alguém leia arquivos em uma única conta
+
+00:06:42.940 --> 00:06:44.540
+de armazenamento sem qualquer acesso de gravação.
+
+00:06:44.540 --> 00:06:48.420
+Há uma sutileza nessas funções de trabalho que pegam as pessoas de surpresa no início
+
+00:06:48.420 --> 00:06:50.160
+e vale a pena entender antes de atribuir qualquer coisa.
+
+00:06:51.000 --> 00:06:53.980
+Gerenciar um recurso e ler os dados dentro dele são duas permissões separadas no Azure.
+
+00:06:55.040 --> 00:06:58.120
+Colaborador em uma conta de armazenamento permite que alguém crie e configure essa conta,
+
+00:06:58.220 --> 00:06:59.960
+mas não permite que leia um único arquivo dentro dela.
+
+00:07:00.540 --> 00:07:03.300
+Ler os dados exige uma função separada voltada para os dados em si.
+
+00:07:03.620 --> 00:07:07.720
+Ao procurar a função correta, comece pela categoria de serviço em vez de pelo topo da lista.
+
+00:07:08.460 --> 00:07:11.160
+A página de funções internas da Microsoft é organizada por serviço.
+
+00:07:11.160 --> 00:07:14.760
+Portanto, pesquisar por um termo como blob ou máquina virtual reduz centenas de opções
+
+00:07:14.760 --> 00:07:15.580
+a apenas algumas.
+
+00:07:16.680 --> 00:07:19.580
+A orientação da Microsoft para escolher entre elas é surpreendentemente simples.
+
+00:07:20.360 --> 00:07:23.460
+Comece com a função mais restritiva que ainda permita que a pessoa faça seu trabalho
+
+00:07:23.460 --> 00:07:25.980
+somente o nível quando não for possível realizar a tarefa de outra forma.
+
+00:07:26.040 --> 00:07:29.900
+Se alguém precisa ler blobs, a função de leitor da conta do recado e a função de colaborador
+
+00:07:29.900 --> 00:07:31.640
+entrega muito mais do que foi solicitado.
+
+00:07:31.640 --> 00:07:33.740
+Privilégio mínimo é o ponto principal.
+
+00:07:34.440 --> 00:07:38.140
+Privilégio mínimo é o nome desse hábito e significa dar alguém a menor função no
+
+00:07:38.140 --> 00:07:42.120
+menor escopo e pelo menor escopo, que ainda permita que ele realize seu trabalho.
+
+00:07:42.880 --> 00:07:44.820
+O motivo pelo qual isso importa não é organização burocracia.
+
+00:07:45.740 --> 00:07:48.840
+Limitar a função e o escopo limita o que o invasor pode alcançar caso aquela conta
+
+00:07:48.840 --> 00:07:49.700
+seja comprometida.
+
+00:07:50.240 --> 00:07:52.120
+Portanto, uma atribuição pequena significa um raio de impacto pequeno.
+
+00:07:52.640 --> 00:07:54.580
+A própria orientação da Microsoft coloca-se de forma clara.
+
+00:07:54.580 --> 00:07:58.900
+Evite atribuir funções mais amplas e escopos mais amplos, mesmo quando a opção mais ampla
+
+00:07:58.900 --> 00:08:01.980
+é mais conveniente no momento porque a conveniência de hoje se torna um raio de impacto de amanhã.
+
+00:08:03.080 --> 00:08:05.320
+Vale a pena lembrar de um número da documentação da Microsoft.
+
+00:08:06.000 --> 00:08:09.340
+A Microsoft recomenda um máximo de três proprietários de assinatura, porque cada
+
+00:08:09.340 --> 00:08:12.380
+proprietário extra adiciona outro caminho para a disseminação de uma conta comprometida.
+
+00:08:13.020 --> 00:08:16.000
+É um projeto que você agenda, é um hábito que você agenda, é um hábito que você
+
+00:08:16.000 --> 00:08:16.880
+aplica numa atribuição.
+
+00:08:17.760 --> 00:08:21.000
+Alguém que precisa de acesso para a migração de duas semanas recebe uma função por duas semanas,
+
+00:08:21.000 --> 00:08:22.940
+não uma função para sempre, não uma função para sempre.
+
+00:08:22.940 --> 00:08:25.840
+Retirar o acesso depois é uma simples exclusão, não uma busca, é uma planilha.
+
+00:08:26.560 --> 00:08:29.100
+O outro motivo pelo qual as equipes mantêm esse hábito é que atribuições pequenas
+
+00:08:29.100 --> 00:08:29.860
+são fáceis de explicar.
+
+00:08:30.340 --> 00:08:33.820
+Quando um gerente pergunta quem pode acessar a assinatura financeira, algumas atribuições
+
+00:08:33.820 --> 00:08:35.180
+de grupo levam um minuto para explicar.
+
+00:08:35.760 --> 00:08:38.300
+400 atribuições individuais levam uma tarde inteira de investigação.
+
+00:08:38.880 --> 00:08:41.060
+Para as funções privilegiadas, o padrão fica ainda mais rigoroso.
+
+00:08:41.840 --> 00:08:45.120
+Use o escopo mais restrito que funcione como o único grupo de recursos em vez de toda
+
+00:08:45.120 --> 00:08:45.500
+assinatura.
+
+00:08:46.200 --> 00:08:50.320
+Em seguida, ative a ativação Just-in-Time através do Microsoft, enter Privilege Identity Management
+
+00:08:50.320 --> 00:08:52.580
+para que o privilégio exista por um curto período em vez de para sempre.
+
+00:08:53.440 --> 00:08:56.620
+Essa última opção requer uma camada paga do EntryG, então trate-a como algo para
+
+00:08:56.620 --> 00:08:58.460
+evoluir e não como algo padrão que você está perdendo.
+
+00:08:59.360 --> 00:09:02.460
+E se as funções integradas realmente não se encaixarem na sua situação, esse é o
+
+00:09:02.460 --> 00:09:04.940
+único caso em que criar as suas próprias começa a fazer sentido, que é exatamente
+
+00:09:04.940 --> 00:09:05.740
+para onde estamos indo.
+
+00:09:06.900 --> 00:09:08.000
+Integradas ou cria as suas próprias.
+
+00:09:08.500 --> 00:09:11.360
+As funções integradas são prontas e a Microsoft as mantém, o que é o principal
+
+00:09:11.360 --> 00:09:12.440
+motivo para começar por elas.
+
+00:09:13.160 --> 00:09:16.280
+Funções personalizadas cobrem a lacuna onde nenhuma função integrada atende ao que
+
+00:09:16.280 --> 00:09:19.540
+uma equipe precise e podem ser compartilhadas entre assinaturas que confiam no mesmo locatário.
+
+00:09:19.540 --> 00:09:24.180
+A Microsoft mantém a lista integrada atualizada à medida que os serviços mudam, e essa manutenção
+
+00:09:24.180 --> 00:09:26.200
+é exatamente o que você herda no momento em que cria a sua própria.
+
+00:09:26.800 --> 00:09:29.880
+Uma função é apenas uma lista escrita de operações permitidas, então uma função
+
+00:09:29.880 --> 00:09:32.360
+personalizada significa que sua equipe passa a ser dona dessa lista a partir dela.
+
+00:09:32.440 --> 00:09:34.660
+O processo em si é menos assustador do que o nome sugere.
+
+00:09:35.060 --> 00:09:38.920
+Você geralmente começa clonando a função integrada mais próxima e removendo as permissões
+
+00:09:38.920 --> 00:09:39.760
+de que não precisa.
+
+00:09:40.540 --> 00:09:43.380
+A partir daí você atribui a função a um conjunto de escopos atribuídos para que o Azure
+
+00:09:43.380 --> 00:09:44.400
+saiba onde ela pode ser usada.
+
+00:09:44.400 --> 00:09:47.360
+Então você atesta em uma tarefa real antes de entregá-la a qualquer pessoa.
+
+00:09:48.080 --> 00:09:49.120
+Contrapartida é responsabilidade.
+
+00:09:49.460 --> 00:09:52.460
+No momento que você cria uma função personalizada, ela se torna algo que sua equipe precisa manter.
+
+00:09:52.920 --> 00:09:55.680
+Os serviços adicionam novas permissões com o tempo, então uma função que se ajusta
+
+00:09:55.680 --> 00:09:57.080
+perfeitamente hoje pode acabar se tornando nele.
+
+00:09:57.480 --> 00:10:00.560
+A Microsoft tem um aviso específico sobre como as pessoas criam funções personalizadas.
+
+00:10:01.200 --> 00:10:04.480
+Usar um asterisco em vez de nomear as ações que você deseja significa que a função
+
+00:10:04.480 --> 00:10:07.840
+também assume permissões que a Microsoft adiciona posteriormente, e isso é um acesso
+
+00:10:07.840 --> 00:10:08.940
+que ninguém escolheu ou revisou.
+
+00:10:09.580 --> 00:10:10.840
+Os limites também mandê-lo consistente.
+
+00:10:10.840 --> 00:10:15.220
+E você pode ter até 5 mil funções personalizadas em um locatário e uma função personalizada
+
+00:10:15.220 --> 00:10:17.580
+que em que o ações de dados não pode ser atribuída no escopo do grupo de gerenciamento.
+
+00:10:18.500 --> 00:10:20.340
+Para iniciantes, o conselho prático é curto.
+
+00:10:20.880 --> 00:10:24.360
+Procure primeiro por uma função integrada e trate a função personalizada com a exceção
+
+00:10:24.360 --> 00:10:26.440
+que você pode justificar, não o padrão que você escolhe.
+
+00:10:27.320 --> 00:10:28.940
+Funções do Azure não são funções do Enter.
+
+00:10:29.700 --> 00:10:32.980
+Existe mais uma fonte de confusão, e ela não tem nada a ver com funções personalizadas.
+
+00:10:33.400 --> 00:10:36.800
+A palavra função aparece em dois lugares no mundo da Microsoft e são sistemas separados
+
+00:10:36.800 --> 00:10:37.840
+com atribuições separadas.
+
+00:10:37.840 --> 00:10:41.880
+As funções do Azure controlam o acesso aos recursos do Azure, o que significa máquinas
+
+00:10:41.880 --> 00:10:43.700
+virtuais, armazenamento, redes e bancos de dados.
+
+00:10:44.400 --> 00:10:47.860
+As funções do Microsoft Enter controlam o acesso aos recursos de diretório, o que
+
+00:10:47.860 --> 00:10:50.320
+significa usuários, grupos, domínios e licenças.
+
+00:10:51.120 --> 00:10:52.180
+Os escopos também não coincidem.
+
+00:10:52.820 --> 00:10:55.820
+Uma função do Azure pode ser atribuída no escopo de grupo de gerenciamento, assinatura,
+
+00:10:55.920 --> 00:10:56.980
+grupo de recursos ou recurso.
+
+00:10:57.780 --> 00:11:01.420
+Uma função do Enter é atribuída no nível de locatário, em uma unidade administrativa
+
+00:11:01.420 --> 00:11:03.280
+ou em um único objeto, como um aplicativo.
+
+00:11:03.660 --> 00:11:07.360
+Se você não tiver certeza de em qual sistema está, pergunte o que a pessoa precisa alterar.
+
+00:11:08.080 --> 00:11:11.280
+Alterar pessoas, grupos ou licenças coloca você no Microsoft e entra.
+
+00:11:11.560 --> 00:11:14.500
+E alterar máquinas virtuais, armazenamento ou redes coloca você no Azure.
+
+00:11:15.300 --> 00:11:17.580
+Muitas pessoas ocupam funções em ambos os sistemas ao mesmo tempo.
+
+00:11:18.240 --> 00:11:20.280
+Então vem a consequência que mais pega as pessoas.
+
+00:11:21.180 --> 00:11:24.560
+Um administrador global não obtém acesso automaticamente aos recursos do Azure, porque
+
+00:11:24.560 --> 00:11:26.800
+esse crachá gerencia seu diretório e não suas assinaturas.
+
+00:11:27.780 --> 00:11:30.940
+Essa pessoa pode mudar a situação e vale a pena conhecer o mecanismo.
+
+00:11:30.940 --> 00:11:35.840
+Um administrador global pode ativar uma opção no portal que concede a eles a função de
+
+00:11:35.840 --> 00:11:38.320
+administrador de acesso do usuário em todas as assinaturas do locatário.
+
+00:11:38.680 --> 00:11:40.160
+É uma ação deliberada em vez de um padrão.
+
+00:11:40.320 --> 00:11:43.480
+Muitas organizações nunca percebem até que uma auditoria questione quem detém o quê,
+
+00:11:44.140 --> 00:11:46.100
+mas um pedaço da história está por trás de tudo isso.
+
+00:11:46.540 --> 00:11:49.380
+As antigas funções clássicas de administrador de assinatura foram totalmente aposentadas.
+
+00:11:49.720 --> 00:11:53.100
+Aquelas chamadas administrador da conta, administrador de serviços e coadministrador.
+
+00:11:53.100 --> 00:11:56.340
+Isso significa que toda a decisão de acesso no Azure hoje passa pelo controle de acesso
+
+00:11:56.340 --> 00:11:57.100
+baseado em função.
+
+00:11:58.020 --> 00:12:01.060
+Quando você consegue distinguir esses dois sistemas, os hábitos que causam problemas
+
+00:12:01.060 --> 00:12:02.400
+tornam-se muito mais fáceis de identificar.
+
+00:12:04.060 --> 00:12:05.580
+Os erros que todos cometem
+
+00:12:05.580 --> 00:12:09.740
+A maioria dos problemas em assinaturas reais vem de uma pequena lista de hábitos, e cada
+
+00:12:09.740 --> 00:12:12.060
+um deles é fácil de corrigir quando você sabe o que procurar.
+
+00:12:12.760 --> 00:12:16.500
+Esta parte soa como um conselho para grandes empresas, mas aplica-se tanto a uma assinatura
+
+00:12:16.500 --> 00:12:17.980
+como apenas três recursos nela.
+
+00:12:18.740 --> 00:12:20.760
+Comece com o hábito que quase todos adotam primeiro.
+
+00:12:20.760 --> 00:12:24.200
+O proprietário fica no topo da lista de funções, por isso se torna a escolha padrão.
+
+00:12:25.060 --> 00:12:26.500
+Como o proprietário pode distribuir acesso?
+
+00:12:26.580 --> 00:12:29.780
+Uma conta de proprietário torna-se uma forma de criar mais contas de proprietário enquanto
+
+00:12:29.780 --> 00:12:30.580
+ninguém está olhando.
+
+00:12:31.620 --> 00:12:33.960
+Há o hábito de atribuir funções a pessoas em vez de grupos.
+
+00:12:34.740 --> 00:12:38.380
+As atribuições de grupo condensam dezenas de atribuições individuais em uma só, e
+
+00:12:38.380 --> 00:12:41.340
+quando a Microsoft explica como consertar uma assinatura que ficou sem espaço, esse é
+
+00:12:41.340 --> 00:12:42.780
+o primeiro passo recomendado.
+
+00:12:43.660 --> 00:12:46.340
+Outra é fácil de ignorar porque não é um erro que se comete de propósito.
+
+00:12:46.980 --> 00:12:49.940
+As permissões são herdadas e cumulativas, e é assim que alguém acaba acessando
+
+00:12:49.940 --> 00:12:52.520
+um recurso que ninguém se lembra de ter atribuído, e a atribuição geralmente fica
+
+00:12:52.520 --> 00:12:54.660
+em um nível superior da árvore onde ninguém se deu o trabalho de olhar.
+
+00:12:54.760 --> 00:12:57.040
+A suposição que o custo uma tarde inteira de trabalhar às pessoas é de que uma função
+
+00:12:57.040 --> 00:12:58.380
+de administrador em todo o escritório, em todo o escritório, em todo o escritório,
+
+00:12:58.440 --> 00:12:59.520
+em todo o escritório e desbloqueia o Azure.
+
+00:12:59.700 --> 00:13:02.840
+Não desbloqueia, não por padrão, e os administradores frequentemente acabam encarando
+
+00:13:02.840 --> 00:13:05.260
+uma mensagem de acesso negado e uma assinatura que eles pensavam controlar.
+
+00:13:05.660 --> 00:13:07.320
+Crever uma regra de negação para essa solução?
+
+00:13:07.480 --> 00:13:07.760
+Óbvia.
+
+00:13:07.840 --> 00:13:10.980
+Mas a Microsoft afirma que você não pode criar diretamente suas próprias atribuições
+
+00:13:10.980 --> 00:13:12.860
+de negação, porque o Azure cria e gerencia essas.
+
+00:13:12.860 --> 00:13:16.340
+O acesso é removido quando você exclui a atribuição que o concedeu, não quando
+
+00:13:16.340 --> 00:13:17.140
+você escreve um bloqueio.
+
+00:13:17.620 --> 00:13:19.300
+Algumas equipes descobrem o limite da maneira mais difícil.
+
+00:13:19.780 --> 00:13:23.720
+O Azure permite 5 mil atribuições de função por assinatura e 500 por grupo de gerenciamento
+
+00:13:23.720 --> 00:13:25.060
+e ambos os limites são fixos.
+
+00:13:25.960 --> 00:13:29.200
+A causa habitual de atingir esse limite são milhares de atribuições individuais concedidas
+
+00:13:29.200 --> 00:13:30.000
+a pessoas individuais.
+
+00:13:30.460 --> 00:13:33.580
+Grupos alinhados levam permissões mais longe do que a maioria das pessoas espera.
+
+00:13:34.120 --> 00:13:37.380
+Uma pessoa está em um grupo, esse grupo pertence a um grupo maior, e as atribuições
+
+00:13:37.380 --> 00:13:40.540
+ligadas ao grupo maior recarem sobre a pessoa sem que ninguém precise anunciar.
+
+00:13:40.540 --> 00:13:43.540
+O último ponto aparece na automação em vez de no portal.
+
+00:13:44.260 --> 00:13:47.780
+A Microsoft recomenda usar o ID exclusivo de uma função em vez do seu nome de exibição.
+
+00:13:48.640 --> 00:13:52.100
+Nomes mudam, funções em versão prévia são renomeadas quando são lançadas, e qualquer
+
+00:13:52.100 --> 00:13:54.500
+coisa automatizada com nome antigo para te funcionar sem aviso.
+
+00:13:55.160 --> 00:13:57.220
+Cada um desses pontos remete à mesma pequena decisão.
+
+00:13:58.060 --> 00:13:59.640
+Escolha a menor função que realiza o trabalho.
+
+00:13:59.880 --> 00:14:03.060
+Aplique a um grupo em vez de uma pessoa e defina o escopo o mais baixo possível na árvore
+
+00:14:03.060 --> 00:14:03.900
+conforme o trabalho permitir.
+
+00:14:04.580 --> 00:14:08.060
+Faça isso de forma consistente e a maioria desses problemas nunca terá chance de começar.
+
+00:14:08.700 --> 00:14:09.840
+Recapitulação é uma pergunta em aberto.
+
+00:14:09.840 --> 00:14:11.060
+Então vamos reunir o que cobriu.
+
+00:14:11.560 --> 00:14:16.160
+Toda atribuição de função no Azure é um o que e um até onde, e nada é concedido
+
+00:14:16.160 --> 00:14:17.240
+até que alguém crie uma.
+
+00:14:17.440 --> 00:14:19.000
+É, as permissões vão para baixo.
+
+00:14:19.440 --> 00:14:22.600
+Elas se acumulam e desaparecem quando você excluir a atribuição em vez de bloqueá-la.
+
+00:14:23.060 --> 00:14:24.620
+Mantém o hábito e o restante permanecerá assim.
+
+00:14:25.140 --> 00:14:27.860
+A regra é a menor função no menor escopo atribuída a um grupo.
+
+00:14:28.420 --> 00:14:33.240
+Se isso fez o Azure parecer um pouco menos intimidador, inscreva-se no M365FM, pois abordamos
+
+00:14:33.240 --> 00:14:35.440
+uma parte da pilha por vezes e explicamos tudo em termos simples.
+
+00:14:35.960 --> 00:14:37.980
+Antes de ir, deixarei uma pergunta para você refletir.
+
+00:14:37.980 --> 00:14:42.260
+Se você abrisse sua assinatura hoje e verificasse cada atribuição nela, você seria capaz
+
+00:14:42.260 --> 00:14:43.560
+de explicar por que cada um está lá.

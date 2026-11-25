@@ -1,0 +1,907 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:03.740
+Le contrôle d'accès basé sur les rôles azur est en fait une carte d'accès, par l'interrupteur.
+
+00:00:04.280 --> 00:00:06.380
+Un interrupteur allume ou éteint la lumière pour toute une pièce,
+
+00:00:06.640 --> 00:00:09.100
+tandis qu'une carte ouvre des portes précises pour une personne précise.
+
+00:00:10.400 --> 00:00:12.020
+La plupart d'entre nous ont appris les autorisations.
+
+00:00:12.520 --> 00:00:14.880
+Comme un interrupteur, c'est pourquoi l'accès est souvent plus large que prévu.
+
+00:00:16.360 --> 00:00:19.100
+Bienvenue sur le podcast M365FM où nous explorons les personnes,
+
+00:00:19.340 --> 00:00:21.100
+les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:22.220 --> 00:00:24.360
+Aujourd'hui, nous analysons le fonctionnement de l'accès dans Azure,
+
+00:00:24.760 --> 00:00:26.840
+qui repose sur trois éléments clés faciles à retenir.
+
+00:00:26.840 --> 00:00:30.320
+A la fin, vous saurez examiner l'accès de n'importe qui dans votre abonnement
+
+00:00:30.320 --> 00:00:33.140
+et comprendre pourquoi il existe et ce que fait réellement le R.
+
+00:00:33.760 --> 00:00:34.460
+RBax, ici.
+
+00:00:35.040 --> 00:00:38.340
+Le contrôle d'accès basé sur les rôles répond à trois questions pour chaque ressource que vous possédez
+
+00:00:38.340 --> 00:00:40.200
+et les pose à chaque nouvelle requête.
+
+00:00:40.800 --> 00:00:42.260
+Ces questions sont qui peut entrer,
+
+00:00:42.420 --> 00:00:46.560
+ce qu'ils sont autorisés à faire une fois à l'intérieur et jusqu'où s'étend leur portée.
+
+00:00:47.240 --> 00:00:48.600
+Cela semble complexe, mais ce n'est pas le cas.
+
+00:00:49.600 --> 00:00:52.840
+Microsoft le décrit comme un système d'autorisation basé sur Azure Resource Manager,
+
+00:00:53.340 --> 00:00:55.940
+le service qui reçoit une requête et décide de l'exécuter, ou non.
+
+00:00:55.940 --> 00:01:00.680
+L'autorisation est simplement la décision sur ce qu'une personne déjà connectée est autorisée à faire.
+
+00:01:01.280 --> 00:01:03.820
+Imaginez un bâtiment avec une porte d'entrée commune et de nombreuses pièces verrouillées.
+
+00:01:04.420 --> 00:01:06.880
+Tout le monde passe par la même entrée car la connexion prouve leur identité,
+
+00:01:07.000 --> 00:01:09.360
+puis chacun possède une carte d'accès pour les pièces nécessaires.
+
+00:01:09.760 --> 00:01:10.440
+Pour les pièces nécessaires.
+
+00:01:11.080 --> 00:01:13.780
+Certaines cartes ouvrent un placard de stockage, et d'autres ouvrent un étage entier.
+
+00:01:14.520 --> 00:01:15.740
+Rien dans Azure n'est ouvert par défaut.
+
+00:01:16.440 --> 00:01:18.520
+L'accès existe parce que quelqu'un a créé une attribution de rôle,
+
+00:01:18.840 --> 00:01:20.680
+et il disparaît quand quelqu'un supprime cette attribution.
+
+00:01:20.680 --> 00:01:25.100
+Aucun interrupteur ne s'active seul, et aucune autorisation ne s'active sans que vous le sachiez, sans que vous le sachiez.
+
+00:01:25.440 --> 00:01:27.820
+Donc quand un collègue peut soudainement voir une ressource qu'il n'a jamais touchée,
+
+00:01:28.060 --> 00:01:29.580
+l'explication est presque toujours la même.
+
+00:01:30.320 --> 00:01:32.440
+Quelque part dans la hiérarchie, une attribution existe et l'a trouvée.
+
+00:01:32.800 --> 00:01:33.740
+Vous révèle toute l'histoire.
+
+00:01:34.920 --> 00:01:38.280
+Il est utile de clarifier dès maintenant qu'il ne s'agit pas d'un supplément payant ou d'une fonctionnalité premium.
+
+00:01:39.420 --> 00:01:42.200
+Microsoft précise qu'Azure Airbac est gratuit et inclus dans votre abonnement.
+
+00:01:42.200 --> 00:01:45.240
+Vous le trouverez dans le portail sur une page appelée contrôle d'accès,
+
+00:01:45.420 --> 00:01:48.060
+où l'étiquette IAM apparaît à chaque niveau de la hiérarchie.
+
+00:01:49.020 --> 00:01:52.940
+L'avantage est que vous pouvez donner à quelqu'un exactement l'accès requis par son travail, et rien de plus.
+
+00:01:54.720 --> 00:01:57.460
+Une personne gère les machines virtuelles, une autre s'occupe des réseaux,
+
+00:01:57.880 --> 00:02:00.200
+et une équipe gère les bases de données, sans se marcher sur les pieds.
+
+00:02:01.240 --> 00:02:03.460
+Ces trois éléments assurent ce fonctionnement, alors décortiquons-les.
+
+00:02:04.500 --> 00:02:05.980
+Les trois composantes de chaque attribution de rôle.
+
+00:02:06.980 --> 00:02:08.940
+Chaque attribution dans Azure repose sur les trois mêmes éléments,
+
+00:02:08.940 --> 00:02:11.400
+une structure que Microsoft utilise comme base pour appliquer les permissions.
+
+00:02:12.200 --> 00:02:15.260
+S'il manque une seule partie, l'attribution perd tout son sens.
+
+00:02:15.760 --> 00:02:18.420
+Le portail vous guide à travers ces trois étapes chaque fois que vous ajoutez une attribution
+
+00:02:18.420 --> 00:02:20.660
+en vous demandant un membre, un rôle et une portée avant l'enregistrement.
+
+00:02:21.400 --> 00:02:25.200
+Le premier élément est le principe de sécurité, le terme officiel pour désigner l'entité qui reçoit l'accès.
+
+00:02:25.680 --> 00:02:29.900
+Il peut s'agir d'un utilisateur, d'un groupe, d'une identité d'application ou d'une identité gérée
+
+00:02:29.900 --> 00:02:31.460
+qu'Azure crée et renouvelle pour vous.
+
+00:02:32.360 --> 00:02:35.520
+Le second est la définition de rôle, qui correspond à l'ensemble des actions autorisées par ce rôle.
+
+00:02:35.980 --> 00:02:38.140
+La liste va de la lecture et l'écriture jusqu'à la suppression,
+
+00:02:38.360 --> 00:02:40.220
+avec quelques centaines de variantes basées sur ces trois fonctions.
+
+00:02:40.220 --> 00:02:44.000
+Il existe des rôles de toute taille, du vaste rôle de propriétaire jusqu'à des rôles très ciblés,
+
+00:02:44.320 --> 00:02:46.140
+comme le lecteur de machines virtuelles.
+
+00:02:46.140 --> 00:02:48.840
+Le troisième élément est la portée, qui définit l'ensemble des ressources auxquelles le rôle s'applique.
+
+00:02:49.500 --> 00:02:51.940
+La portée détermine l'étendue des conséquences d'une erreur,
+
+00:02:52.140 --> 00:02:54.860
+elle mérite donc la plus grande attention lors de vos configurations.
+
+00:02:55.660 --> 00:02:59.260
+Seule la combinaison de ces éléments a du sens, ce que les débutants oublient souvent, oublient souvent.
+
+00:02:59.820 --> 00:03:02.980
+Le rôle de contributeur sur un groupe de ressources permet de gérer tout ce qui se trouve dans ce dossier,
+
+00:03:03.040 --> 00:03:03.720
+mais rien dehors.
+
+00:03:04.720 --> 00:03:08.560
+Le rôle de contributeur sur un abonnement entier permet à cette même personne de gérer toutes vos ressources,
+
+00:03:08.560 --> 00:03:10.680
+un résultat très différent, malgré le même nom.
+
+00:03:11.540 --> 00:03:14.720
+Deux éléments de cette liste peuvent paraître étranges si vous n'avez jamais administré d'environnement cloud.
+
+00:03:15.740 --> 00:03:18.520
+Un principe de service est un identifiant et un mot de passe pour une application,
+
+00:03:18.960 --> 00:03:21.560
+permettant à un logiciel de se connecter et d'agir sans intervention humaine.
+
+00:03:22.380 --> 00:03:24.620
+Une identité gérée fonctionne de la même manière, sans mot de passe,
+
+00:03:24.700 --> 00:03:28.680
+car Azure gère les identifiants pour vous et aucun secret ne se retrouve dans un fichier de configuration.
+
+00:03:29.500 --> 00:03:30.720
+Les deux premières parties sont les plus simples.
+
+00:03:31.220 --> 00:03:32.700
+Soit vous avez choisi la bonne personne, soit non.
+
+00:03:33.100 --> 00:03:34.600
+Soit vous avez choisi le bon rôle, soit non.
+
+00:03:34.960 --> 00:03:36.920
+Et ces décisions se clarifient, généralement rapidement.
+
+00:03:36.920 --> 00:03:40.220
+C'est dans la portée que se cachent les vrais problèmes, c'est donc ce que nous allons aborder ensuite.
+
+00:03:41.240 --> 00:03:42.080
+Les quatre tailles de portée.
+
+00:03:42.720 --> 00:03:47.020
+La portée se décline en exactement quatre tailles que Microsoft liste de la plus large à la plus étroite.
+
+00:03:47.580 --> 00:03:50.460
+Il s'agit du groupe d'administration, de l'abonnement, du groupe de ressources et de la ressource.
+
+00:03:51.080 --> 00:03:53.700
+Un groupe d'administration est un conteneur situé au-dessus des abonnements
+
+00:03:53.700 --> 00:03:57.580
+qui permet aux grandes organisations d'organiser plusieurs abonnements dans une arborescence.
+
+00:03:59.580 --> 00:04:02.760
+La plupart des débutants ne les utilisent jamais, mais il faut savoir qu'ils existent,
+
+00:04:02.820 --> 00:04:05.540
+car l'accès accordé à ce niveau s'applique à tous les abonnements en dessous.
+
+00:04:05.540 --> 00:04:10.080
+Vient ensuite dans la hiérarchie l'abonnement, qui est généralement la première limite que vous rencontrez.
+
+00:04:10.640 --> 00:04:13.860
+Il regroupe votre facturation, vos limites de service et un ensemble de ressources liées entre elles.
+
+00:04:14.580 --> 00:04:16.540
+Et pour la plupart des gens, c'est la seule limite à laquelle ils pensent.
+
+00:04:17.840 --> 00:04:21.700
+En dessous se trouve le groupe de ressources, un dossier dans un abonnement qui contient des ressources associées
+
+00:04:21.700 --> 00:04:24.820
+que les équipes organisent généralement par projet, environnement ou département.
+
+00:04:24.820 --> 00:04:28.480
+La plus petite unité est la ressource unique et elle désigne une seule chose.
+
+00:04:29.000 --> 00:04:31.760
+Il peut s'agir d'un compte de stockage, une machine virtuelle ou d'une base de données.
+
+00:04:32.340 --> 00:04:37.180
+Le portail affiche cela dans une liste déroulante et le niveau choisi détermine l'étendue de l'arborescence couverte par une attribution.
+
+00:04:37.980 --> 00:04:41.740
+L'héritage est la règle qui donne tout son sens à cette hiérarchie et ne fonctionne que dans une seule direction.
+
+00:04:42.440 --> 00:04:45.000
+L'accès accordé à un niveau parent se répercute sur tout ce qui se trouve en dessous.
+
+00:04:45.000 --> 00:04:51.540
+Attribuez le rôle de lecteur au niveau du groupe d'administration et cette personne pourra lire chaque ressource de chaque abonnement de ce groupe.
+
+00:04:52.300 --> 00:04:55.580
+L'inverse ne se produit jamais car l'accès accordé au plus profond de l'arborescence ne remonte pas.
+
+00:04:56.160 --> 00:04:57.800
+La règle additive surprend encore plus de monde.
+
+00:04:58.680 --> 00:05:03.760
+Comme Azure calcule vos autorisations effectives en additionnant toutes vos attributions, une attribution large annule une attribution restreinte.
+
+00:05:04.520 --> 00:05:08.700
+Prenons quelqu'un qui détient le rôle de lecteur au niveau de l'abonnement et celui de contributeur sur un seul groupe de ressources.
+
+00:05:09.400 --> 00:05:13.920
+Son accès effectif pour cet abonnement est contributeur, car la somme des deux rôles donne contributeur
+
+00:05:13.920 --> 00:05:16.400
+et le rôle de lecteur ne change rien.
+
+00:05:17.280 --> 00:05:19.660
+C'est pourquoi ajouter un petit rôle pour résoudre un gros problème fonctionne rarement.
+
+00:05:20.260 --> 00:05:23.760
+L'appartenance à un groupe ajoute une couche supplémentaire, car les attributions faites au groupe sont transitives.
+
+00:05:24.760 --> 00:05:27.840
+Si vous faites partie d'un groupe qui appartient à un autre groupe disposant d'une attribution,
+
+00:05:27.980 --> 00:05:30.340
+vous héritez de ses autorisations, que cela soit voulu ou non.
+
+00:05:31.460 --> 00:05:36.400
+Une fois que vous comprenez l'étendue de la portée, la question suivante est celle qui vous amène ici quel rôle lui attribuer.
+
+00:05:37.360 --> 00:05:38.760
+Les rôles que vous rencontrerez réellement.
+
+00:05:39.400 --> 00:05:41.720
+Microsoft propose plus de 100 rôles intégrés pour Azure
+
+00:05:41.720 --> 00:05:44.220
+et 5 d'entre eux constituent le fondement du système.
+
+00:05:45.400 --> 00:05:47.280
+Vous découvrirez les autres services par service.
+
+00:05:47.560 --> 00:05:50.300
+Au fil de votre travail, propriétaire est le plus important des seins.
+
+00:05:50.560 --> 00:05:52.700
+Il accorde un contrôle total sur toutes les ressources de la portée,
+
+00:05:53.080 --> 00:05:55.300
+ainsi que la capacité d'accorder des accès à d'autres personnes.
+
+00:05:55.780 --> 00:05:58.100
+Ce second pouvoir change la manière dont vous devez l'utiliser.
+
+00:05:58.780 --> 00:06:02.160
+Contributeur accorde le même contrôle total sur les ressources avec une différence capitale.
+
+00:06:03.140 --> 00:06:04.740
+Un contributeur ne peut attribuer de rôle à personne,
+
+00:06:04.740 --> 00:06:08.320
+il peut créer et supprimer des éléments, mais ne peut pas ouvrir de porte aux autres.
+
+00:06:09.160 --> 00:06:10.640
+Lecteur est exactement ce que le nom suggère.
+
+00:06:10.640 --> 00:06:13.860
+Quelqu'un avec le rôle de lecteur peut consulter les ressources sans pouvoir rien modifier,
+
+00:06:13.980 --> 00:06:15.760
+ce qui en fait le point de départ le plus sûr pour tout projet.
+
+00:06:16.320 --> 00:06:17.820
+Les deux derniers sont les gestionnaires d'accès.
+
+00:06:17.960 --> 00:06:21.160
+L'administrateur de l'accès utilisateur et l'administrateur de contrôle d'accès basé sur les rôles
+
+00:06:21.160 --> 00:06:22.980
+gèrent tous deux qui peuvent accéder à quoi ?
+
+00:06:22.980 --> 00:06:25.580
+Microsoft les regroupe avec le rôle de propriétaire comme rôle privilégié,
+
+00:06:25.840 --> 00:06:28.200
+car ils peuvent tous deux s'attribuer à quelqu'un d'autre le rôle de propriétaire.
+
+00:06:28.820 --> 00:06:31.760
+Au-delà de ces cinq rôles, il existe une longue liste de rôles liés à des fonctions professionnelles,
+
+00:06:31.760 --> 00:06:33.620
+chacun ciblant un service ou un type de tâche précis.
+
+00:06:33.620 --> 00:06:37.240
+Le rôle de contributeur de machines virtuelles permet de créer des machines virtuelles
+
+00:06:37.240 --> 00:06:39.440
+sans toucher à votre réseau ou à vos données sans toucher à vos données.
+
+00:06:39.860 --> 00:06:43.220
+Le rôle de lecteur de données blob de stockage permet de lire les fichiers d'un seul compte de stockage
+
+00:06:43.220 --> 00:06:44.420
+sans aucun accès en écriture.
+
+00:06:45.280 --> 00:06:48.280
+Il existe une subtilité dans ces rôles fonctionnels qui piègent souvent les utilisateurs au début,
+
+00:06:48.520 --> 00:06:50.200
+et il est important de la comprendre avant toute attribution.
+
+00:06:50.940 --> 00:06:54.140
+La gestion d'une ressource et la lecture des données qu'elle contient sont deux autorisations distinctes dans Azure.
+
+00:06:54.800 --> 00:06:58.040
+Le rôle de contributeur sur un compte de stockage permet de créer et de configurer ce compte,
+
+00:06:58.140 --> 00:06:59.840
+mais ne permet pas de lire un seul fichier à l'intérieur.
+
+00:06:59.840 --> 00:07:03.260
+La lecture des données nécessite un rôle distinct ciblant les données elles-mêmes.
+
+00:07:03.640 --> 00:07:08.040
+Lorsque vous recherchez le rôle approprié, commencez par la catégorie de service plutôt que par le haut de la liste.
+
+00:07:08.580 --> 00:07:10.900
+La page des rôles intégrée de Microsoft est organisée par service.
+
+00:07:11.420 --> 00:07:15.680
+Chercher un mot comme blob ou machine virtuelle réduit ainsi des centaines d'options à une poignée.
+
+00:07:16.780 --> 00:07:19.400
+Les conseils de Microsoft pour choisir entre eux sont d'une simplicité rafraîchissante.
+
+00:07:20.460 --> 00:07:23.160
+Commencez par le rôle le plus restrictif qui permet tout de même à la personne de travailler
+
+00:07:23.160 --> 00:07:25.820
+et d'augmenter les droits que s'il travaille ne peut être effectué autrement.
+
+00:07:26.160 --> 00:07:28.820
+Si quelqu'un a besoin de lire des blobs, le rôle de lecteur suffit,
+
+00:07:28.820 --> 00:07:31.620
+alors que le rôle de contributeur lui donne bien plus que nécessaire.
+
+00:07:32.400 --> 00:07:33.800
+Le moindre privilège est l'objectif principal.
+
+00:07:34.500 --> 00:07:36.140
+Le moindre privilège désigne cette habitude,
+
+00:07:36.340 --> 00:07:39.360
+qui consiste à donner à quelqu'un le rôle le plus limité à la portée la plus restreinte
+
+00:07:39.360 --> 00:07:42.040
+et pour la durée la plus courte, permettant d'accomplir son travail.
+
+00:07:42.720 --> 00:07:44.940
+La raison pour laquelle cela compte ni par souci d'ordre ni par formé d'aide.
+
+00:07:45.780 --> 00:07:49.940
+Limiter le rôle et la portée limite ce qu'un attaquant peut atteindre si ce compte est compromis.
+
+00:07:50.220 --> 00:07:54.520
+Si une attribution limitée signifie un rédaction rédaction, les propres conseils de Microsoft l'expriment clairement.
+
+00:07:54.520 --> 00:07:57.560
+Éviter d'attribuer des rôles plus larges sur des portées plus étendues,
+
+00:07:57.720 --> 00:08:01.860
+même si l'option est plus pratique sur le moment, car la facilité d'aujourd'hui devient le risque de demain.
+
+00:08:03.180 --> 00:08:05.560
+Un chiffre tiré de la documentation Microsoft mérite d'être retenu.
+
+00:08:06.220 --> 00:08:08.680
+Microsoft recommande un maximum de trois propriétaires d'abonnement,
+
+00:08:08.940 --> 00:08:12.180
+car chaque propriétaire supplémentaire ajoute un chemin de propagation pour un compte compromis.
+
+00:08:12.860 --> 00:08:14.460
+Le moindre privilège n'est pas un projet à planifier,
+
+00:08:14.460 --> 00:08:17.540
+c'est une habitude à appliquer au moment même de la création d'une attribution d'une attribution.
+
+00:08:18.280 --> 00:08:21.980
+Quelqu'un qui a besoin d'un accès pour une migration de deux semaines reçoit un rôle pour deux semaines, pas un rôle définitif.
+
+00:08:21.980 --> 00:08:26.140
+Révoquer cet accès par la suite ne nécessite qu'une simple suppression sans avoir à fouiller dans un tableau.
+
+00:08:26.640 --> 00:08:29.900
+L'autre raison pour laquelle les équipes s'y tiennent est que les petites attributions sont faciles à justifier.
+
+00:08:30.480 --> 00:08:32.860
+Lorsqu'un responsable demande qui peut accéder à l'abonnement financier,
+
+00:08:33.120 --> 00:08:35.080
+quelques attributions de groupe s'expliquent en une minute.
+
+00:08:35.840 --> 00:08:38.820
+Qu'attribution individuelle nécessite une après-midi de recherche ?
+
+00:08:38.820 --> 00:08:41.080
+Pour les rôles privilégiés, le modèle se resserre encore davantage.
+
+00:08:41.840 --> 00:08:45.540
+Utilisez le périmètre le plus restreint possible, comme un seul groupe de ressources au lieu de tout l'abonnement.
+
+00:08:46.500 --> 00:08:49.980
+Activez ensuite l'activation juste à temps via Microsoft Entra Privileged Identity Management
+
+00:08:49.980 --> 00:08:52.380
+pour que le privilège soit temporaire plutôt que permanent.
+
+00:08:53.580 --> 00:08:56.940
+Cette option nécessite une version payante d'Entra ID, considérez-la donc comme une évolution
+
+00:08:56.940 --> 00:08:58.360
+plutôt qu'un défaut dont vous seriez privé.
+
+00:08:59.400 --> 00:09:01.920
+Et si les rôles intégrés ne correspondent vraiment pas à votre situation,
+
+00:09:02.120 --> 00:09:05.520
+c'est le seul cas où créer les vôtres devient logique ce vers quoi nous nous dirigeons.
+
+00:09:06.960 --> 00:09:07.980
+Intégrés ou sur mesure ?
+
+00:09:08.620 --> 00:09:10.680
+Les rôles intégrés sont prêts à l'emploi et maintenus par Microsoft,
+
+00:09:10.820 --> 00:09:12.380
+qui est la principale raison de commencer par là.
+
+00:09:12.980 --> 00:09:16.860
+Les rôles personnalisés comblent les lacunes lorsque aucun rôle intégré ne convient à une équipe
+
+00:09:16.860 --> 00:09:19.260
+et ils peuvent être partagés entre abonnements d'un même tenant.
+
+00:09:20.460 --> 00:09:23.220
+Microsoft met à jour la liste des rôles intégrés au fil des changements de services.
+
+00:09:23.680 --> 00:09:26.000
+Une maintenance dont vous héritez dès que vous créez les vôtres.
+
+00:09:27.100 --> 00:09:28.760
+Un rôle n'est qu'une liste d'opérations autorisées,
+
+00:09:29.020 --> 00:09:31.880
+un rôle personnalisé signifie donc que votre équipe gère cette liste désormais.
+
+00:09:32.360 --> 00:09:34.560
+Le processus en lui-même est moins intimidant que son nom ne laisse penser.
+
+00:09:35.060 --> 00:09:37.760
+On commence généralement par cloner le rôle intégré le plus proche
+
+00:09:37.760 --> 00:09:39.700
+et en retirer les permissions inutiles.
+
+00:09:40.640 --> 00:09:44.200
+Ensuite, vous définissez des périmètres assignables pour que Azure sache où le rôle peut être utilisé.
+
+00:09:44.200 --> 00:09:47.460
+Puis, vous le testez sur une tâche réelle avant de le confier à quiconque.
+
+00:09:47.900 --> 00:09:49.140
+Le compromis réside dans la responsabilité.
+
+00:09:49.560 --> 00:09:52.580
+Dès que vous créez un rôle personnalisé, il devient un élément que votre équipe doit maintenir.
+
+00:09:53.020 --> 00:09:54.240
+Les services ajoutent de nouvelles permissions,
+
+00:09:54.480 --> 00:09:56.900
+donc un rôle parfait aujourd'hui peut devenir obsolète avec le temps.
+
+00:09:57.560 --> 00:10:00.480
+Microsoft émet un avertissement spécifique sur la manière de rédiger les rôles personnalisés.
+
+00:10:01.220 --> 00:10:03.240
+Utiliser un astérisque au lieu de nommer les actions
+
+00:10:03.240 --> 00:10:06.200
+signifie que le rôle héritera aussi des futures permissions ajoutées par Microsoft,
+
+00:10:07.060 --> 00:10:08.960
+sans examen, pré-azout et à l'âble.
+
+00:10:09.520 --> 00:10:11.000
+Les limites permettent également de garder le modèle cohérent.
+
+00:10:11.420 --> 00:10:13.620
+Vous pouvez détenir jusqu'à 5000 rôles personnalisés partenants
+
+00:10:13.620 --> 00:10:17.200
+et un rôle incluant des actions de données ne peut être assigné au niveau du groupe d'administration.
+
+00:10:18.280 --> 00:10:20.240
+Pour les débutants, le conseil pratique est simple.
+
+00:10:20.920 --> 00:10:22.120
+Privilégiez d'abord un rôle intégré
+
+00:10:22.120 --> 00:10:24.700
+et considérez le rôle personnalisé comme une exception justifiée
+
+00:10:24.700 --> 00:10:26.340
+et non comme le réflexe par défaut.
+
+00:10:27.340 --> 00:10:28.840
+Les rôles Azure ne sont pas des rôles en tra.
+
+00:10:29.660 --> 00:10:31.000
+Il existe une autre source de confusion
+
+00:10:31.000 --> 00:10:33.000
+qui n'a rien à voir avec les rôles personnalisés.
+
+00:10:33.400 --> 00:10:35.860
+Le terme en rôle héritera apparaît à deux endroits dans l'hypocystème Microsoft
+
+00:10:35.860 --> 00:10:37.960
+et ce sont des systèmes distincts avec des attributions séparées.
+
+00:10:38.460 --> 00:10:40.520
+Les rôles Azure contrôlent l'accès aux ressources Azure,
+
+00:10:40.660 --> 00:10:43.520
+c'est-à-dire aux machines virtuelles, au stockage, aux réseaux et aux bases de données.
+
+00:10:44.400 --> 00:10:47.200
+Les rôles Microsoft en tra contrôlent l'accès aux ressources d'annuaire,
+
+00:10:47.280 --> 00:10:50.340
+c'est-à-dire aux utilisateurs, aux groupes, aux domaines et aux licences.
+
+00:10:51.080 --> 00:10:52.180
+Les étendues ne correspondent pas non plus.
+
+00:10:52.800 --> 00:10:54.840
+Un rôle Azure peut être attribué au niveau d'un groupe d'administration,
+
+00:10:54.980 --> 00:10:57.200
+d'un abonnement, d'un groupe de ressources ou d'une ressource ou d'une ressource.
+
+00:10:58.220 --> 00:11:00.200
+Un rôle en tra est attribué au niveau du locataire,
+
+00:11:00.300 --> 00:11:02.840
+d'une unité administrative ou d'un objet unique tel qu'une application.
+
+00:11:03.940 --> 00:11:05.700
+Si vous ne savez jamais dans quel système vous vous trouvez,
+
+00:11:05.820 --> 00:11:07.100
+demandez ce que la personne doit modifier.
+
+00:11:08.220 --> 00:11:09.900
+Modifier des personnes, des groupes ou des licences
+
+00:11:09.900 --> 00:11:11.340
+vous place dans Microsoft en tra
+
+00:11:11.340 --> 00:11:14.460
+et modifier des machines virtuelles, du stockage ou des réseaux vous place dans Azure.
+
+00:11:15.340 --> 00:11:17.660
+De nombreuses personnes détiennent des rôles dans les deux systèmes en même temps.
+
+00:11:18.320 --> 00:11:20.520
+Vient ensuite la conséquence qui piège le plus souvent les gens.
+
+00:11:21.220 --> 00:11:24.400
+Un administrateur général n'obtient pas automatiquement l'accès aux ressources Azure,
+
+00:11:24.620 --> 00:11:26.840
+car ce badge gère votre annuaire et non vos abonnements.
+
+00:11:27.820 --> 00:11:29.120
+Cette personne peut changer la situation,
+
+00:11:29.340 --> 00:11:31.000
+et il est utile de connaître ce mécanisme.
+
+00:11:31.000 --> 00:11:34.500
+Un administrateur général peut activer une option dans le portail
+
+00:11:34.500 --> 00:11:38.120
+qui lui confère le rôle d'administrateur de l'accès utilisateur sur chaque abonnement du locataire.
+
+00:11:38.720 --> 00:11:40.340
+Il s'agit d'une action délibérée et non par défaut,
+
+00:11:40.540 --> 00:11:42.020
+et de nombreuses organisations ne le remarquent jamais,
+
+00:11:42.180 --> 00:11:43.600
+jusqu'à ce qu'un audit demande qui détient quoi.
+
+00:11:44.220 --> 00:11:45.960
+Un élément historique supplémentaire se cache d'air tout cela.
+
+00:11:46.600 --> 00:11:49.060
+Les anciens rôles d'administrateurs d'abonnement classique sont totalement retirés,
+
+00:11:49.720 --> 00:11:53.440
+ceux nommés administrateurs de compte, administrateurs de service et co-administrateurs.
+
+00:11:53.820 --> 00:11:55.700
+Cela signifie que chaque décision d'accès dans Azure aujourd'hui
+
+00:11:55.700 --> 00:11:57.240
+passe par le contrôle d'accès basé sur les rôles.
+
+00:11:57.240 --> 00:11:59.680
+Lorsque vous savez distinguer ces deux systèmes,
+
+00:12:00.100 --> 00:12:02.200
+les habitudes problématiques deviennent beaucoup plus faciles à repérer.
+
+00:12:04.370 --> 00:12:05.210
+Les erreurs que tout le monde commet.
+
+00:12:05.970 --> 00:12:07.530
+La plupart des problèmes dans les abonnements réels
+
+00:12:07.530 --> 00:12:09.050
+proviennent d'une courte liste d'habitudes,
+
+00:12:09.470 --> 00:12:12.110
+et chacune d'entre elles est facile à corriger une fois que vous savez quoi chercher.
+
+00:12:13.110 --> 00:12:15.170
+Cette partie ressemble à un conseil pour les grandes entreprises,
+
+00:12:15.450 --> 00:12:17.810
+mais elle s'applique tout autant à un abonnement contenant trois ressources.
+
+00:12:18.670 --> 00:12:20.870
+Commençons par l'habitude que presque tout le monde adopte en premier.
+
+00:12:21.390 --> 00:12:23.010
+Le rôle propriétaire se trouve en haut de la liste,
+
+00:12:23.130 --> 00:12:24.330
+il devient donc le choix par défaut.
+
+00:12:24.990 --> 00:12:26.650
+Comme le propriétaire peut distribuer les accès,
+
+00:12:26.650 --> 00:12:29.690
+un compte propriétaire devient un moyen de créer d'autres comptes propriétaires
+
+00:12:29.690 --> 00:12:30.710
+sans que personne ne surveille.
+
+00:12:31.570 --> 00:12:34.650
+Ensuite il y a l'habitude d'attribuer des rôles aux personnes plutôt qu'aux groupes.
+
+00:12:35.550 --> 00:12:38.450
+Les attributions par groupe regroupent des dizaines d'attributions individuelles en une seule,
+
+00:12:38.590 --> 00:12:41.010
+et lorsque Microsoft explique comment corriger un abonnement à court d'espace,
+
+00:12:41.150 --> 00:12:42.150
+c'est la première étape recommandée.
+
+00:12:43.750 --> 00:12:46.350
+Une autre est facile à manquer, car ce n'est pas une erreur que l'on commet volontairement.
+
+00:12:46.810 --> 00:12:48.230
+Les autorisations s'héritent et se cumulent,
+
+00:12:48.310 --> 00:12:51.070
+ce qui permet à quelqu'un d'accéder à une ressource sans que personne ne se souvienne de l'avoir attribuée.
+
+00:12:51.290 --> 00:12:53.850
+L'attribution se trouve généralement plus haut dans l'arborescence que ce que dans l'arborescence,
+
+00:12:53.850 --> 00:12:54.950
+parce que tout le monde a pris la peine de vérifier,
+
+00:12:55.310 --> 00:12:56.710
+l'hypothèse qui fait perdre une après-midi aux gens
+
+00:12:56.710 --> 00:12:59.090
+et qu'un rôle d'administrateur à l'échelle de l'entreprise donne accès à Azure.
+
+00:12:59.430 --> 00:13:00.590
+Ce n'est pas le cas, pas par défaut,
+
+00:13:00.650 --> 00:13:03.890
+et les administrateurs se retrouvent régulièrement face à un message d'accès refusé sur un abonnement
+
+00:13:03.890 --> 00:13:04.710
+qu'ils pensent s'est contrôlé.
+
+00:13:05.690 --> 00:13:07.470
+Créer une règle de refus semble être la solution évidente,
+
+00:13:07.910 --> 00:13:11.090
+mais Microsoft précise que vous ne pouvez pas créer directement vos propres attributions de refus,
+
+00:13:11.290 --> 00:13:12.690
+car Azure les crée et les gère lui-même.
+
+00:13:13.210 --> 00:13:15.250
+L'accès est supprimé lorsque vous retirez l'attribution qu'il accordait,
+
+00:13:15.370 --> 00:13:17.230
+pas lorsque vous créez un blocage, pas lorsque vous créez.
+
+00:13:17.690 --> 00:13:19.590
+Certaines équipes atteignent le plafond de manière abrupte.
+
+00:13:19.670 --> 00:13:21.990
+Azure autorise 5 000 attributions de rôle par abonnement
+
+00:13:21.990 --> 00:13:23.510
+et 500 par groupe d'administration,
+
+00:13:23.650 --> 00:13:25.650
+et ces deux limites sont fixes, sont fixes.
+
+00:13:25.970 --> 00:13:27.370
+La cause habituelle de l'atteinte de ce plafond
+
+00:13:27.370 --> 00:13:29.930
+est le recours à des milliers d'attributions individuelles accordées à des personnes individuelles.
+
+00:13:30.370 --> 00:13:32.550
+Les groupes imbriqués transmettent les autorisations bien plus loin
+
+00:13:32.550 --> 00:13:33.690
+que ce que la plupart des gens imaginent.
+
+00:13:34.110 --> 00:13:36.430
+Une personne est membre d'un groupe, ce groupe appartient à un groupe plus large,
+
+00:13:36.630 --> 00:13:38.750
+et les attributions liées au groupe plus large s'appliquent à la personne
+
+00:13:38.750 --> 00:13:41.030
+sans que personne ne l'annonce, sans que personne ne l'annonce.
+
+00:13:41.410 --> 00:13:43.690
+Ce dernier point apparaît dans l'automatisation plutôt que dans le portail.
+
+00:13:43.690 --> 00:13:46.690
+Microsoft recommande d'utiliser l'identifiant unique d'un rôle
+
+00:13:46.690 --> 00:13:47.810
+plutôt que son nom d'affichage.
+
+00:13:48.730 --> 00:13:51.430
+Les noms changent, les rôles en préversion sont renommés lors de leur publication,
+
+00:13:51.930 --> 00:13:54.450
+et tout ce qui est automatisé avec l'ancien nom échoue, sans avertissement.
+
+00:13:55.210 --> 00:13:57.150
+Chacun de ces problèmes découle de la même petite décision.
+
+00:13:58.150 --> 00:13:59.910
+Choisissez le rôle le plus restreint pour effectuer la tâche.
+
+00:14:00.090 --> 00:14:01.510
+Attribuez-le à un groupe plutôt qu'à une personne,
+
+00:14:02.070 --> 00:14:03.930
+et définissez la portée aussi bas que possible dans l'arborescence.
+
+00:14:04.710 --> 00:14:05.750
+Appliquez cela systématiquement,
+
+00:14:06.010 --> 00:14:07.990
+et la plupart de ces problèmes n'auront jamais l'occasion d'apparaître.
+
+00:14:08.930 --> 00:14:09.750
+Récapitulatif et une question ouvert.
+
+00:14:10.090 --> 00:14:11.090
+Alors faisons le point sur ce que nous avons.
+
+00:14:11.090 --> 00:14:14.810
+Chaque attribution de rôle dans Azure définit un, quoi, et une portée,
+
+00:14:15.310 --> 00:14:17.610
+et rien n'est accordé tant que quelqu'un n'en crée pas une,
+
+00:14:17.990 --> 00:14:19.090
+les autorisations se revêchent vers le bas.
+
+00:14:19.530 --> 00:14:22.510
+Elles se cumulent et disparaissent lorsque vous supprimez l'attribution au lieu de la bloquer.
+
+00:14:23.170 --> 00:14:24.570
+Gardez cette habitude et le reste très simple.
+
+00:14:25.190 --> 00:14:27.950
+La règle est le plus petit rôle avec la plus petite portée attribue à un groupe.
+
+00:14:28.470 --> 00:14:30.390
+Si cela a rendu Azure un peu moins intimidant pour vous,
+
+00:14:30.530 --> 00:14:31.970
+abonnez-vous à N365FM,
+
+00:14:32.150 --> 00:14:35.290
+car nous abordons une partie de la pile à la fois et l'expliquons en termes simples.
+
+00:14:35.770 --> 00:14:37.930
+Avant de partir, je vous laisse avec une question à méditer.
+
+00:14:37.930 --> 00:14:41.370
+Si vous ouvriez votre abonnement aujourd'hui et passez en revue chaque attribution,
+
+00:14:41.710 --> 00:14:43.930
+seriez-vous capable d'expliquer pourquoi chacune d'elles est présente ?

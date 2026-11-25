@@ -1,0 +1,880 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.620
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, idean teknologi yang untuk masa depan dunia kerja.
+
+00:00:07.420 --> 00:00:10.360
+Branching terdengar seperti detail kecil sampai dua orang mengubah file yang sama.
+
+00:00:11.080 --> 00:00:14.320
+Kemudian seseorang harus mencari tahu versi mana yang asli dan itulah masalah branching.
+
+00:00:14.640 --> 00:00:20.300
+Branch hanyalah salinan aman dari proyek Anda dan strategi branching adalah aturan tim Anda tentang bagaimana salinan tersebut disatukan kembali.
+
+00:00:20.700 --> 00:00:26.580
+Ada tiga yang besar, GitFlow, GitHubFlow, dan Trunk Based Development, dan masing-masing dibuat untuk jenis tim yang berbeda.
+
+00:00:27.060 --> 00:00:29.720
+Di akhir nanti akan tahu mana yang cocok untuk tim Anda dan kesalahan apa yang harus dihindari.
+
+00:00:30.580 --> 00:00:36.620
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:37.680 --> 00:00:38.220
+Apa itu branch?
+
+00:00:38.840 --> 00:00:41.240
+Kata branch terdengar teknis namun ide dibaliknya sederhana.
+
+00:00:42.120 --> 00:00:45.060
+Repository adalah folder proyek Anda dengan seluruh riwayat yang disimpan oleh.
+
+00:00:45.380 --> 00:00:53.120
+Itu berarti setiap versi dari setiap file sejak hari pertama tersimpan, dan branch adalah salinan proyek yang bisa Anda ubah tanpa menyentuh versi aslinya, tanpa menyentuh versi aslinya.
+
+00:00:53.420 --> 00:00:55.720
+Tidak ada yang terkunci dan tidak ada yang terhapus saat Anda membuat branch.
+
+00:00:55.980 --> 00:01:00.240
+Anda sebenarnya hanya menyatakan ingin mencoba sesuatu tanpa merusak versi yang sudah berjalan.
+
+00:01:00.680 --> 00:01:03.600
+Itulah mengapa branching terasa aman setelah Anda melakukannya beberapa kali.
+
+00:01:04.240 --> 00:01:09.700
+Branch utama, yang oleh beberapa tim disebut main dan yang lain master, adalah salinan yang dianggap semua orang sebagai versi proyek yang berfungsi.
+
+00:01:10.120 --> 00:01:13.200
+Jika Anda melihat kedua nama tersebut dan bertanya-tanya apakah keduanya berbeda jauhnya, tiba?
+
+00:01:13.620 --> 00:01:19.080
+Main dan master berarti sama, dan peralihan dari satu nama ke nama lain hanyalah pilihan penamaan, bukan fitur baru yang harus belajari.
+
+00:01:19.580 --> 00:01:24.340
+Branch di git juga murah, dan itulah bagian yang paling sulit dipercayai oleh orang-orang dari alat lama.
+
+00:01:24.340 --> 00:01:29.580
+Pada sistem sebelum git membuat branch adalah operasi yang lambat dan berat yang jarang dan harus dilakukan dengan hati-hati.
+
+00:01:29.940 --> 00:01:33.420
+Di git prosesnya terjadi seketika, itulah sebabnya tim modern membuat branch untuk hampir semua.
+
+00:01:33.940 --> 00:01:38.880
+Jika Anda pernah mendengar orang menyebut komen, itu hanyalah titik pemeriksaan yang disimpan, satu perubahan yang direkam dan pesan yang menyertai.
+
+00:01:39.280 --> 00:01:44.600
+Branch sebenarnya adalah label bergerak yang menunjukkan rangkaian titik pemeriksaan tersebut, itulah sebabnya berpindah antar branch sangat cepat.
+
+00:01:44.600 --> 00:01:46.360
+Namun ide itu mulai-tulah landasan keseluruhannya.
+
+00:01:46.760 --> 00:01:52.740
+Setiap strategi dan setiap perdebatan antar pengembang bermuara pada satu pertanyaan tentang bagaimana saat yang tersebut dibuat dan bagaimana saat yang itu disatukan kembali.
+
+00:01:53.780 --> 00:01:54.980
+Mengapa strategi branching ada?
+
+00:01:55.600 --> 00:01:58.480
+Begitu tim berkembang lebih dari satu orang, aturan mulai menjadi penting.
+
+00:01:58.900 --> 00:02:00.820
+Git membuat percabangan menjadi murah dan penggabungan.
+
+00:02:01.040 --> 00:02:04.240
+Menjadi mudah, perubahan besar dari alat lama di mana penggabungan terasa menakutkan dan jarang langsung.
+
+00:02:04.500 --> 00:02:07.100
+Vincent Driesen, sosok dibalik git flow, menyampaikan poin ini sendiri.
+
+00:02:07.760 --> 00:02:13.020
+Digit, percabangan dan penggabungan menjadi alur kerja sehari-hari bukan lagi peristiwa khusus yang dijatuhkan berminggu-minggu sebelumnya.
+
+00:02:14.040 --> 00:02:15.340
+Namun percabangan yang murah masalah baru.
+
+00:02:16.100 --> 00:02:20.900
+Jika semua orang membuat salinan kapanpun mereka mau dan tidak ada yang sepakat bagaimana saat itu disatukan, pekerjaan pun akan berbenturan.
+
+00:02:21.440 --> 00:02:26.440
+Perubahan seseorang yang setengah jadi tercampur dengan sesuatu yang seharusnya sudah selesai dan kini tim tidak bisa merilis keduanya.
+
+00:02:26.860 --> 00:02:31.500
+Bayangkan seorang pengembang di tengah proses desain ulang sementara rekan setim diam-diam memperbaiki bug di file yang sama.
+
+00:02:32.320 --> 00:02:34.740
+Kedua perubahan itu mendarat di tempat yang sama dan tidak ada yang menduga.
+
+00:02:34.740 --> 00:02:37.900
+Strategi percabangan adalah solusinya dan itu tidak semelarik kedengaran.
+
+00:02:38.280 --> 00:02:41.520
+Ini bukan perangkat lunak yang Anda install dan bukan pengaturan yang Anda aktifkan sekali ledupan.
+
+00:02:42.060 --> 00:02:48.800
+Ini adalah kesepakatan bersama tentang siapa bekerja di mana, berapa lama cabang boleh ada, dan bagaimana perubahan ditinjau sebelum masuk ke versi utama.
+
+00:02:49.520 --> 00:02:51.880
+Ketika kesepakatan itu tidak ada, Anda mendapatkan kekacauan seperti dia.
+
+00:02:52.360 --> 00:02:55.700
+Dua orang, satu file, dua versi kebenaran, dan tidak ada yang yakin mana nyata.
+
+00:02:56.580 --> 00:02:58.820
+Strategi adalah cara tim menjaga hal itu terjadi dua kali.
+
+00:03:00.220 --> 00:03:00.920
+Tiga elemen dasar.
+
+00:03:00.920 --> 00:03:07.340
+Hampir setiap strategi dibangun dari tiga jenis cabang yang sama, dan setelah Anda mengetahuinya, model ini tidak lagi terdengar seperti bahasa asing.
+
+00:03:07.580 --> 00:03:10.940
+Pertama adalah cabang utama, main versi yang selalu berfungsi sebagai tempat Anda melakukan print.
+
+00:03:11.260 --> 00:03:12.500
+Ini adalah satu-satunya yang pernah hilang.
+
+00:03:13.040 --> 00:03:15.540
+Kedua adalah cabang fitur-fiture, dan disinilah pekerjaan sebenarnya terjadi.
+
+00:03:16.260 --> 00:03:20.460
+Anda membuatnya untuk satu tugas, seperti menambahkan halaman login atau memperbaiki tombol yang rusak.
+
+00:03:21.080 --> 00:03:23.760
+Anda menamainya sesuai pekerjaannya, antara siapapun bisa langsung tahu kegunaan.
+
+00:03:24.420 --> 00:03:29.200
+Cabang fitur dimaksudkan untuk sementara, dan saat pekerjaan digabungkan cabang tersebut akan dihapus.
+
+00:03:29.200 --> 00:03:33.300
+Ketiga adalah cabang rilis, rilis, dan ini hanya muncul saat Anda merilis dalam versi bernok.
+
+00:03:33.720 --> 00:03:35.840
+Inilah cara untuk melakukan snapshot demi pemeriksaan akhir.
+
+00:03:36.360 --> 00:03:39.520
+Anda membuatnya saat kode hampir siap menggunakannya untuk memperbaiki bug menit terakhir,
+
+00:03:39.620 --> 00:03:41.660
+dan memberinya nomor versi sebelum dikirim ke pelanggan.
+
+00:03:42.160 --> 00:03:42.900
+Itulah perangkat lengkap.
+
+00:03:43.420 --> 00:03:46.520
+Yang membedakan ketiga model besar ini adalah seberapa sering mereka melakukan pecebang.
+
+00:03:46.880 --> 00:03:49.260
+Gitflow menggunakan ketiganya ditambah satu cabang permainan kedua.
+
+00:03:49.900 --> 00:03:52.520
+GitHubflow sebagian besar hanya menggunakan cabang utama dan cabang fitur.
+
+00:03:52.960 --> 00:03:56.740
+Trang-based development mendorong hampir semua hal langsung ke cabang utama dan hampir cabang utama dan hampir cabang besar.
+
+00:03:56.740 --> 00:03:59.400
+Satu bagian lagi perlu disebutkan meskipun ini bukan sebuah brand.
+
+00:03:59.960 --> 00:04:04.860
+Pull request adalah cara brand yang sudah selesai ditinjau dan ini muncul di setiap strategi modern.
+
+00:04:05.360 --> 00:04:08.500
+Kita akan kembali membahasnya karena ini adalah mekanisme sehari-hari yang paling sering ada guna.
+
+00:04:09.240 --> 00:04:10.180
+Gitflow yang terstruktur.
+
+00:04:10.740 --> 00:04:15.180
+Strategi paling terkenal ini memiliki tengah lahir tertentu dan mengetahuinya membantu menjelaskan mengapa bentuknya seperti itu.
+
+00:04:15.700 --> 00:04:20.740
+Vincent Driasan menerbitkan Gitflow pada Januari 2010 dalam sebuah post berjudul A Successful Git Branching Model.
+
+00:04:20.740 --> 00:04:25.080
+Selama bertahun-tahun setelahnya, ini adalah jawaban standar setiap kali seseorang bertanya cara menggunakan brand.
+
+00:04:25.460 --> 00:04:27.040
+Gitpro berjalan pada dua branch permanen.
+
+00:04:27.440 --> 00:04:33.120
+Master menyimpan kode yang siap untuk produksi kapan saja dan develop menyimpan semua yang sudah selesai tapi belum dirilis.
+
+00:04:33.700 --> 00:04:36.860
+Keduanya tidak pernah hilang dan semua branch lainnya mengorbit di sekitar mereka.
+
+00:04:37.560 --> 00:04:39.940
+Brand fitur keluar dari develop dan digabungkan kembali ke develop.
+
+00:04:40.520 --> 00:04:44.600
+Branch rilis keluar dari develop mendapatkan sentuhan akhir lalu digabungkan ke develop dan master.
+
+00:04:44.600 --> 00:04:51.180
+Branch hotfix keluar dari master untuk memperbaiki masalah mendesak di produksi dan digabungkan kembali ke keduanya agar perbaikan tidak hilang di rilis berikutnya.
+
+00:04:51.960 --> 00:04:54.060
+Struktur itu sangat berguna saat Anda merilis dalam versi.
+
+00:04:54.720 --> 00:04:59.580
+Tekanlah Anda mendukung versi 2 saat versi 3 sedang dikerjakan dan pelanggan di versi 1 butuh perbaikan.
+
+00:05:00.240 --> 00:05:02.940
+Gitflow memberi Anda tempat yang jelas dan terarah untuk melakukan pekerjaan.
+
+00:05:03.340 --> 00:05:04.760
+Namun inilah kejutkan hampir semua orang.
+
+00:05:05.740 --> 00:05:08.660
+Pada Maret 2020, 10 tahun setelah menerbitkan post tersebut,
+
+00:05:08.660 --> 00:05:10.780
+Jason menambahkan catatan di bagian atas artikel yang sendiri.
+
+00:05:11.300 --> 00:05:14.020
+Ia menulis bahwa Gitflow telah diperlakukan seperti dogma, bukan pilih.
+
+00:05:14.440 --> 00:05:17.500
+Itu tidak dirancang untuk aplikasi web yang dikirimkan terus-menerus, katanya.
+
+00:05:17.620 --> 00:05:20.680
+Dan tim yang merilis dengan cara itu harus mengadopsi sesuatu yang lebih sederhana seperti GitHub.
+
+00:05:20.880 --> 00:05:22.240
+Kalimat penutupnya layak untuk diingat.
+
+00:05:22.820 --> 00:05:26.080
+Obat menjawab itu tidak ada, jadi pertimbangan konteks Anda sendiri dan putuskan sendiri.
+
+00:05:26.700 --> 00:05:28.680
+Bagi tim yang memang dituju, semua itu bukan masalah.
+
+00:05:29.220 --> 00:05:33.160
+Jika Anda membangun perangkat lunak yang diberi versi secara eksplisit atau mendukung beberapa versi yang beredar,
+
+00:05:33.480 --> 00:05:34.740
+model ini masih bisa sangat cocok.
+
+00:05:36.480 --> 00:05:37.720
+GitHub Flow yang sederhana.
+
+00:05:38.280 --> 00:05:40.740
+GitHub Flow mendekati masalah tersebut dari arah yang berlawan.
+
+00:05:40.740 --> 00:05:46.400
+Scott Chacon menulisnya pada Agustus 2011 dan intinya adalah GitHub sendiri sama sekali tidak menggunakan Gitflow.
+
+00:05:47.500 --> 00:05:48.060
+Alasannya sederhana.
+
+00:05:48.600 --> 00:05:51.940
+GitHub melakukan deployment ke produksi setiap hari, seringkali beberapa kali sehari,
+
+00:05:52.240 --> 00:05:55.100
+dan proses yang dibangun di sekitar release tidak sesuai dengan kenyataan itu.
+
+00:05:55.980 --> 00:05:58.900
+Jadi mereka menjederhanakannya menjadi satu aturan kelas dan daftar langkah yang singkat.
+
+00:05:58.900 --> 00:06:02.020
+Aturannya adalah segala sesuatu di branch main harus bisa di-deploy,
+
+00:06:02.120 --> 00:06:05.000
+artinya main selalu aman untuk dirilis dan aman untuk membuat branch baru.
+
+00:06:05.860 --> 00:06:09.160
+Untuk mulai bekerja, Anda membuat branch baru dari main dengan nama yang jelas,
+
+00:06:09.280 --> 00:06:11.240
+seperti add login page atau fix broken button.
+
+00:06:11.960 --> 00:06:14.620
+Dari sana, Anda sering-sering melakukan push ke branch tersebut agar tersimpan
+
+00:06:14.620 --> 00:06:16.380
+dan semua orang tahu apa yang sedang Anda kerjakan.
+
+00:06:17.060 --> 00:06:19.460
+Saat butuh masukan atau saat pekerjaan selesai,
+
+00:06:19.660 --> 00:06:21.600
+buka pull request, seseorang meninjaunya,
+
+00:06:21.740 --> 00:06:24.900
+jalankan tes, dan setelah disetujui, gabungkan ke main,
+
+00:06:25.140 --> 00:06:28.680
+lalu segera deploy karena main, harus selalu siap dirilis.
+
+00:06:29.400 --> 00:06:30.200
+Itulah seluruh alurnya.
+
+00:06:30.740 --> 00:06:32.600
+Tidak ada branch develop, release, atau hotfix.
+
+00:06:32.900 --> 00:06:34.900
+Hanya ada main dan branch fitur yang berumur pendek.
+
+00:06:35.360 --> 00:06:38.960
+Saat itu, GitHub memiliki 35 karyawan dengan sekitar 15 hingga 20 orang
+
+00:06:38.960 --> 00:06:40.220
+bekerja pada proyek yang sama sekaligus.
+
+00:06:40.600 --> 00:06:44.360
+Postingan siakon menunjukkan 6 orang berbeda melakukan deploy sekitar 24 kali dalam 1 hari.
+
+00:06:44.620 --> 00:06:47.660
+Komprominya adalah, ini mengasumsikan Anda bisa melakukan deploy sesuai permintaan
+
+00:06:47.660 --> 00:06:48.860
+dan tidak perlu mendukung versi lama.
+
+00:06:49.040 --> 00:06:51.780
+Untuk aplikasi web atau tim kecil, hal itu biasanya benar
+
+00:06:51.780 --> 00:06:54.320
+dan kesederhanaannya sangat berharga saat Anda baru memulai.
+
+00:06:54.720 --> 00:06:56.720
+Jika suatu branch bertahan lebih lama dari yang diinginkan,
+
+00:06:56.720 --> 00:06:58.860
+solusinya adalah menggabungkan main terbaru ke dalamnya
+
+00:06:58.860 --> 00:07:00.600
+agar tidak melenceng saat Anda bekerja.
+
+00:07:02.200 --> 00:07:03.700
+Trunk-based development metode yang cepat.
+
+00:07:04.080 --> 00:07:05.220
+Jika GitHub flow itu sederhana,
+
+00:07:05.420 --> 00:07:07.760
+trunk-based development adalah versi yang lebih ringkas dari kesederhanaan itu.
+
+00:07:08.120 --> 00:07:10.780
+Semua orang melakukan komit perubahan kecil ke satu branch bersama,
+
+00:07:11.120 --> 00:07:13.080
+yaitu trunk yang hanyalah nama lain dari branch.
+
+00:07:13.220 --> 00:07:15.620
+Jika memang ada, hanya bertahan selama beberapa jam, bukan berminggu-minggu.
+
+00:07:16.200 --> 00:07:17.980
+Masa hidup yang singkat itu adalah inti-idenya
+
+00:07:17.980 --> 00:07:19.240
+dan layak untuk direnungkan sejenak.
+
+00:07:19.880 --> 00:07:21.040
+Semakin lama branch bertahan,
+
+00:07:21.160 --> 00:07:22.680
+semakin jauh proyek berkembang tanpanya,
+
+00:07:22.680 --> 00:07:25.280
+dan semakin berantakan proses penggabungannya nanti.
+
+00:07:26.420 --> 00:07:28.380
+Branch pendek berarti penggabungan kecil,
+
+00:07:28.560 --> 00:07:30.560
+dan penggabungan kecil bisa diperbaiki dalam semenit,
+
+00:07:30.700 --> 00:07:31.480
+bukan seharian.
+
+00:07:32.200 --> 00:07:33.340
+Branch rilis bersifat opsionalis.
+
+00:07:33.580 --> 00:07:36.580
+Branch tersebut hanyalah snapshot yang Anda bersalat perlu menandai suatu versi.
+
+00:07:37.100 --> 00:07:38.620
+Jika Anda dukung berkali-kali dalam sehari,
+
+00:07:38.740 --> 00:07:39.940
+Anda sama sekali tidak menurunkannya,
+
+00:07:40.040 --> 00:07:41.600
+karena trunk itu sendiri selalu siap dirilis.
+
+00:07:42.160 --> 00:07:43.700
+Bukti dibalik metode ini layak diketahui,
+
+00:07:43.820 --> 00:07:45.540
+karena ini lebih dari sekadar preferensi seseorang.
+
+00:07:45.960 --> 00:07:48.980
+Dora, program riset yang mempelajari cara tim mengirimkan perangkat lunak
+
+00:07:48.980 --> 00:07:51.680
+meninjau kembali datanya dari tahun 2017 dan 2017.
+
+00:07:52.460 --> 00:07:55.160
+Ditemukan bahwa pekerja lebih baik jika menjaga tiga branch aktif atau kurang,
+
+00:07:55.280 --> 00:07:56.740
+bergabung ke trunk setidaknya sekali sehari,
+
+00:07:56.900 --> 00:07:59.220
+serta melewatkan code freeze dan fase integrasi terpisah.
+
+00:07:59.840 --> 00:08:01.560
+GUL adalah contoh terkenal dari cara kerja ini,
+
+00:08:01.660 --> 00:08:02.940
+dan praktiknya sudah lama ada di sana,
+
+00:08:03.160 --> 00:08:06.540
+tetapi itulah sebabnya model ini terus muncul setiap kali orang berbicara tentang tim yang gesit.
+
+00:08:06.940 --> 00:08:09.520
+Kendalanya adalah model ini menuntut lebih banyak dari Anda dibandingkan 2 menit.
+
+00:08:09.880 --> 00:08:12.080
+Anda harus memencah pekerjaan menjadi bagian-bagian kecil,
+
+00:08:12.160 --> 00:08:13.700
+dan mengandalkan tes otomatis yang cepat,
+
+00:08:13.700 --> 00:08:16.840
+karena tidak ada periode stabilisasi yang lama untuk mendeteksi masalah di akhir.
+
+00:08:16.840 --> 00:08:19.880
+Itulah mengapa pengembangan berbasis terang bekerja paling baik pada tim yang terus menerus
+
+00:08:19.880 --> 00:08:21.940
+melalui sempurna dari produk dan telah berinvestasi dalam pengujian.
+
+00:08:22.080 --> 00:08:24.860
+Ini juga merupakan model yang paling mungkin terasa asing jika Anda baru mulai.
+
+00:08:25.140 --> 00:08:27.840
+Tidak ada branch berumur panjang tempat Anda bisa menyembunyikan pekerjaan yang belum selesai.
+
+00:08:28.480 --> 00:08:29.420
+Penjelasan mengenai pull request.
+
+00:08:30.000 --> 00:08:33.040
+Ketiga strategi tersebut mengandalkan alat yang sama untuk menggabungkan pekerjaan,
+
+00:08:33.100 --> 00:08:34.740
+dan itulah alat yang akan Anda gunakan setiap hari.
+
+00:08:35.340 --> 00:08:37.020
+Pull request, yang biasanya disingkat PR,
+
+00:08:37.120 --> 00:08:39.300
+adalah permintaan untuk menggabungkan branch Anda ke branch lain.
+
+00:08:39.300 --> 00:08:42.840
+Fitur ini dilengkapi dengan tempat bawaan bagi orang lain untuk meninjau perubahan tersebut,
+
+00:08:43.140 --> 00:08:45.200
+yang lebih merupakan sebuah percakapan daripada sekadar tertentu.
+
+00:08:45.900 --> 00:08:47.900
+Peninjau dapat memberikan komentar pada baris tertentu,
+
+00:08:48.140 --> 00:08:49.820
+mengajukan pertanyaan, dan meminta perubahan.
+
+00:08:50.320 --> 00:08:52.220
+Anda terus mengirimkan komit tambahan ke branch yang sama,
+
+00:08:52.540 --> 00:08:54.300
+dan pull request tersebut akan diperbarui secara otomatis.
+
+00:08:54.640 --> 00:08:58.700
+Ini menjadi catatan diskusi yang berjalan hingga semua orang puas dan perubahan siap digabungkan.
+
+00:08:59.200 --> 00:09:00.540
+Nilainya terletak pada waktu pelaksanaan.
+
+00:09:00.800 --> 00:09:03.040
+Peninjauan dilakukan sebelum perubahan mencapai branch.
+
+00:09:03.040 --> 00:09:05.660
+Artinya, kesalahan ditemukan saat masih mudah diperbaiki,
+
+00:09:05.980 --> 00:09:08.760
+alih-alih setelah dirilis ke pelanggan, dan mulai menimbulkan masalah.
+
+00:09:09.440 --> 00:09:11.100
+GitHub tidak menemukan ide peninjauan kode,
+
+00:09:11.220 --> 00:09:12.900
+tetapi mereka mempopularkan pull request,
+
+00:09:13.400 --> 00:09:15.440
+dan fitur ini sudah ada sejak sekitar tahun 2008.
+
+00:09:15.940 --> 00:09:18.220
+Saat ini hampir setiap layanan hosting git memiliki versinya sendiri,
+
+00:09:18.320 --> 00:09:19.600
+meskipun namanya mungkin sedikit berbeda.
+
+00:09:20.180 --> 00:09:22.000
+Ada juga sisi sosial yang penting untuk dibahas sebentar lagi.
+
+00:09:22.400 --> 00:09:23.620
+Saat Anda membuka pull request,
+
+00:09:23.620 --> 00:09:25.840
+orang lain dapat melihat branch Anda dan mulai mengembangkannya,
+
+00:09:26.060 --> 00:09:28.060
+yang secara tidak langsung mengubah branch tersebut menjadi milik besar.
+
+00:09:28.060 --> 00:09:28.940
+Ingat pemikiran itu,
+
+00:09:29.080 --> 00:09:31.320
+karena itulah alasan mengapa salah satu aturan yang akan dibahas nanti.
+
+00:09:32.020 --> 00:09:32.940
+March vs Rebase
+
+00:09:32.940 --> 00:09:34.740
+Setelah pull request disetujui,
+
+00:09:34.840 --> 00:09:37.100
+Anda harus menggabungkan pekerjaan Anda kembali ke branch utama,
+
+00:09:37.200 --> 00:09:38.460
+dan ada dua cara untuk melakukannya.
+
+00:09:38.840 --> 00:09:40.240
+Keduanya terlihat serupa di permukaan,
+
+00:09:40.420 --> 00:09:41.700
+namun berpulih laku sangat berbeda damnya.
+
+00:09:42.040 --> 00:09:44.860
+Salah memilih cara pada branch yang salah dapat menghapus pekerjaan dekat satu tim Anda.
+
+00:09:45.120 --> 00:09:47.040
+Jadi bagian berikut ini jauh lebih penting daripada kedengarannya.
+
+00:09:47.440 --> 00:09:49.460
+Merging menggabungkan branch Anda dengan branch utama,
+
+00:09:49.460 --> 00:09:51.820
+dan menambahkan komit gabungan yang mencatat kedua reak sekaligus.
+
+00:09:51.820 --> 00:09:53.780
+Tidak ada yang ditulis ulang dan tidak ada yang hilang.
+
+00:09:54.240 --> 00:09:56.980
+Anda selalu dapat melihat bahwa dua alur pekerjaan digabungkan pada tanggal itu.
+
+00:09:57.300 --> 00:10:00.600
+Cataan tersebut berguna saat Anda nantinya mencoba mencari tahu apa yang berubah dan kapan.
+
+00:10:00.940 --> 00:10:01.960
+Rebasing menempuh jalur yang berbeda.
+
+00:10:02.420 --> 00:10:03.600
+Cara ini mengambil komit Anda,
+
+00:10:03.720 --> 00:10:05.980
+memindahkannya agar tersusun rapi di atas main terbaru,
+
+00:10:06.080 --> 00:10:07.880
+serta membuat komit baru selama prosesnya.
+
+00:10:08.500 --> 00:10:10.980
+Hasilnya adalah garis lurus yang bersih tanpa komit gabungan,
+
+00:10:11.100 --> 00:10:12.640
+yang menurut banyak tim jauh lebih mudah dibaca.
+
+00:10:12.900 --> 00:10:14.780
+Komensasinya adalah bagian yang sering ngumpul dari perhatian pemula.
+
+00:10:15.400 --> 00:10:17.480
+Merging mempertahankan seluruh cerita persis seperti yang terjadi.
+
+00:10:21.820 --> 00:10:23.660
+Tataan kapan pekerjaan itu digabungkan pun hilang.
+
+00:10:24.060 --> 00:10:26.940
+Hal itu mengarah pada satu aturan dan ini adalah aturan terpenting dalam keseluruhan abis.
+
+00:10:27.220 --> 00:10:29.400
+Jangan pernah melakukan rebase pada branch yang sedang dikerjakan orang.
+
+00:10:29.860 --> 00:10:32.800
+Atlassian menyederhanakannya menjadi satu pertanyaan sebelum setiap rebase,
+
+00:10:32.900 --> 00:10:34.520
+apakah ada orang lain yang menggunakan branch ini?
+
+00:10:34.960 --> 00:10:36.360
+Jika jawabannya ya, jangan menurut ulang branch.
+
+00:10:36.860 --> 00:10:39.780
+Alasan hal ini sangat merugikan adalah karena rebase pada branch bersama
+
+00:10:39.780 --> 00:10:41.060
+akan merusak salinan milik orang lain.
+
+00:10:41.940 --> 00:10:43.500
+Rewind Anda tidak lagi cocok dengan mereka,
+
+00:10:43.500 --> 00:10:47.400
+dan paksaan untuk memperbaikinya dengan force push akan menimpa pekerjaan yang sedang mereka bangun.
+
+00:10:47.940 --> 00:10:49.180
+Jika Anda merasa ragu, cukup lakukan.
+
+00:10:49.180 --> 00:10:52.940
+Simpan rebase untuk branch pribadi Anda sebagai cara hebat untuk merapikan komit
+
+00:10:52.940 --> 00:10:56.840
+yang berantakan sebelum membuka pull request dan jangan ganggu branch bersama dan jangan kebut.
+
+00:10:57.700 --> 00:10:59.480
+Memilih strategi untuk tim kecil maupun besar.
+
+00:10:59.960 --> 00:11:02.480
+Pilihan bergantung pada beberapa pertanyaan sederhana tentang tim Anda,
+
+00:11:02.600 --> 00:11:04.320
+bukan pada model mana yang terdengar paling profesional.
+
+00:11:04.820 --> 00:11:05.920
+Berapa sering Anda melakukan pengiriman?
+
+00:11:06.360 --> 00:11:08.680
+Kedua, apakah Anda mendukung versi lama yang masih digunakan orang?
+
+00:11:09.100 --> 00:11:11.620
+Ketiga, berapa banyak orang yang mengerjakan kode yang sama secara besar?
+
+00:11:11.620 --> 00:11:14.080
+Keempat, seberapa besar kepercayaan Anda pada pengujian otomatis?
+
+00:11:14.480 --> 00:11:17.060
+Keempat, jawaban tersebut menuntun kemodel yang tepat jauh lebih cepat
+
+00:11:17.060 --> 00:11:19.380
+daripada grafik perbandingan manapun dan itulah pertanyaan yang penting.
+
+00:11:19.820 --> 00:11:23.040
+Jika Anda tim kecil atau bekerja sendiri, GitHub Flow biasanya sudah cukup.
+
+00:11:24.000 --> 00:11:26.640
+Satu branch utama dan branch fitur yang singkat akan sangat membantu
+
+00:11:26.640 --> 00:11:28.960
+dan Anda selalu bisa menambah struktur nanti jika diperlukan.
+
+00:11:29.660 --> 00:11:31.760
+Jika Anda mengirimkan pelangkat lunak berversi
+
+00:11:31.760 --> 00:11:34.040
+atau harus mendukung beberapa versi release sekaligus,
+
+00:11:34.200 --> 00:11:36.260
+branch release dan hotfix pada Git Flow sangat berguna.
+
+00:11:36.820 --> 00:11:39.520
+Itulah dunia tempat yang diciptakan dan di dunia tersebut yang masih bekerja dengan baik.
+
+00:11:39.520 --> 00:11:42.320
+Jika Anda tim yang lebih besar, yang makin secara berkelanjutan
+
+00:11:42.320 --> 00:11:44.400
+dan telah berupaya keras dalam pengujian otomatis,
+
+00:11:44.540 --> 00:11:46.640
+pengembangan berbasis terang menjaga merge Anda tetap kecil
+
+00:11:46.640 --> 00:11:47.860
+dan release Anda sering dilakukan.
+
+00:11:48.500 --> 00:11:49.940
+Itulah tempatnya kompensasi yang diminta oleh Methodet.
+
+00:11:50.340 --> 00:11:51.580
+Satu hal lagi yang patut diingat.
+
+00:11:52.100 --> 00:11:54.440
+Bahkan penulis Git Flow mengatakan tidak ada satu jawaban yang benar.
+
+00:11:55.300 --> 00:11:57.160
+Anda memilih modal yang sesuai dengan konteks Anda
+
+00:11:57.160 --> 00:11:59.240
+dan Anda mengubah pilihan tersebut saat konteks Anda berulang.
+
+00:11:59.720 --> 00:12:02.560
+Cara yang baik untuk memulai adalah memilih modal paling ringan yang berfungsi
+
+00:12:02.560 --> 00:12:04.420
+lalu tambahkan prosedur hanya saat ada yang rusak.
+
+00:12:04.920 --> 00:12:06.980
+Tim sering mengadopsi Git Flow karena terlihat mengesankan,
+
+00:12:06.980 --> 00:12:09.640
+lalu mendapati cabang tambahan lebih banyak membebani daripada menguntung.
+
+00:12:10.480 --> 00:12:11.660
+Kesalahan umum yang dilakukan pemula.
+
+00:12:12.180 --> 00:12:13.380
+Apapun strategi yang Anda pilih,
+
+00:12:13.720 --> 00:12:16.080
+ada beberapa kesalahan yang hampir menjebak semua orang di tahun pertama
+
+00:12:16.080 --> 00:12:17.460
+dan semuanya tidaklah unik.
+
+00:12:18.640 --> 00:12:21.000
+Yang terbesar adalah membiarkan cabang fitur tetap ada selama berminggu.
+
+00:12:21.520 --> 00:12:23.360
+Cabang yang sudah lama akan sangat berbeda dari main
+
+00:12:23.360 --> 00:12:24.640
+sehingga penggabungan menjadi sulit,
+
+00:12:24.760 --> 00:12:27.060
+jadi buatlah cabang singkat dan sering-seringlah menggabungkannya.
+
+00:12:27.860 --> 00:12:29.860
+Bekerja langsung di main tanpa tinjauan terasa lebih cepat
+
+00:12:29.860 --> 00:12:31.980
+hingga perubahan yang rusak mencapai pengguna Anda
+
+00:12:31.980 --> 00:12:34.520
+dan tidak ada penghalang di antara keduanya dan terkeduanya.
+
+00:12:34.520 --> 00:12:37.300
+Lalu ada cabang yang Anda tulis ulang saat orang lain masih menggunakannya.
+
+00:12:37.940 --> 00:12:40.420
+Melakukan rebase atau force push di atas pekerjaan orang lain
+
+00:12:40.420 --> 00:12:41.980
+adalah kesalahan yang merusak harirkan tim
+
+00:12:41.980 --> 00:12:43.640
+karena riwayat mereka tidak lagi cocok dengan Anda.
+
+00:12:44.040 --> 00:12:46.080
+Memasukkan perubahan yang tidak terkait ke dalam satu cabang
+
+00:12:46.080 --> 00:12:47.720
+atau satu pull request adalah kesalahan umum lain.
+
+00:12:48.200 --> 00:12:49.680
+Hal ini membuat tinjauan menjadi lambat
+
+00:12:49.680 --> 00:12:51.600
+dan jika Anda perlu membatalkan sesuatu nantinya,
+
+00:12:51.700 --> 00:12:53.640
+Anda tidak bisa memisahkan perubahan yang baik dari yang buruk.
+
+00:12:54.020 --> 00:12:55.380
+Menurut pengaturan perusahaan besar,
+
+00:12:55.500 --> 00:12:57.640
+tanpa proses pengujian dan redis mereka memang menggoda
+
+00:12:57.640 --> 00:13:00.000
+dan jarang berhasil karena model itu sendiri bukanlah keajaiban.
+
+00:13:00.560 --> 00:13:02.220
+Kalaip, praktik di sekitarnya yang menentuk.
+
+00:13:02.220 --> 00:13:03.560
+Yang terakhir lebih tidak disediakan.
+
+00:13:03.880 --> 00:13:06.300
+Jika Anda menganggap strategi sebagai preferensi pribadi
+
+00:13:06.300 --> 00:13:07.300
+dan hanya Anda yang mengikutinya,
+
+00:13:07.400 --> 00:13:08.960
+maka itu belum benar-benar disebut strategi.
+
+00:13:09.520 --> 00:13:10.260
+Hanya sekadar kebiasaan.
+
+00:13:10.620 --> 00:13:12.260
+Tiap poin ini adalah cara umum bagi tim
+
+00:13:12.260 --> 00:13:15.020
+untuk membuang waktu dan masing-masing memiliki perbaikan yang sederhana.
+
+00:13:15.760 --> 00:13:16.440
+Mana yang cocok untuk Anda.
+
+00:13:16.840 --> 00:13:17.860
+Jadi itulah gambaran keseluruh.
+
+00:13:18.080 --> 00:13:20.840
+Brand seperti yang Anda lihat adalah salinan aman dari pekerjaan Anda
+
+00:13:20.840 --> 00:13:22.960
+dan strategi percabangan adalah kesepakatan tim Anda
+
+00:13:22.960 --> 00:13:24.900
+tentang bagaimana salinan tersebut disatukan kembali.
+
+00:13:25.740 --> 00:13:28.060
+GitFlow adalah model terstruktur yang dibuat untuk perangkat lunak
+
+00:13:28.060 --> 00:13:29.020
+yang dirilis dalam versi berung.
+
+00:13:29.020 --> 00:13:32.580
+GitFlow adalah model sederhana yang dibuat untuk tim yang merilis secara berkelanjutan.
+
+00:13:33.080 --> 00:13:35.220
+Trunk-based development adalah model cepat yang cocok
+
+00:13:35.220 --> 00:13:37.740
+untuk tim yang berkomitmen pada perubahan kecil dan pengujian yang kuat.
+
+00:13:38.440 --> 00:13:39.900
+Dan saat menggabungkan kembali pekerjaan,
+
+00:13:39.980 --> 00:13:41.200
+Merge akan mempertahankan riwayat Anda
+
+00:13:41.200 --> 00:13:43.860
+sementara rebase merapikannya dan hanya boleh digunakan pada cabang pribadi.
+
+00:13:44.440 --> 00:13:47.420
+Berlanggana ke MTK 5FM untuk terus mempelajari alat dan pola pikir
+
+00:13:47.420 --> 00:13:48.520
+yang bentuk masa depan kerja.
+
+00:13:49.100 --> 00:13:50.140
+Dan itulah pertanyaan saya untuk Anda.
+
+00:13:50.440 --> 00:13:52.640
+Strategi percabangan apa yang digunakan tim Anda saat ini?
+
+00:13:52.860 --> 00:13:54.700
+Dan apakah itu keputusan nyata yang dibuat seseorang
+
+00:13:54.700 --> 00:13:56.400
+atau hanya kebiasaan yang belum dipertanyakan asal?
+
+00:13:56.400 --> 00:14:26.380
+Terima kasih.

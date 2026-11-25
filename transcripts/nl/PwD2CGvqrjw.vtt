@@ -1,0 +1,5251 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.220
+De meeste organisaties stappen over naar Microsoft 365 met één stille overtuiging.
+
+00:00:04.500 --> 00:00:06.760
+Microsoft beheert het, dus Microsoft maakt er backups van.
+
+00:00:06.920 --> 00:00:10.420
+Die overtuiging is onjuist, en wel op een manier die je pas opmerkt wanneer het er echt op aankomt.
+
+00:00:10.540 --> 00:00:14.760
+Want Microsoft houdt de service draaiende, dat is beschikbaarheid, maar beschikbaarheid is geen herstelbaarheid.
+
+00:00:14.940 --> 00:00:16.440
+Dat zijn twee verschillende beloftes.
+
+00:00:16.680 --> 00:00:18.820
+Slechts één daarvan is inbegrepen bij je abonnement.
+
+00:00:18.980 --> 00:00:21.540
+In deze aflevering kijken we naar wat de ingebouwde tools echt dekken,
+
+00:00:21.700 --> 00:00:25.520
+wat Microsoft 365 backup toevoegt, waar backups van derden in het plaatje passen,
+
+00:00:25.620 --> 00:00:28.280
+wat ransomware ermee doet en hoe je een hersteltest voordat je er een nodig hebt.
+
+00:00:28.280 --> 00:00:32.480
+En als je op deze manier wilt blijven leren, abonneer je dan op de M365 FM podcast,
+
+00:00:32.680 --> 00:00:35.000
+zodat je er nooit om twee uur s'nachts achterkomt wat je niet kunt herstellen.
+
+00:00:35.180 --> 00:00:36.660
+Maar eerst een woord van onze sponsor.
+
+00:00:37.120 --> 00:00:38.160
+Sponsor segment 1.
+
+00:00:38.400 --> 00:00:41.600
+Dit deel van de show wordt mede mogelijk gemaakt door Stella Migrator for Exchange.
+
+00:00:41.800 --> 00:00:43.700
+Het is een tool voor het verplaatsen van mailboxen.
+
+00:00:43.860 --> 00:00:46.700
+Je kunt ze verplaatsen tussen exchange-omgevingen, van de ene tenant naar de andere,
+
+00:00:46.880 --> 00:00:48.860
+of van oudere systemen naar Microsoft 365.
+
+00:00:49.360 --> 00:00:53.120
+Het is gebouwd voor werk waarbij je het je niet kunt veroorloven om onderweg e-mails te verliezen.
+
+00:00:53.260 --> 00:00:55.640
+En het helpt ook bij herstelgerelateerde werkzaamheden.
+
+00:00:55.640 --> 00:00:59.120
+Wanneer je gegevens uit de ene omgeving moet halen en in een andere moet plaatsen,
+
+00:00:59.260 --> 00:01:01.260
+wil je een tool die de mailbox-structuur voor je afhandelt.
+
+00:01:01.460 --> 00:01:02.360
+Waarom noemen we het hier?
+
+00:01:02.520 --> 00:01:05.280
+Omdat het verplaatsen van mailboxen een proces is waarbij met data wordt gewerkt.
+
+00:01:05.460 --> 00:01:08.560
+Je kopieert dingen, je wijzigt dingen en je verwijdert de bron zodra je klaar bent.
+
+00:01:08.760 --> 00:01:11.740
+En juist bij dergelijke gegevensverwerkingen ontstaan herstelproblemen,
+
+00:01:11.860 --> 00:01:14.300
+niet op normale dagen, maar op dagen dat er iets in beweging is
+
+00:01:14.300 --> 00:01:16.360
+en iemand aanneemt dat er ergens anders een kopie bestaat.
+
+00:01:16.360 --> 00:01:19.060
+Dus als je een migratie, fusie of tenantverhuizing plant,
+
+00:01:19.280 --> 00:01:21.740
+beschouw de vraag over herstel dan als onderdeel van het plan,
+
+00:01:21.900 --> 00:01:24.880
+niet als iets wat je later toevoegt, wat ons terugbrengt bij de kernvraag.
+
+00:01:24.980 --> 00:01:26.900
+Wie is er eigenlijk verantwoordelijk voor jouw gegevens?
+
+00:01:27.080 --> 00:01:29.000
+De kloof in gedeelde verantwoordelijkheid.
+
+00:01:29.220 --> 00:01:31.600
+Laten we beginnen bij wat Microsoft daadwerkelijk belooft.
+
+00:01:31.820 --> 00:01:34.620
+Lees de Microsoft Service overeenkomst en dit is wat je zult vinden.
+
+00:01:34.780 --> 00:01:37.400
+De toezegging betreft de service, uptime en beschikbaarheid.
+
+00:01:37.520 --> 00:01:39.100
+De service is actief en je kunt erbij.
+
+00:01:39.340 --> 00:01:40.220
+Dat is de afspraak.
+
+00:01:40.420 --> 00:01:43.780
+Microsoft publiceert uptime doelstellingen voor zijn services en werkt hard om die te behalen.
+
+00:01:43.780 --> 00:01:47.100
+Voor de meeste workloads ligt die doelstelling op 99,9%.
+
+00:01:47.100 --> 00:01:49.640
+Kijk nu naar wat dezelfde overeenkomst zegt over jouw gegevens.
+
+00:01:49.820 --> 00:01:51.840
+Er staat dat jij eigenaar bent en dat jij verantwoordelijk bent,
+
+00:01:52.000 --> 00:01:53.580
+en dat staat niet verstopt in de kleine lettertjes.
+
+00:01:53.740 --> 00:01:55.060
+Het staat er in duidelijke taal.
+
+00:01:55.300 --> 00:01:58.420
+Microsoft raadt aan om regelmatig backups van je content en gegevens te maken.
+
+00:01:58.660 --> 00:02:03.180
+Die aanbeveling staat gewoon in de overeenkomst waar de meeste beheerders doorheen klikken zonder deze ooit echt te lezen.
+
+00:02:03.420 --> 00:02:05.260
+Deze afspraak bestaat dus uit twee helften.
+
+00:02:05.560 --> 00:02:08.580
+Microsoft houdt het platform draaiende, jij houdt je inhoud veilig.
+
+00:02:08.780 --> 00:02:12.060
+Dat is wat gedeelde verantwoordelijkheid in de praktijk betekent en daar ontstaat de kloof,
+
+00:02:12.060 --> 00:02:13.900
+omdat de meeste mensen alleen de eerste helft horen.
+
+00:02:14.100 --> 00:02:16.140
+Ze horen cloud en stellen zich een kluis voor.
+
+00:02:16.340 --> 00:02:19.880
+Ze horen Microsoft Datacenter en denken dat iemand anders het risico draagt.
+
+00:02:20.080 --> 00:02:21.880
+Dat is een correct beeld van de infrastructuur.
+
+00:02:22.060 --> 00:02:25.320
+Het is een vreselijk beeld voor je data en dit is waarom deze verwarring zo vaak voorkomt.
+
+00:02:25.460 --> 00:02:27.620
+De infrastructuur is inderdaad zeer veerkrachtig.
+
+00:02:27.860 --> 00:02:30.320
+Microsoft beheert veel datacenters in vele regio's.
+
+00:02:30.460 --> 00:02:32.380
+Je inhoud wordt op meer dan één plek opgeslagen.
+
+00:02:32.640 --> 00:02:36.060
+Schijven gaan kapot, servers falen en hele gebouwen kunnen offline gaan zonder dat je het merkt.
+
+00:02:36.240 --> 00:02:37.400
+Dat is pas echte techniek.
+
+00:02:37.560 --> 00:02:38.140
+Het werkt.
+
+00:02:38.360 --> 00:02:40.960
+Mensen zien die veerkracht en trekken vervolgens een verkeerde conclusie.
+
+00:02:40.960 --> 00:02:44.100
+Ze denken als het hardware falen overleeft, moet het alles overleven.
+
+00:02:44.240 --> 00:02:46.800
+Maar hardware falen is slechts één manier om data te verliezen.
+
+00:02:47.000 --> 00:02:49.200
+Denk eens na over wat die replicatie daadwerkelijk doet.
+
+00:02:49.380 --> 00:02:54.340
+Het houdt je inhoud in de gaten en kopieert elke wijziging snel en betrouwbaar naar een andere locatie, de hele tijd.
+
+00:02:54.580 --> 00:02:56.240
+Stel jezelf nu een eenvoudige vraag.
+
+00:02:56.460 --> 00:02:57.960
+Wat kopieert het wanneer je een bestand verwijderd?
+
+00:02:58.540 --> 00:02:59.340
+De verwijdering.
+
+00:02:59.560 --> 00:03:02.300
+Wat kopieert het wanneer een script 10.000 documenten overschrijft?
+
+00:03:02.440 --> 00:03:03.280
+De overschrijving.
+
+00:03:03.500 --> 00:03:05.760
+Wat kopieert het wanneer ransomware een bibliotheek versleutelt?
+
+00:03:05.900 --> 00:03:07.020
+De versleutelde bestanden.
+
+00:03:07.400 --> 00:03:10.640
+Datacenter replicatie beschermt Microsoft tegen het falen van eigen hardware.
+
+00:03:10.640 --> 00:03:13.720
+Het is nooit ontworpen om jou te beschermen tegen je eigen verwijderingen.
+
+00:03:13.860 --> 00:03:16.780
+Het heeft geen idee welke wijziging een fout was en welke echtwerk.
+
+00:03:16.960 --> 00:03:18.760
+Dus hier is de nuchtere feitelijke weergave.
+
+00:03:19.200 --> 00:03:22.000
+Replicatie kopieert fouten net zo snel als het goede data kopieert.
+
+00:03:22.180 --> 00:03:24.100
+Dat is geen gebrek, dat is het ontwerp.
+
+00:03:24.440 --> 00:03:26.560
+Replicatie bestaat om elke kopie identiek te houden.
+
+00:03:26.720 --> 00:03:30.800
+Als één kopie fout is, zijn ze dat binnen enkele ogenblikken allemaal, en dat is het structurele probleem.
+
+00:03:30.960 --> 00:03:32.980
+Je data is hoog beschikbaar en goed gerepliceerd,
+
+00:03:33.180 --> 00:03:36.940
+maar beschikbaarheid en replicatie gaan er beide vanuit dat de data correct is op het moment van kopiëren.
+
+00:03:37.140 --> 00:03:39.740
+Geen van beide biedt een manier om terug te gaan naar een moment voor de schade.
+
+00:03:39.740 --> 00:03:42.300
+Dit is meestal het punt waarop een leidinggevende tegen gas geeft.
+
+00:03:42.520 --> 00:03:45.200
+Microsoft kan onze tenant toch zeker herstellen als er iets misgaat,
+
+00:03:45.300 --> 00:03:47.820
+en het eerlijke antwoord is, niet op de manier die jij je voorstelt.
+
+00:03:48.080 --> 00:03:49.540
+Microsoft kan de dienst herstellen.
+
+00:03:49.760 --> 00:03:52.140
+Het kan een uitgevallen datacenter weer online brengen.
+
+00:03:52.260 --> 00:03:55.660
+Het houdt geen privé-backup van je tenant bij die het op verzoek kan terugzetten.
+
+00:03:55.860 --> 00:03:58.820
+Als jouw beheerder een site verwijderd of een aanvaller een mailbox wist,
+
+00:03:58.960 --> 00:04:02.040
+is het standpunt van Microsoft dat je de dienst gebruikt zoals ontworpen,
+
+00:04:02.240 --> 00:04:03.740
+en dat is de kloof in gedeelde verantwoordelijkheid.
+
+00:04:04.500 --> 00:04:07.640
+Microsoft is eigenaar van het platform, jij bent eigenaar van de inhoud,
+
+00:04:07.640 --> 00:04:10.520
+en in de ruimte daartussen vindt het meeste echte dataverlies plaats.
+
+00:04:10.700 --> 00:04:14.600
+Niet door storingen, maar door mensen, accounts, automatisering en wijzigingen
+
+00:04:14.600 --> 00:04:17.440
+die werden toegestaan omdat het systeem deed wat hem werd opgedragen.
+
+00:04:17.680 --> 00:04:20.040
+Nu heeft Microsoft je niet met lege handen achtergelaten.
+
+00:04:20.260 --> 00:04:23.100
+Er zijn ingebouwde hulpmiddelen ontwikkeld om je een uitweg te bieden.
+
+00:04:23.400 --> 00:04:25.800
+Prullenbakken, bewaartermijnen, versiegeschiedenis.
+
+00:04:26.000 --> 00:04:29.600
+Elk daarvan dekt een specifiek soort fout gedurende een specifieke tijd.
+
+00:04:29.840 --> 00:04:32.820
+De echte vraag is dus niet of Microsoft je bescherming biedt,
+
+00:04:32.880 --> 00:04:36.720
+maar wat die hulpmiddelen precies doen en, minstens zo belangrijk, wat ze niet doen.
+
+00:04:36.720 --> 00:04:40.300
+Beschikbaarheid, duurzaamheid, herstelbaarheid, drie verschillende woorden.
+
+00:04:40.540 --> 00:04:43.480
+Voordat we naar een hulpmiddel kijken, moeten we deze drie begrippen ophelderen.
+
+00:04:43.620 --> 00:04:45.700
+Ze klinken als hetzelfde, dat zijn ze niet.
+
+00:04:46.100 --> 00:04:48.080
+Beschikbaarheid betekent dat je nu bij je gegevens kunt.
+
+00:04:48.260 --> 00:04:51.860
+Je opent Outlook, de mail laat, je opent een documentbibliotheek en de bestanden staan er.
+
+00:04:52.000 --> 00:04:54.140
+Als de dienst online is, werkt de beschikbaarheid.
+
+00:04:54.440 --> 00:04:56.860
+Duurzaamheid betekent dat je gegevens niet per ongeluk verdwijnen.
+
+00:04:57.060 --> 00:05:00.380
+Schijven gaan kapot, servers falen, maar de opgeslagen kopie blijft hoe dan ook bestaan.
+
+00:05:00.740 --> 00:05:03.340
+Duurzaamheid gaat erover dat gegevens langer meegaan dan de hardware.
+
+00:05:03.640 --> 00:05:07.500
+En herstelbaarheid betekent dat je kunt terugkeren naar een bekende goede staat nadat er iets misgaat.
+
+00:05:07.620 --> 00:05:11.120
+Een specifiek moment, een specifieke versie, zoals het was voor de schade.
+
+00:05:11.360 --> 00:05:12.760
+Let op wat elk woord belooft.
+
+00:05:12.960 --> 00:05:17.080
+Het eerste belooft toegang, het tweede belooft overleving, het derde belooft een weg terug.
+
+00:05:17.300 --> 00:05:19.040
+Laten we eens kijken waar Microsoft staat.
+
+00:05:19.260 --> 00:05:21.320
+Op het gebied van beschikbaarheid is Microsoft sterk.
+
+00:05:21.520 --> 00:05:24.260
+De uptime doelen zijn openbaar en het platform haalt die meestal.
+
+00:05:24.440 --> 00:05:26.460
+Ook op het gebied van duurzaamheid zijn ze sterk.
+
+00:05:26.460 --> 00:05:31.500
+Je inhoud staat op meerdere plekken en de kans dat Microsoft deze verliest door een hardwarefout is zeer klein.
+
+00:05:31.640 --> 00:05:37.680
+Maar wat betreft herstelbaarheid op tenantniveau wordt het dun, omdat herstelbaarheid afhangt van of je een kopie hebt van voor het probleem.
+
+00:05:37.800 --> 00:05:39.520
+En een tenant bewaart er standaard geen.
+
+00:05:39.700 --> 00:05:41.720
+Wat het wel bewaart, zijn korte tijdsvensters.
+
+00:05:41.920 --> 00:05:46.340
+Een prullenbak die leegloopt, een bewaarklok die afloopt, versiegeschiedenis die stopt bij een vast aantal.
+
+00:05:46.540 --> 00:05:50.380
+Die helpen, we zullen ze allemaal doornemen, maar het zijn vangnetten voor kleine, recente fouten.
+
+00:05:50.520 --> 00:05:53.700
+Het is geen manier om een volledige omgeving terug te zetten naar afgelopen dinsdag.
+
+00:05:53.700 --> 00:05:55.860
+En hier ontstaat de verwarring in de bestuurskamer.
+
+00:05:56.020 --> 00:05:59.500
+Een leidinggevende vraagt, zijn onze gegevens veilig in Microsoft 365?
+
+00:05:59.800 --> 00:06:01.980
+De beheerder hoort dat als een vraag over duurzaamheid.
+
+00:06:02.160 --> 00:06:06.900
+Het eerlijke antwoord is ja, het is zeer veilig tegen hardwareverlies, maar de leidinggevende bedoelde iets groters.
+
+00:06:07.120 --> 00:06:09.740
+Die bedoelde, als er iets misgaat, kunnen we het dan terugkrijgen?
+
+00:06:09.920 --> 00:06:13.120
+Dat is een vraag over herstelbaarheid en datzelfde, ja, geldt daar niet.
+
+00:06:13.300 --> 00:06:15.200
+Eén woord wordt gehoord, drie worden verondersteld.
+
+00:06:15.440 --> 00:06:16.960
+Niemand heeft gelogen in dat gesprek.
+
+00:06:17.080 --> 00:06:18.940
+De beheerder beantwoordde de vraag die hij hoorde.
+
+00:06:18.940 --> 00:06:22.240
+De leidinggevende vertrouwde op een antwoord op een vraag die hij nooit stelde.
+
+00:06:22.380 --> 00:06:27.520
+En het gat tussen die twee staat in je risicoregister, ongeschreven, totdat een incident er een naam aangeeft.
+
+00:06:27.700 --> 00:06:29.000
+Hoe maak je dit dan concreet?
+
+00:06:29.260 --> 00:06:30.180
+Denk aan een spiegel.
+
+00:06:30.380 --> 00:06:34.060
+Een spiegel toont je direct en continu een perfecte kopie van wat ervoor staat.
+
+00:06:34.300 --> 00:06:37.400
+Elke beweging, elke verandering wordt gereflecteerd zodra het gebeurt.
+
+00:06:37.560 --> 00:06:38.980
+Krijg nu een vlek op je overhemd.
+
+00:06:39.080 --> 00:06:40.120
+De spiegel toont de vlek.
+
+00:06:40.280 --> 00:06:42.200
+Hij bewaart geen beeld van het overhemd van vanmorgen.
+
+00:06:42.360 --> 00:06:43.380
+Hij heeft geen geheugen.
+
+00:06:43.580 --> 00:06:44.940
+Hij reflecteert alleen het heden.
+
+00:06:45.180 --> 00:06:47.920
+Dat is wat replicatie en hoge beschikbaarheid voor je data doen.
+
+00:06:47.920 --> 00:06:48.880
+Ze spiegelen het.
+
+00:06:49.000 --> 00:06:51.100
+Elke wijziging verschijnt direct in elke kopie.
+
+00:06:51.240 --> 00:06:52.180
+Een backup is anders.
+
+00:06:52.400 --> 00:06:56.220
+Een backup is een foto genomen op een specifiek moment, ergens anders opgeslagen en bewaard zoals het was.
+
+00:06:56.400 --> 00:06:58.400
+Wanneer er iets misgaat, kijk je niet in de spiegel.
+
+00:06:58.560 --> 00:06:59.680
+Je pakt de foto erbij.
+
+00:06:59.860 --> 00:07:01.060
+Een spiegel is geen backup.
+
+00:07:01.300 --> 00:07:05.700
+En het merendeel van wat men bescherming noemt in Microsoft 365 is spiegelgedrag.
+
+00:07:05.840 --> 00:07:09.400
+Real time, altijd actueel, altijd getrouw, inclusief de fouten.
+
+00:07:09.560 --> 00:07:15.780
+Dus wanneer Microsoft je iets geeft dat op een foto lijkt, hoe klein ook, is het belangrijk wat die foto dekt en hoe lang deze blijft.
+
+00:07:15.780 --> 00:07:18.440
+De eerste die de meeste mensen tegenkomen is de simpelste.
+
+00:07:18.600 --> 00:07:20.620
+Je verwijdert een bestand en het gaat ergens heen.
+
+00:07:20.740 --> 00:07:21.300
+De prullenbak.
+
+00:07:21.480 --> 00:07:23.180
+Hoe de prullenbakken daadwerkelijk werken.
+
+00:07:23.420 --> 00:07:25.900
+SharePoint en OneDrive verwerken verwijdering in twee fasen.
+
+00:07:26.060 --> 00:07:27.160
+Je verwijdert een bestand.
+
+00:07:27.340 --> 00:07:28.200
+Het verdwijnt niet.
+
+00:07:28.380 --> 00:07:32.000
+In plaats daarvan verplaatst het naar de eerste prullenbak, die toebehoort aan de gebruiker die het verwijderde.
+
+00:07:32.160 --> 00:07:33.240
+Elke gebruiker heeft er een.
+
+00:07:33.400 --> 00:07:34.160
+Ze openen deze.
+
+00:07:34.380 --> 00:07:36.780
+Ze zien hun eigen verwijderde items en ze herstellen deze met één klik.
+
+00:07:36.940 --> 00:07:38.520
+Dat is de versie die de meeste mensen kennen.
+
+00:07:38.700 --> 00:07:39.240
+Nu de klok.
+
+00:07:39.240 --> 00:07:43.680
+Items blijven 93 dagen in de prullenbak, maar die 93 dagen is het totaal over beide fasen.
+
+00:07:43.840 --> 00:07:47.300
+Het is geen 93 dagen in de eerste prullenbak en dan nog eens 93 ergens anders.
+
+00:07:47.500 --> 00:07:50.680
+Het is één gedeelde periode en die begint op de dag dat het item wordt verwijderd.
+
+00:07:50.820 --> 00:07:51.960
+Dus wat is de tweede fase?
+
+00:07:52.220 --> 00:07:55.780
+Wanneer een gebruiker de prullenbak leegt of er iets uit verwijderd, verdwijnt het item niet.
+
+00:07:55.980 --> 00:07:57.980
+Het verplaatst naar de prullenbak van de tweede fase.
+
+00:07:58.220 --> 00:07:59.560
+Die hoort bij de siteverzameling.
+
+00:07:59.820 --> 00:08:01.860
+Alleen een beheerder van de siteverzameling kan deze zien.
+
+00:08:02.080 --> 00:08:04.060
+Gewone gebruikers kunnen dat niet en de klok tikt door.
+
+00:08:04.060 --> 00:08:08.620
+Als je op dag 1 een bestand verwijderde en je prullenbak op dag 10 leegde, heeft het item nog 83 dagen in de tweede fase.
+
+00:08:09.240 --> 00:08:09.760
+Uitgereset.
+
+00:08:09.900 --> 00:08:10.880
+Het begint niet opnieuw.
+
+00:08:11.060 --> 00:08:12.340
+Dit is waar mensen in de val lopen.
+
+00:08:12.520 --> 00:08:15.560
+Een gebruiker zegt, ik heb dat maanden geleden verwijderd, maar ik denk dat ik het nodig heb.
+
+00:08:15.660 --> 00:08:17.820
+De beheerder controleert de prullenbak van het eerste niveau.
+
+00:08:18.100 --> 00:08:18.420
+Leeg.
+
+00:08:18.600 --> 00:08:23.380
+De beheerder denkt dat het weg is, maar het kan in het tweede niveau staan, alleen zichtbaar voor iemand met de juiste rol.
+
+00:08:23.580 --> 00:08:25.860
+Een prullenbak controleren is niet beide controleren.
+
+00:08:25.980 --> 00:08:28.720
+Er zijn dus twee plekken om te zoeken en twee verschillende mensen die kunnen kijken.
+
+00:08:28.960 --> 00:08:30.340
+Wat gebeurt er nu op dag 94?
+
+00:08:30.660 --> 00:08:32.300
+Het item wordt definitief verwijderd.
+
+00:08:32.300 --> 00:08:34.940
+Het verlaat de prullenbak van het tweede niveau en gaat nergens anders heen.
+
+00:08:35.060 --> 00:08:36.300
+Er is geen derde prullenbak.
+
+00:08:36.300 --> 00:08:39.200
+Er is geen optie om Microsoft te vragen naar content die is verlopen.
+
+00:08:39.420 --> 00:08:42.920
+Zodra het venster sluit, is het standaardpad om dat bestand terug te krijgen ook gesloten.
+
+00:08:43.100 --> 00:08:44.500
+En merk op hoe geruisloos dat gaat.
+
+00:08:44.660 --> 00:08:46.440
+Er wordt de dag ervoor geen waarschuwingsmail verstuurd.
+
+00:08:46.600 --> 00:08:48.420
+Er is geen rapport dat aangeeft wat er bijna verloopt.
+
+00:08:48.560 --> 00:08:49.660
+Het item verdwijnt gewoon.
+
+00:08:49.860 --> 00:08:52.460
+Als niemand het in die 93 dagen nodig had, merkt niemand het.
+
+00:08:52.600 --> 00:08:55.320
+Als iemand het op dag 95 nodig had, ontdekken ze dat op die dag.
+
+00:08:55.480 --> 00:08:57.700
+Dat is een hard feit voor alles wat zelden wordt geopend.
+
+00:08:57.940 --> 00:09:01.680
+Denk aan de map met jaarverslagen, het contractenarchief, de bestanden die je eens per jaar opent.
+
+00:09:01.840 --> 00:09:04.640
+Een verwijdering in februari wordt misschien pas ontdekt bij de adit in juni.
+
+00:09:04.640 --> 00:09:06.500
+Tegen die tijd is het venster allang gesloten.
+
+00:09:06.680 --> 00:09:08.560
+Nu de andere vraag, wie kan deze prullenbakken legen?
+
+00:09:08.740 --> 00:09:10.760
+Gebruikers kunnen hun eigen prullenbak van het eerste niveau legen.
+
+00:09:10.980 --> 00:09:11.660
+Dat is verwacht.
+
+00:09:11.860 --> 00:09:13.080
+Zo werkt de functie nu eenmaal.
+
+00:09:13.280 --> 00:09:16.160
+En siteverzamelingbeheerders kunnen het tweede niveau legen, ook dat is verwacht.
+
+00:09:16.300 --> 00:09:18.620
+Maar kijk eens wat dat betekent vanuit het perspectief van een aanvaller.
+
+00:09:18.820 --> 00:09:23.080
+Als iemand een gebruikersaccount overneemt, krijgen ze niet alleen de bestanden van die gebruiker, maar ook de prullenbak.
+
+00:09:23.240 --> 00:09:28.040
+De aanvaller kan content verwijderen en vervolgens het eerste niveau legen, waardoor alles naar het tweede niveau wordt verplaatst.
+
+00:09:28.200 --> 00:09:30.560
+Dat geeft de aanvaller een voorsprong, maar het is niet het einde.
+
+00:09:30.560 --> 00:09:33.280
+Het echte probleem is een gecompromitteerd beheerdersaccount.
+
+00:09:33.460 --> 00:09:37.700
+Een beheerder kan het tweede niveau legen, wat betekent dat een aanvaller met die rol de inhoud van een site kan wissen,
+
+00:09:37.880 --> 00:09:41.100
+beide prullenbakken kan legen en het enige kan verwijderen waar de gebruiker op rekende.
+
+00:09:41.340 --> 00:09:43.120
+Daar is niets mis mee, het is geen bak.
+
+00:09:43.280 --> 00:09:45.580
+Het systeem doet wat een geautoriseerd account vraagt.
+
+00:09:45.760 --> 00:09:47.820
+De prullenbak beschermt tegen eerlijke fouten.
+
+00:09:48.000 --> 00:09:50.660
+Het is nooit gebouwd om iemand tegen te houden die de sleutels in handen heeft.
+
+00:09:50.820 --> 00:09:53.720
+En dat is het patroon om in gedachten te houden terwijl we elke native tool bespreken.
+
+00:09:53.920 --> 00:09:56.140
+Ze gaan ervan uit dat de persoon die ze gebruikt aan jouw kant staat.
+
+00:09:56.340 --> 00:09:57.840
+Dat is de SharePoint en OneDrive.
+
+00:09:57.840 --> 00:10:00.200
+Twee niveaus, één klok, 93 dagen.
+
+00:10:00.400 --> 00:10:05.840
+Exchange heeft zijn eigen versie hiervan, hetzelfde idee, maar een andere klok, andere mappen en een veel kortere standaardduur.
+
+00:10:06.000 --> 00:10:09.040
+Exchange online, herstelbaar items en de bijbehorende limieten.
+
+00:10:09.240 --> 00:10:12.540
+Exchange gebruikt geen prullenbak, het gebruikt mappen die op elkaar stapelen.
+
+00:10:12.700 --> 00:10:16.160
+Een gebruiker verwijdert een e-mail die in de map verwijderde items terechtkomt.
+
+00:10:16.240 --> 00:10:17.560
+Dat is degene die iedereen kent.
+
+00:10:17.760 --> 00:10:20.460
+Men kan deze openen, het bericht vinden en terug naar het postvak inslepen.
+
+00:10:20.680 --> 00:10:21.440
+Niets bijzonders.
+
+00:10:21.700 --> 00:10:26.500
+Vervolgens leegt de gebruiker de map verwijderde items, of Outlook doet dit bij het afsluiten, afhankelijk van de instellingen.
+
+00:10:26.500 --> 00:10:29.440
+Het bericht is uit het zicht verdwenen, maar niet uit het postvak verwijderd.
+
+00:10:29.520 --> 00:10:32.160
+Het verplaatst naar een verborgen map genaamd Herstelbaar Items.
+
+00:10:32.440 --> 00:10:34.540
+Gebruikers zien deze niet in de normale mappenstructuur.
+
+00:10:34.740 --> 00:10:38.600
+Ze bereiken deze via een menu in Outlook met de optie Verwijderde items van server herstellen.
+
+00:10:38.820 --> 00:10:40.640
+De meeste mensen hebben hier nog nooit op geklikt.
+
+00:10:40.880 --> 00:10:42.280
+Velen weten niet eens dat het bestaat.
+
+00:10:42.500 --> 00:10:44.340
+Binnen Herstelbaar Items bevinden zich submappen.
+
+00:10:44.560 --> 00:10:45.740
+Drie daarvan zijn hier van belang.
+
+00:10:45.940 --> 00:10:48.340
+De eerste is Verwijderingen, waar gelegde items op hun beurt wachten.
+
+00:10:48.540 --> 00:10:51.840
+De tweede is Opschoonacties, waar items naartoe gaan na definitieve verwijdering.
+
+00:10:51.840 --> 00:10:56.560
+En de derde is Versies, die kopieën bevat van items die zijn bewerkt terwijl bepaalde bewaarplichten gelden.
+
+00:10:56.720 --> 00:11:00.160
+Elke map heeft een andere taak en alleen de eerste is zichtbaar voor de gebruiker.
+
+00:11:00.360 --> 00:11:05.840
+Nu de tijdklok, standaard worden items in Herstelbaar Items 14 dagen bewaard, niet 93, maar 14.
+
+00:11:06.060 --> 00:11:09.740
+Twee weken gerekend vanaf de dag dat het item uit Verwijderde items werd verwijderd.
+
+00:11:09.840 --> 00:11:11.780
+Een beheerder kan dit verhogen naar 30 dagen.
+
+00:11:12.060 --> 00:11:17.600
+Dat is het maximum voor deze instelling via een enkel PowerShell-commando per postvak of via een tenant breed beleid.
+
+00:11:17.600 --> 00:11:20.780
+Het is goedkoop, snel en toch doen verrassend veel tenants dit nooit.
+
+00:11:21.020 --> 00:11:22.520
+Vergelijk de twee tijdklokken eens.
+
+00:11:22.740 --> 00:11:24.900
+SharePoint en OneDrive bieden je 93 dagen.
+
+00:11:25.100 --> 00:11:27.520
+Exchange bied je er 14, tenzij iemand dat heeft aangepast.
+
+00:11:27.720 --> 00:11:31.400
+Dat is een heel andere veiligheidsmarge voor een werklast waar mensen constant dingen verliezen.
+
+00:11:31.560 --> 00:11:33.640
+En dit is wat er gebeurt aan het einde van die periode.
+
+00:11:33.880 --> 00:11:37.200
+De Managed Folder Assistant, een achtergrondproces, scant het postvak.
+
+00:11:37.320 --> 00:11:40.180
+Alles wat de bewaartermijn heeft overschreden, wordt definitief verwijderd.
+
+00:11:40.300 --> 00:11:41.960
+Geen waarschuwing en geen tweede prullenbak.
+
+00:11:42.140 --> 00:11:44.840
+Er is een functie die hierbij van belang is en die een onhandige naam heeft.
+
+00:11:44.980 --> 00:11:46.280
+Herstel van afzonderlijke items.
+
+00:11:46.280 --> 00:11:47.500
+Wat het doet is simpel.
+
+00:11:47.700 --> 00:11:52.020
+Het voorkomt dat het systeem items uit herstelbaar items verwijderd voordat de bewaartermijn is verstreken.
+
+00:11:52.260 --> 00:11:56.380
+Zonder deze functie kan een gebruiker het herstelvenster openen, items selecteren en ze direct wissen.
+
+00:11:56.600 --> 00:11:59.180
+Ze gaan dan direct naar de map opschoonacties en zijn vervolgens verdwenen.
+
+00:11:59.340 --> 00:12:02.560
+Met herstel van afzonderlijke items ingeschakeld, wordt die kortere weg afgesloten.
+
+00:12:02.760 --> 00:12:07.180
+Het verzoek van de gebruiker om te wissen wordt geaccepteerd, maar het item blijft in de map totdat de bewaartijd is verstreken.
+
+00:12:07.400 --> 00:12:08.300
+Waarom is dat belangrijk?
+
+00:12:08.620 --> 00:12:14.520
+Omdat het beschermt tegen de snelle versie van een fout en tegen de snelle versie van een aanval, volgt hier het deel dat beheerders verrast.
+
+00:12:14.520 --> 00:12:19.060
+Het herstel van individuele items staat standaard aan voor nieuwe postvakken in Exchange Online.
+
+00:12:19.280 --> 00:12:21.360
+Maar het is niet gegarandeerd voor elk postvak.
+
+00:12:21.500 --> 00:12:25.980
+Oudere postvakken, gemiegeerde postvakken en postvakken aangemaakt via bepaalde tools hebben het mogelijk niet.
+
+00:12:26.120 --> 00:12:29.780
+Als je e-mail hebt verplaatst vanaf een on-premises exchange of een ander systeem, kun je er niet van uitgaan.
+
+00:12:29.920 --> 00:12:30.900
+Je moet het controleren.
+
+00:12:31.060 --> 00:12:33.080
+Een commando toont je de instelling voor elk postvak.
+
+00:12:33.240 --> 00:12:34.920
+De meeste tenants hebben het nog nooit uitgevoerd.
+
+00:12:35.140 --> 00:12:36.480
+Stel je nu een harde verwijdering voor.
+
+00:12:36.660 --> 00:12:38.220
+Een aanvaller krijgt toegang tot een account.
+
+00:12:38.460 --> 00:12:39.500
+Ze hoeven niet slim te zijn.
+
+00:12:39.500 --> 00:12:43.280
+Ze openen het postvak, selecteren alles, verwijderen het en leegen vervolgens de verwijderde items.
+
+00:12:43.480 --> 00:12:45.880
+Daarna gaan ze naar het herstelvenster en wissen wat erover blijft.
+
+00:12:46.020 --> 00:12:48.480
+Als herstel van individuele items uitstaat, slaagt het wissen.
+
+00:12:48.680 --> 00:12:51.240
+De gegevens zijn weg en het venster van 14 dagen deed er nooit toe.
+
+00:12:51.420 --> 00:12:53.220
+Als het aanstaat, wordt het wissen geblokkeerd.
+
+00:12:53.400 --> 00:12:56.540
+De items blijven in de herstelbare items staan in afwachting van de tijd.
+
+00:12:56.760 --> 00:12:58.180
+Maar een script verandert het beeld.
+
+00:12:58.400 --> 00:13:02.280
+Een script met beheerdersrechten of een aanvaller met de juiste rol kan meer dan een gebruiker.
+
+00:13:02.500 --> 00:13:06.900
+Ze kunnen de bewaarinstelling zelf wijzigen, op nul zetten, herstel van individuele items uitzetten,
+
+00:13:06.900 --> 00:13:08.660
+dan de verwijdering uitvoeren en daarna wissen.
+
+00:13:08.840 --> 00:13:10.100
+Elke stap is toegestaan.
+
+00:13:10.260 --> 00:13:15.240
+Elke stap wordt gelogd als je de logboeken in de gaten houdt, maar het systeem stopt niets omdat het account de rechten heeft.
+
+00:13:15.440 --> 00:13:17.900
+De mappen beschermen tegen een vermoeide gebruiker op een vrijdagmiddag.
+
+00:13:18.600 --> 00:13:23.080
+Ze bieden geen bescherming als de persoon die verwijdert dezelfde rechten heeft als de persoon die de regels opstelde.
+
+00:13:23.220 --> 00:13:25.120
+En dat is nog voordat we de grotere vraag stellen.
+
+00:13:25.340 --> 00:13:27.500
+14 dagen aan verwijderde items klinkt als een backup.
+
+00:13:27.660 --> 00:13:30.460
+Een manier om e-mail terug te krijgen, een plek om te zoeken als er iets mist.
+
+00:13:30.620 --> 00:13:31.680
+Het klinkt als een backup.
+
+00:13:31.980 --> 00:13:33.540
+Het is voor iets anders gebouwd.
+
+00:13:33.880 --> 00:13:34.960
+Retentie is geen backup.
+
+00:13:34.960 --> 00:13:39.400
+Retentiebeleid is gebouwd om een juridische vraag te beantwoorden, niet een operationele.
+
+00:13:39.560 --> 00:13:45.580
+Een compliance team schrijft een regel, bewaar elk contract 7 jaar, bewaar financiële e-mail 10 jaar, verwijder chat na 2 jaar.
+
+00:13:45.760 --> 00:13:52.300
+Het beleid draait op de achtergrond en de tenant houdt inhoud vast zodat het bedrijf kan bewijzen wat bestond en wanneer, als een toezichthouder of rechter er ooit om vraagt.
+
+00:13:52.500 --> 00:13:53.180
+Dat is governance.
+
+00:13:53.580 --> 00:13:55.380
+Het is een goede taak en de tools doen het goed.
+
+00:13:55.580 --> 00:13:57.120
+Maar kijk naar wat de taak werkelijk is.
+
+00:13:57.320 --> 00:13:59.260
+Het gaat om het behouden van inhoud met een reden.
+
+00:13:59.460 --> 00:14:01.880
+Het gaat er niet om een omgeving terug te brengen naar hoe het was.
+
+00:14:01.880 --> 00:14:05.800
+Niemand schreef een retentiebeleid met het idee, zo herstellen we ons na een slechte dinsdag.
+
+00:14:05.940 --> 00:14:08.080
+En toch is dat hoe de meeste beheerders erover praten.
+
+00:14:08.240 --> 00:14:10.400
+We hebben retentie ingeschakeld, dus we zitten goed.
+
+00:14:10.640 --> 00:14:11.780
+Waarvoor precies gedekt?
+
+00:14:11.980 --> 00:14:12.840
+Neem SharePoint.
+
+00:14:13.100 --> 00:14:21.180
+Wanneer een retentiebeleid op een site van toepassing is en iemand een bestand bewerkt of verwijderd, kopieert SharePoint stilletjes het origineel naar een verborgen plek genaamd de bibliotheek voor behoud.
+
+00:14:21.560 --> 00:14:22.600
+Gebruikers zien die nooit.
+
+00:14:22.840 --> 00:14:26.240
+Alleen siteverzamelingbeheerders kunnen erbij en alleen via de siteinstellingen.
+
+00:14:26.380 --> 00:14:27.420
+Klinkt als een vangnet.
+
+00:14:27.660 --> 00:14:28.660
+Gedeeltelijk is het dat ook.
+
+00:14:28.820 --> 00:14:32.320
+De bibliotheek legt inhoud vast die is gewijzigd of verwijderd terwijl het beleid actief was.
+
+00:14:32.480 --> 00:14:34.460
+Het bewaart de versie zoals die op dat moment was.
+
+00:14:34.660 --> 00:14:38.160
+Als je moet bewijzen wat een document zei voordat iemand het bewerkte, is die kopie er.
+
+00:14:38.320 --> 00:14:40.900
+Als iemand een bestand verwijdert, belandt daar ook een kopie van.
+
+00:14:41.100 --> 00:14:42.640
+Kijk nu eens naar wat het niet vastlegt.
+
+00:14:42.840 --> 00:14:44.400
+Het legt de site niet als geheel vast.
+
+00:14:44.600 --> 00:14:47.280
+Het bevat losse onderdelen van inhoud, bestand voor bestand.
+
+00:14:47.280 --> 00:14:48.640
+Er zit geen structuur bij.
+
+00:14:48.880 --> 00:14:53.000
+Machtigingen, pagina-layouts, navigatie, lijstweergave en de koppelingen tussen items staan er niet in.
+
+00:14:53.140 --> 00:14:58.380
+Een inhoud die nooit is bewerkt of verwijderd, staat er misschien helemaal niet in, omdat de bibliotheek alleen vult wanneer er iets verandert.
+
+00:14:58.520 --> 00:15:00.040
+Het groeit ook onopgemerkt.
+
+00:15:00.220 --> 00:15:09.180
+Elke bewerking voegt een kopie toe, dus de opslag telt mee voor je kwotum en niemand merkt het totdat een site geen ruimte meer heeft en de bestanden er met duizenden staan zonder hulpmiddel om ze weer samen te voegen.
+
+00:15:09.400 --> 00:15:11.400
+Herstellen vanuit de bibliotheek is handwerk.
+
+00:15:11.560 --> 00:15:15.840
+Een beheerder opent het, vindt het juiste bestand, kopieert het eruit en zet het handmatig terug, bestand voor bestand.
+
+00:15:15.840 --> 00:15:17.380
+Dus hier is het structurele punt.
+
+00:15:17.620 --> 00:15:19.180
+Retentie bewaart kopieën van inhoud.
+
+00:15:19.360 --> 00:15:21.860
+Het bewaart geen consistente status op een specifiek tijdstip.
+
+00:15:22.020 --> 00:15:24.180
+Dat is niet hetzelfde en het verschil is makkelijk te missen.
+
+00:15:24.320 --> 00:15:25.660
+Een kopie is een enkel item.
+
+00:15:25.900 --> 00:15:28.760
+Een status is alles tegelijk zoals het op één moment was.
+
+00:15:28.960 --> 00:15:33.520
+De bestanden, hun mappen, hun machtigingen en hun metagegevens die allemaal op elkaar zijn afgestemd.
+
+00:15:33.700 --> 00:15:40.360
+Stel je een documentbibliotheek voor op dinsdagochtend 400 bestanden georganiseerd in mappen met specifieke personen die toegang hebben tot specifieke mappen.
+
+00:15:40.360 --> 00:15:45.920
+Tegen woensdagmiddag heeft een script de helft van de mappen hernoemd en heeft een synchronisatiefout een derde van de bestanden overschreven.
+
+00:15:46.080 --> 00:15:49.320
+Iemand heeft ook de machtigingen gewijzigd om een ongerelateerd probleem op te lossen.
+
+00:15:49.480 --> 00:15:51.500
+Vraag retentie nu om dinsdag terug te krijgen.
+
+00:15:51.800 --> 00:15:52.440
+Dat kan niet.
+
+00:15:52.600 --> 00:15:54.820
+Het kan je oudere kopieën van sommige bestanden geven.
+
+00:15:55.020 --> 00:15:56.780
+Het kan je niet vertellen in welke map ze stonden.
+
+00:15:57.000 --> 00:15:58.620
+Het kan de machtigingen niet opnieuw opbouwen.
+
+00:15:58.820 --> 00:16:02.320
+Het kan je niet vertellen welke versies bij elkaar horen, omdat het nooit heeft vastgelegd dat ze dat deden.
+
+00:16:02.460 --> 00:16:06.500
+Je kunt elk bestand bewaren en nog steeds niet in staat zijn om de site te herstellen zoals die op dinsdagochtend was.
+
+00:16:06.500 --> 00:16:08.620
+Elk bestand overleefde het, bestaat dus niet.
+
+00:16:08.760 --> 00:16:12.080
+En dat gat komt pas laat aan het licht, omdat compliancecontroles het nooit testen.
+
+00:16:12.200 --> 00:16:13.840
+Men vraagt, bewaar je deze inhoud?
+
+00:16:14.040 --> 00:16:16.540
+Het antwoord is ja en de controle slaagt.
+
+00:16:17.100 --> 00:16:19.580
+Niemand vraagt, kun je alles binnen twee uur terugzetten?
+
+00:16:20.040 --> 00:16:22.220
+Die vraag wordt alleen gesteld tijdens een incident.
+
+00:16:22.560 --> 00:16:25.480
+Er zijn dus twee verschillende vragen en voor elk is een eigen tool nodig.
+
+00:16:25.740 --> 00:16:27.660
+Retentie beantwoord, kunnen we bewijzen dat het bestond?
+
+00:16:27.880 --> 00:16:29.480
+Backup beantwoord, kunnen we het terugzetten?
+
+00:16:29.660 --> 00:16:31.000
+Dat is het model om vast te houden.
+
+00:16:31.180 --> 00:16:33.060
+Het een is bewijslast, het ander is herstel.
+
+00:16:33.060 --> 00:16:37.680
+Een bedrijf kan uitblinken in het eerste en niets hebben voor het tweede en de administratie ziet er evengoed prima uit.
+
+00:16:37.820 --> 00:16:40.740
+Nu is er één retentiefunctie waar mensen vaker op leunen dan op enige andere.
+
+00:16:40.940 --> 00:16:43.680
+Het is degene die het meest serieus voelt omdat advocaten hem gebruiken.
+
+00:16:43.920 --> 00:16:47.360
+Litigation hold, litigation hold, e-discovery en het probleem van de verkeerde tool.
+
+00:16:47.540 --> 00:16:49.080
+Een litigation hold heeft één taak.
+
+00:16:49.180 --> 00:16:51.420
+Het vertelt exchange om te stoppen met het verwijderen van zaken.
+
+00:16:51.600 --> 00:16:54.220
+Een beheerder plaatst de mailbox op hold en alles daarin wordt bewaard.
+
+00:16:54.380 --> 00:16:58.380
+Verzonde mail, ontvangen mail, verwijderde mail, zelfs items die een gebruiker bewust heeft gewist.
+
+00:16:58.740 --> 00:17:01.800
+Bewerkingen worden ook bewaard als eerdere kopieën van hetzelfde bericht.
+
+00:17:01.800 --> 00:17:05.300
+De hold kan voor een vast aantal dagen gelden of zonder einddatum.
+
+00:17:05.480 --> 00:17:09.980
+De meeste juridische teams kiezen de tweede optie omdat niemand een verlopen hold aan een rechter wil uitleggen.
+
+00:17:10.120 --> 00:17:12.280
+Dus, hoelang, dat heeft een simpel antwoord.
+
+00:17:12.420 --> 00:17:13.600
+Totdat iemand het verwijdert.
+
+00:17:13.760 --> 00:17:14.980
+En dat is het eerste probleem.
+
+00:17:15.160 --> 00:17:16.060
+Niemand verwijdert het.
+
+00:17:16.200 --> 00:17:18.200
+Er wordt een hold geplaatst voor een zaak in 2021.
+
+00:17:18.600 --> 00:17:20.420
+De zaak wordt in 2022 gesloten.
+
+00:17:20.640 --> 00:17:25.340
+De hold blijft omdat niemand IT vertelde dat het weg kon en niemand bij IT de persoon wil zijn die het per ongeluk verwijderde.
+
+00:17:25.560 --> 00:17:28.640
+Jaren later bevat die mailbox nog steeds elk item dat er ooit in zat.
+
+00:17:28.860 --> 00:17:29.920
+Denk nu eens aan de opslag.
+
+00:17:29.920 --> 00:17:34.380
+Items in de hold staan in de map, recoverable items, dezelfde verborgen map die we zojuist bespraken.
+
+00:17:34.560 --> 00:17:35.640
+Die map heeft een quotum.
+
+00:17:35.900 --> 00:17:40.260
+Standaard is dat 100 gigabyte en het kan naar 110 worden verhoogd zodra de mailbox op hold staat.
+
+00:17:40.500 --> 00:17:44.500
+Wanneer een mailbox met een hold blijft groeien, raakt die map vol en als hij vol is, gaat er van alles mis.
+
+00:17:44.500 --> 00:17:51.020
+Gebruikers krijgen fouten, mail wordt niet meer verwijderd, de opschoonactie voor oude items kan niet draaien en de mailbox gedraagt zich niet meer zoals voor de hold.
+
+00:17:51.160 --> 00:17:52.820
+Dit alles gebeurt geruisloos.
+
+00:17:53.020 --> 00:17:54.760
+De hold werkt precies zoals ontworpen.
+
+00:17:54.960 --> 00:17:58.020
+De bijwerkingen komen maanden later en lijken op een mailbox probleem.
+
+00:17:58.220 --> 00:18:01.000
+Niemand legt de link met de juridische beslissing die ze veroorzaakte.
+
+00:18:01.220 --> 00:18:06.140
+Nu naar het echte probleem met de verkeerde tool, omdat een litigation hold alles bewaart, gaan mensen het als een vangnet zien.
+
+00:18:06.140 --> 00:18:08.400
+Als het in de wacht staat, kunnen we het terugkrijgen.
+
+00:18:08.540 --> 00:18:12.820
+Technisch gezien ja, je kunt de data vinden, maar vinden en herstellen zijn totaal verschillende taken.
+
+00:18:13.020 --> 00:18:15.680
+Om content uit een wachtstand te halen, gebruik je e-discovery.
+
+00:18:15.880 --> 00:18:20.160
+Je opent een zaak, definieert een zoekopdracht, voert deze uit, beoordeelt de resultaten en exporteert deze.
+
+00:18:20.360 --> 00:18:23.080
+Dat proces is bedoeld voor advocaten die bewijsmateriaal moeten verzamelen.
+
+00:18:23.240 --> 00:18:25.960
+Het levert items op. Het plaatst ze niet terug waar ze thuishoren.
+
+00:18:26.200 --> 00:18:28.440
+Stel je voor dat een beheerder dit gebruikt om te herstellen na een incident.
+
+00:18:28.720 --> 00:18:30.380
+De mailboxen van een afdeling zijn gewist.
+
+00:18:30.540 --> 00:18:33.940
+De beheerder voert een zoekopdracht uit, wacht tot deze klaar is en exporteert de resultaten als bestanden.
+
+00:18:33.940 --> 00:18:36.700
+Daarna moeten ze die content op de een of andere manier terug in de actieve mailboxen krijgen.
+
+00:18:36.880 --> 00:18:39.640
+De mappenstructuur is gedeeltelijk. De status van berichten is gedeeltelijk.
+
+00:18:39.860 --> 00:18:42.260
+Sommige items komen aan anderen niet en niets komt automatisch op de juiste plek terecht.
+
+00:18:42.440 --> 00:18:44.100
+Het is traag, handmatig en onvolledig.
+
+00:18:44.240 --> 00:18:46.080
+Je zult horen dat dit wordt omschreven als een backup hebben.
+
+00:18:46.300 --> 00:18:49.340
+Dat is het niet. Het is een verzameltoel die gevraagd wordt het werk van een hersteltoel te doen.
+
+00:18:49.460 --> 00:18:51.260
+En er is een menselijk probleem dat het nog erger maakt.
+
+00:18:51.440 --> 00:18:52.420
+Wie beheert deze tools?
+
+00:18:52.620 --> 00:18:55.020
+In de meeste organisaties is dat niet het infrastructuurteam.
+
+00:18:55.160 --> 00:18:59.400
+De juridische afdeling, Compliance of a Records Manager, beheert de litigation hold en e-discovery.
+
+00:18:59.500 --> 00:19:03.680
+Zij hebben de rechten. Zij kennen de zaaknummers. Zij bepalen wat er bewaard wordt.
+
+00:19:03.880 --> 00:19:07.760
+De mensen die de tenant dagelijks beheren, kunnen vaak niet eens de e-discovery console openen.
+
+00:19:07.900 --> 00:19:11.460
+De rol is niet aan hen toegewezen en dat zou ook niet moeten, want functiescheiding is belangrijk.
+
+00:19:11.740 --> 00:19:13.300
+Maar stel je voor dat het een rotnacht is.
+
+00:19:13.480 --> 00:19:18.220
+De tenant wordt aangevallen en de benodigde content is alleen bereikbaar via een tool van iemand die niet aanwezig is.
+
+00:19:18.420 --> 00:19:21.940
+Misschien slapen ze. Misschien weten ze niet hoe ze onder druk een zoekopdracht moeten uitvoeren.
+
+00:19:22.100 --> 00:19:25.160
+En wat ze ook exporteren, het moet nog steeds door een mens met de hand worden hersteld.
+
+00:19:25.380 --> 00:19:27.400
+Dus, de juridische tools beschermen de content.
+
+00:19:27.400 --> 00:19:29.560
+Ze beschermen niet je vermogen om snel te herstellen.
+
+00:19:29.780 --> 00:19:33.540
+Dat laat de ingebouwde functie over waar de meeste mensen op vertrouwen bij een ramp op bestandsniveau.
+
+00:19:33.700 --> 00:19:37.700
+Het zit in elke documentbibliotheek en de meeste beheerders hebben nooit gecontroleerd hoe dit is ingesteld.
+
+00:19:38.080 --> 00:19:41.300
+Versiebeheer. De versiebeheer en herstelfuncties van SharePoint en OneDrive.
+
+00:19:41.500 --> 00:19:44.000
+Elke documentbibliotheek bewaart oude versies van bestanden.
+
+00:19:44.240 --> 00:19:45.420
+Dat is versiegeschiedenis.
+
+00:19:45.600 --> 00:19:48.920
+Het is het eerste waar de meeste beheerders naar wijzen wanneer iemand een document over schrijft.
+
+00:19:49.100 --> 00:19:50.480
+Voor een enkel bestand werkt het goed.
+
+00:19:50.480 --> 00:19:54.540
+Je klikt met de rechtermuisknop, opent de versiegeschiedenis, kiest de kopie van dinsdag, herstelt deze, 10 seconden.
+
+00:19:54.660 --> 00:19:56.000
+Maar kijk eens naar de beperkingen.
+
+00:19:56.300 --> 00:19:58.000
+Versiebeheer is een telling, geen tijdlijn.
+
+00:19:58.200 --> 00:20:01.520
+Nieuwe bibliotheken in SharePoint Online hebben standaard 500 hoofdversies.
+
+00:20:01.760 --> 00:20:04.500
+Wanneer de 500 eerste versie arriveert, vervalt de oudste.
+
+00:20:04.660 --> 00:20:06.760
+En oudste heeft niets met kalendertijd te maken.
+
+00:20:06.980 --> 00:20:11.260
+Een bestand dat de hele dag wordt bewerkt door een app met intensief automatisch opslaan, kan die versie snel verbruiken.
+
+00:20:11.440 --> 00:20:14.200
+Een bestand dat ongewijzigd blijft, behoudt zijn geschiedenis voor altijd.
+
+00:20:14.420 --> 00:20:17.000
+Dus, de vraag, kunnen we de versie van afgelopen dinsdag terugkrijgen?
+
+00:20:17.000 --> 00:20:20.280
+Heeft geen vast antwoord. Het hangt af van hoe vaak dat bestand werd bewerkt.
+
+00:20:20.460 --> 00:20:21.640
+Voeg daar nu de kosten aan toe.
+
+00:20:21.820 --> 00:20:23.560
+Elke versie neemt opslagruimte in beslag.
+
+00:20:23.840 --> 00:20:26.740
+Microsoft slaat voor veel officebestanden alleen de gewijzigde delen op.
+
+00:20:26.880 --> 00:20:29.920
+Wat helpt, maar andere bestandstypen slaan elke keer een volledige kopie op.
+
+00:20:30.360 --> 00:20:34.320
+Vermenigvuldig dat met 500 versies voor duizenden bestanden en je opslagquoten, merk dat.
+
+00:20:34.520 --> 00:20:35.620
+Dus beheerders snoeien.
+
+00:20:35.820 --> 00:20:41.340
+Ze stellen de limiet in op 50 of 10, of ze schakelen automatisch snoeien in, wat oudere versies verwijdert op basis van leeftijd.
+
+00:20:41.540 --> 00:20:42.980
+Elke keuze bespaart ruimte.
+
+00:20:43.200 --> 00:20:44.720
+Elke keuze verkort de weg terug.
+
+00:20:44.720 --> 00:20:48.880
+Je ruilt herstelmogelijkheden voor opslagkosten, en de meeste mensen maken die ruil zonder het ooit vast te leggen.
+
+00:20:49.000 --> 00:20:50.940
+Dan is er nog de tweede functie waar mensen naar grijpen.
+
+00:20:51.120 --> 00:20:53.040
+Het heeft een goede naam en het verricht echt werk.
+
+00:20:53.220 --> 00:20:54.260
+Je OneDrive herstellen.
+
+00:20:54.480 --> 00:20:58.160
+Hiermee kun je een hele OneDrive terugzetten naar een eerder punt, niet één bestand, maar alles.
+
+00:20:58.360 --> 00:21:02.160
+Je kiest een datum, bekijkt de activiteitsgrafiek en Microsoft maakt de wijzigingen na dat moment ongedaan.
+
+00:21:02.320 --> 00:21:04.360
+Het venster is een doorlopende periode van 30 dagen.
+
+00:21:04.580 --> 00:21:07.160
+Het herstel van vandaag kan teruggaan tot een dag in de afgelopen maand.
+
+00:21:07.380 --> 00:21:09.380
+Dat vanmorgen kan één dag verder vooruit reiken.
+
+00:21:09.380 --> 00:21:12.820
+Niets van voor dat bereik is beschikbaar en er moeten een paar zaken in orde zijn.
+
+00:21:13.000 --> 00:21:15.800
+De gebruiker of een beheerder die namens hen handelt, moet dit doen.
+
+00:21:15.980 --> 00:21:18.420
+Het werkt per OneDrive, dus één account tegelijk.
+
+00:21:18.600 --> 00:21:21.140
+Het herstel zelf raakt alleen de inhoud in die OneDrive.
+
+00:21:21.340 --> 00:21:24.420
+Het raakt niet wat in een SharePoint site, een mailbox of een team staat.
+
+00:21:24.640 --> 00:21:25.860
+Wat kan het nu niet repareren?
+
+00:21:26.040 --> 00:21:27.760
+Het kan niet verder teruggaan dan 30 dagen.
+
+00:21:28.000 --> 00:21:32.100
+Als de schade op dag 31 gebeurde of je merkte het pas op dag 31, is de optie gesloten.
+
+00:21:32.320 --> 00:21:36.600
+Het kan een verwijderde OneDrive niet opnieuw opbouwen, want dat is een ander proces met een eigen tijdlijn,
+
+00:21:36.600 --> 00:21:38.780
+en het kan niet aangeven welke wijzigingen fout waren.
+
+00:21:38.920 --> 00:21:43.420
+Je kiest een tijdstip en hoopt dat je het juiste moment hebt gekozen, want het herstel werkt als een terugspoelfunctie.
+
+00:21:43.580 --> 00:21:45.640
+Alles na het gekozen punt wordt ongedaan gemaakt.
+
+00:21:45.840 --> 00:21:47.260
+Goede bewerkingen inbegrepen.
+
+00:21:47.460 --> 00:21:53.020
+Een gebruiker die na de schade normaal doorwerkte, verliest die dagen aan legitiem werk, tenzij ze eerst kopieën opslaan.
+
+00:21:53.240 --> 00:21:54.920
+SharePoint heeft een eigen versie hiervan.
+
+00:21:55.140 --> 00:21:58.220
+Het heet Deze bibliotheek herstellen en staat in de bibliotheekinstellingen.
+
+00:21:58.420 --> 00:21:59.140
+Hetzelfde idee.
+
+00:21:59.380 --> 00:22:01.880
+Kies een datum, bekijk de wijzigingen en zet de bibliotheek terug.
+
+00:22:02.040 --> 00:22:04.540
+De beperkingen zijn vergelijkbaar met enkele extra voorwaarden.
+
+00:22:04.540 --> 00:22:06.900
+Het werkt per bibliotheek, niet voor een hele site.
+
+00:22:07.060 --> 00:22:10.800
+Het gebruikt hetzelfde venster van 30 dagen en moet worden geactiveerd door iemand met de juiste rechten.
+
+00:22:10.960 --> 00:22:13.660
+Er moet dus iemand wakker en bereikbaar zijn die zeker weet wat er hersteld moet worden.
+
+00:22:13.800 --> 00:22:16.860
+Een rollback van een bibliotheek omvat alleen de inhoud van die bibliotheek.
+
+00:22:17.420 --> 00:22:21.540
+Sitepagina's, lijsten, machtigingswijzigingen en instellingen elders op de site veranderen niet mee,
+
+00:22:21.780 --> 00:22:23.540
+wat ons brengt bij het onderliggende probleem.
+
+00:22:23.780 --> 00:22:26.480
+Deze functies helpen alleen als je de schade op tijd opmerkt.
+
+00:22:26.660 --> 00:22:28.400
+De meeste organisaties doen dat niet.
+
+00:22:28.580 --> 00:22:31.660
+Een gebruiker verwijdert een map en niemand opent deze zes weken lang.
+
+00:22:31.660 --> 00:22:36.120
+Een synchronisatiefout overschrijft bestanden en pas bij de kwartaalcontrole kijkt er iemand naar.
+
+00:22:36.320 --> 00:22:41.440
+Ransomware versleutelt inhoud langzaam en het eerste teken is een gebruiker die vraagt waarom hun spreadsheet niet opent.
+
+00:22:41.660 --> 00:22:42.880
+Niets geeft je een waarschuwing.
+
+00:22:43.120 --> 00:22:45.560
+Geen enkel dashboard geeft aan dat herstel nodig is.
+
+00:22:46.000 --> 00:22:50.800
+Iemand moet het probleem zien, melden en koppelen aan de juiste tool binnen het juiste tijdsbestek.
+
+00:22:51.380 --> 00:22:53.380
+Elke stap duurt dagen, soms weken.
+
+00:22:53.620 --> 00:22:56.760
+Tegen die tijd is de klok van 30 dagen al grotendeels verstreken.
+
+00:22:56.760 --> 00:23:01.680
+De ingebouwde tools voor bestanden bieden dus een uitweg, maar alleen bij snelle ontdekkingen, kleine omvang en recente schade.
+
+00:23:01.840 --> 00:23:03.620
+En dan hebben we het nog steeds alleen over bestanden.
+
+00:23:03.800 --> 00:23:06.460
+Het volgende probleem is groter omdat het geen enkele workload is.
+
+00:23:06.640 --> 00:23:10.120
+Het zijn er verschillende, samengevoegd onder één naam die mensen dagelijks gebruiken.
+
+00:23:10.300 --> 00:23:11.220
+Teams, Teams.
+
+00:23:11.460 --> 00:23:13.620
+Het herstelprobleem dat niemand in kaart heeft gebracht.
+
+00:23:13.880 --> 00:23:15.180
+Vraag iemand waar hun team leeft.
+
+00:23:15.400 --> 00:23:16.920
+De meesten zullen zeggen, in Teams.
+
+00:23:17.140 --> 00:23:18.320
+Dat antwoord is het probleem.
+
+00:23:18.480 --> 00:23:19.640
+Het team is niet één ding.
+
+00:23:19.840 --> 00:23:21.160
+Het is een naam voor een bundel.
+
+00:23:21.160 --> 00:23:27.880
+Wanneer iemand op Team maken klikt, bouwt Microsoft op de achtergrond verschillende losse onderdelen en verbindt deze met één identiteit.
+
+00:23:28.080 --> 00:23:30.620
+De app op je scherm is slechts het venster naar al die onderdelen.
+
+00:23:30.860 --> 00:23:31.800
+Begin bij het fundament.
+
+00:23:32.200 --> 00:23:35.060
+Elk team is gebaseerd op een Microsoft 365 groep.
+
+00:23:35.140 --> 00:23:37.720
+Die groep bevat de ledenlijst, de eigenaren en het e-mailadres.
+
+00:23:37.920 --> 00:23:40.140
+Het is de identiteit waar de andere onderdelen aan hangen.
+
+00:23:40.300 --> 00:23:41.560
+Dan is er een SharePoint site.
+
+00:23:41.780 --> 00:23:43.720
+Dat is waar het tabblad Bestanden naar verwijst.
+
+00:23:43.720 --> 00:23:48.400
+Elk bestand dat in een kanaal wordt gedeeld, komt daar in een documentbibliotheek terecht, in een map vernoemd naar het kanaal.
+
+00:23:48.620 --> 00:23:50.140
+Daarnaast is er een Exchange Mailbox.
+
+00:23:50.140 --> 00:23:53.260
+De groep krijgt er één in deze bevatte agenda in kopieën van sommige gesprekken.
+
+00:23:53.400 --> 00:23:55.220
+Het is makkelijk om te vergeten dat deze bestaat.
+
+00:23:55.420 --> 00:23:58.400
+Dan Planner als iemand een plan toevoegt en Wannot als iemand een notitieblok toevoegt.
+
+00:23:58.560 --> 00:24:00.500
+Planner bewaart zijn gegevens in zijn eigen service.
+
+00:24:00.760 --> 00:24:03.880
+Het notitieblok wordt opgeslagen als een bestand binnen die SharePoint site.
+
+00:24:04.060 --> 00:24:06.120
+En dan de chats die nergens op die plekken staan.
+
+00:24:06.620 --> 00:24:10.200
+Kanaalberichten worden opgeslagen in een verborgen mailbox gedeelte gekoppeld aan de groep.
+
+00:24:10.200 --> 00:24:13.800
+Een op een groep schats worden opgeslagen in de mailboxen van de deelnemers.
+
+00:24:14.000 --> 00:24:16.820
+Verschillende containers, verschillende regels, verschillende klokken.
+
+00:24:16.820 --> 00:24:22.000
+Dus één team betekent een groep, een site, een mailbox, een plan, een notitieblok en twee soorten berichtopslag.
+
+00:24:22.200 --> 00:24:25.260
+Zes of zeven locaties en elk heeft zijn eigen herstelregels.
+
+00:24:25.480 --> 00:24:27.400
+Denk nu eens na over wat dat betekent bij een incident.
+
+00:24:27.660 --> 00:24:29.140
+Iemand zegt, ons team is kapot.
+
+00:24:29.360 --> 00:24:30.080
+Welk onderdeel?
+
+00:24:30.220 --> 00:24:32.400
+De bestanden, de berichten, het lidmaatschap, het plan.
+
+00:24:32.600 --> 00:24:35.280
+Elk heeft een andere tool, een ander venster en een andere eigenaar.
+
+00:24:35.440 --> 00:24:36.600
+Je kunt het team niet herstellen.
+
+00:24:36.840 --> 00:24:40.540
+Je kunt de onderdelen alleen één voor één herstellen en hopen dat ze aansluiten als je klaar bent.
+
+00:24:40.540 --> 00:24:43.880
+Laten we kijken naar het enige herstelpad dat Microsoft biedt voor het geheel.
+
+00:24:44.080 --> 00:24:47.620
+Wanneer een eigenaar een team verwijdert, gaat de groep naar een status van zacht verwijderd.
+
+00:24:47.720 --> 00:24:49.820
+Het is verwijderd uit het zicht, maar het is niet weg.
+
+00:24:50.060 --> 00:24:54.400
+Beheerders kunnen het 30 dagen lang herstellen vanuit het entra-beheercentrum of met PowerShell.
+
+00:24:54.580 --> 00:24:56.240
+30 dagen, geen 93.
+
+00:24:56.720 --> 00:24:59.320
+En de klok hoort bij de groep, niet bij de inhoud erin.
+
+00:24:59.560 --> 00:25:03.020
+Wanneer de groep terugkomt, komen de daaraan gekoppelde onderdelen meestal ook terug.
+
+00:25:03.180 --> 00:25:06.460
+De site verschijnt opnieuw, de mailbox wordt gekoppeld, het lidmaatschap keert terug.
+
+00:25:06.460 --> 00:25:10.780
+Voor een schone, snelle verwijdering van een heel team is dat nuttig, maar het dekt alleen dat ene scenario.
+
+00:25:11.080 --> 00:25:12.460
+Het helpt niet als iemand een kanaal verwijdert.
+
+00:25:13.180 --> 00:25:16.420
+Kanalen hebben hun eigen korte venster en wat je terugkrijgt is gedeeltelijk.
+
+00:25:16.580 --> 00:25:22.160
+Het helpt niet als een gebruiker bestanden uit de documentbibliotheek verwijdert, want die volgen de SharePoint-regels die we al bespraken.
+
+00:25:22.320 --> 00:25:28.460
+En het helpt niet als het team nog bestaat, maar de inhoud erin is gewijzigd, overschreven of geleegd, wat vaker voorkomt.
+
+00:25:28.600 --> 00:25:33.200
+Nu, het deel dat bijna iedereen verrast, chat- en kanaalberichten worden door Microsoft bewaard.
+
+00:25:33.200 --> 00:25:38.200
+Als je een bewaarbeleid instelt voor Teams, gaan er op de achtergrond kopieën naar verborgen mappen in die mailboxen.
+
+00:25:38.600 --> 00:25:41.200
+Bewaarbeleid kan ze voor een bepaalde tijd vasthouden en ze daarna verwijderen.
+
+00:25:42.000 --> 00:25:45.020
+Compliance tools kunnen ze doorzoeken en e-discovery kan ze exporteren.
+
+00:25:45.160 --> 00:25:46.680
+Dus het BEWA-arpaat bestaat.
+
+00:25:46.860 --> 00:25:48.440
+Maar kijk naar de richting van het verkeer.
+
+00:25:48.640 --> 00:25:53.440
+Alles in dat pad verplaatst inhoudt uit Teams naar een zoekresultaat, naar een exportbestand, naar een beoordelingsstoel.
+
+00:25:53.580 --> 00:25:55.600
+Er is geen standaardknop die het terugverplaatst.
+
+00:25:55.820 --> 00:25:57.940
+Denk na over wat het herstellen van een bericht zou betekenen.
+
+00:25:58.080 --> 00:25:59.720
+Een bericht hoort bij een discussie-thread.
+
+00:25:59.720 --> 00:26:01.220
+De thread hoort bij een kanaal.
+
+00:26:01.340 --> 00:26:05.240
+Het heeft een afzender, tijdstempel, reacties, antwoorden, bewerkingen en bijlagen.
+
+00:26:05.440 --> 00:26:10.200
+Plaats een bericht terug in een live kanaal en het moet op de juiste plek komen, in de juiste volgorde en met de juiste auteur.
+
+00:26:10.400 --> 00:26:12.440
+Het product is niet gebouwd om dat te accepteren.
+
+00:26:12.600 --> 00:26:15.060
+Je kunt achteraf geen geschiedenis in een gesprek invoegen.
+
+00:26:15.240 --> 00:26:18.400
+In het beste geval kun je mensen een export geven en zeggen, hier is wat er is gezegd.
+
+00:26:18.560 --> 00:26:19.340
+Dat is een archief.
+
+00:26:19.520 --> 00:26:20.440
+Het is geen herstel.
+
+00:26:20.640 --> 00:26:23.060
+Dus wanneer iemand vraagt, kunnen we de chats van ons team terugkrijgen?
+
+00:26:23.180 --> 00:26:25.720
+Het eerlijke antwoord is, we kunnen laten zien wat ze hebben gezegd.
+
+00:26:25.800 --> 00:26:27.720
+We kunnen ze niet terugplaatsen zoals ze waren.
+
+00:26:27.720 --> 00:26:30.520
+De meeste mensen stellen die vraag pas als de chats al weg zijn.
+
+00:26:30.680 --> 00:26:32.060
+En dat wijst op iets groters.
+
+00:26:32.240 --> 00:26:35.400
+Een gebruiker die per ongeluk iets verwijdert, is slechts één manier waarop het misgaat.
+
+00:26:35.520 --> 00:26:37.680
+Er zijn er nog diverse anderen en die zien er anders uit.
+
+00:26:37.900 --> 00:26:38.840
+Laten we ze dus benoemen.
+
+00:26:39.040 --> 00:26:40.500
+De scenario's voor reëel verlies.
+
+00:26:40.700 --> 00:26:43.780
+Het meeste dataverlies in Microsoft 365 ziet er niet uit als een aanval.
+
+00:26:43.940 --> 00:26:45.380
+Het ziet eruit als een normale dag.
+
+00:26:45.580 --> 00:26:46.460
+Begin met de eenvoudigste.
+
+00:26:46.540 --> 00:26:48.100
+Per ongeluk verwijderen en overschrijven.
+
+00:26:48.240 --> 00:26:50.020
+Een gebruiker verwijdert de map om op te ruimen.
+
+00:26:50.200 --> 00:26:52.280
+Een ander slaat een oude kopie op over de nieuwe heen.
+
+00:26:52.280 --> 00:26:56.720
+Iemand plakt de verkeerde spreadsheet in de verkeerde bibliotheek en vervangt de cijfers van het voorrige kwartaal.
+
+00:26:56.840 --> 00:26:57.820
+Er is niets gehackt.
+
+00:26:57.920 --> 00:27:01.360
+Het systeem deed precies wat er gevraagd werd en de persoon die het vroeg, zat er simpelweg naast.
+
+00:27:01.500 --> 00:27:05.060
+Dit is veruit het meest voorkomende verlies en de eigen tools die we hebben behandeld, zijn hiervoor gebouwd.
+
+00:27:05.220 --> 00:27:06.200
+Dat is het goede nieuws.
+
+00:27:06.400 --> 00:27:09.200
+Het addertje onder het gras is dat je het binnen het tijdsbestek moet opmerken.
+
+00:27:09.380 --> 00:27:10.500
+Verander nu de intentie.
+
+00:27:10.860 --> 00:27:12.400
+Kwaadwillende insideractiviteit.
+
+00:27:12.400 --> 00:27:15.940
+Iemand met legitieme toegang besluit te pakken of te vernietigen wat binnen bereik ligt.
+
+00:27:16.140 --> 00:27:17.720
+Misschien vertrekken ze op slechte voet.
+
+00:27:17.900 --> 00:27:19.500
+Misschien zijn ze boos over een beoordeling.
+
+00:27:19.740 --> 00:27:20.800
+Ze hoeven niet in te breken.
+
+00:27:21.040 --> 00:27:26.360
+Ze hebben al de juiste rechten, dus elke verwijdering lijkt op routinewerk en de lags tonen een geautoriseerde gebruiker die geautoriseerde dingen doet.
+
+00:27:26.540 --> 00:27:28.820
+Dan is er nog een gecompromitteerd admin of service account.
+
+00:27:29.080 --> 00:27:30.980
+Dit is het scenario dat het hele plaatje verandert.
+
+00:27:31.180 --> 00:27:34.280
+We zagen eerder dat een gestolen gebruikersaccount zijn eigen prullenbakken kan legen.
+
+00:27:34.480 --> 00:27:35.920
+Een admin account kan veel meer.
+
+00:27:36.120 --> 00:27:40.820
+Het kan de prullenbakken van het tweede niveau legen, bewaarinstellingen verkorten, blokkades verwijderen en hele sites wissen.
+
+00:27:42.400 --> 00:27:43.940
+Het is een schiller omdat niemand er toezicht op houdt.
+
+00:27:44.020 --> 00:27:48.560
+Het heeft uitgebreide rechten, een wachtwoord dat nooit verandert en geen mens zou vreemd gedrag opmerken.
+
+00:27:48.760 --> 00:27:52.640
+Wanneer dat account valt, vallen de vangnetten mee omdat ze allemaal achter dezelfde permissies zitten.
+
+00:27:52.820 --> 00:27:55.260
+Het volgende scenario bevat helemaal geen kwaadwillende actor.
+
+00:27:55.560 --> 00:27:56.760
+Problemen met de sync client.
+
+00:27:56.980 --> 00:27:58.980
+De OneDrive synchronisatie client doet één ding goed.
+
+00:27:59.140 --> 00:28:01.020
+Hij zorgt dat de cloud en de laptop op één lijn zitten.
+
+00:28:01.240 --> 00:28:02.700
+Dat akkoord is precies het probleem.
+
+00:28:02.840 --> 00:28:08.320
+Als een laptop een beschadigde schijf heeft, een slechte restore of een halvoltooide verplaatsing, vraagt de client niet wie er gelijk heeft.
+
+00:28:08.480 --> 00:28:09.740
+Hij synchroniseert gewoon.
+
+00:28:09.740 --> 00:28:16.040
+Een beschadigd bestand op één apparaat kan een goede kopie in de cloud overschrijven, waarna de cloud die corruptie naar elk ander apparaat push.
+
+00:28:16.180 --> 00:28:18.320
+Eén slechte laptop wordt ieder slechte bestand.
+
+00:28:18.560 --> 00:28:21.140
+Dan zijn er nog apps van derden- en automatiseringsfouten.
+
+00:28:21.360 --> 00:28:24.900
+Denk aan de Power Automate Flow die bestanden verplaatst en een logische fout bevat,
+
+00:28:25.080 --> 00:28:27.280
+of het migratiescript dat op de verkeerde site draait,
+
+00:28:27.460 --> 00:28:32.460
+of de app die iemand twee jaar geleden goedkeurde en nu toestemming heeft om elke bibliotheek in de tenant te lezen en schrijven.
+
+00:28:32.660 --> 00:28:34.560
+Deze tools handelen snel en op grote schaal.
+
+00:28:34.740 --> 00:28:36.720
+Een persoon verwijdert per ongeluk tien bestanden.
+
+00:28:36.720 --> 00:28:39.620
+Een flow met een foutief filter verwijdert er 10.000 voor de launch.
+
+00:28:39.760 --> 00:28:42.800
+En hij blijft draaien totdat iemand het opmerkt, wat vaak pas dagen later is.
+
+00:28:42.980 --> 00:28:45.260
+Nu degene die zorgvuldige organisaties overvalt.
+
+00:28:45.440 --> 00:28:48.480
+Het verwijderen van accounts van vertrokken medewerkers en de valkuil van licentieverwijdering.
+
+00:28:48.660 --> 00:28:49.640
+Zo gaat dat in zijn werk.
+
+00:28:49.800 --> 00:28:51.800
+Een werknemer vertrekt, ouwer stuurt de melding.
+
+00:28:51.980 --> 00:28:56.180
+Het account wordt uitgeschakeld, de licentie verwijderd en uiteindelijk wordt de gebruiker gewist.
+
+00:28:56.400 --> 00:28:58.800
+Dat is standaard afboarding en het voelt verantwoord,
+
+00:28:58.980 --> 00:29:02.120
+maar een licentie houdt de mailbox en OneDrive in een bruikbare staat.
+
+00:29:02.340 --> 00:29:04.660
+Haal de licentie weg en de klok begint te tikken.
+
+00:29:04.660 --> 00:29:08.100
+De OneDrive van een verwijderde gebruiker wordt bewaard voor een retentieperiode,
+
+00:29:08.320 --> 00:29:11.300
+standaard 30 dagen, en beheerders kunnen dit verlengen tot 10 jaar.
+
+00:29:11.460 --> 00:29:16.160
+Een mailbox zonder licentie en zonder bewaarinstelling wordt na een kortere spijtperiode ook verwijderd.
+
+00:29:16.280 --> 00:29:18.760
+Dus iemands hele werk, jaren aan e-mail en bestanden,
+
+00:29:19.020 --> 00:29:21.440
+kan op een aftelklok staan zodra een ticket wordt gesloten.
+
+00:29:21.640 --> 00:29:23.780
+En degene die het afsloot, deed niets verkeerd.
+
+00:29:24.000 --> 00:29:25.320
+Diegene volgde de checklist.
+
+00:29:25.520 --> 00:29:27.980
+De checklist vroeg alleen nooit, heeft iemand dit nog nodig?
+
+00:29:28.240 --> 00:29:32.160
+Maanden later vraagt een manager om de bestanden van een voormalig werknemer vanwege een klant geschil.
+
+00:29:32.320 --> 00:29:34.260
+De OneDrive is weg, de mailbox is weg.
+
+00:29:34.260 --> 00:29:36.760
+Het retentievenster is weken geleden stilletjes verstreken.
+
+00:29:36.880 --> 00:29:38.520
+Kijk naar wat deze scenario's gemeen hebben.
+
+00:29:38.720 --> 00:29:40.360
+Geen enkel incident vereiste een inbreuk.
+
+00:29:40.520 --> 00:29:43.360
+Elk ontstond door een normale actie met normale rechten en normale snelheid.
+
+00:29:43.580 --> 00:29:45.140
+Daarom zijn ze zo moeilijk om voor te plannen.
+
+00:29:45.300 --> 00:29:47.460
+Je kunt ze niet blokkeren zonder het werk zelf te blokkeren.
+
+00:29:47.620 --> 00:29:50.160
+Maar één scenario neemt al deze elementen en voert het tempo op.
+
+00:29:50.260 --> 00:29:53.700
+Het is doelbewust, het is snel en het is degene waardoor eindelijk een budget wordt goedgekeurd.
+
+00:29:54.160 --> 00:29:54.520
+Ransomware.
+
+00:29:54.880 --> 00:29:56.740
+Ransomware in Microsoft 365.
+
+00:29:57.320 --> 00:29:58.260
+Wat gebeurt er eigenlijk?
+
+00:29:58.500 --> 00:30:01.040
+De meeste mensen zien ransomware als een probleem met bestanden.
+
+00:30:01.040 --> 00:30:03.800
+Een map verandert in Wartaal en er verschijnt een briefje op het scherm.
+
+00:30:03.940 --> 00:30:07.180
+Maar in Microsoft 365 is dat de laatste stap, niet de eerste.
+
+00:30:07.400 --> 00:30:08.920
+De aanval begint bij identiteit.
+
+00:30:09.140 --> 00:30:12.360
+Iemand verkrijgt een wachtwoord via phishing, koopt er een uitendatalek of misleidt een gebruiker
+
+00:30:12.360 --> 00:30:14.380
+om een aanmeldverzoek goed te keuren dat ze niet zelf zijn gestart.
+
+00:30:14.540 --> 00:30:16.740
+Ze hebben geen virus nodig, ze hebben een geldige sessie nodig.
+
+00:30:16.960 --> 00:30:19.500
+Zodra ze die hebben, zien ze eruit als een normale werknemer die normaal werk verricht.
+
+00:30:19.660 --> 00:30:21.420
+Vanaf dat moment bewegen ze zich geruisloos voort.
+
+00:30:21.580 --> 00:30:23.380
+Ze lezen e-mails om te leren wie belangrijk is.
+
+00:30:23.540 --> 00:30:27.320
+Ze zoeken naar accounts met brede toegang, want één beheerdersrol is duizend gebruikersaccounts waard.
+
+00:30:27.320 --> 00:30:29.460
+Ze controleren welke instellingen hen in de weg staan.
+
+00:30:29.780 --> 00:30:31.440
+Bewaarbeleid, bewaarplichten, waarschuwingen.
+
+00:30:31.600 --> 00:30:33.460
+Sommige zaken duren uren, andere weken.
+
+00:30:33.820 --> 00:30:35.160
+Versleuteling komt bewust pas laat.
+
+00:30:35.360 --> 00:30:38.180
+De aanvaller wil elk netwerk in kaart hebben voordat er iets zichtbaars gebeurt.
+
+00:30:38.360 --> 00:30:39.680
+Dus waar worden de bestanden geraakt?
+
+00:30:39.880 --> 00:30:41.680
+Vaak via de OneDrive synchronisatieclient.
+
+00:30:41.860 --> 00:30:43.300
+En dit onderdeel is bijna te simpel.
+
+00:30:43.500 --> 00:30:47.860
+Malware belandt op een laptop of de aanvaller gebruikt een gestolen sessie om code uit te voeren op een apparaat dat al is aangemeld.
+
+00:30:48.040 --> 00:30:50.800
+Het begint met het versleutelen van bestanden in de lokale OneDrive-map.
+
+00:30:51.060 --> 00:30:53.160
+Documenten, spreadsheets, de volledige mappenstructuur.
+
+00:30:53.160 --> 00:30:59.160
+De synchronisatieclient ziet gewijzigde bestanden, het doet waar het voor gebouwd is, het upload ze, niemand hoeft in te breken in de cloud.
+
+00:30:59.360 --> 00:31:03.080
+Het eigen apparaat van de gebruiker brengt de schade via de voordeur naar binnen, bestand voor bestand.
+
+00:31:03.240 --> 00:31:09.400
+En als die gebruiker een bibliotheek deelt met een team of mappen heeft gesynchroniseerd naar andere machines, verspreiden de versleutelde kopieën zich vanaf daar.
+
+00:31:09.540 --> 00:31:12.080
+De synchronisatieclient wordt dus het bezorgmechanisme.
+
+00:31:12.280 --> 00:31:15.740
+Het is vertrouwd, het is snel en het vraagt nooit of een wijziging legitiem was.
+
+00:31:16.000 --> 00:31:19.840
+Denk nu aan versiebeheer, want hier komt het eerdere vangnet samen met de planning van de aanvaller.
+
+00:31:19.840 --> 00:31:25.420
+We zagen dat de versiegeschiedenis standaard 500 hoofdversies bevat en de oudste verdwijnt wanneer de volgende arriveert.
+
+00:31:25.580 --> 00:31:27.660
+Een aanvaller die dat weet, heeft een simpele zet.
+
+00:31:27.880 --> 00:31:29.540
+Versleutel elk bestand niet één keer.
+
+00:31:29.840 --> 00:31:31.020
+Overschrijf het steeds opnieuw.
+
+00:31:31.200 --> 00:31:32.620
+Elke actie voegt een versie toe.
+
+00:31:32.800 --> 00:31:37.800
+Een paar honderd acties later is elke schone kopie uit de geschiedenis geduwd en wat overblijft is een stapel versleutelde bestanden.
+
+00:31:38.040 --> 00:31:38.980
+Langzamer, maar stil.
+
+00:31:39.100 --> 00:31:43.680
+En het werkt bijzonder goed bij bibliotheken met lagere versielimieten die veel beheerders instellen om opslag te besparen.
+
+00:31:43.900 --> 00:31:45.160
+Dan is er nog de botte versie.
+
+00:31:45.360 --> 00:31:45.840
+Massale verwijdering.
+
+00:31:45.840 --> 00:31:46.420
+Verwijdering.
+
+00:31:46.720 --> 00:31:47.400
+Verwijderde inhoud.
+
+00:31:47.560 --> 00:31:50.220
+Leeg de prullenbak van de eerste fase en de klok begint te lopen.
+
+00:31:50.420 --> 00:31:53.080
+Als de aanvaller een beheerdersrol heeft, wist hij ook de tweede fase.
+
+00:31:53.280 --> 00:31:56.480
+Als dat niet zo is, hoeven ze alleen de 93 dagen af te wachten of te hopen dat niemand kijkt.
+
+00:31:56.660 --> 00:31:59.440
+Inhoud die vandaag is verwijderd en drie maanden lang onopgemerkt blijft, is weg.
+
+00:31:59.600 --> 00:32:01.360
+Wat het bewaarbeleid ook op papier zei.
+
+00:32:01.560 --> 00:32:02.720
+Soms doet de aanvaller beide.
+
+00:32:03.120 --> 00:32:04.880
+Versleutelde bestanden die worden gesynchroniseerd.
+
+00:32:05.120 --> 00:32:07.000
+Verwijder de rest en wist alles waarvoor ze rechten hebben.
+
+00:32:07.180 --> 00:32:09.160
+Je hebt deze uitspraak waarschijnlijk wel eens gehoord.
+
+00:32:09.400 --> 00:32:11.040
+SharePoint kan geen ransomware krijgen.
+
+00:32:11.040 --> 00:32:14.160
+Het is halfwaar en dat is precies waarom deze uitspraak zo schadelijk is.
+
+00:32:14.320 --> 00:32:15.400
+Dit is de ware helft.
+
+00:32:15.900 --> 00:32:18.140
+Ransomwarecode kan niet draaien binnen SharePoint online.
+
+00:32:18.320 --> 00:32:21.920
+Er is geen server om te infecteren, geen besturingssysteem dat malware kan overnemen.
+
+00:32:22.120 --> 00:32:24.800
+De Microsoft-dienst versleutelt je sites niet van binnenuit.
+
+00:32:25.020 --> 00:32:26.380
+Dit is de helft die er echt toe doet.
+
+00:32:26.640 --> 00:32:31.280
+Bijna niets daarvan beschermt de inhoud, omdat inhoud via mensen en apparaten bij SharePoint terechtkomt.
+
+00:32:31.380 --> 00:32:36.620
+Een gesynchroniseerde bibliotheek is slechts een map op een laptop en de sync-client schrijft alles in die map terug naar de bibliotheek.
+
+00:32:36.620 --> 00:32:41.380
+Een gestolen account kan bestanden uploaden, overschrijven of verwijderen via de browser of een API.
+
+00:32:41.580 --> 00:32:43.820
+Een app met uitgebreide machtigingen kan dat nog sneller.
+
+00:32:44.040 --> 00:32:46.860
+SharePoint krijgt dus geen ransomware op de manier waarop een laptop dat krijgt.
+
+00:32:47.000 --> 00:32:48.400
+Het slaat alleen het resultaat op.
+
+00:32:48.560 --> 00:32:51.180
+Het platform blijft schoon, de gegevens daarin niet.
+
+00:32:51.340 --> 00:32:55.020
+En een team dat de eerste zin gelooft, slaat de planning over die de tweede zin vereist.
+
+00:32:55.200 --> 00:33:00.600
+De echte vraag is dus wat je doet als een bibliotheek vol staat met versleutelde bestanden en de sync-client ze al heeft verspreid.
+
+00:33:00.940 --> 00:33:04.020
+Microsoft heeft een eigen oplossing gebouwd voor de sync-kant hiervan.
+
+00:33:04.020 --> 00:33:07.860
+Die is beperkt, nuttig en werkt het best wanneer je het probleem vroeg opmerkt.
+
+00:33:08.720 --> 00:33:11.640
+Ransomware herstel met ingebouwde tools, een rondleiding.
+
+00:33:11.900 --> 00:33:14.360
+Begin met wat Microsoft heeft gebouwd voor de sync-kant.
+
+00:33:14.600 --> 00:33:19.460
+Wanneer OneDrive ziet dat een groot aantal bestanden tegelijk verandert op een manier die lijkt op versleuteling, kan het dit markeren.
+
+00:33:19.640 --> 00:33:23.320
+De gebruiker krijgt een melding, iets in de trant van, we denken dat je bestanden zijn aangevallen.
+
+00:33:23.520 --> 00:33:28.040
+Vanaf daar opent het herstelproces en leidt Microsoft de gebruiker door het terugdraaien van OneDrive.
+
+00:33:28.300 --> 00:33:30.100
+Dat is de prompt voor ransomware detectie.
+
+00:33:30.100 --> 00:33:34.300
+Het is gekoppeld aan het herstellen van je OneDrive, dezelfde 30 dagen terugsproefing die we eerder bespraken.
+
+00:33:34.480 --> 00:33:36.940
+Voor één gebruiker, één laptop, vroegtijdig opgemerkt.
+
+00:33:37.100 --> 00:33:37.860
+Het werkt goed.
+
+00:33:38.040 --> 00:33:39.760
+De gebruiker kiest een punt voor de schade.
+
+00:33:39.960 --> 00:33:43.580
+De activiteitsgrafiek toont een piek in bestandswijzigingen, dus het juiste moment is makkelijk te zien.
+
+00:33:43.780 --> 00:33:46.240
+Ze bevestigen en Microsoft maakt alles na dat punt ongedaan.
+
+00:33:46.380 --> 00:33:47.480
+Maar kijk naar de voorwaarden.
+
+00:33:47.700 --> 00:33:48.960
+De detectie moet afgaan.
+
+00:33:49.120 --> 00:33:50.140
+Dat gebeurt niet altijd.
+
+00:33:50.360 --> 00:33:57.260
+Trage versleuteling, kleine batches of bestanden die de aanvaller via de browser overschreef in plaats van de sync-client, kunnen allemaal onder de drempel blijven.
+
+00:33:57.260 --> 00:34:01.960
+En de prompt helpt alleen als de gebruiker het leest, begrijpt en niet zomaar het venster sluit om verder te werken.
+
+00:34:02.140 --> 00:34:04.220
+Stap nu over van één gebruiker naar een bibliotheek.
+
+00:34:04.400 --> 00:34:06.160
+SharePoint heeft deze bibliotheek hersteld.
+
+00:34:06.360 --> 00:34:09.520
+Het zet één enkele documentbibliotheek terug naar een moment in de afgelopen 30 dagen.
+
+00:34:09.740 --> 00:34:13.760
+Hetzelfde overzicht, dezelfde beoordelingsstap, dezelfde bevestiging, maar het is bibliotheek voor bibliotheek.
+
+00:34:13.860 --> 00:34:16.480
+Een site kan er zes hebben, een tenant wel 4000 sites.
+
+00:34:16.700 --> 00:34:21.140
+Iemand moet elke bibliotheek openen, een tijdstip kiezen, de wijzigingen beoordelen en bevestigen.
+
+00:34:21.320 --> 00:34:24.840
+Diegene heeft op elke site de juiste rol of de rechten nodig om zichzelf eraan toe te voegen.
+
+00:34:24.840 --> 00:34:27.800
+En dit is de vraag die alles bepaalt. Welk tijdstip?
+
+00:34:28.060 --> 00:34:29.920
+Aanvallers kondigen niet aan wanneer ze zijn begonnen.
+
+00:34:30.140 --> 00:34:33.260
+Het eerste versleutelde bestand kan van maandag zijn, het laatste van donderdag.
+
+00:34:33.400 --> 00:34:36.800
+Een beheerder die een herstelpunt kiest, raadt waar het schoon eindigde en de schade begon.
+
+00:34:37.000 --> 00:34:39.340
+Kies je te laat, dan komen de versleutelde bestanden terug.
+
+00:34:39.500 --> 00:34:41.640
+Kies je te vroeg, dan gooi je dagen aan echt werk weg.
+
+00:34:41.860 --> 00:34:43.080
+Laten we er nu getallen aan hangen.
+
+00:34:43.280 --> 00:34:44.820
+Stel dat 300 gebruikers zijn getroffen.
+
+00:34:45.040 --> 00:34:47.740
+Ieder heeft een OneDrive en elke OneDrive heeft zijn eigen herstel nodig.
+
+00:34:48.000 --> 00:34:50.220
+Vele delen ook bibliotheken over wel 12 sites.
+
+00:34:50.220 --> 00:34:54.460
+Reken op een paar duizend bestanden per gebruiker, verspreid over honderden locaties.
+
+00:34:54.640 --> 00:34:56.400
+Er is geen knop voor iedereen herstellen.
+
+00:34:56.640 --> 00:35:01.360
+In de praktijk script de beheerder zet met PowerShell of ze doorlopen het proces één voor één met gebruikers.
+
+00:35:01.540 --> 00:35:04.400
+Hoe dan ook, elk herstel moet in de wachtrij, draaien en voltooien.
+
+00:35:04.620 --> 00:35:08.280
+Grote hersteltaken duren uren en je kunt niet veilig beginnen tot de aanvaller weg is,
+
+00:35:08.380 --> 00:35:11.660
+want herstel in een gecompromitteerde tenant voet alleen maar de volgende ronde van versleuteling.
+
+00:35:11.660 --> 00:35:15.500
+De tijdskosten zitten dus niet in het herstel zelf, maar in het bepalen welke accounts zijn geraakt.
+
+00:35:15.500 --> 00:35:20.440
+De aanvaller buitensluiten, herstelpunten kiezen, honderden operaties uitvoeren en elk resultaat controleren.
+
+00:35:20.560 --> 00:35:22.080
+Voor een middelgroot bedrijf zijn dat dagen.
+
+00:35:22.280 --> 00:35:23.860
+Voor een grote organisatie zijn het weken.
+
+00:35:24.020 --> 00:35:25.340
+En dat is nog het makkelijke gedeelte.
+
+00:35:25.500 --> 00:35:26.580
+Het dekt alleen bestanden.
+
+00:35:26.800 --> 00:35:28.240
+Kijk nu waar native herstel stopt.
+
+00:35:28.520 --> 00:35:28.920
+Exchange.
+
+00:35:29.140 --> 00:35:30.480
+Er is geen terugsboekknop voor een mailbox.
+
+00:35:31.640 --> 00:35:34.740
+Herstelbaar items geeft je verwijderde e-mail binnen een venster van 14 tot 30 dagen,
+
+00:35:34.920 --> 00:35:36.980
+maar niets voor mail die is gewijzigd, verplaatst of herschreven.
+
+00:35:36.980 --> 00:35:39.940
+Als een aanvaller doorstuurregels heeft gemaakt of berichten heeft aangepast,
+
+00:35:40.100 --> 00:35:42.340
+brengt geen enkele native tool de mailbox terug zoals hij was.
+
+00:35:42.520 --> 00:35:42.980
+Teams chat.
+
+00:35:42.980 --> 00:35:45.000
+We zagen al dat er geen weg terug is in het product.
+
+00:35:45.220 --> 00:35:48.680
+Berichten kunnen worden geëxporteerd, maar ze kunnen niet worden teruggezet in een actieve conversatie.
+
+00:35:48.820 --> 00:35:50.540
+En dan de consistentie tussen workloads.
+
+00:35:50.840 --> 00:35:51.960
+Dit is de stille verrader.
+
+00:35:52.200 --> 00:35:56.220
+Stel dat teams bestanden werden versleuteld, het kanaal werd verwijderd en het groepslidmaatschap werd gewijzigd.
+
+00:35:56.340 --> 00:36:00.080
+Je kunt de bibliotheek naar één punt herstellen, de groep naar een ander en de mailbox naar een derde.
+
+00:36:00.240 --> 00:36:02.780
+Elke tool draait op zijn eigen klok en in zijn eigen venster.
+
+00:36:03.020 --> 00:36:04.040
+Niets verbindt ze met elkaar.
+
+00:36:04.040 --> 00:36:08.760
+Dus je voltooit het herstel en elk onderdeel ziet er op zichzelf goed uit, maar de site verwijst naar een kanaal dat weg is.
+
+00:36:08.940 --> 00:36:11.220
+De bestanden zijn eigendom van mensen die geen lid meer zijn.
+
+00:36:11.220 --> 00:36:14.140
+De status kwam nooit overeen met hoe eigen tools onderdelen herstellen.
+
+00:36:14.340 --> 00:36:17.420
+Ze herstellen geen specifiek moment en Microsoft wist dat daar een gat zat.
+
+00:36:17.560 --> 00:36:22.460
+Dus bouwden ze iets nieuws dat buiten de oude prullenbakken en retentievensters valt, specifiek gericht op dit probleem.
+
+00:36:22.680 --> 00:36:25.040
+Microsoft 365 Backup, wat het is.
+
+00:36:25.240 --> 00:36:28.400
+Microsoft noemt het Microsoft 365 Backup een eenvoudige naam.
+
+00:36:28.520 --> 00:36:33.560
+En het is de eerste keer dat Microsoft een backup en herstelfunctie verkoopt voor zijn eigen dienst, gebouwd door het bedrijf dat deze beheert.
+
+00:36:33.560 --> 00:36:38.960
+Het dekt drie workloads, SharePoint, OneDrive en Exchange, sites, persoonlijke opslag en mailboxen.
+
+00:36:39.120 --> 00:36:41.560
+Dat zijn de plekken waar we zagen dat eigen herstelmethode tekortschoten.
+
+00:36:41.760 --> 00:36:43.000
+Dus de scope is geen toeval.
+
+00:36:43.180 --> 00:36:44.000
+Hoe kom je er nu aan?
+
+00:36:44.160 --> 00:36:45.320
+Je koopt het niet per gebruiker.
+
+00:36:45.500 --> 00:36:46.720
+Er is geen licentie per stoel.
+
+00:36:46.900 --> 00:36:49.100
+Het wordt gefactureerd via Azure op basis van verbruik.
+
+00:36:49.220 --> 00:36:54.580
+Een beheerder koppelt de tenant aan een Azure abonnement, activeert de dienst in het Microsoft 365 beheercentrum en de teller loopt.
+
+00:36:54.720 --> 00:36:58.040
+Je betaalt voor de hoeveelheid data die je beschermt, gemeten per gigabyte per maand.
+
+00:36:58.240 --> 00:37:00.400
+Dat facturatie model is belangrijker dan het klinkt.
+
+00:37:00.400 --> 00:37:03.180
+Het betekent dat je sommige dingen kunt beschermen en anderen kunt overslaan.
+
+00:37:03.300 --> 00:37:05.180
+Je hoeft niet de hele tenant te dekken om te beginnen.
+
+00:37:05.400 --> 00:37:11.980
+Je kiest welke sites, accounts en mailboxen in een back-up beleid vallen en de rekening volgt die keuze, wat ook betekent dat er een besluit moet worden genomen.
+
+00:37:12.180 --> 00:37:14.040
+Iemand moet bepalen wat er binnen de scope valt.
+
+00:37:14.240 --> 00:37:17.920
+Als niemand dat doet, is er niets beschermd en blijft de dienst uitgeschakeld en inactief.
+
+00:37:18.100 --> 00:37:21.060
+Nu het onderdeel dat het dagelijkse werk verandert, point-in-time herstel.
+
+00:37:21.220 --> 00:37:25.200
+Er wordt regelmatig een back-up kopie gemaakt en die kopieën worden bewaard als herstelpunten.
+
+00:37:25.360 --> 00:37:27.880
+Als er iets misgaat, hoef je niet naar losse bestanden te zoeken.
+
+00:37:27.880 --> 00:37:32.960
+Je kiest een moment, dinsdag 9 uur ochtends en je vertelt de dienst om dat item terug te zetten zoals het op dat moment was.
+
+00:37:33.140 --> 00:37:34.900
+En er zijn twee manieren om dit aan te vragen.
+
+00:37:35.080 --> 00:37:41.180
+De granulaire manier werkt voor één ding, één site, één onedrive, één mailbox of zelfs een paar items daarbinnen gevonden via een zoekopdracht.
+
+00:37:41.400 --> 00:37:44.700
+Dat is het antwoord voor een gebruiker die vorige week de verkeerde map heeft verwijderd.
+
+00:37:44.820 --> 00:37:46.760
+De bulk manier werkt voor veel dingen tegelijk.
+
+00:37:46.960 --> 00:37:51.980
+Kies een groep sites, een lijst met accounts, een set mailboxen en herstel ze allemaal naar hetzelfde punt in de tijd.
+
+00:37:52.180 --> 00:37:54.680
+Dat is het antwoord op de ransomware doorloop die we net hebben afgerond.
+
+00:37:54.680 --> 00:37:57.260
+De genen met 301 schijven en geen enkele knop.
+
+00:37:57.420 --> 00:37:58.380
+Deze keer is die er wel.
+
+00:37:58.600 --> 00:38:00.820
+Vergelijk dat eens met wat de ingebouwde hulpprogramma's u boden.
+
+00:38:00.940 --> 00:38:05.820
+Een doorlopende terugspoeling van 30 dagen, bibliotheek voor bibliotheek, een prullenbak die leegloopt, een bewaarmap die onderdelen vasthoudt.
+
+00:38:05.880 --> 00:38:09.580
+Hier krijgt u een volledig vastgelegde status en een manier om een hele site of mailbox daarnaar terug te brengen.
+
+00:38:09.720 --> 00:38:10.500
+Nu de snelheid.
+
+00:38:10.820 --> 00:38:14.060
+Microsoft doet hier sterke beweringen en het is de moeite waard om te begrijpen wat daarachter zit.
+
+00:38:14.220 --> 00:38:17.740
+De belofte is dat herstelacties veel sneller verlopen dan bij hulpprogramma's die van buiten afwerken.
+
+00:38:17.920 --> 00:38:19.700
+Grote volumes in uren, niet in dagen.
+
+00:38:19.700 --> 00:38:21.800
+En de reden is de architectuur, geen magie.
+
+00:38:21.940 --> 00:38:27.900
+Een hulpprogramma van een derde partij moet via een openbare interface om uw gegevens vragen bij de Microsoft Service, één verzoek per keer binnen de limieten die Microsoft stelt.
+
+00:38:28.180 --> 00:38:31.140
+Microsoft 365 Backup hoeft niet bij die deur aan te sluiten.
+
+00:38:31.340 --> 00:38:36.320
+Het bevindt zich binnen het platform, dicht bij de gegevens en kan een ander pad gebruiken om inhoud te kopiëren en terug te zetten.
+
+00:38:36.540 --> 00:38:38.660
+Minder afstand, minder poorten, minder limieten.
+
+00:38:38.840 --> 00:38:40.460
+De snelheid komt dus door de positie.
+
+00:38:40.640 --> 00:38:43.340
+De Service is niet slimmer, hij staat alleen op een andere plek.
+
+00:38:43.480 --> 00:38:48.500
+We komen hierop terug, want de fysica stelt een plafond aan elk herstel en het is eerlijk gezegd de moeite waard om daarnaar te kijken.
+
+00:38:48.500 --> 00:38:50.080
+Hou dat idee voor nu even vast.
+
+00:38:50.260 --> 00:38:54.900
+De plek waar een back-uprogramma staat, bepaalt hoe snel het kan werken, wat ons bij de term first party brengt.
+
+00:38:55.020 --> 00:38:56.420
+Het klinkt als een marketingterm.
+
+00:38:56.640 --> 00:38:58.200
+In de praktijk verandert het twee dingen.
+
+00:38:58.400 --> 00:38:59.580
+Ten eerste, vertrouwen.
+
+00:38:59.740 --> 00:39:05.700
+Uw gegevens hoeven niet aan een ander bedrijf te worden gegeven, naar een andere cloud te worden gekopieerd of te worden benaderd via een app met uitgebreide machtigingen in uw tenant.
+
+00:39:05.880 --> 00:39:10.540
+Er is geen extra leverancier om te controleren, geen extra connector om goed te keuren en geen extra account dat gestolen kan worden.
+
+00:39:10.720 --> 00:39:13.360
+Voor een beveiligingsbeoordeling is dat één naam minder op de lijst.
+
+00:39:13.500 --> 00:39:14.840
+Ten tweede, integratie.
+
+00:39:14.840 --> 00:39:19.720
+De service weet hoe SharePoint een site opslaat, hoe OneDrive met versies omgaat en hoe Exchange een mailbox beheert.
+
+00:39:19.860 --> 00:39:21.900
+Het herstelt gegevens native in die workloads.
+
+00:39:22.260 --> 00:39:26.120
+Machtigingen, structuur en metadata komen terug als onderdeel van het item, niet als een tweede taak.
+
+00:39:26.260 --> 00:39:27.980
+Dat is het deel dat retentie nooit kon doen.
+
+00:39:28.160 --> 00:39:30.580
+Het brengt de site-status terug, niet alleen de bestanden.
+
+00:39:30.780 --> 00:39:33.440
+Als je alles op een rij zet, ziet het plaatje er bijna compleet uit.
+
+00:39:33.600 --> 00:39:37.540
+Eén factuurregel, status per tijdstip, een bulkopsie die past bij het aanvalscenario.
+
+00:39:37.880 --> 00:39:40.460
+Snelheid door positie en een first-party zetel aan tafel.
+
+00:39:40.680 --> 00:39:41.640
+Dus wat is er mis mee?
+
+00:39:41.880 --> 00:39:43.700
+Niets, als je het bekijkt voor wat het is.
+
+00:39:43.880 --> 00:39:46.380
+Maar een backup is slecht zo compleet als zijn grenzen.
+
+00:39:46.560 --> 00:39:50.660
+En deze heeft grenzen waar je goed naar moet kijken, te beginnen bij wat het dekt en wat niet.
+
+00:39:50.880 --> 00:39:53.940
+Bereik en limieten van Microsoft 365 backup.
+
+00:39:54.180 --> 00:39:55.120
+Begin bij de dekking.
+
+00:39:55.360 --> 00:39:55.940
+Drie workloads.
+
+00:39:56.220 --> 00:39:57.940
+SharePoint, OneDrive, Exchange.
+
+00:39:58.220 --> 00:39:59.480
+Dat is de volledige lijst.
+
+00:39:59.640 --> 00:40:00.860
+Al het andere valt daar buiten.
+
+00:40:01.060 --> 00:40:02.960
+Teams is op zichzelf geen beschermde workload.
+
+00:40:02.960 --> 00:40:05.880
+De bestanden in een team staan in SharePoint, dus die zijn gedekt.
+
+00:40:06.020 --> 00:40:08.940
+De mailbox achter de groep staat in Exchange, dus die is ook gedekt.
+
+00:40:09.100 --> 00:40:13.460
+Maar de chats, de structuur van kanaalberichten, planner en het team als enkel object vallen niet onder het product.
+
+00:40:13.660 --> 00:40:16.360
+We hebben een heel hoofdstuk besteed aan uit hoeveel onderdelen een team bestaat.
+
+00:40:16.520 --> 00:40:17.860
+De backup bereikt er daar twee van.
+
+00:40:18.100 --> 00:40:19.720
+Hetzelfde verhaal geldt voor de rest van de tenant.
+
+00:40:19.940 --> 00:40:24.020
+Entra ID-objecten, voorwaardelijke toegangsbeleidsregels, power platform apps, loop, forms, stream.
+
+00:40:24.240 --> 00:40:25.560
+Niets daarvan valt binnen de scope.
+
+00:40:25.760 --> 00:40:31.020
+Als uw herstelplan ervan uitgaat dat Microsoft Microsoft 365 backupt, dan heeft die zin hier een footnote nodig.
+
+00:40:31.020 --> 00:40:34.080
+Het backupt drie workloads en de footnote betreft de andere twintig.
+
+00:40:34.220 --> 00:40:35.020
+Nu de tijdlijn.
+
+00:40:35.200 --> 00:40:36.960
+Hoe lang blijven die herstelpunten bewaard?
+
+00:40:37.140 --> 00:40:42.940
+De dienst bewaart backupgegevens voor een bepaalde periode en die periode wordt vastgelegd door de dienst zelf, niet door uw beleid.
+
+00:40:43.200 --> 00:40:45.880
+Microsoft heeft het omschreven als tot een jaar aan herstelpunten.
+
+00:40:46.120 --> 00:40:51.480
+Controleer de huidige documentatie voordat u een plan op dat aantal baseert, want limieten als deze veranderen met productupdates.
+
+00:40:51.680 --> 00:40:54.240
+En vergelijk dat nu met wat de organisatie daadwerkelijk vraagt.
+
+00:40:54.400 --> 00:40:56.940
+Een financiële afdeling heeft mogelijk zeven jaar aan gegevens nodig.
+
+00:40:57.120 --> 00:40:59.060
+Een gereguleerde sector heeft er misschien tien nodig.
+
+00:40:59.060 --> 00:41:02.380
+Een juridische afdeling wil elke versie van een contract vanaf de dag van ondertekening.
+
+00:41:02.540 --> 00:41:05.080
+Een backup die een jaar teruggaat, biedt geen antwoord op die vragen.
+
+00:41:05.260 --> 00:41:06.340
+Dat is geen tekortkoming.
+
+00:41:06.520 --> 00:41:07.600
+Het is een andere taak.
+
+00:41:07.740 --> 00:41:09.920
+Backups zijn bedoeld om recente schade ongedaan te maken.
+
+00:41:10.280 --> 00:41:14.320
+Langdurige bewaring is de taak van de retentielaag en we hebben al gezien wat die laag wel en niet kan.
+
+00:41:14.500 --> 00:41:15.860
+Maar er is een gat tussen die twee.
+
+00:41:16.100 --> 00:41:19.860
+Schade die na veertien maanden wordt ontdekt, is te oud voor de backup en te rommelig voor retentie.
+
+00:41:20.020 --> 00:41:24.400
+Een langzame, stille corruptie, van het type dat niemand opmerkt tot een audit, kan in dat gat leven.
+
+00:41:24.400 --> 00:41:28.560
+De herstelpunten die u nodig hebt, zijn al verlopen en wat overblijft is een hoop losse kopieën.
+
+00:41:28.680 --> 00:41:31.300
+De bewaarperiode is dus niet lang genoeg om uw enige plan te zijn.
+
+00:41:31.480 --> 00:41:35.320
+Het is lang genoeg om de meeste fouten en aanvallen te dekken, maar niet lang genoeg voor de stille gevallen.
+
+00:41:35.520 --> 00:41:39.100
+Nu de vraag die mensen als tweede stellen, maar als eerste zouden moeten stellen, waar staan de gegevens?
+
+00:41:39.400 --> 00:41:44.480
+Microsoft zegt dat de backup binnen de Microsoft 365 dienstgrens wordt opgeslagen, gescheiden van de live inhoud.
+
+00:41:44.660 --> 00:41:47.840
+Het staat in eigen opslag, apart van waar uw sites en mailboxen draaien.
+
+00:41:48.000 --> 00:41:50.720
+Dus een foutieve verwijdering in een bibliotheek raakt de herstelpunten niet.
+
+00:41:50.720 --> 00:41:55.460
+Dat is logische scheiding. Het is reëel en het is nuttig. Maar kijk naar wat logische scheiding betekent.
+
+00:41:55.640 --> 00:41:58.780
+De backup is gescheiden van de inhoud. Het is niet gescheiden van de tenant.
+
+00:41:59.060 --> 00:42:04.260
+Het is nog steeds gekoppeld aan je tenant, wordt beheerd via hetzelfde admincenter en gecontroleerd door dezelfde rollen.
+
+00:42:04.400 --> 00:42:09.180
+De mensen die het kunnen configureren zijn mensen in jouw omgeving met de juiste machtigingen en jouw identiteitssysteem.
+
+00:42:09.240 --> 00:42:11.520
+Laten we dus het scenario bekijken waar we naartoe hebben gewerkt.
+
+00:42:11.680 --> 00:42:13.120
+Een gecompromitteerde beheerder.
+
+00:42:13.340 --> 00:42:17.080
+We zagen al wat zo'n account kan aanrichten bij prullenbakken, bewaarplichten en retentieinstellingen.
+
+00:42:17.080 --> 00:42:23.700
+Vraag jezelf nu af wat hetzelfde account kan doen met een backupbeleid, wie kan wijzigen wat beschermd is, wie een site uit de lijst kan verwijderen en wie een herstelpunt kan wissen.
+
+00:42:23.900 --> 00:42:26.620
+De antwoorden hangen af van hoe je rollen toewijst en hoe goed je ze bewaakt.
+
+00:42:26.760 --> 00:42:28.520
+De service geeft je de besturingselementen.
+
+00:42:28.660 --> 00:42:31.800
+Het maakt de keuzes niet voor je en dit is de vraag over de leveranciersafhankelijkheid.
+
+00:42:32.000 --> 00:42:33.420
+Jouw productiedata draait op Microsoft.
+
+00:42:33.720 --> 00:42:35.200
+Jouw identiteitsbeheer draait op Microsoft.
+
+00:42:35.520 --> 00:42:36.800
+Jouw backup draait ook op Microsoft.
+
+00:42:37.080 --> 00:42:39.700
+Eén bedrijf, één controlepaneel, één set inloggegevens aan de top.
+
+00:42:39.860 --> 00:42:41.900
+Als de fout in een datacenter ligt, is dat prima.
+
+00:42:41.900 --> 00:42:43.440
+Microsoft is daar goed in.
+
+00:42:43.540 --> 00:42:50.640
+Maar als de fout op tenantniveau ligt, in de identiteitslaag of de factureringsrelatie, dan deelt alles wat je gebruikt voor herstel dezelfde route als alles wat kapot is gegaan.
+
+00:42:51.400 --> 00:42:52.820
+Beveiligingsexperts noemen dit een gedeeldlot.
+
+00:42:53.020 --> 00:42:55.780
+Eén gebeurtenis schakelt zowel de data als het pad ernaartoe uit.
+
+00:42:56.000 --> 00:42:57.380
+Dat maakt het product niet slecht.
+
+00:42:57.560 --> 00:43:02.680
+Het maakt het een sterke eerste laag, snel, native en gebouwd voor bulkherstel waar native tools nooit in slaagden.
+
+00:43:02.840 --> 00:43:04.520
+Het is geen onafhankelijke kopie.
+
+00:43:04.520 --> 00:43:10.020
+Dat kan het ook niet zijn, want onafhankelijkheid betekent iets heel anders, andere opslag, andere inloggegevens, een ander controlepaneel.
+
+00:43:10.140 --> 00:43:13.240
+En dat is de reden waarom er überhaupt een markt voor externe leveranciers bestaat.
+
+00:43:13.420 --> 00:43:14.820
+Wat voegt een externe backup toe?
+
+00:43:14.980 --> 00:43:18.220
+Een backupproduct van een derde partij begint met één structurele beslissing.
+
+00:43:18.380 --> 00:43:24.140
+Het bewaart je data ergens anders, niet in een andere map, maar op een andere plek beheerd door een ander bedrijf, onder een andere set accounts.
+
+00:43:24.360 --> 00:43:26.640
+De kopie staat in opslag die niet van jouw tenant is.
+
+00:43:26.800 --> 00:43:29.180
+Het kan in het datacenter van een andere cloud provider staan.
+
+00:43:29.360 --> 00:43:31.380
+Het kan in een regio staan die je zelf hebt gekozen.
+
+00:43:31.380 --> 00:43:35.540
+Wat telt is dat de opslag niets te maken heeft met de Microsoft 365 service die het beschermt.
+
+00:43:35.620 --> 00:43:37.280
+En het heeft zijn eigen inloggegevens.
+
+00:43:37.500 --> 00:43:39.180
+Dit is het gedeelte waar mensen aan voorbij gaan.
+
+00:43:39.380 --> 00:43:42.480
+De login voor de backup is geen Microsoft 365 login.
+
+00:43:42.760 --> 00:43:48.360
+Deze bevindt zich in het systeem van de leverancier met zijn eigen wachtwoordbeleid, eigen multifactorverificatie en eigen toegangslijst.
+
+00:43:48.500 --> 00:43:51.680
+Dus een gestolen globale beheerdersaccount in jouw tenant opent daar niets.
+
+00:43:51.860 --> 00:43:55.720
+De aanvaller kan elke prullenbak legen, elke site wissen en elk beleid herschrijven.
+
+00:43:55.880 --> 00:43:59.480
+En de backup merkt er niets van omdat deze die identiteit in de eerste plaats al niet vertrouwde.
+
+00:43:59.480 --> 00:44:01.200
+Dat brengt ons bij het control plane.
+
+00:44:01.380 --> 00:44:06.720
+Het control plane is de plek waar je de regels instelt, wat wordt beschermd, hoe vaak, hoe lang het wordt bewaard en wie het mag verwijderen.
+
+00:44:06.860 --> 00:44:11.520
+Voor Microsoft 365 backup is die plek je eigen beheercentrum, gekoppeld aan je eigen tenant.
+
+00:44:11.760 --> 00:44:15.780
+Bij een onafhankelijk product is het een aparte console die volledig buiten de tenant draait.
+
+00:44:15.940 --> 00:44:18.600
+En die scheiding is wat het in het ergste geval laat overleven.
+
+00:44:18.840 --> 00:44:26.780
+Bij een incident op tenantniveau, zoals wanneer de hele tenant is vergrendeld, gekaapt of opgeschort vanwege een factuurgeschil, gaat alles wat van die tenant afhangt tegelijk op zwart.
+
+00:44:26.780 --> 00:44:31.540
+Een onafhankelijk control plane blijft werken omdat het in de basis niet afhankelijk was van de tenant.
+
+00:44:31.740 --> 00:44:35.420
+Je kunt nog steeds inloggen, je herstelpunten zien en een herstelactie starten.
+
+00:44:35.640 --> 00:44:36.380
+Dan de retentie.
+
+00:44:36.500 --> 00:44:40.460
+Native backup bewaart herstelpunten voor een vaste periode die door de dienst wordt bepaald.
+
+00:44:40.640 --> 00:44:42.100
+Tools van derde laten je meestal kiezen.
+
+00:44:42.200 --> 00:44:46.180
+Een jaar voor de meeste inhoud, zeven jaar voor financiën, tien jaar voor een gereguleerd team.
+
+00:44:46.420 --> 00:44:50.780
+Sommigen laten je dagelijkse kopieën een maand bewaren, wekelijkse kopieën een jaar en maandelijkse kopieën tien jaar lang.
+
+00:44:50.960 --> 00:44:53.680
+Zo blijven de opslagkosten redelijk en blijft de historie lang bewaard.
+
+00:44:53.680 --> 00:44:56.180
+Die flexibiliteit dicht het gat dat we eerder beschreven.
+
+00:44:56.340 --> 00:44:59.580
+De langzame corruptie die na veertien maanden wordt ontdekt, valt dan niet meer buiten de boot.
+
+00:44:59.740 --> 00:45:01.840
+Het herstelpunt van voor de schade is er nog steeds.
+
+00:45:02.080 --> 00:45:06.160
+Vervolgens de locatie voor herstel, Native Herstel plaatst de inhoud terug in dezelfde tenant waar het vandaan kwam.
+
+00:45:06.340 --> 00:45:07.780
+Dat is prima voor een verwijderde map.
+
+00:45:07.960 --> 00:45:10.440
+Het is een probleem als de tenant zelf de bron van het falen is.
+
+00:45:10.700 --> 00:45:13.440
+Veel onafhankelijke producten kunnen herstellen tussen tenants door.
+
+00:45:13.640 --> 00:45:19.520
+Je zet een schone tenant op, wijst de tool daarnaartoe en brengt mailboxen en sites terug naar een plek die de aanvaller nooit heeft aangeraakt.
+
+00:45:19.520 --> 00:45:24.500
+Het helpt ook bij dagelijkse zakelijke gebeurtenissen, zoals een fusie, een afsplitsing of een verhuizing tussen tenants.
+
+00:45:24.720 --> 00:45:29.140
+Dezelfde functionaliteit die je redt bij een ramp, verplaatst ook gegevens netjes als er niets mis is gegaan.
+
+00:45:29.280 --> 00:45:30.420
+En dan is er nog de uitgang.
+
+00:45:30.640 --> 00:45:37.280
+De meeste producten kunnen je gegevens exporteren in open formaten, mailboxen als PST bestanden, documenten als gewone bestanden in een originele mappenstructuur.
+
+00:45:37.480 --> 00:45:39.980
+Dat klinkt onbelangrijk totdat je het alternatief bedenkt.
+
+00:45:39.980 --> 00:45:43.480
+Gegevens die alleen gelezen kunnen worden via de software van één leverancier.
+
+00:45:43.660 --> 00:45:50.920
+Open formaten betekenen dat de backup bruikbaar blijft als je van tool wisselt, als de leverancier voorwaarden wijzigt, of als je een deel moet overhandigen aan een rechtbank.
+
+00:45:51.080 --> 00:45:52.940
+Nu de dekking, waar het gat het grootst is.
+
+00:45:53.180 --> 00:45:56.180
+Microsoft 365 Backup dekt drie workloads.
+
+00:45:56.180 --> 00:46:05.000
+Onafhankelijke producten dekken doorgaans meer, zoals Teams Chats, waarbij de tool de gespreksgeschiedenis kan vastleggen en laten herstellen als leesbaar archief of terugzetten waar het platform dit toestaat.
+
+00:46:05.120 --> 00:46:15.240
+Planner, borden en taken, entra ID, objecten zoals gebruikers, groepen en appregistraties, en bij een groeiend aantal producten, onderdelen van het Power Platform inclusief apps, flows en de onderliggende data.
+
+00:46:15.480 --> 00:46:18.360
+De dekking verschilt per leverancier en verandert bij elke release.
+
+00:46:18.360 --> 00:46:19.900
+Dat is het eerlijke voorbehoud.
+
+00:46:20.080 --> 00:46:25.540
+Twee producten kunnen beide beweren Microsoft 365 te backuppen, maar zeer verschillende lijsten met zaken beschermen.
+
+00:46:25.540 --> 00:46:32.280
+De lijst is wat je koopt, dus een onafhankelijke kopie bied je scheiding, een langer geheugen, een uitweg bij een gecompromitteerde tenant en een breder vangnet.
+
+00:46:32.440 --> 00:46:37.740
+Maar dat alles betekent niets totdat je kunt zeggen wat je ervan nodig hebt, hoeveel verlies je kunt tolereren en hoelang je plat kunt liggen.
+
+00:46:37.960 --> 00:46:42.300
+Zonder die twee cijfers kun je geen enkele optie beoordelen of het nu die van Microsoft is of van iemand anders.
+
+00:46:42.500 --> 00:46:46.120
+En die cijfers hebben namen, hersteldoelstellingen uitgelegd voor leidinggevende.
+
+00:46:46.340 --> 00:46:48.200
+Twee cijfers bepalen alles in een herstelplan.
+
+00:46:48.380 --> 00:46:50.400
+RPO, Recovery Point Objective, herstelpuntdoelstelling.
+
+00:46:50.580 --> 00:46:52.120
+Hoeveel data kunnen we ons veroorloven te verliezen?
+
+00:46:52.120 --> 00:46:56.560
+Dat wordt achteruitgemeten. Het systeem valt uit om drie uur smiddags. Je laatste goede kopie is van twaalf uur smiddags.
+
+00:46:56.720 --> 00:46:59.960
+Je bent drie uur aan werk kwijt. Een RPO van vier uur betekent dat je dat accepteert.
+
+00:47:00.100 --> 00:47:01.920
+Een RPO van vijftien minuten betekent dat je dat niet doet.
+
+00:47:02.100 --> 00:47:04.020
+RTO, Recovery Time Objective, hersteltijddoelstelling.
+
+00:47:04.180 --> 00:47:05.780
+Hoe lang kunnen we ons veroorloven om plat te liggen?
+
+00:47:05.920 --> 00:47:09.020
+Dat wordt vooruitgemeten. De klok begint te lopen zodra de schade optreedt.
+
+00:47:09.080 --> 00:47:11.840
+Hij stopt wanneer mensen weer kunnen werken, niet wanneer de herstelklus klaar is.
+
+00:47:12.040 --> 00:47:14.880
+Wanneer een echte gebruiker een echt bestand opent en het is er, dat zijn de definities.
+
+00:47:14.880 --> 00:47:17.740
+Ze passen in twee zinnen, de meeste knikken instemmend.
+
+00:47:17.880 --> 00:47:22.080
+Maar hier gaat het mis. Niemand in IT kan deze cijfers alleen bepalen, want het zijn geen technische instellingen.
+
+00:47:22.200 --> 00:47:26.100
+Het zijn uitspraken over wat het bedrijf kan overleven. En het bedrijf is de enige die dat weet.
+
+00:47:26.260 --> 00:47:28.860
+Wat er meestal gebeurt, is dat IT een standaardwaarde kiest.
+
+00:47:29.020 --> 00:47:31.440
+De backup draait s'nachts omdat de tool dat suggereert.
+
+00:47:31.620 --> 00:47:34.840
+Het herstel duurt een dag of twee omdat de laatste test zo aanvoelde.
+
+00:47:35.080 --> 00:47:39.220
+Dat worden de RPO en de RTO, niet omdat iemand dat besloot, maar omdat niemand het deed.
+
+00:47:39.400 --> 00:47:42.180
+En een standaardwaarde is een besluit dat je nam zonder te weten dat je het nam.
+
+00:47:42.180 --> 00:47:44.600
+Denk na over wat de nachtelijke backup werkelijk zegt.
+
+00:47:44.780 --> 00:47:50.680
+Het zegt dat je elke dinsdag bereid bent alles te verliezen vanaf maandagnacht tot wel 24 uur aan e-mailwijzigingen en goedkeuringen.
+
+00:47:50.840 --> 00:47:53.340
+Misschien sluit het financiële team op dinsdag het kwartaal af.
+
+00:47:53.500 --> 00:47:55.940
+Misschien tekent een verkoopteam die middag drie contracten.
+
+00:47:56.060 --> 00:47:59.760
+De standaardinstelling weet dat niet. Het behandelt elke dag en elke afdeling hetzelfde.
+
+00:47:59.920 --> 00:48:01.920
+Dus het getal heeft een eigenaar buiten IT nodig.
+
+00:48:02.120 --> 00:48:05.140
+En het moet een getal zijn, niet zo snel mogelijk, niet minimale downtime.
+
+00:48:05.440 --> 00:48:08.340
+Die uitdrukkingen voelen verantwoordelijk aan. Ze leggen zich nergens op vast.
+
+00:48:08.340 --> 00:48:12.420
+Een uur is een uur. Vier uur is vier uur. Je kunt er een prijs aan hangen en eromheen plannen.
+
+00:48:12.580 --> 00:48:14.720
+Hoe krijg je dan een echt getal van een afdelingshoofd?
+
+00:48:14.840 --> 00:48:17.420
+Vraag hen niet om een RPO. Ze zullen je vreemd aankijken.
+
+00:48:17.640 --> 00:48:19.240
+Stel de vraag die ze wel kunnen beantwoorden.
+
+00:48:19.440 --> 00:48:22.700
+Wat is een uur aan verloren e-mail waard? Laat hen het vervolgens zelf uitrekenen.
+
+00:48:22.820 --> 00:48:25.260
+Hoeveel mensen in je team zijn afhankelijk van e-mail voor hun werk?
+
+00:48:25.420 --> 00:48:29.080
+Wat doen ze in een uur? Als het hele team een uur lang geblokkeerd is, wat zijn dan alleen al de loonkosten?
+
+00:48:29.340 --> 00:48:33.000
+Welke deals lopen vertraging op? Welke klant moet wachten? Welke deadline wordt gemist?
+
+00:48:33.000 --> 00:48:37.380
+Sales zegt misschien, twee uur geen mail op een vrijdag tegen het einde van het kwartaal en we verliezen een deal.
+
+00:48:37.620 --> 00:48:38.340
+Nu heb je iets.
+
+00:48:38.600 --> 00:48:45.020
+Legal zegt misschien, we kunnen een dag zonder, maar we mogen geen enkel bericht van de afgelopen week verliezen omdat we moeten kunnen bewijzen wat er is verzonden.
+
+00:48:45.260 --> 00:48:49.640
+Dat is een krappe RPO en een ruime RTO. Het is precies het tegenovergestelde van wat Sales nodig heeft.
+
+00:48:49.840 --> 00:48:53.120
+Verschillende antwoorden van verschillende mensen over dezelfde workload. Dat is het punt.
+
+00:48:53.320 --> 00:48:56.520
+De getallen zijn niet overal in het bedrijf hetzelfde. Dat zouden ze ook niet moeten zijn.
+
+00:48:56.520 --> 00:49:01.680
+Ze als uniform behandelen betekent te veel betalen voor onbelangrijke content of juist onvoldoende bescherming voor zaken die een kwartaal kunnen doen kelderen.
+
+00:49:01.680 --> 00:49:05.460
+En zodra een getal op papier staat, verandert er iets. Het is niet langer een mening.
+
+00:49:05.680 --> 00:49:09.040
+Een manager kan zeggen, onze RTO voor financiële mail is vier uur.
+
+00:49:09.220 --> 00:49:12.540
+Dan kan IT eerlijk antwoorden, onze huidige opzet levert twee dagen op.
+
+00:49:12.620 --> 00:49:15.900
+Nu is er een kloof en een kloof kan worden gefinancierd, geaccepteerd of gedicht.
+
+00:49:16.120 --> 00:49:19.880
+Zonder het getal is er geen kloof. Er is alleen een gevoel dat alles waarschijnlijk wel in orde is.
+
+00:49:20.060 --> 00:49:25.500
+Het werk is dus niet het kiezen van een product. Het werk is het schriftelijk verkrijgen van een getal van elk bedrijfsonderdeel met een naam erbij.
+
+00:49:25.740 --> 00:49:30.220
+Daarna toet je elk hulpmiddel hier aan en de getallen zijn niet langer abstract zodra je ze aan een workload koppelt.
+
+00:49:30.220 --> 00:49:34.700
+Elke workload faalt anders, herstelt anders en heeft een andere tijd nodig om terug te keren.
+
+00:49:34.880 --> 00:49:39.720
+Dus laten we ze per workload toepassen, te beginnen met degene die iedereen gebruikt voordat ze koffie hebben gehad.
+
+00:49:39.840 --> 00:49:40.640
+Exchange Online
+
+00:49:40.640 --> 00:49:45.680
+Bij het instellen van RPO en RTO voor Exchange Online begin je met de vraag wat voor soort herstel je bedoelt.
+
+00:49:45.820 --> 00:49:48.300
+Want exchange herstellen is niet één taak. Het zijn er drie.
+
+00:49:48.500 --> 00:49:49.640
+Elk heeft zijn eigen klok.
+
+00:49:49.820 --> 00:49:52.720
+Een itemherstel haalt een enkel bericht, een map of een handvol e-mails terug.
+
+00:49:52.880 --> 00:49:55.880
+Een gebruiker heeft de verkeerde thread verwijderd. Dat is de kleinschalige variant.
+
+00:49:55.880 --> 00:50:01.180
+Natuurlijke tools kunnen dit goed aan. Met herstelbaar items kunnen gebruikers of beheerders het item binnen enkele minuten terughalen.
+
+00:50:01.340 --> 00:50:05.280
+Een mailboxherstel is groter. De gehele mailbox is beschadigd, legemaakt of verdwenen.
+
+00:50:05.400 --> 00:50:06.940
+De standaardopties zijn hier beperkt.
+
+00:50:07.100 --> 00:50:09.840
+Een verwijderde mailbox kan binnen de respijtperiode worden teruggehaald.
+
+00:50:09.980 --> 00:50:14.360
+Een mailbox met een bewaarplicht kan worden doorzocht en geëxporteerd, maar een mailbox die is gewijzigd in plaats van verwijderd,
+
+00:50:14.420 --> 00:50:17.620
+kent geen terugspoeffunctie en een volledig ten het herstel is iets dat niemand heeft geoefend.
+
+00:50:17.760 --> 00:50:20.820
+Honderden of duizenden mailboxen tegelijk naar hetzelfde moment.
+
+00:50:20.820 --> 00:50:22.920
+Standaard tools bieden daarvoor geen pad.
+
+00:50:23.100 --> 00:50:25.800
+Kijk dus naar wat de standaard tools feitelijk bieden in cijfers.
+
+00:50:26.020 --> 00:50:31.100
+Voor itemherstel is de RPO bijna nul, zolang het item zich nog binnen het venster van 14 tot 30 dagen bevindt.
+
+00:50:31.200 --> 00:50:35.060
+De RTO is een kwestie van minuten. Dat is een sterk resultaat voor de meest voorkomende fout.
+
+00:50:35.260 --> 00:50:38.840
+Voor al het overige is de eerlijke RPO van de standaard tools wat er toevallig is overgebleven.
+
+00:50:39.020 --> 00:50:43.620
+De RTO is de tijd die iemand nodig heeft om het handmatig te exporteren, sorteren en herbouwen.
+
+00:50:43.840 --> 00:50:45.040
+Dagen is gebruikelijk.
+
+00:50:45.040 --> 00:50:46.740
+Soms is het antwoord dat het niet kan.
+
+00:50:46.920 --> 00:50:48.740
+Een backupproduct verandert dat beeld.
+
+00:50:48.740 --> 00:50:51.280
+Herstelpunten worden volgens een schema vastgelegd.
+
+00:50:51.400 --> 00:50:57.180
+De RPO wordt het tijdsverschil tussen snapshots, elke vier uur of elke paar uur of minder, afhankelijk van het product en het plan.
+
+00:50:57.360 --> 00:51:03.860
+En de RTO voor een mailbox daalt van dagen naar uren, omdat de tool de mailbox als geheel terugzet en niet als een stapel geëxporteerde items.
+
+00:51:04.120 --> 00:51:06.440
+Dan zijn er de gevallen die niet in het standaardplaatje passen.
+
+00:51:06.600 --> 00:51:10.220
+Gedeelde mailboxen hebben geen gebruiker, vaak geen licentie en niemand die ze controleert.
+
+00:51:10.220 --> 00:51:14.280
+Een ondersteuningsinbox of een factuurinbox kan jaren aan klantgeschiedenis bevatten.
+
+00:51:14.440 --> 00:51:17.440
+Wanneer er een woord verwijderd, merkt niemand het totdat een klant belt.
+
+00:51:17.440 --> 00:51:21.340
+Behandel elke gedeelde mailbox als een eigen regel in het plan met een benoemde eigenaar.
+
+00:51:21.500 --> 00:51:25.500
+Bij resource mailboxen, voor ruimtes en apparatuur, gaat het minder om de inhoud en meer om de agenda's.
+
+00:51:25.660 --> 00:51:27.800
+Het verliezen van één mailbox betekent het verliezen van boekingen.
+
+00:51:27.960 --> 00:51:29.780
+De data is klein, de verstoring is groot.
+
+00:51:30.000 --> 00:51:32.980
+Dan zijn er nog openbare mappen, ouder, onhandig, maar nog steeds aanwezig in veeltenants.
+
+00:51:33.200 --> 00:51:35.080
+Sommige bevatten decennia aan gedeelde dossiers.
+
+00:51:35.320 --> 00:51:37.060
+Standaard bescherming hiervoor is beperkt.
+
+00:51:37.300 --> 00:51:39.940
+Will-back-up tools gaan hier verschillend of helemaal niet mee om.
+
+00:51:40.080 --> 00:51:42.340
+Als je ze hebt, vraag er dan specifiek naar bijnaam.
+
+00:51:42.340 --> 00:51:43.680
+En er is nog één vraag.
+
+00:51:43.920 --> 00:51:45.640
+Niet elke mailbox is even belangrijk.
+
+00:51:45.860 --> 00:51:50.820
+De mailbox van een directielid bevat bestuursmails, gesprekken over deals en besluiten die nergens anders worden vastgelegd.
+
+00:51:50.900 --> 00:51:54.240
+Een juridische mailbox bevat de correspondentie die u mogelijk in de rechtszaal moet bewijzen.
+
+00:51:54.420 --> 00:51:56.120
+Die twee verdienen hun eigen categorie.
+
+00:51:56.340 --> 00:51:59.120
+Strakkere RPO, snellere RTO, vaker getest.
+
+00:51:59.320 --> 00:52:02.400
+Een algemene mailbox voor een maga zijn team kan in een ruimere categorie vallen,
+
+00:52:02.640 --> 00:52:06.240
+niet omdat die mensen minder belangrijk zijn, maar omdat de kosten van het verlies van die e-mail anders zijn.
+
+00:52:06.460 --> 00:52:08.280
+Zet het in een tabel en het patroon wordt zichtbaar.
+
+00:52:08.280 --> 00:52:10.720
+Directie en juridische zaken krijgen de kortste vensters.
+
+00:52:10.920 --> 00:52:12.480
+De kernteams van het bedrijf komen daarna.
+
+00:52:12.680 --> 00:52:15.240
+Gedeelde en resource mailboxen krijgen een eigenaar en een besluit.
+
+00:52:15.380 --> 00:52:17.920
+Al het overige krijgt de standaardinstelling, ditmaal met opzet.
+
+00:52:18.120 --> 00:52:18.940
+Dat is Exchange.
+
+00:52:19.160 --> 00:52:21.780
+Het is de werklast met de meest volwassen ingebouwde vangnetten.
+
+00:52:21.960 --> 00:52:24.560
+Toch laat het gaten open tussen item, mailbox en tenant.
+
+00:52:24.800 --> 00:52:28.360
+SharePoint brengt een ander soort risico met zich mee, niet omdat het meer data bevat,
+
+00:52:28.520 --> 00:52:31.900
+maar omdat de data structuur heeft en structuur is lastiger te herstellen dan inhoud.
+
+00:52:32.140 --> 00:52:34.740
+RPO en RTO instellen voor SharePoint online.
+
+00:52:34.940 --> 00:52:37.720
+Een SharePoint tenant is geen stapel bestanden, het is een web.
+
+00:52:37.720 --> 00:52:38.860
+Begin bij de eenheid.
+
+00:52:39.040 --> 00:52:40.600
+Een siteverzameling is de container.
+
+00:52:40.900 --> 00:52:44.980
+Daarin bevinden zich bibliotheken, lijsten, pagina's, machtigingen en instellingen.
+
+00:52:45.240 --> 00:52:47.820
+Vervolgens koppelen hubsites diverse van die containers aan elkaar,
+
+00:52:47.980 --> 00:52:50.400
+zodat navigatie, zoeken en huisstijl eroverheen vloeien.
+
+00:52:50.520 --> 00:52:54.280
+Een projectsite wordt samengevoegd in een afdelingshub en die hap weer in een bedrijfshap.
+
+00:52:54.380 --> 00:52:57.440
+En daaronder liggen de afhankelijkheden die niemand in een diagram heeft getekend.
+
+00:52:57.600 --> 00:53:00.260
+Een lijst op de ene site voet een power, automate flow op een andere.
+
+00:53:00.440 --> 00:53:03.420
+Een pagina op het intranet linkt naar een bibliotheek drie sites verderop.
+
+00:53:03.520 --> 00:53:06.460
+Een Teams-kanaalmap verwijst naar een site die ook als klantportaal dient.
+
+00:53:06.460 --> 00:53:10.680
+Dus als iemand zegt, herstel de financiële site, is de eerste vraag, welke financiële site?
+
+00:53:10.820 --> 00:53:12.480
+En de tweede is, wat leunde er nog meer op?
+
+00:53:12.560 --> 00:53:15.300
+Want een site herstellen is niet hetzelfde als de bestanden ervan terugzetten.
+
+00:53:15.500 --> 00:53:17.680
+Dat zagen we bij het terugdraaien van de bibliotheek.
+
+00:53:17.800 --> 00:53:20.620
+Bestanden komen terug, maar een site is bestanden plus structuur,
+
+00:53:20.860 --> 00:53:22.540
+en die structuur is waar de problemen beginnen.
+
+00:53:22.780 --> 00:53:23.520
+Neem machtigingen.
+
+00:53:23.720 --> 00:53:25.920
+Een site heeft eigenaren, leden en bezoekers.
+
+00:53:26.140 --> 00:53:29.140
+Daarbinnen kunnen individuele mappen en bestanden unieke machtigingen hebben
+
+00:53:29.140 --> 00:53:31.360
+die iemand twee jaar geleden handmatig heeft ingesteld.
+
+00:53:31.360 --> 00:53:34.360
+Als een herstel de inhoud terugzet, maar de machtigingen reset,
+
+00:53:34.680 --> 00:53:38.240
+kunnen mensen niet bij wat ze nodig hebben of zien ze juist wat ze nooit hadden mogen zien.
+
+00:53:38.480 --> 00:53:40.980
+Dat laatste is erger, want niemand klaagt daarover.
+
+00:53:41.240 --> 00:53:42.120
+Dan de koppelingen.
+
+00:53:42.300 --> 00:53:44.800
+Elke gedeelde link, elke ingesloten link op een pagina,
+
+00:53:45.000 --> 00:53:47.760
+elke bladwijzer in iemands browser verwijst naar een specifiek adres
+
+00:53:47.760 --> 00:53:49.380
+en soms naar een specifiek item-idee.
+
+00:53:49.560 --> 00:53:52.700
+Herstel naar een andere locatie of herstel een item als een nieuwe kopie,
+
+00:53:52.920 --> 00:53:54.720
+en de oude koppelingen breken geruisloos.
+
+00:53:54.880 --> 00:53:56.940
+Het bestand bestaat, het pad ernaartoe niet.
+
+00:53:57.140 --> 00:53:58.400
+Dan de metagegevens.
+
+00:53:58.400 --> 00:54:01.900
+Kolommen, inhoudstypen, wie het bestand heeft gemaakt, wie het als laatste heeft gewijzigd,
+
+00:54:01.980 --> 00:54:04.060
+wanneer, bewaar labels, goedkeuring status,
+
+00:54:04.240 --> 00:54:06.680
+een herstelactie die het document terugzet maar de metagegevens verliest,
+
+00:54:06.820 --> 00:54:08.680
+geeft een advocaat een bestand zonder enige historie.
+
+00:54:08.800 --> 00:54:11.240
+Dus een goede RTO voor SharePoint kan niet stoppen bij
+
+00:54:11.240 --> 00:54:12.060
+De site is terug.
+
+00:54:12.220 --> 00:54:16.100
+Het moet zeggen, de site is terug inclusief machtigingen, koppelingen en intacte metagegevens.
+
+00:54:16.320 --> 00:54:20.180
+Dat is een strengere toets en minder tools slagen hiervoor dan hun verkooppagina's doen geloven.
+
+00:54:20.340 --> 00:54:22.000
+En dit is het punt dat mensen verbaast.
+
+00:54:22.180 --> 00:54:24.780
+Een herstel kan foutloos eindigen en er toch kapot uitzien.
+
+00:54:24.780 --> 00:54:28.480
+Een gebruiker opent een bibliotheek, de bestanden staan er, maar de weergave is weg.
+
+00:54:28.620 --> 00:54:31.000
+De weergave gegroepeerd op project en gesorteerd op deadline,
+
+00:54:31.200 --> 00:54:34.920
+of de map die ze elke ochtend gebruikt en ontbreekt omdat deze onder een andere naam is hersteld,
+
+00:54:35.120 --> 00:54:38.760
+of een stroom die de bibliotheek voedde is gestopt en er is sinds het herstel niets nieuws binnengekomen.
+
+00:54:38.960 --> 00:54:40.720
+Technisch gezien zijn de gegevens terug.
+
+00:54:40.900 --> 00:54:44.340
+Praktisch gezien kan de gebruiker niet werken en het maakt de gebruiker niet uit wat het verschil is.
+
+00:54:44.560 --> 00:54:46.740
+Daarom stopt de klok niet wanneer de taak is voltooid.
+
+00:54:46.900 --> 00:54:49.560
+Hij stopt pas wanneer een echt persoon zegt, dit ziet er goed uit.
+
+00:54:49.560 --> 00:54:53.340
+Neem dat op in de doelstelling zelf als een voorwaarde voor succes, niet als bijzaak.
+
+00:54:53.400 --> 00:54:56.700
+Hoe bepaal je nu getallen voor iets dat verstrengeld is en niet naast elkaar staat?
+
+00:54:56.860 --> 00:54:57.960
+Er zijn er te veel van.
+
+00:54:58.220 --> 00:54:59.780
+Deel ze in naar wat het bedrijf verliest.
+
+00:55:00.020 --> 00:55:02.760
+Niveau 1 is de kleine set die het werk stopt als deze verdwijnt.
+
+00:55:02.900 --> 00:55:06.880
+De intranet homepage, de contractbibliotheek, de site waar finance het kwartaal afsluit.
+
+00:55:07.100 --> 00:55:11.220
+Deze krijgen strikte doelstellingen, een RPO gemeten in uren en een RTO die ook in uren wordt gemeten,
+
+00:55:11.380 --> 00:55:13.400
+met benoemde eigenaren die akkoord zijn gegaan met de cijfers.
+
+00:55:13.580 --> 00:55:16.100
+Niveau 2 omvat actieve team sites en projectruimtes.
+
+00:55:16.100 --> 00:55:19.320
+Belangrijk, maar een dag aan verloren bewerkingen doet pijn zonder fataal te zijn.
+
+00:55:19.540 --> 00:55:21.340
+Ruimere marges en een standaard proces.
+
+00:55:21.580 --> 00:55:22.920
+Niveau 3 is al het overige.
+
+00:55:23.280 --> 00:55:28.400
+Gearchiveerde projecten, oude evenementensites, verlaten experimenten, eigen tools en een langere hersteltijd zijn hier prima
+
+00:55:28.400 --> 00:55:30.080
+en dat waard op uitspreken bespaart geld.
+
+00:55:30.300 --> 00:55:30.980
+Nog één stap.
+
+00:55:31.200 --> 00:55:33.960
+Breng de afhankelijkheden voor niveau 1 in kaart voordat je ze nodig hebt.
+
+00:55:34.180 --> 00:55:37.660
+Weet bij welke hub het hoort, welke stromen het raken en welke teams erop vertrouwen.
+
+00:55:37.820 --> 00:55:40.620
+Een herstelplan dat deze niet vermeldt, is een plan voor een half herstel.
+
+00:55:40.620 --> 00:55:44.320
+Dat is SharePoint's complexe structuur, nauwe tolerantie voor een herstel dat slechts afgerond lijkt.
+
+00:55:44.320 --> 00:55:45.980
+OneDrive is het tegenovergestelde.
+
+00:55:46.140 --> 00:55:47.980
+Elke omgeving is simpel, plat en persoonlijk.
+
+00:55:48.160 --> 00:55:50.120
+De moeilijkheid zit niet in de vorm van een enkel account.
+
+00:55:50.320 --> 00:55:52.760
+Het is wat er gebeurt als je dit vermenigvuldigt met het hele bedrijf.
+
+00:55:52.900 --> 00:55:55.000
+RPO en RTO instellen voor OneDrive.
+
+00:55:55.200 --> 00:55:58.380
+Eén OneDrive is klein, één persoon, één mappenstructuur, één set bestanden.
+
+00:55:58.580 --> 00:56:03.160
+Het verlies daarvan treft één persoon op één vervelende middag en het standaard herstel dat we bespraken werkt daar prima voor.
+
+00:56:03.340 --> 00:56:05.280
+Maar zo ziet een storing er in de praktijk niet uit.
+
+00:56:05.640 --> 00:56:07.180
+Ransomware treft niet slechts één account.
+
+00:56:07.180 --> 00:56:11.640
+Het treft wie er ook klikte, wie de melding goedkeurde, wiens laptop online was toen de code werd uitgevoerd.
+
+00:56:11.640 --> 00:56:14.700
+De rijkwijte is de sper gebruiker, maar de impact is ten het breed.
+
+00:56:14.900 --> 00:56:17.680
+50 accounts, dan 200, dan de hele verkoopafdeling.
+
+00:56:17.880 --> 00:56:19.940
+Elke OneDrive is een apart herstelproces.
+
+00:56:20.180 --> 00:56:25.140
+Elk heeft een eigen schadevenster, een eigen herstelpunt en een eigen eigenaar die het misschien nog niet heeft gemerkt.
+
+00:56:25.320 --> 00:56:27.680
+Daarom kan de doelstelling niet per account worden opgesteld.
+
+00:56:27.880 --> 00:56:30.740
+Het moet voor het geheel worden opgesteld en dat verandert de statistiek.
+
+00:56:30.880 --> 00:56:33.580
+De meeste teams vragen hoe lang duurt het om één OneDrive te herstellen.
+
+00:56:33.580 --> 00:56:36.160
+Dat is de verkeerde vraag, want het antwoord is altijd prima.
+
+00:56:36.400 --> 00:56:38.680
+Minuten, misschien een uur voor een intensieve gebruiker.
+
+00:56:38.680 --> 00:56:41.620
+De juiste vraag is, hoe lang duurt het voordat er 300 klaar zijn?
+
+00:56:41.860 --> 00:56:47.800
+Dat is de snelheid van bulkherstel en dat getal bepaalt of een aanval op maandag-woensdag voorbij is of volgende week vrijdag nog steeds gaande is.
+
+00:56:48.040 --> 00:56:49.800
+Zet het daarom in de doelstelling als een tempo.
+
+00:56:50.060 --> 00:56:53.860
+Hoeveel accounts per uur, bij welke gemiddelde omvang, met hoeveel menselijke tussenkomst.
+
+00:56:54.020 --> 00:56:58.160
+Als een beheerder elk proces moet bewaken, is het tempo laag en moet je dat zwart op wit vastleggen.
+
+00:56:58.300 --> 00:57:01.240
+Als het via scripts of bulk tools verloopt, gaat het tempo omhoog.
+
+00:57:01.380 --> 00:57:04.680
+Hoe dan ook, het getal moet in een test worden gemeten, niet worden afgelezen van een productpagina.
+
+00:57:05.380 --> 00:57:07.000
+Kijk nu naar wat de hoop groter maakt.
+
+00:57:07.000 --> 00:57:11.540
+Known Folder Move. Dat is het beleid dat bureaublad, documenten en afbeeldingen omleidt naar OneDrive.
+
+00:57:11.740 --> 00:57:15.040
+Je schakelt het in omdat het gebruikers beschermt tegen een kapotte laptop en dat doet het ook.
+
+00:57:15.160 --> 00:57:17.360
+Maar denk eens na over wat het doet met het aanvalsoppervlak.
+
+00:57:17.560 --> 00:57:20.100
+Voorheen stonden de werkbestanden van een gebruiker op een lokale schijf.
+
+00:57:20.160 --> 00:57:21.880
+Een defecte laptop betekende dat je ze kwijt was.
+
+00:57:22.100 --> 00:57:25.000
+Nu staan diezelfde bestanden in OneDrive en worden ze overal gesynchroniseerd,
+
+00:57:25.140 --> 00:57:27.960
+wat geweldig is voor een kapotte laptop, maar slecht voor een synchronisatieaanval.
+
+00:57:28.160 --> 00:57:29.960
+Hetgeen je verplaatst om bestanden veilig te stellen,
+
+00:57:30.160 --> 00:57:32.820
+is nu wat de Sync Client gebruikt om versleutelde kopieën te verspreiden.
+
+00:57:32.820 --> 00:57:36.120
+Known Folder Move verplaatst dus het risico. Het neemt het niet weg.
+
+00:57:36.320 --> 00:57:39.860
+Het verandert een lokaal verlies in een cloudbreedverlies en maakt OneDrive de enige opslaglocatie
+
+00:57:39.860 --> 00:57:42.340
+voor bestanden die voorheen per ongeluk nog ergens anders een kopie hadden.
+
+00:57:42.460 --> 00:57:45.660
+Als je dit uitrolt, is je RPO voor OneDrive niet langer een indicatief getal.
+
+00:57:45.820 --> 00:57:47.700
+Het wordt de enige bescherming die die mappen hebben.
+
+00:57:47.940 --> 00:57:49.280
+Dan het laatste punt, hefbomen.
+
+00:57:49.480 --> 00:57:51.240
+We hebben gezien hoe de licentievalsstrik werkt.
+
+00:57:51.440 --> 00:57:52.900
+Dit is de kant van OneDrive daarvan.
+
+00:57:53.100 --> 00:57:56.960
+Wanneer een account wordt verwijderd, komt de bijbehorende OneDrive in een bewaarperiode terecht voor definitieve verwijdering.
+
+00:57:57.100 --> 00:57:59.620
+De standaard is 93 dagen voor de site van een verwijderde gebruiker,
+
+00:58:02.820 --> 00:58:05.000
+Deze managers kunnen tijdens die periode toegang krijgen tot de bestanden.
+
+00:58:05.160 --> 00:58:06.320
+Maar merk op hoe stil het is.
+
+00:58:06.540 --> 00:58:08.340
+Niemand logt in. Niemand controleert het.
+
+00:58:08.460 --> 00:58:10.660
+De bestanden blijven staan en aan het einde van de periode worden ze verwijderd.
+
+00:58:10.760 --> 00:58:12.940
+Dus de OneDrive van een vertrekkende werknemer heeft een eigen doelstelling nodig.
+
+00:58:13.140 --> 00:58:15.060
+Wie erft de toegang? Wie beoordeelt dit?
+
+00:58:15.220 --> 00:58:16.880
+Wie beslist wat wordt bewaard en voor hoe lang?
+
+00:58:17.080 --> 00:58:20.660
+Zonder die antwoorden verstrijken de 93 dagen volgens een schema dat niemand heeft vastgelegd
+
+00:58:20.660 --> 00:58:23.360
+en verdwijnt het werk van een voormalig werknemer op een doodgewone donderdag.
+
+00:58:23.560 --> 00:58:24.520
+Dat is OneDrive.
+
+00:58:24.800 --> 00:58:29.000
+Eenvoudig van vorm, lastig qua volume en blootgesteld door juist die beleidsregels die het moeten beschermen.
+
+00:58:29.000 --> 00:58:32.600
+Teams is het tegenovergestelde probleem. Het is niet lastig vanwege het volume.
+
+00:58:32.840 --> 00:58:34.940
+Het is lastig omdat er geen enkele ding is om te herstellen.
+
+00:58:35.220 --> 00:58:37.580
+Wat betekent dat er geen enkele doelstelling is om in te stellen?
+
+00:58:37.880 --> 00:58:39.880
+RPO en RTO instellen voor Teams.
+
+00:58:40.080 --> 00:58:42.040
+Je kunt niet één doelstelling voor een team instellen.
+
+00:58:42.240 --> 00:58:44.020
+Er is geen enkel ding om het tegenaf te zetten.
+
+00:58:44.240 --> 00:58:47.160
+Haal het team dus eerst uit elkaar en bepaal een waarde voor elk onderdeel.
+
+00:58:47.200 --> 00:58:48.640
+De bestanden staan in SharePoint.
+
+00:58:48.900 --> 00:58:53.000
+Dat is de bibliotheek achter het tabblad Bestanden en die volgt de SharePoint doelstelling die je al hebt ingesteld.
+
+00:58:53.160 --> 00:58:55.840
+Het postvak en de agenda staan in Exchange achter de groep.
+
+00:58:55.840 --> 00:59:01.160
+Lidmaatschap en eigendom zitten in de Microsoft 365 groep, wat betekent dat ze in Entra ID staan.
+
+00:59:01.340 --> 00:59:06.540
+Planner-borden, one-out notitieblokken en apps die aan kanalen zijn vastgemaakt, hebben elk hun eigen plek en eigen regels.
+
+00:59:06.740 --> 00:59:11.140
+Een team heeft dus minstens vijf eigenaren van zijn gegevens en elk kan op zijn eigen moment falen.
+
+00:59:11.260 --> 00:59:13.000
+Een goed plan benoemt ze in een korte tabel.
+
+00:59:13.160 --> 00:59:15.820
+Onderdeel, locatie, RPO, RTO, wie keurt het goed?
+
+00:59:15.960 --> 00:59:17.400
+Het kost een middag om dit te schrijven.
+
+00:59:17.600 --> 00:59:19.340
+De meeste tenants hebben dit nooit opgeschreven.
+
+00:59:19.340 --> 00:59:22.520
+Nu het onderdeel waar iedereen zich zorgen over maakt, chat en kanaalberichten.
+
+00:59:22.720 --> 00:59:25.080
+Hier komen verwachtingen en werkelijkheid niet overeen.
+
+00:59:25.080 --> 00:59:29.640
+Mensen gaan ervan uit dat als een bericht verdwijnt, het net zo kan terugkomen als een verwijderd bestand.
+
+00:59:29.800 --> 00:59:32.740
+En als het alleen verwijderd is, kan retentie vaak een kopie bewaren.
+
+00:59:32.880 --> 00:59:36.580
+Die kopie staat in een verborgen map in een postvak, gemaakt voor zoekopdrachten en juridische beoordeling.
+
+00:59:36.760 --> 00:59:37.860
+Je kunt het bericht daar vinden.
+
+00:59:38.080 --> 00:59:39.200
+Je kunt het exporteren.
+
+00:59:39.380 --> 00:59:44.200
+Wat je niet kunt, is het terugplaatsen in het kanaal op volgorde, met antwoorden, reacties en de thread intact.
+
+00:59:44.400 --> 00:59:46.540
+De eerlijke RPO voor chat is dus een vraag.
+
+00:59:46.540 --> 00:59:49.460
+Moeten de woorden bewaard blijven of moet de conversatie worden hersteld?
+
+00:59:49.660 --> 00:59:51.960
+Dat zijn verschillende doelen met verschillende prijskaartjes.
+
+00:59:52.140 --> 00:59:54.360
+Voor de meeste afdelingen is een doorzoekbaar archief voldoende.
+
+00:59:55.080 --> 00:59:57.120
+Dit betekent een verloren thread, een verloren beslissing.
+
+00:59:57.260 --> 01:00:00.440
+En het antwoord moet een tool zijn die gesprekken in een leesbare vorm vastlegt.
+
+01:00:00.660 --> 01:00:03.220
+Vraag het team welke ze bedoelen voordat je het nummer opschrijft.
+
+01:00:03.440 --> 01:00:05.560
+Dan de vergeten onderdelen, vergaderopnames.
+
+01:00:05.880 --> 01:00:08.960
+Deze komen terecht in OneDrive of SharePoint afhankelijk van het type vergadering
+
+01:00:08.960 --> 01:00:10.960
+en volgen de bewaartermijn van de eigenaar van het bestand.
+
+01:00:11.200 --> 01:00:14.120
+Sommige tenants laten ze automatisch verlopen na een bepaald aantal dagen.
+
+01:00:14.120 --> 01:00:17.200
+De opname van de bestuursvergadering van vorig jaar kan dus opzettelijk verwijderd zijn
+
+01:00:17.200 --> 01:00:19.060
+en niemand herinnert zich dat ze daarmee akkoord zijn gegaan.
+
+01:00:19.200 --> 01:00:20.120
+Het wiki-tabblad.
+
+01:00:20.120 --> 01:00:22.720
+Het is een verouderde functie die als bestand in de bibliotheek van het team staat
+
+01:00:22.720 --> 01:00:24.880
+en makkelijk over het hoofd wordt gezien omdat het er niet uitziet als een bestand.
+
+01:00:25.000 --> 01:00:27.020
+Als het wordt verwijderd, gaan de noticies mee verloren.
+
+01:00:27.220 --> 01:00:30.900
+En apps, tabbladen, bots, connectors en aangepaste apps die aan kanalen zijn vastgepind.
+
+01:00:31.060 --> 01:00:34.180
+Hun instellingen en gegevens bevinden zich meestal bij de app zelf, niet bij teams.
+
+01:00:34.400 --> 01:00:36.960
+Herstel het team en het tabblad wijst misschien naar niets of naar een dienst
+
+01:00:36.960 --> 01:00:40.760
+die opnieuw moet worden aangemeld, een nieuwe verbinding vereist of goedkeuring van een beheerder nodig heeft.
+
+01:00:40.960 --> 01:00:42.480
+Zet ze dus ook allemaal op de lijst.
+
+01:00:42.660 --> 01:00:46.420
+Niet omdat ze groot zijn, maar omdat dit de onderdelen zijn die een herstelteam leeg laten aanvoelen.
+
+01:00:46.420 --> 01:00:49.440
+En dit is de uitspraak die je hardop moet zeggen voordat er een incident optreedt.
+
+01:00:49.540 --> 01:00:52.820
+Sommige teamsgegevens zijn mogelijk alleen als export te herstellen, niet als live herstel.
+
+01:00:52.960 --> 01:00:54.420
+Een bestand komt terug als een bestand.
+
+01:00:54.560 --> 01:00:56.680
+Een mailbox item komt terug als een e-mail item.
+
+01:00:56.860 --> 01:01:00.200
+Maar een gesprek met al zijn structuur komt wellicht terug als een document dat je doorzoekt,
+
+01:01:00.380 --> 01:01:02.200
+leest en overhandigt aan iemand die het nodig heeft.
+
+01:01:02.420 --> 01:01:03.800
+Dat is geen falen van de planning.
+
+01:01:04.020 --> 01:01:05.580
+Het is hoe het product in elkaar zit.
+
+01:01:05.760 --> 01:01:08.460
+De fout is een doelstelling opstellen die een live herstel belooft
+
+01:01:08.460 --> 01:01:11.740
+om er tijdens een storing achter te komen dat de tool alleen een record kan leveren.
+
+01:01:11.920 --> 01:01:14.820
+Schrijf de doelstelling dus op in de vorm die je daadwerkelijk kunt waarmaken.
+
+01:01:14.820 --> 01:01:18.060
+Herstelt als live inhoud binnen 4 uur voor bestanden in de groep.
+
+01:01:18.120 --> 01:01:20.880
+Herstelt als een doorzoekbare export binnen 1 dag voor chat.
+
+01:01:21.100 --> 01:01:22.140
+Beiden zijn legitiem.
+
+01:01:22.380 --> 01:01:24.280
+Slechts 1 van beiden is eerlijk over chat.
+
+01:01:24.480 --> 01:01:29.000
+Nu heb je doelstellingen voor elke werklast, exchange, sharepoint, one drive, teams, aantallen,
+
+01:01:29.200 --> 01:01:29.820
+eigenaren en slaagvoorwaarden.
+
+01:01:30.540 --> 01:01:34.640
+Op papier lijken ze af en dat is het gevaar, want een getal op papier is slechts een bewering.
+
+01:01:34.860 --> 01:01:37.800
+Niemand weet of de tools het halen totdat iemand het herstel uitvoert.
+
+01:01:38.020 --> 01:01:40.240
+Waarom de meeste herstelplannen nooit zijn uitgevoerd?
+
+01:01:40.460 --> 01:01:41.820
+Dit is het patroon in de meeste organisaties.
+
+01:01:41.820 --> 01:01:43.980
+Iemand koopt een back-up product.
+
+01:01:44.160 --> 01:01:47.920
+Er is een budgetpost, een gesprek met de leverancier, een proof of concept en een getekend contract.
+
+01:01:48.100 --> 01:01:51.300
+De tool wordt aangezet, een dashboard kleurt groen en het project wordt afgesloten.
+
+01:01:51.520 --> 01:01:54.520
+Dan is er de stille aanname, de backup is gemaakt, dus het herstel zal werken.
+
+01:01:54.680 --> 01:01:55.820
+Maar niemand heeft dat officieel vastgelegd.
+
+01:01:56.540 --> 01:01:57.760
+Niemand heeft het gecontroleerd.
+
+01:01:57.940 --> 01:02:00.440
+De aankoop was het bewijs en dat bewijs werd nooit getest.
+
+01:02:00.640 --> 01:02:04.940
+Dus het plan bestaat als een gevoel dat gedeeld wordt door iedereen die er niet bij was toen de tool werd geconfigureerd.
+
+01:02:05.080 --> 01:02:06.220
+En het dashboard helpt niet.
+
+01:02:06.400 --> 01:02:08.040
+Het is gemaakt om je een gerust gevoel te geven.
+
+01:02:08.200 --> 01:02:09.780
+Een groene status betekent dat de taak is uitgevoerd.
+
+01:02:09.780 --> 01:02:11.860
+Het zegt dat gegevens zijn gelezen, gekopieerd en opgeslagen.
+
+01:02:12.000 --> 01:02:13.780
+Het zegt niet dat de gegevens kunnen worden teruggezet.
+
+01:02:13.960 --> 01:02:16.600
+Dat zijn twee verschillende claims en het dashboard maakt alleen de eerste waar.
+
+01:02:16.760 --> 01:02:21.220
+Een backup kan twee jaar lang elke nacht voltooien en alsnog falen de eerste keer dat iemand om een mailbox vraagt.
+
+01:02:21.400 --> 01:02:22.400
+Dus waar gaat het mis?
+
+01:02:22.880 --> 01:02:23.320
+Stilletjes.
+
+01:02:23.520 --> 01:02:25.480
+Throttling is de meest voorkomende oorzaak.
+
+01:02:25.640 --> 01:02:31.400
+We komen later op de technische details, maar kort gezegd beperkt Microsoft hoe snel externe tools gegevens kunnen ophalen.
+
+01:02:31.640 --> 01:02:36.800
+Wanneer een backup taak die limiet bereikt, vertraagt hij, probeert het opnieuw en slaat soms items over die niet op tijd bereikt konden worden.
+
+01:02:36.800 --> 01:02:39.880
+De taak rapporteert nog steeds succes omdat het grootste deel van de data is gelukt.
+
+01:02:40.060 --> 01:02:42.560
+De overgeslagen items staan in een logbestand dat niemand leest.
+
+01:02:42.760 --> 01:02:43.960
+Rechten zijn een ander probleem.
+
+01:02:44.140 --> 01:02:49.240
+Het account dat de backup tool gebruikt kan rechten verliezen na een functiewijziging, een update van voorwaardelijke toegang of een wachtwoordbeleid.
+
+01:02:49.420 --> 01:02:50.560
+Niemand linkte dat aan de backup.
+
+01:02:50.800 --> 01:02:52.460
+De taak kan bepaalde sites niet meer lezen.
+
+01:02:52.720 --> 01:02:53.760
+Sommige tools markeren dit.
+
+01:02:53.960 --> 01:02:55.420
+Sommige tools maken simpelweg een kleinere backup.
+
+01:02:55.600 --> 01:02:56.840
+En dan zijn er nog de uitsluitingen.
+
+01:02:56.940 --> 01:02:59.240
+Een site werd tijdens de installatie weggelaten omdat deze nieuw was.
+
+01:02:59.400 --> 01:03:01.980
+Een gedeelde mailbox werd nooit toegevoegd omdat er geen licentie was.
+
+01:03:01.980 --> 01:03:04.860
+Een groep gebruikers werd bewust overgeslagen en daarna vergeten.
+
+01:03:05.020 --> 01:03:07.640
+Maanden later zijn dat precies de items die iemand nodig heeft.
+
+01:03:07.820 --> 01:03:10.980
+De backup is compleet in de zin dat deze alles bevat wat je hebt opgegeven.
+
+01:03:11.180 --> 01:03:12.840
+Niets hiervan verschijnt als een foutmelding.
+
+01:03:13.060 --> 01:03:16.080
+Ze verschijnen als een gat en een gat wordt pas zichtbaar wanneer je het probeert te vullen.
+
+01:03:16.220 --> 01:03:17.480
+Kijk nu naar wie de vraag stelt.
+
+01:03:17.680 --> 01:03:19.720
+Een auditor vraagt, hebben jullie een backupproces?
+
+01:03:19.900 --> 01:03:20.980
+Is het gedocumenteerd?
+
+01:03:21.200 --> 01:03:21.720
+Draait het?
+
+01:03:21.900 --> 01:03:26.840
+Dat zijn terechte vragen en een goed antwoord is een beleidsdocument, een screenshot van de console en een recent logbestand.
+
+01:03:27.000 --> 01:03:29.920
+De auditor vertrekt tevreden en de organisatie is geslaagd.
+
+01:03:29.920 --> 01:03:31.780
+Een incident vraagt iets heel anders.
+
+01:03:31.980 --> 01:03:37.540
+Het vraagt, kun je deze 400 mailboxen van dinsdag terugzetten binnen 6 uur, terwijl de aanvaller misschien nog meekijkt?
+
+01:03:37.720 --> 01:03:39.040
+Het geeft niet om het beleid.
+
+01:03:39.280 --> 01:03:45.380
+Het geeft om de klok, de inloggegevens en of de hersteltaak zijn eerste contact met een echte tenant onder druk overleeft.
+
+01:03:45.580 --> 01:03:51.260
+De een controleert of er een proces bestaat, de ander of het werkt en de meeste organisaties zijn ingericht om voor die eerste te slagen.
+
+01:03:51.440 --> 01:03:55.660
+Het resultaat is een plan dat op papier aflijkt, maar nog nooit door een mens is gebruikt op een slechte dag.
+
+01:03:55.840 --> 01:03:57.380
+Niemand weet hoe lang de stappen echt duren.
+
+01:03:57.620 --> 01:03:59.120
+Niemand weet welke account ze uitvoert.
+
+01:03:59.120 --> 01:04:01.780
+Niemand weet wat de tool doet als er 2000 items tegelijk falen.
+
+01:04:01.960 --> 01:04:04.640
+Dat is het onderdeel dat moet veranderen, niet het product en niet het budget.
+
+01:04:04.840 --> 01:04:07.620
+De gewoonte om een aangekochte tool als een bewezen tool te beschouwen.
+
+01:04:07.780 --> 01:04:11.580
+De volgende vraag is dus hoe je het test niet met een demo of een rondleiding van de leverancier,
+
+01:04:11.800 --> 01:04:15.500
+maar met een methode die je kunt herhalen, meten en opnieuw kunt draaien als de tenant verandert.
+
+01:04:15.940 --> 01:04:17.040
+Hoe een herstel testen?
+
+01:04:17.180 --> 01:04:18.260
+Een praktische methode.
+
+01:04:18.520 --> 01:04:20.600
+Begin met scenario's, niet met functies.
+
+01:04:20.840 --> 01:04:23.140
+Een functietest vraagt, werkt de herstelknop?
+
+01:04:23.380 --> 01:04:24.000
+Dat doet hij.
+
+01:04:24.180 --> 01:04:26.760
+Elke leverancier heeft die al 100 keer gedemonstreerd.
+
+01:04:26.760 --> 01:04:28.940
+Een scenario's test vraagt iets lastigers.
+
+01:04:29.140 --> 01:04:31.260
+Kunnen we deze specifieke slechte dag overleven?
+
+01:04:31.460 --> 01:04:32.820
+Schrijf de slechte dagen dus op.
+
+01:04:33.020 --> 01:04:34.320
+Vier zijn genoeg om te beginnen.
+
+01:04:34.520 --> 01:04:38.920
+Een verwijderde mailbox, bij voorkeur die van een leidinggevende, want dat is de eerste die het bedrijf opmerkt.
+
+01:04:39.060 --> 01:04:40.020
+Een gewiste site.
+
+01:04:40.240 --> 01:04:44.240
+Kies een belangrijke SharePoint site, de contractenbibliotheek of de site voor de financiële afsluiting.
+
+01:04:44.480 --> 01:04:45.920
+Behandel deze alsof hij weg is.
+
+01:04:45.920 --> 01:04:50.700
+Massa-encryptie van OneDrive, niet één account, maar een groep van 50, want de omvang is het probleem.
+
+01:04:50.840 --> 01:04:52.800
+Een enkel account leert je niets over de omvang.
+
+01:04:52.980 --> 01:04:57.320
+En een verwijderd team, de bestanden, de groep, de mailbox, de kanalen, alles tegelijk.
+
+01:04:57.480 --> 01:04:59.680
+Elk scenario krijgt een script van één pagina.
+
+01:04:59.900 --> 01:05:00.680
+Wat is er kapot?
+
+01:05:00.880 --> 01:05:01.720
+Vanaf welk moment?
+
+01:05:02.020 --> 01:05:03.800
+En wie vraagt erom om het terug te krijgen?
+
+01:05:04.040 --> 01:05:06.920
+Bepaal nu wat slagen betekent voordat je ook maar iets uitvoert.
+
+01:05:07.140 --> 01:05:10.100
+Dit is de stap die teams overslaan en daarom bewijzen hun tests niets.
+
+01:05:10.100 --> 01:05:14.640
+Als je de slaagcriteria pas na het herstel bepaalt, zul je altijd een manier vinden om het een succes te noemen.
+
+01:05:14.860 --> 01:05:16.280
+Schrijf dus drie voorwaarden op.
+
+01:05:16.420 --> 01:05:16.700
+Tijd.
+
+01:05:16.920 --> 01:05:19.540
+De klok begint te lopen zodra het scenario wordt aangekondigd.
+
+01:05:19.620 --> 01:05:23.480
+Hij stopt wanneer een gebruiker bevestigt dat de inhoud werkt, niet wanneer de taak als voltooid wordt gemarkeerd.
+
+01:05:23.620 --> 01:05:27.300
+Je hebt al een RTO voor elke workload, dus dat is het getal waar je tegen test.
+
+01:05:27.900 --> 01:05:28.260
+Volledigheid.
+
+01:05:28.480 --> 01:05:30.780
+Vergelijk wat er teruggekomen is met wat er terug had moeten komen.
+
+01:05:30.960 --> 01:05:32.720
+Aantal items, aantal mappen, groottes.
+
+01:05:32.920 --> 01:05:34.860
+Kies een steekproef en controleer deze handmatig.
+
+01:05:35.060 --> 01:05:37.940
+Controleer voor een site de rechten op drie mappen waarvan je weet dat ze unieke toegang hebben.
+
+01:05:38.220 --> 01:05:39.700
+Controleer of de koppelingen nog werken.
+
+01:05:40.000 --> 01:05:41.900
+Controleer de metadata van een paar documenten.
+
+01:05:42.220 --> 01:05:45.860
+Volledigheid betekent de structuur, niet alleen de bestanden, en bruikbaarheid voor een echt persoon.
+
+01:05:46.080 --> 01:05:47.200
+Dit is wat het meest telt.
+
+01:05:47.480 --> 01:05:51.180
+Zet iemand van de business voor de herstelde inhoud, iemand die niet heeft geholpen bij de test.
+
+01:05:51.380 --> 01:05:55.480
+Vraag hen een normale ochtendritueel uit te voeren, de gebruikelijke map te openen en het gebruikelijke bestand te vinden.
+
+01:05:55.660 --> 01:05:57.360
+Als ze aarzelen, schrijf dan op waarom.
+
+01:05:57.360 --> 01:05:58.740
+Nu, waar herstel je naartoe?
+
+01:05:58.920 --> 01:06:00.640
+Niet naar productie, niet de eerste keer.
+
+01:06:00.840 --> 01:06:06.020
+Herstel eerst naar een alternatieve locatie, een testomgeving, een testmailbox, een aparte bibliotheek.
+
+01:06:06.160 --> 01:06:12.820
+Daar ontdek je de basis, of de tool de data bereikt, of het account de rechten heeft en of de stappen in je noticies kloppen met wat je echt doet.
+
+01:06:13.260 --> 01:06:15.300
+Fouten kosten hier een middag, geen klant.
+
+01:06:15.500 --> 01:06:17.240
+Ga daarna dichter naar de werkelijkheid toe.
+
+01:06:17.700 --> 01:06:21.940
+Productieachtige condities betekenen hetzelfde rechtenmodel, hetzelfde volume, dezelfde tijdstruk.
+
+01:06:21.940 --> 01:06:25.500
+Herstel een volledige tier 1 site naar een staging kopie van de tenantstructuur.
+
+01:06:25.700 --> 01:06:29.220
+Draai het OneDrive bulk scenario met het werkelijke aantal accounts, niet met 3.
+
+01:06:29.220 --> 01:06:33.160
+Een herstelactie die werkt bij 10 items maar faalt bij 10.000, heeft niets bewezen.
+
+01:06:33.340 --> 01:06:35.380
+En terwijl het draait, schrijf je alles op.
+
+01:06:35.540 --> 01:06:37.020
+Noteer de tijd bij elke stap.
+
+01:06:37.360 --> 01:06:42.700
+Declaratie, scoping, eerste commando, eerste byte hersteld, laatste byte hersteld, gebruikersbevestiging.
+
+01:06:42.900 --> 01:06:46.540
+Noteer de exacte stappen in volgorde, inclusief de stappen die niet in het plan stonden.
+
+01:06:46.540 --> 01:06:53.060
+De toestemmingsaanvraag die 40 minuten duurde, de goedkeuring van iemand op vakantie, het commando dat een andere syntax vereiste dan in de documentatie stond.
+
+01:06:53.220 --> 01:06:57.540
+Noteer ook de betrokkenen, wie het uitvoerde, wie het goedkeurde, wie op het laatste moment werd ingeschakeld.
+
+01:06:57.540 --> 01:06:59.920
+Als één naam bij elke stap staat, heb je geen plan.
+
+01:07:00.100 --> 01:07:00.900
+Je hebt een persoon.
+
+01:07:01.120 --> 01:07:02.560
+Dat verslag is het echte resultaat.
+
+01:07:02.720 --> 01:07:04.700
+Het herstel zelf is slecht zo je het hebt gegenereerd.
+
+01:07:04.900 --> 01:07:05.580
+Nu, hoe vaak?
+
+01:07:05.700 --> 01:07:08.660
+Per kwartaal is een verstandige ondergrens, niet elk scenario elke keer.
+
+01:07:08.840 --> 01:07:13.160
+Roteer ze zodat elk scenario minstens één keer per jaar draait en de scenario's met het hoogste risico vaker.
+
+01:07:13.380 --> 01:07:21.780
+En voer het opnieuw uit na elke tenant wijziging, een nieuw beleid voor voorwaardelijke toegang, een wijziging in beheerdersrollen, een nieuw back-up product, een geactiveerde workload, een licentiewijziging, een fusie.
+
+01:07:21.780 --> 01:07:28.200
+Stuk voor stuk kunnen ze geruisloos een herstelpad verbreken, ze zullen je er niet op wijzen en dan beginnen de cijfers op papier eindelijk iets te betekenen.
+
+01:07:28.340 --> 01:07:34.540
+Maar zelfs een geslaagde test kan je misleiden, want een herstelactie die in een middag met 50 accounts verliep, schaalt niet lineair naar 5000.
+
+01:07:34.980 --> 01:07:37.260
+En de reden is niet je tool, je team of je plan.
+
+01:07:37.480 --> 01:07:42.060
+Het is een limiet die buiten dit alles valt en waar de meeste teams pas op de dag dat het ertoe doet tegenaan lopen.
+
+01:07:42.360 --> 01:07:44.840
+Throttling, bandbreedte en de natuurkunde van herstel.
+
+01:07:45.060 --> 01:07:48.380
+Elke restore loopt tegen een plafond aan en dat wordt niet door je tool bepaald.
+
+01:07:48.380 --> 01:07:50.600
+Microsoft beschermt zijn dienst met limieten.
+
+01:07:50.860 --> 01:07:56.400
+Wanneer een externe applicatie om data vraagt via Microsoft Graph of the Workload APIs, belt de dienst te verzoeken.
+
+01:07:56.620 --> 01:08:00.900
+Vraag je te snel, dan antwoordt hij met een beleefde weigering, vertraag, wacht, probeer het opnieuw.
+
+01:08:01.120 --> 01:08:01.940
+Dat is throttling.
+
+01:08:02.200 --> 01:08:03.380
+Dat is er met een goede reden.
+
+01:08:03.600 --> 01:08:06.500
+De bulktaak van één tenant mag de e-mail van anderen niet vertragen.
+
+01:08:06.500 --> 01:08:12.100
+Maar voor een restore betekent het dat de tempo door de dienst wordt bepaald, niet door hoeveel hardware de leverancier heeft gekocht.
+
+01:08:12.380 --> 01:08:15.380
+En de limieten gelden per app, per tenant en per workload.
+
+01:08:15.380 --> 01:08:22.260
+Dus een tool die tijdens een rustige zondagse backup snel leest, kan op maandagochtend kruipen wanneer je eigen gebruikers tegelijkertijd de dienst gebruiken.
+
+01:08:22.480 --> 01:08:24.160
+Laten we er nu echte getallen aan hangen.
+
+01:08:24.340 --> 01:08:26.120
+Stel dat je 20 terabyte moet herstellen.
+
+01:08:26.320 --> 01:08:28.740
+Een tenant met een paar duizend mensen bereikt dat zonder moeite.
+
+01:08:28.940 --> 01:08:31.880
+Een presentatie van een leverancier kan beweren tot 5 terabyte per dag.
+
+01:08:32.060 --> 01:08:35.020
+Dat is een redelijk getal in een lab met een schone tenant zonder concurrerende belasting.
+
+01:08:35.280 --> 01:08:36.100
+Reken het maar uit.
+
+01:08:36.300 --> 01:08:39.060
+Met die snelheid duurt 20 terabyte vier dagen continu draaien.
+
+01:08:39.260 --> 01:08:42.080
+Bij een realistischer tempo van 2 terabyte per dag zijn het er 10.
+
+01:08:42.080 --> 01:08:49.540
+En dat gaat ervan uit dat niets mislukt, geen verlopen tokens, geen batch items die vastlopen in retreats, geen tweede golf van frotteling omdat de restore zelf voor de dienst op een aanval lijkt.
+
+01:08:49.660 --> 01:08:52.840
+Dus het eerlijke antwoord is dagen, geen uren, wat de brochure ook zegt.
+
+01:08:53.000 --> 01:08:54.860
+En er is nog een hiaat dat mensen over het hoofd zien.
+
+01:08:55.040 --> 01:08:56.500
+Herstellen is geen grote stroom.
+
+01:08:56.740 --> 01:08:58.200
+Bestanden zijn klein en talrijk.
+
+01:08:58.360 --> 01:09:03.840
+Een miljoen kleine items duren veel langer dan één grote video, omdat elk item een eigen verzoek is met eigen overhead.
+
+01:09:04.080 --> 01:09:06.880
+Terabytes vertellen je de omvang, het aantal items vertelt je de tijd.
+
+01:09:06.880 --> 01:09:10.040
+Kijk nu eens naar hoe Microsoft 365 Backup dit verandert.
+
+01:09:10.200 --> 01:09:12.700
+Zoals we zagen, staat het niet in de rij bij de openbare ingang.
+
+01:09:12.720 --> 01:09:17.000
+Het draait binnen het platform, dicht bij de opslag en gebruikt interne paden om inhoud terug te kopiëren.
+
+01:09:17.220 --> 01:09:20.360
+Daarom spreekt Microsoft over het herstellen van grote volumes in uren.
+
+01:09:20.560 --> 01:09:24.140
+Voor SharePoint en OneDrive verwijdert de architectuur inderdaad de grootste barrière.
+
+01:09:24.380 --> 01:09:25.780
+Maar kijk wat die claim inhoudt.
+
+01:09:25.820 --> 01:09:28.600
+Het dekt drie workloads binnen de eigen omgeving van Microsoft.
+
+01:09:28.940 --> 01:09:34.520
+Het zegt niets over een tool van derden die Teams chats, entra objecten of een mailbox naar een andere tenant herstelt.
+
+01:09:34.520 --> 01:09:37.520
+Die gaan nog steeds door de voordeur en stuiten nog steeds op de limieten.
+
+01:09:37.700 --> 01:09:39.240
+De lage gedragen zicht is anders.
+
+01:09:39.520 --> 01:09:40.740
+Die in het platform is snel.
+
+01:09:40.940 --> 01:09:43.100
+De onafhankelijke tool is langzamer maar staat los.
+
+01:09:43.300 --> 01:09:46.540
+Dat is een echte afweging en je moet rekening houden met beide snelheden, niet het gemiddelde ervan.
+
+01:09:46.720 --> 01:09:48.060
+Dus wat vraag je aan een leverancier?
+
+01:09:48.280 --> 01:09:49.920
+Vraag niet hoe snel is jullie herstel.
+
+01:09:50.080 --> 01:09:51.740
+Je krijgt een mooi getal als koptekst.
+
+01:09:51.920 --> 01:09:54.200
+Vraag naar de gemeten doorvoer onder jouw omstandigheden.
+
+01:09:54.380 --> 01:09:58.920
+Hoeveel gigabyte per uur op een tenant zoals die van jou, terwijl je tegelijkertijd mailboxen en sites herstelt.
+
+01:09:59.160 --> 01:10:00.340
+Gemeten door wie en wanneer.
+
+01:10:00.500 --> 01:10:03.000
+Wat gebeurt er met dat getal wanneer frotteling optreedt?
+
+01:10:03.000 --> 01:10:06.680
+Vertraagt de tool op een nette manier of faalt hij items en hoor je dat pas later?
+
+01:10:06.960 --> 01:10:08.760
+Stel daarna de vraag die er echt toe doet.
+
+01:10:08.920 --> 01:10:12.140
+Kan ik tijdens een proof of concept een bulkherstel uitvoeren op mijn schaal?
+
+01:10:12.320 --> 01:10:14.540
+Een leverancier die akkoord gaat, is zelfverzekerd.
+
+01:10:14.700 --> 01:10:17.620
+Een leverancier die in plaats daarvan een demo voorstelt, vertelt je ook iets.
+
+01:10:17.800 --> 01:10:21.120
+En verwerk het antwoord in je RTO niet hun best case scenario, maar jouw geteste scenario.
+
+01:10:21.420 --> 01:10:24.480
+Maar zelfs een snel herstel helpt niet als de verkeerde persoon bij de tools kan.
+
+01:10:24.720 --> 01:10:27.640
+Snelheid doet er weinig toe als de aanvaller nog steeds de sleutels in handen heeft.
+
+01:10:27.800 --> 01:10:29.780
+De volgende vraag gaat dus helemaal niet over data.
+
+01:10:29.780 --> 01:10:34.280
+Het gaat over wie de backup kan aanraken en wat er gebeurt als die identiteit gecompromitteerd is.
+
+01:10:34.440 --> 01:10:35.780
+De backup zelf beschermen.
+
+01:10:35.900 --> 01:10:37.120
+Een backup is een doelwit.
+
+01:10:37.460 --> 01:10:38.340
+Aanvallers weten dat.
+
+01:10:38.520 --> 01:10:41.440
+De beste zoeken er eerst naar voordat ze één enkel bestand aanraken,
+
+01:10:41.640 --> 01:10:45.480
+want als ze bij de backup kunnen, is de losgeldbrief geen dreigement meer, maar een prijs.
+
+01:10:45.680 --> 01:10:46.740
+Begin dus met de accounts.
+
+01:10:47.040 --> 01:10:50.120
+De persoon die backups beheert, mag niet inloggen met hetzelfde account als voor e-mail,
+
+01:10:50.300 --> 01:10:51.980
+of het account waarmee aankopen worden goedgekeurd,
+
+01:10:52.200 --> 01:10:54.500
+vergaderingen worden bijgewoond of de hele dag op links wordt geklikt.
+
+01:10:54.680 --> 01:10:57.180
+Geef de backup laag eigen admin identiteiten, aparte namen,
+
+01:10:57.180 --> 01:10:59.440
+aparte wachtwoorden die voor slechts één taak worden gebruikt.
+
+01:10:59.780 --> 01:11:01.980
+Waarom? Omdat dagelijkse accounts het slachtoffer worden van phishing.
+
+01:11:02.160 --> 01:11:03.860
+Dat is de meest gebruikelijke manier om binnen te komen.
+
+01:11:04.040 --> 01:11:06.420
+En een account dat e-mail leest, is een account dat kan worden bedrogen.
+
+01:11:06.620 --> 01:11:10.180
+Een account dat alleen de backup console opent, loopt veel minder kans om om de tuin geleid te worden.
+
+01:11:10.480 --> 01:11:11.860
+Vergrendel die accounts vervolgens.
+
+01:11:12.260 --> 01:11:14.320
+Multifactor authenticatie en niet de zwakste soort.
+
+01:11:14.500 --> 01:11:17.460
+Een SMS-code kan worden onderschept of iemand kan worden overtuigd deze af te geven.
+
+01:11:17.640 --> 01:11:20.220
+Een fysieke sleutel of een phishing-bestendige methode kan dat niet.
+
+01:11:20.420 --> 01:11:22.000
+Voeg daar voorwaardelijke toegang aan toe.
+
+01:11:22.240 --> 01:11:24.260
+Sta inloggen alleen toe vanaf beheerde apparaten,
+
+01:11:24.260 --> 01:11:27.020
+alleen vanaf bekende locaties en alleen met een compliant machine.
+
+01:11:27.020 --> 01:11:31.040
+Als de inlogpoging niet overeenkomt, mislukt deze, zelfs met het juiste wachtwoord.
+
+01:11:31.160 --> 01:11:34.700
+En als het backupproduct buiten je tenant leeft, moeten die regels daar ook gelden.
+
+01:11:34.920 --> 01:11:36.720
+Verschillende systemen, dezelfde discipline.
+
+01:11:37.000 --> 01:11:40.080
+Een sterk beleid op de ene plek en een zwak beleid op de andere is niet genoeg.
+
+01:11:40.280 --> 01:11:41.440
+Denk nu aan de kopieën zelf.
+
+01:11:41.640 --> 01:11:43.320
+Wat wil een aanvaller met beheerdersrechten doen?
+
+01:11:43.580 --> 01:11:47.860
+Herstelpunten verwijderen, de retentie verkorten, het schema aanpassen zodat er niets nieuws meer wordt opgeslagen.
+
+01:11:48.080 --> 01:11:51.020
+Dat alles kan in een paar klikken stilletjes worden gedaan als niets het tegenhoudt.
+
+01:11:51.020 --> 01:11:53.000
+Dat is waar onveranderbaarheid om de hoek komt kijken.
+
+01:11:53.200 --> 01:11:56.000
+Een onveranderbare backup kan voor een bepaalde periode niet worden gewijzigd of verwijderd,
+
+01:11:56.100 --> 01:11:59.020
+niet door een gebruiker, niet door een beheerder en niet door het eigen ondersteuningsteam van de leverancier.
+
+01:11:59.200 --> 01:12:01.800
+De opslag zelf weigert het verzoek totdat de tijd om is.
+
+01:12:01.960 --> 01:12:04.640
+Een retentievergrendeling werkt op dezelfde manier een niveau hoger.
+
+01:12:04.780 --> 01:12:05.840
+Het bevriest het beleid.
+
+01:12:06.080 --> 01:12:09.680
+Zelfs een globale beheerder kan het retentievenster niet verkorten zodra de vergrendeling is ingesteld.
+
+01:12:09.860 --> 01:12:12.880
+De aanvaller heeft de hoogste rol in de tenant en de instelling verandert nog steeds niet.
+
+01:12:13.000 --> 01:12:14.420
+Maar hier zit het addertje onder het gras.
+
+01:12:15.040 --> 01:12:16.580
+Onveranderbaarheid werkt alleen als je het inschakelt.
+
+01:12:16.700 --> 01:12:19.700
+En als je het niet snel kunt uitschakelen, controleer dan hoe jouw product hiermee omgaat.
+
+01:12:19.860 --> 01:12:23.480
+Sommige tools bieden het aan, sommige stoppen het weg, sommige laten een enkele beheerder het met één bevestiging uitschakelen.
+
+01:12:23.620 --> 01:12:25.440
+Een slot dat gemakkelijk opent, is geen slot.
+
+01:12:25.660 --> 01:12:26.900
+Stel dus een eenvoudige vraag.
+
+01:12:27.120 --> 01:12:28.300
+Wie kan een backup verwijderen?
+
+01:12:28.440 --> 01:12:29.880
+Niet wie het zou moeten kunnen, maar wie het kan.
+
+01:12:30.080 --> 01:12:33.700
+Tel de werkelijke namen, loop de rollen na, de backup beheerders, de tenant beheerders die rollen kunnen toewijzen,
+
+01:12:33.820 --> 01:12:36.780
+het ondersteuningsteam van de leverancier, de factuureigenaar die het abonnement kan opzeggen.
+
+01:12:36.780 --> 01:12:39.280
+En opzeggen betekent vaak dat de data ook verloren gaat.
+
+01:12:39.460 --> 01:12:41.200
+Mensen zijn meestal verrast door het totaal.
+
+01:12:41.340 --> 01:12:44.720
+Een lijst waarvan ze verwachten dat er twee namen op stonden, bevat er uiteindelijk twaalf.
+
+01:12:44.860 --> 01:12:47.460
+Elke naam op die lijst is een ingang, dus verkleinde lijst.
+
+01:12:47.600 --> 01:12:52.420
+Minder mensen met verwijderingsrechten vereisen een tweede goedkeurder voor destructieve acties, als het product dit ondersteunt.
+
+01:12:52.560 --> 01:12:56.120
+En controleer de lijst regelmatig, want rollen hopen zich op en niemand verwijdert ze.
+
+01:12:56.280 --> 01:12:58.720
+Plan vervolgens voor de dag dat de tenant niet meer van jou is.
+
+01:12:58.960 --> 01:13:01.580
+Stel dat de aanvaller binnen is en je ze hebt buitengesloten.
+
+01:13:01.580 --> 01:13:08.240
+En nu moet je bij de backup kunnen, maar de inlog voor de backup hangt af van dezelfde tenant en die tenant is in chaos, opgeschort of gekaapt.
+
+01:13:08.480 --> 01:13:10.580
+Daar is een break glass procedure voor.
+
+01:13:10.780 --> 01:13:13.340
+Een manier om binnen te komen die niet afhangt van wat er kapot is.
+
+01:13:13.580 --> 01:13:18.580
+Bewaar noodreferenties voor de backup laag buiten de tenant, geprint, verzegeld en fysiek opgeslagen.
+
+01:13:18.800 --> 01:13:20.980
+Of in een kluis die niet inlogt via Microsoft.
+
+01:13:21.260 --> 01:13:23.320
+Wijs de twee personen aan die deze kunnen openen.
+
+01:13:23.520 --> 01:13:27.740
+Noteer het noodcontact van de leverancier met het telefoonnummer, want e-mail werkt mogelijk niet.
+
+01:13:27.860 --> 01:13:30.440
+En test dit op dezelfde manier als je een hersteltest uitvoert.
+
+01:13:30.440 --> 01:13:34.160
+Als niemand de verzegelde envelop ooit heeft gebruikt, weet niemand wat erin zit.
+
+01:13:34.340 --> 01:13:37.380
+Dat alles beschermt de data, bestanden, mailboxen en sites.
+
+01:13:37.660 --> 01:13:40.380
+Maar data is slechts één ding dat een tenant verliest op een slechte dag.
+
+01:13:40.740 --> 01:13:44.440
+Herstel verder dan data, identiteit, configuratie en al het andere.
+
+01:13:44.720 --> 01:13:46.580
+Stel je de tenant voor na een slechte week.
+
+01:13:46.740 --> 01:13:50.380
+De bestanden zijn terug, de mailboxen zijn terug, maar niemand kan inloggen zoals voorheen.
+
+01:13:50.520 --> 01:13:55.040
+Omdat data op een fundament rust, een laag van identiteit en instellingen die bepaalt wie toegang krijgt.
+
+01:13:55.100 --> 01:13:57.140
+Vanaf welke locatie en wat zij mogen aanraken.
+
+01:13:57.360 --> 01:13:59.440
+Backup tools beschermen meestal alleen de inhoud.
+
+01:13:59.440 --> 01:14:02.280
+De onderliggende laag is wat mensen vaak vergeten op de sommen.
+
+01:14:02.480 --> 01:14:05.720
+Begin bij entra-ID, gebruikers, groepen en app-registraties.
+
+01:14:05.900 --> 01:14:09.640
+Een groep is niet slechts een lijstnamen, het beheert toegang tot een team, site of mailbox.
+
+01:14:09.940 --> 01:14:13.640
+Als een licentietoewijzing wordt verwijderd, verliest alles wat de groep vertrouwde zijn basis.
+
+01:14:14.000 --> 01:14:17.520
+Sommige verwijderde objecten kunnen gedurende een korte periode uit de prullenbak worden teruggehaald.
+
+01:14:17.720 --> 01:14:20.760
+Daarna zijn ze weg en keren ze terug als nieuwe objecten met nieuwe ID's.
+
+01:14:20.960 --> 01:14:23.540
+Niets dat naar het oude ID verwees, weet van het nieuwe af.
+
+01:14:23.700 --> 01:14:25.220
+Dan is er voorwaardelijke toegang.
+
+01:14:25.220 --> 01:14:31.720
+Dit zijn de regels die bepalen wie multifactor-authenticatie nodig heeft, welke apparaten als vertrouwd gelden en welke landen worden geblokkeerd.
+
+01:14:31.940 --> 01:14:36.420
+De meeste tenants hebben er tientallen, opgebouwd door de jaren heen met uitzonderingen na specifieke incidenten.
+
+01:14:36.540 --> 01:14:42.200
+Een aanvaller met beheerdersrechten kan ze binnen minuten wijzigen en als niemand ze heeft geëxporteerd, kent niemand de exacte logica meer.
+
+01:14:42.380 --> 01:14:44.620
+Je bouwt het uit je hoofd opnieuw op en krijgt het bijna goed.
+
+01:14:44.820 --> 01:14:46.900
+App-registraties kennen hetzelfde probleem.
+
+01:14:46.900 --> 01:14:51.320
+Elke registratie bevat machtigingen, geheime, omleidingsadressen en toestemmingsbesluiten.
+
+01:14:51.540 --> 01:14:54.120
+Raak je die kwijt, dan stopt elke integratie die ze gebruikte.
+
+01:14:54.300 --> 01:14:57.300
+De bedrijfsapplicatie, de automatisering, de back-up tool zelf.
+
+01:14:57.500 --> 01:15:02.760
+Nu de workload-instellingen, exchange-email-stroomregels bepalen hoe e-mail wordt gerouteerd, getagd, geblokkeerd en ondertekend.
+
+01:15:03.040 --> 01:15:05.120
+Connectoren bepalen hoe e-mail partners bereikt.
+
+01:15:05.320 --> 01:15:09.260
+Sharepoint, beheerdersinstellingen dekken delimieten, externe toegang- en opslagregels.
+
+01:15:09.440 --> 01:15:13.980
+Teams beleid bepaalt wie mag vergaderen, opnemen, chatten met buitenstaanders en welke apps mag installeren.
+
+01:15:13.980 --> 01:15:17.980
+Niets daarvan is inhoud, dus niets daarvan komt terug wanneer een mailbox of site wordt herstelt.
+
+01:15:18.160 --> 01:15:21.680
+En daarom is het opnieuw opbouwen van configuratie langzamer dan het herstellen van bestanden.
+
+01:15:21.840 --> 01:15:25.880
+Een best-en-herstel is een kopie. Het heeft een omvang en een snelheid, en beide kun je meten.
+
+01:15:26.000 --> 01:15:28.180
+Een configuratie-herstel is een reeks beslissingen.
+
+01:15:28.400 --> 01:15:30.960
+Waarom was die regel daar? Voor welke uitzondering was die bedoeld?
+
+01:15:31.120 --> 01:15:33.660
+Wie heeft die goed gekeurd? Welk beleid hangt af van welke groep?
+
+01:15:33.820 --> 01:15:36.960
+Elk antwoord zit in iemands hoofd, in een ticket van drie jaar geleden of nergens.
+
+01:15:37.140 --> 01:15:39.080
+Dus de tijd tikt niet op basis van bandbreedte.
+
+01:15:39.200 --> 01:15:40.620
+Het draait om mensen en geheugen.
+
+01:15:40.620 --> 01:15:45.380
+Een team kan terabytes aan data in dagen herstellen, maar weken kwijt zijn om de tenant weer te laten werken zoals voorheen.
+
+01:15:45.580 --> 01:15:49.520
+Gedurende die tijd werken gebruikers om de tekortkomingen heen en worden die tijdelijke oplossingen nieuwe problemen.
+
+01:15:49.640 --> 01:15:51.480
+Er is echter een goedkoop, gedeeltelijk antwoord.
+
+01:15:51.680 --> 01:15:54.160
+Leg de configuratie vast in een vorm die een machine kan lezen.
+
+01:15:54.400 --> 01:15:55.840
+Dat is configuratie als code.
+
+01:15:56.080 --> 01:15:58.220
+Exporteer uw voorwaardelijke toegangbeleid als bestanden.
+
+01:15:58.400 --> 01:16:01.880
+Exporteer e-mailstroomregels, transportinstellingen en teamsbeleid op dezelfde manier.
+
+01:16:02.120 --> 01:16:05.680
+Veel hiervan kunnen met PowerShell of de Graph API in een paar regels worden opgehaald.
+
+01:16:05.680 --> 01:16:11.040
+Sla de exports ergens buiten de tenant op in versiebeheer als dat kan, zodat elke wijziging een datum en naam heeft.
+
+01:16:11.200 --> 01:16:12.660
+Het is geen volledige backup.
+
+01:16:12.920 --> 01:16:16.920
+Exports leggen niet alles vast en sommige objecten kunnen niet met dezelfde idees worden nagemaakt.
+
+01:16:17.080 --> 01:16:22.460
+Maar zelfs een eenvoudige export verandert een herbouw van, wat hadden we ook alweer, naar, pas dit bestand toe en controleer het.
+
+01:16:22.640 --> 01:16:24.800
+Dat bespaart dagen werk voor vrijwel geen kosten.
+
+01:16:25.020 --> 01:16:25.640
+Plan de export.
+
+01:16:25.880 --> 01:16:27.900
+Voer deze wekelijks uit of na elke wijziging.
+
+01:16:28.080 --> 01:16:32.400
+En test het op dezelfde manier als een restore door het toe te passen op een testtenant en te kijken wat er kapot gaat.
+
+01:16:32.400 --> 01:16:40.900
+Er liggen nu veel stukjes op tafel, native tools, Microsoft 365 backup, een onafhankelijke kopie, inhoud en configuratie, verschillende workloads met verschillende tijdslijnen.
+
+01:16:41.100 --> 01:16:46.640
+Ze moeten passen in één besluitvormingsproces dat iemand op een dinsdag kan gebruiken met een budgetvergadering op woensdag.
+
+01:16:46.780 --> 01:16:57.380
+Een besluitvormingsmodel, native, Microsoft 365 backup, third party, drie lagen, geen drie producten om uit te kiezen, maar drie niveaus van bescherming die elke plek verdienen op basis van kosten en dekking.
+
+01:16:57.380 --> 01:17:05.740
+Begin onderaan. Niveau 1 is alleen native tools, prullenbakken, herstelbaar items, versiebeheer, het OneDrive hersteltijdsbestek, al betaald, al ingeschakeld.
+
+01:17:05.880 --> 01:17:07.760
+En voor de juiste inhoud zijn ze voldoende.
+
+01:17:07.960 --> 01:17:12.620
+Een project site die vorig jaar is gesloten, een gedeelde map met evenement foto's, een team dat praat over de launch.
+
+01:17:12.820 --> 01:17:15.680
+Verlies je daar een dag van, dan is iemand geërgerd, maar de wereld draait door.
+
+01:17:15.840 --> 01:17:16.740
+De test is simpel.
+
+01:17:16.920 --> 01:17:20.860
+Als de inhoud een laag risico heeft, kortstondig is of makkelijk opnieuw op te bouwen is, dan is native een prima antwoord.
+
+01:17:21.040 --> 01:17:23.000
+Dit bewust schriftelijk vastleggen is een beslissing.
+
+01:17:23.160 --> 01:17:24.760
+Het niet vastleggen is een standaardinstelling.
+
+01:17:24.760 --> 01:17:27.260
+Niveau 2 is Microsoft 365 Backup.
+
+01:17:27.420 --> 01:17:34.360
+Dit is voor de kernworkloads waar snelheid telt, sites met contracten, mailboxen voor de financiële administratie, de OneDrive accounts van een verkoopafdeling die niets onder kan.
+
+01:17:34.520 --> 01:17:36.720
+Hier is de vraag niet of de gegevens terug kunnen komen.
+
+01:17:36.920 --> 01:17:38.800
+Het gaat erom hoe snel en in welke staat.
+
+01:17:38.980 --> 01:17:44.060
+Een first party restore binnen de tenant grens met point-in-time opties geeft je uren, waar native tools je dagen kosten.
+
+01:17:44.320 --> 01:17:49.380
+Dat is de laag die je aanspreekt op een gewone slechte dag, wanneer iemand per ongeluk iets verwijdert of een synchronisatiefout zich verspreidt.
+
+01:17:49.460 --> 01:17:50.720
+Het is uw snelle rijstrook.
+
+01:17:50.720 --> 01:17:55.620
+Tier 3 is een onafhankelijke kopie bij een derde partij met aparte opslag, aparte inloggegevens en een apart beheerplatform.
+
+01:17:55.840 --> 01:18:02.880
+Dit is voor content die je onder geen beding mag verliezen, gereguleerde gegevens, directie en juridische post, en alles waarbij het scenario inhoudt dat de tenant zelf faalt,
+
+01:18:03.100 --> 01:18:09.540
+of dat nu een gecompromitteerde global administrator is, een kwaadwillende insider met de sleutels, of een probleem bij de leverancier waar je geen controle over hebt.
+
+01:18:09.700 --> 01:18:12.080
+Tier 2 bevindt zich dicht bij hetgeen het beschermt.
+
+01:18:12.180 --> 01:18:14.580
+Tier 3 niet, en die afstand is juist het hele punt.
+
+01:18:14.580 --> 01:18:16.340
+En hier vindt de verschuiving plaats.
+
+01:18:16.540 --> 01:18:18.100
+De meeste teams behandelen dit als een menu.
+
+01:18:18.240 --> 01:18:21.320
+Kies er een, vergelijk de prijzen, lees de lijst met functies en kies een winnaar.
+
+01:18:21.360 --> 01:18:23.180
+Maar de tires zijn geen concurrenten van elkaar.
+
+01:18:23.400 --> 01:18:24.920
+Ze beantwoorden verschillende vragen.
+
+01:18:25.120 --> 01:18:27.220
+Native lost de kleine fout in enkele minuten op.
+
+01:18:27.420 --> 01:18:31.020
+Microsoft 365 Backup lost het grote herstel in enkele uren op.
+
+01:18:31.120 --> 01:18:34.520
+De onafhankelijke kopie biedt uitkomst op de dag dat de eerste twee niet te vertrouwen zijn.
+
+01:18:34.720 --> 01:18:37.360
+Haal er een weg en een specifiek scenario blijft ongedekt.
+
+01:18:37.580 --> 01:18:38.420
+De stapel ze.
+
+01:18:38.580 --> 01:18:40.400
+Tier 1 voor alles, want dat is er al.
+
+01:18:40.560 --> 01:18:43.480
+Tier 2 voor de workloads die je als bedrijfscritisch hebt gemarkeerd.
+
+01:18:43.480 --> 01:18:49.740
+Tier 3 voor het smalle segment waar het doelstrikt is, de toezichthouder meekijkt of de aanvaller waarschijnlijk de backup zelf aanvalt.
+
+01:18:49.940 --> 01:18:54.800
+Elke laag bevat een kleinere set content, dus de kosten per laag dalen naarmate de bescherming sterker wordt.
+
+01:18:54.960 --> 01:18:57.120
+En dat is waar het budgetgesprek meestal vastloopt.
+
+01:18:57.320 --> 01:18:59.320
+Iemand ziet een prijs per gebruiker en schrikt ervan.
+
+01:18:59.500 --> 01:19:00.680
+Dus verander het perspectief.
+
+01:19:00.900 --> 01:19:03.900
+Vergelijk de prijs niet met nul, vergelijk het met de kosten van één slechte week.
+
+01:19:04.100 --> 01:19:05.520
+Neem een bedrijf van 2000 mensen.
+
+01:19:05.700 --> 01:19:10.240
+Stel dat een ransomware aanval, e-mail en bestanden vijf werkdagen platlegt, zelfs bij gedeeltelijke capaciteit.
+
+01:19:10.240 --> 01:19:18.520
+Tel de salarissen van de geblokkeerde uren, de misgelopen deals, de te late aangifte, het overwerk voor IT, het externe incidentteam, de juridische kosten en de klant die vertrekt.
+
+01:19:18.680 --> 01:19:20.900
+Voor de meeste organisaties loopt dat in de miljoenen.
+
+01:19:21.140 --> 01:19:24.520
+Zet daar nu een beschermingslaag naast die een paar dollar per gebruiker per maand kost.
+
+01:19:24.700 --> 01:19:26.000
+De som is niet eens in de buurt.
+
+01:19:26.200 --> 01:19:27.640
+Maar let op wat de som nodig heeft.
+
+01:19:27.820 --> 01:19:31.280
+Het heeft het getal nodig dat je eerder bij elke afdeling hebt verzameld, de kosten van een uur.
+
+01:19:31.460 --> 01:19:33.280
+Dat is wat een prijs verandert in een vergelijking.
+
+01:19:33.460 --> 01:19:34.880
+En doe het ook de andere kant op.
+
+01:19:34.880 --> 01:19:39.840
+Als een tier 3 kopie voor de hele tenant meer kost dan het verlies dat het voorkomt, heb je de verkeerde dingen beschermd.
+
+01:19:40.020 --> 01:19:41.280
+Stem de laag af op de tier.
+
+01:19:41.540 --> 01:19:44.060
+Geef uit waar het getal hoog is en stop waar dat niet zo is.
+
+01:19:44.280 --> 01:19:45.240
+Dat geeft je het model.
+
+01:19:45.480 --> 01:19:48.540
+Drie lagen afgestemd op de doelstellingen, geprijst tegenover het verlies.
+
+01:19:48.740 --> 01:19:50.720
+Maar een model op een dia herstelt helemaal niets.
+
+01:19:50.900 --> 01:19:55.860
+Het betekent pas echt iets als de dag aanbreekt dat het plan moet werken tegen de klok in, tegen een aanvaller en een team dat niet heeft geslapen.
+
+01:19:56.040 --> 01:19:57.360
+Laten we kijken hoe dat verloopt.
+
+01:19:57.540 --> 01:19:58.780
+Uur 0, vandaag 7.
+
+01:19:59.000 --> 01:20:01.420
+Een incident tijdlijn, uur 0, vandaag 7.
+
+01:20:01.600 --> 01:20:03.220
+Uur 0 begint niet met een herstelactie.
+
+01:20:03.220 --> 01:20:04.500
+Het begint met een signaal.
+
+01:20:04.660 --> 01:20:06.200
+Een gebruiker kan een bestand niet openen.
+
+01:20:06.320 --> 01:20:08.680
+Een beveiligingswaarschuwing gaat af bij massa wijzigingen van bestanden.
+
+01:20:08.860 --> 01:20:12.540
+De wachtrij van de helpdesk stroomt vol met dezelfde klacht en iemand legt eindelijk de puzzelstukjes bij elkaar.
+
+01:20:12.760 --> 01:20:14.520
+Dan komt het deel dat iedereen wil overslaan.
+
+01:20:14.680 --> 01:20:15.580
+Herstel nog niets.
+
+01:20:15.820 --> 01:20:16.820
+Stop eerst de schade.
+
+01:20:17.060 --> 01:20:18.940
+Schakel de gecompromitteerde accounts uit.
+
+01:20:19.120 --> 01:20:20.540
+Trek hun sessies en tokens in.
+
+01:20:20.720 --> 01:20:27.300
+Pauseer OneDrive synchronisatie waar mogelijk, want herstellen naar een bibliotheek die nog steeds versleutelde bestanden synchroniseert, is als olie op het vuur gooien.
+
+01:20:27.300 --> 01:20:31.060
+Als de aanvaller een beheerdersrol heeft, krijgt dat voorrang op al het andere op de lijst.
+
+01:20:31.060 --> 01:20:35.500
+Bepaal daarna de omvang. Welke accounts, welke sites, welke mailboxen en vanaf welk moment.
+
+01:20:35.720 --> 01:20:38.420
+Het auditlogboek en de aanmeldgeschiedenis geven daarop het antwoord.
+
+01:20:38.600 --> 01:20:42.300
+Het doel is één schone tijdsaanduiding, het laatste punt waarop de data nog in orde was.
+
+01:20:42.520 --> 01:20:46.240
+Zonder dat herstel je op basis van een gok en een gok kan de schade weer terugbrengen.
+
+01:20:46.400 --> 01:20:47.080
+Dit kost uren.
+
+01:20:47.280 --> 01:20:52.040
+Het voelt altijd te langzaam, maar een herstelactie die start voor isolatie en scoping moet vaak dubbel worden overschreven.
+
+01:20:52.240 --> 01:20:54.820
+Nu is er een spanning waar niemand in de planningsvergadering over spreekt.
+
+01:20:54.820 --> 01:20:57.520
+Je hebt de service weer nodig. Je hebt ook bewijs nodig.
+
+01:20:57.740 --> 01:21:02.240
+De laks van bestandswijzigingen, de mailboxregels van de aanvaller, de doorstuuradressen, de app toestemmingen.
+
+01:21:02.360 --> 01:21:06.140
+Overschrijf ze met een herstelactie en je verliest het spoor dat laat zien hoe ze binnenkwamen en of ze dat nog steeds kunnen.
+
+01:21:06.460 --> 01:21:07.940
+Exporteer eerst de auditgegevens.
+
+01:21:08.220 --> 01:21:10.280
+Maak indien mogelijk een snapshot van de getroffen sites.
+
+01:21:10.520 --> 01:21:15.740
+Herstel naar alternatieve locaties waar dat zinvol is en laat de beschadigde originelen met rust totdat de beveiliging aangeeft dat ze weg mogen.
+
+01:21:16.000 --> 01:21:21.080
+Juridische zaken en de verzekeraar zullen hier later om vragen en je eigen team ook op de dag dat ze moeten bewijzen dat de deur dicht zit.
+
+01:21:21.080 --> 01:21:24.140
+Het herstel loopt dus parallel aan het onderzoek, niet in plaats ervan.
+
+01:21:24.360 --> 01:21:26.280
+Wanneer het begint, is de volgorde van belang.
+
+01:21:26.640 --> 01:21:27.480
+Identiteit eerst.
+
+01:21:27.720 --> 01:21:29.000
+Niets anders werkt zonder dat.
+
+01:21:29.180 --> 01:21:33.280
+Aanmoddingen, multifactor, voorwaardelijke toegang, groepslidmaatschappen, de beheerdersrollen zelf.
+
+01:21:33.460 --> 01:21:38.300
+Als de identiteitslaag niet klopt, komt elk hersteld bestand in een tenant terecht die de verkeerde mensen vertrouwt.
+
+01:21:38.420 --> 01:21:39.320
+E-mail als tweede.
+
+01:21:39.560 --> 01:21:44.200
+Dat is waar mensen als eerste naar grijpen en het bevat de beslissingen, de goedkeuringen en de wachtwoordresets.
+
+01:21:44.600 --> 01:21:47.480
+Mailboxen van directie en juridische zaken leiden als de TSA.
+
+01:21:47.480 --> 01:21:56.700
+Dan samenwerking, tier 1 SharePoint sites, daarna de teams die daarop zijn gebouwd, vervolgens OneDrive accounts in batches, te beginnen met de groepen die niet kunnen werken zonder hun bestanden, en daarna de rest.
+
+01:21:56.860 --> 01:22:00.920
+Tier 3 sites, gearchiveerde projecten, gedeelde mailboxen die dit jaar door niemand zijn geopend.
+
+01:22:01.100 --> 01:22:02.640
+Die komen bewust als laatste terug.
+
+01:22:02.840 --> 01:22:05.480
+Nu communicatie, want stilte veroorzaakt zijn eigen schade.
+
+01:22:05.680 --> 01:22:07.960
+Vertel gebruikers in de eerste uren de kale feiten.
+
+01:22:08.140 --> 01:22:10.960
+Er is iets mis, dit is wat je moet doen en dit is waar je vanaf moet blijven.
+
+01:22:11.140 --> 01:22:12.760
+Beloof geen tijd die je niet kunt waarmaken.
+
+01:22:13.000 --> 01:22:16.640
+Geef het leiderschap een korte update volgens een vast schema, ongeacht of er iets veranderd is.
+
+01:22:16.640 --> 01:22:18.360
+Elke 2 uur, daarna elke 4.
+
+01:22:18.560 --> 01:22:20.920
+Wat we weten, wat we niet weten, wat de volgende stap is.
+
+01:22:21.060 --> 01:22:25.580
+Een leider die een vast ritme van eerlijke updates krijgt, belt niet langer naar de incidentkamer voor antwoorden.
+
+01:22:25.760 --> 01:22:27.540
+Tegen dag 2 wordt het patroon duidelijk.
+
+01:22:27.720 --> 01:22:29.760
+Het herstel gaat langzamer dan in het plan stond.
+
+01:22:29.940 --> 01:22:31.300
+Er is sprake van throttling.
+
+01:22:31.500 --> 01:22:35.020
+Een groep items is mislukt en niemand zag het omdat de taak als voltooid werd gemeld.
+
+01:22:35.220 --> 01:22:37.720
+Iemand ontdekt een gedeelde mailbox die nooit in scoop was.
+
+01:22:37.920 --> 01:22:41.440
+Iemand anders vindt een team waarvan de chat alleen als export kan worden teruggehaald.
+
+01:22:41.440 --> 01:22:46.280
+De rechten op een herstelde site komen niet overeen met wat de eigenaar zich herinnert en de mensen zijn veranderd.
+
+01:22:46.400 --> 01:22:51.600
+De twee technici die de stap bekende zijn uitgeput en de verzegelde envelop bevat een verlopen inloggegeven.
+
+01:22:51.820 --> 01:22:53.080
+Niets daarvan is domme pech.
+
+01:22:53.280 --> 01:22:58.820
+Elk punt is een hiaat die een test had kunnen aantonen en elk punt kost een dag bij een echt incident, wat het terugbrengt naar de structuur.
+
+01:22:59.000 --> 01:23:00.140
+Het plan is niet de tool.
+
+01:23:00.360 --> 01:23:04.760
+Het gaat om wie de beslissing neemt, wie de inloggegevens beheert en wie mag zeggen, herstel nu.
+
+01:23:05.080 --> 01:23:07.820
+Governance, eigenaarschap en de vragen die je maandag moet stellen.
+
+01:23:08.040 --> 01:23:10.520
+Vraag wie verantwoordelijk is voor backups in jouw organisatie.
+
+01:23:10.520 --> 01:23:12.160
+Je krijgt een van de vier antwoorden.
+
+01:23:12.340 --> 01:23:14.520
+IT zegt dat het van hen is omdat zij de tenant beheren.
+
+01:23:14.700 --> 01:23:17.540
+Security zegt dat het van hen is omdat ransomware een security event is.
+
+01:23:17.780 --> 01:23:20.880
+Compliance zegt dat het van hen is omdat retentie een beleid is dat zij hebben geschreven.
+
+01:23:21.040 --> 01:23:23.800
+En in een verrassend aantal bedrijven is het eerlijke antwoord niemand.
+
+01:23:24.100 --> 01:23:25.600
+Iedereen faalt op zijn eigen manier.
+
+01:23:25.800 --> 01:23:28.020
+IT beheert de tool, maar niet de zakelijke cijfers.
+
+01:23:28.220 --> 01:23:30.960
+Dus de RPO is wat de standaardinstelling van het product ook is.
+
+01:23:31.260 --> 01:23:34.980
+Security beheert de dreiging, maar niet het herstel, dus het plan stopt bij isolatie.
+
+01:23:34.980 --> 01:23:39.140
+Compliance beheert het beleid, maar niet de tijd, dus ze kunnen bewijzen dat content bestond,
+
+01:23:39.340 --> 01:23:40.660
+maar niet hoe snel het terugkomt.
+
+01:23:40.760 --> 01:23:44.980
+En niemand betekent dat de eerste eigenaar degene is die toevallig in de kamer is tijdens het incident.
+
+01:23:45.300 --> 01:23:49.380
+Kies dus één persoon, geen commissie, één aangewezen rol die verantwoordelijk is voor het herstel,
+
+01:23:49.600 --> 01:23:52.500
+waarbij de andere drie de cijfers, toegang en vereisten aanleveren.
+
+01:23:52.680 --> 01:23:54.080
+Schrijf die naam vervolgens op.
+
+01:23:54.240 --> 01:23:55.060
+Nu vijf vragen.
+
+01:23:55.300 --> 01:23:57.700
+Stel ze maandag in een gewone vergadering zonder dia's.
+
+01:23:57.880 --> 01:23:58.500
+Wat is gedekt?
+
+01:23:58.720 --> 01:23:59.960
+Niet wat je van plan was te dekken.
+
+01:23:59.960 --> 01:24:01.240
+Wat valt er vandaag onder?
+
+01:24:01.460 --> 01:24:06.800
+Workload voor workload, inclusief gedeelde postvakken, teams chats en de sites die iemand vorige maand heeft toegevoegd.
+
+01:24:06.920 --> 01:24:09.020
+Wat is de RPO voor elk niveau als getal?
+
+01:24:09.240 --> 01:24:12.420
+Niet als vage uren of een dag met een bedrijfseigenaar die ermee akkoord ging.
+
+01:24:12.640 --> 01:24:14.120
+Wanneer hebben we voor het laatst hersteld?
+
+01:24:14.340 --> 01:24:16.560
+Geef me een datum, een scenario en een resultaat.
+
+01:24:16.720 --> 01:24:20.320
+Als het antwoord is dat we er nog nooit een hebben uitgevoerd, is dat je antwoord en het is een eerlijk antwoord.
+
+01:24:20.540 --> 01:24:21.760
+Wie kan de backups verwijderen?
+
+01:24:21.900 --> 01:24:26.060
+Tel de namen en tel daarna opnieuw inclusief de facturatie-eigenaar en het ondersteunend personeel van de leverancier.
+
+01:24:26.060 --> 01:24:30.160
+En waar staat de kopie? Welk systeem? Welke inloggegevens? Welke tenant?
+
+01:24:30.400 --> 01:24:37.560
+Als het antwoord is dat het op dezelfde plek staat als al het andere onder dezelfde beheerdersaccounts, dan heb je wel een tweede kopie van de gegevens, maar ook hetzelfde enkele storingspunt.
+
+01:24:37.780 --> 01:24:38.480
+Vijf vragen.
+
+01:24:38.660 --> 01:24:42.540
+Elke vraag kost een minuut om te stellen en elke vraag kan een week kosten om goed te beantwoorden.
+
+01:24:42.760 --> 01:24:43.840
+Dat gat is de bevinding.
+
+01:24:44.160 --> 01:24:45.680
+Doe dan het deel dat het effectief maakt.
+
+01:24:45.920 --> 01:24:48.520
+Schrijf de antwoorden op en zet een datum naast elk antwoord.
+
+01:24:48.720 --> 01:24:56.040
+Niet, wij hebben backups, maar liever, exchange gedekt, RPO 4 uur, laatste herstel getest op 12 maart, geslaagd in 2 uur en 10 minuten.
+
+01:24:56.060 --> 01:25:02.140
+Een datum verandert een bewering in een dossier en een verouderde datum vertelt je waar je verder moet kijken zonder dat iemand erover hoeft te discussiëren.
+
+01:25:02.340 --> 01:25:03.880
+Neem de pagina elk kwartaal door.
+
+01:25:04.140 --> 01:25:06.000
+Wanneer een datum veroudert, is dat de taak.
+
+01:25:06.180 --> 01:25:07.320
+Dat is de echte verandering.
+
+01:25:07.560 --> 01:25:09.880
+Jarenlang was de vraag of de tenant de gegevens bewaarde.
+
+01:25:10.100 --> 01:25:13.160
+Bewaard in de zin van ergens opgeslagen onder een beleid voor een bepaalde periode.
+
+01:25:13.380 --> 01:25:16.120
+Het is een comfortabel woord omdat het geen bewijs van gebruik vereist.
+
+01:25:16.300 --> 01:25:18.460
+De nieuwe vraag is of de gegevens herstelbaar zijn.
+
+01:25:18.700 --> 01:25:22.140
+Door wie, hoe snel, in welke staat en heeft iemand dit gecontroleerd?
+
+01:25:22.360 --> 01:25:24.040
+Bewaard is een eigenschap van opslag.
+
+01:25:24.040 --> 01:25:26.900
+Herstelbaar is een eigenschap van een plan dat is uitgevoerd.
+
+01:25:27.520 --> 01:25:28.380
+Conclusie en outro
+
+01:25:28.380 --> 01:25:31.700
+De dag dat je moet herstellen is de verkeerde dag om de beperkingen te leren kennen.
+
+01:25:31.920 --> 01:25:36.320
+Dat is het hele argument en de 93 dagen, de 14 dagen en de beperkingslimieten zijn slechts details.
+
+01:25:36.580 --> 01:25:37.980
+Ze staan allemaal ergens afgedrukt.
+
+01:25:38.220 --> 01:25:40.320
+Ze worden alleen zelden gelezen totdat de klok al loopt.
+
+01:25:40.500 --> 01:25:41.980
+Hou het model dus in 4 stappen vast.
+
+01:25:42.460 --> 01:25:44.520
+Beschikbaarheid is Microsoft die de service in de lucht houdt.
+
+01:25:44.700 --> 01:25:46.700
+Retentie is het bewaren van een kopie voor de advocaten.
+
+01:25:46.840 --> 01:25:50.500
+Een backup is een kopie die je kunt terugzetten, bewaard op een plek waar een aanvaller niet bij kan.
+
+01:25:50.500 --> 01:25:56.220
+En een geteste restore is het bewijs dat de eerste drie samenwerken in jouw tenant, op jouw schaal, met jouw mensen.
+
+01:25:56.500 --> 01:25:59.340
+Sla de laatste over en de andere drie zijn slechts een geloof.
+
+01:25:59.540 --> 01:26:02.480
+Voordat we afsluiten, een kort woord over de sponsor van vandaag.
+
+01:26:02.720 --> 01:26:08.220
+Stella Migrator for Exchange is gebouwd voor het verplaatsen van mailboxen tussen omgevingen en voor werkzaamheden die nauw verwant zijn aan herstel.
+
+01:26:08.440 --> 01:26:12.660
+Wanneer je een restore plant, breng je uiteindelijk toch elke mailbox, gedeelde mailbox en archief in kaart.
+
+01:26:12.860 --> 01:26:15.260
+Dat is dezelfde inventarisatie die een migratie vereist.
+
+01:26:15.260 --> 01:26:20.860
+Als een verhuizing op je planning staat of als je herstelplan een manier nodig heeft om mailbox data ergens schoon te landen, is het de moeite waard.
+
+01:26:21.060 --> 01:26:26.040
+Data migratie en herstelplanning delen hetzelfde voorbereidende werk en ze samen doen bespaart je dubbel werk.
+
+01:26:26.220 --> 01:26:29.700
+En als dit je kijk op je herstelplan heeft veranderd, laat dan een beoordeling achter.
+
+01:26:29.900 --> 01:26:33.620
+Het helpt meer beheerders deze aflevering te vinden voordat ze het nodig hebben, niet erna.
+
+01:26:33.840 --> 01:26:36.840
+De meeste mensen zoeken pas naar dit onderwerp als er al iets mis is gegaan.
+
+01:26:37.000 --> 01:26:40.180
+Als je contact wilt houden, verbind je dan met mij, Mirko Peters, op LinkedIn.
+
+01:26:40.420 --> 01:26:42.640
+Vertel me welk onderwerp je als volgende behandeld wilt zien.
+
+01:26:42.640 --> 01:26:46.500
+Backup for Power Platform, Entra ID Herstel of waar je nu ook op vastloopt.
+
+01:26:46.680 --> 01:26:52.960
+En abonneer je op de M365FM podcast zodat je het als eerste hoort en niet om 2 uur met een restaartaak die vaststaat op 40%.

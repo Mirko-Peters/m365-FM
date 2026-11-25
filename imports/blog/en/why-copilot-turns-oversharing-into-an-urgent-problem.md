@@ -1,8 +1,8 @@
 ---
 title: "Why Copilot turns oversharing into an urgent problem"
 summary: "Copilot works with the permissions that already exist in your tenant, so content that was shared too broadly becomes easy to find. Here is why oversharing matters more now and how to start addressing it."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-25
 topics: [oversharing, copilot-governance, sharepoint]

@@ -1,0 +1,1771 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.830
+Vous pouvez pour 12 jours de Microsoft 365, Copilot, l'IA, Azure et les personnes qui façonnent l'avenir du travail.
+
+00:00:07.870 --> 00:00:12.050
+En janvier, la M365Con est de retour et nous allons plus loin, plus loin.
+
+00:00:12.910 --> 00:00:17.970
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.810 --> 00:00:21.150
+Pas de diapositives génériques, pas de mots à la mode sans fin.
+
+00:00:21.950 --> 00:00:23.130
+Nous nous attaquons aux vrais défis.
+
+00:00:23.790 --> 00:00:28.670
+Copilot Studio, agent d'IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.670 --> 00:00:34.330
+Que vous soyez un professionnel de l'informatique, un développeur ou un chef d'entreprise, il existe des sessions conçues pour vous.
+
+00:00:35.570 --> 00:00:39.850
+Avec 10 jours complets, vous pouvez explorer de multiples technologies et vous connecter à une communauté mondiale.
+
+00:00:40.890 --> 00:00:44.230
+Regardez en direct et rapportez des informations pratiques à votre organisation.
+
+00:00:45.250 --> 00:00:50.590
+Janvier 2027, 10 jours. Une communauté. Microsoft. Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.830 --> 00:00:55.590
+Rendez-vous sur m365con.net et réservez votre place dès aujourd'hui.
+
+00:00:55.590 --> 00:00:58.590
+C'est m365con.net de...
+
+00:01:00.010 --> 00:01:04.630
+Rejoignez-nous dès maintenant sur m365con.net et nous vous retrouverons en direct en janvier.
+
+00:01:05.290 --> 00:01:06.130
+Voici mon défi pour vous.
+
+00:01:06.590 --> 00:01:09.590
+Votre équipe BI peut-elle suivre chaque modification apportée au rapport du développement à la production
+
+00:01:09.590 --> 00:01:12.690
+avec les approbations consignées et l'automatisation consignée et l'automatisation pour l'encharge de charge ?
+
+00:01:12.690 --> 00:01:13.910
+Un point de contrôle rapide avant de nous lancer.
+
+00:01:14.450 --> 00:01:19.330
+Cette session suppose que vous connaissez déjà les bases de PBIP et les termes git tels que branche, commit et pull request.
+
+00:01:19.330 --> 00:01:20.950
+Voici la feuille de route.
+
+00:01:21.390 --> 00:01:26.070
+Nous aborderons les approbations GitHub BR, les vérifications automatisées avec Action et les pipelines de déploiement pour Power BI.
+
+00:01:26.630 --> 00:01:30.290
+Ces trois éléments font la différence entre espérer que les choses ne se cassent pas et savoir réellement qu'elles ne se casseront pas.
+
+00:01:30.790 --> 00:01:31.730
+Mais d'abord, soyons réalistes.
+
+00:01:32.010 --> 00:01:33.750
+PBIP n'est pas la solution miracle que vous pourriez penser.
+
+00:01:35.090 --> 00:01:37.330
+Pourquoi PBIP n'est pas le remet miracle ?
+
+00:01:37.330 --> 00:01:42.870
+La nouvelle réalité brillante avec les projets Power BI Desktop, PBP, c'est que tout semble plus propre dès que vous basculez.
+
+00:01:44.210 --> 00:01:49.090
+Au lieu de regrouper un modèle de rapport entier et des connexions dans une boîte noire PBX volumineuse, PBIP,
+
+00:01:49.390 --> 00:01:52.050
+présente tout cela sous la forme d'un dossier structuré rempli de fichiers textes.
+
+00:01:52.710 --> 00:01:55.930
+Le modèle sémantique obtient son propre fichier de faisceau de modèle, qui n'est pas seulement lisible.
+
+00:01:56.590 --> 00:01:58.770
+Il se connecte également directement à des outils tels que Tabular Editor.
+
+00:01:59.330 --> 00:02:02.930
+Les connexions, les visuels et les métadonnées JSON sont stockés dans des fichiers distincts.
+
+00:02:03.270 --> 00:02:06.570
+Soudain, Git fonctionne vraiment ici. Les différences vous montrent exactement ce qui a changé.
+
+00:02:07.330 --> 00:02:10.170
+Les branches permettent à plusieurs personnes d'expérimenter sans se marcher sur les pieds
+
+00:02:10.170 --> 00:02:14.690
+et vous débloquez la compatibilité avec les outils CICCD tels que GitHub Actions ou Azure DevOps.
+
+00:02:15.570 --> 00:02:17.710
+C'est le bon côté ? Le déblocage technique ?
+
+00:02:17.710 --> 00:02:20.290
+Le mauvais côté, c'est que PBP ne corrige pas comme par magie la dynamique d'équipe.
+
+00:02:21.030 --> 00:02:24.170
+Tout ce qui fait s'émettre en lumière le chaos que vous aviez déjà...
+
+00:02:24.170 --> 00:02:28.830
+Avec PBX, chaque modification vivait silencieusement dans un seul fichier binaire que personne ne pouvait suivre correctement.
+
+00:02:29.250 --> 00:02:33.930
+Avec PBIP, ces mêmes modifications sont désormais dispersées dans des dizaines de petits fichiers qui réclament votre attention dans Git.
+
+00:02:34.390 --> 00:02:35.710
+Oui, les conflits de fusion sont visibles.
+
+00:02:35.710 --> 00:02:38.470
+Oui, vous pouvez enfin voir quelle mesure a été modifiée.
+
+00:02:39.770 --> 00:02:43.330
+Mais si 5 personnes travaillent sur le même ensemble de données le lundi matin, Git s'allume toujours en rouge.
+
+00:02:44.770 --> 00:02:48.430
+La différence, c'est que vous pouvez désormais en discuter fichier par fichier au lieu de faire comme si le problème n'existait pas.
+
+00:02:49.330 --> 00:02:51.950
+Voyez cela comme si vous troquiez votre tiroir abrique à bras contre une boîte à outils.
+
+00:02:52.610 --> 00:02:54.190
+Bien sûr, chaque tournuis a désormais sa place.
+
+00:02:54.630 --> 00:02:57.830
+Mais lorsque la moitié du bureau attrape la tête cruciforme en même temps, les frictions ne disparaissent pas.
+
+00:02:58.330 --> 00:03:00.250
+Il devient juste un peu plus facile de voir qui a attrapé, quoi.
+
+00:03:00.250 --> 00:03:02.810
+C'est ce qu'apporte PBIP. La clarté s'en discipline.
+
+00:03:03.330 --> 00:03:07.050
+J'ai travaillé avec des équipes qui ont tout misé sur PBIP en espérant qu'ils résoudraient les modifications contradictoires.
+
+00:03:07.790 --> 00:03:11.010
+Ils ont abandonné les règles, ignoré les révisions et fait confiance à la visibilité pour les saw-out.
+
+00:03:11.310 --> 00:03:14.730
+En quelques sprints, le résultat était une piste d'audit pleine de modifications inexpliquées.
+
+00:03:15.810 --> 00:03:20.250
+Des colonnes renommées sans raison, des relations ajustées sans avertissement, des mesures réécrites sans aucun contexte.
+
+00:03:21.830 --> 00:03:25.590
+Voir les modifications ne les a pas rendues plus sûres, cela a juste rendu la confusion permanente dans l'historique Git.
+
+00:03:25.590 --> 00:03:27.990
+Il y a aussi la question des conflits de fusion.
+
+00:03:28.830 --> 00:03:31.090
+PBIP les rend clairs et nets, parfois douloureusement.
+
+00:03:32.010 --> 00:03:38.750
+Au lieu d'une corruption silencieuse enfouie dans un PBX, vous regardez des marqueurs de conflits rouges vifs dans VS Code montrant trois versions concurrentes de la même mesure d'axe.
+
+00:03:39.790 --> 00:03:42.070
+Techniquement, c'est du progrès. Au moins, vous savez exactement ce qui a cassé.
+
+00:03:42.290 --> 00:03:44.050
+Mais faire plus de bruit ne signifie pas que la douleur disparaît.
+
+00:03:44.390 --> 00:03:46.110
+Cela signifie simplement que vous ne pouvez plus l'ignorer.
+
+00:03:47.350 --> 00:03:51.190
+Que ce soit une bénédiction ou une malédiction, dépend de la discipline de votre équipe en matière de flux de travail.
+
+00:03:52.230 --> 00:03:52.950
+Et c'est la crise de la preuve.
+
+00:03:52.950 --> 00:03:55.770
+La véritable avancée n'est pas PBIP en soi, mais ce qui le permet.
+
+00:03:56.210 --> 00:04:02.950
+Mais, en divisant les rapports et les modèles en fichiers texte contre la barre version, vous pouvez enfin superposer des flux de travail Git approprié, approprié.
+
+00:04:03.410 --> 00:04:06.390
+Branches, demandes d'extraction, révision, pipeline, CICD.
+
+00:04:07.230 --> 00:04:08.710
+PBIP la porte, pas la destination.
+
+00:04:09.470 --> 00:04:13.590
+Il vous offre un contrôle de version barre composant, mais il ne dit pas aux personnes qui tiennent le volant comment conduire.
+
+00:04:14.550 --> 00:04:18.530
+Cela signifie que les mêmes problèmes persistent si vous n'intégrez pas de structure et d'automatisation autour de cette configuration.
+
+00:04:18.990 --> 00:04:20.150
+Sans approbation ni révision.
+
+00:04:20.150 --> 00:04:23.810
+Vous ne faites que regarder les empreintes de pattes plus visibles du même troupeau de chat.
+
+00:04:24.550 --> 00:04:29.850
+Sans garde-fous tels que les contrôles automatisés, vous continuez à faire confiance aux développeurs pour ne pas glisser des modifications douteuses directement en production.
+
+00:04:30.750 --> 00:04:34.130
+PBIP rend les pratiques DevOps modernes possibles dans Power BI, mais ne les applique pas.
+
+00:04:34.410 --> 00:04:34.850
+Mais ne les applique.
+
+00:04:35.050 --> 00:04:36.070
+Cela relève toujours de l'équipe.
+
+00:04:36.370 --> 00:04:37.410
+Alors cela nous mène-t-il ?
+
+00:04:37.410 --> 00:04:38.370
+Avec de la clarté, mais pas d'or.
+
+00:04:38.370 --> 00:04:43.370
+PBIP élimine le brouillard monolithique du PBX, mais il n'empêche pas les collisions désordonnées.
+
+00:04:44.230 --> 00:04:49.510
+Pour cela, vous avez besoin de contrôle, de quelque chose pour empêcher les gens de se remplacer les uns les autres ou d'introduire furtivement des modifications non testées.
+
+00:04:49.990 --> 00:04:51.050
+C'est pourquoi l'étape suivante est si importante.
+
+00:04:51.970 --> 00:04:56.150
+Les pull requests GitHub prennent la pile désordonnée de fichiers PBIP et y placent des feux de signalisation.
+
+00:04:56.610 --> 00:05:02.630
+Au lieu de 5 développeurs se précipitant au même carrefour, vous obtenez des contrôles, des signaux et un journal indiquant qu'il y a réellement fait quoi.
+
+00:05:02.630 --> 00:05:08.570
+C'est là que l'histoire change, car aussi utiles que soient les PR, quiconque les a vécues sait qu'elles peuvent être à la fois une bouée de sauvetage et un goulot d'étranglement.
+
+00:05:09.330 --> 00:05:11.190
+La question évidente avant de plonger est donc la suivante.
+
+00:05:11.450 --> 00:05:16.830
+Comment maintenir l'ordre qu'elles apportent, sans transformer chaque petit changement de couleur en réunion de comité ?
+
+00:05:16.830 --> 00:05:18.810
+Les approbations de PR, du chaos aux méfaits contrôlés.
+
+00:05:19.570 --> 00:05:24.430
+Parlons maintenant du véritable point de contrôle qui transforme PBIP d'un chaos organisé en quelque chose de gérable.
+
+00:05:25.110 --> 00:05:26.190
+Les approbations de demande d'extraction.
+
+00:05:26.670 --> 00:05:28.670
+Imaginez 5 développeurs en train de peaufiner le même rapport.
+
+00:05:29.090 --> 00:05:32.450
+L'un modifie les piles, un autre renomme une colonne, un autre modifie la mise en forme.
+
+00:05:33.150 --> 00:05:34.150
+Et deux autres jouent avec les couleurs.
+
+00:05:34.930 --> 00:05:38.430
+Si toutes ces modifications ne sont pas vérifiées, vous n'obtenez pas de collaboration, vous obtenez un rapport Franken.
+
+00:05:38.770 --> 00:05:40.030
+C'est pourquoi les demandes d'extraction existent.
+
+00:05:40.370 --> 00:05:45.050
+Elles sont le gardien, qui ralentit suffisamment les choses pour empêcher l'équivalent de 5 personnes de fusionner au même carrefour en même temps.
+
+00:05:45.910 --> 00:05:47.370
+Considérez les demandes d'extraction comme des feux de simulation.
+
+00:05:47.790 --> 00:05:49.130
+Un feu vert signifie fusionner et avancer.
+
+00:05:50.130 --> 00:05:54.050
+Un feu rouge vous retient jusqu'à ce que les réviseurs confirment que votre travail n'entrera pas en collision avec autre chose.
+
+00:05:54.810 --> 00:05:59.450
+Rien de compliqué, juste des pots structurés pour que vous ne détruisiez pas les modifications des autres, par accident, par accident.
+
+00:05:59.450 --> 00:06:04.390
+Et oui, les approbations rendent des gens nerveux. Elles ne nous ralentiront pas seulement si vous les utilisez à mauvais escient.
+
+00:06:05.210 --> 00:06:08.910
+Vous n'avez pas besoin que les cadres supérieurs approuvent automatiquement un changement de couleur sur un graphique circulaire.
+
+00:06:09.450 --> 00:06:14.870
+Mais vous voulez absolument plus d'une perdieue lorsque quelqu'un restructure un schéma d'ensemble de données, ou recable des relations dans le modèle.
+
+00:06:14.870 --> 00:06:19.050
+L'approche pratique est donc la suivante, mapper la rigueur de la révision à l'impact.
+
+00:06:19.690 --> 00:06:22.470
+Une seule approbation rapide convient parfaitement pour les ajustements cosmétiques ou textiles.
+
+00:06:23.250 --> 00:06:28.490
+Des portes multi-réviseurs sont nécessaires lors de la modification de mesure, de l'ajout de colonnes calculées, ou de l'ajustement de relations.
+
+00:06:29.130 --> 00:06:33.910
+De cette façon, le travail quotidien reste rapide, mais les éléments à enjeux élevés ne se faufilent pas dans la production sans contrôle.
+
+00:06:34.350 --> 00:06:35.550
+Je ne suis pas le seul à faire preuve de prudence.
+
+00:06:36.090 --> 00:06:40.170
+Les propres directives de Microsoft relatives aux branches et aux espaces de travail traitent les approbations d'EPR comme un point de compte.
+
+00:06:40.170 --> 00:06:44.170
+C'est le moment où vous décidez officiellement qu'une modification fait partie de la version partagée.
+
+00:06:45.230 --> 00:06:48.630
+Sans cette étape, vous laissez les gens appliquer des correctifs à chaud dans le modèle de base.
+
+00:06:49.130 --> 00:06:51.330
+Ce n'est pas de la gouvernance. C'est un incident qui attend de se produire.
+
+00:06:52.230 --> 00:06:53.790
+Et voici une victoire tactique que les gens oublient.
+
+00:06:54.790 --> 00:06:56.890
+Les PR produisent automatiquement une piste d'audit.
+
+00:06:57.770 --> 00:06:59.670
+Chaque validation, commentaire et approbation sont signés.
+
+00:07:00.130 --> 00:07:03.590
+Ainsi, la prochaine fois que quelqu'un vous demandera pourquoi le rapport sur les revenus a été publié la semaine dernière,
+
+00:07:03.790 --> 00:07:05.590
+vous n'aurez pas à passer au crible les fichiers locaux comme un détecté.
+
+00:07:05.590 --> 00:07:09.730
+Il vous suffit de vérifier l'historique des RP, de savoir qui l'a approuvé, ce qui a été discuté et quels changements ont été inclus.
+
+00:07:10.330 --> 00:07:12.570
+Cette piste vaut son pesant d'heures supplémentaires économisées.
+
+00:07:13.390 --> 00:07:15.750
+Fin de compte, les approbations des RP ne sont pas une question de bureaucratie.
+
+00:07:16.370 --> 00:07:17.090
+Elles sont une question d'équilibre.
+
+00:07:17.390 --> 00:07:18.670
+Si elles sont trop souples, vous invitez le chaos.
+
+00:07:19.030 --> 00:07:21.050
+Si elles sont trop strictes, vous vous retrouverez bloqués sur les modifications assidées.
+
+00:07:21.630 --> 00:07:23.310
+Le juste milieu réside dans des règles évolutives.
+
+00:07:23.590 --> 00:07:27.270
+Des révisions légères pour les modifications à faible impact, des approbations contrôlées pour les refactorisations lourdes.
+
+00:07:28.030 --> 00:07:30.150
+Cela permet de sécuriser le dépôt sans épuiser tout le monde.
+
+00:07:30.150 --> 00:07:33.390
+Cela dit, les RP ne détectent que ce à quoi les réviseurs prêtent réellement attention.
+
+00:07:34.190 --> 00:07:37.730
+Les humains se fatiguent, survolent les modifications ou appuient sur approuver juste pour vider la file d'attente,
+
+00:07:38.010 --> 00:07:40.510
+ce qui signifie que de nombreux problèmes évitables peuvent encore passer inaperçus.
+
+00:07:40.990 --> 00:07:45.430
+Si vous avez déjà fusionné des DAG bâclés ou une relation rompue parce que personne ne l'a détecté pendant la révision,
+
+00:07:45.550 --> 00:07:46.210
+vous savez ce que c'est.
+
+00:07:47.050 --> 00:07:49.430
+C'est là que la prochaine étape intervient, automatiser l'évidence.
+
+00:07:50.110 --> 00:07:53.310
+Au lieu de compter uniquement sur les réviseurs humains pour remarquer les lacunes de formatage,
+
+00:07:53.310 --> 00:07:54.950
+les noms faibles ou les descriptions manquantes,
+
+00:07:55.270 --> 00:07:58.090
+vous laissez l'automatisation analyser chaque PR avant même qu'elle ne soit prouvée.
+
+00:07:58.090 --> 00:08:00.250
+Les humains se concentrent sur le contexte.
+
+00:08:00.330 --> 00:08:01.770
+Les machines détectent les erreurs prévisibles.
+
+00:08:02.550 --> 00:08:03.690
+La prochaine étape logique est donc simple.
+
+00:08:04.290 --> 00:08:04.790
+Les PAB à l'ordre.
+
+00:08:05.330 --> 00:08:07.050
+L'automatisation rend cet ordre plus intelligent.
+
+00:08:07.190 --> 00:08:11.190
+Et cette combinaison est ce qui empêche votre branche principale de se transformer en une décharge d'erreur petite mécouteuse.
+
+00:08:12.490 --> 00:08:14.730
+Les vérifications automatisées, votre équipe de révision silencieuse.
+
+00:08:15.130 --> 00:08:15.990
+Voici donc l'élément suivant.
+
+00:08:16.650 --> 00:08:18.990
+Les vérifications automatisées, votre équipe de révision silencieuse.
+
+00:08:19.390 --> 00:08:23.330
+Ce sont les chiens de garde qui ne dorment pas, ne survolent pas les demandes d'extraction et ne sont pas distraits par Slack.
+
+00:08:24.710 --> 00:08:27.870
+Ils restent assis à la porte du dépôt et aboient chaque fois que quelque chose de bâclé tente de s'y faufiler.
+
+00:08:28.970 --> 00:08:30.850
+Le mécanisme sous-jacent est assez simple, les actions GitHub.
+
+00:08:31.410 --> 00:08:33.530
+Chaque fois que vous envoyez un commit ou ouvrez une demande d'extraction,
+
+00:08:33.890 --> 00:08:36.370
+les actions se lancent et exécutent les scripts que vous leur demandez d'exécuter.
+
+00:08:36.710 --> 00:08:38.150
+Considérez-les comme des videurs avec des presses papines.
+
+00:08:38.650 --> 00:08:41.810
+De nouveaux fichiers apparaissent et, au lieu de les envoyer en production par défaut,
+
+00:08:42.530 --> 00:08:47.570
+les actions exécutent une batterie de vérification, de scripts en PowerShell, d'outils de validation, voire de quelques tâches de nœuds,
+
+00:08:48.110 --> 00:08:49.030
+puis donnent leur feu vert.
+
+00:08:49.950 --> 00:08:53.310
+Vous n'appuyez pas sur lecture vous-même, elles se déclenchent automatiquement sur les événements que vous définissez.
+
+00:08:53.970 --> 00:08:56.510
+Le hic, c'est que vous ne commencez pas par lancer tous les validateurs possibles.
+
+00:08:56.510 --> 00:08:59.630
+Faites cela et vous transformerez votre dépôt en sécurité d'aéroport.
+
+00:08:59.970 --> 00:09:02.590
+Les développeurs passeront plus de temps à décompresser leurs chaussures qu'à écrire du code.
+
+00:09:03.150 --> 00:09:04.570
+Le plus intelligent est de commencer petit.
+
+00:09:05.210 --> 00:09:07.490
+Choisissez les vérifications qui renvoient la valeur la plus élevée,
+
+00:09:07.690 --> 00:09:10.570
+pour le moins de friction, les conventions de nommage, les anti-modèles d'axes flagrants,
+
+00:09:10.710 --> 00:09:12.450
+les erreurs de schéma évidentes comme les relations manquantes
+
+00:09:12.450 --> 00:09:14.570
+et peut-être un peu de linting sur les fichiers JSON ou de modèles.
+
+00:09:15.530 --> 00:09:17.410
+De cette façon, vos développeurs se sentent toujours rapides,
+
+00:09:17.570 --> 00:09:19.090
+mais vous vous êtes acheté des garde-fous.
+
+00:09:19.530 --> 00:09:20.530
+Mettons quelques outils sur la table.
+
+00:09:20.530 --> 00:09:23.650
+Model.bim est un fichier texte, ce qui signifie que...
+
+00:09:23.650 --> 00:09:25.530
+Les outils d'analyse statique peuvent le parcourir.
+
+00:09:26.350 --> 00:09:28.690
+Tabular Editor peut exécuter des scripts en ligne de commande
+
+00:09:28.690 --> 00:09:31.270
+pour valider les relations, les règles de nommage ou les groupes de calcul.
+
+00:09:31.950 --> 00:09:34.530
+Les scripts PowerShell du module Microsoft Power BI MGT
+
+00:09:34.530 --> 00:09:35.770
+peuvent interroger des ensembles de données
+
+00:09:35.770 --> 00:09:37.710
+ou valider si un espace de travail est réellement actif
+
+00:09:37.710 --> 00:09:38.870
+avant d'y déposer des modifications.
+
+00:09:39.590 --> 00:09:41.230
+Combinez cela avec les API REST Power BI
+
+00:09:41.230 --> 00:09:43.150
+et vous pouvez même automatiser les tests de détection de fumée
+
+00:09:43.150 --> 00:09:44.130
+pour les rapports mis à jour.
+
+00:09:44.130 --> 00:09:46.670
+Un script de validation peut accéder à ces API,
+
+00:09:47.030 --> 00:09:48.850
+vérifier les métadonnées ou les liaisons de sources de données
+
+00:09:48.850 --> 00:09:49.890
+et renvoyer les erreurs.
+
+00:09:50.690 --> 00:09:51.690
+Rien de tout cela n'est hypothétique.
+
+00:09:52.230 --> 00:09:54.290
+C'est ce qui fait que PBB vaut la peine d'être adopté en premier lieu.
+
+00:09:55.070 --> 00:09:56.330
+Un excellent modèle utilisé par les équipes
+
+00:09:56.330 --> 00:09:57.490
+consiste à configurer une action GitHub
+
+00:09:57.490 --> 00:09:59.510
+lors de l'ouverture de l'ouverture de la mise à jour d'une demande d'extraction.
+
+00:10:00.030 --> 00:10:01.470
+Ce flux de travail exécute une petite suite,
+
+00:10:01.590 --> 00:10:03.870
+peut-être un script PowerShell pour tester les noms d'ensemble de données,
+
+00:10:04.030 --> 00:10:06.270
+un script de nœuds pour détecter les extraits d'axes incorrects
+
+00:10:06.270 --> 00:10:08.090
+et une exécution de lignes de commande d'éditeur tabulaire
+
+00:10:08.090 --> 00:10:09.570
+pour s'assurer que le modèle éditeur tabulaire
+
+00:10:09.570 --> 00:10:10.690
+pour s'assurer que le modèle ne se casse pas.
+
+00:10:10.790 --> 00:10:11.550
+Bonne pratique de base.
+
+00:10:12.290 --> 00:10:14.090
+En cas d'échec, l'action envoie les commentaires directement
+
+00:10:14.090 --> 00:10:15.650
+dans la conversation de la demande d'extraction
+
+00:10:15.650 --> 00:10:16.650
+et marque la build en rouge.
+
+00:10:17.210 --> 00:10:18.030
+Pas de fusion, pas de clic.
+
+00:10:18.470 --> 00:10:19.610
+Le développeur corrige le problème
+
+00:10:19.610 --> 00:10:20.850
+avant même que la branche ne soit prise en compte.
+
+00:10:21.510 --> 00:10:22.250
+Voici pourquoi c'est important.
+
+00:10:22.850 --> 00:10:24.970
+Les différences de texte ne vous avertissent pas des problèmes de performance.
+
+00:10:25.570 --> 00:10:27.170
+Vous pouvez voir une mesure où une colonne renommée
+
+00:10:27.170 --> 00:10:28.810
+et penser que cela semble correcte,
+
+00:10:28.870 --> 00:10:30.150
+mais un validateur peut détecter le fait
+
+00:10:30.150 --> 00:10:31.990
+que quelqu'un a supprimé un index ou modifié le filtre
+
+00:10:31.990 --> 00:10:33.630
+d'une manière qui transforme les requêtes en boue.
+
+00:10:34.330 --> 00:10:36.130
+Une équipe avec laquelle j'ai travaillé a eu un cas comme celui-ci.
+
+00:10:36.130 --> 00:10:37.810
+Une reconstruction d'un ensemble de données
+
+00:10:37.810 --> 00:10:38.990
+semblait innocente dans Git,
+
+00:10:39.050 --> 00:10:40.610
+mais un validateur a signalé une relation rompue
+
+00:10:40.610 --> 00:10:41.430
+avant qu'elle n'entre en production.
+
+00:10:41.790 --> 00:10:42.870
+Ce seul échec automatisé
+
+00:10:42.870 --> 00:10:44.790
+leur a évité des heures de lutte contre les incendies
+
+00:10:44.790 --> 00:10:46.630
+et quelques appels mécontents d'utilisateurs professionnels.
+
+00:10:46.910 --> 00:10:48.770
+Considérez l'automatisation comme le filtre du travail de base.
+
+00:10:49.170 --> 00:10:50.930
+Les humains détestent vérifier les règles de casse
+
+00:10:50.930 --> 00:10:52.490
+ou rechercher les noms de table de la feuille 1.
+
+00:10:52.610 --> 00:10:54.410
+Un script peut s'en charger en quelques millisecondes.
+
+00:10:55.130 --> 00:10:56.170
+Les humains ont toujours leur mot à dire,
+
+00:10:56.530 --> 00:10:58.330
+mais leurs évaluations portent sur l'adéquation stratégique,
+
+00:10:58.410 --> 00:10:59.790
+la logique métier et la qualité de la conception
+
+00:10:59.790 --> 00:11:00.790
+plutôt que sur la question de savoir
+
+00:11:00.790 --> 00:11:02.710
+si vous avez mis systématiquement les majuscules dans les 10 clients.
+
+00:11:03.670 --> 00:11:05.070
+La division du travail, purement et simplement.
+
+00:11:05.450 --> 00:11:07.310
+Les actions Microsoft vous poussent dans cette direction.
+
+00:11:08.210 --> 00:11:09.950
+Les actions GitHub s'intègrent au service Power BI
+
+00:11:09.950 --> 00:11:10.870
+et même aux API Fabrics
+
+00:11:10.870 --> 00:11:13.390
+qui fait de la validation une partie intégrante de votre histoire CICD.
+
+00:11:14.010 --> 00:11:14.710
+Ce n'est pas exagéré.
+
+00:11:15.070 --> 00:11:15.910
+C'est la voie à suivre évidente.
+
+00:11:16.470 --> 00:11:17.770
+Automatisez les tâches d'hygiène répétitive
+
+00:11:17.770 --> 00:11:18.970
+afin que les développeurs et les réviseurs
+
+00:11:18.970 --> 00:11:19.830
+ne gaspillent pas d'énergie
+
+00:11:19.830 --> 00:11:21.230
+à des vérifications de cohérence ennuyeuses.
+
+00:11:21.650 --> 00:11:23.450
+En résumé, traitez les actions comme vos collègues robots.
+
+00:11:24.370 --> 00:11:25.490
+Commencez par une poignée de vérifications
+
+00:11:25.490 --> 00:11:26.390
+qui apportent le plus de valeur,
+
+00:11:26.390 --> 00:11:28.510
+puis développez-les à mesure que votre équipe gagne en maturité.
+
+00:11:29.850 --> 00:11:31.570
+Automatisez les vérifications de cohérence au niveau du modèle,
+
+00:11:31.690 --> 00:11:33.370
+la validation des schémas et les règles de dénomination.
+
+00:11:33.930 --> 00:11:35.230
+Laissez les réviseurs libres de consacrer du temps
+
+00:11:35.230 --> 00:11:36.330
+à la conception et à la stratégie
+
+00:11:36.330 --> 00:11:37.390
+et non à la relecture des noms de champ.
+
+00:11:38.390 --> 00:11:39.630
+Et une fois ces vérifications en place,
+
+00:11:39.710 --> 00:11:40.730
+la question devient naturellement
+
+00:11:40.730 --> 00:11:43.210
+si les actions peuvent empêcher l'entrée de mauvaises modifications,
+
+00:11:43.430 --> 00:11:46.550
+pourquoi ne pas également les laisser transmettre les bonnes modifications ?
+
+00:11:46.550 --> 00:11:47.590
+C'est là qu'interviennent les pipelines,
+
+00:11:47.770 --> 00:11:48.630
+pas seulement les blocages,
+
+00:11:48.990 --> 00:11:49.950
+mais des moyens automatisés
+
+00:11:49.950 --> 00:11:51.330
+de pousser des builds approuvés
+
+00:11:51.330 --> 00:11:52.870
+du développement au test et à la production
+
+00:11:52.870 --> 00:11:54.350
+sans le rituel des clics manuels.
+
+00:11:54.350 --> 00:11:57.670
+Cela fait passer les déploiements de modifications de la superstition
+
+00:11:57.670 --> 00:11:59.310
+à quelque chose en quoi vous pouvez réellement avoir confiance.
+
+00:12:00.150 --> 00:12:02.010
+Les pipelines de déploiement, une fiabilité sans prière.
+
+00:12:02.690 --> 00:12:03.930
+Les pipelines de déploiement sont l'endroit
+
+00:12:03.930 --> 00:12:05.830
+où toute la configuration passe d'une expérience agréable
+
+00:12:05.830 --> 00:12:07.630
+à quelque chose que vous pouvez réellement exécuter en production
+
+00:12:07.630 --> 00:12:09.750
+sans vous ronger les ongles, sans vous ronger les oeufs.
+
+00:12:10.530 --> 00:12:12.210
+C'est la partie qui fait passer votre code soigneusement,
+
+00:12:12.310 --> 00:12:14.130
+vérifiez d'un environnement à l'autre de manière ordonnée,
+
+00:12:14.250 --> 00:12:15.730
+du développement au test puis à la production,
+
+00:12:16.230 --> 00:12:18.050
+sans compter sur des clics de souris chanceux.
+
+00:12:19.010 --> 00:12:20.430
+La publication manuelle dans Power BI,
+
+00:12:20.430 --> 00:12:21.250
+c'est le Far West,
+
+00:12:21.730 --> 00:12:22.650
+exporter un PBX,
+
+00:12:22.990 --> 00:12:23.670
+importer-le ailleurs,
+
+00:12:23.670 --> 00:12:25.710
+prier pour ne pas avoir choisi le mauvais espace de travail
+
+00:12:25.710 --> 00:12:27.850
+et croiser les doigts pour que les identifiants des ensembles de données
+
+00:12:27.850 --> 00:12:29.290
+soient toujours alignés, soient toujours alignés.
+
+00:12:29.570 --> 00:12:31.210
+C'est comme porter une brassée de course en sac.
+
+00:12:31.910 --> 00:12:33.210
+Peut-être que vous arriverez à la voiture,
+
+00:12:33.350 --> 00:12:35.250
+peut-être que les oeufs redécoreront votre allée.
+
+00:12:35.850 --> 00:12:37.590
+C'est pourquoi les pipelines de déploiement existent,
+
+00:12:37.810 --> 00:12:39.910
+et plus particulièrement les API restées pipelines de déploiement.
+
+00:12:41.030 --> 00:12:43.270
+Elles ont été conçues pour éliminer cet élément constant de hasard.
+
+00:12:44.190 --> 00:12:46.230
+Ces API ne sont pas de simples boutons d'étape suivante.
+
+00:12:46.730 --> 00:12:47.970
+Elles prennent en charge plusieurs scénarios clés
+
+00:12:47.970 --> 00:12:49.350
+que chaque responsable BI devrait connaître.
+
+00:12:50.450 --> 00:12:52.550
+Déployer tout envoie un espace de travail entier
+
+00:12:52.550 --> 00:12:53.430
+à l'étape suivante.
+
+00:12:54.950 --> 00:12:56.990
+Le déploiement sélectif vous permet de sélectionner
+
+00:12:56.990 --> 00:12:58.630
+des éléments individuels comme un rapport
+
+00:12:58.630 --> 00:13:00.150
+ou un ensemble de données,
+
+00:13:00.370 --> 00:13:02.010
+et le déploiement en amont avec
+
+00:13:02.010 --> 00:13:03.190
+Is Backward Deployment True
+
+00:13:03.190 --> 00:13:05.610
+peut promouvoir le contenu à une étape précédente s'il y manque.
+
+00:13:07.410 --> 00:13:07.890
+En plus de cela,
+
+00:13:07.950 --> 00:13:09.170
+les API peuvent également mettre à jour
+
+00:13:09.170 --> 00:13:10.330
+l'application associée à l'étape.
+
+00:13:11.050 --> 00:13:13.350
+Ainsi, lorsque vous promouvez du contenu en test ou en production,
+
+00:13:13.590 --> 00:13:15.290
+l'application liée peut se mettre à jour automatiquement
+
+00:13:15.290 --> 00:13:17.250
+et les utilisateurs voient immédiatement les rapports actualisés.
+
+00:13:17.550 --> 00:13:18.870
+C'est un véritable contrôle
+
+00:13:18.870 --> 00:13:20.970
+sans avoir à déplacer des fichiers comme un stagiaire désespéré.
+
+00:13:20.970 --> 00:13:22.630
+Voici la dure vérité.
+
+00:13:23.150 --> 00:13:24.030
+Avant que tout cela ne fonctionne,
+
+00:13:24.150 --> 00:13:25.510
+vous devez remplir les conditions préalables,
+
+00:13:25.610 --> 00:13:26.890
+ennuyeuses mais cruciales.
+
+00:13:26.970 --> 00:13:28.450
+L'appelant, qu'il s'agisse d'un compte humain
+
+00:13:28.450 --> 00:13:29.430
+ou d'un principal de service,
+
+00:13:29.570 --> 00:13:30.790
+doit être dans Microsoft Entry-ID
+
+00:13:30.790 --> 00:13:32.530
+avec les autorisations appropriées sur le pipeline
+
+00:13:32.530 --> 00:13:33.650
+et les espaces de travail cibles.
+
+00:13:34.470 --> 00:13:35.290
+Ignorez cet état périmé.
+
+00:13:35.850 --> 00:13:37.450
+Et lorsque vous appuyez sur les principes de service,
+
+00:13:37.530 --> 00:13:38.950
+ce que vous devriez absolument faire pour l'automatisation,
+
+00:13:39.030 --> 00:13:39.990
+vous atteignez certaines limites.
+
+00:13:40.650 --> 00:13:41.830
+Les principes de service ne peuvent pas configurer
+
+00:13:41.830 --> 00:13:42.590
+ou autres pour les sources de données,
+
+00:13:42.670 --> 00:13:43.610
+de sorte que certains ensembles de données
+
+00:13:43.610 --> 00:13:44.670
+ne seront pas actualisés tant qu'un humain
+
+00:13:44.670 --> 00:13:45.610
+ne seront pas actualisés tant qu'un humain
+
+00:13:45.610 --> 00:13:47.050
+n'aura pas corrigé les informations d'identification.
+
+00:13:47.230 --> 00:13:48.910
+De plus, un principe de service devient propriétaire
+
+00:13:48.910 --> 00:13:50.410
+des modèles sémantiques et des rapports paginés
+
+00:13:50.410 --> 00:13:50.870
+qu'il déploie,
+
+00:13:50.950 --> 00:13:52.810
+ce qui peut bloquer les actualisations planifiées,
+
+00:13:52.990 --> 00:13:53.450
+scanifiées.
+
+00:13:53.730 --> 00:13:54.530
+Et oubliez les flux de données.
+
+00:13:55.270 --> 00:13:57.010
+Les principes de service ne peuvent pas du tout les déployer.
+
+00:13:57.630 --> 00:13:58.150
+Autre problème,
+
+00:13:58.270 --> 00:14:00.090
+chaque appel de déploiement est limité à 300 éléments.
+
+00:14:00.610 --> 00:14:02.030
+Si votre espace de travail s'est transformé
+
+00:14:02.030 --> 00:14:03.050
+en un dépotoir de visuels,
+
+00:14:03.130 --> 00:14:04.370
+ce plafond vous sera imposé.
+
+00:14:05.370 --> 00:14:06.890
+Ce ne sont pas des informations agréables à savoir,
+
+00:14:07.010 --> 00:14:07.550
+ce sont des nids de poules
+
+00:14:07.550 --> 00:14:08.470
+que vous devez reconnaître dès le début.
+
+00:14:09.210 --> 00:14:11.610
+Comment intégrer cela dans les actions GitHub ?
+
+00:14:11.610 --> 00:14:13.290
+La méthode intelligente et éprouvée
+
+00:14:13.290 --> 00:14:15.730
+consiste à stocker votre identifiant client principal de service
+
+00:14:15.730 --> 00:14:18.130
+et votre secret dans les secrets du référentiel GitHub.
+
+00:14:19.050 --> 00:14:20.650
+Cela les empêche d'être inclus dans le code
+
+00:14:20.650 --> 00:14:21.810
+et de les valider accidentellement.
+
+00:14:22.330 --> 00:14:23.650
+Vous mappez ensuite les dossiers du référentiel
+
+00:14:23.650 --> 00:14:24.470
+aux identifiants de pipeline
+
+00:14:24.470 --> 00:14:25.630
+à l'aide d'un fichier de configuration YAM.
+
+00:14:26.390 --> 00:14:28.190
+Chaque dossier s'aligne sur un pipeline spécifique
+
+00:14:28.190 --> 00:14:29.870
+et l'action GitHub l'i7Map
+
+00:14:29.870 --> 00:14:31.450
+pour envoyer le contenu au bon endroit.
+
+00:14:32.250 --> 00:14:33.350
+Ce n'est pas moi qui invente quelque chose.
+
+00:14:34.230 --> 00:14:35.950
+Ce modèle apparaît dans les actions communautaires
+
+00:14:35.950 --> 00:14:37.630
+telles que le déploiement du pipeline Power BI
+
+00:14:37.630 --> 00:14:38.730
+sur la place de marché GitHub.
+
+00:14:39.550 --> 00:14:40.230
+Cela fonctionne bien,
+
+00:14:40.230 --> 00:14:41.970
+mais vous devez savoir que ces actions de la place de marché
+
+00:14:41.970 --> 00:14:43.590
+sont tierces et non certifiées par Microsoft.
+
+00:14:44.610 --> 00:14:45.550
+Traduction, elles sont utiles
+
+00:14:45.550 --> 00:14:46.470
+mais vous assumez les risques.
+
+00:14:46.990 --> 00:14:47.990
+Si vous avez besoin d'une sécurité
+
+00:14:47.990 --> 00:14:49.190
+et d'une assistance maximale,
+
+00:14:49.390 --> 00:14:50.910
+exécutez vos propres scripts par rapport aux API.
+
+00:14:51.270 --> 00:14:53.330
+D'accord, à quoi cela ressemble-t-il concrètement ?
+
+00:14:53.330 --> 00:14:54.310
+Vous fermez une demande d'extraction,
+
+00:14:54.390 --> 00:14:55.370
+les actions GitHub se déclenchent,
+
+00:14:55.410 --> 00:14:56.110
+vous appelez l'appli REST
+
+00:14:56.110 --> 00:14:57.030
+et des pipelines de déploiement
+
+00:14:57.030 --> 00:14:59.230
+et vous déplacez votre contenu de dev à test.
+
+00:14:59.850 --> 00:15:01.250
+Si toutes vos vérifications sont réussies,
+
+00:15:01.330 --> 00:15:02.930
+le même workflow peut être promu vers PROD.
+
+00:15:04.030 --> 00:15:05.450
+Le cycle est reproductible et vérifiable.
+
+00:15:06.250 --> 00:15:07.490
+Vous savez exactement ce qui s'est passé
+
+00:15:07.490 --> 00:15:09.090
+où, quand et avec l'approbation de qui.
+
+00:15:10.230 --> 00:15:12.130
+les sessions d'espoir nocturne improvisées par une structure.
+
+00:15:12.890 --> 00:15:13.810
+Et si votre patron vous demande
+
+00:15:13.810 --> 00:15:15.110
+comment nous savons que rien n'a été introduit
+
+00:15:15.110 --> 00:15:15.770
+sans avoir été testé,
+
+00:15:15.890 --> 00:15:16.630
+vous avez en fait une réponse
+
+00:15:16.630 --> 00:15:17.490
+qui dépasse le cadre d'une réponse
+
+00:15:17.490 --> 00:15:18.270
+qui dépasse le cadre d'une cas.
+
+00:15:18.630 --> 00:15:20.310
+Cela signifie-t-il que l'automatisation est parfaite ?
+
+00:15:20.310 --> 00:15:20.410
+Non.
+
+00:15:20.970 --> 00:15:22.030
+Vous rencontrerez toujours des cas
+
+00:15:22.030 --> 00:15:23.430
+où les corrections manuelles des identifiants
+
+00:15:23.430 --> 00:15:24.090
+sont inévitables
+
+00:15:24.090 --> 00:15:25.510
+ou les limites des éléments et des flux de données
+
+00:15:25.510 --> 00:15:26.890
+vous obligent à repenser votre structure.
+
+00:15:27.890 --> 00:15:28.510
+Et la différence,
+
+00:15:28.590 --> 00:15:30.250
+c'est que vous avez affaire à des exceptions connues occasionnelles
+
+00:15:30.250 --> 00:15:31.370
+et non un chaos perpétuel.
+
+00:15:32.630 --> 00:15:33.350
+Neuf fois sur dix,
+
+00:15:33.450 --> 00:15:34.730
+le déploiement s'exécute sans problème
+
+00:15:34.730 --> 00:15:35.870
+et vous arrêtez de passer vos week-ends
+
+00:15:35.870 --> 00:15:37.690
+à courir après les relations manquantes dans PR-Od.
+
+00:15:38.450 --> 00:15:38.850
+Fin de compte,
+
+00:15:38.910 --> 00:15:40.170
+les pipelines de déploiement et les actions
+
+00:15:40.170 --> 00:15:41.570
+vous offrent une fiabilité sans faille.
+
+00:15:42.230 --> 00:15:43.950
+Au lieu de cliquer et de chuchoter au dieu du reporting,
+
+00:15:44.070 --> 00:15:45.030
+vous disposez d'un processus
+
+00:15:45.030 --> 00:15:45.810
+qui transmet les rapports
+
+00:15:45.810 --> 00:15:47.390
+à travers les environnements de manière cohérente.
+
+00:15:48.250 --> 00:15:49.090
+Vous pouvez les vérifier,
+
+00:15:49.390 --> 00:15:50.430
+les restaurer si nécessaire
+
+00:15:50.430 --> 00:15:51.230
+et dormir la nuit
+
+00:15:51.230 --> 00:15:52.330
+en sachant que personne n'a modifié
+
+00:15:52.330 --> 00:15:53.310
+le nom d'un espace de travail.
+
+00:15:53.930 --> 00:15:54.190
+Ensuite,
+
+00:15:54.270 --> 00:15:55.710
+une fois que vos déploiements fonctionnent aussi bien,
+
+00:15:55.870 --> 00:15:57.190
+le véritable défi change.
+
+00:15:57.190 --> 00:15:58.610
+La question n'est plus de savoir
+
+00:15:58.610 --> 00:15:59.470
+si nous pouvons promouvoir
+
+00:15:59.470 --> 00:16:00.210
+en toute sécurité
+
+00:16:00.210 --> 00:16:01.230
+mais comment intégrer la gouvernance
+
+00:16:01.230 --> 00:16:02.350
+sans transformer toute la configuration
+
+00:16:02.350 --> 00:16:04.250
+en paperasserie ?
+
+00:16:04.250 --> 00:16:04.770
+Cet équilibre,
+
+00:16:04.850 --> 00:16:05.770
+ce contrôle sans bureaucratie,
+
+00:16:05.850 --> 00:16:06.930
+c'est ce que nous allons aborder ensuite.
+
+00:16:07.950 --> 00:16:09.070
+La gouvernance sans bureaucratie.
+
+00:16:09.670 --> 00:16:11.050
+Personne ne s'est inscrit à CICD
+
+00:16:11.050 --> 00:16:11.990
+juste pour avoir l'impression
+
+00:16:11.990 --> 00:16:12.810
+de renouveler son permis
+
+00:16:12.810 --> 00:16:13.930
+de conduire au DMV.
+
+00:16:14.330 --> 00:16:15.430
+L'objectif est la rapidité
+
+00:16:15.430 --> 00:16:16.210
+et la sécurité
+
+00:16:16.210 --> 00:16:16.790
+et non de se noyer
+
+00:16:16.790 --> 00:16:17.750
+dans les diagrammes de processus
+
+00:16:17.750 --> 00:16:18.270
+et les approbations.
+
+00:16:18.850 --> 00:16:19.750
+La gouvernance traditionnelle
+
+00:16:19.750 --> 00:16:20.570
+oublie souvent qu'elle tente
+
+00:16:20.570 --> 00:16:21.630
+d'améliorer la qualité
+
+00:16:21.630 --> 00:16:22.590
+en étouffant les développeurs
+
+00:16:22.590 --> 00:16:23.530
+sous les formulaires et les tickets
+
+00:16:23.530 --> 00:16:24.410
+et le résultat final
+
+00:16:27.190 --> 00:16:29.850
+une gouvernance qui fonctionne réellement
+
+00:16:29.850 --> 00:16:30.370
+est une gouvernance
+
+00:16:30.370 --> 00:16:31.430
+qui ressemble à des glissières de sécurité
+
+00:16:31.430 --> 00:16:31.970
+sur une autoroute.
+
+00:16:32.290 --> 00:16:33.070
+Elles ne vous ralentissent pas,
+
+00:16:33.130 --> 00:16:33.730
+elles s'assurent simplement
+
+00:16:33.730 --> 00:16:34.790
+que votre voiture ne quitte pas la route
+
+00:16:34.790 --> 00:16:35.670
+à 130 km heure.
+
+00:16:36.910 --> 00:16:37.550
+Et la différence pratique
+
+00:16:37.550 --> 00:16:37.990
+vient de la manière
+
+00:16:37.990 --> 00:16:38.490
+dont vous définissez
+
+00:16:38.490 --> 00:16:39.190
+ces glissières de sécurité.
+
+00:16:39.550 --> 00:16:40.410
+Tous les dépôts n'ont pas besoin
+
+00:16:40.410 --> 00:16:41.030
+des mêmes règles,
+
+00:16:41.470 --> 00:16:42.570
+c'est la première solution tactique.
+
+00:16:42.990 --> 00:16:44.010
+Pour les modifications cosmétiques
+
+00:16:44.010 --> 00:16:44.470
+dans un rapport,
+
+00:16:44.570 --> 00:16:45.010
+vous n'avez pas besoin
+
+00:16:45.010 --> 00:16:45.730
+d'un conseil des anciens.
+
+00:16:46.130 --> 00:16:47.050
+Kitup peut être configuré
+
+00:16:47.050 --> 00:16:47.890
+pour un simple campus
+
+00:16:47.890 --> 00:16:48.670
+le véhicule que fusionne.
+
+00:16:49.310 --> 00:16:49.950
+Et pour les mises à jour
+
+00:16:49.950 --> 00:16:50.690
+de modèles à fort impact
+
+00:16:50.690 --> 00:16:51.510
+qui recalcule la moitié
+
+00:16:51.510 --> 00:16:52.290
+de votre logique métier.
+
+00:16:52.670 --> 00:16:53.250
+Resserrez les barrières
+
+00:16:53.250 --> 00:16:54.030
+avec plusieurs réviseurs
+
+00:16:54.030 --> 00:16:54.590
+et faites-les répondre
+
+00:16:54.590 --> 00:16:55.310
+à un modèle de PR
+
+00:16:55.310 --> 00:16:56.210
+qui répertorie exactement
+
+00:16:56.210 --> 00:16:56.850
+ce qu'il faut vérifier.
+
+00:16:57.630 --> 00:16:58.510
+Léger là où il peut l'être,
+
+00:16:58.670 --> 00:16:59.550
+strict là où il doit l'être.
+
+00:16:59.850 --> 00:17:00.510
+Des mathématiques simples.
+
+00:17:00.870 --> 00:17:01.850
+C'est là que les modèles de PR
+
+00:17:01.850 --> 00:17:02.850
+gagnent vraiment leur vie.
+
+00:17:03.210 --> 00:17:03.850
+Un bon modèle indique
+
+00:17:03.850 --> 00:17:04.470
+la logique métier,
+
+00:17:04.570 --> 00:17:05.330
+les dépendances de schémas,
+
+00:17:05.470 --> 00:17:06.130
+les notes de test,
+
+00:17:06.370 --> 00:17:07.150
+afin que le réviseur
+
+00:17:07.150 --> 00:17:08.090
+n'ait pas à deviner
+
+00:17:08.090 --> 00:17:09.030
+ce qui est important.
+
+00:17:09.870 --> 00:17:10.350
+Ajoutez à cela
+
+00:17:10.350 --> 00:17:11.550
+des vérifications automatisées
+
+00:17:11.550 --> 00:17:12.330
+pour traquer les éléments
+
+00:17:12.330 --> 00:17:12.870
+ennuyeux
+
+00:17:12.870 --> 00:17:13.370
+et soudain,
+
+00:17:13.450 --> 00:17:14.150
+vos humains redeviennent
+
+00:17:14.150 --> 00:17:14.990
+du travail humain.
+
+00:17:15.410 --> 00:17:15.910
+Les robots traquent
+
+00:17:15.910 --> 00:17:17.050
+vous vérifiez
+
+00:17:17.050 --> 00:17:17.810
+si la mesure des ventes
+
+00:17:17.810 --> 00:17:18.390
+correspond toujours
+
+00:17:18.390 --> 00:17:19.330
+à la définition de la finance.
+
+00:17:20.090 --> 00:17:20.950
+C'est la division du travail
+
+00:17:20.950 --> 00:17:21.770
+qui maintient le rythme
+
+00:17:21.770 --> 00:17:22.710
+sans sacrifier la qualité.
+
+00:17:23.670 --> 00:17:24.570
+Rajoutons l'automatisation
+
+00:17:24.570 --> 00:17:25.090
+dans le tableau
+
+00:17:25.090 --> 00:17:26.050
+car c'est la clé de voûte.
+
+00:17:26.890 --> 00:17:27.950
+Vos vérifications automatisées,
+
+00:17:28.030 --> 00:17:28.390
+qu'il s'agisse
+
+00:17:28.390 --> 00:17:29.230
+de scripts de PowerShell
+
+00:17:29.230 --> 00:17:30.090
+utilisant des validations
+
+00:17:30.090 --> 00:17:30.830
+d'éditeurs tabulaires
+
+00:17:30.830 --> 00:17:32.110
+Microsoft PowerBM GMT
+
+00:17:32.110 --> 00:17:33.390
+ou d'analyses JSON ciblées,
+
+00:17:33.670 --> 00:17:34.290
+détectent les éléments
+
+00:17:34.290 --> 00:17:35.190
+dont aucun réviseur humain
+
+00:17:35.190 --> 00:17:35.890
+ne devrait se soucier.
+
+00:17:36.870 --> 00:17:37.430
+Dommage cohérent,
+
+00:17:37.530 --> 00:17:38.310
+erreur fiscale évidente,
+
+00:17:38.430 --> 00:17:39.050
+relation manquante,
+
+00:17:39.150 --> 00:17:39.730
+relation manquante,
+
+00:17:39.810 --> 00:17:40.390
+tout cela est signalé
+
+00:17:40.390 --> 00:17:41.390
+avant même que la demande de pool
+
+00:17:41.390 --> 00:17:42.270
+n'obtienne un bouton vert.
+
+00:17:43.030 --> 00:17:43.810
+Cela signifie que les yeux
+
+00:17:43.810 --> 00:17:44.350
+des examinateurs
+
+00:17:44.350 --> 00:17:45.050
+se portent exactement
+
+00:17:45.050 --> 00:17:45.630
+là où ils le devraient
+
+00:17:45.630 --> 00:17:46.230
+en termes d'intention,
+
+00:17:46.330 --> 00:17:47.390
+de conception et de confiance réelle
+
+00:17:47.390 --> 00:17:48.330
+de l'entreprise dans ce rapport.
+
+00:17:49.150 --> 00:17:50.070
+Et ce n'est pas que de la théorie.
+
+00:17:50.570 --> 00:17:51.130
+Les équipes qui vivent
+
+00:17:51.130 --> 00:17:52.130
+dans le chaos sans gouvernance
+
+00:17:52.130 --> 00:17:52.970
+retrouvent souvent la raison
+
+00:17:52.970 --> 00:17:54.210
+en faisant exactement cela.
+
+00:17:54.950 --> 00:17:55.970
+Modèle de relations publiques,
+
+00:17:56.130 --> 00:17:57.070
+validateur automatisé
+
+00:17:57.070 --> 00:17:57.970
+et niveau d'approbation
+
+00:17:57.970 --> 00:17:58.830
+adapté aux référentiels.
+
+00:17:59.330 --> 00:18:00.090
+Le changement est immédiat.
+
+00:18:00.610 --> 00:18:01.550
+Le travail semble plus léger
+
+00:18:01.550 --> 00:18:02.390
+car les développeurs savent
+
+00:18:02.390 --> 00:18:03.190
+qu'ils ne seront pas bloqués
+
+00:18:03.190 --> 00:18:04.050
+pour avoir modifié un titre
+
+00:18:04.050 --> 00:18:04.830
+et ils ne peuvent pas contourner
+
+00:18:04.830 --> 00:18:05.450
+l'examen minutieux
+
+00:18:05.450 --> 00:18:06.530
+s'ils remodèlent l'ensemble de données
+
+00:18:06.530 --> 00:18:07.410
+qui alimentent les tableaux
+
+00:18:07.410 --> 00:18:08.350
+de bord de la direction.
+
+00:18:09.170 --> 00:18:10.030
+La qualité reste élevée
+
+00:18:10.030 --> 00:18:10.850
+mais personne n'a l'impression
+
+00:18:10.850 --> 00:18:12.190
+de remplir des formulaires fiscaux
+
+00:18:12.190 --> 00:18:12.970
+pour pousser du code.
+
+00:18:14.030 --> 00:18:14.890
+Il y a aussi la vue d'ensemble,
+
+00:18:15.230 --> 00:18:16.110
+la manière dont les environnements
+
+00:18:16.110 --> 00:18:16.790
+sont mappés aux branches.
+
+00:18:17.750 --> 00:18:18.430
+La plupart des équipes
+
+00:18:18.430 --> 00:18:19.350
+se retrouvent dans l'un des deux modèles
+
+00:18:19.350 --> 00:18:19.690
+pris en chat.
+
+00:18:20.330 --> 00:18:20.810
+Première option,
+
+00:18:21.090 --> 00:18:22.050
+les développeurs créent des espaces
+
+00:18:22.050 --> 00:18:22.910
+de travail de fonctionnalité
+
+00:18:22.910 --> 00:18:23.710
+qui sont mappés directement
+
+00:18:23.710 --> 00:18:24.590
+aux branches de fonctionnalités
+
+00:18:24.590 --> 00:18:25.950
+de sorte que chaque branche expérimentale
+
+00:18:25.950 --> 00:18:26.770
+dispose d'un bac à sable
+
+00:18:26.770 --> 00:18:27.910
+en miroir dans le service Power BI.
+
+00:18:29.190 --> 00:18:29.750
+Deuxième option,
+
+00:18:30.290 --> 00:18:31.130
+les développeurs effectuent
+
+00:18:31.130 --> 00:18:31.790
+leurs modifications
+
+00:18:31.790 --> 00:18:32.870
+localement dans PB&P
+
+00:18:32.870 --> 00:18:33.790
+et les synchronisent
+
+00:18:33.790 --> 00:18:34.950
+avec une branche de fonctionnalités
+
+00:18:34.950 --> 00:18:36.170
+sans espaces de travail parallèles,
+
+00:18:36.490 --> 00:18:37.250
+laissant l'automatisation
+
+00:18:37.250 --> 00:18:38.410
+gérer le pipeline de déploiement
+
+00:18:38.410 --> 00:18:39.510
+dans des environnements partagés.
+
+00:18:40.850 --> 00:18:41.810
+Les deux approches sont conformes
+
+00:18:41.810 --> 00:18:43.370
+au conseil de Microsoft Fabric CI-CD.
+
+00:18:43.930 --> 00:18:44.870
+L'astuce consiste à décider
+
+00:18:44.870 --> 00:18:45.590
+quel style correspond
+
+00:18:45.590 --> 00:18:46.370
+à l'appétit de votre équipe
+
+00:18:46.370 --> 00:18:46.950
+pour les frais générants.
+
+00:18:47.590 --> 00:18:48.090
+Dans tous les cas,
+
+00:18:48.130 --> 00:18:49.010
+il s'agit toujours de branches
+
+00:18:49.010 --> 00:18:49.850
+et d'espaces de travail.
+
+00:18:50.390 --> 00:18:51.150
+Vous choisissez simplement
+
+00:18:51.150 --> 00:18:51.730
+de refléter les deux.
+
+00:18:52.790 --> 00:18:53.450
+Avec ces modèles à l'esprit,
+
+00:18:53.510 --> 00:18:54.570
+la gouvernance devient encore plus facile
+
+00:18:54.570 --> 00:18:55.190
+à mettre à l'échelle.
+
+00:18:55.590 --> 00:18:56.290
+Approbation légère
+
+00:18:56.290 --> 00:18:57.150
+pour les ajustements de contenu
+
+00:18:57.150 --> 00:18:57.870
+dans un espace de travail
+
+00:19:01.790 --> 00:19:02.430
+d'elles qui passent en test
+
+00:19:02.430 --> 00:19:02.830
+ou en production.
+
+00:19:03.330 --> 00:19:03.970
+La structure est claire.
+
+00:19:04.330 --> 00:19:05.370
+Plus votre modification va loin,
+
+00:19:05.470 --> 00:19:06.450
+plus elle mérite d'être contrôlée.
+
+00:19:07.390 --> 00:19:08.390
+Personne ne conteste les règles
+
+00:19:08.390 --> 00:19:09.090
+lorsqu'elles ont du sens.
+
+00:19:09.430 --> 00:19:10.530
+Et n'oubliez pas l'aspect culturel.
+
+00:19:11.110 --> 00:19:12.170
+Lorsque les développeurs constatent
+
+00:19:12.170 --> 00:19:12.910
+que les robots gèrent
+
+00:19:12.910 --> 00:19:13.790
+les vérifications de base
+
+00:19:13.790 --> 00:19:14.710
+et que les humains n'interviennent
+
+00:19:14.710 --> 00:19:15.670
+que lorsque leur jugement compte,
+
+00:19:15.790 --> 00:19:16.470
+ils cessent de considérer
+
+00:19:16.470 --> 00:19:17.550
+la gouvernance comme un obstacle.
+
+00:19:18.410 --> 00:19:19.070
+Ils la respectent
+
+00:19:19.070 --> 00:19:19.890
+car elle filtre le bruit
+
+00:19:19.890 --> 00:19:20.590
+et les empêche de lutter
+
+00:19:20.590 --> 00:19:21.850
+contre les incendies en production.
+
+00:19:23.450 --> 00:19:24.710
+L'automatisation se charge des remarques.
+
+00:19:25.070 --> 00:19:25.850
+Les humains se concentrent.

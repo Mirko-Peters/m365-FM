@@ -1,0 +1,1426 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:06.780
+Siap untuk 12 hari bersama Microsoft 365, Copilot, AI, Azure, dan orang-orang yang membentuk masa depan pekerjaan.
+
+00:00:07.600 --> 00:00:11.960
+Januari ini, M365 schon hadir kembali dan kami akan melakukannya dengan lebih besar.
+
+00:00:12.800 --> 00:00:18.200
+Bergabungan dengan kami untuk sesi langsung, demo dunia nyata, dan pengetahuan praktis dari MVP dan pakar industri di seluruh dunia.
+
+00:00:18.880 --> 00:00:21.160
+Tidak ada slide umum, tidak ada kata kunci yang tak ada habisnya.
+
+00:00:21.920 --> 00:00:23.080
+Kami menangani tantangan nyata.
+
+00:00:23.720 --> 00:00:28.780
+Copilot Studio, IGN AI, Fabrik, Keamanan, Tata Kelola, dan Otomatisasi.
+
+00:00:28.780 --> 00:00:34.320
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.460 --> 00:00:39.940
+Dengan 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.160
+Tonton langsung, dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.240 --> 00:00:48.860
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.500 --> 00:00:50.460
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.800 --> 00:00:55.460
+Kunjungi m365con.net dan amankan tempat Anda hari ini.
+
+00:00:56.500 --> 00:00:58.420
+Itulah m365con.net.
+
+00:00:58.780 --> 00:01:04.720
+Bergabunglah sekarang di m365con.net dan kami akan melihat Anda secara langsung di bulan Januari.
+
+00:01:05.460 --> 00:01:06.160
+Tentang saya untuk Anda.
+
+00:01:06.740 --> 00:01:12.140
+Bisakah tim BI Anda melacak setiap perubahan dalam laporan dari pengembangan ke produksi dengan persetujuan yang catat dan otomatisasi yang menjalankan tugasnya?
+
+00:01:12.540 --> 00:01:13.700
+Tidak pemeriksaan cepat sebelum kita mulai.
+
+00:01:14.240 --> 00:01:19.500
+Sesi ini mengasumsikan Anda sudah mengetahui dasar-dasar PBIP dan istilah git seperti cabang, komit, dan permintaan tarik.
+
+00:01:19.500 --> 00:01:20.900
+Berikut petajalannya.
+
+00:01:21.360 --> 00:01:25.720
+Kami akan membahas persetujuan GitHub PR, pemeriksaan otomatis dengan tindakan, dan alur penerapan untuk Power BI.
+
+00:01:25.720 --> 00:01:30.480
+Ketikanya membuat perbedaan antara berharap sesuatu tidak rusak dan benar-benar mengetahui bahwa itu tidak akan terjadi.
+
+00:01:30.600 --> 00:01:31.940
+Namun pertama-tama, mari kita ada PP kenyataan.
+
+00:01:32.180 --> 00:01:34.060
+PBIP bukanlah obat ajaib seperti yang Anda kira.
+
+00:01:35.100 --> 00:01:36.440
+Mengapa PBIP bukanlah obat ajaib?
+
+00:01:36.440 --> 00:01:42.900
+Realitas baru yang mengelapkan dengan proyek desktop Power BI PP adalah semuanya tampak lebih bersih saat Anda membaliknya.
+
+00:01:44.520 --> 00:01:48.760
+Alih-alih menjejalkan seluruh model laporan dan koneksi ke dalam satu kota hitam PBX yang besar, PBIP.
+
+00:01:49.240 --> 00:01:52.140
+Menata semuanya sebagai folder terstruktur yang penuh dengan file text.
+
+00:01:52.840 --> 00:01:55.980
+Model semantik mendapatkan file, model BIM-nya sendiri, yang tidak hanya dapat dibaca.
+
+00:01:56.640 --> 00:01:58.720
+Ia juga langsung terhubung ke alat seperti tabular editor.
+
+00:01:59.720 --> 00:02:02.320
+Koneksi visual metadata JSON berada dalam file terpisah.
+
+00:02:03.240 --> 00:02:04.580
+Tiba-tiba git benar-benar berfungsi di sini.
+
+00:02:04.580 --> 00:02:06.680
+Perbedaan menunjukkan kepada Anda apa yang berubah.
+
+00:02:07.200 --> 00:02:10.160
+Cabang memungkinkan banyak orang bereksperimen tanpa saling bertabrakan
+
+00:02:10.160 --> 00:02:14.800
+dan Anda membuka kompatibilitas dengan perkakasnya IPCD seperti GitHub Actions atau Azure DevOps.
+
+00:02:15.580 --> 00:02:16.960
+Itulah sisi baiknya, sisi teknisnya.
+
+00:02:17.780 --> 00:02:20.400
+Sisi buruknya adalah PPIP tidak secara ajaib memperbaiki dinamikat.
+
+00:02:20.940 --> 00:02:23.480
+Yang benar-benar dilakukannya hanyalah menyoroti kekacauan yang sudah Anda alam.
+
+00:02:24.380 --> 00:02:28.880
+Dengan PBX, setiap suntingan diam-diam berada dalam satu berkas miner yang tidak dapat dilacak dengan baik oleh siapapun.
+
+00:02:29.640 --> 00:02:33.680
+Dengan PBIP, suntingan yang sama sekarang tersebar di lusinan berkas kecil yang menuntut perhatian di Git.
+
+00:02:33.680 --> 00:02:35.620
+Ya, konflik penggabungan terlihat.
+
+00:02:36.200 --> 00:02:38.300
+Dan Anda akhirnya dapat melihat ukuran mana yang diubah.
+
+00:02:39.380 --> 00:02:43.520
+Namun, jika lima orang bekerja keras pada kumpulan data yang sama pada Senin pagi, kita tetap menyala merah.
+
+00:02:44.360 --> 00:02:48.640
+Perbedaannya adalah sekarang Anda dapat berdebat tentangnya berkas demi berkas alih-alih berpura-pura masalah itu tidak ada.
+
+00:02:49.340 --> 00:02:52.100
+Anggap saja seperti menukar leci sampah Anda dengan kotak berkakas berkakas.
+
+00:02:52.500 --> 00:02:54.600
+Tentu, setiap obeng kini memiliki tempat yang rapi.
+
+00:02:54.700 --> 00:02:57.780
+Tetapi ketika separuh kantor meraih kepala Philip sekaligus, gesekan tidak menghilang.
+
+00:02:58.300 --> 00:03:00.340
+Menjadi sedikit lebih mudah untuk melihat siapa yang mengambil apa.
+
+00:03:00.340 --> 00:03:02.860
+Itulah yang dihadirkan PBIP, Kejelasan Tanpa Disiplin.
+
+00:03:03.280 --> 00:03:07.220
+Saya pernah bekerja dengan tim yang menggunakan PBIP sepenuhnya dengan harapan dapat menyelesaikan suntingan yang berbentuk.
+
+00:03:07.760 --> 00:03:11.080
+Mereka mengabaikan aturan, melewatkan tinjauan, dan mengandalkan visibilitas untuk menyelamatkan.
+
+00:03:11.320 --> 00:03:14.880
+Dalam beberapa sprint, hasilnya adalah jejak audit yang penuh dengan perubahan yang tidak dapat dijelaskan.
+
+00:03:15.760 --> 00:03:20.920
+Kolom diganti namanya tanpa alasan, hubungan disesuaikan tanpa peringatan, ukuran ditulis ulang tanpa konteks.
+
+00:03:21.860 --> 00:03:25.640
+Melihat suntingan tidak membuat mereka lebih aman, itu hanya membuat kebingungan permainan dalam Rio Airgate.
+
+00:03:25.640 --> 00:03:28.080
+Ada juga masalah konflik penggabungan.
+
+00:03:28.780 --> 00:03:31.060
+PIP membuatnya keras dan jelas, terkadang menyakitkan.
+
+00:03:32.100 --> 00:03:38.800
+Alih-alih korupsi diam-diam yang terkubur dalam PBX, Anda menatap penanda konflik merah terang di VS Code yang menunjukkan tiga versi yang bersaing dari ukuran reaksi yang sama.
+
+00:03:39.640 --> 00:03:40.500
+Certiknis itu kemajur.
+
+00:03:40.860 --> 00:03:44.320
+Tidak hanya Anda tahu persis apa yang rusak, tetapi menjadi lebih keras tidak berarti rasa sakitnya hilang.
+
+00:03:44.500 --> 00:03:45.960
+Artinya Anda tidak bisa lagi mengabaikannya.
+
+00:03:45.960 --> 00:03:51.240
+Apakah itu berkah atau kutukan, itu tergantung pada seberapa disiplin tim Anda dalam alur kerja.
+
+00:03:52.300 --> 00:03:52.800
+Nah, inilah intinya.
+
+00:03:53.340 --> 00:03:56.580
+Kerobosan sebenarnya bukanlah PBX itu sendiri, melainkan apa yang dimungkinkan oleh PBX.
+
+00:03:57.020 --> 00:04:02.980
+Dengan membagi laporan dan model menjadi file berbasis teks yang dapat dikontrol versinya, Anda akhirnya dapat melapisi alur kerja git yang tepat di atasnya.
+
+00:04:03.400 --> 00:04:06.220
+Cabang, permintaan penarikan, tinjauan, alur CI per CD.
+
+00:04:07.240 --> 00:04:08.700
+PBX adalah pintu, bukan tujuan.
+
+00:04:08.960 --> 00:04:13.780
+Ini memberi Anda kontrol versi per komponen, tetapi tidak memberitahu orang yang memegang kemudi cara mengemudi.
+
+00:04:13.780 --> 00:04:18.580
+Itu berarti masalah yang sama tetap ada jika Anda tidak membungkus struktur dan otomatisasi di sekitar pengaturan ini.
+
+00:04:19.000 --> 00:04:23.660
+Tanpa persetujuan dan tinjauan, Anda hanya menatap jejak kaki yang lebih terlihat dari kawanan kucing yang sama.
+
+00:04:24.700 --> 00:04:29.780
+Tanpa pagar pembatas seperti pemeriksaan otomatis, Anda masih mercaya pengembang untuk tidak menyelipkan suntingan yang meragukan langsung ke produksi.
+
+00:04:30.860 --> 00:04:34.580
+PBIP memungkinkan praktek DevOps modern di Power BI, tetapi tidak menerapkannya.
+
+00:04:35.080 --> 00:04:37.000
+Masih ada di tim, apa yang tersisa bagi kita.
+
+00:04:37.380 --> 00:04:38.560
+Dengan kejelasan tetapi bukan keterang.
+
+00:04:38.780 --> 00:04:43.160
+PBIP menghilangkan kabut monolitik PBX tetapi tidak mencegah tabrakan yang berantakan.
+
+00:04:43.780 --> 00:04:49.580
+Untuk itu, Anda memerlukan kontrol, sesuatu untuk menghentikan orang agar tidak saling menyesampingkan atau menyelinapkan perubahan yang belum diuji.
+
+00:04:50.000 --> 00:04:51.180
+Itulah mengapa langkah berdiri saat ini.
+
+00:04:51.960 --> 00:04:56.340
+Permintaan terik GitHub mengambil tumpukan file PBIP yang berantakan dan memasang lampu lalu lintas diatasnya.
+
+00:04:56.700 --> 00:05:02.480
+Alih-alih lima pengembang berlomba ke persimpangan yang sama, Anda mendapatkan pemeriksaan sinyal dan catatan tentang siapa yang sebenarnya melakukan apa.
+
+00:05:02.900 --> 00:05:03.920
+Dan disitulah ceritanya berubah.
+
+00:05:03.920 --> 00:05:08.760
+Karena meskipun PR berguna, siapapun yang pernah mengalaminya tahu bahwa PR dapat terasa seperti pengalaman sekaligus titik kemacetan.
+
+00:05:08.760 --> 00:05:15.420
+Jadi pertanyaan yang jelas sebelum kita membahasnya adalah, bagaimana Anda menjaga keteraturan yang mereka buat tanpa mengubah setiap perubahan warna kecil menjadi rapat komite?
+
+00:05:16.700 --> 00:05:18.980
+Bersetujuan PR dari kacauan menjadi kenakalan yang terkenal.
+
+00:05:19.460 --> 00:05:24.660
+Sekarang mari kita bahas tentang titik pemeriksaan sebenarnya yang mengubah PBIP dari kekacauan yang terorganisir menjadi sesuatu yang dapat dikelola.
+
+00:05:25.100 --> 00:05:26.160
+Bersetujuan permintaan tadi.
+
+00:05:26.160 --> 00:05:28.680
+Bayangkan lima pengembang yang semua mengubah laporan yang sama.
+
+00:05:29.400 --> 00:05:34.240
+Satu mengedit tumpukan, yang lain mengganti nama kolom, yang satu mengubah format, dan dua lagi mengutak-atik warna.
+
+00:05:34.820 --> 00:05:38.540
+Jika semua pengeditan itu tidak dicentang, Anda tidak akan mendapatkan kolaborasi, Anda hanya akan mendapatkan laporan.
+
+00:05:38.880 --> 00:05:39.640
+Telah sebabnya PR ada.
+
+00:05:39.920 --> 00:05:45.380
+Mereka adalah penjaga gerbang yang memperlambat segalanya hanya cukup untuk mencegah lima orang bergabung ke persimpangan yang sama sekaligus.
+
+00:05:45.960 --> 00:05:47.300
+Anggap PR sebagai lampu lalu lintas kita.
+
+00:05:47.860 --> 00:05:49.240
+Lampu hijau berarti bergabung dan bergerak maju.
+
+00:05:49.240 --> 00:05:54.320
+Lampu merah menahan Anda hingga peninja mengonfirmasi bahwa pekerjaan Anda tidak akan menabrak sesuatu yang lain.
+
+00:05:55.040 --> 00:05:59.400
+Tidak ada yang istimewa, hanya jadat terstruktur sehingga Anda tidak sengating menghancurkan perubahan secara tidak sengaja.
+
+00:06:00.080 --> 00:06:01.440
+Dan ya, persetujuan memang buat orang guru.
+
+00:06:02.140 --> 00:06:04.380
+Persetujuan tidak akan memperlambat kita hanya jika Anda menyakannya.
+
+00:06:04.980 --> 00:06:08.700
+Anda tidak memerlukan manajer senior yang menyetujui perubahan warna pada diagram lingkaran.
+
+00:06:09.040 --> 00:06:15.200
+Tetapi Anda benar-benar menginginkan lebih dari satu pasang mata saat seseorang merestrukturisasi skema kumpulan data atau mengubah hubungan dalam model.
+
+00:06:16.040 --> 00:06:19.180
+Jadi pendekatan praktisnya adalah dipetakan keketatan peninjaan terhadap dampak.
+
+00:06:19.960 --> 00:06:22.160
+Persetujuan cepat tunggal sudah cukup untuk perubahan kosmetika.
+
+00:06:23.320 --> 00:06:28.200
+Gerbang multi peninja diperlukan saat mengubah ukuran, menambahkan kolom terhitung, atau menyesuaikan hubungan.
+
+00:06:29.140 --> 00:06:34.000
+Dengan begitu, pekerjaan sehari-hari tetap cepat, tetapi hal-hal berisiko tinggi tidak menyelinap ke dalam produksi tanpa diperiksa.
+
+00:06:34.360 --> 00:06:35.440
+Ini bukan hanya karena saya berhati-hati.
+
+00:06:36.000 --> 00:06:40.160
+Panduan cabang dan ruang kerja Microsoft sendiri memperlakukan persetujuan PR sebagai titik kontrol.
+
+00:06:40.980 --> 00:06:44.400
+Itu adalah momen ketika Anda secara resmi memutuskan suatu perubahan menjadi bagian dari versi bersama.
+
+00:06:45.020 --> 00:06:48.660
+Tanpa langkah ini, pada dasarnya Anda membiarkan orang-orang melakukan hotpatch apapun yang mereka suka ke dalam model.
+
+00:06:48.660 --> 00:06:51.300
+Bukan tata kelola, itu adalah insiden yang menuntur jadi.
+
+00:06:52.160 --> 00:06:53.820
+Dan inilah kemenangan taktis yang dilupakan orang.
+
+00:06:54.720 --> 00:06:56.880
+PR secara otomatis menghasilkan jejak audit.
+
+00:06:57.840 --> 00:06:59.560
+Setiap komitmen, komentar, dan persetujuan dicatat.
+
+00:07:00.000 --> 00:07:05.340
+Jadi, lain kali seseorang bertanya mengapa laporan pendapatan rusak minggu lalu, Anda tidak perlu menyaring file lokal seperti detektif.
+
+00:07:05.740 --> 00:07:09.660
+Anda cukup memiliki seri white PR siapa yang menyetujuinya, apa yang dibahas, dan perubahan apa yang disertakan.
+
+00:07:10.340 --> 00:07:12.360
+Jejak itu sepadan dengan jam lembur yang dihemat.
+
+00:07:12.360 --> 00:07:15.740
+Intinya, persetujuan PR bukanlah tentang birokrasi.
+
+00:07:16.240 --> 00:07:16.980
+Ini tentang keseimbangan.
+
+00:07:17.400 --> 00:07:18.700
+Terlalu longgar akan mengundang kekacauan.
+
+00:07:19.120 --> 00:07:20.680
+Terlalu ketat akan menghambat pengeditan sepil.
+
+00:07:21.320 --> 00:07:23.280
+Titik teman yang tepat adalah aturan yang berskala.
+
+00:07:23.540 --> 00:07:25.100
+Pinjauan ringan untuk pengeditan berdepak rendah.
+
+00:07:25.220 --> 00:07:26.700
+Persetujuan terbatas untuk perbaikan besar.
+
+00:07:27.500 --> 00:07:30.220
+Itu menjaga repot tetap aman tanpa membuat semua orang kelelahan.
+
+00:07:30.680 --> 00:07:33.440
+Meskipun demikian, PR hanya menangkap apa yang benar-benar diperhatikan oleh peninjam.
+
+00:07:33.440 --> 00:07:38.060
+Manusia bisa lelah, mengabaikan perubahan, atau menekan setujui hanya untuk menghapus antrean,
+
+00:07:38.160 --> 00:07:40.360
+yang berarti banyak masalah yang dapat dicegah masih dapat lolos.
+
+00:07:41.040 --> 00:07:46.500
+Jika Anda pernah menggabungkan di agi yang ceropo atau hubungan yang rusak karena tidak ada yang menemukannya selama peninjauan, Anda tahu kesulitannya.
+
+00:07:47.260 --> 00:07:49.520
+Disinilah perubahan berikutnya terjadi, mengotomatiskan hal yang sudah.
+
+00:07:49.920 --> 00:07:51.940
+Daripada hanya mengandalkan peninjauan manusia,
+
+00:07:51.940 --> 00:07:55.220
+untuk memperhatikan kesenjangan format, penamaan yang lemah, atau deskripsi yang hilang,
+
+00:07:55.340 --> 00:07:58.420
+Anda membiarkan otomatisasi memindai setiap PR bahkan sebelum persetujuan sampai ke meja.
+
+00:07:58.880 --> 00:07:59.880
+Manusia fokus pada konteks.
+
+00:07:59.880 --> 00:08:01.720
+Mesin mengambil kesalahan yang dapat diprediksi.
+
+00:08:02.480 --> 00:08:04.880
+Jadi langkah logis berikutnya sedangkan PR membawa keterata.
+
+00:08:05.300 --> 00:08:07.060
+Otomatisasi membuat pesanan itu lebih pintar,
+
+00:08:07.240 --> 00:08:11.440
+dan kombinasi itulah yang menjaga cabang utama Anda agar tidak berubah menjadi tempat pembuangan sampah kesalahan kecil namun mahal.
+
+00:08:12.520 --> 00:08:14.560
+Pemeriksaan otomatis, tim peninjau diam-diam Anda.
+
+00:08:15.100 --> 00:08:15.980
+Ini adalah bagian selanjutnya.
+
+00:08:16.600 --> 00:08:18.820
+Pemeriksaan otomatis, tim peninjau diam-diam Anda.
+
+00:08:19.240 --> 00:08:22.160
+Ini adalah anjing menjaga yang tidak tidur, tidak membaca segilas permintaan penarikan,
+
+00:08:22.760 --> 00:08:23.860
+dan tidak terganggu oleh slek.
+
+00:08:24.720 --> 00:08:27.880
+Mereka duduk di pintu repo dan menggonggung setiap kali ada sesuatu yang ceropo menjadi nak masuk.
+
+00:08:27.880 --> 00:08:30.920
+Mekanisme dibaliknya cukup sederhana, tindakan kita.
+
+00:08:31.440 --> 00:08:33.820
+Setiap kali Anda mendorong komit atau membuka permintaan penarikan,
+
+00:08:34.160 --> 00:08:36.280
+tidak akan berputar dan menjalankan skrip yang Anda perintahkan.
+
+00:08:36.720 --> 00:08:38.220
+Untuk saja mereka sebagai penjaga dengan papan klip.
+
+00:08:38.560 --> 00:08:41.600
+File baru muncul, dan alih-alih melambaikannya ke produksi secara default,
+
+00:08:41.740 --> 00:08:43.680
+tindakan menjalankan serangkaian pemeriksaan,
+
+00:08:43.940 --> 00:08:46.440
+skrip di power cell, alat validasi, mungkin beberapa tugas note,
+
+00:08:46.540 --> 00:08:49.520
+dan baru kemudian memberikan lampu hijau, dan baru kemudian memberikan lampu hijau.
+
+00:08:50.000 --> 00:08:53.380
+Anda tidak menekan tombol putar sendiri, mereka aktif secara otomatis pada peristiwa yang Anda tetapkan.
+
+00:08:53.380 --> 00:08:56.840
+Sekarang masalahnya, Anda tidak memulai dengan melemparkan setiap validator yang mungkin kena-kena lanjut.
+
+00:08:57.100 --> 00:08:59.540
+Lakukan itu, dan Anda akan mengubah repo Anda menjadi keamanan benar.
+
+00:08:59.940 --> 00:09:02.940
+Pengembang akan menghabiskan lebih banyak waktu untuk membuka resleting sepatu mereka depan-depan.
+
+00:09:03.260 --> 00:09:04.740
+Langkah yang lebih cerdas adalah mulai dari lengkap.
+
+00:09:05.200 --> 00:09:08.180
+Pilih pemeriksaan yang membalikkan nilai terbesar dengan gesekan paling sedikit,
+
+00:09:08.340 --> 00:09:12.240
+konvensi penamaan, antipola DAX yang mencolok kesalahan skema yang jelas seperti hubungannya hilang,
+
+00:09:12.320 --> 00:09:14.380
+dan mungkin beberapa linting pada file JSON atau model.
+
+00:09:15.440 --> 00:09:17.420
+Dengan begitu pengembang Anda tetap merasa cepat,
+
+00:09:17.480 --> 00:09:19.180
+tetapi Anda telah membeli beberapa real pengaman.
+
+00:09:19.180 --> 00:09:20.640
+Mari kita letakkan beberapa alat ya, Smith.
+
+00:09:21.060 --> 00:09:25.360
+Model Lord PIM adalah file text, yang berarti alat analisis statis dapat menjelajahnya.
+
+00:09:26.300 --> 00:09:29.720
+Tabular editor dapat menjalankan skrip baris perintah untuk memvalidasi hubungan,
+
+00:09:29.840 --> 00:09:31.320
+aturan penamaan, atau grup kalkulasi.
+
+00:09:31.960 --> 00:09:35.600
+Skrip Power Cell dari modul Microsoft Power BI MGT dapat meminta kumpulan data
+
+00:09:35.600 --> 00:09:39.160
+atau memvalidasi apakah ruang kerja benar-benar aktif sebelum Anda membangun perubahan di dalamnya.
+
+00:09:39.560 --> 00:09:41.180
+Gabungkan itu dengan Power BI RS API,
+
+00:09:41.480 --> 00:09:44.200
+dan Anda bahkan dapat mengotomatiskan uji asap untuk laporan yang diperbarui.
+
+00:09:45.020 --> 00:09:47.000
+Skrip validasi dapat mengakses API tersebut,
+
+00:09:47.000 --> 00:09:50.000
+memeriksa metadata atau pengikatan sumber data, dan mengembalikan kesalahan.
+
+00:09:50.720 --> 00:09:51.540
+Semua ini tidak bersifat tetis.
+
+00:09:52.200 --> 00:09:54.180
+Itulah yang membuat PBIP layak dopsi sejak awal.
+
+00:09:55.280 --> 00:09:56.480
+Pola yang bagus yang digunakan tim,
+
+00:09:56.640 --> 00:09:59.420
+menyiapkan tindakan GitHub pada permintaan tarik terbuka atau pembaruan.
+
+00:10:00.480 --> 00:10:02.160
+Alur kerja itu menjalankan rangkaian kecil.
+
+00:10:02.780 --> 00:10:05.240
+Mungkin skrip Power Cell untuk menguji nama kumpulan data, skrip note,
+
+00:10:05.540 --> 00:10:06.920
+untuk menangkap cuplikan daksi yang puruk,
+
+00:10:07.060 --> 00:10:09.980
+dan menjalankan baris perintah editor tabel untuk memastikan model tidak rusak.
+
+00:10:10.680 --> 00:10:11.580
+Praktek terbaik dasar.
+
+00:10:11.580 --> 00:10:13.100
+Jika terjadi kegagalan,
+
+00:10:13.260 --> 00:10:15.940
+tindakan tersebut mendorong komentar langsung ke percakapan permintaan tarik
+
+00:10:15.940 --> 00:10:17.020
+dan menandai build dengan warna merah.
+
+00:10:17.280 --> 00:10:18.320
+Tidak ada penggabungan, tidak ada klip.
+
+00:10:18.620 --> 00:10:20.640
+Pengembang memperbaikinya bahkan sebelum cabang dipertimbang.
+
+00:10:21.500 --> 00:10:22.320
+Inilah mengapa itu penting.
+
+00:10:22.760 --> 00:10:25.040
+Perbedaan teks tidak memperingatkan Anda tentang masalah kidat.
+
+00:10:25.380 --> 00:10:27.320
+Anda mungkin melihat ukuran atau kolom yang diganti,
+
+00:10:27.660 --> 00:10:29.580
+namanya, dan menganggapnya baik-baik saja,
+
+00:10:29.720 --> 00:10:31.160
+tetapi validator dapat mengetahui fakta
+
+00:10:31.160 --> 00:10:34.320
+bahwa seseorang menghapus indeks atau mengubah filter dengan cara mengubah filter dengan cara di lumpur.
+
+00:10:34.320 --> 00:10:36.240
+Satu tim yang bekerja dengan saya memiliki kasus seperti ini.
+
+00:10:36.240 --> 00:10:39.020
+Pembangunan kembali kumpulan data tampak tidak berbahaya digit,
+
+00:10:39.100 --> 00:10:41.660
+tetapi validator menandai hubungan yang rusak sebelum mencapai produksi.
+
+00:10:41.780 --> 00:10:43.720
+Kegagalan otomatis tunggal itu menyelamatkan mereka
+
+00:10:43.720 --> 00:10:46.700
+dari berjam-jam pemadaman kebakaran dan beberapa panggilan marah dari pengguna bisnis.
+
+00:10:46.980 --> 00:10:48.660
+Anggaplah otomatisasi sebagai penyaring kergerasan.
+
+00:10:49.120 --> 00:10:51.120
+Manusia tidak suka meriksa aturan huruf besar per kecil
+
+00:10:51.120 --> 00:10:52.520
+atau memindai nama tabel lembar satu.
+
+00:10:53.000 --> 00:10:54.560
+Skrip dapat menangannya dalam hitungan detik.
+
+00:10:54.960 --> 00:10:56.200
+Manusia tetap memberikan masukan,
+
+00:10:56.200 --> 00:10:58.540
+tetapi tinjauan mereka lebih mengarah pada kesesuaian strategis,
+
+00:10:58.640 --> 00:10:59.940
+logika bisnis, dan kualitas desain.
+
+00:11:00.020 --> 00:11:02.060
+Dan kualitas desain bukan pendapat Anda menggunakan huruf kapital
+
+00:11:06.240 --> 00:11:07.400
+yang berdasarnya mendorong Anda ke arah ini.
+
+00:11:08.080 --> 00:11:11.260
+Tindakan GitHub terintegrasi dengan layanan Power BI dan bahkan API Fabrics
+
+00:11:11.260 --> 00:11:13.600
+yang menjadikan validasi sebagai bagian dari kisah CICD Anda.
+
+00:11:13.960 --> 00:11:14.660
+Tidak berlebihan.
+
+00:11:15.060 --> 00:11:16.060
+Dan adalah cara yang jelas untuk maju.
+
+00:11:16.440 --> 00:11:17.760
+Otomatiskan kebersihan yang berulang,
+
+00:11:17.860 --> 00:11:19.840
+sehingga pengembang dan peninjau tidak membong-bong energi
+
+00:11:19.840 --> 00:11:21.380
+untuk pemeriksaan konsistensi yang membosankan.
+
+00:11:21.620 --> 00:11:23.400
+Intinya pelakon tindakan seperti rekan kerja buat Anda.
+
+00:11:24.340 --> 00:11:26.700
+Mulailah dengan beberapa pemeriksaan yang memberikan nilai paling banyak,
+
+00:11:26.700 --> 00:11:28.560
+lalu perlu seiring tim Anda menjadi dewasa.
+
+00:11:29.720 --> 00:11:31.460
+Otomatiskan pemeriksaan kewarasan tingkat model,
+
+00:11:31.720 --> 00:11:33.300
+validasi skema, dan aturan penamaan.
+
+00:11:33.300 --> 00:11:36.240
+Biarkan peninjau bebas menghabiskan waktu untuk desain dan strategi,
+
+00:11:36.360 --> 00:11:37.420
+bukan mengoreksi nama bidang.
+
+00:11:38.400 --> 00:11:39.900
+Dan setelah pemeriksaan tersebut dilakukan,
+
+00:11:40.020 --> 00:11:43.080
+pertanyaannya secara alami menjadi apakah tindakan dapat memblokir perubahan buruk
+
+00:11:43.080 --> 00:11:45.480
+agar tidak masuk, mengapa tidak membiarkan mereka juga membayar ke depan.
+
+00:11:46.260 --> 00:11:48.260
+Disinilah pipeline berperan bukan sekadar blokade,
+
+00:11:48.480 --> 00:11:51.100
+tetapi cara otomatis untuk mendorong build yang disetujui
+
+00:11:51.100 --> 00:11:53.120
+dari pengembangan melalui pengujian dan keproduksi
+
+00:11:53.120 --> 00:11:54.500
+tanpa ritual klik tombol manual.
+
+00:11:55.540 --> 00:11:57.440
+Dan perubahan itu mengubah penerapan dari takhayul
+
+00:11:57.440 --> 00:11:59.260
+menjadi sesuatu yang benar-benar dapat Anda percaya.
+
+00:12:00.140 --> 00:12:01.940
+Pipeline penerapan, keandalan tanpa doa.
+
+00:12:01.940 --> 00:12:04.700
+Pipeline penerapan adalah tempat seluruh pengaturan
+
+00:12:04.700 --> 00:12:06.560
+berubah dari eksperimen yang bagus menjadi sesuatu
+
+00:12:06.560 --> 00:12:08.320
+yang benar-benar dapat Anda jalankan dalam produksi
+
+00:12:08.320 --> 00:12:09.280
+tanpa harus bersusah payah.
+
+00:12:10.020 --> 00:12:11.360
+Ini adalah bagian yang membawa kode Anda
+
+00:12:11.360 --> 00:12:13.040
+yang telah diperiksa dengan cematan kode tersebut
+
+00:12:13.040 --> 00:12:14.320
+di antara lingkungan dengan cara yang teratur
+
+00:12:14.320 --> 00:12:15.800
+pengembangan pengujian dan akhirnya produksi
+
+00:12:15.800 --> 00:12:17.340
+tanpa bergantung pengujian dan akhirnya produksi
+
+00:12:17.340 --> 00:12:18.820
+tanpa bergantung pada klik mouse yang beruntung.
+
+00:12:19.100 --> 00:12:21.300
+Penderbitan manual di Power BI adalah Wild West.
+
+00:12:21.820 --> 00:12:23.660
+Ekspor PBX, impor ke tempat lain,
+
+00:12:23.900 --> 00:12:25.880
+berdo'alah agar Anda tidak memilih ruang kerja yang salah,
+
+00:12:25.880 --> 00:12:28.360
+dan berdo'alah agar ID kumpulan data tetap selaras.
+
+00:12:28.360 --> 00:12:31.400
+Tanah, ini seperti membawa setumpuk belanjaan tanpa tas.
+
+00:12:32.140 --> 00:12:33.540
+Mungkin Anda berhasil sampai ke mobil,
+
+00:12:33.660 --> 00:12:35.340
+mungkin telur menghiasi jalan masuk Anda.
+
+00:12:36.140 --> 00:12:37.640
+Itulah sebabnya pipeline penerapan ada,
+
+00:12:37.880 --> 00:12:39.820
+dan lebih khusus lagi, APRS pipeline penerapan.
+
+00:12:41.220 --> 00:12:42.960
+AP ini dibuat untuk menghilangkan unsur kebetulan
+
+00:12:42.960 --> 00:12:43.520
+yang terus-menerus.
+
+00:12:44.180 --> 00:12:46.080
+AP ini bukan sekadar tombol tahap berikutnya.
+
+00:12:46.640 --> 00:12:48.220
+AP ini mendukung beberapa skenario utama
+
+00:12:48.220 --> 00:12:49.400
+yang harus diketahui oleh CPMI.
+
+00:12:50.360 --> 00:12:52.260
+Deploy All mengirimkan seluruh ruang kerja
+
+00:12:52.260 --> 00:12:53.280
+ke tahap berikutnya.
+
+00:12:53.280 --> 00:12:57.360
+Selective Deploy memungkinkan Anda memilih item individual
+
+00:12:57.360 --> 00:12:58.840
+seperti laporan atau kumpulan data.
+
+00:12:59.280 --> 00:13:01.300
+Dan Backward Deploy dengan Is Backward Deployment True
+
+00:13:01.300 --> 00:13:03.580
+dapat mengembalikan konten ke tahap sebelumnya
+
+00:13:03.580 --> 00:13:04.900
+jika konten tersebut hilang di sana.
+
+00:13:05.240 --> 00:13:06.360
+Jika konten tersebut hilang di sana.
+
+00:13:07.400 --> 00:13:09.240
+Selain itu, AP juga dapat memperbarui aplikasi
+
+00:13:09.240 --> 00:13:10.420
+yang terkait dengan tahap tersebut.
+
+00:13:10.920 --> 00:13:12.660
+Jadi, saat Anda mempromosikan konten
+
+00:13:12.660 --> 00:13:13.860
+ke dalam pengujian atau produksi,
+
+00:13:13.960 --> 00:13:15.920
+aplikasi yang ditolakkan dapat diperbarui secara otomatis
+
+00:13:15.920 --> 00:13:17.480
+dan pengguna langsung melihat laporan yang diperbarui.
+
+00:13:17.900 --> 00:13:18.800
+Itulah kontrol yang sebenarnya
+
+00:13:18.800 --> 00:13:21.020
+tanpa harus mengacak-acak file seperti pekejam agar yang putus asal.
+
+00:13:21.020 --> 00:13:22.640
+Sekarang ialah kebenaran yang sebenar.
+
+00:13:23.200 --> 00:13:24.080
+Sebelum semua ini berhasil,
+
+00:13:24.220 --> 00:13:26.340
+Anda memerlukan prasyarat yang mempusankan tetapi penting.
+
+00:13:26.920 --> 00:13:29.980
+Manggil, baik akun manusia atau prinsipal layanan
+
+00:13:29.980 --> 00:13:31.480
+harus berada di Microsoft Enter ID
+
+00:13:31.480 --> 00:13:33.780
+dengan izin yang tepat di alur kerja dan ruang kerja target.
+
+00:13:34.500 --> 00:13:35.320
+Lewat ini tanya bergerak.
+
+00:13:35.900 --> 00:13:37.380
+Dan saat Anda mengandalkan prinsip layanan
+
+00:13:37.380 --> 00:13:39.280
+yang benar-benar harus Anda lakukan untuk otomatisasi,
+
+00:13:39.380 --> 00:13:40.300
+Anda mencapai beberapa batasan.
+
+00:13:41.140 --> 00:13:43.540
+Prinsip layanan tidak dapat mengonfigurasi OOT untuk sumber data,
+
+00:13:43.540 --> 00:13:45.260
+jadi kumpulan data tertentu tidak akan diperbarui
+
+00:13:45.260 --> 00:13:46.600
+hingga manusia memperbaiki kredensial.
+
+00:13:47.140 --> 00:13:49.520
+Selain itu, prinsip layanan menjadi pemilik model semantik
+
+00:13:49.520 --> 00:13:51.020
+dan laporan berhalaman yang disebarkannya
+
+00:13:51.020 --> 00:13:52.900
+yang dapat memblokir pembaruan terjadwal.
+
+00:13:53.740 --> 00:13:54.680
+Dan lupakan tentang aliran data.
+
+00:13:55.240 --> 00:13:56.980
+Prinsip layanan tidak dapat menyebarkannya sama sekali.
+
+00:13:57.480 --> 00:14:00.120
+Satu hal lagi, setiap panggilan penyebaran dibatasi hingga 300 set.
+
+00:14:00.420 --> 00:14:03.120
+Jika ruang kerja Anda meledak menjadi tempat pembuangan sampah visual,
+
+00:14:03.480 --> 00:14:04.640
+batasan itu akan datang kepada Anda.
+
+00:14:05.340 --> 00:14:06.960
+Ini bukan hal yang menyenangkan untuk diketahui,
+
+00:14:07.060 --> 00:14:08.360
+ini adalah lupang yang perlu Anda akuitakan.
+
+00:14:09.060 --> 00:14:10.680
+Jadi bagaimana Anda menghubungkan ini ketindakan GitHub?
+
+00:14:10.680 --> 00:14:15.600
+Metode cerdas yang telah teruji adalah dengan menyimpan ID klien prinsipal,
+
+00:14:15.840 --> 00:14:18.320
+layanan Anda, dan rahasia di rahasia repository GitHub.
+
+00:14:19.140 --> 00:14:21.660
+Itu membuatnya keluar dari kode dan jauh dari komit yang tidak disengat.
+
+00:14:22.320 --> 00:14:25.520
+Kemudian Anda memetakkan folder repo ke ID alur dengan file konfigurasi YAML.
+
+00:14:26.660 --> 00:14:28.220
+Setiap folder selaras dengan alur tertentu,
+
+00:14:28.340 --> 00:14:31.280
+dan tindakan GitHub membaca peta itu untuk mendorong konten ke tempat yang tepat.
+
+00:14:32.240 --> 00:14:33.140
+Ini bukan saya mengada-ada.
+
+00:14:33.680 --> 00:14:36.240
+Pola ini muncul dalam tindakan komunitas
+
+00:14:36.240 --> 00:14:38.860
+seperti penyebaran alur Power BI di GitHub Marketplace.
+
+00:14:38.860 --> 00:14:41.040
+Ini berfungsi dengan baik, tetapi Anda harus tahu bahwa
+
+00:14:41.040 --> 00:14:42.880
+tindakan Marketplace ini merupakan tindakan pihak ketiga
+
+00:14:42.880 --> 00:14:44.000
+bukan yang tersertifikasi Microsoft.
+
+00:14:44.400 --> 00:14:46.540
+Perjemahannya, tindakan ini berguna tetapi Anda menanggir risiko.
+
+00:14:46.980 --> 00:14:49.220
+Jika Anda memerlukan keamanan dan dukungan maksimum,
+
+00:14:49.420 --> 00:14:50.760
+gunakan skrip Anda sendiri terhadap API.
+
+00:14:51.340 --> 00:14:52.520
+Oke, jadi seperti apa ini di lapangan?
+
+00:14:53.380 --> 00:14:54.620
+Anda menutup permintaan menarikan,
+
+00:14:54.980 --> 00:14:55.800
+memicu tindakan GitHub,
+
+00:14:55.960 --> 00:14:57.100
+memanggil res API alur penyebaran,
+
+00:14:57.160 --> 00:14:59.100
+dan memindahkan kontenan dari pengembangan ke pengujian.
+
+00:14:59.840 --> 00:15:01.080
+Jika semua pemeriksaan Anda lulus,
+
+00:15:01.080 --> 00:15:02.880
+alur kerja yang sama dapat dipromosikan ke PR.
+
+00:15:04.080 --> 00:15:05.520
+Siklus ini dapat diulang dan lewat.
+
+00:15:05.520 --> 00:15:07.320
+Anda tahu persis apa yang terjadi,
+
+00:15:07.420 --> 00:15:09.200
+di mana, kapan, dan atas persetujuan siapa.
+
+00:15:09.780 --> 00:15:11.340
+Itu menggantikan sesi harapan malam hari
+
+00:15:11.340 --> 00:15:12.280
+yang didadakan dengan struktur.
+
+00:15:13.020 --> 00:15:14.160
+Dan jika atasan Anda bertanya,
+
+00:15:14.260 --> 00:15:15.620
+bagaimana kita tahu tidak ada yang lulus tambah.
+
+00:15:16.180 --> 00:15:17.940
+Anda sebenarnya memiliki jawaban selain percayalah.
+
+00:15:18.640 --> 00:15:19.940
+Apakah ini berarti otomatisasi itu semua?
+
+00:15:20.660 --> 00:15:22.100
+Anda masih akan menghadapi kasus
+
+00:15:22.100 --> 00:15:23.280
+di mana perbaikan kredensial manual
+
+00:15:23.280 --> 00:15:24.000
+tidak dapat dihindari,
+
+00:15:24.080 --> 00:15:25.720
+atau di mana batasan pada item dan aliran data
+
+00:15:25.720 --> 00:15:27.540
+memaksa Anda untuk memikirkan kembali struktur Anda.
+
+00:15:27.800 --> 00:15:29.420
+Namun perbedaannya adalah Anda berhadapan
+
+00:15:29.420 --> 00:15:30.640
+dengan pengecuan yang diketahui sesekali,
+
+00:15:30.760 --> 00:15:31.760
+bukan kekacauan yang terus-menerus.
+
+00:15:31.760 --> 00:15:33.540
+9 dari 10 kali,
+
+00:15:33.860 --> 00:15:35.140
+penerapan berjalan dengan sangat baik
+
+00:15:35.140 --> 00:15:36.600
+dan Anda berhenti menghabiskan akhir pekan
+
+00:15:36.600 --> 00:15:38.120
+untuk mengejar hubungan yang hilang dalam per.
+
+00:15:38.440 --> 00:15:40.040
+Intinya, alur penerapan ditambah tindakan
+
+00:15:40.040 --> 00:15:41.760
+memberi Anda keandalan tanpa harus berdoa.
+
+00:15:42.280 --> 00:15:44.260
+Alih-alih mengklik dan berbisik pada dewa pelaporan,
+
+00:15:44.420 --> 00:15:45.960
+Anda memiliki proses yang membawa laporan
+
+00:15:45.960 --> 00:15:47.480
+melalui lingkungan dengan konsistensi.
+
+00:15:48.180 --> 00:15:49.340
+Anda dapat mengaudit jejaknya,
+
+00:15:49.440 --> 00:15:50.980
+memutar kembali jika diperlukan,
+
+00:15:51.100 --> 00:15:52.240
+dan tidurnya nyak tanpa mengetahui
+
+00:15:52.240 --> 00:15:53.500
+ada yang salah mengetik nama ruang kerja.
+
+00:15:53.760 --> 00:15:56.280
+Kemudian setelah penerapan berjalan dengan lancar,
+
+00:15:56.400 --> 00:15:57.340
+tantangan sebenarnya berubah.
+
+00:15:57.340 --> 00:15:59.580
+Bukan lagi dapatkah kita mempromosikan dengan aman,
+
+00:15:59.960 --> 00:16:01.420
+tetapi bagaimana kita melapisi tata kelola
+
+00:16:01.420 --> 00:16:03.260
+tanpa mengembah seluruh pengaturan menjadi birokrasi.
+
+00:16:04.260 --> 00:16:05.640
+Keseimbangan kontrol tanpa birokrasi
+
+00:16:05.640 --> 00:16:06.980
+itulah yang akan kita tangani selanjutnya.
+
+00:16:07.960 --> 00:16:09.160
+Tata kelola tanpa birokrasi
+
+00:16:09.160 --> 00:16:11.160
+Tidak ada yang mendaftar untuk CE-PCD
+
+00:16:11.160 --> 00:16:13.740
+hanya untuk merasa seperti memperbarui si mobil di DMV.
+
+00:16:14.420 --> 00:16:16.240
+Sasarannya adalah kecepatan dengan keselamatan
+
+00:16:16.240 --> 00:16:18.200
+bukan tenggelam dalam bagian proses dan persetujuan.
+
+00:16:18.740 --> 00:16:20.300
+Tata kelola tradisional seringkali lupa
+
+00:16:20.300 --> 00:16:22.300
+bahwa mereka mencoba meningkatkan kualitas
+
+00:16:22.300 --> 00:16:24.200
+dengan menceki pengembang dengan formulir dan tiket
+
+00:16:24.200 --> 00:16:25.820
+dan hasil akhirnya bukanlah kode yang lebih aman,
+
+00:16:25.820 --> 00:16:28.220
+melainkan pengembang infrastrasi berlarian di sekitar pagar pembatas.
+
+00:16:28.580 --> 00:16:29.940
+Tata kelola yang benar-benar berfungsi adalah
+
+00:16:29.940 --> 00:16:32.040
+tata kelola yang terasa seperti pagar pembatas di jalan raya.
+
+00:16:32.280 --> 00:16:33.280
+Mereka tidak memperlambat Anda.
+
+00:16:33.500 --> 00:16:34.540
+Mereka hanya memastikan mobil Anda
+
+00:16:34.540 --> 00:16:36.020
+tidak meninggalkan jalan dengan kecepatan lapang.
+
+00:16:36.580 --> 00:16:38.380
+Dan perbedaan praktisnya berasal dari cara Anda
+
+00:16:38.380 --> 00:16:39.300
+menetapkan pagar pembatas.
+
+00:16:39.580 --> 00:16:41.220
+Tidak setiap repo memerlukan aturan yang sama.
+
+00:16:41.540 --> 00:16:42.460
+Itulah perbaikan takwis pertama.
+
+00:16:42.960 --> 00:16:44.460
+Untuk perubahan kosmetik dalam laporan,
+
+00:16:44.560 --> 00:16:45.660
+Anda tidak memerlukan dewan tukul.
+
+00:16:46.100 --> 00:16:47.680
+Tidak dapat diatur ke satu jempol ke atas
+
+00:16:47.680 --> 00:16:48.700
+yang sederhana dan menggabungkan.
+
+00:16:48.700 --> 00:16:50.720
+Namun, untuk pembaruan modal berdampak tinggi
+
+00:16:50.720 --> 00:16:52.700
+yang menghitung ulang setengah logika bisnis Anda
+
+00:16:52.700 --> 00:16:54.100
+berketat gerbang dengan beberapa peninjau
+
+00:16:54.100 --> 00:16:54.820
+dan beberapa peninjau
+
+00:16:54.820 --> 00:16:55.940
+dan buat mereka menjawab templat PR
+
+00:16:55.940 --> 00:16:57.440
+yang mencetumkan dengan tempat apa yang harus diperiksa.
+
+00:16:57.620 --> 00:16:59.440
+Ringan jika memungkinkan ketat jika harus.
+
+00:16:59.860 --> 00:17:00.500
+Atipika sederhana.
+
+00:17:00.880 --> 00:17:02.800
+Disinilah templat PR benar-benar berfungsi.
+
+00:17:03.320 --> 00:17:05.120
+Templat yang bagus menembutkan logika bisnis,
+
+00:17:05.280 --> 00:17:06.960
+dependensi skema, cetat dan pengujian
+
+00:17:06.960 --> 00:17:08.880
+sehingga peninjau tidak perlu menempat apa yang penting.
+
+00:17:09.680 --> 00:17:11.260
+Lapisi itu dengan pemeriksaan otomatis
+
+00:17:11.260 --> 00:17:12.600
+yang mengejar hal-hal yang membosankan.
+
+00:17:12.600 --> 00:17:14.340
+Dan tiba-tiba manusia Anda diangkat kembali
+
+00:17:14.340 --> 00:17:15.160
+ke pekerjaan manusia
+
+00:17:15.160 --> 00:17:16.320
+buat mengejar aturan ke sini.
+
+00:17:16.760 --> 00:17:18.160
+Anda meriksa apakah metrik penjualan
+
+00:17:18.160 --> 00:17:19.400
+masih sesuai dengan definisi keuang.
+
+00:17:20.180 --> 00:17:21.560
+Pembagian kerja yang menjaga kecepatan
+
+00:17:21.560 --> 00:17:22.980
+tetap tinggi tanpa mengorbankan kualitas.
+
+00:17:23.520 --> 00:17:25.400
+Mari tambahkan otomatisasi kembali ke dalam gambar
+
+00:17:25.400 --> 00:17:26.160
+karena itu adalah kunci.
+
+00:17:26.860 --> 00:17:28.040
+Pemeriksaan otomatis Anda,
+
+00:17:28.300 --> 00:17:29.240
+baik itu skrip PowerShell
+
+00:17:29.240 --> 00:17:30.360
+yang menggunakan validasi editor
+
+00:17:30.360 --> 00:17:31.780
+tabel Microsoft Power BMKMT
+
+00:17:31.780 --> 00:17:33.220
+atau linting JSON yang ditargetkan
+
+00:17:33.220 --> 00:17:34.820
+menangkap hal-hal yang tidak perlu diperdulikan
+
+00:17:34.820 --> 00:17:35.700
+oleh peninjau manusia.
+
+00:17:36.760 --> 00:17:37.780
+Penamaan yang konsisten,
+
+00:17:37.900 --> 00:17:38.960
+kesalahan pajak yang jelas,
+
+00:17:38.960 --> 00:17:40.360
+hubungan yang hilang semuanya ditandai
+
+00:17:40.360 --> 00:17:41.640
+bahkan sebelum permintaan kumpulan
+
+00:17:41.640 --> 00:17:42.420
+mendapat tombol hijau.
+
+00:17:42.920 --> 00:17:44.400
+Itu berarti mata peninjau mengarah tepat
+
+00:17:44.400 --> 00:17:46.080
+ke tempat yang seharusnya pada maksud desain
+
+00:17:46.080 --> 00:17:48.260
+dan apakah bisnis akan benar-benar berjaya laporan itu.
+
+00:17:49.080 --> 00:17:50.020
+Dan ini bukan hanya teori.
+
+00:17:50.440 --> 00:17:52.300
+Tim yang hidup dalam kekacauan tanpa tata kelola
+
+00:17:52.300 --> 00:17:53.700
+seringkali menemukan kembali kewarasan
+
+00:17:53.700 --> 00:17:54.500
+dengan melakukan hal ini.
+
+00:17:54.960 --> 00:17:56.840
+Template PR, validator otomatis
+
+00:17:56.840 --> 00:17:58.780
+dan tingkat persetujuan yang disesuaikan dengan repo.
+
+00:17:59.360 --> 00:18:00.180
+Perubahannya langsung terjadi.
+
+00:18:00.480 --> 00:18:01.560
+Pekerjaan terasa lebih ringan
+
+00:18:01.560 --> 00:18:03.320
+karena pengembang tahu mereka tidak akan diblokir
+
+00:18:03.320 --> 00:18:04.120
+karena mengubah judul
+
+00:18:04.120 --> 00:18:05.720
+tetapi mereka tidak dapat melewati pengawasan
+
+00:18:08.960 --> 00:18:10.000
+kualitas tetap tinggi
+
+00:18:10.000 --> 00:18:11.240
+tetapi tidak ada yang merasa
+
+00:18:11.240 --> 00:18:12.480
+seperti mengisi formulir pajak
+
+00:18:12.480 --> 00:18:13.240
+untuk mendorong kode.
+
+00:18:14.080 --> 00:18:15.420
+Sekarang ada juga gambaran yang lebih besar
+
+00:18:15.420 --> 00:18:16.800
+bagaimana lingkungan dipetakan ke cabang.
+
+00:18:17.920 --> 00:18:19.500
+Sebagian besar Tim menggunakan salah satu dari hukum.
+
+00:18:20.280 --> 00:18:20.920
+Opsi pertama,
+
+00:18:21.100 --> 00:18:22.440
+pengembang membuat ruang kerja fitur
+
+00:18:22.440 --> 00:18:23.800
+yang dipetakan langsung ke cabang fitur
+
+00:18:23.800 --> 00:18:25.340
+sehingga setiap cabang eksperimental
+
+00:18:25.340 --> 00:18:26.920
+memiliki kotak pasir yang dicerminkan
+
+00:18:26.920 --> 00:18:28.040
+dalam layanan Power BI.
+
+00:18:29.180 --> 00:18:30.060
+Opsi kedua,
+
+00:18:30.540 --> 00:18:32.320
+pengembang membuat perubahan mereka secara lokal
+
+00:18:32.320 --> 00:18:33.760
+di PBIP dan menyingkronkannya
+
+00:18:33.760 --> 00:18:35.600
+ke cabang fitur tanpa ruang kerja paralel
+
+00:18:35.600 --> 00:18:37.620
+sehingga otomatisasi dapat menangani
+
+00:18:37.620 --> 00:18:39.120
+alur penyebaran ke lingkungan bersama.
+
+00:18:40.860 --> 00:18:41.640
+Kedua pendekatan tersebut
+
+00:18:41.640 --> 00:18:42.660
+sejalan dengan panduan Fabric
+
+00:18:42.660 --> 00:18:43.540
+yaitu peseri Microsoft.
+
+00:18:43.920 --> 00:18:45.280
+Triknya adalah memutuskan gaya mana
+
+00:18:45.280 --> 00:18:46.440
+yang sesuai dengan selera tim Anda
+
+00:18:46.440 --> 00:18:47.000
+untuk overhead.
+
+00:18:47.580 --> 00:18:48.100
+Apapun itu,
+
+00:18:48.340 --> 00:18:49.860
+itu tetap percabangan plus ruang kerja.
+
+00:18:50.340 --> 00:18:51.760
+Anda hanya memilih apakah mencerminkan kedua.
+
+00:18:52.640 --> 00:18:53.840
+Dengan mempertimbangkan pola tersebut,
+
+00:18:53.960 --> 00:18:55.380
+tata kelola menjadi lebih mudah untuk ditingkat.
+
+00:18:55.740 --> 00:18:56.480
+Persetujuan yang ringan
+
+00:18:56.480 --> 00:18:57.440
+untuk perubahan konten
+
+00:18:57.440 --> 00:18:58.340
+di ruang kerja fitur,
+
+00:18:58.760 --> 00:18:59.580
+tinjauan yang lebih berat
+
+00:18:59.580 --> 00:19:00.340
+dan pemeriksaan skrip
+
+00:19:00.340 --> 00:19:01.000
+untuk perubahan modal
+
+00:19:01.000 --> 00:19:02.300
+yang mendorong pengujian atau produksi.
+
+00:19:03.280 --> 00:19:03.760
+Turutnya jelas,
+
+00:19:03.760 --> 00:19:05.520
+semakin jauh perubahan Anda berjalan,
+
+00:19:05.600 --> 00:19:06.800
+semakin banyak penjagaan yang layak dilakukan.
+
+00:19:07.280 --> 00:19:08.120
+Tidak ada yang melawan aturan
+
+00:19:08.120 --> 00:19:09.260
+ketika aturan itu benar-benar soakan.
+
+00:19:09.480 --> 00:19:10.500
+Dan jangan lupakan sisi budaya.
+
+00:19:10.980 --> 00:19:11.940
+Ketika pengembang melihat
+
+00:19:11.940 --> 00:19:12.680
+bahwa buat menangani
+
+00:19:12.680 --> 00:19:13.500
+pemiksaan kasar
+
+00:19:13.500 --> 00:19:14.480
+dan manusia hanya menimbang
+
+00:19:14.480 --> 00:19:15.660
+di mana penilaian mereka penting,
+
+00:19:15.920 --> 00:19:16.720
+mereka berhenti memandang
+
+00:19:16.720 --> 00:19:17.760
+tata kelola sebagai hambatan.
+
+00:19:18.340 --> 00:19:19.140
+Mereka menghormatinya
+
+00:19:19.140 --> 00:19:20.180
+karena menyaring kebisingan
+
+00:19:20.180 --> 00:19:20.840
+dan mencegah mereka
+
+00:19:20.840 --> 00:19:22.200
+memadamkan kebakaran dalam produksi.
+
+00:19:23.720 --> 00:19:24.760
+Otomatisasi melakukan omelan.
+
+00:19:25.140 --> 00:19:25.620
+Manusia fokus.
