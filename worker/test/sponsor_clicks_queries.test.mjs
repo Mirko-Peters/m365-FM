@@ -79,6 +79,9 @@ test("Suchbegriffe: interne Route nimmt nur Search-Console-Zeilen mit gueltigen 
     assert.equal((await post([row(), row({ day: "2026-11-07", clicks: 4, impressions: 140, position: 8 }), row({ query: "oversharing sharepoint online", clicks: 0, impressions: 10, position: 12.4 })])).status, 200);
     await post([row({ clicks: 3 })]);   // gleicher Tag/Begriff/Seite: wird ueberschrieben, nicht doppelt
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM sponsor_queries_daily").get().n, 3);
+    raw.exec("UPDATE sponsor_queries_daily SET fetched_at=1 WHERE day='2026-11-07'");
+    await post([row({ day: "2026-11-07", clicks: 4, impressions: 140, position: 8 })]);   // D1-Kosten: gleiche Werte -> kein Schreibzugriff
+    assert.equal(raw.prepare("SELECT fetched_at FROM sponsor_queries_daily WHERE day='2026-11-07'").get().fetched_at, 1, "unveraenderte Zeile wird nicht neu geschrieben");
     const org = (await call("/api/sponsor/dashboard" + Q)).json.orgs[0];
     assert.equal(org.queries.length, 2);
     const top = org.queries[0];
