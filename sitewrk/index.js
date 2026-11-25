@@ -779,7 +779,10 @@ export async function withPreload(request, env, res) {
     const body = new ReadableStream({ start(c) { for (const x of chunks) c.enqueue(x); c.error(e); } });
     return new Response(body, { status: res.status, statusText: res.statusText, headers: res.headers });
   }
-  const links = end >= 0 ? preloadLinks(text.slice(0, end)) : [];
+  // Kopf laenger als PRELOAD_HEAD (grosses JSON-LD steht im Kopf hinter Stylesheet und Bild-Preload, z. B. /entity/ mit hasDefinedTerm): das Gelesene ist
+  // noch Kopf, solange kein <body> darin steht - dann zaehlen die Links darin (ein angeschnittenes <link ohne ">" passt nicht auf das Muster).
+  const head = end >= 0 ? text.slice(0, end) : !done && !/<body[\s>]/i.test(text) ? text : "";
+  const links = head ? preloadLinks(head) : [];
   const body = new ReadableStream({
     start(c) { for (const x of chunks) c.enqueue(x); if (done) c.close(); },
     async pull(c) { if (done) return; try { const r = await reader.read(); if (r.done) { done = true; c.close(); } else c.enqueue(r.value); } catch (e) { c.error(e); } },

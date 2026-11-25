@@ -87,3 +87,16 @@ test("withPreload direkt: 304 und fremde Hosts unveraendert; Staging nur staging
   r = await withPreload(rq("https://www.m365.fm/a/"), ENV, new Response("<html><body>ohne Kopf" + "y".repeat(70000), { headers: { "content-type": "text/html" } }));
   assert.equal(r.headers.get("link"), null, "kein </head> in 64 KiB"); assert.equal((await r.text()).length, "<html><body>ohne Kopf".length + 70000);
 });
+
+test("Kopf ueber 64 KiB (grosses JSON-LD hinter Stylesheet und Bild): Links aus dem gelesenen Kopfteil, Koerper byte-gleich", async () => {
+  const ld = '<script type="application/ld+json">' + "{\"a\":\"" + "z".repeat(90000) + "\"}</script>";
+  const big = `<!doctype html><html lang="en"><head><meta charset="utf-8">${FONT}${CSS}${IMGP}${ld}</head><body>b</body></html>`;
+  const mk = () => new Response(new ReadableStream({ start(c) { for (let i = 0; i < big.length; i += 16384) c.enqueue(new TextEncoder().encode(big.slice(i, i + 16384))); c.close(); } }),
+    { headers: { "content-type": "text/html; charset=utf-8" } });
+  const r = await withPreload(new Request("https://www.m365.fm/entity/"), ENV, mk());
+  assert.equal(r.headers.get("link"), EXP_CSS + ", " + EXP_IMG); assert.equal(await r.text(), big);
+  // angeschnittenes <link> am Lesegrenze: kein halber Eintrag
+  const cut = `<!doctype html><html><head>${"<meta name=x>".repeat(5040)}${CSS}${ld}</head><body></body></html>`;
+  const r2 = await withPreload(new Request("https://www.m365.fm/a/"), ENV, new Response(cut, { headers: { "content-type": "text/html" } }));
+  assert.equal(await r2.text(), cut); const l2 = r2.headers.get("link"); assert.ok(l2 === null || l2 === EXP_CSS, String(l2));
+});

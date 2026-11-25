@@ -11,6 +11,9 @@ on:
       shrink:
         description: "Vorhandene R2-Bilder breiter als 1600 px verkleinern (neuer Schluessel -w1600; nur mit apply=true wirklich)"
         default: "false"
+      recopy:
+        description: "Maskiert kopierte Bilder ('&amp;', Masse passen nicht zu w/h) neu kopieren - nur neuer Schluessel -r<B>x<H>, nichts ueberschrieben (nur mit apply=true wirklich)"
+        default: "false"
 permissions:
   contents: write
 jobs:
@@ -27,9 +30,13 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: python tools/r2_upload.py ${{ inputs.fill_dims == 'true' && '--fill-dims' || inputs.shrink == 'true' && '--shrink' || '' }} ${{ inputs.apply == 'true' && '--apply' || '' }}
+        run: python tools/r2_upload.py ${{ inputs.fill_dims == 'true' && '--fill-dims' || inputs.shrink == 'true' && '--shrink' || inputs.recopy == 'true' && '--recopy-escaped' || '' }} ${{ inputs.apply == 'true' && '--apply' || '' }}
+      # Gesichert wird auf den Branch, von dem der Lauf gestartet wurde (auf main wie bisher main; auf einem Arbeits-Branch bleibt die Zuordnung dort,
+      # bis der PR gemergt ist)
       - name: Zuordnung sichern
         if: inputs.apply == 'true' || inputs.fill_dims == 'true'
+        env:
+          BR: ${{ github.ref_name }}
         run: |
           git config user.name "github-actions"; git config user.email "actions@github.com"
           git add data/r2_map.json
@@ -38,5 +45,5 @@ jobs:
           if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
           git commit -q -m "R2: Bildzuordnung"
           # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
-          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin "$BR" && git push -q origin "HEAD:$BR" && exit 0; sleep $((i*5)); done
           echo "::error::Zuordnung konnte nicht gesichert werden"; exit 1

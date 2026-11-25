@@ -12,6 +12,7 @@ Ablauf (Aufruf: python tools/r2_site_sync.py <docs>):
     nach dem Purge des R2-Kanten-Caches, tools/purge_changed.py --r2; scheitert er, bleibt die alte Kennung).
     Der Site-Worker nutzt R2 nur, wenn pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt: bei jedem Fehler liefert
     automatisch GitHub Pages, nie ein veralteter Stand aus R2.
+Nie markiert (seit 27.11.2026): gehashte Stylesheets und Skripte pages/assets/<name>.<hash>.<css|js> (r2_common.HASHED_KEY, site_assets.py).
 Markierung (seit 27.11.2026): zusaetzlich Cache-Control GONE_CC (Direktive m365-gone, r2_common), damit der Zonen-Cache des Site-Workers sie erkennt.
 Bestehende Markierungen ohne diese Direktive bekommen sie mit:  python tools/r2_site_sync.py --remark-gone
 (liest meta/gone.json, je Schluessel head_object; nur Objekte mit gone=1 und ohne Direktive: copy_object an Ort und Stelle mit denselben Metadaten und
@@ -22,7 +23,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from r2_common import GONE_CC, GONE_KEY, GONE_MARK, IMG, client, ctype, read_gone, upload, url_of, THREADS   # noqa: E402
+from r2_common import GONE_CC, GONE_KEY, GONE_MARK, HASHED_KEY, IMG, client, ctype, read_gone, upload, url_of, THREADS   # noqa: E402
 
 MARKER = "r2-build.txt"
 META = {"src": "docs"}
@@ -91,7 +92,8 @@ def main(src):
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     if failed: return fail(f"{len(failed)} Dateien nicht geladen (z. B. {failed[0][0]})")
     # Entfernt markieren: nur eigene Spiegel-Objekte (Metadaten src=docs); Altbestand aus r2out/ bleibt wie bisher unberuehrt
-    cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER)
+    # Gehashte Stylesheets/Skripte (HASHED_KEY) nie: alte Seiten verlangen den alten Namen weiter (site_assets.py), der Inhalt darunter aendert sich nie
+    cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER and not HASHED_KEY.match(k))
     def head(k):
         try: return k, (s3.head_object(Bucket=bucket, Key=k).get("Metadata") or {}), None
         except Exception as e: return k, None, str(e)[:120]

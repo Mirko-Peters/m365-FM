@@ -47,6 +47,7 @@ import site_listen as LST   # "Show folgen"-Knopf auf den Folgenseiten und Anhoe
 from site_size import sizes, writers
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
+import site_assets as SA   # Skripte und Stylesheet mit Inhalts-Hash im Namen (Site-Worker: immutable), in docs/ und r2out/
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date, timedelta
 from pathlib import Path
@@ -64,6 +65,7 @@ OUT = ROOT / "docs"
 _dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists() else ""
 BASE = os.environ.get("SITE_BASE") or (f"https://{_dom}" if _dom else "https://mirko-peters.github.io/m365-dub-downloader")
 BASE = BASE.rstrip("/")
+SA.setup([OUT])   # ohne build() (Tests, Einzelseiten) wie bisher: gehashte Dateien nur nach docs/
 R2.DEFAULT_IMG = f"{BASE}/assets/og-default.png"   # tote Bilder (data/r2_dead.json): JSON-LD-Bildfelder und og:image weichen auf das Standardbild dieses Baus aus
 TODAY = date.today().isoformat()
 INDEXNOW_KEY = "0348df8af6514d5bae4d9f9a5ba51f57"
@@ -414,7 +416,7 @@ A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'
 def a11y_tags(lang):
     t = dict(_A11Y.get("en", {}))
     t.update(_A11Y.get(lang, {}))
-    return (f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}/assets/a11y.js"></script>')
+    return (f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}{SA.path("a11y.js")}"></script>')
 
 
 _QUI = {}
@@ -589,11 +591,11 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <body>
 {ext_links(body)}
 {a11y_tags(lang)}
-<script defer src="{BASE}/assets/page.js"></script>
-<script defer src="{BASE}/assets/attend.js"></script>
+<script defer src="{BASE}{SA.path("page.js")}"></script>
+<script defer src="{BASE}{SA.path("attend.js")}"></script>
 <script>(function(){{if(!matchMedia("(pointer:fine)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=0,ev=["wheel","keydown","pointerdown","touchstart"];function go(){{if(d)return;d=1;ev.forEach(function(e){{removeEventListener(e,go)}});var s=document.createElement("script");s.src="{BASE}/assets/smooth.js";document.body.appendChild(s)}}ev.forEach(function(e){{addEventListener(e,go,{{passive:true,once:true}})}})}})();</script>
-<script defer src="{BASE}/assets/fx.js"></script>
-{('<script defer src="' + BASE + '/assets/viz.js"></script>') if 'class="viz"' in body else ""}
+<script defer src="{BASE}{SA.path("fx.js")}"></script>
+{('<script defer src="' + BASE + SA.path("viz.js") + '"></script>') if 'class="viz"' in body else ""}
 </body></html>
 """
 
@@ -603,13 +605,12 @@ _CSSF = {}
 
 def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
-    if not _CSSF:
-        import hashlib
+    # Name site.<sha1[:10]>.css wie bisher, seit 27.11.2026 ueber site_assets: auch in r2out/ (r2out-Seiten gehen vor dem Deploy live, das neue
+    # Stylesheet war bis zum Deploy nur ueber GitHub Pages erreichbar). data-sbar: der Site-Worker setzt daraus den Preload-Link-Header (Early Hints).
+    if "css" not in _CSSF:
         css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n" + ROLE.CSS + "\n"
-        name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
-        (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
-        _CSSF["u"] = f"{BASE}/assets/{name}"
-    return f'<link rel="stylesheet" href="{_CSSF["u"]}" data-sbar>'
+        _CSSF["css"] = css
+    return f'<link rel="stylesheet" href="{BASE}{SA.put("site.css", _CSSF["css"])}" data-sbar>'
 
 
 _IDENT = {"@id", "@type", "@context", "name", "url"}
@@ -1085,10 +1086,11 @@ def build():
     OUT.mkdir(parents=True)
     (OUT / ".nojekyll").write_text("")
     if (ROOT / "assets").exists():
-        shutil.copytree(ROOT / "assets", OUT / "assets")
+        shutil.copytree(ROOT / "assets", OUT / "assets")   # ungehashte Namen bleiben (alte Seiten, Drittverweise)
         write_cm_js(OUT)
         from site_i18n import write_ui_js
         write_ui_js(OUT)
+    SA.setup([OUT, ROOT / "r2out"])   # gehashte Skripte und Stylesheet (site_assets) ab hier in docs/ und r2out/
 
     # veröffentlichte Folgen je Sprache sammeln
     items = {}  # (vid, lang) -> dict

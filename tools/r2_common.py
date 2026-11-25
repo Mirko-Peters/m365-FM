@@ -9,6 +9,10 @@ CT = {".html": "text/html; charset=utf-8", ".json": "application/json; charset=u
       ".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".ics": "text/calendar; charset=utf-8", ".vtt": "text/vtt; charset=utf-8", ".webmanifest": "application/manifest+json",
       ".xsl": "application/xslt+xml", ".pdf": "application/pdf", ".csv": "text/csv; charset=utf-8"}
 IMG = re.compile(r"\.(png|jpe?g|gif|webp|avif|svg|ico)$", re.I)   # wie im Site-Worker: Bilder kommen nie aus R2 zuerst, also auch nie unter /__r2c
+# Stylesheets und Skripte mit Inhalts-Hash im Namen (site_assets.py; = HASHED im Site-Worker, Schluessel pages/assets/<name>.<hash>.<css|js>): Inhalt unter dem
+# Namen unveraenderlich. Der Spiegel markiert sie nie als entfernt - alte Seiten (Browser-Cache, Kanten-Cache, r2out-Seiten eines frueheren Baus) verlangen
+# den alten Namen weiter, und der Site-Worker liefert ihn nach dem 404 von GitHub Pages aus R2.
+HASHED_KEY = re.compile(r"^pages/assets/[a-z0-9][a-z0-9_-]*\.[0-9a-f]{8,}\.(?:css|js)$", re.I)
 THREADS = max(1, int(os.environ.get("R2_THREADS") or 32))   # parallele Uploads (vorher fest 16; naechtlicher Bau: ~28.000 geaenderte Seiten in 18 min)
 GONE_KEY = "meta/gone.json"   # Liste der als entfernt markierten Schluessel (nur r2_site_sync.py schreibt sie)
 # Cache-Control eines als entfernt markierten Objekts: wie normale Uploads (public, max-age=600) plus die Erweiterungs-Direktive m365-gone. Der Site-Worker

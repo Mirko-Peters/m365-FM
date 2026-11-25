@@ -5,6 +5,7 @@ import site_media as MED
 import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import ontology as ONT   # Oberbegriffe per Regel (Klammer/Praefix) fuer alle Entitaeten beim Laden
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
+import site_assets as SA   # wiki.js und wk-<sprache>.js mit Inhalts-Hash im Namen (Site-Worker: immutable)
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -254,14 +255,16 @@ def wiki_block(lang, term_id, api, base, static, links=None):
     cfg = json.dumps({"api": api, "term": term_id, "lang": lang}, ensure_ascii=False).replace("</", "<\\/")
     st = f'<div class="wk-static wk-body">{wiki_render(static["body"], links, w)[0]}</div>' if static else ""
     return (f'{WCSS}<section aria-labelledby="wk-h"><h2 id="wk-h">{esc(w["h"])}</h2><p class="mut">{esc(w["intro"])}</p><div id="c-wiki">{st}</div></section>'
-            f'<script defer src="{base}/assets/wk-{lang}.js"></script><script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
+            f'<script defer src="{base}{SA.path(f"wk-{lang}.js")}"></script><script>window.M365W={cfg}</script><script defer src="{base}{SA.path("wiki.js")}"></script>')
 
 
 def write_wk_js(write, lang, links):
     """assets/wk-<sprache>.js: Oberflaechentexte des Wiki-Teils und alle verlinkbaren Begriffe (id -> [Name, URL]) einmal je Sprache."""
     w = WT.get(lang, WT["en"])
-    write(f"assets/wk-{lang}.js", "window.M365WT=" + json.dumps(w, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-          + ";window.M365WL=" + json.dumps(links, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";")
+    c = ("window.M365WT=" + json.dumps(w, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+         + ";window.M365WL=" + json.dumps(links, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";")
+    write(f"assets/wk-{lang}.js", c)   # ungehashter Name bleibt (alte Seiten)
+    SA.put(f"wk-{lang}.js", c)   # wk-<sprache>.<hash>.js in docs/ und r2out/: wiki_block verweist darauf (Site-Worker: immutable)
 
 
 def build_learn(ctx):
