@@ -1,0 +1,36 @@
+name: Ladezeit-Pruefung am echten Seitenbau (nichts wird veroeffentlicht)
+# Baut die Seite verkleinert (Deutsch und Englisch, wie site-staging.yml, ohne Upload, ohne Deploy, ohne Secrets) und prueft docs/ und r2out/
+# gegen den Site-Worker (tools/ladezeit_pruefung.mjs): R2-only-Pfade fuer den Kaltstart, gehashte Skripte, Preload-Header, Blogbild.
+on:
+  push:
+    branches: [claude/ladezeit-messung]
+    paths: [.github/workflows/ladezeit-bau.yml, tools/ladezeit_pruefung.mjs]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: { group: ladezeit-bau, cancel-in-progress: true }
+jobs:
+  bau:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      SITE_LANGS: "de,en"
+      SITE_BASE: https://www.m365.fm
+      COMMUNITY_API: https://api-dub.m365.fm
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v7
+        with: { node-version: 24 }
+      - run: pip install -q requests cryptography pillow boto3 pyyaml
+      - name: Cache der Community-Exporte (nur lesen)
+        uses: actions/cache/restore@v6
+        with:
+          path: data/cache
+          key: exports-${{ github.run_id }}
+          restore-keys: exports-
+      - name: Seite bauen (verkleinert, nichts wird veroeffentlicht)
+        run: python generate_site.py
+      - name: Pruefen
+        run: node tools/ladezeit_pruefung.mjs docs r2out | tee -a "$GITHUB_STEP_SUMMARY"
