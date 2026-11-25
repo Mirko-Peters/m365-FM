@@ -58,10 +58,11 @@ def read_gone(s3, bucket):
         raise
 
 
-def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cache_control="public, max-age=600"):
+def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cache_control="public, max-age=600", block=None):
     """todo: [(key, path, hash)] -> (ok_keys, failed_keys). Erst Dateien, dann Seiten (eine neue Seite zeigt nie auf ein noch fehlendes Stylesheet);
     Fehlschlaege werden `retries`-mal wiederholt (mit kurzer Pause). strict=True (Spiegel): Phase 2 entfaellt, wenn in Phase 1 etwas endgueltig
-    fehlschlug - im r2out-Upload nicht, dort soll eine fehlende Export-Datei nicht alle Sprachseiten aufhalten."""
+    fehlschlug - im r2out-Upload nicht, dort soll eine fehlende Export-Datei nicht alle Sprachseiten aufhalten. block(key): Phase 2 entfaellt auch, wenn
+    eine solche Datei endgueltig fehlschlug (r2out: gehashte Skripte/Stylesheets, HASHED_KEY - neue Seiten verweisen schon auf den neuen Namen)."""
     def put(item):
         key, f, h = item
         try:
@@ -71,7 +72,7 @@ def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cac
     ok, failed, shown = [], [], [0]
     with ThreadPoolExecutor(THREADS) as ex:
         for phase in ([t for t in todo if not t[0].endswith(".html")], [t for t in todo if t[0].endswith(".html")]):
-            if failed and strict: break   # Seiten erst, wenn alle Dateien da sind
+            if failed and (strict or (block and any(block(t[0]) for t in failed))): break   # Seiten erst, wenn alle (bzw. die blockierenden) Dateien da sind
             rest = phase
             for attempt in range(retries + 1):
                 if attempt: time.sleep(2 * attempt)

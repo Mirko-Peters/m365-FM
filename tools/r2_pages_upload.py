@@ -14,7 +14,7 @@ import hashlib, json, os, re, sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from r2_common import IMG, client, read_gone, upload, url_of   # noqa: E402
+from r2_common import HASHED_KEY, IMG, client, read_gone, upload, url_of   # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "r2out"
@@ -107,7 +107,7 @@ def main():
         man[item[0]] = item[2]; n[0] += 1
         if n[0] % 2000 == 0: save_man()   # Zwischenstand: auch bei Abbruch mitten im Upload bleibt das Hochgeladene vermerkt
     try:
-        ok, failed = upload(s3, bucket, todo, on_ok=on_ok)
+        ok, failed = upload(s3, bucket, todo, on_ok=on_ok, block=HASHED_KEY.match)   # gehashtes Skript gescheitert: keine Seite, die darauf verweist
     finally:
         save_man()
     # T41: geaenderte Seiten und Dateien fuer den Purge nach dem Deploy (der Site-Worker haelt R2-Antworten 4 h im Kanten-Cache unter /__r2c<adresse>)
@@ -121,7 +121,8 @@ def main():
     # Deploy mit 404 (z. B. die aus docs/ umgezogenen Seiten beim ersten Lauf) -> Ende 1, der Seitenbau veroeffentlicht nicht; der naechste Lauf laedt nur den Rest.
     # Ebenso die Sitemaps der Sprachen ausser en/de (seit 16.11.2026 nur in r2out/): der Index sitemap.xml in GitHub Pages verweist auf sie; und die aus
     # docs/ umgezogenen Datenexporte (EXPORT: Register fuer den Community-Worker, og-manifest.json, seo-report.json), die es nach dem Deploy sonst nirgends gaebe.
-    lost = sorted(k for k, _f, _h in failed if (k.endswith(".html") or moved(k)) and k not in served)
+    # Gehashte Skripte/Stylesheets (HASHED_KEY, Gegenpruefung 25.11.2026): neue Seiten verweisen nur auf sie; fehlt eines, kein Deploy (upload laedt dann auch keine Seiten)
+    lost = sorted(k for k, _f, _h in failed if (k.endswith(".html") or moved(k) or HASHED_KEY.match(k)) and k not in served)
     if lost:
         print(f"::error::R2-Upload r2out: {len(lost)} Seiten, Sitemaps oder Datenexporte fehlen im Bucket (z. B. {', '.join(lost[:3])}) - kein Deploy, sonst antworten sie mit 404"); return 1
     return 0

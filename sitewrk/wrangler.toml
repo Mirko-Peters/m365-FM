@@ -45,6 +45,10 @@ R2_EDGE_TTL = "86400"
 # Live bleibt "0", bis auf Staging belegt ist, dass es wirkt, UND alle bestehenden Entfernt-Markierungen den Marker tragen (python tools/r2_site_sync.py
 # --remark-gone): sonst kaeme eine als entfernt markierte Seite ohne Marker aus der Zone. Dann in einem eigenen kleinen PR auf "1".
 # Bei "1" leert tools/purge_changed.py (liest diesen Wert) zusaetzlich https://img.m365.fm/pages/... . R2_ZONE_HOST: live nur https://img.m365.fm.
+# Pflicht vor "1" (Gegenpruefung 25.11.2026): auf Staging belegen, dass ein mit m365-gone markiertes Objekt mit genau diesem Cache-Control beim Worker ankommt
+# (zoneGet nimmt Treffer nur bei Cache-Control "public, max-age=600" bzw. "no-store", sonst Server-Timing zc="cc" und der heutige Weg). Purge: der Wert
+# wird aus dem Checkout des Seitenbaus gelesen - beim Umschalten darf kein site.yml-Lauf mit altem Stand laufen; nach dem Zurueckschalten auf "0" eine
+# Stunde (R2_ZONE_TTL) im Deploy-Job R2_ZONE_PURGE=1 setzen, damit Zonen-Eintraege nicht veralten.
 # R2_ZONE_TTL: Obergrenze der Kanten-Dauer im Zonen-Weg (60 bis 604800 s), zum Start 1 h.
 R2_ZONE_CACHE = "0"
 R2_ZONE_HOST = "https://img.m365.fm"
@@ -88,7 +92,9 @@ ENVIRONMENT = "staging"
 ORIGIN = "https://staging.m365.fm"
 MIGRATED = "0"
 R2_PRIMARY = "0"
-# Zonen-Cache auf Staging an (eigene Domain, nie img.m365.fm; tools/check_staging_isolation.py prueft das), kurze TTL statt Purge
+# Zonen-Cache auf Staging an (eigene Domain, nie img.m365.fm; tools/check_staging_isolation.py prueft das), kurze TTL statt Purge.
+# Entfernt-Markierungen gibt es im Staging-Bucket nicht (tools/staging_upload.py markiert nichts). Fuer die gone-Probe ein Testobjekt mit Metadaten gone=1
+# UND Cache-Control "public, max-age=600, m365-gone" anlegen (wie tools/r2_site_sync.py); erst dann ist die Messung zu gone aussagekraeftig.
 R2_ZONE_CACHE = "1"
 R2_ZONE_HOST = "https://img-staging.m365.fm"
 R2_ZONE_TTL = "300"

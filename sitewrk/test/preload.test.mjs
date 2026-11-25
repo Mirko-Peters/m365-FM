@@ -100,3 +100,21 @@ test("Kopf ueber 64 KiB (grosses JSON-LD hinter Stylesheet und Bild): Links aus 
   const r2 = await withPreload(new Request("https://www.m365.fm/a/"), ENV, new Response(cut, { headers: { "content-type": "text/html" } }));
   assert.equal(await r2.text(), cut); const l2 = r2.headers.get("link"); assert.ok(l2 === null || l2 === EXP_CSS, String(l2));
 });
+
+test("preloadLinks: <link> als Text in JSON-LD, Skript, Stil, noscript oder Kommentar zaehlt nicht (Nutzertexte im JSON-LD, Gegenpruefung 25.11.2026)", () => {
+  const evil = '<link rel=preload as=image fetchpriority=high href=https://admin.m365.fm/x>';
+  const ld = `<script type="application/ld+json">{"jobTitle":"${evil}"}</script>`;
+  assert.deepEqual(preloadLinks(`${CSS}${ld}`), [EXP_CSS]);
+  assert.deepEqual(preloadLinks(`${CSS}<script>var a='${evil.replace("admin.", "")}'</script>`), [EXP_CSS], "Skript");
+  assert.deepEqual(preloadLinks(`${CSS}<script type="application/ld+json">{"x":"${evil.replace("admin.", "")}`), [EXP_CSS], "abgeschnittenes JSON-LD (Lesegrenze)");
+  assert.deepEqual(preloadLinks(`<!-- ${CSS} -->`), [], "Kommentar");
+  assert.deepEqual(preloadLinks(`<noscript>${CSS}</noscript><style>/* ${CSS} */</style><template>${CSS}</template>`), [], "noscript, style, template");
+  assert.deepEqual(preloadLinks(`${ld}${IMGP}`), [EXP_IMG], "echter Bild-Preload nach dem JSON-LD bleibt");
+});
+
+test("preloadLinks: nur Website- und Bild-Hosts, keine anderen *.m365.fm-Subdomains", () => {
+  for (const h of ["admin.m365.fm", "partner.m365.fm", "profile.m365.fm", "api-dub.m365.fm", "x.img.m365.fm", "m365con.net", "img.m365.fm:8443"])
+    assert.deepEqual(preloadLinks(`<link rel="preload" as="image" href="https://${h}/a.webp" fetchpriority="high">`), [], h);
+  for (const h of ["www.m365.fm", "img.m365.fm", "staging.m365.fm"])
+    assert.equal(preloadLinks(`<link rel="preload" as="image" href="https://${h}/a.webp" fetchpriority="high">`).length, 1, h);
+});

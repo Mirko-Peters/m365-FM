@@ -132,6 +132,8 @@ test("Suchindex-Rueckfall: zweiter Abruf aus dem Kanten-Cache (/__r2f<pfad>, vom
   assert.ok(store.has("https://www.m365.fm/__r2f/search/manifest.json"));
   const h = await run(req("/search/manifest.json", "HEAD")); assert.equal(await h.text(), "");
   gets = []; const m = await run(req("/search/part-9.json")); assert.equal(m.status, 404); assert.ok(!store.has("https://www.m365.fm/__r2f/search/part-9.json"), "Fehlen nicht gemerkt");
+  assert.deepEqual(gets.filter((k) => k.startsWith("pages/search/")), ["pages/search/part-9.json"], "fehlt: Bucket genau einmal, dann GitHub Pages");
+  assert.deepEqual(origins.filter((o) => o.startsWith("/search/")), ["/search/part-9.json"], "nur der fehlende Teil fragt GitHub Pages (27.11.: Suchindex zuerst aus R2)");
 });
 
 test("R2_EDGE_TTL: /__r2f-Eintraege 1 Tag, gehashte Assets weiter 30 Tage; ohne, ungueltig oder Bau ohne -pfad 4 h", async () => {

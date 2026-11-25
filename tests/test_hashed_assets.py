@@ -44,6 +44,22 @@ class Naming(unittest.TestCase):
         for bad in ("../x.js", "a/b.js", "x.min.js", "x.txt", "X.js"):
             with self.assertRaises(ValueError, msg=bad): SA.hashed_name(bad, d)
 
+    def test_hashed_scripts_do_not_parse_own_plain_name(self):
+        """Gegenpruefung 25.11.2026: attend.js leitete BASE aus /assets/attend.js im eigenen src ab; unter attend.<hash>.js wurde BASE die ganze
+        Skript-URL (Popup-Bild 404). Kein gehashtes Skript darf seinen ungehashten Namen als festes Muster suchen; attend.js: BASE fuer beide Namen."""
+        names = {"page", "a11y", "attend", "fx", "viz", "entity", "wiki"}
+        for n in names:
+            src = (ROOT / "assets" / f"{n}.js").read_text("utf-8")
+            if "currentScript" not in src: continue
+            for m in re.finditer(r"/((?:\\/|[^/\n])+)/[gimsuy]*", src):
+                rx = m.group(1)
+                if re.search(rf"\\/{re.escape(n)}\\\.js", rx): self.fail(f"{n}.js: Muster {rx} passt nur auf den ungehashten Namen")
+        src = (ROOT / "assets" / "attend.js").read_text("utf-8")
+        line = next(l for l in src.splitlines() if "var BASE" in l)
+        rx = re.search(r"\.replace\(/(.+?)/i?, \"\"\)", line).group(1).replace("\\/", "/")
+        for u in ("https://www.m365.fm/assets/attend.cdd70231c0.js", "https://www.m365.fm/assets/attend.js", "https://www.m365.fm/assets/attend.js?v=2"):
+            self.assertEqual(re.sub(rx, "", u, flags=re.I), "https://www.m365.fm", u)
+
     def test_no_plain_asset_name_is_immutable(self):
         """Kein ungehashter Name unter assets/ darf auf HASHED passen - sonst lieferte der Worker ihn ein Jahr unveraenderlich aus."""
         for f in (ROOT / "assets").rglob("*"):
@@ -120,15 +136,19 @@ class BuildOutput(unittest.TestCase):
         self.assertGreater(len(head.encode("utf-8")), 65536, "Kopf hier laenger als die Lesegrenze des Workers")
 
     def test_wiki_scripts_hashed(self):
+        """wiki.js gehasht; wk-<sprache>.js (Liste aller Begriffe, aendert sich mit jeder neuen Entitaet) bewusst ungehasht: sonst aenderte jede neue
+        Entitaet alle Entitaetsseiten (Upload, Purge, kalter Kanten-Cache - Gegenpruefung 25.11.2026)."""
         import site_learn as L
         out = {}
         L.write_wk_js(lambda rel, c: out.__setitem__(rel, c), "de", {"a": ["A", "https://www.m365.fm/de/entity/a/"]})
-        self.assertIn("assets/wk-de.js", out, "ungehashte Datei bleibt (alte Seiten)")
+        self.assertIn("assets/wk-de.js", out)
+        self.assertFalse(list((self.tmp / "r2out" / "assets").glob("wk-de.*.js")) if (self.tmp / "r2out" / "assets").exists() else [], "keine gehashte wk-Datei")
         b = L.wiki_block("de", "a", "https://api", "https://www.m365.fm", None)
-        m = re.search(r'src="https://www\.m365\.fm/assets/(wk-de\.[0-9a-f]{10}\.js)"', b); self.assertTrue(m, b[-300:])
-        self.assertEqual((self.tmp / "r2out" / "assets" / m.group(1)).read_text("utf-8"), out["assets/wk-de.js"])
+        self.assertIn('src="https://www.m365.fm/assets/wk-de.js"', b)
+        b2 = L.wiki_block("de", "a", "https://api", "https://www.m365.fm", None)
+        L.write_wk_js(lambda rel, c: None, "de", {"a": ["A", "u"], "b": ["B (neu)", "u2"]})
+        self.assertEqual(L.wiki_block("de", "a", "https://api", "https://www.m365.fm", None), b2, "neue Entitaet aendert die Seite nicht")
         self.assertRegex(b, r'src="https://www\.m365\.fm/assets/wiki\.[0-9a-f]{10}\.js"')
-        self.assertNotIn("/assets/wk-de.js\"", b)
 
     def test_entity_script_hashed(self):
         src = (ROOT / "site_entities.py").read_text("utf-8")

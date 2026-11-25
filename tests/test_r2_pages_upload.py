@@ -230,6 +230,19 @@ class R2outOrderTest(Base):
             self.assertEqual(self.r2out_run(), 0, "alte Fassung liegt noch im Bucket")
         self._with_clean_manifest(body)
 
+    def test_failed_hashed_asset_blocks_pages_and_deploy(self):
+        """Gegenpruefung 25.11.2026: neue Seiten verweisen nur auf gehashte Skripte/Stylesheets (site_assets.py). Scheitert eines davon endgueltig, laedt der
+        Upload keine Seite (sonst live mit 404 fuer das Skript) und endet mit 1 (kein Deploy); der naechste Lauf laedt beides."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "assets/entity.0123456789.js": "e()", "search/part-1.json": "{}"})
+            self.s3.fail_put.add("pages/assets/entity.0123456789.js")
+            self.assertEqual(self.r2out_run(), 1, "gehashtes Skript fehlt")
+            self.assertNotIn("pages/pl/x/index.html", self.s3.obj, "keine Seite ohne ihr Skript")
+            self.assertIn("pages/search/part-1.json", self.s3.obj, "andere Dateien schon")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertIn("pages/pl/x/index.html", self.s3.obj); self.assertIn("pages/assets/entity.0123456789.js", self.s3.obj)
+        self._with_clean_manifest(body)
+
     def test_sitemap_upload_type_and_missing_sitemap_blocks_deploy(self):
         """16.11.2026: Sitemaps der Sprachen ausser en/de liegen nur in r2out/. Sie gehen mit application/xml in den Bucket (nicht gefiltert, im Purge);
         fehlt eine davon nach dem Upload ganz -> Ende 1 (der Index in GitHub Pages verweist darauf, sonst 404). Andere .xml-Dateien blockieren nicht."""
