@@ -205,9 +205,10 @@ def thumb(vid, r2map, dims=None):
 
 
 def pick(vid, lang, pages):
-    """Videoseite in der Sprache der Seite, sonst die englische. pages: vid -> {sprache: (url, titel)}. -> (url, titel, sprache) oder None."""
+    """Videoseite in der Sprache der Seite, sonst die englische, sonst das Video auf YouTube (Schluessel "yt", englischer Originaltitel).
+    pages: vid -> {sprache: (url, titel)}. -> (url, titel, sprache oder "yt") oder None."""
     pg = pages.get(vid) or {}
-    for l in (lang, "en"):
+    for l in (lang, "en", "yt"):
         if pg.get(l) and pg[l][0]: return pg[l][0], clean_title(pg[l][1]), l
     return None
 
@@ -220,6 +221,12 @@ def items(doc, pid, lang, pages):
     return out
 
 
+def _attrs(l, lang):
+    """Linkattribute: andere Sprache kennzeichnen; YouTube (fremde Seite, englisches Original) mit rel=noopener."""
+    if l == "yt": return ' rel="noopener"' + ('' if lang == "en" else ' lang="en" hreflang="en"')
+    return f' lang="{l}" hreflang="{l}"' if l != lang else ""
+
+
 def card(doc, pid, lang, pages, r2map, dims=None):
     """Abschnitt "Passende Videos" eines Leitfadens; leer ohne Video mit Seite."""
     its = items(doc, pid, lang, pages)
@@ -227,9 +234,8 @@ def card(doc, pid, lang, pages, r2map, dims=None):
     h, lead, kind, en = ui(lang)
     li = ""
     for vid, u, t, l in its:
-        other = f' lang="{l}" hreflang="{l}"' if l != lang else ""
-        li += (f'<li><a href="{u}"{other}><span class="pl-vth">{thumb(vid, r2map, dims)}</span><b>{esc(t)}</b>'
-               f'<small>{esc(kind)}{" · " + esc(en) if l != lang else ""}</small></a></li>')
+        li += (f'<li><a href="{u}"{_attrs(l, lang)}><span class="pl-vth">{thumb(vid, r2map, dims)}</span><b>{esc(t)}</b>'
+               f'<small>{esc("YouTube" if l == "yt" else kind)}{" · " + esc(en) if l != lang and lang != "en" else ""}</small></a></li>')
     return f'{CSS}<section class="pl-vids" id="videos"><h2>{esc(h)}</h2><p class="mut">{esc(lead)}</p><ul class="pl-vgrid">{li}</ul></section>'
 
 
@@ -237,12 +243,12 @@ def path_line(doc, pid, lang, pages):
     """Kurze Zeile fuer die Karte des Leitfadens auf der Pfadseite (nur Links, ohne Bilder)."""
     its = items(doc, pid, lang, pages)
     if not its: return ""
-    return (f'<p class="mut pl-vline">{esc(ui(lang)[0])}: ' + " · ".join(f'<a href="{u}"{(" lang=" + chr(34) + l + chr(34) + " hreflang=" + chr(34) + l + chr(34)) if l != lang else ""}>{esc(t)}</a>' for _, u, t, l in its) + "</p>")
+    return (f'<p class="mut pl-vline">{esc(ui(lang)[0])}: ' + " · ".join(f'<a href="{u}"{_attrs(l, lang)}>{esc(t)}</a>' for _, u, t, l in its) + "</p>")
 
 
 def ld_refs(doc, pid, lang, pages, has_ld):
     """Verweise fuer Article.video: nur @id der VideoObject-Knoten, die die Videoseite selbst definiert (has_ld(url)) - keine zweite Beschreibung desselben Videos."""
-    return [{"@id": u + "#video"} for _, u, _, _ in items(doc, pid, lang, pages) if has_ld(u)]
+    return [{"@id": u + "#video"} for _, u, _, l in items(doc, pid, lang, pages) if l != "yt" and has_ld(u)]
 
 
 def prepare(doc, pillars, pages, dates, today, ent_ids=None, ld_urls=(), r2map=None, dims=None, out=print, path=None):

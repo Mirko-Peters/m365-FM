@@ -1224,7 +1224,7 @@ def build():
         return top_block(l) + f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
 
     # Englisches Original je Video (Podpage-Show unter /show/), Zuordnung ueber den englischen YouTube-Titel
-    ORIG = {}; ORIG_T = {}   # ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
+    ORIG = {}; ORIG_T = {}; _et = {}   # _et: englische Originaltitel je Video; ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
     try:
         import site_podpage as _PPm
         _et = site_text.fix_tree(json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8"))) if (ROOT / "data" / "en_titles.json").exists() else {}   # T5
@@ -1697,6 +1697,8 @@ def build():
     _pbs = _PPs.episode_index(BASE)["by_slug"]
     for _v, _sl in ORIG.items():
         if _sl in _pbs: _pvp.setdefault(_v, {})["en"] = (_pbs[_sl]["url"], ORIG_T.get(_v) or _pbs[_sl]["e"]["title"])
+    for _v in _pvp:   # ohne englische Seite: das Video auf YouTube mit seinem englischen Originaltitel (data/en_titles.json)
+        if _et.get(_v): _pvp[_v]["yt"] = (f"https://www.youtube.com/watch?v={_v}", _et[_v])
     _pvm = _EMX
     _ctx["pillar_videos"] = PVID.prepare(PVID.load(), PIL.order(), _pvp, {_v: (videos.get(_v) or {}).get("date") for _v in _pvp}, TODAY,
                                          ent_ids=lambda s: list(_pvm.ids(s, "en", set())), ld_urls={url_of(_it) for _it in items.values()}, r2map=R2.MAP, dims=R2._dims())

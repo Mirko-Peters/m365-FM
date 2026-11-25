@@ -164,6 +164,15 @@ class Render(unittest.TestCase):
         self.assertIn("<h2>Vidéos associées</h2>", PV.card(self.d, "kpis", "fr", self.pages, self.R2))
         self.assertEqual(PV.card(self.d, "lean", "de", self.pages, self.R2), "")   # Leitfaden ohne Video: keine Karte
 
+    def test_youtube_fallback_without_english_page(self):
+        pages = {"v_x": {"de": (f"{BASE}/de/x/", "X erklärt"), "yt": ("https://www.youtube.com/watch?v=v_x", "X  explained")}}
+        d = doc(); d["pillars"] = {"kpis": {"videos": [{"id": "v_x"}], "blocked": []}}
+        en = PV.card(d, "kpis", "en", pages, {})
+        self.assertIn('href="https://www.youtube.com/watch?v=v_x" rel="noopener"', en); self.assertIn("<b>X explained</b>", en); self.assertIn("<small>YouTube</small>", en)
+        self.assertIn(f'href="{BASE}/de/x/"', PV.card(d, "kpis", "de", pages, {}))   # eigene Sprache vor YouTube
+        self.assertIn('rel="noopener" lang="en" hreflang="en"', PV.card(d, "kpis", "fr", pages, {}))
+        self.assertEqual(PV.ld_refs(d, "kpis", "en", pages, lambda u: True), [])   # kein Verweis auf fremde Seiten
+
     def test_ld_refs_only_for_pages_with_videoobject(self):
         refs = PV.ld_refs(self.d, "kpis", "de", self.pages, lambda u: "/show/" not in u)
         self.assertEqual(refs, [{"@id": f"{BASE}/de/oee-erklaert/#video"}])
