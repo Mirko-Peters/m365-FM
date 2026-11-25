@@ -30,7 +30,7 @@ F = Path(__file__).parent / "data" / "sidebar_related.json"
 VERSION = 1
 NE, NV, SHOW, NIDS = 5, 24, 5, 12   # gespeicherte EN-Folgen, hoechstens gespeicherte Dub-Videos, angezeigte Folgen, beruecksichtigte Entitaeten
 FRESH_DAYS = 30   # eine Folge ohne Kernpunkte/FAQ wird so lange je Bau neu gerechnet (danach fest, auch ohne)
-MAX_BYTES = 3_000_000   # Deckel der Datei (Test): ~6.000 Schluessel x ~300 B
+MAX_BYTES = 6_000_000   # Deckel der Datei (Test). Gemessen in der Bau-Probe vom 25.11.2026: 7.418 Schluessel, 3,1 MB (~420 B je Schluessel); Platz fuer gut das Doppelte
 DOC = "Feste Aehnliche Folgen der Seitenleiste je Inhalt (site_related.py). Einmal berechnet, danach nur gelesen; nicht von Hand pflegen."
 
 
