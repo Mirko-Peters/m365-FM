@@ -21,7 +21,8 @@ PILLARS = [{"id": "lean", "topics": ["kaizen"], "re": "lean|kaizen|wastes?"},
 
 
 def doc(**kw):
-    d = {"max": 2, "min_score": 6, "blocked": [], "context": {"en": "manufactur\\w*|shop ?floors?|factory floors?", "de": "fertigung\\w*|instandhaltung\\w*"},
+    d = {"max": 2, "min_score": 6, "blocked": [], "context": {"manufacturing": "manufactur\\w*|fertigung\\w*", "floor": "shop ?floors?|factory floors?",
+                                                              "maintenance": "instandhaltung\\w*", "industrial": "industrial|industrielle\\w*"},
          "rules": {"mfg-it": {"en": "industrial ai|asset management", "not": "load planning", "ignore_topics": ["erp-x"]}}, "pillars": {}}
     d.update(kw)
     return d
@@ -58,7 +59,8 @@ class Score(unittest.TestCase):
         self.assertEqual(PV.score(PILLARS[1], VIDS["v_kpi"], d, ENT)[0], 0)  # "KPI" in einem Copilot-Video
         self.assertLess(PV.score(PILLARS[1], tx("OEE", "", "", ""), d, ENT)[0], 6)   # ohne Fertigungsbezug kein Treffer
         self.assertEqual(PV.score(PILLARS[1], tx("OEE dashboards", "for manufacturing", "oee, kpi", ""), d, ENT)[0], 0)   # ein einzelner Fertigungsbegriff reicht nicht
-        self.assertGreater(PV.score(PILLARS[1], tx("OEE dashboards", "for manufacturing", "oee, kpi", "Fertigung Fertigung Fertigung"), d, ENT)[0], 0)   # zweiter Bezug aus dem Transkript (3 Nennungen)
+        self.assertGreater(PV.score(PILLARS[1], tx("OEE dashboards", "for manufacturing", "oee, kpi", "Instandhaltung Instandhaltung Instandhaltung"), d, ENT)[0], 0)   # zweiter Bezug aus dem Transkript (3 Nennungen)
+        self.assertEqual(PV.score(PILLARS[1], tx("OEE dashboards", "for manufacturing", "oee, kpi", "Fertigung Fertigung Fertigung"), d, ENT)[0], 0)   # Fertigung = manufacturing: dasselbe Konzept
 
     def test_not_rule_and_ignored_topics(self):
         d = doc()
@@ -209,14 +211,156 @@ class PillarPages(unittest.TestCase):
         self.assertIn('pl-vline', files["de/learn/path/manufacturing-excellence/index.html"])
 
 
+class Concepts(unittest.TestCase):
+    """Fertigungsbezug nach Konzepten (nicht nach Treffer-Strings) und Pflicht eines spezifischen Treffers - mit den echten Regeln und Leitfaeden."""
+    @classmethod
+    def setUpClass(cls):
+        import site_pillars as S
+        cls.d, cls.P = PV.load(), {p["id"]: p for p in S.order()}
+
+    def sc(self, pid, t, ent=None):
+        return PV.score(self.P[pid], t, self.d, ent)
+
+    def test_translation_and_inflections_are_one_concept(self):
+        # Copilot-Video mit einem Nebensatz "manufacturing" / "Fertigung" (Branchenbeispiel) und Beugungsformen: kein Fertigungsbezug
+        t = {"title": ["How to Build a Governed Microsoft Copilot Learning Center: KPIs", "", "Copilot-Lernzentrum aufbauen: KPIs"],
+             "desc": ["Adoption KPIs for Copilot. Real-world examples cover e-commerce, support, legal and manufacturing.", "Einsatzfälle von E-Commerce bis Fertigung."],
+             "body": ["kpi, kpis", "", "", ""], "tr": ""}
+        s, why = self.sc("manufacturing-kpis", t, lambda x: ["oee"] if "kpi" in x.lower() else [])
+        self.assertEqual(s, 0, why)
+        t2 = tx("Instandhaltung planen", "Instandhaltungsbedarf und Instandhaltungsleitungen", "instandhaltung")
+        self.assertEqual(self.sc("manufacturing-it-azure", t2)[0], 0)   # drei Formen eines Worts = ein Konzept
+
+    def test_mfg_only_in_body_is_not_enough(self):
+        t = tx("Azure AI Search: Hybrid Search", "Vector and keyword search", "examples: e-commerce, manufacturing, shop floor search, oee")
+        self.assertEqual(self.sc("manufacturing-kpis", t, lambda x: ["oee"] if "oee" in x.lower() else []), (0, ["kein Fertigungsbezug (factory-floor, manufacturing, oee, nur im Text)"]))
+
+    def test_same_term_in_en_and_de_title_counts_once(self):
+        t = {"title": ["Copilot KPIs: Measuring Adoption in Manufacturing Companies", "", "Copilot-KPIs: Einführung in Fertigungsunternehmen messen"],
+             "desc": ["", ""], "body": ["kpis", "", "", ""], "tr": ""}
+        self.assertEqual(self.sc("manufacturing-kpis", t)[0], 0)
+        t = {"title": ["Microsoft Teams Shifts: Scheduling Frontline Workers in Manufacturing", "", "Microsoft Teams Schichten: Frontline-Mitarbeitende in der Fertigung planen"],
+             "desc": ["", ""], "body": ["scheduling", "", "", ""], "tr": ""}
+        self.assertEqual(self.sc("production-scheduling-aps", t)[0], 0)
+
+    def test_generic_re_terms_alone_do_not_count(self):
+        # Fertigungsbezug erfuellt (2 Konzepte im Titel), aber nur allgemeine Woerter aus "re": kein Treffer
+        t = tx("Teams Shifts on the shop floor: scheduling frontline workers in manufacturing", "Scheduling shifts for manufacturing teams", "scheduling, shifts")
+        s, why = self.sc("production-scheduling-aps", t)
+        self.assertEqual(s, 0); self.assertTrue(why[0].startswith("nur allgemeine Begriffe"), why)
+        t = tx("Copilot KPIs on the shop floor in manufacturing", "KPIs for Copilot adoption in manufacturing", "kpis")
+        self.assertEqual(self.sc("manufacturing-kpis", t)[0], 0)
+        # dasselbe mit einem spezifischen Begriff (rules) zaehlt
+        t = tx("Overall equipment effectiveness on the shop floor in manufacturing", "OEE and KPIs in manufacturing", "kpis, oee")
+        self.assertGreaterEqual(self.sc("manufacturing-kpis", t)[0], 6)
+
+    def test_todays_hits_still_pass_without_entities(self):
+        for vid, pid in (("ZY12nBEY2qc", "manufacturing-it-azure"), ("DfWvXDmheKY", "manufacturing-it-azure"), ("6d6FcLfYess", "manufacturing-it-azure"), ("ZPjhQuq0wA0", "production-scheduling-aps")):
+            if not (ROOT / "episodes" / f"{vid}.json").exists(): self.skipTest("Dub-Daten fehlen")
+            s, why = self.sc(pid, PV.texts(vid))
+            self.assertGreaterEqual(s, self.d["min_score"], (vid, why))
+        self.assertLess(self.sc("manufacturing-kpis", PV.texts("AXT4Qac8mQ8"))[0], self.d["min_score"])   # Fabric-Roadmap: kein KPI-Video
+
+
+class HandEdits(unittest.TestCase):
+    """Hand-Eintraege duerfen den Bau nicht stoppen und eine kaputte Datei wird nie ueberschrieben."""
+    def test_missing_videos_key_and_string_entries(self):
+        d = doc(); d["pillars"] = {"kpis": {"blocked": ["v_x"]}, "lean": {"videos": ["v_kpi", 7, {"note": "ohne id"}]}}
+        add = run(d, list(VIDS))
+        self.assertTrue(any(p == "kpis" for p, _, _ in add))
+        self.assertEqual(PV.shown(d, "lean")[0], "v_kpi")   # blosse ID gilt als Eintrag
+        self.assertIn("v_kpi", PV.taken(d))
+
+    def test_invalid_pillar_entry_is_skipped_not_replaced(self):
+        d = doc(); d["pillars"] = {"kpis": ["kaputt"], "lean": {"videos": "auch kaputt"}}
+        msgs = []
+        add = PV.update(d, PILLARS, list(VIDS), "2026-11-25", ENT, texts_fn=lambda v: VIDS[v], out=msgs.append)
+        self.assertEqual(d["pillars"]["kpis"], ["kaputt"]); self.assertEqual(d["pillars"]["lean"]["videos"], "auch kaputt")
+        self.assertEqual([p for p, _, _ in add], ["mfg-it"])
+        self.assertEqual(len(msgs), 2)
+        self.assertEqual(PV.shown(d, "kpis"), [])
+
+    def test_broken_file_is_never_overwritten(self):
+        with tempfile.TemporaryDirectory() as t:
+            f = Path(t) / "pv.json"; f.write_text('{"pillars": {"kpis": {"videos": [{"id": "x", "manual": true},]}}}', "utf-8")   # Komma zu viel
+            msgs = []
+            d = PV.load(f, out=msgs.append)
+            self.assertTrue(msgs and msgs[0].startswith("::warning::"))
+            pages = {"v_oee": {"de": (f"{BASE}/de/oee/", "OEE")}}
+            with mock.patch.object(PV, "texts", lambda v: VIDS[v]):
+                self.assertIsNone(PV.prepare(d, PILLARS, pages, {}, "2026-11-25", ENT, out=msgs.append, path=f))
+            self.assertIn('},]', f.read_text("utf-8"))   # unveraendert (Mirkos Fassung bleibt zum Korrigieren)
+
+    def test_block_at_own_pillar_frees_video_for_others(self):
+        d = doc(); d["pillars"] = {"lean": {"videos": [{"id": "v_ind", "score": 6}], "blocked": ["v_ind"]}}
+        add = run(d, ["v_ind"])
+        self.assertEqual(add[0][:2], ("mfg-it", "v_ind"))
+        self.assertEqual(PV.shown(d, "lean"), [])
+        d2 = doc(blocked=["v_ind"]); self.assertEqual(run(d2, ["v_ind"]), [])   # global gesperrt: nirgends
+
+    def test_step_summary_lists_new_hits(self):
+        with tempfile.TemporaryDirectory() as t:
+            f, sm = Path(t) / "pv.json", Path(t) / "summary.md"
+            pages = {"v_oee": {"de": (f"{BASE}/de/oee/", "OEE erklärt (KI-Synchronfassung)")}}
+            with mock.patch.object(PV, "texts", lambda v: VIDS[v]), mock.patch.dict("os.environ", {"GITHUB_STEP_SUMMARY": str(sm)}):
+                PV.prepare(doc(), PILLARS, pages, {}, "2026-11-25", ENT, out=lambda *a: None, path=f)
+            self.assertIn("`kpis`: [OEE erklärt](https://www.youtube.com/watch?v=v_oee)", sm.read_text("utf-8"))
+
+
+class Titles(unittest.TestCase):
+    def test_clean_title_only_removes_dub_labels(self):
+        self.assertEqual(PV.clean_title("Copilot Studio (Part 2) (KI-Synchronfassung)"), "Copilot Studio (Part 2)")
+        self.assertEqual(PV.clean_title("Loop (Preview)"), "Loop (Preview)")
+        self.assertEqual(PV.clean_title("動画 （AI吹き替え）"), "動画")
+        self.assertEqual(PV.clean_title("X  (Doublage IA)"), "X")
+        import site_meta_podcast as M
+        self.assertLessEqual(set(M.DUB_LABELS), set(PV._DUBS))
+
+
+class PagesIndex(unittest.TestCase):
+    """Aufbau der Videoseiten fuer die Karte (generate_site.py ruft PV.pages_index): Englisch nur die Folge der Hauptshow mit demselben Video."""
+    def test_english_show_page_only_with_same_video(self):
+        dubs = [("v1", "de", f"{BASE}/de/a/", "A (KI-Synchronfassung)"), ("v2", "de", f"{BASE}/de/b/", "B"), ("v3", "de", f"{BASE}/de/c/", "C")]
+        by_slug = {"a": {"url": f"{BASE}/show/episodes/a/", "e": {"title": "A podcast"}, "yt": "v1"},
+                   "b": {"url": f"{BASE}/show/episodes/b/", "e": {"title": "B podcast"}, "yt": "other"},   # anderes Video
+                   "c": {"url": f"{BASE}/show/episodes/c/", "e": {"title": "C podcast"}}}   # nur Audio
+        pg = PV.pages_index(dubs, {"v1": "a", "v2": "b", "v3": "c"}, {"v1": "A"}, by_slug, {"v1": "A en", "v2": "B en", "v3": "C en"})
+        self.assertEqual(pg["v1"]["en"], (f"{BASE}/show/episodes/a/", "A"))
+        for v in ("v2", "v3"): self.assertNotIn("en", pg[v])
+        self.assertEqual(pg["v2"]["yt"], ("https://www.youtube.com/watch?v=v2", "B en"))
+        self.assertEqual(PV.pick("v2", "en", pg), ("https://www.youtube.com/watch?v=v2", "B en", "yt"))
+        self.assertEqual(PV.pick("v2", "ar", pg)[2], "yt")   # keine Dub-Folge der Sprache, keine englische Videoseite: YouTube
+        self.assertEqual(PV.pick("v1", "ar", pg)[2], "en")
+
+    def test_generate_site_hook_is_guarded(self):
+        src = (ROOT / "generate_site.py").read_text("utf-8")
+        i = src.index("import site_pillar_videos as PVID")
+        blk = src[src.rindex("try:", 0, i):src.index("PIL.build(_ctx", i)]
+        self.assertIn("PVID.pages_index(", blk); self.assertIn("except Exception", blk)
+
+
+class Workflow(unittest.TestCase):
+    def test_site_yml_saves_pillar_videos_right_after_build(self):
+        import yaml
+        steps = yaml.safe_load((ROOT / ".github" / "workflows" / "site.yml").read_text("utf-8"))["jobs"]["build"]["steps"]
+        i = next(k for k, st in enumerate(steps) if (st.get("run") or "").strip() == "python generate_site.py")
+        st = steps[i + 1]
+        self.assertIn("data/pillar_videos.json", st["run"])
+        self.assertIn("always()", st["if"]); self.assertIn("refs/heads/main", st["if"])
+        self.assertNotIn("-X theirs", st["run"])   # Hand-Aenderungen waehrend des Baus gewinnen
+        self.assertIn("git push", st["run"])
+
+
 class DataFile(unittest.TestCase):
     def test_real_file_is_consistent(self):
         import site_pillars as S
         d = PV.load()
+        self.assertNotIn("_error", d)
         ids = {p["id"] for p in S.pillars()}
         self.assertLessEqual(set(d["pillars"]), ids)
         self.assertLessEqual(set(d["rules"]), ids)
-        for r in [d["context"].get("en"), d["context"].get("de")] + [v for x in d["rules"].values() for k, v in x.items() if k in ("en", "de", "not")]:
+        self.assertGreaterEqual(len(d["context"]), 5); self.assertFalse(set(d["context"]) <= {"en", "de"}, "context: Konzepte, nicht Sprachen")
+        for r in list(d["context"].values()) + [v for x in d["rules"].values() for k, v in x.items() if k in ("en", "de", "not")]:
             self.assertIsNotNone(PV._rx(r))
         flat = [e["id"] for v in d["pillars"].values() for e in v["videos"]]
         self.assertEqual(len(flat), len(set(flat)), "Video doppelt zugeordnet")
@@ -224,6 +368,9 @@ class DataFile(unittest.TestCase):
         for v in d["pillars"].values():
             for e in v["videos"]:
                 if not e.get("manual"): self.assertGreaterEqual(e["score"], d["min_score"]); self.assertRegex(e["date"], r"^\d{4}-\d{2}-\d{2}$")
+        # Fabric-Roadmap haengt bei Manufacturing IT (von Hand), nicht bei den Kennzahlen
+        self.assertIn("AXT4Qac8mQ8", PV.shown(d, "manufacturing-it-azure"))
+        self.assertNotIn("AXT4Qac8mQ8", PV.shown(d, "manufacturing-kpis")); self.assertIn("AXT4Qac8mQ8", d["pillars"]["manufacturing-kpis"]["blocked"])
 
 
 if __name__ == "__main__":

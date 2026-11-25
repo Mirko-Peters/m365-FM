@@ -1691,17 +1691,16 @@ def build():
     import site_pillars as PIL   # Pillar-Kompendien und Lernpfad (imports/pillars, data/pillars.json): Zuordnung der Beitraege vor dem Blog (Kasten "Teil des Lernpfads")
     PIL.assign(_posts)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
-    import site_pillar_videos as PVID   # Passende Sticky-Man-Videos je Leitfaden (data/pillar_videos.json): neue Videos pruefen, Treffer anhaengen, Karte auf den Leitfaden
-    _pvp = {}   # Video -> {Sprache: (Videoseite, Titel)}: Dub-Folgenseiten, englisch die Folge der Hauptshow zum selben Video
-    for (_v, _l), _it in items.items(): _pvp.setdefault(_v, {})[_l] = (url_of(_it), _it["e"]["title"])
-    _pbs = _PPs.episode_index(BASE)["by_slug"]
-    for _v, _sl in ORIG.items():
-        if _sl in _pbs: _pvp.setdefault(_v, {})["en"] = (_pbs[_sl]["url"], ORIG_T.get(_v) or _pbs[_sl]["e"]["title"])
-    for _v in _pvp:   # ohne englische Seite: das Video auf YouTube mit seinem englischen Originaltitel (data/en_titles.json)
-        if _et.get(_v): _pvp[_v]["yt"] = (f"https://www.youtube.com/watch?v={_v}", _et[_v])
-    _pvm = _EMX
-    _ctx["pillar_videos"] = PVID.prepare(PVID.load(), PIL.order(), _pvp, {_v: (videos.get(_v) or {}).get("date") for _v in _pvp}, TODAY,
-                                         ent_ids=lambda s: list(_pvm.ids(s, "en", set())), ld_urls={url_of(_it) for _it in items.values()}, r2map=R2.MAP, dims=R2._dims())
+    try:   # Passende Sticky-Man-Videos je Leitfaden (data/pillar_videos.json): neue Videos pruefen, Treffer anhaengen, Karte auf den Leitfaden.
+        import site_pillar_videos as PVID   # Ein Fehler hier kostet nur die Karte, nicht den Bau (Hand-Eintraege in der Datei)
+        _pvp = PVID.pages_index([(_v, _l, url_of(_it), _it["e"]["title"]) for (_v, _l), _it in items.items()], ORIG, ORIG_T, _PPs.episode_index(BASE)["by_slug"], _et)
+        _pvm = _EMX
+        _pvx = PVID.prepare(PVID.load(), PIL.order(), _pvp, {_v: (videos.get(_v) or {}).get("date") for _v in _pvp}, TODAY,
+                            ent_ids=lambda s: list(_pvm.ids(s, "en", set())), ld_urls={url_of(_it) for _it in items.values()}, r2map=R2.MAP, dims=R2._dims())
+        if _pvx: _ctx["pillar_videos"] = _pvx
+    except Exception as _ex:
+        print(f"::warning::Passende Videos: {type(_ex).__name__}: {_ex} - Leitfaeden ohne Karte")
+        _ctx.pop("pillar_videos", None)
     PIL.build(_ctx, _posts, LRN.ENTS)
     import site_library as LIB
     LIB.build(_ctx, LIB.fetch_items(COMMUNITY_API), _people, COMMUNITY_API)

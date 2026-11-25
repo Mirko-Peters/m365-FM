@@ -3,17 +3,25 @@
 Zuordnung ohne KI: Titel, SEO-Texte (data/video_seo/en.json.gz), deutscher Titel, Beschreibung und Tags der Dub-Folge (episodes/<id>.json) und das deutsche
 Transkript (transcripts/de/<id>.vtt) werden gegen die Muster des Leitfadens geprueft: "re" und "topics" aus data/pillars.json plus die Video-Muster
 "rules" aus data/pillar_videos.json (englisch und deutsch). Gewichte: Treffer im Titel 4, in der Kurzbeschreibung 2, im uebrigen Text je Begriff 1
-(hoechstens 2), im Transkript je Begriff mit mindestens 3 Nennungen 1 (hoechstens 2). Ein Video zaehlt nur mit Fertigungsbezug ("context": z. B.
-manufacturing, shop floor, Fertigung, Instandhaltung) - so wird "lean" in einem SharePoint-Video oder "KPI" in einem Copilot-Video kein Treffer.
-Aufgenommen wird ab "min_score" Punkten; lieber kein Video als ein unpassendes.
+(hoechstens 3), im Transkript je Begriff mit mindestens 3 Nennungen 1 (hoechstens 2), +2 wenn der Fertigungsbezug schon im Titel steht.
+Ein Video zaehlt nur, wenn alle drei Bedingungen gelten:
+  - Fertigungsbezug: mindestens 2 verschiedene Konzepte aus "context" (Konzept -> Muster, englisch und deutsch in einem Muster; manufacturing und
+    Fertigung sind EIN Konzept, Beugungsformen auch), davon mindestens eines im Titel oder in der Kurzbeschreibung oder 3-mal im Transkript.
+    So wird ein Nebensatz "Beispiele aus Handel und Fertigung" in einem Copilot-Video kein Fertigungsbezug.
+  - ein spezifischer Treffer: ein Muster aus "rules" oder ein Thema (Entitaet) des Leitfadens, nicht nur ein allgemeines Wort aus "re"
+    (kpis, scheduling, lean, iot) - so wird "KPI" in einem Copilot-Video oder "Scheduling" in einem Teams-Shifts-Video kein Treffer.
+  - mindestens "min_score" Punkte; lieber kein Video als ein unpassendes.
 
 Speicher: data/pillar_videos.json
-  {"max": 4, "min_score": 6, "context": {"en": Muster, "de": Muster}, "rules": {pillar-id: {"en": Muster, "de": Muster}}, "blocked": [video-id, ...],
-   "pillars": {pillar-id: {"videos": [{"id", "score", "date", "title"} | {"id", "manual": true}], "blocked": [video-id, ...]}}}
+  {"max": 4, "min_score": 6, "context": {Konzept: Muster}, "rules": {pillar-id: {"en": Muster, "de": Muster, "not": Titelmuster, "ignore_topics": [...]}},
+   "blocked": [video-id, ...], "pillars": {pillar-id: {"videos": [{"id", "score", "date", "title"} | {"id", "manual": true}], "blocked": [video-id, ...]}}}
 Regeln (stabil, "einmalig"): Eintraege werden nie umsortiert oder entfernt. Neue Videos werden beim Seitenbau geprueft und nur angehaengt, solange
 der Leitfaden weniger als "max" Eintraege hat; ein Video steht hoechstens bei einem Leitfaden. Von Hand: {"id": ..., "manual": true} steht immer
-(auch ueber "max"), "blocked" (je Leitfaden oder global) sperrt ein Video - es wird nicht mehr zugeordnet und nicht angezeigt.
-Der Seitenbau schreibt die Datei nur, wenn etwas angehaengt wurde; site.yml sichert sie mit den uebrigen Daten des Baus.
+(auch ueber "max"); "blocked" je Leitfaden sperrt ein Video dort (es wird dort nicht angezeigt und nicht mehr zugeordnet, darf aber zu einem anderen
+Leitfaden), "blocked" ganz oben sperrt es ueberall. Eine kaputte Datei (ungueltiges JSON) wird nicht ueberschrieben: der Bau meldet eine Warnung und
+zeigt keine Karten. Der Seitenbau schreibt die Datei nur, wenn etwas angehaengt wurde; site.yml sichert sie im Schritt direkt nach generate_site.py.
+Hand-Aenderungen nicht waehrend eines laufenden Seitenbaus committen: bei einem Konflikt verwirft der Bau seine neuen Treffer (der naechste Bau
+rechnet sie auf der Hand-Fassung neu), die Hand-Fassung bleibt.
 
 Kommandozeile (ohne Netz, ohne KI): python site_pillar_videos.py measure  -> Punkte je Leitfaden und Video, nichts wird geschrieben
                                     python site_pillar_videos.py assign   -> wie der Seitenbau: neue Treffer anhaengen und speichern"""
@@ -30,16 +38,44 @@ W_TITLE, W_DESC, CAP_BODY, CAP_TR, TR_MIN, W_CTX, CTX_MIN = 4, 2, 3, 2, 3, 2, 2
 
 
 # ---------- Daten ----------
-def load(path=None):
-    try: d = json.loads(Path(path or FILE).read_text("utf-8"))
-    except (OSError, ValueError): d = {}
+def load(path=None, out=print):
+    """Datei lesen. Fehlt sie oder ist sie kaputt, gibt es eine Warnung und ein leeres Dokument mit "_error": prepare() schreibt es dann nie zurueck
+    (eine Hand-Aenderung mit Tippfehler darf nicht durch eine neu gerechnete Fassung ersetzt werden)."""
+    f = Path(path or FILE)
+    try:
+        d = json.loads(f.read_text("utf-8"))
+        if not isinstance(d, dict): raise ValueError("kein JSON-Objekt")
+    except (OSError, ValueError) as ex:
+        out(f"::warning::{f.name} nicht lesbar ({type(ex).__name__}: {ex}) - keine Karte 'Passende Videos', die Datei bleibt unveraendert")
+        d = {"_error": str(ex)}
     d.setdefault("max", 4); d.setdefault("min_score", 6); d.setdefault("blocked", []); d.setdefault("pillars", {})
     d.setdefault("rules", {}); d.setdefault("context", {})
     return d
 
 
 def save(doc, path=None):
-    Path(path or FILE).write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    Path(path or FILE).write_text(json.dumps({k: v for k, v in doc.items() if k != "_error"}, ensure_ascii=False, indent=1) + "\n", "utf-8")
+
+
+def _ids(x):
+    """Liste von Video-IDs aus einem Hand-Eintrag (Liste oder einzelne ID)."""
+    if isinstance(x, str): return {x}
+    return {v for v in x if isinstance(v, str)} if isinstance(x, (list, tuple, set)) else set()
+
+
+def _entries(d):
+    """Eintraege eines Leitfadens als dicts: eine blosse ID ("abc") gilt als {"id": "abc"}, alles andere ohne ID wird uebergangen."""
+    vs = d.get("videos") if isinstance(d, dict) else None
+    out = []
+    for e in vs if isinstance(vs, list) else []:
+        if isinstance(e, str): e = {"id": e}
+        if isinstance(e, dict) and isinstance(e.get("id"), str) and e["id"]: out.append(e)
+    return out
+
+
+def _pl(doc, pid):
+    d = (doc.get("pillars") or {}).get(pid) if isinstance(doc.get("pillars"), dict) else None
+    return d if isinstance(d, dict) else {}
 
 
 def _rx(pat):
@@ -70,7 +106,7 @@ def texts(vid, root=ROOT):
     dd = _strip(de.get("desc"))
     try: tr = _vtt_text((root / "transcripts" / "de" / f"{vid}.vtt").read_text("utf-8"))
     except OSError: tr = ""
-    return {"title": [_CACHE["en"].get(vid) or "", s.get("t") or "", re.sub(r"\s*\(KI-Synchronfassung\)\s*$", "", de.get("title") or "")],
+    return {"title": [_CACHE["en"].get(vid) or "", s.get("t") or "", clean_title(de.get("title") or "")],
             "desc": [s.get("d") or "", dd[:400]],
             "body": [s.get("u") or "", " | ".join(str(c[1]) for c in s.get("c") or [] if isinstance(c, (list, tuple)) and len(c) > 1), de.get("tags") or "", dd[400:]],
             "tr": tr}
@@ -84,12 +120,43 @@ def _hits(rxs, s):
     return out
 
 
+def _often(rxs, s):
+    """Begriffe, die im Text mindestens TR_MIN-mal vorkommen."""
+    n = {}
+    for r in rxs:
+        if r:
+            for m in r.finditer(s or ""): n[m.group(0).lower()] = n.get(m.group(0).lower(), 0) + 1
+    return {k for k, c in n.items() if c >= TR_MIN}
+
+
+def _concepts(doc):
+    """Fertigungskonzepte aus "context": {Konzept: Muster}. Jedes Konzept zaehlt einmal, egal in welcher Sprache und Form es vorkommt."""
+    return [(k, _rx(v)) for k, v in sorted((doc.get("context") or {}).items()) if isinstance(v, str) and v]
+
+
+def _ctx_in(cons, s, often=False):
+    out = set()
+    for k, r in cons:
+        n = len(r.findall(s or ""))
+        if n >= (TR_MIN if often else 1): out.add(k)
+    return out
+
+
+def _memo(fn):
+    if not fn: return None
+    m = {}
+    def f(s):
+        if s not in m: m[s] = list(fn(s))
+        return m[s]
+    return f
+
+
 def score(p, tx, doc, ent_ids=None):
     """Punkte eines Videos fuer einen Leitfaden -> (punkte, gruende). tx: texts(); ent_ids(text) -> Entitaets-IDs (Themen des Leitfadens, optional)."""
     ru = (doc.get("rules") or {}).get(p["id"]) or {}
-    rxs = [_rx(p.get("re")), _rx(ru.get("en")), _rx(ru.get("de"))]
-    cx = doc.get("context") or {}
-    crx = [_rx(cx.get("en")), _rx(cx.get("de"))]
+    rule_rx = [_rx(ru.get("en")), _rx(ru.get("de"))]
+    rxs = [_rx(p.get("re"))] + rule_rx
+    cons = _concepts(doc)
     topics = set(p.get("topics") or []) - set(ru.get("ignore_topics") or [])
     ts, ds, bs = (" · ".join(x for x in tx.get(k) or [] if x) for k in ("title", "desc", "body"))
     tr = tx.get("tr") or ""
@@ -98,16 +165,17 @@ def score(p, tx, doc, ent_ids=None):
         h = _hits(rxs, s)
         if ent_ids and topics: h |= {"#" + t for t in set(ent_ids(s)) & topics}
         return h
-    def often(r_list, s):
-        n = {}
-        for r in r_list:
-            if r:
-                for m in r.finditer(s): n[m.group(0).lower()] = n.get(m.group(0).lower(), 0) + 1
-        return {k for k, c in n.items() if c >= TR_MIN}
-    th, dh, bh, trh = lvl(ts), lvl(ds), lvl(bs), often(rxs, tr)
-    ct = _hits(crx, ts)
-    ctx = _hits(crx, " · ".join((ts, ds, bs))) | often(crx, tr)
-    if len(ctx) < CTX_MIN: return 0, ["kein Fertigungsbezug" + (f" ({', '.join(sorted(ctx))})" if ctx else "")]
+    th, dh, bh, trh = lvl(ts), lvl(ds), lvl(bs), _often(rxs, tr)
+    ck = ("_cx", tuple(r.pattern for _, r in cons))   # Fertigungskonzepte haengen nicht vom Leitfaden ab: einmal je Video und Regelstand
+    if ck not in tx:
+        t_ = _ctx_in(cons, ts)
+        tx[ck] = (t_, t_ | _ctx_in(cons, ds) | _ctx_in(cons, tr, True), _ctx_in(cons, bs))
+    ct, anchor, cb = tx[ck]   # im Titel; im Titel, in der Kurzbeschreibung oder 3-mal im Transkript; im uebrigen Text
+    ctx = anchor | cb
+    if len(ctx) < CTX_MIN or not anchor:
+        return 0, ["kein Fertigungsbezug" + (f" ({', '.join(sorted(ctx))}{'' if anchor else ', nur im Text'})" if ctx else "")]
+    spec = {h for h in th | dh | bh if h.startswith("#")} | _hits(rule_rx, " · ".join((ts, ds, bs))) | _often(rule_rx, tr)
+    if not spec: return 0, ["nur allgemeine Begriffe (" + ", ".join(sorted(th | dh | bh | trh)) + ")" if th | dh | bh | trh else "kein Treffer"]
     sc = (W_TITLE if th else 0) + (W_DESC if dh else 0) + min(CAP_BODY, len(bh)) + min(CAP_TR, len(trh))
     if sc and ct: sc += W_CTX   # Fertigung steht schon im Titel
     why = [f"{k}: {', '.join(sorted(v))}" for k, v in (("Titel", th), ("Beschreibung", dh), ("Text", bh), ("Transkript", trh), ("Fertigung im Titel", ct)) if v]
@@ -116,26 +184,34 @@ def score(p, tx, doc, ent_ids=None):
 
 # ---------- Zuordnung (nur anhaengen) ----------
 def taken(doc):
-    """Video-IDs, die schon bei einem Leitfaden stehen (auch von Hand)."""
-    return {e.get("id") for v in (doc.get("pillars") or {}).values() for e in v.get("videos") or []}
+    """Video-IDs, die schon bei einem Leitfaden stehen (auch von Hand). Ein beim eigenen Leitfaden gesperrtes Video ist frei fuer andere Leitfaeden."""
+    pls = doc.get("pillars") if isinstance(doc.get("pillars"), dict) else {}
+    return {e["id"] for v in pls.values() for e in _entries(v) if e["id"] not in _ids(v.get("blocked") or [])}
 
 
-def update(doc, pillars, videos, today, ent_ids=None, texts_fn=None, title_fn=None):
+def update(doc, pillars, videos, today, ent_ids=None, texts_fn=None, title_fn=None, out=print):
     """Prueft alle noch nicht zugeordneten Videos (videos: IDs mit Seite, aelteste zuerst) und haengt Treffer an. Bestehende Eintraege bleiben,
     wie sie sind. Vergeben wird nach Punkten (hoechste zuerst, bei Gleichstand das aeltere Video und der fruehere Leitfaden im Pfad); ein Video geht
     an den besten Leitfaden, der noch Platz hat (weniger als max angezeigte Eintraege, von Hand gesetzte zaehlen mit).
     Rueckgabe: [(pillar-id, video-id, punkte)] der neuen Eintraege in der Reihenfolge, in der sie angehaengt wurden."""
-    pl = doc.setdefault("pillars", {})
-    for p in pillars: pl.setdefault(p["id"], {"videos": [], "blocked": []})
+    if doc.get("_error"): return []
+    if not isinstance(doc.get("pillars"), dict): out("::warning::pillar_videos.json: 'pillars' ist kein Objekt - nichts angehaengt"); return []
+    pl = doc["pillars"]
+    ok = []   # Leitfaeden, an die angehaengt werden kann (ein von Hand verbogener Eintrag wird nicht ersetzt, nur uebergangen)
+    for p in pillars:
+        d = pl.setdefault(p["id"], {"videos": [], "blocked": []})
+        if not isinstance(d, dict) or not isinstance(d.setdefault("videos", []), list):
+            out(f"::warning::pillar_videos.json: Eintrag '{p['id']}' hat kein gueltiges 'videos' - dort wird nichts angehaengt"); continue
+        ok.append(p)
     mx, ms = int(doc.get("max") or 4), int(doc.get("min_score") or 6)
-    gblock, used, added = set(doc.get("blocked") or []), taken(doc), []
-    texts_fn = texts_fn or texts
+    gblock, used, added = _ids(doc.get("blocked") or []), taken(doc), []
+    texts_fn, ent_ids = texts_fn or texts, _memo(ent_ids)   # Entitaeten je Text nur einmal (gleicher Text fuer alle Leitfaeden)
     cand = []
     for k, vid in enumerate(videos):
         if vid in used or vid in gblock: continue
         tx = texts_fn(vid)
-        for i, p in enumerate(pillars):
-            if vid in set(pl[p["id"]].get("blocked") or []): continue
+        for i, p in enumerate(ok):
+            if vid in _ids(pl[p["id"]].get("blocked") or []): continue
             s, _ = score(p, tx, doc, ent_ids)
             if s >= ms: cand.append((-s, k, i, vid, p["id"], s))
     for _, _, _, vid, pid, s in sorted(cand):
@@ -149,12 +225,11 @@ def update(doc, pillars, videos, today, ent_ids=None, texts_fn=None, title_fn=No
 
 def shown(doc, pid):
     """Video-IDs, die der Leitfaden zeigt: Reihenfolge der Datei, ohne gesperrte, jede ID einmal."""
-    d = (doc.get("pillars") or {}).get(pid) or {}
-    bl = set(d.get("blocked") or []) | set(doc.get("blocked") or [])
+    d = _pl(doc, pid)
+    bl = _ids(d.get("blocked") or []) | _ids(doc.get("blocked") or [])
     out = []
-    for e in d.get("videos") or []:
-        v = e.get("id")
-        if v and v not in bl and v not in out: out.append(v)
+    for e in _entries(d):
+        if e["id"] not in bl and e["id"] not in out: out.append(e["id"])
     return out
 
 
@@ -251,14 +326,48 @@ def ld_refs(doc, pid, lang, pages, has_ld):
     return [{"@id": u + "#video"} for _, u, _, l in items(doc, pid, lang, pages) if l != "yt" and has_ld(u)]
 
 
+def pages_index(dubs, orig, orig_t, by_slug, en_titles):
+    """Videoseiten je Video fuer die Karte: vid -> {sprache: (url, titel)}.
+    dubs: [(vid, sprache, url, titel)] der Dub-Folgenseiten; orig: vid -> Slug der englischen Folge der Hauptshow (Zuordnung ueber den Titel),
+    by_slug: Slug -> Folge der Hauptshow ({"url", "e": {"title"}, "yt"}), en_titles: vid -> englischer Originaltitel.
+    Englisch gilt die Folge der Hauptshow nur, wenn sie genau dieses Video zeigt ("yt" = vid) - sonst waere die Karte "Video" eine Audio-Folge
+    oder ein anderes Video; dann (und ganz ohne englische Folge) verlinkt die Karte das Video auf YouTube mit seinem englischen Originaltitel ("yt")."""
+    pages = {}
+    for vid, lang, u, t in dubs: pages.setdefault(vid, {})[lang] = (u, t)
+    for vid, sl in (orig or {}).items():
+        it = (by_slug or {}).get(sl)
+        if it and it.get("yt") == vid and it.get("url"):
+            pages.setdefault(vid, {})["en"] = (it["url"], (orig_t or {}).get(vid) or (it.get("e") or {}).get("title") or "")
+    for vid in pages:
+        if (en_titles or {}).get(vid): pages[vid]["yt"] = (f"https://www.youtube.com/watch?v={vid}", en_titles[vid])
+    return pages
+
+
+def _summary(add, titles, out):
+    """Neue automatische Treffer zusaetzlich in der Zusammenfassung des Laufs ($GITHUB_STEP_SUMMARY), damit Mirko sie sieht und notfalls sperrt."""
+    import os
+    f = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not add or not f: return
+    try:
+        with open(f, "a", encoding="utf-8") as h:
+            h.write("### Passende Lernpfad-Videos: neu zugeordnet\n\n" + "".join(f"- `{pid}`: [{titles.get(vid) or vid}](https://www.youtube.com/watch?v={vid}) ({s} Punkte)\n" for pid, vid, s in add)
+                    + "\nSperren: Video-ID in `pillars.<leitfaden>.blocked` von `data/pillar_videos.json` eintragen.\n\n")
+    except OSError as ex: out(f"Passende Videos: Zusammenfassung nicht geschrieben ({ex})")
+
+
 def prepare(doc, pillars, pages, dates, today, ent_ids=None, ld_urls=(), r2map=None, dims=None, out=print, path=None):
     """Seitenbau: neue Videos pruefen und anhaengen (Datei nur bei Aenderung schreiben), dann den Kontext fuer site_pillars.build.
-    pages: vid -> {sprache: (url, titel)} aller Videos mit Seite; dates: vid -> Datum (aelteste zuerst geprueft)."""
+    pages: vid -> {sprache: (url, titel)} aller Videos mit Seite; dates: vid -> Datum (aelteste zuerst geprueft). Kaputte Datei (doc["_error"]): nichts."""
+    if doc.get("_error"):
+        out("Passende Videos: Datei nicht lesbar, keine Karten (" + str(doc["_error"]) + ")")
+        return None
     order = sorted(pages, key=lambda v: (dates.get(v) or "9999", v))
-    add = update(doc, pillars, order, today, ent_ids, title_fn=lambda v: clean_title((pages[v].get("en") or pages[v].get("de") or next(iter(pages[v].values())))[1]))
+    tit = lambda v: clean_title((pages[v].get("en") or pages[v].get("de") or next(iter(pages[v].values())))[1])
+    add = update(doc, pillars, order, today, ent_ids, title_fn=tit, out=out)
     if add:
         try: save(doc, path)
-        except OSError as ex: out(f"Passende Videos: Datei nicht gespeichert ({ex})")
+        except OSError as ex: out(f"::warning::Passende Videos: Datei nicht gespeichert ({ex})")
+        _summary(add, {v: tit(v) for _, v, _ in add}, out)
     out(f"Passende Videos: {len(add)} neu zugeordnet" + "".join(f"; {pid} + {vid} ({s})" for pid, vid, s in add) + " | je Leitfaden: " + ", ".join(f"{p['id']} {len(shown(doc, p['id']))}" for p in pillars))
     return {"doc": doc, "pages": pages, "ld": set(ld_urls), "r2": r2map or {}, "dims": dims or {}}
 
@@ -272,9 +381,16 @@ def _all_videos(root=ROOT):
     return sorted(ids, key=lambda x: ((v.get(x) or {}).get("date") or "9999", x))
 
 
+# Zusaetze der Dub-Titel ("Titel (KI-Synchronfassung)"), wie site_meta_podcast.DUB_LABELS, dazu die indischen Sprachen der Dub-Dateien
+_DUBS = ("KI-Synchronfassung", "Doblaje IA", "Doublage IA", "Doppiaggio IA", "Dublagem IA", "AI-nasynchronisatie", "Dubbing AI", "Sulih Suara AI", "ИИ-дубляж",
+         "ШІ-дубляж", "دبلجة بالذكاء الاصطناعي", "דיבוב AI", "AI吹き替え", "AI 더빙", "AI डबिंग", "AI ഡബ്ബിംഗ്", "AI டப்பிங்", "AI డబ్బింగ్", "AI ਡਬਿੰਗ")
+_DUB_RX = re.compile(r"\s*[（(]\s*(?:" + "|".join(re.escape(x) for x in _DUBS) + r")\s*[)）]\s*$", re.I)
+
+
 def clean_title(t):
-    """Titel ohne Zusatz in Klammern am Ende ("(KI-Synchronfassung)", "(Doublage IA)", "（AI吹き替え）") und ohne doppelte Leerzeichen."""
-    return re.sub(r"\s+", " ", re.sub(r"\s*[(（][^()（）]*[)）]\s*$", "", _strip(t))).strip()
+    """Titel ohne Dub-Zusatz am Ende ("(KI-Synchronfassung)", "(Doublage IA)", "（AI吹き替え）") und ohne doppelte Leerzeichen; andere Klammern
+    ("(Part 2)", "(Preview)") bleiben."""
+    return re.sub(r"\s+", " ", _DUB_RX.sub("", _strip(t))).strip()
 
 
 def _title(vid):
@@ -295,7 +411,8 @@ def main(argv):
     from datetime import date
     import site_pillars as PIL
     cmd = argv[1] if len(argv) > 1 else "measure"
-    doc, pills, ent = load(), PIL.order(), _ents()
+    doc, pills, ent = load(), PIL.order(), _memo(_ents())
+    if doc.get("_error"): return 1
     try: pub = {k.split(":")[0] for k in json.loads((ROOT / "data" / "published.json").read_text("utf-8"))}
     except (OSError, ValueError): pub = set()
     vids = [v for v in _all_videos() if v in pub]   # nur Videos mit Folgenseite (wie im Seitenbau)

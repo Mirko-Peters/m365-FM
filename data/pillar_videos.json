@@ -1,10 +1,18 @@
 {
- "_": "Passende Sticky-Man-Videos je Leitfaden des Lernpfads (site_pillar_videos.py). Eintraege bleiben stehen; der Seitenbau haengt neue Treffer nur an (hoechstens max je Leitfaden, ab min_score Punkten, jedes Video nur einmal). Von Hand: {\"id\": \"<YouTube-ID>\", \"manual\": true} in videos ergaenzen (steht immer), Video-ID in blocked (je Leitfaden oder ganz oben) sperrt es. rules: zusaetzliche Muster fuer Videos (englisch/deutsch) neben re und topics aus data/pillars.json; context: Fertigungsbezug, ohne den kein Video zaehlt.",
+ "_": "Passende Sticky-Man-Videos je Leitfaden des Lernpfads (site_pillar_videos.py). Eintraege bleiben stehen; der Seitenbau haengt neue Treffer nur an (hoechstens max je Leitfaden, ab min_score Punkten, jedes Video nur einmal). Von Hand: {\"id\": \"<YouTube-ID>\", \"manual\": true} in videos ergaenzen (steht immer), Video-ID in blocked des Leitfadens sperrt es dort (es darf dann zu einem anderen Leitfaden), blocked ganz oben sperrt es ueberall. rules: zusaetzliche Muster fuer Videos (englisch/deutsch) neben re und topics aus data/pillars.json - ein Video braucht mindestens einen Treffer aus rules oder ein Thema des Leitfadens; not: Titelmuster, das ausschliesst. context: Fertigungskonzepte (Konzept -> Muster, beide Sprachen in einem Muster); ein Video braucht 2 verschiedene Konzepte, eines davon im Titel, in der Kurzbeschreibung oder 3-mal im Transkript. Nicht waehrend eines laufenden Seitenbaus committen (bei Konflikt verwirft der Bau seine neuen Treffer).",
  "max": 4,
  "min_score": 6,
  "context": {
-  "en": "manufactur\\w*|factory floors?|factories|plant floors?|shop ?floors?|industrial|production (?:lines?|planning|orders?|scheduling|control|plants?|floors?|machines?)|bill of materials|predictive maintenance|asset maintenance|work centers?|assembly lines?|oee|mes|ot (?:networks?|data|systems?)|scada|opc ua|industry 4\\.0",
-  "de": "fertigung\\w*|fabrikhalle\\w*|werkshalle\\w*|werks-\\w+|produktionsplanung\\w*|produktionslinie\\w*|produktionsentscheidung\\w*|produktionsauftr\\w*|produktionssteuerung|fertigungsauftr\\w*|instandhaltung\\w*|industrie 4\\.0|industrielle\\w*|stückliste\\w*|shopfloor\\w*|schichtwechsel\\w*|maschinenausfall\\w*|anlageneffektivität"
+  "manufacturing": "manufactur\\w*|fertigung\\w*",
+  "factory-floor": "factory floors?|factories|plant floors?|shop ?floors?|shopfloor\\w*|fabrikhalle\\w*|werkshalle\\w*|werks-\\w+",
+  "industrial": "industrial|industry 4\\.0|industrielle\\w*|industrie 4\\.0",
+  "production": "production (?:lines?|planning|orders?|scheduling|control|plants?|floors?|machines?)|work centers?|assembly lines?|produktionsplanung\\w*|produktionslinie\\w*|produktionsentscheidung\\w*|produktionsauftr\\w*|produktionssteuerung",
+  "bill-of-materials": "bill of materials|stückliste\\w*",
+  "maintenance": "predictive maintenance|asset maintenance|instandhaltung\\w*|maschinenausfall\\w*",
+  "oee": "oee|anlageneffektivität",
+  "mes": "mes",
+  "ot": "ot (?:networks?|data|systems?)|scada|opc ua",
+  "shift-change": "schichtwechsel\\w*"
  },
  "rules": {
   "lean-manufacturing": {
@@ -68,15 +76,10 @@
    "blocked": []
   },
   "manufacturing-kpis": {
-   "videos": [
-    {
-     "id": "AXT4Qac8mQ8",
-     "score": 6,
-     "date": "2026-11-25",
-     "title": "Bessere Produktionsentscheidungen: Roadmap für Hersteller vom ersten Anwendungsfall zur Microsoft-Fabric-Datenplattform"
-    }
-   ],
-   "blocked": []
+   "videos": [],
+   "blocked": [
+    "AXT4Qac8mQ8"
+   ]
   },
   "production-scheduling-aps": {
    "videos": [
@@ -116,6 +119,12 @@
      "score": 10,
      "date": "2026-11-25",
      "title": "Dynamics 365 Supply Chain Management Simply Explained"
+    },
+    {
+     "id": "AXT4Qac8mQ8",
+     "manual": true,
+     "title": "Bessere Produktionsentscheidungen: Roadmap für Hersteller vom ersten Anwendungsfall zur Microsoft-Fabric-Datenplattform",
+     "note": "von Hand umgehaengt (vor dem ersten Deploy): Thema Fabric-Datenplattform passt zu Manufacturing IT, nicht zu den Kennzahlen"
     }
    ],
    "blocked": []
