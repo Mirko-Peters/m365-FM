@@ -344,8 +344,7 @@ class Workflow(unittest.TestCase):
         import yaml
         steps = yaml.safe_load((ROOT / ".github" / "workflows" / "site.yml").read_text("utf-8"))["jobs"]["build"]["steps"]
         i = next(k for k, st in enumerate(steps) if (st.get("run") or "").strip() == "python generate_site.py")
-        st = steps[i + 1]
-        self.assertIn("data/pillar_videos.json", st["run"])
+        st = next(s for s in steps[i + 1:i + 3] if "data/pillar_videos.json" in (s.get("run") or ""))   # direkt nach dem Bau (neben dem Sicherungsschritt der aehnlichen Folgen)
         self.assertIn("always()", st["if"]); self.assertIn("refs/heads/main", st["if"])
         self.assertNotIn("-X theirs", st["run"])   # Hand-Aenderungen waehrend des Baus gewinnen
         self.assertIn("git push", st["run"])
