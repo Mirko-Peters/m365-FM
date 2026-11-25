@@ -1,3 +1,4 @@
+import { rawDb } from "./d1meter.js";
 const now = () => Math.floor(Date.now() / 1000);
 const EID = /^[a-z0-9-]{2,48}$/;
 const LANG = /^[a-z]{2}$/;
@@ -78,7 +79,7 @@ export async function recordGeocodeStatus(db, geo, address = geo?.geo_address ||
 }
 
 export async function ensureDirectoryCols(db) {
-  if (ready.has(db)) return;
+  if (ready.has(rawDb(db))) return;
   for (const [table, column] of [
     ["profile_private", "map_public INTEGER NOT NULL DEFAULT 0"],
     ["profile_private", "lat REAL"],
@@ -111,7 +112,7 @@ export async function ensureDirectoryCols(db) {
       ]);
     }
   } catch {}
-  ready.add(db);
+  ready.add(rawDb(db));
 }
 
 function inBbox(item, bbox) {

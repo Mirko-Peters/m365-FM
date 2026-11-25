@@ -1095,6 +1095,8 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
     assert.equal((await importSearchIndex(env)).changed, 0);
     assert.equal((await importSearchIndex(env)).changed, 0);
     assert.equal(indexWrites(), before, "unveraenderte Dokumente werden nicht erneut geschrieben");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_title_norm_done'").get().v, "1", "Titel-Nachfuellung ist erledigt und entfaellt kuenftig");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, "0", "geaenderter Import weckt den Vektor-Abgleich");
 
     raw.prepare("UPDATE search_doc SET title_norm='' WHERE id=?").run(docs[0].id);
     const beforeTitleNormBackfill = indexWrites();
@@ -1353,9 +1355,12 @@ test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektor
   assert.equal(raw.prepare("SELECT vid FROM search_vector WHERE id=?").get(docs[0].id).vid, upserts[0].id);
 
   raw.prepare("UPDATE search_doc SET h='changed' WHERE id=?").run(docs[0].id);
+  assert.deepEqual(await syncSearchVectors(env), { skipped: "unveraendert", processed: 0 }, "D1-Kosten: nach leerem Volllauf ruht der Abgleich bis zum naechsten geaenderten Import");
+  raw.exec("UPDATE meta SET v='0' WHERE k='search_vectors_idle'");   // wie importSearchIndex bei changed>0
   assert.equal((await syncSearchVectors(env)).processed, 1, "geanderte Hashes werden erneut eingebettet");
   assert.equal(upserts.length, 503);
   raw.prepare("UPDATE search_doc SET gone=1 WHERE id=?").run(docs[1].id);
+  raw.exec("UPDATE meta SET v='0' WHERE k='search_vectors_idle'");   // wie importSearchIndex bei gone>0
   assert.deepEqual(await syncSearchVectors(env), { deleted: 1 });
   assert.deepEqual(deletions, [await vectorId(docs[1].id)]);
   assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[1].id).gone, 1, "Quelldokument bleibt erhalten");

@@ -1,3 +1,4 @@
+import { rawDb } from "./d1meter.js";
 import { rateLimit, sha256hex } from "./util.js";
 import { embed, queryVectors, rrf, upsertVectors, vectorId } from "./vectors.js";
 import { countSearch } from "./search_demand.js";
@@ -38,13 +39,13 @@ async function initializeSearchFts(db) {
 }
 
 async function ensureSearchFts(db) {
-  let ready = ftsReady.get(db);
+  let ready = ftsReady.get(rawDb(db));
   if (!ready) {
     ready = initializeSearchFts(db);
-    ftsReady.set(db, ready);
+    ftsReady.set(rawDb(db), ready);
   }
   try { return await ready; }
-  catch (error) { ftsReady.delete(db); throw error; }
+  catch (error) { ftsReady.delete(rawDb(db)); throw error; }
 }
 
 async function getJson(env, path) {
@@ -107,11 +108,17 @@ async function currentRows(db, ids) {
   return rows;
 }
 
+// Einmalige Nachfuellung alter Zeilen ohne title_norm: die Abfrage hat keinen passenden Index und las in jedem Lauf alle aktiven Zeilen.
+// Neue und geaenderte Dokumente bekommen title_norm beim Import; ist nichts mehr offen, merkt sich meta search_title_norm_done das und der
+// Durchlauf entfaellt (D1-Kosten). Zuruecksetzen: meta-Wert auf "0".
+const BACKFILL_LIMIT = 5000;
 async function backfillSearchTitleNorm(db) {
-  const rows = (await db.prepare("SELECT id,title FROM search_doc WHERE title_norm='' AND gone=0 LIMIT 5000").all()).results || [];
+  if ((await meta(db, "search_title_norm_done"))?.v === "1") return 0;
+  const rows = (await db.prepare(`SELECT id,title FROM search_doc WHERE title_norm='' AND gone=0 LIMIT ${BACKFILL_LIMIT}`).all()).results || [];
   const updates = rows.map((row) => db.prepare("UPDATE search_doc SET title_norm=? WHERE id=? AND title_norm=''")
     .bind(normalizeTitle(row.title), row.id));
   for (let i = 0; i < updates.length; i += 99) await db.batch(updates.slice(i, i + 99));
+  if (rows.length < BACKFILL_LIMIT) await setMeta(db, "search_title_norm_done", "1");
   return rows.length;
 }
 
@@ -124,8 +131,10 @@ export async function importSearchIndex(env) {
   }
   await backfillSearchTitleNorm(db);
   const tokenizer = await ensureSearchFts(db);
-  const ftsRows = await db.prepare("SELECT COUNT(*) n FROM search_fts").first();
-  const docRows = await db.prepare("SELECT COUNT(*) n FROM search_doc").first();
+  // Leerer FTS-Index bei vorhandenen Dokumenten (Tokenizer-Wechsel, Wiederherstellung ohne FTS-Tabellen): Neuaufbau erzwingen.
+  // Je eine Zeile genuegt als Pruefung; COUNT(*) las beide Tabellen in jedem Lauf ganz (D1-Kosten).
+  const ftsRows = await db.prepare("SELECT 1 n FROM search_fts LIMIT 1").first();
+  const docRows = await db.prepare("SELECT 1 n FROM search_doc LIMIT 1").first();
   if (!ftsRows?.n && docRows?.n) await db.prepare("UPDATE search_doc SET h='' WHERE h<>''").run();
   const cycle = await sha256hex(JSON.stringify(manifest));
   const oldCycle = (await meta(db, "search_import_cycle"))?.v;
@@ -164,6 +173,7 @@ export async function importSearchIndex(env) {
   }
   for (let i = 0; i < statements.length; i += 99) await db.batch(statements.slice(i, i + 99));
 
+  if (changed) await setMeta(db, "search_vectors_idle", "0");   // geaenderte Dokumente: Vektor-Abgleich wieder aufnehmen
   const ids = [...new Set(docs.map((doc) => doc.id))];
   await setMeta(db, `search_ids_part_${part}`, JSON.stringify({ cycle, ids }));
   await setMeta(db, "search_import_cycle", cycle);
@@ -181,6 +191,7 @@ export async function importSearchIndex(env) {
     const missing = indexed.filter((row) => !seen.has(row.id)).map((row) => row.id);
     const gone = missing.map((id) => db.prepare("UPDATE search_doc SET gone=1 WHERE id=? AND gone=0").bind(id));
     for (let i = 0; i < gone.length; i += 100) await db.batch(gone.slice(i, i + 100));
+    if (missing.length) await setMeta(db, "search_vectors_idle", "0");   // entfernte Dokumente: Vektoren loeschen
     await setMeta(db, "search_complete_cycle", cycle);
     return { part, changed, gone: missing.length, tokenizer };
   }
@@ -191,8 +202,13 @@ function documentText(doc) {
   return `${doc.title}\n${doc.summary}\n${doc.keywords}`.slice(0, 2000);
 }
 
+// D1-Kosten: nach einem vollen Durchlauf ohne offene Dokumente merkt sich meta search_vectors_idle den Tag; bis importSearchIndex etwas
+// aendert (setzt "0") oder der Tag wechselt (Sicherheitsnetz: ein voller Abgleich am Tag), entfallen die LEFT-JOIN-Abfrage ueber search_doc
+// und die Rueckkehr des Cursors an den Anfang.
 export async function syncSearchVectors(env) {
   if (!env.AI || !env.VEC) return { skipped: "Workers-AI- oder Vectorize-Binding fehlt" };
+  const today = new Date().toISOString().slice(0, 10);
+  if ((await meta(env.DB, "search_vectors_idle"))?.v === today) return { skipped: "unveraendert", processed: 0 };
 
   const gone = (await env.DB.prepare(
     "SELECT v.id,v.vid FROM search_vector v INNER JOIN search_doc d ON d.id=v.id WHERE d.gone=1 LIMIT ?",
@@ -218,7 +234,7 @@ export async function syncSearchVectors(env) {
       "LEFT JOIN search_vector v ON v.id=d.id WHERE d.gone=0 AND (v.h IS NULL OR v.h<>d.h) ORDER BY d.id LIMIT ?",
     ).bind(VECTOR_BATCH_SIZE).all()).results || [];
   }
-  if (!docs.length) return { processed: 0 };
+  if (!docs.length) { await setMeta(env.DB, "search_vectors_idle", today); return { processed: 0 }; }
 
   const vectors = await embed(env, docs.map(documentText));
   const vectorIds = await Promise.all(docs.map(({ id }) => vectorId(id)));
@@ -529,6 +545,17 @@ function countEntityFacet(rows) {
 // ctx (nur die Suche der Website, nicht MCP): zaehlt den Begriff anonym nach der Antwort (search_demand.js countSearch, Issue #156), aber nur mit c=1:
 // assets/search.js setzt es nur, wenn die Eingabe steht (Absenden, Adresse mit q, Filter/Mehr/Trefferklick, 1,5 s Tipppause), nie fuer Zwischenstaende
 // beim Tippen. Die Zaehlung laeuft ausschliesslich in ctx.waitUntil, die Antwortzeit aendert sich nicht; hier gibt es keinen weiteren KI- oder Vectorize-Aufruf.
+// Ratenlimit der Suche (60 Anfragen je 60 s und IP-Hash). D1-Kosten: mit der Bindung RL_SEARCH (Workers Rate Limiting, worker/wrangler.toml,
+// kein Konsolen-Schritt) kostet eine Suche keine Lese- und Schreibzeile in ratelimit mehr. Fehlt die Bindung (Staging, Tests) oder antwortet
+// sie nicht, gilt wie bisher die D1-Tabelle.
+async function searchAllowed(env, ipHash) {
+  if (env.RL_SEARCH && typeof env.RL_SEARCH.limit === "function") {
+    try { return !!(await env.RL_SEARCH.limit({ key: `search:${ipHash}` })).success; }
+    catch (error) { console.warn("RL_SEARCH nicht erreichbar, D1-Ratenlimit:", String(error?.message || error)); }
+  }
+  return rateLimit(env.DB, `search:${ipHash}`, 60, 60);
+}
+
 export async function handleSearch(env, request, url, J, ctx) {
   if (request.method !== "GET") return J({ error: "bad_request" }, 405);
   const q = (url.searchParams.get("q") || "").replace(/\p{Cc}/gu, "").trim().replace(/\s+/g, " ");
@@ -546,9 +573,25 @@ export async function handleSearch(env, request, url, J, ctx) {
     year,
   };
   const pref = url.searchParams.get("pref") || "";
+  // D1-Kosten: Suchen unter 3 Zeichen pruefen den Titel per instr()/LIKE ueber alle aktiven Zeilen (bis zu 5 Scans je Anfrage). Ihre Antwort
+  // haengt nur von den Parametern ab (keine Vektorsuche unter 3 Zeichen, kein Cookie), deshalb liegt sie 300 s im Kanten-Cache des Rechenzentrums;
+  // ein Treffer kostet weder Ratenlimit noch D1. Ein statischer Praefix-Index waere die gruendlichere Loesung, braucht aber Seitenbau und Migration.
+  const shortKey = qLength < 3 && globalThis.caches?.default
+    ? new Request(`https://dedupe.m365.fm/search-short/v1?${new URLSearchParams({ q, lang: filters.lang, type: filters.type, entity: filters.entity, year, pref, page: String(page), size: String(size) })}`)
+    : null;
+  if (shortKey) {
+    const hit = await globalThis.caches.default.match(shortKey).catch(() => null);
+    if (hit) {
+      const data = await hit.json().catch(() => null);
+      if (data) {
+        if (ctx?.waitUntil && url.searchParams.get("c") === "1") ctx.waitUntil(countSearch(env, { q, lang: pref, zero: !data.total, origin: url.origin }).catch(() => 0));
+        return J(data, 200, { "cache-control": "public, max-age=300" });
+      }
+    }
+  }
   const day = new Date().toISOString().slice(0, 10);
   const ipHash = await sha256hex(`${request.headers.get("cf-connecting-ip") || ""}|${day}|${env.SESSION_SECRET || ""}`);
-  if (!(await rateLimit(env.DB, `search:${ipHash}`, 60, 60))) return J({ error: "rate_limit" }, 429);
+  if (!(await searchAllowed(env, ipHash))) return J({ error: "rate_limit" }, 429);
   const normalizedQuery = normalizeSearchText(q);
   if (!/[\p{L}\p{N}]/u.test(q) || !normalizedQuery) {
     return J({ q, total: 0, page, results: [], facets: { type: {}, lang: {}, entity: {}, year: {} } }, 200, { "cache-control": "public, max-age=300" });
@@ -577,7 +620,7 @@ export async function handleSearch(env, request, url, J, ctx) {
   }
   const results = resultRows.slice((page - 1) * size, page * size)
     .map(({ url, title, summary, type, lang, date, image }) => ({ url, title, summary, type, lang, date, image, ...(pref && lang !== pref ? { other_lang: true } : {}) }));
-  return J({
+  const body = {
     q, total: resultRows.length, page,
     results,
     facets: {
@@ -586,5 +629,10 @@ export async function handleSearch(env, request, url, J, ctx) {
       entity: countEntityFacet(rowsFor("entity")),
       year: countFacet(rowsFor("year"), "year", "year"),
     },
-  }, 200, { "cache-control": "public, max-age=300" });
+  };
+  if (shortKey) {
+    const put = globalThis.caches.default.put(shortKey, new Response(JSON.stringify(body), { headers: { "content-type": "application/json", "cache-control": "public, max-age=300" } })).catch(() => 0);
+    if (ctx?.waitUntil) ctx.waitUntil(put); else await put;
+  }
+  return J(body, 200, { "cache-control": "public, max-age=300" });
 }

@@ -1,6 +1,6 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
 import { isStaging, stagingEnv, installFetchGuard, stagingResponse, robotsResponse } from "./staging.js";
-import { json, cors, isOwnSite, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
+import { json, cors, isOwnSite, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, purgeRateLimits, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
@@ -25,8 +25,9 @@ import { importEpisodeUrls } from "./episode_urls.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats, deleteUserSearchDemand } from "./search_demand.js";
-import { entityMap } from "./entities.js";
-import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
+import { entityMap, tickEnv } from "./entities.js";
+import { meterDb } from "./d1meter.js";
+import { handleProfiles, deleteUserData, refreshProfilesExportIfStale } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
 import { handleEntFill } from "./entfill.js";
@@ -644,79 +645,87 @@ const handlers = {
     }
   },
   async scheduled(event, env, ctx) {
-    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler.
+    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext, gelesene/geschriebene D1-Zeilen) statt verschluckter Fehler.
     const scheduledAt = event.scheduledTime || Date.now();
     const tick = new Date(scheduledAt);
     if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
-    const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
+    env = tickEnv(env);   // D1-Kosten: entityMap() laedt einmal je Lauf statt in jeder Aufgabe (entities.js)
+    const daily = event.cron === "0 6 * * *";   // Tageslauf: er uebernimmt um 06:00 auch alle Aufgaben des 30-Minuten-Laufs (siehe oben)
+    // Jede Aufgabe bekommt ihr eigenes env (Messhuelle um D1, track); die Funktionen nehmen es als Parameter env.
+    const T = (name, fn) => { const p = track(env, name, fn); ctx.waitUntil(p); return p; };
     if (event.cron === "*/15 * * * *") {
-      const reminders = track(env, "topicSessionReminders", async () => {
+      const cleanup = tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0;   // Aufraeumen der Themen-Benachrichtigungen einmal am Tag
+      const reminders = T("topicSessionReminders", async (env) => {
         const queued = await queueSessionReminders(env);
-        const dispatched = await dispatchTopicNotifications(env);
+        const dispatched = await dispatchTopicNotifications(env, { cleanup });
         return { queued, dispatched };
       });
-      ctx.waitUntil(reminders);
       // Event-Import (Community Days, Sessionize) zur Minute 15 und 45: in diesem Aufruf, also nie im Aufruf der Digests (0 6 und */30) und der uebrigen
       // Aufgaben, und erst NACH den Benachrichtigungen (sie bekommen ihr Kontingent zuerst). Jeder Lauf ist hart gedeckelt (eventimport.js CAP:
       // rund 100 D1-Aufrufe und 12 Abrufe); was nicht hineinpasst, folgt im naechsten.
       // Event <-> Event-Entitaet: Namensvergleich fuer neue Events (evententity.js suggestEventEntities, wenige D1-Aufrufe); eigene Aufgabe, damit die Zeile des Event-Imports unveraendert bleibt
-      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventEntity", () => suggestEventEntities(env))));
-      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", () => runEventImport(env))));
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventEntity", (env) => suggestEventEntities(env))));
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", (env) => runEventImport(env))));
       return;
     }
-    if (event.cron === "0 6 * * *") {
-      T("runPushDigest", () => runPushDigest(env));
-      T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
-      T("runDigest", () => runDigest(env, { at: scheduledAt }));
-      T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
-      T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
-      T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
+    if (daily) {
+      T("runPushDigest", (env) => runPushDigest(env));
+      T("syncAutoRoles", (env) => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
+      T("runDigest", (env) => runDigest(env, { at: scheduledAt }));
+      T("syncInviterBadges", (env) => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
+      T("purgeLinkedinOrphans", (env) => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
+      T("purgeSearchStats", (env) => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
+      T("purgeRateLimits", (env) => purgeRateLimits(env.DB));   // abgelaufene Ratenlimit-Fenster (util.js RL_SHORT)
+      // Expertise-Stufen: Belege aus rund 12 Quelltabellen; einmal am Tag (D1-Kosten). Bestaetigungen und Pruefungen rechnen ihr Paar sofort
+      // (computeLevels), die Verwaltung kann den Lauf jederzeit anstossen (/api/admin/expertise-sync).
+      T("syncExpertise", (env) => syncExpertise(env, entityMap));
     }
-    if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
-    if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
-    T("refreshFeeds", () => refreshFeeds(env));
-    T("refreshContributions", () => refreshContributions(env));
-    T("pollUpdates", () => pollUpdates(env));
-    T("queueTopicArticles", () => queueTopicArticles(env));
-    T("dispatchTopicNotifications", () => dispatchTopicNotifications(env));
-    T("refreshFollowers", () => refreshFollowers(env));
-    T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
-    T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
-    T("seedRoadmap", () => seedRoadmap(env));
-    T("purgeMessages", () => purgeMessages(env.DB));
-    T("purgeEntityClaimReview", () => purgeEntityClaimReview(env.DB));
-    T("autoTranslate", () => autoTranslate(env));
-    T("autoTranslateItems", () => autoTranslateItems(env));
-    T("autoTranslateEntities", () => autoTranslateEntities(env, entityMap));
-    T("pollPodcast", () => pollPodcast(env));
-    T("pollVideos", () => pollVideos(env));
-    T("syncShows", () => syncShows(env));
-    T("flushOutbox", () => flushOutbox(env));
-    T("importLegacyBlog", () => importLegacyBlog(env));
-    T("importContentBlog", () => importContentBlog(env));   // T15: Content-Pakete aus imports/blog/
-    T("refreshProfilesExport", () => refreshProfilesExport(env));
-    T("backfillDirectoryGeocodes", () => backfillDirectoryGeocodes(env));
-    T("remindInvites", () => remindInvites(env));
-    T("runTrQueue", () => runTrQueue(env, entityMap));
-    T("searchDemand", async () => {   // #156: Begriffe einordnen (Workers AI/Vectorize, nie im Suchpfad), Nachfrage fortschreiben, im Haiku-Budget uebersetzen
+    if (event.cron === "*/30 * * * *") T("runDigest", (env) => runDigest(env, { at: scheduledAt }));
+    if (event.cron === "*/30 * * * *") T("byodChecks", (env) => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
+    T("refreshFeeds", (env) => refreshFeeds(env));
+    T("refreshContributions", (env) => refreshContributions(env));
+    T("pollUpdates", (env) => pollUpdates(env));
+    T("queueTopicArticles", (env) => queueTopicArticles(env));
+    // dispatchTopicNotifications laeuft im */15-Zweig (jede Viertelstunde, also auch :00 und :30); hier lief es um :00/:30 ein zweites Mal
+    T("refreshFollowers", (env) => refreshFollowers(env));
+    // Sprecher verknuepfen einmal je Lauf, nachdem beide Event-Aufgaben fertig sind (vorher nach jeder von beiden, also doppelt)
+    const events = [T("ensurePastEvents", (env) => ensurePastEvents(env)), T("ensureM365Con", (env) => ensureM365Con(env))];
+    ctx.waitUntil(Promise.all(events).then(() => track(env, "linkSpeakers", async (env) => ({ speakers: await linkSpeakers(env), entities: await linkSpeakerEntities(env) }))));
+    T("seedRoadmap", (env) => seedRoadmap(env));
+    T("purgeMessages", (env) => purgeMessages(env.DB));
+    T("purgeEntityClaimReview", (env) => purgeEntityClaimReview(env.DB));
+    T("autoTranslate", (env) => autoTranslate(env));
+    T("autoTranslateItems", (env) => autoTranslateItems(env));
+    T("autoTranslateEntities", (env) => autoTranslateEntities(env, entityMap));
+    T("pollPodcast", (env) => pollPodcast(env));
+    T("pollVideos", (env) => pollVideos(env));
+    T("syncShows", (env) => syncShows(env));
+    T("flushOutbox", (env) => flushOutbox(env));
+    T("importLegacyBlog", (env) => importLegacyBlog(env));
+    T("importContentBlog", (env) => importContentBlog(env));   // T15: Content-Pakete aus imports/blog/
+    T("refreshProfilesExport", (env) => refreshProfilesExportIfStale(env));   // nur bei fehlendem oder ueber 85 min altem Zwischenspeicher (profiles.js)
+    T("backfillDirectoryGeocodes", (env) => backfillDirectoryGeocodes(env));
+    T("remindInvites", (env) => remindInvites(env));
+    T("runTrQueue", (env) => runTrQueue(env, entityMap));
+    T("searchDemand", async (env) => {   // #156: Begriffe einordnen (Workers AI/Vectorize, nie im Suchpfad), Nachfrage fortschreiben, im Haiku-Budget uebersetzen
       // Fortschreiben liest die ganze Tabelle (12 Monate): nur nach neuen Uebersetzungsluecken und einmal taeglich um 06:00 (D1-Lesekontingent)
-      const classified = await classifySearches(env), demand = classified.translation_gap || event.cron === "0 6 * * *" ? await aggregateDemand(env) : { skipped: true };
+      const classified = await classifySearches(env), demand = classified.translation_gap || daily ? await aggregateDemand(env) : { skipped: true };
       return { classified, demand, translated: await runTrDemand(env, entityMap) };
     });
-    T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
-    T("syncContentTopics", () => syncContentTopics(env));
-    T("importEntitiesFromSite", () => importEntitiesFromSite(env));
-    T("importLibrarySeed", async () => (env.LIB_SEED_IMPORT === "1" ? importLibrarySeed(env, (await import("./library_seed.json")).default) : { skipped: "aus (LIB_SEED_IMPORT)" }));   // Start-Eintraege der Bibliothek, Standard aus
-    T("importQuotesFromSite", () => importQuotesFromSite(env));
-    T("importEpisodeUrls", () => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
-    T("importEpisodes", () => importEpisodes(env));
-    T("importTranslations", () => importTranslations(env));
-    T("importSearchIndex", () => importSearchIndex(env));
-    T("syncSearchVectors", () => syncSearchVectors(env));
-    T("syncExpertVectors", () => syncExpertVectors(env));
-    T("closeExpiredExpertRequests", () => closeExpiredExpertRequests(env));
-    T("syncExpertise", () => syncExpertise(env, entityMap));   // */30 kehrt um 06:00 oben zurueck, daher nicht doppelt
-    ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
+    T("syncLiveEvents", (env) => syncLiveEvents(env, entityMap));
+    T("syncContentTopics", (env) => syncContentTopics(env));
+    T("importEntitiesFromSite", (env) => importEntitiesFromSite(env));
+    T("importLibrarySeed", async (env) => (env.LIB_SEED_IMPORT === "1" ? importLibrarySeed(env, (await import("./library_seed.json")).default) : { skipped: "aus (LIB_SEED_IMPORT)" }));   // Start-Eintraege der Bibliothek, Standard aus
+    T("importQuotesFromSite", (env) => importQuotesFromSite(env));
+    T("importEpisodeUrls", (env) => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
+    T("importEpisodes", (env) => importEpisodes(env));
+    T("importTranslations", (env) => importTranslations(env, { daily }));   // Kopie aus ent_tr/item_tr nur beim ersten Lauf und im Tageslauf (register.js)
+    T("importSearchIndex", (env) => importSearchIndex(env));
+    T("syncSearchVectors", (env) => syncSearchVectors(env));
+    T("syncExpertVectors", (env) => syncExpertVectors(env));
+    T("closeExpiredExpertRequests", (env) => closeExpiredExpertRequests(env));
+    // Protokoll 7 Tage; das DELETE liest ohne Index auf started die ganze Tabelle, daher einmal am Tag statt in jedem Lauf
+    if (daily) ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };
 
@@ -734,10 +743,16 @@ export default {
   },
 };
 
-async function track(env, name, fn) {   // Lauf protokollieren; ein Fehler bricht die uebrigen Aufgaben nicht ab
-  const t0 = Math.floor(Date.now() / 1000); let id = 0;
-  try { id = (await env.DB.prepare("INSERT INTO cron_runs(name,started) VALUES(?,?) RETURNING id").bind(name, t0).first())?.id || 0; } catch { /* Tabelle fehlt bis zur Migration */ }
-  let ok = 1, info = "";
-  try { const r = await fn(); info = r && typeof r === "object" ? JSON.stringify(r).slice(0, 300) : ""; } catch (e) { ok = 0; info = String(e && e.message || e).slice(0, 300); console.error("cron", name, info); }
-  if (id) await env.DB.prepare("UPDATE cron_runs SET finished=?,ok=?,info=? WHERE id=?").bind(Math.floor(Date.now() / 1000), ok, info, id).run().catch(() => 0);
+// Lauf protokollieren; ein Fehler bricht die uebrigen Aufgaben nicht ab. D1-Kosten: eine Zeile am Ende (vorher INSERT beim Start und UPDATE am
+// Ende); ein uebersprungener Lauf (Ergebnis mit skipped, ohne geschriebene Zeile) wird nicht protokolliert, die Verwaltung zeigt dann den letzten
+// echten Lauf. Fehler werden immer protokolliert. info beginnt mit rr/rw = gelesene/geschriebene D1-Zeilen der Aufgabe (d1meter.js).
+// Folge: ein Lauf, der noch arbeitet oder vom Laufzeitende abgebrochen wurde, erscheint nicht mehr als "laeuft".
+async function track(env, name, fn) {
+  const t0 = Math.floor(Date.now() / 1000), m = { rr: 0, rw: 0 }, e = Object.create(env);
+  e.DB = meterDb(env.DB, m);
+  let ok = 1, info = "", r;
+  try { r = await fn(e); } catch (err) { ok = 0; info = String(err && err.message || err).slice(0, 300); console.error("cron", name, info); }
+  if (ok && r && typeof r === "object" && r.skipped !== undefined && !m.rw) return;
+  if (ok) info = JSON.stringify({ rr: m.rr, rw: m.rw, ...(r && typeof r === "object" ? (Array.isArray(r) ? { r } : r) : r === undefined ? {} : { r }) }).slice(0, 300);
+  await env.DB.prepare("INSERT INTO cron_runs(name,started,finished,ok,info) VALUES(?,?,?,?,?)").bind(name, t0, Math.floor(Date.now() / 1000), ok, info).run().catch(() => 0);   // Tabelle fehlt bis zur Migration
 }

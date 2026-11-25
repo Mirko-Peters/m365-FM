@@ -34,8 +34,23 @@ export async function baseIds(env) {
   return ids;
 }
 
+// D1-Kosten: im Cron laden mehrere Aufgaben desselben Laufs alle live-Entitaeten samt JSON (autoTranslate, runTrQueue, runTrDemand,
+// syncLiveEvents, syncExpertise, refreshProfilesExport, syncExpertVectors ...). index.js gibt jedem Cron-Lauf ein eigenes env (tickEnv) mit
+// einem Merker; entityMap() laedt dann einmal je Lauf. Schreibt eine Aufgabe entity_rev (Import aus entities.json), verwirft sie den Merker
+// (dropEntityMap). Anfragen (fetch) laden wie bisher je Aufruf: ein Isolat-Zwischenspeicher wuerde nach Aenderungen in anderen Isolaten
+// veraltete Daten zeigen.
+export const TICK = Symbol.for("m365.cron.tick");
+export function tickEnv(env) { const e = Object.create(env); e[TICK] = {}; return e; }
+export function dropEntityMap(env) { if (env && env[TICK]) env[TICK].emap = null; }
+
 // Alle Entitaeten als Map: Datenbank (live) und, solange entity_source=json, die Datei als Grundlage darunter
 export async function entityMap(env) {
+  const tick = env && env[TICK];
+  if (!tick) return loadEntityMap(env);
+  if (!tick.emap) tick.emap = loadEntityMap(env).catch((e) => { tick.emap = null; throw e; });
+  return tick.emap;
+}
+async function loadEntityMap(env) {
   const base = new Map();
   if ((await source(env)) !== "db") for (const e of await siteEntities(env)) base.set(e.id, e);
   const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [];
@@ -51,7 +66,9 @@ export async function importEntitiesFromSite(env) {
   const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id)), t = Math.floor(Date.now() / 1000);
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
+  if (todo.length) dropEntityMap(env);
   const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));
+  dropEntityMap(env);   // der Abgleich kann live-Fassungen ersetzen; die Paarung danach braucht den neuen Stand
   const paired = await pairExisting(env, { dry: false, limit: 50 }).catch((e) => ({ error: String(e).slice(0, 120) }));   // neue Firmen-Entitaeten aus dem Repo bekommen ihre Paar-Firma automatisch (idempotent)
   return { imported: todo.length, db: have.size + todo.length, file: list.length, synced, paired };
 }

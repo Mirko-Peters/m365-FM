@@ -224,3 +224,26 @@ test("Admin-Monatszähler meldet Warnung ab 2.500 E-Mails", async () => {
   assert.equal(result.sentMonth, 2500);
   assert.equal(result.warning, true);
 });
+
+test("D1-Kosten: ist die Woche beliefert, endet jeder weitere Lauf derselben Woche nach einer meta-Abfrage; die naechste Woche laeuft wieder", async () => {
+  const { db, raw } = await database();
+  const t = Date.UTC(2026, 10, 2, 6, 0, 2);
+  raw.exec("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('member','en','token',1,1);");
+  const oldFetch = globalThis.fetch; let fetches = 0, feedAt = t;
+  globalThis.fetch = async () => { fetches++; return { json: async () => ({ episodes: [{ id: "new", language: "en", date: new Date(feedAt - 3600_000).toISOString(), url: "https://www.m365.fm/en/new", title: "New" }] }) }; };
+  const queries = [], counting = { prepare(sql) { queries.push(sql); return db.prepare(sql); }, batch: (s) => db.batch(s) };
+  const env = { DB: counting, SITE: "https://www.m365.fm", MAIL_FROM: "M365.FM", EMAIL: { send: async () => ({ messageId: "ok" }) } };
+  try {
+    assert.equal((await runDigest(env, { at: t })).sent, 1);
+    const second = await runDigest(env, { at: t + 1800_000 });
+    assert.equal(second.done, true, "kein Kandidat mehr: Woche erledigt");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='weekly_done'").get().v, "2026-11-02");
+    queries.length = 0; fetches = 0;
+    const third = await runDigest(env, { at: t + 3600_000 });
+    assert.deepEqual(third, { sent: 0, period: "2026-11-02", done: true });
+    assert.equal(queries.length, 1, "nur die meta-Abfrage"); assert.equal(fetches, 0, "episodes.json wird nicht geholt");
+    feedAt = t + 7 * 86400_000;
+    assert.equal((await runDigest(env, { at: feedAt })).sent, 1, "naechste Woche wird wieder gesendet");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='legacy_topics_adopted'").get().v, "1");
+  } finally { globalThis.fetch = oldFetch; }
+});
