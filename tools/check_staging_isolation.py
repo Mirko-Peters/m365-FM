@@ -18,7 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent
 
 LIVE_NAMES = {"m365-dub-community", "m365-dub-site", "m365-dub", "m365-fm", "m365-search"}
 LIVE_HOSTS = ("api-dub.m365.fm", "dub.m365.fm", "www.m365.fm", "m365.fm", "img.m365.fm")
-STAGING_HOSTS = {"staging.m365.fm", "api-staging.m365.fm"}
+STAGING_HOSTS = {"staging.m365.fm", "api-staging.m365.fm", "img-staging.m365.fm"}   # img-staging: R2-Domain des Staging-Buckets (Zonen-Cache des Site-Workers)
+STAGING_ZONE_HOST = "https://img-staging.m365.fm"
 ENV_KEYS_OK = {"name", "workers_dev", "routes", "d1_databases", "r2_buckets", "vars", "observability", "main", "compatibility_date", "triggers"}
 SECRETS_OK = re.compile(r"^(CLOUDFLARE_API_TOKEN|CLOUDFLARE_ACCOUNT_ID|R2_ACCOUNT_ID|STAGING_[A-Z0-9_]+|GITHUB_TOKEN)$")
 WORKFLOWS = ("worker-staging.yml", "site-staging.yml")
@@ -116,6 +117,8 @@ def check_site_toml(text):
         errs.append("sitewrk/wrangler.toml: R2_PRIMARY muss in Staging \"0\" sein")
     if not env.get("r2_buckets"):
         errs.append("sitewrk/wrangler.toml: [[env.staging.r2_buckets]] (PAGES -> m365-fm-staging) fehlt")
+    if "R2_ZONE_HOST" in v and v.get("R2_ZONE_HOST") != STAGING_ZONE_HOST:
+        errs.append(f"sitewrk/wrangler.toml: R2_ZONE_HOST muss in Staging {STAGING_ZONE_HOST} sein (ist {v.get('R2_ZONE_HOST')!r}) - nie der Live-Cache")
     return errs
 
 

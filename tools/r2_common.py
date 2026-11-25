@@ -9,8 +9,17 @@ CT = {".html": "text/html; charset=utf-8", ".json": "application/json; charset=u
       ".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".ics": "text/calendar; charset=utf-8", ".vtt": "text/vtt; charset=utf-8", ".webmanifest": "application/manifest+json",
       ".xsl": "application/xslt+xml", ".pdf": "application/pdf", ".csv": "text/csv; charset=utf-8"}
 IMG = re.compile(r"\.(png|jpe?g|gif|webp|avif|svg|ico)$", re.I)   # wie im Site-Worker: Bilder kommen nie aus R2 zuerst, also auch nie unter /__r2c
+# Stylesheets und Skripte mit Inhalts-Hash im Namen (site_assets.py; = HASHED im Site-Worker, Schluessel pages/assets/<name>.<hash>.<css|js>): Inhalt unter dem
+# Namen unveraenderlich. Der Spiegel markiert sie nie als entfernt - alte Seiten (Browser-Cache, Kanten-Cache, r2out-Seiten eines frueheren Baus) verlangen
+# den alten Namen weiter, und der Site-Worker liefert ihn nach dem 404 von GitHub Pages aus R2.
+HASHED_KEY = re.compile(r"^pages/assets/[a-z0-9][a-z0-9_-]*\.[0-9a-f]{8,}\.(?:css|js)$", re.I)
 THREADS = max(1, int(os.environ.get("R2_THREADS") or 32))   # parallele Uploads (vorher fest 16; naechtlicher Bau: ~28.000 geaenderte Seiten in 18 min)
 GONE_KEY = "meta/gone.json"   # Liste der als entfernt markierten Schluessel (nur r2_site_sync.py schreibt sie)
+# Cache-Control eines als entfernt markierten Objekts: wie normale Uploads (public, max-age=600) plus die Erweiterungs-Direktive m365-gone. Der Site-Worker
+# sieht im Zonen-Cache (R2_ZONE_CACHE, sitewrk/index.js goneMarked) keine Custom-Metadaten, wohl aber Cache-Control - so erkennt er die Markierung ohne
+# Bucket-Lesung. Browser und Cloudflare ignorieren unbekannte Direktiven.
+GONE_MARK = "m365-gone"
+GONE_CC = "public, max-age=600, " + GONE_MARK
 
 
 def ctype(key):
@@ -49,10 +58,11 @@ def read_gone(s3, bucket):
         raise
 
 
-def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cache_control="public, max-age=600"):
+def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cache_control="public, max-age=600", block=None):
     """todo: [(key, path, hash)] -> (ok_keys, failed_keys). Erst Dateien, dann Seiten (eine neue Seite zeigt nie auf ein noch fehlendes Stylesheet);
     Fehlschlaege werden `retries`-mal wiederholt (mit kurzer Pause). strict=True (Spiegel): Phase 2 entfaellt, wenn in Phase 1 etwas endgueltig
-    fehlschlug - im r2out-Upload nicht, dort soll eine fehlende Export-Datei nicht alle Sprachseiten aufhalten."""
+    fehlschlug - im r2out-Upload nicht, dort soll eine fehlende Export-Datei nicht alle Sprachseiten aufhalten. block(key): Phase 2 entfaellt auch, wenn
+    eine solche Datei endgueltig fehlschlug (r2out: gehashte Skripte/Stylesheets, HASHED_KEY - neue Seiten verweisen schon auf den neuen Namen)."""
     def put(item):
         key, f, h = item
         try:
@@ -62,7 +72,7 @@ def upload(s3, bucket, todo, meta=None, retries=1, on_ok=None, strict=False, cac
     ok, failed, shown = [], [], [0]
     with ThreadPoolExecutor(THREADS) as ex:
         for phase in ([t for t in todo if not t[0].endswith(".html")], [t for t in todo if t[0].endswith(".html")]):
-            if failed and strict: break   # Seiten erst, wenn alle Dateien da sind
+            if failed and (strict or (block and any(block(t[0]) for t in failed))): break   # Seiten erst, wenn alle (bzw. die blockierenden) Dateien da sind
             rest = phase
             for attempt in range(retries + 1):
                 if attempt: time.sleep(2 * attempt)

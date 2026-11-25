@@ -15,6 +15,7 @@ URLS = [
     ("CSS mit Hash", None),
     ("CSS a11y", B + "/assets/a11y.css"),
     ("JS page", B + "/assets/page.js"),
+    ("JS page mit Hash", "hashed:page"),   # seit 27.11.2026 eingebunden als page.<hash>.js (site_assets.py): erwartet immutable
     ("Schrift", B + "/assets/fonts/barlow-latin-400-normal.woff2"),
     ("OG-Bild", "https://img.m365.fm/og/index.png"),   # Teilen-Bilder liegen im R2-Bucket (generate_og.py, tools/r2_og_upload.py)
     ("Icon", B + "/assets/apple-touch-icon.png"),
@@ -22,7 +23,7 @@ URLS = [
     ("Sitemap fr Blog (R2)", B + "/sitemap-fr-blog.xml"),   # Sitemaps der Sprachen ausser en/de liegen im R2-Bucket (site_size.r2_only)
     ("Register (R2)", B + "/episodes-register.json"),   # grosse Datenexporte liegen seit 16.11.2026 im R2-Bucket (site_size.EXPORT_RX)
     ("llms.txt", B + "/llms.txt"),
-    ("R2-Bild", "https://img.m365.fm/i/5254f600109b589b2c2d.webp"),
+    ("R2-Bild", "https://img.m365.fm/i/5254f600109b589b2c2d-r1200x675.webp"),   # Blogbild Pexels 4665930, seit 25.11.2026 neu kopiert (1200x675, ~92 KB statt Original 1,63 MB)
     ("404", B + "/gibt-es-nicht-cache-check/"),
     ("Suchseite de", B + "/de/search/"),
 ]
@@ -47,10 +48,10 @@ def get(url, extra=None):
     return getattr(r, "status", None) or r.code, {k.lower(): v for k, v in r.headers.items()}, ttfb, total, len(body), body
 
 
-def css_url():
+def css_url(rx=r'href="(https://www\.m365\.fm/assets/site\.[0-9a-f]+\.css)"'):
     try:
         html = get(B + "/", {"Accept-Encoding": "identity"})[5].decode("utf-8", "replace")
-        m = re.search(r'href="(https://www\.m365\.fm/assets/site\.[0-9a-f]+\.css)"', html)
+        m = re.search(rx, html)
         return m.group(1) if m else None
     except Exception: return None
 
@@ -58,6 +59,7 @@ def css_url():
 print("## Cache-Messung (je Adresse 3 Abrufe im Abstand von 1 s, dann ein bedingter Abruf)\n")
 for name, url in URLS:
     if url is None: url = css_url()
+    elif url.startswith("hashed:"): url = css_url(r'src="(https://www\.m365\.fm/assets/' + url[7:] + r'\.[0-9a-f]{8,}\.js)"')
     if not url: print(f"### {name}: nicht gefunden\n"); continue
     print(f"### {name}\n`{url}`\n")
     first = None

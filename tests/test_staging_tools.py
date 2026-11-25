@@ -186,6 +186,9 @@ class Isolation(unittest.TestCase):
             "R2 primaer": self.last(s, 'R2_PRIMARY = "0"', 'R2_PRIMARY = "1"'),
             "Origin live": self.last(s, 'ORIGIN = "https://staging.m365.fm"', 'ORIGIN = "https://www.m365.fm"'),
             "Name": self.last(s, 'name = "m365-dub-site-staging"', 'name = "m365-dub-site"'),
+            "Zonen-Cache live": self.last(s, 'R2_ZONE_HOST = "https://img-staging.m365.fm"', 'R2_ZONE_HOST = "https://img.m365.fm"'),
+            "Zonen-Cache fremd": self.last(s, 'R2_ZONE_HOST = "https://img-staging.m365.fm"', 'R2_ZONE_HOST = "https://img-test.example"'),
+            "img-Route live": self.last(s, 'pattern = "img-staging.m365.fm/*"', 'pattern = "img.m365.fm/*"'),
         }
         for name, text in cases.items():
             self.assertTrue(ISO.check_site_toml(text), name)

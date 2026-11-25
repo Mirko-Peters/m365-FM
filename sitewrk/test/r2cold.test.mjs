@@ -13,7 +13,7 @@ globalThis.caches = { default: {
   match: async (r) => { if (r.url === READY_URL) { readyMatches++; if (hang) return new Promise(() => {}); } const x = store.get(r.url); return x ? x.clone() : undefined; },
   put: async (r, res) => { store.set(r.url, res.clone()); } } };
 const HTML = { "content-type": "text/html; charset=utf-8" };
-let ORIGIN_BUILD = "b1"; const originPaths = [];
+let ORIGIN_BUILD = "b1", ghSitemap = false; const originPaths = [];
 globalThis.fetch = async (req) => {
   const r = typeof req === "string" ? new Request(req) : req, u = new URL(r.url);
   if (u.pathname === "/show/redirects.json") return new Response("{}", { headers: { "content-type": "application/json" } });
@@ -23,9 +23,12 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/fr/") return new Response("<html>gh fr start</html>", { headers: HTML });   // Startseite der Sprache bleibt in GitHub Pages
   if (u.pathname === "/community/u/x/") return new Response("<html>gh profil</html>", { headers: HTML });   // englische Seite in docs/
   if (u.pathname === "/entity/nur-gh/") return new Response("<html>gh entity</html>", { headers: HTML });   // (noch) nicht im Bucket, aber bei GitHub Pages
+  if (u.pathname === "/sitemap-fr-blog.xml" && ghSitemap) return new Response("<urlset>gh</urlset>", { headers: { "content-type": "application/xml" } });
   return new Response("<html>404</html>", { status: 404, headers: HTML });
 };
-const { default: W, __resetR2Ready, __r2ReadyState, READY_TTL, R2_ONLY_PAGE } = await import("../index.js");
+const { default: W, __resetR2Ready, __r2ReadyState, READY_TTL, R2_ONLY_PAGE, r2OnlyFile } = await import("../index.js");
+import { readFileSync } from "node:fs";
+const CASES = JSON.parse(readFileSync(new URL("./r2only_cases.json", import.meta.url), "utf8"));
 const enc = (t) => new TextEncoder().encode(t).buffer;
 const obj = (body, ct, meta = {}) => ({ httpEtag: '"r2"', uploaded: new Date("2026-11-16T08:00:00Z"), httpMetadata: { contentType: ct }, customMetadata: meta, arrayBuffer: async () => enc(body), text: async () => body, get body() { return new Response(body).body; } });
 const B = {
@@ -36,6 +39,14 @@ const B = {
   "pages/fr/blog/a/index.html": obj("<html>r2 fr blog</html>", "text/html; charset=utf-8"),
   "pages/fr/index.html": obj("<html>r2 fr start</html>", "text/html; charset=utf-8", { src: "docs" }),
   "pages/community/u/x/index.html": obj("<html>r2 profil</html>", "text/html; charset=utf-8", { src: "docs" }),
+  "pages/de/show/episodes/a/index.html": obj("<html>r2 de folge</html>", "text/html; charset=utf-8"),   // nur im Bucket (site_podpage.py, write_r2)
+  "pages/glossary/x/index.html": obj("<html>r2 glossar</html>", "text/html; charset=utf-8"),           // site_learn.py, write_r2
+  "pages/de/glossary/x/index.html": obj("<html>r2 de glossar</html>", "text/html; charset=utf-8"),
+  "pages/sitemap-fr-blog.xml": obj("<urlset>r2</urlset>", "application/xml; charset=utf-8"),
+  "pages/sitemap-fr-alt.xml": obj("<urlset>alt</urlset>", "application/xml; charset=utf-8", { gone: "1" }),
+  "pages/sitemap-fr-spiegel.xml": obj("<urlset>spiegel</urlset>", "application/xml; charset=utf-8", { src: "docs" }),
+  "pages/show/episodes/a/transcript.txt": obj("Hallo", "text/plain; charset=utf-8"),
+  "pages/og-manifest.json": obj("[]", "application/json; charset=utf-8"),
 };
 const r2Gets = [];
 const PAGES = { get: async (k) => { r2Gets.push(k); return B[k] || null; } };
@@ -43,7 +54,7 @@ const env = { PAGES, MIGRATED: "1", R2_PRIMARY: "1" };
 const req = (path, h = {}) => new Request("https://www.m365.fm" + path, { headers: h });
 const run = async (r, e = env) => { const w = []; const res = await W.fetch(r, e, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
 const shared = (v, t) => store.set(READY_URL, new Response(v, { headers: { "x-r2-build-t": String(t), "cache-control": "public, max-age=30" } }));
-const fresh = () => { store.clear(); __resetR2Ready(); origins = 0; buildFetches = 0; readyMatches = 0; hang = false; ORIGIN_BUILD = "b1"; originPaths.length = 0; r2Gets.length = 0; logs.length = 0; };
+const fresh = () => { store.clear(); __resetR2Ready(); origins = 0; buildFetches = 0; readyMatches = 0; hang = false; ORIGIN_BUILD = "b1"; ghSitemap = false; originPaths.length = 0; r2Gets.length = 0; logs.length = 0; };
 const st = (r) => r.headers.get("server-timing") || "";
 const pageGets = () => r2Gets.filter((k) => k !== "pages/r2-build.txt");   // Bucket-Abrufe ohne die Pruefung der Bau-Kennung
 // Messzeilen (console.log) mitschneiden: nur die JSON-Zeilen des Workers, alles andere unveraendert ausgeben
@@ -189,4 +200,71 @@ test("Interner Schluessel /__r2c/~ready ist keine oeffentliche Adresse; Dateien 
   fresh(); shared("b1", Date.now());
   const r = await run(req("/__r2c/~ready")); assert.equal(r.status, 404);
   await run(req("/covers/x.png")); assert.equal(readyMatches, 0, "Bilder nie aus R2 zuerst");
+});
+
+// ---------------------------------------------------------------- Ladezeit 27.11.2026: Luecken von #602 (Punkt 1)
+test("R2_ONLY_PAGE: Faelle aus r2only_cases.json (direct ja, mixed und docs nein)", () => {
+  for (const [src, ps] of Object.entries(CASES.direct)) for (const p of ps) assert.ok(R2_ONLY_PAGE.test(p), src + ": " + p);
+  for (const [src, ps] of Object.entries(CASES.mixed)) for (const p of ps) assert.ok(!R2_ONLY_PAGE.test(p), src + " (gemischt): " + p);
+  for (const p of CASES.docs) assert.ok(!R2_ONLY_PAGE.test(p), "docs: " + p);
+});
+
+test("Kalt: /de/show/episodes/a/, /glossary/x/, /de/glossary/x/ direkt aus R2 (r2direct), kein GitHub Pages", async () => {
+  for (const [p, body] of [["/de/show/episodes/a/", "<html>r2 de folge</html>"], ["/glossary/x/", "<html>r2 glossar</html>"], ["/de/glossary/x/", "<html>r2 de glossar</html>"]]) {
+    fresh();
+    const a = await run(req(p)); assert.equal(a.status, 200, p); assert.equal(await a.text(), body, p);
+    assert.match(st(a), /src;desc="r2direct"/, p); assert.doesNotMatch(st(a), /origin;dur/, p); assert.equal(origins, 0, p);
+    assert.ok(store.has("https://www.m365.fm/__r2c" + p), p + ": Schluessel /__r2c wie der Rueckfall");
+  }
+});
+
+test("Kalt: /de/show/episodes/<neu>/ fehlt im Bucket -> GitHub Pages 404 -> englisches Original (301) ohne zweites Lesen", async () => {
+  fresh();
+  const a = await run(req("/de/show/episodes/neu/"));
+  assert.equal(a.status, 301); assert.equal(a.headers.get("location"), "https://www.m365.fm/show/episodes/neu/");
+  assert.deepEqual(pageGets(), ["pages/de/show/episodes/neu/index.html"], "Bucket genau einmal gefragt");
+  assert.deepEqual(originPaths, ["/de/show/episodes/neu/"]);
+});
+
+test("Kalt: /glossary/ selbst und uebersetzte Blogbeitraege nicht direkt (GitHub Pages zuerst)", async () => {
+  for (const p of ["/glossary/", "/de/community/u/x/blog/y/"]) {
+    fresh();
+    await run(req(p));
+    assert.deepEqual(originPaths, [p], p + ": GitHub Pages zuerst");
+    assert.equal(logs.length, 0, p + ": keine Messzeile");
+  }
+});
+
+test("r2OnlyFile: Sitemaps ausser en/de, Exporte, Transkripte; nicht sitemap.xml, feed.xml, Seiten", () => {
+  for (const p of ["/sitemap-fr-blog.xml", "/og-manifest.json", "/episodes-register-2.json", "/show/episodes/a/transcript.txt", "/de/a/transcript.vtt"]) assert.ok(r2OnlyFile(p), p);
+  for (const p of ["/sitemap.xml", "/feed.xml", "/episodes.json", "/a/", "/assets/page.js"]) assert.ok(!r2OnlyFile(p), p);
+});
+
+test("Kalt: Sitemap, Export, Transkript nur im Bucket gleich aus R2 (r2direct), ohne GitHub Pages; gone/src=docs -> GitHub Pages ohne zweites Lesen", async () => {
+  fresh(); ORIGIN_BUILD = "b0";   // Kennung passt nie: bleibt "nicht bereit" (sonst waere ab der zweiten Anfrage R2 zuerst aktiv)
+  const s = await run(req("/sitemap-fr-blog.xml")); assert.equal(s.status, 200); assert.equal(await s.text(), "<urlset>r2</urlset>");
+  assert.equal(s.headers.get("content-type"), "application/xml; charset=utf-8"); assert.match(st(s), /src;desc="r2direct"/); assert.equal(s.headers.get("x-m365-sitemaps"), "r2");
+  const t = await run(req("/show/episodes/a/transcript.txt")); assert.equal(await t.text(), "Hallo"); assert.equal(t.headers.get("x-robots-tag"), "noindex");
+  const e = await run(req("/og-manifest.json")); assert.equal(await e.text(), "[]"); assert.equal(e.headers.get("x-robots-tag"), "noindex");
+  const c = await run(req("/sitemap-fr-blog.xml", { "if-none-match": '"r2"' })); assert.equal(c.status, 304);
+  assert.equal(origins, 0, "kein Umweg ueber GitHub Pages");
+  for (const p of ["/sitemap-fr-alt.xml", "/sitemap-fr-spiegel.xml", "/sitemap-fr-fehlt.xml"]) {
+    r2Gets.length = 0; originPaths.length = 0;
+    const r = await run(req(p)); assert.equal(r.status, 404, p);
+    assert.deepEqual(originPaths, [p], p + ": danach GitHub Pages"); assert.deepEqual(pageGets(), ["pages" + p], p + ": Bucket nur einmal gelesen");
+  }
+});
+
+test("Kalt, Datei bei GitHub Pages vorhanden, aber im Bucket gone: GitHub Pages liefert", async () => {
+  fresh(); ghSitemap = true; ORIGIN_BUILD = "b0";
+  B["pages/sitemap-fr-blog.xml"].customMetadata = { gone: "1" };
+  try { const r = await run(req("/sitemap-fr-blog.xml")); assert.equal(await r.text(), "<urlset>gh</urlset>"); assert.deepEqual(originPaths, ["/sitemap-fr-blog.xml"]); }
+  finally { B["pages/sitemap-fr-blog.xml"].customMetadata = {}; }
+});
+
+test("Warm (Kennung passt): Dateien weiter ueber r2First, Notschalter R2_PRIMARY=0: GitHub Pages zuerst, dann Rueckfall", async () => {
+  fresh(); shared("b1", Date.now() - 1000);
+  const a = await run(req("/sitemap-fr-blog.xml")); assert.equal(a.headers.get("x-m365-src"), "r2"); assert.equal(origins, 0);
+  fresh();
+  const b = await run(req("/sitemap-fr-blog.xml"), { ...env, R2_PRIMARY: "0" }); assert.equal(await b.text(), "<urlset>r2</urlset>"); assert.deepEqual(originPaths, ["/sitemap-fr-blog.xml"]);
 });

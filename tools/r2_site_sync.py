@@ -12,13 +12,18 @@ Ablauf (Aufruf: python tools/r2_site_sync.py <docs>):
     nach dem Purge des R2-Kanten-Caches, tools/purge_changed.py --r2; scheitert er, bleibt die alte Kennung).
     Der Site-Worker nutzt R2 nur, wenn pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt: bei jedem Fehler liefert
     automatisch GitHub Pages, nie ein veralteter Stand aus R2.
+Nie markiert (seit 27.11.2026): gehashte Stylesheets und Skripte pages/assets/<name>.<hash>.<css|js> (r2_common.HASHED_KEY, site_assets.py).
+Markierung (seit 27.11.2026): zusaetzlich Cache-Control GONE_CC (Direktive m365-gone, r2_common), damit der Zonen-Cache des Site-Workers sie erkennt.
+Bestehende Markierungen ohne diese Direktive bekommen sie mit:  python tools/r2_site_sync.py --remark-gone
+(liest meta/gone.json, je Schluessel head_object; nur Objekte mit gone=1 und ohne Direktive: copy_object an Ort und Stelle mit denselben Metadaten und
+demselben Content-Type, nur Cache-Control neu; nichts geloescht, Inhalt unveraendert). Vor dem Umschalten von R2_ZONE_CACHE auf "1" (sitewrk/wrangler.toml).
 Umgebung: R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (GitHub-Secrets); R2_MANIFEST, R2_KEEP_KEYS, R2_CHANGED_OUT, R2_TOMBSTONE_FORCE."""
 import hashlib, json, os, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from r2_common import GONE_KEY, IMG, client, ctype, read_gone, upload, url_of, THREADS   # noqa: E402
+from r2_common import GONE_CC, GONE_KEY, GONE_MARK, HASHED_KEY, IMG, client, ctype, read_gone, upload, url_of, THREADS   # noqa: E402
 
 MARKER = "r2-build.txt"
 META = {"src": "docs"}
@@ -87,13 +92,14 @@ def main(src):
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     if failed: return fail(f"{len(failed)} Dateien nicht geladen (z. B. {failed[0][0]})")
     # Entfernt markieren: nur eigene Spiegel-Objekte (Metadaten src=docs); Altbestand aus r2out/ bleibt wie bisher unberuehrt
-    cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER)
+    # Gehashte Stylesheets/Skripte (HASHED_KEY) nie: alte Seiten verlangen den alten Namen weiter (site_assets.py), der Inhalt darunter aendert sich nie
+    cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER and not HASHED_KEY.match(k))
     def head(k):
         try: return k, (s3.head_object(Bucket=bucket, Key=k).get("Metadata") or {}), None
         except Exception as e: return k, None, str(e)[:120]
     def mark(k):
         try:
-            s3.copy_object(Bucket=bucket, Key=k, CopySource={"Bucket": bucket, "Key": k}, MetadataDirective="REPLACE", ContentType=ctype(k), CacheControl="public, max-age=600", Metadata={**META, "gone": "1"})
+            s3.copy_object(Bucket=bucket, Key=k, CopySource={"Bucket": bucket, "Key": k}, MetadataDirective="REPLACE", ContentType=ctype(k), CacheControl=GONE_CC, Metadata={**META, "gone": "1"})
             return k, None
         except Exception as e: return k, str(e)[:120]
     own, foreign, bad = [], 0, []
@@ -131,8 +137,34 @@ def main(src):
     return 0
 
 
+def remark_gone():
+    """Bestehende Markierungen (meta/gone.json) mit Cache-Control GONE_CC versehen. Ende 0 nur ohne Fehler; nichts geloescht, nur copy_object an Ort und Stelle."""
+    s3, bucket = client()
+    if not s3: return fail("Zugangsdaten fehlen")
+    gone = read_gone(s3, bucket)
+    def one(k):
+        try:
+            h = s3.head_object(Bucket=bucket, Key=k)
+            md = h.get("Metadata") or {}
+            if md.get("gone") != "1": return k, "revived", None   # inzwischen neu geladen: nicht anfassen
+            if GONE_MARK in (h.get("CacheControl") or ""): return k, "ok", None
+            s3.copy_object(Bucket=bucket, Key=k, CopySource={"Bucket": bucket, "Key": k}, MetadataDirective="REPLACE", ContentType=h.get("ContentType") or ctype(k), CacheControl=GONE_CC, Metadata=md)
+            return k, "marked", None
+        except Exception as e: return k, "", str(e)[:120]
+    n = {"marked": 0, "ok": 0, "revived": 0}; bad = []
+    with ThreadPoolExecutor(THREADS) as ex:
+        for k, what, e in ex.map(one, sorted(gone)):
+            if e:
+                bad.append(k)
+                if len(bad) <= 5: print("Nachmarkieren fehlgeschlagen", k, e)
+            else: n[what] += 1
+    print(f"Entfernt-Liste: {len(gone)}, nachmarkiert: {n['marked']}, schon markiert: {n['ok']}, inzwischen wieder geladen (unberuehrt): {n['revived']}, Fehler: {len(bad)}")
+    return fail(f"{len(bad)} Schluessel nicht nachmarkiert") if bad else 0
+
+
 if __name__ == "__main__":
     a = sys.argv[1:]
+    if a == ["--remark-gone"]: sys.exit(remark_gone())
     if a[:1] == ["--marker"] and len(a) == 2: sys.exit(marker(Path(a[1])))
     if len(a) == 1: sys.exit(main(Path(a[0])))
     print(__doc__); sys.exit(2)
