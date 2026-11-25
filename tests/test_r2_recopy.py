@@ -115,6 +115,21 @@ class Recopy(unittest.TestCase):
         self.assertEqual(json.loads(d.read_text())[P + "/i/5254f600109b589b2c2d-r1200x675.webp"], [1200, 675])
 
 
+class RealMap(unittest.TestCase):
+    """Der Blogbeitrag (Community-Export) traegt schon die alte R2-Adresse statt der Pexels-Adresse (Seitenbau-Pruefung 25.11.2026:
+    /community/u/mirko-p/blog/stop-the-industrialization-.../ verwies weiter auf das 1,63-MB-Original). Der Eintrag R2-alt -> R2-neu in
+    data/r2_map.json stellt auch diese Verweise um; Masse kommen dann aus r2_dims (1200x675)."""
+    NEW = P + "/i/5254f600109b589b2c2d-r1200x675.webp"
+
+    def test_old_r2_url_rewritten_with_new_dims(self):
+        if str(ROOT) not in sys.path: sys.path.insert(0, str(ROOT))
+        import site_r2 as R2, site_img_dims as DM
+        self.assertEqual(R2.rewrite(f'<img src="{P}/i/5254f600109b589b2c2d.webp">'), f'<img src="{self.NEW}">')
+        self.assertEqual(R2.rewrite(f'<img src="{self.NEW}">'), f'<img src="{self.NEW}">', "neue Adresse bleibt (kein zweites Umschreiben)")
+        self.assertEqual(R2.rewrite(K), self.NEW)
+        self.assertEqual(list(DM._dimensions(P + "/i/5254f600109b589b2c2d.webp")), [1200, 675])
+
+
 class Workflow(unittest.TestCase):
     def test_r2_images_pushes_to_dispatch_branch(self):
         y = (ROOT / ".github" / "workflows" / "r2-images.yml").read_text("utf-8")

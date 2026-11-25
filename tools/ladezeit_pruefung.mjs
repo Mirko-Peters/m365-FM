@@ -14,7 +14,8 @@ const r2List = [...walk(r2out)];
 console.log(`docs/: ${docsSet.size} Dateien, r2out/: ${r2List.length} Dateien`);
 // ---- 1
 const groups = new Map(); let only = 0, miss = 0;
-const shape = (p) => p.replace(/\/[a-z]{2}\//, "/<l>/").replace(/^\/[a-z]{2}\//, "/<l>/").split("/").slice(0, 4).map((s, i) => i >= 2 && s && !s.includes("<") ? (/\.[a-z0-9]+$/.test(s) ? "*" + s.slice(s.lastIndexOf(".")) : "*") : s).join("/");
+const WORDS = new Set(["community", "u", "c", "blog", "entity", "glossary", "show", "episodes", "learn", "tag", "search", "blog-import", "events", "topics", "wiki", "directory", "sponsor", "m365con", "updates", "podcast", "top"]);
+const shape = (p) => p.split("/").map((s, i) => !s || (i === 1 && /^[a-z]{2}$/.test(s)) || WORDS.has(s) ? s : /\.[a-z0-9]+$/.test(s) ? "*" + s.slice(s.lastIndexOf(".")) : "*").join("/").replace(/^\/\*\/\*/, "/*/*");
 for (const rel of r2List) {
   if (docsSet.has(rel)) continue;
   only++;
@@ -78,3 +79,6 @@ const hits = new Map();
 for (const [d, rel] of allHtml) { const h = fs.readFileSync(path.join(d, rel), "utf8"); for (const m of h.matchAll(/https:\/\/[a-z0-9.-]+\/i\/5254f600109b589b2c2d[^"'\s)&]*/g)) { const e = hits.get(m[0]) || { n: 0, ex: rel }; e.n++; hits.set(m[0], e); } }
 for (const [u, e] of hits) console.log(`  ${String(e.n).padStart(5)}  ${u}   z. B. ${e.ex}`);
 if (!hits.size) console.log("  keine Verweise gefunden");
+for (const [d, rel] of allHtml) { const h = fs.readFileSync(path.join(d, rel), "utf8"); if (!h.includes("5254f600109b589b2c2d")) continue;
+  for (const m of h.matchAll(/<(?:img|meta|link)\b[^>]*5254f600109b589b2c2d[^>]*>/g)) console.log(`  ${rel}: ${m[0].slice(0, 300)}`);
+  for (const m of h.matchAll(/"(?:image|thumbnailUrl|url)"\s*:\s*"[^"]*5254f600109b589b2c2d[^"]*"/g)) console.log(`  ${rel} (JSON-LD): ${m[0]}`); }
