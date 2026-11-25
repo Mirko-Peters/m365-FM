@@ -9,7 +9,7 @@ on:
         description: "Anzahl Blogbeiträge für die Inhaltsprüfung"
         default: "50"
   schedule:
-    - cron: "47 6 * * *"
+    - cron: "47 6 * * 1"   # woechentlich (Montag): der Drift-Check liest den ganzen Entitaeten-Export aus D1, die Live-Pruefung liest Seiten aus R2 (D1-/R2-Kosten)
 permissions:
   contents: write
 concurrency:

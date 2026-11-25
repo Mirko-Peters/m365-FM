@@ -1,7 +1,7 @@
 name: Community-API (Cloudflare Worker) einrichten und veröffentlichen
 on:
   schedule:
-    - cron: "50 5 * * *"   # taeglich: Spreaker-Token per OAuth erneuern und neu ausrollen
+    - cron: "50 5 * * *"   # taeglich: Spreaker-Token per OAuth erneuern; nur Token-Lauf (TOKEN_ONLY: secret put, ohne D1-Sicherung, Migration und Deploy)
   workflow_dispatch:
   push:
     branches: [main]
@@ -70,6 +70,9 @@ jobs:
         working-directory: worker
         run: node setup.mjs
         env:
+          # D1-Kosten: der taegliche Zeitplan erneuert nur die Tokens (secret put rollt die laufende Fassung mit dem neuen Wert aus). Push und
+          # Handlauf wie bisher; setup.mjs sichert D1 dort nur, wenn Migrationen ausstehen (bei unklarem Stand immer).
+          TOKEN_ONLY: ${{ github.event_name == 'schedule' && '1' || '' }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -108,7 +111,7 @@ jobs:
           D1_BACKUP_KEY: ${{ secrets.D1_BACKUP_KEY }}
         run: |
           f=worker/backup-d1.sql
-          if [ ! -f "$f" ]; then echo "Keine D1-Sicherung in diesem Lauf."; exit 0; fi
+          if [ ! -f "$f" ]; then echo "Keine D1-Sicherung in diesem Lauf (keine ausstehenden Migrationen oder Token-Lauf; zurueckholen ueber D1 Time Travel)." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
           if [ -n "$D1_BACKUP_KEY" ]; then
             openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -in "$f" -out "$f.enc" -pass env:D1_BACKUP_KEY
             echo "d1enc=1" >> "$GITHUB_ENV"; echo "D1-Sicherung verschluesselt ($(wc -c < "$f.enc") Bytes)."
