@@ -203,6 +203,35 @@ class PurgeFlowTest(unittest.TestCase):
         self.assertLess(3261 * 2, load().MAX_URLS)
 
 
+class R2UploadPurgeTest(unittest.TestCase):
+    """Build-Job: /__r2f der eben nach R2 geladenen Seiten sofort leeren (sie sind ab dem Upload live, auch wenn danach eine Pruefung den Bau stoppt)."""
+    def run_it(self, urls, cf, env=None):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "r2-changed.json"; f.write_text(json.dumps(urls))
+            m = load()
+            with mock.patch.dict(os.environ, env if env is not None else {"CLOUDFLARE_API_TOKEN": "t", "CF_ZONE_ID": "Z", "BASE": BASE}, clear=True), mock.patch("urllib.request.urlopen", cf), mock.patch("time.sleep"):
+                return m.main_r2_upload(str(f))
+
+    def test_purges_uploaded_pages_under_r2f(self):
+        cf = FakeCF()
+        self.assertEqual(self.run_it(["/fr/y/", "/ja/z/transcript.txt", "/fr/bild.png"], cf), 0)
+        self.assertEqual(sorted(cf.files), [BASE + "/__r2f/fr/y/", BASE + "/__r2f/ja/z/transcript.txt"], "Bilder nie (kommen nie aus R2 zuerst)")
+
+    def test_never_blocks(self):
+        self.assertEqual(self.run_it(["/fr/y/"], FakeCF(), env={}), 0, "ohne Token: Warnung, Ende 0")
+        cf = FakeCF(fail_files=True, fail_all=True); self.assertEqual(self.run_it(["/fr/y/"], cf), 0)
+        self.assertEqual(self.run_it([], FakeCF()), 0)
+
+    def test_workflow_step_right_after_upload(self):
+        wf = yaml.safe_load((ROOT / ".github" / "workflows" / "site.yml").read_text("utf-8"))
+        st = wf["jobs"]["build"]["steps"]
+        up = next(i for i, s in enumerate(st) if "tools/r2_pages_upload.py r2out" in s.get("run", ""))
+        pu = next(i for i, s in enumerate(st) if "--r2-upload r2-changed.json" in s.get("run", ""))
+        self.assertEqual(pu, up + 1); self.assertTrue(st[pu]["continue-on-error"])
+        checks = [i for i, s in enumerate(st) if any(c in s.get("run", "") for c in ("check_schema.py", "check_encoding.py", "check_titles.py"))]
+        self.assertTrue(checks and all(i > pu for i in checks), "vor den blockierenden Pruefungen")
+
+
 class WorkflowOrderTest(unittest.TestCase):
     """site.yml: der R2-Purge laeuft nach dem vollstaendigen Spiegel und vor der Bau-Kennung, ein Fehlschlag verhindert die Kennung; sie traegt die Endung des Site-Workers."""
     def test_order_and_marker(self):

@@ -1125,29 +1125,18 @@ def build():
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
     import site_related as SRL   # feste "Aehnliche Folgen" je Inhalt (data/sidebar_related.json), statt "Neueste Folgen" (Mirko, 25.11.2026)
-    _SRS = SRL.Store(); _SRP = []
-    def _rel_picker():
-        """Einmal je Bau, erst beim ersten neuen Schluessel (site_related.build_picker): Punkte je Entitaet fuer die Folgen der Hauptshow
-        (site_podpage.ep_hits wie find_episodes) und fuer die Videos mit Dub-Fassung (englisches Original ueber ORIG, sonst _dub_hits)."""
-        if not _SRP:
-            import site_podpage as _PP
-            _ix = _PP.episode_index(BASE); _H = _PP.ep_hits(BASE)
-            _SRP.append((*SRL.build_picker(_H, _ix, by_vid, ORIG, _dub_hits, SX.episodes_for), _ix, _H))
-        return _SRP[0]
+    _SRS = SRL.Store()
+    def _rel_load():   # einmal je Bau, erst beim ersten Bedarf: Folgen der Hauptshow und ihre Entitaets-Treffer (site_podpage.ep_hits wie find_episodes)
+        import site_podpage as _PP
+        return _PP.episode_index(BASE), _PP.ep_hits(BASE)
+    # ORIG und _dub_hits entstehen erst weiter unten in build(): ueber lambda erst beim Aufruf gelesen (wie vorher in der Closure related_for)
+    _REL = SRL.Related(_SRS, _rel_load, by_vid, None, lambda lg, it: _dub_hits(lg, it), SX.episodes_for, SBX.by,
+                       lambda lg, text, ids, exclude: [e["id"] for e in SBR.chips_for(SBX, text, ids, exclude, lang=lg)],
+                       url_of, anchor_title, TODAY)
     def related_for(l, key, text="", ids=None, exclude=()):
         """[(url, titel)] der festen aehnlichen Folgen einer Inhaltsseite in ihrer Sprache; ohne key (Uebersichtsseiten) oder mit SIDEBAR_RELATED=0: None."""
-        if not key or not SRL.enabled(): return None
-        def _compute():
-            P, _yts, _ix, _H = _rel_picker()
-            _rid = SRL.ids_for(key, _H, SBX.by, lambda: [e["id"] for e in SBR.chips_for(SBX, text, ids, exclude, lang=l)], exclude)
-            _ss, _sv = SRL.self_of(key, lambda s: _yts.get(s, ()), lambda v: {ORIG[v]} if v in ORIG else ())
-            return P.pick(_rid, _ss, _sv)
-        ent = SRL.fixed(_SRS, key, _compute)   # einmal berechnet, danach nur gelesen (neue Folgen aendern die Seite nicht)
-        import site_podpage as _PP
-        _bys = _PP.episode_index(BASE)["by_slug"]
-        en_link = lambda s: (_bys[s]["url"], _bys[s]["e"]["title"]) if s in _bys else None
-        dub_link = lambda v, lg: (url_of(by_vid[v][lg]), anchor_title(by_vid[v][lg]["e"]["title"])) if lg in by_vid.get(v, {}) else None
-        return SRL.links(ent, l, en_link, dub_link)
+        _REL.orig = ORIG   # ORIG (weiter unten in build() gesetzt) steht fest, bevor die erste Seite gebaut wird
+        return _REL.links_for(l, key, text, ids, exclude)
     def sidebar(l, text="", ids=None, exclude=(), home=False, topics_h="", key=""):
         """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen. key: Inhalts-Schluessel (site_related) fuer die festen
         "Aehnlichen Folgen"; ohne key (Uebersichten) keine Folgen-Karte. Linkziele: Englisch die Hauptshow (/show/), Dub-Sprachen die Folgen ihrer Sprache.
@@ -1735,7 +1724,7 @@ def build():
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
-    _SRS.save()   # neue feste "Aehnliche Folgen" (alle Inhaltsseiten sind gebaut); site.yml sichert die Datei per Bot-Commit
+    _SRS.save(allow=LRN.ENTITY_EXPORT_OK is not False)   # neue feste "Aehnliche Folgen" (alle Inhaltsseiten sind gebaut); ohne Entitaeten-Export nicht (site_related); site.yml sichert die Datei per Bot-Commit
     try:   # SEO-Check-Seite (noindex): Episoden + Community-Inhalte
         _urls = {f'{i["vid"]}:{l}': url_of(i) for l in active for i in by_lang[l] if i.get("vid")}
         SEOR.build(_ctx, _people, [p for p in _posts if not p.get("legacy") and not p.get("html")], PODS.fetch_eps(COMMUNITY_API), VIDS.fetch_videos(COMMUNITY_API), (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), SEOR.author_info(AUTHOR), _urls)

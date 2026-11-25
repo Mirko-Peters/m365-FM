@@ -11,8 +11,13 @@ Paginierung, Show-Start, Gaeste-/Hosts-/Sponsoren-Liste) rufen die Seitenleiste 
 Schluessel je Inhalt, sprachneutral (nicht je Sprachpfad): e:<podpage-slug> (englische Folge und ihre Dub-Fassungen), v:<youtube-id> (Dub-Folge
 ohne englisches Original), ent:<id>, g:<gast>, p:<show-seite>, blog:<handle>/<slug>, vid:<slug>, lib:<handle>-<slug>, pod:<slug>, evt:<handle>,
 u:<handle>, c:<handle>, live:<slug>.
-Eintrag: {"e": [bis zu 5 Slugs der Hauptshow], "v": [bis zu 8 YouTube-IDs mit Dub-Fassung]}. Englische Seiten zeigen "e", jede Dub-Sprache die
-ersten 5 aus "v", die es in ihrer Sprache gibt. Nicht mehr vorhandene Folgen entfallen beim Ausgeben (der Eintrag bleibt).
+Eintrag: {"e": [bis zu 5 Slugs der Hauptshow], "v": [YouTube-IDs mit Dub-Fassung]}. Englische Seiten zeigen "e", jede Dub-Sprache die
+ersten 5 aus "v", die es in ihrer Sprache gibt. "v" ist so gewaehlt, dass jede Dub-Sprache ihre 5 besten bekommt (Arabisch hat nur fuer gut ein
+Drittel der Videos eine Fassung): ein Video kommt in der Rangfolge dazu, solange eine seiner Sprachen noch keine 5 hat (hoechstens NV).
+Nicht mehr vorhandene Folgen entfallen beim Ausgeben (der Eintrag bleibt).
+Wann ein Eintrag fest wird (fixed): nur mit Treffer (ein leerer Eintrag wird jeden Bau neu gerechnet, bis eine passende Folge existiert, dann
+aendert sich die Seite genau einmal), bei einer Folge (e:) erst mit Kernpunkten/FAQ oder nach FRESH_DAYS Tagen (die ersten Baus einer neuen Folge
+kennen sonst nur ihren Titel), und nur, wenn der Bau den D1-Export der Entitaeten hatte (Store.save(allow=False) schreibt sonst nichts).
 Auswahl ohne KI (vorhandene Logik wie site_podpage.find_episodes): Entitaeten der Seite (Themen-Chips), je Folge Titel 3 Punkte, Nennungen in
 Kernpunkten/FAQ bis 3, QA-gepruefte Extraktion +5; die ersten 3 Entitaeten zaehlen doppelt; nur Punkte > 0; Gleichstand: neuer zuerst, dann Slug.
 Nie die Seite selbst.
@@ -23,7 +28,8 @@ from pathlib import Path
 
 F = Path(__file__).parent / "data" / "sidebar_related.json"
 VERSION = 1
-NE, NV, SHOW, NIDS = 5, 8, 5, 12   # gespeicherte EN-Folgen, gespeicherte Dub-Videos, angezeigte Folgen, beruecksichtigte Entitaeten
+NE, NV, SHOW, NIDS = 5, 24, 5, 12   # gespeicherte EN-Folgen, hoechstens gespeicherte Dub-Videos, angezeigte Folgen, beruecksichtigte Entitaeten
+FRESH_DAYS = 30   # eine Folge ohne Kernpunkte/FAQ wird so lange je Bau neu gerechnet (danach fest, auch ohne)
 MAX_BYTES = 3_000_000   # Deckel der Datei (Test): ~6.000 Schluessel x ~300 B
 DOC = "Feste Aehnliche Folgen der Seitenleiste je Inhalt (site_related.py). Einmal berechnet, danach nur gelesen; nicht von Hand pflegen."
 
@@ -35,7 +41,7 @@ def enabled():
 class Store:
     """data/sidebar_related.json: lesen, neue Eintraege merken, mit einem Schluessel je Zeile (sortiert, kleine Diffs) schreiben."""
     def __init__(self, path=F):
-        self.path = Path(path); self.items = {}; self.new = 0
+        self.path = Path(path); self.items = {}; self.new = 0; self.temp = set()   # temp: nur fuer diesen Bau (fixed), nie geschrieben
         try:
             d = json.loads(self.path.read_text("utf-8"))
             if isinstance(d, dict) and d.get("_v") == VERSION and isinstance(d.get("items"), dict):
@@ -46,19 +52,26 @@ class Store:
             print("sidebar_related.json nicht lesbar:", ex)
 
     def get(self, key):
-        return self.items.get(key)
+        ent = self.items.get(key)
+        if key in self.temp:
+            return ent   # in diesem Bau schon gerechnet (vorlaeufig): alle Sprachen gleich
+        return ent if ent and (ent.get("e") or ent.get("v")) else None   # leer (aeltere Datei): wie fehlend, wird neu gerechnet
 
     def put(self, key, entry):
-        self.items[key] = {"e": list(entry.get("e") or [])[:NE], "v": list(entry.get("v") or [])[:NV]}; self.new += 1
+        self.items[key] = {"e": list(entry.get("e") or [])[:NE], "v": list(entry.get("v") or [])[:NV]}; self.new += 1; self.temp.discard(key)
         return self.items[key]
 
     def dumps(self):
-        rows = [json.dumps(k, ensure_ascii=False) + ":" + json.dumps(self.items[k], ensure_ascii=False, separators=(",", ":")) for k in sorted(self.items)]
+        rows = [json.dumps(k, ensure_ascii=False) + ":" + json.dumps(self.items[k], ensure_ascii=False, separators=(",", ":")) for k in sorted(self.items) if k not in self.temp]
         return '{"_v":' + str(VERSION) + ',"_doc":' + json.dumps(DOC, ensure_ascii=False) + ',"items":{\n' + ",\n".join(rows) + "\n}}\n"
 
-    def save(self):
-        """Schreibt nur, wenn neue Eintraege dazugekommen sind (sonst bleibt die Datei byte-gleich, kein Bot-Commit)."""
+    def save(self, allow=True):
+        """Schreibt nur, wenn neue Eintraege dazugekommen sind (sonst bleibt die Datei byte-gleich, kein Bot-Commit). allow=False (Bau ohne
+        D1-Export der Entitaeten): nichts schreiben, die Eintraege dieses Baus gelten nur fuer ihn, der naechste rechnet sie neu."""
         if not self.new:
+            return False
+        if not allow:
+            print(f"::warning::Seitenleiste: {self.new} neue Eintraege fuer Aehnliche Folgen NICHT gespeichert (Entitaeten-Export fehlte), der naechste Bau rechnet sie neu")
             return False
         self.path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.path.with_suffix(".json.tmp"); tmp.write_text(self.dumps(), "utf-8"); tmp.replace(self.path)
@@ -84,15 +97,30 @@ def _score(ids, rank, skip):
     return tot
 
 
+def _cover(ranked, langs_of, n=SHOW, cap=NV):
+    """Videos in Rangfolge, bis jede Sprache n hat: ein Video kommt dazu, solange eine seiner Sprachen noch keine n hat. So bekommt jede Sprache
+    genau ihre n besten (links() nimmt je Sprache die ersten n vorhandenen), auch Arabisch mit wenigen Fassungen."""
+    cnt, out = {}, []
+    for v in ranked:
+        ls = langs_of(v) or ()
+        if any(cnt.get(l, 0) < n for l in ls):
+            out.append(v)
+            for l in ls: cnt[l] = cnt.get(l, 0) + 1
+            if len(out) >= cap: break
+    return out
+
+
 class Picker:
     """Rechnet einen Eintrag aus den Entitaeten der Seite. en_rank(eid) -> {slug: Punkte} (Hauptshow), vid_rank(eid) -> {youtube-id: Punkte}
-    (Videos mit Dub-Fassung); en_date/vid_date: Datum fuer den Gleichstand."""
-    def __init__(self, en_rank, vid_rank, en_date, vid_date):
+    (Videos mit Dub-Fassung); en_date/vid_date: Datum fuer den Gleichstand; vid_langs(v): Sprachen mit Dub-Fassung (ohne: jede ein eigener Platz)."""
+    def __init__(self, en_rank, vid_rank, en_date, vid_date, vid_langs=None):
         self.en_rank, self.vid_rank, self.en_date, self.vid_date = en_rank, vid_rank, en_date, vid_date
+        self.vid_langs = vid_langs or (lambda v: ("*",))
 
     def pick(self, ids, self_slugs=(), self_vids=()):
+        tv = _score(ids, self.vid_rank, set(self_vids))
         return {"e": _top(_score(ids, self.en_rank, set(self_slugs)), self.en_date, NE),
-                "v": _top(_score(ids, self.vid_rank, set(self_vids)), self.vid_date, NV)}
+                "v": _cover(_top(tv, self.vid_date, len(tv)), self.vid_langs)}
 
 
 def build_picker(H, idx, by_vid, orig, dub_hits, episodes_for):
@@ -144,7 +172,7 @@ def build_picker(H, idx, by_vid, orig, dub_hits, episodes_for):
     for v, sl in orig.items(): yts.setdefault(sl, set()).add(v)
     for it in idx["items"]:
         if it.get("yt"): yts.setdefault(it["slug"], set()).add(it["yt"])
-    return Picker(en_rank, vid_rank, {it["slug"]: it["date"] for it in idx["items"]}, vd), yts
+    return Picker(en_rank, vid_rank, {it["slug"]: it["date"] for it in idx["items"]}, vd, lambda v: tuple(sorted(by_vid.get(v) or ()))), yts
 
 
 def ids_for(key, H, live, chips=lambda: [], exclude=()):
@@ -159,10 +187,29 @@ def ids_for(key, H, live, chips=lambda: [], exclude=()):
     return list(dict.fromkeys(list(exclude or ()) + list(chips())))
 
 
-def fixed(store, key, compute):
-    """Der feste Eintrag eines Inhalts: vorhanden -> unveraendert zurueck (auch leer), sonst einmal compute() und speichern."""
+def fixed(store, key, compute, final=True):
+    """Der feste Eintrag eines Inhalts: vorhanden -> unveraendert zurueck, sonst compute(). Gespeichert (fest) wird nur ein Eintrag mit Treffer und
+    final=True; sonst gilt er nur fuer diesen Bau (alle Sprachen gleich) und wird beim naechsten neu gerechnet."""
     ent = store.get(key)
-    return ent if ent is not None else store.put(key, compute())
+    if ent is not None:
+        return ent
+    ent = compute()
+    if final and (ent.get("e") or ent.get("v")):
+        return store.put(key, ent)
+    ent = {"e": list(ent.get("e") or [])[:NE], "v": list(ent.get("v") or [])[:NV]}
+    store.items[key] = ent; store.temp.add(key)   # nur im Speicher (vorlaeufig): alle Sprachen dieses Baus gleich, nie geschrieben
+    return ent
+
+
+def episode_final(it, today, days=FRESH_DAYS):
+    """Eintrag einer Folge der Hauptshow (episode_index-Eintrag) fest machen? Mit Kernpunkten oder FAQ, oder wenn sie aelter als days Tage ist."""
+    if not it or it.get("keypoints") or it.get("faq"):
+        return True
+    import datetime as _dt
+    try:
+        return (_dt.date.fromisoformat(str(today)[:10]) - _dt.date.fromisoformat(str(it.get("date"))[:10])).days > days
+    except ValueError:
+        return True
 
 
 def links(entry, lang, en_link, dub_link, n=SHOW):
@@ -182,3 +229,46 @@ def self_of(key, vids_of_slug=lambda s: (), slugs_of_vid=lambda v: ()):
         v = key[2:]
         return set(slugs_of_vid(v) or ()), {v}
     return set(), set()
+
+
+class Related:
+    """Die festen "Aehnlichen Folgen" eines Baus (aus generate_site.build herausgeloest, damit tests/test_sidebar_related.py den Weg mit echten
+    Aufrufen prueft). load() -> (episode_index, ep_hits), erst beim ersten neuen Schluessel; by_vid/orig/dub_hits/episodes_for wie build_picker;
+    live: erlaubte Entitaeten (site_sidebar.Index.by); chips(lang, text, ids, exclude) -> Entitaets-IDs der Themen-Chips; url_of(dub-folge) und
+    anchor(titel) fuer die Linkziele der Dub-Sprachen; today: Datum des Baus (episode_final)."""
+    def __init__(self, store, load, by_vid, orig, dub_hits, episodes_for, live, chips, url_of, anchor=lambda t: t, today=""):
+        self.store, self._load, self.by_vid, self.orig, self.dub_hits, self.episodes_for = store, load, by_vid, orig, dub_hits, episodes_for
+        self.live, self.chips, self.url_of, self.anchor, self.today = live, chips, url_of, anchor, today
+        self._idx = self._picker = None
+
+    def index(self):
+        if self._idx is None:
+            self._idx = self._load()
+        return self._idx
+
+    def picker(self):
+        if self._picker is None:
+            ix, H = self.index()
+            self._picker = build_picker(H, ix, self.by_vid, self.orig, self.dub_hits, self.episodes_for)
+        return self._picker
+
+    def entry(self, l, key, text="", ids=None, exclude=()):
+        def compute():
+            P, yts = self.picker(); _ix, H = self.index()
+            rid = ids_for(key, H, self.live, lambda: list(self.chips(l, text, ids, exclude)), exclude)
+            ss, sv = self_of(key, lambda s: yts.get(s, ()), lambda v: {self.orig[v]} if v in self.orig else ())
+            return P.pick(rid, ss, sv)
+        final = True
+        if key.startswith("e:") and self.store.get(key) is None:
+            final = episode_final(self.index()[0]["by_slug"].get(key[2:]), self.today)
+        return fixed(self.store, key, compute, final)
+
+    def links_for(self, l, key, text="", ids=None, exclude=()):
+        """[(url, titel)] in der Sprache der Seite; ohne key (Uebersichtsseiten) oder mit SIDEBAR_RELATED=0: None (keine Folgen-Karte)."""
+        if not key or not enabled():
+            return None
+        ent = self.entry(l, key, text, ids, exclude)
+        bys = self.index()[0]["by_slug"] if l == "en" else {}
+        en_link = lambda s: (bys[s]["url"], bys[s]["e"]["title"]) if s in bys else None
+        dub_link = lambda v, lg: (self.url_of(self.by_vid[v][lg]), self.anchor(self.by_vid[v][lg]["e"]["title"])) if lg in self.by_vid.get(v, {}) else None
+        return links(ent, l, en_link, dub_link)

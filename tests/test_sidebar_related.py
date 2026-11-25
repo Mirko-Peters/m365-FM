@@ -108,15 +108,60 @@ class StoreTest(unittest.TestCase):
             calls = []
             again = SR.fixed(st2, "ent:sharepoint", lambda: calls.append(1) or P2.pick(["sharepoint"]))
             self.assertEqual(again, first); self.assertEqual(calls, [], "fester Eintrag wird nicht neu berechnet")
-            self.assertEqual(SR.fixed(st2, "ent:leer", lambda: calls.append(1) or {"e": ["z"]}), {"e": [], "v": []}, "auch leere Treffer bleiben fest")
             self.assertFalse(st2.save()); self.assertEqual(f.read_bytes(), b1, "nichts Neues -> Datei byte-gleich, kein Bot-Commit")
             new = SR.fixed(st2, "ent:neu", lambda: P2.pick(["sharepoint"]))
             self.assertEqual(new["e"][0], "z", "neuer Inhalt bekommt beim ersten Bau seinen Eintrag mit den aktuellen Folgen")
             self.assertTrue(st2.save())
             lines = f.read_text("utf-8").splitlines()
             self.assertTrue(lines[0].startswith('{"_v":1,'))
-            self.assertEqual([l.split('":', 1)[0][1:] for l in lines[1:-1]], ["ent:leer", "ent:neu", "ent:sharepoint"], "ein Schluessel je Zeile, sortiert")
+            self.assertEqual([l.split('":', 1)[0][1:] for l in lines[1:-1]], ["ent:neu", "ent:sharepoint"], "ein Schluessel je Zeile, sortiert; leere Auswahl nicht gespeichert")
             self.assertEqual(json.loads(f.read_text("utf-8"))["items"]["ent:sharepoint"], first)
+
+    def test_empty_selection_not_frozen_filled_once_then_fixed(self):
+        """Seite ohne passende Folge (neue Entitaet, leeres Profil): keine Karte, jeder Bau rechnet neu; sobald eine Folge passt, einmal fest."""
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "s.json"
+            H, idx, by_vid, orig, dh, ef = data()
+            P, _ = SR.build_picker(H, idx, by_vid, orig, dh, ef)
+            st = SR.Store(f)
+            self.assertEqual(SR.fixed(st, "ent:copilot", lambda: P.pick(["copilot"])), {"e": [], "v": []})
+            self.assertEqual(SR.fixed(st, "ent:copilot", lambda: self.fail("im selben Bau nicht neu rechnen")), {"e": [], "v": []}, "alle Sprachen dieses Baus gleich")
+            SR.fixed(st, "ent:sp", lambda: P.pick(["sharepoint"])); st.save()
+            self.assertNotIn('"ent:copilot"', f.read_text("utf-8"), "leer wird nicht gespeichert")
+            H2 = dict(H, z={"t": {"copilot": 1}, "k": {}}); idx["items"].append({"slug": "z", "date": "2026-12-01", "url": "/z/", "e": {"title": "Z"}}); idx["by_slug"]["z"] = idx["items"][-1]
+            P2, _ = SR.build_picker(H2, idx, by_vid, orig, dh, ef)
+            st2 = SR.Store(f); b_sp = json.loads(f.read_text("utf-8"))["items"]["ent:sp"]
+            self.assertEqual(SR.fixed(st2, "ent:copilot", lambda: P2.pick(["copilot"]))["e"], ["z"], "neue passende Folge -> Karte erscheint")
+            self.assertTrue(st2.save()); b2 = f.read_bytes()
+            self.assertEqual(json.loads(b2)["items"]["ent:sp"], b_sp, "nicht-leerer Eintrag bleibt byte-gleich")
+            H3 = dict(H2, y={"t": {"copilot": 1}, "k": {"copilot": 3}}); idx["items"].append({"slug": "y", "date": "2026-12-02", "url": "/y/", "e": {"title": "Y"}}); idx["by_slug"]["y"] = idx["items"][-1]
+            P3, _ = SR.build_picker(H3, idx, by_vid, orig, dh, ef)
+            st3 = SR.Store(f)
+            self.assertEqual(SR.fixed(st3, "ent:copilot", lambda: P3.pick(["copilot"]))["e"], ["z"], "danach fest")
+            self.assertFalse(st3.save()); self.assertEqual(f.read_bytes(), b2)
+
+    def test_new_episode_without_keypoints_stays_open_for_fresh_days(self):
+        it = {"slug": "n", "date": "2026-11-20", "keypoints": [], "faq": []}
+        self.assertFalse(SR.episode_final(it, "2026-11-25"), "neue Folge ohne Kernpunkte: noch nicht fest")
+        self.assertTrue(SR.episode_final(dict(it, keypoints=["x"]), "2026-11-25"))
+        self.assertTrue(SR.episode_final(dict(it, faq=[{"q": "a", "a": "b"}]), "2026-11-25"))
+        self.assertTrue(SR.episode_final(it, "2026-12-31"), f"nach {SR.FRESH_DAYS} Tagen fest, auch ohne Kernpunkte")
+        self.assertTrue(SR.episode_final(None, "2026-11-25"))
+        with tempfile.TemporaryDirectory() as d:
+            st = SR.Store(Path(d) / "s.json")
+            self.assertEqual(SR.fixed(st, "e:n", lambda: {"e": ["a"], "v": []}, final=False), {"e": ["a"], "v": []})
+            self.assertFalse(st.save(), "vorlaeufig: nicht gespeichert")
+            self.assertEqual(SR.fixed(st, "e:n", lambda: self.fail("nicht neu")), {"e": ["a"], "v": []}, "im selben Bau fuer alle Sprachen gleich")
+
+    def test_no_save_without_entity_export(self):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "s.json"; st = SR.Store(f)
+            SR.fixed(st, "ent:x", lambda: {"e": ["a"], "v": []})
+            self.assertFalse(st.save(allow=False)); self.assertFalse(f.exists(), "Bau ohne Entitaeten-Export schreibt keine neuen Eintraege")
+            self.assertTrue(st.save()); self.assertTrue(f.exists())
+        src = (ROOT / "site_learn.py").read_text("utf-8")
+        self.assertIn("ENTITY_EXPORT_OK = bool(over)", src)
+        self.assertIn("_SRS.save(allow=LRN.ENTITY_EXPORT_OK is not False)", (ROOT / "generate_site.py").read_text("utf-8"))
 
     def test_version_bump_recomputes_and_broken_file_tolerated(self):
         with tempfile.TemporaryDirectory() as d:
@@ -129,8 +174,19 @@ class StoreTest(unittest.TestCase):
 
     def test_entry_size_capped(self):
         st = SR.Store(Path(tempfile.gettempdir()) / "gibt-es-nicht-sr.json")
-        e = st.put("k", {"e": list("abcdefgh"), "v": [f"v{i}" for i in range(20)]})
+        e = st.put("k", {"e": list("abcdefgh"), "v": [f"v{i}" for i in range(40)]})
         self.assertEqual((len(e["e"]), len(e["v"])), (SR.NE, SR.NV))
+
+    def test_dub_list_covers_every_language_with_five(self):
+        """Arabisch hat nur fuer gut ein Drittel der Videos eine Fassung: "v" waechst, bis auch ar seine 5 besten hat; andere Sprachen unveraendert."""
+        langs = {f"V{i:02d}": (("ar", "de", "fr") if i % 3 == 0 else ("de", "fr")) for i in range(30)}
+        ranked = sorted(langs)
+        v = SR._cover(ranked, lambda x: langs[x])
+        de = [x for x in v if "de" in langs[x]][:5]; ar = [x for x in v if "ar" in langs[x]][:5]
+        self.assertEqual(de, ranked[:5], "de: die 5 besten wie vorher")
+        self.assertEqual(ar, [x for x in ranked if "ar" in langs[x]][:5], "ar: seine 5 besten")
+        self.assertEqual(len(v), 8, "nur so viele wie noetig: die 5 besten (2 davon mit ar) und 3 weitere mit ar-Fassung")
+        self.assertLessEqual(len(SR._cover([f"x{i}" for i in range(100)], lambda x: (x,))), SR.NV)
 
     def test_committed_file_small_and_valid(self):
         f = ROOT / "data" / "sidebar_related.json"
@@ -144,6 +200,45 @@ class StoreTest(unittest.TestCase):
     def test_switch(self):
         with mock.patch.dict(os.environ, {"SIDEBAR_RELATED": "0"}): self.assertFalse(SR.enabled())
         with mock.patch.dict(os.environ, {"SIDEBAR_RELATED": ""}): self.assertTrue(SR.enabled())
+
+
+class RelatedSmokeTest(unittest.TestCase):
+    """Der Weg aus generate_site.build (site_related.Related) mit echten Aufrufen: Folge e:, Dub ohne Original v:, Entitaet ent:, ohne key."""
+    def setUp(self):
+        H, idx, by_vid, orig, dh, ef = data()
+        for it in idx["items"]: it.setdefault("keypoints", ["k"]); it.setdefault("faq", [])
+        self.idx, self.by_vid = idx, by_vid
+        self.tmp = tempfile.TemporaryDirectory(); self.f = Path(self.tmp.name) / "s.json"
+        self.loads = []
+        self.R = SR.Related(SR.Store(self.f), lambda: self.loads.append(1) or (idx, H), by_vid, orig, dh, ef, {"sharepoint": 1, "teams": 1, "intune": 1},
+                            lambda lg, text, ids, exclude: [i for i in ("sharepoint", "teams", "intune") if i in text.lower()],
+                            lambda it: f"{BASE}/{it['lang']}/{it['slug']}/", lambda t: t[:58], "2026-11-25")
+
+    def tearDown(self): self.tmp.cleanup()
+
+    def test_all_kinds(self):
+        en = self.R.links_for("en", "e:a", "egal")
+        self.assertTrue(en and all(u.startswith(f"{BASE}/show/episodes/") for u, _ in en)); self.assertNotIn(f"{BASE}/show/episodes/a/", [u for u, _ in en], "nie die Seite selbst")
+        de = self.R.links_for("de", "e:a", "egal")
+        self.assertTrue(all(u.startswith(f"{BASE}/de/") for u, _ in de)); self.assertNotIn("A de", [t for _, t in de], "auch nicht die eigene Dub-Fassung")
+        fr = self.R.links_for("fr", "v:YT_Y_______", "Teams")
+        self.assertNotIn(f"{BASE}/fr/yt_y_______-fr/", [u for u, _ in fr])
+        ent = self.R.links_for("en", "ent:intune", "Intune", exclude=("intune",))
+        self.assertEqual(ent[0][0], f"{BASE}/show/episodes/g/", "Extraktion +5")
+        self.assertIsNone(self.R.links_for("en", "", "SharePoint"), "Uebersichtsseite: keine Folgen-Karte")
+        self.assertEqual(self.R.links_for("ar", "ent:intune", "Intune", exclude=("intune",)), [], "Sprache ohne Fassung: leer, kein Fehler")
+        self.assertEqual(self.loads, [1], "Folgen-Index einmal je Bau")
+        self.assertTrue(self.R.store.save())
+        keys = set(json.loads(self.f.read_text("utf-8"))["items"])
+        self.assertTrue({"e:a", "ent:intune"} <= keys)
+        with mock.patch.dict(os.environ, {"SIDEBAR_RELATED": "0"}): self.assertIsNone(self.R.links_for("en", "e:a"))
+
+    def test_new_episode_without_keypoints_not_frozen(self):
+        self.idx["items"].append({"slug": "neu", "date": "2026-11-24", "url": f"{BASE}/show/episodes/neu/", "e": {"title": "NEU"}, "keypoints": [], "faq": []})
+        self.idx["by_slug"]["neu"] = self.idx["items"][-1]
+        self.R.links_for("en", "e:neu", "SharePoint")
+        self.R.store.save()
+        self.assertFalse(self.f.exists() and "e:neu" in json.loads(self.f.read_text("utf-8"))["items"], "erst mit Kernpunkten (oder nach 30 Tagen) fest")
 
 
 class CallersTest(unittest.TestCase):
@@ -170,7 +265,8 @@ class CallersTest(unittest.TestCase):
         g = self.src("generate_site.py")
         for call in ('side=side_for(l, label, body))', 'side=side_for(l, _pt, _pb))', 'side=side_for(l, label, body), switch=sw_top)'):
             self.assertIn(call, g, call)
-        self.assertIn('if not key or not SRL.enabled(): return None', g)
+        self.assertIn('if not key or not enabled():\n            return None', self.src("site_related.py"))
+        self.assertIn("return _REL.links_for(l, key, text, ids, exclude)", g)
 
     def test_sidebar_without_latest_episodes(self):
         g = self.src("generate_site.py")
@@ -178,12 +274,19 @@ class CallersTest(unittest.TestCase):
         self.assertNotIn("by_lang.get(l", body, "keine neuesten Folgen der Sprache mehr")
         self.assertNotIn("episode_index(BASE)[\"items\"]", body)
         self.assertIn("related=rel", body)
-        self.assertIn("_SRS.save()", g)
+        self.assertIn("_SRS.save(allow=", g)
 
     def test_workflow_saves_file(self):
+        import yaml
         w = self.src(".github/workflows/site.yml")
-        step = w[w.index("- name: Money-Keywords und Profil-Export sichern"):w.index("- name: Interne Links prüfen")]
-        self.assertEqual(step.count("data/sidebar_related.json"), 3, "Kommentar, git status und git add")
+        st = yaml.safe_load(w)["jobs"]["build"]["steps"]
+        gen = next(i for i, s in enumerate(st) if s.get("run") == "python generate_site.py")
+        fetch, save = st[gen - 1], st[gen + 1]
+        self.assertIn("git checkout origin/main -- data/sidebar_related.json", fetch["run"], "neuester Stand von main vor dem Bau (wartender Bau hinter dem naechtlichen)")
+        self.assertEqual(save["if"], "always() && hashFiles('data/sidebar_related.json') != ''", "sofort nach dem Bau und auch, wenn spaeter eine Pruefung scheitert")
+        self.assertIn("git add data/sidebar_related.json", save["run"]); self.assertIn("git diff --quiet origin/main -- data/sidebar_related.json", save["run"])
+        up = next(i for i, s in enumerate(st) if "r2_pages_upload.py" in s.get("run", ""))
+        self.assertLess(gen + 1, up, "vor dem R2-Upload")
         self.assertIn("SIDEBAR_RELATED: ${{ vars.SIDEBAR_RELATED }}", w)
         self.assertNotRegex(w, re.compile(r"^\s*paths:.*data/", re.M), "Daten-Commits loesen den Seitenbau nicht aus")
 
