@@ -6,6 +6,7 @@ import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
 import { pairNewOrgEntity, pairExisting } from "./orgpair.js";
+import { readJson, sourceState } from "./srcmeta.js";
 import { AI_PREFIX, aiFieldValues, aiFieldsOf, aiUserId, humanEdited, ownedEntities, revSource, stateHash } from "./entfill.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
@@ -59,18 +60,32 @@ async function loadEntityMap(env) {
 }
 
 // Cron: neue Eintraege aus entities.json (Repo) in die Datenbank uebernehmen (nur IDs ohne live-Fassung; nichts wird ueberschrieben) - ersetzt den Knopf in der Verwaltung fuer den laufenden Betrieb
-export async function importEntitiesFromSite(env) {
-  const db = env.DB, list = await siteEntities(env, 0);
+// D1-Kosten: der Cron laeuft alle 30 Minuten, entities.json und entities-src.json aendern sich nur mit einem Seitenbau. Beide Dateien (und
+// meta entity_source) gehen in einen Fingerabdruck (meta entities_src, srcmeta.js); ist er unveraendert, endet der Lauf ohne die Lesung aller
+// live-eids, ohne den Abgleich und ohne die Paarung. Gespeichert wird er nur, wenn der Lauf alles erledigt hat (Abgleich: alle Kandidaten
+// geprueft; Paarung: nichts mehr offen oder kein Fortschritt mehr). Sicherheitsnetz: der Tageslauf (daily, 06:00) rechnet immer voll, z. B. fuer
+// einen Abgleich, der wegen einer gleichzeitigen Bearbeitung ausgelassen wurde, oder eine in D1 entfernte live-Fassung.
+async function siteJson(env, path) {
+  try { const r = await fetch(env.SITE + path, { cf: { cacheTtl: 0 } }); return r.ok === false ? null : await readJson(r); } catch { return null; }
+}
+export async function importEntitiesFromSite(env, { daily = false } = {}) {
+  const db = env.DB, file = await siteJson(env, "/entities.json"), list = file?.json?.entities || [];
   if (!list.length) return { skipped: "entities.json nicht erreichbar" };
+  const srcFile = await siteJson(env, "/entities-src.json");
+  const st = await sourceState(db, "entities_src", file.text + "\u0001" + (srcFile?.text || "") + "\u0001" + (await source(env)));
+  if (st.same && !daily) return { skipped: "unveraendert", imported: 0 };
   const have = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || []).map((r) => r.eid));
   const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id)), t = Math.floor(Date.now() / 1000);
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
   if (todo.length) dropEntityMap(env);
-  const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));
+  const synced = await syncEntitiesFromSite(env, { list: srcFile?.json?.entities }).catch((e) => ({ error: String(e).slice(0, 120) }));
   dropEntityMap(env);   // der Abgleich kann live-Fassungen ersetzen; die Paarung danach braucht den neuen Stand
   const paired = await pairExisting(env, { dry: false, limit: 50 }).catch((e) => ({ error: String(e).slice(0, 120) }));   // neue Firmen-Entitaeten aus dem Repo bekommen ihre Paar-Firma automatisch (idempotent)
-  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced, paired };
+  const syncDone = !synced.error && (synced.skipped === undefined || /entity_source=db/.test(synced.skipped)) && !(synced.candidates > synced.checked);
+  const pairDone = !paired.error && (!(paired.remaining > 0) || !(paired.linked + paired.entities_created + paired.orgs_created));
+  if (syncDone && pairDone) await st.commit();
+  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced, paired, ...(syncDone && pairDone ? {} : { open: 1 }) };
 }
 
 // T30: Abgleich JSON -> D1 fuer Entitaeten, die schon in der Datenbank sind. Grundlage ist /entities-src.json (Repo-Fassung ohne
@@ -125,8 +140,8 @@ export function mergeFromJson(json, revs, sysId) {
 export async function syncEntitiesFromSite(env, opts = {}) {
   const db = env.DB;
   if ((await source(env)) === "db") return { skipped: "entity_source=db" };
-  let list = [];
-  try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) list = (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
+  let list = Array.isArray(opts.list) ? opts.list : [];   // importEntitiesFromSite gibt die schon geladene Datei mit
+  if (!list.length) try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) list = (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
   if (!list.length) return { skipped: "entities-src.json nicht erreichbar" };
   const last = +(await db.prepare("SELECT v FROM meta WHERE k='ent_src_n'").first().catch(() => null))?.v || 0;
   if (last && list.length < last * 0.8) return { skipped: `entities-src.json unvollstaendig (${list.length} statt ${last})` };   // Schutz vor einem halben Seitenbau

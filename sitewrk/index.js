@@ -20,7 +20,9 @@ export const r2EdgeTtl = (env) => { const n = Number(env && env.R2_EDGE_TTL); re
 // Typische Scanner-Adressen (WordPress, PHP, Zugangsdateien): die Website hat keine solche Adresse (geprueft 25.11.2026: docs/, data/*.json,
 // data/podpage/redirects.json, data/redirects_extra.json, sitewrk/test/legacy_cases.json). Frueh ein 404 ohne Abruf bei GitHub Pages und ohne R2-Lesung,
 // im Browser bzw. bei Zwischen-Caches einen Tag gueltig. /.well-known/ ist nicht betroffen.
-export const SCANNER = /\.php\d?$|(?:^|\/)wp-(?:admin|content|includes|json|login|config|cron|signup|load|mail|trackback|links)|(?:^|\/)\.(?:env|git)(?:[./_-]|$)/i;
+// wp-…: nur als ganzes Pfadsegment (danach "/", "." oder Ende) und nur an der Wurzel oder unter EINEM Vorsatz-Segment (/blog/wp-admin/,
+// /wordpress/wp-login.php), nie unter /community/ oder /entity/: Mitglieder waehlen Blog-Slugs und Handles selbst (wp-mail-smtp-…, wp-content-pro).
+export const SCANNER = /\.php\d?$|^\/(?:(?!community\/|entity\/)[^/]+\/)?wp-(?:admin|content|includes|json|login|config|cron|signup|load|mail|trackback|links)(?:[/.]|$)|(?:^|\/)\.(?:env|git)(?:[./_-]|$)/i;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
 // HTML-Adressen: Verzeichnisse, .html und Pfade ohne Dateiendung. Dateien (.json, .xml, .txt, Bilder, Assets) sind keine Seiten.

@@ -26,7 +26,7 @@ import { importEpisodes, importTranslations, handleRegister } from "./register.j
 import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
 import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats, deleteUserSearchDemand } from "./search_demand.js";
 import { entityMap, tickEnv } from "./entities.js";
-import { meterDb } from "./d1meter.js";
+import { track } from "./track.js";   // Cron-Protokoll (cron_runs), D1-Messung je Aufgabe
 import { handleProfiles, deleteUserData, refreshProfilesExportIfStale } from "./profiles.js";
 import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
@@ -652,7 +652,7 @@ const handlers = {
     env = tickEnv(env);   // D1-Kosten: entityMap() laedt einmal je Lauf statt in jeder Aufgabe (entities.js)
     const daily = event.cron === "0 6 * * *";   // Tageslauf: er uebernimmt um 06:00 auch alle Aufgaben des 30-Minuten-Laufs (siehe oben)
     // Jede Aufgabe bekommt ihr eigenes env (Messhuelle um D1, track); die Funktionen nehmen es als Parameter env.
-    const T = (name, fn) => { const p = track(env, name, fn); ctx.waitUntil(p); return p; };
+    const T = (name, fn) => { const p = track(env, name, fn, { daily }); ctx.waitUntil(p); return p; };
     if (event.cron === "*/15 * * * *") {
       const cleanup = tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0;   // Aufraeumen der Themen-Benachrichtigungen einmal am Tag
       const reminders = T("topicSessionReminders", async (env) => {
@@ -690,7 +690,7 @@ const handlers = {
     T("refreshFollowers", (env) => refreshFollowers(env));
     // Sprecher verknuepfen einmal je Lauf, nachdem beide Event-Aufgaben fertig sind (vorher nach jeder von beiden, also doppelt)
     const events = [T("ensurePastEvents", (env) => ensurePastEvents(env)), T("ensureM365Con", (env) => ensureM365Con(env))];
-    ctx.waitUntil(Promise.all(events).then(() => track(env, "linkSpeakers", async (env) => ({ speakers: await linkSpeakers(env), entities: await linkSpeakerEntities(env) }))));
+    ctx.waitUntil(Promise.all(events).then(() => track(env, "linkSpeakers", async (env) => ({ speakers: await linkSpeakers(env), entities: await linkSpeakerEntities(env) }), { daily })));
     T("seedRoadmap", (env) => seedRoadmap(env));
     T("purgeMessages", (env) => purgeMessages(env.DB));
     T("purgeEntityClaimReview", (env) => purgeEntityClaimReview(env.DB));
@@ -714,7 +714,7 @@ const handlers = {
     });
     T("syncLiveEvents", (env) => syncLiveEvents(env, entityMap));
     T("syncContentTopics", (env) => syncContentTopics(env));
-    T("importEntitiesFromSite", (env) => importEntitiesFromSite(env));
+    T("importEntitiesFromSite", (env) => importEntitiesFromSite(env, { daily }));   // bei unveraenderten Dateien uebersprungen, im Tageslauf voll
     T("importLibrarySeed", async (env) => (env.LIB_SEED_IMPORT === "1" ? importLibrarySeed(env, (await import("./library_seed.json")).default) : { skipped: "aus (LIB_SEED_IMPORT)" }));   // Start-Eintraege der Bibliothek, Standard aus
     T("importQuotesFromSite", (env) => importQuotesFromSite(env));
     T("importEpisodeUrls", (env) => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
@@ -742,17 +742,3 @@ export default {
     return handlers.scheduled(event, env, ctx);
   },
 };
-
-// Lauf protokollieren; ein Fehler bricht die uebrigen Aufgaben nicht ab. D1-Kosten: eine Zeile am Ende (vorher INSERT beim Start und UPDATE am
-// Ende); ein uebersprungener Lauf (Ergebnis mit skipped, ohne geschriebene Zeile) wird nicht protokolliert, die Verwaltung zeigt dann den letzten
-// echten Lauf. Fehler werden immer protokolliert. info beginnt mit rr/rw = gelesene/geschriebene D1-Zeilen der Aufgabe (d1meter.js).
-// Folge: ein Lauf, der noch arbeitet oder vom Laufzeitende abgebrochen wurde, erscheint nicht mehr als "laeuft".
-async function track(env, name, fn) {
-  const t0 = Math.floor(Date.now() / 1000), m = { rr: 0, rw: 0 }, e = Object.create(env);
-  e.DB = meterDb(env.DB, m);
-  let ok = 1, info = "", r;
-  try { r = await fn(e); } catch (err) { ok = 0; info = String(err && err.message || err).slice(0, 300); console.error("cron", name, info); }
-  if (ok && r && typeof r === "object" && r.skipped !== undefined && !m.rw) return;
-  if (ok) info = JSON.stringify({ rr: m.rr, rw: m.rw, ...(r && typeof r === "object" ? (Array.isArray(r) ? { r } : r) : r === undefined ? {} : { r }) }).slice(0, 300);
-  await env.DB.prepare("INSERT INTO cron_runs(name,started,finished,ok,info) VALUES(?,?,?,?,?)").bind(name, t0, Math.floor(Date.now() / 1000), ok, info).run().catch(() => 0);   // Tabelle fehlt bis zur Migration
-}

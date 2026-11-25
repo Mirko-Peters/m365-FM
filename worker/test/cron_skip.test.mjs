@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { importQuotesFromSite } from "../src/quotes.js";
 import { syncContentTopics } from "../src/topics.js";
+import { importEntitiesFromSite } from "../src/entities.js";
 
 async function setup() {
   const { DatabaseSync } = await import("node:sqlite");
@@ -19,7 +20,7 @@ async function setup() {
         bind(...x) { a = x; return o; },
         all: async () => { log.sql.push(sql); return { results: st.all(...a) }; },
         first: async () => { log.sql.push(sql); return st.get(...a) ?? null; },
-        run: async () => { log.sql.push(sql); const before = changes(); st.run(...a); const n = changes() - before; if (!/INTO meta/.test(sql)) log.writes += n; return { meta: { changes: n } }; },
+        run: async () => { log.sql.push(sql); const before = changes(); const r = st.run(...a); const n = changes() - before; if (!/INTO meta/.test(sql)) log.writes += n; return { meta: { changes: n, last_row_id: Number(r.lastInsertRowid) } }; },
       };
       return o;
     },
@@ -66,4 +67,24 @@ test("Themen: created wird nicht ueberschrieben, unveraenderte topics.json ueber
   assert.equal(log.writes, 3, "dazu das Loeschen der entfallenen Zuordnung");
   assert.deepEqual(raw.prepare("SELECT item_id,eid,weight,created FROM content_topic ORDER BY item_id,eid").all().map((x) => [x.item_id, x.eid, x.weight, x.created === 7]),
     [["a", "azure", 1, true], ["a", "fabric", 0.8, true], ["c", "azure", 1, false]]);
+});
+
+test("Entitaeten: zweiter Lauf mit gleichen entities.json/entities-src.json liest kein entity_rev; geaenderte Datei oder Tageslauf rechnen voll", async () => {
+  const { env, log, raw } = await setup();
+  const ents = [{ id: "contoso", type: "org", name: "Contoso", desc: { en: "Contoso builds Microsoft 365 apps." } }, { id: "hub", type: "product", name: "Hub", desc: { en: "Seed hub text here." } }];
+  const files = { "/entities-src.json": { entities: ents }, "/entities.json": { entities: ents } };
+  const first = await withFetch(files, () => importEntitiesFromSite(env));
+  assert.equal(first.imported, 2); assert.equal(first.open, undefined, "alles erledigt -> Fingerabdruck gespeichert");
+  log.sql = []; log.writes = 0;
+  const again = await withFetch(files, () => importEntitiesFromSite(env));
+  assert.equal(again.skipped, "unveraendert"); assert.equal(again.imported, 0);
+  assert.ok(!log.sql.some((q) => /entity_rev|org_entity|FROM orgs/.test(q)), "keine Lesung aller live-eids, kein Abgleich, keine Paarung");
+  assert.equal(log.writes, 0);
+  log.sql = [];
+  const daily = await withFetch(files, () => importEntitiesFromSite(env, { daily: true }));
+  assert.equal(daily.skipped, undefined, "Tageslauf rechnet voll (Sicherheitsnetz)"); assert.ok(log.sql.some((q) => /SELECT DISTINCT eid FROM entity_rev/.test(q)));
+  const more = [...ents, { id: "neu", type: "concept", name: "Neu", desc: { en: "A new concept for the test." } }];
+  const changed = await withFetch({ "/entities-src.json": { entities: more }, "/entities.json": { entities: more } }, () => importEntitiesFromSite(env));
+  assert.equal(changed.imported, 1, "geaenderte Datei -> neuer Eintrag wird uebernommen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='neu' AND status='live'").get().n, 1);
 });

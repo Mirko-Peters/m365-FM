@@ -8,6 +8,8 @@
 // Auf dem Live-Worker ist ENVIRONMENT nicht gesetzt: isStaging() ist false, nichts davon wird aktiv.
 
 export const isStaging = (env) => String(env?.ENVIRONMENT || "").toLowerCase() === "staging";
+// Teil synthetischer Cache-API-Schluessel (qa.js, search.js): Staging und live teilen die Zone m365.fm und damit den Cache je Rechenzentrum.
+export const cacheEnv = (env) => (isStaging(env) ? "stg" : "live");
 
 // Secrets und Bindungen mit Wirkung nach aussen. In Staging gelten sie als nicht vorhanden (auch wenn sie gesetzt sind).
 // Anmelde-Anbieter (Google, Microsoft, GitHub) bleiben: sie lesen nur eine Identitaet und schreiben nichts.

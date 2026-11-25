@@ -95,11 +95,16 @@ class Workflows(unittest.TestCase):
         for s in (run, push):
             self.assertEqual(s["env"]["ENTITY_EXPORT_FILE"], "${{ runner.temp }}/entity-export.json")   # ausserhalb des Repos (nie committet)
 
-    def test_migration_check_weekly(self):
+    def test_migration_check_drift_weekly_live_check_daily(self):
         wf = self.load("migration-check.yml"); on = wf.get("on") or wf.get(True)
         cron = on["schedule"][0]["cron"].split()
-        self.assertEqual(len(cron), 5); self.assertNotEqual(cron[4], "*")   # ein Wochentag, nicht taeglich
+        self.assertEqual(len(cron), 5); self.assertEqual(cron[4], "*")   # Live-Pruefung der Weiterleitungen weiter taeglich
         self.assertIn("workflow_dispatch", on)
+        steps = wf["jobs"]["check"]["steps"]
+        drift = next(s for s in steps if "check_entity_drift.py" in str(s.get("run", "")))
+        self.assertIn('github.event_name }}" = "schedule" ] && [ "$(date -u +%u)" != "1" ]', drift["run"])   # Drift-Check (D1-Export) nur montags oder von Hand
+        live = next(s for s in steps if "check_migration.py" in str(s.get("run", "")))
+        self.assertNotIn("date -u", live["run"])
 
     def test_worker_schedule_is_token_only(self):
         wf = self.load("worker.yml")

@@ -61,5 +61,8 @@ test("Kurze Suche (< 3 Zeichen): zweiter Abruf aus dem Kanten-Cache ohne D1 und 
     const tasks = []; sql.length = 0;
     await call(env, "AI", "198.51.100.10", { waitUntil: (p) => tasks.push(p) });
     assert.equal(tasks.length, 0, "ohne c=1 keine Zaehlung");
+    assert.ok([...store.keys()].every((k) => k.includes("/live/search-short/")));
+    await call({ ...env, ENVIRONMENT: "staging" }, "AI");
+    assert.equal(store.size, 2, "Staging bekommt einen eigenen Eintrag (gleiche Zone wie live)");
   } finally { globalThis.caches = old; }
 });

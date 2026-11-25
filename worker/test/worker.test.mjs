@@ -1096,7 +1096,7 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
     assert.equal((await importSearchIndex(env)).changed, 0);
     assert.equal(indexWrites(), before, "unveraenderte Dokumente werden nicht erneut geschrieben");
     assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_title_norm_done'").get().v, "1", "Titel-Nachfuellung ist erledigt und entfaellt kuenftig");
-    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, "0", "geaenderter Import weckt den Vektor-Abgleich");
+    assert.match(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, /^0:/, "geaenderter Import weckt den Vektor-Abgleich");
 
     raw.prepare("UPDATE search_doc SET title_norm='' WHERE id=?").run(docs[0].id);
     const beforeTitleNormBackfill = indexWrites();
@@ -1364,6 +1364,48 @@ test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektor
   assert.deepEqual(await syncSearchVectors(env), { deleted: 1 });
   assert.deepEqual(deletions, [await vectorId(docs[1].id)]);
   assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[1].id).gone, 1, "Quelldokument bleibt erhalten");
+});
+
+test("search: Vektor-Abgleich verliert kein Wecken durch parallelen Import (sync-Abfrage -> import schreibt -> sync setzt Ruhetag)", async () => {
+  const { db, raw } = await searchDb();
+  seedSearchDocs(raw, [{ id: "en:a", url: "https://www.m365.fm/a/", lang: "en", type: "page", title: "Vector document a" }]);
+  const env = {
+    DB: db,
+    AI: { async run(_m, { text }) { return { data: text.map(() => Array(1024).fill(0.1)) }; } },
+    VEC: { async upsert() {}, async deleteByIds() {} },
+  };
+  const { syncSearchVectors, wakeVectors } = await import("../src/search.js");
+  assert.equal((await syncSearchVectors(env)).processed, 1);
+  assert.equal((await syncSearchVectors(env)).processed, 0, "leerer Volllauf setzt den Ruhetag");
+  const today = new Date().toISOString().slice(0, 10);
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, today);
+  // Wettlauf: der Import weckt (neues Dokument), waehrend ein schon gestarteter Abgleich noch nichts gefunden hat
+  await wakeVectors(db);
+  const wokeA = raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v;
+  const realPrepare = db.prepare.bind(db);
+  let injected = false;
+  const racing = {
+    ...env,
+    DB: { ...db, batch: db.batch?.bind(db), prepare(sql) {
+      const st = realPrepare(sql);
+      if (!injected && /LEFT JOIN search_vector/.test(sql)) {   // nach der leeren Abfrage schreibt der Import neue Dokumente und weckt erneut
+        const all = st.bind.bind(st);
+        return { bind: (...a) => { const b = all(...a); return { ...b, all: async () => { const r = await b.all(); injected = true; await wakeVectors(db); return r; } }; } };
+      }
+      return st;
+    } },
+  };
+  raw.prepare("UPDATE meta SET v=? WHERE k='search_vectors_idle'").run(wokeA);
+  assert.equal((await syncSearchVectors(racing)).processed, 0);
+  assert.ok(injected);
+  const after = raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v;
+  assert.notEqual(after, today, "das Wecken des Imports bleibt stehen, der naechste Lauf arbeitet");
+  assert.match(after, /^0:/);
+  assert.equal((await syncSearchVectors(env)).processed, 0);
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, today, "ohne Wettlauf ruht der Abgleich wieder");
+  raw.exec("DELETE FROM meta WHERE k='search_vectors_idle'");
+  assert.equal((await syncSearchVectors(env)).processed, 0);
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, today, "fehlende Zeile wird angelegt");
 });
 
 test("vectors: Embeddings, Upsert, gefilterte Abfrage und RRF sind wiederverwendbar", async () => {

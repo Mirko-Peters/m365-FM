@@ -2,6 +2,7 @@ import { rawDb } from "./d1meter.js";
 import { rateLimit, sha256hex } from "./util.js";
 import { embed, queryVectors, rrf, upsertVectors, vectorId } from "./vectors.js";
 import { countSearch } from "./search_demand.js";
+import { cacheEnv } from "./staging.js";
 
 const TYPES = new Set(["episode", "dub_episode", "entity", "person", "glossary", "blog", "event", "show", "page"]);
 const VECTOR_BATCH_SIZE = 200;
@@ -173,7 +174,7 @@ export async function importSearchIndex(env) {
   }
   for (let i = 0; i < statements.length; i += 99) await db.batch(statements.slice(i, i + 99));
 
-  if (changed) await setMeta(db, "search_vectors_idle", "0");   // geaenderte Dokumente: Vektor-Abgleich wieder aufnehmen
+  if (changed) await wakeVectors(db);   // geaenderte Dokumente: Vektor-Abgleich wieder aufnehmen
   const ids = [...new Set(docs.map((doc) => doc.id))];
   await setMeta(db, `search_ids_part_${part}`, JSON.stringify({ cycle, ids }));
   await setMeta(db, "search_import_cycle", cycle);
@@ -191,7 +192,7 @@ export async function importSearchIndex(env) {
     const missing = indexed.filter((row) => !seen.has(row.id)).map((row) => row.id);
     const gone = missing.map((id) => db.prepare("UPDATE search_doc SET gone=1 WHERE id=? AND gone=0").bind(id));
     for (let i = 0; i < gone.length; i += 100) await db.batch(gone.slice(i, i + 100));
-    if (missing.length) await setMeta(db, "search_vectors_idle", "0");   // entfernte Dokumente: Vektoren loeschen
+    if (missing.length) await wakeVectors(db);   // entfernte Dokumente: Vektoren loeschen
     await setMeta(db, "search_complete_cycle", cycle);
     return { part, changed, gone: missing.length, tokenizer };
   }
@@ -203,12 +204,25 @@ function documentText(doc) {
 }
 
 // D1-Kosten: nach einem vollen Durchlauf ohne offene Dokumente merkt sich meta search_vectors_idle den Tag; bis importSearchIndex etwas
-// aendert (setzt "0") oder der Tag wechselt (Sicherheitsnetz: ein voller Abgleich am Tag), entfallen die LEFT-JOIN-Abfrage ueber search_doc
-// und die Rueckkehr des Cursors an den Anfang.
+// aendert (wakeVectors: "0:<Zeit>-<Zufall>", jedes Wecken ein neuer Wert) oder der Tag wechselt (Sicherheitsnetz: ein voller Abgleich am Tag),
+// entfallen die LEFT-JOIN-Abfrage ueber search_doc und die Rueckkehr des Cursors an den Anfang.
+// Wettlauf: importSearchIndex und syncSearchVectors laufen im selben Cron-Tick parallel (index.js). Der Abgleich setzt den Ruhetag deshalb nur
+// bedingt (UPDATE ... WHERE v IS <Wert vom Anfang>): hat der Import inzwischen geweckt, bleibt dessen Wert stehen und der naechste Lauf arbeitet.
+export async function wakeVectors(db) {
+  await setMeta(db, "search_vectors_idle", `0:${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
+}
+async function restVectors(db, before, today) {
+  if (before == null) {
+    await db.prepare("INSERT INTO meta(k,v) VALUES('search_vectors_idle',?) ON CONFLICT(k) DO NOTHING").bind(today).run();
+  } else {
+    await db.prepare("UPDATE meta SET v=? WHERE k='search_vectors_idle' AND v=?").bind(today, before).run();
+  }
+}
 export async function syncSearchVectors(env) {
   if (!env.AI || !env.VEC) return { skipped: "Workers-AI- oder Vectorize-Binding fehlt" };
   const today = new Date().toISOString().slice(0, 10);
-  if ((await meta(env.DB, "search_vectors_idle"))?.v === today) return { skipped: "unveraendert", processed: 0 };
+  const idle = (await meta(env.DB, "search_vectors_idle"))?.v ?? null;
+  if (idle === today) return { skipped: "unveraendert", processed: 0 };
 
   const gone = (await env.DB.prepare(
     "SELECT v.id,v.vid FROM search_vector v INNER JOIN search_doc d ON d.id=v.id WHERE d.gone=1 LIMIT ?",
@@ -234,7 +248,7 @@ export async function syncSearchVectors(env) {
       "LEFT JOIN search_vector v ON v.id=d.id WHERE d.gone=0 AND (v.h IS NULL OR v.h<>d.h) ORDER BY d.id LIMIT ?",
     ).bind(VECTOR_BATCH_SIZE).all()).results || [];
   }
-  if (!docs.length) { await setMeta(env.DB, "search_vectors_idle", today); return { processed: 0 }; }
+  if (!docs.length) { await restVectors(env.DB, idle, today); return { processed: 0 }; }
 
   const vectors = await embed(env, docs.map(documentText));
   const vectorIds = await Promise.all(docs.map(({ id }) => vectorId(id)));
@@ -575,9 +589,9 @@ export async function handleSearch(env, request, url, J, ctx) {
   const pref = url.searchParams.get("pref") || "";
   // D1-Kosten: Suchen unter 3 Zeichen pruefen den Titel per instr()/LIKE ueber alle aktiven Zeilen (bis zu 5 Scans je Anfrage). Ihre Antwort
   // haengt nur von den Parametern ab (keine Vektorsuche unter 3 Zeichen, kein Cookie), deshalb liegt sie 300 s im Kanten-Cache des Rechenzentrums;
-  // ein Treffer kostet weder Ratenlimit noch D1. Ein statischer Praefix-Index waere die gruendlichere Loesung, braucht aber Seitenbau und Migration.
+  // ein Treffer kostet weder Ratenlimit noch D1. Schluessel mit Umgebung (qa.js cacheEnv: Staging und live teilen die Zone). Ein statischer Praefix-Index waere die gruendlichere Loesung, braucht aber Seitenbau und Migration.
   const shortKey = qLength < 3 && globalThis.caches?.default
-    ? new Request(`https://dedupe.m365.fm/search-short/v1?${new URLSearchParams({ q, lang: filters.lang, type: filters.type, entity: filters.entity, year, pref, page: String(page), size: String(size) })}`)
+    ? new Request(`https://dedupe.m365.fm/${cacheEnv(env)}/search-short/v1?${new URLSearchParams({ q, lang: filters.lang, type: filters.type, entity: filters.entity, year, pref, page: String(page), size: String(size) })}`)
     : null;
   if (shortKey) {
     const hit = await globalThis.caches.default.match(shortKey).catch(() => null);

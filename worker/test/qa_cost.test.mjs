@@ -58,3 +58,19 @@ test("/api/edits/pending: ohne Anmeldung leer und ohne D1; angemeldet wie bisher
   assert.match(js, /if \(authHint\(\)\) showVotes\(\);/, "Seite fragt nur mit Anmeldehinweis sofort");
   assert.match(js, /if \(!a\[1\]\.j\.loggedIn\) \{ det\.appendChild\(login\(\)\); return; \}\s*showVotes\(\);/, "sonst nach bestaetigter Anmeldung");
 });
+
+test("/api/qa: Staging und live teilen die Zone, aber nie einen Cache-Eintrag (Umgebung im Schluessel)", async () => {
+  const { qaKey } = await import("../src/qa.js");
+  assert.notEqual(qaKey({ ENVIRONMENT: "staging" }, "azure").url, qaKey({}, "azure").url);
+  assert.match(qaKey({}, "azure").url, /\/live\/qa\/v1\/azure$/); assert.match(qaKey({ ENVIRONMENT: "staging" }, "azure").url, /\/stg\/qa\/v1\/azure$/);
+  const { env } = await setup();
+  const store = new Map(), old = globalThis.caches;
+  globalThis.caches = { default: { async match(r) { const v = store.get(r.url); return v ? new Response(v) : undefined; }, async put(r, res) { store.set(r.url, await res.text()); }, async delete(r) { return store.delete(r.url); } } };
+  try {
+    await qa({ ...env, ENVIRONMENT: "staging" }, "/api/qa?eid=azure");
+    await qa(env, "/api/qa?eid=azure");
+    assert.equal(store.size, 2, "je Umgebung ein eigener Eintrag");
+    assert.equal((await qa({ ...env, ENVIRONMENT: "staging" }, "/api/qa/vote", { id: 2 }, "POST", { aid: 2 })).data.ok, true);
+    assert.deepEqual([...store.keys()].map((k) => k.includes("/live/")), [true], "Loeschen auf Staging laesst den Live-Eintrag stehen");
+  } finally { globalThis.caches = old; }
+});

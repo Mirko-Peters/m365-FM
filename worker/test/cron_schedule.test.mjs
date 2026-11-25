@@ -111,3 +111,32 @@ test("ratelimit: abgelaufene kurze Fenster nach 2 Tagen, alles andere nach 366 T
   }
   for (const c of calls) { const w = evalWin(c.win); if (w !== null) assert.ok(w <= RL_MAX_WINDOW, `${c.f}: ${c.key} ${c.win}`); }
 });
+
+test("Protokoll: im Tageslauf bekommen auch uebersprungene Aufgaben ihre Zeile (Betriebsansicht ohne Luecken)", async () => {
+  const { raw, env } = await setup();
+  await run(env, "*/30 * * * *", "2026-11-10T10:30:00Z");
+  assert.ok(!names(raw).includes("importLibrarySeed"), "tagsueber: uebersprungen -> keine Zeile");
+  raw.exec("DELETE FROM cron_runs");
+  await run(env, "0 6 * * *", "2026-11-10T06:00:00Z");
+  const row = raw.prepare("SELECT ok,finished,info FROM cron_runs WHERE name='importLibrarySeed'").get();
+  assert.ok(row && row.ok === 1 && row.finished > 0, "Tageslauf protokolliert den uebersprungenen Lauf");
+  assert.match(row.info, /"skipped"/);
+});
+
+test("Protokoll: langsame Aufgabe schreibt eine Startzeile (laeuft) und ergaenzt sie am Ende; schnelle nur eine Zeile am Ende", async () => {
+  const { raw, sql, env } = await setup();
+  const { track } = await import("../src/track.js");
+  let release; const gate = new Promise((r) => { release = r; });
+  const p = track(env, "langsam", async () => { await gate; return { done: 1 }; }, { slowMs: 5 });
+  await new Promise((r) => setTimeout(r, 40));
+  const mid = raw.prepare("SELECT finished,ok FROM cron_runs WHERE name='langsam'").all();
+  assert.deepEqual(mid.map((r) => [r.finished, r.ok]), [[0, 0]], "haengt die Aufgabe, bleibt sie als laeuft sichtbar");
+  release(); await p;
+  const end = raw.prepare("SELECT finished,ok,info FROM cron_runs WHERE name='langsam'").all();
+  assert.equal(end.length, 1); assert.equal(end[0].ok, 1); assert.ok(end[0].finished > 0); assert.match(end[0].info, /"done":1/);
+  const n = sql.length;
+  await track(env, "schnell", async () => ({ x: 1 }), { slowMs: 5000 });
+  assert.equal(sql.slice(n).filter((q) => /cron_runs/.test(q)).length, 1, "schnelle Aufgabe: ein INSERT am Ende");
+  await track(env, "schnell-skip", async () => ({ skipped: "x" }), { slowMs: 5000 });
+  assert.ok(!names(raw).includes("schnell-skip"));
+});

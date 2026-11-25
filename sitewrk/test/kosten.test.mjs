@@ -93,13 +93,15 @@ test("Ohne gueltige Bau-Kennung (R2_PRIMARY=0): R2-Rueckfall nach dem 404 wie bi
 });
 
 test("Scanner-Adressen: fruehes 404 ohne GitHub Pages, ohne R2 und ohne Bau-Kennung", async () => {
-  for (const p of ["/wp-login.php", "/xmlrpc.php", "/wp-admin/", "/blog/wp-content/plugins/x/readme.txt", "/wp-includes/wlwmanifest.xml", "/.env", "/.env.local", "/api/.env", "/.git/config", "/.git/HEAD", "/de/index.php", "/wp-json/wp/v2/users"]) {
+  for (const p of ["/wp-login.php", "/xmlrpc.php", "/wp-admin/", "/blog/wp-content/plugins/x/readme.txt", "/wp-includes/wlwmanifest.xml", "/.env", "/.env.local", "/api/.env", "/.git/config", "/.git/HEAD", "/de/index.php", "/wp-json/wp/v2/users", "/wordpress/wp-admin/", "/wp-content"]) {
     origins = []; gets = []; readyMatches = 0;
     const r = await run(req(p)); assert.equal(r.status, 404, p);
     assert.deepEqual(origins, [], p); assert.deepEqual(gets, [], p); assert.equal(readyMatches, 0, p);
     assert.equal(r.headers.get("cache-control"), "public, max-age=86400"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
   }
-  for (const p of ["/.well-known/api-catalog", "/entity/wordpress/", "/show/episodes/wp-ready-copilot/", "/blog/the-env-of-teams/", "/entity/git/", "/entity/github/", "/de/wp/", "/.gitignore-tipps/"]) {
+  for (const p of ["/.well-known/api-catalog", "/entity/wordpress/", "/show/episodes/wp-ready-copilot/", "/blog/the-env-of-teams/", "/entity/git/", "/entity/github/", "/de/wp/", "/.gitignore-tipps/",
+    "/community/u/anna/blog/wp-content-migration-to-sharepoint/", "/blog/wp-login-sso-entra/", "/entity/wp-json/", "/community/u/x/blog/wp-mail-smtp-richtig-konfigurieren/",
+    "/community/u/wp-content-pro/", "/community/u/wp-admin/", "/de/community/u/wp-content-pro/", "/blog/wp-mail-smtp-x/", "/de/wp-content-migration/"]) {
     assert.equal(SCANNER.test(p), false, p);   // echte Adressen und aehnliche Slugs bleiben unberuehrt
   }
   const h = await run(req("/wp-login.php", "HEAD")); assert.equal(h.status, 404); assert.equal(await h.text(), "");

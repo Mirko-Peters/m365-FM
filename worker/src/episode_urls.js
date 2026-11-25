@@ -37,9 +37,10 @@ export async function importEpisodeUrls(env) {
   }
   // Erst nach dem Zustand: eine Folge, deren Adresse sich seit dem letzten Abgleich geaendert hat, ist wieder offen (Wert bei Spreaker passt nicht
   // mehr zur Adresse). Vorher gesetzt, wuerde der noch alte Zustand ("ok" mit der alten Adresse) es im selben Import wieder zuruecksetzen.
-  await db.prepare("UPDATE episode_urls SET status='differs' WHERE status='ok' AND url<>'' AND rtrim(url_on_spreaker,'/')<>rtrim(url,'/')").run().catch(() => 0);
-  await src.commit();
-  return { imported: ok.length, state: applied, written };
+  // Schlaegt dieses UPDATE fehl (z. B. D1 overloaded), bleibt der Fingerabdruck ungespeichert: der naechste Lauf rechnet neu, statt "unveraendert".
+  const diffOk = await db.prepare("UPDATE episode_urls SET status='differs' WHERE status='ok' AND url<>'' AND rtrim(url_on_spreaker,'/')<>rtrim(url,'/')").run().then(() => true, () => false);
+  if (diffOk) await src.commit();
+  return { imported: ok.length, state: applied, written, ...(diffOk ? {} : { retry: "differs-Abgleich fehlgeschlagen" }) };
 }
 
 export async function episodeUrlsOverview(db) {

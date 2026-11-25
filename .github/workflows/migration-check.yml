@@ -9,7 +9,8 @@ on:
         description: "Anzahl Blogbeiträge für die Inhaltsprüfung"
         default: "50"
   schedule:
-    - cron: "47 6 * * 1"   # woechentlich (Montag): der Drift-Check liest den ganzen Entitaeten-Export aus D1, die Live-Pruefung liest Seiten aus R2 (D1-/R2-Kosten)
+    - cron: "47 6 * * *"   # taeglich: die Live-Pruefung (301-Weiterleitungen) soll einen kaputten Seitenbau am selben Tag melden
+    # Der Drift-Check liest den ganzen Entitaeten-Export aus D1 und laeuft deshalb nur montags (oder von Hand), siehe Schritt unten (D1-Kosten).
 permissions:
   contents: write
 concurrency:
@@ -27,7 +28,9 @@ jobs:
         run: python tools/check_migration.py --sample "${{ inputs.sample || '50' }}"
       - name: Entitäten JSON gegen D1 (T30)
         continue-on-error: true
-        run: python tools/check_entity_drift.py
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%u)" != "1" ]; then echo "Drift-Check nur montags (D1-Kosten)"; exit 0; fi
+          python tools/check_entity_drift.py
       - name: Bericht speichern
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
