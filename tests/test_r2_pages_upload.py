@@ -322,5 +322,68 @@ class R2outOrderTest(Base):
         self._with_clean_manifest(body)
 
 
+
+class R2outBucketEtagTest(Base):
+    """Kostenanalyse 25.11.2026: fehlt das Manifest (Actions-Cache verdraengt), vergleicht der Upload mit den ETags aus der Bucket-Liste statt alles
+    neu zu laden. Ergebnis in der Step-Summary."""
+    def setUp(self):
+        super().setUp()
+        import hashlib
+        from test_r2_og_upload import EtagS3
+        self.s3 = EtagS3(); self.md5 = lambda b: hashlib.md5(b).hexdigest()
+        self.sumf = Path(self.tmp.name) / "summary.md"
+
+    def go(self):
+        os.makedirs(ROOT / "data" / "cache", exist_ok=True)
+        return run("r2_pages_upload", [self.r2out], {"R2_KEYS_OUT": str(self.keys), "R2_CHANGED_OUT": str(self.changed), "GITHUB_STEP_SUMMARY": str(self.sumf)}, self.s3)
+
+    def test_lost_manifest_uses_bucket_etags(self):
+        mpath = ROOT / "data" / "cache" / "r2_pages.json"; backup = mpath.read_bytes() if mpath.exists() else None
+        try:
+            if mpath.exists(): mpath.unlink()
+            tree(self.r2out, {**{f"pl/p{i}/index.html": f"p{i}" for i in range(5)}, "search/manifest.json": "{}", "fr/x/transcript.txt": "t"})
+            self.assertEqual(self.go(), 0)
+            self.assertEqual(len([k for op, k in self.s3.log if op == "put"]), 7, "erster Lauf ohne Bucket-Inhalt: alles")
+            mpath.unlink()   # Actions-Cache verloren
+            tree(self.r2out, {"pl/p2/index.html": "neu"})   # eine Seite geaendert
+            self.s3.obj["pages/pl/p3/index.html"]["meta"] = {"gone": "1"}   # eine als entfernt markiert (wieder erzeugt)
+            self.s3.obj["meta/gone.json"] = {"body": json.dumps(["pages/pl/p3/index.html"]).encode(), "ct": "", "meta": {}}
+            self.s3.log.clear(); self.sumf.write_text("")
+            self.assertEqual(self.go(), 0)
+            self.assertEqual(sorted(k for op, k in self.s3.log if op == "put"), ["pages/pl/p2/index.html", "pages/pl/p3/index.html"], "nur Geaendertes und wieder Erzeugtes")
+            self.assertEqual(sorted(json.loads(self.changed.read_text())), ["/pl/p2/", "/pl/p3/"])
+            man = json.loads(mpath.read_text()); self.assertEqual(len(man), 7, "Manifest wieder vollstaendig"); self.assertEqual(man["pages/pl/p2/index.html"], self.md5(b"neu"))
+            sm = self.sumf.read_text(); self.assertIn("ETags aus dem Bucket", sm); self.assertIn("hochgeladen (PUT): 2", sm)
+            self.s3.obj["meta/gone.json"]["body"] = b"[]"   # der Spiegel im Deploy-Job nimmt die Markierung zurueck
+            self.s3.log.clear(); self.sumf.write_text(""); self.assertEqual(self.go(), 0)
+            self.assertEqual([k for op, k in self.s3.log if op == "put"], []); self.assertIn("Manifest aus dem Actions-Cache", self.sumf.read_text())
+        finally:
+            if backup is not None: mpath.write_bytes(backup)
+            elif mpath.exists(): mpath.unlink()
+
+    def test_multipart_etag_and_unreadable_listing_reload(self):
+        mpath = ROOT / "data" / "cache" / "r2_pages.json"; backup = mpath.read_bytes() if mpath.exists() else None
+        try:
+            if mpath.exists(): mpath.unlink()
+            tree(self.r2out, {"pl/a/index.html": "a", "pl/b/index.html": "b"})
+            self.assertEqual(self.go(), 0); mpath.unlink()
+            orig = self.s3.list_objects_v2
+            def multi(**kw):
+                r = orig(**kw)
+                for o in r["Contents"]:
+                    if o["Key"] == "pages/pl/b/index.html": o["ETag"] = '"' + self.md5(b"b") + '-2"'
+                return r
+            self.s3.list_objects_v2 = multi; self.s3.log.clear()
+            self.assertEqual(self.go(), 0); self.assertEqual([k for op, k in self.s3.log if op == "put"], ["pages/pl/b/index.html"], "mehrteiliger ETag: unbekannt -> neu")
+            mpath.unlink()
+            def broken(**kw): raise RuntimeError("AccessDenied")
+            self.s3.list_objects_v2 = broken; self.s3.log.clear(); self.sumf.write_text("")
+            self.assertEqual(self.go(), 0); self.assertEqual(len([k for op, k in self.s3.log if op == "put"]), 2, "Liste nicht lesbar: wie bisher alles")
+            self.assertIn("alles neu", self.sumf.read_text())
+        finally:
+            if backup is not None: mpath.write_bytes(backup)
+            elif mpath.exists(): mpath.unlink()
+
+
 if __name__ == "__main__":
     unittest.main()

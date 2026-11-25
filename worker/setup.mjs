@@ -2,7 +2,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { webcrypto as crypto } from "node:crypto";
-import { d1BackupExportArgs, d1BackupTables } from "./src/d1_backup.js";
+import { d1BackupExportArgs, d1BackupTables, d1PendingMigrations } from "./src/d1_backup.js";
 
 const run = (args, input) => { const r = spawnSync("npx", ["wrangler", ...args], { input, encoding: "utf8" }); return r; };
 const maskAccount = (value, ...extraAccounts) => {
@@ -74,26 +74,38 @@ let toml = readFileSync("wrangler.toml", "utf8").replace(/database_id = "[^"]*"/
 writeFileSync("wrangler.toml", toml);
 console.log("D1:", db.name);
 
-// 2) Schema anwenden (idempotent)
-// Sicherung vor jeder Schemaaenderung (Artefakt im Workflow), dann versionierte Migrationen (migrations/, Tabelle d1_migrations merkt sich den Stand)
-const schema = run(["d1", "execute", "m365-dub", "--remote", "--json", "--command", "SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name"]);
-if (schema.status !== 0) fail("D1-Tabellen fuer Sicherung: " + (schema.stderr || schema.stdout));
-let tables = [];
-try {
-  const result = JSON.parse(schema.stdout);
-  tables = d1BackupTables(Array.isArray(result) ? result.flatMap((x) => x.results || []) : result.results || []);
-} catch { fail("D1-Tabellenliste nicht lesbar"); }
-// FTS5-Virtual- und Schattentabellen kann wrangler d1 export nicht sichern.
-const bak = run(d1BackupExportArgs(tables));
-console.log("D1-Sicherung:", bak.status === 0 ? "backup-d1.sql" : "FEHLER " + maskAccount((bak.stderr || bak.stdout).slice(0, 300)));
-if (bak.status !== 0) fail("Ohne Sicherung keine Migration");
-const sch = run(["d1", "migrations", "apply", "m365-dub", "--remote"]);
-if (sch.status !== 0) fail("Schema: " + sch.stderr);
-console.log("Schema ok");
+// TOKEN_ONLY=1 (taeglicher Lauf von worker.yml, nur fuer die Erneuerung des Spreaker-/YouTube-Tokens): keine Sicherung, keine Migration, kein Deploy;
+// nur die Secrets unten (secret put rollt die laufende Fassung mit dem neuen Wert aus).
+const tokenOnly = process.env.TOKEN_ONLY === "1";
+if (tokenOnly) console.log("TOKEN_ONLY: nur Secrets erneuern (keine D1-Sicherung, keine Migration, kein Deploy)");
+else {
+  // 2) Schema anwenden (idempotent)
+  // Sicherung vor jeder Schemaaenderung (Artefakt im Workflow), dann versionierte Migrationen (migrations/, Tabelle d1_migrations merkt sich den Stand).
+  // D1-Kosten: nur wenn Migrationen ausstehen; ist der Stand unklar (Fehler, unbekannte Ausgabe), wird wie bisher gesichert und angewendet.
+  const ml = run(["d1", "migrations", "list", "m365-dub", "--remote"]);
+  const pending = d1PendingMigrations(ml.status, ml.stdout, ml.stderr);
+  console.log("D1-Migrationen:", pending === "none" ? "keine ausstehend - keine Sicherung noetig" : pending === "pending" ? "ausstehend - erst sichern, dann anwenden" : "Stand unklar - sichern und anwenden wie bisher");
+  if (pending !== "none") {
+    const schema = run(["d1", "execute", "m365-dub", "--remote", "--json", "--command", "SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name"]);
+    if (schema.status !== 0) fail("D1-Tabellen fuer Sicherung: " + (schema.stderr || schema.stdout));
+    let tables = [];
+    try {
+      const result = JSON.parse(schema.stdout);
+      tables = d1BackupTables(Array.isArray(result) ? result.flatMap((x) => x.results || []) : result.results || []);
+    } catch { fail("D1-Tabellenliste nicht lesbar"); }
+    // FTS5-Virtual- und Schattentabellen kann wrangler d1 export nicht sichern.
+    const bak = run(d1BackupExportArgs(tables));
+    console.log("D1-Sicherung:", bak.status === 0 ? "backup-d1.sql" : "FEHLER " + maskAccount((bak.stderr || bak.stdout).slice(0, 300)));
+    if (bak.status !== 0) fail("Ohne Sicherung keine Migration");
+    const sch = run(["d1", "migrations", "apply", "m365-dub", "--remote"]);
+    if (sch.status !== 0) fail("Schema: " + sch.stderr);
+    console.log("Schema ok");
+  }
 
-// 3) Erstmal deployen (damit Secrets einen Worker haben), dann Secrets
-const dep = run(["deploy"]);
-console.log(maskAccount(dep.stdout.split("\n").slice(-6).join("\n"))); if (dep.status !== 0) fail("Deploy: " + dep.stderr);
+  // 3) Erstmal deployen (damit Secrets einen Worker haben), dann Secrets
+  const dep = run(["deploy"]);
+  console.log(maskAccount(dep.stdout.split("\n").slice(-6).join("\n"))); if (dep.status !== 0) fail("Deploy: " + dep.stderr);
+}
 
 let have = [];
 try { have = JSON.parse(run(["secret", "list", "--format", "json"]).stdout).map((s) => s.name); } catch {}

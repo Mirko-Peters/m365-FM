@@ -84,6 +84,14 @@ name = "EMAIL"
 binding = "PAGES"
 bucket_name = "m365-fm"
 
+# Ratenlimit der Suche ohne D1 (Workers Rate Limiting, 60 Anfragen je 60 s und IP-Hash; worker/src/search.js searchAllowed). Kein Schritt in der
+# Cloudflare-Konsole noetig: namespace_id ist eine frei gewaehlte Zahl je Konto. Die Zaehlung gilt je Standort und ist ungefaehr - fuer den
+# Missbrauchsschutz der Suche genuegt das. Ohne Bindung (Staging erbt sie nicht) gilt wie bisher die D1-Tabelle ratelimit.
+[[ratelimits]]
+name = "RL_SEARCH"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
+
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)
 

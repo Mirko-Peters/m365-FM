@@ -12,6 +12,17 @@ const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.j
 // Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/ bzw. mit R2 als Ursprung /__r2f<pfad>, s. r2CacheKey; Purge nach
 // dem Upload bzw. vor der Bau-Kennung), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
 const EDGE_HTML = 14400, R2_TTL = 14400, R2_MISS_TTL = 600;
+// Kostenanalyse 25.11.2026: Eintraege unter /__r2f (R2 als Ursprung, Bau-Kennung mit "-pfad") bleiben R2_EDGE_TTL Sekunden im Kanten-Cache (wrangler.toml,
+// Standard dort 86400). Sicher, weil jede Byte-Aenderung einer Seite oder Datei ihren Purge-Hash aendert (tools/page_hashes.py, seit 25.11. ohne Sonderregel
+// fuer die frühere Liste "Neueste Folgen") und tools/purge_changed.py --r2 genau diese Adressen vor der neuen Bau-Kennung leert. Vorher galten 4 h, weil die
+// Liste "Neueste Folgen" ohne Purge veralten durfte. Notschalter: R2_EDGE_TTL = "14400" (oder Variable entfernen). Erlaubt 600 s bis 7 Tage, sonst R2_TTL.
+export const r2EdgeTtl = (env) => { const n = Number(env && env.R2_EDGE_TTL); return Number.isInteger(n) && n >= 600 && n <= 604800 ? n : R2_TTL; };
+// Typische Scanner-Adressen (WordPress, PHP, Zugangsdateien): die Website hat keine solche Adresse (geprueft 25.11.2026: docs/, data/*.json,
+// data/podpage/redirects.json, data/redirects_extra.json, sitewrk/test/legacy_cases.json). Frueh ein 404 ohne Abruf bei GitHub Pages und ohne R2-Lesung,
+// im Browser bzw. bei Zwischen-Caches einen Tag gueltig. /.well-known/ ist nicht betroffen.
+// wp-…: nur als ganzes Pfadsegment (danach "/", "." oder Ende) und nur an der Wurzel oder unter EINEM Vorsatz-Segment (/blog/wp-admin/,
+// /wordpress/wp-login.php), nie unter /community/ oder /entity/: Mitglieder waehlen Blog-Slugs und Handles selbst (wp-mail-smtp-…, wp-content-pro).
+export const SCANNER = /\.php\d?$|^\/(?:(?!community\/|entity\/)[^/]+\/)?wp-(?:admin|content|includes|json|login|config|cron|signup|load|mail|trackback|links)(?:[/.]|$)|(?:^|\/)\.(?:env|git)(?:[./_-]|$)/i;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
 // HTML-Adressen: Verzeichnisse, .html und Pfade ohne Dateiendung. Dateien (.json, .xml, .txt, Bilder, Assets) sind keine Seiten.
@@ -93,9 +104,9 @@ async function checkBuild(env, url) {
 // im Log (logR2Page, Workers Logs in sitewrk/wrangler.toml).
 // READY_TTL NICHT einfach verlaengern: nach einem Deploy gaelte die alte Kennung weiter, und r2First laese unter /__r2c/@<alter Bau>/ bis zu 4 h alte Seiten.
 const READY_KEY = "/__r2c/~ready", READY_WAIT = 50;
-async function sharedReady(url) {
+async function sharedReady(url, wait = READY_WAIT) {
   const read = caches.default.match(new Request(url.origin + READY_KEY)).then(async (c) => (c ? { t: c.headers.get("x-r2-build-t"), v: (await c.text()).trim() } : null));
-  const c = await withTimeout(read.catch(() => null), READY_WAIT);
+  const c = await withTimeout(read.catch(() => null), wait);
   if (!c || !/^\d{10,16}$/.test(c.t || "") || (c.v && !BUILD_RX.test(c.v))) return null;
   const now = Date.now(), t = Math.min(Number(c.t), now);   // Uhrabweichung: hoechstens ab jetzt gueltig
   return now - t < READY_TTL ? { t, v: c.v } : null;
@@ -107,6 +118,18 @@ function storeReady(url, t, v) {
 // Liefert { v, src }: v = Bau-Kennung, wenn R2 genau den Bau von GitHub Pages enthaelt, sonst ""; src fuer Server-Timing (mem = Isolat,
 // cache = geteilt aus dem Kanten-Cache, cold = kein gueltiger Stand: GitHub Pages). Nie auf eine Pruefung warten, die eine andere Anfrage
 // gestartet hat (bricht sie ab, haengen sonst alle): die Pruefung laeuft ueber ctx.waitUntil dieser Anfrage, bis dahin gilt der letzte Stand.
+// Kostenanalyse 25.11.2026: vorher las jedes Isolat mit gemerkter Kennung alle 30 s selbst pages/r2-build.txt (R2 Class B) und fragte GitHub Pages.
+// Jetzt liest die Auffrischung im Hintergrund zuerst den geteilten Stand (/__r2c/~ready) und uebernimmt ihn, wenn er juenger ist als der eigene
+// (hoechstens 30 s alt, also nie aelter als der Stand eines Isolats selbst); nur sonst prueft sie selbst und legt das Ergebnis ab. So prueft etwa ein
+// Isolat je Rechenzentrum und 30 s. READY_TTL bleibt 30 s (s. o.).
+const READY_BG_WAIT = 500;
+async function refreshReady(env, url) {
+  const sh = await sharedReady(url, READY_BG_WAIT);
+  if (sh && sh.t > READY.t) { READY = { t: sh.t, v: sh.v, busy: 0 }; return; }
+  const v = await checkBuild(env, url), t = Date.now();
+  READY = { t, v, busy: 0 };
+  await storeReady(url, t, v);
+}
 async function r2Ready(env, url, ctx) {
   let src = "mem";
   if (Date.now() - READY.t >= READY_TTL && !READY.v) {   // nach dem Start eines Isolates (oder zuletzt "nicht bereit"): geteilten Stand lesen
@@ -116,8 +139,7 @@ async function r2Ready(env, url, ctx) {
   const now = Date.now();
   if (now - READY.t >= READY_TTL && now - READY.busy > 10000) {
     READY.busy = now;
-    ctx.waitUntil(checkBuild(env, url).then((v) => { const t = Date.now(); READY = { t, v, busy: 0 }; return storeReady(url, t, v); })
-      .catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
+    ctx.waitUntil(refreshReady(env, url).catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
   }
   return { v: READY.v, src };
 }
@@ -125,13 +147,13 @@ async function r2Ready(env, url, ctx) {
 // ueberlebt den naechsten Deploy, wenn sich die Datei nicht geaendert hat. Geaenderte, neue und entfallene Adressen leert der Deploy-Job nach dem
 // vollstaendigen Spiegel und vor dem Setzen der Kennung (tools/purge_changed.py --r2): was ein Isolat mit einer alten Kennung bis dahin gecacht hat, ist
 // weg, was es danach cacht, ist schon neu. Gelingt der Purge nicht, bleibt die alte Kennung (dann GitHub Pages).
-// "Geaendert" heisst: Purge-Hash ohne die Liste "neueste Folgen" (tools/page_hashes.py) - die Seitenleiste eines
-// sonst unveraenderten Eintrags ist hoechstens R2_TTL (4 h) alt. Eigener Praefix /__r2f: den Schluessel /__r2c<pfad> bildet der alte R2-Rueckfall aus
+// "Geaendert" heisst: Purge-Hash (tools/page_hashes.py), seit 25.11.2026 ueber die ganze Seite (die Liste "neueste Folgen", die vorher ohne Purge
+// bis R2_TTL veralten durfte, gibt es nicht mehr) - deshalb leben Eintraege hier R2_EDGE_TTL (r2EdgeTtl). Eigener Praefix /__r2f: den Schluessel /__r2c<pfad> bildet der alte R2-Rueckfall aus
 // jeder angefragten Adresse (z. B. /@x/... -> /__r2c/@x/...), er darf hier nie treffen. Kennung ohne "-pfad" (Deploy-Job ohne diesen Purge): wie bisher
 // mit Bau-Kennung im Schluessel (/__r2c/@<kennung><pfad>), Eintraege eines frueheren Baus treffen nie.
 export const PATH_KEY = /-pfad$/;
 export const r2CacheKey = (origin, build, cp) => origin + (PATH_KEY.test(build) ? "/__r2f" + cp : "/__r2c/@" + build + cp);
-async function r2First(request, env, ctx, url, p, key, build) {
+async function r2First(request, env, ctx, url, p, key, build, st = {}) {   // st.miss = true: Objekt fehlt im Bucket oder ist als entfernt markiert (kein Lesefehler)
   const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
   const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag
   const cache = caches.default, ck = new Request(r2CacheKey(url.origin, build, cp));
@@ -141,16 +163,16 @@ async function r2First(request, env, ctx, url, p, key, build) {
     const obj = await env.PAGES.get(key).catch(() => null);
     if (!obj || (obj.customMetadata && obj.customMetadata.gone === "1")) {   // fehlt oder vom Seitenbau als entfernt markiert (Datei bleibt im Bucket, wird aber nicht mehr ausgeliefert)
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
-      return null;
+      st.miss = true; return null;
     }
-    let buf; try { buf = await obj.arrayBuffer(); } catch { return null; }   // Lesefehler: GitHub Pages statt Fehlerseite
+    let buf; try { buf = await obj.arrayBuffer(); } catch { return null; }   // Lesefehler: GitHub Pages statt Fehlerseite (und die R2-Rueckfaelle nach dem 404 versuchen es erneut)
     const meta = obj.httpMetadata && obj.httpMetadata.contentType;
     const ct = html ? CT.html : (meta && !/octet-stream/i.test(meta) ? meta : CT[ext] || "application/octet-stream");
-    const ttl = HASHED.test(p) ? 2592000 : FONT.test(p) ? 86400 : R2_TTL;
+    const ttl = HASHED.test(p) ? 2592000 : FONT.test(p) ? 86400 : PATH_KEY.test(build) ? r2EdgeTtl(env) : R2_TTL;   // /__r2f: R2_EDGE_TTL (Purge je Adresse), /__r2c/@<bau>: 4 h
     hit = new Response(buf, { headers: { "content-type": ct, "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${ttl}` } });
     ctx.waitUntil(cache.put(ck, hit.clone()).catch(() => {}));
   }
-  if (hit.headers.get("x-r2-miss")) return null;
+  if (hit.headers.get("x-r2-miss")) { st.miss = true; return null; }
   const h = new Headers({ "content-type": hit.headers.get("content-type"), "x-m365-cache": state, "x-m365-src": "r2", "access-control-allow-origin": "*" });   // wie GitHub Pages (CORS fuer openapi.json, llms.txt, Feeds ...)
   for (const k of ["etag", "last-modified"]) { const v = hit.headers.get(k); if (v) h.set(k, v); }
   finishHeaders(h, p);
@@ -397,7 +419,10 @@ export async function stagingFetch(request, env) {
 // 5xx-Seite). Die Seite ist noindex und no-store: nach dem Bau gilt sofort die feste Seite (die kanonische). Nur Felder, die auch die statische Seite
 // zeigt (ohne Kontaktdaten). Nur Personen (/u/); Firmen (/c/) gehen direkt zur Firmenliste.
 export const LIVE_PROFILE_PAGE = /^(?:\/(de|fr|es|it|nl|pt|pl|id|ru|uk|ar|he|ja|ko))?\/community\/u\/([a-z0-9][a-z0-9-]{2,29})\/?(?:index\.html)?$/;   // Kuerzel wie HANDLE in worker/src/profiles.js
-const COMMUNITY_API = "https://api-dub.m365.fm", PROFILE_MISS_TTL = 60;
+// Kanten-Cache (Kostenanalyse 25.11.2026): "kein oeffentliches Profil" 600 s (vorher 60), ein oeffentliches Profil 120 s (vorher gar nicht) - je
+// Kuerzel unter /__live/u/<kuerzel> bzw. /__live/p/<kuerzel> (interne Schluessel, oeffentlich 404). Die Antwort an den Browser bleibt no-store.
+// Folge: ein Profil, das auf nicht oeffentlich wechselt, kann hier hoechstens 120 s weiter erscheinen; ein neues hoechstens 600 s spaeter.
+const COMMUNITY_API = "https://api-dub.m365.fm", PROFILE_MISS_TTL = 600, PROFILE_HIT_TTL = 120;
 const esc = (x) => String(x ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const str = (x, max) => (typeof x === "string" ? x.trim().slice(0, max) : "");
 function safeUrl(u) {   // nur http/https; der Wert kommt aus dem normalisierten URL-Objekt
@@ -437,13 +462,21 @@ export function profileHtml(v, lang, handle, api) {
 // null = kein Live-Profil (unbekannt, nicht oeffentlich, API-Fehler): der Aufrufer leitet dann per 302 zur Mitgliederliste weiter
 async function profileLive(request, env, ctx, url, m) {
   const handle = m[2], lang = m[1] || "", api = (env && typeof env.COMMUNITY_API === "string" && /^https:\/\/[a-z0-9.-]+$/i.test(env.COMMUNITY_API) ? env.COMMUNITY_API : COMMUNITY_API);
-  const cache = caches.default, ck = new Request(url.origin + "/__live/u/" + handle);
-  if (await cache.match(ck).catch(() => null)) return null;   // kurz gemerkt: eindeutig kein oeffentliches Profil (schuetzt die API vor Abfragen erfundener Kuerzel)
-  let r;
-  try { r = await fetch(api + "/api/profile/" + handle, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(3000), cf: { cacheTtl: 0 } }); } catch { return null; }
-  if (r.status === 404) { ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${PROFILE_MISS_TTL}` } })).catch(() => {})); return null; }
-  if (!r.ok) return null;
-  let j; try { j = await r.json(); } catch { return null; }
+  const cache = caches.default, ck = new Request(url.origin + "/__live/u/" + handle), pk = new Request(url.origin + "/__live/p/" + handle);
+  const [miss, kept] = await Promise.all([cache.match(ck).catch(() => null), cache.match(pk).catch(() => null)]);
+  if (miss) return null;   // gemerkt: eindeutig kein oeffentliches Profil (schuetzt die API vor Abfragen erfundener Kuerzel)
+  let j = null;
+  if (kept) { try { j = await kept.json(); } catch { j = null; } }
+  if (!j) {
+    let r;
+    try { r = await fetch(api + "/api/profile/" + handle, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(3000), cf: { cacheTtl: 0 } }); } catch { return null; }
+    if (r.status === 404) { ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${PROFILE_MISS_TTL}` } })).catch(() => {})); return null; }
+    if (!r.ok) return null;
+    try { j = await r.json(); } catch { return null; }
+    const v0 = j && j.profile;
+    if (v0 && typeof v0 === "object" && v0.type === "u" && v0.handle === handle && v0.public === true)   // nur gepruefte oeffentliche Profile merken
+      ctx.waitUntil(cache.put(pk, new Response(JSON.stringify({ profile: v0 }), { headers: { "content-type": "application/json", "cache-control": `public, max-age=${PROFILE_HIT_TTL}` } })).catch(() => {}));
+  }
   const v = j && j.profile;
   if (!v || typeof v !== "object" || v.type !== "u" || v.handle !== handle || v.public !== true) return null;   // nur oeffentliche Profile mit genau diesem Kuerzel
   const html = profileHtml(v, lang || "en", handle, api);
@@ -597,6 +630,7 @@ const site = {
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });
+    if (SCANNER.test(url.pathname)) return new Response(request.method === "HEAD" ? null : "Not found", { status: 404, headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=86400" } });   // Scanner (s. SCANNER)
     // partner.m365.fm (PARTNER_HOST): Sponsor-Dashboard auf eigener Subdomain, noindex, nicht in der Sitemap
     const partnerHost = env.PARTNER_HOST || "";
     if (partnerHost && url.hostname === partnerHost) return partnerRequest(request, env, ctx, url);
@@ -624,7 +658,7 @@ const site = {
       if (to) return redirect(request, url.origin, to, url.search);
     }
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
-    if (p.startsWith("/__r2c/") || p.startsWith("/__r2f/")) return new Response("Not found", { status: 404 });   // interne Cache-Schluessel, keine oeffentlichen Adressen
+    if (p.startsWith("/__r2c/") || p.startsWith("/__r2f/") || p.startsWith("/__r2s/") || p.startsWith("/__live/")) return new Response("Not found", { status: 404 });   // interne Cache-Schluessel, keine oeffentlichen Adressen
     if (p === SPEC_PATH && WWW_HOSTS.has(url.hostname) && (request.method === "GET" || request.method === "HEAD")) return speculationRules(request);   // Regeln fuer den Vorabruf (s. withSpeculation)
     if (p === "/") { const hl = homeLang(request); if (hl) return langRedirect(url.origin, hl, url.search); }   // vor jedem Cache: eine englische Startseite aus dem Cache erreicht nie einen deutschen Browser
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
@@ -634,8 +668,8 @@ const site = {
     const page = !isImg && !isStatic && isHtmlPath(p), rq = request;   // Seiten: R2 zuerst auch bei Range-Anfragen (s. u.)
     // Messung (Server-Timing, nur Seiten): src = r2 (R2 zuerst), r2direct (R2-only-Seite ohne gueltige Kennung gleich aus dem Bucket), pages (GitHub Pages), r2fallback (GitHub Pages 404, dann Bucket);
     // ready = mem/cache/cold (Herkunft der Bau-Kennung, s. r2Ready) oder off (R2 zuerst nicht moeglich: Notschalter, Methode, Pfad); Dauern in ms
+    let ready = "off", r2miss = false, r2tried = false;   // r2miss: R2 zuerst mit gueltiger Bau-Kennung fand das Objekt nicht; r2tried: R2-only-Seite schon direkt gefragt -> die R2-Rueckfaelle nach dem 404 lesen es nicht noch einmal
     const r2only = page && R2_ONLY_PAGE.test(p);   // nur im Bucket (s. R2_ONLY_PAGE): im kalten Zustand gleich aus R2, Messzeile im Log
-    let ready = "off", r2tried = false;
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
@@ -643,9 +677,10 @@ const site = {
         const rd = await r2Ready(env, url, ctx);
         ready = rd.src;
         if (rd.v) {
-          const t0 = Date.now(), r2 = await r2First(rq, env, ctx, url, p, key, rd.v);
+          const t0 = Date.now(), st = {}, r2 = await r2First(rq, env, ctx, url, p, key, rd.v, st);
           const d = Date.now() - t0;
           if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${d}`); if (r2only) logR2Page(request, p, "r2", ready, r2, d); return r2; }
+          r2miss = !!st.miss;   // der Bucket enthaelt genau den Bau von GitHub Pages: was dort fehlt, fehlt ueberall
         } else if (r2only) {
           // Keine gueltige Kennung (cold oder "nicht bereit"): R2-only-Seite gleich aus dem Bucket statt GitHub Pages (404) -> R2-Rueckfall.
           // r2Page mit dem Schluessel /__r2c<pfad> wie der Rueckfall (geleert in Schritt 1 nach dem Deploy), nie /__r2f. null: weiter wie bisher.
@@ -676,14 +711,23 @@ const site = {
       if (to) return redirect(request, url.origin, (await finalTarget(to, migrated)) || to, url.search);
     }
     if (res.status === 404 && env.PAGES && /^\/search\/(manifest|part-\d{1,4})\.json$/.test(p)) {   // T37: Suchindex liegt im R2-Bucket (pages/search/...)
+      // Kanten-Cache 600 s (wie s-maxage) unter /__r2f<pfad> (Kostenanalyse 25.11.2026: vorher jede Anfrage eine R2-Lesung). Den Schluessel leert der
+      // Deploy wie jede geaenderte r2out-Datei (tools/purge_changed.py --r2, Liste aus r2-changed.json). Nur Treffer werden gemerkt.
+      const sh = { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" };
+      const sk = new Request(url.origin + "/__r2f" + p), c = await caches.default.match(sk).catch(() => null);
+      if (c) return new Response(request.method === "HEAD" ? null : c.body, { headers: { ...sh, "x-m365-cache": "HIT" } });
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
-      if (obj) return new Response(obj.body, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" } });
+      let buf = null; if (obj) { try { buf = await obj.arrayBuffer(); } catch { buf = null; } }
+      if (buf) {
+        ctx.waitUntil(caches.default.put(sk, new Response(buf.slice(0), { headers: { "content-type": sh["content-type"], "cache-control": "public, max-age=600" } })).catch(() => {}));
+        return new Response(request.method === "HEAD" ? null : buf, { headers: { ...sh, "x-m365-cache": "MISS" } });
+      }
     }
     // Sitemap oder Datenexport aus dem R2-Bucket (pages/<datei>): Sitemaps indexierbar als application/xml, Exporte als application/json mit noindex
     // (noindexPath, wie aus GitHub Pages); SEC- und HTML-Cache-Header (finishHeaders), CORS wie GitHub Pages, ETag/304, HEAD.
     // Nur Objekte des r2out-Uploads: als entfernt markiert (gone=1) oder nur Spiegel von GitHub Pages (src=docs, dort 404 = wirklich weg) -> 404 wie bisher.
     const sm = SITEMAP_R2.test(p);
-    if (res.status === 404 && env.PAGES && (sm || R2_EXPORT.test(p)) && (request.method === "GET" || request.method === "HEAD")) {
+    if (res.status === 404 && env.PAGES && !r2miss && (sm || R2_EXPORT.test(p)) && (request.method === "GET" || request.method === "HEAD")) {
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
       const cm = (obj && obj.customMetadata) || {};
       if (obj && cm.gone !== "1" && cm.src !== "docs") {
@@ -696,7 +740,7 @@ const site = {
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }
-    if (res.status === 404 && env.PAGES && TRANSCRIPT.test(p) && (request.method === "GET" || request.method === "HEAD")) {   // #266: Transkript aus dem R2-Bucket (pages/<pfad>)
+    if (res.status === 404 && env.PAGES && !r2miss && TRANSCRIPT.test(p) && (request.method === "GET" || request.method === "HEAD")) {   // #266: Transkript aus dem R2-Bucket (pages/<pfad>)
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
       if (obj && !(obj.customMetadata && obj.customMetadata.gone === "1")) {
         const h = new Headers();
@@ -707,8 +751,11 @@ const site = {
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }
-    if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
-      const t1 = Date.now(), r2 = r2tried ? null : await r2Page(rq, env, ctx, url, p), d = Date.now() - t1;   // schon direkt gefragt (null): nicht noch einmal lesen
+    // Nur Seiten-Adressen (r2Page liest pages/<pfad>/index.html; fuer /x.php oder /a.json gibt es so ein Objekt nie) und nur, wenn R2 zuerst das Objekt
+    // nicht schon mit gueltiger Bau-Kennung vermisst hat bzw. die R2-only-Seite nicht schon direkt gefragt wurde (sonst zwei R2-Lesungen je echtem 404).
+    // Die Weiterleitung LANG_EP bleibt in allen Faellen.
+    if (res.status === 404 && env.PAGES && !IMG.test(p) && isHtmlPath(p) && (request.method === "GET" || request.method === "HEAD")) {
+      const t1 = Date.now(), r2 = r2miss || r2tried ? null : await r2Page(rq, env, ctx, url, p), d = Date.now() - t1;
       if (r2 && page) r2.headers.set("server-timing", `src;desc="r2fallback", ready;desc="${ready}", origin;dur=${tOrigin}, r2;dur=${d}`);
       if (r2 && r2only) logR2Page(request, p, "r2fallback", ready, r2, d, tOrigin);
       if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"

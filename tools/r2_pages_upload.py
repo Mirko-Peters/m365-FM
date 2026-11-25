@@ -3,7 +3,13 @@ Schluessel pages/<pfad>, Content-Type nach Endung, nur geaenderte Dateien (MD5-M
 Es wird nichts geloescht. Schluessel, die tools/r2_site_sync.py als entfernt markiert hat (meta/gone.json) und die der Bau wieder erzeugt,
 werden neu geladen (sonst bliebe die Markierung bei unveraendertem Inhalt stehen).
 Zugang ueber R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (GitHub-Secrets). Aufruf: python tools/r2_pages_upload.py [r2out]
-Umgebung optional: R2_CHANGED_OUT (Adressen fuer den Purge), R2_KEYS_OUT (alle Schluessel aus r2out/ fuer den Spiegel im Deploy-Job)."""
+Umgebung optional: R2_CHANGED_OUT (Adressen fuer den Purge), R2_KEYS_OUT (alle Schluessel aus r2out/ fuer den Spiegel im Deploy-Job).
+Fehlt das Manifest (Actions-Cache verdraengt) oder ist es leer, gelten die ETags aus einer Liste des Buckets (pages/, ETag = MD5 eines einfachen PUT,
+wie tools/r2_og_upload.py): rund 150 LIST-Aufrufe statt eines vollen Uploads aller r2out-Dateien (Kostenanalyse 25.11.2026). Das Ergebnis (Quelle des
+Vergleichs, Zahl der PUTs) steht in der Step-Summary.
+Grenze des Rueckfalls: die Liste kennt keine Metadaten. Eine Seite, die als Spiegel aus docs/ (src=docs) mit genau denselben Bytes im Bucket liegt,
+wird dann nicht neu geladen; R2 zuerst liefert sie trotzdem, nur der alte R2-Rueckfall nicht. Sitemaps, Exporte und Blog-Import prueft head_object
+wie bisher (checked)."""
 import hashlib, json, os, re, sys
 from pathlib import Path
 
@@ -21,6 +27,30 @@ moved = lambda k: bool(SITEMAP.match(k) or EXPORT.match(k))   # nur in r2out/, a
 # damit auch ein (unwahrscheinliches) src=docs-Objekt dort sicher ersetzt wird; fehlen blockiert den Deploy wie bisher nicht (Worker-Import holt sie spaeter).
 BLOG = re.compile(r"^pages/(?:blog-import/[^/]+\.json|translations-blog\.json)$")
 checked = lambda k: moved(k) or bool(BLOG.match(k))
+MD5 = re.compile(r"^[0-9a-f]{32}$")   # ETag eines einfachen PUT; mehrteilige Uploads ("<md5>-<n>") zaehlen als unbekannt (werden neu geladen)
+
+
+def bucket_etags(s3, bucket, prefix="pages/"):
+    """Schluessel -> MD5 aller Objekte unter prefix (nur einfache ETags)."""
+    out, tok = {}, None
+    while True:
+        kw = {"Bucket": bucket, "Prefix": prefix, "MaxKeys": 1000}
+        if tok: kw["ContinuationToken"] = tok
+        r = s3.list_objects_v2(**kw)
+        for o in r.get("Contents", []):
+            e = str(o.get("ETag", "")).strip('"').lower()
+            if MD5.match(e): out[o["Key"]] = e
+        if not r.get("IsTruncated"): return out
+        tok = r["NextContinuationToken"]
+
+
+def summary(lines):
+    """Zeilen in die Step-Summary des Workflows (nur in GitHub Actions)."""
+    f = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not f: return
+    try:
+        with open(f, "a", encoding="utf-8") as fh: fh.write("\n".join(lines) + "\n")
+    except OSError: pass
 
 
 def main():
@@ -36,6 +66,15 @@ def main():
     try: man = json.loads(MAN.read_text("utf-8")) if MAN.exists() else {}
     except Exception: man = {}
     man = {k: v for k, v in man.items() if k in keys}   # nur aktuelle Schluessel: kommt ein Schluessel spaeter zurueck (z. B. aus docs/), wird er neu geladen
+    source = "Manifest aus dem Actions-Cache"
+    if not man and keys:   # Manifest fehlt oder ist leer: Bucket-ETags statt alles neu laden
+        try:
+            have = bucket_etags(s3, bucket)
+            man = {k: v for k, v in have.items() if k in keys}
+            source = f"ETags aus dem Bucket (Manifest fehlte; {len(have)} Objekte unter pages/, {len(man)} davon aus r2out/)"
+        except Exception as e:
+            print("Bucket-Liste nicht lesbar:", type(e).__name__); source = "keiner (Manifest fehlt, Bucket-Liste nicht lesbar: alles neu)"
+        print("Vergleich:", source)
     try: gone = read_gone(s3, bucket)
     except Exception as e: print("Entfernt-Liste nicht lesbar:", type(e).__name__); gone = set()
     served = {k for k in man if k not in gone}   # liegt schon (nicht als entfernt markiert) im Bucket: scheitert der Upload, bleibt die alte Fassung erreichbar
@@ -77,6 +116,7 @@ def main():
     print(f"fuer den Purge vorgemerkt: {len(changed)} Adressen")
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}, im Manifest: {len(man)}")
     if failed: print(f"::warning::R2-Upload r2out: {len(failed)} Fehler - diese Dateien werden beim naechsten Lauf erneut geladen")
+    summary(["### R2-Upload r2out", f"- Dateien in r2out/: {len(files)}", f"- Vergleich: {source}", f"- hochgeladen (PUT): {len(ok)}, Fehler: {len(failed)}", f"- fuer den Purge vorgemerkt: {len(changed)}"])
     # Seiten in r2out/ gibt es nur im Bucket (seit 11.11.2026 alle Sprachseiten ausser en/de). Fehlt eine davon dort noch ganz, antwortete sie nach dem
     # Deploy mit 404 (z. B. die aus docs/ umgezogenen Seiten beim ersten Lauf) -> Ende 1, der Seitenbau veroeffentlicht nicht; der naechste Lauf laedt nur den Rest.
     # Ebenso die Sitemaps der Sprachen ausser en/de (seit 16.11.2026 nur in r2out/): der Index sitemap.xml in GitHub Pages verweist auf sie; und die aus

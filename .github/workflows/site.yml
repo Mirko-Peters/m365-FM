@@ -224,8 +224,15 @@ jobs:
           done
           echo "::error::Verzeichnis-Einleitungen konnten nicht gesichert werden"
           exit 1
+      # Feste "Aehnliche Folgen" (site_related.py): actions/checkout holt den Stand des Ereignisses. Ein Bau, der hinter dem naechtlichen Bau in der
+      # Warteschlange stand, kennt dessen Bot-Commit von data/sidebar_related.json sonst nicht, rechnet dessen neue Schluessel noch einmal (vielleicht mit
+      # einer neueren Folge) und ueberschreibt sie beim Sichern: diese Seiten aenderten sich ein zweites Mal. Darum den neuesten Stand von main holen.
+      - name: Feste Aehnliche Folgen - neuesten Stand von main holen
+        run: git fetch -q origin main && git checkout origin/main -- data/sidebar_related.json 2>/dev/null || echo "data/sidebar_related.json noch nicht auf main (erster Bau legt sie an)"
       - run: python generate_site.py
         env:
+          # Notschalter feste "Aehnliche Folgen" der Seitenleiste (site_related.py): Repo-Variable SIDEBAR_RELATED=0 = keine Folgen-Karte. Leer = an.
+          SIDEBAR_RELATED: ${{ vars.SIDEBAR_RELATED }}
           # Kurzlink-Basis fuer Sponsor-Links und Hausanzeigen (https://c.m365.fm). Leer = alte Adresse api-dub.m365.fm/go/<code>.
           # Erst als Repo-Variable GO_BASE eintragen, wenn c.m365.fm/<code> ausgeliefert wird (Worker-Deploy mit Route c.m365.fm).
           GO_BASE: ${{ vars.GO_BASE }}
@@ -237,6 +244,22 @@ jobs:
           ADMIN_BASE: ${{ vars.ADMIN_BASE }}
           PROFILE_BASE: ${{ vars.PROFILE_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
+      # Direkt nach dem Bau und immer (auch wenn eine spaetere blockierende Pruefung scheitert): die r2out/-Seiten mit den neuen Eintraegen gehen gleich danach
+      # in den Bucket und sind damit live. Muss im Git liegen (nicht nur im Actions-Cache), sonst rechnet ein Bau nach Cache-Verlust alles neu und aendert
+      # alle Seiten. Daten-Commits loesen diesen Workflow nicht aus.
+      - name: Feste Aehnliche Folgen sichern (data/sidebar_related.json, sofort nach dem Bau)
+        if: always() && hashFiles('data/sidebar_related.json') != ''
+        continue-on-error: true
+        run: |
+          if [ -z "$(git status --porcelain data/sidebar_related.json)" ]; then echo "unveraendert"; exit 0; fi
+          if git cat-file -e origin/main:data/sidebar_related.json 2>/dev/null && git diff --quiet origin/main -- data/sidebar_related.json; then echo "unveraendert (wie auf main)"; exit 0; fi
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/sidebar_related.json && git commit -q -m "Feste Aehnliche Folgen der Seitenleiste ergaenzt"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q -X theirs origin main; then git push -q origin HEAD:main && exit 0; else git rebase --abort 2>/dev/null || true; fi
+            sleep $((i*5))
+          done
+          echo "::error::data/sidebar_related.json konnte nicht gesichert werden"; exit 1
       # Sitemaps der Sprachen ausser en/de liegen seit 16.11.2026 nur in r2out/ (R2-Bucket), Index und en/de in docs/: geprueft werden alle, und zwar
       # VOR dem Upload - was in den Bucket geht, ist sofort live (der Site-Worker liefert es nach dem 404 von GitHub Pages), auch ohne Deploy
       - name: Sitemaps prüfen (docs/ + r2out/, blockierend, vor dem R2-Upload)
@@ -265,6 +288,16 @@ jobs:
         run: |
           pip install -q boto3
           R2_KEYS_OUT=r2-keys.json python tools/r2_pages_upload.py r2out
+      # Was eben in den Bucket ging, ist sofort live (alte Bau-Kennung passt weiter). Scheitert danach eine blockierende Pruefung (check_schema/-encoding/-titles),
+      # laeuft der Deploy-Job mit seinem R2-Purge nie: schon gecachte /__r2f-Eintraege dieser Seiten blieben bis R2_EDGE_TTL (1 Tag) alt. Darum hier gleich leeren.
+      - name: R2-Kanten-Cache der eben hochgeladenen Seiten leeren (nicht blockierend; der Deploy-Job leert sie noch einmal)
+        if: always() && hashFiles('r2-changed.json') != ''
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          BASE: https://www.m365.fm
+        run: python3 tools/purge_changed.py --r2-upload r2-changed.json
       - name: Pruefsummenliste der R2-Seiten sichern (immer, sofort nach dem Upload)
         if: always() && hashFiles('data/cache/r2_pages.json') != ''
         uses: actions/cache/save@v6
@@ -278,6 +311,7 @@ jobs:
           if [ ! -f docs/community/u/mirko-p/index.html ]; then echo "::warning::Profilseite mirko-p fehlt (Profil-Export fehlgeschlagen oder Profil nicht oeffentlich), siehe Zeile 'Profil-Export' im Log oben"; fi
       - name: Money-Keywords und Profil-Export sichern
         continue-on-error: true
+        # data/sidebar_related.json sichert der eigene Schritt direkt nach generate_site.py (oben).
         run: |
           if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"

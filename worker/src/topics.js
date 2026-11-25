@@ -1,5 +1,6 @@
 // Inhalt <-> Entitaet (content_topic): Uebernahme aus den topics-Spalten der Datenbank und aus dem Seitenbau (SITE/topics.json: fruehere Beitraege und
 // Folgen der Hauptshow mit Gewicht), Export fuer den Seitenbau und Agenten, Pflege von Hand ueber die Verwaltung.
+import { readJson, sourceState } from "./srcmeta.js";
 const now = () => Math.floor(Date.now() / 1000);
 const DBKINDS = { blog: "SELECT id,topics FROM blog_posts WHERE status='live'", podcast: "SELECT id,topics FROM pod_episodes WHERE published>0", video: "SELECT id,topics FROM yt_videos WHERE published>0", library: "SELECT id,topics FROM lib_items WHERE status='live'", session: "SELECT id,topics FROM event_sessions WHERE status='live'" };
 
@@ -16,24 +17,30 @@ export async function syncContentTopics(env) {
     for (let i = 0; i < stmts.length; i += 100) { const res = await db.batch(stmts.slice(i, i + 100)); fromDb += res.reduce((a, x) => a + (x.meta?.changes || 0), 0); }
   }
   // 2) Seitenbau: fruehere Beitraege und Folgen der Hauptshow mit Gewicht (SITE/topics.json); 'site' ueberschreibt eigene aeltere Zuordnungen, nie 'admin'
-  let j = null; try { j = await (await fetch(env.SITE + "/topics.json", { cf: { cacheTtl: 600 } })).json(); } catch { /* Seite nicht erreichbar */ }
-  if (j && Array.isArray(j.items)) {
+  // D1-Kosten: topics.json aendert sich nur mit einem Seitenbau; bei unveraenderter Datei (meta topics_src) entfallen UPSERT, Abgleich und Loeschpruefung.
+  // created bleibt beim ersten Eintrag (vorher: jede Zeile in jedem Lauf neu geschrieben), geschrieben wird nur ein geaendertes Gewicht.
+  let j = null, text = ""; try { const r = await readJson(await fetch(env.SITE + "/topics.json", { cf: { cacheTtl: 600 } })); j = r.json; text = r.text; } catch { /* Seite nicht erreichbar */ }
+  const src = j && Array.isArray(j.items) ? await sourceState(db, "topics_src", text) : null;
+  if (src?.same) return { fromDb, fromSite: 0, skipped: "topics.json unveraendert" };
+  if (src) {
     const stmts = [];
     for (const it of j.items.slice(0, 60000)) {
       if (!it.kind || !it.id || !it.eid) continue;
-      stmts.push(db.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES(?,?,?,?,'site',?) ON CONFLICT(kind,item_id,eid) DO UPDATE SET weight=excluded.weight,created=excluded.created WHERE content_topic.src<>'admin'").bind(String(it.kind), String(it.id).slice(0, 120), String(it.eid), +it.w || 1, t));
+      stmts.push(db.prepare("INSERT INTO content_topic(kind,item_id,eid,weight,src,created) VALUES(?,?,?,?,'site',?) ON CONFLICT(kind,item_id,eid) DO UPDATE SET weight=excluded.weight WHERE content_topic.src<>'admin' AND content_topic.weight IS NOT excluded.weight").bind(String(it.kind), String(it.id).slice(0, 120), String(it.eid), +it.w || 1, t));
     }
     for (let i = 0; i < stmts.length; i += 100) { const res = await db.batch(stmts.slice(i, i + 100)); fromSite += res.reduce((a, x) => a + (x.meta?.changes || 0), 0); }
     // vom Seitenbau nicht mehr gelieferte Zuordnungen (Beitrag umgeschrieben) entfernen
     const seen = new Set(j.items.map((it) => it.kind + "|" + it.id + "|" + it.eid)), kinds = [...new Set(j.items.map((it) => String(it.kind)))];
+    let more = false;
     for (const k of kinds) {
       const rows = (await db.prepare("SELECT item_id,eid FROM content_topic WHERE kind=? AND src='site'").bind(k).all()).results || [];
-      const gone = rows.filter((r) => !seen.has(k + "|" + r.item_id + "|" + r.eid)).slice(0, 2000);
+      const stale = rows.filter((r) => !seen.has(k + "|" + r.item_id + "|" + r.eid)), gone = stale.slice(0, 2000);
+      if (stale.length > gone.length) more = true;
       for (let i = 0; i < gone.length; i += 100) await db.batch(gone.slice(i, i + 100).map((r) => db.prepare("DELETE FROM content_topic WHERE kind=? AND item_id=? AND eid=? AND src='site'").bind(k, r.item_id, r.eid)));
     }
+    if (!more) await src.commit();   // mehr als 2.000 entfallene Zuordnungen je Art: der naechste Lauf raeumt weiter auf
   }
-  const total = (await db.prepare("SELECT COUNT(*) n FROM content_topic").first())?.n || 0;
-  return { fromDb, fromSite, total };
+  return { fromDb, fromSite };   // ohne COUNT(*) ueber content_topic (Vollscan je Lauf)
 }
 
 export async function handleTopics(env, request, url, path, user, J) {

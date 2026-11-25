@@ -1,4 +1,5 @@
-"""Kanten-Cache ueber Deploys erhalten (17.11.2026): Purge-Hash ohne die Liste "neueste Folgen" (tools/page_hashes.py), gezielter Purge statt
+"""Kanten-Cache ueber Deploys erhalten (17.11.2026): Purge-Hash ueber die ganze Seite ausser DTSTAMP (tools/page_hashes.py; die Liste "neueste Folgen"
+gibt es seit 25.11.2026 nicht mehr, die festen "Aehnlichen Folgen" zaehlen mit), gezielter Purge statt
 purge_everything (tools/purge_changed.py, MAX_URLS), R2-Schluessel ohne Bau-Kennung (/__r2f<pfad>, sitewrk/index.js) mit Purge nach dem Spiegel, vor der Bau-Kennung.
 Kern: keine veralteten Seiten - jede echte Aenderung (Titel, Hauptinhalt, Asset-Adressen, uebrige Seitenleiste) wird geleert, auch ueber gescheiterte Laeufe hinweg."""
 import importlib.util, io, json, os, subprocess, sys, tempfile, unittest, urllib.error
@@ -19,10 +20,11 @@ class _Ix:   # Wissensgraph-Stub fuer site_sidebar.render: keine Themen-Chips
     def match(self, text, k=8): return []
 
 
-def page(title="T", body="Text", css="aaaaaaaaaa", latest=("Folge A", "Folge B"), chips=False, foot="Fuss"):
-    """Seite wie generate_site.page mit der echten Seitenleiste (site_sidebar.render), damit der Filter auf die echte Ausgabe passt."""
+def page(title="T", body="Text", css="aaaaaaaaaa", related=("Folge A", "Folge B"), chips=False, foot="Fuss", latest=("Folge A", "Folge B")):
+    """Seite wie generate_site.page mit der echten Seitenleiste (site_sidebar.render). related: feste Aehnliche Folgen der Seite (site_related);
+    latest: neueste Folgen, wie sie frueher uebergeben wurden (render nimmt sie nur noch aus Kompatibilitaet an, ohne Wirkung)."""
     items = [{"t": t, "u": f"/show/episodes/{i}/"} for i, t in enumerate(latest)]
-    side = SBR.render(_Ix(), BASE, "en", "", items, lambda x: x["u"], lambda x: x["t"], BASE + "/show/episodes/")
+    side = SBR.render(_Ix(), BASE, "en", "", items, lambda x: x["u"], lambda x: x["t"], BASE + "/show/episodes/", related=[(f"/show/episodes/r{i}/", t) for i, t in enumerate(related)])
     if chips: side = side.replace('<div class="sbar-in">', '<div class="sbar-in"><section class="sb-card"><h2>Themen</h2><ul class="sb-chips"><li>X</li></ul></section>')
     return (f'<!doctype html><html><head><title>{title}</title><link rel="stylesheet" href="{BASE}/assets/site.{css}.css"></head><body><header>Nav</header>'
             f'<main class="wrap shw"><div class="shmain"><h1>{title}</h1><p>{body}</p></div>{side}</main><footer>{foot}</footer></body></html>')
@@ -44,20 +46,20 @@ def hashes(d, docs, r2out=None):
 
 
 class PurgeHashTest(unittest.TestCase):
-    """Nur die Liste "neueste Folgen" und DTSTAMP fallen heraus - alles, was den Inhalt oder die Darstellung betrifft, aendert den Hash."""
+    """Nur DTSTAMP faellt heraus - alles, was den Inhalt oder die Darstellung betrifft (auch die Seitenleiste), aendert den Hash."""
     def h(self, files):
         with tempfile.TemporaryDirectory() as d: return json.loads(hashes(d, files).read_text())
 
-    def test_only_latest_list_ignored(self):
+    def test_new_episode_keeps_bytes_sidebar_counts(self):
         a = self.h({"x/index.html": page()})["/x/"]
-        self.assertEqual(self.h({"x/index.html": page(latest=("Folge NEU", "Folge A"))})["/x/"], a, "neue Folge in der Seitenleiste: kein Purge")
-        self.assertEqual(self.h({"x/index.html": page(latest=("Folge A",))})["/x/"], a)
-        for kw in ({"title": "T2"}, {"body": "Text neu"}, {"css": "bbbbbbbbbb"}, {"chips": True}, {"foot": "Fuss neu"}):
+        self.assertEqual(self.h({"x/index.html": page(latest=("Folge NEU", "Folge A"))})["/x/"], a, "neue Folge: die Seite bleibt byte-gleich (keine Neueste-Folgen-Liste mehr)")
+        for kw in ({"title": "T2"}, {"body": "Text neu"}, {"css": "bbbbbbbbbb"}, {"chips": True}, {"foot": "Fuss neu"}, {"related": ("Folge A",)}):
             self.assertNotEqual(self.h({"x/index.html": page(**kw)})["/x/"], a, kw)
 
-    def test_filter_matches_real_sidebar(self):
+    def test_no_latest_rule_left(self):
         side = SBR.render(_Ix(), BASE, "de", "", [{"u": "/a/", "t": "A"}], lambda x: x["u"], lambda x: x["t"], BASE + "/de/podcast/")
-        self.assertIn('<ol class="sb-list"><li>', side, "site_sidebar.render schreibt die Liste so - sonst greift der Filter in tools/page_hashes.py nicht")
+        self.assertNotIn("sb-list", side, "ohne related keine Folgen-Karte, auch wenn noch items uebergeben werden")
+        self.assertNotIn("LATEST", (ROOT / "tools" / "page_hashes.py").read_text("utf-8"), "Sonderregel entfaellt: die Seitenleiste zaehlt ganz")
 
     def test_ics_dtstamp_ignored_other_fields_not(self):
         a = self.h({"e/event.ics": ics()})["/e/event.ics"]
@@ -121,7 +123,7 @@ class PurgeFlowTest(unittest.TestCase):
         r2_1 = {"de/x/index.html": page("X"), "fr/y/index.html": page("Y"), "ru/tag/облако/index.html": page("R")}
         keys = ["pages/de/x/index.html", "pages/fr/y/index.html", "pages/ru/tag/облако/index.html", "pages/ja/z/transcript.txt"]
         old = self.build("b1", docs1, r2_1, keys)
-        new_latest = ("Folge NEU", "Folge A")   # neue Folge: Seitenleiste ueberall anders
+        new_latest = ("Folge NEU", "Folge A")   # neue Folge: frueher war die Seitenleiste ueberall anders, jetzt bleibt sie gleich (feste Aehnliche Folgen)
         docs2 = {"index.html": page("Start", latest=new_latest), "show/a/index.html": page("A", body="neu", latest=new_latest), "show/b/index.html": page("B", latest=new_latest),
                  "assets/fonts/x.woff2": b"F", "community/events/e/event.ics": ics(stamp="20261118T000000Z"), "show/c/index.html": page("C")}
         r2_2 = {"de/x/index.html": page("X", latest=new_latest), "fr/y/index.html": page("Y2", latest=new_latest), "ru/tag/облако/index.html": page("R", body="neu")}
@@ -134,7 +136,7 @@ class PurgeFlowTest(unittest.TestCase):
         cf = FakeCF(); self.step1(old, new, cf, uploaded)
         ru = BASE + "/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/"
         self.assertEqual(sorted(cf.files), sorted([BASE + "/show/a/", BASE + "/show/c/", BASE + "/fr/y/", ru, BASE + "/__r2c/fr/y/", BASE + "/__r2c" + ru[len(BASE):]]),
-                         "nur echte Aenderungen; Startseite, /show/b/, /de/x/ (nur Seitenleiste), Schrift und .ics (nur DTSTAMP) bleiben im Cache")
+                         "nur echte Aenderungen; Startseite, /show/b/, /de/x/ (nur neue Folge, Seite byte-gleich), Schrift und .ics (nur DTSTAMP) bleiben im Cache")
         self.assertEqual(cf.everything, 0, "kein Komplett-Purge")
         pend = self.pending()
         self.assertFalse(pend["all"]); self.assertEqual(pend["urls"], sorted(["/show/a/", "/show/c/", "/fr/y/", "/ru/tag/облако/", "/ja/z/transcript.txt"]))
@@ -199,6 +201,35 @@ class PurgeFlowTest(unittest.TestCase):
             m.MAX_URLS = 60; self.assertTrue(m.purge("Z", [f"{BASE}/p{i}/" for i in range(61)], "t")); self.assertEqual(cf.everything, 1)
         # Lauf #709 (17.11.): 1697 + 1564 = 3261 Adressen loesten mit MAX_URLS 3000 einen Komplett-Purge aus - jetzt gezielt
         self.assertLess(3261 * 2, load().MAX_URLS)
+
+
+class R2UploadPurgeTest(unittest.TestCase):
+    """Build-Job: /__r2f der eben nach R2 geladenen Seiten sofort leeren (sie sind ab dem Upload live, auch wenn danach eine Pruefung den Bau stoppt)."""
+    def run_it(self, urls, cf, env=None):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "r2-changed.json"; f.write_text(json.dumps(urls))
+            m = load()
+            with mock.patch.dict(os.environ, env if env is not None else {"CLOUDFLARE_API_TOKEN": "t", "CF_ZONE_ID": "Z", "BASE": BASE}, clear=True), mock.patch("urllib.request.urlopen", cf), mock.patch("time.sleep"):
+                return m.main_r2_upload(str(f))
+
+    def test_purges_uploaded_pages_under_r2f(self):
+        cf = FakeCF()
+        self.assertEqual(self.run_it(["/fr/y/", "/ja/z/transcript.txt", "/fr/bild.png"], cf), 0)
+        self.assertEqual(sorted(cf.files), [BASE + "/__r2f/fr/y/", BASE + "/__r2f/ja/z/transcript.txt"], "Bilder nie (kommen nie aus R2 zuerst)")
+
+    def test_never_blocks(self):
+        self.assertEqual(self.run_it(["/fr/y/"], FakeCF(), env={}), 0, "ohne Token: Warnung, Ende 0")
+        cf = FakeCF(fail_files=True, fail_all=True); self.assertEqual(self.run_it(["/fr/y/"], cf), 0)
+        self.assertEqual(self.run_it([], FakeCF()), 0)
+
+    def test_workflow_step_right_after_upload(self):
+        wf = yaml.safe_load((ROOT / ".github" / "workflows" / "site.yml").read_text("utf-8"))
+        st = wf["jobs"]["build"]["steps"]
+        up = next(i for i, s in enumerate(st) if "tools/r2_pages_upload.py r2out" in s.get("run", ""))
+        pu = next(i for i, s in enumerate(st) if "--r2-upload r2-changed.json" in s.get("run", ""))
+        self.assertEqual(pu, up + 1); self.assertTrue(st[pu]["continue-on-error"])
+        checks = [i for i, s in enumerate(st) if any(c in s.get("run", "") for c in ("check_schema.py", "check_encoding.py", "check_titles.py"))]
+        self.assertTrue(checks and all(i > pu for i in checks), "vor den blockierenden Pruefungen")
 
 
 class WorkflowOrderTest(unittest.TestCase):

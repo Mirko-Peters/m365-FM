@@ -1,5 +1,6 @@
 """Ein Menue und eine Sidebar fuer alle Sprachen (Mirko, 6.11.2026): Englisch wie jede andere Sprache, keine Show-Karte in der Sidebar,
-jede Inhaltsseite (Folge, Entitaet, Blogbeitrag, Video, Bibliothek, Event, Profil) mit derselben Sidebar."""
+jede Inhaltsseite (Folge, Entitaet, Blogbeitrag, Video, Bibliothek, Event, Profil) mit derselben Sidebar. Seit 25.11.2026 statt "Neueste Folgen"
+die festen "Aehnlichen Folgen" (site_related.py, Karte sb-rel), nur auf Inhaltsseiten."""
 import re
 import sys
 import unittest
@@ -11,12 +12,13 @@ import site_sidebar as SBR   # noqa: E402
 
 BASE = "https://www.m365.fm"
 ITEMS = [{"u": f"{BASE}/x/{i}/", "t": f"Folge {i}"} for i in range(8)]
+REL = [(f"{BASE}/r/{i}/", f"Aehnlich {i}") for i in range(7)]
 SHP = {"spotify_show": "https://open.spotify.com/show/x", "amazon_show": "https://music.amazon.com/podcasts/x"}
 
 
 def side(ix, lang, **kw):
     pre = "" if lang == "en" else "/" + lang
-    args = dict(items=ITEMS, url_of=lambda x: x["u"], title_of=lambda x: x["t"], all_url=f"{BASE}{pre}/podcast/", shp=SHP, rss="https://www.spreaker.com/show/1/episodes/feed",
+    args = dict(related=REL, items=ITEMS, url_of=lambda x: x["u"], title_of=lambda x: x["t"], all_url=f"{BASE}{pre}/podcast/", shp=SHP, rss="https://www.spreaker.com/show/1/episodes/feed",
                 ent_prefix=pre, community_url=f"{BASE}{pre}/community/")
     args.update(kw)
     return SBR.render(ix, BASE, lang, **args)
@@ -50,12 +52,35 @@ class SidebarTest(unittest.TestCase):
         cls.some = [i for i, e in cls.ix.by.items() if e["type"] == "product"][:3]
 
     def test_same_cards_in_every_language(self):
-        want = ["sb-con", "sb-g", "topics", "latest", "listen", "sb-comm"]
+        want = ["sb-con", "sb-g", "topics", "sb-rel", "listen", "sb-comm"]
         for lang in SBR.L10N:
             h = side(self.ix, lang, ids=self.some)
             self.assertEqual(cards(h), want, lang)
             self.assertNotIn("sb-nav", h)
             self.assertNotIn("M365.FM Show", h)
+
+    def test_related_card_max_five_and_no_latest_list(self):
+        for lang in SBR.L10N:
+            h = side(self.ix, lang, ids=self.some)
+            card = re.search(r'<section class="sb-card sb-rel"><h2>([^<]+)</h2><ul class="sb-list">(.*?)</ul>', h, re.S)
+            self.assertTrue(card, lang)
+            self.assertEqual(card.group(1), SBR.L10N[lang]["related"], lang)
+            self.assertEqual(card.group(2).count("<li>"), 5, lang)
+            self.assertNotIn("Folge 0", h, "items (frueher neueste Folgen) ohne Wirkung")
+            self.assertNotIn(SBR.L10N[lang]["latest"], h, lang)
+            self.assertNotIn("<ol", h, lang)
+
+    def test_no_card_without_related(self):
+        for rel in (None, []):
+            h = side(self.ix, "fr", ids=self.some, related=rel)
+            self.assertNotIn("sb-rel", h); self.assertNotIn("sb-list", h)
+
+    def test_related_translated_in_all_15_languages(self):
+        self.assertEqual(len(SBR.L10N), 15)
+        vals = [t["related"] for t in SBR.L10N.values()]
+        self.assertEqual(len(set(vals)), 15, "jede Sprache eigene Uebersetzung")
+        self.assertEqual(SBR.L10N["de"]["related"], "Ähnliche Folgen")
+        self.assertEqual(SBR.L10N["en"]["related"], "Similar episodes")
 
     def test_labels_exist_in_all_languages(self):
         keys = set(SBR.L10N["en"])

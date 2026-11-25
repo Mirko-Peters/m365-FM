@@ -419,11 +419,35 @@ def d1_edited(items):
     return ids
 
 
-def fetch_export():
+EXPORT_MAX_AGE_S = 6 * 3600   # Laufzeitgrenze des Jobs (entity-fill.yml: 350 min): aelter -> neu holen
+PUSH_CHUNK = 50               # Eintraege je POST /api/internal/entity-fill (der Worker nimmt hoechstens 50, entfill.js)
+
+
+def fetch_export(path=None):
+    """Live-Fassungen aus D1 (/api/entity/export). D1-Kosten: mit path (ENTITY_EXPORT_FILE bzw. --export-file) wird der Export dort abgelegt, und ein
+    spaeterer Start im selben Job (push-Schritt nach run) liest ihn, solange er juenger als EXPORT_MAX_AGE_S ist, statt alle live-Entitaeten noch
+    einmal zu lesen. Sicher, weil der Worker beim Schreiben selbst prueft (human_edited, changed_meanwhile). Datei kaputt/zu alt -> neu holen."""
+    if path:
+        f = Path(path)
+        try:
+            if f.is_file() and time.time() - f.stat().st_mtime < EXPORT_MAX_AGE_S:
+                items = json.loads(f.read_text("utf-8"))
+                if isinstance(items, list):
+                    print(f"D1-Export aus {f.name} (vom Lauf davor, {int((time.time() - f.stat().st_mtime) // 60)} min alt) - nicht neu geholt")
+                    return items
+        except (OSError, ValueError):
+            pass
     api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
     req = urllib.request.Request(api.rstrip("/") + "/api/entity/export", headers={"user-agent": "m365fm-actions/1.0 (+https://www.m365.fm)", "accept": "application/json", "cache-control": "no-cache"})
     with urllib.request.urlopen(req, timeout=60) as r:
-        return json.loads(r.read().decode()).get("items") or []
+        items = json.loads(r.read().decode()).get("items") or []
+    if path:
+        try:
+            Path(path).parent.mkdir(parents=True, exist_ok=True); tmp = Path(str(path) + ".tmp")
+            tmp.write_text(json.dumps(items, ensure_ascii=False), "utf-8"); tmp.replace(path)
+        except OSError as ex:
+            print(f"::warning::D1-Export nicht ablegbar ({type(ex).__name__}); der naechste Start holt ihn neu")
+    return items
 
 
 def fetch_tr():
@@ -457,11 +481,11 @@ def adopt_ent_tr(ents, gen, fill, i18n, tr, edited=(), spons=()):
     return touched
 
 
-def edited_ids(strict):
-    """IDs der von Menschen bearbeiteten Entitaeten (D1-Export). strict: ohne frische Antwort abbrechen (Fail-closed)."""
+def edited_ids(strict, export_file=None):
+    """IDs der von Menschen bearbeiteten Entitaeten (D1-Export). strict: ohne frische Antwort abbrechen (Fail-closed). export_file: siehe fetch_export."""
     cache = OUT / "edited.json"
     try:
-        ids = d1_edited(fetch_export())
+        ids = d1_edited(fetch_export(export_file))
         jsave(cache, sorted(ids), indent=0)
         return ids
     except Exception as ex:
@@ -499,8 +523,8 @@ def push(ents, state, edited, fill, i18n, post=None, spons=None):
         item["base"] = (fill.get(eid) or {}).get("d1h") or d["h"]   # Stand, fuer den der Text erzeugt wurde (sonst der aktuelle)
         jobs.append((eid, ph, item))
     counts = {}
-    for i in range(0, len(jobs), 20):
-        part = jobs[i:i + 20]; res = post([j[2] for j in part])
+    for i in range(0, len(jobs), PUSH_CHUNK):   # D1-Kosten: der Worker rechnet humanEdited/ownedEntities je Aufruf einmal (vorher 20 je Aufruf)
+        part = jobs[i:i + PUSH_CHUNK]; res = post([j[2] for j in part])
         for r in res.get("results") or []:
             counts[r["status"]] = counts.get(r["status"], 0) + 1
             job = next((j for j in part if j[0] == r["id"]), None)
@@ -920,7 +944,7 @@ def main():
     strict = mode in ("run", "collect", "push")
     ents, gen = load_entities(), load_gentext(); fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
     state = jload(OUT / "state.json", {"batches": [], "tries": {}}); spons = sponsored_ids()
-    edited = edited_ids(strict)
+    edited = edited_ids(strict, opt("--export-file") or os.environ.get("ENTITY_EXPORT_FILE") or None)
     if mode in ("run", "plan", "inventory"):   # schon vorhandene Auto-Uebersetzungen (ent_tr) nicht noch einmal kaufen; gespeichert nur in run
         for l in adopt_ent_tr(ents, gen, fill, i18n, fetch_tr(), edited, spons):
             if mode == "run": jsave(OUT / "i18n" / f"{l}.json", i18n[l])
