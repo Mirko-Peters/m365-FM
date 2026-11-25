@@ -126,7 +126,7 @@ class Consistency(unittest.TestCase):
             self.assertIsNotNone(m)
             self.assertEqual({"en": m.group(1), "de": m.group(2)}[lang], cp["course"][lang])
             self.assertEqual(S.registry()["path"]["title"][lang], cp["course"][lang], f"Kursname = Titel des Lernpfads ({lang})")
-        self.assertEqual(WRANGLER["vars"]["CERTOPUS_ON"], "0")
+        self.assertEqual(WRANGLER["vars"]["CERTOPUS_ON"], "1")
         self.assertEqual(S.registry()["path"]["id"], PID)
 
     def test_certopus_doc_names_tools(self):
