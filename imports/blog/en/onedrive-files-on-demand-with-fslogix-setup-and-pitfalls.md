@@ -1,10 +1,10 @@
 ---
 title: "OneDrive Files On-Demand with FSLogix: setup and pitfalls"
 summary: "Learn supports the OneDrive sync app on non-persistent desktops with FSLogix, given a per-machine install and the latest FSLogix. In our reading, opened Files On-Demand files land in the container, so watch size."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [fslogix, onedrive]
 keypoints:

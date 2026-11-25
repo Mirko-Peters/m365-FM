@@ -1,10 +1,10 @@
 ---
 title: "How to configure RDP Shortpath for managed and public networks"
 summary: "RDP Shortpath for public networks works without configuration when UDP is allowed; the managed-network listener needs a policy, a firewall rule and a host restart. Covers host pool settings and transport checks."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:

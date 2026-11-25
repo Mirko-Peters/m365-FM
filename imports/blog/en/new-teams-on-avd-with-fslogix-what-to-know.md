@@ -1,10 +1,10 @@
 ---
 title: "New Teams on AVD with FSLogix: what to know"
 summary: "New Teams on Azure Virtual Desktop needs FSLogix 2210 hotfix 3 or later, and Microsoft recommends hotfix 4 or later. If you use a separate Office container, you must also set IncludeTeams so Teams data stays in the container."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [avd-teams-media-optimization, fslogix]
 keypoints:

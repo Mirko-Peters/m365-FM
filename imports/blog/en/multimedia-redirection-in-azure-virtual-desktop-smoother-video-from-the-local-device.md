@@ -1,10 +1,10 @@
 ---
 title: "Multimedia redirection in Azure Virtual Desktop: smoother video from the local device"
 summary: "Multimedia redirection moves browser video playback and WebRTC audio calls from the remote session to the user's local Windows device, so the device does the decoding and rendering. It needs a service on the session host, a browser extension for Edge or Chrome, and a Windows client."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [avd-multimedia-redirection, azure-virtual-desktop]
 keypoints:

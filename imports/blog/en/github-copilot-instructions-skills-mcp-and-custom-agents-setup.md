@@ -1,10 +1,10 @@
 ---
 title: "GitHub Copilot Instructions, Skills, MCP and Custom Agents: Setup Guide"
 summary: "Set up GitHub Copilot customization in the order Microsoft documents it: instruction files, prompt files, agent skills, MCP servers and custom agents, with file paths, settings and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [github-copilot, mcp, agent-skill, github-copilot-agent-mode]
 keypoints:
   - "Instruction files shape how Copilot answers: .github/copilot-instructions.md applies repository-wide, and .instructions.md files with applyTo apply to matching paths."

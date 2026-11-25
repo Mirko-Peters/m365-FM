@@ -1,10 +1,10 @@
 ---
 title: "AB-620 Exam Guide: AI Agent Builder Associate, Skills Measured in Copilot Studio"
 summary: "The AB-620 skills measured outline from Microsoft Learn with section weights: planning agents, agent flows, topics, tools, MCP, multi-agent work, evaluation and ALM, plus passing score and a study order."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [ab-620, copilot-studio, agent-flows, mcp]
 keypoints:
   - "AB-620 covers designing and building integrated AI agent solutions in Copilot Studio. The passing score is 700 or greater."

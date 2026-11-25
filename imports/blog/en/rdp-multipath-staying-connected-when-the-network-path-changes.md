@@ -1,10 +1,10 @@
 ---
 title: "RDP Multipath: staying connected when the network path changes"
 summary: "RDP Multipath keeps standby network paths for an Azure Virtual Desktop session and switches when the active path degrades or fails. Covers the paths, client versions, rollout, firewall capacity and checks."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:

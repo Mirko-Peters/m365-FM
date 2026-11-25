@@ -1,10 +1,10 @@
 ---
 title: "Copilot Studio Agent Flows vs Power Automate Cloud Flows: Which to Use"
 summary: "Agent flows and Power Automate cloud flows both automate processes, but they differ in where you manage them, how they are billed and what they can do. Here is what Microsoft Learn documents."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [copilot-studio, power-automate, agent-flows, ai-agent]
 keypoints:
   - "Learn describes agent flows as deterministic: the same input always produces the same output. An agent decides when to call them."

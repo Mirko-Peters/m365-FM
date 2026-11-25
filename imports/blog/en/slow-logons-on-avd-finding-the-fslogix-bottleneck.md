@@ -1,10 +1,10 @@
 ---
 title: "Slow logons on AVD: finding the FSLogix bottleneck"
 summary: "Split the logon into the stages Azure Virtual Desktop Insights reports, read the FSLogix profile log for the attach time, then check VM load, antivirus exclusions, DNS and SMB reachability, and storage latency and throttling in that order. This article gives the sources and checks for each step."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [fslogix, azure-virtual-desktop]
 keypoints:

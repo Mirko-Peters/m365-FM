@@ -1,10 +1,10 @@
 ---
 title: "AB-900 Exam Guide: Microsoft 365 Copilot and Agent Administration Fundamentals"
 summary: "The AB-900 skills measured outline from Microsoft Learn, as of October 14, 2026, with weights for core services, data protection and governance, and Copilot and agent administration, plus a study plan."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [ab-900, copilot, sharepoint-advanced-management, microsoft-365-admin-center]
 keypoints:
   - "AB-900 skills measured are dated October 14, 2026, and the passing score is 700 or greater. The study guide lists no prerequisites."

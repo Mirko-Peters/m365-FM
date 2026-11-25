@@ -1,10 +1,10 @@
 ---
 title: "Turn an Excel Spreadsheet into a Power App with Copilot: Step by Step"
 summary: "How to turn an Excel spreadsheet into a Power App with Copilot: upload the file with Start with data, fix column types, save and publish, plus the Excel Online option and its limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [power-apps, copilot-in-power-apps, dataverse]
 keypoints:
   - "In the Power Apps maker portal, select Start with data, then Upload file, and Copilot builds a Dataverse table and a first app from your worksheet."

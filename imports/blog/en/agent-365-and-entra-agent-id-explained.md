@@ -1,10 +1,10 @@
 ---
 title: "Agent 365 and Microsoft Entra Agent ID Explained: Registry, Identity and Licensing"
 summary: "How Microsoft Agent 365 and Microsoft Entra Agent ID fit together: the agent registry, identity blueprints, Conditional Access, roles to assign, licensing and where to find all agents in the admin center."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [agent-365, agent-id, microsoft-entra, agent-registry]
 keypoints:
   - "Agent 365 is the unified registry and control plane for agents in the Microsoft 365 admin center. Entra Agent ID remains the identity foundation underneath it."

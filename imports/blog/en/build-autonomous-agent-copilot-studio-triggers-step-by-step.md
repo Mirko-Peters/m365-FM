@@ -1,10 +1,10 @@
 ---
 title: "Copilot Studio Autonomous Agents: Build One Step by Step With Event Triggers"
 summary: "How to build an autonomous agent in Copilot Studio: turn on generative orchestration, add actions, add an event trigger, test it, publish it, and what the credential and billing rules mean."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [copilot-studio, autonomous-agent, generative-orchestration, ai-agent]
 keypoints:
   - "An autonomous agent in Copilot Studio is a normal agent with event triggers. The trigger sends a payload, and the agent decides which actions or topics to run."

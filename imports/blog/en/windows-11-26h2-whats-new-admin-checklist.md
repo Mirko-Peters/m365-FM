@@ -1,10 +1,10 @@
 ---
 title: "Windows 11 26H2: What Is New and What Admins Need to Know"
 summary: "Windows 11 version 26H2 (the 2026 Update) is an enablement package for 25H2 and 24H2. This guide covers new features, support lifecycle, rollout, admin steps and the known issues Microsoft lists."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-26
 topics: [windows-update-for-business, windows-autopatch, windows-autopilot]
 keypoints:
   - "Windows 11 version 26H2, also called the Windows 11 2026 Update, is generally available for eligible devices on 25H2 or 24H2."

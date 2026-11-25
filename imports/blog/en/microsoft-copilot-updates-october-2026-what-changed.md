@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Copilot Updates October 2026: What Changed and Who Gets It"
 summary: "A sorted summary of Microsoft's October 2026 Copilot update post: Home, Projects, Autopilot, Workspaces, Excel and PowerPoint skills, Teams recap and admin controls, with availability stages."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [copilot, copilot-cowork, copilot-notebooks, copilot-governance]
 keypoints:
   - "Microsoft's monthly post groups changes into user capabilities and IT admin capabilities, and says its dates are tentative and subject to change."

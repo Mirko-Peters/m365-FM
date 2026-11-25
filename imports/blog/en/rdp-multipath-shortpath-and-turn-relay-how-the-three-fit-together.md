@@ -1,10 +1,10 @@
 ---
 title: "RDP Multipath, Shortpath and TURN relay: how the three fit together"
 summary: "Reverse connect TCP starts every Azure Virtual Desktop session, RDP Shortpath moves it to UDP (managed, STUN or TURN), and RDP Multipath keeps standby paths. This guide maps each layer to its setting and check."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:

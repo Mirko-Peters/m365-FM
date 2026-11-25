@@ -1,10 +1,10 @@
 ---
 title: "Setting up Azure Virtual Desktop on Azure Local: prerequisites and pitfalls"
 summary: "Before adding session hosts on Azure Local you need a registered 23H2 or later instance, a Windows image, a logical network, an AD domain join account and Azure roles. Covers portal fields and constraints."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [avd-for-azure-local, azure-virtual-desktop]
 keypoints:

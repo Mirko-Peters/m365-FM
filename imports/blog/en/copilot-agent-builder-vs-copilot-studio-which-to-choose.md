@@ -1,10 +1,10 @@
 ---
 title: "Copilot Agent Builder vs Copilot Studio: Which One Should You Use?"
 summary: "Agent Builder or Copilot Studio? Microsoft's decision order, the real differences in actions, channels, sharing and lifecycle, and how to copy an agent from one to the other."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [copilot-agent-builder, copilot-studio, ai-agent]
 keypoints:
   - "Microsoft says to choose by required capabilities and operating model, not by audience size alone, and to ask three questions in a fixed order."

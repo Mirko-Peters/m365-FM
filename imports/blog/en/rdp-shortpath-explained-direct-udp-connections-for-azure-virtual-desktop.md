@@ -1,10 +1,10 @@
 ---
 title: "RDP Shortpath explained: direct UDP connections for Azure Virtual Desktop"
 summary: "RDP Shortpath adds a UDP-based transport to an Azure Virtual Desktop connection and falls back to the TCP reverse connect transport when UDP cannot be established. It has two modes, managed networks and public networks, which together give four options."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:

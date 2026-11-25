@@ -1,10 +1,10 @@
 ---
 title: "Copilot Notebooks: Combine Files, Emails and Meetings in One Project"
 summary: "How Microsoft 365 Copilot Notebooks gather files, emails, meetings and sites as references for one project, how to create a notebook, and the documented limits such as 300 files and no charts."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [copilot-notebooks, copilot, onenote, copilot-pages]
 keypoints:
   - "A notebook is a scoped workspace. Copilot answers only from the references you add, not from your whole OneDrive, mailbox or Teams chats."

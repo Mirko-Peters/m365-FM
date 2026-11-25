@@ -1,10 +1,10 @@
 ---
 title: "Copilot in Power BI: What AI Can Do for DAX Queries and Report Building"
 summary: "What Copilot in Power BI does for DAX and reports, how to open it in DAX query view and the service, the capacity and tenant requirements, and the limits Microsoft documents."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [copilot-in-power-bi, power-bi, dax, semantic-model]
 keypoints:
   - "Copilot in DAX query view writes DAX queries from a prompt, explains queries and DAX topics, and refines a query when you select it and ask for a change."

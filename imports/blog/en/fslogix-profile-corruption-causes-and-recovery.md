@@ -1,10 +1,10 @@
 ---
 title: "FSLogix profile corruption: causes and recovery"
 summary: "A failed attach, temporary profile or hung sign-out can point to a damaged FSLogix container, but locks, permissions, full disks or a changed naming setting are often the cause. Sorts causes, logs and recovery options."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-26
 render: v2
 topics: [fslogix-profile-container]
 keypoints:

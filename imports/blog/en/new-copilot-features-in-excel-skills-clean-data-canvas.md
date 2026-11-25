@@ -1,10 +1,10 @@
 ---
 title: "New Copilot Features in Excel: Skills, Clean Data, Get Data and Interactive Canvas"
 summary: "The newest Copilot features in Excel as Microsoft lists them for October 2026: the clean data, get data, skill builder and skill recorder skills, interactive canvas, and where each is available."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [copilot, excel, power-query]
 keypoints:
   - "Copilot in Excel now has skills. Type @clean-data in a prompt or choose it from the Skills menu to find and fix data problems with your approval."

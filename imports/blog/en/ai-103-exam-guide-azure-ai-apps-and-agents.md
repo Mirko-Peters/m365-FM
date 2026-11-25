@@ -1,10 +1,10 @@
 ---
 title: "AI-103 Exam Guide: Developing AI Apps and Agents on Azure, Skills Measured"
 summary: "The AI-103 skills measured outline from Microsoft Learn with section weights, what each area covers, who the exam is for, passing score, preview-feature policy and how to plan your study."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-26
 topics: [ai-103, microsoft-foundry, foundry-agent-service, ai-agent]
 keypoints:
   - "Exam AI-103 is Developing AI Apps and Agents on Azure. Learn's skills measured are dated April 16, 2026, and the passing score is 700 or greater."

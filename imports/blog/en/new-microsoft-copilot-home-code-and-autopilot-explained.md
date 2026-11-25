@@ -1,10 +1,10 @@
 ---
 title: "The New Microsoft Copilot: Home, Code and Autopilot Explained"
 summary: "What Microsoft announced on 25 September 2026: Copilot Home, Code and Autopilot, how licensing and billing split, what admins control, and which parts were in Frontier or preview."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-03
+date: 2026-11-26
 topics: [copilot, copilot-cowork, frontier-program, agent-365]
 keypoints:
   - "Home is the new starting point in Copilot and brings Chat and Cowork together. Microsoft says Copilot will route requests to Chat, Cowork or Code."
