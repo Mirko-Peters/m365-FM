@@ -1,0 +1,4789 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.080
+De Vender XDR wordt nu bijna overal ingezet. De meeste tenants hebben het ingeschakeld.
+
+00:00:04.260 --> 00:00:07.160
+De meeste licenties zijn betaald en de meeste teams gebruiken het als een slimmere antivirus.
+
+00:00:07.340 --> 00:00:09.960
+Het blokkeert de bekende dreigingen. Het stuurt een e-mail.
+
+00:00:10.180 --> 00:00:13.400
+Iemand klikt door een wachtrij heen. Maar in werkelijkheid is dat geen detectie.
+
+00:00:13.600 --> 00:00:17.260
+Dat is consumptie, omdat het model achter de standaardinstellingen is gebouwd voor de gemiddelde klant,
+
+00:00:17.420 --> 00:00:20.560
+en de gemiddelde klant bestaat niet. Het is niemands tenant, ook die van jou niet.
+
+00:00:20.720 --> 00:00:25.320
+Dus vandaag gaan we dat oplossen. We kijken naar hoe incidentcorrelatie echt bepaalt wat bij elkaar hoort.
+
+00:00:25.480 --> 00:00:27.600
+We schrijven aangepaste detecties in KQL.
+
+00:00:27.600 --> 00:00:31.400
+We filteren ruis met een methode, voegen automatisering toe, halen Sentinel erbij,
+
+00:00:31.620 --> 00:00:33.800
+bouwen response playbooks en meten vervolgens of het werkt.
+
+00:00:33.940 --> 00:00:38.200
+Als je in de beveiliging werkt, abonneer je dan nu zodat de volgende aflevering over detection engineering je bereikt.
+
+00:00:38.380 --> 00:00:41.780
+Maar voordat we in de architectuur duiken, een kort woord over wie deze show steunt.
+
+00:00:42.560 --> 00:00:44.660
+Sponsorsegment. Stella Migrator for Exchange.
+
+00:00:44.900 --> 00:00:48.140
+De beveiliging status verandert tijdens een migratie en de meeste teams houden daar geen rekening mee.
+
+00:00:48.380 --> 00:00:51.080
+Wanneer mailboxen verhuizen, verhuizen de signalen die de vendor ziet met hen mee.
+
+00:00:51.620 --> 00:00:52.500
+Inlogpatronen verschuiven.
+
+00:00:52.940 --> 00:00:54.260
+Mailboxrechten worden opnieuw opgebouwd.
+
+00:00:54.260 --> 00:00:57.180
+Door schakelregels en gemachtig te verschijnen op plekken waar ze voorheen niet waren.
+
+00:00:57.340 --> 00:00:59.300
+Je detectielogica leest dit alles als gedrag.
+
+00:00:59.460 --> 00:01:01.740
+Dus een rommelige verhuizing zorgt voor rommelige signalen.
+
+00:01:01.900 --> 00:01:04.260
+Dat is waar Stella Migrator for Exchange in beeld komt.
+
+00:01:04.440 --> 00:01:07.280
+Het is een tool voor het verplaatsen van mailboxen binnen het Microsoft ecosysteem,
+
+00:01:07.440 --> 00:01:09.840
+inclusief tussen exchange omgevingen en naar Microsoft 365.
+
+00:01:10.400 --> 00:01:11.280
+Het punt is simpel.
+
+00:01:11.480 --> 00:01:14.680
+Een schone identiteit en een schone mailbox status maken detectielogica schoner.
+
+00:01:14.880 --> 00:01:17.180
+Minder vreemde resjes betekent later minder valse positieven.
+
+00:01:17.360 --> 00:01:18.580
+Dat is alles wat je hoeft te weten.
+
+00:01:18.780 --> 00:01:21.040
+Er staat een link in de beschrijving als je het beter wilt bekijken.
+
+00:01:21.040 --> 00:01:22.480
+Nu terug naar het kernprobleem.
+
+00:01:22.680 --> 00:01:24.120
+Wat betekent standaard, eigenlijk?
+
+00:01:24.400 --> 00:01:25.920
+De standaard aanname voor detectie.
+
+00:01:26.140 --> 00:01:27.960
+Begin met voor wie de standaardinstellingen zijn gebouwd.
+
+00:01:28.100 --> 00:01:29.520
+Ze zijn gebouwd voor de gemiddelde tenant.
+
+00:01:29.800 --> 00:01:31.100
+Breed, veilig, generiek.
+
+00:01:31.320 --> 00:01:33.900
+Microsoft moet iets leveren dat werkt voor een accountantskantoor van 10 personen
+
+00:01:33.900 --> 00:01:35.420
+en voor een bank met 60.000 werkplekken.
+
+00:01:35.560 --> 00:01:37.080
+Dus de logica moet voorzichtig zijn.
+
+00:01:37.280 --> 00:01:40.260
+Het kan niet veel aannemen over jouw bedrijf, omdat het niets over jouw bedrijf weet.
+
+00:01:40.480 --> 00:01:41.880
+Dit is wat je kant en klaar krijgt.
+
+00:01:42.160 --> 00:01:45.360
+Ingebouwde waarschuwingen voor endpoints, identiteit, e-mail en cloudapps.
+
+00:01:45.360 --> 00:01:50.220
+Geautomatiseerd onderzoek en herstel dat naar een waarschuwing kijkt en beslist of het bewijs stand houdt.
+
+00:01:50.300 --> 00:01:54.400
+Een aanvalsverstoring die een gebruiker of apparaat kan isoleren terwijl een aanval nog gaande is.
+
+00:01:54.600 --> 00:01:55.480
+Dat is echt de waarde.
+
+00:01:55.680 --> 00:01:58.440
+Ik doe het niet af als onbelangrijk, maar kijk naar wat ze alle drie gemeen hebben.
+
+00:01:58.640 --> 00:02:01.180
+Ze reageren op patronen die bij veel klanten voorkomen.
+
+00:02:01.400 --> 00:02:04.100
+Ze zijn afgesteld om voor de meeste mensen meestal gelijk te hebben.
+
+00:02:04.360 --> 00:02:07.480
+En ze werken het best bij aanvallen die lijken op wat Microsoft al heeft gezien.
+
+00:02:07.480 --> 00:02:11.420
+Dat is het belangrijkste punt, omdat jouw risico er anders uitziet dan dat van anderen.
+
+00:02:11.640 --> 00:02:13.400
+Denk na over wat je werkelijk beschermt.
+
+00:02:13.400 --> 00:02:16.160
+Misschien is het een mailbox van financiën die overboekingen goedkeurt,
+
+00:02:16.380 --> 00:02:20.900
+een beheerdersaccount voor productie of een onderzoeksbestand dat het bedrijf zou ruïneren als het zou uitlekken.
+
+00:02:21.040 --> 00:02:23.120
+Een generieke detectie weet niets van dat alles.
+
+00:02:23.320 --> 00:02:28.080
+Het behandelt elke mailbox, elke account en elke server als min of meer gelijk en die aanname klopt niet.
+
+00:02:28.260 --> 00:02:29.140
+Dus wat kost je dat?
+
+00:02:29.300 --> 00:02:30.940
+Twee dingen en ze werken elkaar tegen.
+
+00:02:31.140 --> 00:02:33.380
+Ten eerste, stilte waar je juist een signaal nodig hebt.
+
+00:02:33.380 --> 00:02:37.340
+De aanval die zich richt op jouw specifieke zwakke plek past niet in een schabloon, dus er gebeurt niets.
+
+00:02:37.440 --> 00:02:40.540
+Geen waarschuwing, incident of ticket, enkel een logbestand dat niemand leest.
+
+00:02:40.700 --> 00:02:42.640
+Ten tweede, ruis waar je het niet wilt hebben.
+
+00:02:42.640 --> 00:02:47.440
+Algemene regels slaan aan bij normaal gedrag in jouw omgeving, omdat jouw normaal niet het gemiddelde is.
+
+00:02:47.600 --> 00:02:49.920
+Je IT-team voert een script uit dat op een aanval lijkt.
+
+00:02:50.100 --> 00:02:52.460
+Je financiële team logt in vanuit drie verschillende landen.
+
+00:02:52.640 --> 00:02:54.520
+De regel slaat toch aan, keer op keer.
+
+00:02:54.780 --> 00:02:56.000
+Leg die twee nu eens bij elkaar.
+
+00:02:56.240 --> 00:03:00.200
+Analisten besteden hun dag aan betekenisloze meldingen, terwijl de echt belangrijke melding nog niet bestaat.
+
+00:03:00.200 --> 00:03:01.420
+Dat is de fout in het model.
+
+00:03:01.640 --> 00:03:02.700
+Het ligt niet aan het product.
+
+00:03:02.900 --> 00:03:05.760
+Het is de aanname dat de standaardinstellingen van iemand anders jouw risico kunnen beschrijven.
+
+00:03:05.960 --> 00:03:08.580
+Deze aflevering gaat dus over de overstap van het ene model naar het andere.
+
+00:03:08.580 --> 00:03:12.840
+In het oude model verbruik je waarschuwingen, bepaalt Microsoft wat verdacht is en reageer jij.
+
+00:03:13.000 --> 00:03:20.460
+In het nieuwe model ontwikkel je zelf detecties, bepaal je wat belangrijk is in je tenant, schrijf je de logica, correleer je gegevens, automatiseer je de respons en meet je het resultaat.
+
+00:03:20.680 --> 00:03:22.860
+Hetzelfde platform, maar een andere relatie ermee.
+
+00:03:23.060 --> 00:03:27.660
+Maar om iets te kunnen ontwikkelen, moet je zien hoe het platform echt is opgebouwd, want je kunt niet veranderen wat je niet kunt zien.
+
+00:03:27.860 --> 00:03:28.580
+Dus laten we het openbreken.
+
+00:03:29.280 --> 00:03:31.580
+Hoe Defender XDR er architecturaal echt uitziet.
+
+00:03:31.580 --> 00:03:34.120
+De meeste mensen omschrijven Defender XDR als één product.
+
+00:03:34.320 --> 00:03:35.000
+Dat is het niet.
+
+00:03:35.160 --> 00:03:36.920
+Het zijn vier producten in één jas.
+
+00:03:37.140 --> 00:03:39.500
+Elk onderdeel bewaakt een ander deel van je omgeving.
+
+00:03:39.720 --> 00:03:44.580
+Defender 4 Endpoint bewaakt apparaten, processen, bestanden, netwerkverbindingen en registerwijzigingen.
+
+00:03:45.360 --> 00:03:48.580
+Defender 4 Identity bewaakt je domingcontrollers en je identiteitsinfrastructuur.
+
+00:03:49.220 --> 00:03:53.900
+Defender 4 Office 365 bewaakt e-mail en samenwerking, zoals mailstromen, Teams en SharePoint.
+
+00:03:54.080 --> 00:03:57.540
+En Defender 4 CloudApps bewaakt wat er gebeurt in je SaaS-apps en cloud-sessies.
+
+00:03:57.780 --> 00:04:01.200
+Vier workloads, vier sets, sensoren en ze voeden allemaal één portaal.
+
+00:04:01.200 --> 00:04:05.220
+Dat portaal is het centrale Defender-portaal op security.microsoft.com.
+
+00:04:05.340 --> 00:04:09.260
+Het is de plek waar incidenten, waarschuwingen, opsporing en responsacties samenkomen.
+
+00:04:09.420 --> 00:04:11.780
+En dan is dit het deel dat de vorm van het geheel verandert.
+
+00:04:12.140 --> 00:04:13.360
+Sentinel trekt erbij in.
+
+00:04:13.720 --> 00:04:15.820
+Microsoft brengt zijn scene naar dezelfde portal.
+
+00:04:16.080 --> 00:04:20.660
+De wachtrij waarin je werkt maakt nu niet meer uit of een waarschuwing van een endpoint-sensor of een firewall-logboek komt.
+
+00:04:20.840 --> 00:04:22.280
+Eén plek, één incident-model.
+
+00:04:22.480 --> 00:04:24.360
+We komen later uitgebreider terug op Sentinel.
+
+00:04:24.640 --> 00:04:26.020
+Hou voor nu alleen de richting in gedachten.
+
+00:04:26.260 --> 00:04:28.260
+De grens tussen XDR en scene wordt steeds vager.
+
+00:04:28.440 --> 00:04:29.880
+Een portal is nu slechts een weergave.
+
+00:04:29.880 --> 00:04:31.180
+Het is niet de architectuur.
+
+00:04:31.360 --> 00:04:33.960
+Om te begrijpen hoe het echt werkt, heb je een stroommodel nodig.
+
+00:04:34.160 --> 00:04:36.500
+Ik geef je er een die goed werkt als je geen diagram kunt zien.
+
+00:04:36.740 --> 00:04:39.360
+Drie lagen, gebeurtenis, redenering, orchestratie.
+
+00:04:39.560 --> 00:04:41.080
+Laag 1 is de gebeurtenislaag.
+
+00:04:41.240 --> 00:04:42.560
+Dit is onbewerkte telemetrie.
+
+00:04:42.720 --> 00:04:46.820
+Een proces start, een gebruiker meldt zich aan, een e-mail komt binnen, een bestand wordt extern gedeeld.
+
+00:04:47.020 --> 00:04:51.420
+Elke sensor in alle vier de workloads legt vast wat er is gebeurd met een tijdstempel en de betrokken entiteiten.
+
+00:04:51.640 --> 00:04:53.060
+Nog geen oordeel, enkel feiten.
+
+00:04:53.340 --> 00:04:54.800
+Laag 2 is de redeneerlaag.
+
+00:04:54.980 --> 00:04:57.520
+Dit is waar iets naar die feiten kijkt en bepaalt wat ze betekenen.
+
+00:04:57.520 --> 00:05:03.260
+Detectielogica wordt geactiveerd, waarschuwingen worden aangemaakt en correlatie groepeert deze waarschuwingen in incidenten.
+
+00:05:03.460 --> 00:05:06.660
+Deze laag verandert, er is iets gebeurd in, er is iets gebeurd dat ertoe doet.
+
+00:05:06.820 --> 00:05:08.320
+En dit is waar het verbinding meemaakt.
+
+00:05:08.540 --> 00:05:10.240
+Laag 3 is de orchestratielaag.
+
+00:05:10.420 --> 00:05:11.400
+Dit is wat je eraan doet.
+
+00:05:11.940 --> 00:05:15.700
+Geautomatiseerd onderzoek, onderbreking van aanvallen, playbooks, goedkeuringen, inperkingsacties.
+
+00:05:15.860 --> 00:05:17.460
+Het is de laag die actie onderneemt.
+
+00:05:17.860 --> 00:05:19.820
+Gebeurtenis, redenering, orchestratie.
+
+00:05:20.000 --> 00:05:23.360
+Onthoud die volgorde, want alles in deze aflevering sluit daarop aan.
+
+00:05:23.500 --> 00:05:26.380
+Het schrijven van KQL-detecties valt onder de redeneerlaag.
+
+00:05:26.500 --> 00:05:28.540
+Het afstemmen van ruis valt onder de redeneerlaag.
+
+00:05:28.660 --> 00:05:30.200
+Playbooks vallen onder orquestratie.
+
+00:05:30.380 --> 00:05:32.720
+En kwaliteit meten betekent terugkijken op alle drie de lagen.
+
+00:05:32.880 --> 00:05:34.900
+Maar de lagen hebben een plek nodig om gegevens te delen.
+
+00:05:34.980 --> 00:05:37.180
+En dat brengt ons bij het deel waar de meeste teams nooit naar kijken.
+
+00:05:37.400 --> 00:05:38.800
+Waar bevinden de signalen zich eigenlijk?
+
+00:05:39.020 --> 00:05:42.460
+Ze bevinden zich in geavanceerde opsporing, specifiek in de tabellen voor geavanceerde opsporing.
+
+00:05:42.460 --> 00:05:45.160
+Zie ze als het gedeelde gegevensvlak onder het hele platform.
+
+00:05:45.380 --> 00:05:47.740
+Device Process Events bevat procesactiviteit.
+
+00:05:47.740 --> 00:05:49.840
+Identity Lockdown Events bevat aanmoldingen.
+
+00:05:50.040 --> 00:05:51.700
+E-mail Events bevat e-mailverkeer.
+
+00:05:51.840 --> 00:05:54.200
+Cloud App Events bevat wat gebruikers doen in je cloud apps.
+
+00:05:54.380 --> 00:05:56.860
+En er zijn tabellen voor waarschuwingen en voor incidenten zelf.
+
+00:05:57.060 --> 00:05:59.580
+Dus de uitvoer van de redeneerlaag wordt ook door zoekbare data.
+
+00:05:59.840 --> 00:06:01.300
+Dat is belangrijker dan het klinkt.
+
+00:06:01.400 --> 00:06:03.960
+Het betekent dat dezelfde tabellen die een analist gebruikt om te zoeken,
+
+00:06:04.160 --> 00:06:06.160
+ook de tabellen zijn waarop je aangepaste detecties draaien.
+
+00:06:06.300 --> 00:06:08.780
+Er is geen tweede verborgen gegevensopslag achter de schermen.
+
+00:06:08.780 --> 00:06:11.720
+Als je het kunt zien in Advanced Hunting, kun je er logica op bouwen.
+
+00:06:11.840 --> 00:06:14.400
+En als je het daar niet kunt zien, kan je detectie het ook niet zien.
+
+00:06:14.560 --> 00:06:16.920
+De architectuur biedt je dus een heel directe overeenkomst.
+
+00:06:17.200 --> 00:06:18.660
+Microsoft verzamelt de events.
+
+00:06:18.900 --> 00:06:22.640
+Je krijgt leestoegang tot hetzelfde datavlak dat Microsoft's eigen logica gebruikt.
+
+00:06:22.800 --> 00:06:27.580
+En het verschil tussen standaard en maatwerk is grotendeels het werk dat jij bovenop die gedeelde laag verricht.
+
+00:06:27.800 --> 00:06:29.240
+Dat is de structurele opening.
+
+00:06:29.520 --> 00:06:31.380
+Maar voordat je logica schrijft voor die tabellen,
+
+00:06:31.580 --> 00:06:34.500
+moet je begrijpen wat er gebeurt met de waarschuwingen die die logica genereert.
+
+00:06:34.500 --> 00:06:36.320
+Want waarschuwingen blijven niet lang alleen.
+
+00:06:36.500 --> 00:06:39.880
+Iets groepeert ze, voegt ze samen en beslist welke bij hetzelfde verhaal horen.
+
+00:06:40.060 --> 00:06:41.160
+En dat is correlatie.
+
+00:06:41.320 --> 00:06:43.880
+En het is het meest verkeerd begrepen onderdeel van het hele platform.
+
+00:06:44.280 --> 00:06:45.640
+Waarschuwingen zijn geen incidenten.
+
+00:06:45.840 --> 00:06:49.740
+Laten we beginnen met een definitie, want mensen gebruiken deze twee woorden alsof ze hetzelfde betekenen.
+
+00:06:49.900 --> 00:06:51.460
+Een waarschuwing is één observatie.
+
+00:06:51.640 --> 00:06:54.880
+Een sensor zag iets, een regel kwam overeen en het platform noteerde het.
+
+00:06:55.000 --> 00:06:58.500
+Een verdacht PowerShell-commando op één laptop, een aanmelding vanaf een vreemde locatie,
+
+00:06:58.620 --> 00:07:01.000
+een e-mailbericht dat na aflevering opnieuw werd geclassificeerd.
+
+00:07:01.000 --> 00:07:02.380
+Een incident is een verhaal.
+
+00:07:02.380 --> 00:07:06.460
+Het is een verzameling observaties waarvan iemand of iets heeft besloten dat ze bij elkaar horen.
+
+00:07:06.700 --> 00:07:09.200
+Dat verschil klinkt klein, maar het verandert hoe je werkt.
+
+00:07:09.360 --> 00:07:11.780
+Een waarschuwing beantwoordt de vraag, wat is hier gebeurd?
+
+00:07:11.940 --> 00:07:14.280
+Een incident beantwoordt de vraag, wat doet de aanvaller?
+
+00:07:14.500 --> 00:07:16.040
+Dat zijn heel verschillende vragen.
+
+00:07:16.240 --> 00:07:18.020
+Aanvallers produceren niet één event.
+
+00:07:18.220 --> 00:07:23.580
+Ze produceren een keten, een phishingmail, dan een klik, dan een aanmelding, dan een mailboxregel, dan een bestandsdownload.
+
+00:07:23.580 --> 00:07:26.760
+Elke stap is een eigen waarschuwing, vaak vanuit een eigen workload.
+
+00:07:26.920 --> 00:07:28.640
+Dus Defender doet de groepering voor je.
+
+00:07:28.860 --> 00:07:35.080
+Wanneer waarschuwingen zaken delen hetzelfde apparaat, dezelfde gebruiker, dezelfde mailbox of hetzelfde bestand koppelt het platformse aan één incident.
+
+00:07:35.340 --> 00:07:37.100
+Je opent één item in plaats van zeven.
+
+00:07:37.280 --> 00:07:40.240
+Je ziet de tijdlijn, de getroffen assets en de volgorde van de gebeurtenissen.
+
+00:07:40.480 --> 00:07:41.520
+Dat is echt bespaard werk.
+
+00:07:41.740 --> 00:07:43.540
+Dat is de enige reden waarom correlatie bestaat.
+
+00:07:43.700 --> 00:07:45.340
+Maar kijk eens waar die groepering van uitgaat.
+
+00:07:45.440 --> 00:07:47.260
+Het gaat ervan uit dat de overlap de verbinding is.
+
+00:07:47.420 --> 00:07:50.440
+Als twee waarschuwingen betrekking hebben op dezelfde gebruiker, horen ze waarschijnlijk bij dezelfde aanval.
+
+00:07:50.440 --> 00:07:52.700
+Als ze geen entiteit delen, horen ze er waarschijnlijk niet bij.
+
+00:07:52.880 --> 00:07:54.080
+Dat is een redelijke aanname.
+
+00:07:54.260 --> 00:07:58.020
+Het blijft echter een aanname, en deze wordt automatisch gemaakt voordat een mens naar het bewijs heeft gekeken.
+
+00:07:58.220 --> 00:07:59.100
+Meestal gaat het goed.
+
+00:07:59.340 --> 00:08:01.180
+Wanneer het fout gaat, gaat het onopgemerkt fout.
+
+00:08:01.400 --> 00:08:04.040
+Niemand ziet de waarschuwing die wel bij het verhaal had moeten horen, maar dat niet deed.
+
+00:08:04.220 --> 00:08:07.540
+Niemand ziet de ongerelateerde waarschuwingen die aan elkaar zijn geplakt door een gedeelde server.
+
+00:08:07.800 --> 00:08:10.740
+Dit laat zien hoeveel vertrouwen teams werkelijk hebben in deze groepering.
+
+00:08:11.020 --> 00:08:14.100
+Binnen een incident sorteren analisten nog steeds waarschuwingen één voor één.
+
+00:08:14.280 --> 00:08:16.060
+Open een incident met twaalf waarschuwingen.
+
+00:08:16.220 --> 00:08:16.900
+Wat gebeurt er?
+
+00:08:16.900 --> 00:08:21.920
+Iemand klikt op de eerste waarschuwing, leest deze, beslist of het echt is, klikt op de tweede, leest deze, beslist.
+
+00:08:22.100 --> 00:08:25.560
+Het incident bood een container, maar het werk daarbinnen is nog steeds per waarschuwing.
+
+00:08:25.760 --> 00:08:29.040
+Elke waarschuwing krijgt een eigen oordeel, eigen notices, eigen klassificatie.
+
+00:08:29.280 --> 00:08:31.800
+Waarom? Omdat het incident zelf geen oordeel bevat.
+
+00:08:31.980 --> 00:08:32.600
+Het is een map.
+
+00:08:32.780 --> 00:08:38.520
+De betekenis zit in de onderdelen en de analist moet het verhaal handmatig reconstrueren om te bepalen of de map een echte melding of ruis is.
+
+00:08:38.740 --> 00:08:41.200
+Dat is geen fout van de analist, het is een fout in het model.
+
+00:08:41.400 --> 00:08:43.900
+De groepering bespaarde klikken, maar geen beoordelingswerk.
+
+00:08:43.900 --> 00:08:47.840
+En dat brengt ons bij een cijfer. Het management houdt ervan om het aantal incidenten bij te houden.
+
+00:08:47.980 --> 00:08:51.000
+Je ziet het op dashboards. Incidenten deze maand 18% lager.
+
+00:08:51.180 --> 00:08:53.960
+Het voelt als vooruitgang, maar het aantal incidenten is een ijdelheidsstatistiek.
+
+00:08:54.080 --> 00:08:56.280
+Het vertelt je hoeveel mappen het platform heeft aangemaakt.
+
+00:08:56.420 --> 00:08:58.620
+Het zegt niets over de vraag of die mappen correct waren.
+
+00:08:58.860 --> 00:09:00.680
+Denk na over wat dat cijfer kan beïnvloeden.
+
+00:09:00.920 --> 00:09:03.060
+Minder incidenten kunnen minder aanvallen betekenen.
+
+00:09:03.240 --> 00:09:07.180
+Het kan ook bredere samenvoeging betekenen, waarbij vijf aparte inbraken in één werden gestopt,
+
+00:09:07.360 --> 00:09:10.680
+of dat een regel werd uitgeschakeld en een hele klasse aan activiteiten onzichtbaar werd.
+
+00:09:10.680 --> 00:09:13.880
+Het aantal daalde in alle drie de gevallen, en slechts één daarvan is goed.
+
+00:09:14.060 --> 00:09:16.200
+De echte maatstaf is dus de incidentkwaliteit.
+
+00:09:16.420 --> 00:09:18.180
+Bevatte het incident de volledige aanval?
+
+00:09:18.380 --> 00:09:19.960
+Liet het de niet gerelateerde ruis weg?
+
+00:09:20.120 --> 00:09:23.380
+Kwam de analist sneller tot een oordeel omdat het verhaal al was samengesteld?
+
+00:09:23.680 --> 00:09:27.260
+Kwaliteit is lastiger te tellen, maar het is de enige versie die je de waarheid vertelt.
+
+00:09:27.420 --> 00:09:30.680
+En je kunt de kwaliteit niet verbeteren als je niet weet hoe de groepering beslist,
+
+00:09:30.900 --> 00:09:34.260
+welke entiteiten tellen, hoe lang het venster loopt, wat er aan de randen gebeurt.
+
+00:09:34.460 --> 00:09:37.500
+Dus daar gaan we nu heen, naar de logica van de correlatie zelf,
+
+00:09:37.660 --> 00:09:39.460
+hoe incidentcorrelatie echt werkt.
+
+00:09:39.460 --> 00:09:43.840
+Correlatie draait op gedeelde entiteiten, en een entiteit is iets waar een waarschuwing overgaat,
+
+00:09:43.920 --> 00:09:48.120
+een apparaat, een gebruikersaccount, een mailbox, een IP-adres, een filehash.
+
+00:09:48.320 --> 00:09:50.540
+Wanneer twee waarschuwingen naar dezelfde entiteit verwijzen,
+
+00:09:50.760 --> 00:09:54.040
+behandelt het platform dit als een koppeling en stapelen koppelingen zich op tot een incident.
+
+00:09:54.300 --> 00:09:55.960
+Zie het als matchen, niet als begrijpen.
+
+00:09:56.160 --> 00:09:59.180
+De engine leest de waarschuwing niet om te vragen of het verhaal logisch is.
+
+00:09:59.340 --> 00:10:01.740
+Het controleert of de waarschuwingen dezelfde objecten raken.
+
+00:10:01.900 --> 00:10:04.940
+Een phishing-waarschuwing noemt een mailbox, een inlogwaarschuwing noemt dezelfde gebruiker,
+
+00:10:04.940 --> 00:10:07.120
+een malware-waarschuwing noemt de laptop waar die gebruiker op werkt.
+
+00:10:07.120 --> 00:10:09.240
+Die drie overlappen, dus ze worden samengevoegd.
+
+00:10:09.380 --> 00:10:10.220
+Dan is er nog tijd.
+
+00:10:10.440 --> 00:10:14.160
+Overlap alleen is niet genoeg, want dezelfde laptop kan in meldingen verschijnen met maanden ertussen.
+
+00:10:14.480 --> 00:10:18.500
+Correlatie kijkt daarom ook hoe dicht meldingen in tijd op elkaar liggen en of de reeks logisch is.
+
+00:10:18.680 --> 00:10:23.240
+Een klik, dan een inlogpoging, en dan een proces op het apparaat, alles binnen enkele uren, leest als één keten.
+
+00:10:23.400 --> 00:10:25.600
+Diezelfde drie gebeurtenissen verspreidt over een kwartaal niet.
+
+00:10:25.740 --> 00:10:27.720
+En dit samenvoegen werkt over verschillende workloads heen.
+
+00:10:27.860 --> 00:10:29.060
+Dat is het hele doel van XDR.
+
+00:10:29.320 --> 00:10:30.960
+De e-mail-melding kwam van het ene product.
+
+00:10:30.960 --> 00:10:32.820
+De identiteitsmelding kwam van een ander.
+
+00:10:33.020 --> 00:10:34.720
+De endpoint-melding kwam van een derde.
+
+00:10:34.720 --> 00:10:39.720
+Correlatie brengt ze samen in één tijdlijn, zodat je de aanval ziet zoals de aanvaller die uitvoerde, niet zoals elke sensor die zag.
+
+00:10:39.880 --> 00:10:40.800
+Nu de zwakke punten.
+
+00:10:41.060 --> 00:10:43.180
+Matchen op gedeelde entiteiten faalt in twee richtingen.
+
+00:10:43.360 --> 00:10:46.600
+Het voegt zaken samen die niet horen te worden samengevoegd, en mist zaken die dat wel zouden moeten zijn.
+
+00:10:46.800 --> 00:10:48.000
+Begin met over samenvoeging.
+
+00:10:48.220 --> 00:10:50.900
+Stel je een service-account voor dat backups draait op 40 servers.
+
+00:10:51.140 --> 00:10:53.380
+Elke melding op een van die servers noemt dat account.
+
+00:10:53.380 --> 00:10:59.940
+Dus een losstaande melding op server 3 en een op server 31 wijzen beide naar dezelfde gebruiker, en de engine lijmt ze aan elkaar.
+
+00:10:59.940 --> 00:11:05.220
+Nu heb je één incident dat lijkt op een brede campagne, terwijl het eigenlijk twee aparte, saaie gebeurtenissen zijn.
+
+00:11:05.560 --> 00:11:06.680
+Jumphosts doen hetzelfde.
+
+00:11:06.900 --> 00:11:11.980
+Elke beheerder gaat er langs, dus elke activiteit van een beheerder deelt een apparaat, en IP-adressen doen dit ook.
+
+00:11:12.120 --> 00:11:17.580
+Honderden mensen verlaten je kantoor via één publiek IP, dus een melding gekoppeld aan dat adres kan gebruikers verbinden die elkaar nooit hebben ontmoet.
+
+00:11:17.740 --> 00:11:19.540
+Het resultaat is een opgeblazen incident.
+
+00:11:20.000 --> 00:11:23.500
+Analisten openen het, zien 60 meldingen, en kunnen niet zeggen welke bij de aanval horen.
+
+00:11:23.660 --> 00:11:27.020
+Dus besteden ze of een uur aan het ontrafelen ervan, of ze sluiten de hele zaak.
+
+00:11:27.120 --> 00:11:30.100
+Onder samenvoeging is het tegenovergestelde probleem, en het is verraderlijker.
+
+00:11:30.300 --> 00:11:34.080
+Denk aan een aanvaller die een wachtwoord steelt en inlogt vanaf een schone machine die jij niet beheert.
+
+00:11:34.280 --> 00:11:36.960
+Geen enkel apparaat in jouw float komt ooit in aanraking met die sessie.
+
+00:11:37.120 --> 00:11:42.000
+De identiteitsmeldingen gaan af, maar er is geen endpo-ind gebeurtenis om ze aan te koppelen, geen gedeeld apparaat, geen gedeelde filehash.
+
+00:11:42.000 --> 00:11:47.440
+De enige gemeenschappelijke entiteit is de gebruiker, en als de meldingen die gebruiker op iets andere manieren benoemen, wordt de link wellicht nooit gelegd.
+
+00:11:47.540 --> 00:11:52.060
+Dus de inbraak staat in je wachtrij als losse items, een identiteitsmelding hier, een cloudappmelding daar.
+
+00:11:52.220 --> 00:11:53.000
+Elk lijkt klein.
+
+00:11:53.240 --> 00:11:58.620
+Niemand ziet de keten omdat het ene element dat ze zou verbinden nooit verscheen, wat ons brengt bij hoe je een incident moet lezen zodra je er een hebt.
+
+00:11:58.780 --> 00:12:02.440
+De meeste mensen behandelen de incidentgrafiek als een plaatje, een diagram met knooppunten en lijnen.
+
+00:12:02.620 --> 00:12:05.260
+Ze werpen er een blik op, knikken en gaan terug naar de lijst met waarschuwingen.
+
+00:12:05.400 --> 00:12:07.320
+Gebruik het in plaats daarvan als een redeneerinstrument.
+
+00:12:07.320 --> 00:12:09.720
+Bekijk de lijnen en vraag jezelf af waarom ze er allemaal zijn.
+
+00:12:09.940 --> 00:12:11.780
+Welke entiteit verbindt deze waarschuwing met die andere?
+
+00:12:11.960 --> 00:12:16.280
+Is het een echte link, dezelfde gecompromitteerde gebruiker, of een gedeeld object zoals dat service-account?
+
+00:12:16.440 --> 00:12:18.660
+Elke verbinding in het diagram is een bewering van de engine.
+
+00:12:18.900 --> 00:12:21.660
+Jouw taak is om die bewering te controleren en te kijken wat er ontbreekt.
+
+00:12:21.820 --> 00:12:28.060
+Als je weet dat een aanvallen mailbox, een apparaat en een cloud-sessie had moeten raken, en het diagram toont er slechts twee, dan is de derde een hiaat.
+
+00:12:28.220 --> 00:12:31.240
+De vorm van het diagram laat zien waar de engine geen bewijs meer had.
+
+00:12:31.240 --> 00:12:33.080
+Dat laatste punt is het belangrijkst.
+
+00:12:33.240 --> 00:12:36.540
+Wanneer correlatie faalt, is dat zelden omdat de matching logica kapot is.
+
+00:12:36.540 --> 00:12:39.800
+Het faalt omdat het bewijs dat nodig is voor de matching nooit is aangemaakt.
+
+00:12:40.000 --> 00:12:42.860
+Geen waarschuwing, geen entiteit, geen entiteit, geen link.
+
+00:12:43.060 --> 00:12:45.760
+Dus het gat in het incident is meestal een gat in de detectie.
+
+00:12:45.920 --> 00:12:50.780
+Er gebeurde iets, niets werd geactiveerd en het verhaal heeft een gat in het midden, en dat is waar we naar moeten kijken.
+
+00:12:50.960 --> 00:12:53.740
+De plaatsen binnen echte tenants waar die gaten blijven verschijnen.
+
+00:12:54.160 --> 00:12:56.220
+Waar correlatie faalt binnen echte tenants?
+
+00:12:56.520 --> 00:12:59.240
+Begin met de omgeving die de meeste van jullie daadwerkelijk gebruiken.
+
+00:12:59.400 --> 00:13:02.200
+Hybride, een deel van je identiteit leeft nog steeds on-premises.
+
+00:13:02.440 --> 00:13:05.780
+Domein controllers in een surferruimte of in een datacenter dat je hebt geërfd.
+
+00:13:05.780 --> 00:13:11.240
+Defender 4 Identity houdt ze in de gaten via een sensor, en die sensor voert hetzelfde platform als al het andere.
+
+00:13:11.440 --> 00:13:12.520
+Maar hier is het probleem.
+
+00:13:12.740 --> 00:13:16.160
+Die signalen komen niet altijd op tijd aan, en ze komen niet altijd volledig aan.
+
+00:13:16.340 --> 00:13:17.780
+Een sensor verliest zijn verbinding.
+
+00:13:18.000 --> 00:13:20.800
+Een domeincontroller zit achter een regel die niemand heeft gedocumenteerd.
+
+00:13:20.940 --> 00:13:23.580
+Een nieuwe controller komt online en niemand installeert de agent.
+
+00:13:23.780 --> 00:13:29.300
+Dus de cloud-aanmelding verschijnt direct en de on-premises-helft van hetzelfde verhaal verschijnt laat, in stukjes of helemaal niet.
+
+00:13:29.640 --> 00:13:32.500
+Correlatie hangt ervan af dat beide helften op hetzelfde moment bestaan.
+
+00:13:32.720 --> 00:13:36.320
+Wanneer een helft ontbreekt, heeft de link niets om aan vast te houden, en je zult geen foutmelding zien.
+
+00:13:36.480 --> 00:13:38.720
+Je ziet een kleiner incident dan de aanvalrechtvaardigde.
+
+00:13:38.900 --> 00:13:40.780
+Voeg nu de producten toe die niet van Defender zijn.
+
+00:13:41.040 --> 00:13:42.580
+Bijna elke tenant heeft er wel een paar.
+
+00:13:42.760 --> 00:13:50.600
+Een firewall van de ene leverancier, een webproxy van de andere, een externe email gateway voor exchange, een cloud-toegangstol die een ander team twee jaar geleden kocht.
+
+00:13:50.600 --> 00:13:55.380
+Elk produceert waarschuwingen, en sommige van die waarschuwingen beschrijven precies de activiteit waar je omgeeft.
+
+00:13:55.540 --> 00:13:57.500
+Maar Defender koppelt niet wat het niet kan lezen.
+
+00:13:57.720 --> 00:14:00.740
+Als die waarschuwingen nooit het platform bereiken, worden ze nooit entiteiten.
+
+00:14:00.960 --> 00:14:03.920
+Ze blijven in hun eigen console in hun eigen wachtrij met hun eigen naamgeving.
+
+00:14:04.100 --> 00:14:09.860
+De aanvaller kwam door je firewall en daarna in je mailbox, en geen enkel systeem ter wereld koppelde die twee omdat ze nooit op dezelfde plek waren.
+
+00:14:10.020 --> 00:14:10.920
+Dus wat kost je dat?
+
+00:14:11.060 --> 00:14:12.700
+Ten eerste wordt het werk dubbel gedaan.
+
+00:14:12.940 --> 00:14:17.140
+Twee analisten of dezelfde analist op twee verschillende dagen triëren wat in werkelijkheid één gebeurtenis is.
+
+00:14:17.140 --> 00:14:20.660
+Ieder opent zijn eigen item, leest zijn eigen bewijsmateriaal en schrijft zijn eigen noticies.
+
+00:14:20.820 --> 00:14:23.040
+De minuten stapelen zich op en het voegt niets toe aan de kennis.
+
+00:14:23.260 --> 00:14:25.400
+Ten tweede, en erger nog, de keten breekt.
+
+00:14:25.560 --> 00:14:30.980
+Een aanval die zich ontvouwt over identiteit, e-mail en eindpunt ziet er pas uit als een aanval als je alle drie de stappen samen ziet.
+
+00:14:31.180 --> 00:14:36.800
+Splitsen uit elkaar en elk stukje ziet eruit als een vreemd voorval met een lage prioriteit, een gemiddelde melding hier, een informatieve daar.
+
+00:14:37.000 --> 00:14:38.600
+Niemand escaleert een vreemd voorval.
+
+00:14:38.840 --> 00:14:40.420
+Zo ziet dat moment er doorgaans uit.
+
+00:14:40.580 --> 00:14:42.600
+Een gebruiker meldt op maandag een vreemde e-mail.
+
+00:14:42.840 --> 00:14:44.600
+Dat is ticket 1 vanuit de mail workload.
+
+00:14:44.600 --> 00:14:48.320
+Op dinsdag activeert een aanmelding vanuit een onbekend land een identiteitsmelding.
+
+00:14:48.560 --> 00:14:51.000
+Dat is ticket 2 en het belandt bij een andere analist.
+
+00:14:51.160 --> 00:14:56.020
+Op woensdag markeert een firewall van een andere leverancier ongebruikelijk uitgaand verkeer vanuit het financiële subnet.
+
+00:14:56.180 --> 00:14:58.080
+Ticket 3 in een volledig aparte tool.
+
+00:14:58.340 --> 00:15:02.440
+Drie tickets, drie eigenaren, drie afsluitende noticies die zeggen geen verdere actie.
+
+00:15:02.600 --> 00:15:06.580
+Maar het was één inbraak, één persoon, één gestolen sessie, drie dagen van stille beweging.
+
+00:15:06.800 --> 00:15:12.240
+Elk ticket werd correct gesloten op basis van wat die analist kon zien en de som van die correcte beslissingen was een verkeerde.
+
+00:15:12.240 --> 00:15:17.640
+Dat is het falen. Het is geen onachtzaamheid. Het is een structuur die niemand ooit het volledige beeld gaf.
+
+00:15:17.680 --> 00:15:21.480
+Dus hoe los je zo'n gat op? Dat los je niet op door naar de incidentgrafiek te staren.
+
+00:15:21.680 --> 00:15:23.920
+De grafiek toont alleen wat het platform al weet.
+
+00:15:24.140 --> 00:15:30.080
+De oplossing zit een laag dieper in de logica die bepaalt wat als melding wordt geschreven en welke entiteiten die melding bevat.
+
+00:15:30.300 --> 00:15:37.300
+Wat betekent dat je de taal moet spreken waarop die laag draait, die onder hunting, onder aangepaste detecties, onder bijna alles wat je kunt veranderen.
+
+00:15:37.300 --> 00:15:42.580
+De meeste teams behandelen KQL als een hunting hobby.
+
+00:15:42.760 --> 00:15:49.240
+Iemand in het team vindt het leuk. Ze schrijven slimme queries op een rustige middag, plakken ze in een gedeelde notitie en al de rest blijft doorklikken in de wachtrij.
+
+00:15:49.420 --> 00:15:50.660
+Dat is zonde van wat het is.
+
+00:15:50.940 --> 00:15:55.380
+KQL is het bedieningspaneel. Het is de enige plek waar je beslist wat als verdacht telt in je tenant.
+
+00:15:55.640 --> 00:15:59.100
+Elke aangepaste detectie is een query. Elk hunting resultaat is een query.
+
+00:15:59.360 --> 00:16:01.940
+Zelfs de manier waarop je controleert of correlatie iets heeft gemist is een query.
+
+00:16:02.120 --> 00:16:04.560
+Als je het niet kunt schrijven, wacht je tot iemand anders het voor je schrijft.
+
+00:16:04.560 --> 00:16:08.140
+Laten we eerst het mentale model opbouwen. Zie een tabel als een gebeurtenisstroom.
+
+00:16:08.400 --> 00:16:10.900
+Rijen blijven binnenkomen, elk een feit met een tijdstempel.
+
+00:16:11.060 --> 00:16:13.560
+Een query is een hypothese die je op die stroom loslaat.
+
+00:16:13.680 --> 00:16:16.560
+Als een aanvaller dit deed, zou ik rijen zien die er zo uitzien.
+
+00:16:16.740 --> 00:16:20.100
+Je schrijft je vermoeden, voert het uit en de stroom vertelt je of je gelijk hebt.
+
+00:16:20.300 --> 00:16:21.800
+Die denkwijze houdt je scherp.
+
+00:16:21.820 --> 00:16:23.360
+Een query is geen zoekopdracht.
+
+00:16:23.540 --> 00:16:27.400
+Het is een bewering over het gedrag van een aanvaller die de data kan bevestigen of weerleggen.
+
+00:16:27.580 --> 00:16:28.720
+Welke stromen zijn er nu?
+
+00:16:28.920 --> 00:16:31.600
+Vijf tabellen vormen de basis voor het meeste wat je bouwt.
+
+00:16:31.600 --> 00:16:37.120
+Device Process Events bevat procescreatie, wat er draaide, wat het starten en met welke opdrachtregel.
+
+00:16:37.320 --> 00:16:43.660
+Device Events is de brede tabel voor al het andere op een apparaat, zoals registerwijzigingen, driver loads en beveiligingsacties.
+
+00:16:43.880 --> 00:16:47.100
+Identity Lock-on Events bevat aanmoldingen vanuit je identiteitsbronnen.
+
+00:16:47.320 --> 00:16:50.640
+E-mail Events bevat de e-mailstroom met afzender, ontvanger en oordeel.
+
+00:16:50.800 --> 00:16:54.240
+En Cloud-App Events bevat wat mensen doen in je SaaS-app zodra ze zijn ingelogd.
+
+00:16:54.420 --> 00:16:58.840
+Leer wat elk ervan registreert en welke kolommen de gebruiker, het apparaat en de mailbox identificeren.
+
+00:16:59.040 --> 00:17:00.740
+Dat is het lezen van het schema dat ertoe doet.
+
+00:17:00.740 --> 00:17:03.880
+De kolomnamen vertellen je aan welke entiteiten je waarschuwing gekoppeld kan worden.
+
+00:17:04.040 --> 00:17:07.340
+En zoals we zagen bij correlatie, zijn entiteiten wat het verhaal met elkaar verbindt.
+
+00:17:07.420 --> 00:17:08.140
+Nu het patroon.
+
+00:17:08.280 --> 00:17:10.960
+Het bestaat uit vier stappen en de volgorde is de kern van de vaardigheid.
+
+00:17:11.160 --> 00:17:11.820
+Filter vroeg.
+
+00:17:12.000 --> 00:17:13.720
+Verklein de tabel voordat je iets anders doet.
+
+00:17:13.980 --> 00:17:15.040
+Stel het tijdvenster in.
+
+00:17:15.260 --> 00:17:16.540
+Benoem de actie waar het om gaat.
+
+00:17:16.760 --> 00:17:19.740
+Elke rij die je in de eerste regels wegfiltert, hoef je niet te verwerken.
+
+00:17:20.020 --> 00:17:20.920
+Projecteer beperkt.
+
+00:17:21.140 --> 00:17:22.820
+Behoud alleen de kolommen die je nodig hebt.
+
+00:17:23.000 --> 00:17:27.880
+Een brede tabel bevat tientallen velden en deze onnodig meeslepen door de rest van de query vertraagt alles.
+
+00:17:27.880 --> 00:17:30.340
+Samenvatten, tellen, groeperen en meten.
+
+00:17:30.540 --> 00:17:35.440
+Dit is waar een berg gebeurtenissen een patroon wordt, zoals dit account faalde twaalf keer en slaagde daarna.
+
+00:17:35.620 --> 00:17:36.560
+Koppel als laatste.
+
+00:17:36.800 --> 00:17:39.480
+Voeg pas een tweede tabel toe wanneer de eerste al klein is.
+
+00:17:39.680 --> 00:17:42.480
+Een koppeling tussen twee enorme sets is waar queries stranden.
+
+00:17:42.680 --> 00:17:45.140
+Filteren, projecteren, samenvatten, koppelen.
+
+00:17:45.380 --> 00:17:50.780
+Wanneer een query traag is of een time-out geeft, is de oplossing bijna altijd dat een van deze vier in de verkeerde volgorde gebeurde.
+
+00:17:50.940 --> 00:17:53.680
+En over fouten gesproken, drie daarvan komen constant voor.
+
+00:17:53.880 --> 00:17:55.820
+De eerste is het onbeperkte tijdsbereik.
+
+00:17:55.820 --> 00:17:58.760
+Een query zonder tijdsfilter scant alles wat in de tabel staat.
+
+00:17:58.940 --> 00:18:02.620
+Het is traag, kostbaar en een detectie die daarop gebouwd is, kan simpelweg falen.
+
+00:18:02.800 --> 00:18:05.360
+Stel altijd een venster in en laat het overeenkomen met de vraag.
+
+00:18:05.520 --> 00:18:06.940
+De tweede is de dure koppeling.
+
+00:18:07.140 --> 00:18:11.660
+Iemand koppelt vroegtijdig twee grote tabellen zonder ze eerst te filteren en vraagt zich af waarom het portaal vastloopt.
+
+00:18:11.840 --> 00:18:13.980
+Verklein eerst beide kanten en koppel ze daarna pas.
+
+00:18:14.160 --> 00:18:16.600
+Het derde punt is het matchen van strings in enorme kolommen.
+
+00:18:16.800 --> 00:18:23.440
+Het doorzoeken van de volledige opdrachtregel van elke procesgebeurtenis met een losse, contains, controle, blinkt de engine, tekst te lezen die niet nodig was.
+
+00:18:23.440 --> 00:18:25.500
+Match indien mogelijk op een specifiek veld.
+
+00:18:25.680 --> 00:18:28.900
+Beperk eerst de rijen en voer daarna de tekstzoekopdracht uit op wat overblijft.
+
+00:18:29.080 --> 00:18:34.080
+Los deze drie op en de meeste trage queries zijn niet langer traag, maar dit is de grens van wat we zojuist hebben besproken.
+
+00:18:34.260 --> 00:18:36.760
+Een goede query in een notitie blijft slechts een notitie.
+
+00:18:36.940 --> 00:18:39.620
+Het vindt alleen iets als iemand eraan denkt om het uit te voeren.
+
+00:18:39.780 --> 00:18:41.900
+De aanvaller wacht niet tot jouw donderdagmiddag.
+
+00:18:42.040 --> 00:18:45.340
+Een query wordt een detectie wanneer deze volgens een planning zonder jou draait.
+
+00:18:45.540 --> 00:18:48.940
+Van hunting query naar detectieregel, een detectie heeft een eigen levenscyclus.
+
+00:18:49.100 --> 00:18:52.100
+Het verschijnt niet zomaar, draait niet eeuwig en blijft niet vanzelf correct.
+
+00:18:52.100 --> 00:18:57.260
+Het doorloopt fase, hypothese, query, validatie, regel, optimalisatie, uitfasering.
+
+00:18:57.460 --> 00:18:58.600
+Begin met een hypothese.
+
+00:18:58.820 --> 00:19:01.140
+Je schrijft in begrijpelijke taal op wat de aanvaller doet.
+
+00:19:01.340 --> 00:19:04.920
+Na een gestolen inloggegevens maken ze een postvakregel die e-mails verbergt.
+
+00:19:05.040 --> 00:19:07.320
+Die zin komt voor alle code en daarna past de query.
+
+00:19:07.560 --> 00:19:10.220
+Je zet de aanname om in KQL en voert deze uit op echte gegevens.
+
+00:19:10.460 --> 00:19:12.500
+Dan volgt validatie, wat de meeste teams overslaan.
+
+00:19:12.620 --> 00:19:14.180
+Je controleert de resultaten handmatig.
+
+00:19:14.360 --> 00:19:15.740
+Komen de rijen overeen met wat je bedoelde?
+
+00:19:15.860 --> 00:19:17.320
+Hoeveel daarvan zijn normale activiteiten?
+
+00:19:17.460 --> 00:19:19.560
+Als je niet elke rij kunt verklaren, ben je er nog niet klaar voor.
+
+00:19:19.560 --> 00:19:23.780
+Pas dan wordt het een regel en daarna komt optimalisatie, want de eerste versie is nooit de laatste.
+
+00:19:23.940 --> 00:19:25.180
+Ten slotte, uitfasering.
+
+00:19:25.400 --> 00:19:28.900
+Een regel die niet langer zijn waarde bewijst, wordt doelgericht verwijderd, niet door verwaarlozing.
+
+00:19:29.100 --> 00:19:30.200
+Hou vast aan die volgorde.
+
+00:19:30.440 --> 00:19:34.400
+De meeste defecte detecties hebben een fase overgeslagen en dat was bijna altijd de validatiefase.
+
+00:19:34.600 --> 00:19:39.260
+Wat betreft de techniek binnen Defender, je bouwt aangepaste detectieregels vanaf de pagina voor geavanceerde opsporing en vensthunting.
+
+00:19:39.460 --> 00:19:42.940
+Je schrijft de query, voert deze uit en kiest ervoor om er een detectieregel van te maken.
+
+00:19:43.140 --> 00:19:47.320
+Het portaal vraagt vervolgens hoe vaak de regel moet draaien en die keuze is belangrijker dan het lijkt.
+
+00:19:47.320 --> 00:19:50.320
+Je hebt twee categorieën opties, gepland en bijna realtime.
+
+00:19:50.520 --> 00:19:55.120
+Geplande regels draaien met een vast interval, elk uur, elke drie uur, elke twaalf uur of eenmaal per dag.
+
+00:19:55.300 --> 00:19:58.620
+Ze kijken terug over een venster van gegevens, vinden overeenkomsten en genereren waarschuwingen.
+
+00:19:58.760 --> 00:19:59.580
+Ze zijn flexibel.
+
+00:19:59.800 --> 00:20:03.660
+Ze kunnen zwaardere logica aan, zoals een summarize met een join, omdat ze de tijd hebben om dit te verwerken.
+
+00:20:03.860 --> 00:20:07.020
+Bijna realtime, ook wel continu genoemd, draait zodra gebeurtenissen binnenstromen.
+
+00:20:07.260 --> 00:20:09.580
+Waarschuwingen verschijnen binnen enkele ogenblikken, niet pas na uren.
+
+00:20:09.740 --> 00:20:13.960
+Die snelheid is wat je wilt voor zaken die niet kunnen wachten, zoals een postvakregel die direct na een riskante aanmelding wordt gemaakt.
+
+00:20:13.960 --> 00:20:16.900
+Maar er zijn beperkingen. De query moet eenvoudig blijven.
+
+00:20:17.100 --> 00:20:20.380
+Alleen bepaalde tabellen worden ondersteund en je kunt niet vertrouwen op zware aggregatie.
+
+00:20:20.560 --> 00:20:23.240
+De afweging is dus duidelijk, snelheid versus complexiteit.
+
+00:20:23.460 --> 00:20:27.060
+Gebruik bijna realtime voor signalen van individuele gebeurtenissen met een hoge betrouwbaarheid.
+
+00:20:27.240 --> 00:20:30.680
+Gebruik gepland voor patronen die pas zichtbaar worden bij tellen of vergelijken over tijd.
+
+00:20:30.920 --> 00:20:33.920
+Vervolgens het onderdeel waar mensen over struikelen, de uitvoerkolommen.
+
+00:20:34.120 --> 00:20:37.080
+Een regel is een query, maar het platform heeft meer nodig dan alleen rijen.
+
+00:20:37.220 --> 00:20:40.040
+Het moet weten wanneer de gebeurtenis plaatsvond en waar deze over ging.
+
+00:20:40.040 --> 00:20:45.680
+Je query moet dus een tijdstempelkolom retourneren en identificeren de kolommen voor de betrokken entiteiten bevatten.
+
+00:20:45.860 --> 00:20:50.660
+Een apparaat idee, een gebruikersaccount of object idee, een postvakadres, een best-end shush.
+
+00:20:50.900 --> 00:20:55.840
+Laat je deze weg, dan weigert de regel op te slaan of worden er waarschuwingen gemaakt die nergens aangekoppeld zijn.
+
+00:20:56.060 --> 00:20:57.940
+Herinner je wat we zeiden over correlatie?
+
+00:20:58.280 --> 00:20:59.540
+Entiteiten zijn de verbindingen.
+
+00:20:59.660 --> 00:21:01.520
+Een waarschuwing zonder entiteit is een wees.
+
+00:21:01.700 --> 00:21:06.540
+Het kan niet worden toegevoegd aan een incident, geen reactie op het juiste apparaat triggeren en een analist niet vertellen wie hij moet bellen.
+
+00:21:06.680 --> 00:21:09.400
+Dat is ook waarom een onzorgvuldige, summarize, regels kan breken.
+
+00:21:09.400 --> 00:21:12.580
+Wanneer je aggregeert, gooi je de kolommen weg waarop je niet hebt gegroepeerd.
+
+00:21:12.780 --> 00:21:17.560
+Dan verdwijnen de entiteitsvelden, dus je moet ze meenemen, terug projecteren of er doelbewust op groeperen.
+
+00:21:17.860 --> 00:21:20.920
+Controleer altijd de laatste regels van je query en stel jezelf één vraag.
+
+00:21:21.100 --> 00:21:23.340
+Als dit afgaat, waar is de waarschuwing dan op gericht?
+
+00:21:23.560 --> 00:21:24.240
+Dan de metadata.
+
+00:21:24.760 --> 00:21:26.480
+Dit is wat de analist om drie uur leest.
+
+00:21:26.660 --> 00:21:29.620
+Je stelt een titel in en die moet aangeven wat er is gebeurd, niet hoe de regel heet.
+
+00:21:30.260 --> 00:21:34.660
+Apostrof, postvakregel verbergt e-mail naar riskante aanmelding is beter dan regel 47.
+
+00:21:34.660 --> 00:21:39.240
+Je stelt een ernst niveau in dat de schade moet weerspiegelen als het echt is, niet hoe slim de query is.
+
+00:21:39.380 --> 00:21:45.940
+Je stelt een categorie in zodat de waarschuwing in de juiste bak belandt, zoals persistentie of toegang tot inloggegevens, en je koppelt deze aan een mitre techniek.
+
+00:21:46.140 --> 00:21:51.100
+Die koppeling is geen versiering, zo meet je later je dekking en zie je welke delen van een aanval je nog niet kunt detecteren.
+
+00:21:51.300 --> 00:21:56.360
+Voeg een beschrijving toe met de volgende stap voor de analist en de regel is klaar voor gebruik, maar de regelschrijven is het makkelijke deel.
+
+00:21:56.360 --> 00:22:00.660
+Een query kan perfect zijn en toch zinloos als deze iets detecteert wat niemand hoefde te detecteren.
+
+00:22:00.840 --> 00:22:04.180
+Dus de moeilijkere vraag komt voor elke KQL, wat verdient überhaupt een regel?
+
+00:22:04.380 --> 00:22:07.240
+Kiezen wat je wilt detecteren, dreigingsgerichte prioritering.
+
+00:22:07.440 --> 00:22:09.780
+De meeste teams beantwoorden die vraag op de verkeerde manier.
+
+00:22:09.980 --> 00:22:14.220
+Ze openen de mitre ATT en CK matrix, zien honderden technieken en besluiten ze allemaal af te dekken.
+
+00:22:14.360 --> 00:22:15.680
+Er verschijnt een spreadsheet.
+
+00:22:16.100 --> 00:22:19.260
+Elke cel krijgt een kleur en het project wordt, vul het raster in.
+
+00:22:19.480 --> 00:22:21.920
+Maar de matrix beschrijft wat aanvallers overal doen.
+
+00:22:22.100 --> 00:22:24.020
+Het vertelt je niet wat jou persoonlijk zou schaden.
+
+00:22:24.020 --> 00:22:27.440
+Dat is de basis. Het is een wereldkaart en jij probeert één huis daarin te verdedigen.
+
+00:22:27.600 --> 00:22:30.200
+Dus begin ergens anders. Begin bij bedrijfsrisico's.
+
+00:22:30.400 --> 00:22:31.520
+Stel een eenvoudige vraag.
+
+00:22:31.740 --> 00:22:34.580
+Als een aanvaller morgen binnenkomt, waar gaan ze achteraan en wat zou dat kosten?
+
+00:22:34.820 --> 00:22:38.680
+Niet in technische termen, maar in geld, downtime, juridische blootstelling en krantenkoppen.
+
+00:22:38.820 --> 00:22:41.080
+Het antwoord op die vraag is je detectiestrategie.
+
+00:22:41.240 --> 00:22:44.060
+De matrix komt later als hulpmiddel om je werk te controleren.
+
+00:22:44.260 --> 00:22:45.500
+Maak het antwoord nu concreet.
+
+00:22:45.740 --> 00:22:47.140
+Vier dingen om in kaart te brengen.
+
+00:22:47.260 --> 00:22:51.820
+Ten eerste de crown jewels, de systemen en data die het einde van het bedrijf betekenen als ze lekken of stoppen,
+
+00:22:51.820 --> 00:22:54.860
+het betaalplatform, de klantendatabase, de ontwerpenstanden.
+
+00:22:55.120 --> 00:22:58.820
+Noteer ze bij naam en hou bij welke apparaten en cloudapps ze aanraken.
+
+00:22:59.020 --> 00:23:00.980
+Ten tweede identiteitsniveaus.
+
+00:23:01.200 --> 00:23:04.760
+Niet elk account is gelijk en je detectielogica moet niet doen alsof dat wel zo is.
+
+00:23:04.940 --> 00:23:07.660
+Een tenantbeheerder zit in een andere klasse dan een vertegenwoordiger.
+
+00:23:07.900 --> 00:23:10.420
+Hetzelfde geldt voor het account dat je synchronisatiedienst draait.
+
+00:23:10.620 --> 00:23:15.400
+Deel accounts in niveaus in en besluit dat activiteit op het hoogste niveau strengere regels en een snellere reactie vereist.
+
+00:23:15.580 --> 00:23:19.060
+Ten derde waardevolle mailboxen, de financieel leider die overboekingen goedkeurt,
+
+00:23:19.060 --> 00:23:22.200
+de executive assistant die elke agenda ziet, de juridische inbox.
+
+00:23:22.540 --> 00:23:27.020
+Aanvallers kennen deze, CEO-fraude vindt hier plaats, dus je regels moeten dat ook doen.
+
+00:23:27.180 --> 00:23:32.440
+Ten vierde, bevoorrechte rollen, globale admin, exchangebeheerder, iedereen die een regel kan maken,
+
+00:23:32.760 --> 00:23:34.840
+toestemming kan geven of een beleid kan wijzigen.
+
+00:23:35.020 --> 00:23:35.460
+Tel ze.
+
+00:23:35.700 --> 00:23:40.300
+De meeste tenants vinden er meer dan verwacht en sommige van die accounts zijn al een jaar niet ingelogd.
+
+00:23:40.460 --> 00:23:41.780
+Die lijst is bewust kort.
+
+00:23:42.000 --> 00:23:45.380
+Een middag met de juiste mensen in een kamer kan dit opleveren en zodra je het hebt,
+
+00:23:45.640 --> 00:23:47.560
+schrijven de regelkandidaten zichzelf bijna.
+
+00:23:47.560 --> 00:23:52.060
+Een nieuw apparaat dat inlogt op een tier zero account, een doorstuurregel op de financiële mailbox,
+
+00:23:52.260 --> 00:23:53.560
+een roltoewijzing die niemand heeft aangevraagd.
+
+00:23:54.280 --> 00:23:56.520
+Dit roept de volgende spanning op, dekking versus diepgang.
+
+00:23:56.780 --> 00:23:59.140
+Dekking zegt, detecteer iets voor elke techniek.
+
+00:23:59.300 --> 00:24:03.660
+Diepgang zegt, detecteer een paar dingen goed en het eerlijke antwoord is dat diepgang in het begin wint.
+
+00:24:03.820 --> 00:24:06.180
+Tien geweldige detecties verslaan honderd algemene.
+
+00:24:06.360 --> 00:24:08.540
+Een geweldige detectie heeft een duidelijke hypothese.
+
+00:24:08.760 --> 00:24:09.840
+Het bevat entiteiten.
+
+00:24:10.080 --> 00:24:11.900
+Het is gevalideerd aan de hand van echte data.
+
+00:24:12.160 --> 00:24:14.900
+Het heeft een eigenaar die weet hoe een true positive eruit ziet.
+
+00:24:14.900 --> 00:24:19.380
+Honderd algemene regels gekopieerd van een blog en in één weekend aangezet, geven je het tegenovergestelde.
+
+00:24:19.520 --> 00:24:21.280
+Niemand weet waarom de helft ervan bestaat.
+
+00:24:21.460 --> 00:24:23.120
+Ze slaan aan bij normale activiteiten.
+
+00:24:23.380 --> 00:24:25.420
+Analisten leren ze te negeren en nu heb je ruis gebouwd.
+
+00:24:25.540 --> 00:24:26.020
+Geen dekking.
+
+00:24:26.180 --> 00:24:28.280
+Dus pak eerst de tien die aansluiten op je kroonjuwelen.
+
+00:24:28.520 --> 00:24:30.300
+Maak ze stuk voor stuk solide en breed dan uit.
+
+00:24:30.500 --> 00:24:31.880
+Waar komen de volgende tien vandaan?
+
+00:24:31.980 --> 00:24:32.660
+Je hebt de bron al.
+
+00:24:32.760 --> 00:24:33.840
+Je eigen incidenthistorie.
+
+00:24:34.020 --> 00:24:36.060
+Elk incident dat je hebt afgehandeld is een gratis lee.
+
+00:24:36.180 --> 00:24:37.380
+Pak het afgelopen jaar erbij.
+
+00:24:37.640 --> 00:24:39.280
+Stel voor elk echt incident drie vragen.
+
+00:24:39.400 --> 00:24:40.360
+Hoe kwamen we erachter?
+
+00:24:40.360 --> 00:24:42.180
+Wat deed de aanvaller voordat we het merkten?
+
+00:24:42.300 --> 00:24:44.340
+En welke stap had een regel eerder kunnen opvangen?
+
+00:24:44.500 --> 00:24:47.060
+Die tweede vraag is de nuttige, omdat die wijst op de leemte.
+
+00:24:47.260 --> 00:24:51.780
+Als de inbraak vier dagen duurde voordat iemand het zag, waren er vier dagen aan gedrag zonder detectie.
+
+00:24:51.940 --> 00:24:53.320
+Bijna incidenten tellen ook mee.
+
+00:24:53.500 --> 00:24:55.000
+De phishingmail die een gebruiker meldde.
+
+00:24:55.120 --> 00:24:57.000
+De aanmelding die een analist handmatig markeerde.
+
+00:24:57.140 --> 00:24:59.760
+Als een persoon het kon opvangen, had een query dat waarschijnlijk ook gekund.
+
+00:24:59.940 --> 00:25:01.060
+Nu nog één invalshoek.
+
+00:25:01.220 --> 00:25:02.980
+Deze is voor de mensen die het werk financieren.
+
+00:25:03.180 --> 00:25:05.320
+Behandel je detectie-backluck als een risicoregister.
+
+00:25:05.520 --> 00:25:07.460
+Elk idee voor een regel is een post op de lijst.
+
+00:25:07.460 --> 00:25:11.200
+Het benoemt een risico, het bijbehorende asset, de waarschijnlijkheid en de schade.
+
+00:25:11.420 --> 00:25:14.380
+Rangschikt de lijst op wat het beschermt, niet op hoe interessant de query is.
+
+00:25:14.600 --> 00:25:20.820
+Wanneer een leidinggevende vraagt waarom je drie weken besteedt aan detectie van e-mail doorsturen in plaats van iets flitsends, staat het antwoord op de pagina.
+
+00:25:21.040 --> 00:25:23.100
+Dit beschermt het account dat het geld verplaatst.
+
+00:25:23.220 --> 00:25:28.100
+En het register toont afwegingen, wat je bouwt, wat je uitstelt en welk risico je accepteert door te wachten.
+
+00:25:28.360 --> 00:25:32.560
+Dat is een gesprek dat de leiding begrijpt, omdat het hetzelfde gesprek is als over elk ander risico.
+
+00:25:32.560 --> 00:25:37.160
+Je hebt dus de prioriteiten, kroonjuwelen, niveaus, mailboxen, rollen en een gerangschikte backlog.
+
+00:25:37.460 --> 00:25:38.160
+Ga nu bouwen.
+
+00:25:38.340 --> 00:25:42.920
+De eerste familie van detecties om te bouwen, omdat de meeste aanvallen daar beginnen, is identiteit.
+
+00:25:43.320 --> 00:25:45.360
+Aangepaste detecties voor identiteitsaanvallen.
+
+00:25:45.680 --> 00:25:47.940
+Identiteit is waar de meeste inbraken tegenwoordig beginnen.
+
+00:25:48.160 --> 00:25:51.060
+In een cloud-first tenant is er geen netwerkrand om doorheen te breken.
+
+00:25:51.280 --> 00:25:53.000
+De perimeter is een aanmeldpagina.
+
+00:25:53.180 --> 00:25:58.260
+Een aanvaller heeft geen malware of exploit nodig als ze door die pagina kunnen lopen met een geldig wachtwoord, of beter nog, met een geldige sessie.
+
+00:25:58.360 --> 00:26:00.660
+En zodra ze binnen zijn, zien ze eruit als een gebruiker.
+
+00:26:00.660 --> 00:26:01.640
+Dat is het probleem.
+
+00:26:01.840 --> 00:26:05.820
+Dus identiteitsdetecties zijn de eerste familie om te bouwen, niet omdat ze het meest geavanceerd zijn,
+
+00:26:05.820 --> 00:26:09.540
+maar omdat al het andere mail, bestanden, endpoints meestal volgt uit een gestolen identiteit.
+
+00:26:09.760 --> 00:26:12.780
+Laten we beginnen met een patroon dat iedereen kent en dat bijna iedereen verkeerd doet.
+
+00:26:13.180 --> 00:26:14.080
+Onmogelijke reistijd.
+
+00:26:14.280 --> 00:26:18.120
+De basisversie zegt een gebruiker meldde zich binnen een uur vanuit twee landen aan, dus geef een waarschuwing.
+
+00:26:18.280 --> 00:26:21.340
+En in een echte tenant die constant meldingen geeft, verbindt iemand zich via een VPN
+
+00:26:21.340 --> 00:26:24.180
+en een telefoon roomt naar een mobiele provider die via een ander land routeert.
+
+00:26:24.320 --> 00:26:27.080
+Een cloud-proxy komt uit een datacenter in een andere regio.
+
+00:26:27.400 --> 00:26:30.140
+Analisten zien dit tien keer per dag en leren het weg te wuiven.
+
+00:26:30.320 --> 00:26:32.000
+Goed uitgevoerd verandert dit alles.
+
+00:26:32.200 --> 00:26:34.580
+Je sluit je bekende VPN en proxy bereiken uit.
+
+00:26:34.740 --> 00:26:38.740
+Je vereist dat de tweede aanmelding afkomstig is van een apparaat of app die de gebruiker nooit heeft gebruikt
+
+00:26:38.740 --> 00:26:41.400
+en je verhoogt de ernst alleen als het account zich in een hogere laag bevindt.
+
+00:26:41.500 --> 00:26:44.960
+Hetzelfde idee, drie extra voorwaarden en de waarschuwing begint ergens op te slaan.
+
+00:26:45.100 --> 00:26:47.000
+Het tweede patroon is MFA-moeheid.
+
+00:26:47.200 --> 00:26:49.020
+Hier heeft de aanvaller het wachtwoord al in handen.
+
+00:26:49.180 --> 00:26:52.840
+Ze forceren de ene aanmelding na de andere en de telefoon van de gebruiker trilt met goedkeuringsverzoeken.
+
+00:26:52.840 --> 00:26:56.300
+Dan tikt de gebruiker op een gegeven moment, moe of verwart, op goedkeuren.
+
+00:26:56.460 --> 00:27:00.240
+Dus zoek je naar de piek, veel mislukte of onderbroken MFA-pogingen in een kort tijdsbestek,
+
+00:27:00.360 --> 00:27:01.580
+gevolgd door één succesvolle.
+
+00:27:01.700 --> 00:27:05.860
+Tel de pogingen per gebruiker, groepeer ze op tijd en stel een drempel in die bij jouw tenant past.
+
+00:27:06.040 --> 00:27:07.160
+De reeks is het signaal.
+
+00:27:07.340 --> 00:27:09.020
+Eén geweigerd verzoek betekent niets.
+
+00:27:09.260 --> 00:27:11.560
+Vijftien in tien minuten en dan een goedkeuring is een inbraak.
+
+00:27:11.680 --> 00:27:14.760
+Het derde patroon combineert twee zwakke signalen tot één sterk signaal.
+
+00:27:14.880 --> 00:27:16.680
+Een nieuw apparaat plus een bevoorrechte actie.
+
+00:27:16.820 --> 00:27:18.780
+Een eerste aanmelding vanaf een apparaat is normaal.
+
+00:27:18.780 --> 00:27:23.580
+Mensen krijgen nieuwe laptops, een roll-in-toewijzing of een toestemmingsverlening is ook normaal voor beheerders.
+
+00:27:23.720 --> 00:27:27.060
+Maar beide samen, vanaf een account dat zich nooit zo gedroeg binnen hetzelfde uur,
+
+00:27:27.200 --> 00:27:28.600
+is het waard om iemand voor wakker te maken.
+
+00:27:28.860 --> 00:27:32.020
+Dit is waar je identiteitslagen uit het voorrige gedeelte hun waarde bewijzen.
+
+00:27:32.180 --> 00:27:37.000
+Je past de regel alleen toe op de hoogste laag, zodat het volume klein blijft en het vertrouwen hoog.
+
+00:27:37.140 --> 00:27:39.100
+Nu het moeilijkere geval, token diefstal.
+
+00:27:39.280 --> 00:27:42.600
+Hier heeft de aanvaller het wachtwoord of de MFA-prompt helemaal niet nodig.
+
+00:27:42.820 --> 00:27:47.520
+Ze stelen een sessie token, vaak vanuit een browser op een besmette machine of via een proxy phishingpagina.
+
+00:27:47.740 --> 00:27:50.740
+Vervolgens spelen ze dit af vanuit het perspectief van het identiteitssysteem.
+
+00:27:50.840 --> 00:27:53.380
+De aanmelding heeft al plaatsgevonden en was legitiem.
+
+00:27:53.560 --> 00:27:56.100
+Dus verschuift het signaal naar wat de sessie daarna doet.
+
+00:27:56.260 --> 00:27:59.500
+Je zoekt in cloud-app gebeurtenissen naar een sessie die plotseling verandert.
+
+00:27:59.700 --> 00:28:03.480
+Dezelfde sessie-idee die verschijnt vanaf een nieuw IP-adres en een nieuwe user-agent.
+
+00:28:03.640 --> 00:28:07.000
+Een gebruiker die normaal e-mail leest, begint plotseling massaal bestanden te downloaden
+
+00:28:07.000 --> 00:28:09.460
+of beheerdersinstellingen te wijzigen direct na een locatieverandering.
+
+00:28:09.660 --> 00:28:11.460
+Geen enkele gebeurtenis bewijst diefstal.
+
+00:28:11.660 --> 00:28:13.740
+De gedragsverandering binnen één sessie doet dat wel.
+
+00:28:13.740 --> 00:28:18.120
+Dat levert valse positieven op en de beste oplossing daarvoor is context vanuit een andere workload.
+
+00:28:18.240 --> 00:28:22.060
+Een identiteitswaarschuwing alleen kan vaak niet vertellen of er iets mis is, maar koppel
+
+00:28:22.060 --> 00:28:23.900
+het aan het eindpunt en het beeld wordt scherper.
+
+00:28:24.140 --> 00:28:29.100
+Neem de aanmeldingsgebeurtenis en vraag of het apparaat erachter beheert, compliant en bekend is.
+
+00:28:29.300 --> 00:28:33.340
+Een risicovolle aanmelding vanaf een apparaat dat de vendor voor endpoint nog nooit heeft gezien
+
+00:28:33.340 --> 00:28:37.340
+is veel interessanter dan dezelfde aanmelding vanaf een laptop die al twee jaar in uw float zit.
+
+00:28:37.480 --> 00:28:41.220
+Dus u schrijft het join en u doet dat als laatste nadat u beide kanten heeft gefilterd.
+
+00:28:41.220 --> 00:28:45.160
+Dus identiteitsgebeurtenissen aan de ene kant, apparaatinventaris of recente eindpuntwaarschuwingen
+
+00:28:45.160 --> 00:28:47.420
+aan de andere kant, gekoppeld op apparaat, idee of account.
+
+00:28:47.780 --> 00:28:51.580
+Waarschuwingen die de join overleven bevatten meer bewijs en de rest wordt verwijderd voordat
+
+00:28:51.580 --> 00:28:52.540
+een analist ze ooit ziet.
+
+00:28:52.700 --> 00:28:55.500
+En nog een laatste punt, het punt dat bepaalt of dit allemaal werkt.
+
+00:28:56.300 --> 00:28:56.660
+Entiteitstoewijzing.
+
+00:28:56.920 --> 00:29:00.460
+Wanneer u de query voltooit, kiest u welke kolom de gebruiker bevat, kiest u de verkeerde,
+
+00:29:00.580 --> 00:29:02.460
+dan wordt de waarschuwing aan het verkeerde object gekoppeld.
+
+00:29:02.660 --> 00:29:05.380
+Misschien komt het terecht op een weergave naam die overeenkomt met drie personen.
+
+00:29:05.380 --> 00:29:08.620
+Misschien gebruikt het een aanmeldnaam in de ene tabel en een object-idee in de andere,
+
+00:29:08.800 --> 00:29:10.360
+waardoor correlatie ze nooit koppelt.
+
+00:29:10.560 --> 00:29:13.820
+Wijs toe aan de stabiele identificatie, de account-object-idee en controleer of elke
+
+00:29:13.820 --> 00:29:15.140
+tabel die u koppelt hiermee akkoord gaat.
+
+00:29:15.300 --> 00:29:18.460
+Als de waarschuwing niet bij de juiste gebruiker terechtkomt, werkt er stroomafwaarts niets meer.
+
+00:29:18.660 --> 00:29:20.840
+Niet het incident, niet de beheersing, niet het playbook.
+
+00:29:21.020 --> 00:29:24.140
+Dat is dus identiteit, wachtwoorden, prompts, tokens en de context eromheen.
+
+00:29:24.320 --> 00:29:26.380
+Maar identiteit is niet de enige manier om binnen te komen.
+
+00:29:26.580 --> 00:29:28.040
+De andere voordeur is de inbox.
+
+00:29:28.460 --> 00:29:31.000
+Aangepaste detecties voor e-mail en samenwerkingsmisbruik.
+
+00:29:31.000 --> 00:29:34.800
+Zodra een aanvaller een identiteit heeft overgenomen, is de mailbox de eerste plek waar ze heen gaan.
+
+00:29:34.980 --> 00:29:37.380
+Niet om mail te lezen, maar om het gedrag van de mail aan te passen.
+
+00:29:37.520 --> 00:29:39.200
+De klassieke zet is de inboxregel.
+
+00:29:39.360 --> 00:29:42.180
+Een nieuwe regel die elk bericht doorstuurt naar een extern adres,
+
+00:29:42.400 --> 00:29:47.660
+of een regel die alles met woorden als factuur of beveiligingswaarschuwing verplaatst naar een map die niemand opent,
+
+00:29:47.880 --> 00:29:50.240
+of een regel die mail als gelezen markeert en verwijderd.
+
+00:29:50.380 --> 00:29:53.920
+De aanvaller wil uw gesprekken zien en wil dat u blind blijft voor die van hen.
+
+00:29:54.120 --> 00:29:57.260
+Dus u zoekt in cloudappen fans naar acties voor het aanmaken van regels.
+
+00:29:57.260 --> 00:30:01.300
+Nieuwe inboxregel, inboxregel instellen, wijzigingen in het doorsturen van mailboxen.
+
+00:30:01.520 --> 00:30:03.520
+Vervolgens voegt u de voorwaarden toe die ertoe doen.
+
+00:30:03.680 --> 00:30:09.420
+Een doorsturing naar een domein buiten uw tenant, een regel zonder naam of met de naam van één enkel teken of alleen punten.
+
+00:30:09.600 --> 00:30:12.260
+Een regel die een map targett zoals RSS feeds of gespreksgeschiedenis.
+
+00:30:13.020 --> 00:30:14.340
+Plaatsen waar nooit een mens kijkt.
+
+00:30:14.540 --> 00:30:15.780
+Elk van deze is vreemd.
+
+00:30:15.920 --> 00:30:19.380
+Twee samen op een waardevolle mailbox wijzen bijna zeker op een inbreuk.
+
+00:30:19.500 --> 00:30:20.400
+En let op de timing.
+
+00:30:20.660 --> 00:30:23.480
+Een regel die binnen een uur na een risicovolle aanmelding is aangemaakt,
+
+00:30:23.620 --> 00:30:26.300
+weegt veel zwaarder dan een regel die op een rustige dinsdag is aangemaakt.
+
+00:30:26.300 --> 00:30:30.200
+Bijna realtime werkt hier goed, omdat de aanvaller snel handelt zodra de regel actief is.
+
+00:30:30.380 --> 00:30:31.660
+Nu een ander soort signaal.
+
+00:30:31.800 --> 00:30:33.560
+Eén die komt nadat de mail al is aangekomen.
+
+00:30:33.740 --> 00:30:35.720
+E-mail filtering neemt een besluit bij aflevering.
+
+00:30:35.940 --> 00:30:37.460
+Veilig, verdacht of geblokkeerd.
+
+00:30:37.660 --> 00:30:38.740
+Maar het oordeel verandert.
+
+00:30:38.920 --> 00:30:42.440
+Een link die er om 9 uur onschadelijk uitzag, is om 11 uur ochtends een wapen geworden.
+
+00:30:42.640 --> 00:30:47.080
+Het platform Heur klassificeert het bericht later en verwijdert het uit postvakken, maar alleen als het wordt opgemerkt.
+
+00:30:47.260 --> 00:30:49.180
+Tegen die tijd heeft iemand er misschien al op geklikt.
+
+00:30:49.180 --> 00:30:56.300
+Kijk dus naar het hiyaat, koppel e-mail gebeurtenissen aan URL klik gebeurtenissen en vraag welke gebruikers op een link klikten in een bericht waarvan het oordeel na aflevering veranderde.
+
+00:30:56.440 --> 00:30:59.440
+Die klik vond plaats in het tijdsvenster waarin iedereen dacht dat de mail veilig was.
+
+00:30:59.640 --> 00:31:01.220
+Die gebruikers vormen jouw blootstelling.
+
+00:31:01.420 --> 00:31:04.280
+Je geeft een waarschuwing af voor hen en controleert hun aanmeldingen voor de komende uren.
+
+00:31:04.480 --> 00:31:06.320
+Dat is een detectie die niemand standaard krijgt.
+
+00:31:06.540 --> 00:31:08.360
+Deze bestaat alleen omdat jij de vraag stelt.
+
+00:31:08.760 --> 00:31:10.720
+Samenwerking is het volgende pad en dat is nog stiller.
+
+00:31:10.920 --> 00:31:13.140
+Eenmaal binnen blijft een aanvaller niet altijd in de mail.
+
+00:31:13.340 --> 00:31:16.160
+Teams en SharePoint bevatten bestanden en daar zijn ze op uit.
+
+00:31:16.160 --> 00:31:18.020
+Let dus op pieken in extern delen.
+
+00:31:18.180 --> 00:31:27.800
+Een gebruiker die normaal twee documenten per maand deelt, deelt er plotseling veertig met een extern adres of maakt anonieme links in bulk aan of één account download honderden bestanden uit een bibliotheek in tien minuten.
+
+00:31:27.980 --> 00:31:30.120
+Het patroon is een basislijn en een uitbarsting.
+
+00:31:30.300 --> 00:31:34.880
+Tel de acties per gebruiker per dag, vergelijk vandaag met de afgelopen dertig dagen en markeer de stijging.
+
+00:31:35.100 --> 00:31:38.240
+Bepaal de drempelwaarden op basis van je eigen data, niet van een blogpost.
+
+00:31:38.420 --> 00:31:43.480
+Een verkoopteam download bulkbestanden voor het einde van een kwartaal en een regel die daar geen rekening mee houdt, zal je bedelven onder meldingen.
+
+00:31:43.480 --> 00:31:46.040
+Breng het nu samen, want niets hiervan staat op zichzelf.
+
+00:31:46.340 --> 00:31:48.520
+Zakelijke e-mailcompromittering is een keten.
+
+00:31:48.680 --> 00:31:57.300
+Een phishing wachtwoord in de identiteitslaag, een doorstuurregel in de maillaag, een massale download in de cloud app laag en dan de valse factuur verstuurd vanuit een echte mailbox naar een echte klant.
+
+00:31:57.460 --> 00:31:58.940
+Elke schakel op zich lijkt klein.
+
+00:31:59.140 --> 00:32:03.220
+Een aanmelding, een regel, een download, drie waarschuwingen, drie workloads, drie mogelijke eigenaren.
+
+00:32:03.400 --> 00:32:06.500
+Dit is precies waar de correlatiehyaten die we eerder bespraken de kop op steken.
+
+00:32:06.680 --> 00:32:08.440
+Dus je detecties moeten een entiteit delen.
+
+00:32:08.440 --> 00:32:12.440
+Dezelfde gebruiker moet op dezelfde manier gekoppeld zijn zodat het platform een gezamenlijk punt heeft.
+
+00:32:12.660 --> 00:32:15.280
+Dan wordt de keten één incident in plaats van drie tickets.
+
+00:32:15.280 --> 00:32:17.940
+Bouw de regels als schakels, niet als eilanden.
+
+00:32:18.180 --> 00:32:21.160
+Vraag je bij elke regel af wat er direct voor en direct naar komt.
+
+00:32:21.420 --> 00:32:27.360
+Dat dekt de voordeuren, identiteit en mail, maar de aanvaller belandt uiteindelijk vaak op een apparaat en apparaten communiceren voortdurend.
+
+00:32:27.520 --> 00:32:31.100
+Ze produceren de meest ruisrijke signalen die je hebt en enkele van de meest onthullende.
+
+00:32:31.100 --> 00:32:33.340
+Aangepaste detecties voor endpoint gedrag.
+
+00:32:33.500 --> 00:32:40.360
+De meeste endpoint detecties begonnen met bestanden, een bekende slechte hash, een bekende slechte naam, een handtekening die zegt dat dit binaire bestand malware is, blokkeer het.
+
+00:32:40.460 --> 00:32:42.420
+En dat werkt nog steeds voor standaard bedreigingen.
+
+00:32:42.600 --> 00:32:45.040
+Maar een bestand is voor een aanvaller het makkelijkst aan te passen.
+
+00:32:45.480 --> 00:32:47.700
+Hercompileren, inpakken, hernoemen en de hash is nieuw.
+
+00:32:47.840 --> 00:32:50.840
+Dus de detectie die ertoe doet, verschuift van wat het bestand is naar wat het doet.
+
+00:32:51.060 --> 00:32:52.460
+Dat is gedragsgebaseerd denken.
+
+00:32:52.680 --> 00:32:54.740
+Je stopt met de vraag, is dit programma slecht?
+
+00:32:54.900 --> 00:32:57.480
+En je begint te vragen, is deze reeks acties hier normaal?
+
+00:32:57.480 --> 00:33:00.100
+De scherpste versie daarvan is Living of Veland.
+
+00:33:00.260 --> 00:33:01.780
+De aanvaller brengt niets nieuws mee.
+
+00:33:02.000 --> 00:33:03.860
+Ze gebruiken tools die al op de machine staan.
+
+00:33:04.120 --> 00:33:10.160
+PowerShell, CMD, WME Script, MSHTA, CertUtil, Runtlet 32, RexVR 32.
+
+00:33:10.420 --> 00:33:14.860
+Binaire bestanden ondertekend door Microsoft, standaard vertrouwd en aanwezig op elk apparaat dat je bezit.
+
+00:33:15.520 --> 00:33:16.740
+Beveiligingsmensen noemen ze lolbens.
+
+00:33:16.960 --> 00:33:20.040
+Een best NS-scanner ziet niets verkeerds omdat er niets mis is met het bestand.
+
+00:33:20.200 --> 00:33:22.460
+Het signaal zit dus in de relatie tussen processen.
+
+00:33:22.660 --> 00:33:24.080
+Denk aan ouder- en kindprocessen.
+
+00:33:24.280 --> 00:33:25.840
+Wordt dat een document opent, is normaal.
+
+00:33:25.840 --> 00:33:27.460
+Wordt dat PowerShell start, is dat niet.
+
+00:33:27.480 --> 00:33:32.160
+Outlook dat een scripthost opent, een browser die CMD start, een PDF-lezer die MSHTA aanroept.
+
+00:33:32.320 --> 00:33:35.260
+Voor elk van die paren is er bijna geen legitieme reden om te bestaan.
+
+00:33:35.440 --> 00:33:40.640
+In Apparaat Process Events lees je het startende proces en het nieuwe proces naast elkaar en schrijf je de regel voor het paar.
+
+00:33:40.820 --> 00:33:42.440
+Kijk daarna naar de opdrachtregel.
+
+00:33:42.680 --> 00:33:50.000
+PowerShell met een gecodeerde opdracht, een verborgen venster en een downloadstring is iets heel anders dan PowerShell dat je inventarisatiescript voor beheerders uitvoert.
+
+00:33:50.240 --> 00:33:52.120
+CertUtil dat een bestand van internet haalt.
+
+00:33:52.340 --> 00:33:54.980
+Runtlet 32 dat een DLL laat vanuit een tijdelijke map van een gebruiker.
+
+00:33:54.980 --> 00:33:57.720
+De tool is vertrouwd. De manier waarop deze wordt gebruikt niet.
+
+00:33:57.900 --> 00:34:01.180
+Nu persistentie, want een aanvaller die wil blijven, heeft een manier nodig om een herstart te overleven.
+
+00:34:01.320 --> 00:34:03.640
+Je let op de plekken waar Windows automatisch zaken uitvoert.
+
+00:34:03.800 --> 00:34:05.000
+Runt sleutels in het register.
+
+00:34:05.260 --> 00:34:07.480
+Geplande taken die via een opdrachtregel zijn gemaakt.
+
+00:34:07.720 --> 00:34:09.760
+Nieuwe surfaces die naar vreemde paden verwijzen.
+
+00:34:10.240 --> 00:34:13.260
+Opstartmappen in apparaatregisteren vents en apparaatprocessen vents.
+
+00:34:13.500 --> 00:34:17.500
+Je zoekt naar een schrijfactie op een van die locaties door een proces dat daar niets te zoeken heeft.
+
+00:34:17.700 --> 00:34:22.920
+Een geplande taak die door een scripthost is gemaakt en naar een bestand in een gebruikersprofiel verwijst, is een goed voorbeeld.
+
+00:34:22.920 --> 00:34:24.580
+Beheertools maken taken aan.
+
+00:34:24.820 --> 00:34:27.180
+Beheertools worden meestal niet uitgevoerd vanuit appdata.
+
+00:34:27.360 --> 00:34:29.680
+Toegang tot inloggegevens volgt dezelfde logica.
+
+00:34:29.860 --> 00:34:33.380
+Toegang tot het LSASS proces door iets dat geen bekende beveiligingstool is.
+
+00:34:33.580 --> 00:34:35.600
+Register Hive Exports van Sum of Security.
+
+00:34:35.820 --> 00:34:37.840
+Een tool die geheugen dumpt met een ingebouwde utility.
+
+00:34:38.180 --> 00:34:39.780
+Dat zijn zeldzame, specifieke acties.
+
+00:34:40.020 --> 00:34:42.080
+En zeldzaam plus specifiek is de vorm van goede regels.
+
+00:34:42.260 --> 00:34:43.840
+Dus je hebt de gedragingen in kaart.
+
+00:34:43.980 --> 00:34:46.680
+En dan komt nu het deel dat bepaalt of deze regels helpen of schaden.
+
+00:34:46.680 --> 00:34:49.780
+Endpoint regels vereisen de meeste afstelling van alles wat je zult bouwen.
+
+00:34:49.980 --> 00:34:50.340
+Waarom?
+
+00:34:50.480 --> 00:34:53.200
+Omdat legitieme software constant vreemde dingen doet.
+
+00:34:53.360 --> 00:34:55.120
+Een installer start een script host.
+
+00:34:55.320 --> 00:34:59.340
+Een beheeragent draait versleutelde PowerShell omdat het zo complexe commando's verstuurt.
+
+00:34:59.480 --> 00:35:02.580
+Een ontwikkelaar stol start onderliggende processen vanuit vreemde paden.
+
+00:35:02.740 --> 00:35:06.500
+Je eigen IT-team schrijft scripts die voor een detectie precies op een aanval lijken.
+
+00:35:06.680 --> 00:35:09.800
+Elk van deze is een juiste match op de logica en een vals alarm in de praktijk.
+
+00:35:09.960 --> 00:35:11.700
+Het werk zit hem dus niet in het schrijven van de regel.
+
+00:35:11.900 --> 00:35:13.660
+Het zit in het vormgeven van wat de regel negeert.
+
+00:35:13.660 --> 00:35:15.380
+En hier maken teams een kostbare keuze.
+
+00:35:15.560 --> 00:35:17.220
+Ze gebruiken een allow list op basis van hash.
+
+00:35:17.360 --> 00:35:18.200
+Een hash is exact.
+
+00:35:18.380 --> 00:35:23.000
+Het betekent ook dat de regel stilvalt voor die ene bestandsversie en breekt zodra de leverancier een update uitbrengt.
+
+00:35:23.080 --> 00:35:26.160
+Dus de lijst groeit eindeloos en iemand is altijd de nieuwste beeld aan het najagen.
+
+00:35:26.320 --> 00:35:27.520
+Er is een beter ankerpunt.
+
+00:35:27.760 --> 00:35:30.440
+Gebruik een allow list op basis van ondertekende uitgever en pad samen.
+
+00:35:30.640 --> 00:35:34.740
+Dit proces, ondertekend door deze leverancier, draaiend vanuit deze map, mag dit gedrag vertonen.
+
+00:35:34.900 --> 00:35:38.960
+Alleen de uitgever is te ruim, aangezien een ondertekend binary misbruikt of gekopieerd kan worden.
+
+00:35:38.960 --> 00:35:42.520
+Alleen het pad is ook te ruim, aangezien aanvallers naar algemene mappen schrijven.
+
+00:35:42.680 --> 00:35:46.320
+De combinatie is smal genoeg om veilig te zijn en stabiel genoeg om een update te overleven.
+
+00:35:46.500 --> 00:35:50.780
+Bewaar de hash voor de zeldzame gevallen die het echt nodig hebben, maar neem afstand en kijk naar wat je net hebt gebouwd.
+
+00:35:50.900 --> 00:35:54.940
+Parent-child regels, opdrachtregelregels, persistentieregels, credentialregels.
+
+00:35:55.120 --> 00:35:56.200
+Elk ervan is correct.
+
+00:35:56.420 --> 00:36:00.540
+Elk ervan zal ook afgaan op iets onschadelijks in een tenant met duizenden apparaten die de hele dag draaien.
+
+00:36:00.740 --> 00:36:01.940
+Dat zijn veel waarschuwingen.
+
+00:36:02.040 --> 00:36:04.100
+En volume heeft de neiging een probleem op zich te worden.
+
+00:36:04.100 --> 00:36:06.280
+Oh, waarom ruis een structureel probleem is?
+
+00:36:06.420 --> 00:36:09.480
+Laten we beginnen met een stelling die oneerlijk kan klinken voor de mensen die in de wachtrij werken.
+
+00:36:10.020 --> 00:36:11.580
+Alertvermoeidheid is geen falen van de analist.
+
+00:36:11.740 --> 00:36:13.220
+Het is een resultaat van het ontwerp.
+
+00:36:13.400 --> 00:36:18.420
+Iemand bouwde een systeem dat meer waarschuwingen produceert dan een mens kan lezen en beoordeelde de mensen vervolgens op of ze ze lazen.
+
+00:36:18.620 --> 00:36:23.340
+Wanneer een vermoeid persoon de veertigste waarschuwing van de ochtend overslaat, doet het systeem precies waarvoor het is geconfigureerd.
+
+00:36:23.500 --> 00:36:25.680
+Dus stop met vragen waarom het team niet zorgvuldiger is.
+
+00:36:25.860 --> 00:36:28.180
+Vraag wat het model produceert en wie besloot dat het dat moest doen.
+
+00:36:28.340 --> 00:36:29.820
+Hier is een manier om dat zichtbaar te maken.
+
+00:36:34.760 --> 00:36:36.820
+Vermenigvuldig dit met de waarschuwingen die dagelijks binnenkomen.
+
+00:36:37.220 --> 00:36:39.420
+Vermenigvuldig dit met het aantal analisten dat eraan werkt.
+
+00:36:39.600 --> 00:36:43.160
+Dat zijn je dagelijkse kosten in uren en de meeste teams hebben dit nooit berekend.
+
+00:36:43.380 --> 00:36:44.700
+Voer het uit met gewone getallen.
+
+00:36:44.960 --> 00:36:47.560
+6 minuten per waarschuwing, 300 waarschuwingen per dag.
+
+00:36:47.740 --> 00:36:51.020
+Dat is 30 uur werk per dag voordat iemand überhaupt iets echt onderzoekt.
+
+00:36:51.180 --> 00:36:55.140
+En als 60% van die meldingen onschadelijk is, hebben die 18 uur je niets opgeleverd.
+
+00:36:55.260 --> 00:36:58.440
+Niet niets in theorie, maar niets in de zin van telkens weer hetzelfde antwoord.
+
+00:36:58.620 --> 00:37:01.400
+Dit gaat prima. Hang er nu maar eens een prijskaartje aan.
+
+00:37:01.400 --> 00:37:06.360
+Die uren komen uit een salarisbudget en uit de tijd die je had kunnen besteden aan de volgende detectie.
+
+00:37:06.560 --> 00:37:08.040
+Ruis verspilt niet alleen moeite.
+
+00:37:08.280 --> 00:37:10.860
+Het vreet de capaciteit op die je nodig hebt om het op te lossen.
+
+00:37:11.060 --> 00:37:12.540
+En dat leidt tot de belangrijkste kosten.
+
+00:37:12.740 --> 00:37:13.800
+Die zie je niet op een dashboard.
+
+00:37:14.020 --> 00:37:15.620
+Ruis verbergt echte incidenten.
+
+00:37:15.820 --> 00:37:19.120
+Denk eens na over wat er met de aandacht gebeurt als de meeste meldingen niets blijken te zijn.
+
+00:37:19.340 --> 00:37:22.580
+Mensen leren terecht dat de meeste meldingen niets voorstellen, dus ze gaan sneller werken.
+
+00:37:22.740 --> 00:37:25.540
+Ze scannen vluchtig en sluiten meldingen op basis van een patroon in plaats van bewijs.
+
+00:37:25.680 --> 00:37:27.900
+Dat is een rationele reactie op de data die ze hebben gekregen.
+
+00:37:28.060 --> 00:37:29.420
+En dan komt de echte melding binnen.
+
+00:37:29.420 --> 00:37:30.920
+Die ziet er net zo uit als de andere.
+
+00:37:31.180 --> 00:37:33.880
+Zelfde formaat, zelfde ernstlabel, zelfde titelstijl.
+
+00:37:34.000 --> 00:37:38.020
+Hij staat in de wachtrij tussen twee valse alarmen en de analist geeft hem dezelfde vier seconden.
+
+00:37:38.180 --> 00:37:38.940
+Niemand was lui.
+
+00:37:39.140 --> 00:37:42.560
+Het signaal had simpelweg geen manier om op te vallen in de berg waar het in begraven lag.
+
+00:37:42.740 --> 00:37:44.180
+Dat is het jonge die wolf riep effect.
+
+00:37:44.420 --> 00:37:45.840
+En het is geen verhaal over eerlijkheid.
+
+00:37:45.980 --> 00:37:47.480
+Het gaat over basispercentages.
+
+00:37:47.760 --> 00:37:51.680
+Wanneer het aantal valse alarmen de echte met 50 op 1 overtreft, wordt de aandacht niet overeenkomstig verdeeld.
+
+00:37:51.840 --> 00:37:53.080
+Dus waar komt die ruis vandaan?
+
+00:37:53.460 --> 00:37:54.540
+Grotendeels uit drie bronnen.
+
+00:37:54.540 --> 00:37:56.120
+De eerste is brede regels.
+
+00:37:56.300 --> 00:38:01.720
+Een detectie die geschreven is om elke mogelijke variant van gedrag te vangen, vangt ook elke onschadelijke versie ervan.
+
+00:38:02.040 --> 00:38:04.400
+PowerShell met een download string klinkt specifiek.
+
+00:38:04.540 --> 00:38:07.500
+In een tenant met een software deployment tool gaat hij de hele dag af.
+
+00:38:07.680 --> 00:38:08.840
+De regel deed zijn werk.
+
+00:38:09.040 --> 00:38:10.100
+De scope was de fout.
+
+00:38:10.360 --> 00:38:12.040
+De tweede is onbeheerde uitsluitingen.
+
+00:38:12.180 --> 00:38:14.940
+Iemand onderdrukte vorig voorjaar een melding om een slechte week door te komen.
+
+00:38:15.180 --> 00:38:17.640
+Niemand schreef op waarom, wie het goedkeurde of wanneer het moest eindigen.
+
+00:38:17.840 --> 00:38:18.720
+Nu staat het er gewoon.
+
+00:38:18.720 --> 00:38:21.500
+Sommige uitsluitingen zijn te ruim en verbergen echte activiteit.
+
+00:38:21.660 --> 00:38:25.320
+Anderen zijn te smal, waardoor een vrijwel identieke melding alsnog afgaat vanaf het volgende apparaat.
+
+00:38:25.440 --> 00:38:27.580
+Hoe dan ook, niemand is verantwoordelijk voor de beslissing.
+
+00:38:27.740 --> 00:38:32.840
+De derde is rumoerige software, beheertools, backupsoftware, vulnerability scanners en ontwikkelaarstools.
+
+00:38:33.120 --> 00:38:36.920
+Ze doen dingen die op aanvallen lijken, omdat het mechanisch gezien dezelfde acties zijn.
+
+00:38:37.120 --> 00:38:40.760
+Een scanner die elk apparaat op het netwerk scant, lijkt erg op verkenning.
+
+00:38:40.940 --> 00:38:42.220
+Er is niets mis met de scanner.
+
+00:38:42.460 --> 00:38:45.000
+De detectie kan zonder hulp simpelweg het verschil niet zien.
+
+00:38:45.000 --> 00:38:46.720
+Merk op wat alle drie gemeen hebben.
+
+00:38:46.940 --> 00:38:48.260
+Geen van allen is een mysterie.
+
+00:38:48.260 --> 00:38:51.740
+Elke bron van ruis heeft een oorzaak die je kunt benoemen en een plek in de configuratie,
+
+00:38:51.900 --> 00:38:55.640
+wat betekent dat ruis oplosbaar is, maar alleen als je het niet langer als weersomstandigheden behandelt.
+
+00:38:55.800 --> 00:38:58.460
+De meeste teams tunen alsof ze reageren op een slecht humeur.
+
+00:38:58.640 --> 00:39:00.620
+Een analist klaagt, iemand voegt een uitzondering toe,
+
+00:39:00.740 --> 00:39:03.320
+de wachtrij wordt iets rustiger en iedereen gaat weer over tot de orde van de dag.
+
+00:39:03.500 --> 00:39:08.060
+Geen meting, geen registratie, geen plan om te controleren of het werkte of dat er stilletjes iets anders kapot is gegaan.
+
+00:39:08.120 --> 00:39:10.560
+Dat is geen tuning, dat is gokken met een verwijderknop.
+
+00:39:10.680 --> 00:39:13.680
+Tuning vereist een methode, een gedisciplineerde tuning methode.
+
+00:39:13.780 --> 00:39:14.860
+Begin met cijfers.
+
+00:39:14.860 --> 00:39:17.840
+Voordat je ook maar één regel aanpast, haal eerst de data op.
+
+00:39:17.940 --> 00:39:21.940
+Welke waarschuwingsbronnen produceren het grootste volume en welke daarvan hebben het slechtste percentage fout positieve?
+
+00:39:22.140 --> 00:39:24.360
+Dat zijn twee verschillende lijsten en je hebt ze allebei nodig.
+
+00:39:24.600 --> 00:39:26.320
+Volume vertelt je waar de tijd naartoe gaat.
+
+00:39:26.480 --> 00:39:29.100
+Het percentage fout positieve vertelt je waar de tijd wordt verspeeld.
+
+00:39:29.260 --> 00:39:32.680
+Een regel die 400 keer per maand afgaat en elke keer gelijk heeft, is geen tuningprobleem.
+
+00:39:32.820 --> 00:39:35.760
+Een regel die 40 keer afgaat en er 38 keer naast zit, is dat wel.
+
+00:39:35.760 --> 00:39:37.760
+Sorteer op beide en kijk naar de overlap.
+
+00:39:37.960 --> 00:39:40.380
+De regels bovenaan elke lijst zijn je eerste doelwitte.
+
+00:39:40.580 --> 00:39:45.380
+Je kunt dit verkrijgen via de incident- en waarschuwingsweergave in de portal, gefilterd op detectiebron en klassificatie,
+
+00:39:45.580 --> 00:39:48.240
+of je kunt een query schrijven op de waarschuwingstabellen en groeperen op titel.
+
+00:39:48.360 --> 00:39:51.040
+De klassificaties van de analist zijn hierbij de belangrijkste input.
+
+00:39:51.240 --> 00:39:55.180
+Elke keer dat iemand een waarschuwing markeert als fout positief of echt positief, is dat een datapunt.
+
+00:39:55.340 --> 00:40:00.220
+Als je tiende klassificatiestap overslaat, heb je geen nulmeting, dus maakt dat de eerste gewoonte die je moet verbeteren.
+
+00:40:00.220 --> 00:40:04.300
+Nu de regel voor verandering, één wijziging, één hypothese, één controledatum.
+
+00:40:04.500 --> 00:40:08.560
+Dat is de hele discipline en het klinkt bijna te simpel, maar denk eens aan wat er gebeurt zonder die aanpak.
+
+00:40:08.680 --> 00:40:11.880
+Iemand voegt drie uitzonderingen toe en past een drempelwaarde aan op dezelfde middag.
+
+00:40:12.040 --> 00:40:13.560
+De wachtrij daalt met 30%.
+
+00:40:13.560 --> 00:40:15.680
+Geweldig, behalve dat je niet weet welke wijziging daarvoor zorgde.
+
+00:40:15.800 --> 00:40:18.080
+En heeft hem van die wijzigingen misschien ook iets belangrijks het zwijgen opgelegd?
+
+00:40:18.100 --> 00:40:20.160
+Dat kun je niet zien omdat je alles tegelijk hebt veranderd.
+
+00:40:20.260 --> 00:40:22.020
+Dus noteer het voordat je actie onderneemt.
+
+00:40:22.120 --> 00:40:27.520
+Ik geloof dat deze waarschuwing wordt geactiveerd door onze deployment tool en als ik dat toolsignproces van deze ene regel uitsluit,
+
+00:40:27.520 --> 00:40:30.400
+daalt het volume met ongeveer een derde zonder verlies van echte positieve.
+
+00:40:30.600 --> 00:40:32.700
+Dat is een hypothese, die kan fout zijn.
+
+00:40:32.860 --> 00:40:34.740
+Prik dan een datum over twee weken en controleer.
+
+00:40:34.880 --> 00:40:35.720
+Is het volume gedaald?
+
+00:40:35.920 --> 00:40:37.400
+Zijn er echte positieve verdwenen?
+
+00:40:37.580 --> 00:40:39.560
+Zo ja bij de tweede vraag, dan draai je het terug.
+
+00:40:39.740 --> 00:40:40.400
+Nu de tools.
+
+00:40:40.660 --> 00:40:42.680
+Defender biedt er een paar en ze vervullen verschillende taken.
+
+00:40:42.900 --> 00:40:45.680
+Met alertafstemregels, die je onder de instellingen voor alertafstemming vindt,
+
+00:40:45.720 --> 00:40:47.220
+kun je actie ondernemen op basis van een patroon.
+
+00:40:47.340 --> 00:40:51.780
+Je kiest het alerttype, definieert voorwaarden voor de betrokken entiteiten en bepaalt vervolgens wat er moet gebeuren.
+
+00:40:52.000 --> 00:40:55.720
+Verberg de alert, los deze automatisch op of markeer deze als informatief.
+
+00:40:55.720 --> 00:41:00.920
+Dit is de juiste tool wanneer specifiek bekend goedgedrag steeds dezelfde detectie activeert.
+
+00:41:01.220 --> 00:41:02.680
+Onderdrukking is de grovere variant.
+
+00:41:03.020 --> 00:41:05.600
+Het dempt een alert zodat deze niet langer werk veroorzaakt.
+
+00:41:05.800 --> 00:41:09.980
+Gebruik het voorzichtig, want een onderdrukte alert laat vaak minder sporen na dan een opgeloste.
+
+00:41:10.360 --> 00:41:12.200
+Automatische resolutie zit daartussenin.
+
+00:41:12.360 --> 00:41:14.820
+De alert wordt nog steeds aangemaakt en geregistreerd,
+
+00:41:15.080 --> 00:41:17.380
+maar sluit zichzelf met een reden die als bewijs dient.
+
+00:41:17.560 --> 00:41:20.620
+Je kunt tellen hoe vaak deze afging en zien of het patroon verandert.
+
+00:41:20.860 --> 00:41:23.840
+Wanneer je kunt kiezen tussen iets verbergen of het met een spoor oplossen,
+
+00:41:23.840 --> 00:41:26.300
+kies dan voor het spoor. Welke tool je ook gebruikt,
+
+00:41:26.540 --> 00:41:28.540
+de volgende regel is belangrijker dan de tool zelf.
+
+00:41:28.720 --> 00:41:30.260
+Hou uitsluitingen nauw begrenst.
+
+00:41:30.440 --> 00:41:32.640
+Een uitsluiting moet een entiteit en een voorwaarde benoemen.
+
+00:41:32.880 --> 00:41:34.860
+Deze apparaatgroep, deze ondertekende uitgever,
+
+00:41:35.080 --> 00:41:37.120
+deze opdrachtregel vanaf dit pad, nooit de hele regel.
+
+00:41:37.360 --> 00:41:40.080
+Dit is waarom. Een hele regel uitsluiten lost de ruis niet op.
+
+00:41:40.240 --> 00:41:41.540
+Het verwijdert de detectie.
+
+00:41:41.740 --> 00:41:43.640
+Je wil de eendeployment tool het zwijgen en opleggen,
+
+00:41:43.800 --> 00:41:46.340
+maar in plaats daarvan heb je het platform vertelt dat gedrag overal,
+
+00:41:46.500 --> 00:41:48.400
+voor elke gebruiker, voor altijd te negeren.
+
+00:41:48.400 --> 00:41:50.640
+De aanvaller die hetzelfde doet op een andere machine,
+
+00:41:50.640 --> 00:41:53.400
+loopt nu voorbij een regel die technisch gezien nog steeds aanstaat.
+
+00:41:53.580 --> 00:41:55.820
+Stel daarom elke keer de vraag om het te vernauwen.
+
+00:41:56.020 --> 00:41:58.360
+Wat is de kleinste beschrijving van het onschadelijke geval?
+
+00:41:58.600 --> 00:42:01.780
+Schrijf de uitsluiting zodat deze alleen daarop aansluit en niet breder is.
+
+00:42:01.980 --> 00:42:04.260
+Als je het onschadelijke geval niet precies kunt beschrijven,
+
+00:42:04.500 --> 00:42:07.180
+begrijp je de ruis nog niet en dat is een reden om verder te onderzoeken,
+
+00:42:07.400 --> 00:42:09.180
+niet om meer uit te sluiten dan wat bijna niemand doet.
+
+00:42:09.660 --> 00:42:10.900
+Documenteer elke uitsluiting.
+
+00:42:11.140 --> 00:42:13.340
+Bij elke uitsluiting horen drie genoteerde zaken.
+
+00:42:13.340 --> 00:42:15.780
+Een eigenaar, een persoon die ervoor verantwoordelijk is,
+
+00:42:15.940 --> 00:42:17.820
+een reden in een zin die een buitenstaander begrijpt,
+
+00:42:17.820 --> 00:42:18.860
+en een vervaldatum.
+
+00:42:19.080 --> 00:42:20.700
+Eigenaar, reden, vervaldatum.
+
+00:42:20.900 --> 00:42:24.200
+De eigenaar is belangrijk omdat uitsluitingen langer bestaan dan de mensen die ze hebben gemaakt.
+
+00:42:24.400 --> 00:42:26.480
+De reden is belangrijk omdat niemand zich na zes maanden
+
+00:42:26.480 --> 00:42:28.200
+nog de slechte week herinnert die het veroorzaakte.
+
+00:42:28.400 --> 00:42:31.160
+En de vervaldatum is het belangrijkst omdat het dwingt tot een beslissing.
+
+00:42:31.400 --> 00:42:34.180
+Wanneer de datum aanbreekt, moet iemand naar de uitsluiting kijken en zeggen
+
+00:42:34.180 --> 00:42:35.780
+nog steeds nodig of verwijderen.
+
+00:42:36.000 --> 00:42:39.080
+Zonder datum is de standaard stilte en stilte betekent dat het blijft staan.
+
+00:42:39.080 --> 00:42:41.080
+Je kunt dit in een eenvoudig register bijhouden.
+
+00:42:41.240 --> 00:42:42.420
+Een spreadsheet werkt prima.
+
+00:42:42.660 --> 00:42:44.420
+Een lijst in je ticketsysteem werkt ook.
+
+00:42:44.580 --> 00:42:45.940
+Wat niet werkt is het uit je hoofd doen,
+
+00:42:45.940 --> 00:42:48.400
+want dit is wat er gebeurt als je die laatste stap overslaat.
+
+00:42:48.540 --> 00:42:51.080
+Een uitsluiting zonder vervaldatum blijft geen oplossing.
+
+00:42:51.320 --> 00:42:54.400
+Het verandert langzaam in een plek waar de aanvaller ongezien te werk kan gaan,
+
+00:42:54.560 --> 00:42:55.620
+en daar moeten we nu naar kijken.
+
+00:42:56.140 --> 00:42:58.280
+Uitsluitingen, blinde vlekken en tuning die stilstaat.
+
+00:42:58.440 --> 00:43:00.360
+Denk eens na over hoe een uitsluiting ontstaat.
+
+00:43:00.480 --> 00:43:01.640
+Iemand heeft een zware week.
+
+00:43:01.780 --> 00:43:03.940
+Een regel wordt weer getriggerd door een implementatietool.
+
+00:43:04.120 --> 00:43:05.180
+Ze voegen een uitsluiting toe,
+
+00:43:05.180 --> 00:43:07.540
+de wachtrij kalmeert en ze gaan weer over tot de orde van de dag.
+
+00:43:07.720 --> 00:43:09.040
+Logisch, niemand doet iets fout,
+
+00:43:09.200 --> 00:43:11.180
+maar een jaar later staat die uitsluiting er nog steeds.
+
+00:43:11.400 --> 00:43:13.460
+Degene die hem schreef is naar een ander team gegaan.
+
+00:43:13.460 --> 00:43:18.100
+De implementatietool is in de herfst vervangen en de uitsluiting beslaat nu een map op een hele apparaatgroep
+
+00:43:18.100 --> 00:43:20.180
+waar iedereen met lokale rechten naar kan schrijven.
+
+00:43:20.380 --> 00:43:22.340
+Dus plaatst een aanvaller een script in die map.
+
+00:43:22.520 --> 00:43:25.040
+De regel die het had moeten detecteren, staat nog steeds aan.
+
+00:43:25.180 --> 00:43:28.400
+Er zit simpelweg een gat in dat precies de vorm heeft van jouw oude gemakzucht.
+
+00:43:28.640 --> 00:43:30.720
+Zo wordt een permanente uitsluiting een aanvalspad,
+
+00:43:30.720 --> 00:43:35.380
+niet door één grote fout, maar door een stapel kleine, begrijpelijke keuzes waar nooit meer naar omgekeken is.
+
+00:43:35.520 --> 00:43:37.200
+En hier komt het ongemakkelijke deel.
+
+00:43:37.480 --> 00:43:38.580
+Aanvallers zoeken hiernaar.
+
+00:43:38.740 --> 00:43:40.860
+Map-uitsluitingen zijn in veel opstellingen openbaar
+
+00:43:40.860 --> 00:43:43.060
+en een lokale beheerder kan ze vaak uitlezen op een machine.
+
+00:43:43.460 --> 00:43:46.700
+Een lijst met zaken die we niet in de gaten houden, is nuttig voor iedereen die binnenkomt.
+
+00:43:46.800 --> 00:43:49.060
+Je hebt dus een agenda nodig, geen onderbuikgevoel.
+
+00:43:49.340 --> 00:43:54.100
+Evalueer elk kwartaal elke onderdrukking, elke tuningregel en elke uitzondering allemaal in één keer.
+
+00:43:54.360 --> 00:43:55.960
+Stel bij elke regel drie vragen.
+
+00:43:56.160 --> 00:43:57.400
+Is de eigenaar nog aanwezig?
+
+00:43:57.400 --> 00:43:59.440
+Is de oorspronkelijke reden nog steeds geldig?
+
+00:43:59.560 --> 00:44:02.840
+En is er in de omgeving iets veranderd waardoor de uitsluiting breder is geworden dan voorheen?
+
+00:44:03.000 --> 00:44:07.280
+Als je het werk uit de vorige sectie hebt gedaan, heeft het register al een verloopdatum bij elk item.
+
+00:44:07.480 --> 00:44:10.440
+De evaluatie is dan simpelweg het doorlopen van de items die verlopen zijn.
+
+00:44:10.640 --> 00:44:13.060
+Behouden, verlengen met een nieuwe datum of verwijderen.
+
+00:44:13.060 --> 00:44:14.080
+Geen vierde optie.
+
+00:44:14.260 --> 00:44:17.220
+Het laten staan omdat niemand klaagt, is geen besluit, het is verwaarlozing.
+
+00:44:17.400 --> 00:44:20.640
+Eén plek verdient een eigen aanpak, de vendor voor endpoint uitsluitingen.
+
+00:44:20.800 --> 00:44:26.340
+Dit zijn de instellingen die het platform vertellen om een bestand, map, proces of extensie over te slaan tijdens scannen en monitoren.
+
+00:44:26.560 --> 00:44:29.300
+Beschouw die lijst als een risico-inventarisatie, want dat is het precies.
+
+00:44:29.480 --> 00:44:31.820
+Elke regel is een plek waar je ervoor hebt gekozen minder te zien.
+
+00:44:32.060 --> 00:44:33.700
+Lees het op de manier waarop een aanvaller dat zou doen.
+
+00:44:33.900 --> 00:44:35.740
+Welke paden zijn beschrijfbaar door normale gebruikers?
+
+00:44:35.920 --> 00:44:37.580
+Welke uitsluitingen bevatten wildcards?
+
+00:44:37.780 --> 00:44:39.660
+Staat er een hele schijf of een tijdelijke map in?
+
+00:44:39.840 --> 00:44:41.760
+Welke zijn er voor software die je niet meer gebruikt?
+
+00:44:41.760 --> 00:44:44.140
+Sorteer ze op basis van hoeveel ruimte ze beslaan.
+
+00:44:44.240 --> 00:44:46.340
+En bovenaan die lijst bevindt zich je grootste risico.
+
+00:44:46.540 --> 00:44:49.360
+Eén enkele brede uitsluiting kan 50 goede detectiesten niet doen.
+
+00:44:49.580 --> 00:44:53.960
+Zet de lijst in een spreadsheet, voeg de eigenaar en de reden toe en markeer elke regel die je niet kunt verklaren.
+
+00:44:54.180 --> 00:44:59.340
+Dat zijn je eerste verwijderingen, wat ons brengt bij het idee dat dit alles zichtbaar maakt voor mensen die niet in de portal werken.
+
+00:44:59.800 --> 00:45:00.200
+Afstemschuld.
+
+00:45:00.400 --> 00:45:01.940
+Het werkt net als elke andere schuld.
+
+00:45:02.160 --> 00:45:07.100
+Elke uitsluiting die je toevoegt zonder eigenaar of verloopdatum is een kleine lening op je toekomstige zichtbaarheid.
+
+00:45:07.100 --> 00:45:10.640
+Het lost het probleem van vandaag op en de rente verschijnt later als een blinde vlek.
+
+00:45:10.640 --> 00:45:13.780
+Laat er genoeg staan en je betaalt meer dan je kunt zien en dat kun je kwantificeren.
+
+00:45:13.960 --> 00:45:15.560
+Hoeveel uitsluitingen hebben geen eigenaar?
+
+00:45:15.700 --> 00:45:17.040
+Hoeveel hebben geen verloopdatum?
+
+00:45:17.180 --> 00:45:18.360
+Hoeveel zijn ouder dan een jaar?
+
+00:45:18.560 --> 00:45:20.700
+Hoeveel beslaan een hele regel in plaats van een entiteit?
+
+00:45:20.900 --> 00:45:25.520
+Die vier cijfers elk kwartaal bijgehouden, vertellen een leidinggevend team iets wat ze al begrijpen.
+
+00:45:25.700 --> 00:45:29.320
+Hoeveel ongecontroleerd risico de tenant draagt en of dit toe of afneemt.
+
+00:45:29.420 --> 00:45:32.760
+Een cijfer dat de leiding in 10 seconden kan lezen, verandert het gesprek.
+
+00:45:32.920 --> 00:45:36.220
+We hebben 41 uitzonderingen die niemand beheert, leidt tot een besluit.
+
+00:45:36.380 --> 00:45:39.380
+We moeten onze instellingen opschonen, krijgt een knikje en verder niets.
+
+00:45:39.380 --> 00:45:43.380
+Nu een patroon om op te merken alles in dit deel ging over aftrekken, brede regels inkorten,
+
+00:45:43.540 --> 00:45:47.100
+verouderde uitsluitingen verwijderen, smalle regels schrijven met eigenaren eraan gekoppeld.
+
+00:45:47.240 --> 00:45:51.280
+En wat overblijft als je dat werk hebt gedaan, is een wachtrij waarin het meeste wat verschijnt echt is.
+
+00:45:51.480 --> 00:45:53.720
+Dat is de voorwaarde die je nodig hebt voor de volgende stap,
+
+00:45:53.980 --> 00:45:57.740
+want een systeem dat uit zichzelf handelt is slechts zo veilig als de signalen waarop het handelt.
+
+00:45:57.820 --> 00:46:00.560
+Voer het ruis en het maakt ruis fouten op machinesnelheid.
+
+00:46:00.780 --> 00:46:04.380
+Maak eerst de wachtrij rustig, dan wordt automatisering iets waar je op kunt vertrouwen.
+
+00:46:04.960 --> 00:46:06.520
+Automatisering binnen Defender XDR.
+
+00:46:06.520 --> 00:46:08.300
+Defender handelt al uit zichzelf.
+
+00:46:08.520 --> 00:46:13.260
+Voordat je ook maar één draaiboek schrijft, onderzoekt het platform waarschuwingen en lost het een deel van wat het vindt op.
+
+00:46:13.340 --> 00:46:15.740
+Het heet geautomatiseerd onderzoek en herstel.
+
+00:46:16.000 --> 00:46:18.020
+Zie het als een junior-analyst die nooit slaapt.
+
+00:46:18.180 --> 00:46:21.240
+Een waarschuwing gaat af op een apparaat, het platform start een onderzoek,
+
+00:46:21.400 --> 00:46:26.720
+het kijkt naar de bestanden, de processen, de persistentiepunten en de andere apparaten die hetzelfde bewijs hebben aangeraakt.
+
+00:46:26.920 --> 00:46:30.240
+Dan komt het tot een oordeel, schadelijk, verdacht of geen bedreigingen gevonden.
+
+00:46:30.240 --> 00:46:36.360
+Als iets schadelijk is, stelt het acties voor, bestand in quarantaine plaatsen, proces stoppen, registersleutel verwijderen, geplande taak wissen.
+
+00:46:36.560 --> 00:46:39.280
+Wat daarna gebeurt, hangt af van één instelling, het autonomieniveau.
+
+00:46:39.420 --> 00:46:41.020
+Je kiest dat niveau per apparaatgroep.
+
+00:46:41.120 --> 00:46:42.240
+Het komt in een paar stappen.
+
+00:46:42.440 --> 00:46:45.120
+Aan de onderkant onderzoekt het platform, maar onderneemt het geen actie.
+
+00:46:45.260 --> 00:46:47.360
+Het vertelt je wat het zou doen en een persoon beslist.
+
+00:46:47.560 --> 00:46:50.740
+In het midden handelt het zelf sommige zaken af en vraagt de toestemming voor de rest.
+
+00:46:50.960 --> 00:46:54.500
+Helemaal bovenaan verhelpt het alles zonder vragen en beoordeelt een persoon het achteraf.
+
+00:46:54.620 --> 00:46:56.360
+Die stappen gaan niet over intelligentie.
+
+00:46:56.360 --> 00:46:58.620
+Elk niveau voert hetzelfde onderzoek uit.
+
+00:46:58.840 --> 00:47:06.080
+Ze verschillen in één vraag, wie drukt op de knop, nu een ander soort automatisering, een die niet wacht tot een onderzoek is afgerond, aanvalsverstoring.
+
+00:47:06.320 --> 00:47:08.860
+Dit is gebouwd voor het moment dat een aanval al in gang is gezet.
+
+00:47:09.080 --> 00:47:12.300
+Stel dat de vendor signalen correleert tussen een identiteit, eindpunt en e-mail.
+
+00:47:12.460 --> 00:47:18.200
+Het gecombineerde beeld komt overeen met een bekend patroon, zoals ransomware staging of een hands-on keyboard inbraak via een gestolen account.
+
+00:47:18.400 --> 00:47:21.840
+Op dat moment zijn minuten belangrijker dan zekerheid, dus onderneemt het platform actie.
+
+00:47:21.980 --> 00:47:25.500
+Het kan een apparaat isoleren door de netwerktoegang te verbreken, behalve naar de vendor zelf.
+
+00:47:25.500 --> 00:47:29.260
+Het kan een gebruikersaccount uitschakelen zodat de gestolen sessie stopt met werken in de hele tenant.
+
+00:47:29.420 --> 00:47:31.460
+U heeft die regel niet geschreven, Microsoft deed dat.
+
+00:47:31.600 --> 00:47:34.020
+Het wordt alleen geactiveerd bij matches met een hoge mate van zekerheid.
+
+00:47:34.220 --> 00:47:35.040
+Dat is het ontwerp.
+
+00:47:35.240 --> 00:47:38.120
+Verstoring is bewust beperkt omdat de acties pijnlijk zijn als ze onjuist zijn.
+
+00:47:38.280 --> 00:47:40.500
+Een geïsoleerde laptop betekent een persoon die niet kan werken.
+
+00:47:40.660 --> 00:47:42.620
+Een uitgeschakeld account kan van uw CFO zijn.
+
+00:47:42.800 --> 00:47:44.020
+Die spanning is de echte vraag.
+
+00:47:44.260 --> 00:47:45.640
+Wanneer moet de machine alleen handelen?
+
+00:47:45.940 --> 00:47:48.220
+Beantwoord die vraag niet op gevoel, maar op basis van risico.
+
+00:47:48.380 --> 00:47:51.360
+Kijk naar wat de actie kost als het fout is en wat wachten kost als het juist is.
+
+00:47:51.360 --> 00:47:56.200
+Een bestand in quarantaine op een standaard werkstation, lage kosten als het fout is, want u herstelt het met één klik.
+
+00:47:56.380 --> 00:47:58.740
+Dat is een goede kandidaat voor volledige automatisering.
+
+00:47:58.920 --> 00:48:03.440
+Een apparaat dat uw productielijn of een domeincontroller beheert, daar een fout maken betekent een uitval.
+
+00:48:03.600 --> 00:48:06.420
+Een analist moet eerst goedkeuren, dus u werkt met niveaus.
+
+00:48:06.640 --> 00:48:09.460
+Standaard gebruikersapparaten gaan naar de hogere autonomieinstelling.
+
+00:48:09.700 --> 00:48:14.540
+Servers en kritieke systemen blijven semi-geautomatiseerd, waarbij het platform voorstelt en een persoon bevestigt.
+
+00:48:14.540 --> 00:48:20.040
+De nieuwste, minst zekere apparaatgroepen blijven op het laagste niveau totdat u heeft gezien hoe het platform zich in uw omgeving gedraagt.
+
+00:48:20.220 --> 00:48:23.260
+Dat laatste punt leidt tot het idee dat hieronder ligt een vertrouwensmodel.
+
+00:48:23.740 --> 00:48:25.300
+Automatisering moet zijn rijkwijd te verdienen.
+
+00:48:25.480 --> 00:48:28.020
+U geeft een nieuw systeem niet op dag één volledige bevoegdheid.
+
+00:48:28.180 --> 00:48:34.320
+U begint beperkt en kijkt naar het bewijs, controleert de onderzoeksresultaten, hoeveel oordelen correct waren, hoeveel herstelacties een analist heeft teruggedraaid.
+
+00:48:34.480 --> 00:48:39.100
+Als het platform 60 dagen lang correct is geweest op een apparaatgroep, is dat een reden om de bevoegdheid daar te vergroten.
+
+00:48:39.100 --> 00:48:44.780
+Als het telkens uw eigen beheertool als kwaadaardig markeert, is dat een reden om het signaal te verbeteren voordat u het meer macht geeft.
+
+00:48:45.020 --> 00:48:49.480
+Precisie komt eerst, rijkwijd te volgt, en dit sluit direct aan bij het werk dat u zojuist heeft afgerond.
+
+00:48:49.640 --> 00:48:52.680
+Een rustige, afgestemde wachtrij is wat de cijfers leesbaar maakt.
+
+00:48:52.840 --> 00:48:57.220
+In een rumoerige tenant kun je niet zien of automatisering accuraat is, omdat de input al vermengd is.
+
+00:48:57.460 --> 00:49:01.260
+Maak de signalen schoon en de vertrouwenskwestie wordt meetbaar in plaats van emotioneel.
+
+00:49:01.440 --> 00:49:04.040
+Maar let op wat ingebouwde automatisering wel en niet kan.
+
+00:49:04.040 --> 00:49:08.740
+Het handelt op basis van Microsoft Detecties met Microsoft Logica in de volgorde van Microsoft.
+
+00:49:09.100 --> 00:49:12.620
+Het weet niets van jouw goedkeuringsketen, je VIP-lijst of je ticketsysteem.
+
+00:49:12.760 --> 00:49:16.880
+Het kan geen gebruiker uitschakelen, een manager inlichten of een zaak openen in je eigen tools.
+
+00:49:17.140 --> 00:49:20.240
+Daarvoor heb je iets nodig dat je zelf beheert, geen autonomie-instelling.
+
+00:49:20.460 --> 00:49:21.840
+Je hebt orkestratie nodig.
+
+00:49:22.140 --> 00:49:23.520
+Waarom komt Sentinel in beeld?
+
+00:49:23.740 --> 00:49:27.300
+Defender XDR kent Microsoft signalen beter dan wat je ook bezit.
+
+00:49:27.480 --> 00:49:29.140
+Het ziet de procesboom op de laptop.
+
+00:49:29.140 --> 00:49:35.120
+Het ziet de aanmelding, de mailbox-regel en de OAuth-toestemming en koppelt ze omdat Microsoft beide kanten van de verbinding heeft gebouwd.
+
+00:49:35.120 --> 00:49:36.320
+Die diepgang is reëel.
+
+00:49:36.520 --> 00:49:40.500
+Geen enkele tool van derde kan hierbinnen dit ecosysteem aan tippen, maar diepgang heeft een grens.
+
+00:49:40.680 --> 00:49:43.080
+Defender kan alleen redeneren over wat er binnenkomt.
+
+00:49:43.260 --> 00:49:44.800
+Veel van je omgeving doet dat nooit.
+
+00:49:45.080 --> 00:49:53.280
+Denk aan wat er buiten staat, de firewall aan de rand van het datacenter, de switches en draadloze controllers, de VPN-concentrator, de proxy die elk uitgaand verzoek logt,
+
+00:49:53.280 --> 00:49:58.160
+de bedrijfsapplicatie die je financiële team gebruikt en de SaaS-tools waarmee de vendor voor cloudapps geen verbinding maakt.
+
+00:49:58.360 --> 00:50:06.480
+Dan zijn er nog aangepaste logs, de badge-taak die naar een bestand schrijft, het verouderde systeem dat alleen syslog spreekt, de on-prem database die vastlegt wie welke rij heeft aangeraakt.
+
+00:50:06.660 --> 00:50:11.980
+Niets daarvan belandt in advanced hunting, dus wanneer een aanvaller zich door die leemte beweegt, ziet de vendor slechts de helft van het verhaal.
+
+00:50:11.980 --> 00:50:16.920
+Een gestolen account meldt zich aan via de VPN, opent een interne app en haalt gegevens op via een proxy.
+
+00:50:17.140 --> 00:50:18.560
+De vendor vangt de aanmelding op.
+
+00:50:18.740 --> 00:50:20.420
+De rest gebeurt op plekken die het niet kan lezen.
+
+00:50:20.420 --> 00:50:23.100
+Je correlatie, zoals we eerder zagen, kan alleen koppelen wat het kan zien.
+
+00:50:23.280 --> 00:50:24.640
+Dat is waar Sentinel in beeld komt.
+
+00:50:24.840 --> 00:50:25.640
+De kern is simpel.
+
+00:50:25.880 --> 00:50:27.480
+De vendor ziet Microsoft tot in de details.
+
+00:50:27.860 --> 00:50:29.300
+Sentinel ziet alles in de breedte.
+
+00:50:29.600 --> 00:50:31.740
+Sentinel is een seam en een cloud-native oplossing.
+
+00:50:31.980 --> 00:50:37.620
+Het ontvangt laks van bijna elke bron, slaat ze op in een werkruimte en laat je dezelfde querytaal gebruiken voor alles.
+
+00:50:37.820 --> 00:50:41.020
+De firewall-tabel en de aanmeldingstabel staan naast elkaar.
+
+00:50:41.240 --> 00:50:47.100
+Met één query kun je een IP-adres volgen van een netwerklog naar een identiteitsgebeurtenis en vervolgens naar een eindpuntwaarschuwing.
+
+00:50:47.300 --> 00:50:49.700
+Dat is een vraag die de vendor alleen niet kan beantwoorden.
+
+00:50:49.700 --> 00:50:52.080
+Microsoft verkleint de afstand tussen de twee.
+
+00:50:52.280 --> 00:50:54.840
+De Unified Defender portal bevat nu Sentinel.
+
+00:50:55.200 --> 00:50:56.840
+Eén wachtrij, één incident model.
+
+00:50:57.180 --> 00:51:03.700
+Een analist opent één incident en ziet meldingen van Defender workloads naast meldingen van Sentinel-regels, gegroepeerd door dezelfde correlatielogica.
+
+00:51:04.460 --> 00:51:07.620
+Geen tweede console, geen case-nummers kopiëren tussen systemen.
+
+00:51:07.800 --> 00:51:12.280
+Dat verandert hoe mensen werken, maar het roept ook een ontwerpvraag op die de portal niet voor je kan beantwoorden.
+
+00:51:12.520 --> 00:51:13.100
+Wat hoort waar?
+
+00:51:13.260 --> 00:51:15.440
+Hier is een kader dat in de praktijk stand houdt.
+
+00:51:15.560 --> 00:51:18.160
+Hou in Defender alles waar de eigen diepgang het hele punt is.
+
+00:51:18.160 --> 00:51:22.840
+Eindpunt gedrag, signalen voor identiteitsbescherming, e-mail resultaten, cloud-app activiteit van gekoppelde apps.
+
+00:51:23.020 --> 00:51:24.780
+Die detecties draaien het dichtst bij de data.
+
+00:51:25.040 --> 00:51:26.500
+Ze gebruiken de rijkste telemetrie.
+
+00:51:26.720 --> 00:51:29.460
+Ze voeden direct geautomatiseerd onderzoek en aanvalsverstoring.
+
+00:51:29.680 --> 00:51:31.640
+Ze naar buiten verplaatsen, verzwakt ze alleen maar.
+
+00:51:31.820 --> 00:51:33.960
+Routeer naar Sentinel alles wat breedte nodig heeft.
+
+00:51:33.960 --> 00:51:38.800
+Die detecties die netwerklogboeken koppelen aan identiteit, regels voor externe data, lange retentie voor compliance.
+
+00:51:39.060 --> 00:51:42.380
+Zodat je 18 maanden terug kunt kijken als iemand vraagt naar een oud-datalac.
+
+00:51:42.480 --> 00:51:45.480
+Cross-source hunting waarbij het antwoord in drie systemen tegelijk leeft.
+
+00:51:45.640 --> 00:51:47.360
+En een snelle test voor het grijze gebied.
+
+00:51:47.580 --> 00:51:50.020
+Vraag of de detectiedata nodig heeft die Defender niet heeft.
+
+00:51:50.240 --> 00:51:52.400
+Zo ja, dan hoort het in Sentinel, omdat het moet.
+
+00:51:52.640 --> 00:51:55.660
+Zo nee, vraag of het profiteert van de ingebouwde respons van Defender.
+
+00:51:55.920 --> 00:51:57.180
+Zo ja, hou het in Defender.
+
+00:51:57.420 --> 00:51:58.520
+Merk op wat dat kader doet.
+
+00:51:58.520 --> 00:52:00.900
+Het beëindigt de discussie over welke tool beter is.
+
+00:52:00.900 --> 00:52:03.660
+Ze concurreren niet. Ze bestrijken verschillende oppervlakken.
+
+00:52:03.780 --> 00:52:05.820
+Het echte werk is beslissen waar elke regel thuis hoort.
+
+00:52:05.940 --> 00:52:07.340
+Maar er zit een addertje onder het gras.
+
+00:52:07.520 --> 00:52:09.380
+Eentje die mensen verrast na de eerste factuur.
+
+00:52:09.580 --> 00:52:11.080
+De twee verbinden is niet gratis.
+
+00:52:11.280 --> 00:52:14.640
+Elke tabel die je naar Sentinel stuurt, kost geld om in te nemen en op te slaan.
+
+00:52:14.780 --> 00:52:16.860
+Elke dubbele melding kost tijd van analisten.
+
+00:52:17.080 --> 00:52:20.560
+De keuzes die je in de eerste week maakt, vaak door alles inschakelen te klikken,
+
+00:52:20.700 --> 00:52:21.980
+bepalen jarenlang beide rekeningen.
+
+00:52:22.180 --> 00:52:24.780
+Dus de integratie heeft een ontwerp nodig, geen selectievakje.
+
+00:52:24.780 --> 00:52:27.160
+De integratie van Defender en Sentinel ontwerpen.
+
+00:52:27.300 --> 00:52:28.960
+Begin met hoe de verbinding zich gedraagt.
+
+00:52:29.140 --> 00:52:30.800
+Het is nuttiger dan de meeste mensen verwachten.
+
+00:52:31.020 --> 00:52:34.480
+De Defender XDR connector in Sentinel synchroniseert incidenten en waarschuwingen.
+
+00:52:34.640 --> 00:52:36.080
+Wanneer Defender een incident aanmaakt,
+
+00:52:36.220 --> 00:52:39.200
+verschijnt dit aan de Sentinel kant met de bijbehorende waarschuwingen en entiteiten.
+
+00:52:39.380 --> 00:52:41.320
+En de synchronisatie werkt in beide richtingen.
+
+00:52:41.500 --> 00:52:44.820
+Een analist sluit het incident op de ene plek en de status werkt bij op de andere.
+
+00:52:45.040 --> 00:52:48.740
+Wijs het toe, voorzie het van commentaar, verander de ernst en de wijziging volgt.
+
+00:52:48.900 --> 00:52:50.720
+Je hoeft dus geen twee wachtrijen bij te houden.
+
+00:52:50.720 --> 00:52:54.760
+Je onderhoudt één verhaal in twee systemen, maar die connector verplaatst alleen incidenten.
+
+00:52:54.880 --> 00:52:57.000
+Het verplaatst niet de ruwe data die erachter zit.
+
+00:52:57.160 --> 00:52:58.760
+En dat is de eerste echte beslissing.
+
+00:52:58.760 --> 00:53:02.420
+Je kunt alleen de incidenten en meldingen versturen, of je kunt ook de ruwe tabellen streamen,
+
+00:53:02.560 --> 00:53:07.080
+zoals apparaatprocesgebeurtenissen, e-mailgebeurtenissen en identiteitaanmeldingsgebeurtenissen naar de Sentinel werkruimte.
+
+00:53:07.420 --> 00:53:08.640
+Incidenten alleen is goedkoop.
+
+00:53:08.760 --> 00:53:12.280
+Je krijgt het portaaloverzicht, de automatiseringskoppelingen en de status van alle systemen.
+
+00:53:12.420 --> 00:53:13.500
+Wat je inlevert is hunting.
+
+00:53:13.720 --> 00:53:16.740
+Advanced hunting en Defender bewaren ongeveer 30 dagen aan gegevens.
+
+00:53:16.740 --> 00:53:20.520
+Als de vraag over iets van vijf maanden geleden gaat, is de telemetrie verdwenen.
+
+00:53:20.660 --> 00:53:21.960
+Raw Ingestion lost dat op.
+
+00:53:22.120 --> 00:53:28.080
+Je krijgt een lange retentie en kunt de Vendertabellen koppelen aan firewall logs in één query, maar je betaalt per gigabyte.
+
+00:53:28.300 --> 00:53:29.980
+En endpoint-tabellen zijn enorm.
+
+00:53:30.200 --> 00:53:33.880
+Een apparaat genereert duizenden procesgebeurtenissen per dag over duizenden apparaten.
+
+00:53:34.080 --> 00:53:36.700
+De afweging is dus duidelijk, functionaliteit tegenoverkosten.
+
+00:53:36.880 --> 00:53:39.260
+En het antwoord is niet alles of niets, wat leidt tot gelaagdheid.
+
+00:53:39.480 --> 00:53:41.520
+Niet elk logbestand heeft hetzelfde prijskaartje.
+
+00:53:41.740 --> 00:53:43.180
+Sorteer je gegevens op waarde.
+
+00:53:43.420 --> 00:53:48.100
+Sommige tabellen voeden die tacties die je dagelijks uitvoert, aanmoldingen, cloud-app-events, e-mail-events.
+
+00:53:48.320 --> 00:53:51.600
+Die gaan naar de volledige analytische laag waar regels ze snel kunnen bevragen.
+
+00:53:51.860 --> 00:53:54.520
+Andere tabellen zijn alleen belangrijk als er een onderzoek start.
+
+00:53:54.820 --> 00:53:58.220
+Uitgebreide netwerk-clacks, qua processen-vents van apparaten met laag risico,
+
+00:53:58.380 --> 00:54:03.160
+die kunnen in een goedkopere laag of in het data lake staan waar je minder betaalt voor opslag en ze alleen bevraagt wanneer nodig.
+
+00:54:03.160 --> 00:54:05.440
+Een derde groep heb je alleen nodig voor compliance.
+
+00:54:05.660 --> 00:54:08.860
+Bewaar het lang en goedkoop en bevraag het nooit, tenzij een auditor erom vraagt.
+
+00:54:08.860 --> 00:54:13.960
+Stel daarom bij elke tabel één vraag, welke regel of welk onderzoek zou stuklopen als deze gegevens morgen zouden verdwijnen.
+
+00:54:14.100 --> 00:54:16.880
+Als het antwoord geen is, hoort het niet in de dure laag thuis.
+
+00:54:17.160 --> 00:54:22.180
+Voer die controle uit bij de opzet en daarna elk kwartaal, omdat zowel je detecties als je data volumes veranderen.
+
+00:54:22.360 --> 00:54:25.060
+Nu het probleem dat in week 2 opduikt, dubbele incidenten.
+
+00:54:25.220 --> 00:54:26.180
+Dit is hoe het gebeurt.
+
+00:54:26.400 --> 00:54:28.740
+Defender geeft een waarschuwing bij een verdachte aanmelding.
+
+00:54:28.940 --> 00:54:30.820
+De connector brengt die waarschuwing in Sentinel.
+
+00:54:31.180 --> 00:54:35.740
+Vervolgens reageert een Sentinel-analyse regel die over dezelfde RAT-tabel loopt op hetzelfde gedrag.
+
+00:54:35.740 --> 00:54:40.760
+Twee waarschuwingen, één gebeurtenis en nu twee incidenten of tickets, waarbij een analist aan beide werkt.
+
+00:54:40.900 --> 00:54:43.780
+De eerste oplossing is bepalen wie de eigenaar is van elke detectie.
+
+00:54:43.980 --> 00:54:47.080
+Als Defender een gedrag al dekt, schrijf er dan geen Sentinel-regel voor.
+
+00:54:47.300 --> 00:54:53.280
+Schakel in Sentinel het aanmaken van incidenten op basis van Microsoft beveiligingswaarschuwingen uit, aangezien de connector de echte al doorzet.
+
+00:54:53.440 --> 00:54:55.340
+Die ene instelling voorkomt een hoop dubbelingen.
+
+00:54:55.540 --> 00:54:57.040
+De tweede oplossing is groepering.
+
+00:54:57.040 --> 00:55:03.540
+In het uniforme portaal voegt correlatie gerelateerde waarschuwingen uit beide systemen samen tot één incident, maar alleen als ze entiteiten delen.
+
+00:55:03.660 --> 00:55:08.200
+Hou je entiteit-mapping dus consistent in beide sets regels, dezelfde gebruikers-idee, hetzelfde apparaat-idee.
+
+00:55:08.340 --> 00:55:10.720
+Sloordige mapping is de reden waarom duplicaten blijven bestaan.
+
+00:55:10.900 --> 00:55:12.420
+Dat leidt tot de vraag over het opstellen.
+
+00:55:12.660 --> 00:55:13.840
+Waar schrijf je een nieuwe regel?
+
+00:55:14.040 --> 00:55:19.620
+Gebruik aangepaste Defender detecties wanneer de data in Defender tabellen staat en het resultaat een eigen respons moet activeren.
+
+00:55:19.620 --> 00:55:26.180
+Waarschuwingen van die regels kunnen geautomatiseerd onderzoek, apparaatbeperking en dezelfde incident logica voeden als ingebouwde waarschuwingen.
+
+00:55:26.360 --> 00:55:28.500
+Bijna real-time is ook alleen daar beschikbaar.
+
+00:55:28.740 --> 00:55:38.280
+Gebruik Sentinel-analyse regels wanneer de query-data buiten Defender nodig heeft een langere terugblik vereist dan het Venst-Hunting biedt of bij een geplande regel voor gekoppelde tabellen.
+
+00:55:38.740 --> 00:55:40.120
+Eén simpele test werkt.
+
+00:55:40.340 --> 00:55:42.360
+Heeft de regel iets nodig wat Defender niet kan zien?
+
+00:55:42.640 --> 00:55:44.360
+Sentinel, anders, Defender.
+
+00:55:44.360 --> 00:55:46.000
+Dus nu staat de data op één plek.
+
+00:55:46.140 --> 00:55:47.780
+De incidenten stromen beide kanten op.
+
+00:55:47.780 --> 00:55:50.420
+De kosten hebben een plafond en de duplicaten hebben een eigenaar.
+
+00:55:50.580 --> 00:55:52.160
+Wat nog ontbreekt is het handelende deel.
+
+00:55:52.320 --> 00:55:54.840
+Een wachtrij vol goede incidenten is slechts een betere lijst.
+
+00:55:55.040 --> 00:55:56.440
+Vervolgens, de response engine.
+
+00:55:56.680 --> 00:55:58.500
+Response playbooks van waarschuwing tot actie.
+
+00:55:58.680 --> 00:55:59.920
+Een playbook is een beslissing.
+
+00:56:00.140 --> 00:56:01.280
+Dat is alles wat het is.
+
+00:56:01.480 --> 00:56:03.960
+Iemand besloot ooit wanneer dit gebeurt, doen we dat.
+
+00:56:04.680 --> 00:56:11.560
+En momenteel staat die beslissing bij de meeste teams op een wiki-pagina, in het hoofd van een senior-analyst of in een Slack-bericht van twee jaar geleden.
+
+00:56:11.560 --> 00:56:16.260
+Een playbook neemt die beslissing, schrijft deze in stappen uit en laat de stappen automatisch uitvoeren.
+
+00:56:16.260 --> 00:56:18.540
+De vraag is dus niet wat we kunnen automatiseren.
+
+00:56:18.780 --> 00:56:21.800
+Het is, welke beslissingen nemen we al elke keer op dezelfde manier?
+
+00:56:22.060 --> 00:56:23.520
+Dat zijn je eerste kandidaten.
+
+00:56:23.760 --> 00:56:28.500
+Als drie analisten identiek op dezelfde waarschuwing zouden reageren, hoeft er geen persoon in die lust te zitten.
+
+00:56:28.700 --> 00:56:29.380
+Nu de techniek.
+
+00:56:29.580 --> 00:56:32.140
+In Sentinel zijn playbooks gebouwd op Azure Logic Apps.
+
+00:56:32.320 --> 00:56:36.740
+Een Logic App is een workflow, een trigger, gevolgd door een reeks stappen die elke service aanroepen.
+
+00:56:36.940 --> 00:56:38.260
+Lees een gebruiker uit Entra ID.
+
+00:56:38.500 --> 00:56:39.440
+Stuur een bericht naar Teams.
+
+00:56:39.660 --> 00:56:40.740
+Roep de Defender API aan.
+
+00:56:40.900 --> 00:56:41.480
+Open een ticket.
+
+00:56:41.480 --> 00:56:45.500
+Er is een connector voor de meeste tools die je al hebt, maar een playbook start niet uit zichzelf.
+
+00:56:45.640 --> 00:56:46.760
+Iets moet het activeren.
+
+00:56:46.940 --> 00:56:48.660
+Dat is de taak van automatiseringsregels.
+
+00:56:48.820 --> 00:56:50.360
+Zij zitten als triggerlaag voor de playbooks.
+
+00:56:50.560 --> 00:56:55.000
+Een automatiseringsregel houdt incidenten of waarschuwingen in de gaten, controleert condities en voert dan actie uit.
+
+00:56:55.160 --> 00:57:00.100
+Het kan een playbook uitvoeren, maar ook een eigenaar toewijzen, ernst wijzigen, een tech toevoegen of het incident sluiten.
+
+00:57:00.300 --> 00:57:02.620
+Je schrijft een conditie, zoals incident aangemaakt.
+
+00:57:02.820 --> 00:57:07.160
+Ernst hoog, bevat een gebruikersentiteit uit de bevoorrechte laag en koppelt daar het playbook aan.
+
+00:57:07.360 --> 00:57:08.240
+Denk de zin lagen.
+
+00:57:08.240 --> 00:57:10.800
+De regel bepaalt wanneer het playbook bepaalt wat.
+
+00:57:10.960 --> 00:57:12.700
+Ze gescheiden houden werpt zijn vruchten af.
+
+00:57:12.840 --> 00:57:15.380
+Een automatiseringsregel kan meerdere playbooks naar elkaar aanroepen.
+
+00:57:15.500 --> 00:57:18.700
+En je kunt een playbook buiten gebruik stellen zonder elke trigger die het gebruikte te herschrijven.
+
+00:57:18.880 --> 00:57:20.160
+Wat bouwen mensen nu als eerste?
+
+00:57:20.400 --> 00:57:22.040
+Vier playbooks dekken het meeste nut.
+
+00:57:22.200 --> 00:57:23.400
+Een apparaat isoleren.
+
+00:57:23.660 --> 00:57:29.400
+Wanneer een incident een gecompromitteerd eindpunt bevestigt, roept het playbook Defender voor, endpoint aan en sluit de machine af van het netwerk.
+
+00:57:29.580 --> 00:57:32.720
+Defender zelf blijft bereikbaar, zodat de analist onderzoek kan blijven doen.
+
+00:57:32.720 --> 00:57:34.160
+Een gebruiker uitschakelen.
+
+00:57:34.320 --> 00:57:38.760
+Het playbook markeert het account als uitgeschakeld in Entra ID en het gestolen wachtwoord werkt niet meer.
+
+00:57:38.980 --> 00:57:39.860
+Sessies intrekken.
+
+00:57:40.060 --> 00:57:41.940
+Anders dan uitschakelen en vaak beter.
+
+00:57:42.200 --> 00:57:49.520
+Het beëindigt elk actief token voor de gebruiker, waardoor een herhaalde sessie direct stopt, terwijl de persoon na een wachtwoordreset weer veilig kan inloggen.
+
+00:57:49.680 --> 00:57:50.660
+Een indicator blokkeren.
+
+00:57:50.780 --> 00:57:51.820
+Een schadelijk IP-adres.
+
+00:57:51.980 --> 00:57:52.400
+Een domein.
+
+00:57:52.560 --> 00:57:53.100
+Een filehash.
+
+00:57:53.240 --> 00:57:56.560
+Het playbook voegt dit toe aan de blokkeerlijst, zodat de volgende poging al aan de deur faalt.
+
+00:57:56.760 --> 00:57:58.160
+Elk van deze is een enkele actie.
+
+00:57:58.160 --> 00:57:59.320
+Dat is bewust gedaan.
+
+00:57:59.520 --> 00:58:03.060
+Kleine playbooks zijn makkelijker te testen, te vertrouwen en later te combineren.
+
+00:58:03.180 --> 00:58:05.780
+Maar dit is de fout die veel eerste pogingen de das om doet.
+
+00:58:06.000 --> 00:58:09.760
+Ze gaan direct over tot actie, er komt een melding binnen en het playbook schakelt het account uit.
+
+00:58:09.960 --> 00:58:11.020
+Zonder vragen te stellen.
+
+00:58:11.220 --> 00:58:14.880
+En dan blijkt de aanvaller de CFO te zijn die inlogde vanuit een hotel in het buitenland.
+
+00:58:15.040 --> 00:58:17.600
+En nu kan het hoofd financiën de loonadministratie niet goedkeuren.
+
+00:58:17.800 --> 00:58:19.040
+Dus verrijking komt eerst.
+
+00:58:19.260 --> 00:58:21.800
+Verzamel context, beslist dan en onderneem dan actie.
+
+00:58:22.000 --> 00:58:24.760
+Voor elke actie verzamelt het playbook wat een mens zou opzoeken.
+
+00:58:24.760 --> 00:58:26.540
+Zit deze gebruiker in de VIP-groep?
+
+00:58:26.720 --> 00:58:28.300
+Wat is hun risiconiveau op dit moment?
+
+00:58:28.500 --> 00:58:30.800
+Heeft het apparaat de afgelopen dag andere meldingen getoond?
+
+00:58:31.020 --> 00:58:33.960
+Staat het IP-adres op een threadfeed of is het een bekend bedrijfsbereik?
+
+00:58:34.120 --> 00:58:34.860
+Wie is de manager?
+
+00:58:35.080 --> 00:58:36.420
+Hoe laat is het voor deze gebruiker?
+
+00:58:36.600 --> 00:58:39.520
+Elk antwoord is een aanroep naar een API en elk antwoord duurt seconde.
+
+00:58:39.680 --> 00:58:40.740
+Dan komt er een voorwaarde.
+
+00:58:40.960 --> 00:58:45.780
+Als de gebruiker een laag risico vormt, het apparaat onbeheerd is en de indicator overeenkomt met een bekende dreiging, ga door.
+
+00:58:45.940 --> 00:58:48.500
+Als de gebruiker een VIP is, stop dan en vraag het aan een persoon.
+
+00:58:48.500 --> 00:58:53.860
+De logica leest precies zoals de checklist die een analist zou volgen, behalve dat het elke keer in 4 seconden om 3 uur ochtends draait.
+
+00:58:54.020 --> 00:58:56.860
+En dat brengt ons bij het laatste ontwerponderdeel, goedkeuringspoorten.
+
+00:58:57.020 --> 00:58:59.560
+Bij acties met een grote impact onderneemt het playbook geen actie.
+
+00:58:59.700 --> 00:59:07.440
+Het vraagt het, het plaatst een bericht in een teamskanaal of stuurt een e-mail met de samenvatting van het incident, het verzamelde bewijs en twee knoppen, goedkeuren of afwijzen.
+
+00:59:07.600 --> 00:59:08.500
+De workflow wacht.
+
+00:59:08.740 --> 00:59:10.820
+Als een aangewezen persoon goedkeurt, gaat het door.
+
+00:59:11.020 --> 00:59:14.820
+Als niemand binnen 30 minuten antwoord, escaleert het naar de volgende persoon op de lijst.
+
+00:59:14.820 --> 00:59:18.640
+Dat geeft je snelheid waar het risico laag is en een menselijke beslissing waar het risico hoog is.
+
+00:59:18.780 --> 00:59:20.620
+De analist doet het werk niet meer zelf.
+
+00:59:20.860 --> 00:59:23.400
+Zij nemen het besluit met alle context al op het scherm.
+
+00:59:23.600 --> 00:59:26.760
+Dus je hebt triggers, playbooks, verrijkingen en goedkeuringen.
+
+00:59:26.940 --> 00:59:33.140
+Dat is een werkende response engine en het is ook een zeer efficiënte manier om je eigen tenant te slopen als niemand er limieten aan stelt.
+
+00:59:33.920 --> 00:59:36.080
+Veiligheidsmarges, veilige automatisering op schaal.
+
+00:59:36.300 --> 00:59:41.700
+Elk playbook zit er wel eens naast, niet omdat de logica slecht is, maar omdat data verandert en de omgeving verschuift.
+
+00:59:41.700 --> 00:59:45.260
+Een regel geschreven in maart stuit op een situatie die niemand in maart voorzag.
+
+00:59:45.440 --> 00:59:48.660
+Dus je ontwerpt niet voor de dag dat het werkt, je ontwerpt voor de dag dat het misgaat.
+
+00:59:48.820 --> 00:59:50.740
+Dat is denken in termen van Impact Radius.
+
+00:59:51.000 --> 00:59:53.460
+Stel voor elk playbook één vraag voordat het live gaat.
+
+00:59:53.660 --> 00:59:57.180
+Als dit op het verkeerde doelwit wordt afgevuurd, hoe ver verspreidt de schade zich dan?
+
+00:59:57.400 --> 00:59:58.500
+Neem sessies intrekken.
+
+00:59:58.720 --> 01:00:01.100
+Verkeerd doelwit en één persoon meldt zich opnieuw aan.
+
+01:00:01.420 --> 01:00:02.820
+Vervelend, vijf minuten verloren.
+
+01:00:03.140 --> 01:00:06.180
+Neem apparaat isoleren, verkeerd doelwit en een laptop gaat op zwart.
+
+01:00:06.380 --> 01:00:07.980
+Erger, maar je kunt het terugdraaien.
+
+01:00:07.980 --> 01:00:11.720
+Neem nu een playbook dat accounts uitschakelt, geactiveerd door een regel die te breed is.
+
+01:00:11.880 --> 01:00:14.620
+Een slechte dag levert 50 uitgeschakelde gebruikers op voor de lunch.
+
+01:00:14.800 --> 01:00:15.880
+De actie is hetzelfde.
+
+01:00:16.040 --> 01:00:17.280
+De radius is wat veranderde.
+
+01:00:17.500 --> 01:00:19.420
+Schrijf die radius dus op naast elk playbook.
+
+01:00:19.560 --> 01:00:22.320
+Eén gebruiker, één apparaat, één groep of de hele tenant.
+
+01:00:22.560 --> 01:00:24.820
+Stem daarna de veiligheidsmaatregelen af op die omvang.
+
+01:00:24.980 --> 01:00:28.280
+De eerste maatregel is een lijst met zaken die het playbook nooit mag aanraken.
+
+01:00:28.280 --> 01:00:33.020
+VIP's, leidinggevende, financiële goedkeurders, de mensen van wie de blokkering leidt tot een
+
+01:00:33.020 --> 01:00:36.780
+telefoontje naar je baas, serviceaccounts omdat het uitschakelen ervan een betalingsronde,
+
+01:00:37.020 --> 01:00:40.460
+een backup of een hele applicatie kan stoppen en niemand merkt het tot er stroomafwaarts
+
+01:00:40.460 --> 01:00:40.980
+iets faalt.
+
+01:00:41.140 --> 01:00:45.240
+Ook kritieke services, domingcontrollers, de hosts die productie draaien, de machines waarbij
+
+01:00:45.240 --> 01:00:46.520
+isolatie en uitval betekent.
+
+01:00:46.520 --> 01:00:50.160
+Houd deze als uitsluitingslijsten in een watchlist of beveiligingsgroep en laat het playbook
+
+01:00:50.160 --> 01:00:51.720
+die lijst als allereerste stap uitlezen.
+
+01:00:51.940 --> 01:00:53.160
+Staat dit doelwit op de lijst?
+
+01:00:53.320 --> 01:00:54.760
+Zo ja, onderneem dan geen actie.
+
+01:00:54.760 --> 01:00:56.960
+Stuur het door naar een persoon met een duidelijke notitie waarom.
+
+01:00:57.140 --> 01:00:59.600
+Dat is hetzelfde idee als de goedkeuringspoorten, maar dan strenger.
+
+01:00:59.800 --> 01:01:03.080
+Sommige doelwitten moeten helemaal niet worden geautomatiseerd, hoe overtuigend het signaal
+
+01:01:03.080 --> 01:01:03.500
+ook lijkt.
+
+01:01:03.660 --> 01:01:05.580
+Ten tweede, limieten op het playbook zelf.
+
+01:01:05.800 --> 01:01:09.560
+Een snelheidslimiet zegt dat dit playbook maximaal vijf accounts per uur mag uitschakelen.
+
+01:01:09.720 --> 01:01:11.580
+Het zesde verzoek stopt en waarschuwt iemand.
+
+01:01:11.580 --> 01:01:15.060
+Het klinkt ondergeschikt, maar het is de maatregel die een op hol geslagen lus verandert in een
+
+01:01:15.060 --> 01:01:15.580
+klein incident.
+
+01:01:15.840 --> 01:01:18.700
+Want de fout waar je bang voor bent, is meestal niet één verkeerde beslissing.
+
+01:01:18.860 --> 01:01:22.240
+Het is één verkeerde beslissing die 400 keer op machinesnelheid wordt herhaald.
+
+01:01:22.480 --> 01:01:23.480
+Vervolgens een noodstop.
+
+01:01:23.660 --> 01:01:26.080
+Eén schakelaar één plek die de automatisering uitschakelt.
+
+01:01:26.240 --> 01:01:29.120
+Een instelling die het playbook aan het begin van elke uitvoering controleert, zodat de
+
+01:01:29.120 --> 01:01:31.060
+dienstdoende persoon alles binnen een enkele seconde kan stoppen.
+
+01:01:31.240 --> 01:01:33.880
+Laat mensen niet om twee uur s'nacht door Logic App zoeken naar de juiste.
+
+01:01:34.080 --> 01:01:35.260
+Test de schakelaar ook.
+
+01:01:35.260 --> 01:01:38.660
+Een noodstop die niemand ooit heeft ingedrukt, is een hoop, geen controle maatregel.
+
+01:01:38.820 --> 01:01:39.880
+Dan een terugdraaipad.
+
+01:01:40.080 --> 01:01:42.120
+Ken voor elke actie de ongedaan maakmethode.
+
+01:01:42.280 --> 01:01:43.440
+Een apparaat geïsoleerd?
+
+01:01:43.580 --> 01:01:44.760
+Er is een vrij gave actie.
+
+01:01:44.900 --> 01:01:46.080
+Een gebruiker uitgeschakeld?
+
+01:01:46.260 --> 01:01:47.160
+Schakel deze weer in.
+
+01:01:47.280 --> 01:01:48.400
+Een indicator geblokkeerd?
+
+01:01:48.620 --> 01:01:49.300
+Verwijder deze.
+
+01:01:49.560 --> 01:01:52.880
+Schrijf de omgekeerde stappen als hun eigen kleine playbook, zodat een fout herstellen één
+
+01:01:52.880 --> 01:01:54.420
+klik kost in plaats van een haastige zoektocht.
+
+01:01:54.560 --> 01:01:55.980
+Ten vierde, een registratie.
+
+01:01:56.180 --> 01:01:58.460
+Elke geautomatiseerde actie moet een spoor achterlaten.
+
+01:01:58.620 --> 01:02:02.460
+Wat er draaide, welk incident het triggerde, welk doelwit, welk bewijs werd gebruikt, wie
+
+01:02:02.460 --> 01:02:03.780
+het goedkeurde en wat het resultaat was.
+
+01:02:04.000 --> 01:02:07.280
+Schrijf dat in de incidentopmerkingen en in een lochtabel die je later kunt doorzoeken.
+
+01:02:07.500 --> 01:02:10.480
+Wanneer een additer vraagt waarom het account van een directeur op een donderdag werd vergrendeld,
+
+01:02:10.640 --> 01:02:12.140
+hoef je dit niet uit je geheugen te reconstrueren.
+
+01:02:12.140 --> 01:02:16.120
+Je leest het logboekbericht en als er iets misgaat, is het logboek de manier om de oorzaak
+
+01:02:16.120 --> 01:02:17.680
+in minuten in plaats van dagen te vinden.
+
+01:02:17.880 --> 01:02:19.240
+En als laatste, een pilot.
+
+01:02:19.600 --> 01:02:21.680
+Lanceer nooit een nieuw playbook op de hele tenant.
+
+01:02:21.920 --> 01:02:25.580
+Kies eerst een kleine groep, een paar dozijn apparaten, een team dat weet dat het als test
+
+01:02:25.580 --> 01:02:28.240
+wordt gebruikt, idealiter in een gebied waar een fout goedkoop is.
+
+01:02:28.460 --> 01:02:31.900
+Draai in een modus waarin het playbook voorstelt maar niet actie onderneemt en vergelijk wat
+
+01:02:31.900 --> 01:02:33.940
+het zou hebben gedaan met wat een analist daadwerkelijk deed.
+
+01:02:34.160 --> 01:02:36.120
+Schakel daarna pas echte acties in voor die groep.
+
+01:02:36.320 --> 01:02:38.700
+Verbreed de scope pas als de cijfers kloppen en niet eerder.
+
+01:02:38.700 --> 01:02:42.640
+Je hebt nu dus een response engine met limieten, lijsten, schakelaars en registraties.
+
+01:02:42.800 --> 01:02:45.820
+Dat roept de vraag op die elke leidinggevende vroeg of laat stelt.
+
+01:02:46.020 --> 01:02:48.120
+Niet, is het slim, maar werkt dit allemaal wel?
+
+01:02:48.300 --> 01:02:49.940
+De kwaliteit van detectie meten.
+
+01:02:50.100 --> 01:02:53.040
+De meeste beveiligingsrapporten beginnen met aantallen, waarschuwingen deze maand, afgesloten
+
+01:02:53.040 --> 01:02:54.180
+incidenten, geopende tickets.
+
+01:02:54.380 --> 01:02:56.640
+Het getal komt op een slide en de slide gaat omhoog in de organisatie.
+
+01:02:56.800 --> 01:02:58.740
+Maar een telling vertelt je alleen hoe druk het systeem was.
+
+01:02:58.920 --> 01:03:00.440
+Het zegt niets over of het effectief was.
+
+01:03:00.640 --> 01:03:04.180
+Een tenant kan het volume aan waarschuwingen verdubbelen en minder veilig zijn omdat de extra waarschuwingen
+
+01:03:04.180 --> 01:03:04.600
+ruis waren.
+
+01:03:04.600 --> 01:03:07.760
+Het kan het volume halveren en veiliger zijn omdat de juiste dingen werden geschrapt.
+
+01:03:07.960 --> 01:03:09.840
+Hetzelfde getal, tegengestelde betekenis.
+
+01:03:10.020 --> 01:03:12.040
+De verschuiving gaat dus van activiteit naar resultaat.
+
+01:03:12.220 --> 01:03:15.140
+Stop met vragen hoeveel waarschuwingen er waren, begin met vragen hoeveel er correct
+
+01:03:15.140 --> 01:03:17.540
+waren, hoe snel je het probleem zag en hoe snel je het hebt gestopt.
+
+01:03:17.720 --> 01:03:21.560
+Dat vereist een paar specifieke maatregelen die allemaal beginnen bij één input die je
+
+01:03:21.560 --> 01:03:23.100
+al hebt, het oordeel van de analist.
+
+01:03:23.300 --> 01:03:27.700
+Elke waarschuwing die wordt afgesloten als true positive, false positive of informatief is
+
+01:03:27.700 --> 01:03:28.420
+een datapunt.
+
+01:03:28.620 --> 01:03:31.800
+Als je team die klassificatie overslaat, is niets van wat volgt mogelijk.
+
+01:03:31.800 --> 01:03:33.940
+Dat is dus de eerste gewoonte die je moet afdwingen.
+
+01:03:34.080 --> 01:03:37.600
+De true positive rate is het deel van de waarschuwingen dat echte activiteit bleek te zijn.
+
+01:03:37.760 --> 01:03:40.340
+De false positive rate is het deel dat ongevaarlijk bleek te zijn.
+
+01:03:40.520 --> 01:03:43.600
+Het zijn twee kanten van dezelfde medaille en je houdt ze per regel bij, niet alleen voor
+
+01:03:43.600 --> 01:03:44.100
+de hele tenant.
+
+01:03:44.300 --> 01:03:46.360
+Een gemiddelde voor de gehele tenant maskeert alles.
+
+01:03:46.560 --> 01:03:50.380
+Eén regel met 95% false positives verdwijnt in een mooi oogend totaalcijfer.
+
+01:03:50.620 --> 01:03:52.320
+Precisie is een nettere manier om het te zeggen.
+
+01:03:52.540 --> 01:03:55.140
+Van alles wat de regel markeerde, hoeveel was het waard om te markeren?
+
+01:03:55.340 --> 01:03:58.720
+Lage precisie betekent dat analisten hun dag besteden aan het bewijzen dat er niets is gebeurd.
+
+01:03:58.720 --> 01:04:01.640
+En zoals we eerder zagen, is dat waar echte incidenten zich verschuilen.
+
+01:04:01.800 --> 01:04:04.780
+Dan de twee tijdmetingen die belangrijker zijn dan de meeste teams toegeven.
+
+01:04:04.920 --> 01:04:08.240
+De detectietijd is het gat tussen het begin van de kwaadaardige activiteit en het moment
+
+01:04:08.240 --> 01:04:09.240
+dat een waarschuwing afging.
+
+01:04:09.420 --> 01:04:13.000
+De responstijd is het gat tussen de waarschuwing en de actie die het incident indamde.
+
+01:04:13.200 --> 01:04:15.760
+Hou ze apart bij omdat ze om verschillende redenen falen.
+
+01:04:15.920 --> 01:04:20.860
+Trage detectie wijst meestal op een ontbrekende regel, een late data toevoer of een regel met een
+
+01:04:20.860 --> 01:04:21.480
+traag schema.
+
+01:04:21.740 --> 01:04:26.280
+Trage respons wijst op wachtrijen, onduidelijke verantwoordelijkheden of een draaiboek dat te lang
+
+01:04:26.280 --> 01:04:30.840
+op goedkeuring wacht. Een tip bij het lezen ervan, gebruik de mediaan, niet het gemiddelde.
+
+01:04:31.340 --> 01:04:35.340
+Eén incident dat een lang weekend ongemoeid bleef, trekt een gemiddelde naar onzin.
+
+01:04:35.600 --> 01:04:38.020
+De mediaan laat zien hoe een normale dag eruit ziet.
+
+01:04:38.240 --> 01:04:41.740
+Bekijk daarna de traagste 10% apart, want daar schuilt het werkelijke risico.
+
+01:04:41.920 --> 01:04:43.760
+Tot nu toe kijkt elke maatstaf achteruit.
+
+01:04:43.960 --> 01:04:46.520
+Ze beoordelen de waarschuwingen die je al hebt, maar er is een vraag die ze niet kunnen
+
+01:04:46.520 --> 01:04:46.940
+beantwoorden.
+
+01:04:47.100 --> 01:04:49.100
+Hoe zit het met de aanvallen waarvoor je geen regel hebt?
+
+01:04:49.300 --> 01:04:50.920
+Dat is de taak van de dekkingsmetriek.
+
+01:04:50.920 --> 01:04:55.080
+Neem je prioriteitenlijst, de technieken gekoppeld aan je kroonjuwelen en bevoorrechte rollen,
+
+01:04:55.240 --> 01:04:57.680
+die je eerder koos in plaats van de hele matrix te kopiëren.
+
+01:04:57.840 --> 01:05:01.180
+Tel vervolgens hoeveel daarvan een detectie hebben die daadwerkelijk is getest en bewezen
+
+01:05:01.180 --> 01:05:01.800
+effectief is.
+
+01:05:02.020 --> 01:05:03.620
+Deel dit door elkaar, dat is je dekking.
+
+01:05:03.860 --> 01:05:05.020
+Let op het woord getest.
+
+01:05:05.240 --> 01:05:07.960
+Een regel die bestaat maar nooit is bewezen, is slechts een gerucht.
+
+01:05:08.140 --> 01:05:11.940
+Als je 40 geprioriteerde technieken hebt en 22 hebben een regel die afging bij een echte
+
+01:05:11.940 --> 01:05:13.800
+test, dan is je dekking 55%.
+
+01:05:13.800 --> 01:05:17.020
+Dat getal vertelt het management iets wat geen enkel aantal waarschuwingen kan vertellen.
+
+01:05:17.020 --> 01:05:20.120
+Hoeveel van het terrein dat je besloot te verdedigen, wordt daadwerkelijk verdedigd?
+
+01:05:20.240 --> 01:05:22.180
+Breng het nu terug naar de individuele detectie.
+
+01:05:22.340 --> 01:05:24.480
+Elke regel krijgt een scorekaart met 4 onderdelen.
+
+01:05:24.660 --> 01:05:27.340
+Volume, hoe vaak de regel de afgelopen 90 dagen is afgegaan.
+
+01:05:27.660 --> 01:05:30.380
+Resultaten, hoeveel daarvan waren terechte meldingen en hoeveel vals.
+
+01:05:31.100 --> 01:05:33.780
+Beoordelingsdatum, wanneer iemand er voor het laatst met een frisse blik naar keek.
+
+01:05:33.920 --> 01:05:36.660
+En een eigenaar, zodat de scorekaart een verantwoordelijke heeft.
+
+01:05:36.920 --> 01:05:39.740
+Zet dit op 1 rij per regel en patronen worden direct zichtbaar.
+
+01:05:39.920 --> 01:05:44.120
+Een regel met een hoog volume en 0 terechte meldingen moet worden bijgesteld of verwijderd.
+
+01:05:44.120 --> 01:05:49.060
+Een regel die in een jaar nooit is afgegaan, is perfect of kapot, dat weet je pas na controle.
+
+01:05:49.340 --> 01:05:55.100
+Een nauwkeurige regel die 18 maanden niet is beoordeeld is vast nog goed, maar de brondata kan zijn gewijzigd.
+
+01:05:55.240 --> 01:05:57.940
+Dat laatste punt legt de zwakte in alles hierboven bloot.
+
+01:05:58.120 --> 01:06:01.620
+Elke metriek in dit gedeelte gaat ervan uit dat de regels werken zoals verwacht.
+
+01:06:01.780 --> 01:06:04.900
+Een inactieve regel ziet er op een dashboard hetzelfde uit als een gezonde.
+
+01:06:04.900 --> 01:06:10.100
+0 meldingen kan betekenen 0 aanvallen of een kapotte query na een schemawijziging.
+
+01:06:10.100 --> 01:06:16.440
+Cijfers betekenen dus alleen iets als detectisch bewust zijn getest tegen echt gedrag voordat een aanvaller dat doet.
+
+01:06:16.660 --> 01:06:19.560
+Het testen van detectisch, validatie en purple teaming.
+
+01:06:19.720 --> 01:06:22.100
+Een regel die je nooit bewust hebt geactiveerd, is een gok.
+
+01:06:22.260 --> 01:06:23.960
+De eerste test is daarom de simpelste.
+
+01:06:24.200 --> 01:06:27.460
+Voer het gedrag uit dat de regel moet detecteren en kijk of de melding verschijnt.
+
+01:06:27.660 --> 01:06:29.000
+Dit is de atomaire benadering.
+
+01:06:29.000 --> 01:06:33.360
+Je neemt één kleine actie van een aanvaller, één techniek en reproduceert deze in isolatie.
+
+01:06:33.680 --> 01:06:39.860
+Gecodeerde PowerShell vanuit een Word-proces, een taakplanner aangemaakt via een script-host, een registerwijziging in een RAM-key.
+
+01:06:40.080 --> 01:06:43.000
+Elk is een enkele gecontroleerde stap met een bekend verwacht resultaat.
+
+01:06:43.740 --> 01:06:46.680
+De regel gaat af of niet en niet is het nuttige resultaat.
+
+01:06:46.900 --> 01:06:49.780
+Dat is een gat dat je hebt gevonden op je eigen tijd, niet op die van een aanvaller.
+
+01:06:50.020 --> 01:06:52.780
+Voer deze uit op een testapparaat in een apparaatgroep die hiervoor is bedoeld.
+
+01:06:53.040 --> 01:06:54.300
+Controleer vervolgens drie dingen.
+
+01:06:54.540 --> 01:06:55.620
+Werd de melding geactiveerd?
+
+01:06:55.620 --> 01:06:58.040
+Kwam deze bij de juiste gebruiker en het juiste apparaat terecht?
+
+01:06:58.220 --> 01:06:59.220
+En hoe lang duurde het?
+
+01:06:59.340 --> 01:07:04.700
+Een regel die elf minuten te laat afgaat door je planning, vertelt je iets over detectietijd wat geen enkel dashboard toont.
+
+01:07:04.840 --> 01:07:06.880
+Je hoeft niet elke test handmatig te bouwen.
+
+01:07:07.060 --> 01:07:08.460
+Defender biedt al een deel hiervan.
+
+01:07:08.660 --> 01:07:13.760
+Voor endpoints kun je aanvalscenario's draaien via de simulatiefuncties en het begeleide evaluatielab in de portal.
+
+01:07:14.040 --> 01:07:18.000
+Deze reproduceren bekend gedrag zoals pogingen tot credentialdamping of verdachte scriptactiviteit,
+
+01:07:18.200 --> 01:07:19.880
+zodat je ziet wat de ingebouwde detecties opvangen.
+
+01:07:20.120 --> 01:07:22.500
+Dat is nuttig als basislijn, maar let op wat het bewijst.
+
+01:07:22.500 --> 01:07:25.840
+Dit bewijst dat Microsoft detecties werken voor Microsoft scenario's.
+
+01:07:25.860 --> 01:07:27.800
+Je aangepaste regels vereisen je eigen tests.
+
+01:07:28.040 --> 01:07:31.060
+Voor e-mail is er aanvalsimulatietraining en Defender voor Office 365.
+
+01:07:31.600 --> 01:07:36.700
+Je lanceert een gesimuleerde phishingcampagne met een inloggegevens oogst of een kwaadaardige link en kijkt wat er gebeurt.
+
+01:07:36.900 --> 01:07:37.580
+Wie klikte er?
+
+01:07:37.760 --> 01:07:38.800
+Wie rapporteerde het?
+
+01:07:38.960 --> 01:07:41.800
+Hebben de beleidsregels het bericht geblokkeerd of bereikte het de inbox?
+
+01:07:42.020 --> 01:07:46.580
+Dat test zowel de mensen als de controles en voedt de e-mail detecties die we eerder bouwden met echt klikgedrag.
+
+01:07:46.740 --> 01:07:49.400
+Maar één regel tegelijk testen brengt je slechts tot op zekere hoogte.
+
+01:07:49.400 --> 01:07:51.500
+Aanvallers voeren technieken niet geïsoleerd uit.
+
+01:07:51.680 --> 01:07:52.640
+Ze schakelen ze aan één.
+
+01:07:52.860 --> 01:07:54.200
+Daar komt Purple Team in kijken.
+
+01:07:54.420 --> 01:07:55.840
+Het is een lus tussen twee rollen.
+
+01:07:56.020 --> 01:07:58.820
+De rode kant voert een techniek uit, zoals een aanvaller dat zou doen.
+
+01:07:59.000 --> 01:08:02.960
+De blauwe kant kijkt toe en noteert wat ze zagen, wat ze misten en wat te laat reageerde.
+
+01:08:03.160 --> 01:08:04.640
+Dan komt de stap die het laat werken.
+
+01:08:04.840 --> 01:08:07.340
+De blauwe kant optimaliseert direct in dezelfde sessie.
+
+01:08:07.540 --> 01:08:10.760
+Schrijf de ontbrekende regel, verfijn de ruizige regel, herstel de entiteitstoewijzing.
+
+01:08:10.960 --> 01:08:12.680
+Dan voert de rode kant de techniek opnieuw uit.
+
+01:08:12.900 --> 01:08:14.920
+Uitvoeren, missen, herstellen, opnieuw uitvoeren.
+
+01:08:15.220 --> 01:08:18.140
+Dezelfde middag en de output is geen rapport dat wordt gearchiveerd.
+
+01:08:18.260 --> 01:08:22.140
+De gemiste zaken gaan direct naar de detectieachterstand, gerangschikt op het risico dat ze blootleggen.
+
+01:08:22.280 --> 01:08:26.020
+Een techniek die zonder alert voorbij glipte bij een bevoorrechte rol springt naar de top.
+
+01:08:26.200 --> 01:08:29.920
+Eén die wel reageerde, maar met weinig context, komt lager op de lijst als optimalisatietaak.
+
+01:08:30.600 --> 01:08:34.920
+Zo wordt testen de bron van je volgende regel, in plaats van een aparte oefening waar niemand zich mee verbindt.
+
+01:08:35.540 --> 01:08:37.680
+Als je geen Red Team hebt, kun je dit nog steeds doen.
+
+01:08:37.920 --> 01:08:40.380
+Kies elke maand drie technieken uit je geprioriteerde lijst.
+
+01:08:40.380 --> 01:08:42.740
+Eén persoon voert ze uit, een ander houdt de wachtrij in de gaten.
+
+01:08:42.900 --> 01:08:45.040
+Het gaat langzamer, maar het vindt nog steeds echte gaten.
+
+01:08:45.220 --> 01:08:46.940
+Dan is er de test die de meeste teams vergeten.
+
+01:08:47.100 --> 01:08:49.380
+Degene die controleert of de regel van gisteren nog steeds werkt.
+
+01:08:49.580 --> 01:08:50.840
+Regels breken stilletjes.
+
+01:08:51.200 --> 01:08:53.920
+Microsoft hernoemt een kolom of wijzigt hoe een tabel wordt gevuld.
+
+01:08:54.080 --> 01:08:56.880
+Een nieuwe agentversie verandert wat een procesgebeurtenis bevat.
+
+01:08:57.060 --> 01:08:59.880
+Een productupdate verplaatst een veld van de ene naar de andere tabel.
+
+01:09:00.080 --> 01:09:02.100
+Je query draait nog steeds en geeft niets terug.
+
+01:09:02.300 --> 01:09:05.080
+Geen fout, geen waarschuwing, alleen stilte die lijkt op veiligheid.
+
+01:09:05.280 --> 01:09:06.620
+Voer dus regressietests uit.
+
+01:09:06.620 --> 01:09:13.560
+Hou je atomische tests als een vaste set, één per regel, en voer ze periodiek opnieuw uit, minstens maandelijks, en altijd na een schema of productwijziging.
+
+01:09:13.780 --> 01:09:15.600
+Vergelijk de resultaten met de laatste run.
+
+01:09:15.780 --> 01:09:21.540
+Een regel die in maart reageerde en in juni stil blijft, is ofwel door geluk hersteld of door een update kapot gegaan, en je moet weten welke van de twee.
+
+01:09:21.780 --> 01:09:23.640
+Behandel dit als een controle van de rookmelder.
+
+01:09:23.800 --> 01:09:25.440
+Je test het niet omdat je een brand verwacht.
+
+01:09:25.620 --> 01:09:28.540
+Je test omdat de kosten als je er te laat achterkomt, je hele huis zijn.
+
+01:09:28.720 --> 01:09:33.600
+Maar kijk eens wat al dat testen oplevert, een groeiende verzameling regels, tests, resultaten en backlog items.
+
+01:09:33.600 --> 01:09:37.520
+Elk item heeft een verantwoordelijke nodig en een duidelijk pad van creatie tot pensioen.
+
+01:09:37.700 --> 01:09:41.040
+Zonder dat wordt de geteste regel van vandaag de vergeten regel van volgend jaar.
+
+01:09:41.240 --> 01:09:43.560
+Nu over naar detection als code en lifecyclebeheer.
+
+01:09:43.720 --> 01:09:46.240
+Open de portal en bekijk je lijst met aangepaste detecties.
+
+01:09:46.460 --> 01:09:49.240
+Stel jezelf nu een simpele vraag, wie heeft de laatste veranderd en waarom?
+
+01:09:49.360 --> 01:09:51.340
+In de meeste tenants kan niemand dat beantwoorden.
+
+01:09:51.560 --> 01:09:55.420
+Iemand heeft de query in een browser-tabblad bewerkt, op opslaan gedrukt en is verder gegaan.
+
+01:09:55.580 --> 01:09:56.720
+De oude versie is weg.
+
+01:09:56.720 --> 01:10:01.820
+Er is geen review, geen verslag van wat de regel deed en geen manier om terug te draaien als de wijziging fout blijkt te zijn.
+
+01:10:02.040 --> 01:10:04.540
+Dat is hoe de meeste teams detecties als instellingen behandelen.
+
+01:10:04.720 --> 01:10:05.880
+Maar een detectie is code.
+
+01:10:06.100 --> 01:10:11.300
+Het heeft logica, inputs en bijwerkingen en een slechte wijziging kan je net zo blind maken als een slechte deployment een app kan verbreken.
+
+01:10:11.520 --> 01:10:12.560
+Behandel het dus ook zo.
+
+01:10:12.780 --> 01:10:14.400
+Sla elke regel op in versiebeheer.
+
+01:10:14.540 --> 01:10:16.100
+Een git repository werkt prima.
+
+01:10:16.380 --> 01:10:20.880
+Elke detectie wordt een bestand, de query, het schema, de ernst, de metadata, alles op één plek.
+
+01:10:21.100 --> 01:10:23.000
+Wijzigingen gaan vervolgens via een pull request.
+
+01:10:23.240 --> 01:10:24.720
+De een stelt voor, de ander leest het na.
+
+01:10:24.720 --> 01:10:31.180
+Filtert de query vroegtijdig, geeft het de entiteitskolommen terug, is de uitsluiting nauwkeurig en heeft het een eigenaar en een vervaldatum?
+
+01:10:31.320 --> 01:10:34.220
+Die review vangt de te brede regel af voordat deze de wachtrij bereikt.
+
+01:10:34.380 --> 01:10:35.960
+Je krijgt de historie er ook gratis bij.
+
+01:10:36.160 --> 01:10:39.680
+Over zes maanden, wanneer een regel stilvalt, kun je precies zien welke commit het heeft veranderd.
+
+01:10:39.780 --> 01:10:41.320
+En terugdraaien is slechts één klik.
+
+01:10:41.500 --> 01:10:42.560
+Nu de kant van de deployment.
+
+01:10:42.880 --> 01:10:48.860
+Defender stelt aangepaste detecties beschikbaar via de Graph Security API, zodat je regels kunt maken, bijwerken en uitschakelen vanuit een script.
+
+01:10:49.040 --> 01:10:50.120
+Koppel dit aan een pipeline.
+
+01:10:50.120 --> 01:10:52.140
+Een merge naar de mainbranche activeert een build.
+
+01:10:52.140 --> 01:10:55.740
+De build valideert de query syntax en de deploy stap push de regel naar de tenant.
+
+01:10:55.960 --> 01:10:58.240
+Niemand raakt de portal aan om een wijziging door te voeren.
+
+01:10:58.480 --> 01:10:59.300
+Dat doet twee dingen.
+
+01:10:59.500 --> 01:11:04.380
+Ten eerste elimineert het drift, omdat de repository de bron van waarheid wordt en de tenant dit simpelweg spiegelt.
+
+01:11:04.540 --> 01:11:06.500
+Ten tweede kun je testen voordat je uitrolt.
+
+01:11:06.740 --> 01:11:09.600
+Voer de query uit tegen een testtenant of een opgeslagen dataset.
+
+01:11:09.940 --> 01:11:12.500
+Bevestig dat het teruggeeft wat je verwacht en promote het dan pas.
+
+01:11:12.700 --> 01:11:16.440
+Maar code in een repository heeft nog steeds regels nodig over wie de eigenaar is en hoe het eruit ziet.
+
+01:11:16.660 --> 01:11:17.820
+Begin met eigenaarschap.
+
+01:11:17.820 --> 01:11:21.680
+Elke detectie krijgt een toegewezen eigenaar, een persoon of team dat in het bestand staat.
+
+01:11:21.900 --> 01:11:24.700
+Wanneer een regel s'nachts afgaat, is dat degene die de vraag krijgt.
+
+01:11:24.860 --> 01:11:28.560
+Een regel zonder eigenaar verwatert, omdat niemand zich verantwoordelijk voelt voor het onderhoud.
+
+01:11:28.760 --> 01:11:30.120
+Bepaal daarnaast ernstniveaus.
+
+01:11:30.300 --> 01:11:32.780
+Leg vast wat hoog, medium en laag betekenen in jouw tenant.
+
+01:11:33.040 --> 01:11:37.440
+Hoog kan betekenen, bel direct iemand, waarschijnlijk een actieve inbreuk op een bevoorrechte identiteit.
+
+01:11:37.700 --> 01:11:40.100
+Medium betekent beoordelen binnen de werkdag.
+
+01:11:40.340 --> 01:11:44.700
+Zonder schriftelijke standaard kiezen tien auteurs tien betekenissen en wordt je wachtrij weer ruis.
+
+01:11:44.700 --> 01:11:48.300
+En wat betreft naamgeving, kies een conventie en dwing deze af in de pull request.
+
+01:11:48.460 --> 01:11:53.620
+Iets als workload, techniek, gedrag, identiteit, token replay, actie met nieuw bevoorrecht apparaat,
+
+01:11:53.700 --> 01:11:57.200
+sorteert goed, zoekt makkelijk en vertelt een analist wat er gebeurde voordat ze het openen.
+
+01:11:57.300 --> 01:11:59.480
+Verdachte activiteit 4 zegt ze helemaal niets.
+
+01:11:59.660 --> 01:12:03.660
+Het laatste onderdeel van de levenscyclus en degene die bijna niemand opschrijft, uitfasering.
+
+01:12:03.840 --> 01:12:05.520
+Een regel moet zijn plek continu verdienen.
+
+01:12:05.780 --> 01:12:07.200
+Stel vooraf criteria vast.
+
+01:12:07.380 --> 01:12:10.020
+Hij is in 12 maanden nul keer afgegaan en de test slaagt nog steeds.
+
+01:12:10.260 --> 01:12:10.740
+Behoud hem.
+
+01:12:10.920 --> 01:12:13.220
+Hij vangt wellicht niets omdat er simpelweg niets is gebeurd.
+
+01:12:13.220 --> 01:12:17.620
+Hij gaat vaak af en analisten sluiten hem 90% van de tijd als ongevaarlijk, zelfs na bijsturing.
+
+01:12:17.840 --> 01:12:19.340
+Vaseer hem uit of schrijf hem opnieuw.
+
+01:12:19.480 --> 01:12:21.700
+De databron waar hij van afhankelijk is, bestaat niet meer.
+
+01:12:21.940 --> 01:12:22.520
+Verwijder hem.
+
+01:12:22.680 --> 01:12:25.240
+De techniek die hij dekt, wordt nu beter afgehandeld door een ingebouwde detectie.
+
+01:12:25.480 --> 01:12:26.700
+Verwijder hem en noteer waarom.
+
+01:12:26.960 --> 01:12:28.620
+Uitfaseren is niet hetzelfde als verwijderen.
+
+01:12:28.780 --> 01:12:31.840
+Schakel de regel uit, bewaar het bestand in de repository en leg de reden vast.
+
+01:12:32.020 --> 01:12:34.320
+Als de situatie verandert, kun je hem weer terugbrengen.
+
+01:12:34.480 --> 01:12:38.320
+Dit alles levert een systeem op dat controleerbaar, herhaalbaar en eerlijk is over wat actief is.
+
+01:12:38.480 --> 01:12:41.200
+Maar een repository en een pipeline draaien niet vanzelf.
+
+01:12:41.200 --> 01:12:46.020
+Iemand moet de pull request schrijven, de oordelen lezen en beslissen wat wordt uitgefaseerd.
+
+01:12:46.280 --> 01:12:49.820
+Buffernance werkt alleen als de mensen eromheen zijn ingericht om het uit te voeren.
+
+01:12:50.260 --> 01:12:55.360
+Het bedrijfsmodel achter goede detectie, alles tot nu toe heeft mensen nodig en mensen moeten hun taken kennen.
+
+01:12:55.560 --> 01:12:57.440
+In de meeste teams doet één persoon alles.
+
+01:12:57.680 --> 01:13:02.160
+Dezelfde analist sorteert de wachtrij, schrijft af en toe een query, past een uitzondering aan en beantwoordt de CISO.
+
+01:13:02.320 --> 01:13:03.740
+Dat werkt totdat de wachtrij groeit.
+
+01:13:03.940 --> 01:13:05.880
+Dan is het schrijven van regels het eerste dat sneuvelt.
+
+01:13:06.080 --> 01:13:08.420
+Schrijt daarom de rollen, zelfs als één persoon twee petten op heeft.
+
+01:13:08.420 --> 01:13:10.580
+De detection engineer is eigenaar van de regels.
+
+01:13:10.760 --> 01:13:14.360
+Zij schrijven de query, voeren de tests uit, houden de repository schoon en faseren uit wat verouderd is.
+
+01:13:14.500 --> 01:13:17.280
+De analist werkt de wachtrij af en veldt het oordeel over elke waarschuwing.
+
+01:13:17.440 --> 01:13:20.180
+De incident commander neemt het over wanneer er zich iets echts ontvoudt.
+
+01:13:20.340 --> 01:13:24.160
+Zij beslissen wie wat indamt, wie met de business communiceert en wanneer het incident voorbij is.
+
+01:13:24.320 --> 01:13:30.480
+En de executive sponsor maakt de weg vrij, zorgt voor budget, prioriteiten en de bevoegdheid om te zeggen, ja, we vergrendelen dat account.
+
+01:13:30.740 --> 01:13:32.580
+Vier taken, vier verschillende vragen.
+
+01:13:32.580 --> 01:13:36.300
+En als niemand verantwoordelijk is voor de eerste, blijven de regels maar liggen en verouderen ze.
+
+01:13:36.480 --> 01:13:39.000
+Nu het onderdeel dat de vier samenbindt, de feedback loop.
+
+01:13:39.120 --> 01:13:41.960
+Elk oordeel dat een analist invoert, is informatie over een regel.
+
+01:13:42.160 --> 01:13:44.500
+True positive, false positive, informatief.
+
+01:13:44.640 --> 01:13:48.240
+Als dat oordeel nooit de maker van de regel bereikt, zal de regel nooit verbeteren.
+
+01:13:48.380 --> 01:13:53.240
+De analist blijft week na week dezelfde ruismelding sluiten en de engineer denkt dat alles in orde is.
+
+01:13:53.460 --> 01:13:54.800
+Sluit de cirkel dus bewust.
+
+01:13:55.020 --> 01:13:58.280
+Eén keer per week haalt de detection engineer de oordelen op voor elke regel.
+
+01:13:58.280 --> 01:14:01.360
+Welke werden vaker dan de helft van de tijd als vals positive gemarkeerd?
+
+01:14:01.520 --> 01:14:04.320
+Welke kon niemand klassificeren omdat de melding context miste?
+
+01:14:04.460 --> 01:14:05.820
+Elk van die punten wordt een ticket.
+
+01:14:06.060 --> 01:14:09.220
+Verfijnde uitsluiting, voegt de ontbrekende kolom toe, wijzigt de drempelwaarde.
+
+01:14:09.440 --> 01:14:11.640
+Daarna wordt de analist geïnformeerd over wat er is veranderd.
+
+01:14:11.760 --> 01:14:12.940
+Die laatste stap is belangrijk.
+
+01:14:13.200 --> 01:14:17.080
+Wanneer analisten zien dat hun oordelen leiden tot oplossingen, klassificeren ze zorgvuldiger en wordt de data beter.
+
+01:14:17.400 --> 01:14:18.720
+Vervolgens, de mensen daarboven.
+
+01:14:19.040 --> 01:14:20.520
+Executives willen geen aantal regels zien.
+
+01:14:20.720 --> 01:14:21.640
+Ze willen drie antwoorden.
+
+01:14:21.880 --> 01:14:23.040
+Welk risico hebben we verkleind?
+
+01:14:23.200 --> 01:14:24.420
+Hoeveel tijd hebben we bespaard?
+
+01:14:24.420 --> 01:14:26.180
+En welke kwetsbaarheden hebben we gedicht?
+
+01:14:26.340 --> 01:14:30.760
+Verkleind risico is het eerder genoemde dekkingsgetal, stijgend tegenover de technieken gekoppeld aan je kroonjuwelen.
+
+01:14:30.940 --> 01:14:34.080
+Bespaarde tijd is het aantal uren van analisten en dat kun je berekenen.
+
+01:14:34.240 --> 01:14:38.960
+Meldingen die door tuning zijn verwijderd, maal minuten per melding, plus wat de playbook nu automatisch doet.
+
+01:14:39.160 --> 01:14:43.680
+En gedichte kwetsbaarheden is de afname van tuning schuld plus de gaten die je Purple Team heeft gevonden en gedicht.
+
+01:14:43.900 --> 01:14:45.820
+Zet die drie één keer per maand op één pagina.
+
+01:14:46.060 --> 01:14:47.820
+Laat een trendlijn zien, geen momentopname.
+
+01:14:48.020 --> 01:14:52.260
+Een medianenresponse tijd die daalt van 40 naar 12 minuten werkt beter dan een willekeurige dashboard screenshot.
+
+01:14:52.260 --> 01:14:54.380
+Maar wat als je twee mensen hebt in plaats van 12?
+
+01:14:54.540 --> 01:14:56.120
+Probeer dan niet alles tegelijk te doen.
+
+01:14:56.360 --> 01:14:57.800
+Begin klein en wees er strikt in.
+
+01:14:58.020 --> 01:14:58.820
+Drie regels.
+
+01:14:59.040 --> 01:15:01.140
+Kies de drie detecties die je hoogste risico dekken.
+
+01:15:01.380 --> 01:15:04.300
+Waarschijnlijk één voor identiteit, één voor e-mail, één voor endpoint.
+
+01:15:04.720 --> 01:15:07.380
+Schrijf ze goed, test ze en wijs aan elke eigenaar toe.
+
+01:15:07.560 --> 01:15:08.200
+Eén playbook.
+
+01:15:08.400 --> 01:15:15.260
+Kies de simpelste actie met de kleinste impact, zoals het intrekken van sessies voor een bevestigd gecompromitteerde gebruiker, met een goedkeuringstap en een noodknop.
+
+01:15:15.360 --> 01:15:16.680
+Eén statistiek, slechts één.
+
+01:15:17.000 --> 01:15:19.540
+Precisie van die drie regels of de medianenresponse tijd.
+
+01:15:19.680 --> 01:15:21.440
+Hou dit elke maand bij en rapporteer het.
+
+01:15:21.600 --> 01:15:24.320
+Dat is een klein begin en het is genoeg omdat het bewijst dat de loop werkt.
+
+01:15:24.520 --> 01:15:26.660
+Zodra dat lukt, voeg je een regel toe en dan nog een.
+
+01:15:26.800 --> 01:15:29.080
+Het systeem groeit vanuit bewijs, niet vanuit ambitie.
+
+01:15:29.220 --> 01:15:32.380
+Maar kijk eens naar wat je zojuist hebt gebouwd, rol voor rol en metriek voor metriek.
+
+01:15:32.440 --> 01:15:36.460
+Het is een andere manier om naar het hele platform te kijken en het is de moeite waard om daar even bij stil te staan.
+
+01:15:36.620 --> 01:15:39.080
+Om het model opnieuw vorm te geven, kijken we waar dit begon.
+
+01:15:39.080 --> 01:15:41.120
+Een tenant schakelt de Vender XDR in.
+
+01:15:41.280 --> 01:15:43.160
+De portal stroomt vol met waarschuwingen.
+
+01:15:43.160 --> 01:15:45.500
+Het team opent ze één voor één en reageert.
+
+01:15:45.740 --> 01:15:49.760
+Sommige zijn echt, de meeste niet en de hele operatie steunt op één overtuiging.
+
+01:15:49.940 --> 01:15:53.920
+De leverancier weet wat belangrijk is, dus de taak is om bij te blijven met wat de leverancier stuurt.
+
+01:15:54.140 --> 01:15:55.100
+Dat is het oude model.
+
+01:15:55.460 --> 01:15:57.200
+Waarschuwingen consumeren, reageren.
+
+01:15:57.340 --> 01:15:59.300
+En het faalt op een zeer specifieke manier.
+
+01:15:59.520 --> 01:16:02.340
+Het behandelt detectie als iets dat je ontvangt als een levering.
+
+01:16:02.540 --> 01:16:06.040
+De doos arriveert, je opent hem en wat erin zit wordt jouw werklast.
+
+01:16:06.140 --> 01:16:10.540
+Niemand vraagt of de inhoud bij je bedrijf past, omdat het model niemand de taak gaf dat te vragen.
+
+01:16:10.680 --> 01:16:12.380
+Het nieuwe model draait de richting om.
+
+01:16:12.380 --> 01:16:13.580
+Je ontwerpt context.
+
+01:16:13.820 --> 01:16:18.860
+Je bepaalt welke identiteit het mailboxen en apparaten het grootste risico vormen en je schrijft detecties daaromheen.
+
+01:16:19.040 --> 01:16:22.720
+Je correleert, zodat één inbreuk verschijnt als één verhaal in plaats van drie tickets.
+
+01:16:22.940 --> 01:16:28.480
+Je automatiseert de beslissingen die je toch al elke keer hetzelfde neemt met limieten eromheen en je meet zodat werkt het.
+
+01:16:28.620 --> 01:16:33.180
+Een antwoord met een cijfer krijgt hetzelfde platform, dezelfde licenties, andere relatie ermee.
+
+01:16:33.360 --> 01:16:34.960
+Nu schuilt er een valstrik in die verschuiving.
+
+01:16:35.160 --> 01:16:39.900
+Het is makkelijk om dit te horen en een project voor je te zien, de regels bouwen, playbooks koppelen, het dashboard instellen en het klaar noemen.
+
+01:16:39.900 --> 01:16:42.060
+Maar dat is de oude denkwijze die weer naar binnen sluipt.
+
+01:16:42.620 --> 01:16:43.620
+Implementatie als mijlpaal.
+
+01:16:44.420 --> 01:16:45.380
+Detectiekwaliteit werkt zo niet.
+
+01:16:45.660 --> 01:16:47.040
+Aanvallers veranderen hun methode.
+
+01:16:47.360 --> 01:16:48.920
+Microsoft verandert zijn schema's.
+
+01:16:49.060 --> 01:16:53.720
+Je eigen omgeving verandert telkens wanneer iemand een nieuwe tool adopteert, een bedrijf fuseert of een team reorganiseert.
+
+01:16:53.860 --> 01:16:57.480
+Een regel die in januari scherp was is in juni net even uit de bocht en niemand heeft hem aangeraakt.
+
+01:16:57.640 --> 01:16:58.760
+De bodem is verschoven.
+
+01:16:58.980 --> 01:17:00.280
+Dus kwaliteit is een discipline.
+
+01:17:00.280 --> 01:17:02.480
+Iets wat je wekelijks in kleine stapjes doet.
+
+01:17:02.680 --> 01:17:07.160
+Lees de uitkomsten, stem één regel af, test één techniek, controleer één vervaldatum.
+
+01:17:07.340 --> 01:17:11.300
+Sai, herhaalbaar werk en het is de enige manier om het systeem betrouwbaar te houden.
+
+01:17:11.460 --> 01:17:15.860
+En je moet duidelijk zijn over de grens, want doen alsof dat niet zo is, zorg ervoor dat teams zelf genoegzaam worden.
+
+01:17:16.060 --> 01:17:17.700
+Geen enkele regelset is ooit af.
+
+01:17:17.840 --> 01:17:22.040
+Je zult nooit een punt bereiken waarop de dekking volledig is, de ruis verdwenen is en de backlog leeg is.
+
+01:17:22.220 --> 01:17:27.900
+Er zal altijd een techniek zijn waarvoor je nog niet geschreven hebt, een uitsluiting die veroudert en een gegevensbron die stilletjes is gestopt.
+
+01:17:27.900 --> 01:17:30.100
+Het doel is geen voltooiing, maar richting.
+
+01:17:30.260 --> 01:17:32.960
+Elke maand zouden de cijfers die ertoe doen de goede kant op moeten gaan.
+
+01:17:33.160 --> 01:17:36.960
+Precisie omhoog, respons tijd omlaag, afstemmingsschuld dalend, geteste dekking stijgend.
+
+01:17:37.120 --> 01:17:39.040
+Als dat gebeurt, sta je verder dan waar je stond.
+
+01:17:39.200 --> 01:17:40.940
+Als ze stagneren, weet je waar je moet kijken.
+
+01:17:41.200 --> 01:17:43.420
+Dat is de hele verandering en het past in één zin.
+
+01:17:43.660 --> 01:17:50.480
+Stop met vragen wat het platform detecteert, begin met vragen wat jij het hebt opgedragen om te zoeken, wat alleen de vraag overlaat wat er gebeurt als je dat niet doet.
+
+01:17:51.140 --> 01:17:53.780
+Conclusie, recensieverzoek en LinkedIn call to action.
+
+01:17:54.040 --> 01:17:56.060
+Dit is de consequentie, simpelweg gezegd.
+
+01:17:56.060 --> 01:18:00.360
+Een tenant die zijn standaardinstellingen nooit aanpast, zal zijn incident tegenkomen via een standaardmelding die niemand las.
+
+01:18:00.560 --> 01:18:03.820
+Die melding staat in de wachtrij tussen 200 anderen met de markering medium.
+
+01:18:04.060 --> 01:18:08.420
+Als dit soort content over detection engineering je helpt om anders te denken, laat dan een recensie achter.
+
+01:18:08.640 --> 01:18:10.840
+Het kost een minuut en het helpt meer mensen het te vinden.
+
+01:18:11.120 --> 01:18:13.540
+Maak verbinding met mij, Mirko Peters, op LinkedIn.
+
+01:18:13.880 --> 01:18:17.980
+Vertel me welk onderwerp als volgende moet komen en deel dit met het team dat nu begraven ligt onder de ruis van meldingen.
+
+01:18:18.160 --> 01:18:19.800
+Zij zijn degene die het vandaag nodig hebben.
+
+01:18:19.800 --> 01:18:22.700
+Van standaardinstellingen naar detectie, dat is de verschuiving.

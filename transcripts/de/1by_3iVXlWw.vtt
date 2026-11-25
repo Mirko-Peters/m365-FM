@@ -1,0 +1,745 @@
+WEBVTT
+
+00:00:00.440 --> 00:00:06.060
+Willkommen beim M355-Welch-CFM-Podcast, wo wir die Menschen Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.860 --> 00:00:08.600
+Was Azure Virtual Desktop eigentlich ist?
+
+00:00:09.220 --> 00:00:14.700
+Azure Virtual Desktop betreibt ihre Windows-Desktops oben in der Microsoft Cloud, nicht auf dem Laptop vor ihnen, nicht auf dem Laptop vor ihnen.
+
+00:00:14.840 --> 00:00:19.780
+Der Name klingt nach einem großen Produkt, aber es sind eigentlich nur ein paar einfache Teile mit jeweils klar definierten Aufgaben.
+
+00:00:20.340 --> 00:00:25.560
+Ihre Benutzer greifen von einem Laptop, einem Telefon oder sogar einem Browser auf diese Desktops zu und aus ihrer Sicht sieht es einfach aus, wie Windows.
+
+00:00:25.560 --> 00:00:32.480
+Was viele verwirrt, ist das Geld, denn der Zugriff ist oft schon durch eine vorhandene Lizenz abgedeckt, während die zugrunde liegende Infrastruktur je nach Auslastung variiert.
+
+00:00:33.240 --> 00:00:39.860
+Am Ende werden Sie jedes Teil benennen, sehen, wo die Dateien wirklich liegen und die tatsächlichen Grenzen kennen, bevor Sie jemandem etwas versprechen.
+
+00:00:40.380 --> 00:00:41.500
+Fangen wir also mit der einfachen Version an.
+
+00:00:42.100 --> 00:00:46.360
+Azure Virtual Desktop ist ein Dienst, der Windows-Desktops und Apps in Azure der Microsoft Cloud ausführt.
+
+00:00:47.080 --> 00:00:49.440
+S-Stream zieht auf das Gerät, das der Benutzer gerade verwendet.
+
+00:00:50.020 --> 00:00:53.560
+Dieses Gerät kann ein einfaches Laptop, ein Telefon, ein Tablet oder sogar ein Webbrowser sein.
+
+00:00:53.560 --> 00:00:56.600
+Sie benötigen nicht viel Leistung, da die Schwerstarbeit in der Cloud erledigt wird.
+
+00:00:57.040 --> 00:01:01.380
+Das Erste, was die Leute verwirrt, ist, dass dies nicht eine einzige virtuelle Maschine ist, bei der man sich anmeldet.
+
+00:01:02.040 --> 00:01:05.300
+Es ist ein Dienst, der aus ein paar Objekten mit Namen wie Hostpool und Sitzungshost besteht.
+
+00:01:06.240 --> 00:01:11.000
+Microsoft hat diese Namen nicht ohne Grund gewählt und sobald man weiß, was jedes Teil tut, wird das Gesamtbild ruhig und einfach.
+
+00:01:11.600 --> 00:01:13.800
+Der Dienst bietet Ihnen außerdem die Wahl, was Sie bereitstellen möchten.
+
+00:01:14.280 --> 00:01:19.460
+Sie können jemandem einen vollständigen Windows-Desktop geben oder die benötigten Apps veröffentlichen und den Rest von Windows weglassen.
+
+00:01:19.460 --> 00:01:23.940
+Im Hintergrund können Sie Windows 11, Windows 10 oder Windows Server ausführen, je nachdem, was Ihre Apps unterstützen.
+
+00:01:24.740 --> 00:01:31.080
+Und da alles in Azure läuft, müssen Sie sich nicht um die Gateway und Broker-Server kümmern, die Sie bei älteren Remote Desktop Setups selbst verwalten mussten.
+
+00:01:32.440 --> 00:01:33.920
+Die Komponenten, mit denen Sie tatsächlich arbeiten.
+
+00:01:34.300 --> 00:01:36.000
+Der erste Begriff, den man kennen sollte, ist der Hostpool.
+
+00:01:36.660 --> 00:01:41.580
+Ein Hostpool ist eine Gruppe von virtuellen Azure-Maschinen, die bei Azure Virtual Desktop registriert sind und die Maschinen.
+
+00:01:41.980 --> 00:01:43.420
+Darin werden Sitzungshosts genannt.
+
+00:01:44.560 --> 00:01:47.060
+Sie können es sich wie eine kleine Flotte vorstellen, die alle dieselbe Aufgabe erfüllt.
+
+00:01:47.060 --> 00:01:49.960
+Wenn eine Maschine ausgelastet ist oder neu erstellt werden muss, machen die anderen einfach ein.
+
+00:01:50.360 --> 00:01:55.540
+Jeder Sitzungshost in einem Pool sollte vom selben Image stammen, damit zwei Benutzer niemals zwei verschiedene Windows-Versionen erhalten.
+
+00:01:56.080 --> 00:01:59.560
+Der Sitzungshost ist die Maschine selbst, der eigentliche virtuelle Desktop, auf dem ein Benutzer landet.
+
+00:02:00.020 --> 00:02:02.120
+Dies ist die Vorlage, aus der die Maschine erstellt wird.
+
+00:02:02.420 --> 00:02:04.380
+Und in dieser Welt nennt man sie ein Golden Image.
+
+00:02:05.080 --> 00:02:08.980
+Das bedeutet einfach den sauberen, genehmigten Ausgangspunkt, von dem aus Sie jeden neuen Host kopieren.
+
+00:02:10.400 --> 00:02:13.300
+Als nächstes kommt die Anwendungsgruppe, die entscheidet, was die Leute tatsächlich sind.
+
+00:02:13.300 --> 00:02:19.040
+Eine Anwendungsgruppe kann einen vollständigen Desktop veröffentlichen oder eine einzelne App, die Microsoft als Remote App bezeichnet.
+
+00:02:19.440 --> 00:02:20.400
+Ein Detail ist hierbei wichtig.
+
+00:02:20.800 --> 00:02:22.620
+Remote App funktioniert nur mit gepulten Host-Pools.
+
+00:02:23.000 --> 00:02:25.940
+Wenn Sie also einzelne Apps bereitstellen möchten, ist diese Wahl bereits für Sie getroffen.
+
+00:02:26.220 --> 00:02:31.680
+Das letzte Element ist der Workspace, der Anwendungsgruppen zusammenfasst, damit ein Benutzer seine Dinge im Client finden kann, finden kann.
+
+00:02:32.000 --> 00:02:33.660
+Ein Workspace führt von sich aus keine Arbeit aus.
+
+00:02:34.080 --> 00:02:38.100
+Es ist einfach der Ort, an dem die veröffentlichten Desktops und Apps für die Personen aufgelistet sind, die Sie sehen dürfen.
+
+00:02:38.600 --> 00:02:41.040
+Angenommen, Ihr Finanzteam benötigt einen Standard-Desktop mit all seinen Tools.
+
+00:02:41.040 --> 00:02:44.960
+Sie erstellen ein Host-Pool aus einem Golden Image und fügen Ihnen dann Sitzungshosts hinzu.
+
+00:02:45.480 --> 00:02:49.160
+Als nächstes erstellen Sie eine Desktop-Anwendungsgruppe für diese Hosts und fügen Sie ein Workspace hinzu.
+
+00:02:49.460 --> 00:02:51.040
+Dann weisen Sie die Finanzbenutzer dieser Gruppe zu.
+
+00:02:51.480 --> 00:02:54.260
+Von Ihrer Seite aus öffnen Sie den Client, sehen einen Desktop und klicken sich ein.
+
+00:02:54.880 --> 00:02:59.260
+Das Interessante ist, dass derselbe Pool auf zwei sehr unterschiedliche Arten eingerichtet werden kann
+
+00:02:59.260 --> 00:03:04.040
+und diese Wahl ändert fast alles, was folgt, einschließlich des Speicherorts der Benutzerdateien und der Höhe der Rechnung.
+
+00:03:04.040 --> 00:03:07.260
+Zwei Möglichkeiten, einen Desktop bereitzustellen.
+
+00:03:07.480 --> 00:03:08.640
+Das bringt uns zur Weggabelung.
+
+00:03:09.080 --> 00:03:11.820
+Ein Host-Pool gibt es in zwei Arten und Sie wählen eine aus, wenn Sie ihn erstellen.
+
+00:03:12.020 --> 00:03:14.000
+Sie können Ihre Meinung später nicht wirklich ändern, ohne aufzubauen.
+
+00:03:14.360 --> 00:03:15.820
+Es lohnt sich also, es ist von Anfang an richtig so.
+
+00:03:16.260 --> 00:03:18.800
+Persönliche Host-Pools weisen jeden Sitzungshost einer Person zu.
+
+00:03:19.280 --> 00:03:23.640
+Wenn Sie zehn Benutzer haben, haben Sie zehn Sitzungshosts und jeder Benutzer landet immer auf seiner eigenen Maschine.
+
+00:03:24.480 --> 00:03:28.720
+Da die ein zugewiesener Schreibtisch mit einem Namensschild, da die Person immer wieder zum selben zurückkehrt.
+
+00:03:28.720 --> 00:03:31.660
+Das maximale Sitzungslimit für einen persönlichen Host-Pool ist ein.
+
+00:03:32.060 --> 00:03:36.340
+Der Vorteil ist, dass der Benutzer installieren kann, was er möchte und es behalten kann, da seine Änderungen auf dieser Maschine verbleiben.
+
+00:03:36.840 --> 00:03:38.440
+Gepoolte Host-Pools funktionieren umgekehrt.
+
+00:03:38.620 --> 00:03:43.180
+Sie erstellen eine Gruppe von Sitzungshosts und der Dienst führt einen Lastausgleich für jeden Benutzer auf die Maschine durch, die gerade Platz hat.
+
+00:03:43.560 --> 00:03:45.840
+Mehrere Personen können gleichzeitig an derselben Maschine angemeldet sein.
+
+00:03:46.360 --> 00:03:50.240
+Daher kommen die Kosteneinsparungen, weil sie für weniger Maschinen bezahlen, um dieselbe Menge an Benutzern zu bedienen.
+
+00:03:50.880 --> 00:03:54.680
+Gepoolte Pools verwenden eine Lastausgleichsmethode ihrer Wahl, entweder Breath-First oder Depth-First.
+
+00:03:54.680 --> 00:03:59.100
+Obwohl das Ergebnis für den Benutzer gleich aussieht, landen sie möglicherweise morgen auf einer anderen Maschine als heute.
+
+00:03:59.900 --> 00:04:01.860
+Es gibt auch ein konfigurierbares maximales Sitzungslimit.
+
+00:04:02.000 --> 00:04:08.060
+Microsoft merkt an, dass die Anzahl bei einer Häufung gleichzeitiger Anmeldungen kurzzeitig überschritten werden kann, was später seltsame Leistungsbeschwerden erklärt.
+
+00:04:08.840 --> 00:04:11.100
+Es gibt zudem die Multi-Session Edition von Windows selbst.
+
+00:04:11.700 --> 00:04:16.840
+Windows 11 Enterprise Multi-Session und Windows 10 Enterprise Multi-Session ermöglichen vielen Benutzern die gemeinsame Nutzung einer Windows-Installation.
+
+00:04:17.380 --> 00:04:20.100
+Diese Edition ist exklusiv für Azure Virtual Desktop verfügbar.
+
+00:04:20.360 --> 00:04:22.100
+Single-Session bedeutet einen Benutzer pro Maschine.
+
+00:04:22.100 --> 00:04:26.400
+Multi-Session bedeutet, dass die Maschine für eine Gruppe ausgelegt ist, was gepoolte Pools so effizient macht.
+
+00:04:26.820 --> 00:04:27.800
+Der Kompromiss ist eindeutig.
+
+00:04:28.180 --> 00:04:29.820
+Gepoolt spart Geld und ist gut skalierbar.
+
+00:04:30.140 --> 00:04:33.860
+Aber die Maschine ist geteilt und temporär, sodass alles, was ein Benutzer dort speichert, verschwinden kann.
+
+00:04:34.300 --> 00:04:39.560
+Persönlich kostet mehr und bietet jedem eine feste Maschine, was für Nutzer mit Admin-Rechten oder spezieller Software geeignet ist.
+
+00:04:39.700 --> 00:04:39.940
+Boot.
+
+00:04:40.640 --> 00:04:42.620
+Das wirft die nächste Frage auf, die wir beantworten müssen.
+
+00:04:42.740 --> 00:04:45.040
+Und genau an dieser scheitern fast alle ersten Bereitstellungen.
+
+00:04:45.040 --> 00:04:52.280
+Wenn ein Benutzer jeden Morgen auf einer neuen Maschine landen kann, müssen seine Dateien und Einstellungen woanders liegen, nicht auf der Maschine, die einem nicht gehört.
+
+00:04:53.320 --> 00:04:57.120
+In einem gepoolten Pool ist die Maschine temporär, man kann das Benutzerprofil also nicht darauf speichern.
+
+00:04:58.100 --> 00:05:00.100
+Das Profil muss der Person folgen, nicht der Maschine.
+
+00:05:00.240 --> 00:05:02.080
+Und genau das erledigt FS Logix.
+
+00:05:02.760 --> 00:05:08.460
+FS Logix Profil Container nehmen das gesamte Benutzerprofil auf, inklusive Desktop-Dokumenten, Einstellungen und App-Präferenzen.
+
+00:05:08.460 --> 00:05:13.440
+Sie verpacken alles in eine einzelne Containerdatei, meist eine virtuelle Festplatte auf einer Dateifreigabe.
+
+00:05:14.080 --> 00:05:19.220
+Wenn sich der Benutzer anmeldet, wird dieser Container an den jeweiligen Sitzungshost angehängt und der Desktop sieht exakt so aus wie beim Verlassen.
+
+00:05:19.860 --> 00:05:20.880
+Zwei praktische Anmerkungen dazu.
+
+00:05:21.360 --> 00:05:26.780
+FS Logix ist in berechtigten Lizenzen ohne Aufpreis enthalten und auf den Multi-Session-Images vorinstalliert.
+
+00:05:27.560 --> 00:05:30.700
+Jemand muss es jedoch noch konfigurieren, es aktiviert sich also nicht von selbst wie von Zauberhahn.
+
+00:05:31.120 --> 00:05:37.620
+Es ist zudem das Element, das einen nicht-persistenten Desktop für den Benutzer persistent erscheinen lässt, obwohl die darunterliegende Maschine völlig neu für ihn ist.
+
+00:05:39.040 --> 00:05:42.040
+Nehmen wir an, der Finanzbenutzer meldet sich am Montag an und landet auf Sitzungshost 3.
+
+00:05:42.640 --> 00:05:43.860
+Er arbeitet und meldet sich dann ab.
+
+00:05:44.240 --> 00:05:45.820
+Am Dienstag landet er auf Sitzungshost 7.
+
+00:05:46.500 --> 00:05:52.360
+Sein Hintergrundbild, seine Verknüpfung, seine Browser-Lesezeichen und seine Dateien sind alle da, weil der Container mitgewandert ist und die Maschine keine Rolle spielte.
+
+00:05:53.100 --> 00:05:55.260
+Deshalb werden gepoolte Pools auch so aktualisiert, wie sie es werden.
+
+00:05:55.920 --> 00:05:58.580
+Man patcht nicht jeden Sitzungshost von Hand und hofft, dass sie alle identisch bleiben.
+
+00:05:58.900 --> 00:06:03.840
+Man erstellt ein frisches Golden Image mit integrierten Updates und stellt die Hosts daraus neu bereit, sodass jede Maschine identisch startet.
+
+00:06:04.500 --> 00:06:08.260
+Persönliche Pools sind anders und sie aktualisieren sich eher wie gewöhnliche Windows-Rechner über Windows-Update
+
+00:06:08.260 --> 00:06:09.260
+oder ihre Verwaltungstools.
+
+00:06:09.920 --> 00:06:13.920
+Nachdem die Komponenten und Daten nun Sinn ergeben, lassen sie uns den Benutzer dabei beobachten, wie er auch verbindet.
+
+00:06:14.720 --> 00:06:15.960
+Wie verbindet sich ein Benutzer eigentlich?
+
+00:06:16.520 --> 00:06:18.360
+Vom Benutzerseite aus ist dies der einfachste Teil.
+
+00:06:18.900 --> 00:06:23.500
+Sie öffnen die Windows-App oder den Remote Desktop Client, der unter Windows, Mac, iOS und Android funktioniert.
+
+00:06:24.260 --> 00:06:27.220
+Es gibt auch eine Browser-Option für Geräte, auf denen nichts installiert werden kann.
+
+00:06:27.660 --> 00:06:30.400
+Dort sehen Sie den Desktop oder die Apps, die Sie für Sie freigeben und klicken darauf.
+
+00:06:30.860 --> 00:06:33.860
+Im Hintergrund läuft die Verbindung entgegengesetzt zu dem, was Sie vielleicht erwarten würden.
+
+00:06:33.860 --> 00:06:36.880
+Das Gerät des Benutzers akzeptiert keine Verbindung aus dem Internet.
+
+00:06:37.420 --> 00:06:40.300
+Es kontaktiert den Azure Virtual Desktop Dienst und der Dienst leitet dies weiter.
+
+00:06:40.860 --> 00:06:42.220
+Microsoft nennt diese Reverse-Verbindung.
+
+00:06:42.820 --> 00:06:47.640
+Der Vorteil ist, dass Sie keine eingehenden Ports zum Internet öffnen und selbst keinen Gateway- oder Broker-Server betreiben müssen.
+
+00:06:48.100 --> 00:06:52.620
+Das ist ein echter Sicherheitsgewinn und ein wesentlicher Grund, warum dies einfacher einzurichten ist als klassisches Remote Desktop.
+
+00:06:53.180 --> 00:06:54.780
+Ein weiteres Detail erklärt eine häufige Beschwerde.
+
+00:06:55.200 --> 00:06:58.980
+Eine Sitzung kann aktiv, getrennt oder ausstehend sein und jede bedeutet etwas leicht anderes.
+
+00:06:59.560 --> 00:07:01.260
+Aktiv bedeutet, die Person arbeitet gerade.
+
+00:07:01.940 --> 00:07:07.700
+Getrennt bedeutet, Sie schließen das Fenster, ohne sich abzumelden und wenn Sie zurückkehren, leitet der Dienst Sie direkt wieder zu derselben Sitzung.
+
+00:07:08.440 --> 00:07:12.860
+Ausstehend ist der interessante Status, da es sich um einen Platzhalter handelt, der den Platz reserviert, während Sie sich anmeldet.
+
+00:07:13.240 --> 00:07:17.700
+Die Anmeldung kann je nach Größe des Profils zwischen 30 Sekunden und 5 Minuten dauern.
+
+00:07:17.700 --> 00:07:22.520
+Das bedeutet, die langsame Erstanmeldung, über die sich Leute beschweren, liegt meist nicht am Netzwerk.
+
+00:07:23.020 --> 00:07:26.500
+Es liegt an der Größe des Profils, das heruntergeladen und eingebunden wird und das ist etwas, das Sie optimieren.
+
+00:07:26.820 --> 00:07:29.120
+Die Technologie funktioniert also und das Sicherheitskonzept überzeugt.
+
+00:07:29.440 --> 00:07:31.460
+Nun zu dem Teil, über den jeder wirklich diskutiert, die Rechnung.
+
+00:07:32.520 --> 00:07:33.960
+Warum ändert sich die Rechnung jeden Monat?
+
+00:07:34.540 --> 00:07:39.680
+Die Preisgestaltung von Azure Virtual Desktop besteht aus zwei separaten Teilen und der ganze Trick besteht darin, diese gedanklich getrennt zu halten.
+
+00:07:40.040 --> 00:07:43.040
+Teil 1 sind die Benutzerzugriffsrechte, also wer sich verbinden darf.
+
+00:07:43.040 --> 00:07:48.540
+Teil 2 ist die Azure-Infrastruktur, also Rechenleistung, Speicher und Netzwerk, auf denen die Desktops tatsächlich laufen.
+
+00:07:49.340 --> 00:07:52.140
+Teil 1 ist oft bereits bezahlt und Teil 2 ist derjenige, der variiert.
+
+00:07:52.940 --> 00:07:57.080
+Beginnen Sie mit dem Zugriff, denn hier entdecken viele Teams, dass sie bereits Lizenzen besitzen, von denen sie nichts wussten.
+
+00:07:57.700 --> 00:08:03.820
+Wenn Ihre Benutzer bereits über eine berechtigte Probenutzerlizenz verfügen, können sie ohne zusätzliche Servicegebühr auf Windows 11 und Windows 10 Desktops zugreifen.
+
+00:08:03.820 --> 00:08:14.720
+Diese Liste umfasst Microsoft 365 E3 und E5, Microsoft F3 Business Premium, die Bildungslizenzen A3 und A5, Windows Enterprise E3 und E5 sowie Windows VDA pro Benutzer.
+
+00:08:15.700 --> 00:08:19.040
+Für einen normalen Microsoft 365 Betrieb ist die Zugangsfrage oft schon geklärt.
+
+00:08:19.720 --> 00:08:24.160
+Das ist für viele Teams eine angenehme Überraschung und verändert die Kalkulation, bevor man überhaupt Geld für die Desktop-Seite ausgibt.
+
+00:08:24.700 --> 00:08:25.580
+Zwei Ausnahmen sind wichtig.
+
+00:08:25.580 --> 00:08:34.680
+Wenn Ihre Sitzungshosts Windows Server statt Windows Client ausführen, benötigen Sie eine Remote Desktop Services Client Zugriffslizenz mit aktiver Software Assurance oder eine ADS Abonnement Lizenz.
+
+00:08:35.580 --> 00:08:41.160
+Und wenn Sie Personen außerhalb Ihrer eigenen Organisation bedienen, ist das ein völlig anderes Modell, dass als nutzerbasierte Zugriffspreise bezeichnet wird.
+
+00:08:41.780 --> 00:08:45.880
+Die Kosten liegen bei 10 Dollar pro Nutzer im Monat für Desktops und Apps oder 5,50 Dollar nur für Apps.
+
+00:08:46.680 --> 00:08:49.420
+Sie zahlen nur für Nutzer, die sich in dem Monat tatsächlich mindestens einmal verbinden.
+
+00:08:50.100 --> 00:08:52.400
+Dann kommt die Infrastruktur und das ist der Teil, der sich ständig ändert.
+
+00:08:52.400 --> 00:08:57.580
+Sie bezahlen die virtuellen Maschinen, den Speicher für Images und Profiles sowie das Netzwerk rein nach Verbrauch.
+
+00:08:58.060 --> 00:08:58.900
+Eine Besonderheit überraschend.
+
+00:08:59.540 --> 00:09:05.480
+Virtuelle Maschinen für Azure Virtual Desktop mit Windows werden zu Linux-Compute-Preisen abgerechnet, was die Rechenkosten niedriger hält, als man vielleicht vermuten würde.
+
+00:09:05.880 --> 00:09:07.380
+Die Rechnung ist aus einem bestimmten Grund unvorhersehbar.
+
+00:09:07.820 --> 00:09:09.760
+Sie richtet sich nach dem, was Sie ausführen, nicht nach einer Festnutzer.
+
+00:09:10.240 --> 00:09:13.980
+Lassen Sie Hosts über Nacht eingeschaltet, ohne dass jemand darauf zugreift, bezahlen Sie für leere Maschinen.
+
+00:09:14.480 --> 00:09:16.380
+Die gute Nachricht ist, dass Sie an drei Hebeln ansetzen können.
+
+00:09:16.940 --> 00:09:22.380
+Multisession bringt mehr Nutzer auf jede Maschine und Autoscaling fährt Hosts herunter oder löscht sie, wenn die Nachfrage sinkt.
+
+00:09:23.080 --> 00:09:27.560
+Eine Reservierung für die Compute-Leistung, die Sie dauerhaft benötigen, kann die Pay-as-you-go-Rate um bis zu 72% sinken.
+
+00:09:28.040 --> 00:09:30.840
+Ein wahrenes Wort zu den nutzerbezogenen Kostenzahlen, die Sie online sehen.
+
+00:09:31.200 --> 00:09:37.500
+Sie schwanken von etwa 10 Dollar pro Monat für einen Schichtarbeiter in einem automatisch skalierten Pool bis zu 170 Dollar oder mehr für eine dedizierte Power-User-Maschine.
+
+00:09:38.200 --> 00:09:39.180
+Diese Spanne ist kein Fehler.
+
+00:09:39.700 --> 00:09:41.780
+Es ist derselbe Dienst bei völlig unterschiedlichen Arbeitslasten.
+
+00:09:42.120 --> 00:09:45.480
+Betrachten Sie daher jede einzelne Zahl als Ausgangspunkt für Tests, nicht als verbindliches Angebot.
+
+00:09:45.960 --> 00:09:48.820
+Das Kostenmodell ist auch der Ort, an dem Fehler passieren, also schauen wir uns das als nächstes an.
+
+00:09:49.680 --> 00:09:50.900
+Die Fehler und die tatsächlichen Grenzen.
+
+00:09:51.500 --> 00:09:55.800
+Die meisten Probleme bei einer Azure Virtual Desktop-Bereitstellung gehen auf eine kurze Liste von Wiederholungstätern zurück.
+
+00:09:56.000 --> 00:09:57.080
+Keiner davon ist exotisch.
+
+00:09:57.800 --> 00:10:00.940
+Ein häufiger Fehler ist, die Sitzungsholz nach Gefühl statt Durchmessungen zu dimensionieren.
+
+00:10:00.940 --> 00:10:05.940
+Die Leute schätzen, dass eine bestimmte Maschinengröße eine bestimmte Anzahl von Nutzern aufnehmen kann und stellen dann fest, dass dies nicht der Fall ist.
+
+00:10:06.460 --> 00:10:14.680
+Microsofts eigene Richtlinien basieren auf dem Arbeitslasttyp mit groben Beispielen wie zwei Nutzer pro virtueller CPU für eine Standard-Büroarbeit und ER6 für eine leichte Callcenter-Arbeit.
+
+00:10:15.740 --> 00:10:18.960
+Dieselbe Richtlinie weist Sie dennoch darauf hin, dies anhand Ihrer eigenen Anwendung zu validieren.
+
+00:10:19.320 --> 00:10:20.940
+Dichte ist ein Testergebnis, kein Datenblatt.
+
+00:10:21.380 --> 00:10:23.600
+Ein weiterer Fehler ist, Hosts laufen zu lassen, obwohl niemand darauf arbeitet.
+
+00:10:24.000 --> 00:10:28.560
+Nicht ausgelastete Kapazitäten sind das klassische Geldleck in diesem Modell und lassen sich durch Autoscaling am einfachsten bewegen.
+
+00:10:28.560 --> 00:10:31.100
+Ein dritter Punkt ist, gepoolte Sitzungsholz wie Haustiere zu bauen.
+
+00:10:31.740 --> 00:10:33.440
+Man meldet sich an und aktualisiert sie einzeln.
+
+00:10:33.540 --> 00:10:37.380
+So driften die Pool-Konfigurationen langsam auseinander und zwei Benutzer erhalten unterschiedliche Arbeitsumgebungen.
+
+00:10:37.760 --> 00:10:38.940
+Die Lösung ist das Modell selbst.
+
+00:10:39.060 --> 00:10:43.680
+Änderungen direkt in das Golden Image einbauen und neu bereitstellen, damit die Maschinen austauschbar und identisch bleiben.
+
+00:10:45.040 --> 00:10:49.800
+Dann gibt es noch die Einschränkungen, die ebenso wichtig sind, da man sie weder umgehen noch wegdiskutieren kann.
+
+00:10:50.580 --> 00:10:55.000
+Man kann eine vorhandene Windows Professional oder Enterprise Maschine nicht auf Windows Enterprise Multisession aktualisieren
+
+00:10:55.000 --> 00:10:58.020
+und der bereitgestellte Multisession Maschine auch nicht in eine andere Edition umwandeln.
+
+00:10:58.560 --> 00:10:59.580
+Man stellt sie neu bereit.
+
+00:11:00.140 --> 00:11:05.240
+Direkte Upgrades des Betriebssystems wie das Verschieben eines gepoolten Sitzungsholz von Windows 10 auf Windows 11 werden nicht unterstützt,
+
+00:11:05.320 --> 00:11:06.660
+also ist auch hier ein Neuaufbau erforderlich.
+
+00:11:07.340 --> 00:11:10.000
+Multisession ist zudem mit einer Lizenzregel verbunden, die viele überrascht.
+
+00:11:10.560 --> 00:11:15.400
+Windows Enterprise Multisession darf produktiv nicht außerhalb des Azure Virtual Desktop Dienstes ausgeführt werden
+
+00:11:15.400 --> 00:11:18.280
+und lässt sich nicht über einen lokalen Key Management Service aktivieren.
+
+00:11:19.380 --> 00:11:23.960
+Falls Sie planen, dieses Image auf eigene Hardware zu übertragen, wird dieser Plan den Lizenzbestimmungen nicht standhalten.
+
+00:11:23.960 --> 00:11:27.960
+Eine Frist ist bereits abgelaufen und es lohnt sich zu prüfen, ob Sie davon betroffen sind.
+
+00:11:28.740 --> 00:11:30.000
+Azure Virtual Desktop Classic.
+
+00:11:30.660 --> 00:11:36.820
+Das ältere Bereitstellungsmodell wurde am 30. September 2026 eingestellt und Verbindungen zu klassischen Ressourcen sind jetzt blockiert.
+
+00:11:37.820 --> 00:11:42.620
+Wenn noch Teile Ihrer Umgebung auf Clask laufen, müssen Sie die Migration sofort angehen und nicht erst im nächsten Quartal.
+
+00:11:42.620 --> 00:11:44.940
+Die Plattform entwickelt sich ebenfalls weiter.
+
+00:11:45.500 --> 00:11:49.060
+Im Juni 2026 hat Microsoft drei Funktionen allgemein verfügbar gemacht.
+
+00:11:50.020 --> 00:11:53.940
+Dabei handelte es sich um automatisierte Host-Pools auf Basis einer Sitzungs-Host-Konfiguration,
+
+00:11:54.120 --> 00:11:56.560
+dynamisches Autoscaling, das Hosts bei Bedarf erstellt und löscht,
+
+00:11:56.640 --> 00:12:00.400
+sowie kurzlebige Betriebssystem-Datenträger, die das Betriebssystem auf dem lokalen Speicher der Maschine ablegen.
+
+00:12:01.140 --> 00:12:02.620
+Zusammengenommen zeigen Sie, wohin die Reise geht.
+
+00:12:03.460 --> 00:12:06.040
+Pools bauen ihre eigenen Maschinen auf und ab und bleiben identisch,
+
+00:12:06.140 --> 00:12:08.540
+weil die Konfiguration des Administrators die Quelle der Wahrheit ist.
+
+00:12:08.540 --> 00:12:12.020
+Es gibt bereits Tools, die einen Großteil des operativen Betriebs automatisieren,
+
+00:12:12.200 --> 00:12:13.940
+von Skalierungszeitplänen bis hin zu Image-Updates.
+
+00:12:14.060 --> 00:12:16.520
+Das ist eine Prüfung wert, sobald Sie wissen, was Sie automatisieren wollen.
+
+00:12:17.380 --> 00:12:20.680
+All das wirft die berechtigte Frage auf, wenn man dies den Alternativen vorziehen sollte,
+
+00:12:22.280 --> 00:12:25.280
+wenn es Windows 365 und herkömmliches VDI schlägt.
+
+00:12:25.600 --> 00:12:28.080
+Microsoft bietet mehr als einen Weg, Windows in die Cloud zu bringen
+
+00:12:28.080 --> 00:12:31.620
+und die zwei Namen, die man am häufigsten hört, sind Azure Virtual Desktop und Windows 365.
+
+00:12:31.920 --> 00:12:35.220
+Windows 365 ist die einfache Variante mit einem festen monatlichen Abonnement pro Benutzer.
+
+00:12:35.660 --> 00:12:37.060
+Jeder erhält seinen eigenen Cloud-PC
+
+00:12:37.060 --> 00:12:39.280
+und Microsoft betreibt die Infrastruktur für Sie.
+
+00:12:39.780 --> 00:12:40.800
+Es gibt keine Multi-Session-Option.
+
+00:12:41.240 --> 00:12:43.080
+Die Maschinengrößen stammen aus einer festen Liste
+
+00:12:43.080 --> 00:12:44.440
+und die Rechnung ist vorhersehbar,
+
+00:12:44.820 --> 00:12:46.960
+da Sie einen Arbeitsplatz anstelle einer Workload kaufen.
+
+00:12:47.540 --> 00:12:48.920
+Für einen permanent aktiven Einzelnutzer,
+
+00:12:48.980 --> 00:12:50.640
+der einfach einen sauberen Windows-Desktop benötigt,
+
+00:12:50.680 --> 00:12:51.620
+ist dies oft die saubere Lösung.
+
+00:12:52.020 --> 00:12:53.760
+Azure Virtual Desktop ist die flexible Variante.
+
+00:12:54.240 --> 00:12:56.280
+Es ist verbrauchsbasiert und unterstützt Multi-Session,
+
+00:12:56.380 --> 00:12:57.900
+sodass sich viele Personen eine Maschine teilen können.
+
+00:12:58.400 --> 00:13:00.640
+Es bietet Ihnen zudem den gesamten Azure Virtual Machine-Katalog
+
+00:13:00.640 --> 00:13:03.140
+sowie Kontrolle über Images, Netzwerke und Identitäten.
+
+00:13:03.720 --> 00:13:05.160
+Der Kompromiss besteht darin,
+
+00:13:05.220 --> 00:13:06.920
+dass Sie mehr Verantwortung für den Betrieb übernehmen,
+
+00:13:07.060 --> 00:13:09.120
+da Sie die Sitzungshosts und Pools selbst verwalten,
+
+00:13:09.340 --> 00:13:10.540
+im Vergleich zum klassischen Ansatz,
+
+00:13:10.640 --> 00:13:11.700
+bei dem Sie Ihre eigene VDI
+
+00:13:11.700 --> 00:13:14.460
+oder eine Remote Desktop Services Farm aufbauten und betrieben,
+
+00:13:14.700 --> 00:13:16.400
+Azure Virtual Desktop entfernt das Gateway
+
+00:13:16.400 --> 00:13:18.240
+und den Broker, die Sie früher pflegen mussten.
+
+00:13:18.800 --> 00:13:20.080
+Das ist ein erheblicher Arbeitsaufwand
+
+00:13:20.080 --> 00:13:21.540
+und ein Risikofaktor, der einfach wegfällt.
+
+00:13:22.040 --> 00:13:23.300
+Die praktische Regel lautet also,
+
+00:13:23.400 --> 00:13:24.740
+passen Sie die Workload an das Werkzeug an.
+
+00:13:25.060 --> 00:13:26.940
+Wenn ein Benutzer eine dedizierte Maschine benötigt
+
+00:13:26.940 --> 00:13:28.540
+und Sie das einfachstmögliche Budget wünschen,
+
+00:13:28.600 --> 00:13:30.420
+ist Windows 365 meist die bessere Wahl.
+
+00:13:30.840 --> 00:13:32.580
+Wenn Sie eine Gruppe mit ähnlichen Aufgaben haben
+
+00:13:32.580 --> 00:13:34.620
+oder Kontrolle über das Image und das Netzwerk benötigen,
+
+00:13:34.740 --> 00:13:36.180
+zahlt sich Azure Virtual Desktop aus.
+
+00:13:36.180 --> 00:13:38.220
+Die meisten Unternehmen betreiben am Ende beides,
+
+00:13:38.340 --> 00:13:40.040
+da beide unterschiedliche Anforderungen erfüllen.
+
+00:13:41.060 --> 00:13:42.440
+Was sollte man daraus mitnehmen?
+
+00:13:42.960 --> 00:13:44.120
+Die Kurzfassung lautet wie folgt.
+
+00:13:44.560 --> 00:13:47.820
+Azure Virtual Desktop stellt Windows-Desktops und Apps in Azure bereit,
+
+00:13:47.900 --> 00:13:49.720
+die aus einem Hostpool von Sitzungshosts bestehen,
+
+00:13:49.760 --> 00:13:50.900
+die alle von einem Golden Image stammen.
+
+00:13:51.320 --> 00:13:53.860
+Sie geben diese als vollständigen Desktop oder einzelne App aus
+
+00:13:53.860 --> 00:13:55.540
+und wählen persönlich für eine dedizierte Maschine
+
+00:13:55.540 --> 00:13:57.960
+oder gepoolt für gemeinsam genutzte und kosteneffiziente Instanzen.
+
+00:13:58.440 --> 00:14:00.780
+In einem Pool behalten Sie Profile und FS-Logics bei,
+
+00:14:00.900 --> 00:14:01.880
+sodass Sie dem Benutzer folgen.
+
+00:14:02.280 --> 00:14:03.720
+Benutzer verbinden sich per Reverse Connection,
+
+00:14:03.720 --> 00:14:04.880
+sodass Sie keine eingehenden Ports öffnen.
+
+00:14:04.880 --> 00:14:07.800
+Der Zugriff ist meist durch eine bereits vorhandene Lizenz abgedeckt
+
+00:14:07.800 --> 00:14:09.400
+und Sie bezahlen die Infrastruktur nach Verbrauch.
+
+00:14:09.900 --> 00:14:11.000
+Meine Frage an Sie ist daher,
+
+00:14:11.120 --> 00:14:13.840
+wenn Sie eine Benutzergruppe zuerst auf einen Cloud-Desktop umstellen müssten,
+
+00:14:14.340 --> 00:14:16.020
+wer wäre das und was würde Sie zögern lassen?
+
+00:14:16.860 --> 00:14:18.720
+Wenn dieses Thema dadurch weniger einschüchternd wirkt,
+
+00:14:18.820 --> 00:14:20.440
+abonnieren Sie M3355FM,
+
+00:14:20.540 --> 00:14:22.160
+um die Werkzeuge und die Denkweise zu meistern,
+
+00:14:22.180 --> 00:14:23.400
+die die Zukunft der Arbeit gestalten.

@@ -1,0 +1,589 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:07.040
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:07.320 --> 00:00:10.820
+Branching klinkt als een klein detail totdat twee mensen hetzelfde bestand aanpassen.
+
+00:00:11.060 --> 00:00:14.660
+Dan moet iemand uitzoeken welke versie de juiste is, en dat is een branching-probleem.
+
+00:00:14.800 --> 00:00:20.760
+Een branch is slechts een veilige kopie van je project, en een branching-strategie is de regel van je team voor hoe die kopieën weer samenkomen.
+
+00:00:20.940 --> 00:00:26.880
+Er zijn er drie belangrijke, GitFlow, GitHubFlow en Trunk-Based Development, en elk is gebouwd voor een ander type team.
+
+00:00:26.880 --> 00:00:30.380
+Aan het eind weet je welke bij die van jou past en welke fouten je moet vermijden.
+
+00:00:30.600 --> 00:00:37.380
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:37.620 --> 00:00:41.720
+Wat een branch is. Het woord branch klinkt technisch, maar het idee erachter is simpel.
+
+00:00:41.880 --> 00:00:45.600
+Een repository is je projectmat met de volledige geschiedenis opgeslagen door Git.
+
+00:00:45.800 --> 00:00:52.940
+Dat betekent elke versie van elk bestand teruggaan tot de eerste dag, en een branch is een kopie van dat project die je kunt wijzigen zonder het echte project aan te raken.
+
+00:00:53.180 --> 00:00:56.160
+Niets wordt vergrendeld en niets wordt verwijderd wanneer je een branch maakt.
+
+00:00:56.160 --> 00:01:00.340
+Je zegt eigenlijk gewoon dat je iets wilt proberen zonder de versie die al werkt kapot te maken.
+
+00:01:00.600 --> 00:01:03.900
+Dat is waarom branching veilig begint te voelen nadat je het een paar keer hebt gedaan.
+
+00:01:04.120 --> 00:01:09.920
+De mainbranche, die sommige teams, main, noemen en andere, master, is de kopie die iedereen als de werkende versie van het project beschouwt.
+
+00:01:10.040 --> 00:01:13.580
+Als je beide namen hebt gezien en je afvroeg of het verschillende dingen zijn, dat zijn ze niet.
+
+00:01:13.780 --> 00:01:19.520
+Main en master betekenen hetzelfde, en de overstap van de ene naar de andere naam was een naamkeuze, geen nieuwe functie die je moet leren.
+
+00:01:19.760 --> 00:01:24.640
+Branches in Git zijn ook goedkoop, en dat is het deel dat mensen die van oudere tools komen het moeilijkst vinden om te geloven.
+
+00:01:24.640 --> 00:01:29.720
+In de systemen van voor Git was het maken van een branche een trage, zware operatie die je zelden en voorzichtig deed.
+
+00:01:29.880 --> 00:01:33.680
+In Git gebeurt het direct en daarom maken moderne teams voor bijna alles een branche aan.
+
+00:01:33.840 --> 00:01:39.300
+Als je mensen hoort praten over een commit, dat is gewoon een opgeslagen checkpoint, één vastgelegde wijziging met een bericht eraan gekoppeld.
+
+00:01:39.460 --> 00:01:42.720
+Een branche is eigenlijk een bewegend label dat naar een reeks van die checkpoints wijst.
+
+00:01:42.880 --> 00:01:44.600
+Daarom is wisselen tussen branches zo snel.
+
+00:01:44.600 --> 00:01:46.680
+Maar dat ene idee is het volledige fundament.
+
+00:01:46.960 --> 00:01:52.600
+Elke strategie en elk meningsverschil tussen ontwikkelaars komt neer op een enkele vraag over hoe die kopieën worden gemaakt en hoe ze weer samenkomen.
+
+00:01:53.400 --> 00:01:55.280
+Waarom branching strategieën bestaan?
+
+00:01:55.520 --> 00:01:58.780
+Zodra een team uit meer dan één persoon bestaat, beginnen de regels ertoe te doen.
+
+00:01:59.000 --> 00:02:04.320
+Git maakt Vertakken goedkoop en Mergen eenvoudig, een grote verandering ten opzichte van oudere tools waar Mergen eng en zeldzaam aanvoelde.
+
+00:02:04.520 --> 00:02:07.660
+Vincent Driessen, de persoon achter Git Flow, maakte dit punt zelf ook.
+
+00:02:07.800 --> 00:02:13.600
+In Git zijn Vertakken en Mergen onderdeel geworden van de dagelijkse workflow, in plaats van een speciale gebeurtenis die je weken van tevoren inplant.
+
+00:02:13.600 --> 00:02:16.180
+Goedkoop Vertakken creëert echter wel een nieuw probleem.
+
+00:02:16.300 --> 00:02:21.300
+Als iedereen kopieën maakt wanneer ze maar willen en niemand afspreekt hoe die kopieën weer samenkomen, botst het werk.
+
+00:02:21.500 --> 00:02:26.640
+Iemands half afgeronde wijziging vermengt zich met iets dat af had moeten zijn, waardoor het team niets meer kan opleveren.
+
+00:02:26.820 --> 00:02:31.780
+Stel je een ontwikkelaar voor die halverwege een herontwerp is, terwijl een teamgenoot in stilte een bak in hetzelfde bestand repareert.
+
+00:02:32.000 --> 00:02:35.000
+Beide wijzigingen komen op dezelfde plek terecht en niemand had dat verwacht.
+
+00:02:35.140 --> 00:02:38.460
+Een branching strategie is de oplossing en dat is minder glamoureus dan het klinkt.
+
+00:02:38.460 --> 00:02:42.160
+Het is geen software die je installeert en geen instelling die je eenmaal aanpast en vergeet.
+
+00:02:42.160 --> 00:02:48.780
+Het is een gedeelde afspraak over wie waar werkt, hoe lang een branche mag bestaan en hoe wijzigingen worden beoordeeld voordat ze in de hoofdversie komen.
+
+00:02:49.000 --> 00:02:52.460
+Wanneer die afspraak ontbreekt, krijg je de puinhoop van het begin van deze aflevering.
+
+00:02:52.620 --> 00:02:56.520
+Twee mensen, één bestand, twee versies van de waarheid en niemand weet welke de echte is.
+
+00:02:56.700 --> 00:02:59.540
+Een strategie is hoe een team voorkomt dat dit nog een keer gebeurt.
+
+00:03:00.120 --> 00:03:01.140
+De drie bouwstenen.
+
+00:03:01.360 --> 00:03:07.480
+Bijna elke strategie is opgebouwd uit dezelfde drie soorten branches en zodra je die kent, klinkt het model niet langer als een vreemde taal.
+
+00:03:07.620 --> 00:03:10.880
+De eerste is de main branch, de altijd werkende versie waarvan je publiceert.
+
+00:03:10.880 --> 00:03:12.980
+Het is de enige branch die nooit verdwijnt.
+
+00:03:13.140 --> 00:03:16.140
+De tweede is de feature branch en hier gebeurt het eigenlijke werk.
+
+00:03:16.320 --> 00:03:20.940
+Je maakt er een aan voor één taak, zoals het toevoegen van een inlogpagina of het repareren van een kapotte knop.
+
+00:03:21.060 --> 00:03:24.380
+Je noemt hem naar het werk zodat iedereen in één oogopslag ziet waarvoor hij dient.
+
+00:03:24.600 --> 00:03:28.880
+Feature branches zijn tijdelijk bedoeld en zodra het werk is gamertje, wordt de branch verwijderd.
+
+00:03:29.540 --> 00:03:33.360
+De derde is de release branch en die verschijnt alleen wanneer je versies met nummers uitbrengt.
+
+00:03:33.460 --> 00:03:36.260
+Het is een manier om een momentopname te bevriezen voor laatste controles.
+
+00:03:36.260 --> 00:03:41.740
+Je maakt deze aan als de code bijna klaar is, gebruikt hem om laatste baks te fixen en geeft hem een versienummer voordat hij naar klanten gaat.
+
+00:03:41.940 --> 00:03:43.600
+Dat is de volledige gereedschapskist.
+
+00:03:43.800 --> 00:03:46.800
+Wat de drie grote modellen onderscheidt, is hoe vaak ze vertakken.
+
+00:03:46.980 --> 00:03:49.760
+GitFlow gebruikt alle drie plus een tweede permanente branch.
+
+00:03:49.960 --> 00:03:52.740
+GitHubFlow gebruikt meestal alleen main en feature branches.
+
+00:03:53.000 --> 00:03:56.880
+Trunk-based development push bijna alles direct naar main en vertakt nauwelijks.
+
+00:03:57.060 --> 00:03:59.880
+Eén onderdeel is nog het benoemen waard, ook al is het geen branch.
+
+00:04:00.040 --> 00:04:05.080
+Een pull request is de manier waarop een afgeronde branch wordt beoordeeld en het komt voor in elke moderne strategie.
+
+00:04:05.080 --> 00:04:08.740
+We komen hier nog op terug, want het is het dagelijkse mechanisme dat je het meest zult gebruiken.
+
+00:04:08.940 --> 00:04:10.740
+GitFlow, de gestructureerde variant.
+
+00:04:10.960 --> 00:04:15.520
+De beroemdste strategie heeft een specifieke geboortedatum en dat weten helpt verklaren waarom het er zo uitziet.
+
+00:04:15.740 --> 00:04:21.040
+Vincent Driessen publiceerde GitFlow in januari 2010 in een artikel genaamd Asuccessful Git Branching Model.
+
+00:04:21.340 --> 00:04:25.100
+Jarenlang daarna was het het standaard antwoord wanneer iemand vroeg hoe je branches moet gebruiken.
+
+00:04:25.340 --> 00:04:27.380
+GitFlow draait op twee permanente branches.
+
+00:04:27.780 --> 00:04:33.480
+Master bevat code die elk moment klaar is voor productie en develop bevat alles wat af is maar nog niet is uitgebracht.
+
+00:04:33.480 --> 00:04:36.940
+Die twee verdwijnen nooit en alle andere branches draaien om hen heen.
+
+00:04:37.120 --> 00:04:40.320
+Feature branches vertrekken vanuit develop en worden terug samengevoegd in develop.
+
+00:04:40.500 --> 00:04:45.080
+Release branches vertrekken vanuit develop krijgen hun laatste afwerking en worden dan samengevoegd in zowel develop als master.
+
+00:04:45.240 --> 00:04:51.640
+Botfix branches vertrekken vanuit master om iets dringends in productie te herstellen en ze worden ook in beide samengevoegd, zodat de fix niet verloren gaat in de volgende release.
+
+00:04:51.820 --> 00:04:54.660
+Die structuur bewijst zijn waarde wanneer je inversies uitbrengt.
+
+00:04:54.820 --> 00:04:59.840
+Stel dat je versie 2 ondersteunt terwijl versie 3 in ontwikkeling is en een klant met versie 1 een patch nodig heeft.
+
+00:04:59.840 --> 00:05:03.080
+GitFlow biedt je een duidelijke, gemarkeerde plek om dat werk te doen.
+
+00:05:03.080 --> 00:05:05.580
+Maar hier komt de wending en die verrast bijna iedereen.
+
+00:05:05.760 --> 00:05:11.080
+In maart 2020, 10 jaar na het publiceren van het bericht, voegde Driessen een opmerking toe bovenaan zijn eigen artikel.
+
+00:05:11.240 --> 00:05:14.380
+Hij schreef dat GitFlow werd behandeld als een dogma in plaats van als een keuze.
+
+00:05:14.520 --> 00:05:20.720
+Het was niet ontworpen voor webapps die continu worden geleverd, zei hij, en teams die op die manier werken, moeten iets simpeler zoals GitHubFlow gebruiken.
+
+00:05:20.920 --> 00:05:22.620
+Zijn slotzin is het onthouden waard.
+
+00:05:22.980 --> 00:05:26.200
+Wondermiddelen bestaan niet, dus kijk naar je eigen context en beslis zelf.
+
+00:05:26.420 --> 00:05:29.280
+Voor de teams waarvoor het gebouwd is, is dat allemaal geen probleem.
+
+00:05:29.280 --> 00:05:35.580
+Als je software bouwt met expliciete versies of je ondersteunt verschillende versies in het veld, dan past het model nog net zo goed als voorheen.
+
+00:05:36.080 --> 00:05:37.920
+GitHubFlow, de simpele variant.
+
+00:05:38.180 --> 00:05:41.320
+GitHubFlow benaderde het probleem vanuit de tegenovergestelde richting.
+
+00:05:41.540 --> 00:05:47.200
+Scott Chacon schreef het in augustus 2011 op en het punt was dat GitHub zelf GitFlow helemaal niet gebruikte.
+
+00:05:47.400 --> 00:05:48.380
+De reden was simpel.
+
+00:05:48.640 --> 00:05:55.780
+GitHub implementeerde elke dag wijzigingen in productie, vaak meerdere keren per dag, en een proces rondom releases paste simpelweg niet bij die realiteit.
+
+00:05:55.780 --> 00:05:59.240
+Dus brachten ze het terug tot één harde regel en een korte lijst met stappen.
+
+00:05:59.360 --> 00:06:05.620
+De regel is dat alles in de main branch deployable is, wat betekent dat main altijd veilig is om vanaf te releasen en veilig om van af te takken.
+
+00:06:05.780 --> 00:06:11.800
+Om te beginnen maak je een nieuwe branch vanaf main met een duidelijke naam, zoals login pagina toevoegen of kapotte knop repareren.
+
+00:06:12.040 --> 00:06:16.960
+Van daaruit push je je werk regelmatig naar die branch, zodat er een backup is en iedereen kan zien waar je aanwerkt.
+
+00:06:16.960 --> 00:06:28.960
+Wanneer je feedback wilt of denkt dat het werk klaar is, open je een pull request, laat je het reviewen, draai je de tests en zodra het is goedgekeurd, merge je het naar main, waarna je direct deployt omdat main altijd, chippable, moet blijven.
+
+00:06:29.180 --> 00:06:30.400
+Dat is de volledige flow.
+
+00:06:30.640 --> 00:06:35.260
+Geen develop-branche, geen release-branche, geen hotfix-branche, alleen main- en kortstondige feature-branches.
+
+00:06:35.520 --> 00:06:40.440
+GitHub had destijds 35 medewerkers, van wie er ongeveer 15 tot 20 tegelijk aan hetzelfde project werkte.
+
+00:06:40.680 --> 00:06:44.560
+Chacon Post laat zien dat zes verschillende mensen op één dag ongeveer 24 keer deployden.
+
+00:06:44.560 --> 00:06:49.460
+De keerzijde is dat het ervan uitgaat dat je andemaan kunt deployen en geen oude versies hoeft te ondersteunen.
+
+00:06:49.580 --> 00:06:54.340
+Voor een webapp of een klein team is dat meestal waar, en die eenvoud is veel waard als je net begint.
+
+00:06:54.520 --> 00:07:01.440
+Als een branch toch langer blijft bestaan dan de bedoeling was, is de oplossing om de laatste main erin terug te mergen, zodat hij niet gaat afwijken tijdens je werk.
+
+00:07:01.600 --> 00:07:03.760
+Trunk-based development, de snelle variant.
+
+00:07:04.100 --> 00:07:07.780
+Als GitHub Flow simpel is, dan is trunk-based development de lean versie van simple.
+
+00:07:08.040 --> 00:07:12.780
+Iedereen commit kleine wijzigingen naar één gedeelde branch, de trunk, wat simpelweg een andere naam is voor main.
+
+00:07:12.780 --> 00:07:15.900
+Branches bestaan, als ze er al zijn, voor uren in plaats van weken.
+
+00:07:16.080 --> 00:07:19.700
+Die korte levensduur is het hele idee en het is de moeite waard om daar even bij stil te staan.
+
+00:07:19.900 --> 00:07:26.420
+Hoe langer een branch blijft bestaan, hoe meer de rest van het project zonder die branch doorgaat en hoe rommeliger de merge wordt wanneer hij uiteindelijk terugkomt.
+
+00:07:26.540 --> 00:07:31.820
+Korte branches betekenen kleine merges, en kleine merges los je op in een minuut in plaats van in een middag.
+
+00:07:32.020 --> 00:07:33.620
+Release branches zijn hier optioneel.
+
+00:07:33.800 --> 00:07:36.820
+Het zijn slecht snapshots die je maakt wanneer je een versie wilt markeren.
+
+00:07:36.820 --> 00:07:41.840
+Als je meerdere keren per dag deployt, heb je ze helemaal niet nodig, omdat de trunk zelf altijd chippable is.
+
+00:07:42.000 --> 00:07:46.040
+Het bewijs achter deze methode is het kennen waard, omdat het meer is dan alleen iemands persoonlijke voorkeur.
+
+00:07:46.200 --> 00:07:51.980
+Dora, het onderzoeksprogramma dat bestudeert hoe teams software leveren, keek terug naar de eigen data uit 2016 en 2017.
+
+00:07:52.360 --> 00:07:59.700
+Daaruit bleek dat teams beter presteren wanneer ze drie of minder actieve branches behouden, minstens één keer per dag naar de trunk-merging en code-freezes en aparte integratiefases overslaan.
+
+00:07:59.700 --> 00:08:06.740
+Google is het bekende voorbeeld van deze werkwijze en de praktijk gaat daar ver terug, maar dat is mede de reden waarom het model telkens opduikt als mensen praten over snelle teams.
+
+00:08:06.920 --> 00:08:09.760
+Het addertje onder het gras is dat het meer van je vraagt dan de andere twee.
+
+00:08:10.000 --> 00:08:17.080
+Je moet je werk opknippen in kleine stukjes en vertrouwen op snelle geautomatiseerde tests, omdat er geen lange stabilisatieperiode is om problemen aan het einde op te vangen.
+
+00:08:17.300 --> 00:08:21.780
+Daarom werkt trunk-based development het beste bij teams die constant opleveren en hebben geïnvesteerd in testen.
+
+00:08:21.900 --> 00:08:24.960
+Het is ook het model dat het meest onwennig kan aanvoelen als je net begint.
+
+00:08:24.960 --> 00:08:28.260
+Er is geen langlopende branche waar je onafgemaakt werk kunt verbergen.
+
+00:08:28.260 --> 00:08:29.840
+Pool requests uitgelegd
+
+00:08:29.840 --> 00:08:34.920
+Alle drie de strategieën leunen op dezelfde tool om werk samen te voegen en het is de tool die je elke dag zult gebruiken.
+
+00:08:35.080 --> 00:08:39.940
+Een pool request, meestal afgekort tot PR, is een verzoek om jouw branche samen te voegen met een andere branche.
+
+00:08:40.100 --> 00:08:43.280
+Het heeft een ingebouwde plek waar mensen de wijziging eerst kunnen beoordelen.
+
+00:08:43.500 --> 00:08:45.380
+Het is minder een knop en meer een gesprek.
+
+00:08:45.660 --> 00:08:50.100
+Reviewers kunnen reageren op individuele regels, vragen stellen en wijzigingen aanvragen.
+
+00:08:50.100 --> 00:08:54.300
+Je blijft commits pushen naar dezelfde branche en de pool request wordt gaandeweg bijgewerkt.
+
+00:08:54.300 --> 00:08:58.820
+Het wordt een doorlopend verslag van de discussie totdat iedereen tevreden is en de wijziging klaar is om te mergen.
+
+00:08:59.020 --> 00:09:00.700
+De waarde zit hem volledig in de timing.
+
+00:09:00.940 --> 00:09:03.540
+De review vindt plaats voordat de wijziging de main branche bereikt.
+
+00:09:03.740 --> 00:09:09.300
+Dat betekent dat fouten worden ontdekt terwijl ze nog goedkoop te herstellen zijn, in plaats van nadat ze bij klanten zijn beland en problemen veroorzaken.
+
+00:09:09.540 --> 00:09:15.500
+GitHub heeft het idee van code reviews niet uitgevonden, maar het populariseerde de pool request en de functie stamt uit ongeveer 2008.
+
+00:09:15.500 --> 00:09:19.860
+Tegenwoordig heeft bijna elke githoost zijn eigen versie ervan, ook al verschilt de naam soms een beetje.
+
+00:09:20.060 --> 00:09:22.460
+Er is ook een sociale kant die zo dadelijk belangrijk wordt.
+
+00:09:22.620 --> 00:09:27.980
+Op het moment dat je een pool request opent, kunnen anderen je branche zien en erop voortbouwen, wat die branche stilletjes verandert in iets gedeels.
+
+00:09:28.180 --> 00:09:31.980
+Hou die gedachten vast, want dat is precies de reden waarom een van de komende regels bestaat.
+
+00:09:32.160 --> 00:09:33.360
+Merge versus rebase
+
+00:09:33.360 --> 00:09:38.380
+Zodra een pool request is goedgekeurd, moet je je werk terugbrengen naar main en er zijn twee manieren om dat te doen.
+
+00:09:38.580 --> 00:09:41.820
+Ze zien er oppervlakkig hetzelfde uit, maar gedragen zich onderhuids heel verschillend.
+
+00:09:41.820 --> 00:09:45.120
+Kies je de verkeerde op de verkeerde branche, dan kun je het werk van een teamgenoot wissen.
+
+00:09:45.300 --> 00:09:47.440
+Dus dit volgende deel is belangrijker dan het klinkt.
+
+00:09:47.600 --> 00:09:51.980
+Merge en combineert je branche met main en voegt een merge commit toe die beide geschiedenissen tegelijk vastlegt.
+
+00:09:52.220 --> 00:09:53.880
+Niets wordt herschreven en niets gaat verloren.
+
+00:09:54.140 --> 00:09:57.260
+Je kunt altijd zien dat twee werkstromen op een bepaalde datum samenkwamen.
+
+00:09:57.480 --> 00:10:00.760
+Dat verslag is nuttig als je later probeert te achterhalen wat er veranderd is en wanneer.
+
+00:10:01.020 --> 00:10:02.540
+Rebasing bewandelt een andere route.
+
+00:10:02.800 --> 00:10:08.140
+Het pakje commits verplaatst ze zodat ze netjes bovenop de nieuwste main komen te staan en maakt onderweg gloednieuwe commits aan.
+
+00:10:08.140 --> 00:10:12.740
+Het resultaat is een strakke, rechte lijn zonder merge commits wat voor veel teams veel leesbaarder is.
+
+00:10:12.940 --> 00:10:15.160
+De keerzijde is wat beginners vaak over het hoofd zien.
+
+00:10:15.380 --> 00:10:18.060
+Merge en behoudt het volledige verhaal precies zoals het gebeurd is.
+
+00:10:18.280 --> 00:10:23.700
+Rebazen maakt het verhaal netter, maar vervangt de originele commits waardoor de registratie van wanneer het werk werd toegevoegd verdwijnt.
+
+00:10:23.880 --> 00:10:27.380
+Dat leidt tot één regel en dit is de belangrijkste regel in deze hele aflevering.
+
+00:10:27.580 --> 00:10:29.540
+Rebase nooit een branche waar anderen aan werken.
+
+00:10:29.720 --> 00:10:34.760
+Atlas Shian verwoordt het als een enkele vraag die je voor elke rebase moet stellen of iemand anders ook naar deze branche kijkt.
+
+00:10:34.900 --> 00:10:36.940
+Als het antwoord ja is, herschrijf je hem niet.
+
+00:10:36.940 --> 00:10:41.700
+De reden dat het zo pijnlijk is, is dat een rebase op een gedeelde branche de kopie van iedereen anders kapot maakt.
+
+00:10:41.920 --> 00:10:47.500
+Jouw historie komt niet meer overeen met die van hen en een geforceerde push om dit te herstellen over schrijft het werk waar zij nog op voortbouwde.
+
+00:10:47.660 --> 00:10:49.700
+Als je ooit twijfelt, kies dan gewoon voor mergen.
+
+00:10:49.940 --> 00:10:55.460
+Bewaar rebase voor je eigen privébranche, daar is het een geweldige manier om rommelige commits op te schonen voordat je een pull request opent.
+
+00:10:55.700 --> 00:10:57.320
+Blijf van gedeelde branches af.
+
+00:10:57.460 --> 00:10:59.620
+Een strategie kiezen voor kleine en grote teams.
+
+00:10:59.860 --> 00:11:04.340
+Kiezen komt neer op een paar eenvoudige vragen over je team, niet op welk model het meest professioneel klinkt.
+
+00:11:04.340 --> 00:11:06.320
+Ten eerste, hoe vaak je releases uitbrengt.
+
+00:11:06.400 --> 00:11:09.080
+Ten tweede, of je oude versies ondersteunt die mensen nog steeds gebruiken.
+
+00:11:09.220 --> 00:11:11.760
+Ten derde, hoeveel mensen tegelijkertijd aan dezelfde code werken.
+
+00:11:11.900 --> 00:11:14.580
+Ten vierde, hoeveel vertrouwen je hebt in je geautomatiseerde tests.
+
+00:11:14.820 --> 00:11:19.820
+Die vier antwoorden wijzen sneller naar een passend model dan welk vergelijkingsoverzicht dan ook, dat zijn de vragen die er echt toe doen.
+
+00:11:19.980 --> 00:11:23.700
+Als je een klein team bent of alleen werkt, is GitHub Flow meestal meer dan genoeg.
+
+00:11:23.860 --> 00:11:29.400
+Een mainbranche en korte feature branches brengen je al heel ver en je kunt later altijd nog structuur toevoegen als dat nodig is.
+
+00:11:29.400 --> 00:11:36.460
+Als je versiebeheerde software uitbrengt of meerdere uitgebrachte versies tegelijk moet ondersteunen, zijn de release- en hotfix-branches van GitHub Flow hun gewicht in goud waard.
+
+00:11:36.620 --> 00:11:40.040
+Dat is de wereld waarvoor het gebouwd is en in die wereld werkt het nog steeds uitstekend.
+
+00:11:40.200 --> 00:11:47.720
+Als je een groter team bent dat continu uitlevert en je hebt echt geïnvesteerd in geautomatiseerd testen, zorgt trunk-based development voor kleine merges en frequente releases.
+
+00:11:48.040 --> 00:11:50.200
+Dat is precies de afruil die daarvoor gevraagd wordt.
+
+00:11:50.440 --> 00:11:51.920
+Nog één ding is het onthouden waard.
+
+00:11:51.920 --> 00:11:55.160
+Zelfs de bedenker van GitHub Flow zegt dat er geen enkel juist antwoord is.
+
+00:11:55.340 --> 00:11:59.620
+Je kiest het model dat bij je context past en je past die keuze aan wanneer je context verandert.
+
+00:11:59.800 --> 00:12:04.620
+Een goed begin is om het lichtste model te kiezen dat werkt en pas extra regels toe te voegen als er iets stuk gaat.
+
+00:12:04.800 --> 00:12:10.120
+Teams kiezen vaak voor GitHub Flow omdat het indrukwekkend oogt, maar ontdekken dan dat de extra branches meer kosten dan ze opleveren.
+
+00:12:10.300 --> 00:12:11.920
+Veel gemaakte fouten door beginners.
+
+00:12:12.280 --> 00:12:18.080
+Welke strategie je ook kiest, een handvol fouten brengt bijna iedereen in hun eerste jaar ten val en geen daarvan is bijzonder.
+
+00:12:18.080 --> 00:12:21.220
+De grootste is het wekenlang laten bestaan van feature branches.
+
+00:12:21.640 --> 00:12:27.460
+Zo'n oude branche is zo ver afgedwaald van main dat mergen een gevecht wordt, hou branches te skort en merge ze vaak.
+
+00:12:27.740 --> 00:12:34.460
+Direct op main werken zonder review voelt sneller, totdat een defecte wijziging je gebruikers bereikt en er niets meer tussen hen en die fout in staat.
+
+00:12:34.720 --> 00:12:37.620
+Dan is er nog de branche die je herschrijft terwijl anderen die nog gebruiken.
+
+00:12:37.840 --> 00:12:43.680
+Reba's en of geforceerd pushen over het werk van een ander is de fout die de dag van een teamgenoot verpest omdat hun historie niet meer bij de jouwe past.
+
+00:12:43.680 --> 00:12:48.300
+Het proppen van ongerelateerde wijzigingen in één branche of pull request is nog zo'n veel voorkomende fout.
+
+00:12:48.480 --> 00:12:53.640
+Het vertraagt de review en als je later iets moet terugdraaien, kun je de goede wijziging niet scheiden van de slechte.
+
+00:12:53.840 --> 00:13:00.740
+De opzet van een groot bedrijf kopiëren zonder hun test- en releaseproces is verleidelijk, maar werkt zelden omdat het model op zichzelf niet de magie is.
+
+00:13:00.980 --> 00:13:02.520
+Dat zijn de werkwijzen eromheen.
+
+00:13:02.720 --> 00:13:03.860
+De laatste is subtieler.
+
+00:13:04.020 --> 00:13:09.220
+Als je de strategie als een persoonlijke voorkeur behandelt en jij bent de enige die hem volgt, dan is het nog geen echte strategie.
+
+00:13:09.220 --> 00:13:15.420
+Het is slechts een gewoonte. Elk van deze punten is een normale manier voor een team om een middag te verliezen en ze hebben allemaal een eenvoudige oplossing.
+
+00:13:15.700 --> 00:13:18.280
+Welke past bij jou? Dat is dus het volledige plaatje.
+
+00:13:18.460 --> 00:13:25.140
+Een branche is, zoals je hebt gezien, een veilige kopie van je werk en een branching-strategie is de afspraak die het team maakt over hoe die kopieën weer samenkomen.
+
+00:13:25.360 --> 00:13:29.300
+GitFlow is de gestructureerde methode, gebouwd voor software die in genummerde versies wordt uitgebracht.
+
+00:13:29.520 --> 00:13:32.940
+GitHub Flow is de eenvoudige methode, gebouwd voor teams die continu uitleveren.
+
+00:13:33.080 --> 00:13:38.180
+Trunk-based development is de snelle methode en is geschikt voor teams die zich kunnen inzetten voor kleine wijzigingen en sterke tests.
+
+00:13:38.180 --> 00:13:43.960
+En als het gaat om het samenvoegen van werk, behoud Merch je historie, terwijl Rebase het opruimt en alleen thuishoort op privébranches.
+
+00:13:44.200 --> 00:13:49.000
+Abonneer je op M365FM om te blijven leren over de tools en de mindset die de toekomst van werk vormgeven.
+
+00:13:49.160 --> 00:13:57.000
+En hier is mijn vraag aan jou. Welke branching-strategie gebruikt jouw team op dit moment en was dat een bewuste beslissing of gewoon een gewoonte waar nog niemand vraagtekens bij heeft gezet?
