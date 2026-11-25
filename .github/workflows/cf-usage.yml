@@ -1,0 +1,29 @@
+name: Cloudflare-Verbrauch messen (D1, R2 – nur lesend)
+# Wochenbericht in der Step-Summary: D1-Zeilen gelesen/geschrieben je Tag, R2-Operationen nach actionType und Klasse (A/B/kostenlos),
+# R2-Speicher je Bucket und D1-Zeilen je Cron-Aufgabe (cron_runs rr/rw). Standard 14 Tage = eine Woche vorher, eine nachher.
+# Nur lesend (GraphQL-Analytics, GET, ein festes SELECT auf cron_runs); schreibt nichts ins Repo, nach D1 oder R2. tools/cf_usage.py
+# Token: CF_ANALYTICS_TOKEN (Lese-Token, "Account Analytics: Read"), sonst CLOUDFLARE_API_TOKEN. Fehlt ein Recht: Hinweis, kein roter Lauf.
+on:
+  workflow_dispatch:
+    inputs:
+      days: { description: "Anzahl voller Tage (2 bis 31)", required: false, default: "14" }
+  schedule:
+    - cron: "23 4 * * 1"   # montags 04:23 UTC
+permissions:
+  contents: read
+concurrency: { group: cf-usage, cancel-in-progress: false }
+jobs:
+  usage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Verbrauch abfragen (Step-Summary)
+        env:
+          CF_ANALYTICS_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID || secrets.R2_ACCOUNT_ID }}
+          DAYS_IN: ${{ inputs.days || '14' }}
+        run: python tools/cf_usage.py --days "$DAYS_IN"
