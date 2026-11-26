@@ -5,6 +5,8 @@ Registry und Pfad: data/pillars.json. Veröffentlicht werden nur Metadaten (Titl
 Prüfhinweise und Review-Protokoll bleiben in der Datei und erscheinen nie auf der Seite.
 
 Seiten:  /learn/<slug>/ (en) und /de/learn/<slug>/ (de), Pfad /learn/path/<id>/ und /de/learn/path/<id>/.
+Vertiefungen: /learn/<leitfaden>/<vertiefung>/ (en, imports/pillars/en/clusters/) und /de/learn/<leitfaden>/<vertiefung>/ (de, imports/pillars/de/clusters/, nur mit slug.de),
+hreflang-Paar wie bei den Leitfäden. Die Dateien der Redaktion bleiben unverändert; scrub/_scrub_de/scrub_deep entfernen Redaktionsvermerke beim Bau.
 Cluster: Blogbeiträge werden den Pillars per Entitäts-Themen und Slug-Muster zugeordnet (assign); jeder zugeordnete englische oder deutsche Beitrag zeigt
 unten einen Kasten "Teil des Lernpfads" mit Link auf Pillar und Pfad (article_box). Verweise in den Dateien werden beim Bauen geprüft: unbekannte
 Entitäten, Beiträge und Pillar-Adressen führen zu einer Warnung im Build-Log, der Link wird dann zu Text (nichts bricht den Bau)."""
@@ -34,8 +36,8 @@ UI = {
     "overview": ("View the whole path", "Ganzen Pfad ansehen"), "disc": ("Note: The author works at iFAKT GmbH.", "Offenlegung: Der Autor arbeitet bei der iFAKT GmbH."), "articles": ("articles", "Artikel"), "toc": ("Contents", "Inhalt"),
     "src_lead": ("All online sources were retrieved on November 20, 2026.", "Alle Online-Quellen wurden am 20.11.2026 abgerufen."),
     "other": ("Deutsche Fassung", "English version"), "tbl": ("Table", "Tabelle"),
-    # Vertiefungen (nur Englisch) und Leitfäden ohne Fassung der Sprache
-    "deep": ("Deep dives", "Vertiefungen"), "deep_lead": ("Focused articles on single methods of this guide.", "Ausführliche Artikel zu einzelnen Methoden dieses Leitfadens (auf Englisch)."),
+    # Vertiefungen (en, de) und Leitfäden ohne Fassung der Sprache
+    "deep": ("Deep dives", "Vertiefungen"), "deep_lead": ("Focused articles on single methods of this guide.", "Ausführliche Artikel zu einzelnen Methoden dieses Leitfadens."),
     "deep_one": ("Deep dive", "Vertiefung"), "deep_part": ("part of", "Teil von"), "back": ("Back to the guide", "Zurück zum Leitfaden"),
     "deep_more": ("More deep dives in this guide", "Weitere Vertiefungen dieses Leitfadens"), "en_only": ("in English", "auf Englisch"),
     "rel_g": ("Related guides", "Weiterführende Leitfäden"), "rel_lead": ("Separate guides in this learning path cover these methods in depth.", "Eigene Leitfäden dieses Lernpfads behandeln diese Methoden ausführlich."),
@@ -239,32 +241,48 @@ def pdate(x):
 
 
 def clusters():
-    """Vertiefungen (nur Englisch): [{id, parent, slug: {en}, label: {en}}] in Reihenfolge der Registry."""
+    """Vertiefungen: [{id, parent, slug: {en, de?}, label: {en, de?}}] in Reihenfolge der Registry (de nur mit slug.de und Datei imports/pillars/de/clusters/)."""
     return [c for c in registry().get("clusters") or [] if by_id(c.get("parent"))]
 
 
-def clusters_of(pid):
-    return [c for c in clusters() if c["parent"] == pid and cluster_file(c).exists()]
+def clusters_of(pid, lang="en"):
+    """Vertiefungen eines Leitfadens mit Fassung dieser Sprache (Standard: englisch, die Grundlage jeder Vertiefung)."""
+    return [c for c in clusters() if c["parent"] == pid and has_cluster(c, lang)]
 
 
-def cluster_file(c):
-    return DIR / "en" / "clusters" / f"{c['slug']['en']}.md"
+def cslug(c, lang):
+    """Slug einer Vertiefung: de mit slug.de, sonst der englische (wie slug_of)."""
+    return (c["slug"].get("de") if lang == "de" else None) or c["slug"]["en"]
 
 
-def cluster_url(BASE, c):
-    return f"{BASE}/learn/{slug_of(by_id(c['parent']), 'en')}/{c['slug']['en']}/"
+def cluster_file(c, lang="en"):
+    return DIR / lang / "clusters" / f"{cslug(c, lang)}.md"
+
+
+def has_cluster(c, lang):
+    """Gibt es die Vertiefung in dieser Sprache? de nur mit slug.de (wie has bei Leitfäden), dazu die Datei."""
+    if lang == "de" and not c["slug"].get("de"): return False
+    return cluster_file(c, lang).exists()
+
+
+def cluster_url(BASE, c, lang="en"):
+    return f"{BASE}{lp(lang)}/learn/{slug_of(by_id(c['parent']), lang)}/{cslug(c, lang)}/"
+
+
+def clabel(c, lang):
+    return (c.get("label") or {}).get(lang) or c["label"]["en"]
 
 
 def find_cluster(parent_slug, slug):
-    """Vertiefung zu /learn/<parent>/<slug>/ (Eltern-Slug en oder de) oder None."""
+    """Vertiefung zu /learn/<parent>/<slug>/ (Eltern- und Vertiefungs-Slug en oder de) oder None."""
     p = next((q for q in pillars() if parent_slug in (q["slug"]["en"], q["slug"].get("de"))), None)
     if not p: return None
-    return next((c for c in clusters_of(p["id"]) if c["slug"]["en"] == slug), None)
+    return next((c for c in clusters() if c["parent"] == p["id"] and slug in (c["slug"]["en"], c["slug"].get("de")) and has_cluster(c, "en")), None)
 
 
 # ---------- Datei lesen ----------
 H1 = re.compile(r"^# (.+)$")
-SKIP_H1 = ("competitive", "wettbewerb", "editorial", "prüfhinweise", "pruefhinweise")
+SKIP_H1 = ("competitive", "wettbewerb", "hinweis zur wettbewerb", "editorial", "prüfhinweise", "pruefhinweise")
 
 
 def _sections(text):
@@ -304,6 +322,73 @@ _INTERNAL = re.compile(r"\s*\([^()]*(?:review log|editorial notes|review-protoko
 
 _PLAN_PAREN = re.compile(r"\s*\((?:(?:planned|geplant)(?=[,;)])|in preparation|in Vorbereitung|links go live|Links werden)[^()]*\)", re.I)
 _PLAN_TAIL = re.compile(r"\s*,\s*planned\)")
+
+
+_LL = r"(?:\[[^\]]+\]\(https?://(?:www\.)?m365\.fm/(?:en/)?learn/[a-z0-9/-]+\))"   # Link auf einen Leitfaden oder eine Vertiefung
+_FR_DE = {"parent-pillar": "Übergeordneter Leitfaden", "übergeordnete pillar": "Übergeordneter Leitfaden", "parent-leitfaden": "Übergeordneter Leitfaden",
+          "schwester-cluster": "Weitere Vertiefungen", "geschwister-cluster": "Weitere Vertiefungen", "pillar-leitfäden": "Leitfäden in diesem Lernpfad",
+          "verwandte pillars": "Verwandte Leitfäden", "schwesterleitfäden": "Verwandte Leitfäden", "cluster-leitfäden": "Vertiefungen",
+          "vertiefungen (cluster, geplant)": "Vertiefungen", "vertiefungsartikel": "Vertiefungen", "verwandte pillars und cluster": "Verwandte Leitfäden und Vertiefungen",
+          "verwandte pillars und cluster (vor livegang links prüfen)": "Verwandte Leitfäden und Vertiefungen", "glossarbegriffe (entities)": "Glossarbegriffe",
+          "entity-seiten": "Begriffsseiten"}
+
+
+def _scrub_de(md):
+    """Neue deutsche Leitfäden und Vertiefungen (Kursausbau, 26.11.2026): Redaktionssprache der Dateien lesbar machen, die Dateien bleiben unverändert.
+    Nur feste Wendungen (Fachbegriffe wie "geplante Instandhaltung" oder das Buch "5 Pillars of the Visual Workplace" bleiben). "Pillar-Seite"/"Pillar-Page"
+    der bestehenden Leitfäden bleibt unberührt (eigene Regeln in scrub)."""
+    md = re.sub(r"(?m)^\*\*([^*\n]+)\*\*[ \t]*$", lambda m: f"**{_FR_DE[m.group(1).strip().lower()]}**" if m.group(1).strip().lower() in _FR_DE else m.group(0), md)
+    md = re.sub(r"(\))\s*\(geplante[rn]? (?:Cluster|Pillar|Leitfaden|Vertiefung)\)", r"\1", md)          # [..](..) (geplanter Cluster)
+    md = re.sub(r"(" + _LL + r"), geplant\)", r"\1)", md)                                                 # (siehe [..](..), geplant)
+    # "der geplante Leitfaden zu [..]", "im geplanten Pillar [..]", "unser geplanter Pillar zu [..]", "der geplante Cluster [..]"
+    md = re.sub(r"\bgeplante[nrs]? (?=(?:Leitf[aä]d\w*|Pillars?|Clusters?|Vertiefung\w*)?\s*(?:zu[rm]?\s+|über\s+)?" + _LL + ")", "", md)
+    md = re.sub(r"\b(der|Der) geplante Cluster zur (?=Simulation)", r"die Vertiefung zur ", md)
+    md = re.sub(r"\b([Dd])er (?:Schwester-)?Cluster (zu[rm]?|über) (?=" + _LL + ")", lambda m: ("D" if m.group(1) == "D" else "d") + f"ie Vertiefung {m.group(2)} ", md)
+    md = re.sub(r"\b([Dd])er Cluster (?=" + _LL + ")", lambda m: ("D" if m.group(1) == "D" else "d") + "ie Vertiefung ", md)
+    md = re.sub(r"\bim \[Cluster (zu[rm]?) ", r"in der [Vertiefung \1 ", md)                                # Artikel passend zu "Vertiefung"
+    md = re.sub(r"\b(aus|mit|von|in) dem \[Cluster (zu[rm]?) ", r"\1 der [Vertiefung \2 ", md)
+    md = re.sub(r"\b([Dd])er \[Cluster (zu[rm]?) ", r"\1ie [Vertiefung \2 ", md)
+    md = re.sub(r"\[Cluster (zu[rm]?) ", r"[Vertiefung \1 ", md)
+    md = re.sub(r"\bDieser Artikel ist ein Cluster des\b", "Dieser Artikel ist eine Vertiefung des", md)
+    md = re.sub(r"(?m)^\*Ein Cluster-Artikel des m365\.fm-Leitfadens \[[^\]]+\]\([^)]+\)\.?\*[ \t]*\n?", "", md)   # die Seite zeigt "Vertiefung · Teil von ..." selbst
+    for a, b in ((r"\b([Dd])er Parent-(?:Leitfaden|Pillar)\b", r"\1er übergeordnete Leitfaden"), (r"\bim Parent-(?:Leitfaden|Pillar)\b", "im übergeordneten Leitfaden"),
+                 (r"\bden Cluster (?=" + _LL + r"|[A-ZÄÖÜ])", "die Vertiefung "), (r"\bunserem Pillar\b(?!-)", "unserem Leitfaden"),
+                 (r"\bdes Parent-Pillars\b(?!-)", "des übergeordneten Leitfadens"), (r"\b([Dd])er Parent-Pillar\b(?!-)", r"\1er übergeordnete Leitfaden"),
+                 (r"\bdes Pillars\b(?!-)", "des Leitfadens"), (r"\bin der Pillar\b(?!-)", "im Leitfaden"), (r"\bRegelrunden der Pillar\b(?!-)", "Regelrunden des Leitfadens"),   # "die Pillar" (feminin) vor "der Pillar"
+                 (r"\b([Dd])er Pillar\b(?!-)", r"\1er Leitfaden"), (r"\b([Dd])ie Pillar\b(?!-)", lambda m: ("D" if m.group(1) == "D" else "d") + "er Leitfaden"),
+                 (r"\b(im|dem|den|unseren|unser|zum) Pillar\b(?!-)", r"\1 Leitfaden"),
+                 (r"\[Azure-Pillar\]", "[Leitfaden zu Azure]"), (r"\[Pillar, (Abschnitt [\d.]+)\]", r"[Leitfaden, \1]"),
+                 (r"\bSchwesterleitfaden\b", "Leitfaden"), (r"\bSchwesterartikel(n?)\b", r"verwandten Artikel\1"), (r"\bDer verwandten Artikel\b", "Der verwandte Artikel"),
+                 (r"\bder verwandten Artikel zu", "der verwandte Artikel zu"), (r"\bim verwandten Artikel\b", "im verwandten Artikel"),
+                 (r"\bDer Schwester-Cluster zu\b", "Die Vertiefung zu"),
+                 (r"\bdie führenden Erklärseiten und der Leitfaden\b", "verbreitete Erklärseiten und der Leitfaden"),
+                 (r"\b(Mehrere|Einige|Manche|Viele) Wettbewerb(?:s|er)seiten\b", r"\1 Webseiten"), (r"\bFast jede Wettbewerberseite\b", "Fast jede Webseite"),
+                 (r"\b(von|auf|bei|mit|aus) Wettbewerb(?:s|er)seiten\b", r"\1 anderen Webseiten"), (r"(?m)(?:^|(?<=[.!?:] ))Wettbewerb(?:s|er)seiten\b(?!\s*:)", "Viele Webseiten"),   # nicht "Wettbewerberseiten: ..." (Quelle, entfällt über _DROP_SRC)
+                 (r"\bEine gut rankende Seite\b", "Eine viel gelesene Seite"), (r"\bViele hoch rankende Seiten\b", "Viele Ratgeberseiten")):
+        md = re.sub(a, b, md)
+    return md
+
+
+def _glink(lab):
+    """Deutscher Leitfaden mit dem Namen lab (label.de) -> Markdown-Link (die Adresse bildet Ctx.link auf die gebaute Seite ab), sonst None."""
+    p = next((q for q in pillars() if q["label"].get("de") == lab and q["slug"].get("de")), None)
+    return f"[{lab}](https://www.m365.fm/learn/{p['slug']['de']}/)" if p else None
+
+
+def _scrub_old_de(md):
+    """Bestehende deutsche Leitfäden (20.11.2026): Verweise auf "geplante Pillar-Seiten" und das "Schwester-Kompendium" zeigen auf Leitfäden, die längst
+    veröffentlicht sind. Sie werden zu Links auf den Leitfaden ("im Leitfaden [Produktionskennzahlen](...)"); die Dateien bleiben unverändert.
+    Nur Namen, die genau einem deutschen Leitfaden entsprechen (label.de), sonst bleibt der Satz stehen."""
+    md = re.sub(r"Eine ausführliche Darstellung der Fertigungs-IT auf Azure ist als eigene Pillar-Seite geplant \(siehe Liste am Ende dieses Artikels\)\.",
+                lambda m: f"Eine ausführliche Darstellung der Fertigungs-IT auf Azure gibt der Leitfaden {_glink('Manufacturing IT mit Azure')}." if _glink("Manufacturing IT mit Azure") else m.group(0), md)
+    labs = sorted({q["label"]["de"] for q in pillars() if q["slug"].get("de")}, key=len, reverse=True)
+    rx = "|".join(map(re.escape, labs))
+    if rx:
+        md = re.sub(r"\b(in der|die) Pillar-(?:Seite|Page) (?:zu[rm]? )?(" + rx + r")\b(?!\]|-)", lambda m: ("im Leitfaden " if m.group(1) == "in der" else "der Leitfaden ") + _glink(m.group(2)), md)
+    md = re.sub(r"(ist im Leitfaden \[[^\]]+\]\(https://www\.m365\.fm/learn/[a-z0-9-]+/\)) vorgesehen\b", r"\1 zu finden", md)   # "... ist in der Pillar-Seite zu X vorgesehen"
+    md = re.sub(r"(Leitfaden \[[^\]]+\]\(https://www\.m365\.fm/learn/[a-z0-9-]+/\)) \(siehe (?:Linkliste|Liste) am Ende[^)]*\)", r"\1", md)
+    md = re.sub(r"\b([Dd])as Schwester-Kompendium (?=\[)", lambda m: ("D" if m.group(1) == "D" else "d") + "er Leitfaden ", md)
+    return md
 
 
 def scrub(md):
@@ -351,6 +436,10 @@ def scrub(md):
                  (r"was founded in 2001 by Jörg Drees", "was, according to the company, founded in 2001"),
                  (r"wurde 2001 von Jörg Drees gegründet", "wurde nach Unternehmensangaben 2001 gegründet")):
         md = re.sub(a, b, md)
+    md = re.sub(r"\bcompare the formulas used by ERP vendors and competitors\b", "compare the formulas used by ERP vendors and other guides", md)   # SERP-Vergleich (kanban-pull-system)
+    md = re.sub(r"\bvergleichen die Formeln von ERP-Anbietern und Wettbewerbern\b", "vergleichen die Formeln von ERP-Anbietern und Ratgeberseiten", md)
+    md = _scrub_old_de(md)
+    md = _scrub_de(md)
     # Adressen in Backticks (/learn/<slug>/) werden zu Links auf den Pillar
     md = re.sub(r"(?m)^(\s*[-*]\s+)`(/(?:en/)?learn/[a-z0-9-]+/(?:[a-z0-9-]+/)?)`:\s*(.+?)\s*$", lambda m: f"{m.group(1)}[{m.group(3)}](https://www.m365.fm{m.group(2)})", md)
     md = re.sub(r"(?m)^(\s*[-*]\s+)([^:\n`\[]+?):\s*`(/(?:en/)?learn/[a-z0-9-]+/(?:[a-z0-9-]+/)?)`.*$", lambda m: f"{m.group(1)}[{m.group(2).strip()}](https://www.m365.fm{m.group(3)})", md)
@@ -427,7 +516,7 @@ class Ctx:
     def __init__(self, BASE, ents, en_posts, de_posts, episodes=None, tr_posts=None):
         self.BASE, self.ents, self.en_posts, self.de_posts, self.episodes = BASE, ents, en_posts, de_posts, episodes
         self.tr_posts = tr_posts or {}   # {lang: {slug}} Sprachfassungen der Beitraege (ausser de)
-        self.deep_ok = None              # IDs der gebauten Vertiefungen (None: alle mit Datei); Links auf andere entfallen
+        self.deep_ok = None              # {lang: IDs der gebauten Vertiefungen} (None: alle mit Datei); Links auf andere entfallen
         self.warn = []
 
     def link(self, u, lang):
@@ -442,9 +531,11 @@ class Ctx:
             if mm.group(1) == registry()["path"]["id"]: return path_url(self.BASE, lang) + frag
             self.warn.append(f"Pillar-Adresse unbekannt: {u}"); return None
         mm = re.match(r"/(?:en/)?learn/([a-z0-9-]+)/([a-z0-9-]+)/?$", path)
-        if mm:   # Vertiefung /learn/<leitfaden>/<vertiefung>/ (nur Englisch)
+        if mm:   # Vertiefung /learn/<leitfaden>/<vertiefung>/: auf deutschen Seiten die deutsche Fassung, sonst die englische
             c = find_cluster(*mm.groups())
-            if c and (self.deep_ok is None or c["id"] in self.deep_ok): return cluster_url(self.BASE, c) + frag
+            ok = lambda l: c and (has_cluster(c, l) if self.deep_ok is None else c["id"] in self.deep_ok.get(l, ()))
+            if lang == "de" and ok("de"): return cluster_url(self.BASE, c, "de") + frag   # deutsche Fassung der Vertiefung
+            if ok("en"): return cluster_url(self.BASE, c) + frag
             self.warn.append(f"Pillar-Adresse unbekannt: {u}"); return None
         mm = re.match(r"/(?:en/)?learn/([a-z0-9-]+)/?$", path)
         if mm:
@@ -477,7 +568,7 @@ def inline(s, lang, cx):
 
     def _learn(m):   # `/learn/<slug>/` bzw. `/learn/<slug>/<vertiefung>/` im Text: Link auf Pillar oder Vertiefung, sonst Code
         if m.group(2):
-            c = find_cluster(m.group(1), m.group(2)); lab = c and c["label"]["en"]
+            c = find_cluster(m.group(1), m.group(2)); lab = c and clabel(c, lang if lang == "de" and has_cluster(c, "de") else "en")
         else:
             p = next((q for q in pillars() if m.group(1) in (q["slug"]["en"], q["slug"].get("de"))), None); lab = p and p["label"][lang]
         if not lab or not cx: return m.group(0)
@@ -495,7 +586,7 @@ def inline(s, lang, cx):
         if n is None: return label
         ext = not n.startswith(cx.BASE) if cx else True
         return f'<a href="{esc(n)}"' + (' rel="noopener" target="_blank"' if ext else _hl_en(n, lang, cx)) + f'>{label}</a>'
-    return re.sub(r"\[([^\]]+)\]\(((?:https?://|#)[^\s)]+)\)", a, s)
+    return re.sub(r"\[([^\[\]]+)\]\(((?:https?://|#)[^\s)]+)\)", a, s)
 
 
 _TROW = re.compile(r"^\s*\|.*\|\s*$")
@@ -556,10 +647,13 @@ def render(md, lang, cx, ids=True, demote=0):   # demote=1: "# Teil" wird h2, "#
     return "\n".join(out), heads
 
 
+_UML = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss"})
+
+
 def fix_anchors(h, heads, cx):
     """Sprungmarken des Inhaltsverzeichnisses mit den Überschrift-IDs abgleichen (Doppelstriche und Nummern ignorieren); unbekannte: Hinweis im Build-Log."""
     ids = {x[2] for x in heads}
-    flat = lambda a: re.sub(r"-+", "-", a).strip("-")
+    flat = lambda a: re.sub(r"-+", "-", a.translate(_UML)).strip("-")
     by_flat = {}
     for x in heads: by_flat.setdefault(flat(x[2]), x[2]); by_flat.setdefault(re.sub(r"^\d+-", "", flat(x[2])), x[2])
 
@@ -572,18 +666,39 @@ def fix_anchors(h, heads, cx):
     return re.sub(r'href="#([^"]+)"', fix, h)
 
 
+_UNV_WORDS = r"(?:unverified|ungeprüft|ungepruft|unbelegt)"
+
+
+def _unv_why(why):
+    """Grund eines Markers für den Tooltip: Aufträge an die Redaktion ("vor Veröffentlichung bestätigen", "in dieser Sitzung", "check with ...") entfallen."""
+    why = re.sub(r"<[^>]+>", "", why or "")
+    why = re.sub(r"[;,]?\s*(?:confirm|check|verify|re-check)\b[^;\]]*?\bbefore (?:publication|go-live|publishing)\b", "", why, flags=re.I)
+    why = re.sub(r"\s*\bin this (?:session|review)\b", "", why)
+    why = re.sub(r"\s*\bin dieser Sitzung\b", "", why)
+    why = re.sub(r"(?:^|[;.]\s*|,\s*)[^;.]*\b(?:prüfen|bestätigen|erfragen)\s*\.?\s*$", "", why.strip())   # Auftrag am Ende ("... anhand der Norm prüfen")
+    why = re.sub(r"[;,]?\s*(?:die|den|das)?\s*[^;\]]*?\bvor (?:der )?Veröffentlichung\b[^;\]]*", "", why)
+    why = re.sub(r"[;,]\s*(?:nur als internes Ziel verwenden|Die Anforderung des Kunden prüfen[^;\]]*)", "", why)
+    why = re.sub(r"[;,]\s*(?:check (?:the|with) [^;\]]*|use as an internal target only)", "", why)
+    return why.strip().strip(";,").strip().rstrip(".")
+
+
+def _unv_tag(lang, why=""):
+    why = _unv_why(why).replace('"', "&quot;")
+    title = f"{tx(lang, 'unv_t')} {why[:1].upper() + why[1:]}." if why else esc(tx(lang, "unv_t"))
+    return f'<sup class="pl-unv" title="{title}">{esc(tx(lang, "unv"))}</sup>'
+
+
+def _unv(h, lang):
+    """Marker im HTML -> kleines Etikett, der Grund steht im Tooltip: [unverified], [ungeprüft: Grund], [unbelegt; Grund], Grund mit Verweis [n];
+    nachgestellt [Praxiswert, unbelegt], [practitioner range, unverified], [als Statistik unbelegt]."""
+    h = re.sub(r"\[" + _UNV_WORDS + r"(?:\s*[:;]\s*|\s+)?((?:[^\[\]]|\[\d{1,3}\])*)\]", lambda m: _unv_tag(lang, m.group(1)), h, flags=re.I)
+    return re.sub(r"\[([^\[\]<>]{1,80}?)[,;]?\s+" + _UNV_WORDS + r"\b([^\[\]<>]{0,160})\]", lambda m: _unv_tag(lang, (m.group(1) + " " + m.group(2).strip(" ;,")).strip()), h, flags=re.I)
+
+
 def finish(h, n_sources, lang, dropped=()):
-    """Nachbearbeitung: [12] -> Sprung zur Quelle, Marker [unverified]/[ungeprüft] -> kleiner Hinweis, "(planned)"/"(geplant)" entfällt."""
+    """Nachbearbeitung: [12] -> Sprung zur Quelle, Marker [unverified]/[ungeprüft]/[unbelegt] -> kleiner Hinweis, "(planned)"/"(geplant)" entfällt."""
     h = re.sub(r"\s*\((?:planned|geplant)\)", "", h)
-    def unv(m):   # [unverified] oder [unverified: Grund] -> kleines Etikett, der Grund steht im Tooltip
-        why = re.sub(r"<[^>]+>", "", m.group(1) or "")
-        why = re.sub(r"[;,]?\s*(?:confirm|check|verify|re-check)\b[^;\]]*?\bbefore (?:publication|go-live|publishing)\b", "", why, flags=re.I)   # Auftrag an die Redaktion, kein Hinweis für Lesende
-        why = re.sub(r"\s*\bin this (?:session|review)\b", "", why)
-        why = re.sub(r"[;,]\s*(?:check (?:the|with) [^;\]]*|use as an internal target only)", "", why)
-        why = why.strip().strip(";,").strip().rstrip(".").replace('"', "&quot;")
-        title = f"{tx(lang, 'unv_t')} {why[:1].upper() + why[1:]}." if why else esc(tx(lang, "unv_t"))
-        return f'<sup class="pl-unv" title="{title}">{esc(tx(lang, "unv"))}</sup>'
-    h = re.sub(r"\[(?:unverified|ungeprüft|ungepruft)(?:\s*[:;]\s*|\s+)?([^\]]*)\]", unv, h, flags=re.I)   # auch [unverified as a statistic], [unverified; Grund]
+    h = _unv(h, lang)
 
     valid = n_sources if isinstance(n_sources, (set, frozenset)) else set(range(1, n_sources + 1))
 
@@ -596,11 +711,11 @@ def finish(h, n_sources, lang, dropped=()):
     return re.sub(r">([^<]+)<", lambda m: ">" + cites(m.group(1)) + "<", h)
 
 
-_DROP_SRC = re.compile(r"^(?:NEURONwriter\b|Competitor pages\b|Wettbewerberseiten\b)", re.I)
+_DROP_SRC = re.compile(r"^(?:NEURONwriter\b|Competitor pages\b|Wettbewerberseiten\b|Wettbewerbsseiten\b)", re.I)
 _URL = re.compile(r"(?<![\](\"'=])\bhttps?://[^\s<>)\]]+[^\s<>)\].,;:]")
 
 
-_ST = r"(?:V|F|S|P)(?:-sister)?"   # Prüfstatus der Faktenprüfung in den Quellenlisten der neuen Leitfäden ((S) geprüft, (V-sister) beim Schwester-Leitfaden geprüft ...)
+_ST = r"(?:V|F|S|P)(?:-sister|-Schwester)?"   # Prüfstatus der Faktenprüfung in den Quellenlisten der neuen Leitfäden ((S) geprüft, (V-sister) beim Schwester-Leitfaden geprüft ...)
 
 
 def _src_status(t):
@@ -610,10 +725,20 @@ def _src_status(t):
     t = re.sub(r"\s*\((?:[^()]*\b(?:sister|sibling|parent|related) (?:pillar|guide)s?\b|[^()]*`?[\w-]+\.md`?|via sibling pillar)[^()]*\)", "", t)   # geprüft beim Schwester-Leitfaden, Dateinamen
     t = re.sub(r"\(" + _ST + r"[;,]\s*re-fetched\b", "(accessed", t)                              # (F, re-fetched D ...) -> (accessed D ...)
     t = re.sub(r"\(re-fetched\b", "(accessed", t)
+    t = re.sub(r"\s*\((?:[^()]*\bSchwester-?(?:Pillars?|Leitfadens?|leitfadens?|leitfäden|Clusters?)\b|über Schwester-Pillar)[^()]*\)", "", t)   # geprueft beim Schwester-Leitfaden
     t = re.sub(r"\(" + _ST + r"[;,:]\s*(?=[^()]*\))", "(", t)                                      # (V; vendor page) -> (vendor page)
     t = re.sub(r"\s*\(" + _ST + r"\)(?=\s*(?:[.;,]|$))", "", t)                                   # (S) (V) (F) (V-sister)
     t = re.sub(r"\s*\(" + _ST + r"$", "", t)                                                        # abgeschnittenes "(S" am Ende
+    t = re.sub(r"\(erneut abgerufen\b", "(abgerufen", t)
     return t.strip()
+
+
+def _unv_src(h, lang):
+    """Marker in einer Quellenangabe: Etikett wie im Text, der Grund bleibt lesbar in Klammern (er nennt oft die Ersatzquelle mit Link)."""
+    def one(m):
+        why = re.sub(r"[;,]\s*$", "", m.group(1).strip())
+        return _unv_tag(lang) + (f" ({why})" if why else "")
+    return re.sub(r"\[" + _UNV_WORDS + r"(?:\s*[:;]\s*|\s+)?((?:[^\[\]])*)\]", one, h, flags=re.I)
 
 
 def sources_html(md, lang, cx):
@@ -626,15 +751,17 @@ def sources_html(md, lang, cx):
         elif items and ln.strip() and not ln.startswith(("#", ">")): items[-1][1] += " " + ln.strip()
     keep, dropped = [], set()
     for n, t in items:
-        if _DROP_SRC.match(t.strip()) or re.search(r"\(competitor page\b", t, re.I): dropped.add(n); continue   # nur für die SERP-Analyse, im Text nicht zitiert
+        if _DROP_SRC.match(t.strip()) or re.search(r"\((?:competitor page|Wettbewerbsseite)\b", t, re.I): dropped.add(n); continue   # nur für die SERP-Analyse, im Text nicht zitiert
         t = re.sub(r"\s*\((?:competitor|Wettbewerber)\)", "", t, flags=re.I)
         t = re.sub(r"\((?:competitor|Wettbewerber), ", "(", t, flags=re.I)
         t = re.sub(r"\(used for the competitive analysis and as (?=a pointer)", "(", t)   # Arbeitsvermerke der Redaktion in Quellenangaben
         t = re.sub(r";?\s*re-checked in (?:the )?review round \d+", "", t)
         t = re.sub(r"\s*for the SERP re-check\b", "", t)
+        t = re.sub(r"\s*für den SERP-Re-Check\b", "", t); t = re.sub(r";?\s*in Prüfrunde \d+ erneut geprüft", "", t)
+        t = re.sub(r"\(genutzt für die Wettbewerbsanalyse und als (?=Verweis)", "(", t)
         t = _src_status(t)
         keep.append((n, _URL.sub(lambda u: f"[{u.group(0)}]({u.group(0)})", t)))
-    lis = "".join(f'<li id="src-{n}" value="{n}">{inline(t, lang, cx)}</li>' for n, t in keep)
+    lis = "".join(f'<li id="src-{n}" value="{n}">{_unv_src(inline(t, lang, cx), lang)}</li>' for n, t in keep)
     lead = f"<p>{esc(tx(lang, 'src_lead'))}</p>" if keep else ""
     return lead + f'<ol class="pl-src">{lis}</ol>', {n for n, _ in keep}, dropped
 
@@ -654,7 +781,7 @@ def faq_of(md):
             q, a = m.group(1).strip(), []
         elif q and ln.strip(): a.append(ln.strip())
     if q and a: out.append((q, " ".join(a)))
-    clean = lambda s: re.sub(r"\s+", " ", re.sub(r"\[(\d{1,3})\]|\[(?:unverified|ungeprüft)[^\]]*\]", "", re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", re.sub(r"[*`>]", "", s)))).strip()
+    clean = lambda s: re.sub(r"\s+", " ", re.sub(r"\[(\d{1,3})\]|\[(?:unverified|ungeprüft|unbelegt)[^\]]*\]", "", re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", re.sub(r"[*`>]", "", s)))).strip()
     return [(clean(q), clean(a)[:1200]) for q, a in out if q and a][:12]
 
 
@@ -663,6 +790,9 @@ ASSIGN = {}   # (handle, slug) -> [pillar-ids nach Güte]
 CLUSTER = {}  # pillar-id -> [post, ...] nach Güte
 ASSIGN_DE = {}   # (handle, slug) -> bester Leitfaden mit deutscher Fassung (Kasten auf deutschen und übersetzten Blogseiten, wenn der erste nur Englisch ist)
 MIXED = {}       # pillar-id -> CLUSTER + CLUSTER_DE gemeinsam nach Güte (Seiten ausser Englisch)
+SCORES = {}      # (handle, slug) -> [(Guete, pillar-id)] ab 2 Punkten, nach Guete (Rueckfall je Sprache: article_box, related)
+POOL = {}        # (handle, slug) -> (Beitrag, Datum) der zugeordneten englischen Originalbeitraege
+MIXED_L = {}     # Sprache (ausser en/de) -> {pillar-id: [post, ...]} wie MIXED, Rueckfall auf den besten Leitfaden MIT Fassung dieser Sprache
 CLUSTER_DE = {}  # pillar-id -> weitere Beiträge, die nur über ASSIGN_DE zugeordnet sind (Liste "Vertiefen" der deutschen und übersetzten Seiten)
 
 
@@ -688,7 +818,7 @@ def _match(p, post):
 
 def assign(posts):
     """Ordnet live veröffentlichte englische Originalbeiträge den Pillars zu (Themen und Slug-Muster)."""
-    ASSIGN.clear(); CLUSTER.clear(); ASSIGN_DE.clear(); CLUSTER_DE.clear()
+    ASSIGN.clear(); CLUSTER.clear(); ASSIGN_DE.clear(); CLUSTER_DE.clear(); SCORES.clear(); POOL.clear(); MIXED_L.clear()
     pool = [x for x in posts if (x.get("lang") or "en") == "en" and not x.get("tr_of") and x.get("slug") and x.get("handle")]
     for p in pillars(): CLUSTER[p["id"]] = []; CLUSTER_DE[p["id"]] = []
     de_ok = {p["id"] for p in pillars() if p["slug"].get("de")}
@@ -700,6 +830,8 @@ def assign(posts):
         key = (post["handle"], post["slug"])
         if keep: ASSIGN[key] = [pid for _, pid in keep]
         for s, pid in keep: CLUSTER[pid].append((s, post.get("published") or 0, post))
+        SCORES[key] = [(s, pid) for s, _, pid in sc if s >= 2]   # alle Treffer nach Guete (Rueckfall je Sprache in article_box und related)
+        POOL[key] = (post, post.get("published") or 0)
         de = next(((s, pid) for s, _, pid in sc if pid in de_ok), None)   # wie vor dem Ausbau: bester Leitfaden unter denen mit deutscher Fassung
         if de and de[0] >= 2:
             ASSIGN_DE[key] = de[1]
@@ -714,8 +846,18 @@ def assign(posts):
 
 def related(pid, lang):
     """Zugeordnete Beiträge eines Leitfadens für Seiten dieser Sprache: en wie assign; andere Sprachen zusätzlich die Beiträge, deren erster Leitfaden
-    nur Englisch ist (dort bleibt der bisherige Leitfaden mit deutscher Fassung), nach Güte."""
-    return CLUSTER.get(pid, []) if lang == "en" else MIXED.get(pid, [])
+    keine Fassung der Sprache hat (dort gilt der beste Leitfaden mit Fassung der Sprache: de über ASSIGN_DE, übersetzte Sprachen über SCORES), nach Güte."""
+    if lang == "en": return CLUSTER.get(pid, [])
+    if lang == "de": return MIXED.get(pid, [])
+    if lang not in MIXED_L:   # übersetzte Sprachen: neue Leitfäden gibt es dort erst nach dem Übersetzungslauf, ihre Beiträge bleiben beim bisherigen Leitfaden
+        acc = {q["id"]: [] for q in pillars()}
+        for key, (post, pub) in POOL.items():
+            sc = {x: s for s, x in SCORES.get(key, ())}
+            for x in ASSIGN.get(key, ()): acc[x].append((sc.get(x, 0), pub, post))
+            fb = next((x for s, x in SCORES.get(key, ()) if has(by_id(x), lang)), None)   # bester Leitfaden mit Fassung der Sprache (wie ASSIGN_DE für de)
+            if fb and fb not in ASSIGN.get(key, ()): acc[fb].append((sc[fb], pub, post))
+        MIXED_L[lang] = {x: [y[2] for y in sorted(v, key=lambda y: (-y[0], -y[1]))] for x, v in acc.items()}
+    return MIXED_L[lang].get(pid, [])
 
 
 def _post_url(BASE, post, lang):
@@ -729,7 +871,7 @@ def article_box(post, lang, BASE):
     ids = ASSIGN.get(key)
     if not ids: return ""
     p = next((q for q in map(by_id, ids) if q and has(q, lang)), None)   # erster zugeordneter Leitfaden MIT Fassung der Sprache
-    if not p and lang != "en" and ASSIGN_DE.get(key): p = by_id(ASSIGN_DE[key])   # erster nur Englisch: bisheriger Leitfaden mit deutscher Fassung
+    if not p and lang != "en": p = next((q for q in (by_id(pid) for _, pid in SCORES.get(key, ())) if q and has(q, lang)), None)   # erster ohne Fassung der Sprache: bester mit Fassung
     if not p or not has(p, lang): return ""
     st = "margin:1.5em 0;padding:.8em 1em;border:1px solid var(--bd,#ccd);border-left:4px solid var(--ac,#0a6);border-radius:.4em"   # inline: Blogseiten laden das CSS der Pillar-Seiten nicht
     return (f'<aside class="pl-box" style="{st}" aria-label="{esc(tx(lang, "part"))}"><p class="mut" style="margin:.3em 0">{esc(tx(lang, "part"))}: <a href="{path_url(BASE, lang)}">{esc(registry()["path"]["title"][lang])}</a></p>'
@@ -889,10 +1031,11 @@ CSS = """<style>
 .pl-stage{margin:2em 0 .4em}.pl-step-n{display:inline-block;min-width:2em;height:2em;line-height:2em;text-align:center;border-radius:50%;background:var(--ac,#0a6);color:#fff;margin-right:.5em;font-weight:700}
 .pl-card{border:1px solid var(--bd,#ccd);border-radius:.5em;padding:1em;margin:.8em 0}.pl-card h3{margin:.1em 0 .3em}.pl-card ul{margin:.4em 0 0;padding-left:1.2em}
 .pl-dd{margin:.6em 0 0}.pl-dd b{display:block;font-size:.92em}.pl-deep li{margin:.35em 0}.pl-deep small{color:var(--mut,#667)}
+.pl-see{margin:.3em 0 .8em;font-size:.95em}
 </style>"""
 
 
-_DISC = re.compile(r"Note:|Offenlegung|Disclosure|vendor of iFAKT|Anbieter von iFAKT", re.I)
+_DISC = re.compile(r"Note:|Offenlegung|Hinweis: Der Autor|Disclosure|vendor of iFAKT|Anbieter von iFAKT", re.I)
 
 
 def _author_html(md, lang, cx, box=None):
@@ -906,8 +1049,7 @@ def _author_html(md, lang, cx, box=None):
 
 
 def _article(p, lang, BASE, cx):
-    f = ROOT / "imports" / "pillars" / lang / f"{slug_of(p, lang)}.md"
-    d = parse_file(f)
+    d = parse_file(pillar_file(p, lang))
     if not d or not d["h1"] or not d["article"]: return None
     src_html, n_src, dropped = sources_html(d["sources"], lang, cx) if d["sources"] else ("", set(), set())
     body, heads = render(d["article"], lang, cx)   # weitere Teile ("# Teil") werden gleichrangige h2, kein Sprung in der Hierarchie
@@ -939,80 +1081,135 @@ def hub_html(lang, BASE):
 
 
 def _deep_list(BASE, cs, lang, cdocs, cls="pl-deep"):
-    """Liste der Vertiefungen eines Leitfadens (Link, Beschreibung); auf Seiten anderer Sprachen mit hreflang="en"."""
-    hl = '' if lang == "en" else ' hreflang="en" lang="en"'
-    return "<ul>" + "".join(f'<li><a href="{cluster_url(BASE, c)}"{hl}>{esc(c["label"]["en"])}</a>' + (f' <small>{esc(cdocs[c["id"]]["desc"])}</small>' if cls == "pl-deep" and cdocs[c["id"]]["desc"] else "")
-                            + "</li>" for c in cs) + "</ul>"
+    """Liste der Vertiefungen eines Leitfadens (Link, Beschreibung) in der Fassung der Sprache; fehlt sie, die englische mit hreflang="en"."""
+    out = []
+    for c in cs:
+        cl = lang if (lang, c["id"]) in cdocs else "en"
+        hl = '' if cl == lang else ' hreflang="en" lang="en"'
+        d = cdocs[(cl, c["id"])]
+        out.append(f'<li><a href="{cluster_url(BASE, c, cl)}"{hl}>{esc(clabel(c, cl))}</a>' + (f' <small>{esc(d["desc"])}</small>' if cls == "pl-deep" and d["desc"] else "") + "</li>")
+    return "<ul>" + "".join(out) + "</ul>"
 
 
 def build_clusters(g, cx, cdocs, pa):
-    """Seiten der Vertiefungen /learn/<leitfaden>/<vertiefung>/ (nur Englisch): Canonical auf sich selbst, kein hreflang, in der Sitemap (ausser noindex)."""
+    """Seiten der Vertiefungen /learn/<leitfaden>/<vertiefung>/ (en) und /de/learn/<leitfaden>/<vertiefung>/ (de, mit slug.de und Datei): Canonical auf sich selbst,
+    hreflang-Paar en<->de (x-default en), wenn es beide Fassungen gibt, in der Sitemap (ausser noindex)."""
     BASE, write, page, sitemap = g["BASE"], g["write"], g["page"], g["sitemap"]
     n = 0
     for c in clusters():
-        d = cdocs.get(c["id"])
-        if not d: continue
-        p = by_id(c["parent"]); lang = "en"
-        u, pu = cluster_url(BASE, c), url(BASE, p, "en")
-        crumbs = [(tx(lang, "learn"), f"{BASE}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], pu), (c["label"]["en"], u)]
-        nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(t)}</a>' for t, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
-        sib = [x for x in clusters_of(p["id"]) if x["id"] != c["id"] and x["id"] in cdocs]
-        more = (f'<section class="pl-box pl-deep"><h2>{esc(tx(lang, "deep_more"))}</h2>{_deep_list(BASE, sib, lang, cdocs)}</section>' if sib else "")
-        dt = pdate(c)
-        b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "deep_one"))} · {esc(tx(lang, "deep_part"))} <a href="{pu}">{esc(p["label"][lang])}</a> · '
-                   f'{d["mins"]} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{dt}">{dt}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a></p>'
-                   f'{d["body"]}</article>{more}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}"><a href="{pu}" rel="up"><small>{esc(tx(lang, "back"))}</small><b>{esc(p["label"][lang])}</b></a></nav>'
-                   + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{d["auth"]}</section>' if d["auth"] else "")
-                   + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{d["src"]}</section>' if d["src"] else ""))
-        art = {"@context": "https://schema.org", "@type": "Article", "@id": u + "#article", "headline": d["h1"][:110], "description": d["desc"], "inLanguage": lang,
-               "url": u, "mainEntityOfPage": u, "datePublished": dt, "dateModified": dt, "wordCount": d["words"],
-               "author": {"@type": "Person", "@id": f"{BASE}/community/u/{AUTHOR}/#person", "name": "Mirko Peters", "url": f"{BASE}/community/u/{AUTHOR}/"},
-               "publisher": {"@id": f"{BASE}/#org"},
-               "isPartOf": [{"@type": "Course", "@id": path_url(BASE, lang) + "#course", "name": pa["title"][lang], "url": path_url(BASE, lang)},
-                            {"@id": pu + "#article", "name": p["label"][lang], "url": pu}]}   # Verweis ohne @type: der Article-Knoten steht auf der Seite des Leitfadens (check_schema verlangt sonst headline usw.)
-        ld = [art, _crumb_ld(BASE, crumbs)]
-        if d["faq"]: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in d["faq"]]})
-        noidx = bool(c.get("noindex") or p.get("noindex"))
-        write(f"learn/{slug_of(p, 'en')}/{c['slug']['en']}/index.html", page(lang, d["title"], d["desc"], u, b, None, ld, og_type="article", noindex=noidx))
-        if not noidx: sitemap.append((u, dt, None))
-        n += 1
+        for lang in LANGS:
+            d = cdocs.get((lang, c["id"]))
+            if not d: continue
+            p = by_id(c["parent"])
+            u, pu = cluster_url(BASE, c, lang), url(BASE, p, lang)
+            crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], pu), (clabel(c, lang), u)]
+            nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(t)}</a>' for t, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
+            sib = [x for x in clusters_of(p["id"]) if x["id"] != c["id"] and ("en", x["id"]) in cdocs]
+            if sib and all(f'href="{cluster_url(BASE, x, lang if (lang, x["id"]) in cdocs else "en")}' in d["body"] for x in sib): sib = []   # der Artikel verlinkt schon alle Geschwister (Liste "Weitere Vertiefungen" der Datei): kein zweiter Kasten
+            more = (f'<section class="pl-box pl-deep"><h2>{esc(tx(lang, "deep_more"))}</h2>{_deep_list(BASE, sib, lang, cdocs)}</section>' if sib else "")
+            noidx = bool(c.get("noindex") or p.get("noindex"))
+            alts = {} if noidx else {l: cluster_url(BASE, c, l) for l in LANGS if (l, c["id"]) in cdocs}
+            ol = "de" if lang == "en" else "en"
+            other = f' · <a href="{alts[ol]}" hreflang="{ol}" lang="{ol}">{esc(tx(lang, "other"))}</a>' if ol in alts else ""
+            dt = pdate(c)
+            b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "deep_one"))} · {esc(tx(lang, "deep_part"))} <a href="{pu}">{esc(p["label"][lang])}</a> · '
+                       f'{d["mins"]} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{dt}">{dt}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
+                       f'{d["body"]}</article>{more}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}"><a href="{pu}" rel="up"><small>{esc(tx(lang, "back"))}</small><b>{esc(p["label"][lang])}</b></a></nav>'
+                       + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{d["auth"]}</section>' if d["auth"] else "")
+                       + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{d["src"]}</section>' if d["src"] else ""))
+            art = {"@context": "https://schema.org", "@type": "Article", "@id": u + "#article", "headline": d["h1"][:110], "description": d["desc"], "inLanguage": lang,
+                   "url": u, "mainEntityOfPage": u, "datePublished": dt, "dateModified": dt, "wordCount": d["words"],
+                   "author": {"@type": "Person", "@id": f"{BASE}/community/u/{AUTHOR}/#person", "name": "Mirko Peters", "url": f"{BASE}/community/u/{AUTHOR}/"},
+                   "publisher": {"@id": f"{BASE}/#org"},
+                   "isPartOf": [{"@type": "Course", "@id": path_url(BASE, lang) + "#course", "name": pa["title"][lang], "url": path_url(BASE, lang)},
+                                {"@id": pu + "#article", "name": p["label"][lang], "url": pu}]}   # Verweis ohne @type: der Article-Knoten steht auf der Seite des Leitfadens (check_schema verlangt sonst headline usw.)
+            ld = [art, _crumb_ld(BASE, crumbs)]
+            if d["faq"]: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in d["faq"]]})
+            hl = alts if len(alts) > 1 else None
+            write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/{slug_of(p, lang)}/{cslug(c, lang)}/index.html", page(lang, d["title"], d["desc"], u, b, hl, ld, xdefault=alts.get("en") if hl else None, og_type="article", noindex=noidx))
+            if not noidx: sitemap.append((u, dt, hl))
+            n += 1
     return n
 
 
 def _cluster_docs(BASE, cx, g):
-    """Vertiefungen lesen und rendern -> {id: {h1, title, desc, body, src, auth, words, mins, faq}} (nur vorhandene Dateien)."""
-    # Eine kaputte Datei kostet nur ihre eigene Vertiefung: erst alle lesen, dann rendern; Links auf nicht gebaute Vertiefungen (Fließtext, Kasten "Deep dives",
-    # hasPart, Pfadseite) entfallen, weil cx.deep_ok und cdocs nur die gelesenen enthalten. Scheitert das Rendern einer Datei, wird ohne sie neu gerendert.
+    """Vertiefungen lesen und rendern -> {(lang, id): {h1, title, desc, body, src, auth, words, mins, faq}} (en und de, nur vorhandene Dateien)."""
+    # Eine kaputte Datei kostet nur ihre eigene Fassung: erst alle lesen, dann rendern; Links auf nicht gebaute Vertiefungen (Fließtext, Kasten "Deep dives",
+    # hasPart, Pfadseite) entfallen bzw. zeigen auf die englische Fassung, weil cx.deep_ok und cdocs nur die gelesenen enthalten. Eine deutsche Fassung ohne englische
+    # wird nicht gebaut (die Vertiefung braucht die englische Seite als x-default).
     parsed = {}
     for c in clusters():
-        try:
-            d = parse_file(cluster_file(c))
-        except Exception as e:  # noqa: BLE001
-            print(f"::warning::Pillars: Vertiefung {c['id']} nicht gebaut: {type(e).__name__}: {e}"); continue
-        if not d or not d["h1"] or not d["article"]: print(f"Pillars: Vertiefung fehlt oder leer: en/clusters/{c['slug']['en']}.md"); continue
-        d["article"] = scrub_deep(d["article"])
-        parsed[c["id"]] = (c, d)
+        for lang in LANGS:
+            if not has_cluster(c, lang): continue
+            try:
+                d = parse_file(cluster_file(c, lang))
+            except Exception as e:  # noqa: BLE001
+                print(f"::warning::Pillars: Vertiefung {lang}/{c['id']} nicht gebaut: {type(e).__name__}: {e}"); continue
+            if not d or not d["h1"] or not d["article"]: print(f"Pillars: Vertiefung fehlt oder leer: {lang}/clusters/{cslug(c, lang)}.md"); continue
+            d["article"] = scrub_deep(d["article"])
+            parsed[(lang, c["id"])] = (c, d, lang)
+    parsed = {k: v for k, v in parsed.items() if ("en", k[1]) in parsed}
     while True:
-        cx.deep_ok = set(parsed)
+        cx.deep_ok = {l: {cid for (ll, cid) in parsed if ll == l} for l in LANGS}
         out = {}
-        bad = [cid for cid in parsed if not _cluster_doc(*parsed[cid], cx, g, out)]
+        bad = [k for k in parsed if not _cluster_doc(*parsed[k], cx, g, out)]
         if not bad: return out
-        for cid in bad: parsed.pop(cid)
+        for k in bad:
+            parsed.pop(k)
+            if k[0] == "en": parsed.pop(("de", k[1]), None)
 
 
-def _cluster_doc(c, d, cx, g, out):
-    """Rendert eine Vertiefung nach out[id]; False bei Fehler (Warnung im Log)."""
+def _cluster_doc(c, d, lang, cx, g, out):
+    """Rendert eine Vertiefung nach out[(lang, id)]; False bei Fehler (Warnung im Log)."""
     try:
-        src_html, n_src, dropped = sources_html(d["sources"], "en", cx) if d["sources"] else ("", set(), set())
-        body, heads = render(d["article"], "en", cx)
-        body = finish(fix_anchors(body, heads, cx), n_src, "en", dropped)
+        src_html, n_src, dropped = sources_html(d["sources"], lang, cx) if d["sources"] else ("", set(), set())
+        body, heads = render(d["article"], lang, cx)
+        body = finish(fix_anchors(body, heads, cx), n_src, lang, dropped)
         words = len(re.sub(r"<[^>]+>", " ", body).split())
-        out[c["id"]] = {"h1": d["h1"], "title": meta_value(d["meta"], "meta title", "meta-title") or d["h1"], "desc": meta_value(d["meta"], "meta description", "meta-description"),
-                        "body": body, "src": src_html, "auth": _author_html(d["author"], "en", cx, g.get("author_box")) if d["author"] else "",
-                        "words": words, "mins": max(1, round(words / 220)), "faq": faq_of(d["article"])}
+        out[(lang, c["id"])] = {"h1": d["h1"], "title": meta_value(d["meta"], "meta title", "meta-title") or d["h1"], "desc": meta_value(d["meta"], "meta description", "meta-description"),
+                                "body": body, "src": src_html, "auth": _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else "",
+                                "words": words, "mins": max(1, round(words / 220)), "faq": faq_of(d["article"])}
         return True
     except Exception as e:  # noqa: BLE001
-        print(f"::warning::Pillars: Vertiefung {c['id']} nicht gebaut: {type(e).__name__}: {e}"); return False
+        print(f"::warning::Pillars: Vertiefung {lang}/{c['id']} nicht gebaut: {type(e).__name__}: {e}"); return False
+
+
+_SEE = {"en": "In depth:", "de": "Ausführlich:"}
+
+
+def see_targets(p, lang, BASE, cdocs):
+    """data/pillars.json "see" eines Leitfadens: [{"to": [IDs von Leitfäden oder Vertiefungen], "at": {en, de: Sprungmarke des Abschnitts}}] ->
+    [(Sprungmarke, [(Adresse, Name, Datum)])] in dieser Sprache (en, de); nur gebaute, indexierbare Ziele mit Fassung dieser Sprache."""
+    out = []
+    for e in p.get("see") or ():
+        at = (e.get("at") or {}).get(lang)
+        if not at or lang not in LANGS: continue
+        tg = []
+        for tid in e.get("to") or ():
+            c = next((x for x in clusters() if x["id"] == tid), None)
+            if c:
+                if (lang, tid) in cdocs and not c.get("noindex"): tg.append((cluster_url(BASE, c, lang), clabel(c, lang), pdate(c)))
+                continue
+            q = by_id(tid)
+            if q and q["id"] != p["id"] and has(q, lang) and not q.get("noindex"): tg.append((url(BASE, q, lang), q["label"][lang], pdate(q)))
+        if tg: out.append((at, tg))
+    return out
+
+
+def see_links(body, p, lang, BASE, cdocs):
+    """Hinweis "Ausführlich: <Link>" direkt unter der Überschrift des Abschnitts, den ein eigener Leitfaden oder eine Vertiefung ausführlich behandelt
+    (gegen Kannibalisierung: der Überblick verweist im Text auf die spezialisierte Seite, nicht nur im Kasten am Seitenende). Ziele, die der Abschnitt schon
+    verlinkt, entfallen. Fehlt die Sprungmarke (Überschrift geändert), Hinweis im Log, die Seite bleibt unverändert."""
+    for at, tg in see_targets(p, lang, BASE, cdocs):
+        m = re.search(r'<h([23]) id="' + re.escape(esc(at)) + r'"[^>]*>.*?</h\1>', body, re.S)
+        if not m:
+            print(f"Pillars: Sprungmarke für Hinweis „{_SEE[lang]}“ fehlt: {lang}/{slug_of(p, lang)}#{at}"); continue
+        nxt = re.search(r"<h[2-" + m.group(1) + r"][ >]", body[m.end():])
+        sec = body[m.end(): m.end() + nxt.start() if nxt else len(body)]
+        tg = [(u, n) for u, n, _ in tg if f'href="{esc(u)}' not in sec]
+        if tg:
+            body = body[:m.end()] + f'<p class="pl-see"><b>{esc(_SEE[lang])}</b> ' + ", ".join(f'<a href="{esc(u)}">{esc(n)}</a>' for u, n in tg) + "</p>" + body[m.end():]
+    return body
 
 
 def build(g, posts, ents, written=None):
@@ -1030,13 +1227,16 @@ def build(g, posts, ents, written=None):
     langs = active()
     made = {l: 0 for l in langs}
     cards = {}
-    cdocs = _cluster_docs(BASE, cx, g)   # Vertiefungen vorab: Kasten "Deep dives" auf dem Eltern-Leitfaden und Liste auf der Pfadseite
-    deep = {p["id"]: [c for c in clusters_of(p["id"]) if c["id"] in cdocs] for p in pillars()}
+    untr = {}   # Sprache -> Leitfäden ohne Übersetzung (noch von keiner Übersetzung erfasst)
+    cdocs = _cluster_docs(BASE, cx, g)   # Vertiefungen vorab ({(lang, id): ...}): Kasten "Deep dives"/"Vertiefungen" auf dem Eltern-Leitfaden und Liste auf der Pfadseite
+    deep = {p["id"]: [c for c in clusters_of(p["id"]) if ("en", c["id"]) in cdocs] for p in pillars()}
     for lang in langs:
         ordered = order_l(lang); n_pillars = len(ordered)   # Schritte und Vor/Zurück nur über Leitfäden mit Fassung dieser Sprache
         for p in pillars():
             if not has(p, lang):
-                if lang == "en" or p["slug"].get("de"): print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md")   # Leitfäden nur auf Englisch: in anderen Sprachen kein Hinweis
+                if lang == "en" or (lang == "de" and p["slug"].get("de")) or (lang not in LANGS and any(has(p, l) for l in langs if l not in LANGS)):
+                    print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md")   # en/de immer; übersetzte Sprachen nur, wenn eine andere Übersetzung den Leitfaden schon hat
+                elif lang not in LANGS: untr[lang] = untr.get(lang, 0) + 1   # noch nicht übersetzt (Normalfall bis translate-pillars.yml): eine Sammelzeile statt je Leitfaden
                 continue
             res = _article(p, lang, BASE, cx)
             if not res: print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md"); continue
@@ -1059,17 +1259,18 @@ def build(g, posts, ents, written=None):
             if rel_posts:
                 deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
             dd = ""
-            if lang == "en" and deep.get(p["id"]):   # Kasten "Deep dives" (Vertiefungen nur auf Englisch)
+            if lang in LANGS and deep.get(p["id"]):   # Kasten "Deep dives"/"Vertiefungen" (en, de; fehlt die deutsche Fassung, Link auf die englische)
                 dd = (f'<section class="pl-box pl-deep" aria-labelledby="pl-deep-h"><h2 id="pl-deep-h">{esc(tx(lang, "deep"))}</h2><p>{esc(tx(lang, "deep_lead"))}</p>'
                       f'{_deep_list(BASE, deep[p["id"]], lang, cdocs)}</section>')
-            rg = [q for q in map(by_id, p.get("related") or ()) if q and has(q, "en") and not q.get("noindex")] if lang == "en" else []
+            rg = [q for q in map(by_id, p.get("related") or ()) if q and has(q, lang) and not q.get("noindex")] if lang in LANGS else []
             if rg:   # Kasten "Related guides": eigene Leitfäden zu Methoden, die dieser Leitfaden nur kurz behandelt (data/pillars.json related; gegen Kannibalisierung)
                 dd += (f'<section class="pl-box pl-deep pl-relg" aria-labelledby="pl-relg-h"><h2 id="pl-relg-h">{esc(tx(lang, "rel_g"))}</h2><p>{esc(tx(lang, "rel_lead"))}</p><ul>'
-                       + "".join(f'<li><a href="{url(BASE, q, "en")}">{esc(q["label"]["en"])}</a></li>' for q in rg) + "</ul></section>")
+                       + "".join(f'<li><a href="{url(BASE, q, lang)}">{esc(q["label"][lang])}</a></li>' for q in rg) + "</ul></section>")
             _pv = g.get("pillar_videos")   # Karte "Passende Videos" (site_pillar_videos.py, data/pillar_videos.json); ohne Zuordnung bleibt die Seite unveraendert
             vids = PV.card(_pv["doc"], p["id"], lang, _pv["pages"], _pv["r2"], _pv["dims"]) if _pv else ""
             _ig = bool(IG.get("pillar", p["id"], lang))   # Kopfbild (Teilen-Bild) und 9-10 Infografiken im Text; ohne Freigabe in data/infographics_live.json bleibt die Seite unveraendert
             if _ig: body = IG.inject(body, "pillar", p["id"], lang)
+            body = see_links(body, p, lang, BASE, cdocs)   # nach den Infografiken: deren Platz hängt an den Überschriften
             auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
             crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
@@ -1085,16 +1286,22 @@ def build(g, posts, ents, written=None):
                    "author": {"@type": "Person", "@id": author_id, "name": "Mirko Peters", "url": f"{BASE}/community/u/{AUTHOR}/"},
                    "publisher": {"@id": f"{BASE}/#org"},
                    "isPartOf": {"@type": "Course", "@id": path_url(BASE, lang) + "#course", "name": pa["title"][lang], "url": path_url(BASE, lang)}}
-            if lang == "en" and deep.get(p["id"]): art["hasPart"] = [{"@id": cluster_url(BASE, c) + "#article", "name": c["label"]["en"], "url": cluster_url(BASE, c)} for c in deep[p["id"]]]   # nur Verweise (s. o.)
+            if lang in LANGS and deep.get(p["id"]):   # nur Verweise (s. o.), in der Fassung der Sprache, sonst englisch
+                art["hasPart"] = [{"@id": cluster_url(BASE, c, cl) + "#article", "name": clabel(c, cl), "url": cluster_url(BASE, c, cl)} for c in deep[p["id"]] for cl in [lang if (lang, c["id"]) in cdocs else "en"]]
             _vref = PV.ld_refs(_pv["doc"], p["id"], lang, _pv["pages"], lambda x: x in _pv["ld"]) if _pv else []
             if _vref: art["video"] = _vref   # nur Verweise auf die VideoObject-Knoten der Videoseiten, keine zweite Beschreibung
             ld = [art, _crumb_ld(BASE, crumbs)] + (IG.image_ld(BASE, "pillar", p["id"], lang, u, title=d["h1"], date=dt) if _ig else [])
             faq = faq_of(d["article"])
             if faq: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
             write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/{slug_of(p, lang)}/index.html", page(lang, title, desc, u, b, alts if len(alts) > 1 and not noidx else None, ld, xdefault=alts.get("en"), og_type="article", noindex=noidx, **(IG.page_kw("pillar", p["id"], lang) if _ig else {})))
-            if not noidx: sitemap.append((u, dt, alts if len(alts) > 1 else None))
+            # lastmod: neue Links im Kasten "Vertiefungen"/"Weiterführende Leitfäden" und unter "Ausführlich:" ändern die Seite (Google: Links zählen als
+            # wesentliche Änderung) -> jüngstes Datum dieser Ziele, damit die neuen internen Links schneller neu gecrawlt werden; dateModified bleibt das der Datei
+            lm = max([dt] + [pdate(c) for c in (deep.get(p["id"]) or []) if lang in LANGS] + [pdate(q) for q in rg]
+                     + [x for _, tg in see_targets(p, lang, BASE, cdocs) for _, _, x in tg])
+            if not noidx: sitemap.append((u, lm, alts if len(alts) > 1 else None))
             made[lang] += 1
             cards[(lang, p["id"])] = (desc, mins)
+    if untr: print("Pillars: noch ohne Übersetzung (translate-pillars.yml): " + ", ".join(f"{l} {n}" for l, n in untr.items()))
     n_deep = build_clusters(g, cx, cdocs, pa)   # ohne try: die Links darauf (Kasten, hasPart, Pfadseite) stehen schon fest, ein Fehler hier soll den Bau sichtbar stoppen
     # Pfadseiten (mit Kasten "Abschlusstest & Zertifikat") und Testseiten
     qdoc = quiz_doc()
@@ -1138,12 +1345,13 @@ def build(g, posts, ents, written=None):
         parts = []
         for _, q, cl in items:
             parts.append({"@type": "WebPage", "name": q["label"][lang], "url": url(BASE, q, cl), **({} if cl == lang else {"inLanguage": "en"})})
-            parts += [{"@type": "WebPage", "name": c["label"]["en"], "url": cluster_url(BASE, c), "inLanguage": "en"} for c in deep.get(q["id"], [])]
+            parts += [{"@type": "WebPage", "name": clabel(c, cl), "url": cluster_url(BASE, c, cl), **({} if cl == lang else {"inLanguage": "en"})}
+                      for c in deep.get(q["id"], []) for cl in [lang if (lang, c["id"]) in cdocs else "en"]]
         ld = [{"@context": "https://schema.org", "@type": "Course", "@id": pu + "#course", "name": pa["title"][lang], "description": pa["short"][lang], "inLanguage": lang, "url": pu,
                "provider": {"@id": f"{BASE}/#org"}, "isAccessibleForFree": True, "hasPart": parts},
               {"@context": "https://schema.org", "@type": "ItemList", "name": pa["title"][lang], "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": url(BASE, q, cl), "name": q["label"][lang]} for i, (_, q, cl) in enumerate(items)]},
               _crumb_ld(BASE, crumbs)]
-        write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], pa["short"][lang], pu, b, None if noidx else alts, ld, xdefault=alts["en"], og_type="website", noindex=noidx))
+        write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], (pa.get("seo_desc") or {}).get(lang) or pa["short"][lang], pu, b, None if noidx else alts, ld, xdefault=alts["en"], og_type="website", noindex=noidx))
         if not noidx: sitemap.append((pu, max([UPDATED] + [pdate(p) for p in pillars()] + [pdate(c) for c in clusters()]), alts))
         path_langs.append((lang, groups, crumbs))
     for lang, groups, crumbs in path_langs:   # Testseiten: noindex, nie in der Sitemap

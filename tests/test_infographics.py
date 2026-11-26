@@ -125,7 +125,7 @@ class PillarHoldAndLanguages(unittest.TestCase):
     def test_real_registry_holds_the_ten_new_guides(self):
         hold = IGT.pillar_hold(ROOT)
         import site_pillars as S
-        new = {p["id"] for p in S.pillars() if not p["slug"].get("de")}
+        new = {p["id"] for p in S.pillars() if p.get("date") == "2026-11-26"}   # Kursausbau (seit der deutschen Fassung auch mit slug.de)
         self.assertEqual(len(new), 10)
         self.assertTrue(new <= hold, "neue Leitfaeden bis zur Freigabe auf der Halteliste (Samstagslauf)")
         self.assertFalse({i["slug"] for i in IGT.items("pillar")} & hold)
