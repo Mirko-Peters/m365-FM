@@ -146,6 +146,11 @@ Reihenfolge, wenn PR #606 auf main ist:
 - *Rückweg Kursausbau:* weich – `"noindex": true` je Leitfaden oder Vertiefung in `data/pillars.json` (Seite bleibt erreichbar, ohne Sitemap und hreflang);
   hart – Revert der Commits (der Purge meldet die entfallenen Seiten). Fragen der neuen Leitfäden wie oben stilllegen. Eine Vertiefung unter einen anderen
   Leitfaden zu hängen (`parent`) ändert ihre Adresse und braucht eine 301 von der alten.
+- *Deutsche Fassung der Kurs-Erweiterung (26.11.2026):* Mirkos Dateien liegen unverändert unter `imports/pillars/de/<slug>.md` und
+  `imports/pillars/de/clusters/<slug>.md`; `slug.de` (Leitfäden und Vertiefungen) und `label.de` (Vertiefungen) in `data/pillars.json` schalten die Seiten
+  `/de/learn/<slug>/` und `/de/learn/<eltern>/<vertiefung>/` frei, mit hreflang de↔en und x-default en. Der deutsche Test fragt dieselben Gruppen wie der
+  englische und verlinkt die deutschen Seiten; die deutschen Fragen kommen wie bisher aus dem Fragenlauf. Rückweg: `slug.de` entfernen (die Seiten fallen auf
+  die englische Fassung zurück, keine toten Links), für die gebauten `/de/`-Adressen eine 301 auf die englische Seite setzen.
 
 **Anrede:** Seite, E-Mail und Zertifikat siezen („Sie“), passend zu den Leitfäden (Entscheidung 24.11.2026).
 

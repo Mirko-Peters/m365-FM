@@ -1,4 +1,4 @@
-"""Uebersetzt die zehn englischen Pillar-Kompendien (imports/pillars/en) mit Haiku (Message Batch) in 13 weitere Sprachen
+"""Uebersetzt die englischen Pillar-Kompendien (imports/pillars/en, ohne die Vertiefungen in en/clusters) mit Haiku (Message Batch) in 13 weitere Sprachen
 (fr es it nl pt pl id ru uk ar he ja ko; de ist handgepflegt) und die kurzen Texte des Lernpfads (Oberflaeche, Pfad, Stufen, Leitfaden-Namen).
 
 Ergebnis:
@@ -250,7 +250,7 @@ def plan_items(langs, pids, redo=False, ui_only=False):
     items, stale = [], {}
     for p in ([] if ui_only else PIL.pillars()):
         if pids and p["id"] not in pids: continue
-        if not pids and not p["slug"].get("de") and not p.get("translate"): continue   # neue Leitfaeden (nur Englisch, Kursausbau 26.11.2026): nur nach Freigabe (--pillars oder "translate": true)
+        if not pids and not p["slug"].get("de") and not p.get("translate"): continue   # Leitfaeden nur auf Englisch (ohne slug.de): nur nach Freigabe (--pillars oder "translate": true); seit 26.11.2026 haben alle 20 eine deutsche Fassung
         s = source(p)
         if not s: continue
         parts = chunks(s["article"]); hashes = [h8(x) for x in parts]
