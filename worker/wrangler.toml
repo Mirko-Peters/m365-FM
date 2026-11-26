@@ -75,6 +75,9 @@ CERTOPUS_ON = "1"
 # Platzhalter der Vorlage (optional, JSON): ohne Angabe gelten {Name},{Course},{Score},{Date}, soweit die Vorlage sie laut recipient_fields kennt.
 # CERTOPUS_FIELDS = '{"name":"{Name}","course":"{Course}","score":"{Score}","date":"{Date}"}'
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
+# Lernfortschritt im Lernpfad mit dem Konto abgleichen (worker/src/learnprogress.js, /api/learn/progress): "1" = an. Fehlt die Var oder steht sie
+# auf "0", antwortet die Route mit 404 {error:"off"} ohne D1-Abfrage und die Seite speichert nur im Browser. Staging erbt [vars] nicht (Eintrag unten).
+LEARN_PROGRESS_SYNC = "1"
 
 [[send_email]]
 name = "EMAIL"
@@ -91,6 +94,12 @@ bucket_name = "m365-fm"
 name = "RL_SEARCH"
 namespace_id = "1001"
 simple = { limit = 60, period = 60 }
+
+# Ratenlimit des Lernfortschritts ohne D1 (30 Anfragen je 60 s und Nutzer; worker/src/learnprogress.js LP_RL). Ohne Bindung (Staging) gilt die D1-Tabelle ratelimit.
+[[ratelimits]]
+name = "RL_LEARN"
+namespace_id = "1002"
+simple = { limit = 30, period = 60 }
 
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)
@@ -127,6 +136,7 @@ USD_PER_EUR = "1.08"
 SEARCH_GAP_THRESHOLD = "0.35"
 SEARCH_VECTOR_MIN_SCORE = "0.4"
 SEARCH_DEMAND_MIN = "3"
+LEARN_PROGRESS_SYNC = "1"   # Lernfortschritt mit dem Konto abgleichen (wie live; ohne RL_LEARN-Bindung gilt das D1-Ratenlimit)
 
 [env.staging.observability]
 enabled = true

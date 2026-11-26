@@ -117,6 +117,16 @@ class BuildOutput(unittest.TestCase):
         js = (self.tmp / "docs" / "assets" / re.search(r"/assets/(page\.[0-9a-f]{10}\.js)", h).group(1)).read_bytes()
         self.assertEqual(js, (ROOT / "assets" / "page.js").read_bytes(), "Inhalt unveraendert")
 
+    def test_learnprogress_only_on_learning_pages(self):
+        """assets/learnprogress.js gehasht und nur mit dem Marker data-lpx (Lernpfad-, Leitfaden-, Vertiefungsseiten); data-lp (Folgen-Kasten) laedt es nicht."""
+        h = self.render('<main><article class="pl-art" data-lpx="manufacturing-excellence" data-k="g"><h1>T</h1></article></main><footer></footer>')
+        m = re.findall(r'<script defer src="[^"]+/assets/(learnprogress\.[0-9a-f]{10}\.js)"></script>', h)
+        self.assertEqual(len(m), 1)
+        for d in ("docs", "r2out"): self.assertEqual((self.tmp / d / "assets" / m[0]).read_bytes(), (ROOT / "assets" / "learnprogress.js").read_bytes())
+        self.assertTrue(SA.HASHED_RX.match("/assets/" + m[0]))
+        for body in ('<main><h1>T</h1><div class="lp" data-lp="apple"></div></main><footer></footer>', '<main><h1>T</h1><div class="viz"></div></main><footer></footer>'):
+            self.assertNotIn("learnprogress", self.render(body))
+
     def test_css_bundle_also_in_r2out(self):
         u = re.search(r'href="[^"]+(/assets/site\.[0-9a-f]{10}\.css)"', self.G.css_link()).group(1)
         a, b = (self.tmp / "docs" / u.lstrip("/")).read_bytes(), (self.tmp / "r2out" / u.lstrip("/")).read_bytes()

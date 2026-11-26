@@ -156,7 +156,7 @@ export async function rateLimit(db, key, max, windowSec) {
 // fehlender (rateLimit legt ihn neu an), Loeschen aendert also kein Verhalten. Taeglich (Cron 06:00): Praefixe mit Fenster hoechstens 1 Tag
 // (Liste RL_SHORT, Test worker/test/cron_schedule.test.mjs prueft jedes Fenster) nach 2 Tagen, alle uebrigen nach RL_MAX_WINDOW (laengstes
 // Fenster im Code: 365 Tage). Bereichsabfrage auf dem Primaerschluessel k, kein Vollscan je Praefix.
-export const RL_SHORT = ["search:", "expert_search:", "sdq:", "adlead:", "sponsor:", "ps:", "em:", "mk_ip:", "mk_mail:", "hw_ip:", "hw_mail:"];
+export const RL_SHORT = ["search:", "expert_search:", "sdq:", "adlead:", "sponsor:", "ps:", "em:", "mk_ip:", "mk_mail:", "hw_ip:", "hw_mail:", "learnp:"];
 export const RL_MAX_WINDOW = 366 * 86400;
 export async function purgeRateLimits(db, at = Date.now()) {
   const t = Math.floor(at / 1000); let deleted = 0;

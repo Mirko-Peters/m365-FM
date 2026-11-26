@@ -26,6 +26,7 @@
 // (erneuter Klick oder Cron issuePendingCerts, sobald CERTOPUS_ON=1).
 import { cleanText, rateLimit, randomToken, readSessionInfo, sha256hex, memberOf } from "./util.js";
 import { isStaging } from "./staging.js";
+import { handleLearnProgress } from "./learnprogress.js";
 
 export const PER_PILLAR = 3, PASS_PCT = 80, MAX_ATTEMPTS = 3, ATTEMPT_TTL = 86400;   // PER_PILLAR = PER_MAX (Grundlage von HAVE_MIN); gezogen wird perGroup(...)
 // Testzusammensetzung (Kursausbau 26.11.2026, bis zu 20 Leitfaden-Gruppen): Fragen gleichmaessig ueber alle Gruppen, die Fragen haben (nach pageFilter),
@@ -230,6 +231,7 @@ export async function issuePendingCerts(env, limit = 5) {
 export async function deleteUserLearn(db, uid) {   // Konto loeschen: Versuche und Zertifikat-Zeilen (Name, E-Mail samt Herkunft aus dem Zusatzschritt). Bei Certopus ausgestellte Zertifikate bleiben dort.
   await db.prepare("DELETE FROM learn_attempts WHERE user_id=?").bind(uid).run().catch(() => 0);
   await db.prepare("DELETE FROM learn_certs WHERE user_id=?").bind(uid).run().catch(() => 0);
+  await db.prepare("DELETE FROM learn_progress WHERE user_id=?").bind(uid).run().catch(() => 0);   // Lernfortschritt (0056, learnprogress.js)
 }
 
 async function internalUpsert(env, request, J) {
@@ -543,6 +545,7 @@ async function stats(env, url, user, J) {
 
 export async function handleLearnQuiz(env, request, url, path, user, J, opts = {}) {
   if (path === "/api/internal/learn-quiz") return internalUpsert(env, request, J);
+  if (path === "/api/learn/progress") return handleLearnProgress(env, request, url, user, J, { paths: Object.keys(COURSE) });   // Lernfortschritt nach Opt-in (learnprogress.js)
   const method = request.method;
   let allowed;   // Routen ausdruecklich als path === "..." (tools/mcp_routes.mjs liest sie so aus dem Quelltext)
   if (path === "/api/learn/quiz/start" || path === "/api/learn/quiz/submit") allowed = ["POST"];

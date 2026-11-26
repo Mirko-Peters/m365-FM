@@ -184,6 +184,14 @@ class Render(unittest.TestCase):
         self.assertTrue(h.startswith('<p class="mut pl-vline">Passende Videos: '))
         self.assertNotIn("<img", h)
 
+    def test_data_vid_only_with_mark(self):
+        """Lernfortschritt (assets/learnprogress.js): Klick auf Karte oder Pfadzeile = "geoeffnet", erkannt an data-vid; ohne mark HTML wie vorher."""
+        c, l = PV.card(self.d, "kpis", "de", self.pages, self.R2, self.DIMS, mark=True), PV.path_line(self.d, "kpis", "de", self.pages, mark=True)
+        for h in (c, l):
+            self.assertEqual(re.findall(r'<a [^>]*data-vid="([^"]+)"', h), ["v_oee", "v_en"])
+        self.assertIn(f'<a href="{BASE}/de/oee-erklaert/" data-vid="v_oee"><span class="pl-vth">', c)
+        self.assertNotIn("data-vid", PV.card(self.d, "kpis", "de", self.pages, self.R2, self.DIMS) + PV.path_line(self.d, "kpis", "de", self.pages))
+
 
 class PillarPages(unittest.TestCase):
     def test_build_shows_card_on_guide_and_path(self):
@@ -209,6 +217,8 @@ class PillarPages(unittest.TestCase):
         for h in files.values(): self.assertNotIn('"@type": "VideoObject"', h.split("\n", 1)[0])   # keine zweite Beschreibung des Videos
         self.assertNotIn('id="videos"', files["learn/lean-manufacturing/index.html"])
         self.assertIn('pl-vline', files["de/learn/path/manufacturing-excellence/index.html"])
+        if S.progress_on():   # Lernfortschritt: data-vid an Karte und Pfadzeile
+            self.assertIn('data-vid="v_oee"', de); self.assertRegex(files["de/learn/path/manufacturing-excellence/index.html"], r'class="mut pl-vline">[^<]*<a [^>]*data-vid="v_oee"')
 
 
 class Concepts(unittest.TestCase):

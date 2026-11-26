@@ -48,6 +48,7 @@ import { handleShows, syncShows } from "./shows.js";
 import { handleMediakit } from "./mediakit.js";
 import { handleHardware } from "./hardware.js";
 import { handleLearnQuiz, issuePendingCerts, deleteUserLearn, certMailIntent, certMailCallback, CERTMAIL_SCOPE } from "./learnquiz.js";
+import { purgeLearnProgress } from "./learnprogress.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
@@ -696,6 +697,7 @@ const handlers = {
       T("purgeLinkedinOrphans", (env) => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
       T("purgeSearchStats", (env) => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
       T("purgeRateLimits", (env) => purgeRateLimits(env.DB));   // abgelaufene Ratenlimit-Fenster (util.js RL_SHORT)
+      T("purgeLearnProgress", (env) => purgeLearnProgress(env.DB, scheduledAt));   // Lernfortschritt: 24 Monate ohne Aenderung, am 1. bis 3. des Monats (learnprogress.js)
       // Expertise-Stufen: Belege aus rund 12 Quelltabellen; einmal am Tag (D1-Kosten). Bestaetigungen und Pruefungen rechnen ihr Paar sofort
       // (computeLevels), die Verwaltung kann den Lauf jederzeit anstossen (/api/admin/expertise-sync).
       T("syncExpertise", (env) => syncExpertise(env, entityMap));

@@ -10,6 +10,7 @@ hreflang-Paar wie bei den Leitfäden. Die Dateien der Redaktion bleiben unverän
 Cluster: Blogbeiträge werden den Pillars per Entitäts-Themen und Slug-Muster zugeordnet (assign); jeder zugeordnete englische oder deutsche Beitrag zeigt
 unten einen Kasten "Teil des Lernpfads" mit Link auf Pillar und Pfad (article_box). Verweise in den Dateien werden beim Bauen geprüft: unbekannte
 Entitäten, Beiträge und Pillar-Adressen führen zu einer Warnung im Build-Log, der Link wird dann zu Text (nichts bricht den Bau)."""
+import difflib
 import html as _html
 import json
 import re
@@ -25,6 +26,9 @@ LANGS = ("en", "de")   # handgepflegte Fassungen (imports/pillars/en, /de)
 TR_LANGS = ("fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")   # Haiku-Uebersetzungen der englischen Fassung (translate_pillars.py)
 UPDATED = "2026-11-20"
 AUTHOR = "mirko-p"
+# Lernfortschritt (assets/learnprogress.js, worker/src/learnprogress.js): Kasten "Ihr Lernfortschritt" mit Opt-in, Marker data-lpx, data-vid/-pid/-cid.
+# False (oder "progress": false am Pfad in data/pillars.json): HTML wie vor dem 26.11.2026 (byte-gleich, tests/test_pillars.py Progress).
+PROGRESS = True
 
 UI = {
     "learn": ("Learn", "Lernen"), "path": ("Learning path", "Lernpfad"), "guide": ("Guide", "Leitfaden"), "step": ("Step {n} of {m}", "Schritt {n} von {m}"),
@@ -127,6 +131,39 @@ UI = {
     "q_err_consent": ("Please confirm that you agree.", "Bitte bestätigen Sie die Einwilligung."),
     "q_err_rate": ("Too many requests. Please try again later.", "Zu viele Anfragen. Bitte versuchen Sie es später erneut."),
     "q_err": ("Something went wrong. Please reload the page.", "Etwas ist schiefgelaufen. Bitte laden Sie die Seite neu."),
+    # Lernfortschritt (Kasten auf Pfad-, Leitfaden- und Vertiefungsseiten, assets/learnprogress.js); uebersetzte Sprachen fallen auf Englisch zurueck.
+    # Platzhalter {x} ersetzt das Skript (kein str.format).
+    "lp_box": ("Your learning progress", "Ihr Lernfortschritt"),
+    "lp_save": ("Save learning progress", "Lernfortschritt speichern"),
+    # kurz (Kasten steht vor dem Text, auf dem Handy oberhalb des Falzes); die Einzelheiten stehen in der Datenschutzerklaerung (Link im Kasten)
+    "lp_optin": ("Remembers what you have read, which videos you opened and where you stopped – in this browser and, when signed in, in your account. Only after you click; you can turn it off at any time.",
+                 "Merkt sich, was Sie gelesen und welche Videos Sie geöffnet haben und wo Sie stehen – im Browser und, wenn Sie angemeldet sind, im Konto. Erst nach dem Klick; jederzeit abschaltbar."),
+    "lp_privacy": ("Privacy", "Datenschutz"),
+    "lp_prog": ("{d} of {n} guides read", "{d} von {n} Leitfäden gelesen"),
+    "lp_prog_dd": ("{d} of {n} deep dives read", "{d} von {n} Vertiefungen gelesen"),
+    "lp_cont": ("Continue: {t}", "Weiterlesen: {t}"),
+    "lp_cont_at": ("Continue: {t} – {s}", "Weiterlesen: {t} – {s}"),
+    "lp_resume": ("Continue at “{s}”", "Weiterlesen bei „{s}“"),
+    "lp_started": ("Started", "Begonnen"),
+    "lp_read": ("✓ Read", "✓ Gelesen"),
+    "lp_unread": ("Mark as unread", "Als ungelesen markieren"),
+    "lp_auto": ("Counts as read once you have read to the end.", "Zählt als gelesen, wenn Sie bis zum Ende gelesen haben."),
+    "lp_opened": ("✓ opened", "✓ geöffnet"),
+    "lp_open_q": ("Still to read: {l}", "Noch offen: {l}"),
+    "lp_more": ("and {n} more", "und {n} weitere"),
+    "lp_ready": ("All guides read – ready for the test", "Alle Leitfäden gelesen – bereit für den Test"),
+    "lp_local": ("Saved in this browser · Sign in to continue on other devices", "In diesem Browser gespeichert · Anmelden, um auf anderen Geräten weiterzulesen"),
+    "lp_synced": ("Saved in this browser and in your account", "In diesem Browser und in Ihrem Konto gespeichert"),
+    "lp_sync_err": ("Account sync unavailable right now – saved in this browser", "Abgleich mit dem Konto gerade nicht möglich – im Browser gespeichert"),
+    "lp_signin": ("Sign in with {p}", "Anmelden mit {p}"),
+    "lp_reset": ("Reset progress", "Fortschritt zurücksetzen"),
+    "lp_reset_q": ("Delete your learning progress in this browser?", "Lernfortschritt in diesem Browser löschen?"),
+    "lp_reset_q_acc": ("Delete your learning progress in this browser and in your account?", "Lernfortschritt in diesem Browser und in Ihrem Konto löschen?"),
+    "lp_off": ("Stop saving", "Nicht mehr speichern"),
+    "lp_off_q": ("Stop saving and delete the saved progress (in this browser{a})?", "Speichern beenden und gespeicherten Fortschritt löschen (in diesem Browser{a})?"),
+    "lp_off_acc": ("and in your account", "und in Ihrem Konto"),
+    "lp_del_pend": ("Not yet deleted in your account – this is done at the next sync while you are signed in.", "Im Konto noch nicht gelöscht – das geschieht beim nächsten Abgleich, während Sie angemeldet sind."),
+    "lp_overview": ("Back to the learning path", "Zur Lernpfad-Übersicht"),
 }
 
 
@@ -941,15 +978,142 @@ def _asset_v(name):
     except OSError: return "0"
 
 
-def quiz_box(lang, BASE, groups):
-    """Kasten "Abschlusstest & Zertifikat" unter den Stufen der Pfadseite."""
+def quiz_box(lang, BASE, groups, progress=False):
+    """Kasten "Abschlusstest & Zertifikat" unter den Stufen der Pfadseite; progress: Zeile "Noch offen" (fuellt assets/learnprogress.js nach dem Opt-in)."""
     n, need = quiz_numbers(groups)
     facts = [qx(lang, "q_free"), qx(lang, "q_login_need"), qx(lang, "q_count", n=n, g=len(groups) or len(order()), k=per_group(len(groups) or len(order()))), qx(lang, "q_pass", pct=PASS_PCT, need=need, n=n),
              qx(lang, "q_tries", m=MAX_TRIES), qx(lang, "q_certmail")]
     act = (f'<p><a class="btn main" href="{quiz_url(BASE, lang)}">{esc(qx(lang, "q_go"))}</a></p>' if groups
            else f'<p class="pl-soon"><strong>{esc(qx(lang, "q_soon"))}</strong></p>')
+    qo = f'<p class="pl-qopen"{lp_en(lang)}></p>' if progress else ""   # lang="en": englische Ersatztexte des Skripts (wie Kasten und Endzeile)
     return (f'<section class="pl-box pl-quiz" aria-labelledby="pl-quiz-h"><h2 id="pl-quiz-h">{esc(qx(lang, "q_box"))}</h2><p>{esc(qx(lang, "q_box_lead"))}</p>'
-            f'<ul>{"".join(f"<li>{esc(x)}</li>" for x in facts)}</ul>{act}</section>')
+            f'<ul>{"".join(f"<li>{esc(x)}</li>" for x in facts)}</ul>{qo}{act}</section>')
+
+
+# ---------- Lernfortschritt (Opt-in, assets/learnprogress.js) ----------
+LP_KEYS = tuple(k for k in UI if k.startswith("lp_"))
+LP_LOGIN = ("linkedin", "microsoft", "google")   # Anmeldelinks im Kasten der Pfadseite (wie der Rueckfall in assets/learnquiz.js), ohne Abfrage von /api/providers
+# Vor dem ersten Bild: hat der Browser den Opt-in schon (localStorage m365-learn, nur gelesen), gilt die Klasse lpx-on und der Kasten zeigt gleich den Platz fuer
+# den Stand statt des Opt-in-Texts (kein Sprung, wenn das Skript ihn fuellt). Ohne Opt-in wird nichts geschrieben.
+LPX_EARLY = '<script>try{if(JSON.parse(localStorage.getItem("m365-learn")||"{}").on===1)document.documentElement.classList.add("lpx-on")}catch(e){}</script>'
+LPX_CSS = """<style>
+.pl-lpx{margin:.4em 0 1.4em;padding:.7em 1em;border:1px solid var(--bd,#ccd);border-radius:.5em;background:var(--card,transparent);font-size:.95em}
+.pl-lpx p{margin:.25em 0}.pl-lpx .btn{margin:.2em 0}.lpx-t{font-size:.88em;color:var(--mut,#667)}
+.lpx-a p{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .8em}.lpx-a .btn{margin:0}
+.lpx-b{display:none}.lpx-on .lpx-a{display:none}.lpx-on .lpx-b{display:block;min-height:4.8em}.lpx-on .pl-lpx[data-k="p"] .lpx-b{min-height:12em}
+@media (max-width:40em){.lpx-on .lpx-b{min-height:9.8em}.lpx-on .pl-lpx[data-k="p"] .lpx-b{min-height:22.5em}}
+.lpx-s{font-size:.88em;color:var(--mut,#667)}.lpx-l{background:none;border:0;padding:0;font:inherit;color:var(--ac,#0a6);text-decoration:underline;cursor:pointer}
+.lpx-bar{display:block;width:100%;max-width:24em;height:.55em;accent-color:var(--ac,#0a6);margin:.3em 0}
+.pl-done{min-height:1.6em;margin:1.2em 0}.pl-qopen{display:none}.lpx-on .pl-qopen{display:block;min-height:3em}
+.pl-step-n.ok{background:var(--f-ok,#1e7a4a);color:transparent;position:relative}.pl-step-n.ok::after{content:"✓";position:absolute;inset:0;color:#fff}
+.lpx-on a[data-cid]::before,.lpx-on .pl-vline a[data-vid]::before{content:"";display:inline-block;width:1.1em}
+a[data-cid].ok::before,.pl-vline a[data-vid].ok::before{content:"✓";color:var(--f-ok,#1e7a4a)}.pl-card h3 a.lpx-ok::before{content:"✓ ";color:var(--f-ok,#1e7a4a)}
+.pl-vth{position:relative}.pl-vok{position:absolute;top:.4em;inset-inline-start:.4em;padding:.1em .45em;border-radius:.4em;background:rgba(0,0,0,.72);color:#fff;font-size:.8em;font-weight:600}
+</style>"""
+
+
+def progress_on():
+    """Lernfortschritt an? Code-Schalter PROGRESS und optional "progress": false am Pfad in data/pillars.json."""
+    return bool(PROGRESS) and registry()["path"].get("progress", True) is not False
+
+
+def lp_privacy(BASE, lang):
+    return f"{BASE}/datenschutz/#lernpfad-fortschritt" if lang == "de" else f"{BASE}/privacy/#learning-progress"
+
+
+def lp_en(lang):
+    """ ' lang="en"', solange die Texte des Kastens in dieser Sprache auf Englisch zurueckfallen (uebersetzte Sprachen ohne lp_*-Overlay; Screenreader)."""
+    return ' lang="en"' if lang not in LANGS and not ((overlay().get("ui") or {}).get(lang) or {}).get("lp_box") else ""
+
+
+def lp_box(lang, BASE, k):
+    """Kasten "Ihr Lernfortschritt" unter der Meta-Zeile (Leitfaden: nach dem Kopfbild). Statisch der Opt-in, kompakt (Knopf ohne JS deaktiviert, ein Satz,
+    Link zum Datenschutz); nach dem Opt-in fuellt assets/learnprogress.js .lpx-b (fester Mindestplatz je Breite, kein Layout-Sprung; aria-live setzt das Skript
+    erst nach dem ersten Bild). data-nosnippet: kein Suchsnippet aus dem Kasten."""
+    return (f'{LPX_EARLY}<div class="pl-lpx" id="lpx" data-k="{k}"{lp_en(lang)} data-nosnippet><p class="lpx-h"><b>{esc(tx(lang, "lp_box"))}</b></p>'
+            f'<div class="lpx-a"><p><button type="button" class="btn main" id="lpx-save" disabled>{esc(tx(lang, "lp_save"))}</button>'
+            f'<span class="lpx-t">{esc(tx(lang, "lp_optin"))} <a href="{lp_privacy(BASE, lang)}" rel="nofollow">{esc(tx(lang, "lp_privacy"))}</a></span></p></div>'
+            '<div class="lpx-b"></div></div>')
+
+
+def lp_done(lang, BASE):
+    """Zeile am Artikelende: statisch der Link zur Pfadseite, nach dem Lesen "✓ Gelesen · Als ungelesen markieren" (assets/learnprogress.js)."""
+    return f'<p class="pl-done"{lp_en(lang)}><a href="{path_url(BASE, lang)}">{esc(tx(lang, "lp_overview"))}</a></p>'
+
+
+# Ueberschrift, hoechstens ein kurzer Absatz (z. B. "<p><strong>Teil A</strong></p>" bei ifakt-polaris), dann die Liste
+_TOC_RX = re.compile(r'<h([23]) id="([^"]+)"[^>]*>(?:(?!</h[1-6]>).)*</h\1>\s*(?:<p>(?:(?!</p>).){0,200}</p>\s*)?<(ul|ol)>((?:(?!</\3>).)*)</\3>', re.S)
+_HEAD_RX = re.compile(r'<h[2-4](?: id="([^"]*)")?[^>]*>(.*?)</h[2-4]>', re.S)
+
+
+def _plain(x):
+    """Text einer Ueberschrift bzw. eines Listenpunkts zum Vergleich (ohne Tags, ohne fuehrende Nummer "1." / "1)")."""
+    x = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", x))).strip()
+    return re.sub(r"^\d{1,3}[.)]\s*", "", x).casefold()
+
+
+def _names(item, ids, texts):
+    """Nennt der Listenpunkt eine Ueberschrift des Artikels? Sprungmarke auf deren ID oder (auch ohne Link) ihr Text - Uebersetzungen weichen in
+    Verzeichnis und Ueberschrift oft leicht ab, daher Aehnlichkeit >= 0.6 statt Gleichheit."""
+    a = re.match(r'\s*<a href="#([^"]*)"', item)
+    if a and _html.unescape(a.group(1)) in ids: return True
+    if re.search(r'href="(?!#)', item): return False
+    x = _plain(item)
+    if not x or len(x) > 160: return False
+    if x in texts: return True
+    for t in texts:
+        m = difflib.SequenceMatcher(None, x, t)
+        if m.real_quick_ratio() >= 0.6 and m.quick_ratio() >= 0.6 and m.ratio() >= 0.6: return True
+    return False
+
+
+def toc_ids(body):
+    """IDs der Inhaltsverzeichnis-Ueberschriften im gerenderten Artikel (in jeder Sprache): Ueberschrift, direkt darunter eine Liste mit mindestens
+    3 Punkten, die zu mindestens 70 % je eine spaetere Ueberschrift des Artikels nennen - als Sprungmarke (href="#id") oder, ohne Links (z. B.
+    manufacturing-kpis), mit deren Text. Gewoehnliche Listen (Saetze, Quellenverweise wie #src-1) sind keine Verzeichnisse. Die Lesestelle wird dort nie
+    gespeichert."""
+    out = []
+    for m in _TOC_RX.finditer(body):
+        lis = re.findall(r"<li[^>]*>(.*?)</li>", m.group(4), re.S)
+        if len(lis) < 3: continue
+        hs = _HEAD_RX.findall(body[m.end():])
+        ids, texts = {_html.unescape(i) for i, _ in hs if i}, {_plain(t) for _, t in hs}
+        if sum(_names(x, ids, texts) for x in lis) >= 0.7 * len(lis): out.append(_html.unescape(m.group(2)))
+    return out
+
+
+# Texte, die das Skript braucht (die statischen lp_box, lp_save, lp_optin, lp_privacy, lp_overview stehen schon im HTML); je Seitenart nur die noetigen
+LP_JS_ALL = ("lp_local", "lp_synced", "lp_sync_err", "lp_signin", "lp_off", "lp_off_q", "lp_off_acc", "lp_del_pend", "lp_auto", "lp_read")
+LP_JS = {"g": LP_JS_ALL + ("lp_unread", "lp_resume", "lp_started", "lp_opened"),
+         "p": LP_JS_ALL + ("lp_prog", "lp_prog_dd", "lp_cont", "lp_cont_at", "lp_open_q", "lp_more", "lp_ready", "lp_reset", "lp_reset_q", "lp_reset_q_acc")}
+LP_JS["c"] = LP_JS["g"]
+
+
+def lp_data(g, lang, k, id_="", mins=0, toc=(), guides=(), deep=()):
+    """Konfiguration fuer assets/learnprogress.js (#lpx-data, Muster #lq-data): API (Staging: Staging-API ueber g["api"]), Pfad, Sprache, Seite
+    (k = g Leitfaden, c Vertiefung, p Pfadseite), Texte LP_JS[k]; auf der Pfadseite die Leitfaeden und Vertiefungen [id, Titel, Adresse, Sprache der Seite]
+    in Lernreihenfolge."""
+    cfg = {"api": g.get("api", "https://api-dub.m365.fm"), "path": registry()["path"]["id"], "lang": lang, "k": k, "privacy": lp_privacy(g["BASE"], lang),
+           "login": list(LP_LOGIN), "t": {x: tx(lang, x) for x in LP_JS[k]}}
+    if id_: cfg.update(id=id_, min=int(mins), toc=list(toc))
+    if guides or deep: cfg.update(g=[list(x) for x in guides], c=[list(x) for x in deep])
+    return '<script type="application/json" id="lpx-data">' + json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + "</script>"
+
+
+def lp_article(lang, k, id_, mins):
+    """Attribute am Artikel (Marker data-lpx: generate_site.page bindet assets/learnprogress.js nur dann ein)."""
+    return f' data-lpx="{esc(registry()["path"]["id"])}" data-k="{k}" data-id="{esc(id_)}" data-l="{lang}" data-min="{int(mins)}"'
+
+
+LP_END = '<span class="pl-end" aria-hidden="true"></span>'
+
+
+def lp_parts(g, lang, k, id_, mins, body):
+    """-> (Attribute am Artikel, Kasten, Ende-Marker, Zeile am Ende samt Konfiguration, CSS); alles leer ohne Lernfortschritt (HTML wie vorher)."""
+    if not progress_on(): return "", "", "", "", ""
+    BASE = g["BASE"]
+    return (lp_article(lang, k, id_, mins), lp_box(lang, BASE, k), LP_END,
+            lp_done(lang, BASE) + lp_data(g, lang, k, id_, mins, toc_ids(body)), LPX_CSS)
 
 
 JS_KEYS = ("q_loading", "q_login_h", "q_result_h", "q_login","q_signin", "q_start", "q_resume", "q_left", "q_none_left", "q_best", "q_of", "q_progress", "q_valid", "q_submit", "q_missing", "q_noq",
@@ -1080,12 +1244,13 @@ def hub_html(lang, BASE):
     return f'<h2>{esc(tx(lang, "paths"))}</h2><div class="ln-grid">{c}</div>' if c else ""
 
 
-def _deep_list(BASE, cs, lang, cdocs, cls="pl-deep"):
-    """Liste der Vertiefungen eines Leitfadens (Link, Beschreibung) in der Fassung der Sprache; fehlt sie, die englische mit hreflang="en"."""
+def _deep_list(BASE, cs, lang, cdocs, cls="pl-deep", mark=False):
+    """Liste der Vertiefungen eines Leitfadens (Link, Beschreibung) in der Fassung der Sprache; fehlt sie, die englische mit hreflang="en".
+    mark: data-cid am Link (Pfadseite, Lernfortschritt)."""
     out = []
     for c in cs:
         cl = lang if (lang, c["id"]) in cdocs else "en"
-        hl = '' if cl == lang else ' hreflang="en" lang="en"'
+        hl = ('' if cl == lang else ' hreflang="en" lang="en"') + (f' data-cid="{esc(c["id"])}"' if mark else "")
         d = cdocs[(cl, c["id"])]
         out.append(f'<li><a href="{cluster_url(BASE, c, cl)}"{hl}>{esc(clabel(c, cl))}</a>' + (f' <small>{esc(d["desc"])}</small>' if cls == "pl-deep" and d["desc"] else "") + "</li>")
     return "<ul>" + "".join(out) + "</ul>"
@@ -1112,9 +1277,10 @@ def build_clusters(g, cx, cdocs, pa):
             ol = "de" if lang == "en" else "en"
             other = f' · <a href="{alts[ol]}" hreflang="{ol}" lang="{ol}">{esc(tx(lang, "other"))}</a>' if ol in alts else ""
             dt = pdate(c)
-            b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "deep_one"))} · {esc(tx(lang, "deep_part"))} <a href="{pu}">{esc(p["label"][lang])}</a> · '
+            la, lbox, lend, ldone, lcss = lp_parts(g, lang, "c", c["id"], d["mins"], d["body"])   # Lernfortschritt (leer, wenn aus)
+            b = _shell(g, lang, f'{CSS}{lcss}{nav}<article class="pl-art"{la}><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "deep_one"))} · {esc(tx(lang, "deep_part"))} <a href="{pu}">{esc(p["label"][lang])}</a> · '
                        f'{d["mins"]} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{dt}">{dt}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
-                       f'{d["body"]}</article>{more}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}"><a href="{pu}" rel="up"><small>{esc(tx(lang, "back"))}</small><b>{esc(p["label"][lang])}</b></a></nav>'
+                       f'{lbox}{d["body"]}{lend}</article>{ldone}{more}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}"><a href="{pu}" rel="up"><small>{esc(tx(lang, "back"))}</small><b>{esc(p["label"][lang])}</b></a></nav>'
                        + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{d["auth"]}</section>' if d["auth"] else "")
                        + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{d["src"]}</section>' if d["src"] else ""))
             art = {"@context": "https://schema.org", "@type": "Article", "@id": u + "#article", "headline": d["h1"][:110], "description": d["desc"], "inLanguage": lang,
@@ -1267,7 +1433,7 @@ def build(g, posts, ents, written=None):
                 dd += (f'<section class="pl-box pl-deep pl-relg" aria-labelledby="pl-relg-h"><h2 id="pl-relg-h">{esc(tx(lang, "rel_g"))}</h2><p>{esc(tx(lang, "rel_lead"))}</p><ul>'
                        + "".join(f'<li><a href="{url(BASE, q, lang)}">{esc(q["label"][lang])}</a></li>' for q in rg) + "</ul></section>")
             _pv = g.get("pillar_videos")   # Karte "Passende Videos" (site_pillar_videos.py, data/pillar_videos.json); ohne Zuordnung bleibt die Seite unveraendert
-            vids = PV.card(_pv["doc"], p["id"], lang, _pv["pages"], _pv["r2"], _pv["dims"]) if _pv else ""
+            vids = PV.card(_pv["doc"], p["id"], lang, _pv["pages"], _pv["r2"], _pv["dims"], mark=progress_on()) if _pv else ""
             _ig = bool(IG.get("pillar", p["id"], lang))   # Kopfbild (Teilen-Bild) und 9-10 Infografiken im Text; ohne Freigabe in data/infographics_live.json bleibt die Seite unveraendert
             if _ig: body = IG.inject(body, "pillar", p["id"], lang)
             body = see_links(body, p, lang, BASE, cdocs)   # nach den Infografiken: deren Platz hängt an den Überschriften
@@ -1275,9 +1441,10 @@ def build(g, posts, ents, written=None):
             crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             dt = pdate(p)
-            b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
+            la, lbox, lend, ldone, lcss = lp_parts(g, lang, "g", p["id"], mins, body)   # Lernfortschritt (leer, wenn aus)
+            b = _shell(g, lang, f'{CSS}{lcss}{nav}<article class="pl-art"{la}><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
                        f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{dt}">{dt}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
-                       f'{IG.hero_figure("pillar", p["id"], lang) if _ig else ""}{body}</article>{dd}{vids}{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
+                       f'{IG.hero_figure("pillar", p["id"], lang) if _ig else ""}{lbox}{body}{lend}</article>{ldone}{dd}{vids}{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
                        + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{auth}</section>' if auth else "")
                        + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{src_html}</section>' if src_html else ""))
             author_id = f"{BASE}/community/u/{AUTHOR}/#person"
@@ -1306,10 +1473,12 @@ def build(g, posts, ents, written=None):
     # Pfadseiten (mit Kasten "Abschlusstest & Zertifikat") und Testseiten
     qdoc = quiz_doc()
     path_langs = []
+    prog = progress_on()
     for lang in langs:
         pu = path_url(BASE, lang)
         stages = ""
         items = []
+        lpd = []   # Vertiefungen der Karten [id, Titel, Adresse] fuer den Lernfortschritt
         n = 0
         for si, st in enumerate(pa["stages"]):
             blk = ""
@@ -1325,11 +1494,12 @@ def build(g, posts, ents, written=None):
                 if lang != "en": rel = [x for x in rel if x["slug"] in by_lang.get(lang, {})]
                 lst = ("<ul>" + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel[:5]) + "</ul>") if rel and own else ""
                 _pv = g.get("pillar_videos")
-                vl = PV.path_line(_pv["doc"], pid, lang, _pv["pages"]) if _pv and own else ""   # passende Videos des Leitfadens als Links (ohne Bilder)
-                dl = f'<div class="pl-dd"><b>{esc(tx(lang, "deep"))}</b>{_deep_list(BASE, deep[pid], lang, cdocs, cls="pl-dd")}</div>' if deep.get(pid) else ""
+                vl = PV.path_line(_pv["doc"], pid, lang, _pv["pages"], mark=prog) if _pv and own else ""   # passende Videos des Leitfadens als Links (ohne Bilder)
+                dl = f'<div class="pl-dd"><b>{esc(tx(lang, "deep"))}</b>{_deep_list(BASE, deep[pid], lang, cdocs, cls="pl-dd", mark=prog)}</div>' if deep.get(pid) else ""
+                if prog: lpd += [[c["id"], clabel(c, ccl), cluster_url(BASE, c, ccl), ccl] for c in deep.get(pid) or () for ccl in [lang if (lang, c["id"]) in cdocs else "en"]]
                 hl = "" if own else ' hreflang="en"'
                 mark = "" if own else f' <small lang="{lang}">({esc(tx(lang, "en_only"))})</small>'
-                blk += (f'<div class="pl-card"><h3>{f'<span class="pl-step-n">{n}</span>' if own else ""}<a href="{url(BASE, p, cl)}"{hl}>{esc(p["label"][lang])}</a>{mark}</h3><p{"" if own else " lang=" + chr(34) + "en" + chr(34)}>{esc(desc)}</p>'
+                blk += (f'<div class="pl-card"{f' data-pid="{esc(pid)}"' if prog else ""}><h3>{f'<span class="pl-step-n">{n}</span>' if own else ""}<a href="{url(BASE, p, cl)}"{hl}>{esc(p["label"][lang])}</a>{mark}</h3><p{"" if own else " lang=" + chr(34) + "en" + chr(34)}>{esc(desc)}</p>'
                         f'<p class="mut">{mins} {esc(tx(lang, "min"))}</p>{lst}{vl}{dl}</div>')
                 items.append((n, p, cl))
             if blk: stages += f'<h2 class="pl-stage">{esc(st["title"][lang])}</h2><p class="mut">{esc(st["text"][lang])}</p>{blk}'
@@ -1338,8 +1508,12 @@ def build(g, posts, ents, written=None):
         crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], pu)]
         nav = f'<nav aria-label="breadcrumb"><a href="{crumbs[0][1]}">{esc(crumbs[0][0])}</a> › {esc(crumbs[1][0])}</nav>'
         groups = quiz_groups(qdoc, lang, lambda q, _l=lang: url(BASE, q, _l if (_l, q["id"]) in cards else "en"))   # Leitfaden ohne Fassung der Sprache: englische Seite
-        b = _shell(g, lang, f'{CSS}{nav}<h1>{esc(pa["title"][lang])}</h1><p class="pl-meta">{esc(tx(lang, "path"))} · {len(items)} {esc(tx(lang, "guides"))}</p>'
-                   f'<p>{esc(pa["intro"][lang])}</p><p><a class="btn main" href="{first}">{esc(tx(lang, "start"))}</a></p>{stages}{quiz_box(lang, BASE, groups)}')
+        lpx = ""
+        if prog:   # Kasten "Ihr Lernfortschritt" (Opt-in) mit Marker data-lpx und Konfiguration (Leitfaeden der Karten, Vertiefungen)
+            lpx = (lp_box(lang, BASE, "p").replace('<div class="pl-lpx" id="lpx"', f'<div class="pl-lpx" id="lpx" data-lpx="{esc(pa["id"])}"', 1)
+                   + lp_data(g, lang, "p", guides=[[q["id"], q["label"][lang], url(BASE, q, cl), cl] for _, q, cl in items], deep=lpd))
+        b = _shell(g, lang, f'{CSS}{LPX_CSS if prog else ""}{nav}<h1>{esc(pa["title"][lang])}</h1><p class="pl-meta">{esc(tx(lang, "path"))} · {len(items)} {esc(tx(lang, "guides"))}</p>'
+                   f'{lpx}<p>{esc(pa["intro"][lang])}</p><p><a class="btn main" href="{first}">{esc(tx(lang, "start"))}</a></p>{stages}{quiz_box(lang, BASE, groups, progress=prog)}')
         alts = {l: path_url(BASE, l) for l in langs if indexed(l)}
         noidx = not indexed(lang)
         parts = []
