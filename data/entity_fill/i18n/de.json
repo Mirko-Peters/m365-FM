@@ -864,11 +864,13 @@
  "adx-studio": {
   "desc": "Kanadisches Softwareunternehmen, dessen Portalprodukt für Dynamics CRM 2015 von Microsoft übernommen wurde und die Grundlage von Power Pages bildete.",
   "h": "11c0fa2950ba7364",
+  "long": "ADX Studio war ein kanadisches Softwareunternehmen, das ein Portalprodukt für Dynamics CRM entwickelte. Das Produkt ermöglichte es Organisationen, Webportale zu erstellen, die mit ihren Dynamics CRM-Daten verbunden sind.\n\nIm Jahr 2015 übernahm Microsoft ADX Studio. Die übernommene Portal-Technologie diente später als Grundlage für Power Pages, die Low-Code-Plattform von Microsoft zur Erstellung extern ausgerichteter Websites. Leser, die die Geschichte von Power Pages oder die Ursprünge der Dynamics 365-Portale erforschen, stoßen bei ADX Studio auf den Ausgangspunkt dieser Produktlinie.\n\nZu dieser Entität sind derzeit keine Episoden auf M365.FM verlinkt, und es sind hier keine weiteren Beziehungen zu anderen Themen erfasst. Der Name des Unternehmens taucht hauptsächlich im Zusammenhang mit der Übernahme durch Microsoft und der Entwicklungslinie von einem Dynamics CRM-Portalprodukt zu Power Pages auf.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "94375e58"
+   "desc": "94375e58",
+   "long": "8a1b0d48"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-26"
  },
  "aerospace": {
   "faq": [
@@ -4533,6 +4535,17 @@
   },
   "ts": "2026-11-18"
  },
+ "azure-confidential-computing": {
+  "desc": "Die Implementierung von Confidential Computing durch Microsoft, die Daten während der Verarbeitung in hardwarebasierten vertrauenswürdigen Ausführungsumgebungen schützt.",
+  "h": "17e07bf1f19ece4a",
+  "long": "Azure Confidential Computing ist die Implementierung von Confidential Computing durch Microsoft. Der Begriff stammt vom Confidential Computing Consortium, das zur Linux Foundation gehört. Das Konsortium definiert das Ziel als den Schutz von Daten während der Verarbeitung, indem die Berechnung in einer hardwarebasierten, attestierten vertrauenswürdigen Ausführungsumgebung durchgeführt wird. Microsoft hat das Konsortium 2019 mitbegründet.\n\nEine vertrauenswürdige Ausführungsumgebung isoliert Code und Daten während der Ausführung, sodass sie ohne Berechtigung weder gelesen noch verändert werden können. Azure nutzt einen hardwarebasierten Root of Trust, den der Cloud-Anbieter nicht kontrolliert. Wenn er aktiviert und korrekt konfiguriert ist, kann Microsoft auf unverschlüsselte Kundendaten nicht zugreifen, auch nicht als Betreiber der Cloud.\n\nAzure verschlüsselt Daten bereits im Ruhezustand und bei der Übertragung. Confidential Computing deckt den dritten Zustand ab, die Daten während der Verarbeitung, einschließlich kryptografischer Schlüssel, sodass Daten in allen drei Zuständen geschützt sind. Die Übersicht verweist auf Angebote in den Bereichen Infrastruktur, Plattformdienste und Entwicklertools. Organisationen mit sensiblen oder regulierten Daten setzen es typischerweise ein. Die Seite enthält keinen Hinweis auf eine Einstellung oder Umbenennung.",
+  "m": "autotr",
+  "sh": {
+   "desc": "f3f35a3c",
+   "long": "20f51e9e"
+  },
+  "ts": "2026-11-26"
+ },
  "azure-connected-machine-agent": {
   "desc": "Der leichtgewichtige Agent, der auf Servern außerhalb von Azure installiert wird, um sie mit Azure Arc zu verbinden. Er stellt die Verbindung ausgehend über HTTPS her, verwaltet Erweiterungen und meldet das Inventar, sodass der Computer als Azure-Ressource erscheint.",
   "faq": [
@@ -4584,6 +4597,28 @@
    "long": "e5446d5d"
   },
   "ts": "2026-11-18"
+ },
+ "azure-container-instances": {
+  "desc": "Ein serverloser Weg, Linux- oder Windows-Container in Azure auszuführen, ohne virtuelle Maschinen zu verwalten.",
+  "h": "288604c335783732",
+  "long": "Azure Container Instances führt Linux- oder Windows-Container auf serverlose Weise aus. Sie verwalten keine virtuellen Maschinen und benötigen keinen übergeordneten Orchestrator. Container starten in Sekunden, und die Abrechnung erfolgt pro Sekunde auf Basis der von Ihnen angegebenen CPU-Kerne und des Arbeitsspeichers.\n\nEine einzelne Container-Instanz kann allein laufen, und mehrere Container können eine Containergruppe bilden, die Host, Netzwerk, Speicher und Lebenszyklus teilt, zum Beispiel eine App mit einem Logging-Sidecar (nur Linux). Images können von Docker Hub, Azure Container Registry oder anderen Registries stammen. Container können in einem virtuellen Netzwerk platziert werden, Azure-Files-Freigaben einbinden und eine verwaltete Identität verwenden. Spot-Container bieten einen Rabatt für unterbrechbare Workloads, und vertrauliche Container schützen Daten während der Verarbeitung.\n\nMit virtuellen Knoten kann Azure Kubernetes Service Pods als Containergruppen auf diesem Dienst ausführen und skalieren, ohne auf die VM-basierte Autoskalierung warten zu müssen. Typische Nutzer sind Entwickler, die isolierte, kurzlebige oder lastspitzenbedingte Workloads ohne Cluster-Betrieb benötigen. Die Seite weist darauf hin, dass nur x64-Images unterstützt werden und privilegierte Vorgänge nicht zulässig sind.",
+  "m": "autotr",
+  "sh": {
+   "desc": "4b071861",
+   "long": "e37a004c"
+  },
+  "ts": "2026-11-26"
+ },
+ "azure-container-registry": {
+  "desc": "Eine verwaltete Registry in Azure zum Speichern und Verwalten von Container-Images und zugehörigen Artefakten.",
+  "h": "87902db9c6310946",
+  "long": "Azure Container Registry ist ein verwalteter Registry-Dienst für Container-Images und zugehörige Artefakte. Er basiert auf der Open-Source-Plattform Docker. Teams erstellen private Registries in Azure und bewahren dort die Images für ihre Container-Builds und Deployments auf.\n\nNeben Docker-kompatiblen Images für Windows und Linux kann eine Registry Helm-Charts und Images im OCI-Format speichern. ACR Tasks können Images in Azure erstellen, entweder bei Bedarf oder ausgelöst durch einen Quellcode-Commit oder eine Aktualisierung des Basis-Images. Registries gibt es in den Stufen Basic, Standard und Premium, wobei Geo-Replikation ein Premium-Feature ist. Der Zugriff erfolgt über Microsoft Entra ID, Azure RBAC vergibt feingranulare Berechtigungen, und Microsoft Defender for Cloud kann Images beim Pushen scannen.\n\nAzure Kubernetes Service, App Service, Batch und Service Fabric können Images aus einer Registry abrufen. CI/CD-Tools wie Azure Pipelines oder Jenkins können Images dorthin pushen. Entwickler und Plattformteams, die Container auf Azure betreiben, nutzen sie typischerweise als zentralen Image-Speicher.",
+  "m": "autotr",
+  "sh": {
+   "desc": "1405f519",
+   "long": "6b5aa36b"
+  },
+  "ts": "2026-11-26"
  },
  "azure-container-storage": {
   "desc": "Azure Container Storage ist ein Dienst zur Volume-Verwaltung und Orchestrierung für Container auf Kubernetes, einschließlich AKS. Version 2 verwendet die lokalen NVMe-Datenträger der Clusterknoten als Backing-Storage.",
@@ -4637,6 +4672,17 @@
   },
   "ts": "2026-11-18"
  },
+ "azure-data-box": {
+  "desc": "Eine Produktfamilie robuster, verschlüsselter Geräte für den Offline-Transfer großer Datenmengen zu und von Azure.",
+  "h": "b4d69d91dbce267d",
+  "long": "Azure Data Box ist eine Microsoft-Lösung für den Offline-Transfer großer Datenmengen zu und von Azure. Microsoft stellt ein robustes, verschlüsseltes Speichergerät bereit, Sie kopieren Daten lokal darauf oder davon und senden es zurück. Die Seite richtet sich an Übertragungen von mehr als etwa 40 TB, bei denen wenig oder gar keine Netzwerkverbindung besteht.\n\nFür einen Import bestellen Sie das Gerät im Azure-Portal, kopieren Ihre Daten darauf und senden es zurück. Die Daten werden anschließend nach Azure hochgeladen, und die Datenträger werden gemäß den NIST-Richtlinien gelöscht. Für einen Export werden Daten aus Ihrem Speicherkonto auf das Gerät und anschließend auf Ihre eigenen Server kopiert. Der Data Box-Dienst im Portal verfolgt die Bestellung und sendet E-Mail-Benachrichtigungen bei Änderungen.\n\nDie aktuellen Geräte sind Data Box Next-gen mit 120 TB oder 525 TB nutzbarer Kapazität. Das 80-TB-Gerät wird in einigen Regionen eingestellt, und Data Box Heavy ist eingestellt und kann nicht mehr bestellt werden. Typische Einsatzzwecke sind einmalige Migrationen, die erste Massenübertragung vor inkrementellen Netzwerkübertragungen sowie Exporte für die Notfallwiederherstellung oder die Rückführung on-premises. Partner wie Veeam und Commvault sowie Dienste wie Azure File Sync und Azure Backup sind integriert.",
+  "m": "autotr",
+  "sh": {
+   "desc": "2506e5ce",
+   "long": "9099145e"
+  },
+  "ts": "2026-11-26"
+ },
  "azure-data-lake-storage": {
   "desc": "Azure Data Lake Storage ist eine Reihe von Funktionen auf Azure Blob Storage zum Speichern großer Datenmengen für Analyse-Workloads.",
   "faq": [
@@ -4663,6 +4709,28 @@
   },
   "ts": "2026-11-18"
  },
+ "azure-data-share": {
+  "desc": "Ein Dienst zum sicheren Teilen von Daten mit Kunden und Partnern außerhalb der eigenen Organisation.",
+  "h": "38b017d260254d65",
+  "long": "Azure Data Share ist ein Dienst zum sicheren Teilen von Daten mit Kunden und Partnern außerhalb Ihrer Organisation. Der Anbieter behält die Kontrolle darüber, was geteilt wird, und der Dienst protokolliert, was wann und mit wem geteilt wurde. Beide Seiten benötigen ein Azure-Abonnement.\n\nEin Datenanbieter erstellt eine Freigabe, lädt Empfänger ein, legt Nutzungsbedingungen fest, wählt, wie oft Aktualisierungen bereitgestellt werden, und kann den Zugriff jederzeit widerrufen. Ein Verbraucher erhält eine E-Mail-Einladung, liest die Bedingungen und akzeptiert oder lehnt die Einladung ab. Es gibt zwei Freigabemodi. Bei der snapshotbasierten Freigabe werden die Daten in den eigenen Speicher des Verbrauchers kopiert, entweder als vollständiger Snapshot oder als stündliche oder tägliche inkrementelle Snapshots. Bei der In-Place-Freigabe bleiben die Daten dort, wo sie sind, und der Verbraucher fragt sie live ab. Laut der Seite ist die In-Place-Freigabe derzeit nur für Azure Data Explorer verfügbar.\n\nDie Daten selbst verbleiben in den zugrunde liegenden Speichern, etwa Azure Blob Storage, Azure Data Lake, Azure SQL Database oder Azure Synapse Analytics, und Data Share speichert nur Metadaten. Datenteams, die Daten mit Partnern austauschen, nutzen den Dienst. Die Seite enthält keinen Hinweis auf Außerbetriebnahme oder Umbenennung.",
+  "m": "autotr",
+  "sh": {
+   "desc": "07bce776",
+   "long": "57596a54"
+  },
+  "ts": "2026-11-26"
+ },
+ "azure-database-for-mysql": {
+  "desc": "Ein vollständig verwalteter relationaler Datenbankdienst in Azure, basierend auf der MySQL Community Edition.",
+  "h": "7237866dddc36a19",
+  "long": "Azure Database for MySQL ist ein vollständig verwalteter relationaler Datenbankdienst in Azure. Er basiert auf der MySQL Community Edition. Laut Dokumentation ist er für Entwickler konzipiert und kann geschäftskritische Workloads mit vorhersagbarer Leistung und dynamischer Skalierung ausführen. Die zentrale Dokumentation behandelt die Bereitstellung als Flexible Server.\n\nTeams nutzen den Dienst als Datenbank für Web- und Anwendungs-Backends sowie um bestehende MySQL-Workloads von lokalen Umgebungen oder anderen Clouds zu migrieren. Die Dokumentation nennt Migrationsoptionen wie Dump und Restore, Import und Export, Data-in-Replikation von Amazon RDS for MySQL sowie Online-Migration mit minimaler Ausfallzeit. Tutorials zeigen PHP mit Laravel, Java Spring Boot auf AKS und WordPress auf App Service. Anleitungen zur Optimierung behandeln Abfrageleistung, hohe CPU-Auslastung, geringen Arbeitsspeicher, Konnektivität und Replikationslatenz.\n\nDa Microsoft den Dienst betreibt, müssen Kunden die Datenbankserver nicht selbst verwalten. Entwickler- und Betriebsteams, die bereits MySQL verwenden, entscheiden sich typischerweise für diesen Dienst. Die Startseite der Dokumentation enthält keinen Hinweis auf eine Einstellung des Dienstes.",
+  "m": "autotr",
+  "sh": {
+   "desc": "fc035ac6",
+   "long": "6f662ab8"
+  },
+  "ts": "2026-11-26"
+ },
  "azure-database-for-postgresql-flexible-server": {
   "desc": "Ein vollständig verwalteter Azure-Datenbankdienst auf Basis der Community-PostgreSQL-Engine mit den Rechenebenen Burstable, General Purpose und Memory Optimized.",
   "faq": [
@@ -4688,6 +4756,17 @@
    "long": "1c1313ab"
   },
   "ts": "2026-11-24"
+ },
+ "azure-database-migration-service": {
+  "desc": "Ein vollständig verwalteter Dienst zur Migration von Datenbanken auf Azure-Datenplattformen, mit minimaler Ausfallzeit bei Online-Migrationen.",
+  "h": "cdcb8756f9823438",
+  "long": "Der Azure Database Migration Service ist ein vollständig verwalteter Dienst zur Migration von Datenbanken auf Azure-Datenplattformen. Online-Migrationen zielen auf minimale Ausfallzeiten ab. Er kann über das Azure-Portal, PowerShell und die Azure CLI genutzt werden.\n\nLaut der Seite unterstützt er derzeit die Modernisierung von SQL-Datenbanken nach Azure. Als Ziele nennt die Funktionstabelle Azure SQL Database für die Offline-Migration sowie Azure SQL Managed Instance und SQL Server auf Azure-virtuellen Maschinen für Online- und Offline-Migrationen. Unterstützt werden Schemamigration und private Endpunkte. Die Migration von Anmeldungen und von mit TDE verschlüsselten Datenbanken wird nicht unterstützt. Optional kann eine kostenlose Nachverfolgungsressource erstellt werden, die den Ressourcenanbieter Microsoft.AzureArcData benötigt. Der Dienst nutzt dieselbe Technologie wie die SQL Server-Migrationsbewertung, um vor einem Umzug Änderungen zu empfehlen; die Behebung der Probleme übernimmt der Benutzer.\n\nDatenbankadministratoren und Migrationsteams, die SQL Server-Datenbanken nach Azure verschieben, nutzen ihn. Die Seite enthält keinen Hinweis auf eine Einstellung des Dienstes.",
+  "m": "autotr",
+  "sh": {
+   "desc": "dc5af505",
+   "long": "d9afd388"
+  },
+  "ts": "2026-11-26"
  },
  "azure-databricks": {
   "desc": "Ein von Microsoft und Databricks gemeinsam entwickelter, verwalteter Apache-Spark-Analysedienst auf Azure für Data Engineering, Analytics und Machine Learning auf Daten im eigenen Speicher.",
@@ -4855,6 +4934,17 @@
    "long": "f87ce633"
   },
   "ts": "2026-11-18"
+ },
+ "azure-devtest-labs": {
+  "desc": "Ein Dienst, mit dem Entwickler und Tester Azure-virtuelle Computer per Self-Service schnell erstellen und verwalten können, mit Kostenkontrollen und Automatisierung.",
+  "h": "99e9c54c3f4614ad",
+  "long": "Azure DevTest Labs ermöglicht es Entwicklern und Testern, Azure-virtuelle Computer für Entwicklung und Test schnell zu erstellen und zu verwalten. Der Dienst folgt einem Self-Service-Modell mit integrierten Kostenkontrollen und Automatisierung.\n\nRessourcen werden in Labs organisiert. Lab-Besitzer bereiten virtuelle Computer mit den Tools vor, die Benutzer benötigen, und Benutzer beanspruchen diese Computer oder erstellen eigene. Richtlinien können VM-Größen, die Anzahl der Computer pro Benutzer und die Gesamtzahl begrenzen. Automatische Herunterfahr- und Startpläne, Kostenübersichten und Ablaufdaten reduzieren Verschwendung. Labs nutzen benutzerdefinierte Images, Formeln, Artefakte, die Software automatisch installieren, sowie ARM-Vorlagen. Artefakt- und Vorlagen-Repositories in Git können angebunden und unternehmensweit geteilt werden.\n\nDer Dienst baut auf Azure Resource Manager auf und wird über das Azure-Portal verwaltet. Er verwendet Images aus dem Azure Marketplace sowie benutzerdefinierte Images. Typische Einsatzszenarien sind Entwicklungs- und Testcomputer, Schulungs- oder Klassenraum-Labs, wiederholbare Bereitstellung und die Integration in CI/CD-Pipelines. Ihn nutzen Entwicklungsteams und IT-Administratoren, die eine leichtgewichtige Governance für verteilte Teams wünschen. Die Übersichtsseite enthält keinen Hinweis auf eine Einstellung des Dienstes.",
+  "m": "autotr",
+  "sh": {
+   "desc": "68e6ed91",
+   "long": "a1ee6929"
+  },
+  "ts": "2026-11-26"
  },
  "azure-digital-twins": {
   "desc": "Ein Azure-Plattformdienst zum Aufbau eines lebendigen Graphen digitaler Zwillinge, der mit DTDL-Modellen definiert wird. Er bildet Entitäten und Beziehungen einer realen Umgebung ab und kann abgefragt und als Ereignisse weitergeleitet werden.",
@@ -5126,6 +5216,17 @@
    "long": "a4e64402"
   },
   "ts": "2026-11-18"
+ },
+ "azure-firewall-manager": {
+  "desc": "Ein Sicherheitsverwaltungsdienst für die zentrale Richtlinien- und Routenverwaltung cloudbasierter Sicherheitsperimeter.",
+  "h": "cecd2e6d6826c6c3",
+  "long": "Azure Firewall Manager ist ein Sicherheitsverwaltungsdienst. Er stellt zentrale Sicherheitsrichtlinien- und Routenverwaltung für cloudbasierte Sicherheitsperimeter bereit. Es werden zwei Architekturen unterstützt. Ein gesicherter virtueller Hub ist ein von Microsoft verwalteter Azure Virtual WAN-Hub mit Sicherheits- und Routingrichtlinien. Ein Hub-virtuelles Netzwerk ist ein Standard-virtuelles Netzwerk, das vom Kunden verwaltet wird, und dort wird nur Azure Firewall Policy unterstützt.\n\nDer Dienst kann mehrere Azure Firewall-Instanzen über Regionen und Abonnements hinweg bereitstellen und konfigurieren. Die zentrale IT kann globale Firewallrichtlinien erstellen, und lokale Teams können für Self-Service eigene hinzufügen. Für gesicherte virtuelle Hubs können Partner-Anbieter von Security-as-a-Service den Internetverkehr filtern, und die zentrale Routenverwaltung leitet den Datenverkehr ohne manuell definierte benutzerdefinierte Routen über den Hub. Virtuelle Netzwerke können mit einem DDoS Protection-Plan verknüpft werden, und Web Application Firewall-Richtlinien für Azure Front Door und Azure Application Gateway lassen sich zentral erstellen und zuweisen.\n\nSicherheits- und Netzwerkteams mit vielen Firewalls oder Hubs nutzen ihn typischerweise. Die Seite weist darauf hin, dass DDoS Protection nicht in gesicherte virtuelle Hubs integriert ist, abgesehen von einer Vorschau für vom Kunden bereitgestellte öffentliche IP-Adressen. Es gibt keinen Hinweis auf Einstellung oder Umbenennung.",
+  "m": "autotr",
+  "sh": {
+   "desc": "81a2210c",
+   "long": "f8e6b9d2"
+  },
+  "ts": "2026-11-26"
  },
  "azure-front-door": {
   "desc": "Globaler Azure-Dienst, der Content Delivery und Layer-7-Lastverteilung an Microsoft-Edge-Standorten kombiniert und eine integrierte Web Application Firewall enthält; er wird häufig vor regionalen Application Gateways platziert.",
@@ -7385,11 +7486,13 @@
  "bottleneck": {
   "desc": "Die Ressource oder der Prozessschritt, der begrenzt, wie viel Arbeit in einem bestimmten Zeitraum durch ein Produktionssystem fließen kann; nach einer Störung kann der Engpass auf eine andere Maschine, einen anderen Prüfschritt, ein anderes Werkzeug oder eine andere Person übergehen.",
   "h": "523bf5dab81920ea",
-  "m": "autotr",
+  "long": "Ein Engpass (Produktion) ist der Ressourcen- oder Prozessschritt, der begrenzt, wie viel Arbeit in einem bestimmten Zeitraum durch ein Produktionssystem fließen kann. Da alle anderen Schritte vom Output des limitierenden Schritts abhängen, wird der Durchsatz des gesamten Systems durch diesen einen Punkt bestimmt und nicht durch die kombinierte Kapazität aller Schritte.\n\nDas Konzept dient dazu zu verstehen, wo die Kapazität tatsächlich eingeschränkt ist und wo Bemühungen zur Verbesserung des Flusses Wirkung zeigen. Ein Engpass kann eine Maschine, ein Prüfschritt, ein Werkzeug oder eine Person sein. Seine Identifizierung hilft zu erklären, warum sich Arbeit vor einem Schritt staut, während andere Schritte auf Input warten.\n\nEin Engpass ist nicht unbedingt fest. Nach einer Störung kann sich der limitierende Punkt auf eine andere Maschine, einen anderen Prüfschritt, ein anderes Werkzeug oder eine andere Person verlagern, daher muss der Ort des Engpasses bei sich ändernden Bedingungen gegebenenfalls neu bewertet werden.\n\nZu diesem Eintrag sind derzeit keine verwandten Themen oder M365.FM-Episoden verlinkt.",
+  "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "abcb1b13"
+   "desc": "abcb1b13",
+   "long": "eeb15541"
   },
-  "ts": "2026-11-21"
+  "ts": "2026-11-26"
  },
  "bring-your-own-device": {
   "desc": "Bring your own device (BYOD) ist die Praxis, dass Mitarbeitende private Smartphones, Tablets oder Laptops für die Arbeit nutzen, was eine Trennung und den Schutz von Unternehmensdaten auf diesen Geräten erfordert.",
@@ -14602,12 +14705,29 @@
  },
  "dynamic-distribution-group": {
   "desc": "Eine Exchange Online-Gruppe mit E-Mail-Funktion, deren Mitgliedschaft anhand von Empfängerattributen und Regeln berechnet wird, etwa nach Abteilung oder Standort, statt über eine feste Mitgliederliste.",
+  "faq": [
+   {
+    "a": "Eine dynamische Verteilergruppe ist eine mailaktivierte Gruppe in Exchange Online, deren Mitgliedschaft anhand von Empfängerattributen und Regeln berechnet wird, etwa Abteilung oder Standort. Sie stützt sich nicht auf eine feste Mitgliederliste.",
+    "q": "Was ist eine dynamische Verteilergruppe?"
+   },
+   {
+    "a": "Eine Gruppe mit fester Mitgliedschaft verwendet eine definierte Liste von Mitgliedern, während eine dynamische Verteilergruppe ihre Mitglieder anhand von Attributen und Regeln ermittelt. Die Empfänger folgen daher den Kriterien und nicht einer manuell geführten Liste.",
+    "q": "Worin unterscheidet sich eine dynamische Verteilergruppe von einer Gruppe mit fester Mitgliedschaft?"
+   },
+   {
+    "a": "Microsoft beschreibt, wie sie erstellt und verwaltet werden, in der Exchange-Online-Dokumentation auf Microsoft Learn, unter Empfänger und dynamische Verteilergruppen.",
+    "q": "Wo finde ich die offizielle Dokumentation zu dynamischen Verteilergruppen?"
+   }
+  ],
   "h": "914aba416de1e083",
+  "long": "Eine dynamische Verteilergruppe ist eine mailaktivierte Gruppe in Exchange Online. Anders als eine Standardverteilergruppe speichert sie keine feste Mitgliederliste. Ihre Mitgliedschaft wird anhand von Empfängerattributen und Regeln berechnet, etwa Abteilung oder Standort. Die Empfängergruppe ergibt sich also aus den Kriterien, mit denen die Gruppe definiert ist.\n\nDieser Ansatz wird verwendet, wenn Nachrichten eine Gruppe von Personen erreichen sollen, die über Attribute beschrieben wird und nicht über eine manuell gepflegte Liste. Da die Mitgliedschaft den Regeln und den zugrunde liegenden Empfängerattributen folgt, spiegeln die Empfänger einer an die Gruppe gesendeten Nachricht diese Attribute wider und nicht eine Liste, die jemand von Hand bearbeitet.\n\nMicrosoft beschreibt in der Exchange-Online-Dokumentation auf Microsoft Learn, im Abschnitt zu Empfängern und dynamischen Verteilergruppen, wie dynamische Verteilergruppen erstellt und verwaltet werden.\n\nMit diesem Eintrag sind derzeit keine M365.FM-Episoden oder verwandten Themen verknüpft. Diese Seite behandelt daher nur die Definition des Konzepts, so wie sie in den verfügbaren Fakten beschrieben ist.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "bee1c7a5"
+   "desc": "bee1c7a5",
+   "faq": "075ed3cb",
+   "long": "c652f768"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-26"
  },
  "dynamics-365": {
   "desc": "Die Familie der Geschäftsanwendungen von Microsoft für Vertrieb, Kundenservice, Finanzen, Lieferkette und mehr, einschließlich Business Central für kleine und mittelständische Unternehmen. Sie baut auf Dataverse und der Power Platform auf.",
@@ -32384,12 +32504,29 @@
  },
  "production-routing": {
   "desc": "In der Fertigung legt ein Arbeitsplan die Abfolge der Arbeitsgänge fest, die ein Produkt durchläuft, sowie die Arbeitsplätze oder Ressourcen, die jeden Arbeitsgang ausführen können, einschließlich zugelassener Alternativpläne und deren Regeln.",
+  "faq": [
+   {
+    "a": "Ein Routing legt die Abfolge der Arbeitsgänge fest, die ein Produkt durchläuft, sowie die Arbeitsplätze oder Ressourcen, die jeden Arbeitsgang ausführen können. Es kann außerdem genehmigte Alternativrouten und deren Regeln umfassen.",
+    "q": "Was ist ein Routing in der Fertigung?"
+   },
+   {
+    "a": "Alternativrouten sind genehmigte Optionen, um ein Produkt über einen anderen Weg oder mit anderen Ressourcen herzustellen. Für sie gelten Regeln, die bestimmen, wann sie verwendet werden dürfen.",
+    "q": "Was sind Alternativrouten in einem Routing?"
+   },
+   {
+    "a": "Für jeden Arbeitsgang gibt ein Routing die Arbeitsplätze oder Ressourcen an, die ihn ausführen können, und ordnet den Arbeitsgang zugleich in die Gesamtabfolge ein.",
+    "q": "Was legt ein Routing für jeden Arbeitsgang fest?"
+   }
+  ],
   "h": "f62025cfa49cd359",
+  "long": "Routing (Fertigung) ist ein Konzept, das beschreibt, wie ein Produkt Schritt für Schritt hergestellt wird. Ein Routing legt die Abfolge der Arbeitsgänge fest, die ein Produkt während der Produktion durchläuft, und bestimmt die Arbeitsplätze oder Ressourcen, die jeden Arbeitsgang ausführen können. Es umfasst außerdem genehmigte Alternativrouten sowie die Regeln, die festlegen, wann diese Alternativen gelten.\n\nIn der Praxis wird ein Routing verwendet, um den Produktionsweg eines Artikels zu dokumentieren und zu standardisieren. Indem Arbeitsgänge in der richtigen Reihenfolge aufgeführt und jeweils mit den Ressourcen verknüpft werden, die sie ausführen können, bietet ein Routing Planern und Mitarbeitern in der Produktion eine gemeinsame Grundlage dafür, wie die Arbeit durch ein Werk fließt. Alternativrouten ermöglichen es, die Produktion über einen anderen Weg fortzusetzen, wenn der primäre Weg nicht verfügbar ist, sofern die Alternative genehmigt wurde und ihre Regeln erfüllt sind.\n\nEin Routing wird häufig zusammen mit anderen Fertigungsstammdaten betrachtet, etwa der Stückliste mit den für die Herstellung eines Produkts benötigten Materialien, da beide zusammen beschreiben, was hergestellt wird und wie es hergestellt wird. Die für diesen Eintrag verfügbaren Fakten verknüpfen das Konzept nicht mit einem bestimmten Microsoft-Produkt, und derzeit sind keine M365.FM-Episoden mit ihm verbunden.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "6e0fd7b9"
+   "desc": "6e0fd7b9",
+   "faq": "e2bc9c35",
+   "long": "26cfa41d"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-26"
  },
  "productized-services": {
   "desc": "Productisierte Dienstleistungen sind Beratungsangebote, die als benannte Programme mit festem Umfang, definierten Ergebnissen, einem festen Zeitplan und einem festen Preis standardisiert sind.",
@@ -38020,12 +38157,25 @@
  },
  "sql-join": {
   "desc": "Eine JOIN-Klausel in SQL kombiniert Spalten aus zwei oder mehr Tabellen anhand einer verwandten Spalte. Gängige Varianten sind Inner Joins, die nur übereinstimmende Zeilen zurückgeben, und Left Joins, die jede Zeile der linken Tabelle beibehalten.",
+  "faq": [
+   {
+    "a": "Ein SQL JOIN kombiniert Spalten aus zwei oder mehr Tabellen anhand einer zugehörigen Spalte. Dadurch können Daten, die in getrennten Tabellen gespeichert sind, gemeinsam in einem Ergebnis zurückgegeben werden.",
+    "q": "Was macht ein SQL JOIN?"
+   },
+   {
+    "a": "Ein Inner Join gibt nur die Zeilen zurück, die in beiden Tabellen übereinstimmende Werte haben. Ein Left Join behält jede Zeile der linken Tabelle bei, auch solche ohne Entsprechung in der rechten Tabelle.",
+    "q": "Worin unterscheiden sich ein Inner Join und ein Left Join?"
+   }
+  ],
   "h": "1e0e69be1fb64761",
+  "long": "Ein SQL JOIN ist eine Klausel in der Abfragesprache SQL, die Spalten aus zwei oder mehr Tabellen anhand einer zugehörigen Spalte miteinander kombiniert. Dadurch lassen sich Daten, die in getrennten Tabellen gespeichert sind, gemeinsam in einer einzigen Ergebnismenge zurückgeben.\n\nEs gibt mehrere Varianten. Ein Inner Join gibt nur die Zeilen zurück, die in den verbundenen Tabellen übereinstimmende Werte haben. Ein Left Join behält jede Zeile der linken Tabelle bei, auch wenn in der rechten Tabelle keine Entsprechung existiert. Welche Variante gewählt wird, bestimmt, welche Zeilen im Ergebnis erscheinen, und ist daher zentral für das Verhalten einer Abfrage.\n\nJOIN-Klauseln werden überall dort verwendet, wo relationale Daten abgefragt werden, etwa wenn zusammengehörige Datensätze auf verschiedene Tabellen verteilt sind und gemeinsam gelesen oder analysiert werden müssen. Das Verständnis dafür, wie die zugehörige Spalte die Tabellen verknüpft, ist die Grundlage für das Schreiben korrekter Join-Bedingungen.\n\nMit diesem Eintrag sind derzeit keine verwandten Themen oder M365.FM-Episoden verknüpft.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "a9b3ba18"
+   "desc": "a9b3ba18",
+   "faq": "e5baaf91",
+   "long": "e5f5a258"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-26"
  },
  "sql-server-management-studio": {
   "desc": "SQL Server Management Studio (SSMS) ist Microsofts kostenlose integrierte Umgebung zur Verwaltung von SQL Server- und Azure SQL-Datenbanken, einschließlich des Schreibens von Abfragen und der Untersuchung von Ausführungsplänen.",
