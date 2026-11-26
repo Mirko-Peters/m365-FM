@@ -71,7 +71,7 @@ jobs:
             git commit -q -m "$MSG"
             for i in 1 2 3 4 5; do
               git fetch -q origin main
-              if git pull --rebase --autostash -q origin main; then
+              if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
                 if git push -q origin HEAD:main; then echo "Sponsor-Reihe gespeichert: $MSG" | tee -a "$GITHUB_STEP_SUMMARY"; return 0; fi
               else
                 git rebase --abort 2>/dev/null || true

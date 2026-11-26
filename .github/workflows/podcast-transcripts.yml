@@ -50,4 +50,4 @@ jobs:
           for f in transcripts/podcast/APPLIED.txt data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
           git commit -q -m "Podcast-Transkripte -> Spreaker: Protokoll $(date -u +%Y-%m-%dT%H:%MZ)"
-          (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+          (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q

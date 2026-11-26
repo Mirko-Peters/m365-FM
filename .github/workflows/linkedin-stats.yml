@@ -67,7 +67,7 @@ jobs:
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
           git commit -q -m "LinkedIn-Follower aktualisiert (Pages Data Portability API)"
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main; then
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "gepusht"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true

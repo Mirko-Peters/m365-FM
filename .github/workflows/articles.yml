@@ -68,7 +68,7 @@ jobs:
           if [ "$N" = "0" ]; then echo "Artikel: nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
           # main bewegt sich oft (Bots): nachziehen und wiederholen; data/spend.json fuehrt der Treiber spendjson je Schluessel zusammen, -X theirs gilt nur fuer die uebrigen Dateien
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q -X theirs origin main; then
+            if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "Artikel: $N Commit(s) auf main gespeichert (Artikel, Uebersetzungen, Zwischenstand, Kostenbuch)" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true
