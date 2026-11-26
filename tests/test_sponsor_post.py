@@ -407,6 +407,7 @@ class WorkflowSave(unittest.TestCase):
         (seed / "imports" / "blog" / "en" / "alt.md").write_text("x\n", "utf-8"); (seed / "anderes.txt").write_text("a\n", "utf-8")
         self.git(seed, "add", "-A"); self.git(seed, "commit", "-q", "-m", "start"); self.git(seed, "push", "-q", str(self.tmp / "origin.git"), "HEAD:main")
         self.git(self.tmp, "clone", "-q", "-b", "main", "origin.git", "work"); self.work = self.tmp / "work"
+        (self.work / "tools").mkdir(exist_ok=True); shutil.copy(ROOT / "tools" / "git_sync_check.py", self.work / "tools")   # Pruefung nach jedem autostash-pull
         self.git(self.work, "config", "user.name", "bot"); self.git(self.work, "config", "user.email", "bot@example.test")
 
     def tearDown(self):

@@ -57,7 +57,7 @@ jobs:
           if [ -z "$(git rev-list FETCH_HEAD..HEAD)" ]; then exit 0; fi
           # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q -X theirs origin main; then
+            if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "Zwischenstand gespeichert"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true
@@ -83,7 +83,7 @@ jobs:
             echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0
           fi
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q -X theirs origin main; then
+            if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "Gespeichert: $N Commit(s) auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true

@@ -569,6 +569,7 @@ class WorkflowSave(unittest.TestCase):
         g("clone", "-q", str(self.tmp / "origin.git"), str(self.tmp / "seed")); seed = self.seed = self.tmp / "seed"
         for d in ("data/articles", "tools"): (seed / d).mkdir(parents=True)
         (seed / "tools" / "spend_merge.py").write_bytes((REPO / "tools" / "spend_merge.py").read_bytes())
+        (seed / "tools" / "git_sync_check.py").write_bytes((REPO / "tools" / "git_sync_check.py").read_bytes())   # Pruefung nach jedem autostash-pull
         (seed / "data" / "spend.json").write_text(json.dumps({"2026-12": {"input_tokens": 10, "usd": 3.0}}, indent=1))
         g("add", "-A", cwd=seed); g("commit", "-q", "-m", "start", cwd=seed); g("push", "-q", "origin", "HEAD:main", cwd=seed)
         g("clone", "-q", str(self.tmp / "origin.git"), str(self.tmp / "run")); self.run_dir = self.tmp / "run"

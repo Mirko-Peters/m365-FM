@@ -457,6 +457,7 @@ class WorkflowPush(unittest.TestCase):
         g("clone", "-q", str(self.tmp / "origin.git"), str(self.tmp / "seed")); seed = self.tmp / "seed"
         (seed / "data").mkdir(); (seed / "data" / "spend.json").write_text("{}"); g("add", "-A", cwd=seed); g("commit", "-q", "-m", "start", cwd=seed); g("push", "-q", "origin", "HEAD:main", cwd=seed)
         g("clone", "-q", str(self.tmp / "origin.git"), str(self.tmp / "run")); self.run_dir = self.tmp / "run"
+        (self.run_dir / "tools").mkdir(); shutil.copy(ROOT / "tools" / "git_sync_check.py", self.run_dir / "tools")   # Pruefung nach jedem autostash-pull
         g("commit", "-q", "--allow-empty", "-m", "anderer Bot", cwd=seed); g("push", "-q", "origin", "HEAD:main", cwd=seed)   # main hat sich seit dem Checkout bewegt
         bin_ = self.tmp / "bin"; bin_.mkdir(); (bin_ / "sleep").write_text("#!/bin/sh\nexit 0\n"); (bin_ / "sleep").chmod(0o755)
         self.env = {**os.environ, "PATH": f"{bin_}{os.pathsep}{os.environ['PATH']}", "GITHUB_STEP_SUMMARY": str(self.tmp / "summary.md"), "GIT_TERMINAL_PROMPT": "0"}

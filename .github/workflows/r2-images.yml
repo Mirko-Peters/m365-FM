@@ -45,5 +45,5 @@ jobs:
           if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
           git commit -q -m "R2: Bildzuordnung"
           # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
-          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin "$BR" && git push -q origin "HEAD:$BR" && exit 0; sleep $((i*5)); done
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin "$BR" && python3 tools/git_sync_check.py && git push -q origin "HEAD:$BR" && exit 0; sleep $((i*5)); done
           echo "::error::Zuordnung konnte nicht gesichert werden"; exit 1
