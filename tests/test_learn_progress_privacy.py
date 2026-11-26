@@ -20,10 +20,14 @@ class PrivacyText(unittest.TestCase):
         self.assertTrue(de and en)
         for txt, words in ((de, ("m365-learn", "m365-learn-s", "m365_auth", "Lernfortschritt speichern", "Vor dem Klick wird nichts gespeichert und nichts an uns gesendet",
                                  "§ 25 Abs. 2 Nr. 2 TDDDG", "Art. 6 Abs. 1 lit. b DSGVO", "nach 24 Monaten ohne Änderung", "Löschen Ihres Kontos", "nicht in dieses Konto übernommen",
-                                 "Fortschritt zurücksetzen", "Nicht mehr speichern", "Als ungelesen markieren")),
+                                 "Fortschritt zurücksetzen", "Nicht mehr speichern", "Als ungelesen markieren", "Konto-ID", "einmal je Tab und Viertelstunde",
+                                 "auch ohne Konto", "eine leere Zeile mit Zeitpunkt bleibt", "gilt je Browser", "holt es nach", "lehnt unser Server die Übernahme ab",
+                                 "Fortschritt vereinigt")),
                            (en, ("m365-learn", "m365-learn-s", "m365_auth", "Save learning progress", "Nothing is stored and nothing is sent to us before you click",
                                  "Section 25(2) no. 2 TDDDG", "Art. 6(1)(b) GDPR", "after 24 months without a change", "deleting your account", "not transferred to that account",
-                                 "Reset progress", "Stop saving", "Mark as unread"))):
+                                 "Reset progress", "Stop saving", "Mark as unread", "account ID", "once per tab and quarter of an hour", "also without an account",
+                                 "an empty row with a timestamp remains", "applies per browser", "completes it once you are signed in again", "refuses to take it over",
+                                 "progress is combined"))):
             for w in words: self.assertIn(w, txt)
         for k in ("m365-learn", "m365-learn-s", "m365_auth"): self.assertIn(f'"{k}"', self.js)
 
@@ -42,16 +46,21 @@ class PrivacyText(unittest.TestCase):
         self.assertRegex(lp, r"24\s*\*\s*30|730|24 Monate")
         fn = quiz[quiz.index("function deleteUserLearn"):]; fn = fn[:fn.index("\n}") + 2]
         self.assertIn("learn_progress", fn)
-        self.assertIn('keepT("learn_progress")', (ROOT / "worker" / "src" / "identities.js").read_text("utf-8"))
+        ident = (ROOT / "worker" / "src" / "identities.js").read_text("utf-8")
+        self.assertIn('keepT("learn_progress")', ident); self.assertIn("mergeLearnProgress(db, S, T)", ident)   # Zusammenfuehren: Vereinigung
+        self.assertIn('error: "uid"', lp)   # anderes Konto: 409, nichts uebernommen
 
     def test_script_sends_nothing_before_opt_in(self):
         """Kein sendBeacon; der einzige fetch steckt in api(), und api() wird nur mit einem Stand nach dem Opt-in aufgerufen."""
         js = self.js
         self.assertNotIn("sendBeacon", js)
         self.assertEqual(len(re.findall(r"\bfetch\(", js)), 1)
-        for fn in ("flush", "first", "get"):
+        for fn in ("flush", "first", "get", "delAcc"):   # jeder Weg zu api() mit Stand prueft zuerst, dass es einen gibt (Opt-in)
             body = js[js.index(f"function {fn}("):]; body = body[:body.index("\n  }\n")]
-            self.assertRegex(body, r"if \(!S \|\||if \(busy\)|if \(!S\)", fn)
+            self.assertRegex(body.split("\n")[1] + body.split("\n")[2] + body.split("\n")[3], r"if \(!S \|\| RO", fn)
+        body = js[js.index("function delRes("):]; body = body[:body.index("\n  }\n")]
+        self.assertIn("var u = RES && RES.dl[P];", body)   # ohne Stand nur das vorgemerkte DELETE nach "Nicht mehr speichern"
+        self.assertEqual(len(re.findall(r"\bapi\(", js)) - 1, 5, "api() ausser der Definition: GET, POST (flush, init), DELETE (delAcc, delRes)")
         self.assertIn("if (!S || RO) return false;", js)   # save(): nur mit Stand
         early = __import__("site_pillars").LPX_EARLY
         self.assertIn('localStorage.getItem("m365-learn")', early); self.assertNotIn("setItem", early)

@@ -7,7 +7,7 @@ import worker from "../src/index.js";
 import { makeSession, RL_SHORT } from "../src/util.js";
 import { deleteUserLearn } from "../src/learnquiz.js";
 import { mergeStatements } from "../src/identities.js";
-import { LP_ID_RX, LP_VID_RX, LP_MAX, LP_MAX_STATE, LP_AGE_MAX, applyChanges, normState, purgeLearnProgress, LP_KEEP_MS } from "../src/learnprogress.js";
+import { LP_ID_RX, LP_VID_RX, LP_MAX, LP_MAX_STATE, LP_AGE_MAX, applyChanges, normState, purgeLearnProgress, LP_KEEP_MS, unionState, cleanHeading } from "../src/learnprogress.js";
 
 const PATH = "manufacturing-excellence";
 const R = "/api/learn/progress";
@@ -304,14 +304,17 @@ test("Konto: deleteUserLearn loescht die Zeile; DELETE /api/me entfernt sie samt
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_progress WHERE user_id=2").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_progress WHERE user_id=1").get().n, 1);
 
-  // S=2 -> T=1: T hat schon eine Zeile -> die von T gilt, die von S bleibt am stillgelegten S
-  await post(env, s.bob, { set: [["g", "tpm"]] });
+  // S=2 -> T=1: T hat schon eine Zeile -> Vereinigung in der Zeile von T (ep von T bleibt), die von S bleibt am stillgelegten S
+  await post(env, s.bob, { set: [["g", "tpm"]], vid: ["ZY12nBEY2qc"] });
   raw.prepare("INSERT INTO learn_progress(user_id,path,state,ep,updated) VALUES (2,'other-path','{}',0,1)").run();
+  const ep1 = raw.prepare("SELECT ep FROM learn_progress WHERE user_id=1").get().ep;
   for (const st of await mergeStatements(env.DB, 2, 1)) await st.run();
   raw.prepare("UPDATE users SET banned=2, merged_into=1 WHERE id=2").run();
-  const rows = raw.prepare("SELECT user_id,path,state FROM learn_progress ORDER BY user_id,path").all().map((x) => ({ ...x }));
+  const rows = raw.prepare("SELECT user_id,path,state,ep FROM learn_progress ORDER BY user_id,path").all().map((x) => ({ ...x }));
   assert.deepEqual(rows.map((x) => [x.user_id, x.path]), [[1, "manufacturing-excellence"], [1, "other-path"], [2, "manufacturing-excellence"]]);
-  assert.match(rows[0].state, /kaizen/); assert.doesNotMatch(rows[0].state, /tpm/);
+  assert.deepEqual(Object.keys(JSON.parse(rows[0].state).g).sort(), ["kaizen", "tpm"], "gelesen per ODER");
+  assert.ok(JSON.parse(rows[0].state).v.ZY12nBEY2qc, "geoeffnet per ODER");
+  assert.equal(rows[0].ep, ep1);
 
   // T ohne Zeile -> T uebernimmt die Zeile von S
   raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES (3,'github','cy','Cy',1),(4,'github','di','Di',1)").run();
@@ -326,12 +329,13 @@ test("Konto: deleteUserLearn loescht die Zeile; DELETE /api/me entfernt sie samt
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_progress WHERE user_id=4").get().n, 1, "fremde Konten bleiben");
 });
 
-test("Aufraeumen: nur am 1. des Monats, Zeilen ohne Aenderung seit 24 Monaten; im Tageslauf eingetragen", async () => {
+test("Aufraeumen: am 1. bis 3. des Monats (ausgefallener Lauf wird nachgeholt), Zeilen ohne Aenderung seit 24 Monaten; im Tageslauf eingetragen", async () => {
   const { env, raw } = await setup();
-  const at = Date.parse("2026-12-01T06:00:00Z");
+  const at = Date.parse("2026-12-02T06:00:00Z");
   raw.prepare("INSERT INTO learn_progress(user_id,path,state,ep,updated) VALUES (1,'a-path','{}',0,?),(2,'a-path','{}',0,?)").run(at - LP_KEEP_MS - 1000, at - LP_KEEP_MS + 86400000);
-  assert.deepEqual(await purgeLearnProgress(env.DB, Date.parse("2026-12-02T06:00:00Z")), { skipped: "nur am 1. des Monats" });
-  assert.deepEqual(await purgeLearnProgress(env.DB, at), { deleted: 1 });
+  assert.deepEqual(await purgeLearnProgress(env.DB, Date.parse("2026-12-04T06:00:00Z")), { skipped: "nur am 1. bis 3. des Monats" });
+  assert.deepEqual(await purgeLearnProgress(env.DB, at), { deleted: 1 }, "am 2. (Lauf vom 1. ausgefallen)");
+  assert.deepEqual(await purgeLearnProgress(env.DB, Date.parse("2026-12-03T06:00:00Z")), { deleted: 0 }, "Wiederholung loescht nichts mehr");
   assert.deepEqual(raw.prepare("SELECT user_id FROM learn_progress").all().map((x) => x.user_id), [2]);
   assert.equal(LP_KEEP_MS, 730 * 86400 * 1000, "24 Monate");
   const ix = readFileSync(new URL("../src/index.js", import.meta.url), "utf8");
@@ -360,4 +364,40 @@ test("Kosten: mit RL_LEARN-Bindung kostet GET ausser memberOf genau 1 Lesen, DEL
   sql.length = 0;
   await del(env, s.ada);
   assert.equal(sql.filter((q) => /learn_progress/.test(q)).length, 1, "DELETE: ein Schreiben, kein Lesen");
+});
+
+test("Konto-Pruefung: POST mit u eines anderen Kontos -> 409 uid mit dem Stand des angemeldeten Kontos, ohne Schreiben (auch mit init:1); DELETE ebenso", async () => {
+  const { env, s, raw, writes } = await setup();
+  await post(env, s.bob, { set: [["g", "tpm"]] });
+  const w0 = writes.length;
+  let r = await post(env, s.bob, { u: 1, set: [["g", "geheim-a"]], vid: ["AAAAAAAAAAA"] });
+  assert.equal(r.status, 409); assert.equal(r.data.error, "uid"); assert.equal(r.data.uid, 2);
+  assert.deepEqual(Object.keys(r.data.state.g), ["tpm"], "Stand von Konto 2 zum Ersetzen");
+  r = await post(env, s.bob, { u: 1, init: 1, set: [["g", "geheim-a"]] });
+  assert.equal(r.status, 409, "init hebt die Konto-Pruefung nicht auf");
+  r = await post(env, s.bob, { u: "1", set: [["g", "geheim-a"]] });
+  assert.equal(r.status, 409, "auch als Zeichenkette");
+  assert.equal(writes.length, w0);
+  assert.doesNotMatch(raw.prepare("SELECT state FROM learn_progress WHERE user_id=2").get().state, /geheim/);
+  r = await post(env, s.bob, { u: 2, set: [["g", "oee"]] });
+  assert.equal(r.status, 200, "eigenes Konto"); assert.deepEqual(Object.keys(r.data.state.g).sort(), ["oee", "tpm"]);
+  r = await call(env, `${R}?path=${PATH}&u=1`, { method: "DELETE", cookie: s.bob });
+  assert.equal(r.status, 409); assert.equal(r.data.error, "uid"); assert.deepEqual(Object.keys(r.data.state.g).sort(), ["oee", "tpm"], "nichts geloescht");
+  r = await call(env, `${R}?path=${PATH}&u=2`, { method: "DELETE", cookie: s.bob });
+  assert.equal(r.status, 200); assert.deepEqual(r.data.state.g, {});
+});
+
+test("unionState: ODER fuer gelesen und Videos, juengste Lesestelle, Grenzen; cleanHeading kappt nach Codepunkten", () => {
+  const a = { g: { oee: { r: 0, a: "alt", at: 10 }, tpm: { r: 1, rt: 3 } }, v: { ZY12nBEY2qc: 50 } };
+  const b = { g: { oee: { r: 1, rt: 7, a: "neu", h: "Neu", l: "de", pc: 40, at: 20 }, kaizen: { r: 1, rt: 2 } }, c: { smed: { r: 1 } }, v: { ZY12nBEY2qc: 30, AXT4Qac8mQ8: 9 } };
+  const u = unionState(a, b);
+  assert.deepEqual(u.g.oee, { r: 1, rt: 7, a: "neu", h: "Neu", l: "de", pc: 40, at: 20 });
+  assert.equal(u.g.tpm.r, 1); assert.equal(u.g.kaizen.r, 1); assert.equal(u.c.smed.r, 1);
+  assert.deepEqual(u.v, { ZY12nBEY2qc: 30, AXT4Qac8mQ8: 9 });
+  const older = unionState({ g: { oee: { r: 1, a: "neu", at: 20 } } }, { g: { oee: { r: 0, a: "alt", at: 10 } } });
+  assert.deepEqual(older.g.oee, { r: 1, a: "neu", at: 20 }, "aeltere Lesestelle und ungelesen von S aendern nichts");
+  const full = { g: Object.fromEntries(Array.from({ length: LP_MAX.g }, (_, i) => [`t${i}x`, { r: 1 }])) };
+  assert.equal(Object.keys(unionState(full, { g: { extra: { r: 1 } } }).g).length, LP_MAX.g);
+  const h = "a".repeat(79) + "😀z";
+  assert.equal(cleanHeading(h), "a".repeat(79) + "😀", "kein halbes Emoji");
 });

@@ -1,7 +1,10 @@
 // Lernfortschritt im Lernpfad (site_pillars.py: Kasten #lpx, Konfiguration #lpx-data, Marker data-lpx; Worker worker/src/learnprogress.js).
 // Vor dem Klick auf "Lernfortschritt speichern" wird nichts gespeichert und nichts gesendet (§ 25 TDDDG); gelesen wird nur der eigene Schluessel m365-learn
-// (ob der Opt-in schon besteht). Danach: localStorage m365-learn {v:1,on:1,u,ep,sy,p:{<pfad>:{g,c,v,q}}}, sessionStorage m365-learn-s (Abgleich in diesem Tab),
-// fuer Angemeldete Abgleich mit dem Konto (GET hoechstens 1 je Tab-Sitzung, POST nur bei Aenderung, Lesestelle gedrosselt, Videoklick sofort mit keepalive).
+// (ob der Opt-in schon besteht). Danach: localStorage m365-learn {v:1,on:1,u,ep,sy,dl,p:{<pfad>:{g,c,v,q}}}, sessionStorage m365-learn-s (Abgleich in diesem Tab),
+// fuer Angemeldete Abgleich mit dem Konto (GET hoechstens 1 je Tab-Sitzung bzw. 15 min, POST nur bei Aenderung, Lesestelle gedrosselt, Videoklick sofort mit keepalive).
+// Jeder POST/DELETE nennt das Konto (u), fuer das gesammelt wurde; der Server lehnt ein anderes angemeldetes Konto mit 409 uid ab (gemeinsames Geraet).
+// Loeschen im Konto (Zuruecksetzen, Nicht mehr speichern) bleibt als dl {<pfad>: konto} vorgemerkt, bis der Server es bestaetigt; nach "Nicht mehr speichern"
+// bleibt dafuer nur der Rest {v:1,on:0,dl} (keine Fortschrittsdaten), gesendet wird dann nur das DELETE und nur bei Anmeldehinweis.
 // "Gelesen" automatisch: Artikelende gesehen UND aktive Lesezeit >= clamp(30 % der Lesezeit, 20 s, 180 s). Zeiten an den Server nur als Alter (age), nie als Zeitstempel.
 (function () {
   "use strict";
@@ -16,17 +19,19 @@
   try { A_RX = new RegExp("^[\\p{L}\\p{N}\\p{M}_-]{1,160}$", "u"); } catch (e) { A_RX = /^[A-Za-z0-9À-￿_-]{1,160}$/; }
   var SKIP = { videos: 1, sources: 1, "pl-deep-h": 1, "pl-relg-h": 1 };
   (C.toc || []).forEach(function (x) { SKIP[x] = 1; });
-  var MAXQ = 200, DEBOUNCE = 2000, POS_GAP = 300000;
+  var MAXQ = 200, DEBOUNCE = 2000, POS_GAP = 300000, SESS_TTL = 900000, MAXB = 15000;   // Body-Grenze des Servers 16384 Bytes (Rest geht mit dem naechsten POST)
   var art = D.querySelector("article.pl-art[data-lpx]"), endEl = art && art.querySelector(".pl-end"), done = D.querySelector(".pl-done");
   var doneHTML = done ? done.innerHTML : "", saveBtn = D.getElementById("lpx-save"), slot = box.querySelector(".lpx-b"), qopen = D.querySelector(".pl-qopen");
-  var S = null, RO = false;   // Stand (nur nach dem Opt-in); RO: unbekannte Formatversion -> nur anzeigen, nie schreiben
-  var sess = null, off = false, busy = false, again = false, deb = 0, err = false;
+  var S = null, RO = false, RES = null;   // Stand (nur nach dem Opt-in); RO: unbekannte Formatversion -> nur anzeigen, nie schreiben; RES: Rest nach "Nicht mehr speichern"
+  var sess = null, off = false, busy = false, again = false, deb = 0, err = false, gen = 0, resBusy = false;   // gen: Antworten aus der Zeit vor Zuruecksetzen/Abschalten/anderem Tab gelten nicht
   // "gelesen": im Speicher, auch vor dem Opt-in (ohne Speicherzugriff)
   var minSec = Math.min(180, Math.max(20, Math.round((+C.min || 1) * 60 * 0.3)));
   var act = 0, since = D.visibilityState === "visible" ? now() : -1, endSeen = false, readyRead = false, noAuto = false, timer = 0, lastPos = "";
 
   function now() { return W.performance && performance.now ? performance.now() : Date.now(); }
   function int(x) { x = Math.floor(+x); return isFinite(x) && x > 0 ? x : 0; }
+  function cut(s, n) { return Array.from(String(s)).slice(0, n).join(""); }   // nach Codepunkten (kein halbes Emoji)
+  function blen(s) { try { return encodeURIComponent(s).replace(/%[0-9A-F]{2}/g, "x").length; } catch (e) { return s.length * 3; } }   // UTF-8-Bytes
   function t(k, v) {
     var s = T[k] || k;
     if (v) Object.keys(v).forEach(function (n) { s = s.split("{" + n + "}").join(String(v[n])); });
@@ -46,7 +51,7 @@
     var o = { r: e.r ? 1 : 0 };
     if (typeof e.t === "number" && isFinite(e.t)) o.t = e.t;
     if (typeof e.a === "string" && A_RX.test(e.a)) o.a = e.a;
-    if (typeof e.h === "string" && e.h) o.h = e.h.replace(/[<>]/g, "").slice(0, 80);
+    if (typeof e.h === "string" && e.h) o.h = cut(e.h.replace(/[<>]/g, ""), 80);
     if (typeof e.l === "string" && L_RX.test(e.l)) o.l = e.l;
     if (typeof e.pc === "number" && isFinite(e.pc)) o.pc = Math.max(0, Math.min(100, Math.round(e.pc)));
     return o;
@@ -72,14 +77,21 @@
     if (Array.isArray(x.q)) r.q = x.q.filter(validQ).slice(-MAXQ);
     return r;
   }
-  function load() {   // -> Stand, null (kein Opt-in, kaputt), false (unbekannte Version) oder "x" (kein localStorage)
+  function cleanDl(x) {   // vorgemerktes Loeschen im Konto {<pfad>: konto}
+    var r = {};
+    if (x && typeof x === "object") Object.keys(x).filter(function (k) { return ID_RX.test(k) && int(x[k]); }).slice(0, 20).forEach(function (k) { r[k] = int(x[k]); });
+    return r;
+  }
+  function load() {   // -> Stand, null (kein Opt-in, kaputt; Rest nach "Nicht mehr speichern" in RES), false (unbekannte Version) oder "x" (kein localStorage)
     var raw, o;
+    RES = null;
     try { raw = W.localStorage.getItem(KEY); } catch (e) { return "x"; }
     if (!raw) return null;
     try { o = JSON.parse(raw); } catch (e) { return null; }
+    if (o && typeof o === "object" && o.on === 0 && o.v === 1) { var d = cleanDl(o.dl); if (Object.keys(d).length) RES = { v: 1, on: 0, dl: d, lg: o.lg ? 1 : 0 }; return null; }
     if (!o || typeof o !== "object" || o.on !== 1) return null;
     if (o.v !== 1) return false;
-    var s = { v: 1, on: 1, u: int(o.u), ep: int(o.ep), sy: int(o.sy), p: {} };
+    var s = { v: 1, on: 1, u: int(o.u), ep: int(o.ep), sy: int(o.sy), dl: cleanDl(o.dl), p: {} };
     if (o.p && typeof o.p === "object") Object.keys(o.p).filter(function (k) { return ID_RX.test(k); }).forEach(function (k) { s.p[k] = normPath(o.p[k]); });
     return s;
   }
@@ -102,6 +114,8 @@
   function writeSess(o) { try { W.sessionStorage.setItem(SKEY, JSON.stringify(o)); } catch (e) { /* ignore */ } }
   function dropSess() { try { W.sessionStorage.removeItem(SKEY); } catch (e) { /* ignore */ } }
   function authHint(on) { try { if (on) W.localStorage.setItem(AUTH, "1"); else W.localStorage.removeItem(AUTH); } catch (e) { /* ignore */ } }
+  function hint() { try { return W.localStorage.getItem(AUTH) === "1"; } catch (e) { return false; } }   // community.js setzt ihn beim An-, entfernt ihn beim Abmelden
+  function saveRes() { try { if (RES && Object.keys(RES.dl).length) W.localStorage.setItem(KEY, JSON.stringify(RES)); else { RES = null; W.localStorage.removeItem(KEY); } } catch (e) { /* ignore */ } }
 
   // ---------- Warteschlange ----------
   function qkey(e) { return e.s ? "r" + e.s.join(":") : e.x ? "r" + e.x.join(":") : e.v ? "v" + e.v : "p" + e.p.k + ":" + e.p.id; }
@@ -124,15 +138,14 @@
     if (p.pc != null) o.pc = p.pc;
     return o;
   }
-  function bodyOf(q, init) {   // -> [Body, gesendete Eintraege] mit den Grenzen des Servers (set/unset 120, vid 100, pos 60)
+  function bodyOf(q, init) {   // -> [Body, gesendete Eintraege] mit den Grenzen des Servers (set/unset 120, vid 100, pos 60, MAXB Bytes); u: Konto, fuer das gesammelt wurde
     var b = { path: P, ep: S.ep, init: init ? 1 : 0, set: [], unset: [], vid: [], pos: [] }, sent = [], n = Date.now();
+    if (S.u && !init) b.u = S.u;
+    var used = blen(JSON.stringify(b));
     q.forEach(function (e) {
-      if (e.s && b.set.length < 120) b.set.push(e.s);
-      else if (e.x && b.unset.length < 120) b.unset.push(e.x);
-      else if (e.v && b.vid.length < 100) b.vid.push(e.v);
-      else if (e.p && b.pos.length < 60) b.pos.push(posOf(e.p, n));
-      else return;
-      sent.push(e);
+      var k = e.s ? "set" : e.x ? "unset" : e.v ? "vid" : "pos", it = e.s || e.x || e.v || posOf(e.p, n), z = blen(JSON.stringify(it)) + 1;
+      if (b[k].length >= { set: 120, unset: 120, vid: 100, pos: 60 }[k] || used + z > MAXB) return;
+      used += z; b[k].push(it); sent.push(e);
     });
     return [b, sent];
   }
@@ -151,14 +164,14 @@
   }
 
   // ---------- Konto ----------
-  function api(method, b, keep) {
+  function api(method, b, keep, u) {
     var o = { method: method, credentials: "include", headers: {} };
     if (method !== "GET") o.headers["x-requested-with"] = "m365";
     if (b) { o.headers["content-type"] = "application/json"; o.body = JSON.stringify(b); }
     if (keep) o.keepalive = true;
-    var u = C.api + "/api/learn/progress" + (method === "POST" ? "" : "?path=" + encodeURIComponent(P));
+    var url = C.api + "/api/learn/progress" + (method === "POST" ? "" : "?path=" + encodeURIComponent(P) + (u ? "&u=" + u : ""));
     try {
-      return W.fetch(u, o).then(function (r) {
+      return W.fetch(url, o).then(function (r) {
         return r.json().then(function (j) { return { s: r.status, j: j || {} }; }, function () { return { s: r.status, j: {} }; });
       }, function () { return { s: 0, j: {} }; });
     } catch (e) { return Promise.resolve({ s: 0, j: {} }); }
@@ -182,11 +195,20 @@
   }
   function noteSess(r) {   // Ergebnis der Anmeldepruefung fuer diesen Tab (pt: letzte gesendete Lesestelle, Drossel 5 min)
     if (r.s !== 200 && r.s !== 409 && r.s !== 401 && r.s !== 404) return;
+    if (r.s === 409 && !int(r.j.uid)) return;
     sess = { t: Date.now(), s: r.s === 409 ? 200 : r.s, uid: r.s === 200 || r.s === 409 ? int(r.j.uid) : 0, pt: (sess && sess.pt) || 0 };
     writeSess(sess);
   }
+  function fresh(ss) {   // gemerkte Pruefung noch gueltig? Nicht nach 15 min und nicht, wenn der Anmeldehinweis (community.js) inzwischen etwas anderes sagt
+    if (!ss || (ss.s !== 200 && ss.s !== 401 && ss.s !== 404) || !(Date.now() - int(ss.t) < SESS_TTL)) return false;
+    if (ss.s === 401 && hint()) return false;   // inzwischen anderswo angemeldet
+    if (ss.s === 200 && !hint()) return false;  // inzwischen abgemeldet
+    return true;
+  }
+  function pend() { return S && S.dl && S.dl[P] ? S.dl[P] : 0; }   // vorgemerktes Loeschen im Konto fuer diesen Pfad (Konto-ID)
   function idle() { busy = false; if (again) { again = false; flush(); } }
   function signed() { return !!(sess && sess.s === 200 && sess.uid && S && S.u === sess.uid); }
+  function replace(j) { S.u = int(j.uid); S.p = {}; adopt(j, false); }   // anderes Konto auf diesem Geraet: ersetzen, nie zusammenfuehren
   function handle(r, sent) {
     if (!S) { busy = false; return; }
     noteSess(r);
@@ -195,62 +217,118 @@
     else if ((r.s === 200 || r.s === 409) && okState(r.j)) {
       authHint(true); err = false;
       var uid = int(r.j.uid);
-      if (S.u && S.u !== uid) { S.u = uid; S.p = {}; adopt(r.j, false); }   // anderes Konto auf diesem Geraet: ersetzen, nie zusammenfuehren
+      if (S.u && S.u !== uid) replace(r.j);   // auch 409 uid: der Server hat nichts uebernommen
+      else if (r.j.error === "uid") { /* DELETE fuer ein vorgemerktes anderes Konto: dieser Stand bleibt */ }
       else if (r.s === 409) { S.u = uid; adopt(r.j, false); }   // Zuruecksetzen auf einem anderen Geraet verpasst: Serverstand gilt
       else {
         var ks = sent.map(function (e) { return JSON.stringify(e); });
         pth().q = pth().q.filter(function (e) { return ks.indexOf(JSON.stringify(e)) < 0; });
         S.u = uid; adopt(r.j, true);
+        if (pth().q.length && sent.length) again = true;   // Rest ueber der Byte- oder Listengrenze
       }
       save();
+    } else if (r.s === 413) {   // sollte mit MAXB nicht vorkommen: gesendete Lesestellen verwerfen (Status bleibt), dann neu
+      var kp = sent.filter(function (e) { return e.p; }).map(function (e) { return JSON.stringify(e); });
+      if (kp.length) { pth().q = pth().q.filter(function (e) { return kp.indexOf(JSON.stringify(e)) < 0; }); save(); again = true; } else err = true;
     } else err = true;   // 429, 5xx, Netz: Warteschlange bleibt, naechster Anlass holt nach
     render(); idle();
   }
   function flush(keep) {
     clearTimeout(deb); deb = 0;
-    if (!S || RO || off || !signed() || !pth().q.length) return;
+    if (!S || RO || off || !sess || sess.s !== 200 || !sess.uid) return;
     if (busy) { again = true; return; }
-    var x = bodyOf(pth().q, false);
+    if (pend() === sess.uid) { delAcc(keep); return; }   // vorgemerktes Loeschen vor allem anderen
+    if (!signed() || !pth().q.length) return;
+    var x = bodyOf(pth().q, false), g0 = gen;
     busy = true;
-    api("POST", x[0], keep).then(function (r) { handle(r, x[1]); });
+    api("POST", x[0], keep).then(function (r) { if (g0 !== gen) { noteSess(r); idle(); return; } handle(r, x[1]); });
+  }
+  function delAcc(keep) {   // vorgemerktes Loeschen im Konto senden (zugleich Anmeldepruefung); erst die Bestaetigung des Servers loescht die Vormerkung
+    var u = pend();
+    if (!S || RO || !u) return;
+    if (busy) { again = true; return; }
+    var g0 = gen;
+    busy = true;
+    api("DELETE", null, keep, u).then(function (r) {
+      if (!S || g0 !== gen) { idle(); return; }
+      noteSess(r);
+      if (r.s === 200 && okState(r.j) && int(r.j.uid) === u) {
+        delete S.dl[P]; err = false; authHint(true);
+        if (!S.u) { S.ep = int(r.j.ep); save(); busy = false; get(); return; }   // Gaststand nach erneutem Opt-in: jetzt wie ueblich vereinigen
+        if (S.u !== u) replace(r.j);   // lokal lag der Stand eines anderen Kontos: das angemeldete (geloeschte) gilt
+        else adopt(r.j, true);   // leerer Stand mit neuer Epoche, danach das seit dem Zuruecksetzen Gesammelte
+        save();
+        if (pth().q.length) again = true;
+      } else if (r.s === 409 && okState(r.j)) {   // anderes Konto angemeldet: Vormerkung bleibt fuer das alte Konto
+        authHint(true); err = false;
+        if (!S.u) { save(); busy = false; get(); return; }
+        handle(r, []); return;
+      } else if (r.s === 404) off = true;
+      else if (r.s === 401) authHint(false);
+      else err = true;
+      render(); idle();
+    });
+  }
+  function delRes() {   // nach "Nicht mehr speichern": nur das vorgemerkte DELETE, kein Stand, keine Tab-Pruefung
+    var u = RES && RES.dl[P];
+    if (!u || resBusy || S) return;
+    resBusy = true;
+    api("DELETE", null, false, u).then(function (r) {
+      resBusy = false;
+      if (S || !RES) return;   // inzwischen wieder eingeschaltet: die Vormerkung steckt in S.dl
+      if (r.s === 200 && int(r.j.uid) === u) { authHint(true); delete RES.dl[P]; }
+      else if (r.s === 401) { authHint(false); RES.lg = 0; }
+      else if (r.s === 409) authHint(true);
+      saveRes(); render();
+    });
   }
   function soon() { if (!S || off) return; clearTimeout(deb); deb = setTimeout(flush, DEBOUNCE); }
   function first() {   // erste Anfrage dieser Tab-Sitzung (zugleich Anmeldepruefung, fuer Gaeste 0 D1)
     if (!S || RO) return;
     var ss = readSess();
-    if (ss && (ss.s === 200 || ss.s === 401 || ss.s === 404)) {
-      sess = ss; if (ss.s === 404) off = true;
+    if (fresh(ss)) {
+      sess = ss; if (ss.s === 404) { off = true; return; }
       if (ss.s === 200 && S.u === ss.uid) flush();
-      else if (ss.s === 200 && S.u !== ss.uid) get();   // anderes Konto oder Gaststand: erst abgleichen
+      else if (ss.s === 200) { if (pend() === ss.uid) delAcc(); else get(); }   // anderes Konto oder Gaststand: erst abgleichen
       return;
     }
-    get();
+    if (ss && int(ss.pt)) sess = { t: 0, s: 0, uid: 0, pt: int(ss.pt) };   // Drossel der Lesestelle bleibt
+    if (pend()) delAcc(); else get();
   }
   function get() {
-    if (busy) { return; }
+    if (!S || RO || busy) return;
+    var g0 = gen;
     busy = true;
     api("GET").then(function (r) {
-      if (!S) { idle(); return; }
-      if (r.s === 200 && okState(r.j) && !S.u) {   // Gaststand + Konto: vereinigen (init:1), danach gehoert der Stand diesem Konto
-        noteSess(r); authHint(true);
-        var q = fullQueue();
-        if (!q.length) { S.u = int(r.j.uid); adopt(r.j, false); save(); render(); idle(); return; }
-        S.ep = int(r.j.ep);
-        var x = bodyOf(q, true);
-        api("POST", x[0]).then(function (r2) {
-          if (!S) { idle(); return; }
-          noteSess(r2);
-          if ((r2.s === 200 || r2.s === 409) && okState(r2.j)) { S.u = int(r2.j.uid); adopt(r2.j, false); authHint(true); err = false; save(); }
-          else err = r2.s !== 401 && r2.s !== 404;
-          if (r2.s === 404) off = true;
-          render(); idle();
-        });
-        return;
-      }
-      if (r.s === 200 && okState(r.j) && S.u === int(r.j.uid) && pth().q.length) {   // eigenes Konto mit Ausstehendem: senden (Server vereinigt)
-        noteSess(r); busy = false; authHint(true); flush(); return;
-      }
+      if (!S || g0 !== gen) { idle(); return; }
+      var uid = r.s === 200 && okState(r.j) ? int(r.j.uid) : 0;
+      if (uid && pend() === uid) { noteSess(r); busy = false; delAcc(); return; }   // erst loeschen, dann nichts Altes uebernehmen
+      if (uid && !S.u) { init(r); return; }
+      if (uid && S.u === uid && pth().q.length) { noteSess(r); busy = false; authHint(true); flush(); return; }   // eigenes Konto mit Ausstehendem: senden (Server vereinigt)
       handle(r, []);
+    });
+  }
+  function init(r) {   // Gaststand + Konto: vereinigen (init:1), danach gehoert der Stand diesem Konto
+    noteSess(r); authHint(true);
+    var uid = int(r.j.uid), q = fullQueue(), q0 = pth().q.map(function (e) { return JSON.stringify(e); }), g0 = gen;
+    if (!q.length) { S.u = uid; adopt(r.j, false); save(); render(); idle(); return; }
+    S.ep = int(r.j.ep);
+    var x = bodyOf(q, true);
+    api("POST", x[0]).then(function (r2) {
+      if (!S || g0 !== gen) { idle(); return; }
+      noteSess(r2);
+      if ((r2.s === 200 || r2.s === 409) && okState(r2.j) && int(r2.j.uid) === uid) {
+        // was vor dem Senden in der Warteschlange stand, deckt der volle Stand ab; was waehrenddessen dazukam, bleibt und wird nachgesendet,
+        // ebenso Eintraege des vollen Stands ueber der Byte-Grenze
+        pth().q = pth().q.filter(function (e) { return q0.indexOf(JSON.stringify(e)) < 0; });
+        var ks = x[1].map(function (e) { return JSON.stringify(e); });
+        q.forEach(function (e) { if (ks.indexOf(JSON.stringify(e)) < 0) enq(e); });
+        S.u = uid; adopt(r2.j, true); authHint(true); err = false; save();
+        if (pth().q.length) again = true;
+      } else if (okState(r2.j)) { authHint(true); replace(r2.j); save(); }   // inzwischen ein anderes Konto: nichts uebernehmen
+      else { err = r2.s !== 401 && r2.s !== 404; if (r2.s === 401) authHint(false); }
+      if (r2.s === 404) off = true;
+      render(); idle();
     });
   }
 
@@ -276,12 +354,13 @@
   }
 
   // ---------- Lesestelle ----------
-  function heading() {   // letzte Ueberschrift ueber der Oberkante (beim Verlassen einmal gemessen, kein Scroll-Listener)
+  function heading() {   // letzte Ueberschrift im oberen Sechstel (beim Verlassen einmal gemessen, kein Scroll-Listener). Nach "Weiterlesen" oder einer
+    // Sprungmarke steht die Ueberschrift wegen scroll-margin-top (5em) knapp unter der Oberkante und zaehlt so noch als aktueller Abschnitt
     if (!art) return null;
-    var hs = art.querySelectorAll("h2[id],h3[id]"), last = null;
+    var hs = art.querySelectorAll("h2[id],h3[id]"), last = null, lim = Math.max(96, (W.innerHeight || 0) / 6);
     for (var i = 0; i < hs.length; i++) {
       if (SKIP[hs[i].id]) continue;
-      if (hs[i].getBoundingClientRect().top < 1) last = hs[i]; else break;
+      if (hs[i].getBoundingClientRect().top < lim) last = hs[i]; else break;
     }
     return last;
   }
@@ -292,7 +371,7 @@
     var el = heading(), se = D.scrollingElement || D.documentElement, max = Math.max(1, se.scrollHeight - (W.innerHeight || 0));
     var pc = Math.max(0, Math.min(100, Math.round(100 * (W.scrollY || se.scrollTop || 0) / max)));
     if (!el || pc < 5) return;
-    var a = A_RX.test(el.id) ? el.id : "", ti = (el.textContent || "").replace(/\s+/g, " ").replace(/[<>]/g, "").trim().slice(0, 80), sig = a + "|" + pc;
+    var a = A_RX.test(el.id) ? el.id : "", ti = cut((el.textContent || "").replace(/\s+/g, " ").replace(/[<>]/g, "").trim(), 80), sig = a + "|" + pc;
     if (sig === lastPos) return;
     lastPos = sig;
     var p = { k: K, id: ID, l: LANG, pc: pc, t: Date.now() };
@@ -310,8 +389,8 @@
   function render() { if (raf) return; raf = (W.requestAnimationFrame || setTimeout)(function () { raf = 0; draw(); }); }
   function link(text, a) { return h("button", { type: "button", class: "lpx-l", "data-lpx-a": a, text: text }); }
   // Reihenfolge im Kasten: was erst nach der Antwort des Servers dazukommt (Weiterlesen, Anmeldelinks), steht zuletzt -> nichts darueber verschiebt sich
-  function loginLine() {
-    if (signed() || off || !C.login || !C.login.length) return null;
+  function loginLine(force) {
+    if ((!force && signed()) || off || !C.login || !C.login.length) return null;
     var p = h("p", { class: "lpx-s" }), ret = encodeURIComponent(location.href.split("#")[0]), parts = t("lp_signin").split("{p}"), names = { linkedin: "LinkedIn", microsoft: "Microsoft", google: "Google", github: "GitHub" };
     p.appendChild(D.createTextNode(parts[0]));
     C.login.forEach(function (pv, i) {
@@ -322,9 +401,10 @@
     if (parts[1]) p.appendChild(D.createTextNode(parts[1]));
     return p;
   }
+  function waitDel() { var u = pend(); return !!u && !(sess && sess.s === 200 && sess.uid === u && !err); }   // Loeschen im Konto steht noch aus (nicht angemeldet/Fehler)
   function statusLine() {
     var p = h("p", { class: "lpx-s" }), sg = signed();
-    p.appendChild(D.createTextNode(err ? t("lp_sync_err") : sg ? t("lp_synced") : t("lp_local")));
+    p.appendChild(D.createTextNode(waitDel() ? t("lp_del_pend") : err ? t("lp_sync_err") : sg ? t("lp_synced") : t("lp_local")));
     p.appendChild(D.createTextNode(" · "));
     if (K === "p") { p.appendChild(link(t("lp_reset"), "reset")); p.appendChild(D.createTextNode(" · ")); }
     p.appendChild(link(t("lp_off"), "off"));
@@ -342,7 +422,7 @@
     else if ((e.a || e.pc != null) && e.l === LANG && !location.hash && !persisted) m.appendChild(h("button", { type: "button", class: "btn", "data-lpx-a": "resume", text: t("lp_resume", { s: fit(e.h || e.pc + " %", 60) }) }));
     else if (e.a || e.pc != null) { m.appendChild(h("b", { text: t("lp_started") })); m.appendChild(D.createTextNode(" · " + t("lp_auto"))); }
     else m.appendChild(D.createTextNode(t("lp_auto")));
-    slot.replaceChildren(m, statusLine());
+    slot.replaceChildren.apply(slot, [m, statusLine()].concat(waitDel() ? [loginLine(true)].filter(Boolean) : []));
     if (done) {
       if (e.r) { done.replaceChildren(h("b", { text: t("lp_read") }), D.createTextNode(" · "), link(t("lp_unread"), "unread")); }
       else if (done.innerHTML !== doneHTML) done.innerHTML = doneHTML;
@@ -354,13 +434,13 @@
     var m = h("p", { class: "lpx-m" }, [h("b", { text: t("lp_prog", { d: dg, n: G.length }) }), CC.length ? " · " + t("lp_prog_dd", { d: dc, n: CC.length }) : ""]);
     var lg = latest(G, "g"), lc = latest(CC, "c"), cur = lg && lc ? ((lc.e.t || 0) > (lg.e.t || 0) ? lc : lg) : (lg || lc), go = null;
     if (cur) {
-      var same = cur.e.l === LANG && cur.e.a;
-      go = h("a", { class: "btn main", href: cur.x[2] + (same ? "#" + encodeURIComponent(cur.e.a) : ""), text: same && cur.e.h ? t("lp_cont_at", { t: fit(cur.x[1], 50), s: fit(cur.e.h, 40) }) : t("lp_cont", { t: fit(cur.x[1], 70) }) });
+      var same = cur.e.l === (cur.x[3] || LANG) && cur.e.a;   // x[3]: Sprache der Karte (englischer Ersatz-Leitfaden auf uebersetzten Pfadseiten)
+      go = h("a", { class: "btn main", href: cur.x[2] + (same ? "#" + encodeURIComponent(cur.e.a) : ""), text: same && cur.e.h ? t("lp_cont_at", { t: fit(cur.x[1], 36), s: fit(cur.e.h, 30) }) : t("lp_cont", { t: fit(cur.x[1], 60) }) });
     } else {
       var nx = G.filter(function (x) { return !(p.g[x[0]] && p.g[x[0]].r); })[0];
-      if (nx && dg) go = h("a", { class: "btn main", href: nx[2], text: t("lp_cont", { t: fit(nx[1], 70) }) });
+      if (nx && dg) go = h("a", { class: "btn main", href: nx[2], text: t("lp_cont", { t: fit(nx[1], 60) }) });
     }
-    slot.replaceChildren.apply(slot, [bar, m, statusLine()].concat(go ? [h("p", {}, [go])] : [], (sess && sess.s === 401) || !S.u ? [loginLine()].filter(Boolean) : []));
+    slot.replaceChildren.apply(slot, [bar, m, statusLine()].concat(go ? [h("p", {}, [go])] : [], (sess && sess.s === 401) || !S.u || waitDel() ? [loginLine(waitDel())].filter(Boolean) : []));
     if (qopen) {
       var open = G.filter(function (x) { return !(p.g[x[0]] && p.g[x[0]].r); });
       if (!open.length && G.length) qopen.replaceChildren(h("b", { text: t("lp_ready") }));
@@ -376,8 +456,8 @@
   function marks() {   // ✓ an Karten, Vertiefungen und Videos (Pfad- und Leitfadenseite)
     var p = S ? pth() : emptyPath();
     D.querySelectorAll(".pl-card[data-pid]").forEach(function (c) {
-      var n = c.querySelector(".pl-step-n"), on = !!(p.g[c.getAttribute("data-pid")] && p.g[c.getAttribute("data-pid")].r);
-      if (n) { n.classList.toggle("ok", on); if (on) n.setAttribute("title", t("lp_read")); else n.removeAttribute("title"); }
+      var n = c.querySelector(".pl-step-n") || c.querySelector("a"), on = !!(p.g[c.getAttribute("data-pid")] && p.g[c.getAttribute("data-pid")].r);   // ohne Nummer (englischer Ersatz): ✓ am Titel-Link
+      if (n) { n.classList.toggle(n.tagName === "A" ? "lpx-ok" : "ok", on); if (on) n.setAttribute("title", t("lp_read")); else n.removeAttribute("title"); }
     });
     D.querySelectorAll("a[data-cid]").forEach(function (a) { a.classList.toggle("ok", !!(p.c[a.getAttribute("data-cid")] && p.c[a.getAttribute("data-cid")].r)); });
     D.querySelectorAll("a[data-vid]").forEach(function (a) {
@@ -387,12 +467,17 @@
       else if (b && !on) b.remove();
     });
   }
+  var resEl = null;
   function draw() {
     var html = D.documentElement;
+    if (slot && !slot.getAttribute("aria-live")) slot.setAttribute("aria-live", "polite");   // erst nach dem ersten Bild: keine Ansage beim Laden
     if (!S) {
       html.classList.remove("lpx-on");
       if (saveBtn) saveBtn.disabled = false;
       if (slot) slot.replaceChildren();
+      var oa = box.querySelector(".lpx-a");   // nach "Nicht mehr speichern": Loeschen im Konto steht noch aus
+      if (resEl) { resEl.remove(); resEl = null; }
+      if (oa && RES && RES.dl[P]) { resEl = h("div", { class: "lpx-dl" }, [h("p", { class: "lpx-s", text: t("lp_del_pend") }), loginLine(true)]); oa.appendChild(resEl); }
       if (qopen) qopen.replaceChildren();
       if (done && done.innerHTML !== doneHTML) done.innerHTML = doneHTML;
       marks();
@@ -400,7 +485,7 @@
     }
     html.classList.add("lpx-on");
     if (!slot) return;
-    if (RO) { slot.replaceChildren(h("p", { class: "lpx-s", text: t("lp_auto") })); return; }
+    if (RO) { slot.replaceChildren(h("p", { class: "lpx-s" }, [t("lp_auto") + " · ", link(t("lp_off"), "off")])); return; }   // neuere Formatversion: nur Abschalten
     if (K === "p") drawPath(); else drawGuide();
     marks();
   }
@@ -408,21 +493,37 @@
   // ---------- Bedienung ----------
   function optIn() {
     if (S) return;
-    S = { v: 1, on: 1, u: 0, ep: 0, sy: 0, p: {} };
+    S = { v: 1, on: 1, u: 0, ep: 0, sy: 0, dl: RES ? RES.dl : {}, p: {} };   // noch ausstehendes Loeschen im Konto bleibt vorgemerkt
     pth();
     if (readyRead && K !== "p" && ID) { entry(K, ID).r = 1; enq({ s: [K, ID] }); }   // schon erfuellt: sofort uebernehmen
     if (!save()) { S = null; return; }
+    RES = null;
     render(); first(); plan();
   }
-  function stop(reset) {
-    var acc = !!(S && S.u && !off);
+  function stop(reset) {   // Zuruecksetzen (Pfad) oder Nicht mehr speichern (alles). Im Konto: als dl vorgemerkt, bis der Server das DELETE bestaetigt
+    if (RO) {   // unbekannte Formatversion: nur lokal entfernen (kein Konto bekannt)
+      if (W.confirm && !W.confirm(t("lp_off_q", { a: "" }))) return;
+      try { W.localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+      S = null; RO = false; gen++; render(); return;
+    }
+    var acc = !!(S && (S.u || pend()));
     var q = reset ? t(acc ? "lp_reset_q_acc" : "lp_reset_q") : t("lp_off_q", { a: acc ? " " + t("lp_off_acc") : "" });
     if (W.confirm && !W.confirm(q)) return;
-    if (acc) api("DELETE").then(function (r) { if (S && r.s === 200 && r.j) { S.ep = int(r.j.ep); S.sy = int(r.j.updated); save(); } });
-    noAuto = true; clearTimeout(timer);
-    if (reset) { S.p[P] = emptyPath(); save(); }
-    else { S = null; try { W.localStorage.removeItem(KEY); } catch (e) { /* ignore */ } dropSess(); sess = null; }
-    lastPos = ""; render();
+    noAuto = true; clearTimeout(timer); clearTimeout(deb); deb = 0; gen++; err = false;   // laufende Antworten gelten nicht mehr
+    lastPos = "";
+    if (reset) {
+      S.p[P] = emptyPath();
+      if (S.u) S.dl[P] = S.u;
+      save(); render(); flush();   // angemeldet: DELETE sofort (nach einer laufenden Anfrage), sonst beim naechsten Abgleich
+      return;
+    }
+    var dl = {};
+    Object.keys(S.dl || {}).forEach(function (k) { dl[k] = S.dl[k]; });
+    if (S.u) Object.keys(S.p).concat([P]).forEach(function (k) { dl[k] = S.u; });
+    S = null; sess = null; busy = false; again = false; dropSess();
+    RES = { v: 1, on: 0, dl: dl, lg: 0 };   // nur die Vormerkung bleibt (keine Fortschrittsdaten); ohne Konto wird der Schluessel entfernt
+    saveRes(); render();
+    if (RES) delRes();
   }
   function onClick(ev) {
     var el = ev.target && ev.target.closest ? ev.target : null;
@@ -438,7 +539,7 @@
       else if (k === "resume") resume();
       return;
     }
-    if (el.closest("[data-lpx-login]")) { dropSess(); return; }   // nach der Rueckkehr sofort neu abgleichen
+    if (el.closest("[data-lpx-login]")) { dropSess(); if (RES && !S) { RES.lg = 1; saveRes(); } return; }   // nach der Rueckkehr sofort neu abgleichen bzw. loeschen
     var v = el.closest("a[data-vid]");
     if (v && S && !RO && v.closest(".pl-vids,.pl-vline")) {
       var id = v.getAttribute("data-vid");
@@ -474,7 +575,8 @@
     if (ev.key !== KEY) return;
     var s = load();
     if (s === "x") return;
-    if (s === false) { RO = true; S = S || { v: 1, on: 1, u: 0, ep: 0, sy: 0, p: {} }; }
+    gen++; busy = false; again = false;   // Antworten auf Anfragen zum alten Stand gelten nicht mehr
+    if (s === false) { RO = true; S = S || { v: 1, on: 1, u: 0, ep: 0, sy: 0, dl: {}, p: {} }; }
     else { RO = false; S = s; }
     render();
   });
@@ -490,9 +592,10 @@
   }
   var s0 = load();
   if (s0 === "x") return;   // kein localStorage: statische Anzeige bleibt (Knopf deaktiviert), nichts wird gesendet
-  if (s0 === false) { RO = true; S = { v: 1, on: 1, u: 0, ep: 0, sy: 0, p: {} }; }
+  if (s0 === false) { RO = true; S = { v: 1, on: 1, u: 0, ep: 0, sy: 0, dl: {}, p: {} }; }
   else S = s0;
   if (S && !RO && art && K !== "p") { var e0 = pth()[K][ID]; if (e0 && e0.r) noAuto = true; }   // schon gelesen: Automatik ruht
   render();
   if (S && !RO) first();
+  else if (!S && RES && RES.dl[P] && (RES.lg || hint())) delRes();   // ausstehendes Loeschen nur bei Anmeldehinweis (kein Abgleich, keine Tab-Pruefung)
 })();

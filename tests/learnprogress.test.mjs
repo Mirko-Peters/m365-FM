@@ -10,7 +10,7 @@ const T = { lp_read: "✓ Read", lp_unread: "Mark as unread", lp_auto: "Counts a
   lp_synced: "Saved in this browser and in your account", lp_sync_err: "Sync unavailable", lp_signin: "Sign in with {p}", lp_reset: "Reset progress", lp_reset_q: "Delete?",
   lp_reset_q_acc: "Delete in account?", lp_off: "Stop saving", lp_off_q: "Stop (in this browser{a})?", lp_off_acc: "and in your account", lp_opened: "✓ opened",
   lp_prog: "{d} of {n} guides read", lp_prog_dd: "{d} of {n} deep dives read", lp_cont: "Continue: {t}", lp_cont_at: "Continue: {t} – {s}", lp_open_q: "Still to read: {l}",
-  lp_more: "and {n} more", lp_ready: "All guides read" };
+  lp_more: "and {n} more", lp_ready: "All guides read", lp_del_pend: "Not yet deleted in your account" };
 
 // ---------- DOM-Attrappe ----------
 function matches(el, sel) {
@@ -65,7 +65,7 @@ function page(kind = "g", opts = {}) {
   const cfg = { api: "https://api.test", path: "manufacturing-excellence", lang: opts.lang || "de", k: kind, login: ["linkedin", "microsoft"], t: T, ...(opts.cfg || {}) };
   if (kind !== "p") Object.assign(cfg, { id: "lean-basics", min: opts.min ?? 5, toc: ["inhaltsverzeichnis"] });
   else Object.assign(cfg, { g: [["lean-basics", "Lean", "https://x/de/learn/lean/"], ["oee", "OEE", "https://x/de/learn/oee/"], ["kanban", "Kanban", "https://x/de/learn/kanban/"]],
-    c: [["kaizen", "Kaizen", "https://x/de/learn/lean/kaizen/"]] });
+    c: [["kaizen", "Kaizen", "https://x/de/learn/lean/kaizen/"]] }, opts.cfg || {});
   const data = el(doc, "script", { id: "lpx-data", type: "application/json" }); data.appendChild(new Text(JSON.stringify(cfg)));
   const box = el(doc, "div", { class: "pl-lpx", id: "lpx", "data-k": kind }, [el(doc, "div", { class: "lpx-a" }, [el(doc, "button", { id: "lpx-save", disabled: "" })]), el(doc, "div", { class: "lpx-b" })]);
   const r = { doc, html, body, box, cfg };
@@ -81,7 +81,7 @@ function page(kind = "g", opts = {}) {
     Object.assign(r, { art, hs, end, done, vth, vids });
   } else {
     const cards = cfg.g.map(([id], i) => el(doc, "div", { class: "pl-card", "data-pid": id }, [el(doc, "h3", {}, [el(doc, "span", { class: "pl-step-n" }, [String(i + 1)])])]));
-    const dd = el(doc, "a", { href: cfg.c[0][2], "data-cid": "kaizen" }, ["Kaizen"]);
+    const dd = el(doc, "a", { href: (cfg.c[0] || [])[2] || "https://x/", "data-cid": "kaizen" }, ["Kaizen"]);
     const vline = el(doc, "p", { class: "mut pl-vline" }, [el(doc, "a", { href: "https://x/v/", "data-vid": "AXT4Qac8mQ8" }, ["Video"])]);
     const qopen = el(doc, "p", { class: "pl-qopen" });
     [box, ...cards, dd, vline, qopen].forEach((x) => body.appendChild(x));
@@ -114,6 +114,7 @@ function env(kind = "g", o = {}) {
     let r = typeof replies === "function" ? replies(c) : (replies[c.method] || { status: 401, json: { error: "login" } });
     if (typeof r === "function") r = r(c);
     if (r === "net") return Promise.reject(new TypeError("Failed to fetch"));
+    if (r && typeof r.then === "function") return r.then((x) => (x === "net" ? Promise.reject(new TypeError("Failed to fetch")) : { status: x.status, json: () => Promise.resolve(x.json) }));   // spaete Antwort
     return Promise.resolve({ status: r.status, json: () => Promise.resolve(r.json) });
   };
   const winL = {}, docL = {};
@@ -386,4 +387,179 @@ test("Skript: kein sendBeacon, jedes fetch hinter dem Opt-in, nur erlaubte Metho
   assert.equal((JS.match(/\bfetch\(/g) || []).length, 1, "ein einziger fetch-Aufruf (api)");
   assert.ok(!/method:\s*"PUT"|api\("PUT"/.test(JS));
   for (const k of ["m365-learn", "m365-learn-s", "m365_auth"]) assert.ok(JS.includes(`"${k}"`), k);
+});
+
+// ---------- Gegenpruefung 26.11.: Konten, Loeschen, Rennen, gemerkte Pruefung, Lesestelle ----------
+const PATH = "manufacturing-excellence";
+const st = (E) => E.state().p[PATH];
+function later() { let res; const p = new Promise((r) => (res = r)); return { p, res }; }
+const fresh = (o) => JSON.stringify({ t: 1_000_000, pt: 0, ...o });
+
+test("Konto A -> B im selben Tab (gemerkte Pruefung uid 7): POST nennt u=7, Server lehnt mit 409 uid ab, lokal wird ersetzt statt uebernommen", async () => {
+  const q = [{ s: ["g", "oee"] }, { v: "AAAAAAAAAAA" }];
+  const E = env("g", { store: { "m365-learn": ON({ q, g: { oee: { r: 1 } } }, { u: 7 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) },
+    replies: { POST: (c) => (c.body.u && c.body.u !== 8 ? { status: 409, json: { ...srv(8, { g: { kanban: { r: 1 } } }).json, error: "uid" } } : srv(8)) } });
+  await E.tick();
+  assert.equal(E.calls.length, 1); assert.equal(E.calls[0].method, "POST");
+  assert.equal(E.calls[0].body.u, 7, "erwartetes Konto im Body");
+  assert.equal(E.state().u, 8);
+  assert.deepEqual(Object.keys(st(E).g), ["kanban"], "Stand von Konto 8, nichts von 7");
+  assert.deepEqual(st(E).q, []); assert.deepEqual(st(E).v, {});
+  await E.vis("hidden");
+  assert.equal(E.calls.length, 1, "danach nichts von Konto 7 nachgesendet");
+  // init (Gaststand) sendet kein u
+  const G = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }) }, replies: { GET: srv(7), POST: srv(7) } });
+  await G.tick();
+  assert.equal(G.calls[1].body.init, 1); assert.equal(G.calls[1].body.u, undefined);
+});
+
+test("Zuruecksetzen abgemeldet (401): lokal geleert, Loeschen im Konto vorgemerkt und ehrlich angezeigt; naechste Tab-Sitzung sendet zuerst DELETE, holt nichts Altes zurueck", async () => {
+  const old = { g: { "lean-basics": { r: 1 } } };
+  const E = env("p", { store: { "m365-learn": ON(old, { u: 7 }) }, replies: { GET: { status: 401, json: { error: "login" } }, DELETE: { status: 401, json: { error: "login" } } } });
+  await E.tick();
+  let confirmText = ""; E.ctx.confirm = (t) => { confirmText = t; return true; };
+  await E.click(E.P.box.querySelector(".lpx-b").querySelector("[data-lpx-a=reset]"));
+  assert.equal(confirmText, "Delete in account?");
+  assert.deepEqual(st(E).g, {}); assert.deepEqual(E.state().dl, { [PATH]: 7 });
+  assert.equal(E.calls.filter((c) => c.method === "DELETE").length, 0, "abgemeldet: nichts gesendet, bleibt vorgemerkt");
+  assert.match(E.P.box.querySelector(".lpx-b").textContent, /Not yet deleted in your account/);
+  assert.ok(E.P.box.querySelector(".lpx-b").querySelector("[data-lpx-login]"), "Anmeldelinks");
+  // nach dem Anmelden (neue Tab-Pruefung): DELETE vor allem anderen, kein GET mit altem Stand
+  const F = env("p", { store: Object.fromEntries(E.ls.map), replies: (c) => c.method === "DELETE" ? srv(7, {}, { ep: 12 }) : srv(7, old) });
+  await F.tick();
+  assert.equal(F.calls[0].method, "DELETE"); assert.match(F.calls[0].url, /&u=7$/);
+  assert.deepEqual(st(F).g, {}, "alter Stand kommt nicht zurueck"); assert.equal(F.state().ep, 12); assert.deepEqual(F.state().dl, {});
+  assert.equal(F.calls.length, 1);
+  assert.match(F.P.box.querySelector(".lpx-b").textContent, /in your account/);
+});
+
+test("Zuruecksetzen angemeldet: Netzfehler und 503 -> Hinweis sichtbar, Vormerkung bleibt; naechste Tab-Sitzung holt nach", async () => {
+  const E = env("p", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }, { u: 7 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) },
+    replies: (c) => c.method === "DELETE" ? "net" : srv(7) });
+  await E.tick();
+  await E.click(E.P.box.querySelector(".lpx-b").querySelector("[data-lpx-a=reset]"));
+  assert.equal(E.calls.at(-1).method, "DELETE");
+  assert.deepEqual(E.state().dl, { [PATH]: 7 }); assert.match(E.P.box.querySelector(".lpx-b").textContent, /Not yet deleted/);
+  const F = env("p", { store: Object.fromEntries(E.ls.map), sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) }, replies: (c) => c.method === "DELETE" ? { status: 503, json: {} } : srv(7) });
+  await F.tick();
+  assert.equal(F.calls[0].method, "DELETE"); assert.deepEqual(F.state().dl, { [PATH]: 7 });
+  const G = env("p", { store: Object.fromEntries(F.ls.map), sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) }, replies: (c) => c.method === "DELETE" ? srv(7, {}, { ep: 20 }) : srv(7) });
+  await G.tick();
+  assert.deepEqual(G.state().dl, {}); assert.equal(G.state().ep, 20);
+});
+
+test("Nicht mehr speichern abgemeldet: nur Rest {on:0, dl} ohne Fortschritt; DELETE erst bei Anmeldehinweis oder nach dem Anmeldelink; 200 entfernt den Schluessel", async () => {
+  const E = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1, a: "x-y", h: "Geheim" } } }, { u: 7 }) }, replies: { GET: { status: 401, json: {} }, DELETE: { status: 401, json: {} } } });
+  await E.tick();
+  await E.click(E.P.box.querySelector(".lpx-b").querySelector("[data-lpx-a=off]"));
+  assert.deepEqual(E.state(), { v: 1, on: 0, dl: { [PATH]: 7 }, lg: 0 }, "keine Fortschrittsdaten im Rest");
+  assert.equal(E.calls.at(-1).method, "DELETE");
+  assert.ok(!E.P.html.classList.contains("lpx-on"));
+  await E.tick();
+  assert.match(E.P.box.querySelector(".lpx-a").textContent, /Not yet deleted/);
+  const n = E.calls.length;
+  await E.click(E.P.vids.children[1]); await E.vis("hidden");
+  assert.equal(E.calls.length, n, "abgeschaltet: kein Abgleich");
+  // neuer Aufruf ohne Hinweis: nichts gesendet
+  let F = env("g", { store: Object.fromEntries(E.ls.map), replies: { DELETE: srv(7) } });
+  await F.tick(); assert.equal(F.calls.length, 0); assert.deepEqual(F.ss.log.filter((x) => x[0] === "set"), [], "keine Tab-Pruefung");
+  // Anmeldelink im Hinweis merkt sich den Versuch
+  await F.click(F.P.box.querySelector(".lpx-a").querySelector("[data-lpx-login]"));
+  assert.equal(F.state().lg, 1);
+  const G = env("g", { store: Object.fromEntries(F.ls.map), replies: { DELETE: srv(7, {}, { ep: 30 }) } });
+  await G.tick();
+  assert.equal(G.calls.length, 1); assert.equal(G.calls[0].method, "DELETE"); assert.match(G.calls[0].url, /&u=7$/);
+  assert.equal(G.ls.map.get("m365-learn"), undefined, "erledigt: Schluessel entfernt");
+  // mit Anmeldehinweis von community.js; anderes Konto -> 409, Rest bleibt
+  const H = env("g", { store: { ...Object.fromEntries(E.ls.map), m365_auth: "1" }, replies: { DELETE: { status: 409, json: { ...srv(9).json, error: "uid" } } } });
+  await H.tick();
+  assert.equal(H.calls.length, 1); assert.deepEqual(H.state().dl, { [PATH]: 7 });
+  // erneutes Einschalten uebernimmt die Vormerkung
+  await H.click(H.P.box.querySelector("#lpx-save"));
+  assert.deepEqual(H.state().dl, { [PATH]: 7 }); assert.equal(H.state().on, 1);
+});
+
+test("Rennen: Videoklick waehrend des init-POST geht nicht verloren", async () => {
+  const d = later();
+  const E = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }) }, replies: (c) => c.method === "GET" ? srv(7) : c.body.init ? d.p : srv(7, { g: { oee: { r: 1 } }, v: { ZY12nBEY2qc: 3 } }) });
+  await E.tick();
+  assert.equal(E.calls.length, 2); assert.equal(E.calls[1].body.init, 1);
+  await E.click(E.P.vids.children[1]);
+  assert.equal(E.calls.length, 2, "waehrend des init-POST: vorgemerkt (busy)");
+  d.res(srv(7, { g: { oee: { r: 1 } } }));
+  await E.tick(10);
+  assert.equal(st(E).v.ZY12nBEY2qc, 1, "Video bleibt lokal");
+  assert.equal(E.calls.length, 3, "und wird nachgesendet"); assert.deepEqual(E.calls[2].body.vid, ["ZY12nBEY2qc"]); assert.equal(E.calls[2].body.u, 7);
+  assert.deepEqual(st(E).q, []);
+});
+
+test("Rennen: spaete POST-Antwort nach dem Zuruecksetzen stellt nichts wieder her; DELETE erst danach, frische Aktion bleibt", async () => {
+  const d = later();
+  let posts = 0;
+  const E = env("g", { min: 1, store: { "m365-learn": ON({}, { u: 7, ep: 0 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) },
+    replies: (c) => c.method === "DELETE" ? srv(7, {}, { ep: 99 }) : c.method === "POST" ? (posts++ === 0 ? d.p : (c.body.ep === 99 ? srv(7, { v: { ZY12nBEY2qc: 5 } }, { ep: 99 }) : { status: 409, json: { ...srv(7, {}, { ep: 99 }).json, error: "ep" } })) : srv(7) });
+  await E.tick();
+  E.P.box.setAttribute("data-k", "p");
+  await E.click(E.P.vids.children[1]);   // POST 1 laeuft
+  assert.equal(E.calls.at(-1).method, "POST");
+  E.ctx.confirm = () => true;
+  E.P.box.querySelector(".lpx-b").appendChild(new (E.P.box.constructor)("button", { "data-lpx-a": "reset" }, E.P.doc));
+  await E.click(E.P.box.querySelector(".lpx-b").querySelector("[data-lpx-a=reset]"));
+  assert.equal(E.calls.filter((c) => c.method === "DELETE").length, 0, "DELETE wartet auf die laufende Anfrage");
+  await E.click(E.P.vids.children[1]);   // frische Aktion nach dem Zuruecksetzen, waehrend POST 1 noch laeuft
+  d.res(srv(7, { g: { oee: { r: 1 } }, v: { ZY12nBEY2qc: 5 } }, { ep: 0 }));
+  await E.tick(12);
+  assert.deepEqual(st(E).g, {}, "alte Antwort gilt nicht");
+  assert.deepEqual(E.calls.slice(1).map((c) => c.method), ["DELETE", "POST"], "erst DELETE, dann die frische Aktion");
+  assert.equal(E.calls[2].body.ep, 99, "mit der neuen Epoche (kein 409)"); assert.deepEqual(E.calls[2].body.vid, ["ZY12nBEY2qc"]);
+  assert.equal(E.state().ep, 99); assert.equal(st(E).v.ZY12nBEY2qc, 1); assert.deepEqual(st(E).q, []);
+});
+
+test("Gemerkte Pruefung veraltet: 401 + Anmeldehinweis, 200 ohne Hinweis und nach 15 min -> neu pruefen; frisch -> keine Anfrage", async () => {
+  let E = env("g", { store: { "m365-learn": ON(), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 401 }) }, replies: { GET: srv(7), POST: srv(7) } });
+  await E.tick(); assert.equal(E.calls[0]?.method, "GET", "anderswo angemeldet");
+  E = env("g", { store: { "m365-learn": ON({}, { u: 7 }) }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) }, replies: { GET: { status: 401, json: {} } } });
+  await E.tick(); assert.equal(E.calls[0]?.method, "GET", "abgemeldet (Hinweis fehlt)");
+  assert.doesNotMatch(E.P.box.querySelector(".lpx-b").textContent, /in your account/);
+  E = env("g", { store: { "m365-learn": ON({}, { u: 7 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7, t: 1_000_000 - 16 * 60_000 }) }, replies: { GET: srv(7) } });
+  await E.tick(); assert.equal(E.calls[0]?.method, "GET", "nach 15 min");
+  E = env("g", { store: { "m365-learn": ON() }, sess: { "m365-learn-s": fresh({ s: 401 }) } });
+  await E.tick(); assert.equal(E.calls.length, 0, "frisch und ohne Hinweis: keine Anfrage");
+});
+
+test("Lesestelle hinter scroll-margin (Weiterlesen, Sprungmarke): aktuelle Ueberschrift knapp unter der Oberkante zaehlt", async () => {
+  const E = env("g", { store: { "m365-learn": ON() } });
+  const [toc, ein, wsa] = E.P.hs;
+  toc._top = -3000; ein._top = -900; wsa._top = 80; E.ctx.scrollY = 3000;
+  await E.vis("hidden");
+  assert.equal(st(E).g["lean-basics"].a, "wertströmanalyse-ü");
+});
+
+test("Byte-Grenze: viele lange Lesestellen (Japanisch) -> jeder Body unter 16 KB, Rest im naechsten POST", async () => {
+  const ja = "目".repeat(132), q = Array.from({ length: 40 }, (_, i) => ({ p: { k: "g", id: `guide-${i}`, a: ja, h: "見".repeat(80), l: "ja", pc: 30, t: 999_000 } }));
+  const E = env("g", { store: { "m365-learn": ON({ q }, { u: 7 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) }, replies: { POST: srv(7) } });
+  await E.tick(10);
+  assert.ok(E.calls.length >= 2, "aufgeteilt");
+  for (const c of E.calls) assert.ok(new TextEncoder().encode(c.opts.body).length <= 16384, "Body " + new TextEncoder().encode(c.opts.body).length);
+  assert.equal(E.calls.reduce((n, c) => n + c.body.pos.length, 0), 40);
+  assert.deepEqual(st(E).q, []);
+});
+
+test("Uebersetzte Pfadseite: englischer Ersatz-Leitfaden bekommt ✓ am Titel und Anker bei englischer Lesestelle; unbekannte Version laesst sich abschalten", async () => {
+  const E = env("p", { lang: "fr", cfg: { g: [["lean-basics", "Lean", "https://x/fr/learn/lean/", "fr"], ["oee", "OEE", "https://x/learn/oee/", "en"]], c: [] },
+    store: { "m365-learn": ON({ g: { oee: { r: 0, a: "intro", h: "Intro", l: "en", pc: 10, t: 999_000 } }, "lean-basics": { r: 1 } }) }, replies: { GET: { status: 401, json: {} } } });
+  E.P.cards[1].children[0].children = []; E.P.cards[1].children[0].appendChild(new (E.P.box.constructor)("a", { href: "https://x/learn/oee/" }, E.P.doc));
+  await E.tick();
+  assert.equal(E.P.box.querySelector(".lpx-b").querySelector("a.btn").getAttribute("href"), "https://x/learn/oee/#intro");
+  E.P.cards[1].attrs["data-pid"] = "oee";
+  const s2 = E.state(); s2.p[PATH].g.oee.r = 1; E.ls.map.set("m365-learn", JSON.stringify(s2));
+  const F = env("p", { lang: "fr", store: Object.fromEntries(E.ls.map), cfg: { g: [["lean-basics", "Lean", "https://x/fr/learn/lean/", "fr"], ["oee", "OEE", "https://x/learn/oee/", "en"]], c: [] } });
+  F.P.cards[1].children[0].children = []; const a = F.P.cards[1].children[0].appendChild(new (F.P.box.constructor)("a", { href: "https://x/learn/oee/" }, F.P.doc));
+  await F.tick();
+  assert.ok(a.classList.contains("lpx-ok"));
+  assert.equal(F.P.box.querySelector(".lpx-b").getAttribute("aria-live"), "polite", "aria-live erst nach dem ersten Bild");
+  const R = env("g", { store: { "m365-learn": JSON.stringify({ v: 2, on: 1 }) } });
+  await R.tick();
+  await R.click(R.P.box.querySelector(".lpx-b").querySelector("[data-lpx-a=off]"));
+  assert.equal(R.ls.map.get("m365-learn"), undefined); assert.equal(R.calls.length, 0);
 });

@@ -2,15 +2,21 @@
 // Lernpfad-Videos (v) je Nutzer und Pfad in D1 (learn_progress, Migration 0056). Die Seite (assets/learnprogress.js) ruft das erst nach dem Opt-in
 // "Lernfortschritt speichern" auf; vorher gibt es keinen Request. Eingehaengt in handleLearnQuiz (learnquiz.js), Route /api/learn/progress.
 //   GET    /api/learn/progress?path=<pfad>   Login; Stand {uid, ep, updated, now, state}. Ohne Zeile: ep 0, updated 0, leerer Stand. 1 Lesen.
-//   POST   /api/learn/progress  {path, ep, init, set, unset, vid, pos}   Login; Aenderungen zusammenfuehren (Vereinigung), Antwort wie GET.
+//   POST   /api/learn/progress  {path, u, ep, init, set, unset, vid, pos}   Login; Aenderungen zusammenfuehren (Vereinigung), Antwort wie GET.
+//          u = Konto-ID, fuer die der Client sammelt: ungleich dem angemeldeten Konto -> 409 {error:"uid"} mit dem Stand dieses Kontos, ohne Schreiben
+//          (gemeinsames Geraet: im selben Tab ab- und als anderes Konto angemeldet). Ohne u (Gaststand, init:1) entfaellt die Pruefung.
 //          Body hoechstens LP_MAX_BODY Bytes (413). Falsche Eintraege werden still verworfen (kein 400), damit ein Ausreisser den Abgleich nicht blockiert.
 //          ep des Clients ungleich ep der Zeile und init nicht 1 -> 409 mit dem Serverstand, ohne Schreiben (Zuruecksetzen auf einem anderen Geraet).
 //          Keine Aenderung -> kein Schreiben. Schreiben mit optimistischer Sperre auf updated; bei Konflikt einmal neu lesen, sonst 503.
-//   DELETE /api/learn/progress?path=<pfad>   Login; Zuruecksetzen/Abschalten: leerer Stand, neue Epoche ep (Serversekunden). 1 Schreiben.
+//   DELETE /api/learn/progress?path=<pfad>&u=<konto>   Login; Zuruecksetzen/Abschalten: leerer Stand, neue Epoche ep (Serversekunden). 1 Schreiben.
+//          u ungleich dem angemeldeten Konto -> 409 {error:"uid"} ohne Schreiben (1 Lesen). Die Zeile bleibt als leerer Stand mit ep, damit andere Geraete
+//          das Zuruecksetzen beim naechsten Abgleich (409 ep) uebernehmen; sie verschwindet mit dem Konto oder nach 24 Monaten ohne Aenderung.
 // Alle Zeiten setzt der Server: der Client sendet nur relative Alter (age in Sekunden), absolute Zeitfelder vom Client werden ignoriert.
-// Schalter: Var LEARN_PROGRESS_SYNC = "1" (wrangler.toml, live und staging); sonst 404 {error:"off"} vor jeder D1-Abfrage, die Seite arbeitet nur lokal.
+// Schalter: Var LEARN_PROGRESS_SYNC = "1" (wrangler.toml, live und staging); sonst 404 {error:"off"} vor jeder D1-Abfrage dieses Handlers (index.js liest fuer
+// Angemeldete vorher schon die Sitzung, 1-2 Zeilen; der Client merkt sich 404 je Tab), die Seite arbeitet nur lokal.
 // Ratenlimit LP_RL je Nutzer: Bindung RL_LEARN (Workers Rate Limiting, kein D1), ohne Bindung (Staging, Tests) D1-Tabelle ratelimit ("learnp:" in RL_SHORT).
-// Konto: deleteUserLearn (learnquiz.js) loescht die Zeilen, mergeStatements (identities.js) uebernimmt sie mit keepT. Aufraeumen: purgeLearnProgress.
+// Konto: deleteUserLearn (learnquiz.js) loescht die Zeilen; mergeStatements (identities.js) vereinigt sie mit mergeLearnProgress (gleicher Pfad in beiden
+// Konten: gelesen/geoeffnet per ODER, juengste Lesestelle) und uebernimmt die uebrigen mit keepT. Aufraeumen: purgeLearnProgress.
 import { cleanText, rateLimit } from "./util.js";
 
 export const LP_MAX_BODY = 16384;          // Bytes je POST
@@ -34,7 +40,8 @@ const list = (x, n) => (Array.isArray(x) ? x.slice(0, n) : []);
 const int = (x) => (typeof x === "number" && Number.isFinite(x) ? Math.round(x) : typeof x === "string" && /^-?\d{1,12}$/.test(x) ? Number(x) : null);
 export const cleanAge = (x) => { const n = int(x); return n === null ? 0 : Math.min(LP_AGE_MAX, Math.max(0, n)); };
 export const cleanAnchor = (x) => (typeof x === "string" && LP_ANCHOR_RX.test(x) ? x : "");
-export const cleanHeading = (x) => (typeof x === "string" ? cleanText(x, 200).replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 80) : "");
+// Titel: auf 80 Zeichen nach Codepunkten gekappt (kein halbes Emoji)
+export const cleanHeading = (x) => (typeof x === "string" ? Array.from(cleanText(x, 200).replace(/[<>]/g, "").replace(/\s+/g, " ").trim()).slice(0, 80).join("") : "");
 
 // Gespeicherten bzw. zurueckgegebenen Stand normalisieren: nur bekannte Felder mit gueltigen Werten (alte oder kaputte Zeilen werden so bereinigt)
 function cleanEntry(e) {
@@ -111,12 +118,51 @@ export function applyChanges(state, body, t = nowS()) {
     if (pc !== null && pc >= 0 && pc <= 100) e.pc = pc;
     e.at = at;
   }
-  // Groesse: zuerst die aeltesten Anker und Titel streichen
+  return fitState(s);
+}
+
+// Groesse: zuerst die aeltesten Anker und Titel streichen
+function fitState(s) {
   if (bytes(packState(s)) > LP_MAX_STATE) {
     const ents = KINDS.flatMap((k) => Object.values(s[k])).filter((e) => e.a || e.h).sort((x, y) => (x.at || 0) - (y.at || 0));
     for (const e of ents) { delete e.a; delete e.h; if (bytes(packState(s)) <= LP_MAX_STATE) break; }
   }
   return s;
+}
+
+// Zwei Staende vereinigen (Konten zusammenfuehren): a = Zielkonto T, b = Quellkonto S. gelesen und geoeffnet per ODER (Mirkos Regel 3b),
+// Lesestelle: die juengere nach Serverzeit (at), Video: fruehester Zeitpunkt. Grenzen wie beim Schreiben (LP_MAX, LP_MAX_STATE).
+export function unionState(a, b) {
+  const s = normState(JSON.parse(JSON.stringify(normState(a)))), o = normState(b);
+  for (const k of KINDS) for (const [id, e] of Object.entries(o[k])) {
+    const x = s[k][id];
+    if (!x) { if (Object.keys(s[k]).length < LP_MAX[k]) s[k][id] = { ...e }; continue; }
+    if (e.r === 1 && x.r !== 1) { x.r = 1; if (e.rt) x.rt = e.rt; }
+    if ((e.at || 0) > (x.at || 0)) { for (const f of ["a", "h", "l", "pc"]) delete x[f]; for (const f of ["a", "h", "l", "pc", "at"]) if (e[f] !== undefined) x[f] = e[f]; }
+  }
+  for (const [v, t] of Object.entries(o.v)) {
+    if (s.v[v]) { s.v[v] = Math.min(s.v[v], t); continue; }
+    if (Object.keys(s.v).length < LP_MAX.v) s.v[v] = t;
+  }
+  return fitState(s);
+}
+
+// Statements fuer mergeStatements (identities.js), vor keepT("learn_progress"): hat T fuer einen Pfad schon eine Zeile, bekommt sie die Vereinigung
+// mit der Zeile von S (ep von T bleibt). Pfade nur bei S uebernimmt danach keepT. 1 Lesen (beide Konten), 1 Schreiben je gemeinsamem Pfad mit Aenderung.
+export async function mergeLearnProgress(db, S, T) {
+  let rows = [];
+  try { rows = (await db.prepare("SELECT user_id,path,state,updated FROM learn_progress WHERE user_id IN (?,?)").bind(S, T).all())?.results || []; }
+  catch { return []; }   // Tabelle fehlt (alte Testdatenbank): wie bisher nur keepT
+  const by = (u) => new Map(rows.filter((r) => Number(r.user_id) === Number(u)).map((r) => [r.path, r]));
+  const sm = by(S), tm = by(T), st = [];
+  for (const [path, tr] of tm) {
+    const sr = sm.get(path);
+    if (!sr) continue;
+    const before = parseState(tr.state), after = unionState(before, parseState(sr.state)), txt = packState(after);
+    if (txt === packState(before)) continue;
+    st.push(db.prepare("UPDATE learn_progress SET state=?, updated=? WHERE user_id=? AND path=?").bind(txt, Math.max(Date.now(), (Number(tr.updated) || 0) + 1), T, path));
+  }
+  return st;
 }
 
 async function allowed(env, uid) {
@@ -169,8 +215,10 @@ export async function handleLearnProgress(env, request, url, user, J, { paths = 
   const db = env.DB, uid = user.id;
 
   if (method === "GET") return J(out(uid, await readRow(db, uid, path)));
+  const mine = (x) => { const n = int(x); return !n || n <= 0 || n === uid; };   // erwartetes Konto des Clients (fehlt: keine Pruefung)
 
   if (method === "DELETE") {
+    if (!mine(url.searchParams.get("u"))) return J({ ...out(uid, await readRow(db, uid, path)), error: "uid" }, 409);   // anderes Konto angemeldet: nichts loeschen
     const t = Date.now();
     const r = await db.prepare("INSERT INTO learn_progress(user_id,path,state,ep,updated) VALUES(?,?,'{}',?,?) ON CONFLICT(user_id,path) DO UPDATE SET state='{}', " +
       "ep=MAX(excluded.ep, learn_progress.ep+1), updated=MAX(excluded.updated, learn_progress.updated+1) RETURNING ep,updated").bind(uid, path, Math.floor(t / 1000), t).first();
@@ -183,6 +231,7 @@ export async function handleLearnProgress(env, request, url, user, J, { paths = 
     const row = await readRow(db, uid, path);
     const ep = row ? Number(row.ep) || 0 : 0;
     const before = row ? parseState(row.state) : normState({});
+    if (!mine(body.u)) return J({ ...out(uid, row, before), error: "uid" }, 409);   // Stand eines anderen Kontos: nie in dieses uebernehmen (vor ep und init)
     if (cep !== ep && !init) return J({ ...out(uid, row, before), error: "ep" }, 409);
     const after = applyChanges(before, body);
     const txt = packState(after);
@@ -195,10 +244,11 @@ export async function handleLearnProgress(env, request, url, user, J, { paths = 
   return J({ error: "busy" }, 503);
 }
 
-// Monatlich im Tageslauf (index.js, nur am 1. des Monats): Zeilen ohne Aenderung seit 24 Monaten loeschen. Kein Index auf updated: einmal je Monat
-// liest das die Tabelle (etwa so viele Zeilen wie Nutzer mit Fortschritt).
+// Monatlich im Tageslauf (index.js, am 1. bis 3. des Monats, damit ein ausgefallener Lauf nachgeholt wird; zweiter und dritter Lauf loeschen meist nichts):
+// Zeilen ohne Aenderung seit 24 Monaten loeschen. Kein Index auf updated: je Lauf liest das die Tabelle (etwa so viele Zeilen wie Nutzer mit Fortschritt).
+export const LP_PURGE_DAYS = 3;
 export async function purgeLearnProgress(db, at = Date.now()) {
-  if (new Date(at).getUTCDate() !== 1) return { skipped: "nur am 1. des Monats" };
+  if (new Date(at).getUTCDate() > LP_PURGE_DAYS) return { skipped: "nur am 1. bis 3. des Monats" };
   const r = await db.prepare("DELETE FROM learn_progress WHERE updated<?").bind(at - LP_KEEP_MS).run();
   return { deleted: r?.meta?.changes || 0 };
 }
