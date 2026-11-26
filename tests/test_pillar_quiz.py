@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "tools"))
 import pillar_quiz as PQ  # noqa: E402
 import site_pillars as PIL  # noqa: E402
 
-OLD10 = [p for p in PIL.order() if p["slug"].get("de")]   # die ersten 10 Leitfaeden (Stand vor dem Kursausbau): Grundlage der Laeufe mit Attrappen
+OLD10 = [p for p in PIL.order() if p.get("date") != "2026-11-26"]   # die ersten 10 Leitfaeden (Stand vor dem Kursausbau 26.11.2026): Grundlage der Laeufe mit Attrappen
 GOOD = {"q": "What does the value stream map make visible first?", "opts": ["Waiting times between steps", "Machine colours", "Employee birthdays", "Office layout"],
         "a": 0, "why": "The guide says the map shows flow and waiting times.", "ref": "What a value stream map shows"}
 
@@ -423,7 +423,7 @@ class ClusterRun(_RunBase):
         self.real_public()
         items = PQ.plan(())
         gd = [it for it in items if not PQ.is_cluster(it[0])]; cl = [it for it in items if PQ.is_cluster(it[0])]
-        self.assertEqual(sorted(p["id"] for p, *_ in gd), sorted(p["id"] for p in PIL.order() if not p["slug"].get("de")))
+        self.assertEqual(sorted(p["id"] for p, *_ in gd), sorted(p["id"] for p in PIL.order() if p.get("date") == "2026-11-26"))   # die 10 neuen Leitfaeden
         self.assertEqual(len(cl), 15)
         self.assertTrue(all(need == PQ.KEEP for *_, need in gd) and all(need == PQ.CLUSTER_KEEP for *_, need in cl))
         self.assertEqual({p["parent"] for p, *_ in cl}, {"lean-manufacturing", "operational-excellence", "shop-floor-management", "production-scheduling-aps", "digital-twin-manufacturing"})

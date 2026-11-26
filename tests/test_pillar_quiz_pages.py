@@ -18,15 +18,16 @@ import site_pillars as S
 
 BASE = "https://www.m365.fm"
 PID = "manufacturing-excellence"
+NEW_DATE = "2026-11-26"   # Kursausbau: die 10 neuen Leitfäden (seit der deutschen Fassung auch mit slug.de)
 EN_ONLY = "ifakt-polaris"   # Leitfaden ohne deutsche Fragen in der Testdatei: die deutsche Seite nimmt die englischen
 
 
 def fixture(all_guides=False):
     """Kleine Testdatei wie tools/pillar_quiz.py sie schreibt - absichtlich mit "a"/"why" in einer Frage, die nie auf die Seite dürfen.
-    Standard: Fragen nur für die 10 Leitfäden mit deutscher Fassung (Stand vor dem Fragenlauf der neuen Leitfäden); all_guides: alle 20."""
+    Standard: Fragen nur für die 10 ersten Leitfäden (Stand vor dem Fragenlauf der neuen Leitfäden vom 26.11.2026); all_guides: alle 20."""
     pills = {}
     for p in S.pillars():
-        if not all_guides and not p["slug"].get("de"): continue
+        if not all_guides and p.get("date") == NEW_DATE: continue
         pid = p["id"]
         en = [{"id": f"{pid}-{i}", "q": f"EN question {i} about {pid}?", "opts": [f"en opt {j}" for j in range(4)]} for i in range(1, 5)]
         de = [{"id": f"{pid}-{i}", "q": f"DE Frage {i} zu {pid}?", "opts": [f"de Option {j}" for j in range(4)]} for i in range(1, 5)]
@@ -123,7 +124,7 @@ class WithQuiz(unittest.TestCase):
         self.assertEqual(dg["lean-manufacturing"]["t"], "Lean Management")
         self.assertTrue(dg[EN_ONLY]["qs"][0]["q"].startswith("EN question"), "fehlt die deutsche Fassung, gilt die englische")
         self.assertEqual([q["id"] for q in dg[EN_ONLY]["qs"]], [q["id"] for q in {g["id"]: g for g in en["groups"]}[EN_ONLY]["qs"]], "gleiche IDs in en und de")
-        self.assertEqual([g["id"] for g in en["groups"]], [p["id"] for p in S.order() if p["slug"].get("de")], "Lernreihenfolge; Leitfäden ohne Fragen fehlen")
+        self.assertEqual([g["id"] for g in en["groups"]], [p["id"] for p in S.order() if p.get("date") != NEW_DATE], "Lernreihenfolge; Leitfäden ohne Fragen fehlen")
 
     def test_config_for_script(self):
         c, d = config(self.en), config(self.de)
@@ -167,7 +168,8 @@ class WithQuiz20(unittest.TestCase):
             d = embedded(files[rel + "test/index.html"])
             self.assertEqual([g["id"] for g in d["groups"]], [p["id"] for p in S.order()])
             urls = {g["id"]: g["u"] for g in d["groups"]}
-            self.assertEqual(urls["tpm-oee"], f"{BASE}/learn/tpm-oee/", "Leitfaden nur auf Englisch: englische Seite, auch im deutschen Test")
+            self.assertEqual(urls["tpm-oee"], f"{BASE}{S.lp(lang)}/learn/tpm-oee/", "Leitfaden der Sprache (seit der deutschen Fassung auch im deutschen Test)")
+            self.assertEqual(urls["5s-visual-management"], f"{BASE}/learn/5s-visual-management/" if lang == "en" else f"{BASE}/de/learn/5s-methode-visuelles-management/")
         self.assertEqual(S.quiz_numbers(embedded(files[f"learn/path/{PID}/test/index.html"])["groups"]), (40, 32))
 
 

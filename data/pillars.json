@@ -1,5 +1,5 @@
 {
- "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (nur Englisch): Datei imports/pillars/en/clusters/<slug.en>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge). related = IDs eigener Leitfaeden zu Methoden, die dieser Leitfaden nur kurz behandelt: Kasten 'Related guides' auf der englischen Seite (gegen Kannibalisierung, bis die bestehenden Leitfaeden selbst auf die neuen verlinken).",
+ "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (en, de): Datei imports/pillars/<sprache>/clusters/<slug>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/ bzw. /de/learn/<slug.de des Eltern-Leitfadens>/<slug.de>/; ohne slug.de nur Englisch; label.de = Name auf deutschen Seiten; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge). related = IDs eigener Leitfaeden zu Methoden, die dieser Leitfaden nur kurz behandelt: Kasten 'Related guides'/'Weiterführende Leitfäden' auf der englischen und deutschen Seite (gegen Kannibalisierung, bis die bestehenden Leitfaeden selbst auf die neuen verlinken).",
  "path": {
   "id": "manufacturing-excellence",
   "title": {
@@ -16,7 +16,7 @@
   },
   "intro": {
    "en": "This path takes you from the basic ideas of Lean to digital production planning. Each step is a complete guide with formulas, examples and sources, and each guide links to related articles on m365.fm. Several guides have deep dives on single methods, such as kaizen, standard work or lot sizing. Work through the steps in order, or jump to the topic you need. One guide describes a software example, iFAKT Polaris. The author works at iFAKT GmbH, and vendor claims in that guide are marked as such.",
-   "de": "Dieser Pfad führt von den Grundideen des Lean-Managements bis zur digitalen Produktionsplanung. Jeder Schritt ist ein vollständiger Leitfaden mit Formeln, Beispielen und Quellen und verweist auf passende Artikel auf m365.fm. Mehrere Leitfäden haben Vertiefungen zu einzelnen Methoden, etwa Kaizen, Standardarbeit oder Losgrößen. Die neuen Leitfäden und alle Vertiefungen gibt es bisher nur auf Englisch. Gehen Sie die Schritte der Reihe nach durch oder springen Sie zum Thema, das Sie brauchen. Ein Leitfaden beschreibt ein Software-Beispiel, iFAKT Polaris. Der Autor arbeitet bei der iFAKT GmbH, Herstellerangaben in diesem Leitfaden sind als solche gekennzeichnet."
+   "de": "Dieser Pfad führt von den Grundideen des Lean-Managements bis zur digitalen Produktionsplanung. Jeder Schritt ist ein vollständiger Leitfaden mit Formeln, Beispielen und Quellen und verweist auf passende Artikel auf m365.fm. Mehrere Leitfäden haben Vertiefungen zu einzelnen Methoden, etwa Kaizen, Standardarbeit oder Losgrößen. Gehen Sie die Schritte der Reihe nach durch oder springen Sie zum Thema, das Sie brauchen. Ein Leitfaden beschreibt ein Software-Beispiel, iFAKT Polaris. Der Autor arbeitet bei der iFAKT GmbH, Herstellerangaben in diesem Leitfaden sind als solche gekennzeichnet."
   },
   "certopus": {
    "_": "Nur zur Doku/Anzeige (CERTOPUS.md). Für den Worker gilt die Var CERTOPUS_PATHS in worker/wrangler.toml.",
@@ -291,7 +291,8 @@
   {
    "id": "5s-visual-management",
    "slug": {
-    "en": "5s-visual-management"
+    "en": "5s-visual-management",
+    "de": "5s-methode-visuelles-management"
    },
    "label": {
     "en": "5S and visual management",
@@ -307,7 +308,8 @@
   {
    "id": "kanban-pull-system",
    "slug": {
-    "en": "kanban-pull-system"
+    "en": "kanban-pull-system",
+    "de": "kanban-pull-prinzip"
    },
    "label": {
     "en": "Kanban and pull systems",
@@ -323,7 +325,8 @@
   {
    "id": "smed-changeover-reduction",
    "slug": {
-    "en": "smed-changeover-reduction"
+    "en": "smed-changeover-reduction",
+    "de": "smed-ruestzeitreduzierung"
    },
    "label": {
     "en": "SMED and changeover reduction",
@@ -338,7 +341,8 @@
   {
    "id": "tpm-oee",
    "slug": {
-    "en": "tpm-oee"
+    "en": "tpm-oee",
+    "de": "tpm-oee"
    },
    "label": {
     "en": "TPM and OEE",
@@ -353,7 +357,8 @@
   {
    "id": "six-sigma-root-cause-analysis",
    "slug": {
-    "en": "six-sigma-root-cause-analysis"
+    "en": "six-sigma-root-cause-analysis",
+    "de": "six-sigma-ursachenanalyse"
    },
    "label": {
     "en": "Six Sigma and root cause analysis",
@@ -368,7 +373,8 @@
   {
    "id": "sop-mrp-production-planning",
    "slug": {
-    "en": "sop-mrp-production-planning"
+    "en": "sop-mrp-production-planning",
+    "de": "sop-mrp-produktionsplanung"
    },
    "label": {
     "en": "S&OP, MRP and production planning",
@@ -383,7 +389,8 @@
   {
    "id": "theory-of-constraints",
    "slug": {
-    "en": "theory-of-constraints"
+    "en": "theory-of-constraints",
+    "de": "theory-of-constraints-engpass"
    },
    "label": {
     "en": "Theory of constraints",
@@ -398,7 +405,8 @@
   {
    "id": "mes-isa-95",
    "slug": {
-    "en": "mes-isa-95"
+    "en": "mes-isa-95",
+    "de": "mes-isa-95"
    },
    "label": {
     "en": "MES and ISA-95",
@@ -415,7 +423,8 @@
   {
    "id": "predictive-maintenance-iiot",
    "slug": {
-    "en": "predictive-maintenance-iiot"
+    "en": "predictive-maintenance-iiot",
+    "de": "predictive-maintenance-iiot"
    },
    "label": {
     "en": "Predictive maintenance and IIoT",
@@ -430,7 +439,8 @@
   {
    "id": "ot-cybersecurity-iec-62443",
    "slug": {
-    "en": "ot-cybersecurity-iec-62443"
+    "en": "ot-cybersecurity-iec-62443",
+    "de": "ot-security-iec-62443"
    },
    "label": {
     "en": "OT cybersecurity and IEC 62443",
@@ -446,10 +456,12 @@
    "id": "kaizen",
    "parent": "lean-manufacturing",
    "slug": {
-    "en": "kaizen"
+    "en": "kaizen",
+    "de": "kaizen"
    },
    "label": {
-    "en": "Kaizen and kaizen events"
+    "en": "Kaizen and kaizen events",
+    "de": "Kaizen und Kaizen-Workshops"
    },
    "date": "2026-11-26"
   },
@@ -457,10 +469,12 @@
    "id": "pdca-cycle",
    "parent": "lean-manufacturing",
    "slug": {
-    "en": "pdca-cycle"
+    "en": "pdca-cycle",
+    "de": "pdca-zyklus"
    },
    "label": {
-    "en": "PDCA cycle"
+    "en": "PDCA cycle",
+    "de": "PDCA-Zyklus"
    },
    "date": "2026-11-26"
   },
@@ -468,10 +482,12 @@
    "id": "a3-problem-solving",
    "parent": "lean-manufacturing",
    "slug": {
-    "en": "a3-problem-solving"
+    "en": "a3-problem-solving",
+    "de": "a3-methode"
    },
    "label": {
-    "en": "A3 problem solving"
+    "en": "A3 problem solving",
+    "de": "A3-Methode"
    },
    "date": "2026-11-26"
   },
@@ -479,10 +495,12 @@
    "id": "poka-yoke",
    "parent": "lean-manufacturing",
    "slug": {
-    "en": "poka-yoke"
+    "en": "poka-yoke",
+    "de": "poka-yoke"
    },
    "label": {
-    "en": "Poka-yoke (mistake proofing)"
+    "en": "Poka-yoke (mistake proofing)",
+    "de": "Poka Yoke (Fehlervermeidung)"
    },
    "date": "2026-11-26"
   },
@@ -490,10 +508,12 @@
    "id": "standard-work",
    "parent": "shop-floor-management",
    "slug": {
-    "en": "standard-work"
+    "en": "standard-work",
+    "de": "standardarbeit"
    },
    "label": {
-    "en": "Standard work"
+    "en": "Standard work",
+    "de": "Standardarbeit"
    },
    "date": "2026-11-26"
   },
@@ -501,10 +521,12 @@
    "id": "andon",
    "parent": "shop-floor-management",
    "slug": {
-    "en": "andon"
+    "en": "andon",
+    "de": "andon"
    },
    "label": {
-    "en": "Andon system"
+    "en": "Andon system",
+    "de": "Andon-System"
    },
    "date": "2026-11-26"
   },
@@ -512,10 +534,12 @@
    "id": "paperless-manufacturing",
    "parent": "shop-floor-management",
    "slug": {
-    "en": "paperless-manufacturing"
+    "en": "paperless-manufacturing",
+    "de": "papierlose-fertigung"
    },
    "label": {
-    "en": "Paperless manufacturing"
+    "en": "Paperless manufacturing",
+    "de": "Papierlose Fertigung"
    },
    "date": "2026-11-26"
   },
@@ -523,10 +547,12 @@
    "id": "lot-sizing",
    "parent": "production-scheduling-aps",
    "slug": {
-    "en": "lot-sizing"
+    "en": "lot-sizing",
+    "de": "losgroesse"
    },
    "label": {
-    "en": "Lot sizing"
+    "en": "Lot sizing",
+    "de": "Losgröße berechnen"
    },
    "date": "2026-11-26"
   },
@@ -534,10 +560,12 @@
    "id": "manufacturing-inventory-management",
    "parent": "production-scheduling-aps",
    "slug": {
-    "en": "manufacturing-inventory-management"
+    "en": "manufacturing-inventory-management",
+    "de": "bestandsmanagement"
    },
    "label": {
-    "en": "Manufacturing inventory management"
+    "en": "Manufacturing inventory management",
+    "de": "Bestandsmanagement in der Produktion"
    },
    "date": "2026-11-26"
   },
@@ -545,10 +573,12 @@
    "id": "intralogistics",
    "parent": "production-scheduling-aps",
    "slug": {
-    "en": "intralogistics"
+    "en": "intralogistics",
+    "de": "intralogistik"
    },
    "label": {
-    "en": "Intralogistics"
+    "en": "Intralogistics",
+    "de": "Intralogistik"
    },
    "date": "2026-11-26"
   },
@@ -556,10 +586,12 @@
    "id": "manufacturing-simulation",
    "parent": "digital-twin-manufacturing",
    "slug": {
-    "en": "manufacturing-simulation"
+    "en": "manufacturing-simulation",
+    "de": "simulation-produktion"
    },
    "label": {
-    "en": "Manufacturing simulation"
+    "en": "Manufacturing simulation",
+    "de": "Simulation in der Produktion"
    },
    "date": "2026-11-26"
   },
@@ -567,10 +599,12 @@
    "id": "process-mining-manufacturing",
    "parent": "digital-twin-manufacturing",
    "slug": {
-    "en": "process-mining-manufacturing"
+    "en": "process-mining-manufacturing",
+    "de": "process-mining-produktion"
    },
    "label": {
-    "en": "Process mining in manufacturing"
+    "en": "Process mining in manufacturing",
+    "de": "Process Mining in der Produktion"
    },
    "date": "2026-11-26"
   },
@@ -578,10 +612,12 @@
    "id": "sustainable-manufacturing",
    "parent": "operational-excellence",
    "slug": {
-    "en": "sustainable-manufacturing"
+    "en": "sustainable-manufacturing",
+    "de": "nachhaltige-produktion"
    },
    "label": {
-    "en": "Sustainable manufacturing"
+    "en": "Sustainable manufacturing",
+    "de": "Nachhaltige Produktion"
    },
    "date": "2026-11-26"
   },
@@ -589,10 +625,12 @@
    "id": "supply-chain-resilience",
    "parent": "operational-excellence",
    "slug": {
-    "en": "supply-chain-resilience"
+    "en": "supply-chain-resilience",
+    "de": "resiliente-lieferketten"
    },
    "label": {
-    "en": "Supply chain resilience"
+    "en": "Supply chain resilience",
+    "de": "Resiliente Lieferketten"
    },
    "date": "2026-11-26"
   },
@@ -600,10 +638,12 @@
    "id": "manufacturing-workforce-skills",
    "parent": "operational-excellence",
    "slug": {
-    "en": "manufacturing-workforce-skills"
+    "en": "manufacturing-workforce-skills",
+    "de": "qualifikationsmatrix"
    },
    "label": {
-    "en": "Manufacturing workforce skills"
+    "en": "Manufacturing workforce skills",
+    "de": "Qualifikationsmatrix"
    },
    "date": "2026-11-26"
   }
