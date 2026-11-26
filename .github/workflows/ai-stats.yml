@@ -84,7 +84,7 @@ jobs:
           git commit -q -m "Belegzahlen /sponsor/ aktualisiert (KI-Zitate, Google AI, Search Console)"
           # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main; then
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "PUSHED=1" >> "$GITHUB_ENV"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true

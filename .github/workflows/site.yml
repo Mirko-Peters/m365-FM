@@ -1,5 +1,10 @@
 name: Website bauen und veröffentlichen
-# Wann gebaut wird (weniger Actions-Minuten, Ziel: privates Repo mit GitHub Pro):
+# Wann gebaut wird - seit 26.11.2026 (Mirko: "dann immer nur mittwoch seite neu bauen, alles so lange sammeln"):
+# - nur noch einmal pro Woche voll, MITTWOCH 13:07 UTC (nach dem Deploy-Tag am Vormittag: gesammelte PRs sind gemergt).
+#   Code-Pushes (Merges) bauen standardmaessig nicht mehr sofort (SITE_PUSH_BUILD Standard jetzt "0"), Frische-Baus fuer neue Folgen
+#   sind standardmaessig aus (SITE_FRESH_OFF Standard jetzt "1", spreaker-feed-check.yml). Von Hand ("Run workflow") geht jederzeit.
+#   Rueckweg: Repo-Variable SITE_PUSH_BUILD=1 bzw. SITE_FRESH_OFF=0 setzen, Zeitplan unten wieder auf "7 1 * * *".
+# Frueher (bis 26.11.2026):
 # - naechtlich einmal voll (01:07 UTC = 02:07 Berlin im Winter, 03:07 im Sommer): alle Daten-Abrufe, Plattform-Sync, Spotify;
 #   danach (04:47 UTC) setzt spreaker-links.yml das Website-Feld der neuen Folgen auf die frisch gebauten Seiten.
 # - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
@@ -23,7 +28,7 @@ on:
             "tools/r2_common.py", "tools/r2_pages_upload.py", "tools/r2_og_upload.py", "tools/r2_site_sync.py",
             "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", "data/pillar_quiz.json", ".github/workflows/site.yml"]
   schedule:
-    - cron: "7 1 * * *"
+    - cron: "7 13 * * 3"   # Mittwoch 13:07 UTC (Mirko 26.11.2026: nur mittwochs bauen); vorher taeglich "7 1 * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -37,9 +42,9 @@ permissions:
   id-token: write
 jobs:
   build:
-    # Repo-Variable SITE_PUSH_BUILD=0: Code-Pushes bauen nicht sofort (kostet dann 0 Minuten), sie kommen mit dem naechtlichen/Frische-Bau
-    # (vars.X || '1'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false -> jeder Push-Bau wurde uebersprungen
-    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '1') != '0'
+    # Repo-Variable SITE_PUSH_BUILD: Standard seit 26.11.2026 "0" = Code-Pushes bauen nicht sofort, sie kommen mit dem Mittwochs-Bau; "1" = wie frueher sofort.
+    # (vars.X || 'Standard'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false - darum immer mit Standardwert
+    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '0') != '0'
     runs-on: ubuntu-latest
     concurrency:
       group: site-build
@@ -98,7 +103,7 @@ jobs:
           if [ -n "$(git status --porcelain data/top.json data/published.json data/spreaker_auth.enc)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/top.json data/published.json data/spreaker_auth.enc && git commit -m "Spreaker-Daten aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Englische Original-Titel der Videos holen (YouTube oEmbed)
         if: github.event_name != 'push'
@@ -108,7 +113,7 @@ jobs:
           if [ -n "$(git status --porcelain data/en_titles.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/en_titles.json && git commit -m "Englische Original-Titel aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Englische Show - Audio und Transkripte (Spreaker-RSS)
         if: github.event_name != 'push'
@@ -118,7 +123,7 @@ jobs:
           if [ -n "$(git status --porcelain data/en_episodes.json data/en_transcripts)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/en_episodes.json data/en_transcripts && git commit -m "Englische Show: Audio/Transkripte aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Bewertungen einsammeln (Apple Podcasts)
         if: github.event_name != 'push'
@@ -128,7 +133,7 @@ jobs:
           if [ -n "$(git status --porcelain data/reviews_ext.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/reviews_ext.json && git commit -m "Bewertungen aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Spotify-Folgenlinks einsammeln (ohne API) – nur naechtlich/manuell (mode=full), sonst gilt der gespeicherte Stand
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode != 'fresh')
@@ -147,7 +152,7 @@ jobs:
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
               git commit -q -m "Spotify-Folgenlinks aktualisiert"
               for i in 1 2 3 4 5; do
-                if git pull --rebase --autostash -q -X theirs origin main; then
+                if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
                   git push -q origin HEAD:main && exit 0
                 else
                   git rebase --abort 2>/dev/null || true
@@ -167,7 +172,7 @@ jobs:
           if [ -n "$(git status --porcelain data/show_notes)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/show_notes && git commit -m "Show Notes aus Spreaker aktualisiert" -q
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: M365 Show (Livestreams) von YouTube holen
         timeout-minutes: 8
@@ -182,7 +187,7 @@ jobs:
           if [ -n "$(git status --porcelain data/live.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/live.json && git commit -m "M365 Show: Streams aktualisiert" -q
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Plattform-Sync-Regressionen (offline)
         run: python3 tools/test_sync_platforms.py
@@ -201,7 +206,7 @@ jobs:
           if [ -n "$(git status --porcelain data/episode_links.json data/episode_links_report.json data/platforms.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/episode_links.json data/episode_links_report.json data/platforms.json && git commit -m "Plattform-Folgenlinks aktualisiert" -q
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Verzeichnis-Einleitungen nur aus Fakten erzeugen
         continue-on-error: true   # Einleitungen sind optional; ein Fehler hier darf den Seitenbau nicht aufhalten
@@ -222,7 +227,7 @@ jobs:
           git add data/directory_intros.json
           git commit -m "Verzeichnis-Einleitungen aktualisiert"
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main && git push -q origin HEAD:main; then exit 0; fi
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py && git push -q origin HEAD:main; then exit 0; fi
             git rebase --abort 2>/dev/null || true
             sleep $((i * 5))
           done
@@ -261,7 +266,7 @@ jobs:
           git add data/pillar_videos.json
           git commit -q -m "Passende Lernpfad-Videos: neue Zuordnungen aus dem Seitenbau"
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main; then
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
               git push -q origin HEAD:main && exit 0
             else
               if git diff --name-only --diff-filter=U | grep -qx 'data/pillar_videos.json'; then
@@ -287,7 +292,7 @@ jobs:
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
           git add data/sidebar_related.json && git commit -q -m "Feste Aehnliche Folgen der Seitenleiste ergaenzt"
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q -X theirs origin main; then git push -q origin HEAD:main && exit 0; else git rebase --abort 2>/dev/null || true; fi
+            if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then git push -q origin HEAD:main && exit 0; else git rebase --abort 2>/dev/null || true; fi
             sleep $((i*5))
           done
           echo "::error::data/sidebar_related.json konnte nicht gesichert werden"; exit 1
@@ -351,7 +356,7 @@ jobs:
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
               git commit -q -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
               for i in 1 2 3 4 5; do
-                if git pull --rebase --autostash -q -X theirs origin main; then
+                if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
                   git push -q origin HEAD:main && exit 0
                 else
                   git rebase --abort 2>/dev/null || true

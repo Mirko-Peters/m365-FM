@@ -161,7 +161,7 @@ jobs:
         env:
           ALT: ${{ steps.staende.outputs.main }}
           NEU: ${{ steps.merge.outputs.neu }}
-          SEITE_BAUEN: ${{ vars.SITE_PUSH_BUILD || '1' }}
+          SEITE_BAUEN: ${{ vars.SITE_PUSH_BUILD || '0' }}   # wie site.yml: seit 26.11.2026 Standard "0" (Seite nur mittwochs)
         run: |
           set -uo pipefail
           git fetch --no-tags origin main
@@ -169,7 +169,7 @@ jobs:
           echo "Geänderte Dateien: $(git diff --name-only "$ALT..$NEU" | wc -l)"
           FEHLT=0; GESTARTET=""
           for W in $PLAN; do
-            if [ "$W" = "site.yml" ] && [ "$SEITE_BAUEN" = "0" ]; then echo "site.yml übersprungen (Repo-Variable SITE_PUSH_BUILD=0, kommt mit dem nächtlichen Bau)"; continue; fi
+            if [ "$W" = "site.yml" ] && [ "$SEITE_BAUEN" = "0" ]; then echo "site.yml übersprungen (Repo-Variable SITE_PUSH_BUILD=0, kommt mit dem Mittwochs-Bau)"; continue; fi
             ARGS=()
             [ "$W" = "site.yml" ] && ARGS=(-f mode=fresh)   # wie ein Push-Bau: ohne Spotify-/Plattform-Abgleich
             if gh workflow run "$W" --ref main "${ARGS[@]}"; then GESTARTET="$GESTARTET $W"; else echo "::error::$W konnte nicht angestoßen werden - bitte unter Actions von Hand starten."; FEHLT=1; fi

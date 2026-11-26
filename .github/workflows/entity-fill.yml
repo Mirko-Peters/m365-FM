@@ -86,7 +86,7 @@ jobs:
           if [ "$N" = "0" ]; then echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
           # nur data/entity_fill (schreibt kein anderer Job): keine theirs-Strategie, die fremde Aenderungen verwerfen koennte; ein Konflikt bricht den Rebase ab und faellt auf
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main; then
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "Gespeichert: $N Commit(s) auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true
@@ -111,7 +111,7 @@ jobs:
           if [ "$N" = "0" ]; then echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
           # nur data/entity_fill (schreibt kein anderer Job): keine theirs-Strategie, die fremde Aenderungen verwerfen koennte; ein Konflikt bricht den Rebase ab und faellt auf
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main; then
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
               if git push -q origin HEAD:main; then echo "Gespeichert: $N Commit(s) auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
             else
               git rebase --abort 2>/dev/null || true
