@@ -23,8 +23,9 @@
   var art = D.querySelector("article.pl-art[data-lpx]"), endEl = art && art.querySelector(".pl-end"), done = D.querySelector(".pl-done");
   var doneHTML = done ? done.innerHTML : "", saveBtn = D.getElementById("lpx-save"), slot = box.querySelector(".lpx-b"), qopen = D.querySelector(".pl-qopen");
   var S = null, RO = false, RES = null;   // Stand (nur nach dem Opt-in); RO: unbekannte Formatversion -> nur anzeigen, nie schreiben; RES: Rest nach "Nicht mehr speichern"
-  var sess = null, off = false, busy = 0, rid = 0, cur = null, again = false, deb = 0, err = false, gen = 0, resBusy = false;   // gen: Antworten aus der Zeit vor Zuruecksetzen/Abschalten/anderem Tab gelten nicht
-  // busy: Nummer der laufenden Anfrage (0: keine); nur deren Antwort gibt busy frei. cur: ihr Promise (Abschalten wartet darauf)
+  var sess = null, off = false, busy = 0, rid = 0, cur = null, again = false, redo = false, deb = 0, err = false, gen = 0, resBusy = false;   // gen: Antworten aus der Zeit vor Zuruecksetzen/Abschalten/anderem Tab gelten nicht
+  // busy: Nummer der laufenden Anfrage (0: keine); nur deren Antwort gibt busy frei, auch nach dem Abschalten. cur: ihr Promise (Abschalten wartet darauf)
+  // redo: erster Abgleich (first/get) kam waehrend einer laufenden Anfrage (erneutes Opt-in, anderer Tab) -> nach deren Antwort nachholen
   // "gelesen": im Speicher, auch vor dem Opt-in (ohne Speicherzugriff)
   var minSec = Math.min(180, Math.max(20, Math.round((+C.min || 1) * 60 * 0.3)));
   var act = 0, since = D.visibilityState === "visible" ? now() : -1, endSeen = false, readyRead = false, noAuto = false, manual = false, timer = 0, lastPos = "";   // manual: in diesem Aufruf "Als ungelesen markieren" benutzt
@@ -194,10 +195,10 @@
     S.ep = int(j.ep); S.sy = int(j.updated);
     q.forEach(function (e) { applyLocal(e); np.q.push(e); });
   }
-  function noteSess(r) {   // Ergebnis der Anmeldepruefung fuer diesen Tab (pt: letzte gesendete Lesestelle, Drossel 5 min); nach "Nicht mehr speichern" nichts mehr
+  function noteSess(r, fail) {   // Ergebnis der Anmeldepruefung fuer diesen Tab (pt: letzte gesendete Lesestelle, Drossel 5 min); nach "Nicht mehr speichern" nichts mehr
     if (!S) return;
-    if (r.s !== 200 && r.s !== 409 && r.s !== 401 && r.s !== 404) {   // 429, 5xx, Netz: auch der Fehlschlag sperrt neue Pruefungen fuer 15 min (h: Anmeldehinweis dabei)
-      if (!(sess && sess.s === 200)) { sess = { t: Date.now(), s: 0, e: 1, h: hint() ? 1 : 0, uid: 0, pt: (sess && sess.pt) || 0 }; writeSess(sess); }
+    if (fail || r.s !== 200 && r.s !== 409 && r.s !== 401 && r.s !== 404) {   // 429, 5xx, Netz: auch der Fehlschlag sperrt neue Pruefungen fuer 15 min (h: Anmeldehinweis dabei)
+      if (fail || !(sess && sess.s === 200)) { sess = { t: Date.now(), s: 0, e: 1, h: hint() ? 1 : 0, uid: 0, pt: (sess && sess.pt) || 0 }; writeSess(sess); }
       return;
     }
     if (r.s === 409 && !int(r.j.uid)) return;
@@ -215,7 +216,12 @@
   function pend() { return S && S.dl && S.dl[P] ? S.dl[P] : 0; }   // vorgemerktes Loeschen im Konto fuer diesen Pfad (Konto-ID)
   function begin() { busy = ++rid; return busy; }
   function track(p) { cur = p; return p; }
-  function idle(id) { if (id !== busy) return; busy = 0; if (again) { again = false; flush(); } }   // veraltete Antwort einer abgeloesten Anfrage gibt nichts frei
+  function idle(id) {   // veraltete Antwort einer abgeloesten Anfrage gibt nichts frei
+    if (id !== busy) return;
+    busy = 0;
+    if (redo) { redo = false; again = false; first(); }   // first() sendet auch das Vorgemerkte (flush/delAcc)
+    else if (again) { again = false; flush(); }
+  }
   function signed() { return !!(sess && sess.s === 200 && sess.uid && S && S.u === sess.uid); }
   function replace(j) { S.u = int(j.uid); S.p = {}; adopt(j, false); }   // anderes Konto auf diesem Geraet: ersetzen, nie zusammenfuehren
   function handle(r, sent, id) {
@@ -297,6 +303,7 @@
   function soon() { if (!S || off) return; clearTimeout(deb); deb = setTimeout(flush, DEBOUNCE); }
   function first() {   // erste Anfrage dieser Tab-Sitzung (zugleich Anmeldepruefung, fuer Gaeste 0 D1)
     if (!S || RO) return;
+    if (busy) { redo = true; return; }   // laufende Anfrage (vor Abschalten, anderem Tab): erst nach ihrer Antwort, sonst koennte sie danach noch am Server ankommen
     var ss = readSess();
     if (fresh(ss)) {
       sess = ss; if (ss.s === 404) { off = true; return; }
@@ -309,7 +316,8 @@
     if (pend()) delAcc(); else get();
   }
   function get() {
-    if (!S || RO || busy) return;
+    if (!S || RO) return;
+    if (busy) { redo = true; return; }
     var g0 = gen, id = begin();
     track(api("GET")).then(function (r) {
       if (!S || g0 !== gen) { idle(id); return; }
@@ -338,7 +346,7 @@
         S.u = uid; adopt(r2.j, true); authHint(true); err = false; save();
         if (pth().q.length) again = true;
       } else if (okState(r2.j)) { authHint(true); replace(r2.j); save(); }   // inzwischen ein anderes Konto: nichts uebernehmen
-      else { err = r2.s !== 401 && r2.s !== 404; if (r2.s === 401) authHint(false); }
+      else { err = r2.s !== 401 && r2.s !== 404; if (r2.s === 401) authHint(false); if (err) noteSess(r2, true); }   // Vereinigung gescheitert: auch das 15 min merken (sonst GET + init bei jedem Aufruf)
       if (r2.s === 404) off = true;
       render(); idle(id);
     });
@@ -541,7 +549,7 @@
     if (S.u) Object.keys(S.p).concat([P]).forEach(function (k) { dl[k] = S.u; });
     else if (u) dl[P] = u;   // Gaststand mitten im ersten Abgleich: nur dieser Pfad ging ans Konto
     var w = busy ? cur : null;   // laufende Anfrage (z. B. init-POST): das DELETE erst nach ihrer Antwort, sonst koennte der Server sie danach noch schreiben
-    S = null; sess = null; busy = 0; again = false; dropSess();
+    S = null; sess = null; again = false; redo = false; dropSess();   // busy bleibt bis zur Antwort: erneutes Opt-in sendet erst danach
     RES = { v: 1, on: 0, dl: dl, lg: 0 };   // nur die Vormerkung bleibt (keine Fortschrittsdaten); ohne Konto wird der Schluessel entfernt
     saveRes(); render();
     if (RES) { if (w) w.then(function () { delRes(); }); else delRes(); }

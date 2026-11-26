@@ -712,3 +712,71 @@ test("B10: Plakette am Video traegt lang=en, wenn der Kasten auf Englisch zuruec
   await F.tick();
   assert.equal(F.P.vth.querySelector(".pl-vok").getAttribute("lang"), null);
 });
+
+// ---------- Restpunkte der Gegenpruefung ----------
+const calls = (E) => E.calls.map((c) => c.method + (c.body && c.body.init ? "(init)" : ""));
+
+test("N1: init-POST scheitert (503) nach GET 200: auch das sperrt den Tab 15 min (kein GET + init bei jedem Aufruf); Anmeldehinweis weg -> neu", async () => {
+  const rep = (c) => c.method === "GET" ? srv(7) : { status: 503, json: {} };
+  const E = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }), m365_auth: "1" }, replies: rep });
+  await E.tick(10);
+  assert.deepEqual(calls(E), ["GET", "POST(init)"]);
+  assert.match(E.P.box.querySelector(".lpx-b").textContent, /Sync unavailable/);
+  for (let i = 0; i < 2; i++) {
+    const F = env("g", { ls: E.ls, ss: E.ss, replies: rep });
+    await F.tick(10);
+    assert.deepEqual(F.calls, [], "Seitenwechsel im selben Tab: keine neue Pruefung, kein neuer init-POST");
+    assert.match(F.P.box.querySelector(".lpx-b").textContent, /Sync unavailable/);
+  }
+  assert.equal(st(E).g.oee.r, 1, "Gaststand bleibt lokal");
+  E.ls.map.delete("m365_auth");   // inzwischen abgemeldet
+  const G = env("g", { ls: E.ls, ss: E.ss, replies: { GET: { status: 401, json: {} } } });
+  await G.tick(10); assert.deepEqual(calls(G), ["GET"]);
+});
+
+test("N2: Nicht mehr speichern und sofort wieder Opt-in waehrend des init-POST: DELETE erst nach der init-Antwort, danach nichts Altes", async () => {
+  const d = later();
+  const E = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }), m365_auth: "1" },
+    replies: (c) => c.method === "GET" ? srv(7) : c.method === "POST" ? d.p : srv(7, {}, { ep: 40 }) });
+  await E.tick();
+  assert.deepEqual(calls(E), ["GET", "POST(init)"]);
+  await E.click(act(E, "off"));
+  await E.click(E.P.box.querySelector("#lpx-save")); await E.tick();
+  assert.deepEqual(calls(E), ["GET", "POST(init)"], "nichts, solange der init-POST laeuft");
+  d.res(srv(7, { g: { oee: { r: 1 } } })); await E.tick(20);
+  assert.deepEqual(calls(E), ["GET", "POST(init)", "DELETE", "GET"]); assert.match(E.calls[2].url, /&u=7$/);
+  assert.deepEqual(E.state().dl, {}); assert.deepEqual(st(E).g, {}); assert.equal(E.state().u, 7);
+  // ebenso, wenn das erneute Opt-in aus einem anderen Tab kommt (storage), waehrend hier der init-POST nach dem Abschalten noch laeuft
+  const d2 = later();
+  const F = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }), m365_auth: "1" },
+    replies: (c) => c.method === "GET" ? srv(7) : c.method === "POST" ? d2.p : srv(7, {}, { ep: 40 }) });
+  await F.tick();
+  await F.click(act(F, "off"));
+  F.ls.map.set("m365-learn", ON({}, { dl: { [PATH]: 7 } })); storageEv(F); await F.tick();
+  assert.deepEqual(calls(F), ["GET", "POST(init)"]);
+  d2.res(srv(7, { g: { oee: { r: 1 } } })); await F.tick(20);
+  assert.deepEqual(calls(F), ["GET", "POST(init)", "DELETE", "GET"]);
+});
+
+test("N3: anderer Tab schaltet ab und wieder ein, waehrend hier eine Anfrage laeuft: dieser Tab gleicht nach der Antwort ab (einmal)", async () => {
+  const d = later(); let n = 0;
+  const E = env("g", { store: { "m365-learn": ON({}, { u: 7 }), m365_auth: "1" }, replies: (c) => (n++ === 0 ? d.p : srv(7, {}, { ep: 60 })) });
+  await E.tick();
+  assert.deepEqual(calls(E), ["GET"]);
+  E.ls.map.set("m365-learn", JSON.stringify({ v: 1, on: 0, dl: { [PATH]: 7 }, lg: 0 })); storageEv(E);
+  E.ls.map.set("m365-learn", ON({}, { u: 7, dl: { [PATH]: 7 } })); storageEv(E);
+  await E.tick();
+  assert.deepEqual(calls(E), ["GET"], "keine zweite parallele Anfrage");
+  d.res(srv(7)); await E.tick(20);
+  assert.deepEqual(calls(E), ["GET", "DELETE"], "vorgemerktes Loeschen nach der Antwort nachgeholt, nicht doppelt"); assert.match(E.calls[1].url, /&u=7$/);
+  assert.deepEqual(E.state().dl, {}); assert.equal(E.state().ep, 60);
+  await E.advance(10_000); assert.equal(E.calls.length, 2, "keine Schleife");
+  // Gaststand ohne Vormerkung: get() waehrend busy holt den Abgleich (GET) nach
+  const d2 = later(); let m = 0;
+  const F = env("g", { store: { "m365-learn": ON({}, { u: 7 }), m365_auth: "1" }, replies: (c) => (m++ === 0 ? d2.p : srv(7)) });
+  await F.tick();
+  F.ls.map.set("m365-learn", JSON.stringify({ v: 1, on: 0, dl: {}, lg: 0 })); storageEv(F);
+  F.ls.map.set("m365-learn", ON()); storageEv(F); await F.tick();
+  d2.res(srv(7)); await F.tick(20);
+  assert.deepEqual(calls(F), ["GET", "GET"]); assert.equal(F.state().u, 7);
+});
