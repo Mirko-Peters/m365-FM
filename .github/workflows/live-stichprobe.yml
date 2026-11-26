@@ -1,0 +1,16 @@
+name: Live-Stichprobe (nur lesen)
+# Prueft nach einem Deploy einige Live-Seiten (tools/live_stichprobe.sh): Seitenleiste, Testseite noindex, Videokarte, Header, gehashte Skripte, Blogbild.
+on:
+  push:
+    branches: [claude/ladezeit-messung]
+    paths: [.github/workflows/live-stichprobe.yml, tools/live_stichprobe.sh]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: bash tools/live_stichprobe.sh | tee -a "$GITHUB_STEP_SUMMARY"
