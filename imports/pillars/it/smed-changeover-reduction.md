@@ -1,0 +1,1090 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | SMED: riduzione dei tempi di cambio e setup nel lean |
+| Meta description | SMED (cambio stampo in pochi minuti) spiegato: cambio rapido in 8 passi, setup interno ed esterno, formule dei tempi di cambio, esempi e OSHA LOTO. |
+| Slug | `smed-changeover-reduction` |
+
+# SMED: Riduzione del tempo di cambio attrezzaggio, passo dopo passo
+
+> **Risposta breve:** SMED (single-minute exchange of die) è un metodo per passare una macchina o una linea da un prodotto al successivo nel minor tempo possibile, con un obiettivo di meno di dieci minuti, cioè un tempo a "una sola cifra" in minuti. La sua idea centrale viene da Shigeo Shingo: separare le attività di attrezzaggio che si possono fare solo a macchina ferma (attrezzaggio interno) da quelle che si possono fare mentre la macchina è in marcia (attrezzaggio esterno), convertire il più possibile del lavoro interno in esterno, quindi semplificare tutto ciò che resta [1][6].
+
+> **Punti chiave**
+> - Il tempo di cambio va dall'ultimo pezzo buono della produzione precedente al primo pezzo buono della nuova produzione, alla velocità normale. Il riavvio e le regolazioni contano come tempo di cambio [2][21].
+> - SMED procede in un ordine fisso: osservare, separare l'interno dall'esterno, convertire l'interno in esterno, semplificare l'interno, semplificare l'esterno, standardizzare, ripetere [5].
+> - Gran parte dei primi guadagni deriva dall'organizzazione (preparazione dei materiali, liste di controllo, carrelli, lavori in parallelo), non da hardware costoso [19][20].
+> - Un cambio più breve rende appieno quando si sfrutta il tempo guadagnato: lotti più piccoli, cambi più frequenti e un EPEI più corto, oppure più capacità su un collo di bottiglia. Decidere prima dell'avvio del progetto quale di questi obiettivi perseguire.
+> - Dimensione del lotto e scorte crescono con il tempo di cambio. Nella formula classica della dimensione economica del lotto, ridurre del 75 percento il costo di attrezzaggio dimezza la dimensione economica del lotto.
+> - Ogni fase di attrezzaggio interno avviene su attrezzature ferme. Negli Stati Uniti, l'attrezzaggio rientra nella "manutenzione" ai sensi dello standard OSHA sul lockout/tagout, salvo che si applichi una stretta eccezione [8][9].
+> - I guadagni sui cambi si perdono senza lavoro standard, audit e un KPI di cambio esposto nella bacheca di reparto. La ricerca ha criticato la pratica SMED per il limitato uso della progettazione delle attrezzature e per la debole capacità di mantenere i risultati nel tempo [12][13].
+> - KPI utili: tempo medio di cambio e sua dispersione, percentuale di cambi entro lo standard, scarti di riavvio, numero di cambi a settimana, EPEI e giorni di scorta.
+
+## Indice
+
+1. [Che cos'è SMED? Definizione e idea centrale](#che-cosè-smed-definizione-e-idea-di-fondo)
+2. [Perché il tempo di cambio conta: dimensione del lotto, scorte, flessibilità e OEE](#perché-il-tempo-di-cambio-è-importante-dimensione-del-lotto-scorte-flessibilità-e-oee)
+3. [Storia: da Taylor e Ford a Shingo e Toyota](#storia-da-taylor-e-ford-a-shingo-e-toyota)
+4. [Come misurare correttamente il tempo di cambio](#come-misurare-correttamente-il-tempo-di-cambio-produzione)
+5. [Il metodo SMED in 8 passi](#il-metodo-smed-in-8-passi)
+6. [Le otto tecniche di Shingo con esempi](#le-otto-tecniche-di-shingo-con-esempi)
+7. [Tecniche di cambio per tipo di attrezzatura](#tecniche-di-cambio-formato-per-tipo-di-impianto)
+8. [Esempio SMED: un progetto completo su una pressa a iniezione](#esempio-smed-un-progetto-completo-su-una-pressa-per-lo-stampaggio-a-iniezione)
+9. [Dai cambi più brevi ai lotti più piccoli: EPEI e dimensionamento dei lotti](#dai-cambi-più-brevi-ai-lotti-più-piccoli-epei-e-dimensionamento-dei-lotti)
+10. [Sicurezza: cambi, lockout/tagout ed ergonomia](#sicurezza-cambi-lockouttagout-ed-ergonomia)
+11. [Qualità: approvazione del primo pezzo, poka-yoke e line clearance regolamentato](#qualità-approvazione-del-primo-pezzo-poka-yoke-e-verifica-regolamentata-della-pulizia-di-linea)
+12. [Persone e ruoli: chi fa cosa in un cambio](#persone-e-ruoli-chi-fa-cosa-in-un-cambio-formato)
+13. [Modelli e liste di controllo SMED](#modelli-e-checklist-smed)
+14. [Tabella di marcia: dal pilota a un sistema di cambio a livello di stabilimento](#roadmap-di-implementazione-dal-pilota-a-un-sistema-di-cambio-formato-a-livello-di-stabilimento)
+15. [KPI dei cambi: come misurare i progressi](#kpi-per-i-cambi-formato-come-misurare-i-progressi)
+16. [Il business case: costi, ROI e contabilità delle scorte](#il-business-case-costi-roi-e-contabilizzazione-delle-scorte)
+17. [SMED e altri strumenti lean](#smed-e-altri-strumenti-lean)
+18. [Esempi SMED documentati](#esempi-documentati-di-smed)
+19. [Errori comuni in SMED](#errori-comuni-nello-smed)
+20. [Limiti e critiche a SMED](#limiti-e-critiche-della-smed)
+21. [SMED in versione digitale: dati, video, MES e scheduling](#smed-diventa-digitale-dati-video-mes-e-scheduling)
+22. [Glossario SMED](#glossario-smed)
+23. [FAQ: domande su SMED e sui cambi](#faq-smed-e-domande-sui-cambi-formato)
+24. [Conclusioni e primi passi](#conclusioni-e-primi-passi)
+
+## Che cos'è SMED? Definizione e idea di fondo
+
+Il Lean Enterprise Institute (LEI) definisce [SMED](https://www.m365.fm/entity/smed/) come un processo per cambiare la produzione di un'attrezzatura da un codice articolo a un altro nel minor tempo possibile [1]. "Single-minute" non significa un minuto. Significa un numero di minuti a una sola cifra, quindi meno di dieci [1]. Il termine "die" (stampo) deriva dalle presse per stampaggio, dove il metodo è stato applicato per la prima volta, ma SMED si applica a qualsiasi cambio: stampi, dime, utensili da taglio, lastre di stampa, parti di formato su una linea di confezionamento, ricette su una riempitrice.
+
+Un [cambio](https://www.m365.fm/entity/setup-time/) (detto anche setup) è l'operazione con cui si commuta una macchina o un gruppo collegato di macchine, come una cella o una linea di assemblaggio, da un prodotto a un altro [2]. LEI misura il tempo di cambio dal momento in cui l'ultima unità della produzione completata lascia il processo fino a quando dal processo esce la prima unità accettabile della produzione successiva [2]. Questo confine è importante e ci torneremo nella sezione sulla misurazione.
+
+### Setup interno e setup esterno
+
+L'intuizione chiave di Shingo è stata dividere ogni cambio in due tipi di lavoro [1]:
+
+| Tipo | Definizione | Esempi |
+|---|---|---|
+| **Setup interno** | Lavoro che può essere svolto solo a macchina ferma | Sbloccare e rimuovere lo stampo vecchio, montare quello nuovo, sostituire le parti di formato all'interno della protezione, regolazione del primo pezzo |
+| **Setup esterno** | Lavoro che può essere svolto mentre la macchina sta ancora lavorando la produzione precedente o sta già lavorando quella successiva | Prelevare il nuovo stampo, gli utensili e il materiale; preriscaldare uno stampo; verificare che il nuovo stampo non sia danneggiato; riportare lo stampo vecchio in magazzino; documentazione |
+
+In un cambio non migliorato, quasi tutto avviene mentre la macchina è ferma: l'attrezzista ferma la macchina e poi va a cercare lo stampo, la gru, la chiave giusta e il disegno. SMED sposta la "ricerca" e il "prelievo" fuori dal tempo di fermo, poi interviene sul lavoro che richiede davvero una macchina ferma.
+
+### SMED, cambio rapido e riduzione del setup: i termini
+
+I termini si sovrappongono e negli stabilimenti statunitensi sono usati in modo intercambiabile:
+
+- **SMED (single-minute exchange of die):** il nome dato da Shingo al metodo e al suo obiettivo di minuti a una cifra [1][6].
+- **Quick changeover (QCO):** il termine comune sul pavimento di produzione americano per la stessa pratica, usato ad esempio dai centri NIST MEP [18].
+- **Setup reduction / setup time reduction:** un'etichetta generale che comprende SMED più interventi ingegneristici sulle attrezzature.
+- **OTED (one-touch exchange of die):** un obiettivo più rigoroso, un cambio in meno di 100 secondi [5].
+- **Changeover time reduction:** il risultato. SMED è il metodo più diffuso per ottenerlo, ma non l'unica leva; anche la progettazione del prodotto, dell'attrezzatura e la pianificazione contribuiscono [13][15].
+
+### L'idea di fondo in una frase
+
+Non fermare la macchina per nulla che potrebbe essere fatto mentre gira, e rendere ciò che deve avvenire durante il fermo così semplice da non richiedere ricerche, regolazioni né pezzi di prova.
+
+In pratica, l'approccio SMED separa le attività di setup che richiedono la macchina ferma da quelle che possono essere eseguite mentre la macchina è ancora in funzione, sposta il maggior numero possibile di lavori nel secondo gruppo e poi riduce ciò che resta. Questo fa di SMED un metodo di miglioramento continuo per il processo di cambio e uno degli strumenti standard della produzione snella.
+
+### Vantaggi di SMED
+
+Molte pagine web elencano i vantaggi con percentuali che raramente riportano una fonte. I vantaggi qui sotto sono i meccanismi; l'entità di ciascuno dipende dal punto di partenza.
+
+1. **Capacità:** ogni minuto tolto dal setup interno restituisce un minuto di tempo macchina. In un collo di bottiglia, è produzione che guadagna l'intero stabilimento.
+2. **Lotti più piccoli e meno scorte:** quando un cambio costa poco, si può produrre ogni prodotto più spesso e in quantità minori. LEI osserva che l'EPEx (every product every interval) di una macchina dipende direttamente dai suoi tempi di cambio [3].
+3. **Lead time più brevi e migliore puntualità di consegna:** meno lavoro in corso significa code più corte; lotti piccoli permettono di reagire alle variazioni della domanda in giorni invece che in settimane.
+4. **Qualità:** cambi standardizzati con impostazioni fisse riducono tentativi ed errori, scarti di avviamento e guasti sul primo pezzo. Meno pezzi prodotti per lotto significa anche meno pezzi a rischio quando si scopre un difetto.
+5. **Sicurezza ed ergonomia:** un cambio ben progettato elimina sollevamenti scomodi, il lavoro con le mani dentro lo stampo e la fretta, purché la sicurezza sia progettata e non aggirata (vedi la sezione sulla sicurezza).
+
+## Perché il tempo di cambio è importante: dimensione del lotto, scorte, flessibilità e OEE
+
+I cambi lunghi spingono gli impianti in una trappola prevedibile. Se un cambio costa due ore, nessuno vuole farne spesso, quindi l'impianto produce grandi lotti. I grandi lotti generano scorte, lead time lunghi e la necessità di prevedere la domanda dei clienti con largo anticipo. Le previsioni sbagliano più spesso quanto più si spingono in là nel tempo, quindi l'impianto accumula ancora più scorte di sicurezza. Il cambio diventa la causa nascosta di metà delle scorte presenti nello stabilimento.
+
+### La trappola della dimensione del lotto in numeri
+
+**Esempio svolto (illustrativo):** una pressa per stampaggio lavora 16 ore al giorno (960 minuti). Ogni cambio richiede 90 minuti. La pressa realizza 8 codici articolo.
+
+- Se la pressa esegue due cambi al giorno, perde 180 minuti, ovvero il 18,8 per cento del suo tempo (180 / 960). Produrre tutti e 8 i codici richiede quindi 4 giorni, pertanto ogni articolo viene realizzato circa ogni 4 giorni e l'impianto deve mantenere circa 4 giorni di scorta per ogni articolo, oltre alla scorta di sicurezza.
+- Per realizzare ogni articolo ogni giorno, la pressa dovrebbe eseguire 8 cambi al giorno: 8 × 90 = 720 minuti, il 75 per cento del suo tempo. Non è possibile se gli articoli richiedono più di 240 minuti di tempo di lavorazione.
+- Se il cambio viene ridotto a 15 minuti, 8 cambi costano 120 minuti, il 12,5 per cento della giornata. Ogni articolo può essere realizzato ogni giorno e le scorte di ciclo scendono da circa 4 giorni a circa 1 giorno.
+
+È questa la ragione per cui Toyota ha investito nella riduzione dei tempi di cambio molto prima che diventasse di moda: senza cambi rapidi, la produzione just-in-time a piccoli lotti non funziona.
+
+### Il tempo di cambio nell'OEE
+
+L'efficienza complessiva delle apparecchiature (OEE) moltiplica disponibilità, prestazione e qualità [4]. LEI include le regolazioni tra le sei principali perdite che l'OEE mira a ridurre [4]; nella maggior parte degli schemi OEE, i cambi pianificati vengono registrati come perdita di disponibilità, e lo scarto di avviamento dopo un cambio come perdita di qualità. Ne derivano due conseguenze:
+
+- Una riduzione del tempo di cambio si riflette sulla disponibilità OEE solo se il tempo risparmiato viene usato per produrre. Se l'impianto semplicemente lavora meno ore, la disponibilità OEE non si muove.
+- Se l'impianto usa il tempo risparmiato per effettuare cambi più frequenti (per ridurre le dimensioni dei lotti), la disponibilità OEE può restare stabile o persino diminuire mentre scorte e lead time migliorano. È un buon risultato. Valutate SMED in base all'obiettivo scelto, non solo sull'OEE.
+
+Le definizioni dettagliate dell'OEE sono trattate nella guida [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/), e il lato manutenzione dell'OEE nella guida su [TPM and OEE](https://www.m365.fm/en/learn/tpm-oee/).
+
+### Tre modi per usare il tempo guadagnato
+
+| Opzione | Quando è adatta | Cosa si misura |
+|---|---|---|
+| **Più capacità** (stesso numero di cambi) | La macchina è un collo di bottiglia, la domanda supera la capacità | Produzione per settimana, ore di straordinario, disponibilità OEE |
+| **Lotti più piccoli** (più cambi, stesso tempo totale di cambio) | La macchina ha capacità residua, scorte elevate, lead time lunghi, molte varianti | EPEI, dimensione del lotto, giorni di scorta, lead time |
+| **Combinazione** (parte capacità, parte lotti più piccoli) | La maggior parte degli impianti reali | Entrambi gli insiemi, con una ripartizione esplicita concordata con la pianificazione |
+
+Il motivo più comune per cui i progetti SMED deludono è che nessuno ha preso questa decisione. Il cambio diventa più veloce, la pianificazione mantiene le vecchie dimensioni dei lotti e il tempo risparmiato si perde in periodi di inattività più lunghi. Torneremo su questo punto nella sezione sugli errori.
+
+## Storia: da Taylor e Ford a Shingo e Toyota
+
+La riduzione dei tempi di attrezzaggio è più antica del suo nome. Frederick Winslow Taylor analizzò le parti non a valore aggiunto degli attrezzaggi in *Shop Management* (1911), Frank Gilbreth descrisse la riduzione dei tempi di attrezzaggio in *Motion Study* (1911), e gli stabilimenti di Henry Ford documentarono la riduzione degli attrezzaggi in *Ford Methods and Ford Shops* (1915) [5]. Nessuno di questi lavori la trasformò in un metodo strutturato e ampiamente diffuso [5]. Per gran parte del XX secolo, la risposta standard ai lunghi attrezzaggi fu matematica: il lotto economico di riordino, che accetta il costo di attrezzaggio come dato e calcola il lotto "giusto", cioè grande [5].
+
+### Toyota e il cambio stampo rapido
+
+In Toyota, i cambi utensile richiedevano, secondo quanto riportato, da due a otto ore nei primi anni del dopoguerra; l'articolo di Wikipedia segnala che questa cifra necessita di una citazione [5]. Taiichi Ohno diventò responsabile delle officine meccaniche di Toyota nel 1945 e, nel 1955, osservò delle presse per stampaggio Danly negli Stati Uniti; Toyota ne acquistò in seguito diverse per lo stabilimento di Motomachi [5]. Il programma interno di Toyota per il "cambio stampo rapido" utilizzava le domande ECRS (eliminare, combinare, riordinare, semplificare), che provenivano dal programma statunitense Training Within Industry della Seconda guerra mondiale [5][33]. Secondo la stessa fonte, i tempi di cambio di Toyota scesero da ore a 15 minuti negli anni Sessanta e a 3 minuti negli anni Settanta [5].
+
+### Shigeo Shingo
+
+Shigeo Shingo (1909–1990) fu un ingegnere industriale e consulente presso la Japan Management Association a partire dal 1945 [6]. Raccolse esperienze di miglioramento presso Toyo Kogyo (oggi Mazda) nel 1950 e presso Mitsubishi Heavy Industries a Hiroshima nel 1957; dal 1969 lavorò in Toyota alla riduzione del tempo di cambio stampo sulle presse, dove cambi stampo di una o due ore, a volte di mezza giornata, scesero a pochi minuti [6]. LEI colloca le sue intuizioni chiave, la separazione tra attrezzaggio interno ed esterno e la conversione del lavoro interno in esterno, negli anni Cinquanta e Sessanta [1].
+
+Shingo pubblicò il metodo in inglese nel 1985 come *A Revolution in Manufacturing: The SMED System* (Productivity Press) [6][7]. Il libro riporta che, nei suoi casi tra il 1975 e il 1985, i tempi di attrezzaggio scesero in media a circa il 2,5 per cento dell'originale, un fattore 40 [5]. Va considerata questa cifra come il riepilogo dello stesso Shingo sui suoi casi di consulenza, non come un parametro di riferimento indipendente.
+
+Nel 1988 la business school della Utah State University istituì in suo onore lo Shingo Prize; oggi il premio è gestito dallo Shingo Institute presso la Jon M. Huntsman School of Business [6][30].
+
+### SMED negli Stati Uniti
+
+I produttori statunitensi conobbero lo SMED attraverso la traduzione dei libri di Shingo negli anni Ottanta, la diffusione del just-in-time e il successo dei costruttori automobilistici giapponesi. Oggi è un modulo standard nella formazione lean, incluse le offerte di cambio rapido dei centri del NIST Manufacturing Extension Partnership (MEP) [18][31]. Il contesto lean più ampio è trattato nella guida [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/).
+
+## Come misurare correttamente il tempo di cambio produzione
+
+La maggior parte dei dati sui cambi produzione negli stabilimenti è sbagliata, e non perché le persone mentano. È sbagliata perché nessuno ha concordato dove inizia e dove finisce un cambio produzione. Il sistema ERP spesso registra come "setup" il tempo tra due conferme d'ordine; gli operatori spesso annotano il tempo in cui "la macchina era smontata"; gli ingegneri spesso cronometrano solo il cambio dello stampo. Tutti e tre sono più brevi della perdita reale.
+
+### La definizione: dall'ultimo pezzo buono al primo pezzo buono
+
+Usare il confine LEI: dall'ultima unità buona della vecchia produzione alla prima unità buona della nuova produzione [2]. Due precisazioni lo rendono rigoroso:
+
+1. **Alla velocità normale.** La nuova produzione è effettivamente "a regime" solo quando produce pezzi buoni alla cadenza standard. Leanproduction.com definisce la fine come il primo pezzo buono a piena velocità [19]. Se la linea gira a metà velocità per 20 minuti dopo la ripartenza, quei 20 minuti fanno parte della perdita da cambio produzione.
+2. **Compreso il rallentamento finale.** Se la vecchia produzione rallenta prima dell'arresto (ad esempio la linea viene svuotata e funziona a produzione parziale), va conteggiato anche questo. Alcuni stabilimenti lo chiamano le "3 Ups": pulizia, setup e avviamento [24].
+
+### Le tre fasi di un cambio produzione
+
+| Fase | Cosa succede | Perdite nascoste tipiche |
+|---|---|---|
+| **Rallentamento finale / pulizia** | Ultimi pezzi dell'ordine precedente, svuotamento della linea, rimozione del materiale, pulizia | La linea gira a velocità ridotta; gli operatori si allontanano per prendere il lavoro successivo |
+| **Setup (scambio)** | Rimozione e montaggio di utensili, stampi, parti di formato; modifica delle impostazioni | Ricerche, attesa della gru o del carrello elevatore, parti mancanti, bulloni |
+| **Avviamento / messa a regime** | Primi pezzi, misurazione, regolazione, approvazione, rampa fino alla piena velocità | Regolazioni per tentativi ed errori, attesa dell'approvazione qualità, scarti |
+
+La scomposizione di Shingo per un setup convenzionale, come riportata su Wikipedia, assegna circa il 30 percento alla preparazione e al controllo di materiali e utensili; circa il 5 percento al montaggio e allo smontaggio; circa il 15 percento al centraggio, al dimensionamento e all'impostazione delle condizioni; e circa il 50 percento alle prove e alle regolazioni [5]. Un manuale universitario aperto di lean manufacturing offre un quadro simile per lo stampaggio della lamiera, con circa il 20-50 percento del tempo di setup speso in regolazioni [36]. La lezione pratica: lo scambio in sé è la parte piccola. Le parti grandi sono la preparazione e la messa a regime.
+
+### Formule per i cambi produzione
+
+**Tempo di cambio produzione (per evento):**
+Tempo di cambio produzione = tempo del primo pezzo buono alla velocità standard − tempo dell'ultimo pezzo buono della produzione precedente
+
+**Tempo medio di cambio produzione:**
+Tempo medio di cambio produzione = somma di tutti i tempi di cambio produzione / numero di cambi produzione
+
+**Quota dei cambi produzione sul tempo disponibile:**
+Quota cambi produzione = tempo totale di cambio produzione / tempo di produzione pianificato × 100%
+
+**Rapporto interno:**
+Rapporto interno = tempo di setup interno / lavoro totale di setup × 100%
+
+**Costo di un cambio produzione (modello semplice):**
+Costo per cambio produzione = margine di contribuzione perso (solo se la macchina è un collo di bottiglia o se la produzione è venduta interamente) + costo del lavoro della squadra di cambio + scarti di avviamento + materiali di consumo
+
+MachineMetrics, un fornitore di sistemi di monitoraggio macchine, usa una suddivisione comparabile: costo del lavoro perso = ore di fermo × numero di addetti × costo orario del lavoro, e valore del prodotto perso = prezzo unitario × velocità standard × ore di fermo [21]. Attenzione al secondo termine: conta come perdita reale solo se la produzione persa avrebbe potuto essere venduta. Su una macchina con capacità residua, il costo di un cambio produzione è soprattutto lavoro e scarti, e il beneficio dello SMED sta nei lotti più piccoli, non nel recupero di produzione.
+
+**Esempio svolto (illustrativo):** Un centro di lavoro CNC lavora su due turni da 8 ore, 5 giorni a settimana, con 60 minuti di pause pianificate al giorno: tempo di produzione pianificato = (16 − 1) × 60 × 5 = 4.500 minuti a settimana. La settimana scorsa ha avuto 9 cambi produzione che hanno richiesto 52, 68, 47, 95, 61, 58, 73, 49 e 87 minuti.
+
+- Totale = 590 minuti; media = 590 / 9 = 65,6 minuti.
+- Quota dei cambi produzione = 590 / 4.500 = 13,1 percento.
+- Dispersione: il più breve 47, il più lungo 95 minuti, un'ampiezza di 48 minuti. Un'ampiezza così grande di solito significa che non esiste uno standard; quelli lunghi sono quelli in cui mancano utensili o programmi.
+- Costo: squadra di 1 addetto al cambio con una tariffa oraria caricata di 48 $ (illustrativo) = 590 / 60 × 48 $ = 472 $ a settimana di lavoro. Se la macchina è un collo di bottiglia con un margine di contribuzione di 180 $ all'ora, il margine perso è 590 / 60 × 180 $ = 1.770 $ a settimana, circa 92.000 $ l'anno su 52 settimane. È questo numero che giustifica un progetto.
+
+### Come raccogliere i dati
+
+1. **Prima il video.** Filmate un cambio formato completo, dall'ultimo pezzo buono al primo pezzo buono, con un orologio visibile. Una telecamera sulla macchina, idealmente una seconda che segue l'attrezzista. Chiedete prima il permesso alla squadra e spiegate lo scopo: il video riguarda il processo, non le persone. Il centro Michigan di NIST MEP ha usato video, diagramma a spaghetti e grafico di analisi del setup nel progetto Brighton NC Machine [17].
+2. **Diagramma a spaghetti.** Tracciate il percorso a piedi dell'attrezzista su una planimetria. I cambi formato spesso comportano centinaia o migliaia di piedi di cammino; nell'esempio Brighton erano 9.121 piedi per cambio formato prima del miglioramento [17].
+3. **Elenco degli elementi.** Scomponete il video in elementi di alcuni secondi o alcuni minuti: "camminare fino al magazzino utensili, 3:20", "allentare 8 bulloni di serraggio, 4:10". Un cambio formato tipico si scompone in circa 30-50 elementi, secondo leanproduction.com [19].
+4. **Due settimane di baseline.** Raccogliete orari di inizio e fine di tutti i cambi formato per almeno due settimane prima di modificare qualsiasi cosa, così conoscete la media e la dispersione [19]. Vorne avverte che le squadre cambiano comportamento quando sanno di essere osservate (effetto Hawthorne), quindi il primo cambio filmato può essere più veloce del normale [20].
+
+Il modello per l'elenco degli elementi è nella [sezione modelli](#modelli-e-checklist-smed).
+
+## Il metodo SMED in 8 passi
+
+Shingo ha descritto quattro fasi concettuali, spesso chiamate fasi SMED: nella fase preliminare setup interno ed esterno sono mescolati; la fase 1 li separa; la fase 2 converte l'interno in esterno; la fase 3 razionalizza tutti gli aspetti del setup [5]. Le fonti di pratica sviluppano questo in sette passi base: osservare, separare, convertire, razionalizzare l'interno, razionalizzare l'esterno, documentare, ripetere [5]. Gli otto passi seguenti aggiungono il passo che la maggior parte delle guide omette: preparare il progetto, inclusi la sicurezza e la decisione su come usare il tempo risparmiato.
+
+| Passo | Fase Shingo | Risultato |
+|---|---|---|
+| 0. Preparare: scegliere la macchina, la squadra, l'obiettivo e l'uso del tempo risparmiato | (preliminare) | Charter, dati di baseline, revisione della sicurezza |
+| 1. Registrare il cambio formato attuale | fase preliminare | Video, elenco elementi con tempi, diagramma a spaghetti |
+| 2. Separare gli elementi interni ed esterni | fase 1 | Ogni elemento marcato I o E; checklist e piano di preparazione anticipata |
+| 3. Convertire l'interno in esterno | fase 2 | Lista azioni: preparazione, standardizzazione delle funzioni, dime intermedie |
+| 4. Razionalizzare gli elementi interni | fase 3 | Morsetti rapidi, regolazioni eliminate, lavoro in parallelo |
+| 5. Razionalizzare gli elementi esterni | fase 3 | Carrelli, pannelli ombra, stoccaggio vicino alla macchina |
+| 6. Standardizzare e formare | (follow-up) | Foglio standard del cambio formato, registrazioni di formazione |
+| 7. Mantenere e ripetere | (follow-up) | KPI in bacheca, audit, ciclo successivo |
+
+### Passo 0: Preparare il progetto
+
+**Scegliere la macchina pilota.** Buoni pilota hanno un cambio formato di circa 30-90 minuti che avviene più volte alla settimana, una squadra collaborativa e un problema aziendale evidente (collo di bottiglia, scorte elevate, ordini in ritardo). Vorne suggerisce un cambio formato pilota di 30-60 minuti [20]; leanproduction.com raccomanda SMED quando i cambi formato rappresentano almeno il 20 percento del tempo produttivo perso, e TPM prima altrimenti [19]. Entrambe sono regole empiriche dei fornitori, non standard, ma indicano la direzione giusta: non iniziate con un cambio di 12 ore né con uno di 5 minuti.
+
+**Formare la squadra.** Operatori e attrezzisti che eseguono il cambio formato ogni giorno, un tecnico di manutenzione, un ingegnere di produzione, un tecnico qualità per l'approvazione del primo pezzo e un rappresentante della sicurezza. Un supervisore sponsorizza la squadra. Quattro-sette persone è una dimensione gestibile.
+
+**Concordare l'obiettivo e l'uso del tempo risparmiato.** Scrivete la baseline (media e intervallo), il target (ad esempio, riduzione del 50 percento nel primo ciclo, come suggerisce Vorne [20]) e cosa farà la pianificazione con il tempo: capacità, lotti più piccoli o una suddivisione.
+
+**Revisione della sicurezza.** Elencate le fonti di energia (elettrica, idraulica, pneumatica, gravità, termica) e la procedura attuale di controllo dell'energia. Decidete prima del workshop quali passi rientrano nel lockout/tagout. Non accettate mai idee "più veloci" che saltano l'isolamento dell'energia (vedi la sezione sicurezza).
+
+### Passo 1: Registrare il cambio formato attuale
+
+Filmatelo, costruite l'elenco degli elementi e disegnate lo spaghetti diagram. Scrivete gli elementi nell'ordine in cui si sono svolti, con orario di inizio, durata e chi li ha eseguiti. Segnalate subito gli sprechi evidenti: ricerche, spostamenti, attese della gru, prove di avviamento.
+
+Domande da porsi per ogni elemento (anche le classiche domande in stile "cinque perché" funzionano):
+
+- Perché questa operazione viene eseguita? (Possiamo eliminarla?)
+- Perché proprio ora, mentre la macchina è ferma? (Può essere esterna?)
+- Perché in questo modo? (Può essere più semplice?)
+- Perché la fa questa persona? (Possono farla due persone in parallelo, o può farla l'operatore?)
+
+### Passo 2: Separare gli elementi interni ed esterni
+
+Contrassegnate ogni elemento come I (richiede la macchina ferma) o E (potrebbe essere eseguito mentre la macchina è in funzione). Non modificate ancora il metodo; smettete solo di svolgere lavoro esterno durante la fermata. Questo passo è soprattutto organizzativo:
+
+- **Checklist di pre-cambio:** tutto ciò che serve al lavoro successivo (stampo, attrezzi, dime, inserti, materiale, programma, disegno, calibri, imballaggio) viene elencato e verificato prima che la macchina si fermi.
+- **Verifiche funzionali:** il nuovo stampo viene controllato per danni e completezza prima di essere montato, non dopo il primo pezzo difettoso.
+- **Trasporto:** il nuovo stampo viene posizionato vicino alla macchina prima della fermata; lo stampo vecchio torna in magazzino dopo la ripartenza.
+
+Leanproduction.com osserva che spostare gli elementi in esterni può quasi dimezzare il tempo di cambio [19]. Ciò corrisponde all'esperienza sul campo, ma dipende interamente da quanta ricerca e quanto recupero avvengono oggi.
+
+### Passo 3: Trasformare gli elementi interni in esterni
+
+Ora riesaminate ogni elemento I rimanente e chiedetevi cosa dovrebbe cambiare perché diventi esterno. Le tecniche di Shingo in questo caso sono preparare in anticipo le condizioni operative, standardizzare le funzioni e usare dime intermedie [5]:
+
+- **Preriscaldare** stampi e matrici fuori dalla macchina, così che i primi colpi non debbano portarli a temperatura.
+- **Preregolare** gli utensili in un preselettore o su una seconda attrezzatura mentre la macchina lavora.
+- **Standardizzare** le dimensioni che contano per la macchina (altezza di serraggio, posizioni di centraggio, punti di collegamento), così che un nuovo stampo non richieda alcuna regolazione.
+- **Dime intermedie**: montate il pezzo o lo stampo successivo su un pallet o una piastra base standard fuori dalla macchina, poi sostituite l'intero pallet.
+
+### Passo 4: Semplificare gli elementi interni
+
+Ciò che resta interno viene reso rapido e semplice:
+
+- **Morsetti funzionali** al posto dei bulloni: fissaggi a un quarto di giro, morsetti a camma, asole a U in modo che un bullone richieda solo mezzo giro, serraggio idraulico o magnetico.
+- **Eliminare le regolazioni:** arresti fissi, perni di centraggio, scale e riferimenti, impostazioni memorizzate come ricette. La regolazione è la singola categoria più pesante del tempo di attrezzaggio nella suddivisione di Shingo [5].
+- **Operazioni in parallelo:** due persone sui lati opposti della macchina, ciascuna con una sequenza definita, possono ridurre il tempo complessivo di più della metà eliminando gli spostamenti intorno alla macchina. Servono un chiaro sistema di segnalazione e, sotto lockout/tagout, ognuno applica il proprio lucchetto.
+- **Un utensile, una misura:** standardizzate le misure dei bulloni, così un solo utensile funziona ovunque.
+
+### Passo 5: Semplificare gli elementi esterni
+
+Il lavoro esterno non ferma la macchina, ma impegna le persone e può ritardare l'avvio del cambio. Semplificatelo con carrelli per il cambio organizzati per sequenza, pannelli portautensili (shadow board), stoccaggio di stampi e utensili nel punto d'uso secondo le [5S](https://www.m365.fm/en/learn/5s-visual-management/), e segnali visivi chiari ("prossimo lavoro pronto").
+
+### Passo 6: Standardizzare e formare
+
+Scrivete il nuovo metodo come foglio di cambio standard: la sequenza degli elementi, chi fa cosa, i punti chiave (sicurezza, qualità), i tempi e gli utensili necessari. LEI descrive il [lavoro standardizzato](https://www.m365.fm/entity/standard-work/) come la definizione di procedure precise per il lavoro di ciascun operatore [26]. Formate tutti coloro che eseguono il cambio, non solo l'equipe pilota; il metodo TWI Job Instruction, che scompone un lavoro in passi importanti e punti chiave, è un formato pratico [33]. Il gruppo di articoli sul [lavoro standard](https://www.m365.fm/en/learn/shop-floor-management/standard-work/) illustra il formato in dettaglio.
+
+### Passo 7: Consolidare e ripetere
+
+Riportate il tempo di cambio formato sulla lavagna del reparto, verificate gli scostamenti ogni giorno e controllate regolarmente lo standard. La SMED è un ciclo di miglioramento continuo, non un evento una tantum. Avviate il ciclo successivo: il riepilogo sulla pratica SMED di Wikipedia indica che possono essere necessarie diverse iterazioni per scendere sotto i dieci minuti [5]. Un secondo ciclo attacca di norma gli elementi dipendenti dall'attrezzatura hardware che il primo ciclo aveva rinviato.
+
+## Le otto tecniche di Shingo con esempi
+
+Shingo ha riassunto il suo approccio in otto tecniche [5]. La tabella riporta per ciascuna una spiegazione semplice ed esempi tratti da settori diversi.
+
+| # | Tecnica | Cosa significa | Esempi |
+|---|---|---|---|
+| 1 | Separare il setup interno da quello esterno | Non fermare la macchina per lavori che si possono svolgere mentre essa è in funzione | Checklist, preparazione di stampo e materiale prima dell'arresto |
+| 2 | Convertire il setup interno in esterno | Cambiare il metodo in modo che il lavoro si sposti fuori dall'arresto | Preriscaldamento degli stampi, preregolazione degli utensili, preassemblaggio delle parti di formato |
+| 3 | Standardizzare la funzione, non la forma | Standardizzare solo le caratteristiche con cui la macchina interagisce, non l'intero utensile | Stessa altezza e stesso bordo di serraggio su ogni stampo tramite blocchi distanziatori; stesso accoppiamento su ogni stampo |
+| 4 | Usare serraggi funzionali o eliminare i fissaggi | Fissare con un solo movimento, o non fissare affatto | Viti a un quarto di giro, leve a camma, fori a pera, morsetti idraulici, piastre magnetiche |
+| 5 | Usare dime intermedie | Preparare su un supporto standard fuori dalla macchina e sostituire il supporto | Pallet di serraggio a punto zero sui centri di lavoro, piastre di base per gli stampi da pressa |
+| 6 | Adottare operazioni in parallelo | Più persone lavorano contemporaneamente secondo una sequenza definita | Due attrezzisti ai due lati di una pressa; l'operatore prepara il materiale mentre l'attrezzista sostituisce lo stampo |
+| 7 | Eliminare le regolazioni | Sostituire le prove per tentativi con posizioni fisse e impostazioni memorizzate | Perni di posizionamento, arresti, scale, download di ricette, display digitali |
+| 8 | Meccanizzazione | Usare l'assistenza motorizzata dove serve davvero, dopo le altre sette | Carrelli porta-stampi a rulli, sollevatori di stampi, assi di regolazione motorizzati |
+
+Due osservazioni sull'elenco. In primo luogo, la meccanizzazione è volutamente l'ultima. L'hardware acquistato prima dei passi organizzativi spesso automatizza lo spreco. In secondo luogo, "standardizzare la funzione, non la forma" è la tecnica meno utilizzata. Un impianto non ha bisogno di ricostruire 200 stampi; spesso basta un insieme di blocchi distanziatori o piastre adattatrici che portino tutti gli stampi alla stessa altezza di serraggio e allo stesso bordo di posizionamento.
+
+## Tecniche di cambio formato per tipo di impianto
+
+I principi sono gli stessi ovunque, ma le leve principali variano a seconda del processo. Le tabelle seguenti sono una checklist di pratica, non un benchmark basato su fonti.
+
+### Presse per stampaggio
+
+| Leva | Esempio |
+|---|---|
+| Altezza standard dello stampo e posizionamento | Parallele o blocchi distanziatori portano tutti gli stampi alla stessa altezza di chiusura; perni di centraggio o un arresto posteriore centrano lo stampo |
+| Trasporto degli stampi | Carrelli porta-stampo o bolster a rulli predisposti alla pressa; binari a rulli o a sfere sul bolster |
+| Bloccaggio | Morsetti idraulici o meccanici a sgancio rapido; asole a U e una sola misura di bullone, se i bulloni restano |
+| Impostazioni | Altezza di chiusura, pressione del contrappeso e impostazioni di avanzamento memorizzate per ogni stampo; scale graduate ben visibili |
+| Sicurezza | Blocchi di sicurezza ogni volta che lo stampo viene regolato o riparato in pressa, come richiesto da OSHA [10]; procedura di regolazione dello stampo ai sensi di 29 CFR 1910.217(d)(9) |
+
+### Stampaggio a iniezione
+
+| Leva | Esempio |
+|---|---|
+| Preriscaldamento | Stampo preriscaldato su un'unità di controllo della temperatura separata prima della sostituzione |
+| Connessioni | Multiaccoppiamenti per acqua e collegamenti del canale caldo, codificati a colori |
+| Materiale | Materiale successivo già essiccato e pronto; composto di spurgo e procedura standardizzati |
+| Bloccaggio | Sistemi di cambio stampo rapido (piani magnetici o idraulici), spessore standard delle piastre stampo |
+| Impostazioni | Parametri di processo caricati da una ricetta invece che regolati a memoria |
+
+### Lavorazione CNC
+
+| Leva | Esempio |
+|---|---|
+| Preimpostazione degli utensili | Utensili misurati offline in un preimpostatore, correzioni trasferite al controllo |
+| Attrezzaggio del pezzo | Bloccaggio a punto zero, pallet standardizzati, attrezzature dedicate conservate vicino alla macchina |
+| Programmi | Programmi collaudati rilasciati e caricati in anticipo; nessuna modifica alla macchina |
+| Primo pezzo | Il tastatore in macchina sostituisce la misurazione manuale per impostare le correzioni del sistema di riferimento |
+| Famiglie di utensili | Libreria utensili standard, in modo che la maggior parte delle lavorazioni richieda pochi cambi utensile |
+
+### Linee di confezionamento e riempimento
+
+| Leva | Esempio |
+|---|---|
+| Parti di formato | Parti di formato codificate a colori per ogni dimensione di prodotto, conservate su un carrello nell'ordine di cambio |
+| Regolazioni | Arresti fissi e scale numerate al posto della regolazione libera; assi servo con posizioni memorizzate |
+| Pulizia | Sequenza di pulizia standardizzata; pulizia a secco prima; pulizia in parallelo delle parti rimosse |
+| Etichette e materiali | Checklist di sgombero linea; preparazione di etichette, cartoni e tappi prima dell'arresto |
+| Avviamento | Controlli definiti sul primo pezzo; procedura di rampa di velocità |
+
+### Cambi dominati dalla pulizia e regolamentati (alimentare, farmaceutico, chimico)
+
+Negli stabilimenti alimentari, delle bevande, farmaceutici e chimici il "cambio" vero e proprio è spesso piccolo, mentre pulizia e verifica sono grandi. Il pensiero SMED resta valido: preparare in anticipo detergenti, utensili e documenti; pulire le parti rimovibili offline mentre la macchina viene rimontata con un secondo set; sequenziare i prodotti per ridurre al minimo le pulizie complete (dal chiaro allo scuro, dal privo di allergeni a quello che li contiene). La differenza è che alcuni passaggi sono obbligatori e non si possono abbreviare saltandoli:
+
+- I produttori farmaceutici statunitensi devono ispezionare le strutture di confezionamento ed etichettatura immediatamente prima dell'uso, per assicurarsi che tutti i prodotti farmaceutici e i materiali di confezionamento ed etichettatura non idonei delle operazioni precedenti siano stati rimossi, e documentare i risultati nei registri di produzione del lotto (21 CFR 211.130(e)) [11].
+- Gli stabilimenti alimentari statunitensi soggetti alla norma sui controlli preventivi devono disporre di controlli sugli allergeni alimentari che includano procedure per proteggere gli alimenti dalla contaminazione crociata da allergeni durante conservazione, manipolazione e uso (21 CFR 117.135(c)(2)) [37].
+
+In questo contesto SMED riduce il lavoro attorno ai passaggi obbligatori e rende quei passaggi più rapidi e affidabili, ad esempio con una checklist di sgombero linea e una sequenza fissa. Non li elimina mai.
+
+### Linee e celle di assemblaggio
+
+I cambi nell'assemblaggio riguardano soprattutto materiali e informazioni: kit diversi, istruzioni di lavoro diverse, attrezzature diverse in alcune postazioni. Le leve sono la preparazione dei kit della variante successiva prima del cambio, attrezzature che coprono più varianti, istruzioni di lavoro digitali che cambiano con l'ordine, e cambi "a scorrimento" in cui ogni postazione passa alla nuova variante quando arriva il primo pezzo della stessa, così che la linea non si fermi nel suo complesso.
+
+## Esempio SMED: un progetto completo su una pressa per lo stampaggio a iniezione
+
+L'esempio seguente è illustrativo. I numeri sono realistici per una fonderia di stampaggio di medie dimensioni, ma non descrivono uno stabilimento reale. Mostrano come si incastrano i passaggi e come calcolare l'effetto.
+
+**Situazione.** Una pressa per lo stampaggio a iniezione da 300 tonnellate lavora 6 stampi per una famiglia di carter. Opera su 3 turni da 8 ore con 30 minuti di pausa per turno, 5 giorni a settimana: tempo di produzione pianificato = 3 × 7,5 × 60 × 5 = 6.750 minuti a settimana. Cambia stampo 5 volte a settimana. Base di partenza su due settimane: tempo medio di cambio 96 minuti, intervallo da 78 a 131 minuti. La macchina non è un collo di bottiglia; il problema sono 11 giorni di scorte di prodotti finiti e frequenti ordini urgenti.
+
+**Obiettivo concordato con la pianificazione.** Ridurre il tempo medio di cambio di almeno il 50 per cento nel primo ciclo e usare il tempo recuperato per effettuare più cambi, in modo che ogni stampo venga eseguito almeno ogni 3 giorni invece che ogni 6.
+
+### Passo 1: elenco degli elementi (prima)
+
+| # | Elemento | Tempo (min) | I/E oggi | Potrebbe essere |
+|---|---|---|---|---|
+| 1 | Ultimi colpi, svuotamento della tramoggia, arresto macchina | 6 | I | I (in parte E: svuotamento della tramoggia prima della fine della tiratura) |
+| 2 | Cammino fino al magazzino stampi, ricerca del successivo stampo, recupero del carroponte | 14 | I | E |
+| 3 | Scollegamento delle linee di acqua e canale caldo (12 raccordi singoli) | 8 | I | I, da semplificare |
+| 4 | Sbloccaggio dello stampo (8 bulloni), sollevamento e rimozione | 9 | I | I, da semplificare |
+| 5 | Sollevamento del nuovo stampo, allineamento a occhio, bloccaggio (8 bulloni) | 13 | I | I, da semplificare |
+| 6 | Collegamento delle linee di acqua e canale caldo, ricerca del tubo giusto per ogni attacco | 10 | I | I, da semplificare |
+| 7 | Ricerca del materiale, essiccazione | 7 | I | E |
+| 8 | Riscaldamento dello stampo alla temperatura | 12 | I | E (preriscaldo) |
+| 9 | Impostazione dei parametri dalla scheda di set-up, regolazione | 9 | I | I, eliminare la regolazione |
+| 10 | Colpi di prova, regolazione, attesa dell'approvazione qualità | 8 | I | I, da semplificare |
+| **Totale interno (tempo trascorso)** | | **96** | | |
+
+I due candidati esterni (elementi 2 e 7) e il preriscaldo (elemento 8) sommano 33 minuti di fermo macchina che non richiederebbero una macchina ferma.
+
+### Passi 2 e 3: separare e convertire
+
+- Gli elementi 2 e 7 diventano esterni con una checklist pre-cambio attivata 45 minuti prima della fine pianificata della tiratura: stampo, posto nel carroponte, materiale (essiccato), tubi, documenti, calibro del primo pezzo. Risparmio: 21 minuti.
+- L'elemento 8 diventa esterno con una stazione di preriscaldo in cui lo stampo successivo viene portato in temperatura mentre quello vecchio è in produzione. Risparmio: circa 10 minuti (restano 2 minuti per la stabilizzazione in macchina).
+- Elemento 1: la tramoggia viene svuotata negli ultimi minuti della tiratura invece che dopo l'arresto. Risparmio: 3 minuti.
+
+Risultato dopo i primi due passi: 96 − 21 − 10 − 3 = **62 minuti**, ottenuti principalmente con una checklist, un preriscaldatore e disciplina.
+
+### Passo 4: semplificare l'interno
+
+| # | Intervento | Prima (min) | Dopo (min) |
+|---|---|---|---|
+| 3 + 6 | Piastre multiraccordo per acqua e canale caldo, codificate a colori | 18 | 4 |
+| 4 + 5 | Anello di centraggio e sedi di serraggio standardizzate, morsetti a rapida chiusura; una seconda persona per il lavoro in parallelo | 22 | 9 |
+| 9 | Parametri di processo memorizzati per stampo e caricati dal controllore | 9 | 2 |
+| 10 | Controllo del primo pezzo con un calibro dedicato alla macchina, tecnico qualità preavvisato | 8 | 5 |
+| 1 | Fine tiratura con tramoggia già vuota | 3 | 3 |
+| 8 | Stabilizzazione dopo il preriscaldo | 2 | 2 |
+| **Totale** | | **62** | **25** |
+
+Il tempo trascorso è ora di 25 minuti. Si noti che il lavoro in parallelo di due persone riduce il tempo trascorso ma non il tempo di lavoro: il contenuto di manodopera degli elementi 4 e 5 resta di circa 18 minuti-persona.
+
+### Passo 6: standardizzare
+
+La nuova sequenza viene scritta come foglio di cambio standard con due colonne (attrezzista A, attrezzista B), addestrata su tutti e tre i turni e verificata ogni settimana per un mese. Dopo quattro settimane, la media è di 27 minuti con un intervallo da 23 a 34 minuti.
+
+### L'effetto
+
+| Indicatore | Prima | Dopo |
+|---|---|---|
+| Tempo medio di cambio | 96 min | 27 min (−72%) |
+| Intervallo dei cambi | 78–131 min | 23–34 min |
+| Cambi per settimana | 5 | 10 |
+| Tempo totale di cambio a settimana | 480 min | 270 min |
+| Quota dei cambi sul tempo pianificato | 7,1% | 4,0% |
+| Intervallo con cui ogni stampo viene eseguito (EPEI) | circa 6 giorni | circa 3 giorni |
+| Scorte di prodotti finiti (scorta di ciclo) | circa 11 giorni | circa 6 giorni (obiettivo) |
+
+La macchina ora cambia configurazione il doppio delle volte e nonostante ciò trascorre 210 minuti in meno a settimana nei cambi. Le scorte di ciclo si riducono all'incirca in proporzione all'intervallo. L'investimento: una stazione di preriscaldamento, sei set di accoppiamenti multipli, la standardizzazione dei morsetti e due giorni di tempo del team. Il business case per questo tipo di progetto è calcolato nella [sezione business case](#il-business-case-costi-roi-e-contabilizzazione-delle-scorte).
+
+## Dai cambi più brevi ai lotti più piccoli: EPEI e dimensionamento dei lotti
+
+SMED crea potenziale; la schedulazione lo trasforma in risultati. Due strumenti collegano il tempo di cambio con la dimensione del lotto e le scorte: EPEI e la classica formula di dimensionamento del lotto.
+
+### Cosa significa EPEI
+
+EPEI sta per "every part every interval" (il lessico LEI ora usa il termine EPEx, "every product every interval", ovvero "ogni prodotto ogni intervallo"). Descrive con quale frequenza una macchina o un processo cicla attraverso tutti i suoi codici articolo: se una macchina viene riconfigurata in modo da produrre ogni codice articolo ogni tre giorni, il suo EPEx è di tre giorni [3]. LEI osserva che l'EPEx dipende dai tempi di cambio e dal numero di codici articolo; cambi lunghi e molti codici lo fanno salire, a meno che il tempo di cambio non venga ridotto [3]. Un EPEI più breve significa lotti più piccoli e meno scorte. Nella [mappatura del flusso di valore](https://www.m365.fm/en/learn/value-stream-mapping/), l'EPEI è una voce standard nel riquadro dati di un processo con cambi [35].
+
+### Come calcolare l'EPEI
+
+Una formula comune tra i professionisti (derivata dal bilancio dei tempi di un processo; non è una formula LEI):
+
+EPEI = tempo totale di cambio per un ciclo completo su tutti i codici / (tempo disponibile al giorno − tempo di marcia necessario al giorno)
+
+L'idea: ogni giorno la macchina necessita di una quantità fissa di tempo di marcia per soddisfare la domanda. Il tempo rimanente può essere impiegato nei cambi. Più tempo di cambio richiede un ciclo completo su tutti i codici, più giorni occorrono per completare il ciclo.
+
+**Esempio svolto (a scopo illustrativo):** Una macchina ha 900 minuti di tempo disponibile al giorno. Produce 4 codici con la seguente domanda giornaliera e i seguenti tempi ciclo:
+
+| Codice | Domanda giornaliera (pezzi) | Tempo ciclo (min/pezzo) | Tempo di marcia al giorno (min) | Tempo di cambio (min) |
+|---|---|---|---|---|
+| A | 400 | 0,8 | 320 | 40 |
+| B | 300 | 0,8 | 240 | 40 |
+| C | 150 | 1,0 | 150 | 60 |
+| D | 50 | 1,2 | 60 | 60 |
+| **Totale** | | | **770** | **200** |
+
+- Tempo rimasto per i cambi al giorno: 900 − 770 = 130 minuti.
+- Un ciclo completo sui quattro codici richiede 200 minuti di tempo di cambio.
+- EPEI = 200 / 130 = 1,54 giorni, arrotondato in pratica per eccesso a **2 giorni**: ogni codice viene prodotto ogni 2 giorni.
+- Dimensioni dei lotti con EPEI di 2 giorni = 2 giorni di domanda: A 800, B 600, C 300, D 100 pezzi.
+
+**Ora applichiamo SMED.** I cambi scendono a 15 minuti per A e B e a 20 minuti per C e D: totale = 70 minuti.
+
+- EPEI = 70 / 130 = 0,54 giorni, arrotondato per eccesso a **1 giorno**: ogni codice ogni giorno.
+- Le dimensioni dei lotti si dimezzano: A 400, B 300, C 150, D 50 pezzi.
+- La scorta di ciclo media (circa mezzo lotto, se la domanda è costante) scende da circa 1 giorno di domanda a circa mezzo giorno.
+- Tempo residuo: con EPEI di 1 giorno, i cambi richiedono 70 dei 130 minuti liberi; restano 60 minuti come riserva per guasti e picchi di domanda.
+
+Due note pratiche. Primo, non pianificare mai con zero tempo residuo; le macchine reali hanno guasti, e un EPEI che utilizza ogni minuto libero crolla al primo giorno difficile. Secondo, l'EPEI può essere diverso per i codici ad alto volume e quelli a basso volume: A e B ogni giorno, C e D ogni due giorni è spesso un compromesso migliore di un intervallo uniforme. È qui che SMED incontra [heijunka](https://www.m365.fm/entity/heijunka/), il livellamento della produzione per volume e mix [25].
+
+### La formula del lotto economico e perché il costo di setup conta
+
+Il lotto economico di riordino (EOQ), sviluppato da Ford W. Harris nel 1913 [39] e per decenni approccio standard al dimensionamento dei lotti [5], bilancia il costo di setup con il costo di mantenimento:
+
+EOQ = √(2 × D × S / H)
+
+dove D = domanda annua, S = costo per setup (o ordine), H = costo annuo di mantenimento per unità. Per una produzione con un tasso produttivo finito, il lotto economico di produzione (EPQ) aggiunge un fattore correttivo √(1 / (1 − d/p)), dove d è il tasso di domanda e p il tasso di produzione. I dettagli di entrambe le formule, comprese le loro ipotesi, sono trattati nel gruppo di argomenti sul [dimensionamento dei lotti](https://www.m365.fm/en/learn/production-scheduling-aps/lot-sizing/).
+
+Il punto chiave per SMED è la radice quadrata. Se il costo di setup S scende a un quarto, la dimensione economica del lotto si dimezza (√0,25 = 0,5). Se S scende a un nono, la dimensione del lotto scende a un terzo.
+
+**Esempio illustrativo:** D = 24.000 pezzi all'anno, H = 2,40 $ per pezzo all'anno (ad esempio, costo di possesso del 20 percento su un componente da 12 $), S = 160 $ per attrezzaggio (due ore di una squadra di due persone a 40 $ l'ora, costo pieno).
+
+- EOQ = √(2 × 24.000 × 160 / 2,40) = √3.200.000 ≈ **1.789 pezzi**, circa 13 lotti all'anno (24.000 / 1.789 ≈ 13,4).
+- Dopo SMED, il cambio dura 30 minuti con la stessa squadra: S = 40 $.
+- EOQ = √(2 × 24.000 × 40 / 2,40) = √800.000 ≈ **894 pezzi**, circa 27 lotti all'anno (24.000 / 894 ≈ 26,8).
+- La scorta media di ciclo (EOQ / 2) scende da circa 894 a circa 447 pezzi; a 12 $ per pezzo, per questo solo componente si liberano circa 5.400 $ di inventario.
+
+La formula ha limiti ben noti: presuppone una domanda costante, costi noti e nessun vincolo di capacità, e il "costo per attrezzaggio" è difficile da definire quando l'attrezzista è comunque pagato. I praticanti del Lean la usano quindi come argomento di direzione ("un costo di attrezzaggio più basso giustifica lotti più piccoli"), non come regola di schedulazione. Un sistema pull con [kanban](https://www.m365.fm/en/learn/kanban-pull-system/) e una schedulazione basata su EPEI di solito la sostituisce [34].
+
+### Verifica della capacità: puoi permetterti più cambi?
+
+Prima di pianificare la riduzione delle dimensioni dei lotti, verifica il bilancio di capacità:
+
+Tempo richiesto a settimana = Σ (domanda × tempo ciclo) + numero di cambi × tempo medio di cambio
+
+Deve restare ampiamente al di sotto del tempo disponibile. Su un collo di bottiglia, un cambio più breve è in primo luogo un guadagno di capacità; decidere se usarlo per lotti più piccoli è una scelta deliberata, che la guida sulla [teoria dei vincoli](https://www.m365.fm/en/learn/theory-of-constraints/) analizza in dettaglio. Su una risorsa non collo di bottiglia esiste per definizione capacità disponibile, ed è di solito più saggio investire il tempo di cambio risparmiato in cambi più frequenti.
+
+## Sicurezza: cambi, lockout/tagout ed ergonomia
+
+Nessuna delle dodici pagine molto lette analizzate per questa guida affronta il lockout/tagout, sebbene quasi ogni attività di attrezzaggio interno avvenga all'interno della zona di pericolo di una macchina. Negli Stati Uniti, questo non è facoltativo.
+
+### L'attrezzaggio è manutenzione ai sensi dello standard lockout/tagout OSHA
+
+Lo standard OSHA per il controllo dell'energia pericolosa, 29 CFR 1910.147, riguarda la manutenzione e l'assistenza di macchine e attrezzature in cui un'energizzazione, un avviamento o un rilascio di energia immagazzinata non previsti potrebbero danneggiare i lavoratori [8]. La sua definizione di "servicing and/or maintenance" (assistenza e/o manutenzione) include esplicitamente l'attrezzaggio e la regolazione, e per "setting up" (attrezzaggio) si intende qualsiasi lavoro svolto per preparare una macchina o un'attrezzatura a eseguire il normale funzionamento produttivo [8]. Un cambio è quindi, per impostazione predefinita, un'attività di assistenza ai sensi dello standard.
+
+Lo standard richiede una procedura documentata di controllo dell'energia, formazione e una sequenza di applicazione fissa: preparazione allo spegnimento, spegnimento della macchina, isolamento delle fonti di energia, applicazione dei dispositivi di lockout o tagout, rilascio dell'energia immagazzinata e verifica dell'isolamento [8]. I datori di lavoro devono ispezionare ogni procedura di controllo dell'energia almeno una volta l'anno [8].
+
+### L'eccezione per la manutenzione minore: stretta, non una scappatoia
+
+Una nota al paragrafo sull'ambito di applicazione esclude le piccole modifiche di utensili, le regolazioni e altre attività di manutenzione minore che si svolgono durante il normale funzionamento produttivo, se sono di routine, ripetitive e parte integrante dell'uso dell'attrezzatura per la produzione, e solo se il lavoro viene eseguito con misure alternative che garantiscono una protezione efficace [8]. La eTool di OSHA sul lockout/tagout spiega che tali attività ricadono allora nei requisiti di protezione delle macchine del Subpart O, ed elenca esempi di misure alternative: utensili appositamente progettati, dispositivi remoti, protezioni a barriera interbloccate, sezionatori locali e interruttori di comando sotto il controllo esclusivo del lavoratore che esegue l'operazione [9]. Se una qualsiasi parte dell'eccezione non è soddisfatta, si applica il lockout/tagout [9].
+
+Cosa significa per SMED:
+
+- Un cambio completo di stampo o matrice non è di norma un cambio utensile "minore" durante la normale produzione; va pianificato con lockout/tagout. Se una specifica attività rientri nell'eccezione prevista è un giudizio legale e di sicurezza che spetta al responsabile della sicurezza, non al team SMED.
+- SMED deve rendere il lockout più rapido e semplice, non saltarlo. Esempi: punti di lockout raggruppati ed etichettati sulla macchina, una stazione di lockout nel carrello del cambio, scatole di lockout di gruppo per i lavori in parallelo in cui ciascuna persona applica il proprio lucchetto, fasi di verifica scritte nella scheda standard del cambio.
+- Uno standard di tempo di cambio che può essere rispettato solo saltando l'isolamento energetico è uno standard sbagliato. Inserire il tempo di lockout nell'obiettivo.
+
+### Presse meccaniche
+
+Per le presse meccaniche, OSHA richiede una procedura di montaggio dello stampo che garantisca il rispetto delle norme sulla protezione del punto di lavoro, barre di rovesciamento a molla dove la pressa è progettata per tali barre, arresti dello stampo sulle presse inclinate, blocchi di sicurezza ogni volta che gli stampi vengono regolati o riparati nella pressa, e attrezzi come spazzole o pistole a pressione, in modo che operatori e attrezzisti non debbano raggiungere il punto di lavoro per lubrificare [10]. Questi elementi devono far parte di ogni standard di cambio per presse.
+
+### Ergonomia
+
+I cambi comportano una movimentazione pesante e scomoda: sollevamento di stampi, parti di formato e attrezzature, lavoro piegati all'interno delle protezioni, ricerca di bulloni. OSHA descrive l'ergonomia come l'adattamento del lavoro al lavoratore per ridurre i disturbi muscoloscheletrici [32]. SMED ed ergonomia di solito vanno nella stessa direzione: carrelli per stampi, guide a rulli, ausili di sollevamento, attrezzature all'altezza della vita e meno bulloni sono più rapidi e meno gravosi per il corpo. Il rischio sta negli obiettivi di velocità: quando una squadra è spinta a battere il cronometro, si trascurano la tecnica di sollevamento e i sollevamenti in due persone. Gli obiettivi di tempo vanno fissati in modo che possano essere raggiunti con un ritmo sostenibile.
+
+### Checklist di sicurezza per i progetti SMED
+
+| Controllo | Fatto |
+|---|---|
+| Fonti di energia della macchina elencate (elettrica, idraulica, pneumatica, gravitazionale, termica, chimica) | ☐ |
+| Procedura attuale di controllo dell'energia rivista; fasi di cambio sotto lockout/tagout individuate | ☐ |
+| Il responsabile della sicurezza ha esaminato ogni affermazione secondo cui una fase rientra nell'eccezione per la manutenzione minore | ☐ |
+| Fasi di lockout e verifica inserite nella scheda standard del cambio, con il relativo tempo | ☐ |
+| Lavori in parallelo: ogni persona applica il proprio lucchetto; segnali di comunicazione definiti | ☐ |
+| Presse: procedura di montaggio stampi, blocchi di sicurezza, barre di rovesciamento, arresti dello stampo verificati [10] | ☐ |
+| Sollevamenti pesanti individuati; ausili di sollevamento o sollevamenti in due persone definiti | ☐ |
+| Superfici calde (stampi preriscaldati, matrici riscaldate) individuate; guanti e modalità di manipolazione definiti | ☐ |
+| Nuovo hardware di serraggio rapido verificato per forza di serraggio e comportamento in sicurezza in caso di guasto | ☐ |
+| Primo cambio con il nuovo standard osservato da un supervisore | ☐ |
+
+## Qualità: approvazione del primo pezzo, poka-yoke e verifica regolamentata della pulizia di linea
+
+La messa a punto e la regolazione rappresentano la parte più grande di molti cambi formato [5]. I problemi di qualità dopo un cambio formato hanno di solito le stesse cause: utensile o programma sbagliato, impostazioni prese a memoria, controlli del primo pezzo mancanti oppure un'approvazione del primo pezzo che attende un ispettore impegnato altrove.
+
+### Approvazione del primo pezzo senza attese
+
+- **Definire il controllo** nel foglio standard del cambio formato: quali caratteristiche, quale calibro, quale dimensione del campione.
+- **Portare il calibro alla macchina** e formare l'operatore alla misurazione, con un tecnico della qualità che approva solo dove il piano di controllo lo richiede.
+- **Informare in anticipo la qualità** con la checklist pre-cambio, in modo che l'ispettore sia presente quando esce il primo pezzo.
+- **Registrare il risultato del primo pezzo** insieme all'ordine, così da renderlo tracciabile.
+
+### Poka-yoke nel cambio formato
+
+I dispositivi [poka-yoke](https://www.m365.fm/en/learn/lean-manufacturing/poka-yoke/) prevengono o rilevano gli errori [28]. Nei cambi formato, esempi tipici sono:
+
+| Errore | Poka-yoke |
+|---|---|
+| Stampo o matrice sbagliata per l'ordine | Stampo codificato (RFID, codice a barre o chiave meccanica) che il controllo macchina verifica rispetto all'ordine |
+| Programma o ricetta sbagliati | Ricetta richiamata automaticamente dal numero d'ordine |
+| Tubi collegati alle porte sbagliate | Piastre o attacchi multipli che si innestano in un solo verso, con codice colore |
+| Parte di formato montata in posizione errata | Spine di centraggio asimmetriche |
+| Etichette o materiali vecchi lasciati in linea | Checklist di pulizia di linea con firma; contenitori dedicati per il materiale rimosso |
+
+### Settori regolamentati
+
+Negli stabilimenti regolamentati, il cambio formato fa parte del sistema qualità. Nel confezionamento farmaceutico statunitense, l'ispezione di pulizia di linea prima dell'uso e la sua documentazione nel registro di lotto sono richieste dal 21 CFR 211.130(e) [11]. Nel settore alimentare, i cambi relativi agli allergeni rientrano nei controlli sugli allergeni alimentari richiesti dal 21 CFR 117.135(c)(2) [37]. Nelle filiere automotive (IATF 16949) e aerospaziali (AS9100), i piani di controllo e i requisiti specifici del cliente possono prevedere la verifica della regolazione o la verifica del primo pezzo dopo i set-up; verificate i contratti e i piani di controllo invece di presumere una regola generica. La guida sulla [pianificazione della produzione aerospaziale](https://www.m365.fm/en/learn/aerospace-production-planning/) copre il contesto aerospaziale. I progetti SMED in questi ambienti devono includere il responsabile qualità fin dal primo giorno e convalidare ogni modifica alle fasi di pulizia o verifica prima del suo utilizzo.
+
+### Visione statistica
+
+Il cambio formato è anche una fonte di variabilità. Se i pezzi prodotti all'inizio di ogni lotto differiscono in modo sistematico, una carta di controllo suddivisa in "primi 30 minuti dopo il cambio formato" e "resto del lotto" lo rende visibile. Cakmakci ha usato la capacità di processo (Cpk) in uno studio SMED nel settore automotive per valutare il legame tra riduzione dei set-up e progettazione degli impianti [16]. La guida [Six Sigma e analisi delle cause radice](https://www.m365.fm/en/learn/six-sigma-root-cause-analysis/) copre l'analisi di capacità e le carte di controllo.
+
+## Persone e ruoli: chi fa cosa in un cambio formato
+
+Lo SMED viene spesso descritto come un metodo tecnico. In pratica, però, cambia il lavoro di operatori e attrezzisti più di qualsiasi altro strumento Lean, quindi riesce o fallisce con loro.
+
+### Ruoli
+
+| Ruolo | Nel progetto SMED | Nel cambio formato quotidiano |
+|---|---|---|
+| Operatore | Membro del team; conosce i dettagli, riprende e viene ripreso | Esegue la preparazione esterna, parti del lavoro interno, la misura del primo pezzo |
+| Attrezzista / setter | Membro centrale del team; è il responsabile del metodo | Esegue lo scambio interno, coordina il lavoro in parallelo |
+| Tecnico di manutenzione | Realizza e mantiene l'hardware a cambio rapido, gli attacchi, i morsetti | Supporta i cambi complessi; mantiene in buone condizioni stampi e matrici |
+| Ingegnere di produzione | Facilita, analizza i video, progetta le soluzioni tecniche | È responsabile dello standard; lo migliora |
+| Tecnico di qualità | Definisce i controlli del primo pezzo e il poka-yoke | Approva i primi pezzi dove richiesto |
+| Capoturno / responsabile di linea | Sponsorizza; libera tempo per il team | Pianifica i cambi formato con il programma; verifica il rispetto dello standard |
+| Pianificatore della produzione | Concorda come impiegare il tempo risparmiato; modifica le dimensioni dei lotti | Sequenza gli ordini per ridurre al minimo lo sforzo di cambio formato |
+| Rappresentante per la sicurezza | Verifica il controllo dell'energia e l'ergonomia | Controlla il lockout durante i cambi formato |
+
+### Cosa cambia per operatori e attrezzisti
+
+Lo SMED di solito sposta il lavoro: gli operatori assumono la preparazione esterna e parti dell'allestimento interno, mentre gli attrezzisti passano meno tempo a cercare e più tempo sulle fasi tecniche. Questo è un cambiamento nel contenuto del lavoro. Negli stabilimenti sindacalizzati, mansioni, classificazioni e livelli retributivi sono spesso definiti dal contratto, quindi occorre concordare la nuova ripartizione con il sindacato prima che il nuovo standard entri in vigore. Negli stabilimenti non sindacalizzati la stessa questione si presenta in modo informale: chi viene formato, chi è responsabile se un primo pezzo risulta non conforme e se i nuovi compiti vengono riconosciuti.
+
+### Rispetto delle persone
+
+Tre regole tratte dalla pratica fanno la differenza tra un progetto SMED che il reparto sostiene e uno che incontra resistenza:
+
+1. **Filmate il processo, non la persona.** Spiegate lo scopo prima di riprendere. Lasciate che l'attrezzista commenti per primo il video; di solito sa esattamente dove sono gli sprechi. Negli stabilimenti sindacalizzati, informate per tempo i rappresentanti sindacali e concordate come i video vengono conservati e utilizzati.
+2. **Non trasformate il tempo risparmiato in tagli di personale.** Se lo SMED porta a licenziamenti, il progetto di miglioramento successivo non riceverà alcuna idea dal reparto. Usate il tempo per aumentare la capacità, ridurre i lotti o formare il personale.
+3. **Fissate obiettivi che si possano raggiungere in sicurezza.** Uno standard di cambio formato descrive un buon metodo a un ritmo normale. Le analogie con il pit stop aiutano a spiegare il lavoro in parallelo e la preparazione, ma un team di pit stop si allena per una sosta in condizioni di gara; un attrezzista esegue lo stesso cambio alla fine di un turno lungo, molte volte all'anno.
+
+Vorne raccomanda di iniziare dai miglioramenti "umani", cioè preparazione e organizzazione, prima dei cambiamenti tecnici [20]; leanproduction.com fa la stessa raccomandazione [19]. Questo ordine costruisce anche fiducia: il team vede risultati rapidi dalle proprie idee prima che vengano spesi soldi.
+
+## Modelli e checklist SMED
+
+I modelli seguenti possono essere copiati in un foglio di calcolo oppure stampati su fogli A3 o 11 × 17 pollici. Sono formati di lavoro nati dalla pratica, non uno standard.
+
+### Modello 1: foglio di osservazione del cambio formato (elenco degli elementi)
+
+| # | Elemento (verbo + oggetto) | Inizio (mm:ss) | Durata (min) | Persona | I/E oggi | Tipo di spreco (ricerca, camminata, attesa, regolazione, altro) | Idea | Potrebbe essere I/E |
+|---|---|---|---|---|---|---|---|---|
+| 1 | Fermare la macchina, ultimo pezzo buono | 00:00 | | | I | | | |
+| 2 | | | | | | | | |
+| … | | | | | | | | |
+| | **Totale interno** | | | | | | | |
+| | **Totale esterno** | | | | | | | |
+
+Suggerimenti: una riga per elemento, verbi all'inizio ("allentare", "camminare", "cercare"), tempi letti dal video. Aggiungere una colonna "distanza percorsa" se la camminata è significativa.
+
+### Modello 2: foglio di conversione da interno a esterno
+
+| Elemento interno | Perché la macchina deve essere ferma? | Cosa dovrebbe cambiare perché diventi esterno? | Tecnica (preparare, standardizzare la funzione, dima intermedia) | Costo (basso / medio / alto) | Responsabile | Scadenza |
+|---|---|---|---|---|---|---|
+| Riscaldare lo stampo | Lo stampo si riscalda solo in macchina | Postazione separata di preriscaldamento | Preparare le condizioni operative | Medio | | |
+| Allineare la matrice a occhio | Nessun riferimento | Perno di centraggio e battuta posteriore | Standardizzare la funzione | Basso | | |
+| | | | | | | |
+
+### Modello 3: checklist pre-cambio (setup esterno)
+
+| Articolo per la lavorazione successiva | Ubicazione | Controllato da | Tempo | OK |
+|---|---|---|---|---|
+| Matrice / stampo / formato n. … (ispezionato, completo, pulito) | Preparato vicino alla macchina, posizione … | | | ☐ |
+| Utensili (elenco), morsetti, bulloni di ricambio | Carrello del cambio | | | ☐ |
+| Materiale / componenti (quantità, lotto, essiccato se necessario) | | | | ☐ |
+| Programma / ricetta rilasciato e caricato | Controllore | | | ☐ |
+| Disegno, piano di controllo, calibro per il primo pezzo | Carrello | | | ☐ |
+| Imballaggio ed etichette per la lavorazione successiva | | | | ☐ |
+| Gru / carrello elevatore / seconda persona prenotati per l'orario … | | | | ☐ |
+| Tecnico qualità avvisato (se è richiesta approvazione) | | | | ☐ |
+| Dispositivi di blocco e procedura di lockout disponibili | Postazione di lockout | | | ☐ |
+
+Attivazione: un orario fisso prima della fine della produzione in corso (ad esempio, all'inizio degli ultimi 45 minuti), indicato sulla macchina o nel programma.
+
+### Modello 4: foglio di cambio standard (versione a due persone)
+
+| Fase | Attrezzista A | Tempo (min) | Attrezzista B | Tempo (min) | Punto chiave (sicurezza / qualità) |
+|---|---|---|---|---|---|
+| 1 | Fermare la macchina, applicare il lucchetto | 0–2 | Applicare il proprio lucchetto | 0–2 | Verificare energia zero prima di entrare |
+| 2 | Scollegare gli attacchi (lato operatore) | 2–4 | Scollegare gli attacchi (lato posteriore) | 2–4 | Superfici calde: guanti |
+| 3 | Sbloccare, sollevare lo stampo vecchio | 4–8 | Guidare la gru, posizionare sul carrello | 4–8 | Segnale di sollevamento a due persone |
+| … | | | | | |
+| n | Controllo del primo pezzo, rilascio | | Riportare lo stampo vecchio in magazzino | | Registrare il risultato del primo pezzo |
+| | **Tempo totale target** | | | | |
+
+### Modello 5: audit del cambio formato (settimanale nel primo mese, mensile dopo)
+
+| Domanda | Sì / No | Commento |
+|---|---|---|
+| La checklist pre-cambio è stata completata prima dell'arresto? | | |
+| È stata seguita la sequenza standard? | | |
+| Il lockout e la verifica sono stati eseguiti come previsto? | | |
+| Tutti gli utensili e i componenti erano al punto d'uso (nessuna ricerca)? | | |
+| Il controllo del primo pezzo è stato eseguito come definito? | | |
+| Il tempo di cambio è stato registrato (dall'ultimo pezzo buono al primo pezzo buono)? | | |
+| Scostamento dal target, causa registrata? | | |
+| Idea di miglioramento della squadra raccolta? | | |
+
+### Modello 6: scheda di progetto SMED (una pagina)
+
+| Campo | Contenuto |
+|---|---|
+| Macchina / linea | |
+| Problema (con dati) | es. tempo medio di cambio 96 min, intervallo 78–131 min, 11 giorni di scorte |
+| Obiettivo | es. −50% nel primo ciclo, ogni stampo ogni 3 giorni |
+| Uso del tempo risparmiato (concordato con la pianificazione) | capacità / lotti più piccoli / suddivisione |
+| Squadra | nomi e ruoli |
+| Revisione di sicurezza eseguita da | |
+| Programma | date di baseline, workshop, implementazione, standardizzazione |
+| Limite di budget per l'hardware | |
+| Sponsor | |
+
+## Roadmap di implementazione: dal pilota a un sistema di cambio formato a livello di stabilimento
+
+La tempistica sottostante è una stima di esperienza per uno stabilimento discreto di medie dimensioni; i tempi dipendono dalle attrezzature, dai tempi di consegna dell'hardware e dal tempo che il team riesce a dedicare [unverified: tempistica basata su stima di esperienza, non su dati misurati].
+
+| Fase | Tempistica | Attività | Risultato |
+|---|---|---|---|
+| 1. Preparazione | Settimane 1–3 | Scelta della macchina pilota, raccolta dei dati di base per almeno due settimane [19], charter, revisione della sicurezza, accordo sull'uso del tempo recuperato | Charter firmato, dati di base noti |
+| 2. Workshop pilota | Settimana 4 (3–5 giorni) | Filmare e analizzare il cambio formato, separazione e conversione delle attività interne ed esterne, interventi rapidi sul campo, primo test della nuova sequenza | Primo standard nuovo, elenco delle azioni |
+| 3. Implementazione | Settimane 5–10 | Hardware (accoppiamenti, morsetti, carrelli), preriscaldamento o preimpostazione, secondo test, formazione di tutti i turni | Nuovo standard formato |
+| 4. Stabilizzazione | Settimane 11–16 | KPI giornalieri sulla lavagna, audit settimanali, adeguamento delle dimensioni dei lotti e della schedulazione | Tempo stabile, lotti ridotti |
+| 5. Estensione | Mesi 5–12 | Le successive 3–5 macchine, formazione di coach SMED interni, standard di cambio formato inserito nelle specifiche dei nuovi impianti | Sistema di cambio formato esteso all'area |
+
+### Scelta delle macchine successive
+
+Ordinare i candidati per impatto e sforzo:
+
+| Criterio | Peso | Domanda |
+|---|---|---|
+| Collo di bottiglia | Alto | La macchina è il vincolo del flusso del valore? |
+| Frequenza × durata dei cambi formato | Alto | Quante ore alla settimana si perdono nei cambi formato? |
+| Dolore legato a scorte / tempi di attraversamento | Medio | Questa macchina genera lotti grandi e scorte elevate a valle? |
+| Variazione del tempo di cambio formato | Medio | L'intervallo è ampio (segno di standard mancanti)? |
+| Prontezza del team | Medio | La squadra è disponibile, un supervisore la sponsorizza? |
+| Impegno hardware | Basso (negativo) | Serve un investimento importante prima di ottenere risultati? |
+
+### Rendere il cambio formato un requisito di progettazione
+
+Il progetto SMED più economico è quello che non serve. Inserire i requisiti sul cambio formato nelle specifiche per nuove attrezzature, utensili e stampi: tempo massimo di cambio, altezze di serraggio e accoppiamenti standardizzati, impostazioni memorizzate, nessuna regolazione. Braglia e colleghi propongono un metodo strutturato, la quick changeover design (QCD), per aiutare i costruttori di macchine a progettare per cambi rapidi fin dall'inizio [15]. Acquisti e ingegneria devono farsene carico, non solo il team lean.
+
+## KPI per i cambi formato: come misurare i progressi
+
+| KPI | Formula / definizione | Perché conta | Revisione tipica |
+|---|---|---|---|
+| Tempo medio di cambio formato | Σ tempi di cambio formato / numero di cambi formato (ultimo pezzo buono – primo pezzo buono) | Risultato principale | Giornaliera per macchina, trend settimanale |
+| Intervallo o deviazione standard dei tempi di cambio | Max − min, oppure deviazione standard degli ultimi 20 cambi formato | Mostra se esiste uno standard e se viene seguito | Settimanale |
+| Cambi formato entro standard | Cambi formato ≤ tempo target / tutti i cambi formato × 100% | Aderenza allo standard | Giornaliera sulla lavagna |
+| Tempo di setup interno | Somma degli elementi interni | Avanzamento della separazione e della conversione | Per ciclo SMED |
+| Tempo di run-up e scarti | Tempo e scarti dal riavvio fino alla velocità e alla qualità standard | Spesso la perdita nascosta più grande | Per cambio formato |
+| Primo pezzo corretto al primo controllo | Primi pezzi approvati al primo controllo / tutti i primi pezzi × 100% | Qualità del cambio formato | Settimanale |
+| Numero di cambi formato a settimana | Conteggio | Mostra se i guadagni vengono usati per lotti più piccoli | Settimanale con la pianificazione |
+| Quota del cambio formato sul tempo pianificato | Σ tempo di cambio formato / tempo di produzione pianificato × 100% | Visione della capacità | Settimanale |
+| EPEI | Intervallo entro il quale tutti i pezzi vengono prodotti una volta | Flessibilità | Mensile |
+| Dimensione media del lotto e giorni di scorta | Pezzi per lotto; scorta / domanda giornaliera media | Risultato di business | Mensile |
+| Disponibilità OEE | Come definita nel tuo schema OEE | Effetto a livello di macchina, se il tempo viene usato per produrre | Settimanale |
+
+Mantieni la lavagna semplice: un grafico per macchina con i tempi giornalieri di cambio formato rispetto al target, e una riga per la motivazione ogni volta che un cambio formato ha superato il target. Le regole generali per le lavagne KPI sono trattate nella guida [shop floor management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+**Una nota sui target:** "sotto i dieci minuti" è l'aspirazione di Shingo, non un benchmark universale. Un buon tempo di cambio formato è quello stabile, sicuro e abbastanza breve da supportare l'EPEI di cui i tuoi clienti hanno bisogno. Per una linea di presse di grandi dimensioni, 20 minuti possono essere eccellenti; per un piccolo tornio CNC, 20 minuti possono essere lenti.
+
+## Il business case: costi, ROI e contabilizzazione delle scorte
+
+I team finanziari pongono tre domande su SMED: quanto costa, cosa rende e quando si vede nei numeri. Le risposte dipendono molto dal fatto che la macchina sia un collo di bottiglia.
+
+### Costi
+
+| Voce di costo | Natura tipica | Contabilizzazione |
+|---|---|---|
+| Tempo del team per workshop e follow-up | Ore di operatori, attrezzisti, ingegneri | Costo operativo |
+| Hardware a basso costo (carrelli, shadow board, blocchi distanziatori, codifica a colori) | Ridotto | Solitamente costo operativo, a seconda della soglia di capitalizzazione | 
+| Hardware per cambio rapido (attacchi rapidi, sistemi di serraggio, preriscaldatori, presetter) | Da medio ad alto | Spesso investimento in capitale se sopra la soglia | 
+| Formazione | Ore | Costo operativo |
+| Perdita di produzione durante le prove | Di solito ridotta se le prove si svolgono durante i cambi formato pianificati | Costo operativo |
+
+### Ritorni
+
+1. **Capacità in un collo di bottiglia:** ore di cambio formato risparmiate × margine di contribuzione per ora, se l'output aggiuntivo può essere venduto. Nell'esempio CNC sopra, i 590 minuti di cambio formato a settimana costano circa 92.000 dollari l'anno di margine perso; dimezzarli recupererebbe circa 46.000 dollari l'anno, ma solo se l'output extra trova acquirenti.
+2. **Riduzione delle scorte:** un rilascio di cassa una tantum (stato patrimoniale) più risparmi ricorrenti sul costo di mantenimento (conto economico).
+3. **Meno urgenze e cambi formato d'emergenza:** straordinari, spedizioni urgenti con sovrapprezzo e interruzione del lavoro pianificato.
+4. **Scarti e rilavorazioni:** run-up più brevi e più stabili.
+5. **Manodopera:** a volte inferiore, spesso simile; il lavoro in parallelo riduce il tempo trascorso ma non sempre il contenuto di manodopera.
+
+### Esempio di ROI svolto (a scopo illustrativo, prosecuzione dell'esempio dello stampaggio)
+
+| Voce | Importo |
+|---|---|
+| Investimento: stazione di preriscaldamento | $12.000 |
+| Investimento: 6 set di accoppiamenti multipli a $1.500 | $9.000 |
+| Investimento: standardizzazione di morsetti e localizzatori | $6.000 |
+| Tempo del team: 6 persone × 16 ore × $45 costo orario pieno | $4.320 |
+| **Costo totale una tantum** | **$31.320** |
+| Riduzione delle scorte di prodotti finiti di 5 giorni a $6.000 al giorno di costo del venduto | $30.000 di liquidità liberata una tantum |
+| Costo di mantenimento risparmiato al 20% annuo su $30.000 | $6.000 all'anno |
+| Meno urgenze e straordinari (stima dai dati dell'anno scorso) | $8.000 all'anno |
+| Scarti di avviamento: 15 colpi di scarto in meno per cambio × 10 cambi × 50 settimane × $0,90 | $6.750 all'anno |
+| **Beneficio ricorrente** | **$20.750 all'anno** |
+| **Tempo di recupero semplice sui benefici ricorrenti** | 31.320 / 20.750 ≈ 1,5 anni |
+
+La liquidità liberata dalle scorte ($30.000) copre quasi interamente l'investimento nel primo anno, ma si tratta di un effetto sullo stato patrimoniale, non di un utile. Nel business case tenete separati i due aspetti e non contate due volte lo stesso risparmio.
+
+### L'effetto del costing a assorbimento
+
+Con il costing a assorbimento [38], che negli Stati Uniti è richiesto nella sostanza per la rendicontazione esterna delle scorte (ASC 330-10-30-1 e 30-3 includono un'allocazione dei costi generali fissi di produzione basata sulla capacità normale, e 330-10-30-8 afferma che escludere tutti i costi generali dal costo delle scorte non è una procedura contabile accettata [40]; chiedete al vostro controller come la vostra azienda lo applica), una parte dei costi generali fissi di produzione viene capitalizzata nelle scorte. Quando le scorte diminuiscono, i costi generali capitalizzati nelle scorte ridotte vengono rilasciati nel costo del venduto del periodo. L'utile contabile può quindi calare temporaneamente mentre le scorte si riducono, anche se la liquidità migliora.
+
+**Esempio svolto (a scopo illustrativo):** se il 30 percento del valore delle scorte da $30.000 è costituito da costi generali fissi, la riduzione delle scorte rilascia circa $9.000 di costi generali nel costo del venduto del periodo. I controller di stabilimento dovrebbero spiegare questo effetto alla direzione prima dell'avvio del programma SMED, in modo che un successo del lean non venga interpretato come un superamento dei costi. La guida [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/) illustra come presentare questi effetti in uno scorecard di stabilimento.
+
+## SMED e altri strumenti lean
+
+SMED raramente funziona da solo. Dipende da alcuni strumenti e ne abilita altri.
+
+| Strumento | Relazione con SMED |
+|---|---|
+| [5S](https://www.m365.fm/en/learn/5s-visual-management/) | Prerequisito: utensili e stampi in posizioni definite eliminano la ricerca, lo spreco esterno più grande [27] |
+| [Lavoro standard](https://www.m365.fm/en/learn/shop-floor-management/standard-work/) | Mantiene i guadagni: il nuovo cambio formato diventa lo standard [26] |
+| [TPM](https://www.m365.fm/en/learn/tpm-oee/) | Mantiene in condizione stampi, matrici e attrezzature a cambio rapido; leanproduction.com raccomanda prima il TPM quando i guasti, non i cambi formato, dominano il tempo perso [19][29] |
+| [Poka-yoke](https://www.m365.fm/en/learn/lean-manufacturing/poka-yoke/) | Previene utensili, programmi o collegamenti errati [28] |
+| [Kanban e pull](https://www.m365.fm/en/learn/kanban-pull-system/) | Utilizza lotti più piccoli; le quantità kanban si riducono man mano che i cambi formato diventano più brevi [34] |
+| [Heijunka](https://www.m365.fm/entity/heijunka/) | Il livellamento per mix richiede cambi formato frequenti e brevi [25] |
+| [Value stream mapping](https://www.m365.fm/en/learn/value-stream-mapping/) | Mostra quali cambi formato determinano scorte e lead time; il tempo di cambio e l'EPEI sono voci della data box [35] |
+| [Kaizen](https://www.m365.fm/en/learn/lean-manufacturing/kaizen/) | Il workshop SMED è un classico formato di evento kaizen |
+| [Teoria dei vincoli](https://www.m365.fm/en/learn/theory-of-constraints/) | Indirizza lo sforzo SMED prima al vincolo, dove il tempo risparmiato è output di sistema |
+| [Pianificazione della produzione e APS](https://www.m365.fm/en/learn/production-scheduling-aps/) | Sequenzia gli ordini per minimizzare lo sforzo di cambio e trasforma cambi più brevi in lotti più piccoli |
+
+## Esempi documentati di SMED
+
+Molte pagine web citano riduzioni "tipiche" del 50-90 percento senza fonte. Gli esempi seguenti sono documentati, con i loro limiti.
+
+### Cambi formato delle presse in Toyota
+
+Wikipedia, basandosi sui libri di Shingo, riferisce che i cambi formato in Toyota sono scesi da ore a 15 minuti entro gli anni Sessanta e a 3 minuti negli anni Settanta [5]; il resoconto dello stesso Shingo descrive cambi di stampo da una a due ore, a volte mezza giornata, ridotti a pochi minuti dopo che iniziò a lavorare in Toyota nel 1969 [6]. Un manuale di ingegneria aperto riferisce che un cambio su una pressa Toyota da 1.000 tonnellate è passato da quattro ore a tre minuti [36]. I dati provengono da resoconti di Shingo e di Toyota e non sono stati verificati in modo indipendente, ma sono coerenti tra le fonti.
+
+### Brighton NC Machine Corporation (Michigan, NIST MEP)
+
+Brighton NC Machine, un produttore del Michigan con oltre 100 dipendenti, ha collaborato con il Michigan Manufacturing Technology Center, parte della NIST MEP National Network [17]. Prima del progetto, i cambi potevano essere effettuati solo nel primo turno, richiedevano 8 ore e 20 minuti e comportavano 9.121 piedi di spostamenti dei dipendenti [17]. Un evento kaizen con video, un diagramma a spaghetti e un grafico di analisi dei setup ha portato a una riduzione del 70 percento del tempo di cambio e a una riduzione del 98 percento dei tempi di spostamento; l'azienda ha riferito 460.000 dollari di nuove vendite e 125.000 dollari di risparmi sui costi [17]. I risultati sono quelli riportati dall'azienda e da MEP; le storie di successo MEP sono riferite dai clienti.
+
+### Casi di consulenza di Shingo
+
+Shingo ha riferito che, nei suoi casi di riduzione dei setup tra il 1975 e il 1985, i tempi di setup sono scesi in media a circa il 2,5 percento dell'originale [5]. Si tratta di una media di casi selezionati dall'ideatore del metodo, e quindi di un benchmark superiore piuttosto che di un'aspettativa.
+
+### Panoramica della ricerca
+
+Una rassegna dello stato dell'arte di da Silva e Godinho Filho nell'*International Journal of Advanced Manufacturing Technology* (2019) ha classificato 130 articoli su SMED per area, metodo, strumenti, implementazione e risultati [14]. La letteratura mostra SMED applicato in contesti automobilistici, metalmeccanici, dell'imballaggio, della stampa, alimentari e farmaceutici. Un caso dell'industria della stampa citato in un manuale aperto ha riportato una riduzione del 46 percento del tempo di setup interno [36]. I casi pubblicati tendono a riportare successi; i progetti falliti o abbandonati raramente vengono documentati, quindi le medie tratte dalla letteratura di casi vanno interpretate con cautela.
+
+## Errori comuni nello SMED
+
+| Errore | Perché fa danno | Approccio migliore |
+|---|---|---|
+| Nessuna decisione su come usare il tempo risparmiato | I guadagni svaniscono in tempi morti; i lotti restano uguali | Concordare con la pianificazione prima del progetto: capacità, lotti più piccoli o suddivisione |
+| Acquistare prima l'hardware | Automatizza lo spreco; il budget è esaurito prima di sistemare l'organizzazione | Esaurire prima separazione e conversione; meccanizzazione per ultima [5] |
+| Misurare solo il "cambio" | Non considera run-up e regolazione, spesso la parte più grande | Dall'ultimo pezzo buono al primo pezzo buono alla velocità standard [2] |
+| Filmare senza spiegazioni | L'equipe si sente osservata; resistenza | Spiegare lo scopo, coinvolgere il attrezzista nell'analisi, concordare l'uso dei video |
+| Pilota sulla macchina più difficile | Risultati lenti, lunghi e costosi | Avviare il pilota con un cambio di 30–90 minuti che avviene di frequente |
+| Un cambio "eroico" | Tempo registrato con gli ingegneri presenti, non ripetibile | Standardizzare, formare tutti i turni, misurare per settimane |
+| Saltare il lockout/tagout per risparmiare tempo | Grave rischio di infortunio; violazione OSHA | Inserire il lockout nello standard; renderlo più rapido, mai saltarlo [8] |
+| Nessuno standard e nessun audit | I tempi tornano indietro nel giro di pochi mesi | Scheda standard del cambio, audit, KPI in bacheca |
+| Ignorare la schedulazione | Sequenze casuali causano cambi completi che potrebbero essere parziali | Sequenziare per famiglia di prodotto; pianificare i cambi in orari fissi |
+| Avviare un cambio poco prima del cambio turno | Passaggio di consegne nel mezzo della regolazione interna; passaggi saltati o ripetuti, i lucchetti cambiano mano | Pianificare i cambi in modo che una sola squadra li completi, oppure definire un punto formale di passaggio di consegne con trasferimento del lockout, come richiesto dalla procedura di controllo energetico |
+| Costo di setup nel sistema di pianificazione mai aggiornato | L'ERP continua a calcolare lotti grandi | Aggiornare tempi di setup e regole di dimensione dei lotti nell'ERP dopo lo SMED |
+| Trattare lo SMED come un progetto una tantum | Nessun secondo ciclo; la fase hardware non avviene mai | Pianificare cicli; rendere lo SMED parte della routine di miglioramento |
+
+Il penultimo punto è facile da trascurare. Molti sistemi ERP calcolano le dimensioni dei lotti a partire dai tempi di setup memorizzati nei cicli di lavorazione. Se questi restano ai valori vecchi, il sistema di pianificazione continua a suggerire i vecchi lotti grandi. La guida [S&OP and MRP](https://www.m365.fm/en/learn/sop-mrp-production-planning/) spiega dove si trovano questi parametri.
+
+## Limiti e critiche della SMED
+
+La SMED è uno degli strumenti Lean meglio documentati, ma presenta dei limiti, che la letteratura di ricerca ha messo in evidenza.
+
+### 1. Troppa organizzazione, poca progettazione
+
+McIntosh e colleghi sostenevano nel 1996 che l'interpretazione diffusa della SMED ha portato i professionisti a privilegiare cambiamenti organizzativi a basso costo basati sui team, trascurando soluzioni progettuali che potrebbero migliorare i cambi formato in modo più fondamentale; hanno prestato particolare attenzione al problema del consolidamento dei miglioramenti [13]. Lo stesso gruppo di ricerca ha poi pubblicato una valutazione critica della metodologia di Shingo sull'*International Journal of Production Research* (2000) [12]. Lo studio di Cakmakci sul settore automobilistico collega in modo analogo i problemi di attrezzaggio a attrezzature e progettazione di stampi inadeguate [16], mentre Braglia e colleghi hanno sviluppato la progettazione del cambio rapido per integrare la capacità di cambio formato nella progettazione delle macchine [15]. La conclusione pratica: organizzate workshop SMED, ma inserite anche i requisiti di cambio formato nelle specifiche per le nuove attrezzature e per la progettazione dei prodotti.
+
+### 2. Consolidare i risultati
+
+I tempi di cambio formato tendono a risalire quando lo standard non viene formato al nuovo personale, il carrello degli utensili perde i propri attrezzi o l'attrezzatura a cambio rapido non viene manutenuta. McIntosh e colleghi hanno evidenziato il consolidamento come debolezza centrale [13]. Le contromisure sono poco spettacolari: lavoro standard, audit, un KPI esposto in reparto, e manutenzione dell'attrezzatura nell'ambito del TPM.
+
+### 3. Non tutti i processi ne traggono lo stesso beneficio
+
+- **Industrie di processo** (chimica, alimentare, farmaceutica): i cambi formato sono spesso dominati da pulizia, convalida e controlli obbligatori. La SMED riduce il lavoro attorno a essi, ma la pianificazione delle campagne e il sequenziamento dei prodotti (dal chiaro allo scuro, prima i prodotti senza allergeni) possono contare di più.
+- **Job shop ad alta varietà e bassi volumi**: molti attrezzaggi sono unici e si verificano una sola volta. L'analisi elemento per elemento di un singolo attrezzaggio rende meno; contano di più il bloccaggio standardizzato dei pezzi, le librerie di utensili, la programmazione offline e il raggruppamento per famiglie di pezzi.
+- **Macchine con capacità disponibile e scorte ridotte**: la SMED porta pochi vantaggi. Verificate prima la quota dei cambi formato nel tempo perso [19].
+
+### 4. Risultati che non arrivano al risultato economico
+
+Se il tempo risparmiato non viene utilizzato (si vedano le tre opzioni sopra), la SMED migliora un numero su un grafico e nient'altro. Il metodo non può impedirlo; deve farlo la direzione, ed è questo il motivo più comune per cui la SMED delude.
+
+### 5. Pressione sulle persone
+
+Obiettivi di velocità e cronometri possono generare pressione, lavoro frettoloso e scorciatoie che aggirano la sicurezza. Il metodo in sé non lo richiede, ma la sua implementazione può farlo. La buona pratica fissa obiettivi a un ritmo sostenibile, tutela i tempi di blocco macchina e non usa il tempo risparmiato per tagliare le mansioni.
+
+## SMED diventa digitale: dati, video, MES e scheduling
+
+Gli strumenti digitali non sostituiscono il metodo SMED, ma rendono l'analisi più rapida e i risultati più facili da mantenere nel tempo.
+
+### Misurare automaticamente i cambi formato
+
+I registri manuali dei cambi formato sono spesso incompleti. I sistemi di monitoraggio delle macchine possono rilevare i cambi formato dagli stati della macchina e dai conteggi dei pezzi, così che ogni cambio formato abbia un inizio, una fine e una durata senza burocrazia; fornitori come MachineMetrics sostengono che l'acquisizione automatica dei dati sia più affidabile della registrazione manuale [21] (affermazione del fornitore). L'operatore deve comunque inserire la causa quando un cambio formato si prolunga. La guida su [manufacturing execution system (MES) e ISA-95](https://www.m365.fm/en/learn/mes-isa-95/) spiega come questi dati si inseriscono nell'architettura di sistema dello stabilimento, mentre [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/) illustra le opzioni cloud per raccoglierli.
+
+Le attrezzature per il cambio rapido sono sempre più connesse: stampi e matrici codificati che il controllore verifica rispetto all'ordine, download delle ricette, sistemi di serraggio con sensori. Ciascuno di questi è un asset OT sulla rete di stabilimento, con le stesse questioni di patch e di accesso di qualsiasi controllore; la guida su [OT cybersecurity and ISA/IEC 62443](https://www.m365.fm/en/learn/ot-cybersecurity-iec-62443/) spiega come proteggerli.
+
+### Analisi video
+
+Il video girato con smartphone o action camera basta per la maggior parte dei workshop SMED. Un software che permette al team di suddividere il video in elementi e di classificarli come interni o esterni fa risparmiare ore di cronometraggio manuale. Concordate la tutela della privacy: chi vede i video, per quanto tempo vengono conservati e il fatto che non vengano usati per valutare le prestazioni individuali.
+
+### Istruzioni di lavoro e ricette digitali
+
+Le istruzioni di lavoro digitali possono cambiare automaticamente con l'ordine, mostrare passo passo la scheda standard del cambio formato con immagini e registrare il risultato del primo pezzo; questo è trattato nel cluster sulla [paperless manufacturing](https://www.m365.fm/en/learn/shop-floor-management/paperless-manufacturing/). La gestione delle ricette, in cui le impostazioni macchina sono memorizzate per prodotto e scaricate dall'ordine, elimina la regolazione come fonte di tempo e di errore. Nei settori regolamentati, entrambe devono essere convalidate.
+
+### Scheduling con setup dipendenti dalla sequenza
+
+Quando i tempi di cambio dipendono dalla sequenza (dal colore chiaro al scuro, dal formato piccolo al grande, prima i prodotti senza allergeni), uno strumento di scheduling può sequenziare gli ordini per minimizzare il tempo totale di cambio. I sistemi di advanced planning and scheduling (APS) possono modellare matrici di setup dipendenti dalla sequenza; la guida su [production scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/) spiega come funzionano e che cosa richiedono dal reparto produttivo. La matrice di setup nell'APS deve essere aggiornata dopo ogni ciclo SMED, altrimenti lo scheduler ottimizza sulla base di tempi superati.
+
+### Simulazione e modelli di value stream
+
+Prima che uno stabilimento riduca le dimensioni dei lotti lungo un value stream, può testare l'effetto di cambi più brevi su EPEI, scorte e lead time in un modello di value stream o in una simulazione a eventi discreti. La guida [digital twin in manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/) e il cluster sulla [manufacturing simulation](https://www.m365.fm/en/learn/digital-twin-manufacturing/manufacturing-simulation/) spiegano l'approccio. Il software per value stream come iFAKT Polaris è un esempio di strumento che registra tempi di cambio e dimensioni dei lotti per ogni fase di processo e ne calcola l'effetto sul value stream; si veda il profilo [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/). **Nota: l'autore lavora presso iFAKT GmbH.**
+
+### Limiti
+
+Gli strumenti digitali amplificano uno standard di lavoro; non lo creano. Una dashboard di monitoraggio macchine che mostra cambi da 90 minuti non cambia nulla finché un team non filma il cambio e non lo corregge. Iniziate con carta e video, e digitalizzate la raccolta dati una volta che lo standard e la routine dei KPI funzionano.
+
+## Glossario SMED
+
+| Termine | Significato |
+|---|---|
+| **Regolazione** | Impostazione per tentativi ed errori dopo il montaggio di un utensile; la categoria più grande del tempo di attrezzaggio nella scomposizione di Shingo [5] |
+| **Cambio produzione** | Passaggio di una macchina o di una linea da un prodotto a un altro; detto anche attrezzaggio (setup) [2] |
+| **Tempo di cambio produzione** | Tempo dall'ultimo pezzo buono della vecchia produzione al primo pezzo buono della nuova produzione [2], idealmente alla velocità standard |
+| **Carrello per il cambio** | Carrello che contiene tutti gli utensili e i componenti per un cambio produzione, disposti nell'ordine di utilizzo |
+| **Scorta di ciclo** | Scorta creata dalle dimensioni dei lotti; in media circa mezzo lotto quando la domanda è costante |
+| **Stampo** | Utensile usato in una pressa per tagliare o formare il materiale; all'origine della "D" in SMED |
+| **ECRS** | Eliminare, combinare, riordinare, semplificare: domande di miglioramento del Training Within Industry, usate nel programma Toyota di cambio rapido degli stampi [5] |
+| **EOQ / EPQ** | Quantità economica d'ordine / quantità economica di produzione: formule per le dimensioni dei lotti che bilanciano costi di attrezzaggio e di giacenza |
+| **EPEI / EPEx** | Ogni parte (prodotto) ogni intervallo: frequenza con cui un processo cicla su tutte le sue parti [3] |
+| **Attrezzaggio esterno** | Lavoro di attrezzaggio che può essere svolto mentre la macchina è in funzione [1] |
+| **Approvazione del primo pezzo** | Controllo del primo pezzo dopo un cambio produzione prima di proseguire la produzione |
+| **Morsetto funzionale** | Elemento di fissaggio che blocca con un unico movimento, come una leva a camma o una vite a un quarto di giro [5] |
+| **Dima intermedia** | Supporto standard (pallet, sottopiastra) su cui il successivo utensile o pezzo viene preparato al di fuori della macchina [5] |
+| **Attrezzaggio interno** | Lavoro di attrezzaggio che può essere svolto solo a macchina ferma [1] |
+| **Verifica di pulizia della linea** | Ispezione che tutti i materiali della produzione precedente siano stati rimossi prima dell'inizio della successiva; richiesta nel confezionamento farmaceutico statunitense [11] |
+| **Lockout/tagout (LOTO)** | Procedure e dispositivi per controllare l'energia pericolosa durante la manutenzione, compreso l'attrezzaggio, ai sensi di 29 CFR 1910.147 [8] |
+| **Eccezione per la manutenzione minore** | Eccezione ristretta al lockout/tagout per cambi utensile minori, di routine, ripetitivi e integrati nella normale produzione, con protezione alternativa efficace [8][9] |
+| **OTED** | Cambio dello stampo con un solo tocco: cambio produzione in meno di 100 secondi [5] |
+| **Operazioni in parallelo** | Due o più persone che lavorano contemporaneamente a un cambio produzione secondo una sequenza definita [5] |
+| **Cambio rapido (QCO)** | Termine comune negli Stati Uniti per la pratica SMED [18] |
+| **Ricetta** | Insieme memorizzato di parametri macchina per prodotto, scaricato invece di essere impostato a mano |
+| **Messa a regime** | Fase dopo la ripartenza fino a quando arrivano pezzi buoni alla velocità standard |
+| **Blocco di sicurezza** | Blocco posto tra le metà dello stampo di una pressa mentre gli stampi vengono regolati o riparati; richiesto da OSHA per le presse meccaniche a potenza [10] |
+| **Diagramma di analisi dell'attrezzaggio** | Elenco degli elementi di un cambio produzione con tempi e classificazione interna/esterna [17] |
+| **Diagramma a spaghetti** | Disegno dei percorsi di spostamento su una planimetria |
+| **Standardizzare la funzione, non la forma** | Standardizzare solo le caratteristiche di un utensile che interagiscono con la macchina, come l'altezza di serraggio [5] |
+| **3 Ups** | Pulizia, preparazione, avvio: un modello semplice delle fasi del cambio produzione [24] |
+
+## FAQ: SMED e domande sui cambi formato
+
+### Che cosa significa SMED?
+
+SMED sta per single-minute exchange of die (talvolta scritto "dies"), cioè "cambio stampo in un singolo minuto". "Single-minute" indica un numero di minuti a una sola cifra, quindi un cambio formato inferiore a dieci minuti [1]. Il metodo si applica a qualsiasi cambio formato, non solo agli stampi per presse.
+
+### Chi ha inventato lo SMED?
+
+Shigeo Shingo (1909–1990), ingegnere industriale giapponese, ha sviluppato il metodo a partire dagli anni Cinquanta, con lavori presso Toyo Kogyo (Mazda), Mitsubishi Heavy Industries e, dal 1969, Toyota [6]. Lo ha pubblicato in inglese nel 1985 come *A Revolution in Manufacturing: The SMED System* [6].
+
+### Quali sono i passi dello SMED?
+
+Osservare e registrare il cambio formato, separare gli elementi interni da quelli esterni, convertire gli interni in esterni, semplificare gli elementi interni, semplificare gli elementi esterni, standardizzare e ripetere [5]. Questa guida aggiunge in testa una fase di preparazione (prova pilota, team, verifica di sicurezza, uso del tempo recuperato).
+
+### Qual è la differenza tra attrezzaggio interno ed esterno?
+
+L'attrezzaggio interno può essere eseguito solo a macchina ferma, come il montaggio di uno stampo. L'attrezzaggio esterno può essere eseguito mentre la macchina è in marcia, come il prelievo e il controllo del prossimo stampo [1]. Lo SMED sposta il maggior lavoro possibile dall'interno all'esterno.
+
+### Come si calcola il tempo di cambio formato?
+
+Si misura dall'ultimo pezzo buono della produzione precedente al primo pezzo buono della nuova produzione, alla velocità standard [2][21]. Il tempo medio di cambio formato è la somma di tutti i tempi di cambio diviso il numero di cambi; la quota di cambio formato è il tempo totale di cambio diviso il tempo di produzione pianificato. Per le formule e l'esempio su CNC, vedere la sezione sulla misurazione.
+
+### Qual è la differenza tra tempo di cambio formato e tempo di attrezzaggio?
+
+Nell'uso quotidiano spesso coincidono, anche se alcune fonti li distinguono esplicitamente [23]. In senso stretto, molti professionisti usano "tempo di attrezzaggio" per lo scambio vero e proprio e "tempo di cambio formato" per l'intera perdita dall'ultimo pezzo buono al primo pezzo buono, incluse la fase di rallentamento e quella di riavvio. Per il lavoro di miglioramento si usi la definizione più ampia.
+
+### Qual è un buon tempo di cambio formato?
+
+L'obiettivo indicato da Shingo è inferiore a dieci minuti [1]. Una risposta pratica: un buon tempo di cambio formato è stabile (intervallo ristretto), sicuro e abbastanza breve da supportare le dimensioni dei lotti e l'EPEI richiesti dai clienti. Per le grandi linee di presse, 20 minuti possono essere un ottimo risultato; per una piccola macchina possono essere troppi.
+
+### Che cos'è l'OTED?
+
+One-touch exchange of die: un cambio formato in meno di 100 secondi [5]. È l'obiettivo successivo allo SMED, di solito raggiungibile solo con attrezzature dedicate per il cambio rapido.
+
+### Che rapporto c'è tra SMED e OEE?
+
+Nell'OEE i cambi formato vengono di norma contabilizzati come perdite di disponibilità e lo scarto da avviamento come perdita di qualità [4]. Cambi più brevi aumentano la disponibilità OEE solo se il tempo risparmiato viene usato per produrre. Se viene usato per effettuare cambi più frequenti, l'OEE può restare stabile mentre scorte e lead time migliorano.
+
+### Lo SMED richiede lockout/tagout?
+
+Negli Stati Uniti, l'attrezzaggio rientra nella "manutenzione e/o assistenza" previste dallo standard OSHA sul lockout/tagout, 29 CFR 1910.147; quindi le fasi interne di cambio su macchine con energia pericolosa vi ricadono per impostazione predefinita [8]. Un'eccezione ristretta riguarda piccoli cambi utensile durante la normale produzione, purché siano routinari, ripetitivi e parte integrante del processo, e solo con protezioni alternative efficaci [8][9]. Sarà il vostro responsabile della sicurezza a stabilire quali fasi rientrano in questa eccezione.
+
+### Che cos'è l'EPEI e come lo SMED lo modifica?
+
+EPEI (every part every interval; LEI: EPEx) è il tempo entro cui un processo produce una volta tutti i propri codici articolo [3]. Dipende dai tempi di cambio e dal numero di articoli. Una formula comune è il tempo totale di cambio per tutti gli articoli diviso il tempo giornaliero rimanente dopo il tempo di lavorazione. Nell'esempio di questa guida, ridurre i cambi da 200 a 70 minuti per ciclo abbassa l'EPEI da 2 giorni a 1 giorno e dimezza i lotti.
+
+### Perché i miglioramenti sui cambi formato si perdono nel tempo?
+
+Perché lo standard non viene formato su tutti i turni, il carrello degli attrezzi per il cambio perde utensili, le attrezzature per il cambio rapido non vengono manutenute o nessuno controlla il KPI. La ricerca ha individuato nella sostenibilità il punto debole centrale della pratica SMED [13]. Le fonti operative indicano le stesse cause, come un'esecuzione non uniforme e attrezzature non pronte [22]. Le contromisure sono il lavoro standard, gli audit e un KPI giornaliero sui cambi formato esposto in reparto.
+
+### SMED fa parte del TPM?
+
+No. SMED e TPM sono metodi Lean distinti, ma dipendono l'uno dall'altro. Il TPM mantiene in efficienza stampi, matrici e attrezzature per cambio rapido, e leanproduction.com raccomanda di iniziare dal TPM quando i guasti, e non i cambi formato, dominano il tempo perso [19][29]. Nella maggior parte degli schemi OEE, sia i cambi formato sia i guasti vengono registrati come perdite di disponibilità.
+
+### SMED si applica solo a stampi e presse?
+
+No. Il nome deriva dalle presse per stampaggio, ma LEI definisce SMED come un processo per cambiare qualsiasi attrezzatura produttiva da un codice articolo a un altro nel minor tempo possibile [1]. Gli stessi passaggi funzionano per un cambio linea in confezionamento, un cambio stampo, un cambio attrezzaggio su un centro di lavoro o un cambio prodotto su una linea di assemblaggio.
+
+### Qual è la differenza tra un evento SMED e un programma SMED?
+
+Un evento SMED è un workshop mirato, di solito un evento kaizen, su una singola macchina o linea. Un programma SMED è il sistema a livello di stabilimento che ne sta alla base: un modello standard per il cambio formato, team formati, KPI dei cambi formato esposti nella lavagna di reparto e un piano di estensione da macchina a macchina. Gli eventi producono i primi risultati; il programma li mantiene e li estende (vedi la roadmap di estensione).
+
+### Quali settori usano SMED?
+
+Qualsiasi settore con cambi formato: automotive e stampaggio di lamiera, materie plastiche, lavorazioni meccaniche, confezionamento, stampa, elettronica, alimentare e bevande, e farmaceutico. Una revisione di 130 articoli su SMED ha coperto un'ampia gamma di settori [14]. Nell'industria di processo, pulizia e verifiche obbligatorie spesso dominano, quindi SMED viene combinato con il sequenziamento e la pianificazione per campagne.
+
+### Quanto dura un progetto SMED?
+
+Un primo ciclo SMED su una macchina richiede spesso da tre a quattro mesi, dalla baseline a un nuovo standard stabile: alcune settimane di preparazione e rilevazione della baseline, un workshop di tre-cinque giorni, alcune settimane per hardware e formazione, e un mese di stabilizzazione [unverified: stima di practitioner]. I tempi di consegna dell'hardware possono allungare questa durata.
+
+### Quanto costa SMED?
+
+Il primo ciclo è spesso economico: tempo del team, checklist, carrelli, codifica a colori e blocchi distanziatori. L'hardware per il cambio rapido, come multi-accoppiamenti, serraggio idraulico o stazioni di preriscaldamento, costa di più e dovrebbe venire dopo i passaggi organizzativi. L'esempio di ROI svolto in questa guida stima un pay-back di circa 1,5 anni per una pressa a iniezione; i vostri numeri saranno diversi.
+
+### SMED può funzionare in una job shop ad alto mix e basso volume?
+
+Sì, ma con un focus diverso. Quando la maggior parte degli attrezzaggi è unica, standardizzate ciò che si ripete: bloccaggio dei pezzi, librerie utensili, programmazione offline, preimpostazione e famiglie di pezzi. Analizzate il processo di attrezzaggio, non un singolo attrezzaggio specifico.
+
+## Conclusioni e primi passi
+
+SMED è uno dei metodi lean più pratici, perché la sua logica è semplice e i risultati sono misurabili: non fermare la macchina per attività che potrebbero essere svolte mentre essa è in funzione, e rendere semplice, sicuro e privo di regolazioni ciò che deve avvenire durante la fermata. L'intuizione di Shingo degli anni Cinquanta e Sessanta resta valida, e i primi grandi guadagni derivano ancora da checklist, preparazione anticipata e lavoro in parallelo piuttosto che da hardware costoso.
+
+Il metodo ripaga solo se il tempo risparmiato viene utilizzato. Un cambio formato più rapido è capacità potenziale o flessibilità potenziale; lo stabilimento deve decidere quale delle due, quindi modificare dimensioni dei lotti, cicli produttivi, programmi ed encomi ERP in funzione della domanda del cliente. I numeri di questa guida mostrano perché ne valga la pena: nell'esempio EPEI, ridurre il tempo di cambio formato per ciclo da 200 a 70 minuti dimezza le dimensioni dei lotti, e nella formula della dimensione economica del lotto, un quarto del costo di setup significa metà del lotto economico.
+
+Anche i limiti meritano attenzione. Lo SMED organizzativo raggiunge un tetto dove subentrano la progettazione di attrezzature e prodotto, i guadagni svaniscono senza standard e audit, e la velocità non deve mai andare a scapito di lockout/tagout o ergonomia.
+
+**I vostri primi passi nei prossimi 30 giorni**
+
+- [ ] Scegliete una macchina con cambi formato frequenti di 30-90 minuti e un problema aziendale evidente
+- [ ] Registrate inizio e fine di ogni cambio formato per due settimane (ultimo pezzo buono al primo pezzo buono)
+- [ ] Concordate con la pianificazione come utilizzare il tempo risparmiato: capacità, lotti più piccoli o una suddivisione
+- [ ] Verificate con il vostro responsabile sicurezza la procedura di controllo dell'energia di quella macchina
+- [ ] Filmate un cambio formato con il consenso della squadra e costruite l'elenco degli elementi
+- [ ] Contrassegnate ogni elemento come interno o esterno e introducete una checklist pre-cambio
+- [ ] Calcolate l'EPEI attuale e le dimensioni dei lotti che ne derivano
+- [ ] Esponete il tempo di cambio formato sulla lavagna di reparto con un obiettivo e una colonna per le motivazioni
+- [ ] Verificate se il centro NIST MEP del vostro stato offre un workshop sul cambio rapido [18][31]
+
+---
+
+## Ulteriori letture su m365.fm
+
+**Guide di questo percorso di apprendimento**
+- [Lean Manufacturing: principi, strumenti, implementazione e limiti](https://www.m365.fm/en/learn/lean-manufacturing/)
+- [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/)
+- [KPI di produzione](https://www.m365.fm/en/learn/manufacturing-kpis/)
+- [Gestione del reparto e Gemba walk](https://www.m365.fm/en/learn/shop-floor-management/)
+- [Pianificazione della produzione e APS](https://www.m365.fm/en/learn/production-scheduling-aps/)
+- [Digital Twin nella produzione](https://www.m365.fm/en/learn/digital-twin-manufacturing/)
+- [IT di produzione con Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/)
+- [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/)
+- [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+- [5S e gestione visiva](https://www.m365.fm/en/learn/5s-visual-management/)
+- [Total Productive Maintenance (TPM) e OEE](https://www.m365.fm/en/learn/tpm-oee/)
+- [Kanban e sistemi pull](https://www.m365.fm/en/learn/kanban-pull-system/)
+- [Six Sigma e analisi delle cause radice](https://www.m365.fm/en/learn/six-sigma-root-cause-analysis/)
+- [S&OP, MRP e pianificazione della produzione](https://www.m365.fm/en/learn/sop-mrp-production-planning/)
+- [MES e ISA-95](https://www.m365.fm/en/learn/mes-isa-95/)
+- [Teoria dei vincoli](https://www.m365.fm/en/learn/theory-of-constraints/)
+
+**Approfondimenti**
+- [Kaizen ed eventi kaizen](https://www.m365.fm/en/learn/lean-manufacturing/kaizen/)
+- [Poka-yoke](https://www.m365.fm/en/learn/lean-manufacturing/poka-yoke/)
+- [Ciclo PDCA](https://www.m365.fm/en/learn/lean-manufacturing/pdca-cycle/)
+- [Lavoro standard](https://www.m365.fm/en/learn/shop-floor-management/standard-work/)
+- [Produzione senza carta e istruzioni di lavoro digitali](https://www.m365.fm/en/learn/shop-floor-management/paperless-manufacturing/)
+- [Dimensionamento dei lotti: EOQ ed EPQ](https://www.m365.fm/en/learn/production-scheduling-aps/lot-sizing/)
+- [Gestione delle scorte di produzione](https://www.m365.fm/en/learn/production-scheduling-aps/manufacturing-inventory-management/)
+- [Simulazione di produzione](https://www.m365.fm/en/learn/digital-twin-manufacturing/manufacturing-simulation/)
+- [Competenze della forza lavoro di produzione e TWI](https://www.m365.fm/en/learn/operational-excellence/manufacturing-workforce-skills/)
+
+**Termini del glossario (entità)**
+[SMED](https://www.m365.fm/entity/smed/) · [Setup time](https://www.m365.fm/entity/setup-time/) · [Heijunka](https://www.m365.fm/entity/heijunka/) · [Standard work](https://www.m365.fm/entity/standard-work/) · [Kanban](https://www.m365.fm/entity/kanban/) · [5S](https://www.m365.fm/entity/5s/) · [Poka-yoke](https://www.m365.fm/entity/poka-yoke/) · [TPM](https://www.m365.fm/entity/total-productive-maintenance/) · [Value stream mapping](https://www.m365.fm/entity/value-stream-mapping/) · [Lean management](https://www.m365.fm/entity/lean-management/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** è il conduttore di m365.fm e lavora presso iFAKT GmbH. Su m365.fm scrive di lean manufacturing, eccellenza operativa e trasformazione digitale della produzione, con particolare attenzione a come i modelli di flusso del valore, la simulazione e l'analisi dei KPI aiutano gli stabilimenti a mettere in pratica metodi come lo SMED.
+
+**Nota: l'autore lavora presso iFAKT GmbH.**
+
+# Sources
+
+All sources accessed November 20, 2026. Regulatory texts and LEI definitions were opened and checked on that date; vendor pages are cited for vendor guidance and labeled as such in the text.
+
+1. Single Minute Exchange of Die. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/
+2. Changeover. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/changeover/
+3. Every Product Every Interval (EPEx). Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/every-product-every-interval/
+4. Overall Equipment Effectiveness. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/overall-equipment-effectiveness/
+5. Single-minute exchange of die (history, Shingo's eight techniques, four stages, seven basic steps, setup time breakdown, OTED; citing Shingo 1985 and 1989). Wikipedia. https://en.wikipedia.org/wiki/Single-minute_exchange_of_die
+6. Shigeo Shingo. Wikipedia. https://en.wikipedia.org/wiki/Shigeo_Shingo
+7. Shingo, S. (translated by Dillon, A. P.): A Revolution in Manufacturing: The SMED System. Productivity Press, Cambridge, MA, 1985, 386 pp., ISBN 978-0-915299-03-4 (publisher page, Routledge: https://www.routledge.com/A-Revolution-in-Manufacturing-The-SMED-System-1st-Edition/Shingo/p/book/9780915299034; book text not consulted directly).
+8. 29 CFR 1910.147, The control of hazardous energy (lockout/tagout). Occupational Safety and Health Administration (OSHA), US Department of Labor. https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147 (verbatim text cross-checked at https://www.law.cornell.edu/cfr/text/29/1910.147)
+9. Lockout/Tagout eTool: Minor servicing exception (relationship to Subpart O). OSHA. https://www.osha.gov/etools/lockout-tagout/hot-topics/relationship-subpart-o/minor-servicing-exception
+10. 29 CFR 1910.217, Mechanical power presses, paragraph (d)(9) Diesetting. OSHA. https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.217
+11. 21 CFR 211.130, Packaging and labeling operations, paragraph (e). Legal Information Institute, Cornell Law School. https://www.law.cornell.edu/cfr/text/21/211.130
+12. McIntosh, R. I. et al.: A critical evaluation of Shingo's "SMED" (Single Minute Exchange of Die) methodology. International Journal of Production Research, Vol. 38, No. 11 (2000), pp. 2377–2395. Record: https://acnpsearch.tweb-dev.unibo.it/singlejournalindex/73565535 (DOI not confirmed online)
+13. McIntosh, R.; Culley, S.; Gest, G.; Mileham, T.; Owen, G.: An assessment of the role of design in the improvement of changeover performance. International Journal of Operations & Production Management, Vol. 16, No. 9 (1996), pp. 5–22. https://doi.org/10.1108/01443579610125552
+14. da Silva, I. B.; Godinho Filho, M.: Single-minute exchange of die (SMED): a state-of-the-art literature review. International Journal of Advanced Manufacturing Technology, Vol. 102 (2019), pp. 4289–4307. https://doi.org/10.1007/s00170-019-03484-w
+15. Braglia, M.; Di Paco, F.; Frosolini, M.; Marrazzini, L.: Quick changeover design: a new Lean methodology to support the design of machines in terms of rapid changeover capability. Journal of Manufacturing Technology Management, Vol. 34, No. 9 (2023), pp. 84–114. https://doi.org/10.1108/JMTM-12-2022-0430
+16. Cakmakci, M.: Process improvement: performance analysis of the setup time reduction-SMED in the automobile industry. International Journal of Advanced Manufacturing Technology, Vol. 41, No. 1 (2009), pp. 168–179. https://doi.org/10.1007/s00170-008-1434-4
+17. Success Story: Improvement Effort Reduces Changeover Time (Brighton NC Machine Corporation, Michigan Manufacturing Technology Center), April 6, 2018. NIST Manufacturing Innovation Blog. https://www.nist.gov/blogs/manufacturing-innovation-blog/success-story-improvement-effort-reduces-changeover-time
+18. Quick Changeover (April 16, 2024). WMEP Manufacturing Solutions (Wisconsin), part of the MEP National Network. https://wmep.org/quick-changeover/
+19. SMED (Single-Minute Exchange of Die). leanproduction.com (vendor-operated knowledge page). https://leanproduction.com/smed
+20. Single-Minute Exchange of Die (SMED). Vorne Industries (vendor). https://www.vorne.com/tools/single-minute-exchange-of-die.htm
+21. How to Reduce Changeover Time. MachineMetrics (vendor). https://www.machinemetrics.com/blog/changeover-time
+22. How to Reduce Changeover Time in Manufacturing: A Practical Playbook for Maintenance and Operations. MaintainX (vendor). https://www.getmaintainx.com/blog/how-to-reduce-changeover-time-in-manufacturing
+23. How To Reduce Changeover Time in Manufacturing. Tulip Interfaces (vendor). https://tulip.co/blog/reduce-changeover-time-in-manufacturing/
+24. How to Reduce Changeover Time with Connected Workforce Software. L2L (vendor). https://l2l.com/blog/reduce-changeover-time
+25. Heijunka. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/heijunka/
+26. Standardized Work. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/standardized-work/
+27. 5S. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/five-s/
+28. Poka-Yoke. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/poka-yoke/
+29. Total Productive Maintenance. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/total-productive-maintenance/
+30. About the Shingo Institute. Shingo Institute, Jon M. Huntsman School of Business, Utah State University. https://shingo.org/about-the-shingo-institute/
+31. Manufacturing Extension Partnership (MEP). National Institute of Standards and Technology (NIST). https://www.nist.gov/mep
+32. Ergonomics. OSHA. https://www.osha.gov/ergonomics
+33. Training Within Industry. Wikipedia. https://en.wikipedia.org/wiki/Training_Within_Industry
+34. Kanban. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/kanban/
+35. Value-Stream Mapping. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/value-stream-mapping/
+36. Chapter 5: Single Minute Exchange of Die (SMED). In: Statistical Process Control and Lean Manufacturing (open textbook, Creative Commons). PALNI Pressbooks. https://pressbooks.palni.org/spcleanmanufacturing/?p=35
+37. 21 CFR 117.135, Preventive controls, paragraph (c)(2) Food allergen controls. Legal Information Institute, Cornell Law School. https://www.law.cornell.edu/cfr/text/21/117.135
+38. Total absorption costing. Wikipedia. https://en.wikipedia.org/wiki/Total_absorption_costing
+39. Economic order quantity. Wikipedia (formula Q* = √(2DK/h); Harris 1913). https://en.wikipedia.org/wiki/Economic_order_quantity (accessed November 20, 2026)
+40. Handbook: Inventory (2025), sections on ASC 330-10-30-1, 30-3, 30-6 to 30-8. KPMG LLP. https://kpmg.com/kpmg-us/content/dam/kpmg/frv/pdf/2025/inventory.pdf (accessed November 20, 2026)

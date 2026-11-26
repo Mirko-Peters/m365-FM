@@ -1,28 +1,28 @@
 <translation>
-## Level sigma dan DPMO: perhitungannya langkah demi langkah
+## Level sigma dan DPMO: perhitungannya dijabarkan langkah demi langkah
 
-Tidak ada halaman yang banyak dibaca yang menampilkan perhitungan ini dalam bentuk teks, jadi berikut ini langkah demi langkahnya.
+Tidak ada halaman yang banyak dibaca yang menampilkan perhitungan ini dalam bentuk teks, jadi berikut ini dijabarkan langkah demi langkah.
 
 ### Unit, cacat, dan peluang
 
 | Istilah | Arti | Contoh (badan katup) |
 |---|---|---|
-| Unit | item yang diproduksi atau diproses | satu badan katup hidraulik |
-| Cacat | setiap kegagalan memenuhi persyaratan pelanggan | kebocoran saat uji, lubang di luar toleransi |
-| Peluang | kesempatan terpisah terjadinya cacat yang diukur | 8 karakteristik kritis-untuk-mutu yang diperiksa per badan |
+| Unit | item yang diproduksi atau diproses | satu badan katup hidrolik |
+| Cacat | setiap kegagalan memenuhi persyaratan pelanggan | kebocoran saat pengujian, diameter lubang di luar toleransi |
+| Peluang | kesempatan terpisah untuk terjadinya cacat yang diukur | 8 karakteristik kritis-untuk-mutu yang diperiksa per badan |
 | DPU | cacat per unit = cacat ÷ unit | |
 | DPO | cacat per peluang = cacat ÷ (unit × peluang) | |
 | DPMO | DPO × 1.000.000 | |
 
 ### Contoh kerja 1: dari jumlah cacat ke level sigma
 
-Sebuah sel mesin memproses 5.000 badan katup dalam sebulan. Setiap badan memiliki 8 karakteristik yang diperiksa (peluang). Inspeksi mencatat 46 cacat.
+Sebuah sel mesin memproses 5.000 badan katup dalam satu bulan. Setiap badan memiliki 8 karakteristik yang diperiksa (peluang). Pemeriksaan mencatat 46 cacat.
 
 - DPU = 46 ÷ 5.000 = 0,0092
 - DPO = 46 ÷ (5.000 × 8) = 46 ÷ 40.000 = 0,00115
 - DPMO = 0,00115 × 1.000.000 = **1.150**
 
-Untuk mengonversi DPMO menjadi level sigma, cari nilai z dari distribusi normal standar yang ekor atasnya sama dengan DPO, lalu tambahkan 1,5 yang lazim:
+Untuk mengonversi DPMO menjadi level sigma, cari nilai-z dari distribusi normal standar yang ekor atasnya sama dengan DPO, lalu tambahkan 1,5 sebagai konvensi:
 
 - Yield per peluang = 1 − 0,00115 = 0,99885
 - z untuk 0,99885 = 3,05 (dari tabel normal, atau `=NORM.S.INV(0,99885)` di Excel)
@@ -30,7 +30,7 @@ Untuk mengonversi DPMO menjadi level sigma, cari nilai z dari distribusi normal 
 
 Rumus di balik setiap tabel sigma adalah DPMO = 1.000.000 × (1 − Φ(level sigma − 1,5)), dengan Φ adalah distribusi normal standar kumulatif [5]. Di Excel: `=NORM.S.INV(1-DPMO/1000000)+1.5`.
 
-**Hati-hati dengan peluang.** Jumlah peluang adalah pilihan, dan itu menentukan hasilnya. Jika 46 cacat yang sama dihitung terhadap 20 "peluang" per unit, DPMO turun menjadi 460 dan level sigma naik menjadi sekitar 4,8 tanpa ada perbaikan apa pun. Tentukan definisi peluang sekali per keluarga produk, hitung hanya karakteristik yang benar-benar diperiksa, dan jaga agar definisinya tetap. Untuk perbandingan antarproses, DPU dan first pass yield lebih sulit dimanipulasi.
+**Hati-hati dengan peluang.** Jumlah peluang adalah pilihan, dan itu memengaruhi hasilnya. Jika 46 cacat yang sama dihitung terhadap 20 "peluang" per unit, DPMO turun menjadi 460 dan level sigma naik menjadi sekitar 4,8 tanpa ada perbaikan yang terjadi. Tentukan definisi peluang sekali per keluarga produk, hitung hanya karakteristik yang benar-benar diperiksa, dan jaga definisinya tetap. Untuk perbandingan antarproses, DPU dan first pass yield lebih sulit dimanipulasi.
 
 ### Tabel konversi sigma (dihitung)
 
@@ -46,29 +46,29 @@ Nilai dihitung dengan rumus di atas (DPMO jangka panjang dengan pergeseran 1,5 s
 | 5 | 233 | 99,977% | 0,57 |
 | 6 | 3,4 | 99,99966% | 0,002 |
 
-Kolom terakhir menunjukkan mengapa pergeseran itu penting: tanpanya, proses enam sigma hanya menghasilkan sekitar dua cacat per miliar, bukan 3,4 per sejuta.
+Kolom terakhir menunjukkan mengapa pergeseran itu penting: tanpa pergeseran, proses enam sigma akan menghasilkan sekitar dua cacat per miliar, bukan 3,4 per sejuta.
 
 ### Contoh kerja 2: rolled throughput yield
 
-Sebuah part melewati empat langkah proses. First pass yield-nya masing-masing 98%, 95%, 99%, dan 97%. Rolled throughput yield (RTY), yaitu probabilitas sebuah unit lolos semua langkah tanpa rework apa pun, adalah hasil kalinya:
+Sebuah part melewati empat langkah proses. First pass yield-nya adalah 98%, 95%, 99%, dan 97%. Rolled throughput yield (RTY), yaitu probabilitas sebuah unit lolos semua langkah tanpa pengerjaan ulang, adalah hasil kalinya:
 
 RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, atau 89,4%
 
-Setiap langkah tampak dapat diterima jika dilihat sendiri; secara bersama-sama, lebih dari satu dari sepuluh unit memerlukan rework atau scrap di suatu tempat. RTY sering kali lebih berguna bagi plant manager daripada level sigma, karena menunjukkan "pabrik tersembunyi" dari siklus rework. Untuk definisi first pass yield dan metrik terkait, lihat [panduan KPI Manufaktur](https://www.m365.fm/en/learn/manufacturing-kpis/).
+Setiap langkah tampak dapat diterima jika dilihat sendiri-sendiri; secara bersama-sama, lebih dari satu dari sepuluh unit memerlukan pengerjaan ulang atau menjadi scrap di suatu tahap. RTY sering kali lebih berguna bagi manajer pabrik dibandingkan level sigma, karena menunjukkan "pabrik tersembunyi" dari siklus pengerjaan ulang. Untuk definisi first pass yield dan metrik terkait, lihat [panduan KPI Manufaktur](https://www.m365.fm/en/learn/manufacturing-kpis/).
 
 ### Contoh kerja 3: nilai satu level sigma
 
-Contoh yang menjadi acuan dalam artikel ini: sebuah plant mengirimkan 48.000 badan katup per tahun. 2,8% gagal dalam uji kebocoran akhir. Setiap kegagalan menimbulkan biaya $85 untuk rework, uji ulang, dan scrap (angka ilustratif).
+Contoh yang berjalan dalam artikel ini: sebuah pabrik mengirimkan 48.000 badan katup per tahun. 2,8% gagal pada uji kebocoran akhir. Setiap kegagalan menimbulkan biaya $85 untuk pengerjaan ulang, pengujian ulang, dan scrap (angka ilustratif).
 
 - Kegagalan per tahun: 48.000 × 0,028 = 1.344
 - Biaya: 1.344 × $85 = $114.240 per tahun
-- Level sigma: DPO = 0,028 per unit (satu peluang: bocor atau tidak) -> z = 1,91 -> **3,41 sigma**
+- Level sigma: DPO = 0,028 per unit (satu peluang: bocor atau tidak bocor) -> z = 1,91 -> **3,41 sigma**
 
-Jika sebuah proyek DMAIC menurunkan tingkat kegagalan menjadi 0,6%:
+Jika proyek DMAIC menurunkan tingkat kegagalan menjadi 0,6%:
 
 - Kegagalan: 48.000 × 0,006 = 288; biaya: $24.480
 - Penghematan tahunan: $89.760 (sebelum biaya proyek)
 - Level sigma: z untuk 0,994 = 2,51 -> **4,01 sigma**
 
-Naik dari sekitar 3,4 ke sekitar 4,0 sigma adalah hasil satu proyek yang realistis. Naik dari 4,5 ke 6 sigma biasanya memerlukan perancangan ulang, bukan proyek.
+Naik dari sekitar 3,4 ke sekitar 4,0 sigma adalah hasil satu proyek yang realistis. Naik dari 4,5 ke 6 sigma biasanya memerlukan perancangan ulang, bukan sekadar proyek.
 </translation>

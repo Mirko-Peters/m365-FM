@@ -1,15 +1,15 @@
 <translation>
 ## Indicadores de manutenção: MTBF, MTTR, conformidade de PM e métricas específicas de PdM
 
-Meça o programa pelo seu efeito sobre o trabalho de operação e manutenção, e não pela acurácia do modelo. A Society for Maintenance & Reliability Professionals (SMRP), uma sociedade sem fins lucrativos dos EUA formada por profissionais da área, publica melhores práticas, métricas e diretrizes para manutenção e confiabilidade; se sua empresa as utiliza, alinhe suas definições com a redação da SMRP [26]. Nosso guia de [KPIs de manufatura](https://www.m365.fm/en/learn/manufacturing-kpis/) cobre MTBF, MTTR e disponibilidade junto com OEE; as definições aqui são mantidas consistentes com ele.
+Meça o programa pelo seu efeito sobre o trabalho de operação e manutenção, não pela acurácia do modelo. A Society for Maintenance & Reliability Professionals (SMRP), uma sociedade sem fins lucrativos dos EUA formada por profissionais da área, publica melhores práticas, métricas e diretrizes para manutenção e confiabilidade; se sua empresa as utiliza, alinhe suas definições com a redação da SMRP [26]. Nosso guia de [indicadores de manufatura](https://www.m365.fm/en/learn/manufacturing-kpis/) cobre MTBF, MTTR e disponibilidade junto com OEE; as definições aqui são mantidas consistentes com ele.
 
 ### Indicadores centrais de confiabilidade
 
 > **MTBF (tempo médio entre falhas) = tempo de operação ÷ número de falhas**
-> **MTTR (tempo médio de reparo) = tempo total de reparo ÷ número de reparos**
+> **MTTR (tempo médio para reparo) = tempo total de reparo ÷ número de reparos**
 > **Disponibilidade inerente = MTBF ÷ (MTBF + MTTR)**
 
-**Exemplo ilustrativo.** Os 12 ativos do piloto operaram um total de 96.000 horas no ano de referência, com 9 falhas e 72 horas de tempo total de reparo.
+**Exemplo prático.** Os 12 ativos do piloto operaram um total de 96.000 horas no ano de referência, com 9 falhas e 72 horas de tempo total de reparo.
 
 - MTBF = 96.000 ÷ 9 = **10.667 horas**
 - MTTR = 72 ÷ 9 = **8,0 horas**
@@ -19,32 +19,32 @@ No primeiro ano do piloto, ocorrem 4 falhas funcionais no mesmo tempo de operaç
 
 - MTBF (falhas funcionais) = 96.000 ÷ 4 = **24.000 horas**
 
-Seja explícito sobre o que conta como falha. Se os reparos planejados disparados pela PdM fossem contados como falhas, o MTBF pareceria inalterado mesmo com a queda acentuada do tempo de parada. Reporte ambos: falhas funcionais e intervenções detectadas pela PdM.
+Seja explícito sobre o que conta como falha. Se os reparos planejados acionados pela PdM fossem contados como falhas, o MTBF pareceria inalterado, mesmo que o tempo de parada tivesse caído drasticamente. Reporte ambos: falhas funcionais e intervenções detectadas pela PdM.
 
 ### Indicadores de processo de manutenção
 
 | Indicador | Fórmula | Por que importa para a PdM |
 |---|---|---|
-| Conformidade de PM | Ordens de trabalho de PM concluídas dentro da janela programada ÷ ordens de trabalho de PM devidas no período | Um programa de PdM sobre um programa de PM falho fracassa; primeiro controle os cuidados básicos |
-| Percentual de manutenção planejada | Horas de manutenção planejada ÷ horas totais de manutenção | Deve subir à medida que a PdM transforma quebras em trabalho planejado |
-| Participação de trabalho reativo (emergencial) | Horas de trabalho emergencial ÷ horas totais de manutenção | Ligação direta com a constatação do NIST sobre fábricas com predominância reativa [4] |
-| Conformidade de programação | Horas de trabalho programado concluídas conforme planejado ÷ horas programadas | Mostra se os trabalhos planejados disparados pela PdM são de fato executados |
+| Conformidade de PM | Ordens de trabalho de PM concluídas dentro da janela programada ÷ ordens de trabalho de PM vencidas, no período | Um programa de PdM sobre um programa de PM quebrado fracassa; primeiro coloque os cuidados básicos sob controle |
+| Percentual de manutenção planejada | Horas de manutenção planejada ÷ total de horas de manutenção | Deve subir à medida que a PdM transforma quebras em trabalho planejado |
+| Participação de trabalho reativo (emergencial) | Horas de trabalho emergencial ÷ total de horas de manutenção | Vínculo direto com a constatação do NIST sobre fábricas com predominância reativa [4] |
+| Conformidade de programação | Horas de trabalho programado concluídas conforme planejado ÷ horas programadas | Mostra se os trabalhos planejados acionados pela PdM realmente são executados |
 | Custo de manutenção por unidade ou como percentual do valor de reposição do ativo | Custo total de manutenção ÷ produção, ou ÷ valor estimado de reposição dos ativos | Evita que "economias" em paradas sejam anuladas por custos maiores de serviço |
 | Tempo de parada não planejada em ativos monitorados | Horas de paradas não planejadas causadas por ativos monitorados | O principal indicador de resultado |
 
-**Exemplo ilustrativo: conformidade de PM.** Em março, 240 ordens de trabalho de PM estavam devidas na linha. 204 foram concluídas dentro da janela acordada (por exemplo, data de vencimento mais ou menos 10% do intervalo ou um número fixo de dias; defina a janela uma vez e mantenha-a). Conformidade de PM = 204 ÷ 240 = **85%**. Muitos líderes de manutenção buscam 90% ou mais antes de adicionar camadas preditivas [não verificado como benchmark publicado; use apenas como meta interna].
+**Exemplo prático: conformidade de PM.** Em março, 240 ordens de trabalho de PM estavam vencidas na linha. 204 foram concluídas dentro da janela acordada (por exemplo, data de vencimento mais ou menos 10% do intervalo ou um número fixo de dias; defina a janela uma vez e mantenha-a). Conformidade de PM = 204 ÷ 240 = **85%**. Muitos líderes de manutenção estabelecem como meta 90% ou mais antes de adicionar camadas preditivas [não verificado como benchmark publicado; use apenas como meta interna].
 
 ### Indicadores específicos de PdM
 
 | Indicador | Fórmula | Direção da meta |
 |---|---|---|
-| Cobertura | Ativos críticos sob monitoramento de condição ÷ ativos críticos | Aumentar, até o escopo planejado |
-| Antecedência de detecção | Dias entre o primeiro alerta e a falha funcional (ou o reparo planejado) | Maior que o tempo necessário para planejar |
-| Precisão dos alertas | Alertas confirmados ÷ todos os alertas | Aumentar, sem perder recall |
-| Taxa de detecção (recall) | Falhas precedidas por um alerta oportuno ÷ todas as falhas dos modos de falha monitorados | Aumentar |
-| Tempo de resposta ao alerta | Tempo entre o alerta e a decisão de triagem | Dentro do limite acordado (por exemplo, 1 turno para alta prioridade) |
-| Trabalho gerado pela PdM | Ordens de trabalho originadas de achados de condição ÷ todas as ordens de trabalho corretivas | Aumentar |
-| Taxa de retorno do estado encontrado (as-found) | Ordens de trabalho de PdM com condição as-found registrada ÷ ordens de trabalho de PdM | Próxima de 100% |
+| Cobertura | Ativos críticos sob monitoramento de condição ÷ ativos críticos | Crescente, até o escopo planejado |
+| Tempo de antecedência da detecção | Dias entre o primeiro alerta e a falha funcional (ou o reparo planejado) | Maior que o tempo necessário para planejar |
+| Precisão dos alertas | Alertas confirmados ÷ todos os alertas | Crescente, sem perder recall |
+| Taxa de detecção (recall) | Falhas precedidas por um alerta oportuno ÷ todas as falhas dos modos de falha monitorados | Crescente |
+| Tempo de resposta ao alerta | Tempo do alerta até a decisão de triagem | Dentro do limite acordado (por exemplo, 1 turno para prioridade alta) |
+| Trabalho gerado pela PdM | Ordens de trabalho originadas de achados de condição ÷ todas as ordens de trabalho corretivas | Crescente |
+| Taxa de retorno as-found | Ordens de trabalho de PdM com condição as-found registrada ÷ ordens de trabalho de PdM | Próxima de 100% |
 
-Coloque de três a cinco desses indicadores no quadro diário ou semanal da equipe de manutenção. Para saber como esses quadros funcionam, veja [gestão no chão de fábrica](https://www.m365.fm/en/learn/shop-floor-management/).
+Coloque de três a cinco destes indicadores no quadro diário ou semanal da equipe de manutenção. Para entender como esses quadros funcionam, veja [gestão à vista no chão de fábrica](https://www.m365.fm/en/learn/shop-floor-management/).
 </translation>

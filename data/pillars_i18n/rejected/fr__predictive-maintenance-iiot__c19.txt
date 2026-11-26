@@ -1,5 +1,5 @@
 <translation>
-## Indicateurs de maintenance : MTBF, MTTR, conformité PM et indicateurs spécifiques à la maintenance prédictive
+## Indicateurs de maintenance : MTBF, MTTR, conformité PM et indicateurs spécifiques à la maintenance prédictive (PdM)
 
 Mesurez le programme à son effet sur le travail d'exploitation et de maintenance, et non à la précision du modèle. La Society for Maintenance & Reliability Professionals (SMRP), une société à but non lucratif américaine fondée par des praticiens, publie des bonnes pratiques, des indicateurs et des lignes directrices pour la maintenance et la fiabilité ; si votre entreprise les utilise, alignez vos définitions sur la formulation de la SMRP [26]. Notre guide sur les [indicateurs de fabrication](https://www.m365.fm/en/learn/manufacturing-kpis/) couvre le MTBF, le MTTR et la disponibilité aux côtés du TRS ; les définitions présentées ici sont cohérentes avec ce guide.
 
@@ -9,42 +9,42 @@ Mesurez le programme à son effet sur le travail d'exploitation et de maintenanc
 > **MTTR (temps moyen de réparation) = temps total de réparation ÷ nombre de réparations**
 > **Disponibilité intrinsèque = MTBF ÷ (MTBF + MTTR)**
 
-**Exemple détaillé.** Les 12 équipements pilotes ont fonctionné pendant un total de 96 000 heures au cours de l'année de référence, avec 9 pannes et 72 heures de temps de réparation total.
+**Exemple chiffré.** Les 12 équipements pilotes ont fonctionné au total 96 000 heures durant l'année de référence, avec 9 pannes et 72 heures de temps de réparation cumulé.
 
 - MTBF = 96 000 ÷ 9 = **10 667 heures**
 - MTTR = 72 ÷ 9 = **8,0 heures**
 - Disponibilité intrinsèque = 10 667 ÷ (10 667 + 8,0) = **99,93 %** par équipement
 
-Au cours de la première année pilote, 4 pannes fonctionnelles surviennent sur le même temps de fonctionnement, et 5 défauts en développement sont détectés et réparés comme travaux planifiés.
+Au cours de la première année pilote, 4 défaillances fonctionnelles surviennent sur le même temps de fonctionnement, et 5 défauts naissants sont détectés et réparés comme des travaux planifiés.
 
-- MTBF (pannes fonctionnelles) = 96 000 ÷ 4 = **24 000 heures**
+- MTBF (défaillances fonctionnelles) = 96 000 ÷ 4 = **24 000 heures**
 
-Soyez explicite quant à ce qui est considéré comme une panne. Si les réparations planifiées déclenchées par la maintenance prédictive étaient comptées comme des pannes, le MTBF semblerait inchangé alors que les arrêts ont fortement diminué. Présentez les deux : les pannes fonctionnelles, et les interventions détectées par la maintenance prédictive.
+Soyez explicite sur ce qui constitue une panne. Si les réparations planifiées déclenchées par la maintenance prédictive étaient comptées comme des pannes, le MTBF semblerait inchangé alors que les arrêts ont fortement diminué. Présentez les deux : les pannes fonctionnelles, et les interventions détectées par la maintenance prédictive.
 
 ### Indicateurs de processus de maintenance
 
 | Indicateur | Formule | Pourquoi il compte pour la maintenance prédictive |
 |---|---|---|
-| Conformité PM | Ordres de travail PM terminés dans la fenêtre programmée ÷ ordres de travail PM échus sur la période | Un programme de maintenance prédictive sur un programme de maintenance préventive défaillant échoue ; maîtrisez d'abord les soins de base |
-| Part de la maintenance planifiée | Heures de maintenance planifiée ÷ total des heures de maintenance | Doit augmenter à mesure que la maintenance prédictive transforme les pannes en travaux planifiés |
-| Part du travail réactif (d'urgence) | Heures de travail d'urgence ÷ total des heures de maintenance | Lien direct avec le constat du NIST sur les usines à forte dominante réactive [4] |
-| Respect du planning | Heures de travail planifiées réalisées comme prévu ÷ heures planifiées | Montre si les travaux planifiés déclenchés par la maintenance prédictive sont réellement exécutés |
-| Coût de maintenance par unité ou en part de la valeur de remplacement des équipements | Coût total de maintenance ÷ production, ou ÷ valeur de remplacement estimée des équipements | Évite que les « économies » sur les arrêts soient annulées par la hausse des coûts de service |
-| Arrêts non planifiés sur les équipements surveillés | Heures d'arrêts non planifiés causés par les équipements surveillés | Le principal indicateur de résultat |
+| Conformité PM | Ordres de travail PM réalisés dans la fenêtre programmée ÷ ordres de travail PM dus sur la période | Un programme de maintenance prédictive posé sur un programme de maintenance préventive défaillant échoue ; maîtrisez d'abord les soins de base |
+| Part de maintenance planifiée | Heures de maintenance planifiée ÷ heures de maintenance totales | Doit augmenter à mesure que la maintenance prédictive transforme les pannes en travaux planifiés |
+| Part des travaux réactifs (d'urgence) | Heures de travaux d'urgence ÷ heures de maintenance totales | Lien direct avec le constat du NIST sur les usines à forte proportion de travaux réactifs [4] |
+| Respect du planning | Heures de travaux planifiés réalisées comme prévu ÷ heures planifiées | Montre si les travaux planifiés déclenchés par la maintenance prédictive sont effectivement exécutés |
+| Coût de maintenance par unité ou en part de la valeur de remplacement des équipements | Coût total de maintenance ÷ production, ou ÷ valeur estimée de remplacement des équipements | Évite que les « économies » sur les arrêts soient annulées par la hausse des coûts de service |
+| Arrêts non planifiés sur les équipements surveillés | Heures d'arrêt non planifié causées par les équipements surveillés | Le principal indicateur de résultat |
 
-**Exemple détaillé : conformité PM.** En mars, 240 ordres de travail PM étaient échus sur la ligne. 204 ont été réalisés dans la fenêtre convenue (par exemple date d'échéance plus ou moins 10 % de l'intervalle, ou un nombre fixe de jours ; définissez la fenêtre une fois pour toutes et conservez-la). Conformité PM = 204 ÷ 240 = **85 %**. De nombreux responsables de maintenance visent 90 % ou plus avant d'ajouter des couches prédictives [non vérifié comme référence publiée ; à utiliser uniquement comme objectif interne].
+**Exemple chiffré : conformité PM.** En mars, 240 ordres de travail PM étaient dus sur la ligne. 204 ont été réalisés dans la fenêtre convenue (par exemple date d'échéance plus ou moins 10 % de l'intervalle, ou un nombre de jours fixe ; définissez la fenêtre une fois et conservez-la). Conformité PM = 204 ÷ 240 = **85 %**. De nombreux responsables de maintenance visent 90 % ou plus avant d'ajouter des couches prédictives [non vérifié en tant que référence publiée ; à utiliser uniquement comme objectif interne].
 
-### Indicateurs spécifiques à la maintenance prédictive
+### Indicateurs spécifiques à la maintenance prédictive (PdM)
 
 | Indicateur | Formule | Sens de l'objectif |
 |---|---|---|
-| Couverture | Actifs critiques sous surveillance d'état ÷ actifs critiques | À la hausse, jusqu'au périmètre prévu |
-| Délai de détection | Nombre de jours entre la première alerte et la panne fonctionnelle (ou la réparation planifiée) | Supérieur au temps nécessaire à la planification |
-| Précision des alertes | Alertes confirmées ÷ total des alertes | À la hausse, sans perdre en rappel |
-| Taux de détection (rappel) | Pannes précédées d'une alerte à temps ÷ total des pannes des modes de défaillance surveillés | À la hausse |
-| Temps de réponse aux alertes | Délai entre l'alerte et la décision de tri | Dans la limite convenue (par exemple 1 équipe pour les priorités élevées) |
-| Travail généré par la maintenance prédictive | Ordres de travail issus de constats d'état ÷ total des ordres de travail correctifs | À la hausse |
-| Taux de retour « tel que trouvé » | Ordres de travail de maintenance prédictive avec l'état « tel que trouvé » renseigné ÷ ordres de travail de maintenance prédictive | Proche de 100 % |
+| Couverture | Équipements critiques sous surveillance d'état ÷ équipements critiques | À la hausse, jusqu'au périmètre prévu |
+| Délai de détection | Jours entre la première alerte et la défaillance fonctionnelle (ou la réparation planifiée) | Plus long que le temps nécessaire à la planification |
+| Précision des alertes | Alertes confirmées ÷ toutes les alertes | À la hausse, sans perdre en rappel |
+| Taux de détection (rappel) | Défaillances précédées d'une alerte opportune ÷ toutes les défaillances des modes de défaillance surveillés | À la hausse |
+| Délai de réponse aux alertes | Temps entre l'alerte et la décision de tri | Dans la limite convenue (par exemple 1 équipe pour les priorités élevées) |
+| Travaux générés par la maintenance prédictive | Ordres de travail issus de constats d'état ÷ tous les ordres de travail correctifs | À la hausse |
+| Taux de retour « as-found » | Ordres de travail PdM avec état « as-found » consigné ÷ ordres de travail PdM | Proche de 100 % |
 
-Affichez trois à cinq de ces indicateurs sur le tableau quotidien ou hebdomadaire de l'équipe de maintenance. Pour le fonctionnement de ces tableaux, voir [management de l'atelier](https://www.m365.fm/en/learn/shop-floor-management/).
+Placez trois à cinq de ces indicateurs sur le tableau quotidien ou hebdomadaire de l'équipe de maintenance. Pour le fonctionnement de ce type de tableaux, voir [management visuel en atelier](https://www.m365.fm/en/learn/shop-floor-management/).
 </translation>

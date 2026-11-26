@@ -1,45 +1,45 @@
 <translation>
 ### Os dois ciclos de vida
 
-A 62443 distingue o **ciclo de vida de desenvolvimento do produto** do fornecedor do **ciclo de vida da solução de automação** na planta, que possui uma fase de integração e uma fase de operação e manutenção [2]. Um CLP seguro (4-2) não torna uma linha segura; o integrador precisa configurá-lo corretamente (3-3), e o proprietário do ativo precisa operá-lo com segurança durante vinte anos (2-1). A maioria dos problemas na planta surge na terceira etapa.
+A 62443 distingue o **ciclo de vida de desenvolvimento do produto** do fornecedor do **ciclo de vida da solução de automação** na planta, que tem uma fase de integração e uma fase de operação e manutenção [2]. Um CLP seguro (4-2) não torna uma linha segura; o integrador precisa configurá-lo corretamente (3-3), e o proprietário do ativo precisa operá-lo com segurança durante vinte anos (2-1). A maioria dos problemas na planta surge na terceira etapa.
 
 ## Requisitos fundamentais, níveis de segurança e níveis de maturidade
 
 ### Os sete requisitos fundamentais
 
-Todos os requisitos técnicos da 3-3 (sistema) e da 4-2 (componente) estão agrupados em sete requisitos fundamentais (FRs) [2]. Aprenda-os; eles são a base de toda análise de lacunas.
+Todos os requisitos técnicos em 3-3 (sistema) e 4-2 (componente) são agrupados em sete requisitos fundamentais (FRs) [2]. Aprenda-os; eles são a base de toda análise de lacunas.
 
-| FR | Nome | O que exige, em linguagem de planta | Medidas típicas na planta |
+| FR | Nome | O que pergunta, em linguagem de planta | Medidas típicas na planta |
 |---|---|---|---|
-| FR 1 | Controle de identificação e autenticação (IAC) | Sabemos quem ou o que está se conectando? | Contas pessoais em vez de logins compartilhados de "operador", MFA para acesso remoto, certificados de dispositivo para OPC UA |
-| FR 2 | Controle de uso (UC) | Cada pessoa pode fazer apenas o que sua função exige? | Direitos baseados em função nas IHMs e ferramentas de engenharia, contas de administrador separadas, auditoria de quem alterou a lógica |
-| FR 3 | Integridade do sistema (SI) | Conseguimos detectar ou impedir alterações não autorizadas em software, lógica e dados? | Lista de permissão de aplicativos, firmware assinado, chave do controlador em RUN, detecção de alteração de lógica |
-| FR 4 | Confidencialidade dos dados (DC) | Informações sensíveis são protegidas em uso, em trânsito e em armazenamento? | Sessões remotas criptografadas, proteção de receitas e desenhos, tratamento de CUI em trabalhos de defesa |
-| FR 5 | Fluxo de dados restrito (RDF) | O tráfego está limitado ao necessário entre zonas? | Segmentação, firewalls nos condutos, DMZ industrial, gateways unidirecionais quando justificados |
-| FR 6 | Resposta oportuna a eventos (TRE) | Percebemos os incidentes e reagimos a tempo? | Coleta de logs, monitoramento da rede OT, tratamento de alarmes, plano de resposta a incidentes |
-| FR 7 | Disponibilidade de recursos (RA) | As funções essenciais continuam operando sob estresse ou ataque? | Redundância, backups, restaurações testadas, proteção contra inundação de rede, recurso manual de contingência |
+| FR 1 | Controle de identificação e autenticação (IAC) | Sabemos quem ou o quê está se conectando? | Contas pessoais em vez de logins compartilhados de "operador", MFA para acesso remoto, certificados de dispositivo para OPC UA |
+| FR 2 | Controle de uso (UC) | Cada pessoa só pode fazer o que a sua função exige? | Direitos baseados em função em IHMs e ferramentas de engenharia, contas de administrador separadas, auditoria de quem alterou a lógica |
+| FR 3 | Integridade do sistema (SI) | Conseguimos detectar ou impedir alterações não autorizadas em software, lógica e dados? | Lista de permissões de aplicações, firmware assinado, chave do controlador em RUN, detecção de alterações de lógica |
+| FR 4 | Confidencialidade dos dados (DC) | Informações sensíveis são protegidas em uso, trânsito e armazenamento? | Sessões remotas criptografadas, proteção de receitas e desenhos, tratamento de CUI em trabalhos de defesa |
+| FR 5 | Fluxo de dados restrito (RDF) | O tráfego está limitado ao necessário entre zonas? | Segmentação, firewalls em conduítes, DMZ industrial, gateways unidirecionais onde justificado |
+| FR 6 | Resposta oportuna a eventos (TRE) | Percebemos incidentes e reagimos a tempo? | Coleta de logs, monitoramento da rede OT, tratamento de alarmes, playbook de incidentes |
+| FR 7 | Disponibilidade de recursos (RA) | As funções essenciais continuam operando sob estresse ou ataque? | Redundância, backups, restaurações testadas, proteção contra inundação de rede, recuperação manual |
 
 ### Níveis de segurança (SL 1 a 4)
 
-Um nível de segurança descreve até que ponto um atacante poderá ser resistido por uma zona ou componente. A 62443-3-3 define quatro níveis [2]:
+Um nível de segurança descreve quão forte um atacante uma zona ou componente consegue suportar. A 62443-3-3 define quatro níveis [2]:
 
 | SL | Proteção contra | Exemplo de ameaça em uma planta |
 |---|---|---|
-| SL 0 | Nenhuma proteção especial necessária | Raramente justificado; não é um alvo de projeto |
+| SL 0 | Nenhuma proteção especial necessária | Raramente justificado; não é uma meta de projeto |
 | SL 1 | Violação casual ou acidental | Um técnico conecta um notebook na porta errada do switch |
-| SL 2 | Violação intencional por meios simples, com poucos recursos, habilidades genéricas e baixa motivação | Ransomware de prateleira, atacante oportunista com ferramentas padrão |
-| SL 3 | Violação intencional por meios sofisticados, recursos moderados, habilidades específicas de IACS e motivação moderada | Grupo criminoso que estuda seu sistema de controle antes de agir |
-| SL 4 | Violação intencional por meios sofisticados, recursos amplos, habilidades específicas de IACS e alta motivação | Equipe bem financiada, apoiada por um Estado, visando um processo específico |
+| SL 2 | Violação intencional usando meios simples, poucos recursos, habilidades genéricas e baixa motivação | Ransomware comum, um atacante oportunista com ferramentas padrão |
+| SL 3 | Violação intencional usando meios sofisticados, recursos moderados, habilidades específicas de IACS e motivação moderada | Um grupo criminoso que estuda seu sistema de controle antes de agir |
+| SL 4 | Violação intencional usando meios sofisticados, recursos amplos, habilidades específicas de IACS e alta motivação | Uma equipe bem financiada, apoiada por um Estado, visando um processo específico |
 
-Cada nível de segurança não é um único número para a planta inteira, mas um vetor distribuído pelos sete FRs. Uma zona pode precisar de SL 3 para FR 3 (integridade, porque uma lógica manipulada poderia ferir alguém), mas apenas SL 1 para FR 4 (confidencialidade, porque o dado não é sensível). A visão geral secundária observa que os SLs são avaliados por requisito técnico, e não como uma classificação geral de um produto [3].
+Cada nível de segurança não é um número único para a planta inteira, mas um vetor sobre os sete FRs. Uma zona pode precisar de SL 3 para FR 3 (integridade, porque uma lógica manipulada poderia ferir alguém), mas apenas SL 1 para FR 4 (confidencialidade, porque o dado não é sensível). A visão geral secundária observa que os SLs são avaliados por requisito técnico, e não como uma classificação geral de um produto [3].
 
-Há também três tipos de nível de segurança [2]:
+Também existem três tipos de nível de segurança [2]:
 
-- **SL-T (alvo):** o nível desejado para uma zona ou conduto, definido pela análise de risco.
+- **SL-T (alvo):** o nível desejado para uma zona ou conduíte, definido pela avaliação de risco.
 - **SL-C (capacidade):** o que um sistema (3-3) ou componente (4-2) pode oferecer quando adequadamente integrado e configurado.
 - **SL-A (alcançado):** o nível real da solução instalada.
 
-Todo o programa pode ser descrito em uma frase: escolha componentes com SL-C pelo menos igual ao SL-T, configure-os para que o SL-A atinja o SL-T e use medidas compensatórias onde isso não ocorrer.
+Todo o programa pode ser descrito em uma frase: escolha componentes com SL-C pelo menos igual ao SL-T, configure-os para que o SL-A atinja o SL-T, e use medidas compensatórias onde isso não ocorrer.
 
-**Como a maioria dos fabricantes de porte médio define os alvos.** SL 2 é o alvo comum para zonas de produção em manufatura discreta, com SL 3 para zonas cujo comprometimento poderia causar lesões, liberações ambientais de grande porte ou paradas prolongadas, como sistemas de segurança e controle de processos críticos. Trata-se de experiência prática, não de uma regra da norma [não verificado como estatística]. A decisão cabe à sua análise de risco, documentada e aprovada pelo proprietário do ativo.
+**Como a maioria dos fabricantes de porte médio define os alvos.** SL 2 é o alvo comum para zonas de produção em manufatura discreta, com SL 3 para zonas cujo comprometimento poderia causar ferimentos, liberações ambientais de grande porte ou paradas longas, como sistemas de segurança e controle de processos críticos. Trata-se de experiência de praticantes, não de uma regra da norma [não verificado como estatística]. A decisão pertence à sua avaliação de risco, documentada e aprovada pelo proprietário do ativo.
 </translation>

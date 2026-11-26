@@ -7,22 +7,22 @@ Ninguna de las páginas más consultadas muestra este cálculo en texto, así qu
 
 | Término | Significado | Ejemplo (cuerpo de válvula) |
 |---|---|---|
-| Unidad | el artículo que se fabrica o procesa | un cuerpo de válvula hidráulica |
+| Unidad | el artículo que se produce o procesa | un cuerpo de válvula hidráulica |
 | Defecto | cualquier incumplimiento de un requisito del cliente | una fuga en la prueba, un diámetro de orificio fuera de tolerancia |
-| Oportunidad | una posibilidad distinta de que aparezca un defecto y que se mide | 8 características críticas para la calidad (CTQ) inspeccionadas por cuerpo |
+| Oportunidad | una posibilidad distinta de defecto que se mide | 8 características críticas para la calidad inspeccionadas por cuerpo |
 | DPU | defectos por unidad = defectos ÷ unidades | |
 | DPO | defectos por oportunidad = defectos ÷ (unidades × oportunidades) | |
 | DPMO | DPO × 1.000.000 | |
 
 ### Ejemplo práctico 1: de los recuentos de defectos al nivel sigma
 
-Una celda mecaniza 5.000 cuerpos de válvula al mes. Cada cuerpo tiene 8 características que se inspeccionan (oportunidades). La inspección registra 46 defectos.
+Una célula mecaniza 5.000 cuerpos de válvula al mes. Cada cuerpo tiene 8 características que se inspeccionan (oportunidades). La inspección registra 46 defectos.
 
 - DPU = 46 ÷ 5.000 = 0,0092
 - DPO = 46 ÷ (5.000 × 8) = 46 ÷ 40.000 = 0,00115
 - DPMO = 0,00115 × 1.000.000 = **1.150**
 
-Para convertir el DPMO en un nivel sigma, se busca el valor z de la distribución normal estándar cuya cola superior es igual al DPO, y luego se suma el 1,5 convencional:
+Para convertir el DPMO en un nivel sigma, se busca el valor z de la distribución normal estándar cuya cola superior sea igual al DPO, y después se suma el 1,5 convencional:
 
 - Rendimiento por oportunidad = 1 − 0,00115 = 0,99885
 - z para 0,99885 = 3,05 (de una tabla normal, o `=NORM.S.INV(0,99885)` en Excel)
@@ -30,11 +30,11 @@ Para convertir el DPMO en un nivel sigma, se busca el valor z de la distribució
 
 La fórmula que hay detrás de cada tabla sigma es DPMO = 1.000.000 × (1 − Φ(nivel sigma − 1,5)), donde Φ es la distribución normal estándar acumulada [5]. En Excel: `=NORM.S.INV(1-DPMO/1000000)+1,5`.
 
-**Cuidado con las oportunidades.** El número de oportunidades es una decisión, y determina el resultado. Si los mismos 46 defectos se cuentan frente a 20 "oportunidades" por unidad, el DPMO baja a 460 y el nivel sigma sube a unos 4,8 sin que nada haya mejorado. Defina las oportunidades una sola vez por familia de productos, cuente solo las características que realmente se verifican y mantenga fija la definición. Para comparar procesos, el DPU y el rendimiento al primer paso son más difíciles de manipular.
+**Cuidado con las oportunidades.** El número de oportunidades es una elección, y determina el resultado. Si los mismos 46 defectos se cuentan frente a 20 "oportunidades" por unidad, el DPMO baja a 460 y el nivel sigma sube a unos 4,8 sin que nada haya mejorado. Defina las oportunidades una sola vez por familia de productos, cuente solo las características que realmente se comprueban y mantenga fija la definición. Para comparar procesos, el DPU y el rendimiento al primer paso son más difíciles de manipular.
 
 ### La tabla de conversión sigma (calculada)
 
-Valores calculados con la fórmula anterior (DPMO a largo plazo con el desplazamiento de 1,5 sigma) y, a modo de comparación, para un proceso perfectamente centrado con ambas colas contadas:
+Valores calculados con la fórmula anterior (DPMO a largo plazo con el desplazamiento de 1,5 sigma) y, para comparar, para un proceso perfectamente centrado con ambas colas contadas:
 
 | Nivel sigma | DPMO (con desplazamiento de 1,5σ) | Rendimiento (con desplazamiento) | Defectos por millón si está centrado, sin desplazamiento |
 |---|---|---|---|
@@ -48,27 +48,27 @@ Valores calculados con la fórmula anterior (DPMO a largo plazo con el desplazam
 
 La última columna muestra por qué importa el desplazamiento: sin él, un proceso de seis sigma produciría unos dos defectos por mil millones, no 3,4 por millón.
 
-### Ejemplo práctico 2: rendimiento de flujo acumulado (RTY)
+### Ejemplo práctico 2: rendimiento de throughput acumulado
 
-Una pieza pasa por cuatro pasos de proceso. Los rendimientos al primer paso son 98 %, 95 %, 99 % y 97 %. El rendimiento de flujo acumulado (RTY, *rolled throughput yield*), la probabilidad de que una unidad pase todos los pasos sin ningún retrabajo, es el producto:
+Una pieza pasa por cuatro pasos de proceso. Los rendimientos al primer paso son 98 %, 95 %, 99 % y 97 %. El rendimiento de throughput acumulado (RTY, por sus siglas en inglés), la probabilidad de que una unidad pase todos los pasos sin ningún retrabajo, es el producto:
 
 RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, o 89,4 %
 
-Cada paso parece aceptable por separado; juntos, más de una unidad de cada diez necesita retrabajo o se desecha en algún punto. El RTY suele ser para un director de planta una métrica más útil que un nivel sigma, porque muestra la "fábrica oculta" de los bucles de retrabajo. Para las definiciones del rendimiento al primer paso y de otras métricas relacionadas, consulte la [guía de KPI de fabricación](https://www.m365.fm/en/learn/manufacturing-kpis/).
+Cada paso parece aceptable por sí solo; en conjunto, más de una unidad de cada diez necesita retrabajo o se desecha en algún punto. El RTY suele ser para un director de planta una métrica más útil que un nivel sigma, porque muestra la "fábrica oculta" de los bucles de retrabajo. Para las definiciones del rendimiento al primer paso y de métricas relacionadas, consulte la [guía de KPI de fabricación](https://www.m365.fm/en/learn/manufacturing-kpis/).
 
 ### Ejemplo práctico 3: lo que vale un nivel sigma
 
-El ejemplo que recorre este artículo: una planta envía 48.000 cuerpos de válvula al año. El 2,8 % no supera la prueba final de fugas. Cada fallo cuesta 85 $ en retrabajo, nueva prueba y chatarra (cifra ilustrativa).
+El ejemplo de referencia de este artículo: una planta envía 48.000 cuerpos de válvula al año. El 2,8 % falla la prueba final de fugas. Cada fallo cuesta 85 $ en retrabajo, nueva prueba y desguace (cifra ilustrativa).
 
 - Fallos al año: 48.000 × 0,028 = 1.344
 - Coste: 1.344 × 85 $ = 114.240 $ al año
-- Nivel sigma: DPO = 0,028 por unidad (una oportunidad: fuga o no fuga) → z = 1,91 → **3,41 sigma**
+- Nivel sigma: DPO = 0,028 por unidad (una oportunidad: fuga o no fuga) -> z = 1,91 -> **3,41 sigma**
 
 Si un proyecto DMAIC reduce la tasa de fallos al 0,6 %:
 
 - Fallos: 48.000 × 0,006 = 288; coste: 24.480 $
 - Ahorro anual: 89.760 $ (antes de los costes del proyecto)
-- Nivel sigma: z para 0,994 = 2,51 → **4,01 sigma**
+- Nivel sigma: z para 0,994 = 2,51 -> **4,01 sigma**
 
-Pasar de unos 3,4 a unos 4,0 sigma es un resultado realista de un solo proyecto. Pasar de 4,5 a 6 sigma normalmente exige un rediseño, no un proyecto.
+Pasar de unos 3,4 a unos 4,0 sigma es un resultado realista para un solo proyecto. Pasar de 4,5 a 6 sigma suele requerir un rediseño, no un proyecto.
 </translation>
