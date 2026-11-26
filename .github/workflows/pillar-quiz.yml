@@ -14,11 +14,11 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "plan = Zaehlung/Kosten, run = erzeugen, pruefen, speichern (Schluessel an den Worker nur auf main), collect = offene Batches abholen, push = nur Schluessel an den Worker senden, reshuffle = einmalig Optionen geheim neu ordnen (sendet nichts; danach Seitenbau, dann push), regen = einmalig alle Fragen neu erzeugen, alte IDs stilllegen"
+        description: "plan = Zaehlung/Kosten, run = erzeugen, pruefen, speichern (Schluessel an den Worker nur auf main), collect = offene Batches abholen, push = nur Schluessel an den Worker senden, reshuffle = einmalig Optionen geheim neu ordnen (sendet nichts; danach Seitenbau, dann push), regen = einmalig alle Fragen neu erzeugen, alte IDs stilllegen, retranslate = deutsche Fragen mit ae/oe/ue statt Umlauten neu uebersetzen (Haiku, hoechstens 0,10 EUR)"
         type: choice
-        options: [plan, run, collect, push, reshuffle, regen]
+        options: [plan, run, collect, push, reshuffle, regen, retranslate]
         default: plan
-      pillars: { description: "Nur diese Leitfaeden oder Vertiefungen (IDs, kommagetrennt; plan nennt die Liste); leer = alle mit zu wenigen Fragen AUSSER denen auf der Freigabeliste data/pillar_quiz.json hold (neue Leitfaeden und Vertiefungen erst nach Freigabe)", required: false, default: "" }
+      pillars: { description: "Nur diese Leitfaeden oder Vertiefungen (IDs, kommagetrennt; plan nennt die Liste); leer = alle mit zu wenigen Fragen AUSSER denen auf der Freigabeliste data/pillar_quiz.json hold (neue Leitfaeden und Vertiefungen erst nach Freigabe). Bei retranslate: leer = alle Gruppen (hold egal); eine Leitfaden-ID nimmt ihre Vertiefungen mit", required: false, default: "" }
 permissions:
   contents: write
 concurrency: { group: pillar-quiz, cancel-in-progress: false }
@@ -67,7 +67,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
       - name: Ergebnis committen (auf den ausloesenden Zweig)
-        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'reshuffle' || env.MODE == 'regen')
+        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'reshuffle' || env.MODE == 'regen' || env.MODE == 'retranslate')
         env:
           BRANCH: ${{ github.ref_name }}
         run: |

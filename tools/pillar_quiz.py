@@ -49,6 +49,9 @@ Modi (python tools/pillar_quiz.py MODE [--pillars a,b]):
            oeffentliche Datei, ihre IDs stehen dort unter "retired" und werden nie wieder vergeben; neue IDs zaehlen nach der hoechsten bisherigen weiter.
            Kosten: Schaetzung und Obergrenze ins Log, harte Grenze PILLAR_QUIZ_REGEN_USD (Standard 2 USD) - darueber wird nichts gesendet.
            Push an den Worker wie run nur auf main; dort legt der Worker alle nicht mehr gesendeten IDs still (active=0).
+  retranslate  deutsche Fassung bestehender Fragen neu uebersetzen, deren Text Umlaute als ae/oe/ue schreibt (ascii_german; Frage, Optionen, why_de im
+           Schluessel). Gleiche Anfrage wie run (Haiku-Batch), IDs/Reihenfolge/Loesungen bleiben, harte Grenze PILLAR_QUIZ_RETR_EUR (Standard 0,10 EUR).
+           Push an den Worker wie run nur auf main. Ohne Treffer: nichts zu tun, keine Kosten.
   show     (lokal, mit CRON_KEY) Fragen mit Loesungen als Text ausgeben - nie in Actions verwenden (Logs sind oeffentlich)
 Budget: Obergrenze PILLAR_QUIZ_RUN_EUR (Standard 2 EUR) je Lauf fuer Sonnet + Haiku zusammen (gerechnet mit max_tokens); Haiku zusaetzlich ueber das
 Haiku-Tagesbudget des Workers (ai_gateway.check_budget/report_usage, Job pillar_quiz). Logs nennen nie eine Loesung."""
@@ -152,6 +155,58 @@ def check_item(x):
     return {"q": q.strip(), "opts": opts, "a": a, "why": why.strip(), "ref": ref.strip()[:160], "topic": topic.strip()[:60]}, ""
 
 
+_UMLAUT = re.compile(r"[äöüÄÖÜß]")
+_TRANSLIT = re.compile(r"(?<![aeiouq])(?:ae|oe|ue)", re.I)
+_TRANSLIT_OK = re.compile(r"^(?:\w*(?:aktu|visu|manu|individu|eventu|virtu|konzeptu|kontextu|textu|habitu|punktu|du|spiritu)ell\w*|zuerst\w*|"
+                          r"oee|oems?|purdue|aero\w*|boeing|poet\w*|koeffizient\w*|poesie|suez\w*|schaeffler\w*|\w*zue(?:in|rk|nt)\w*|duett\w*|silhouette\w*|israel|michael|joe|aloe|"
+                          r"(?:value|issue|queue|continue|revenue|influence|residue|avenue|league|statue|virtue|sequence|argue|pursue|shoe|guess|fuel|cruel)"
+                          r"(?:s|d|es|ed|ing)?|true|due|blue|does|goes|vague|fluent|tuesday|suede)$", re.I)   # ganze Woerter: "fuel" darf "Nachfuellung" nicht decken
+
+
+_TRANSLIT_STEM = re.compile(r"fuell|fuehr|fuer|ueber|muess|koenn|moeglich|waehr|naechst|groess|aender|pruef|loes|rueck|stueck|taeglich|haeufig|"
+                            r"spaet|kuerz|hoeh|gemaess|gehoer|zaehl|laeng|staerk|schaetz|saetz|qualitaet|stoer|ruest|engpaess|verfueg|beruecksicht|oeffn|uebt|uebung|"
+                            r"waerm|geschaeft|maerkt|gefaehr|kuehl|koerper|gebuehr|verguet", re.I)
+_VOCAB = None
+
+
+def _de_vocab():
+    """Wortschatz der deutschen Leitfaeden und Vertiefungen (imports/pillars/de, klein geschrieben) - nur fuer ascii_german."""
+    global _VOCAB
+    if _VOCAB is None:
+        _VOCAB = set()
+        for f in (ROOT / "imports" / "pillars" / "de").rglob("*.md"):
+            try: t = f.read_text("utf-8")
+            except OSError: continue
+            t = re.sub(r"\]\([^)]*\)|https?://\S+|`[^`]*`", " ", t)   # Link-Ziele, URLs und Code (Slugs, DAX-Namen) enthalten ASCII-Formen
+            _VOCAB.update(w.lower() for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", t))
+        # ASCII-Form neben ihrer Umlautform (erklaert/erklärt) gilt nicht als belegtes Wort
+        _VOCAB -= {w for w in _VOCAB if _TRANSLIT.search(w) and any(u in _VOCAB for u in _umlaut_forms(w))}
+    return _VOCAB
+
+
+def _umlaut_forms(w):
+    """Alle Schreibungen von w, in denen ae/oe/ue (nach Konsonant) als ä/ö/ü stehen (ohne w selbst)."""
+    parts, out = re.split(r"(?<![aeiouq])(ae|oe|ue)", w.lower()), [""]
+    for i, x in enumerate(parts):
+        out = [o + y for o in out for y in ((x, {"ae": "ä", "oe": "ö", "ue": "ü"}[x]) if i % 2 else (x,))]
+    return [o for o in out if o != w.lower()][:64]
+
+
+def ascii_german(*texts):
+    """True, wenn ein deutscher Text Umlaute als ae/oe/ue schreibt (Uebersetzung im ASCII-Stil), auch gemischt mit echten Umlauten:
+    - ein Wort mit eindeutigem Stamm (fuer, ueber, Nachfuellung) oder eines, das im Wortschatz der deutschen Leitfaeden nicht vorkommt, wohl aber
+      mit Umlaut (Engpaesse -> Engpässe), oder
+    - kein ä/ö/ü/ß im ganzen Text und mindestens zwei Woerter mit ae/oe/ue nach einem Konsonanten (aktuell, visuell, zuerst, value ausgenommen)."""
+    t = " ".join(x for x in texts if isinstance(x, str))
+    words = [w for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", t) if not (w.isupper() and len(w) <= 6) and not _TRANSLIT_OK.match(w)]   # Akronyme (OEM, DOE, S&OE)
+    if any(_TRANSLIT_STEM.search(w) for w in words): return True   # eindeutige Wortstaemme (Nachfuellung, fuer, geaendert, geoeffnet) reichen allein
+    sus = [w for w in words if len(w) >= 3 and _TRANSLIT.search(w)]   # "ae" allein (Hexwerte, Abkuerzungen) ist kein Wort
+    if not sus: return False
+    voc = _de_vocab()
+    if voc and any(w.lower() not in voc and any(u in voc for u in _umlaut_forms(w)) for w in sus): return True
+    return not _UMLAUT.search(t) and len(sus) >= 2
+
+
 def check_translation(src, tr):
     """Uebersetzung eines Kandidaten pruefen -> (dict(q, opts, why) oder None, Grund). Reihenfolge der Optionen bleibt die der Quelle."""
     if not isinstance(tr, dict): return None, "kein Objekt"
@@ -164,6 +219,7 @@ def check_translation(src, tr):
     if len({_norm(o) for o in opts}) != len(opts): return None, "doppelte Optionen"
     if not isinstance(why, str) or not why.strip(): return None, "Erklaerung"
     if any(bad_text(s) for s in [q, why] + opts): return None, "encoding"
+    if ascii_german(q, why, *opts): return None, "Umlaute als ae/oe/ue"
     return {"q": q.strip(), "opts": opts, "why": why.strip()}, ""
 
 
@@ -229,7 +285,8 @@ TR_SYSTEM = (
     "You are a professional technical translator for manufacturing and production planning. Translate the quiz questions in the user's JSON from US English into German "
     "(du-Form is not needed; use neutral wording). Keep the number and order of options exactly; translate each option at the same index. Keep product names and acronyms "
     "(OEE, KPI, APS, MES, ERP, SMED, 5S, ISA-95, Azure, iFAKT Polaris) and established loanwords used in German Lean practice (Kaizen, Gemba, Kanban, Muda, Poka-Yoke). "
-    "Use the usual German terms (Wertstromanalyse, Shopfloor Management, Kennzahlen, Feinplanung, Durchlaufzeit, Ruestzeit). Do not add or remove information and "
+    "Use the usual German terms (Wertstromanalyse, Shopfloor Management, Kennzahlen, Feinplanung, Durchlaufzeit, Rüstzeit). Write correct German spelling with umlauts and sharp s (ä, ö, ü, ß); "
+    "never replace them with ae, oe, ue or ss. Do not add or remove information and "
     "do not make the correct option easier to spot. Answer with one JSON array only, no other text: [{\"n\": 1, \"q\": \"...\", \"opts\": [\"...\", \"...\", \"...\", \"...\"], \"why\": \"...\"}]")
 
 
@@ -900,9 +957,14 @@ def run(mode, pids_filter):
     d = write_check(pub_out, keys_doc, f, stats)
     OPEN.unlink(missing_ok=True)
     print("Verworfen (Gruende je Leitfaden):", json.dumps(stats["rejected"], ensure_ascii=False))
+    src_of = {p["id"]: p for p, *_ in items}
     for pid in stats["candidates"]:
-        n = len((pub_out["pillars"].get(pid) or {}).get("en") or [])
-        if n < MIN: print(f"::warning::{pid}: nur {n} Fragen (Ziel mindestens {MIN}) - naechster Lauf erzeugt weitere")
+        p = src_of.get(pid)
+        if p is not None and is_cluster(p):   # Fragen einer Vertiefung stehen beim Eltern-Leitfaden (Feld src)
+            n = sum(1 for x in (pub_out["pillars"].get(group_of(p)) or {}).get("en") or [] if x.get("src") == pid); need = CLUSTER_MIN
+        else:
+            n = len((pub_out["pillars"].get(pid) or {}).get("en") or []); need = MIN
+        if n < need: print(f"::warning::{pid}: nur {n} Fragen (Ziel mindestens {need}) - naechster Lauf erzeugt weitere")
     summary(pub_out, stats, usage)
     print(f"Pruefdateien: {d}")
     if added and f: auto_push()
@@ -954,6 +1016,60 @@ def reshuffle():
     return n
 
 
+RETR_EUR = float(os.environ.get("PILLAR_QUIZ_RETR_EUR") or 0.10)   # harte Grenze fuer retranslate (Obergrenze mit max_tokens)
+
+
+def retranslate(pids_filter=()):
+    """Deutsche Fassung bestehender Fragen neu uebersetzen, deren Text Umlaute als ae/oe/ue schreibt (ascii_german auf Frage, Optionen und why_de).
+    Gleiche Uebersetzungsanfrage wie run (TR_SYSTEM, Haiku-Batch), Quelle = englische Frage, Optionen und why_en; IDs, Optionsreihenfolge und Loesung
+    bleiben. Ersetzt wird nur, was check_translation besteht. pids_filter: nur diese Gruppen (Leitfaden-ID) bzw. Vertiefungen (src). -> Zahl ersetzt."""
+    f = fernet()
+    if not f: raise SystemExit("CRON_KEY fehlt")
+    if not os.environ.get("ANTHROPIC_API_KEY"): raise SystemExit("ANTHROPIC_API_KEY fehlt")
+    pub = load_public(); keys_doc = load_keys(f) or {}; k = {x["qid"]: x for x in keys_doc.get("keys") or []}
+    todo = {}
+    for pid, v in pub["pillars"].items():
+        en = {x["id"]: x for x in v.get("en") or []}
+        for x in v.get("de") or []:
+            kk, e = k.get(x["id"]), en.get(x["id"])
+            if not kk or not e: continue
+            if pids_filter and pid not in pids_filter and x.get("src") not in pids_filter: continue
+            if ascii_german(x["q"], kk.get("why_de", ""), *x["opts"]): todo.setdefault(pid, []).append((e, x, kk))
+    n = sum(len(v) for v in todo.values())
+    if not n: print("Keine deutsche Frage mit ae/oe/ue statt Umlauten - nichts zu tun"); return 0
+    reqs = [req(f"tr__{pid}", CHECK_MODEL, TR_SYSTEM, tr_user([{"q": e["q"], "opts": e["opts"], "why": kk.get("why_en", "")} for e, _, kk in xs]), TR_MAX)
+            for pid, xs in todo.items()]
+    cap = sum(req_cap_usd(r) for r in reqs)
+    print(f"Neu zu uebersetzen: {n} deutsche Fragen in {len(reqs)} Gruppen ({', '.join(todo)}); "
+          f"Obergrenze Haiku {cap:.3f} $ = {eur(cap):.3f} EUR (Grenze {RETR_EUR:.2f} EUR)", flush=True)
+    if eur(cap) > RETR_EUR: raise SystemExit("Obergrenze ueber PILLAR_QUIZ_RETR_EUR - nichts gesendet")
+    from ai_gateway import check_budget, report_usage
+    if not check_budget(JOB, CHECK_MODEL, eur(cap)): raise SystemExit("Haiku-Tagesbudget reicht nicht - nichts gesendet")
+    usage, fixed, why = Usage(), 0, {}
+    for r in results(wait(submit(reqs))):
+        pid = r["custom_id"].split("__", 1)[1]; res = r["result"]; w = why.setdefault(pid, {})
+        if res["type"] != "succeeded": w[res["type"]] = len(todo.get(pid) or []); continue
+        usage.add(CHECK_MODEL, res["message"].get("usage"))
+        if res["message"].get("stop_reason") in ("max_tokens", "refusal"): w[res["message"]["stop_reason"]] = len(todo.get(pid) or []); continue
+        arr = parse_json(text_of(res["message"]), list) or []
+        tr = {int(x["n"]): x for x in arr if isinstance(x, dict) and str(x.get("n", "")).isdigit()}
+        for j, (e, x, kk) in enumerate(todo.get(pid) or []):
+            de, reason = check_translation(e, tr.get(j + 1))
+            if not de: w[reason] = w.get(reason, 0) + 1; continue
+            x["q"], x["opts"], kk["why_de"] = de["q"], de["opts"], de["why"]; fixed += 1
+    hk = usage.t.get(CHECK_MODEL)
+    if hk: report_usage(JOB, CHECK_MODEL, hk[0], hk[1], "batch", batch=True)
+    if fixed:
+        version = dt.date.today().isoformat()
+        PUBLIC.write_text(json.dumps(public_doc(pub, version), ensure_ascii=False, indent=1) + "\n", "utf-8")
+        keys_doc["version"] = version; KEYS.write_bytes(encrypt_keys(keys_doc, f) + b"\n")
+    print(f"Neu uebersetzt: {fixed} von {n} (IDs, Optionsreihenfolge und Loesungen unveraendert). Kosten: {usage.line() if usage.t else '0 $'}")
+    rest = {pid: w for pid, w in why.items() if w}
+    if rest: print("::warning::Nicht ersetzt (bleibt wie bisher, naechster Aufruf versucht es erneut):", json.dumps(rest, ensure_ascii=False))
+    if fixed: auto_push()
+    return fixed
+
+
 def show():
     """Lokal: Fragen mit Loesungen ausgeben (nie in Actions - Logs sind oeffentlich)."""
     if os.environ.get("GITHUB_ACTIONS"): raise SystemExit("show gibt Loesungen aus und laeuft nicht in GitHub Actions")
@@ -992,8 +1108,9 @@ def main(argv=None):
     elif mode == "push": do_push(True)
     elif mode == "reshuffle": reshuffle()
     elif mode == "regen": regen()
+    elif mode == "retranslate": retranslate(pids)
     elif mode == "show": show()
-    else: raise SystemExit(f"Unbekannter Modus {mode!r} (plan|run|collect|push|reshuffle|regen|show)")
+    else: raise SystemExit(f"Unbekannter Modus {mode!r} (plan|run|collect|push|reshuffle|regen|retranslate|show)")
 
 
 if __name__ == "__main__":

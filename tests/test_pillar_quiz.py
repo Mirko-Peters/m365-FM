@@ -413,11 +413,40 @@ class ClusterRun(_RunBase):
     """Kursausbau 26.11.2026: 10 neue Leitfaeden und 15 Vertiefungen mit der echten Registry. Ohne Netz und ohne Schluessel; Laeufe nur mit Attrappen."""
     LEGACY = False
 
+    # Freigabeliste vor dem Fragenlauf vom 26.11.2026 (Lauf 45751342822). Die echte Datei hat seitdem Fragen fuer alle 25 Quellen
+    # und keine "hold"-Liste mehr; real_public() stellt den Stand davor her, damit die Tests weiter den Lauf selbst pruefen.
+    HOLD_2611 = ["5s-visual-management", "kanban-pull-system", "smed-changeover-reduction", "tpm-oee", "six-sigma-root-cause-analysis",
+                 "sop-mrp-production-planning", "theory-of-constraints", "mes-isa-95", "predictive-maintenance-iiot", "ot-cybersecurity-iec-62443",
+                 "kaizen", "pdca-cycle", "a3-problem-solving", "poka-yoke", "standard-work", "andon", "paperless-manufacturing", "lot-sizing",
+                 "manufacturing-inventory-management", "intralogistics", "manufacturing-simulation", "process-mining-manufacturing",
+                 "sustainable-manufacturing", "supply-chain-resilience", "manufacturing-workforce-skills"]
+
     def real_public(self, hold=True):
         d = json.loads((ROOT / "data" / "pillar_quiz.json").read_text("utf-8"))
+        held = set(self.HOLD_2611)
+        for pid in list(d["pillars"]):
+            if pid in held: del d["pillars"][pid]; continue
+            for lang, qs in d["pillars"][pid].items():
+                d["pillars"][pid][lang] = [q for q in qs if q.get("src") not in held]
+        d["hold"] = list(self.HOLD_2611)
         if not hold: d.pop("hold", None)
         PQ.PUBLIC.write_text(json.dumps(d, ensure_ascii=False), "utf-8")
         return d
+
+    def test_real_file_after_run_2611(self):
+        """Ergebnis des Fragenlaufs 26.11.2026: jede der 25 Quellen hat ihre Fragen, en und de gleich, keine Freigabeliste mehr."""
+        d = json.loads((ROOT / "data" / "pillar_quiz.json").read_text("utf-8"))
+        self.assertFalse(d.get("hold"), "alle 25 Quellen erzeugt = freigegeben")
+        for pid in self.HOLD_2611[:10]:
+            self.assertEqual(len(d["pillars"][pid]["en"]), PQ.KEEP, pid)
+        src = {}
+        for pid, v in d["pillars"].items():
+            self.assertEqual([q["id"] for q in v["en"]], [q["id"] for q in v["de"]], pid)
+            for q in v["en"]:
+                if q.get("src"): src[q["src"]] = src.get(q["src"], 0) + 1
+        self.assertEqual(src, {c: PQ.CLUSTER_KEEP for c in self.HOLD_2611[10:]})
+        PQ.PUBLIC.write_text(json.dumps(d, ensure_ascii=False), "utf-8")
+        self.assertEqual(PQ.plan(()), [], "kein Bedarf mehr: ein weiterer run ohne --pillars kostet nichts")
 
     def test_plan_lists_guides_and_clusters_without_network(self):
         self.real_public()
@@ -489,6 +518,157 @@ class PushLog(unittest.TestCase):
         out = self.run_push({"ok": True, "upserted": 60, "deactivated": 60, "total": 60, "pillars": 10})
         self.assertIn("::warning::Schluessel-Push: 60 Fragen stillgelegt", out)
         self.assertIn("::warning::", self.run_push({"ok": True, "upserted": 60, "deactivated": 0, "total": 66, "pillars": 10}))
+
+
+
+
+class Umlauts(unittest.TestCase):
+    """Fragenlauf 26.11.2026: Haiku schrieb in 7 Gruppen ae/oe/ue statt Umlauten (Prompt nannte "Ruestzeit"). Erkennung, Pruefung, retranslate."""
+    ASCII = "Ein Kaizen braucht einen stabilen Standard, weil das Team sonst nicht erkennt, ob die Aenderung tatsaechlich geholfen hat und fuer wen."
+    MIXED = "Sie erhoeht die Ausbringung der Anlage über eine Stunde, sie aendert aber nichts am Engpass."
+    GOOD = ["Eine visuelle Steuerung zeigt zuerst den aktuellen Soll-Zustand, manuell und eventuell individuell.",
+            "Die Steuerung der neuen Feuerwehr-Quelle läuft über Kennzahlen wie OEE.", "Which value is true for this issue?",
+            "The influence of the queue on fuel use"]
+
+    def test_detects_ascii_and_mixed(self):
+        self.assertTrue(PQ.ascii_german(self.ASCII)); self.assertTrue(PQ.ascii_german(self.MIXED))
+        self.assertTrue(PQ.ascii_german("Eine Min/Max-Linie am Regal, die die Nachfuellung steuert, und ein Etikett je Stueck"), "Ausnahmen nur als ganze Woerter")
+        self.assertFalse(PQ.ascii_german("Die OEE und das Purdue-Modell, OEE-Verluste"))
+        self.assertTrue(PQ.ascii_german("Das Werk wird neu geaendert, die Halle neu geoeffnet, das Team neu geuebt."), "ge- und Vokal vor ae/oe/ue")
+        self.assertTrue(PQ.ascii_german("Die Bauueberwachung prüft das Gebäude."))
+        self.assertTrue(PQ.ascii_german("Die Lösung wird erklaert genannt."), "Wortschatz ohne ASCII-Formen aus Slugs")
+        for g in ["Der OEM liefert, der OEM prüft nicht", "Die DOE und S&OE sowie OE im Werk", "Schaeffler und Schaeffler-Werke",
+                  "Beide Werte sind zueinander anzuerkennen und zuerst zu messen", "Der Suezkanal und Suez"]:
+            self.assertFalse(PQ.ascii_german(g), g)
+        for g in self.GOOD: self.assertFalse(PQ.ascii_german(g), g)
+
+    def test_real_old_questions_clean(self):
+        d = json.loads((ROOT / "data" / "pillar_quiz.json").read_text("utf-8"))
+        old = [x for pid in ("value-stream-mapping", "manufacturing-kpis", "aerospace-production-planning", "manufacturing-it-azure", "ifakt-polaris")
+               for x in d["pillars"][pid]["de"]]
+        self.assertEqual([x["id"] for x in old if PQ.ascii_german(x["q"], *x["opts"])], [])
+
+    def test_check_translation_rejects(self):
+        src = {"opts": ["a", "b", "c", "d"]}
+        bad = {"q": self.ASCII, "opts": ["eins", "zwei", "drei", "vier"], "why": "Weil es so im Leitfaden steht."}
+        self.assertEqual(PQ.check_translation(src, bad), (None, "Umlaute als ae/oe/ue"))
+        ok = {**bad, "q": "Ein Kaizen braucht einen stabilen Standard, weil das Team sonst nicht erkennt, ob die Änderung geholfen hat."}
+        self.assertIsNotNone(PQ.check_translation(src, ok)[0])
+
+    def test_prompt_asks_for_umlauts(self):
+        self.assertIn("Rüstzeit", PQ.TR_SYSTEM); self.assertNotIn("Ruestzeit", PQ.TR_SYSTEM); self.assertIn("never replace them with ae, oe, ue", PQ.TR_SYSTEM)
+
+
+class Retranslate(_RunBase):
+    LEGACY = False
+
+    def seed(self):
+        f = PQ.fernet("k")
+        pub = {"path": PQ.path_id(), "version": "2026-11-26", "pillars": {
+            "tpm-oee": {"en": [{"id": "tpm-oee-1", "q": "Where does OEE's value lie?", "opts": ["A", "B", "C", "D"]},
+                               {"id": "tpm-oee-2", "q": "What is TPM?", "opts": ["E", "F", "G", "H"]}],
+                        "de": [{"id": "tpm-oee-1", "q": "Worin liegt der Nutzen? " + Umlauts.ASCII, "opts": ["a", "b", "c", "d"]},
+                               {"id": "tpm-oee-2", "q": "Was ist TPM? Eine Methode für die Instandhaltung.", "opts": ["e", "f", "g", "h"]}]},
+            "lean-manufacturing": {"en": [{"id": "lean-manufacturing-13", "q": "Why a standard?", "opts": ["I", "J", "K", "L"], "src": "kaizen"}],
+                                   "de": [{"id": "lean-manufacturing-13", "q": "Warum ein Standard?", "opts": ["i", "j", "k", "l"], "src": "kaizen"}]}}}
+        PQ.PUBLIC.write_text(json.dumps(pub, ensure_ascii=False), "utf-8")
+        keys = {"path": PQ.path_id(), "order": PQ.ORDER, "keys": [
+            {"qid": "tpm-oee-1", "pillar": "tpm-oee", "answer": 3, "why_en": "Losses.", "why_de": "Verluste."},
+            {"qid": "tpm-oee-2", "pillar": "tpm-oee", "answer": 1, "why_en": "Maintenance.", "why_de": "Instandhaltung für alle."},
+            {"qid": "lean-manufacturing-13", "pillar": "lean-manufacturing", "answer": 2, "why_en": "Baseline.", "why_de": Umlauts.MIXED, "src": "kaizen"}]}
+        PQ.KEYS.write_bytes(PQ.encrypt_keys(keys, f) + b"\n")
+        return f
+
+    def fake(self, good=True):
+        def submit(reqs):
+            bid = f"b{len(self.batches)}"; self.batches[bid] = reqs; return bid
+
+        def results(b):
+            out = []
+            for r in self.batches[b["id"]]:
+                qs = json.loads(r["params"]["messages"][0]["content"])
+                text = json.dumps([{"n": q["n"], "q": ("Übersetzt: " if good else "Uebersetzt fuer: ") + q["q"], "opts": [("Ö " if good else "Oe fuer ") + o for o in q["opts"]],
+                                    "why": "Begründung: " + q["why"]} for q in qs], ensure_ascii=False)
+                out.append({"custom_id": r["custom_id"], "result": {"type": "succeeded", "message": {"content": [{"type": "text", "text": text}],
+                            "usage": {"input_tokens": 500, "output_tokens": 100}, "stop_reason": "end_turn"}}})
+            return out
+        return [patch.object(PQ, "submit", submit), patch.object(PQ, "wait", lambda bid: {"id": bid}), patch.object(PQ, "results", results)]
+
+    def go(self, *a, good=True):
+        log = io.StringIO()
+        ps = self.fake(good)
+        for x in ps: x.start()
+        try:
+            with redirect_stdout(log): n = PQ.retranslate(set(a))
+        finally:
+            for x in ps: x.stop()
+        return n, log.getvalue()
+
+    def test_replaces_only_ascii_questions(self):
+        f = self.seed()
+        n, log = self.go()
+        self.assertEqual(n, 2, log)
+        reqs = [r for b in self.batches.values() for r in b]
+        self.assertEqual(sorted(r["custom_id"] for r in reqs), ["tr__lean-manufacturing", "tr__tpm-oee"])
+        sent = json.loads(next(r for r in reqs if r["custom_id"] == "tr__tpm-oee")["params"]["messages"][0]["content"])
+        self.assertEqual(sent, [{"n": 1, "q": "Where does OEE's value lie?", "opts": ["A", "B", "C", "D"], "why": "Losses."}], "Quelle = Englisch samt why_en")
+        pub = json.loads(PQ.PUBLIC.read_text()); de = {x["id"]: x for v in pub["pillars"].values() for x in v["de"]}
+        self.assertEqual(de["tpm-oee-1"]["q"], "Übersetzt: Where does OEE's value lie?"); self.assertEqual(de["tpm-oee-1"]["opts"], ["Ö A", "Ö B", "Ö C", "Ö D"])
+        self.assertEqual(de["tpm-oee-2"]["q"], "Was ist TPM? Eine Methode für die Instandhaltung.", "saubere Fragen bleiben")
+        self.assertEqual(de["lean-manufacturing-13"]["src"], "kaizen"); self.assertEqual(pub["version"], PQ.dt.date.today().isoformat())
+        self.assertEqual([x["id"] for x in pub["pillars"]["tpm-oee"]["en"]], ["tpm-oee-1", "tpm-oee-2"])
+        k = {x["qid"]: x for x in PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), f)["keys"]}
+        self.assertEqual(k["tpm-oee-1"]["answer"], 3); self.assertEqual(k["tpm-oee-1"]["why_de"], "Begründung: Losses.")
+        self.assertEqual(k["tpm-oee-2"]["why_de"], "Instandhaltung für alle.")
+        self.assertEqual(k["lean-manufacturing-13"]["why_de"], "Begründung: Baseline.", "why_de mit ae/oe/ue zaehlt mit")
+        self.assertIn("nicht main", log)
+        self.batches.clear()
+        n2, log2 = self.go()
+        self.assertEqual((n2, self.batches), (0, {}), "zweiter Aufruf: nichts zu tun, keine Kosten"); self.assertIn("nichts zu tun", log2)
+
+    def test_filter_and_bad_translation_kept(self):
+        self.seed()
+        n, log = self.go("kaizen", good=False)
+        self.assertEqual(n, 0); self.assertIn("Nicht ersetzt", log)
+        self.assertEqual([r["custom_id"] for b in self.batches.values() for r in b], ["tr__lean-manufacturing"], "--pillars kaizen: nur diese Vertiefung")
+        self.assertIn("Aenderung", PQ.PUBLIC.read_text("utf-8"), "unveraendert")
+
+    def test_partial_and_reversed_order(self):
+        """Antworten in umgekehrter n-Reihenfolge; eine schlechte Uebersetzung in der Gruppe bleibt alt, die gute wird geschrieben."""
+        f = self.seed()
+        def results(b):
+            out = []
+            for r in self.batches[b["id"]]:
+                qs = json.loads(r["params"]["messages"][0]["content"])
+                arr = [{"n": q["n"], "q": "Übersetzt: " + q["q"], "opts": ["Ö " + o for o in q["opts"]], "why": "Begründung: " + q["why"]} for q in qs]
+                if r["custom_id"] == "tr__lean-manufacturing": arr = [{**x, "opts": x["opts"][:3]} for x in arr]   # falsche Zahl Optionen
+                out.append({"custom_id": r["custom_id"], "result": {"type": "succeeded", "message": {"content": [{"type": "text", "text": json.dumps(arr[::-1], ensure_ascii=False)}],
+                            "usage": {"input_tokens": 10, "output_tokens": 10}, "stop_reason": "end_turn"}}})
+            return out
+        with patch.object(PQ, "submit", lambda reqs: self.batches.setdefault("b", reqs) and "b"), patch.object(PQ, "wait", lambda bid: {"id": bid}), \
+                patch.object(PQ, "results", results), redirect_stdout(io.StringIO()) as log:
+            self.assertEqual(PQ.retranslate(set()), 1)
+        pub = json.loads(PQ.PUBLIC.read_text()); de = {x["id"]: x for v in pub["pillars"].values() for x in v["de"]}
+        self.assertEqual(de["tpm-oee-1"]["q"], "Übersetzt: Where does OEE's value lie?")
+        self.assertEqual(de["lean-manufacturing-13"]["q"], "Warum ein Standard?", "verworfene Uebersetzung: alter Text bleibt")
+        k = {x["qid"]: x for x in PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), f)["keys"]}
+        self.assertEqual(k["lean-manufacturing-13"]["why_de"], Umlauts.MIXED); self.assertIn("Nicht ersetzt", log.getvalue())
+        self.assertNotIn("Losses", log.getvalue(), "keine Erklaerung im Log")
+
+    def test_budget_false_sends_nothing(self):
+        self.seed()
+        with patch("ai_gateway.check_budget", lambda *a, **k: False), self.assertRaises(SystemExit): self.go()
+        self.assertEqual(self.batches, {})
+
+    def test_cap(self):
+        self.seed()
+        with patch.object(PQ, "RETR_EUR", 0.000001), self.assertRaises(SystemExit): self.go()
+        self.assertEqual(self.batches, {}, "ueber der Grenze: nichts gesendet")
+
+    def test_main_mode(self):
+        self.seed()
+        with patch.object(PQ, "retranslate", lambda p: self.batches.setdefault("called", p)): PQ.main(["retranslate", "--pillars", "tpm-oee"])
+        self.assertEqual(self.batches["called"], {"tpm-oee"})
 
 
 if __name__ == "__main__":
