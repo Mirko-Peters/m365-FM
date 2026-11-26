@@ -5,7 +5,9 @@ name: Website bauen und veröffentlichen
 # - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
 #   Uebersetzungen, Artikel, Cover) bauen nicht mehr sofort - sie kommen mit dem naechtlichen Bau (oder per "Run workflow").
 #   Ausnahme: data/pillar_quiz.json (neue Fragen des Abschlusstests): der Worker hat die Schluessel nach dem Merge sofort (worker.yml), die Testseite soll
-#   die Fragen am selben Tag zeigen (bis dahin blendet worker/src/learnquiz.js pageFilter die neuen Leitfaeden aus).
+#   die Fragen am selben Tag zeigen (bis dahin blendet worker/src/learnquiz.js pageFilter die neuen Leitfaeden aus). Das gilt nur fuer Merges/Pushes von
+#   Menschen: pushed pillar-quiz.yml selbst auf main (Standard-Token), startet kein Workflow - die Seite kommt dann mit dem naechtlichen Bau
+#   (innerhalb von HAVE_GRACE = 3 Tagen; schneller: site.yml von Hand starten). Jeder solche Push startet einen vollen Bau (~4 h).
 # - neue Folgen: spreaker-feed-check.yml (alle 2 h) startet einen Frische-Bau (mode=fresh), sobald eine neu veroeffentlichte Folge noch
 #   keine Seite hat (tools/new_episodes_check.py, hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6).
 # - von Hand: "Run workflow" (mode=full wie naechtlich, mode=fresh ohne Spotify-/Plattform-Abgleich, ~30 min kuerzer).

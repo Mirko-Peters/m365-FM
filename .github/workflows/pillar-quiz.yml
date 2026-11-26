@@ -8,6 +8,8 @@ name: Lernpfad-Abschlusstest - Fragen erzeugen (Sonnet + Haiku, Batch)
 # Ausloeser: nur von Hand (workflow_dispatch). Die frueheren Push-Ausloeser der Arbeitszweige (claude/lernpfad-quiz-fragen: run,
 # claude/lernpfad-zertifikat: reshuffle/regen) sind entfernt; die Neuerzeugung (regen) ist erledigt (Marke "regen" im Schluessel, zweiter Lauf tut nichts).
 # Schluessel gehen nur von main an den Live-Worker (run auf main oder mode=push; nach dem Merge sendet worker.yml).
+# Reihenfolge beim Kursausbau (CERTOPUS.md): erst Merge und ein gruener site.yml-Lauf mit den neuen Seiten, dann run (am besten auf einem Arbeitszweig, Merge
+# baut Seite und Worker zugleich). Spaetestens 3 Tage (HAVE_GRACE) nach dem Einspielen der Schluessel muss die Testseite die neuen Fragen zeigen.
 on:
   workflow_dispatch:
     inputs:

@@ -1,5 +1,5 @@
 {
- "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (nur Englisch): Datei imports/pillars/en/clusters/<slug.en>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge).",
+ "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (nur Englisch): Datei imports/pillars/en/clusters/<slug.en>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge). related = IDs eigener Leitfaeden zu Methoden, die dieser Leitfaden nur kurz behandelt: Kasten 'Related guides' auf der englischen Seite (gegen Kannibalisierung, bis die bestehenden Leitfaeden selbst auf die neuen verlinken).",
  "path": {
   "id": "manufacturing-excellence",
   "title": {
@@ -112,7 +112,13 @@
     "lean-management",
     "eight-wastes"
    ],
-   "re": "lean|kaizen|5s|wastes?|six sigma|kanban|standard work|poka yoke|smed|continuous improvement"
+   "re": "lean|kaizen|5s|wastes?|six sigma|kanban|standard work|poka yoke|smed|continuous improvement",
+   "related": [
+    "5s-visual-management",
+    "kanban-pull-system",
+    "smed-changeover-reduction",
+    "tpm-oee"
+   ]
   },
   {
    "id": "operational-excellence",
@@ -176,7 +182,11 @@
     "takt-time",
     "total-productive-maintenance"
    ],
-   "re": "oee|kpis?|takt|cycle times?|lead times?|ppm|fpy|otif|teep|performance indicators?"
+   "re": "oee|kpis?|takt|cycle times?|lead times?|ppm|fpy|otif|teep|performance indicators?",
+   "related": [
+    "tpm-oee",
+    "six-sigma-root-cause-analysis"
+   ]
   },
   {
    "id": "production-scheduling-aps",
@@ -197,7 +207,11 @@
     "production-routing",
     "bottleneck"
    ],
-   "re": "scheduling|aps|planning and scheduling|bottlenecks?|capacity planning|mrp|theory of constraints"
+   "re": "scheduling|aps|planning and scheduling|bottlenecks?|capacity planning|mrp|theory of constraints",
+   "related": [
+    "sop-mrp-production-planning",
+    "theory-of-constraints"
+   ]
   },
   {
    "id": "digital-twin-manufacturing",
@@ -247,7 +261,12 @@
     "enterprise-resource-planning",
     "dynamics-365-supply-chain-management"
    ],
-   "re": "mes|manufacturing it|azure iot|iot hub|iot|factory it|plant it|opc ua"
+   "re": "mes|manufacturing it|azure iot|iot hub|iot|factory it|plant it|opc ua",
+   "related": [
+    "mes-isa-95",
+    "predictive-maintenance-iiot",
+    "ot-cybersecurity-iec-62443"
+   ]
   },
   {
    "id": "ifakt-polaris",

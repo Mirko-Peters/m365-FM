@@ -214,6 +214,24 @@ class Rendered(unittest.TestCase):
     def test_unverified_reason_in_tooltip(self):
         h = S.finish("<p>x [unverified: practitioner estimate] y [ungeprüft]</p>", 0, "en")
         self.assertEqual(h.count("pl-unv"), 2); self.assertIn("Practitioner estimate.", h); self.assertNotIn("[unverified", h)
+        h = S.finish("<p>a [unverified as a statistic] b [unverified; practitioner estimate] c [unverified as to current volume; check the CISA advisories page] "
+                     "d [unverified as a published benchmark; use as an internal target only] e [unverified against Shingo's own books in this session] f [unverified : statut]</p>", 0, "en")
+        self.assertEqual(h.count("pl-unv"), 6); self.assertNotIn("[unverified", h)
+        for x in ("As a statistic.", "Practitioner estimate.", "As to current volume.", "As a published benchmark.", "Against Shingo's own books.", "Statut."): self.assertIn(x, h)
+        self.assertNotRegex(h, r"CISA advisories|internal target|this session")
+
+    def test_sources_status_marks_removed(self):
+        """Prüfvermerke der Faktenprüfung ((S), (*), (V-sister), Dateinamen, "via sibling pillar") stehen nicht in der Quellenliste; (S&OP), (UNS) bleiben."""
+        md = ("Sources marked (S) were checked in this session.\n1. (*) JIPM: Award. https://a.example/x\n2. (S) Goldratt: The Race. https://b.example\n"
+              "3. Lean Lexicon. https://c.example/ (S)\n4. Sugimori. https://d.example (V; volume, issue and pages as verified for the sister pillar `production-scheduling-aps.md`)\n"
+              "5. Smartsheet. https://e.example (V; vendor page)\n6. ISA. https://f.example (F, re-fetched November 20, 2026)\n7. OEE. https://g.example (S: manufacturing-kpis.md)\n"
+              "8. Orlicky: MRP (via sibling pillar; original not consulted)\n9. Sales and operations planning (S&OP). APICS. https://h.example\n10. Unified namespace (UNS). HiveMQ. https://i.example (V-sister)\n"
+              "11. Harris. https://j.example (page numbers of the Harris original as in the parent pillar; volume confirmed)")
+        h, valid, _ = S.sources_html(md, "en", ctx())
+        self.assertEqual(valid, set(range(1, 12)))
+        t = re.sub(r"<[^>]+>", " ", h)
+        self.assertNotRegex(t, r"\.md\b|(?i:sister|sibling|parent pillar)|\((?:V|F|S|P)(?:-sister)?\)|\((?:\*|†)\)|\((?:V|F|S|P)[;,:]|re-fetched")
+        for x in ("(vendor page)", "(accessed November 20, 2026)", "(S&amp;OP)", "(UNS)", "JIPM: Award", "Goldratt: The Race"): self.assertIn(x, h)
 
     def test_blockquote_keeps_lists(self):
         h, _ = S.render("> **Key takeaways**\n> - eins [1]\n> - zwei\n>\n> Schluss", "en", None)
@@ -242,6 +260,15 @@ class Rendered(unittest.TestCase):
         d = S.scrub("Die [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) aus Stuttgart wurde 2001 von Jörg Drees gegründet [18].\n\nEine eigene Pillar-Page zum digitalen Zwilling ist geplant (siehe Ende).\n\n- `/learn/digital-twin/`: Digitaler Zwilling (geplant)\n")
         self.assertNotIn("Drees", d); self.assertIn("nach Unternehmensangaben 2001 gegründet", d); self.assertNotIn("ist geplant", d)
         self.assertIn("[Digitaler Zwilling (geplant)]", d.replace("[Digitaler Zwilling]", "[Digitaler Zwilling (geplant)]")) if False else self.assertIn("(https://www.m365.fm/learn/digital-twin/)", d)
+
+
+class FallbackLinks(unittest.TestCase):
+    def test_link_to_english_page_from_other_language(self):
+        cx = ctx()
+        h = S.inline("[TPM](https://www.m365.fm/en/learn/tpm-oee/) und [Lean](https://www.m365.fm/learn/lean-manufacturing/)", "de", cx)
+        self.assertIn('href="https://www.m365.fm/learn/tpm-oee/" hreflang="en" lang="en"', h)
+        self.assertIn('href="https://www.m365.fm/de/learn/lean-management/">', h)
+        self.assertNotIn("hreflang", S.inline("[TPM](https://www.m365.fm/en/learn/tpm-oee/)", "en", cx))
 
 
 class Build(unittest.TestCase):
@@ -342,6 +369,61 @@ class Build(unittest.TestCase):
         self.assertEqual(len(course["hasPart"]), 35)
         self.assertIn(("https://www.m365.fm/learn/path/manufacturing-excellence/", "2026-11-26"), [(u, d) for u, d, a in self.sm])
 
+    def test_blocking_schema_check_passes(self):
+        """check_schema.py (blockiert den Seitenbau) über das JSON-LD aller gebauten Lernpfad-Seiten: Verweise auf Leitfäden/Vertiefungen sind keine Article-Knoten ohne Pflichtfelder."""
+        import subprocess, tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            for rel, html in self.files.items():
+                f = Path(tmp) / "docs" / rel; f.parent.mkdir(parents=True, exist_ok=True)
+                ld = self.json.loads(html.split("\n", 1)[0])["ld"]
+                f.write_text("<!doctype html><html><head>" + "".join(f'<script type="application/ld+json">{self.json.dumps(n, ensure_ascii=False)}</script>' for n in ld) + "</head><body>" + html.split("\n", 1)[1] + "</body></html>", "utf-8")
+            r = subprocess.run([sys.executable, str(ROOT / "check_schema.py"), str(Path(tmp) / "docs")], capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr); self.assertIn("49 Seiten mit JSON-LD", r.stdout)
+        for rel in ("learn/lean-manufacturing/index.html", "learn/lean-manufacturing/kaizen/index.html"):
+            art = next(n for n in self.json.loads(self.files[rel].split("\n", 1)[0])["ld"] if n.get("@type") == "Article")
+            for x in (art.get("hasPart") or []) + [y for y in (art["isPartOf"] if isinstance(art["isPartOf"], list) else [art["isPartOf"]]) if y.get("@type") != "Course"]:
+                self.assertNotIn("@type", x, rel); self.assertTrue(x["@id"].endswith("/#article"), rel)
+
+    def test_pages_clean_markers_and_jargon(self):
+        for rel, html in self.files.items():
+            body = re.sub(r"<style>.*?</style>", "", html.split("\n", 1)[1], flags=re.S)
+            txt = re.sub(r"<[^>]+>", " ", body)
+            self.assertNotRegex(txt, r"\[(?:unverified|ungeprüft)", rel)
+            src = re.sub(r"<[^>]+>", " ", body[body.find('id="sources"'):]) if 'id="sources"' in body else ""
+            self.assertNotRegex(src, r"\.md\b|(?i:sister|sibling|parent pillar)|\((?:V|F|S|P)(?:-sister)?\)|\((?:\*|†)\)|\((?:V|F|S|P)[;,:]", rel)
+            if rel.count("/") == 3 and not rel.startswith(("de/", "learn/path/")):   # Vertiefungen
+                self.assertNotRegex(txt, r"(?i)cluster article|a cluster of the|parent pillar|\bthe pillar\b|\bsibling\b|pillar guide|\[pillar\b|ranking explainers|ranking page|top-ranking|\bcluster \[|\w cluster\b(?! after| in the last)", rel)
+        self.assertNotRegex(self.files["learn/mes-isa-95/index.html"], r"ranking explainers|question on google\.com")
+
+    def test_related_guides_box(self):
+        lean = self.files["learn/lean-manufacturing/index.html"]
+        box = lean[lean.index('class="pl-box pl-deep pl-relg"'):]; box = box[:box.index("</section>")]
+        self.assertEqual(re.findall(r'href="https://www\.m365\.fm/learn/([a-z0-9-]+)/"', box), ["5s-visual-management", "kanban-pull-system", "smed-changeover-reduction", "tpm-oee"])
+        for rel, ids in (("learn/production-scheduling-aps/index.html", ["sop-mrp-production-planning", "theory-of-constraints"]), ("learn/manufacturing-kpis/index.html", ["tpm-oee", "six-sigma-root-cause-analysis"])):
+            h = self.files[rel]; box = h[h.index("pl-relg"):]; box = box[:box.index("</section>")]
+            self.assertEqual(re.findall(r'href="https://www\.m365\.fm/learn/([a-z0-9-]+)/"', box), ids)
+        self.assertNotIn("pl-relg", self.files["de/learn/lean-management/index.html"])
+        for p in S.pillars():
+            for q in p.get("related") or (): self.assertIsNotNone(S.by_id(q), f"{p['id']}: related {q} unbekannt")
+
+    def test_broken_deep_dive_costs_only_itself(self):
+        import contextlib, io
+        from unittest import mock
+        import site_infographics as _IG
+        files = {}
+        g = dict(BASE=BASE, write=lambda rel, html: files.__setitem__(rel, html), sitemap=[], author_box=None, LANGS=("en", "de"),
+                 page=lambda lang, title, desc, canon, body, alts, ld, **kw: body, header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
+        real = S.parse_file
+        def broken(path):
+            if Path(path).name == "kaizen.md": raise ValueError("kaputt")
+            return real(path)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(_IG, "get", lambda *a: None), mock.patch.object(S, "parse_file", broken):
+            S.build(g, [], set())
+        self.assertIn("Vertiefung kaizen nicht gebaut", out.getvalue())
+        self.assertNotIn("learn/lean-manufacturing/kaizen/index.html", files); self.assertIn("learn/lean-manufacturing/pdca-cycle/index.html", files)
+        self.assertFalse([rel for rel, h in files.items() if "/learn/lean-manufacturing/kaizen/" in h], "kein Link auf die nicht gebaute Vertiefung")
+
     def test_noindex_switch(self):
         import contextlib, io, json
         from unittest import mock
@@ -374,6 +456,14 @@ class AssignPrecision(unittest.TestCase):
         self.assertNotIn(("h", "world-maps-overview"), S.ASSIGN); self.assertNotIn(("h", "interpreting-survey-data"), S.ASSIGN)
         self.assertNotIn("ifakt-polaris", S.ASSIGN.get(("h", "heijunka-production-leveling"), []))
         self.assertEqual(S.ASSIGN[("h", "oee-explained")], ["manufacturing-kpis"])
+
+    def test_related_other_languages_sorted_by_score(self):
+        """Seiten ausser Englisch: Beiträge, deren erster Leitfaden nur Englisch ist (hier TPM), stehen nach Güte zwischen den übrigen, nicht dahinter."""
+        S.assign([{"handle": "h", "slug": "takt-basics", "title": "Takt basics", "topics": [], "published": 9, "lang": "en"},
+                  {"handle": "h", "slug": "autonomous-maintenance-basics", "title": "Autonomous maintenance and OEE", "topics": ["total-productive-maintenance"], "published": 1, "lang": "en"}])
+        self.assertEqual(S.ASSIGN[("h", "autonomous-maintenance-basics")], ["tpm-oee"]); self.assertEqual(S.ASSIGN_DE[("h", "autonomous-maintenance-basics")], "manufacturing-kpis")
+        self.assertEqual([x["slug"] for x in S.related("manufacturing-kpis", "de")], ["autonomous-maintenance-basics", "takt-basics"])
+        self.assertEqual([x["slug"] for x in S.related("manufacturing-kpis", "en")], ["takt-basics"])
 
     def test_pins(self):
         S.assign([{"handle": "h", "slug": "modular-production-planning-software-modules", "title": "Modules", "topics": ["advanced-planning-and-scheduling", "finite-capacity-scheduling", "polaris"], "published": 1, "lang": "en"}])
