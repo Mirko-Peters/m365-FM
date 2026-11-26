@@ -8,6 +8,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import worker from "../src/index.js";
+import { perGroup, threshold, scoreText } from "../src/learnquiz.js";
 import { makeSession } from "../src/util.js";
 
 const ROOT = new URL("../../", import.meta.url);
@@ -125,21 +126,24 @@ test("Ende zu Ende: Push wie tools/pillar_quiz.py -> Start -> Abgabe -> Zertifik
   for (const k of ["quiz_ready", "passed", "best", "open", "cert", "name", "email_masked", "email_src", "providers", "cert_on", "attempts_left"]) assert.ok(k in st0.data, `GET cert: Feld ${k} fehlt`);
   assert.equal(st0.data.quiz_ready, true); assert.equal(st0.data.cert_on, true); assert.equal(st0.data.attempts_left, 3);
 
-  // 3) Start: 3 Fragen je Leitfaden, alle IDs stehen auf der Testseite (deutsche Fragen)
+  // 3) Start: perGroup(G) Fragen je Leitfaden (10 Gruppen: 3, 20 Gruppen: 2), alle IDs stehen auf der Testseite (deutsche Fragen)
+  const G = Object.keys(QUIZ.pillars).length, PER = perGroup(G), TOTAL = PER * G, NEED = threshold(TOTAL);
   const s = await call(env, "/api/learn/quiz/start", { method: "POST", cookie, body: { path: PATH, lang: "de", src: "e2e" } });
   assert.equal(s.status, 200, s.text);
   for (const k of ["attempt", "qids", "expires", "attempts_left"]) assert.ok(k in s.data, `start: Feld ${k} fehlt`);
   const pageIds = new Set(Object.values(QUIZ.pillars).flatMap((v) => v.de.map((q) => q.id)));
-  assert.equal(s.data.qids.length, 3 * Object.keys(QUIZ.pillars).length);
+  assert.equal(s.data.qids.length, TOTAL);
   for (const q of s.data.qids) assert.ok(pageIds.has(q), `${q} fehlt in data/pillar_quiz.json`);
-  for (const pid of Object.keys(QUIZ.pillars)) assert.equal(s.data.qids.filter((q) => q.startsWith(pid + "-")).length, 3, pid);
+  for (const pid of Object.keys(QUIZ.pillars)) assert.equal(s.data.qids.filter((q) => q.startsWith(pid + "-")).length, PER, pid);
 
-  // 4) Abgabe mit Antworten im Format von learnquiz.js ({qid: index}); 6 falsch -> 24/30 = bestanden
-  const answers = Object.fromEntries(s.data.qids.map((q, i) => [q, i < 6 ? (fakeAnswer(q) + 1) % 4 : fakeAnswer(q)]));
+  // 4) Abgabe mit Antworten im Format von learnquiz.js ({qid: index}); genau so viele falsch, dass die Schwelle erreicht ist (30: 24/30, 40: 32/40)
+  const WRONG = TOTAL - NEED;
+  const answers = Object.fromEntries(s.data.qids.map((q, i) => [q, i < WRONG ? (fakeAnswer(q) + 1) % 4 : fakeAnswer(q)]));
   const sb = await call(env, "/api/learn/quiz/submit", { method: "POST", cookie, body: { attempt: s.data.attempt, answers } });
   assert.equal(sb.status, 200, sb.text);
   for (const k of ["attempt", "score", "total", "passed", "threshold", "per_pillar", "results", "attempts_left"]) assert.ok(k in sb.data, `submit: Feld ${k} fehlt`);
-  assert.equal(sb.data.total, 30); assert.equal(sb.data.score, 24); assert.equal(sb.data.threshold, 24); assert.equal(sb.data.passed, true);
+  assert.equal(sb.data.total, TOTAL); assert.equal(sb.data.score, NEED); assert.equal(sb.data.threshold, NEED); assert.equal(sb.data.passed, true);
+  assert.ok(G === 20 ? TOTAL === 40 && NEED === 32 : true, "Kursausbau 26.11.: 20 Gruppen -> 40 Fragen, Schwelle 32");
   assert.deepEqual(new Set(Object.keys(sb.data.per_pillar)), new Set(Object.keys(QUIZ.pillars)), "per_pillar-Schluessel = Gruppen-IDs der Testseite");
   for (const r of sb.data.results) { for (const k of ["qid", "ok", "chosen", "correct", "why"]) assert.ok(k in r, `results: ${k}`); assert.match(r.why, /^Weil /); }
 
@@ -168,7 +172,7 @@ test("Ende zu Ende: Push wie tools/pillar_quiz.py -> Start -> Abgabe -> Zertifik
     assert.equal(post.recipients[0].email, "ada@example.com");
     assert.equal(post.recipients[0].data["{Name}"], "Ada Lovelace");
     assert.equal(post.recipients[0].data["{Course}"], cfg.course.de);
-    assert.equal(post.recipients[0].data["{Score}"], "24/30 (80 %)");
+    assert.equal(post.recipients[0].data["{Score}"], scoreText(NEED, TOTAL));
     assert.match(post.recipients[0].data["{Date}"], /^\d\d\.\d\d\.\d{4}$/);
     // Seite neu laden: GET cert liefert das Zertifikat (learnquiz.js -> certDone)
     const st2 = await call(env, `/api/learn/cert?path=${PATH}`, { cookie });
