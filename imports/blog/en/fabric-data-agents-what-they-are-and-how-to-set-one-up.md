@@ -1,10 +1,10 @@
 ---
 title: "Fabric Data Agents: What They Are and How to Set One Up"
 summary: "A Fabric data agent answers plain-English questions over lakehouses, warehouses, semantic models and more. Learn prerequisites, setup steps, security behavior and the documented limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [fabric-data-agents, fabric, onelake, data-governance]
 keypoints:
   - "A Fabric data agent turns plain-English questions into SQL, DAX or KQL and returns answers over data in OneLake. It is generally available."

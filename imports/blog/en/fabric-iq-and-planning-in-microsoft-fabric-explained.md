@@ -1,10 +1,10 @@
 ---
 title: "Fabric IQ and Planning in Microsoft Fabric Explained"
 summary: "What Fabric IQ is, how its three layers and items fit together, and what Planning adds: ontology, graph, data agent and operations agent, based on Microsoft Learn, with open points listed."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [fabric-iq, fabric, ontology, onelake]
 keypoints:
   - "Fabric IQ is the part of Microsoft IQ that covers business entities and data. Work IQ and Foundry IQ cover other context."

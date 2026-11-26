@@ -1,10 +1,10 @@
 ---
 title: "Turn SharePoint Lists into Apps and Dashboards with Copilot"
 summary: "What Copilot can do with a SharePoint list today: create lists, add views and rules, generate a live HTML dashboard, and when a Power Apps canvas app is the better route. Sources and gaps noted."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [sharepoint, microsoft-lists, copilot, power-apps]
 keypoints:
   - "Copilot in SharePoint can create lists from a prompt or an Excel file, add views, rules and conditional formatting, and propose changes that you approve before they apply."

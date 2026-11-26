@@ -1,10 +1,10 @@
 ---
 title: "Context-based redirections: controlling clipboard, drives and USB with Conditional Access"
 summary: "Context-based redirections let Azure Virtual Desktop allow or restrict clipboard, drive and storage, printer and USB redirection depending on whether a connection meets a Conditional Access requirement, such as a compliant device. The feature is in preview as of 17 November 2026."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [avd-context-based-redirections, azure-virtual-desktop]
 keypoints:

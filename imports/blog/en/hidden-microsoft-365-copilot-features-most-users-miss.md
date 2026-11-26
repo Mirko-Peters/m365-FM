@@ -1,10 +1,10 @@
 ---
 title: "Hidden Microsoft 365 Copilot Features Most Users Miss"
 summary: "Five lesser-used Copilot features, based on Microsoft Support: Notebooks, Pages, scheduled tasks, memory and custom instructions, and temporary chats. Steps, limits and licenses are included."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [copilot, copilot-notebooks, copilot-pages, copilot-memory]
 keypoints:
   - "Copilot Notebooks gather files, Pages and references so answers use only the content you add. Copilot grounds on up to 300 files."

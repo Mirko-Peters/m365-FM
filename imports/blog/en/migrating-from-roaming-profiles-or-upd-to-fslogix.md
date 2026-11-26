@@ -1,10 +1,10 @@
 ---
 title: "Migrating from roaming profiles or UPD to FSLogix"
 summary: "Microsoft's FSLogix FAQ says there is no direct migration path from other roaming profile solutions. It points to OneDrive known folder move for user data and to the frx utility, which it describes for copying local profiles."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [fslogix, fslogix-profile-container]
 keypoints:

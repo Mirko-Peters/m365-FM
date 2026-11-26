@@ -1,10 +1,10 @@
 ---
 title: "GPU session hosts on Azure Virtual Desktop: when they pay off"
 summary: "A GPU session host pays off when users run graphics-intensive applications or need higher frame rates, because remote sessions render on the CPU by default. Covers VM sizes, licensing, HEVC trade-offs and verification."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [azure-virtual-desktop, gpu]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Securing redirection in Azure Virtual Desktop with Entra authentication context"
 summary: "To restrict clipboard, drive, printer and USB redirection on unmanaged devices, create an Entra authentication context, require a compliant device for it in Conditional Access and map it in the host pool. In preview."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [avd-context-based-redirections, azure-virtual-desktop]
 keypoints:

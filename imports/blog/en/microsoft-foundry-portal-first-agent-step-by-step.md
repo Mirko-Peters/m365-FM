@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Foundry Portal Tour: Build Your First Agent Step by Step"
 summary: "A walkthrough of the Microsoft Foundry portal for a first prompt agent: project, model deployment, playground, instructions, web search tool, save as agent and preview, with roles, agent types and cleanup."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [microsoft-foundry, foundry-agent-service, ai-agent]
 keypoints:
   - "Foundry Agent Service offers prompt agents, voice-based prompt agents and hosted agents. A prompt agent is configuration only: instructions, a model and tools."

@@ -1,10 +1,10 @@
 ---
 title: "Power Automate with MCP and Claude: What Finance Teams Should Know"
 summary: "What Microsoft documents about connecting Claude to Power Platform through MCP: the Dataverse MCP server, Copilot Studio MCP tools, a Power Automate plugin for Claude Code, and the governance and billing points finance teams should check."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [power-automate, mcp, dataverse-mcp-server, claude]
 keypoints:
   - "Learn lists Claude desktop and Claude Code as supported non-Microsoft clients for the Dataverse MCP server, after an admin enables the server and allowed clients for the environment."

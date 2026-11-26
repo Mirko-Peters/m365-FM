@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Entra Passkeys: Common Mistakes to Avoid When You Roll Them Out"
 summary: "Seven passkey (FIDO2) rollout mistakes drawn from Microsoft Learn's documented warnings: profiles, self-service setup, attestation, AAGUID lists, synced passkeys, exclusions and lockout risk."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [microsoft-entra, entra-id, passkey, fido2]
 keypoints:
   - "Opting in to passkey profiles is one-way, and your existing global settings move into the Default passkey profile, so plan that profile before you opt in."

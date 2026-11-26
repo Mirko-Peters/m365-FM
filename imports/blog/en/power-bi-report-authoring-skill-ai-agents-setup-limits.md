@@ -1,10 +1,10 @@
 ---
 title: "Power BI Report Authoring Skill: How AI Agents Build Reports, Setup and Limits"
 summary: "What Microsoft Learn documents about the Power BI Report Authoring skill for AI agents: what it does, how the powerbi-authoring plugin is installed, which clients it targets and the limits Microsoft lists."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [power-bi, power-bi-project-pbip, agent-skill, mcp]
 keypoints:
   - "The Power BI Report Authoring skill (power-bi-report-authoring) creates, edits and validates PBIR report definitions in PBIP projects. Learn marks it as preview."

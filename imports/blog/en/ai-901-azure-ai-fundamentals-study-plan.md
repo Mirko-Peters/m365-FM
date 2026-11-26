@@ -1,10 +1,10 @@
 ---
 title: "AI-901 Azure AI Fundamentals Study Plan Based on the Skills Measured"
 summary: "A four-week AI-901 study plan built on Microsoft Learn's skills measured outline: two domains, the 40-45% and 55-60% weights, official prep resources, and what the exam page does not state."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [ai-901, microsoft-foundry, responsible-ai, ai-900]
 keypoints:
   - "AI-901 has two domains: Identify AI concepts and capabilities at 40-45%, and Implement AI solutions by using Microsoft Foundry at 55-60%."

@@ -1,10 +1,10 @@
 ---
 title: "Connect Claude to Power BI via MCP: Setup Options and Risks"
 summary: "Which Microsoft MCP servers let an AI client query Power BI semantic models, what permissions they use, and which risks to review. Includes a note on what Microsoft's pages confirm about Claude."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [power-bi, mcp, claude, fabric-iq]
 keypoints:
   - "Microsoft documents three Power BI related MCP servers: Authoring, Fabric IQ for consumption, and an older Power BI Consumption server."

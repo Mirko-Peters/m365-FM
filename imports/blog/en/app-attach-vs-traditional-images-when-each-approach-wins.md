@@ -1,10 +1,10 @@
 ---
 title: "App attach vs traditional images: when each approach wins"
 summary: "App Attach suits apps that change on their own schedule, go to only some users, or exist as MSIX, Appx or App-V packages. Baking apps into the image suits stable, common, unpackaged apps and avoids the extra file share and certificate chain."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [msix-app-attach, azure-virtual-desktop]
 keypoints:

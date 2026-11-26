@@ -1,10 +1,10 @@
 ---
 title: "Build a Multi-Agent Orchestrator with Microsoft Foundry: Options and Dates"
 summary: "Which Microsoft options exist for multi-agent orchestration in Foundry: workflows, Microsoft Agent Framework patterns, hosted agents and A2A, plus the retirement dates Microsoft Learn lists for older approaches."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [microsoft-foundry, ai-agent, microsoft-agent-framework, agent-orchestrator]
 keypoints:
   - "Foundry workflows, a visual builder for orchestrating agents, are in preview and scheduled to lose the visual designer and in-portal execution on December 1, 2026."

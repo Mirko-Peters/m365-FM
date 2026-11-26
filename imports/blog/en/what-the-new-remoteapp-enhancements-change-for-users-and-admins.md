@@ -1,10 +1,10 @@
 ---
 title: "What the new RemoteApp enhancements change for users and admins"
 summary: "RemoteApp enhancements change how published apps behave on the client: moving and resizing, Snap, full screen, multi-monitor and appearance. Covers requirements, the registry value, verification and known issues."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [avd-remoteapp, avd-application-group]
 keypoints:

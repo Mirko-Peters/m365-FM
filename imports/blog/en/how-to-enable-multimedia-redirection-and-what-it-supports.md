@@ -1,10 +1,10 @@
 ---
 title: "How to enable multimedia redirection and what it supports"
 summary: "To enable multimedia redirection, install the Remote Desktop Multimedia Redirection Service on the session host, force-install the Edge or Chrome extension by policy, restart and test on a listed site."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [avd-multimedia-redirection, azure-virtual-desktop]
 keypoints:

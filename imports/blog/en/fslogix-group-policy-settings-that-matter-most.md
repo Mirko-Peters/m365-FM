@@ -1,10 +1,10 @@
 ---
 title: "FSLogix Group Policy settings that matter most"
 summary: "To configure FSLogix with Group Policy, copy fslogix.admx and fslogix.adml into a policy store, then set at least Enabled and VHDLocations. Covers required, recommended and decision settings and what Group Policy does not reset."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [fslogix]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Three Conditional Access Policies to Set Up in a New Microsoft 365 Tenant"
 summary: "Start with MFA for all users, blocking legacy authentication and phishing-resistant MFA for admins. Steps, exclusions, report-only rollout and the security defaults and license rules from Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [conditional-access, microsoft-entra, security-defaults, legacy-authentication]
 keypoints:
   - "Microsoft has separate Learn articles for three starter policies: MFA for all users, blocking legacy authentication, and phishing-resistant MFA for admins."

@@ -1,10 +1,10 @@
 ---
 title: "RemoteApp in Azure Virtual Desktop: single apps instead of a full desktop"
 summary: "RemoteApp publishes individual applications from a pooled host pool, so users open an app in Windows App instead of a full Windows desktop. This article explains what RemoteApp is, where the apps come from, what it does not isolate, and how to decide between apps and a desktop."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [avd-remoteapp, avd-application-group]
 keypoints:

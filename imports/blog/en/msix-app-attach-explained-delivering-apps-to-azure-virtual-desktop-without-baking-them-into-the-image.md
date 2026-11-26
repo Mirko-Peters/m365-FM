@@ -1,10 +1,10 @@
 ---
 title: "MSIX app attach explained: delivering apps to Azure Virtual Desktop without baking them into the image"
 summary: "App Attach mounts an application disk image or App-V package from an SMB share into a user's session at sign-in, so the app is not installed on the host or image. Explains formats, share, assignment and certificates."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-27
 render: v2
 topics: [msix-app-attach, azure-virtual-desktop]
 keypoints:

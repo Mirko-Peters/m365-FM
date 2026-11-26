@@ -1,10 +1,10 @@
 ---
 title: "Connect Claude to Microsoft 365 Securely: A Governance Checklist"
 summary: "How the Claude Microsoft 365 connector works, which Entra consent it needs, which data it can read, and which admin controls limit it: a checklist based on Anthropic's and Microsoft's documentation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-27
 topics: [claude, microsoft-365, governance, mcp]
 keypoints:
   - "The connector uses delegated permissions. Claude acts as the signed-in user and can only reach what that user can already see in Microsoft 365."

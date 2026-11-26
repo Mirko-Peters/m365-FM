@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 Copilot in Outlook: What It Can Do for Your Inbox"
 summary: "What Copilot in Outlook documents today: summarizing threads, drafting, coaching, inbox prioritization, scheduling and meeting prep, plus the license, mailbox and encryption limits that apply."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [outlook, copilot, exchange-online, copilot-chat]
 keypoints:
   - "Copilot in Outlook can summarize threads, draft and coach emails, schedule meetings, prepare you for meetings and rank incoming mail as high, low or normal."

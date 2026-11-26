@@ -1,10 +1,10 @@
 ---
 title: "SharePoint HTML Pages with Copilot: Create, Upload, Edit and Publish"
 summary: "How HTML pages work in SharePoint: create one with Copilot or upload a file, edit and publish it, which licenses apply, what the sandbox blocks, and what is unclear about HTML list views."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-04
+date: 2026-11-27
 topics: [sharepoint, sharepoint-html-pages, microsoft-lists, copilot]
 keypoints:
   - "HTML pages live in the Site Pages library. You create them with Copilot or upload an .html file of up to 10 MB, then edit, publish and share like other pages."
