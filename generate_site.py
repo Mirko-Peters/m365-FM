@@ -594,7 +594,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <script defer src="{BASE}{SA.path("page.js")}"></script>
 <script defer src="{BASE}{SA.path("attend.js")}"></script>
 <script defer src="{BASE}{SA.path("fx.js")}"></script>
-{('<script defer src="' + BASE + SA.path("viz.js") + '"></script>') if 'class="viz"' in body else ""}
+{('<script defer src="' + BASE + SA.path("viz.js") + '"></script>') if 'class="viz"' in body else ""}{('<script defer src="' + BASE + SA.path("learnprogress.js") + '"></script>') if ' data-lpx="' in body else ""}
 </body></html>
 """
 

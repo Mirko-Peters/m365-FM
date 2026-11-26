@@ -302,23 +302,28 @@ def _attrs(l, lang):
     return f' lang="{l}" hreflang="{l}"' if l != lang else ""
 
 
-def card(doc, pid, lang, pages, r2map, dims=None):
+def _vid(vid, mark):
+    """data-vid fuer den Lernfortschritt (assets/learnprogress.js: Klick auf die Karte = "geoeffnet"); mark=False: HTML wie vor dem 26.11.2026."""
+    return f' data-vid="{esc(vid)}"' if mark else ""
+
+
+def card(doc, pid, lang, pages, r2map, dims=None, mark=False):
     """Abschnitt "Passende Videos" eines Leitfadens; leer ohne Video mit Seite."""
     its = items(doc, pid, lang, pages)
     if not its: return ""
     h, lead, kind, en = ui(lang)
     li = ""
     for vid, u, t, l in its:
-        li += (f'<li><a href="{u}"{_attrs(l, lang)}><span class="pl-vth">{thumb(vid, r2map, dims)}</span><b>{esc(t)}</b>'
+        li += (f'<li><a href="{u}"{_attrs(l, lang)}{_vid(vid, mark)}><span class="pl-vth">{thumb(vid, r2map, dims)}</span><b>{esc(t)}</b>'
                f'<small>{esc("YouTube" if l == "yt" else kind)}{" · " + esc(en) if l != lang and lang != "en" else ""}</small></a></li>')
     return f'{CSS}<section class="pl-vids" id="videos"><h2>{esc(h)}</h2><p class="mut">{esc(lead)}</p><ul class="pl-vgrid">{li}</ul></section>'
 
 
-def path_line(doc, pid, lang, pages):
+def path_line(doc, pid, lang, pages, mark=False):
     """Kurze Zeile fuer die Karte des Leitfadens auf der Pfadseite (nur Links, ohne Bilder)."""
     its = items(doc, pid, lang, pages)
     if not its: return ""
-    return (f'<p class="mut pl-vline">{esc(ui(lang)[0])}: ' + " · ".join(f'<a href="{u}"{_attrs(l, lang)}>{esc(t)}</a>' for _, u, t, l in its) + "</p>")
+    return (f'<p class="mut pl-vline">{esc(ui(lang)[0])}: ' + " · ".join(f'<a href="{u}"{_attrs(l, lang)}{_vid(v, mark)}>{esc(t)}</a>' for v, u, t, l in its) + "</p>")
 
 
 def ld_refs(doc, pid, lang, pages, has_ld):

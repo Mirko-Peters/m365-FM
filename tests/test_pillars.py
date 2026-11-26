@@ -689,5 +689,93 @@ class AssignPrecision(unittest.TestCase):
         self.assertIn("ifakt-polaris", S.ASSIGN[("h", "modular-production-planning-software-modules")])
 
 
+def _build_files(progress):
+    import contextlib, io
+    import site_infographics as _IG
+    files = {}
+    g = dict(BASE=BASE, write=lambda rel, html: files.__setitem__(rel, html), sitemap=[], author_box=None, LANGS=("en", "de"),
+             page=lambda lang, title, desc, canon, body, alts, ld, **kw: body, header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
+    with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(_IG, "get", lambda *a: None), mock.patch.object(S, "PROGRESS", progress):
+        S.build(g, [], set())
+    return files
+
+
+class Progress(unittest.TestCase):
+    """Lernfortschritt (Plan v2, Seiten-Teil): Marker und Kaesten auf Leitfaden, Vertiefung und Pfadseite; PROGRESS=False -> HTML wie vorher."""
+    MARKERS = (' data-lpx="', "lpx-data", "lpx-on", 'class="pl-lpx"', ' data-pid="', ' data-cid="', ' data-vid="', 'class="pl-end"', 'class="pl-done"', 'class="pl-qopen"', "m365-learn")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.on, cls.off = _build_files(True), _build_files(False)
+
+    def cfg(self, h):
+        import json
+        return json.loads(re.search(r'<script type="application/json" id="lpx-data">(.*?)</script>', h).group(1))
+
+    def test_off_is_old_html(self):
+        """Ohne Lernfortschritt keine Spur davon, und die Seiten mit Lernfortschritt unterscheiden sich nur um dessen Teile."""
+        self.assertEqual(set(self.on), set(self.off))
+        strip = [(re.escape(S.LPX_CSS), ""), (re.escape(S.LPX_EARLY) + r'<div class="pl-lpx".*?<div class="lpx-b" aria-live="polite"></div></div>', ""),
+                 (r' data-lpx="[^"]*" data-k="[gc]" data-id="[^"]*" data-l="[a-z]+" data-min="\d+"', ""), (re.escape(S.LP_END), ""),
+                 (r'<p class="pl-done">.*?</p><script type="application/json" id="lpx-data">.*?</script>', ""), (r'<script type="application/json" id="lpx-data">.*?</script>', ""),
+                 (r' data-(?:pid|cid|vid)="[^"]*"', ""), (r'<p class="pl-qopen" aria-live="polite"></p>', "")]
+        for rel, h in self.off.items():
+            for m in self.MARKERS: self.assertNotIn(m, h, rel)
+            x = self.on[rel]
+            for rx, to in strip: x = re.sub(rx, to, x, flags=re.S)
+            self.assertEqual(x, h, rel)
+        reg = S.registry(); reg_off = {**reg, "path": {**reg["path"], "progress": False}}
+        with mock.patch.object(S, "registry", lambda: reg_off):
+            self.assertFalse(S.progress_on())
+        self.assertTrue(S.progress_on())
+
+    def test_guide_and_deep_dive(self):
+        for rel, k, pid, lang, toc in (("de/learn/lean-management/index.html", "g", "lean-manufacturing", "de", "inhaltsverzeichnis"),
+                                       ("learn/lean-manufacturing/index.html", "g", "lean-manufacturing", "en", "table-of-contents"),
+                                       ("learn/lean-manufacturing/kaizen/index.html", "c", "kaizen", "en", None)):
+            h = self.on[rel]
+            m = re.search(r'<article class="pl-art" data-lpx="manufacturing-excellence" data-k="(\w)" data-id="([^"]+)" data-l="(\w+)" data-min="(\d+)">', h)
+            self.assertTrue(m, rel); self.assertEqual(m.groups()[:3], (k, pid, lang)); self.assertGreaterEqual(int(m.group(4)), 1)
+            art = h[m.start():h.index("</article>", m.start())]
+            self.assertTrue(art.endswith(S.LP_END), "Ende-Marker ist das letzte Kind des Artikels")
+            self.assertLess(art.index('<p class="pl-meta">'), art.index('class="pl-lpx"'), "Kasten nach der Meta-Zeile")
+            self.assertLess(art.index('class="pl-lpx"'), art.index("<h2"), "Kasten vor dem Text")
+            self.assertIn('<button type="button" class="btn main" id="lpx-save" disabled>', art, "ohne JS deaktiviert")
+            self.assertEqual(h.count('id="lpx"'), 1); self.assertEqual(h.count('id="lpx-data"'), 1)
+            after = h[h.index("</article>"):]
+            self.assertTrue(after.startswith('</article><p class="pl-done"><a href="'), rel)
+            self.assertLess(after.index("pl-done"), after.index('class="pl-step"'))
+            c = self.cfg(h)
+            self.assertEqual((c["path"], c["lang"], c["k"], c["id"]), ("manufacturing-excellence", lang, k, pid))
+            self.assertEqual(c["min"], int(m.group(4))); self.assertEqual(c["api"], "https://api-dub.m365.fm")
+            self.assertEqual(set(c["t"]), set(S.LP_KEYS))
+            self.assertEqual(c["privacy"], f"{BASE}/datenschutz/#lernpfad-fortschritt" if lang == "de" else f"{BASE}/privacy/#learning-progress")
+            if toc: self.assertIn(toc, c["toc"])
+            self.assertTrue(all(f'id="{t}"' in h for t in c["toc"]))
+            self.assertIn(f'<a href="{c["privacy"]}">', art)
+
+    def test_path_page(self):
+        h = self.on["de/learn/path/manufacturing-excellence/index.html"]
+        self.assertIn('<div class="pl-lpx" id="lpx" data-lpx="manufacturing-excellence" data-k="p">', h)
+        self.assertLess(h.index('class="pl-meta"'), h.index('class="pl-lpx"')); self.assertLess(h.index('class="pl-lpx"'), h.index('class="pl-card"'))
+        c = self.cfg(h)
+        self.assertEqual(c["k"], "p"); self.assertNotIn("id", c)
+        pids = re.findall(r'<div class="pl-card" data-pid="([^"]+)">', h)
+        self.assertEqual([x[0] for x in c["g"]], pids); self.assertEqual(len(pids), len(S.order()))
+        self.assertEqual(sorted(set(x[0] for x in c["c"])), sorted(set(re.findall(r'data-cid="([^"]+)"', h))))
+        self.assertTrue(all(u.startswith(BASE + "/") for _, _, u in c["g"] + c["c"]))
+        box = h[h.index('class="pl-box pl-quiz"'):]
+        self.assertIn('<p class="pl-qopen" aria-live="polite"></p>', box[:box.index("</section>")])
+
+    def test_texts_en_de(self):
+        for k in S.LP_KEYS:
+            en, de = S.UI[k]
+            self.assertTrue(en and de, k)
+            self.assertEqual(re.findall(r"\{\w+\}", en), re.findall(r"\{\w+\}", de), k)
+            self.assertNotRegex(de, r"\b(du|dein|deine|deinem|dich|dir)\b", "Seite siezt (wie der Abschlusstest)")
+        self.assertEqual(S.tx("fr", "lp_save"), S.UI["lp_save"][0], "uebersetzte Sprachen: Englisch, bis der Uebersetzer laeuft")
+        self.assertIn("{a}", S.UI["lp_off_q"][0])
+
+
 if __name__ == "__main__":
     unittest.main()
