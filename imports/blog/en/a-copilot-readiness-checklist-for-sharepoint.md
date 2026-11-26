@@ -1,8 +1,8 @@
 ---
 title: "A Copilot readiness checklist for SharePoint"
 summary: "A practical Copilot readiness checklist for SharePoint: review permissions and sharing links, reduce oversharing, apply sensitivity labels, and set up ongoing oversight before a rollout."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-26
 topics: [copilot-governance, oversharing, sensitivity-labels]
