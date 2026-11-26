@@ -205,6 +205,8 @@ export async function mergeStatements(db, S, T) {
   st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status<>'ok' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status='ok')", T, S));
   st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status='draft' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status<>'draft')", T, S));
   keepT("learn_certs");
+  // Lernfortschritt (0056): eine Zeile je Nutzer und Pfad - hat T schon eine, gilt die von T, sonst uebernimmt T die von S (Rest bleibt am stillgelegten S)
+  keepT("learn_progress");
   // Versuchszaehler (ratelimit, Schluessel learnq:<uid>:<pfad>, Fenster 24 h): laufende Zaehler von S werden zu denen von T addiert, das Fenster
   // beginnt mit dem spaeteren Start - so bringt das Zusammenfuehren keine zusaetzlichen Versuche. Abgelaufene Fenster zaehlen nicht.
   const cut = now() - ATTEMPT_TTL, sk = `learnq:${S}:`;
