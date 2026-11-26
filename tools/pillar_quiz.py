@@ -158,11 +158,13 @@ def check_item(x):
 _UMLAUT = re.compile(r"[äöüÄÖÜß]")
 _TRANSLIT = re.compile(r"(?<![aeiouq])(?:ae|oe|ue)", re.I)
 _TRANSLIT_OK = re.compile(r"^(?:\w*(?:aktu|visu|manu|individu|eventu|virtu|konzeptu|kontextu|textu|habitu|punktu|du|spiritu)ell\w*|zuerst\w*|"
-                          r"value\w*|true|issue\w*|queue\w*|due|blue|does|goes|aero\w*|boeing|poet\w*|continue\w*|revenue\w*|israel|michael|"
-                          r"koeffizient\w*|poesie|suez|duett\w*|statue\w*|silhouette\w*|\w*(?:influen|fluen|fuel|cruel|guess|argue|avenue|residue|pursue|league|vague|"
-                          r"tuesday|suede|shoe|joe|aloe|\w*sequen|\w*tue)\w*)$", re.I)
+                          r"oee|purdue|aero\w*|boeing|poet\w*|koeffizient\w*|poesie|suez|duett\w*|silhouette\w*|israel|michael|joe|aloe|"
+                          r"(?:value|issue|queue|continue|revenue|influence|residue|avenue|league|statue|virtue|sequence|argue|pursue|shoe|guess|fuel|cruel)"
+                          r"(?:s|d|es|ed|ing)?|true|due|blue|does|goes|vague|fluent|tuesday|suede)$", re.I)   # ganze Woerter: "fuel" darf "Nachfuellung" nicht decken
 
 
+_TRANSLIT_STEM = re.compile(r"fuell|fuehr|fuer|ueber|muess|koenn|moeglich|waehr|naechst|groess|aender|pruef|loes|rueck|stueck|taeglich|haeufig|"
+                            r"spaet|kuerz|hoeh|gemaess|gehoer|zaehl|laeng|staerk|schaetz|saetz|qualitaet|stoer|ruest|engpaess|verfueg|beruecksicht", re.I)
 _VOCAB = None
 
 
@@ -187,11 +189,13 @@ def _umlaut_forms(w):
 
 def ascii_german(*texts):
     """True, wenn ein deutscher Text Umlaute als ae/oe/ue schreibt (Uebersetzung im ASCII-Stil), auch gemischt mit echten Umlauten:
-    - ein Wort, das im Wortschatz der deutschen Leitfaeden nicht vorkommt, wohl aber mit Umlaut (Engpaesse -> Engpässe), oder
+    - ein Wort mit eindeutigem Stamm (fuer, ueber, Nachfuellung) oder eines, das im Wortschatz der deutschen Leitfaeden nicht vorkommt, wohl aber
+      mit Umlaut (Engpaesse -> Engpässe), oder
     - kein ä/ö/ü/ß im ganzen Text und mindestens zwei Woerter mit ae/oe/ue nach einem Konsonanten (aktuell, visuell, zuerst, value ausgenommen)."""
     t = " ".join(x for x in texts if isinstance(x, str))
     sus = [w for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", t) if _TRANSLIT.search(w) and not _TRANSLIT_OK.match(w)]
     if not sus: return False
+    if any(_TRANSLIT_STEM.search(w) for w in sus): return True   # eindeutige Wortstaemme (Nachfuellung, fuer, ueber) reichen allein
     voc = _de_vocab()
     if voc and any(w.lower() not in voc and any(u in voc for u in _umlaut_forms(w)) for w in sus): return True
     return not _UMLAUT.search(t) and len(sus) >= 2

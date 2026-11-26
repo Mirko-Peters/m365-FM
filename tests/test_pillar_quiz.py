@@ -534,6 +534,8 @@ class Umlauts(unittest.TestCase):
 
     def test_detects_ascii_and_mixed(self):
         self.assertTrue(PQ.ascii_german(self.ASCII)); self.assertTrue(PQ.ascii_german(self.MIXED))
+        self.assertTrue(PQ.ascii_german("Eine Min/Max-Linie am Regal, die die Nachfuellung steuert, und ein Etikett je Stueck"), "Ausnahmen nur als ganze Woerter")
+        self.assertFalse(PQ.ascii_german("Die OEE und das Purdue-Modell, OEE-Verluste"))
         for g in self.GOOD: self.assertFalse(PQ.ascii_german(g), g)
 
     def test_real_old_questions_clean(self):
