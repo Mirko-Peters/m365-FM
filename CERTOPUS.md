@@ -151,6 +151,16 @@ Reihenfolge, wenn PR #606 auf main ist:
   `/de/learn/<slug>/` und `/de/learn/<eltern>/<vertiefung>/` frei, mit hreflang de↔en und x-default en. Der deutsche Test fragt dieselben Gruppen wie der
   englische und verlinkt die deutschen Seiten; die deutschen Fragen kommen wie bisher aus dem Fragenlauf. Rückweg: `slug.de` entfernen (die Seiten fallen auf
   die englische Fassung zurück, keine toten Links), für die gebauten `/de/`-Adressen eine 301 auf die englische Seite setzen.
+- *Übersetzerlauf für die 10 neuen Leitfäden (13 Sprachen):* von Hand mit `translate-pillars.yml`, erst nach dem Merge und einem grünen `site.yml`-Lauf.
+  Ohne Feld `pillars` nimmt der Lauf die neuen Leitfäden jetzt mit (sie haben `slug.de`), Quelle bleibt die englische Datei; vorher `mode=plan`
+  (Kostenschätzung). Der Lauf pusht mit dem Standard-Token: das startet keinen Seitenbau, die übersetzten Seiten kommen mit dem nächtlichen Bau oder einem
+  Handlauf von `site.yml`. Bis dahin meldet der Bau je Sprache nur eine Sammelzeile „noch ohne Übersetzung“. Vertiefungen übersetzt der Lauf nicht; dafür
+  reicht `translate_pillars.py` allein nicht: `build_clusters`/`_cluster_docs`, der Kasten „Deep dives“, `hasPart` und `see_links` arbeiten nur für en/de.
+- *Infografiken der neuen Leitfäden:* bei der Freigabe von `pillar_hold` (`data/infographics_live.json`) entstehen jetzt auch deutsche Bildtexte
+  (`pillar_langs` = en, de); vorher `tools/infographics.py plan --kinds pillar --langs en,de` (nur Schätzung) und die Kosten mit de angeben.
+- *Hinweis „Ausführlich:“ (`see` in `data/pillars.json`):* direkt unter der passenden Überschrift eines Leitfadens ein Link auf den spezialisierten
+  Leitfaden oder die Vertiefung (gegen Kannibalisierung, en und de). Ändert Mirko eine Überschrift, meldet der Bau „Sprungmarke für Hinweis … fehlt“ und
+  der Test schlägt fehl; dann die Sprungmarke in `see.at` nachziehen. Sitemap-`lastmod` eines Leitfadens = jüngstes Datum seiner verlinkten neuen Ziele.
 
 **Anrede:** Seite, E-Mail und Zertifikat siezen („Sie“), passend zu den Leitfäden (Entscheidung 24.11.2026).
 

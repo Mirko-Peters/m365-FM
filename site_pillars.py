@@ -369,6 +369,28 @@ def _scrub_de(md):
     return md
 
 
+def _glink(lab):
+    """Deutscher Leitfaden mit dem Namen lab (label.de) -> Markdown-Link (die Adresse bildet Ctx.link auf die gebaute Seite ab), sonst None."""
+    p = next((q for q in pillars() if q["label"].get("de") == lab and q["slug"].get("de")), None)
+    return f"[{lab}](https://www.m365.fm/learn/{p['slug']['de']}/)" if p else None
+
+
+def _scrub_old_de(md):
+    """Bestehende deutsche Leitfäden (20.11.2026): Verweise auf "geplante Pillar-Seiten" und das "Schwester-Kompendium" zeigen auf Leitfäden, die längst
+    veröffentlicht sind. Sie werden zu Links auf den Leitfaden ("im Leitfaden [Produktionskennzahlen](...)"); die Dateien bleiben unverändert.
+    Nur Namen, die genau einem deutschen Leitfaden entsprechen (label.de), sonst bleibt der Satz stehen."""
+    md = re.sub(r"Eine ausführliche Darstellung der Fertigungs-IT auf Azure ist als eigene Pillar-Seite geplant \(siehe Liste am Ende dieses Artikels\)\.",
+                lambda m: f"Eine ausführliche Darstellung der Fertigungs-IT auf Azure gibt der Leitfaden {_glink('Manufacturing IT mit Azure')}." if _glink("Manufacturing IT mit Azure") else m.group(0), md)
+    labs = sorted({q["label"]["de"] for q in pillars() if q["slug"].get("de")}, key=len, reverse=True)
+    rx = "|".join(map(re.escape, labs))
+    if rx:
+        md = re.sub(r"\b(in der|die) Pillar-(?:Seite|Page) (?:zu[rm]? )?(" + rx + r")\b(?!\]|-)", lambda m: ("im Leitfaden " if m.group(1) == "in der" else "der Leitfaden ") + _glink(m.group(2)), md)
+    md = re.sub(r"(ist im Leitfaden \[[^\]]+\]\(https://www\.m365\.fm/learn/[a-z0-9-]+/\)) vorgesehen\b", r"\1 zu finden", md)   # "... ist in der Pillar-Seite zu X vorgesehen"
+    md = re.sub(r"(Leitfaden \[[^\]]+\]\(https://www\.m365\.fm/learn/[a-z0-9-]+/\)) \(siehe (?:Linkliste|Liste) am Ende[^)]*\)", r"\1", md)
+    md = re.sub(r"\b([Dd])as Schwester-Kompendium (?=\[)", lambda m: ("D" if m.group(1) == "D" else "d") + "er Leitfaden ", md)
+    return md
+
+
 def scrub(md):
     """Entfernt alles, was nur für die Redaktion gedacht ist: Platzhalter ([Editor: ...]), Klammerverweise auf Prüfhinweise und Review-Protokolle,
     Zeile mit Stand und Lesezeit, Verweiszeile auf die andere Sprachfassung (die Seite setzt hreflang und einen Link selbst), Vermerke "geplant/planned"
@@ -414,6 +436,9 @@ def scrub(md):
                  (r"was founded in 2001 by Jörg Drees", "was, according to the company, founded in 2001"),
                  (r"wurde 2001 von Jörg Drees gegründet", "wurde nach Unternehmensangaben 2001 gegründet")):
         md = re.sub(a, b, md)
+    md = re.sub(r"\bcompare the formulas used by ERP vendors and competitors\b", "compare the formulas used by ERP vendors and other guides", md)   # SERP-Vergleich (kanban-pull-system)
+    md = re.sub(r"\bvergleichen die Formeln von ERP-Anbietern und Wettbewerbern\b", "vergleichen die Formeln von ERP-Anbietern und Ratgeberseiten", md)
+    md = _scrub_old_de(md)
     md = _scrub_de(md)
     # Adressen in Backticks (/learn/<slug>/) werden zu Links auf den Pillar
     md = re.sub(r"(?m)^(\s*[-*]\s+)`(/(?:en/)?learn/[a-z0-9-]+/(?:[a-z0-9-]+/)?)`:\s*(.+?)\s*$", lambda m: f"{m.group(1)}[{m.group(3)}](https://www.m365.fm{m.group(2)})", md)
@@ -1006,6 +1031,7 @@ CSS = """<style>
 .pl-stage{margin:2em 0 .4em}.pl-step-n{display:inline-block;min-width:2em;height:2em;line-height:2em;text-align:center;border-radius:50%;background:var(--ac,#0a6);color:#fff;margin-right:.5em;font-weight:700}
 .pl-card{border:1px solid var(--bd,#ccd);border-radius:.5em;padding:1em;margin:.8em 0}.pl-card h3{margin:.1em 0 .3em}.pl-card ul{margin:.4em 0 0;padding-left:1.2em}
 .pl-dd{margin:.6em 0 0}.pl-dd b{display:block;font-size:.92em}.pl-deep li{margin:.35em 0}.pl-deep small{color:var(--mut,#667)}
+.pl-see{margin:.3em 0 .8em;font-size:.95em}
 </style>"""
 
 
@@ -1079,6 +1105,7 @@ def build_clusters(g, cx, cdocs, pa):
             crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], pu), (clabel(c, lang), u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(t)}</a>' for t, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             sib = [x for x in clusters_of(p["id"]) if x["id"] != c["id"] and ("en", x["id"]) in cdocs]
+            if sib and all(f'href="{cluster_url(BASE, x, lang if (lang, x["id"]) in cdocs else "en")}' in d["body"] for x in sib): sib = []   # der Artikel verlinkt schon alle Geschwister (Liste "Weitere Vertiefungen" der Datei): kein zweiter Kasten
             more = (f'<section class="pl-box pl-deep"><h2>{esc(tx(lang, "deep_more"))}</h2>{_deep_list(BASE, sib, lang, cdocs)}</section>' if sib else "")
             noidx = bool(c.get("noindex") or p.get("noindex"))
             alts = {} if noidx else {l: cluster_url(BASE, c, l) for l in LANGS if (l, c["id"]) in cdocs}
@@ -1147,6 +1174,44 @@ def _cluster_doc(c, d, lang, cx, g, out):
         print(f"::warning::Pillars: Vertiefung {lang}/{c['id']} nicht gebaut: {type(e).__name__}: {e}"); return False
 
 
+_SEE = {"en": "In depth:", "de": "Ausführlich:"}
+
+
+def see_targets(p, lang, BASE, cdocs):
+    """data/pillars.json "see" eines Leitfadens: [{"to": [IDs von Leitfäden oder Vertiefungen], "at": {en, de: Sprungmarke des Abschnitts}}] ->
+    [(Sprungmarke, [(Adresse, Name, Datum)])] in dieser Sprache (en, de); nur gebaute, indexierbare Ziele mit Fassung dieser Sprache."""
+    out = []
+    for e in p.get("see") or ():
+        at = (e.get("at") or {}).get(lang)
+        if not at or lang not in LANGS: continue
+        tg = []
+        for tid in e.get("to") or ():
+            c = next((x for x in clusters() if x["id"] == tid), None)
+            if c:
+                if (lang, tid) in cdocs and not c.get("noindex"): tg.append((cluster_url(BASE, c, lang), clabel(c, lang), pdate(c)))
+                continue
+            q = by_id(tid)
+            if q and q["id"] != p["id"] and has(q, lang) and not q.get("noindex"): tg.append((url(BASE, q, lang), q["label"][lang], pdate(q)))
+        if tg: out.append((at, tg))
+    return out
+
+
+def see_links(body, p, lang, BASE, cdocs):
+    """Hinweis "Ausführlich: <Link>" direkt unter der Überschrift des Abschnitts, den ein eigener Leitfaden oder eine Vertiefung ausführlich behandelt
+    (gegen Kannibalisierung: der Überblick verweist im Text auf die spezialisierte Seite, nicht nur im Kasten am Seitenende). Ziele, die der Abschnitt schon
+    verlinkt, entfallen. Fehlt die Sprungmarke (Überschrift geändert), Hinweis im Log, die Seite bleibt unverändert."""
+    for at, tg in see_targets(p, lang, BASE, cdocs):
+        m = re.search(r'<h([23]) id="' + re.escape(esc(at)) + r'"[^>]*>.*?</h\1>', body, re.S)
+        if not m:
+            print(f"Pillars: Sprungmarke für Hinweis „{_SEE[lang]}“ fehlt: {lang}/{slug_of(p, lang)}#{at}"); continue
+        nxt = re.search(r"<h[2-" + m.group(1) + r"][ >]", body[m.end():])
+        sec = body[m.end(): m.end() + nxt.start() if nxt else len(body)]
+        tg = [(u, n) for u, n, _ in tg if f'href="{esc(u)}' not in sec]
+        if tg:
+            body = body[:m.end()] + f'<p class="pl-see"><b>{esc(_SEE[lang])}</b> ' + ", ".join(f'<a href="{esc(u)}">{esc(n)}</a>' for u, n in tg) + "</p>" + body[m.end():]
+    return body
+
+
 def build(g, posts, ents, written=None):
     """Schreibt alle Pillar-Seiten, die Vertiefungen und die Pfadseiten. g: Kontext wie bei site_library.build. posts: live veröffentlichte Beiträge (aller Sprachen)."""
     BASE, write, page, sitemap = g["BASE"], g["write"], g["page"], g["sitemap"]
@@ -1162,13 +1227,16 @@ def build(g, posts, ents, written=None):
     langs = active()
     made = {l: 0 for l in langs}
     cards = {}
+    untr = {}   # Sprache -> Leitfäden ohne Übersetzung (noch von keiner Übersetzung erfasst)
     cdocs = _cluster_docs(BASE, cx, g)   # Vertiefungen vorab ({(lang, id): ...}): Kasten "Deep dives"/"Vertiefungen" auf dem Eltern-Leitfaden und Liste auf der Pfadseite
     deep = {p["id"]: [c for c in clusters_of(p["id"]) if ("en", c["id"]) in cdocs] for p in pillars()}
     for lang in langs:
         ordered = order_l(lang); n_pillars = len(ordered)   # Schritte und Vor/Zurück nur über Leitfäden mit Fassung dieser Sprache
         for p in pillars():
             if not has(p, lang):
-                if lang == "en" or p["slug"].get("de"): print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md")   # Leitfäden nur auf Englisch: in anderen Sprachen kein Hinweis
+                if lang == "en" or (lang == "de" and p["slug"].get("de")) or (lang not in LANGS and any(has(p, l) for l in langs if l not in LANGS)):
+                    print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md")   # en/de immer; übersetzte Sprachen nur, wenn eine andere Übersetzung den Leitfaden schon hat
+                elif lang not in LANGS: untr[lang] = untr.get(lang, 0) + 1   # noch nicht übersetzt (Normalfall bis translate-pillars.yml): eine Sammelzeile statt je Leitfaden
                 continue
             res = _article(p, lang, BASE, cx)
             if not res: print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md"); continue
@@ -1202,6 +1270,7 @@ def build(g, posts, ents, written=None):
             vids = PV.card(_pv["doc"], p["id"], lang, _pv["pages"], _pv["r2"], _pv["dims"]) if _pv else ""
             _ig = bool(IG.get("pillar", p["id"], lang))   # Kopfbild (Teilen-Bild) und 9-10 Infografiken im Text; ohne Freigabe in data/infographics_live.json bleibt die Seite unveraendert
             if _ig: body = IG.inject(body, "pillar", p["id"], lang)
+            body = see_links(body, p, lang, BASE, cdocs)   # nach den Infografiken: deren Platz hängt an den Überschriften
             auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
             crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
@@ -1225,9 +1294,14 @@ def build(g, posts, ents, written=None):
             faq = faq_of(d["article"])
             if faq: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
             write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/{slug_of(p, lang)}/index.html", page(lang, title, desc, u, b, alts if len(alts) > 1 and not noidx else None, ld, xdefault=alts.get("en"), og_type="article", noindex=noidx, **(IG.page_kw("pillar", p["id"], lang) if _ig else {})))
-            if not noidx: sitemap.append((u, dt, alts if len(alts) > 1 else None))
+            # lastmod: neue Links im Kasten "Vertiefungen"/"Weiterführende Leitfäden" und unter "Ausführlich:" ändern die Seite (Google: Links zählen als
+            # wesentliche Änderung) -> jüngstes Datum dieser Ziele, damit die neuen internen Links schneller neu gecrawlt werden; dateModified bleibt das der Datei
+            lm = max([dt] + [pdate(c) for c in (deep.get(p["id"]) or []) if lang in LANGS] + [pdate(q) for q in rg]
+                     + [x for _, tg in see_targets(p, lang, BASE, cdocs) for _, _, x in tg])
+            if not noidx: sitemap.append((u, lm, alts if len(alts) > 1 else None))
             made[lang] += 1
             cards[(lang, p["id"])] = (desc, mins)
+    if untr: print("Pillars: noch ohne Übersetzung (translate-pillars.yml): " + ", ".join(f"{l} {n}" for l, n in untr.items()))
     n_deep = build_clusters(g, cx, cdocs, pa)   # ohne try: die Links darauf (Kasten, hasPart, Pfadseite) stehen schon fest, ein Fehler hier soll den Bau sichtbar stoppen
     # Pfadseiten (mit Kasten "Abschlusstest & Zertifikat") und Testseiten
     qdoc = quiz_doc()
@@ -1277,7 +1351,7 @@ def build(g, posts, ents, written=None):
                "provider": {"@id": f"{BASE}/#org"}, "isAccessibleForFree": True, "hasPart": parts},
               {"@context": "https://schema.org", "@type": "ItemList", "name": pa["title"][lang], "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": url(BASE, q, cl), "name": q["label"][lang]} for i, (_, q, cl) in enumerate(items)]},
               _crumb_ld(BASE, crumbs)]
-        write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], pa["short"][lang], pu, b, None if noidx else alts, ld, xdefault=alts["en"], og_type="website", noindex=noidx))
+        write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], (pa.get("seo_desc") or {}).get(lang) or pa["short"][lang], pu, b, None if noidx else alts, ld, xdefault=alts["en"], og_type="website", noindex=noidx))
         if not noidx: sitemap.append((pu, max([UPDATED] + [pdate(p) for p in pillars()] + [pdate(c) for c in clusters()]), alts))
         path_langs.append((lang, groups, crumbs))
     for lang, groups, crumbs in path_langs:   # Testseiten: noindex, nie in der Sitemap

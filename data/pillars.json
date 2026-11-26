@@ -1,5 +1,5 @@
 {
- "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (en, de): Datei imports/pillars/<sprache>/clusters/<slug>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/ bzw. /de/learn/<slug.de des Eltern-Leitfadens>/<slug.de>/; ohne slug.de nur Englisch; label.de = Name auf deutschen Seiten; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge). related = IDs eigener Leitfaeden zu Methoden, die dieser Leitfaden nur kurz behandelt: Kasten 'Related guides'/'Weiterführende Leitfäden' auf der englischen und deutschen Seite (gegen Kannibalisierung, bis die bestehenden Leitfaeden selbst auf die neuen verlinken).",
+ "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (en, de): Datei imports/pillars/<sprache>/clusters/<slug>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/ bzw. /de/learn/<slug.de des Eltern-Leitfadens>/<slug.de>/; ohne slug.de nur Englisch; label.de = Name auf deutschen Seiten; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge). related = IDs eigener Leitfaeden zu Methoden, die dieser Leitfaden nur kurz behandelt: Kasten 'Related guides'/'Weiterführende Leitfäden' auf der englischen und deutschen Seite (gegen Kannibalisierung, bis die bestehenden Leitfaeden selbst auf die neuen verlinken). see = Hinweis 'In depth:'/'Ausführlich:' mit Link direkt unter einer Überschrift des Leitfadens: [{to: [IDs von Leitfäden oder Vertiefungen], at: {en, de: Sprungmarke (id) der Überschrift}}] (gegen Kannibalisierung im Text, nicht nur im Kasten; fehlt die Sprungmarke, Hinweis im Bau-Log; Test prüft alle Sprungmarken). path.seo_desc = Meta-Description der Pfadseite (en, de; höchstens 155 Zeichen, sonst gilt path.short).",
  "path": {
   "id": "manufacturing-excellence",
   "title": {
@@ -93,7 +93,11 @@
      "ot-cybersecurity-iec-62443"
     ]
    }
-  ]
+  ],
+  "seo_desc": {
+   "en": "Free learning path: 20 guides and 15 deep dives on lean, OEE, Six Sigma, scheduling, MES and OT security, with a final test and certificate.",
+   "de": "Kostenloser Lernpfad: 20 Leitfäden und 15 Vertiefungen zu Lean, OEE, Six Sigma, Planung, MES und OT-Sicherheit, mit Abschlusstest und Zertifikat."
+  }
  },
  "pillars": [
   {
@@ -118,6 +122,108 @@
     "kanban-pull-system",
     "smed-changeover-reduction",
     "tpm-oee"
+   ],
+   "see": [
+    {
+     "to": [
+      "5s-visual-management"
+     ],
+     "at": {
+      "en": "5s-workplace-organization-as-the-foundation",
+      "de": "5s-ordnung-als-fundament"
+     }
+    },
+    {
+     "to": [
+      "standard-work"
+     ],
+     "at": {
+      "en": "standard-work",
+      "de": "standardarbeit"
+     }
+    },
+    {
+     "to": [
+      "smed-changeover-reduction"
+     ],
+     "at": {
+      "en": "smed-quick-changeover-in-steps",
+      "de": "smed-rüstzeiten-in-schritten-reduzieren"
+     }
+    },
+    {
+     "to": [
+      "kanban-pull-system"
+     ],
+     "at": {
+      "en": "kanban",
+      "de": "kanban"
+     }
+    },
+    {
+     "to": [
+      "poka-yoke"
+     ],
+     "at": {
+      "en": "poka-yoke-prevent-defects-instead-of-inspecting",
+      "de": "poka-yoke-fehler-verhindern-statt-prüfen"
+     }
+    },
+    {
+     "to": [
+      "andon"
+     ],
+     "at": {
+      "en": "andon-make-problems-visible-immediately",
+      "de": "andon-probleme-sofort-sichtbar-machen"
+     }
+    },
+    {
+     "to": [
+      "tpm-oee"
+     ],
+     "at": {
+      "en": "tpm-total-productive-maintenance",
+      "de": "tpm-total-productive-maintenance"
+     }
+    },
+    {
+     "to": [
+      "kaizen",
+      "pdca-cycle"
+     ],
+     "at": {
+      "en": "kaizen-and-continuous-improvement",
+      "de": "kaizen-und-kvp"
+     }
+    },
+    {
+     "to": [
+      "a3-problem-solving"
+     ],
+     "at": {
+      "en": "a3-problem-solving",
+      "de": "a3-problemlösung"
+     }
+    },
+    {
+     "to": [
+      "six-sigma-root-cause-analysis"
+     ],
+     "at": {
+      "en": "lean-vs-six-sigma-vs-lean-six-sigma",
+      "de": "lean-vs-six-sigma-vs-lean-six-sigma"
+     }
+    },
+    {
+     "to": [
+      "manufacturing-kpis"
+     ],
+     "at": {
+      "en": "lean-kpis-how-to-measure-progress",
+      "de": "lean-kpis-fortschritt-messbar-machen"
+     }
+    }
    ]
   },
   {
@@ -133,7 +239,46 @@
    "topics": [
     "operational-excellence"
    ],
-   "re": "operational excellence|opex"
+   "re": "operational excellence|opex",
+   "see": [
+    {
+     "to": [
+      "a3-problem-solving",
+      "pdca-cycle"
+     ],
+     "at": {
+      "en": "a3-problem-solving-and-pdca",
+      "de": "a3-problemlösung-und-pdca"
+     }
+    },
+    {
+     "to": [
+      "tpm-oee"
+     ],
+     "at": {
+      "en": "total-productive-maintenance-tpm-and-oee",
+      "de": "total-productive-maintenance-tpm-und-oee"
+     }
+    },
+    {
+     "to": [
+      "standard-work"
+     ],
+     "at": {
+      "en": "standardized-work",
+      "de": "standardarbeit"
+     }
+    },
+    {
+     "to": [
+      "kaizen"
+     ],
+     "at": {
+      "en": "continuous-improvement-and-kaizen",
+      "de": "kvp-und-kaizen"
+     }
+    }
+   ]
   },
   {
    "id": "shop-floor-management",
@@ -149,7 +294,36 @@
     "gemba-walk",
     "shop-floor-management"
    ],
-   "re": "gemba|shop ?floor|tier(?:ed)? meetings?|andon|daily management"
+   "re": "gemba|shop ?floor|tier(?:ed)? meetings?|andon|daily management",
+   "see": [
+    {
+     "to": [
+      "andon"
+     ],
+     "at": {
+      "en": "andon-making-deviations-visible-in-real-time",
+      "de": "andon-abweichungen-in-echtzeit-sichtbar-machen"
+     }
+    },
+    {
+     "to": [
+      "paperless-manufacturing"
+     ],
+     "at": {
+      "en": "analog-or-digital-digital-shop-floor-management-compared",
+      "de": "analog-oder-digital-digitales-shopfloor-management-im-vergleich"
+     }
+    },
+    {
+     "to": [
+      "mes-isa-95"
+     ],
+     "at": {
+      "en": "data-integration-mes-erp-and-machine-data",
+      "de": "datenanbindung-mes-erp-und-maschinendaten"
+     }
+    }
+   ]
   },
   {
    "id": "value-stream-mapping",
@@ -165,7 +339,18 @@
     "value-stream-mapping",
     "value-stream-manager"
    ],
-   "re": "value stream|vsm"
+   "re": "value stream|vsm",
+   "see": [
+    {
+     "to": [
+      "manufacturing-simulation"
+     ],
+     "at": {
+      "en": "11-dynamic-and-digital-value-stream-mapping",
+      "de": "11-dynamische-und-digitale-wertstromanalyse"
+     }
+    }
+   ]
   },
   {
    "id": "manufacturing-kpis",
@@ -186,6 +371,53 @@
    "related": [
     "tpm-oee",
     "six-sigma-root-cause-analysis"
+   ],
+   "see": [
+    {
+     "to": [
+      "smed-changeover-reduction"
+     ],
+     "at": {
+      "en": "6-changeover-time-smed-and-micro-stops",
+      "de": "6-rüstzeit-smed-und-mikrostillstände"
+     }
+    },
+    {
+     "to": [
+      "tpm-oee"
+     ],
+     "at": {
+      "en": "7-oee-how-to-calculate-overall-equipment-effectiveness",
+      "de": "7-oee-gesamtanlageneffektivität-richtig-berechnen"
+     }
+    },
+    {
+     "to": [
+      "six-sigma-root-cause-analysis"
+     ],
+     "at": {
+      "en": "8-quality-kpis-scrap-rate-first-pass-yield-rework-rate-ppm",
+      "de": "8-qualitätskennzahlen-ausschussquote-first-pass-yield-nacharbeitsquote-ppm"
+     }
+    },
+    {
+     "to": [
+      "manufacturing-inventory-management"
+     ],
+     "at": {
+      "en": "9-delivery-and-inventory-kpis-otif-schedule-adherence-wip-days-of-supply",
+      "de": "9-liefer--und-bestandskennzahlen-otif-termintreue-wip-reichweite"
+     }
+    },
+    {
+     "to": [
+      "predictive-maintenance-iiot"
+     ],
+     "at": {
+      "en": "11-maintenance-kpis-mtbf-mttr-and-inherent-availability",
+      "de": "11-instandhaltung-mtbf-mttr-und-technische-verfügbarkeit"
+     }
+    }
    ]
   },
   {
@@ -211,6 +443,71 @@
    "related": [
     "sop-mrp-production-planning",
     "theory-of-constraints"
+   ],
+   "see": [
+    {
+     "to": [
+      "sop-mrp-production-planning"
+     ],
+     "at": {
+      "en": "3-the-weaknesses-of-classic-mrp-logic",
+      "de": "3-die-schwächen-der-klassischen-mrp-logik"
+     }
+    },
+    {
+     "to": [
+      "mes-isa-95"
+     ],
+     "at": {
+      "en": "6-erp-vs-aps-vs-mes",
+      "de": "6-erp-aps-und-mes-im-vergleich"
+     }
+    },
+    {
+     "to": [
+      "theory-of-constraints"
+     ],
+     "at": {
+      "en": "7-theory-of-constraints-drum-buffer-rope-and-buffer-management",
+      "de": "7-engpasstheorie-drum-buffer-rope-und-buffer-management"
+     }
+    },
+    {
+     "to": [
+      "kanban-pull-system"
+     ],
+     "at": {
+      "en": "84-kanban-pull-and-conwip",
+      "de": "84-kanban-pull-und-conwip"
+     }
+    },
+    {
+     "to": [
+      "lot-sizing"
+     ],
+     "at": {
+      "en": "9-lot-sizing-eoq-worked-example-and-limits",
+      "de": "9-losgrößen-andler-formel-rechenbeispiel-und-kritik"
+     }
+    },
+    {
+     "to": [
+      "manufacturing-inventory-management"
+     ],
+     "at": {
+      "en": "10-safety-stock-formula-and-worked-example",
+      "de": "10-sicherheitsbestand-formel-und-rechenbeispiel"
+     }
+    },
+    {
+     "to": [
+      "manufacturing-simulation"
+     ],
+     "at": {
+      "en": "12-digital-twin-and-simulation",
+      "de": "12-digitaler-zwilling-und-simulation"
+     }
+    }
    ]
   },
   {
@@ -228,7 +525,54 @@
     "factory-simulation",
     "azure-digital-twins"
    ],
-   "re": "digital twins?|factory simulation|production simulation|virtual commissioning"
+   "re": "digital twins?|factory simulation|production simulation|virtual commissioning",
+   "see": [
+    {
+     "to": [
+      "mes-isa-95"
+     ],
+     "at": {
+      "en": "5-architecture-and-data-foundation-erp-mes-plm-iot",
+      "de": "5-architektur-und-datenbasis-erp-mes-plm-iot"
+     }
+    },
+    {
+     "to": [
+      "manufacturing-simulation"
+     ],
+     "at": {
+      "en": "6-simulation-at-the-core-factory-material-flow-and-value-stream-simulation",
+      "de": "6-simulation-als-kern-fabrik--materialfluss--und-wertstromsimulation"
+     }
+    },
+    {
+     "to": [
+      "theory-of-constraints"
+     ],
+     "at": {
+      "en": "72-capacity-and-bottleneck-analysis",
+      "de": "72-kapazitäts--und-engpassanalyse"
+     }
+    },
+    {
+     "to": [
+      "predictive-maintenance-iiot"
+     ],
+     "at": {
+      "en": "78-maintenance",
+      "de": "78-instandhaltung"
+     }
+    },
+    {
+     "to": [
+      "ot-cybersecurity-iec-62443"
+     ],
+     "at": {
+      "en": "16-security-data-ownership-and-regulation",
+      "de": "16-sicherheit-datenhoheit-und-regulierung"
+     }
+    }
+   ]
   },
   {
    "id": "aerospace-production-planning",
@@ -244,7 +588,36 @@
     "aerospace",
     "traceability"
    ],
-   "re": "aerospace|aviation|as9100|mro|traceability"
+   "re": "aerospace|aviation|as9100|mro|traceability",
+   "see": [
+    {
+     "to": [
+      "theory-of-constraints"
+     ],
+     "at": {
+      "en": "112-bottleneck-management-with-the-theory-of-constraints",
+      "de": "112-engpasssteuerung-nach-der-theory-of-constraints"
+     }
+    },
+    {
+     "to": [
+      "manufacturing-simulation"
+     ],
+     "at": {
+      "en": "114-simulation-test-capacity-decisions-before-you-make-them",
+      "de": "114-simulation-kapazitätsentscheidungen-vorher-testen"
+     }
+    },
+    {
+     "to": [
+      "supply-chain-resilience"
+     ],
+     "at": {
+      "en": "12-supply-chain-risks-2022-to-2026-and-what-they-mean-for-planning",
+      "de": "12-lieferkettenrisiken-2022-bis-2026-und-ihre-folgen-für-die-planung"
+     }
+    }
+   ]
   },
   {
    "id": "manufacturing-it-azure",
@@ -266,6 +639,44 @@
     "mes-isa-95",
     "predictive-maintenance-iiot",
     "ot-cybersecurity-iec-62443"
+   ],
+   "see": [
+    {
+     "to": [
+      "mes-isa-95"
+     ],
+     "at": {
+      "en": "data-model-first-isa-95-and-the-unified-namespace",
+      "de": "datenmodell-zuerst-isa-95-und-unified-namespace"
+     }
+    },
+    {
+     "to": [
+      "ot-cybersecurity-iec-62443"
+     ],
+     "at": {
+      "en": "itot-convergence-and-security",
+      "de": "itot-konvergenz-und-sicherheit"
+     }
+    },
+    {
+     "to": [
+      "predictive-maintenance-iiot"
+     ],
+     "at": {
+      "en": "use-case-1-predictive-maintenance-on-azure",
+      "de": "use-case-1-predictive-maintenance-mit-azure"
+     }
+    },
+    {
+     "to": [
+      "tpm-oee"
+     ],
+     "at": {
+      "en": "use-case-4-real-time-kpis-oee-and-value-streams",
+      "de": "use-case-4-kennzahlen-oee-und-wertstrom"
+     }
+    }
    ]
   },
   {

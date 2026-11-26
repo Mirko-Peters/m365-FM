@@ -364,16 +364,17 @@ class Build(unittest.TestCase):
         import json
         self.files, self.sm = {}, []
         g = dict(BASE=BASE, write=lambda rel, html: self.files.__setitem__(rel, html), sitemap=self.sm, author_box=None, LANGS=("en", "de"),
-                 page=lambda lang, title, desc, canon, body, alts, ld, **kw: json.dumps({"ld": ld, "alts": alts, "canon": canon}, ensure_ascii=False) + "\n" + body,
+                 page=lambda lang, title, desc, canon, body, alts, ld, **kw: json.dumps({"ld": ld, "alts": alts, "canon": canon, "desc": desc}, ensure_ascii=False) + "\n" + body,
                  header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
         posts = [{"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "What is a gemba walk", "topics": ["gemba-walk"], "published": 5, "lang": "en"},
                  {"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "Was ist ein Gemba Walk", "topics": ["gemba-walk"], "lang": "de", "tr_of": 1}]
         import contextlib, io
         from unittest import mock
         import site_infographics as _IG
-        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(_IG, "get", lambda *a: None):   # unabhaengig von den echten Infografik-Daten
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(_IG, "get", lambda *a: None):   # unabhaengig von den echten Infografik-Daten
             S.build(g, posts, {"kaizen", "digital-twin"})
-        self.json = json
+        self.json, self.log = json, out.getvalue()
 
     def test_pages_schema_and_language_links(self):
         self.assertEqual(len(self.files), 74)   # 20 en + 20 de Leitfäden, 15 + 15 Vertiefungen, 2 Pfadseiten, 2 Testseiten (Abschlusstest)
@@ -503,6 +504,87 @@ class Build(unittest.TestCase):
                 self.assertNotRegex(txt, FORBIDDEN_DE, rel)
                 self.assertNotRegex(txt, r"(?i)cluster-artikel|\bder Leitfaden-|\bin der Leitfaden\b|der Regelrunden der Leitfaden|\bim \[Vertiefung|\bder \[Vertiefung|dem \[Vertiefung", rel)
         self.assertNotRegex(self.files["learn/mes-isa-95/index.html"], r"ranking explainers|question on google\.com")
+
+    def test_see_hints_under_sections(self):
+        # Befund Kannibalisierung: der Überblick verweist im Abschnitt selbst auf die spezialisierte Seite (data/pillars.json "see")
+        self.assertNotIn("Sprungmarke für Hinweis", self.log)   # jede Sprungmarke der Registry trifft eine Überschrift (en, de)
+        n = 0
+        for p in S.pillars():
+            for e in p.get("see") or ():
+                for t in e["to"]: self.assertTrue(S.by_id(t) or any(c["id"] == t for c in S.clusters()), f"{p['id']}: see {t} unbekannt")
+                self.assertTrue(set(e["at"]) <= {"en", "de"} and e["at"], p["id"]); n += 1
+        self.assertGreaterEqual(n, 40)
+        def sec(rel, anchor):
+            h = self.files[rel]; i = h.index(f'id="{anchor}"'); j = h.find("<h2", i + 10); return h[i:j]
+        cases = (("de/learn/produktionsplanung-aps/index.html", "10-sicherheitsbestand-formel-und-rechenbeispiel", "/de/learn/produktionsplanung-aps/bestandsmanagement/"),
+                 ("de/learn/produktionsplanung-aps/index.html", "9-losgrößen-andler-formel-rechenbeispiel-und-kritik", "/de/learn/produktionsplanung-aps/losgroesse/"),
+                 ("de/learn/produktionsplanung-aps/index.html", "7-engpasstheorie-drum-buffer-rope-und-buffer-management", "/de/learn/theory-of-constraints-engpass/"),
+                 ("de/learn/produktionskennzahlen/index.html", "7-oee-gesamtanlageneffektivität-richtig-berechnen", "/de/learn/tpm-oee/"),
+                 ("de/learn/lean-management/index.html", "kaizen-und-kvp", "/de/learn/lean-management/kaizen/"),
+                 ("de/learn/lean-management/index.html", "5s-ordnung-als-fundament", "/de/learn/5s-methode-visuelles-management/"),
+                 ("learn/production-scheduling-aps/index.html", "10-safety-stock-formula-and-worked-example", "/learn/production-scheduling-aps/manufacturing-inventory-management/"),
+                 ("learn/manufacturing-kpis/index.html", "7-oee-how-to-calculate-overall-equipment-effectiveness", "/learn/tpm-oee/"))
+        for rel, anchor, target in cases:
+            s = sec(rel, anchor); self.assertRegex(s, r'</h[23]><p class="pl-see"><b>(?:Ausführlich|In depth):</b> <a href="' + re.escape(BASE + target) + '"', rel + "#" + anchor)
+        self.assertNotIn('class="pl-see"', self.files["learn/ifakt-polaris/index.html"]); self.assertNotIn('class="pl-see"', self.files["de/learn/tpm-oee/index.html"])
+        # Ziel schon im Abschnitt verlinkt: kein zweiter Hinweis; fehlende Sprungmarke: Seite unverändert, Hinweis im Log
+        p = {"id": "x", "slug": {"en": "x", "de": "x"}, "see": [{"to": ["tpm-oee"], "at": {"de": "a"}}, {"to": ["tpm-oee"], "at": {"de": "fehlt"}}]}
+        body = f'<h2 id="a">A</h2><p>Siehe <a href="{BASE}/de/learn/tpm-oee/">TPM</a>.</p><h2 id="b">B</h2>'
+        import contextlib, io
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): self.assertEqual(S.see_links(body, p, "de", BASE, {}), body)
+        self.assertIn("Sprungmarke für Hinweis „Ausführlich:“ fehlt: de/x#fehlt", out.getvalue())
+        self.assertIn('<h2 id="b">B</h2><p class="pl-see">', S.see_links(body.replace('id="b"', 'id="b"'), {**p, "see": [{"to": ["tpm-oee"], "at": {"de": "b"}}]}, "de", BASE, {}))
+        self.assertEqual(S.see_links(body, p, "fr", BASE, {}), body)   # übersetzte Sprachen: keine Sprungmarken bekannt
+
+    def test_old_german_jargon_and_serp_lines(self):
+        for rel, html in self.files.items():
+            txt = re.sub(r"<[^>]+>", " ", re.sub(r"<style>.*?</style>", "", html.split("\n", 1)[1], flags=re.S))
+            if rel.startswith("de/"): self.assertNotRegex(txt, r"Pillar-(?:Seite|Page)|Schwester-Kompendi|\bin der Leitfaden\b", rel)
+            self.assertNotRegex(txt, r"ERP vendors and competitors|ERP-Anbietern und Wettbewerbern", rel)
+            if rel != "learn/ifakt-polaris/index.html": self.assertNotRegex(txt, r"\bSERP\b", rel)   # ifakt-polaris (en): Satz bleibt bis zur Entscheidung, sonst gilt die Übersetzung als veraltet
+        de = self.files["de/learn/lean-management/index.html"]
+        self.assertIn(f'Eine Vertiefung ist im Leitfaden <a href="{BASE}/de/learn/produktionskennzahlen/">Produktionskennzahlen</a> zu finden.', de)
+        self.assertIn(f'Die Methodik wird im Leitfaden <a href="{BASE}/de/learn/shop-floor-management/">Shopfloor Management</a> vertieft.', de)
+        self.assertIn(f'gibt der Leitfaden <a href="{BASE}/de/learn/manufacturing-it-azure/">Manufacturing IT mit Azure</a>.', self.files["de/learn/digital-twin/index.html"])
+        self.assertIn(f'Ausführlich behandelt der Leitfaden <a href="{BASE}/de/learn/produktionsplanung-aps/">', self.files["de/learn/produktionsplanung-luftfahrt/index.html"])
+        self.assertEqual(S._scrub_old_de("Mehr in der Pillar-Seite zu Unbekanntem."), "Mehr in der Pillar-Seite zu Unbekanntem.")   # nur bekannte Leitfäden werden zum Link
+
+    def test_cluster_without_duplicate_sibling_box(self):
+        for rel in ("learn/lean-manufacturing/kaizen/index.html", "de/learn/lean-management/kaizen/index.html"):
+            h = self.files[rel]
+            self.assertNotIn("More deep dives in this guide", h); self.assertNotIn("Weitere Vertiefungen dieses Leitfadens", h)
+            for sib in ("pdca", "a3", "poka-yoke"): self.assertIn(sib, h.split("</article>")[0], rel)   # die Liste der Datei bleibt, mit allen Geschwistern
+            self.assertIn('rel="up"', h)
+
+    def test_path_description_and_lastmod(self):
+        for lang, rel in (("en", "learn/path/manufacturing-excellence/index.html"), ("de", "de/learn/path/manufacturing-excellence/index.html")):
+            d = self.json.loads(self.files[rel].split("\n", 1)[0])["desc"]
+            self.assertLessEqual(len(d), 155, rel); self.assertEqual(d, S.registry()["path"]["seo_desc"][lang])
+        for rel in self.files:
+            if "/learn/path/" not in rel: self.assertLessEqual(len(self.json.loads(self.files[rel].split("\n", 1)[0])["desc"] or ""), 160, rel)
+        sm = {u: d for u, d, a in self.sm}
+        self.assertEqual(sm[f"{BASE}/de/learn/produktionsplanung-aps/"], "2026-11-26")   # neue Links (Kästen, "Ausführlich:") auf Seiten vom 26.11.
+        self.assertEqual(sm[f"{BASE}/learn/manufacturing-kpis/"], "2026-11-26")
+        self.assertEqual(sm[f"{BASE}/de/learn/ifakt-polaris/"], "2026-11-20")   # ohne neue Links bleibt das Datum der Datei
+        art = next(n for n in self.json.loads(self.files["de/learn/produktionsplanung-aps/index.html"].split("\n", 1)[0])["ld"] if n.get("@type") == "Article")
+        self.assertEqual(art["dateModified"], "2026-11-20")
+
+    def test_log_without_noise_for_untranslated_guides(self):
+        import contextlib, io, json as _j
+        import site_infographics as _IG
+        files, out = {}, io.StringIO()
+        g = dict(BASE=BASE, write=lambda rel, html: files.__setitem__(rel, html), sitemap=[], author_box=None, LANGS=("en", "de"),
+                 page=lambda *a, **kw: "{}\n", header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
+        if not any((S.DIR / "fr").glob("*.md")) or "fr" not in ((S.overlay().get("ui")) or {}): self.skipTest("keine französische Fassung")
+        with contextlib.redirect_stdout(out), mock.patch.object(S, "active", lambda: ("en", "de", "fr")), mock.patch.object(_IG, "get", lambda *a: None):
+            S.build(g, [], set())
+        log = out.getvalue()
+        new_fr = [p for p in S.pillars() if not S.has(p, "fr")]
+        self.assertTrue(new_fr)
+        self.assertNotIn("Datei fehlt oder leer: fr/", log)   # nur eine andere Übersetzung macht eine fehlende Datei zum Hinweis
+        self.assertIn(f"noch ohne Übersetzung (translate-pillars.yml): fr {len(new_fr)}", log)
+        self.assertNotIn("Datei fehlt oder leer: en/", log); self.assertNotIn("Datei fehlt oder leer: de/", log)
 
     def test_related_guides_box(self):
         lean = self.files["learn/lean-manufacturing/index.html"]
