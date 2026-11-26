@@ -1,7 +1,7 @@
 // Lernpfad-Abschlusstest + Zertifikat ueber Certopus (Spezifikation Teil B, Mirko 24.11.2026).
 // Die Fragen (ohne Antworten) stehen oeffentlich in data/pillar_quiz.json (Seitenbau); die Antwortschluessel nur hier in D1 (learn_quiz_keys),
 // eingespielt von tools/pillar_quiz.py push ueber POST /api/internal/learn-quiz (CRON_KEY). Antworten verlassen den Worker nur nach einer Abgabe.
-//   POST /api/learn/quiz/start   {path, lang, src, have}  Login; 3 Fragen je Leitfaden (nur Fragen, die die Seite kennt: pageFilter), hoechstens 3 Versuche je 24 h (Nutzer und Pfad), ein Versuch gilt 24 h
+//   POST /api/learn/quiz/start   {path, lang, src, have}  Login; perGroup(Gruppen) Fragen je Leitfaden (nur Fragen, die die Seite kennt: pageFilter), hoechstens 3 Versuche je 24 h (Nutzer und Pfad), ein Versuch gilt 24 h
 //                                                         409 page_outdated: die Seite kennt keine aktive Frage (Seitenbau nach neuem Fragensatz steht aus)
 //   POST /api/learn/quiz/submit  {attempt, answers}        Login; zaehlen, speichern, Ergebnis je Frage und Leitfaden (Sprache des Versuchs). Richtige Option und
 //                                                         Erklaerung nur fuer richtig beantwortete Fragen, nach dem Bestehen fuer alle, ohne verbleibende Versuche
@@ -27,7 +27,12 @@
 import { cleanText, rateLimit, randomToken, readSessionInfo, sha256hex, memberOf } from "./util.js";
 import { isStaging } from "./staging.js";
 
-export const PER_PILLAR = 3, PASS_PCT = 80, MAX_ATTEMPTS = 3, ATTEMPT_TTL = 86400;
+export const PER_PILLAR = 3, PASS_PCT = 80, MAX_ATTEMPTS = 3, ATTEMPT_TTL = 86400;   // PER_PILLAR = PER_MAX (Grundlage von HAVE_MIN); gezogen wird perGroup(...)
+// Testzusammensetzung (Kursausbau 26.11.2026, bis zu 20 Leitfaden-Gruppen): Fragen gleichmaessig ueber alle Gruppen, die Fragen haben (nach pageFilter),
+// Ziel QUIZ_TARGET Fragen, je Gruppe PER_MIN bis PER_MAX: 10 Gruppen -> 3 (30 Fragen, noetig 24, wie bisher), 15 -> 2 (30/24), 20 -> 2 (40/32).
+// Gleiche Formel wie site_pillars.per_group (Kasten und Testseite nennen dieselben Zahlen; tests/test_lernpfad_e2e.py prueft den Gleichlauf).
+export const QUIZ_TARGET = 30, PER_MIN = 2, PER_MAX = 3;
+export const perGroup = (n) => Math.min(PER_MAX, Math.max(PER_MIN, Math.ceil(QUIZ_TARGET / Math.max(1, n))));
 export const CERTOPUS_API = "https://api.certopus.com/v1";
 export const DEFAULT_FIELDS = { name: "{Name}", course: "{Course}", score: "{Score}", date: "{Date}" };
 // Kursname je Sprache, wenn CERTOPUS_PATHS ihn nicht nennt (Event-Titel bei Certopus)
@@ -257,6 +262,9 @@ async function internalUpsert(env, request, J) {
 // (tools/pillar_quiz.py next_n), also nur Nummern ueber der hoechsten bekannten des Leitfadens, oder der ganze Leitfaden fehlt auf der Seite.
 // Aeltere Fragen gehoeren immer zum Pool. Bleiben in einem Leitfaden weniger als HAVE_MIN, gilt sein ganzer Pool; fehlen mehr als ein Fuenftel der
 // Leitfaeden, der ganze Pool. Fehlt have (aeltere Seite im Cache), gilt der ganze Pool wie bisher.
+// Ganz neue Leitfaeden (alle Schluessel jung, die Seite kennt keine Frage davon) zaehlen nicht zur Basis des Fuenftels, sobald es mindestens einen
+// Leitfaden mit aelteren Schluesseln gibt: Kommen mehrere neue Leitfaden-Gruppen auf einmal (Kursausbau: 10 neue zu 10 alten), bleibt der Test bis zum
+// Seitenbau beim bisherigen Satz, statt Fragen zu ziehen, die die Seite nicht zeigt. Weglassen lassen sich so nur Gruppen in ihren ersten HAVE_GRACE.
 // -> Map Leitfaden -> qids, oder null: have ist eine gueltige Liste ohne jede aktive Frage (Seite veraltet, z. B. nach neuem Fragensatz) -> 409 page_outdated
 export const HAVE_MAX = 500, HAVE_MIN = PER_PILLAR + 1, HAVE_PILLAR_PCT = 80, HAVE_GRACE = 3 * 86400;
 const qnum = (q) => Number(q.slice(q.lastIndexOf("-") + 1));
@@ -269,17 +277,20 @@ export function pageFilter(groups, have, fresh = new Set()) {
   const hv = haveSet(have);
   if (!hv) return groups;
   const out = new Map();
-  let seen = 0;
+  let seen = 0, anyOld = false, newOnly = 0;
   for (const [p, l] of groups) {
     const known = l.filter((q) => hv.has(q));
     seen += known.length;
+    if (l.some((q) => !fresh.has(q))) anyOld = true;
+    else if (!known.length) newOnly++;
     const top = known.length ? Math.max(...known.map(qnum)) : -1;
     const x = l.filter((q) => hv.has(q) || !fresh.has(q) || (top >= 0 && qnum(q) <= top));
     if (!x.length) continue;   // neuer Leitfaden, den die Seite (noch) nicht kennt
     out.set(p, x.length >= Math.min(l.length, HAVE_MIN) ? x : l);
   }
   if (!seen) return null;
-  return out.size >= Math.ceil((groups.size * HAVE_PILLAR_PCT) / 100) ? out : groups;   // zu viel fehlt: veraltete oder manipulierte Liste -> ganzer Pool
+  const base = groups.size - (anyOld ? newOnly : 0);
+  return out.size >= Math.ceil((base * HAVE_PILLAR_PCT) / 100) ? out : groups;   // zu viel fehlt: veraltete oder manipulierte Liste -> ganzer Pool
 }
 
 async function start(env, request, user, J) {
@@ -309,7 +320,8 @@ async function start(env, request, user, J) {
   const groups = pageFilter(by, b.have, fresh);
   if (!groups) return J({ error: "page_outdated" }, 409);
   if (!(await rateLimit(db, rlKey(user.id, path), MAX_ATTEMPTS, ATTEMPT_TTL))) return J({ error: "rate_limit", attempts_left: 0 }, 429);
-  const qids = [...groups.values()].flatMap((l) => pick(l, PER_PILLAR));
+  const k = perGroup(groups.size);
+  const qids = [...groups.values()].flatMap((l) => pick(l, k));
   const id = randomToken(16);
   const src = String(b.src || "").toLowerCase().replace(/[^a-z0-9._:/-]/g, "").slice(0, 40);
   await db.prepare("INSERT INTO learn_attempts(id,user_id,path,lang,qids,started,src) VALUES(?,?,?,?,?,?,?)").bind(id, user.id, path, lang, JSON.stringify(qids), t, src).run();

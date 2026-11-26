@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import worker from "../src/index.js";
 import { makeSession } from "../src/util.js";
-import { issuePendingCerts, deleteUserLearn, linkedinUrl, scoreText, dateText, threshold, quizLang, pageFilter, NAME_URL_RX, NAME_TLD, certName, HAVE_GRACE } from "../src/learnquiz.js";
+import { issuePendingCerts, deleteUserLearn, linkedinUrl, scoreText, dateText, threshold, quizLang, pageFilter, NAME_URL_RX, NAME_TLD, certName, HAVE_GRACE, perGroup } from "../src/learnquiz.js";
 
 const PATH = "manufacturing-excellence";
 const PILLARS = ["lean-manufacturing", "kaizen", "six-sigma", "tpm", "kanban", "smed", "oee", "mes", "aps", "digital-twin"];
@@ -652,4 +652,56 @@ test("Cron: wartende Zeilen eines nicht eingerichteten Pfads blockieren nicht; h
     assert.deepEqual(await issuePendingCerts(env), { ok: 1, error: 0, skipped: 0 });
     assert.deepEqual(await issuePendingCerts({ ...env, CERTOPUS_PATHS: "{}" }), { skipped: "keine_pfade" });
   } finally { m.restore(); }
+});
+
+// Kursausbau 26.11.2026: bis zu 20 Leitfaden-Gruppen. Fragen gleichmaessig ueber die Gruppen mit Fragen (perGroup), 80 % zum Bestehen.
+test("perGroup: 10 Gruppen 3 je Gruppe (30), 15 Gruppen 2 (30), 20 Gruppen 2 (40)", () => {
+  assert.deepEqual([1, 2, 5, 10, 11, 15, 16, 20, 30].map(perGroup), [3, 3, 3, 3, 3, 2, 2, 2, 2]);
+  assert.equal(10 * perGroup(10), 30); assert.equal(threshold(30), 24);
+  assert.equal(20 * perGroup(20), 40); assert.equal(threshold(40), 32);
+  assert.equal(perGroup(0), 3, "ohne Gruppen kein Fehler");
+});
+
+test("pageFilter: 10 neue Leitfaeden auf einmal (alle jung, Seite kennt sie nicht) blenden aus, solange es alte gibt", () => {
+  const mk = (p) => [1, 2, 3, 4, 5, 6].map((n) => `${p}-${n}`);
+  const old = Array.from({ length: 10 }, (_, i) => `old${i}`), neu = Array.from({ length: 10 }, (_, i) => `new${i}`);
+  const g = new Map([...old, ...neu].map((p) => [p, mk(p)]));
+  const fresh = new Set(neu.flatMap(mk));
+  const page = old.flatMap(mk);
+  const r = pageFilter(g, page, fresh);
+  assert.deepEqual([...r.keys()], old, "nur die 10 alten Gruppen (vorher: ganzer Pool mit 10 von 20 unbekannt)");
+  assert.deepEqual(pageFilter(g, [...page, ...neu.flatMap(mk)], fresh), g, "Seite kennt alle: alle 20 Gruppen");
+  // alte Gruppen lassen sich weiterhin nicht weglassen: fehlen 3 von 10 alten in have, bleiben sie trotzdem im Pool
+  assert.deepEqual([...pageFilter(g, old.slice(3).flatMap(mk), fresh).keys()], old);
+  assert.deepEqual(pageFilter(g, old.slice(3).flatMap(mk), fresh).get("old0"), mk("old0"));
+  // ganz am Anfang (alle Schluessel jung): bisherige Regel, zwei von fuenf fehlen -> ganzer Pool
+  const g5 = new Map(old.slice(0, 5).map((p) => [p, mk(p)]));
+  assert.equal(pageFilter(g5, old.slice(0, 3).flatMap(mk), new Set(old.slice(0, 5).flatMap(mk))), g5);
+});
+
+test("Start und Abgabe mit 20 Leitfaeden: 2 je Leitfaden, 40 Fragen, bestanden ab 32; neue Gruppen vor dem Seitenbau ausgeblendet (30/24)", async () => {
+  const { env, raw, s } = await setup();
+  const P20 = [...PILLARS, ...Array.from({ length: 10 }, (_, i) => `new-guide-${i}`)];
+  const k20 = P20.flatMap((p) => [1, 2, 3, 4, 5, 6].map((n) => ({ qid: `${p}-${n}`, pillar: p, answer: ANSWER(n) })));
+  assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: k20.filter((k) => PILLARS.includes(k.pillar)) }, headers: { "x-cron-key": "cron-test" } })).status, 200);
+  raw.prepare("UPDATE learn_quiz_keys SET created=created-?").run(HAVE_GRACE + 60);   // die 10 alten liegen laenger zurueck
+  assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: k20 }, headers: { "x-cron-key": "cron-test" } })).status, 200);
+  const reset = () => { raw.prepare("DELETE FROM learn_attempts").run(); raw.prepare("DELETE FROM ratelimit").run(); };
+  const oldPage = k20.filter((k) => PILLARS.includes(k.pillar)).map((k) => k.qid);
+  const before = await start(env, s.ada, { have: oldPage });
+  assert.equal(before.status, 200);
+  assert.equal(before.data.total, 30); assert.equal(before.data.threshold, 24);
+  assert.ok(before.data.qids.every((q) => oldPage.includes(q)), "keine Frage, die die alte Seite nicht zeigt");
+  for (const p of PILLARS) assert.equal(before.data.qids.filter((q) => q.startsWith(p + "-")).length, 3, p);
+  reset();
+  const st = await start(env, s.ada, { have: k20.map((k) => k.qid) });
+  assert.equal(st.data.total, 40); assert.equal(st.data.threshold, 32); assert.equal(new Set(st.data.qids).size, 40);
+  for (const p of P20) assert.equal(st.data.qids.filter((q) => q.startsWith(p + "-")).length, 2, p);
+  const ok = await submit(env, s.ada, st.data.attempt, answersFor(st.data.qids, 8));
+  assert.equal(ok.data.score, 32); assert.equal(ok.data.total, 40); assert.equal(ok.data.passed, true); assert.equal(ok.data.threshold, 32);
+  assert.equal(Object.keys(ok.data.per_pillar).length, 20);
+  assert.ok(Object.values(ok.data.per_pillar).every((p) => p.n === 2));
+  const st2 = await start(env, s.bob, { have: k20.map((k) => k.qid) });
+  const no = await submit(env, s.bob, st2.data.attempt, answersFor(st2.data.qids, 9));
+  assert.equal(no.data.score, 31); assert.equal(no.data.passed, false);
 });

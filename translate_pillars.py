@@ -250,6 +250,7 @@ def plan_items(langs, pids, redo=False, ui_only=False):
     items, stale = [], {}
     for p in ([] if ui_only else PIL.pillars()):
         if pids and p["id"] not in pids: continue
+        if not pids and not p["slug"].get("de") and not p.get("translate"): continue   # neue Leitfaeden (nur Englisch, Kursausbau 26.11.2026): nur nach Freigabe (--pillars oder "translate": true)
         s = source(p)
         if not s: continue
         parts = chunks(s["article"]); hashes = [h8(x) for x in parts]

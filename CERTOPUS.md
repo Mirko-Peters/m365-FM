@@ -129,6 +129,23 @@ Reihenfolge, wenn PR #606 auf main ist:
 - *Ausblenden in den ersten 3 Tagen:* Direkt nach dem ersten Push sind alle Fragen „neu“; in dieser Zeit kann eine manipulierte Seite je Leitfaden nur die
   höchsten Nummern weglassen (mindestens 4 bleiben) und höchstens 2 von 10 Leitfäden. Weil Lösungen erst nach dem Bestehen bzw. dem letzten Versuch
   kommen, lässt sich daraus keine planbare Auswahl bekannter Fragen bauen.
+- *Kursausbau 26.11.2026 (20 Leitfäden, 15 Vertiefungen):* Fragen je Leitfaden-Gruppe = `perGroup(G) = min(3, max(2, ceil(30 / G)))` über die Gruppen mit
+  Fragen (Worker `worker/src/learnquiz.js` und Seite `site_pillars.per_group` gleich): 10 Gruppen 30 Fragen (bestanden ab 24, wie bisher), 15 Gruppen 30/24,
+  20 Gruppen 40/32; Bestehensgrenze weiter 80 %. Leitfäden ohne Fragen zählen nicht mit. Vertiefungen liefern Fragen zur Gruppe ihres Eltern-Leitfadens
+  (`src` in `data/pillar_quiz.json`). Neue Leitfäden und Vertiefungen stehen auf der Freigabeliste `hold`: `tools/pillar_quiz.py run` ohne `--pillars` erzeugt
+  sie nicht; `plan` nennt Kosten-Obergrenze und Aufruf. Kommen viele neue Gruppen auf einmal in den Worker (Schlüssel vor dem Seitenbau), zählen ganz neue
+  Gruppen (alle Schlüssel jünger als 3 Tage, der Seite unbekannt) nicht zur 80-%-Basis von `pageFilter`: der Test bleibt bis zum Seitenbau beim alten Satz.
+- *Reihenfolge beim Fragenlauf für neue Leitfäden:* (1) Merge des Kursausbaus und ein **grüner** `site.yml`-Lauf, der die neuen Seiten veröffentlicht;
+  (2) erst dann `pillar-quiz.yml mode=run pillars=<IDs>`, am besten auf einem Arbeitszweig – der Merge danach startet `worker.yml` (Schlüssel) und
+  `site.yml` (Testseite, `data/pillar_quiz.json` steht in den Push-Pfaden) zugleich; (3) prüfen, dass der nächste Seitenbau grün ist. Die Testseite muss
+  die neuen Fragen spätestens **3 Tage** (`HAVE_GRACE`) nach dem Einspielen der Schlüssel zeigen: danach gelten die Schlüssel als alt, `pageFilter` blendet
+  sie nicht mehr aus, und Fragen, die die Seite nicht kennt, zählen als falsch – mit 20 Gruppen wäre der Test dann nicht mehr zu bestehen. Läuft `run`
+  direkt auf main, pusht der Workflow mit dem Standard-Token: das startet weder `site.yml` noch `worker.yml`, die Schlüssel gehen aber sofort an den
+  Worker (auto_push); die Seite kommt erst mit dem nächtlichen Bau. Ist der Seitenbau rot, die neuen Schlüssel stilllegen: `data/pillar_quiz_keys.enc`
+  auf den Stand vor dem Lauf zurücksetzen (Revert-Commit), `worker.yml` sendet ihn, `tools/pillar_quiz.py push` setzt fehlende qids auf `active=0`.
+- *Rückweg Kursausbau:* weich – `"noindex": true` je Leitfaden oder Vertiefung in `data/pillars.json` (Seite bleibt erreichbar, ohne Sitemap und hreflang);
+  hart – Revert der Commits (der Purge meldet die entfallenen Seiten). Fragen der neuen Leitfäden wie oben stilllegen. Eine Vertiefung unter einen anderen
+  Leitfaden zu hängen (`parent`) ändert ihre Adresse und braucht eine 301 von der alten.
 
 **Anrede:** Seite, E-Mail und Zertifikat siezen („Sie“), passend zu den Leitfäden (Entscheidung 24.11.2026).
 

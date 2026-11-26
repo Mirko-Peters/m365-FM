@@ -3,9 +3,13 @@ name: Lernpfad-Abschlusstest - Fragen erzeugen (Sonnet + Haiku, Batch)
 # Ergebnis: data/pillar_quiz.json (oeffentlich, ohne Loesungen) und data/pillar_quiz_keys.enc (Loesungen, verschluesselt mit einem aus CRON_KEY abgeleiteten Schluessel).
 # Die Loesungen erscheinen nie im Klartext im Repo, im Log oder im Artefakt (Artefakte oeffentlicher Repos kann jeder angemeldete GitHub-Nutzer laden).
 # Kosten: hoechstens PILLAR_QUIZ_RUN_EUR (Standard 2 EUR) je Lauf, Haiku zusaetzlich im Haiku-Tagesbudget des Workers. Ein Leitfaden mit 5+ Fragen wird nicht neu erzeugt.
+# Vertiefungen (data/pillars.json clusters) liefern eigene Fragen zur Gruppe ihres Eltern-Leitfadens (bis 3 je Vertiefung). Neue Leitfaeden und Vertiefungen stehen
+# auf der Freigabeliste "hold" in data/pillar_quiz.json: ohne ausdrueckliches pillars=<IDs> erzeugt run sie nicht (Kursausbau 26.11.2026, Freigabe durch Mirko).
 # Ausloeser: nur von Hand (workflow_dispatch). Die frueheren Push-Ausloeser der Arbeitszweige (claude/lernpfad-quiz-fragen: run,
 # claude/lernpfad-zertifikat: reshuffle/regen) sind entfernt; die Neuerzeugung (regen) ist erledigt (Marke "regen" im Schluessel, zweiter Lauf tut nichts).
 # Schluessel gehen nur von main an den Live-Worker (run auf main oder mode=push; nach dem Merge sendet worker.yml).
+# Reihenfolge beim Kursausbau (CERTOPUS.md): erst Merge und ein gruener site.yml-Lauf mit den neuen Seiten, dann run (am besten auf einem Arbeitszweig, Merge
+# baut Seite und Worker zugleich). Spaetestens 3 Tage (HAVE_GRACE) nach dem Einspielen der Schluessel muss die Testseite die neuen Fragen zeigen.
 on:
   workflow_dispatch:
     inputs:
@@ -14,7 +18,7 @@ on:
         type: choice
         options: [plan, run, collect, push, reshuffle, regen]
         default: plan
-      pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt); leer = alle mit weniger als 5 Fragen", required: false, default: "" }
+      pillars: { description: "Nur diese Leitfaeden oder Vertiefungen (IDs, kommagetrennt; plan nennt die Liste); leer = alle mit zu wenigen Fragen AUSSER denen auf der Freigabeliste data/pillar_quiz.json hold (neue Leitfaeden und Vertiefungen erst nach Freigabe)", required: false, default: "" }
 permissions:
   contents: write
 concurrency: { group: pillar-quiz, cancel-in-progress: false }

@@ -21,10 +21,12 @@ PID = "manufacturing-excellence"
 EN_ONLY = "ifakt-polaris"   # Leitfaden ohne deutsche Fragen in der Testdatei: die deutsche Seite nimmt die englischen
 
 
-def fixture():
-    """Kleine Testdatei wie tools/pillar_quiz.py sie schreibt - absichtlich mit "a"/"why" in einer Frage, die nie auf die Seite dürfen."""
+def fixture(all_guides=False):
+    """Kleine Testdatei wie tools/pillar_quiz.py sie schreibt - absichtlich mit "a"/"why" in einer Frage, die nie auf die Seite dürfen.
+    Standard: Fragen nur für die 10 Leitfäden mit deutscher Fassung (Stand vor dem Fragenlauf der neuen Leitfäden); all_guides: alle 20."""
     pills = {}
     for p in S.pillars():
+        if not all_guides and not p["slug"].get("de"): continue
         pid = p["id"]
         en = [{"id": f"{pid}-{i}", "q": f"EN question {i} about {pid}?", "opts": [f"en opt {j}" for j in range(4)]} for i in range(1, 5)]
         de = [{"id": f"{pid}-{i}", "q": f"DE Frage {i} zu {pid}?", "opts": [f"de Option {j}" for j in range(4)]} for i in range(1, 5)]
@@ -83,7 +85,8 @@ class WithQuiz(unittest.TestCase):
         de = self.files[f"de/learn/path/{PID}/index.html"]
         for s in ("Kostenlos", "Anmeldung", "30 Fragen", "80 %", "(24 von 30 richtig)", "Certopus"): self.assertIn(s, de)
         en = self.files[f"learn/path/{PID}/index.html"]
-        for s in ("Free of charge", "Sign-in", "30 questions", "80 %", "(24 of 30 correct)", "Certopus"): self.assertIn(s, en)
+        for s in ("Free of charge", "Sign-in", "30 questions from 10 guides", "80 %", "(24 of 30 correct)", "Certopus"): self.assertIn(s, en)
+        self.assertIn("30 Fragen aus 10 Leitfäden", de)
 
     def test_test_pages_noindex_and_not_in_sitemap(self):
         for lang in ("en", "de"):
@@ -120,7 +123,7 @@ class WithQuiz(unittest.TestCase):
         self.assertEqual(dg["lean-manufacturing"]["t"], "Lean Management")
         self.assertTrue(dg[EN_ONLY]["qs"][0]["q"].startswith("EN question"), "fehlt die deutsche Fassung, gilt die englische")
         self.assertEqual([q["id"] for q in dg[EN_ONLY]["qs"]], [q["id"] for q in {g["id"]: g for g in en["groups"]}[EN_ONLY]["qs"]], "gleiche IDs in en und de")
-        self.assertEqual([g["id"] for g in en["groups"]], [p["id"] for p in S.order()], "Lernreihenfolge")
+        self.assertEqual([g["id"] for g in en["groups"]], [p["id"] for p in S.order() if p["slug"].get("de")], "Lernreihenfolge; Leitfäden ohne Fragen fehlen")
 
     def test_config_for_script(self):
         c, d = config(self.en), config(self.de)
@@ -148,7 +151,24 @@ class WithQuiz(unittest.TestCase):
         gr = embedded(self.en)["groups"]
         self.assertEqual(S.quiz_numbers(gr), (30, 24))
         self.assertEqual(S.quiz_numbers([{"qs": [1, 2]}, {"qs": [1, 2, 3, 4, 5]}]), (5, 4))
-        self.assertEqual(S.quiz_numbers([]), (30, 24), "ohne Fragen: 3 je Leitfaden")
+        self.assertEqual(S.quiz_numbers([]), (40, 32), "ohne Fragen: Formel über alle 20 Leitfäden des Pfads")
+        self.assertEqual(S.quiz_numbers([{"qs": [1] * 6}] * 10), (30, 24), "10 Gruppen: 3 je Gruppe")
+        self.assertEqual(S.quiz_numbers([{"qs": [1] * 6}] * 15), (30, 24), "15 Gruppen: 2 je Gruppe")
+        self.assertEqual(S.quiz_numbers([{"qs": [1] * 6}] * 20), (40, 32), "20 Gruppen: 2 je Gruppe")
+        self.assertEqual([S.per_group(n) for n in (1, 10, 11, 15, 20, 30)], [3, 3, 3, 2, 2, 2])
+
+
+class WithQuiz20(unittest.TestCase):
+    """Nach dem Fragenlauf der neuen Leitfäden: 20 Gruppen, 2 je Gruppe, 40 Fragen, bestanden ab 32 (gleiche Formel wie der Worker)."""
+    def test_twenty_groups(self):
+        files, sm, pages = build(fixture(all_guides=True))
+        for lang, rel, txt in (("en", f"learn/path/{PID}/", ("40 questions from 20 guides", "(32 of 40 correct)")), ("de", f"de/learn/path/{PID}/", ("40 Fragen aus 20 Leitfäden", "(32 von 40 richtig)"))):
+            for t in txt: self.assertIn(t, files[rel + "index.html"]); self.assertIn(t, files[rel + "test/index.html"])
+            d = embedded(files[rel + "test/index.html"])
+            self.assertEqual([g["id"] for g in d["groups"]], [p["id"] for p in S.order()])
+            urls = {g["id"]: g["u"] for g in d["groups"]}
+            self.assertEqual(urls["tpm-oee"], f"{BASE}/learn/tpm-oee/", "Leitfaden nur auf Englisch: englische Seite, auch im deutschen Test")
+        self.assertEqual(S.quiz_numbers(embedded(files[f"learn/path/{PID}/test/index.html"])["groups"]), (40, 32))
 
 
 class WithoutQuiz(unittest.TestCase):
@@ -189,7 +209,9 @@ class Texts(unittest.TestCase):
 
     def test_qx_falls_back_on_broken_placeholder(self):
         with mock.patch.object(S, "overlay", lambda: {"ui": {"fr": {"q_count": "{x} questions"}}}):
-            self.assertEqual(S.qx("fr", "q_count", n=30, k=3), "30 questions, 3 from each guide")
+            self.assertEqual(S.qx("fr", "q_count", n=30, g=10, k=3), "30 questions from 10 guides")
+        with mock.patch.object(S, "overlay", lambda: {"ui": {"fr": {"q_count": "{n} questions, {k} de chaque guide"}}}):
+            self.assertEqual(S.qx("fr", "q_count", n=40, g=20, k=2), "40 questions, 2 de chaque guide", "bisherige Übersetzungen mit {k} bleiben richtig")
         self.assertEqual(S.qx("de", "q_pass", pct=80, need=24, n=30), "Bestanden ab 80 % (24 von 30 richtig)")
 
     def test_consent_names_certopus_and_privacy_link(self):

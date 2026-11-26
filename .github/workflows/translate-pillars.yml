@@ -4,7 +4,7 @@ on:
     inputs:
       mode: { description: "plan = nur Zustand und Kostenschaetzung (ohne Schluessel), run = senden, abwarten, speichern", type: choice, options: [plan, run], default: plan }
       langs: { description: "Sprachen, kommagetrennt (leer = alle 13: fr,es,it,nl,pt,pl,id,ru,uk,ar,he,ja,ko)", required: false, default: "" }
-      pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt, z. B. lean-manufacturing); leer = alle", required: false, default: "" }
+      pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt, z. B. lean-manufacturing); leer = alle mit deutscher Fassung oder translate=true in data/pillars.json (neue, rein englische Leitfaeden nur, wenn hier genannt)", required: false, default: "" }
       limit: { description: "Hoechstens so viele Anfragen (Probelauf, z. B. 12); 0 = keine Grenze", required: false, default: "0" }
       redo: { description: "Ganze Leitfaeden neu uebersetzen (kostenpflichtig; alter Text bleibt, bis die neue Fassung die Pruefung besteht)", type: boolean, default: false }
       ui_only: { description: "Nur Oberflaechentexte (neue/geaenderte Schluessel, z. B. q_* des Abschlusstests; deutsche Oberflaeche wird ganz neu angefordert)", type: boolean, default: false }

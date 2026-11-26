@@ -1,5 +1,5 @@
 {
- "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/. topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich); pins = Slugs, die fest zugeordnet werden.",
+ "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/; ohne slug.de gibt es nur die englische Seite (Canonical auf sich selbst, kein hreflang). topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich; bei gleicher Guete gewinnt der fruehere Eintrag); pins = Slugs, die fest zugeordnet werden. date = Tag der Veroeffentlichung (datePublished, Sitemap; ohne Feld gilt site_pillars.UPDATED). noindex: true = Seite bleibt erreichbar, aber noindex, nicht in Sitemap und hreflang (Notschalter, gilt auch fuer Vertiefungen). clusters = Vertiefungen (nur Englisch): Datei imports/pillars/en/clusters/<slug.en>.md, Adresse /learn/<slug.en des Eltern-Leitfadens>/<slug.en>/; parent = ID des Eltern-Leitfadens (parent aendern aendert die Adresse - dann 301 von der alten setzen). Kursaufbau: path.stages (Reihenfolge = Lernreihenfolge). related = IDs eigener Leitfaeden zu Methoden, die dieser Leitfaden nur kurz behandelt: Kasten 'Related guides' auf der englischen Seite (gegen Kannibalisierung, bis die bestehenden Leitfaeden selbst auf die neuen verlinken).",
  "path": {
   "id": "manufacturing-excellence",
   "title": {
@@ -7,16 +7,16 @@
    "de": "Manufacturing Excellence: von den Lean-Grundlagen zur digitalen Produktionsplanung"
   },
   "seo_title": {
-   "en": "Manufacturing Excellence Learning Path: 10 Guides",
-   "de": "Lernpfad Manufacturing Excellence: 10 Leitfäden"
+   "en": "Manufacturing Excellence Learning Path: 20 Guides",
+   "de": "Lernpfad Manufacturing Excellence: 20 Leitfäden"
   },
   "short": {
-   "en": "A free learning path in ten in-depth guides: Lean, operational excellence, shop floor management, value stream mapping, KPIs, scheduling, digital twins, aerospace and manufacturing IT.",
-   "de": "Ein kostenloser Lernpfad in zehn ausführlichen Leitfäden: Lean, Operational Excellence, Shopfloor Management, Wertstromanalyse, Kennzahlen, Feinplanung, digitaler Zwilling, Luftfahrt und Manufacturing IT."
+   "en": "A free learning path in 20 in-depth guides with deep dives: Lean, 5S, kanban, SMED, TPM and OEE, Six Sigma, value stream mapping, KPIs, S&OP and MRP, scheduling, theory of constraints, digital twins, MES, predictive maintenance, OT security, aerospace and manufacturing IT.",
+   "de": "Ein kostenloser Lernpfad mit 20 ausführlichen Leitfäden und Vertiefungen: Lean, 5S, Kanban, SMED, TPM und OEE, Six Sigma, Wertstromanalyse, Kennzahlen, S&OP und MRP, Feinplanung, Engpasstheorie, digitaler Zwilling, MES, vorausschauende Wartung, OT-Sicherheit, Luftfahrt und Manufacturing IT."
   },
   "intro": {
-   "en": "This path takes you from the basic ideas of Lean to digital production planning. Each step is a complete guide with formulas, examples and sources, and each guide links to related articles on m365.fm. Work through the steps in order, or jump to the topic you need. The last guide describes one software example, iFAKT Polaris. The author works at iFAKT GmbH, and vendor claims in that guide are marked as such.",
-   "de": "Dieser Pfad führt von den Grundideen des Lean-Managements bis zur digitalen Produktionsplanung. Jeder Schritt ist ein vollständiger Leitfaden mit Formeln, Beispielen und Quellen und verweist auf passende Artikel auf m365.fm. Gehen Sie die Schritte der Reihe nach durch oder springen Sie zum Thema, das Sie brauchen. Der letzte Leitfaden beschreibt ein Software-Beispiel, iFAKT Polaris. Der Autor arbeitet bei der iFAKT GmbH, Herstellerangaben in diesem Leitfaden sind als solche gekennzeichnet."
+   "en": "This path takes you from the basic ideas of Lean to digital production planning. Each step is a complete guide with formulas, examples and sources, and each guide links to related articles on m365.fm. Several guides have deep dives on single methods, such as kaizen, standard work or lot sizing. Work through the steps in order, or jump to the topic you need. One guide describes a software example, iFAKT Polaris. The author works at iFAKT GmbH, and vendor claims in that guide are marked as such.",
+   "de": "Dieser Pfad führt von den Grundideen des Lean-Managements bis zur digitalen Produktionsplanung. Jeder Schritt ist ein vollständiger Leitfaden mit Formeln, Beispielen und Quellen und verweist auf passende Artikel auf m365.fm. Mehrere Leitfäden haben Vertiefungen zu einzelnen Methoden, etwa Kaizen, Standardarbeit oder Losgrößen. Die neuen Leitfäden und alle Vertiefungen gibt es bisher nur auf Englisch. Gehen Sie die Schritte der Reihe nach durch oder springen Sie zum Thema, das Sie brauchen. Ein Leitfaden beschreibt ein Software-Beispiel, iFAKT Polaris. Der Autor arbeitet bei der iFAKT GmbH, Herstellerangaben in diesem Leitfaden sind als solche gekennzeichnet."
   },
   "certopus": {
    "_": "Nur zur Doku/Anzeige (CERTOPUS.md). Für den Worker gilt die Var CERTOPUS_PATHS in worker/wrangler.toml.",
@@ -31,13 +31,16 @@
      "de": "1. Grundlagen"
     },
     "text": {
-     "en": "The ideas behind continuous improvement and how leaders work on the floor.",
-     "de": "Die Ideen hinter kontinuierlicher Verbesserung und wie Führungskräfte am Ort des Geschehens arbeiten."
+     "en": "The ideas behind continuous improvement, how leaders work on the floor, and the basic lean tools: 5S, kanban and quick changeover.",
+     "de": "Die Ideen hinter kontinuierlicher Verbesserung, wie Führungskräfte am Ort des Geschehens arbeiten, und die Lean-Grundwerkzeuge 5S, Kanban und schnelles Rüsten."
     },
     "pillars": [
      "lean-manufacturing",
      "operational-excellence",
-     "shop-floor-management"
+     "shop-floor-management",
+     "5s-visual-management",
+     "kanban-pull-system",
+     "smed-changeover-reduction"
     ]
    },
    {
@@ -46,12 +49,14 @@
      "de": "2. Sehen und messen"
     },
     "text": {
-     "en": "Make the flow visible and measure it with a few meaningful numbers.",
-     "de": "Den Fluss sichtbar machen und mit wenigen aussagekräftigen Kennzahlen messen."
+     "en": "Make the flow visible, measure it with a few meaningful numbers, keep the machines running and find the root causes of problems.",
+     "de": "Den Fluss sichtbar machen, mit wenigen aussagekräftigen Kennzahlen messen, Anlagen verfügbar halten und Ursachen von Problemen finden."
     },
     "pillars": [
      "value-stream-mapping",
-     "manufacturing-kpis"
+     "manufacturing-kpis",
+     "tpm-oee",
+     "six-sigma-root-cause-analysis"
     ]
    },
    {
@@ -60,12 +65,14 @@
      "de": "3. Planen und simulieren"
     },
     "text": {
-     "en": "From finite-capacity scheduling to digital twins of the factory.",
-     "de": "Von der Feinplanung mit endlichen Kapazitäten bis zum digitalen Zwilling der Fabrik."
+     "en": "From sales and operations planning and MRP to finite-capacity scheduling, bottlenecks and digital twins of the factory.",
+     "de": "Von Absatz- und Produktionsplanung und MRP über die Feinplanung mit endlichen Kapazitäten und Engpässe bis zum digitalen Zwilling der Fabrik."
     },
     "pillars": [
      "production-scheduling-aps",
-     "digital-twin-manufacturing"
+     "digital-twin-manufacturing",
+     "sop-mrp-production-planning",
+     "theory-of-constraints"
     ]
    },
    {
@@ -74,13 +81,16 @@
      "de": "4. Anwenden"
     },
     "text": {
-     "en": "An industry with strict rules, the Microsoft IT landscape and one software example.",
-     "de": "Eine Branche mit strengen Regeln, die Microsoft-IT-Landschaft und ein Software-Beispiel."
+     "en": "An industry with strict rules, the Microsoft IT landscape, MES, predictive maintenance, OT security and one software example.",
+     "de": "Eine Branche mit strengen Regeln, die Microsoft-IT-Landschaft, MES, vorausschauende Wartung, OT-Sicherheit und ein Software-Beispiel."
     },
     "pillars": [
      "aerospace-production-planning",
      "manufacturing-it-azure",
-     "ifakt-polaris"
+     "ifakt-polaris",
+     "mes-isa-95",
+     "predictive-maintenance-iiot",
+     "ot-cybersecurity-iec-62443"
     ]
    }
   ]
@@ -102,7 +112,13 @@
     "lean-management",
     "eight-wastes"
    ],
-   "re": "lean|kaizen|5s|wastes?|six sigma|kanban|standard work|poka yoke|smed|continuous improvement"
+   "re": "lean|kaizen|5s|wastes?|six sigma|kanban|standard work|poka yoke|smed|continuous improvement",
+   "related": [
+    "5s-visual-management",
+    "kanban-pull-system",
+    "smed-changeover-reduction",
+    "tpm-oee"
+   ]
   },
   {
    "id": "operational-excellence",
@@ -166,7 +182,11 @@
     "takt-time",
     "total-productive-maintenance"
    ],
-   "re": "oee|kpis?|takt|cycle times?|lead times?|ppm|fpy|otif|teep|performance indicators?"
+   "re": "oee|kpis?|takt|cycle times?|lead times?|ppm|fpy|otif|teep|performance indicators?",
+   "related": [
+    "tpm-oee",
+    "six-sigma-root-cause-analysis"
+   ]
   },
   {
    "id": "production-scheduling-aps",
@@ -187,7 +207,11 @@
     "production-routing",
     "bottleneck"
    ],
-   "re": "scheduling|aps|planning and scheduling|bottlenecks?|capacity planning|mrp|theory of constraints"
+   "re": "scheduling|aps|planning and scheduling|bottlenecks?|capacity planning|mrp|theory of constraints",
+   "related": [
+    "sop-mrp-production-planning",
+    "theory-of-constraints"
+   ]
   },
   {
    "id": "digital-twin-manufacturing",
@@ -237,7 +261,12 @@
     "enterprise-resource-planning",
     "dynamics-365-supply-chain-management"
    ],
-   "re": "mes|manufacturing it|azure iot|iot hub|iot|factory it|plant it|opc ua"
+   "re": "mes|manufacturing it|azure iot|iot hub|iot|factory it|plant it|opc ua",
+   "related": [
+    "mes-isa-95",
+    "predictive-maintenance-iiot",
+    "ot-cybersecurity-iec-62443"
+   ]
   },
   {
    "id": "ifakt-polaris",
@@ -258,6 +287,325 @@
     "value-stream-management-software-manufacturing",
     "manufacturing-optimization-aerospace-what-first"
    ]
+  },
+  {
+   "id": "5s-visual-management",
+   "slug": {
+    "en": "5s-visual-management"
+   },
+   "label": {
+    "en": "5S and visual management",
+    "de": "5S und visuelles Management"
+   },
+   "topics": [
+    "5s",
+    "visual-management"
+   ],
+   "re": "visual management|visual factory|red tag(?:ging)?|shadow boards?",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "kanban-pull-system",
+   "slug": {
+    "en": "kanban-pull-system"
+   },
+   "label": {
+    "en": "Kanban and pull systems",
+    "de": "Kanban und Pull-Systeme"
+   },
+   "topics": [
+    "kanban",
+    "pull-system"
+   ],
+   "re": "pull systems?|pull production|conwip|kanban cards?",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "smed-changeover-reduction",
+   "slug": {
+    "en": "smed-changeover-reduction"
+   },
+   "label": {
+    "en": "SMED and changeover reduction",
+    "de": "SMED und Rüstzeitreduzierung"
+   },
+   "topics": [
+    "smed"
+   ],
+   "re": "changeovers?|quick changeover|single minute exchange of dies?",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "tpm-oee",
+   "slug": {
+    "en": "tpm-oee"
+   },
+   "label": {
+    "en": "TPM and OEE",
+    "de": "TPM und OEE"
+   },
+   "topics": [
+    "total-productive-maintenance"
+   ],
+   "re": "total productive maintenance|autonomous maintenance|jishu hozen|six big losses",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "six-sigma-root-cause-analysis",
+   "slug": {
+    "en": "six-sigma-root-cause-analysis"
+   },
+   "label": {
+    "en": "Six Sigma and root cause analysis",
+    "de": "Six Sigma und Ursachenanalyse"
+   },
+   "topics": [
+    "lean-six-sigma"
+   ],
+   "re": "dmaic|ishikawa|fishbone diagrams?|5 whys|five whys",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "sop-mrp-production-planning",
+   "slug": {
+    "en": "sop-mrp-production-planning"
+   },
+   "label": {
+    "en": "S&OP, MRP and production planning",
+    "de": "S&OP, MRP und Produktionsplanung"
+   },
+   "topics": [
+    "material-requirements-planning"
+   ],
+   "re": "s op|sales and operations planning|master production schedul(?:e|ing)",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "theory-of-constraints",
+   "slug": {
+    "en": "theory-of-constraints"
+   },
+   "label": {
+    "en": "Theory of constraints",
+    "de": "Engpasstheorie (Theory of Constraints)"
+   },
+   "topics": [
+    "theory-of-constraints"
+   ],
+   "re": "theory of constraints|drum buffer rope|goldratt|critical chain",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "mes-isa-95",
+   "slug": {
+    "en": "mes-isa-95"
+   },
+   "label": {
+    "en": "MES and ISA-95",
+    "de": "MES und ISA-95"
+   },
+   "topics": [
+    "isa-95",
+    "manufacturing-execution-system",
+    "unified-namespace"
+   ],
+   "re": "isa 95|iec 62264|unified namespace",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "predictive-maintenance-iiot",
+   "slug": {
+    "en": "predictive-maintenance-iiot"
+   },
+   "label": {
+    "en": "Predictive maintenance and IIoT",
+    "de": "Vorausschauende Wartung und IIoT"
+   },
+   "topics": [
+    "predictive-maintenance"
+   ],
+   "re": "predictive maintenance|condition monitoring|iiot|industrial iot",
+   "date": "2026-11-26"
+  },
+  {
+   "id": "ot-cybersecurity-iec-62443",
+   "slug": {
+    "en": "ot-cybersecurity-iec-62443"
+   },
+   "label": {
+    "en": "OT cybersecurity and IEC 62443",
+    "de": "OT-Sicherheit und IEC 62443"
+   },
+   "topics": [],
+   "re": "ot security|ot cybersecurity|iec 62443|isa 62443|operational technology security|ics security",
+   "date": "2026-11-26"
+  }
+ ],
+ "clusters": [
+  {
+   "id": "kaizen",
+   "parent": "lean-manufacturing",
+   "slug": {
+    "en": "kaizen"
+   },
+   "label": {
+    "en": "Kaizen and kaizen events"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "pdca-cycle",
+   "parent": "lean-manufacturing",
+   "slug": {
+    "en": "pdca-cycle"
+   },
+   "label": {
+    "en": "PDCA cycle"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "a3-problem-solving",
+   "parent": "lean-manufacturing",
+   "slug": {
+    "en": "a3-problem-solving"
+   },
+   "label": {
+    "en": "A3 problem solving"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "poka-yoke",
+   "parent": "lean-manufacturing",
+   "slug": {
+    "en": "poka-yoke"
+   },
+   "label": {
+    "en": "Poka-yoke (mistake proofing)"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "standard-work",
+   "parent": "shop-floor-management",
+   "slug": {
+    "en": "standard-work"
+   },
+   "label": {
+    "en": "Standard work"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "andon",
+   "parent": "shop-floor-management",
+   "slug": {
+    "en": "andon"
+   },
+   "label": {
+    "en": "Andon system"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "paperless-manufacturing",
+   "parent": "shop-floor-management",
+   "slug": {
+    "en": "paperless-manufacturing"
+   },
+   "label": {
+    "en": "Paperless manufacturing"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "lot-sizing",
+   "parent": "production-scheduling-aps",
+   "slug": {
+    "en": "lot-sizing"
+   },
+   "label": {
+    "en": "Lot sizing"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "manufacturing-inventory-management",
+   "parent": "production-scheduling-aps",
+   "slug": {
+    "en": "manufacturing-inventory-management"
+   },
+   "label": {
+    "en": "Manufacturing inventory management"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "intralogistics",
+   "parent": "production-scheduling-aps",
+   "slug": {
+    "en": "intralogistics"
+   },
+   "label": {
+    "en": "Intralogistics"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "manufacturing-simulation",
+   "parent": "digital-twin-manufacturing",
+   "slug": {
+    "en": "manufacturing-simulation"
+   },
+   "label": {
+    "en": "Manufacturing simulation"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "process-mining-manufacturing",
+   "parent": "digital-twin-manufacturing",
+   "slug": {
+    "en": "process-mining-manufacturing"
+   },
+   "label": {
+    "en": "Process mining in manufacturing"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "sustainable-manufacturing",
+   "parent": "operational-excellence",
+   "slug": {
+    "en": "sustainable-manufacturing"
+   },
+   "label": {
+    "en": "Sustainable manufacturing"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "supply-chain-resilience",
+   "parent": "operational-excellence",
+   "slug": {
+    "en": "supply-chain-resilience"
+   },
+   "label": {
+    "en": "Supply chain resilience"
+   },
+   "date": "2026-11-26"
+  },
+  {
+   "id": "manufacturing-workforce-skills",
+   "parent": "operational-excellence",
+   "slug": {
+    "en": "manufacturing-workforce-skills"
+   },
+   "label": {
+    "en": "Manufacturing workforce skills"
+   },
+   "date": "2026-11-26"
   }
  ]
 }

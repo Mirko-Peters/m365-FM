@@ -86,9 +86,10 @@ test("Konfiguration passt zusammen: CERTOPUS_PATHS (wrangler.toml), data/pillars
     const v = QUIZ.pillars[pid];
     assert.ok(v.en.length >= 3, `${pid}: zu wenige Fragen`);
     assert.deepEqual(v.de.map((q) => q.id), v.en.map((q) => q.id), `${pid}: IDs en/de verschieden`);
-    for (const q of v.en) { assert.ok(q.id.startsWith(pid + "-")); assert.deepEqual(Object.keys(q).sort(), ["id", "opts", "q"]); }
+    for (const q of v.en) { assert.ok(q.id.startsWith(pid + "-")); assert.deepEqual(Object.keys(q).filter((k) => k !== "src").sort(), ["id", "opts", "q"]); }   // src: Vertiefung, aus der die Frage stammt (keine Loesung)
   }
-  if (pids.length) assert.deepEqual(new Set(Object.keys(QUIZ.pillars)), new Set(pids));
+  // Fragen gibt es nur fuer Leitfaeden des Pfads; neue Leitfaeden ohne Fragen (vor dem Fragenlauf) fehlen in der Datei und werden uebersprungen
+  if (pids.length) for (const pid of Object.keys(QUIZ.pillars)) assert.ok(pids.includes(pid), `${pid} steht nicht im Pfad`);
 });
 
 test("assets/learnquiz.js nutzt nur Adressen, die der Worker kennt", () => {

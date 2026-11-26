@@ -47,7 +47,7 @@ class RealQuizPages(unittest.TestCase):
             self.assertEqual(got, want, f"{lang}: Fragen-IDs der Seite != data/pillar_quiz.json")
             self.assertEqual([g["id"] for g in data["groups"]], [p for p in (x["id"] for x in S.order()) if p in QUIZ["pillars"]])
             for g in data["groups"]:
-                self.assertEqual(set(g), {"id", "t", "u", "qs"})
+                self.assertEqual(set(g), {"id", "t", "u", "qs"})   # Feld src (Vertiefung) erreicht die Seite nicht
                 for q in g["qs"]: self.assertEqual(set(q), {"id", "q", "opts"}); self.assertEqual(len(q["opts"]), 4)
             blob = re.search(r'<script type="application/json" id="lq-data">(.*?)</script>', html, re.S).group(1)
             for bad in ('"a":', '"why"', '"answer"', '"why_en"', '"why_de"', '"correct"'): self.assertNotIn(bad, blob)
@@ -59,8 +59,11 @@ class RealQuizPages(unittest.TestCase):
     def test_box_links_test_page(self):
         self.assertIn(f'href="{PAGES.BASE}/learn/path/{PID}/test/"', self.files[f"learn/path/{PID}/index.html"])
         self.assertIn(f'href="{PAGES.BASE}/de/learn/path/{PID}/test/"', self.files[f"de/learn/path/{PID}/index.html"])
-        n, need = S.quiz_numbers(S.quiz_groups(QUIZ, "en", lambda p: ""))
-        self.assertEqual((n, need), (30, 24))
+        gr = S.quiz_groups(QUIZ, "en", lambda p: "")
+        n, need = S.quiz_numbers(gr)
+        k = S.per_group(len(gr))
+        self.assertEqual((n, need), (k * len(gr), -(-k * len(gr) * 80 // 100)))
+        if len(gr) == 10: self.assertEqual((n, need), (30, 24), "vor dem Fragenlauf der neuen Leitfäden: Test wie bisher")
 
 
 class Consistency(unittest.TestCase):
@@ -68,18 +71,27 @@ class Consistency(unittest.TestCase):
         for pid, v in QUIZ["pillars"].items():
             self.assertEqual([q["id"] for q in v["en"]], [q["id"] for q in v["de"]], pid)
             for lang in ("en", "de"):
-                for q in v[lang]: self.assertEqual(set(q), {"id", "q", "opts"}, q["id"])
+                for q in v[lang]: self.assertEqual(set(q) - {"src"}, {"id", "q", "opts"}, q["id"])
+            self.assertEqual([q.get("src") for q in v["en"]], [q.get("src") for q in v["de"]], pid)
+            subs = {c["id"] for c in S.clusters_of(pid)}
+            for q in v["en"]:
+                if q.get("src"): self.assertIn(q["src"], subs, f"{q['id']}: src ist keine Vertiefung von {pid}")
+        for h in QUIZ.get("hold") or []:
+            self.assertTrue(S.by_id(h) or any(c["id"] == h for c in S.clusters()), f"hold: {h} unbekannt")
 
     def test_ids_complete_unique_and_never_reused(self):
         """Echtdaten: jeder Leitfaden des Pfads hat mindestens PQ.MIN Fragen (en und de), IDs sind pfadweit eindeutig, keine aktive ID steht
         unter retired, und neue IDs liegen ueber der hoechsten stillgelegten (der Worker blendet nur hoehere Nummern als die bekannten aus)."""
         num = lambda pid, qid: int(re.fullmatch(re.escape(pid) + r"-(\d+)", qid).group(1))
         order = [p["id"] for p in S.order()]
-        self.assertEqual(list(QUIZ["pillars"]), order, "Reihenfolge wie site_pillars.order()")
+        have = list(QUIZ["pillars"])
+        self.assertEqual(have, [p for p in order if p in have], "Reihenfolge wie site_pillars.order(); Leitfäden ohne Fragen (vor dem Lauf) fehlen")
+        missing = [p for p in order if p not in have]
+        self.assertTrue(set(missing) <= set(QUIZ.get("hold") or []), f"Leitfäden ohne Fragen müssen auf der Freigabeliste stehen: {missing}")
         retired, seen = QUIZ.get("retired") or {}, []
-        for pid in order:
+        for pid in have:
             v = QUIZ["pillars"][pid]
-            for lang in ("en", "de"): self.assertGreaterEqual(len(v[lang]), PQ.MIN, f"{pid} {lang}")
+            for lang in ("en", "de"): self.assertGreaterEqual(len([q for q in v[lang] if not q.get("src")]), PQ.MIN, f"{pid} {lang}")   # eigene Fragen ohne Vertiefungen
             ids = [q["id"] for q in v["en"]]
             self.assertTrue(all(num(pid, q) > 0 for q in ids), pid)   # Form <pillar>-<n>
             old = set(retired.get(pid) or [])
@@ -88,6 +100,7 @@ class Consistency(unittest.TestCase):
             seen += ids + sorted(old)
         self.assertEqual(len(seen), len(set(seen)), "IDs pfadweit eindeutig")
         self.assertFalse(set(retired) - set(order), "retired nur fuer Leitfaeden des Pfads")
+        self.assertEqual(len(order), 20)
 
     def test_keys_file_is_encrypted(self):
         blob = (ROOT / "data" / "pillar_quiz_keys.enc").read_bytes().strip()
@@ -99,6 +112,9 @@ class Consistency(unittest.TestCase):
 
     def test_constants_match_worker(self):
         self.assertEqual(S.PER_PILLAR, js_const("PER_PILLAR"))
+        for k in ("QUIZ_TARGET", "PER_MIN", "PER_MAX"): self.assertEqual(getattr(S, k), js_const(k), k)
+        self.assertIn("Math.min(PER_MAX, Math.max(PER_MIN, Math.ceil(QUIZ_TARGET / Math.max(1, n))))", WORKER_JS, "gleiche Formel wie site_pillars.per_group")
+        self.assertIn("pick(l, k)", WORKER_JS)
         self.assertEqual(S.PASS_PCT, js_const("PASS_PCT"))
         self.assertEqual(S.MAX_TRIES, js_const("MAX_ATTEMPTS"))
 
