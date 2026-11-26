@@ -1,0 +1,50 @@
+<translation>
+## KPI Pemeliharaan: MTBF, MTTR, kepatuhan PM, dan metrik khusus PdM
+
+Ukur program berdasarkan dampaknya terhadap operasi dan pekerjaan pemeliharaan, bukan akurasi model. Society for Maintenance & Reliability Professionals (SMRP), sebuah masyarakat nirlaba yang berbasis di AS dan dibentuk oleh para praktisi, menerbitkan praktik terbaik, metrik, dan panduan untuk pemeliharaan dan keandalan; jika perusahaan Anda menggunakannya, selaraskan definisi Anda dengan rumusan SMRP [26]. Panduan kami tentang [KPI manufaktur](https://www.m365.fm/en/learn/manufacturing-kpis/) membahas MTBF, MTTR, dan ketersediaan bersama OEE; definisi di sini dibuat konsisten dengan panduan tersebut.
+
+### KPI keandalan inti
+
+> **MTBF (mean time between failures, rata-rata waktu antar kegagalan) = waktu operasi ÷ jumlah kegagalan**
+> **MTTR (mean time to repair, rata-rata waktu perbaikan) = total waktu perbaikan ÷ jumlah perbaikan**
+> **Ketersediaan inheren = MTBF ÷ (MTBF + MTTR)**
+
+**Contoh perhitungan.** Ke-12 aset percontohan beroperasi total 96.000 jam operasi pada tahun dasar dengan 9 kegagalan dan total waktu perbaikan 72 jam.
+
+- MTBF = 96.000 ÷ 9 = **10.667 jam**
+- MTTR = 72 ÷ 9 = **8,0 jam**
+- Ketersediaan inheren = 10.667 ÷ (10.667 + 8,0) = **99,93%** per aset
+
+Pada tahun pertama percontohan, terjadi 4 kegagalan fungsional pada waktu operasi yang sama, dan 5 gangguan yang sedang berkembang terdeteksi dan diperbaiki sebagai pekerjaan terencana.
+
+- MTBF (kegagalan fungsional) = 96.000 ÷ 4 = **24.000 jam**
+
+Nyatakan secara eksplisit apa yang dihitung sebagai kegagalan. Jika perbaikan terencana yang dipicu PdM dihitung sebagai kegagalan, MTBF akan tampak tidak berubah meskipun waktu henti turun drastis. Laporkan keduanya: kegagalan fungsional, dan intervensi yang terdeteksi PdM.
+
+### KPI proses pemeliharaan
+
+| KPI | Rumus | Mengapa penting bagi PdM |
+|---|---|---|
+| Kepatuhan PM | Work order PM yang diselesaikan dalam jendela terjadwal ÷ work order PM yang jatuh tempo dalam periode | Program PdM di atas program PM yang rusak akan gagal; kendalikan perawatan dasar terlebih dahulu |
+| Persentase pemeliharaan terencana | Jam pemeliharaan terencana ÷ total jam pemeliharaan | Seharusnya naik seiring PdM mengubah kerusakan menjadi pekerjaan terencana |
+| Porsi pekerjaan reaktif (darurat) | Jam kerja darurat ÷ total jam pemeliharaan | Terkait langsung dengan temuan NIST tentang pabrik yang didominasi pekerjaan reaktif [4] |
+| Kepatuhan jadwal | Jam kerja terjadwal yang diselesaikan sesuai rencana ÷ jam terjadwal | Menunjukkan apakah pekerjaan terencana yang dipicu PdM benar-benar dikerjakan |
+| Biaya pemeliharaan per unit atau sebagai porsi nilai penggantian aset | Total biaya pemeliharaan ÷ output, atau ÷ estimasi nilai penggantian aset | Mencegah "penghematan" dari waktu henti terhapus oleh kenaikan biaya servis |
+| Waktu henti tak terencana pada aset yang dipantau | Jam henti tak terencana yang disebabkan oleh aset yang dipantau | Metrik hasil utama |
+
+**Contoh perhitungan: kepatuhan PM.** Pada bulan Maret, 240 work order PM jatuh tempo di lini produksi. 204 diselesaikan dalam jendela yang disepakati (misalnya tanggal jatuh tempo ditambah atau dikurangi 10% dari interval atau sejumlah hari tetap; tentukan jendela tersebut sekali dan konsisten). Kepatuhan PM = 204 ÷ 240 = **85%**. Banyak pemimpin pemeliharaan menargetkan 90% atau lebih sebelum menambahkan lapisan prediktif [tidak terverifikasi sebagai tolok ukur yang dipublikasikan; gunakan hanya sebagai target internal].
+
+### KPI khusus PdM
+
+| KPI | Rumus | Arah target |
+|---|---|---|
+| Cakupan | Aset kritis yang dipantau kondisinya ÷ aset kritis | Naik, sesuai cakupan yang direncanakan |
+| Waktu tunggu deteksi | Jumlah hari antara peringatan pertama dan kegagalan fungsional (atau perbaikan terencana) | Lebih panjang dari waktu yang dibutuhkan untuk merencanakan |
+| Presisi peringatan | Peringatan yang dikonfirmasi ÷ seluruh peringatan | Naik, tanpa kehilangan recall |
+| Tingkat deteksi (recall) | Kegagalan yang didahului peringatan tepat waktu ÷ seluruh kegagalan dari mode kegagalan yang dipantau | Naik |
+| Waktu respons peringatan | Waktu dari peringatan hingga keputusan triase | Dalam batas yang disepakati (misalnya 1 shift untuk prioritas tinggi) |
+| Pekerjaan yang dihasilkan PdM | Work order yang berasal dari temuan kondisi ÷ seluruh work order korektif | Naik |
+| Tingkat umpan balik kondisi awal (as-found) | Work order PdM dengan kondisi as-found tercatat ÷ work order PdM | Mendekati 100% |
+
+Pasang tiga hingga lima dari KPI ini pada papan harian atau mingguan tim pemeliharaan. Untuk cara kerja papan semacam ini, lihat [manajemen lantai produksi](https://www.m365.fm/en/learn/shop-floor-management/).
+</translation>

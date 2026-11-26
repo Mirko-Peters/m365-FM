@@ -1,0 +1,40 @@
+<translation>
+## Gestione delle patch e delle vulnerabilità in OT
+
+In ambito IT d'ufficio la regola è "applicare le patch rapidamente". In OT la regola è "decidere con attenzione". Una patch può richiedere l'approvazione del fornitore, il riavvio di un controllore, una rivalidazione nei settori regolamentati, o un test completo della linea. Negli stabilimenti soggetti alle normative FDA (farmaceutico, dispositivi medici, alimentare) e sotto i requisiti dei clienti automotive o aerospaziali, una modifica a un sistema validato di norma attiva la vostra procedura di controllo delle modifiche e di validazione; pianificate nella finestra di patching anche il tempo di revisione del team qualità. ISA-TR62443-2-3 tratta la gestione delle patch nell'ambiente IACS [1].
+
+### Fonti di informazione sulle vulnerabilità
+
+- Avvisi di sicurezza dei fornitori e portali di sicurezza dei prodotti dei vostri fornitori di PLC, HMI, azionamenti e software.
+- Gli avvisi ICS di CISA, che pubblicano vulnerabilità dei prodotti industriali, spesso coordinate con i fornitori [non verificato per quanto riguarda il volume attuale; consultate la pagina degli avvisi CISA].
+- Il vostro strumento di monitoraggio OT, che confronta le versioni del firmware dell'inventario con gli avvisi.
+
+### Una tabella decisionale per ogni avviso
+
+| Domanda | Se sì | Se no |
+|---|---|---|
+| Il prodotto interessato è nel nostro inventario? | Proseguire | Chiudere, documentare |
+| La funzione vulnerabile è utilizzata o raggiungibile nella nostra configurazione? | Proseguire | Documentare il motivo; ricontrollare alla prossima modifica |
+| È noto che viene sfruttata o esiste un exploit pubblico? | Priorità alta | Priorità in base al punteggio di conseguenza |
+| L'asset è raggiungibile da una zona a fiducia inferiore o da remoto? | Priorità alta | Priorità media |
+| Il fornitore approva la patch per la nostra versione? | Pianificare la patch nella prossima finestra | Applicare misure compensative |
+| La patch può essere applicata senza fermo macchina? | Programmare nella manutenzione ordinaria | Programmare nel fermo pianificato |
+
+### Misure compensative quando non è possibile applicare la patch
+
+Quando la patch non è disponibile, non approvata o non applicabile prima del prossimo fermo:
+
+- Limitate il conduit: consentite solo gli host e i protocolli necessari all'asset.
+- Disattivate i servizi e le porte non utilizzati.
+- Posizionate il selettore a chiave del controllore su RUN per bloccare le modifiche remote al programma, dove il controllore lo supporta.
+- Aumentate il monitoraggio dell'asset (allarmi su nuove connessioni o download di programmi).
+- Documentate il rischio residuo e ottenete l'approvazione del responsabile dell'asset.
+
+### Esempio di decisione
+
+Un avviso descrive una vulnerabilità di denial of service sfruttabile da remoto nel server web del modello di PLC usato nel controllo della pressa Z3. L'inventario mostra quattro PLC interessati. Il server web è attivo ma non utilizzato. La correzione del firmware è disponibile ma richiede un riavvio del controllore e il fornitore raccomanda un test funzionale. Decisione: disattivare il server web su tutti e quattro i PLC durante la finestra del prossimo fine settimana (30 minuti per pressa), bloccare HTTP e HTTPS verso i PLC nel conduit C4, e installare il firmware al fermo pianificato tra otto settimane. Il rischio residuo provvisorio è documentato e approvato dal responsabile dell'ingegneria di stabilimento.
+
+### Sistemi legacy e fuori supporto
+
+Ogni stabilimento ha sistemi che non riceveranno mai un'altra patch: HMI con versioni di Windows non più supportate, controllori che il fornitore ha dismesso. Trattateli come un problema di ciclo di vita con un budget, non come un'eccezione di sicurezza da rinnovare all'infinito. Il campo di inventario "stato di supporto del fornitore" alimenta un piano di sostituzione allineato alle ricostruzioni di linea e alla pianificazione degli investimenti.
+</translation>

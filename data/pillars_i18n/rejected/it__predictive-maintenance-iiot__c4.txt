@@ -1,0 +1,34 @@
+<translation>
+1. **Il modo di guasto ha conseguenze per la sicurezza o per l'ambiente?** In caso affermativo, serve un'attività che riduca il rischio a un livello accettabile, oppure una riprogettazione. La manutenzione a guasto non è un'opzione.
+2. **Esiste un segnale di allarme rilevabile prima del guasto funzionale (un potenziale guasto, P)?** In caso affermativo, e se il periodo di preavviso è sufficientemente lungo e costante, la manutenzione basata sulle condizioni o predittiva è la prima scelta.
+3. **In caso contrario, il guasto è legato all'età?** Se la probabilità di guasto cresce chiaramente con l'età o con l'utilizzo, può funzionare una sostituzione programmata in base al tempo o all'uso.
+4. **Se nessuna delle due ipotesi si applica, le conseguenze sono accettabili?** Allora si può far funzionare il componente fino al guasto in modo deliberato, con ricambi disponibili e una procedura di riparazione rapida. In caso contrario, occorre riprogettare o aggiungere ridondanza.
+
+La RCM come metodo formale è nata nell'aviazione commerciale statunitense. F. Stanley Nowlan e Howard F. Heap di United Airlines hanno redatto nel 1978 il rapporto *Reliability-Centered Maintenance* per il Dipartimento della Difesa degli Stati Uniti [9]; lo standard SAE JA1011 (1998) ha successivamente definito i criteri minimi che un processo deve soddisfare per poter essere definito RCM [10]. I lettori del settore aeronautico riconosceranno la stessa logica nello sviluppo dei programmi di manutenzione; per il lato della pianificazione consultate la nostra guida sulla [pianificazione della produzione aerospaziale](https://www.m365.fm/en/learn/aerospace-production-planning/).
+
+## Come si guastano le macchine: la curva P-F e i sei modelli di guasto
+
+### La curva P-F
+
+La curva P-F descrive la condizione di un asset nel tempo. A un certo punto inizia un difetto. Poco dopo diventa rilevabile con una data tecnica: questo è il **punto di potenziale guasto (P)**. La condizione continua a peggiorare finché l'asset non può più svolgere la sua funzione: il **punto di guasto funzionale (F)**. Il tempo tra P e F è l'**intervallo P-F**.
+
+Tre proprietà della curva P-F guidano ogni decisione di manutenzione predittiva:
+
+1. **Ogni tecnica ha il proprio punto P.** L'analisi delle vibrazioni o gli ultrasuoni individuano in genere un difetto di un cuscinetto a rotolamento molto prima che il cuscinetto si surriscaldi; una termocamera lo vede più tardi; un tecnico lo sente e lo percepisce per ultimo. Più il punto P è anticipato, più lungo è il preavviso e maggiore è la libertà di pianificazione.
+2. **L'intervallo P-F varia.** Lo stesso modo di guasto può svilupparsi in mesi su un ventilatore poco caricato e in giorni su un riduttore molto sollecitato e mal lubrificato. Pianificate con una stima prudenziale, non con la media.
+3. **Il preavviso utile è più breve dell'intervallo P-F.** Si perde il tempo tra un'ispezione e l'altra e il tempo necessario per ordinare i ricambi, pianificare ed eseguire l'intervento.
+
+### Esempio svolto: un giro mensile di misure di vibrazione è sufficiente?
+
+Uno stabilimento monitora il cuscinetto di un motore di ventilazione da 75 kW (100 hp) con un raccoglitore portatile di dati di vibrazione. L'esperienza su ventilatori simili suggerisce un intervallo P-F di circa 8 settimane per i difetti della pista esterna del cuscinetto rilevati tramite vibrazioni (un'ipotesi per questo esempio; raccogliete le vostre evidenze).
+
+- Intervallo di ispezione: giro mensile, circa 4,3 settimane.
+- Caso peggiore: il difetto diventa rilevabile il giorno dopo una misura. Viene individuato al giro successivo, 4,3 settimane dopo.
+- Preavviso residuo: 8,0 − 4,3 = **3,7 settimane** (l'"intervallo P-F netto").
+- Tempo necessario per agire: 2 settimane di tempo di consegna per un set di cuscinetti e 1 settimana per inserire il lavoro in una fermata programmata = 3 settimane.
+- Margine: 3,7 − 3,0 = **0,7 settimane**. Il giro funziona, ma per un soffio.
+
+Con un giro trimestrale (13 settimane), il difetto potrebbe passare da P a F tra due misure. Il monitoraggio sembrerebbe attivo sulla carta e individuerebbe il guasto per fortuna. Una regola empirica diffusa in affidabilità prevede di ispezionare non oltre la metà dell'intervallo P-F, cioè qui ogni 4 settimane o più spesso [non verificata come standard formale; è una convenzione dei professionisti]. Un sensore wireless che trasmette più volte al giorno elimina quasi del tutto la perdita dovuta all'intervallo di ispezione, ed è il principale argomento operativo a favore del monitoraggio IIoT continuo per gli asset con intervalli P-F brevi o incerti.
+
+> **Formula: intervallo P-F netto = intervallo P-F − intervallo di ispezione.** Il lavoro è tecnicamente fattibile solo se l'intervallo P-F netto è più lungo del tempo necessario per pianificare ed eseguire la riparazione.
+</translation>

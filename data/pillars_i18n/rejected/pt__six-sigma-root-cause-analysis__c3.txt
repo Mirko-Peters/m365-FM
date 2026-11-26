@@ -1,0 +1,74 @@
+<translation>
+## Níveis sigma e DPMO: o cálculo passo a passo
+
+Nenhuma das páginas muito lidas mostra este cálculo em texto, então aqui ele está passo a passo.
+
+### Unidades, defeitos e oportunidades
+
+| Termo | Significado | Exemplo (corpo de válvula) |
+|---|---|---|
+| Unidade | o item que está sendo produzido ou processado | um corpo de válvula hidráulica |
+| Defeito | qualquer falha em atender a um requisito do cliente | um vazamento no teste, um furo fora de tolerância |
+| Oportunidade | uma chance distinta de ocorrer um defeito, que é medida | 8 características críticas para a qualidade verificadas por corpo |
+| DPU | defeitos por unidade = defeitos ÷ unidades | |
+| DPO | defeitos por oportunidade = defeitos ÷ (unidades × oportunidades) | |
+| DPMO | DPO × 1.000.000 | |
+
+### Exemplo trabalhado 1: da contagem de defeitos ao nível sigma
+
+Uma célula usina 5.000 corpos de válvula em um mês. Cada corpo tem 8 características que são inspecionadas (oportunidades). A inspeção registra 46 defeitos.
+
+- DPU = 46 ÷ 5.000 = 0,0092
+- DPO = 46 ÷ (5.000 × 8) = 46 ÷ 40.000 = 0,00115
+- DPMO = 0,00115 × 1.000.000 = **1.150**
+
+Para converter DPMO em nível sigma, encontre o valor z da distribuição normal padrão cuja cauda superior é igual ao DPO e, em seguida, some o 1,5 convencional:
+
+- Rendimento por oportunidade = 1 − 0,00115 = 0,99885
+- z para 0,99885 = 3,05 (a partir de uma tabela normal, ou `=NORM.S.INV(0,99885)` no Excel)
+- Nível sigma (curto prazo, com deslocamento) = 3,05 + 1,5 = **4,55**
+
+A fórmula por trás de toda tabela sigma é DPMO = 1.000.000 × (1 − Φ(nível sigma − 1,5)), em que Φ é a distribuição normal padrão cumulativa [5]. No Excel: `=NORM.S.INV(1-DPMO/1000000)+1,5`.
+
+**Cuidado com as oportunidades.** O número de oportunidades é uma escolha, e ela determina o resultado. Se os mesmos 46 defeitos forem contados contra 20 "oportunidades" por unidade, o DPMO cai para 460 e o nível sigma sobe para cerca de 4,8 sem que nada tenha melhorado. Defina as oportunidades uma vez por família de produtos, conte apenas as características que são de fato verificadas e mantenha a definição fixa. Para comparações entre processos, o DPU e o rendimento de primeira passagem são mais difíceis de manipular.
+
+### A tabela de conversão sigma (calculada)
+
+Valores calculados com a fórmula acima (DPMO de longo prazo com o deslocamento de 1,5 sigma) e, para comparação, para um processo perfeitamente centrado com ambas as caudas contadas:
+
+| Nível sigma | DPMO (com deslocamento de 1,5σ) | Rendimento (com deslocamento) | Defeitos por milhão se centrado, sem deslocamento |
+|---|---|---|---|
+| 1 | 691.462 | 30,9% | 317.311 |
+| 2 | 308.538 | 69,1% | 45.500 |
+| 3 | 66.807 | 93,3% | 2.700 |
+| 4 | 6.210 | 99,38% | 63 |
+| 4,5 | 1.350 | 99,865% | 6,8 |
+| 5 | 233 | 99,977% | 0,57 |
+| 6 | 3,4 | 99,99966% | 0,002 |
+
+A última coluna mostra por que o deslocamento importa: sem ele, um processo seis sigma produziria cerca de dois defeitos por bilhão, e não 3,4 por milhão.
+
+### Exemplo trabalhado 2: rendimento de throughput acumulado
+
+Uma peça passa por quatro etapas de processo. Os rendimentos de primeira passagem são 98%, 95%, 99% e 97%. O rendimento de throughput acumulado (RTY, na sigla em inglês), a probabilidade de uma unidade passar por todas as etapas sem qualquer retrabalho, é o produto:
+
+RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, ou 89,4%
+
+Cada etapa parece aceitável isoladamente; juntas, mais de uma unidade em dez precisa de retrabalho ou é sucateada em algum ponto. O RTY costuma ser uma métrica mais útil para um gerente de fábrica do que um nível sigma, porque mostra a "fábrica oculta" dos ciclos de retrabalho. Para as definições de rendimento de primeira passagem e métricas relacionadas, veja o [guia de KPIs de manufatura](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### Exemplo trabalhado 3: o que vale um nível sigma
+
+O exemplo que percorre este artigo: uma fábrica envia 48.000 corpos de válvula por ano. 2,8% falham no teste final de vazamento. Cada falha custa US$ 85 em retrabalho, reteste e sucata (valor ilustrativo).
+
+- Falhas por ano: 48.000 × 0,028 = 1.344
+- Custo: 1.344 × US$ 85 = US$ 114.240 por ano
+- Nível sigma: DPO = 0,028 por unidade (uma oportunidade: vazamento ou não vazamento) -> z = 1,91 -> **3,41 sigma**
+
+Se um projeto DMAIC reduzir a taxa de falha para 0,6%:
+
+- Falhas: 48.000 × 0,006 = 288; custo: US$ 24.480
+- Economia anual: US$ 89.760 (antes dos custos do projeto)
+- Nível sigma: z para 0,994 = 2,51 -> **4,01 sigma**
+
+Passar de cerca de 3,4 para cerca de 4,0 sigma é um resultado realista de um único projeto. Passar de 4,5 para 6 sigma normalmente exige redesenho, não um projeto.
+</translation>

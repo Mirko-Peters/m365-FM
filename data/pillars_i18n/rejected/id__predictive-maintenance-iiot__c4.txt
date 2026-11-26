@@ -1,0 +1,34 @@
+<translation>
+1. **Apakah mode kegagalan tersebut memiliki konsekuensi keselamatan atau lingkungan?** Jika ya, Anda memerlukan tugas yang menurunkan risiko ke tingkat yang dapat diterima, atau desain ulang. Membiarkan mesin rusak baru diperbaiki (run-to-failure) bukan pilihan.
+2. **Apakah ada peringatan yang dapat dideteksi sebelum kegagalan fungsional (potential failure, P)?** Jika ada, dan periode peringatannya cukup panjang dan konsisten, pemeliharaan berbasis kondisi atau prediktif adalah pilihan pertama.
+3. **Jika tidak, apakah kegagalan tersebut terkait usia?** Jika probabilitas kegagalan naik dengan jelas seiring usia atau pemakaian, penggantian berbasis waktu atau pemakaian dapat berhasil.
+4. **Jika keduanya tidak berlaku, apakah konsekuensinya dapat diterima?** Maka jalankan mesin sampai rusak secara sengaja, dengan suku cadang dan prosedur perbaikan yang cepat. Jika tidak, lakukan desain ulang atau tambahkan redundansi.
+
+RCM sebagai metode formal berasal dari penerbangan komersial Amerika Serikat. F. Stanley Nowlan dan Howard F. Heap dari United Airlines menulis laporan tahun 1978 *Reliability-Centered Maintenance* untuk Departemen Pertahanan Amerika Serikat [9]; SAE JA1011 (1998) kemudian menetapkan kriteria minimum yang harus dipenuhi suatu proses agar disebut RCM [10]. Pembaca dari bidang penerbangan akan mengenali logika yang sama dalam pengembangan program pemeliharaan; lihat panduan [perencanaan produksi aerospace](https://www.m365.fm/en/learn/aerospace-production-planning/) kami untuk sisi perencanaannya.
+
+## Bagaimana mesin rusak: kurva P-F dan enam pola kegagalan
+
+### Kurva P-F
+
+Kurva P-F menggambarkan kondisi suatu aset dari waktu ke waktu. Pada suatu titik, cacat mulai terbentuk. Beberapa saat kemudian, cacat itu menjadi dapat dideteksi dengan teknik tertentu: inilah **titik potential failure (P)**. Kondisi terus menurun hingga aset tidak lagi mampu menjalankan fungsinya: **titik functional failure (F)**. Waktu antara P dan F disebut **interval P-F**.
+
+Tiga sifat kurva P-F menjadi dasar setiap keputusan pemeliharaan prediktif:
+
+1. **Setiap teknik memiliki titik P-nya sendiri.** Analisis getaran atau ultrasonik umumnya mendeteksi cacat bantalan elemen bergulir jauh sebelum bantalan menjadi panas; kamera termal melihatnya lebih lambat; teknisi mendengar dan merasakannya paling akhir. Semakin awal titik P, semakin panjang peringatannya, dan semakin besar keleluasaan perencanaan Anda.
+2. **Interval P-F bervariasi.** Mode kegagalan yang sama dapat berkembang dalam hitungan bulan pada kipas dengan beban ringan, dan dalam hitungan hari pada gearbox dengan beban berat dan pelumasan yang buruk. Rencanakan dengan estimasi konservatif, bukan dengan rata-rata.
+3. **Peringatan yang berguna lebih pendek daripada interval P-F.** Anda kehilangan waktu antara inspeksi dan waktu yang dibutuhkan untuk memesan suku cadang, merencanakan, dan melaksanakan pekerjaan.
+
+### Contoh penerapan: apakah rute getaran bulanan sudah memadai?
+
+Sebuah pabrik memantau bantalan motor kipas 75 kW (100 hp) dengan pengumpul data getaran portabel. Pengalaman pada kipas sejenis menunjukkan interval P-F sekitar 8 minggu untuk cacat outer-race yang terdeteksi melalui getaran (asumsi untuk contoh ini; kumpulkan bukti Anda sendiri).
+
+- Interval inspeksi: rute bulanan, sekitar 4,3 minggu.
+- Kasus terburuk: cacat menjadi terdeteksi sehari setelah pengukuran. Cacat itu ditemukan pada rute berikutnya, 4,3 minggu kemudian.
+- Sisa waktu peringatan: 8,0 − 4,3 = **3,7 minggu** (disebut "interval P-F bersih").
+- Waktu yang dibutuhkan untuk bertindak: 2 minggu lead time untuk satu set bantalan dan 1 minggu untuk memasukkan pekerjaan ke dalam henti terencana = 3 minggu.
+- Margin: 3,7 − 3,0 = **0,7 minggu**. Rute ini berfungsi, tetapi hanya pas-pasan.
+
+Dengan rute triwulanan (13 minggu), cacat dapat berkembang dari P ke F di antara dua pengukuran. Pemantauan akan terlihat sibuk di atas kertas dan menangkap kegagalan itu karena kebetulan. Aturan praktis yang umum dalam keandalan adalah melakukan inspeksi tidak lebih dari setengah interval P-F, yang berarti setiap 4 minggu atau lebih sering [belum terverifikasi sebagai standar formal; ini adalah konvensi praktisi]. Sensor nirkabel yang melaporkan beberapa kali sehari hampir sepenuhnya menghilangkan kehilangan akibat interval inspeksi, dan inilah argumen operasional utama untuk pemantauan IIoT berkelanjutan pada aset dengan interval P-F yang pendek atau tidak pasti.
+
+> **Rumus: interval P-F bersih = interval P-F − interval inspeksi.** Tugas tersebut secara teknis layak hanya jika interval P-F bersih lebih panjang daripada waktu yang dibutuhkan untuk merencanakan dan melaksanakan perbaikan.
+</translation>

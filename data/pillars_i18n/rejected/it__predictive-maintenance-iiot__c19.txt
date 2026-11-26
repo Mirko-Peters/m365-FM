@@ -1,0 +1,50 @@
+<translation>
+## KPI di manutenzione: MTBF, MTTR, conformità alla manutenzione preventiva e metriche specifiche per la PdM
+
+Misurate il programma in base al suo effetto sul lavoro di esercizio e manutenzione, non in base all'accuratezza del modello. La Society for Maintenance & Reliability Professionals (SMRP), un'associazione senza scopo di lucro statunitense formata da professionisti del settore, pubblica best practice, metriche e linee guida per la manutenzione e l'affidabilità; se la vostra azienda le utilizza, allineate le vostre definizioni alla formulazione di SMRP [26]. La nostra guida sui [KPI manifatturieri](https://www.m365.fm/en/learn/manufacturing-kpis/) copre MTBF, MTTR e disponibilità insieme all'OEE; le definizioni qui riportate sono coerenti con essa.
+
+### KPI di affidabilità fondamentali
+
+> **MTBF (tempo medio tra i guasti) = tempo di funzionamento ÷ numero di guasti**
+> **MTTR (tempo medio di riparazione) = tempo totale di riparazione ÷ numero di riparazioni**
+> **Disponibilità intrinseca = MTBF ÷ (MTBF + MTTR)**
+
+**Esempio svolto.** I 12 asset pilota hanno funzionato complessivamente per 96.000 ore nell'anno di riferimento, con 9 guasti e 72 ore di tempo totale di riparazione.
+
+- MTBF = 96.000 ÷ 9 = **10.667 ore**
+- MTTR = 72 ÷ 9 = **8,0 ore**
+- Disponibilità intrinseca = 10.667 ÷ (10.667 + 8,0) = **99,93%** per asset
+
+Nel primo anno pilota si verificano 4 guasti funzionali nello stesso tempo di funzionamento, e 5 anomalie in sviluppo vengono rilevate e riparate come lavoro pianificato.
+
+- MTBF (guasti funzionali) = 96.000 ÷ 4 = **24.000 ore**
+
+Siate espliciti su ciò che conta come guasto. Se le riparazioni pianificate attivate dalla PdM fossero conteggiate come guasti, l'MTBF apparirebbe invariato anche se i fermi fossero diminuiti sensibilmente. Riportate entrambi: i guasti funzionali e gli interventi rilevati dalla PdM.
+
+### KPI dei processi di manutenzione
+
+| KPI | Formula | Perché è importante per la PdM |
+|---|---|---|
+| Conformità alla manutenzione preventiva | Ordini di lavoro PM completati entro la finestra programmata ÷ ordini di lavoro PM scaduti, nel periodo | Un programma di PdM applicato sopra un programma PM non funzionante fallisce; prima mettete sotto controllo la cura di base |
+| Percentuale di manutenzione pianificata | Ore di manutenzione pianificata ÷ ore totali di manutenzione | Dovrebbe aumentare man mano che la PdM trasforma i guasti in lavoro pianificato |
+| Quota di lavori reattivi (di emergenza) | Ore di lavoro di emergenza ÷ ore totali di manutenzione | Collegamento diretto con il risultato del NIST sugli impianti con forte prevalenza di interventi reattivi [4] |
+| Conformità al programma | Ore di lavoro programmato completate come pianificato ÷ ore programmate | Mostra se i lavori pianificati attivati dalla PdM vengono effettivamente eseguiti |
+| Costo di manutenzione per unità o come quota del valore di sostituzione dell'asset | Costo totale di manutenzione ÷ produzione, oppure ÷ valore stimato di sostituzione degli asset | Evita che i "risparmi" sui fermi vengano annullati da costi di assistenza più elevati |
+| Fermi non pianificati sugli asset monitorati | Ore di fermo non pianificato causate dagli asset monitorati | È la metrica di risultato principale |
+
+**Esempio svolto: conformità alla PM.** A marzo, sulla linea erano dovuti 240 ordini di lavoro PM. 204 sono stati completati entro la finestra concordata (ad esempio data di scadenza più o meno il 10% dell'intervallo oppure un numero fisso di giorni; definite la finestra una volta sola e mantenetela). Conformità alla PM = 204 ÷ 240 = **85%**. Molti responsabili della manutenzione puntano al 90% o più prima di aggiungere livelli predittivi [non verificato come benchmark pubblicato; da usare solo come obiettivo interno].
+
+### KPI specifici della PdM
+
+| KPI | Formula | Direzione dell'obiettivo |
+|---|---|---|
+| Copertura | Asset critici sotto monitoraggio delle condizioni ÷ asset critici | In aumento, fino allo scopo pianificato |
+| Tempo di anticipo della rilevazione | Giorni tra il primo allarme e il guasto funzionale (o la riparazione pianificata) | Più lungo del tempo necessario per pianificare |
+| Precisione degli allarmi | Allarmi confermati ÷ tutti gli allarmi | In aumento, senza perdere la sensibilità |
+| Tasso di rilevazione (richiamo) | Guasti preceduti da un allarme tempestivo ÷ tutti i guasti dei modi di guasto monitorati | In aumento |
+| Tempo di risposta agli allarmi | Tempo dall'allarme alla decisione di triage | Entro il limite concordato (ad esempio 1 turno per la priorità alta) |
+| Lavoro generato dalla PdM | Ordini di lavoro originati da rilievi di condizione ÷ tutti gli ordini di lavoro correttivi | In aumento |
+| Tasso di feedback "as-found" | Ordini di lavoro PdM con condizione as-found registrata ÷ ordini di lavoro PdM | Vicino al 100% |
+
+Inserite da tre a cinque di questi indicatori nella bacheca giornaliera o settimanale del team di manutenzione. Per come funzionano queste bacheche, consultate la [gestione del reparto produttivo](https://www.m365.fm/en/learn/shop-floor-management/).
+</translation>

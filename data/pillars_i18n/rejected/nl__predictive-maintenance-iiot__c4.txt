@@ -1,0 +1,34 @@
+<translation>
+1. **Heeft de faalwijze gevolgen voor veiligheid of milieu?** Zo ja, dan heeft u een taak nodig die het risico tot een acceptabel niveau terugbrengt, of een herontwerp. Laten doorlopen tot defect is geen optie.
+2. **Is er een detecteerbare waarschuwing vóór functioneel falen (een potentiële fout, P)?** Zo ja, en is de waarschuwingsperiode lang en voldoende consistent, dan is conditiegebaseerd of voorspellend onderhoud de eerste keuze.
+3. **Zo niet, is het falen leeftijdsgerelateerd?** Als de faalkans duidelijk stijgt met leeftijd of gebruik, dan kan vervanging op basis van tijd of gebruik werken.
+4. **Als geen van beide van toepassing is, zijn de gevolgen dan acceptabel?** Dan laat u het bewust doorlopen tot defect, met reserveonderdelen en een snelle reparatieprocedure. Anders moet u herontwerpen of redundantie toevoegen.
+
+RCM als formele methode is afkomstig uit de Amerikaanse commerciële luchtvaart. F. Stanley Nowlan en Howard F. Heap van United Airlines schreven in 1978 het rapport *Reliability-Centered Maintenance* voor het Amerikaanse ministerie van Defensie [9]; SAE JA1011 (1998) legde later de minimumcriteria vast waaraan een proces moet voldoen om als RCM te gelden [10]. Lezers uit de luchtvaart herkennen dezelfde logica in de ontwikkeling van onderhoudsprogramma's; zie onze gids over [productieplanning in de luchtvaart](https://www.m365.fm/en/learn/aerospace-production-planning/) voor de planningskant.
+
+## Hoe machines falen: de P-F-curve en de zes faalpatronen
+
+### De P-F-curve
+
+De P-F-curve geeft de conditie van een asset over tijd weer. Op een bepaald moment ontstaat een defect. Iets later wordt het detecteerbaar met een bepaalde techniek: dit is het **punt van potentiële fout (P)**. De conditie blijft dalen totdat de asset zijn functie niet meer kan vervullen: het **punt van functioneel falen (F)**. De tijd tussen P en F is het **P-F-interval**.
+
+Drie eigenschappen van de P-F-curve bepalen elke beslissing rond voorspellend onderhoud:
+
+1. **Elke techniek heeft een eigen P-punt.** Trillingsanalyse of ultrasoon onderzoek ziet een defect in een wentellager meestal lang voordat het lager heet wordt; een warmtebeeldcamera ziet het later; een monteur hoort en voelt het als laatste. Hoe eerder het P-punt, hoe langer de waarschuwing en hoe meer planningsruimte u heeft.
+2. **Het P-F-interval varieert.** Dezelfde faalwijze kan zich op een licht belaste ventilator over maanden ontwikkelen en op een zwaar belaste, slecht gesmeerde tandwielkast over dagen. Plan met een conservatieve schatting, niet met het gemiddelde.
+3. **De bruikbare waarschuwing is korter dan het P-F-interval.** U verliest de tijd tussen inspecties en de tijd die nodig is om onderdelen te bestellen, het werk te plannen en uit te voeren.
+
+### Uitgewerkt voorbeeld: is een maandelijkse trillingsronde voldoende?
+
+Een fabriek bewaakt het lager van een ventilatormotor van 75 kW (100 pk) met een draagbare trillingsdataverzamelaar. Ervaring met vergelijkbare ventilatoren wijst op een P-F-interval van ongeveer 8 weken voor defecten in de buitenring van het lager, gedetecteerd via trilling (een aanname voor dit voorbeeld; verzamel zelf bewijs).
+
+- Inspectie-interval: maandelijkse ronde, ongeveer 4,3 weken.
+- Slechtste geval: het defect wordt detecteerbaar de dag na een meting. Het wordt gevonden bij de volgende ronde, 4,3 weken later.
+- Resterende waarschuwing: 8,0 − 4,3 = **3,7 weken** (het "netto P-F-interval").
+- Benodigde tijd om te handelen: 2 weken levertijd voor een lagerset en 1 week om het werk in een geplande stilstand te laten passen = 3 weken.
+- Marge: 3,7 − 3,0 = **0,7 weken**. De ronde werkt, maar net.
+
+Met een kwartaalronde (13 weken) kan het defect zich tussen twee metingen van P naar F ontwikkelen. De bewaking zou op papier druk lijken en het falen toevallig vangen. Een gangbare vuistregel in betrouwbaarheidsmanagement is om niet vaker dan de helft van het P-F-interval te laten inspecteren, wat hier betekent: elke 4 weken of vaker [niet geverifieerd als formele norm; het is een conventie uit de praktijk]. Een draadloze sensor die meerdere keren per dag rapporteert, elimineert het verlies door het inspectie-interval bijna volledig. Dat is het belangrijkste operationele argument voor continue IIoT-bewaking bij assets met korte of onzekere P-F-intervallen.
+
+> **Formule: netto P-F-interval = P-F-interval − inspectie-interval.** De taak is alleen technisch haalbaar als het netto P-F-interval langer is dan de tijd die u nodig heeft om de reparatie te plannen en uit te voeren.
+</translation>

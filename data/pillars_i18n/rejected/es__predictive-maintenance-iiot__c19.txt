@@ -1,0 +1,50 @@
+<translation>
+## KPI de mantenimiento: MTBF, MTTR, cumplimiento de PM e indicadores específicos de PdM
+
+Mida el programa por su efecto en el trabajo de operación y mantenimiento, no por la precisión del modelo. La Society for Maintenance & Reliability Professionals (SMRP), una sociedad sin ánimo de lucro de Estados Unidos formada por profesionales del sector, publica buenas prácticas, métricas y guías para el mantenimiento y la fiabilidad; si su empresa las utiliza, alinee sus definiciones con la redacción de SMRP [26]. Nuestra guía de [KPI de fabricación](https://www.m365.fm/en/learn/manufacturing-kpis/) cubre MTBF, MTTR y disponibilidad junto con OEE; las definiciones aquí se mantienen coherentes con ella.
+
+### KPI de fiabilidad básicos
+
+> **MTBF (tiempo medio entre fallos) = tiempo de operación ÷ número de fallos**
+> **MTTR (tiempo medio de reparación) = tiempo total de reparación ÷ número de reparaciones**
+> **Disponibilidad inherente = MTBF ÷ (MTBF + MTTR)**
+
+**Ejemplo práctico.** Los 12 activos piloto funcionaron un total de 96.000 horas de operación en el año de referencia, con 9 fallos y 72 horas de tiempo total de reparación.
+
+- MTBF = 96.000 ÷ 9 = **10.667 horas**
+- MTTR = 72 ÷ 9 = **8,0 horas**
+- Disponibilidad inherente = 10.667 ÷ (10.667 + 8,0) = **99,93 %** por activo
+
+En el primer año del piloto, se producen 4 fallos funcionales en el mismo tiempo de operación, y 5 fallos en desarrollo se detectan y reparan como trabajo planificado.
+
+- MTBF (fallos funcionales) = 96.000 ÷ 4 = **24.000 horas**
+
+Sea explícito sobre qué se considera un fallo. Si las reparaciones planificadas activadas por PdM se contaran como fallos, el MTBF parecería inalterado aunque el tiempo de parada hubiera caído de forma notable. Informe de ambos: fallos funcionales e intervenciones detectadas por PdM.
+
+### KPI de procesos de mantenimiento
+
+| KPI | Fórmula | Por qué importa para PdM |
+|---|---|---|
+| Cumplimiento de PM | Órdenes de trabajo de PM completadas dentro de la ventana programada ÷ órdenes de trabajo de PM vencidas en el periodo | Un programa de PdM sobre un programa de PM roto fracasa; primero hay que controlar el mantenimiento básico |
+| Porcentaje de mantenimiento planificado | Horas de mantenimiento planificado ÷ horas totales de mantenimiento | Debe aumentar a medida que PdM convierte las averías en trabajo planificado |
+| Proporción de trabajo reactivo (de emergencia) | Horas de trabajo de emergencia ÷ horas totales de mantenimiento | Relación directa con la conclusión del NIST sobre plantas con predominio reactivo [4] |
+| Cumplimiento de la programación | Horas de trabajo programado completadas según lo planificado ÷ horas programadas | Muestra si los trabajos planificados activados por PdM se llevan realmente a cabo |
+| Coste de mantenimiento por unidad o como porcentaje del valor de reposición del activo | Coste total de mantenimiento ÷ producción, o ÷ valor estimado de reposición de los activos | Evita que los "ahorros" en paradas se compensen con mayores costes de servicio |
+| Tiempo de parada no planificado en activos monitorizados | Horas de paradas no planificadas causadas por activos monitorizados | La principal métrica de resultado |
+
+**Ejemplo práctico: cumplimiento de PM.** En marzo, en la línea vencían 240 órdenes de trabajo de PM. 204 se completaron dentro de la ventana acordada (por ejemplo, fecha de vencimiento más o menos el 10 % del intervalo o un número fijo de días; defina la ventana una vez y manténgala). Cumplimiento de PM = 204 ÷ 240 = **85 %**. Muchos responsables de mantenimiento fijan como objetivo el 90 % o más antes de añadir capas predictivas [no verificado como referencia publicada; úselo solo como objetivo interno].
+
+### KPI específicos de PdM
+
+| KPI | Fórmula | Dirección del objetivo |
+|---|---|---|
+| Cobertura | Activos críticos bajo monitorización de condición ÷ activos críticos | Al alza, hasta el alcance previsto |
+| Tiempo de anticipación de la detección | Días entre la primera alerta y el fallo funcional (o la reparación planificada) | Mayor que el tiempo necesario para planificar |
+| Precisión de alertas | Alertas confirmadas ÷ todas las alertas | Al alza, sin perder sensibilidad |
+| Tasa de detección (sensibilidad) | Fallos precedidos por una alerta oportuna ÷ todos los fallos de los modos de fallo monitorizados | Al alza |
+| Tiempo de respuesta a alertas | Tiempo desde la alerta hasta la decisión de triaje | Dentro del límite acordado (por ejemplo, 1 turno para prioridad alta) |
+| Trabajo generado por PdM | Órdenes de trabajo originadas por hallazgos de condición ÷ todas las órdenes de trabajo correctivo | Al alza |
+| Tasa de retroalimentación del estado encontrado | Órdenes de trabajo de PdM con estado encontrado registrado ÷ órdenes de trabajo de PdM | Cercana al 100 % |
+
+Coloque de tres a cinco de estos indicadores en el tablero diario o semanal del equipo de mantenimiento. Para saber cómo funcionan estos tableros, consulte [gestión en planta](https://www.m365.fm/en/learn/shop-floor-management/).
+</translation>

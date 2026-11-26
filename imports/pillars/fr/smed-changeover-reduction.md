@@ -1,0 +1,1090 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | SMED : réduction des temps de changement de série en Lean |
+| Meta description | SMED (échange de matrice en une minute) expliqué : changement rapide en 8 étapes, réglage interne vs externe, formules, exemples et consignation LOTO OSHA. |
+| Slug | `smed-changeover-reduction` |
+
+# SMED : réduction du temps de changement de série, étape par étape
+
+> **Réponse courte :** SMED (single-minute exchange of die, changement d'outil en moins de dix minutes) est une méthode qui vise à faire passer une machine ou une ligne d'un produit au suivant en un minimum de temps, avec pour objectif une durée à un chiffre, c'est-à-dire moins de dix minutes. Son idée centrale vient de Shigeo Shingo : séparer les opérations de réglage qui ne peuvent se faire qu'à l'arrêt de la machine (réglage interne) de celles qui peuvent se faire pendant qu'elle tourne (réglage externe), convertir autant que possible le travail interne en externe, puis rationaliser tout ce qui reste [1][6].
+
+> **Points clés**
+> - Le temps de changement court de la dernière bonne pièce de l'ancien lot à la première bonne pièce du nouveau lot, à cadence normale. La montée en régime et les réglages comptent dans le temps de changement [2][21].
+> - SMED suit un ordre fixe : observer, séparer l'interne de l'externe, convertir l'interne en externe, rationaliser l'interne, rationaliser l'externe, standardiser, recommencer [5].
+> - Les premiers gains viennent surtout de l'organisation (préparation en amont, listes de contrôle, chariots, travaux en parallèle) et non d'un matériel coûteux [19][20].
+> - Un changement plus court ne rapporte pleinement que si l'on exploite le temps gagné : lots plus petits, changements plus fréquents avec un EPEI plus court, ou plus de capacité sur un goulot. Il faut décider lequel avant le lancement du projet.
+> - La taille des lots et les stocks évoluent avec le temps de changement. Dans la formule classique de taille économique de lot, réduire le coût de réglage de 75 % divise la taille économique du lot par deux.
+> - Chaque étape de réglage interne se fait sur un équipement à l'arrêt. Aux États-Unis, le réglage relève de l'« entretien » au sens de la norme OSHA de consignation et d'étiquetage (lockout/tagout), sauf exception étroite [8][9].
+> - Les gains de changement s'effritent sans travail standard, audits et indicateur de changement affiché dans l'atelier. La recherche a critiqué la pratique du SMED pour sa sous-utilisation de la conception des équipements et sa pérennisation insuffisante [12][13].
+> - Bons indicateurs : temps de changement moyen et sa dispersion, pourcentage de changements conformes au standard, rebuts de montée en régime, nombre de changements par semaine, EPEI et jours de stock.
+
+## Table des matières
+
+1. [Qu'est-ce que le SMED ? Définition et idée centrale](#quest-ce-que-le-smed--définition-et-idée-centrale)
+2. [Pourquoi le temps de changement compte : taille des lots, stocks, flexibilité et TRS](#pourquoi-le-temps-de-changement-de-série-compte--taille-des-lots-stocks-flexibilité-et-trs)
+3. [Histoire : de Taylor et Ford à Shingo et Toyota](#histoire--de-taylor-et-ford-à-shingo-et-toyota)
+4. [Comment mesurer correctement le temps de changement](#comment-mesurer-correctement-le-temps-de-changement-de-série)
+5. [La méthode SMED en 8 étapes](#la-méthode-smed-en-8-étapes)
+6. [Les huit techniques de Shingo, avec exemples](#les-huit-techniques-de-shingo-avec-des-exemples)
+7. [Techniques de changement selon le type d'équipement](#techniques-de-changement-de-série-selon-le-type-déquipement)
+8. [Exemple SMED : un projet complet sur une presse à injecter](#exemple-smed--un-projet-complet-sur-une-presse-à-injecter)
+9. [Des changements plus courts aux lots plus petits : EPEI et dimensionnement des lots](#des-changements-de-série-plus-courts-aux-lots-plus-petits--epei-et-dimensionnement-des-lots)
+10. [Sécurité : changements, consignation et étiquetage, ergonomie](#sécurité--changements-consignation-et-ergonomie)
+11. [Qualité : validation de la première pièce, détrompage et libération de ligne réglementée](#qualité--approbation-de-la-première-pièce-détrompage-et-contrôle-réglementé-de-la-propreté-de-ligne)
+12. [Personnes et rôles : qui fait quoi lors d'un changement](#personnes-et-rôles--qui-fait-quoi-lors-dun-changement-de-série)
+13. [Modèles et listes de contrôle SMED](#modèles-et-listes-de-contrôle-smed)
+14. [Feuille de route de déploiement : d'un pilote à un système de changement à l'échelle de l'usine](#feuille-de-route-de-déploiement--du-pilote-à-un-système-de-changement-de-série-à-léchelle-de-lusine)
+15. [Indicateurs de changement : comment mesurer les progrès](#indicateurs-de-changement-de-série--comment-mesurer-les-progrès)
+16. [Le business case : coûts, ROI et comptabilisation des stocks](#le-dossier-économique--coûts-roi-et-comptabilisation-des-stocks)
+17. [SMED et autres outils du lean](#smed-et-autres-outils-du-lean)
+18. [Exemples SMED documentés](#exemples-documentés-de-smed)
+19. [Erreurs courantes avec le SMED](#erreurs-courantes-du-smed)
+20. [Limites et critiques du SMED](#limites-et-critiques-du-smed)
+21. [Le SMED se numérise : données, vidéo, MES et ordonnancement](#smed-à-lère-numérique--données-vidéo-mes-et-ordonnancement)
+22. [Glossaire SMED](#glossaire-smed)
+23. [FAQ : questions sur le SMED et les changements](#faq--smed-et-questions-sur-les-changements-de-série)
+24. [Conclusion et premières étapes](#conclusion-et-premières-étapes)
+
+## Qu'est-ce que le SMED ? Définition et idée centrale
+
+Le Lean Enterprise Institute (LEI) définit le [SMED](https://www.m365.fm/entity/smed/) comme un processus permettant de changer les équipements de production d'une référence à une autre en un minimum de temps [1]. « Single-minute » ne signifie pas une minute. Cela signifie un nombre à un seul chiffre de minutes, donc moins de dix [1]. Le terme « die » vient des presses d'emboutissage où la méthode a été appliquée pour la première fois, mais le SMED s'applique à tout changement de série : moules, gabarits, outils de coupe, plaques d'impression, pièces de format sur une ligne de conditionnement, recettes sur une machine de remplissage.
+
+Un [changement de série](https://www.m365.fm/entity/setup-time/) (aussi appelé réglage) est l'opération qui consiste à faire passer une machine, ou un groupe de machines liées comme une cellule ou une ligne d'assemblage, d'un produit à un autre [2]. Le LEI mesure le temps de changement de série depuis le moment où la dernière unité de la série terminée quitte le processus jusqu'à celui où la première unité conforme de la série suivante en sort [2]. Cette limite est importante, et nous y revenons dans la section sur la mesure.
+
+### Réglage interne et réglage externe
+
+L'intuition clé de Shingo a été de diviser chaque changement de série en deux types de travail [1] :
+
+| Type | Définition | Exemples |
+|---|---|---|
+| **Réglage interne** | Travail qui ne peut être effectué que lorsque la machine est à l'arrêt | Desserrer et retirer l'ancien outil, monter le nouveau, changer les pièces de format à l'intérieur du carter, réglage de la première pièce |
+| **Réglage externe** | Travail qui peut être effectué pendant que la machine tourne encore sur la série précédente ou déjà sur la suivante | Aller chercher le nouvel outil, les outillages et la matière ; préchauffer un moule ; contrôler le nouvel outil pour détecter des dommages ; ranger l'ancien outil ; formalités administratives |
+
+Dans un changement de série non amélioré, presque tout se fait pendant que la machine est arrêtée : le régleur arrête la machine, puis part chercher l'outil, la grue, la bonne clé et le plan. Le SMED sort la recherche et la préparation du temps d'arrêt, puis s'attaque au travail qui exige réellement une machine à l'arrêt.
+
+### SMED, changement rapide et réduction des réglages : les termes
+
+Les termes se recouvrent, et les usines américaines les emploient indifféremment :
+
+- **SMED (single-minute exchange of die) :** le nom donné par Shingo à la méthode et à son objectif de minutes à un seul chiffre [1][6].
+- **Changement rapide (quick changeover, QCO) :** le terme courant dans les ateliers américains pour désigner la même pratique, utilisé par exemple par les centres NIST MEP [18].
+- **Réduction des réglages / réduction du temps de réglage :** une appellation générale qui couvre le SMED ainsi que les modifications techniques des équipements.
+- **OTED (one-touch exchange of die) :** un objectif plus strict, un changement de série en moins de 100 secondes [5].
+- **Réduction du temps de changement de série :** le résultat. Le SMED est la méthode la plus répandue pour y parvenir, mais ce n'est pas le seul levier ; la conception des produits, celle des équipements et l'ordonnancement y contribuent aussi [13][15].
+
+### L'idée centrale en une phrase
+
+Ne jamais arrêter la machine pour une tâche qui pourrait être faite pendant qu'elle tourne, et rendre ce qui doit obligatoirement se faire pendant l'arrêt si simple qu'il n'y ait ni recherche, ni réglage, ni pièces d'essai.
+
+Concrètement, l'approche SMED sépare les tâches de réglage qui exigent une machine à l'arrêt de celles qui peuvent être réalisées pendant que la machine tourne encore, déplace le plus de travail possible vers le second groupe, puis raccourcit ce qui reste. Le SMED est donc une méthode d'amélioration continue du processus de changement de série, et l'un des outils standard de la production au plus juste (lean manufacturing).
+
+### Avantages du SMED
+
+De nombreuses pages web listent des bénéfices assortis de pourcentages rarement sourcés. Les avantages ci-dessous sont les mécanismes ; l'ampleur de chacun dépend de votre point de départ.
+
+1. **Capacité :** chaque minute retirée du réglage interne restitue une minute de temps machine. Sur un goulot d'étranglement, c'est une production supplémentaire pour toute l'usine.
+2. **Lots plus petits et moins de stock :** lorsqu'un changement de série est peu coûteux, on peut fabriquer chaque produit plus souvent, en quantités plus réduites. Le LEI souligne que l'EPEx (every product every interval) d'une machine dépend directement de ses temps de changement de série [3].
+3. **Délais plus courts et meilleur respect des livraisons :** moins d'en-cours signifie des files d'attente plus courtes ; de petits lots permettent de réagir à une évolution de la demande en quelques jours au lieu de quelques semaines.
+4. **Qualité :** des changements de série standardisés, avec des réglages fixes, réduisent les tâtonnements, les rebuts de démarrage et les échecs sur la première pièce. Moins de pièces fabriquées par lot signifie aussi moins de pièces exposées lorsqu'un défaut est découvert.
+5. **Sécurité et ergonomie :** un changement de série bien conçu supprime les manutentions pénibles, les gestes en force dans les outils et la précipitation, à condition que la sécurité soit intégrée à la conception et non contournée (voir la section sur la sécurité).
+
+## Pourquoi le temps de changement de série compte : taille des lots, stocks, flexibilité et TRS
+
+Des changements de série longs enferment les usines dans un piège prévisible. Si un changement de série coûte deux heures, personne ne veut le faire souvent, donc l'usine produit de grands lots. Les grands lots créent des stocks, des délais de livraison plus longs et la nécessité de prévoir la demande client plus loin dans le temps. Les prévisions sont plus souvent fausses plus elles portent loin, donc l'usine constitue encore plus de stock de sécurité. Le changement de série devient la raison cachée de la moitié des stocks du site.
+
+### Le piège de la taille des lots en chiffres
+
+**Exemple chiffré (à titre illustratif) :** Une presse d'emboutissage fonctionne 16 heures par jour (960 minutes). Chaque changement de série dure 90 minutes. La presse fabrique 8 références.
+
+- Si la presse change de série deux fois par jour, elle perd 180 minutes, soit 18,8 % de son temps (180 / 960). Produire les 8 références prend alors 4 jours, donc chaque pièce est fabriquée environ tous les 4 jours, et l'usine doit conserver environ 4 jours de stock pour chaque pièce, plus le stock de sécurité.
+- Pour fabriquer chaque pièce chaque jour, la presse aurait besoin de 8 changements de série par jour : 8 × 90 = 720 minutes, soit 75 % de son temps. Ce n'est pas possible si les pièces demandent plus de 240 minutes de temps de marche.
+- Si l'on ramène le changement de série à 15 minutes, 8 changements coûtent 120 minutes, soit 12,5 % de la journée. Chaque pièce peut alors être fabriquée chaque jour, et le stock de cycle passe d'environ 4 jours à environ 1 jour.
+
+C'est la raison pour laquelle Toyota a investi dans la réduction des temps de changement de série bien avant que cela ne devienne à la mode : sans changements de série rapides, la production en petits lots en juste-à-temps ne fonctionne pas.
+
+### Le temps de changement de série dans le TRS
+
+Le taux de rendement synthétique (TRS) multiplie la disponibilité, la performance et la qualité [4]. LEI compte les réglages parmi les six grandes pertes visées par le TRS [4] ; dans la plupart des schémas TRS, les changements de série planifiés sont comptabilisés comme une perte de disponibilité, et le rebut de démarrage après un changement de série comme une perte de qualité. Cela a deux conséquences :
+
+- Une réduction du temps de changement de série n'apparaît dans la disponibilité du TRS que si le temps gagné est utilisé pour produire. Si l'usine fonctionne simplement moins d'heures, la disponibilité du TRS ne bouge pas.
+- Si l'usine utilise le temps gagné pour effectuer des changements de série plus fréquents (afin de réduire la taille des lots), la disponibilité du TRS peut rester stable, voire baisser, alors que les stocks et les délais s'améliorent. C'est un bon résultat. Jugez le SMED par l'objectif que vous avez choisi, et non par le seul TRS.
+
+Les définitions détaillées du TRS sont présentées dans le guide [Indicateurs de production](https://www.m365.fm/en/learn/manufacturing-kpis/), et le volet maintenance du TRS dans le guide sur [TPM et TRS](https://www.m365.fm/en/learn/tpm-oee/).
+
+### Trois façons d'utiliser le temps gagné
+
+| Option | Quand elle convient | Ce que l'on mesure |
+|---|---|---|
+| **Plus de capacité** (même nombre de changements de série) | La machine est un goulot, la demande dépasse la capacité | Production par semaine, heures supplémentaires, disponibilité du TRS |
+| **Lots plus petits** (plus de changements de série, même temps total de changement) | La machine a de la capacité disponible, stocks élevés, délais longs, nombreuses variantes | EPEI, taille des lots, jours de stock, délai de livraison |
+| **Mixte** (une partie en capacité, une partie en lots plus petits) | La plupart des usines réelles | Les deux séries d'indicateurs, avec une répartition explicite convenue avec la planification |
+
+La raison la plus fréquente de la déception des projets SMED est que personne n'a pris cette décision. Le changement de série devient plus rapide, la planification conserve les anciennes tailles de lots, et le temps gagné disparaît dans des périodes d'inactivité plus longues. Nous revenons sur ce point dans la section consacrée aux erreurs.
+
+## Histoire : de Taylor et Ford à Shingo et Toyota
+
+La réduction des temps de changement de série est plus ancienne que son nom. Frederick Winslow Taylor a analysé les parties sans valeur ajoutée des changements de série dans *Shop Management* (1911), Frank Gilbreth a décrit la réduction du temps de changement dans *Motion Study* (1911), et les usines de Henry Ford ont documenté cette réduction dans *Ford Methods and Ford Shops* (1915) [5]. Aucun d'eux n'en a fait une méthode structurée et largement adoptée [5]. Pendant la majeure partie du XXe siècle, la réponse standard aux longs changements de série a été mathématique : la quantité économique de commande, qui accepte le coût de changement comme donné et calcule le lot « optimal », généralement important [5].
+
+### Toyota et le changement rapide d'outillage
+
+Chez Toyota, les changements d'outils duraient, selon les sources, deux à huit heures au début de l'après-guerre ; l'article Wikipedia signale ce chiffre comme nécessitant une citation [5]. Taiichi Ohno devient responsable des ateliers d'usinage de Toyota en 1945 et, en 1955, observe des presses d'estampage Danly aux États-Unis ; Toyota en achètera plusieurs pour son usine de Motomachi [5]. Le programme interne de Toyota, « quick die change », utilisait les questions ECRS (éliminer, combiner, réorganiser, simplifier), issues du programme américain Training Within Industry de la Seconde Guerre mondiale [5][33]. Selon cette même source, les temps de changement de Toyota sont passés de plusieurs heures à 15 minutes dans les années 1960, puis à 3 minutes dans les années 1970 [5].
+
+### Shigeo Shingo
+
+Shigeo Shingo (1909–1990) était ingénieur industriel et consultant à la Japan Management Association à partir de 1945 [6]. Il a accumulé son expérience d'amélioration chez Toyo Kogyo (aujourd'hui Mazda) en 1950, puis chez Mitsubishi Heavy Industries à Hiroshima en 1957 ; à partir de 1969, il travaille chez Toyota sur la réduction du temps de changement de matrice sur les presses, où des changements d'une à deux heures, parfois une demi-journée, sont ramenés à quelques minutes [6]. LEI situe ses idées clés, la séparation entre changement interne et externe et la conversion du travail interne en travail externe, dans les années 1950 et 1960 [1].
+
+Shingo a publié la méthode en anglais en 1985 sous le titre *A Revolution in Manufacturing: The SMED System* (Productivity Press) [6][7]. Le livre indique que, sur l'ensemble de ses cas entre 1975 et 1985, les temps de changement ont été réduits en moyenne à environ 2,5 % de l'original, soit un facteur de 40 [5]. Ce chiffre doit être considéré comme la synthèse de Shingo lui-même sur ses missions de conseil, et non comme une référence indépendante.
+
+En 1988, la business school de l'Utah State University a créé le prix Shingo en son honneur ; aujourd'hui, le Shingo Institute de la Jon M. Huntsman School of Business en assure la gestion [6][30].
+
+### SMED aux États-Unis
+
+Les fabricants américains ont découvert le SMED grâce à la traduction des livres de Shingo dans les années 1980, à la diffusion du juste-à-temps et au succès des constructeurs automobiles japonais. Aujourd'hui, c'est un module standard des formations au lean, notamment les offres de changement rapide des centres du NIST Manufacturing Extension Partnership (MEP) [18][31]. Le contexte plus large du lean est traité dans le guide [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/).
+
+## Comment mesurer correctement le temps de changement de série
+
+La plupart des données de changement de série dans les usines sont fausses, et ce n'est pas parce que les gens mentent. C'est parce que personne ne s'est mis d'accord sur le moment où un changement de série commence et celui où il se termine. Le système ERP enregistre souvent le « setup » comme le temps écoulé entre deux confirmations d'ordre ; les opérateurs notent souvent le temps pendant lequel « la machine était démontée » ; les ingénieurs ne chronométrent souvent que le changement de matrice. Ces trois mesures sont inférieures à la perte réelle.
+
+### La définition : du dernier bon produit au premier bon produit
+
+Utilisez la limite LEI : du dernier bon élément de l'ancienne série au premier bon élément de la nouvelle série [2]. Deux précisions la rendent rigoureuse :
+
+1. **À vitesse normale.** La nouvelle série n'est « en production » que lorsqu'elle fabrique de bons produits à la cadence standard. Leanproduction.com définit la fin comme le premier bon produit à pleine vitesse [19]. Si la ligne tourne à la moitié de sa vitesse pendant 20 minutes après le redémarrage, ces 20 minutes font partie de la perte de changement de série.
+2. **Y compris la phase de ralentissement.** Si l'ancienne série ralentit avant l'arrêt (par exemple, la ligne est vidée et tourne en partiel), comptez-le également. Certaines usines appellent cela les « 3 Ups » : nettoyage, mise en place et démarrage [24].
+
+### Les trois phases d'un changement de série
+
+| Phase | Ce qui se passe | Pertes cachées typiques |
+|---|---|---|
+| **Fin de série / nettoyage** | Derniers produits de l'ancien ordre, vidange de la ligne, retrait des matières, nettoyage | Ligne qui tourne à vitesse réduite ; opérateurs qui partent chercher le job suivant |
+| **Mise en place (échange)** | Dépose et montage des outillages, matrices, pièces de format ; changement des réglages | Recherche d'outils, attente du pont roulant ou du chariot élévateur, pièces ou boulons manquants |
+| **Redémarrage / montée en cadence** | Premiers produits, mesures, réglages, validation, montée à pleine vitesse | Réglages par essais et erreurs, attente de l'approbation qualité, rebuts |
+
+La répartition de Shingo pour une mise en place conventionnelle, telle que rapportée sur Wikipédia, attribue environ 30 % à la préparation et à la vérification des matières et des outils ; environ 5 % au montage et au démontage ; environ 15 % au centrage, au dimensionnement et au réglage des conditions ; et environ 50 % aux essais et aux réglages [5]. Un manuel d'ingénierie libre sur la production allégée donne une image similaire pour l'emboutissage des métaux, avec environ 20 à 50 % du temps de mise en place consacré aux réglages [36]. La leçon pratique : l'échange lui-même est la petite partie. Les grandes parts sont la préparation et la montée en cadence.
+
+### Formules de changement de série
+
+**Temps de changement de série (par événement) :**
+Temps de changement de série = instant du premier bon produit à vitesse standard − instant du dernier bon produit de la série précédente
+
+**Temps moyen de changement de série :**
+Temps moyen de changement de série = somme de tous les temps de changement de série / nombre de changements de série
+
+**Part du changement de série dans le temps disponible :**
+Part du changement de série = temps total de changement de série / temps de production planifié × 100 %
+
+**Ratio interne :**
+Ratio interne = temps de mise en place interne / charge totale de mise en place × 100 %
+
+**Coût d'un changement de série (modèle simple) :**
+Coût par changement de série = marge sur coût variable perdue (uniquement si la machine est un goulot ou si la production est vendue) + coût de main-d'œuvre de l'équipe de changement + rebuts de montée en cadence + consommables
+
+MachineMetrics, un éditeur de solutions de supervision des machines, utilise une répartition comparable : coût de main-d'œuvre perdu = heures d'arrêt × nombre de personnes × coût horaire de main-d'œuvre, et valeur de production perdue = prix unitaire × cadence standard × heures d'arrêt [21]. Attention au second terme : il ne représente une perte réelle que si la production perdue aurait pu être vendue. Sur une machine disposant d'une capacité excédentaire, le coût d'un changement de série correspond principalement à la main-d'œuvre et aux rebuts, et le bénéfice du SMED réside dans des lots plus petits, non dans une production récupérée.
+
+**Exemple chiffré (illustratif) :** Un centre d'usinage CNC fonctionne en deux postes de 8 heures, 5 jours par semaine, avec 60 minutes de pauses planifiées par jour : temps de production planifié = (16 − 1) × 60 × 5 = 4 500 minutes par semaine. La semaine dernière, il y a eu 9 changements de série d'une durée de 52, 68, 47, 95, 61, 58, 73, 49 et 87 minutes.
+
+- Total = 590 minutes ; moyenne = 590 / 9 = 65,6 minutes.
+- Part du changement de série = 590 / 4 500 = 13,1 %.
+- Dispersion : le plus court 47 minutes, le plus long 95 minutes, soit une amplitude de 48 minutes. Une amplitude aussi large signale généralement l'absence de standard ; les plus longs sont ceux où des outils ou des programmes manquaient.
+- Coût : une équipe d'1 régleur à un taux chargé de 48 $ de l'heure (illustratif) = 590 / 60 × 48 $ = 472 $ par semaine en main-d'œuvre. Si la machine est un goulot avec une marge sur coût variable de 180 $ de l'heure, la marge perdue est de 590 / 60 × 180 $ = 1 770 $ par semaine, soit environ 92 000 $ par an sur 52 semaines. C'est ce chiffre qui justifie un projet.
+
+### Comment collecter les données
+
+1. **Vidéo d'abord.** Filmez un changement de série complet, depuis la dernière bonne pièce jusqu'à la première bonne pièce, avec une horloge visible. Une caméra sur la machine et, idéalement, une seconde qui suit le régleur. Demandez d'abord l'autorisation à l'équipe et expliquez l'objectif : la vidéo porte sur le processus, pas sur les personnes. Le centre du Michigan du NIST MEP a utilisé une vidéo, un diagramme spaghetti et un graphique d'analyse de réglage dans le projet Brighton NC Machine [17].
+2. **Diagramme spaghetti.** Tracez le trajet à pied du régleur sur un plan d'implantation. Les changements de série comprennent souvent des centaines, voire des milliers de pieds de marche ; dans l'exemple de Brighton, il s'agissait de 9 121 pieds par changement de série avant amélioration [17].
+3. **Liste des éléments.** Découpez la vidéo en éléments de quelques secondes à quelques minutes : « marcher jusqu'à la armoire à outils, 3:20 », « desserrer 8 boulons de bridage, 4:10 ». Un changement de série typique se décompose en environ 30 à 50 éléments, selon leanproduction.com [19].
+4. **Deux semaines de référence.** Collectez les heures de début et de fin de tous les changements de série pendant au moins deux semaines avant de modifier quoi que ce soit, afin de connaître la moyenne et la dispersion [19]. Vorne met en garde : les équipes modifient leur comportement lorsqu'elles savent être observées (effet Hawthorne), si bien que le premier changement de série filmé peut être plus rapide que la normale [20].
+
+Le modèle de liste des éléments se trouve dans la [section des modèles](#modèles-et-listes-de-contrôle-smed).
+
+## La méthode SMED en 8 étapes
+
+Shingo a décrit quatre stades conceptuels, souvent appelés stades SMED : au stade préliminaire, réglage interne et externe sont mélangés ; le stade 1 les sépare ; le stade 2 transforme l'interne en externe ; le stade 3 rationalise tous les aspects du réglage [5]. Les sources de praticiens les développent en sept étapes de base : observer, séparer, convertir, rationaliser l'interne, rationaliser l'externe, documenter, répéter [5]. Les huit étapes ci-dessous ajoutent celle que la plupart des guides omettent : la préparation du projet, y compris la sécurité et la décision sur l'utilisation du temps gagné.
+
+| Étape | Stade de Shingo | Résultat |
+|---|---|---|
+| 0. Préparer : choisir la machine, l'équipe, l'objectif et l'utilisation du temps gagné | (préliminaire) | Charte, données de référence, revue de sécurité |
+| 1. Enregistrer le changement de série actuel | stade préliminaire | Vidéo, liste des éléments avec temps, diagramme spaghetti |
+| 2. Séparer les éléments internes et externes | stade 1 | Chaque élément marqué I ou E ; liste de contrôle et plan de préparation |
+| 3. Convertir l'interne en externe | stade 2 | Liste d'actions : préparation, standardisation des fonctions, gabarits intermédiaires |
+| 4. Rationaliser les éléments internes | stade 3 | Serre-joints rapides, réglages supprimés, travaux en parallèle |
+| 5. Rationaliser les éléments externes | stade 3 | Chariots, panneaux d'ombre, stockage près de la machine |
+| 6. Standardiser et former | (suivi) | Fiche standard de changement de série, registres de formation |
+| 7. Pérenniser et répéter | (suivi) | Indicateur KPI au tableau, audits, cycle suivant |
+
+### Étape 0 : Préparer le projet
+
+**Choisir la machine pilote.** De bons pilotes ont un changement de série d'environ 30 à 90 minutes qui se produit plusieurs fois par semaine, une équipe coopérative et une douleur métier visible (goulot d'étranglement, stock élevé, commandes en retard). Vorne suggère un changement de série pilote de 30 à 60 minutes [20] ; leanproduction.com recommande le SMED lorsque les changements de série représentent au moins 20 % du temps productif perdu, et le TPM d'abord dans le cas contraire [19]. Il s'agit de règles empiriques de fournisseurs, non de normes, mais elles vont dans le bon sens : ne commencez pas par un changement de série de 12 heures ni par un de 5 minutes.
+
+**Constituer l'équipe.** Opérateur(s) et régleur(s) qui effectuent le changement de série au quotidien, un technicien de maintenance, un ingénieur de fabrication, un technicien qualité pour l'approbation de la première pièce, et un représentant sécurité. Un superviseur parraine l'équipe. Quatre à sept personnes constituent une taille gérable.
+
+**Convenir de l'objectif et de l'utilisation du temps gagné.** Notez la référence (moyenne et plage), la cible (par exemple, une réduction de 50 % au premier cycle, comme le suggère Vorne [20]) et ce que la planification fera du temps gagné : capacité, lots plus petits ou fractionnement.
+
+**Revue de sécurité.** Listez les sources d'énergie (électrique, hydraulique, pneumatique, gravitaire, thermique) et la procédure actuelle de consignation des énergies. Décidez avant l'atelier quelles étapes relèvent du verrouillage/étiquetage (lockout/tagout). N'acceptez jamais d'idées « plus rapides » qui contournent l'isolation énergétique (voir la section sécurité).
+
+### Étape 1 : Enregistrer le changement de série actuel
+
+Filmez-le, établissez la liste des éléments, dessinez le diagramme de déplacement (spaghetti diagram). Notez les éléments dans l'ordre où ils se sont produits, avec l'heure de début, la durée et la personne qui les a réalisés. Repérez immédiatement les gaspillages évidents : recherche, déplacements, attente de la grue, essais.
+
+Questions à poser pour chaque élément (les questions de type « cinq pourquoi » classiques fonctionnent aussi) :
+
+- Pourquoi fait-on cela ? (Peut-on le supprimer ?)
+- Pourquoi maintenant, alors que la machine est arrêtée ? (Peut-on le réaliser en externe ?)
+- Pourquoi de cette façon ? (Peut-on faire plus simple ?)
+- Pourquoi par cette personne ? (Deux personnes peuvent-elles travailler en parallèle, ou l'opérateur peut-il le faire ?)
+
+### Étape 2 : Séparer les éléments internes et externes
+
+Marquez chaque élément I (nécessite une machine arrêtée) ou E (peut être réalisé pendant que la machine fonctionne). Ne modifiez pas encore la méthode ; arrêtez simplement de faire pendant l'arrêt les tâches externes. Cette étape relève surtout de l'organisation :
+
+- **Liste de contrôle avant changement de série :** tout ce dont le job suivant a besoin (matrice, outils, gabarits, inserts, matière, programme, plan, calibres, emballage) est listé et vérifié avant l'arrêt de la machine.
+- **Contrôles de fonctionnement :** la nouvelle matrice est contrôlée pour détecter tout dommage et vérifier son intégralité avant sa mise en place, et non après la première pièce défectueuse.
+- **Transport :** la nouvelle matrice est positionnée près de la machine avant l'arrêt ; l'ancienne matrice retourne au stockage après le redémarrage.
+
+Leanproduction.com indique que déplacer des éléments vers l'externe peut réduire presque de moitié le temps de changement de série [19]. Cela correspond à l'expérience des praticiens, mais dépend entièrement de la quantité de recherche et de déplacement qui a lieu aujourd'hui.
+
+### Étape 3 : Transformer l'interne en externe
+
+Examinez maintenant chaque élément I restant et demandez-vous ce qu'il faudrait modifier pour qu'il devienne externe. Les techniques de Shingo sont ici la préparation des conditions de fonctionnement à l'avance, la standardisation des fonctions et l'utilisation de gabarits intermédiaires [5] :
+
+- **Préchauffer** moules et matrices hors de la machine, afin que les premiers coups n'aient pas à les porter en température.
+- **Prérégler** les outils sur un préréglage ou sur un second gabarit pendant que la machine fonctionne.
+- **Standardiser** les dimensions qui comptent pour la machine (hauteur de serrage, positions de centrage, points de raccordement) afin qu'une nouvelle matrice ne nécessite aucun réglage.
+- **Gabarits intermédiaires** : montez la prochaine pièce ou matrice sur une palette ou une semelle standard hors de la machine, puis échangez la palette complète.
+
+### Étape 4 : Rationaliser les éléments internes
+
+Ce qui reste interne est rendu rapide et simple :
+
+- **Systèmes de serrage fonctionnels** au lieu de boulons : fixations à quart de tour, brides à came, fentes en U pour qu'un boulon ne nécessite qu'un demi-tour, serrage hydraulique ou magnétique.
+- **Supprimer les réglages :** butées fixes, goujons de centrage, échelles et repères, réglages mémorisés sous forme de recettes. Le réglage est la plus grande catégorie unique du temps de changement de série dans la répartition de Shingo [5].
+- **Opérations en parallèle :** deux personnes de part et d'autre de la machine, chacune avec une séquence définie, peuvent réduire le temps écoulé de plus de moitié en supprimant les déplacements autour de la machine. Elles ont besoin d'un système de signalisation clair et, sous consignation (lockout/tagout), chaque personne applique son propre cadenas.
+- **Un outil, une taille :** standardisez les tailles de boulons pour qu'un seul outil fonctionne partout.
+
+### Étape 5 : Rationaliser les éléments externes
+
+Le travail externe n'arrête pas la machine, mais il mobilise des personnes et peut retarder le début du changement de série. Rationalisez-le avec des chariots de changement organisés par séquence, des tableaux d'ombre (shadow boards), le stockage des matrices et outils au point d'utilisation selon la [5S](https://www.m365.fm/en/learn/5s-visual-management/), et des signaux visuels clairs (« prochain job prêt »).
+
+### Étape 6 : Standardiser et former
+
+Rédigez la nouvelle méthode sous forme de fiche standard de changement de série : la séquence des éléments, qui fait quoi, les points clés (sécurité, qualité), les temps et les outils nécessaires. LEI décrit le [travail standardisé](https://www.m365.fm/entity/standard-work/) comme l'établissement de procédures précises pour le travail de chaque opérateur [26]. Formez tous ceux qui réalisent le changement de série, et pas seulement l'équipe pilote ; la méthode TWI Job Instruction, qui découpe un travail en étapes importantes et points clés, est un format pratique [33]. Le dossier sur le [travail standard](https://www.m365.fm/en/learn/shop-floor-management/standard-work/) détaille ce format.
+
+### Étape 7 : Pérenniser et répéter
+
+Affichez le temps de changement de série sur le tableau d'atelier, analysez les écarts chaque jour et auditez régulièrement le standard. SMED est une boucle d'amélioration continue, et non un événement ponctuel. Lancez le cycle suivant : le résumé de la pratique SMED sur Wikipédia indique que plusieurs itérations peuvent être nécessaires pour descendre sous les dix minutes [5]. Un deuxième cycle s'attaque généralement aux éléments dépendant du matériel que le premier cycle a reportés.
+
+## Les huit techniques de Shingo, avec des exemples
+
+Shingo a résumé son approche en huit techniques [5]. Le tableau donne à chacune une explication simple et des exemples issus de différents secteurs.
+
+| n° | Technique | Ce que cela signifie | Exemples |
+|---|---|---|---|
+| 1 | Séparer le réglage interne du réglage externe | Ne pas arrêter la machine pour des opérations qui peuvent être réalisées pendant qu'elle tourne | Checklist, préparation de l'outillage et de la matière avant l'arrêt |
+| 2 | Convertir le réglage interne en réglage externe | Modifier la méthode pour que les opérations soient déplacées hors de l'arrêt | Préchauffage des moules, présréglage des outils, préassemblage des pièces de format |
+| 3 | Standardiser la fonction, pas la forme | Ne standardiser que les caractéristiques avec lesquelles la machine interagit, et non l'outil entier | Même hauteur de serrage et même chant sur chaque matrice grâce à des cales d'épaisseur ; même accouplement sur chaque moule |
+| 4 | Utiliser des brides fonctionnelles ou supprimer les fixations | Fixer d'un seul mouvement, ou ne pas fixer du tout | Vis à quart de tour, leviers à came, trous en forme de poire, serrages hydrauliques, plateaux magnétiques |
+| 5 | Utiliser des gabarits intermédiaires | Préparer sur un support standard hors de la machine, puis échanger le support | Palettes à serrage à point zéro sur centres d'usinage, plaques support pour matrices de presse |
+| 6 | Adopter des opérations parallèles | Plusieurs personnes travaillent en même temps selon une séquence définie | Deux régleurs de part et d'autre d'une presse ; l'opérateur prépare la matière pendant que le régleur change la matrice |
+| 7 | Supprimer les réglages | Remplacer les essais-erreurs par des positions fixes et des réglages mémorisés | Pions et butées de positionnement, échelles, téléchargement de recettes, afficheurs numériques |
+| 8 | Mécanisation | Utiliser une assistance motorisée là où elle apporte réellement un gain, après les sept autres techniques | Chariots à rouleaux pour matrices, élévateurs de matrices, axes de réglage motorisés |
+
+Deux remarques sur cette liste. Premièrement, la mécanisation arrive volontairement en dernier. Du matériel acheté avant les étapes organisationnelles automatise souvent du gaspillage. Deuxièmement, « standardiser la fonction, pas la forme » est la technique la moins exploitée. Une usine n'a pas besoin de reconstruire 200 matrices ; souvent, un jeu de cales d'épaisseur ou de plaques adaptatrices qui ramènent toutes les matrices à la même hauteur de serrage et au même chant de positionnement suffit.
+
+## Techniques de changement de série selon le type d'équipement
+
+Les principes sont les mêmes partout, mais les principaux leviers diffèrent selon le procédé. Les tableaux ci-dessous constituent une liste de contrôle issue de la pratique, et non un référentiel de benchmark étayé par des sources.
+
+### Presses d'emboutissage
+
+| Levier | Exemple |
+|---|---|
+| Hauteur de matrice standard et positionnement | Cales parallèles ou blocs d'écartement amenant toutes les matrices à la même hauteur de fermeture ; goupilles de positionnement ou butée arrière centrant la matrice |
+| Transport des matrices | Chariots porte-matrices ou bolsters roulants préparés au niveau de la presse ; rails à rouleaux ou à billes sur le bolster |
+| Serrage | Brides hydrauliques ou mécaniques à serrage rapide ; rainures en U et une seule taille de boulon si des boulons subsistent |
+| Réglages | Hauteur de fermeture, pression de contrebalancement et réglages d'avance enregistrés pour chaque matrice ; échelles graduées et repérées |
+| Sécurité | Cales de sécurité à chaque fois que la matrice est réglée ou réparée dans la presse, comme l'exige l'OSHA [10] ; procédure de réglage des matrices au titre de 29 CFR 1910.217(d)(9) |
+
+### Moulage par injection
+
+| Levier | Exemple |
+|---|---|
+| Préchauffage | Moule préchauffé sur une unité de régulation de température séparée avant le changement |
+| Raccordements | Raccords multiples pour l'eau et les connexions de canal chaud, codés par couleur |
+| Matière | Matière suivante séchée et prête ; composé de purge et procédure standardisés |
+| Serrage | Systèmes de changement rapide de moule (plateaux magnétiques ou hydrauliques), épaisseur de plaque de moule standardisée |
+| Réglages | Paramètres de procédé chargés depuis une recette au lieu d'être réglés de mémoire |
+
+### Usinage CNC
+
+| Levier | Exemple |
+|---|---|
+| Préréglage des outils | Outils mesurés hors machine sur un préréglieur, décalages transférés à la commande |
+| Bridage de la pièce | Serrage à point zéro, palettes standardisées, montages dédiés stockés près de la machine |
+| Programmes | Programmes validés publiés et chargés à l'avance ; aucune modification sur la machine |
+| Première pièce | Palpage en machine remplaçant la mesure manuelle pour le calage des décalages d'origine pièce |
+| Familles d'outils | Bibliothèque d'outils standard afin que la plupart des travaux nécessitent peu de changements d'outils |
+
+### Lignes de conditionnement et de remplissage
+
+| Levier | Exemple |
+|---|---|
+| Pièces de format | Pièces de format codées par couleur pour chaque taille de produit, stockées sur un chariot dans l'ordre du changement |
+| Réglages | Butées fixes et échelles numérotées au lieu de réglages libres ; axes servo avec positions mémorisées |
+| Nettoyage | Séquence de nettoyage standardisée ; nettoyage à sec en premier ; nettoyage en parallèle des pièces démontées |
+| Étiquettes et matières | Liste de contrôle de dégagement de ligne ; préparation des étiquettes, cartons et capsules avant l'arrêt |
+| Mise en route | Contrôles définis de la première pièce ; procédure de montée en vitesse progressive |
+
+### Changements dominés par le nettoyage et réglementés (alimentaire, pharmaceutique, chimique)
+
+Dans les usines agroalimentaires, des boissons, pharmaceutiques et chimiques, le « changement » proprement dit est souvent réduit, tandis que le nettoyage et la vérification sont importants. La démarche SMED reste applicable : préparer à l'avance les produits de nettoyage, les outils et les documents ; nettoyer les pièces amovibles hors ligne pendant que la machine est remontée avec un second jeu ; séquencer les produits pour minimiser les nettoyages complets (du plus clair au plus foncé, sans allergène avant les produits contenant des allergènes). La différence tient au fait que certaines étapes sont imposées et ne peuvent pas être raccourcies en étant omises :
+
+- Les fabricants de médicaments américains doivent inspecter les installations de conditionnement et d'étiquetage immédiatement avant utilisation afin de s'assurer que tous les produits pharmaceutiques et les matériaux de conditionnement et d'étiquetage inadaptés issus des opérations précédentes ont été retirés, et consigner les résultats dans les dossiers de production par lot (21 CFR 211.130(e)) [11].
+- Les installations alimentaires américaines relevant de la règle sur les contrôles préventifs doivent disposer de mesures de maîtrise des allergènes comprenant des procédures visant à protéger les aliments de la contamination croisée par les allergènes pendant le stockage, la manipulation et l'utilisation (21 CFR 117.135(c)(2)) [37].
+
+Ici, le SMED réduit le travail qui entoure les étapes imposées et rend ces étapes plus rapides et plus fiables, par exemple grâce à une liste de contrôle de dégagement de ligne et à une séquence fixe. Il ne les supprime jamais.
+
+### Lignes et cellules d'assemblage
+
+Les changements sur les lignes d'assemblage concernent surtout la matière et l'information : kits différents, instructions de travail différentes, montages différents sur quelques postes. Les leviers sont la mise en kit de la variante suivante avant le changement, des montages couvrant plusieurs variantes, des instructions de travail numériques qui basculent avec l'ordre de fabrication, et des changements « en cascade », où chaque poste bascule dès l'arrivée de la première unité de la nouvelle variante, de sorte que la ligne ne s'arrête jamais dans son ensemble.
+
+## Exemple SMED : un projet complet sur une presse à injecter
+
+L'exemple suivant est illustratif. Les chiffres sont réalistes pour un atelier de moulage de taille moyenne, mais ne décrivent pas une usine réelle. Ils montrent comment les étapes s'enchaînent et comment calculer l'effet.
+
+**Situation.** Une presse à injecter de 300 tonnes fait tourner 6 moules pour une famille de carters. Elle travaille en 3 équipes de 8 heures avec 30 minutes de pauses par équipe, 5 jours par semaine : temps de production planifié = 3 × 7,5 × 60 × 5 = 6 750 minutes par semaine. Elle change de moule 5 fois par semaine. Référence sur deux semaines : temps de changement moyen de 96 minutes, plage de 78 à 131 minutes. La machine n'est pas un goulot ; le problème est un stock de produits finis de 11 jours et des commandes urgentes fréquentes.
+
+**Objectif convenu avec la planification.** Réduire le temps de changement moyen d'au moins 50 pour cent dès le premier cycle et utiliser le temps gagné pour faire davantage de changements, afin que chaque moule tourne au moins tous les 3 jours au lieu de tous les 6.
+
+### Étape 1 : liste des éléments (avant)
+
+| # | Élément | Temps (min) | I/E aujourd'hui | Pourrait être |
+|---|---|---|---|---|
+| 1 | Derniers coups, vidage de la trémie, arrêt de la machine | 6 | I | I (en partie E : vider la trémie avant la fin de la série) |
+| 2 | Marche jusqu'au stockage des moules, recherche du moule suivant, prise au pont roulant | 14 | I | E |
+| 3 | Déconnexion des circuits d'eau et du canal chaud (12 raccords simples) | 8 | I | I, à simplifier |
+| 4 | Déserrage du moule (8 boulons), extraction | 9 | I | I, à simplifier |
+| 5 | Mise en place du nouveau moule, alignement à l'œil, serrage (8 boulons) | 13 | I | I, à simplifier |
+| 6 | Raccordement des circuits d'eau et du canal chaud, recherche du bon flexible pour chaque orifice | 10 | I | I, à simplifier |
+| 7 | Recherche de la matière, séchage | 7 | I | E |
+| 8 | Mise en température du moule | 12 | I | E (préchauffage) |
+| 9 | Réglage des paramètres d'après la fiche de réglage, ajustements | 9 | I | I, supprimer l'ajustement |
+| 10 | Coups d'essai, réglages, attente de l'approbation qualité | 8 | I | I, à simplifier |
+| **Total interne (temps écoulé)** | | **96** | | |
+
+Les deux candidats externes (éléments 2 et 7) et le préchauffage (élément 8) représentent ensemble 33 minutes d'arrêt machine qui ne nécessitent pas une machine à l'arrêt.
+
+### Étapes 2 et 3 : séparer et convertir
+
+- Les éléments 2 et 7 deviennent externes grâce à une liste de contrôle préalable au changement, déclenchée 45 minutes avant la fin prévue de la série : moule, emplacement du pont roulant, matière (séchée), flexibles, documents, gabarit de contrôle de la première pièce. Gain : 21 minutes.
+- L'élément 8 devient externe grâce à un poste de préchauffage où le moule suivant est mis en température pendant que l'ancien tourne. Gain : environ 10 minutes (2 minutes restent pour la stabilisation dans la machine).
+- Élément 1 : la trémie est vidée dans les dernières minutes de la série au lieu d'après l'arrêt. Gain : 3 minutes.
+
+Résultat après les deux premières étapes : 96 − 21 − 10 − 3 = **62 minutes**, obtenues principalement grâce à une liste de contrôle, un préchauffeur et de la rigueur.
+
+### Étape 4 : simplifier l'interne
+
+| # | Mesure | Avant (min) | Après (min) |
+|---|---|---|---|
+| 3 + 6 | Plaques multi-raccords pour l'eau et le canal chaud, codées par couleur | 18 | 4 |
+| 4 + 5 | Bague de centrage et rainures de serrage standardisées, brides à action rapide ; une deuxième personne pour les tâches en parallèle | 22 | 9 |
+| 9 | Paramètres de procédé enregistrés par moule et chargés depuis la commande | 9 | 2 |
+| 10 | Contrôle de la première pièce avec un gabarit dédié à la machine, technicien qualité prévenu à l'avance | 8 | 5 |
+| 1 | Fin de série avec la trémie déjà vide | 3 | 3 |
+| 8 | Stabilisation après préchauffage | 2 | 2 |
+| **Total** | | **62** | **25** |
+
+Le temps écoulé est désormais de 25 minutes. Notons que le travail en parallèle de deux personnes réduit le temps écoulé mais pas le temps de main-d'œuvre : le contenu en main-d'œuvre des éléments 4 et 5 reste d'environ 18 personne-minutes.
+
+### Étape 6 : standardiser
+
+La nouvelle séquence est rédigée sous forme de fiche standard de changement en deux colonnes (régleur A, régleur B), formée à toutes les équipes et auditée chaque semaine pendant un mois. Après quatre semaines, la moyenne est de 27 minutes avec une plage de 23 à 34 minutes.
+
+### L'effet
+
+| Indicateur | Avant | Après |
+|---|---|---|
+| Temps de changement moyen | 96 min | 27 min (−72 %) |
+| Plage des changements | 78–131 min | 23–34 min |
+| Changements par semaine | 5 | 10 |
+| Temps total de changement par semaine | 480 min | 270 min |
+| Part du changement dans le temps planifié | 7,1 % | 4,0 % |
+| Intervalle de passage de chaque moule (EPEI) | environ 6 jours | environ 3 jours |
+| Stock de produits finis (stock de cycle) | environ 11 jours | environ 6 jours (objectif) |
+
+La machine change maintenant de production deux fois plus souvent et passe pourtant 210 minutes de moins par semaine en changements de série. Le stock de cycle baisse à peu près proportionnellement à l'intervalle. L'investissement : un poste de préchauffage, six jeux de raccords multiples, la standardisation des serrages et deux jours de temps de l'équipe. La justification économique de ce type de projet est calculée dans la [section business case](#le-dossier-économique--coûts-roi-et-comptabilisation-des-stocks).
+
+## Des changements de série plus courts aux lots plus petits : EPEI et dimensionnement des lots
+
+Le SMED crée un potentiel ; l'ordonnancement le transforme en résultats. Deux outils relient le temps de changement de série à la taille des lots et aux stocks : l'EPEI et la formule classique de dimensionnement de lot.
+
+### Ce que signifie l'EPEI
+
+EPEI signifie « every part every interval » (le lexique de LEI utilise désormais le terme EPEx, « every product every interval »). Il décrit la fréquence à laquelle une machine ou un processus parcourt l'ensemble de ses références : si une machine est réglée de façon à produire chaque référence tous les trois jours, son EPEx est de trois jours [3]. LEI indique que l'EPEx dépend des temps de changement de série et du nombre de références ; des changements longs et de nombreuses références le font augmenter, sauf si le temps de changement est réduit [3]. Un EPEI plus court signifie des lots plus petits et moins de stock. Dans la [cartographie de la chaîne de valeur](https://www.m365.fm/en/learn/value-stream-mapping/), l'EPEI figure parmi les données standard d'un processus comportant des changements de série [35].
+
+### Comment calculer l'EPEI
+
+Une formule courante utilisée par les praticiens (issue du bilan de temps d'un processus ; ce n'est pas une formule de LEI) :
+
+EPEI = temps total de changement de série pour un cycle complet sur toutes les références / (temps disponible par jour − temps de marche nécessaire par jour)
+
+L'idée : chaque jour, la machine a besoin d'une durée de marche fixe pour satisfaire la demande. Le temps restant peut être consacré aux changements de série. Plus un cycle complet sur toutes les références nécessite de temps de changement, plus le cycle dure de jours.
+
+**Exemple chiffré (illustratif) :** Une machine dispose de 900 minutes de temps disponible par jour. Elle fabrique 4 références, avec la demande journalière et les temps de cycle suivants :
+
+| Référence | Demande journalière (pièces) | Temps de cycle (min/pièce) | Temps de marche par jour (min) | Temps de changement (min) |
+|---|---|---|---|---|
+| A | 400 | 0,8 | 320 | 40 |
+| B | 300 | 0,8 | 240 | 40 |
+| C | 150 | 1,0 | 150 | 60 |
+| D | 50 | 1,2 | 60 | 60 |
+| **Total** | | | **770** | **200** |
+
+- Temps restant pour les changements par jour : 900 − 770 = 130 minutes.
+- Un cycle complet sur les quatre références nécessite 200 minutes de temps de changement.
+- EPEI = 200 / 130 = 1,54 jour, arrondi en pratique à **2 jours** : chaque référence est fabriquée tous les 2 jours.
+- Tailles de lots avec un EPEI de 2 jours = 2 jours de demande : A 800, B 600, C 300, D 100 pièces.
+
+**Appliquons maintenant le SMED.** Les changements tombent à 15 minutes pour A et B et à 20 minutes pour C et D : total = 70 minutes.
+
+- EPEI = 70 / 130 = 0,54 jour, arrondi à **1 jour** : chaque référence tous les jours.
+- Les tailles de lots sont divisées par deux : A 400, B 300, C 150, D 50 pièces.
+- Le stock de cycle moyen (environ la moitié d'un lot, si la demande est stable) passe d'environ 1 jour de demande à environ une demi-journée.
+- Temps disponible : avec un EPEI de 1 jour, les changements nécessitent 70 des 130 minutes libres ; 60 minutes restent en tampon pour les pannes et les pics de demande.
+
+Deux remarques pratiques. Premièrement, ne jamais planifier sans temps disponible ; les machines tombent en panne, et un EPEI qui consomme chaque minute libre s'effondre au premier mauvais jour. Deuxièmement, l'EPEI peut différer pour les références à forte rotation et celles à faible rotation : A et B tous les jours, C et D un jour sur deux est souvent un meilleur compromis qu'un intervalle uniforme. C'est là que le SMED rencontre le [heijunka](https://www.m365.fm/entity/heijunka/), le lissage de la production par volume et par mix [25].
+
+### La formule de taille de lot et l'importance du coût de lancement
+
+La quantité économique de commande (EOQ), développée par Ford W. Harris en 1913 [39] et, pendant des décennies, l'approche standard du dimensionnement des lots [5], équilibre le coût de lancement et le coût de possession :
+
+EOQ = √(2 × D × S / H)
+
+où D = demande annuelle, S = coût par lancement (ou par commande), H = coût annuel de possession par unité. Pour une production à cadence finie, la quantité économique de production (EPQ) ajoute un facteur de correction √(1 / (1 − d/p)), où d est le taux de demande et p la cadence de production. Le détail de ces deux formules, y compris leurs hypothèses, est traité dans le chapitre consacré au [dimensionnement des lots](https://www.m365.fm/en/learn/production-scheduling-aps/lot-sizing/).
+
+Le point clé pour le SMED est la racine carrée. Si le coût de lancement S tombe au quart, la taille économique du lot est divisée par deux (√0,25 = 0,5). Si S tombe au neuvième, la taille du lot tombe au tiers.
+
+**Exemple détaillé (illustratif) :** D = 24 000 pièces par an, H = 2,40 $ par pièce et par an (par exemple, un coût de possession de 20 % sur une pièce à 12 $), S = 160 $ par changement (deux heures d'une équipe de deux personnes à 40 $ de l'heure chargée).
+
+- QEE = √(2 × 24 000 × 160 / 2,40) = √3 200 000 ≈ **1 789 pièces**, soit environ 13 lots par an (24 000 / 1 789 ≈ 13,4).
+- Après SMED, le changement dure 30 minutes avec la même équipe : S = 40 $.
+- QEE = √(2 × 24 000 × 40 / 2,40) = √800 000 ≈ **894 pièces**, soit environ 27 lots par an (24 000 / 894 ≈ 26,8).
+- Le stock moyen de cycle (QEE / 2) passe d'environ 894 à environ 447 pièces ; à 12 $ la pièce, cela libère environ 5 400 $ de stock pour cette seule référence.
+
+La formule a des limites bien connues : elle suppose une demande constante, des coûts connus et l'absence de contrainte de capacité, et le « coût par changement » est difficile à établir lorsque le régleur est payé de toute façon. Les praticiens du Lean l'utilisent donc comme argument de direction (« un coût de changement plus faible justifie des lots plus petits »), et non comme règle d'ordonnancement. Un système tiré avec un [kanban](https://www.m365.fm/en/learn/kanban-pull-system/) et un planning fondé sur l'EPEI le remplace généralement [34].
+
+### Vérification de capacité : peut-on se permettre plus de changements ?
+
+Avant de prévoir de réduire la taille des lots, vérifiez l'équilibre de capacité :
+
+Temps requis par semaine = Σ (demande × temps de cycle) + nombre de changements × temps moyen de changement
+
+Ce total doit rester nettement inférieur au temps disponible. À un goulot d'étranglement, un changement plus court est d'abord un gain de capacité ; décider de l'utiliser pour des lots plus petits est un choix délibéré, que le guide sur la [théorie des contraintes](https://www.m365.fm/en/learn/theory-of-constraints/) examine en détail. À un poste qui n'est pas un goulot, une capacité excédentaire existe par définition, et il est généralement plus judicieux d'utiliser le temps gagné pour des changements plus fréquents.
+
+## Sécurité : changements, consignation et ergonomie
+
+Aucune des douze pages largement consultées analysées pour ce guide ne traite de la consignation (lockout/tagout), alors que presque tous les éléments de réglage interne se déroulent dans la zone dangereuse d'une machine. Aux États-Unis, ce n'est pas facultatif.
+
+### Régler une machine relève de l'entretien au titre de la norme de consignation de l'OSHA
+
+La norme de l'OSHA relative à la maîtrise de l'énergie dangereuse, 29 CFR 1910.147, couvre la maintenance et l'entretien des machines et équipements dont la mise sous énergie, le démarrage ou la libération inattendus d'énergie stockée pourraient blesser des salariés [8]. Sa définition de « maintenance et/ou entretien » inclut explicitement la mise au point et le réglage, et la « mise au point » est définie comme tout travail effectué pour préparer une machine ou un équipement à réaliser son fonctionnement normal de production [8]. Un changement est donc, par défaut, une activité de maintenance au sens de la norme.
+
+La norme exige une procédure documentée de maîtrise de l'énergie, une formation et une séquence d'application fixe : préparation de l'arrêt, arrêt de la machine, isolement des sources d'énergie, pose des dispositifs de consignation ou de signalisation, purge de l'énergie stockée et vérification de l'isolement [8]. L'employeur doit inspecter chaque procédure de maîtrise de l'énergie au moins une fois par an [8].
+
+### L'exception pour les petites opérations de maintenance : étroite, pas une faille
+
+Une note du champ d'application exempte les petits changements d'outils et réglages ainsi que les autres opérations de maintenance mineures réalisées pendant le fonctionnement normal de production, à condition qu'elles soient routinières, répétitives et intégrées à l'utilisation de l'équipement pour la production, et seulement si le travail est effectué selon des mesures alternatives offrant une protection effective [8]. L'eTool de l'OSHA sur la consignation explique que ces activités relèvent alors des exigences de protection des machines du sous-chapitre O, et énumère des exemples de mesures alternatives : outils spécialement conçus, dispositifs à distance, protecteurs-barrières à verrouillage, sectionneurs et commandes locales placés sous le contrôle exclusif du salarié effectuant le travail [9]. Si une partie de l'exception n'est pas satisfaite, la consignation s'applique [9].
+
+Ce que cela signifie pour SMED :
+
+- Un changement complet de matrice ou de moule n'est généralement pas un changement d'outil « mineur » pendant la production normale ; planifiez-le avec un verrouillage/étiquetage (consignation). La question de savoir si une tâche précise entre dans l'exception est un jugement juridique et de sécurité qui relève de votre professionnel de la sécurité, et non de l'équipe SMED.
+- Le SMED doit rendre la consignation plus rapide et plus simple, jamais la supprimer. Exemples : points de consignation regroupés et étiquetés sur la machine, un poste de consignation dans le chariot de changement, des boîtes de consignation collective pour les travaux en parallèle où chaque personne applique son propre cadenas, des étapes de vérification écrites dans la fiche standard de changement.
+- Un standard de temps de changement qui ne peut être atteint qu'en sautant l'isolement énergétique est un mauvais standard. Inscrivez le temps de consignation dans l'objectif.
+
+### Presses mécaniques
+
+Pour les presses mécaniques, l'OSHA exige une procédure de réglage des matrices qui garantit la conformité aux règles de protection du point de travail, des barres de retournement à ressort lorsque la presse est conçue pour, des butées de matrice sur les presses inclinées, des blocs de sécurité chaque fois que des matrices sont réglées ou réparées dans la presse, et des outils tels que des brosses ou des pistolets à graisse afin que les opérateurs et les régleurs n'introduisent pas la main dans le point de travail pour lubrifier [10]. Ces éléments doivent figurer dans chaque standard de changement de presse.
+
+### Ergonomie
+
+Les changements impliquent une manutention lourde et contraignante : soulever des matrices, des pièces de format et des gabarits, travailler penché à l'intérieur des protections, atteindre des boulons. L'OSHA décrit l'ergonomie comme l'adaptation du travail à la personne afin de réduire les troubles musculo-squelettiques [32]. Le SMED et l'ergonomie vont généralement dans le même sens : chariots porte-matrices, rails à rouleaux, aides à la manutention, gabarits à hauteur de taille et moins de boulons font gagner du temps et ménagent le corps. Le risque réside dans les objectifs de temps : lorsqu'une équipe est poussée à battre la montre, la technique de levage et les levages à deux personnes sont ignorés. Les objectifs de temps doivent être fixés de manière à pouvoir être atteints à un rythme soutenable.
+
+### Liste de contrôle sécurité pour les projets SMED
+
+| Contrôle | Fait |
+|---|---|
+| Sources d'énergie de la machine répertoriées (électrique, hydraulique, pneumatique, gravitaire, thermique, chimique) | ☐ |
+| Procédure actuelle de maîtrise de l'énergie examinée ; étapes de changement sous verrouillage/étiquetage identifiées | ☐ |
+| Le professionnel de la sécurité a examiné toute affirmation selon laquelle une étape relève de l'exception de maintenance mineure | ☐ |
+| Étapes de consignation et de vérification inscrites dans la fiche standard de changement, avec le temps | ☐ |
+| Travaux en parallèle : chaque personne applique son propre cadenas ; signaux de communication définis | ☐ |
+| Presses : procédure de réglage des matrices, blocs de sécurité, barres de retournement, butées de matrice vérifiés [10] | ☐ |
+| Levages lourds identifiés ; aides à la manutention ou levages à deux personnes définis | ☐ |
+| Surfaces chaudes (moules préchauffés, matrices chauffées) identifiées ; gants et mode de manipulation définis | ☐ |
+| Nouveau matériel de serrage rapide vérifié pour la force de serrage et le comportement en cas de défaillance | ☐ |
+| Premier changement avec le nouveau standard observé par un superviseur | ☐ |
+
+## Qualité : approbation de la première pièce, détrompage et contrôle réglementé de la propreté de ligne
+
+La mise en train et les réglages représentent la plus grande part de nombreux changements de série [5]. Les problèmes de qualité qui suivent un changement de série ont généralement les mêmes causes : mauvais outil ou mauvais programme, réglages faits de mémoire, contrôles de la première pièce omis, ou une approbation de la première pièce qui attend un inspecteur occupé ailleurs.
+
+### Approbation de la première pièce sans attente
+
+- **Définir le contrôle** dans la fiche standard de changement de série : quelles caractéristiques, quel moyen de mesure, quelle taille d'échantillon.
+- **Apporter le moyen de mesure à la machine** et former l'opérateur à mesurer, un technicien qualité n'approuvant que là où le plan de contrôle l'exige.
+- **Prévenir la qualité à l'avance** avec la liste de contrôle pré-changement, afin que l'inspecteur soit présent au moment où la première pièce sort.
+- **Enregistrer le résultat de la première pièce** avec l'ordre de fabrication, afin qu'il soit traçable.
+
+### Détrompage du changement de série
+
+Les dispositifs [poka-yoke](https://www.m365.fm/en/learn/lean-manufacturing/poka-yoke/) empêchent ou détectent les erreurs [28]. Dans les changements de série, les exemples typiques sont :
+
+| Erreur | Poka-yoke |
+|---|---|
+| Mauvaise matrice ou mauvais moule pour l'ordre | Matrice codée (RFID, code-barres ou clé mécanique) que la commande de la machine vérifie par rapport à l'ordre |
+| Mauvais programme ou mauvaise recette | Recette appelée automatiquement à partir du numéro d'ordre |
+| Flexibles raccordés aux mauvais orifices | Plaques ou raccords multiples qui ne s'emboîtent que dans un sens, codés par couleur |
+| Pièce de format montée à la mauvaise position | Pions de centrage asymétriques |
+| Anciennes étiquettes ou matières restées sur la ligne | Liste de contrôle de propreté de ligne avec visa ; contenants dédiés pour les matières retirées |
+
+### Secteurs réglementés
+
+Dans les usines réglementées, le changement de série fait partie du système qualité. Dans le conditionnement pharmaceutique aux États-Unis, l'inspection de propreté de ligne avant utilisation et son enregistrement dans le dossier de lot sont exigés par 21 CFR 211.130(e) [11]. Dans l'alimentaire, les changements liés aux allergènes font partie des contrôles des allergènes alimentaires exigés par 21 CFR 117.135(c)(2) [37]. Dans les chaînes d'approvisionnement automobile (IATF 16949) et aérospatiale (AS9100), les plans de contrôle et les exigences propres aux clients peuvent imposer une vérification de réglage ou de la première pièce après les réglages ; vérifiez vos contrats et vos plans de contrôle plutôt que de supposer une règle générique. Le guide sur la [planification de production aérospatiale](https://www.m365.fm/en/learn/aerospace-production-planning/) traite du contexte aérospatial. Les projets SMED dans ces environnements doivent associer le responsable qualité dès le premier jour et valider toute modification des étapes de nettoyage ou de vérification avant de l'appliquer.
+
+### Vision statistique
+
+Un changement de série est aussi une source de variabilité. Si les pièces produites au début de chaque série diffèrent systématiquement, une carte de contrôle découpée en « 30 premières minutes après le changement » et « reste de la série » permet de le rendre visible. Cakmakci a utilisé la capabilité de processus (Cpk) dans une étude SMED automobile pour évaluer le lien entre la réduction des temps de réglage et la conception des équipements [16]. Le guide [Six Sigma et analyse des causes racines](https://www.m365.fm/en/learn/six-sigma-root-cause-analysis/) traite de l'analyse de capabilité et des cartes de contrôle.
+
+## Personnes et rôles : qui fait quoi lors d'un changement de série
+
+Le SMED est souvent présenté comme une méthode technique. En pratique, il modifie davantage le travail des opérateurs et des régleurs que tout autre outil Lean, si bien qu'il réussit ou échoue avec eux.
+
+### Rôles
+
+| Rôle | Dans le projet SMED | Lors du changement de série quotidien |
+|---|---|---|
+| Opérateur | Membre de l'équipe ; connaît les détails, filme et est filmé | Réalise la préparation externe, une partie du travail interne et la mesure de la première pièce |
+| Régleur / régleur de moules | Membre central de l'équipe ; responsable de la méthode | Réalise l'échange interne et pilote les travaux en parallèle |
+| Technicien de maintenance | Conçoit et entretient les outillages à changement rapide, les raccords et les brides | Apporte son appui pour les changements complexes ; maintient les matrices et moules en bon état |
+| Ingénieur méthodes | Anime le projet, analyse les vidéos, conçoit les solutions techniques | Est responsable du standard ; l'améliore |
+| Technicien qualité | Définit les contrôles de première pièce et le détrompage | Valide les premières pièces lorsque cela est requis |
+| Superviseur | Parraine le projet ; libère du temps pour l'équipe | Planifie les changements de série avec le planning ; contrôle le respect du standard |
+| Planificateur de production | Convient de l'usage du temps gagné ; modifie les tailles de lots | Séquence les ordres de fabrication pour minimiser l'effort de changement de série |
+| Représentant sécurité | Examine la consignation de l'énergie et l'ergonomie | Audite la consignation lors des changements de série |
+
+### Ce qui change pour les opérateurs et les régleurs
+
+Le SMED déplace généralement une partie du travail : les opérateurs prennent en charge la préparation externe et une partie du réglage interne, et les régleurs passent moins de temps à chercher et davantage sur les étapes techniques. Il s'agit d'une modification du contenu du poste. Dans les usines syndiquées, les descriptions de poste, les classifications et les niveaux de rémunération sont souvent définis par la convention collective ; il faut donc convenir de la nouvelle répartition avec les représentants syndicaux avant la mise en service du nouveau standard. Dans les usines non syndiquées, la même question se pose de manière informelle : qui est formé, qui est responsable si une première pièce est non conforme, et si les nouvelles tâches sont reconnues.
+
+### Respect des personnes
+
+Trois règles issues de la pratique font la différence entre un projet SMED que l'atelier soutient et un projet auquel il résiste :
+
+1. **Filmez le processus, pas la personne.** Expliquez l'objectif avant de filmer. Laissez le régleur commenter la vidéo en premier ; il ou elle sait généralement exactement où se trouvent les gaspillages. Dans les usines syndiquées, informez les représentants syndicaux dès le départ et convenez des modalités de stockage et d'utilisation des vidéos.
+2. **Ne transformez pas le temps gagné en suppressions de postes.** Si le SMED conduit à des licenciements, le prochain projet d'amélioration ne recevra aucune idée de la part de l'atelier. Utilisez ce temps pour la capacité, des lots plus petits ou la formation.
+3. **Fixez des objectifs atteignables en toute sécurité.** Un standard de changement de série décrit une bonne méthode à un rythme normal. Les analogies avec les arrêts au stand aident à expliquer le travail en parallèle et la préparation, mais une équipe de pit-stop s'entraîne pour un seul arrêt dans des conditions de course ; un régleur réalise le même changement à la fin d'un long poste, plusieurs fois par an.
+
+Vorne recommande de commencer par les améliorations « humaines », c'est-à-dire la préparation et l'organisation, avant les changements techniques [20] ; leanproduction.com formule la même recommandation [19]. Cet ordre renforce aussi la confiance : l'équipe constate des résultats rapides grâce à ses propres idées avant que de l'argent ne soit dépensé.
+
+## Modèles et listes de contrôle SMED
+
+Les modèles ci-dessous peuvent être copiés dans un tableur ou imprimés sur des feuilles A3 ou 11 × 17 pouces. Ce sont des formats de travail issus de la pratique, pas une norme.
+
+### Modèle 1 : feuille d'observation du changement de série (liste des éléments)
+
+| # | Élément (verbe + objet) | Début (mm:ss) | Durée (min) | Personne | I/E actuel | Type de gaspillage (recherche, déplacement, attente, réglage, autre) | Idée | Pourrait être E/I |
+|---|---|---|---|---|---|---|---|---|
+| 1 | Arrêter la machine, dernière bonne pièce | 00:00 | | | I | | | |
+| 2 | | | | | | | | |
+| … | | | | | | | | |
+| | **Total interne** | | | | | | | |
+| | **Total externe** | | | | | | | |
+
+Conseils : une ligne par élément, verbes en début de ligne (« desserrer », « marcher », « chercher »), temps relevés sur la vidéo. Ajoutez une colonne « distance parcourue » si les déplacements sont importants.
+
+### Modèle 2 : fiche de conversion interne vers externe
+
+| Élément interne | Pourquoi la machine doit-elle être arrêtée ? | Que faudrait-il changer pour que cet élément devienne externe ? | Technique (préparer, standardiser la fonction, gabarit intermédiaire) | Coût (faible / moyen / élevé) | Responsable | Échéance |
+|---|---|---|---|---|---|---|
+| Chauffer le moule | Le moule ne chauffe que dans la machine | Poste de préchauffage séparé | Préparer les conditions de fonctionnement | Moyen | | |
+| Aligner la matrice à l'œil | Aucune référence | Goupille de centrage et butée arrière | Standardiser la fonction | Faible | | |
+| | | | | | | |
+
+### Modèle 3 : liste de contrôle avant changement (préparation externe)
+
+| Élément pour la prochaine série | Emplacement | Vérifié par | Temps | OK |
+|---|---|---|---|---|
+| Matrice / moule / n° de jeu de format … (contrôlé, complet, propre) | Préparé à la machine, position … | | | ☐ |
+| Outils (liste), brides, boulons de rechange | Chariot de changement | | | ☐ |
+| Matière / composants (quantité, lot, séchés si nécessaire) | | | | ☐ |
+| Programme / recette validé et chargé | Automate | | | ☐ |
+| Plan, plan de surveillance, calibre de première pièce | Chariot | | | ☐ |
+| Emballages et étiquettes pour la prochaine série | | | | ☐ |
+| Pont roulant / chariot élévateur / deuxième personne réservé pour l'heure … | | | | ☐ |
+| Technicien qualité prévenu (si approbation requise) | | | | ☐ |
+| Dispositifs de consignation et procédure de consignation à portée de main | Poste de consignation | | | ☐ |
+
+Déclencheur : un moment fixe avant la fin de la série en cours (par exemple, au début des 45 dernières minutes), affiché sur la machine ou dans le planning.
+
+### Modèle 4 : fiche de changement standard (version à deux opérateurs)
+
+| Étape | Régleur A | Temps (min) | Régleur B | Temps (min) | Point clé (sécurité / qualité) |
+|---|---|---|---|---|---|
+| 1 | Arrêter la machine, appliquer le cadenas | 0–2 | Appliquer son propre cadenas | 0–2 | Vérifier l'absence d'énergie avant d'intervenir |
+| 2 | Déconnecter les raccords (côté opérateur) | 2–4 | Déconnecter les raccords (côté arrière) | 2–4 | Surfaces chaudes : gants |
+| 3 | Desserrer, sortir l'ancien moule | 4–8 | Guider le pont roulant, poser sur le chariot | 4–8 | Signal de levage à deux personnes |
+| … | | | | | |
+| n | Contrôle de la première pièce, validation | | Ramener l'ancien moule au stockage | | Consigner le résultat de la première pièce |
+| | **Temps écoulé cible** | | | | |
+
+### Modèle 5 : audit du changement de série (hebdomadaire pendant le premier mois, mensuel ensuite)
+
+| Question | Oui / Non | Commentaire |
+|---|---|---|
+| La liste de contrôle avant changement a-t-elle été complétée avant l'arrêt ? | | |
+| La séquence standard a-t-elle été suivie ? | | |
+| La consignation et la vérification ont-elles été faites comme prévu ? | | |
+| Tous les outils et pièces étaient-ils au poste d'utilisation (aucune recherche) ? | | |
+| Le contrôle de la première pièce a-t-il été réalisé comme défini ? | | |
+| Le temps de changement a-t-il été relevé (dernière bonne pièce à première bonne pièce) ? | | |
+| Écart par rapport à la cible, cause consignée ? | | |
+| L'idée d'amélioration de l'équipe a-t-elle été recueillie ? | | |
+
+### Modèle 6 : charte de projet SMED (une page)
+
+| Champ | Contenu |
+|---|---|
+| Machine / ligne | |
+| Problème (avec données) | ex. temps de changement moyen 96 min, plage 78–131 min, 11 jours de stock |
+| Objectif | ex. −50 % dès le premier cycle, chaque moule toutes les 3 jours |
+| Utilisation du temps gagné (convenue avec la planification) | capacité / lots plus petits / découpage |
+| Équipe | noms et rôles |
+| Revue sécurité réalisée par | |
+| Planning | dates de référence, atelier, mise en œuvre, standardisation |
+| Plafond budgétaire pour l'équipement | |
+| Sponsor | |
+
+## Feuille de route de déploiement : du pilote à un système de changement de série à l'échelle de l'usine
+
+Le calendrier ci-dessous est une estimation de praticiens pour une usine de fabrication discrète de taille moyenne ; les délais dépendent des équipements, des délais d'approvisionnement en matériel et du temps dont dispose l'équipe [unverified: estimation de praticiens, non validée par des données de référence].
+
+| Phase | Délai | Activités | Résultat |
+|---|---|---|---|
+| 1. Préparer | Semaines 1 à 3 | Choisir la machine pilote, collecter les données de référence pendant au moins deux semaines [19], charte, revue de sécurité, accord sur l'utilisation du temps gagné | Charte signée, référence de base connue |
+| 2. Atelier pilote | Semaine 4 (3 à 5 jours) | Filmer et analyser le changement de série, séparer et convertir, gains rapides sur le terrain, premier essai de la nouvelle séquence | Premier standard, liste d'actions |
+| 3. Mise en œuvre | Semaines 5 à 10 | Matériel (raccords, brides, chariots), préchauffage ou préréglage, deuxième essai, formation de toutes les équipes | Nouveau standard formé |
+| 4. Stabiliser | Semaines 11 à 16 | Indicateurs quotidiens au tableau, audits hebdomadaires, ajustement des tailles de lots et du planning | Temps stable, lots réduits |
+| 5. Déployer | Mois 5 à 12 | 3 à 5 machines suivantes, formation de coachs SMED internes, standard de changement de série intégré aux spécifications des nouveaux équipements | Système de changement de série sur toute la zone |
+
+### Choisir les machines suivantes
+
+Classer les candidates selon l'impact et l'effort :
+
+| Critère | Poids | Question |
+|---|---|---|
+| Goulot d'étranglement | Élevé | La machine est-elle la contrainte de la chaîne de valeur ? |
+| Fréquence × durée des changements de série | Élevé | Combien d'heures par semaine sont perdues en changements de série ? |
+| Douleur en stock / délai de livraison | Moyen | Cette machine génère-t-elle de grands lots et des stocks élevés en aval ? |
+| Variation de la durée de changement de série | Moyen | La plage est-elle large (signe d'un manque de standards) ? |
+| Préparation de l'équipe | Moyen | L'équipe est-elle motivée, un superviseur parraine-t-il le projet ? |
+| Effort matériel | Faible (négatif) | Un investissement important est-il nécessaire avant d'obtenir des résultats ? |
+
+### Faire du changement de série une exigence de conception
+
+Le projet SMED le moins coûteux est celui dont on n'a pas besoin. Inscrire les exigences de changement de série dans les spécifications des nouveaux équipements, outillages et moules : durée maximale de changement, hauteurs de serrage et raccords standardisés, réglages mémorisés, aucun réglage manuel. Braglia et ses collègues proposent une méthode structurée, la conception de changement rapide (QCD, quick changeover design), pour aider les constructeurs de machines à concevoir dès le départ pour des changements rapides [15]. Les achats et l'ingénierie doivent en être responsables, et pas seulement l'équipe Lean.
+
+## Indicateurs de changement de série : comment mesurer les progrès
+
+| Indicateur | Formule / définition | Pourquoi il compte | Revue typique |
+|---|---|---|---|
+| Durée moyenne de changement de série | Σ durées de changement / nombre de changements (dernière bonne pièce à première bonne pièce) | Résultat principal | Quotidienne par machine, tendance hebdomadaire |
+| Étendue ou écart-type des durées de changement | Max − min, ou écart-type sur les 20 derniers changements | Montre si un standard existe et est respecté | Hebdomadaire |
+| Changements conformes au standard | Changements ≤ durée cible / ensemble des changements × 100 % | Respect du standard | Quotidienne sur le tableau d'affichage |
+| Temps de réglage interne | Somme des opérations internes | Avancement de la séparation et de la conversion | Par cycle SMED |
+| Temps de montée en régime et rebuts | Temps et rebuts depuis le redémarrage jusqu'à la vitesse et la qualité standard | Souvent la plus grande perte cachée | Par changement de série |
+| Première pièce bonne du premier coup | Premières pièces approuvées au premier contrôle / ensemble des premières pièces × 100 % | Qualité du changement de série | Hebdomadaire |
+| Nombre de changements de série par semaine | Comptage | Montre si les gains servent à des lots plus petits | Hebdomadaire avec la planification |
+| Part du changement de série dans le temps planifié | Σ durée de changement / temps de production planifié × 100 % | Vision de la capacité | Hebdomadaire |
+| EPEI | Intervalle dans lequel toutes les pièces sont produites une fois | Flexibilité | Mensuelle |
+| Taille moyenne des lots et jours de stock | Pièces par lot ; stock / demande quotidienne moyenne | Résultat économique | Mensuelle |
+| Disponibilité TRS | Telle que définie dans votre schéma TRS | Effet au niveau machine, si le temps sert à produire | Hebdomadaire |
+
+Gardez le tableau d'affichage simple : un graphique par machine avec les durées quotidiennes de changement par rapport à la cible, et une ligne pour la raison lorsqu'un changement a dépassé la cible. Les règles générales des tableaux d'indicateurs sont présentées dans le guide [shop floor management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+**Un mot sur les cibles :** « moins de dix minutes » est l'objectif de Shingo, non une référence universelle. Une bonne durée de changement est celle qui est stable, sûre et suffisamment courte pour soutenir l'EPEI dont vos clients ont besoin. Pour une grande ligne de presses, 20 minutes peuvent être excellentes ; pour un petit tour CNC, 20 minutes peuvent être lentes.
+
+## Le dossier économique : coûts, ROI et comptabilisation des stocks
+
+Les équipes financières posent trois questions sur le SMED : combien cela coûte, ce que cela rapporte, et quand cela apparaît dans les chiffres. Les réponses dépendent fortement du fait que la machine soit un goulot d'étranglement ou non.
+
+### Coûts
+
+| Poste de coût | Nature typique | Comptabilisation |
+|---|---|---|
+| Temps de l'équipe pour l'atelier et le suivi | Heures des opérateurs, régleurs, ingénieurs | Charge d'exploitation |
+| Matériel peu coûteux (chariots, panneaux à ombres, cales, codes couleur) | Faible | Généralement charge d'exploitation, selon votre seuil d'immobilisation |
+| Matériel de changement rapide (raccords, systèmes de serrage, préchauffeurs, préréglage) | Moyen à élevé | Souvent immobilisation si au-dessus de votre seuil |
+| Formation | Heures | Charge d'exploitation |
+| Perte de production pendant les essais | Généralement faible si les essais ont lieu pendant les changements planifiés | Charge d'exploitation |
+
+### Retours
+
+1. **Capacité au goulot d'étranglement :** heures de changement économisées × marge sur coût variable par heure, si la production supplémentaire peut être vendue. Dans l'exemple CNC ci-dessus, les 590 minutes de changement par semaine coûtent environ 92 000 $ par an en marge perdue ; les réduire de moitié récupérerait environ 46 000 $ par an, mais seulement si la production supplémentaire trouve preneur.
+2. **Réduction des stocks :** une libération de trésorerie ponctuelle (bilan) plus des économies récurrentes sur le coût de possession (compte de résultat).
+3. **Moins d'expéditions urgentes et de changements en urgence :** heures supplémentaires, fret express et perturbation du travail planifié.
+4. **Rebuts et reprises :** montées en régime plus courtes et plus stables.
+5. **Main-d'œuvre :** parfois inférieure, souvent similaire ; le travail en parallèle raccourcit le temps écoulé sans toujours réduire le contenu en main-d'œuvre.
+
+### Exemple de calcul du retour sur investissement (illustratif, suite de l'exemple de moulage)
+
+| Élément | Montant |
+|---|---|
+| Investissement : poste de préchauffage | 12 000 $ |
+| Investissement : 6 jeux de raccords multiples à 1 500 $ | 9 000 $ |
+| Investissement : normalisation des brides et des dispositifs de positionnement | 6 000 $ |
+| Temps d'équipe : 6 personnes × 16 heures × 45 $ chargés | 4 320 $ |
+| **Coût unique total** | **31 320 $** |
+| Stock de produits finis réduit de 5 jours à 6 000 $ par jour de coût des produits vendus | 30 000 $ de trésorerie libérée, unique |
+| Coût de possession économisé à 20 % par an sur 30 000 $ | 6 000 $ par an |
+| Moins de transports urgents et d'heures supplémentaires (estimation d'après les registres de l'an dernier) | 8 000 $ par an |
+| Rebut de démarrage : 15 pièces rebutées de moins par changement × 10 changements × 50 semaines × 0,90 $ | 6 750 $ par an |
+| **Bénéfice récurrent** | **20 750 $ par an** |
+| **Délai de récupération simple sur les bénéfices récurrents** | 31 320 / 20 750 ≈ 1,5 an |
+
+La trésorerie libérée par le stock (30 000 $) couvre presque l'investissement dès la première année, mais il s'agit d'un effet sur le bilan, et non d'un bénéfice. Dissociez ces deux éléments dans le dossier d'affaires et ne comptez pas deux fois la même économie.
+
+### L'effet du coût complet (absorption costing)
+
+Selon la méthode du coût complet [38], que les US GAAP imposent en substance pour la présentation externe des stocks (les ASC 330-10-30-1 et 30-3 incluent une affectation des frais généraux de production fixes sur la base de la capacité normale, et le ASC 330-10-30-8 précise que l'exclusion de tous les frais généraux du coût des stocks n'est pas une méthode comptable admise [40] ; demandez à votre contrôleur financier comment votre entreprise l'applique), une partie des frais généraux de fabrication fixes est incorporée dans la valeur des stocks. Lorsque le stock diminue, les frais généraux qui avaient été incorporés dans le stock réduit sont imputés au coût des produits vendus sur la période. Le bénéfice comptable peut donc baisser temporairement pendant la réduction des stocks, alors même que la trésorerie s'améliore.
+
+**Exemple illustratif :** si 30 % des 30 000 $ de stock correspondent à des frais généraux fixes, la réduction du stock impute environ 9 000 $ de frais généraux au coût des produits vendus de la période. Les contrôleurs de site doivent expliquer cet effet à la direction avant le lancement du programme SMED, afin qu'un succès du lean ne soit pas perçu comme un dépassement de coûts. Le guide [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/) explique comment présenter ces effets sur un tableau de bord de site.
+
+## SMED et autres outils du lean
+
+Le SMED fonctionne rarement seul. Il repose sur certains outils et en rend d'autres possibles.
+
+| Outil | Relation avec le SMED |
+|---|---|
+| [5S](https://www.m365.fm/en/learn/5s-visual-management/) | Prérequis : des outils et matrices à emplacements définis suppriment la recherche, le plus grand gaspillage externe [27] |
+| [Travail standard](https://www.m365.fm/en/learn/shop-floor-management/standard-work/) | Conserve les gains : le nouveau changement de série devient le standard [26] |
+| [TPM](https://www.m365.fm/en/learn/tpm-oee/) | Maintient en état les matrices, moules et équipements de changement rapide ; leanproduction.com recommande d'appliquer d'abord la TPM lorsque les pannes, et non les changements de série, dominent le temps perdu [19][29] |
+| [Poka-yoke](https://www.m365.fm/en/learn/lean-manufacturing/poka-yoke/) | Empêche les mauvais outils, programmes ou connexions [28] |
+| [Kanban et flux tiré](https://www.m365.fm/en/learn/kanban-pull-system/) | Utilise des lots plus petits ; les quantités kanban diminuent à mesure que les changements de série se raccourcissent [34] |
+| [Heijunka](https://www.m365.fm/entity/heijunka/) | Le lissage par mix exige des changements de série fréquents et courts [25] |
+| [Cartographie de la chaîne de valeur](https://www.m365.fm/en/learn/value-stream-mapping/) | Montre quels changements de série font croître les stocks et les délais ; le temps de changement et l'EPEI sont des données inscrites dans la boîte de données [35] |
+| [Kaizen](https://www.m365.fm/en/learn/lean-manufacturing/kaizen/) | L'atelier SMED est un format classique d'événement kaizen |
+| [Théorie des contraintes](https://www.m365.fm/en/learn/theory-of-constraints/) | Oriente d'abord l'effort SMED vers la contrainte, où le temps gagné devient production du système |
+| [Ordonnancement de production et APS](https://www.m365.fm/en/learn/production-scheduling-aps/) | Séquence les ordres pour minimiser l'effort de changement de série et transforme des changements plus courts en lots plus petits |
+
+## Exemples documentés de SMED
+
+De nombreuses pages web citent des réductions « typiques » de 50 à 90 % sans source. Les exemples ci-dessous sont documentés, avec leurs limites.
+
+### Changements de série des presses chez Toyota
+
+Wikipédia, s'appuyant sur les livres de Shingo, rapporte que les changements de série de Toyota sont passés de plusieurs heures à 15 minutes dans les années 1960, puis à 3 minutes dans les années 1970 [5] ; le récit de Shingo lui-même décrit des changements de matrices d'une à deux heures, parfois une demi-journée, ramenés à quelques minutes après son entrée chez Toyota en 1969 [6]. Un manuel d'ingénierie en libre accès rapporte qu'un changement sur une presse de 1 000 tonnes chez Toyota est passé de quatre heures à trois minutes [36]. Ces chiffres proviennent de sources de Shingo et de Toyota et n'ont pas fait l'objet d'un audit indépendant, mais ils sont cohérents d'une source à l'autre.
+
+### Brighton NC Machine Corporation (Michigan, NIST MEP)
+
+Brighton NC Machine, un fabricant du Michigan employant plus de 100 personnes, a travaillé avec le Michigan Manufacturing Technology Center, membre du réseau national NIST MEP [17]. Avant le projet, les changements de série ne pouvaient être effectués que pendant l'équipe du matin, duraient 8 heures et 20 minutes et exigeaient 9 121 pieds de déplacements des employés [17]. Un événement kaizen, comprenant une vidéo, un diagramme en spaghetti et une analyse des réglages, a conduit à une réduction de 70 % du temps de changement et à 98 % de déplacements en moins ; l'entreprise a annoncé 460 000 $ de nouvelles ventes et 125 000 $ d'économies de coûts [17]. Les résultats sont ceux rapportés par l'entreprise et le MEP ; les études de cas du MEP reposent sur les déclarations des clients.
+
+### Cas de conseil de Shingo
+
+Shingo a rapporté que, sur l'ensemble de ses cas de réduction des réglages entre 1975 et 1985, les temps de réglage sont tombés en moyenne à environ 2,5 % de leur valeur initiale [5]. Il s'agit d'une moyenne de cas choisis par l'inventeur de la méthode, donc d'un repère haut plutôt que d'une attente.
+
+### Revue de la recherche
+
+Une revue de l'état de l'art de da Silva et Godinho Filho, publiée dans l'*International Journal of Advanced Manufacturing Technology* (2019), a classé 130 articles sur le SMED par domaine, méthode, outils, mise en œuvre et résultats [14]. La littérature montre le SMED appliqué dans l'automobile, la métallurgie, l'emballage, l'imprimerie, l'agroalimentaire et la pharmacie. Un cas de l'industrie de l'imprimerie cité dans un manuel en libre accès fait état d'une réduction de 46 % du temps de réglage interne [36]. Les cas publiés tendent à rapporter des succès ; les projets échoués ou abandonnés sont rarement décrits, il convient donc de traiter avec prudence les moyennes issues de la littérature de cas.
+
+## Erreurs courantes du SMED
+
+| Erreur | Pourquoi c'est néfaste | Meilleure pratique |
+|---|---|---|
+| Aucune décision sur l'utilisation du temps gagné | Les gains se perdent dans les temps morts ; les lots restent les mêmes | Convenir avec la planification, avant le projet, de l'usage : capacité, lots plus petits ou fractionnement |
+| Acheter du matériel en premier | Automatise le gaspillage ; budget épuisé avant que l'organisation soit stabilisée | Épuiser d'abord la séparation et la conversion ; la mécanisation en dernier [5] |
+| Ne mesurer que le « changement » | Omet la mise en route et le réglage, souvent la plus grande part | Du dernier bon pièce au premier bon pièce à vitesse standard [2] |
+| Filmer sans explication | L'équipe se sent surveillée ; résistance | Expliquer l'objectif, impliquer le régleur dans l'analyse, convenir de l'usage des vidéos |
+| Pilote sur la machine la plus difficile | Résultats longs, coûteux et lents | Piloter avec un changement de 30 à 90 minutes qui se produit souvent |
+| Un changement « héroïque » | Temps record relevé en présence d'ingénieurs, non reproductible | Standardiser, former toutes les équipes, mesurer sur plusieurs semaines |
+| Ignorer le verrouillage/étiquetage pour gagner du temps | Risque de blessure grave ; infraction à la réglementation OSHA | Inscrire le verrouillage dans le standard ; le rendre plus rapide, ne jamais le sauter [8] |
+| Pas de standard et pas d'audit | Les temps reviennent à leurs valeurs initiales en quelques mois | Fiche standard de changement, audits, KPI affiché au tableau |
+| Ignorer le planning | Des séquences aléatoires provoquent des changements complets qui pourraient être partiels | Séquencer par famille de produits ; planifier les changements à heures fixes |
+| Démarrer un changement juste avant la relève | Passation au milieu du réglage interne ; étapes sautées ou répétées, verrous changeant de mains | Planifier les changements pour qu'une même équipe les termine, ou définir un point de passation formel avec transfert du verrouillage, comme l'exige votre procédure de contrôle de l'énergie |
+| Coût de changement non mis à jour dans le système de planification | L'ERP continue de calculer de grands lots | Mettre à jour les temps de changement et les règles de taille de lot dans l'ERP après le SMED |
+| Traiter le SMED comme un projet ponctuel | Pas de deuxième cycle ; l'étape matérielle n'arrive jamais | Planifier des cycles ; faire du SMED une partie de la routine d'amélioration |
+
+Le avant-dernier point est facile à manquer. De nombreux systèmes ERP calculent les tailles de lots à partir des temps de changement enregistrés dans les gammes. Si ceux-ci restent à leurs anciennes valeurs, le système de planification continue de recommander les anciens grands lots. Le guide [S&OP et MRP](https://www.m365.fm/en/learn/sop-mrp-production-planning/) explique où ces paramètres sont stockés.
+
+## Limites et critiques du SMED
+
+Le SMED est l'un des outils du lean les mieux documentés, mais il a des limites, que la littérature de recherche a mises en évidence.
+
+### 1. Trop d'organisation, pas assez de conception
+
+McIntosh et ses collègues ont soutenu en 1996 que l'interprétation largement répandue du SMED a conduit les praticiens à privilégier des changements organisationnels peu coûteux et fondés sur les équipes, au détriment de solutions reposant sur la conception, qui pourraient améliorer les changements de série de manière plus fondamentale ; ils ont porté une attention particulière au problème de la pérennisation des améliorations [13]. Le même groupe de recherche a publié par la suite une évaluation critique de la méthodologie de Shingo dans l'*International Journal of Production Research* (2000) [12]. L'étude de Cakmakci sur l'automobile relie de même les problèmes de réglage à des équipements et à une conception des outillages inadéquats [16], et Braglia et ses collègues ont développé la conception de changements de série rapides afin d'intégrer la capacité de changement de série dans la conception des machines [15]. La conclusion pratique : organisez des ateliers SMED, mais inscrivez aussi les exigences de changement de série dans les spécifications des nouveaux équipements et des conceptions de produits.
+
+### 2. Pérenniser les gains
+
+Les temps de changement de série tendent à revenir en arrière lorsque le standard n'est pas formé auprès du nouveau personnel, lorsque le chariot de changement perd ses outils ou lorsque l'outillage à changement rapide n'est pas entretenu. McIntosh et ses collègues ont fait de la pérennisation une faiblesse centrale [13]. Les contre-mesures sont peu spectaculaires : travail standard, audits, un KPI affiché au tableau et maintenance de l'outillage dans le cadre du TPM.
+
+### 3. Tous les processus ne gagnent pas autant
+
+- **Industries de process** (chimie, agroalimentaire, pharma) : les changements de série sont souvent dominés par le nettoyage, la validation et les contrôles réglementaires. Le SMED raccourcit le travail autour de ces opérations, mais la planification par campagnes et le séquencement des produits (du clair vers le foncé, sans allergènes en premier) peuvent avoir plus d'effet.
+- **Ateliers à forte variété et faible volume** : beaucoup de réglages uniques n'interviennent qu'une fois. L'analyse élément par élément d'un réglage isolé rapporte moins ; le serrage standardisé, les bibliothèques d'outils, la programmation hors ligne et le regroupement par famille de pièces rapportent davantage.
+- **Machines ayant une capacité disponible et des stocks faibles** : le SMED leur apporte peu. Vérifiez d'abord la part des changements de série dans le temps perdu [19].
+
+### 4. Des gains qui n'atteignent pas le résultat
+
+Si le temps gagné n'est pas utilisé (voir les trois options ci-dessus), le SMED améliore un chiffre sur un graphique et rien d'autre. La méthode ne peut pas empêcher cela ; c'est au management de le faire, et c'est la raison la plus courante pour laquelle le SMED déçoit.
+
+### 5. La pression sur les personnes
+
+Les objectifs de vitesse et les chronomètres peuvent créer de la pression, un travail précipité et des raccourcis au détriment de la sécurité. La méthode elle-même ne l'exige pas, mais sa mise en œuvre le peut. Les bonnes pratiques fixent des objectifs à un rythme soutenable, protègent le temps de consignation et n'utilisent pas le temps gagné pour supprimer des postes.
+
+## SMED à l'ère numérique : données, vidéo, MES et ordonnancement
+
+Les outils numériques ne remplacent pas la méthode SMED, mais ils rendent l'analyse plus rapide et les résultats plus faciles à pérenniser.
+
+### Mesurer les changements de série automatiquement
+
+Les relevés manuels des changements de série sont souvent incomplets. Les systèmes de surveillance des machines peuvent détecter les changements à partir des états des machines et des comptages de pièces, de sorte que chaque changement de série reçoit un début, une fin et une durée sans formalités papier ; des éditeurs comme MachineMetrics soutiennent que la capture automatisée des données est plus fiable que la saisie manuelle [21] (affirmation de l'éditeur). L'opérateur doit tout de même indiquer la raison lorsqu'un changement de série dure trop longtemps. Le guide sur le [système d'exécution de fabrication (MES) et ISA-95](https://www.m365.fm/en/learn/mes-isa-95/) explique comment ces données s'intègrent dans l'architecture système de l'usine, et [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/) présente les options cloud pour les collecter.
+
+Le matériel de changement rapide est de plus en plus connecté : matrices et moules codés que le contrôleur vérifie par rapport à l'ordre de fabrication, téléchargement de recettes, systèmes de serrage équipés de capteurs. Chacun de ces éléments est un actif OT sur le réseau de l'usine, avec les mêmes questions de correctifs et d'accès que n'importe quel automate ; le guide sur la [cybersécurité OT et ISA/IEC 62443](https://www.m365.fm/en/learn/ot-cybersecurity-iec-62443/) explique comment les sécuriser.
+
+### Analyse vidéo
+
+Une vidéo tournée avec un smartphone ou une caméra d'action suffit pour la plupart des ateliers SMED. Un logiciel qui permet à l'équipe de découper la vidéo en éléments et de les marquer comme internes ou externes fait gagner des heures de chronométrage manuel. Il faut convenir des règles de confidentialité : qui voit les vidéos, combien de temps elles sont conservées, et le fait qu'elles ne servent pas à évaluer les performances individuelles.
+
+### Instructions de travail et recettes numériques
+
+Les instructions de travail numériques peuvent changer automatiquement avec l'ordre de fabrication, afficher pas à pas la fiche standard de changement de série avec des images, et enregistrer le résultat de la première pièce ; ce point est traité dans le dossier sur la [fabrication sans papier](https://www.m365.fm/en/learn/shop-floor-management/paperless-manufacturing/). La gestion des recettes, dans laquelle les réglages machine sont mémorisés par produit et téléchargés à partir de l'ordre de fabrication, supprime le réglage comme source de temps perdu et d'erreurs. Dans les secteurs réglementés, les deux doivent être validés.
+
+### Ordonnancement avec des préparations dépendant de la séquence
+
+Lorsque les durées de changement dépendent de la séquence (couleurs claires avant foncées, petits formats avant grands, produits sans allergènes en premier), un outil d'ordonnancement peut séquencer les ordres de fabrication afin de minimiser le temps total de changement. Les systèmes de planification et d'ordonnancement avancés (APS) peuvent modéliser des matrices de préparation dépendant de la séquence ; le guide sur la [planification de production et l'APS](https://www.m365.fm/en/learn/production-scheduling-aps/) explique leur fonctionnement et ce qu'ils exigent de l'atelier. La matrice de préparation de l'APS doit être mise à jour après chaque cycle SMED, sinon l'ordonnanceur optimise à partir d'anciens temps.
+
+### Simulation et modèles de chaîne de valeur
+
+Avant qu'une usine ne réduise les tailles de lot sur une chaîne de valeur, elle peut tester l'effet de changements de série plus courts sur l'EPEI, les stocks et le délai de livraison, dans un modèle de chaîne de valeur ou une simulation à événements discrets. Le guide sur le [jumeau numérique en fabrication](https://www.m365.fm/en/learn/digital-twin-manufacturing/) et le dossier sur la [simulation de fabrication](https://www.m365.fm/en/learn/digital-twin-manufacturing/manufacturing-simulation/) expliquent cette approche. Un logiciel de chaîne de valeur comme iFAKT Polaris est un exemple d'outil qui enregistre les temps de changement et les tailles de lot par étape de processus et calcule leur effet sur la chaîne de valeur ; voir la fiche [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/). **Remarque : l'auteur travaille chez iFAKT GmbH.**
+
+### Limites
+
+Les outils numériques amplifient un standard de travail ; ils n'en créent pas un. Un tableau de bord de surveillance machine affichant des changements de série de 90 minutes ne change rien tant qu'une équipe n'a pas filmé le changement et corrigé le problème. Commencez avec le papier et la vidéo, et numérisez la collecte des données une fois le standard et la routine des indicateurs clés en place.
+
+## Glossaire SMED
+
+| Terme | Signification |
+|---|---|
+| **Réglage** | Réglage par essais et erreurs après le montage d'un outil ; la plus grande catégorie du temps de changement dans la décomposition de Shingo [5] |
+| **Changement de série** | Passage d'une machine ou d'une ligne d'un produit à un autre ; aussi appelé setup [2] |
+| **Temps de changement de série** | Temps écoulé entre la dernière bonne pièce de l'ancienne série et la première bonne pièce de la nouvelle série [2], idéalement à vitesse standard |
+| **Chariot de changement de série** | Chariot qui contient tous les outils et pièces nécessaires à un changement de série, rangés dans l'ordre d'utilisation |
+| **Stock de cycle** | Stock créé par la taille des lots ; en moyenne, environ une demi-lot lorsque la demande est stable |
+| **Matrice** | Outil utilisé dans une presse pour découper ou former la matière ; à l'origine du « D » de SMED |
+| **ECRS** | Éliminer, combiner, réarranger, simplifier : questions d'amélioration issues de Training Within Industry, utilisées dans le programme de changement rapide de matrices de Toyota [5] |
+| **EOQ / EPQ** | Quantité économique de commande / quantité économique de production : formules de taille de lot qui équilibrent le coût de préparation et le coût de stockage |
+| **EPEI / EPEx** | Every part (product) every interval : fréquence à laquelle un processus parcourt toutes ses références [3] |
+| **Setup externe** | Travaux de préparation qui peuvent être réalisés pendant que la machine tourne [1] |
+| **Validation de la première pièce** | Contrôle de la première pièce après un changement de série avant de poursuivre la production |
+| **Serre-joint fonctionnel** | Élément de fixation qui serre en un seul mouvement, comme un levier à came ou une vis à quart de tour [5] |
+| **Gabarit intermédiaire** | Support standard (palette, plaque de base) sur lequel le prochain outil ou la prochaine pièce est préparé hors de la machine [5] |
+| **Setup interne** | Travaux de préparation qui ne peuvent être réalisés que lorsque la machine est à l'arrêt [1] |
+| **Dégagement de ligne** | Contrôle que tous les matériaux de la série précédente ont été retirés avant le début de la suivante ; exigé dans l'emballage pharmaceutique aux États-Unis [11] |
+| **Consignation/déconsignation (LOTO)** | Procédures et dispositifs de maîtrise de l'énergie dangereuse lors des interventions, y compris la préparation, selon 29 CFR 1910.147 [8] |
+| **Exception de maintenance mineure** | Exception étroite à la consignation pour les changements d'outils mineurs, routiniers, répétitifs et intégrés à la production normale, avec une protection alternative efficace [8][9] |
+| **OTED** | Échange de matrice en un seul geste : changement de série en moins de 100 secondes [5] |
+| **Opérations en parallèle** | Deux personnes ou plus travaillant simultanément sur un changement de série selon une séquence définie [5] |
+| **Changement rapide (QCO)** | Terme courant aux États-Unis pour la pratique SMED [18] |
+| **Recette** | Ensemble enregistré de paramètres machine par produit, chargé au lieu d'être réglé à la main |
+| **Montée en régime** | Phase après le redémarrage jusqu'à l'obtention de bonnes pièces à vitesse standard |
+| **Bloc de sécurité** | Bloc placé entre les demi-matrices d'une presse pendant le réglage ou la réparation des matrices ; exigé par l'OSHA pour les presses mécaniques à puissance [10] |
+| **Diagramme d'analyse du setup** | Liste des éléments d'un changement de série avec leurs temps et leur classement interne/externe [17] |
+| **Diagramme spaghetti** | Représentation des trajets de déplacement sur un plan d'implantation |
+| **Standardiser la fonction, non la forme** | Standardiser uniquement les caractéristiques d'un outil qui interagissent avec la machine, comme la hauteur de serrage [5] |
+| **3 Ups** | Nettoyage, préparation, démarrage : modèle simple des phases d'un changement de série [24] |
+
+## FAQ : SMED et questions sur les changements de série
+
+### Que signifie SMED ?
+
+SMED signifie *single-minute exchange of die* (changement d'outil en un temps à un chiffre, parfois écrit « dies »). « Single-minute » désigne un temps à un chiffre en minutes, soit un changement de série inférieur à dix minutes [1]. La méthode s'applique à tout changement de série, pas seulement aux outillages de presse.
+
+### Qui a inventé SMED ?
+
+Shigeo Shingo (1909–1990), ingénieur industriel japonais, a développé la méthode à partir des années 1950, avec des travaux chez Toyo Kogyo (Mazda), Mitsubishi Heavy Industries et, à partir de 1969, chez Toyota [6]. Il l'a publiée en anglais en 1985 sous le titre *A Revolution in Manufacturing: The SMED System* [6].
+
+### Quelles sont les étapes de SMED ?
+
+Observer et enregistrer le changement de série, séparer les opérations internes des opérations externes, convertir les opérations internes en externes, rationaliser les opérations internes, rationaliser les opérations externes, standardiser, puis recommencer [5]. Ce guide ajoute en amont une étape de préparation (pilote, équipe, revue de sécurité, utilisation du temps gagné).
+
+### Quelle est la différence entre préparation interne et externe ?
+
+La préparation interne ne peut être effectuée que machine arrêtée, par exemple le montage d'un outil. La préparation externe peut être effectuée pendant que la machine tourne, par exemple l'approvisionnement et le contrôle du prochain outil [1]. SMED transfère le maximum de travail de l'interne vers l'externe.
+
+### Comment calcule-t-on le temps de changement de série ?
+
+On mesure depuis la dernière pièce bonne de la série précédente jusqu'à la première pièce bonne de la nouvelle série, à vitesse standard [2][21]. Le temps moyen de changement de série est la somme de tous les temps de changement divisée par le nombre de changements ; la part de changement de série est le temps total de changement divisé par le temps de production planifié. Voir les formules et l'exemple CNC dans la section sur la mesure.
+
+### Quelle est la différence entre temps de changement de série et temps de préparation ?
+
+Dans l'usage courant, les deux termes se confondent souvent, bien que certaines sources les distinguent explicitement [23]. Strictement, de nombreux praticiens utilisent « temps de préparation » pour l'échange d'outil proprement dit et « temps de changement de série » pour la perte totale entre la dernière pièce bonne et la première pièce bonne, incluant la descente et la montée en régime. Pour les démarches d'amélioration, retenez la définition la plus large.
+
+### Quel est un bon temps de changement de série ?
+
+L'objectif de Shingo est inférieur à dix minutes [1]. Une réponse pratique : un bon temps de changement de série est stable (plage étroite), sûr, et suffisamment court pour soutenir les tailles de lots et l'EPEI dont vos clients ont besoin. Pour de grandes lignes de presses, 20 minutes peuvent être excellentes ; pour une petite machine, c'est peut-être lent.
+
+### Qu'est-ce que l'OTED ?
+
+*One-touch exchange of die* : un changement de série en moins de 100 secondes [5]. C'est l'objectif suivant après SMED, généralement atteint seulement avec un matériel de changement rapide dédié.
+
+### Quel est le lien entre SMED et le TRS ?
+
+Les changements de série sont généralement comptabilisés comme pertes de disponibilité, et la mise en route avec rebut comme pertes de qualité dans le TRS [4]. Des changements plus courts n'améliorent la disponibilité du TRS que si le temps gagné sert à produire. S'il sert à effectuer plus de changements, le TRS peut rester stable, tandis que les stocks et les délais s'améliorent.
+
+### SMED impose-t-il la consignation (lockout/tagout) ?
+
+Aux États-Unis, la préparation fait partie de « l'entretien et/ou de la maintenance » couverts par la norme OSHA de consignation, 29 CFR 1910.147 ; les étapes internes de changement sur un équipement à énergie dangereuse relèvent donc de cette norme par défaut [8]. Une exception étroite couvre les changements d'outils mineurs en cours de production normale, lorsqu'ils sont routiniers, répétitifs et intégrés au process, et seulement avec une protection alternative efficace [8][9]. Faites décider par votre spécialiste sécurité quelles étapes entrent dans ce cas.
+
+### Qu'est-ce que l'EPEI et comment SMED le modifie-t-il ?
+
+L'EPEI (*every part every interval* ; LEI : EPEx) est le temps dans lequel un process produit une fois tous ses numéros de pièces [3]. Il dépend des temps de changement de série et du nombre de références. Une formule courante est le temps total de changement pour toutes les références divisé par le temps quotidien restant après les temps de fonctionnement. Dans l'exemple de ce guide, la réduction des changements de 200 à 70 minutes par cycle ramène l'EPEI de 2 jours à 1 jour et divise les lots par deux.
+
+### Pourquoi les améliorations de changement de série se dégradent-elles dans le temps ?
+
+Parce que le standard n'est pas formé à tous les équipes, que le chariot de changement perd ses outils, que le matériel de changement rapide n'est pas entretenu, ou que personne ne suit l'indicateur. La recherche a identifié la pérennisation comme une faiblesse centrale de la pratique SMED [13]. Les sources issues de la pratique pointent les mêmes causes, comme une exécution inconstante ou un équipement non prêt [22]. Les contre-mesures sont le travail standardisé, les audits et un indicateur quotidien de changement de série affiché au tableau.
+
+### SMED fait-il partie du TPM ?
+
+Non. Le SMED et le TPM sont deux méthodes Lean distinctes, mais elles dépendent l'une de l'autre. Le TPM maintient les matrices, les moules et l'outillage à changement rapide en bon état, et leanproduction.com recommande de commencer par le TPM lorsque les pannes, et non les changements de série, dominent les pertes de temps [19][29]. Dans la plupart des modèles de TRS, les changements de série comme les pannes sont comptabilisés comme pertes de disponibilité.
+
+### Le SMED ne s'applique-t-il qu'aux matrices et aux presses ?
+
+Non. Le nom vient des presses d'emboutissage, mais le LEI définit le SMED comme un processus permettant de changer n'importe quel équipement de production d'une référence à une autre dans le temps le plus court possible [1]. Les mêmes étapes s'appliquent à un changement de série sur une ligne de conditionnement, à un changement de moule, à un changement de montage sur un centre d'usinage ou à un changement de produit sur une ligne d'assemblage.
+
+### Quelle est la différence entre un événement SMED et un programme SMED ?
+
+Un événement SMED est un atelier ciblé, généralement un événement kaizen, portant sur une machine ou une ligne. Un programme SMED est le système à l'échelle de l'usine qui le sous-tend : un modèle standard de changement de série, des équipes formées, des indicateurs de changement de série affichés sur le tableau d'atelier et un plan de déploiement de machine en machine. Les événements produisent les premiers résultats ; le programme permet de les pérenniser et de les étendre (voir la feuille de route de déploiement).
+
+### Quelles industries utilisent le SMED ?
+
+Toute industrie pratiquant des changements de série : automobile et emboutissage des métaux, plasturgie, usinage, conditionnement, impression, électronique, agroalimentaire et boissons, et pharmaceutique. Une revue de 130 articles sur le SMED couvre un large éventail de secteurs [14]. Dans les industries de process, le nettoyage et les contrôles réglementaires dominent souvent, si bien que le SMED est combiné à l'ordonnancement et à la planification par campagnes.
+
+### Combien de temps dure un projet SMED ?
+
+Un premier cycle SMED sur une machine demande souvent trois à quatre mois, de la mesure de référence à un nouveau standard stabilisé : quelques semaines de préparation et de mesure de référence, un atelier de trois à cinq jours, plusieurs semaines pour l'outillage et la formation, puis un mois de stabilisation [unverified: estimation de praticien]. Les délais de livraison du matériel peuvent allonger ce calendrier.
+
+### Combien coûte le SMED ?
+
+Le premier cycle est souvent peu coûteux : temps d'équipe, check-lists, chariots, codage couleur et cales d'épaisseur. L'outillage à changement rapide, comme les multi-raccords, le serrage hydraulique ou les postes de préchauffage, coûte davantage et doit intervenir après les mesures organisationnelles. L'exemple de calcul de retour sur investissement de ce guide estime un temps de retour d'environ 1,5 an pour une presse à injecter ; vos chiffres seront différents.
+
+### Le SMED peut-il fonctionner dans un atelier de sous-traitance à mix élevé et faibles volumes ?
+
+Oui, mais avec un axe différent. Lorsque la plupart des réglages sont uniques, standardisez ce qui se répète : le bridage des pièces, les bibliothèques d'outils, la programmation hors ligne, le préréglage et les familles de pièces. Analysez le processus de réglage lui-même, et non un réglage particulier.
+
+## Conclusion et premières étapes
+
+SMED est l'une des méthodes lean les plus pratiques, car sa logique est simple et ses résultats sont mesurables : ne pas arrêter la machine pour des tâches qui peuvent être effectuées pendant qu'elle tourne, et rendre ce qui doit se passer pendant l'arrêt simple, sûr et sans réglage. L'intuition de Shingo, née dans les années 1950 et 1960, reste valable : les premiers gains importants proviennent encore des listes de contrôle, de la préparation en amont et des travaux en parallèle, plutôt que d'équipements coûteux.
+
+La méthode ne rapporte que si le temps gagné est utilisé. Un changement de série plus court représente une capacité potentielle ou une flexibilité potentielle ; l'usine doit décider laquelle, puis modifier les tailles de lots, les séquences de production, les plannings et les paramètres ERP en fonction de la demande client. Les chiffres de ce guide montrent pourquoi cela en vaut la peine : dans l'exemple EPEI, la réduction du temps de changement par cycle de 200 à 70 minutes divise par deux les tailles de lots, et dans la formule de taille de lot, un quart du coût de lancement signifie la moitié du lot économique.
+
+Les limites méritent également attention. Le SMED organisationnel atteint un plafond lorsque la conception des équipements et des produits prend le relais, les gains s'effritent sans standards ni audits, et la vitesse ne doit jamais se faire au détriment du verrouillage/étiquetage (lockout/tagout) ou de l'ergonomie.
+
+**Vos premières étapes dans les 30 prochains jours**
+
+- [ ] Choisir une machine avec des changements fréquents de 30 à 90 minutes et une douleur métier visible
+- [ ] Enregistrer le début et la fin de chaque changement pendant deux semaines (dernière bonne pièce jusqu'à la première bonne pièce)
+- [ ] Convenir avec la planification de la manière dont le temps gagné sera utilisé : capacité, lots plus petits ou fractionnement
+- [ ] Revoir avec votre professionnel de la sécurité la procédure de contrôle énergétique de cette machine
+- [ ] Filmer un changement avec l'accord de l'équipe et établir la liste des éléments
+- [ ] Marquer chaque élément comme interne ou externe et introduire une liste de contrôle préalable au changement
+- [ ] Calculer l'EPEI actuel et les tailles de lots qu'il implique
+- [ ] Afficher le temps de changement sur le tableau d'atelier avec une cible et une colonne de motifs
+- [ ] Vérifier si le centre NIST MEP de votre État propose un atelier de changement rapide [18][31]
+
+---
+
+## Pour aller plus loin sur m365.fm
+
+**Guides de ce parcours d'apprentissage**
+- [Lean Manufacturing : principes, outils, mise en œuvre et limites](https://www.m365.fm/en/learn/lean-manufacturing/)
+- [Cartographie de la chaîne de valeur](https://www.m365.fm/en/learn/value-stream-mapping/)
+- [Indicateurs de performance industrielle (KPI)](https://www.m365.fm/en/learn/manufacturing-kpis/)
+- [Management de l'atelier et Gemba walks](https://www.m365.fm/en/learn/shop-floor-management/)
+- [Ordonnancement de production et APS](https://www.m365.fm/en/learn/production-scheduling-aps/)
+- [Jumeau numérique en production](https://www.m365.fm/en/learn/digital-twin-manufacturing/)
+- [IT industrielle avec Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/)
+- [Excellence opérationnelle](https://www.m365.fm/en/learn/operational-excellence/)
+- [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+- [5S et gestion visuelle](https://www.m365.fm/en/learn/5s-visual-management/)
+- [Maintenance productive totale (TPM) et OEE](https://www.m365.fm/en/learn/tpm-oee/)
+- [Kanban et systèmes en flux tiré](https://www.m365.fm/en/learn/kanban-pull-system/)
+- [Six Sigma et analyse des causes racines](https://www.m365.fm/en/learn/six-sigma-root-cause-analysis/)
+- [S&OP, MRP et planification de production](https://www.m365.fm/en/learn/sop-mrp-production-planning/)
+- [MES et ISA-95](https://www.m365.fm/en/learn/mes-isa-95/)
+- [Théorie des contraintes](https://www.m365.fm/en/learn/theory-of-constraints/)
+
+**Approfondissements**
+- [Kaizen et événements kaizen](https://www.m365.fm/en/learn/lean-manufacturing/kaizen/)
+- [Poka-yoke](https://www.m365.fm/en/learn/lean-manufacturing/poka-yoke/)
+- [Cycle PDCA](https://www.m365.fm/en/learn/lean-manufacturing/pdca-cycle/)
+- [Travail standard](https://www.m365.fm/en/learn/shop-floor-management/standard-work/)
+- [Fabrication sans papier et instructions de travail numériques](https://www.m365.fm/en/learn/shop-floor-management/paperless-manufacturing/)
+- [Dimensionnement des lots : EOQ et EPQ](https://www.m365.fm/en/learn/production-scheduling-aps/lot-sizing/)
+- [Gestion des stocks en production](https://www.m365.fm/en/learn/production-scheduling-aps/manufacturing-inventory-management/)
+- [Simulation de production](https://www.m365.fm/en/learn/digital-twin-manufacturing/manufacturing-simulation/)
+- [Compétences de la main-d'œuvre industrielle et TWI](https://www.m365.fm/en/learn/operational-excellence/manufacturing-workforce-skills/)
+
+**Termes du glossaire (entités)**
+[SMED](https://www.m365.fm/entity/smed/) · [Temps de changement](https://www.m365.fm/entity/setup-time/) · [Heijunka](https://www.m365.fm/entity/heijunka/) · [Travail standard](https://www.m365.fm/entity/standard-work/) · [Kanban](https://www.m365.fm/entity/kanban/) · [5S](https://www.m365.fm/entity/5s/) · [Poka-yoke](https://www.m365.fm/entity/poka-yoke/) · [TPM](https://www.m365.fm/entity/total-productive-maintenance/) · [Cartographie de la chaîne de valeur](https://www.m365.fm/entity/value-stream-mapping/) · [Management Lean](https://www.m365.fm/entity/lean-management/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** est l'animateur de m365.fm et travaille chez iFAKT GmbH. Sur m365.fm, il écrit sur la production allégée (lean manufacturing), l'excellence opérationnelle et la transformation numérique de la production, en mettant l'accent sur la manière dont les modèles de chaîne de valeur, la simulation et l'analyse des indicateurs clés aident les usines à mettre en pratique des méthodes comme le SMED.
+
+**Remarque : l'auteur travaille chez iFAKT GmbH.**
+
+# Sources
+
+All sources accessed November 20, 2026. Regulatory texts and LEI definitions were opened and checked on that date; vendor pages are cited for vendor guidance and labeled as such in the text.
+
+1. Single Minute Exchange of Die. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/
+2. Changeover. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/changeover/
+3. Every Product Every Interval (EPEx). Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/every-product-every-interval/
+4. Overall Equipment Effectiveness. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/overall-equipment-effectiveness/
+5. Single-minute exchange of die (history, Shingo's eight techniques, four stages, seven basic steps, setup time breakdown, OTED; citing Shingo 1985 and 1989). Wikipedia. https://en.wikipedia.org/wiki/Single-minute_exchange_of_die
+6. Shigeo Shingo. Wikipedia. https://en.wikipedia.org/wiki/Shigeo_Shingo
+7. Shingo, S. (translated by Dillon, A. P.): A Revolution in Manufacturing: The SMED System. Productivity Press, Cambridge, MA, 1985, 386 pp., ISBN 978-0-915299-03-4 (publisher page, Routledge: https://www.routledge.com/A-Revolution-in-Manufacturing-The-SMED-System-1st-Edition/Shingo/p/book/9780915299034; book text not consulted directly).
+8. 29 CFR 1910.147, The control of hazardous energy (lockout/tagout). Occupational Safety and Health Administration (OSHA), US Department of Labor. https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147 (verbatim text cross-checked at https://www.law.cornell.edu/cfr/text/29/1910.147)
+9. Lockout/Tagout eTool: Minor servicing exception (relationship to Subpart O). OSHA. https://www.osha.gov/etools/lockout-tagout/hot-topics/relationship-subpart-o/minor-servicing-exception
+10. 29 CFR 1910.217, Mechanical power presses, paragraph (d)(9) Diesetting. OSHA. https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.217
+11. 21 CFR 211.130, Packaging and labeling operations, paragraph (e). Legal Information Institute, Cornell Law School. https://www.law.cornell.edu/cfr/text/21/211.130
+12. McIntosh, R. I. et al.: A critical evaluation of Shingo's "SMED" (Single Minute Exchange of Die) methodology. International Journal of Production Research, Vol. 38, No. 11 (2000), pp. 2377–2395. Record: https://acnpsearch.tweb-dev.unibo.it/singlejournalindex/73565535 (DOI not confirmed online)
+13. McIntosh, R.; Culley, S.; Gest, G.; Mileham, T.; Owen, G.: An assessment of the role of design in the improvement of changeover performance. International Journal of Operations & Production Management, Vol. 16, No. 9 (1996), pp. 5–22. https://doi.org/10.1108/01443579610125552
+14. da Silva, I. B.; Godinho Filho, M.: Single-minute exchange of die (SMED): a state-of-the-art literature review. International Journal of Advanced Manufacturing Technology, Vol. 102 (2019), pp. 4289–4307. https://doi.org/10.1007/s00170-019-03484-w
+15. Braglia, M.; Di Paco, F.; Frosolini, M.; Marrazzini, L.: Quick changeover design: a new Lean methodology to support the design of machines in terms of rapid changeover capability. Journal of Manufacturing Technology Management, Vol. 34, No. 9 (2023), pp. 84–114. https://doi.org/10.1108/JMTM-12-2022-0430
+16. Cakmakci, M.: Process improvement: performance analysis of the setup time reduction-SMED in the automobile industry. International Journal of Advanced Manufacturing Technology, Vol. 41, No. 1 (2009), pp. 168–179. https://doi.org/10.1007/s00170-008-1434-4
+17. Success Story: Improvement Effort Reduces Changeover Time (Brighton NC Machine Corporation, Michigan Manufacturing Technology Center), April 6, 2018. NIST Manufacturing Innovation Blog. https://www.nist.gov/blogs/manufacturing-innovation-blog/success-story-improvement-effort-reduces-changeover-time
+18. Quick Changeover (April 16, 2024). WMEP Manufacturing Solutions (Wisconsin), part of the MEP National Network. https://wmep.org/quick-changeover/
+19. SMED (Single-Minute Exchange of Die). leanproduction.com (vendor-operated knowledge page). https://leanproduction.com/smed
+20. Single-Minute Exchange of Die (SMED). Vorne Industries (vendor). https://www.vorne.com/tools/single-minute-exchange-of-die.htm
+21. How to Reduce Changeover Time. MachineMetrics (vendor). https://www.machinemetrics.com/blog/changeover-time
+22. How to Reduce Changeover Time in Manufacturing: A Practical Playbook for Maintenance and Operations. MaintainX (vendor). https://www.getmaintainx.com/blog/how-to-reduce-changeover-time-in-manufacturing
+23. How To Reduce Changeover Time in Manufacturing. Tulip Interfaces (vendor). https://tulip.co/blog/reduce-changeover-time-in-manufacturing/
+24. How to Reduce Changeover Time with Connected Workforce Software. L2L (vendor). https://l2l.com/blog/reduce-changeover-time
+25. Heijunka. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/heijunka/
+26. Standardized Work. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/standardized-work/
+27. 5S. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/five-s/
+28. Poka-Yoke. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/poka-yoke/
+29. Total Productive Maintenance. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/total-productive-maintenance/
+30. About the Shingo Institute. Shingo Institute, Jon M. Huntsman School of Business, Utah State University. https://shingo.org/about-the-shingo-institute/
+31. Manufacturing Extension Partnership (MEP). National Institute of Standards and Technology (NIST). https://www.nist.gov/mep
+32. Ergonomics. OSHA. https://www.osha.gov/ergonomics
+33. Training Within Industry. Wikipedia. https://en.wikipedia.org/wiki/Training_Within_Industry
+34. Kanban. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/kanban/
+35. Value-Stream Mapping. Lean Enterprise Institute (LEI), Lean Lexicon. https://www.lean.org/lexicon-terms/value-stream-mapping/
+36. Chapter 5: Single Minute Exchange of Die (SMED). In: Statistical Process Control and Lean Manufacturing (open textbook, Creative Commons). PALNI Pressbooks. https://pressbooks.palni.org/spcleanmanufacturing/?p=35
+37. 21 CFR 117.135, Preventive controls, paragraph (c)(2) Food allergen controls. Legal Information Institute, Cornell Law School. https://www.law.cornell.edu/cfr/text/21/117.135
+38. Total absorption costing. Wikipedia. https://en.wikipedia.org/wiki/Total_absorption_costing
+39. Economic order quantity. Wikipedia (formula Q* = √(2DK/h); Harris 1913). https://en.wikipedia.org/wiki/Economic_order_quantity (accessed November 20, 2026)
+40. Handbook: Inventory (2025), sections on ASC 330-10-30-1, 30-3, 30-6 to 30-8. KPMG LLP. https://kpmg.com/kpmg-us/content/dam/kpmg/frv/pdf/2025/inventory.pdf (accessed November 20, 2026)

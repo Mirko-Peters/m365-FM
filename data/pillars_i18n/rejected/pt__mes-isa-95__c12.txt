@@ -1,0 +1,27 @@
+<translation>
+## MES em setores regulados
+
+Em setores regulados, o MES faz parte do sistema de qualidade, e seus registros são registros legais. Esta seção apresenta as regras dos EUA para as quais você deve projetar; ela não substitui a orientação da sua equipe de assuntos regulatórios.
+
+### FDA 21 CFR Part 11: registros e assinaturas eletrônicos
+
+Para sistemas fechados, o 21 CFR 11.10 exige, entre outros controles, a validação de sistemas quanto à precisão, confiabilidade e desempenho consistente conforme o pretendido; a capacidade de gerar cópias precisas e completas dos registros; a proteção dos registros durante todo o período de retenção; a limitação do acesso ao sistema a pessoas autorizadas; e "trilhas de auditoria seguras, geradas por computador e com carimbo de data e hora" que registrem a data e a hora dos lançamentos e ações do operador que criem, modifiquem ou excluam registros, sem obscurecer informações registradas anteriormente [19]. Outros parágrafos abrangem verificações operacionais e de autoridade, verificações de dispositivos, treinamento e políticas escritas.
+
+**O que isso significa para um MES:** contas de usuário individuais (sem logins compartilhados no terminal), trilhas de auditoria em todos os registros regulados, assinaturas eletrônicas vinculadas ao registro e que mostrem o nome do signatário, a data, a hora e o significado da assinatura, e um pacote de validação. Planeje o trabalho de validação em termos de tempo e orçamento; em farmacêutica, ele costuma representar grande parte do esforço de implantação [não verificado: nenhum benchmark público para essa parcela].
+
+### Farmacêutica: registros eletrônicos de lote
+
+Os fabricantes de medicamentos devem manter os registros de produção e controle de cada lote, conforme as regras de boas práticas de fabricação na 21 CFR Part 211; a seção 211.188 estabelece que "os registros de produção e controle de lote devem ser preparados para cada lote de produto farmacêutico fabricado" [38]. Um MES com registros eletrônicos de lote (eBR) impõe a sequência da receita, captura pesagens e parâmetros na origem e oferece suporte à **revisão por exceção**: o revisor de QA verifica os desvios sinalizados pelo sistema, em vez de ler cada página. Esse é um dos argumentos de negócio mais fortes para MES em qualquer setor, porque o tempo de revisão dos registros de lote frequentemente limita a liberação.
+
+### Dispositivos médicos: QMSR e registros históricos de dispositivos
+
+Desde 2 de fevereiro de 2026, o Quality Management System Regulation (21 CFR Part 820) do FDA incorpora por referência a ISO 13485:2016, incluindo seus requisitos de identificação e rastreabilidade [20]. O termo mais antigo "device history record" (DHR, registro histórico do dispositivo) ainda aparece em muitas descrições de produtos MES e procedimentos de fábrica; a página do QMSR do FDA não usa o termo, portanto nossa recomendação é mapear seus registros para os requisitos da ISO 13485:2016 que o QMSR incorpora, e não para os números de seção antigos da Part 820, e confirmar o mapeamento com assuntos regulatórios. O MES normalmente produz o registro como construído por lote ou número de série: componentes, operações, inspeções, equipamentos e pessoal.
+
+### Alimentos: rastreabilidade FSMA 204
+
+A Food Traceability Rule do FDA (FSMA Seção 204) exige elementos-chave de dados para eventos críticos de rastreamento (recebimento, transformação, expedição) vinculados a um código de lote de rastreabilidade, com os registros fornecidos ao FDA em até 24 horas após uma solicitação; o FDA não fará a aplicação dessa regra antes de 20 de julho de 2028 [29]. Eventos de transformação acontecem na produção, portanto o MES ou um módulo de rastreabilidade é o lugar natural para criar os códigos de lote e vincular entradas a saídas.
+
+### Automotivo e aeroespacial
+
+IATF 16949 e AS9100 acrescentam requisitos de rastreabilidade, plano de controle e primeiro artigo; requisitos específicos de clientes frequentemente vão além. Na IATF 16949, a seção 8.5.2.1 complementa os requisitos de identificação e rastreabilidade da ISO 9001 com planos de rastreabilidade documentados baseados em "os níveis de risco ou gravidade de falha para funcionários, clientes e consumidores", segundo uma matriz comparativa de um organismo de certificação [39] (fonte secundária; a norma é um texto pago). Ambas as normas são textos pagos; o guia de [planejamento da produção aeroespacial](https://www.m365.fm/en/learn/aerospace-production-planning/) cobre a AS9100 e a AS9102 em profundidade.
+</translation>
