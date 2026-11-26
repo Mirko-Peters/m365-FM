@@ -148,7 +148,8 @@ export function unionState(a, b) {
 }
 
 // Statements fuer mergeStatements (identities.js), vor keepT("learn_progress"): hat T fuer einen Pfad schon eine Zeile, bekommt sie die Vereinigung
-// mit der Zeile von S (ep von T bleibt). Pfade nur bei S uebernimmt danach keepT. 1 Lesen (beide Konten), 1 Schreiben je gemeinsamem Pfad mit Aenderung.
+// mit der Zeile von S (ep von T bleibt). Pfade nur bei S uebernimmt danach keepT (mit ep 0, siehe identities.js). 1 Lesen (beide Konten), 1 Schreiben je
+// gemeinsamem Pfad mit Aenderung, nur wenn die Zeile von T seit dem Lesen unveraendert ist (updated).
 export async function mergeLearnProgress(db, S, T) {
   let rows = [];
   try { rows = (await db.prepare("SELECT user_id,path,state,updated FROM learn_progress WHERE user_id IN (?,?)").bind(S, T).all())?.results || []; }
@@ -160,7 +161,8 @@ export async function mergeLearnProgress(db, S, T) {
     if (!sr) continue;
     const before = parseState(tr.state), after = unionState(before, parseState(sr.state)), txt = packState(after);
     if (txt === packState(before)) continue;
-    st.push(db.prepare("UPDATE learn_progress SET state=?, updated=? WHERE user_id=? AND path=?").bind(txt, Math.max(Date.now(), (Number(tr.updated) || 0) + 1), T, path));
+    // optimistische Sperre: schreibt T zwischen diesem Lesen und der Batch, bleibt dessen Stand (die Zeile von S bleibt ohnehin am stillgelegten S)
+    st.push(db.prepare("UPDATE learn_progress SET state=?, updated=? WHERE user_id=? AND path=? AND updated=?").bind(txt, Math.max(Date.now(), (Number(tr.updated) || 0) + 1), T, path, tr.updated));
   }
   return st;
 }

@@ -320,13 +320,47 @@ test("Konto: deleteUserLearn loescht die Zeile; DELETE /api/me entfernt sie samt
   raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES (3,'github','cy','Cy',1),(4,'github','di','Di',1)").run();
   raw.prepare("INSERT INTO learn_progress(user_id,path,state,ep,updated) VALUES (3,?,'{\"g\":{\"oee\":{\"r\":1}}}',7,1)").run(PATH);
   for (const st of await mergeStatements(env.DB, 3, 4)) await st.run();
-  assert.deepEqual({ ...raw.prepare("SELECT user_id,ep FROM learn_progress WHERE state LIKE '%oee%'").get() }, { user_id: 4, ep: 7 });
+  assert.deepEqual({ ...raw.prepare("SELECT user_id,ep FROM learn_progress WHERE state LIKE '%oee%'").get() }, { user_id: 4, ep: 0 }, "uebernommen mit ep 0 (Geraete von T kennen nur ep 0)");
 
   // Kontoloeschung von 1 entfernt auch die Zeilen des stillgelegten Kontos 2
   const r = await call(env, "/api/me", { method: "DELETE", cookie: s.ada });
   assert.equal(r.status, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_progress WHERE user_id IN (1,2)").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_progress WHERE user_id=4").get().n, 1, "fremde Konten bleiben");
+});
+
+test("Zusammenfuehren (Endpruefung B1): Schreiben von T zwischen Lesen und Batch bleibt erhalten (optimistische Sperre auf updated)", async () => {
+  const { env, raw, s } = await setup();
+  await post(env, s.ada, { set: [["g", "kaizen"]] });
+  await post(env, s.bob, { set: [["g", "tpm"]] });
+  const st = await mergeStatements(env.DB, 2, 1);   // liest learn_progress beider Konten
+  const r = await post(env, s.ada, { set: [["g", "oee"]] });   // ein Geraet von T schreibt dazwischen
+  assert.equal(r.status, 200);
+  for (const x of st) await x.run();
+  const g = Object.keys(JSON.parse(raw.prepare("SELECT state FROM learn_progress WHERE user_id=1").get().state).g).sort();
+  assert.ok(g.includes("oee"), "Schreiben von T geht nicht verloren: " + g.join(","));
+  assert.ok(g.includes("kaizen"));
+  assert.ok(JSON.parse(raw.prepare("SELECT state FROM learn_progress WHERE user_id=2").get().state).g.tpm, "Zeile von S bleibt am stillgelegten S");
+  // ohne Schreiben dazwischen: Vereinigung wie bisher
+  for (const x of await mergeStatements(env.DB, 2, 1)) await x.run();
+  assert.deepEqual(Object.keys(JSON.parse(raw.prepare("SELECT state FROM learn_progress WHERE user_id=1").get().state).g).sort(), ["kaizen", "oee", "tpm"]);
+});
+
+test("Zusammenfuehren (Endpruefung B2): T uebernimmt eine Zeile von S mit Reset-Epoche -> ep 0, POST eines Geraets von T (ep 0) kein 409", async () => {
+  const { env, raw, s } = await setup();
+  const g0 = await get(env, s.ada);
+  assert.equal(g0.data.ep, 0, "T ohne Zeile: Geraet kennt ep 0");
+  await post(env, s.bob, { set: [["g", "tpm"]] });
+  await del(env, s.bob);
+  const ep = raw.prepare("SELECT ep FROM learn_progress WHERE user_id=2").get().ep;
+  assert.ok(ep > 0);
+  await post(env, s.bob, { ep, u: 2, set: [["g", "tpm"]] });
+  raw.prepare("INSERT INTO learn_progress(user_id,path,state,ep,updated) VALUES (1,'other-path','{}',5,1),(2,'other-path','{}',9,1)").run();
+  for (const x of await mergeStatements(env.DB, 2, 1)) await x.run();
+  assert.deepEqual(raw.prepare("SELECT user_id,path,ep FROM learn_progress ORDER BY user_id,path").all().map((x) => [x.user_id, x.path, x.ep]),
+    [[1, PATH, 0], [1, "other-path", 5], [2, "other-path", 9]], "nur die uebernommene Zeile bekommt ep 0; Zeilen von T und die bei S verbleibenden behalten ihre ep");
+  const r = await post(env, s.ada, { ep: 0, u: 1, set: [["g", "oee"]] });
+  assert.equal(r.status, 200, "kein 409 ep"); assert.deepEqual(Object.keys(r.data.state.g).sort(), ["oee", "tpm"]);
 });
 
 test("Aufraeumen: am 1. bis 3. des Monats (ausgefallener Lauf wird nachgeholt), Zeilen ohne Aenderung seit 24 Monaten; im Tageslauf eingetragen", async () => {

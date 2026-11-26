@@ -796,6 +796,8 @@ class Progress(unittest.TestCase):
         """Uebersetzte Sprachen ohne lp_*-Uebersetzung: Kasten und Endzeile mit lang="en"; Leitfaden: Kasten nach dem Kopfbild (LCP-Bild bleibt oben)."""
         with mock.patch.object(S, "overlay", lambda: {"ui": {}}):
             self.assertIn(' lang="en"', S.lp_box("fr", BASE, "g")); self.assertIn(' lang="en"', S.lp_done("fr", BASE))
+            self.assertIn('<p class="pl-qopen" lang="en"></p>', S.quiz_box("fr", BASE, [], True), "Endpruefung B10: Zeile Noch offen mit englischem Ersatztext")
+            self.assertIn('<p class="pl-qopen"></p>', S.quiz_box("de", BASE, [], True)); self.assertNotIn("pl-qopen", S.quiz_box("fr", BASE, [], False))
             self.assertNotIn(' lang="en"', S.lp_box("de", BASE, "g")); self.assertNotIn(' lang="en"', S.lp_box("en", BASE, "g"))
         with mock.patch.object(S, "overlay", lambda: {"ui": {"fr": {"lp_box": "Votre progression"}}}):
             self.assertNotIn(' lang="en"', S.lp_box("fr", BASE, "g"))

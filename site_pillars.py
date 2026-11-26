@@ -985,7 +985,7 @@ def quiz_box(lang, BASE, groups, progress=False):
              qx(lang, "q_tries", m=MAX_TRIES), qx(lang, "q_certmail")]
     act = (f'<p><a class="btn main" href="{quiz_url(BASE, lang)}">{esc(qx(lang, "q_go"))}</a></p>' if groups
            else f'<p class="pl-soon"><strong>{esc(qx(lang, "q_soon"))}</strong></p>')
-    qo = '<p class="pl-qopen"></p>' if progress else ""
+    qo = f'<p class="pl-qopen"{lp_en(lang)}></p>' if progress else ""   # lang="en": englische Ersatztexte des Skripts (wie Kasten und Endzeile)
     return (f'<section class="pl-box pl-quiz" aria-labelledby="pl-quiz-h"><h2 id="pl-quiz-h">{esc(qx(lang, "q_box"))}</h2><p>{esc(qx(lang, "q_box_lead"))}</p>'
             f'<ul>{"".join(f"<li>{esc(x)}</li>" for x in facts)}</ul>{qo}{act}</section>')
 

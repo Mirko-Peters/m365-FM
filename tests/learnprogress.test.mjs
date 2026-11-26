@@ -67,7 +67,7 @@ function page(kind = "g", opts = {}) {
   else Object.assign(cfg, { g: [["lean-basics", "Lean", "https://x/de/learn/lean/"], ["oee", "OEE", "https://x/de/learn/oee/"], ["kanban", "Kanban", "https://x/de/learn/kanban/"]],
     c: [["kaizen", "Kaizen", "https://x/de/learn/lean/kaizen/"]] }, opts.cfg || {});
   const data = el(doc, "script", { id: "lpx-data", type: "application/json" }); data.appendChild(new Text(JSON.stringify(cfg)));
-  const box = el(doc, "div", { class: "pl-lpx", id: "lpx", "data-k": kind }, [el(doc, "div", { class: "lpx-a" }, [el(doc, "button", { id: "lpx-save", disabled: "" })]), el(doc, "div", { class: "lpx-b" })]);
+  const box = el(doc, "div", { class: "pl-lpx", id: "lpx", "data-k": kind, ...(opts.boxLang ? { lang: opts.boxLang } : {}) }, [el(doc, "div", { class: "lpx-a" }, [el(doc, "button", { id: "lpx-save", disabled: "" })]), el(doc, "div", { class: "lpx-b" })]);
   const r = { doc, html, body, box, cfg };
   if (kind !== "p") {
     const hs = ["inhaltsverzeichnis", "einleitung", "wertströmanalyse-ü", "fazit"].map((id) => el(doc, "h2", { id }, [id === "einleitung" ? "Einleitung" : id === "fazit" ? "Fazit" : id]));
@@ -134,7 +134,7 @@ function env(kind = "g", o = {}) {
   ctx.window = ctx;
   vm.runInNewContext(JS, ctx);
   const api = {
-    P, ctx, calls, ls, ss, se, timers,
+    P, ctx, calls, ls, ss, se, timers, winL,
     async tick(n = 6) { for (let i = 0; i < n; i++) await new Promise((r) => setImmediate(r)); },
     async advance(ms) { perf += ms; clock += ms; for (;;) { timers.sort((a, b) => a.at - b.at); const t = timers[0]; if (!t || t.at > perf) break; timers.shift(); t.f(); } await api.tick(); },
     async clockJump(ms) { clock += ms; },
@@ -485,11 +485,12 @@ test("Rennen: Videoklick waehrend des init-POST geht nicht verloren", async () =
   await E.tick();
   assert.equal(E.calls.length, 2); assert.equal(E.calls[1].body.init, 1);
   await E.click(E.P.vids.children[1]);
-  assert.equal(E.calls.length, 2, "waehrend des init-POST: vorgemerkt (busy)");
+  assert.equal(E.calls.length, 3, "waehrend des init-POST: eigener keepalive-POST nur mit dem Video (B6)");
+  assert.equal(E.calls[2].opts.keepalive, true); assert.deepEqual(E.calls[2].body.vid, ["ZY12nBEY2qc"]); assert.equal(E.calls[2].body.init, 0); assert.equal(E.calls[2].body.u, 7);
   d.res(srv(7, { g: { oee: { r: 1 } } }));
   await E.tick(10);
   assert.equal(st(E).v.ZY12nBEY2qc, 1, "Video bleibt lokal");
-  assert.equal(E.calls.length, 3, "und wird nachgesendet"); assert.deepEqual(E.calls[2].body.vid, ["ZY12nBEY2qc"]); assert.equal(E.calls[2].body.u, 7);
+  assert.equal(E.calls.length, 4, "und wird nachgesendet"); assert.deepEqual(E.calls[3].body.vid, ["ZY12nBEY2qc"]); assert.equal(E.calls[3].body.u, 7);
   assert.deepEqual(st(E).q, []);
 });
 
@@ -562,4 +563,152 @@ test("Uebersetzte Pfadseite: englischer Ersatz-Leitfaden bekommt ✓ am Titel un
   await R.tick();
   await R.click(R.P.box.querySelector(".lpx-b").querySelector("[data-lpx-a=off]"));
   assert.equal(R.ls.map.get("m365-learn"), undefined); assert.equal(R.calls.length, 0);
+});
+
+// ---------- Befunde der Endpruefung ----------
+const storageEv = (E) => (E.winL.storage || []).forEach((f) => f({ key: "m365-learn" }));
+const act = (E, a, where = ".lpx-b") => E.P.box.querySelector(where).querySelector(`[data-lpx-a=${a}]`);
+
+test("A1: Nicht mehr speichern waehrend des init-POST: Rueckfrage nennt das Konto, DELETE fuer dieses Konto erst nach der Antwort", async () => {
+  const d = later();
+  const E = env("g", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }) }, replies: (c) => c.method === "GET" ? srv(7) : c.method === "POST" ? d.p : srv(7, {}, { ep: 40 }) });
+  await E.tick();
+  assert.equal(E.calls[1].body.init, 1);
+  let q = null; E.ctx.confirm = (x) => { q = x; return true; };
+  await E.click(act(E, "off"));
+  assert.match(q, /and in your account/, "Gaststand wird gerade ins Konto uebernommen");
+  assert.deepEqual(E.state(), { v: 1, on: 0, dl: { [PATH]: 7 }, lg: 0 });
+  assert.equal(E.calls.length, 2, "DELETE wartet auf den init-POST");
+  d.res(srv(7, { g: { oee: { r: 1 } } }));
+  await E.tick(10);
+  assert.deepEqual(E.calls.map((c) => c.method), ["GET", "POST", "DELETE"]); assert.match(E.calls[2].url, /&u=7$/);
+  assert.equal(E.ls.map.get("m365-learn"), undefined, "bestaetigt: Rest entfernt");
+});
+
+test("A1: Zuruecksetzen waehrend des init-POST: Rueckfrage nennt das Konto, DELETE nach der Antwort, danach nichts Altes", async () => {
+  const d = later();
+  const E = env("p", { store: { "m365-learn": ON({ g: { oee: { r: 1 } } }) }, replies: (c) => c.method === "GET" ? srv(7) : c.method === "POST" ? d.p : srv(7, {}, { ep: 40 }) });
+  await E.tick();
+  assert.equal(E.calls[1].body.init, 1);
+  let q = null; E.ctx.confirm = (x) => { q = x; return true; };
+  await E.click(act(E, "reset"));
+  assert.equal(q, "Delete in account?");
+  assert.deepEqual(E.state().dl, { [PATH]: 7 });
+  d.res(srv(7, { g: { oee: { r: 1 } } }));
+  await E.tick(12);
+  assert.deepEqual(E.calls.map((c) => c.method), ["GET", "POST", "DELETE", "GET"]); assert.match(E.calls[2].url, /&u=7$/);
+  assert.deepEqual(E.state().dl, {}); assert.deepEqual(st(E).g, {}); assert.equal(E.state().u, 7); assert.equal(E.state().ep, 0);
+});
+
+test("A2: spaete POST-Antwort nach Nicht mehr speichern schreibt keine Tab-Pruefung (m365-learn-s) mehr", async () => {
+  const d = later();
+  const E = env("g", { store: { "m365-learn": ON({}, { u: 7 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) },
+    replies: (c) => c.method === "POST" ? d.p : c.method === "DELETE" ? { status: 401, json: {} } : srv(7) });
+  await E.tick();
+  await E.click(E.P.vids.children[1]);
+  assert.equal(E.calls.at(-1).method, "POST");
+  await E.click(act(E, "off"));
+  assert.equal(E.ss.map.get("m365-learn-s"), undefined);
+  d.res(srv(7)); await E.tick(10);
+  assert.equal(E.ss.map.get("m365-learn-s"), undefined, "nach der spaeten Antwort");
+});
+
+test("B3: anderer Tab aendert waehrend einer Anfrage: keine zweite parallele Anfrage, vorgemerkter Nachversand bleibt", async () => {
+  const d = later(); let n = 0, inflight = 0, maxIn = 0;
+  const E = env("g", { min: 1, store: { "m365-learn": ON({}, { u: 7 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) },
+    replies: (c) => { if (c.method !== "POST") return srv(7); n++; inflight++; maxIn = Math.max(maxIn, inflight);
+      return (n === 1 ? d.p : Promise.resolve(srv(7))).then((x) => { inflight--; return x; }); } });
+  await E.tick();
+  await E.click(E.P.vids.children[1]);   // POST 1 haengt
+  E.seeEnd(); await E.advance(21_000); await E.advance(2100);   // gelesen -> entprellt -> vorgemerkt (busy)
+  assert.equal(n, 1);
+  const o = E.state(); o.sy = 1; E.ls.map.set("m365-learn", JSON.stringify(o)); storageEv(E);
+  await E.click(E.P.done.querySelector("[data-lpx-a]")); await E.advance(2100);   // ungelesen -> entprellt
+  assert.equal(n, 1, "keine zweite Anfrage, solange POST 1 laeuft");
+  d.res(srv(7)); await E.tick(12);
+  assert.equal(maxIn, 1);
+  assert.equal(n, 2, "Nachversand nach der Antwort");
+  assert.deepEqual(E.calls.at(-1).body.unset, [["g", "lean-basics"]]); assert.deepEqual(st(E).q, []);
+});
+
+test("B4: Opt-in nur in einem anderen Tab: dieser Tab gleicht ab und uebernimmt, was er schon als gelesen erkannt hat; vorgemerktes Loeschen zuerst", async () => {
+  const E = env("g", { min: 1, store: { m365_auth: "1" }, replies: { GET: srv(7), POST: srv(7, { g: { "lean-basics": { r: 1 } } }) } });
+  E.seeEnd(); await E.advance(21_000);
+  assert.equal(E.calls.length, 0);
+  E.ls.map.set("m365-learn", ON({}, { u: 7 })); storageEv(E);
+  await E.tick(8);
+  assert.equal(E.calls[0]?.method, "GET");
+  assert.deepEqual(E.calls[1]?.body.set, [["g", "lean-basics"]], "schon erfuelltes Lesen geht mit");
+  assert.equal(st(E).g["lean-basics"].r, 1);
+  const F = env("g", { store: { m365_auth: "1" }, replies: { DELETE: srv(7, {}, { ep: 50 }), GET: srv(7) } });
+  F.ls.map.set("m365-learn", ON({}, { u: 7, dl: { [PATH]: 7 } })); storageEv(F);
+  await F.tick(8);
+  assert.equal(F.calls[0]?.method, "DELETE"); assert.match(F.calls[0].url, /&u=7$/);
+  assert.deepEqual(F.state().dl, {});
+});
+
+test("B5: Abschalten und erneutes Opt-in im selben Aufruf: Automatik laeuft wieder, ausser nach Als ungelesen markieren", async () => {
+  const E = env("g", { min: 1, store: { "m365-learn": ON() }, replies: { GET: { status: 401, json: {} } } });
+  await E.tick();
+  await E.click(act(E, "off"));
+  await E.click(E.P.box.querySelector("#lpx-save")); await E.tick();
+  E.seeEnd(); await E.advance(25_000);
+  assert.equal(st(E).g["lean-basics"]?.r, 1, "automatisch gelesen");
+  const F = env("g", { min: 1, store: { "m365-learn": ON() }, replies: { GET: { status: 401, json: {} } } });
+  F.seeEnd(); await F.advance(25_000);
+  await F.click(F.P.done.querySelector("[data-lpx-a]"));   // als ungelesen markiert
+  await F.click(act(F, "off"));
+  await F.click(F.P.box.querySelector("#lpx-save")); await F.tick();
+  await F.advance(60_000); await F.vis("hidden");
+  assert.ok(!st(F).g["lean-basics"]?.r, "nach Als ungelesen markieren ruht die Automatik weiter");
+});
+
+test("B6: Videoklick waehrend einer laufenden Anfrage: eigener keepalive-POST nur mit dem Video, fuer das Konto und die Epoche", async () => {
+  const d = later(); let n = 0;
+  const E = env("g", { min: 1, store: { "m365-learn": ON({}, { u: 7, ep: 33 }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) },
+    replies: (c) => c.method === "POST" ? (n++ === 0 ? d.p : srv(7, {}, { ep: 33 })) : srv(7) });
+  await E.tick();
+  E.seeEnd(); await E.advance(21_000); await E.advance(2100);
+  assert.equal(E.calls.length, 1, "POST 1 laeuft");
+  await E.click(E.P.vids.children[1]);
+  assert.equal(E.calls.length, 2);
+  const c = E.calls[1];
+  assert.equal(c.opts.keepalive, true);
+  assert.deepEqual({ ...c.body }, { path: PATH, ep: 33, init: 0, u: 7, set: [], unset: [], vid: ["ZY12nBEY2qc"], pos: [] });
+  d.res(srv(7, {}, { ep: 33 })); await E.tick(10);
+  assert.deepEqual(E.calls.at(-1).body.vid, ["ZY12nBEY2qc"], "Warteschlange sendet ihn noch einmal (Server vereinigt)"); assert.deepEqual(st(E).q, []);
+  // vorgemerktes Loeschen: kein Nebenweg (das DELETE geht vor)
+  const F = env("g", { store: { "m365-learn": ON({}, { u: 7, dl: { [PATH]: 7 } }), m365_auth: "1" }, sess: { "m365-learn-s": fresh({ s: 200, uid: 7 }) }, replies: () => later().p });
+  await F.tick();
+  assert.equal(F.calls.length, 1); await F.click(F.P.vids.children[1]);
+  assert.equal(F.calls.length, 1);
+});
+
+test("B7: Fehlschlag der Anmeldepruefung (503, 429, Netz) sperrt weitere Pruefungen im Tab fuer 15 min; Anmeldehinweis geaendert -> neu", async () => {
+  for (const bad of [{ status: 503, json: {} }, { status: 429, json: {} }, "net"]) {
+    const E = env("g", { store: { "m365-learn": ON() }, replies: { GET: bad } });
+    await E.tick();
+    assert.equal(E.calls.length, 1);
+    const F = env("g", { store: Object.fromEntries(E.ls.map), ss: E.ss, replies: { GET: srv(7) } });
+    await F.tick();
+    assert.equal(F.calls.length, 0, "Seitenwechsel im selben Tab: keine zweite Pruefung " + JSON.stringify(bad));
+    assert.match(F.P.box.querySelector(".lpx-b").textContent, /Sync unavailable/);
+  }
+  const E = env("g", { store: { "m365-learn": ON() }, replies: { GET: { status: 503, json: {} } } });
+  await E.tick();
+  const o = JSON.parse(E.ss.map.get("m365-learn-s")); o.t -= 16 * 60_000;
+  const old = storage({ "m365-learn-s": JSON.stringify(o) });
+  const F = env("g", { store: Object.fromEntries(E.ls.map), ss: old, replies: { GET: srv(7) } });
+  await F.tick(); assert.equal(F.calls[0]?.method, "GET", "nach 15 min");
+  const G = env("g", { store: { ...Object.fromEntries(E.ls.map), m365_auth: "1" }, ss: E.ss, replies: { GET: srv(7) } });
+  await G.tick(); assert.equal(G.calls[0]?.method, "GET", "inzwischen angemeldet");
+});
+
+test("B10: Plakette am Video traegt lang=en, wenn der Kasten auf Englisch zurueckfaellt", async () => {
+  const E = env("g", { lang: "fr", boxLang: "en", store: { "m365-learn": ON({ v: { ZY12nBEY2qc: 1 } }) }, replies: { GET: { status: 401, json: {} } } });
+  await E.tick();
+  assert.equal(E.P.vth.querySelector(".pl-vok").getAttribute("lang"), "en");
+  const F = env("g", { store: { "m365-learn": ON({ v: { ZY12nBEY2qc: 1 } }) }, replies: { GET: { status: 401, json: {} } } });
+  await F.tick();
+  assert.equal(F.P.vth.querySelector(".pl-vok").getAttribute("lang"), null);
 });

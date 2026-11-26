@@ -1,7 +1,7 @@
 // Lernfortschritt im Lernpfad (site_pillars.py: Kasten #lpx, Konfiguration #lpx-data, Marker data-lpx; Worker worker/src/learnprogress.js).
 // Vor dem Klick auf "Lernfortschritt speichern" wird nichts gespeichert und nichts gesendet (§ 25 TDDDG); gelesen wird nur der eigene Schluessel m365-learn
 // (ob der Opt-in schon besteht). Danach: localStorage m365-learn {v:1,on:1,u,ep,sy,dl,p:{<pfad>:{g,c,v,q}}}, sessionStorage m365-learn-s (Abgleich in diesem Tab),
-// fuer Angemeldete Abgleich mit dem Konto (GET hoechstens 1 je Tab-Sitzung bzw. 15 min, POST nur bei Aenderung, Lesestelle gedrosselt, Videoklick sofort mit keepalive).
+// fuer Angemeldete Abgleich mit dem Konto (GET hoechstens 1 je Tab-Sitzung bzw. 15 min, auch nach einem Fehlschlag, POST nur bei Aenderung, Lesestelle gedrosselt, Videoklick sofort mit keepalive).
 // Jeder POST/DELETE nennt das Konto (u), fuer das gesammelt wurde; der Server lehnt ein anderes angemeldetes Konto mit 409 uid ab (gemeinsames Geraet).
 // Loeschen im Konto (Zuruecksetzen, Nicht mehr speichern) bleibt als dl {<pfad>: konto} vorgemerkt, bis der Server es bestaetigt; nach "Nicht mehr speichern"
 // bleibt dafuer nur der Rest {v:1,on:0,dl} (keine Fortschrittsdaten), gesendet wird dann nur das DELETE und nur bei Anmeldehinweis.
@@ -23,10 +23,11 @@
   var art = D.querySelector("article.pl-art[data-lpx]"), endEl = art && art.querySelector(".pl-end"), done = D.querySelector(".pl-done");
   var doneHTML = done ? done.innerHTML : "", saveBtn = D.getElementById("lpx-save"), slot = box.querySelector(".lpx-b"), qopen = D.querySelector(".pl-qopen");
   var S = null, RO = false, RES = null;   // Stand (nur nach dem Opt-in); RO: unbekannte Formatversion -> nur anzeigen, nie schreiben; RES: Rest nach "Nicht mehr speichern"
-  var sess = null, off = false, busy = false, again = false, deb = 0, err = false, gen = 0, resBusy = false;   // gen: Antworten aus der Zeit vor Zuruecksetzen/Abschalten/anderem Tab gelten nicht
+  var sess = null, off = false, busy = 0, rid = 0, cur = null, again = false, deb = 0, err = false, gen = 0, resBusy = false;   // gen: Antworten aus der Zeit vor Zuruecksetzen/Abschalten/anderem Tab gelten nicht
+  // busy: Nummer der laufenden Anfrage (0: keine); nur deren Antwort gibt busy frei. cur: ihr Promise (Abschalten wartet darauf)
   // "gelesen": im Speicher, auch vor dem Opt-in (ohne Speicherzugriff)
   var minSec = Math.min(180, Math.max(20, Math.round((+C.min || 1) * 60 * 0.3)));
-  var act = 0, since = D.visibilityState === "visible" ? now() : -1, endSeen = false, readyRead = false, noAuto = false, timer = 0, lastPos = "";
+  var act = 0, since = D.visibilityState === "visible" ? now() : -1, endSeen = false, readyRead = false, noAuto = false, manual = false, timer = 0, lastPos = "";   // manual: in diesem Aufruf "Als ungelesen markieren" benutzt
 
   function now() { return W.performance && performance.now ? performance.now() : Date.now(); }
   function int(x) { x = Math.floor(+x); return isFinite(x) && x > 0 ? x : 0; }
@@ -193,24 +194,32 @@
     S.ep = int(j.ep); S.sy = int(j.updated);
     q.forEach(function (e) { applyLocal(e); np.q.push(e); });
   }
-  function noteSess(r) {   // Ergebnis der Anmeldepruefung fuer diesen Tab (pt: letzte gesendete Lesestelle, Drossel 5 min)
-    if (r.s !== 200 && r.s !== 409 && r.s !== 401 && r.s !== 404) return;
+  function noteSess(r) {   // Ergebnis der Anmeldepruefung fuer diesen Tab (pt: letzte gesendete Lesestelle, Drossel 5 min); nach "Nicht mehr speichern" nichts mehr
+    if (!S) return;
+    if (r.s !== 200 && r.s !== 409 && r.s !== 401 && r.s !== 404) {   // 429, 5xx, Netz: auch der Fehlschlag sperrt neue Pruefungen fuer 15 min (h: Anmeldehinweis dabei)
+      if (!(sess && sess.s === 200)) { sess = { t: Date.now(), s: 0, e: 1, h: hint() ? 1 : 0, uid: 0, pt: (sess && sess.pt) || 0 }; writeSess(sess); }
+      return;
+    }
     if (r.s === 409 && !int(r.j.uid)) return;
     sess = { t: Date.now(), s: r.s === 409 ? 200 : r.s, uid: r.s === 200 || r.s === 409 ? int(r.j.uid) : 0, pt: (sess && sess.pt) || 0 };
     writeSess(sess);
   }
   function fresh(ss) {   // gemerkte Pruefung noch gueltig? Nicht nach 15 min und nicht, wenn der Anmeldehinweis (community.js) inzwischen etwas anderes sagt
-    if (!ss || (ss.s !== 200 && ss.s !== 401 && ss.s !== 404) || !(Date.now() - int(ss.t) < SESS_TTL)) return false;
+    if (!ss || !(Date.now() - int(ss.t) < SESS_TTL)) return false;
+    if (ss.e) return !ss.s && !ss.h === !hint();   // Fehlschlag: Ruhe, ausser der Anmeldehinweis hat sich seither geaendert
+    if (ss.s !== 200 && ss.s !== 401 && ss.s !== 404) return false;
     if (ss.s === 401 && hint()) return false;   // inzwischen anderswo angemeldet
     if (ss.s === 200 && !hint()) return false;  // inzwischen abgemeldet
     return true;
   }
   function pend() { return S && S.dl && S.dl[P] ? S.dl[P] : 0; }   // vorgemerktes Loeschen im Konto fuer diesen Pfad (Konto-ID)
-  function idle() { busy = false; if (again) { again = false; flush(); } }
+  function begin() { busy = ++rid; return busy; }
+  function track(p) { cur = p; return p; }
+  function idle(id) { if (id !== busy) return; busy = 0; if (again) { again = false; flush(); } }   // veraltete Antwort einer abgeloesten Anfrage gibt nichts frei
   function signed() { return !!(sess && sess.s === 200 && sess.uid && S && S.u === sess.uid); }
   function replace(j) { S.u = int(j.uid); S.p = {}; adopt(j, false); }   // anderes Konto auf diesem Geraet: ersetzen, nie zusammenfuehren
-  function handle(r, sent) {
-    if (!S) { busy = false; return; }
+  function handle(r, sent, id) {
+    if (!S) { idle(id); return; }
     noteSess(r);
     if (r.s === 404) { off = true; err = false; }
     else if (r.s === 401) { authHint(false); err = false; }
@@ -231,7 +240,7 @@
       var kp = sent.filter(function (e) { return e.p; }).map(function (e) { return JSON.stringify(e); });
       if (kp.length) { pth().q = pth().q.filter(function (e) { return kp.indexOf(JSON.stringify(e)) < 0; }); save(); again = true; } else err = true;
     } else err = true;   // 429, 5xx, Netz: Warteschlange bleibt, naechster Anlass holt nach
-    render(); idle();
+    render(); idle(id);
   }
   function flush(keep) {
     clearTimeout(deb); deb = 0;
@@ -239,34 +248,32 @@
     if (busy) { again = true; return; }
     if (pend() === sess.uid) { delAcc(keep); return; }   // vorgemerktes Loeschen vor allem anderen
     if (!signed() || !pth().q.length) return;
-    var x = bodyOf(pth().q, false), g0 = gen;
-    busy = true;
-    api("POST", x[0], keep).then(function (r) { if (g0 !== gen) { noteSess(r); idle(); return; } handle(r, x[1]); });
+    var x = bodyOf(pth().q, false), g0 = gen, id = begin();
+    track(api("POST", x[0], keep)).then(function (r) { if (g0 !== gen) { noteSess(r); idle(id); return; } handle(r, x[1], id); });
   }
   function delAcc(keep) {   // vorgemerktes Loeschen im Konto senden (zugleich Anmeldepruefung); erst die Bestaetigung des Servers loescht die Vormerkung
     var u = pend();
     if (!S || RO || !u) return;
     if (busy) { again = true; return; }
-    var g0 = gen;
-    busy = true;
-    api("DELETE", null, keep, u).then(function (r) {
-      if (!S || g0 !== gen) { idle(); return; }
+    var g0 = gen, id = begin();
+    track(api("DELETE", null, keep, u)).then(function (r) {
+      if (!S || g0 !== gen) { idle(id); return; }
       noteSess(r);
       if (r.s === 200 && okState(r.j) && int(r.j.uid) === u) {
         delete S.dl[P]; err = false; authHint(true);
-        if (!S.u) { S.ep = int(r.j.ep); save(); busy = false; get(); return; }   // Gaststand nach erneutem Opt-in: jetzt wie ueblich vereinigen
+        if (!S.u) { S.ep = int(r.j.ep); save(); busy = 0; get(); return; }   // Gaststand nach erneutem Opt-in: jetzt wie ueblich vereinigen
         if (S.u !== u) replace(r.j);   // lokal lag der Stand eines anderen Kontos: das angemeldete (geloeschte) gilt
         else adopt(r.j, true);   // leerer Stand mit neuer Epoche, danach das seit dem Zuruecksetzen Gesammelte
         save();
         if (pth().q.length) again = true;
       } else if (r.s === 409 && okState(r.j)) {   // anderes Konto angemeldet: Vormerkung bleibt fuer das alte Konto
         authHint(true); err = false;
-        if (!S.u) { save(); busy = false; get(); return; }
-        handle(r, []); return;
+        if (!S.u) { save(); busy = 0; get(); return; }
+        handle(r, [], id); return;
       } else if (r.s === 404) off = true;
       else if (r.s === 401) authHint(false);
       else err = true;
-      render(); idle();
+      render(); idle(id);
     });
   }
   function delRes() {   // nach "Nicht mehr speichern": nur das vorgemerkte DELETE, kein Stand, keine Tab-Pruefung
@@ -282,12 +289,18 @@
       saveRes(); render();
     });
   }
+  function side(v) {   // Videoklick waehrend einer laufenden Anfrage: eigener keepalive-POST nur mit diesem Video (der Server vereinigt; der Eintrag bleibt in der
+    // Warteschlange und geht mit dem naechsten Abgleich noch einmal mit). Nur fuer das angemeldete Konto, nicht vor einem vorgemerkten Loeschen
+    if (!S || RO || off || !sess || sess.s !== 200 || !sess.uid || pend() || (S.u && S.u !== sess.uid)) return;
+    api("POST", { path: P, ep: S.ep, init: 0, u: sess.uid, set: [], unset: [], vid: [v], pos: [] }, true);
+  }
   function soon() { if (!S || off) return; clearTimeout(deb); deb = setTimeout(flush, DEBOUNCE); }
   function first() {   // erste Anfrage dieser Tab-Sitzung (zugleich Anmeldepruefung, fuer Gaeste 0 D1)
     if (!S || RO) return;
     var ss = readSess();
     if (fresh(ss)) {
       sess = ss; if (ss.s === 404) { off = true; return; }
+      if (ss.e) { err = true; render(); return; }   // Fehlschlag vor weniger als 15 min: keine neue Pruefung
       if (ss.s === 200 && S.u === ss.uid) flush();
       else if (ss.s === 200) { if (pend() === ss.uid) delAcc(); else get(); }   // anderes Konto oder Gaststand: erst abgleichen
       return;
@@ -297,25 +310,24 @@
   }
   function get() {
     if (!S || RO || busy) return;
-    var g0 = gen;
-    busy = true;
-    api("GET").then(function (r) {
-      if (!S || g0 !== gen) { idle(); return; }
+    var g0 = gen, id = begin();
+    track(api("GET")).then(function (r) {
+      if (!S || g0 !== gen) { idle(id); return; }
       var uid = r.s === 200 && okState(r.j) ? int(r.j.uid) : 0;
-      if (uid && pend() === uid) { noteSess(r); busy = false; delAcc(); return; }   // erst loeschen, dann nichts Altes uebernehmen
-      if (uid && !S.u) { init(r); return; }
-      if (uid && S.u === uid && pth().q.length) { noteSess(r); busy = false; authHint(true); flush(); return; }   // eigenes Konto mit Ausstehendem: senden (Server vereinigt)
-      handle(r, []);
+      if (uid && pend() === uid) { noteSess(r); busy = 0; delAcc(); return; }   // erst loeschen, dann nichts Altes uebernehmen
+      if (uid && !S.u) { init(r, id); return; }
+      if (uid && S.u === uid && pth().q.length) { noteSess(r); busy = 0; authHint(true); flush(); return; }   // eigenes Konto mit Ausstehendem: senden (Server vereinigt)
+      handle(r, [], id);
     });
   }
-  function init(r) {   // Gaststand + Konto: vereinigen (init:1), danach gehoert der Stand diesem Konto
+  function init(r, id) {   // Gaststand + Konto: vereinigen (init:1), danach gehoert der Stand diesem Konto
     noteSess(r); authHint(true);
     var uid = int(r.j.uid), q = fullQueue(), q0 = pth().q.map(function (e) { return JSON.stringify(e); }), g0 = gen;
-    if (!q.length) { S.u = uid; adopt(r.j, false); save(); render(); idle(); return; }
+    if (!q.length) { S.u = uid; adopt(r.j, false); save(); render(); idle(id); return; }
     S.ep = int(r.j.ep);
     var x = bodyOf(q, true);
-    api("POST", x[0]).then(function (r2) {
-      if (!S || g0 !== gen) { idle(); return; }
+    track(api("POST", x[0])).then(function (r2) {
+      if (!S || g0 !== gen) { idle(id); return; }
       noteSess(r2);
       if ((r2.s === 200 || r2.s === 409) && okState(r2.j) && int(r2.j.uid) === uid) {
         // was vor dem Senden in der Warteschlange stand, deckt der volle Stand ab; was waehrenddessen dazukam, bleibt und wird nachgesendet,
@@ -328,7 +340,7 @@
       } else if (okState(r2.j)) { authHint(true); replace(r2.j); save(); }   // inzwischen ein anderes Konto: nichts uebernehmen
       else { err = r2.s !== 401 && r2.s !== 404; if (r2.s === 401) authHint(false); }
       if (r2.s === 404) off = true;
-      render(); idle();
+      render(); idle(id);
     });
   }
 
@@ -349,7 +361,7 @@
   }
   function markUnread() {
     if (!S || RO) return;
-    noAuto = true; readyRead = false; clearTimeout(timer);
+    noAuto = true; manual = true; readyRead = false; clearTimeout(timer);
     entry(K, ID).r = 0; enq({ x: [K, ID] }); save(); render(); soon();
   }
 
@@ -463,7 +475,7 @@
     D.querySelectorAll("a[data-vid]").forEach(function (a) {
       var on = !!p.v[a.getAttribute("data-vid")], th = a.querySelector(".pl-vth"), b = th && th.querySelector(".pl-vok");
       a.classList.toggle("ok", on);
-      if (th && on && !b) th.appendChild(h("span", { class: "pl-vok", text: t("lp_opened") }));
+      if (th && on && !b) th.appendChild(h("span", box.getAttribute("lang") === "en" ? { class: "pl-vok", lang: "en", text: t("lp_opened") } : { class: "pl-vok", text: t("lp_opened") }));   // englischer Ersatztext
       else if (b && !on) b.remove();
     });
   }
@@ -491,11 +503,18 @@
   }
 
   // ---------- Bedienung ----------
+  function started() {   // Stand ist neu da (Opt-in hier oder in einem anderen Tab): Automatik nur aus, wenn in diesem Aufruf ungelesen markiert oder schon gelesen
+    noAuto = manual;
+    if (K === "p" || !ID) return false;
+    var e = pth()[K][ID];
+    if (e && e.r) { noAuto = true; return false; }
+    if (readyRead && !manual) { entry(K, ID).r = 1; enq({ s: [K, ID] }); return true; }   // schon erfuellt: sofort uebernehmen
+    return false;
+  }
   function optIn() {
     if (S) return;
     S = { v: 1, on: 1, u: 0, ep: 0, sy: 0, dl: RES ? RES.dl : {}, p: {} };   // noch ausstehendes Loeschen im Konto bleibt vorgemerkt
-    pth();
-    if (readyRead && K !== "p" && ID) { entry(K, ID).r = 1; enq({ s: [K, ID] }); }   // schon erfuellt: sofort uebernehmen
+    pth(); started();
     if (!save()) { S = null; return; }
     RES = null;
     render(); first(); plan();
@@ -506,24 +525,26 @@
       try { W.localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
       S = null; RO = false; gen++; render(); return;
     }
-    var acc = !!(S && (S.u || pend()));
+    var u = S.u || (sess && sess.s === 200 && sess.uid) || 0, acc = !!(u || pend());   // u: auch waehrend des ersten Abgleichs (init), solange S.u noch 0 ist
     var q = reset ? t(acc ? "lp_reset_q_acc" : "lp_reset_q") : t("lp_off_q", { a: acc ? " " + t("lp_off_acc") : "" });
     if (W.confirm && !W.confirm(q)) return;
     noAuto = true; clearTimeout(timer); clearTimeout(deb); deb = 0; gen++; err = false;   // laufende Antworten gelten nicht mehr
     lastPos = "";
     if (reset) {
       S.p[P] = emptyPath();
-      if (S.u) S.dl[P] = S.u;
+      if (u) S.dl[P] = u;
       save(); render(); flush();   // angemeldet: DELETE sofort (nach einer laufenden Anfrage), sonst beim naechsten Abgleich
       return;
     }
     var dl = {};
     Object.keys(S.dl || {}).forEach(function (k) { dl[k] = S.dl[k]; });
     if (S.u) Object.keys(S.p).concat([P]).forEach(function (k) { dl[k] = S.u; });
-    S = null; sess = null; busy = false; again = false; dropSess();
+    else if (u) dl[P] = u;   // Gaststand mitten im ersten Abgleich: nur dieser Pfad ging ans Konto
+    var w = busy ? cur : null;   // laufende Anfrage (z. B. init-POST): das DELETE erst nach ihrer Antwort, sonst koennte der Server sie danach noch schreiben
+    S = null; sess = null; busy = 0; again = false; dropSess();
     RES = { v: 1, on: 0, dl: dl, lg: 0 };   // nur die Vormerkung bleibt (keine Fortschrittsdaten); ohne Konto wird der Schluessel entfernt
     saveRes(); render();
-    if (RES) delRes();
+    if (RES) { if (w) w.then(function () { delRes(); }); else delRes(); }
   }
   function onClick(ev) {
     var el = ev.target && ev.target.closest ? ev.target : null;
@@ -545,6 +566,7 @@
       var id = v.getAttribute("data-vid");
       if (!VID_RX.test(id) || pth().v[id]) return;
       pth().v[id] = 1; enq({ v: id }); save(); marks();
+      if (busy) side(id);   // laufende Anfrage: flush merkt nur vor, und der Nachversand ginge mit dem Verlassen der Seite verloren
       flush(true);   // Seite wird verlassen; die Zielseite laedt dieses Skript nicht
     }
   }
@@ -575,10 +597,12 @@
     if (ev.key !== KEY) return;
     var s = load();
     if (s === "x") return;
-    gen++; busy = false; again = false;   // Antworten auf Anfragen zum alten Stand gelten nicht mehr
+    var was = !!S && !RO;
+    gen++;   // Antworten auf Anfragen zum alten Stand gelten nicht mehr (busy und again bleiben: die laufende Anfrage gibt busy mit ihrer Antwort frei)
     if (s === false) { RO = true; S = S || { v: 1, on: 1, u: 0, ep: 0, sy: 0, dl: {}, p: {} }; }
     else { RO = false; S = s; }
     render();
+    if (!was && S && !RO) { if (started()) save(); first(); plan(); }   // Opt-in in einem anderen Tab: hier ebenso abgleichen (vorgemerktes Loeschen zuerst)
   });
 
   // ---------- Start ----------

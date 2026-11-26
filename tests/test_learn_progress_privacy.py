@@ -31,6 +31,30 @@ class PrivacyText(unittest.TestCase):
             for w in words: self.assertIn(w, txt)
         for k in ("m365-learn", "m365-learn-s", "m365_auth"): self.assertIn(f'"{k}"', self.js)
 
+    def test_all_stored_fields_named(self):
+        """Endpruefung B8/B9: alle gespeicherten Felder (q, ep/sy, dl, pt, lg, Fehlschlag) und Video per Karte oder Link."""
+        de, en = _section(self.legal, "lernpfad-fortschritt"), _section(self.legal, "learning-progress")
+        for w in ("deren Karte oder Link Sie angeklickt haben", "(Warteschlange)", "Epoche und Änderungszeitpunkt des Servers", "Konto-ID je Pfad",
+                  "den Zeitpunkt der zuletzt gesendeten Lesestelle", "auch einen Fehlschlag", "ob Sie danach den Anmeldelink im Kasten angeklickt haben"):
+            self.assertIn(w, de)
+        for w in ("whose card or link you clicked", "(queue)", "epoch and the server's change time", "account ID per path", "the time of the last reading position sent",
+                  "including a failure", "whether you then clicked the sign-in link in the box"):
+            self.assertIn(w, en)
+        # die Felder gibt es im Skript wirklich
+        for f in ("q: []", "ep: int(o.ep), sy: int(o.sy)", "pt: (sess && sess.pt)", "lg: o.lg", "e: 1, h: hint()"):
+            self.assertIn(f, self.js)
+
+    def test_check_once_per_quarter_hour_also_after_failure(self):
+        """Endpruefung B7: auch ein Fehlschlag (429, 5xx, Netz) der Anmeldepruefung wird in m365-learn-s gemerkt (Sperre 15 min, Anmeldehinweis gilt weiter)."""
+        de, en = _section(self.legal, "lernpfad-fortschritt"), _section(self.legal, "learning-progress")
+        self.assertIn("einmal je Tab und Viertelstunde bei unserem Server api-dub.m365.fm nach, ob Sie angemeldet sind, auch ohne Konto und auch nach einem Fehlschlag", de)
+        self.assertIn("once per tab and quarter of an hour whether you are signed in, also without an account and also after a failure", en)
+        fn = self.js[self.js.index("function noteSess("):]; fn = fn[:fn.index("\n  }\n")]
+        self.assertIn("writeSess(sess); }", fn.split("\n")[3])
+        fr = self.js[self.js.index("function fresh("):]; fr = fr[:fr.index("\n  }\n")]
+        self.assertIn("if (ss.e) return !ss.s && !ss.h === !hint();", fr)
+        self.assertIn("if (ss.s === 401 && hint()) return false;", fr); self.assertIn("if (ss.s === 200 && !hint()) return false;", fr)
+
     def test_links_from_pages_reach_the_sections(self):
         import site_pillars as S
         self.assertTrue(S.lp_privacy("https://x", "de").endswith("/datenschutz/#lernpfad-fortschritt"))
@@ -55,12 +79,12 @@ class PrivacyText(unittest.TestCase):
         js = self.js
         self.assertNotIn("sendBeacon", js)
         self.assertEqual(len(re.findall(r"\bfetch\(", js)), 1)
-        for fn in ("flush", "first", "get", "delAcc"):   # jeder Weg zu api() mit Stand prueft zuerst, dass es einen gibt (Opt-in)
+        for fn in ("flush", "first", "get", "delAcc", "side"):   # jeder Weg zu api() mit Stand prueft zuerst, dass es einen gibt (Opt-in)
             body = js[js.index(f"function {fn}("):]; body = body[:body.index("\n  }\n")]
             self.assertRegex(body.split("\n")[1] + body.split("\n")[2] + body.split("\n")[3], r"if \(!S \|\| RO", fn)
         body = js[js.index("function delRes("):]; body = body[:body.index("\n  }\n")]
         self.assertIn("var u = RES && RES.dl[P];", body)   # ohne Stand nur das vorgemerkte DELETE nach "Nicht mehr speichern"
-        self.assertEqual(len(re.findall(r"\bapi\(", js)) - 1, 5, "api() ausser der Definition: GET, POST (flush, init), DELETE (delAcc, delRes)")
+        self.assertEqual(len(re.findall(r"\bapi\(", js)) - 1, 6, "api() ausser der Definition: GET, POST (flush, init, side), DELETE (delAcc, delRes)")
         self.assertIn("if (!S || RO) return false;", js)   # save(): nur mit Stand
         early = __import__("site_pillars").LPX_EARLY
         self.assertIn('localStorage.getItem("m365-learn")', early); self.assertNotIn("setItem", early)

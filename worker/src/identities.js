@@ -209,6 +209,8 @@ export async function mergeStatements(db, S, T) {
   // Lernfortschritt (0056): eine Zeile je Nutzer und Pfad - hat T schon eine, bekommt sie die Vereinigung mit der von S (mergeLearnProgress: gelesen/
   // geoeffnet per ODER, juengste Lesestelle; die Zeile von S bleibt am stillgelegten S), sonst uebernimmt T die von S (keepT)
   st.push(...await mergeLearnProgress(db, S, T));
+  // Zeilen, die T uebernimmt, mit Epoche 0: die Geraete von T kennen fuer diese Pfade nur ep 0 (keine Zeile); eine Reset-Epoche von S gaebe dort 409 ep
+  st.push(q("UPDATE learn_progress SET ep=0 WHERE user_id=? AND path NOT IN (SELECT path FROM learn_progress WHERE user_id=?)", S, T));
   keepT("learn_progress");
   // Versuchszaehler (ratelimit, Schluessel learnq:<uid>:<pfad>, Fenster 24 h): laufende Zaehler von S werden zu denen von T addiert, das Fenster
   // beginnt mit dem spaeteren Start - so bringt das Zusammenfuehren keine zusaetzlichen Versuche. Abgelaufene Fenster zaehlen nicht.
