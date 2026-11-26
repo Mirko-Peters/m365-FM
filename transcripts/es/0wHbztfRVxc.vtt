@@ -1,0 +1,886 @@
+WEBVTT
+
+00:00:00.380 --> 00:00:05.060
+Bienvenidos al podcast M365FM, donde exploramos a las personas, las ideas y las tecnologías
+
+00:00:05.060 --> 00:00:06.220
+que dan forma al futuro del trabajo.
+
+00:00:06.840 --> 00:00:08.780
+¿Por qué DAX parece más difícil de lo que es?
+
+00:00:09.340 --> 00:00:13.560
+Power BI esconde más de 250 funciones detrás de una pequeña barra de fórmulas y el nombre
+
+00:00:13.560 --> 00:00:18.180
+de toda esa caja de herramientas es DAX, es DAX, significada de Analysis Expressions,
+
+00:00:18.440 --> 00:00:21.480
+y es el lenguaje que convierte tus tablas importadas en respuestas que no puedes obtener
+
+00:00:21.480 --> 00:00:22.100
+solo haciendo clics.
+
+00:00:22.440 --> 00:00:25.020
+Podrías esperar un aprendizaje difícil, pero en la práctica no necesitarás la mayoría
+
+00:00:25.020 --> 00:00:25.540
+de esas funciones.
+
+00:00:26.320 --> 00:00:29.120
+Lo que asusta a la gente no es la larga lista, sino una idea llamada contexto.
+
+00:00:29.120 --> 00:00:31.740
+Y una vez que la entiendes, el resto resulta mucho más fácil.
+
+00:00:32.120 --> 00:00:35.920
+Al final sabrás qué es DAX, dónde vive y por qué se comporta, cómo lo hace.
+
+00:00:36.940 --> 00:00:38.080
+¿Qué es realmente DAX?
+
+00:00:38.640 --> 00:00:40.900
+DAX es la abreviatura de Data Analysis Expressions.
+
+00:00:41.140 --> 00:00:44.340
+Si alguna vez has abierto Power BI Desktop y hecho clic en la barra de fórmulas de la
+
+00:00:44.340 --> 00:00:48.760
+parte superior y has estado justo frente a él, es el lenguaje que usa Power BI para
+
+00:00:48.760 --> 00:00:52.560
+crear cálculos y es el mismo que aparece en Power Pivot de Excel y en un producto de
+
+00:00:52.560 --> 00:00:54.640
+servidor de Microsoft llamado Analysis Services.
+
+00:00:55.640 --> 00:00:57.420
+Microsoft lo describe en una frase sencilla.
+
+00:00:57.420 --> 00:01:01.660
+DAX te ayuda a crear información nueva a partir de los datos que ya tienes en tu modelo.
+
+00:01:02.160 --> 00:01:02.840
+Ese es todo su trabajo.
+
+00:01:03.200 --> 00:01:06.600
+Es tablas ahí y quieres algo que las tablas no contienen literalmente todavía como una
+
+00:01:06.600 --> 00:01:08.580
+tasa de crecimiento o un margen de beneficio.
+
+00:01:09.100 --> 00:01:11.640
+Supongamos que tus datos ya contienen todas las ventas que hizo la empresa este año.
+
+00:01:12.100 --> 00:01:15.480
+Esas tablas pueden decirte que se vendió, pero no pueden decirte si este trimestre superó
+
+00:01:15.480 --> 00:01:16.720
+al mismo trimestre del año pasado.
+
+00:01:17.400 --> 00:01:21.080
+Esa comparación es información nueva y crearla es exactamente para lo que sirve DAX.
+
+00:01:21.080 --> 00:01:23.460
+Una fórmula de DAX puede vivir en uno de cuatro lugares.
+
+00:01:23.840 --> 00:01:27.100
+Una medida es un cálculo que se actualiza en vivo al filtrar un informe y una columna
+
+00:01:27.100 --> 00:01:30.280
+calculada es una columna nueva que agregas a una tabla y rellenas fila por fila.
+
+00:01:30.880 --> 00:01:34.280
+También existe la tabla calculada que crea una tabla completamente nueva a partir de una
+
+00:01:34.280 --> 00:01:37.560
+fórmula y la regla de seguridad que decide qué filas puede ver una persona.
+
+00:01:38.260 --> 00:01:41.320
+Para un principiante, las dos primeras son las que importan y son las únicas dos que
+
+00:01:41.320 --> 00:01:42.320
+necesitarás por mucho tiempo.
+
+00:01:42.320 --> 00:01:46.060
+El lenguaje tiene más de 250 funciones clasificadas en grupos según lo que hacen.
+
+00:01:46.900 --> 00:01:51.120
+Algunas manejan fechas y horas, otras manejan textos, otras suman números y un grupo está
+
+00:01:51.120 --> 00:01:53.020
+diseñado para comparar este mes con el mes pasado.
+
+00:01:53.440 --> 00:01:54.300
+No usarás la mayoría de ellos.
+
+00:01:54.680 --> 00:01:57.980
+Las personas que escriben DAX profesionalmente siguen consultando cosas constantemente y eso
+
+00:01:57.980 --> 00:01:58.640
+es completamente normal.
+
+00:01:59.140 --> 00:02:01.560
+Lo que escribes realmente es más amigable de lo que sugiere el nombre.
+
+00:02:01.960 --> 00:02:05.300
+Una fórmula sencilla suele ser un nombre corto, un signo de igual y una palabra que suma
+
+00:02:05.300 --> 00:02:05.900
+una columna.
+
+00:02:06.880 --> 00:02:10.620
+No hay llaves que memorizar el primer día y el editor sugiere funciones a medida que avanzas.
+
+00:02:12.320 --> 00:02:13.280
+¿Cómo difiere DAX de Excel?
+
+00:02:14.140 --> 00:02:17.500
+Si ya conoces Excel, esta es la parte que hace que el resto de DAX cobre sentido.
+
+00:02:17.960 --> 00:02:21.220
+Las fórmulas de Excel funcionan con celdas y rangos y están vinculadas a donde se encuentran
+
+00:02:21.220 --> 00:02:21.920
+los datos en el cuadrito.
+
+00:02:22.540 --> 00:02:25.580
+Mueve una columna y la fórmula se rompe porque apuntaba en lugar de a un objeto.
+
+00:02:26.360 --> 00:02:28.140
+DAX trabaja con columnas completas y tabla completa.
+
+00:02:28.560 --> 00:02:32.120
+Cuando apuntas a una columna en DAX, estás apuntando la columna entera, no una celda dentro
+
+00:02:32.120 --> 00:02:32.480
+de ella.
+
+00:02:33.120 --> 00:02:35.780
+Parece una pequeña diferencia, pero cambia todo en tu forma de pensar.
+
+00:02:36.420 --> 00:02:37.040
+Tomemos un ejemplo.
+
+00:02:37.500 --> 00:02:41.020
+En Excel, si quieres que el precio de una tabla de productos aparezca junto a una fila de ventas,
+
+00:02:41.020 --> 00:02:42.520
+probablemente escribirías un Boost Carve.
+
+00:02:43.100 --> 00:02:46.520
+En un modelo de Power BI, la tabla de ventas y la de productos ya están conectadas por
+
+00:02:46.520 --> 00:02:48.680
+una relación, así que el precio está simplemente disponible.
+
+00:02:49.080 --> 00:02:52.420
+La mayoría de las veces no escribes ninguna fórmula de búsqueda porque el modelo ya sabe
+
+00:02:52.420 --> 00:02:53.460
+cómo encajan las tablas.
+
+00:02:53.940 --> 00:02:56.420
+La ventaja es que una fórmula puede responder a 100 preguntas diferentes.
+
+00:02:56.900 --> 00:03:00.720
+Escribes el total de ventas una vez y te da la cifra para cada región, cada mes y cada
+
+00:03:00.720 --> 00:03:04.140
+producto porque se recalcula según lo que muestra el informe en ese momento.
+
+00:03:04.140 --> 00:03:07.200
+No la copias hacia abajo en una columna como lo harías en Excel.
+
+00:03:07.700 --> 00:03:10.680
+Excel sigue siendo brillante para lo que es una persona trabajando en una sola hoja
+
+00:03:10.680 --> 00:03:11.100
+de cálculo.
+
+00:03:11.920 --> 00:03:15.280
+DAX está diseñado para el caso diferente, en el que cientos de personas ven el mismo
+
+00:03:15.280 --> 00:03:18.200
+informe y los números deben ser correctos sin importar cómo los analicen.
+
+00:03:18.740 --> 00:03:19.760
+Y también hay un límite en esto.
+
+00:03:20.120 --> 00:03:23.580
+No existe la celda A1 en DAX, por lo que algunos hábitos de Excel te llevarán por mal
+
+00:03:23.580 --> 00:03:23.880
+camino.
+
+00:03:24.700 --> 00:03:28.180
+Si escribes una media que solo apunta a una columna, como pedir el monto de ventas por
+
+00:03:28.180 --> 00:03:30.560
+sí solo, DAX arroja un error porque no hay una fila única.
+
+00:03:30.560 --> 00:03:35.180
+De dónde extraer datos, tienes que decirle cómo combinar la columna usualmente sumándola
+
+00:03:35.180 --> 00:03:37.880
+y eso confunde a casi todos los que vienen de una hoja de cálculo.
+
+00:03:38.620 --> 00:03:39.760
+Medidas y columnas calculadas.
+
+00:03:40.280 --> 00:03:43.560
+Casi todos los problemas de un principiante en DAX se reducen a una elección y ocurre
+
+00:03:43.560 --> 00:03:44.840
+antes de escribir una sola fórmula.
+
+00:03:45.820 --> 00:03:49.020
+Estás decidiendo si lo que necesitas es una columna calculada o una medida.
+
+00:03:49.520 --> 00:03:51.460
+Ambas usan DAX y se comportan de manera muy diferente.
+
+00:03:51.800 --> 00:03:53.460
+Una columna calculada es la que resulta familiar.
+
+00:03:54.020 --> 00:03:58.200
+Agregas una nueva columna a una tabla y DAX la rellena para cada fila, una fila a la vez.
+
+00:03:58.200 --> 00:04:03.140
+Si su tabla de ventas tiene cantidad y precio, una columna calculada puede determinar el importe
+
+00:04:03.140 --> 00:04:06.800
+de cada fila y si desea clasificar a los clientes por grupos de DAX, una columna calculada
+
+00:04:06.800 --> 00:04:08.360
+puede etiquetar a cada uno.
+
+00:04:09.120 --> 00:04:10.440
+Detalle importante es cuándo se ejecuta.
+
+00:04:11.000 --> 00:04:15.040
+Se calcula cuándo se actualizan los datos y los resultados se almacenan dentro de su modelo.
+
+00:04:15.860 --> 00:04:18.300
+Una medida es lo opuesto, porque no almacena ningún resultado.
+
+00:04:19.120 --> 00:04:22.440
+Calcula su respuesta en vivo, en el momento en que alguien mira el informe, según lo que
+
+00:04:22.440 --> 00:04:23.120
+aparezca en pantalla.
+
+00:04:23.920 --> 00:04:26.860
+Una medida de ventas totales muestra un número para toda la empresa.
+
+00:04:26.860 --> 00:04:29.620
+Un número diferente para una región y otro más para un mes.
+
+00:04:29.880 --> 00:04:31.260
+Todo con la misma fórmula.
+
+00:04:31.660 --> 00:04:34.480
+No se guarda nada porque la respuesta cambia constantemente.
+
+00:04:35.080 --> 00:04:36.900
+Hay una trampa que enseña a la gente la diferencia de la forma difícil.
+
+00:04:37.560 --> 00:04:40.160
+Imagine que quiere el margen de beneficio, que es el beneficio debido por las ventas.
+
+00:04:40.920 --> 00:04:44.360
+Si lo crea como una columna calculada, obtendrá un porcentaje correcto para cada fila individual.
+
+00:04:45.160 --> 00:04:48.180
+Sin embargo, en el momento en que intenta mostrar un margen promedio para toda una región,
+
+00:04:48.340 --> 00:04:51.840
+el número es incorrecto porque ha promediado un montón de porcentajes en lugar de dividir
+
+00:04:51.840 --> 00:04:53.860
+el beneficio total por las ventas totales.
+
+00:04:53.860 --> 00:04:57.020
+Necesita la proporción de la suma, no la suma de las proporciones.
+
+00:04:57.100 --> 00:04:58.520
+Solo una medida obtiene eso correctamente.
+
+00:04:59.260 --> 00:05:01.580
+Elegir entre ellas se reduce a lo que necesite que haga el resultado.
+
+00:05:02.280 --> 00:05:05.980
+Si la respuesta debe servir como etiqueta, segmentador, encabezado de fila o categoría
+
+00:05:05.980 --> 00:05:07.720
+para filtrar, use una columna calculada.
+
+00:05:08.560 --> 00:05:11.380
+Si necesita un número en medio, un gráfico o tabla que reaccione a medida que los usuarios
+
+00:05:11.380 --> 00:05:12.400
+hacen clic, use una medida.
+
+00:05:12.720 --> 00:05:14.620
+Cuando cualquiera de las dos funcione, inclínese por la medida.
+
+00:05:15.000 --> 00:05:16.520
+Ese último punto importa más de lo que parece.
+
+00:05:17.240 --> 00:05:20.920
+Cada columna calculada reside en la memoria de su modelo y esa memoria tiene un costo.
+
+00:05:20.920 --> 00:05:22.840
+Las medidas no ocupan ese espacio.
+
+00:05:23.360 --> 00:05:26.600
+En un archivo pequeño nunca lo notará, pero en uno real con millones de filas,
+
+00:05:26.800 --> 00:05:29.340
+un puñado de columnas descuidadas puede ralentizarlo todo.
+
+00:05:30.000 --> 00:05:33.720
+También hay una idea subyacente a ambas que explica casi todos los resultados extraños
+
+00:05:33.720 --> 00:05:35.500
+de DAX y es lo que hace que la gente abandone.
+
+00:05:36.260 --> 00:05:37.520
+Es la que merece toda su atención.
+
+00:05:38.200 --> 00:05:39.560
+La idea que hace tropezar a todos.
+
+00:05:40.240 --> 00:05:44.560
+Debajo de ambas puertas hay una idea y es la que decide si DAX parece simple o imposible.
+
+00:05:45.120 --> 00:05:48.660
+Se llama contexto y simplemente significa el conjunto de filas que una fórmula tiene permitido
+
+00:05:48.660 --> 00:05:49.680
+observar mientras se ejecuta.
+
+00:05:50.140 --> 00:05:50.840
+Cambia el contexto.
+
+00:05:51.140 --> 00:05:52.840
+La misma fórmula le dará una respuesta diferente.
+
+00:05:53.160 --> 00:05:54.340
+Eso no es un error, es todo diseño.
+
+00:05:54.840 --> 00:05:57.780
+Hay dos tipos de contexto y sus nombres son menos intimidantes de lo que parece.
+
+00:05:58.420 --> 00:06:00.140
+El contexto de fila se refiere a la fila actual.
+
+00:06:00.600 --> 00:06:04.620
+Aparece cuando DAX recorre una tabla fila por fila, ya sea porque creó una columna calculada
+
+00:06:04.620 --> 00:06:07.060
+o porque usó una función que itera sobre filas deliberadamente.
+
+00:06:07.800 --> 00:06:09.660
+Si nada está iterando, no hay contexto de fila.
+
+00:06:09.920 --> 00:06:11.560
+Es una regla que vale la pena repetirse.
+
+00:06:12.040 --> 00:06:15.320
+El contexto de filtro es todo lo que ya ha sido filtrado antes de que su fórmula comience.
+
+00:06:15.320 --> 00:06:18.160
+Cada celda en un informe tiene su propio contexto de filtro.
+
+00:06:18.440 --> 00:06:21.920
+Un segmentador de año, un gráfico dividido por región, un filtro en la página e incluso
+
+00:06:21.920 --> 00:06:23.980
+hacer clic en una barra de otro gráfico influyen en él.
+
+00:06:24.460 --> 00:06:27.640
+Aquí es donde los principiantes se equivocan y es algo tan común que quienes enseñan DAX
+
+00:06:27.640 --> 00:06:28.980
+advierten sobre ello por su nombre.
+
+00:06:29.920 --> 00:06:33.460
+Muchos asumen que cada fila de una tabla visual se calcula por sí sola como si la fórmula
+
+00:06:33.460 --> 00:06:34.480
+se ejecutara por fila.
+
+00:06:35.120 --> 00:06:36.040
+Esa suposición es incorrecta.
+
+00:06:36.300 --> 00:06:40.340
+Cada celda se calcula bajo su propio filtro y ese filtro puede abarcar silenciosamente muchas
+
+00:06:40.340 --> 00:06:40.900
+filas a la vez.
+
+00:06:41.520 --> 00:06:44.920
+Cuando alguien dice que un número de DAX es incorrecto, este malentendido suele ser la razón.
+
+00:06:45.860 --> 00:06:48.300
+Imagina una tabla de ventas totales con las marcas en el lateral.
+
+00:06:49.340 --> 00:06:52.560
+La fórmula nunca cambia, pero el número al lado de cada marca es diferente porque cada
+
+00:06:52.560 --> 00:06:54.420
+celda lleva su propio filtro para esa marca.
+
+00:06:55.180 --> 00:06:57.660
+No se editó nada entre filas, así que el contexto hizo todo el trabajo.
+
+00:06:58.240 --> 00:07:01.700
+Lo mismo ocurre con un segmentador, donde al hacer clic en una región cada celda se vuelve
+
+00:07:01.700 --> 00:07:02.820
+a calcular bajo el nuevo filtro.
+
+00:07:03.320 --> 00:07:06.360
+Una vez que pueda visualizar eso, podrá predecir que era una medida incluso antes de escribirla.
+
+00:07:07.420 --> 00:07:08.380
+Los filtros también se propagan.
+
+00:07:08.380 --> 00:07:11.600
+Cuando filtra una tabla de productos, ese filtro fluye hacia la tabla de ventas a través
+
+00:07:11.600 --> 00:07:13.820
+de la relación, por lo que las cifras de ventas también se reducen.
+
+00:07:14.120 --> 00:07:16.860
+El contexto de fila no se propaga de esa manera, lo cual es otra razón por la que vamos
+
+00:07:16.860 --> 00:07:17.440
+a ser como tan distinto.
+
+00:07:17.680 --> 00:07:20.440
+La función que convierte el contexto de una trampa en una herramienta se llama Calculate.
+
+00:07:21.020 --> 00:07:24.080
+Permite cambiar los filtros bajo los cuales se ejecuta una fórmula para que pueda solicitar
+
+00:07:24.080 --> 00:07:26.120
+un número como si solo el año pasado estuviera seleccionado.
+
+00:07:26.120 --> 00:07:29.760
+Microsoft la llama una de las funciones más potentes de DAX, y una vez que haya comprendido
+
+00:07:29.760 --> 00:07:31.160
+el contexto, entenderá por qué.
+
+00:07:31.840 --> 00:07:34.340
+Quiero ser honesto sobre la parte difícil, porque usted se lo merece.
+
+00:07:34.600 --> 00:07:37.500
+El contexto es realmente la parte complicada y requiere repetición para interiorizarlo.
+
+00:07:37.840 --> 00:07:41.260
+Todo lo demás en DAX es principalmente recordar qué función hace qué, y esa parte es más
+
+00:07:41.260 --> 00:07:42.840
+una consulta que una habilidad.
+
+00:07:43.420 --> 00:07:44.760
+Domina el contexto y lo demás vendrá solo.
+
+00:07:45.520 --> 00:07:46.860
+Lo que la gente construye realmente con DAX.
+
+00:07:47.320 --> 00:07:50.440
+El contexto es abstracto hasta que ve para qué sirve, por lo que ayuda a mirar la lista
+
+00:07:50.440 --> 00:07:52.180
+corta de cosas que la gente realmente construye.
+
+00:07:52.660 --> 00:07:56.060
+Cada una de ellas es una pregunta que un gráfico normal no puede responder por sí solo.
+
+00:07:56.420 --> 00:07:57.920
+La primera es el crecimiento a lo largo del tiempo.
+
+00:07:58.200 --> 00:08:01.600
+Abarca el año tras año, trimestre tras trimestre y los totales acumulados que suman a que pasan
+
+00:08:01.600 --> 00:08:01.900
+los meses.
+
+00:08:02.440 --> 00:08:05.620
+Este suele ser el momento en que alguien abre la barra de fórmulas por primera vez, porque
+
+00:08:05.620 --> 00:08:09.020
+un gráfico simple te muestra el mes actual y alguien en una reunión pregunta de inmediato
+
+00:08:09.020 --> 00:08:10.280
+cómo se compara con el año pasado.
+
+00:08:11.520 --> 00:08:13.920
+DAX tiene todo un grupo de funciones creadas exactamente para esto.
+
+00:08:14.600 --> 00:08:16.840
+En segundo lugar están las proporciones que deben sobrevivir al filtrado.
+
+00:08:17.180 --> 00:08:19.860
+Esto significa margen de beneficio, tasa de conversión y valor promedio de pedido.
+
+00:08:20.140 --> 00:08:23.420
+Estos son los cálculos que fallan cuando se crean de manera incorrecta, razón por la cual
+
+00:08:23.420 --> 00:08:24.600
+aparecieron en la última sección.
+
+00:08:24.600 --> 00:08:28.600
+La clasificación es la tercera y responde a preguntas como qué producto es el número
+
+00:08:28.600 --> 00:08:31.160
+uno en cada región y qué vendedor lidera en cada categoría.
+
+00:08:31.960 --> 00:08:34.900
+Una ordenación simple no te llevará allí porque necesitas que el rango se reinicie
+
+00:08:34.900 --> 00:08:35.620
+dentro de cada grupo.
+
+00:08:35.980 --> 00:08:39.400
+La segmentación es la cuarta y significa agrupar clientes en bandas de edad o pedidos
+
+00:08:39.400 --> 00:08:42.360
+en niveles de valor para que puedas informar sobre las bandas en lugar de los números
+
+00:08:42.360 --> 00:08:42.740
+brutos.
+
+00:08:42.740 --> 00:08:46.640
+Este es un trabajo para una columna calculada porque la banda es una etiqueta que deseas
+
+00:08:46.640 --> 00:08:47.480
+usar como segmentador.
+
+00:08:48.000 --> 00:08:50.640
+Ahora veamos un pequeño ejemplo para que deje de sentirse abstracto.
+
+00:08:51.520 --> 00:08:54.880
+Tienes una tabla de ventas con las transacciones reales, una tabla de productos con nombres
+
+00:08:54.880 --> 00:08:57.200
+y categorías y una tabla de fechas con una fila por día.
+
+00:08:58.000 --> 00:09:01.000
+Escribes una medida para las ventas totales, luego una segunda medida para las ventas del
+
+00:09:01.000 --> 00:09:02.780
+año pasado y una tercera que compara ambas.
+
+00:09:03.200 --> 00:09:06.400
+La segunda y la tercera se construyen sobre la primera porque las medidas pueden usar otras
+
+00:09:06.400 --> 00:09:07.500
+medidas como bloques de construcción.
+
+00:09:07.840 --> 00:09:09.980
+Observa que nunca tocaste las tablas originales en absoluto.
+
+00:09:10.200 --> 00:09:13.140
+Agregaste tres pequeñas medidas y el informe se convirtió en algo con lo que un gerente
+
+00:09:13.140 --> 00:09:14.000
+realmente puede trabajar.
+
+00:09:14.460 --> 00:09:17.640
+Esa creación de capas es lo que mantiene un modelo real legible en lugar de convertirse
+
+00:09:17.640 --> 00:09:18.500
+en una fórmula gigante.
+
+00:09:19.120 --> 00:09:20.500
+Ese es el patrón que verás una y otra vez.
+
+00:09:21.140 --> 00:09:25.200
+Hay pequeñas medidas apiladas y reutilizadas, cada una respondiendo a una pregunta clara,
+
+00:09:26.300 --> 00:09:28.520
+donde los principiantes se atascan y los límites son estos.
+
+00:09:29.260 --> 00:09:32.660
+Si las últimas secciones hicieron que DAX pareciera accesible, bien, pero no voy a fingir
+
+00:09:32.660 --> 00:09:33.540
+que todo es sencillo.
+
+00:09:33.960 --> 00:09:37.700
+Aquí es donde la gente realmente atropiase y donde el lenguaje genuinamente presenta resistencia.
+
+00:09:38.260 --> 00:09:41.820
+El error más común es el que acabamos de cubrir, confundir el contexto de fila y el
+
+00:09:41.820 --> 00:09:42.820
+contexto de filtro.
+
+00:09:42.900 --> 00:09:46.300
+Se manifiesta como totales que no coinciden, promedios que parecen ligeramente incorrectos
+
+00:09:46.300 --> 00:09:47.540
+y porcentajes que no tienen sentido.
+
+00:09:47.840 --> 00:09:50.920
+La solución no es añadir más funciones, sino reducir la velocidad y preguntar qué
+
+00:09:50.920 --> 00:09:51.960
+filas puede ver la fórmula.
+
+00:09:52.160 --> 00:09:54.960
+Un segundo lugar muy cercano es apoyarse en columnas calculadas porque parece más
+
+00:09:54.960 --> 00:09:55.140
+seguro.
+
+00:09:55.640 --> 00:09:58.380
+Se comportan como las columnas de Excel en las que ya confías, así que son tentadoras.
+
+00:09:59.020 --> 00:10:03.080
+También ocupan memoria y muchas de ellas son simplemente necesarias porque el mismo
+
+00:10:03.080 --> 00:10:05.820
+resultado suele obtenerse con una medida más ligera y correcta.
+
+00:10:06.800 --> 00:10:11.140
+Activa relaciones bidireccionales es la tercera trampa y la gente lo hace sin entenderlas.
+
+00:10:11.140 --> 00:10:15.020
+Una relación normalmente filtra en una dirección desde el lado del uno hacia el lado de muchos.
+
+00:10:15.700 --> 00:10:19.140
+El filtrado bidireccional hace que los filtros fluyan en ambos sentidos y es realmente útil
+
+00:10:19.140 --> 00:10:20.200
+en casos específicos.
+
+00:10:20.940 --> 00:10:23.980
+También es peligroso porque puede crear silenciosamente rutas ambiguas y resultados
+
+00:10:23.980 --> 00:10:24.560
+incorrectos.
+
+00:10:25.000 --> 00:10:28.900
+Quienes mejor conocen DAX lo tratan con mucha precaución y los principiantes deberían
+
+00:10:28.900 --> 00:10:30.280
+evitarlo hasta entender bien el modelo.
+
+00:10:30.860 --> 00:10:34.060
+El cuarto error es culpar a DAX de un informe lento cuando el problema es el modelo.
+
+00:10:34.840 --> 00:10:38.480
+Los objetos visuales y las fórmulas lentas suelen ser síntomas de un modelo mal estructurado
+
+00:10:38.480 --> 00:10:39.860
+más que de una mala fórmula.
+
+00:10:40.660 --> 00:10:44.660
+Power BI incluye una herramienta llamada analizador de rendimiento que muestra exactamente qué
+
+00:10:44.660 --> 00:10:48.180
+objeto visual y qué fórmula consumen tiempo y es lo primero que debes revisar antes de
+
+00:10:48.180 --> 00:10:49.020
+reescribir algo.
+
+00:10:49.760 --> 00:10:52.760
+Ahora hablemos de los límites honestos porque un video para principiantes que los omite
+
+00:10:52.760 --> 00:10:54.060
+no está siendo sincero contigo.
+
+00:10:54.460 --> 00:10:55.400
+La curva de aprendizaje es real.
+
+00:10:55.720 --> 00:10:58.880
+La propia guía para principiantes de Microsoft dice que DAX puede ser difícil de aprender
+
+00:10:58.880 --> 00:10:59.440
+y tiene razón.
+
+00:10:59.920 --> 00:11:03.580
+Tanto las columnas calculadas como las fórmulas complejas tienen un costo ya sea de memoria
+
+00:11:03.580 --> 00:11:04.120
+o de tiempo.
+
+00:11:04.980 --> 00:11:07.900
+No todas las funciones existen en todas las versiones de las herramientas y el lenguaje
+
+00:11:07.900 --> 00:11:11.060
+sigue cambiando, con lo que un tutorial antiguo puede quedar desactualizado sin que te des
+
+00:11:11.060 --> 00:11:11.280
+cuenta.
+
+00:11:11.800 --> 00:11:14.740
+Además, en DAX no existen las referencias a celdas, así que tendrás que desaprender
+
+00:11:14.740 --> 00:11:17.080
+un poco tu instinto de hoja de cálculo antes de asimilar el nuevo.
+
+00:11:17.720 --> 00:11:18.840
+Nada de eso es motivo para evitarlo.
+
+00:11:19.300 --> 00:11:22.060
+Es motivo para esperar un par de tardes frustrantes en lugar de esperar magia.
+
+00:11:22.520 --> 00:11:26.280
+Y si alguna vez te sientes rezagado, recuerda que incluso quienes escriben DAX profesionalmente
+
+00:11:26.280 --> 00:11:27.820
+siguen buscando información casi todas las semanas.
+
+00:11:28.240 --> 00:11:30.860
+Nadie retiene todas esas funciones en su cabeza y tú tampoco tienes por qué hacerlo.
+
+00:11:30.860 --> 00:11:37.000
+Donde DAX encaja Microsoft 365, Fabric y Azure, todo esto, vive en más de un lugar dentro
+
+00:11:37.000 --> 00:11:40.260
+del entorno de Microsoft que ya pagas y eso es una buena noticia para tus habilidades.
+
+00:11:41.200 --> 00:11:44.200
+DAX no es un truco de un solo producto que desaparece cuando cambias de herramienta.
+
+00:11:44.680 --> 00:11:47.720
+Power BI Desktop es el primer hogar y es gratuito para descargar.
+
+00:11:48.100 --> 00:11:50.040
+Ahí es donde la mayoría de la gente escribe su primera fórmula.
+
+00:11:50.660 --> 00:11:54.180
+Power Pivot es el segundo y está dentro de Excel, así que si alguna vez has creado una
+
+00:11:54.180 --> 00:11:57.700
+tabla dinámica sobre un modelo de datos allí, has estado a un clic de DAX sin darte cuenta.
+
+00:11:57.700 --> 00:12:02.360
+El tercer hogar es Analysis Services, el producto de servidor de Microsoft que impulsa los modelos
+
+00:12:02.360 --> 00:12:02.840
+de Power BI.
+
+00:12:03.580 --> 00:12:05.840
+Ese motor compartido es la razón por la que DAX aparecen los tres.
+
+00:12:06.140 --> 00:12:08.320
+No son tres lenguajes diferentes que por casualidad se parecen.
+
+00:12:08.840 --> 00:12:11.280
+Es un solo lenguaje y aprenderlo una vez sirve para todo.
+
+00:12:12.420 --> 00:12:14.680
+¿Power BI ahora forma parte de Microsoft Fabric?
+
+00:12:15.320 --> 00:12:18.780
+Si has oído ese nombre y no sabías qué era, la respuesta sencilla es que Fabric es la
+
+00:12:18.780 --> 00:12:20.860
+plataforma de datos donde residen los modelos de Power BI.
+
+00:12:20.860 --> 00:12:25.260
+Por qué es un modelo de Power BI se describe como un elemento de Fabric y por qué los
+
+00:12:25.260 --> 00:12:29.200
+ajustes de herramientas como Copilot parecen de Fabric en lugar de Power BI.
+
+00:12:30.000 --> 00:12:31.360
+Es su lenta en escena a través del mismo linaje.
+
+00:12:31.740 --> 00:12:34.900
+El motor tabular y las ideas de modelado detrás de DAX provienen de la familia Microsoft
+
+00:12:34.900 --> 00:12:37.440
+SQL Server, una tecnología de servidor que también funciona en Azure.
+
+00:12:38.440 --> 00:12:41.760
+No necesitas nada de esto para escribir tu primera medida, pero explica por qué los
+
+00:12:41.760 --> 00:12:44.340
+mismos conceptos siguen apareciendo en las ofertas de empleo para puestos de datos.
+
+00:12:45.100 --> 00:12:49.680
+Luego está lo primero que un principiante en 2026 se preguntará si Copilot puede escribir
+
+00:12:49.680 --> 00:12:50.600
+el DAX por ti.
+
+00:12:51.100 --> 00:12:54.960
+La respuesta honesta es que en parte, Copilot para Power BI puede generar DAX y escribir
+
+00:12:54.960 --> 00:12:58.780
+consultas DAX, pero requiere una capacidad de pago de Fabric o Premium.
+
+00:12:59.520 --> 00:13:01.380
+Algunas de sus funciones aún están en vista previa.
+
+00:13:01.660 --> 00:13:03.920
+Microsoft aclara que depende de un modelo bien preparado.
+
+00:13:04.680 --> 00:13:07.560
+Sin esa preparación puede devolver respuestas genéricas o simplemente incorrectas.
+
+00:13:07.800 --> 00:13:11.000
+Sí que Copilot es una ventaja genuina, pero los conceptos básicos son los que te
+
+00:13:11.000 --> 00:13:12.720
+permiten saber si obtuvo la respuesta correcta.
+
+00:13:13.220 --> 00:13:15.180
+La versión corta hay una pregunta para ti.
+
+00:13:15.660 --> 00:13:17.120
+Aquí tienes la versión corta para que te la llevo.
+
+00:13:17.120 --> 00:13:22.100
+DAX es el lenguaje de fórmulas detrás de Power BI y Power Pivot en Excel y funciona
+
+00:13:22.100 --> 00:13:24.940
+con tablas y columnas completas en lugar de celdas individuales.
+
+00:13:25.780 --> 00:13:29.560
+Las medidas calculan su respuesta en tiempo real al filtrar y las columnas calculadas
+
+00:13:29.560 --> 00:13:31.060
+almacenan un valor para cada fila.
+
+00:13:31.960 --> 00:13:36.020
+Debajo de todo está el contexto, la idea que decide qué filas puede ver una fórmula
+
+00:13:36.020 --> 00:13:38.860
+y algo que vale la pena practicar hasta que parezca obvio.
+
+00:13:39.500 --> 00:13:41.800
+Es mucho menos aterrador de lo que sugieren esas tres letras.
+
+00:13:42.360 --> 00:13:43.140
+Y ahora ya tienes el mapa.
+
+00:13:43.140 --> 00:13:44.720
+Pregunta para ti es esta.
+
+00:13:45.200 --> 00:13:48.120
+¿Cuál es ese cálculo que sigues haciendo mal en Excel y ese que desearías que un informe
+
+00:13:48.120 --> 00:13:49.240
+pudiera mostrarte directamente?
+
+00:13:50.300 --> 00:13:53.400
+Dilo en los comentarios por qué ese deseo específico suele ser el punto exacto donde
+
+00:13:53.400 --> 00:13:54.660
+DAX empieza a tener sentido.
+
+00:13:55.420 --> 00:14:00.460
+Si esto hizo que el tema fuera menos intimidante, suscríbete a M365FM para dominar las herramientas
+
+00:14:00.460 --> 00:14:02.020
+y la mentalidad que informa el futuro del trabajo.
