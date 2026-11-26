@@ -107,7 +107,7 @@ A line has 420 minutes of planned time. The ideal time per unit is 0.5 minutes, 
 - Availability: 350 ÷ 420 = 83.3%.
 - Performance: (0.5 × 595) ÷ 350 = 85.0%.
 - Quality: 560 ÷ 595 = 94.1%.
-- OEE: 0.833 × 0.85 × 0.941 = 66.7%.
+- OEE: 0.833 × 0.85 × 0.941 = 66.7% (calculated with the unrounded factors; the rounded factors shown give 66.6%).
 
 Check: 560 × 0.5 ÷ 420 = 280 ÷ 420 = 66.7%.
 
@@ -117,7 +117,7 @@ The team sorts the losses. Stops are the largest. It shortens a changeover and f
 - Availability: 375 ÷ 420 = 89.3%.
 - Total count: 0.90 × 375 ÷ 0.5 = 675 units.
 - Good count: 675 × 0.96 = 648 units.
-- OEE: 0.893 × 0.90 × 0.96 = 77.1%.
+- OEE: 0.893 × 0.90 × 0.96 = 77.1% (calculated with the unrounded availability of 375 ÷ 420; the rounded factors shown give 77.2%).
 
 Check: 648 × 0.5 ÷ 420 = 324 ÷ 420 = 77.1%.
 
