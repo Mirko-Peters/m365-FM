@@ -1,5 +1,10 @@
 name: Website bauen und veröffentlichen
-# Wann gebaut wird (weniger Actions-Minuten, Ziel: privates Repo mit GitHub Pro):
+# Wann gebaut wird - seit 26.11.2026 (Mirko: "dann immer nur mittwoch seite neu bauen, alles so lange sammeln"):
+# - nur noch einmal pro Woche voll, MITTWOCH 13:07 UTC (nach dem Deploy-Tag am Vormittag: gesammelte PRs sind gemergt).
+#   Code-Pushes (Merges) bauen standardmaessig nicht mehr sofort (SITE_PUSH_BUILD Standard jetzt "0"), Frische-Baus fuer neue Folgen
+#   sind standardmaessig aus (SITE_FRESH_OFF Standard jetzt "1", spreaker-feed-check.yml). Von Hand ("Run workflow") geht jederzeit.
+#   Rueckweg: Repo-Variable SITE_PUSH_BUILD=1 bzw. SITE_FRESH_OFF=0 setzen, Zeitplan unten wieder auf "7 1 * * *".
+# Frueher (bis 26.11.2026):
 # - naechtlich einmal voll (01:07 UTC = 02:07 Berlin im Winter, 03:07 im Sommer): alle Daten-Abrufe, Plattform-Sync, Spotify;
 #   danach (04:47 UTC) setzt spreaker-links.yml das Website-Feld der neuen Folgen auf die frisch gebauten Seiten.
 # - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
@@ -23,7 +28,7 @@ on:
             "tools/r2_common.py", "tools/r2_pages_upload.py", "tools/r2_og_upload.py", "tools/r2_site_sync.py",
             "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", "data/pillar_quiz.json", ".github/workflows/site.yml"]
   schedule:
-    - cron: "7 1 * * *"
+    - cron: "7 13 * * 3"   # Mittwoch 13:07 UTC (Mirko 26.11.2026: nur mittwochs bauen); vorher taeglich "7 1 * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -37,9 +42,9 @@ permissions:
   id-token: write
 jobs:
   build:
-    # Repo-Variable SITE_PUSH_BUILD=0: Code-Pushes bauen nicht sofort (kostet dann 0 Minuten), sie kommen mit dem naechtlichen/Frische-Bau
-    # (vars.X || '1'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false -> jeder Push-Bau wurde uebersprungen
-    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '1') != '0'
+    # Repo-Variable SITE_PUSH_BUILD: Standard seit 26.11.2026 "0" = Code-Pushes bauen nicht sofort, sie kommen mit dem Mittwochs-Bau; "1" = wie frueher sofort.
+    # (vars.X || 'Standard'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false - darum immer mit Standardwert
+    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '0') != '0'
     runs-on: ubuntu-latest
     concurrency:
       group: site-build

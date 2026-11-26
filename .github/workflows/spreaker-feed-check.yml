@@ -26,7 +26,8 @@ jobs:
           SITE_FRESH_GAP_H: ${{ vars.SITE_FRESH_GAP_H || '6' }}
         run: python tools/new_episodes_check.py
       - name: Seitenbau fuer neue Folgen starten (mode=fresh)
-        if: steps.neweps.outputs.dispatch == '1' && vars.SITE_FRESH_OFF != '1'
+        # seit 26.11.2026 Standard aus (Mirko: nur mittwochs bauen); SITE_FRESH_OFF=0 schaltet die Frische-Baus wieder ein
+        if: steps.neweps.outputs.dispatch == '1' && (vars.SITE_FRESH_OFF || '1') != '1'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
