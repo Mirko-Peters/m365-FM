@@ -361,15 +361,16 @@ class DataFile(unittest.TestCase):
         self.assertGreaterEqual(len(d["context"]), 5); self.assertFalse(set(d["context"]) <= {"en", "de"}, "context: Konzepte, nicht Sprachen")
         for r in list(d["context"].values()) + [v for x in d["rules"].values() for k, v in x.items() if k in ("en", "de", "not")]:
             self.assertIsNotNone(PV._rx(r))
-        flat = [e["id"] for v in d["pillars"].values() for e in v["videos"]]
+        flat = [e["id"] for v in d["pillars"].values() for e in v["videos"] if not e.get("manual")]   # von Hand darf ein Video zusaetzlich bei einem zweiten Leitfaden stehen
         self.assertEqual(len(flat), len(set(flat)), "Video doppelt zugeordnet")
         for pid in d["pillars"]: self.assertLessEqual(len(PV.shown(d, pid)), max(d["max"], sum(1 for e in d["pillars"][pid]["videos"] if e.get("manual"))))
         for v in d["pillars"].values():
             for e in v["videos"]:
                 if not e.get("manual"): self.assertGreaterEqual(e["score"], d["min_score"]); self.assertRegex(e["date"], r"^\d{4}-\d{2}-\d{2}$")
-        # Fabric-Roadmap haengt bei Manufacturing IT (von Hand), nicht bei den Kennzahlen
-        self.assertIn("AXT4Qac8mQ8", PV.shown(d, "manufacturing-it-azure"))
-        self.assertNotIn("AXT4Qac8mQ8", PV.shown(d, "manufacturing-kpis")); self.assertIn("AXT4Qac8mQ8", d["pillars"]["manufacturing-kpis"]["blocked"])
+        # Mirko 26.11.2026: Fabric-Roadmap zurueck zu den Kennzahlen (von Hand), bei Manufacturing IT gesperrt; Shop-Floor-Video zusaetzlich bei Shop Floor Management
+        self.assertIn("AXT4Qac8mQ8", PV.shown(d, "manufacturing-kpis")); self.assertNotIn("AXT4Qac8mQ8", d["pillars"]["manufacturing-kpis"]["blocked"])
+        self.assertNotIn("AXT4Qac8mQ8", PV.shown(d, "manufacturing-it-azure")); self.assertIn("AXT4Qac8mQ8", d["pillars"]["manufacturing-it-azure"]["blocked"])
+        self.assertIn("ZY12nBEY2qc", PV.shown(d, "shop-floor-management")); self.assertIn("ZY12nBEY2qc", PV.shown(d, "manufacturing-it-azure"))
 
 
 if __name__ == "__main__":
