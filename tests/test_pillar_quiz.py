@@ -413,11 +413,40 @@ class ClusterRun(_RunBase):
     """Kursausbau 26.11.2026: 10 neue Leitfaeden und 15 Vertiefungen mit der echten Registry. Ohne Netz und ohne Schluessel; Laeufe nur mit Attrappen."""
     LEGACY = False
 
+    # Freigabeliste vor dem Fragenlauf vom 26.11.2026 (Lauf 45751342822). Die echte Datei hat seitdem Fragen fuer alle 25 Quellen
+    # und keine "hold"-Liste mehr; real_public() stellt den Stand davor her, damit die Tests weiter den Lauf selbst pruefen.
+    HOLD_2611 = ["5s-visual-management", "kanban-pull-system", "smed-changeover-reduction", "tpm-oee", "six-sigma-root-cause-analysis",
+                 "sop-mrp-production-planning", "theory-of-constraints", "mes-isa-95", "predictive-maintenance-iiot", "ot-cybersecurity-iec-62443",
+                 "kaizen", "pdca-cycle", "a3-problem-solving", "poka-yoke", "standard-work", "andon", "paperless-manufacturing", "lot-sizing",
+                 "manufacturing-inventory-management", "intralogistics", "manufacturing-simulation", "process-mining-manufacturing",
+                 "sustainable-manufacturing", "supply-chain-resilience", "manufacturing-workforce-skills"]
+
     def real_public(self, hold=True):
         d = json.loads((ROOT / "data" / "pillar_quiz.json").read_text("utf-8"))
+        held = set(self.HOLD_2611)
+        for pid in list(d["pillars"]):
+            if pid in held: del d["pillars"][pid]; continue
+            for lang, qs in d["pillars"][pid].items():
+                d["pillars"][pid][lang] = [q for q in qs if q.get("src") not in held]
+        d["hold"] = list(self.HOLD_2611)
         if not hold: d.pop("hold", None)
         PQ.PUBLIC.write_text(json.dumps(d, ensure_ascii=False), "utf-8")
         return d
+
+    def test_real_file_after_run_2611(self):
+        """Ergebnis des Fragenlaufs 26.11.2026: jede der 25 Quellen hat ihre Fragen, en und de gleich, keine Freigabeliste mehr."""
+        d = json.loads((ROOT / "data" / "pillar_quiz.json").read_text("utf-8"))
+        self.assertFalse(d.get("hold"), "alle 25 Quellen erzeugt = freigegeben")
+        for pid in self.HOLD_2611[:10]:
+            self.assertEqual(len(d["pillars"][pid]["en"]), PQ.KEEP, pid)
+        src = {}
+        for pid, v in d["pillars"].items():
+            self.assertEqual([q["id"] for q in v["en"]], [q["id"] for q in v["de"]], pid)
+            for q in v["en"]:
+                if q.get("src"): src[q["src"]] = src.get(q["src"], 0) + 1
+        self.assertEqual(src, {c: PQ.CLUSTER_KEEP for c in self.HOLD_2611[10:]})
+        PQ.PUBLIC.write_text(json.dumps(d, ensure_ascii=False), "utf-8")
+        self.assertEqual(PQ.plan(()), [], "kein Bedarf mehr: ein weiterer run ohne --pillars kostet nichts")
 
     def test_plan_lists_guides_and_clusters_without_network(self):
         self.real_public()
