@@ -209,6 +209,19 @@ class Plan(unittest.TestCase):
             self.assertEqual(r["params"]["model"], T.MODEL)
             self.assertTrue(r["custom_id"].startswith("fr__lean-manufacturing__"))
 
+    def test_new_guides_only_with_release(self):
+        """Kursausbau 26.11.2026: die 10 neuen Leitfaeden (nur Englisch) werden ohne ausdrueckliches --pillars (oder "translate": true) nie uebersetzt."""
+        new = {p["id"] for p in PIL.pillars() if not p["slug"].get("de")}
+        self.assertEqual(len(new), 10)
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(T, "OUT", Path(d)):
+            items, _ = T.plan_items(["fr"], set())
+            self.assertFalse({x[1] for x in items} & new, "leeres Feld 'pillars' nimmt die neuen Leitfaeden nicht mit")
+            items, _ = T.plan_items(["fr"], {"tpm-oee"})
+            self.assertEqual({x[1] for x in items}, {"tpm-oee"}, "mit --pillars: ausdruecklich freigegeben")
+            reg = json.loads(json.dumps(PIL.registry())); next(p for p in reg["pillars"] if p["id"] == "tpm-oee")["translate"] = True
+            with mock.patch.object(PIL, "pillars", lambda: reg["pillars"]):
+                self.assertIn("tpm-oee", {x[1] for x in T.plan_items(["fr"], set())[0]})
+
     def test_done_pillars_are_not_resent_and_changed_source_is_stale(self):
         with tempfile.TemporaryDirectory() as d, mock.patch.object(T, "OUT", Path(d)):
             p = PIL.by_id("lean-manufacturing"); s = T.source(p); parts = T.chunks(s["article"])

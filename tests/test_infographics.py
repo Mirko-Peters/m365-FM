@@ -95,6 +95,42 @@ class PillarKind(unittest.TestCase):
         self.assertIn("pillar:", IGT.plan_text(rep, ["en", "de"]))
 
 
+class PillarHoldAndLanguages(unittest.TestCase):
+    """Kursausbau 26.11.2026: neue Leitfaeden (nur Englisch) bekommen erst nach Freigabe Bilder (pillar_hold), und nie Bilder fuer Sprachen ohne Seite."""
+
+    def root(self, t, hold):
+        r = Path(t)
+        (r / "data").mkdir(); (r / "imports" / "pillars" / "en").mkdir(parents=True); (r / "imports" / "pillars" / "de").mkdir()
+        (r / "data" / "pillars.json").write_text(json.dumps({"pillars": [{"id": "old", "slug": {"en": "old", "de": "alt"}}, {"id": "new", "slug": {"en": "new"}}, {"id": "neu2", "slug": {"en": "neu2"}}]}), "utf-8")
+        (r / "data" / "infographics_live.json").write_text(json.dumps({"langs": ["en", "de"], "kinds": ["pillar"], "pillar_hold": hold}), "utf-8")
+        src = (ROOT / "imports" / "pillars" / "en" / "lean-manufacturing.md").read_text("utf-8")
+        for n in ("old", "new", "neu2"): (r / "imports" / "pillars" / "en" / f"{n}.md").write_text(src, "utf-8")
+        (r / "imports" / "pillars" / "de" / "alt.md").write_text((ROOT / "imports" / "pillars" / "de" / "lean-management.md").read_text("utf-8"), "utf-8")
+        (r / "imports" / "pillars" / "de" / "new.md").write_text(src, "utf-8")   # Datei ohne slug.de zaehlt nicht als deutsche Fassung
+        return r
+
+    def test_hold_list_and_languages(self):
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = self.root(t, ["neu2"]); store = IGT.DirStore(s)
+            its = {i["slug"]: i for i in IGT.items("pillar", root)}
+            self.assertEqual(set(its), {"old", "new"}, "neu2 steht auf der Halteliste")
+            self.assertEqual(its["old"]["langs"], ("en", "de")); self.assertEqual(its["new"]["langs"], ("en",))
+            self.assertEqual(IGT.cmd_check(["pillar"], ["en", "de"], store, root), {"spec": 2, "tr": 0, "render": 0, "open": 0})
+            for i in its.values(): store.put(IGT.spec_key(i), {"v": 1, "en": pillar_set(9)})
+            self.assertEqual(IGT.cmd_check(["pillar"], ["en", "de"], store, root), {"spec": 0, "tr": 1, "render": 2, "open": 0}, "keine de-Uebersetzung fuer den Leitfaden ohne deutsche Seite")
+            rep = IGT.plan(["pillar"], ["en", "de"], root)
+            self.assertEqual(rep["pillar"]["n"], 2); self.assertEqual(rep["pillar"]["tr_todo"], {"de": 1})
+            self.assertTrue(IGT.lang_ok({"key": "blog:x"}, "fr"))
+
+    def test_real_registry_holds_the_ten_new_guides(self):
+        hold = IGT.pillar_hold(ROOT)
+        import site_pillars as S
+        new = {p["id"] for p in S.pillars() if not p["slug"].get("de")}
+        self.assertEqual(len(new), 10)
+        self.assertTrue(new <= hold, "neue Leitfaeden bis zur Freigabe auf der Halteliste (Samstagslauf)")
+        self.assertFalse({i["slug"] for i in IGT.items("pillar")} & hold)
+
+
 class SpecChecks(unittest.TestCase):
     def test_valid_set(self):
         self.assertIsNone(IGT.check_set(SET))

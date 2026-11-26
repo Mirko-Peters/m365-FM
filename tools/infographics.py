@@ -318,13 +318,34 @@ def content_posts(root):
     return out
 
 
+def pillar_hold(root):
+    """Leitfaeden, fuer die (noch) keine Bilder entstehen: data/infographics_live.json "pillar_hold" (Kursausbau 26.11.2026: die neuen Leitfaeden bis zur
+    Freigabe durch Mirko - der Samstagslauf wuerde sie sonst automatisch und bezahlt verarbeiten). Freigabe: ID aus der Liste entfernen."""
+    d = jload(Path(root) / "data" / "infographics_live.json", {})
+    return {x for x in ((d.get("pillar_hold") if isinstance(d, dict) else None) or []) if isinstance(x, str)}
+
+
+def pillar_langs(root, p):
+    """Sprachen mit eigener Fassung des Leitfadens: en, de nur mit slug.de und Datei, Uebersetzungen mit Datei (englischer Slug). Fuer andere Sprachen
+    entstehen keine Bildtexte und Bilder (es gibt dort keine Seite)."""
+    sl = p.get("slug") or {}; en = sl.get("en") or p.get("id")
+    base, out = Path(root) / "imports" / "pillars", ["en"]
+    for l in LANGS:
+        name = sl.get("de") if l == "de" else en
+        if l != "en" and name and (base / l / f"{name}.md").exists(): out.append(l)
+    return tuple(out)
+
+
 def pillar_guides(root):
-    """Englische Leitfaeden (data/pillars.json + imports/pillars/en/<slug>.md) -> [(id, Titel, Text)]. Text ohne Links und Quellenmarken, bis PILLAR_TEXT Zeichen. Der Schluessel ist die Pillar-ID (steht auch in den Seitenadressen der anderen Sprachen)."""
+    """Englische Leitfaeden (data/pillars.json + imports/pillars/en/<slug>.md) -> [(id, Titel, Text)]. Text ohne Links und Quellenmarken, bis PILLAR_TEXT Zeichen. Der Schluessel ist die Pillar-ID (steht auch in den Seitenadressen der anderen Sprachen).
+    Leitfaeden auf der Halteliste pillar_hold fehlen (keine Bildtexte, keine Kosten)."""
     out = []
     reg = jload(Path(root) / "data" / "pillars.json", {})
+    hold = pillar_hold(root)
     for p in (reg.get("pillars") if isinstance(reg, dict) else None) or []:
         if not isinstance(p, dict): continue
         pid = p.get("id")
+        if pid in hold: continue
         slug = (p.get("slug") or {}).get("en") or pid
         f = Path(root) / "imports" / "pillars" / "en" / f"{slug}.md"
         if not pid or not f.exists(): continue
@@ -368,8 +389,9 @@ def items(kind, root=None):
             if slug not in have and len(body) > 300:
                 out.append({"key": f"blog:{slug}", "kind": kind, "slug": slug, "title": title, "text": body, "label": "Blog"})
     elif kind == "pillar":
+        reg = {p.get("id"): p for p in (jload(D / "pillars.json", {}) or {}).get("pillars") or [] if isinstance(p, dict)}
         for slug, title, body in pillar_guides(Path(root or ROOT)):
-            out.append({"key": f"pillar:{slug}", "kind": kind, "slug": slug, "title": title, "text": body, "label": "Guide"})
+            out.append({"key": f"pillar:{slug}", "kind": kind, "slug": slug, "title": title, "text": body, "label": "Guide", "langs": pillar_langs(Path(root or ROOT), reg.get(slug) or {"id": slug})})
     elif kind == "episode":
         for p in jload(D / "podpage" / "episodes.json.gz", []):
             if p.get("hidden") or not p.get("published", True): continue
@@ -503,6 +525,11 @@ def want_kinds(s):
     return ks
 
 
+def lang_ok(it, l):
+    """Entsteht fuer diesen Inhalt eine Sprachfassung der Bilder? Leitfaeden nur in Sprachen mit eigener Seite (it["langs"]), alles andere wie bisher."""
+    return "langs" not in it or l in it["langs"]
+
+
 def plan(kinds, langs, root=None, store=None, limit=None):
     """Zaehlt je Art: Inhalte, fehlende englische Bildtexte, fehlende Uebersetzungen je Sprache, fehlende Bilder. Liest Specs nur, wenn store gegeben."""
     rep, tot_spec, tot_tr = {}, 0, 0
@@ -514,6 +541,7 @@ def plan(kinds, langs, root=None, store=None, limit=None):
             have = store.get(spec_key(it)) if store else None
             if not have or not have.get("en"): r["spec_todo"] += 1
             for l in langs:
+                if not lang_ok(it, l): continue
                 if l != "en" and (not have or not have.get(l)): r["tr_todo"][l] = r["tr_todo"].get(l, 0) + 1
                 if not (idx.get(it["slug"]) or {}).get(l): r["img_todo"][l] = r["img_todo"].get(l, 0) + 1
         rep[k] = r
@@ -587,6 +615,7 @@ def cmd_translate(kinds, langs, limit, store, st, root=None):
         groups, n = {}, 0
         for it in its:
             if limit and n >= limit: break
+            if not lang_ok(it, l): continue
             tk = it["key"] + "#" + l
             if tk in busy or st["tries"].get(tk, 0) >= MAX_TRIES: continue
             have = doc(it)
@@ -609,6 +638,7 @@ def cmd_check(kinds, langs, store, root=None):
                 if it["key"] not in busy and st["tries"].get(it["key"], 0) < MAX_TRIES: out["spec"] += 1
                 continue
             for l in langs:
+                if not lang_ok(it, l): continue
                 if have.get(l):
                     if not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < RENDER_TRIES: out["render"] += 1
                 elif l != "en":
@@ -717,7 +747,7 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
             have = store.get(spec_key(it))
             if not have: continue
             for l in langs:
-                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < RENDER_TRIES: todo.append((it, l, have))
+                if lang_ok(it, l) and have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < RENDER_TRIES: todo.append((it, l, have))
         if limit: todo = todo[:max(0, limit - made)]
         print(f"{k}: {len(todo)} Bildsaetze zu rendern")
         for i in range(0, len(todo), chunk):
