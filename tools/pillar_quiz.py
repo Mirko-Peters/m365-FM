@@ -13,6 +13,13 @@ Ablauf je Leitfaden (data/pillars.json, Reihenfolge des Pfads):
      - Uebersetzung ins Deutsche: q/opts/why; Optionsreihenfolge und Loesung bleiben gleich; Pruefung: gleiche Zahl Optionen, keine leeren, keine doppelten.
   3. Behalten werden bis KEEP Fragen je Leitfaden (verschiedene Abschnitte zuerst, dann Reihenfolge des Modells). Ziel: mindestens MIN.
 
+Vertiefungen (data/pillars.json "clusters", Kursausbau 26.11.2026) sind eigene Textquellen mit eigener Anfrage (imports/pillars/en/clusters/<slug>.md,
+CLUSTER_CANDIDATES Kandidaten, bis CLUSTER_KEEP Fragen, Ziel CLUSTER_MIN). Ihre Fragen gehoeren zur Gruppe des Eltern-Leitfadens (IDs <eltern-id>-<n>,
+Feld "src" = ID der Vertiefung; der Worker verlangt qid = "<pillar>-..."), der Test zieht sie also als Teil dieses Leitfadens.
+Freigabe: data/pillar_quiz.json "hold" = IDs (Leitfaeden oder Vertiefungen), die run/collect ohne ausdrueckliches --pillars nicht senden; plan zeigt sie
+getrennt mit Kosten-Obergrenze. --pillars nennt Quellen mit ihrer eigenen ID (Leitfaden oder Vertiefung, z. B. kaizen); ein Leitfaden nimmt seine
+Vertiefungen nicht automatisch mit (keine unerwarteten Kosten beim Nachlauf eines bestehenden Leitfadens).
+
 Fragen wachsen mit: Das Werkzeug ist jederzeit neu startbar. Ein Leitfaden mit mindestens MIN Fragen bleibt unberuehrt; einer mit weniger bekommt neue
 Kandidaten (bestehende Fragen werden dem Modell als "nicht wiederholen" mitgegeben). Neue Fragen bekommen neue IDs <pillar-id>-<n> (n = hoechste bisherige + 1),
 bestehende IDs werden nie umnummeriert.
@@ -73,6 +80,7 @@ GEN_MODEL = os.environ.get("PILLAR_QUIZ_MODEL") or "claude-sonnet-5-5"
 CHECK_MODEL = os.environ.get("PILLAR_QUIZ_CHECK_MODEL") or "claude-haiku-5-5"
 PRICES = {"claude-sonnet-5-5": (2.0, 10.0), "claude-sonnet-5": (2.0, 10.0), "claude-haiku-5-5": (0.10, 0.50)}   # USD je 1 Mio. Token (ohne Batch-Rabatt)
 CANDIDATES, KEEP, MIN = 8, 6, 5
+CLUSTER_CANDIDATES, CLUSTER_KEEP, CLUSTER_MIN = 5, 3, 2   # je Vertiefung (Fragen zaehlen zur Gruppe des Eltern-Leitfadens)
 REGEN_CANDIDATES = 12   # regen: mehr Kandidaten, weil Dubletten im Pfad und Aehnlichkeit zu alten Fragen zusaetzlich aussortieren
 RUN_EUR = float(os.environ.get("PILLAR_QUIZ_RUN_EUR") or 2)
 REGEN_USD = float(os.environ.get("PILLAR_QUIZ_REGEN_USD") or 2)   # harte Grenze fuer regen (Obergrenze mit max_tokens); Ziel unter 1 USD
@@ -93,9 +101,23 @@ def path_id():
     return PIL.registry()["path"]["id"]
 
 
+def is_cluster(p):
+    return bool(p.get("parent"))
+
+
+def group_of(p):
+    """Gruppe (Leitfaden-ID) einer Fragenquelle: der Leitfaden selbst oder bei einer Vertiefung ihr Eltern-Leitfaden."""
+    return p.get("parent") or p["id"]
+
+
+def sources_of(p):
+    """Fragenquellen eines Leitfadens: er selbst, dann seine Vertiefungen (Reihenfolge der Registry, nur mit Datei)."""
+    return [p] + [{"id": c["id"], "parent": p["id"], "label": {"en": c["label"]["en"]}, "slug": c["slug"]} for c in PIL.clusters_of(p["id"])]
+
+
 def article_text(p):
-    """Veroeffentlichter englischer Text des Leitfadens (Artikel ohne Autorenbox und Quellen), Link-Adressen entfernt (spart Token, kein Inhalt)."""
-    d = PIL.parse_file(PIL.DIR / "en" / f"{PIL.slug_of(p, 'en')}.md")
+    """Veroeffentlichter englischer Text des Leitfadens bzw. der Vertiefung (Artikel ohne Autorenbox und Quellen), Link-Adressen entfernt (spart Token, kein Inhalt)."""
+    d = PIL.parse_file(PIL.DIR / "en" / "clusters" / f"{p['slug']['en']}.md" if is_cluster(p) else PIL.DIR / "en" / f"{PIL.slug_of(p, 'en')}.md")
     if not d or not d["article"]: return ""
     t = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", d["article"])
     t = re.sub(r"\[([^\]]+)\]\((?:https?://|/|#)[^)]*\)", r"\1", t)
@@ -211,10 +233,12 @@ TR_SYSTEM = (
     "do not make the correct option easier to spot. Answer with one JSON array only, no other text: [{\"n\": 1, \"q\": \"...\", \"opts\": [\"...\", \"...\", \"...\", \"...\"], \"why\": \"...\"}]")
 
 
-def gen_user(p, text, existing, n=CANDIDATES):
+def gen_user(p, text, existing, n=None):
+    n = n or (CLUSTER_CANDIDATES if is_cluster(p) else CANDIDATES)
     avoid = ""
     if existing:
-        avoid = "\n\nThese questions already exist for this guide; do not repeat or closely paraphrase them:\n" + "\n".join(f"- {q}" for q in existing)
+        avoid = ("\n\nThese questions already exist in the same learning path (this guide and the other guides of the test); do not repeat or closely "
+                 "paraphrase them, and do not ask about the same concept again:\n" + "\n".join(f"- {q}" for q in existing))
     return (f"<guide title=\"{p['label']['en']}\">\n{text}\n</guide>\n\nWrite exactly {n} questions about this guide following the rules." + avoid)
 
 
@@ -303,16 +327,19 @@ def load_public():
 def public_doc(pub, version):
     """Oeffentliche Datei in fester Form und Pfad-Reihenfolge - nur id, q, opts."""
     out = {"_": "Fragen des Abschlusstests (tools/pillar_quiz.py). Ohne Loesungen: die Antwortschluessel liegen verschluesselt in data/pillar_quiz_keys.enc "
-                "und in der Datenbank des Workers. IDs bleiben fest; neue Fragen bekommen neue IDs. IDs unter retired sind stillgelegt und werden nie wieder vergeben.",
+                "und in der Datenbank des Workers. IDs bleiben fest; neue Fragen bekommen neue IDs. IDs unter retired sind stillgelegt und werden nie wieder vergeben. "
+                "src = Vertiefung, aus der eine Frage stammt (Gruppe = Eltern-Leitfaden). hold = Leitfaeden/Vertiefungen, die run ohne ausdrueckliches --pillars "
+                "nicht erzeugt (Freigabe durch Mirko: ID aus hold entfernen oder pillar-quiz.yml mit pillars=<IDs> starten).",
            "path": path_id(), "version": version, "pillars": {}}
     known = [p["id"] for p in PIL.order()]
     for pid in known + sorted(k for k in pub["pillars"] if k not in known):
         d = pub["pillars"].get(pid)
         if not d: continue
-        out["pillars"][pid] = {l: [{"id": x["id"], "q": x["q"], "opts": list(x["opts"])} for x in d.get(l) or []] for l in LANGS}
+        out["pillars"][pid] = {l: [{"id": x["id"], "q": x["q"], "opts": list(x["opts"]), **({"src": x["src"]} if x.get("src") else {})} for x in d.get(l) or []] for l in LANGS}
     ret = pub.get("retired") or {}
     if ret:
         out["retired"] = {pid: sorted(set(ret[pid]), key=_idn) for pid in known + sorted(k for k in ret if k not in known) if ret.get(pid)}
+    if pub.get("hold"): out["hold"] = list(dict.fromkeys(pub["hold"]))
     return out
 
 
@@ -341,16 +368,32 @@ def next_n(pid, ids):
 
 # ---------- Planung ----------
 def plan(pids_filter=()):
-    """-> [(p, text, existing_en_questions, need)] fuer Leitfaeden mit weniger als MIN Fragen."""
+    """-> [(quelle, text, bestehende englische Fragen des ganzen Pfads, need)] fuer Leitfaeden mit weniger als MIN eigenen Fragen und Vertiefungen mit weniger
+    als CLUSTER_MIN (Fragen mit src = Vertiefung). pids_filter: IDs von Quellen (Leitfaden oder Vertiefung). Die Freigabeliste "hold" wendet released() an."""
     pub = load_public(); out = []
+    allq = [x["q"] for v in pub["pillars"].values() for x in (v or {}).get("en") or []]   # "nicht wiederholen" ueber den ganzen Pfad (Dubletten zwischen Leitfaeden)
     for p in PIL.order():
-        if pids_filter and p["id"] not in pids_filter: continue
-        have = ((pub["pillars"].get(p["id"]) or {}).get("en")) or []
-        if len(have) >= MIN: continue
-        text = article_text(p)
-        if not text: print(f"::warning::{p['id']}: kein englischer Text gefunden"); continue
-        out.append((p, text, [x["q"] for x in have], KEEP - len(have)))
+        grp = (pub["pillars"].get(p["id"]) or {}).get("en") or []
+        for s in sources_of(p):
+            if pids_filter and s["id"] not in pids_filter: continue
+            own = [x for x in grp if (x.get("src") or None) == (s["id"] if is_cluster(s) else None)]
+            lo, keep = (CLUSTER_MIN, CLUSTER_KEEP) if is_cluster(s) else (MIN, KEEP)
+            if len(own) >= lo: continue
+            text = article_text(s)
+            if not text: print(f"::warning::{s['id']}: kein englischer Text gefunden"); continue
+            out.append((s, text, allq, keep - len(own)))
     return out
+
+
+def held(pub=None):
+    """IDs der Freigabeliste data/pillar_quiz.json "hold" (neue Leitfaeden und Vertiefungen bis zur Freigabe durch Mirko)."""
+    return set((pub or load_public()).get("hold") or [])
+
+
+def released(items, pids_filter, hold):
+    """Ohne --pillars nur Quellen ausserhalb der Freigabeliste; mit --pillars genau die genannten (ausdrueckliche Freigabe)."""
+    if pids_filter: return list(items)
+    return [it for it in items if it[0]["id"] not in hold and group_of(it[0]) not in hold]
 
 
 def gen_requests(items):
@@ -369,14 +412,17 @@ def phase2_requests(items, cands):
 
 def phase2_cap_usd(items, n=CANDIDATES):
     """Obergrenze der Haiku-Stufe vor dem Erzeugen: n Platzhalter-Fragen je Leitfaden in voller Laenge."""
-    fake = {p["id"]: [{"q": "x" * 200, "opts": ["x" * 100] * 4, "why": "x" * 250, "a": 0}] * n for p, *_ in items}
+    fake = {p["id"]: [{"q": "x" * 200, "opts": ["x" * 100] * 4, "why": "x" * 250, "a": 0}] * min(n, CLUSTER_CANDIDATES if is_cluster(p) else n) for p, *_ in items}
     return sum(req_cap_usd(r) for r in phase2_requests(items, fake))
 
 
-def report_plan(items):
+def report_plan(items, title=""):
     gen = gen_requests(items)
     g, h = sum(req_cap_usd(r) for r in gen), phase2_cap_usd(items)
-    print(f"Leitfaeden ohne genug Fragen (< {MIN}): {len(items)} - " + ", ".join(f"{p['id']} (+{need})" for p, _, _, need in items))
+    gd, cl = [it for it in items if not is_cluster(it[0])], [it for it in items if is_cluster(it[0])]
+    if title: print(title)
+    if gd or not cl: print(f"Leitfaeden ohne genug Fragen (< {MIN}): {len(gd)} - " + ", ".join(f"{p['id']} (+{need})" for p, _, _, need in gd))
+    if cl: print(f"Vertiefungen ohne genug Fragen (< {CLUSTER_MIN}, zaehlen zum Eltern-Leitfaden): {len(cl)} - " + ", ".join(f"{p['id']} -> {p['parent']} (+{need})" for p, _, _, need in cl))
     print(f"Obergrenze: Sonnet {g:.3f} $ + Haiku {h:.3f} $ = {eur(g + h):.2f} EUR (Grenze je Lauf {RUN_EUR:.2f} EUR); erwartet deutlich weniger")
     return g, h
 
@@ -501,17 +547,19 @@ def merge(pub, keys_doc, passed, items):
     added, pa = {}, path_id()
     have_keys = {k["qid"] for k in keys_doc["keys"]}
     for p, _, _, need in items:
-        pid = p["id"]; cs = select(passed.get(pid) or [], need)
+        sid, pid = p["id"], group_of(p); cs = select(passed.get(sid) or [], need)   # Vertiefung: Fragen in der Gruppe des Eltern-Leitfadens, IDs in dessen Namensraum
         if not cs: continue
         d = pub["pillars"].setdefault(pid, {"en": [], "de": []})
         n = next_n(pid, used_ids(pub, keys_doc, pid))
+        src = {"src": sid} if is_cluster(p) else {}
         for c in cs:
             qid = f"{pid}-{n}"; n += 1
             assert qid not in have_keys
-            d.setdefault("en", []).append({"id": qid, "q": c["q"], "opts": c["opts"]})
-            d.setdefault("de", []).append({"id": qid, "q": c["de"]["q"], "opts": c["de"]["opts"]})
-            keys_doc["keys"].append({"qid": qid, "path": pa, "pillar": pid, "answer": c["a"], "why_en": c["why"], "why_de": c["de"]["why"], "ref": c.get("ref", "")})
-        added[pid] = len(cs)
+            d.setdefault("en", []).append({"id": qid, "q": c["q"], "opts": c["opts"], **src})
+            d.setdefault("de", []).append({"id": qid, "q": c["de"]["q"], "opts": c["de"]["opts"], **src})
+            keys_doc["keys"].append({"qid": qid, "path": pa, "pillar": pid, "answer": c["a"], "why_en": c["why"], "why_de": c["de"]["why"], "ref": c.get("ref", ""), **src})
+        added[sid] = len(cs)
+    if added and pub.get("hold"): pub["hold"] = [h for h in pub["hold"] if h not in added]   # erzeugt = freigegeben
     return added
 
 
@@ -804,9 +852,10 @@ def run(mode, pids_filter):
         print(f"Offener Lauf gefunden (Erzeugung {st['gen']}, Pruefung {st.get('check') or '-'}) - mache dort weiter")
     else:
         if mode == "collect": print("Kein offener Batch - nichts abzuholen"); return
-        items = [it for it in items_all if not pids_filter or it[0]["id"] in pids_filter]
+        items = released(plan(pids_filter), pids_filter, held())
         if not items:
-            print(f"Alle Leitfaeden haben mindestens {MIN} Fragen - nichts zu tun")
+            print(f"Alle freigegebenen Leitfaeden haben mindestens {MIN} Fragen (Vertiefungen {CLUSTER_MIN}) - nichts zu tun"
+                  + (f"; zurueckgehalten bis zur Freigabe (nur mit --pillars): {', '.join(sorted(held()))}" if held() else ""))
             return
         g, h = report_plan(items)
         if eur(g + h) > RUN_EUR:
@@ -929,9 +978,14 @@ def main(argv=None):
         if f and KEYS.exists() and (load_keys(f) or {}).get("regen") == REGEN: print(f"Neuerzeugung schon erledigt (Marke {REGEN}) - regen tut nichts")
         else: report_regen(regen_items(load_public()))
     elif mode == "plan":
-        items = [it for it in plan(()) if not pids or it[0]["id"] in pids]
-        if not items: print(f"Alle Leitfaeden haben mindestens {MIN} Fragen - nichts zu tun")
-        else: report_plan(items)
+        all_items = plan(pids); hold = held()
+        items = released(all_items, pids, hold)
+        if not items: print(f"Freigegeben: alle Leitfaeden haben mindestens {MIN} Fragen (Vertiefungen {CLUSTER_MIN}) - nichts zu tun")
+        else: report_plan(items, "Freigegeben (run ohne --pillars):")
+        rest = [it for it in all_items if it not in items]
+        if rest:
+            g, h = report_plan(rest, "Zurueckgehalten bis zur Freigabe (data/pillar_quiz.json hold; run nur mit --pillars):")
+            print(f"Freigabe in einem Lauf: pillar-quiz.yml mode=run pillars={','.join(it[0]['id'] for it in rest)}")
         st = load_open()
         if st: print(f"Offener Lauf: Erzeugung {st.get('gen')}, Pruefung {st.get('check') or '-'} (mode=collect holt ab)")
     elif mode in ("run", "collect"): run(mode, pids)

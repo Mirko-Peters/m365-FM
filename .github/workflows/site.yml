@@ -4,6 +4,8 @@ name: Website bauen und veröffentlichen
 #   danach (04:47 UTC) setzt spreaker-links.yml das Website-Feld der neuen Folgen auf die frisch gebauten Seiten.
 # - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
 #   Uebersetzungen, Artikel, Cover) bauen nicht mehr sofort - sie kommen mit dem naechtlichen Bau (oder per "Run workflow").
+#   Ausnahme: data/pillar_quiz.json (neue Fragen des Abschlusstests): der Worker hat die Schluessel nach dem Merge sofort (worker.yml), die Testseite soll
+#   die Fragen am selben Tag zeigen (bis dahin blendet worker/src/learnquiz.js pageFilter die neuen Leitfaeden aus).
 # - neue Folgen: spreaker-feed-check.yml (alle 2 h) startet einen Frische-Bau (mode=fresh), sobald eine neu veroeffentlichte Folge noch
 #   keine Seite hat (tools/new_episodes_check.py, hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6).
 # - von Hand: "Run workflow" (mode=full wie naechtlich, mode=fresh ohne Spotify-/Plattform-Abgleich, ~30 min kuerzer).
@@ -17,7 +19,7 @@ on:
             "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_articles.py", "generate_covers.py", "translate_blog.py",
             "tools/build_speakers.py", "tools/generate_directory_intros.py", "tools/sponsor_ssr.mjs", "tools/page_hashes.py", "tools/purge_changed.py",
             "tools/r2_common.py", "tools/r2_pages_upload.py", "tools/r2_og_upload.py", "tools/r2_site_sync.py",
-            "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", ".github/workflows/site.yml"]
+            "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", "data/pillar_quiz.json", ".github/workflows/site.yml"]
   schedule:
     - cron: "7 1 * * *"
   workflow_dispatch:

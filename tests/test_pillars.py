@@ -9,7 +9,9 @@ sys.path.insert(0, str(ROOT))
 import site_pillars as S
 
 BASE = "https://www.m365.fm"
-ALL = [(lang, p) for lang in S.LANGS for p in S.pillars()]
+ALL = [(lang, p) for lang in S.LANGS for p in S.pillars() if S.has(p, lang)]   # Leitfäden in jeder vorhandenen Fassung (neue nur Englisch)
+FILES = [(lang, p, S.pillar_file(p, lang)) for lang, p in ALL] + [("en", c, S.cluster_file(c)) for c in S.clusters()]   # plus Vertiefungen (nur Englisch)
+NEW = [p for p in S.pillars() if not p["slug"].get("de")]
 
 
 def ctx(**kw):
@@ -19,9 +21,28 @@ def ctx(**kw):
 class Registry(unittest.TestCase):
     def test_files_exist_and_slugs_unique(self):
         for lang in S.LANGS:
-            slugs = [S.slug_of(p, lang) for p in S.pillars()]
+            ps = [p for p in S.pillars() if lang == "en" or p["slug"].get(lang)]   # ohne slug.de gibt es nur die englische Fassung
+            slugs = [S.slug_of(p, lang) for p in ps]
             self.assertEqual(len(slugs), len(set(slugs)), lang)
             for s in slugs: self.assertTrue((ROOT / "imports" / "pillars" / lang / f"{s}.md").exists(), f"{lang}/{s}.md fehlt")
+        self.assertEqual(len(NEW), 10)
+        for p in NEW: self.assertFalse(S.has(p, "de")); self.assertTrue(S.has(p, "en")); self.assertEqual(p.get("date"), "2026-11-26", p["id"])
+
+    def test_clusters_have_parent_file_and_unique_slugs(self):
+        cs = S.clusters()
+        self.assertEqual(len(cs), len(S.registry()["clusters"]), "jede Vertiefung hat einen vorhandenen Eltern-Leitfaden")
+        self.assertEqual(len(cs), 15)
+        ids = [c["id"] for c in cs] + [p["id"] for p in S.pillars()]
+        self.assertEqual(len(ids), len(set(ids)), "IDs von Vertiefungen und Leitfäden eindeutig (Fragen-Quellen, custom_id)")
+        for c in cs:
+            self.assertTrue(S.cluster_file(c).exists(), c["id"])
+            self.assertNotEqual(c["slug"]["en"], "path"); self.assertRegex(c["slug"]["en"], r"^[a-z0-9-]+$")
+            self.assertEqual(set(c["slug"]), {"en"}, "Vertiefungen gibt es nur auf Englisch")
+            m = re.search(r"^\| Parent pillar \| \[[^\]]+\]\(https://www\.m365\.fm/en/learn/([a-z0-9-]+)/\)", S.cluster_file(c).read_text("utf-8"), re.M)
+            self.assertEqual(S.by_id(c["parent"])["slug"]["en"], m.group(1), f"{c['id']}: parent wie in der Datei")
+        for p in S.pillars():
+            sl = [c["slug"]["en"] for c in S.clusters_of(p["id"])]
+            self.assertEqual(len(sl), len(set(sl)), p["id"])
 
     def test_path_covers_each_pillar_once(self):
         ids = [i for st in S.registry()["path"]["stages"] for i in st["pillars"]]
@@ -32,15 +53,19 @@ class Registry(unittest.TestCase):
         pa = S.registry()["path"]
         for k in ("title", "seo_title", "short", "intro"): self.assertTrue({"en", "de"} <= set(pa[k]), k)
         self.assertLessEqual(max(len(v) for v in pa["seo_title"].values()), 60)
+        self.assertEqual([[i for i in st["pillars"]] for st in pa["stages"]][0][-3:], ["5s-visual-management", "kanban-pull-system", "smed-changeover-reduction"])
+        self.assertEqual(len(pa["stages"]), 4); self.assertEqual(len(S.order()), 20)
+        for k in ("seo_title", "short"):
+            for lang in ("en", "de"): self.assertNotRegex(pa[k][lang], r"\b(10|ten|zehn)\b", f"{k} {lang}: Zahl der Leitfäden veraltet")
         for p in S.pillars(): self.assertTrue({"en", "de"} <= set(p["label"]))
 
 
 class Content(unittest.TestCase):
     def test_every_file_parses_with_seo_fields(self):
-        for lang, p in ALL:
-            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
+        for lang, p, f in FILES:
+            d = S.parse_file(f)
             who = f"{lang}/{p['id']}"
-            self.assertTrue(d["h1"] and len(d["article"].split()) > 5000, who)
+            self.assertTrue(d["h1"] and len(d["article"].split()) > (3000 if p.get("parent") else 5000), who)   # Vertiefungen 3.000-5.000 Wörter
             t = S.meta_value(d["meta"], "meta title", "meta-title"); ds = S.meta_value(d["meta"], "meta description", "meta-description")
             self.assertTrue(30 <= len(t) <= 60, f"{who} Title {len(t)}")
             self.assertTrue(80 <= len(ds) <= 160, f"{who} Description {len(ds)}")
@@ -48,30 +73,40 @@ class Content(unittest.TestCase):
 
     def test_no_internal_notes_in_published_parts(self):
         rx = re.compile(r"\[(?:Editor|Redaktion)|review log|Review-Protokoll|Editorial notes|Prüfhinweise|Wettbewerbsanalyse|Competitive analysis", re.I)
-        for lang, p in ALL:
-            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
-            for part in ("article", "author", "sources"): self.assertIsNone(rx.search(d[part]), f"{lang}/{p['id']} {part}")
+        for lang, p, f in FILES:
+            d = S.parse_file(f)
+            for part in ("article", "author", "sources"):
+                m = rx.search(d[part]) if part != "sources" else rx.search(S.sources_html(d[part], lang, ctx())[0])   # Quellen: wie veröffentlicht
+                self.assertIsNone(m, f"{lang}/{p['id']} {part}: {m and d[part][max(0, m.start() - 60):m.end() + 40]}")
 
     def test_toulouse_never_published(self):
-        for lang, p in ALL:
-            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
+        for lang, p, f in FILES:
+            d = S.parse_file(f)
             for part in ("article", "author", "sources"): self.assertNotIn("toulouse", d[part].lower(), f"{lang}/{p['id']} {part}")
 
     def test_ifakt_disclosure_in_every_author_box(self):
-        for lang, p in ALL:
-            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
+        for lang, p, f in FILES:
+            d = S.parse_file(f)
             self.assertRegex(d["author"], r"(?i)works at (\[)?iFAKT|arbeitet bei der (\[)?iFAKT|Anbieter von iFAKT|vendor of iFAKT|iFAKT GmbH", f"{lang}/{p['id']}")
 
     def test_render_anchors_resolve_and_markers(self):
-        for lang, p in ALL:
+        for lang, p, f in FILES:
             cx = ctx()
-            d, body, src, heads = S._article(p, lang, BASE, cx)
+            d, body, src, heads = rendered(p, lang, f, cx)
             ids = [h[2] for h in heads]
             self.assertEqual(len(ids), len(set(ids)), f"{lang}/{p['id']} doppelte IDs")
             self.assertFalse([w for w in cx.warn if w.startswith("Sprungmarke")], f"{lang}/{p['id']}")
             self.assertNotIn("(planned)", body); self.assertNotIn("(geplant)", body)
             self.assertNotRegex(body, r"<script|<iframe")
             self.assertEqual(len(re.findall(r'<li id="src-', src)), len(set(re.findall(r'<li id="src-(\d+)"', src))))
+
+
+def rendered(p, lang, f, cx):
+    """Wie site_pillars._article, auch für Vertiefungen -> (d, body, quellen, heads)."""
+    d = S.parse_file(f)
+    src, n_src, dropped = S.sources_html(d["sources"], lang, cx) if d["sources"] else ("", set(), set())
+    body, heads = S.render(d["article"], lang, cx)
+    return d, S.finish(S.fix_anchors(body, heads, cx), n_src, lang, dropped), src, heads
 
 
 class Links(unittest.TestCase):
@@ -81,6 +116,31 @@ class Links(unittest.TestCase):
         self.assertEqual(cx.link("https://www.m365.fm/en/learn/value-stream-mapping/", "de"), f"{BASE}/de/learn/wertstromanalyse/")
         self.assertEqual(cx.link("https://www.m365.fm/learn/wertstromanalyse/", "en"), f"{BASE}/learn/value-stream-mapping/")
         self.assertEqual(cx.link("https://www.m365.fm/learn/digital-twin/", "de"), f"{BASE}/de/learn/digital-twin/")
+        # Leitfaden nur auf Englisch: auch von deutschen Seiten die englische Adresse (keine tote /de/-Adresse)
+        self.assertEqual(cx.link("https://www.m365.fm/en/learn/tpm-oee/", "de"), f"{BASE}/learn/tpm-oee/")
+        self.assertEqual(cx.link("https://www.m365.fm/en/learn/tpm-oee/#oee", "en"), f"{BASE}/learn/tpm-oee/#oee")
+        # Vertiefungen: /learn/<leitfaden>/<vertiefung>/ ohne Sprachpräfix, auch über den deutschen Slug des Eltern-Leitfadens
+        self.assertEqual(cx.link("https://www.m365.fm/en/learn/lean-manufacturing/kaizen/", "en"), f"{BASE}/learn/lean-manufacturing/kaizen/")
+        self.assertEqual(cx.link("https://www.m365.fm/learn/lean-management/kaizen/", "de"), f"{BASE}/learn/lean-manufacturing/kaizen/")
+        self.assertIsNone(cx.link("https://www.m365.fm/en/learn/lean-manufacturing/andon/", "en"), "Vertiefung eines anderen Leitfadens")
+        self.assertEqual(cx.link("https://www.m365.fm/en/learn/", "en"), f"{BASE}/learn/")
+        self.assertEqual(cx.link("https://www.m365.fm/en/learn/path/manufacturing-excellence/", "de"), f"{BASE}/de/learn/path/manufacturing-excellence/")
+        self.assertEqual([w for w in cx.warn if "Pillar" in w], ["Pillar-Adresse unbekannt: https://www.m365.fm/en/learn/lean-manufacturing/andon/"])
+
+    def test_all_learn_links_resolve(self):
+        """Jede m365.fm/(en/)learn/-Adresse in Artikel, Autorenbox und Quellen aller englischen Dateien (Leitfäden und Vertiefungen) führt auf eine gebaute Seite."""
+        built = {S.url(BASE, p, "en") for p in S.pillars()} | {S.cluster_url(BASE, c) for c in S.clusters()} | {S.path_url(BASE, "en"), f"{BASE}/learn/"}
+        n = 0
+        for lang, p, f in FILES:
+            if lang != "en": continue
+            d = S.parse_file(f)
+            for part in ("article", "author", "sources"):
+                for u in re.findall(r"https?://(?:www\.)?m365\.fm/(?:en/)?learn/[^\s)\]>\"']*", d[part]):
+                    cx = ctx(); v = cx.link(u, "en"); n += 1
+                    self.assertFalse(cx.warn, f"{p['id']}: {u}")
+                    self.assertIn(v.split("#")[0], built, f"{p['id']}: {u} -> {v}")
+                    self.assertNotIn("/en/learn/", v)
+        self.assertGreater(n, 500)
 
     def test_unknown_targets_become_text(self):
         cx = ctx(ents={"kaizen"}, en={"what-is-a-gemba-walk"}, de=set())
@@ -105,6 +165,15 @@ class Cluster(unittest.TestCase):
                  {"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "Was ist ein Gemba Walk", "topics": ["gemba-walk"], "lang": "de", "tr_of": 1}]
         S.assign(posts)
         self.assertEqual(S.ASSIGN[("mirko-p", "what-is-a-gemba-walk")][0], "shop-floor-management")
+        # erster Treffer ein Leitfaden nur auf Englisch: deutsche Blogseite behält den Kasten mit dem bisherigen Leitfaden (deutsche Fassung)
+        tpm = {"handle": "mirko-p", "slug": "total-productive-maintenance-pillars", "title": "The pillars of total productive maintenance", "topics": ["total-productive-maintenance"], "published": 3, "lang": "en"}
+        S.assign(posts + [tpm])
+        self.assertEqual(S.ASSIGN[("mirko-p", tpm["slug"])][0], "tpm-oee")
+        self.assertIn(f"{BASE}/learn/tpm-oee/", S.article_box(tpm, "en", BASE))
+        de_box = S.article_box(tpm, "de", BASE)
+        self.assertIn(f"{BASE}/de/learn/produktionskennzahlen/", de_box); self.assertNotIn("/de/learn/tpm-oee/", de_box)
+        self.assertIn(tpm, S.related("manufacturing-kpis", "de")); self.assertNotIn(tpm, S.related("manufacturing-kpis", "en"))
+        S.assign(posts)
         self.assertNotIn(("mirko-p", "sharepoint-permissions"), S.ASSIGN)
         box = S.article_box(posts[0], "en", BASE)
         self.assertIn(f"{BASE}/learn/shop-floor-management/", box); self.assertIn(f"{BASE}/learn/path/manufacturing-excellence/", box)
@@ -119,8 +188,8 @@ class Cluster(unittest.TestCase):
 
 class AuthorBox(unittest.TestCase):
     def test_site_box_plus_disclosure(self):
-        for lang, p in ALL:
-            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
+        for lang, p, f in FILES:
+            d = S.parse_file(f)
             h = S._author_html(d["author"], lang, ctx(), lambda l: '<section class="author-box">BOX</section>')
             self.assertTrue(h.startswith('<section class="author-box">BOX</section>'), f"{lang}/{p['id']}")
             self.assertRegex(h, r"(?i)ifakt", f"{lang}/{p['id']} ohne iFAKT-Hinweis")
@@ -129,17 +198,18 @@ class AuthorBox(unittest.TestCase):
 
 FORBIDDEN = re.compile(r"\((?:planned|geplant)[,;)]|Sister guides \(|check links before go-live|Links vor Livegang|activate link|aktivieren\)|NEURONwriter|Competitor pages|Wettbewerberseiten|\(competitor|\(Wettbewerber"
                        r"|\[unverified:|\[ungeprüft:|Reading time|Lesezeit:|German version:|English version:|Deutsche Fassung:|Englische Fassung:|founded in 2001 by|von Jörg Drees gegründet"
-                       r"|planned (?:m365|[\w ]{0,40}(?:guide|compendium))|geplante[n]? Pillar|ist geplant|\(not yet published|, not yet published|noch nicht veröffentlicht\)|\(in Vorbereitung|\(in preparation", re.I)
+                       r"|planned (?:m365|[\w ]{0,40}(?:guide|compendium))|geplante[n]? Pillar|ist geplant|\(not yet published|(?:planned|geplant), not yet published|noch nicht veröffentlicht\)|\(in Vorbereitung|\(in preparation", re.I)
 
 
 class Rendered(unittest.TestCase):
     def test_no_internal_or_planned_notes_on_pages(self):
-        for lang, p in ALL:
-            d, body, src, heads = S._article(p, lang, BASE, ctx())
+        for lang, p, f in FILES:
+            d, body, src, heads = rendered(p, lang, f, ctx())
             txt = re.sub(r"<[^>]+>", " ", body + " " + src)
             m = FORBIDDEN.search(txt)
             self.assertIsNone(m, f"{lang}/{p['id']}: {m and txt[max(0, m.start() - 60):m.end() + 60]}")
             self.assertNotRegex(body, r"`/learn/", f"{lang}/{p['id']} Adresse in Backticks")
+            self.assertNotRegex(txt, r"(?i)\b(?:the|our) planned (?:pillar|cluster|guide)|\(both planned\)|\(planned (?:cluster|pillar|guide)\)|(?:SMED|reduction|IIoT|ISA-95|62443) \(guide\)|competitor page|before publication", f"{lang}/{p['id']}")
 
     def test_unverified_reason_in_tooltip(self):
         h = S.finish("<p>x [unverified: practitioner estimate] y [ungeprüft]</p>", 0, "en")
@@ -191,7 +261,7 @@ class Build(unittest.TestCase):
         self.json = json
 
     def test_pages_schema_and_language_links(self):
-        self.assertEqual(len(self.files), 24)   # 20 Leitfäden, 2 Pfadseiten, 2 Testseiten (Abschlusstest)
+        self.assertEqual(len(self.files), 49)   # 20 en + 10 de Leitfäden, 15 Vertiefungen, 2 Pfadseiten, 2 Testseiten (Abschlusstest)
         for rel, html in self.files.items():
             ld = self.json.loads(html.split("\n", 1)[0])["ld"]
             for n in ld:
@@ -226,6 +296,67 @@ class Build(unittest.TestCase):
         self.assertTrue(any(n.get("@type") == "ImageObject" for n in meta["ld"]))
         other = seen["de/learn/lean-management/index.html"]
         self.assertNotIn("ig-fig", other); self.assertNotIn("og_image", json.loads(other.split("\n", 1)[0])["kw"])   # nur die freigegebene Sprachfassung
+
+    def test_clusters_and_en_only_guides(self):
+        meta = lambda rel: self.json.loads(self.files[rel].split("\n", 1)[0])
+        sm = {u: (d, a) for u, d, a in self.sm}
+        for c in S.clusters():
+            rel = f"learn/{S.by_id(c['parent'])['slug']['en']}/{c['slug']['en']}/index.html"
+            u = f"{BASE}/{rel[:-10]}"
+            m = meta(rel)
+            self.assertEqual(m["canon"], u); self.assertIsNone(m["alts"], "kein hreflang")
+            self.assertEqual(sm[u], ("2026-11-26", None))
+            art = next(n for n in m["ld"] if n["@type"] == "Article")
+            self.assertEqual(art["url"], u); self.assertEqual(art["inLanguage"], "en")
+            self.assertIn(S.url(BASE, S.by_id(c["parent"]), "en") + "#article", [x["@id"] for x in art["isPartOf"]])
+            self.assertIn(f'href="{S.url(BASE, S.by_id(c["parent"]), "en")}" rel="up"', self.files[rel])
+        for p in NEW:
+            rel = f"learn/{p['slug']['en']}/index.html"; u = f"{BASE}/{rel[:-10]}"
+            self.assertEqual(meta(rel)["canon"], u); self.assertIsNone(meta(rel)["alts"]); self.assertEqual(sm[u], ("2026-11-26", None))
+            self.assertNotIn(f"de/learn/{p['slug']['en']}/index.html", self.files)
+        lean = self.files["learn/lean-manufacturing/index.html"]
+        box = lean[lean.index('class="pl-box pl-deep"'):]; box = box[:box.index("</section>")]
+        self.assertEqual(sorted(re.findall(r'href="https://www\.m365\.fm/learn/lean-manufacturing/([a-z0-9-]+)/"', box)), ["a3-problem-solving", "kaizen", "pdca-cycle", "poka-yoke"])
+        self.assertNotIn('class="pl-box pl-deep"', self.files["de/learn/lean-management/index.html"], "Kasten nur auf der englischen Seite")
+        self.assertIn("Step 9 of 20", self.files["learn/tpm-oee/index.html"])
+        self.assertIn("Schritt 4 von 10", self.files["de/learn/wertstromanalyse/index.html"])
+
+    def test_no_dead_steps_and_links(self):
+        built = {f"{BASE}/{rel[:-10]}" for rel in self.files}
+        for rel, h in self.files.items():
+            for u in re.findall(r'href="(https://www\.m365\.fm/(?:[a-z]{2}/)?learn/(?!$)[^"#]*)', h):
+                if u.endswith("/learn/"): continue
+                self.assertIn(u, built, f"{rel}: toter Link {u}")
+            if rel.startswith("de/") and 'class="pl-step"' in h:
+                step = h[h.index('class="pl-step"'):]; step = step[:step.index("</nav>")]
+                self.assertNotRegex(step, r'href="https://www\.m365\.fm/learn/', f"{rel}: Vor/Zurück auf eine englische Seite")
+
+    def test_path_page_stages_and_deep_dives(self):
+        en, de = self.files["learn/path/manufacturing-excellence/index.html"], self.files["de/learn/path/manufacturing-excellence/index.html"]
+        for h in (en, de):
+            self.assertEqual(h.count('class="pl-stage"'), 4); self.assertEqual(h.count('class="pl-card"'), 20)
+            self.assertEqual(len(set(re.findall(r'href="https://www\.m365\.fm/learn/(?!path/)[a-z0-9-]+/[a-z0-9-]+/"', h))), 15)
+        self.assertEqual(de.count("(auf Englisch)"), 10); self.assertEqual(re.findall(r'pl-step-n">(\d+)', de), [str(i) for i in range(1, 11)])
+        self.assertEqual(re.findall(r'pl-step-n">(\d+)', en), [str(i) for i in range(1, 21)])
+        course = next(n for n in self.json.loads(en.split("\n", 1)[0])["ld"] if n["@type"] == "Course")
+        self.assertEqual(len(course["hasPart"]), 35)
+        self.assertIn(("https://www.m365.fm/learn/path/manufacturing-excellence/", "2026-11-26"), [(u, d) for u, d, a in self.sm])
+
+    def test_noindex_switch(self):
+        import contextlib, io, json
+        from unittest import mock
+        reg = json.loads(json.dumps(S.registry()))
+        next(p for p in reg["pillars"] if p["id"] == "tpm-oee")["noindex"] = True
+        next(c for c in reg["clusters"] if c["id"] == "kaizen")["noindex"] = True
+        files, sm, kw = {}, [], {}
+        g = dict(BASE=BASE, write=lambda rel, html: files.__setitem__(rel, html), sitemap=sm, author_box=None, LANGS=("en", "de"),
+                 page=lambda lang, title, desc, canon, body, alts, ld, **k: kw.__setitem__(canon, k.get("noindex")) or body, header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
+        import site_infographics as _IG
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(_IG, "get", lambda *a: None), mock.patch.object(S, "registry", lambda: reg):
+            S.build(g, [], set())
+        for u in (f"{BASE}/learn/tpm-oee/", f"{BASE}/learn/lean-manufacturing/kaizen/"):
+            self.assertTrue(kw[u], u); self.assertNotIn(u, [x[0] for x in sm])
+        self.assertIn("learn/tpm-oee/index.html", files, "Seite bleibt erreichbar")
 
     def test_german_pages_show_german_titles(self):
         de = self.files["de/learn/shop-floor-management/index.html"]

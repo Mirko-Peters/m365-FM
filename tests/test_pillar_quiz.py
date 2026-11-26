@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "tools"))
 import pillar_quiz as PQ  # noqa: E402
 import site_pillars as PIL  # noqa: E402
 
+OLD10 = [p for p in PIL.order() if p["slug"].get("de")]   # die ersten 10 Leitfaeden (Stand vor dem Kursausbau): Grundlage der Laeufe mit Attrappen
 GOOD = {"q": "What does the value stream map make visible first?", "opts": ["Waiting times between steps", "Machine colours", "Employee birthdays", "Office layout"],
         "a": 0, "why": "The guide says the map shows flow and waiting times.", "ref": "What a value stream map shows"}
 
@@ -137,8 +138,9 @@ class Output(unittest.TestCase):
         self.assertEqual(PQ.next_n("lean", []), 1)
 
 
-class FullRun(unittest.TestCase):
-    """Ganzer Lauf mit Attrappen statt API: Dateien, IDs, Verschluesselung, Wachstum ohne Umnummerierung, keine Loesung im Log."""
+class _RunBase(unittest.TestCase):
+    """Attrappen statt API und temporaere Dateien fuer FullRun und ClusterRun."""
+    LEGACY = True
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); d = Path(self.tmp.name)
@@ -146,6 +148,8 @@ class FullRun(unittest.TestCase):
                   patch.dict(os.environ, {"CRON_KEY": "k", "ANTHROPIC_API_KEY": "x", "PILLAR_QUIZ_CHECK_DIR": str(d / "check"), "COMMUNITY_API": "",
                                               "GITHUB_REF_NAME": ""}),
                   patch("ai_gateway.check_budget", lambda *a, **k: True), patch("ai_gateway.report_usage", lambda *a, **k: None)]
+        if self.LEGACY:   # Laeufe wie vor dem Kursausbau: 10 Leitfaeden ohne Vertiefungen (die neuen prueft ClusterRun)
+            self.p += [patch.object(PIL, "order", lambda: list(OLD10)), patch.object(PIL, "clusters_of", lambda pid: [])]
         for x in self.p: x.start()
         self.batches = {}
 
@@ -229,6 +233,9 @@ class FullRun(unittest.TestCase):
             return buf.getvalue()
         finally:
             for x in ps: x.stop()
+
+class FullRun(_RunBase):
+    """Ganzer Lauf mit Attrappen statt API: Dateien, IDs, Verschluesselung, Wachstum ohne Umnummerierung, keine Loesung im Log."""
 
     def test_run_writes_public_and_encrypted_keys(self):
         log = self.run_tool(["run", "--pillars", "lean-manufacturing,value-stream-mapping"], verify_wrong={0, 3})
@@ -400,6 +407,68 @@ class FullRun(unittest.TestCase):
     def test_plan_budget_under_cap(self):
         g, h = PQ.report_plan(PQ.plan(())) if PQ.plan(()) else (0, 0)
         self.assertLess(PQ.eur(g + h), 2.0)
+
+
+class ClusterRun(_RunBase):
+    """Kursausbau 26.11.2026: 10 neue Leitfaeden und 15 Vertiefungen mit der echten Registry. Ohne Netz und ohne Schluessel; Laeufe nur mit Attrappen."""
+    LEGACY = False
+
+    def real_public(self, hold=True):
+        d = json.loads((ROOT / "data" / "pillar_quiz.json").read_text("utf-8"))
+        if not hold: d.pop("hold", None)
+        PQ.PUBLIC.write_text(json.dumps(d, ensure_ascii=False), "utf-8")
+        return d
+
+    def test_plan_lists_guides_and_clusters_without_network(self):
+        self.real_public()
+        items = PQ.plan(())
+        gd = [it for it in items if not PQ.is_cluster(it[0])]; cl = [it for it in items if PQ.is_cluster(it[0])]
+        self.assertEqual(sorted(p["id"] for p, *_ in gd), sorted(p["id"] for p in PIL.order() if not p["slug"].get("de")))
+        self.assertEqual(len(cl), 15)
+        self.assertTrue(all(need == PQ.KEEP for *_, need in gd) and all(need == PQ.CLUSTER_KEEP for *_, need in cl))
+        self.assertEqual({p["parent"] for p, *_ in cl}, {"lean-manufacturing", "operational-excellence", "shop-floor-management", "production-scheduling-aps", "digital-twin-manufacturing"})
+        self.assertEqual(PQ.released(items, set(), PQ.held()), [], "ohne --pillars: alles zurueckgehalten")
+        self.assertEqual(len(PQ.released(items, {"kaizen"}, PQ.held())), 25, "mit --pillars: die genannten (plan filtert vorher)")
+        self.assertEqual([p["id"] for p, *_ in PQ.plan({"kaizen", "tpm-oee"})], ["kaizen", "tpm-oee"])
+        self.assertEqual(PQ.plan({"lean-manufacturing"}), [], "ein Leitfaden nimmt seine Vertiefungen nicht automatisch mit")
+        g, h = sum(PQ.req_cap_usd(r) for r in PQ.gen_requests(items)), PQ.phase2_cap_usd(items)
+        self.assertLess(PQ.eur(g + h), PQ.RUN_EUR, "alle 25 Quellen passen in einen Lauf unter der Grenze")
+        u = PQ.gen_requests([it for it in items if it[0]["id"] == "kaizen"])[0]["params"]["messages"][0]["content"]
+        self.assertIn("Write exactly 5 questions", u); self.assertIn("same learning path", u)
+        self.assertIn(json.loads(PQ.PUBLIC.read_text())["pillars"]["manufacturing-kpis"]["en"][0]["q"], u, "nicht wiederholen: Fragen des ganzen Pfads")
+        log = io.StringIO()
+        with redirect_stdout(log): PQ.main(["plan"])
+        self.assertIn("Zurueckgehalten bis zur Freigabe", log.getvalue()); self.assertIn("Vertiefungen ohne genug Fragen", log.getvalue())
+
+    def test_run_without_pillars_sends_nothing_for_held(self):
+        self.real_public()
+        log = self.run_tool(["run"])
+        self.assertIn("nichts zu tun", log); self.assertEqual(self.batches, {}, "kein Batch, keine Kosten")
+
+    def test_run_released_cluster_counts_for_parent(self):
+        before = self.real_public()
+        self.run_tool(["run", "--pillars", "kaizen,tpm-oee"])
+        pub = json.loads(PQ.PUBLIC.read_text())
+        lean_old = [x["id"] for x in before["pillars"]["lean-manufacturing"]["en"]]
+        lean = pub["pillars"]["lean-manufacturing"]["en"]
+        self.assertEqual([x["id"] for x in lean[:len(lean_old)]], lean_old, "bestehende Fragen bleiben")
+        new = lean[len(lean_old):]
+        self.assertEqual(len(new), PQ.CLUSTER_KEEP); self.assertTrue(all(x["src"] == "kaizen" for x in new))
+        used = lean_old + list((before.get("retired") or {}).get("lean-manufacturing") or [])
+        top = max(int(i.rsplit("-", 1)[1]) for i in used)
+        self.assertEqual([x["id"] for x in new], [f"lean-manufacturing-{n}" for n in range(top + 1, top + 1 + PQ.CLUSTER_KEEP)], "IDs im Namensraum des Eltern-Leitfadens")
+        self.assertEqual([x.get("src") for x in pub["pillars"]["lean-manufacturing"]["de"][len(lean_old):]], ["kaizen"] * PQ.CLUSTER_KEEP)
+        self.assertEqual([x["id"] for x in pub["pillars"]["tpm-oee"]["en"]], [f"tpm-oee-{n}" for n in range(1, PQ.KEEP + 1)])
+        order = [p["id"] for p in PIL.order()]
+        self.assertEqual(list(pub["pillars"]), [p for p in order if p in pub["pillars"]], "Pfadreihenfolge, tpm-oee an seiner Stelle")
+        self.assertNotIn("kaizen", pub["hold"]); self.assertNotIn("tpm-oee", pub["hold"]); self.assertIn("pdca-cycle", pub["hold"])
+        keys = PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), PQ.fernet("k"))["keys"]
+        self.assertTrue(all(k["pillar"] == "lean-manufacturing" and k["qid"].startswith("lean-manufacturing-") for k in keys if k.get("src") == "kaizen"))
+        body = PQ.push_body({"path": "p", "keys": keys})
+        self.assertTrue(all(set(k) == {"qid", "pillar", "answer", "why_en", "why_de"} for k in body["keys"]), "src geht nicht an den Worker")
+        import site_pillars as S
+        self.assertTrue(all(set(S._clean_q(x)) == {"id", "q", "opts"} for x in new), "src erreicht die Seite nicht")
+        self.assertTrue({r["custom_id"] for b in self.batches.values() for r in b} >= {"gen__kaizen", "gen__tpm-oee"})
 
 
 
