@@ -18,7 +18,7 @@ on:
         type: choice
         options: [plan, run, collect, push, reshuffle, regen, retranslate]
         default: plan
-      pillars: { description: "Nur diese Leitfaeden oder Vertiefungen (IDs, kommagetrennt; plan nennt die Liste); leer = alle mit zu wenigen Fragen AUSSER denen auf der Freigabeliste data/pillar_quiz.json hold (neue Leitfaeden und Vertiefungen erst nach Freigabe)", required: false, default: "" }
+      pillars: { description: "Nur diese Leitfaeden oder Vertiefungen (IDs, kommagetrennt; plan nennt die Liste); leer = alle mit zu wenigen Fragen AUSSER denen auf der Freigabeliste data/pillar_quiz.json hold (neue Leitfaeden und Vertiefungen erst nach Freigabe). Bei retranslate: leer = alle Gruppen (hold egal); eine Leitfaden-ID nimmt ihre Vertiefungen mit", required: false, default: "" }
 permissions:
   contents: write
 concurrency: { group: pillar-quiz, cancel-in-progress: false }

@@ -158,13 +158,14 @@ def check_item(x):
 _UMLAUT = re.compile(r"[äöüÄÖÜß]")
 _TRANSLIT = re.compile(r"(?<![aeiouq])(?:ae|oe|ue)", re.I)
 _TRANSLIT_OK = re.compile(r"^(?:\w*(?:aktu|visu|manu|individu|eventu|virtu|konzeptu|kontextu|textu|habitu|punktu|du|spiritu)ell\w*|zuerst\w*|"
-                          r"oee|purdue|aero\w*|boeing|poet\w*|koeffizient\w*|poesie|suez|duett\w*|silhouette\w*|israel|michael|joe|aloe|"
+                          r"oee|oems?|purdue|aero\w*|boeing|poet\w*|koeffizient\w*|poesie|suez\w*|schaeffler\w*|\w*zue(?:in|rk|nt)\w*|duett\w*|silhouette\w*|israel|michael|joe|aloe|"
                           r"(?:value|issue|queue|continue|revenue|influence|residue|avenue|league|statue|virtue|sequence|argue|pursue|shoe|guess|fuel|cruel)"
                           r"(?:s|d|es|ed|ing)?|true|due|blue|does|goes|vague|fluent|tuesday|suede)$", re.I)   # ganze Woerter: "fuel" darf "Nachfuellung" nicht decken
 
 
 _TRANSLIT_STEM = re.compile(r"fuell|fuehr|fuer|ueber|muess|koenn|moeglich|waehr|naechst|groess|aender|pruef|loes|rueck|stueck|taeglich|haeufig|"
-                            r"spaet|kuerz|hoeh|gemaess|gehoer|zaehl|laeng|staerk|schaetz|saetz|qualitaet|stoer|ruest|engpaess|verfueg|beruecksicht", re.I)
+                            r"spaet|kuerz|hoeh|gemaess|gehoer|zaehl|laeng|staerk|schaetz|saetz|qualitaet|stoer|ruest|engpaess|verfueg|beruecksicht|oeffn|uebt|uebung|"
+                            r"waerm|geschaeft|maerkt|gefaehr|kuehl|koerper|gebuehr|verguet", re.I)
 _VOCAB = None
 
 
@@ -174,8 +175,12 @@ def _de_vocab():
     if _VOCAB is None:
         _VOCAB = set()
         for f in (ROOT / "imports" / "pillars" / "de").rglob("*.md"):
-            try: _VOCAB.update(w.lower() for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", f.read_text("utf-8")))
-            except OSError: pass
+            try: t = f.read_text("utf-8")
+            except OSError: continue
+            t = re.sub(r"\]\([^)]*\)|https?://\S+|`[^`]*`", " ", t)   # Link-Ziele, URLs und Code (Slugs, DAX-Namen) enthalten ASCII-Formen
+            _VOCAB.update(w.lower() for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", t))
+        # ASCII-Form neben ihrer Umlautform (erklaert/erklärt) gilt nicht als belegtes Wort
+        _VOCAB -= {w for w in _VOCAB if _TRANSLIT.search(w) and any(u in _VOCAB for u in _umlaut_forms(w))}
     return _VOCAB
 
 
@@ -193,9 +198,10 @@ def ascii_german(*texts):
       mit Umlaut (Engpaesse -> Engpässe), oder
     - kein ä/ö/ü/ß im ganzen Text und mindestens zwei Woerter mit ae/oe/ue nach einem Konsonanten (aktuell, visuell, zuerst, value ausgenommen)."""
     t = " ".join(x for x in texts if isinstance(x, str))
-    sus = [w for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", t) if _TRANSLIT.search(w) and not _TRANSLIT_OK.match(w)]
+    words = [w for w in re.findall(r"[A-Za-zÄÖÜäöüß]+", t) if not (w.isupper() and len(w) <= 6) and not _TRANSLIT_OK.match(w)]   # Akronyme (OEM, DOE, S&OE)
+    if any(_TRANSLIT_STEM.search(w) for w in words): return True   # eindeutige Wortstaemme (Nachfuellung, fuer, geaendert, geoeffnet) reichen allein
+    sus = [w for w in words if len(w) >= 3 and _TRANSLIT.search(w)]   # "ae" allein (Hexwerte, Abkuerzungen) ist kein Wort
     if not sus: return False
-    if any(_TRANSLIT_STEM.search(w) for w in sus): return True   # eindeutige Wortstaemme (Nachfuellung, fuer, ueber) reichen allein
     voc = _de_vocab()
     if voc and any(w.lower() not in voc and any(u in voc for u in _umlaut_forms(w)) for w in sus): return True
     return not _UMLAUT.search(t) and len(sus) >= 2

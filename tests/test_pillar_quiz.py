@@ -520,8 +520,6 @@ class PushLog(unittest.TestCase):
         self.assertIn("::warning::", self.run_push({"ok": True, "upserted": 60, "deactivated": 0, "total": 66, "pillars": 10}))
 
 
-if __name__ == "__main__":
-    unittest.main()
 
 
 class Umlauts(unittest.TestCase):
@@ -536,6 +534,12 @@ class Umlauts(unittest.TestCase):
         self.assertTrue(PQ.ascii_german(self.ASCII)); self.assertTrue(PQ.ascii_german(self.MIXED))
         self.assertTrue(PQ.ascii_german("Eine Min/Max-Linie am Regal, die die Nachfuellung steuert, und ein Etikett je Stueck"), "Ausnahmen nur als ganze Woerter")
         self.assertFalse(PQ.ascii_german("Die OEE und das Purdue-Modell, OEE-Verluste"))
+        self.assertTrue(PQ.ascii_german("Das Werk wird neu geaendert, die Halle neu geoeffnet, das Team neu geuebt."), "ge- und Vokal vor ae/oe/ue")
+        self.assertTrue(PQ.ascii_german("Die Bauueberwachung prüft das Gebäude."))
+        self.assertTrue(PQ.ascii_german("Die Lösung wird erklaert genannt."), "Wortschatz ohne ASCII-Formen aus Slugs")
+        for g in ["Der OEM liefert, der OEM prüft nicht", "Die DOE und S&OE sowie OE im Werk", "Schaeffler und Schaeffler-Werke",
+                  "Beide Werte sind zueinander anzuerkennen und zuerst zu messen", "Der Suezkanal und Suez"]:
+            self.assertFalse(PQ.ascii_german(g), g)
         for g in self.GOOD: self.assertFalse(PQ.ascii_german(g), g)
 
     def test_real_old_questions_clean(self):
@@ -629,6 +633,33 @@ class Retranslate(_RunBase):
         self.assertEqual([r["custom_id"] for b in self.batches.values() for r in b], ["tr__lean-manufacturing"], "--pillars kaizen: nur diese Vertiefung")
         self.assertIn("Aenderung", PQ.PUBLIC.read_text("utf-8"), "unveraendert")
 
+    def test_partial_and_reversed_order(self):
+        """Antworten in umgekehrter n-Reihenfolge; eine schlechte Uebersetzung in der Gruppe bleibt alt, die gute wird geschrieben."""
+        f = self.seed()
+        def results(b):
+            out = []
+            for r in self.batches[b["id"]]:
+                qs = json.loads(r["params"]["messages"][0]["content"])
+                arr = [{"n": q["n"], "q": "Übersetzt: " + q["q"], "opts": ["Ö " + o for o in q["opts"]], "why": "Begründung: " + q["why"]} for q in qs]
+                if r["custom_id"] == "tr__lean-manufacturing": arr = [{**x, "opts": x["opts"][:3]} for x in arr]   # falsche Zahl Optionen
+                out.append({"custom_id": r["custom_id"], "result": {"type": "succeeded", "message": {"content": [{"type": "text", "text": json.dumps(arr[::-1], ensure_ascii=False)}],
+                            "usage": {"input_tokens": 10, "output_tokens": 10}, "stop_reason": "end_turn"}}})
+            return out
+        with patch.object(PQ, "submit", lambda reqs: self.batches.setdefault("b", reqs) and "b"), patch.object(PQ, "wait", lambda bid: {"id": bid}), \
+                patch.object(PQ, "results", results), redirect_stdout(io.StringIO()) as log:
+            self.assertEqual(PQ.retranslate(set()), 1)
+        pub = json.loads(PQ.PUBLIC.read_text()); de = {x["id"]: x for v in pub["pillars"].values() for x in v["de"]}
+        self.assertEqual(de["tpm-oee-1"]["q"], "Übersetzt: Where does OEE's value lie?")
+        self.assertEqual(de["lean-manufacturing-13"]["q"], "Warum ein Standard?", "verworfene Uebersetzung: alter Text bleibt")
+        k = {x["qid"]: x for x in PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), f)["keys"]}
+        self.assertEqual(k["lean-manufacturing-13"]["why_de"], Umlauts.MIXED); self.assertIn("Nicht ersetzt", log.getvalue())
+        self.assertNotIn("Losses", log.getvalue(), "keine Erklaerung im Log")
+
+    def test_budget_false_sends_nothing(self):
+        self.seed()
+        with patch("ai_gateway.check_budget", lambda *a, **k: False), self.assertRaises(SystemExit): self.go()
+        self.assertEqual(self.batches, {})
+
     def test_cap(self):
         self.seed()
         with patch.object(PQ, "RETR_EUR", 0.000001), self.assertRaises(SystemExit): self.go()
@@ -638,3 +669,7 @@ class Retranslate(_RunBase):
         self.seed()
         with patch.object(PQ, "retranslate", lambda p: self.batches.setdefault("called", p)): PQ.main(["retranslate", "--pillars", "tpm-oee"])
         self.assertEqual(self.batches["called"], {"tpm-oee"})
+
+
+if __name__ == "__main__":
+    unittest.main()
