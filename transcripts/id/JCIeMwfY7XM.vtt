@@ -1,0 +1,1054 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:04.020
+Sementik kernel ada lapisan di bawah alat AI Microsoft yang hampir tidak pernah dijelaskan siapapun.
+
+00:00:04.420 --> 00:00:10.020
+Ini adalah perangkat sumber terbuka gratis yang memungkinkan kode Anda berbicara dengan model besar-besar dan memungkinkan model itu memanggil kembali.
+
+00:00:10.180 --> 00:00:14.080
+Anda mungkin mengira ini membuat chatbot, tetapi sebenarnya ini adalah middleware, bagian tenang di tengah.
+
+00:00:14.760 --> 00:00:19.880
+Setelah Anda melihat beberapa bagian di dalamnya, cara Microsoft membangun agen tidak lagi terasa, seperti misteri.
+
+00:00:20.360 --> 00:00:26.220
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan pekerjaan.
+
+00:00:26.220 --> 00:00:30.220
+Hari ini, kita akan membedah semantic kernel bagian demi bagian dengan bahasa yang sederhana.
+
+00:00:30.860 --> 00:00:32.260
+Apa itu semantic kernel sebenarnya?
+
+00:00:32.900 --> 00:00:36.700
+Mari kita mulai dengan versi yang paling sederhana, karena namanya membuatnya terdengar lebih berat daripada saya.
+
+00:00:37.580 --> 00:00:40.400
+Semantic kernel adalah perangkat sumber terbuka gratis dari Microsoft,
+
+00:00:40.820 --> 00:00:45.060
+yang menghubungkan perangkat lunak yang sedang Anda bangun ke model AI lalu membiarkan model itu memanggil kembali kode Anda.
+
+00:00:45.940 --> 00:00:49.740
+Microsoft menggambarkannya sebagai middleware, istilah untuk lapisan yang berada di tengah,
+
+00:00:49.860 --> 00:00:53.280
+dan meneruskan pesan antara dua hal yang tidak menggunakan bahasa yang sama.
+
+00:00:54.420 --> 00:00:55.640
+Sekarang bukan merupakan semanticnya.
+
+00:00:55.640 --> 00:00:58.440
+Ini bukan aplikasi yang Anda buka, bukan chatbot untuk mengetik,
+
+00:00:58.680 --> 00:01:00.860
+dan bukan model seperti yang berjalan di balik co-pilot.
+
+00:01:01.300 --> 00:01:03.640
+Anda menginstallnya di dalam proyek yang sedang dikerjakan,
+
+00:01:03.820 --> 00:01:06.180
+dan itu akan menangani bagian sulit saat berkomunikasi dengan AI.
+
+00:01:06.800 --> 00:01:10.660
+Perangkat ini pertama kali muncul pada Maret 2023 di bawah lisensi terbuka bernama MIT.
+
+00:01:11.300 --> 00:01:14.060
+Lisensi itu berarti siapa saja dapat menggunakannya, membaca kodenya,
+
+00:01:14.140 --> 00:01:17.700
+dan mengubahnya sesuai kebutuhan yang menjadi alasan besar mengapa alat ini cepat populer di kalaman pengombang.
+
+00:01:17.840 --> 00:01:19.400
+Alat ini juga tidak peduli di mana perangkat lunak.
+
+00:01:19.920 --> 00:01:21.780
+Perangkat ini bekerja di dalam aplikasi Anda sendiri,
+
+00:01:21.780 --> 00:01:24.840
+di cloud Microsoft, di cloud lain, atau di mesin yang ada di bawah meja Anda.
+
+00:01:25.640 --> 00:01:27.040
+Azure adalah rumah paling umum untuknya,
+
+00:01:27.180 --> 00:01:29.640
+tetapi Microsoft dengan cepat menegaskan bahwa Azure tidak diwajibkan.
+
+00:01:29.900 --> 00:01:31.260
+Ada alasan jelas mengapa lapisan ini ada.
+
+00:01:31.840 --> 00:01:33.820
+Bayangkan aplikasi yang berfungsi penuh dengan fitur nyata,
+
+00:01:33.980 --> 00:01:35.480
+seperti mencari pesanan atau mengirim email.
+
+00:01:36.460 --> 00:01:38.500
+Model bahasa sangat hebat dalam memahami permintaan,
+
+00:01:38.620 --> 00:01:40.500
+tetapi tidak dapat menyentuh semua itu sendirian.
+
+00:01:41.520 --> 00:01:45.640
+Sementik kenal menjembatani kesenjangan itu sehingga model dapat menjangkau aplikasi Anda dan aplikasi Anda dapat tersebut.
+
+00:01:45.840 --> 00:01:47.320
+Berikut adalah contoh kecil agar lebih nyata.
+
+00:01:47.640 --> 00:01:51.180
+Misalkan pelanggan mengetik pertanyaan tentang pesanan dan aplikasi Anda perlu mencari pesanan itu,
+
+00:01:51.400 --> 00:01:54.000
+memeriksa statusnya, dan memeriksa statusnya, dan membahas sederhana.
+
+00:01:54.000 --> 00:01:57.100
+Sebuah model dapat menulis balasan itu, tetapi tidak dapat mencari pesanan tersebut sendiri.
+
+00:01:57.580 --> 00:02:00.340
+Sementik kenal menginginkan dan meminta aplikasi Anda untuk melakukan pencarian,
+
+00:02:00.720 --> 00:02:03.300
+lalu menggunakan jawabannya dalam balasan tersebut, semuanya dalam satu alut.
+
+00:02:03.660 --> 00:02:06.440
+Microsoft mengatakan perusahaan-perusahaan Fortune 500 sudah menggunakannya,
+
+00:02:06.640 --> 00:02:10.600
+dan alasan yang mereka berikan adalah karena sifat yang fleksibel, modular, dan mudah dipantau kinerjanya.
+
+00:02:11.040 --> 00:02:11.260
+Diem.
+
+00:02:12.900 --> 00:02:13.600
+Kernel dan namanya.
+
+00:02:14.340 --> 00:02:17.240
+Kata pertama yang sering membingungkan orang adalah kernel, jadi mari kita berdana.
+
+00:02:17.800 --> 00:02:21.100
+Sementik merujuk pada makna dan bahasa alami, sesuatu yang dikuasai oleh model AI.
+
+00:02:21.100 --> 00:02:24.840
+Kernel merujuk pada pusatnya, satu objek di mana semua hal lain terhubung.
+
+00:02:25.260 --> 00:02:27.240
+Deskripsi dari Microsoft sendiri terasa sangat sederhana.
+
+00:02:28.060 --> 00:02:31.320
+Sederhananya, kernel adalah wadah yang menyimpan semua layanan dan plugin
+
+00:02:31.320 --> 00:02:33.460
+yang dibutuhkan aplikasi AI Anda untuk berjalan.
+
+00:02:33.800 --> 00:02:36.860
+Bayangkan ini sebagai satu kotak di mana setiap bagian dari aplikasi AI Anda didaftarkan,
+
+00:02:37.000 --> 00:02:38.500
+sehingga aplikasi selalu tahu di mana menemukannya.
+
+00:02:38.840 --> 00:02:40.280
+Anda memberikan dua jenis hal kepada kernel.
+
+00:02:40.540 --> 00:02:44.660
+Pertama adalah layanan, yaitu model AI itu sendiri ditambah utilitas biasa seperti pencatatan log.
+
+00:02:44.660 --> 00:02:48.420
+Kedua adalah plugin, yaitu bagian yang melakukan pekerjaan sebenarnya,
+
+00:02:48.640 --> 00:02:49.880
+dan kita akan membahasnya sebentar lagi.
+
+00:02:50.600 --> 00:02:52.520
+Ketika aplikasi Anda mengirimkan permintaan,
+
+00:02:52.600 --> 00:02:54.220
+kena menjalankan urutan tugas yang singkat.
+
+00:02:54.840 --> 00:02:57.020
+Ia memilih layanan AI terbaik untuk tugas tersebut,
+
+00:02:57.180 --> 00:02:58.380
+membangun perintah dari tempat Anda,
+
+00:02:58.540 --> 00:02:59.700
+mengirimkannya, membaca balasan,
+
+00:03:00.160 --> 00:03:01.760
+dan memberikan hasilnya kembali ke aplikasi Anda.
+
+00:03:02.360 --> 00:03:04.720
+Jika itu terdengar seperti sistem yang pernah Anda lihat sebelumnya, itu memang benar.
+
+00:03:05.120 --> 00:03:07.840
+Microsoft memodelkan kernel berdasarkan pola umum dari internet
+
+00:03:07.840 --> 00:03:09.140
+yang disebut injeksi dependensi,
+
+00:03:09.260 --> 00:03:12.020
+di mana satu tempat pusat menyediakan komponen yang dibutuhkan bagian kode lain,
+
+00:03:12.140 --> 00:03:13.620
+sehingga tidak perlu diatur secara manual.
+
+00:03:13.620 --> 00:03:15.600
+Bagi Anda, poin praktisnya sedap.
+
+00:03:16.060 --> 00:03:17.140
+Kernel adalah ruang kendalinya.
+
+00:03:17.440 --> 00:03:19.660
+Segala sesuatu yang lain adalah alat yang Anda daftarkan di sana,
+
+00:03:19.820 --> 00:03:22.100
+dan dari satu tempat itu Anda dapat mengatur dan memantau semuanya.
+
+00:03:22.800 --> 00:03:25.200
+Ada satu detail lagi tentang kernel, dan kemudian kita akan lanjut.
+
+00:03:25.700 --> 00:03:27.160
+Ini ringan karena sebenarnya sebuah wadah,
+
+00:03:27.300 --> 00:03:29.880
+jadi Microsoft merekomendasikan untuk membuat yang baru setiap kali digunakan
+
+00:03:29.880 --> 00:03:31.060
+daripada menyimpannya selamanya.
+
+00:03:31.520 --> 00:03:32.820
+Itu terdengar merepotkan,
+
+00:03:32.920 --> 00:03:35.760
+tetapi hal itu mencegah plugin Anda membocokkan status antar permintaan,
+
+00:03:36.060 --> 00:03:36.760
+plugin, dan fungsi.
+
+00:03:37.360 --> 00:03:39.840
+Di sini semantik kernel menjadi berguna, jadi mari kita perlambahkan.
+
+00:03:40.260 --> 00:03:42.720
+Plugin adalah sekumpulan fungsi yang Anda expose ke AI.
+
+00:03:42.720 --> 00:03:46.380
+Dalam alat lain, fungsi tersebut sering disebut sebagai tools atau actions,
+
+00:03:46.500 --> 00:03:49.320
+dan pada versi awal semantik kernel, plugin disebut sebagai skills.
+
+00:03:49.960 --> 00:03:51.560
+Fungsi hanyalah potongan kode Anda sendiri,
+
+00:03:52.060 --> 00:03:53.260
+dengan deskripsi sederhana yang terlambat.
+
+00:03:53.580 --> 00:03:56.080
+Deskripsi tersebut memberitahu AI apa yang dilakukan fungsi tersebut,
+
+00:03:56.180 --> 00:03:57.800
+apa yang masuk ke dalamnya, dan apa yang dihasilkan.
+
+00:03:58.520 --> 00:04:01.240
+Contoh dari Microsoft sendiri adalah plugin lampu dengan tiga fungsi.
+
+00:04:01.800 --> 00:04:03.180
+Satu untuk mencantumkan semua lampu,
+
+00:04:03.260 --> 00:04:04.740
+satu untuk melaporkan status satu lampu,
+
+00:04:04.820 --> 00:04:06.340
+dan satu untuk mengubah status lampu.
+
+00:04:07.100 --> 00:04:08.360
+Model membaca deskripsi tersebut,
+
+00:04:08.460 --> 00:04:10.000
+dan memilih fungsi yang tepat untuk permintaan tersebut.
+
+00:04:10.000 --> 00:04:11.840
+Pemula biasanya melewatkan satu detail di sini.
+
+00:04:12.340 --> 00:04:13.260
+Deskripsi bukanlah hiasan.
+
+00:04:13.860 --> 00:04:15.880
+Jika deskripsinya samar, model akan menebak dengan salah,
+
+00:04:16.000 --> 00:04:17.380
+atau mengabaikan fungsinya sepenuhnya,
+
+00:04:17.460 --> 00:04:18.420
+dan semuanya akan berantakan.
+
+00:04:18.820 --> 00:04:21.720
+Tulis deskripsinya seperti cara Anda menjelaskan fungsi tersebut kepada rekan baru,
+
+00:04:21.880 --> 00:04:23.260
+dan model akan menggunakannya dengan benar.
+
+00:04:23.540 --> 00:04:24.760
+Plugin bisa berasal dari tiga tempat.
+
+00:04:25.120 --> 00:04:26.920
+Anda bisa menulisnya dalam kode Anda sendiri,
+
+00:04:27.140 --> 00:04:29.620
+mengimpornya dari standar web bersama yang disebut OpenAPI,
+
+00:04:29.740 --> 00:04:31.720
+atau menariknya dari sesuatu yang disebut server MCP,
+
+00:04:31.820 --> 00:04:33.300
+singkatan dari model konteks protokol.
+
+00:04:34.000 --> 00:04:34.860
+Pilihan terakhir itu penting,
+
+00:04:34.900 --> 00:04:36.360
+karena memungkinkan satu tim membangun kemampuan,
+
+00:04:36.360 --> 00:04:37.620
+dan membagikannya kepada semua orang.
+
+00:04:38.080 --> 00:04:39.960
+Berbagi adalah keuntungan utama dari dua opsi terakhir.
+
+00:04:40.620 --> 00:04:43.140
+Jika Anda mendeskripsikan kemampuan dengan OpenAPI
+
+00:04:43.140 --> 00:04:44.700
+atau membungkusnya dalam server MCP,
+
+00:04:45.000 --> 00:04:47.060
+tim lain bisa langsung menggunakannya tanpa menulis ulang.
+
+00:04:47.200 --> 00:04:49.700
+Bahkan pembuat di alat low code bisa menggunakan kemampuan yang sama.
+
+00:04:50.180 --> 00:04:51.720
+Begitulah cara satu fungsi yang dibangun dengan baik
+
+00:04:51.720 --> 00:04:52.500
+akhirnya membantu seluruh.
+
+00:04:52.760 --> 00:04:56.000
+Plugin juga bekerja dengan baik dengan cara tim nyata membangun perangkat lunak.
+
+00:04:56.560 --> 00:04:59.320
+Plugin bisa memiliki koneksi basis data atau klien web sendiri,
+
+00:04:59.480 --> 00:05:01.380
+sehingga AI tidak pernah melihat detail sensitifnya.
+
+00:05:01.960 --> 00:05:03.820
+AI hanya melihat deskripsi sederhana dan hasilnya.
+
+00:05:03.820 --> 00:05:07.080
+Ada satu peringatan praktis sebelum Anda membangun kotak peralatan raksa.
+
+00:05:07.640 --> 00:05:10.920
+OpenAI merekomendasikan tidak lebih dari 20 alat dalam satu permintaan,
+
+00:05:11.060 --> 00:05:12.300
+dan idealnya tidak lebih dari 10,
+
+00:05:12.500 --> 00:05:14.820
+karena akurasi model menurun seiring bertambahnya daftar.
+
+00:05:15.820 --> 00:05:17.000
+Fungsi yang lebih sedikit dan lebih jelas
+
+00:05:17.000 --> 00:05:18.620
+selalu lebih baik daripada tumpukan besar fungsi.
+
+00:05:19.320 --> 00:05:20.420
+Perencanaan dan pemengilai fungsi
+
+00:05:20.420 --> 00:05:22.940
+Setelah Anda memiliki beberapa fungsi dan masalah baru muncul,
+
+00:05:23.240 --> 00:05:25.060
+AI harus memutuskan fungsi mana yang akan digunakan
+
+00:05:25.060 --> 00:05:26.860
+dan urutannya untuk menjawab satu permintaan.
+
+00:05:27.460 --> 00:05:28.820
+Dalam semantik kernel, tugas itu disebut perencanaan.
+
+00:05:29.720 --> 00:05:30.820
+Jawaban awalnya adalah perencanaan.
+
+00:05:30.820 --> 00:05:32.960
+Anda memberikan sekumpulan fungsi ke perangkat tersebut
+
+00:05:32.960 --> 00:05:35.320
+dan perangkat itu menulis perintah yang meminta model untuk memilihkan encancang.
+
+00:05:35.600 --> 00:05:38.480
+Itu berhasil, tetapi bergantung pada model yang menebak-nebak pilihannya.
+
+00:05:39.260 --> 00:05:41.960
+Kemudian OpenAI membangun pemanggilan fungsi langsung ke dalam modelnya,
+
+00:05:42.140 --> 00:05:45.300
+dan pembuat model lain seperti Gemini, Cloud, dan Mistral mengikuti ide yang sama.
+
+00:05:46.180 --> 00:05:48.560
+Pemanggilan fungsi berarti model bisa langsung meminta fungsi tertentu
+
+00:05:48.560 --> 00:05:50.000
+berdasarkan nama dengan input yang tepat,
+
+00:05:50.160 --> 00:05:52.360
+hal-hali mendeskripsikan keinginannya dalam sebuah paragraf.
+
+00:05:52.940 --> 00:05:54.460
+Karena hal itu terbukti lebih andal,
+
+00:05:54.640 --> 00:05:56.960
+semantik kernel menjadikannya cara utama untuk menencanakan.
+
+00:05:56.960 --> 00:05:59.920
+Perubahan itu memiliki konsekuensi langsung yang perlu Anda ketahui.
+
+00:06:00.500 --> 00:06:04.360
+Perencana stepwise dan handlebars yang lebih lama telah ditinggalkan dan dihapus dari paket.
+
+00:06:05.060 --> 00:06:08.240
+Microsoft kini menyarankan pengembang untuk menggunakan pemanggilan fungsi sebagai gantinya.
+
+00:06:08.520 --> 00:06:09.940
+Di setiap bahasa yang didukung perangkat ini,
+
+00:06:10.120 --> 00:06:13.620
+ada alasan mengapa Microsoft beralih dari perencana lama dan hal itu patut disampaikan dengan jelas.
+
+00:06:14.000 --> 00:06:17.080
+Perencana meminta model untuk menciptakan rencana dengan kata-kata yang fleksibel,
+
+00:06:17.160 --> 00:06:17.820
+namun tidak dapat diksip.
+
+00:06:18.380 --> 00:06:20.320
+Pemanggilan fungsi lebih terbatas dan mudah diulang,
+
+00:06:20.440 --> 00:06:22.400
+sehingga Anda mendapatkan lebih sedikit kejutan dalam produksi,
+
+00:06:22.400 --> 00:06:24.100
+yang merupakan kebutuhan aplikasi bisnis.
+
+00:06:24.100 --> 00:06:26.400
+Cara kerjanya lebih sederhana daripada kedengaran.
+
+00:06:26.900 --> 00:06:29.940
+Model meminta fungsi semantik karena menjalankannya mengembalikan hasilnya
+
+00:06:29.940 --> 00:06:32.560
+dan model memutuskan apa yang harus dilakukan selanjutnya.
+
+00:06:33.080 --> 00:06:34.760
+Perulangan tersebut berulang hingga tugas selesai.
+
+00:06:35.140 --> 00:06:37.040
+Ia bahkan dapat memanggil beberapa fungsi sekaligus
+
+00:06:37.040 --> 00:06:39.880
+yang merupakan cara menangani permintaan seperti mematikan semua lampu di ruangan.
+
+00:06:40.440 --> 00:06:43.680
+Anda dapat menganggap perulangan tersebut sebagai percakapan singkat antara kode Anda dan model.
+
+00:06:44.100 --> 00:06:46.140
+Model berbicara, kode Anda mendengarkan dan bertindak,
+
+00:06:46.400 --> 00:06:48.480
+lalu model berbicara lagi dengan apapun yang telah dipelajari.
+
+00:06:48.960 --> 00:06:49.760
+Memori dan rak
+
+00:06:49.760 --> 00:06:52.600
+Ada batasan yang membuat semua orang terkejut pada awalnya.
+
+00:06:52.600 --> 00:06:55.140
+Model bahasa dengan sendirinya tidak memiliki memori.
+
+00:06:55.760 --> 00:07:00.700
+Setiap permintaan dimulai dari awal tanpa mengetahui dokumen, data, atau percakapan Anda 5 menit yang lalu.
+
+00:07:01.080 --> 00:07:03.480
+Solusinya adalah pola yang disebut Retrieval Augmented Generation.
+
+00:07:04.060 --> 00:07:06.240
+Sederhananya Anda mencarinya terlebih dahulu lo menjawabnya.
+
+00:07:06.740 --> 00:07:08.340
+Alih-alih berharap model mengingat sesuatu,
+
+00:07:08.660 --> 00:07:11.940
+Anda mengambil materi yang relevan dan menyerahkannya beserta pertanyaannya.
+
+00:07:12.480 --> 00:07:16.100
+Untuk melihat mengapa ini penting, pikirkan saat terakhir chatbot membuat sesuatu dengan percaya diri.
+
+00:07:16.100 --> 00:07:18.640
+Itu terjadi ketika model tidak bagi dasar yang nyata untuk bekerja.
+
+00:07:18.940 --> 00:07:24.080
+Retrieval memperbaiki hal itu dengan memberikan dokumen atau catatan aktual sehingga jawabannya disarakan pada sesuatu yang dapat Anda tunjukkan.
+
+00:07:24.580 --> 00:07:26.720
+Semanti karena membangun memori tersebut di atas penyimpanan vektor.
+
+00:07:27.120 --> 00:07:30.840
+Penyimpanan vektor adalah basis data yang disesuaikan untuk makna, bukan kata-kata yang tepat,
+
+00:07:30.960 --> 00:07:33.640
+dan konektor kit memberikan Anda satu antarmuka bersama untuk banyak di antara.
+
+00:07:35.060 --> 00:07:37.880
+Azure AI Search adalah pilihan yang biasa digunakan dan lainnya,
+
+00:07:37.980 --> 00:07:40.200
+seperti Postgres, Redis, dan Kidron juga didukung.
+
+00:07:40.200 --> 00:07:43.600
+Kata vektor layak mendapatkan satu kalimat karena tidak seseram kedengarannya.
+
+00:07:44.480 --> 00:07:47.300
+Sistem mengubah teks Anda menjadi daftar angka yang disebut embedding,
+
+00:07:47.460 --> 00:07:51.960
+yang menangkap makna teks sehingga dapat menemukan bagian yang maknanya dekat meskipun kata-katanya tidak cocok.
+
+00:07:52.700 --> 00:07:53.980
+Ada detail menarik di sini untuk pemula.
+
+00:07:54.820 --> 00:07:57.100
+Pencarian vektor dapat diekspos ke model sebagai plug-in,
+
+00:07:57.280 --> 00:08:01.980
+yang berarti AI dapat mencari sesuatu sendiri saat pertanyaan membutuhkannya menggunakan pemanggilan fungsi yang baru saja kita bahas.
+
+00:08:03.100 --> 00:08:05.060
+Ada satu peringatan jujur yang perlu diingat.
+
+00:08:05.240 --> 00:08:08.160
+Fitur penyimpanan vektor masih dalam perhatian jauh sehingga bisa berubah,
+
+00:08:08.160 --> 00:08:10.900
+dan konektor penyimpanan memori yang lama telah digantikan oleh yang lebih baru,
+
+00:08:11.460 --> 00:08:12.540
+yaitu konektor dan prompt.
+
+00:08:13.220 --> 00:08:15.740
+Memori adalah salah satu jenis plug, dan perangkat ini memiliki yang lain.
+
+00:08:16.080 --> 00:08:17.080
+Konektor adalah adapter,
+
+00:08:17.500 --> 00:08:21.020
+dan memungkinkan satu blok kode Anda berkomunikasi dengan banyak model berbeda melalui bintu yang satu.
+
+00:08:21.540 --> 00:08:23.300
+Daftarnya lebih panjang dari yang Anda kira,
+
+00:08:23.480 --> 00:08:26.880
+mencakup Azure OpenAI, OpenAI biasa, gemini dari Google, Mistral,
+
+00:08:27.000 --> 00:08:29.860
+dan bahkan model yang berjalan di mesin Anda sendiri melalui alat bernama olama.
+
+00:08:30.340 --> 00:08:31.740
+Amazon Bedrock juga ada di sana,
+
+00:08:31.740 --> 00:08:34.100
+bersama dengan layanan apapun yang mengikuti gaya OpenAI.
+
+00:08:34.660 --> 00:08:36.280
+Manfaatnya akan terlihat saat model baru hadir.
+
+00:08:37.000 --> 00:08:38.120
+Alia menerus ulang aplikasi Anda.
+
+00:08:38.160 --> 00:08:40.420
+Anda cukup menukar konektornya dan mempertahankan sisanya.
+
+00:08:41.280 --> 00:08:44.100
+Microsoft menyebut perangkat ini tahan masa depan justru karena alasan ini,
+
+00:08:44.240 --> 00:08:46.680
+karena kode Anda tidak lagi peduli model mana yang digunakan di baliknya.
+
+00:08:47.120 --> 00:08:49.220
+Manfaat praktisnya adalah pilihan tanpa keterikatan pada satu.
+
+00:08:49.700 --> 00:08:51.660
+Jika perusahaan Anda sudah membayar untuk Azure OpenAI,
+
+00:08:51.860 --> 00:08:52.620
+Anda memulainya dari sana.
+
+00:08:52.960 --> 00:08:55.120
+Dan jika model yang lebih murah atau lebih baik muncul tahun depan,
+
+00:08:55.260 --> 00:08:57.280
+Anda beralih ke sana tanpa perlu menyentuh sisa aplikasi.
+
+00:08:57.860 --> 00:09:00.900
+Kebebasan itulah alasan utama mengapati memilih perangkat seperti ini sejak kau.
+
+00:09:00.900 --> 00:09:02.820
+Omong-omong konektor mencakup lebih dari skerero.
+
+00:09:03.120 --> 00:09:05.800
+Ide yang sama berlaku untuk embedding, gambar, dan bahkan audio,
+
+00:09:05.800 --> 00:09:08.200
+sehingga satu aplikasi dapat menggabungkan berbagai jenis E.
+
+00:09:08.500 --> 00:09:10.740
+Tiap bahasa mendukung bagian yang sedikit berbeda dari daftar tersebut
+
+00:09:10.740 --> 00:09:12.440
+yang patut diperiksa sebelum Anda memutuskan.
+
+00:09:13.140 --> 00:09:14.000
+Kemudian ada template prompt.
+
+00:09:14.460 --> 00:09:16.560
+Sebuah template menggabungkan instruksi Anda, input pengguna,
+
+00:09:16.760 --> 00:09:18.800
+dan output dari sebuah fungsi ke dalam satu prompt tunggal.
+
+00:09:19.260 --> 00:09:21.200
+Anda dapat menyimpan template tersebut sebagai file
+
+00:09:21.200 --> 00:09:22.460
+dan membagikannya dengan tim Anda
+
+00:09:22.460 --> 00:09:24.940
+yang mengubah penulisan prompt menjadi sesuatu yang dapat Anda lacak nanya.
+
+00:09:25.580 --> 00:09:27.060
+Bagian terakhir dalam sesi ini adalah filter.
+
+00:09:27.300 --> 00:09:31.040
+Filter memungkinkan Anda menjalankan pemeriksaan sendiri sebelum dan sesudah model bekerja,
+
+00:09:31.260 --> 00:09:33.660
+di mana tim menempatkan aturan keselamatan dan keamanan mereka.
+
+00:09:33.660 --> 00:09:37.780
+Microsoft menunjuk filter sebagai tempat untuk pekerjaan AI yang bertanggung jawab
+
+00:09:37.780 --> 00:09:39.860
+dan ini adalah fitur kecil dengan tugas yang besar.
+
+00:09:41.080 --> 00:09:42.580
+Satu perangkat, tiga bahasa.
+
+00:09:43.280 --> 00:09:46.400
+Anda mungkin bertanya-tanya apakah semua ini cocok dengan bahasa yang sudah Anda kuasai
+
+00:09:46.400 --> 00:09:47.140
+dan jawabannya mungkin.
+
+00:09:48.420 --> 00:09:50.620
+Semantik kernel tersedia untuk C-Sub, Python, dan Java.
+
+00:09:51.220 --> 00:09:53.440
+Setiap versi sengaja mengikuti kebiasaan bahasanya sendiri
+
+00:09:53.440 --> 00:09:55.380
+sehingga terasa asli alih-alih dipaksakan.
+
+00:09:55.900 --> 00:09:58.640
+Kode Python yang ditulis dengannya tetap terbaca seperti Python
+
+00:09:58.640 --> 00:10:00.560
+dan kode C-Sub tetap terbaca seperti C-Sub.
+
+00:10:00.680 --> 00:10:02.060
+Microsoft melakukan itu dengan sengaja
+
+00:10:02.060 --> 00:10:04.740
+karena alat yang melawan kebiasaan Anda adalah alat yang akan berhenti dan digunakan.
+
+00:10:05.000 --> 00:10:05.980
+Memulai dibuat sederhana mungkin.
+
+00:10:06.560 --> 00:10:07.940
+Dalam C-Sub, Anda cukup menambahkan satu.
+
+00:10:08.280 --> 00:10:10.840
+Di Python, Anda hanya perlu menjalankan satu perintah instalasi
+
+00:10:10.840 --> 00:10:12.860
+dan di Java Anda cukup menariknya dari repository bias.
+
+00:10:13.000 --> 00:10:14.840
+Tidak ada langkah pengaturan rumit yang menghalangi Anda
+
+00:10:14.840 --> 00:10:16.260
+untuk mendapatkan contoh kerja pertamaan.
+
+00:10:16.560 --> 00:10:17.760
+Ada alasan lain mengapa hal ini penting.
+
+00:10:18.080 --> 00:10:19.700
+Itu berarti Anda tidak perlu mempelajari bahasa baru
+
+00:10:19.700 --> 00:10:21.280
+untuk mencoba ide-idea dalam episode ini.
+
+00:10:21.800 --> 00:10:23.620
+Jika Anda sudah menulis Python untuk proyek sampingan,
+
+00:10:23.720 --> 00:10:24.860
+Anda bisa mengikuti jalur Python
+
+00:10:24.860 --> 00:10:27.600
+dan jika pekerjaan Anda menggunakan polarity, Anda bisa menggunakannya itu.
+
+00:10:27.600 --> 00:10:29.740
+Ada satu hal yang perlu diketahui sebelum Anda milik.
+
+00:10:29.980 --> 00:10:30.980
+Keduanya tidak sepenuhnya setara.
+
+00:10:31.340 --> 00:10:33.740
+Beberapa fitur hadir di C-Sub dan Python sebelum mencapai Java
+
+00:10:33.740 --> 00:10:36.220
+dan konektor penyimpanan vektor lebih condong kedua bahasa pertama.
+
+00:10:36.700 --> 00:10:38.800
+Ada baiknya melihat sekilas daftar fitur untuk bahasa Anda
+
+00:10:38.800 --> 00:10:40.040
+sebelum Anda merencanakan sesuatu.
+
+00:10:40.380 --> 00:10:42.600
+Satu janji lagi layak didapatkan jika Anda sedang...
+
+00:10:42.600 --> 00:10:46.180
+Versi 1 ke atas hadir dengan komitmen tanpa perubahan yang merusak
+
+00:10:46.180 --> 00:10:47.840
+yang berarti kode yang Anda pelajari ini
+
+00:10:47.840 --> 00:10:49.960
+tidak akan terbuang sia-sia oleh pembaruan berikutnya.
+
+00:10:51.660 --> 00:10:53.820
+Kepailat, foundry, dan apa yang akan datang selanjutnya.
+
+00:10:54.400 --> 00:10:56.240
+Sekarang untuk pertanyaan yang paling membingungkan banyak orang
+
+00:10:56.240 --> 00:10:57.680
+dan ini layak mendapatkan jawaban yang logis.
+
+00:10:58.240 --> 00:11:00.400
+Semantic kernel bukanlah Microsoft 365 Copilot
+
+00:11:00.400 --> 00:11:02.560
+dan Anda tidak membutuhkannya untuk menggunakan Copilot.
+
+00:11:02.980 --> 00:11:05.100
+Copilot adalah produk jadi yang Anda buka dan gunakan
+
+00:11:05.100 --> 00:11:06.800
+sementara semantic kernel adalah bahan bangunan
+
+00:11:06.800 --> 00:11:09.120
+yang digunakan pengembang untuk membuat fitur AI mereka sendiri.
+
+00:11:09.900 --> 00:11:12.000
+Kaitan yang sebenarnya adalah cara bersama dan mendeskripsikan SWOT.
+
+00:11:12.640 --> 00:11:14.380
+Semantic kernel menggunakan standar web yang sama,
+
+00:11:14.580 --> 00:11:16.980
+OpenAPI, yang digunakan Microsoft 365 Copilot
+
+00:11:16.980 --> 00:11:18.920
+untuk mendeskripsikan apa yang dapat dilakukan oleh sebuah ekstensi.
+
+00:11:19.340 --> 00:11:21.040
+Karena kedua sisi menggunakan bahasa yang sama,
+
+00:11:21.300 --> 00:11:23.500
+kapabilitas yang Anda bangun dapat dibagikan kepada pengembang lain
+
+00:11:23.500 --> 00:11:24.680
+dan bahkan kepada penggondus kode.
+
+00:11:24.680 --> 00:11:27.480
+Ada jembatan di sini juga untuk membangun agen Anda sendiri
+
+00:11:27.480 --> 00:11:28.900
+ke dalam dunia Microsoft 365.
+
+00:11:29.740 --> 00:11:33.140
+SDK agen Microsoft 365 menangani sisi Microsoft 365
+
+00:11:33.140 --> 00:11:36.600
+dan sisi AI ditangani oleh semantic kernel atau penerusnya.
+
+00:11:37.380 --> 00:11:39.820
+Jadi keduanya memungkinkan agen kustom untuk menjangkau Copilot.
+
+00:11:40.960 --> 00:11:42.760
+Di sisi cloud, kerangka kerja yang lebih baru
+
+00:11:42.760 --> 00:11:45.000
+mencantumkan Microsoft Foundry sebagai salah satu tempat
+
+00:11:45.000 --> 00:11:46.360
+untuk menjalankan modal dan agen.
+
+00:11:46.960 --> 00:11:49.180
+Membantu untuk melihat ini sebagai lapisan daripada sebagai pesek.
+
+00:11:49.580 --> 00:11:51.680
+Copilot adalah pengalaman jadi yang digunakan rekan kerjaan.
+
+00:11:51.940 --> 00:11:53.860
+Copilot Studio adalah tempat para pembuat
+
+00:11:53.860 --> 00:11:56.620
+membangun agen mereka sendiri dengan sedikit atau tanpa kode
+
+00:11:56.620 --> 00:11:58.840
+dan semantic kernel adalah perangkat pengembang di bawahnya
+
+00:11:58.840 --> 00:12:00.240
+yang mengubah ide menjadi kode yang berfungsi.
+
+00:12:00.860 --> 00:12:02.540
+Mereka dimasukkan untuk saling melengkapi bulan bersaing.
+
+00:12:02.960 --> 00:12:04.140
+Hal itu membawa kita pada bagian yang cucuk.
+
+00:12:04.700 --> 00:12:06.540
+Microsoft membangun kerangka kerja yang lebih baru,
+
+00:12:06.660 --> 00:12:07.800
+kerangka kerja agen Microsoft,
+
+00:12:07.960 --> 00:12:10.500
+dengan menggabungkan semantic kernel dengan proyek lain yang disebut autogen.
+
+00:12:10.920 --> 00:12:12.780
+Sejak saat itu, kerangka kerja ini menjadi titik awal
+
+00:12:12.780 --> 00:12:13.720
+yang direkomendasikan untuk baru.
+
+00:12:14.180 --> 00:12:16.460
+Ketegangan yang sebenarnya di sini sederhana dan Anda mungkin sudah merasakannya.
+
+00:12:16.460 --> 00:12:18.360
+Anda tentu tidak ingin menghabiskan waktu berbulan-bulan
+
+00:12:18.360 --> 00:12:20.180
+melajari sesuatu yang akan segera digantikan oleh Microsoft.
+
+00:12:23.860 --> 00:12:26.440
+Pengerjaan fitur baru kini beralih ke kerangka kerja yang lebih baru,
+
+00:12:26.620 --> 00:12:28.720
+namun semantic kernel tidak mati dan tidak ditinggalkan.
+
+00:12:28.960 --> 00:12:31.100
+Microsoft masih mendukungnya dan terus merilis perbaikan,
+
+00:12:31.380 --> 00:12:34.040
+dan panduan resmi Microsoft menyatakan bahwa untuk proyek yang sudah ada
+
+00:12:34.040 --> 00:12:36.040
+atau saat Anda perlu mencurkan sesuatu dengan cepat,
+
+00:12:36.140 --> 00:12:38.060
+tetap menggunakan semantic kernel adalah pilihan yang sangat tepat.
+
+00:12:38.540 --> 00:12:40.560
+Bagi Anda sebagai pembelajar, ide-idenya bisa langsung diterapkan.
+
+00:12:40.840 --> 00:12:42.300
+Sebuah plugin di sini menjadi tool di sana,
+
+00:12:42.460 --> 00:12:44.580
+dan model mental yang baru saja Anda bangun adalah hal yang sama.
+
+00:12:44.740 --> 00:12:47.020
+Membelajari semantic kernel sebenarnya adalah membelajari bagaimana
+
+00:12:47.020 --> 00:12:48.380
+Microsoft melakukan perikatan terdapat.
+
+00:12:49.060 --> 00:12:51.900
+Cara berpikir itu akan bertahan lebih lama daripada satu alat unggap.
+
+00:12:51.900 --> 00:12:54.340
+Kapan menggunakan semantic kernel?
+
+00:12:54.760 --> 00:12:57.620
+Mari kita akhiri dengan pertanyaan praktis tentang kapan sebenarnya harus menggunakan kit.
+
+00:12:57.940 --> 00:13:00.240
+Mulailah dengan aturan yang cocok untuk hampir semua alat.
+
+00:13:00.660 --> 00:13:03.520
+Jika Anda bisa menulis fungsi biasa untuk menyelesaikan pekerjaan tersebut, tulis-ulis itu.
+
+00:13:03.860 --> 00:13:05.780
+Microsoft mengatakan hal ini tentang Agin,
+
+00:13:05.860 --> 00:13:08.960
+dan itu adalah saran yang bagus karena menggunakan AI saat potongan kode sederhana
+
+00:13:08.960 --> 00:13:10.540
+sudah cukup hanya akan menambah biaya.
+
+00:13:10.840 --> 00:13:13.720
+Dan kebingungan, maka gunakanlah semantic kernel saat Anda adalah pengembang
+
+00:13:13.720 --> 00:13:15.700
+yang menambahkan AI ke aplikasi yang sudah Anda miliki,
+
+00:13:15.700 --> 00:13:18.220
+dan Anda ingin kode Anda sendiri dapat dipanggil oleh model tersebut.
+
+00:13:18.300 --> 00:13:20.500
+Itulah kasus intinya, dan di situ rakit ini bersinar.
+
+00:13:20.500 --> 00:13:24.420
+Gunakanlah saat Anda memerlukan satu basis kode untuk bekerja dengan beberapa model,
+
+00:13:24.560 --> 00:13:27.060
+sehingga Anda bisa beralih penyedia tanpa menulis ulang apapun,
+
+00:13:27.180 --> 00:13:29.260
+dan gunakanlah saat perusahaan Anda beroperasi di internet,
+
+00:13:29.380 --> 00:13:32.960
+serta menginginkan pencatatan, keamanan, dan pengawasan yang diminta oleh tim IT besar
+
+00:13:32.960 --> 00:13:34.360
+sebelum mereka menyetujui sesuatu.
+
+00:13:34.680 --> 00:13:35.900
+Dua saat untuk mencari alternatif lain.
+
+00:13:36.360 --> 00:13:38.680
+Jika Anda tidak pernah menulis kode, kit ini bukan pintu Anda,
+
+00:13:38.800 --> 00:13:41.020
+karena jalur yang ramah pembuat adalah co-pilot studio,
+
+00:13:41.360 --> 00:13:44.040
+dan semantic kernel berada di bawah dunia tersebut, bukan di depannya.
+
+00:13:44.640 --> 00:13:47.220
+Jika yang Anda inginkan, hanyalah chatbot sederhana di situs web,
+
+00:13:47.220 --> 00:13:50.120
+Anda sedang memecahkan masalah yang lebih kecil daripada yang dirancang untuk kit ini.
+
+00:13:50.340 --> 00:13:51.620
+Sudut pandang karya juga penting di sini,
+
+00:13:51.700 --> 00:13:53.680
+karena banyak dari Anda datang ke sini justru untuk hal itu.
+
+00:13:54.540 --> 00:13:58.480
+Ide-ide dalam kit ini, seperti plugin, pemanggilan fungsi memori, dan konektor,
+
+00:13:58.680 --> 00:14:01.880
+juga muncul di alat AI lainnya, termasuk yang bukan dari Microsoft.
+
+00:14:02.440 --> 00:14:04.260
+Pelajari di sini dan Anda akan mengenalinya di mana-mana.
+
+00:14:04.600 --> 00:14:06.440
+Ada satu hal terakhir bagi siapapun yang memulai dari yang.
+
+00:14:06.660 --> 00:14:08.480
+Jika Anda memulai sesuatu yang benar-benar baru,
+
+00:14:08.700 --> 00:14:11.140
+Microsoft kini mengarahkan pengembang ke penerusnya terlebih dahulu.
+
+00:14:11.220 --> 00:14:13.540
+Jadi pelajari semantic kernel untuk ide-idenya,
+
+00:14:13.640 --> 00:14:15.700
+dan gunakan kerangka kerja baru saat Anda memulai.
+
+00:14:15.700 --> 00:14:18.560
+Konsepnya sama dan di luar bagian yang layak untuk dipertanggap.
+
+00:14:20.440 --> 00:14:21.620
+Rekapitulasi dan satu pertanyaan.
+
+00:14:21.960 --> 00:14:24.000
+Jadi mari kita rangkum semuanya dalam beberapa baris singkat.
+
+00:14:24.620 --> 00:14:25.880
+Semantic kernel adalah middleware,
+
+00:14:26.060 --> 00:14:27.900
+lapisan yang menghubungkan koda Anda ke model AI.
+
+00:14:28.760 --> 00:14:30.160
+Kernel menyimpan semuanya di satu tempat,
+
+00:14:30.600 --> 00:14:32.300
+lagi memberikan fungsi Anda sendiri kepada AI.
+
+00:14:32.840 --> 00:14:34.980
+Memanggilan fungsi adalah cara ia memutuskan apa yang harus dijalan.
+
+00:14:35.280 --> 00:14:37.000
+Memory adalah cara ia mengingat data Anda,
+
+00:14:37.000 --> 00:14:39.160
+dan konektor membuat Anda bebas melukar model antinya.
+
+00:14:39.960 --> 00:14:41.360
+Jika Anda mengingat satu hal ini,
+
+00:14:42.100 --> 00:14:45.280
+model adalah bagian yang akan berubah lagi dan lagi seiring perkembangan teknologi.
+
+00:14:45.980 --> 00:14:49.160
+Koneksi antara kode dan model Anda adalah bagian yang benar-benar Anda kendalikan,
+
+00:14:49.280 --> 00:14:50.780
+dan koneksi itulah yang diberikan semantic kernel.
+
+00:14:51.500 --> 00:14:52.280
+Jika ini membantu,
+
+00:14:52.560 --> 00:14:56.720
+berlanggananlah podcast M3A5FM untuk memasai alat dan pola pikir yang membentuk masa depan kerja.
+
+00:14:57.320 --> 00:14:58.000
+Ini perancangan untuk Anda.
+
+00:14:58.000 --> 00:15:01.460
+Jika Anda bisa menyerahkan satu tugas dari pekerjaan Anda kepada AI besok,
+
+00:15:01.460 --> 00:15:03.320
+tugas mana yang akan Anda percayakan padanya terlebih dahulu.

@@ -1,0 +1,742 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:05.820
+Willkommen zum M365FM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.420 --> 00:00:07.780
+Zwei Möglichkeiten, dasselbe zu tun.
+
+00:00:08.200 --> 00:00:13.060
+Sie können dieselbe Zahl in Power BI auf zwei verschiedene Arten erstellen, die sich überhaupt nicht ähnlich verhalten.
+
+00:00:13.740 --> 00:00:16.800
+Eine davon wird in ihrem Datenmodell gespeichert und folgt jeder einzelnen Zeile.
+
+00:00:17.260 --> 00:00:21.560
+Die andere existiert erst, wenn jemand auf ein Diagramm klickt oder einen Filter verschiebt und wird dann sofort neu berechnet.
+
+00:00:22.880 --> 00:00:28.520
+Willkommen zum M365FM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:28.520 --> 00:00:33.880
+Heute stellen wir berechnete Spalten und Measures vor, die beiden Möglichkeiten, eine Zahl in Power BI zu erstellen.
+
+00:00:34.320 --> 00:00:39.520
+Es gibt eine einfache Frage, die die Wahl offensichtlich macht, und am Ende werden Sie sie verwenden, ohne darüber nachzudenken, ohne darüber nachzudenken.
+
+00:00:40.020 --> 00:00:41.800
+Was macht Power BI wirklich, wenn Sie klicken?
+
+00:00:42.460 --> 00:00:45.940
+Bevor wir uns mit der Wahl befassen, ist es hilfreich zu verstehen, was Power BI unter Ihren Fingern tut.
+
+00:00:46.320 --> 00:00:49.120
+Sie zeigen auf einige Daten vielleicht eine Excel-Datei oder eine Datenbank.
+
+00:00:49.120 --> 00:00:51.560
+Und Power BI lädt diese Daten in ein sogenanntes Modell.
+
+00:00:51.780 --> 00:00:53.940
+Ein Modell ist einfach eine Reihe von Tabellen, die sich im Arbeitsspeicher befinden.
+
+00:00:54.260 --> 00:00:57.740
+Eine Tabelle besteht aus Zeilen und Spalten, genau wie die Tabellenkalkulation, die Sie bereits kennen.
+
+00:00:58.520 --> 00:01:04.680
+Jede Spalte enthält eine Art von Objekt, wie ein Datum, eine Stadt oder einen Umsatzbetrag, und jede Zeile stellt einen Datensatz dar, wie ein einzelner Verkauf.
+
+00:01:04.940 --> 00:01:09.440
+Sobald sich die Daten im Modell befinden, ziehen Sie Felder in ein Diagramm, und Power BI zeichnet ein Bild für Sie.
+
+00:01:09.940 --> 00:01:14.320
+Dieser Teil fühlt sich einfach an, und ist es auch, bis Sie eine Zahl benötigen, die noch nicht in Ihren Daten enthalten ist.
+
+00:01:14.880 --> 00:01:16.920
+Möglicherweise möchten Sie den Gewinn und haben nur Umsatz und Kosten.
+
+00:01:17.340 --> 00:01:19.920
+Möglicherweise möchten Sie den Umsatz des nächsten Jahres und haben nur den des letzten Jahres.
+
+00:01:19.920 --> 00:01:21.660
+In diesem Fall erstellen Sie Ihre eigene Berechnung.
+
+00:01:22.080 --> 00:01:24.440
+Und Power BI stellt Ihnen dafür zwei sehr unterschiedliche Tools zur Verfügung.
+
+00:01:24.740 --> 00:01:26.900
+Beide Tools verwenden dieselbe Formelsprache namens DAX.
+
+00:01:27.260 --> 00:01:30.580
+Es lohnt sich, diesen Namen zu kennen, da er überall in der Microsoft-Welt vorkommt.
+
+00:01:31.140 --> 00:01:35.760
+DAX ähnelt stark den Excel-Formeln, die Sie wahrscheinlich mit Summen, Durchschnittswerten und einfachen mathematischen Berechnungen beschrieben haben.
+
+00:01:36.260 --> 00:01:40.720
+DAX verfügt über eine Bibliothek mit mehr als 200 Funktionen, sodass die Sprache selbst nicht der schwierige Teil ist.
+
+00:01:40.860 --> 00:01:43.820
+Es lohnt sich, zu erläutern, worum es hier geht, denn es handelt sich hierbei nicht um einen akademischen Wort.
+
+00:01:43.820 --> 00:01:48.980
+Ein Bericht, der 10 Sekunden zum Öffnen benötigt, wirkt für den Benutzer fehlerhaft, selbst wenn alle Zahlen darin korrekt sind.
+
+00:01:49.540 --> 00:01:55.100
+Ein Bericht, der sich sofort öffnen lässt, aber einen leicht falschen Prozentsatz anzeigt, ist noch schlimmer, da niemand eine Zahl hinterfragt, die plausibel erscheint.
+
+00:01:55.340 --> 00:02:00.140
+Diese kleine Entscheidung steht also direkt unter den beiden Faktoren, nach denen Benutzer ihren Bericht beurteilen, Geschwindigkeit und Vertrauen.
+
+00:02:00.600 --> 00:02:05.440
+Das Schwierige daran ist, dass Power BI Ihnen zwei Tools bietet, die austauschbar aussehen, sich aber völlig unterschiedlich verhalten.
+
+00:02:06.060 --> 00:02:09.340
+Die falsche Wahl ist der häufigste Grund, warum Anfänger einen Bericht erhalten, der nur langsam verläuft.
+
+00:02:09.500 --> 00:02:11.320
+Oder schlimmer noch, eine Zahl enthält sich schlichtweg falsch ist.
+
+00:02:11.320 --> 00:02:14.820
+Vor dieser Entscheidung stehen Sie und Sie werden sie bei jedem Bericht treffen, den Sie jemals erstellen.
+
+00:02:15.480 --> 00:02:16.560
+Was ist eine berechnete Spalte?
+
+00:02:17.540 --> 00:02:21.160
+Eine berechnete Spalte kann man sich am einfachsten vorstellen, da sie wie eine Spalte in einer Tabellenkalkulation.
+
+00:02:21.540 --> 00:02:26.320
+Sie nehmen eine bereits vorhandene Tabelle, fügen eine neue Spalte hinzu und schreiben eine Formel, die jede Zeile durchläuft.
+
+00:02:26.780 --> 00:02:29.880
+Angenommen, Sie haben eine Umsatztabelle mit einer Spalte für den Umsatzbetrag und einer Spalte für die Gesamtkosten.
+
+00:02:30.340 --> 00:02:33.060
+Sie fügen eine Spalte für die Bruttomage hinzu, die die Kosten vom Umsatz abzieht.
+
+00:02:33.600 --> 00:02:36.260
+Jede Zeile erhält ihre eigene Antwort, gehört dauerhaft zu dieser Zeile.
+
+00:02:36.960 --> 00:02:39.540
+Microsoft verwendet in seiner eigenen Dokumentation ein übersichtliches Beispiel.
+
+00:02:39.540 --> 00:02:45.660
+Ein Versandleiter hat eine Geografietabelle mit separaten Spalten für Stadt und Bundesland und er möchte, dass diese in einem Feld zusammengeführt werden.
+
+00:02:45.920 --> 00:02:51.240
+Er fügt eine berechnete Spalte hinzu, die Stadt und Bundesland miteinander verbindet und jetzt wird dieses Feld wie jedes andere auf einer Karte eingefügt.
+
+00:02:51.700 --> 00:02:54.760
+Stadt und Bundesland bleiben an dieselbe Zeile gebunden und genau das benötigt er.
+
+00:02:55.540 --> 00:02:56.660
+Ein Detail ändert später alles.
+
+00:02:57.220 --> 00:02:59.520
+Eine berechnete Spalte wird nicht berechnet, wenn Sie den Bericht betrachten.
+
+00:02:59.880 --> 00:03:03.120
+Sie wird einmal berechnet, wenn die Daten aktualisiert werden und dann in Ihrem Modell gespeichert.
+
+00:03:03.120 --> 00:03:07.420
+Diese Speicherung ist der Grund, warum eine berechnete Spalte sofort angezeigt und teuer in der Aufbewahrung ist.
+
+00:03:07.780 --> 00:03:12.060
+Jede Spalte, die Sie hinzufügen, belegt Speicherplatz und bleibt dort, unabhängig davon, ob Sie jemand verwendet oder nicht.
+
+00:03:12.420 --> 00:03:13.560
+Es gibt noch eine zweite Konsequenz.
+
+00:03:14.040 --> 00:03:18.300
+Ein gespeicherter Wert ändert sich nicht, wenn jemand auf einen Filter klickt, da er bereits während der Aktualisierung festgelegt wurde.
+
+00:03:19.060 --> 00:03:22.280
+Ein auf diese Weise erstellter Prozentsatz bleibt einfach dort eingefroren, was der Betrachter tut.
+
+00:03:23.000 --> 00:03:25.760
+Diese eingefrorene Eigenschaft ist in manchen Fällen ein Feature in anderer Falle.
+
+00:03:26.440 --> 00:03:27.860
+Später werden wir genau sehen, wo das zutrifft.
+
+00:03:27.860 --> 00:03:32.340
+Eine weitere Sache, die eine berechnete Spalte tun kann, überrascht die Leute oft und ist wirklich nützlich,
+
+00:03:32.420 --> 00:03:35.060
+da eine berechnete Spalte ihre eigene Zeile kennt, Deile kennt.
+
+00:03:35.440 --> 00:03:38.440
+Sie kann auch über eine Beziehung hinweg auf eine Werte aus einer verknüpften Tabelle zugreifen.
+
+00:03:38.800 --> 00:03:41.900
+Sie können eine Produktkategorie in eine Verkaufszeile ziehen und Sie direkt dort speichern,
+
+00:03:41.980 --> 00:03:44.880
+was berechnete Spalten praktisch für die Erstellung von Bezeichnungen und Schlüsseln macht.
+
+00:03:45.780 --> 00:03:50.060
+Das bedeutet aber auch, dass jeder dieser gespeicherten Werte bei der nächsten Änderung der Daten erneut berechnet werden muss.
+
+00:03:50.640 --> 00:03:51.960
+Was eine Kennzahl eigentlich ist?
+
+00:03:52.340 --> 00:03:53.700
+Eine Kennzahl befindet sich nicht in einer Zeit.
+
+00:03:54.000 --> 00:03:56.700
+Sie befindet sich im Diagramm und wird nur angezeigt, wenn sich jemand das Diagramm ansieht.
+
+00:03:56.700 --> 00:03:59.340
+Sie schreiben eine Formel, die Dinge über viele Zahlen hinweg addiert
+
+00:03:59.340 --> 00:04:02.140
+und das Ergebnis ändert sich je nachdem, was der Betrachter ausgewählt hat.
+
+00:04:02.460 --> 00:04:06.620
+Der Gesamtumsatz ist eine Kennzahl, da er jeden Verkauf in dem auf dem Bildschirm angezeigten Datenausschnitt summiert
+
+00:04:06.620 --> 00:04:09.120
+und der durchschnittliche Bestellwert ist aus demselben Grund eine Kennzahl.
+
+00:04:10.540 --> 00:04:14.040
+Microsofts eigenes Beispiel ist ein Vertriebsleiter, der den Umsatz des nächsten Jahres prognostizieren muss.
+
+00:04:14.520 --> 00:04:17.840
+Sie verfügt über die Zahlen des letzten Jahres und weiß, dass das Unternehmen mit einer Steigerung von 6 Prozent.
+
+00:04:18.300 --> 00:04:22.120
+Daher erstellt sie eine Kennzahl, die die Summe der Umsätze des letzten Jahres nimmt und mit 1 kommunalitipliziert.
+
+00:04:22.880 --> 00:04:25.720
+Nun kann sie diese Prognose nach Region, Produkt oder Monat aufteilen.
+
+00:04:25.720 --> 00:04:27.880
+Und die Zahl wird jedes Mal mit ihr aktualisiert.
+
+00:04:28.260 --> 00:04:29.880
+Dieser letzte Teil ist der eigentliche Sinn der Kennzahl.
+
+00:04:30.300 --> 00:04:34.460
+Sie wird in dem Moment berechnet, indem jemand das Diagramm betrachtet und zwar auf der Grundlage der jeweils angewendeten Filme.
+
+00:04:34.660 --> 00:04:36.880
+Und durch Klicken auf eine einzelne Region wird die Kennzahl für diese Region neu berechnet
+
+00:04:36.880 --> 00:04:39.540
+und durch Hinzufügen eines Jahres wird die Kennzahl für dieses Jahr neu berechnet.
+
+00:04:39.700 --> 00:04:43.460
+Es werden keine Daten im Voraus gespeichert, weshalb eine Kennzahl keine Arbeitsspeicher oder Speicherplatz belegt,
+
+00:04:43.540 --> 00:04:44.900
+die dies bei einer berechneten Spalte der Fall ist.
+
+00:04:45.140 --> 00:04:47.460
+Sie wird bei Bedarf und nur für den vorliegenden Ausschnitt berechnet.
+
+00:04:47.460 --> 00:04:51.020
+Es gibt eine Grenze, die Sie kennen sollten und sie erklärt einen Fehler, auf den wir später noch zurückkommen.
+
+00:04:51.480 --> 00:04:55.340
+Eine Kennzahl muss Elemente addieren, dagegen können Sie keine Kennzahl schreiben, die einfach auf eine einzelne Zelle verweist.
+
+00:04:55.720 --> 00:04:59.200
+Sie hat keine aktuelle Zeile, auf der sie basieren kann, was bedeutet, dass sie immer zusammenfassen muss.
+
+00:04:59.760 --> 00:05:02.760
+Das ist ein Hinweis darauf, wie die beiden Tools funktionieren und das ist der nächste Punkt, den wir anpacken müssen.
+
+00:05:03.120 --> 00:05:04.780
+Ein Measure verfügt in Ihrem Modell über eine Stammtabelle.
+
+00:05:05.140 --> 00:05:07.120
+Dabei handelt es sich im Grunde nur um den Ordner, unter dem es angezeigt.
+
+00:05:07.320 --> 00:05:09.820
+Und es an einen übersichtlicheren Ort verschieben, ohne dass etwas kaputt geht.
+
+00:05:09.980 --> 00:05:11.600
+Das ist ein kleines Indiz dafür, dass etwas Größeres passiert.
+
+00:05:11.820 --> 00:05:13.800
+Ein Measure ist nicht an die darunterliegenden Zeilen gebunden.
+
+00:05:13.800 --> 00:05:17.440
+Es ist an die Frage gebunden und beantwortet diese Frage jedes Mal neu, wenn jemand sie stellt.
+
+00:05:18.280 --> 00:05:20.140
+Der eigentliche Unterschied besteht darin, wo die Berechnung steht.
+
+00:05:20.760 --> 00:05:25.120
+Jede Berechnung in Power BI wird in einem bestimmten Kontext ausgeführt und Sie müssen nur zwei davon kennen.
+
+00:05:25.540 --> 00:05:26.600
+Der erste ist der Zellenkontext.
+
+00:05:27.040 --> 00:05:29.160
+Dabei handelt es sich um die aktuelle Zeile, in der Sie die Formel befinden.
+
+00:05:29.560 --> 00:05:34.460
+Wenn Sie eine berechnete Spalte schreiben, durchläuft Power BI die Tabelle zeilenweise und übergibt diese Zeile an Ihre Formel.
+
+00:05:34.960 --> 00:05:38.700
+Power BI kennt den Umsatzbetrag für diese Zeile und die Kosten für diese Zeile, da sie direkt dort stehen.
+
+00:05:39.240 --> 00:05:40.600
+Der zweite ist der Filterkontext.
+
+00:05:40.880 --> 00:05:43.500
+Hierbei handelt es sich um den Datenausschnitt, den der Betrachter ausgewert hat.
+
+00:05:43.800 --> 00:05:46.000
+Wenn Sie ein Measure schreiben, übergebe Power BI überhaupt keine Zeile.
+
+00:05:46.360 --> 00:05:50.800
+Es zeigt alles an, was nach dem Anwenden der Filter noch auf dem Bildschirm zu sehen ist und Ihre Formel fasst diesen Stapel zusammen.
+
+00:05:51.180 --> 00:05:53.880
+Ändern Sie den Filter, ändert sich der Stapel und damit auch die Antwort.
+
+00:05:54.540 --> 00:05:58.620
+Dieser Unterschied erklärt die Falle, in die fast jeder Anfänger tappt und es lohnt sich dafür, etwas langsamer vorzugehen.
+
+00:05:59.140 --> 00:06:02.140
+Stellen Sie sich vor, Sie erstellen einen Bruttomargenprozentsatz als berechnete Spalte,
+
+00:06:02.240 --> 00:06:04.440
+indem Sie in jeder Zeile die Marge durch den Umsatz dividieren.
+
+00:06:04.880 --> 00:06:08.060
+Jede Zeile erhält einen sinnvollen Prozentsatz und das sieht in der Tabelle perfekt aus.
+
+00:06:08.160 --> 00:06:13.060
+Jetzt versuchen Sie, den durchschnittlichen Margenprozentsatz für das gesamte Unternehmen anzuzeigen, indem Sie alle diese Zahlenprozentsätze mitteln.
+
+00:06:13.800 --> 00:06:17.640
+Die Summe, die Sie erhalten, ist falsch, sieht aber völlig vernünftig aus, ist aber falsch und das ist es, was die Sache gefährlich macht.
+
+00:06:18.120 --> 00:06:20.420
+Die richtige Antwort ist überhaupt kein Durchschnitt von Prozentsätzen.
+
+00:06:21.320 --> 00:06:25.020
+Es ist die Gesamtmarge geteilt durch den Gesamtumsatz, was bedeutet, dass die Summe durch die Summe dividiert wird.
+
+00:06:25.800 --> 00:06:29.280
+Das muss eine Kennzahl sein, da sie auf den gesamten Ausschnitt auf einmal angewendet wird und nicht Zeile verzeichnet.
+
+00:06:29.560 --> 00:06:30.720
+Behalten Sie diese eine dem Hintergrund.
+
+00:06:31.120 --> 00:06:34.660
+Dividieren Sie die Summe durch die Summe, denn das erspart Ihnen die häufigste falsche Zahl im Power BI.
+
+00:06:35.460 --> 00:06:37.300
+Es gibt einen zweiten Teil, der genauso wichtig ist.
+
+00:06:37.740 --> 00:06:39.400
+Filter fließen zwischen Tabellen in Ihrem Modell.
+
+00:06:39.400 --> 00:06:43.880
+Ein Filter in Ihrer Produkttabelle erreicht also die Verkaufstabelle und grenzt auch die Verkäufe ein.
+
+00:06:44.240 --> 00:06:45.740
+Ein Zeilenkontext wird nicht auf diese übertragen.
+
+00:06:46.020 --> 00:06:49.600
+Eine berechnete Spalte befindet sich in einer eigenen Tabelle und kann die gefilterten Werte nicht an anderer Stelle sehen,
+
+00:06:49.620 --> 00:06:52.120
+nicht an anderer Stelle sehen, ohne dass zusätzliche Arbeit erforderlich ist, um sie abzurufen.
+
+00:06:52.240 --> 00:06:55.440
+Eine Kennzahl hingegen befindet sich im Filterkontext und sieht das gesamte gefilterte Modell.
+
+00:06:55.780 --> 00:07:00.640
+Aus diesem Grund sind Kennzahlen der natürliche Speicherort für alles, das auf die Verwendung des Berichts reagieren muss,
+
+00:07:00.640 --> 00:07:03.660
+wo sich jede Kennzahl in Ihrem Bericht befindet.
+
+00:07:04.360 --> 00:07:07.900
+Jetzt kann die Auswahl konkret werden, da jedes Tool seinen Platz auf der Seite hat.
+
+00:07:08.780 --> 00:07:12.860
+Eine berechnete Spalte macht sich immer dann bezahlt, wenn ein Wert in einer Zeile stehen und wie Daten behandelt werden muss.
+
+00:07:13.580 --> 00:07:16.100
+Wenn Sie in einem Slicer haben möchten, muss es sich um eine Spalte handeln.
+
+00:07:16.520 --> 00:07:19.540
+Dasselbe gilt für eine Zeilenüberschrift, eine Spaltenüberschrift oder eine Diagrammachse.
+
+00:07:19.700 --> 00:07:24.160
+Das Sortieren von Kunden nach Altersgruppen oder Produkt nach Preisklassen ist ebenfalls Spaltenarbeit, da Sie Zeilen beschriften.
+
+00:07:24.480 --> 00:07:26.900
+Das Gleiche gilt für das Erstellen eines Schlüssels, die zwei Tabellen miteinander verbinden.
+
+00:07:26.900 --> 00:07:31.400
+Eine Kennzahl ist das richtige Tool, wenn sich ein Wert ändern muss, wenn der Betrachter herumklickt.
+
+00:07:32.280 --> 00:07:36.620
+Gewinn im Prozent für die ausgewählte Region, Wachstum für den ausgewählten Monat, eine laufende Summe bis zum ausgewählten Datum.
+
+00:07:37.180 --> 00:07:37.940
+Das sind alles Kennzahlen.
+
+00:07:38.380 --> 00:07:41.660
+Sie befinden sich im Wertebereich eines Diagramms, der bei jeder Filteränderung neu berechnet wird.
+
+00:07:42.380 --> 00:07:45.500
+Die einzige Frage, die das Ganze entscheidet, ist diese und die Sie immer mit sich herumtragen können.
+
+00:07:46.000 --> 00:07:47.920
+Muss ich diese Zahl ändern, wenn jemand auf einen Filter klickt?
+
+00:07:48.480 --> 00:07:50.200
+Wenn die Antwort Ja lautet, benötigen Sie eine Kennzahl.
+
+00:07:50.200 --> 00:07:56.340
+Wenn die Antwort Nein lautet und der Wert sich in einer Zeile befinden muss, damit er aufgeteilt oder als Schlüssel verwendet werden kann, benötigen Sie eine berechnete Spalte.
+
+00:07:56.860 --> 00:07:57.900
+Zwei Beispiele verdeutlichen dies.
+
+00:07:58.380 --> 00:08:02.060
+Altersgruppen sind eine berechnete Spalte, da jeder Kunde eine Gruppe erhält und Sie danach filtern möchten.
+
+00:08:02.920 --> 00:08:06.260
+Die prozentuale Marge für das ausgewählte Quartal ist eine Kennzahl, da Sie sie mit dem Quartal haben.
+
+00:08:06.600 --> 00:08:11.100
+Dieselbe Tabelle, dieselben Daten, zwei verschiedene Tools und jetzt ist die Auswahl eine Entscheidung und keine Vermutung mehr.
+
+00:08:13.100 --> 00:08:14.780
+Die Speicherkosten hinter Ihrem langsamen Bericht.
+
+00:08:15.300 --> 00:08:18.600
+Ich habe bereits erwähnt, dass eine berechnete Spalte gespeichert wird und dass dieser Speicherplatz einen Preis hat.
+
+00:08:18.600 --> 00:08:22.900
+Dies ist der Teil, der aus einer kleinen, übersichtlichen Auswahl einen Bericht macht, der entweder schnell oder langsam ist.
+
+00:08:23.500 --> 00:08:28.320
+Power BI behält importierte Daten im Arbeitsspeicher bei und speichert diese Daten Spalte für Spalte statt Zeile für Zeile.
+
+00:08:28.640 --> 00:08:31.120
+Das klingt nach einem technischen Detail, aber Sie können den Effekt spüren.
+
+00:08:32.040 --> 00:08:36.240
+Beim Summieren einer einzelnen Spalte wird nur diese eine Spalte gelesen, deshalb sofort eine große Gesamtsumme zurückgegeben.
+
+00:08:36.240 --> 00:08:43.800
+Eine berechnete Spalte befindet sich als gespeicherte Spalte in diesem Arbeitsspeicher und laut Microsofts eigener Anleitung lassen sich diese Spalten nicht so gut komprimieren, wie die, die sie zuvor in Power Query stellte.
+
+00:08:44.060 --> 00:08:47.460
+Power Query ist das Tool, mit dem Sie Ihre Daten formen, bevor Sie das Modell erreichen.
+
+00:08:48.000 --> 00:08:49.080
+Es versteckt sich auch unser Kostenfaktor.
+
+00:08:49.500 --> 00:08:53.780
+Berechnete Spalten werden berechnet, nachdem alle Ihre Power Query-Tabellen geladen wurden, wodurch die Aktualisierung gestreckt wird.
+
+00:08:54.240 --> 00:08:56.880
+Die Rechnung wird also zweimal angezeigt, einmal für den Arbeitsspeichschau und einmal für die Zeit.
+
+00:08:57.880 --> 00:09:03.700
+Um ein Gefühl für die Größenordnung zu bekommen, sagt Microsoft, dass Power BI etwa 10 GB Quelldaten auf etwa 1 GB komprimieren kann.
+
+00:09:03.700 --> 00:09:06.180
+Und beim Schreiben auf die Festplatte wird noch einmal etwas mehr gespart.
+
+00:09:06.840 --> 00:09:10.100
+Diese Komprimierung ist der Grund, warum ein kleines Modell überraschend viele Daten aufnehmen kann.
+
+00:09:10.800 --> 00:09:16.160
+Jede berechnete Spalte, die Sie hinzufügen, schmälert jedoch die Einsparung und Sie summieren sich still und heimlich, da niemand eine zusätzliche Spalte bemerkt.
+
+00:09:16.440 --> 00:09:19.020
+Es gibt noch weitere ehrliche Grenzen, die davon abhängt, wie Ihre Daten verknüpft sind.
+
+00:09:19.560 --> 00:09:22.560
+Wenn Ihr Modell seine Daten importiert, wird eine berechnete Spalte gespeichert.
+
+00:09:22.880 --> 00:09:27.500
+Wenn Ihr Modell die Daten stattdessen live abfragt, wird die Spalte überhaupt nicht gespeichert und zum Zeitpunkt der Abfrage berechnet,
+
+00:09:27.640 --> 00:09:30.680
+wodurch die Kosten von der Aktualisierung zum Klick verlagert werden, ohne dass sie verschwendet.
+
+00:09:30.680 --> 00:09:36.740
+In jedem Fall erledigt die Spalte irgendwo Arbeit und genau aus diesem Grund sind Modellierer vorsichtig, wie viele Spalten Sie hinzufügen.
+
+00:09:37.080 --> 00:09:39.500
+Die praktische Regel hier ist einfach genug, damit auch Anfänger Sie befolgen.
+
+00:09:39.980 --> 00:09:44.200
+Wenn eine neue Spalte eine einfache zeilenweise Berechnung ist und Sie sie in Power Query erstellen können, erstellen Sie sie dort.
+
+00:09:44.200 --> 00:09:48.220
+Weichern Sie Ihre berechneten DAX-Spalten für die Aufträge, die Sie wirklich benötigen.
+
+00:09:48.560 --> 00:09:51.180
+B. Einen Wert, der zwei Tabellen verbinden oder Zeilen in Wänden sortieren muss.
+
+00:09:51.520 --> 00:09:54.580
+Wenn die Mathematik eigentlich eine Zusammenfassung ist, greifen Sie stattdessen auf eine Kennzahl zurück,
+
+00:09:54.640 --> 00:09:56.560
+da eine Kennzahl Sie nichts kostet, bis sich jemand Sie ansieht.
+
+00:09:57.560 --> 00:09:58.740
+Keines der Tools ist kostenlos.
+
+00:09:58.940 --> 00:10:00.680
+Sie senden die Rechnung einfach zu unterschiedlichen Zeiten,
+
+00:10:00.820 --> 00:10:04.360
+wobei eine gespeicherte Spalte die Rechnung bei der Aktualisierung und eine Live-Kennzahl die Rechnung beim Klick stellen.
+
+00:10:05.640 --> 00:10:06.860
+Die Fehler die Anfänger wieder machen.
+
+00:10:07.200 --> 00:10:09.740
+Wenn die Funktionsweise klar ist, kommen einem die Fehler bekannt vor.
+
+00:10:10.420 --> 00:10:13.600
+Vier davon tauchen immer wieder auf und jeder Einzelne ist aus einem bestimmten Grund verlockend.
+
+00:10:14.200 --> 00:10:17.840
+Der erste ist das Erstellen eines Prozentsatzes als berechnete Spalte und das anschließende Bilden eines Durchschnitts.
+
+00:10:18.460 --> 00:10:21.800
+Das ist am schmerzhaftesten, da der Bericht nicht abstürzt und nicht kaputt aussieht.
+
+00:10:22.480 --> 00:10:24.760
+Er zeigt einfach mit absoluter Sicherheit eine falsche Zahl an
+
+00:10:24.760 --> 00:10:28.260
+und die Lösung ist die Regel von vorhin, nämlich die Summe durch die Summe zu teilen, nämlich die Summe zu teilen.
+
+00:10:28.620 --> 00:10:32.020
+Der zweite ist das Stapeln von berechneten Zwischenspalten, um zu einer endgültigen Antwort zu gelangen.
+
+00:10:32.760 --> 00:10:35.180
+Sie erstellen eine Spalte, dann eine zweite Spalte, die die erste verwendet,
+
+00:10:35.180 --> 00:10:37.600
+dann eine dritte, die die zweite verwendet und das Ganze wirkt übersichtlich.
+
+00:10:38.320 --> 00:10:39.900
+Während der Entwicklung kann es Ihnen sogar beim Denken her.
+
+00:10:40.220 --> 00:10:43.000
+Jeder Schritt in dieser Kette wird im Arbeitsspeicher abgelegt und bleibt dort,
+
+00:10:43.000 --> 00:10:45.620
+sodass die übersichtliche kleine Leiter Ihr Modell still und leise aufbläht.
+
+00:10:45.880 --> 00:10:49.520
+Eine einzelne Kennzahl mit wenigen Variablen kann die gleiche Arbeit leisten, ohne dass etwas gespeichert werden.
+
+00:10:49.920 --> 00:10:51.940
+Die dritte Möglichkeit ist der Einsatz einer berechneten Spalte,
+
+00:10:51.980 --> 00:10:53.600
+wenn eine Kennzahl dieselbe Aufgabe tatsächlich erledigen wird.
+
+00:10:54.260 --> 00:10:56.800
+Der klassische Fall ist die Multiplikation von Mengen und Preisen in jeder Zeile.
+
+00:10:57.280 --> 00:10:58.700
+Sie können diese Spalte erstellen und summieren
+
+00:10:58.700 --> 00:11:01.060
+oder die Multiplikation von einer Kennzahl beim Addieren durchführen lassen.
+
+00:11:01.420 --> 00:11:03.000
+Mit der zweiten Option bleibt Ihr Modell übersichtlich.
+
+00:11:03.420 --> 00:11:06.420
+Die vierte Möglichkeit ist die Erwartung, dass eine gespeicherte Spalte auf ein Slice ergibt.
+
+00:11:06.720 --> 00:11:08.880
+Eine berechnete Spalte wurde beim Aktualisieren festgelegt,
+
+00:11:08.960 --> 00:11:10.280
+sodass sie sich nicht bewegt, wenn der Betrachter klickt.
+
+00:11:10.280 --> 00:11:11.040
+Dies ist kein Fehler.
+
+00:11:11.440 --> 00:11:14.760
+Es ist die Definition des Tools und wenn Sie es so sehen, hören Sie auf, sich dagegen zu wehren.
+
+00:11:15.020 --> 00:11:16.680
+Bevor wir fortfahren, noch ein ehrlicher Hinweis,
+
+00:11:16.760 --> 00:11:18.800
+denn an dieser Stelle neigen Anfänger dazu, zu viel zu korrigieren.
+
+00:11:19.040 --> 00:11:21.200
+Berechnete Spalten sind nicht falsch und nicht veraltet.
+
+00:11:22.180 --> 00:11:23.620
+Sie können nur bestimmte Aufgaben ausführen
+
+00:11:23.620 --> 00:11:26.460
+und wenn Ihr Modell klein ist, spielt das Argument des Arbeitsspeichers kaum eine Rolle.
+
+00:11:26.840 --> 00:11:29.540
+Wenn eine berechnete Spalte für die Funktion Ihres Berichts erforderlich ist,
+
+00:11:29.620 --> 00:11:30.160
+verwenden Sie sie.
+
+00:11:30.620 --> 00:11:32.700
+Seien Sie sich jedoch der Kosten bewusst, damit Sie die Wahl haben.
+
+00:11:33.660 --> 00:11:36.120
+Dies ist in Microsoft 365 Fabric und Azure der Fall.
+
+00:11:36.700 --> 00:11:39.140
+Bevor wir zum Schluss kommen, lohnt es sich, einen Blick darauf zu werfen,
+
+00:11:39.140 --> 00:11:41.080
+wurde diese kleine Option im Gesamtbild von Microsoft angesiedelt.
+
+00:11:41.740 --> 00:11:43.660
+Power BI ist das Berichterstellungstool von Microsoft
+
+00:11:43.660 --> 00:11:47.040
+und ist heutzutage in Microsoft Fabric eingebettet der umfassenderen Datenplattform des Unternehmens.
+
+00:11:47.820 --> 00:11:49.440
+Dieselben beiden Tools, die Sie kennengelernt haben,
+
+00:11:49.580 --> 00:11:52.120
+sind in dieser gesamten Produktfamilie, in Power BI Desktop,
+
+00:11:52.360 --> 00:11:54.040
+in Excel über etwas namens Power Pivot
+
+00:11:54.040 --> 00:11:56.660
+und in einem Serverprodukt namens Analysis Services enthalten.
+
+00:11:57.920 --> 00:12:00.940
+Dies ist also kein Power BI Trick, den Sie einmal lernen und dann vergessen, er begleitet Sie.
+
+00:12:01.640 --> 00:12:04.320
+Azure kommt hier ins Spiel, da Ihre Daten normalerweise abgelegt werden,
+
+00:12:04.400 --> 00:12:05.440
+bevor Sie in Ihren Bericht gelangen.
+
+00:12:05.440 --> 00:12:09.020
+Ihre Verkaufszahlen befinden sich möglicherweise in einer Azure Datenbank,
+
+00:12:09.080 --> 00:12:11.920
+in einer Datei auf SharePoint oder einem System, das in Ihrem eigenen Gebäude ausgeführt wird.
+
+00:12:12.400 --> 00:12:15.460
+Fabric ist die Ebene, die alles zusammenfasst und das von Ihnen erstellte Modell hostet.
+
+00:12:15.860 --> 00:12:16.940
+Eine ehrliche Grenze, dies zu erreichen.
+
+00:12:17.500 --> 00:12:19.320
+Größere Modelle benötigen eine größere Kapazität
+
+00:12:19.320 --> 00:12:21.040
+und die Kapazität ist die Engine, auf der alles läuft.
+
+00:12:21.600 --> 00:12:25.440
+Die gemeinsam genutzte Kapazität von Microsoft kann Modelle mit einer Größe von bis zu ca. 1 GB hosten.
+
+00:12:25.600 --> 00:12:28.040
+Alle größeren Modelle ist eine Premium- oder Fabrikkapazität erfordert.
+
+00:12:28.300 --> 00:12:30.680
+Das ist eine Kostenentscheidung, die in der Regel von jemandem getroffen wird,
+
+00:12:30.720 --> 00:12:31.740
+der über der Gehaltsstufe Anfänger liegt.
+
+00:12:31.740 --> 00:12:33.080
+Sie müssen sich also noch keine Gedanken machen.
+
+00:12:33.460 --> 00:12:35.500
+Sie müssen sich nur bewusst machen, dass die kleine Angewohnheit,
+
+00:12:35.580 --> 00:12:37.260
+zwischen einer Spalte und einer Kennzahl zu wählen,
+
+00:12:37.320 --> 00:12:38.820
+Ihre Modelle schlank hält, während Sie wachsen.
+
+00:12:40.160 --> 00:12:42.100
+Eine kurze Zusammenfassung und eine Frage an Sie.
+
+00:12:42.760 --> 00:12:44.160
+Die Kurzfassung sieht wie folgt aus.
+
+00:12:44.700 --> 00:12:47.060
+Eine berechnete Spalte wird Zeile für Zeile ausgearbeitet,
+
+00:12:47.140 --> 00:12:50.280
+in Ihrem Modell gespeichert und ist bereit zum Slicen, Filtern oder Sortieren.
+
+00:12:50.960 --> 00:12:53.300
+Eine Kennzahl wird ausgearbeitet, wenn jemand das Diagramm betrachtet,
+
+00:12:53.400 --> 00:12:55.880
+befolgt jeden vom Betrachter angewendeten Filter und kostet bis zu diesem Zeitpunkt.
+
+00:12:56.360 --> 00:12:58.060
+Das eine ist ein Wert, der zu einer Zeile gehört
+
+00:12:58.060 --> 00:13:00.100
+und das andere ist ein Wert, der zu einer Ansicht gehört.
+
+00:13:00.100 --> 00:13:03.040
+Die Regel, die Sie beachten sollten, ist die von vorhin.
+
+00:13:03.760 --> 00:13:05.940
+Wenn sich eine Zahl ändern muss, wenn jemand auf einen Filter klickt,
+
+00:13:06.000 --> 00:13:06.880
+muss es sich um eine Kennzahl an.
+
+00:13:07.240 --> 00:13:09.740
+Und wenn sie sich in einer Zeile befinden muss, damit sie segmentiert werden kann,
+
+00:13:09.820 --> 00:13:11.080
+muss es sich um eine berechnete Spalte an.
+
+00:13:11.740 --> 00:13:14.700
+Diese eine Regel spart Ihnen mehr Zeit als jedes Tutorial über Formeln.
+
+00:13:15.480 --> 00:13:16.320
+Nun zu meiner Frage an Sie.
+
+00:13:16.700 --> 00:13:19.660
+Nach welcher der beiden haben Sie gesucht, ohne wirklich darüber nachzudenken?
+
+00:13:20.040 --> 00:13:22.460
+Und hat es Sie jemals in einen langsamen Bericht oder eine Zahl gestürzt,
+
+00:13:22.500 --> 00:13:23.400
+die Sie zweimal erklären mussten?
+
+00:13:23.900 --> 00:13:26.100
+Zählen Sie es mir in den Kommentaren, denn dort zeigen Sie die wahren Lektionen.
+
+00:13:26.100 --> 00:13:28.520
+Wenn Ihnen das Thema jetzt weniger einschüchtern vorkommt,
+
+00:13:28.660 --> 00:13:31.560
+abonnieren Sie M365 FM, um die Tools und die Denkweise zu erlernen,
+
+00:13:31.640 --> 00:13:32.720
+die die Zukunft der Arbeit prägen.

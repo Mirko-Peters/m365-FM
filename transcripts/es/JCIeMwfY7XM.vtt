@@ -1,0 +1,673 @@
+WEBVTT
+
+00:00:00.420 --> 00:00:03.560
+Semantic kernel es la capa que subyace las herramientas de IA de Microsoft y que casi
+
+00:00:03.560 --> 00:00:07.140
+nadie explica. Es un kit gratuito de código abierto que permite que tu propio código
+
+00:00:07.140 --> 00:00:10.680
+se comunique con un gran modelo de lenguaje y que ese modelo llame a tu código. Podría
+
+00:00:10.680 --> 00:00:13.520
+esperar un generador de chatbots, pero en realidad es un middleware la parte silenciosa
+
+00:00:13.520 --> 00:00:17.640
+del medio. Una vez que veas el puñado de piezas que contiene, la forma en que Microsoft
+
+00:00:17.640 --> 00:00:23.280
+crea agentes deja de parecer un misterio. Bienvenido al podcast de M365FM, donde exploramos
+
+00:00:23.280 --> 00:00:27.020
+las personas, las ideas y las tecnologías que dan forma al futuro del trabajo. Hoy
+
+00:00:27.020 --> 00:00:31.660
+desglosamos semantic kernel pieza por pieza en un lenguaje sencillo. ¿Qué es realmente
+
+00:00:31.660 --> 00:00:35.360
+semantic kernel? Empecemos por la versión más sencilla porque el nombre hace que parezca
+
+00:00:35.360 --> 00:00:39.900
+más pesado de lo que realmente es. Semantic kernel es un kit gratuito de código abierto
+
+00:00:39.900 --> 00:00:43.200
+de Microsoft que conecta al software que ya estás creando con un modelo de IA y luego
+
+00:00:43.200 --> 00:00:47.860
+permite que el modelo llame a tu propio código. Microsoft lo describe como middleware, que
+
+00:00:47.860 --> 00:00:52.160
+es solo una palabra para la capa A que se encuentra en el medio y pasa mensajes entre dos cosas
+
+00:00:52.160 --> 00:00:56.860
+que no hablan el mismo idioma. Ahora bien, no importa tanto qué es. No es una aplicación
+
+00:00:56.860 --> 00:01:00.340
+que abres, no es un chatbot en el que escribes, ni es un modelo como los que se ejecutan detrás
+
+00:01:00.340 --> 00:01:04.020
+de Copilot. Lo instalas dentro de un proyecto en el que ya estás trabajando y se encarga
+
+00:01:04.020 --> 00:01:08.340
+de la incómoda parte de hablar con una IA. El kit apareció por primera vez en marzo
+
+00:01:08.340 --> 00:01:12.420
+de 2023 bajo una licencia abierta llamada MIT. Esa licencia significa que cualquiera puede
+
+00:01:12.420 --> 00:01:14.980
+usarlo, leer el código y modificarlo para adaptarlo a sus propias necesidades, lo que
+
+00:01:14.980 --> 00:01:16.840
+es una de las principales razones por las que extendió el usuario, por las que extendió
+
+00:01:16.840 --> 00:01:19.440
+rápidamente entre los desarrolladores. Tampoco le importa dónde se ejecute tu software.
+
+00:01:20.020 --> 00:01:23.580
+El kit funciona dentro de tu propia aplicación, en la nube de Microsoft, en otra nube o en
+
+00:01:23.580 --> 00:01:26.980
+una máquina que tengas debajo del escritorio. Azure es el lugar más común para su uso,
+
+00:01:27.280 --> 00:01:30.660
+pero Microsoft se apresura a decir que Azure no es necesario. Hay una razón clara por
+
+00:01:30.660 --> 00:01:34.140
+la que existe esta cámara. Imagina una aplicación funcional llena de funciones reales, como
+
+00:01:34.140 --> 00:01:38.120
+buscar pedidos o enviar correos electrónicos. Un modelo de lenguaje es excelente para comprender
+
+00:01:38.120 --> 00:01:42.520
+solicitudes, pero no puede hacer nada de eso por sí solo. El núcleo semántico cierra
+
+00:01:42.520 --> 00:01:45.260
+esa brecha para que el modelo pueda acceder a tu aplicación y esta a su vez pueda acceder
+
+00:01:45.260 --> 00:01:49.040
+al modelo. Aquí tienes un pequeño ejemplo para que sea real. Imagina que un cliente escribe una
+
+00:01:49.040 --> 00:01:52.500
+pregunta sobre un pedido y tu aplicación necesita buscarlo, comprobar su estado y responder
+
+00:01:52.500 --> 00:01:56.320
+en un lenguaje sencillo. Un modelo puede escribir esa respuesta, pero no puede buscar el pedido
+
+00:01:56.320 --> 00:02:00.060
+por sí solo. El núcleo semántico permite que el modelo solicite a tu aplicación que
+
+00:02:00.060 --> 00:02:03.220
+analice una búsqueda y luego utilice la respuesta en su respuesta, en su respuesta, en su resultado.
+
+00:02:04.100 --> 00:02:07.540
+Microsoft dice que las empresas de Fortune 500 ya lo utilizan y la razón que dan es que
+
+00:02:07.540 --> 00:02:10.660
+es flexible, modular y fácil de observar mientras funciona.
+
+00:02:12.880 --> 00:02:16.260
+El núcleo y el nombre. La primera palabra que confunde a la gente es núcleo, así que
+
+00:02:16.260 --> 00:02:19.700
+vamos a analizar el nombre. La semántica apunta al significado y al lenguaje natural,
+
+00:02:20.020 --> 00:02:23.700
+el tipo de cosas en las que un modelo web. El núcleo apunta al centro, el único objeto
+
+00:02:23.700 --> 00:02:27.000
+que se conecta a todo lo demás. La propia descripción de Microsoft es sorprendentemente
+
+00:02:27.000 --> 00:02:30.960
+sencilla. En su forma más simple, el núcleo es un contenedor que contiene todos los servicios
+
+00:02:30.960 --> 00:02:34.640
+y complementos que tu aplicación de IA necesita para ejecutarse. Piensa en él como una única
+
+00:02:34.640 --> 00:02:38.080
+caja donde se registra cada parte de tu aplicación de IA, de modo que la aplicación siempre sepa
+
+00:02:38.080 --> 00:02:41.440
+dónde encontrarlas. Al núcleo le entrega dos tipos de cosas. La primera son los servicios,
+
+00:02:41.620 --> 00:02:45.840
+que son los propios modelos de IA, más utilidades ordinarias como el registro. La segunda
+
+00:02:45.840 --> 00:02:49.480
+son los complementos, que son las partes que hacen el trabajo real y llegaremos a ellas en
+
+00:02:49.480 --> 00:02:53.820
+un momento. Cuando tu aplicación envía una solicitud, el núcleo ejecuta una breve secuencia
+
+00:02:53.820 --> 00:02:58.060
+de trabajos. Elige el mejor servicio de IA para la tarea, crea el indicador a partir de tu plantilla,
+
+00:02:58.460 --> 00:03:03.480
+lo envía, lee la respuesta y devuelve el resultado a tu aplicación. Si esto te suena a fontanería
+
+00:03:03.480 --> 00:03:07.600
+que ya has visto antes, ¿por qué lo es? Microsoft modeló el núcleo según un patrón común de
+
+00:03:07.600 --> 00:03:11.480
+tontonet denominado inyección de dependencias, en el que un lugar central proporciona las piezas que
+
+00:03:11.480 --> 00:03:14.900
+necesitan otras partes del código, de modo que nadie tiene que cablearlas. Para ti el aspecto
+
+00:03:14.900 --> 00:03:18.700
+práctico es sencillo. El núcleo es la sala de control. Todo lo demás es una herramienta que
+
+00:03:18.700 --> 00:03:23.540
+registras allí, y desde ese único lugar puedes configurar y observar todo. Hay un detalle más
+
+00:03:23.540 --> 00:03:27.600
+sobre el núcleo y luego seguiremos. Es ligero porque en realidad es solo un contenedor, por lo
+
+00:03:27.600 --> 00:03:31.020
+que Microsoft recomienda crear uno nuevo para cada uso en lugar de conservar uno para siempre.
+
+00:03:32.080 --> 00:03:35.280
+Suena quisquilloso, pero evita que los complementos pierdan estado entre solicitudes,
+
+00:03:35.620 --> 00:03:39.680
+complementos y funciones. Es donde el núcleo semático resulta útil, así que vayamos más despacio.
+
+00:03:40.320 --> 00:03:44.160
+Un complemento es un grupo de funciones que expones a la IA. En otras herramientas,
+
+00:03:44.160 --> 00:03:47.440
+esas funciones suelen denominarse herramientas o acciones, y en la primera versión del núcleo
+
+00:03:47.440 --> 00:03:51.520
+semántico los complementos se llamaban habilidades. Una función es solo un fragmento de tu propio
+
+00:03:51.520 --> 00:03:55.320
+código, con una descripción simple adjunta. La descripción le dice a la IA qué hace la
+
+00:03:55.320 --> 00:04:00.160
+función, qué entra en ella y qué sale de ella. El propio ejemplo de Microsoft es un complemento
+
+00:04:00.160 --> 00:04:04.240
+de luces, con tres funciones. Una que enumera todas las luces, otra que informa del estado
+
+00:04:04.240 --> 00:04:08.580
+de una sola luz, y otra que cambia el estado de una luz. El modelo lee esas descripciones y elige
+
+00:04:08.580 --> 00:04:11.880
+la función correcta para la solicitud. Los principiantes suelen pasar por alto un detalle aquí.
+
+00:04:11.880 --> 00:04:16.060
+La descripción es decorativa. Si es vaga, el modelo adivina mal o omite la función
+
+00:04:16.060 --> 00:04:20.480
+por completo, y todos se desmoronan. Que ve la descripción de la forma en que explicarías
+
+00:04:20.480 --> 00:04:23.080
+la función a un nuevo colega, y el modelo la utilizará correctamente.
+
+00:04:23.480 --> 00:04:26.540
+Los complementos pueden prevenir de tres lugares. Puedes escribirlos en tu propio código
+
+00:04:26.540 --> 00:04:30.260
+e importarlos desde un estándar web compartido llamado OpenEPI, o extraerlos de algo llamado
+
+00:04:30.260 --> 00:04:33.040
+Servidor MCP, que es la abreviatura de Model Context Protocol.
+
+00:04:33.980 --> 00:04:36.940
+Esta última es importante porque permite a un equipo crear una capacidad de compartirla con
+
+00:04:36.940 --> 00:04:40.280
+todos los demás. Compartir es el verdadero premio con esas dos últimas opciones.
+
+00:04:40.280 --> 00:04:44.760
+Si describes una capacidad con OpenEPI o la envuelves en un servidor MSP, otro equipo
+
+00:04:44.760 --> 00:04:48.600
+puede retomarla sin reescribirla. E incluso, un creador en una herramienta de código bajo
+
+00:04:48.600 --> 00:04:51.920
+puede usar la misma capacidad. Si es como una función bien construida termina ayudando
+
+00:04:51.920 --> 00:04:55.280
+a toda la empresa. Los complementos también funcionan bien con la forma en que los equipos
+
+00:04:55.280 --> 00:04:58.940
+reales construyen software. Un complemento puede mantener su propia conexión de base de datos
+
+00:04:58.940 --> 00:05:02.860
+o cliente web, por lo que la IA nunca ve los detalles confidenciales. Solo ve la descripción
+
+00:05:02.860 --> 00:05:06.740
+simple y el resultado. Hay una advertencia práctica antes de construir una caja de herramientas
+
+00:05:06.740 --> 00:05:11.580
+gigante. OpenAI recomienda no más de 20 herramientas en una sola solicitud, e idealmente no más
+
+00:05:11.580 --> 00:05:14.900
+de 10 porque la precisión del modelo disminuye a medida que la lista se hace más larga.
+
+00:05:15.880 --> 00:05:18.600
+Menos funciones pero más claras superan a una pila gigante de 10 cada vez.
+
+00:05:19.440 --> 00:05:22.400
+Planificación y llamada función. Cuando tienes varias funciones y aparece un nuevo
+
+00:05:22.400 --> 00:05:26.980
+programa, la IA tiene que decidir qué funciones usar y en qué orden para responder a una solicitud.
+
+00:05:27.420 --> 00:05:30.840
+En semantic kernel esta tarea se llama planificación. La respuesta original en los planificadores.
+
+00:05:31.320 --> 00:05:34.660
+Le entregaste al kit un conjunto de funciones y este escribe un aviso pidiendo al modelo que
+
+00:05:34.660 --> 00:05:38.380
+eligiera un plan por ti. Eso funcionó, pero se basó en que el modelo adivinara su camino a través de
+
+00:05:38.380 --> 00:05:42.420
+la elección. Luego OpenAI incorporó la llamada funciones directamente en sus modelos y otros
+
+00:05:42.420 --> 00:05:45.340
+creadores de modelos como Gemini, Cloud y Mistral siguieron con la misma idea.
+
+00:05:46.100 --> 00:05:49.900
+La llamada funciones significa que el modelo puede simplemente solicitar una función específica por
+
+00:05:49.900 --> 00:05:52.620
+su nombre con las entradas correctas en lugar de escribir lo que quiere en un párrafo.
+
+00:05:52.940 --> 00:05:56.580
+Como resultó ser más confiable, semantic kernel lo convirtió en la principal forma de
+
+00:05:56.580 --> 00:06:00.820
+planificar. Ese cambio tiene una consecuencia directa que debes conocer. Sus antiguos
+
+00:06:00.820 --> 00:06:04.400
+planificadores, Stepwise y Handlebars, han quedado obsoletos y se han eliminado del paquete.
+
+00:06:04.980 --> 00:06:08.180
+Microsoft ahora le dice a los desarrolladores que utilicen la llamada funciones en su lugar.
+
+00:06:08.540 --> 00:06:11.820
+En cada lenguaje compatible con el kit hay una razón por la que Microsoft se alejó de los
+
+00:06:11.820 --> 00:06:15.260
+antiguos planificadores y vale la pena decirlo claramente. Un planificador le pidió al modelo
+
+00:06:15.260 --> 00:06:19.540
+que inventara un plan en palabras que fuera flexible pero impredecible. La llamada función es más
+
+00:06:19.540 --> 00:06:22.920
+limitada y repetible por lo que se producen menos sorpresas en producción que es exactamente lo
+
+00:06:22.920 --> 00:06:26.540
+que necesita una aplicación empresarial. Su funcionamiento es más sencillo de lo que...
+
+00:06:26.540 --> 00:06:31.300
+El modelo solicita una función, el núcleo semántico la ejecuta, devuelve el resultado y el modelo
+
+00:06:31.300 --> 00:06:35.640
+decide qué hacer a continuación. Ese bucle se repite hasta que finalice la tarea. Incluso puede
+
+00:06:35.640 --> 00:06:38.680
+llamar a varias funciones a la vez, que es la forma en que gestiona una solicitud como apagar
+
+00:06:38.680 --> 00:06:42.900
+todas las luces de una habitación. Puedes pensar en el bucle como una breve conversación entre tu
+
+00:06:42.900 --> 00:06:47.380
+código y el modelo. El modelo habla, tu código escucha y actúa, y luego el modelo vuelve a hablar
+
+00:06:47.380 --> 00:06:52.300
+con lo que aprendió. Emoria Rack. Existe una limitación que pilla a todo el mundo desprevenido
+
+00:06:52.300 --> 00:06:57.180
+la primera vez. Un modelo de lenguaje por sí solo no tiene memoria. Cada solicitud empieza de cero sin
+
+00:06:57.180 --> 00:07:00.600
+tener ni idea de tus documentos, tus datos o la conversación que has tenido hace cinco minutos.
+
+00:07:01.040 --> 00:07:04.920
+Solución es un patrón denominado recuperación generación aumentada. En pocas palabras primero
+
+00:07:04.920 --> 00:07:10.200
+lo buscas y luego respondes. En lugar de esperar que el modelo recuerde algo, buscas el material relevante y
+
+00:07:10.200 --> 00:07:14.720
+se lo entregas junto con la pregunta. Para ver por qué esto es importante, piensa en la última vez que un chatbot
+
+00:07:14.720 --> 00:07:18.640
+inventó algo con seguridad. Eso ocurre cuando el modelo no tiene nada real con lo que trabajar.
+
+00:07:18.920 --> 00:07:22.320
+La recuperación soluciona eso entregándole el documento o registro real para que la respuesta
+
+00:07:22.320 --> 00:07:26.560
+se base en algo que puedas señalar. El kernel semántico construye esa memoria sobre almacenes de
+
+00:07:26.560 --> 00:07:30.900
+vectores. Un almacén de vectores es una base de datos ajustada para el significado en lugar de las
+
+00:07:30.900 --> 00:07:33.900
+palabras exactas y los conectores del kit te ofrecen una interfaz compartida en muchos de ellos.
+
+00:07:35.240 --> 00:07:40.300
+Azure AI Search es la opción habitual y también son compatibles otros como Postgres, Redis y QDRand.
+
+00:07:40.760 --> 00:07:44.580
+La palabra vector merece una frase porque da menos miedo de lo que parece. El sistema
+
+00:07:44.580 --> 00:07:48.360
+convierte tu texto en lista de números llamadas incrustaciones que capturan lo que significa
+
+00:07:48.360 --> 00:07:51.720
+el texto para que pueda encontrar pasajes que tengan un significado similar incluso cuando
+
+00:07:51.720 --> 00:07:55.700
+las palabras no crees. Y hay un detalle interesante para principiantes. La búsqueda vectorial se puede
+
+00:07:55.700 --> 00:07:58.900
+exponer al modelo como un complemento, lo que significa que la IA puede buscar cosas por su
+
+00:07:58.900 --> 00:08:02.200
+cuenta cuando una pregunta necesita utilizando la misma llamada de función que acabamos de tratar.
+
+00:08:03.080 --> 00:08:07.280
+Hay una advertencia honesta que debemos tener en cuenta. La función de almacenamiento vectorial aún está
+
+00:08:07.280 --> 00:08:10.360
+en versión preliminar, por lo que puede cambiar y los antiguos conectores de almacenamiento de
+
+00:08:10.360 --> 00:08:14.180
+memoria se han sustituido por otros más nuevos conectores de aviso. La memoria es un tipo de
+
+00:08:14.180 --> 00:08:18.740
+conector y el kit tiene otros. Un conector es un adaptador y permite que un bloque de tu código
+
+00:08:18.740 --> 00:08:22.620
+se comunique con muchos modelos diferentes a través de la misma forma. La lista es más larga de lo que
+
+00:08:22.620 --> 00:08:27.300
+cabría esperar e incluye Azure OpenAI, Plain OpenAI, Chemine de Google, Mistral e incluso modelos que se
+
+00:08:27.300 --> 00:08:31.260
+ejecutan en tu propia máquina a través de una herramienta llamada Oyama. La base de Amazon también
+
+00:08:31.260 --> 00:08:36.180
+está ahí, junto con cualquier servicio que sigue el estilo OpenAI. La recompensa parece que un nuevo modelo.
+
+00:08:36.920 --> 00:08:39.820
+En lugar de reescribir tu aplicación, cambias el conector y conservas todo lo demás.
+
+00:08:39.820 --> 00:08:44.460
+Todo lo demás. Microsoft llama el kit a prueba de futuro exactamente por esta razón, porque a tu
+
+00:08:44.460 --> 00:08:48.700
+código deja de importarle qué modelo hay debajo. La ventaja práctica es la posibilidad de elegir
+
+00:08:48.700 --> 00:08:53.660
+sin adaptador. Si tu empresa ya paga por Azure OpenAI, empiezas por ahí. Y si el año que viene
+
+00:08:53.660 --> 00:08:57.200
+aparece un modelo mejor o más barato, te pasas a él sin tocar el resto de la aplicación.
+
+00:08:57.880 --> 00:09:00.900
+Esa libertad es la razón discreta por la que los equipos eligen un kit como este en Primord.
+
+00:09:01.340 --> 00:09:04.740
+Por cierto, los conectores abarcan más que hecha. La misma idea se aplica a las incrustaciones,
+
+00:09:04.840 --> 00:09:08.040
+las imágenes e incluso el audio, de modo que una aplicación puede combinar varios tipos de
+
+00:09:08.040 --> 00:09:11.840
+IA. Cada lenguaje admite una parte ligeramente diferente de esa lista, lo que conviene comprobar
+
+00:09:11.840 --> 00:09:15.420
+antes de decidirse. Luego están las plantillas de indicación. Una plantilla conviene a tus
+
+00:09:15.420 --> 00:09:19.480
+instrucciones, la entrada del usuario y la salida de una función en una única indicación. Puedes
+
+00:09:19.480 --> 00:09:22.940
+guardar esa plantilla como un archivo y compartirla con tu equipo, lo que convierte la redacción de
+
+00:09:22.940 --> 00:09:27.120
+indicaciones en algo que puedes seguir y revisar. La última parte de esta sección son los filtros.
+
+00:09:27.560 --> 00:09:31.140
+Un filtro te permite ejecutar tus propias comprobaciones antes y después de que actúe el modelo,
+
+00:09:31.260 --> 00:09:36.460
+que es donde los equipos establecen sus reglas de seguridad. Microsoft señala los filtros como el lugar
+
+00:09:36.460 --> 00:09:39.840
+para el trabajo responsable con la IA, y es una pequeña función con una gran tarea.
+
+00:09:41.320 --> 00:09:45.500
+Un kit, tres lenguajes. Quizás te preguntes si algo de esto encaja con el lenguaje que ya
+
+00:09:45.500 --> 00:09:49.940
+conoces, y la respuesta probablemente sea sí. El núcleo semántico se envía para C Sharp,
+
+00:09:50.060 --> 00:09:53.620
+Python y Java. Cada versión sigue los hábitos de su propio lenguaje a propósito,
+
+00:09:53.720 --> 00:09:57.900
+por lo que parece nativo en lugar de añadido. El código Python escrito con él sigue leyéndose como
+
+00:09:57.900 --> 00:10:02.180
+Python, y el código C Sharp sigue leyéndose como C Sharp. Microsoft lo hizo a propósito porque una
+
+00:10:02.180 --> 00:10:05.380
+herramienta que lucha contra tus hábitos es una herramienta que dejas de usar. Pesar es
+
+00:10:05.380 --> 00:10:09.820
+deliberadamente pequeño. En C Sharp añades un paquete. En Python ejecutas un único comando
+
+00:10:09.820 --> 00:10:14.520
+de instalación y en Java lo extraes del repositorio habitual. No hay pasos de configuración gigantescos
+
+00:10:14.520 --> 00:10:18.420
+que se interpongan entre tú y tu primer ejemplo funcional. Hay otra razón que importa. Significa
+
+00:10:18.420 --> 00:10:22.340
+que no tienes que aprender un nuevo lenguaje para probar las ideas de este episodio. Si ya escribes
+
+00:10:22.340 --> 00:10:25.720
+Python para un proyecto paralelo, puedes seguir la ruta de Python, y si tu trabajo se ejecuta
+
+00:10:25.720 --> 00:10:30.580
+en Polarity, puedes usar esa. Hay una cosa que debes saber antes de elegir. No son perfectos
+
+00:10:30.580 --> 00:10:34.060
+en tu informe. Algunas características llegan a C Sharp y Python antes de llegar a Java,
+
+00:10:34.060 --> 00:10:37.100
+y los conectores de almacenamiento vectorial se inclinan hacia las dos primeras. Vale la pena
+
+00:10:37.100 --> 00:10:40.640
+echar un vistazo rápido a la lista de características de tu lenguaje y te planificará. Hay otra
+
+00:10:40.640 --> 00:10:44.940
+promesa que vale la pena tener si estás aprendiendo. La versión 1 y posteriores incluyen el compromiso
+
+00:10:44.940 --> 00:10:49.040
+de no realizar cambios disruptivos, lo que significa que el código que aprendas hoy no se desechará
+
+00:10:49.040 --> 00:10:55.460
+en la próxima actualización. Copilot, Foundry y lo que venga después. Ahora, la pregunta que confunde
+
+00:10:55.460 --> 00:10:59.540
+la mayoría de las personas y que merece una respuesta directa. Semantic Kernel no es Microsoft
+
+00:10:59.540 --> 00:11:04.420
+365 Copilot, ¿y no lo necesitas para usar Copilot? Copilot es un producto terminado que
+
+00:11:04.420 --> 00:11:07.860
+abres y usas, mientras que Semantic Kernel es un material de construcción que los desarrolladores
+
+00:11:07.860 --> 00:11:11.460
+usan para crear sus propias funciones de IA. El verdadero vínculo es una forma compartida
+
+00:11:11.460 --> 00:11:15.820
+de escribir las cosas. Semantic Kernel usa el mismo estándar web, OpenAPI, que Microsoft
+
+00:11:15.820 --> 00:11:20.160
+365 Copilot usa para escribir lo que puede ser una extensión. Dado que ambas partes hablan
+
+00:11:20.160 --> 00:11:23.940
+el mismo idioma, una capacidad que crees se puede compartir con otros desarrolladores e incluso
+
+00:11:23.940 --> 00:11:27.560
+con creadores que no escriben código. Aquí también hay un puente para crear tu propia gente
+
+00:11:27.560 --> 00:11:32.960
+en el mundo de Microsoft 365. El SDK de Microsoft 365 Agents gestiona el lado de Microsoft 365
+
+00:11:32.960 --> 00:11:38.520
+y el lado de la IA lo gestiona Semantic Kernel o su sucesor. De este modo, juntos permiten que
+
+00:11:38.520 --> 00:11:42.920
+un agente personalizado llegue a Copilot. En el lado de la nube, el nuevo marco incluye
+
+00:11:42.920 --> 00:11:47.840
+Microsoft Foundry como uno de los lugares donde ejecutar modelos y agentes. Ayuda a verlos como
+
+00:11:47.840 --> 00:11:53.420
+capas en lugar de rivales. Copilot es la experiencia final que utilizan tus colegas. Copilot Studio es donde
+
+00:11:53.420 --> 00:11:57.600
+los creadores crean sus propios agentes con poco o ningún código y Semantic Kernel es el kit de
+
+00:11:57.600 --> 00:12:01.800
+desarrollo subyacente que convierte una idea en código funcional. Están pensados para funcionar
+
+00:12:01.800 --> 00:12:05.860
+juntos, no para competir. Esto nos lleva a la parte honesta. Microsoft creó un nuevo marco,
+
+00:12:06.140 --> 00:12:11.140
+Microsoft Agent Framework, combinando a Semantic Kernel con otro proyecto llamado Autoken. Desde
+
+00:12:11.140 --> 00:12:13.940
+entonces se ha convertido en el punto de partida recomendado para proyectos de agentes completamente.
+
+00:12:14.300 --> 00:12:18.160
+La verdadera tensión aquí es simple y probablemente ya la hayas sentido. No quieres pasar meses aprendiendo
+
+00:12:18.160 --> 00:12:22.940
+algo que Microsoft está a punto de reemplazar. Sí que abordemos ese medio directamente. Esto es lo que significa y lo que no
+
+00:12:22.940 --> 00:12:27.600
+significa. El trabajo de las nuevas funciones ahora pasa al nuevo marco, pero Semantic Kernel no está
+
+00:12:27.600 --> 00:12:31.820
+muerto ni abandonado. Microsoft aún lo admite y sigue enviando correcciones y las propias directrices
+
+00:12:31.820 --> 00:12:35.800
+de Microsoft dicen que para un proyecto existente, o cuando necesitas enviar algo rápidamente,
+
+00:12:36.220 --> 00:12:39.840
+permanecer en Semantic Kernel es perfectamente adecuado. Para ti como aprendizlas se transfieren
+
+00:12:39.840 --> 00:12:43.940
+directamente. Un complemento aquí se convierte en una herramienta y el modelo mental que acabas de crear es
+
+00:12:43.940 --> 00:12:49.880
+el mismo. Aprender Semantic Kernel es realmente aprender cómo Microsoft aborda a los agentes. Esa forma de pensar
+
+00:12:49.880 --> 00:12:54.280
+perdura más que cualquier herramienta individual. ¿Cuándo usar Semantic Kernel?
+
+00:12:54.840 --> 00:12:58.460
+Terminamos con la cuestión práctica de cuándo recurrir realmente a este equipo. Empieza con la
+
+00:12:58.460 --> 00:13:02.280
+regla que se aplica a casi cualquier herramienta. Si puedes escribir una función simple para hacer
+
+00:13:02.280 --> 00:13:06.540
+el trabajo, escribe la función simple. Microsoft dice esto sobre los agentes y es un buen consejo
+
+00:13:06.540 --> 00:13:10.300
+porque recurrir a la IA cuando un simple fragmento de código bastaría solo para añadir costes y
+
+00:13:10.300 --> 00:13:15.140
+confusión. Luego recurre a Semantic Kernel cuando eres un desarrollador que añade IA a una aplicación que ya
+
+00:13:15.140 --> 00:13:19.840
+tienes y quieres que tu propio código sea invocable por el modelo. Ese es el caso principal y es donde
+
+00:13:19.840 --> 00:13:24.560
+brilla el kit. Recurra a él cuando necesite una base de código que funcione con varios modelos para
+
+00:13:24.560 --> 00:13:28.680
+poder cambiar de proveedor sin reescribir nada. Y recurra a él cuando su empresa funcione en internet
+
+00:13:28.680 --> 00:13:33.300
+y quiera el tipo de registro, seguridad y supervisión que piden los grandes equipos de TI antes de aprobar
+
+00:13:33.300 --> 00:13:37.920
+cualquier cosa. Hay dos momentos, lo que hay que buscar en otra parte. Si nunca escribes código, el kit no es
+
+00:13:37.920 --> 00:13:42.620
+tu puerta de entrada porque el camino más adecuado para los creadores es Copilot Studio y Semantic Kernel se sitúa por
+
+00:13:42.620 --> 00:13:47.300
+debajo de ese mundo en lugar del frente. Si todo lo que quieres es un simple chatbot en un sitio web,
+
+00:13:47.540 --> 00:13:50.920
+estás resolviendo un problema menor que aquel para el que se crea este kit. El ángulo profesional
+
+00:13:50.920 --> 00:13:54.620
+también importa aquí, ya que muchos de vosotros habéis venido aquí precisamente para eso. Las
+
+00:13:54.620 --> 00:13:58.760
+ideas de este kit, los complementos, las llamadas a funciones, la memoria y los conectores, también
+
+00:13:58.760 --> 00:14:03.160
+aparecen en otras herramientas de IA, incluidas las que no son de Microsoft. Aprenda a utilizarlas
+
+00:14:03.160 --> 00:14:06.960
+aquí y las reconocerá en todas partes. Hay una última cosa para cualquiera que empiece de cero. Si está
+
+00:14:06.960 --> 00:14:10.760
+empezando algo completamente nuevo, Microsoft ahora dirige a los desarrolladores primero hacia el
+
+00:14:10.760 --> 00:14:15.380
+sucesor. Así que aprenda el núcleo semántico para las ideas y recurra al nuevo marco cuando
+
+00:14:15.380 --> 00:14:18.720
+empiece. Los conceptos son los mismos y esa es la parte que vale la pena contar.
+
+00:14:20.160 --> 00:14:24.960
+El resumen y una pregunta. Así que vamos a unir las piezas en unas pocas líneas. El núcleo
+
+00:14:24.960 --> 00:14:29.420
+semántico es un medio web, la capa que conecta su código a un modelo de IA. El núcleo lo mantiene
+
+00:14:29.420 --> 00:14:33.500
+todo en un solo lugar. Los complementos le dan a la IA sus propias funciones. La llamada a funciones
+
+00:14:33.500 --> 00:14:37.420
+es la forma en que decide qué ejecutar. La memoria es la forma en que recuerda sus datos y los
+
+00:14:37.420 --> 00:14:42.180
+conectores le permiten cambiar de modelo más adelante. Si recuerda algo que sea esto, el
+
+00:14:42.180 --> 00:14:46.460
+modelo es la parte que cambiará una y otra vez a medida que la tecnología avance. El cable entre
+
+00:14:46.460 --> 00:14:50.060
+tu código y el modelo es la parte que realmente controlas y ese cableado es lo que te proporciona
+
+00:14:50.060 --> 00:14:54.680
+el núcleo semántico. Si esto te ha resultado útil, suscríbete al podcast M365FM para dominar
+
+00:14:54.680 --> 00:14:57.800
+las herramientas y la mentalidad que están dando forma al futuro del trabajo. Esta es mi pregunta
+
+00:14:57.800 --> 00:15:02.180
+para ti. Si mañana pudieras delegar una tarea de tu propio trabajo a una IA, ¿qué tarea le
+
+00:15:02.180 --> 00:15:03.060
+confiarías primero?
