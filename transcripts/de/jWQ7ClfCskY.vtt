@@ -1,0 +1,649 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:05.580
+Willkommen beim M365FM-Podcast, wo wir die Menschen, Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.380 --> 00:00:10.920
+Gartner prognostizierte, dass 80% der Data Lakes hinter den Erwartungen zurückbleiben würden und Kataloge und Kataloge.
+
+00:00:11.380 --> 00:00:16.740
+Diese Lücke ist ein Grund dafür, warum eine dritte Option auftauchte, das Data Lake House, das neben dem älteren Data Warehouse und Data Lake existiert.
+
+00:00:17.360 --> 00:00:19.820
+Ein Warehouse hält Daten sauber und organisiert, bevor sie hineingelangen.
+
+00:00:20.500 --> 00:00:25.320
+Ein Lake nimmt alles roh und kostengünstig auf und bestimmt die Struktur später, während ein Lake House versucht, ihnen beides zu bieten.
+
+00:00:25.320 --> 00:00:31.940
+Microsoft liefert jetzt ein Warehouse und ein Lake House Seite an Seite in Fabric aus, basierend auf einer Speicherschicht namens One Lake, namens One Lake.
+
+00:00:32.180 --> 00:00:36.320
+Am Ende werden sie wissen, welches für ihre Situation passt und warum das Muster wichtiger ist als der Name.
+
+00:00:37.880 --> 00:00:39.160
+Woher all diese Daten kommen?
+
+00:00:40.000 --> 00:00:45.920
+Willkommen beim M355FM-Podcast, wo wir die Menschen, Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:46.560 --> 00:00:51.160
+Beginnen wir mit dem täglichen Chaos, denn genau dagegen wurden Data Warehouse, Data Lake und Data Lake House entwickelt.
+
+00:00:52.120 --> 00:00:53.260
+Stellen Sie sich einen kleinen Onlineshop vor.
+
+00:00:53.260 --> 00:00:57.580
+Die Bestellungen liegen in einem System, die Kunden-E-Mails in einem anderen und die Website-Klicks in einem dritten.
+
+00:00:57.960 --> 00:01:00.260
+Keines dieser drei Systeme kommuniziert standardmäßig miteinander.
+
+00:01:00.920 --> 00:01:04.460
+Stellen Sie dem Besitzer nun eine einfache Frage. Welches Produkt bringt tatsächlich Geld ein?
+
+00:01:04.980 --> 00:01:10.060
+Um sie zu beantworten, muss jemand Zahlen aus allen drei Quellen zusammenführen, sie manuell abgleichen und hoffen, dass die Kundennamen übereinstimmen.
+
+00:01:10.940 --> 00:01:16.260
+Derselbe Kunde ist oft auf drei leicht unterschiedliche Arten gelistet und allein das kann das Gesamtergebnis verfälschen.
+
+00:01:16.720 --> 00:01:20.580
+Die erste Aufgabe ist es also, die Daten an einem Ort zusammenzuführen, wo sie verglichen und hinterfragt werden können.
+
+00:01:20.580 --> 00:01:23.860
+Ein Warehouse, ein Lake und ein Lake House erfüllen alle diese Aufgaben.
+
+00:01:24.180 --> 00:01:26.840
+Aus der Ferne sehen Sie aus wie Rivalen, die um denselben Platz kämpfen.
+
+00:01:27.320 --> 00:01:30.220
+Sie sind keine Rivalen und der tatsächliche Unterschied ist geringer als der Name vermutlich.
+
+00:01:30.780 --> 00:01:32.080
+Jedes von Ihnen beantwortet dieselbe Frage.
+
+00:01:32.640 --> 00:01:37.300
+Diese Frage lautet, wie viel Bereinigung und Organisation vor dem Speichern der Daten geschieht und wie viel für später übrig bleibt?
+
+00:01:37.760 --> 00:01:38.160
+Äh.
+
+00:01:38.160 --> 00:01:40.820
+Diese eine Entscheidung ist es, die drei verschiedene Werkzeuge schafft.
+
+00:01:41.600 --> 00:01:46.160
+Sie erklärt auch, warum zwei intelligente Datenteams auf dasselbe Unternehmen schauen und darüber streiten können, welches das Richtige ist.
+
+00:01:46.580 --> 00:01:49.180
+Halten Sie an dieser Idee fest, denn alles Weitere hier hängt davon ab.
+
+00:01:49.640 --> 00:01:55.240
+Das ist wichtiger, als es klingt, denn das gewählte Muster entscheidet darüber, wie schnell Ihre Berichte laden und wie sehr Sie den Zahlen darin vertrauen.
+
+00:01:55.820 --> 00:01:58.560
+Wenn man es falsch macht, kann ein Team ein Jahr damit verbringen, etwas zu bauen, das niemand nutzen kann.
+
+00:01:58.880 --> 00:02:01.200
+Wenn man es richtig macht, beantwortet das Team Fragen in Sekunden.
+
+00:02:01.640 --> 00:02:03.760
+Unternehmen wählen selten eines aus und bleiben für mal dabei.
+
+00:02:04.020 --> 00:02:08.420
+Wenn ein Unternehmen wächst, betreibt es oft mehrere dieser Systeme gleichzeitig, was genau der Grund für die häufige Verwirrung ist.
+
+00:02:09.660 --> 00:02:13.860
+Das Data Warehouse, das Ordentliche, kam zuerst und funktioniert wie ein gut geführter Aktenschrank.
+
+00:02:14.680 --> 00:02:17.040
+Bevor etwas hineinkommt, wird es bereinigt, geprüft und geformt.
+
+00:02:17.100 --> 00:02:18.780
+Diese Regel nennt man Schema on Write.
+
+00:02:19.660 --> 00:02:22.420
+Write bezeichnet den Moment des Speicherns und Schema steht für die Struktur.
+
+00:02:22.840 --> 00:02:24.400
+Die Struktur wird bereits im Eingang festgelegt.
+
+00:02:24.780 --> 00:02:26.620
+Stellen Sie sich ein Data Warehouse für einen Einzelhändler vor.
+
+00:02:26.620 --> 00:02:31.120
+Wenn ein Verkauf eingeht, stellt das Warehouse sicher, dass Datum, Betrag und Transaktionsnummer korrekt sind.
+
+00:02:31.900 --> 00:02:34.420
+Dann wird jeder Wert in die richtige Spalte der richtigen Tabelle sortiert.
+
+00:02:34.980 --> 00:02:36.040
+Nichts Schlampiges schlüpft hindurch.
+
+00:02:36.560 --> 00:02:40.420
+Da die Form beim Eingang feststeht, werden Anfragen schnell beantwortet und die Zahlen sind leicht zu vertrauen.
+
+00:02:41.320 --> 00:02:46.460
+Deshalb sind Business Intelligence, Dashboards und Berichte, auf deren Firmen basieren, seit Jahrzehnten in Warehouses zu Hause.
+
+00:02:47.020 --> 00:02:49.700
+Deshalb öffnen SQL-Kennnisse auch heute noch Türen für eine Karriere im Datenbereich.
+
+00:02:50.240 --> 00:02:52.340
+Der Nachteil ist, dass man sich von Anfang an auf eine Struktur festlegen muss.
+
+00:02:52.800 --> 00:02:57.060
+Ändert sich das Geschäft und man benötigt eine neue Spalte oder Tabelle, muss jemand die Arbeit überarbeiten.
+
+00:02:57.740 --> 00:03:00.360
+In einem großen Warehouse kann das Tage sorgfältiger Migration erfordern.
+
+00:03:00.360 --> 00:03:02.920
+Es gibt einen zweiten Haken, der heute wichtiger ist als früher.
+
+00:03:03.560 --> 00:03:08.700
+Ein Warehouse braucht Zeilen und Spalten, daher passen freier Text, Bilder und Audiodateien nicht gut hinein, nicht gut hinein.
+
+00:03:09.080 --> 00:03:11.820
+Das sind genau die unstrukturierten Daten, aus denen heutige KI-Tools lernen wollen.
+
+00:03:12.280 --> 00:03:13.360
+Geld ist ein weiterer kritischer Punkt.
+
+00:03:13.360 --> 00:03:18.940
+Traditionelle Warehouses koppeln Speicher und Rechenleistung, sodass man beides erweitert, selbst wenn man nur eines benötigt.
+
+00:03:19.520 --> 00:03:21.660
+Warehouses sind zudem für einen bestimmten Typ Mensch konzipiert.
+
+00:03:22.320 --> 00:03:26.400
+Sie belohnen jemanden, der Struktur mag, in Tabellen denkt und den ganzen Tag gerne SQL schreibt.
+
+00:03:26.640 --> 00:03:27.180
+Oh, und die für nicht.
+
+00:03:27.480 --> 00:03:30.300
+Wenn das auf sie zutrifft, ist das Warehouse ein gemütliches Zuhause, das uns erhalten.
+
+00:03:30.840 --> 00:03:36.180
+Das Warehouse ist also die ordentliche, verlässliche Wahl, die sich jedoch unwohl fühlt, wenn Daten sich nicht anpassen wollen.
+
+00:03:36.180 --> 00:03:39.400
+Der Data Lake, die günstige Variante?
+
+00:03:39.940 --> 00:03:40.620
+Dann kam die Flut.
+
+00:03:41.240 --> 00:03:46.540
+Zwischen Ende der 2000er und Anfang der 2010er Jahre stellten Firmen fest, dass sie viel mehr Daten hatten, als ihre Warehouses fassten,
+
+00:03:46.940 --> 00:03:48.580
+und vieles davon passte gar nicht in ordentliche Zahlen.
+
+00:03:49.080 --> 00:03:54.100
+Fotos, Chatprotokolle, Sensordaten und freie Notizen häuften sich an, ohne dass es einen sauberen Ort für sie gab.
+
+00:03:54.480 --> 00:03:56.260
+Ein Data Lake stellt die Warehouse-Regel komplett auf den Kopf.
+
+00:03:56.600 --> 00:04:02.520
+Es speichert Datenroh in der Form, in der sie ankommen, und wendet erst Struktur an, wenn sie jemand liest, eine Regel namens Schema on Read.
+
+00:04:02.520 --> 00:04:13.580
+Der Name stammt aus einem Blogbeitrag vom 14. Oktober 2010 von James Dixon, dem damaligen Chief Technology Officer bei einem Unternehmen namens Pentaho.
+
+00:04:14.340 --> 00:04:18.500
+Er verglich einen Data Mart mit einem Laden für abgefülltes Wasser, das gereinigt, verpackt und trinkfertig ist.
+
+00:04:19.100 --> 00:04:22.400
+In seiner Vorstellung ist ein Data Lake ein natürliches Gewässer, zu dem man geht, wenn man es braucht.
+
+00:04:23.000 --> 00:04:24.900
+Die moderne Version dieses Bildes ist ein Reservoir.
+
+00:04:25.380 --> 00:04:28.500
+Es akzeptiert alles in jedem Format zu jeder Zeit und das zu geringen Kosten.
+
+00:04:28.500 --> 00:04:34.600
+Früher Lakes liefen auf Hadoop. Moderne basieren meist auf Cloud-Speichern wie Azure Blob Storage oder Amazon S3.
+
+00:04:35.460 --> 00:04:37.800
+Der große Vorteil ist, dass Speicherplatz und Rechenleistung getrennt sind.
+
+00:04:38.160 --> 00:04:41.600
+Man kann Berge von Daten aufbewahren, ohne für die Verarbeitung jedes einzelnen Bytes zu bezahlen.
+
+00:04:41.860 --> 00:04:45.500
+Deshalb wurden Lakes zum Standardort für Machine Learning Experimente und für Langzeitarchive.
+
+00:04:46.040 --> 00:04:49.020
+Ein weiterer Grund spielt hier eine Rolle und es ist der stille Grund, warum Lakes so populär wurden.
+
+00:04:49.300 --> 00:04:53.100
+In einem Warehouse transformiert man die Daten, bevor man sie lädt, was Ingenieure als ETL bezeichnen, bezeichnen.
+
+00:04:53.100 --> 00:05:00.760
+In einem Lake kann man die Rohdaten zuerst laden und später transformieren, was man ELT nennt und diese Reihenfolge ermöglicht es, Dinge zu behalten, bei denen man noch nicht sicher ist, ob man sie braucht.
+
+00:05:01.380 --> 00:05:07.140
+Eine Zeit lang sah das wie die Antwort auf alles aus, weil es günstig, offen, unbegrenzt und flexibel war.
+
+00:05:07.800 --> 00:05:10.880
+Das Warehouse wirkte plötzlich verhalten, wie ein See zu einem Sumpf wird.
+
+00:05:11.600 --> 00:05:16.640
+Doch ein Reservoir ohne Regeln hat eine Schattenseite, die sich nur langsam zeigt, was es so gefährlich macht, was es so gefährlich macht.
+
+00:05:16.640 --> 00:05:24.620
+Wer niemand die Dateien beschriftet, füllt sich der See mit Duplikaten, halbfertigen Exporten und Ordnern, namens Final U, Final 2 und endgültig, Final 2 und endgültig.
+
+00:05:24.820 --> 00:05:27.200
+Die Branche hat einen Spitznamen für dieses Ergebnis, Datensumpf.
+
+00:05:27.700 --> 00:05:32.480
+Gartner prognostizierte, dass bis 2018 der Delta Lakes kein effektives Metadatenmanagement enthalten würden,
+
+00:05:32.820 --> 00:05:35.760
+also die Beschriftung und Katalogisierung die Daten auffindbar und vertrauenswürdig machen.
+
+00:05:36.500 --> 00:05:41.420
+Metadaten sind einfach Daten über ihre Daten, die Notizen darüber, was eine Datei enthält, woher sie stammt und wem sie gehört.
+
+00:05:42.120 --> 00:05:45.580
+Ohne diese Notizen ist ein Lake ein Warehouse, bei dem von jeder Kiste das Etikett abgerissen wurde.
+
+00:05:45.580 --> 00:05:48.800
+Das tiefere Problem ist, dass das Aufschieben der Aufräumarbeit diese nicht beseitigt,
+
+00:05:49.100 --> 00:05:51.260
+sondern nur auf denjenigen verlagert, der die Daten später liest.
+
+00:05:52.220 --> 00:05:56.300
+Nun hat diese Person drei Versionen der Kundenliste und keine Möglichkeit festzustellen, welche davon korrekt ist.
+
+00:05:57.380 --> 00:05:59.640
+Dieses Problem trifft die KI direkt und genau da wird es teuer.
+
+00:06:00.400 --> 00:06:04.380
+Ein Modell, das mit duplizierten, unbeschrifteten Daten trainiert wird, lernt die falschen Lektionen.
+
+00:06:05.100 --> 00:06:09.020
+Der Sumpf bremst die Leute aus und bringt ihren System im Stillen bei, fehlerhaft zu sein.
+
+00:06:09.740 --> 00:06:12.500
+Klassische Data Lakes verzichten zudem auf die Sicherheitsvorkehrungen eines Warehouses.
+
+00:06:12.500 --> 00:06:16.880
+Es gibt keine integrierte Governance, keine Transaktion und keinen natürlichen Ort, um zu kontrollieren, wer welche Zeilen sieht.
+
+00:06:17.380 --> 00:06:22.400
+Die Lakes blieben also günstig und offen, was auch der Grund dafür wurde, dass vielen Berichten stillschweigend nicht mehr vertraut wurde.
+
+00:06:22.980 --> 00:06:26.500
+Das Versprechen, alles zu speichern, hatte sich in einen Raum voller Kisten verwandelt, die niemand mehr finden konnte.
+
+00:06:27.240 --> 00:06:30.820
+Beim Lakehouse, das beides vereinen will, bestand die Lösung nicht darin, sich für eine Seite zu entschaffen.
+
+00:06:31.160 --> 00:06:34.640
+Sie bestand darin, die Disziplin des Warehouses direkt auf den günstigen Speicher des Lakes anzuwenden.
+
+00:06:34.980 --> 00:06:36.440
+Diese Kombination ist das Delta Lakehouse.
+
+00:06:36.920 --> 00:06:40.860
+Der Trick ist eine Schicht, die über gewöhnlichen Dateien liegt und die Garantien einer Datenbank hinzufügt.
+
+00:06:40.860 --> 00:06:45.900
+Delta Lake ist das offene Format, das die meisten Lakehouses nutzen und es verleiht Rohdaten drei Dinge.
+
+00:06:46.500 --> 00:06:51.000
+Diese drei Dinge sind alles oder nichts, rechte und erzwungene Schemata, sowie eine Versionshistorie, auf die man zurückgreifen kann.
+
+00:06:51.440 --> 00:06:53.420
+Diese erste Garantie verdient eine einfache Erklärung.
+
+00:06:53.760 --> 00:06:59.580
+In einem Lakehouse wird ein Update entweder vollständig oder gar nicht übernommen, sodass nie halbgeschriebene Daten entstehen, die den nächsten Bericht beschädigen, die den nächsten schickt.
+
+00:06:59.580 --> 00:07:04.280
+Ingenieure nennen dies ACDA und die Buchstaben stehen für ein Set an Versprechen, die die Daten konsistent halten.
+
+00:07:05.120 --> 00:07:11.980
+Die zweite Garantie bedeutet, dass das Lakehouse schlechte Daten beim Eingang ablehnen kann, genau wie ein Warehouse, anstatt alles zu akzeptieren und auf das Beste zu hoffen.
+
+00:07:12.820 --> 00:07:15.700
+Die dritte bedeutet, dass Sie nachsehen können, was eine Tabelle letzte Woche enthielt.
+
+00:07:15.780 --> 00:07:18.240
+Ein Lebensretter, wenn jemand fragt, warum sich eine Zahl geändert hat.
+
+00:07:18.240 --> 00:07:23.360
+Da die zugrunde liegenden Dateien offen und für jedes Tool lesbar bleiben, sind sie nicht an das Produkt eines Unternehmens gebunden.
+
+00:07:24.000 --> 00:07:29.520
+Sie können dieselben Tabellen mit SQL, Python oder einem Reporting-Tool lesen und jedes davon sieht dieselben Zahlen.
+
+00:07:30.200 --> 00:07:31.780
+Ein kleiner Buchstaben-Salat, die eine Erwähnung hat.
+
+00:07:32.240 --> 00:07:37.540
+Delta Lake und Apache Iceberg sind zwei offene Tabellenformate, die eine ähnliche Aufgabe erfüllen und beide in einem modernen Lakehouse willkommen sind.
+
+00:07:38.120 --> 00:07:39.340
+Der Sinn dieser Offenheit ist einfach.
+
+00:07:40.020 --> 00:07:44.180
+Ihre Daten bleiben in Dateien, die jeder lesen kann, sodass ein späterer Toolwechsel nicht bedeutet, ganz von vorne anzufangen.
+
+00:07:44.840 --> 00:07:47.920
+Ein Lakehouse verarbeitet zudem Livestreams und gespeicherte Badges am selben Ort.
+
+00:07:48.600 --> 00:07:52.280
+Das ist etwas, das das Warehouse und der klassische Lake jeweils für sich allein nur schwer bewältigen können.
+
+00:07:53.000 --> 00:07:56.700
+Das Bild dazu ist ein Reservoir, das seinen eigenen Katalog mit einem direkt integrierten Leseraum führt.
+
+00:07:57.420 --> 00:08:00.440
+Sie erhalten die Kapazität des Lakes und die Ordnung des Warehouses in einem System.
+
+00:08:00.600 --> 00:08:01.620
+Und das ist das gesamte Versprechen.
+
+00:08:02.660 --> 00:08:10.620
+Wo sich das in Microsoft Fabric befindet, das ist genau die Form, die Microsoft in Fabric eingebaut hat, seine Analytikplattform, die im November 2023 allgemein verfügbar wurde.
+
+00:08:11.400 --> 00:08:14.820
+Öffnen Sie Fabric und Sie können zwei separate Elemente im selben Arbeitsbereich erstellen.
+
+00:08:15.260 --> 00:08:17.140
+Eines heißt Warehouse und das andere heißt Lakehouse.
+
+00:08:17.140 --> 00:08:19.940
+Ihre Namen sind erfrischend ehrlich darüber, was sie sind.
+
+00:08:20.780 --> 00:08:22.700
+Das Warehouse-Element ist für Leute gebaut, die SQL beherrschen.
+
+00:08:23.200 --> 00:08:28.160
+Es unterstützt vollständige Transaktionen über mehrere Tabellen hinweg, sowie Views, Funktionen und Stored Procedures.
+
+00:08:28.940 --> 00:08:31.820
+Das macht es zum natürlichen Zuhause für Business Reporting und SQL-fokussierte Teams.
+
+00:08:31.820 --> 00:08:34.580
+Das Lakehouse-Element ist für Leute gebaut, die mit Code arbeiten.
+
+00:08:35.280 --> 00:08:40.520
+Es führt Apache Spark aus, sodass sie Python, Scala, SQL oder R verwenden können und es speichert strukturierte Daten nebeneinander.
+
+00:08:41.700 --> 00:08:45.620
+Das macht es besser geeignet für Data Engineering und Data Science, wo Daten oft unübersichtlich sind.
+
+00:08:46.160 --> 00:08:47.400
+Der überraschende Teil ist eine gute Nachricht.
+
+00:08:47.400 --> 00:08:51.980
+Beide Elemente speichern ihre Tabellen im selben Delta-Format und beide nutzen dieselbe SQL-Engine im Hintergrund.
+
+00:08:52.920 --> 00:08:55.940
+Es sind keine zwei rivalisierenden Systeme, die mit Kleber und Hoffnung zusammengehalten werden.
+
+00:08:56.620 --> 00:09:01.840
+Jedes Lakehouse erhält außerdem kostenlos einen SQL-Analyse-Endpunkt, der ein schreibgeschütztes SQL-Fenster auf seine Tabellen darstellt.
+
+00:09:02.280 --> 00:09:07.900
+Ein Analyst kann Lakehouse-Daten abfragen und Power BI verbinden, ohne zuerst ein Warehouse zu bauen, was eine ganze Kopierunde einspart.
+
+00:09:07.900 --> 00:09:10.620
+Es gibt ein paar andere Tools, die sie im selben Arbeitsbereich sehen will.
+
+00:09:11.340 --> 00:09:17.260
+Pipelines verschieben Daten von Ort zu Ort, Dataflows bieten eine Low-Code-Methode zur Gestaltung, Notebooks bieten einen Platz zum Programmieren.
+
+00:09:18.220 --> 00:09:22.060
+Keines davon erfordert tiefgehende Admin-Kenntnisse, was den freundlichen Teil von Fabric ausmacht.
+
+00:09:22.980 --> 00:09:24.840
+Microsofts eigene Anleitung hält die Entscheidung einfach.
+
+00:09:25.440 --> 00:09:31.200
+Wählen Sie das Lakehouse, wenn Sie Spark möchten, keine Transaktionen über viele Tabellen benötigen oder Ihre Daten unstrukturiert oder gemischt sind.
+
+00:09:32.140 --> 00:09:35.000
+Wählen Sie das Warehouse, wenn Sie SQL möchten und Ihre Daten bereits strukturiert sind.
+
+00:09:35.000 --> 00:09:38.500
+Microsoft schlägt zudem vor, ein Lakehouse in drei Schichten zu organisieren.
+
+00:09:38.980 --> 00:09:44.320
+Bronze enthält die rohen Daten, Silber enthält bereinigte Daten und Gold enthält die polierten Tabellen, aus denen Berichte lesen.
+
+00:09:44.980 --> 00:09:47.500
+Es ist dieselbe Idee der Ordnung, nur innerhalb des Lakes angewendet.
+
+00:09:48.300 --> 00:09:49.680
+Ein Lake und die eine Kopie der Daten.
+
+00:09:50.340 --> 00:09:53.080
+All dieses Teilen funktioniert dank eines zentralen Bausteins. Und der hat einen Namen.
+
+00:09:53.500 --> 00:09:57.380
+One Lake ist die Speicherschicht unter jedem Teil von Fabric und jeder Fabric-Mandant erhält genau eine.
+
+00:09:57.380 --> 00:09:59.800
+Sie können sie nicht löschen und keine zweite davon erstellen.
+
+00:10:00.420 --> 00:10:02.480
+Das ist eine bewusste Designentscheidung und keine Einschränkung.
+
+00:10:02.480 --> 00:10:08.060
+One Lake basiert auf Azure Data Lake Storage und bewahrt Tabellen in offenen Formaten wie Delta, Parquet und Iceberg auf.
+
+00:10:08.980 --> 00:10:12.900
+Das sind offene Standards, was bedeutet, die Daten sind nicht in einem Format gefangen, das nur Microsoft lesen kann.
+
+00:10:13.580 --> 00:10:14.920
+Sie können sie jederzeit mitnehmen, wenn Sie das möchten.
+
+00:10:15.360 --> 00:10:17.480
+Der Vorteil ist eine einzige Datenkopie, die jede Engine speist.
+
+00:10:17.780 --> 00:10:22.380
+Ein SQL-Entwickler stellt ein Warehouse und ein Data Scientist kann ein Spark-Notebook anhängen und diese Tabellen direkt lesen,
+
+00:10:22.440 --> 00:10:24.780
+ohne Export und ohne zweite Kopie, die synchronisiert werden muss.
+
+00:10:24.780 --> 00:10:28.140
+Shortcuts weiten diese Idee auf das gesamte Unternehmen aus.
+
+00:10:28.620 --> 00:10:32.160
+Ein Shortcut ist ein Verweis auf Daten, die anderswo liegen in einem anderen Workspace,
+
+00:10:32.280 --> 00:10:37.520
+in Azure Blob Storage, in Amazon S3 oder sogar auf eigenen Servern und erwirkt lokal, ohne etwas zu kopieren.
+
+00:10:38.420 --> 00:10:42.840
+Wenn sich die Quelle ändert, sehen Sie die Änderung sofort, was das Problem veralteter Kopien vollständig beseitigt.
+
+00:10:43.800 --> 00:10:47.340
+Mirroring geht einen Schritt weiter und lässt eine Kopie einer operativen Datenbank in den One Lake fließen,
+
+00:10:47.440 --> 00:10:48.780
+wo sie als abfragbare Tabellen bereitsteht.
+
+00:10:48.780 --> 00:10:55.020
+Sie können sich den manuellen Aufbau eigener Pipelines sparen, da One Lake dieselbe Sprache wie Azure Data Lake Storage spricht.
+
+00:10:55.640 --> 00:10:59.580
+Tools wie Azure Snaps Analytics und Azure Databricks können ohne Umbau eine Verbindung herstellen.
+
+00:11:00.160 --> 00:11:03.120
+Falls Ihr Unternehmen bereits in diese Azure Tools investiert hat, sind diese nicht verloren.
+
+00:11:03.720 --> 00:11:07.960
+Finanz- und Vertriebsteams können separate Workspaces behalten und zahlen dennoch über Shortcuts teilen,
+
+00:11:08.140 --> 00:11:12.900
+was doppelte Kopien, die früher auseinanderdrifteten und für Streit sorgten und für Streit sorgten lautlos beseitigt.
+
+00:11:13.740 --> 00:11:16.400
+Direct Lake, Power BI und die ehrlichen Grenzen.
+
+00:11:16.400 --> 00:11:20.560
+Ein weiteres Microsoft-Element ist wissenswert, besonders wenn Sie Power-Berichte erstellen.
+
+00:11:20.920 --> 00:11:22.000
+Und jetzt kommen wir zum ehrlichen Teil.
+
+00:11:22.760 --> 00:11:26.100
+Direct Lake ist ein Power BI-Speichermodus, der direkt aus Delta-Tabellen im One Lake liest.
+
+00:11:26.680 --> 00:11:31.560
+Die Aktualisierung kopiert nur Metadaten, ein Schritt, den Microsoft Framing nennt und der in Sekunden abgeschlossen sein kann.
+
+00:11:32.180 --> 00:11:36.960
+Der ältere Import-Modus ist deutlich aufwendiger, da er den gesamten Datensatz in den Bericht kopiert, bevor jemand ihn ansehen kann.
+
+00:11:37.980 --> 00:11:42.600
+Microsoft empfiehlt Direct Lake als die richtige Wahl für die Goldschicht des Bronze-Silber-Gold-Setups.
+
+00:11:43.060 --> 00:11:46.140
+Ohne bei Haus ähnliche Geschwindigkeit, ohne eine vollständige Kopie der Daten zu erstellen.
+
+00:11:46.500 --> 00:11:48.060
+Dennoch hat der Import-Modus weiterhin seine Berechtigung.
+
+00:11:48.540 --> 00:11:53.920
+Wenn Sie als Self-Service-Analyst schnell eigene Spalten hinzufügen müssen oder Ihre Daten außerhalb von Fabrik liegen, kann der Import der einfache Weg sein.
+
+00:11:54.420 --> 00:11:55.880
+Direct Lake ist keine Regel, sondern Option.
+
+00:11:56.540 --> 00:11:59.040
+Nun zu den Grenzen, denn Anfänger verdienen diese ebenso wie die Vorteile.
+
+00:11:59.620 --> 00:12:01.680
+Die Grenzen beginnen bei den Kapazitätsbeschränkungen.
+
+00:12:01.680 --> 00:12:08.480
+Bei einer kleinen Fabrik-Kapazität von F2 bis F8 ist ein Direct-Date-Modell auf 3 GB Arbeitsspeicher und 300 Millionen Zahlen pro Tabelle begrenzt.
+
+00:12:08.820 --> 00:12:10.380
+Diese Zahlen steigen, wenn Sie mehr Kapazität erwerben.
+
+00:12:10.680 --> 00:12:14.300
+So ermöglicht eine F64-Kapazität 25 GB und 1,5 Milliarden.
+
+00:12:14.700 --> 00:12:16.660
+Sie müssen sie einplanen, anstatt sie später erst zu entdecken.
+
+00:12:17.200 --> 00:12:18.460
+Die Lizenzierung fügt ein weiterer Ebenen zu.
+
+00:12:19.060 --> 00:12:23.480
+Fabrik erfordert eine bezahlte Kapazität plus Benutzerlizenzen und hat eine Grenze bei F64.
+
+00:12:23.480 --> 00:12:29.180
+Bei Kapazitäten unterhalb von F64 benötigt jede Person, die Power BI-Inhalte ansieht, eine bezahlte Lizenz.
+
+00:12:30.000 --> 00:12:33.880
+Erst ab F64 können Personen mit einer kostenlosen Lizenz und einer Betrachterrolle diese einsehen.
+
+00:12:34.540 --> 00:12:36.680
+Ein weiteres Limit überrascht fast jeden, der es ausprobiert.
+
+00:12:37.480 --> 00:12:41.820
+Der SQL-Analyse-Endpunkt in einem Lakehouse ist schreibgeschützt, er kann Delta-Tabellen abfragen und lesen,
+
+00:12:41.820 --> 00:12:45.020
+aber nicht die vollständige Bearbeitung und Transformation leisten wie ein echtes Warehouse.
+
+00:12:45.720 --> 00:12:47.140
+Der letzte Punkt sind Aufwand und Kosten.
+
+00:12:47.720 --> 00:12:49.360
+Ein Lakehouse einzurichten kann kompliziert sein.
+
+00:12:49.740 --> 00:12:52.840
+Es bringt eine echte Lernkurve mit sich und Lakehouse ist teilweise ein Marketingbegriff,
+
+00:12:52.840 --> 00:12:55.420
+weshalb zwei Anbieter bei diesem Wort völlig unterschiedliches meinen können.
+
+00:12:56.680 --> 00:12:57.980
+Daher ist das Muster wichtiger als der Name.
+
+00:12:58.440 --> 00:13:02.240
+Ein Warehouse ist nach wie vor die einfachste richtige Antwort für sauberes, strukturiertes, SQL-basiertes Bericht.
+
+00:13:02.700 --> 00:13:07.060
+Ein Lakehouse rechtfertigt seinen Platz, wenn sie Skalierbarkeit, gemischte Datentypen und KI-Arbeiten im selben System benötigen.
+
+00:13:07.780 --> 00:13:09.140
+Die Kurzfassung und die Frage.
+
+00:13:09.500 --> 00:13:12.980
+Bringen wir jetzt alles zusammen, denn drei Begriffe sollten nicht einen ganzen Abend zur Klärung beanspruchen.
+
+00:13:13.700 --> 00:13:17.700
+Ein Data-Warehouse speichert saubere, strukturierte Daten und liefert schnelle, vertrauenswürdige Antworten,
+
+00:13:17.740 --> 00:13:19.760
+was es zum Zuhause für klassisches Berichtswesen macht.
+
+00:13:19.760 --> 00:13:24.080
+Ein Data-Lake speichert Rohdaten kostengünstig in jedem Format, was ihn flexibel und leicht zu befüllen macht,
+
+00:13:24.140 --> 00:13:26.420
+aber auch leicht zu befüllen macht, aber auch leicht zu ruinieren, wenn jemand etwas beschreibt.
+
+00:13:27.340 --> 00:13:29.880
+Ein Data-Lakehouse fügt die Regeln des Warehouse wieder über dem Lake hinzu,
+
+00:13:29.960 --> 00:13:31.860
+sodass sie Flexibilität und Ordnung am selben Ort erhalten.
+
+00:13:32.480 --> 00:13:36.160
+In der Microsoft-Welt sind ein Warehouse und ein Lakehouse zwei Elemente innerhalb von Fabric,
+
+00:13:36.220 --> 00:13:38.960
+die sich ein Delta-Format und eine Speicherschicht namens One Lake teilen.
+
+00:13:39.680 --> 00:13:43.520
+One Lake hält eine einzige Kopie der Daten vor und Verknüpfungen sowie Spiegelungen ermöglichen es,
+
+00:13:43.520 --> 00:13:46.340
+anderen Teams und sogar anderen Clouds teilzuhaben, ohne Duplikate zu erstellen.
+
+00:13:46.340 --> 00:13:49.940
+Der wichtigere Punkt ist, dass dies überhaupt keine drei konkurrierenden Produkte sind.
+
+00:13:50.360 --> 00:13:52.360
+Es sind drei Speichermuster und welche Sie benötigen,
+
+00:13:52.560 --> 00:13:54.320
+ergibt sich aus Ihren Daten und den Fähigkeiten Ihres Teams,
+
+00:13:54.640 --> 00:13:56.200
+nicht daraus, welcher Anbieter am lautesten geschrien hat.
+
+00:13:57.060 --> 00:13:58.280
+Hier ist also die Frage, die ich Ihnen mitgebe.
+
+00:13:58.840 --> 00:14:01.020
+Wenn Ihr Unternehmen morgen mit nur einem der drei beginnen müsste,
+
+00:14:01.120 --> 00:14:03.160
+welches wäre es und welche Daten drängen Sie dazu?
+
+00:14:03.800 --> 00:14:05.900
+Wenn Ihnen das Thema dadurch weniger einschüchternd vorkommt,
+
+00:14:06.020 --> 00:14:09.400
+abonnieren Sie N305 und 60FM, um die Werkzeuge und die Denkweise zu meistern,
+
+00:14:09.400 --> 00:14:10.480
+die die Zukunft der Arbeit prägen.
