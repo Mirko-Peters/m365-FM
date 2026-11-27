@@ -1,10 +1,10 @@
 ---
 title: "Windows 11 Enterprise multi-session: what is different"
 summary: "Windows 11 Enterprise multi-session lets several users sign in at once on one VM. It may run in production only in Azure Virtual Desktop, is not supported in personal host pools and is serviced differently."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [windows-enterprise-multi-session, azure-virtual-desktop]
 keypoints:

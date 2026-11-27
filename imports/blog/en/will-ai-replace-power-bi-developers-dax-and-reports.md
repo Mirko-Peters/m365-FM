@@ -1,10 +1,10 @@
 ---
 title: "Will AI Replace Power BI Developers? What Changes for DAX and Reports"
 summary: "What Microsoft documents that AI can do in Power BI today, from Copilot and DAX help to the Authoring MCP server, and which human tasks remain: data preparation, review, permissions and governance."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [power-bi, copilot-in-power-bi, dax, semantic-model]
 keypoints:
   - "Microsoft's documentation describes AI as help for authoring, DAX, summaries and chat. It makes no forecast about jobs or replacement."

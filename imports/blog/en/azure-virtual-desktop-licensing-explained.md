@@ -1,10 +1,10 @@
 ---
 title: "Azure Virtual Desktop licensing explained"
 summary: "For session hosts in Azure, Azure Virtual Desktop costs come from consumed Azure resources and the per-user license. Internal users need an eligible Windows, Microsoft 365 or RDS license; external customers need per-user access pricing."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [azure-virtual-desktop, microsoft-365-e3]
 keypoints:

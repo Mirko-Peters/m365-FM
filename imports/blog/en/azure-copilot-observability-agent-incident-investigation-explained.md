@@ -1,10 +1,10 @@
 ---
 title: "Azure Copilot Observability Agent: How Agentic Incident Investigation Works"
 summary: "What the Azure Copilot observability agent does in Azure Monitor: chat, deep investigation of an active incident, autonomous alert correlation in preview, telemetry prerequisites, regions and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [azure-copilot-agents, azure-monitor, microsoft-security-copilot]
 keypoints:
   - "The observability agent in Azure Monitor offers three things: chat with telemetry, deep investigation of an active incident and autonomous operations (preview)."

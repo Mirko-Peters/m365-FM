@@ -1,10 +1,10 @@
 ---
 title: "Why Microsoft 365 Feels Confusing and How to Structure It"
 summary: "Microsoft 365 is a bundle of apps, services, identity, device management and security under one name. Here is a simple structure based on Microsoft Learn to sort the pieces and the admin centers."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [microsoft-365, entra-id, microsoft-365-admin-center, governance]
 keypoints:
   - "Microsoft Learn describes Microsoft 365 for enterprise as three components: apps and cloud services, Windows 11 Enterprise, and device management with advanced security."

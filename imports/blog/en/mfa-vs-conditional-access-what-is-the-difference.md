@@ -1,10 +1,10 @@
 ---
 title: "MFA vs Conditional Access: What Is the Difference in Microsoft Entra?"
 summary: "MFA is a second sign-in check. Conditional Access is the policy engine that decides when to require it. Compare MFA, security defaults and Conditional Access, with license notes from Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [mfa, conditional-access, entra-id, security-defaults]
 keypoints:
   - "MFA is the verification step. Conditional Access is the policy engine that decides whether, when and for whom to require it."

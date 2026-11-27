@@ -1,10 +1,10 @@
 ---
 title: "How to configure QR-code watermarking for AVD session hosts"
 summary: "Watermarking is turned on per session host with the Enable watermarking policy in Intune (settings catalog) or Group Policy. This guide lists the prerequisites, the steps for both tools, the five options with their defaults, and how to look up a Connection ID afterwards."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-watermarking, azure-virtual-desktop]
 keypoints:

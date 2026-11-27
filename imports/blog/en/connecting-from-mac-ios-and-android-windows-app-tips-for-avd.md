@@ -1,10 +1,10 @@
 ---
 title: "Connecting from Mac, iOS and Android: Windows App tips for AVD"
 summary: "Windows App connects to Azure Virtual Desktop from macOS, iOS/iPadOS and Android/Chrome OS, but several features that work on Windows are missing there. This guide covers requirements, sign-in steps, the feature gaps that surprise users, and the security settings that differ on mobile."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [windows-app, azure-virtual-desktop]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Intune Compliance Policies: Common Mistakes and How to Fix Them"
 summary: "Intune compliance policy mistakes that Microsoft documents: the default for devices without a policy, no grace period, missing notifications, user versus device assignment, validity period and conflicting results."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [intune, device-compliance, conditional-access]
 keypoints:
   - "Devices with no compliance policy are treated as compliant by default. With Conditional Access, Microsoft recommends switching this to Not compliant."

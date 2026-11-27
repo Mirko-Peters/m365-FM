@@ -1,10 +1,10 @@
 ---
 title: "MCP vs API: Do Enterprises Really Need MCP? A Decision Guide"
 summary: "MCP does not replace APIs. Microsoft's Azure MCP security guide gives criteria for when an agent needs MCP and when a direct API is better, plus a cautious way to start."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [mcp, ai-agent, azure-api-management, governance]
 keypoints:
   - "The core question in Microsoft's guide is whether an agent must discover and reason about a capability at runtime, or whether the integration can be hardcoded."

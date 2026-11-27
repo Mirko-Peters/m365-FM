@@ -1,10 +1,10 @@
 ---
 title: "GitHub Copilot CLI: Getting Started with Instructions, Custom Agents and Skills"
 summary: "How to install and customize GitHub Copilot CLI: install options, login, custom instruction files, custom agents in .agent.md files, skills with SKILL.md, plus MCP, hooks and plugins as GitHub documents them."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [github-copilot-cli, github-copilot, mcp]
 keypoints:
   - "Copilot CLI needs an active Copilot plan. Via an organization, the Copilot CLI policy must be enabled. Windows needs PowerShell v6 or higher."

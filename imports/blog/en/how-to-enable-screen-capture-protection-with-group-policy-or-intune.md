@@ -1,10 +1,10 @@
 ---
 title: "How to enable screen capture protection with Group Policy or Intune"
 summary: "Enable the policy setting Enable screen capture protection on the session hosts, either in an Intune Settings catalog profile or in Group Policy after adding the Azure Virtual Desktop administrative template. Restart the session hosts, then connect in a new session to test."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-screen-capture-protection, azure-virtual-desktop]
 keypoints:

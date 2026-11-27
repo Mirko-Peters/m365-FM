@@ -1,10 +1,10 @@
 ---
 title: "Hybrid Joined PCs and Intune: How Co-Management Works"
 summary: "How hybrid joined PCs are managed with Intune through co-management: prerequisites, the two paths, the seven workloads, pilot versus full switching, and the mistakes Microsoft warns about."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [co-management, hybrid-entra-join, intune, configuration-manager]
 keypoints:
   - "Co-management means a Windows device is managed by Configuration Manager and Intune at the same time. It needs the Configuration Manager client and Intune enrollment."

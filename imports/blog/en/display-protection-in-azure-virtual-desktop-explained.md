@@ -1,10 +1,10 @@
 ---
 title: "Display Protection in Azure Virtual Desktop explained"
 summary: "Display Protection uses Microsoft PlayReady to encrypt remote session video and helps protect it from screen capture malware on the user's Windows device. Learn lists it as public preview, with strict client requirements."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-display-protection, azure-virtual-desktop]
 keypoints:

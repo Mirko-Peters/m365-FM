@@ -1,10 +1,10 @@
 ---
 title: "Business Central Quality Management: Setup, Templates and Inspection Rules"
 summary: "Business Central Quality Management from 2026 release wave 1: what it covers, how to install and set it up, permission sets, inspection generation rules, triggers and handling of failed goods."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [dynamics-365-business-central, quality-management-system]
 keypoints:
   - "Quality Management is a Microsoft extension, new in Business Central 2026 release wave 1. It installs automatically on new environments."

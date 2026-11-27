@@ -1,10 +1,10 @@
 ---
 title: "Screen capture protection in Azure Virtual Desktop: what it blocks and what it doesn't"
 summary: "Screen capture protection blocks remote content in screenshots and screen sharing on the client by using operating system features and APIs. It is not DRM, it does not stop a photo of the screen, and it does not control copy and paste or file transfer."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-screen-capture-protection, azure-virtual-desktop]
 keypoints:

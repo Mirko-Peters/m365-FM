@@ -1,10 +1,10 @@
 ---
 title: "Choosing a Display Protection level per host pool"
 summary: "Pick level 0, 1 or 2 per host pool by asking which endpoints connect to it and what you do when an endpoint cannot meet the level. Level 1 allows a software fallback, level 2 blocks every endpoint without hardware DRM, and the setting applies to the whole pool."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-display-protection, azure-virtual-desktop]
 keypoints:

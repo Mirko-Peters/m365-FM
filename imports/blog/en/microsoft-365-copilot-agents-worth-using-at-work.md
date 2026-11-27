@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 Copilot Agents Worth Using at Work: A Practical Guide"
 summary: "Which Microsoft-built Copilot agents exist, what each does, how to find and add them, and how to choose by task. Based on Microsoft Support and Learn, with no ranking that Microsoft does not publish."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [copilot, ai-agent, copilot-studio, copilot-agent-builder]
 keypoints:
   - "Microsoft lists three built-in agents in the Copilot left navigation: Analyst, Researcher and Visual Creator."

@@ -1,10 +1,10 @@
 ---
 title: "Power Automate MCP Server: How to Set It Up and What to Check"
 summary: "The Power Automate plugin from Microsoft's power-platform-skills repository connects Claude Code or GitHub Copilot CLI to flows through a FlowAgent MCP server. Setup steps, prerequisites and source gaps."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [power-automate, mcp, claude-code, governance]
 keypoints:
   - "Microsoft's power-platform-skills repository contains a Power Automate plugin for GitHub Copilot CLI and Claude Code, powered by the FlowAgent MCP server."

@@ -1,10 +1,10 @@
 ---
 title: "OneLake Catalog: Find and Govern Data in Microsoft Fabric"
 summary: "How the OneLake catalog works: the Explore, Govern and Secure tabs, filters, governance insights, recommended actions, and the limits that Microsoft Learn lists, with steps to open and use each tab."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [onelake, fabric, data-governance, fabric-workspace]
 keypoints:
   - "The OneLake catalog opens from the OneLake icon in the Fabric navigation pane and has three tabs: Explore, Govern and Secure."

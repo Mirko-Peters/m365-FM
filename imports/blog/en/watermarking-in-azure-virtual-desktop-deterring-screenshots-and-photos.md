@@ -1,10 +1,10 @@
 ---
 title: "Watermarking in Azure Virtual Desktop: deterring screenshots and photos"
 summary: "Watermarking overlays QR codes on Azure Virtual Desktop remote desktops. Each code carries a Connection ID or Device ID, so it deters photos of the screen and lets an admin trace a leaked image back to a session, but it does not block capture."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-watermarking, azure-virtual-desktop]
 keypoints:

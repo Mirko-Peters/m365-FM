@@ -1,10 +1,10 @@
 ---
 title: "Business Central MCP Server: What It Is, How to Configure It and Connect Clients"
 summary: "The Business Central MCP server explained: what it exposes, how admins create a configuration, which clients connect, the mcp.json for VS Code, authentication, limits and the planned pricing notice."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [dynamics-365-business-central, mcp, github-copilot, copilot-studio]
 keypoints:
   - "The Business Central MCP server exposes Business Central data and actions to MCP-compliant AI clients, always under the signed-in user's own permissions."

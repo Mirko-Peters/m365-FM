@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 Adoption Problems: Why Rollouts Stall and What Microsoft Recommends"
 summary: "Why Microsoft 365 adoption stalls and what Microsoft's own guidance says to do: stakeholders, champions, pilots with up to three scenarios, success measures, and reading Adoption Score in the admin center."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-06
+date: 2026-11-28
 topics: [microsoft-365, viva, copilot-adoption]
 keypoints:
   - "Microsoft's change management guidance says technology projects struggle when little attention goes to the human side of change."

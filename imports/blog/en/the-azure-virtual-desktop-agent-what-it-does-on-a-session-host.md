@@ -1,10 +1,10 @@
 ---
 title: "The Azure Virtual Desktop agent: what it does on a session host"
 summary: "The Azure Virtual Desktop agent is the software on each session host that connects the VM to the Azure Virtual Desktop service. This article explains what Learn says it does at registration, during a connection and during updates, and where an admin can read its state."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-28
 render: v2
 topics: [avd-agent, avd-session-host]
 keypoints:

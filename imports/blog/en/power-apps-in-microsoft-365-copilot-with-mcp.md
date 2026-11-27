@@ -1,10 +1,10 @@
 ---
 title: "Power Apps in Microsoft 365 Copilot with MCP: What Works Today"
 summary: "How MCP connects Power Apps and Microsoft 365 Copilot: the Power Apps MCP Server for agents, MCP app widgets for interactive UI, and the preview limits and permissions that Microsoft Learn documents."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-05
+date: 2026-11-28
 topics: [power-apps, mcp, copilot, copilot-studio]
 keypoints:
   - "The Power Apps MCP Server is in preview and gives agents three tools: log_for_review, request_assistance and invoke_data_entry."
