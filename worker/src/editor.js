@@ -13,6 +13,7 @@ import { cleanText, sha256hex } from "./util.js";
 import { limitTopics } from "./sponsor_extra.js";
 import { rejectPitch } from "./podcast.js";
 import { rejectVideo } from "./youtube.js";
+import { isHiddenPerson, hiddenPersonEids } from "./privacy.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => String(s || "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, n);
@@ -62,7 +63,10 @@ const A = {
       return { before: { status: it.status, prevLive: prev?.id || 0 }, after: { status: "live" } };
     },
     async reject(env, it) { await env.DB.prepare("UPDATE entity_rev SET status='rejected' WHERE id=?").bind(it.id).run(); return { before: { status: it.status }, after: { status: "rejected" } }; },
-    async undo(env, b, id, a) { return undoRev(env.DB, "entity_rev", b, id, a); },
+    async undo(env, b, id, a) {   // K41/B: eine Freigabe zuruecknehmen setzt die Fassung davor wieder live - nicht fuer eine verborgene Personen-Entitaet
+      if (a.status === "live" && b.prevLive) { const r = await env.DB.prepare("SELECT eid FROM entity_rev WHERE id=?").bind(id).first(); if (r && (await isHiddenPerson(env.DB, r.eid))) return false; }
+      return undoRev(env.DB, "entity_rev", b, id, a);
+    },
   },
   cert: {
     async load(db, id) { const [uid, eid] = String(id).split(":"); const r = await db.prepare("SELECT c.user_id,c.eid,c.year,c.url,k.status,k.created,u.name FROM cert_check k JOIN certs c ON c.user_id=k.user_id AND c.eid=k.eid JOIN users u ON u.id=c.user_id WHERE k.user_id=? AND k.eid=?").bind(+uid, eid || "").first(); return r && { ...r, id, title: `${r.eid}${r.year ? " · " + r.year : ""}`, body: r.url || "", ownerId: r.user_id, pending: r.status === "pending" }; },
@@ -139,6 +143,7 @@ export async function decide(env, user, { kind, id, action, reason = "", viaProp
     return { status: 200, body: { ok: true, proposed: true, proposal: pid } };
   }
   if (!A[kind][action]) return { status: 400, body: { error: "unsupported" } };
+  if (kind === "entity" && action === "approve" && (await isHiddenPerson(db, it.eid))) return { status: 409, body: { error: "hidden_person" } };   // K41/B: nichts fuer eine verborgene Personen-Entitaet live setzen
   if (!it.pending && action !== "hide" && !(legacy && roleOf(actor) === "admin" && (kind === "wiki" || kind === "entity"))) return { status: 409, body: { error: "not_pending" } };   // nur der Admin entscheidet ueber die alte Route erneut
   let r; try { r = await A[kind][action](env, it, txt(reason, 300), actor); } catch (e) { return { status: 500, body: { error: e.code || "server" } }; }
   const logId = await logEdit(db, actor, ACT[action], kind, id, { reason: viaProposal ? `${reason} (Empfehlung #${viaProposal})` : reason, before: r.before, after: r.after });
@@ -275,6 +280,7 @@ export async function revertTo(env, user, kind, id, revId, seen) {
     const t = kind === "wiki" ? "wiki_rev" : "entity_rev", cond = kind === "wiki" ? "term=? AND lang=?" : "eid=?", args = kind === "wiki" ? [v.it.term, v.it.lang] : [v.it.eid];
     const row = await db.prepare(`SELECT status,user_id FROM ${t} WHERE id=?`).bind(target.id).first();
     if (!row || row.status !== "old") return { status: 409, body: { error: "not_revertable" } };   // abgelehnte oder wartende Fassungen gehen nur ueber die Freigabe live
+    if (kind === "entity" && (await isHiddenPerson(db, v.it.eid))) return { status: 409, body: { error: "hidden_person" } };   // K41/B: keine fruehere Fassung einer verborgenen Personen-Entitaet live setzen
     if (role !== "admin" && row.user_id && Number(row.user_id) === Number(actor.id)) return { status: 403, body: { error: "own_content" } };   // nicht die eigene Fassung wieder live setzen
     await db.batch([db.prepare(`UPDATE ${t} SET status='old' WHERE ${cond} AND status='live'`).bind(...args), db.prepare(`UPDATE ${t} SET status='live' WHERE id=?`).bind(target.id)]);
     logItem = target.id;   // am Eintrag der jetzt live stehenden Revision: daraus liest revRole "von der Redaktion gesetzt"
@@ -316,12 +322,15 @@ async function queue(db, user, kind, lang) {
   const actor = await loadActor(db, user);
   const vis = out.filter((x) => inScope(actor, { topics: x.topics || [], lang: x.lang }));   // Fach-Editor: nur eigener Themenbereich; Eintraege ohne Thema nur fuer allgemeine Editoren
   out.length = 0; out.push(...vis);
+  // Runde 6: offene Vorschlaege zu verborgenen Personen-Entitaeten (Profil privat, gesperrt, geloescht) kennzeichnen; Freigeben geht nicht (409 hidden_person)
+  const hiddenP = out.some((x) => x.kind === "entity") ? await hiddenPersonEids(db) : new Set();
   const orgs = new Map(), ids = [...new Set(out.map((x) => x.authorId).filter(Boolean))];   // Firmen aller Autoren in wenigen Abfragen (eigene Firma)
   for (let i = 0; i < ids.length; i += 80) for (const r of (await db.prepare(`SELECT user_id,org_id FROM org_members WHERE status='active' AND user_id IN (${ids.slice(i, i + 80).map(() => "?").join(",")})`).bind(...ids.slice(i, i + 80)).all().catch(() => ({ results: [] }))).results || []) orgs.set(r.user_id, [...(orgs.get(r.user_id) || []), r.org_id]);
   for (const x of out) {   // je Aktion: do | propose | no (fuer die Schaltflaechen); Eigentuemer/Firma wirken ueber can()
     const ip = { ownerId: x.authorId, orgIds: orgs.get(x.authorId) || [], topics: x.topics || [], lang: x.lang }; x.actions = {};
     for (const a of KIND_ACTIONS[x.kind]) { const p = can(actor, ACT[a], ip); x.actions[a] = modeOf(p); }
     x.own = actor.id === x.authorId;
+    if (x.kind === "entity" && hiddenP.has(x.title)) { x.hiddenPerson = true; x.actions.approve = "no"; }
   }
   return out;
 }

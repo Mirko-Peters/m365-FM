@@ -477,6 +477,22 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
     if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
     if (/^ALTER TABLE lib_items ADD COLUMN (?:reviewed INTEGER NOT NULL DEFAULT 0|origin TEXT NOT NULL DEFAULT '')$/i.test(s)) continue;   // 0054: Kennzeichen "von der Redaktion geprueft" der Bibliothek, Spalte mit Standardwert; library.js legt sie zur Laufzeit nur an, wenn sie fehlt
+    if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0057: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
+    if (/^INSERT OR IGNORE INTO mig0057_backup\(tabelle, schluessel, wert, zeit\)\s+SELECT 'entity_claims', /i.test(s)) continue;   // 0057 (Runde 11): Sicherung vor dem Loeschen, UNIQUE (tabelle, schluessel) behaelt beim zweiten Lauf das erste Original
+    if (/^DELETE FROM entity_claims WHERE via IN \('owner', 'manual'\) AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0057: verwaiste Owner- und manuelle Ansprueche geloeschter Konten (Altbestand), idempotent
+    // 0058: Altbestand Adressen ohne Profil (Speaker-Eintraege, Blog-, Creator-Abos, Speaker-Identitaet) und Themen-Abos auf Merker geloeschter Konten;
+    // jede Anweisung trifft nur Zeilen mit einer Adresse ohne Profil bzw. Merker user_id 0 und aendert beim zweiten Lauf nichts (Test in datenschutz.test.mjs).
+    // Runde 9: Hilfstabelle mig0058_handle (Runde 12: nur noch die Adressen ohne Profil und ohne Firma) wird am Anfang geleert und am Ende entfernt
+    // Runde 10: dauerhafte Sicherung mig0058_backup - jede Originalzeile vor der Aenderung, UNIQUE (tabelle, schluessel) behaelt beim zweiten Lauf das erste Original
+    // Runde 12: nichts zieht mehr auf ein Konto um - nur Bindung loesen (Speaker, speaker_ref) bzw. Abos loeschen
+    if (/^(?:DELETE FROM|INSERT OR IGNORE INTO|UPDATE|DROP TABLE) mig0058_handle\b/i.test(s)
+      || /^INSERT OR IGNORE INTO mig0058_backup\(tabelle, schluessel, wert, zeit\)\s+SELECT /i.test(s)
+      || /^UPDATE speaker_ref SET handle = '' WHERE handle IN \(SELECT h FROM mig0058_handle\)$/i.test(s)
+      || /^DELETE FROM blog_follows WHERE handle IN \(SELECT h FROM mig0058_handle\)$/i.test(s)
+      || /^DELETE FROM (?:push_topics|email_topics|topic_queue) WHERE kind = 'creator' AND (?:sent = 0 AND )?topic_id IN \(SELECT h FROM mig0058_handle\)$/i.test(s)) continue;
+    if (/^UPDATE event_sessions SET speakers = \(\s+SELECT json_group_array\(json\(v\)\) FROM \(/i.test(s)
+      || /^DELETE FROM (?:push_topics|email_topics) WHERE kind = 'entity' AND topic_id IN \(SELECT eid FROM person_entity WHERE user_id = 0\)$/i.test(s)
+      || /^DELETE FROM mail_topic_follows WHERE eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));

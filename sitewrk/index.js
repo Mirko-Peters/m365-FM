@@ -835,7 +835,8 @@ const site = {
     if (fh === "bad") return plain(421, "Misdirected request");
     if (fh) return byodServe(request, env, url, fh);
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
-    // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
+    // gedacht (doppelte Inhalte, als entfernt markierte Seiten), die Mediadaten (mediakit/) nur per Formular. Nur diese Pfade sind hierher geroutet;
+    // Bilder (i/, og/) kommen weiter direkt aus R2.
     // x-m365-guard: zoneGet erkennt daran, dass ein Zonen-Abruf hier statt in R2 gelandet ist (dann heutiger Weg, nie als "fehlt" gewertet)
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600", "x-m365-guard": "1" } });
     if (SCANNER.test(url.pathname)) return new Response(request.method === "HEAD" ? null : "Not found", { status: 404, headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=86400" } });   // Scanner (s. SCANNER)

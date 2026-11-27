@@ -1,3 +1,4 @@
+import { hiddenPersonEids } from "./privacy.js";
 import { rawDb } from "./d1meter.js";
 import { rateLimit, sha256hex } from "./util.js";
 import { embed, queryVectors, rrf, upsertVectors, vectorId } from "./vectors.js";
@@ -49,9 +50,9 @@ async function ensureSearchFts(db) {
   catch (error) { ftsReady.delete(rawDb(db)); throw error; }
 }
 
-async function getJson(env, path) {
+async function getJson(env, path, cacheTtl = 600) {
   try {
-    const response = await fetch(env.SITE + path, { cf: { cacheTtl: 600 } });
+    const response = await fetch(env.SITE + path, { cf: { cacheTtl } });
     return response.ok ? await response.json() : null;
   } catch {
     return null;
@@ -147,7 +148,7 @@ export async function importSearchIndex(env) {
   }
 
   const siteOrigin = new URL(env.SITE).origin;
-  const docs = json.docs.map((doc) => normalizeDoc(doc, siteOrigin)).filter(Boolean);
+  const docs = await withoutBlockedEntities(db, await withoutHiddenPeople(db, json.docs.map((doc) => normalizeDoc(doc, siteOrigin)).filter(Boolean)), manifest, cycle);
   const existing = await currentRows(db, docs.map((doc) => doc.id));
   const statements = [];
   const timestamp = now();
@@ -197,6 +198,74 @@ export async function importSearchIndex(env) {
     return { part, changed, gone: missing.length, tokenizer };
   }
   return { part, changed, tokenizer };
+}
+
+// K45: Der Index kommt aus dem letzten Seitenbau. Bis zum naechsten Bau enthaelt er noch Profilseiten (alle Sprachen, auch Blog unter
+// /community/u/<h>/) und Personen-Entitaeten von Mitgliedern, die ihr Profil inzwischen privat gestellt oder geloescht haben oder gesperrt
+// wurden. privacy.js markiert diese sofort als entfernt; hier kommen sie nicht zurueck.
+const PROFILE_PATH = /\/community\/u\/([a-z0-9][a-z0-9-]{2,29})\//, ENTITY_PATH = /\/entity\/([a-z0-9-]{2,48})\/?$/;
+async function withoutHiddenPeople(db, docs) {
+  if (!docs.some((d) => PROFILE_PATH.test(d.url) || (d.type === "person" && ENTITY_PATH.test(new URL(d.url).pathname)))) return docs;
+  const pub = new Set(((await db.prepare("SELECT p.handle FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1 AND p.handle IS NOT NULL").all().catch(() => ({ results: [] }))).results || []).map((r) => r.handle));
+  const hidden = await hiddenPersonEids(db);
+  return docs.filter((d) => {
+    const m = PROFILE_PATH.exec(d.url); if (m && !pub.has(m[1])) return false;
+    const e = d.type === "person" && ENTITY_PATH.exec(new URL(d.url).pathname); return !(e && hidden.has(e[1]));
+  });
+}
+
+// K41/A: Sperrliste fuer Personen-Dokumente aus dem Suchindex des letzten Seitenbaus. Gesetzt bei der Admin-Freigabe eines Personen-Merkers
+// (entities.js releasePersonEntity), bei der Kontoloeschung (profiles.js deleteUserData: Adresse und Personen-Entitaeten) und beim Wechsel oder
+// Entfernen der Profil-Adresse (alte Adresse; profiles.js, mcp.js). Bis zum naechsten Seitenbau enthaelt der Index unter /community/u/<h>/ (alle
+// Sprachen) und /entity/<h>/ noch Name und Kurzzeile der alten Person - auch wenn die Adresse inzwischen einem anderen Mitglied gehoert oder es
+// den Merker uebernommen hat (profiles.js ownedEntity); withoutHiddenPeople prueft nur den heutigen Inhaber. Je Adresse/id ein meta-Eintrag
+// search_block:<h> mit den Suchindex-Durchlaeufen (Hash des Manifests wie cycle unten), die zum Zeitpunkt der Sperre veroeffentlicht bzw.
+// importiert waren, und der Sperrzeit. Aufgenommen werden die Dokumente erst aus einem Seitenbau, der seine Exporte NACH der Sperre geholt hat:
+// anderer Hash UND manifest.fetched (site_search.py: Zeitpunkt des Export-Abrufs am Anfang des Baus, site_fetch.data_time) nach der Sperre.
+// Ohne fetched bleibt gesperrt (build, das Ende des Baus, reicht nicht: ein Bau mit Exporten von vor der Sperre kann danach veroeffentlichen).
+export const SEARCH_BLOCK = "search_block:";
+const SEARCH_BLOCK_END = "search_block;";   // naechstes Zeichen nach ':' - Bereichsabfrage ueber den Primaerschluessel
+const BLOCK_ID = /^[a-z0-9-]{2,48}$/;
+async function searchBlockCycles(env) {
+  const cycles = new Set();
+  const manifest = await getJson(env, "/search/manifest.json", 0);
+  if (manifest) cycles.add(await sha256hex(JSON.stringify(manifest)));
+  const imported = (await meta(env.DB, "search_import_cycle").catch(() => null))?.v;
+  if (imported) cycles.add(imported);
+  return [...cycles];
+}
+export async function searchBlockStatement(env, eid, at, cycles = null) {
+  return env.DB.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(SEARCH_BLOCK + eid, JSON.stringify({ cycles: cycles || await searchBlockCycles(env), at }));
+}
+// Kontoloeschung, Adresswechsel: Sperre fuer alle Adressen/ids auf einmal (ein Manifest-Abruf, ein Batch)
+export async function blockSearchPeople(env, ids, at = now()) {
+  const list = [...new Set((ids || []).filter((h) => BLOCK_ID.test(h || "")))];
+  if (!list.length || !env?.DB) return;
+  const cycles = await searchBlockCycles(env);
+  await env.DB.batch(await Promise.all(list.map((h) => searchBlockStatement(env, h, at, cycles))));
+}
+
+export function searchBlockActive(block, manifest, cycle) {
+  const cycles = Array.isArray(block?.cycles) ? block.cycles : [], at = +block?.at || 0, fetched = Date.parse(manifest?.fetched || "") / 1000;
+  if (cycles.includes(cycle)) return true;
+  return !(Number.isFinite(fetched) && fetched > at);
+}
+
+async function withoutBlockedEntities(db, docs, manifest, cycle) {
+  const rows = (await db.prepare("SELECT k,v FROM meta WHERE k>=? AND k<?").bind(SEARCH_BLOCK, SEARCH_BLOCK_END).all().catch(() => ({ results: [] }))).results || [];
+  if (!rows.length) return docs;
+  const blocked = new Set(), old = [], limit = now() - 90 * 86400;
+  for (const row of rows) {
+    let block = null; try { block = JSON.parse(row.v); } catch { /* defekt: gesperrt lassen */ }
+    if (!block || searchBlockActive(block, manifest, cycle)) blocked.add(row.k.slice(SEARCH_BLOCK.length));
+    else if ((+block?.at || 0) < limit) old.push(row.k);   // laengst durch einen neuen Seitenbau ersetzt; Eintrag bleibt sonst (Rueckfall auf ein zwischengespeichertes altes Manifest)
+  }
+  if (old.length) await db.batch(old.map((k) => db.prepare("DELETE FROM meta WHERE k=?").bind(k)));
+  if (!blocked.size) return docs;
+  return docs.filter((d) => {
+    const e = ENTITY_PATH.exec(new URL(d.url).pathname); if (e && blocked.has(e[1])) return false;
+    const p = PROFILE_PATH.exec(d.url); return !(p && blocked.has(p[1]));   // Profilseiten der alten Adresse (alle Sprachen, auch Blog darunter)
+  });
 }
 
 function documentText(doc) {

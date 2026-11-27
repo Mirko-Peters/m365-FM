@@ -1,7 +1,9 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
+import { acctKeys, hiddenPersonEids, isHiddenPerson, HIDDEN_PERSON_SQL } from "./privacy.js";
 import { legacyRev } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
-import { cleanText, rateLimit } from "./util.js";
+import { audit, cleanText, rateLimit } from "./util.js";
+import { searchBlockStatement } from "./search.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
@@ -54,12 +56,63 @@ export async function entityMap(env) {
 async function loadEntityMap(env) {
   const base = new Map();
   if ((await source(env)) !== "db") for (const e of await siteEntities(env)) base.set(e.id, e);
-  const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [];
-  for (const r of rows) { try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }
+  const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [], hidden = await hiddenPersonEids(env.DB);
+  for (const r of rows) { if (hidden.has(r.eid)) continue; try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }   // K41: Personen-Entitaet eines privaten, gesperrten oder geloeschten Profils nie oeffentlich (MCP get_entity, search_entities ...)
+  for (const eid of hidden) base.delete(eid);   // auch nicht aus /entities.json des letzten Seitenbaus (enthaelt bis zum naechsten Bau noch die D1-Fassung)
   return base;
 }
 
 // Cron: neue Eintraege aus entities.json (Repo) in die Datenbank uebernehmen (nur IDs ohne live-Fassung; nichts wird ueberschrieben) - ersetzt den Knopf in der Verwaltung fuer den laufenden Betrieb
+const ENT_ID = /^[a-z0-9][a-z0-9-]{1,79}$/;
+const validEnt = (e) => !!(e && ENT_ID.test(e.id || "") && e.name && e.type);
+
+async function siteSrcEntities(env) {
+  try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) return (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
+  return [];
+}
+
+// K41: Der Merker einer geloeschten Personen-Entitaet (person_entity, user_id 0) bleibt dauerhaft - kein Cron hebt ihn auf. Eine automatische
+// Aufhebung, sobald dieselbe id redaktionell im Repo steht, holte die veraltete Profil-Fassung aus /entities.json und das alte Suchdokument
+// /entity/<id>/ aus dem Suchindex des letzten Seitenbaus zurueck. Aufheben nur ausdruecklich durch einen Admin (releasePersonEntity,
+// POST /api/admin/person-entity/release): nur mit gueltigem Eintrag in /entities-src.json (reine Repo-Fassung ohne D1). In EINEM db.batch:
+// alle Fassungen der id verwerfen (status 'rejected'), die Repo-Fassung als einzige live-Revision anlegen, alle Suchdokumente der Person
+// (/entity/<id>/ und Sprachfassungen) auf gone=1, Sperrliste fuer importSearchIndex (search.js searchBlockStatement: alte Dokumente erst aus
+// einem neuen Seitenbau), Merker weg. Verworfen wird alles, was es zur id noch gibt: deleteUserData hat bei der Loeschung alle Fassungen
+// entfernt, jede spaetere ist ungeprueft (sie entstand, waehrend die id verborgen war, etwa mit Name und Kurzzeile aus der veralteten
+// /entities.json). 'rejected' statt 'old': eine 'old'-Fassung koennte die Redaktion im Versionsverlauf wieder live setzen (editor.js revertTo).
+export async function releasePersonEntity(env, eid) {
+  const db = env.DB;
+  if (!ENT_ID.test(eid || "")) return { error: "bad_request", status: 400 };
+  const mark = await db.prepare("SELECT user_id FROM person_entity WHERE eid=?").bind(eid).first();
+  if (!mark) return { error: "not_marked", status: 404 };
+  if (mark.user_id) return { error: "owned", status: 409 };   // gehoert einem bestehenden Konto (ownedEntity): nichts aufzuheben
+  const entry = (await siteSrcEntities(env)).find((e) => e?.id === eid);
+  if (!validEnt(entry)) return { error: "not_in_repo", status: 409 };
+  const { id, ...data } = entry, t = now(), marked = "EXISTS (SELECT 1 FROM person_entity WHERE eid=? AND user_id=0)";
+  const res = await db.batch([
+    db.prepare(`UPDATE entity_rev SET status='rejected' WHERE eid=? AND status IN ('live','pending','old') AND ${marked}`).bind(id, eid),
+    db.prepare(`INSERT INTO entity_rev(eid,data,summary,user_id,status,created) SELECT ?,?,?,0,'live',? WHERE NOT EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live') AND ${marked}`)
+      .bind(id, JSON.stringify(data), "Übernahme aus entities.json (Freigabe Personen-Merker)", t, id, eid),
+    db.prepare("UPDATE search_doc SET gone=1 WHERE instr(url,?)>0").bind(`/entity/${eid}/`),
+    await searchBlockStatement(env, eid, t),
+    db.prepare("DELETE FROM person_entity WHERE eid=? AND user_id=0").bind(eid),
+  ]);
+  if (!res?.[4]?.meta?.changes) return { error: "conflict", status: 409 };   // dazwischen von einem Konto uebernommen: nichts verworfen oder angelegt (Bedingung oben)
+  if (!res?.[1]?.meta?.changes) return { error: "conflict", status: 409 };   // nicht erreichbar (live-Fassungen sind oben verworfen); nie 200 ohne die Repo-Fassung
+  return { ok: true, eid, live: true, discarded: res[0]?.meta?.changes || 0, search: "blocked_until_next_build" };
+}
+
+export async function handlePersonRelease(env, request, user, J, viaToken) {
+  if (request.method !== "POST") return J({ error: "method_not_allowed" }, 405);
+  if (viaToken || !user?.admin) return J({ error: "forbidden" }, 403);   // nur Admin mit Browser-Sitzung, nicht per KI-Token
+  if (request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
+  const b = await request.json().catch(() => null), eid = String(b?.eid || "").trim();
+  const r = await releasePersonEntity(env, eid);
+  if (r.error) return J({ error: r.error }, r.status);
+  await audit(env.DB, user.id, "person-entity-release", eid, `Repo-Fassung live, ${r.discarded} ungepruefte Fassung(en) verworfen`);
+  return J(r);
+}
+
 // D1-Kosten: der Cron laeuft alle 30 Minuten, entities.json und entities-src.json aendern sich nur mit einem Seitenbau. Beide Dateien (und
 // meta entity_source) gehen in einen Fingerabdruck (meta entities_src, srcmeta.js); ist er unveraendert, endet der Lauf ohne die Lesung aller
 // live-eids, ohne den Abgleich und ohne die Paarung. Gespeichert wird er nur, wenn der Lauf alles erledigt hat (Abgleich: alle Kandidaten
@@ -75,7 +128,10 @@ export async function importEntitiesFromSite(env, { daily = false } = {}) {
   const st = await sourceState(db, "entities_src", file.text + "\u0001" + (srcFile?.text || "") + "\u0001" + (await source(env)));
   if (st.same && !daily) return { skipped: "unveraendert", imported: 0 };
   const have = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || []).map((r) => r.eid));
-  const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id)), t = Math.floor(Date.now() / 1000);
+  // K41: Personen-Entitaet eines geloeschten (oder privaten) Profils nie aus dem letzten Seitenbau zurueckholen - /entities.json enthaelt bis zum
+  // naechsten Bau noch die D1-Fassung samt Name und Kurzzeile. Der Merker bleibt nach einer Kontoloeschung (siehe releasePersonEntity).
+  const hidden = await hiddenPersonEids(db);
+  const todo = list.filter((e) => validEnt(e) && !have.has(e.id) && !hidden.has(e.id)), t = Math.floor(Date.now() / 1000);
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
   if (todo.length) dropEntityMap(env);
@@ -141,7 +197,7 @@ export async function syncEntitiesFromSite(env, opts = {}) {
   const db = env.DB;
   if ((await source(env)) === "db") return { skipped: "entity_source=db" };
   let list = Array.isArray(opts.list) ? opts.list : [];   // importEntitiesFromSite gibt die schon geladene Datei mit
-  if (!list.length) try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) list = (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
+  if (!list.length) list = await siteSrcEntities(env);
   if (!list.length) return { skipped: "entities-src.json nicht erreichbar" };
   const last = +(await db.prepare("SELECT v FROM meta WHERE k='ent_src_n'").first().catch(() => null))?.v || 0;
   if (last && list.length < last * 0.8) return { skipped: `entities-src.json unvollstaendig (${list.length} statt ${last})` };   // Schutz vor einem halben Seitenbau
@@ -255,6 +311,7 @@ export async function handleEntity(env, request, url, path, user, J) {
 
   if (path === "/api/entity" && method === "GET") {
     const id = url.searchParams.get("id"); if (!ID.test(id || "")) return J({ error: "bad_request" }, 400);
+    if ((await hiddenPersonEids(db)).has(id)) return J({ error: "not_found" }, 404);   // K41: Personen-Entitaet eines nicht (mehr) oeffentlichen Profils
     const live = await liveOf(db, id);
     const hist = ((await db.prepare("SELECT r.id,r.data,r.summary,r.created,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.eid=? AND r.status IN ('live','old') ORDER BY r.created DESC LIMIT 15").bind(id).all()).results || []);
     let mine = null; if (user) mine = await db.prepare("SELECT id,data FROM entity_rev WHERE eid=? AND user_id=? AND status='pending' ORDER BY created DESC LIMIT 1").bind(id, user.id).first();
@@ -265,6 +322,7 @@ export async function handleEntity(env, request, url, path, user, J) {
     if (need()) return need();
     const b = await request.json().catch(() => ({})), id = String(b.id || "");
     if (!ID.test(id)) return J({ error: "bad_id" }, 400);
+    if (await isHiddenPerson(db, id)) return J({ error: "not_found" }, 404);   // K41/B: wie GET - keine Fassung (live oder Vorschlag) fuer eine verborgene Personen-Entitaet
     if (!(await rateLimit(db, `ent:h:${user.id}`, 8, 3600)) || !(await rateLimit(db, `ent:d:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
     const v = await validate(env, id, b.data || {}); if (v.err) return J({ error: v.err }, 400);
     const dup = await findDuplicate(env, id, v.data); if (dup) return J({ error: "duplicate", id: dup }, 409);   // Branche/Job: gleicher normalisierter Name oder Alias existiert schon
@@ -295,13 +353,19 @@ export async function handleEntity(env, request, url, path, user, J) {
     const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data, { requireOwner: true }).catch(() => null) : null;
     return J({ ok: true, status: "pending", ...(pair ? { company: pair.handle, owner: pair.owner } : {}) });
   }
-  if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
+  if (path === "/api/entity/tr" && method === "GET") { const items = await entityTranslations(env.DB); for (const eid of await hiddenPersonEids(db)) delete items[eid]; return J({ items }, 200, { "cache-control": "public, max-age=300" }); }   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {
     // src: Herkunft der live-Fassung (seed = Uebernahme aus entities.json, ai = KI-Entwurf, human = von einem Menschen veraendert, owned = selbst verwaltet); h: Hash von desc/long/faq (Schutz in /api/internal/entity-fill)
     // aif: Felder (desc.en, long.de ...), deren Wert noch genau der eines KI-Entwurfs ist - der Seitenbau kennzeichnet sie als KI-Text
-    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live'").all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
+    const rows = (await db.prepare(`SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live' AND r.eid NOT IN (${HIDDEN_PERSON_SQL})`).all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
     const items = [];
-    for (const r of rows) { const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif }); }
+    // pe: Personen-Entitaet aus einem Profil (person_entity, ownedEntity) - der Seitenbau baut sie aus einer Cache-Fassung nur, wenn das Profil im
+    // frischen Profil-Export oeffentlich ist und der Konto-Schluessel ak passt (site_fetch.scrub, privacy.js acctKeys; Runde 8)
+    const pe = new Map(((await db.prepare("SELECT eid,user_id FROM person_entity WHERE user_id>0").all().catch(() => ({ results: [] }))).results || []).map((r) => [r.eid, r.user_id])), ak = await acctKeys(env);
+    for (const r of rows) {
+      const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)), k = pe.has(r.eid) ? await ak(pe.get(r.eid), r.eid) : undefined;
+      items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif, pe: pe.has(r.eid), ...(k ? { ak: k } : {}) });
+    }
     return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path.startsWith("/api/admin/entity")) {

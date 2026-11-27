@@ -297,7 +297,7 @@ def booking_on():
     return slot_cfg().get("booking") is True
 
 
-DEFAULT_SKIP = ["/community/", "/seo/", "/callback/", "/login/", "/account/", "/admin/", "/impressum/", "/datenschutz/", "/privacy/", "/legal/",
+DEFAULT_SKIP = ["/community/", "/seo/", "/callback/", "/login/", "/account/", "/admin/", "/impressum/", "/datenschutz/", "/privacy/", "/legal/", "/nutzungsbedingungen/", "/terms/",
                 "/accessibility/", "/live/", "/404.html", "/sponsor/", "/services/", "/for/", "/i-want-to/", "/media-kit/", "/m365con/sponsor/"]
 DEFAULT_ALLOW = [r"^/(?:[a-z]{2}/)?community/u/[^/]+/blog/[^/]+/$"]   # Blogbeitraege liegen unter /community/, sind aber Inhaltsseiten
 

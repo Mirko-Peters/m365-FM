@@ -1,3 +1,4 @@
+import { invalidateProfileExport } from "./privacy.js";
 import { cleanText, rateLimit } from "./util.js";
 import { goodHost } from "./profiles.js";
 import { describeSource, fetchSourceItems, ingestItems, notifyFound, reviewAction, dropPosts, trustedMember, ogOnly, linkedInUrl, ctypeOf, summarize, entryKindOf,
@@ -61,11 +62,7 @@ async function ensureContributionColumns(db) {
   await db.prepare("CREATE TABLE IF NOT EXISTS contribution_ignored (user_id INTEGER NOT NULL, url TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(user_id,url))").run();
 }
 
-// Oeffentliche Profile kommen aus einem Zwischenspeicher (Cron alle 30 Minuten). Wird etwas Oeffentliches privat, verborgen oder geloescht,
-// verwerfen wir ihn, damit der naechste Seitenbau es nicht mehr zeigt.
-async function invalidateProfileExport(db) {
-  await db.prepare("DELETE FROM export_cache WHERE k='profiles'").run().catch(() => {});
-}
+// invalidateProfileExport (privacy.js): Wird etwas Oeffentliches privat, verborgen oder geloescht, verwerfen wir den Profil-Zwischenspeicher sofort.
 
 function safeUrl(value) {
   try {

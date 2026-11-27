@@ -7,7 +7,7 @@ export { haikuJson } from "./util.js";
 const WAIT = 24 * 3600, WINDOW = 30 * 24 * 3600, DAILY_CAP = 150, PER_RUN = 4;
 const LANGS = { en: "English", de: "German", fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", ja: "Japanese", ko: "Korean" };
 const KINDS = {
-  blog: { table: "blog_posts", sel: "id,lang,title,summary,body", where: "status='live' AND html='' AND published>0", t: "published", f: ["title", "summary", "body"] },
+  blog: { table: "blog_posts", sel: "id,lang,title,summary,body", where: "status='live' AND html='' AND published>0 AND user_id>0", t: "published", f: ["title", "summary", "body"] },
   podcast: { table: "pod_episodes", sel: "id,lang,title,description AS summary", where: "published>0", t: "published", f: ["title", "summary"] },
   video: { table: "yt_videos", sel: "id,lang,title,description AS summary", where: "published>0", t: "published", f: ["title", "summary"] },
 };
@@ -61,11 +61,11 @@ export async function autoTranslateItems(env) {
 export async function translatedBlogItems(db) {
   try {
     const rows = (await db.prepare(
-      `SELECT x.item_id,x.lang,x.title,x.summary,x.body,b.slug,b.lang src_lang,b.topics,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
+      `SELECT x.item_id,x.lang,x.title,x.summary,x.body,b.slug,b.lang src_lang,b.topics,b.created,b.published,b.updated,p.handle,u.name,b.user_id,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
        FROM item_tr x JOIN blog_posts b ON b.id=x.item_id AND b.status='live' JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE x.kind='blog' ORDER BY b.published DESC LIMIT 2000`).all()).results || [];
     return rows.map((r) => ({ id: 1000000000 + r.item_id * 100 + Object.keys(LANGS).indexOf(r.lang), slug: r.slug, title: r.title, summary: r.summary, body: r.body, lang: r.lang, src_lang: r.src_lang, ai_tr: true,
-      topics: JSON.parse(r.topics || "[]"), keypoints: [], faq: [], created: r.created, published: r.published, updated: r.updated, has_html: 0, handle: r.handle, name: r.name, votes: r.votes, coauthors: [] }));
+      topics: JSON.parse(r.topics || "[]"), keypoints: [], faq: [], created: r.created, published: r.published, updated: r.updated, has_html: 0, handle: r.handle, name: r.name, user_id: r.user_id, votes: r.votes, coauthors: [] }));   // user_id: blog.js ersetzt es durch ak
   } catch { return []; }
 }
 

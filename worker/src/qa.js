@@ -3,6 +3,7 @@ import { cleanText, esc, rateLimit } from "./util.js";
 import { knownIds } from "./entities.js";
 import { notify } from "./mail.js";
 import { gate, logEdit } from "./perm.js";
+import { HIDDEN_PERSON_SQL, isHiddenPerson, acctKeys } from "./privacy.js";
 import { cacheEnv } from "./staging.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
@@ -11,7 +12,7 @@ const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\
 const MIN_VOTES = 2;   // ohne Annahme durch Eigentuemer/Redaktion braucht eine Antwort so viele Stimmen, um in der FAQ-Box zu erscheinen
 
 export async function askQuestion(env, user, eid, q, lang) {
-  if (!ID.test(eid || "") || !(await knownIds(env)).has(eid)) return { error: "not_found" };
+  if (!ID.test(eid || "") || !(await knownIds(env)).has(eid) || (await isHiddenPerson(env.DB, eid))) return { error: "not_found" };   // Runde 6: keine Fragen zu verborgenen Personen
   q = txt(q, 200); if (q.length < 10) return { error: "too_short" };
   if (!/[?？]$/.test(q)) q += "?";
   if (!(await rateLimit(env.DB, `qa:q:${user.id}`, 5, 86400))) return { error: "rate_limit" };
@@ -19,7 +20,7 @@ export async function askQuestion(env, user, eid, q, lang) {
   return { ok: true, id: r.meta?.last_row_id };
 }
 export async function answerQuestion(env, user, qid, a) {
-  const q = await env.DB.prepare("SELECT id,user_id,eid,lang FROM entity_q WHERE id=? AND hidden=0").bind(+qid).first(); if (!q) return { error: "not_found" };
+  const q = await env.DB.prepare(`SELECT id,user_id,eid,lang FROM entity_q WHERE id=? AND hidden=0 AND eid NOT IN (${HIDDEN_PERSON_SQL})`).bind(+qid).first(); if (!q) return { error: "not_found" };
   a = txt(a, 600); if (a.length < 20) return { error: "too_short" };
   if (!(await rateLimit(env.DB, `qa:a:${user.id}`, 10, 86400))) return { error: "rate_limit" };
   const r = await env.DB.prepare("INSERT INTO entity_a(q_id,user_id,a,created) VALUES(?,?,?,?)").bind(q.id, user.id, a, now()).run();
@@ -53,7 +54,7 @@ export async function handleQa(env, request, url, path, user, J) {
       const hit = await cache.match(qaKey(env, eid)).catch(() => null), data = hit ? await hit.json().catch(() => null) : null;
       if (data) return J(data);
     }
-    const qs = (await db.prepare("SELECT q.id,q.q,q.lang,q.created,q.user_id,COALESCE(u.name,'') name FROM entity_q q LEFT JOIN users u ON u.id=q.user_id AND u.banned=0 WHERE q.eid=? AND q.hidden=0 ORDER BY q.created DESC LIMIT 30").bind(eid).all()).results || [];
+    const qs = (await db.prepare(`SELECT q.id,q.q,q.lang,q.created,q.user_id,COALESCE(u.name,'') name FROM entity_q q LEFT JOIN users u ON u.id=q.user_id AND u.banned=0 WHERE q.eid=? AND q.hidden=0 AND q.eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY q.created DESC LIMIT 30`).bind(eid).all()).results || [];   // Runde 6: verborgene Personen ohne Q&A
     const byQ = new Map(qs.map((q) => [q.id, []]));
     if (qs.length) {
       const rows = (await db.prepare("SELECT a.id,a.q_id,a.a,a.created,a.accepted,a.user_id,COALESCE(u.name,'') name,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes,(SELECT COUNT(*) FROM entity_a_votes v2 WHERE v2.a_id=a.id AND v2.user_id=?) me FROM entity_a a LEFT JOIN users u ON u.id=a.user_id AND u.banned=0 WHERE a.q_id IN (SELECT value FROM json_each(?)) AND a.hidden=0 ORDER BY a.q_id, a.accepted DESC, votes DESC, a.created, a.id").bind(user?.id || 0, JSON.stringify(qs.map((q) => q.id))).all()).results || [];
@@ -65,9 +66,17 @@ export async function handleQa(env, request, url, path, user, J) {
     return J(data);
   }
   if (path === "/api/qa/export" && method === "GET") {   // Top-Antworten fuer die FAQ-Box (statischer Build)
-    const rows = (await db.prepare(`SELECT q.eid,q.q,q.lang,a.a,a.accepted,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes FROM entity_q q JOIN entity_a a ON a.q_id=q.id WHERE q.hidden=0 AND a.hidden=0 ORDER BY q.id, a.accepted DESC, votes DESC`).all()).results || [];
+    const rows = (await db.prepare(`SELECT q.eid,q.q,q.lang,a.a,a.accepted,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes FROM entity_q q JOIN entity_a a ON a.q_id=q.id WHERE q.hidden=0 AND a.hidden=0 AND q.eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY q.id, a.accepted DESC, votes DESC`).all()).results || [];
     const seen = new Set(), items = [];
-    for (const r of rows) { const k = r.eid + "|" + r.q; if (seen.has(k)) continue; seen.add(k); if (r.accepted || r.votes >= MIN_VOTES) items.push({ eid: r.eid, q: r.q, a: r.a, lang: r.lang }); }
+    // Runde 9: Fragen zu Personen-Entitaeten aus einem Profil (person_entity) tragen den Konto-Schluessel ak des Inhabers (privacy.js acctKeys, eid =
+    // Adresse) - site_fetch.scrub verwirft damit Cache-Fassungen, wenn die Adresse inzwischen ein anderes Konto fuehrt
+    const pe = new Map(((await db.prepare("SELECT eid,user_id FROM person_entity WHERE user_id>0").all().catch(() => ({ results: [] }))).results || []).map((r) => [r.eid, r.user_id])), ak = await acctKeys(env);
+    for (const r of rows) {
+      const k = r.eid + "|" + r.q; if (seen.has(k)) continue; seen.add(k);
+      if (!(r.accepted || r.votes >= MIN_VOTES)) continue;
+      const key = pe.has(r.eid) ? await ak(pe.get(r.eid), r.eid) : undefined;
+      items.push({ eid: r.eid, q: r.q, a: r.a, lang: r.lang, ...(key ? { ak: key } : {}) });
+    }
     return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (!user) return J({ error: "login" }, 401);

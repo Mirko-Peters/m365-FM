@@ -1,5 +1,6 @@
 // Events (Veranstalter), Sessions mit Speakern, Sponsoren-Suche fuer Veranstalter
 import { mailReady, sendMail } from "./mailer.js";
+import { acctKeys, withAcctKeys, anonSpeaker, isFormer } from "./privacy.js";
 import { ownedEntity } from "./profiles.js";
 import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
@@ -79,17 +80,23 @@ const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) =
 // Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten,
 // ebenso die Kennungen aus dem Import (sz = Sessionize-Kennung, r = Speaker-Identitaet): ohne sie koennte der naechste Abgleich einen in der Quelle
 // zurueckgezogenen Speaker nicht mehr entfernen, sobald der Veranstalter irgendein Feld der Session im Formular gespeichert hat.
+// Anonymisierte Eintraege (geloeschtes Konto, privacy.js anonSpeaker) bleiben anonym: in der Reihenfolge der bisherigen Liste uebernommen, ohne Suche
+// nach einem Profil oder einer Entitaet mit dem Namen "Former member" (sonst bekaeme ein Mitglied mit diesem Anzeigenamen den Eintrag). Eintraege
+// mit uid (Adresse entfernt, privacy.js releaseHandleOps) behalten die Bindung an ihr Konto und werden nicht per Name mit einem Profil verknuepft.
 async function speakersCheck(db, list, prev, selfHandle) {
-  const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x])), byName = new Map((prev || []).filter((x) => x.sz || x.r).map((x) => [x.n, x]));
+  const out = [], old = new Map((prev || []).filter((x) => !x?.anon).map((x) => [x.h || x.n, x])), byName = new Map((prev || []).filter((x) => x.sz || x.r).map((x) => [x.n, x]));
+  const anonPrev = (prev || []).filter((x) => x?.anon);
   const ids = (k, n) => { const x = k?.sz || k?.r ? k : byName.get(n); return { ...(x?.sz ? { sz: x.sz } : {}), ...(x?.r ? { r: x.r } : {}) }; };
   for (const s of (Array.isArray(list) ? list : []).slice(0, 8)) {
     const n = txt(s?.n, 80); let h = String(s?.h || "").toLowerCase().trim(), e = String(s?.e || "").toLowerCase().trim();
+    if (s?.anon || isFormer(n)) { out.push(anonSpeaker(anonPrev.shift() || { s: "confirmed" })); continue; }
     if (e && !EID.test(e)) return null;
-    if (!h && n.length >= 3) {   // Speaker existiert schon als oeffentliches Profil (eindeutiger Name)? Dann direkt verknuepfen, er bestaetigt in seinem Profil
+    const bound = !h && old.get(n)?.uid;
+    if (!h && n.length >= 3 && !bound) {   // Speaker existiert schon als oeffentliches Profil (eindeutiger Name)? Dann direkt verknuepfen, er bestaetigt in seinem Profil
       const m = (await db.prepare("SELECT p.handle FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.public=1 AND p.handle IS NOT NULL AND lower(u.name)=lower(?) LIMIT 2").bind(n).all()).results || [];
       if (m.length === 1) h = m[0].handle;
     }
-    if (!e && n.length >= 3) {
+    if (!e && n.length >= 3 && !bound) {
       const pe = (await db.prepare("SELECT eid FROM entity_rev WHERE status='live' AND json_extract(data,'$.type')='person' AND lower(json_extract(data,'$.name'))=lower(?) LIMIT 2").bind(n).all()).results || [];
       if (pe.length === 1) e = pe[0].eid;
     }
@@ -99,7 +106,7 @@ async function speakersCheck(db, list, prev, selfHandle) {
       const p = await db.prepare("SELECT u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle=? AND p.public=1").bind(h).first();
       if (!p) return null;
       out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited", ...ids(keep, keep?.n || n) });
-    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }), ...ids(keep, n) });
+    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }), ...(keep?.uid ? { uid: keep.uid } : {}), ...ids(keep, n) });
   }
   return out;
 }
@@ -159,6 +166,21 @@ export async function claimLinkedinEntity(env, user, info, eid) {
   }
   return { status };
 }
+// Oeffentlicher Events-Export (Runde 8): Speaker mit Profil-Adresse und Veranstalter-Profil tragen den Konto-Schluessel ak (privacy.js acctKeys) des
+// Kontos, das die Adresse jetzt fuehrt. Kommt der Export beim Seitenbau aus data/cache, zeigt site_fetch.scrub einen Eintrag nur mit Name und Link,
+// wenn Adresse und Schluessel zum frischen Profil-Export passen (sonst "Former member" ohne Link).
+async function withEventAcctKeys(env, evs) {
+  const hs = new Set();
+  for (const ev of evs) { if (ev.organizer?.kind === "u" && ev.organizer.handle) hs.add(ev.organizer.handle); for (const s of ev.sessions || []) for (const x of s.speakers || []) if (x.h) hs.add(x.h); }
+  if (!hs.size) return evs;
+  const uid = new Map(((await env.DB.prepare("SELECT handle,user_id FROM profiles WHERE handle IN (SELECT value FROM json_each(?))").bind(JSON.stringify([...hs])).all()).results || []).map((r) => [r.handle, r.user_id]));
+  const ak = await acctKeys(env), key = async (h) => (uid.has(h) ? await ak(uid.get(h), h) : undefined);
+  for (const ev of evs) {
+    if (ev.organizer?.kind === "u" && ev.organizer.handle) { const k = await key(ev.organizer.handle); if (k) ev.organizer.ak = k; }
+    for (const s of ev.sessions || []) s.speakers = await Promise.all((s.speakers || []).map(async (x) => { const k = x.h ? await key(x.h) : undefined; return k ? { ...x, ak: k } : x; }));
+  }
+  return evs;
+}
 const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []).map(({ email, ...x }) => x) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
 // Ansichten vieler Events mit fester Zahl an Abfragen (je 50 Events hoechstens sieben), nicht mehreren je Event: der Export aller oeffentlichen Events
 // bleibt so auch mit Hunderten importierter Events weit unter der Subrequest-Grenze eines Aufrufs.
@@ -168,7 +190,8 @@ async function evViews(db, evs, withPending) {
   for (let i = 0; i < evs.length; i += 50) {
     const part = evs.slice(i, i + 50), ids = JSON.stringify(part.map((e) => e.id)), oid = [...new Set(part.map((e) => e.org_id).filter(Boolean))], uid = [...new Set(part.map((e) => e.owner_id).filter(Boolean))];
     const orgs = new Map((oid.length ? await all(`SELECT id,handle,name,public FROM orgs WHERE id ${IN}`, JSON.stringify(oid)) : []).map((o) => [o.id, o]));
-    const owners = new Map((uid.length ? await all(`SELECT u.id,u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id ${IN}`, JSON.stringify(uid)) : []).map((u) => [u.id, u]));
+    // K43: ein gesperrtes Konto erscheint nicht als Veranstalter (weder Name noch Profil-Adresse)
+    const owners = new Map((uid.length ? await all(`SELECT u.id,u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id ${IN} AND u.banned=0`, JSON.stringify(uid)) : []).map((u) => [u.id, u]));
     const sess = group(await all(`SELECT * FROM event_sessions WHERE event_id ${IN} AND merged_into=0 ${withPending ? "" : "AND status='live' "}ORDER BY start,id`, ids), "event_id");
     const partners = group(await all(`SELECT p.event_id,p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id ${IN} AND p.status='confirmed' ORDER BY p.created`, ids), "event_id");
     const asked = withPending ? group(await all(`SELECT a.event_id,o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id ${IN}`, ids), "event_id") : null;
@@ -299,9 +322,9 @@ export function similarName(a, b) {
   if (lev(fx, fy) > (Math.min(fx.length, fy.length) >= 5 ? 1 : 0)) return false;
   return lx === ly || (lx.length === 1 && ly[0] === lx) || (ly.length === 1 && lx[0] === ly) || (Math.min(lx.length, ly.length) >= 5 && lev(lx, ly) <= 1);
 }
-async function speakerMatches(db, me) {
+async function speakerMatches(db, me, uid = 0) {   // uid: nur eigene an das Konto gebundene Eintraege (privacy.js releaseHandleOps)
   const rows = (await db.prepare("SELECT s.speakers,e.title ev FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND s.speakers LIKE '%\"n\":%' AND e.public=1 LIMIT 3000").all()).results || [], by = new Map();
-  for (const r of rows) { let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } for (const x of sp) if (x.n && !x.h && similarName(me.name, x.n)) { const o = by.get(x.n) || { name: x.n, sessions: 0, events: new Set() }; o.sessions++; o.events.add(r.ev); by.set(x.n, o); } }
+  for (const r of rows) { let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } for (const x of sp) if (x.n && !x.h && !x.anon && (!x.uid || x.uid === uid) && similarName(me.name, x.n)) { const o = by.get(x.n) || { name: x.n, sessions: 0, events: new Set() }; o.sessions++; o.events.add(r.ev); by.set(x.n, o); } }
   return [...by.values()].map((o) => ({ name: o.name, sessions: o.sessions, events: [...o.events].slice(0, 4) }));
 }
 export async function handleEvents(env, request, url, path, user, J) {
@@ -320,7 +343,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/events/export" && method === "GET") {
     const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY unclaimed,start DESC LIMIT 300").all()).results || [];   // von Mitgliedern gepflegte Events zuerst: importierte verdraengen sie nie aus dem Export (und damit von der Seite)
-    return J({ events: await evViews(db, evs, false) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ events: await withEventAcctKeys(env, await evViews(db, evs, false)) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();
@@ -431,7 +454,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (m[2] === "attendees" && method === "GET") {
       const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
       const wl = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='waitlist'").bind(ev.id).first()).n;
-      const vis = (await db.prepare("SELECT u.name,p.handle FROM event_attendees a JOIN users u ON u.id=a.user_id JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE a.event_id=? AND a.status='going' AND a.visible=1 ORDER BY a.created LIMIT 200").bind(ev.id).all()).results || [];
+      const vis = (await db.prepare("SELECT u.name,p.handle FROM event_attendees a JOIN users u ON u.id=a.user_id AND u.banned=0 JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE a.event_id=? AND a.status='going' AND a.visible=1 ORDER BY a.created LIMIT 200").bind(ev.id).all()).results || [];
       const me = user ? await db.prepare("SELECT status,visible FROM event_attendees WHERE event_id=? AND user_id=?").bind(ev.id, user.id).first() : null;
       return J({ transfer: !!TRANSFER[ev.handle], going, waitlist: wl, capacity: cap, full: cap > 0 && going >= cap, visible: vis.map((r) => ({ name: r.name, handle: r.handle })), me: me ? { status: me.status, visible: !!me.visible } : null, can_edit: user ? await canManage(db, user, ev, "edit") : false }, 200, { "cache-control": "no-store" });
     }
@@ -503,7 +526,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/team$/))) {
     const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     if (method === "GET") {
-      const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
+      const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 AND u.banned=0 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
       const mine = need() ? false : await canManage(db, user, ev, "roles");
       return J({ roles: Object.keys(EVENT_ROLES), team: rows.filter((r) => mine || r.handle).map((r) => ({ role: r.role, name: r.name, handle: r.handle || "", ...(mine ? { uid: r.user_id } : {}) })), can_edit: mine });
     }
@@ -543,17 +566,18 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1 AND p.handle IS NOT NULL").bind(user.id).first();
     if (!me) return J({ suggestions: [] });
-    return J({ suggestions: await speakerMatches(db, me) });
+    return J({ suggestions: await speakerMatches(db, me, user.id) });
   }
   if (path === "/api/speaker/claim" && method === "POST") {   // Nutzer bestaetigt: "das bin ich" -> Eintrag wird mit dem Profil verknuepft (Speaker-Anfrage, bestaetigt der Nutzer selbst)
     if (need()) return need();
     const b = await body(), me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1 AND p.handle IS NOT NULL").bind(user.id).first();
     if (!me) return J({ error: "need_profile" }, 400);
-    const ok = (await speakerMatches(db, me)).find((x) => x.name === String(b.name || "")); if (!ok) return J({ error: "not_found" }, 404);
+    const ok = (await speakerMatches(db, me, user.id)).find((x) => x.name === String(b.name || "")); if (!ok) return J({ error: "not_found" }, 404);
     let n = 0, ops = [];
     for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE merged_into=0 AND speakers LIKE ?").bind(`%"n":${JSON.stringify(ok.name).slice(0, -1)}"%`).all()).results || []) {
       let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } let ch = false;
-      for (const x of sp) if (x.n === ok.name && !x.h) { if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = me.handle; x.s = "invited"; ch = true; n++; }
+      for (const x of sp) if (x.n === ok.name && !x.h && !x.anon && (!x.uid || x.uid === user.id)) {   // anonymisierte Eintraege (geloeschtes Konto, privacy.js) beansprucht niemand, an ein Konto gebundene nur dieses
+        if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; delete x.uid; x.h = me.handle; x.s = "invited"; ch = true; n++; }
       if (ch) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id));
     }
     if (ops.length) await db.batch(ops);
@@ -595,7 +619,9 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const b = await body(), pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ error: "need_profile" }, 409);
     const se = await db.prepare("SELECT id,speakers FROM event_sessions WHERE id=?").bind(+b.id).first(); if (!se) return J({ error: "not_found" }, 404);
-    const sp = parse(se.speakers, []).map((x) => (x.h === pr.handle ? { ...x, s: b.ok ? "confirmed" : "declined" } : x));
+    const old = parse(se.speakers, []);
+    if (!old.some((x) => x.h === pr.handle && x.s === "invited")) return J({ error: "not_pending" }, 409);   // nur offene Anfragen (wie MCP respond_speaker_request); eine abgelehnte wird nicht nachtraeglich bestaetigt
+    const sp = old.map((x) => (x.h === pr.handle && x.s === "invited" ? { ...x, s: b.ok ? "confirmed" : "declined" } : x));
     await db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id).run();
     return J({ ok: true });
   }
@@ -625,8 +651,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     const ok = await claimEntity(db, eid, user.id, "manual"); return ok ? J({ ok: true }) : J({ error: "claimed" }, 409);
   }
   if (path === "/api/entity/claims" && method === "GET") {
-    const rows = (await db.prepare("SELECT c.eid,p.handle FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 WHERE c.status='verified'").all()).results || [];
-    return J({ claims: rows }, 200, { "cache-control": "public, max-age=300" });
+    const rows = (await db.prepare("SELECT c.eid,p.handle,c.user_id FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='verified'").all()).results || [];
+    return J({ claims: await withAcctKeys(env, rows) }, 200, { "cache-control": "public, max-age=300" });   // ak statt Konto-ID (site_fetch.scrub, Runde 9)
   }
   if (path === "/api/entity/claim/mine" && method === "GET") {
     if (need()) return need();

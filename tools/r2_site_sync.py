@@ -18,7 +18,7 @@ Bestehende Markierungen ohne diese Direktive bekommen sie mit:  python tools/r2_
 (liest meta/gone.json, je Schluessel head_object; nur Objekte mit gone=1 und ohne Direktive: copy_object an Ort und Stelle mit denselben Metadaten und
 demselben Content-Type, nur Cache-Control neu; nichts geloescht, Inhalt unveraendert). Vor dem Umschalten von R2_ZONE_CACHE auf "1" (sitewrk/wrangler.toml).
 Umgebung: R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (GitHub-Secrets); R2_MANIFEST, R2_KEEP_KEYS, R2_CHANGED_OUT, R2_TOMBSTONE_FORCE."""
-import hashlib, json, os, sys
+import hashlib, json, os, re, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -27,6 +27,12 @@ from r2_common import GONE_CC, GONE_KEY, GONE_MARK, HASHED_KEY, IMG, client, cty
 
 MARKER = "r2-build.txt"
 META = {"src": "docs"}
+# Seiten aus r2out/ (site_size.write_r2: Sprachseiten ausser en/de seit 11.11.2026, dazu Entitaetsseiten ALLER Sprachen einschliesslich en/de,
+# Blog-Sprachfassungen und Lernseiten - auch pages/entity/<id>/index.html und pages/community/u/<h>/blog/<slug>/index.html). Sie tragen keine
+# Metadaten (tools/r2_pages_upload.py). Fehlt eine davon im Bau (Profil privat oder geloescht, Bann, Blog, Event, Firma entfernt), wird sie wie
+# eine docs-Seite als entfernt markiert - sonst lieferte der Site-Worker sie weiter mit 200 aus (Sicherheitspruefung K25/K41, DSGVO). Deshalb
+# zaehlt jede Seite (index.html) und jeder Feed (feed.xml) ohne Metadaten, nicht nur die mit Sprachpraefix.
+R2OUT_PAGE = re.compile(r"^pages/.+/(?:index\.html|feed\.xml)$")
 
 
 def fail(msg):
@@ -91,7 +97,8 @@ def main(src):
     write_changed()
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     if failed: return fail(f"{len(failed)} Dateien nicht geladen (z. B. {failed[0][0]})")
-    # Entfernt markieren: nur eigene Spiegel-Objekte (Metadaten src=docs); Altbestand aus r2out/ bleibt wie bisher unberuehrt
+    # Entfernt markieren: eigene Spiegel-Objekte (Metadaten src=docs) und Seiten aus r2out/ (R2OUT_PAGE), die der Bau nicht mehr erzeugt;
+    # andere Objekte ohne Metadaten bleiben unberuehrt
     # Gehashte Stylesheets/Skripte (HASHED_KEY) nie: alte Seiten verlangen den alten Namen weiter (site_assets.py), der Inhalt darunter aendert sich nie
     cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER and not HASHED_KEY.match(k))
     def head(k):
@@ -106,14 +113,14 @@ def main(src):
     with ThreadPoolExecutor(THREADS) as ex:
         for k, md, e in ex.map(head, cand):
             if e: bad.append(k)
-            elif md.get("src") == "docs": own.append(k)
+            elif md.get("src") == "docs" or (not md.get("src") and R2OUT_PAGE.match(k)): own.append(k)
             else: foreign += 1
     if bad: return fail(f"{len(bad)} Schluessel nicht pruefbar (z. B. {bad[0]})")
     # Teilen-Bilder (pages/og/) zaehlen nicht mit: sie sind am 4.11.2026 bewusst aus docs/ in den Bucket unter og/ umgezogen (img.m365.fm/og/,
     # tools/r2_og_upload.py) - ihr einmaliges Markieren ist kein Zeichen fuer ein falsches Verzeichnis
     n_guard = sum(1 for k in own if not k.startswith("pages/og/"))
-    if n_guard > len(files) and os.environ.get("R2_TOMBSTONE_FORCE") != "1":
-        return fail(f"{n_guard} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files)}) - vermutlich falsches Verzeichnis. "
+    if n_guard > len(files) + len(keep) and os.environ.get("R2_TOMBSTONE_FORCE") != "1":   # Bau = docs/ plus r2out/
+        return fail(f"{n_guard} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files) + len(keep)}) - vermutlich falsches Verzeichnis. "
                     "Bei Absicht einmal mit R2_TOMBSTONE_FORCE=1 laufen lassen")
     marked = []
     with ThreadPoolExecutor(THREADS) as ex:

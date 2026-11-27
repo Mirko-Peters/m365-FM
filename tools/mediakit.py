@@ -749,6 +749,8 @@ def main():
         print("PDF:", p, p.stat().st_size // 1024, "KB,", len(rows_for(lang, D)), "Kennzahlen")
     pub = {k: v for k, v in D.items() if k != "local"}
     pub["local"] = {k: v for k, v in D["local"].items() if k not in ("pricing", "sponsor_i18n", "ad_pricing")}
+    # Suchanfragen aus der Search Console gehoeren nicht in oeffentliche Dateien (latest.json liegt im Bucket und frueher im Artefakt); das PDF nutzt sie nicht
+    pub["yt_search"] = {k: v for k, v in (D.get("yt_search") or {}).items() if k != "queries"}
     (out / "latest.json").write_text(json.dumps(pub, ensure_ascii=False, indent=1), "utf-8")
     if not rows_for("en", D): sys.exit("Keine Kennzahlen verfuegbar - PDF nicht veroeffentlichen")
 

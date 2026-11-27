@@ -74,7 +74,7 @@ async function currentItems(db, episodes, languages, since, until, site) {
     seen.add(key);
     byLang[e.language].push({ title: e.title, summary: e.summary, url: safeHref(e.url, site), time: itemTime(e) });
   }
-  const blogs = (await db.prepare("SELECT id,slug,title,summary,lang,published FROM blog_posts WHERE status='live' AND published>=? AND published<=? ORDER BY published DESC LIMIT 300").bind(since, until).all().catch(() => ({ results: [] }))).results || [];
+  const blogs = (await db.prepare("SELECT b.id,b.slug,b.title,b.summary,b.lang,b.published FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0 WHERE b.status='live' AND b.published>=? AND b.published<=? ORDER BY b.published DESC LIMIT 300").bind(since, until).all().catch(() => ({ results: [] }))).results || [];
   for (const b of blogs) {
     if (!languages.has(b.lang)) continue;
     const key = `blog${b.id}|${b.lang}`;

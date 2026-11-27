@@ -24,9 +24,12 @@ ELLIOT = {"handle": "elliot-margot", "name": "Elliot M.", "type": "u", "expertis
 
 
 def _fetch(people, orgs=()):
-    """fetch_members mit festem Export, ohne Netz und ohne data/members_export.json zu ueberschreiben."""
+    """fetch_members mit festem Export, ohne Netz und ohne data/members_export.json zu ueberschreiben. Der Export gilt als frisch abgerufen
+    (site_fetch.states): ohne frischen Abruf entstehen keine Profilseiten (Datenschutz Runde 7, tests/test_profiles_fresh_only.py)."""
+    url = "https://api.example/api/profiles/export"
     with tempfile.TemporaryDirectory() as d, mock.patch.object(MEM, "_fetch_export", lambda url: {"people": people, "orgs": list(orgs)}), \
-            mock.patch.object(MEM, "CACHE", Path(d) / "m.json"), mock.patch.object(MEM, "_mark", lambda *a: None):
+            mock.patch.object(MEM, "CACHE", Path(d) / "m.json"), mock.patch.object(MEM, "_mark", lambda *a: None), \
+            mock.patch("site_fetch.states", return_value={url: "frisch"}):
         return MEM.fetch_members("https://api.example")
 
 

@@ -114,12 +114,13 @@ export async function stats(db, uid) {
 }
 
 // Punkte eines Zeitraums je Sprache (fuer den Kurator): Kommentare x2 + erhaltene Likes x3
+// K22: die Kurzvorstellung nur ohne Profil oder bei oeffentlichem Profil (wie /api/u) - /api/curator ist oeffentlich und zwischengespeichert
 export async function topUsers(db, lang, since, limit = 5) {
   const r = await db.prepare(
-    `SELECT u.id, u.name, u.bio,
+    `SELECT u.id, u.name, CASE WHEN p.user_id IS NULL OR p.public=1 THEN u.bio ELSE '' END bio,
        (SELECT COUNT(*) FROM comments c WHERE c.user_id=u.id AND c.lang=?1 AND c.status='ok' AND c.created>=?2) AS cm,
        (SELECT COUNT(*) FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=u.id AND c.lang=?1 AND c.status='ok' AND l.created>=?2 AND l.user_id<>u.id) AS lk
-     FROM users u WHERE u.banned=0 AND EXISTS (SELECT 1 FROM comments c WHERE c.user_id=u.id AND c.lang=?1 AND c.created>=?2)
+     FROM users u LEFT JOIN profiles p ON p.user_id=u.id WHERE u.banned=0 AND EXISTS (SELECT 1 FROM comments c WHERE c.user_id=u.id AND c.lang=?1 AND c.created>=?2)
      ORDER BY (cm + lk) DESC, u.id ASC LIMIT ?3`
   ).bind(lang, since, limit).all();
   return (r.results || []).map((x) => ({ id: x.id, name: x.name, bio: x.bio, comments: x.cm, likes: x.lk, points: x.cm + x.lk })).filter((x) => x.points > 0);

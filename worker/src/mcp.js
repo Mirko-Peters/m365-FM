@@ -1,8 +1,10 @@
 // MCP-Server (Streamable HTTP, JSON-RPC) fuer www.m365.fm: Lesen ohne Anmeldung, Schreiben mit persoenlichem KI-Zugangstoken.
 // Alle Schreibaktionen laufen durch dieselben Regeln wie die Website (Abstimmung, Pflichtfelder, Rate-Limits).
+import { releaseHandleOps, invalidateProfileExport, forgetSearchPerson, HIDDEN_PERSON_SQL } from "./privacy.js";
 import { cleanText, randomToken, sha256hex, rateLimit } from "./util.js";
 import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
+import { blockSearchPeople } from "./search.js";
 import { autoVerifyCert, cleanI18n, saveI18n, readI18n, RESERVED_HANDLES } from "./profiles.js";
 import { canManage, EVENT_ROLES, promoteWaitlist, partnerAction, handleEvents } from "./events.js";
 import { handleEventImport, adminEventGate } from "./eventimport.js";
@@ -466,7 +468,7 @@ export async function callTool(env, user, name, a) {
   }
   if (name === "get_event_team") {
     const ev = await db.prepare("SELECT id FROM events WHERE handle=? AND public=1").bind(String(a.handle || "")).first(); if (!ev) return { error: "not_found" };
-    const rows = (await db.prepare("SELECT r.role,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
+    const rows = (await db.prepare("SELECT r.role,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id AND u.banned=0 JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
     return { team: rows.map((r) => ({ role: r.role, name: r.name, handle: r.handle })) };
   }
   if (name === "set_event_role") {
@@ -499,7 +501,7 @@ export async function callTool(env, user, name, a) {
   }
   if (name === "search_members") {
     const q = `%${String(a.query || "").replace(/[%_]/g, "").slice(0, 40)}%`;
-    const rows = (await db.prepare("SELECT p.handle,u.name,p.headline FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.public=1 AND p.handle IS NOT NULL AND (u.name LIKE ?1 OR p.headline LIKE ?1) LIMIT 15").bind(q).all()).results || [];
+    const rows = (await db.prepare("SELECT p.handle,u.name,p.headline FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1 AND p.handle IS NOT NULL AND (u.name LIKE ?1 OR p.headline LIKE ?1) LIMIT 15").bind(q).all()).results || [];
     return { members: rows.map((r) => ({ ...r, url: `https://www.m365.fm/community/u/${r.handle}/` })) };
   }
   if (!user && needsToken({ name })) return { error: "token_required" };
@@ -512,7 +514,7 @@ export async function callTool(env, user, name, a) {
   }
   if (name === "update_my_profile") {
     if (a.city_visibility !== undefined && !["all", "contacts", "none"].includes(a.city_visibility)) return { error: "bad_city_visibility" };
-    const cur = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first();
+    const cur = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();
     let handle = a.handle !== undefined ? String(a.handle).toLowerCase().trim() : cur?.handle;
     if (!handle || !HANDLE.test(handle)) return { error: cur ? "bad_handle" : "handle_required" };
     if (RESERVED_HANDLES.has(handle) && cur?.handle !== handle) return { error: "handle_taken" };   // verdeckt sonst /api/profile/me|business|company; nur neu vergeben gesperrt
@@ -532,6 +534,9 @@ export async function callTool(env, user, name, a) {
       if (moved) await db.prepare("UPDATE profile_private SET lat=NULL,lng=NULL,geo_precision='',geo_address='',geo_at=0,geo_city='' WHERE user_id=?").bind(user.id).run().catch(() => {});
     }
     await db.prepare(`UPDATE profiles SET ${sets.map(([k]) => k + "=?").join(",")},updated=? WHERE user_id=?`).bind(...sets.map(([, v]) => v), now(), user.id).run();
+    // Wie POST /api/profile/me: alte Adresse frei -> Speaker-Eintraege und Blog-Abos wandern mit (K42); war das Profil oeffentlich -> Export und Suche sofort (K45)
+    if (cur?.handle && cur.handle !== handle) { const ops = await releaseHandleOps(db, cur.handle, handle, user.id); if (ops.length) await db.batch(ops); await blockSearchPeople(env, [cur.handle]); }   // K41/A: Suchsperre der alten Adresse
+    if (cur?.public) { await invalidateProfileExport(db); if (cur.handle !== handle || (a.public !== undefined && !a.public)) await forgetSearchPerson(db, cur.handle); }
     return { ok: true, note: "Public pages appear after the next hourly site build." };
   }
   if (name === "add_expertise") {   // seit Paket 22 setzt das System die Stufen (levels.js); das Werkzeug erklaert nur noch, wie Expertise belegt wird
@@ -542,7 +547,7 @@ export async function callTool(env, user, name, a) {
     return { guides: g.map((h) => ({ id: h.id, how_to: de ? h.de : h.en, tools: h.tools })), ...(t && !g.length ? { error: "unknown_topic" } : {}), topics: HOWTO.map((h) => h.id), note: "Always show the user the text before saving. Write tools need the personal token." };
   }
   if (name === "get_entity_questions") {
-    const qs = (await db.prepare("SELECT id,q,lang FROM entity_q WHERE eid=? AND hidden=0 ORDER BY created DESC LIMIT 20").bind(String(a.id || "")).all()).results || [], out = [];
+    const qs = (await db.prepare(`SELECT id,q,lang FROM entity_q WHERE eid=? AND hidden=0 AND eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY created DESC LIMIT 20`).bind(String(a.id || "")).all()).results || [], out = [];   // Runde 6: verborgene Personen ohne Q&A
     for (const q of qs) out.push({ ...q, answers: ((await db.prepare("SELECT a.id,a.a,a.accepted,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes FROM entity_a a WHERE a.q_id=? AND a.hidden=0 ORDER BY a.accepted DESC, votes DESC LIMIT 5").bind(q.id).all()).results || []) });
     return { questions: out };
   }
