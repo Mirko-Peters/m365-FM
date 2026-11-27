@@ -1,0 +1,1561 @@
+WEBVTT
+
+00:00:00.060 --> 00:00:05.820
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang-orang ide dan teknologi yang membentuk masa depan pekerjaan.
+
+00:00:06.600 --> 00:00:07.940
+Apa sebenarnya SAP S4 4 HANA itu?
+
+00:00:08.500 --> 00:00:14.900
+SAP mengatakan bahwa pelangganya menghasilkan lebih dari 87% perdagangan global dan sebagian besarnya berjalan melalui perangkat lunak yang tidak pernah Anda lihat.
+
+00:00:15.280 --> 00:00:20.180
+Rilis terbaru perangkat lunak itu disebut SAP S4 4 HANA dan namanya membuatnya terdengar jauh lebih rumit daripada kenyataannya.
+
+00:00:21.060 --> 00:00:23.000
+Di bawah akronim tersebut terdapat satu perubahan sederhana.
+
+00:00:23.460 --> 00:00:24.880
+Data dipindahkan dari bis ke memori.
+
+00:00:25.380 --> 00:00:28.440
+Itulah sebabnya laporan yang dulu berjalan semalaman sekarang diperbarui saat Anda menonton.
+
+00:00:28.440 --> 00:00:35.500
+Perubahan itu juga memaksa setiap perusahaan yang menjalankan sistem SAP lama untuk membuat keputusan karena dukungan utama untuknya berakhir pada tahun 2027.
+
+00:00:36.240 --> 00:00:41.880
+Jadi kami akan membahas apa itu S4 4 HANA, cara kerjanya, bagaimana perusahaan menjalankan dan memigrasikannya,
+
+00:00:42.200 --> 00:00:44.980
+di mana Microsoft berperan dan bagian-bagiannya tidak sesuai dengan yang ditawarkan.
+
+00:00:45.120 --> 00:00:46.200
+Mari kita mulai definisi yang sederhana.
+
+00:00:46.820 --> 00:00:48.620
+S4 4 HANA adalah sistem ERP.
+
+00:00:49.400 --> 00:00:52.740
+ERP berarti perangkat lunak yang digunakan perusahaan untuk menjalankan operasi intinya.
+
+00:00:53.100 --> 00:00:57.600
+Menerima pesanan, membeli bahan, melacak inventaris, membayar karyawan, dan menutup buku.
+
+00:00:58.440 --> 00:01:02.500
+Jika bisnis Anda membuat atau menjual sesuatu dalam skala besar, sesuatu seperti ini berada dibalik semua itu.
+
+00:01:02.840 --> 00:01:04.760
+Yang setelah dibalik semua itu yang sering dia menjaga angka-angka tebelut.
+
+00:01:04.860 --> 00:01:10.140
+Orang-orang di industri ini menyebutnya sistem pencatatan yang merupakan cara keren untuk mengatakan bahwa ia menyimpan versi resmi kebenaran.
+
+00:01:10.740 --> 00:01:13.760
+Tika seseorang bertanya apa yang sebenarnya dilakukan ERP, itulah jawaban jujurnya.
+
+00:01:14.120 --> 00:01:17.180
+Ia mengingat semua yang dilakukan bisnis dengan cara dapat dipercaya di kemudian hari.
+
+00:01:17.880 --> 00:01:19.780
+Namanya lebih mudah rusak dari yang terlihat.
+
+00:01:20.600 --> 00:01:23.080
+Bagian S4 adalah singkatan dari SAP Business Suite 4,
+
+00:01:23.380 --> 00:01:25.480
+dan bagian HANA adalah basis data yang menjalankannya.
+
+00:01:25.480 --> 00:01:31.760
+SAP merilisnya pada tahun 2015 sebagai penerus SAP ECC yang menggantikan sistem R3 pada tahun 1902.
+
+00:01:32.500 --> 00:01:36.960
+Sil-sila itu penting karena sebagian besar perusahaan yang mendengarkan ini menjalankan salah satu sistem lama itu sekarang.
+
+00:01:37.640 --> 00:01:38.780
+Satu detail di sini mengejutkan banyak.
+
+00:01:39.200 --> 00:01:40.760
+S4 HANA hanya berjalan di SAP HANA.
+
+00:01:41.260 --> 00:01:43.480
+SAP berhenti mendukung produk intinya pada basis data lain,
+
+00:01:43.680 --> 00:01:46.940
+jadi ini bukan peningkatan kosmetik atau lapisan cat baru pada mesin lama.
+
+00:01:47.660 --> 00:01:48.880
+Ini adalah pembangunan kembali fondasi,
+
+00:01:48.880 --> 00:01:52.160
+dan hampir semua hal lain dalam episode ini mengikuti dari keputusan tunggal itu.
+
+00:01:52.560 --> 00:01:55.120
+Itu juga mengapa migrasi tidak pernah sekadar pembaruan perangkat lunak
+
+00:01:55.120 --> 00:01:57.160
+karena Anda memindahkan lantai tempat perusahaan berdiri.
+
+00:01:57.860 --> 00:01:59.800
+Mengapa basis data di bawahnya mengubah segalanya?
+
+00:02:00.360 --> 00:02:01.900
+Untuk mengetahui mengapa basis data penting,
+
+00:02:02.020 --> 00:02:03.460
+bayangkan bagaimana sistem lama menyimpan data.
+
+00:02:04.060 --> 00:02:06.640
+SAC menyimpan catatan pada disk yang diatur dalam baris,
+
+00:02:06.840 --> 00:02:09.620
+jadi satu catatan pelanggan diatur tepat di sebelah pesanan pelanggan tersebut,
+
+00:02:09.740 --> 00:02:11.180
+alamat mereka, dan faktur mereka.
+
+00:02:11.180 --> 00:02:14.520
+Membaca satu bidang berarti menyeret seluruh baris bersamanya
+
+00:02:14.520 --> 00:02:17.620
+yang menjadi lambat saat Anda mengajukan pertanyaan yang mencakup jutaan catatan.
+
+00:02:18.240 --> 00:02:19.360
+Hana membalikkan kedua pilihan itu.
+
+00:02:19.900 --> 00:02:21.940
+Ia menyimpan data dalam memori alih-alih di disk,
+
+00:02:22.260 --> 00:02:24.580
+dan ia mengatur data itu dalam kolom alih-alih baris.
+
+00:02:25.520 --> 00:02:28.300
+Kolom menampung satu jenis nilai seperti setiap tanggal pesanan dalam sistem
+
+00:02:28.300 --> 00:02:31.720
+sehingga basis data dapat membaca hanya bagian yang dibutuhkan query dan melewatkan sisanya.
+
+00:02:32.200 --> 00:02:32.880
+Itulah trik utamanya.
+
+00:02:33.200 --> 00:02:36.480
+Penyimpanan kolom juga terkompresi dengan baik karena nilai-nilai yang serupa berada bersebelahan,
+
+00:02:36.480 --> 00:02:39.000
+sehingga jumlah memori yang sama menampung lebih banyak sama menampung lebih banyak data.
+
+00:02:39.000 --> 00:02:41.960
+Efisiensi itu penting, karena biaya memori lebih mahal daripada disk,
+
+00:02:42.260 --> 00:02:44.560
+dan menentukan ukuran perangkat kelas dengan benar adalah pekerjaan tersendiri.
+
+00:02:44.860 --> 00:02:46.460
+Keuntungannya lebih besar daripada kecepatan mentah.
+
+00:02:46.980 --> 00:02:50.680
+Di dunia lama, analitik dan transaksi sehari-hari berada dalam sistem yang terpisah,
+
+00:02:50.820 --> 00:02:53.380
+dan pelaporan biasanya berarti menyalin data semalaman ke gudang.
+
+00:02:55.020 --> 00:02:58.220
+Dengan hana, kedua jenis pekerjaan tersebut dijalankan terhadap satu salinan data bersama
+
+00:02:58.220 --> 00:03:00.880
+sehingga angka-angka tersebut tidak perlu berpindah kemanapun agar dapat berguna.
+
+00:03:01.620 --> 00:03:02.600
+Mari kita ambil contoh praktis.
+
+00:03:02.600 --> 00:03:07.340
+Tim keuangan yang menutup buku pada akhir bulan biasanya menunggu pekerjaan batch yang berjalan hingga larut malam,
+
+00:03:07.520 --> 00:03:10.260
+dan jika ada yang tampak salah, orang yang dapat memperbaikinya sudah pulang.
+
+00:03:11.160 --> 00:03:14.260
+Dengan S4 Hana, angka-angka tersebut sudah ada di sana saat transaksi masuk,
+
+00:03:14.520 --> 00:03:16.080
+sehingga penutupan dapat terjadi pada siang hari,
+
+00:03:16.200 --> 00:03:18.660
+sementara orang-orang yang memahami angka-angka tersebut masih berada di meja mereka.
+
+00:03:19.500 --> 00:03:20.660
+Siapapun yang telah menunggu jendela,
+
+00:03:20.760 --> 00:03:22.500
+batch tahu betapa pentingnya perubahan tunggal itu.
+
+00:03:23.600 --> 00:03:24.800
+Manfaat kedua mudah terlewatkan.
+
+00:03:25.240 --> 00:03:28.040
+Satu modal data berarti lebih sedikit tempat untuk angka yang sama untuk tidak setuju.
+
+00:03:28.040 --> 00:03:31.080
+Angka penjualan dalam satu laporan cocok dengan angka di laporan lain
+
+00:03:31.080 --> 00:03:32.720
+karena keduanya dibaca dari satu tabel,
+
+00:03:32.840 --> 00:03:34.740
+bukan dari dua sistem yang digabungkan bertahun-tahun lalu.
+
+00:03:35.280 --> 00:03:37.860
+Satu peringatan jujur sebelum kita lanjut, dan itu akan dibahas nanti.
+
+00:03:38.680 --> 00:03:41.880
+Kemasaran SAP sendiri mengatakan Hana ribuan kali lebih cepat daripada basis data lama,
+
+00:03:42.100 --> 00:03:43.700
+dan Anda harus menganggapnya sebagai klaim vendor,
+
+00:03:43.860 --> 00:03:45.740
+bukan hasil yang terukur, bukan hasil yang terukur.
+
+00:03:46.040 --> 00:03:48.100
+Kecepatan sebenarnya bergantung pada volume data,
+
+00:03:48.100 --> 00:03:49.600
+bagaimana sistem dikonfigurasi,
+
+00:03:49.760 --> 00:03:51.480
+dan apakah query itu sendiri ditulis dengan baik.
+
+00:03:52.700 --> 00:03:54.620
+Antara muka baru dan model data yang disederhanakan,
+
+00:03:54.740 --> 00:03:56.440
+perubahan basis data juga memungkinkan SAP
+
+00:03:56.440 --> 00:03:58.640
+membangun kembali layar yang benar-benar dilihat orang.
+
+00:03:59.120 --> 00:04:01.980
+S4 Hana adalah produk SAP pertama yang menggunakan Fiori,
+
+00:04:02.120 --> 00:04:04.260
+yang menggantikan layar hijau padat dari GUI SAP lama
+
+00:04:04.260 --> 00:04:07.020
+dengan aplikasi berbasis Ubin yang dibuat berdasarkan tugas di depan Anda.
+
+00:04:07.200 --> 00:04:08.760
+Jika Anda belum pernah menyentuh antar muka lama,
+
+00:04:08.900 --> 00:04:10.060
+inilah alasan mengapa semua orang berdua.
+
+00:04:10.860 --> 00:04:12.760
+SAP lama terkenal dengan kode transaksi,
+
+00:04:13.220 --> 00:04:14.400
+rangkaian huruf, dan angka pendek
+
+00:04:14.400 --> 00:04:16.260
+yang harus Anda hafal untuk menyelesaikan sesuatu.
+
+00:04:17.440 --> 00:04:19.140
+Fiori mengatur pekerjaan yang sama ke dalam aplikasi
+
+00:04:19.140 --> 00:04:19.840
+dengan nama yang sederhana.
+
+00:04:20.160 --> 00:04:20.960
+Jadi, seorang pegawai,
+
+00:04:21.260 --> 00:04:23.060
+gudang membuka aplikasi penerimaan barang alih-alih
+
+00:04:23.060 --> 00:04:25.240
+mengetik kode yang mereka pelajari dalam pelatihan bertahun-tahun yang lalu.
+
+00:04:25.400 --> 00:04:26.460
+Fiori tidak hanya lebih cantik.
+
+00:04:26.840 --> 00:04:28.200
+Setiap aplikasi dibuat untuk peran tertentu,
+
+00:04:28.300 --> 00:04:30.500
+jadi manajer yang menyetujui pembelian dan petugas yang memasukkan faktur,
+
+00:04:30.560 --> 00:04:32.220
+mendapatkan layar yang berbeda untuk pekerjaan yang berbeda,
+
+00:04:32.280 --> 00:04:33.080
+untuk pekerjaan yang berbeda,
+
+00:04:33.140 --> 00:04:33.900
+untuk pekerjaan yang berbeda,
+
+00:04:33.960 --> 00:04:35.680
+alih yang di transaksi yang padat yang harus dipelajari semua orang.
+
+00:04:35.840 --> 00:04:37.880
+Ini ada perubahan kecil dengan dampak besar pada pekerjaan sari.
+
+00:04:38.240 --> 00:04:39.640
+Model data juga menjadi lebih sederhana,
+
+00:04:39.740 --> 00:04:41.000
+dan keuangan adalah contoh yang paling jelas.
+
+00:04:41.220 --> 00:04:44.000
+Keuangan SAP yang lama menyebarkan angka-angkanya kebanyak tabel terpisah,
+
+00:04:44.000 --> 00:04:46.620
+yang berarti pekerjaan rekonsiliasi hanya untuk mendapatkan total.
+
+00:04:47.120 --> 00:04:49.160
+S per empat HANA menempatkan data keuangan inti
+
+00:04:49.160 --> 00:04:51.640
+ke dalam satu tabel item baris yang dikenal sebagai jurnal universal.
+
+00:04:52.040 --> 00:04:54.920
+Jadi satu entry memuat tampilan akutansi dan tampilan biaya sekaligus.
+
+00:04:56.060 --> 00:04:56.860
+Sebelum perubahan itu,
+
+00:04:57.000 --> 00:05:00.420
+angka laba yang Anda seringkali berarti mencocokkan beberapa tabel bersama-sama di akhir bulan.
+
+00:05:00.940 --> 00:05:02.640
+Sekarang kedua tampilan ditulis pada satu item baris,
+
+00:05:02.640 --> 00:05:04.580
+dan itu memangkas pekerjaan nyata dari kalender keuangan.
+
+00:05:04.980 --> 00:05:06.540
+Itu penting bagi orang yang melakukan pekerjaan itu.
+
+00:05:06.920 --> 00:05:09.720
+Petugas hutang dagang yang dulu mengambil angka dari beberapa laporan sekarang
+
+00:05:09.720 --> 00:05:12.080
+dapat membuka satu item baris dan melihat keseluruhan cerita,
+
+00:05:12.080 --> 00:05:14.120
+yang berarti lebih sedikit menyatukan berbagai hal
+
+00:05:14.120 --> 00:05:15.980
+dan lebih sedikit argumen tentang laporan mana yang benar.
+
+00:05:17.620 --> 00:05:18.600
+Area bisnis yang dicakupnya
+
+00:05:18.600 --> 00:05:20.560
+S per empat HANA bersifat modular
+
+00:05:20.560 --> 00:05:23.900
+yang berarti merupakan kumpulan area yang terhubung bukan satu kumpulan besar.
+
+00:05:24.760 --> 00:05:27.140
+Yang utama, meliputi keuangan, pengadaan, pejualan,
+
+00:05:27.280 --> 00:05:29.700
+manufaktur, rantai pasokan, manajemen aset, pekerjaan proyek,
+
+00:05:29.700 --> 00:05:32.860
+dan orang-orang dengan sumber daya manusia yang sering ditangani oleh SAP SuccessFactors
+
+00:05:32.860 --> 00:05:33.820
+yang berada di samping inti.
+
+00:05:35.220 --> 00:05:36.340
+Daripada mencantumkannya,
+
+00:05:36.600 --> 00:05:37.900
+mari ikuti satu pesanan melalui sistem
+
+00:05:37.900 --> 00:05:39.720
+karena disitulah desain muncul dalam praktek.
+
+00:05:39.720 --> 00:05:43.220
+Pelanggan memesan, jadi penjualan mencatatnya dan meriksa ketersediaan.
+
+00:05:43.760 --> 00:05:46.500
+Pemeriksaan itu menjangkau inventaris yang ada di arantai pasokan.
+
+00:05:47.300 --> 00:05:49.960
+Jika stok terbatas, sistem dapat memicu produksi atau pembelian.
+
+00:05:50.320 --> 00:05:52.800
+Dan setelah barang dikirim, faktur keluar dan pembukuan diperbarui.
+
+00:05:53.260 --> 00:05:55.160
+Perhatikan berapa banyak area yang disentuh oleh satu aliran.
+
+00:05:55.540 --> 00:05:57.800
+Penjualan, inventaris, manufaktur, atau pengadaan,
+
+00:05:57.920 --> 00:06:00.360
+dan keuangan semuanya bertindak berdasarkan pesanan yang sama,
+
+00:06:00.460 --> 00:06:01.760
+membaca satu basis data bersama
+
+00:06:01.760 --> 00:06:03.240
+tanpa ada yang menyalin data antar sistem
+
+00:06:03.240 --> 00:06:04.740
+atau tanpa ada yang menyalin data antar sistem
+
+00:06:04.740 --> 00:06:07.340
+atau mengirim spreadsheet melalui email ke satu sistem satu set catatan
+
+00:06:07.340 --> 00:06:08.580
+itulah yang membuat aliran berfungsi.
+
+00:06:09.720 --> 00:06:12.640
+Di sisi pembelian, seseorang mengajukan permintaan pembelian
+
+00:06:12.640 --> 00:06:14.120
+yang kemudian menjadi pesanan pembelian,
+
+00:06:14.220 --> 00:06:16.380
+kemudian tanda terima barang, dan terakhir pembayaran kepada pemasuk.
+
+00:06:16.960 --> 00:06:19.540
+Tiap langkah tersebut diposting ke bagian keuangan saat itu terjadi
+
+00:06:19.540 --> 00:06:21.600
+sehingga biayanya terlihat saat proses masih berjalan.
+
+00:06:22.280 --> 00:06:24.540
+Sepasang alur ketiga menghubungkan sistem ke puncak perusahaan.
+
+00:06:25.140 --> 00:06:27.680
+Pesanan menjadi uang tunai mengikuti penjualan hingga uang di bank,
+
+00:06:28.080 --> 00:06:29.920
+dan catatan menjadi laporan menarik transaksi
+
+00:06:29.920 --> 00:06:31.220
+dari setiap area ke bagian keuangan.
+
+00:06:31.880 --> 00:06:33.960
+Kedua alur menyeluruh tersebut adalah acara sebagian besar tim
+
+00:06:33.960 --> 00:06:35.460
+menggambarkan apa yang dilakukan S-Pram mereka.
+
+00:06:35.460 --> 00:06:37.800
+Di bawahnya terdapat data induk bersama.
+
+00:06:38.360 --> 00:06:40.920
+Pelanggan, material, dan pemasok masing-masing ada satu kali,
+
+00:06:41.160 --> 00:06:42.880
+dan setiap area membaca dari definisi yang sama
+
+00:06:42.880 --> 00:06:44.840
+sehingga satu pesanan dapat berpindah antar departemen
+
+00:06:44.840 --> 00:06:45.920
+tanpa ada yang mengetik ulang.
+
+00:06:46.600 --> 00:06:49.120
+Setelah inti sebenarnya, S per empat HANA bukanlah satu produk,
+
+00:06:49.240 --> 00:06:50.900
+melainkan serangkaian proses bersama yang dibangun
+
+00:06:50.900 --> 00:06:52.200
+di atas satu sumber data bersama,
+
+00:06:52.400 --> 00:06:55.040
+dan nilainya berasal dari seberapa arat bagian-bagian tersebut saling terkait.
+
+00:06:56.220 --> 00:06:57.280
+Bagaimana penerbangan menjalankan?
+
+00:06:57.280 --> 00:07:00.560
+Sekarang untuk keputusan yang paling banyak diperdebatkan oleh sebagian besar tim
+
+00:07:00.560 --> 00:07:02.300
+yaitu di mana sistem itu berada secara fisik.
+
+00:07:02.660 --> 00:07:03.560
+Ada tiga pilihan utama,
+
+00:07:03.780 --> 00:07:05.960
+dan masing-masing pilihan mengorbankan kendali dengan upaya yang berbed.
+
+00:07:06.400 --> 00:07:07.900
+Setiap pilihan memiliki trade-off yang nyatakan.
+
+00:07:08.200 --> 00:07:08.980
+On-premise berarti,
+
+00:07:09.240 --> 00:07:10.560
+perusahaan memiliki perangkat keras
+
+00:07:10.560 --> 00:07:12.440
+dan menjalankan sistem di pusat datanya sendiri.
+
+00:07:12.760 --> 00:07:14.760
+Anda memutuskan kapan akan melakukan peningkatan,
+
+00:07:14.840 --> 00:07:16.280
+Anda dapat menyesuaikan hampir semua hal,
+
+00:07:16.360 --> 00:07:17.980
+dan Anda menanggung biaya serta tanggung jawab
+
+00:07:17.980 --> 00:07:18.940
+yang menyatai semua kebebasan.
+
+00:07:19.280 --> 00:07:20.880
+Private Cloud adalah jalan tengah,
+
+00:07:21.100 --> 00:07:23.000
+dijual sebagai S per empat HANA Cloud Private Edition,
+
+00:07:23.000 --> 00:07:26.000
+dan seringkali dikirimkan di bawah program yang disebut Rise with SAP.
+
+00:07:26.540 --> 00:07:28.760
+Ini dikelola untuk Anda dan berjalan di balik firewall Anda sendiri,
+
+00:07:28.880 --> 00:07:31.000
+tetapi Anda tetap memiliki sebagian besar opsi penyesuaian,
+
+00:07:31.060 --> 00:07:32.640
+besar opsi penyesuaian dari dunia on-premise.
+
+00:07:32.960 --> 00:07:34.380
+Opsi standar adalah Public Cloud,
+
+00:07:34.820 --> 00:07:36.680
+yang disebut S per empat HANA Cloud Public Edition
+
+00:07:36.680 --> 00:07:38.180
+dan dijual melalui Grow with SAP.
+
+00:07:38.780 --> 00:07:40.020
+Ini berjalan berinfrastruktur bersama.
+
+00:07:40.420 --> 00:07:42.680
+SAP mendorong peningkatan sesuai jadwalnya sendiri
+
+00:07:42.680 --> 00:07:44.220
+dan biaya pengoperasiannya lebih murah.
+
+00:07:44.220 --> 00:07:46.920
+Yang Anda korbankan adalah kebebasan untuk memengkokkan perangkat lunak
+
+00:07:46.920 --> 00:07:47.780
+agar sesuai dengan kebiasaan.
+
+00:07:48.140 --> 00:07:49.240
+Opsi keempat adalah Hybrid,
+
+00:07:49.400 --> 00:07:50.900
+di mana sebagian sistem berjalan di cloud
+
+00:07:50.900 --> 00:07:52.240
+dan sisanya tetap di tempatnya.
+
+00:07:52.700 --> 00:07:54.560
+Perusahaan menggunakannya untuk berpindah secara bertahap
+
+00:07:54.560 --> 00:07:56.280
+atau untuk menjaga bagian bisnis yang sensitif
+
+00:07:56.280 --> 00:07:57.060
+tetap dekat dengan rumah,
+
+00:07:57.160 --> 00:07:58.300
+sementara yang lainnya dimodernisasi.
+
+00:07:58.440 --> 00:07:59.920
+Pertukaran ini layak untuk dikatakan dengan jelas.
+
+00:08:00.180 --> 00:08:01.740
+Cloud publik memberi Anda lebih sedikit sakit kepala
+
+00:08:01.740 --> 00:08:02.500
+untuk melakukan peringkatan
+
+00:08:02.500 --> 00:08:03.280
+dan lebih sedikit kontrol,
+
+00:08:03.360 --> 00:08:04.520
+sementara keluar pribadi dan lokal memberi Anda
+
+00:08:04.520 --> 00:08:05.560
+lebih banyak kontrol dan lebih banyak kontrol
+
+00:08:05.560 --> 00:08:07.180
+dan lebih banyak kontrol dan lebih banyak pekerjaan itu dilakukan.
+
+00:08:07.320 --> 00:08:09.180
+Tidak ada jawaban yang benar secara universal
+
+00:08:09.180 --> 00:08:10.720
+dan pilihannya biasanya bergantung pada
+
+00:08:10.720 --> 00:08:12.480
+seberapa besar perusahaan bersedia yang mempunyai cara kerja.
+
+00:08:12.480 --> 00:08:14.600
+Keputusan itu ada di tangan bisnis dan juga TI
+
+00:08:14.600 --> 00:08:16.820
+itulah sebabnya butuh waktu lama untuk menyelesaikannya.
+
+00:08:17.820 --> 00:08:18.800
+Bagaimana Anda sampai di sana?
+
+00:08:19.120 --> 00:08:21.460
+Dan jam 2027, rumah manapun yang Anda pilih,
+
+00:08:21.540 --> 00:08:22.720
+Anda tetap harus sampai di sana
+
+00:08:22.720 --> 00:08:24.040
+dari manapun Anda berada saat ini
+
+00:08:24.040 --> 00:08:25.980
+dan itulah migrasi dan itulah migrasi.
+
+00:08:26.080 --> 00:08:27.000
+Ada tiga jalur umum
+
+00:08:27.000 --> 00:08:29.760
+dan namanya terdengar lebih aneh daripada ide di baliknya.
+
+00:08:30.140 --> 00:08:30.740
+Waktu penting di sini.
+
+00:08:31.200 --> 00:08:32.180
+Greenfield berarti awal yang baru.
+
+00:08:32.800 --> 00:08:34.220
+Anda membangun sistem baru dari awal
+
+00:08:34.220 --> 00:08:35.980
+dan mendesain ulang proses Anda saat Anda menembak.
+
+00:08:36.220 --> 00:08:37.340
+Itu adalah hasil yang paling bersih
+
+00:08:37.340 --> 00:08:38.300
+dan biasanya yang paling mahal
+
+00:08:38.300 --> 00:08:40.360
+karena Anda mengubah cara orang melakukan pekerjaan mereka
+
+00:08:40.360 --> 00:08:42.140
+bukan sekadar memindahkan data antar mesin.
+
+00:08:43.220 --> 00:08:45.580
+Brownfield berarti mengonversi sistem yang sudah Anda miliki.
+
+00:08:46.280 --> 00:08:47.640
+Lebih cepat dan menyimpan rewired Anda
+
+00:08:47.640 --> 00:08:48.900
+tetapi membawa kebiasaan lama
+
+00:08:48.900 --> 00:08:50.260
+dan kode kustom lama ke platform baru
+
+00:08:50.260 --> 00:08:52.440
+yang secara diam-diam dapat membatasi apa yang Anda peroleh.
+
+00:08:53.200 --> 00:08:54.580
+Konversi juga bukan sekadar salinan.
+
+00:08:55.260 --> 00:08:57.720
+Ia menjalankan sistem yang ada melalui proses konversi teknis,
+
+00:08:57.860 --> 00:08:59.220
+memeriksa kode kustom untuk apapun
+
+00:08:59.220 --> 00:09:00.740
+yang tidak lagi didukung oleh rilis baru
+
+00:09:00.740 --> 00:09:02.360
+dan memperbaiki apapun yang rusak.
+
+00:09:03.240 --> 00:09:05.400
+Bluefield terkadang disebut hybrid berada di antaranya.
+
+00:09:06.180 --> 00:09:08.040
+Anda memindahkan beberapa proses ke model baru
+
+00:09:08.040 --> 00:09:09.860
+sambil mengonversi sisa sistem yang ada
+
+00:09:09.860 --> 00:09:12.220
+yang menyebarkan perubahan dari waktu ke waktu alih-alih
+
+00:09:12.220 --> 00:09:13.180
+menelannya sekaligus.
+
+00:09:13.880 --> 00:09:14.980
+Tidak ada pilihan default di sini
+
+00:09:14.980 --> 00:09:16.540
+dan jalur yang benar bergantung pada
+
+00:09:16.540 --> 00:09:17.660
+seberapa banyak perubahan proses
+
+00:09:17.660 --> 00:09:18.980
+yang benar-benar dapat diserap oleh bisnis.
+
+00:09:19.740 --> 00:09:21.240
+Bagi banyak perusahaan ini sekarang mendesak.
+
+00:09:21.860 --> 00:09:23.680
+Pemeliharaan utama untuk sistem ACC lama
+
+00:09:23.680 --> 00:09:24.860
+berakhir pada Desember 2027
+
+00:09:25.420 --> 00:09:26.780
+dan pemeliharaan tambahan opsional
+
+00:09:26.780 --> 00:09:29.140
+berlangsung hingga akhir 2030 dengan biaya tambahan.
+
+00:09:30.100 --> 00:09:32.220
+Ada juga jembatan yang disebut paket kompatibilitas
+
+00:09:32.220 --> 00:09:34.360
+yang memungkinkan fitur ACC kelasi tetap berjalan
+
+00:09:34.360 --> 00:09:35.800
+di dalam S4HANA di tempat
+
+00:09:35.800 --> 00:09:38.840
+dan jembatan itu sebagian besar ditutup pada 31 Mei 2026.
+
+00:09:38.840 --> 00:09:39.940
+Jadi waktu itu nyata
+
+00:09:39.940 --> 00:09:41.500
+meskipun biaya pasti dari keterlambatan
+
+00:09:41.500 --> 00:09:42.280
+masih diperdebatkan.
+
+00:09:42.960 --> 00:09:44.100
+Yang penting untuk saat ini adalah
+
+00:09:44.100 --> 00:09:46.360
+bahwa keputusan itu tidak bersifat opsional selamanya
+
+00:09:46.360 --> 00:09:47.920
+dan semakin lama perusahaan menunggu
+
+00:09:47.920 --> 00:09:49.520
+semakin sedikit pilihan nyaman yang tersisa
+
+00:09:49.520 --> 00:09:50.640
+menjaga inti tetap bersih.
+
+00:09:51.240 --> 00:09:52.400
+Ketika migrasi terburu-buru
+
+00:09:52.400 --> 00:09:53.840
+tim cenderung mencari satu hal
+
+00:09:53.840 --> 00:09:55.180
+yang menyebabkan masalah paling banyak
+
+00:09:55.180 --> 00:09:55.960
+di kemudian hari
+
+00:09:55.960 --> 00:09:59.020
+yaitu mengedit kode standar SAP secara langsung.
+
+00:10:00.060 --> 00:10:01.760
+Perbaikannya memiliki nama inti bersih
+
+00:10:01.760 --> 00:10:02.520
+dan idenya sederhana.
+
+00:10:03.040 --> 00:10:04.020
+Jangan menulis ulang mesin
+
+00:10:04.020 --> 00:10:05.740
+buat add-on yang bertahan dan tingkatkan.
+
+00:10:05.740 --> 00:10:07.720
+Dalam prakteknya, itu berarti memperluas sistem
+
+00:10:07.720 --> 00:10:08.860
+melalui antarmuka yang dirilis
+
+00:10:08.860 --> 00:10:09.840
+alih-alih memodifikasinya.
+
+00:10:10.640 --> 00:10:12.560
+SAP menawarkan serangkaian alat untuk ini
+
+00:10:12.560 --> 00:10:14.420
+termasuk SAP Business Technology Platform
+
+00:10:14.420 --> 00:10:15.780
+untuk membangun di luar inti
+
+00:10:15.780 --> 00:10:16.920
+model pengembangan yang disebut
+
+00:10:16.920 --> 00:10:17.560
+API-AP Cloud
+
+00:10:17.560 --> 00:10:18.680
+dan aplikasi berdampingan
+
+00:10:18.680 --> 00:10:20.440
+yang memanggil inti melalui API yang didukung.
+
+00:10:21.040 --> 00:10:21.900
+Frase yang perlu diingat adalah
+
+00:10:21.900 --> 00:10:22.420
+API yang dirilis.
+
+00:10:22.860 --> 00:10:23.900
+API hanyalah pintu masuk
+
+00:10:23.900 --> 00:10:24.940
+yang didukung ke dalam sistem
+
+00:10:24.940 --> 00:10:26.300
+dan SAP menandai pintu mana
+
+00:10:26.300 --> 00:10:27.440
+yang aman untuk digunakan.
+
+00:10:27.840 --> 00:10:28.860
+Bangun berdasarkan mitu tersebut
+
+00:10:28.860 --> 00:10:29.740
+dan pemutahiran cenderung
+
+00:10:29.740 --> 00:10:31.100
+tidak akan edit kode standar
+
+00:10:31.100 --> 00:10:31.740
+sebagai gantinya
+
+00:10:31.740 --> 00:10:32.720
+dan setiap pemutahiran
+
+00:10:32.720 --> 00:10:34.000
+berubah menjadi pekerjaan perbaikan.
+
+00:10:34.240 --> 00:10:34.840
+Ambil contoh konkret.
+
+00:10:35.520 --> 00:10:36.260
+Katakanlah sebuah perusaha
+
+00:10:36.260 --> 00:10:37.460
+menginginkan layar persetujuan pelanggan.
+
+00:10:38.080 --> 00:10:39.960
+Alih-alih mengedit program SAP standar
+
+00:10:39.960 --> 00:10:41.520
+pengembang membangun aplikasi kecil
+
+00:10:41.520 --> 00:10:42.320
+terpisah yang membaca
+
+00:10:42.320 --> 00:10:43.300
+dan menulis data melalui
+
+00:10:43.300 --> 00:10:44.220
+antarmuka yang didukung.
+
+00:10:44.780 --> 00:10:46.400
+Ketika SAP mengirimkan pemutahiran
+
+00:10:46.400 --> 00:10:47.780
+aplikasi itu terus berfungsi
+
+00:10:47.780 --> 00:10:49.120
+dan tidak ada yang perlu mencari-cari kode
+
+00:10:49.120 --> 00:10:49.840
+untuk melihat apa yang.
+
+00:10:50.120 --> 00:10:51.380
+Hasilnya baru terlihat bertonton kemudian.
+
+00:10:51.900 --> 00:10:52.920
+Setiap pemutahiran bisa jadi
+
+00:10:52.920 --> 00:10:53.820
+merupakan suara yang tenang
+
+00:10:53.820 --> 00:10:54.620
+atau proyek 6 bulan
+
+00:10:54.620 --> 00:10:55.340
+dan perbedaannya
+
+00:10:55.340 --> 00:10:56.580
+hampir sepenuhnya berasal dari
+
+00:10:56.580 --> 00:10:58.020
+seberapa dalam inti dimodifikasi.
+
+00:10:58.500 --> 00:10:59.580
+Itulah inti yang bersih.
+
+00:11:00.840 --> 00:11:02.620
+Di mana S per 4 HANA bertemu Microsoft,
+
+00:11:02.780 --> 00:11:03.620
+dua dunia tempat banyak
+
+00:11:03.620 --> 00:11:04.660
+dari kita bekerja bertemu di sini.
+
+00:11:05.040 --> 00:11:05.840
+Hubungannya lebih praktis
+
+00:11:05.840 --> 00:11:06.440
+daripada kedengaran.
+
+00:11:06.860 --> 00:11:07.680
+Untuk data,
+
+00:11:07.860 --> 00:11:09.080
+Microsoft Fabric dapat menarik
+
+00:11:09.080 --> 00:11:10.320
+informasi SAP melalui
+
+00:11:10.320 --> 00:11:11.100
+konektor bawaan
+
+00:11:11.100 --> 00:11:12.000
+untuk SAP HANA,
+
+00:11:12.240 --> 00:11:12.820
+SAP Tables,
+
+00:11:12.940 --> 00:11:13.620
+dan SAP BW
+
+00:11:13.620 --> 00:11:14.740
+dan dapat mencerminkan data
+
+00:11:14.740 --> 00:11:15.820
+SAP ke dalam penyimpanan
+
+00:11:15.820 --> 00:11:16.300
+satu danau
+
+00:11:16.300 --> 00:11:17.480
+sehingga laporan tetap terkini
+
+00:11:17.480 --> 00:11:18.640
+tanpa pekerjaan penyalinan
+
+00:11:18.640 --> 00:11:19.220
+setiap malam.
+
+00:11:20.280 --> 00:11:21.460
+Jalur pencerminan perlu diketahui
+
+00:11:21.460 --> 00:11:22.420
+jika Anda pernah mendengar istri.
+
+00:11:23.060 --> 00:11:24.240
+Data SAP dapat berjalan
+
+00:11:24.240 --> 00:11:25.200
+melalui SAP Data Sphere
+
+00:11:25.200 --> 00:11:26.320
+ke penyimpanan cloud Microsoft
+
+00:11:26.320 --> 00:11:27.260
+dan Fabric menjaganya
+
+00:11:27.260 --> 00:11:28.320
+tetap sinkron dari sana.
+
+00:11:29.100 --> 00:11:30.220
+Untuk kasus yang lebih sederhana,
+
+00:11:30.360 --> 00:11:31.180
+konektor Fabric sendiri
+
+00:11:31.180 --> 00:11:32.600
+menarik data S per 4 HANA Tables
+
+00:11:32.600 --> 00:11:33.620
+atau SAP BW secara langsung.
+
+00:11:34.300 --> 00:11:34.860
+Versi sederhana
+
+00:11:34.860 --> 00:11:36.080
+dan alur tersebut terlihat seperti ini.
+
+00:11:36.500 --> 00:11:37.340
+Pesanan penjualan masuk
+
+00:11:37.340 --> 00:11:38.080
+ke S per 4 HANA,
+
+00:11:38.420 --> 00:11:39.420
+Fabric mengambil perubahan
+
+00:11:39.420 --> 00:11:40.480
+dan laporan Power BI
+
+00:11:40.480 --> 00:11:41.700
+diperbarui dengan angka baru
+
+00:11:41.700 --> 00:11:42.380
+dengan angka baru.
+
+00:11:42.860 --> 00:11:44.020
+Orang yang membaca laporan tersebut
+
+00:11:44.020 --> 00:11:45.340
+tidak pernah masuk ke SAP sama sekali
+
+00:11:45.340 --> 00:11:46.380
+yang merupakan intinya.
+
+00:11:46.780 --> 00:11:47.700
+Ini adalah jalan betas yang nyata
+
+00:11:47.700 --> 00:11:48.240
+bagi pengguna bisnis.
+
+00:11:48.700 --> 00:11:49.980
+Identitas adalah koneksi kedua
+
+00:11:49.980 --> 00:11:51.940
+dan inilah yang paling menghemat masalah.
+
+00:11:53.000 --> 00:11:53.780
+Microsoft EntraID
+
+00:11:53.780 --> 00:11:54.660
+menangani proses masuk
+
+00:11:54.660 --> 00:11:55.820
+dan autentikasi multifaktor
+
+00:11:55.820 --> 00:11:57.400
+untuk aplikasi SAP seperti Fiori
+
+00:11:57.400 --> 00:11:58.200
+sehingga pengguna masuk
+
+00:11:58.200 --> 00:11:59.040
+sekali saja alih-alih
+
+00:11:59.040 --> 00:12:00.440
+menggunakan kata sandi yang terpisah.
+
+00:12:00.920 --> 00:12:01.700
+Satu peringatan penting di sini.
+
+00:12:02.180 --> 00:12:03.940
+EntraID dapat menangani autentikasi
+
+00:12:03.940 --> 00:12:04.880
+tetapi tidak menggantikan
+
+00:12:04.880 --> 00:12:06.280
+aturan otorisasi SAP sendiri
+
+00:12:06.280 --> 00:12:07.100
+yang tetap menentukan
+
+00:12:07.100 --> 00:12:07.920
+apa yang boleh dilihat
+
+00:12:07.920 --> 00:12:08.820
+dan dilakukan seseorang
+
+00:12:08.820 --> 00:12:09.380
+di dalam sistem.
+
+00:12:10.360 --> 00:12:11.360
+Otomatisasi dan keamanan
+
+00:12:11.360 --> 00:12:12.260
+melengkapi gambaran tersebut.
+
+00:12:12.640 --> 00:12:14.200
+Power Platform dan Azure Logic Apps
+
+00:12:14.200 --> 00:12:15.640
+terhubung ke SAP melalui konektor
+
+00:12:15.640 --> 00:12:16.880
+sehingga peristiwa bisnis
+
+00:12:16.880 --> 00:12:17.880
+dapat memicu alur kerja
+
+00:12:17.880 --> 00:12:18.600
+di alat Microsoft
+
+00:12:18.600 --> 00:12:19.980
+dan Microsoft Sentinel
+
+00:12:19.980 --> 00:12:21.720
+untuk SAP mengawasi log audit SAP
+
+00:12:21.720 --> 00:12:23.140
+untuk mencari tanda-tanda masalah.
+
+00:12:24.360 --> 00:12:24.940
+Power Platform
+
+00:12:24.940 --> 00:12:26.300
+juga mengirimkan template SAP
+
+00:12:26.300 --> 00:12:27.440
+yang telah dibuat sebelumnya
+
+00:12:27.440 --> 00:12:28.180
+sehingga pembuat dapat
+
+00:12:28.180 --> 00:12:29.220
+menyusun alur persetujuan
+
+00:12:29.220 --> 00:12:30.320
+tanpa menulis kode langsung
+
+00:12:30.320 --> 00:12:31.380
+pada antarmuka SAP.
+
+00:12:32.160 --> 00:12:33.580
+Ada juga pergerakan di sisi AI
+
+00:12:33.580 --> 00:12:34.760
+dengan asisten SAP Joule
+
+00:12:34.760 --> 00:12:35.960
+yang diumumkan terintegrasi
+
+00:12:35.960 --> 00:12:37.640
+dengan Microsoft 365 Copilot
+
+00:12:37.640 --> 00:12:38.360
+dan layar SAP
+
+00:12:38.360 --> 00:12:39.220
+yang dapat digunakan
+
+00:12:39.220 --> 00:12:40.120
+di dalam Teams.
+
+00:12:40.860 --> 00:12:41.680
+Anggap saja itu sebagai
+
+00:12:41.680 --> 00:12:42.720
+sesuatu yang terus berkembang
+
+00:12:42.720 --> 00:12:43.520
+karena ketersediaan
+
+00:12:43.520 --> 00:12:44.440
+terus berubah dan pengumuman
+
+00:12:44.440 --> 00:12:45.300
+tidak sama dengan fitur
+
+00:12:45.300 --> 00:12:46.460
+yang dapat Anda aktifkan saat ini.
+
+00:12:46.920 --> 00:12:47.520
+Di sisi biaya,
+
+00:12:47.520 --> 00:12:49.120
+ada baiknya memiksa cetakan kecil
+
+00:12:49.120 --> 00:12:50.200
+karena beberapa pekerjaan
+
+00:12:50.200 --> 00:12:51.020
+replikasi gratis
+
+00:12:51.020 --> 00:12:52.040
+sementara query dan laporan
+
+00:12:52.040 --> 00:12:52.840
+yang Anda buat di atasnya
+
+00:12:52.840 --> 00:12:53.480
+dikenakan biaya
+
+00:12:53.480 --> 00:12:54.320
+dengan tarif kode normal.
+
+00:12:55.820 --> 00:12:56.520
+Batasan yang jujur
+
+00:12:56.520 --> 00:12:57.160
+dan kesalahan umum.
+
+00:12:57.720 --> 00:12:58.300
+Sekarang kita bahas
+
+00:12:58.300 --> 00:12:59.260
+bagian-bagian yang tidak sesuai
+
+00:12:59.260 --> 00:12:59.940
+dengan yang diharapkan.
+
+00:13:00.360 --> 00:13:01.080
+Mulai dengan kecepatan.
+
+00:13:01.540 --> 00:13:02.720
+Angka performa yang dramatis
+
+00:13:02.720 --> 00:13:04.300
+berasal dari pemasaran SAP sendiri
+
+00:13:04.300 --> 00:13:05.600
+dan query yang dirancang
+
+00:13:05.600 --> 00:13:06.040
+dengan buruk
+
+00:13:06.040 --> 00:13:06.860
+akan tetap merayapi
+
+00:13:06.860 --> 00:13:07.740
+apapun basis data
+
+00:13:07.740 --> 00:13:08.460
+yang ada di bawahnya.
+
+00:13:09.240 --> 00:13:10.120
+Kesalahan berikutnya adalah
+
+00:13:10.120 --> 00:13:11.340
+meremehkan migrasi itu sendiri.
+
+00:13:12.240 --> 00:13:12.780
+Tim menganggarkan
+
+00:13:12.780 --> 00:13:13.980
+perangkat lunak dan lisensi
+
+00:13:13.980 --> 00:13:15.160
+lalu menemukan bahwa
+
+00:13:15.160 --> 00:13:16.320
+membersihkan data yang berantakan
+
+00:13:16.320 --> 00:13:17.140
+selama puluhan tahun
+
+00:13:17.140 --> 00:13:18.060
+dan mendesain ulang proses
+
+00:13:18.060 --> 00:13:18.680
+menghabiskan uang
+
+00:13:18.680 --> 00:13:19.500
+dan waktu yang sebenarnya.
+
+00:13:19.840 --> 00:13:20.500
+Perangkat lunak jarang
+
+00:13:20.500 --> 00:13:21.620
+menjadi bagian yang sulit.
+
+00:13:21.960 --> 00:13:22.580
+Live and ship adalah
+
+00:13:22.580 --> 00:13:23.740
+sodara dekat dari kesalahan itu.
+
+00:13:24.360 --> 00:13:25.640
+Memindahkan isisi apa adanya
+
+00:13:25.640 --> 00:13:26.740
+dapat membawa kode khusus
+
+00:13:26.740 --> 00:13:27.460
+yang sama rumitnya
+
+00:13:27.460 --> 00:13:28.440
+dan laporan yang lambat
+
+00:13:28.440 --> 00:13:29.280
+langsung ke platform baru
+
+00:13:29.280 --> 00:13:30.240
+secara diam-diam mengalahkan
+
+00:13:30.240 --> 00:13:31.440
+sebagian besar tujuan pemindahan
+
+00:13:31.440 --> 00:13:31.980
+secara awal.
+
+00:13:32.620 --> 00:13:33.680
+Klub publik juga menjebak orang.
+
+00:13:34.540 --> 00:13:35.520
+Tim yang terbiasa mengubah
+
+00:13:35.520 --> 00:13:36.520
+apapun yang mereka suka
+
+00:13:36.520 --> 00:13:37.380
+di tempat menemukan
+
+00:13:37.380 --> 00:13:38.220
+bahwa versi standar
+
+00:13:38.220 --> 00:13:39.260
+tidak akan membiarkan mereka
+
+00:13:39.260 --> 00:13:40.080
+dan kejutan itu
+
+00:13:40.080 --> 00:13:41.060
+cenderung datang terlambat
+
+00:13:41.060 --> 00:13:42.100
+setelah proyek telah dikomit.
+
+00:13:42.700 --> 00:13:43.520
+Dua perangkap yang lebih tenang
+
+00:13:43.520 --> 00:13:44.120
+perlu disebutkan.
+
+00:13:44.740 --> 00:13:45.360
+Salah satunya adalah
+
+00:13:45.360 --> 00:13:46.240
+mengharapkan manfaat
+
+00:13:46.240 --> 00:13:46.740
+segera muncul
+
+00:13:46.740 --> 00:13:48.220
+saat pelaporan dan perolehan proses
+
+00:13:48.220 --> 00:13:49.520
+biasanya terjadi beberapa bulan
+
+00:13:49.520 --> 00:13:50.180
+setelah diluncurkan
+
+00:13:50.180 --> 00:13:51.140
+setelah orang benar-benar
+
+00:13:51.140 --> 00:13:52.120
+mempercayai sistem baru.
+
+00:13:53.020 --> 00:13:53.620
+Yang lainnya adalah
+
+00:13:53.620 --> 00:13:55.040
+memperlakukan keseluruhan proyek
+
+00:13:55.040 --> 00:13:55.920
+sebagai proyek TI
+
+00:13:55.920 --> 00:13:57.180
+ketika keputusan yang paling penting
+
+00:13:57.180 --> 00:13:57.980
+berada di tangan bisnis
+
+00:13:57.980 --> 00:13:58.660
+bukan tim teknis.
+
+00:13:59.700 --> 00:14:00.240
+Bagian tersulit
+
+00:14:00.240 --> 00:14:01.120
+jarang sekali bersifat tech.
+
+00:14:01.720 --> 00:14:02.240
+Melatih orang,
+
+00:14:02.500 --> 00:14:03.600
+mengubah cara mereka bekerja
+
+00:14:03.600 --> 00:14:04.460
+dan membuat bisnis
+
+00:14:04.460 --> 00:14:05.460
+menyetujui proses baru
+
+00:14:05.460 --> 00:14:06.040
+adalah hal-hal
+
+00:14:06.040 --> 00:14:06.700
+yang menentukan
+
+00:14:06.700 --> 00:14:07.880
+apakah proyek tersebut berhasil
+
+00:14:07.880 --> 00:14:08.700
+dan bagian itu
+
+00:14:08.700 --> 00:14:09.420
+biasanya mendapat anggaran
+
+00:14:09.420 --> 00:14:09.880
+paling sedikit.
+
+00:14:10.940 --> 00:14:11.340
+Tidak ada satu
+
+00:14:11.340 --> 00:14:11.860
+dari hal tersebut
+
+00:14:11.860 --> 00:14:12.500
+yang menjadi pemindahan.
+
+00:14:13.300 --> 00:14:13.880
+Apa dia pada sini?
+
+00:14:14.600 --> 00:14:15.400
+Ini adalah versi singkat.
+
+00:14:15.880 --> 00:14:16.500
+S per empat Hana
+
+00:14:16.500 --> 00:14:17.500
+adalah sistem yang digunakan
+
+00:14:17.500 --> 00:14:18.100
+perusahaan untuk
+
+00:14:18.100 --> 00:14:19.140
+menjalankan bisnis intinya
+
+00:14:19.140 --> 00:14:20.600
+dibangun kembali pada tahun 2015
+
+00:14:20.600 --> 00:14:21.340
+pada basis data
+
+00:14:21.340 --> 00:14:22.280
+yang menyimpan data dalam memori
+
+00:14:22.280 --> 00:14:23.660
+basis data yang menyimpan data dalam memori.
+
+00:14:24.120 --> 00:14:24.540
+Sistem ini
+
+00:14:24.540 --> 00:14:25.760
+menyederhanakan modal data
+
+00:14:25.760 --> 00:14:26.940
+mencakup area bisnis utama
+
+00:14:26.940 --> 00:14:27.880
+dan memaksa keputusan nyata
+
+00:14:27.880 --> 00:14:28.380
+tentang cloud,
+
+00:14:28.520 --> 00:14:29.000
+celul migasi
+
+00:14:29.000 --> 00:14:30.220
+dan seberapa banyak kode khusus
+
+00:14:30.220 --> 00:14:31.180
+yang Anda izinkan
+
+00:14:31.180 --> 00:14:31.740
+di dekat inti.
+
+00:14:32.780 --> 00:14:33.520
+Peralatan Microsoft
+
+00:14:33.520 --> 00:14:34.440
+terpasang di lapisan data
+
+00:14:34.440 --> 00:14:35.960
+identitas dan otomatisasi
+
+00:14:35.960 --> 00:14:37.580
+dan tengkat waktu tahun 2027
+
+00:14:37.580 --> 00:14:38.160
+adalah alasan
+
+00:14:38.160 --> 00:14:38.800
+mengapa semua ini
+
+00:14:38.800 --> 00:14:39.900
+tidak dapat ditunda selamanya.
+
+00:14:40.320 --> 00:14:40.900
+Berikut pertanyaan
+
+00:14:40.900 --> 00:14:41.760
+yang saya sampaikan kepada Anda.
+
+00:14:42.180 --> 00:14:42.700
+Jika tim Anda
+
+00:14:42.700 --> 00:14:43.560
+masih menggunakan ECC,
+
+00:14:43.820 --> 00:14:44.740
+apakah Anda benar-benar tahu
+
+00:14:44.740 --> 00:14:45.440
+jarum migasi mana
+
+00:14:45.440 --> 00:14:45.980
+yang sedang dituju
+
+00:14:45.980 --> 00:14:46.600
+atau apakah itu
+
+00:14:46.600 --> 00:14:47.620
+masih menjadi perdebatan terbuka?
+
+00:14:47.980 --> 00:14:48.520
+Jika ini membuat
+
+00:14:48.520 --> 00:14:49.080
+topik tersebut
+
+00:14:49.080 --> 00:14:50.080
+tidak terlalu menakutkan,
+
+00:14:50.440 --> 00:14:51.860
+berlanggananlah M305FM
+
+00:14:51.860 --> 00:14:52.460
+untuk menguasai
+
+00:14:52.460 --> 00:14:53.620
+berbagai alat dan pola pikir
+
+00:14:53.620 --> 00:14:54.040
+yang membentuk
+
+00:14:54.040 --> 00:14:55.000
+masa depan pekerjaan.

@@ -1,0 +1,640 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:02.840
+Utilizzi le API REST da anni senza conoscerne il nome.
+
+00:00:03.700 --> 00:00:07.080
+Ogni volta che Power Automate recupera il tuo calendario o Copilot Studio legge un file,
+
+00:00:07.420 --> 00:00:08.900
+un programma chiede informazioni a un altro.
+
+00:00:09.700 --> 00:00:14.880
+Benvenuti al podcast M365FM, dove esploriamo le persone, le idee e le tecnologie che stanno
+
+00:00:14.880 --> 00:00:16.020
+plasmando il futuro del lavoro.
+
+00:00:16.760 --> 00:00:20.120
+Oggi parleremo delle API REST, il semplice schema alla base di quasi tutte le app che
+
+00:00:20.120 --> 00:00:20.600
+utilizzi.
+
+00:00:21.660 --> 00:00:25.060
+Alla fine leggerai una richiesta e capirai esattamente cosa restituisce e capirai perché
+
+00:00:25.060 --> 00:00:26.800
+il nome REST non significa ciò che sembra.
+
+00:00:28.080 --> 00:00:28.940
+Cos'è realmente un API?
+
+00:00:28.940 --> 00:00:33.340
+L'API sta per Application Programming Interface e il nome la fa sembrare più difficile di
+
+00:00:33.340 --> 00:00:33.720
+quanto non sia.
+
+00:00:34.240 --> 00:00:37.640
+Togli l'etichetta, è un API, è un insieme di porte a cui un programma può bussare.
+
+00:00:38.520 --> 00:00:41.280
+Ogni porta è accompagnata da un accordo su cosa puoi chiedere, quale forma assumerà
+
+00:00:41.280 --> 00:00:41.840
+la risposta.
+
+00:00:42.280 --> 00:00:43.660
+Il paragone classico è quello di un ristorante.
+
+00:00:44.100 --> 00:00:46.340
+Non entri mai in cucina e non dici mai allo chef come cucinare.
+
+00:00:46.800 --> 00:00:49.540
+Dici al cameriere cosa vuoi dal menu e un piatto ti torna al tavolo.
+
+00:00:50.180 --> 00:00:54.420
+Il menu è l'accordo e il cameriere è l'interfaccia che trasporta il tuo ordine tra le due parti.
+
+00:00:54.920 --> 00:00:56.600
+La prima interfaccia svolge un vero e proprio lavoro in questo.
+
+00:00:56.600 --> 00:01:00.380
+Un'interfaccia è semplicemente il confine condiviso in cui due cose si incontrano e
+
+00:01:00.380 --> 00:01:03.120
+funziona meglio quando ciascuna parte mantiene riservata la propria attività.
+
+00:01:03.620 --> 00:01:07.780
+Un sito web e un API spostano entrambi informazioni su internet ma sono realizzati per lettori
+
+00:01:07.780 --> 00:01:08.300
+diversi.
+
+00:01:09.060 --> 00:01:12.120
+Un sito web è progettato per i tuoi occhi pieno di colori, pulsanti e intestazioni.
+
+00:01:12.860 --> 00:01:16.100
+Un'API progettata per un altro programma quindi restituisce dati grezzi anziché qualcosa
+
+00:01:16.100 --> 00:01:16.740
+di decorativo.
+
+00:01:17.440 --> 00:01:19.420
+Questa differenza spiega perché l'accordo è così importante.
+
+00:01:19.420 --> 00:01:23.200
+Quando due programmi condividono una porta fissa nessuno dei due deve sapere come funziona
+
+00:01:23.200 --> 00:01:23.900
+l'altro a suo interno.
+
+00:01:24.440 --> 00:01:28.480
+Puoi ricostruire la cucina, cambiare lo chef e riscrivere le ricette senza che il menu al
+
+00:01:28.480 --> 00:01:29.640
+tavolo cambia affatto.
+
+00:01:30.100 --> 00:01:31.900
+Pensa innanzitutto al motivo per cui i programmi ne hanno bisogno.
+
+00:01:32.540 --> 00:01:35.040
+Un programma non può dare un'occhiata allo schermo di un altro programma e indovinare
+
+00:01:35.040 --> 00:01:35.540
+cosa fare dopo.
+
+00:01:35.880 --> 00:01:39.480
+Ha bisogno di un modo fisso e scritto per chiedere qualcosa e ha bisogno della promessa
+
+00:01:39.480 --> 00:01:42.020
+che la risposta arriverà in una forma che sa già come leggere.
+
+00:01:42.660 --> 00:01:44.380
+Quel modo scritto è l'interfaccia nel nome.
+
+00:01:44.380 --> 00:01:48.980
+Salesforce e eBay hanno aperto alcune delle prime grandi epi web nel 2000 e da allora
+
+00:01:48.980 --> 00:01:51.480
+quelle chiamate sono state eseguite sotto la superficie.
+
+00:01:52.420 --> 00:01:54.820
+Non le hai mai notate perché non sono mai state create per essere viste.
+
+00:01:55.720 --> 00:01:58.540
+Quasi sicuramente hai utilizzato un'appi oggi anche se nessuno alla stanza le ha chiamate
+
+00:01:58.540 --> 00:01:58.780
+così.
+
+00:01:59.420 --> 00:02:02.640
+Quindi un'appi è in realtà solo una porta con delle regole e le regole sono ciò che
+
+00:02:02.640 --> 00:02:03.880
+rende prevedibile lo scambio.
+
+00:02:04.580 --> 00:02:07.080
+Ora guarda cosa succede quando una richiesta attraversa effettivamente quello.
+
+00:02:07.600 --> 00:02:08.460
+Viaggio ne ha addirittura.
+
+00:02:08.900 --> 00:02:12.180
+Segui una richiesta dal momento in cui lascia la tua app al momento in cui una risposta arriva
+
+00:02:12.180 --> 00:02:12.560
+a casa.
+
+00:02:12.560 --> 00:02:16.060
+Il viaggio è composto da due metà, una richiesta in uscita e una risposta in ritorno.
+
+00:02:16.420 --> 00:02:18.620
+Entrambe le metà seguono una forma che puoi imparare in pochi minuti.
+
+00:02:19.720 --> 00:02:21.200
+Una richiesta trasporta fino a quattro cose.
+
+00:02:21.560 --> 00:02:24.400
+La prima è l'indirizzo, ovvero l'URL che punta alla cosa che desideri.
+
+00:02:24.980 --> 00:02:27.700
+La seconda è il verbo che dice al server cosa fare con quella cosa.
+
+00:02:28.140 --> 00:02:31.320
+La terza sono le intestazioni, una serie di istruzioni aggiuntive che viaggiano con
+
+00:02:31.320 --> 00:02:33.020
+il messaggio, inclusa la tua prova di chi sei.
+
+00:02:33.220 --> 00:02:36.980
+La quarta è il corpo e appare solo quando invidati anziché richiederli.
+
+00:02:37.560 --> 00:02:38.780
+La risposta rispecchia tutto questo.
+
+00:02:38.780 --> 00:02:42.400
+Si apre con un numero di stato a tre cifre che indica come sono andate le cose seguito
+
+00:02:42.400 --> 00:02:43.220
+dalle proprie intestazioni.
+
+00:02:43.740 --> 00:02:46.680
+Quindi arriva un corpo che contiene i dati richiesti se ci sono dati da inviare.
+
+00:02:47.300 --> 00:02:50.120
+Microsoft Graph mostra questo schema in una forma che puoi effettivamente letti.
+
+00:02:50.480 --> 00:02:54.400
+Ogni richiesta Graph segue la stessa forma, iniziando con l'indirizzo Graph, quindi una
+
+00:02:54.400 --> 00:02:56.120
+versione, e infine la risorsa desidera.
+
+00:02:56.480 --> 00:02:59.780
+La versione è la v1.0 per la produzione e la beta per le cose ancora in anteprima.
+
+00:02:59.780 --> 00:03:03.340
+Invia una richiesta get a quell'indirizzo seguito dagli utenti e da un indirizzo email
+
+00:03:03.340 --> 00:03:06.680
+e il server risponde con un 200k e un corpo che descrive quella persona.
+
+00:03:07.640 --> 00:03:10.840
+Immagina l'indirizzo come la busta e il corpo come la lettera al suo interno.
+
+00:03:11.600 --> 00:03:14.320
+La busta indica il sistema postale dove va il messaggio e la lettera.
+
+00:03:14.440 --> 00:03:16.340
+Contiene tutto ciò che volevi effettivamente dire.
+
+00:03:17.160 --> 00:03:20.300
+Anche il verbo è presente sulla busta, quindi il server sa prima di aprire qualsiasi cosa
+
+00:03:20.300 --> 00:03:22.400
+se stai ponendo una domanda, fornendo nuove informazioni.
+
+00:03:23.240 --> 00:03:25.200
+Nota quanto poco dovevi sapere per seguire tutto questo.
+
+00:03:25.200 --> 00:03:28.280
+Avevi un indirizzo, un verbo e una risposta che potevi leggere ad alta voce.
+
+00:03:28.780 --> 00:03:33.040
+Questo è il ritmo completo di un api rest e si ripete per ogni singola chiamata che farai.
+
+00:03:34.720 --> 00:03:38.460
+Ogni richiesta contiene un verbo e il verbo dice al server che tipo di azione vuoi.
+
+00:03:39.120 --> 00:03:43.220
+Il nome tecnico è metodo HTTP e ce ne sono solo una manciata che incontrerai nel normale lavoro.
+
+00:03:43.940 --> 00:03:45.720
+Get chiede informazioni e non cambia nulla.
+
+00:03:46.240 --> 00:03:49.700
+Post solitamente crea qualcosa di nuovo come inviare un email o aggiungere un commento a un elenco.
+
+00:03:50.380 --> 00:03:52.540
+Put sostituisce un intero record con una nuova versione.
+
+00:03:52.540 --> 00:03:55.620
+Patch aggiorna solo una parte di un record, delle te lo rimuove.
+
+00:03:56.180 --> 00:03:59.260
+Esistono anche head e options, ma servono per controllare le cose dietro le quinte.
+
+00:03:59.360 --> 00:04:01.120
+Potresti passare anni senza toccarne nessuna.
+
+00:04:01.780 --> 00:04:04.720
+Il verbo si trova proprio accanto all'indirizzo, quindi la coppia si legge come una frase.
+
+00:04:06.480 --> 00:04:09.540
+Ottieni questa cosa significa mostramelo, pubblica quella cosa significa farlo accadere.
+
+00:04:10.400 --> 00:04:14.740
+Due parole contano più delle altre qui e insieme spiegano un errore che quasi tutti commettono a un certo punto.
+
+00:04:15.120 --> 00:04:19.160
+Un metodo sicuro non cambia nulla sul server, quindi inviarlo due volte non costa nulla.
+
+00:04:19.160 --> 00:04:23.400
+Un metodo idempotente fornisce lo stesso risultato indipendentemente dal fatto che lo invii una 5.
+
+00:04:23.940 --> 00:04:28.540
+Get, add, put, delete e options sono idempotenti, mentre post e patch non lo sono.
+
+00:04:29.580 --> 00:04:31.680
+Questa distinzione ha un impatto reale sui tuoi strumenti quotidiani.
+
+00:04:32.000 --> 00:04:36.920
+Se un'automazione riprova un get non riuscito, non si interrompe nulla perché la stessa risposta viene semplicemente restituita di nuovo.
+
+00:04:36.920 --> 00:04:42.320
+Se riprova un post non riuscito, potresti creare una seconda email, una seconda riga, un seconda riga, un secondo ordine, senza volerlo.
+
+00:04:42.760 --> 00:04:45.200
+La richiesta sembra identica ma il risultato è molto diverso.
+
+00:04:45.600 --> 00:04:51.020
+Tieni a mente quest'ultima idea perché post è anche il verbo che più spesso costringe il server a chiedere chi sei prima di accettare di fare qualsiasi cosa.
+
+00:04:52.140 --> 00:04:52.940
+Risorse e indirizzi.
+
+00:04:53.320 --> 00:04:59.040
+Una risorsa e qualsiasi cosa di cui stai parlando non è determinata che potrebbe essere un mutente, un email, un file o una singola riga in una tabella
+
+00:04:59.040 --> 00:05:02.240
+e l'url è semplicemente il punto in cui tale risorsa si trova sul server.
+
+00:05:02.920 --> 00:05:07.160
+Ogni indirizzo è costruito una base che nomina il servizio più un percorso che scende fino alla cosa esatta che desideri.
+
+00:05:07.800 --> 00:05:10.160
+L'idea di progettazione sottostante è chiara una volta che la vedi.
+
+00:05:10.660 --> 00:05:14.900
+L'indirizzo indica la cosa, il verbo indica cosa farne e quindi una richiesta spesso si legge come una frase breve.
+
+00:05:15.520 --> 00:05:20.500
+Get me slash message significa dammi i miei messaggi e post me slash send mail significa inviare un email per mio conto.
+
+00:05:21.240 --> 00:05:23.560
+Microsoft Graph si basa su questo con alcune scorciatoie che vale la pena.
+
+00:05:24.040 --> 00:05:28.460
+La parola me si risolve in chiunque abbia eseguito l'accesso quindi non devi prima cercare il tuo identificativo.
+
+00:05:28.460 --> 00:05:34.860
+I dati correlati seguono lo stesso percorso di me slash events, me slash drive o me slash messages.
+
+00:05:35.540 --> 00:05:41.440
+Una raccolta come users contiene molte delle stesse cose e aggiungendo un identificativo alla fine si punta a un membro specifico di tale raccolta.
+
+00:05:42.220 --> 00:05:47.380
+Ecco perché lo stesso indirizzo può descrivere un intero gruppo o una singola persona a seconda di quanto si procede nel percorso.
+
+00:05:48.020 --> 00:05:52.280
+A volte si desidera ridurre la risposta senza modificare la risorsa stessa ed è a questo che servono i parametri di query.
+
+00:05:52.840 --> 00:05:58.280
+Aggiungi select a una richiesta e il server restituisce solo i campi che nomini come nome visualizzato e città.
+
+00:05:58.700 --> 00:06:03.420
+Aggiungi un filtro e restringi un lungo elenco a un set più piccolo come ogni utente con una determinata qualifica professionale.
+
+00:06:03.780 --> 00:06:06.680
+Gli indirizzi sembrano casuali all'inizio ma seguono uno schema che puoi imparare.
+
+00:06:07.060 --> 00:06:09.240
+Una volta che riesci a leggerne uno di solito riesci a indovinare il successo.
+
+00:06:09.540 --> 00:06:13.600
+Ora che sai dove chiedere la domanda successiva riguarda cosa ti viene restituito e la risposta inizia con un numero.
+
+00:06:14.040 --> 00:06:14.660
+Codici di stato.
+
+00:06:15.280 --> 00:06:19.900
+Ogni risposta inizia con un numero di tre cifre e quel numero è il server che ti dice esattamente com'è andata la richiesta.
+
+00:06:19.900 --> 00:06:23.920
+La prima cifra ha la maggior parte del significato quindi ci sono solo cinque famiglie a imparare.
+
+00:06:24.180 --> 00:06:28.100
+Un numero che inizia con 1 significa che la richiesta è ancora in corso, 2 significa che è funzionato,
+
+00:06:28.580 --> 00:06:31.160
+un 3 significa che la risposta si trova da qualche altra parte quindi vai a guardare.
+
+00:06:31.380 --> 00:06:36.560
+Un 4 significa che il problema è dalla tua parte, un 5 significa che il problema è dalla parte del server e non hai fatto nulla di sbagliato.
+
+00:06:36.940 --> 00:06:38.420
+Ecco quelli che effettivamente incontrano principiato.
+
+00:06:38.420 --> 00:06:42.000
+Un 200K significa che ha funzionato, un 201 significa che è stato creato qualcosa di più.
+
+00:06:42.200 --> 00:06:47.160
+Un 24 significa che ha funzionato e non c'è nulla da inviare indietro, mentre un 400 significa che la tua richiesta era malformata.
+
+00:06:47.480 --> 00:06:49.900
+Il resto riguarda le situazioni in cui ti imbatterai in un flusso interrotto.
+
+00:06:50.180 --> 00:06:55.800
+Un 401 significa che non hai dimostrato la tua identità e un 403 significa che hai dimostrato la tua identità e non ti hai comunque consentito fare.
+
+00:06:55.880 --> 00:06:57.480
+Un 404 significa che non hai rizzo.
+
+00:06:58.020 --> 00:07:01.540
+Un 429 significa che stai chiedendo troppo velocemente e il server vuole che tu rallenta.
+
+00:07:01.760 --> 00:07:03.440
+Un 500 significa che il server si interrotte.
+
+00:07:03.440 --> 00:07:05.560
+I server inviano numeri anziché frasi per un motivo.
+
+00:07:05.560 --> 00:07:12.300
+Un altro programma deve leggere quella risposta senza che ci sia un essere umano che la interpreti, quindi un codice fisso breve è molto più semplice da gestire per il software.
+
+00:07:13.080 --> 00:07:17.840
+La tua app può verificare un 200 e andare avanti oppure intercettare un 429 e attendere in silenzio prima di riprovare.
+
+00:07:18.220 --> 00:07:20.440
+La coppia che le persone confondono di più è 403.
+
+00:07:20.540 --> 00:07:24.280
+L'autenticazione riguarda chi sei, mentre l'autorizzazione riguarda ciò che ti ha consentito fare.
+
+00:07:25.180 --> 00:07:30.860
+Un 401 significa che il tuo accesso non è andato a buon fine e un 410 ha funzionato, ma il tuo account non ha l'autorizzazione di cui hai bisogno.
+
+00:07:31.660 --> 00:07:35.180
+Questa distinzione ti farà risparmiare un'ora la prossima volta che un'automazione fallisce
+
+00:07:35.180 --> 00:07:36.940
+e il messaggio di error non ti dice nulla di utile.
+
+00:07:38.320 --> 00:07:39.420
+JSON è linguaggio condiviso.
+
+00:07:40.080 --> 00:07:42.480
+Quando un server invia dati, solitamente, li invia come JSON.
+
+00:07:43.100 --> 00:07:48.100
+JSON è un modo per scrivere dati come testo normale, in modo che qualsiasi programma scritto in qualsiasi linguaggio possa leggere.
+
+00:07:48.300 --> 00:07:52.760
+Il nome sta per JavaScript Notation, ma non è necessario conoscere JavaScript per usarlo.
+
+00:07:53.300 --> 00:07:55.000
+La forma è più semplice di quanto suggerisca il no.
+
+00:07:55.340 --> 00:07:58.340
+Scrivi un'etichetta, quindi un valore, e racchiudi la coppia tra parentesi graph.
+
+00:07:58.340 --> 00:08:04.080
+Un elenco di queste coppie si trova tra parentesi quadre e puoi annidare un elenco dentro un altro fino a raggiungere la profondità dei dati.
+
+00:08:04.420 --> 00:08:07.400
+Questa è la maggior parte del formato, puoi leggerlo ad alta voce senza alcuna formazione.
+
+00:08:08.100 --> 00:08:09.240
+Un piccolo esempio l'ore ne concre.
+
+00:08:09.700 --> 00:08:16.040
+Una richiesta per un utente potrebbe tornare con un'etichetta con il nome John Doe, un'etichetta con la città Redmond e un'etichetta con il dipartimento Help Center.
+
+00:08:16.040 --> 00:08:20.300
+Riconosci subito lo schema, perché il formato è stato scritto per essere letto sia dalle persone che dalle macchie.
+
+00:08:20.820 --> 00:08:24.660
+JSON 1, perché è rimasto piccolo e leggibile, mentre i formati che lo circondavano diventavano pesanti.
+
+00:08:25.400 --> 00:08:34.220
+È stato formalizzato come RFC-1959 a dicembre 2017 e come standard ECMA 404, quindi quasi tutte le API moderne lo considerano il modo predefinito per inviare dati.
+
+00:08:35.260 --> 00:08:43.220
+Impara a leggere JSON e potrai leggere la risposta a quasi tutte le chiamate API, il che trasforma un muro di testo in qualcosa che puoi scansionare in pochi secondi per dimostrare chi sei.
+
+00:08:43.220 --> 00:08:48.780
+Niente di tutto ciò funziona a meno che il server non si fidi di te, quindi la maggior parte delle richieste continuano a provare di testo.
+
+00:08:48.920 --> 00:08:52.780
+Tale prova è chiamata autenticazione e impedisce a chiunque di leggere il tuo posto e eliminare i tuoi file.
+
+00:08:53.240 --> 00:08:54.720
+Ci sono due approcci che incontrerai più spesso.
+
+00:08:55.160 --> 00:08:58.600
+Una chiave API è una lunga stringa fissa che invicono ogni richiesta ed è facile da usare.
+
+00:08:59.060 --> 00:09:03.700
+Il problema è che ampia scade raramente e ruotarla significa toccare ogni posto che la utilizza.
+
+00:09:04.200 --> 00:09:05.580
+O2.0 funziona in modo diverso.
+
+00:09:05.700 --> 00:09:12.580
+L'app riceve un token di accesso di breve durata, spesso denominato token portatore, che sostituisce l'utente connesso e può essere evocato in caso di problemi.
+
+00:09:13.040 --> 00:09:15.060
+La differenza è fondamentale quando si verifica una credenziale.
+
+00:09:15.440 --> 00:09:19.060
+Una chiave API rubata può essere riutilizzata finché rimane valida, il che potrebbe essere per sempre.
+
+00:09:20.060 --> 00:09:25.020
+Un token portatore rubato è progettato per durare poco, quindi smette di funzionare da solo e ti offre una finestra temporale per interrompere l'accesso.
+
+00:09:25.460 --> 00:09:28.260
+La sorpresa è che di solito la credenziale non è la tua password.
+
+00:09:28.260 --> 00:09:34.820
+La tua app ti esegue l'accesso una volta, riceve un token e poi lo passa all'app e a ogni chiamata, in modo che la tua password non viaggi mai con la richiesta.
+
+00:09:35.500 --> 00:09:38.700
+Il token è il sostituto ed è progettato per essere eliminato e sostituito.
+
+00:09:39.720 --> 00:09:44.780
+In una richiesta questo si presenta come una riga in più e le intestazioni che riporta autorizzazione, quindi la parola portatore, quindi il token stesso.
+
+00:09:45.420 --> 00:09:50.640
+Nell'esempio di Microsoft Graph di prima, quell'intestazione è esattamente ciò che ha trasformato una chiamata rifiutata in una chiamata riuscita.
+
+00:09:50.640 --> 00:09:53.120
+Questo è anche il motivo per cui esiste quattrocento luogo.
+
+00:09:53.780 --> 00:09:56.620
+Nessuna prova valida significa nessuna risposta e non ci sono eccezioni.
+
+00:09:57.240 --> 00:10:00.900
+Ogni errore di accesso che hai mai visto in un flusso risale a quest'idea di cosa significhi realmente.
+
+00:10:01.640 --> 00:10:02.040
+REST
+
+00:10:02.040 --> 00:10:05.820
+La parola REST ha una storia di origine che cambia il modo in cui la senti.
+
+00:10:05.820 --> 00:10:11.360
+È stata cognata nel 2000 da un informatico di nome Roy Fielding nella sua tesi di dottorato presso l'Università della California, Irvine.
+
+00:10:11.780 --> 00:10:12.820
+Questa è la parte che tutti ripetono.
+
+00:10:13.200 --> 00:10:15.460
+Ciò che tralasciano è l'argomento effettivo della tesi.
+
+00:10:16.060 --> 00:10:18.580
+Non riguardava la creazione di più web, riguardava il web stesso.
+
+00:10:18.580 --> 00:10:22.920
+Fielding è stato coautore della specifica HTTP 1.1 pubblicata nel 1999
+
+00:10:22.920 --> 00:10:25.900
+e la sua tesi ha evidenziato i principi di progettazione che l'avevano guidata.
+
+00:10:26.160 --> 00:10:30.700
+Ha descritto uno stile architettonico per la connessione di documenti su internet e ha nominato sei vincoli.
+
+00:10:31.220 --> 00:10:36.540
+Client e server, assenza di stato, memorizzazione nella cache o un'interfaccia uniforme, un sistema a livelli e codice su richiesta.
+
+00:10:37.120 --> 00:10:39.240
+Solo un capitolo della tesi tratta di REST.
+
+00:10:40.140 --> 00:10:42.840
+Fielding ha anche respinto l'idea che uno stile vada bene per tutto.
+
+00:10:43.660 --> 00:10:47.080
+Sosteneva che un bravo progettista dovrebbe scegliere uno stile che corrisponda al problema da risolvere
+
+00:10:47.080 --> 00:10:50.120
+piuttosto che considerare un singolo approccio come una panacea per tutto il software.
+
+00:10:50.960 --> 00:10:55.560
+Il percorso da un saggio di progettazione sul web all'etichetta predefinita per le API passa direttamente attraverso SOAP.
+
+00:10:55.920 --> 00:11:00.820
+SOAP era un modo precedente per creare servizi web ed era prolisso, pesante in XML e scomodo da usare.
+
+00:11:01.660 --> 00:11:05.220
+Ruby on Rails ha abbandonato il supporto a SOAP nel 2007 e gli sviluppatori se ne sono andati.
+
+00:11:05.760 --> 00:11:09.000
+Volevano scrivere su HTTP semplice e REST ha dato al loro approccio un nome rispettabile.
+
+00:11:09.000 --> 00:11:17.680
+Il problema più profondo è che REST è rigoroso e guidato da lì per testo, il che significa che una vera API REST consente di scoprire ogni endpoint seguendo i collegamenti e i collegamenti da un punto di partenza.
+
+00:11:18.200 --> 00:11:22.840
+Quasi nessuna delle API che chiamiamo RESTful lo fa davvero e lo stesso Fielding lo ha sottolineato nel 2008.
+
+00:11:23.020 --> 00:11:26.800
+Il nome è stato preso in prestito, allungato e associato a qualcosa per cui non era mai stato scritto.
+
+00:11:27.620 --> 00:11:30.720
+Questa è la finzione ed è il motivo per cui questo argomento ha finalmente senso.
+
+00:11:31.260 --> 00:11:32.880
+Niente di tutto ciò rende il modello una cattiva idea.
+
+00:11:33.040 --> 00:11:38.740
+Le API REST funzionano bene per il compito di cui la maggior parte delle persone ha bisogno e ha bisogno, ovvero consentiva un programma di chiedere dati a un altro tramite web.
+
+00:11:38.740 --> 00:11:40.140
+Il punto è più specifico e utile.
+
+00:11:40.620 --> 00:11:44.120
+Il termine descrive un insieme di scelte di progettazione del 2000, non un insieme di leggi.
+
+00:11:44.580 --> 00:11:48.720
+Quindi nessuno sta valutando la tua API in base a un regolamento nascosto in cui soddisfi già REST?
+
+00:11:49.540 --> 00:11:53.200
+Tutto ciò tocca gli strumenti sullo schermo in questo momento e va più in profondità di quanto ti aspetteresti.
+
+00:11:53.660 --> 00:11:58.020
+Microsoft Graph è l'unica porta d'accesso al cloud di Microsoft e segue esattamente lo schema di questo episodio.
+
+00:11:59.080 --> 00:12:03.440
+Utilizza un indirizzo, un verbo, un'intestazione che dimostra la tua identità e una risposta con un numero.
+
+00:12:04.360 --> 00:12:06.620
+Tutto ciò che esaminiamo viene visualizzato lì nello stesso ordine.
+
+00:12:06.620 --> 00:12:09.500
+Quindi il vocabolario è importante, ben oltre il podcast.
+
+00:12:10.160 --> 00:12:13.480
+I connettori su cui clicchi in Power Automate sono chiamati REST con un volto amichevole.
+
+00:12:14.140 --> 00:12:18.260
+Quando trascini un'azione e compili alcune caselle, il connettore crea la richiesta per te e la invia
+
+00:12:18.260 --> 00:12:20.500
+e ti restituisce la risposta in una piccola scheda ordinata.
+
+00:12:21.000 --> 00:12:24.480
+Le azioni di Copilot Studio e la maggior parte degli script di PowerShell che comunicano con Microsoft
+
+00:12:24.480 --> 00:12:27.880
+tra il stesso modo funzionano allo stesso modo, che il vocabolario torna utile nella pratica.
+
+00:12:28.440 --> 00:12:32.040
+Quando un flusso non riesce con un errore 401 ora sai che il tuo accesso non è andato a buon fare.
+
+00:12:32.040 --> 00:12:36.180
+Quando non riesce con un errore 429 sai che stai chiedendo troppo velocemente e dovresti rallentare il riprovo.
+
+00:12:36.380 --> 00:12:39.380
+Il codice di errore smette di essere rumore e si trasforma in una frase su cui puoi agire.
+
+00:12:39.880 --> 00:12:43.100
+Quindi la prossima volta che un connettore funziona semplicemente ricorda cosa è successo sotto.
+
+00:12:43.800 --> 00:12:47.380
+Un programma ha chiesto qualcosa a un altro, ha dimostrato di chi era e ha ottenuto una risposta chiara.
+
+00:12:47.960 --> 00:12:52.580
+Non devi vedere la richiesta per capirla e una volta che l'avrai capita gli strumenti che hai a disposizione non sembrano più male.
+
+00:12:54.180 --> 00:13:00.180
+Un API REST è un programma che chiede qualcosa a un altro utilizzando un indirizzo, un verbo, una prova di identità e una risposta con un numero.
+
+00:13:00.180 --> 00:13:05.720
+Jason è linguaggio condiviso e REST è un nome preso in prestito da una tesi di laurea, non regolamento da manualizzazione.
+
+00:13:05.840 --> 00:13:09.120
+Se REST non fosse mai stato scritto per le API che abbiamo creato oggi, come dovremmo chiamarle?
+
+00:13:09.720 --> 00:13:10.940
+Ditemi come le chiameresti nei commenti.

@@ -1,0 +1,562 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.080
+Je gebruikt al jaren REST API's zonder dat je de naam kende.
+
+00:00:03.280 --> 00:00:07.280
+Elke keer als Power Atomeet je agenda ophaalt of Copilot Studio een bestand leest,
+
+00:00:07.500 --> 00:00:09.520
+vraagt het ene programma informatie aan het andere.
+
+00:00:09.760 --> 00:00:12.540
+Welkom bij de M365 FM podcast,
+
+00:00:12.820 --> 00:00:16.540
+waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:16.760 --> 00:00:21.460
+Vandaag praten we over REST API's, het eenvoudige patroon achter bijna elke app die je aanraakt.
+
+00:00:21.640 --> 00:00:24.920
+Aan het einde lees je een verzoek, begrijp je precies wat er terugkomt
+
+00:00:24.920 --> 00:00:27.340
+en zie je waarom de naam REST niet betekent wat het lijkt.
+
+00:00:27.740 --> 00:00:29.300
+Wat een API werkelijk is.
+
+00:00:29.300 --> 00:00:34.140
+API staat voor Application Programming Interface en de naam laat het moeilijker klinken dan het is.
+
+00:00:34.340 --> 00:00:38.060
+Haal het label weg en een API is een reeks deuren waar een programma op mag kloppen.
+
+00:00:38.260 --> 00:00:41.860
+Elke deur komt met een afspraak over wat je mag vragen en welke vorm het antwoord zal hebben.
+
+00:00:42.040 --> 00:00:43.740
+De klassieke vergelijking is een restaurant.
+
+00:00:44.060 --> 00:00:46.820
+Je loopt nooit de keuken in en je vertelt de chef nooit hoe hij moet koken.
+
+00:00:47.000 --> 00:00:50.100
+Je vertelt de ober wat je wilt van het menu en er komt een bord naar je tafel.
+
+00:00:50.260 --> 00:00:54.900
+Het menu is de afspraak en de ober is de interface die je bestelling tussen de twee partijen overbrengt.
+
+00:00:54.900 --> 00:00:57.000
+Het woord interface verricht daar echt werk.
+
+00:00:57.000 --> 00:01:03.320
+Een interface is simpelweg de gedeelde grens waar twee dingen samenkomen en het werkt het best als beide zijden hun eigen zaken privé houden.
+
+00:01:03.480 --> 00:01:08.620
+Een website en een API verplaatsen beide informatie over het internet, maar ze zijn gebouwd voor verschillende lezers.
+
+00:01:08.880 --> 00:01:12.480
+Een website is ontworpen voor jouw ogen, volkleuren, knoppen en koppen.
+
+00:01:12.640 --> 00:01:17.260
+Een API is ontworpen voor een ander programma, dus geeft het ruwe data terug in plaats van iets decoratiefs.
+
+00:01:17.420 --> 00:01:19.760
+Dat verschil verklaart waarom de afspraak er zo toe doet.
+
+00:01:20.000 --> 00:01:24.300
+Wanneer twee programma's een vaste deur delen, hoeft geen van beide te weten hoe de ander van binnen werkt.
+
+00:01:24.460 --> 00:01:29.520
+Je kunt de keuken verbouwen, de chef vervangen en de recepten herschrijven zonder dat het menu aan tafel verandert.
+
+00:01:29.760 --> 00:01:32.380
+Denk na over waarom programma's dit in de eerste plaats nodig hebben.
+
+00:01:32.540 --> 00:01:36.100
+Een programma kan niet naar het scherm van een ander programma kijken en raden wat het daarna moet doen.
+
+00:01:36.280 --> 00:01:42.400
+Het heeft een vaste, geschreven manier nodig om iets te vragen en een belofte dat het antwoord aankomt in een vorm die het al kan lezen.
+
+00:01:42.400 --> 00:01:44.900
+Die geschreven manier is de interface in de naam.
+
+00:01:45.080 --> 00:01:52.020
+Salesforce en eBay openden enkele van de eerste grote web APIs in het jaar 2000 en die aanroepen draaien sindsdien onder de oppervlakte.
+
+00:01:52.160 --> 00:01:55.200
+Je hebt ze nooit opgemerkt omdat ze nooit gebouwd waren voor jou om te zien.
+
+00:01:55.400 --> 00:01:59.280
+Je hebt vandaag bijna zeker een API gebruikt, ook al noemde niemand in de kamer het zo.
+
+00:01:59.440 --> 00:02:04.140
+Een API is eigenlijk gewoon een deuropening met regels en die regels maken de uitwisseling voorspelbaar.
+
+00:02:04.320 --> 00:02:07.560
+Kijk nu eens wat er gebeurt wanneer een verzoek daadwerkelijk door die deuropening stapt.
+
+00:02:07.740 --> 00:02:08.740
+De heen en weer reis.
+
+00:02:08.740 --> 00:02:12.900
+Volg één verzoek vanaf het moment dat het je app verlaat tot het moment dat er een antwoord terugkomt.
+
+00:02:13.000 --> 00:02:16.360
+De reis heeft twee helften, een verzoek dat weggaat en een antwoord dat terugkomt.
+
+00:02:16.520 --> 00:02:19.100
+Beide helften volgen een vorm die je in een paar minuten kunt leren.
+
+00:02:19.300 --> 00:02:21.340
+Een verzoek bevat maximaal vier onderdelen.
+
+00:02:21.560 --> 00:02:24.840
+Het eerste is het adres, oftewel de URL die naar het gewenste object wijst.
+
+00:02:25.000 --> 00:02:28.120
+Het tweede is het werkwoord, dat de server vertelt wat er met dat object moet gebeuren.
+
+00:02:28.300 --> 00:02:33.220
+Het derde zijn de headers, een set aanvullende instructies die met het bericht meer reizen, inclusief je identiteitsbewijs.
+
+00:02:33.360 --> 00:02:37.360
+Het vierde is de body, die alleen verschijnt wanneer je gegevens verstuurt in plaats van eromvraagt.
+
+00:02:37.360 --> 00:02:39.100
+Het antwoord weerspiegelt dat allemaal.
+
+00:02:39.360 --> 00:02:43.360
+Het opent met een driecijferig statusnummer dat aangeeft hoe het ging, gevolgd door eigen headers.
+
+00:02:43.640 --> 00:02:47.120
+Daarna komt de body met de gevraagde gegevens, als er gegevens te verzenden zijn.
+
+00:02:47.380 --> 00:02:50.540
+Microsoft Graph toont dit patroon in een vorm die je daadwerkelijk kunt lezen.
+
+00:02:50.740 --> 00:02:55.980
+Elk Graph-verzoek volgt dezelfde vorm, beginnend met het Graph-adres, dan een versie en daarna de gewenste bron.
+
+00:02:56.160 --> 00:03:00.240
+De versie is ofwel v1.0 voor productie, of beta voor zaken die nog in preview zijn.
+
+00:03:00.240 --> 00:03:07.740
+Stuur een get-verzoek naar dat adres, gevolgd door users en een e-mailadres, en de server antwoordt met een 200 oké en een body die die persoon beschrijft.
+
+00:03:07.960 --> 00:03:10.980
+Zie het adres als de envelop en de body als de brief die erin zit.
+
+00:03:11.500 --> 00:03:16.560
+De envelop vertelt het postsysteem waar het bericht heen moet en de brief bevat wat je daadwerkelijk wilde zeggen.
+
+00:03:16.800 --> 00:03:22.760
+Het werkwoord staat ook op de envelop, zodat de server weet voordat er iets wordt geopend of je een vraag stelt of nieuwe informatie aanlevert.
+
+00:03:23.020 --> 00:03:25.360
+Merk op hoe weinig je hoefde te weten om dit te kunnen volgen.
+
+00:03:25.360 --> 00:03:28.900
+Je had één adres, één werkwoord en een antwoord dat je hardop kon voorlezen.
+
+00:03:29.080 --> 00:03:33.560
+Dat is het hele ritme van een rest-API en het herhaalt zich bij elke aanroep die je ooit zult doen.
+
+00:03:33.760 --> 00:03:38.880
+De werkwoorden, elk verzoek bevat een werkwoord en het werkwoord vertelt de server wat voor actie je wilt uitvoeren.
+
+00:03:39.060 --> 00:03:43.600
+De technische naam is de HTTP-methode en er zijn er maar een handvol die je in normaal werk zult tegenkomen.
+
+00:03:43.800 --> 00:03:45.960
+Get vraagt om informatie en verandert helemaal niets.
+
+00:03:46.140 --> 00:03:50.380
+Post creëert meestal iets nieuws, zoals het versturen van een e-mail of het toevoegen van een reactie aan een lijst.
+
+00:03:50.520 --> 00:03:52.780
+Put vervangt een heel record door een nieuwe versie ervan.
+
+00:03:52.780 --> 00:03:54.800
+Patch werkt slechts een deel van een record bij.
+
+00:03:54.800 --> 00:03:56.040
+Delete verwijdert het.
+
+00:03:56.200 --> 00:04:01.660
+Head & Options bestaan ook, maar die zijn voor controles op de achtergrond en je kunt jaren vooruit zonder ze ooit aan te raken.
+
+00:04:01.840 --> 00:04:05.560
+Het werkwoord staat direct naast het adres, dus het paar leest bijna als een zin.
+
+00:04:05.820 --> 00:04:10.120
+Get this thing betekent laat het me zien en post that thing betekent laat het gebeuren.
+
+00:04:10.320 --> 00:04:15.160
+Twee woorden zijn hier belangrijker dan de rest en samen verklaren ze een fout die bijna iedereen wel eens maakt.
+
+00:04:15.320 --> 00:04:19.500
+Een veilige methode verandert niets op de server, dus deze twee keer versturen kost niets.
+
+00:04:19.500 --> 00:04:24.040
+Een idempotente methode geeft hetzelfde resultaat of je deze nu één of vijf keer verstuurt.
+
+00:04:24.040 --> 00:04:28.960
+Get, head, put, delete en options zijn idempotent, terwijl post en patch dat niet zijn.
+
+00:04:29.180 --> 00:04:31.860
+Dat onderscheid heeft grote gevolgen voor je dagelijkse tools.
+
+00:04:32.140 --> 00:04:37.360
+Als een automatisering een mislukte get opnieuw probeert, gaat er niets kapot omdat simpelweg hetzelfde antwoord terugkomt.
+
+00:04:37.500 --> 00:04:42.460
+Als het een mislukte post opnieuw probeert, kun je per ongeluk een tweede e-mail, rij of bestelling aanmaken.
+
+00:04:42.620 --> 00:04:45.600
+Het verzoek ziet er identiek uit, maar de uitkomst is heel anders.
+
+00:04:45.600 --> 00:04:51.620
+Onthoud dat laatste idee, want post is ook het werkwoord dat de server het vaakst twinkt om te vragen wie je bent voordat het actie onderneemt.
+
+00:04:51.860 --> 00:04:53.020
+Resources en adressen.
+
+00:04:53.200 --> 00:04:56.060
+Een resource is datgene waar je het in een specifieke aanroep over hebt.
+
+00:04:56.240 --> 00:05:02.560
+Het kan een gebruiker, e-mail, bestand of een enkele rij in een tabel zijn en de URL is simpelweg waar die resource op de server staat.
+
+00:05:02.800 --> 00:05:07.500
+Elk adres is opgebouwd uit een basis die de dienst benoemt, plus een pad dat leidt naar precies wat je wilt hebben.
+
+00:05:07.500 --> 00:05:10.580
+Het onderliggende ontwerp-idee is helder zodra je het doorhebt.
+
+00:05:10.580 --> 00:05:15.340
+Het adres benoemt het object en het werkwoord zegt wat je ermee moet doen, dus een verzoek leest vaak als een korte zin.
+
+00:05:15.540 --> 00:05:20.740
+Get me messages betekent geef me mijn berichten en post me send mail betekent verstuur namens mij een e-mail.
+
+00:05:21.020 --> 00:05:24.320
+Microsoft Graph leunt hierop met een paar snelkoppelingen die de moeite waard zijn om te kennen.
+
+00:05:24.540 --> 00:05:29.140
+Het woord me verwijst naar degene die is ingelogd, dus je hoeft je eigen idee niet eerst op te zoeken.
+
+00:05:29.680 --> 00:05:34.580
+Gerelateerde data hangt aan hetzelfde pad zoals me events, me drive of me messages.
+
+00:05:34.580 --> 00:05:42.000
+Een verzameling zoals users bevat veel van hetzelfde en door er een idee aan toe te voegen wijs je naar één specifiek lid van die verzameling.
+
+00:05:42.260 --> 00:05:47.660
+Daarom kan hetzelfde adres een hele groep of één persoon beschrijven, afhankelijk van hoe diep je in het pad duikt.
+
+00:05:47.900 --> 00:05:52.700
+Soms wil je het antwoord inkorten zonder de resource zelf te veranderen en daar zijn query parameters voor.
+
+00:05:52.940 --> 00:05:58.180
+Voeg select toe aan een verzoek en de server geeft alleen de velden terug die je noemt, zoals weergavenaam en stad.
+
+00:05:58.380 --> 00:06:03.360
+Voeg filter toe en het verkleint een lange lijst naar een kleinere set, zoals elke gebruiker met een specifieke functietitel.
+
+00:06:03.360 --> 00:06:06.820
+De adressen lijken in het begin willekeurig, maar ze volgen een patroon dat je kunt leren.
+
+00:06:06.980 --> 00:06:09.700
+Als je er eenmaal één kunt lezen, kun je de volgende meestal wel raden.
+
+00:06:09.840 --> 00:06:13.940
+Nu je weet waar je moet vragen, is de volgende vraag wat je terugkrijgt en het antwoord begint met een nummer.
+
+00:06:14.160 --> 00:06:14.900
+Status codes.
+
+00:06:15.220 --> 00:06:20.180
+Elk antwoord begint met een cijfer van drie getallen en dat getal vertelt je precies hoe het verzoek is verlopen.
+
+00:06:20.380 --> 00:06:24.260
+Het eerste cijfer draagt de meeste betekenis, dus er zijn slechts vijf families om te leren.
+
+00:06:24.440 --> 00:06:28.300
+Een nummer dat begint met een één betekent dat het verzoek nog bezig is, een twee betekent dat het is gelukt,
+
+00:06:28.300 --> 00:06:31.140
+een drie betekent dat het antwoord ergens anders staat, dus kijk daar.
+
+00:06:31.140 --> 00:06:36.300
+Een vier betekent dat het probleem aan jouw kant ligt, een vijf betekent dat het probleem bij de server ligt en jij niets fout hebt gedaan.
+
+00:06:36.540 --> 00:06:38.760
+Dit zijn de codes die een beginner daadwerkelijk tegenkomt.
+
+00:06:38.860 --> 00:06:42.320
+200 ok betekent dat het is gelukt en 201 betekent dat er iets nieuws is aangemaakt.
+
+00:06:42.720 --> 00:06:47.260
+204 betekent dat het is gelukt en er niets is om terug te sturen, terwijl 400 betekent dat je verzoek onjuist was opgemaakt.
+
+00:06:47.440 --> 00:06:50.100
+De rest dekt de situaties die je tegenkomt in een verbroken proces.
+
+00:06:50.640 --> 00:06:55.460
+401 betekent dat je niet hebt bewezen wie je bent en 403 betekent dat je wel hebt bewezen wie je bent, maar het alsnog niet mag doen.
+
+00:06:55.460 --> 00:07:01.480
+Een 404 betekent dat er niets op dat adres staat, een 429 betekent dat je te snel vraagt en de server wil dat je vertraagt.
+
+00:07:01.660 --> 00:07:03.700
+De 500 betekent dat de server kapot is.
+
+00:07:03.920 --> 00:07:06.260
+Surfers sturen om een reden getallen in plaats van zinnen.
+
+00:07:06.440 --> 00:07:12.580
+Een ander programma moet dat antwoord lezen zonder menselijke tussenkomst, dus is een korte vaste code veel makkelijker voor software om te verwerken.
+
+00:07:12.760 --> 00:07:17.800
+Je app kan controleren op een 200 en doorgaan, of een 429 opvangen en rustig wachten voordat hij het opnieuw probeert.
+
+00:07:17.960 --> 00:07:21.080
+Het paar dat mensen het meest door elkaar halen is 401 en 403.
+
+00:07:21.080 --> 00:07:24.940
+Authenticatie gaat over wie je bent, terwijl autorisatie gaat over wat je mag doen.
+
+00:07:25.100 --> 00:07:31.640
+Een 401 betekent dat je aanmelding niet is gelukt en een 403 betekent dat je aanmelding werkte, maar je account niet de juiste rechten heeft.
+
+00:07:31.880 --> 00:07:37.360
+Dat ene verschil bespaart je een uur de volgende keer dat een automatisering faalt en de foutmelding niets nuttigs zegt.
+
+00:07:38.040 --> 00:07:39.480
+JSON, de gedeelde taal
+
+00:07:39.480 --> 00:07:43.160
+Wanneer een server gegevens terugstuurt, is dit meestal in JSON-formaat.
+
+00:07:43.380 --> 00:07:48.240
+JSON is een manier om gegevens als platte tekst te schrijven, zodat elk programma in elke taal het kan lezen.
+
+00:07:48.240 --> 00:07:52.980
+De naam staat voor JavaScript Object Notation, maar je hoeft geen JavaScript te kennen om het te gebruiken.
+
+00:07:53.140 --> 00:07:55.340
+De structuur is eenvoudiger dan de naam doet vermoeden.
+
+00:07:55.520 --> 00:07:58.240
+Je schrijft een label, dan een waarde, en je zet het paard tussen accolades.
+
+00:07:59.080 --> 00:08:03.840
+Een lijst van die paren staat tussen vier kanten haken, en je kunt lijsten nesten zo diep als de data gaat.
+
+00:08:04.020 --> 00:08:07.920
+Dat is het grootste deel van het formaat, en je kunt het zonder enige training hardop voorlezen.
+
+00:08:08.100 --> 00:08:09.680
+Een klein voorbeeld maakt het concreet.
+
+00:08:09.860 --> 00:08:16.260
+Een verzoek om een gebruiker kan terugkomen met een naamlabel dat John Doe leest, een stadlabel dat Redmond leest, en een afdelingslabel dat Helpcentrum leest.
+
+00:08:16.260 --> 00:08:20.900
+Je ziet het patroon direct omdat het formaat geschreven is om net zo goed door mensen als door machines gelezen te worden.
+
+00:08:21.140 --> 00:08:24.840
+JSON won omdat het klein en leesbaar bleef terwijl de formats eromheen zwaar werden.
+
+00:08:25.040 --> 00:08:35.060
+Het werd geformaliseerd als RFC 8259 in december 2017 en als de ECMA 404 standaard, dus bijna elke moderne API beschouwt het als de standaard manier om data te versturen.
+
+00:08:35.060 --> 00:08:43.820
+Leer JSON lezen en je kunt het antwoord op bijna elke API-aanroep lezen, wat de muur van tekst verandert in iets dat je in seconden kunt scannen om te bewijzen wie je bent.
+
+00:08:44.040 --> 00:08:48.620
+Niets hiervan werkt tenzij de server je vertrouwt, dus de meeste verzoeken bevatten een bewijs van identiteit.
+
+00:08:48.840 --> 00:08:52.860
+Dat bewijs heet authenticatie en het voorkomt dat zomaar iedereen je e-mails leest of je bestanden verwijdert.
+
+00:08:53.020 --> 00:08:55.180
+Er zijn twee benaderingen die je het vaakst zult tegenkomen.
+
+00:08:55.340 --> 00:08:59.100
+Een API-sleutel is een lange vaste reeks die je bij elk verzoek meestuurt en het is makkelijk om mee te beginnen.
+
+00:08:59.100 --> 00:09:04.080
+Het probleem is dat het breed is, zelden verloopt, en het vervangen ervan betekent dat je elke plek die het gebruik moet aanpassen.
+
+00:09:04.260 --> 00:09:05.880
+OAuth 2.0 werkt anders.
+
+00:09:06.080 --> 00:09:12.720
+De app krijgt een kortstondig toegangstoken, vaak een bearer token genoemd, dat de ingelogte gebruiker vertegenwoordigt en ingetrokken kan worden als er iets misgaat.
+
+00:09:12.840 --> 00:09:15.280
+Het verschil is het belangrijkst wanneer een inloggegeven lekt.
+
+00:09:15.480 --> 00:09:19.780
+Een gestolen API-sleutel kan opnieuw worden gebruikt zolang deze geldig blijft, wat voor eeuwig kan zijn.
+
+00:09:19.960 --> 00:09:25.440
+Een gestolen bearer token is ontworpen om kortstondig te zijn, dus het stopt vanzelf met werken en geeft je een venster om de toegang af te sluiten.
+
+00:09:25.440 --> 00:09:28.580
+De verrassing is dat het inloggegeven meestal niet je wachtwoord is.
+
+00:09:28.760 --> 00:09:35.520
+Je app logt je één keer in, ontvangt een token en geeft dat token vervolgens bij elke aanroep door aan de API, zodat je wachtwoord nooit met het verzoek meer reist.
+
+00:09:35.700 --> 00:09:39.000
+Het token is de vervanger en is gemaakt om weggegooid en vervangen te worden.
+
+00:09:39.200 --> 00:09:44.980
+In een verzoek verschijnt dit als een extra regel in de headers met authorization, dan het woord bearer en dan het token zelf.
+
+00:09:45.180 --> 00:09:50.580
+In het Microsoft Graph voorbeeld van eerder is die header precies wat een afgewezen aanroep veranderde in een succesvolle.
+
+00:09:50.700 --> 00:09:53.720
+Dit is ook precies waarom de 401 foutcode überhaupt bestaat.
+
+00:09:53.720 --> 00:09:57.080
+Geen geldig bewijs betekent geen antwoord en daarop zijn geen uitzonderingen.
+
+00:09:57.180 --> 00:10:02.780
+Elke mislukte aanmelding die je ooit in een proces hebt gezien, is terug te voeren op dit ene idee van wat rest werkelijk betekent.
+
+00:10:02.940 --> 00:10:05.760
+Het woord rest heeft een oorsprongsverhaal dat verandert hoe je het hoort.
+
+00:10:05.960 --> 00:10:11.280
+Het werd in 2000 bedacht door informaticus Roy Fielding in zijn proefschrift aan de University of California, Urfine.
+
+00:10:11.520 --> 00:10:12.960
+Dat is het deel dat iedereen herhaalt.
+
+00:10:13.140 --> 00:10:15.720
+Wat ze echter weglaten, is waar het proefschrift werkelijk over ging.
+
+00:10:15.880 --> 00:10:17.600
+Het ging niet over het bouwen van web APIs.
+
+00:10:17.860 --> 00:10:19.080
+Het ging over het web zelf.
+
+00:10:19.080 --> 00:10:26.220
+Fielding was mede-auteur van de HTTP 1.1-specificatie uit 1999 en zijn proefschrift belichtte de ontwerpprincipes die daarbij als leidraad diende.
+
+00:10:26.400 --> 00:10:36.640
+Hij beschreef een architectuurstijl voor het verbinden van documenten over het internet en benoemde zes beperkingen, client en server, statelessness, caching, een uniforme interface, een gelaagd systeem en code on the man.
+
+00:10:36.860 --> 00:10:39.640
+Slechts één hoofdstuk van het proefschrift behandelt rest überhaupt.
+
+00:10:40.020 --> 00:10:43.480
+Fielding verzette zich ook tegen het idee dat één stijl overal op past.
+
+00:10:43.480 --> 00:10:50.640
+Hij betoogde dat een goede ontwerper een stijl moet kiezen die bij het probleem past, in plaats van elke aanpak als wondermiddel voor alle software te zien.
+
+00:10:50.820 --> 00:10:55.600
+Het pad van een ontwerp-essay over het web naar het standaard label voor APIs loopt dwars door SOAP heen.
+
+00:10:55.820 --> 00:11:01.160
+SOAP was een eerdere manier om webservices te bouwen en het was ontslachtig, XML-zwaar en vervelend om mee te werken.
+
+00:11:01.360 --> 00:11:05.580
+Ruby Unreal schrapte in 2007 de ondersteuning voor SOAP en ontwikkelaars keerde het de rug toe.
+
+00:11:05.780 --> 00:11:09.680
+Ze wilden werken met eenvoudige HTTP en REST gaf hun aanpak een respectabele naam.
+
+00:11:09.680 --> 00:11:17.620
+De complicatie is dat strikte REST hypertext gestuurd is, wat betekent dat een echte REST API je elk eindpunt laat ontdekken door links vanaf een startpunt te volgen.
+
+00:11:17.860 --> 00:11:23.860
+Bijna geen enkele API die wij RESTful noemen, doet dat in werkelijkheid en Fielding wees hier zelf al in 2008 op.
+
+00:11:23.980 --> 00:11:27.500
+De naam werd geleend, opgerekt en geplakt op iets waarvoor het nooit geschreven was.
+
+00:11:27.720 --> 00:11:30.940
+Dat is de misleiding en de reden waarom dit onderwerp eindelijk logisch wordt.
+
+00:11:31.160 --> 00:11:33.160
+Dit alles maakt het patroon nog geen slecht idee.
+
+00:11:33.440 --> 00:11:38.640
+REST APIs werken prima voor het doel waar de meesten ze voor nodig hebben, het ene programma via het web om data laten vragen bij het andere.
+
+00:11:38.640 --> 00:11:40.480
+Het punt is specifieker en nuttiger.
+
+00:11:40.720 --> 00:11:44.440
+Het woord beschrijft een set ontwerpkeuzes uit 2000, geen set wetten.
+
+00:11:44.600 --> 00:11:49.320
+Dus niemand beoordeelt jouw API op basis van een verborgen regelboek waar je al aanrest voldoet.
+
+00:11:49.520 --> 00:11:53.200
+Dit alles raakt de tools op je scherm op dit moment en het gaat dieper dan je zou verwachten.
+
+00:11:53.560 --> 00:11:58.760
+Microsoft Graph is de enige toegangspoort tot de cloud van Microsoft en volgt exact het patroon uit deze aflevering.
+
+00:11:58.940 --> 00:12:04.100
+Het gebruikt een adres, een werkwoord, een header die je identiteit bewijst en een antwoord met een nummer erop.
+
+00:12:04.200 --> 00:12:06.800
+Alles wat we doornemen komt daar in dezelfde volgorde voor.
+
+00:12:06.800 --> 00:12:09.900
+De woordenschat is dus veel belangrijker dan alleen voor deze podcast.
+
+00:12:10.120 --> 00:12:14.180
+De connectors waar je in Power Automate op klikt, zijn REST aanroepen in een vriendelijk jasje.
+
+00:12:14.400 --> 00:12:20.440
+Wanneer je een actie versleept en een paar vakjes invult, bouwt de connector het verzoek voor je, verstuurt het en geeft je het antwoord terug in een nette kaart.
+
+00:12:20.600 --> 00:12:25.900
+Copilot Studio Acties en de meeste PowerShell scripts die met Microsoft 365 communiceren, werken eronder op dezelfde manier.
+
+00:12:26.100 --> 00:12:28.520
+Dat is waar de woordenschat in de praktijk zijn vruchten afwerpt.
+
+00:12:28.700 --> 00:12:32.000
+Wanneer een flow mislukt met een 401, weet je nu dat je aanmelding niet is gelukt.
+
+00:12:32.000 --> 00:12:36.380
+Als het mislukt met een 429, weet je dat je te snel vraagt en dat je moet vertragen en het opnieuw moet proberen.
+
+00:12:36.520 --> 00:12:39.640
+De foutcode is geen ruis meer, maar verandert in een zin waar je iets mee kunt.
+
+00:12:39.820 --> 00:12:43.560
+Dus de volgende keer dat een connector gewoon werkt, bedenk dan wat er aan de achterkant gebeurt.
+
+00:12:43.740 --> 00:12:47.820
+Het ene programma vroeg het andere om iets, bewees wie het was en kreeg een duidelijk antwoord terug.
+
+00:12:48.000 --> 00:12:53.140
+Je hoeft het verzoek niet te zien om het te begrijpen en als je het eenmaal begrijpt, voelen de tools om je heen niet langer als magie.
+
+00:12:53.140 --> 00:13:01.020
+Een REST API is het ene programma dat het andere om iets vraagt met behulp van een adres, een werkwoord, een bewijs van identiteit en een antwoord met een nummer erop.
+
+00:13:01.160 --> 00:13:05.620
+Jason is de gedeelde taal en REST is een naam die is geleend uit een proefschrift, geen handboek om uit je hoofd te leren.
+
+00:13:05.820 --> 00:13:09.620
+Als REST nooit geschreven was voor de apies die we vandaag de dag bouwen, hoe zouden we ze dan moeten noemen?
+
+00:13:09.860 --> 00:13:11.860
+Vertel me in de reacties hoe jij het zou noemen.

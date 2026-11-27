@@ -1,0 +1,1798 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.620
+Bienvenido al podcast M365FM, donde exploramos las personas, las ideas y las tecnologías que están dando forma al futuro del trabajo.
+
+00:00:06.980 --> 00:00:10.440
+En algún lugar de tu organización se está ejecutando una aplicación que nadie recuerda haber creado.
+
+00:00:10.980 --> 00:00:13.980
+Sigue funcionando, así que nadie pregunta. Ese es el problema que la gobernanza debe resolver.
+
+00:00:14.700 --> 00:00:20.560
+Bienvenido al podcast M365FM, donde exploramos las personas, las ideas y las tecnologías que están dando forma al futuro del trabajo.
+
+00:00:20.840 --> 00:00:25.760
+Hoy vamos a dar sentido a la gobernanza de Power Platform, las reglas que evitan que el trabajo de código bajo se desmorone mediante que crece.
+
+00:00:25.760 --> 00:00:32.920
+Al final, los entornos, las políticas de datos y un centro de excelencia tendrán sentido en palabras sencillas, lo que realmente significa la gobernanza.
+
+00:00:33.080 --> 00:00:37.040
+Gobernanza es la palabra menos emocionante de toda esta conversación y es exactamente por eso que la mayoría de la gente lo mide.
+
+00:00:37.260 --> 00:00:41.380
+Si terminamos la jerga, nos referimos a las reglas y los hábitos que una empresa utiliza en una herramienta.
+
+00:00:42.380 --> 00:00:49.460
+Microsoft describe la gobernanza de Power Platform como las políticas, prácticas y herramientas que mantienen la plataforma eficiente, segura y compatible, lo cual es un trabalenguas.
+
+00:00:50.020 --> 00:00:51.240
+La versión simple es más sencilla que eso.
+
+00:00:51.240 --> 00:00:55.960
+Alguien tiene que decidir dónde va cada cosa, qué puede tocar cada cosa y a quién llamar cuando algo se rompe.
+
+00:00:56.660 --> 00:01:00.000
+La mayoría de los principiantes oyen la palabra gobernanza y asumen que existe para detenerlos.
+
+00:01:00.420 --> 00:01:05.640
+Esa suposición merece ser la primera, porque una gobernanza mal hecha bloquea a la gente, mientras que una gobernanza bien hecha hace exactamente lo contrario.
+
+00:01:06.400 --> 00:01:11.660
+Una barandilla en una carretera de montaña no te frena en absoluto, y es la razón por la que puedes tomar la curva a toda velocidad sin acabar en los árboles.
+
+00:01:12.100 --> 00:01:14.020
+Ahora, la tensión que subyace a todo lo que vamos a tratar.
+
+00:01:14.940 --> 00:01:16.260
+Power Platform es fácil a propósito.
+
+00:01:16.820 --> 00:01:23.840
+Cualquiera puede crear una aplicación que funcione en una tarde sin pedir permiso a nadie, y esa misma apertura es lo que hace que sea difícil mantener todo ordenado seis meses después.
+
+00:01:24.520 --> 00:01:28.280
+La plataforma invita a todo el mundo a participar y luego deja la limpieza a quien se dé cuenta primero.
+
+00:01:28.660 --> 00:01:30.400
+Hay una idea más que vale la pena plantear antes de seguir.
+
+00:01:30.980 --> 00:01:32.800
+La gobernanza no es un interruptor que se acciona una vez.
+
+00:01:33.140 --> 00:01:37.260
+Es un hábito que una empresa adapta a medida que aumenta su uso de la plataforma y sigue volviendo a las mismas cuatro preocupaciones.
+
+00:01:37.260 --> 00:01:43.860
+Tu trabajo necesita un hogar, límites a su alcance, un dueño de las reglas y alguien que esté atento a los problemas.
+
+00:01:45.100 --> 00:01:47.680
+Todos los demás detalles de esta conversación dependen de uno de esos cuatro.
+
+00:01:48.140 --> 00:01:49.480
+Una última cosa sobre la palabra en sí.
+
+00:01:50.020 --> 00:01:56.900
+La gobernanza se utiliza como si fuera un departamento o una persona, pero en realidad es una relación entre las personas que construyen cosas y las personas responsables de la plataforma que hay debajo.
+
+00:01:57.640 --> 00:02:02.480
+Cuando esa relación es sana, nadie se da cuenta de la gobernanza porque nada se rompe y nadie queda excluido.
+
+00:02:03.380 --> 00:02:04.980
+Solo se oye hablar de ella cuando falta.
+
+00:02:05.340 --> 00:02:06.140
+¿Por qué molestarse?
+
+00:02:06.480 --> 00:02:09.080
+Las reglas suenan inofensivas en abstracto, así que hagámoslas concretas.
+
+00:02:09.660 --> 00:02:13.200
+Sin ningún tipo de gobernanza, las cosas cotidianas que la gente construye empiezan a chocar.
+
+00:02:13.820 --> 00:02:18.820
+Dos colegas resuelven el mismo problema, construyen la misma aplicación y ahora hay dos versiones circulando sin que nadie pueda decir cuál es la real.
+
+00:02:19.280 --> 00:02:21.820
+El mayor problema es donde aterrice silenciosamente todo ese trabajo.
+
+00:02:22.360 --> 00:02:25.000
+Microsoft tiene una comparación que hace que esto aterrice y es algo así.
+
+00:02:25.740 --> 00:02:29.500
+Imagina que todos en tu empresa comparten una única carpeta de OneDrive para cada documento que poseen
+
+00:02:29.500 --> 00:02:32.600
+y tendrás una idea general de lo que es un entorno compartido de Power Platform.
+
+00:02:33.360 --> 00:02:34.820
+Parece cómodo hasta que deja de ser.
+
+00:02:35.480 --> 00:02:37.700
+Antes de continuar, vale la pena mencionar una palabra.
+
+00:02:38.600 --> 00:02:42.100
+Un inquilino es el espacio privado de tu organización dentro de la nube de Microsoft
+
+00:02:42.100 --> 00:02:44.340
+y todo lo que estamos comentando reside en él.
+
+00:02:45.180 --> 00:02:48.820
+Dentro de ese espacio encontrarás entornos y cada entorno es su propio pequeño contenedor.
+
+00:02:49.480 --> 00:02:52.080
+El riesgo que mantiene despiertos a los administradores es un...
+
+00:02:52.080 --> 00:02:55.640
+Alguien crea una aplicación, se convierte en la única persona que la entiende y luego cambia de trabajo.
+
+00:02:56.180 --> 00:02:58.260
+Microsoft considera que este tipo de recursos no tienen dueño
+
+00:02:58.260 --> 00:03:00.880
+y los marca como un riesgo real para la continuidad del negocio,
+
+00:03:00.980 --> 00:03:04.100
+que es una forma formal de decir que la cosa sigue funcionando sin que quede nadie que pueda arreglarla.
+
+00:03:04.560 --> 00:03:05.740
+Existe una versión sin el mismo problema.
+
+00:03:06.400 --> 00:03:09.180
+Una aplicación creada como Power Rápido crece hasta que todo un equipo depende de ella
+
+00:03:09.180 --> 00:03:11.660
+y nunca obtiene una copia de seguridad, un propietario o un plan.
+
+00:03:12.180 --> 00:03:15.180
+Cuando alguien se da cuenta, lo que está en juego es mucho más importante que la tarde que llevo crearla.
+
+00:03:15.900 --> 00:03:18.600
+Por lo tanto, la gobernanza no consiste en el orden por sí mismo.
+
+00:03:19.240 --> 00:03:23.100
+Le trata de asegurarse de que las cosas de las que depende la gente no se vuelvan frágiles silenciosamente.
+
+00:03:23.100 --> 00:03:27.540
+Piensa en la última cosa útil que creaste y luego piensa en lo que pasaría si simplemente desaparecieras.
+
+00:03:28.080 --> 00:03:28.960
+No es un pensamiento morboso.
+
+00:03:29.420 --> 00:03:31.880
+Es el escenario exacto para el que la gobernanza está diseñada para sobrevivir.
+
+00:03:32.240 --> 00:03:35.600
+La solución comienza con algo tan simple como una sala y es a donde nos dirigimos a continuar.
+
+00:03:36.440 --> 00:03:37.860
+Los entornos son solo salas.
+
+00:03:38.600 --> 00:03:40.160
+Un entorno es exactamente lo que parece.
+
+00:03:40.740 --> 00:03:43.660
+Una sala donde tus aplicaciones, tus flujos y sus datos conviven.
+
+00:03:44.200 --> 00:03:47.660
+Puedes tener tantas salas como necesites y cada una puede tener sus propias reglas.
+
+00:03:47.660 --> 00:03:53.340
+El objetivo de las salas es la separación, para que el trabajo en un proyecto no se interponga con el trabajo en otro.
+
+00:03:53.820 --> 00:03:55.440
+Esa separación se impone el lugar de sugerir.
+
+00:03:56.000 --> 00:04:00.360
+Una aplicación creada en un entorno solo puede acceder a las fuentes de datos que se encuentran en ese mismo entorno,
+
+00:04:00.520 --> 00:04:04.880
+lo que las personas que asumen que todo se relaciona con el propio ejemplo de Microsoft son una aplicación en una sala de pruebas
+
+00:04:04.880 --> 00:04:09.540
+que simplemente no puede ver la base de datos en la sala de desarrollo, aunque ambas salas pertenezcan a la misma empresa.
+
+00:04:10.320 --> 00:04:14.100
+Las salas vienen en varios sabores y las diferencias importan más de lo que un principiante esperaría.
+
+00:04:14.100 --> 00:04:18.220
+La sala predeterminada llega automáticamente compartida por todos en la empresa
+
+00:04:18.220 --> 00:04:22.400
+y es el lugar que Microsoft dice que no ofrece garantías de respaldo y que no debería ergar cargas de trabajo de producción.
+
+00:04:23.140 --> 00:04:26.460
+Una sala de producción es todo lo contrario, creada para el trabajo permanente del que realmente dependes.
+
+00:04:27.040 --> 00:04:29.720
+Un entorno aislado es una sala de práctica que puedes copiar y restablecer cuando quieras.
+
+00:04:30.360 --> 00:04:32.760
+Un entorno de desarrollo es tu propio espacio de trabajo personal
+
+00:04:32.760 --> 00:04:35.520
+y una sala de prueba dura poco y se limpia sola después de un tiempo,
+
+00:04:35.700 --> 00:04:38.020
+lo que nos lleva de nuevo a la pregunta que dejé abierta hace un momento.
+
+00:04:38.820 --> 00:04:41.100
+La sala más peligrosa del inquilino suele ser el entorno predeterminado
+
+00:04:41.100 --> 00:04:44.360
+y la razón es casi graciosa, es en la que todos empiezan.
+
+00:04:44.680 --> 00:04:46.640
+Es muy probable que ahí sea donde se encuentre tu primera aplicación,
+
+00:04:46.940 --> 00:04:49.060
+que comparte con toda la empresa, no se puede eliminar
+
+00:04:49.060 --> 00:04:52.120
+y Microsoft dice abiertamente que no está diseñada para nada de lo que dependas.
+
+00:04:52.720 --> 00:04:55.580
+Sin embargo, es el lugar de destino predeterminado para cualquier persona nueva,
+
+00:04:55.660 --> 00:04:58.040
+lo que significa que el lugar que parece más seguro suele ser más arriesgado.
+
+00:04:58.720 --> 00:05:01.060
+La solución recomendada por Microsoft es más suave de lo que poder es.
+
+00:05:01.220 --> 00:05:02.820
+En lugar de prohibir la sala compartida,
+
+00:05:03.000 --> 00:05:05.940
+diriges a los nuevos creadores hacia sus propias salas personales a medida que construyen,
+
+00:05:05.940 --> 00:05:08.100
+de modo que el espacio compartido se quede para experimentos ligeros.
+
+00:05:08.100 --> 00:05:12.100
+Cualquier cosa seria se gradúa en una sala con verdaderas brandillas a su alrededor
+
+00:05:12.100 --> 00:05:14.540
+y ese es un final mucho mejor que una aplicación que crece en público.
+
+00:05:14.780 --> 00:05:17.200
+Aquí también es donde un par de títulos de trabajo empiezan a tener sentido.
+
+00:05:17.740 --> 00:05:19.620
+Cada sala tiene personas que pueden construir en ella,
+
+00:05:19.740 --> 00:05:21.380
+llamadas creadores, y personas que la gestionan,
+
+00:05:21.600 --> 00:05:22.680
+llamadas administradores de entorno.
+
+00:05:23.020 --> 00:05:24.440
+Los creadores crean aplicaciones y flujos.
+
+00:05:24.880 --> 00:05:26.860
+Los administradores deciden quién entra, cuáles son las reglas
+
+00:05:26.860 --> 00:05:28.440
+y cuándo debe retirarse una sala.
+
+00:05:29.160 --> 00:05:30.560
+La mayoría de los principiantes son creadores
+
+00:05:30.560 --> 00:05:32.620
+y eso está completamente bien porque el trabajo de un creador
+
+00:05:32.620 --> 00:05:36.000
+es construir cosas buenas en lugar de dirigir las tuberías que hay debajo.
+
+00:05:36.000 --> 00:05:38.440
+Las nuevas funciones van incluso más allá
+
+00:05:38.440 --> 00:05:40.940
+y permiten a los administradores aplicar un conjunto compartido de reglas
+
+00:05:40.940 --> 00:05:42.040
+en todo un lote de salas a la vez.
+
+00:05:42.300 --> 00:05:44.740
+Eso significa que una política no se puede cambiar silenciosamente en un lugar
+
+00:05:44.740 --> 00:05:46.520
+mientras en otro lugar mantiene una configuración antigua.
+
+00:05:47.000 --> 00:05:49.240
+Para ti, como creador, se manifiesta principalmente como coherencia
+
+00:05:49.240 --> 00:05:50.560
+porque las reglas que aprendes el primer día
+
+00:05:50.560 --> 00:05:52.480
+siguen aplicándose un año después.
+
+00:05:53.520 --> 00:05:55.020
+Políticas de datos, las reglas del juego.
+
+00:05:55.860 --> 00:05:57.400
+Las salas deciden dónde se aloja tu trabajo
+
+00:05:57.400 --> 00:05:59.160
+pero no dicen nada sobre lo que se puede tocar.
+
+00:06:00.000 --> 00:06:02.440
+Para ello, necesitas la segunda parte de las políticas de datos
+
+00:06:02.440 --> 00:06:04.720
+y para entenderlas, primero necesitas una pequeña palabra.
+
+00:06:05.360 --> 00:06:07.880
+Un conector es el enchufe que permite que una aplicación
+
+00:06:07.880 --> 00:06:09.420
+o un flujo se comunique con otra cosa,
+
+00:06:09.620 --> 00:06:12.500
+ya sea Outlook, SharePoint o un servicio completamente externo a Microsoft.
+
+00:06:13.240 --> 00:06:14.960
+Cada aplicación que has creado es en realidad
+
+00:06:14.960 --> 00:06:17.180
+solo unos pocos de estos enchufes conectados entre sí
+
+00:06:17.180 --> 00:06:19.060
+y la mayoría de las veces ni siquiera piensas en ellos.
+
+00:06:19.420 --> 00:06:20.920
+Una política de datos es una barandilla
+
+00:06:20.920 --> 00:06:22.240
+que se encuentra sobre esos enchufes.
+
+00:06:22.920 --> 00:06:25.300
+La propia descripción de Microsoft es que las políticas de datos
+
+00:06:25.300 --> 00:06:27.160
+reducen el riesgo de que los usuarios expongan
+
+00:06:27.160 --> 00:06:28.760
+involuntariamente datos de la organización
+
+00:06:28.760 --> 00:06:30.720
+que es la forma educada de decir que impiden
+
+00:06:30.720 --> 00:06:32.080
+que una persona bien intencionada
+
+00:06:32.080 --> 00:06:34.240
+damos información confidencial a un lugar que no debería ir.
+
+00:06:35.260 --> 00:06:37.080
+Cada conector se clasifica en uno de tres grupos.
+
+00:06:37.720 --> 00:06:39.320
+Hay un grupo empresarial para datos de trabajo,
+
+00:06:39.440 --> 00:06:41.660
+un grupo no empresarial para servicios personales y de consumo
+
+00:06:41.660 --> 00:06:43.760
+y un grupo bloqueado para cualquier cosa que prefieras
+
+00:06:43.760 --> 00:06:44.660
+que prefieras que en absoluto.
+
+00:06:45.520 --> 00:06:47.280
+Todos esos grupos están abiertos para uso comercial
+
+00:06:47.280 --> 00:06:48.460
+y uno de ellos está cerrado para siempre.
+
+00:06:49.040 --> 00:06:50.460
+También hay una regla sobre esos grupos
+
+00:06:50.460 --> 00:06:51.620
+que sorprende a casi todo el mundo
+
+00:06:51.620 --> 00:06:52.520
+y que veremos en un momento.
+
+00:06:52.920 --> 00:06:54.600
+Esta es la regla que sorprende a casi todo el mundo.
+
+00:06:55.000 --> 00:06:56.920
+Dos conectores que están perfectamente permitidos
+
+00:06:56.920 --> 00:06:58.160
+pueden estar prohibidos a la vez.
+
+00:06:58.760 --> 00:07:00.680
+Si colocas SharePoint en el grupo comercial
+
+00:07:00.680 --> 00:07:02.200
+y un servicio de correo electrónico personal
+
+00:07:02.200 --> 00:07:03.060
+en el grupo no comercial,
+
+00:07:03.320 --> 00:07:05.060
+no podrás crear un único flujo que utilice ambos.
+
+00:07:05.520 --> 00:07:07.360
+Dentro de un grupo eres libre de mezclar y combinar.
+
+00:07:07.780 --> 00:07:09.340
+En los demás grupos la puerta permanece cerrada.
+
+00:07:10.000 --> 00:07:11.840
+Hay un detalle que también sorprende a la gente.
+
+00:07:12.540 --> 00:07:13.700
+Cuando se crea una política nueva,
+
+00:07:13.860 --> 00:07:15.720
+todos los conectores se colocan en el grupo no comercial
+
+00:07:15.720 --> 00:07:16.820
+de forma predeterminada,
+
+00:07:16.960 --> 00:07:18.520
+por lo que no se activa nada por accidente.
+
+00:07:18.980 --> 00:07:20.660
+Ese valor predeterminado es deliberado
+
+00:07:20.660 --> 00:07:21.900
+y significa que la respuesta segura
+
+00:07:21.900 --> 00:07:23.080
+es la que obtienes sin hacer nada.
+
+00:07:23.620 --> 00:07:24.700
+Ahora imagina lo que ocurre
+
+00:07:24.700 --> 00:07:26.380
+cuando una regla cambia por debajo de ti.
+
+00:07:26.980 --> 00:07:28.440
+Alguien programa un flujo para que se ejecute
+
+00:07:28.440 --> 00:07:29.200
+de la mañana hasta las 3.
+
+00:07:29.580 --> 00:07:30.600
+Lleva meses funcionando y,
+
+00:07:30.860 --> 00:07:31.700
+de repente un día falla,
+
+00:07:31.780 --> 00:07:32.680
+aparece un mensaje que indica
+
+00:07:32.680 --> 00:07:33.740
+que la conexión se ha interrumpido.
+
+00:07:34.260 --> 00:07:35.160
+El creador no hizo nada malo.
+
+00:07:35.500 --> 00:07:36.740
+La política simplemente cambió
+
+00:07:36.740 --> 00:07:38.140
+y el flujo se basaba en una combinación
+
+00:07:38.140 --> 00:07:39.060
+que ya no está permitida.
+
+00:07:39.740 --> 00:07:40.720
+Microsoft es claro de afirmar
+
+00:07:40.720 --> 00:07:41.540
+que la aplicación es instant.
+
+00:07:42.020 --> 00:07:43.440
+La mayoría de los cambios de política
+
+00:07:43.440 --> 00:07:44.440
+surten efecto en una hora
+
+00:07:44.440 --> 00:07:45.700
+y los casos más extremos
+
+00:07:45.700 --> 00:07:46.580
+pueden tardar hasta un día,
+
+00:07:46.720 --> 00:07:48.020
+según la cantidad de ejecución.
+
+00:07:48.580 --> 00:07:50.180
+Vale la pena saberlo antes de que cunda el pánico
+
+00:07:50.180 --> 00:07:50.720
+por una política
+
+00:07:50.720 --> 00:07:51.760
+que parece no haber hecho nada toda.
+
+00:07:52.320 --> 00:07:53.520
+Sus administradores pueden ser más precisos
+
+00:07:53.520 --> 00:07:54.720
+que a telegrupo cuando lo necesitan.
+
+00:07:55.160 --> 00:07:56.520
+Pueden permitir el acceso de lectura
+
+00:07:56.520 --> 00:07:56.980
+a un servicio
+
+00:07:56.980 --> 00:07:58.360
+mientras bloquean cualquier cambio en él,
+
+00:07:58.400 --> 00:07:58.720
+por ejemplo,
+
+00:07:58.780 --> 00:07:59.800
+y pueden restringir las cosas
+
+00:07:59.800 --> 00:08:01.240
+a puntos de conexión específicos
+
+00:08:01.240 --> 00:08:02.540
+en lugar de servicios completos.
+
+00:08:03.300 --> 00:08:04.580
+No necesitas ese nivel de detalle
+
+00:08:04.580 --> 00:08:05.040
+para empezar,
+
+00:08:05.180 --> 00:08:06.180
+pero el sistema se puede ajustar
+
+00:08:06.180 --> 00:08:07.200
+en lugar de solo encenderlo
+
+00:08:07.200 --> 00:08:07.800
+y apagarlo.
+
+00:08:08.260 --> 00:08:09.660
+Una regla general evita mucha confusión
+
+00:08:09.660 --> 00:08:10.080
+en este caso.
+
+00:08:10.580 --> 00:08:11.980
+Si dos herramientas están pensadas
+
+00:08:11.980 --> 00:08:12.880
+para funcionar juntas
+
+00:08:12.880 --> 00:08:13.720
+en la misma aplicación,
+
+00:08:13.920 --> 00:08:14.900
+deben estar en el mismo grupo
+
+00:08:14.900 --> 00:08:15.620
+y esa es una decisión
+
+00:08:15.620 --> 00:08:17.060
+que un administrador toma a propósito
+
+00:08:17.060 --> 00:08:17.640
+en lugar de algo
+
+00:08:17.640 --> 00:08:18.220
+que se pueda anular
+
+00:08:18.220 --> 00:08:19.160
+desde dentro de un flujo.
+
+00:08:19.900 --> 00:08:20.240
+Por lo tanto,
+
+00:08:20.300 --> 00:08:21.340
+el propósito nunca fue impedir
+
+00:08:21.340 --> 00:08:21.680
+que creara
+
+00:08:21.680 --> 00:08:22.800
+es para asegurarse
+
+00:08:22.800 --> 00:08:23.500
+de que la combinación
+
+00:08:23.500 --> 00:08:24.460
+que elijas sea segura
+
+00:08:24.460 --> 00:08:25.380
+y que todo dentro
+
+00:08:25.380 --> 00:08:26.220
+de un solo depósito
+
+00:08:26.220 --> 00:08:27.160
+siga funcionando
+
+00:08:27.160 --> 00:08:28.120
+exactamente como siempre.
+
+00:08:29.980 --> 00:08:30.720
+¿Quién es el verdadero estómago?
+
+00:08:31.280 --> 00:08:32.700
+Las reglas no se imponen solas,
+
+00:08:32.820 --> 00:08:33.280
+lo que significa
+
+00:08:33.280 --> 00:08:33.840
+que la propiedad
+
+00:08:33.840 --> 00:08:34.800
+debe residir en algún lugar
+
+00:08:34.800 --> 00:08:35.720
+y eso nos lleva a una frase
+
+00:08:35.720 --> 00:08:36.760
+que escuchará constantemente.
+
+00:08:37.260 --> 00:08:38.060
+Un centro de excelencia,
+
+00:08:38.240 --> 00:08:39.500
+normalmente abreviado como COE,
+
+00:08:39.660 --> 00:08:40.380
+es un equipo dentro
+
+00:08:40.380 --> 00:08:40.840
+de una empresa
+
+00:08:40.840 --> 00:08:41.760
+que establece los estándares,
+
+00:08:41.880 --> 00:08:42.620
+comparte lo que funciona
+
+00:08:42.620 --> 00:08:43.620
+y respalda lo que funciona
+
+00:08:43.620 --> 00:08:44.420
+y respalda a las personas
+
+00:08:44.420 --> 00:08:44.840
+que construye.
+
+00:08:45.020 --> 00:08:45.960
+Es menos un departamento
+
+00:08:45.960 --> 00:08:46.760
+y más un pequeño grupo
+
+00:08:46.760 --> 00:08:47.540
+con una tarea clara.
+
+00:08:48.020 --> 00:08:49.500
+Microsoft es refrescantemente honesto
+
+00:08:49.500 --> 00:08:50.480
+sobre lo que realmente es.
+
+00:08:51.000 --> 00:08:51.700
+La documentación dice
+
+00:08:51.700 --> 00:08:52.600
+que un centro de excelencia
+
+00:08:52.600 --> 00:08:53.420
+necesita personas,
+
+00:08:53.580 --> 00:08:54.940
+comunicación y procesos definidos
+
+00:08:54.940 --> 00:08:55.620
+y que las herramientas
+
+00:08:55.620 --> 00:08:57.460
+son un medio para un fin.
+
+00:08:57.940 --> 00:08:58.480
+En otras palabras,
+
+00:08:58.640 --> 00:08:59.580
+comprar un kit de herramientas
+
+00:08:59.580 --> 00:09:00.560
+no le proporciona gobernanza.
+
+00:09:00.900 --> 00:09:01.360
+¿Tener a alguien
+
+00:09:01.360 --> 00:09:02.460
+a quien realmente le importe?
+
+00:09:02.540 --> 00:09:02.620
+Sí.
+
+00:09:03.300 --> 00:09:04.000
+Ahora, aparte, sorprende.
+
+00:09:04.560 --> 00:09:05.580
+Si busca gobernanza
+
+00:09:05.580 --> 00:09:06.280
+de Power Platform,
+
+00:09:06.460 --> 00:09:07.380
+encontrará el kit de inicio
+
+00:09:07.380 --> 00:09:08.440
+del COE en todas partes
+
+00:09:08.440 --> 00:09:09.080
+y durante años
+
+00:09:09.080 --> 00:09:09.660
+fue la respuesta
+
+00:09:09.660 --> 00:09:10.220
+a esta pregunta.
+
+00:09:10.940 --> 00:09:11.640
+La propia documentación
+
+00:09:11.640 --> 00:09:12.080
+de Microsoft
+
+00:09:12.080 --> 00:09:13.160
+ahora indica claramente
+
+00:09:13.160 --> 00:09:14.260
+que el kit de inicio
+
+00:09:14.260 --> 00:09:14.680
+del COE
+
+00:09:14.680 --> 00:09:15.340
+ya no se mantiene
+
+00:09:15.340 --> 00:09:15.920
+de forma activa
+
+00:09:15.920 --> 00:09:17.100
+y que sus capacidades principales
+
+00:09:17.100 --> 00:09:17.720
+se han trasladado
+
+00:09:17.720 --> 00:09:18.640
+al centro de administración
+
+00:09:19.500 --> 00:09:20.600
+es útil saber
+
+00:09:20.600 --> 00:09:21.280
+de qué se trataba
+
+00:09:21.280 --> 00:09:21.780
+porque el cambio
+
+00:09:21.780 --> 00:09:22.680
+tiene más sentido de esa manera.
+
+00:09:23.140 --> 00:09:24.160
+El kit era una compilación
+
+00:09:24.160 --> 00:09:25.160
+de referencia realizada
+
+00:09:25.160 --> 00:09:26.100
+íntegramente a partir
+
+00:09:26.100 --> 00:09:27.100
+de las propias herramientas
+
+00:09:27.100 --> 00:09:27.680
+de la plataforma
+
+00:09:27.680 --> 00:09:28.820
+con paneles para detectar
+
+00:09:28.820 --> 00:09:29.760
+lo que existe en el inquilino,
+
+00:09:29.920 --> 00:09:30.520
+procesos para ordenar
+
+00:09:30.520 --> 00:09:30.840
+lo que no
+
+00:09:30.840 --> 00:09:32.200
+e incluso una bienvenida cordial
+
+00:09:32.200 --> 00:09:32.740
+para las personas
+
+00:09:32.740 --> 00:09:33.480
+que acababan de empezar.
+
+00:09:34.260 --> 00:09:34.500
+En realidad,
+
+00:09:34.600 --> 00:09:35.120
+nunca fue un producto.
+
+00:09:35.520 --> 00:09:36.080
+Era un muy buen ejemplo
+
+00:09:36.080 --> 00:09:36.680
+que se podía copiar.
+
+00:09:37.060 --> 00:09:37.680
+La buena noticia
+
+00:09:37.680 --> 00:09:39.140
+es que no se desechó nada.
+
+00:09:39.820 --> 00:09:41.040
+Las partes que importaban
+
+00:09:41.040 --> 00:09:41.660
+se incorporaron
+
+00:09:41.660 --> 00:09:42.440
+al propio producto
+
+00:09:42.440 --> 00:09:43.600
+donde se mantienen por ti
+
+00:09:43.600 --> 00:09:44.660
+en lugar de que tu propio equipo
+
+00:09:44.660 --> 00:09:45.740
+las copie y vigile.
+
+00:09:46.300 --> 00:09:47.120
+Esa ruta integrada
+
+00:09:47.120 --> 00:09:47.600
+tiene un nombre
+
+00:09:47.600 --> 00:09:48.200
+que vivirás mucho.
+
+00:09:49.260 --> 00:09:50.200
+Los entornos gestionados
+
+00:09:50.200 --> 00:09:51.320
+permiten que un administrador
+
+00:09:51.320 --> 00:09:52.460
+establezca las reglas una vez
+
+00:09:52.460 --> 00:09:53.100
+y las aplique
+
+00:09:53.100 --> 00:09:53.960
+a muchas salas a la vez
+
+00:09:53.960 --> 00:09:54.800
+con muchos menos clics
+
+00:09:54.800 --> 00:09:55.340
+que si lo hicieras
+
+00:09:55.340 --> 00:09:55.760
+sala por sala.
+
+00:09:56.660 --> 00:09:57.540
+Para ti como principiante
+
+00:09:57.540 --> 00:09:58.300
+la conclusión es sencilla.
+
+00:09:58.880 --> 00:09:59.340
+La gobernanza
+
+00:09:59.340 --> 00:10:00.040
+tiene un propietario
+
+00:10:00.040 --> 00:10:00.380
+sobre todo
+
+00:10:00.380 --> 00:10:01.380
+el solo es un equipo pequeño
+
+00:10:01.380 --> 00:10:02.480
+en lugar de un departamento gigante.
+
+00:10:02.740 --> 00:10:03.760
+Existe una razón práctica
+
+00:10:03.760 --> 00:10:04.700
+por la que esto es importante
+
+00:10:04.700 --> 00:10:05.340
+para ti incluso
+
+00:10:05.340 --> 00:10:06.020
+si nunca dirigirás
+
+00:10:06.020 --> 00:10:06.820
+un centro de excelencia tú.
+
+00:10:07.020 --> 00:10:07.720
+Cuando necesitas algo
+
+00:10:07.720 --> 00:10:08.240
+que no tienes
+
+00:10:08.240 --> 00:10:09.260
+ya sea un nuevo conector
+
+00:10:09.260 --> 00:10:10.020
+o un entorno nuevo
+
+00:10:10.020 --> 00:10:10.840
+hay un lugar conocido
+
+00:10:10.840 --> 00:10:11.580
+al que preguntar.
+
+00:10:11.940 --> 00:10:12.600
+El equipo existe
+
+00:10:12.600 --> 00:10:13.600
+para que esa solicitud
+
+00:10:13.600 --> 00:10:14.760
+no desaparezca en el vacío.
+
+00:10:15.820 --> 00:10:16.620
+Observar lo que sucede
+
+00:10:16.620 --> 00:10:17.900
+Ser dueño de las reglas
+
+00:10:17.900 --> 00:10:18.380
+es una tarea
+
+00:10:18.380 --> 00:10:19.280
+y saber qué está sucediendo
+
+00:10:19.280 --> 00:10:19.980
+realmente es otra.
+
+00:10:20.340 --> 00:10:20.840
+Esta es la parte
+
+00:10:20.840 --> 00:10:21.660
+en la que los principiantes
+
+00:10:21.660 --> 00:10:22.360
+nunca piensan
+
+00:10:22.360 --> 00:10:23.040
+y es lo que hace
+
+00:10:23.040 --> 00:10:24.460
+o deshace todo lo anterior.
+
+00:10:25.140 --> 00:10:25.460
+Sin ella
+
+00:10:25.460 --> 00:10:26.040
+nadie sabría
+
+00:10:26.040 --> 00:10:26.960
+que una aplicación existe
+
+00:10:26.960 --> 00:10:27.740
+o que dejó de funcionar
+
+00:10:27.740 --> 00:10:28.260
+hace seis semanas.
+
+00:10:28.780 --> 00:10:29.120
+Aquí es donde
+
+00:10:29.120 --> 00:10:29.960
+trajo la supervisión.
+
+00:10:30.380 --> 00:10:31.060
+El análisis a nivel
+
+00:10:31.060 --> 00:10:31.460
+de inquilino
+
+00:10:31.460 --> 00:10:32.040
+reúne actividad
+
+00:10:32.040 --> 00:10:32.700
+de cada entorno
+
+00:10:32.700 --> 00:10:33.180
+de tu inquilino
+
+00:10:33.180 --> 00:10:33.800
+en una única vista
+
+00:10:33.800 --> 00:10:34.720
+para que un administrador
+
+00:10:34.720 --> 00:10:35.980
+pueda ver lo que se está creando
+
+00:10:35.980 --> 00:10:36.660
+y lo que se está creando
+
+00:10:36.660 --> 00:10:37.460
+y lo que se está utilizando
+
+00:10:37.460 --> 00:10:37.880
+realmente.
+
+00:10:38.660 --> 00:10:39.380
+Microsoft señala
+
+00:10:39.380 --> 00:10:40.020
+que los informes
+
+00:10:40.020 --> 00:10:40.940
+tardan uno o dos días
+
+00:10:40.940 --> 00:10:41.480
+en completarse
+
+00:10:41.480 --> 00:10:42.220
+después de activarse
+
+00:10:42.220 --> 00:10:42.860
+lo cual vale la pena
+
+00:10:42.860 --> 00:10:43.620
+recordar antes de dar
+
+00:10:43.620 --> 00:10:44.000
+por sentado
+
+00:10:44.000 --> 00:10:44.620
+que no está sucediendo.
+
+00:10:45.580 --> 00:10:46.180
+También hay una lista
+
+00:10:46.180 --> 00:10:46.860
+actualizada de cosas
+
+00:10:46.860 --> 00:10:47.780
+que merece la pena revisar.
+
+00:10:48.240 --> 00:10:49.080
+Muestra los recursos
+
+00:10:49.080 --> 00:10:49.800
+cuyo propietario
+
+00:10:49.800 --> 00:10:50.480
+ha dejado la empresa
+
+00:10:50.480 --> 00:10:51.060
+y los recursos
+
+00:10:51.060 --> 00:10:51.800
+que nadie ha tocado
+
+00:10:51.800 --> 00:10:52.600
+en mucho tiempo.
+
+00:10:53.140 --> 00:10:53.420
+De repente
+
+00:10:53.420 --> 00:10:53.880
+la aplicación
+
+00:10:53.880 --> 00:10:54.780
+sin propietario de antes
+
+00:10:54.780 --> 00:10:55.460
+ya no es una historia
+
+00:10:55.460 --> 00:10:56.400
+sino un elemento de línea
+
+00:10:56.400 --> 00:10:56.940
+en una pantalla.
+
+00:10:57.380 --> 00:10:58.100
+La solución para ese elemento
+
+00:10:58.100 --> 00:10:58.320
+de línea
+
+00:10:58.320 --> 00:10:59.220
+es refrigerantemente aburrida
+
+00:10:59.220 --> 00:11:00.660
+o encuentras un nuevo propietario
+
+00:11:00.660 --> 00:11:01.240
+pero la aplicación
+
+00:11:01.240 --> 00:11:01.780
+no la retiras
+
+00:11:01.780 --> 00:11:02.400
+y en cualquier caso
+
+00:11:02.400 --> 00:11:03.200
+alguien finalmente sabe
+
+00:11:03.200 --> 00:11:03.700
+que existe.
+
+00:11:04.340 --> 00:11:04.680
+Eso es más
+
+00:11:04.680 --> 00:11:05.100
+de lo que ofrecía
+
+00:11:05.100 --> 00:11:05.520
+el año pasado.
+
+00:11:05.920 --> 00:11:06.720
+Junto con los informes
+
+00:11:06.720 --> 00:11:07.820
+un breve resumen semanal
+
+00:11:07.820 --> 00:11:08.760
+señala las aplicaciones
+
+00:11:08.760 --> 00:11:09.260
+y los flujos
+
+00:11:09.260 --> 00:11:10.120
+que han dejado de funcionar
+
+00:11:10.120 --> 00:11:10.700
+para que los problemas
+
+00:11:10.700 --> 00:11:11.300
+salgan a luz
+
+00:11:11.300 --> 00:11:11.920
+antes de que todo
+
+00:11:11.920 --> 00:11:12.720
+un equipo dependa de ellos.
+
+00:11:13.020 --> 00:11:13.520
+Una aplicación
+
+00:11:13.520 --> 00:11:13.980
+en buen estado
+
+00:11:13.980 --> 00:11:14.740
+tiene un propietario
+
+00:11:14.740 --> 00:11:15.280
+un hogar
+
+00:11:15.280 --> 00:11:16.040
+y una ruta segura
+
+00:11:16.040 --> 00:11:16.980
+desde una sala de prácticas
+
+00:11:16.980 --> 00:11:17.440
+hasta la real
+
+00:11:17.440 --> 00:11:18.400
+sin tener que reconstruirla
+
+00:11:18.400 --> 00:11:19.160
+desde cero cada vez.
+
+00:11:19.560 --> 00:11:20.320
+Las personas que pueden ver
+
+00:11:20.320 --> 00:11:20.820
+estos informes
+
+00:11:20.820 --> 00:11:21.480
+también son importantes.
+
+00:11:21.740 --> 00:11:22.860
+Los administradores del entorno
+
+00:11:22.860 --> 00:11:23.660
+pueden ver las salas
+
+00:11:23.660 --> 00:11:24.580
+de las que son responsables
+
+00:11:24.580 --> 00:11:25.640
+mientras que los administradores
+
+00:11:25.640 --> 00:11:26.600
+de la plataforma en general
+
+00:11:26.600 --> 00:11:27.800
+pueden verlo todo
+
+00:11:27.800 --> 00:11:28.280
+lo que mantiene
+
+00:11:28.280 --> 00:11:29.080
+la visibilidad útil
+
+00:11:29.080 --> 00:11:29.840
+sin entregar a todo el mundo
+
+00:11:29.840 --> 00:11:32.720
+una advertencia honesta
+
+00:11:32.720 --> 00:11:33.640
+sobre toda esta visibilidad.
+
+00:11:34.100 --> 00:11:35.060
+Si desactivas los informes
+
+00:11:35.060 --> 00:11:35.880
+el historial se elimina
+
+00:11:35.880 --> 00:11:36.440
+por lo que es algo
+
+00:11:36.440 --> 00:11:37.280
+que activas deliberadamente
+
+00:11:37.280 --> 00:11:38.060
+y lo dejas activado.
+
+00:11:38.520 --> 00:11:39.300
+Aquí hay un pequeño detalle
+
+00:11:39.300 --> 00:11:40.220
+que es fácil pasar por alto.
+
+00:11:41.100 --> 00:11:41.720
+La supervisión
+
+00:11:41.720 --> 00:11:42.860
+no solo te dice que está roto
+
+00:11:42.860 --> 00:11:43.640
+te dice que es popular
+
+00:11:43.640 --> 00:11:44.940
+y a menudo son lo mismo.
+
+00:11:45.340 --> 00:11:45.720
+La aplicación
+
+00:11:45.720 --> 00:11:46.520
+que a todo el mundo le encanta
+
+00:11:46.520 --> 00:11:47.240
+suele ser la aplicación
+
+00:11:47.240 --> 00:11:47.620
+de todo el mundo
+
+00:11:47.620 --> 00:11:48.180
+echaría de menos
+
+00:11:48.180 --> 00:11:48.760
+lo que la convierte
+
+00:11:48.760 --> 00:11:49.420
+en la que merece la pena
+
+00:11:49.420 --> 00:11:50.260
+proteger con un propietario.
+
+00:11:50.940 --> 00:11:51.360
+Nada de esto
+
+00:11:51.360 --> 00:11:51.960
+ocurre automática.
+
+00:11:52.600 --> 00:11:53.300
+Alguien tiene que activar
+
+00:11:53.300 --> 00:11:53.820
+los informes
+
+00:11:53.820 --> 00:11:54.820
+decidir que se consideran
+
+00:11:54.820 --> 00:11:55.360
+utilizados
+
+00:11:55.360 --> 00:11:56.560
+y actuar realmente
+
+00:11:56.560 --> 00:11:57.600
+en función de lo que dice la lista.
+
+00:11:59.840 --> 00:12:00.760
+Y suele ser lo que sale
+
+00:12:00.760 --> 00:12:01.180
+a una empresa.
+
+00:12:02.220 --> 00:12:02.940
+Control sin acabar
+
+00:12:02.940 --> 00:12:03.500
+con la libertad.
+
+00:12:04.080 --> 00:12:04.840
+Ahora podemos hacernos
+
+00:12:04.840 --> 00:12:05.640
+la pregunta que decide
+
+00:12:05.640 --> 00:12:06.660
+si algo de esto funciona.
+
+00:12:07.080 --> 00:12:07.900
+La única decisión real
+
+00:12:07.900 --> 00:12:08.460
+es hasta qué punto
+
+00:12:08.460 --> 00:12:09.040
+hay que ajustar el de.
+
+00:12:09.280 --> 00:12:10.040
+Si lo ajustas todo
+
+00:12:10.040 --> 00:12:10.640
+la gente construye
+
+00:12:10.640 --> 00:12:11.020
+en secreto
+
+00:12:11.020 --> 00:12:12.320
+sus propios ordenadores portátiles
+
+00:12:12.320 --> 00:12:13.140
+con herramientas
+
+00:12:13.140 --> 00:12:14.040
+de las que nunca has oído hablar.
+
+00:12:14.340 --> 00:12:14.980
+Si lo aflojas todo
+
+00:12:14.980 --> 00:12:15.620
+la sala compartida
+
+00:12:15.620 --> 00:12:16.820
+se convierte en un cajón de trastos.
+
+00:12:17.180 --> 00:12:18.340
+Ambas son fallas de gobernanza
+
+00:12:18.340 --> 00:12:19.680
+y ambas son comunes.
+
+00:12:20.320 --> 00:12:21.160
+El equilibrio recomendado
+
+00:12:21.160 --> 00:12:21.640
+por Microsoft
+
+00:12:21.640 --> 00:12:22.340
+es más sensato
+
+00:12:22.340 --> 00:12:22.840
+de lo que parece.
+
+00:12:23.440 --> 00:12:25.080
+Mantén el espacio compartido ajustado
+
+00:12:25.080 --> 00:12:26.420
+la sala de producción sensata
+
+00:12:26.420 --> 00:12:27.580
+y trata las reglas
+
+00:12:27.580 --> 00:12:28.480
+como algo que explicas
+
+00:12:28.480 --> 00:12:29.100
+en lugar de algo
+
+00:12:29.100 --> 00:12:30.080
+que le impones a la gente.
+
+00:12:30.880 --> 00:12:31.500
+Esta última parte
+
+00:12:31.500 --> 00:12:32.560
+importa más que la tecnología.
+
+00:12:33.340 --> 00:12:33.960
+La guía es tajante
+
+00:12:33.960 --> 00:12:34.520
+si se activa
+
+00:12:34.520 --> 00:12:35.400
+una nueva estrategia
+
+00:12:35.400 --> 00:12:36.260
+sin decírselo a nadie.
+
+00:12:36.380 --> 00:12:36.840
+Los usuarios
+
+00:12:36.840 --> 00:12:38.520
+la perciben como una restricción
+
+00:12:38.520 --> 00:12:39.160
+y empiezan a buscar
+
+00:12:39.160 --> 00:12:40.340
+soluciones alternativas.
+
+00:12:40.940 --> 00:12:41.860
+Una regla que nadie entiende
+
+00:12:41.860 --> 00:12:42.640
+es una regla
+
+00:12:42.640 --> 00:12:43.380
+que la gente busca.
+
+00:12:43.900 --> 00:12:44.300
+El equilibrio
+
+00:12:44.300 --> 00:12:45.060
+suele manifestarse
+
+00:12:45.060 --> 00:12:45.920
+como una configuración
+
+00:12:45.920 --> 00:12:46.360
+por niveles
+
+00:12:46.360 --> 00:12:47.160
+en lugar de una reglaje.
+
+00:12:47.580 --> 00:12:48.420
+Sala compartida
+
+00:12:48.420 --> 00:12:49.740
+mantiene las reglas más estrictas
+
+00:12:49.740 --> 00:12:50.380
+porque es la que todos
+
+00:12:50.380 --> 00:12:50.900
+pueden acceder.
+
+00:12:51.120 --> 00:12:51.700
+Las salas de equipo
+
+00:12:51.700 --> 00:12:52.040
+y producción
+
+00:12:52.040 --> 00:12:53.200
+tienen más espacio para respirar
+
+00:12:53.200 --> 00:12:53.660
+porque las personas
+
+00:12:53.660 --> 00:12:54.200
+que trabajan allí
+
+00:12:54.200 --> 00:12:54.800
+creen a propósito.
+
+00:12:55.220 --> 00:12:56.120
+Nada de eso es complicado
+
+00:12:56.120 --> 00:12:57.040
+y coincide con la forma
+
+00:12:57.040 --> 00:12:57.680
+en que la mayoría
+
+00:12:57.680 --> 00:12:58.560
+de las empresas sensatas
+
+00:12:58.560 --> 00:12:59.860
+ya tratan las unidades compartidas
+
+00:12:59.860 --> 00:13:00.700
+y las salas de reuniones.
+
+00:13:01.160 --> 00:13:01.620
+Este equilibrio
+
+00:13:01.620 --> 00:13:02.660
+también tiene un lado creativo.
+
+00:13:03.280 --> 00:13:03.860
+La guía de Microsoft
+
+00:13:03.860 --> 00:13:04.460
+para las personas
+
+00:13:04.460 --> 00:13:05.380
+que crean cosas es breve
+
+00:13:05.380 --> 00:13:06.540
+y vale la pena recordarla.
+
+00:13:07.440 --> 00:13:08.120
+Mantén el espacio
+
+00:13:08.120 --> 00:13:08.820
+de trabajo limpio,
+
+00:13:08.960 --> 00:13:09.660
+comparte con cuidado
+
+00:13:09.660 --> 00:13:10.720
+y proteja los datos
+
+00:13:10.720 --> 00:13:11.420
+que se le confíen.
+
+00:13:12.140 --> 00:13:12.980
+Esos tres hábitos
+
+00:13:12.980 --> 00:13:13.640
+evitan la mayoría
+
+00:13:13.640 --> 00:13:14.180
+de los problemas
+
+00:13:14.180 --> 00:13:15.500
+que la gobernanza debe detectar.
+
+00:13:16.040 --> 00:13:16.540
+Por lo tanto,
+
+00:13:16.740 --> 00:13:17.480
+una buena gobernanza
+
+00:13:17.480 --> 00:13:18.260
+desde tu punto de vista
+
+00:13:18.260 --> 00:13:19.400
+se reduce a tres cosas simples.
+
+00:13:19.960 --> 00:13:20.760
+Sabes dónde crear,
+
+00:13:20.880 --> 00:13:21.840
+sabes qué puedes conectar
+
+00:13:21.840 --> 00:13:22.640
+y sabes exactamente
+
+00:13:22.640 --> 00:13:23.540
+a quién preguntar
+
+00:13:23.540 --> 00:13:24.780
+cuando necesitas más que eso
+
+00:13:24.780 --> 00:13:25.660
+lo que nos devuelve la idea
+
+00:13:25.660 --> 00:13:26.720
+al punto de partida.
+
+00:13:28.000 --> 00:13:28.820
+Lo que realmente quieres
+
+00:13:28.820 --> 00:13:29.820
+no es un libro de reglas
+
+00:13:29.820 --> 00:13:30.360
+que nadie lea,
+
+00:13:30.680 --> 00:13:31.540
+es un conjunto de hábitos
+
+00:13:31.540 --> 00:13:32.300
+que todos entiendan
+
+00:13:32.300 --> 00:13:33.140
+y esa diferencia
+
+00:13:33.140 --> 00:13:34.160
+es el quit de la cuestión.
+
+00:13:35.200 --> 00:13:35.800
+Revisión corta.
+
+00:13:36.080 --> 00:13:36.940
+Así que vamos a recopilarlo.
+
+00:13:37.640 --> 00:13:38.100
+La gobernanza
+
+00:13:38.100 --> 00:13:38.840
+es el conjunto de reglas
+
+00:13:38.840 --> 00:13:39.200
+que mantiene
+
+00:13:39.200 --> 00:13:40.200
+Power Platform utilizable.
+
+00:13:40.780 --> 00:13:41.300
+Los entornos
+
+00:13:41.300 --> 00:13:41.840
+son las salas
+
+00:13:41.840 --> 00:13:42.740
+en las que vive tu trabajo,
+
+00:13:42.980 --> 00:13:43.760
+las políticas de datos
+
+00:13:43.760 --> 00:13:44.760
+son las reglas de tráfico
+
+00:13:44.760 --> 00:13:45.140
+que deciden
+
+00:13:45.140 --> 00:13:45.620
+qué conectores
+
+00:13:45.620 --> 00:13:46.280
+se pueden combinar
+
+00:13:46.280 --> 00:13:47.140
+y un centro de excelencia
+
+00:13:47.140 --> 00:13:47.560
+es el equipo
+
+00:13:47.560 --> 00:13:48.100
+que se encarga
+
+00:13:48.100 --> 00:13:48.860
+de esas reglas.
+
+00:13:49.580 --> 00:13:49.960
+Supervisión
+
+00:13:49.960 --> 00:13:50.340
+es la forma
+
+00:13:50.340 --> 00:13:51.160
+en que cualquiera descubre
+
+00:13:53.540 --> 00:13:54.120
+cada por sí sola.
+
+00:13:54.520 --> 00:13:55.080
+El truco está en ver
+
+00:13:55.080 --> 00:13:55.560
+cómo encajan
+
+00:13:55.560 --> 00:13:56.180
+y esa es la parte
+
+00:13:56.180 --> 00:13:56.600
+que la mayoría
+
+00:13:56.600 --> 00:13:57.000
+de las guías
+
+00:13:57.000 --> 00:13:57.600
+para principiantes
+
+00:13:57.600 --> 00:13:58.040
+es alta.
+
+00:13:58.780 --> 00:13:59.560
+Este es el replanteamiento
+
+00:13:59.560 --> 00:13:59.940
+que vale la pena
+
+00:13:59.940 --> 00:14:00.780
+llevar a cabo en este episodio.
+
+00:14:01.220 --> 00:14:01.740
+La gobernanza
+
+00:14:01.740 --> 00:14:02.240
+no es el precio
+
+00:14:02.240 --> 00:14:02.880
+que pagas por usar
+
+00:14:02.880 --> 00:14:03.420
+Power Platform,
+
+00:14:03.900 --> 00:14:04.320
+es la razón
+
+00:14:04.320 --> 00:14:04.780
+por la que puedes
+
+00:14:04.780 --> 00:14:05.220
+seguir usando
+
+00:14:05.220 --> 00:14:05.520
+a la medida
+
+00:14:05.520 --> 00:14:06.360
+que tu trabajo crece
+
+00:14:06.360 --> 00:14:07.020
+y la razón
+
+00:14:07.020 --> 00:14:07.720
+por la que lo que creas
+
+00:14:07.720 --> 00:14:08.180
+el año pasado
+
+00:14:08.180 --> 00:14:08.800
+seguirá funcionando
+
+00:14:08.800 --> 00:14:09.260
+el año que viene.
+
+00:14:09.460 --> 00:14:09.880
+Una vez que puedes
+
+00:14:09.880 --> 00:14:10.440
+nombrar las piezas,
+
+00:14:10.520 --> 00:14:10.860
+la gobernanza
+
+00:14:10.860 --> 00:14:11.460
+deja de ser un muro
+
+00:14:11.460 --> 00:14:12.100
+contra el que te chocas
+
+00:14:12.100 --> 00:14:13.820
+y se convierte en un conjunto
+
+00:14:13.820 --> 00:14:14.240
+de decisiones
+
+00:14:14.240 --> 00:14:14.740
+que realmente pueden.
+
+00:14:14.800 --> 00:14:15.360
+Así que te dejaré
+
+00:14:23.540 --> 00:14:24.420
+déjalo en los comentarios
+
+00:14:24.420 --> 00:14:26.120
+y suscríbete a M335FM
+
+00:14:26.120 --> 00:14:26.980
+si quieres más herramientas
+
+00:14:26.980 --> 00:14:27.540
+y la mentalidad
+
+00:14:27.540 --> 00:14:28.060
+detrás del trabajo
+
+00:14:28.060 --> 00:14:28.500
+que se sostiene.

@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.320 --> 00:00:05.980
+Willkommen beim M355-Westi-FM-Podcast, wo wir Menschen Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.680 --> 00:00:08.220
+Warum liegen Ihre Daten an zu vielen Orten?
+
+00:00:08.760 --> 00:00:13.580
+Ihre Kundendaten liegen wahrscheinlich derzeit an verschiedenen Orten und niemand kann Ihnen sagen, welche Kopie aktuell ist.
+
+00:00:14.120 --> 00:00:18.900
+Ihre Verkaufszahlen liegen in einer Cloud, Ihre Marketingdateien in einer anderen und Ihre Kundenniste in einer Microsoft-App.
+
+00:00:19.800 --> 00:00:24.360
+Microsoft-Fabric-Verknüpfungen wurden genau dafür entwickelt und funktionieren auf eine Weise, die viele Einsteiger überrascht.
+
+00:00:24.360 --> 00:00:31.280
+Willkommen beim M355-Westi-FM-Podcast, wo wir Menschen Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:31.980 --> 00:00:36.220
+In den nächsten 20 Minuten erkläre ich, was eine Verknüpfung wirklich ist, wo sie liegt und worauf sie zeigen kann.
+
+00:00:36.920 --> 00:00:42.260
+Ihr werdet auch die Grenzen behandeln, vor denen niemand warnt und wie sie zu den Microsoft 365 und Azure-Tools passen, die Sie bereits nutzen.
+
+00:00:43.020 --> 00:00:44.240
+Was ist eine Fabrik-Verknüpfung eigentlich?
+
+00:00:45.120 --> 00:00:48.220
+Um eine Verknüpfung zu verstehen, benötigen Sie zunächst einen Satz darüber, wo Sie sich befinden.
+
+00:00:48.480 --> 00:00:51.680
+Microsoft Fabric ist Microsofts All-in-One-Plattform für die Arbeit mit Daten.
+
+00:00:51.680 --> 00:00:55.500
+Und jedes Fabric-Setup enthält eine einzelne Speicherschicht namens OneLake.
+
+00:00:56.200 --> 00:01:00.580
+Stellen Sie sich OneLake wie ein riesiges organisiertes Laufwerk für alle Analysedaten Ihres Unternehmens vor.
+
+00:01:01.140 --> 00:01:05.080
+Es ist sofort aktiviert, sobald Sie Fabric erhalten. Sie müssen es also nicht erstellen und können es nicht löschen.
+
+00:01:05.480 --> 00:01:07.160
+Sie können auch nicht versehentlich ein zweites erstellen.
+
+00:01:07.620 --> 00:01:10.180
+Es läuft auf Azure-Speicher und speichert Ihre Tabellen in offenen Formaten.
+
+00:01:10.820 --> 00:01:14.100
+Das ist wichtig, weil Ihre Daten nicht in einem Format gefangen sind, das nur ein Unternehmen lesen kann.
+
+00:01:15.000 --> 00:01:17.000
+Innerhalb dieses Laufwerks ist eine Verknüpfung nur ein Zeiger.
+
+00:01:17.420 --> 00:01:20.200
+Es ist ein Objekt, das besagt, die echten Daten liegen dort drüben, also holen Sie sie von dort.
+
+00:01:20.560 --> 00:01:24.180
+Microsoft verwendet zwei Namen, die man kennen sollte, da sie überall in der Dokumentation auftauchen.
+
+00:01:24.580 --> 00:01:26.600
+Der Zielpfad ist der Ort, an dem die Daten tatsächlich liegen.
+
+00:01:26.960 --> 00:01:28.940
+Und der Verknüpfungspfad ist der Ort, an dem die Verknüpfung erscheint.
+
+00:01:29.220 --> 00:01:32.640
+Wenn Sie eine Verknüpfung in Ihrem Lakehouse erstellen, platzieren Sie ein Wegweiser-Schild am Verknüpfungspfad.
+
+00:01:32.920 --> 00:01:36.160
+Dieser Wegweiser zeigt auf dem Zielpfad und die Daten selbst bewegen sich niemals.
+
+00:01:36.860 --> 00:01:40.520
+Nehmen Sie das Symbol auf Ihrem Desktop, das ein Foto öffnet, welches in einem Ordner an anderer Stelle gespeichert ist.
+
+00:01:40.880 --> 00:01:43.400
+Das Symbol ist nicht das Foto und es ist auch keine Kopie des Fotos.
+
+00:01:43.860 --> 00:01:47.140
+Es ist ein Verweis auf das Foto und funktioniert, weil Ihr Computer weiß, wo er suchen muss.
+
+00:01:47.140 --> 00:01:49.320
+Eine Fabrikverknüpfung funktioniert auf die gleiche Weise.
+
+00:01:49.720 --> 00:01:54.640
+Die Ingenieure, die Sie entwickelt haben, beschreiben Verknüpfungen als symbolische Links, was der Fachbegriff für dieselbe Idee ist.
+
+00:01:55.200 --> 00:01:56.840
+Löschen Sie das Symbol und das Foto ist immer noch da.
+
+00:01:57.240 --> 00:02:02.300
+Das ist der Teil, der die Leute überrascht, denn Sie können eine Verknüpfung entfernen, ohne Angst haben zu müssen, die dahinterliegenden Daten zu verlieren.
+
+00:02:02.500 --> 00:02:05.500
+Das ist aus einem einfachen Grund wichtig. Daten zu kopieren ist teuer und mühsam.
+
+00:02:05.500 --> 00:02:09.860
+Wenn zwei Teams jeweils eine eigene Kopie der Kundendaten speichern, zahlen Sie doppelt für den Speicherplatz.
+
+00:02:10.540 --> 00:02:14.920
+Schlimmer noch, Sie erhalten zwei Versionen, die auseinanderlaufen, sobald jemand eine Kopie aktualisiert und die andere vergisst.
+
+00:02:15.720 --> 00:02:16.900
+Ein Shortcut vermeidet beide Probleme.
+
+00:02:17.640 --> 00:02:20.460
+Es gibt eine Kopie an einem Ort, auf die jedes Team zugreift, das sie benötigt.
+
+00:02:21.200 --> 00:02:26.080
+Wenn sich die Quelle ändert, ist die Änderung über den Shortcut sichtbar, sodass niemand nächtliche Jobs zur Synchronisierung ausführen muss.
+
+00:02:26.500 --> 00:02:26.700
+Muss.
+
+00:02:27.280 --> 00:02:28.820
+Auch Tabellendefinitionen bleiben synchron.
+
+00:02:28.820 --> 00:02:32.760
+Wenn jemand an der Quelle eine Spalte hinzufügt, erkennt der Shortcut dies, ohne dass Sie etwas neu erstellen müssen.
+
+00:02:32.760 --> 00:02:37.420
+Ein Shortcut ist ein Verweis, keine Kopie. Und dieser Grundgedanke bildet das Fundament für alles Weitere.
+
+00:02:38.300 --> 00:02:41.780
+Der West dieser Episode befasst sich damit, wo diese Verweise liegen können und worauf Sie zugreifen.
+
+00:02:42.660 --> 00:02:44.020
+Wo ein Shortcut innerhalb von Fabric liegt?
+
+00:02:44.600 --> 00:02:48.640
+Sie können Shortcuts derzeit an zwei Hauptorten erstellen, die beide in Fabric angesiedelt sind.
+
+00:02:49.140 --> 00:02:53.140
+Der erste ist ein Lakehouse, der Arbeitsbereich von Fabric zum Speichern und Analysieren großer Datenmengen.
+
+00:02:53.440 --> 00:02:58.860
+Der zweite ist eine KQL-Datenbank für Echtzeitdaten, die wir hier jedoch ausklammern, da sie ein fortgeschritteneres Thema ist.
+
+00:02:59.340 --> 00:03:01.800
+Wenn Sie neu bei Fabric sind, ist das Lakehouse der Ort, an dem Sie arbeiten.
+
+00:03:01.800 --> 00:03:04.860
+Ein Lakehouse hat zwei Hauptordner, die sich unterschiedlich verhalten.
+
+00:03:05.540 --> 00:03:09.140
+Es gibt einen Tabellenordner für strukturierte Daten und einen Dateiordner für rohe oder semistrukturierte Daten.
+
+00:03:09.860 --> 00:03:11.800
+Wo Sie Ihren Shortcut erstellen, bestimmt sein Verhalten.
+
+00:03:12.200 --> 00:03:13.280
+Daher ist dieser Punkt wichtig.
+
+00:03:13.760 --> 00:03:17.940
+Wenn Sie einen Shortcut unter Tabellen erstellen, signalisieren Sie Fabric, dass es sich bei dem Ziel um eine echte Tabelle handelt.
+
+00:03:18.220 --> 00:03:21.660
+Shortcuts in diesem Ordner müssen auf der obersten Ebene liegen. Sie können sie nicht in einem Unterordner ablegen.
+
+00:03:21.660 --> 00:03:28.520
+Wenn die Daten am Ziel im Delta-Format vorliegen, erkennt das Lakehouse Sie als Tabelle, die Sie mit SQL-Abfragen und in Power BI nutzen können.
+
+00:03:29.200 --> 00:03:33.280
+Die Tabellendefinition synchronisiert sich von selbst, sodass neue Spalten an der Quelle ohne manuelle Arbeit erscheinen.
+
+00:03:33.600 --> 00:03:37.400
+Eine kleine Besonderheit ist wissenswert. Delta erlaubt keine Leerzeichen in Tabellennamen.
+
+00:03:37.980 --> 00:03:41.520
+Wenn Sie einen Shortcut mit einem Leerzeichen benennen, wird Fabric ihn nicht als Delta-Tabelle behandeln.
+
+00:03:41.960 --> 00:03:44.820
+Wenn Sie den Shortcut stattdessen unter Dateien platzieren, sind die Regeln lockerer.
+
+00:03:44.820 --> 00:03:50.520
+Sie können ihn auf jeder Ebene der Ordner-Hierarchie ablegen und auf jedes Dateiformat verweisen, von Tabellenkalkulationen bis zu Bildern.
+
+00:03:51.280 --> 00:03:53.580
+Der Haken dabei ist, dass hier nichts automatisch zu einer Tabelle wird.
+
+00:03:54.920 --> 00:03:58.140
+Dateiverknüpfungen sind hervorragend für Entwickler geeignet, die Rohdaten mit Spark lesen möchten,
+
+00:03:58.400 --> 00:04:01.320
+aber sie erscheinen nicht von selbst in Ihren SQL-Abfragen oder Power BI-Berichten.
+
+00:04:02.380 --> 00:04:05.780
+Eine einfache Regel deckt die meisten Fälle ab und führt direkt zur nächsten Frage.
+
+00:04:06.540 --> 00:04:09.920
+Verwenden Sie Tabellen, wenn Sie Daten mit SQL-Abfragen und in Berichten nutzen möchten,
+
+00:04:10.300 --> 00:04:13.460
+und verwenden Sie Dateien, wenn es sich um Rohdaten handelt, die Sie erst noch verarbeiten müssen.
+
+00:04:13.460 --> 00:04:18.080
+Wenn Sie wissen, wo sich eine Verknüpfung befindet, ist die nächste naheliegende Frage, worauf Sie verweisen können.
+
+00:04:19.120 --> 00:04:20.420
+Worauf Sie eine Verknüpfung richten können.
+
+00:04:20.880 --> 00:04:23.980
+Hier werden Verknüpfungen nützlich, denn die Liste der Ziele, auf die Sie verweisen können, ist lang.
+
+00:04:24.480 --> 00:04:27.640
+Einige dieser Ziele befinden sich innerhalb von Fabric, andere in der weiten Welt außerhalb.
+
+00:04:27.960 --> 00:04:29.160
+Die internen Ziele stehen an erster Stelle.
+
+00:04:29.520 --> 00:04:33.920
+Sie können eine Verknüpfung auf ein anderes Lakehouse, ein Warehouse, eine KQL-Datenbank, eine gespiegelte Datenbank,
+
+00:04:33.920 --> 00:04:37.820
+einen gespiegelten Azure Databricks-Katalog, eine SQL-Datenbank oder ein semantisches Modell richten,
+
+00:04:38.020 --> 00:04:39.900
+was sich wie eine endlose Liste von Produktnamen liest.
+
+00:04:40.280 --> 00:04:41.680
+Die einfache Zusammenfassung lautet also,
+
+00:04:41.680 --> 00:04:43.880
+Wenn die Daten bereits irgendwo in Fabric gespeichert sind,
+
+00:04:44.140 --> 00:04:47.580
+können Sie sie dank einer Fabric als Nutzen oder anderen Stelle in Fabric ausnutzen, ohne sie kopieren zu müssen.
+
+00:04:48.820 --> 00:04:50.760
+Die Daten eines Teams erscheinen in Ihrem Arbeitsbereich
+
+00:04:50.760 --> 00:04:53.200
+und Ihre Benutzer müssen nie erfahren, dass Sie eigentlich nebenan liegen.
+
+00:04:53.500 --> 00:04:55.080
+Die externen Quellen sind der spannende Teil.
+
+00:04:55.700 --> 00:04:59.080
+Die Liste umfasst Azure Data Lake Storage Gen 2, Azure Blob Storage,
+
+00:04:59.440 --> 00:05:01.540
+Amazon S3 und S3-kompatiblen Speicher,
+
+00:05:02.040 --> 00:05:05.000
+Google Cloud Storage, Dataverse, OneDrive und SharePoint,
+
+00:05:05.320 --> 00:05:08.180
+sowie sogar lokale oder netzwerkbeschränkte Standorte über ein Gateway.
+
+00:05:08.180 --> 00:05:12.040
+Es gibt auch Unterstützung für iSpark-Tabellen, auf die wir gleich noch zurückkommen werden.
+
+00:05:12.420 --> 00:05:14.300
+Lesen Sie diese Liste noch einmal und achten Sie darauf, was sie bedeutet.
+
+00:05:14.660 --> 00:05:17.900
+Ihre Daten müssen nicht in die Microsoft-Welt verschoben werden, um dort nutzbar zu sein.
+
+00:05:18.580 --> 00:05:21.980
+Wenn Ihr Unternehmen Dateien in einem Amazon-Bucket und einem Google-Cloud-Bucket speichert,
+
+00:05:22.240 --> 00:05:25.460
+können Sie diese in Fabric zusammenführen, ohne sie erst über das Internet übertragen zu müssen.
+
+00:05:26.340 --> 00:05:28.540
+Sobald eine Verknüpfung existiert, können viele Tools Sie lesen.
+
+00:05:29.040 --> 00:05:31.940
+Spark-Notebooks können Sie lesen, SQL kann Sie abfragen, wenn es sich um eine Tabelle handelt.
+
+00:05:31.940 --> 00:05:33.500
+Und auch Echtzeit-Tools können Sie nutzen.
+
+00:05:34.380 --> 00:05:36.340
+Power BI kann Sie über ein semantisches Modell lesen,
+
+00:05:36.420 --> 00:05:38.740
+einschließlich im Direct-Lake-Modus, auf dem wir später noch zu sprechen kommen.
+
+00:05:39.400 --> 00:05:42.880
+Sogar Anwendungen außerhalb von Fabric können über die OneLake-API darauf zugreifen,
+
+00:05:43.120 --> 00:05:46.200
+da OneLake dieselbe Speichersprache wie Azure Data Lake Storage spricht.
+
+00:05:46.960 --> 00:05:49.720
+Iceberg verdient eine einfache Erklärung, da es ein Name ist, den Sie oft hören werden.
+
+00:05:50.300 --> 00:05:52.020
+Iceberg ist ein weiteres offenes Tabellenformat,
+
+00:05:52.140 --> 00:05:54.420
+auf das Sie einige Unternehmen, darunter Snowflake, stark verlassen.
+
+00:05:55.220 --> 00:05:57.640
+OneLake kann sogenannte virtuelle Metadaten generieren,
+
+00:05:57.640 --> 00:06:01.720
+die es Fabric ermöglichen, eine unterstützte Iceberg-Tabelle wie eine normale Tabelle zu lesen,
+
+00:06:01.800 --> 00:06:03.640
+ohne die zugrunde liegenden Daten neu schreiben zu müssen.
+
+00:06:04.440 --> 00:06:06.820
+Snowflake kann das führende System und der Hauptschreiber bleiben,
+
+00:06:07.060 --> 00:06:09.140
+während Fabric dieselben Daten über eine Verknüpfung liest.
+
+00:06:09.420 --> 00:06:11.660
+Die Reichweite ist also groß und erstreckt sich über Cloud-Ambiter hinweg.
+
+00:06:12.020 --> 00:06:14.380
+Genau dieser Bereich ist der Grund, warum die nächste Frage wichtig ist.
+
+00:06:14.560 --> 00:06:17.080
+Wie sieht das Ganze aus, wenn ein echtes Unternehmen es implementiert?
+
+00:06:18.300 --> 00:06:19.700
+Wie das bei einem realen Unternehmen aussieht?
+
+00:06:20.160 --> 00:06:22.460
+Klären Sie sich ein Unternehmen mit vier separaten Fabrikarbeitsbereichen.
+
+00:06:23.140 --> 00:06:26.080
+Der Vertrieb besitzt die Verkaufstransaktionen, die Finanzabteilung, die Budgets
+
+00:06:26.080 --> 00:06:29.000
+und ein gemeinsam genutzter Arbeitsbereich, die Stammdaten, die jeder braucht,
+
+00:06:29.060 --> 00:06:30.340
+wie Kunden, Produkte und Datum.
+
+00:06:31.260 --> 00:06:33.700
+Dann gibt es noch einen vierten Arbeitsbereich namens Executive Analytics,
+
+00:06:33.880 --> 00:06:35.500
+dessen Mitarbeiter ein bisschen von allem benötigen.
+
+00:06:36.120 --> 00:06:39.380
+Der naheliegende Schritt wäre, all diese Daten in den Executive-Arbeitsbereich zu kopieren.
+
+00:06:39.980 --> 00:06:42.720
+Das funktioniert zwar, erzeugt aber einen zweiten Datensatz zur Speicherung,
+
+00:06:42.900 --> 00:06:45.900
+eine zweite Reihe von Pipelines zur Betreuung und einen zweiten Ort,
+
+00:06:45.960 --> 00:06:47.580
+an dem die Zahlen veralten können.
+
+00:06:48.080 --> 00:06:49.960
+Der beste Weg ist das Erstellen von Verknüpfung.
+
+00:06:50.440 --> 00:06:53.020
+Executive Analytics verweist auf die maßgeblichen Vertriebstabellen,
+
+00:06:53.120 --> 00:06:54.960
+die Finanztabellen und die gemeinsamen Referenztabellen
+
+00:06:54.960 --> 00:06:56.760
+und präsentiert sie zusammen im eigenen Lakehouse.
+
+00:06:57.440 --> 00:06:58.920
+Für einen Berichtsentwickler in diesem Team
+
+00:06:58.920 --> 00:07:01.320
+sieht das Ergebnis wie eine saubere Sammlung von Tabellen aus.
+
+00:07:02.060 --> 00:07:04.800
+Er weiß vielleicht gar nicht, welche Tabellen physisch im Arbeitsbereich gespeichert sind
+
+00:07:04.800 --> 00:07:06.200
+und welche Verknüpfungen anderswohin führen
+
+00:07:06.200 --> 00:07:08.120
+und bei einem gut aufgebauten System muss er das auch nicht.
+
+00:07:08.980 --> 00:07:10.720
+Fabric löst diese Pfade im Hintergrund auf.
+
+00:07:11.320 --> 00:07:12.920
+Ein Bericht wird erstellt, die Zahlen stimmen überein
+
+00:07:12.920 --> 00:07:14.820
+und niemand muss da eine einzige Datei verschieben.
+
+00:07:15.460 --> 00:07:17.780
+Darin liegt eine Designlektion, die man in die eigene Arbeit übernehmen soll.
+
+00:07:18.340 --> 00:07:20.180
+Bewahren Sie die wirklich gemeinsam genutzten Daten,
+
+00:07:20.260 --> 00:07:22.280
+wie die Kundenliste, die Produktliste und die Datumstabelle,
+
+00:07:22.280 --> 00:07:24.640
+in einem Arbeitsbereich auf, der als Quelle der Wahrheit dient.
+
+00:07:25.280 --> 00:07:27.360
+Lassen Sie spezialisierte Daten bei dem Team, das Sie besitzt,
+
+00:07:27.440 --> 00:07:28.200
+da es Sie am besten verstehen.
+
+00:07:28.620 --> 00:07:30.760
+Und lassen Sie alle anderen auf das verweisen, was Sie benötigen.
+
+00:07:30.840 --> 00:07:33.020
+Die Versuchung ist groß, einen riesigen Arbeitsbereich zu bauen,
+
+00:07:33.080 --> 00:07:34.900
+der alles enthält, was jedoch meist zu einem Chaos führt,
+
+00:07:34.960 --> 00:07:36.740
+das niemand pflegen möchte, das niemand pflegen möchte.
+
+00:07:37.000 --> 00:07:37.820
+Das muss ja das also einfach.
+
+00:07:38.400 --> 00:07:41.300
+Sie behalten eine maßgebliche Kopie, alles andere ist eine Verknüpfung
+
+00:07:41.300 --> 00:07:43.940
+und die Person, die den Bericht erstellt, erhält eine saubere Oberfläche.
+
+00:07:44.400 --> 00:07:46.240
+Es klingt ordentlich und ein gut geführtes System ist es auch.
+
+00:07:46.880 --> 00:07:48.220
+Ordentlich bedeutet jedoch nicht kostenlos
+
+00:07:48.220 --> 00:07:50.920
+und es gibt Kompromisse, die in den meisten Einführungen einfach übergangen werden.
+
+00:07:51.880 --> 00:07:53.280
+Die Kompromisse, die niemand erwähnt.
+
+00:07:53.280 --> 00:07:56.400
+Beginnen wir mit der Geschwindigkeit, denn das ist das Erste, was Sie bemerken werden.
+
+00:07:57.000 --> 00:07:59.480
+Eine Verknüpfung kopiert die Daten nicht und lädt sie auch nicht vor.
+
+00:08:00.380 --> 00:08:02.420
+Es passiert nichts, bis jemand die Daten abruft,
+
+00:08:02.640 --> 00:08:04.740
+dann holt Fabric sie von dort, wo sie tatsächlich liegen.
+
+00:08:05.560 --> 00:08:07.660
+Das bedeutet, dass das erste Lesen langsamer sein kann,
+
+00:08:07.740 --> 00:08:09.000
+als das Lesen einer lokalen Kopie,
+
+00:08:09.120 --> 00:08:10.720
+besonders wenn die Quelle in einer anderen Cloud liegt
+
+00:08:10.720 --> 00:08:12.300
+oder sich hinter einem lokalen Gateway befindet.
+
+00:08:13.280 --> 00:08:15.360
+Die Performance hängt von verschiedenen Faktoren ab,
+
+00:08:15.460 --> 00:08:16.520
+darunter die Entfernung zur Quelle,
+
+00:08:16.520 --> 00:08:18.140
+die dazwischenliegende Netzwerklatenz
+
+00:08:18.140 --> 00:08:20.160
+und die Organisation der Dateien, der Datei.
+
+00:08:20.500 --> 00:08:23.220
+Sie hängt auch davon ab, ob die Quelle in diesem Moment verfügbar ist
+
+00:08:23.220 --> 00:08:25.240
+und welche Engine den Lesevorgang durchführte.
+
+00:08:25.880 --> 00:08:27.780
+Microsoft bietet eine Möglichkeit, dies zu entschärfen,
+
+00:08:27.860 --> 00:08:28.500
+das Shortcut-Caching.
+
+00:08:29.200 --> 00:08:31.720
+Wenn ein Lake eine Datei über einen unterstützten Shortcut liest,
+
+00:08:31.820 --> 00:08:34.520
+kann eine Kopie dieser Datei in einem Cache für den Arbeitsbereich speichern.
+
+00:08:35.440 --> 00:08:37.200
+Spätere Anfragen werden aus dem Cache bedient,
+
+00:08:37.280 --> 00:08:38.620
+anstatt das Netzwerk erneut zu belasten.
+
+00:08:39.380 --> 00:08:41.800
+Sie legen fest, wie lange zwischengespeicherte Dateien aufbewahrt werden,
+
+00:08:41.860 --> 00:08:43.020
+von 1 bis 28 Tagen,
+
+00:08:43.020 --> 00:08:45.300
+wobei sich die Uhr bei jedem Zugriff auf eine Datei zurücksetzt.
+
+00:08:45.920 --> 00:08:47.240
+Es gibt zwei Einschränkungen, die man kennen soll.
+
+00:08:47.640 --> 00:08:49.780
+Dateien, die größer als 1 Gigabyte sind, werden nicht zwischengespeichert.
+
+00:08:50.240 --> 00:08:52.120
+Der Cache füllt sich zudem Datei für Datei,
+
+00:08:52.260 --> 00:08:53.480
+während Nutzer auf die Daten zugreifen,
+
+00:08:53.580 --> 00:08:55.620
+da hilft er der allerersten Person, die etwas öffnet, nicht.
+
+00:08:56.580 --> 00:08:58.020
+Caching wird für Google Cloud Storage,
+
+00:08:58.120 --> 00:09:00.340
+Amazon S3-kompatible Speicher und Shortcuts
+
+00:09:00.340 --> 00:09:02.380
+über das On-Premises-Gateway unterstützt.
+
+00:09:03.220 --> 00:09:05.420
+Es ist eine echte Verbesserung für wiederholte Lesezugriffe
+
+00:09:05.420 --> 00:09:07.680
+und kann die Kosten für Datentransfers zwischen Cloud senken,
+
+00:09:07.780 --> 00:09:09.880
+macht aus einem Shortcut aber keine lokale Tabelle.
+
+00:09:10.520 --> 00:09:11.980
+Der größere Kompromiss ist die Abhängigkeit.
+
+00:09:11.980 --> 00:09:14.180
+Ein Shortcut ist auf das Objekt angewiesen, auf der Sephorei.
+
+00:09:14.560 --> 00:09:16.040
+Wenn jemand das Ziel verschiebt oder löscht,
+
+00:09:16.100 --> 00:09:17.160
+wird der Shortcut unterbrochen
+
+00:09:17.160 --> 00:09:19.480
+und der darauf basierende Bericht ebenfalls.
+
+00:09:20.140 --> 00:09:21.400
+Ändert die Quelle ihre Struktur,
+
+00:09:21.640 --> 00:09:23.720
+wirkt sich dies auf alle nachgelagerten Prozesse aus,
+
+00:09:23.780 --> 00:09:26.060
+was meistens erwünscht, manchmal aber auch unerwünscht ist.
+
+00:09:27.180 --> 00:09:29.560
+Außerdem haben Sie nicht die gleiche Kontrolle über die Tabellenwartung
+
+00:09:29.560 --> 00:09:31.320
+wie bei einer Tabelle, die Sie vollständig besitzen.
+
+00:09:31.760 --> 00:09:34.140
+Es gibt klare Fälle, in denen eine Kopie die bessere Wahl ist
+
+00:09:34.140 --> 00:09:36.480
+und Microsofts eigene Richtlinien erläutern diese.
+
+00:09:36.840 --> 00:09:37.600
+Kopieren Sie die Daten,
+
+00:09:37.680 --> 00:09:39.360
+wenn Sie umfangreiche Transformationen benötigen,
+
+00:09:39.360 --> 00:09:40.280
+bevor sie genutzt werden können.
+
+00:09:40.280 --> 00:09:42.460
+Kopieren Sie sie, wenn Vorschriften oder Richtlinien verlangen,
+
+00:09:42.540 --> 00:09:44.020
+dass die Daten in einer bestimmten Region verbleiben.
+
+00:09:44.520 --> 00:09:46.180
+Kopieren Sie sie, wenn Sie die volle Kontrolle
+
+00:09:46.180 --> 00:09:48.300
+über die Entwicklung und Wartung der Tabelle benötigen.
+
+00:09:49.160 --> 00:09:50.680
+Ein Shortcut ist ein wunderbarer Standardwert,
+
+00:09:50.760 --> 00:09:51.740
+aber nicht immer die richtige Lösung.
+
+00:09:52.580 --> 00:09:53.440
+Den Unterschied zu kennen,
+
+00:09:53.580 --> 00:09:55.520
+trennt eine solide Einrichtung von einer anfälligen.
+
+00:09:56.400 --> 00:09:57.640
+Fehler, die für Anwender zur Falle werden.
+
+00:09:58.400 --> 00:10:00.200
+Der erste Fehler ist derjenige, der wirklich schaden kann,
+
+00:10:00.280 --> 00:10:01.560
+weshalb er die meiste Aufmerksamkeit erhält.
+
+00:10:02.100 --> 00:10:04.200
+Shortcuts führen keine kaskadierenden Löschvorgänge durch
+
+00:10:04.200 --> 00:10:04.980
+und das hat zwei Seiten.
+
+00:10:04.980 --> 00:10:06.680
+Wenn Sie den Shortcut selbst löschen,
+
+00:10:07.020 --> 00:10:08.720
+bleiben die Daten am Zielort vollkommen sicher,
+
+00:10:08.720 --> 00:10:10.340
+was dem erwarteten Verhalten entspricht.
+
+00:10:10.960 --> 00:10:12.520
+Wenn Sie jedoch eine Datei oder einen Ordner
+
+00:10:12.520 --> 00:10:14.180
+innerhalb eines beschreibbaren Shortcuts löschen
+
+00:10:14.180 --> 00:10:15.860
+und Sie über Löschberechtigungen am Ziel verfügen,
+
+00:10:15.920 --> 00:10:16.900
+dann löschen Sie dies auch am Zielort.
+
+00:10:17.380 --> 00:10:18.420
+Die Verknüpfung war eine Tür
+
+00:10:18.420 --> 00:10:19.800
+und Sie sind gerade hindurchgegangen
+
+00:10:19.800 --> 00:10:20.800
+und haben eine Wand eingerissen.
+
+00:10:22.060 --> 00:10:23.340
+Bevor Sie einen Ordner bereinigen,
+
+00:10:23.420 --> 00:10:24.660
+der eine Verknüpfung enthalten könnte,
+
+00:10:24.920 --> 00:10:25.640
+denn dies ist der Fehler,
+
+00:10:25.740 --> 00:10:27.000
+der aus einem aufgeräumten Nachmittag
+
+00:10:27.000 --> 00:10:28.060
+einen sehr langen Abend macht.
+
+00:10:29.080 --> 00:10:30.200
+Der zweite Fehler ist die Annahme,
+
+00:10:30.300 --> 00:10:31.700
+dass Dateien und Tabellen austauschbar sind,
+
+00:10:31.740 --> 00:10:32.280
+was sie nicht sind.
+
+00:10:32.280 --> 00:10:34.960
+Ein Ordner voller, einfacher Paket-Dateien
+
+00:10:34.960 --> 00:10:35.880
+ist keine Delta-Tabelle
+
+00:10:35.880 --> 00:10:37.120
+und eine Verknüpfung unter Files
+
+00:10:37.120 --> 00:10:38.000
+erscheint nicht als Tabelle,
+
+00:10:38.080 --> 00:10:39.200
+auf der man SQL ausführen kann.
+
+00:10:40.120 --> 00:10:41.240
+Wenn Sie diese abfragen möchten,
+
+00:10:41.340 --> 00:10:42.700
+müssen Sie die Daten entweder transformieren
+
+00:10:42.700 --> 00:10:43.580
+oder in Delta laden.
+
+00:10:44.500 --> 00:10:44.940
+Es ist leicht,
+
+00:10:45.000 --> 00:10:46.080
+eine Dateiverknüpfung zu erstellen,
+
+00:10:46.160 --> 00:10:47.020
+Power BI zu öffnen
+
+00:10:47.020 --> 00:10:47.700
+und sich dann zu fragen,
+
+00:10:47.780 --> 00:10:48.640
+warum die Daten nicht da sind.
+
+00:10:49.340 --> 00:10:50.540
+Der dritte Fehler ist die Erwartung,
+
+00:10:50.620 --> 00:10:52.200
+dass Rohdateien von selbst zu Tabellen werden.
+
+00:10:52.980 --> 00:10:53.540
+Das werden Sie nicht,
+
+00:10:53.600 --> 00:10:55.360
+aber Fabric bietet eine Verknüpfungstransformation an,
+
+00:10:55.400 --> 00:10:55.680
+die das tut.
+
+00:10:56.060 --> 00:10:58.200
+Verweise Sie auf einen Ordner mit CSV-Paket,
+
+00:10:58.300 --> 00:10:59.360
+JSON- oder Excel-Dateien
+
+00:10:59.360 --> 00:11:00.120
+und Fabric kopiert
+
+00:11:00.120 --> 00:11:00.840
+und konvertiert diese
+
+00:11:00.840 --> 00:11:02.160
+in eine verwaltete Delta-Tabelle,
+
+00:11:02.240 --> 00:11:02.820
+die synchron bleibt
+
+00:11:02.820 --> 00:11:04.140
+und die Quelle alle zwei Minuten prüft.
+
+00:11:04.820 --> 00:11:05.520
+Das ist praktisch,
+
+00:11:05.600 --> 00:11:06.280
+aber man sollte wissen,
+
+00:11:06.380 --> 00:11:08.080
+dass dieser Weg nicht vollständig kopiefrei ist,
+
+00:11:08.140 --> 00:11:09.320
+da eine Delta-Tabelle erstellt wird.
+
+00:11:09.800 --> 00:11:11.080
+Es ist zudem ein anderes Werkzeug
+
+00:11:11.080 --> 00:11:12.200
+als eine einfache Verknüpfung
+
+00:11:12.200 --> 00:11:13.360
+und deckt keine komplexen Joints
+
+00:11:13.360 --> 00:11:14.160
+oder Geschäftsregeln ab,
+
+00:11:14.200 --> 00:11:15.800
+die weiterhin in eine ordnungsgemäße Pipeline geben.
+
+00:11:16.280 --> 00:11:17.760
+Der vierte Fehler ist das ignorierende Grenzwerte.
+
+00:11:18.520 --> 00:11:19.620
+Ein einzelnes Fabric-Element
+
+00:11:19.620 --> 00:11:21.020
+kann bis zu 100.000 Verknüpfungen
+
+00:11:21.020 --> 00:11:22.660
+und bis zu 100 eindeutige Datenverbindungen
+
+00:11:22.660 --> 00:11:23.040
+enthalten.
+
+00:11:23.740 --> 00:11:25.080
+Ein einzelner One-Lake-Pfad
+
+00:11:25.080 --> 00:11:26.700
+kann bis zu 10 Verknüpfungen enthalten.
+
+00:11:27.820 --> 00:11:28.460
+Verknüpfungsnamen dürfen
+
+00:11:28.460 --> 00:11:30.000
+kein Prozent- oder Pluszeichen enthalten
+
+00:11:30.000 --> 00:11:31.480
+und Schema-Verknüpfungen funktionieren
+
+00:11:31.480 --> 00:11:32.160
+nur in Lake Houses,
+
+00:11:32.280 --> 00:11:33.300
+in denen Schemas aktiviert sind.
+
+00:11:34.040 --> 00:11:35.360
+Nichts davon wird Sie am ersten Tag stören,
+
+00:11:35.460 --> 00:11:36.640
+aber bei zunehmender Skalierung schon.
+
+00:11:37.080 --> 00:11:38.160
+Der fünfte Fehler ist die Annahme,
+
+00:11:38.240 --> 00:11:39.340
+dass Ihre Berechtigungen Sie überleiten.
+
+00:11:39.920 --> 00:11:40.880
+Interne Verknüpfungen nutzen
+
+00:11:40.880 --> 00:11:41.740
+Ihre eigene Identität,
+
+00:11:41.820 --> 00:11:43.020
+Sie benötigen also Zugriff auf das Ziel.
+
+00:11:43.740 --> 00:11:44.800
+Externe Verknüpfungen verwenden
+
+00:11:44.800 --> 00:11:45.720
+stattdessen eine gespeicherte
+
+00:11:45.720 --> 00:11:46.580
+Verbindungsidentität.
+
+00:11:46.940 --> 00:11:47.260
+Was bedeutet,
+
+00:11:47.380 --> 00:11:48.540
+dass jeder mit Zugriff auf das Lake House
+
+00:11:48.540 --> 00:11:49.240
+darüber lesen kann?
+
+00:11:49.940 --> 00:11:51.160
+Wenn sowohl ein Verknüpfungspfad
+
+00:11:51.160 --> 00:11:52.520
+als auch ein Zielpfad beteiligt sind,
+
+00:11:52.960 --> 00:11:53.600
+gewinnen die strengeren
+
+00:11:53.600 --> 00:11:54.440
+der beiden Berechtigungen.
+
+00:11:55.040 --> 00:11:56.140
+Das ist eher ein Design-Detail
+
+00:11:56.140 --> 00:11:57.440
+als ein Problem für den ersten Tag,
+
+00:11:57.540 --> 00:11:58.140
+erklärt aber viele
+
+00:11:58.140 --> 00:11:59.240
+verwirrende Zugriffsfehler.
+
+00:12:00.140 --> 00:12:02.040
+Wie passt das zu Microsoft 365 und Azure?
+
+00:12:02.840 --> 00:12:04.780
+Beginnen Sie mit der Microsoft 365-Seite,
+
+00:12:04.860 --> 00:12:05.980
+denn dort werden Sie den Nutzen sehen.
+
+00:12:06.380 --> 00:12:07.720
+Der sichtbare Gewinn ist Power BI.
+
+00:12:08.240 --> 00:12:09.700
+Wenn eine Verknüpfung im Tabellenordner liegt,
+
+00:12:09.760 --> 00:12:10.880
+kann sie in ein semantisches Modell
+
+00:12:10.880 --> 00:12:11.980
+und an einen Bericht einfließen.
+
+00:12:12.660 --> 00:12:14.220
+Dies funktioniert sogar im Direct-Lag-Modus,
+
+00:12:14.220 --> 00:12:16.060
+der die Daten ohne separaten Importschritt
+
+00:12:16.060 --> 00:12:17.640
+direkt in den Arbeitsspeicher des Berichts lädt.
+
+00:12:18.180 --> 00:12:19.120
+Für jemanden, der seine Daten
+
+00:12:19.120 --> 00:12:20.180
+nur in einem Bericht haben wollte,
+
+00:12:20.280 --> 00:12:21.120
+ist das der entscheidende,
+
+00:12:21.160 --> 00:12:21.440
+Teil.
+
+00:12:22.180 --> 00:12:23.140
+Sie zeigen auf die Daten
+
+00:12:23.140 --> 00:12:24.180
+und sie erscheinen dann dort,
+
+00:12:24.260 --> 00:12:25.020
+wo sie bereits arbeiten.
+
+00:12:25.600 --> 00:12:26.400
+Es gibt auch eine Verbindung,
+
+00:12:26.760 --> 00:12:27.620
+die viele bereits kennen,
+
+00:12:27.900 --> 00:12:29.320
+OneDrive und SharePoint.
+
+00:12:30.280 --> 00:12:31.920
+Mit Fabric können Sie eine Verknüpfung
+
+00:12:31.920 --> 00:12:33.260
+direkt auf Dateien in SharePoint
+
+00:12:33.260 --> 00:12:34.220
+oder OneDrive richten,
+
+00:12:34.600 --> 00:12:35.300
+was ja praktisch ist,
+
+00:12:35.340 --> 00:12:37.220
+da dort bereits die täglichen Dokumente liegen.
+
+00:12:37.660 --> 00:12:37.940
+Liegen.
+
+00:12:38.900 --> 00:12:39.840
+Wenn Ihr Team eine Tabelle
+
+00:12:39.840 --> 00:12:40.800
+in SharePoint speichert,
+
+00:12:40.880 --> 00:12:42.060
+kann diese in Fabric erscheinen,
+
+00:12:42.060 --> 00:12:42.980
+ohne dass sie von jemandem
+
+00:12:42.980 --> 00:12:43.840
+kopiert werden muss.
+
+00:12:44.460 --> 00:12:45.300
+Dann gibt es noch Dataverse.
+
+00:12:45.560 --> 00:12:46.300
+Wenn Ihr Team Anwendung
+
+00:12:46.300 --> 00:12:46.900
+mit Power-Apps
+
+00:12:46.900 --> 00:12:48.400
+oder der breiteren Power-Plattform erstellt,
+
+00:12:48.600 --> 00:12:49.940
+liegen diese Daten wahrscheinlich in Dataverse
+
+00:12:49.940 --> 00:12:50.560
+und eine Verknüpfung
+
+00:12:50.560 --> 00:12:51.280
+kann darauf zugreifen.
+
+00:12:51.840 --> 00:12:52.900
+Damit schlägt Fabric die Brücke
+
+00:12:52.900 --> 00:12:53.460
+zu den Tools,
+
+00:12:53.560 --> 00:12:54.960
+die dieser Kanal jede Woche behandelt
+
+00:12:54.960 --> 00:12:55.820
+und Ihre Geschäftsdaten
+
+00:12:55.820 --> 00:12:57.540
+können neben allen anderen Daten existieren.
+
+00:12:58.420 --> 00:12:58.920
+Die Azure-Seite
+
+00:12:58.920 --> 00:13:00.080
+fügt sich auf die gleiche Weise ein.
+
+00:13:00.580 --> 00:13:01.360
+OneDrive basiert auf
+
+00:13:01.360 --> 00:13:02.500
+Azure Data Lake Storage,
+
+00:13:02.900 --> 00:13:03.700
+weshalb Azure-Tools
+
+00:13:03.700 --> 00:13:04.720
+wie Synapse und Databricks
+
+00:13:04.720 --> 00:13:05.660
+mit denselben APIs,
+
+00:13:05.780 --> 00:13:06.520
+die Sie bereits nutzen,
+
+00:13:06.640 --> 00:13:07.600
+darauf zugreifen können.
+
+00:13:08.600 --> 00:13:09.760
+Die Fabrik-Kapazität
+
+00:13:09.760 --> 00:13:10.700
+wird über Azure erworben
+
+00:13:10.700 --> 00:13:11.800
+und Sekunden genau abgerechnet
+
+00:13:11.800 --> 00:13:12.620
+bei einer Mindestlaufzeit
+
+00:13:12.620 --> 00:13:13.260
+von einer Minute
+
+00:13:13.260 --> 00:13:14.100
+und der Option
+
+00:13:14.100 --> 00:13:15.240
+einer jährlichen Reservierung
+
+00:13:15.240 --> 00:13:15.860
+zum Sparen.
+
+00:13:15.860 --> 00:13:18.340
+Das führt zur praktischen Frage
+
+00:13:18.340 --> 00:13:18.880
+der Kosten
+
+00:13:18.880 --> 00:13:20.060
+und die ehrliche Antwort ist,
+
+00:13:20.140 --> 00:13:21.540
+dass Fabrik auf einer Kapazität läuft
+
+00:13:21.540 --> 00:13:23.220
+und eine reine Benutzerlizenz
+
+00:13:23.220 --> 00:13:24.180
+allein nicht ausreicht.
+
+00:13:25.140 --> 00:13:25.860
+Die gute Nachricht ist,
+
+00:13:25.940 --> 00:13:26.280
+dass es eine Möglichkeit
+
+00:13:26.280 --> 00:13:27.000
+zum Ausprobieren gibt.
+
+00:13:27.260 --> 00:13:28.140
+Die Fabrik-Testversion
+
+00:13:28.140 --> 00:13:29.040
+läuft 60 Tage
+
+00:13:29.040 --> 00:13:30.140
+und bietet Ihnen das Äquivalent
+
+00:13:30.140 --> 00:13:31.420
+einer F64-Kapazität,
+
+00:13:31.700 --> 00:13:32.280
+was reichlich Raum
+
+00:13:32.280 --> 00:13:33.000
+zum Erkunden bietet.
+
+00:13:33.520 --> 00:13:34.780
+Eine kostenlose Fabrik-Lizenz
+
+00:13:34.780 --> 00:13:35.600
+wird automatisch vergeben,
+
+00:13:35.680 --> 00:13:36.580
+wenn Sie sich das erste Mal annennen.
+
+00:13:36.580 --> 00:13:37.880
+Sie können Lake-Houses
+
+00:13:37.880 --> 00:13:39.060
+und Notebooks nur dann erstellen,
+
+00:13:39.480 --> 00:13:40.140
+wenn der Arbeitsbereich
+
+00:13:40.140 --> 00:13:40.900
+auf einer Kapazität
+
+00:13:40.900 --> 00:13:42.060
+oder einer Testversion basiert.
+
+00:13:42.820 --> 00:13:44.140
+Ein häufiger Stolperstein ist,
+
+00:13:44.280 --> 00:13:45.780
+dass eine Premium-Per-User-Lizenz
+
+00:13:45.780 --> 00:13:46.360
+für sich genommen
+
+00:13:46.360 --> 00:13:47.840
+keine Fabrik-Kapazität beinhaltet
+
+00:13:47.840 --> 00:13:49.160
+und daher die besprochenen Workloads
+
+00:13:49.160 --> 00:13:49.780
+nicht freischaltet.
+
+00:13:50.640 --> 00:13:51.080
+Sie sind dran.
+
+00:13:51.560 --> 00:13:52.340
+Die Kurzfassung von allem,
+
+00:13:52.420 --> 00:13:52.900
+was wir behandelt haben,
+
+00:13:52.940 --> 00:13:53.340
+sieht so aus.
+
+00:13:53.980 --> 00:13:54.940
+Eine Fabrik-Verknüpfung
+
+00:13:54.940 --> 00:13:55.540
+ist ein Zeiger,
+
+00:13:55.780 --> 00:13:56.240
+keine Kopie.
+
+00:13:56.800 --> 00:13:57.460
+Sie kann auf Daten
+
+00:13:57.460 --> 00:13:58.280
+innerhalb und außerhalb
+
+00:13:58.280 --> 00:13:59.200
+von Fabrik zugreifen,
+
+00:13:59.360 --> 00:14:00.640
+über Azure, Amazon, Google Cloud,
+
+00:14:00.740 --> 00:14:01.960
+Dataverse und SharePoint hinweg
+
+00:14:01.960 --> 00:14:03.300
+und bleibt mit der Quelle synchron.
+
+00:14:04.120 --> 00:14:05.400
+Es gibt jedoch auch echte Kompromisse
+
+00:14:05.400 --> 00:14:06.760
+bei Geschwindigkeit, Abhängigkeit
+
+00:14:06.760 --> 00:14:07.220
+und Kontrolle,
+
+00:14:07.300 --> 00:14:08.080
+die man abwägen sollte,
+
+00:14:08.160 --> 00:14:09.140
+bevor man sich darauf festlegt.
+
+00:14:09.820 --> 00:14:10.760
+Meine Frage an Sie ist einfach.
+
+00:14:11.260 --> 00:14:12.320
+Wo liegen Ihre Daten heute
+
+00:14:12.320 --> 00:14:13.660
+und können Sie über eine Verknüpfung
+
+00:14:13.660 --> 00:14:14.240
+erreicht werden?
+
+00:14:14.760 --> 00:14:15.680
+Schreiben Sie es in die Kommentare,
+
+00:14:15.800 --> 00:14:16.380
+denn ich lese sie
+
+00:14:16.380 --> 00:14:17.120
+und Ihre Antworten
+
+00:14:17.120 --> 00:14:18.080
+bestimmen meine nächsten Themen.
+
+00:14:18.880 --> 00:14:19.580
+Wenn das Thema für Sie
+
+00:14:19.580 --> 00:14:20.780
+dadurch weniger einschüchternd wirkt,
+
+00:14:21.020 --> 00:14:22.440
+abonnieren Sie M365M,
+
+00:14:22.500 --> 00:14:23.860
+um die Tools und Denkweisen zu meistern,
+
+00:14:23.880 --> 00:14:25.060
+die die Zukunft der Arbeit prägen.
