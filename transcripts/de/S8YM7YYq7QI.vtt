@@ -1,0 +1,691 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:05.500
+Willkommen bei meinem 3.0.60 FM Podcast, wo wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.680 --> 00:00:09.220
+Zwei Wege der Suche und warum einer allein sie immer wieder im Stich lässt.
+
+00:00:09.880 --> 00:00:12.020
+Ihr Suchfeld erledigt seit Jahren nur die halbe Arbeit.
+
+00:00:12.940 --> 00:00:18.480
+Es liest die exakten Wörter, die Sie eingeben, perfekt für Richtlinien, Codes, aber nutzlos, wenn Sie nach Freizeit suchen und das Dokument Urlaub sagt.
+
+00:00:20.200 --> 00:00:25.600
+Azure AI Search behebt das, indem zwei verschiedene Suchen gleichzeitig ausgeführt und zu einer Rangliste verschmolzen werden.
+
+00:00:26.400 --> 00:00:31.700
+Diese Mischung nennt man hybriden Abruf und sie liegt den Antworten zugrunde, die Sie bereits von Microsofts KI-Tools erhalten.
+
+00:00:32.320 --> 00:00:36.920
+Am Ende kennen Sie beide Hälften, wissen, wie sie zusammengefügt werden und wo dies Ihren Arbeitsalltag unbemerkt beeinflusst.
+
+00:00:37.340 --> 00:00:40.640
+Die Suche war noch nie nur eine Einzelfähigkeit. Es sind zwei und jede löst ein anderes Problem.
+
+00:00:41.080 --> 00:00:44.080
+Die eine gleicht die exakten Wörter ab, die Sie tippen, die andere das, was Sie eigentlich meinten.
+
+00:00:44.420 --> 00:00:46.700
+Die meisten Tools, die Sie bisher genutzt haben, beherrschen immer nur einen dieser Aufgaben.
+
+00:00:47.160 --> 00:00:48.680
+Diese Lücke erklärt viele frustrierende Momente.
+
+00:00:49.300 --> 00:00:53.400
+Ein Suchfeld findet problemlos eine Teilnummer, versagt aber bei einer simplen Frage zur Urlaubsrichtlinie.
+
+00:00:53.400 --> 00:00:59.860
+Jemand tippt Freizeit und das System zuckt mit den Schultern, weil die gesuchte Seite Urlaub sagt und keinen einzigen Buchstaben mit der Anfrage teilt.
+
+00:01:00.200 --> 00:01:07.440
+Wenn ein System beide Aufgaben gleichzeitig ausführt und die Antworten vergleicht, fühlt sich das Ergebnis nicht mehr wie ein Nachschlagen an, sondern wie Verständnis.
+
+00:01:07.840 --> 00:01:12.840
+Dieser Unterschied wiegt heute schwerer, da KI-Tools Suchergebnisse als Rohmaterial für ihre Antworten nutzen.
+
+00:01:13.300 --> 00:01:17.040
+Wenn die Suche scheitert, ist die Antwort falsch, egal wie intelligent das Modell ist.
+
+00:01:17.040 --> 00:01:19.780
+Die Anforderungen steigen, sobald KI ins Spiel kommt.
+
+00:01:20.440 --> 00:01:25.380
+Ein Sprachmodell kennt ihre Datei nicht, also antwortet es auf Basis des Textes, den sie liefern, und dieser stammt aus der Suche.
+
+00:01:25.740 --> 00:01:28.000
+Eine schwache Suche liefert dem Modell schwaches Material.
+
+00:01:28.340 --> 00:01:31.820
+Und kein noch so gutes Modell kann eine Seite korrigieren, die nie abgerufen wurde.
+
+00:01:32.540 --> 00:01:33.840
+Wir gehen die Sache dahin drei Schritten an.
+
+00:01:34.300 --> 00:01:37.280
+Zuerst die Hälfte der exakten Wörter, die Sie kennen, auch wenn Sie sie nie so genannt haben.
+
+00:01:37.380 --> 00:01:39.620
+Dann die Hälfte der Bedeutung, wo die Überraschungen liegen.
+
+00:01:40.480 --> 00:01:45.760
+Und schließlich wie Azure AI Search beides zu einer Rangliste vereint und warum das Ganze in Tools auftaucht, die Sie jeden Morgen öffnen.
+
+00:01:45.760 --> 00:01:52.420
+Eine der häufigsten Annahmen über hybride Suche ist zudem falsch, zu wissen, warum bewahrt sie vor einem Fehler, den viele Teams machen.
+
+00:01:53.800 --> 00:01:54.660
+Was Stichwort Suche eigentlich tut.
+
+00:01:55.340 --> 00:01:57.180
+Die Stichwort Suche beginnt damit, eine Karte zu erstellen.
+
+00:01:57.980 --> 00:02:01.320
+Wenn Dokumente eingehen, erfasst das System, welche Wörter in welchen Dokumenten vorkommen.
+
+00:02:01.420 --> 00:02:03.440
+Diese Karte wird als invertierter Index bezeichnet.
+
+00:02:04.240 --> 00:02:09.340
+Es klingt langweilig, aber genau deshalb kann die Suche in Millisekunden Millionen von Seiten durchsuchen, noch bevor der Text bereinigt wird.
+
+00:02:09.340 --> 00:02:17.360
+Äh, Brachanalyse-Tools unterteilen Sätze in Wörter, entfernen Füllwörter und führen Varianten wie Laufen und Leaf auf einen gemeinsamen Wortstamm zurück, sodass eine Suche nach Laufen beides findet.
+
+00:02:17.620 --> 00:02:19.020
+Sodass eine Suche nach Laufen beides findet.
+
+00:02:19.380 --> 00:02:22.760
+Davon muss man nichts wissen, damit es funktioniert, aber es erklärt, warum die Ergebnisse so schnell erscheinen.
+
+00:02:23.500 --> 00:02:26.480
+Sobald Sie eine Suchanfrage eingeben, bewertet das System, wie gut jedes Dokument dazu passt.
+
+00:02:26.820 --> 00:02:31.160
+Dieses Bewertungsverfahren hat einen Namen, BM25, und man kann es verstehen, ohne die Mathematik dahinter zu bemühen.
+
+00:02:32.340 --> 00:02:37.640
+BM25 gewichtet Wörter, die häufig in einem Dokument vorkommen, stärker und Wörter, die fast überall vorkommen, schwächer.
+
+00:02:37.640 --> 00:02:42.860
+Nehmen wir zum Beispiel das Wort TRU, das fast überall auftaucht und somit kaum eine Aussagekraft hat.
+
+00:02:43.300 --> 00:02:46.800
+Ein seltener Code wie XC4471 taucht nur einmal auf und liefert da eine präzise Information.
+
+00:02:47.900 --> 00:02:54.020
+BM25 erfasst diesen Instinkt automatisch, sodass die Stichwortsuche bei Teilnummern, Eigennamen, Daten und Fachbegriffen äußerst effizient bleibt.
+
+00:02:54.760 --> 00:02:56.200
+Ein kleines Beispiel verdeutlicht diesen Vorgang.
+
+00:02:56.620 --> 00:03:01.100
+Angenommen, Sie suchen auf einem Laufwerk mit 10.000 Dateien nach Rechnungsvorlage, 4.000 vor sind SIP und DÜV.
+
+00:03:01.100 --> 00:03:10.380
+Das Wort Rechnung kommt überall vor und spielt kaum eine Rolle, aber Fiatat 74 ist selten genug, um die richtige Datei direkt an die Spitze zu bringen, dass es BM25 und seine Berechnung durchführt.
+
+00:03:10.860 --> 00:03:12.520
+Eigene Tests von Microsoft belegen dies.
+
+00:03:12.920 --> 00:03:18.040
+Bei Suchanfragen, die nur aus Stichworten bestehen, erzielte die einfache Stichwortsuche deutlich bessere Ergebnisse als ihr ein bedeutungsbasiertes Such.
+
+00:03:18.300 --> 00:03:22.200
+Wenn Sie die exakte Kennung bereits kennen, ist Präzision immer besser als bloße Cleverness.
+
+00:03:22.200 --> 00:03:24.140
+Diese Präzision hat jedoch einen blinden Fleck.
+
+00:03:24.520 --> 00:03:26.780
+Ihr Stichwortsuche findet nur die Wörter, die Sie eingegeben haben und nichts weiter.
+
+00:03:27.820 --> 00:03:29.340
+Suchen Sie nach Remote Work Richtlinie.
+
+00:03:29.680 --> 00:03:33.960
+Bleibt eine Seite mit dem Titel Tele-Arbeitsleitlinien unsichtbar, da die Begriffe keine gemeinsamen Wörter teilen.
+
+00:03:35.100 --> 00:03:38.580
+Genau diese Schwachstelle wurde entwickelt, um sie durch die andere Hälfte der hybriden Suche abzudecken.
+
+00:03:39.920 --> 00:03:41.180
+Was bewirkt die Vektorsuche eigentlich?
+
+00:03:41.920 --> 00:03:44.280
+Nun zu der Hälfte, die wie Zauberei wirkt, bis man den Trick dahinter versteht.
+
+00:03:44.860 --> 00:03:48.160
+Die Vektorsuche wandelt Text in einer langen Zahlenfolge um, diese Liste nennt man Embedding.
+
+00:03:48.160 --> 00:03:52.340
+Die Zahlen sind nicht zufällig. Sie ordnen die Bedeutung des Textes in einem riesigen Raum an,
+
+00:03:52.520 --> 00:03:54.440
+in dem ähnliche Bedeutungen nah beieinander liegen.
+
+00:03:55.060 --> 00:03:59.360
+Irgendetwas muss diese Embeddings erstellen. Meist ein Embedding-Modell wie das von Azure Open AI.
+
+00:04:00.360 --> 00:04:05.360
+Hier bleiben viele Anfänger hängen, da das Modell ein separater Dienst mit eigenen Kosten- und Ratenbegrenzungen ist.
+
+00:04:05.900 --> 00:04:08.480
+Die Suchmaschine speichert und vergleicht die Vektoren, während das Modell sie erstellt.
+
+00:04:08.900 --> 00:04:14.800
+Die Größe eines Embeddings ist durch das Modell festgelegt und liegt meist im Bereich von hunderten bis wenigen tausend Zahlen pro Textabschnitt, pro Textabschnitt.
+
+00:04:15.180 --> 00:04:17.700
+Diese Zahlen sind auch der Grund, warum die Bedeutungssuche nicht perfekt.
+
+00:04:17.700 --> 00:04:21.320
+Zwei Textstellen können im Raum nah beieinander liegen, ohne wirklich übereinzustimmen,
+
+00:04:21.440 --> 00:04:24.320
+und genau diese knappen Fehltreffer sollen spätere Rankingschritte bereinigen.
+
+00:04:25.100 --> 00:04:27.440
+Sobald Bedeutung Koordinaten hat, verändert sich der Abgleich grundlegend.
+
+00:04:27.740 --> 00:04:30.180
+Das Wort Rückerstattung und der Ausdruck Geld zurück landen nah beieinander,
+
+00:04:30.280 --> 00:04:33.840
+sodass eine Suchanfrage das eine Suchanfrage das eine über das andere finden kann, selbst wenn sie kein einziges von.
+
+00:04:34.260 --> 00:04:36.880
+Das System gleicht nicht mehr Buchstaben ab, sondern Nähe.
+
+00:04:37.360 --> 00:04:41.580
+Zwei Vorteile ergeben sich aus diesem Design, da Bedeutung sprachenübergreifend im gleichen Raum existiert.
+
+00:04:41.900 --> 00:04:45.420
+Eine Suche auf Englisch kann ein deutsches Dokument ohne Übersetzungsschritt finden.
+
+00:04:45.420 --> 00:04:48.140
+Dasselbe Konzept funktioniert über Inhaltstypen hinweg,
+
+00:04:48.340 --> 00:04:50.960
+sodass Text und Bilder einen Raum teilen und direkt verglichen werden können.
+
+00:04:51.780 --> 00:04:54.780
+Um die ähnlichsten Bedeutungen zu finden, führt die Engine eine Suche nach dem nächsten Nachbarn durch.
+
+00:04:55.420 --> 00:04:57.720
+Azure AI Search bietet Ihnen für diese Aufgabe zwei Engines.
+
+00:04:58.080 --> 00:05:02.100
+Die eine ist eine graphbasierte Methode namens HNSW, die schnell ist und große Indizes gut bewältigt.
+
+00:05:02.240 --> 00:05:07.120
+Die andere ist das Schöpfen des KNN, das mehr Kandidaten prüft und Geschwindigkeit gegen Gründlichkeit tauscht und Geschwindigkeit tauscht.
+
+00:05:07.120 --> 00:05:12.240
+Vektor-Scores liegen bei Verwendung der Cosimus-Ähnlichkeit etwa zwischen 0,333 und 1,
+
+00:05:12.480 --> 00:05:14.980
+wobei eine höhere Zahl für eine engere Übereinstimmung steht.
+
+00:05:15.640 --> 00:05:18.740
+Dieser Bereich unterscheidet sich komplett von Keyword-Scores, die nach oben hin keine Grenze haben.
+
+00:05:19.140 --> 00:05:22.620
+Diese beiden getrennt zu halten ist wichtig, da der nächste Schritt zwei Listen zusammenführen muss,
+
+00:05:22.960 --> 00:05:24.640
+die nicht einmal die gleiche numerische Sprache sprechen.
+
+00:05:25.320 --> 00:05:28.120
+Die Hybride-Suche führt beides gleichzeitig aus und vermischt die Ergebnisse.
+
+00:05:28.760 --> 00:05:32.920
+Die Hybride-Suche ist eine einzige Anfrage, die sowohl eine Textabfrage als auch eine Vektorabfrage enthält,
+
+00:05:33.000 --> 00:05:34.140
+welche zusammen ausgeführt werden.
+
+00:05:34.140 --> 00:05:36.760
+Es gibt keinen separaten dritten Algorithmus, der die Arbeit erdicht.
+
+00:05:37.200 --> 00:05:42.920
+Sie senden ihre Wörter und die Bedeutungsversion derselben Wörter in einem Aufruf und die Engine startet beide Aufträge parallel.
+
+00:05:44.020 --> 00:05:44.880
+Jetzt haben sie zwei Ranglisten.
+
+00:05:45.600 --> 00:05:49.480
+Die eine ist nach BM25 sortiert, die andere nach Bedeutung und sie stimmen seltener genauen Reihenfolge bei.
+
+00:05:50.780 --> 00:05:57.520
+Azure AI Search führt sie mit einer Methode namens Reciprocal Rank Fusion, kurz RF, zusammen, deren Grundidee einfach zu verstehen ist.
+
+00:05:59.100 --> 00:06:03.440
+RAF gibt jedem Dokument einen Score von 1 geteilt durch seinen Rang plus eine kleine Konstante.
+
+00:06:04.140 --> 00:06:09.440
+Die Konstante ist in der Praxis 60. Ihre Aufgabe ist es, zu verhindern, dass der Spitzenplatz das Ergebnis völlig dominiert.
+
+00:06:10.100 --> 00:06:14.180
+Ein Dokument, das auf beiden Listen weit oben steht, erhält zwei gute Bewertungen und steigt auf,
+
+00:06:14.320 --> 00:06:17.280
+während eines, das nur eine Liste bevorzugte, einen Platz weiter unten bekommt.
+
+00:06:17.760 --> 00:06:21.840
+Stellen Sie sich eine Richtlinienseite vor, die die Keyword-Suche auf Platz 5 und die Bedeutungssuche auf Platz 2 einstuft.
+
+00:06:22.200 --> 00:06:26.220
+Sie erhält von beiden Seiten eine solide Bewertung und klettert über eine Seite, die nur eine Methode erkannt hat.
+
+00:06:26.220 --> 00:06:28.120
+Diese Übereinstimmung ist der ganze Trick.
+
+00:06:28.520 --> 00:06:32.560
+Wenn zwei verschiedene Methoden auf dieselbe Textstelle zeigen, können Sie ihr mehr vertrauen als jeder Einzelne für sich.
+
+00:06:32.900 --> 00:06:35.360
+Übrige Abfragen behalten auch die üblichen Suchfunktionen bei dieser Wahl.
+
+00:06:35.920 --> 00:06:41.660
+Filter, Facetten und Sortierung funktionieren weiterhin, sodass Sie Ihre praktischen Werkzeuge nicht verlieren, nur weil die Bedeutung jetzt eine Rolle spielt.
+
+00:06:42.200 --> 00:06:45.880
+Sie können sogar die Gewichtung der Vektorseite anpassen, wenn Sie feststellen, dass Ihre Nutzer eine bestimmte Richtung bevorzugen.
+
+00:06:46.560 --> 00:06:49.920
+Angenommen, Ihre Nutzer geben eher kurze, ungenaue Phrasen statt exakter Bezeichner ein.
+
+00:06:49.920 --> 00:06:53.400
+Wenn Sie dieses Gewicht erhöhen, vertraut die Suchmaschine der Bedeutung etwas mehr.
+
+00:06:53.700 --> 00:06:57.500
+Der Standardwert ist nicht einmal geteilt und Sie ändern ihn erst, wenn Sie sehen, wie echte Abfragen aussehen.
+
+00:06:58.640 --> 00:07:04.560
+Standardmäßig liefert eine hybride Abfrage die besten 50 Treffer aus der zusammengeführten Liste und die Textsuche stoppt nach 1000 Treffern.
+
+00:07:05.560 --> 00:07:06.980
+Diese Standardwerte sind großzügig.
+
+00:07:07.140 --> 00:07:10.440
+Für eine Chat-App, die meist nur eine Handvoll guter Textstellen benötigt, um eine Frage gut zu beantworten.
+
+00:07:10.800 --> 00:07:17.180
+Die Benchmarkergebnisse von Microsoft zeigen, dass hybride Methoden sowohl Kundendaten als auch öffentliche Testsets besser verarbeiten als jede Methode allein,
+
+00:07:17.180 --> 00:07:20.460
+weshalb sie zur Standardempfehlung für die Absicherung von KI-Antworten wurde, wurde.
+
+00:07:21.380 --> 00:07:24.460
+Es wurde auf dem Weg nichts verworfen und das ist wichtiger, als es zunächst scheint.
+
+00:07:25.200 --> 00:07:26.940
+Der zweite Durchgang, der die engere Auswahl neu hat.
+
+00:07:27.340 --> 00:07:28.100
+Jetzt wird es interessant.
+
+00:07:28.920 --> 00:07:31.840
+Das Zusammenführen von zwei Listen ergibt eine bessere, engere Auswahl, aber keine Perfekt.
+
+00:07:32.260 --> 00:07:36.240
+Deshalb fügt Dejure AI Search einen zweiten Ranking-Durchgang hinzu, der als semantisches Ranking bezeichnet wird.
+
+00:07:36.780 --> 00:07:39.680
+Der Name klingt so, als würde er die Vektorarbeit wiederholen, aber er bewirkt etwas anderes.
+
+00:07:40.420 --> 00:07:45.320
+Das semantische Ranking nimmt die besten 50 Ergebnisse aus dem vorherigen Schritt und liest jedes davon zusammen mit ihrer Abfrage.
+
+00:07:45.320 --> 00:07:52.380
+Es verwendet Sprachmodelle, die von Bing angepasst wurden, um zu beurteilen, wie gut eine Textstelle die eigentliche Frage beantwortet und bewertet dann jede von 0 bis 4.
+
+00:07:53.100 --> 00:07:56.220
+Eine 4 bedeutet, dass die Textstelle die Frage gut beantwortet, dass sie irrelevant ist.
+
+00:07:57.340 --> 00:07:59.580
+Zwei klare Grenzen bestimmen, was dieser Durchgang leisten kann.
+
+00:07:59.860 --> 00:08:05.160
+Er betrachtet immer nur die Top 50 Ergebnisse, kann also diese Liste neu sortieren, aber kein Dokument retten, das der erste Durchgang nie gefunden hat.
+
+00:08:05.680 --> 00:08:06.580
+Er kann auch nichts erfinden.
+
+00:08:07.160 --> 00:08:11.980
+Die Untertitel und Antworten, die er zurückgibt, stammen wortwörtlich aus ihren eigenen Inhalten und werden nie von Grund auf neu geschrieben.
+
+00:08:12.460 --> 00:08:13.780
+Nichts davon ersetzt den ersten Durchgang.
+
+00:08:13.780 --> 00:08:16.020
+Der Ranker kann nur das neu anordnen, was ihm übergeben wurde.
+
+00:08:16.380 --> 00:08:19.280
+Alles, was es nie in die engere Auswahl geschafft hat, bekommt also keine zweite Chance.
+
+00:08:19.520 --> 00:08:22.880
+Eine gute Ermittlung im Vorfeld ist das, was dem zweiten Durchgang erst etwas Brauchbares zum Optimieren.
+
+00:08:23.040 --> 00:08:23.980
+Es sind auch Kosten damit verbunden.
+
+00:08:24.600 --> 00:08:30.080
+Semantisches Ranking ist eine kostenpflichtige Funktion, die nutzungsabhängig berechnet wird mit einem monatlichen Freibetrag, den die meisten beim Testen nie ausschöpfen.
+
+00:08:30.420 --> 00:08:34.940
+Das ist ein fairer Tausch für präzisere Ergebnisse und deshalb schalten sie es gezielt ein, anstatt überall gleichzeitig.
+
+00:08:35.740 --> 00:08:41.500
+Das erneute Ranking einer Vorauswahl ist weitaus kostengünstiger als das eines gesamten Korpus, weshalb der zweite Durchlauf existiert.
+
+00:08:41.500 --> 00:08:51.000
+Tests von Microsoft zeigten, dass Hybrid Plus mit semantischem Ranking deutlich vor reinem Hybrid liegt, wobei der Abstand bei komplexen, realen Fragen am größten war.
+
+00:08:52.080 --> 00:08:53.900
+Die Funktionen gehen hier über die reine Bewertung hinaus.
+
+00:08:53.900 --> 00:09:00.440
+Semantisches Ranking kann eine kurze Beschreibung liefern, die zusammenfasst, warum ein Abschnitt übereinstimmte, was bei der Anzeige von Ergebnissen sehr hilfreich ist.
+
+00:09:01.380 --> 00:09:07.220
+Eine neuere Option kann Ihre Anfrage sogar in verschiedene Varianten umschreiben, um Tippfehler und fehlende Synonyme vor dem Suchlauf abzufangen.
+
+00:09:08.120 --> 00:09:11.520
+Was der zweite Durchlauf tatsächlich liest, ist wichtig, da er nur auf Textbasis arbeitet.
+
+00:09:12.340 --> 00:09:16.960
+Ein Dokument, das hauptsächlich aus Zahlen besteht oder ein Bild ohne Beschreibung, bietet dem Rankingsystem kaum Anhaltspunkte.
+
+00:09:17.960 --> 00:09:23.320
+Textreiche Inhalte wie Dokumentation und Wissensdatenbanken profitieren am meisten, was auch Microsoft in seinen Leitfäden bestätigt.
+
+00:09:23.980 --> 00:09:27.000
+All dies erhöht die Dauer jeder Anfrage ein wenig und dieser Kompromiss ist beabsichtigt.
+
+00:09:27.420 --> 00:09:33.760
+Sie erkaufen sich eine präzisere Reihenfolge auf Kosten einer langsameren Antwort, was für einen Chatassistenten meist fair, für eine sofortige Suchzeile jedoch ungünstig ist.
+
+00:09:34.460 --> 00:09:36.000
+Der unscheinbare Schritt, der über alles entscheidet.
+
+00:09:36.560 --> 00:09:39.580
+Bevor das intelligente Matching funktionieren kann, müssen Ihre Inhalte vorbereitet werden.
+
+00:09:39.660 --> 00:09:40.940
+Der wichtigste Schritt dabei heißt Chunking.
+
+00:09:40.940 --> 00:09:45.660
+Chunking bedeutet, lange Dokumente in kleinere Abschnitte zu unterteilen, damit jeder Teil separat abgeglichen werden kann.
+
+00:09:46.140 --> 00:09:49.880
+Ein Richtlinienhandbuch ist dann kein riesiger Textblock mehr, sondern besteht aus einigen hundert fokussierten Teilen.
+
+00:09:50.380 --> 00:09:51.580
+Es gibt einen guten Grund, sich die mitzumachen.
+
+00:09:52.020 --> 00:09:58.040
+Ein einzelner Vektor muss die Bedeutung eines gesamten Dokuments in einen Zahlensatz pressen, doch lange Dokumente behandeln oft mehrere Themen gleichzeitig.
+
+00:09:59.280 --> 00:10:04.140
+Wenn man das alles in einen Vektor presst, verschwimmen die Details und das Ende des Dokuments wird oft komplett ignoriert.
+
+00:10:04.780 --> 00:10:06.020
+Die Zahlen hier ist beeindruckend.
+
+00:10:06.020 --> 00:10:12.680
+In Microsofts Tests erreicht die Darstellung eines ganzen Dokuments durch ein Vektor einen Wert von 28,2 bei Anfragen, deren Antworten in langen Dokumenten verborgen waren.
+
+00:10:13.240 --> 00:10:19.560
+Durch das Chunking derselben Dokumente stieg der Wert auf 45,7 und für Antworten, die tief im Dokument vergraben waren, sogar auf 51,4.
+
+00:10:20.220 --> 00:10:22.800
+Größe und Abgrenzung sind ebenso wichtig wie die Entscheidung für das Chunking selber.
+
+00:10:23.660 --> 00:10:29.340
+Abschnitte mit etwa 512 Tokens erreichten 42,4 Punkte, während Abschnitte mit 4030,4 fielen.
+
+00:10:29.340 --> 00:10:36.620
+Die Abschnitte um ein Viertel überlappen zu lassen und an Satzenden zu trennen, steigerte die Punktzahl weiter, da der Kontext nie mitten im Satz zerschnitten wird.
+
+00:10:38.020 --> 00:10:40.100
+Stellen Sie sich ein 80-seitiges HR-Handbuch vor.
+
+00:10:40.340 --> 00:10:44.420
+Gut gechunkt führt eine Frage zum Elternurlaub, genau zu den vier Absätzen, die das Thema behandeln.
+
+00:10:45.280 --> 00:10:50.440
+Schlecht gechunkt zieht die gleiche Frage eine Zusammenfassung der gesamten Richtlinie heran und vergräbt die eigentliche Antwort irgendwo in der Mitte.
+
+00:10:50.440 --> 00:10:52.740
+Sie müssen dies nicht immer von Hand tun.
+
+00:10:53.660 --> 00:11:01.820
+Azure AI Search kann Chunking und Vektorisierung innerhalb einer Indexer-Pipeline ausführen, Daten aus Quellen wie Blob Storage, Azure SQL oder OneLake abrufen und dabei die Einbettungen generieren.
+
+00:11:02.740 --> 00:11:05.100
+Die Arbeit findet nach wie vor statt. Sie geschieht nur automatisch für Sie.
+
+00:11:05.460 --> 00:11:09.780
+Dies ist der Teil, den niemand auf eine Folie setzt und entscheidet darüber, wie gut alles Nachgelagerte sein kann.
+
+00:11:10.320 --> 00:11:13.540
+Wenn das Chunking nicht stimmt, hat selbst das perfekte Ranking keine vernünftige Grundlage.
+
+00:11:14.860 --> 00:11:17.440
+Wo dies bereits ihre Microsoft 365 Arbeit berührt.
+
+00:11:17.440 --> 00:11:20.620
+Die Retrieval Engine, die wir gerade betrachtet haben, ist Azure AI Search.
+
+00:11:20.940 --> 00:11:27.680
+Sie betreibt auf Foundry IQ, Microsofts verwaltete Wissensebene, die Unternehmensinhalte in Wissensdatenbanken für Agenten verwandelt, wandelt.
+
+00:11:28.440 --> 00:11:32.160
+Wir begegnen ihr in Co-Pilot Studio, wo Azure AI Search als Wissensquelle eingebunden ist.
+
+00:11:32.840 --> 00:11:37.660
+Agenten dort greifen auch auf SharePoint, Dataverse, hochgeladene Dokumente, öffentliche Websites und Connectors zu.
+
+00:11:37.880 --> 00:11:41.200
+Und jede dieser Quellen speist dieselbe Antwort Pipeline, speist dieselbe Antwort Pipeline.
+
+00:11:41.300 --> 00:11:43.000
+Dann gibt es noch Microsoft 365 Co-Pilot.
+
+00:11:43.000 --> 00:11:50.300
+Co-Pilot Connectors bringen externe und fachspezifische Inhalte in den Graph, sodass dieselben Retrieval Konzepte erscheinen, auch wenn sie selbst nie einen Index berühren.
+
+00:11:51.240 --> 00:11:55.200
+Eine in ein Chatfenster eingegebene Frage kann aus einem Dokument beantwortet werden, dessen Existenz sie längst hat.
+
+00:11:55.420 --> 00:11:57.460
+Die Sicherheit wird auf eine Weise gehandhabt, die sie beruhigen dürfen.
+
+00:11:57.460 --> 00:12:03.640
+Antworten respektieren die Berechtigungen jeder Person über Microsoft Enter ID, sodass ein Benutzer nur Inhalte sieht, für die er eine Berechtigung hat.
+
+00:12:04.340 --> 00:12:10.300
+Eine Finanzfrage von jemandem außerhalb der Finanzabteilung erhält eine andere Antwort als dieselbe Frage vom Finanzleiter, genauso wie das Zugriffmodell funktionieren soll.
+
+00:12:10.880 --> 00:12:12.120
+Eine Version davon sieht so aus.
+
+00:12:12.840 --> 00:12:15.740
+Ein Mitarbeiter fragt einen internen Agenten, wie viele Tage Bildungsurlaub ihm zustehen.
+
+00:12:16.080 --> 00:12:22.840
+Der Agent durchsucht indizierte SharePoint-Inhalte, findet die aktuelle Richtlinienseite, antwortet mit einem Quellenverweis und der gesamte Austausch verlässt niemals den Tenant.
+
+00:12:22.840 --> 00:12:25.660
+Es gibt eine Einstellung im Co-Pilot-Studio direkt auf diesem Konzept.
+
+00:12:26.500 --> 00:12:35.620
+Tenant Graph Grounding mit semantischer Suche nutzt den semantischen Index hinter Microsoft 365 Co-Pilot zur Verfeinerung des Retrievals und Microsoft merkt an, dass dies besonders bei SharePoint-Inhalten hilft.
+
+00:12:35.760 --> 00:12:36.480
+Das ist der wahre Nutz.
+
+00:12:36.800 --> 00:12:45.280
+Ein gut aufgebauter Assistent wirkt, als hätte er die richtige Seite gelesen, weil Stichwortsuche, Bedeutungssuche, Fusion und der zweite Ranking-Durchlauf alle unter einem Chatfeld vereint sind, das sie bereits nutzen.
+
+00:12:46.000 --> 00:12:48.380
+Kein einzelnes intelligentes Modell leistet diese Arbeit das alleine.
+
+00:12:49.080 --> 00:12:51.020
+Die ehrlichen Grenzen und die Fehler, die Anfänger machen.
+
+00:12:51.020 --> 00:12:55.400
+Lassen Sie uns offen darüber sprechen, wo das System an seine Grenzen stößt, in die Hürden zu kennen, spart Ihnen Zeit.
+
+00:12:55.720 --> 00:12:58.560
+Der erste Fehler ist die Annahme, dass Hybrid automatisch bei allem besser ist.
+
+00:12:58.960 --> 00:13:00.340
+Das ist es nicht und dieser Unterschied ist wichtig.
+
+00:13:00.800 --> 00:13:05.680
+Die eigenen Ergebnisse von Microsoft zeigen, dass bei reinen Stichwortabfragen die reine Stichwortsuche immer noch am besten Abschnitt.
+
+00:13:06.420 --> 00:13:08.780
+Hybrid ist ein starker Standard, kein universeller Gewinner.
+
+00:13:09.060 --> 00:13:11.760
+Und die richtige Antwort hängt von den Fragen ab, die ihre Benutzer tatsächlich stellen.
+
+00:13:12.300 --> 00:13:16.000
+Die zweite Falle ist, riesige Textpassagen zu überspringen, zu stückeln oder dem System zu füttern.
+
+00:13:16.000 --> 00:13:19.920
+Wenn Ihre Stücke zu groß sind, verschwimmt die Bedeutung und das Ende jeder Passage verpufft.
+
+00:13:19.960 --> 00:13:21.540
+Die Lösung ist langweilig, aber effektiv.
+
+00:13:22.260 --> 00:13:25.620
+Schneiden Sie Ansatzgrenzen, halten Sie die Passagen klein und lassen Sie sie ein wenig überlappen.
+
+00:13:26.140 --> 00:13:29.800
+Dann gibt es die Angewohnheit, semantisches Ranking überall einzuschalten, ohne auf den Zähler zu achten.
+
+00:13:30.220 --> 00:13:34.460
+Die Abrechnung erfolgt nach Nutzung, sodass eine stark genutzte App einen kleinen Test schnell auf der Rechnung sichtbar macht.
+
+00:13:35.220 --> 00:13:37.440
+Starten Sie mit dem kostenlosen Kontingent und erweitern Sie es gezielt.
+
+00:13:37.960 --> 00:13:39.600
+Auf die harten Limits werden Sie zuerst stoßen.
+
+00:13:40.440 --> 00:13:43.160
+Semantisches Ranking ordnet immer nur die 50 besten Ergebnisse neu an.
+
+00:13:43.260 --> 00:13:45.160
+Es poliert also eine Vorauswahl, erweitert sie aber nie.
+
+00:13:45.920 --> 00:13:47.280
+Vektorspeicher wird pro Partition verwaltet.
+
+00:13:47.860 --> 00:13:50.520
+Das Limit ändert sich mit Ihrem Tarif und dem Alter des Dienstes.
+
+00:13:50.800 --> 00:13:53.480
+Und ein Erreichen stoppt die Indizierung, anstatt sie nur zu verlangsamen.
+
+00:13:53.960 --> 00:13:54.880
+Gibt auch kleinere Obergrenzen.
+
+00:13:55.560 --> 00:14:00.400
+Ein Vektorfeld ist auf 4096 Dimensionen begrenzt und eine einzelne Vektorabfrage kann höchstens 10 Fälle ansprechen.
+
+00:14:01.180 --> 00:14:06.660
+Der kostenlose Tarif reicht zum Nähren mit einem Dienst und 50 MB Speicher, kann aber nach längerer Inaktivität gelöscht werden.
+
+00:14:07.300 --> 00:14:09.020
+Auch für die Nebenläufigkeit ist eine Obergrenz.
+
+00:14:09.760 --> 00:14:16.280
+Semantisches Ranking läuft über eine Warteschlange und jede Sucheinheit verarbeitet nur wenige Anfragen gleichzeitig, bevor sie abgelehnt werden.
+
+00:14:17.460 --> 00:14:19.580
+Bei einer fehlgenutzten App führt das zu Wiederholungsversuchen.
+
+00:14:20.020 --> 00:14:22.640
+Kapazitätsplanung ist also kein optionales Extra mehr, sobald echte Nutzer kommen.
+
+00:14:23.060 --> 00:14:24.820
+Ein kleiner Vorteil bei der Abrechnung wird leicht übersehen.
+
+00:14:25.240 --> 00:14:29.400
+Ein leerer Abfragestring wird nicht für semantisches Ranking berechnet, selbst wenn der Abfragetyp auf semantisch steht.
+
+00:14:29.600 --> 00:14:31.180
+Eine reine Filteranfrage kostet also nichts.
+
+00:14:31.580 --> 00:14:33.920
+Die Preisgestaltung gibt es in zwei Varianten und die Wahl ist entscheidend.
+
+00:14:33.920 --> 00:14:38.980
+Das dedizierte Modell berechnet einen festen Stundensatz basierend auf der Kapazität, was gut für gleichmäßige Lasten ist,
+
+00:14:39.040 --> 00:14:43.100
+während das serverlose Modell nach Verbrauch abrechnet und für schwankende oder unvorhersehbare Lasten gedacht ist.
+
+00:14:43.780 --> 00:14:47.520
+Die serverlose Option ist noch in der Vorschau, daher ist sie nicht der richtige Ort für kritische Anwendungen.
+
+00:14:47.520 --> 00:14:50.300
+All das macht die Hybride-Suche nicht zu einer schlechten Wahl.
+
+00:14:50.680 --> 00:14:51.980
+Es macht sie zu einer Wahl mit spezifischen Eigenen.
+
+00:14:52.360 --> 00:14:57.180
+Jeder Punkt an zusätzlicher Relevanz hat seinen Preis, sei es in Form von Kosten, Kapazität oder dem Aufwand für die Inhaltsaufbereitung.
+
+00:14:57.680 --> 00:14:57.980
+Bereitung.
+
+00:14:58.960 --> 00:15:02.340
+Zu wissen, welchen Kompromiss man eingeht, macht den Unterschied zwischen einer Demo und einer stabilen Lösung.
+
+00:15:03.780 --> 00:15:06.180
+Kurz gesagt, Hybride-Suche belohnt gute Vorbereitungen.
+
+00:15:06.800 --> 00:15:11.400
+Saubere, stückweise unterteilte und gut beschriebene Inhalte mit sinnvollen Zugriffsregeln holen mehr aus jedem Feature heraus,
+
+00:15:11.400 --> 00:15:14.100
+während ungeordnete Inhalte weniger liefern, egal wie viele Schalter sie umlegen.
+
+00:15:15.080 --> 00:15:16.840
+Eine kurze Zusammenfassung und eine Frage an Sie.
+
+00:15:16.840 --> 00:15:18.740
+Das Gesamtbild lässt sich in wenigen Zahlen fassen.
+
+00:15:19.140 --> 00:15:21.000
+Tichwort-Suche findet die exakten Wörter, die sie eingeben.
+
+00:15:21.420 --> 00:15:22.540
+Vektor-Suche findet die Bedeutung.
+
+00:15:22.940 --> 00:15:26.100
+Die Hybride-Suche führt beides gleichzeitig aus und führt die Ergebnisse nach Rang zusammen.
+
+00:15:26.940 --> 00:15:31.640
+Ein semantisches Ranking sortiert dann die besten 50 neu und alles basiert auf Inhalten, die zuvor korrekt zerlegt wurden.
+
+00:15:32.300 --> 00:15:34.460
+Meine Frage an dich ist einfach und ich mag die Antwort wirklich sehr.
+
+00:15:35.100 --> 00:15:39.180
+Wo in deiner eigenen Arbeit würde eine Suche die Bedeutung und statt nur Wörter versteht am meisten verändern?
+
+00:15:39.980 --> 00:15:43.180
+Schreib es in die Kommentare, denn die Antworten verraten meist mehr als jede Produktseite.
+
+00:15:43.180 --> 00:15:51.120
+Wenn das Thema dadurch weniger einschüchternd wirkt, abonniere M3-Troffen 65FM, um die Tools und die Denkweise zu meistern, die die Zukunft der Arbeit gestalten.

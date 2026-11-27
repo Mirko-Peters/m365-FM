@@ -19,6 +19,40 @@ BRAND_LEN = len(" | M365.FM")
 TITLE_MAX = 60            # Ziel inkl. Marke
 DESC_LO, DESC_HI = 120, 155
 _STOP = {"and", "or", "of", "the", "with", "for", "to", "in", "a", "an", "by", "on", "at", "as", "und", "oder", "von", "mit", "für", "zu", "im", "der", "die", "das", "ein", "eine"}
+_STOP |= {   # Artikel/Praepositionen weiterer Sprachen: davor endet kein Kurzsatz (18.11.2026: lange KI-Kurzbeschreibungen fr/es/it/nl/id/ar).
+    # Ohne Woerter, die auch Englisch/Deutsch sind (met, do, no, die, per, i, e, o ...): die bekaemen sonst falsche Schnitte im Englischen.
+    "le", "la", "les", "une", "des", "du", "et", "ou", "sur", "à", "au", "aux", "pour", "par", "avec",
+    "los", "las", "una", "del", "con", "para", "por",
+    "gli", "nel", "nella", "della", "dei",
+    "uma", "dos", "het", "een", "van", "voor",
+    "oraz", "dla", "yang", "untuk", "dengan", "dari",
+    "и", "в", "на", "с", "для", "по", "і", "та", "з", "у", "و", "في", "من", "على", "إلى"}
+_JOIN1 = "and|that|which|in which|with|using|by|for|to|from|where|when|while|because|including|as|so|through|via|across|under|into|against|und|mit|für|durch|bei|wobei|sowie|damit|wenn|um|während|weil|sodass|zur|zum|indem"
+_JOIN2_LANG = {   # Stufe 2 (nur wenn Stufe 1 keine Fuge findet): Anschlusswoerter je Sprache (18.11.2026, lange KI-Kurzbeschreibungen). Mit Sprache nur deren
+    # Woerter (nl darf "die"/"met"/"door", ohne deutsche oder englische Saetze zu treffen); ohne Sprache die Vereinigung ohne Woerter, die auch en/de sind.
+    "fr": "et|qui|que|avec|pour|par|dans|afin|lorsque|grâce|sans|selon|notamment|dont|où|permettant|offrant|tandis|sur|entre|depuis|via|de|à|au|aux|en|comme|si|sous|vers|chez|lors|d'\\S+",
+    "es": "y|que|con|para|mediante|donde|cuando|sin|según|incluidos|incluyendo|permitiendo|ofreciendo|mientras|sobre|entre|desde|en|de|a|al|del|como|si|bajo|hacia",
+    "it": "che|tramite|dove|quando|senza|grazie|incluso|attraverso|e|ed|mentre|poiché|consentendo|permettendo|offrendo|di|da|tra|fra|su|nel|nella|nei|del|della|per|con|in",
+    "pt": "e|que|com|para|por|onde|quando|sem|incluindo|através|permitindo|oferecendo|enquanto|entre|desde|em|no|na",
+    "nl": "en|die|dat|met|door|voor|waarbij|zodat|zonder|wanneer|waar|om|terwijl|waardoor|bij|naar|binnen|tussen|zoals|in|van|op|als|over",
+    "pl": "który|która|które|aby|dla|przez|oraz|gdy|bez|dotyczący|dotycząca|dotyczące|obejmujący|w zakresie|z wykorzystaniem|na|w|z|do|od|poprzez|między|i",
+    "id": "yang|dengan|untuk|melalui|tanpa|sehingga|agar|saat|seperti|di|ke|dari|pada|dalam|antara|bagi|dan",
+    "ru": "который|которая|которое|которые|для|через|чтобы|при|без|где|по|на базе|с помощью|в|на|с|из|к|между|и",
+    "uk": "який|яка|яке|які|щоб|де|в|у|на|з|із|до|між|для|через|і|та",
+    "ar": "التي|الذي|مع|عبر|حيث|من خلال|لتمكين|بما في ذلك|على|باستخدام|تُسمى|يتيح|تتيح|في|من|إلى|عن|بين|قبل|بعد|مثل|لـ|ل|و\\S+",
+    "he": "אשר|שבו|שבה|עם|כדי|באמצעות|על|של|בין|כמו|המאפשר|המאפשרת|ללא|עבור|מול|תוך",
+    "de": "über|statt|anhand|auf|von|aus|vor|nach|ohne|innerhalb|zwischen|gegen|unter|in|im|bei|mit|für|durch|zur|zum|sowie|damit|wenn|um|während|weil|indem|als|wie|des|der|mithilfe|bis|seit|samt|einschließlich",
+}
+_EN_DE = set(_JOIN1.split("|")) | {"die", "met", "in", "van", "op", "als", "over", "per", "con", "en", "e", "i", "y", "no", "na", "do", "da", "di", "em", "via"}
+_JOIN2 = "|".join(sorted({w for l, v in _JOIN2_LANG.items() if l != "de" for w in v.split("|")} - _EN_DE, key=lambda w: (-len(w), w)))   # ohne Sprache: Vereinigung ohne en/de-Woerter (wie bisher)   # ohne Sprache: Vereinigung ohne en/de-Woerter (wie bisher)
+_FUGE = re.compile(r"[,;،؛](?=\s)|[，、]|\s[–—-](?=\s)|(?<=\s)(?=(?:" + _JOIN1 + r")\s)")   # Stufe 1: Satzzeichen und englische/deutsche Anschlusswoerter (wie bisher)
+_FUGE2 = re.compile(r"(?<=\s)(?=(?:" + _JOIN2 + r")\s)")
+_FUGE2_LANG = {l: re.compile(r"(?<=\s)(?=(?:" + w + r")\s)") for l, w in _JOIN2_LANG.items()}
+_JOIN_WORDS = {l: set(w.split("|")) for l, w in _JOIN2_LANG.items()}
+_DE_NEBENSATZ = re.compile(r"(?:^|,\s+)(?:\w+\s+)?(?:der|die|das|dem|den|deren|dessen|welche[rsmn]?|wenn|weil|dass|damit|indem|während|ob|sodass|bevor|nachdem|sobald|wobei|wodurch|womit)\s", re.I)
+_NO_CUT2 = {"tels", "telles", "tel", "telle", "ainsi", "alors", "bien", "même", "así", "tanto", "tal", "tales", "così", "tanto", "sempre", "assim", "tal", "zowel", "zo", "takie", "tak", "seperti", "так", "такие", "також", "такі",
+             "más", "menos", "mismo", "misma", "plus", "moins", "sie", "ihn", "ihm", "ihnen", "uns", "basado", "basada", "basados", "basadas", "basé", "basée", "basés", "basées", "basato", "basata", "basati", "baseado", "baseada", "gebaseerd"}   # "basado en ..." gehoert zusammen
+
 
 # ---------------------------------------------------------------- Bausteine Entitaeten (15 Sprachen)
 # what/who: Fragekopf mit {n}; who "{n}:" = kein Fragekopf (Sprachen mit Geschlechtsformen). def/use/eps/prof/role/comp/evt/ind/job/ovr/ex/cert: Woerter.
@@ -91,7 +125,7 @@ def _clean(s):
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", s or "")).strip()
 
 
-def lead_text(text, hi=DESC_HI):
+def lead_text(text, hi=DESC_HI, lang=None):
     """Anfang von text als ganze Saetze bis hi Zeichen. Ist schon der erste Satz laenger: Schnitt an Komma/Semikolon/Gedankenstrich (mit Punkt), sonst an einer Wortgrenze mit '…'."""
     s = _clean(text)
     if len(s) <= hi:
@@ -106,20 +140,32 @@ def lead_text(text, hi=DESC_HI):
         return out
     cut = s[:hi]
     best = 0
-    for m in re.finditer(r"[,;](?=\s)|\s[–—-](?=\s)|(?<=\s)(?=(?:and|that|which|in which|with|using|by|for|to|from|where|when|while|because|including|as|so|through|via|across|under|into|against|und|mit|für|durch|bei|wobei|sowie|damit|wenn|um|während|weil|sodass|zur|zum|indem)\s)", cut):
-        head = cut[:m.start()].rstrip(",;–—- ")
-        punct = cut[m.start():m.start() + 1] in ",;–—-"
+    for m in _FUGE.finditer(cut):
+        head = cut[:m.start()].rstrip(",;،؛，、–—- ")
+        if head.count("(") > head.count(")"):
+            continue   # nie in einer offenen Klammer schneiden ("(trier, ranger." waere kaputt)
+        punct = cut[m.start():m.start() + 1] in ",;،؛，、–—-"
         if len(head) >= (45 if punct else 60) and head.rsplit(" ", 1)[-1].lower() not in _STOP and m.start() > best:
             best = m.start()   # laengster Anfang, der an einer Satzfuge endet (Komma, Semikolon, Strich oder vor Nebensatz-/Anschlusswort)
+    if not best:   # Stufe 2: nur Anschlusswoerter weiterer Sprachen, laengerer Mindestanfang, nicht nach "tels", "ainsi", "así" ... (dort gehoert das Wort zum Ausdruck)
+        for m in _FUGE2_LANG.get(lang, _FUGE2).finditer(cut):
+            head = cut[:m.start()].rstrip()
+            last = head.rsplit(" ", 1)[-1].lower()
+            if head.count("(") > head.count(")"):
+                continue
+            if lang == "de" and _DE_NEBENSATZ.search(head):
+                continue   # deutscher Nebensatz: das Verb steht am Ende, ein Schnitt mittendrin zerreisst den Satz (dann lieber "…")
+            if len(head) >= min(45, hi // 2) and last not in _STOP and last not in _NO_CUT2 and last not in _JOIN_WORDS.get(lang, ()) and m.start() > best:   # nach einem Namen vorn ist hi kleiner; nie auf einem Bindewort enden
+                best = m.start()
     if best:
-        return cut[:best].rstrip(",;–—- ") + "."
+        return cut[:best].rstrip(",;،؛，、–—- ") + "."
     return cut[:hi - 1].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
 
 
-def build_desc(lead, more="", prefix="", lo=DESC_LO, hi=DESC_HI):
+def build_desc(lead, more="", prefix="", lo=DESC_LO, hi=DESC_HI, lang=None):
     """prefix (Name, falls die Beschreibung ihn nicht nennt) + Anfang der Beschreibung (ganze Saetze) + more, solange es unter hi bleibt und lead kuerzer als lo ist."""
     pre = f"{prefix} – " if prefix else ""
-    body = lead_text(lead, hi - len(pre)) if lead else ""
+    body = lead_text(lead, hi - len(pre), lang) if lead else ""
     out = pre + body
     if more and len(out) < lo and len(out) + 1 + len(more) <= hi:
         out = f"{out} {more}".strip()
@@ -130,9 +176,11 @@ def build_desc(lead, more="", prefix="", lo=DESC_LO, hi=DESC_HI):
 _CODE = re.compile(r"\b([A-Z]{1,3}-\d{3})\b")
 
 
-def _name(e):
-    """Anzeigename: bei Zertifizierungen ohne das Praefix 'Microsoft Certified:'."""
-    n = e["name"].strip()
+def _name(e, lang="en"):
+    """Anzeigename in der Sprache der Seite (site_ename.ename, data/entity_names.json; wie H1 und Brotkruemel): bei Zertifizierungen ohne das
+    Praefix 'Microsoft Certified:'."""
+    import site_ename as EN
+    n = EN.ename(e, lang).strip()
     return re.sub(r"^Microsoft Certified:\s*", "", n) if e.get("type") == "cert" else n
 
 
@@ -145,7 +193,7 @@ def _short(n):
 def entity_title(lang, e, n_eps=0, dup=0, keep=False):
     t = tok(lang)
     typ = e.get("type")
-    n = _name(e)
+    n = _name(e, lang)
     if dup:
         n = f"{n} ({dup + 1})"   # gleicher Name unter zwei Kennungen (4 Paare): der zweite Eintrag bekommt eine Zahl, sonst identische Titel
     hs = t["hs"]
@@ -186,7 +234,7 @@ def entity_title(lang, e, n_eps=0, dup=0, keep=False):
 
 def entity_desc(lang, e, desc, n_eps=0, type_label=""):
     t = tok(lang)
-    n = _name(e)
+    n = _name(e, lang)
     core = re.sub(r"\s*\(.*?\)", "", n).strip().lower()
     d = _clean(desc)
     if not d:
@@ -197,7 +245,7 @@ def entity_desc(lang, e, desc, n_eps=0, type_label=""):
     pre = "" if named else n
     if len(pre) > 70 and e.get("type") == "cert" and _CODE.findall(pre):
         pre = _CODE.findall(pre)[-1]   # Zertifizierung mit sehr langem Namen: Pruefungsnummer als Anfang
-    return build_desc(d, t["more_eps"] if n_eps else t["more"], pre)
+    return build_desc(d, t["more_eps"] if n_eps else t["more"], pre, lang=lang)
 
 
 def name_flags(ents):

@@ -1,11 +1,11 @@
 name: Community-API (Cloudflare Worker) einrichten und veröffentlichen
 on:
   schedule:
-    - cron: "50 5 * * *"   # taeglich: Spreaker-Token per OAuth erneuern und neu ausrollen
+    - cron: "50 5 * * *"   # taeglich: Spreaker-Token per OAuth erneuern; nur Token-Lauf (TOKEN_ONLY: secret put, ohne D1-Sicherung, Migration und Deploy)
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["worker/**", ".github/workflows/worker.yml"]
+    paths: ["worker/**", ".github/workflows/worker.yml", "data/pillar_quiz_keys.enc"]
 concurrency: { group: worker, cancel-in-progress: false }
 permissions:
   contents: write
@@ -70,6 +70,9 @@ jobs:
         working-directory: worker
         run: node setup.mjs
         env:
+          # D1-Kosten: der taegliche Zeitplan erneuert nur die Tokens (secret put rollt die laufende Fassung mit dem neuen Wert aus). Push und
+          # Handlauf wie bisher; setup.mjs sichert D1 dort nur, wenn Migrationen ausstehen (bei unklarem Stand immer).
+          TOKEN_ONLY: ${{ github.event_name == 'schedule' && '1' || '' }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -98,6 +101,21 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # ein Schlüssel für alles (Mirko 5.11.)
           AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
           CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CERTOPUS_API_KEY: ${{ secrets.CERTOPUS_API_KEY }}   # Lernpfad-Zertifikate (learnquiz.js, CERTOPUS.md); ohne Secret bleibt das Zertifikat "pending"
+      # Antwortschluessel des Lernpfad-Tests nach dem Deploy (wieder) einspielen: data/pillar_quiz_keys.enc (verschluesselt, aus CRON_KEY abgeleitet)
+      # entschluesselt tools/pillar_quiz.py push und schickt ihn an /api/internal/learn-quiz (Upsert, idempotent). Fehlt Werkzeug oder Datei: nichts zu tun.
+      - name: Lernpfad-Schluessel an den Worker
+        if: env.skip != '1'
+        continue-on-error: true
+        env:
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          COMMUNITY_API: https://api-dub.m365.fm
+        run: |
+          if [ -f tools/pillar_quiz.py ] && [ -f data/pillar_quiz_keys.enc ] && [ -n "$CRON_KEY" ]; then
+            pip install -q cryptography && python3 tools/pillar_quiz.py push
+          else
+            echo "Kein Lernpfad-Schluessel einzuspielen (Werkzeug, data/pillar_quiz_keys.enc oder CRON_KEY fehlt)."
+          fi
       # Das Repo ist oeffentlich: Artefakte kann jeder angemeldete GitHub-Nutzer laden. Die D1-Sicherung enthaelt personenbezogene Daten
       # (Konten, Mail-Adressen, Nachrichten, Sponsor-Anfragen) und wird deshalb nur verschluesselt hochgeladen (Secret D1_BACKUP_KEY,
       # AES-256 mit PBKDF2). Ohne Secret kein Artefakt; zurueckholen geht dann ueber D1 Time Travel (Workers Paid: 30 Tage).
@@ -108,7 +126,7 @@ jobs:
           D1_BACKUP_KEY: ${{ secrets.D1_BACKUP_KEY }}
         run: |
           f=worker/backup-d1.sql
-          if [ ! -f "$f" ]; then echo "Keine D1-Sicherung in diesem Lauf."; exit 0; fi
+          if [ ! -f "$f" ]; then echo "Keine D1-Sicherung in diesem Lauf (keine ausstehenden Migrationen oder Token-Lauf; zurueckholen ueber D1 Time Travel)." | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
           if [ -n "$D1_BACKUP_KEY" ]; then
             openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -in "$f" -out "$f.enc" -pass env:D1_BACKUP_KEY
             echo "d1enc=1" >> "$GITHUB_ENV"; echo "D1-Sicherung verschluesselt ($(wc -c < "$f.enc") Bytes)."

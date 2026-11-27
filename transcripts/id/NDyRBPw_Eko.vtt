@@ -1,0 +1,1177 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.900
+Siap untuk 13 hari Microsoft 365, Copilot, AI, Azure, dan orang-orang yang membentuk masa depan kerja.
+
+00:00:07.860 --> 00:00:11.780
+Januari ini, M365 con kembali dan kami hadir lebih besar.
+
+00:00:12.940 --> 00:00:18.060
+Bergabunglah dengan kami untuk sesi langsung, demo nyata, dan pengetahuan praktis dari MVP serta pakar industri dunia.
+
+00:00:18.900 --> 00:00:21.120
+Tanpa slide umum, tanpa jargon yang tak henti.
+
+00:00:21.980 --> 00:00:23.100
+Kami menangani tantangan yang semuanya.
+
+00:00:23.740 --> 00:00:28.820
+Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.820 --> 00:00:34.340
+Baik Anda profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.420 --> 00:00:39.940
+Dengan 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.220
+Tonton langsung, dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.300 --> 00:00:48.820
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.560 --> 00:00:50.520
+Pedaftaran sudah dibuka sekarang.
+
+00:00:51.820 --> 00:00:55.520
+Kunjungi M365 con.net dan amankan tempat Anda hari ini.
+
+00:00:55.940 --> 00:00:58.580
+Itu adalah M365 con.net.
+
+00:00:58.820 --> 00:01:03.360
+Bergabungan sekarang di M365 con.net dan sampai jumpa secara langsung.
+
+00:01:03.780 --> 00:01:04.580
+Di bulan Januari.
+
+00:01:05.420 --> 00:01:06.080
+Ini fakta menarik.
+
+00:01:06.740 --> 00:01:11.000
+Menyematkan kredensial di aplikasi Azure Anda sama saja dengan magikan kunci rumah di halte bus.
+
+00:01:12.020 --> 00:01:16.040
+Enter ID dan identitas terkelola memungkinkan Anda mengunci setiap pintu tampak dulu pusing dengan gantungan kunci
+
+00:01:16.040 --> 00:01:18.480
+atau berharap tidak ada yang melihat catatan tempel di bawah keyboard Anda.
+
+00:01:18.900 --> 00:01:21.640
+Kebaiknya, Anda tidak perlu menjadi ahli kriptografi untuk melakukan ini.
+
+00:01:21.640 --> 00:01:26.180
+Saya akan menunjukkan langkah demi langkah cara melukar rahasia dengan token agar Anda bisa tidur lebih nyanyang.
+
+00:01:26.180 --> 00:01:28.280
+Masalah kunci di kaset itu.
+
+00:01:28.820 --> 00:01:34.140
+Mengapa begitu banyak aplikasi Azure masih menyimpan kata Sandi di file konfigurasi seolah kita masih menulis script VB tahun 2003?
+
+00:01:34.600 --> 00:01:34.720
+Tek.
+
+00:01:35.200 --> 00:01:36.260
+Serius, ini tahun 2024.
+
+00:01:36.980 --> 00:01:39.740
+Kita punya sistem keamanan kluar native yang membuat token sesuai permintaan,
+
+00:01:39.900 --> 00:01:43.980
+namun seseorang di luar sana masih melakukan komit kata Sandi kerepo mereka seperti itu sebuah lencana kehormatan.
+
+00:01:43.980 --> 00:01:46.360
+Dan alasannya selalu sama.
+
+00:01:46.820 --> 00:01:48.320
+Kami melakukan hardcode hanya untuk menghemat waktu.
+
+00:01:49.100 --> 00:01:52.480
+Hemat waktu hari ini lalu habiskan berminggu-minggu membereskan kekacauan saat kata Sandi bocor.
+
+00:01:52.780 --> 00:01:53.540
+Itu bukan jalan pintas.
+
+00:01:54.100 --> 00:01:55.260
+Itu adalah perendahan dengan angkat tambahan.
+
+00:01:55.860 --> 00:01:57.200
+Masalah ini lebih besar daripada sekadar kemalesan.
+
+00:01:57.920 --> 00:02:03.660
+Pengembang mengira memasukkan nama pengguna dan kata Sandi ke file konfigurasi atau pengaturan aplikasi JSON itu aman karena sifatnya internal.
+
+00:02:04.340 --> 00:02:05.720
+Kecuali tidak ada yang benar-benar bersifat internal.
+
+00:02:06.260 --> 00:02:11.820
+Konfigurasi itu disalin ke dev, test, staging, tiga cabang QA berbeda, cadangan, dan laptop yang tertinggal di pesawat.
+
+00:02:11.820 --> 00:02:14.440
+Ini bukan rahasia. Itu adalah siaran terdistribusi.
+
+00:02:15.320 --> 00:02:20.220
+Tambahkan Git, di mana kesalahan PUS telah membuat lebih banyak kata Sandi produksi bocor ke publik daripada yang bisa saya hitung.
+
+00:02:20.580 --> 00:02:22.220
+Dan Anda menciptakan antrean insiden sendiri.
+
+00:02:23.280 --> 00:02:24.360
+Inilah bagian yang tidak disukai siapa.
+
+00:02:25.360 --> 00:02:27.320
+Perbaikan cepat ini tidak hanya berisiko pada paparan.
+
+00:02:28.180 --> 00:02:29.600
+Perbaikan ini menjamin hal itu seiring berjalan.
+
+00:02:30.100 --> 00:02:30.720
+Rahasia itu licin.
+
+00:02:31.420 --> 00:02:34.340
+Mereka menyelinap ke file log karena Anda lupa melakukan sanitasi pada pengecualian.
+
+00:02:34.960 --> 00:02:36.800
+Mereka bersembuhin di tangkapan layar yang dibagikan melalui tim.
+
+00:02:36.800 --> 00:02:41.680
+Data tersebut diarsipkan ke cadangan yang tidak ter-enkripsi di penyimpanan blog karena tidak ada yang membayar untuk tingkatan vol.
+
+00:02:42.000 --> 00:02:45.520
+Hanya butuh satu penyerang yang bosan memindai repositori publik untuk mencari string yang jelas.
+
+00:02:45.900 --> 00:02:48.160
+Password 123 masih menjadi tambang emas.
+
+00:02:48.480 --> 00:02:50.220
+Dan tiba-tiba seluruh aplikasi Anda terbuka lebar.
+
+00:02:50.580 --> 00:02:51.300
+Rasuatu favorit saya.
+
+00:02:51.580 --> 00:02:56.920
+Ingat saat ribuan kredensial muncul di GitHub publik beberapa tahun lalu karena pengembang menggunakan repo pribadi hanya untuk pengujian?
+
+00:02:57.640 --> 00:02:58.680
+Penyerang bahkan tidak perlu berusaha.
+
+00:02:59.260 --> 00:03:03.820
+Mereka menjalankan pemindai kata kunci, menemukan string koneksi, dan langsung masuk ke sumber daya produksi.
+
+00:03:04.220 --> 00:03:07.640
+Tanpa zero day, tanpa muntah sepertasan ala halu, cukup salin, tempel, untung.
+
+00:03:08.200 --> 00:03:09.580
+Itulah hasil dari melakukan hard coding rahasia.
+
+00:03:09.580 --> 00:03:12.060
+Sebuah rumah di mana pencuri bahkan tidak perlu membawal kunci.
+
+00:03:12.640 --> 00:03:17.500
+Kunci di bawah keset, dan Anda menyemprotkan tulisan kunci ada di bawah pengaturan aplikasi REAC di teras depan.
+
+00:03:18.200 --> 00:03:21.780
+Anda tidak akan membiarkan pintu depan terbuka dengan kode garasi tertulis di catatan tempel,
+
+00:03:21.860 --> 00:03:24.340
+tetapi begitulah perilaku string koneksi jika menyatakan kredensial.
+
+00:03:24.600 --> 00:03:24.740
+Paa.
+
+00:03:25.460 --> 00:03:29.260
+Tentu itu berhasil sampai tetangga yang saya maksud adalah botnet anonim mengetahui di mana Anda menyimpannya.
+
+00:03:29.740 --> 00:03:30.140
+Menyimpan.
+
+00:03:30.720 --> 00:03:31.980
+Microsoft terasa sangat jelas akhirnya ini.
+
+00:03:32.720 --> 00:03:36.480
+Kredensial yang dihardcode kini dimasukkan ke dalam kategori yang sama dengan Internet Explorer dan Clippy.
+
+00:03:36.480 --> 00:03:37.700
+Depresiasi.
+
+00:03:38.240 --> 00:03:42.040
+Anda bisa tetap menggunakannya, tapi bersiaplah untuk kecewa, rusak, dan lock audit yang meneriaki Anda.
+
+00:03:42.620 --> 00:03:43.780
+Tambahkan dengan masalah penyebaran.
+
+00:03:44.180 --> 00:03:45.540
+Setiap lingkungan membutuhkan pengaturannya sendiri.
+
+00:03:46.160 --> 00:03:48.780
+Jadi sekarang Anda punya kata sandi untuk kotak dev string admin di staging,
+
+00:03:48.980 --> 00:03:51.360
+satu lagi di produksi, dan tidak ada yang tahu apakah itu dirotasi.
+
+00:03:52.220 --> 00:03:54.480
+Tim yang berbeda menimbun salinan yang sedikit usang.
+
+00:03:55.380 --> 00:03:57.920
+Seseorang mengomentari string koneksi lama, alih-alih menghapusnya.
+
+00:03:58.800 --> 00:03:59.120
+Selamat.
+
+00:03:59.120 --> 00:04:01.960
+Aplikasi Anda lalaci sampai digital berisi kunci indung.
+
+00:04:02.540 --> 00:04:04.000
+Penyerang menyukainya karena itu seperti beras mana.
+
+00:04:04.600 --> 00:04:07.580
+Dan jangan sebutkan apa yang terjadi ketika kontraktor mendapatkan akses baca kerepo Anda.
+
+00:04:08.020 --> 00:04:09.120
+Anda pikir mereka nyomong ambil kode.
+
+00:04:09.640 --> 00:04:10.780
+Poin penting di sini sedara anak-anak.
+
+00:04:11.400 --> 00:04:12.980
+Bahaya sebenarnya bukan hanya kebocahan kata sandi.
+
+00:04:13.440 --> 00:04:14.540
+Tapi cara rahasia itu berkemambian.
+
+00:04:14.940 --> 00:04:16.580
+Begitu Anda memasukkannya ke dalam konfigurasi,
+
+00:04:16.720 --> 00:04:20.320
+mereka mereplikasi ke seluruh lingkungan, cadangan skrip, dan dokumentasi, dan dokumentasi.
+
+00:04:20.320 --> 00:04:21.600
+Anda tidak dapat mengelola penyebaran itu.
+
+00:04:21.980 --> 00:04:24.140
+Anda tidak dapat menahannya dengan trik pengaburan yang cerdik.
+
+00:04:24.480 --> 00:04:25.540
+Itu bukan masalah yang bisa Anda tambah.
+
+00:04:25.540 --> 00:04:26.980
+Itu masalah yang harus Anda hilangkan.
+
+00:04:27.360 --> 00:04:28.940
+Berhentilah memikirkan di mana harus menyembunyikan.
+
+00:04:29.400 --> 00:04:31.120
+Sebaliknya berhentilah menggunakan kunci sama sekali.
+
+00:04:31.380 --> 00:04:32.040
+Itulah mengapa token Anda.
+
+00:04:32.620 --> 00:04:33.820
+Mereka tidak berlaku seperti kata sandi.
+
+00:04:34.200 --> 00:04:35.040
+Mereka tidak berumur panjang.
+
+00:04:35.440 --> 00:04:37.860
+Mereka tidak statis dan tidak tersimpan di file selama bertahun-tahun.
+
+00:04:38.040 --> 00:04:39.280
+Menantang orang yang salah untuk menemukannya.
+
+00:04:39.660 --> 00:04:41.260
+Obat untuk penyebaran kata sandi lebih baik?
+
+00:04:41.560 --> 00:04:41.860
+Baik.
+
+00:04:42.440 --> 00:04:45.180
+Obatnya adalah menggantinya dengan sesuatu yang hancur sendiri saat diselah gunakan.
+
+00:04:45.700 --> 00:04:47.540
+Token memungkinkan Anda melakukan hal itu.
+
+00:04:47.740 --> 00:04:49.700
+Dan Entra ID adalah sistem yang membagikannya.
+
+00:04:50.300 --> 00:04:51.960
+Oke, jika kita membuang kunci di bawah keset,
+
+00:04:51.960 --> 00:04:55.060
+bagaimana token tidak menjadi masalah yang lebih rumit bagi kita, para admin.
+
+00:04:55.660 --> 00:04:58.820
+Mari kita bahas mengapa token justru membuat hidup lebih mudah, bukan lebih sulit.
+
+00:04:59.580 --> 00:05:01.400
+Mengapa token selalu lebih unggul daripada kata sandi.
+
+00:05:01.820 --> 00:05:04.380
+Jika kata sandi adalah kunci mobil, token adalah tiket yang valid.
+
+00:05:04.860 --> 00:05:07.640
+Anda menggunakannya untuk sekali jalan dan tiket itu tidak berguna setelah perjalanan.
+
+00:05:08.100 --> 00:05:09.780
+Tidak ada yang bisa menyalahkan tiket file secara diam-diam.
+
+00:05:09.920 --> 00:05:11.780
+Dan jika mereka mencoba, seseorang akan langsung mengetahuinya.
+
+00:05:12.620 --> 00:05:13.440
+Itulah perbedaan mendasarnya.
+
+00:05:14.000 --> 00:05:14.780
+Kata sandi itu statis.
+
+00:05:15.240 --> 00:05:16.940
+Token bersifat sementara dan terbatas.
+
+00:05:16.940 --> 00:05:20.660
+Artinya jika bocor, dampaknya kecil dan waktunya terus berjalan sebelum ke dalam luar sah.
+
+00:05:21.960 --> 00:05:25.140
+Token itu di dunia Azure, aplikasi Anda menghubungi EntraID dan bertanya,
+
+00:05:25.220 --> 00:05:26.620
+Hey, bolehkah saya melakukan izin untuk melakukannya?
+
+00:05:27.480 --> 00:05:30.500
+EntraID memeriksa siapa atau apa yang meminta, memproses administrasinya,
+
+00:05:30.660 --> 00:05:32.840
+lalu memberikan paket yang ditandatangani yaitu token akses.
+
+00:05:33.120 --> 00:05:33.900
+Token tersebut berumur-umur.
+
+00:05:34.160 --> 00:05:36.080
+Token terikat pada identitas pengguna atau layanan.
+
+00:05:36.460 --> 00:05:37.940
+Token memiliki batasan pada apa yang bisa diaksesnya.
+
+00:05:38.320 --> 00:05:41.020
+Dan saat jendela waktunya habis token itu, tidak ada yang meresetnya.
+
+00:05:41.280 --> 00:05:41.940
+Tidak ada yang merotasi.
+
+00:05:42.360 --> 00:05:43.040
+Tokenannya begitu saja.
+
+00:05:43.460 --> 00:05:45.780
+Tentu saja saat Anda beritahu pengembangan tentang ini, reaksi pertama mereka.
+
+00:05:45.880 --> 00:05:47.940
+Kalau tidak, sekarang ada banyak token yang berputar-putar.
+
+00:05:47.940 --> 00:05:52.140
+Apakah kita harus mencacainya, menyimpannya, mengejar kode penyegaran, membangun logika pengganti?
+
+00:05:52.760 --> 00:05:54.000
+Jawabannya tidak, jangan khawatir.
+
+00:05:54.520 --> 00:05:56.840
+Pustaka identitas Microsoft menangani tugas teknis tersebut untuk Anda.
+
+00:05:57.340 --> 00:06:02.060
+SDK tersebut benar-benar mengambil, menyegarkan, dan membuang token layaknya petugas kebersihan yang merapikan acara.
+
+00:06:02.600 --> 00:06:03.820
+Anda tidak perlu menciptakan kembali omb.
+
+00:06:04.120 --> 00:06:08.000
+Anda cukup memanggil fungsinya dan fokus pada logika aplikasi Anda yang dibandingkan dengan cara lama.
+
+00:06:08.600 --> 00:06:11.820
+Kata Sandy Statis Ibarat memberikan kunci induk seluruh gedung kepada seseorang.
+
+00:06:12.220 --> 00:06:17.840
+Mereka tidak hanya bisa masuk ke lantai, mereka bisa masuk ke ruang eksekutif, ruang server, bahkan lemari jamilan di meja HR.
+
+00:06:18.500 --> 00:06:19.200
+Herang, mari lihat token.
+
+00:06:19.660 --> 00:06:23.340
+Token adalah kartu tamu yang hanya berlaku untuk lantai 3 dan mati pada pukul 7 belan.
+
+00:06:23.880 --> 00:06:28.400
+Jika seseorang mencoba menggunakannya setelah jam kerja, akses ditolak tanpa tebakan tanpa akses berkepanjang.
+
+00:06:28.760 --> 00:06:31.300
+Cakupannya disesuaikan dengan fungsi, bukan akses terbuka lebar yang tidak aman.
+
+00:06:31.960 --> 00:06:33.360
+Token juga memiliki kecerdasan di dalam.
+
+00:06:33.900 --> 00:06:34.880
+Pernahkah Anda membuka isi token?
+
+00:06:35.300 --> 00:06:36.400
+Rasanya seperti memeriksa kartu pasawat.
+
+00:06:36.980 --> 00:06:39.120
+Di dalamnya ada informasi penerbangan berkursi gerbang dan zona.
+
+00:06:39.420 --> 00:06:43.380
+Token menyimpan klaim, peran, cakupan, ID penyewa, bahkan info dasar pengguna.
+
+00:06:44.160 --> 00:06:46.700
+Itu berarti api Anda tidak hanya memercaya orang yang masuk.
+
+00:06:47.400 --> 00:06:51.380
+Ini memeriksa apakah orang ini ada di Departemen Keuangan, memiliki peran pembayaran, dan disetujui hari ini.
+
+00:06:52.240 --> 00:06:57.020
+Anda dapat membangun aturan yang jauh lebih ketat langsung ke dalam logika aplikasi tanpa mengelola 10 kumpulan kata sani berbeda.
+
+00:06:57.480 --> 00:06:58.300
+Ini perbandingan nyatanya.
+
+00:06:58.300 --> 00:07:03.080
+Suatu tempat kerja saya memiliki basis data yang dikunci hanya dikan kredisi SGL yang dikodikan permanen di mana-mana.
+
+00:07:03.720 --> 00:07:04.940
+Akun itu memiliki hak ases amin sistem.
+
+00:07:05.360 --> 00:07:10.060
+Seperti yang bisa diduga, seorang kontraktor menyalinnya ke sebuah alat dan bam seluruh basis data menjadi tempat bermain mereka.
+
+00:07:10.580 --> 00:07:11.360
+Tiap tabel tereksposi.
+
+00:07:12.120 --> 00:07:17.780
+Sekarang lihat sistem yang lebih baru menggunakan token yang dibatasi hanya untuk kebutuhan aplikasi, akses baca pada satu skema saja.
+
+00:07:18.720 --> 00:07:22.040
+Bahkan jika seseorang mencuri token itu, yang bisa mereka lakukan hanyalah memilih data.
+
+00:07:22.040 --> 00:07:23.620
+Dan hanya sampai token ke dalam warsah.
+
+00:07:24.020 --> 00:07:25.620
+Itu mengubah mimpi buruk menjadi gangguan kecil.
+
+00:07:26.480 --> 00:07:27.860
+Sekarang saya bisa mendengar berapa pengembang menurut.
+
+00:07:28.300 --> 00:07:30.860
+Token terdengar bagus secara teori tapi akan merusak alur kerja saya.
+
+00:07:31.360 --> 00:07:33.900
+Saya tidak punya waktu untuk memikirkan pembaruan atau keda luar secara mendetail.
+
+00:07:34.400 --> 00:07:34.960
+Itu hanya mitos.
+
+00:07:35.420 --> 00:07:37.200
+Tidak ada yang mengharapkan Anda untuk menyegarkannya secara manual.
+
+00:07:37.560 --> 00:07:42.540
+Pustaka yang sudah Anda gunakan di .NET atau Node mengambil token penyegaran, menukarnya secara tidak terlihat, dan terus berjalan.
+
+00:07:42.900 --> 00:07:45.400
+Anda bahkan tidak tahu itu terjadi kecuali Anda sedang menghenti paket data.
+
+00:07:45.860 --> 00:07:46.320
+Itulah intinya.
+
+00:07:46.780 --> 00:07:47.800
+Berhenti menjaga rahasia secara manual.
+
+00:07:48.260 --> 00:07:49.140
+Biarkan sistem yang menangani.
+
+00:07:49.440 --> 00:07:51.180
+Angkap enter ID sebagai kantor paspor.
+
+00:07:51.180 --> 00:07:56.440
+Anda datang, buktikan identitas Anda, dan mereka memberi cap ID yang dipercaya oleh penjaga perbatasan, yaitu api Anda.
+
+00:07:57.240 --> 00:07:58.460
+Cap ke dalam luar secara tidak bisa naik.
+
+00:07:58.940 --> 00:07:59.700
+Cap salah ditolak.
+
+00:08:00.120 --> 00:08:01.980
+Memusatkan pertanyaan identitas pada satu otoritas.
+
+00:08:02.440 --> 00:08:03.180
+Mereka kasih Anda tidak berdebat.
+
+00:08:03.480 --> 00:08:04.620
+Api Anda tidak menjaga kata sandi.
+
+00:08:05.180 --> 00:08:06.780
+Mereka hanya meriksa cap dan membiarkan Anda lep.
+
+00:08:06.780 --> 00:08:10.940
+Itu jauh lebih baik daripada menyulap selusin kunci misterius dan bertanya-tanya mana yang masih berlaku.
+
+00:08:11.880 --> 00:08:18.960
+Bagian terbaik bagi kita orang IT, tidak ada lagi rotasi kata sandi paksa setiap 90 hari, tidak ada lagi skrip yang berjalan pukul 3 pagi untuk mereset akun layanan.
+
+00:08:19.700 --> 00:08:24.380
+Tidak ada lagi perdebatan tentang apakah akan menyimpan rahasia di key vault atau hanya berharap semuanya aman.
+
+00:08:24.920 --> 00:08:27.540
+Token kedaluarsa dengan sendirinya dan kedaluarsa itu adalah jaring pengamanan.
+
+00:08:28.100 --> 00:08:29.840
+Jika ada yang bocor, itu pasti akan berhenti berfungsi.
+
+00:08:30.360 --> 00:08:31.120
+Anda tidak memperbaiki apa.
+
+00:08:31.580 --> 00:08:33.660
+Anda hanya membangun sistem yang pulih otomatis secara desek.
+
+00:08:33.660 --> 00:08:36.880
+Jadi ya, token menangani login pengguna dengan aman dan bersih?
+
+00:08:37.680 --> 00:08:38.000
+Bagus.
+
+00:08:38.420 --> 00:08:40.160
+Tapi ini bukan hanya soal pengguna mengklik masuk.
+
+00:08:40.620 --> 00:08:47.000
+Ujian sesungguhnya adalah saat aplikasi perlu berbicara dengan aplikasi lain atau layanan mengirim permintaan pukul 3 pagi tanpa ada manusia di dekat keyboard.
+
+00:08:47.560 --> 00:08:49.400
+Disatulah hal-hal berubah dan sekadar butuh menjadi sangat tipe.
+
+00:08:50.200 --> 00:08:52.820
+Perkenalkan identitas terkelola prinsip layanan tapi tidak konyol.
+
+00:08:53.460 --> 00:08:59.300
+Bayangkan jika aplikasi Anda bisa masuk ke layanan Azure tanpa mengetik kata sandi karena sudah memiliki identitas resmi sejak awal.
+
+00:09:00.180 --> 00:09:01.420
+Itu bukan fiksi ilmiah.
+
+00:09:01.720 --> 00:09:03.180
+Begitulah cara keidentitas terkelola aman dan cintit.
+
+00:09:03.660 --> 00:09:09.900
+Dan begitu Anda mulai menggunakannya, gagasan untuk mengelola servis prinsipal dengan secret yang kedaluarsa akan terasa kuno seperti membawa pager.
+
+00:09:11.280 --> 00:09:13.560
+Inilah kekacauan lama yang dulu kita alami yaitu servis prinsipal.
+
+00:09:14.140 --> 00:09:23.140
+Anda mendaftarkannya, membuat klien secret atau mungkin sertifikat, memasukkannya ke key vault lalu memberikan identitas itu ke aplikasi agar bisa melakukan hal seperti terhubung ke SQL atau penyimpanan.
+
+00:09:23.740 --> 00:09:25.020
+Di atas kertas itu terdengar baik.
+
+00:09:25.560 --> 00:09:28.320
+Credential tidak lagi dikodekan secara permanen, hubcode semuanya terpusat.
+
+00:09:28.320 --> 00:09:32.280
+Kenyataannya Anda seperti menjaga barang panas yang kedaluarsa setiap 1-2 tahun.
+
+00:09:32.980 --> 00:09:38.540
+Anda mengatur peringat outlook berjudul, jangan biarkan prod mati, namun tetap lupa sampai peringatan gangguan di hari minggu muncul.
+
+00:09:39.360 --> 00:09:45.040
+Dan jika Anda tidak sengaja mencatat secret ke konsol yang salah selamat, Anda baru saja memamerkan vault Anda di papan reklama.
+
+00:09:45.040 --> 00:09:48.520
+Memang vault lebih baik daripada string konfigurasi, tapi Anda masih harus makan juggling.
+
+00:09:48.980 --> 00:09:51.620
+Anda harus merotasi secret secara manual atau mengotomasikannya dengan script.
+
+00:09:52.300 --> 00:09:54.280
+Jika rotasi gagal, aplikasi Anda mati tanpa suara.
+
+00:09:54.640 --> 00:09:57.280
+Dan jangan berpura-pura bahwa kebanyakan tempat pernah mengunci rotasi di stage.
+
+00:09:57.740 --> 00:09:59.880
+Mereka hanya menunggu sampai hari di mana prod menolak untuk dimulai.
+
+00:10:00.220 --> 00:10:06.480
+Berapa banyak dari kita yang terbangun oleh tiket tidak bisa terhubung ke database hanya untuk menemukan bahwa string rahasia itu kedaluarsa pada tengah malam?
+
+00:10:07.640 --> 00:10:09.260
+Disitulah manager identity mengubah segalanya.
+
+00:10:09.620 --> 00:10:13.940
+Anda menjalankan resource, katakanlah Azure App Service Function atau VM lalu Anda cukup menekan saklar.
+
+00:10:13.940 --> 00:10:15.400
+Aktifkan managed identity.
+
+00:10:16.740 --> 00:10:20.580
+Di balik layar, Azure membuat objek identitas di enter ID yang dapat digunakan resource Anda.
+
+00:10:21.060 --> 00:10:23.000
+Tanpa string rahasia, tanpa tanggal pembaruan vault.
+
+00:10:23.640 --> 00:10:25.700
+Ini seperti versi aplikasi dari terakhir dengan bawa SIM.
+
+00:10:26.100 --> 00:10:27.600
+Anda tidak perlu membawa kartu kunci visi.
+
+00:10:28.080 --> 00:10:31.880
+Cloud sudah tahu siapa Anda dan menjamin Anda kapanpun Anda perlu berkomunikasi dengan resource lain.
+
+00:10:32.860 --> 00:10:33.580
+Pikirkan seperti ini.
+
+00:10:33.900 --> 00:10:36.100
+Dulu setiap aplikasi adalah remaja yang meminjam mobil ayat.
+
+00:10:36.560 --> 00:10:38.920
+Mereka harus membawa kunci kemana-mana dan jika kunci itu hilang, permanen.
+
+00:10:39.520 --> 00:10:43.560
+Dengan managed identity, aplikasi langsung mendapatkan SIM dan asuransi saat dibuat
+
+00:10:43.560 --> 00:10:46.400
+sehingga sekarang tidak perlu lagi meminta izin di tengah malam.
+
+00:10:47.260 --> 00:10:48.760
+Tidak ada kunci cadangan yang diselotip di bawah pang.
+
+00:10:49.220 --> 00:10:50.520
+Secara teknis, inilah yang terjadi.
+
+00:10:50.940 --> 00:10:53.200
+Aplikasi Anda memanggil layanan metadata instance,
+
+00:10:53.340 --> 00:10:56.000
+tautan aneh yang hanya ada di dalam VM dan layanan Azure.
+
+00:10:56.760 --> 00:10:58.440
+Dia berkata, hey saya butuh token untuk berbicara dengan es.
+
+00:10:59.200 --> 00:11:03.400
+Layanan metadata menjawab, oke saya tahu identitasmu karena kamu berjalan di dalam resource yang disetujui.
+
+00:11:04.440 --> 00:11:06.760
+Itu kan bertanda tangan yang berumur pendek langsung dari enter ID.
+
+00:11:06.760 --> 00:11:10.200
+Tidak perlu mengelola kredensial, rotasi, atau fog.
+
+00:11:10.900 --> 00:11:13.780
+Anda cukup mendapatkan JWT yang bisa dikirim ke SQL atau Storage
+
+00:11:13.780 --> 00:11:15.840
+dan target memvalidasinya melalui enter ID.
+
+00:11:16.380 --> 00:11:19.520
+Waktunya contoh, Anda punya aplikasi web yang perlu melakukan query ke database SQL.
+
+00:11:19.900 --> 00:11:22.940
+Pengaturan lama, Anda menyembunyikan username dan password SQL di keyfold,
+
+00:11:23.220 --> 00:11:24.560
+lalu aplikasi mengambilnya saat runtime.
+
+00:11:25.160 --> 00:11:28.180
+Anda menghabiskan separuh hidup Anda khawatir apakah itu sudah dirotasi dengan benar,
+
+00:11:28.180 --> 00:11:29.780
+apakah referensi keyfold berfungsi di staging,
+
+00:11:29.900 --> 00:11:31.720
+dan apakah pengembang menerapkan kebijakan yang tepat.
+
+00:11:33.020 --> 00:11:35.740
+Pengaturan baru, aktifkan managed identity untuk aplikasi web,
+
+00:11:35.740 --> 00:11:39.040
+tambahkan sebagai pengguna database di SQL dengan peran yang diperlukan, lalu selesai.
+
+00:11:39.680 --> 00:11:42.480
+Aplikasi meminta token ke Azure, menggunakannya di connection string,
+
+00:11:42.620 --> 00:11:44.100
+dan tidak pernah melihat password sama sekali.
+
+00:11:45.380 --> 00:11:47.260
+Tidak ada yang perlu dirotasi dan tidak ada yang bocor di lock.
+
+00:11:47.760 --> 00:11:48.760
+Anfaatnya menumpuk dengan cepat.
+
+00:11:49.420 --> 00:11:51.280
+Rahasia sepenuhnya hilang dari repo dan config,
+
+00:11:51.600 --> 00:11:54.360
+sehingga kemungkinan pengembang secara tidak sengaja mengunggah string sensitif
+
+00:11:54.360 --> 00:11:56.200
+berubah dari hampir pasti menjadi nyaris 0.
+
+00:11:57.320 --> 00:11:58.480
+Rotasi menjadi otomatis.
+
+00:11:58.860 --> 00:12:00.080
+Token ke dalam warsa dengan sendirinya.
+
+00:12:00.480 --> 00:12:02.140
+Tidak ada lagi kepanikan perpanjangan di tengah malam.
+
+00:12:02.760 --> 00:12:04.420
+Dan karena identitas adalah objek enter ID,
+
+00:12:04.420 --> 00:12:05.900
+Anda bisa memberikan hak akses paling minim.
+
+00:12:06.380 --> 00:12:09.160
+Aplikasi web Anda tidak perlu akses kontributor ke seluruh langganan Anda.
+
+00:12:09.520 --> 00:12:11.860
+Aplikasi hanya butuh akses baca ke satu kontainer penyimpanan.
+
+00:12:12.580 --> 00:12:13.780
+Anda membuat penetapan itu sekali,
+
+00:12:14.260 --> 00:12:15.240
+dan Azure yang menegakkannya.
+
+00:12:15.920 --> 00:12:18.200
+Intinya, managed identity mengubah komunikasi layanan
+
+00:12:18.200 --> 00:12:21.320
+dari berharap Anda tidak membocorkan kunci menjadi sistem yang langsung berfungsi.
+
+00:12:21.680 --> 00:12:24.100
+Mereka memberi Anda pengaturan default yang aman tanpa tugas pembersih.
+
+00:12:24.500 --> 00:12:26.700
+Ini adalah hal yang paling mendekati sihir dalam keamanan Azure.
+
+00:12:27.200 --> 00:12:30.080
+Tentu saja, ID hanya berguna jika direktori benar-benar mengenalinya
+
+00:12:30.080 --> 00:12:31.260
+dan mengetahui apa yang bisa dilakukan.
+
+00:12:31.260 --> 00:12:34.520
+Dan disitulah app registration berperan karena dokumen tetap penting
+
+00:12:34.520 --> 00:12:36.000
+bahkan untuk identitas cloud.
+
+00:12:37.000 --> 00:12:39.020
+App registration tanpa kehilangan kewarasan Anda.
+
+00:12:39.660 --> 00:12:41.920
+App registration adalah kantor samsatnya Enter ID.
+
+00:12:42.820 --> 00:12:44.920
+Tidak ada yang bangun tidur dengan semangat untuk mengurusnya,
+
+00:12:45.060 --> 00:12:47.060
+tapi tanpa dokumen itu Anda tidak akan bisa melaju kemana.
+
+00:12:47.060 --> 00:12:50.100
+Prosesnya membosankan, rumit, dan Anda benar-benar harus melakukannya.
+
+00:12:50.560 --> 00:12:51.520
+Ini adalah langkah catat biru ini.
+
+00:12:51.820 --> 00:12:55.260
+Ini yang memberi tahu Enter ID, bagaimana aplikasi Anda mengidentifikasi dirinya,
+
+00:12:55.500 --> 00:12:58.340
+apa yang mana yang bisa dihubungi, dan bagaimana yang bisa dihubungi, dan bagaimana ijit.
+
+00:12:58.820 --> 00:13:00.900
+Jika Anda melewatkannya atau membuatnya asal-asalan,
+
+00:13:01.040 --> 00:13:03.000
+Anda akan membangun aplikasi yang mungkin setelah tanya seberjalan,
+
+00:13:03.100 --> 00:13:04.680
+tapi mengabaikan setiap aturan keamanan yang ada.
+
+00:13:05.700 --> 00:13:07.380
+Dan seperti halnya melewatkan urusan kantor samsat,
+
+00:13:07.460 --> 00:13:08.700
+pada akhirnya seseorang akan menghentikan Anda.
+
+00:13:09.140 --> 00:13:12.400
+Pada dasarnya, app registration hanyalah kartu identitas untuk sebuah aplikasi.
+
+00:13:12.400 --> 00:13:15.100
+Ini menentukan bagaimana aplikasi bisa masuk,
+
+00:13:15.240 --> 00:13:18.720
+entah itu pengguna yang login dengan akun atau aplikasi itu sendiri yang bertindak sebagai identitas lain.
+
+00:13:19.420 --> 00:13:21.580
+Ini juga menyimpan izin dan titik akhir yang terlibat.
+
+00:13:22.080 --> 00:13:26.480
+Itu berarti cakupan, peran, URI pengalihan, dan cukup banyak birokrasi yang membuat Anda memutar mata.
+
+00:13:27.300 --> 00:13:29.200
+Namun birokrasi inilah alasan mengapa semuanya berfungsi.
+
+00:13:29.600 --> 00:13:32.540
+Tanpanya, Azure tidak tahu siapa yang harus dipercaya, dan API tidak tahu kapan harus mengakses.
+
+00:13:33.180 --> 00:13:35.800
+Bila bagian yang lain, ini tidak rumit sampai Anda melakukan bersalah.
+
+00:13:36.340 --> 00:13:37.660
+Salah memasukkan URI pengalihan,
+
+00:13:37.820 --> 00:13:40.240
+aplikasi Anda tiba-tiba terbuka seperti wahana karnaval tanpa sabuk pengam.
+
+00:13:40.240 --> 00:13:45.200
+Tertukar antara cakupan dan peran Anda baru saja memberikan hak istimewa 12 tingkat lebih tinggi dari yang dimaksudkan.
+
+00:13:45.860 --> 00:13:51.140
+Begitulah portal web yang seharusnya hanya membaca info profil akhirnya menulis ke kalender menghapus kontak dan menakuti petugas kepatuhan.
+
+00:13:52.220 --> 00:13:54.140
+Dan Microsoft Grab adalah ranjauh klasik di sini.
+
+00:13:54.600 --> 00:13:59.620
+Berapa banyak aplikasi yang ditemukan dengan akses baca tulis gerak penuh yang hanya diamankan oleh satu pendaftaran asal-asalan.
+
+00:13:59.900 --> 00:14:00.320
+Terlalu banyak.
+
+00:14:00.760 --> 00:14:01.640
+Mereka tidak membutuhkan semua.
+
+00:14:01.900 --> 00:14:03.380
+Mereka hanya butuh akses baca profil.
+
+00:14:03.380 --> 00:14:07.280
+Namun karena seseorang tidak berhenti untuk meriksa, mereka memberikan akses mode Tuhan versi pengembang.
+
+00:14:07.520 --> 00:14:08.560
+Mari kita singgirkan jargonnya.
+
+00:14:08.560 --> 00:14:11.620
+Cakupan adalah apa yang dapat dilakukan aplikasi atas nama pengguna.
+
+00:14:12.360 --> 00:14:14.500
+Peran adalah apa yang diizinkan untuk dilakukan oleh aplikasi itu.
+
+00:14:14.720 --> 00:14:15.760
+Bayangkan seperti sekolah.
+
+00:14:16.540 --> 00:14:17.600
+Cakupan adalah izin keluar kelas.
+
+00:14:18.200 --> 00:14:19.900
+Emilia boleh meninggalkan kelas untuk pergi ke perpusat.
+
+00:14:20.560 --> 00:14:21.600
+Peran adalah jabatan pekerja.
+
+00:14:22.020 --> 00:14:24.620
+Emilia adalah pusat kawan jadi dia diizinkan berada di belakang meja sirkulasi.
+
+00:14:25.480 --> 00:14:27.880
+Jika Anda mencampurnya, Anda memberi setiap siswa rencana staff.
+
+00:14:28.080 --> 00:14:31.000
+Tidak ada yang menginginkan lorong penur maja dengan akses ke ruang server.
+
+00:14:31.180 --> 00:14:33.300
+Tapi itulah yang diciptakan oleh pendaftaran aplikasi yang ceroboh.
+
+00:14:33.580 --> 00:14:34.600
+Dan kemudian ada alur persetujuan.
+
+00:14:34.600 --> 00:14:38.920
+Pengguna dan admin diminta untuk menyetujui apa yang diminta aplikasi pada saat masuk.
+
+00:14:39.340 --> 00:14:40.960
+Disinilah mata kebanyakan orang yang mengatakan.
+
+00:14:41.380 --> 00:14:42.200
+Tapi inilah kenyataannya.
+
+00:14:42.560 --> 00:14:44.360
+Permintaan persetujuan itu adalah jejak auditan.
+
+00:14:44.820 --> 00:14:47.200
+Permintaan itu memberitahu Anda apa yang diminta aplikasi dan siapa yang menyatakan.
+
+00:14:47.680 --> 00:14:49.940
+Jika Anda melatihkannya otomatik pengguna untuk asal terima,
+
+00:14:50.240 --> 00:14:54.840
+Anda pada dasarnya menjalankan sistem kepercayaan di pintu berangkas yang berarti Anda tidak lagi memiliki berangkas.
+
+00:14:55.420 --> 00:14:56.460
+Anda mengundang kekacauan.
+
+00:14:56.460 --> 00:14:59.280
+Ada langkah sederhana yang mencegah masalah,
+
+00:14:59.620 --> 00:15:02.700
+yaitu menggabungkan autentikasi mudah dengan pemeriksaan klaim nyata di dalam api Anda.
+
+00:15:03.660 --> 00:15:06.660
+Autentikasi mudah memungkinkan Anda mengatur autentikasi dengan hampir tanpa kode.
+
+00:15:07.060 --> 00:15:08.660
+Cukup nyalakan saklar dan pintu depan Anda berfungsi.
+
+00:15:09.080 --> 00:15:09.900
+Tapi jangan berhenti di situ.
+
+00:15:10.240 --> 00:15:12.180
+Bangun pemeriksaan klaim agar api Anda melihat token.
+
+00:15:12.920 --> 00:15:14.480
+Meriksa cakupan atau peran yang tertanam,
+
+00:15:14.780 --> 00:15:15.680
+lalu menegakkan aturan.
+
+00:15:16.260 --> 00:15:18.280
+Dengan begitu, meskipun seseorang meneruskan token,
+
+00:15:18.280 --> 00:15:21.480
+api itu sendiri memastikan hanya lorong yang tepat yang terbuka.
+
+00:15:21.480 --> 00:15:26.100
+Salah satu tempat yang pernah bekerjasama dengan saya menggunakan autentikasi mudah di portal internal tetapi melewatkan.
+
+00:15:26.920 --> 00:15:28.080
+Semuanya berjalan lancar,
+
+00:15:28.200 --> 00:15:31.100
+sampai seseorang menyalin token pengguna dan memanggil api secara langsung.
+
+00:15:31.620 --> 00:15:35.580
+Tidak ada dalam pengaturan mereka yang memvalidasi apakah pemanggil seharusnya mengakses endpoint tersebut.
+
+00:15:36.260 --> 00:15:38.900
+Saat mereka menyadarinya, separuh data tenang mereka sudah diakses.
+
+00:15:39.560 --> 00:15:41.780
+Menambahkan pemeriksaan peran sederhana seharusnya bisa menghentikannya.
+
+00:15:41.780 --> 00:15:43.740
+Aman tidak selalu berarti membutuhkan lebih banyak alat.
+
+00:15:44.000 --> 00:15:45.940
+Ini tentang menggunakan alat yang sudah Anda miliki dengan benar.
+
+00:15:46.660 --> 00:15:49.760
+Saat Anda mengonfigurasi pendaftaran aplikasi dengan cara yang benar, sesuatu yang ngecepat.
+
+00:15:49.760 --> 00:15:53.540
+Klien API sembarangan berhenti menyelinap masuk karena aturannya ketat,
+
+00:15:53.800 --> 00:15:56.120
+token tidak berbohong, dan persetujuan dicatat dengan benar.
+
+00:15:56.900 --> 00:15:58.640
+Aplikasi Anda hanya berkomunikasi dengan apa yang disini.
+
+00:15:59.200 --> 00:16:01.360
+Pengguna Anda hanya memberikan apa yang benar-benar dibutuhkan,
+
+00:16:01.780 --> 00:16:04.500
+dan repo Anda berhenti menjadi tempat pembuangan hak akses yang tidak disengaja.
+
+00:16:05.260 --> 00:16:07.320
+Jadi sekarang Anda memiliki pengguna yang masuk dengan benar,
+
+00:16:07.320 --> 00:16:10.460
+layanan dengan ID asli, dan API yang tidak terbuka lebar.
+
+00:16:11.100 --> 00:16:13.900
+Pertanyaan berikutnya adalah apa yang terjadi ketika sebuah aplikasi tidak hanya bertindak.
+
+00:16:14.240 --> 00:16:17.000
+Aplikasi perlu meniru pengguna atau menuruskan akses mereka ke bawah rantai.
+
+00:16:17.340 --> 00:16:18.640
+Disitulah keseruan yang sebenarnya dimukuk.
+
+00:16:19.140 --> 00:16:23.200
+Perlanggaran bulletin di M365 Show atau ikuti kami di halaman Liga M365 Show
+
+00:16:23.200 --> 00:16:25.820
+untuk siaran langsung bersama MVP yang telah melalui pengalaman ini
+
+00:16:25.820 --> 00:16:28.420
+dan memetik pelajaran berharga agar Anda tidak perlu mengalaminya.
+
+00:16:29.780 --> 00:16:31.820
+Meneruskan token tanpa memutuskan rantai.
+
+00:16:32.080 --> 00:16:37.100
+Pernah mencoba mengirim catatan di kelas hanya untuk ditulis ulang tiga atau empat kali sebelum akhirnya sampai ke guru.
+
+00:16:38.220 --> 00:16:42.300
+Separuh pesan hilang, seseorang mencore-core di pinggiran, dan pada akhirnya hampir tidak masuk akal.
+
+00:16:42.300 --> 00:16:46.300
+Begitulah rasanya meneruskan token pengguna jika Anda mengaturnya dengan salah.
+
+00:16:46.300 --> 00:16:50.140
+Anda pikir identitas pengguna terus berlanjut tetapi saat mencapai layanan terakhir,
+
+00:16:50.260 --> 00:16:53.280
+identitas itu tidak dapat dikenali atau lebih buruk lagi, ditolak sepenuhnya.
+
+00:16:54.180 --> 00:16:57.760
+Berikut ada skenerik terhadapi Anda memiliki pengguna yang masuk melalui aplikasi front-end.
+
+00:16:58.620 --> 00:17:00.920
+Aplikasi front-end tersebut tidak melakukan semua pekerjaan berat.
+
+00:17:01.260 --> 00:17:03.760
+Aplikasi tersebut memanggil API back-end lain untuk melakukan pekerjaan yang sebenarnya.
+
+00:17:04.140 --> 00:17:08.940
+Terdengar bagus, tetapi masalahnya adalah Anda masih memerlukan identitas pengguna asli untuk disertakan dalam permintaan.
+
+00:17:08.940 --> 00:17:12.720
+Jika tidak, API back-end hanya akan menebak siapa pemilik permintaan tersebut.
+
+00:17:13.240 --> 00:17:14.100
+Jadi delegasi harus diubah.
+
+00:17:14.540 --> 00:17:19.320
+Front-end membuktikan siapa penggunanya, meneruskan konteks tersebut ke bawah, dan back-end menjaga alur tersebut tetap utuh.
+
+00:17:19.740 --> 00:17:23.740
+Sederhana dalam teori, namun dalam prakteknya ini adalah ladang ranjau, karena disinilah masalah sering terjadi.
+
+00:17:23.920 --> 00:17:27.740
+Jika Anda hanya meneruskan token akses asli secara langsung, Anda akan menghadapi masalah double hop.
+
+00:17:27.940 --> 00:17:32.740
+Token diterbitkan untuk aplikasi A memanggil sumber daya X, namun aplikasi A mencoba menggunakan token yang sama untuk memanggil aplikasi B.
+
+00:17:32.740 --> 00:17:37.840
+Aplikasi B melihat ketidak cocokan tersebut dan berkata tidak cocokan tersebut dan berkata tidak, token tidak valid bagi saya, tidak, token tidak valid bagi saya.
+
+00:17:38.400 --> 00:17:44.760
+Dan tiba-tiba pengalaman pengguna Anda yang rapi berantakan menjadi permintaan tambahan, klaim yang rusak, atau lebih buruk lagi pop-up persetujuan lainnya bagi pengguna yang saya masuk.
+
+00:17:45.380 --> 00:17:49.980
+Tidak ada yang menghancurkan kepercayaan lebih cepat daripada antren pengguna yang berpikir, bukankah saya sudah mengizinkan ini kemarin?
+
+00:17:50.860 --> 00:17:52.520
+Cara yang tepat untuk perbaikinya bukan yang seluruh sesuatu.
+
+00:17:53.260 --> 00:17:58.060
+Anda perlu menggunakan alur O-AWT 2.0 on behalf of atau OBO jika Anda menyukai akronim yang lebih singkat.
+
+00:17:58.060 --> 00:18:02.380
+Ide-nya cukup sederhana. Setiap layanan tidak hanya meneruskan token asli.
+
+00:18:02.900 --> 00:18:09.020
+Layanan tersebut mengambil token yang masuk, membuktikannya ke entry ID, lalu menukarnya dengan token baru yang valid untuk API berikutnya dalam antrean.
+
+00:18:09.520 --> 00:18:14.040
+Ini seperti pengguna memberikan izin masuk ke layanan pertama, dan alih-alih mencoba menyelinap melalui setiap pintu.
+
+00:18:14.480 --> 00:18:17.940
+Layanan tersebut menukarnya di kantor untuk mendapatkan izin yang tepat ke izin yang tepat ke loangkutnya.
+
+00:18:18.720 --> 00:18:22.280
+Setiap lompatan, mendapatkan token yang dicakup keperannya, dan keamanan tetap utuh.
+
+00:18:22.680 --> 00:18:26.300
+Sekarang, jika Anda telah membangun ini secara manual, Anda tahu rasanya seperti bermain pisau.
+
+00:18:26.300 --> 00:18:29.700
+Mengoper token, menangani penyegaran, dan menukarnya di titik yang tepat.
+
+00:18:30.500 --> 00:18:32.760
+Untungnya middleware seperti Easy Out membuat ini menjadi dapat ditolongan.
+
+00:18:33.300 --> 00:18:39.560
+Easy Out melakukan bagian yang membosankan, menyimpan token, menyegarkannya, dan menawarkan panggilan bantuan untuk mengambilnya sesuai permintaan.
+
+00:18:40.360 --> 00:18:46.000
+Alih membuat peretasan aneh yang mendorong token melalui header dan berdoa agar tidak ada yang bocor ke loang, Anda membiarkan middleware yang mengambil alih tugas mal.
+
+00:18:46.360 --> 00:18:53.000
+Anda menghindari tim pengembang Anda membangun solusi custom yang mencatat token dalam teks biasa untuk debugging dan kemudian lupa untuk menghapusnya.
+
+00:18:53.000 --> 00:18:54.580
+Itu adalah risiko yang tidak bisa endepik.
+
+00:18:54.580 --> 00:19:06.820
+Meneruskan token mentah secara membagi buta seperti menyalin SIM Anda dan membagikannya di setiap pintu, jeep, terlalu banyak informasi pribadi berakhir di tempat yang tidak seharusnya dan tiba-tiba siapapun yang menciptakan permintaan tersebut mendapatkan jauh lebih banyak dari yang seharusnya.
+
+00:19:07.320 --> 00:19:12.280
+Hal itu tidak hanya berisiko membocorkan data identitas yang sebenarnya, tetapi juga meratakan batas keamanan.
+
+00:19:13.080 --> 00:19:17.860
+AP tidak lagi mampu menarik garis yang jelas antara siapa pengguna tersebut dan apa yang seharusnya dipercayakan kepada layanan.
+
+00:19:17.860 --> 00:19:21.940
+Hasilnya, Anda memberikan izin berlebihan atau memblokir panggilan yang sah.
+
+00:19:22.560 --> 00:19:23.400
+Keduanya adalah mimpi bu.
+
+00:19:23.660 --> 00:19:26.360
+Satu, membocorkan data yang melalui menenggelamkan meja bantuan Anda dengan keluar.
+
+00:19:26.780 --> 00:19:27.620
+Mari kita baca yang jelas.
+
+00:19:28.160 --> 00:19:29.760
+Seorang pengguna masuk ke aplikasi web frontend.
+
+00:19:30.220 --> 00:19:36.840
+Aplikasi tersebut memanggil AP yang dilindungi, tetapi alih-alih meneruskan token akses mentah yang menggunakan OB untuk mendapatkan token baru yang valid khusus untuk AP tersebut.
+
+00:19:36.840 --> 00:19:38.580
+Sekarang AP menginginkan beberapa data dari SQL.
+
+00:19:38.980 --> 00:19:39.240
+Sumpet.
+
+00:19:39.600 --> 00:19:42.300
+Hal itu bukan urusan langsung pengguna, jadi AP tidak meneruskan apapun.
+
+00:19:43.340 --> 00:19:49.920
+API mengambil token sistem melalui identitas terkelola, terhubung ke SQL, menjalankan query, dan hanya mengembali hasil yang diperlukan.
+
+00:19:50.580 --> 00:19:52.520
+Di setiap tahapan, konteks identitasnya jelas.
+
+00:19:53.260 --> 00:19:56.040
+Pengguna untuk aplikasi dan API identitas sistem untuk basis data.
+
+00:19:56.780 --> 00:19:59.600
+Tiap token memiliki cakupan, berumur pendek, dan dapat diverifikasi.
+
+00:20:00.320 --> 00:20:01.160
+Keuntungan di sini sangat besar.
+
+00:20:01.620 --> 00:20:03.980
+Layanan saling terhubung tanpa mengacaukan sinyal identitas.
+
+00:20:03.980 --> 00:20:06.940
+Pengguna tidak akan dibanjiri permintaan persetujuan tambahan.
+
+00:20:07.220 --> 00:20:12.660
+API Anda menegakkan klaim yang tepat tanpa kebingungan, dan Anda menghindari penggunaan kunci mentah di jaringan yang tidak semestinya.
+
+00:20:13.420 --> 00:20:15.240
+Oh bukan soal kerja ekstra, melainkan menjaga.
+
+00:20:15.580 --> 00:20:18.680
+Antai kepercayaan tetap utuh dari front end ke back end, hingga ke basis data.

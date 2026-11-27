@@ -1,0 +1,727 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.440
+Klaar voor 12 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.960 --> 00:00:12.340
+Deze januari is M365, kom terug en pakken we groter uit.
+
+00:00:12.940 --> 00:00:18.520
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts wereldwijd.
+
+00:00:18.800 --> 00:00:21.560
+Geen algemene slides, geen eindeloze modewoorden.
+
+00:00:21.860 --> 00:00:23.660
+We pakken de echte uitdagingen aan.
+
+00:00:23.860 --> 00:00:29.060
+Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.060 --> 00:00:34.800
+Of je nu IT-pro, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.240 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.820 --> 00:00:44.060
+Kijk live en neem praktische inzichten mee terug naar je eigen organisatie.
+
+00:00:44.920 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.700 --> 00:00:51.200
+Registratie is nu geopend.
+
+00:00:51.920 --> 00:00:55.900
+Ga naar m365com.net en verzeker vandaag nog van je plek.
+
+00:00:56.180 --> 00:00:58.920
+Dat is m365com.net.
+
+00:00:59.060 --> 00:01:04.800
+Meld je nu aan op m365com.net en we zien je live in januari.
+
+00:01:04.800 --> 00:01:13.840
+Als jouw Microsoft 365 tenant communiceert met Dynamics 365, Azure en diverse andere SaaS tools, is het aanvalsoppervlak groter dan je denkt.
+
+00:01:14.060 --> 00:01:21.060
+Het enge is dat de meeste Zero Trust implementaties focussen op één product en het domino effect op verbonden systemen negeren.
+
+00:01:21.060 --> 00:01:30.660
+In de komende minuten bespreken we waarom dat een probleem is en hoe Zero Trust by Design jouw M365 en D365 omgeving als één geheel beschouwt.
+
+00:01:31.120 --> 00:01:35.600
+Want één muur repareren in een gebouw met meerdere kamers helpt niet als het dak in brand staat.
+
+00:01:35.860 --> 00:01:37.620
+Zero Trust is meer dan alleen MFA.
+
+00:01:37.900 --> 00:01:41.740
+De meesten denken dat ze Zero Trust zijn zodra MFA voor iedereen is ingeschakeld.
+
+00:01:41.740 --> 00:01:43.320
+Het voelt als een grote overwinning.
+
+00:01:43.560 --> 00:01:49.040
+Elke gebruiker krijgt een prompt, elke aanmelding vereist die tweede factor en op papier lijkt de omgeving veilig.
+
+00:01:49.220 --> 00:01:51.520
+Het probleem is dat de inspanning hier vaak stopt.
+
+00:01:51.680 --> 00:02:00.080
+M365 krijgt alle aandacht tijdens de uithol, maar verbonden platformen zoals Dynamics 365 draaien zelfstandig door, vaak met andere regels of helemaal geen.
+
+00:02:00.260 --> 00:02:03.640
+Dat is niet alleen onvolledig, het creëert een vals gevoel van veiligheid.
+
+00:02:03.860 --> 00:02:05.640
+Dit is hoe dat er in de praktijk uitziet.
+
+00:02:05.640 --> 00:02:11.520
+Een beheerder besteedt weken aan het bouwen en testen van voorwaardelijke toegang voor SharePoint, Teams & Exchange Online.
+
+00:02:11.720 --> 00:02:18.300
+Ze dwingen MFA af bij alle aanmeldingen, blokkeren verouderde authenticatie en voelen zich zelfverzekerd dat de tenant is vergrendeld.
+
+00:02:18.480 --> 00:02:24.600
+Maar D365 staat erbij, vertrouwend op Azure AD voor authenticatie, maar zonder dezelfde beleidsomvang.
+
+00:02:24.760 --> 00:02:33.820
+Een gebruiker die inlogt op een D365-omgeving via een opgeslagen bladwijzer, doorloopt mogelijk nooit dezelfde voorwaardelijke toegang en de beheerder merkt niets tot het misgaat.
+
+00:02:33.820 --> 00:02:35.820
+Dit is waar het gatje geld begint te kosten.
+
+00:02:36.120 --> 00:02:39.460
+Stel dat iemands inloggegevens gestolen worden via een phishing-campagne.
+
+00:02:39.660 --> 00:02:42.000
+De aanvaller probeert eerst in te loggen op SharePoint.
+
+00:02:42.200 --> 00:02:45.500
+MFA treedt in werking, ze falen en je denkt dat het probleem is opgelost.
+
+00:02:45.660 --> 00:02:51.480
+Maar omdat de voorwaardelijke toegangsregels van D365 niet zijn afgestemd op die van M365,
+
+00:02:51.680 --> 00:02:55.900
+kan dezelfde aanvaller direct verbinding maken met de financiële module in Dynamics en zo naar binnen lopen.
+
+00:02:56.120 --> 00:02:58.960
+De MFA-muur staat er wel, alleen niet voor elke deur.
+
+00:02:59.140 --> 00:03:03.240
+Plotseling is de verenigde verdediging waarvan je dacht dat die stond, in feite gefragmenteerd.
+
+00:03:03.240 --> 00:03:07.080
+In één voorbeeld dat we zagen, liet een verkeerd afgesteld beleid precies dat toe.
+
+00:03:07.240 --> 00:03:12.280
+Het SharePoint-account van een gebruiker was beschermd door strikte inlogvereisten, maar de Dynamics-toegang niet.
+
+00:03:12.460 --> 00:03:18.960
+De aanvaller omzeilde SharePoint volledig, ging naar Dynamics, draaide een rapport en exporteerde gevoelige betaalgegevens van klanten.
+
+00:03:19.160 --> 00:03:21.600
+Vanuit het perspectief van de gebruiker leek er niets aan de hand.
+
+00:03:21.800 --> 00:03:24.500
+Ze kregen niet eens een melding dat hun account elders was geopend.
+
+00:03:24.720 --> 00:03:29.960
+De aanval was mogelijk, niet omdat MFA zwak was, maar omdat het niet consistent werd afgedwongen waar dat wel had gemoeten.
+
+00:03:29.960 --> 00:03:35.680
+Microsoft's eigen positionering maakt duidelijk, Zero Trust is niet gewoon MFA aanzetten en klaar.
+
+00:03:35.980 --> 00:03:43.020
+Het is een raamwerk gebouwd op het continu valideren van identiteit, verifiëren van apparaat compliance en inspecteren van de sessiecontext.
+
+00:03:43.220 --> 00:03:46.160
+MFA is slechts één onderdeel van de identiteitspijler.
+
+00:03:46.340 --> 00:03:50.840
+Als die pijler niet op elke verbonden dienst wordt toegepast, is het geen betrouwbare controle.
+
+00:03:50.840 --> 00:03:59.520
+En in een verbonden omgeving zoals M365 en D365 hoeven aanvallers maar één dienst te vinden waar de controle niet wordt afgedwongen.
+
+00:03:59.660 --> 00:04:02.420
+We werkten met een team dat deze Lee op de harde manier leerde.
+
+00:04:02.620 --> 00:04:10.820
+Het M365-account van de CFO had MFA en het IT-team was streng op één mailtoegang, maar Dynamics 365 was anders geconfigureerd.
+
+00:04:10.980 --> 00:04:17.460
+De aanvaller kreeg toegang tot het account van de CFO via een gestolen refresh token van een minder beveiligde mobiele app van derde.
+
+00:04:17.460 --> 00:04:23.500
+M365-toegang werd geblokkeerd, maar tokenhergebruik in Dynamics werd niet getriggerd door hetzelfde risicobeleid.
+
+00:04:23.680 --> 00:04:28.520
+Ze genereerden frauduleuze facturen in de financiële module en sluisten die door de normale goedkeuringstroom.
+
+00:04:28.720 --> 00:04:31.540
+Tegen de tijd dat het incident werd ontdekt, was het geld al weg.
+
+00:04:31.740 --> 00:04:35.460
+Elke evaluatie na het incident wees naar dezelfde hoofdoorzaak, beleidsinconsistentie.
+
+00:04:36.180 --> 00:04:42.940
+Het is niet dat MFA faalt, het is dat de randen tussen geïntegreerde Microsoft-diensten vaak de plekken zijn waar beleid niet op elkaar aansluit.
+
+00:04:43.200 --> 00:04:47.420
+Gebruikers wisselen zonder erbij na te denken tussen SharePoint, Outlook, OneDrive.
+
+00:04:47.460 --> 00:04:49.540
+Dynamics en andere verbonden SaaS-apps.
+
+00:04:49.680 --> 00:04:52.960
+Aanvallers weten dit en testen welke deur het zwakste slot heeft.
+
+00:04:53.220 --> 00:05:01.020
+Daarom draait Zero Trust by Design minder om een enkele controle en meer om ervoor te zorgen dat elk toegangspunt zonder uitzondering dezelfde standaarden afdwingt.
+
+00:05:01.240 --> 00:05:08.340
+Regels voor voorwaardelijke toegang, apparaatcontroles, sessiebeheer, ze moeten allemaal deel uitmaken van een uniforme, afgedwongen basislijn.
+
+00:05:08.340 --> 00:05:19.140
+Wanneer elke Microsoft-dienst hetzelfde niveau van controle toepast en identiteit, apparaat en sessiecontext bij elke interactie valideert, sluit je de achterdeurtjes waar aanvallers naar zoeken.
+
+00:05:19.480 --> 00:05:26.820
+De MFA-vraag in M365 stelt niets voor als D365 dezelfde gebruiker vijf seconden later geruisloos doorlaat.
+
+00:05:26.820 --> 00:05:35.400
+Het doel is dat elke transactie, elke lock-in en elke API-aanroep dezelfde controles ondergaat, ongeacht welk product wordt gebruikt.
+
+00:05:35.700 --> 00:05:42.880
+Als afstemming tussen werklasten de eerste stap is, vindt de echte verandering pas plaats wanneer dit beleid in real-time met elkaar communiceert.
+
+00:05:43.100 --> 00:05:46.960
+Dat is waar Zero Trust verandert van een checklist-item naar een actieve verdediging.
+
+00:05:46.960 --> 00:06:00.120
+Wanneer systemen met elkaar gaan praten, wat als het beleid voor voorwaardelijke toegang in Microsoft 365 direct een beveiligingsreactie in Dynamics 365 zou activeren, zonder regels te dupliceren of handmatig te synchroniseren.
+
+00:06:00.480 --> 00:06:03.440
+Dat is niet de standaardrealiteit voor de meeste omgevingen.
+
+00:06:04.260 --> 00:06:07.500
+Meestal dwingt elk systeem zijn eigen regels geïsoleerd af.
+
+00:06:07.500 --> 00:06:18.100
+M365 kan MFA eisen bij riskante aanmoldingen, terwijl D365 functionaliteit enkel toestaat of weigert op basis van rollen in het eigen model.
+
+00:06:18.580 --> 00:06:24.840
+Beide gebruiken dezelfde Azure AD-identiteiten, maar ze delen niet noodzakelijkerwijs dezelfde live risicogegevens met elkaar.
+
+00:06:25.120 --> 00:06:31.440
+Deze geïsoleerde aanpak betekent dat je het ene platform perfect kunt beveiligen, terwijl er in het andere blinde vlekken blijven.
+
+00:06:31.440 --> 00:06:32.700
+Denk er maar eens over na.
+
+00:06:32.700 --> 00:06:39.140
+Je M365 ten ene ziet om twee uur een aanmelding vanaf een Tor exit note, markeert het account als hoog risico en blokkeert de toegang.
+
+00:06:39.320 --> 00:06:45.480
+Maar Dynamics zou, tenzij de eigen controles gekoppeld zijn aan datzelfde real-time risicosignaal, de sessie gewoon kunnen voortzetten.
+
+00:06:45.680 --> 00:06:51.020
+Het token van de gebruiker kan nog steeds geldig zijn voor Dynamics, ondanks de blokkering in M365.
+
+00:06:51.020 --> 00:06:58.500
+Nu heb je een situatie waarin het ene deel van je omgeving het account als gecompromitteerd beschouwd, terwijl het andere deel gewoon een factuur goedkeurt.
+
+00:06:58.500 --> 00:07:04.620
+De gemiste kans is dat beleid- en risicoscores niet direct over beide omgevingen worden verspreid.
+
+00:07:05.180 --> 00:07:12.320
+Microsoft biedt hiervoor de basis met Azure AD Conditional Access en op rollen gebaseerde beveiliging in D365.
+
+00:07:12.840 --> 00:07:21.420
+Conditional Access evalueert aanmeldingen in real-time op risico met signalen zoals onbekende locaties, onmogelijke reispatronen of bekende kwaadaardige IP-reeksen.
+
+00:07:21.420 --> 00:07:27.420
+Op rollen gebaseerde beveiliging in Dynamics bepaalt vervolgens tot op veldniveau wat de gebruiker kan doen zodra deze is ingelogd.
+
+00:07:28.100 --> 00:07:31.540
+Wanneer die tweelagen gescheiden blijven, ontstaan er hiaten in het beleid.
+
+00:07:31.680 --> 00:07:40.220
+Maar wanneer ze verbonden zijn, kan een verhoogde risicovlag in Azure AD direct de mogelijkheden van datzelfde account in Dynamics aanpassen, zonder tussenkomst van de gebruiker.
+
+00:07:40.440 --> 00:07:41.860
+Stel je dit voor in de praktijk.
+
+00:07:42.060 --> 00:07:44.780
+Een verkoper logt in vanaf een ongebruikelijke locatie.
+
+00:07:44.780 --> 00:07:52.300
+Azure AD markeert hen als medium risico en past een voorwaardelijk beleid toe dat extra authenticatie vereist voor gevoelige acties.
+
+00:07:52.800 --> 00:07:59.800
+Dynamics 365 negeert die context niet, maar gebruikt de risicostatus van Azure AD om automatisch functies te vergrendelen,
+
+00:08:00.040 --> 00:08:04.940
+zoals het exporteren van klantlijsten of het wijzigen van prijsgegevens, totdat de sessie is geverifieerd.
+
+00:08:05.100 --> 00:08:11.480
+De handhaving vindt in real-time plaats en is niet afhankelijk van iemand die handmatig een wijziging doorvoert of dezelfde logica twee keer opnieuw opbouwt.
+
+00:08:11.480 --> 00:08:15.380
+Het is een beetje als twee beveiligers bij twee verschillende deuren van je kantoor.
+
+00:08:15.560 --> 00:08:20.860
+De een ziet iemand na werktijd binnenkomen, houdt diegene tegen en waarschuwt de andere beveiliger om alert te zijn.
+
+00:08:21.080 --> 00:08:27.680
+Als die beveiligers niet met elkaar praten, kan de tweede persoon de bezoeker vrolijk binnenlaten via de zijingang terwijl de eerste nog het incident aan het noteren is.
+
+00:08:27.900 --> 00:08:33.220
+Zonder cross-surface signalen is dat precies wat er kan gebeuren tussen M365 en D365.
+
+00:08:33.420 --> 00:08:36.360
+De ene deur zit op slot, maar de andere staat wagenwijd open.
+
+00:08:36.360 --> 00:08:45.080
+Technisch gezien komt dit soort integratie erop neer dat risicosignalen uit Azure AD direct naar D365 kunnen stromen en onderdeel worden van de toegangsbeslissingen.
+
+00:08:45.280 --> 00:08:52.240
+Real-time claims over gebruikersrisico, apparaat compliance of locatie kunnen worden opgenomen in het token dat aan Dynamics wordt gepresenteerd.
+
+00:08:52.500 --> 00:08:58.520
+Vervolgens dwingt Dynamics beperkingen op rolniveau af of weigert het specifieke acties op basis van die claims.
+
+00:08:59.840 --> 00:09:05.940
+Dit verkort de tijd die een aanvaller heeft om een gecompromitteerd account te misbruiken van uren of zelfs dagen tot seconden.
+
+00:09:05.940 --> 00:09:12.800
+Het betekent ook dat je beveiligingsbeleid geen statische documenten meer zijn, maar gaan fungeren als een gedeeld zenuwstelsel over alle platforms heen.
+
+00:09:12.980 --> 00:09:22.080
+Wanneer toegangsbeslissingen in Dynamics exact dezelfde live beveiligingsstatus weerspiegelen als die Microsoft 365 ziet, worden je verdedigingslinies gecoördineerd in plaats van parallel.
+
+00:09:22.380 --> 00:09:25.640
+Die coördinatie is wat de micro-gaten dicht waar aanvallers op vertrouwen.
+
+00:09:25.860 --> 00:09:31.740
+Ze kunnen niet langer zijwaarts bewegen tussen diensten zonder dezelfde alarmen te activeren en op dezelfde blokkades te stuiten in elke dienst.
+
+00:09:31.740 --> 00:09:40.420
+Maar voordat je dat niveau van real-time signaaluitwisseling kunt inschakelen, moet je ervoor zorgen dat de identiteiten zelf gestructureerd zijn op een manier die logisch is voor beide systemen.
+
+00:09:40.660 --> 00:09:49.620
+Dat betekent ze zo segmenteren dat elke rol, elk type data toegang en elk risicoprofiel overzichtelijk beheerd kan worden zonder de werkelijke werkprocessen te verstoren.
+
+00:09:51.320 --> 00:09:53.560
+Identiteitssegmentatie zonder werkstromen te onderbreken.
+
+00:09:53.560 --> 00:09:59.780
+Iedereen praat over het beveiligen van identiteiten, maar weinigen willen onderzoeken hoe je dat doet zonder de productiviteit te schaden.
+
+00:10:00.740 --> 00:10:03.940
+Identiteitssegmentatie gaat er niet om dat mensen voor elke klik door hoepels moeten springen.
+
+00:10:04.080 --> 00:10:16.480
+Het gaat er om toegang zo in te richten dat wordt erkend dat niet alle gebruikers, data of acties hetzelfde risiconiveau met zich meebrengen en vervolgens controles toe te passen die die realiteit weerspiegelen in Microsoft 365 en Dynamics 365.
+
+00:10:16.480 --> 00:10:25.160
+In de praktijk betekent dit het definiëren van duidelijke grenzen tussen groepen op basis van wat ze doen, de gevoeligheid van wat ze verwerken en het risico dat ze vertegenwoordigen.
+
+00:10:25.340 --> 00:10:30.800
+Het is het verschil tussen elke gebruiker een loper geven of alleen de specifieke sleutels die ze echt nodig hebben.
+
+00:10:31.200 --> 00:10:39.940
+In M365 en D365 neemt deze segmentatie meestal de vorm aan van op rollen gebaseerde toegangstoewijzingen die gekoppeld zijn aan specifieke workloads.
+
+00:10:39.940 --> 00:10:52.980
+Een marketingcoördinator heeft wellicht alleen Teams, SharePoint en alleen lezen toegang tot klantgegevens in Dynamics nodig, terwijl iemand van financiën betalingen moet kunnen goedkeuren en gevoelige rapporten moet kunnen opvragen.
+
+00:10:54.000 --> 00:10:58.380
+Het principe is simpel. Hoe bevoorrechter de actie, hoe strenger de controle is.
+
+00:10:59.100 --> 00:11:04.920
+De uitdaging is om dit te doen zonder dat elke aanmelding een leidensweg wordt of dagelijkse taken frustrerend maakt.
+
+00:11:04.920 --> 00:11:08.900
+Dat is het punt waar beheerders zenuwachtig van worden. De angst is als volgt.
+
+00:11:08.900 --> 00:11:17.960
+Als we voor elke rol aparte authenticatiepaden gaan creëren, krijgen gebruikers constant verzoeken, vertragen workflows en zullen Teams hevig protesteren.
+
+00:11:19.340 --> 00:11:32.520
+Je voert verschillende multifactorverijsten in voor sales en financiën en plotseling hangt de helft van je salesteam aan de lijn met IT omdat ze tijdens een klantgesprek niet bij een voorstel kunnen of financiën startteams om samen aan een budget te werken,
+
+00:11:32.820 --> 00:11:36.180
+maar hun uitgebreide inlogproces treedt bij elke chat in werking.
+
+00:11:36.180 --> 00:11:46.860
+Maar de keerzijde is erger. Zonder segmentatie heeft een aanvaller die het account van diezelfde marketingcoördinator overneemt een veel makkelijkere weg om zich zijwaarts naar waardevolle gegevens te verplaatsen.
+
+00:11:47.060 --> 00:11:49.620
+Daarom is het doel niet om het inloggen voor iedereen moeilijker te maken.
+
+00:11:49.840 --> 00:11:54.500
+Het doel is om gevoelige zaken moeilijker toegankelijk te maken, terwijl acties met een laag risico soepel blijven verlopen.
+
+00:11:54.700 --> 00:11:56.060
+Hier is een voorbeeld dat werkt.
+
+00:11:56.060 --> 00:12:00.980
+Verkoopmedewerkers loggen in met standaard MFA voor dagelijkse tools zoals Teams en Outlook.
+
+00:12:01.180 --> 00:12:10.700
+Financiële gebruikers hebben dezelfde basisinlog, maar krijgen een extra authenticatievraag wanneer ze overboekingen in Dynamics willen goedkeuren of gedetailleerde financiële gegevens in Power BI willen exporteren.
+
+00:12:10.700 --> 00:12:21.700
+Op de achtergrond vertelt Privileged Identity Management, PIM, aan Dynamics om die financiële rollen, Just-in-Time, verhoogde rechten te geven voor die acties, rechten die automatisch verlopen na gebruik.
+
+00:12:22.720 --> 00:12:28.840
+Op die manier wordt financiën niet gehinderd tijdens routinewerk, maar is er wel een drempel voor risicovollere operaties.
+
+00:12:29.100 --> 00:12:35.460
+Wanneer je segmentatie aanbrengt via PIM en Just-in-Time toegang, begin je permanente privileges volledig uit accounts te verwijderen.
+
+00:12:35.460 --> 00:12:42.280
+In plaats van dat een financieel manager altijd factuurgenemigingsrechten heeft, heeft hij deze alleen voor het uur dat hij nodig heeft om de maandelijkse betalingen te verwerken.
+
+00:12:42.500 --> 00:12:51.800
+Zelfs als hun inloggegevens gestolen zouden worden, zou de aanvaller de inbreuk precies moeten timen met het toegangsvenster, en dan nog moet hij de contextuele controles op apparaat compliance en locatie doorstaan.
+
+00:12:52.240 --> 00:12:55.460
+Dit vertalen naar dagelijkse taken is waar het ontwerpwerk plaatsvindt.
+
+00:12:56.140 --> 00:13:04.060
+Een salesgebruiker zit misschien de hele dag in Teams te chatten, springt in SharePoint voor voorstellen en bekijkt af en toe CRM gegevens in Dynamics.
+
+00:13:04.060 --> 00:13:09.640
+Niets daarvan vereist intensieve authenticatie, tenzij ze proberen financiële gegevens aan te passen.
+
+00:13:09.800 --> 00:13:18.960
+Een financiële gebruiker leeft wellicht in Power BI dashboards en de Dynamics financiële module, maar ze hebben geen verhoogde rechten nodig om in een Teams kanaal samen te werken.
+
+00:13:19.160 --> 00:13:27.000
+Je definieert deze grenzen in beleidsregels, zodat de gangbare workflows van elke rol snel blijven, terwijl gevoelige acties strikt beveiligd zijn.
+
+00:13:27.260 --> 00:13:32.740
+Denk aan het hebben van verschillende sleutels voor diverse kamers in een kantoorpand, maar dan allemaal op één slimme keycard.
+
+00:13:32.740 --> 00:13:41.360
+Je swipe het één keer en beweegt vrij waar je geautoriseerd bent, maar bij de serverruimte of het archief vraagt de kaart om een pincode voordat de deur opent.
+
+00:13:42.740 --> 00:13:49.000
+Die extra stap gebeurt alleen waar het ertoe doet en je hoeft niet te klooien met een enorme sleutelbos voor elke deur onderweg.
+
+00:13:50.200 --> 00:13:58.200
+Segmentatie op deze manier zorgt dat gebruikers op volle snelheid werken voor laag risico taken, maar dwingt een bewuste validatie af voor kritieke zaken.
+
+00:13:58.200 --> 00:14:06.640
+Het is een balans die sterk genoeg is om aanvallers met gestolen inloggegevens te blokkeren, maar in dagelijks gebruik onzichtbaar voor je team.
+
+00:14:07.820 --> 00:14:13.660
+Zelfs met de juiste toegangssegmenten kan het vertrouwen dat je bij het aanmelden vaststelt niet de enige controle zijn.
+
+00:14:14.040 --> 00:14:19.640
+In een echt veerkrachtige opzet wordt elke actieve sessie continu opnieuw beoordeeld, niet alleen bij de ingang.
+
+00:14:19.640 --> 00:14:23.040
+De kracht van continu verificatie in multi-cloud.
+
+00:14:23.260 --> 00:14:30.220
+In een wereld waar één set cloud-inloggegevens deuren in meerdere platforms kan openen, is eenmalige controle vragen om problemen.
+
+00:14:30.460 --> 00:14:37.000
+Dat was prima in het oude on-premise model, waarbij we een apparaat binnen de netwerkperimeter vertrouwden totdat de gebruiker uitlogde.
+
+00:14:37.200 --> 00:14:47.740
+Maar in een Microsoft 365 en Dynamics 365 omgeving die ook communiceert met AWS, Google Services of SaaS-apps van derde, is het risiconiveau niet statisch.
+
+00:14:47.740 --> 00:14:52.840
+Het verandert voortdurend. Continu verificatie draait de traditionele denkwijze om.
+
+00:14:53.720 --> 00:14:59.380
+In plaats van een eenmalige beslissing bij aanmelding, wordt de toegang tijdens de sessie steeds opnieuw beoordeeld.
+
+00:15:00.420 --> 00:15:04.700
+Dat betekent dat het systeem opnieuw vraagt, is de gebruiker nog steeds wie hij zegt dat hij is?
+
+00:15:04.880 --> 00:15:09.000
+Is het apparaat nog steeds compliant? Is de verbindingslocatie nog steeds vertrouwd?
+
+00:15:09.240 --> 00:15:15.580
+Deze controles kunnen worden geactiveerd door specifieke gebeurtenissen, geplande intervallen of risicosignalen in real-time.
+
+00:15:15.580 --> 00:15:20.240
+Je valideert niet alleen de toegang, je monitoort gedrag en context bij elke stap die wordt gezet.
+
+00:15:20.360 --> 00:15:24.780
+Het is makkelijk om het verschil te zien wanneer je dit vergelijkt met de inloggen en ingelogd blijven, methode.
+
+00:15:24.980 --> 00:15:31.960
+In een on-premise wereld werd je, zodra je laptop op het bedrijfsnetwerk zat en je de eerste controle doorstond, de rest van de dag als veilig beschouwd.
+
+00:15:32.120 --> 00:15:35.360
+Maar cloud services hebben die stabiele fysieke perimeter niet.
+
+00:15:35.700 --> 00:15:40.360
+Gebruikers wisselen gedurende één werksessie tussen apparaten, netwerken en locaties.
+
+00:15:40.360 --> 00:15:46.080
+Dreigingsactoren kunnen een actieve sessie tokens stelen en hergebruiken zonder ooit een nieuwe MFA-pomp te zien.
+
+00:15:46.280 --> 00:15:51.020
+Een statische vertrouwensbeslissing van 9 uur ochtends kan om kwart over 9 ochtends al volledig irrelevant zijn.
+
+00:15:51.260 --> 00:15:52.440
+Stel je dit scenario voor.
+
+00:15:52.620 --> 00:15:56.760
+Een gebruiker meldt zich aan bij M365 vanaf een vertrouwde laptop op het hoofdkantoor.
+
+00:15:56.940 --> 00:16:00.500
+Ze openen Outlook, Teams en Dynamics 365 Finance.
+
+00:16:00.500 --> 00:16:10.920
+Halverwege de sessie verschuift het IP-adres naar een locatie op 3000 kilometer afstand, misschien omdat de wifi thuis wegviel en het apparaat automatisch verbond met een 4G-hotspot in het buitenland.
+
+00:16:11.340 --> 00:16:17.620
+Azure AD Identity Protection markeert het risiconiveau van de aanmelding binnen seconden van geen naar hoog.
+
+00:16:17.780 --> 00:16:21.680
+In de wereld van continu verificatie verspreidt dat risiconiveau zich direct.
+
+00:16:22.420 --> 00:16:27.660
+Microsoft 365 vraagt de gebruiker opnieuw om authenticatie voordat ze dat Teams-bestand kunnen versturen.
+
+00:16:27.660 --> 00:16:37.120
+Op hetzelfde moment reageert Dynamics 365 door de openstaande goedkeuringsworkflow te pauseren en gevoelige acties te blokkeren totdat de sessie opnieuw is gevalideerd.
+
+00:16:37.360 --> 00:16:42.420
+Dit soort coördinatie wordt mogelijk gemaakt door Microsoft Graph en Azure AD Identity Protection.
+
+00:16:42.780 --> 00:16:50.920
+Microsoft Graph vormt de basis, de real-time stroom van identiteits-, apparaat- en activiteitsgegevens die beschikbaar is voor elke verbonden applicatie.
+
+00:16:50.920 --> 00:17:02.000
+Identity Protection gebruikt die gegevens om een dynamische risicoscore toe te wijzen op basis van signalen zoals atypische reizen, aanmoddingen via malware, IP's of onmogelijke locatiewijzigingen.
+
+00:17:02.180 --> 00:17:08.660
+Elke app die is geïntegreerd in dit framework kan reageren op risicowijzigingen tijdens de sessie, niet alleen bij de oorspronkelijke aanmelding.
+
+00:17:08.880 --> 00:17:12.260
+De winst is vooral groot wanneer u in een multi-cloud-omgeving werkt.
+
+00:17:12.260 --> 00:17:18.780
+Stel je een ontwikkelaar voor die in verschillende browser-tabladen schakelt tussen Azure DevOps, de AWS Console en Jira.
+
+00:17:19.000 --> 00:17:25.860
+Als het apparaat niet voldoet aan een compliance check in Microsoft Endpoint Manager tijdens het werken in Azure, kan dat signaal zich verder verspreiden.
+
+00:17:26.300 --> 00:17:34.820
+Geïntegreerde apps in andere clouds kunnen dezelfde markering voor een onbetrouwbaar apparaat overnemen en opnieuw om authenticatie vragen of gevoelige functies blokkeren.
+
+00:17:35.000 --> 00:17:39.700
+Er is geen menselijke actie nodig en een aanvaller kan geen verouderde vertrouwensstatus misbruiken.
+
+00:17:39.700 --> 00:17:44.240
+Het is een beetje als een uitsmijter die in het feest rondloopt in plaats van alleen bij de voordeur te staan.
+
+00:17:44.400 --> 00:17:50.960
+Iemand kan prima binnenkomen, maar als het gedrag verandert, zoals tassen pakken of ruzie zoeken, worden ze verwijderd voordat het escaleert.
+
+00:17:51.120 --> 00:17:53.700
+Continu verificatie werkt op precies dezelfde manier.
+
+00:17:53.920 --> 00:17:59.660
+De omgeving blijft scannen op afwijkingen en dwingt acties af tijdens de sessie, zelfs als de eerste aanmelding legitiem leek.
+
+00:17:59.780 --> 00:18:03.700
+In multi-cloud-opstellingen worden de kosten van niet opnieuw controleren vermenigvuldigd.
+
+00:18:03.820 --> 00:18:07.520
+Een riskante sessie die onopgemerkt blijft, beperkt zich niet tot één app.
+
+00:18:07.520 --> 00:18:12.400
+Deze kan zich via tokenhergebruik of API-integratie en wegbanen door meerdere services.
+
+00:18:12.680 --> 00:18:22.760
+Als je identiteit alleen bij aanvang controleert, gok je erop dat de context niet verandert, inloggegevens niet worden gestolen en een apparaat gedurende urenactiviteit niet non-compliant wordt.
+
+00:18:22.960 --> 00:18:24.500
+Dat is een gok die je niet wilt nemen.
+
+00:18:24.760 --> 00:18:30.860
+Wanneer continu verificatie wordt geautomatiseerd via de juiste Microsoft services, zie je het niet meer als een aparte beveiligingslaag.
+
+00:18:30.860 --> 00:18:37.860
+Het wordt een natuurlijk onderdeel van de toegang, altijd actief, altijd alert en altijd klaar om het vertrouwen opnieuw te beoordelen voordat er echt schade wordt aangericht.
+
+00:18:38.020 --> 00:18:41.280
+Het eindresultaat is dat Zero Trust niet slechts een aanmeldmoment is.
+
+00:18:41.480 --> 00:18:45.940
+Het is het constante geluid op de achtergrond dat elke actie in elk verbonden systeem beschermt.
+
+00:18:46.640 --> 00:18:48.860
+Zero Trust die gebruikers niet uitputt.
+
+00:18:48.940 --> 00:18:55.180
+Als bij de uithol van je Zero Trust mensen twaalf keer per dag op goedkeuren, moeten klikken, vinden ze vanzelf een manier om eeronderuit te komen.
+
+00:18:55.180 --> 00:18:57.480
+Dat is geen luiheid, dat is overlevingsdrang.
+
+00:18:57.620 --> 00:19:03.720
+Er is een grens aan het aantal onderbrekingen voordat iemand besluit om werk gedaan te krijgen boven het volgen van de regels.
+
+00:19:04.240 --> 00:19:09.940
+Het probleem is dat de omwegen die ze kiezen vaak de beveiligingscontroles te nie doen waar jij zo hard aan hebt gewerkt.
+
+00:19:10.320 --> 00:19:13.060
+Dit is waar authenticatievermoeidheid om de hoek komt kijken.
+
+00:19:13.300 --> 00:19:18.620
+Het gebeurt wanneer gebruikers zo vaak hun identiteit moeten bewijzen dat het proces achtergrondruis wordt.
+
+00:19:19.320 --> 00:19:24.080
+De melding is geen zinvolle controle meer, maar een vinkje of, erger nog, iets om te omzeilen.
+
+00:19:24.080 --> 00:19:29.480
+In het Zero Trust model zijn herhaalde uitdagingen bedoeld om acties met een hoge waarde te beschermen.
+
+00:19:29.680 --> 00:19:37.160
+Maar wanneer diezelfde uitdagingen bij elke alledaagse taak opduiken, stoppen mensen met het onderscheiden van legitieme beveiligingsgebeurtenissen en systeemruis.
+
+00:19:37.400 --> 00:19:39.380
+Dat gebrek aan oplettendheid is riskant.
+
+00:19:39.580 --> 00:19:44.480
+Goedbedoelde beleidslijnen kunnen zichzelf saboteren als ze het geduld van gebruikers te snel uitputten.
+
+00:19:44.480 --> 00:19:50.360
+Als een beleid bij elke overstap van Outlook naar Teams naar SharePoint om een nieuwe MFA-melding vraagt,
+
+00:19:50.560 --> 00:19:53.980
+conditioneer je hen om herseloos alles goed te keuren om door te kunnen werken.
+
+00:19:54.180 --> 00:20:00.580
+En in die staat heeft een kwaadaardige melding, bijvoorbeeld van een aanvaller die via MFA vermoeidheidstechnieke sessiecontrole probeert te krijgen,
+
+00:20:00.740 --> 00:20:02.780
+een veel grotere kans om geaccepteerd te worden.
+
+00:20:03.060 --> 00:20:08.800
+Je hebt budget uitgegeven aan sterke beveiligingstechnologie, maar de gedragslaag is nu de zwakste schakel.
+
+00:20:08.800 --> 00:20:10.400
+Hier is een praktijkvoorbeeld.
+
+00:20:10.400 --> 00:20:17.600
+Een werknemer die gefrustreerd is door constante aanmeldmeldingen, stelt Outlook op hun persoonlijke laptop zo in dat inloggegevens voor altijd onthouden worden.
+
+00:20:17.740 --> 00:20:18.900
+Het voelt onschadelijk.
+
+00:20:19.120 --> 00:20:20.800
+Ze winnen er seconden mee in een dag.
+
+00:20:21.020 --> 00:20:25.700
+Maar nu heeft dat persoonlijke apparaten altijd aan token voor de e-mail van de organisatie,
+
+00:20:25.900 --> 00:20:30.100
+buiten de voorwaardelijke toegangsregels om die je voor bedrijfsapparaten hebt ingesteld.
+
+00:20:30.100 --> 00:20:35.200
+Als de laptop verloren gaat of gecompromitteerd raakt, hoeft de aanvaller niet eens MFA te proberen.
+
+00:20:35.400 --> 00:20:36.820
+Ze hebben al een actieve sessie.
+
+00:20:37.020 --> 00:20:39.940
+De slimmere aanpak is om uitdagingen te baseren op context.
+
+00:20:40.180 --> 00:20:42.460
+Adaptief toegangsbeleid is rond dat idee gebouwd.
+
+00:20:42.620 --> 00:20:46.960
+In plaats van elke aanmelding hetzelfde te behandelen, kijken ze in realtime naar het risiconiveau.
+
+00:20:47.120 --> 00:20:52.340
+Het systeem weet of het apparaat voldoet, of de locatie wordt verwacht en of de sessie zich normaal heeft gedragen.
+
+00:20:52.660 --> 00:20:57.540
+Wanneer al die controles op groen staan, wordt de noodzaak voor herhaaldelijke authenticatie sterk verminderd.
+
+00:20:57.540 --> 00:21:02.000
+Gebruikers worden nog steeds uitgedaagd, maar alleen wanneer er iets op een betekenisvolle manier verandert.
+
+00:21:02.200 --> 00:21:05.780
+Dit is hoe je de balans vindt tussen sterke controles en gebruiksvriendelijkheid.
+
+00:21:05.940 --> 00:21:12.000
+Je verhoogt de gevoeligheid in risicovolle scenario's, zoals het openen van financiële gegevens vanaf een onbeheerd apparaat,
+
+00:21:12.240 --> 00:21:15.360
+en houdt de drempel laag voor gebruikers op een vertrouwde laptop op kantoor.
+
+00:21:15.600 --> 00:21:19.220
+Dat is geen toegevelijkheid. Het is strategische toewijzing van middelen.
+
+00:21:19.900 --> 00:21:23.220
+Je besteedt de tijd en aandacht van de gebruiker waar het ertoe doet,
+
+00:21:23.220 --> 00:21:27.860
+in plaats van die te verspillen aan onbelangrijke acties die het dreigingsniveau niet echt verhogen.
+
+00:21:28.320 --> 00:21:30.160
+Denk aan beveiliging op een luchthaven.
+
+00:21:30.400 --> 00:21:37.140
+Iedereen ondergaat een basiscontrole, maar uitgebreide tassencontroles en secundaire scans zijn gereserveerd voor zorgwekkende gevallen,
+
+00:21:37.440 --> 00:21:40.960
+een gemarkeerd item, een afwijkend patroon of een willekeurige check.
+
+00:21:41.140 --> 00:21:44.380
+Niemand trekt bij elke doorgang in de terminal zijn schoenen uit,
+
+00:21:44.520 --> 00:21:48.820
+omdat het systeem is ontworpen om door stroming in balans te brengen met dreigingsdetectie.
+
+00:21:48.820 --> 00:21:54.660
+In Zero Trust termen komen je willekeurige controles in de vorm van sessie-uitdagingen wanneer de context verandert,
+
+00:21:54.860 --> 00:21:57.180
+zelfs als de oorspronkelijke aanmelding veilig was.
+
+00:21:57.380 --> 00:22:01.820
+Wanneer je onnodige barrières wegneemt, maak je het leven van gebruikers niet alleen makkelijker.
+
+00:22:02.000 --> 00:22:03.600
+Je maakt de controles effectiever.
+
+00:22:03.820 --> 00:22:06.520
+Hoe minder prompt ze zien, hoe serieuzer ze ze nemen.
+
+00:22:06.700 --> 00:22:12.960
+Een verzoek tot heerauthenticatie bij het goedkeuren van een transactie met hoge waarde in Dynamics 365 wordt niet genegeerd,
+
+00:22:13.080 --> 00:22:14.760
+omdat het zeldzaam genoeg is om op te vallen.
+
+00:22:14.760 --> 00:22:20.120
+Die aandacht is precies wat je nodig hebt wanneer je vertrouwt op een mens voor het verifiëren van een cruciale actie.
+
+00:22:20.420 --> 00:22:26.800
+Het einddoel van Zero Trust by Design in deze context is beveiliging die constant aanwezig is, maar zelden storend.
+
+00:22:26.980 --> 00:22:33.120
+De automatisering op de achtergrond blijft de naleving van apparaten, sessie-integriteit en identiteitssignalen controleren
+
+00:22:33.120 --> 00:22:35.620
+zonder bij elk positief resultaat een melding te geven.
+
+00:22:35.880 --> 00:22:38.720
+Wanneer iets de risicometer activeert, voelt de gebruiker de.

@@ -1,0 +1,4948 @@
+WEBVTT
+
+00:00:00.220 --> 00:00:12.500
+Niemand vraagt zich af waar samenwerkingscontent zich bevindt, niet op de eerste dag, niet tijdens de kick-off, pas later, wanneer iemand vertrekt, een auditor langskomt of een klant een pagina ziet die hij nooit had mogen zien en dan komt de vraag te laat.
+
+00:00:12.700 --> 00:00:18.140
+Dit is de kern van deze hele aflevering. De vraag is niet welke tool, maar welk opslag- en toegangsmodel erachter zit.
+
+00:00:18.300 --> 00:00:24.260
+Als je nieuw bent, abonneer je dan op de M365FM podcast. We gaan diep in op het beheer van pagina's in loop- en co-pilot.
+
+00:00:24.260 --> 00:00:30.640
+We behandelen containers, lifecycle labels en richtlijnen die mensen daadwerkelijk zullen volgen. Maar eerst de aanname die niet klopte.
+
+00:00:31.300 --> 00:00:36.480
+Sponsorsegment Stella Migrator for Exchange. Een korte opmerking van de sponsor die terugkomt op dit onderwerp.
+
+00:00:37.000 --> 00:00:43.180
+Migratieprojecten zijn de plekken waar plaatsingsfouten aan het licht komen. Je verplaatst mailboxen, je verplaatst een tenant en plotseling vind je content die niemand kan verklaren.
+
+00:00:43.380 --> 00:00:49.180
+Van wie is het? Wie kan het zien? Waar had het moeten staan? Stella Migrator for Exchange is een tool die speciaal voor dit soort migraties is ontwikkeld.
+
+00:00:49.180 --> 00:00:53.740
+Het beheert mailbox-migraties en ondersteunt ook migraties tussen tenants. Dat is de simpele beschrijving.
+
+00:00:53.740 --> 00:00:58.420
+Het verplaatst uitwisselingsgegevens van de ene naar de andere plek. Dit is waarom dat belangrijk is voor loop- en co-pilot-pagina's.
+
+00:00:59.180 --> 00:01:02.760
+Samenwerkingscontent is gekoppeld aan mensen. Een loopcomponent bevindt zich in een back-up bestand.
+
+00:01:02.940 --> 00:01:12.740
+Een co-pilot-pagina begint in iemands persoonlijke context. Beiden zijn afhankelijk van een eigenaar en wanneer een migratie de mensen verplaatst maar de eigendomsgegevens niet meeneemt, wordt het stil en uiteindelijk blijven er pagina's over zonder duidelijke eigenaar.
+
+00:01:12.960 --> 00:01:19.040
+Pagina's zonder duidelijke eigenaar, componenten die gedeeld werden met een groep die niet meer bestaat, links die verwijzen naar een pagina die nooit opnieuw is opgebouwd.
+
+00:01:19.040 --> 00:01:25.640
+Niemand merkt het op de dag van de migratie. Zes maanden later merken ze het pas wanneer iemand vraagt wie verantwoordelijk is voor een pagina waar twaalf mensen gebruik van maken.
+
+00:01:25.860 --> 00:01:29.840
+Dus als u een mailbox of een huurdersverplaatsing plant, beschouw eigendom dan als onderdeel van de inventaris.
+
+00:01:30.100 --> 00:01:34.780
+Noteer wie wat bezit voordat er iets verplaatst wordt. Het is een kleine stap en het voorkomt een hoop opruimwerk.
+
+00:01:34.960 --> 00:01:37.860
+Nu terug naar het echte probleem. Waar begint content eigenlijk?
+
+00:01:38.100 --> 00:01:39.480
+De aanname die niet klopte.
+
+00:01:39.660 --> 00:01:42.680
+Het oude model werkt als volgt. Je kiest een tool op basis van de functies.
+
+00:01:42.680 --> 00:01:46.800
+Deze heeft mooie tabellen, die heeft een goede zoekfunctie, weer een andere heeft een overzichtelijke mobiele app.
+
+00:01:46.880 --> 00:01:48.940
+Je kiest, je implementeert het en dan gaat het vanzelf.
+
+00:01:49.140 --> 00:01:52.320
+Niemand bepaalt wat waar komt te staan. Mensen gebruiken gewoon wat er beschikbaar is.
+
+00:01:52.540 --> 00:01:55.340
+Jarenlang werkte dat meestal prima. Content begon op een bepaalde plek.
+
+00:01:55.480 --> 00:01:58.980
+Je opende een document, een notitieboek of een website. Je navigeerde er bewust naartoe.
+
+00:01:59.200 --> 00:02:00.600
+Zo begint het tegenwoordig niet meer.
+
+00:02:00.840 --> 00:02:03.260
+Werk begint niet in een tool. Het begint in de context.
+
+00:02:03.560 --> 00:02:04.380
+Je bent in een chat.
+
+00:02:04.560 --> 00:02:07.300
+Iemand stelt een vraag en je typt een antwoord dat de moeite waard is om te bewaren.
+
+00:02:07.420 --> 00:02:08.420
+Je bent in een vergadering.
+
+00:02:08.420 --> 00:02:10.620
+Er worden beslissingen genomen en er verschijnen notices.
+
+00:02:10.840 --> 00:02:14.580
+Je praat met Copilot en het geeft je een antwoord dat beter is dan het concept dat je van plan was te schrijven.
+
+00:02:14.720 --> 00:02:18.060
+De content verschijnt eerst, de startpagina komt later, als die al verschijnt.
+
+00:02:18.200 --> 00:02:20.620
+Dus in de meeste organisaties gebeurt er meestal het volgende.
+
+00:02:20.820 --> 00:02:22.100
+Vijf plekken bevatten nu de notices.
+
+00:02:22.440 --> 00:02:23.800
+Sommigen staan in een Teams-chat.
+
+00:02:24.060 --> 00:02:26.200
+Sommigen staan in een loopcomponent die in die chat is geplakt.
+
+00:02:26.440 --> 00:02:28.560
+Sommigen staan op een Copilot-pagina die niemand heeft gedeeld.
+
+00:02:28.800 --> 00:02:31.000
+Sommigen staan in een OneNote-notitieboek van drie jaar geleden.
+
+00:02:31.160 --> 00:02:33.260
+En sommigen, de gelukkigen, werken met SharePoint.
+
+00:02:33.260 --> 00:02:36.580
+Vraag tien mensen waar de nieuwste versie staat en je krijgt vijf antwoorden en twee schouderophalingen.
+
+00:02:36.680 --> 00:02:38.780
+De voor de hand liggende reactie is om de tools de schuld te geven.
+
+00:02:38.980 --> 00:02:40.300
+Te veel, te veel overlap.
+
+00:02:40.540 --> 00:02:41.920
+Microsoft blijft er maar meer aan toevoegen.
+
+00:02:42.080 --> 00:02:43.280
+Maar dat is niet het enige probleem.
+
+00:02:43.440 --> 00:02:44.880
+Elk van deze tools doet iets concreets.
+
+00:02:45.060 --> 00:02:46.160
+Elk heeft een bestaansreden.
+
+00:02:46.300 --> 00:02:48.500
+Het probleem is dat de plaatsing nooit een bewuste keuze is geweest.
+
+00:02:48.660 --> 00:02:49.560
+Het was een bijzaak.
+
+00:02:49.700 --> 00:02:52.260
+Content wordt aangemaakt waar de gebruiker zich toevallig bevindt.
+
+00:02:52.340 --> 00:02:54.640
+De machtigingen, de bewaartermijnen, het eigenaarschap,
+
+00:02:54.780 --> 00:02:57.980
+dat alles wordt per ongeluk bepaald door de container waarin de content zich bevindt.
+
+00:02:57.980 --> 00:02:59.620
+Dat is het model achter de chaos.
+
+00:02:59.860 --> 00:03:01.880
+Niet slechte tools, maar ontbrekende beslissingen.
+
+00:03:02.060 --> 00:03:04.280
+Je kunt een ontbrekende beslissing niet oplossen door een nieuwe tool,
+
+00:03:04.460 --> 00:03:06.320
+een nieuw beleid of een nieuwe trainingsvideo toe te voegen.
+
+00:03:06.480 --> 00:03:08.740
+Je lost het op door te begrijpen wat elke plek daadwerkelijk is
+
+00:03:08.740 --> 00:03:10.340
+en wat het doet met de content die je daar plaatst.
+
+00:03:10.480 --> 00:03:13.260
+Want een thuis is niet zomaar een locatie, het is een setregels.
+
+00:03:13.440 --> 00:03:15.220
+Dus voordat we kiezen waar content thuis hoort,
+
+00:03:15.380 --> 00:03:17.840
+moeten we kijken naar wat elke thuis werkelijk inhoudt.
+
+00:03:17.920 --> 00:03:20.080
+Vijf oppervlakken, vijf verschillende functies.
+
+00:03:20.360 --> 00:03:21.420
+Laten we ze een naam geven.
+
+00:03:21.680 --> 00:03:24.500
+Loop Copilot pagina's, SharePoint, OneNote, Teams.
+
+00:03:24.760 --> 00:03:25.320
+Vijf namen.
+
+00:03:25.320 --> 00:03:27.540
+En voor de meeste gebruikers doen ze allemaal hetzelfde.
+
+00:03:27.660 --> 00:03:29.380
+Je typt wat tekst, anderen kunnen het zien.
+
+00:03:29.560 --> 00:03:31.720
+Klaar, maar elk is ontworpen voor iets anders.
+
+00:03:32.000 --> 00:03:34.040
+Zodra je ziet waar de overlap ophoudt een overlap te zijn,
+
+00:03:34.220 --> 00:03:34.860
+begin dan met Teams.
+
+00:03:35.060 --> 00:03:38.240
+Het is gemaakt voor conversaties, chats, kanalen, vergaderingen en gesprekken.
+
+00:03:38.380 --> 00:03:39.680
+De werkeenheid is een bericht.
+
+00:03:39.900 --> 00:03:40.940
+Berichten bewegen snel.
+
+00:03:41.180 --> 00:03:43.500
+Ze scrollen weg en zijn nooit bedoeld om te worden gearchiveerd.
+
+00:03:43.720 --> 00:03:44.180
+Dan Loop.
+
+00:03:44.360 --> 00:03:47.640
+Loop is gemaakt voor dynamische content die door meerdere personen tegelijk wordt bewerkt.
+
+00:03:47.780 --> 00:03:50.040
+Een takenlijst, een tabel, een korte notitie.
+
+00:03:50.040 --> 00:03:52.900
+De werkeenheid is een component en het idee is dat dezelfde live content
+
+00:03:52.900 --> 00:03:54.840
+op meerdere plaatsen tegelijk kan worden weergegeven.
+
+00:03:54.980 --> 00:03:57.040
+Co-pilot pagina's sluiten daar perfect bij aan.
+
+00:03:57.200 --> 00:04:00.300
+Een pagina is gemaakt om een AI-antwoord op te vangen en bewerkbaar te maken.
+
+00:04:00.520 --> 00:04:02.400
+Je stelt een vraag, co-pilot antwoord,
+
+00:04:02.600 --> 00:04:05.980
+en je haalt dat antwoord uit de chat zodat het bewaard blijft en anderen eraan kunnen werken.
+
+00:04:06.180 --> 00:04:09.020
+De werkeenheid is een enkele pagina die begon als een antwoord.
+
+00:04:09.240 --> 00:04:11.300
+OneNote is ouder en is ontworpen voor iets anders,
+
+00:04:11.480 --> 00:04:14.200
+een notitieboek, secties, pagina's binnen secties.
+
+00:04:14.200 --> 00:04:16.940
+Het is een gestructureerde plek voor één persoon of één groep
+
+00:04:16.940 --> 00:04:18.600
+om gedurende langere tijd na te denken.
+
+00:04:18.800 --> 00:04:21.240
+De werkeenheid is het notitieboek en SharePoint.
+
+00:04:21.240 --> 00:04:25.180
+SharePoint is gebouwd om content te beheren die de organisatie moet beheren,
+
+00:04:25.380 --> 00:04:30.360
+sites, bibliotheken, mappen, items met metadata, versiegeschiedenis en bewaarregels.
+
+00:04:30.580 --> 00:04:35.100
+De werkeenheid is het document en dat document bevindt zich in een structuur die iemand heeft ontworpen.
+
+00:04:35.360 --> 00:04:37.160
+Zet ze naast elkaar en je ziet een patroon.
+
+00:04:37.340 --> 00:04:38.780
+Teams draait om conversatie.
+
+00:04:39.000 --> 00:04:40.960
+Loop en pagina's staan voor flexibiliteit.
+
+00:04:41.180 --> 00:04:42.760
+OneNote is een persoonlijke structuur.
+
+00:04:43.020 --> 00:04:44.660
+SharePoint is een beheerde structuur.
+
+00:04:44.900 --> 00:04:46.320
+Let op de verschillen tussen de twee.
+
+00:04:46.560 --> 00:04:49.420
+Niet de bewerkingservaring, niet de kleuren, niet de pictogrammen.
+
+00:04:49.420 --> 00:04:52.420
+Het verschil zit hem in hoelang de content naar verwachting bewaard blijft,
+
+00:04:52.600 --> 00:04:55.980
+hoeveel mensen er naar verwachting mee werken en hoeveel controle iemand erover wil hebben.
+
+00:04:56.140 --> 00:04:57.140
+En hier gaat het mis.
+
+00:04:57.480 --> 00:04:58.740
+Gebruikers zien dat allemaal niet.
+
+00:04:58.940 --> 00:05:00.660
+Ze zien een lege pagina en een deelknop.
+
+00:05:00.800 --> 00:05:03.200
+Een tabel in loop lijkt erg op een tabel in een woordbestand.
+
+00:05:03.360 --> 00:05:05.660
+Een co-pilot pagina lijkt erg op een OneNote pagina.
+
+00:05:05.820 --> 00:05:08.140
+Een bestand dat in een kanaal is geplaatst lijkt op een bestand in een bibliotheek,
+
+00:05:08.200 --> 00:05:09.400
+omdat het in feite ook een bibliotheek is.
+
+00:05:09.580 --> 00:05:10.680
+Daar komen we later op terug.
+
+00:05:10.900 --> 00:05:12.780
+Mensen beschouwen de tools dus als onderling verwisselbaar.
+
+00:05:12.940 --> 00:05:14.420
+Op het eerste gezicht lijkt dat logisch.
+
+00:05:14.640 --> 00:05:15.320
+Waarom ook niet?
+
+00:05:15.320 --> 00:05:17.020
+Maar de architectuur spreekt dat tegen.
+
+00:05:17.220 --> 00:05:19.640
+Onder elk van deze tools bevindt zich een andere opslaglocatie,
+
+00:05:19.800 --> 00:05:22.680
+een ander toegangsmodel en een ander antwoord op de vraag wie de eigenaar is,
+
+00:05:22.860 --> 00:05:24.720
+wie het kan zien en wat er gebeurt als iemand vertrekt.
+
+00:05:24.880 --> 00:05:27.180
+Twee stukken content kunnen er op het scherm identiek uitzien
+
+00:05:27.180 --> 00:05:28.980
+en zich een jaar later compleet anders gedragen.
+
+00:05:29.240 --> 00:05:30.940
+Dat is het deel dat niemand op de eerste dag ziet.
+
+00:05:31.120 --> 00:05:32.880
+We hebben dus een manier nodig om verder te kijken dan de oppervlakte,
+
+00:05:32.980 --> 00:05:34.780
+een lens waarmee we elk van deze vijf aspecten kunnen beoordelen
+
+00:05:34.780 --> 00:05:35.640
+en een duidelijk antwoord krijgen.
+
+00:05:35.840 --> 00:05:36.700
+Vier onderdelen.
+
+00:05:37.180 --> 00:05:37.540
+Container.
+
+00:05:37.780 --> 00:05:40.980
+Waar bevindt deze content zich fysiek en welke regels gelden daar?
+
+00:05:40.980 --> 00:05:41.980
+Eigenaar.
+
+00:05:42.720 --> 00:05:45.320
+Wie is ervoor verantwoordelijk en is dat een persoon of een team?
+
+00:05:45.880 --> 00:05:46.240
+Levensduur.
+
+00:05:46.400 --> 00:05:48.460
+Hoe lang moet dit bestaan en wanneer eindigt het?
+
+00:05:48.680 --> 00:05:49.080
+Label.
+
+00:05:49.300 --> 00:05:52.320
+Welke mate van gevoeligheid heeft het en geldt die gevoeligheid ook voor elke tool?
+
+00:05:52.540 --> 00:05:53.100
+Vier vragen.
+
+00:05:53.280 --> 00:05:54.480
+Dezelfde vier voor elke tool.
+
+00:05:54.680 --> 00:05:56.980
+Als je die vragen kunt beantwoorden, is de plaatsing geen grok meer.
+
+00:05:57.140 --> 00:05:59.500
+Als je dat niet kunt, heb je het risico ontdekt voordat het jou ontdekte.
+
+00:05:59.660 --> 00:06:00.780
+De volgorde is hier belangrijk,
+
+00:06:00.780 --> 00:06:03.600
+want drie van die vier vragen worden beantwoord door één ding, de container.
+
+00:06:03.800 --> 00:06:05.280
+Die bepaalt wie de content kan zien.
+
+00:06:05.500 --> 00:06:07.160
+Die bepaalt hoe lang de content blijft staan.
+
+00:06:07.340 --> 00:06:09.840
+Die bepaalt wie de content kan opruimen als de auteur er niet meer is.
+
+00:06:10.000 --> 00:06:10.880
+Dus daar beginnen we.
+
+00:06:11.040 --> 00:06:12.700
+En wat een container eigenlijk is.
+
+00:06:12.960 --> 00:06:15.180
+Denk eens na over wat je doet als je iets nieuws maakt.
+
+00:06:15.340 --> 00:06:18.740
+Je typt, je formateert, je klikt op opslaan of het slaat zichzelf op.
+
+00:06:18.820 --> 00:06:22.540
+En op geen enkel moment stelt iemand je drie vragen die belangrijker zijn dan alles wat je net hebt geschreven.
+
+00:06:22.680 --> 00:06:23.420
+Wie kan dit openen?
+
+00:06:23.540 --> 00:06:24.440
+Hoe lang blijft het staan?
+
+00:06:24.660 --> 00:06:26.500
+Wie is er verantwoordelijk voor als jij er niet meer bent?
+
+00:06:26.500 --> 00:06:28.960
+Die vragen worden nog steeds beantwoord, alleen niet door jou.
+
+00:06:29.140 --> 00:06:30.660
+Ze worden beantwoord door de container.
+
+00:06:30.900 --> 00:06:32.780
+Een container is hetgeen dat de content bevat.
+
+00:06:32.920 --> 00:06:36.340
+Een site, een team, een notitieboek, een werkruimte, een mailbox.
+
+00:06:36.340 --> 00:06:37.720
+Wat de content ook bevat.
+
+00:06:37.960 --> 00:06:38.900
+Dat is de container.
+
+00:06:39.160 --> 00:06:40.780
+En die draagt drie dingen met zich mee.
+
+00:06:40.940 --> 00:06:43.680
+De machtigingen, de bewaarregels en het eigenaarschap.
+
+00:06:43.840 --> 00:06:46.740
+Wanneer content in een container terechtkomt, komt het niet leeg aan.
+
+00:06:46.880 --> 00:06:48.600
+Het neemt een bepaalde set gedragingen over.
+
+00:06:48.840 --> 00:06:50.460
+Wie toegang heeft, wordt bepaald door de container.
+
+00:06:50.660 --> 00:06:52.500
+Hoe lang het blijft bestaan, wordt bepaald door de container.
+
+00:06:52.700 --> 00:06:55.180
+Wie het kan herstellen, verplaatsen of verwijderen, wordt bepaald door de container.
+
+00:06:55.180 --> 00:06:56.760
+De auteur stelt dat allemaal niet in.
+
+00:06:56.880 --> 00:06:58.360
+De auteur heeft alleen de woorden geschreven.
+
+00:06:58.560 --> 00:07:00.900
+Dat is een lastig idee om vast te houden, omdat het aafrechts aanvoelt.
+
+00:07:01.100 --> 00:07:01.900
+Jij hebt het gemaakt.
+
+00:07:02.100 --> 00:07:02.820
+Het is van jou.
+
+00:07:02.820 --> 00:07:04.540
+Maar het systeem behandelt het niet zo.
+
+00:07:04.740 --> 00:07:08.460
+Het systeem behandelt je content als een gast in een huis met regels die al op de muren staan.
+
+00:07:08.640 --> 00:07:11.540
+En daarom is de bewerkingservaring minder belangrijk dan het lijkt.
+
+00:07:11.760 --> 00:07:16.960
+Wanneer mensen tools vergelijken, hebben ze het over de editor, de opmaak, hoe soepel het type aanvoelt, hoe goed de tabel werkt.
+
+00:07:17.160 --> 00:07:19.400
+Dat is het deel dat je kunt zien, dus dat krijgt alle aandacht.
+
+00:07:19.580 --> 00:07:21.900
+Maar de editor is het minst duurzame onderdeel van de beslissing.
+
+00:07:22.040 --> 00:07:23.640
+Je bent het over een maand alweer vergeten.
+
+00:07:23.800 --> 00:07:27.360
+Wat je niet zult vergeten, is de dag dat iemand zegt, waarom kan het hele bedrijf dit openen?
+
+00:07:27.460 --> 00:07:28.920
+Of waarom is dit verwijderd?
+
+00:07:29.020 --> 00:07:30.900
+Of waarom kunnen we de eigenaar niet vinden?
+
+00:07:30.900 --> 00:07:32.700
+Die antwoorden vind je niet in de editor.
+
+00:07:32.960 --> 00:07:34.060
+Ze zitten in de container.
+
+00:07:34.360 --> 00:07:35.580
+Laten we het concreet maken.
+
+00:07:35.820 --> 00:07:36.440
+Neem een alinea.
+
+00:07:36.780 --> 00:07:39.420
+Stel, het is een korte samenvatting van een prijsbeslissing voor een klant.
+
+00:07:39.620 --> 00:07:41.700
+Vier zinnen, dezelfde woorden, dezelfde opmaak.
+
+00:07:41.840 --> 00:07:44.380
+Plaats deze alinea in een privé kanaal in een team met acht leden.
+
+00:07:44.580 --> 00:07:46.300
+Nu erft de alinea de toegang van dat team.
+
+00:07:46.480 --> 00:07:48.020
+Acht mensen kunnen de alinea openen.
+
+00:07:48.180 --> 00:07:50.700
+Het team heeft eigenaren, dus er zijn mensen verantwoordelijk voor.
+
+00:07:50.880 --> 00:07:54.480
+En welk bewaarbeleid dan ook van toepassing is op die teamsite, is ook van toepassing op de alinea.
+
+00:07:54.720 --> 00:07:58.420
+Plaats nu exact dezelfde alinea op een pagina die je voor jezelf hebt aangemaakt in je eigen ruimte,
+
+00:07:58.420 --> 00:07:59.940
+voordat iemand anders erbij betrokken is.
+
+00:08:00.120 --> 00:08:01.580
+Nu erft de alinea jouw toegang.
+
+00:08:01.760 --> 00:08:02.280
+Alleen jij.
+
+00:08:02.500 --> 00:08:04.080
+De eigenaar ben jij en alleen jij.
+
+00:08:04.260 --> 00:08:09.940
+En wanneer je account verdwijnt, bepalen de bewaar- en verwijderingsregels die aan je account zijn gekoppeld wat er vervolgens gebeurt.
+
+00:08:10.280 --> 00:08:13.820
+Dezelfde vier zinnen, ander publiek, andere eigenaar, ander lot.
+
+00:08:13.980 --> 00:08:15.540
+En hier komt het stille gedeelte.
+
+00:08:15.800 --> 00:08:17.680
+Niets in de tekst vertelt je naar welke je kijkt.
+
+00:08:17.840 --> 00:08:20.820
+Je zou een printout van beide aan een collega kunnen geven en die zou het verschil niet kunnen zien.
+
+00:08:20.980 --> 00:08:22.320
+Het verschil zit hem niet in de inhoud.
+
+00:08:22.520 --> 00:08:23.480
+Dat is nooit zo geweest.
+
+00:08:23.660 --> 00:08:25.160
+Dat maakt het zo makkelijk om dit over het hoofd te zien.
+
+00:08:25.160 --> 00:08:27.200
+Mensen beoordelen content op basis van wat erin staat.
+
+00:08:27.380 --> 00:08:29.800
+Het systeem beoordeelt content op basis van waar het zich bevindt.
+
+00:08:29.860 --> 00:08:32.540
+Dus als we ons afvragen waar iets moet staan, vragen we niet naar gemak.
+
+00:08:32.660 --> 00:08:34.840
+We vragen ons af welke regels we eraan willen verbinden.
+
+00:08:35.060 --> 00:08:37.340
+Welke mensen, welke levensduur, wie de eigenaar is.
+
+00:08:37.520 --> 00:08:39.520
+Kies de container en je hebt ze alle drie gekozen.
+
+00:08:39.700 --> 00:08:42.560
+En hier wordt loop interessant, want loop doorbreekt het simpele beeld.
+
+00:08:42.740 --> 00:08:44.380
+De content bevindt zich niet op één plek.
+
+00:08:44.520 --> 00:08:47.920
+Het verschijnt op meerdere plekken tegelijk, terwijl het zich slechts in één container bevindt.
+
+00:08:48.000 --> 00:08:49.620
+En dat roept een lastigere vraag op.
+
+00:08:49.700 --> 00:08:53.320
+Als dezelfde content overal verschijnt, welke container heeft dan eigenlijk de leiding?
+
+00:08:53.320 --> 00:08:55.640
+Loopcomponenten zijn van nature draagbaar.
+
+00:08:55.840 --> 00:08:57.300
+Dit is het deel dat mensen verrast.
+
+00:08:57.500 --> 00:09:00.100
+Een loopcomponent bevindt zich niet in de chat waar je hem ziet.
+
+00:09:00.280 --> 00:09:02.240
+Je typt een takenlijst in een Teams bericht.
+
+00:09:02.420 --> 00:09:04.340
+Het lijkt alsof het onderdeel is van dat bericht.
+
+00:09:04.520 --> 00:09:06.860
+Het staat daar in de thread met een naam en een tijdstempel.
+
+00:09:07.060 --> 00:09:08.740
+Je gaat er dus vanuit dat de chat het bevat.
+
+00:09:08.960 --> 00:09:09.680
+Dat is niet zo.
+
+00:09:09.880 --> 00:09:11.820
+Het onderdeel bevindt zich in een back-up bestand.
+
+00:09:12.080 --> 00:09:15.980
+Een echt bestand op een echte opslaglocatie met eigen machtigingen en een eigen eigenaar.
+
+00:09:15.980 --> 00:09:18.700
+Wat je in de chat ziet, is een live venster naar dat bestand.
+
+00:09:18.860 --> 00:09:20.420
+Het bericht verwijst er alleen naar.
+
+00:09:20.660 --> 00:09:21.560
+Dat is het ontwerp.
+
+00:09:21.560 --> 00:09:27.320
+En het is een slim ontwerp, want zodra content in een bestand staat en de chat alleen dat bestand weergeeft, kan dezelfde content overal worden weergegeven.
+
+00:09:27.480 --> 00:09:30.120
+Plak die takenlijst in een Teams-chat en iedereen ziet hem daar.
+
+00:09:30.340 --> 00:09:32.760
+Sliep hem naar een Outlook-email en de ontvanger ziet hem daar.
+
+00:09:32.980 --> 00:09:36.040
+Voeg hem toe aan een pagina in een loopwerkruimte en hij verschijnt ook op die pagina.
+
+00:09:36.260 --> 00:09:37.740
+Drie plaatsen, één stuk content.
+
+00:09:37.960 --> 00:09:40.580
+En wanneer iemand het in Outlook bewerkt, verschijnt de wijziging in Teams.
+
+00:09:40.780 --> 00:09:43.420
+Wanneer iemand een vakje aanvinkt in de loopwerkruimte, wordt de e-mail bijgewerkt.
+
+00:09:43.620 --> 00:09:44.560
+Niets wordt gekopieerd.
+
+00:09:44.780 --> 00:09:45.560
+Niets raakt gedesynchroniseerd.
+
+00:09:46.220 --> 00:09:48.020
+Er is één bestand en al het andere is een weergave.
+
+00:09:48.020 --> 00:09:49.680
+Dat is wat draagbaarheid hier betekent.
+
+00:09:49.820 --> 00:09:51.840
+De content zit niet vast in de app waar hij is ontstaan.
+
+00:09:51.960 --> 00:09:52.660
+Hij reist mee.
+
+00:09:52.840 --> 00:09:54.420
+Als er een bestand is, is er een locatie.
+
+00:09:54.600 --> 00:09:56.660
+En dit is waar mensen stoppen en de juiste vraag stellen.
+
+00:09:56.880 --> 00:09:58.000
+Waar bevindt dat bestand zich?
+
+00:09:58.140 --> 00:09:59.960
+Het eerlijke antwoord is, dat hangt ervan af.
+
+00:10:00.120 --> 00:10:03.580
+Het hangt ervan af wie de component heeft gemaakt en waar die persoon zich bevond toen hij of zij dat deed.
+
+00:10:03.760 --> 00:10:08.380
+Maak je een component in een chat of e-mail, dan komt het bijbehorende bestand meestal terecht in de eigen opslag van de maker.
+
+00:10:08.600 --> 00:10:10.800
+Jouw ruimte, niet die van Teams of de chats, maar die van jou.
+
+00:10:10.980 --> 00:10:14.560
+De mensen met wie je het hebt gedeeld, krijgen toegang tot het bestand, maar het bestand blijft bij jou.
+
+00:10:14.560 --> 00:10:17.780
+Maak je een component in een loop werkruimte, dan verandert de situatie.
+
+00:10:17.960 --> 00:10:20.240
+Nu bevindt het bestand zich in de opslag van de werkruimte.
+
+00:10:20.380 --> 00:10:22.980
+Het behoort tot de werkruimte, niet tot één specifieke persoon daarin.
+
+00:10:23.100 --> 00:10:28.420
+Twee componenten kunnen er dus precies hetzelfde uitzien op het scherm, dezelfde layout, hetzelfde gedrag in de liveomgeving, hetzelfde kleine avatar van degene die aan het bewerken is.
+
+00:10:28.560 --> 00:10:31.680
+De ene staat op een persoonlijke locatie en de andere op een gedeelde locatie.
+
+00:10:31.840 --> 00:10:36.680
+En wat dat bepaalt, is niet een instelling die je hebt gekozen, maar waar je je bevond toen je opmaken klikte.
+
+00:10:36.900 --> 00:10:38.520
+Dat brengt ons terug bij de container.
+
+00:10:38.760 --> 00:10:41.540
+De component erft alles wat de bijbehorende bestanden bevatten.
+
+00:10:41.540 --> 00:10:45.200
+Van wie is die container? Wie kan hem herstellen? Wat gebeurt er als die persoon vertrekt?
+
+00:10:45.360 --> 00:10:47.340
+Laten we het nu hebben over wat portabiliteit je nu echt oplevert.
+
+00:10:47.480 --> 00:10:48.760
+Als functie is het op zich erg goed.
+
+00:10:48.960 --> 00:10:51.900
+Mensen hebben er een hekel aan om verouderde kopieën van een tabel op zes verschillende plekken te plakken.
+
+00:10:52.040 --> 00:10:54.520
+Ze hebben er een hekel aan om te vragen, is dit de meest recente versie?
+
+00:10:54.700 --> 00:10:57.440
+Live content die het gesprek volgt, lost een echt probleem op.
+
+00:10:57.540 --> 00:10:59.840
+Je deelt het één keer en iedereen ziet de actuele status.
+
+00:11:00.160 --> 00:11:02.220
+Dat zorgt voor minder verschuivingen en minder dubbele bestanden.
+
+00:11:02.420 --> 00:11:03.540
+Maar bekijk het eens vanuit een beheersperspectief.
+
+00:11:03.540 --> 00:11:07.620
+Dezelfde eigenschap die het gemakkelijk maakt om te verspreiden, maakt het ook moeilijk om het te beheersen.
+
+00:11:07.760 --> 00:11:11.080
+Een component die in een chat met vijf mensen wordt gedeeld, kan worden doorgestuurd naar een andere chat,
+
+00:11:11.200 --> 00:11:13.740
+vervolgens in een e-mail worden geplakt en daarna op een pagina worden geplaatst.
+
+00:11:13.880 --> 00:11:15.600
+Elk van die acties kan het publiek vergroten.
+
+00:11:15.800 --> 00:11:18.960
+En het onderliggende bestand blijft al die tijd op één locatie staan en dient al die acties onopvallend.
+
+00:11:19.120 --> 00:11:20.340
+Dus wie heeft dat publiek bepaald?
+
+00:11:20.560 --> 00:11:20.880
+Niemand.
+
+00:11:21.120 --> 00:11:22.280
+Het is vanzelf ontstaan.
+
+00:11:22.420 --> 00:11:23.700
+En er is nog een tweede probleem.
+
+00:11:23.880 --> 00:11:28.660
+De component draagt zijn machtigingen met zich mee, maar de persoon die ernaar kijkt, kan vaak niet zien waar het vandaan komt.
+
+00:11:28.660 --> 00:11:30.700
+In een chat lijkt het onderdeel van het gesprek.
+
+00:11:30.880 --> 00:11:35.180
+Niets vertelt je dat dit een bestand is uit iemands persoonlijke opslag dat via een link met deze mensen is gedeeld.
+
+00:11:35.360 --> 00:11:37.400
+Het risico is dus niet dat draagbaarheid slecht is.
+
+00:11:37.580 --> 00:11:39.540
+Het risico is dat het bestand verborgen blijft.
+
+00:11:39.720 --> 00:11:42.560
+Inhoud wordt gemakkelijk verplaatst en de startpagina blijft onzichtbaar.
+
+00:11:42.720 --> 00:11:47.880
+Een component dat begon als een snelle notitie tussen twee collega's kan uiteindelijk het werkdocument voor een heel project worden,
+
+00:11:48.100 --> 00:11:50.100
+zonder dat iemand ooit bepaalt waar het moet komen te staan.
+
+00:11:50.280 --> 00:11:53.820
+En dat roept de praktische vraag op, als de startpagina verborgen blijft voor de gebruiker,
+
+00:11:53.820 --> 00:11:57.920
+moeten we weten waar die back-up bestanden daadwerkelijk terechtkomen en wat die opslag precies inhoudt.
+
+00:11:58.000 --> 00:12:00.180
+Loop werkruimtes en hun opslag realiteit.
+
+00:12:00.440 --> 00:12:02.360
+Dus waar komen die bestanden eigenlijk terecht?
+
+00:12:02.600 --> 00:12:06.880
+Het eerste wat je moet weten, is dat er drie verschillende startpunten zijn en dat mensen die vaak op één hoop gooien.
+
+00:12:07.060 --> 00:12:08.940
+Een loop werkruimte is een gedeelde ruimte.
+
+00:12:09.140 --> 00:12:14.060
+Je maakt hem aan, geeft hem een naam, nodigt mensen uit en de pagina's en componenten erin behoren tot die groep.
+
+00:12:14.220 --> 00:12:15.840
+Dan is er je persoonlijke werkruimte.
+
+00:12:16.020 --> 00:12:19.020
+Elke gebruiker krijgt er een en die is alleen van jou totdat je er iets mee deelt.
+
+00:12:19.020 --> 00:12:24.700
+En dan zijn er nog componenten die in andere apps zijn gemaakt, een Teams chat of een Outlook e-mail, die helemaal geen verband houden met een werkruimte.
+
+00:12:24.880 --> 00:12:26.860
+Drie oorspronkelijk hongen, drie verschillende locaties.
+
+00:12:27.060 --> 00:12:28.560
+Nu de opslag, helder uitgelegd.
+
+00:12:28.760 --> 00:12:31.300
+Componenten die in chats en e-mails worden gemaakt, komen doorgaans in OneDrive terecht.
+
+00:12:31.520 --> 00:12:33.400
+Dat is de persoonlijke opslag die de meeste van jullie al kennen.
+
+00:12:33.580 --> 00:12:35.060
+Het is gekoppeld aan een gebruikersaccount.
+
+00:12:35.240 --> 00:12:37.660
+Het volgt de regels van dat account en er staat een naam aan gekoppeld.
+
+00:12:38.080 --> 00:12:39.060
+Werkruimtes werken anders.
+
+00:12:39.300 --> 00:12:41.300
+Ze bevinden zich in ingebedde SharePoint containers.
+
+00:12:41.300 --> 00:12:47.540
+Dat is een opslagmodel dat Microsoft heeft ontwikkeld, zodat apps content in een beheerde container kunnen opslaan zonder een volledige SharePoint site te hoeven maken.
+
+00:12:47.700 --> 00:12:49.380
+Het is nog steeds SharePoint technologie.
+
+00:12:49.580 --> 00:12:54.100
+Het heeft nog steeds toegang tot machtigingen, bewaartermijnen en compliance, maar het is geen site en het gedraagt zich ook niet als een site.
+
+00:12:54.260 --> 00:12:59.880
+Dus je hebt OneDrive aan de ene kant, gekoppeld aan een persoon, en een ingebedde container aan de andere kant, gekoppeld aan een werkruimte.
+
+00:13:00.100 --> 00:13:01.900
+Dezelfde interface, twee opslagwerelden.
+
+00:13:02.140 --> 00:13:03.940
+En hier lopen beheerders tegen een probleem aan.
+
+00:13:04.100 --> 00:13:06.140
+Met een normale documentbibliotheek kun je bladeren.
+
+00:13:06.140 --> 00:13:10.560
+Je opent het SharePoint beheercentrum, zoekt de site, bekijkt de bibliotheek, ziet de bestanden en controleert wie toegang heeft.
+
+00:13:10.720 --> 00:13:12.420
+Het is ontslachtig, maar het is wel zichtbaar.
+
+00:13:12.600 --> 00:13:14.560
+Ingebedde containers worden niet op die manier weergegeven.
+
+00:13:14.740 --> 00:13:16.500
+Ze verschijnen niet in je lijst met actieve sites.
+
+00:13:16.720 --> 00:13:19.140
+Je kunt de map niet openen en door de bestanden scrollen zoals in een bibliotheek.
+
+00:13:19.840 --> 00:13:24.380
+Beheerwerk verloopt via andere kanalen, zoals PowerShell, Purview en de loopbeheerinstellingen.
+
+00:13:24.520 --> 00:13:30.480
+Met die tools kun je containers beheren, beleid toepassen en zoekopdrachten en blokkeringen uitvoeren, maar de gewoonte om te bladeren verdwijnt.
+
+00:13:30.660 --> 00:13:33.460
+Dat is belangrijk, want de meeste beheergewoonten beginnen met bladeren.
+
+00:13:33.460 --> 00:13:35.980
+Je kijkt, je ziet iets vreemds en je onderneemt actie.
+
+00:13:36.120 --> 00:13:40.280
+Als het lastiger wordt om naar iets te kijken, verdwijnt die gewoonte en blijven problemen langer verborgen.
+
+00:13:40.440 --> 00:13:41.580
+De vraag verandert dus.
+
+00:13:41.760 --> 00:13:45.400
+Het gaat er niet langer om wat erin zit, maar welke beleidsregels er toegang toe hebben.
+
+00:13:45.580 --> 00:13:48.760
+En dat is de vraag die je bewust moet beantwoorden voordat de inhoud zich opstapelt.
+
+00:13:48.920 --> 00:13:51.540
+Dan is er nog het eigenaarschap en dit is een punt waar mensen vaak over struikelen.
+
+00:13:51.680 --> 00:13:53.020
+Een werkruimte heeft eigenaren.
+
+00:13:53.260 --> 00:13:55.540
+Dat zijn de mensen die verantwoordelijk zijn voor de ruimte zelf.
+
+00:13:55.760 --> 00:14:00.540
+Zij beheren het lidmaatschap, bepalen wie anderen kan uitnodigen en zijn degene die reageren als de ruimte verouderd raakt.
+
+00:14:00.540 --> 00:14:02.800
+Maar een pagina in die werkruimte heeft een auteur.
+
+00:14:03.000 --> 00:14:03.960
+Iemand heeft het getypt.
+
+00:14:04.140 --> 00:14:05.880
+Iemands naam staat in de bewerkingsgeschiedenis.
+
+00:14:06.060 --> 00:14:07.180
+Dat zijn twee verschillende dingen.
+
+00:14:07.360 --> 00:14:08.680
+De auteur heeft de pagina geschreven.
+
+00:14:08.840 --> 00:14:11.040
+De eigenaar van de werkruimte is verantwoordelijk voor de locatie ervan.
+
+00:14:11.240 --> 00:14:14.240
+Wanneer de auteur vertrekt, blijft de pagina bestaan omdat de container deze bewaart.
+
+00:14:14.400 --> 00:14:16.960
+Wanneer de laatste eigenaar vertrekt, ontstaat er een ander probleem.
+
+00:14:17.080 --> 00:14:19.500
+Een ruimte vol content waar niemand verantwoordelijk voor is.
+
+00:14:19.680 --> 00:14:21.340
+Teams verergeren dit op een stille manier.
+
+00:14:21.560 --> 00:14:23.620
+Mensen gaan ervan uit dat de auteur ook de eigenaar is.
+
+00:14:23.780 --> 00:14:25.720
+Het is Sarah's pagina, vraag het Sarah maar.
+
+00:14:25.900 --> 00:14:27.500
+Maar Sarah heeft het alleen maar geschreven.
+
+00:14:27.500 --> 00:14:30.880
+Sarah kan de bewaartermijn niet wijzigen, kan het delen niet aanpassen en heeft misschien
+
+00:14:30.880 --> 00:14:32.340
+zelfs niet de rechten om het te verwijderen.
+
+00:14:32.440 --> 00:14:36.600
+Dus de verantwoordelijkheid ligt bij de container, het auteurschap bij de content en door die twee
+
+00:14:36.600 --> 00:14:39.320
+te vermengen krijg je werkruimtes die iedereen gebruikt maar niemand bezit.
+
+00:14:39.480 --> 00:14:42.600
+Hou die scheiding in gedachten, want we gaan het nu hebben over content waarbij die scheiding
+
+00:14:42.600 --> 00:14:43.200
+nog vager wordt.
+
+00:14:43.400 --> 00:14:45.680
+Copilot pagina's hebben een andere ontstaansgeschiedenis.
+
+00:14:45.840 --> 00:14:48.480
+Ze beginnen met een prompt, niet met iemand die typt op een lege pagina.
+
+00:14:48.640 --> 00:14:52.500
+En de vraag wie de eigenaar is van wat een AI heeft helpen schrijven, dat is waar het interessant
+
+00:14:52.500 --> 00:14:52.780
+wordt.
+
+00:14:52.960 --> 00:14:55.640
+Copilot pagina's, waar AI output terechtkomt.
+
+00:14:55.640 --> 00:14:58.360
+Stel Copilot een vraag in de chat en je krijgt een antwoord.
+
+00:14:58.560 --> 00:15:02.500
+Soms is het een goed antwoord, een samenvatting van een lang gesprek, een conceptplan, een
+
+00:15:02.500 --> 00:15:04.460
+vergelijkingstabel die je niet de tijd had om te maken.
+
+00:15:04.640 --> 00:15:07.900
+En dan scroll je en schuift het omhoog, begraven onder de volgende tien berichten.
+
+00:15:08.160 --> 00:15:08.960
+Dat is het probleem.
+
+00:15:09.200 --> 00:15:10.720
+Pagina's zijn bedacht om dat op te lossen.
+
+00:15:10.880 --> 00:15:14.180
+Een Copilot pagina is de duurzame, bewerkbare versie van een Copilot antwoord.
+
+00:15:14.320 --> 00:15:16.460
+Je haalt het antwoord uit de chat en zet het op een pagina.
+
+00:15:16.680 --> 00:15:17.640
+Nu blijft het daar staan.
+
+00:15:17.860 --> 00:15:22.700
+Je kunt erin typen, het reorganiseren, je eigen notices onder de AI tekst toevoegen en Copilot vragen om
+
+00:15:22.700 --> 00:15:23.740
+er steeds meer aan toe te voegen.
+
+00:15:23.740 --> 00:15:26.940
+Het antwoord is geen bericht meer, maar een document waaraan je werkt.
+
+00:15:27.080 --> 00:15:28.120
+En zo begint het.
+
+00:15:28.260 --> 00:15:30.240
+Je maakt een pagina vanuit de chat zelf.
+
+00:15:30.420 --> 00:15:32.900
+Eén klik op een antwoord en het opent naast het gesprek.
+
+00:15:33.020 --> 00:15:35.960
+Je hebt geen site gekozen, geen bibliotheek, geen team.
+
+00:15:36.140 --> 00:15:37.740
+Je zat in een chat en de inhoud is overgezet.
+
+00:15:38.440 --> 00:15:39.460
+Dus waar gaat het naartoe?
+
+00:15:39.640 --> 00:15:40.660
+Eerst naar jouw context.
+
+00:15:40.900 --> 00:15:44.080
+Een nieuwe pagina wordt bij jou opgeslagen in je eigen ruimte, gekoppeld aan je account.
+
+00:15:44.320 --> 00:15:45.520
+Niemand anders kan het openen.
+
+00:15:45.700 --> 00:15:46.980
+Niemand weet zelfs dat het bestaat.
+
+00:15:47.160 --> 00:15:49.980
+Het is een persoonlijk object en het volgt de regels van een privéomgeving.
+
+00:15:50.160 --> 00:15:52.100
+Eén persoon, één account, één eigenaar.
+
+00:15:52.100 --> 00:15:53.520
+En in dat stadium is dat prima.
+
+00:15:53.800 --> 00:15:55.240
+Dat is eigenlijk precies wat je wilt.
+
+00:15:55.460 --> 00:15:59.260
+Schetsen, halfbakken concepten, een AI-antwoord waarvan je nog niet zeker weet of je het kunt vertrouwen.
+
+00:15:59.440 --> 00:16:00.960
+Die horen thuis op een privéplek.
+
+00:16:01.120 --> 00:16:04.260
+Maar pagina's hebben een deelknop en die deelknop verandert wat het object is.
+
+00:16:04.420 --> 00:16:07.320
+Op het moment dat je een pagina deelt, is die niet langer alleen van jou.
+
+00:16:07.520 --> 00:16:11.680
+Je stuurt een link of je voegt mensen bij naam toe en nu bewerken drie collega's dezelfde pagina.
+
+00:16:11.880 --> 00:16:16.780
+Ze voegen rijen toe aan de tabel, ze corrigeren een alinea, ze stellen Copilot hun eigen vervolgvragen.
+
+00:16:16.980 --> 00:16:20.520
+Een privé-kladblok veranderde in ongeveer vier seconden in een gedeeld werkdocument.
+
+00:16:20.520 --> 00:16:22.460
+Er is niets aan de pagina veranderd.
+
+00:16:22.560 --> 00:16:26.660
+Dezelfde inhoud, dezelfde locatie, dezelfde auteur, maar het publiek is veranderd en daarmee ook de belangen.
+
+00:16:26.860 --> 00:16:28.560
+Dat is het punt waar je even bij stil moet staan.
+
+00:16:28.800 --> 00:16:30.960
+Delen creëert geen nieuw object met nieuwe regels.
+
+00:16:31.140 --> 00:16:33.140
+Het spreidt een oud object uit over meer mensen.
+
+00:16:33.340 --> 00:16:37.240
+Een pagina die in de ruimte van één persoon begon, dient nu een groep en staat nog steeds op dezelfde plek.
+
+00:16:37.400 --> 00:16:39.460
+Denk nu eens na over wat er met de inhoud zelf is gebeurd.
+
+00:16:39.620 --> 00:16:40.900
+Een chat-antwoord is wegwerpaar.
+
+00:16:41.080 --> 00:16:41.800
+Dat weet iedereen.
+
+00:16:42.000 --> 00:16:43.580
+Je leest het, je gebruikt het en je gaat verder.
+
+00:16:43.740 --> 00:16:45.200
+Als het fout was, herinnert niemand zich dat.
+
+00:16:45.320 --> 00:16:46.760
+Als het halfjuist was, bewaart niemand het.
+
+00:16:46.760 --> 00:16:47.760
+Een pagina is anders.
+
+00:16:47.980 --> 00:16:49.000
+Het is een waardevol bezit.
+
+00:16:49.140 --> 00:16:49.920
+Het heeft een titel.
+
+00:16:50.100 --> 00:16:50.940
+Het kan bewerkt worden.
+
+00:16:51.140 --> 00:16:53.820
+Het heeft een link die je kunt sturen naar iemand die niet bij het gesprek aanwezig was.
+
+00:16:54.040 --> 00:16:56.860
+Mensen behandelen het als iets dat bestaat, en iets dat bestaat, wordt vertrouwd.
+
+00:16:57.020 --> 00:16:58.600
+Het wordt in een statusrapport geplakt.
+
+00:16:58.820 --> 00:17:00.280
+Het wordt geciteerd in een vergadering.
+
+00:17:00.500 --> 00:17:03.600
+Het wordt de versie waarnaar mensen verwijzen als ze zeggen, dat is wat we hebben besloten.
+
+00:17:03.780 --> 00:17:06.360
+Dus het antwoord werd een waardevol bezit en het risico verhuisde mee.
+
+00:17:06.580 --> 00:17:07.560
+Zo ziet dat risico eruit.
+
+00:17:07.680 --> 00:17:10.700
+Een door A je gegenereerde samenvatting kan op kleine, zelfverzekerde manieren fout zijn.
+
+00:17:10.860 --> 00:17:12.780
+Een getal dat in de verkeerde richting is afgerond.
+
+00:17:12.780 --> 00:17:15.060
+Een beslissing die aan de verkeerde persoon wordt toegeschreven.
+
+00:17:15.220 --> 00:17:16.920
+Een zin die goed klinkt, maar dat niet is.
+
+00:17:17.080 --> 00:17:19.040
+In een chat verdwijnt die fout met het scrollen.
+
+00:17:19.180 --> 00:17:22.460
+Op een gedeelde pagina blijft die fout bestaan, wordt bewerkt door anderen die ervan uitgaan
+
+00:17:22.460 --> 00:17:25.000
+dat de basistekst is gecontroleerd, en langzaam verhardt die tot een feit.
+
+00:17:25.120 --> 00:17:26.580
+En er is nog een tweede soort risico.
+
+00:17:26.820 --> 00:17:28.920
+Pagina's kunnen gebruikmaken van alles waar de gebruiker toegang toe heeft.
+
+00:17:29.020 --> 00:17:30.440
+E-mails, bestanden, vergaderingen.
+
+00:17:30.500 --> 00:17:34.460
+Zo kan een pagina een samenvatting van gevoelige informatie bevatten op een plek die niets te maken
+
+00:17:34.460 --> 00:17:35.000
+heeft met de bron.
+
+00:17:35.160 --> 00:17:37.400
+Het originele bestand kan streng beveiligd zijn.
+
+00:17:37.400 --> 00:17:40.320
+De samenvatting staat in een persoonlijke ruimte met een deelbare link.
+
+00:17:40.520 --> 00:17:43.520
+Dat is content die een nieuw leven heeft gekregen in een nieuwe omgeving met nieuwe regels,
+
+00:17:43.680 --> 00:17:44.940
+en niemand heeft daar zelf voor gekozen.
+
+00:17:45.220 --> 00:17:49.140
+Pagina's vormen dus geen risico omdat AI onbetrouwbaar is of omdat delen gevaarlijk is.
+
+00:17:49.320 --> 00:17:53.100
+Ze vormen een risico omdat ze iets tijdelijks permanent maken zonder dat iemand daar een
+
+00:17:53.100 --> 00:17:54.100
+beslissing overneemt.
+
+00:17:54.200 --> 00:17:58.140
+En zodra iets permanent is en gedeeld wordt, is er één vraag die niet langer te ontwijken
+
+00:17:58.140 --> 00:18:00.720
+valt, van wie is een pagina die door een AI is geschreven?
+
+00:18:01.080 --> 00:18:01.440
+Eigendom.
+
+00:18:01.640 --> 00:18:04.420
+Als een AI eerst schrijft, begin dan met een eenvoudige scheiding.
+
+00:18:04.420 --> 00:18:07.160
+Er is de persoon die de prompt schreef en er is het resultaat.
+
+00:18:07.160 --> 00:18:08.500
+Die twee komen niet overeen.
+
+00:18:08.700 --> 00:18:11.020
+Jij typte twaalf woorden, Copilot produceerde er vierhonderd.
+
+00:18:11.300 --> 00:18:13.860
+De prompt was van jou, maar de pagina is geen kopie van wat jij hebt geschreven.
+
+00:18:14.020 --> 00:18:16.960
+Het is een nieuw artefact, samengesteld uit bestanden, e-mails en vergaderingen die
+
+00:18:16.960 --> 00:18:18.880
+door anderen zijn gemaakt en waarvan anderen de eigenaar zijn.
+
+00:18:19.060 --> 00:18:19.920
+Dus van wie is het?
+
+00:18:20.040 --> 00:18:21.400
+Op papier is het antwoord simpel.
+
+00:18:21.580 --> 00:18:24.020
+De pagina bevindt zich in jouw persoonlijke ruimte, gekoppeld aan jouw account.
+
+00:18:24.260 --> 00:18:25.160
+Jij bent de eigenaar.
+
+00:18:25.340 --> 00:18:26.280
+Dat zegt het systeem.
+
+00:18:26.420 --> 00:18:29.240
+Maar eigenaarschap in het systeem en eigenaarschap in de praktijk zijn twee verschillende dingen.
+
+00:18:29.420 --> 00:18:31.320
+Het systeem weet wiens opslag het bestand bevat.
+
+00:18:31.320 --> 00:18:33.840
+Het weet niet wie verantwoordelijk is voor de inhoud van het bestand.
+
+00:18:33.980 --> 00:18:36.400
+En op een pagina die is opgebouwd uit een tiental bronnen die je hooguitvluchtig hebt
+
+00:18:36.400 --> 00:18:37.520
+bekeken, is dat een terechte vraag.
+
+00:18:37.680 --> 00:18:38.600
+Heb je het gecontroleerd?
+
+00:18:38.760 --> 00:18:39.640
+Heb je het goed gekeurd?
+
+00:18:39.780 --> 00:18:41.460
+Of heb je er maar één keer op geklikt en ben je verder gegaan?
+
+00:18:41.580 --> 00:18:43.120
+Kijk nu eens wat er gebeurt als de maker vertrekt.
+
+00:18:43.260 --> 00:18:44.300
+Het account wordt gesloten.
+
+00:18:44.500 --> 00:18:45.640
+De mailbox wordt afgehandeld.
+
+00:18:45.820 --> 00:18:46.980
+OneDrive wordt afgehandeld.
+
+00:18:47.120 --> 00:18:48.680
+Een manager krijgt 30 dagen toegang.
+
+00:18:48.920 --> 00:18:49.820
+Standaard afhandeling.
+
+00:18:50.060 --> 00:18:53.940
+En ergens in die persoonlijke ruimte bevindt zich een pagina die drie collega's al twee maanden bewerken.
+
+00:18:54.140 --> 00:18:54.940
+Wat gebeurt ermee?
+
+00:18:54.940 --> 00:18:58.080
+Dat hangt af van waar de pagina zich bevindt en wat je bewaarregels voorschrijven.
+
+00:18:58.220 --> 00:19:00.160
+In veel gevallen volgt de pagina het account.
+
+00:19:00.420 --> 00:19:03.520
+Wanneer het account wordt verwijderd, wordt de inhoud op dezelfde manier verwijderd als
+
+00:19:03.520 --> 00:19:05.540
+alle andere bestanden die aan die persoon zijn gekoppeld.
+
+00:19:05.700 --> 00:19:08.820
+Als niemand het kopieert, als niemand het ergens anders naartoe verplaatst waar een eigenaar
+
+00:19:08.820 --> 00:19:09.980
+staat, kan het zomaar verdwijnen.
+
+00:19:10.120 --> 00:19:12.740
+Of het blijft in een verwijderde account status staan die alleen een beheerder kan bereiken
+
+00:19:12.740 --> 00:19:14.560
+en dan alleen als iemand weet hoe hij of zij ernaar moet vragen.
+
+00:19:14.700 --> 00:19:17.560
+Hoe dan ook, de mensen die die pagina gebruiken, komen er op de meest vervelende manier achter.
+
+00:19:17.720 --> 00:19:18.640
+Een link werkt niet meer.
+
+00:19:18.840 --> 00:19:19.940
+Niemand weet wie ze moeten bellen.
+
+00:19:19.940 --> 00:19:21.700
+En hier komt het stille aspect naar voren.
+
+00:19:21.940 --> 00:19:23.940
+Niemand neemt een teambeslissing op een persoonlijke pagina.
+
+00:19:24.120 --> 00:19:25.500
+Dat gebeurt niet tijdens een vergadering.
+
+00:19:25.700 --> 00:19:26.620
+Het gebeurt spontaan.
+
+00:19:26.820 --> 00:19:28.940
+Iemand maakt een pagina aan met de naam mijn kopiloot notities.
+
+00:19:29.180 --> 00:19:30.840
+Privé, ruw, gewoon aan het nadenken.
+
+00:19:31.000 --> 00:19:33.660
+Een week later deelt diegene de pagina met een collega voor een tweede mening.
+
+00:19:33.840 --> 00:19:35.160
+De collega voegt een tabel toe.
+
+00:19:35.360 --> 00:19:36.480
+Iemand anders krijgt de link.
+
+00:19:36.640 --> 00:19:39.520
+Een manager leest het en zegt, prima, laten we voor optie 2 gaan.
+
+00:19:39.760 --> 00:19:43.260
+Niemand heeft iets aangekondigd, maar die pagina bevat nu een beslissing en die beslissing
+
+00:19:43.260 --> 00:19:46.780
+staat in een persoonlijke ruimte onder een persoonlijke titel met de naam van één persoon
+
+00:19:46.780 --> 00:19:48.680
+als eigenaar en de titel verandert nooit.
+
+00:19:48.880 --> 00:19:50.600
+Er staat nog steeds, mijn noticies.
+
+00:19:50.840 --> 00:19:51.660
+Dat is het vreemde.
+
+00:19:51.840 --> 00:19:55.580
+Het label op de pagina geeft aan dat het privé is, terwijl de pagina zelf de functie van
+
+00:19:55.580 --> 00:19:56.440
+een teamrecord vervult.
+
+00:19:56.640 --> 00:19:59.520
+Je kunt dit dus niet oplossen met een betere editor of een slimmere prompt.
+
+00:19:59.760 --> 00:20:03.300
+De oplossing moet een stap zijn, een wel overwogen, benoemde stap waarbij een persoonlijk
+
+00:20:03.300 --> 00:20:04.720
+artefact een gedeeld artefact wordt.
+
+00:20:04.900 --> 00:20:05.880
+We noemen het promotie.
+
+00:20:06.080 --> 00:20:09.400
+Iemand bekijkt de pagina en vraagt zich af, verdient dit een plek bij een eigenaar?
+
+00:20:09.520 --> 00:20:11.800
+Is dit nog steeds in ontwikkeling of is het nu werkende content?
+
+00:20:12.100 --> 00:20:15.060
+En als het werkende content is, wordt het verplaatst naar een container die van een team
+
+00:20:15.060 --> 00:20:16.000
+is, niet van een persoon.
+
+00:20:16.180 --> 00:20:17.740
+Die stap kan niet automatisch verlopen.
+
+00:20:17.960 --> 00:20:21.220
+Een systeem kan geen onderscheid maken tussen een concept dat iemand heeft laten liggen en
+
+00:20:21.220 --> 00:20:22.760
+een concept dat stilletjesbeleid is geworden.
+
+00:20:22.960 --> 00:20:26.180
+Iemand moet die beslissing nemen en die persoon moet weten dat die beslissing bestaat, want
+
+00:20:26.180 --> 00:20:27.480
+anders beslist de standaardinstelling.
+
+00:20:27.700 --> 00:20:30.780
+En die standaardinstelling zegt, degene die als eerste klikte, is de eigenaar.
+
+00:20:30.960 --> 00:20:32.140
+Dat is geen governance model.
+
+00:20:32.420 --> 00:20:33.940
+Dat is een ongelukje met een naam erop.
+
+00:20:34.100 --> 00:20:37.320
+We weten dus wat we nodig hebben, een duidelijk moment waarop het eigenaarschap van een persoon
+
+00:20:37.320 --> 00:20:38.220
+naar een team overgaat.
+
+00:20:38.320 --> 00:20:42.060
+Maar om dat moment te ontwerpen, moeten we begrijpen wie deze dingen daadwerkelijk kan zien en
+
+00:20:42.060 --> 00:20:43.620
+bewerken op alle vijfde locaties.
+
+00:20:43.860 --> 00:20:45.400
+Rechten zijn waar dit praktisch wordt.
+
+00:20:45.600 --> 00:20:48.160
+Het machtigingsmodel is voor alle vijf tools hetzelfde.
+
+00:20:48.340 --> 00:20:51.180
+Vijf manieren om één vraag te beantwoorden, wie krijgt toegang.
+
+00:20:51.380 --> 00:20:53.880
+Laten we beginnen met teams, want daar is het antwoord het best verborgen.
+
+00:20:54.040 --> 00:20:57.240
+Een team lijkt een op zichzelf staand geheel, met kanalen, chats en een tabblad voor bestanden.
+
+00:20:57.420 --> 00:20:59.220
+Maar de bestanden zelf bevinden zich niet in teams.
+
+00:20:59.440 --> 00:21:03.740
+Elk team is gebaseerd op een Microsoft 365 groep en die groep heeft een SharePoint site erachter.
+
+00:21:04.100 --> 00:21:07.380
+Lidmaatschap van het team betekent lidmaatschap van de groep en lidmaatschap van de groep geeft
+
+00:21:07.380 --> 00:21:08.120
+toegang tot de site.
+
+00:21:08.120 --> 00:21:11.340
+Dus wanneer je iemand aan een team toevoegt, stel je geen machtigingen in voor een chat.
+
+00:21:11.500 --> 00:21:12.660
+Je stelt ze in voor een site.
+
+00:21:12.860 --> 00:21:14.260
+Eigenaren krijgen volledige controle.
+
+00:21:14.500 --> 00:21:15.600
+Leden krijgen bewerkingsrechten.
+
+00:21:15.840 --> 00:21:16.720
+Dat is het hele model.
+
+00:21:16.920 --> 00:21:19.780
+Bestanden die in een kanaal worden gedeeld, komen terecht in de bibliotheek van die site
+
+00:21:19.780 --> 00:21:20.600
+en die toegang erft men.
+
+00:21:20.760 --> 00:21:23.780
+Privé en gedeelde kanalen bevinden zich op hun eigen sites met hun eigen ledenlijsten
+
+00:21:23.780 --> 00:21:25.060
+en dat is waar het ingewikkeld wordt.
+
+00:21:25.240 --> 00:21:27.280
+Maar de regel blijft, teams slaat niet zelf op.
+
+00:21:27.380 --> 00:21:29.820
+Het verwijst naar de opslaglocatie en die bepaalt de toegang.
+
+00:21:30.020 --> 00:21:33.100
+SharePoint zelf, het oudste model in de reeks en eerlijk gezegd ook het duidelijkste,
+
+00:21:33.100 --> 00:21:35.420
+heeft een mapstructuur voor de sitebibliotheek met vier niveaus.
+
+00:21:35.720 --> 00:21:37.240
+Machtigingen lopen van boven naar beneden.
+
+00:21:37.440 --> 00:21:39.260
+Een site-eigenaar kan alles daaronder openen.
+
+00:21:39.380 --> 00:21:41.480
+Een bibliotheek kan zich afsplitsen en een eigen lijst krijgen.
+
+00:21:41.660 --> 00:21:42.860
+Een map kan zich weer afsplitsen.
+
+00:21:43.060 --> 00:21:45.280
+Zelfs een enkel bestand kan unieke toegang hebben voor verschillende personen.
+
+00:21:45.400 --> 00:21:46.400
+Het is een boomstructuur.
+
+00:21:46.580 --> 00:21:47.940
+Je kunt het op een whiteboard tekenen.
+
+00:21:48.080 --> 00:21:50.880
+En omdat het een boomstructuur is, kun je met één klik de lastige vraag beantwoorden.
+
+00:21:51.040 --> 00:21:52.300
+Wie mag dit bestand openen en waarom?
+
+00:21:52.460 --> 00:21:56.000
+Het antwoord is er altijd overgenomen van de site of bewust lager in de structuur ingesteld.
+
+00:21:56.180 --> 00:21:57.720
+Die duidelijkheid heeft echter een prijs.
+
+00:21:57.720 --> 00:22:00.940
+Elke keer dat iemand de overerving verbreekt, wordt de boomstructuur moeilijker te lezen.
+
+00:22:01.140 --> 00:22:04.460
+Vijftig unieke machtigingen op vijftig bestanden en niemand kan zeggen wat de regel was.
+
+00:22:04.640 --> 00:22:06.000
+Maar het model zelf is eerlijk.
+
+00:22:06.180 --> 00:22:07.560
+Het vertelt je waar je moet kijken.
+
+00:22:07.840 --> 00:22:10.120
+OneNote werkt anders en het hangt af van je positie.
+
+00:22:10.260 --> 00:22:11.900
+Een notitieblok is iets dat je deelt.
+
+00:22:12.080 --> 00:22:14.340
+Je geeft iemand het notitieblok en die persoon krijgt het.
+
+00:22:14.760 --> 00:22:17.160
+Bewerkingsrechten, weergave rechten, dat is het niveau waarop het is gebouwd.
+
+00:22:17.360 --> 00:22:20.200
+Binnen OneNote volgen secties en pagina's grotendeels het notitieboek.
+
+00:22:20.340 --> 00:22:23.620
+Er is een oude functie voor wachtwoorden voor secties en die duikt nog steeds op.
+
+00:22:23.620 --> 00:22:27.660
+Dit betekent dat bepaalde inhoud in een notitieboek ontoegankelijk kan zijn voor mensen die normaal gesproken volledige toegang hebben.
+
+00:22:27.820 --> 00:22:29.320
+Niemand herinnert zich dat ze het hebben ingesteld.
+
+00:22:29.480 --> 00:22:31.580
+Het overvalt mensen en dan is er nog de locatie.
+
+00:22:31.760 --> 00:22:33.120
+Een OneNote notitieboek is een bestand.
+
+00:22:33.280 --> 00:22:36.140
+Het staat in OneDrive, in een SharePoint bibliotheek of in de bestandsmap van een team.
+
+00:22:36.320 --> 00:22:37.540
+Welke locatie bepaalt alles?
+
+00:22:37.760 --> 00:22:40.140
+Als het notitieboek in iemands OneDrive staat, volgt het die persoon.
+
+00:22:40.300 --> 00:22:42.480
+Als het notitieboek op een teamsite staat, volgt het het team.
+
+00:22:42.700 --> 00:22:47.100
+Hetzelfde notitieboek, dezelfde secties, maar een compleet ander toegangsverhaal, afhankelijk van de map waarin het is opgeslagen.
+
+00:22:47.320 --> 00:22:49.160
+OneNote heeft dus geen eigen machtigingsmodel.
+
+00:22:49.340 --> 00:22:51.340
+Het leent er een van de locatie waar het zich bevindt.
+
+00:22:51.460 --> 00:22:53.400
+Dat brengt ons bij loop- en copilotpagina's.
+
+00:22:53.520 --> 00:22:55.240
+En hier spelen twee dingen tegelijk een rol.
+
+00:22:55.440 --> 00:22:57.220
+Ten eerste, lidmaatschap van de container.
+
+00:22:57.440 --> 00:23:01.440
+Als een loopwerkruimte de startpagina is, hebben de mensen in die werkruimte toegang tot de inhoud ervan.
+
+00:23:01.640 --> 00:23:03.460
+Voeg een lid toe en die ziet de pagina's.
+
+00:23:03.700 --> 00:23:06.120
+Verwijder een lid en de pagina's verdwijnen uit het zicht.
+
+00:23:06.300 --> 00:23:07.780
+Ten tweede, het delen van links.
+
+00:23:07.960 --> 00:23:10.860
+Een enkel onderdeel of een enkele pagina kan afzonderlijk worden gedeeld.
+
+00:23:10.860 --> 00:23:16.740
+Iemand stuurt een link en de ontvanger kan dat ene item openen zonder zich in de werkruimte te bevinden of zelfs maar te weten dat de werkruimte bestaat.
+
+00:23:16.900 --> 00:23:18.380
+Twee deuren naar dezelfde ruimte.
+
+00:23:18.580 --> 00:23:20.500
+De ene is lidmaatschap, de andere is een link.
+
+00:23:20.660 --> 00:23:24.040
+En voor een copilotpagina in iemands persoonlijke ruimte is er helemaal geen werkruimte.
+
+00:23:24.180 --> 00:23:25.360
+De link is de enige deur.
+
+00:23:25.560 --> 00:23:27.300
+Met wie je deelt, is het hele toegangsmodel.
+
+00:23:27.540 --> 00:23:28.400
+Zet ze naast elkaar.
+
+00:23:28.600 --> 00:23:29.980
+Teams krijgt toegang via een groep.
+
+00:23:30.180 --> 00:23:32.000
+SharePoint krijgt toegang via een boomstructuur.
+
+00:23:32.180 --> 00:23:33.420
+OneNote leent toegang van een map.
+
+00:23:33.640 --> 00:23:35.900
+Loop- en pagina's combineren een container met links.
+
+00:23:35.900 --> 00:23:42.360
+Vier modellen, waarvan er een de andere stilletjes over schrijft, omdat lidmaatschap iets is dat je eenmalig bewust instelt en af en toe controleert.
+
+00:23:42.500 --> 00:23:45.900
+Een link is iets dat je in twee klikken aanmaakt terwijl je met iets anders bezig bent.
+
+00:23:46.080 --> 00:23:49.500
+En dat is waar wat je bedoelde en wat er daadwerkelijk gebeurde, uit elkaar beginnen te lopen.
+
+00:23:49.760 --> 00:23:52.760
+Links delen, waar intentie en realiteit elkaar overlappen.
+
+00:23:52.960 --> 00:23:54.840
+Elke deelbare link is er in een paar typen.
+
+00:23:55.000 --> 00:23:57.200
+Het eerste type is mensen binnen je organisatie.
+
+00:23:57.400 --> 00:23:59.720
+Iedereen binnen de tenant die de link ontvangt, kan deze openen.
+
+00:23:59.880 --> 00:24:02.200
+Geen naam vereist, geen lidmaatschap van de werkruimte nodig.
+
+00:24:02.200 --> 00:24:04.700
+Als ze de URL en een werkaccount hebben, kunnen ze de link openen.
+
+00:24:04.700 --> 00:24:06.440
+De tweede optie is voor specifieke personen.
+
+00:24:06.560 --> 00:24:07.400
+Je typt namen in.
+
+00:24:07.580 --> 00:24:09.040
+Alleen die accounts kunnen de link openen.
+
+00:24:09.160 --> 00:24:11.480
+Als je de link doorstuurt naar iemand anders, werkt deze niet voor die persoon.
+
+00:24:11.660 --> 00:24:13.780
+Dit is de meest strikte optie en wordt het minst gebruikt.
+
+00:24:13.960 --> 00:24:15.200
+De derde optie is voor iedereen.
+
+00:24:15.460 --> 00:24:17.080
+Geen aanmelding, geen accountcontrole.
+
+00:24:17.320 --> 00:24:18.880
+Degene die de link heeft, heeft toegang.
+
+00:24:19.060 --> 00:24:21.720
+Dit geldt ook voor mensen buiten je bedrijf die nooit een licentie hebben gehad.
+
+00:24:21.940 --> 00:24:23.660
+Drie typen, drie heel verschillende beloftes.
+
+00:24:23.880 --> 00:24:25.500
+Dus welke krijgt een gebruiker standaard?
+
+00:24:25.680 --> 00:24:27.040
+Dat hangt af van twee factoren.
+
+00:24:27.240 --> 00:24:29.640
+De eerste is het standaard link type dat is ingesteld voor je tenant.
+
+00:24:29.640 --> 00:24:32.920
+De tweede is wat de gebruiker selecteert in het deelvenster, als ze al iets selecteren.
+
+00:24:33.060 --> 00:24:35.480
+En dit is het belangrijkste, de meeste mensen selecteren niets.
+
+00:24:35.640 --> 00:24:38.220
+Ze klikken op delen, kopiëren de link en plakken deze ergens.
+
+00:24:38.420 --> 00:24:40.460
+Wat er vooraf geselecteerd was, is wat ze versturen.
+
+00:24:40.620 --> 00:24:43.880
+De standaardinstelling is dus het beleid, niet het geschreven beleid, maar het daadwerkelijke beleid.
+
+00:24:44.040 --> 00:24:46.920
+Als de standaardinstellingen van je tenant zijn ingesteld op mensen binnen je organisatie,
+
+00:24:47.060 --> 00:24:50.140
+dan heeft elke snelle deelactie binnen het bedrijf een veel groter bereik dan die dan ook had verwacht.
+
+00:24:50.280 --> 00:24:53.600
+Als het om specifieke personen gaat, neemt de frictie toe en raken gebruikers geïrriteerd.
+
+00:24:53.600 --> 00:24:59.040
+Tenantinstellingen kunnen beperken wat is toegestaan en beheerders kunnen links voor iedereen volledig uitschakelen of beperken tot bepaalde websites.
+
+00:24:59.280 --> 00:25:01.380
+Maar een beperking voorkomt alleen het ergste geval.
+
+00:25:01.600 --> 00:25:05.200
+Het voorkomt niet de dagelijkse verschuiving tussen ons drieën en iedereen in het gebouw.
+
+00:25:05.400 --> 00:25:09.140
+Zo werkt het, een beheerder maakt een nette configuratie, een loopwerkruimte voor een project,
+
+00:25:09.360 --> 00:25:13.800
+acht benoemde leden, toegewezen eigenaren, een gevoeligheidslabel dat delen van buiten afblokkeert.
+
+00:25:13.940 --> 00:25:15.820
+In de machtigingenstructuur ziet het er goed uit.
+
+00:25:16.040 --> 00:25:19.140
+Dan moet een projectleider een collega van een andere afdeling een bepaalde pagina laten zien.
+
+00:25:19.360 --> 00:25:21.280
+Ze wil die collega niet toevoegen aan de werkruimte.
+
+00:25:21.280 --> 00:25:26.340
+Dat voelt als teveel gedoe, dus klikt ze op delen op de pagina, gebruikt de standaard link en plakt die in een chat.
+
+00:25:26.540 --> 00:25:31.940
+Klaar, vijf seconden later heeft die ene link een tweede toegangspoort gecreëerd die de lijst met acht leden volledig negeert.
+
+00:25:32.120 --> 00:25:34.820
+Iedereen in het bedrijf die die URL krijgt kan de pagina openen.
+
+00:25:34.980 --> 00:25:36.880
+Iemand stuurt het door naar een team van veertig mensen.
+
+00:25:37.120 --> 00:25:38.520
+Iemand plakt het in een planningsdocument.
+
+00:25:38.820 --> 00:25:42.620
+De zorgvuldig opgebouwde structuur staat er nog steeds, klopt nog steeds en geeft nog steeds acht mensen aan.
+
+00:25:42.760 --> 00:25:44.280
+En het werkelijke publiek is veel groter.
+
+00:25:44.540 --> 00:25:45.820
+Niemand heeft een regel overtreden.
+
+00:25:45.940 --> 00:25:47.920
+Het lidmaatschap van de werkruimte is nooit veranderd.
+
+00:25:47.920 --> 00:25:50.920
+De link werkt er gewoon naast. Dat maakt het zo moeilijk om dit te ontdekken.
+
+00:25:51.080 --> 00:25:54.060
+Het lidmaatschap is zichtbaar. Je kunt de ledenlijst openen en tellen.
+
+00:25:54.200 --> 00:25:55.940
+Een link is onzichtbaar totdat je ernaar zoekt.
+
+00:25:56.100 --> 00:25:57.680
+En zelfs dan moet je weten waar je moet kijken.
+
+00:25:57.920 --> 00:25:59.420
+Dus wat kan een beheerder nu eigenlijk zien?
+
+00:25:59.620 --> 00:26:01.920
+Voor bestanden in SharePoint en OneDrive best veel.
+
+00:26:02.080 --> 00:26:05.740
+Je kunt een site openen, het delen controleren, zien welke items links hebben en welk type het zijn.
+
+00:26:05.920 --> 00:26:09.300
+Er zijn rapporten, zoekhulpmiddelen en een overzicht waarmee je gedeelde content kunt vinden.
+
+00:26:09.540 --> 00:26:11.740
+Voor loop en pagina's is het beeld minder duidelijk.
+
+00:26:11.740 --> 00:26:20.680
+Je kunt de containers beheren, beleid toepassen en zoekopdrachten uitvoeren, maar het is lastiger om een overzicht te krijgen van wie welk onderdeel met wie heeft gedeeld via welke link.
+
+00:26:20.900 --> 00:26:25.200
+Onderdelen in persoonlijke opslag volgen het deelgedrag van de OneDrive van die persoon.
+
+00:26:25.500 --> 00:26:31.280
+Componenten in een werkruimte volgen de container en pagina's in iemands eigen ruimte worden meestal weergegeven als items in die ruimte.
+
+00:26:31.480 --> 00:26:34.980
+Het eerlijke antwoord is dus, je ziet meer dan niets, maar minder dan je zou willen.
+
+00:26:34.980 --> 00:26:43.000
+Die kloof is een reden om te controleren wat je eigen tenant rapporteert voordat je iemand vertelt dat het gedekt is, want een link deelt niet alleen content, maar ook de toekomst van die content.
+
+00:26:43.240 --> 00:26:48.660
+Wat er ook gebeurt, of het nu groeit, bewerkt, gekopieerd of verouderd raakt, gebeurt met dat publiek eraan gekoppeld.
+
+00:26:48.860 --> 00:26:54.100
+Dat leidt tot de vraag waar de meeste teams nooit aan toekomen, niet hoe content wordt gedeeld, maar hoe lang het zou moeten blijven bestaan.
+
+00:26:54.300 --> 00:26:57.260
+De levenscyclus begint bij de creatie, niet bij het opruimen.
+
+00:26:57.460 --> 00:27:00.160
+Elk stuk content heeft een leven. Het begint ergens.
+
+00:27:00.380 --> 00:27:02.760
+Het wordt een tijdje gebruikt en op een gegeven moment moet het stoppen.
+
+00:27:02.760 --> 00:27:05.120
+Dat is een geboorte, een werkzame levensduur en een einde.
+
+00:27:05.340 --> 00:27:09.520
+Drie fases. De meeste organisaties plannen voor precies één van die fases, meestal de laatste.
+
+00:27:09.920 --> 00:27:14.820
+Bewaartermijnen, verwijderingsregels, archiveringsbeleid, alles is geschreven voor het moment dat content moet verdwijnen.
+
+00:27:14.980 --> 00:27:18.420
+Maar niemand beschrijft de eerste fase, niemand bepaalt hoe het begin eruit ziet.
+
+00:27:18.640 --> 00:27:21.180
+Laten we dat eens eens doen. Begin met een simpele observatie.
+
+00:27:21.420 --> 00:27:24.220
+Niet alle content is hetzelfde, zelfs niet als het in dezelfde tool staat.
+
+00:27:24.380 --> 00:27:28.120
+Een ruwe lijst met ideeën die je in twee minuten hebt getypt, is niet hetzelfde als een goedgekeurd projectplan.
+
+00:27:28.120 --> 00:27:33.200
+Het kan allebei een pagina zijn. Het kan allebei een deelknop hebben, maar de ene is kladpapier en de andere is een archief.
+
+00:27:33.360 --> 00:27:37.120
+Die twee horen niet op dezelfde plek te staan. En wel hierom, een archief heeft regels nodig.
+
+00:27:37.340 --> 00:27:43.660
+Het moet een bekende eigenaar hebben, een vastgestelde bewaartermijn, een label dat de gevoeligheid aangeeft en een plek waar iemand het over drie jaar nog kan vinden.
+
+00:27:44.060 --> 00:27:48.360
+Kladpapier heeft dat allemaal niet nodig. Kladpapier moet snel, goedkoop en gemakkelijk te verwijderen zijn.
+
+00:27:48.620 --> 00:27:52.520
+Zet kladpapier op een plek die bedoelt is voor archiefpapier en je begraaft de echte documenten onder de ruis.
+
+00:27:52.520 --> 00:27:56.500
+Zoeken raakt vol met half afgemaakte concepten. Mensen vertrouwen niet meer op wat ze vinden.
+
+00:27:56.740 --> 00:27:59.700
+Zet archiefpapier op een plek die bedoelt is voor kladpapier en het tegenovergestelde gebeurt.
+
+00:27:59.860 --> 00:28:03.960
+Iets wat het bedrijf moet bewaren, ligt in een persoonlijke ruimte zonder eigenaar te wachten tot een account wordt afgesloten.
+
+00:28:04.220 --> 00:28:09.340
+Beide fouten komen voort uit dezelfde oorzaak. De inhoud werd ergens opgeslagen voordat iemand zich afvroeg wat voor soort inhoud het was.
+
+00:28:09.560 --> 00:28:11.000
+Laten we er dus een structuur aan geven.
+
+00:28:11.220 --> 00:28:15.280
+Drie staten. De eerste is concept, bedacht door één persoon, ruw en ongecontroleerd.
+
+00:28:15.280 --> 00:28:20.260
+Dit is het antwoord van de co-piloot dat je niet twee keer hebt gelezen of de schets die je in een loopcomponent hebt getypt om te zien hoe het eruit ziet.
+
+00:28:20.420 --> 00:28:25.340
+Het is van nature privé. Het mag fout zijn. De thuisbasis is persoonlijk. De levensduur is kort.
+
+00:28:25.540 --> 00:28:28.480
+De tweede is samenwerken. Een kleine groep bouwt nu samen niets op.
+
+00:28:28.660 --> 00:28:32.240
+De inhoud is live. Mensen bewerken. Dingen veranderen dagelijks.
+
+00:28:32.420 --> 00:28:37.760
+Het is niet langer alleen van jou. Het heeft een status nodig die bij de groep hoort met benoemde eigenaren, zodat het blijft bestaan als iemand vertrekt.
+
+00:28:37.920 --> 00:28:40.600
+Maar het is nog niet definitief. Niemand zou het nog als het antwoord moeten beschouwen.
+
+00:28:40.600 --> 00:28:45.600
+De laatste is een overeengekomen document. Iemand heeft een besluit genomen. De inhoud beschrijft wat de organisatie bedoelt.
+
+00:28:45.780 --> 00:28:49.120
+Anderen zullen erop vertrouwen. Dit is de staat die een gecontroleerde thuisbasis nodig heeft.
+
+00:28:49.240 --> 00:28:54.480
+Een label, een bewaarregel en een eigenaar die een rol vertegenwoordigt. Niet alleen een naam, concept, samenwerken, overeengekomen document.
+
+00:28:54.760 --> 00:28:58.660
+Let op wat ze van elkaar onderscheidt. Het ligt niet aan de tool. Het ligt niet aan het formaat.
+
+00:28:58.800 --> 00:29:01.860
+Het ligt aan het publiek en het niveau van vertrouwen dat dat publiek in de inhoud mag stellen.
+
+00:29:02.040 --> 00:29:06.040
+En hier faalt governance meestal. De meeste programma's richten hun energie op de derde fase.
+
+00:29:06.040 --> 00:29:11.800
+Dat is logisch. Daar zit het compliance team. Daar kijken auditors. Daar kost een slechte afloop echt geld.
+
+00:29:12.000 --> 00:29:15.980
+Dus worden er labels ontworpen voor documenten. Er worden bewaartermijnen opgesteld voor documenten.
+
+00:29:16.140 --> 00:29:18.800
+De training legt uit hoe documenten correct moeten worden gearchiveerd.
+
+00:29:18.980 --> 00:29:23.820
+Ondertussen loopt de eerste twee fasen volledig uit de hand. Bedenk waar het risico zich daadwerkelijk opbouwt.
+
+00:29:24.000 --> 00:29:26.680
+Duizenden concepten worden dagelijks gemaakt in persoonlijke ruimtes.
+
+00:29:26.960 --> 00:29:30.180
+Honderden gedeelde werkpagina's worden bewerkt door groepen zonder officiële eigenaar.
+
+00:29:30.380 --> 00:29:32.400
+Niets daarvan wordt geteld, niets wordt gecontroleerd.
+
+00:29:32.400 --> 00:29:37.960
+En een deel ervan, het deel dat niemand bijhoudt, wordt stilletjes onderdeel van het daadwerkelijke document zonder ooit als zodanig te worden gearchiveerd.
+
+00:29:38.140 --> 00:29:42.800
+Dat is het patroon. De laatste fase krijgt de aandacht. De eerste twee fasen creëren het probleem.
+
+00:29:42.920 --> 00:29:45.780
+Een life cycle plan dat begint bij het opruimen, begint dus te laat.
+
+00:29:45.980 --> 00:29:49.580
+Tegen die tijd is de content al verspreid, gedeeld, geciteerd en vertrouwd.
+
+00:29:49.760 --> 00:29:52.120
+De enige eerlijke plek om te beginnen is bij de creatie.
+
+00:29:52.280 --> 00:29:54.660
+In welke staat bevindt het zich? Waar hoort die staat thuis?
+
+00:29:54.820 --> 00:29:56.740
+En de moeilijkere vraag volgt direct daarop.
+
+00:29:56.840 --> 00:29:58.280
+Content blijft niet in één staat.
+
+00:29:58.460 --> 00:29:59.860
+Een concept wordt gezamenlijk werk.
+
+00:29:59.860 --> 00:30:03.480
+Gezamenlijk werk wordt een document. Elk van die verschuivingen is een verplaatsing.
+
+00:30:03.620 --> 00:30:06.900
+Een persoon of een proces moet de content van de ene plek naar de andere brengen.
+
+00:30:07.060 --> 00:30:08.860
+Dus hoe vindt die verplaatsing eigenlijk plaats?
+
+00:30:09.040 --> 00:30:11.040
+Het promotiepad van denken naar document.
+
+00:30:11.280 --> 00:30:12.840
+Content beweegt zich in drie stappen.
+
+00:30:13.040 --> 00:30:14.400
+Elke stap heeft zijn eigen plek.
+
+00:30:14.580 --> 00:30:15.920
+Begin met het bedenken van een concept.
+
+00:30:16.180 --> 00:30:18.760
+Daar passen co-pilot pagina's en loopcomponenten het beste bij.
+
+00:30:18.920 --> 00:30:23.060
+Je vraagt co-pilot om een discussie samen te vatten, het antwoord op een pagina te plaatsen en het te verbeteren,
+
+00:30:23.060 --> 00:30:25.760
+of je plaatst snel een tabel in een loopcomponent om een idee te testen.
+
+00:30:25.860 --> 00:30:27.200
+Het staat in je eigen ruimte.
+
+00:30:27.420 --> 00:30:29.300
+Niemand anders ziet het. Dat is het punt.
+
+00:30:29.300 --> 00:30:32.480
+Je kunt hier een fout maken en je kunt het morgen verwijderen zonder dat er iets misgaat.
+
+00:30:32.720 --> 00:30:34.480
+Vervolgens verdient de content een tweede plek.
+
+00:30:34.860 --> 00:30:37.100
+Gezamenlijk werken hoort thuis op een plek die van de groep is.
+
+00:30:37.280 --> 00:30:41.640
+Een loopwerkruimte werkt hier goed voor, net als een teamskanaal met het bestand in de site van het kanaal.
+
+00:30:41.800 --> 00:30:45.200
+Het belangrijkste is dat de container benoemde eigenaren en een ledenlijst heeft,
+
+00:30:45.400 --> 00:30:46.920
+en niet dat één account alles beheert.
+
+00:30:47.160 --> 00:30:50.200
+Wanneer iemand met verlof gaat of het bedrijf verlaat, blijft het werk toegankelijk.
+
+00:30:50.400 --> 00:30:53.200
+De groep kan het bewerken, erover discussiëren en het dagelijks aanpassen.
+
+00:30:53.380 --> 00:30:56.820
+Het is nog steeds niet definitief, maar het is niet langer privé en het pretendeert dat ook niet te zijn.
+
+00:30:56.820 --> 00:31:01.960
+Tot slot is er het record. Een record hoort in SharePoint, op een site, in een speciaal gekozen bibliotheek,
+
+00:31:02.040 --> 00:31:06.260
+met metadata die aangeeft wat het document is en een gevoeligheidslabel dat overeenkomt met de inhoud.
+
+00:31:06.440 --> 00:31:08.480
+Hier worden bewaarregels netjes toegepast.
+
+00:31:08.660 --> 00:31:10.860
+Hier werkt zoeken over jaren, niet over weken,
+
+00:31:11.140 --> 00:31:15.840
+en hier is een eigenaar een rol zoals hoofdinkoop in plaats van iemand die in het voorjaar misschien alweer vertrokken is.
+
+00:31:16.020 --> 00:31:17.400
+Het proces ziet er dus als volgt uit.
+
+00:31:17.560 --> 00:31:21.940
+Concept in een persoonlijke ruimte, werken in een gedeelde container, record in een beheerde bibliotheek.
+
+00:31:22.080 --> 00:31:22.880
+Simpel op papier.
+
+00:31:22.880 --> 00:31:26.300
+Het lastige is weten wanneer je moet verplaatsen, want niets in de tools geeft dat aan.
+
+00:31:26.500 --> 00:31:29.360
+Geen pagina wordt geel, geen banner zegt dat dit nu belangrijk is.
+
+00:31:29.540 --> 00:31:31.860
+Content blijft gewoon staan en wordt elke dag betrouwbaarder,
+
+00:31:32.060 --> 00:31:34.240
+en de verplaatsing vindt pas plaats als iemand het opmerkt.
+
+00:31:34.380 --> 00:31:38.080
+We hebben dus triggers nodig, echte triggers, gebeurtenissen die aangeven dat het tijd is om te promoten.
+
+00:31:38.240 --> 00:31:39.700
+De eerste trigger is een beslissing.
+
+00:31:39.900 --> 00:31:41.940
+Iemand zegt ja, optie 2, laten we ervoor gaan.
+
+00:31:42.100 --> 00:31:45.380
+Op het moment dat die zin wordt uitgesproken, is de content erachter geen concept meer.
+
+00:31:45.520 --> 00:31:46.720
+Het is nu de reden voor iets.
+
+00:31:46.940 --> 00:31:48.600
+Als het op een persoonlijke pagina blijft staan,
+
+00:31:48.760 --> 00:31:50.840
+bevindt de beslissing zich op een plek die niemand anders kan vinden.
+
+00:31:50.840 --> 00:31:52.600
+De beslissing zelf is dus het signaal.
+
+00:31:52.780 --> 00:31:54.560
+Beslissing genomen, content verplaatst.
+
+00:31:54.700 --> 00:31:56.240
+De tweede trigger is een overdracht.
+
+00:31:56.400 --> 00:31:59.580
+Een project wisselt van eigenaar, een rol krijgt een nieuwe persoon, een team wordt gereorganiseerd.
+
+00:31:59.780 --> 00:32:03.460
+Wat de oorzaak ook is, de content staat op het punt de persoon te verliezen die begreep waar de content thuis hoorde.
+
+00:32:03.680 --> 00:32:07.160
+Voordat die persoon vertrekt, heeft de content een plek nodig die niet van hem of haar afhankelijk is.
+
+00:32:07.320 --> 00:32:10.060
+Een overdracht is een deadline en het is een van de weinigen die je ziet aankomen.
+
+00:32:10.240 --> 00:32:13.980
+De derde trigger is een extern publiek, een klant, een partner, een auditor, een toezichthouder.
+
+00:32:14.160 --> 00:32:16.840
+De tweede content is bestemd voor iemand buiten je eigen organisatie.
+
+00:32:16.840 --> 00:32:20.840
+De inzet verandert. Het delen van links, labels en toegangsbeoordelingen is nu veel belangrijker.
+
+00:32:21.540 --> 00:32:25.320
+Content die prima was voor een team van vijf is niet meer geschikt op de dag dat een klant het gaat openen.
+
+00:32:25.440 --> 00:32:28.760
+Een beslissing, een overdracht, een extern publiek, elk van deze factoren is voldoende.
+
+00:32:28.920 --> 00:32:30.940
+Als je op alle drie wacht, heb je te lang gewacht.
+
+00:32:31.080 --> 00:32:32.820
+Je ziet nu misschien een patroon in deze triggers.
+
+00:32:33.100 --> 00:32:34.800
+Geen van deze triggers heeft te maken met tijd.
+
+00:32:34.980 --> 00:32:37.320
+Content wordt niet gepromoot omdat het 30 dagen oud is.
+
+00:32:37.500 --> 00:32:39.460
+Het wordt gepromoot omdat er iets mee is gebeurd.
+
+00:32:39.680 --> 00:32:43.300
+Dat is een nuttige manier om erover na te denken, omdat het mensen niets concreets geeft om op te letten.
+
+00:32:43.480 --> 00:32:45.640
+Ze hoeven niet te beoordelen hoe belangrijk de content is.
+
+00:32:45.640 --> 00:32:48.240
+Ze hoeven zich alleen maar af te vragen, hebben we net een beslissing genomen.
+
+00:32:48.420 --> 00:32:50.260
+Gaat er iemand weg? Gaat dit naar buiten?
+
+00:32:50.460 --> 00:32:52.920
+Drie vragen, makkelijk te onthouden, makkelijk aan te leren.
+
+00:32:53.100 --> 00:32:55.980
+Maar hier aarzelen mensen. Ze weten dat de content verplaatst moet worden.
+
+00:32:56.180 --> 00:32:58.420
+Ze willen het alleen niet verplaatsen en daar hebben ze een goede reden voor.
+
+00:32:58.560 --> 00:33:00.160
+Het verplaatsen van content is niet gratis.
+
+00:33:00.320 --> 00:33:01.580
+Er gaat altijd wel iets verloren.
+
+00:33:02.160 --> 00:33:05.360
+Versiegeschiedenis, opmerkingen, live verbindingen, links die anderen al hebben opgeslagen.
+
+00:33:05.560 --> 00:33:09.720
+Dus voordat we mensen vragen om iets te promoten, moeten we eerlijk zijn over de kosten van die verplaatsing.
+
+00:33:09.900 --> 00:33:11.740
+Wat gaat er mis als content wordt verplaatst?
+
+00:33:11.740 --> 00:33:15.180
+Laten we beginnen met de loopcomponent, want die kan op twee manieren worden verplaatst.
+
+00:33:15.280 --> 00:33:17.140
+Je kunt hem kopiëren of je kunt hem linken.
+
+00:33:17.280 --> 00:33:21.180
+Een kopie haalt de content uit het originele bestand en plaatst een statische versie ergens anders.
+
+00:33:21.380 --> 00:33:25.840
+Plak de tekst in een woorddocument, exporteer een tabel naar Excel en wat er terechtkomt is een momentopname.
+
+00:33:26.060 --> 00:33:29.320
+Die ziet er op de eerste dag goed uit, maar stopt met werken zodra hij aankomt.
+
+00:33:29.420 --> 00:33:30.620
+Een link behoudt de verbinding.
+
+00:33:30.840 --> 00:33:33.760
+De nieuwe locatie toont een live weergave van hetzelfde originele bestand,
+
+00:33:33.960 --> 00:33:37.800
+dezelfde content, dezelfde bewerkingen, geen verschuiving, maar het bestand blijft op dezelfde plek staan.
+
+00:33:38.020 --> 00:33:39.120
+Linken verplaatst dus niets.
+
+00:33:39.280 --> 00:33:42.820
+Het voegt een extra plek toe om hetzelfde te bekijken, met dezelfde oude locatie eronder.
+
+00:33:43.080 --> 00:33:44.180
+Dat is de eerste afweging.
+
+00:33:44.440 --> 00:33:47.140
+Kopieer je het, dan krijg je een nieuwe container, maar verlies je de live content.
+
+00:33:47.380 --> 00:33:50.020
+Link je het, dan behoud je de live content, maar je hebt niets gepromoot.
+
+00:33:50.180 --> 00:33:51.340
+Je hebt er alleen naar verwezen.
+
+00:33:51.580 --> 00:33:53.500
+De meeste mensen weten niet dat ze een keuze maken.
+
+00:33:53.720 --> 00:33:55.200
+Ze plakken en zien wel wat er gebeurt.
+
+00:33:55.420 --> 00:33:58.640
+Dan is er nog de tweede kostenpost, wat wordt er met de inhoud meegekopieerd en wat blijft erachter?
+
+00:33:58.780 --> 00:34:00.420
+De versiegeschiedenis hoort bij het bestand.
+
+00:34:00.640 --> 00:34:03.140
+Wanneer je inhoud kopieert, wordt de geschiedenis niet meegekopieerd.
+
+00:34:03.140 --> 00:34:06.340
+Het nieuwe item begint bij versie 1, met jou als auteur en vandaag als datum.
+
+00:34:06.520 --> 00:34:09.980
+Drie weken aan bewerkingen, wie welke regel heeft gewijzigd, wie de samenvatting heeft herschreven.
+
+00:34:10.180 --> 00:34:11.920
+Dat blijft allemaal in het oude bestand staan.
+
+00:34:12.120 --> 00:34:14.140
+Als iemand later vraagt, wanneer is dit getal gewijzigd?
+
+00:34:14.800 --> 00:34:17.380
+Dan staat het antwoord ergens waar de record niet meer naar verwijst.
+
+00:34:17.620 --> 00:34:20.620
+Hetzelfde geldt voor opmerkingen, die zijn gekoppeld aan het origineel.
+
+00:34:20.780 --> 00:34:24.000
+Een discussie waarin twee mensen ruzie maakten over een getal en het uiteindelijk eens werden,
+
+00:34:24.180 --> 00:34:25.960
+is vaak het beste bewijs voor een bepaalde beslissing.
+
+00:34:26.120 --> 00:34:29.540
+Verplaats je de inhoud zonder die opmerkingen, dan behoud je de conclusie, maar verlies je de onderbouwing.
+
+00:34:29.540 --> 00:34:31.460
+En het synchronisatiegedrag verandert.
+
+00:34:31.660 --> 00:34:34.080
+Binnen de loop ziet iedereen de bewerkingen zodra ze plaatsvinden.
+
+00:34:34.300 --> 00:34:37.060
+Zodra een kopie in een documentbibliotheek terechtkomt, stopt dat.
+
+00:34:37.260 --> 00:34:40.280
+Mensen bewerken de oude en de nieuwe versie parallel, zonder dat ze het weten.
+
+00:34:40.460 --> 00:34:42.760
+Twee bestanden, dezelfde titel, verschillende nummers.
+
+00:34:42.980 --> 00:34:47.260
+Zo ontstaan duplicaten, niet door onachtzaamheid, maar door een verhuizing die er compleet uitzag, maar dat niet was.
+
+00:34:47.440 --> 00:34:49.140
+Dan is er nog de stille schade, de links.
+
+00:34:49.360 --> 00:34:52.140
+Iedereen die aan het concept werkte, heeft het adres van de oude locatie opgeslagen.
+
+00:34:52.340 --> 00:34:54.600
+Het staat in chatgesprekken, in notulen van vergaderingen.
+
+00:34:54.700 --> 00:34:56.580
+Het staat in een e-mail die iemand in maart verstuurde.
+
+00:34:56.580 --> 00:34:59.840
+Het staat in een projectplan, een bladwijzer en een bericht dat is vastgepint in een kanaal.
+
+00:34:59.960 --> 00:35:03.360
+Promoot de content, en al die links verwijzen nog steeds naar de oude locatie.
+
+00:35:03.520 --> 00:35:04.780
+Nu gebeuren er twee dingen.
+
+00:35:04.980 --> 00:35:08.880
+Als de oude content blijft staan, blijven mensen die openen, bewerken en erop vertrouwen.
+
+00:35:09.040 --> 00:35:14.600
+Ze werken in het concept terwijl het document ongelezen in SharePoint blijft staan of de oude content wordt verwijderd en de links werken niet meer.
+
+00:35:14.760 --> 00:35:19.360
+Een dode pagina, een bericht dat niet gevonden kan worden, en iemand die de persoon die het verplaatst heeft, een bericht stuurt.
+
+00:35:19.560 --> 00:35:21.160
+Geen van beide is een technische fout.
+
+00:35:21.460 --> 00:35:24.340
+Beiden zijn het gevolg van een verhuizing zonder plan voor wat er achter blijft.
+
+00:35:24.340 --> 00:35:27.700
+De oplossing is dus niet om verhuizen te vermijden, maar om verhuizen een bewuste actie te maken.
+
+00:35:27.880 --> 00:35:30.300
+Een bewuste promotiestap heeft een aantal duidelijke voordelen.
+
+00:35:30.500 --> 00:35:34.720
+Als iemand besluit iets te promoten, kiest diegene bewust de bestemming waarbij de eigenaar en het label al bekend zijn.
+
+00:35:34.880 --> 00:35:40.300
+De belangrijkste elementen worden overgenomen, de kerncommentaren, de beslissing, een notitie over waar de geschiedenis zich bevindt en de oude locatie wordt afgehandeld.
+
+00:35:40.460 --> 00:35:46.200
+Ofwel wordt het gemarkeerd als vervangen met een verwijzing naar de nieuwe locatie, ofwel wordt het verwijderd en worden de mensen die de oude link hadden hiervan op de hoogte gesteld.
+
+00:35:46.200 --> 00:35:49.960
+Dat is vijf minuten werk en het gebeurt alleen als iemand de verantwoordelijkheid voor deze stap op zich neemt.
+
+00:35:50.080 --> 00:35:52.700
+Zonder die stap wordt content per ongeluk verplaatst, of helemaal niet.
+
+00:35:52.860 --> 00:35:56.160
+In beide gevallen blijft er een record over dat niemand kan vertrouwen en concepten die niemand kan vinden.
+
+00:35:56.340 --> 00:35:58.800
+Maar zelfs een nette promotie lost maar de helft van het probleem op.
+
+00:35:58.940 --> 00:36:02.080
+Zodra de content op de juiste plek staat, begint een andere tijdlijn.
+
+00:36:02.280 --> 00:36:08.820
+Want alles wat we tot nu toe hebben besproken, de locaties, de links, de kopieën hangt af van nog één ding, hoe lang het allemaal mag blijven bestaan.
+
+00:36:09.020 --> 00:36:11.040
+Het gaat om bewaar- en verwijderingsgedrag.
+
+00:36:11.040 --> 00:36:15.800
+Bewaring is een beleidskwestie en beleid werkt alleen als het de plek bereikt waar de content zich bevindt.
+
+00:36:15.860 --> 00:36:16.640
+Begin daar dus.
+
+00:36:16.860 --> 00:36:23.180
+Bewaar beleid binnen het Microsoft domein is van toepassing op locaties, exchange postvakken, SharePoint sites en OneDrive accounts.
+
+00:36:23.440 --> 00:36:27.680
+Loop content valt onder dezelfde locaties, afhankelijk van waar het back-up bestand is opgeslagen.
+
+00:36:27.880 --> 00:36:34.300
+Een component dat in een chat of e-mail is gemaakt, bevindt zich in de OneDrive van de maker en valt daarom onder het beleid dat u voor OneDrive hebt ingesteld.
+
+00:36:34.300 --> 00:36:38.780
+Een werkruimte bevindt zich in een ingebedde container en die container heeft een eigen beleidsbereik.
+
+00:36:38.780 --> 00:36:44.940
+Microsoft heeft ondersteuning hiervoor toegevoegd, maar de details zijn in de loop der tijd veranderd, dus raadpleeg de actuele documentatie voor uw tenant.
+
+00:36:45.140 --> 00:36:48.000
+Co-pilot pagina's en persoonlijke ruimtes werken op dezelfde manier.
+
+00:36:48.200 --> 00:36:51.660
+Ze worden opgeslagen bij de gebruiker, dus het bewaarbeleid van de gebruiker is erop van toepassing.
+
+00:36:51.840 --> 00:36:57.960
+De volgende fout wordt vaak gemaakt, een team schrijft één bewaarbeleid voor SharePoint sites en één voor OneDrive en gaat ervan uit dat loopstandaard onder dit beleid valt.
+
+00:36:58.180 --> 00:37:01.800
+Misschien is dat ook zo, misschien sluit het gekozen bereik de ingebedde containers uit.
+
+00:37:01.800 --> 00:37:04.120
+Niemand controleert dit omdat er niets mis lijkt te zijn.
+
+00:37:04.280 --> 00:37:08.680
+De pagina's blijven gewoon buiten de regels staan totdat iemand ze wil verwijderen of juist wil bewaren.
+
+00:37:08.780 --> 00:37:15.080
+Test het dus, maak een component aan, maak een pagina aan en voer een zoekopdracht uit vanuit het overzicht om te zien of uw beleid en blokkeringen hierop van toepassing zijn.
+
+00:37:15.320 --> 00:37:16.080
+Neem nu het account.
+
+00:37:16.340 --> 00:37:20.800
+Een gebruiker vertrekt, zijn account wordt verwijderd en alles wat aan dat account is gekoppeld valt onder een bepaalde tijdslimiet.
+
+00:37:20.980 --> 00:37:26.820
+OneDrive content volgt de bewaartermijn die uw tenant instelt voor verwijderde gebruikers, standaard 30 dagen, en u kunt deze verlengen.
+
+00:37:26.820 --> 00:37:32.440
+Na die periode wordt de persoonlijke opslag in de wachtrij geplaatst voor verwijdering, tenzij een bewaarbeleid of een blokkering deze tegenhoudt.
+
+00:37:32.440 --> 00:37:36.760
+Dat geldt voor alles wat erin staat, de component van een chat, de copilotpagina die niemand heeft verplaatst.
+
+00:37:36.900 --> 00:37:42.280
+Als het zich in de ruimte van die persoon bevond, doorloopt het die weg en blijft het alleen behouden als iemand actie heeft ondernomen voordat de tijdslimiet was verstreken.
+
+00:37:42.440 --> 00:37:44.540
+Content in een werkruimtecontainer is anders.
+
+00:37:44.760 --> 00:37:46.000
+Het behoort niet tot het account.
+
+00:37:46.260 --> 00:37:50.780
+Het blijft behouden omdat de container blijft bestaan, maar als de laatste eigenaar weg is, blijft het behouden zonder dat iemand de controle heeft.
+
+00:37:50.780 --> 00:37:54.340
+Nu het vangnet, en ik zal hier voorzichtig zijn, want mensen vertrouwen er te veel op.
+
+00:37:54.440 --> 00:37:55.380
+Er is een prullenbak.
+
+00:37:55.600 --> 00:37:59.880
+Wanneer iemand een bestand verwijdert in SharePoint of OneDrive, gaat het naar een prullenbak van de eerste fase.
+
+00:38:00.220 --> 00:38:01.580
+Gebruikers kunnen het zelf herstellen.
+
+00:38:01.820 --> 00:38:05.320
+Na een bepaalde tijd wordt het verplaatst naar een tweede opslaglocatie die toegankelijk is voor beheerders.
+
+00:38:05.500 --> 00:38:10.180
+De standaardperiode is 90 dagen, verdeeld over beide fases, gerekend vanaf de oorspronkelijke verwijdering.
+
+00:38:10.400 --> 00:38:11.980
+Daarna is het permanent verdwenen.
+
+00:38:12.320 --> 00:38:16.060
+Loopcontent wordt op dezelfde manier bewaard, aangezien de back-up bestanden bestanden zijn.
+
+00:38:16.060 --> 00:38:22.820
+Hoe verwijdering er vanuit loop uitziet en hoe een verwijderde pagina of werkruimte kan worden hersteld, hangt echter af van de productversie en de beheertools die u gebruikt.
+
+00:38:23.000 --> 00:38:27.300
+Beloof het management dus geen schone herstelprocedure, maar beloof een periode en vertel mensen dat die kort is.
+
+00:38:27.460 --> 00:38:28.820
+Een bewaarbeleid verandert dit.
+
+00:38:28.980 --> 00:38:35.080
+Als een beleid voorschrijft dat items bewaard moeten worden, wordt het verwijderde item in een verborgen bewaargebied bewaard, zelfs nadat de gebruiker alle opslaglocaties heeft gelegd.
+
+00:38:35.180 --> 00:38:38.220
+De gebruiker denkt dat het weg is. De organisatie heeft het echter nog steeds.
+
+00:38:38.440 --> 00:38:41.420
+Dat is de bedoeling, maar het werkt alleen voor locaties die daadwerkelijk onder het beleid vallen.
+
+00:38:41.420 --> 00:38:47.100
+Dan zijn er nog teams, waar mensen twee dingen door elkaar halen. Chatberichten zijn één ding, bestanden waarnaar in de chat wordt verwezen, zijn iets anders.
+
+00:38:47.280 --> 00:38:50.760
+De bewaartermijn voor teams chats is vastgelegd in een eigen beleid voor chats en kanaalberichten.
+
+00:38:51.000 --> 00:38:56.480
+Berichten kunnen na een jaar of drie worden verwijderd of voor altijd worden bewaard, maar een bestand dat in een chat wordt gedeeld, bevindt zich niet in het bericht zelf.
+
+00:38:56.660 --> 00:39:00.720
+Het staat in OneDrive in de ruimte van de afzender of in de SharePoint site van het team voor een kanaal.
+
+00:39:00.840 --> 00:39:05.620
+Je kunt dus een chatbeleid instellen dat het bericht na een jaar verwijderd, terwijl het bestand waarnaar het verwijst nog steeds bestaat,
+
+00:39:05.620 --> 00:39:10.700
+of andersom, een bestandsbeleid dat het document verwijderd, terwijl het bericht met de dode link jarenlang in de chat blijft staan.
+
+00:39:10.880 --> 00:39:14.200
+Twee klokken, twee locaties, zelden ingesteld door dezelfde persoon.
+
+00:39:14.380 --> 00:39:16.360
+En let op wat er in al deze regels ontbreekt.
+
+00:39:16.580 --> 00:39:20.460
+Ze vertellen je hoe lang, ze vertellen je niet wie, wie wordt gebeld wanneer een wachtlijst moet worden herzien,
+
+00:39:20.660 --> 00:39:23.200
+wie besluit om te verlengen, wie merkt dat een container stil is geworden.
+
+00:39:23.440 --> 00:39:25.140
+Dat deel van de retentie is geen instelling.
+
+00:39:25.600 --> 00:39:27.360
+Eigenaarschap is de verborgen helft van retentie.
+
+00:39:27.560 --> 00:39:29.580
+Verwees de content en de vertrekkende eigenaar.
+
+00:39:29.780 --> 00:39:32.380
+Denk na over hoe één stuk content daadwerkelijk wordt gebruikt.
+
+00:39:32.380 --> 00:39:37.020
+Eén persoon maakt het, een co-pilot pagina, een loopcomponent, een tabel die begon als een snel idee.
+
+00:39:37.280 --> 00:39:38.280
+Die persoon deelt het.
+
+00:39:38.480 --> 00:39:44.340
+Binnen een maand hebben elf mensen het geopend, zes hebben het bewerkt en twee hebben de link in hun eigen planningsdocumenten geplakt.
+
+00:39:44.500 --> 00:39:47.480
+Eén eigenaar, veel lezers, en dat is precies het probleem.
+
+00:39:47.660 --> 00:39:50.440
+Iedereen die afhankelijk is van de inhoud, heeft er een relatie mee.
+
+00:39:50.680 --> 00:39:53.500
+Slechts één persoon heeft een relatie met de onderliggende opslag.
+
+00:39:53.720 --> 00:39:56.280
+Wanneer die persoon vertrekt, merken de elf mensen er niets van.
+
+00:39:56.480 --> 00:39:59.480
+Nog niet, de link werkt nog steeds, de pagina laat nog steeds.
+
+00:39:59.480 --> 00:40:02.100
+Niets in de interface geeft aan dat de eigenaar zomaar is vertrokken.
+
+00:40:02.100 --> 00:40:04.320
+Kijk nu eens naar wat er gebeurt tijdens het vertrekproces.
+
+00:40:04.500 --> 00:40:06.440
+In de meeste organisaties is het een checklist.
+
+00:40:06.840 --> 00:40:10.060
+Deactiveer de aanmelding, conferteer de mailbox naar een gedeelde mailbox of archiveer deze.
+
+00:40:10.260 --> 00:40:14.300
+Geef de manager toegang tot OneDrive voor een bepaalde periode, verwijder de licentie, misschien de laptop ophalen.
+
+00:40:14.460 --> 00:40:16.580
+Elk punt op die lijst is jaren geleden geschreven.
+
+00:40:16.800 --> 00:40:20.980
+Voor een wereld waarin iemands werk zich op drie plekken bevond, hun mailbox, hun bestanden en hun agenda.
+
+00:40:21.280 --> 00:40:22.720
+Lopen pagina's staan er niet op.
+
+00:40:22.900 --> 00:40:24.300
+Niemand is het expres vergeten.
+
+00:40:24.460 --> 00:40:26.880
+De checklist is gemaakt voor de content die mensen kunnen benoemen.
+
+00:40:26.880 --> 00:40:30.520
+Een manager krijgt toegang tot OneDrive en denkt, prima, ik kan hun bestanden zien.
+
+00:40:30.660 --> 00:40:34.500
+Maar de pagina van de co-piloot in die persoonlijke ruimte ziet er voor niemand uit als een bestand.
+
+00:40:34.640 --> 00:40:35.400
+Er is geen map.
+
+00:40:35.560 --> 00:40:37.860
+Het verschijnt niet in de lijst die een manager zou scannen.
+
+00:40:38.040 --> 00:40:42.960
+En een component dat in een chat is gemaakt, is een back-up bestand met een vreemde naam, ergens verborgen in de accountopslag.
+
+00:40:43.120 --> 00:40:46.400
+De manager krijgt dus toegang tot een berg content die hij of zij niet als systeem kan lezen.
+
+00:40:46.620 --> 00:40:49.880
+Dertig dagen later loopt de termijn af en verdwijnt alles wat niet is verplaatst met het account.
+
+00:40:50.100 --> 00:40:52.480
+De oplossing is niet een betere opruiming, maar een eerdere.
+
+00:40:52.720 --> 00:40:54.400
+Ontworpen voor overdracht voor het vertrek.
+
+00:40:54.580 --> 00:40:58.180
+Dat betekent dat de vraag wordt gesteld terwijl de persoon er nog is, niet op zijn of haar laatste dag.
+
+00:40:58.360 --> 00:40:59.800
+Welke gedeelde content is van jou?
+
+00:40:59.980 --> 00:41:01.760
+Welke pagina's worden door anderen bewerkt?
+
+00:41:01.960 --> 00:41:04.640
+Welke componenten zijn de werkversie van iets waar een team op vertrouwt?
+
+00:41:04.760 --> 00:41:07.500
+Een korte controle ingebouwd in de opzegtermijn duurt een uur.
+
+00:41:07.640 --> 00:41:12.200
+Het herstellen van dezelfde content na verwijdering van het account vereist een ticket, hulp van de beheerder en veelhoop.
+
+00:41:12.320 --> 00:41:14.300
+Nog beter is het om de vraag overbodig te maken.
+
+00:41:14.300 --> 00:41:19.820
+Als gedeeld werk alleen in containers staat die bij een groep hoeren, neemt een vertrekkende persoon alleen zijn of haar eigen concepten mee.
+
+00:41:19.820 --> 00:41:22.320
+Dat is wat het promotiepad van eerder je oplevert.
+
+00:41:22.500 --> 00:41:23.900
+Het is niet alleen overzichtelijk.
+
+00:41:24.080 --> 00:41:28.560
+Het betekent dat een vertrek geen reddingsoperatie vereist en dat leidt tot een regel die het vermelden waard is.
+
+00:41:28.760 --> 00:41:31.800
+Alles wat gedeeld wordt, krijgt een team-eigenaar, niet één persoon.
+
+00:41:31.980 --> 00:41:34.700
+Een rol of een groep met minstens twee mensen erachter.
+
+00:41:35.160 --> 00:41:36.980
+De projectleider is beter dan Sarah.
+
+00:41:37.240 --> 00:41:39.320
+Het financiële team is beter dan beide.
+
+00:41:39.320 --> 00:41:47.900
+Wanneer een werkruimte wordt aangemaakt, moet de eigenaarslijst meer dan één naam bevatten en minstens één van die namen moet iemand zijn wiens functie blijft bestaan nadat de medewerker vertrekt.
+
+00:41:48.140 --> 00:41:52.280
+Wanneer een gedeelde pagina wordt gepromoveerd, moet een nieuwe locatie vastleggen wie ervoor verantwoordelijk is.
+
+00:41:52.500 --> 00:41:55.620
+Dit klinkt misschien onbelangrijk, maar het verandert wat er gebeurt bij een vertrek.
+
+00:41:55.620 --> 00:42:00.920
+De vraag is niet langer wie weet waar Sarah's pagina's zijn, maar wie de eigenaar is, en het antwoord staat al vast.
+
+00:42:01.100 --> 00:42:02.040
+Er is nog één ding.
+
+00:42:02.340 --> 00:42:04.840
+Eigenaren moeten worden gecontroleerd, niet alleen toegewezen.
+
+00:42:04.840 --> 00:42:10.100
+Mensen veranderen van functie, teams, krimpen en een werkruimte met twee eigenaren kan binnen een jaar stilletjes naar nul eigenaren zakken.
+
+00:42:10.260 --> 00:42:16.380
+Een kwartjaarlijkse controle van containers zonder eigenaar is goedkoop en het pakt het probleem aan terwijl het nog een naam op een lijst is in plaats van een verloren record.
+
+00:42:16.680 --> 00:42:18.740
+Retentie bepaalt dus hoe lang content meegaat.
+
+00:42:19.100 --> 00:42:21.200
+Eigenaarschap bepaalt of er nog mensen zijn die erom geven.
+
+00:42:21.440 --> 00:42:24.440
+Zorg dat beide aanwezig zijn en de content overleeft de mensen die hem hebben gemaakt.
+
+00:42:24.640 --> 00:42:26.660
+Maar overleven is niet hetzelfde als veilig zijn.
+
+00:42:26.860 --> 00:42:32.020
+Content kan een veilige plek hebben, een goede eigenaar en een redelijke levensduur, en toch blootgesteld worden aan het verkeerde publiek.
+
+00:42:32.020 --> 00:42:35.620
+Dat is een ander soort controle en die controle reist met de content zelf mee.
+
+00:42:36.660 --> 00:42:37.060
+Gevoeligheidslabels
+
+00:42:37.060 --> 00:42:39.440
+Gevoeligheidslabels, wat ze beschermen.
+
+00:42:39.580 --> 00:42:41.920
+Een gevoeligheidslabel is een tag met gevolgen.
+
+00:42:42.120 --> 00:42:43.860
+Je kiest er een en het systeem doet iets.
+
+00:42:44.120 --> 00:42:49.480
+Soms versleutelt het, soms plaatst het een koptekst op elke pagina, soms beperkt het wie uitgenodigd kan worden.
+
+00:42:49.700 --> 00:42:54.760
+De tag heeft hetzelfde woord, bijvoorbeeld vertrouwelijk, maar wat hij daadwerkelijk doet, hangt af van waar je hem aan koppelt.
+
+00:42:54.900 --> 00:42:58.560
+En er zijn drie dingen waar je hem aan kunt koppelen, bestanden, containers en vergaderingen.
+
+00:42:58.560 --> 00:43:03.060
+Elk heeft een andere functie. Het combineren ervan is waar de meeste labelprogramma's de mist in gaan.
+
+00:43:03.260 --> 00:43:05.500
+Begin met containers, omdat die het minst zichtbaar zijn.
+
+00:43:05.680 --> 00:43:09.320
+Een container is een Microsoft 365 groep, een team of een SharePoint site.
+
+00:43:09.540 --> 00:43:12.220
+Wanneer je een container labelt, raak je geen documenten aan die erin zitten.
+
+00:43:12.380 --> 00:43:13.820
+Je stelt de regels voor de ruimte in.
+
+00:43:14.000 --> 00:43:14.660
+Welke regels?
+
+00:43:14.960 --> 00:43:15.960
+Privacy staat voorop.
+
+00:43:16.100 --> 00:43:20.220
+Een label kan een team dwingen om privé te blijven, zodat niemand het openbaar kan maken en het voor het hele bedrijf toegankelijk kan maken.
+
+00:43:20.580 --> 00:43:21.720
+Vervolgens externe toegang.
+
+00:43:21.880 --> 00:43:25.860
+Een label kan aangeven of gasten wel of niet zijn toegestaan, of dat alleen bepaalde domeinen toegang hebben.
+
+00:43:25.860 --> 00:43:30.700
+Een apparaattoegang. Een label kan de site vertellen dat onbeheerde apparaten alleen een browserweergave krijgen,
+
+00:43:30.900 --> 00:43:33.780
+helemaal geen toegang hebben of alleen leesrechten hebben met geblokkeerde downloads.
+
+00:43:34.040 --> 00:43:37.160
+Dat is alles. Privacy, externe toegang en apparaatregels.
+
+00:43:37.340 --> 00:43:40.420
+Een container label bepaalt wie toegang heeft en onder welke voorwaarden.
+
+00:43:40.600 --> 00:43:42.500
+Het zegt niets over wat er op de pagina staat.
+
+00:43:42.740 --> 00:43:44.420
+Bestands labels doen het tegenovergestelde.
+
+00:43:44.580 --> 00:43:47.200
+Een bestands label wordt op het document zelf geplaatst en reist mee.
+
+00:43:47.420 --> 00:43:51.100
+Download het bestand, e-mail het, zet het op een USB-stick en het label blijft in het bestand.
+
+00:43:51.300 --> 00:43:52.740
+Daar zitten de geavanceerde tools.
+
+00:43:52.740 --> 00:43:56.380
+Versleuteling, zodat alleen genoemde personen of groepen het kunnen openen, zelfs buiten je tenant.
+
+00:43:56.700 --> 00:44:00.500
+Markeringen, zodat een koptekst, voetekst of watermerk elke lezer vertelt wat hij of zij in handen heeft.
+
+00:44:00.660 --> 00:44:04.860
+En gebruiksrechten, zodat je lezen kunt toestaan, maar afdrukken, kopiëren of doorsturen kunt blokkeren.
+
+00:44:05.000 --> 00:44:06.820
+Een container label beschermt de locatie.
+
+00:44:07.000 --> 00:44:08.780
+Een bestands label beschermt het bestand zelf.
+
+00:44:09.020 --> 00:44:10.540
+Verschillende functies, beide nuttig.
+
+00:44:10.720 --> 00:44:12.080
+De ene vervangt de andere niet.
+
+00:44:12.280 --> 00:44:13.200
+Dan vergaderingen.
+
+00:44:13.340 --> 00:44:17.880
+Een label op een vergadering kan zaken instellen zoals wie toegang heeft tot de lobby of opnemen is toegestaan,
+
+00:44:17.880 --> 00:44:21.900
+of chatberichten kunnen worden gekopieerd en of de vergaderingsinhoud end-to-end versleuteld kan worden.
+
+00:44:22.080 --> 00:44:27.020
+Het is een kleinere set beheermogelijkheden en het dekt het gesprek zelf, voordat er iets in een bestand wordt opgeslagen.
+
+00:44:27.240 --> 00:44:30.920
+Een vergaderingslabel gaat dus over wat er live in de ruimte gebeurt terwijl mensen nog praten.
+
+00:44:31.140 --> 00:44:32.760
+Drie doelen, drie sets bevoegdheden.
+
+00:44:33.020 --> 00:44:36.940
+Nu komt het punt waar teams vaak tegenaan lopen en dat belangrijker is dan de labelnamen zelf.
+
+00:44:37.200 --> 00:44:38.140
+Bereik komt eerst.
+
+00:44:38.140 --> 00:44:43.920
+Wanneer je een label aanmaakt, bepaal je waar het gebruikt kan worden, bestanden en e-mails, groepen en sites, vergaderingen of een combinatie daarvan.
+
+00:44:44.100 --> 00:44:47.640
+Die keuze wordt het bereik van het label genoemd en bepaalt in feite alles wat erna komt.
+
+00:44:47.780 --> 00:44:50.800
+Een label dat alleen is ingesteld voor bestanden kan niet aan een team worden gekoppeld.
+
+00:44:50.960 --> 00:44:54.280
+Een label dat alleen is ingesteld voor groepen en sites kan niet aan een document worden gekoppeld.
+
+00:44:54.280 --> 00:45:00.060
+Als je wilt dat vertrouwelijke toegang op beide plekken werkt, moet je de scoop voor beide definiëren en vervolgens de juiste beheermogelijkheden voor elke kant instellen.
+
+00:45:00.220 --> 00:45:02.060
+De meeste organisaties doen dit verkeerd.
+
+00:45:02.060 --> 00:45:06.500
+Ze discussiëren drie maanden lang over namen, openbaar, intern, vertrouwelijk, zeer vertrouwelijk.
+
+00:45:06.680 --> 00:45:13.740
+Ze worden het eens over kleuren, ze schrijven een definitie voor elke categorie en dan opent iemand de labelinstellingen en realiseert zich dat het label alleen bestanden dekt, containers niet.
+
+00:45:13.880 --> 00:45:17.120
+De helft van de systemen is dus helemaal niet beschermd, terwijl iedereen dat wel dacht.
+
+00:45:17.120 --> 00:45:18.500
+De volgorde is dus simpel.
+
+00:45:18.740 --> 00:45:22.440
+Bepaal eerst wat je wilt beschermen, containers, bestanden, vergaderingen of alle drie.
+
+00:45:22.620 --> 00:45:24.900
+Bepaal vervolgens wat elk label in elk geval doet.
+
+00:45:25.120 --> 00:45:26.340
+Kies pas daarna de namen.
+
+00:45:26.340 --> 00:45:34.200
+Op die manier weet iemand die vertrouwelijk, ziet bij een team en vertrouwelijk bij een document dat beide een concrete betekenis hebben, ook al is de onderliggende structuur anders.
+
+00:45:34.400 --> 00:45:36.760
+En dat is de nette versie voor sites en documenten.
+
+00:45:36.980 --> 00:45:40.620
+Loop- en co-pilot pagina's passen niet netjes in een van die drie categorieën.
+
+00:45:40.780 --> 00:45:45.300
+Ze slaan bestanden op op ongebruikelijke plekken in containers die de meeste beheerders niet kunnen inzien.
+
+00:45:45.480 --> 00:45:50.960
+De vraag is dus niet wat labels in theorie kunnen doen, maar wat ze daadwerkelijk doen wanneer de inhoud een component of een pagina is.
+
+00:45:51.180 --> 00:45:53.140
+Labels op loop- en co-pilot pagina's.
+
+00:45:53.300 --> 00:45:55.920
+Wat gebeurt er dan als de inhoud een loopcomponent of een pagina is?
+
+00:45:55.920 --> 00:45:57.580
+Laten we beginnen met wat vaststaat.
+
+00:45:57.740 --> 00:45:59.500
+Loop-inhoud wordt opgeslagen in bestanden.
+
+00:45:59.720 --> 00:46:04.540
+Die bestanden staan in OneDrive of in een loopcontainer en die locaties worden gedekt door het labelmechanisme dat u al kent.
+
+00:46:04.700 --> 00:46:06.660
+Het verhaal van labels voor loop is dus niet leeg.
+
+00:46:06.760 --> 00:46:07.860
+Het is ongelijkmatig.
+
+00:46:08.060 --> 00:46:10.680
+Microsoft heeft labelondersteuning voor loopstapsgewijs toegevoegd.
+
+00:46:11.080 --> 00:46:15.400
+Containerlabels op de Microsoft 365 groep of site achter een team werken zoals altijd.
+
+00:46:15.700 --> 00:46:20.520
+Labels op bestandsniveau voor loopinhoud worden langzamer uitgerold en het gedrag hangt af van de context.
+
+00:46:20.520 --> 00:46:27.540
+Een component in een teamchat, een pagina in een werkruimte en een co-pilot pagina in een persoonlijke ruimte krijgen niet allemaal dezelfde behandeling op dezelfde dag.
+
+00:46:27.740 --> 00:46:30.160
+Dat is wat, nog in ontwikkeling, in de praktijk betekent.
+
+00:46:30.400 --> 00:46:33.800
+Sommige besturingselementen werken, andere werken in de ene app wel en in de andere niet.
+
+00:46:34.040 --> 00:46:38.080
+Sommige staan vermeld als geplant en de documentatie verandert sneller dan de meeste governance programma's.
+
+00:46:38.240 --> 00:46:42.040
+Beschouw elke labelfunctie voor loop dus als iets dat je moet controleren, niet als iets dat je zomaar aanneemt.
+
+00:46:42.180 --> 00:46:45.000
+Dan is er nog de overerving, het onderdeel waarvan mensen hopen dat het hen zal redden.
+
+00:46:45.000 --> 00:46:48.820
+Het idee is simpel, je labelt een container en de inhoud ervan volgt dat label.
+
+00:46:48.980 --> 00:46:53.740
+Een site met het label, niet extern delen, staat niet toe dat iemand een gast uitnodigt voor een bestand in die site.
+
+00:46:53.920 --> 00:46:58.000
+Een werkruimtecontainer met een label neemt de privacy en deelregels van dat label over.
+
+00:46:58.220 --> 00:47:01.420
+De inhoud had geen eigen tag nodig om onder de regels van de ruimte te vallen.
+
+00:47:01.620 --> 00:47:03.640
+Dat is echt en het is de moeite waard om te gebruiken.
+
+00:47:03.820 --> 00:47:09.560
+Een containerlabel is de enige bescherming die werkt, zelfs als niemand in het team eraan denkt om iets te doen, maar overerving heeft zijn beperkingen.
+
+00:47:10.100 --> 00:47:11.740
+Containerlabels regelen toegang en delen.
+
+00:47:11.740 --> 00:47:16.680
+Ze versleutelen niet automatisch elk bestand erin en ze plaatsen geen zichtbare markering op een pagina.
+
+00:47:16.840 --> 00:47:20.500
+Een pagina kan zich dus in een goed gelabelde container bevinden zonder eigen label.
+
+00:47:20.720 --> 00:47:25.980
+Of een best-n-s-label standaard, via beleid of alleen handmatig wordt toegepast, hangt af van hoe je het hebt geconfigureerd.
+
+00:47:26.140 --> 00:47:30.720
+Dezelfde labelnaam, twee verschillende lagen en een gebruiker die de pagina bekijkt, ziet er mogelijk maar één.
+
+00:47:30.880 --> 00:47:33.840
+En dan komt Copilot in beeld, want hier bewijzen labels hun nut.
+
+00:47:34.080 --> 00:47:35.700
+Copilot heeft geen eigen toegang.
+
+00:47:35.700 --> 00:47:41.880
+Het werkt als de gebruiker. Wanneer je een vraag stelt, zoekt het in wat je al kunt openen en bouwt het daaruit het antwoord op.
+
+00:47:42.660 --> 00:47:45.080
+Gevoeligheidslabels met encryptie voegen daar nog een regel aan toe.
+
+00:47:45.280 --> 00:47:50.760
+Als de gebruiksrechten van het label het niet toestaan om inhoud te extraheren, kan Copilot die inhoud niet in een antwoord gebruiken.
+
+00:47:50.960 --> 00:47:55.120
+Als je een bestand alleen kunt bekijken en er niet uit kunt kopiëren, zal het antwoord er geen tekst uithalen.
+
+00:47:55.360 --> 00:47:57.140
+Labels geven Copilot dus een grens.
+
+00:47:57.140 --> 00:48:03.460
+Versleutelde inhoud met de juiste beperkingen blijft buiten de samenvatting en wanneer Copilot gelabelde inhoud gebruikt, is het de bedoeling dat het label behouden blijft.
+
+00:48:03.580 --> 00:48:09.960
+De gegenereerde output kan het label van de bron overnemen en wanneer bronnen verschillende labels hebben, neemt het antwoord het meest restrictieve label.
+
+00:48:10.200 --> 00:48:11.080
+Dat is het ontwerp.
+
+00:48:11.200 --> 00:48:14.720
+Het is een goed ontwerp, maar het werkt alleen als de labels bestaan en als ze zijn toegepast.
+
+00:48:14.940 --> 00:48:16.200
+En dat brengt ons bij de hiëten.
+
+00:48:16.440 --> 00:48:21.600
+Voordat u iemand in de leiding belooft dat gelabelde content gedekt is, controleer dan vier dingen in uw eigen tenant.
+
+00:48:21.600 --> 00:48:28.540
+Ten eerste bereiken uw labelbeleidsregels daadwerkelijk de locaties waar loopcontent terechtkomt, zowel OneDrive als de loopcontainers.
+
+00:48:28.720 --> 00:48:33.520
+Ten tweede, welk label krijgt een component en een pagina standaard, indien van toepassing.
+
+00:48:33.820 --> 00:48:39.040
+Ten derde, wordt er een label weergegeven op een pagina die is gemaakt van gelabeld bronmateriaal, en zo ja, welk label.
+
+00:48:39.260 --> 00:48:43.980
+En ten vierde, wat laten de auditlog boeken en de zoekfuncties voor deze content zien wanneer u ernaar zoekt.
+
+00:48:44.220 --> 00:48:47.040
+Voer deze tests uit met echte content via een testaccount.
+
+00:48:47.040 --> 00:48:53.860
+Noteer wat u ziet, niet wat er in de documentatie staat over wat de tenant heeft gedaan, want de slechtste manier om een labelprobleem te ontdekken is tijdens een incidentanalyse.
+
+00:48:54.000 --> 00:48:57.080
+En zelfs een perfecte labelconfiguratie laat één ding onveranderd.
+
+00:48:57.200 --> 00:48:58.820
+Copilot creëert geen nieuwe toegang.
+
+00:48:58.980 --> 00:49:00.720
+Het gebruikt alleen de toegang die er al is.
+
+00:49:00.900 --> 00:49:03.860
+Dus wat uw machtigingen mensen ook toestaan te lezen, Copilot zal het lezen.
+
+00:49:04.060 --> 00:49:05.940
+Copilot leest wat gebruikers kunnen lezen.
+
+00:49:06.200 --> 00:49:08.020
+Copilot machtigingen en overdeling.
+
+00:49:08.320 --> 00:49:09.860
+Copilot heeft geen eigen deur.
+
+00:49:09.860 --> 00:49:11.160
+Het loopt door uw deur.
+
+00:49:11.380 --> 00:49:12.440
+U stelt het een vraag.
+
+00:49:12.640 --> 00:49:16.600
+Het doorzoekt wat je account al kan openen, je bestanden, je chats, je vergaderingen.
+
+00:49:16.600 --> 00:49:21.380
+De sites waar je lid van bent, de pagina's die iemand afgelopen voorjaar met je deelde en die je bent vergeten.
+
+00:49:21.540 --> 00:49:25.720
+Het haalt al die informatie eruit, construeert een antwoord en geeft dat terug in een overzichtelijke alinea.
+
+00:49:25.980 --> 00:49:29.820
+De vraag die je jezelf dus moet stellen is niet wat Copilot kan zien, maar wat deze persoon kan zien.
+
+00:49:30.000 --> 00:49:32.560
+Want het antwoord op de eerste vraag is altijd het antwoord op de tweede.
+
+00:49:32.780 --> 00:49:33.880
+Dat klinkt geruststellend.
+
+00:49:34.020 --> 00:49:35.400
+En in zekere zin is dat ook zo.
+
+00:49:35.640 --> 00:49:36.880
+Copilot breekt nergens in.
+
+00:49:36.880 --> 00:49:40.020
+Het slaat geen toestemmingscontrole over en verzint geen toegang die niemand heeft verleend.
+
+00:49:40.140 --> 00:49:42.720
+Het model respecteert dezelfde regels als de rest van de tenant.
+
+00:49:42.960 --> 00:49:44.640
+Maar kijk eens wat dat werkelijk betekent.
+
+00:49:44.640 --> 00:49:49.500
+Als een medewerker toegang heeft tot een salarisspreadsheet die hij of zij nooit had mogen openen, kan Copilot die spreadsheet gebruiken.
+
+00:49:49.660 --> 00:49:54.280
+Als een projectmap twee jaar geleden per ongeluk met het hele bedrijf is gedeeld, kan Copilot daaruit citeren.
+
+00:49:54.400 --> 00:49:55.420
+De tool is niet het lek.
+
+00:49:55.600 --> 00:49:58.880
+Het is een zeer snelle laser die bovenop alles zit wat je al hebt toegestaan.
+
+00:49:59.020 --> 00:50:00.280
+En dit is waar het om draait.
+
+00:50:00.700 --> 00:50:02.060
+Overmatig delen was er altijd al.
+
+00:50:02.180 --> 00:50:05.780
+Het bevond zich op sites waar iedereen behalve externe gebruikers in de ledenlijst stond.
+
+00:50:05.960 --> 00:50:10.460
+Het bevond zich in links die waren ingesteld voor mensen binnen de organisatie, in een chat geplakt en vervolgens vergeten.
+
+00:50:10.460 --> 00:50:16.060
+Het bevond zich op oude teamsites die niemand had gearchiveerd, met bestanden die niemand zich herinnerde, toegankelijk voor iedereen die wist waar te klikken.
+
+00:50:16.200 --> 00:50:18.120
+Niemand vond het omdat niemand ernaar op zoek ging.
+
+00:50:18.300 --> 00:50:19.660
+Het vinden ervan kostte moeite.
+
+00:50:19.900 --> 00:50:23.380
+Je moest de juiste sitenaam raden, de juiste bibliotheek doorzoeken en de juiste map openen.
+
+00:50:23.500 --> 00:50:28.200
+De kans dat een vreemde per ongeluk op het verkeerde document terecht kwam, was klein, dus het risico bleef theoretisch.
+
+00:50:28.380 --> 00:50:31.300
+Copilot verandert de kansen, niet de machtigingen, maar de kansen.
+
+00:50:31.460 --> 00:50:32.780
+Nu is de zoekopdracht een zin.
+
+00:50:33.000 --> 00:50:35.480
+Wat heeft het management besloten over de reorganisatie?
+
+00:50:35.480 --> 00:50:37.440
+Vat de salarisbeoordeling samen.
+
+00:50:37.680 --> 00:50:39.340
+Laat me alles zien over de overname.
+
+00:50:39.560 --> 00:50:41.900
+Iemand hoeft niet te weten waar de content zich bevindt.
+
+00:50:42.020 --> 00:50:45.380
+Ze hoeven alleen maar te vragen en het systeem vindt het overal waar ze bij kunnen.
+
+00:50:45.560 --> 00:50:48.300
+De blootstelling is dus niet toegenomen, maar aan de oppervlakte gekomen.
+
+00:50:48.540 --> 00:50:50.680
+Zo ziet dat eruit met de tools waar we het over hebben gehad.
+
+00:50:50.820 --> 00:50:53.840
+Er wordt een loop werkruimte aangemaakt voor een gevoelige planningsinspanning.
+
+00:50:54.020 --> 00:51:00.180
+De eigenaar nodigt 12 mensen uit, maar een paar weken later wordt een handige link in een breedkanaal geplakt, ingesteld voor mensen binnen de organisatie.
+
+00:51:00.340 --> 00:51:02.880
+Nu zijn de pagina's toegankelijk voor iedereen met een werkaccount.
+
+00:51:03.120 --> 00:51:04.820
+Niemand heeft de ledenlijst gewijzigd.
+
+00:51:04.820 --> 00:51:06.420
+Niemand beschouwt het als openbaar.
+
+00:51:06.640 --> 00:51:13.080
+Dan vraagt iemand buiten het project Copilot om een samenvatting van de aankomende herstructureringsplannen en het antwoord bevatten Alinea uit die werkruimte.
+
+00:51:13.420 --> 00:51:16.200
+Bronvermelding en ver verwijderd van de 12 mensen voor wie het bedoeld was.
+
+00:51:16.380 --> 00:51:17.860
+Het is een typisch SharePoint verhaal.
+
+00:51:18.000 --> 00:51:21.400
+Een site die jaren geleden voor één afdeling is gebouwd, is met brede toegang geopend omdat dat makkelijker was.
+
+00:51:21.560 --> 00:51:23.380
+Onder de documenten zijn nooit gecontroleerd.
+
+00:51:23.620 --> 00:51:25.140
+Lange tijd maakte niemand zich er druk om.
+
+00:51:25.300 --> 00:51:28.700
+Nu maken ze allemaal deel uit van elk antwoord voor iedereen in elke afdeling, op elke dag.
+
+00:51:28.900 --> 00:51:31.380
+Losse toegangsrechten betekenden vroeger dat iemand iets zou kunnen vinden.
+
+00:51:31.380 --> 00:51:33.500
+Nu betekenen ze dat iemand iets in handen krijgt.
+
+00:51:33.640 --> 00:51:34.520
+Dus wat doe je eraan?
+
+00:51:34.640 --> 00:51:36.740
+Je past de toegangsrechten aan voordat je de tool uitbreidt.
+
+00:51:36.800 --> 00:51:39.180
+In die volgorde, het is verleidelijk om het andersom te doen.
+
+00:51:39.380 --> 00:51:42.260
+Eerst Copilot uitrollen, kijken wat mensen prettig vinden en later opruimen.
+
+00:51:42.440 --> 00:51:43.840
+Maar later ontstaan de problemen.
+
+00:51:43.980 --> 00:51:47.880
+De eerste keer dat een medewerker een antwoord krijgt dat is gebaseerd op een document dat hij of zij niet had mogen zien,
+
+00:51:48.080 --> 00:51:50.020
+verschuift het gesprek van acceptatie naar schadebeperking.
+
+00:51:50.180 --> 00:51:53.680
+En tegen die tijd ben je in aller eil de toegangsrechten aan het aanpassen, terwijl het management toekijkt.
+
+00:51:53.820 --> 00:51:55.480
+De opruiming zelf is niet ingewikkeld.
+
+00:51:55.480 --> 00:51:58.160
+Zoek de sites en werkruimtes die voor iedereen toegankelijk zijn.
+
+00:51:58.380 --> 00:52:00.260
+Zoek de oudste links met het grootste publiek.
+
+00:52:00.540 --> 00:52:02.900
+Controleer wie wat bezit en of die eigenaren er nog zijn.
+
+00:52:03.140 --> 00:52:06.700
+Beperk vervolgens de toegang, label wat gevoelig is en archiveer wat niemand gebruikt.
+
+00:52:06.860 --> 00:52:10.640
+Het is allemaal niet bepaald glamoureus, maar het is allemaal goedkoper voor de uithol dan erna.
+
+00:52:10.800 --> 00:52:13.560
+En zodra de toegangsrechten eerlijk zijn, dient zich een andere vraag aan.
+
+00:52:13.700 --> 00:52:17.540
+Als mensen nu alleen nog toegang hebben tot wat ze zouden moeten hebben, waar moet de nieuwe content dan überhaupt komen te staan?
+
+00:52:17.740 --> 00:52:19.280
+Dat is de plaatsingsbeslissing zelf.
+
+00:52:19.460 --> 00:52:21.160
+Het kader voor de plaatsingsbeslissing.
+
+00:52:21.160 --> 00:52:23.200
+Vier vragen, dat is het hele kader.
+
+00:52:23.400 --> 00:52:24.140
+Wie heeft het nodig?
+
+00:52:24.340 --> 00:52:24.740
+Hoe lang?
+
+00:52:24.900 --> 00:52:25.520
+Hoe gevoelig?
+
+00:52:25.720 --> 00:52:26.560
+Wie is de eigenaar?
+
+00:52:26.700 --> 00:52:30.280
+Je kunt ze in ongeveer 30 seconden stellen, nog voordat je ook maar één woord typt op een nieuwe pagina.
+
+00:52:30.440 --> 00:52:32.620
+En de antwoorden wijzen bijna altijd naar een vaste plek.
+
+00:52:32.780 --> 00:52:33.700
+Neem de eerste vraag.
+
+00:52:33.920 --> 00:52:34.660
+Wie heeft het nodig?
+
+00:52:34.860 --> 00:52:36.060
+Niet wie het misschien ooit wil hebben.
+
+00:52:36.280 --> 00:52:37.120
+Wie heeft het nu nodig?
+
+00:52:37.360 --> 00:52:41.380
+Alleen jij, drie mensen in een project, een afdeling, een klant buiten het bedrijf.
+
+00:52:41.500 --> 00:52:47.500
+Het publiek is de snelste filter die je hebt, omdat het bepaalt of je een persoonlijke ruimte, een gedeelde container of een beheerde bibliotheek nodig hebt.
+
+00:52:47.500 --> 00:52:49.540
+Ten tweede, hoe lang moet het bewaard blijven?
+
+00:52:49.540 --> 00:52:54.380
+Een dag, een kwartaal, zeven jaar, kortstondige content kan ergens worden opgeslagen waar het niet nodig is.
+
+00:52:54.680 --> 00:52:58.040
+Langdurige content heeft een plek nodig met bewaarregels die iemand bewust heeft ingesteld.
+
+00:52:58.200 --> 00:52:59.520
+Ten derde, hoe gevoelig is het?
+
+00:52:59.700 --> 00:53:00.680
+Niet in abstracte zin.
+
+00:53:00.880 --> 00:53:03.200
+Vraag jezelf af wat er gebeurt als de verkeerde persoon dit morgen leest.
+
+00:53:03.540 --> 00:53:05.800
+Irritant, beschamend, een juridisch probleem?
+
+00:53:05.940 --> 00:53:09.260
+Dat geeft je het antwoord op de vraag of je een label nodig hebt en welke container dat kan afdwingen.
+
+00:53:09.380 --> 00:53:10.860
+En ten vierde, wie is de eigenaar?
+
+00:53:11.000 --> 00:53:13.820
+Dit is de vraag die mensen vaak overslaan en die uiteindelijk problemen oplevert.
+
+00:53:13.820 --> 00:53:17.860
+Als het eerlijke antwoord is ik en anderen zijn ervan afhankelijk, dan heb je het probleem al gevonden.
+
+00:53:18.180 --> 00:53:19.260
+Bereken nu de antwoorden.
+
+00:53:19.460 --> 00:53:23.160
+Korte levensduur, kleine groep, een paar mensen, een paar dagen, lage gevoeligheid.
+
+00:53:23.360 --> 00:53:27.680
+Stel, je bent bezig met het samenstellen van gesprekspunten voor een vergadering op donderdag of je test hoe een tabel eruit moet zien.
+
+00:53:27.900 --> 00:53:30.780
+Dit is waar een loopcomponent of een co-pilot pagina zijn nut bewijst.
+
+00:53:30.940 --> 00:53:34.280
+Het is snel, het staat in je eigen ruimte of in de chat waar je het hebt gemaakt.
+
+00:53:34.520 --> 00:53:37.300
+Niemand hoeft iets goed te keuren en er hoeft niets te worden gearchiveerd.
+
+00:53:37.460 --> 00:53:41.640
+Als de inhoud na twee weken verdwijnt, is er niets verloren gegaan, want niets is ooit bedoeld om permanent te zijn.
+
+00:53:41.640 --> 00:53:48.180
+De enige voorwaarde is eerlijkheid. Als de groep groeit of de levensduur langer wordt, veranderen de antwoorden en moet de omgeving mee veranderen.
+
+00:53:48.320 --> 00:53:52.020
+Dan de teamwerkruimte. Een groep bouwt samen aan iets gedurende weken of maanden.
+
+00:53:52.220 --> 00:53:57.020
+De inhoud is live. Mensen bewerken dagelijks en het moet blijven bestaan, zelfs als één persoon vertrekt.
+
+00:53:57.200 --> 00:53:59.800
+Hier is de oplossing een container die eigendom is van de groep.
+
+00:53:59.900 --> 00:54:05.640
+Een loopwerkruimte als het werkpagina gebaseerd en flexibel is, een teamkanaal als het werk naast gesprekken en bestanden staat.
+
+00:54:05.820 --> 00:54:11.080
+In beide gevallen wil je benoemde eigenaren, een ledenlijst die iemand kan lezen en minstens twee mensen die ervoor verantwoordelijk zijn.
+
+00:54:11.080 --> 00:54:14.820
+Let op wat ze gemeen hebben. De inhoud wordt gedeeld, maar is niet definitief.
+
+00:54:14.980 --> 00:54:19.220
+De container moet dus vertrouwd worden voor toegang, maar hoeft niet als permanent archief te worden beschouwd.
+
+00:54:19.400 --> 00:54:22.740
+Dan is er de derde categorie, duurzame gegevens of gecontroleerde inhoud.
+
+00:54:22.940 --> 00:54:29.080
+Alles wat het bedrijf moet bewaren, alles waar een addit erom zou kunnen vragen, alles wat aangeeft wat de organisatie heeft besloten, beloofd of afgesproken...
+
+00:54:29.800 --> 00:54:35.080
+...en alles wat zo gevoelig is dat een fout echt geld kost, wordt opgeslagen in een speciaal daarvoor gekozen SharePoint bibliotheek...
+
+00:54:35.080 --> 00:54:37.200
+...met een gevoeligheidslabel dat overeenkomt met de inhoud.
+
+00:54:37.200 --> 00:54:43.520
+Daar werken retentie, documentbeheer en zoeken over meerdere jaren heen en daar kan een eigenaar een rol zijn in plaats van een naam.
+
+00:54:43.680 --> 00:54:45.820
+De structuur is des kort, klein en bondig.
+
+00:54:46.240 --> 00:54:50.180
+Loopcomponent of pagina, gedeeld en werkend, loopwerkruimte of teamskanaal.
+
+00:54:50.400 --> 00:54:52.860
+Duurzaam of gecontroleerd, SharePoint met een label.
+
+00:54:53.080 --> 00:54:55.160
+Nu een paar eerlijke opmerkingen over het gebruik hiervan.
+
+00:54:55.300 --> 00:54:57.080
+De vragen hoeven niet perfect beantwoord te worden.
+
+00:54:57.260 --> 00:54:58.260
+Een benadering is prima.
+
+00:54:58.540 --> 00:55:00.900
+Als u twijfelt over de gevoeligheid, kies dan een stap hoger.
+
+00:55:01.060 --> 00:55:03.940
+Als u twijfelt over de levensduur, ga dan uit van een langere levensduur.
+
+00:55:03.940 --> 00:55:09.340
+Inhoud heeft bijna nooit een kortere levensduur dan de auteur had verwacht en als de antwoorden tegenstrijdig zijn, wint het strengste antwoord.
+
+00:55:09.500 --> 00:55:12.860
+Een kleine groep met een korte levensduur, maar zeer gevoelig, dat is geen pagina.
+
+00:55:13.040 --> 00:55:17.040
+De gevoeligheid zorgde ervoor dat het in een gecontroleerde omgeving terechtkwam, hoe klein het publiek ook was.
+
+00:55:17.260 --> 00:55:20.120
+Nog iets, het framework maakt het niet uit welke tool je als eerste opende.
+
+00:55:20.300 --> 00:55:22.700
+Je begint misschien in co-pilot omdat daar het idee opkwam.
+
+00:55:22.900 --> 00:55:23.540
+Dat is prima.
+
+00:55:23.800 --> 00:55:25.220
+Ergens beginnen is niet de fout.
+
+00:55:25.460 --> 00:55:28.040
+Er blijven hangen nadat de antwoorden veranderd zijn, is dat wel.
+
+00:55:28.220 --> 00:55:31.920
+De volgende stap is dus om deze vier vragen één voor één op elke tool toe te passen.
+
+00:55:31.920 --> 00:55:36.000
+En de gemakkelijkste plek om te beginnen is de plek die mensen het moeilijkst vinden om te plaatsen.
+
+00:55:36.160 --> 00:55:38.720
+Het notitieboek dat al tien jaar op ieders bureaublad staat.
+
+00:55:38.960 --> 00:55:41.020
+OneNote, waar OneNote nog steeds thuis hoort.
+
+00:55:41.240 --> 00:55:42.580
+OneNote is hier niet het probleem.
+
+00:55:42.780 --> 00:55:44.420
+Het doet al meer dan tien jaar zijn werk.
+
+00:55:44.600 --> 00:55:47.800
+Wat het goed doet, is iemands gedachten gedurende een lange periode vastleggen.
+
+00:55:47.920 --> 00:55:49.040
+Een notitieboek heeft secties.
+
+00:55:49.240 --> 00:55:50.260
+Secties hebben pagina's.
+
+00:55:50.520 --> 00:55:52.260
+Pagina's kunnen zo lang en rommelig zijn als je wilt.
+
+00:55:52.440 --> 00:55:57.420
+Je kunt een webartikel knippen, een foto van een whiteboard invoegen, audio opnemen en een diagram met een pen schetsen.
+
+00:55:57.620 --> 00:55:58.960
+Niemand anders hoeft mee te lezen.
+
+00:55:58.960 --> 00:56:00.860
+Dat is uitgebreide notities maken.
+
+00:56:00.860 --> 00:56:07.440
+Onderzoek voor een offerte, aantekeningen van een jaar aan klantgesprekken, een doorlopend logboek van een project dat je leidt, geschreven in je eigen volgorde.
+
+00:56:07.620 --> 00:56:09.500
+De structuur is van jou en dat is de waarde.
+
+00:56:09.720 --> 00:56:13.320
+Zie het notitieboek als een plek voor hoe jij denkt, niet wat het bedrijf heeft besloten.
+
+00:56:13.540 --> 00:56:16.760
+Dan zijn er de gedeelde versies, zoals klasnotitieboeken en teamnotitieboeken.
+
+00:56:16.920 --> 00:56:23.040
+Een Kalas notitieboek geeft elke student een eigen gedeelte, voegt een gedeelde bibliotheek toe voor handouts en laat de docent alles zien zonder iemand achterna te hoeven zitten.
+
+00:56:23.220 --> 00:56:24.500
+Dat is een duidelijke oplossing.
+
+00:56:24.500 --> 00:56:28.640
+De structuur is vast, de doelgroep is bekend en de levensduur komt overeen met een schoolperiode.
+
+00:56:28.820 --> 00:56:38.460
+Een teamnotitieboek werkt op dezelfde manier, maar dan op kleinere schaal een gedeelde set vergaderingsnotities voor een groep van zes, een gemeenschappelijk naslagwerk met dezelfde tabbladen voor iedereen, zoals onboardingstappen of een doorlopende lijst met contactpersonen van leveranciers.
+
+00:56:38.700 --> 00:56:42.500
+Beide werken wanneer de groep stabiel is, de secties zijn afgesproken en iemand het netjes houdt.
+
+00:56:42.580 --> 00:56:43.520
+Maar hier gaat het mis.
+
+00:56:43.520 --> 00:56:49.440
+Een notitieboek is een bestand. Het bestand staat in OneDrive of een SharePoint-site en de toegang ertoe hangt af van waar het bestand is opgeslagen.
+
+00:56:49.620 --> 00:56:52.340
+Een notitieboek in een persoonlijke OneDrive is gekoppeld aan de persoon.
+
+00:56:52.500 --> 00:56:54.660
+Een notitieboek op een teamsite is gekoppeld aan het team.
+
+00:56:54.880 --> 00:57:01.600
+Secties kunnen met een wachtwoord worden beveiligd, maar dat is een vergrendeling van de sectie, geen label op de inhoud en het heeft niet de waarde die een archiveringsproces nodig heeft.
+
+00:57:01.820 --> 00:57:04.920
+Laat een notitieboek dus geen beslissingen bevatten die het bedrijf moet bewaren.
+
+00:57:04.920 --> 00:57:08.220
+Een notitieboekpagina biedt geen echte manier om aan te geven dat iets definitief is.
+
+00:57:08.220 --> 00:57:13.380
+Er is geen goedkeuringstap, geen schone versie om naar te verwijzen en geen metadata die een archiveringssysteem vertelt waar het naar kijkt.
+
+00:57:13.580 --> 00:57:15.280
+Zoeken in notitieboeken is gebrekkig.
+
+00:57:15.440 --> 00:57:18.580
+De bewaartermijn geldt voor het hele bestand, niet voor de ene pagina die ertoe doet.
+
+00:57:18.760 --> 00:57:21.660
+Dus als iemand over twee jaar vraagt, waar hebben we deze prijs afgesproken?
+
+00:57:21.860 --> 00:57:25.520
+Dan staat het antwoord verborgen op pagina 40 van een notitieboek dat naar een persoon is vernoemd.
+
+00:57:25.760 --> 00:57:28.980
+Beslissingen moeten een eigen plek hebben, een label en een plek waar een onbekende ze kan vinden.
+
+00:57:29.200 --> 00:57:33.380
+Volgens de levenscyclus die we hebben besproken is dat de status van het document en een notitieboek is daar nooit voor ontworpen.
+
+00:57:33.540 --> 00:57:34.600
+Nu de overlap met loop.
+
+00:57:34.600 --> 00:57:39.340
+Hier raken mensen in de war, want op het eerste gezicht lijken een looppagina en een OneNote pagina op elkaar.
+
+00:57:39.560 --> 00:57:43.260
+Beiden zijn flexibel, beide accepteren tekst, tabellen en lijsten en beide kunnen worden gedeeld.
+
+00:57:43.440 --> 00:57:44.460
+Dus waar ligt de grens?
+
+00:57:44.620 --> 00:57:46.540
+Trek die grens door hoe de inhoud zich gedraagt.
+
+00:57:46.720 --> 00:57:49.200
+Een OneNote notitieboek is een persoonlijke of kleine groepsmap.
+
+00:57:49.340 --> 00:57:53.680
+Je organiseert het op onderwerp, je raadpleegt het regelmatig en het wordt grotendeels door één auteur aangepast.
+
+00:57:53.840 --> 00:57:55.920
+Een looppagina is dynamisch en collaboratief.
+
+00:57:56.120 --> 00:58:00.380
+Mensen bewerken op hetzelfde moment en delen ervan worden als componenten gedeeld in chats en e-mails.
+
+00:58:00.380 --> 00:58:05.180
+Gebruik OneNote wanneer de inhoud van jou of een vaste groep is en de inhoud blijft waar deze is geschreven.
+
+00:58:05.380 --> 00:58:07.100
+Gebruik Loop wanneer de inhoud moet worden verplaatst.
+
+00:58:07.320 --> 00:58:10.420
+Op meerdere plaatsen moet worden bijgewerkt en door meerdere mensen tegelijk moet worden bewerkt.
+
+00:58:10.620 --> 00:58:12.860
+Dezelfde woorden op het scherm, verschillende taken eronder.
+
+00:58:13.060 --> 00:58:15.600
+En als je het nog steeds niet zeker weet, ga dan terug naar de vier vragen.
+
+00:58:15.800 --> 00:58:16.560
+Wie heeft het nodig?
+
+00:58:16.780 --> 00:58:17.160
+Hoe lang?
+
+00:58:17.340 --> 00:58:17.980
+Hoe gevoelig?
+
+00:58:18.180 --> 00:58:19.080
+Wie is de eigenaar?
+
+00:58:19.080 --> 00:58:22.520
+Een map voor één persoon met een lange levensduur en lage gevoeligheid is wannoot.
+
+00:58:22.620 --> 00:58:24.500
+Alles wat gedeeld en dynamisch is, is dat niet.
+
+00:58:24.740 --> 00:58:26.080
+Dat dekt de notitieboekregel.
+
+00:58:26.240 --> 00:58:30.740
+Maar er is nog een overlap en deze zorgt voor meer problemen dan alle anderen, omdat de meeste mensen hun dag daar doorbrengen.
+
+00:58:30.900 --> 00:58:33.640
+De plek waar alles gezegd wordt en bijna niets bewaard blijft.
+
+00:58:33.800 --> 00:58:36.480
+Teams, Teams, conversatie is geen opslag.
+
+00:58:36.640 --> 00:58:38.340
+Teams is de plek waarover werk gepraat wordt.
+
+00:58:38.560 --> 00:58:39.500
+Dat is de functie ervan.
+
+00:58:39.700 --> 00:58:41.520
+Een chat is een snelle uitwisseling tussen een paar mensen.
+
+00:58:41.700 --> 00:58:43.940
+Een kanaal is een doorlopende discussie over een onderwerp.
+
+00:58:44.100 --> 00:58:46.840
+Beiden zijn goed in één ding mensen binnen een uur laten reageren.
+
+00:58:46.840 --> 00:58:49.860
+Iemand stelt een vraag, iemand antwoordt en het gesprek gaat verder.
+
+00:58:50.060 --> 00:58:55.140
+En daar begint de ellende, want een plek die goed is voor communicatie, begint aan te voelen als een plek die goed is in het bewaren van dingen.
+
+00:58:55.300 --> 00:58:59.720
+Het heeft een zoekfunctie, een geschiedenis, een tabblad voor bestanden, dus mensen behandelen het als een archiefsysteem.
+
+00:58:59.840 --> 00:59:00.600
+Maar dat is het niet.
+
+00:59:00.760 --> 00:59:01.540
+Het is een stream.
+
+00:59:01.820 --> 00:59:03.240
+Dit is wat een stream met content doet.
+
+00:59:03.440 --> 00:59:06.960
+Alles wat je plaatst, komt onderaan te staan en alles daarboven schuift omhoog en verdwijnt uit beeld.
+
+00:59:07.180 --> 00:59:09.120
+Binnen een week is een bericht alleen nog maar scrollen waard.
+
+00:59:09.340 --> 00:59:11.200
+Binnen een maand moet je het uit je geheugen terugvinden.
+
+00:59:11.460 --> 00:59:12.080
+Wie zei dat?
+
+00:59:12.260 --> 00:59:14.000
+Was het in het projectkanaal of in de zijchat?
+
+00:59:14.000 --> 00:59:15.420
+De inhoud is niet verdwenen.
+
+00:59:15.540 --> 00:59:17.260
+Het is alleen begraven onder nieuwere gesprekken.
+
+00:59:17.440 --> 00:59:18.260
+Neem nu de bestanden.
+
+00:59:18.480 --> 00:59:21.080
+Als iemand een document naar een chat sleept, waar komt het dan terecht?
+
+00:59:21.340 --> 00:59:22.040
+Niet in Teams.
+
+00:59:22.220 --> 00:59:23.640
+Teams slaat geen bestanden op.
+
+00:59:23.780 --> 00:59:29.580
+In een 1 op 1 of groepschat gaat het bestand naar de OneDrive van de afzender en krijgen de deelnemers aan de chat toegang via een deelbare link.
+
+00:59:29.740 --> 00:59:35.080
+In een kanaal gaat het bestand naar de documentbibliotheek van de SharePoint site achter dat team in een map met de naam van het kanaal.
+
+00:59:35.220 --> 00:59:37.140
+Er is dus altijd een echte opslaglocatie.
+
+00:59:37.360 --> 00:59:40.180
+Alleen heeft de gebruiker die niet gekozen wat een aantal gevolgen heeft.
+
+00:59:40.180 --> 00:59:44.920
+Een bestand dat in een chat wordt gedeeld is eigendom van de afzender, dus het brengt het eerder besproken probleem met het verwijderen van bestanden met zich mee.
+
+00:59:45.060 --> 00:59:52.740
+Een bestand in een kanaal blijft op de site van het team staan, wat beter is, maar het komt terecht in een map die het kanaal heeft aangemaakt, zonder metadata en zonder label, tenzij iemand er een toevoegt.
+
+00:59:52.900 --> 00:59:56.380
+En de toegang is afhankelijk van de link of het lidmaatschap, niet van het gesprek.
+
+00:59:56.500 --> 00:59:59.220
+Als je iemand uit een chat verwijdert, werkt de link mogelijk nog steeds.
+
+00:59:59.440 --> 01:00:02.460
+Als je later iemand aan een chat toevoegt, ziet diegene het bestand misschien helemaal niet.
+
+01:00:02.460 --> 01:00:06.940
+Het bestand staat dus op de ene plek, het gesprek op een andere, en niets verbindt ze behalve een miniatuurafbeelding.
+
+01:00:07.120 --> 01:00:09.760
+Dan zijn er nog de beslissingen, en dat is waar het echt misgaat.
+
+01:00:09.920 --> 01:00:12.360
+Denk eens na over hoe een beslissing in een chat tot stand komt.
+
+01:00:12.520 --> 01:00:19.040
+Iemand stelt een wijziging voor, een paar mensen reageren met een duim omhoog, iemand schrijft, klinkt goed, laten we voor optie 2 gaan en iedereen gaat verder.
+
+01:00:19.220 --> 01:00:22.380
+Op dat moment voelt het alsof het is besloten, maar waar is die beslissing nu?
+
+01:00:22.540 --> 01:00:26.940
+Het is één regel midden in een gesprek, tussen een vraag over de lunch en een link naar een concept.
+
+01:00:27.160 --> 01:00:30.760
+Er is geen titel, geen eigenaar, geen datum waar een vreemde naar zou zoeken.
+
+01:00:30.760 --> 01:00:36.060
+Zes maanden later vraagt iemand waarom hebben we voor optie 2 gekozen, en het antwoord is een halvergeten gesprek.
+
+01:00:36.220 --> 01:00:38.540
+Chatberichten zijn moeilijk terug te vinden op basis van betekenis.
+
+01:00:38.740 --> 01:00:40.700
+Zoeken komt overeen met woorden, niet met de uitkomst.
+
+01:00:40.860 --> 01:00:42.960
+Als je de exacte zin niet meer weet, ben je aan het scrollen.
+
+01:00:43.080 --> 01:00:46.300
+Als de mensen die in het gesprek zaten zijn vertrokken, is de context met hen verdwenen.
+
+01:00:46.440 --> 01:00:50.560
+En afhankelijk van je bewaarbeleid kan het bericht zelf al lang verwijderd zijn voordat iemand het nodig heeft.
+
+01:00:50.740 --> 01:00:52.900
+De beslissing is genomen, maar het verslag ervan niet.
+
+01:00:53.060 --> 01:00:54.820
+De oplossing is dus niet om te stoppen met chatten.
+
+01:00:54.980 --> 01:00:55.760
+Chatten is prima.
+
+01:00:55.760 --> 01:00:58.740
+De oplossing is om te voorkomen dat de chat onnodig veel informatie bevat.
+
+01:00:58.740 --> 01:01:01.600
+Richt het gesprek op de kern. Verberg de inhoud er niet in.
+
+01:01:01.740 --> 01:01:03.460
+In de praktijk is dat een kleine gewoonte.
+
+01:01:03.740 --> 01:01:08.580
+Wanneer een beslissing is genomen, noteert iemand die op de juiste plek en plaatst de link terug in de conversatie.
+
+01:01:08.940 --> 01:01:09.740
+Beslissing hier vastgelegd.
+
+01:01:10.420 --> 01:01:11.560
+Eén regel, één link.
+
+01:01:11.720 --> 01:01:16.120
+De chat blijft wat het is een plek om te praten, en de echte inhoud bevindt zich in een container met een eigenaar.
+
+01:01:16.360 --> 01:01:17.740
+Hetzelfde geldt voor documenten.
+
+01:01:17.920 --> 01:01:19.500
+Plak niet het hele plan in een bericht.
+
+01:01:19.760 --> 01:01:23.080
+Deel de link naar de plek waar het plan staat en laat het gesprek eromheen draaien.
+
+01:01:23.080 --> 01:01:25.900
+Op die manier kan de conversatie zo snel gaan als nodig is.
+
+01:01:26.120 --> 01:01:28.680
+Wat mensen nodig hebben, is een plek die niet verplaatst wordt.
+
+01:01:28.860 --> 01:01:31.260
+En voor de meeste organisaties bestaat die plek al.
+
+01:01:31.440 --> 01:01:35.600
+Die bestaat al jaren, opgebouwd met sites, bibliotheken, metadata en levenscyclusregels.
+
+01:01:35.760 --> 01:01:38.860
+Het is de plek in dit hele plaatje die speciaal is ontworpen om dingen te bewaren.
+
+01:01:39.180 --> 01:01:39.580
+SharePoint.
+
+01:01:39.960 --> 01:01:41.460
+SharePoint is de bron van de waarheid.
+
+01:01:41.700 --> 01:01:45.620
+SharePoint is gebouwd om dingen te bewaren, niet om te praten, niet om te brainstormen, maar om te bewaren.
+
+01:01:45.720 --> 01:01:47.080
+En dat zie je terug in de structuur.
+
+01:01:47.280 --> 01:01:48.280
+Het begint met een site.
+
+01:01:48.460 --> 01:01:51.480
+De site is de container en bevat de eigenaren, de leden en de regels.
+
+01:01:51.480 --> 01:01:53.340
+Binnen de site bevinden zich bibliotheken.
+
+01:01:53.540 --> 01:01:56.160
+Binnen een bibliotheek bevinden zich mappen, als je die wilt, en items.
+
+01:01:56.420 --> 01:01:58.180
+Site, bibliotheek, map, item.
+
+01:01:58.180 --> 01:02:01.100
+Vier niveaus en elk niveau kan zijn eigen machtigingen bevatten.
+
+01:02:01.220 --> 01:02:04.320
+Het is het oudste model in dit hele gesprek en nog steeds het duidelijkste.
+
+01:02:04.520 --> 01:02:08.060
+Je kunt naar een document wijzen en precies aangeven wie het mag openen en waarom.
+
+01:02:08.260 --> 01:02:10.780
+Dan komt het onderdeel dat andere tools niet hebben, metadata.
+
+01:02:11.180 --> 01:02:15.800
+Een bibliotheek kan kolommen bevatten, document typen, eigenaar, status, einddatum, contract, klant.
+
+01:02:15.980 --> 01:02:18.940
+Alles wat je bedrijf over een bestand moet weten, kun je naast het bestand opslaan.
+
+01:02:19.100 --> 01:02:20.440
+Dat klinkt misschien onbeduidend.
+
+01:02:20.660 --> 01:02:25.200
+Dat is het niet, want metadata zorgt ervoor dat een vreemde na drie jaar het juiste document terugvindt zonder te weten wie het heeft geschreven.
+
+01:02:25.200 --> 01:02:27.000
+Mappen zijn afhankelijk van iemands geheugen.
+
+01:02:27.180 --> 01:02:28.120
+Kolommen doen dat niet.
+
+01:02:28.280 --> 01:02:30.400
+En de levenscyclus wordt beheerd, niet zomaar voorspeld.
+
+01:02:30.560 --> 01:02:33.260
+Een bibliotheek kan versiebeheer inschakelen met door u gekozen limieten.
+
+01:02:33.420 --> 01:02:35.780
+Er kan goedkeuring vereist zijn voordat iets gepubliceerd wordt.
+
+01:02:35.940 --> 01:02:39.540
+Er kan een bewaarlabel worden toegepast dat aangeeft dat iets zeven jaar bewaard moet worden en daarna beoordeeld.
+
+01:02:39.700 --> 01:02:41.400
+Inhoud wordt hier niet aan zijn lot overgelaten.
+
+01:02:41.620 --> 01:02:44.280
+Iemand heeft bepaald hoe lang het bewaard blijft en het systeem handhaaft dit.
+
+01:02:44.480 --> 01:02:45.960
+Daarom werkt compliance hier het beste.
+
+01:02:46.200 --> 01:02:48.360
+Records Management heeft een paar dingen nodig om te functioneren.
+
+01:02:48.360 --> 01:02:53.100
+Een bekende locatie, een bekende eigenaar, een label dat aangeeft wat het item is en een regel die op het juiste moment wordt geactiveerd.
+
+01:02:53.300 --> 01:02:55.540
+SharePoint biedt u al deze vier elementen op één plek.
+
+01:02:55.660 --> 01:03:00.320
+U kunt een item, een record, vergrendelen om bewerkingen te voorkomen en een duidelijk addedspoor bijhouden van wie het heeft aangeraakt.
+
+01:03:00.480 --> 01:03:01.980
+Probeer dat maar eens met een chatbericht.
+
+01:03:02.240 --> 01:03:03.520
+Zoeken is hetzelfde verhaal.
+
+01:03:03.840 --> 01:03:06.760
+Microsoft zeer geindexeert SharePoint grondig, inclusief die kolommen.
+
+01:03:06.940 --> 01:03:09.560
+U kunt dus filteren op documenttype, op eigenaar en op datum.
+
+01:03:09.880 --> 01:03:12.760
+Resultaten worden weergegeven met context, niet alleen op een overeenkomende zin.
+
+01:03:12.920 --> 01:03:14.760
+Over jaren heen, over duizenden bestanden.
+
+01:03:15.020 --> 01:03:19.000
+Dat is het verschil tussen het vinden van de ondertekende overeenkomst en het vinden van een discussie waarin deze wordt genoemd.
+
+01:03:19.120 --> 01:03:20.220
+Dus dit is de situatie.
+
+01:03:20.440 --> 01:03:22.220
+Loops en pagina's moeten SharePoint voeden.
+
+01:03:22.420 --> 01:03:23.720
+Ze mogen SharePoint niet vervangen.
+
+01:03:23.940 --> 01:03:25.560
+Ze zijn goed aan het begin van het proces.
+
+01:03:25.840 --> 01:03:29.600
+Snelle vastlegging, gezamenlijk opstellen, live updates tussen mensen die er nog aan werken.
+
+01:03:29.600 --> 01:03:34.640
+Dat is echt de waarde en niemand zou daar bezwaar tegen moeten maken, maar ze zijn ontworpen voor een flexibele workflow, niet voor de lange termijn.
+
+01:03:34.800 --> 01:03:39.120
+Ze hebben niet de bibliotheekstructuur, de kolommen of de recordbeheerfuncties die een permanent item nodig heeft.
+
+01:03:39.120 --> 01:03:45.740
+Als je ze standaard als archief laat fungeren, krijg je een record dat moeilijk te doorzoeken en te labelen is en gekoppeld is aan containers waar niemand doorheen kan bladeren.
+
+01:03:45.900 --> 01:03:47.540
+De workflow loopt dus maar één kant op.
+
+01:03:47.700 --> 01:03:49.720
+Ideeën ontstaan in pagina's en componenten.
+
+01:03:49.900 --> 01:03:54.000
+Werk wordt gedeeld in een werkruimte en wat het bedrijf moet bewaren, komt bewust in een bibliotheek terecht.
+
+01:03:54.220 --> 01:03:57.700
+Nu de voor de hand liggende vraag, wanneer verdient een looppagina het om verplaatst te worden?
+
+01:03:57.920 --> 01:03:59.220
+Gebruik de triggers van eerder.
+
+01:03:59.420 --> 01:04:02.000
+Als de pagina een beslissing heeft vastgelegd, gaat deze naar een record.
+
+01:04:02.200 --> 01:04:05.360
+Als de pagina buiten het bedrijf wordt geplaatst, heeft deze een gecontroleerde locatie nodig.
+
+01:04:05.360 --> 01:04:09.100
+Als het een onderdeel is dat door een project wordt overgedragen, heeft het een eigenaar nodig die geen persoon is.
+
+01:04:09.280 --> 01:04:11.280
+Kies vervolgens de juiste vorm voor de verplaatsing.
+
+01:04:11.460 --> 01:04:16.600
+Als de inhoud leest als een document, een plan, een voorstel, een beleid of een rapport, maak er dan een document van.
+
+01:04:16.800 --> 01:04:19.980
+Een woord bestand in de bibliotheek met ingevulde kolommen en een label.
+
+01:04:20.240 --> 01:04:22.860
+Het heeft een titel, een versie en een duidelijke eindstatus.
+
+01:04:23.080 --> 01:04:29.840
+Als de inhoud bedoeld is om door veel mensen gelezen en gevonden te worden, zoals een handleiding, een proces of een aankondiging, is een SharePoint-site pagina geschikter.
+
+01:04:29.840 --> 01:04:34.900
+Deze is ontworpen voor lezers, verschijnt in zoekresultaten en bevindt zich in een site met een zichtbare eigenaar.
+
+01:04:35.020 --> 01:04:42.100
+En als het nog steeds een actief werkoppervlak is dat alleen een stabielere container nodig heeft, laat het dan in een werkruimte staan, maar zorg ervoor dat de eigenaren benoemd zijn en het label is ingesteld.
+
+01:04:42.240 --> 01:04:44.160
+Hoe dan ook, iemand neemt de beslissing bewust.
+
+01:04:44.400 --> 01:04:45.260
+Dat is het patroon.
+
+01:04:45.440 --> 01:04:47.080
+Maar let op waar dit allemaal van afhangt.
+
+01:04:47.440 --> 01:04:52.380
+Bibliotheken hebben eigenaren nodig, labels moeten betekenis hebben en standaardwaarden moeten worden ingesteld voordat iemand iets aanmaakt.
+
+01:04:52.600 --> 01:04:56.720
+Niets daarvan gebeurt vanzelf en niets ervan is houdbaar als het alleen in het hoofd van één beheerder bestaat.
+
+01:04:56.720 --> 01:05:00.360
+Het moet worden opgeschreven, governance zonder de acceptatie te belemmeren.
+
+01:05:00.540 --> 01:05:02.140
+Zo loopt governance meestal spaak.
+
+01:05:02.300 --> 01:05:07.700
+Iemand schrijft de regels, 40 pagina's en AAMG Evans, conventies, goedkeuringsprocedures, een formulier voor elk verzoek.
+
+01:05:07.820 --> 01:05:10.520
+Het is grondig, maar ook onleesbaar, dus niemand leest het.
+
+01:05:10.640 --> 01:05:14.760
+En de weinigen die het wel lezen, besluiten dat het het veiligst is om de tools die erin beschreven staan te vermijden.
+
+01:05:14.920 --> 01:05:21.200
+En ze stoppen niet met werken, ze gaan gewoon terug naar e-mail waar niets goedgekeurd hoeft te worden, terug naar een persoonlijk notitieboekje waar niemand vragen stelt.
+
+01:05:21.400 --> 01:05:24.020
+Terug naar een bestand op het bureaublad met de naam Final V3.
+
+01:05:24.020 --> 01:05:29.340
+De regels hebben het risico niet verminderd. Ze hebben de inhoud ergens naartoe verplaatst zonder container, zonder label en zonder eigenaar.
+
+01:05:29.520 --> 01:05:30.360
+Dat is het dieptepunt.
+
+01:05:30.580 --> 01:05:32.460
+Governance waar mensen in moeten rommelen is geen governance.
+
+01:05:32.660 --> 01:05:34.520
+Het is een document, dus draai het om.
+
+01:05:34.720 --> 01:05:38.200
+Minder regels, duidelijk geformuleerd en afgedwongen door het systeem, niet door geheugen.
+
+01:05:38.360 --> 01:05:41.640
+Een regel die afhankelijk is van het geheugen van mensen zal falen op een drukke dinsdag.
+
+01:05:41.800 --> 01:05:46.480
+Een regel die standaard is ingebouwd, geldt elke dinsdag, ook op de dinsdagen waarop niemand eraan denkt.
+
+01:05:46.680 --> 01:05:51.740
+Als de standaard deling beperkt is tot specifieke personen, zullen de meeste links beperkt zijn tot specifieke personen.
+
+01:05:51.740 --> 01:05:56.400
+Als er bij het aanmaken van een nieuwe werkruimte om twee eigenaren wordt gevraagd, zullen de meeste werkruimtes twee eigenaren hebben.
+
+01:05:56.600 --> 01:05:57.900
+Niemand hoefde te worden getraind.
+
+01:05:58.100 --> 01:06:00.900
+Ze volgden gewoon de weg van de minste moeite, en dat bleek de juiste te zijn.
+
+01:06:01.100 --> 01:06:02.880
+Waar worden die standaardinstellingen dan opgeslagen?
+
+01:06:03.060 --> 01:06:04.660
+Laten we beginnen met wie dingen mag maken.
+
+01:06:04.860 --> 01:06:09.400
+In de loopbeheerinstellingen bepaal je of iedereen werkruimtes kan maken of alleen een gedefinieerde groep.
+
+01:06:09.480 --> 01:06:15.420
+Een open aanpak voelt vriendelijk aan en is prima in het begin, maar het leidt er ook toe dat je uiteindelijk 400 werkruimtes hebt zonder overzicht.
+
+01:06:15.580 --> 01:06:17.240
+Een middenweg werkt voor de meeste tenants.
+
+01:06:17.240 --> 01:06:25.260
+Laat mensen vrij creëren in hun eigen ruimte en beperkt gedeelde werkruimtes tot mensen die een korte briefing hebben gehad of tot een verzoek dat twee minuten duurt, in plaats van twee weken.
+
+01:06:25.580 --> 01:06:27.440
+Vervolgens de standaardinstellingen voor delen.
+
+01:06:27.640 --> 01:06:29.320
+Dit is de instelling met het grootste bereik.
+
+01:06:29.500 --> 01:06:32.020
+Welk type link krijgt iemand te zien wanneer hij of zij op delen klikt?
+
+01:06:32.180 --> 01:06:38.320
+In SharePoint en OneDrive kun je de standaardinstelling wijzigen naar specifieke personen in plaats van iedereen in de organisatie, en je kunt de rijkwijte van een link beperken.
+
+01:06:38.320 --> 01:06:42.540
+Die ene wijziging voorkomt al een enorme hoeveelheid overmatig delen voordat iemand een keuze hoeft te maken.
+
+01:06:42.760 --> 01:06:49.740
+Loopcontent maakt gebruik van hetzelfde deelmechanisme, dus controleer hoe uw tenantinstellingen worden doorgevoerd naar componenten en pagina's en test dit, want het gedrag kan per interface verschillen.
+
+01:06:49.860 --> 01:06:51.320
+Vervolgens de labelbeleidsregels.
+
+01:06:51.580 --> 01:06:52.760
+Welke labels zien gebruikers?
+
+01:06:52.960 --> 01:06:54.440
+Welk label wordt standaard toegepast?
+
+01:06:54.580 --> 01:06:57.700
+Is een label verplicht voordat een document wordt opgeslagen of wordt het alleen voorgesteld?
+
+01:06:57.880 --> 01:07:01.000
+Een standaard label voor nieuwe content is een stille, maar krachtige tool.
+
+01:07:01.200 --> 01:07:06.520
+Het betekent dat een bestand vanaf het begin al enige bescherming heeft en dat de gebruiker het label alleen hoeft te wijzigen als de inhoud verandert.
+
+01:07:06.520 --> 01:07:09.720
+Het verplichten van een label is strenger en werkt goed voor gevoelige teams.
+
+01:07:09.940 --> 01:07:14.420
+Het overal en voor iedereen toepassen leidt tot labels die niemand begrijpt waar we later op terugkomen.
+
+01:07:14.620 --> 01:07:17.960
+Drie belangrijke controles, wie de content aanmaakt, hoe deze wordt gedeeld en hoe deze wordt gelabeld.
+
+01:07:18.160 --> 01:07:21.800
+Zorg dat deze goed zijn ingesteld en het grootste deel van het dagelijkse risico is al afgehandeld voordat iemand een pagina schrijft.
+
+01:07:21.840 --> 01:07:23.280
+Maar standaardinstellingen veranderen.
+
+01:07:23.440 --> 01:07:25.280
+Mensen krijgen uitzonderingen, teams groeien.
+
+01:07:25.440 --> 01:07:28.160
+Een instelling die in januari nog klopte, is in de herfst alweer achterhaald.
+
+01:07:28.300 --> 01:07:30.760
+Plan daarom een evaluatie in, geen project, maar een gewoonte.
+
+01:07:30.760 --> 01:07:34.460
+Eén keer per maand of één keer per kwartaal bekijkt iemand de aanmaakrapporten en de deelrapporten.
+
+01:07:34.540 --> 01:07:36.240
+Hoeveel nieuwe werkruimtes zijn er verschenen?
+
+01:07:36.400 --> 01:07:37.220
+Wie heeft ze gemaakt?
+
+01:07:37.460 --> 01:07:38.780
+Welke hebben één eigenaar of geen?
+
+01:07:38.980 --> 01:07:40.440
+Welke sites worden het meest gedeeld?
+
+01:07:40.620 --> 01:07:42.140
+Wat is er veranderd sinds de laatste keer?
+
+01:07:42.300 --> 01:07:44.480
+Je zoekt niet naar de schuldige, je zoekt naar structuur.
+
+01:07:44.640 --> 01:07:49.000
+Een piek in werkruimtes van één afdeling betekent dat ze een betere plek of betere begeleiding nodig hebben.
+
+01:07:49.160 --> 01:07:52.500
+Een stapel brede links op één site betekent dat die site een gesprek nodig heeft.
+
+01:07:52.680 --> 01:07:56.160
+En een werkruimte zonder activiteit en zonder eigenaar komt in aanmerking voor archivering.
+
+01:07:56.160 --> 01:08:00.300
+Die beoordeling duurt een uur als de rapportages zijn ingesteld, anders is er een crisis nodig.
+
+01:08:00.500 --> 01:08:05.140
+En let op wat dit je oplevert, een korte set regels, een handvol standaardinstellingen en een regelmatige blik op wat er gebeurt.
+
+01:08:05.340 --> 01:08:06.860
+Dat is beheer waar mensen mee kunnen leven.
+
+01:08:07.060 --> 01:08:10.100
+Het vraagt ze niet om erover na te denken, het vraagt ze alleen om niet tegen de stroom in te gaan.
+
+01:08:10.260 --> 01:08:12.220
+Maar standaardinstellingen doen slechts een deel van het werk.
+
+01:08:12.400 --> 01:08:14.000
+Ze kunnen iemand naar een vaste plek leiden.
+
+01:08:14.240 --> 01:08:15.520
+Ze kunnen niet uitleggen waarom.
+
+01:08:15.680 --> 01:08:20.540
+En wanneer iemand naar een lege pagina staart en zich afvraagt waar die thuis hoort, helpt de instelling in het beheerderscentrum niet.
+
+01:08:20.760 --> 01:08:22.880
+Daarvoor zijn woorden nodig die ze daadwerkelijk zullen lezen.
+
+01:08:22.880 --> 01:08:25.380
+Gebruikershandleidingen die daadwerkelijk worden opgevolgd.
+
+01:08:25.500 --> 01:08:27.220
+De meeste handleidingen falen door hun lengte.
+
+01:08:27.380 --> 01:08:30.420
+Een beleid van twaalf pagina's wordt één keer vluchtig bekeken en één keer als bladwijzer opgeslagen.
+
+01:08:30.640 --> 01:08:32.980
+Waarna het in een map belandt, pal naast het vorige beleid van twaalf pagina's.
+
+01:08:33.120 --> 01:08:34.580
+Niemand is hier lui.
+
+01:08:34.800 --> 01:08:37.340
+Mensen hebben gewoon werk af te maken en een lege pagina staart hen aan.
+
+01:08:37.520 --> 01:08:40.080
+Ze openen geen handleiding om te bepalen waar een document thuis hoort.
+
+01:08:40.240 --> 01:08:40.940
+Dus kort het in.
+
+01:08:41.100 --> 01:08:43.720
+Eén pagina, één beslissingsboom, duidelijke taal.
+
+01:08:43.900 --> 01:08:45.620
+De pagina begint met één vraag.
+
+01:08:45.780 --> 01:08:47.160
+Wat ga je met deze inhoud doen?
+
+01:08:47.340 --> 01:08:48.760
+Alles vloeit daaruit voort.
+
+01:08:48.760 --> 01:08:50.200
+Denk je er alleen over na?
+
+01:08:50.200 --> 01:08:53.400
+Werk je eraan met een paar mensen of moet het bedrijf het bewaren?
+
+01:08:53.540 --> 01:08:55.260
+Drie antwoorden, drie bestemmingen.
+
+01:08:55.400 --> 01:08:57.560
+Iemand kan dat in tien seconden lezen en dat is de test.
+
+01:08:57.760 --> 01:09:00.640
+Als de handleiding die tien seconden niet overleeft, is het geen handleiding.
+
+01:09:00.840 --> 01:09:03.680
+Het is documentatie en de woorden zijn belangrijker dan de layout.
+
+01:09:03.980 --> 01:09:07.380
+Sla vluchtige, gezamenlijke artefacten en archiefsystemen over.
+
+01:09:07.640 --> 01:09:08.980
+Maar niemand zegt die hardop.
+
+01:09:09.080 --> 01:09:11.980
+Zeg het zoals je het tegen een collega aan het bureau naast je zou zeggen.
+
+01:09:12.180 --> 01:09:14.380
+Hier nadenken, hier delen, hier bewaren.
+
+01:09:14.520 --> 01:09:16.120
+Dat is het hele model in zes woorden.
+
+01:09:16.320 --> 01:09:20.020
+Nadenken gebeurt op een co-pilot pagina of een loopcomponent in je eigen ruimte.
+
+01:09:20.020 --> 01:09:23.780
+Delen gebeurt in een loopwerkruimte of een teamskanaal met benoemde eigenaren.
+
+01:09:24.000 --> 01:09:26.280
+Bewaren gebeurt in SharePoint met een label.
+
+01:09:26.680 --> 01:09:29.800
+Zet die drie regels bovenaan en daaronder een korte zin.
+
+01:09:30.000 --> 01:09:33.580
+Hier nadenken, concepten, ideeën, alles wat alleen jij nodig hebt.
+
+01:09:34.880 --> 01:09:37.160
+Hier delen, werk in uitvoering met je team.
+
+01:09:37.360 --> 01:09:41.200
+Hier bewaren, beslissingen, afspraken, alles wat we binnen een jaar moeten terugvinden.
+
+01:09:41.420 --> 01:09:43.320
+Voeg nog een regel toe voor het geval je twijfelt.
+
+01:09:43.520 --> 01:09:45.480
+Als je het niet zeker weet, vraag dan wie de eigenaar is.
+
+01:09:45.680 --> 01:09:47.760
+Geen eigenaar? Dan is het nog niet klaar om te delen.
+
+01:09:47.760 --> 01:09:50.740
+Waar moet het dan naartoe? Niet in een documentbibliotheek die niemand bezoekt.
+
+01:09:50.860 --> 01:09:52.980
+Plaats het waar mensen al zijn wanneer de vraag zich voordoet.
+
+01:09:53.180 --> 01:09:56.000
+Maak er een tabblad van in de teamskanalen wanneer er nieuw werk begint.
+
+01:09:56.220 --> 01:09:59.160
+Link ernaar vanaf de homepage onder de naam waar mensen daadwerkelijk naar zoeken.
+
+01:09:59.400 --> 01:10:00.620
+Bijvoorbeeld, waar moet dit naartoe?
+
+01:10:00.820 --> 01:10:02.680
+Voeg het ook toe aan de co-pilot onboarding.
+
+01:10:02.860 --> 01:10:07.360
+Dat is het moment waarop een nieuwe gebruiker op het punt staat zijn eerste pagina aan te maken en de gewoonte nog niet is ingeburgerd.
+
+01:10:07.480 --> 01:10:09.920
+Een link op dat moment doet meer dan een training een maand later.
+
+01:10:10.180 --> 01:10:13.320
+Geef mensen de pagina vervolgens op de plekken waar een beslissing genomen moet worden.
+
+01:10:13.320 --> 01:10:19.540
+Een korte notitie in de workflow voor het aanmaken van een loopwerkruimte, een regel in de labelbeschrijving, een vastgepint bericht in het kanaal voor elk nieuw project.
+
+01:10:19.720 --> 01:10:22.080
+Overal dezelfde woorden, zodat de formulering blijft hangen.
+
+01:10:22.200 --> 01:10:23.680
+Maar een pagina alleen is niet genoeg.
+
+01:10:23.860 --> 01:10:24.760
+Mensen volgen mensen.
+
+01:10:25.020 --> 01:10:28.160
+Kies daarom ambassadeurs, één of twee in elke afdeling, niet van IT.
+
+01:10:28.440 --> 01:10:31.680
+Iemand die bekend is, een beetje nieuwsgierig en collega's al helpt met de kleine dingen.
+
+01:10:31.900 --> 01:10:35.760
+Geef ze de pagina, een briefing van 15 minuten en een manier om vragen te stellen aan de hogere managementlagen.
+
+01:10:36.000 --> 01:10:37.160
+Ze hoeven niets af te dwingen.
+
+01:10:37.360 --> 01:10:39.500
+Ze beantwoorden de vraag, waar moet ik dit plaatsen?
+
+01:10:39.500 --> 01:10:43.740
+Op dat moment, in een stem die collega's vertrouwen en geef ze korte voorbeelden.
+
+01:10:43.880 --> 01:10:50.880
+Een verkoopteam dat een conceptvoorstel schrijft, eerst de co-pilot pagina, de loopwerkruimte terwijl drie mensen SharePoint bewerken wanneer de klant het ontvangt.
+
+01:10:50.980 --> 01:10:53.180
+Een manager die een aanwervingsbeslissing vastlegt.
+
+01:10:53.380 --> 01:10:54.640
+Het blijft nooit bij de chat.
+
+01:10:54.820 --> 01:10:58.480
+Het komt in de ouwer bibliotheek terecht met een label, waarna een link terugverwijst naar de discussie.
+
+01:10:58.660 --> 01:11:01.380
+Vier regels per onderwerp, echte banen, echte resultaten.
+
+01:11:01.560 --> 01:11:05.580
+Een goed voorbeeld leert meer dan een Alinea aan regels, omdat mensen er hun eigen dinsdag in herkennen.
+
+01:11:05.580 --> 01:11:11.420
+Hou het vervolgens levend, bekijk de pagina twee keer per jaar, verwijder alles wat niemand gebruikt, voeg de vraag toe die mensen steeds aan de projectleiders stellen.
+
+01:11:11.560 --> 01:11:14.960
+Als er een nieuwe functie wordt geïntroduceerd, verander dan één regel, niet de hele pagina.
+
+01:11:15.160 --> 01:11:20.160
+Dat is de richtlijn die mensen volgen, kort, duidelijk, geplaatst waar de beslissing wordt genomen, herhaald door iemand die ze vertrouwen.
+
+01:11:20.320 --> 01:11:22.560
+Dit laat een vraag onbeantwoord die de pagina niet kan beantwoorden.
+
+01:11:22.760 --> 01:11:23.960
+Wie bepaalt wat erin komt te staan?
+
+01:11:24.160 --> 01:11:25.300
+Wie financiert de opruiming?
+
+01:11:25.440 --> 01:11:26.900
+En wie is verantwoordelijk als het mislukt?
+
+01:11:27.060 --> 01:11:28.500
+Dat zijn geen gebruikersbeslissingen.
+
+01:11:28.680 --> 01:11:29.840
+Die horen bij een hoger niveau.
+
+01:11:30.140 --> 01:11:31.900
+Welke leidinggevenden moeten hierover beslissen?
+
+01:11:31.900 --> 01:11:35.020
+Sommige van deze zaken kunnen niet worden opgelost door een beheerder met een instellingenpagina.
+
+01:11:35.160 --> 01:11:37.960
+Er is iemand met autoriteit nodig om ja, nee of nog niet te zeggen.
+
+01:11:38.120 --> 01:11:41.820
+En er zijn vier beslissingen die steeds op het verkeerde bureau belanden, of helemaal niet.
+
+01:11:41.980 --> 01:11:43.700
+De eerste is de risicobereidheid.
+
+01:11:43.920 --> 01:11:48.080
+Hoeveel ongecontroleerde, gedeelde AI-output is de organisatie bereid te accepteren?
+
+01:11:48.240 --> 01:11:50.780
+Dat is een serieuze vraag met een breed scala aan antwoorden.
+
+01:11:50.960 --> 01:11:54.720
+Een software-startup zou kunnen zeggen, laat mensen vrij creëren, wij ruimen later wel op.
+
+01:11:54.860 --> 01:11:57.820
+Een bank zou kunnen zeggen, niet delen zonder label en een benoemde eigenaar.
+
+01:11:58.000 --> 01:11:59.480
+Beide standpunten kunnen juist zijn.
+
+01:11:59.480 --> 01:12:03.400
+Wat fout is, is nooit een antwoord geven, want als de leiding zwijgt, wordt de standaardinstelling het antwoord.
+
+01:12:03.540 --> 01:12:07.220
+En de standaardinstelling is wat de tools op dag 1 toestaan, wat meestal de meest soepele instelling is.
+
+01:12:07.380 --> 01:12:08.600
+Dus zeg het gewoon duidelijk.
+
+01:12:08.760 --> 01:12:12.660
+Is het acceptabel als een pagina voor kapiloten met 200 mensen wordt gedeeld en nooit wordt gecontroleerd?
+
+01:12:12.800 --> 01:12:14.880
+Is het acceptabel als er een prijsbeslissing in staat?
+
+01:12:15.100 --> 01:12:16.840
+Leg een getal of een grens vast op schrift.
+
+01:12:17.060 --> 01:12:19.280
+Alles wat daarna komt, is makkelijker te beargumenteren.
+
+01:12:19.460 --> 01:12:24.480
+De tweede beslissing is wie het plaatsingsmodel beheert, niet de tools, maar het model, de regels voor wat waar komt,
+
+01:12:24.680 --> 01:12:26.660
+wie het controleert en wat er gebeurt als het niet werkt.
+
+01:12:26.660 --> 01:12:29.040
+Op dit moment hebben drie groepen elk een deel in handen.
+
+01:12:29.160 --> 01:12:30.820
+Elk beheert de tenant en de instellingen.
+
+01:12:30.980 --> 01:12:32.900
+Records Management beheert de bewaartermijnen en labels,
+
+01:12:33.140 --> 01:12:36.260
+en de business units beheren de daadwerkelijke content en de bijbehorende werkwijze.
+
+01:12:36.380 --> 01:12:38.580
+Elke groep gaat ervan uit dat een van de anderen het beheert.
+
+01:12:38.720 --> 01:12:41.740
+Er staat dat we het platform hebben gebouwd, maar we weten niet wat de inhoud betekent.
+
+01:12:41.880 --> 01:12:45.020
+De afdeling Records zegt dat we het beleid hebben ingesteld, maar we kunnen loop niet zien.
+
+01:12:45.200 --> 01:12:46.960
+De business zegt dat we gewoon aan de slag moeten.
+
+01:12:47.160 --> 01:12:50.800
+Het model heeft dus geen eigenaar, en een model zonder eigenaar is slechts een verzameling instellingen.
+
+01:12:50.940 --> 01:12:52.600
+Kies één verantwoordelijke eigenaar.
+
+01:12:52.600 --> 01:12:56.600
+Het kan een van de drie zijn, maar het moet één naam zijn met de andere twee als benoemde partners.
+
+01:12:56.840 --> 01:12:59.740
+In de meeste organisaties werkt een gedeelde eigenaar het beste.
+
+01:12:59.960 --> 01:13:03.080
+IT beheert de controles, Records beheert de labels en de bewaartermijnen,
+
+01:13:03.220 --> 01:13:05.640
+en de business units beheren de richtlijnen en de voorbeelden.
+
+01:13:05.820 --> 01:13:06.560
+Iemand deelt het.
+
+01:13:06.700 --> 01:13:08.780
+Die persoon is verantwoordelijk als er iets misgaat.
+
+01:13:08.880 --> 01:13:09.780
+Ten derde, geld.
+
+01:13:10.020 --> 01:13:13.540
+Opruimen kost geld en er is een budget nodig voordat iemand co-pilot gaat uitbreiden.
+
+01:13:13.700 --> 01:13:16.360
+Het beperken van oude gedeelde mappen, het archiveren van niet-actieve sites,
+
+01:13:16.520 --> 01:13:18.580
+het toewijzen van eigenaren, het controleren van labels,
+
+01:13:18.580 --> 01:13:21.000
+het testen van hoe loop- en pages zich gedragen in je eigen tenant.
+
+01:13:21.220 --> 01:13:24.620
+Dat zijn uren echt werk en het concurreert met projecten met zichtbare deadlines.
+
+01:13:25.060 --> 01:13:28.720
+Leiderschap moet dus kiezen eerst de opruiming financieren en op een schone basis verder bouwen,
+
+01:13:28.860 --> 01:13:31.560
+of eerst uitbreiden en de kosten later dragen met incident response,
+
+01:13:31.780 --> 01:13:33.900
+wat altijd meer kost en op een ongunstiger moment komt.
+
+01:13:34.100 --> 01:13:36.720
+Geen van beide opties is gratis, slechts één ervan is gepland.
+
+01:13:36.900 --> 01:13:38.900
+En ten vierde, hoe weet je of het allemaal gewerkt heeft?
+
+01:13:39.120 --> 01:13:40.440
+Laat de vage doelen achterwegen.
+
+01:13:40.740 --> 01:13:42.360
+Betere samenwerking is niet meetbaar.
+
+01:13:42.560 --> 01:13:44.820
+Kies drie dingen die je wel kunt meten, minder duplicaten.
+
+01:13:44.820 --> 01:13:48.680
+Hoeveel kopieën van hetzelfde plan bestaan er verspreid over pagina's, werkruimtes en chatbijlagen?
+
+01:13:48.840 --> 01:13:50.000
+Dat aantal zou moeten dalen.
+
+01:13:50.240 --> 01:13:51.620
+Snellere toegang tot informatie.
+
+01:13:51.840 --> 01:13:55.160
+Kies een paar vragen die mensen constant stellen, zoals waar is de getekende overeenkomst?
+
+01:13:55.280 --> 01:13:57.020
+En meet hoe lang het duurt voordat ze antwoord krijgen.
+
+01:13:57.260 --> 01:13:59.440
+Dat zou het vertrek moeten verkorten en soepeler moeten laten verlopen.
+
+01:13:59.620 --> 01:14:01.940
+Hoeveel gedeelde content moet er worden gered als iemand vertrekt?
+
+01:14:02.140 --> 01:14:03.540
+Tel de tickets, tel de uren.
+
+01:14:03.720 --> 01:14:05.560
+In een gezond model daalt dat aantal naar nul.
+
+01:14:05.760 --> 01:14:08.300
+Drie cijfers worden volgens een schema gecontroleerd en gerapporteerd aan het management.
+
+01:14:08.580 --> 01:14:10.960
+Zodra die vier punten zijn vastgesteld, is het werk geen theorie meer.
+
+01:14:10.960 --> 01:14:13.880
+Het heeft een grens, een verantwoordelijke, een budget en een scorebord.
+
+01:14:14.020 --> 01:14:17.200
+Wat overblijft is de juiste volgorde, want de juiste dingen in de verkeerde volgorde doen
+
+01:14:17.200 --> 01:14:20.160
+kan een groot deel van de waardeten niet doen, en de juiste volgorde is niet vanzelfsprekend.
+
+01:14:20.280 --> 01:14:21.920
+Een implementatie volgorde die werkt.
+
+01:14:22.100 --> 01:14:23.980
+De volgorde is hier belangrijker dan de snelheid.
+
+01:14:24.140 --> 01:14:26.720
+De meeste teams krijgen de onderdelen goed, maar de volgorde klopt niet.
+
+01:14:26.900 --> 01:14:29.820
+Ze publiceren een handleiding in de eerste week omdat dat voelt als vooruitgang.
+
+01:14:30.040 --> 01:14:33.040
+Vervolgens ontdekken ze dat de standaardinstellingen eronder nog steeds de andere kant op wijzen.
+
+01:14:33.200 --> 01:14:35.880
+Mensen volgen de pagina en de instellingen maken het stilletjes ongedaan.
+
+01:14:35.880 --> 01:14:38.980
+Begin dus onderaan met de machtigingen en standaardinstellingen voor delen.
+
+01:14:39.100 --> 01:14:40.780
+Dit is de laag waarop al het andere rust.
+
+01:14:40.980 --> 01:14:44.880
+Voordat iemand een labelnaam of een beslissingsboom schrijft, moet je eerst vaststellen wie wat kan bereiken.
+
+01:14:45.080 --> 01:14:48.480
+Beperk de oudste, algemene links, zoek naar sites die voor het hele bedrijf toegankelijk zijn,
+
+01:14:48.600 --> 01:14:49.680
+terwijl dat nooit had mogen zijn.
+
+01:14:49.900 --> 01:14:52.100
+Stel de standaard link in voor specifieke personen.
+
+01:14:52.280 --> 01:14:55.960
+Bepaal wie gedeelde werkruimtes kan aanmaken en controleer wie de eigenaar is van elke werkruimte,
+
+01:14:56.100 --> 01:14:58.500
+want een werkruimte zonder eigenaar is een probleem dat je ziet aankomen.
+
+01:14:58.660 --> 01:15:02.100
+Het is saai werk, maar het is ook het werk dat per uur het meeste risico verkleint
+
+01:15:02.100 --> 01:15:04.120
+en het heeft een bijkomend effect dat later van belang is.
+
+01:15:04.320 --> 01:15:06.060
+Wanneer je copilot eenmaal hebt geïmplementeerd,
+
+01:15:06.220 --> 01:15:08.200
+komen de antwoorden die het genereert voort uit een schonere toegang.
+
+01:15:08.420 --> 01:15:12.140
+Labels en containerbeleid komen daarna en pas nadat de toegangslaag is ingesteld.
+
+01:15:12.320 --> 01:15:16.960
+Hier bepaal je wat elk label doet voor een container en een bestand en welke standaard van toepassing is.
+
+01:15:17.180 --> 01:15:18.680
+Denk aan het eerder genoemde bereik.
+
+01:15:18.900 --> 01:15:21.600
+Stel de controles in voor sites en groepen, vervolgens voor documenten,
+
+01:15:21.760 --> 01:15:24.620
+en controleer dan hoe beide zich gedragen op loops en pagina's in je eigen tenant.
+
+01:15:24.780 --> 01:15:25.680
+Hou de set klein.
+
+01:15:25.920 --> 01:15:28.140
+Vier labels zijn begrijpelijk, negen niet.
+
+01:15:28.140 --> 01:15:32.760
+Koppel vervolgens de containerregels, privacy, delen met externe partijen en apparaattoegang.
+
+01:15:32.900 --> 01:15:35.020
+Als je dit probeert voordat de machtigingen eerlijk zijn,
+
+01:15:35.280 --> 01:15:38.780
+label je content die nog steeds voor iedereen toegankelijk is, wat niets beschermt.
+
+01:15:38.880 --> 01:15:40.460
+Pas nu publiceer je de richtlijnen.
+
+01:15:40.680 --> 01:15:43.840
+Dit is de stap die mensen als eerste willen zetten, maar het is juist de stap die moet wachten.
+
+01:15:44.180 --> 01:15:45.380
+Richtlijnen beschrijven een pad.
+
+01:15:45.600 --> 01:15:47.560
+Dat pad moet bestaan voordat je ernaar kunt verwijzen.
+
+01:15:47.780 --> 01:15:50.460
+Zodra de standaardinstellingen stabiel zijn en de labels betekenis hebben,
+
+01:15:50.640 --> 01:15:52.660
+is denken hier, delen hier, bewaren hier een correcte zin.
+
+01:15:52.900 --> 01:15:54.060
+Daarvoor is het slechts een hoop.
+
+01:15:54.260 --> 01:15:56.840
+Publiceer je het te vroeg, dan verliest de eerste persoon die de richtlijnen volgt
+
+01:15:56.840 --> 01:15:59.360
+en een verkeerde standaardinstelling tegenkomt het vertrouwen in de hele pagina.
+
+01:15:59.540 --> 01:16:01.600
+Wacht dus een paar weken tot de instellingen stabiel zijn
+
+01:16:01.600 --> 01:16:06.180
+en plaats de pagina dan in teams op het intranet en in de onboarding van de co-pilot met overal dezelfde tekst.
+
+01:16:06.440 --> 01:16:07.900
+Lanceer het niet meteen voor iedereen.
+
+01:16:08.140 --> 01:16:10.480
+Kies één afdeling, een afdeling met echte samenwerking,
+
+01:16:10.620 --> 01:16:13.260
+een paar ambassadeurs en een leidinggevende die eerlijke feedback geeft.
+
+01:16:13.420 --> 01:16:14.920
+De juridische afdeling kan bijvoorbeeld werken,
+
+01:16:15.100 --> 01:16:16.940
+net als een projectgericht team binnen de operationele afdeling.
+
+01:16:17.140 --> 01:16:19.740
+Vermijd het luidruchtigste team en het team waar niets op het spel staat.
+
+01:16:19.740 --> 01:16:22.640
+Laat het vier tot zes weken draaien en observeer wat ze daadwerkelijk doen.
+
+01:16:22.840 --> 01:16:23.740
+Waar plaatsten ze dingen?
+
+01:16:23.940 --> 01:16:25.900
+Welke vraag kregen de ambassadeurs het vaakst?
+
+01:16:26.080 --> 01:16:27.500
+Welke instelling zat hen in de weg?
+
+01:16:27.700 --> 01:16:29.420
+Verscheen er werkruimte zonder eigenaar?
+
+01:16:29.640 --> 01:16:31.800
+Controleer de rapporten over het aanmaken en delen aan het begin,
+
+01:16:31.960 --> 01:16:34.560
+halverwege en aan het einde, zodat je een voor- en na-situatie hebt.
+
+01:16:34.720 --> 01:16:37.660
+Wat je tijdens de pilot ontdekt, zal je verrassen, en dat is precies de bedoeling.
+
+01:16:37.860 --> 01:16:40.760
+De werkelijke gewoonten van één afdeling zullen een hiyaat in de richtlijnen blootleggen,
+
+01:16:40.860 --> 01:16:43.220
+een label dat niemand begreep of een standaardinstelling die te streng was.
+
+01:16:43.220 --> 01:16:45.740
+Het oplossen van dergelijke problemen met 40 mensen is goedkoop.
+
+01:16:45.820 --> 01:16:48.200
+Het oplossen van problemen met 4000 gebruikers is een programma op zich.
+
+01:16:48.360 --> 01:16:51.520
+Breed de lancering vervolgens gefaseerd uit met behulp van de lessen die je tijdens de pilot hebt geleerd.
+
+01:16:51.720 --> 01:16:54.720
+Vier stappen, toegang, labels, begeleiding en een pilot.
+
+01:16:54.960 --> 01:16:56.660
+Elke stap maakt de volgende mogelijk.
+
+01:16:56.860 --> 01:16:59.720
+En als alles eenmaal draait, is er nog één ding dat de moeite waard is.
+
+01:16:59.920 --> 01:17:02.580
+Geen nieuwe controle, maar een analyse van de oorzaken van de problemen,
+
+01:17:02.700 --> 01:17:05.640
+omdat de fouten zich herhalen en gemakkelijk te herkennen zijn zodra je hun vorm kent.
+
+01:17:05.800 --> 01:17:07.700
+De foutpatronen om in de gaten te houden.
+
+01:17:07.920 --> 01:17:09.580
+Vier patronen duiken steeds weer op.
+
+01:17:09.580 --> 01:17:12.140
+Zodra je hun vorm kent, kun je ze in één keer herkennen.
+
+01:17:12.300 --> 01:17:14.540
+Het eerste patroon is dat alles in Teams chat staat.
+
+01:17:14.700 --> 01:17:16.720
+Je ziet het in de tenant voordat iemand het toegeeft.
+
+01:17:16.860 --> 01:17:19.320
+Plannen, concepten en beslissingen staan in chatgesprekken
+
+01:17:19.320 --> 01:17:22.040
+en de bijbehorende bestanden staan in de one drive van één persoon.
+
+01:17:22.220 --> 01:17:25.180
+Vraag waar de nieuwste versie staat en drie mensen geven drie verschillende antwoorden.
+
+01:17:25.380 --> 01:17:28.680
+Het teken is simpel, veel chatactiviteit, weinig bestanden in de bibliotheek.
+
+01:17:28.800 --> 01:17:30.640
+De oplossing is de gewoonte die we besproken hebben.
+
+01:17:30.640 --> 01:17:33.840
+Hou het gesprek in de chat, bewaar de content op de startpagina en deel de link terug.
+
+01:17:34.000 --> 01:17:36.140
+Het tweede probleem zijn loopwerkruimtes die niemand bezit.
+
+01:17:36.280 --> 01:17:37.760
+Iemand heeft ze aangemaakt voor een project.
+
+01:17:39.580 --> 01:17:42.160
+Veranderd of de eigenaarslijst bevatte slechts één naam en die persoon is vertrokken.
+
+01:17:42.280 --> 01:17:45.360
+De werkruimte bestaat nog steeds, wordt nog steeds gedeeld en staat nog steeds vol met pagina's.
+
+01:17:45.540 --> 01:17:48.740
+Niemand controleert de werkruimte, niemand archiveert hem en niemand voelt zich verantwoordelijk.
+
+01:17:48.900 --> 01:17:53.300
+Het lijkt geen probleem totdat iemand copilot een vraag stelt en een verouderd plan als feit wordt gepresenteerd.
+
+01:17:53.560 --> 01:17:55.760
+Zoek naar werkruimtes met nul of één eigenaar.
+
+01:17:55.940 --> 01:17:56.500
+Begin daar.
+
+01:17:56.680 --> 01:17:59.480
+Ten derde, pagina's die breed gedeeld worden en nooit gecontroleerd worden.
+
+01:17:59.480 --> 01:18:03.100
+Een copilot pagina begint als een concept van één persoon, krijgt vervolgens een link,
+
+01:18:03.240 --> 01:18:05.500
+die link wordt doorgestuurd en belandt uiteindelijk in een breed kanaal.
+
+01:18:05.500 --> 01:18:09.680
+Weken later wordt de pagina gelezen door mensen die de auteur nooit voor ogen had en er staat nog steeds hetzelfde als op de eerste dag.
+
+01:18:09.840 --> 01:18:11.220
+Niemand heeft de feiten gecontroleerd.
+
+01:18:11.440 --> 01:18:13.640
+Niemand heeft zich afgevraagd of het wel zo breed gedeeld had moeten worden.
+
+01:18:13.820 --> 01:18:17.180
+De pagina is geen concept meer, maar een broncode en niemand heeft hem al zodanig gecontroleerd.
+
+01:18:17.340 --> 01:18:20.600
+Kijk dus naar je deelrapporten voor pagina's met brede links en zonder recente bewerkingen.
+
+01:18:20.740 --> 01:18:22.080
+Die combinatie is een waarschuwing.
+
+01:18:22.300 --> 01:18:25.440
+En ten vierde, labels die overal worden toegepast zonder duidelijke betekenis.
+
+01:18:25.620 --> 01:18:26.660
+Dit voelt als een succes.
+
+01:18:26.900 --> 01:18:28.100
+Elk bestand heeft een label.
+
+01:18:28.320 --> 01:18:32.180
+Het dashboard ziet er geweldig uit, maar vraag een gebruiker wat intern betekent of wat er verandert als ze,
+
+01:18:32.180 --> 01:18:34.540
+vertrouwelijk, selecteren en ze halen hun schouders op.
+
+01:18:34.620 --> 01:18:39.960
+Dus kiezen ze de standaardoptie of wat veilig aanvoelt of wat ervoor zorgt dat de melding niet meer opdringerig is.
+
+01:18:40.140 --> 01:18:44.420
+Een label dat niets betekent, beschermt niets en verbergt de paar bestanden die er echten nodig hadden.
+
+01:18:44.560 --> 01:18:48.840
+Als je veel labels gebruikt en je incidenten nog steeds blootgestolde content aan het licht brengen, is dit waarschijnlijk de reden.
+
+01:18:49.060 --> 01:18:50.500
+Let op wat ze alle vier gemeen hebben.
+
+01:18:50.700 --> 01:18:51.680
+Geen van hen is een bak.
+
+01:18:51.880 --> 01:18:52.660
+Niets is kapot.
+
+01:18:52.660 --> 01:18:58.000
+Elk is een plaatsingsbeslissing die nooit is genomen en een standaardoptie die het gat opvult wat ons terugbrengt naar waar we begonnen.
+
+01:18:58.320 --> 01:18:58.720
+Conclusie.
+
+01:18:58.880 --> 01:19:00.120
+Context heeft een plek nodig.
+
+01:19:00.120 --> 01:19:03.500
+Werk begint in een context, een chat, een vergadering, een melding.
+
+01:19:03.720 --> 01:19:05.740
+Dat deel verandert niet, maar hier is het probleem.
+
+01:19:05.900 --> 01:19:10.240
+Content heeft een container nodig omdat de container de eigenaar, de machtigingen en de tijd bevat.
+
+01:19:10.400 --> 01:19:12.060
+Al het andere vloeit daaruit voort.
+
+01:19:12.260 --> 01:19:15.880
+Kies dus altijd de container voor de content voordat je de eerste regel typt.
+
+01:19:16.060 --> 01:19:19.720
+Als dit je mening over loop en pages heeft veranderd, laat dan een recensie achter voor de podcast.
+
+01:19:19.720 --> 01:19:21.260
+Dat helpt meer mensen om hem te vinden.
+
+01:19:21.460 --> 01:19:23.600
+En maak contact met mij, Mirko Peters, op LinkedIn.
+
+01:19:23.840 --> 01:19:25.600
+Laat me weten wat ik de volgende keer moet behandelen.

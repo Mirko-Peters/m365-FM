@@ -12,6 +12,9 @@ import site_press as PRS
 import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Link)
 import site_landing as LND
 import site_mediakit as MKT
+import site_imglicense as ILC   # Bildlizenz CC BY 4.0 (/image-license/, /de/bildlizenz/)
+import site_infographics as IG   # Infografiken: Kopfbild und Bilder im Text (nur mit Freigabe data/infographics_live.json)
+import site_infohub as IH   # Infografiken-Seite (/infographics/, /de/infografiken/), faellt sich bei jedem Bau selbst
 import site_hardware as HWR   # Hardware-Sponsoring /hardware/ und /hardware/how-we-test/
 import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profile.m365.fm (ADMIN_BASE, PROFILE_BASE; leer = wie bisher)
 import site_support as SUP
@@ -36,6 +39,7 @@ import site_text
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_meta_podcast as MP   # SEO-Titel und Meta-Descriptions der Podcast-Seiten (suchintent-freundlich, reine Funktionen)
 import site_r2 as R2
@@ -43,21 +47,25 @@ import site_listen as LST   # "Show folgen"-Knopf auf den Folgenseiten und Anhoe
 from site_size import sizes, writers
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
+import site_assets as SA   # Skripte und Stylesheet mit Inhalts-Hash im Namen (Site-Worker: immutable), in docs/ und r2out/
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date, timedelta
 from pathlib import Path
 import hashlib
 import site_money as SM
 import site_cover
+import video_seo as VSEO   # Video-SEO der Sticky-Man-Videoseiten (SEO-Titel, Meta, Zusammenfassung, Kapitel; nur mit Freigabe data/video_seo_live.json)
 import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
-from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i)
+from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i, common_topic)
+import site_linkctx as LC   # Beziehungskontext der Linklisten: Einleitungssatz je Liste (data/link_context.json)
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
 _dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists() else ""
 BASE = os.environ.get("SITE_BASE") or (f"https://{_dom}" if _dom else "https://mirko-peters.github.io/m365-dub-downloader")
 BASE = BASE.rstrip("/")
+SA.setup([OUT])   # ohne build() (Tests, Einzelseiten) wie bisher: gehashte Dateien nur nach docs/
 R2.DEFAULT_IMG = f"{BASE}/assets/og-default.png"   # tote Bilder (data/r2_dead.json): JSON-LD-Bildfelder und og:image weichen auf das Standardbild dieses Baus aus
 TODAY = date.today().isoformat()
 INDEXNOW_KEY = "0348df8af6514d5bae4d9f9a5ba51f57"
@@ -307,6 +315,19 @@ def seo_title(t, limit=62, hard=70):   # hard 70 statt 78: Bing-SEO-Bericht "Tit
     return b[: hard - 2].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
 
 
+def _load_seo_overrides():
+    """CTR-Texte (Search-Console-Auswertung 20.11.2026): Pfad -> {title, description}. Betrifft nur <title> und meta/og/twitter description;
+    sichtbare Ueberschrift, og:title und Teilen-Bild bleiben unveraendert. Gepflegt von tools/build_seo_overrides.py."""
+    try:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "seo_overrides.json"), encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+SEO_OVERRIDES = _load_seo_overrides()
+
+
 def meta_desc(s, n=160):
     """Beschreibung fuer meta/og/twitter: hoechstens n Zeichen, bevorzugt am Satzende, sonst an einer Wortgrenze."""
     s = re.sub(r"\s+", " ", strip_tags(s or "")).strip()
@@ -395,7 +416,7 @@ A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'
 def a11y_tags(lang):
     t = dict(_A11Y.get("en", {}))
     t.update(_A11Y.get(lang, {}))
-    return (f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}/assets/a11y.js"></script>')
+    return (f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}{SA.path("a11y.js")}"></script>')
 
 
 _QUI = {}
@@ -510,7 +531,7 @@ def _jsonld_script(value):
     return '<script type="application/ld+json">' + payload + "</script>\n"
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True, og_image=None):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True, og_image=None, og_share=False):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
@@ -528,12 +549,15 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         if _auto: alt = "<!--hl-auto-->"
     body = switch_from(body, {**(switch or alternates or {}), (lang if lang in LANGS else "en"): _self})   # T42: eigene Sprache = diese Seite
     ld = "".join(_jsonld_script(j) for j in complete_ld(jsonld))
-    desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
+    _ov = SEO_OVERRIDES.get(canonical[len(BASE):]) if canonical.startswith(BASE + "/") else None   # CTR-Texte fuer einzelne Seiten
+    tag_title = _ov["title"] if _ov else title
+    desc = meta_desc(_ov["description"] if _ov else desc)   # T7: Beschreibung einheitlich begrenzt
     ogw, ogh = 1200, 630
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
     elif og_image:   # eigenes Bild der Seite (z. B. Service-Landingpages: og-<variante>.png in img.m365.fm/services/, site_landing.py): (url, breite, hoehe)
         ogimg, ogw, ogh = og_image
+        if og_share and share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # Infografiken: Kopfbild als Teilen-Bild, Teilen-Schaltflaechen wie sonst
     elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
         ogimg = f"{OG_BASE}/{og_of.replace(BASE, '').strip('/') or 'index'}.png"
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
@@ -552,7 +576,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <html lang="{hl}" dir="{d}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(seo_title(title))}</title>
+<title>{esc(seo_title(tag_title))}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <link rel="canonical" href="{canonical}">{pn_head(body, extra_head)}
@@ -561,17 +585,16 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="{ogw}"><meta property="og:image:height" content="{ogh}"><meta property="og:image:alt" content="{esc(bare_title(title))}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(bare_title(title))}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{font_preloads()}
+{font_preloads()}{SBR.con_preload(body)}
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
 {ext_links(body)}
 {a11y_tags(lang)}
-<script defer src="{BASE}/assets/page.js"></script>
-<script defer src="{BASE}/assets/attend.js"></script>
-<script>(function(){{if(!matchMedia("(pointer:fine)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=0,ev=["wheel","keydown","pointerdown","touchstart"];function go(){{if(d)return;d=1;ev.forEach(function(e){{removeEventListener(e,go)}});var s=document.createElement("script");s.src="{BASE}/assets/smooth.js";document.body.appendChild(s)}}ev.forEach(function(e){{addEventListener(e,go,{{passive:true,once:true}})}})}})();</script>
-<script defer src="{BASE}/assets/fx.js"></script>
-{('<script defer src="' + BASE + '/assets/viz.js"></script>') if 'class="viz"' in body else ""}
+<script defer src="{BASE}{SA.path("page.js")}"></script>
+<script defer src="{BASE}{SA.path("attend.js")}"></script>
+<script defer src="{BASE}{SA.path("fx.js")}"></script>
+{('<script defer src="' + BASE + SA.path("viz.js") + '"></script>') if 'class="viz"' in body else ""}
 </body></html>
 """
 
@@ -581,13 +604,12 @@ _CSSF = {}
 
 def css_link():
     """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
-    if not _CSSF:
-        import hashlib
+    # Name site.<sha1[:10]>.css wie bisher, seit 27.11.2026 ueber site_assets: auch in r2out/ (r2out-Seiten gehen vor dem Deploy live, das neue
+    # Stylesheet war bis zum Deploy nur ueber GitHub Pages erreichbar). data-sbar: der Site-Worker setzt daraus den Preload-Link-Header (Early Hints).
+    if "css" not in _CSSF:
         css = SBAR_CSS + "\n" + CSS + (ADS.CSS if ADS.css_needed(BASE) else "") + "\n" + FORMS_CSS + "\n" + A11Y_CSS + "\n" + ROLE.CSS + "\n"
-        name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
-        (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
-        _CSSF["u"] = f"{BASE}/assets/{name}"
-    return f'<link rel="stylesheet" href="{_CSSF["u"]}" data-sbar>'
+        _CSSF["css"] = css
+    return f'<link rel="stylesheet" href="{BASE}{SA.put("site.css", _CSSF["css"])}" data-sbar>'
 
 
 _IDENT = {"@id", "@type", "@context", "name", "url"}
@@ -772,7 +794,7 @@ def community_tags(lang, vid=None, mode="", css_async=False):
     """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist).
     css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
     Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
-    priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
+    priv = CPG.privacy_url(BASE, lang)   # gleiche Adresse wie im statischen Anmeldekasten der Community-Seite
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": HOSTS.profile_url(BASE, lang) or f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
     css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'
@@ -870,6 +892,8 @@ def footer(lang):
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{_x("Press kit", "Pressekit")}</a>'
             f'<a href="{BASE}/{"de/" if lang == "de" else ""}media-kit/">{_x("Media kit", "Mediadaten")}</a>'
+            f'<a href="{IH.url(BASE, "de" if lang == "de" else "en")}">{_x("Infographics", "Infografiken")}</a>'   # Infografiken-Seite (nur Englisch und Deutsch), Footer auf allen Seiten (Mirko 19.11.2026)
+            f'<a href="https://event-showcase-1sqdic.grigora.app/en/" rel="noopener" target="_blank">weorganise.events</a>'   # Eventseite von Mirko (Wunsch 19.11.2026), Footer auf allen Seiten
             f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + HWR.footer_links(BASE, lang) + (f'<a href="{SUP.url(BASE, _tl)}">{_x("Support us", "Unterstützen")}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow"{_de}>Impressum</a><a href="{BASE}/legal/" rel="nofollow"{_en}>{_x("Legal notice", "Legal notice")}</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow"{_de}>Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow"{_en}>{_x("Privacy", "Privacy")}</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow"{"" if lang in ("de", "en") else _en}>{_x("Security", "Sicherheit")}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
@@ -902,6 +926,12 @@ def _sentences(text, limit):
     return cut[:k + 1] if k > limit * 0.5 else cut.rsplit(" ", 1)[0] + "…"
 
 
+def _merged_refs(xs):
+    """Expertise/Zertifikate des Profils mit zusammengefuehrten alten ids auf das Ziel und je Ziel einmal (site_learn.resolve_refs, Zuordnung
+    einmal je Bau zwischengespeichert). fetch_members liefert die Profile schon aufgeloest; das hier sichert AUTHOR aus anderen Quellen ab."""
+    return LRN.resolve_refs(xs)
+
+
 def author_box(lang):
     """Author-Box mit schema.org-Auszeichnung (Person, gleiche @id wie das JSON-LD), Expertise als Entitaets-Links, Zertifikaten und sameAs-Kanaelen:
     macht den Autor fuer Suchmaschinen und KI-Antworten (GEO) als geprueften Experten erkennbar (E-E-A-T)."""
@@ -919,10 +949,11 @@ def author_box(lang):
         badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy" itemprop="image">' if img else '<div class="badge">MP</div>'
         badge = ROLE.avatar(badge, ROLE.role_of(a), lang, small=True)   # Editor/Moderator: Ring und Symbol auch im Autorenkasten
         bio = _sentences(a.get("about") or a.get("headline") or "", 360)
-        names = _ent_names(); ex = sorted([e for e in a.get("expertise", []) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
-        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{esc(names[e["e"]])}</a></li>' for e in ex)
-        cs = [c for c in a.get("certs", []) if c.get("e") in names and c.get("verified")][:4]
-        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{esc(names[c["e"]])}</a></li>' for c in cs)
+        names = _ent_names(); ex = sorted([e for e in _merged_refs(a.get("expertise", [])) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
+        _nm = lambda i: EN.html_name(LRN.ENTS.get(i) or {"name": names[i], "type": "product"}, lang)   # Name in der Sprache der Seite (site_ename), wie auf den Entitaetsseiten
+        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{_nm(e["e"])}</a></li>' for e in ex)
+        cs = [c for c in _merged_refs(a.get("certs", [])) if c.get("e") in names and c.get("verified")][:4]
+        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{_nm(c["e"])}</a></li>' for c in cs)
         job = esc((a.get("headline") or progs.get(vp[0], "") if vp else a.get("headline") or "")[:100])
         return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
                 f'<strong><a href="{pref}community/u/{a["handle"]}/" rel="author" itemprop="url"><span itemprop="name">{esc(a["name"])}</span></a>{ROLE.chip(BASE, lang, ROLE.role_of(a), a.get("scope"))}{(" · " + esc(lab)) if lab else ""}</strong>'
@@ -1054,10 +1085,11 @@ def build():
     OUT.mkdir(parents=True)
     (OUT / ".nojekyll").write_text("")
     if (ROOT / "assets").exists():
-        shutil.copytree(ROOT / "assets", OUT / "assets")
+        shutil.copytree(ROOT / "assets", OUT / "assets")   # ungehashte Namen bleiben (alte Seiten, Drittverweise)
         write_cm_js(OUT)
         from site_i18n import write_ui_js
         write_ui_js(OUT)
+    SA.setup([OUT, ROOT / "r2out"])   # gehashte Skripte und Stylesheet (site_assets) ab hier in docs/ und r2out/
 
     # veröffentlichte Folgen je Sprache sammeln
     items = {}  # (vid, lang) -> dict
@@ -1093,18 +1125,31 @@ def build():
     def url_of(it): return episode_url(BASE, it["lang"], it["slug"])
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
-    def sidebar(l, text="", ids=None, exclude=(), home=False):
-        """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen: Englisch mit den Folgen der Hauptshow (/show/),
-        die Dub-Sprachen mit den Folgen ihrer Sprache. ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
-        if l in LANGS:
-            return SBR.render(SBX, BASE, l, text, by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), f"{BASE}/{l}/podcast/", _SHP.get(l), "",
-                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home)
+    import site_related as SRL   # feste "Aehnliche Folgen" je Inhalt (data/sidebar_related.json), statt "Neueste Folgen" (Mirko, 25.11.2026)
+    _SRS = SRL.Store()
+    def _rel_load():   # einmal je Bau, erst beim ersten Bedarf: Folgen der Hauptshow und ihre Entitaets-Treffer (site_podpage.ep_hits wie find_episodes)
         import site_podpage as _PP
-        _en = _PP.episode_index(BASE)["items"]
-        return SBR.render(SBX, BASE, "en", text, _en, lambda x: x["url"], lambda x: x["e"]["title"], f"{BASE}/show/episodes/", _SHP.get("en"),
-                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home)
-    def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
-        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
+        return _PP.episode_index(BASE), _PP.ep_hits(BASE)
+    # ORIG und _dub_hits entstehen erst weiter unten in build(): ueber lambda erst beim Aufruf gelesen (wie vorher in der Closure related_for)
+    _REL = SRL.Related(_SRS, _rel_load, by_vid, None, lambda lg, it: _dub_hits(lg, it), SX.episodes_for, SBX.by,
+                       lambda lg, text, ids, exclude: [e["id"] for e in SBR.chips_for(SBX, text, ids, exclude, lang=lg)],
+                       url_of, anchor_title, TODAY)
+    def related_for(l, key, text="", ids=None, exclude=()):
+        """[(url, titel)] der festen aehnlichen Folgen einer Inhaltsseite in ihrer Sprache; ohne key (Uebersichtsseiten) oder mit SIDEBAR_RELATED=0: None."""
+        _REL.orig = ORIG   # ORIG (weiter unten in build() gesetzt) steht fest, bevor die erste Seite gebaut wird
+        return _REL.links_for(l, key, text, ids, exclude)
+    def sidebar(l, text="", ids=None, exclude=(), home=False, topics_h="", key=""):
+        """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen. key: Inhalts-Schluessel (site_related) fuer die festen
+        "Aehnlichen Folgen"; ohne key (Uebersichten) keine Folgen-Karte. Linkziele: Englisch die Hauptshow (/show/), Dub-Sprachen die Folgen ihrer Sprache.
+        ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
+        rel = related_for(l, key, text, ids, exclude)
+        if l in LANGS:
+            return SBR.render(SBX, BASE, l, text, (), None, None, f"{BASE}/{l}/podcast/", _SHP.get(l), "",
+                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home, topics_h, related=rel)
+        return SBR.render(SBX, BASE, "en", text, (), None, None, f"{BASE}/show/episodes/", _SHP.get("en"),
+                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home, topics_h, related=rel)
+    def side_for(l, title, body_html, home=False, topics_h="", key=""):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), Community; Folgen-Karte nur mit key (Inhaltsseite)
+        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home, topics_h=topics_h, key=key)
 
     R2OUT = ROOT / "r2out"   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
     write, write_r2, _r2n = writers(OUT, R2OUT, R2.rewrite, LANGS)   # write: docs/, ausser was site_size.r2_only nach r2out/ legt (Seiten der Sprachen ausser en/de, Exporte); write_r2: immer r2out/
@@ -1151,7 +1196,7 @@ def build():
                 out += f'<a class="chip" rel="tag" href="{tag_url(BASE, l, t)}">{esc(t)}</a>'
             elif s:
                 out += f'<span class="chip">{esc(t)}</span>'
-        return f'<div class="chips">{out}</div>' if out else ""
+        return (LC.intro(l, "ep.topics") + f'<div class="chips">{out}</div>') if out else ""   # Einleitungssatz: Beziehung Folge -> Themen (site_linkctx)
 
     def top_real(l, n=10):
         rows = (topdata.get("langs") or {}).get(l) or []
@@ -1193,7 +1238,7 @@ def build():
         return top_block(l) + f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
 
     # Englisches Original je Video (Podpage-Show unter /show/), Zuordnung ueber den englischen YouTube-Titel
-    ORIG = {}; ORIG_T = {}   # ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
+    ORIG = {}; ORIG_T = {}; _et = {}   # _et: englische Originaltitel je Video; ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
     try:
         import site_podpage as _PPm
         _et = site_text.fix_tree(json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8"))) if (ROOT / "data" / "en_titles.json").exists() else {}   # T5
@@ -1219,6 +1264,17 @@ def build():
     SNT.load(COMMUNITY_API); SNT.publish(OUT)   # Show Notes aus Spreaker (data/show_notes) + Bearbeitungen aus dem Editor; Rohdaten fuer den Editor unter /show-notes/
     EN_TOP = TOPW.en_items(topdata, _PPs.episode_index(BASE)["by_sid"])   # Top 10 der Hauptshow (erst nach SNT.load: episode_index wird je Bau zwischengespeichert)
     if EN_TOP: TOP_REAL.add("en")   # Fusszeile englischer Seiten -> /top/
+    import site_entmatch as _EM   # gemeinsamer Namensindex: Folgen je Entitaet (Dub), Kontext-Links der Folgenseiten
+    _EMX = _EM.shared(LRN.ENTS); _EMU = {}
+    _dhc = {}
+    def _dub_hits(lang, it):
+        """Entitaeten einer Dub-Folge aus Titel (Schreibung beachtet, Kontext: Extraktion der Folge) und Tags (nur eindeutige Formen), einmal je Folge."""
+        k = (lang, it["slug"])
+        if k not in _dhc:
+            _m = _EMX
+            _cx = {s for s, _ in (SX.BY_EPISODE.get(str(it.get("eid"))) or {}).get("entities", [])}
+            _dhc[k] = set(_m.ids(it["e"]["title"], lang, _cx)) | set(_m.ids_tags(it["e"].get("tags") or ""))
+        return _dhc[k]
     # Episoden-Seiten
     DPOS = {l: {i["vid"]: n for n, i in enumerate(seq)} for l, seq in by_lang.items()}   # Stelle jeder Folge in ihrer Sprache (neueste zuerst) fuer Vor/Zurueck
     MPU = MP.Uniq()   # SEO-Titel der Folgenseiten: je Sprache einmalig
@@ -1241,7 +1297,7 @@ def build():
         _nkp, _nnotes, _nfaq, _nld = SNT.blocks(SNT.get(l, ep_id=it["eid"]), l, edited_only=True)   # nur wenn im Editor bearbeitet: Kernpunkte, Show Notes, FAQ als eigene Bloecke
         _snx = SNALL.get(str(it["eid"]))   # T26: Vollfassung der Shownotes fuer die Dub-Folge (shownotes/site/<spreaker_episode_id>.md)
         if _snx:
-            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE)
+            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE, own=canonical)   # Link auf diese Seite wird Text
             _nnotes = _snh + f"<style>{SNS.CSS}</style>"; _nld = [x for x in _nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: _nfaq = ""
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
@@ -1249,6 +1305,7 @@ def build():
         _el = {k: u for k, u in _ep_links.items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
         _spr = SPM.episode(vid=vid)   # T37 Sponsor: Dub-Folge aus einem Sponsoring (dauerhaft)
+        _vcl = VSEO.clips(l, vid)   # Kapitel als Clips (Schluesselmomente); leer ohne Freigabe
         ld = [
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": canonical + "#episode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
@@ -1265,26 +1322,32 @@ def build():
             {"@context": "https://schema.org", "@type": "VideoObject", "@id": canonical + "#video", "name": e["title"], "description": strip_tags(intro),
              "thumbnailUrl": [f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg", f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg"],
              "uploadDate": videos.get(vid, {}).get("date", it["date"]), "contentUrl": f"https://www.youtube.com/watch?v={vid}",
-             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True, "inLanguage": LANGS[l][1],
+             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True, "inLanguage": LANGS[l][1], **({"hasPart": _vcl} if _vcl else {}),
              "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
             person_ld(), org_ld(),
         ]
         _tbc = TC.breadcrumb(BASE, l, _xids + TC.named_in(e["title"], LRN.ENTS), LRN.ENTS, e["title"], canonical)   # zweite Spur nach dem Hauptthema (nur JSON-LD): Extraktion, sonst im Titel genannte Entitaeten (wie _ep_find der Entitaetsseiten)
         if _tbc: ld.insert(2, _tbc)
         ld[0]["video"] = {"@id": canonical + "#video"}
-        for _n in (ld if _spr else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge
+        for _n in (ld if SPM.ld(_spr) else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge (neutraler Partner: kein sponsor)
             if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["sponsor"] = SPM.ld(_spr)
         for _n in ld:
             if _xab and _n.get("@type") == "VideoObject": _n["about"] = _xab   # T27: das Video behandelt dieselben Entitaeten wie die Folge
         pc = [c for c in ORDER if c in cat_of[vid]][0]
         ld[0]["genre"] = cat_name(pc, l)
         ld[0]["keywords"] = ", ".join(tagraw[l][vid]) or e.get("tags", "")
+        # Kontext-Links (site_entmatch) in Teaser, Stichpunkten, Hoerhinweis, Artikel, FAQ und Show Notes der Folge: erste Nennung je Entitaet auf der
+        # Seite, Ziel in der Sprache der Seite (wenn dort auf index, sonst englisch), Kontext = Extraktion der Folge und Treffer im Titel
+        _dused = _EM.Used(); _dctx = set(_xids) | _dub_hits(l, it); _du = _EMU.setdefault(l, _EM.url_in(BASE, l))
+        _intro_h, _ = _EMX.link_html(intro, _du, l, _dctx, used=_dused)
+        _lis_h, _ = _EMX.link_html("".join(f"<li><span>{x}</span></li>" for x in bullets), _du, l, _dctx, used=_dused)   # <span>: .points li ist ein 2-Spalten-Grid, ohne Huelle wird jeder Entitaets-Link zu einer eigenen Zelle
+        _aud_h, _ = _EMX.link_html(f'<p class="lede" style="margin-top:1.4em">{aud}</p>', _du, l, _dctx, used=_dused)
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
         if art_html:
             art_html, _lk = autolink(art_html, it, [], tagraw[l], url_of, money=LRN.drop_glossed(SM.registry_for(MONEY, l)))
             autolink_log.append(((vid, l), _lk))
-            art_html = LRN.gloss_link(art_html, l, BASE)
+            art_html = LRN.gloss_link(art_html, l, BASE, ctx=_dctx, used=_dused, url_of=_du)
         if art_html and art.get("info"):
             ih = info_html(art["info"])
             art_html = re.sub(r"(</p>)", r"\1" + ih.replace("\\", "\\\\"), art_html, count=1) if ih else art_html
@@ -1316,37 +1379,49 @@ def build():
                          + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{esc(x['a'])}</p></details>" for x in faq_items) + "</section>")
             ld.append({"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LANGS[l][1], "mainEntity": [
                 {"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq_items]})
-        lis = "".join(f"<li>{x}</li>" for x in bullets)
+        lis = _lis_h
+        faq_block, _ = _EMX.link_html(faq_block, _du, l, _dctx, used=_dused)
+        notes_block, _ = _EMX.link_html(notes_block, _du, l, _dctx, used=_dused)
+        _dm = _EM.mentions(BASE, [i for i in _dused if i in LRN.ENTS], _xids)
+        for _n in (ld if _dm else []):   # im Text verlinkte Entitaeten (Audit E7); about bleibt die Extraktion
+            if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["mentions"] = _dm
         el = _ep_links; sh = plat.get(l, {})
         btns = ep_btns(l, el, sh, spk, yt, e["title"], _trf, tr)
         showrow = show_row(l, sh)
-        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
+        _mtx = LT.ep_texts([(x["e"]["title"], url_of(x)) for x in more])   # voller Titel, nie derselbe Text fuer zwei Folgen (Audit SEO-7)
+        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(t_)}</h3></a>' for x, t_ in zip(more, _mtx))
+        _ct = common_topic(it, more, tagraw[l], tagsets[l], catsets[l])   # gemeinsames Thema aller verwandten Folgen: "Weitere Folgen zu {Thema}"
+        _rel_in = LC.intro(l, "ep.more", t=(_ct[1] if _ct[0] == "tag" else cat_name(_ct[1], l))) if _ct else LC.intro(l, "ep.more0")
+        _igs = ORIG.get(vid)   # Infografiken der englischen Folge (Art "episode") auch auf der Videoseite; ohne Freigabe oder ohne Zuordnung alles wie vorher
+        _ig_hero = IG.hero_figure("episode", _igs, l) if _igs else ""
+        _art_ig = IG.inject(art_html, "episode", _igs, l) if _igs else art_html
+        _ig_ld = IG.image_ld(BASE, "episode", _igs, l, canonical) if _igs else []   # ohne title: die Bilder stehen schon mit der englischen Folge auf der Infografiken-Seite
         body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{orig_link(l, ORIG.get(vid), ORIG_T.get(vid))}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
-{chips_html(l, it)}<p class="lede">{intro}</p>
-<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
+{chips_html(l, it)}<p class="lede">{_intro_h}</p>
+{_ig_hero or f'<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>'}
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>" + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
-<p class="mut">▶ {esc(e["title"])}</p>
+<p class="mut">▶ {esc(e["title"])}</p>{VSEO.section(l, vid)}
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
-<p class="lede" style="margin-top:1.4em">{aud}</p>
-{("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}{notes_block}
+{_aud_h}
+{("<section class=article>" + _art_ig + "</section>") if _art_ig else ""}{quiz_block}{faq_block}{notes_block}
 {author_box(l)}
 </article>
 {PAGER(l, *[(url_of(x), x['e']['title']) if x else None for x in NEIGH(by_lang[l], DPOS[l][vid])])}
-{('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
+{('<h2>' + esc(ui[4]) + '</h2>' + _rel_in + '<div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em">{all_eps_btn(l)}</p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
-        _mt = MP.episode_title(l, e["title"], uniq=MPU); _md = MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
+        _mt = MP.episode_title(l, VSEO.title(l, vid, e["title"]), uniq=MPU); _md = VSEO.meta(l, vid, None) or MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld + _ig_ld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode"), key=(f"e:{ORIG[vid]}" if vid in ORIG else f"v:{vid}")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid]), **((IG.page_kw("episode", _igs, l) if _igs else {}) or ({"og_image": _ogv, "og_share": True} if (_ogv := R2.og_video(vid)) else {}))))   # Teilen-/Discover-Bild: Infografik-Kopfbild, sonst das YouTube-Vorschaubild aus dem eigenen Bucket (>= 1200 px), sonst wie bisher
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1457,7 +1532,7 @@ def build():
             _b = (f'{header(_hl, "")}<main class="wrap"><p class="mut"><a href="{_purl(1)}">{esc(_hname)}</a></p><h1>{esc(_ttl)}</h1>{HUB.CSS}'
                   f'<div class="thumbs">{"".join(_ch)}</div>{PAGER(_hl, _pv, _nx, kind="page")}</main>{footer(_hl) if _hl in LANGS else footer_en()}')
             write(f"{_pre}page/{_n}/index.html", page(_hl, _ttl, f"{_SD.HUB_DESC.get(_hl, _SD.HUB_DESC['en'])} – {_pw} {_n}.", _purl(_n), _b,
-                                                         og_type="website", og_of=_purl(1)))
+                                                         og_type="website", og_of=_purl(1), noindex=True))   # Seite 2 ff. der Hubs: noindex,follow (Mirko 18.11.2026), kanonisch auf sich selbst, nicht in der Sitemap
     # /updates/ (Wochenzusammenfassungen) entsteht nach dem Laden der Blogbeitraege: site_milestones.build weiter unten
 
     # Rechtliche Seiten (noindex)
@@ -1562,12 +1637,11 @@ def build():
         k = (e["id"], lang)
         if k not in _epc:
             if lang == "en":
-                _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
+                _epc[k] = PP.find_episodes(BASE, e)
             else:
-                rx = [_rx_i(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])") for n in LRN.ent_names(e)]   # je Name einmal je Bau kompiliert (re.I)
                 _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
                 _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
-                _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
+                _hit = [it for it in by_lang.get(lang, []) if e["id"] in _dub_hits(lang, it)]   # gemeinsamer Namensindex (site_entmatch): Titel mit Schreibung, Tags nur eindeutige Formen
                 _epc[k] = list({it["slug"]: it for it in _ext + _hit}.values())[:12]
         return _epc[k]
     _yt_by_slug = {v: k for k, v in ORIG.items()}   # Hauptshow-Folge -> YouTube-Video (gleiches Video wie die Dub-Fassungen)
@@ -1630,7 +1704,20 @@ def build():
     INV.build(_ctx, _people)   # persoenliche Einladungsseiten mit eigener Teilen-Vorschau (site_invite.py)
     DIR.build(_ctx)
     EVT.build(_ctx, _events, _people, _orgs)
+    import site_pillars as PIL   # Pillar-Kompendien und Lernpfad (imports/pillars, data/pillars.json): Zuordnung der Beitraege vor dem Blog (Kasten "Teil des Lernpfads")
+    PIL.assign(_posts)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
+    try:   # Passende Sticky-Man-Videos je Leitfaden (data/pillar_videos.json): neue Videos pruefen, Treffer anhaengen, Karte auf den Leitfaden.
+        import site_pillar_videos as PVID   # Ein Fehler hier kostet nur die Karte, nicht den Bau (Hand-Eintraege in der Datei)
+        _pvp = PVID.pages_index([(_v, _l, url_of(_it), _it["e"]["title"]) for (_v, _l), _it in items.items()], ORIG, ORIG_T, _PPs.episode_index(BASE)["by_slug"], _et)
+        _pvm = _EMX
+        _pvx = PVID.prepare(PVID.load(), PIL.order(), _pvp, {_v: (videos.get(_v) or {}).get("date") for _v in _pvp}, TODAY,
+                            ent_ids=lambda s: list(_pvm.ids(s, "en", set())), ld_urls={url_of(_it) for _it in items.values()}, r2map=R2.MAP, dims=R2._dims())
+        if _pvx: _ctx["pillar_videos"] = _pvx
+    except Exception as _ex:
+        print(f"::warning::Passende Videos: {type(_ex).__name__}: {_ex} - Leitfaeden ohne Karte")
+        _ctx.pop("pillar_videos", None)
+    PIL.build(_ctx, _posts, LRN.ENTS)
     import site_library as LIB
     LIB.build(_ctx, LIB.fetch_items(COMMUNITY_API), _people, COMMUNITY_API)
     import site_guests as GST
@@ -1650,6 +1737,7 @@ def build():
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
+    _SRS.save(allow=LRN.ENTITY_EXPORT_OK is not False)   # neue feste "Aehnliche Folgen" (alle Inhaltsseiten sind gebaut); ohne Entitaeten-Export nicht (site_related); site.yml sichert die Datei per Bot-Commit
     try:   # SEO-Check-Seite (noindex): Episoden + Community-Inhalte
         _urls = {f'{i["vid"]}:{l}': url_of(i) for l in active for i in by_lang[l] if i.get("vid")}
         SEOR.build(_ctx, _people, [p for p in _posts if not p.get("legacy") and not p.get("html")], PODS.fetch_eps(COMMUNITY_API), VIDS.fetch_videos(COMMUNITY_API), (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), SEOR.author_info(AUTHOR), _urls)
@@ -1664,6 +1752,8 @@ def build():
                    n_main=_main_archive_episodes, n_langs=len(active), ents=LRN.ENTS, day=_SU.day))
     LND.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS,
                    write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
+    IH.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, sitemap=sitemap, TODAY=TODAY))   # Infografiken-Seite: Eintraege melden sich waehrend des Baus (site_infographics.image_ld); ohne Freigabe keine Seite
+    ILC.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, sitemap=sitemap, TODAY=TODAY))   # Bildlizenz-Seiten (Ziel von acquireLicensePage)
     MKT.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Mediadaten /media-kit/
     MKT.build_con(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # M365Con-Sponsordaten /m365con/sponsor/ (#260)
     HWR.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Hardware-Sponsoring /hardware/ (Mirko, 16.11.2026)
@@ -1692,7 +1782,7 @@ def build():
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>{hero}
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
-<h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
+<h2>{esc(ui[3])}</h2>{LC.intro(l, "tag.eps" if noindex else "cat.eps", s=label)}<div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
 <p style="margin-top:1.6em">{all_eps_btn(l)}</p></main>{footer(l)}"""
         _mt, _md = (label, desc) if noindex else MP.category_meta(l, label, len(lst), [x["e"]["title"] for x in lst[:6]])   # Tag-Seiten (noindex) bleiben unveraendert
@@ -1789,8 +1879,10 @@ def build():
     if _gone:
         print(f"Sitemap: {len(_gone)} weitergeleitete Adressen ausgelassen, z. B. " + ", ".join(_gone[:5]))
         sitemap[:] = _keep
-    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
-    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
+    import site_images as SIMG   # Bild-Sitemaps sitemap-<l>-images.xml (eigene Dateien, im Index); Notschalter IMAGE_SITEMAP=0
+    _imgf = SIMG.build(sitemap, [OUT, R2OUT], BASE, LANGS, write, TODAY)
+    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY, extra=_imgf)
+    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs; Bild-Sitemaps: {len(_imgf)} Dateien, {sum(x[2] for x in _imgf)} Seiten mit Bildern")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
     import site_search as SRCH
     _sdocs = SRCH.build_index(sitemap, [OUT, R2OUT], write_r2, BASE, LANGS)

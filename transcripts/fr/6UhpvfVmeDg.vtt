@@ -1,0 +1,805 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:05.650
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:06.870 --> 00:00:09.050
+Ce qu'est réellement Azure Data Lake Storage.
+
+00:00:09.650 --> 00:00:12.990
+Azure Data Lake Storage semble être un tout nouveau produit à apprendre, mais ce n'est pas vraiment le cas.
+
+00:00:13.590 --> 00:00:18.730
+C'est le même stockage Azure Bon Marché dont vous avez probablement déjà entendu parler, avec une option activée qui lui donne de vrais dossiers.
+
+00:00:19.350 --> 00:00:25.010
+Ce réglage modifie la vitesse d'exécution des gros travaux d'analyse, ce qui compte, car la puissance de calcul utilisé représente l'essentiel de vos coûts.
+
+00:00:25.630 --> 00:00:29.390
+C'est aussi une voie sans retour, car une fois ce réglage activé, vous ne pouvez plus le désactiver.
+
+00:00:29.390 --> 00:00:33.730
+Voici donc ce que c'est réellement, comment les équipes l'utilisent, et les erreurs qui font gonfler la facture en silence.
+
+00:00:34.470 --> 00:00:39.130
+La plupart des débutants supposent qu'ils doivent apprendre un service entièrement nouveau, et cette supposition leur fait perdre des semaines.
+
+00:00:40.110 --> 00:00:44.730
+Azure Data Lake Storage n'est pas un produit séparé que vous achetez, ni un type de compte spécial à créer à partir de zéro.
+
+00:00:45.650 --> 00:00:50.710
+Microsoft l'a conçu comme un ensemble de fonctionnalités intégrées au stockage blob ordinaire, le stockage simple qu'Azure propose depuis des années.
+
+00:00:51.450 --> 00:00:54.790
+Vous débloquez ces fonctionnalités en activant une seule option lors de la création du compte.
+
+00:00:55.230 --> 00:00:58.750
+Cette option se trouve dans une courte liste de paramètres sur l'écran où vous créez un nouveau compte de stockage.
+
+00:00:58.750 --> 00:01:01.710
+Il est facile de passer outre, si vous ne savez pas ce que vous regardez.
+
+00:01:02.150 --> 00:01:07.530
+Rien sur cette page n'indique que ce minuscule bouton fait la différence entre un simple saut de fichier et un véritable lac de données.
+
+00:01:08.130 --> 00:01:12.830
+Vous le découvrirez plus tard, soit parce que vos travaux sont rapides et peu coûteux, soit parce qu'ils sont lents et que votre facture grimpe.
+
+00:01:13.670 --> 00:01:18.850
+Pour comprendre pourquoi cette option est si importante, vous devez d'abord avoir une idée claire de ce qu'est un lac de données et pourquoi.
+
+00:01:19.370 --> 00:01:21.190
+Ce n'est pas juste un dossier rempli de fichiers.
+
+00:01:21.190 --> 00:01:25.610
+Un lac de données est un emplacement central où vous conservez toutes vos données.
+
+00:01:26.290 --> 00:01:28.090
+Le mot de Tutseng est très important dans cette phrase.
+
+00:01:28.570 --> 00:01:29.710
+Il contient des données structurées.
+
+00:01:29.970 --> 00:01:32.730
+Les lignes et colonnes ordonnées que vous trouverez dans un tableur ou une table de base de données.
+
+00:01:33.410 --> 00:01:37.390
+Il contient aussi des données non structurées, comme des images, des PDF, des journaux et des fichiers textes bruts.
+
+00:01:38.150 --> 00:01:42.570
+Au lieu de tout forcer dans une forme ordonnée, un lac permet aux données d'arriver sous la forme qu'elles ont.
+
+00:01:43.250 --> 00:01:46.110
+Cette flexibilité est l'intérêt principal et il est utile de comprendre pourquoi cela compte.
+
+00:01:46.110 --> 00:01:47.930
+Imaginez une petite entreprise qui va en ligne.
+
+00:01:48.730 --> 00:01:53.410
+Les exports de vente proviennent d'un système, l'étiquette support d'un autre et les photos des produits sont sur l'ordinateur de quelqu'un.
+
+00:01:54.050 --> 00:01:58.590
+Une base de données traditionnelle exigerait que chaque source soit formatée dans des tables strictes avant d'accepter un seul enregistrement.
+
+00:01:59.430 --> 00:02:04.210
+Un lac de données les prend côte à côte et laisse le formatage pour plus tard quand quelqu'un a réellement besoin d'une réponse.
+
+00:02:04.770 --> 00:02:06.110
+Le nom provient de ce contraste.
+
+00:02:06.650 --> 00:02:10.970
+Un entrepôt stocke des données déjà nettoyées, étiquetées et organisées comme des marchandises sur des étagères.
+
+00:02:10.970 --> 00:02:17.030
+Un lac ressemble davantage à un réservoir, vaste et essentiellement brut, prêt à être filtré dès qu'une question précise se pose.
+
+00:02:17.470 --> 00:02:19.570
+Le compromis est bien réel et c'est la raison d'être des lacs.
+
+00:02:20.070 --> 00:02:23.790
+Lorsque vous conservez des données brutes, vous pouvez répondre plus tard à des questions que personne n'a pensé à poser aujourd'hui.
+
+00:02:24.510 --> 00:02:28.290
+Un entrepôt vous oblige à décider de ce qui est important avant le stockage et tout ce que vous avez jeté est perdu pour toujours.
+
+00:02:29.330 --> 00:02:33.490
+Un lac parie que conserver l'original des ordonnées a plus de valeur que la propreté obtenue en le nettoyant d'abord.
+
+00:02:34.230 --> 00:02:37.090
+Cela ne signifie pas qu'un lac est un fourre-tout car il a toujours besoin d'une forme.
+
+00:02:37.090 --> 00:02:39.050
+Cette forme, ce sont les dossiers que vous découvrirez bientôt.
+
+00:02:39.050 --> 00:02:45.390
+Ce qu'un lac refuse de faire, c'est jeter l'original car il est souvent le seul témoignage de ce qui s'est réellement passé.
+
+00:02:46.370 --> 00:02:48.010
+Un détail compte cependant plus que tous les autres.
+
+00:02:48.910 --> 00:02:53.510
+Un lac doit bien vivre quelque part et dans Azure, ce quelque part est un compte de stockage avec une option activée.
+
+00:02:54.190 --> 00:02:58.250
+C'est avec cette option que commence la véritable histoire et c'est aussi là que se prend la première décision permanente.
+
+00:02:59.570 --> 00:03:02.010
+Le paramètre unique qui transforme le stockage blob en un lac de données.
+
+00:03:02.730 --> 00:03:05.050
+Le stockage blob Azure est le moteur sous-jacent, tout cela.
+
+00:03:05.050 --> 00:03:11.010
+C'est un stockage d'objets peu coûteux, une façon simple de dire que vous y déposez et récupérez des fichiers et ne se soucie pas vraiment ce qu'ils contiennent.
+
+00:03:11.470 --> 00:03:15.830
+Ce qu'il n'a jamais eu, ce sont de vrais dossiers et cette lacune est la raison même de l'existence d'Azure Data Lake Storage.
+
+00:03:16.510 --> 00:03:21.450
+Dans un compte blob normal, un chemin comme Vente, 2026-Mars, n'est pas un dossier contenant un fichier.
+
+00:03:22.210 --> 00:03:26.270
+C'est un non-nom de fichier avec des barres obliques intégrées et le système le traite exactement de cette façon.
+
+00:03:26.270 --> 00:03:31.950
+Le stockage semble organisé à vos yeux car les barres obliques font voir une structure qui n'existe pas réellement.
+
+00:03:32.970 --> 00:03:38.470
+Le stockage d'objets a été conçu ainsi à dessin car une liste plate de noms est facile à répartir sur un grand nombre de machines.
+
+00:03:39.390 --> 00:03:42.810
+Cette astuce cause des problèmes silencieux dès que vous essayez d'effectuer une action au niveau d'un dossier.
+
+00:03:43.550 --> 00:03:48.970
+Si ces barres obliques ne sont pas de vrais dossiers, alors renommer un dossier signifie trouver chaque fichier commençant par ce même chemin.
+
+00:03:49.990 --> 00:03:52.230
+Sur un vaste ensemble de données, cela représente des millions de fichiers.
+
+00:03:52.570 --> 00:03:54.850
+Et une tâche qui devrait prendre quelques secondes peut s'étendre sur des heures.
+
+00:03:54.850 --> 00:03:57.750
+L'activation de l'espace de noms hiérarchiques change exactement cela.
+
+00:03:58.450 --> 00:04:02.250
+Il confère au compte de vrais répertoires et sous-répertoires la même structure que votre ordinateur utilise depuis toujours.
+
+00:04:03.170 --> 00:04:07.270
+Un dossier devient un objet à part entière et non plus seulement du texte inséré dans un nom de fichier.
+
+00:04:08.110 --> 00:04:12.710
+Il suffit de cocher une case pour que le stockage se comporte comme un véritable système de fichiers plutôt que comme un simple bac à étiquette.
+
+00:04:13.550 --> 00:04:17.310
+Vous verrez aussi le nom « Data Lake Storage Gen 2 » dans d'anciens articles et tutoriels.
+
+00:04:17.870 --> 00:04:22.730
+Il s'agit simplement de la deuxième version de cette idée et le nom actuel omet le chiffre donc considéré comme identique.
+
+00:04:22.730 --> 00:04:28.090
+Vous choisissez cette option lors de la création du compte de stockage et vous pouvez aussi mettre à niveau un compte contenant déjà des données.
+
+00:04:28.870 --> 00:04:31.970
+Microsoft s'occupe de la transition pour vous, mais le processus est irréversible.
+
+00:04:32.410 --> 00:04:34.470
+Vous pouvez passer d'une structure plate à une hiérarchique mais pas l'inverse.
+
+00:04:35.130 --> 00:04:37.970
+Une particularité terminologique à connaître pour ne plus être induit en erreur par la documentation.
+
+00:04:39.270 --> 00:04:44.190
+Dans les guides de Microsoft, le mot « Cable up » que signifie « fichier » et le mot « Container up » que signifie « système de fichier ».
+
+00:04:44.190 --> 00:04:47.630
+Ce sont les deux mêmes choses avec des étiquettes différentes, selon la page que vous consultez.
+
+00:04:48.270 --> 00:04:50.070
+Ce qu'il faut retenir, c'est que cette case est définitive.
+
+00:04:50.850 --> 00:04:54.070
+Une fois activée, impossible de revenir au style plat, initial du compte.
+
+00:04:55.130 --> 00:04:57.430
+Pourquoi de vrais dossiers changent-ils la vitesse et la facture ?
+
+00:04:57.430 --> 00:04:59.790
+Microsoft n'a pas créé de vrais dossiers pour l'ordre, mais pour la vitesse.
+
+00:05:00.470 --> 00:05:05.150
+Lorsque les répertoires sont réels, renommer ou supprimer un dossier devient une modification rapide de son entrée.
+
+00:05:06.010 --> 00:05:09.890
+Pas besoin de parcourir une liste d'un million de fichiers car le système met à jour un seul élément et le travail est fait.
+
+00:05:09.890 --> 00:05:14.550
+Le même raccourci s'applique à la suppression, ce qui évite de passer la journée à nettoyer d'anciennes données.
+
+00:05:15.390 --> 00:05:18.350
+L'exemple qui illustre cela est le comportement des outils d'analyse en pratique.
+
+00:05:19.170 --> 00:05:23.290
+Spark et IVE, deux des moteurs les plus utilisés, écrivent souvent leur sortie dans un emplacement temporaire.
+
+00:05:23.970 --> 00:05:25.630
+Une fois le travail terminé, ils renomment cet emplacement.
+
+00:05:26.550 --> 00:05:30.370
+Sur un stockage sans vrai dossier, ce renommage final peut prendre plus de temps que l'analyse elle-même.
+
+00:05:31.130 --> 00:05:35.190
+Finissez par regarder une tâche qui a terminé ses calculs et qui ne fait que renommer des éléments.
+
+00:05:35.590 --> 00:05:38.950
+Ce délai n'est pas seulement agaçant, il est coûteux et mérite qu'on s'y attarde.
+
+00:05:39.890 --> 00:05:44.050
+Dans de nombreuses charges de travail analytique, le calcul représente plus de 80% du coût total.
+
+00:05:44.730 --> 00:05:47.350
+Les machines qui effectuent le travail coûtent bien plus cher que les données stockées.
+
+00:05:48.190 --> 00:05:51.470
+Si un renommage lent maintient ces machines en marche une heure de plus, vous payez 7 heures.
+
+00:05:52.090 --> 00:05:56.470
+Accélérez le stockage et le calcul se termine plus vite, réduisant ainsi la facture alors que le prix du stockage a à peine bougé.
+
+00:05:57.130 --> 00:05:59.810
+La fonctionnalité est aussi parfaitement évolutive, ce qui était autrefois difficile.
+
+00:06:00.730 --> 00:06:05.490
+Les anciens systèmes sacrifiaient la structure de dossier pour l'échelle, car les vrais répertoires étaient coûteux à gérer à grande échelle.
+
+00:06:06.270 --> 00:06:08.490
+Ici, un espace de nom hiérarchique croît de manière linéaire.
+
+00:06:08.490 --> 00:06:13.090
+Ainsi, l'ajout de données ne ralentit pas les répertoires, ce qui soulève la question pratique.
+
+00:06:13.830 --> 00:06:16.490
+Comment les données entrent-elles et sortent-elles réellement de l'un de ces comptes ?
+
+00:06:17.570 --> 00:06:19.630
+Comment les données circulent-elles concrètement ?
+
+00:06:19.630 --> 00:06:23.110
+La plomberie est plus simple qu'il n'y paraît, et c'est là que la théorie devient quelque chose de concret.
+
+00:06:24.250 --> 00:06:28.150
+Les outils d'analyse accès de l'AC via un pilote appelé ABFS, abréviation d'AzureBlob File System.
+
+00:06:28.150 --> 00:06:32.290
+L'adresse du service se termine toujours par dfs.core.windows.net.
+
+00:06:33.090 --> 00:06:36.390
+Vous saisissez rarement cette adresse vous-même, mais c'est la connexion que vos outils utilisent en coulisses.
+
+00:06:37.110 --> 00:06:39.890
+Les outils eux-mêmes sont des noms que vous rencontrerez sans cesse si vous restez dans cet univers.
+
+00:06:40.650 --> 00:06:42.730
+Pendant que Data Factory copie les données d'autres systèmes,
+
+00:06:43.410 --> 00:06:45.690
+Databricks et Synapse les traite et les analyses avec Power BI.
+
+00:06:45.850 --> 00:06:47.230
+Lis les résultats pour créer des rapports.
+
+00:06:47.770 --> 00:06:49.350
+Si vous préférez déplacer les fichiers manuellement,
+
+00:06:49.670 --> 00:06:51.870
+Azure Storage Explorer vous offre une interface visuelle,
+
+00:06:52.110 --> 00:06:55.410
+et un outil en ligne de commande nommé Askopy gère les transferts en masse.
+
+00:06:56.350 --> 00:06:58.010
+Vous n'avez besoin d'aucun de ces outils pour commencer.
+
+00:06:58.630 --> 00:07:02.430
+Le portail Azure, PowerShell et la ligne de commande peuvent tous accéder au même stockage.
+
+00:07:03.170 --> 00:07:07.170
+Vous pouvez télécharger un premier fichier et le voir apparaître dans un dossier avant même d'écrire une seule ligne de code.
+
+00:07:07.690 --> 00:07:10.430
+La plupart des gens commencent avec un dossier et quelques fichiers,
+
+00:07:10.430 --> 00:07:13.470
+puis le lac s'agrandit au fil de nouveaux systèmes.
+
+00:07:14.270 --> 00:07:16.710
+Les autorisations sont gérées de manière plus finissie que dans un stockage classique.
+
+00:07:17.190 --> 00:07:20.390
+Vous pouvez utiliser le système de rôle d'Azure, le même que celui qui régit tout le reste dans Azure.
+
+00:07:21.110 --> 00:07:25.410
+Vous pouvez également définir des listes de contrôle d'accès de type POSIX qui verrouillent un seul dossier ou même un seul fichier.
+
+00:07:25.790 --> 00:07:30.310
+Je m'arrêterai là sur les détails, car l'essentiel est qu'un lac puisse être partagé largement sans donner les clés à tout le monde.
+
+00:07:31.230 --> 00:07:33.750
+Quand les données arrivent, elles atterrissent sous forme de blobs dans un conteneur,
+
+00:07:33.830 --> 00:07:36.750
+ce qui correspond à l'idée de fichier dans un système de fichiers sous ces deux autres noms.
+
+00:07:36.750 --> 00:07:40.770
+A partir de là, une politique de cycle de vie peut déplacer les anciens fichiers vers un niveau moins coûteux
+
+00:07:40.770 --> 00:07:42.010
+ou les supprimer après un délai défini.
+
+00:07:42.710 --> 00:07:45.450
+Le lac se nettoie tout seul, au lieu d'attendre que quelqu'un trie les dossiers manuellement.
+
+00:07:46.190 --> 00:07:47.870
+L'échelle est le dernier point, et elle est généreuse.
+
+00:07:48.290 --> 00:07:51.350
+Microsoft ne fixe aucune limite à la taille du compte ou de chaque fichier individuel.
+
+00:07:52.630 --> 00:07:55.350
+Un fichier peut aller de quelques kilo-octets à des centaines de teraoctets,
+
+00:07:55.490 --> 00:07:58.310
+et les requêtes répondent à un rythme constant peu importe le volume accumulé.
+
+00:07:59.170 --> 00:08:02.450
+Une fois la plomberie clarifiée, il est utile de voir à quoi ressemble une vraie configuration.
+
+00:08:02.450 --> 00:08:07.590
+Dans le monde réel, les équipes ne regroupent que rarement tout dans un immense tas,
+
+00:08:07.750 --> 00:08:10.610
+et le modèle qu'elles privilégient est appelé médaillant-écueux.
+
+00:08:11.330 --> 00:08:12.530
+C'est plus simple que ce que le nom suggère.
+
+00:08:13.030 --> 00:08:15.490
+Les données brutes atterrissent d'abord dans la couche que l'on appelle que bronze.
+
+00:08:15.950 --> 00:08:18.230
+Les données nettoyées et corrigées passent dans la couche silver,
+
+00:08:18.510 --> 00:08:20.910
+et les données raffinées sur lesquelles un rapport peut se s'affinir dans la couche gold.
+
+00:08:21.370 --> 00:08:24.450
+Chaque couche n'est qu'un dossier, et les données progressent au fur et à mesure qu'elles sont améliorées.
+
+00:08:24.810 --> 00:08:26.730
+La couche gold est celle que les rapports utilisent réellement,
+
+00:08:26.730 --> 00:08:30.690
+car il s'agit d'un dossier de fichiers bien structuré que n'importe quel outil peut exploiter,
+
+00:08:31.210 --> 00:08:32.850
+sans savoir comment les données brutes sont arrivées.
+
+00:08:33.770 --> 00:08:35.690
+La structure des dossiers a un impact réel par la suite,
+
+00:08:35.890 --> 00:08:37.230
+et deux modèles méritent d'être reproduits.
+
+00:08:37.650 --> 00:08:39.570
+Pour les données provenant d'appareils ou de capteurs,
+
+00:08:39.870 --> 00:08:41.130
+une structure courante suit l'ordre.
+
+00:08:41.450 --> 00:08:44.750
+Région, sujet, puis année, mois, jour et heure.
+
+00:08:45.430 --> 00:08:48.070
+Les relevés du moteur d'un avion pourraient se trouver sous UK, puis plan,
+
+00:08:48.270 --> 00:08:51.010
+puis l'appareil spécifique, et enfin une date et une heure.
+
+00:08:51.710 --> 00:08:53.050
+Pour les traitements par l'eau sur des fichiers,
+
+00:08:53.050 --> 00:08:55.790
+les équipes utilisent un dossier Income & Pop pour le travail en attente d'être traité.
+
+00:08:55.790 --> 00:08:58.010
+Elles utilisent un dossier OutHug pour les résultats terminés,
+
+00:08:58.110 --> 00:08:59.470
+et un dossier BadHug pour tout ce qui échoue.
+
+00:08:59.850 --> 00:09:01.270
+L'ordre de ces dossiers n'est pas arbitraire.
+
+00:09:01.990 --> 00:09:03.290
+Placer la région et le sujet en tête
+
+00:09:03.290 --> 00:09:05.470
+permet de définir facilement que ces personnes ne peuvent voir
+
+00:09:05.470 --> 00:09:06.870
+que les données du Royaume-Uni et rien d'autre.
+
+00:09:07.450 --> 00:09:09.530
+Vous définissez cette autorisation une seule fois sur le dossier,
+
+00:09:09.690 --> 00:09:11.070
+et tout le contenu hérite de ce paramètre.
+
+00:09:11.710 --> 00:09:13.150
+Si vous inversez l'ordre en commençant par la date,
+
+00:09:13.230 --> 00:09:16.370
+vous finirez par définir des autorisations encore et encore sur d'innombrables petits dossiers.
+
+00:09:17.730 --> 00:09:18.970
+Format de fichier est le dernier choix concret,
+
+00:09:19.050 --> 00:09:20.370
+et il détermine discrètement votre facture.
+
+00:09:21.230 --> 00:09:23.670
+Utilisez un format en colonne comme parquet pour les données que vous lisez souvent,
+
+00:09:23.670 --> 00:09:26.490
+car une requête peut ne récupérer que les colonnes nécessaires et ignorer le reste.
+
+00:09:26.910 --> 00:09:27.830
+Ces fichiers sont compressés,
+
+00:09:28.070 --> 00:09:30.130
+et chacun contient sa propre description de ce qu'il renferme.
+
+00:09:31.150 --> 00:09:32.790
+Utilisez un format basé sur les lignes comme Avro
+
+00:09:32.790 --> 00:09:34.790
+lorsque vous écrivez principalement des données en flux continu,
+
+00:09:34.990 --> 00:09:36.270
+comme des événements provenant d'une application.
+
+00:09:36.690 --> 00:09:38.870
+Une bonne structure et le bon format vous permettent d'économiser de l'argent,
+
+00:09:38.970 --> 00:09:40.910
+mais quelques habitudes courantes font discrètement l'inverse
+
+00:09:40.910 --> 00:09:43.570
+et apparaissent dans presque chaque premier data lake des débutants.
+
+00:09:45.370 --> 00:09:47.270
+Les erreurs qui vous coûtent de l'argent en toute discrétion.
+
+00:09:47.850 --> 00:09:49.950
+La première erreur, que vous verrez partout, est de laisser vos données,
+
+00:09:50.250 --> 00:09:52.030
+sous la forme d'une montagne de minuscules fichiers.
+
+00:09:52.030 --> 00:09:55.050
+Les moteurs d'analyse perdent un temps réel sur chaque fichier,
+
+00:09:55.130 --> 00:09:57.410
+simplement à le lister, à vérifier les autorisations et à l'ouvrir.
+
+00:09:57.990 --> 00:10:00.470
+Mais les petits fichiers demandent bien plus d'attention qu'un seul gros fichier.
+
+00:10:01.150 --> 00:10:03.210
+Les recommandations de Microsoft sont de viser des fichiers compris
+
+00:10:03.210 --> 00:10:06.310
+entre 256 mégaoctets et 100 gigaoctets et 100 gigaoctets.
+
+00:10:06.850 --> 00:10:08.370
+Regroupez les petits fichiers en fichiers plus volumineux
+
+00:10:08.370 --> 00:10:09.510
+avant que quoi que ce soit n'essaie de les lire.
+
+00:10:10.370 --> 00:10:11.810
+C'est une habitude à prendre dès le premier jour,
+
+00:10:11.950 --> 00:10:14.130
+car les petits fichiers s'accumulent plus vite qu'on ne le pense.
+
+00:10:15.210 --> 00:10:17.070
+Il y a un détail de facturation qui piège presque tout le monde
+
+00:10:17.070 --> 00:10:18.130
+et qui est facile à manquer.
+
+00:10:18.130 --> 00:10:21.610
+Les opérations de lecture et d'écriture sont facturées par bloc de 4 mégaoctets.
+
+00:10:22.110 --> 00:10:23.430
+Un fichier qui contient quelques kiloctets.
+
+00:10:23.890 --> 00:10:25.690
+Et tout de même facturé, comme s'il en contenait 4 mégaoctets.
+
+00:10:26.490 --> 00:10:28.750
+Lorsque vos données sont réparties dans des millions de petits fichiers,
+
+00:10:28.830 --> 00:10:30.710
+vous payez le prix fort pour de l'espace en grande partie vide,
+
+00:10:30.910 --> 00:10:32.170
+encore et encore et encore.
+
+00:10:32.690 --> 00:10:34.930
+Si les données brutes arrivent sous forme de flux d'événements minuscules,
+
+00:10:35.370 --> 00:10:37.590
+la solution habituelle consiste à les collecter avec un outil de streaming
+
+00:10:37.590 --> 00:10:38.810
+et à les écrire par l'eau plus importante.
+
+00:10:40.090 --> 00:10:42.610
+Le deuxième piège consiste à activer l'espace de nom hiérarchique
+
+00:10:42.610 --> 00:10:43.750
+alors que vous n'en avez pas besoin.
+
+00:10:44.130 --> 00:10:45.370
+N'oubliez pas qu'il s'agit d'une voie à sens unique.
+
+00:10:45.370 --> 00:10:48.350
+Une fois activé, vous ne pouvez plus revenir à un espace de nom plat pour ce compte.
+
+00:10:48.750 --> 00:10:51.030
+Si vous l'activez pour une archive de sauvegarde ou un dossier d'image,
+
+00:10:51.150 --> 00:10:53.450
+vous avez effectué un changement permanent qui ne vous apporte rien,
+
+00:10:53.550 --> 00:10:54.170
+qui ne vous apporte rien.
+
+00:10:54.310 --> 00:10:56.910
+Les sauvegardes et les photothèques n'ont pas besoin de renommage de dossiers rapides,
+
+00:10:57.130 --> 00:10:58.390
+car les données ne sont pas analysées.
+
+00:10:58.750 --> 00:11:00.330
+Le troisième est d'ignorer les niveaux de stockage.
+
+00:11:00.950 --> 00:11:04.190
+Azure vous permet de placer vos données dans des niveaux chauds, tièdes, froids ou archives
+
+00:11:04.190 --> 00:11:06.070
+selon la fréquence à laquelle vous les lisez.
+
+00:11:06.570 --> 00:11:09.370
+Laissez des données anciennes dans le niveau chaud, c'est dépenser de l'argent sans aucune raison.
+
+00:11:10.250 --> 00:11:12.450
+Adaptez le niveau à la fréquence réelle d'utilisation de vos données
+
+00:11:12.450 --> 00:11:14.390
+et ces mêmes fichiers peuvent coûter une fraction du prix.
+
+00:11:15.190 --> 00:11:17.470
+L'archive est l'endroit le moins cher pour les données que vous n'ouvrez presque jamais,
+
+00:11:17.610 --> 00:11:20.730
+mais ce n'est pas instantané car le fichier doit être réhydraté avant d'être lu.
+
+00:11:21.430 --> 00:11:23.050
+Il y a une limite honnête à garder à l'esprit.
+
+00:11:23.710 --> 00:11:24.890
+Même avec ce paramètre activé,
+
+00:11:25.070 --> 00:11:27.790
+certaines fonctionnalités blob sont encore en cours de déploiement dans ces comptes.
+
+00:11:28.350 --> 00:11:29.510
+Si vous dépendez de l'une d'entre elles,
+
+00:11:29.630 --> 00:11:31.510
+vérifiez sa prise en charge actuelle avant de vous engager.
+
+00:11:32.190 --> 00:11:33.610
+Cela couvre la partie que vous contrôlez vous-même.
+
+00:11:34.210 --> 00:11:35.170
+Cependant, pour beaucoup d'entre vous,
+
+00:11:35.210 --> 00:11:36.750
+un lac de données ne sera pas quelque chose que vous construisez.
+
+00:11:36.910 --> 00:11:39.450
+La question suivante est de savoir où cela s'inscrit dans la stratégie globale de Microsoft.
+
+00:11:39.990 --> 00:11:42.790
+Où cela s'intègre avec Fabric, Power BI et Microsoft 365.
+
+00:11:43.550 --> 00:11:45.370
+Si vous avez passé du temps sur Microsoft Fabric,
+
+00:11:45.490 --> 00:11:47.130
+vous avez déjà rencontré un lac de données sans le savoir.
+
+00:11:48.150 --> 00:11:50.050
+One Lake, la couche de stockage au cœur de Fabric,
+
+00:11:50.190 --> 00:11:52.050
+est construite sur Azure, Data Lake Storage.
+
+00:11:53.150 --> 00:11:56.130
+Il conserve les tables dans des formats ouverts appelés Delta, Parquet et Iceberg,
+
+00:11:56.290 --> 00:11:57.170
+que n'importe quel outil peut lier.
+
+00:11:57.570 --> 00:11:59.210
+Le moteur qui exécute un lac de données dans Azure
+
+00:11:59.210 --> 00:12:01.070
+est le même que celui qui fonctionne sous Fabric en permanence.
+
+00:12:01.070 --> 00:12:03.050
+Si votre équipe travaille déjà dans Fabric,
+
+00:12:03.170 --> 00:12:04.730
+One Lake est le lac que vous rencontrerez en premier,
+
+00:12:04.890 --> 00:12:06.390
+et tout ce que vous venez d'apprendre s'y applique toujours.
+
+00:12:07.050 --> 00:12:08.870
+One Lake emprunte également la structure que vous connaissez déjà.
+
+00:12:09.450 --> 00:12:11.390
+Chaque locataire Fabric obtient exactement un seul One Lake,
+
+00:12:11.590 --> 00:12:12.570
+et vous ne pouvez pas en créer un second.
+
+00:12:13.110 --> 00:12:16.070
+Toute l'organisation partage un lac unique au lieu d'un ensemble dispersé de plusieurs lacs.
+
+00:12:16.730 --> 00:12:18.710
+A l'intérieur, un espace de travail apparaît comme un conteneur,
+
+00:12:19.150 --> 00:12:20.810
+et les éléments qu'il contient apparaissent comme des dossiers.
+
+00:12:21.530 --> 00:12:23.570
+C'est la même paire blob et conteneur que précédemment, simplement,
+
+00:12:23.790 --> 00:12:24.590
+vêtue des habits de Fabric.
+
+00:12:25.250 --> 00:12:27.790
+La partie astucieuse est la façon dont One Lake accède aux données qui se trouvent ailleurs.
+
+00:12:27.790 --> 00:12:30.470
+Une fonctionnalité appelée Raccourci Mec permet de pointer vers des fichiers
+
+00:12:30.470 --> 00:12:32.050
+situés dans un compte Azure Data Lake Storage,
+
+00:12:32.130 --> 00:12:34.510
+un compartiment Amazon S3, une table Dataverse ou même Amazon S3,
+
+00:12:34.630 --> 00:12:35.890
+une table Dataverse ou même un système sur site.
+
+00:12:36.030 --> 00:12:37.470
+Elle les lit sur place sans en faire de copie.
+
+00:12:38.210 --> 00:12:40.030
+Les équipes continuent de travailler dans leurs propres espaces
+
+00:12:40.030 --> 00:12:42.490
+et partagent via des raccourcis au lieu de dupliquer des gigaoctets de données.
+
+00:12:42.930 --> 00:12:44.690
+Cette idée de copie unique réapparaît dans Power BI.
+
+00:12:45.230 --> 00:12:47.430
+Un mode appelé Direct Lake lit directement depuis One Lake
+
+00:12:47.430 --> 00:12:49.250
+sans importer ni copier les données au préalable.
+
+00:12:50.110 --> 00:12:53.110
+C'est pourquoi Fabric insiste sur cette copie unique que chaque outil peut partager.
+
+00:12:54.110 --> 00:12:56.330
+One Lake conserve également les fichiers supprimés pendant 7 jours,
+
+00:12:56.330 --> 00:12:58.690
+ainsi une suppression accidentelle n'est pas le désastre qu'elle serait
+
+00:12:58.690 --> 00:12:59.890
+dans un dossier sans filet de sécurité.
+
+00:13:00.350 --> 00:13:02.110
+Il existe un réel compromis entre les deux approches.
+
+00:13:02.590 --> 00:13:04.630
+One Lake est géré pour vous et destiné aux utilisateurs de fabrique.
+
+00:13:05.330 --> 00:13:07.890
+Un compte Azure Data Lake Storage classique vous donne un contrôle direct
+
+00:13:07.890 --> 00:13:09.810
+et fonctionne avec l'ensemble de la suite d'outils Azure.
+
+00:13:10.590 --> 00:13:13.190
+Ils utilisent la même API, le choix se résume donc à une question de commodité
+
+00:13:13.190 --> 00:13:14.070
+par rapport au contrôle.
+
+00:13:15.230 --> 00:13:17.050
+Ce qu'il faut retenir sur Azure Data Lake Storage,
+
+00:13:17.610 --> 00:13:18.570
+voici donc la version courte.
+
+00:13:19.130 --> 00:13:21.870
+Azure Data Lake Storage est un stockage blob avec un paramètre activé
+
+00:13:21.870 --> 00:13:23.570
+et ce paramètre lui confère de vrais dossiers.
+
+00:13:23.570 --> 00:13:26.510
+Ces dossiers permettent aux gros travaux d'analyse de se terminer plus vite,
+
+00:13:26.630 --> 00:13:29.510
+ce qui peut réduire la facture lorsque le calcul représente la majeure partie des dépenses.
+
+00:13:29.930 --> 00:13:32.770
+C'est irréversible une fois activé et une accumulation de minuscules fichiers
+
+00:13:32.770 --> 00:13:33.770
+vous coûtera plus cher que prévu.
+
+00:13:34.130 --> 00:13:35.390
+Gardez ces quelques points en tête,
+
+00:13:35.670 --> 00:13:38.150
+et ce service intimidant deviendra quelque chose que vous pourrez appréhender.
+
+00:13:38.550 --> 00:13:39.390
+Voici ma question pour vous.
+
+00:13:39.750 --> 00:13:41.170
+Si vous planifiez votre premier lac de données,
+
+00:13:41.310 --> 00:13:43.790
+quel est l'élément sur lequel vous avez le moins de certitude en ce moment ?
+
+00:13:43.790 --> 00:13:44.850
+La structure des dossiers ?
+
+00:13:44.850 --> 00:13:45.370
+Le coût ?
+
+00:13:45.370 --> 00:13:46.570
+Ou sa place dans l'écosystème fabrique ?
+
+00:13:46.570 --> 00:13:49.090
+Si ce sujet vous semble désormais moins intimidant,
+
+00:13:49.390 --> 00:13:52.310
+abonnez-vous à M365FM pour maîtriser les outils et l'état d'esprit
+
+00:13:52.310 --> 00:13:53.870
+qui façonnent l'avenir du travail.

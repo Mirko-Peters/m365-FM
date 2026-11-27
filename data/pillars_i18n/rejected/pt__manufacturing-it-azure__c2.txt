@@ -1,0 +1,28 @@
+<translation>
+| Termo | Significado | Analogia mais próxima em TI |
+|---|---|---|
+| **OT** (operational technology) | Tecnologia que controla processos físicos: máquinas, controladores e sistemas de controle | Como um data center separado, em que uma queda para a produção
+| **PLC** (programmable logic controller) | Computador industrial que controla uma máquina em tempo real | Um sistema embarcado com vida útil de 15 anos ou mais |
+| **SCADA** | Sistema de supervisão para monitorar e operar várias máquinas ou linhas | Um console de monitoramento com acesso de escrita |
+| **MES** (manufacturing execution system) | Controla e registra a execução de ordens de produção na fábrica | Um sistema de workflow entre o ERP e a máquina |
+| **OPC UA** | Padrão industrial neutro quanto a fornecedor para troca de dados, com modelo de informação e segurança integrada | API REST mais schema mais certificados, para máquinas |
+| **MQTT** | Protocolo leve de publicação/assinatura | Um barramento de mensagens, semelhante a tópicos do Event Grid ou do Service Bus |
+| **Unified namespace (UNS)** | Estrutura hierárquica central de eventos na qual todos os sistemas publicam seu estado atual | Um diretório de tópicos em escala corporativa |
+| **OEE** (overall equipment effectiveness) | Eficácia do equipamento a partir de disponibilidade, desempenho e qualidade | Um SLA de disponibilidade, mas para máquinas e incluindo qualidade |
+| **KQL** (Kusto Query Language) | Linguagem de consulta do Fabric Eventhouse e do Azure Data Explorer | A mesma linguagem que você usa no Log Analytics e no Microsoft Sentinel |
+| **Modelo Purdue** | Modelo de referência que organiza em camadas os sistemas da fábrica, desde os dispositivos de campo até a empresa; a ISA-95 se baseia nele [26] | Um modelo de segmentação de rede, do VLAN dos dispositivos até a WAN corporativa |
+
+A linha do KQL é um bom ponto de partida para administradores: se você conhece KQL do Sentinel ou do Log Analytics, pode consultar dados de máquinas em um Eventhouse imediatamente.
+
+### Por onde começar como administrador do Microsoft 365 ou do Azure
+
+Você não precisa se tornar um engenheiro de automação para agregar valor em um projeto de manufatura. Cinco tarefas normalmente ficam com a TI central e podem ser preparadas antes de a primeira máquina ser conectada:
+
+1. **Identidades e funções:** Crie grupos no Microsoft Entra ID e funções Azure RBAC para a equipe de OT, parceiros e equipes de operações; use o Privileged Identity Management para tornar o acesso privilegiado limitado no tempo.
+2. **Uma landing zone do Azure para as fábricas:** Defina uma estrutura de assinaturas e grupos de recursos por fábrica, e use o Azure Policy para impor tags (fábrica, centro de custo, caso de uso) e regiões permitidas.
+3. **Teste o Azure Arc:** Conecte um servidor de teste ou um cluster Kubernetes ao Arc e faça com que os endpoints de saída necessários sejam aprovados pela cadeia de proxies junto à equipe de rede. Em muitas empresas, essas aprovações de firewall são o que mais leva tempo.
+4. **Noções básicas do Fabric:** Decida sobre capacidade, estrutura de workspaces e modelo de acesso; leve para o Fabric a governança que você já tem no Power BI.
+5. **Construa uma relação de trabalho com a OT:** Entenda o modelo de zonas da fábrica antes de propor mudanças de rede. Na OT, a disponibilidade vem antes da confidencialidade, e as janelas de manutenção seguem o cronograma de produção, não o Patch Tuesday.
+
+---
+</translation>

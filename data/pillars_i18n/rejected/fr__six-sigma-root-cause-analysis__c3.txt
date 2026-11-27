@@ -1,0 +1,74 @@
+<translation>
+## Niveaux sigma et DPMO : le calcul détaillé
+
+Aucune des pages largement consultées ne présente ce calcul en détail. Le voici donc pas à pas.
+
+### Unités, défauts et opportunités
+
+| Terme | Signification | Exemple (corps de vanne) |
+|---|---|---|
+| Unité | l'article produit ou traité | un corps de vanne hydraulique |
+| Défaut | tout écart par rapport à une exigence client | une fuite au test, un alésage hors tolérance |
+| Opportunité | une chance distincte de défaut, mesurée | 8 caractéristiques critiques pour la qualité contrôlées par corps |
+| DPU | défauts par unité = défauts ÷ unités | |
+| DPO | défauts par opportunité = défauts ÷ (unités × opportunités) | |
+| DPMO | DPO × 1 000 000 | |
+
+### Exemple de calcul 1 : du nombre de défauts au niveau sigma
+
+Une cellule usine 5 000 corps de vanne par mois. Chaque corps comporte 8 caractéristiques contrôlées (opportunités). Le contrôle enregistre 46 défauts.
+
+- DPU = 46 ÷ 5 000 = 0,0092
+- DPO = 46 ÷ (5 000 × 8) = 46 ÷ 40 000 = 0,00115
+- DPMO = 0,00115 × 1 000 000 = **1 150**
+
+Pour convertir le DPMO en niveau sigma, on cherche la valeur z de la loi normale centrée réduite dont la queue supérieure est égale au DPO, puis on ajoute le décalage conventionnel de 1,5 :
+
+- Rendement par opportunité = 1 − 0,00115 = 0,99885
+- z pour 0,99885 = 3,05 (à partir d'une table de la loi normale, ou `=NORM.S.INV(0,99885)` dans Excel)
+- Niveau sigma (court terme, avec décalage) = 3,05 + 1,5 = **4,55**
+
+La formule qui sous-tend tous les tableaux sigma est DPMO = 1 000 000 × (1 − Φ(niveau sigma − 1,5)), où Φ est la fonction de répartition de la loi normale centrée réduite [5]. Dans Excel : `=NORM.S.INV(1-DPMO/1000000)+1.5`.
+
+**Attention aux opportunités.** Le nombre d'opportunités relève d'un choix, et il détermine le résultat. Si les mêmes 46 défauts sont comptés par rapport à 20 « opportunités » par unité, le DPMO tombe à 460 et le niveau sigma monte à environ 4,8 sans qu'aucune amélioration n'ait eu lieu. Définissez les opportunités une seule fois par famille de produits, ne comptez que les caractéristiques réellement contrôlées, et conservez cette définition sans changement. Pour comparer des procédés, le DPU et le rendement au premier passage sont plus difficiles à manipuler.
+
+### Tableau de conversion sigma (calculé)
+
+Valeurs calculées avec la formule ci-dessus (DPMO à long terme avec le décalage de 1,5 sigma) et, pour comparaison, pour un procédé parfaitement centré avec prise en compte des deux queues de distribution :
+
+| Niveau sigma | DPMO (avec décalage de 1,5σ) | Rendement (avec décalage) | Défauts par million si centré, sans décalage |
+|---|---|---|---|
+| 1 | 691 462 | 30,9 % | 317 311 |
+| 2 | 308 538 | 69,1 % | 45 500 |
+| 3 | 66 807 | 93,3 % | 2 700 |
+| 4 | 6 210 | 99,38 % | 63 |
+| 4,5 | 1 350 | 99,865 % | 6,8 |
+| 5 | 233 | 99,977 % | 0,57 |
+| 6 | 3,4 | 99,99966 % | 0,002 |
+
+La dernière colonne montre pourquoi le décalage est important : sans lui, un procédé à six sigma produirait environ deux défauts par milliard, et non 3,4 par million.
+
+### Exemple de calcul 2 : rendement cumulé de passage (RTY)
+
+Une pièce traverse quatre étapes de procédé. Les rendements au premier passage sont de 98 %, 95 %, 99 % et 97 %. Le rendement cumulé de passage (RTY), c'est-à-dire la probabilité qu'une unité passe toutes les étapes sans aucune reprise, est le produit de ces rendements :
+
+RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, soit 89,4 %
+
+Chaque étape semble acceptable prise isolément ; ensemble, plus d'une unité sur dix doit être reprise ou mise au rebut quelque part. Le RTY est souvent un indicateur plus utile pour un directeur d'usine qu'un niveau sigma, car il fait apparaître l'« usine cachée » des boucles de reprise. Pour les définitions du rendement au premier passage et des indicateurs associés, voir le [guide des KPI de fabrication](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### Exemple de calcul 3 : ce que vaut un niveau sigma
+
+L'exemple suivi dans cet article : une usine expédie 48 000 corps de vanne par an. 2,8 % échouent au test d'étanchéité final. Chaque échec coûte 85 $ en reprise, nouveau test et mise au rebut (chiffre illustratif).
+
+- Échecs par an : 48 000 × 0,028 = 1 344
+- Coût : 1 344 × 85 $ = 114 240 $ par an
+- Niveau sigma : DPO = 0,028 par unité (une seule opportunité : fuite ou pas de fuite) -> z = 1,91 -> **3,41 sigma**
+
+Si un projet DMAIC ramène le taux de défaillance à 0,6 % :
+
+- Échecs : 48 000 × 0,006 = 288 ; coût : 24 480 $
+- Économie annuelle : 89 760 $ (avant coûts du projet)
+- Niveau sigma : z pour 0,994 = 2,51 -> **4,01 sigma**
+
+Passer d'environ 3,4 à environ 4,0 sigma est un résultat réaliste pour un seul projet. Passer de 4,5 à 6 sigma exige généralement une refonte, et non un projet.
+</translation>

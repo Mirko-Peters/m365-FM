@@ -1,0 +1,1444 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.520
+Préparez-vous pour 12 jours de Microsoft 365, Copilot, IA, Azure et les acteurs qui façonnent le futur du travail.
+
+00:00:07.580 --> 00:00:11.980
+En janvier prochain, la M365ON est de retour et nous voyons plus grand.
+
+00:00:12.880 --> 00:00:18.080
+Rejoignez-nous pour des sessions en direct, des démos concrètes et l'expertise pratique de MVPs et d'experts du monde entier.
+
+00:00:18.820 --> 00:00:21.140
+Pas de diapositif générique, pas de jargon marketing sans fin.
+
+00:00:21.900 --> 00:00:23.100
+Nous nous attaquons aux vrais défis.
+
+00:00:23.840 --> 00:00:28.780
+Copilot Studio, Agent IA, Fabrique, Sécurité, Gouvernance et Automatisation.
+
+00:00:28.780 --> 00:00:34.200
+Que vous soyez informaticien, développeur ou dirigeant, il y a des sessions conçues pour vous.
+
+00:00:35.600 --> 00:00:39.860
+Avec 10 jours complets, explorez plusieurs technologies et connectez-vous à une communauté mondiale.
+
+00:00:40.960 --> 00:00:44.100
+Suivez le direct et rapportez des connaissances pratiques au sein de votre organisation.
+
+00:00:45.160 --> 00:00:48.900
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.540 --> 00:00:50.700
+Les inscriptions sont ouvertes.
+
+00:00:51.900 --> 00:00:55.560
+Rendez-vous sur M365ON.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.560 --> 00:00:58.460
+C'est M365ON.net.
+
+00:01:00.160 --> 00:01:04.600
+Scrivez-vous sur M365ON.net et nous vous attendons en direct en janvier.
+
+00:01:04.600 --> 00:01:09.000
+Si vous vous êtes déjà demandé pourquoi vos données disparaissent soudainement d'un rapport
+
+00:01:09.000 --> 00:01:12.960
+ou qui a modifié le fichier source de votre tableau de bord mensuel, vous n'êtes pas seul.
+
+00:01:14.000 --> 00:01:17.680
+La plupart des équipes travaillent à l'aveugle lorsqu'il s'agit de visualiser le parcours complet de leurs données.
+
+00:01:18.820 --> 00:01:21.780
+Aujourd'hui, nous allons retracer ce parcours dans Microsoft.
+
+00:01:21.780 --> 00:01:29.980
+Fabrique, de l'ingestion à l'analyse et découvrir comment le lignage, les autorisations et le catalogue vous gardent le contrôle.
+
+00:01:30.380 --> 00:01:32.180
+Un... un...
+
+00:01:32.180 --> 00:01:35.920
+A la fin, vous verrez chaque étape parcourue par vos données et qui exactement peut y toucher.
+
+00:01:38.140 --> 00:01:40.500
+Rendre visible invisible le chemin réel emprunté par les données.
+
+00:01:41.160 --> 00:01:43.780
+La plupart des gens imaginent que les données suivent un chemin linéaire.
+
+00:01:44.520 --> 00:01:47.960
+Elles quittent la source, passent par quelques mains et finissent proprement dans un rapport.
+
+00:01:47.960 --> 00:01:53.140
+En réalité, c'est comme naviguer dans un vieux bâtiment rénové une douzaine de fois.
+
+00:01:54.620 --> 00:01:58.140
+Vous avez des couloirs qui mènent à des portes fermées, des passages secrets ignorés
+
+00:01:58.140 --> 00:02:00.540
+et des raccourcis qui évitent des pièces entières.
+
+00:02:02.900 --> 00:02:05.560
+C'est tout le défi au sein d'une plateforme d'analyse moderne.
+
+00:02:06.160 --> 00:02:07.920
+Le chemin de vos données n'est pas qu'un simple pipeline.
+
+00:02:08.740 --> 00:02:10.580
+C'est un réseau d'étapes de connexion et de transformation.
+
+00:02:11.940 --> 00:02:16.620
+Le modèle Lake House de Microsoft Fabrique donne l'impression d'un foyer unifié et il l'est,
+
+00:02:16.620 --> 00:02:21.280
+mais sous le capot, c'est un mélange de services spécialisés qui collabore.
+
+00:02:22.500 --> 00:02:26.220
+Il y a une couche de stockage, une couche d'analyse, des outils d'orchestration et des moteurs de traitement.
+
+00:02:27.380 --> 00:02:29.460
+On communique constamment, s'échangeant des données en permanence.
+
+00:02:31.240 --> 00:02:35.620
+Sans les bons outils pour enregistrer ces interactions, vous vous retrouvez dans un labyrinthe sans carte.
+
+00:02:37.480 --> 00:02:42.160
+Vous connaissez peut-être l'entrée des données et le rapport final, mais le milieu reste une boîte noire.
+
+00:02:43.120 --> 00:02:46.280
+Quand cette boîte noire pose problème, c'est généralement lors de la résolution d'incident.
+
+00:02:46.620 --> 00:02:48.800
+Peut-être qu'un chiffre est erroné dans le rapport de vente du mois dernier.
+
+00:02:49.320 --> 00:02:51.220
+Vous vérifiez la logique d'or, elle semble correcte.
+
+00:02:51.480 --> 00:02:53.120
+Le jeu de données sur lequel il est basé semble correct aussi.
+
+00:02:54.320 --> 00:02:58.300
+Mais quelque part en amont, une transformation a modifié les valeurs et personne ne l'a documenté.
+
+00:02:59.800 --> 00:03:03.440
+Ce saut invisible, où le chiffre a cessé d'être exact, devient l'aiguille dans la botte de foin.
+
+00:03:03.660 --> 00:03:07.000
+Et plus une plateforme est utilisée, plus elle a tendance à accumuler ses sauts invisibles.
+
+00:03:07.000 --> 00:03:13.140
+C'est là que l'approche de Fabrique en matière de lignage prend ce labyrinthe pour y laisser une piste de petits cailloux.
+
+00:03:15.080 --> 00:03:16.040
+Prenons un exemple simple.
+
+00:03:16.560 --> 00:03:17.800
+Les données arrivent via Data Factory.
+
+00:03:19.000 --> 00:03:23.240
+Dès que le pipeline s'exécute, la capture du lignage démarre sans que vous ayez à configurer quoi que ce soit de spécial.
+
+00:03:23.240 --> 00:03:28.180
+Fabrique enregistre non seulement la table cible dans le lake house, mais aussi chaque jeu de données source,
+
+00:03:28.320 --> 00:03:32.960
+chaque étape de transformation, et chaque table ou vue créée à partir de celle-ci.
+
+00:03:33.800 --> 00:03:35.060
+Peu importe que ses objets.
+
+00:03:35.600 --> 00:03:39.040
+En aval résidant dans le même espace de travail ou alimente un autre service Fabrique,
+
+00:03:39.380 --> 00:03:42.020
+ces liens sont enregistrés automatiquement en arrière-plan.
+
+00:03:42.560 --> 00:03:46.120
+En pratique, cela signifie que si vous ouvrez la vue de lignage d'un jeu de données,
+
+00:03:46.300 --> 00:03:47.680
+vous ne voyez pas seulement ce qu'il alimente.
+
+00:03:49.020 --> 00:03:51.180
+Voyez tout ce qu'il alimente jusqu'au point d'ingestion.
+
+00:03:51.180 --> 00:03:55.520
+C'est comme suivre une expédition et voir son trajet depuis l'entrepôt du fournisseur
+
+00:03:55.520 --> 00:03:58.640
+à travers chaque centre de distribution, camion et centre de tri.
+
+00:03:59.760 --> 00:04:01.840
+Au lieu de recevoir simplement une notification d'ivraison,
+
+00:04:02.520 --> 00:04:05.360
+vous obtenez une visibilité sur toute la chaîne, pas seulement sur le début et la fin.
+
+00:04:06.000 --> 00:04:09.700
+Une grande différence entre choisir de documenter le lignage et laisser le système le faire pour vous,
+
+00:04:10.460 --> 00:04:13.120
+avec une documentation manuelle, elle n'est à jour que de la dernière fois
+
+00:04:13.120 --> 00:04:16.260
+que quelqu'un l'a mise à jour en supposant qu'il est pensé à le faire.
+
+00:04:17.440 --> 00:04:20.180
+Avec Fabrique, cela se produit comme un effet secondaire de l'utilisation de la plateforme.
+
+00:04:20.180 --> 00:04:23.940
+Les métadonnées sont générées au fur et à mesure que vous créez, déplacez et transformez les données,
+
+00:04:24.060 --> 00:04:26.280
+elles sont donc actuelles et précises et précises.
+
+00:04:27.040 --> 00:04:28.780
+Cela réduit presque totalement le facteur humain,
+
+00:04:28.900 --> 00:04:31.340
+ce qui est le seul moyen pour que les cartes de lignage restent fiables
+
+00:04:31.340 --> 00:04:33.160
+dans un environnement vaste et actif.
+
+00:04:33.560 --> 00:04:34.060
+Et actif.
+
+00:04:34.780 --> 00:04:37.360
+Qu'on vient de noter que ce que Fabrique Stock n'est pas seulement un diagramme statique.
+
+00:04:38.820 --> 00:04:41.640
+Ces métadonnées générées automatiquement servent de base à d'autres contrôles,
+
+00:04:41.700 --> 00:04:43.520
+des contrôles qui ne font pas que visualiser le flux,
+
+00:04:43.520 --> 00:04:45.380
+mais appliquent réellement la gouvernance.
+
+00:04:45.380 --> 00:04:49.020
+C'est la fondation pour connecter le lignage technique
+
+00:04:49.020 --> 00:04:51.960
+aux permissions, aux pistes d'audit et au catalogage de conformités.
+
+00:04:53.180 --> 00:04:56.540
+Quand on entend métadonnées, cela peut sembler être une information passive,
+
+00:04:56.720 --> 00:04:58.940
+mais ici c'est l'échafaudage sur lequel reposent d'autres règles.
+
+00:04:59.760 --> 00:05:01.260
+Et une fois cet échafaudage en place,
+
+00:05:01.400 --> 00:05:04.160
+les permissions cessent d'être des listes d'accès statiques.
+
+00:05:04.160 --> 00:05:08.440
+Elles peuvent refléter les relations réelles entre les jeux de données,
+
+00:05:08.620 --> 00:05:10.220
+les rapports et les espaces de travail.
+
+00:05:11.140 --> 00:05:14.040
+Ce qui signifie que vous n'accordez plus l'accès de manière isolée.
+
+00:05:15.240 --> 00:05:19.100
+Vous l'accordez avec le contexte complet de l'origine et de la destination de ces données.
+
+00:05:20.580 --> 00:05:23.400
+C'est là que la ligne cesse d'être un simple outil opérationnel de dépannage
+
+00:05:23.400 --> 00:05:25.380
+pour devenir un outil stratégique de gouvernance.
+
+00:05:25.680 --> 00:05:28.960
+Car une fois que vous voyez le chemin complet de chaque jeu de données,
+
+00:05:29.040 --> 00:05:31.820
+vous pouvez garantir que le contrôle suit avec la même cohérence.
+
+00:05:31.820 --> 00:05:35.300
+Et c'est précisément là qu'intervient l'héritage des autorisations.
+
+00:05:36.260 --> 00:05:37.820
+Une seule autorisation, partout où cela compte.
+
+00:05:38.640 --> 00:05:41.580
+Imaginez donner à quelqu'un l'autorisation d'ouvrir un rapport finalisé et soigné
+
+00:05:41.580 --> 00:05:45.440
+pour découvrir qu'il peut désormais voir les données brutes et non filtrées qui le sous-tendent.
+
+00:05:46.040 --> 00:05:48.500
+C'est plus courant que vous ne le pensez, l'intention est d'offensive.
+
+00:05:48.940 --> 00:05:52.720
+Vous voulez qu'il consulte les analyses, mais si les autorisations ne sont pas alignées à chaque étape,
+
+00:05:52.780 --> 00:05:55.520
+vous venez de donner accès à des éléments que vous n'aviez jamais voulu partager.
+
+00:05:56.500 --> 00:05:59.400
+Dans le Lake House, Microsoft Fabrique tente de résoudre ce problème
+
+00:05:59.400 --> 00:06:01.300
+avec l'héritage des autorisations.
+
+00:06:02.140 --> 00:06:05.780
+Au lieu de traiter l'ingestion, le stockage et l'analyse comme des îlots isolés,
+
+00:06:06.440 --> 00:06:08.280
+il les traite comme des pièces situées dans le même bâtiment.
+
+00:06:08.960 --> 00:06:12.460
+Si quelqu'un a une clé pour entrer dans une pièce et que celle-ci mène directement à la suivante,
+
+00:06:12.800 --> 00:06:14.480
+il n'a pas besoin d'une clé séparée.
+
+00:06:15.480 --> 00:06:17.140
+La décision d'accès découle naturellement de la première.
+
+00:06:18.180 --> 00:06:20.720
+Le modèle fonctionne en utilisant vos espaces de travail comme point de contrôle.
+
+00:06:21.820 --> 00:06:23.200
+Tout ce qui se trouve dans cet espace de travail,
+
+00:06:23.200 --> 00:06:26.400
+qu'il s'agisse d'une table dans le Lake House, d'un modèle sémantique dans Power BI
+
+00:06:26.400 --> 00:06:30.060
+ou d'un pipeline dans Data Factory, s'appuie sur le même ensemble d'autorisations,
+
+00:06:30.200 --> 00:06:31.700
+sauf si vous les remplacez volontairement.
+
+00:06:33.140 --> 00:06:35.900
+Dans un environnement cloisonné, les autorisations sont souvent gérées à chaque étape
+
+00:06:35.900 --> 00:06:38.080
+par des outils différents, ou même des équipes différentes.
+
+00:06:38.700 --> 00:06:41.620
+Une équipe gère les rôles de base de données, une autre les ACL de stockage,
+
+00:06:41.720 --> 00:06:43.240
+une autre encore les autorisations de rapport.
+
+00:06:44.640 --> 00:06:46.800
+Fil du temps, ces listes distinctes finissent par diverger,
+
+00:06:47.500 --> 00:06:49.780
+ou verrouiller quelque chose à un endroit, mais oublier de faire de même ailleurs,
+
+00:06:49.900 --> 00:06:53.640
+ou vous supprimez un utilisateur d'un système, mais il conserve des identifiants en cache dans un autre.
+
+00:06:54.200 --> 00:06:55.680
+C'est ainsi que la dérive de sécurité s'installe.
+
+00:06:55.920 --> 00:06:59.040
+Ce qui était autrefois une politique cohérente se transforme lentement en un assemblage disparate.
+
+00:06:59.500 --> 00:07:00.300
+Rendons cela concret.
+
+00:07:00.880 --> 00:07:03.300
+Imaginez une table de Lake House contenant des transactions commerciales.
+
+00:07:04.160 --> 00:07:06.580
+Elle est sécurisée de sorte que seule l'équipe financière puisse la consulter.
+
+00:07:06.580 --> 00:07:09.300
+Imaginez maintenant que vous construisiez un jeu de données Power BI
+
+00:07:09.300 --> 00:07:12.360
+qui puise directement dans cette table, puis un tableau de bord basé sur ce jeu de données.
+
+00:07:13.700 --> 00:07:16.600
+Dans une configuration traditionnelle, vous devriez vous assurer manuellement
+
+00:07:16.600 --> 00:07:19.760
+que le jeu de données Power BI comporte les mêmes restrictions que la table du Lake House.
+
+00:07:20.620 --> 00:07:23.860
+Si vous oubliez quelque chose, un utilisateur ayant seulement accès au tableau de bord
+
+00:07:23.860 --> 00:07:26.340
+pourrait interroger la table source et voir des détails sensibles.
+
+00:07:27.580 --> 00:07:31.660
+Dans Fabrique, si le Lake House et l'espace de travail Power BI se trouvent dans la même structure d'espace de travail
+
+00:07:31.660 --> 00:07:33.700
+et les autorisations se répercutent automatiquement,
+
+00:07:33.700 --> 00:07:38.240
+cette table réservée aux finances reste réservée aux finances lorsqu'elle est consultée via Power BI.
+
+00:07:38.600 --> 00:07:41.080
+On n'avait pas besoin de toucher aux moindres paramètres supplémentaires pour que cela fonctionne.
+
+00:07:42.020 --> 00:07:45.020
+Fabrique sait déjà que la source en amont du jeu de données est une table restreinte.
+
+00:07:45.740 --> 00:07:49.800
+Ils n'accordent donc pas l'accès au jeu de données sans vérifier les règles en amont.
+
+00:07:50.840 --> 00:07:54.440
+Le fonctionnement est simple mais puissant, car les espaces de travail sont l'unité d'organisation
+
+00:07:54.440 --> 00:07:57.140
+et tout ce qui s'y trouve suit le même modèle de sécurité.
+
+00:07:57.140 --> 00:08:02.000
+Il n'est pas nécessaire de dupliquer les listes de contrôle d'accès, ni de synchroniser des listes d'identité distinctes.
+
+00:08:02.700 --> 00:08:06.680
+Si vous supprimez quelqu'un de l'espace de travail, il est supprimé partout, les ressources de cet espace apparaissent.
+
+00:08:07.440 --> 00:08:12.040
+La charge administrative diminue fortement, mais surtout les risques d'accès accidentel diminuent avec elle.
+
+00:08:12.720 --> 00:08:14.740
+C'est là que le contraste avec les anciennes méthodes devient évident.
+
+00:08:14.740 --> 00:08:15.500
+Évident.
+
+00:08:16.220 --> 00:08:18.960
+Dans une configuration classique d'entrepôt de données avec un outil BI,
+
+00:08:19.240 --> 00:08:21.560
+vous pourriez avoir un rôle de base de données dans SQL Server,
+
+00:08:21.820 --> 00:08:23.600
+une autorisation de dossier sur un partage de fichiers,
+
+00:08:23.700 --> 00:08:26.200
+et une autorisation de jeu de données dans votre outil de reporting, le tout,
+
+00:08:27.040 --> 00:08:28.220
+pour un même flux de données logique.
+
+00:08:29.600 --> 00:08:34.160
+Gérer cela en parallèle signifie 3 fois plus de travail et 3 fois plus de risque d'oublier une étape.
+
+00:08:34.960 --> 00:08:37.980
+Même avec des scripts d'automatisation, il reste des éléments à maintenir.
+
+00:08:38.480 --> 00:08:40.580
+L'approche qu'a une autorisation pour de multiples surfaces,
+
+00:08:40.880 --> 00:08:43.180
+garantie qu'un changement à la source n'est pas seulement répercuté,
+
+00:08:43.180 --> 00:08:45.100
+mais appliquée partout, en aval.
+
+00:08:45.740 --> 00:08:47.180
+Si la table du Lake House est verrouillée,
+
+00:08:47.460 --> 00:08:49.840
+aucun jeu de données ou visuel dérivé ne contourne ce verrouillage.
+
+00:08:51.020 --> 00:08:52.880
+En matière de gouvernance, ce n'est pas un luxe.
+
+00:08:53.700 --> 00:08:55.240
+C'est le contrôle qui empêche les fuites de données
+
+00:08:55.240 --> 00:08:58.020
+lorsque les rapports sont partagés plus largement que prévus.
+
+00:08:59.780 --> 00:09:03.200
+Cela aligne votre modèle de sécurité sur votre flux de données réel
+
+00:09:03.200 --> 00:09:05.180
+au lieu de les traiter comme deux sujets distincts.
+
+00:09:06.180 --> 00:09:08.560
+Lorsque vous combinez cela avec la cartographie du lignage dont nous venons de parler,
+
+00:09:08.680 --> 00:09:10.000
+ces autorisations ne fonctionnent pas dans le vide.
+
+00:09:10.420 --> 00:09:10.660
+D'aide.
+
+00:09:10.660 --> 00:09:15.260
+Elles sont liées visuellement et techniquement aux chemins exacts empruntés par vos données.
+
+00:09:16.800 --> 00:09:18.880
+Cela permet de voir non seulement qui a accès,
+
+00:09:19.160 --> 00:09:22.480
+mais aussi comment cet accès peut se propager à travers les jeux de données,
+
+00:09:22.760 --> 00:09:24.840
+les transformations et les rapports connectés.
+
+00:09:26.080 --> 00:09:27.460
+S'il est une chose d'appliquer une politique,
+
+00:09:27.760 --> 00:09:31.640
+c'en est une autre d'être capable de le prouver étape par étape sur l'ensemble de votre pipeline.
+
+00:09:32.340 --> 00:09:34.120
+Bien sûr, avoir des autorisations alignées est une bonne chose,
+
+00:09:34.200 --> 00:09:37.100
+mais si un problème survient, vous voudrez savoir exactement qui a effectué des changements et quand.
+
+00:09:37.100 --> 00:09:41.480
+C'est là que la piste d'audit devient aussi cruciale que le modèle d'autorisation lui-même,
+
+00:09:41.560 --> 00:09:42.900
+c'est une source de vérité unique.
+
+00:09:42.900 --> 00:09:49.220
+Avez-vous déjà essayé de découvrir qui a cassé un tableau de bord
+
+00:09:49.220 --> 00:09:54.620
+et fini coincé dans un fil de discussion interminable où personne ne répond vraiment à la question ?
+
+00:09:54.620 --> 00:09:58.360
+Vous jonguez entre l'équipe data, l'équipe BI et parfois même les administrateurs de stockage
+
+00:09:58.360 --> 00:10:00.080
+en assemblant des hypothèses.
+
+00:10:01.120 --> 00:10:03.040
+Pendant ce temps, la personne qui a réellement effectué le changement
+
+00:10:03.040 --> 00:10:05.520
+se demande probablement pourquoi les métriques paraissent différentes aujourd'hui.
+
+00:10:06.820 --> 00:10:09.300
+C'est le moment du travail analytique où le problème technique
+
+00:10:09.300 --> 00:10:11.960
+se transforme en jeu de politique de bureau.
+
+00:10:13.380 --> 00:10:16.020
+Les journaux d'audit sont la solution de Fabrique pour éliminer ce bruit de l'équation.
+
+00:10:16.520 --> 00:10:19.120
+Ils agissent comme une boîte noire pour l'ensemble de votre environnement lake house.
+
+00:10:19.540 --> 00:10:19.920
+A dac house.
+
+00:10:20.820 --> 00:10:22.500
+Chaque action significative est enregistrée,
+
+00:10:22.680 --> 00:10:25.240
+qui l'a fait, ce qui a été touché et quand cela s'est produit.
+
+00:10:26.020 --> 00:10:27.640
+Il ne s'agit pas d'un simple journal d'accès générique.
+
+00:10:27.960 --> 00:10:31.200
+Fabrique lit directement ses entrées à des objets spécifiques sur la plateforme.
+
+00:10:31.200 --> 00:10:34.000
+Ainsi, si le schéma d'un jeu de données change,
+
+00:10:34.300 --> 00:10:36.300
+vous pouvez voir le compte utilisateur exact,
+
+00:10:36.440 --> 00:10:38.760
+le moment précis et la méthode utilisée.
+
+00:10:39.680 --> 00:10:41.720
+C'est ici que la connexion avec le lignage fait toute la différence.
+
+00:10:42.980 --> 00:10:44.440
+Si vous aviez juste un dossier de fichiers journaux,
+
+00:10:44.540 --> 00:10:45.900
+vous devriez toujours croiser manuellement
+
+00:10:45.900 --> 00:10:48.300
+les identifiants et les dates pour en comprendre l'impact.
+
+00:10:49.480 --> 00:10:51.380
+Mais comme Fabrique cartographie déjà le flux de données,
+
+00:10:52.100 --> 00:10:54.460
+si les journaux ne sont pas isolés, c'est les...
+
+00:10:54.460 --> 00:10:56.100
+Vous pouvez afficher le lignage d'un jeu de données,
+
+00:10:56.100 --> 00:10:58.800
+cliquer sur un nœud et voir précisément quelles actions ont été exécutées dessus.
+
+00:10:58.800 --> 00:11:02.040
+Cela signifie que vous pouvez remonter d'une métrique erronée
+
+00:11:02.040 --> 00:11:03.700
+jusqu'au processus de transformation source
+
+00:11:03.700 --> 00:11:07.520
+et identifier la personne ou le processus responsable.
+
+00:11:08.160 --> 00:11:09.240
+La couverture est également très large.
+
+00:11:09.960 --> 00:11:11.880
+La couche d'audit de Fabrique enregistre les événements d'accès
+
+00:11:11.880 --> 00:11:14.580
+pour que vous sachiez quand quelqu'un a interrogé une table ou vers un rapport.
+
+00:11:15.920 --> 00:11:17.940
+Elle journalise la création et la suppression des jeux de données,
+
+00:11:18.020 --> 00:11:18.840
+des pipelines et des tables.
+
+00:11:20.100 --> 00:11:22.120
+Quelles modifications sont enregistrées, qu'elles soient structurelles,
+
+00:11:22.120 --> 00:11:23.660
+comme changer un type de colonne, procédural,
+
+00:11:23.760 --> 00:11:24.820
+comme modifier une activité de pipeline.
+
+00:11:24.820 --> 00:11:28.860
+Même la publication d'une nouvelle version d'un rapport Power BI
+
+00:11:28.860 --> 00:11:32.140
+compte comme un événement lié à son lignage.
+
+00:11:32.940 --> 00:11:33.980
+Tout est traité de la même manière.
+
+00:11:34.340 --> 00:11:36.920
+Heurent, utilisateurs et édits d'objets sont stockés dans un format cohérent.
+
+00:11:37.880 --> 00:11:41.320
+Cette uniformité transforme les journaux en un outil exploitable pour la conformité.
+
+00:11:42.720 --> 00:11:45.520
+Les audits réglementaires ne se soucient pas de vos outils internes.
+
+00:11:46.640 --> 00:11:48.100
+Ils veulent que vous puissiez prouver exactement
+
+00:11:48.100 --> 00:11:51.000
+qui a accédé aux données sensibles, avec quelles autorisations et ce qu'ils en ont fait.
+
+00:11:51.000 --> 00:11:55.160
+La piste d'audit de fabrique peut être interrogée pour retracer l'historique de l'ingestion,
+
+00:11:55.280 --> 00:11:56.720
+de la transformation et de la sortie.
+
+00:11:57.720 --> 00:12:00.960
+Si un jeu de données RH est classé comme contenant des informations personnelles,
+
+00:12:01.480 --> 00:12:03.800
+vous pouvez montrer non seulement la liste d'accès,
+
+00:12:04.040 --> 00:12:06.640
+mais chaque interaction jusqu'aux exportations de rapports.
+
+00:12:08.240 --> 00:12:10.160
+Les enquêtes sur les incidents fonctionnent de la même manière.
+
+00:12:10.780 --> 00:12:13.600
+Imaginons qu'un chiffre dans un rapport trimestriel ne corresponde pas au système financier.
+
+00:12:14.480 --> 00:12:17.260
+Au lieu de spéculer, vous consultez l'historique d'audit du jeu de données source
+
+00:12:17.260 --> 00:12:22.120
+et découvrez qu'une étape de transformation a été ajoutée à un notebook il y a deux semaines.
+
+00:12:22.940 --> 00:12:24.780
+La personne ayant validé ce changement apparaît dans le journal.
+
+00:12:26.440 --> 00:12:28.300
+Vous pouvez vérifier si c'était intentionnel,
+
+00:12:28.580 --> 00:12:31.460
+tester le résultat et corriger le problème sans démêler des rumeurs.
+
+00:12:32.700 --> 00:12:35.360
+Un aspect souvent sous-estimé est son intégration avec Purview.
+
+00:12:37.260 --> 00:12:38.720
+Alors que Fabrique conserve les journaux,
+
+00:12:38.860 --> 00:12:42.940
+Purview peut les récupérer avec les données de catalogue et de lignage de toute l'organisation.
+
+00:12:42.940 --> 00:12:46.320
+Cela signifie que l'audit d'un jeu de données dans un espace de travail
+
+00:12:46.320 --> 00:12:49.140
+peut être consulté parallèlement aux objets associés dans d'autres espaces,
+
+00:12:49.260 --> 00:12:51.680
+voire à des sources de données non fabriques.
+
+00:12:53.060 --> 00:12:56.420
+Pour les grandes entreprises, cela met fin aux enquêtes stoppées aux frontières entre les équipes.
+
+00:12:57.340 --> 00:12:59.240
+Tout est indexé au sein d'une unique couche interrogeable.
+
+00:13:00.280 --> 00:13:01.900
+Lorsque vous liez ainsi les journaux et la traçabilité,
+
+00:13:02.120 --> 00:13:03.880
+vous obtenez bien plus qu'un simple historique d'événements.
+
+00:13:04.360 --> 00:13:06.320
+Vous obtenez la chronologie réelle de la vie de vos données.
+
+00:13:06.740 --> 00:13:08.780
+Vous pouvez suivre le chemin depuis la source jusqu'au rapport,
+
+00:13:08.880 --> 00:13:10.620
+tout en voyant qui est intervenu à chaque étape.
+
+00:13:10.620 --> 00:13:14.560
+C'est une vue complète qui relie les actions humaines aux flux de données.
+
+00:13:15.180 --> 00:13:16.780
+C'est ce qui vous évite de traquer les gens par email
+
+00:13:16.780 --> 00:13:18.760
+ou de prendre des décisions basées sur des suppositions.
+
+00:13:21.500 --> 00:13:23.560
+Au-delà de la résolution des problèmes techniques,
+
+00:13:23.700 --> 00:13:26.900
+ce niveau de visibilité élimine les tensions politiques lors des post-mortem.
+
+00:13:28.220 --> 00:13:30.280
+Vous ne dépendez plus de la mémoire ou de descriptions contradictoires.
+
+00:13:31.460 --> 00:13:33.620
+Vous disposez d'un registre unique et objectif.
+
+00:13:34.620 --> 00:13:37.420
+Peu importe la complexité du pipeline ou le nombre d'équipes impliquées,
+
+00:13:37.540 --> 00:13:40.200
+vous pouvez étayer chaque affirmation avec la même source de vérité.
+
+00:13:40.200 --> 00:13:45.200
+Une fois cette visibilité en place, l'étape logique suivante consiste à l'étendre,
+
+00:13:45.320 --> 00:13:48.920
+pour que cette clarté soit présente pour chaque jeu de données et chaque équipe de l'organisation.
+
+00:13:50.340 --> 00:13:51.240
+C'est là qu'intervient le catalogue.
+
+00:13:52.240 --> 00:13:54.640
+Purview, la salle de cartographie de votre univers de données.
+
+00:13:55.640 --> 00:13:58.300
+Connaître la traçabilité au sein d'un espace de travail est utile,
+
+00:13:58.760 --> 00:14:00.380
+mais c'est comme connaître le plan de son quartier,
+
+00:14:00.760 --> 00:14:02.300
+sans jamais avoir vu le plan de la ville.
+
+00:14:02.300 --> 00:14:07.000
+Vous pouvez naviguer localement, mais si le camion de livraison se perd de banlieue plus loin,
+
+00:14:07.100 --> 00:14:08.540
+vous ignorez pourquoi il est en retard.
+
+00:14:09.260 --> 00:14:12.240
+C'est tout l'écart entre une connaissance au niveau de l'espace de travail et une vue à l'échelle de l'entreprise.
+
+00:14:12.680 --> 00:14:14.480
+C'est précisément là que Microsoft Purview intervient.
+
+00:14:15.800 --> 00:14:16.760
+Purview au-dessus de fabrique,
+
+00:14:17.300 --> 00:14:19.960
+agissant comme un index pour tout ce que la plateforme sait sur la structure,
+
+00:14:20.200 --> 00:14:21.820
+le mouvement et la classification de vos données.
+
+00:14:21.820 --> 00:14:24.820
+Au lieu de fouiller dans chaque espace de travail séparément,
+
+00:14:24.900 --> 00:14:28.960
+vous obtenez un catalogue unique qui rassemble définition de traçabilité et règles d'accès en un seul endroit.
+
+00:14:30.580 --> 00:14:33.440
+Il agrège les métadonnées de plusieurs environnements fabriques et de sources externes,
+
+00:14:33.600 --> 00:14:37.240
+afin que votre vue ne soit pas limitée par les frontières d'une équipe ou d'un projet.
+
+00:14:38.320 --> 00:14:40.260
+Le problème qu'il résout est simple, mais critique.
+
+00:14:41.400 --> 00:14:44.700
+Sans catalogue central, la vue de la traçabilité de chaque équipe s'arrête à ses propres actifs.
+
+00:14:44.980 --> 00:14:48.900
+Le groupe BI peut savoir exactement comment ces tableaux de bord sont construits à partir de ces jeux de données.
+
+00:14:48.900 --> 00:14:54.380
+L'équipe d'ingénierie des données peut savoir comment ces jeux de données ont été sourcés et transformés,
+
+00:14:54.760 --> 00:14:55.820
+mais sans échange constant.
+
+00:14:56.540 --> 00:14:59.640
+L'image complète n'existe jamais dans un seul système.
+
+00:15:01.820 --> 00:15:04.700
+Le dépannage, les contrôles de conformité et la découverte de données ralentissent,
+
+00:15:04.800 --> 00:15:06.060
+car vous devez assembler les fragments manuellement.
+
+00:15:07.500 --> 00:15:10.280
+Dans le catalogue Purview, la traçabilité de l'ingestion à l'analyse
+
+00:15:10.280 --> 00:15:13.140
+est cartographiée à travers chaque espace de travail fabrique connecté.
+
+00:15:14.860 --> 00:15:16.520
+Imaginez ouvrir la page d'un jeu de données,
+
+00:15:16.760 --> 00:15:19.420
+et voir non seulement son lignage dans l'espace de travail actuel,
+
+00:15:19.420 --> 00:15:22.580
+mais aussi le pipeline d'ingestion dans un autre espace qui l'alimente,
+
+00:15:23.000 --> 00:15:24.180
+ainsi que la table traitée.
+
+00:15:24.760 --> 00:15:25.740
+Deux étapes plus en amont.
+
+00:15:26.940 --> 00:15:28.580
+Ce n'est pas un diagramme séparé que vous devez maintenir.
+
+00:15:29.100 --> 00:15:31.880
+Il est lu directement à partir des métadonnées de fabriques et conservées dans le catalogue.
+
+00:15:32.600 --> 00:15:34.760
+À partir de là, toute personne disposant des accès appropriés
+
+00:15:34.760 --> 00:15:36.200
+peut naviguer comme dans une chaîne continue,
+
+00:15:36.340 --> 00:15:39.340
+quelles que soient les frontières logiques ou organisationnelles franchies.
+
+00:15:40.540 --> 00:15:42.280
+L'un des avantages les plus concrets est la recherche.
+
+00:15:42.640 --> 00:15:44.300
+Purview ne se contente pas d'indexer les noms d'objets,
+
+00:15:44.400 --> 00:15:46.620
+il comprend les classifications et les étiquettes de sensibilité.
+
+00:15:46.620 --> 00:15:50.840
+Si votre responsable de la conformité veut savoir où sont stockées
+
+00:15:50.840 --> 00:15:53.300
+ou consommées toutes les données contenant des numéros de téléphone de client,
+
+00:15:53.580 --> 00:15:55.400
+il peut exécuter une requête dans le catalogue
+
+00:15:55.400 --> 00:15:58.020
+et obtenir chaque instance dans les tables Lake House,
+
+00:15:58.780 --> 00:16:01.660
+les jeux de données Power BI, voire les artefacts Synapse.
+
+00:16:03.320 --> 00:16:05.480
+Cette recherche fonctionne car Purview stocke à la fois
+
+00:16:05.480 --> 00:16:07.540
+les métadonnées techniques et les métadonnées métiers
+
+00:16:07.540 --> 00:16:10.080
+que vous avez ajoutées, de sorte que le numéro de téléphone client
+
+00:16:10.080 --> 00:16:12.760
+peut correspondre à une colonne dans une table Lake House,
+
+00:16:13.100 --> 00:16:16.080
+tout comme à un champ dans le modèle de données d'un rapport.
+
+00:16:16.620 --> 00:16:21.160
+C'est par ce lien avec les glossaires que Purview dépasse le simple rôle de carte passive.
+
+00:16:22.480 --> 00:16:24.020
+Si vous avez défini des termes métiers courants,
+
+00:16:24.120 --> 00:16:26.820
+vous pouvez les lier directement au jeu de données ou aux colonnes du catalogue.
+
+00:16:28.000 --> 00:16:30.320
+Cela signifie que le revenu net n'est pas juste une étiquette dans un rapport.
+
+00:16:31.260 --> 00:16:32.580
+Il est lié à la source de données réelle,
+
+00:16:32.700 --> 00:16:35.360
+à la logique de transformation et à chaque rapport qu'il utilise.
+
+00:16:36.200 --> 00:16:38.120
+En matière de gouvernance, cela réduit toute ambiguïté.
+
+00:16:39.380 --> 00:16:41.780
+Les différentes équipes ne débattent plus des définitions dans des fils de discussion.
+
+00:16:42.400 --> 00:16:44.200
+Elles pointent toutes vers la même entrée de glossaires
+
+00:16:44.200 --> 00:16:46.320
+qui renvoient aux objets de données exacts dans Fabrique.
+
+00:16:46.620 --> 00:16:49.760
+L'intégration avec les actifs techniques est large et cohérente.
+
+00:16:51.060 --> 00:16:52.140
+Purview comprend les jeux de données,
+
+00:16:52.280 --> 00:16:55.160
+Power BI y compris leur structure de table et de colonne.
+
+00:16:56.520 --> 00:16:58.720
+Il connaît les table Lake House et les pipelines qui les alimentent.
+
+00:16:59.700 --> 00:17:00.940
+Il enregistre les notebooks Synapse,
+
+00:17:01.560 --> 00:17:03.360
+les scripts SQL et les artefacts de flux de données.
+
+00:17:04.360 --> 00:17:05.160
+Et pour chaque actif,
+
+00:17:05.640 --> 00:17:08.020
+il garde une trace des relations de lignage et des classifications.
+
+00:17:08.020 --> 00:17:12.500
+Il est ainsi tout aussi facile de tracer l'origine d'un KPI
+
+00:17:12.500 --> 00:17:15.960
+dans un rapport Power BI que d'auditer l'impact d'un notebook de transformation
+
+00:17:15.960 --> 00:17:17.400
+sur plusieurs tables en aval.
+
+00:17:19.360 --> 00:17:21.720
+Centraliser tout cela permet de briser les silos de manière pratique.
+
+00:17:22.640 --> 00:17:23.440
+Sans catalogue unique,
+
+00:17:23.620 --> 00:17:25.460
+l'équipe de sécurité pourrait ne voir que les journaux
+
+00:17:25.460 --> 00:17:27.080
+et autorisations de ses propres systèmes,
+
+00:17:27.080 --> 00:17:29.860
+tandis que l'équipe analytique travaille en totale isolation
+
+00:17:29.860 --> 00:17:31.160
+sur ses modèles de rapports.
+
+00:17:32.080 --> 00:17:33.080
+Purview crée des recoupements
+
+00:17:33.080 --> 00:17:35.160
+et le catalogue devient le point de référence unique
+
+00:17:35.160 --> 00:17:36.040
+pour les équipes techniques,
+
+00:17:36.380 --> 00:17:39.160
+les analystes et les responsables de la conformité et les respormités.
+
+00:17:39.500 --> 00:17:41.420
+Cela signifie qu'une politique de gouvernance rédigée
+
+00:17:41.420 --> 00:17:43.240
+au niveau organisationnel peut être vérifiée
+
+00:17:43.240 --> 00:17:44.460
+par rapport au flux de données réels,
+
+00:17:44.720 --> 00:17:46.280
+plutôt que de reposer sur des hypothèses
+
+00:17:46.280 --> 00:17:47.820
+ou une documentation déclarative.
+
+00:17:47.820 --> 00:17:50.520
+C'est là que la réalité technique
+
+00:17:50.520 --> 00:17:52.220
+rencontre le reporting de conformité.
+
+00:17:53.300 --> 00:17:54.860
+Vous ne dessinez pas simplement des cartes
+
+00:17:54.860 --> 00:17:56.000
+pour satisfaire votre curiosité.
+
+00:17:57.260 --> 00:17:58.720
+Vous associez une traçabilité vérifiée
+
+00:17:58.720 --> 00:17:59.680
+à l'utilisation réelle,
+
+00:17:59.900 --> 00:18:01.780
+aux classifications et aux règles de sécurité,
+
+00:18:02.140 --> 00:18:04.540
+de manière à résister aux audits ou aux enquêtes.
+
+00:18:05.540 --> 00:18:08.060
+Qu'il s'agisse de savoir où est stocké un champ sensible
+
+00:18:08.060 --> 00:18:10.300
+ou quel rapport dépend de la table que nous modifions,
+
+00:18:10.680 --> 00:18:11.880
+la réponse se trouve dans le catalogue,
+
+00:18:12.060 --> 00:18:13.520
+complète, actuelle et vérifiable.
+
+00:18:14.680 --> 00:18:16.580
+Avec ce type de visibilité à l'échelle de l'organisation,
+
+00:18:16.740 --> 00:18:17.620
+vous pouvez enfin voir
+
+00:18:17.620 --> 00:18:19.360
+comment chaque élément du pipeline est connecté,
+
+00:18:19.460 --> 00:18:21.300
+ce qui soulève un nouveau défi,
+
+00:18:21.420 --> 00:18:23.580
+garantir que la transparence ne soit pas perdue
+
+00:18:23.580 --> 00:18:25.600
+une fois que les données commencent à changer
+
+00:18:25.600 --> 00:18:26.640
+lors des transformations.
+
+00:18:28.600 --> 00:18:30.740
+Maintenir la transparence à travers chaque transformation,
+
+00:18:31.080 --> 00:18:32.780
+chaque fois que les données subissent une transformation,
+
+00:18:33.020 --> 00:18:35.060
+vous supprimez, vous modifiez quelque chose.
+
+00:18:36.040 --> 00:18:37.680
+Il peut s'agir d'un simple renommage de colonnes
+
+00:18:37.680 --> 00:18:38.740
+ou d'une agrégation complète,
+
+00:18:38.900 --> 00:18:39.460
+mais dans les deux cas,
+
+00:18:39.780 --> 00:18:41.160
+la forme originale change.
+
+00:18:42.180 --> 00:18:43.620
+Si le système ne capture pas ce moment,
+
+00:18:43.720 --> 00:18:45.000
+vous vous retrouvez avec un chiffre
+
+00:18:45.000 --> 00:18:46.520
+que vous ne pouvez pas justifier correctement.
+
+00:18:46.520 --> 00:18:48.620
+Il semble valide dans un rapport,
+
+00:18:48.720 --> 00:18:50.220
+mais demandez comment il a été calculé
+
+00:18:50.220 --> 00:18:51.640
+et vous devrez fouiller dans les scripts,
+
+00:18:51.780 --> 00:18:52.940
+les emails et votre mémoire
+
+00:18:52.940 --> 00:18:54.840
+pour reconstruire ce qui s'est passé.
+
+00:18:56.680 --> 00:18:57.780
+Dans Microsoft Fabric,
+
+00:18:57.920 --> 00:18:59.680
+c'est là que la couche de transformation Synapse
+
+00:18:59.680 --> 00:19:01.080
+prouve toute son utilité.
+
+00:19:01.080 --> 00:19:04.900
+Que vous travaillez avec des scripts SQL,
+
+00:19:05.120 --> 00:19:06.460
+des notebooks Spark ou des flux de données,
+
+00:19:06.660 --> 00:19:07.900
+chaque étape qui modifie les données
+
+00:19:07.900 --> 00:19:09.680
+conserve son lien avec la source d'origine.
+
+00:19:11.200 --> 00:19:13.360
+Le Lake House ne se contente pas de stocker la table de sortie,
+
+00:19:13.560 --> 00:19:14.860
+il sait aussi exactement
+
+00:19:14.860 --> 00:19:16.420
+quel jeu de données ou table l'ont alimenté
+
+00:19:16.420 --> 00:19:17.600
+et comment.
+
+00:19:18.120 --> 00:19:19.060
+Ils sont liés entre eux.
+
+00:19:19.880 --> 00:19:21.080
+Ces liens font partie du graphe de traçabilité,
+
+00:19:21.820 --> 00:19:23.640
+vous permettant de naviguer entre l'avant et la presse
+
+00:19:23.640 --> 00:19:26.540
+sans deviner ni dépendre d'une documentation séparée.
+
+00:19:26.540 --> 00:19:29.020
+Le risque en l'absence de traçabilité
+
+00:19:29.020 --> 00:19:30.500
+au niveau des transformations est assez évident.
+
+00:19:31.820 --> 00:19:33.120
+Vous commencez à vous fier à des agrégats
+
+00:19:33.120 --> 00:19:33.820
+ou à des champs calculés
+
+00:19:33.820 --> 00:19:35.060
+qui peuvent être obsolètes, incomplets
+
+00:19:35.060 --> 00:19:36.500
+ou basés sur des jointures incorrectes.
+
+00:19:37.920 --> 00:19:39.940
+Vous pouvez vérifier la requête finale si vous l'avez,
+
+00:19:40.220 --> 00:19:41.080
+mais cela ne vous dit rien
+
+00:19:41.080 --> 00:19:42.100
+sur les filtres en amont
+
+00:19:42.100 --> 00:19:43.080
+ou les colonnes dérivées
+
+00:19:43.080 --> 00:19:44.920
+créées 3 modèles plus tôt.
+
+00:19:46.460 --> 00:19:47.980
+C'est ainsi que des équipes bien intentionnées
+
+00:19:47.980 --> 00:19:49.600
+peuvent publier des KPIs contradictoires,
+
+00:19:49.740 --> 00:19:51.500
+chacun cohérent dans son propre contexte
+
+00:19:51.500 --> 00:19:52.720
+mais sans racine commune
+
+00:19:52.720 --> 00:19:54.540
+dans le chemin de données sous-jacents.
+
+00:19:55.520 --> 00:19:56.360
+Voici un scénario 5.
+
+00:19:57.340 --> 00:19:58.420
+Vous avez une table de transaction
+
+00:19:58.420 --> 00:19:59.600
+enregistrant les ventes individuelles,
+
+00:19:59.680 --> 00:20:02.040
+la date, le produit, la région et le montant.
+
+00:20:03.000 --> 00:20:04.200
+L'entreprise demande des totaux
+
+00:20:04.200 --> 00:20:05.400
+des ventes hebdomadaires par région.
+
+00:20:06.360 --> 00:20:06.900
+Dans un notebook,
+
+00:20:07.020 --> 00:20:07.880
+vous regroupez par semaine
+
+00:20:07.880 --> 00:20:09.020
+et faites la somme des montants,
+
+00:20:10.000 --> 00:20:11.260
+créant ainsi une table agrégée.
+
+00:20:11.860 --> 00:20:12.780
+Dans la plupart des systèmes,
+
+00:20:12.860 --> 00:20:13.780
+le lien vers la table de base
+
+00:20:13.780 --> 00:20:15.800
+n'est pas suivi au-delà du script du notebook lui-même.
+
+00:20:16.780 --> 00:20:17.240
+Dans Fabrique,
+
+00:20:17.340 --> 00:20:18.540
+cette table de vente hebdomadaire
+
+00:20:18.540 --> 00:20:20.480
+apparaît toujours dans le graphe de traçabilité
+
+00:20:20.480 --> 00:20:21.700
+avec une connexion directe
+
+00:20:21.700 --> 00:20:23.040
+à la table de transaction source.
+
+00:20:24.000 --> 00:20:25.040
+Lorsque vous cliquez sur ce nœud,
+
+00:20:25.100 --> 00:20:25.960
+vous voyez d'où il provient,
+
+00:20:25.960 --> 00:20:27.760
+quels objets de transformation l'ont modifié
+
+00:20:27.760 --> 00:20:30.060
+et où il est utilisé en aval dans les rapports.
+
+00:20:30.620 --> 00:20:31.660
+Cette connexion ne disparaît pas
+
+00:20:31.660 --> 00:20:32.840
+une fois le travail terminé.
+
+00:20:33.700 --> 00:20:34.560
+Elle fait partie des métadonnées
+
+00:20:34.560 --> 00:20:36.060
+jusqu'à ce que vous supprimiez l'actif.
+
+00:20:37.340 --> 00:20:37.900
+Sur le graphique,
+
+00:20:38.020 --> 00:20:39.000
+chaque transformation apparaît
+
+00:20:39.000 --> 00:20:39.760
+comme un nœud distinct,
+
+00:20:40.000 --> 00:20:40.500
+un flux de données,
+
+00:20:40.880 --> 00:20:42.460
+un notebook ou un script SQL.
+
+00:20:43.900 --> 00:20:45.680
+Vous pouvez visualiser à la fois les entrées,
+
+00:20:45.880 --> 00:20:47.080
+c'est-à-dire les jeux de données consommés,
+
+00:20:47.660 --> 00:20:48.840
+et les sorties, comme les tables,
+
+00:20:49.160 --> 00:20:50.280
+vues ou jeux de données produits.
+
+00:20:50.760 --> 00:20:52.980
+Cela permet d'identifier immédiatement
+
+00:20:52.980 --> 00:20:54.680
+quand plusieurs sorties proviennent de la même transformation.
+
+00:20:55.080 --> 00:20:56.620
+Par exemple, un script de nettoyage
+
+00:20:56.620 --> 00:20:58.780
+peut produire une table épurée pour l'analytique
+
+00:20:58.780 --> 00:21:01.740
+et un flux séparé pour l'apprentissage automatique.
+
+00:21:02.980 --> 00:21:05.000
+La vue de lignage montre ces deux chemins
+
+00:21:05.000 --> 00:21:06.320
+issus du même point,
+
+00:21:06.540 --> 00:21:08.060
+rendant les modifications visibles
+
+00:21:08.060 --> 00:21:10.240
+pour les responsables des deux sorties.
+
+00:21:10.240 --> 00:21:12.280
+Ce qui est pratique,
+
+00:21:12.380 --> 00:21:13.580
+c'est que cette portée ne se limite pas
+
+00:21:13.580 --> 00:21:14.560
+à un seul type d'outil.
+
+00:21:15.800 --> 00:21:17.200
+Un flux de données traitant un CSV
+
+00:21:17.200 --> 00:21:19.420
+bénéficie du même suivi amont et aval
+
+00:21:19.420 --> 00:21:22.020
+qu'un notebook Spark joignant de table Lakehouse.
+
+00:21:24.000 --> 00:21:25.180
+Cette cohérence est possible
+
+00:21:25.180 --> 00:21:26.460
+car le service mesh de fabrique
+
+00:21:26.460 --> 00:21:28.320
+traite ces outils comme des paires,
+
+00:21:28.460 --> 00:21:30.520
+transmettant les métadonnées
+
+00:21:30.520 --> 00:21:31.440
+comme les données réelles.
+
+00:21:33.180 --> 00:21:34.300
+Que vous ayez travaillé en SQL
+
+00:21:34.300 --> 00:21:35.360
+ou qu'un collègue ait utilisé
+
+00:21:35.360 --> 00:21:36.340
+un flux de données visuel,
+
+00:21:36.520 --> 00:21:38.440
+le lignage reste consultable de la même manière.
+
+00:21:38.440 --> 00:21:41.420
+Ce mappage automatique indépendant des outils
+
+00:21:41.420 --> 00:21:43.100
+transforme un objectif de gouvernance abstrait
+
+00:21:43.100 --> 00:21:43.940
+en une action concrète.
+
+00:21:45.240 --> 00:21:46.560
+Les équipes d'assurance qualité
+
+00:21:46.560 --> 00:21:47.860
+peuvent auditer tout un chemin de calcul
+
+00:21:47.860 --> 00:21:49.120
+et pas seulement la dernière étape.
+
+00:21:50.500 --> 00:21:51.640
+Les responsables de la conformité
+
+00:21:51.640 --> 00:21:53.380
+peuvent prouver qu'une donnée sensible
+
+00:21:53.380 --> 00:21:54.900
+a été supprimée à une étape précise
+
+00:21:54.900 --> 00:21:56.000
+et jamais réintroduite.
+
+00:21:57.440 --> 00:21:58.620
+Les analystes peuvent vérifier
+
+00:21:58.620 --> 00:22:01.040
+si deux KPIs partagent une table de base commune
+
+00:22:01.040 --> 00:22:02.680
+avant de décider s'ils sont comparables.
+
+00:22:03.620 --> 00:22:04.600
+Il ne s'agit pas de surveiller le travail.
+
+00:22:05.420 --> 00:22:06.820
+Il s'agit de faire confiance aux résultats
+
+00:22:06.820 --> 00:22:08.000
+car vous pouvez voir et vérifier
+
+00:22:08.000 --> 00:22:09.220
+chaque étape qui les a façonnées.
+
+00:22:10.220 --> 00:22:11.080
+Dans un environnement BI,
+
+00:22:11.180 --> 00:22:12.040
+la confiance est fragile.
+
+00:22:12.920 --> 00:22:14.460
+Un pic ou une incohérence inexpliquée
+
+00:22:14.460 --> 00:22:15.540
+érode rapidement la confiance.
+
+00:22:16.460 --> 00:22:17.000
+Lorsque vous avez...
+
+00:22:17.000 --> 00:22:18.000
+Merci.
+
+00:22:18.000 --> 00:22:19.000
+Merci.

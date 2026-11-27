@@ -1,0 +1,5386 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.560
+De meeste teams behandelen patchen nog steeds als een gebeurtenis.
+
+00:00:02.720 --> 00:00:05.880
+Eén keer per maand voert iemand het uit, keurt iemand het goed en houdt iemand het in de gaten.
+
+00:00:06.080 --> 00:00:08.440
+Maar in werkelijkheid werken Windows-updates niet meer zo.
+
+00:00:08.640 --> 00:00:10.160
+Updates zijn een continu systeem.
+
+00:00:10.320 --> 00:00:13.460
+Ze draaien op regels, ringen en gevolgen, of er nu iemand kijkt of niet.
+
+00:00:13.620 --> 00:00:18.580
+In deze video bespreken we autopatch, update ringen, functie-updates, versnelde patches, stuurprogramma's, rapportages en fouten.
+
+00:00:18.720 --> 00:00:21.420
+En als je de volgende release-cyclus niet wilt missen, abonneer je dan nu.
+
+00:00:21.540 --> 00:00:23.700
+Maar eerst het model dat stilletjes aan het falen is.
+
+00:00:24.340 --> 00:00:26.300
+Sponsorsegment Stella Migrator for Exchange.
+
+00:00:26.480 --> 00:00:28.020
+Korte opmerking voordat we beginnen.
+
+00:00:28.020 --> 00:00:30.940
+Updates gaan minder vaak mis als de omgeving eronder schoon is.
+
+00:00:31.140 --> 00:00:37.440
+Verouderde apparaten, halverwege voltooide migraties en oude configuraties zorgen later voor mislukte installaties en vreemde beleidsconflicten.
+
+00:00:37.640 --> 00:00:40.780
+Migraties en patchen hebben één probleem gemeen, onbeheerde wijzigingen.
+
+00:00:40.960 --> 00:00:43.860
+Iemand verplaatst een mailbox zonder plan en je krijgt support tickets.
+
+00:00:44.080 --> 00:00:47.100
+Iemand laat een apparaat buiten een ring en je krijgt een kwetsbaarheidsvenster.
+
+00:00:47.280 --> 00:00:50.840
+Als je momenteel een exchange migratie uitvoert, is er een tool die het kennen waard is.
+
+00:00:51.040 --> 00:00:52.600
+Stella Migrator for Exchange.
+
+00:00:52.600 --> 00:00:59.820
+Het is gebouwd om mailboxen tussen exchange-omgevingen en naar Microsoft 365 te verplaatsen en helpt die wijziging gecontroleerd te houden in plaats van geïmproviseerd.
+
+00:00:59.940 --> 00:01:02.600
+Dat is een feit over de tool, geen belofte over je project.
+
+00:01:02.900 --> 00:01:10.400
+Controleer de details voor je eigen opzet, want een schone status gebeurt niet per ongeluk, wat ons terugbrengt bij de kernvraag, wie is eigenlijk verantwoordelijk voor wijzigingen op een Windows-apparaat.
+
+00:01:10.520 --> 00:01:12.580
+Het oude model, patchen als een gebeurtenis.
+
+00:01:12.820 --> 00:01:14.420
+Laten we beginnen met hoe het vroeger werkte.
+
+00:01:14.420 --> 00:01:19.520
+In het WSUS tijdperk bestond patchen uit vier stappen, goedkeuren, wachten, implementeren, hopen.
+
+00:01:19.780 --> 00:01:21.200
+Microsoft bracht updates uit.
+
+00:01:21.420 --> 00:01:22.700
+Ze kwamen terecht op je server.
+
+00:01:22.940 --> 00:01:26.800
+Een beheerder logde in, koos welke goedgekeurd moesten worden en koos vervolgens welke computers ze kregen.
+
+00:01:27.020 --> 00:01:27.820
+Daarna wachtte je.
+
+00:01:28.020 --> 00:01:30.220
+Apparaten melden zich volgens hun eigen schema bij de server.
+
+00:01:30.500 --> 00:01:32.820
+Sommigen installeerden de update die avond, anderen deden er een week over.
+
+00:01:32.980 --> 00:01:34.220
+Sommigen rapporteerden helemaal nooit terug.
+
+00:01:34.380 --> 00:01:37.180
+En dan hoopte je, je hoopte dat de update de financiële app niet zou breken.
+
+00:01:37.400 --> 00:01:39.440
+Je hoopte dat de laptops daadwerkelijk opnieuw opstarten.
+
+00:01:39.620 --> 00:01:42.360
+Je hoopte dat het rapport dat je op vrijdag opvroeg betekende wat je dacht dat het betekende.
+
+00:01:42.560 --> 00:01:45.060
+Dat is de cyclus, goedkeuren, wachten, implementeren, hopen.
+
+00:01:45.180 --> 00:01:46.300
+En dan is er nog Patch Tuesday.
+
+00:01:46.580 --> 00:01:48.900
+In de meeste organisaties werd Patch Tuesday een deadline.
+
+00:01:49.180 --> 00:01:52.620
+De tweede dinsdag van de maand brak aan en het hele team behandelde het als een implementatiedatum.
+
+00:01:52.780 --> 00:01:54.220
+Iemand maakte zijn agenda leeg.
+
+00:01:54.380 --> 00:01:55.920
+Iemand schreef een wijzigingsverzoek.
+
+00:01:56.080 --> 00:01:58.740
+Iemand stuurde de e-mail met de mededeling, dit weekend patchen.
+
+00:01:58.740 --> 00:02:01.040
+Maar Patch Tuesday was nooit bedoeld als deadline.
+
+00:02:01.280 --> 00:02:02.340
+Het was een signaal.
+
+00:02:02.680 --> 00:02:06.600
+Microsoft vertelde je dat er nieuwe updates beschikbaar waren en dat de klok was gaan tikken.
+
+00:02:06.600 --> 00:02:09.740
+Je bepaalde zelf de deadline op basis van je eigen kwetsbaarheid.
+
+00:02:09.860 --> 00:02:13.340
+Na verloop van tijd werd dit signaal een ritueel en dat ritueel verhulde de echte vraag.
+
+00:02:13.460 --> 00:02:14.780
+Hoe lang kunnen we kwetsbaar blijven?
+
+00:02:14.960 --> 00:02:17.020
+En aan de basis van dit alles lag één aanname.
+
+00:02:17.200 --> 00:02:19.300
+IT bepaalt de timing door de server te beheren.
+
+00:02:19.460 --> 00:02:21.940
+Als je de WSUS server in beheer had, bepaalde jij het schema.
+
+00:02:22.220 --> 00:02:24.340
+Niets werd geïnstalleerd tenzij jij daar toestemming voor gaf.
+
+00:02:24.520 --> 00:02:26.940
+Niets bereikte een apparaat tenzij de server dat toestond.
+
+00:02:27.180 --> 00:02:29.600
+Controle bevond zich op één plek en die plek was van jou.
+
+00:02:29.820 --> 00:02:31.540
+Nu was die aanname op zich niet waas.
+
+00:02:31.700 --> 00:02:33.740
+Het bleef lang overeind en wel met een reden.
+
+00:02:34.060 --> 00:02:35.840
+Apparaten bevonden zich op het bedrijfsnetwerk.
+
+00:02:36.060 --> 00:02:37.360
+Desktops stonden onder bureaus.
+
+00:02:37.580 --> 00:02:39.640
+Laptops kwamen elke avond terug naar kantoor.
+
+00:02:39.800 --> 00:02:43.260
+Alles wees naar dezelfde interne server, want er was nergens anders om naar te wijzen.
+
+00:02:43.420 --> 00:02:45.800
+Het netwerk was de grens en de server bevond zich daar binnen.
+
+00:02:45.980 --> 00:02:47.240
+Dus de controle was reëel.
+
+00:02:47.420 --> 00:02:50.040
+Je keurde een update goed en binnen een dag of twee kon het hele netwerk erbij.
+
+00:02:50.220 --> 00:02:51.900
+Je kon zien welke apparaten verbinding maakten.
+
+00:02:52.060 --> 00:02:53.880
+Je kon achter de apparaten aangaan die dat niet deden.
+
+00:02:54.000 --> 00:02:56.120
+Het model paste bij de omgeving, dus het model werkte.
+
+00:02:56.380 --> 00:02:57.860
+Daarom heeft het zo lang stand gehouden.
+
+00:02:58.040 --> 00:03:00.180
+Maar een model werkt alleen zolang de aannames kloppen.
+
+00:03:00.180 --> 00:03:02.240
+En de aanname hier ging niet over WSUS.
+
+00:03:02.460 --> 00:03:05.820
+Het ging over waar apparaten zijn, met wie ze communiceren en wie het tempo bepaalt.
+
+00:03:05.980 --> 00:03:08.080
+Die wereld is voorbij en het model heeft dat niet door.
+
+00:03:08.300 --> 00:03:10.360
+Waarom werkt het oude model vandaag de dag niet meer?
+
+00:03:10.500 --> 00:03:14.900
+Kijk waar je apparaten nu zijn, niet waar de inventarislijst zegt dat ze zijn, maar waar ze echt zijn.
+
+00:03:15.060 --> 00:03:21.660
+Een keukentafel, een hotel lobby, een trein, een gasten wifi, een thuiskantoor met een router die sinds 2019 niet is bijgewerkt.
+
+00:03:21.660 --> 00:03:24.200
+Laptops komen niet meer elke avond terug naar kantoor.
+
+00:03:24.380 --> 00:03:26.020
+Sommige komen twee keer per maand terug.
+
+00:03:26.240 --> 00:03:27.900
+Sommige komen helemaal nooit meer terug.
+
+00:03:28.060 --> 00:03:33.280
+En de VPN, het enige dat hen vroeger naar je interne server trok, opent men alleen nog als men een bestandshare moet bereiken.
+
+00:03:33.520 --> 00:03:36.900
+Denk dus eens na over wat dat betekent voor een WSUS-server binnen het netwerk.
+
+00:03:37.060 --> 00:03:39.960
+Een apparaat dat nooit contact maakt met het netwerk, meldt zich nooit aan.
+
+00:03:40.080 --> 00:03:42.680
+En een apparaat dat zich nooit aanmeldt, bestaat niet voor die server.
+
+00:03:42.980 --> 00:03:44.240
+Jij hebt de update goedgekeurd.
+
+00:03:44.420 --> 00:03:45.480
+De server is er klaar voor.
+
+00:03:45.660 --> 00:03:47.840
+De laptop staat in een koffieetentje en die twee zullen elkaar nooit ontmoeten.
+
+00:03:47.840 --> 00:03:49.000
+Dat is de eerste breuk.
+
+00:03:49.000 --> 00:03:51.540
+De server beheert een plek en de apparaten verblijven daar niet meer.
+
+00:03:51.700 --> 00:03:53.080
+Nu de tweede breuk, het volume.
+
+00:03:53.320 --> 00:03:55.240
+In het oude model keurde een mens updates goed.
+
+00:03:55.380 --> 00:03:57.900
+Dat werkte toen er nog een handvol producten was en een rustig ritme.
+
+00:03:58.080 --> 00:04:00.140
+Maar kijk eens naar wat er vandaag allemaal binnenkomt.
+
+00:04:00.340 --> 00:04:05.260
+Maandelijkse kwaliteits-updates, jaarlijkse functie-updates, driver-updates van tientallen hardware-leveranciers,
+
+00:04:05.500 --> 00:04:10.160
+dagelijkse definitie-updates en tussentijdse fixes wanneer er iets wordt misbruikt voordat de kalender zegt dat het zou moeten.
+
+00:04:10.380 --> 00:04:13.260
+Niemand kan dat allemaal lezen, testen en handmatig goedkeuren.
+
+00:04:13.480 --> 00:04:14.940
+In ieder geval niet in een goed tempo.
+
+00:04:14.940 --> 00:04:19.660
+Dus wat er meestal gebeurt is dit, de goedkeuringstap wordt een knelpunt of een formaliteit.
+
+00:04:19.920 --> 00:04:23.240
+Of iemand laat updates drie weken liggen omdat er geen tijd is om ze te beoordelen,
+
+00:04:23.460 --> 00:04:26.500
+of iemand klikt op alles goedkeuren omdat er geen tijd is om ze te bekijken.
+
+00:04:26.740 --> 00:04:28.620
+Beide uitkomsten zijn hetzelfde falen.
+
+00:04:28.800 --> 00:04:31.760
+Een menselijke stap bleef in het proces nadat deze niet langer nuttig was.
+
+00:04:31.960 --> 00:04:34.160
+En de derde breuk is degene die echt geld kost.
+
+00:04:35.000 --> 00:04:36.580
+Blootstellingsvensters werden vroeger in weken gemeten.
+
+00:04:36.780 --> 00:04:40.900
+Er werd een kwetsbaarheid gevonden, een patch uitgebracht en aanvallers hadden tijd nodig om er iets bruikbaars van te maken.
+
+00:04:40.900 --> 00:04:42.820
+Je had ruimte, die ruimte is verdwenen.
+
+00:04:43.000 --> 00:04:46.400
+Zodra een patch wordt uitgebracht, kan deze worden vergeleken met de code die hij verving.
+
+00:04:46.580 --> 00:04:48.820
+Die vergelijking laat precies zien wat er kapot was.
+
+00:04:49.160 --> 00:04:51.400
+Aanvallers doen dit routinematig en ze doen het snel.
+
+00:04:51.700 --> 00:04:56.100
+De kloof tussen update vrijgaven en exploit in het wild duurt nu dagen, soms minder.
+
+00:04:56.480 --> 00:04:59.400
+Dus elke dag dat je update in een goedkeuringswachtrij staat,
+
+00:04:59.680 --> 00:05:03.300
+is een dag dat je software draait waarvan de hele wereld weet hoe ze die moeten aanvallen.
+
+00:05:03.520 --> 00:05:07.960
+Dat is waar het oude model stilletjes in veranderde, niet in een patchproces, maar in een blootstellingsproces.
+
+00:05:07.960 --> 00:05:10.860
+Nu wil ik eerlijk zijn, er is een goed argument aan de andere kant.
+
+00:05:11.040 --> 00:05:12.560
+Updates kunnen dingen kapot maken.
+
+00:05:12.760 --> 00:05:16.680
+Iedereen in dit vakgebied heeft wel een verhaal over een patch die een bedrijfsapplicatie platlegde
+
+00:05:16.680 --> 00:05:19.700
+of een driver die schermen zwart maakte op één specifiek laptopmodel.
+
+00:05:20.100 --> 00:05:22.520
+Verstoring is reëel en treft mensen die deadlines hebben.
+
+00:05:22.700 --> 00:05:27.580
+Dus het oude instinct om af te wachten is niet dom, het beschermt iets, maar het weegt de twee risico's verkeerd af.
+
+00:05:27.740 --> 00:05:29.440
+De kosten van verstoring zijn zichtbaar.
+
+00:05:29.600 --> 00:05:32.500
+Er wordt een ticket aangemaakt, iemand klaagt en een manager vraagt wat er is gebeurd.
+
+00:05:32.660 --> 00:05:34.300
+De kosten van vertraging zijn onzichtbaar.
+
+00:05:34.460 --> 00:05:36.040
+Er gebeurt niets, totdat het wel gebeurt.
+
+00:05:36.040 --> 00:05:38.440
+En als het dan gebeurt, is het geen ticket, maar een incident.
+
+00:05:38.720 --> 00:05:42.220
+Teams neigen dus naar het risico dat ze kunnen zien en weg van het risico dat groter is.
+
+00:05:42.420 --> 00:05:43.500
+Dat is het echte gebrek.
+
+00:05:43.660 --> 00:05:48.440
+Het is niet dat WSUS oud is, het is dat het model ervan uitgaat dat iemand in het midden van dit alles kan staan,
+
+00:05:48.620 --> 00:05:51.840
+elke update kan lezen en per apparaat kan beslissen wanneer elk ervan moet landen.
+
+00:05:52.060 --> 00:05:53.240
+Niemand kan dat niet meer.
+
+00:05:53.480 --> 00:05:55.480
+Wat betekent dat de vraag moet veranderen?
+
+00:05:55.660 --> 00:06:00.980
+Het ging nooit echt om hoe we updates beheren, maar om welk resultaat we acceptabel vinden en wie dat bepaalt.
+
+00:06:00.980 --> 00:06:02.700
+En daar verandert de boel.
+
+00:06:02.700 --> 00:06:05.980
+Het nieuwe model, de gewenste status, niet de implementatie.
+
+00:06:06.160 --> 00:06:07.520
+Dus wat komt daarvoor in de plaats?
+
+00:06:07.720 --> 00:06:12.340
+Geen betere server, geen sneller goedkeuringsproces, maar een andere vraag die op een andere plek beantwoord wordt.
+
+00:06:12.560 --> 00:06:16.560
+Bij het oude model moest je updates pushen, de update kiezen, het apparaat kiezen, de dag kiezen.
+
+00:06:16.740 --> 00:06:20.920
+Elke beslissing was een implementatiebeslissing en elke implementatie vereiste dat er iemand achter stond.
+
+00:06:21.100 --> 00:06:23.880
+Het nieuwe model vraagt je in plaats daarvan om een resultaat te beschrijven.
+
+00:06:23.880 --> 00:06:32.600
+Je schrijft op hoe een acceptabele situatie eruit ziet, kwaliteitsupdates binnen 7 dagen na release geïnstalleerd, functieupdates op de versie die je koos, herstarts gedwongen na een deadline, niet ervoor.
+
+00:06:32.820 --> 00:06:33.480
+Dat is alles.
+
+00:06:33.760 --> 00:06:34.780
+Dat is het hele beleid.
+
+00:06:34.960 --> 00:06:36.280
+En dan doet iets anders het werk.
+
+00:06:36.500 --> 00:06:38.460
+Dit is wat gewenste status werkelijk betekent.
+
+00:06:38.640 --> 00:06:40.360
+Beleid bepaalt waar een apparaat moet eindigen.
+
+00:06:40.560 --> 00:06:41.980
+De server zoekt uit hoe het daar komt.
+
+00:06:42.160 --> 00:06:45.180
+Je stopt met het plannen van de reis en begint met het definiëren van de bestemming.
+
+00:06:45.380 --> 00:06:48.040
+Dat klinkt als marketing totdat je ziet waar het werk echt gebeurt.
+
+00:06:48.200 --> 00:06:50.300
+De motor hiervan is Windows Update voor bedrijven.
+
+00:06:50.460 --> 00:06:51.840
+Het is geen server die je installeert.
+
+00:06:51.840 --> 00:06:53.420
+Het is geen console waar je inlogt.
+
+00:06:53.880 --> 00:06:57.700
+Zet mogelijkheden ingebouwd in Windows zelf, ondersteund door de cloud van Microsoft.
+
+00:06:57.960 --> 00:07:05.160
+Het apparaat communiceert direct met Windows Update via internet, waar het zich ook bevindt, en evalueert je regels zelfstandig, wat het eerste probleem van eerder oplost.
+
+00:07:05.320 --> 00:07:07.840
+De laptop in het koffiehuis hoeft je netwerk niet te vinden.
+
+00:07:08.040 --> 00:07:09.820
+Hij weet al hoe hij Microsoft moet vinden.
+
+00:07:10.040 --> 00:07:12.520
+De regels reizen met het apparaat mee, niet met het gebouw.
+
+00:07:12.540 --> 00:07:14.260
+Maar regels hebben een plek nodig om te bestaan.
+
+00:07:14.460 --> 00:07:15.940
+Dat is waar in Toon om de hoek komt kijken.
+
+00:07:16.160 --> 00:07:17.380
+In Toon is het beleidsvlak.
+
+00:07:17.540 --> 00:07:21.020
+Hier schrijf je de regels, groepeer je de apparaten en wijs je de naam de ander toe.
+
+00:07:21.020 --> 00:07:22.520
+Het vervoert de update niet.
+
+00:07:22.520 --> 00:07:24.300
+Het download niets namens de laptop.
+
+00:07:24.600 --> 00:07:27.760
+Het vertelt het apparaat wat is toegestaan, hoe snel en tegen welke tijd.
+
+00:07:27.960 --> 00:07:29.640
+Windows Update is het afleveringsvlak.
+
+00:07:29.780 --> 00:07:33.560
+Het vervoert de bits, bepaald wat wordt aangeboden, regelt de download, voert de installatie uit.
+
+00:07:33.740 --> 00:07:36.900
+Twee vlakken, twee taken en dit onderscheid is belangrijker dan het lijkt.
+
+00:07:37.080 --> 00:07:38.900
+In het oude model deed één doos alles.
+
+00:07:39.160 --> 00:07:42.640
+Het sloeg de updates op, keurde ze goed, distribueerde ze en rapporteerde erover.
+
+00:07:42.880 --> 00:07:46.980
+Beheer en aflevering waren met elkaar verweven, dus elke wijziging in de ene betekende werk in de andere.
+
+00:07:47.180 --> 00:07:48.160
+Nu zijn ze gescheiden.
+
+00:07:48.160 --> 00:07:51.600
+Je wijzigt een beleid in Intune en de afleveringskant maakt het niet uit hoe je daar kwam.
+
+00:07:51.880 --> 00:07:54.800
+Microsoft wijzigt hoe updates worden verpakt en je beleid merkt daar ook niets van.
+
+00:07:55.000 --> 00:07:56.980
+Elke kant kan bewegen zonder de andere te verstoren.
+
+00:07:57.200 --> 00:07:59.100
+Dat is een structurele winst, geen functionaliteit.
+
+00:07:59.300 --> 00:08:01.600
+Dit is wat het verandert voor degene die verantwoordelijk is voor het resultaat.
+
+00:08:01.720 --> 00:08:04.160
+Je stopt met het beheren van patches en begint met het beheren van risicotolerantie.
+
+00:08:04.940 --> 00:08:07.600
+Denk eens na over hoe dat gesprek klinkt in een directievergadering.
+
+00:08:07.800 --> 00:08:11.020
+In het oude model was de vraag, hebben we de updates van deze maand uitgerold?
+
+00:08:11.200 --> 00:08:13.000
+Een ja of nee over een activiteit.
+
+00:08:13.000 --> 00:08:14.600
+Iemand heeft iets gedaan of niet.
+
+00:08:14.760 --> 00:08:19.180
+In het nieuwe model is de vraag, hoe lang zijn we bereid risico te lopen en voor welke apparaten?
+
+00:08:20.940 --> 00:08:22.860
+Dat, dat is een zakelijke vraag.
+
+00:08:23.040 --> 00:08:28.400
+Een laptop voor financiën en een scherm in een vergaderuimte dragen niet hetzelfde risico en zouden niet dezelfde deadline moeten hebben.
+
+00:08:28.560 --> 00:08:30.480
+Een pilotgroep kan in twee dagen overgaan.
+
+00:08:30.620 --> 00:08:34.140
+Een klinisch werkstation heeft misschien twee weken nodig en een schriftelijke onderbouwing.
+
+00:08:34.340 --> 00:08:39.980
+Het echte werk verschuift dus naar voren, niet klikken op, goedkeuren, maar bewust beslissen wat elke groep apparaten moet tolereren.
+
+00:08:40.200 --> 00:08:41.840
+Vervolgens houdt het systeem je daaraan.
+
+00:08:42.040 --> 00:08:42.900
+Dat is de omslag.
+
+00:08:43.120 --> 00:08:45.780
+Minder beslissingen per maand, betere beslissingen per jaar.
+
+00:08:45.960 --> 00:08:53.700
+Maar het werkt alleen als je begrijpt wat eronder zit, want beleid bepaalt, service levert, is een heldere zin en heldere zinnen verbergen de onderdelen die falen.
+
+00:08:53.880 --> 00:08:55.920
+Iets moet opmerken dat er een update bestaat.
+
+00:08:56.140 --> 00:09:01.720
+Iets moet beslissen wat die update betekent voor elk apparaat en iets moet het uitvoeren, bewaken en stoppen als het misgaat.
+
+00:09:01.900 --> 00:09:07.180
+Drie taken, drie lagen en zodra je ziet hoe ze verbonden zijn, weet je precies waar je moet zoeken als een update niet aankomt.
+
+00:09:07.180 --> 00:09:10.600
+De architectuur en audio, gebeurtenis, redenering, orkestratie.
+
+00:09:10.740 --> 00:09:12.380
+Dit is het hele systeem in drie woorden.
+
+00:09:12.860 --> 00:09:14.820
+Gebeurtenis, redenering, orkestratie.
+
+00:09:15.000 --> 00:09:17.580
+Elke update die je ooit zult beheren, doorloopt deze drie.
+
+00:09:17.800 --> 00:09:20.860
+Sla er in je hoofd één over en je zoekt op de verkeerde plek naar het probleem.
+
+00:09:21.080 --> 00:09:22.240
+Begin met de gebeurtenis.
+
+00:09:22.440 --> 00:09:33.520
+Een gebeurtenis is Microsoft die iets uitbrengt, een maandelijkse kwaliteitsupdate, een functieupdate naar een nieuwe Windows-versie, een stuurprogramma van een hardwareleverancier of een spoedreparatie buiten de reguliere planning omdat iemand misbruik maakt van een lek dat het dicht.
+
+00:09:33.520 --> 00:09:37.160
+Dit is het punt met een gebeurtenis. Het weet niet dat jouw omgeving bestaat.
+
+00:09:37.340 --> 00:09:41.160
+Het is een release in de cloud van Microsoft die beschikbaar is voor iedereen die erom vraagt.
+
+00:09:41.320 --> 00:09:43.900
+Het heeft geen mening over je financiële team of je fabrieksvloer.
+
+00:09:44.060 --> 00:09:45.460
+Het komt simpelweg beschikbaar.
+
+00:09:45.720 --> 00:09:46.780
+Dat is alles wat het doet.
+
+00:09:46.960 --> 00:09:48.220
+Het zegt, dit bestaat nu.
+
+00:09:48.440 --> 00:09:49.520
+Dan komt de redenering.
+
+00:09:49.820 --> 00:09:52.960
+Dit is waar je beleid leeft en waar elk apparaat één vraag beantwoordt.
+
+00:09:53.080 --> 00:09:54.820
+Moet ik deze update installeren en wanneer?
+
+00:09:54.980 --> 00:09:57.140
+Het antwoord hangt af van de regels die jij hebt opgesteld.
+
+00:09:57.300 --> 00:09:58.880
+In welke ring bevindt dit apparaat zich?
+
+00:09:59.060 --> 00:10:01.540
+Hoeveel dagen mag die ring een kwaliteitsupdate uitstelen?
+
+00:10:01.540 --> 00:10:04.240
+Is er een functie update beleid dat de versie vastzet?
+
+00:10:04.380 --> 00:10:06.960
+Wat is de deadline en hoe lang is de respite periode daarna?
+
+00:10:07.180 --> 00:10:08.240
+Let op wat hier gebeurt.
+
+00:10:08.460 --> 00:10:09.960
+Niemand beslist op dit moment iets.
+
+00:10:10.160 --> 00:10:12.720
+De beslissing is weken geleden genomen toen je de regels opstelde.
+
+00:10:12.860 --> 00:10:16.200
+Het apparaat leest ze simpelweg, vergelijkt ze met de gebeurtenis en bepaalt zijn eigen antwoord.
+
+00:10:16.340 --> 00:10:18.460
+Twee laptops, dezelfde update, dezelfde dag.
+
+00:10:18.620 --> 00:10:20.180
+De een krijgt de opdracht om vanavond te installeren.
+
+00:10:20.380 --> 00:10:21.400
+De ander moet negen dagen wachten.
+
+00:10:21.640 --> 00:10:23.280
+Geen van beide antwoorden is willekeurig.
+
+00:10:23.440 --> 00:10:26.140
+Elk is het resultaat van de reden neerlaag en vervolgens de orquestratie.
+
+00:10:26.320 --> 00:10:27.720
+Dit is het pad dat actie onderneemt.
+
+00:10:27.720 --> 00:10:32.580
+Iets moet de update bezorgen, de installatie triggeren, de herstart afhandelen en in de gaten houden wat er gebeurt.
+
+00:10:32.740 --> 00:10:36.760
+Iets moet opmerken wanneer een ring begint te falen en de uitrol stoppen voordat het zich verspreidt.
+
+00:10:36.900 --> 00:10:40.540
+Dat iets is ofwel in toen, dat de door jouw geschreven beleidsregels uitvoert,
+
+00:10:40.760 --> 00:10:44.100
+of auto-patch, een beheerde service die die machine voor je bouwt en draait.
+
+00:10:44.340 --> 00:10:45.980
+Dezelfde taak, andere eigenaar.
+
+00:10:46.500 --> 00:10:48.960
+Orquestratie voert uit, bewaakt en pauzeert indien nodig.
+
+00:10:49.220 --> 00:10:51.760
+Laten we nu één update langzaam door alle drie de stappen lopen.
+
+00:10:51.980 --> 00:10:53.520
+Het is de tweede dinsdag van de maand.
+
+00:10:53.720 --> 00:10:55.960
+Microsoft brengt een cumulatieve kwaliteitsupdate uit.
+
+00:10:55.960 --> 00:10:57.140
+Dat is de gebeurtenis.
+
+00:10:57.280 --> 00:10:58.800
+Er is nog niets met je apparaten gebeurd.
+
+00:10:58.960 --> 00:11:00.260
+De update bestaat simpelweg.
+
+00:11:00.480 --> 00:11:03.340
+Vervolgens wordt een laptop in je pilotring wakker en controleert Windows Update.
+
+00:11:03.540 --> 00:11:04.760
+Dit is een check aan de clientzijde.
+
+00:11:04.860 --> 00:11:06.580
+Het apparaat zoekt contact volgens zijn eigen schema.
+
+00:11:06.800 --> 00:11:09.020
+Windows Update zegt dat er een nieuwe update beschikbaar is.
+
+00:11:09.200 --> 00:11:11.440
+Nu begint het redeneren en dat gebeurt op de laptop zelf.
+
+00:11:11.640 --> 00:11:13.040
+Het apparaat leest zijn beleid.
+
+00:11:13.280 --> 00:11:15.300
+Deze ring heeft een uitstel van kwaliteit van twee dagen.
+
+00:11:15.520 --> 00:11:16.920
+De update is vandaag uitgebracht.
+
+00:11:17.120 --> 00:11:18.500
+Dus het antwoord voor nu is nog niet.
+
+00:11:18.660 --> 00:11:19.820
+Er gaan twee dagen voorbij.
+
+00:11:20.020 --> 00:11:21.340
+De laptop controleert opnieuw.
+
+00:11:21.500 --> 00:11:24.440
+Het uitstel is verlopen, dus de update wordt nu aan dit apparaat aangeboden.
+
+00:11:24.440 --> 00:11:25.760
+De laptop download deze.
+
+00:11:25.960 --> 00:11:28.260
+Hij installeert op de achtergrond buiten actieve uren.
+
+00:11:28.440 --> 00:11:31.000
+Dan bereikt hij de herstart en daar heeft het beleid ook een mening over.
+
+00:11:31.220 --> 00:11:34.380
+De deadline geeft de gebruiker een vast aantal dagen om zelf opnieuw op te starten.
+
+00:11:34.560 --> 00:11:35.920
+Daarna dwingt Windows het af.
+
+00:11:36.060 --> 00:11:37.520
+Hier komt orquestratie in beeld.
+
+00:11:37.680 --> 00:11:40.000
+Terwijl dit alles draait, verzamelt de service resultaten.
+
+00:11:40.160 --> 00:11:42.200
+Hoeveel pilotapparaten zijn correct geïnstalleerd?
+
+00:11:42.360 --> 00:11:43.680
+Hoeveel rapporteerde fouten?
+
+00:11:43.800 --> 00:11:47.940
+Als het installatiefoutenpercentage een drempel overschrijdt, wacht orquestratie niet tot de mens het opmerkt.
+
+00:11:48.100 --> 00:11:51.120
+Het pauzeert de uitrol en de brede ring ontvangt de update helemaal niet.
+
+00:11:51.120 --> 00:11:54.580
+Als de pilot gezond oogt, verloopt het uitstel van de volgende ring volgens schema.
+
+00:11:54.800 --> 00:11:57.600
+Dezelfde gebeurtenis, hetzelfde redeneren, een andere klok.
+
+00:11:57.720 --> 00:11:59.820
+Kijk dus naar wat elke laag daadwerkelijk heeft gedaan.
+
+00:12:00.020 --> 00:12:01.760
+De gebeurtenis creëerde de mogelijkheid.
+
+00:12:01.940 --> 00:12:03.620
+De redeneerlaag besliste wie en wanneer.
+
+00:12:03.780 --> 00:12:05.780
+De orquestratie voerde het uit en hield toezicht.
+
+00:12:05.940 --> 00:12:07.940
+En dit is waarom dit belangrijk is als er iets misgaat.
+
+00:12:08.060 --> 00:12:11.320
+Als een apparaat nooit een update ontvangt, ligt het probleem waarschijnlijk niet bij de gebeurtenis.
+
+00:12:11.580 --> 00:12:13.040
+Microsoft heeft deze uitgebracht.
+
+00:12:13.220 --> 00:12:18.280
+De vraag is of de logica het apparaat vertelde om eeuwig te wachten, of dat de orquestratie faalde in de levering.
+
+00:12:18.280 --> 00:12:22.400
+Dat zijn twee totaal verschillende oplossingen en teams verspillen uren door ze door elkaar te halen.
+
+00:12:22.560 --> 00:12:24.240
+Welke laag controleer je nu als eerste?
+
+00:12:24.460 --> 00:12:29.460
+De logische laag, want de gebeurtenis heb je niet in de hand en de orquestratie doet alleen wat de regels voorschrijven.
+
+00:12:29.660 --> 00:12:32.260
+Alles wat daarop volgt, hangt af van of de regels kloppen.
+
+00:12:32.460 --> 00:12:36.400
+Dus daar beginnen we bij de engine die die regels op elk apparaat evalueert.
+
+00:12:36.660 --> 00:12:39.440
+Windows Update voor bedrijven, de engine achter alles.
+
+00:12:39.720 --> 00:12:41.420
+Laten we precies zijn over wat dit is.
+
+00:12:41.640 --> 00:12:44.180
+Windows Update voor bedrijven is geen product dat je koopt.
+
+00:12:44.180 --> 00:12:51.380
+Het is geen server, het is een set beleidsinstellingen in Windows, gekoppeld aan dezelfde Windows Update service waarmee elke PC al communiceert.
+
+00:12:51.580 --> 00:12:52.660
+Dat is precies het idee.
+
+00:12:52.860 --> 00:12:54.720
+De machinerie bestaat al op elk apparaat.
+
+00:12:54.880 --> 00:12:57.680
+Windows Update voor bedrijven laat je simpelweg de regels bepalen die het volgt.
+
+00:12:57.860 --> 00:12:58.840
+Dus wat doet het eigenlijk?
+
+00:12:59.080 --> 00:12:59.580
+Drie dingen.
+
+00:12:59.780 --> 00:13:02.460
+Het laat je vertragen wanneer updates aan een apparaat worden aangeboden.
+
+00:13:02.640 --> 00:13:07.900
+Het laat je een deadline instellen, een moment waarop de update niet langer optioneel is, en je kunt bepalen hoe en wanneer de herstart plaatsvindt.
+
+00:13:08.040 --> 00:13:09.600
+Uitstel, deadline, herstart.
+
+00:13:09.800 --> 00:13:13.020
+Al het andere dat je in deze video configureert, is een variatie op die drie.
+
+00:13:13.020 --> 00:13:13.840
+Wat doet het niet?
+
+00:13:14.000 --> 00:13:15.420
+Het slaat geen updates voor je op.
+
+00:13:15.540 --> 00:13:19.120
+Er is geen goedkeuringswachtrij om te controleren, geen lijst met patches die wachten op een klik.
+
+00:13:19.240 --> 00:13:20.300
+Het bouwt niet je ringen op.
+
+00:13:20.460 --> 00:13:23.160
+Het houdt geen uithol in de gaten en stopt deze niet als het misgaat.
+
+00:13:23.280 --> 00:13:25.000
+En het geeft je uit zichzelf geen mooi rapport.
+
+00:13:25.240 --> 00:13:27.020
+Het is een engine, geen dashboard, geen stuurprogramma.
+
+00:13:27.840 --> 00:13:29.640
+Dat onderscheid neemt een hoop verwarring weg.
+
+00:13:29.860 --> 00:13:34.000
+Wanneer mensen zeggen dat Windows Update voor bedrijven niet werkt, bedoelen ze meestal dat de laag daarboven niet werkt.
+
+00:13:34.140 --> 00:13:35.880
+De engine doet precies wat hem is opgedragen.
+
+00:13:36.080 --> 00:13:37.980
+Dus laten we kijken hoe die instructies worden gegeven.
+
+00:13:38.200 --> 00:13:39.120
+Begin bij uitstel.
+
+00:13:39.120 --> 00:13:44.340
+Uitstel is het aantal dagen dat je instelt, bijvoorbeeld zeven dagen wachten na de release voordat kwaliteit updates aan dit apparaat worden aangeboden.
+
+00:13:44.500 --> 00:13:47.420
+Functie updates wachten een ander aantal dagen, afzonderlijk ingesteld.
+
+00:13:47.600 --> 00:13:49.360
+Tijdens dat wachten wordt er niets geïnstalleerd.
+
+00:13:49.560 --> 00:13:52.380
+Het apparaat weet dat de update bestaat en negeert deze bewust.
+
+00:13:52.600 --> 00:13:53.360
+Dan de deadline.
+
+00:13:53.660 --> 00:13:55.500
+Dit is het getal dat het beleid dwingend maakt.
+
+00:13:55.700 --> 00:14:00.300
+Nadat een update is aangeboden, bepaalt de deadline hoeveel dagen de gebruiker krijgt voordat Windows deze alsnog installeert.
+
+00:14:00.500 --> 00:14:02.500
+Zonder deadline is uitstel slechts een suggestie.
+
+00:14:02.720 --> 00:14:05.160
+Bij één is er een harde grens en start hij daarna opnieuw op.
+
+00:14:05.160 --> 00:14:09.780
+Windows kan wachten op een goed moment buiten actieve uren en de gebruiker poren met meldingen.
+
+00:14:09.900 --> 00:14:14.480
+Maar het beleid kan ook zeggen na zoveel dagen herstarten of de gebruiker dat nu wil of niet.
+
+00:14:14.700 --> 00:14:21.280
+Die drie bedieningselementen in verschillende aantallen geven je heel ander gedrag voor verschillende groepen mensen en niemand hoeft handmatig een update aan te raken.
+
+00:14:21.520 --> 00:14:23.140
+Nu komt het gedeelte dat mensen verrast.
+
+00:14:23.360 --> 00:14:24.900
+Waar wordt de beslissing eigenlijk genomen?
+
+00:14:25.080 --> 00:14:26.080
+Op het apparaat zelf.
+
+00:14:26.300 --> 00:14:28.540
+Een laptop wacht niet op een signaal van je beheerconsole.
+
+00:14:28.740 --> 00:14:33.280
+Op zijn eigen schema maakt hij verbinding met Windows Update via internet en vraagt wat is er voor mij beschikbaar.
+
+00:14:33.280 --> 00:14:35.380
+Windows update antwoordt met wat er bestaat.
+
+00:14:35.640 --> 00:14:37.660
+Vervolgens kijkt het apparaat naar zijn eigen beleid.
+
+00:14:37.820 --> 00:14:40.460
+Het leest de uitstelinstellingen die Intune eerder heeft afgeleverd.
+
+00:14:40.560 --> 00:14:41.960
+Het controleert de release datum.
+
+00:14:42.100 --> 00:14:43.280
+Het doet zelf het rekenwerk.
+
+00:14:43.500 --> 00:14:45.360
+Is deze update oud genoeg om aangeboden te worden?
+
+00:14:45.540 --> 00:14:46.620
+Is de deadline verstreken?
+
+00:14:46.780 --> 00:14:47.980
+Is het binnen de actieve uren?
+
+00:14:48.160 --> 00:14:49.780
+Dat alles wordt lokaal geëvalueerd.
+
+00:14:49.940 --> 00:14:51.260
+Het beleid is dus geen commando.
+
+00:14:51.520 --> 00:14:55.500
+Het is een set instructies die het apparaat bij zich draagt en het raadpleegt deze elke keer dat het controleert op updates.
+
+00:14:55.720 --> 00:14:57.700
+Je beheertool heeft de regels één keer geschreven.
+
+00:14:57.880 --> 00:15:00.440
+Het apparaat past ze telkens opnieuw toe waar het zich ook bevindt.
+
+00:15:00.440 --> 00:15:02.900
+Dat is waarom de laptop in een koffieetentje überhaupt werkt.
+
+00:15:03.040 --> 00:15:06.240
+Hij heeft je netwerk of je console of een verbinding met iets van jou niet nodig.
+
+00:15:06.440 --> 00:15:09.800
+Hij heeft twee dingen nodig, het beleid dat hij al heeft en een route naar Microsoft.
+
+00:15:10.120 --> 00:15:13.020
+En dit is het structurele punt dat het nieuwe model scheidt van het oude.
+
+00:15:13.240 --> 00:15:16.200
+Dit is een beslissingssysteem aan de clientzijde, geen pushsysteem.
+
+00:15:16.340 --> 00:15:19.160
+In een pushsysteem beslist een centraal punt en stuurt het dan door.
+
+00:15:19.360 --> 00:15:22.180
+Als het apparaat niet bereikbaar is, komt de beslissing nooit aan.
+
+00:15:22.380 --> 00:15:25.480
+De controle is slecht zo goed als je vermogen om de machine te bereiken.
+
+00:15:25.680 --> 00:15:28.640
+In een systeem aan de clientzijde leeft de beslissing al op de machine.
+
+00:15:28.640 --> 00:15:30.880
+De controle hangt niet af van het bereiken ervan.
+
+00:15:31.040 --> 00:15:36.040
+Het hangt af van of het beleid is aangekomen en of het beleid correct is, wat je iets belangrijks vertelt over falen.
+
+00:15:36.160 --> 00:15:39.540
+Als een apparaat zich vreemd gedraagt, vraag je niet of je server het kon bereiken.
+
+00:15:39.740 --> 00:15:42.860
+Je vraagt welk beleid het vasthoudt en wat dat beleid het heeft opgedragen te doen.
+
+00:15:43.040 --> 00:15:46.440
+Je hebt nu de drie bedieningselementen gezien, uitstel, deadline, herstart.
+
+00:15:46.640 --> 00:15:47.960
+De vraag is waar je ze instelt.
+
+00:15:48.180 --> 00:15:51.160
+En voor de meeste teams is het antwoord het eerste wat ze openen in Intune.
+
+00:15:51.340 --> 00:15:54.780
+Het bedieningspaneel waar iedereen naar grijpt voordat ze begrijpen wat eronder zit.
+
+00:15:54.780 --> 00:15:58.540
+Update ringen, update ringen uitgelegd, wat ze daadwerkelijk beheren.
+
+00:15:58.660 --> 00:16:02.260
+Open in Intune, ga naar apparaten, dan Windows, dan update ringen.
+
+00:16:02.400 --> 00:16:05.860
+Je zult een beleidstype zien genaamd, update ringen voor Windows 10 en later.
+
+00:16:06.120 --> 00:16:07.580
+Die naam is een beetje misleidend.
+
+00:16:07.760 --> 00:16:12.180
+Een ring is geen groep apparaten, het is een beleid, een bundel instellingen die je aan een groep toewijst.
+
+00:16:12.340 --> 00:16:17.000
+Dus als mensen ring zeggen, bedoelen ze twee dingen tegelijk, de instellingen en de mensen die ze ontvangen.
+
+00:16:17.180 --> 00:16:18.560
+Hou die twee in je hoofd gescheiden.
+
+00:16:18.760 --> 00:16:20.240
+De instellingen staan op één plek.
+
+00:16:20.240 --> 00:16:21.960
+Het lidmaatschap staat ergens anders.
+
+00:16:22.180 --> 00:16:25.400
+De instellingen die ertoe doen, de eerste twee zijn degene die iedereen snel vindt.
+
+00:16:25.660 --> 00:16:28.420
+Uitstelperiode voor kwaliteitsupdates, uitstelperiode voor functieupdates.
+
+00:16:28.620 --> 00:16:29.580
+Ze klinken hetzelfde.
+
+00:16:29.780 --> 00:16:31.140
+Ze gedragen zich heel verschillend.
+
+00:16:31.320 --> 00:16:33.660
+De kwaliteitsupdate is de maandelijkse cumulatieve patch.
+
+00:16:34.340 --> 00:16:36.120
+Beveiligingsoplossingen, bakfixes, kleine wijzigingen.
+
+00:16:36.280 --> 00:16:38.400
+Het uitstel hiervoor loopt van 0 tot 30 dagen.
+
+00:16:38.600 --> 00:16:42.320
+Je stelt 7 dagen in en het apparaat wacht 7 dagen na de release voordat de update wordt aangeboden.
+
+00:16:42.500 --> 00:16:44.540
+Een functieupdate is een nieuwe versie van Windows.
+
+00:16:44.780 --> 00:16:46.880
+Andere omvang, ander risico, andere kalender.
+
+00:16:46.880 --> 00:16:49.440
+Het uitstel kan oplopen tot 365 dagen.
+
+00:16:49.680 --> 00:16:51.280
+Hetzelfde idee, veel langere termijn.
+
+00:16:51.460 --> 00:16:52.920
+En dit is waarom ze gescheiden zijn.
+
+00:16:53.100 --> 00:16:57.120
+Een plafond van 30 dagen voor kwaliteitsupdates is een harde limiet en die is er met een reden.
+
+00:16:57.380 --> 00:16:59.800
+Die patches dicht te gaten die aanvaller zal bestuderen.
+
+00:16:59.980 --> 00:17:04.020
+Een jaar uitstel voor een functieupdate is prima, omdat de versie waarop je zit nog steeds wordt ondersteund.
+
+00:17:04.180 --> 00:17:06.220
+Een jaar wachten met een beveiligingspatch is dat niet.
+
+00:17:06.400 --> 00:17:08.440
+Dus de twee getallen beantwoorden verschillende vragen.
+
+00:17:08.620 --> 00:17:11.200
+De ene vraagt, hoe lang wachten we om te zien of een patch veilig is?
+
+00:17:11.380 --> 00:17:14.080
+De andere vraagt, hoe lang blijven we op deze versie van Windows?
+
+00:17:14.700 --> 00:17:15.660
+Vervolgens, deadlines.
+
+00:17:15.660 --> 00:17:21.200
+In hetzelfde beleid vind je de deadline voor kwaliteitsupdates, de deadline voor functieupdates en de respijtperiode.
+
+00:17:21.420 --> 00:17:23.220
+Daar zullen we later uitgebreid op ingaan.
+
+00:17:23.440 --> 00:17:26.220
+Weet voor nu alleen dat ze in hetzelfde scherm staan naast de uitstelperiodes.
+
+00:17:26.420 --> 00:17:28.120
+Dan is er nog het blok voor de gebruikerservaring.
+
+00:17:28.300 --> 00:17:29.880
+Hier komt beleid samen met de persoon.
+
+00:17:30.080 --> 00:17:30.800
+Actieve uren.
+
+00:17:30.960 --> 00:17:34.140
+Je stelt een begin- en eindtijd in en Windows zal het apparaat binnen dat venster niet herstarten.
+
+00:17:34.320 --> 00:17:36.020
+Het maximale bereik is 18 uur.
+
+00:17:36.160 --> 00:17:41.580
+Er is ook een instelling waarmee Windows de actieve uren automatisch aanpast op basis van hoe de persoon het apparaat daadwerkelijk gebruikt.
+
+00:17:41.760 --> 00:17:43.960
+Handig voor laptops die geen vast schema volgen.
+
+00:17:43.960 --> 00:17:45.540
+Dan het gedrag bij herstarten.
+
+00:17:45.760 --> 00:17:47.100
+Laat je de gebruiker dit plannen?
+
+00:17:47.300 --> 00:17:48.560
+Forseer je het na de deadline?
+
+00:17:48.760 --> 00:17:52.440
+Hoeveel dagen aan herinneringen krijgen ze en wanneer veranderen de herinneringen in een aftelling?
+
+00:17:52.640 --> 00:17:54.040
+En dan de stille instellingen.
+
+00:17:54.200 --> 00:17:56.160
+Of gebruikers zelf updates kunnen pauseren?
+
+00:17:56.380 --> 00:17:58.420
+Of ze op verzoek naar Windows-updates kunnen zoeken?
+
+00:17:58.620 --> 00:18:01.240
+Of de update-melding überhaupt verschijnt of stil blijft?
+
+00:18:01.420 --> 00:18:02.820
+Dit lijken kleine voorkeuren.
+
+00:18:03.060 --> 00:18:03.820
+Dat zijn ze niet.
+
+00:18:04.000 --> 00:18:07.020
+Elke optie bepaalt of de gebruiker invloed heeft op het beleid of het alleen kan inzien.
+
+00:18:07.200 --> 00:18:09.680
+Als uw gebruikers toestaat updates te pauseren, zullen sommigen dat doen.
+
+00:18:09.680 --> 00:18:12.880
+En een gepauzeerd apparaat is een apparaat dat niet langer voldoet aan uw uitstelberekeningen.
+
+00:18:13.020 --> 00:18:15.360
+Nu twee instellingen die gemakkelijk over het hoofd worden gezien.
+
+00:18:16.040 --> 00:18:16.440
+Onderhoudskanaal.
+
+00:18:16.620 --> 00:18:20.980
+Voor de meeste organisaties is het antwoord het kanaal voor algemene beschikbaarheid, de normale release die iedereen krijgt.
+
+00:18:21.120 --> 00:18:22.440
+Het is niet voor niets de standaard.
+
+00:18:22.620 --> 00:18:24.680
+Het is wat Microsoft op grote schaal ondersteunt.
+
+00:18:24.900 --> 00:18:26.140
+Dan de pre-release opties.
+
+00:18:26.360 --> 00:18:33.040
+In Toon kan apparaten inschrijven voor de Windows-insider-kanalen, beta- of release preview, zodat een kleine groep wijzigingen ziet voordat iedereen ze krijgt.
+
+00:18:33.220 --> 00:18:35.520
+Dat kan een slimme ring voor vroegtijdige waarschuwing zijn.
+
+00:18:35.520 --> 00:18:41.380
+Release preview laat u in het bijzonder de volgende kwaliteitsupdate testen voordat deze uitkomt, maar het is geen plek voor apparaten waar men afhankelijk van is.
+
+00:18:41.520 --> 00:18:43.240
+Pre-release builds kunnen fouten bevatten.
+
+00:18:43.420 --> 00:18:44.420
+Daar zijn ze voor bedoeld.
+
+00:18:44.620 --> 00:18:45.540
+Dat is dus het hele overzicht.
+
+00:18:45.700 --> 00:18:49.760
+Twee uitstelperiodes, deadlines en uitloop, actieve uren en herstarts, gebruikersbediening, een kanaal.
+
+00:18:49.860 --> 00:18:51.440
+En eerlijk gezegd is niets ervan moeilijk.
+
+00:18:51.600 --> 00:18:53.320
+Elke instelling heeft een getal of een schakelaar.
+
+00:18:53.440 --> 00:18:55.940
+U kunt het hele beleid in een paar minuten lezen en begrijpen wat het doet.
+
+00:18:56.100 --> 00:18:59.840
+Er is geen mysterie aan de instellingen, maar dat is precies waarom teams een vals gevoel van vooruitgang krijgen.
+
+00:18:59.840 --> 00:19:04.060
+Ze maken één beleid, kiezen verstandige cijfers, wijzen het aan iedereen toe en beschouwen het als klaar.
+
+00:19:04.160 --> 00:19:07.420
+Eén ring, één klok, één weddenschap geplaatst op elk apparaat tegelijk.
+
+00:19:07.540 --> 00:19:08.980
+De instellingen zijn eenvoudig.
+
+00:19:09.140 --> 00:19:11.420
+Het ontwerp van de ringen is waar teams de fout in gaan.
+
+00:19:11.680 --> 00:19:14.360
+Ringen ontwerpen, test, pilot, breed, kritiek.
+
+00:19:14.500 --> 00:19:15.720
+Een ring is een weddenschap.
+
+00:19:15.780 --> 00:19:19.500
+Elke ring plaatst dezelfde weddenschap op een andere groep apparaten op een ander moment.
+
+00:19:19.740 --> 00:19:22.020
+De eerste ring vertelt u of de update veilig is.
+
+00:19:22.180 --> 00:19:25.380
+De laatste ring is de plek waar u zich het minst kunt veroorloven om te ontdekken dat dit niet zo is.
+
+00:19:25.720 --> 00:19:27.880
+Ringontwerp komt in elke fase neer op drie vragen.
+
+00:19:27.880 --> 00:19:34.760
+Hoeveel apparaten zitten erin, hoeveel schade kunnen ze verdragen en hoe goed is het signaal dat u terugkrijgt, omvang, risico en signaalkwaliteit.
+
+00:19:34.980 --> 00:19:36.340
+Dit is hoe ze zich tot elkaar verhouden.
+
+00:19:36.500 --> 00:19:38.220
+Een kleine ring is goedkoop om te laten falen.
+
+00:19:38.380 --> 00:19:42.740
+Als tien apparaten uitvallen, hebben tien mensen een slechte middag, maar tien apparaten is ook een magere steekproef.
+
+00:19:42.900 --> 00:19:50.060
+Als de update slechts één laptopmodel kapot maakt en geen van uw tien apparaten heeft dat model, zegt het signaal dat alles veilig is, terwijl het probleem twee ringen verderop ligt.
+
+00:19:50.220 --> 00:19:56.420
+Een grote ring geeft u het tegenovergestelde, een geweldig signaal omdat het elk model en elke app combinatie dekt, maar als het misgaat, is de impact groot.
+
+00:19:56.420 --> 00:19:58.360
+U kiest er dus niet één, u stapelt ze.
+
+00:19:58.520 --> 00:20:02.120
+Elke ring is groter dan de voorrige en elke ring verdient het vertrouwen van de volgende.
+
+00:20:02.340 --> 00:20:07.160
+De structuur waar de meeste teams op uitkomen heeft vier fases, test, pilot, breed, kritiek.
+
+00:20:07.300 --> 00:20:09.940
+Test is klein, misschien één of twee procent van het totaal.
+
+00:20:10.120 --> 00:20:12.880
+Het doel is om één vraag te beantwoorden, installeert dit überhaupt.
+
+00:20:13.080 --> 00:20:16.760
+Een korte uitstelperiode, soms nul dagen, zodat de update direct bij release wordt gezien.
+
+00:20:16.920 --> 00:20:20.020
+Pilot is groter, zegt vijf tot tien procent, een paar dagen na test.
+
+00:20:20.200 --> 00:20:21.080
+De taak is anders.
+
+00:20:21.340 --> 00:20:25.860
+Het beantwoord of echt werk nog werkt, echte randapparatuur, echte gewoontes, breed is het grootste deel.
+
+00:20:25.860 --> 00:20:28.320
+De meeste van je apparaten lopen een week of langer achter.
+
+00:20:28.500 --> 00:20:33.400
+Tegen de tijd dat een update, breed, bereikt, staan er twee ringen aan bewijs achter en, kritiek, komt bewust als laatste.
+
+00:20:33.540 --> 00:20:35.220
+We komen nog terug op wie daar thuis hoort.
+
+00:20:35.440 --> 00:20:36.400
+Waarom vieren niet twee?
+
+00:20:36.560 --> 00:20:39.660
+Omdat twee ringen je één beslismoment geven, vroege groep, iedereen de rest.
+
+00:20:39.840 --> 00:20:42.420
+Als de vroege groep schoon is, krijgt iedereen de update tegelijk.
+
+00:20:42.580 --> 00:20:44.280
+Je hele omgeving wordt dan de tweede test.
+
+00:20:44.500 --> 00:20:45.500
+Dat is geen ringmodel.
+
+00:20:45.740 --> 00:20:47.300
+Dat is een vertraging met extra stappen.
+
+00:20:47.440 --> 00:20:49.200
+Twee ringen dwingen ook tot een slecht compromis.
+
+00:20:49.320 --> 00:20:52.580
+De vroege groep moet klein genoeg zijn om veilig te zijn en groot genoeg om representatief te zijn.
+
+00:20:52.580 --> 00:20:55.220
+Die doelen werken elkaar tegen, dus faal je in een van beide.
+
+00:20:55.440 --> 00:20:57.880
+Vier ringen laten elke fase één taak uitvoeren.
+
+00:20:58.080 --> 00:21:01.500
+Test controleert de installatie, pilot controleert het werk, breed is de uithol.
+
+00:21:01.640 --> 00:21:03.940
+Kritiek is de beschermde groep die het meeste bewijs krijgt.
+
+00:21:04.100 --> 00:21:04.960
+Dus wie hoort waar?
+
+00:21:05.100 --> 00:21:05.740
+Test is IT.
+
+00:21:06.120 --> 00:21:10.460
+De mensen die een foutcode begrijpen, niet in paniek raken bij een herstart en precies vertellen wat er gebeurde.
+
+00:21:10.660 --> 00:21:12.360
+Dat is een keuze voor signaalkwaliteit.
+
+00:21:12.560 --> 00:21:14.760
+Een vage klacht van een drukke verkoper is ruis.
+
+00:21:14.940 --> 00:21:18.620
+Een screenshot en logbestand van een engineer is data, maar IT alleen is niet genoeg.
+
+00:21:18.620 --> 00:21:20.460
+IT-apparaten zijn opgeruimd.
+
+00:21:20.600 --> 00:21:24.660
+Ze draaien weinig apps en hebben weinig eigenaardigheden, dus de pilot ring heeft power users nodig.
+
+00:21:24.860 --> 00:21:28.360
+Mensen die in de uithoeken van je software werken, de analist met zware macro-werkmappen,
+
+00:21:28.560 --> 00:21:30.600
+de designers met drie monitoren en een bookingstation.
+
+00:21:30.860 --> 00:21:35.140
+Zij maken dingen kapot die schone machines nooit raken, en hardware is net zo belangrijk als mensen.
+
+00:21:35.360 --> 00:21:39.760
+Kies pilot apparaten zodat elk belangrijk model in je organisatie tenminste een paar vertegenwoordigers heeft.
+
+00:21:40.000 --> 00:21:44.520
+Hetzelfde geldt voor drivers, beveiligingsagents en die ene VP en client waar niemand over wil praten.
+
+00:21:44.700 --> 00:21:47.680
+Een pilot ring die een hardware familie overslaat, is daarvoor blind.
+
+00:21:47.680 --> 00:21:50.820
+Nu het moeilijke deel, de mensen die vragen om ergens anders te zijn.
+
+00:21:51.380 --> 00:21:54.960
+Directieleden, het instinct is om hen in de laatste ring te plaatsen om ze te beschermen tegen verstoring.
+
+00:21:55.220 --> 00:21:57.760
+Dat klinkt redelijk totdat je aan de risicoberekening denkt.
+
+00:21:58.300 --> 00:22:01.760
+Directieleden beschikken over de gevoeligste data en zijn het favoriete doelwit voor aanvallers.
+
+00:22:01.920 --> 00:22:04.720
+Hun updates het langst uitstelen is precies de omgekeerde wereld.
+
+00:22:04.880 --> 00:22:08.220
+Een beter antwoord is om hen in de brede groep op te nemen, niet als eerste, niet als laatste,
+
+00:22:08.400 --> 00:22:11.780
+dicht bij de rest van de organisatie, met een vast aanspreekpunt voor als er iets misgaat.
+
+00:22:11.780 --> 00:22:16.120
+Kritiek is voor apparaten waarbij een herstart op het verkeerde moment echt geld kost of erger,
+
+00:22:16.320 --> 00:22:20.140
+kiosken, verkooppunten, fabrieksmachines gekoppeld aan een productielijn,
+
+00:22:20.360 --> 00:22:22.160
+klinische werkstations in een ziekenhuis.
+
+00:22:22.400 --> 00:22:25.320
+Deze apparaten hebben de meeste bewijslast en planning nodig.
+
+00:22:25.520 --> 00:22:29.100
+Een langere uitstelperiode geeft ze dat, maar langer uitstel betekent niet, geen deadline.
+
+00:22:29.320 --> 00:22:32.960
+Het betekent een weloverwogen venster dat is afgestemd met de mensen die de lijn of de afdeling beheren,
+
+00:22:33.100 --> 00:22:34.100
+vastgelegd en nageleefd.
+
+00:22:34.240 --> 00:22:35.060
+Dat is het ontwerp.
+
+00:22:35.220 --> 00:22:38.260
+Vier ringen, verschillende groottes, verschillende taken, verschillende risico's.
+
+00:22:38.260 --> 00:22:39.980
+Maar een ring is slechts uitstel op papier.
+
+00:22:40.160 --> 00:22:42.300
+Het werkt alleen als de deadline erachter echt is.
+
+00:22:42.500 --> 00:22:44.800
+Deadlines, respijtperiodes en herstartgedrag.
+
+00:22:44.960 --> 00:22:47.020
+Uitstel bepaalt wanneer een update wordt aangeboden.
+
+00:22:47.200 --> 00:22:49.260
+Een deadline bepaalt wanneer het aanbod verloopt.
+
+00:22:49.480 --> 00:22:51.560
+Dat is het verschil tussen een suggestie en een regel.
+
+00:22:51.860 --> 00:22:56.040
+Zonder deadline kan een gebruiker de update voor altijd negeren en stelt je ringberekening niets voor.
+
+00:22:56.240 --> 00:22:59.300
+Met een deadline staat er een datum in de agenda waarop Windows stopt met vragen.
+
+00:22:59.800 --> 00:23:02.420
+Kwaliteitsupdates en functieupdates krijgen elk hun eigen deadline.
+
+00:23:02.620 --> 00:23:04.900
+Je stelt ze afzonderlijk in binnen hetzelfde beleid.
+
+00:23:04.900 --> 00:23:08.360
+Voor kwaliteitsupdates is de deadline een aantal dagen van 0 tot 30.
+
+00:23:08.620 --> 00:23:13.000
+Dit wordt geteld vanaf het moment dat de update aan het apparaat wordt aangeboden, niet vanaf de releasedatum.
+
+00:23:13.140 --> 00:23:16.540
+Dus een ring met 7 dagen uitstel en een deadline van 2 dagen betekent dit.
+
+00:23:16.680 --> 00:23:20.300
+De update wordt op dag 7 aangeboden en Windows dwingt de installatie af op dag 9.
+
+00:23:20.760 --> 00:23:24.200
+Functieupdates werken op dezelfde manier met hetzelfde bereik, maar het risico is anders.
+
+00:23:24.400 --> 00:23:27.040
+Een kwaliteitsupdate duurt minuten en vereist 1 herstart.
+
+00:23:27.200 --> 00:23:30.440
+Een functieupdate kan veel langer duren en de herstartcycli zijn intensiever.
+
+00:23:30.440 --> 00:23:35.580
+Daarom geven de meeste teams functieupdates een langere deadline en koppelen ze dit aan een duidelijke melding aan gebruikersruim van tevoren.
+
+00:23:35.800 --> 00:23:37.120
+Dan is er nog de respijtperiode.
+
+00:23:37.320 --> 00:23:40.820
+De respijtperiode is extra tijd na de deadline voordat Windows de herstart afdwingt.
+
+00:23:40.980 --> 00:23:42.520
+Deze loopt van 0 tot 7 dagen.
+
+00:23:42.820 --> 00:23:45.400
+Zie het als een buffer die alleen in één situatie van belang is.
+
+00:23:45.680 --> 00:23:49.060
+Wanneer een apparaat weer online komt nadat het weg is geweest, ziet dat er zo uit.
+
+00:23:49.220 --> 00:23:50.920
+Een laptop zit 2 weken in een tas.
+
+00:23:51.140 --> 00:23:53.440
+De deadline verstrijkt terwijl het apparaat is uitgeschakeld.
+
+00:23:53.580 --> 00:23:55.620
+De gebruiker opent de laptop op maandagochtend.
+
+00:23:55.620 --> 00:24:00.540
+Zonder uitstelperiode kan Windows die machine minuten na het opstarten herstarten, midden in de voorbereiding van een presentatie.
+
+00:24:00.720 --> 00:24:04.160
+Met een uitstelperiode krijgt de gebruiker een paar dagen om op eigen voorwaarden te herstarten.
+
+00:24:04.300 --> 00:24:05.680
+Hier wordt vertrouwen gewonnen of verloren.
+
+00:24:06.020 --> 00:24:08.100
+Gebruikers merken snel hoe jouw beleid aanvoelt.
+
+00:24:08.320 --> 00:24:11.720
+Als een gedwongen herstart ooit tijdens een klantgesprek plaatsvindt, onthouden ze dat.
+
+00:24:11.900 --> 00:24:14.880
+De volgende keer zoeken ze naar de pauzeknop of stoppen ze helemaal met herstarten,
+
+00:24:15.040 --> 00:24:18.080
+omdat ze besloten hebben dat de machine niet te vertrouwen is met het kiezen van het juiste moment.
+
+00:24:18.280 --> 00:24:21.020
+Een slechte herstart leert 10 mensen om de volgende tegen te werken.
+
+00:24:21.180 --> 00:24:23.520
+Een uitstelperiode is goedkope verzekering daartegen.
+
+00:24:23.520 --> 00:24:26.840
+Het kost je een paar dagen blootstelling op apparaten die toch al offline waren.
+
+00:24:27.020 --> 00:24:28.280
+Nu, de herstart zelf.
+
+00:24:28.500 --> 00:24:30.100
+Windows probeert eerst beleefd te zijn.
+
+00:24:30.280 --> 00:24:33.020
+Het installeert updates op de achtergrond en wacht daarna op een herstart.
+
+00:24:33.240 --> 00:24:35.340
+Buiten actieve uren kan het uit zichzelf herstarten.
+
+00:24:35.600 --> 00:24:37.160
+Binnen actieve uren houdt het zich in.
+
+00:24:37.320 --> 00:24:39.160
+Er is nog een beveiliging die mensen vergeten.
+
+00:24:39.760 --> 00:24:40.160
+Bezigheidssoeren.
+
+00:24:40.380 --> 00:24:43.580
+Windows kan detecteren dat iemand actief werkt in een vergadering of hun scherm deelt
+
+00:24:43.580 --> 00:24:46.360
+en stelt de herstart uit, zelfs buiten de ingestelde actieve uren.
+
+00:24:46.520 --> 00:24:49.740
+De instelling in het beleid laat je het bezigheidsvenster definiëren
+
+00:24:49.740 --> 00:24:53.080
+en het apparaat respecteert dit totdat de deadline de kwestie afdwingt.
+
+00:24:53.080 --> 00:24:55.400
+En meldingen zijn belangrijker dan mensen verwachten.
+
+00:24:55.580 --> 00:24:58.980
+Je kunt herinneringen voor de herstart configureren, het aantal waarschuwingsdagen,
+
+00:24:59.220 --> 00:25:02.280
+het aantal uren voor de aftelling op het scherm en of de gebruiker kan sluimeren.
+
+00:25:02.460 --> 00:25:05.840
+Een gedwongen herstart die drie dagen van tevoren wordt aangekondigd, voelt als een regel.
+
+00:25:06.040 --> 00:25:08.460
+Een gedwongen herstart zonder waarschuwing voelt als een hinderlaag.
+
+00:25:08.580 --> 00:25:11.200
+Je kunt Windows ook vertellen om de beleefde fase volledig over te slaan.
+
+00:25:11.460 --> 00:25:13.440
+Automatisch herstarten bij de deadline met een korte waarschuwing.
+
+00:25:13.640 --> 00:25:15.160
+Dat is de juiste keuze voor een kiosk.
+
+00:25:15.320 --> 00:25:16.900
+Het is een harde keuze voor een verkoper.
+
+00:25:17.100 --> 00:25:18.500
+Dit is de spanning die eronder ligt.
+
+00:25:18.920 --> 00:25:20.200
+Beveiliging wil de deadline kort.
+
+00:25:20.200 --> 00:25:22.640
+Elke extra dag is een dag dat de patch niet is toegepast.
+
+00:25:23.260 --> 00:25:24.520
+Productiviteit wil de deadline lang.
+
+00:25:24.700 --> 00:25:28.020
+Elke gedwongen herstart kost iemand hun flow en soms hun onopgeslagen werk.
+
+00:25:28.200 --> 00:25:29.460
+Beide partijen hebben gelijk.
+
+00:25:29.640 --> 00:25:31.700
+De fout is om dit als één globale instelling te zien.
+
+00:25:31.940 --> 00:25:35.960
+Stel het overal strak in en je creëert een stille opstand onder de mensen die zich het minst onderbrekingen kunnen veroorloven.
+
+00:25:36.140 --> 00:25:39.640
+Stel het overal ruim in en je hebt een zeer beleefde manier gebouwd om kwetsbaar te blijven.
+
+00:25:39.800 --> 00:25:41.820
+De betere zet is degene die we al hebben beschreven.
+
+00:25:42.000 --> 00:25:43.180
+Koppel de getallen aan de ring.
+
+00:25:43.380 --> 00:25:47.180
+Test krijgt een korte deadline en geen uitstel, omdat die gebruikers IT zijn en dat verwachten.
+
+00:25:47.180 --> 00:25:50.820
+Broad krijgt een gematigde deadline, een uitstelperiode en ruime meldingen.
+
+00:25:50.940 --> 00:25:54.020
+Critical krijgt een venster dat is afgestemd met de mensen die de lijn beheren.
+
+00:25:54.160 --> 00:25:59.540
+Verschillende groepen, verschillende tolerantie, vastgelegd, verdedigd, beoordeeld en dat regelt kwaliteitsupdates.
+
+00:25:59.720 --> 00:26:02.920
+Maar ringen en deadlines sturen alleen het maandelijkse patchritme netjes aan.
+
+00:26:03.280 --> 00:26:04.820
+Functieupdates zijn van een andere orde.
+
+00:26:05.020 --> 00:26:09.960
+Een nieuwe versie van Windows is groter, risicovoller en gekoppeld aan een ondersteuningsagenda, dus die vereis een eigen beheer.
+
+00:26:10.420 --> 00:26:12.480
+Functieupdatebeleid, het vastzetten van de versie.
+
+00:26:12.480 --> 00:26:15.880
+Update ringen kunnen een functieupdate uitstelen, maar ze kunnen er niet in kiezen.
+
+00:26:16.080 --> 00:26:16.920
+Dat is het hiaat.
+
+00:26:17.080 --> 00:26:20.660
+Een ring zegt, wacht dit aantal dagen en neem daarna wat Microsoft aanbiedt.
+
+00:26:20.740 --> 00:26:24.640
+Als er in die tijd een nieuwe Windows versie uitkomt, maakt het de ring niet uit welke versie dat is.
+
+00:26:24.800 --> 00:26:25.880
+Hij telt alleen de dagen.
+
+00:26:26.680 --> 00:26:27.700
+Functieupdatebeleid lost dat op.
+
+00:26:27.840 --> 00:26:30.480
+Je vindt ze in Intune onder apparaten, Windows en dan functieupdates.
+
+00:26:31.280 --> 00:26:33.160
+Een functieupdatebeleid heeft één taak.
+
+00:26:33.300 --> 00:26:38.680
+Het benoemt een versie, bijvoorbeeld Windows 11.2.4H2, en geeft dit dooraan elk apparaat in de toegewezen groep.
+
+00:26:38.680 --> 00:26:44.940
+Dit is waar je stopt. Niet de nieuwste, niet wat na 90 dagen beschikbaar is, maar een specifieke versie die bewust is gekozen.
+
+00:26:45.140 --> 00:26:46.540
+Dit is waarom dat belangrijk is.
+
+00:26:46.800 --> 00:26:48.700
+Zonder vastzetting verschuift het doel onder je voeten.
+
+00:26:48.960 --> 00:26:51.040
+Microsoft brengt één keer per jaar een nieuwe versie uit.
+
+00:26:51.200 --> 00:26:54.520
+Een apparaat dat zijn uitstelperiode afrondt, kan terechtkomen op een versie waarop je apps nooit zijn getest.
+
+00:26:54.700 --> 00:26:55.720
+Niemand heeft dat besloten.
+
+00:26:55.920 --> 00:26:56.840
+De kalender deed dat.
+
+00:26:57.020 --> 00:26:58.600
+Met een vastzetting is de beslissing aan jou.
+
+00:26:58.760 --> 00:27:00.880
+Het apparaat werkt bijna die versie en blijft daarop staan.
+
+00:27:01.080 --> 00:27:03.160
+Als er een nieuwere versie uitkomt, gebeurt er niets.
+
+00:27:03.160 --> 00:27:07.420
+Je apparaten blijven de gekozen versie gebruiken en ontvangen daarbovenop maandelijkse kwaliteitsupdates.
+
+00:27:07.580 --> 00:27:09.800
+Het beleid is dus eigenlijk een verklaring over de scope.
+
+00:27:09.980 --> 00:27:11.300
+Deze versie is goedgekeurd.
+
+00:27:11.460 --> 00:27:13.720
+Iets nieuwers is dat niet, totdat iemand anders beslist.
+
+00:27:13.940 --> 00:27:18.040
+Wat gebeurt er nu als een ring en een functie-updatebeleid beide op hetzelfde apparaat van toepassing zijn?
+
+00:27:18.200 --> 00:27:19.780
+Het functie-updatebeleid wint.
+
+00:27:20.020 --> 00:27:24.240
+Wanneer je er een toewijst, doet het uitstel van functie-updates in de ring ervoor dat apparaat niet meer toe.
+
+00:27:24.420 --> 00:27:28.380
+Intune zet de instellingen voor het uitstel van functie-updates in de ring opzij...
+
+00:27:28.380 --> 00:27:30.960
+...en het beleid bepaalt welke versie wordt aangeboden en wanneer.
+
+00:27:33.160 --> 00:27:37.300
+Het uitstel van kwaliteitsupdates, deadlines, herstarts, actieve uren, die scheiding is eigenlijk heel netjes.
+
+00:27:37.480 --> 00:27:38.900
+De ring beheert het maandelijkse ritme.
+
+00:27:39.100 --> 00:27:41.220
+Het functie-updatebeleid beheert de jaarlijkse beslissing.
+
+00:27:41.380 --> 00:27:43.220
+Twee besturingen, twee taken, geen overlap.
+
+00:27:43.420 --> 00:27:44.640
+Maar mensen zien dit over het hoofd.
+
+00:27:44.760 --> 00:27:47.200
+Ze stellen een uitstel van 180 dagen in voor functie-updates in de ring...
+
+00:27:47.200 --> 00:27:49.360
+...en wijzen dan een functie-updatebeleid toe met een startdatum in de volgende maand.
+
+00:27:49.560 --> 00:27:51.940
+Vervolgens vragen ze zich af waarom die 180 dagen worden genegeerd.
+
+00:27:52.140 --> 00:27:52.900
+Dat is geen bak.
+
+00:27:53.100 --> 00:27:54.320
+Het beleid heeft die vervangen.
+
+00:27:54.520 --> 00:27:57.820
+Als je vertraging wilt, bouw je die in de uitholinstellingen van het beleid niet in de ring.
+
+00:28:03.160 --> 00:28:04.260
+Deze informatie beschikbaar komt voor de groep.
+
+00:28:04.380 --> 00:28:05.940
+Voor die datum wordt er niets aangeboden.
+
+00:28:06.160 --> 00:28:09.540
+Op die datum komen apparaten in aanmerking en bij de normale check-in wordt de update opgepikt.
+
+00:28:09.700 --> 00:28:11.240
+Ten tweede, gefaseerde uitrol.
+
+00:28:11.420 --> 00:28:15.240
+In plaats van elk apparaat op dezelfde dag in aanmerking te laten komen, kun je het spreiden.
+
+00:28:15.440 --> 00:28:18.160
+Je kiest een einddatum en een tijdsverschil tussen groepen...
+
+00:28:18.160 --> 00:28:20.220
+...en in toen spreidt de geschiktheid over die periode.
+
+00:28:20.520 --> 00:28:24.400
+Duizend apparaten downloaden dan niet allemaal op dezelfde dinsdag meerdere gigabytes.
+
+00:28:24.720 --> 00:28:27.280
+Je netwerk en je helpdesk zullen het verschil merken.
+
+00:28:27.440 --> 00:28:29.260
+Ten derde, groepsgebaseerde golven.
+
+00:28:29.260 --> 00:28:34.400
+In plaats van één grote toewijzing, maak je afzonderlijke beleidsregels voor aparte groepen, elk met een eigen startatum.
+
+00:28:34.540 --> 00:28:38.620
+IT krijgt de versie als eerste, de pilot volgt twee weken later en de brede uitrol een maand daarna.
+
+00:28:38.780 --> 00:28:43.160
+Dat is dezelfde ringlogica die we eerder gebruikten, toegepast op de jaarlijkse beslissing in plaats van de maandelijkse.
+
+00:28:43.340 --> 00:28:45.660
+Zelfde groepen, zelfde volgorde, langere tijdschaal.
+
+00:28:45.780 --> 00:28:49.200
+Het werkt omdat de pin elke groep op een bekend toehoudt terwijl de anderen inhalen.
+
+00:28:49.320 --> 00:28:52.140
+Er is nog één ding te zeggen over hoe een gepind apparaat zich gedraagt.
+
+00:28:52.320 --> 00:28:56.440
+Als een apparaat op een oudere versie zit dan het beleid aangeeft, wordt het bijgewerkt naar de gepinde versie.
+
+00:28:56.440 --> 00:28:58.880
+Als het al op de gepinde versie zit, verandert er niets.
+
+00:28:59.040 --> 00:29:02.260
+En als het op een nieuwere versie zit dan de pin, gaat het apparaat niet terug naar een eerdere versie.
+
+00:29:02.420 --> 00:29:04.060
+Het beleid kan een apparaat op zijn plek houden.
+
+00:29:04.220 --> 00:29:06.500
+Het kan een al geïnstalleerde functie update niet ongedaan maken.
+
+00:29:06.680 --> 00:29:07.880
+De volgorde is dus van belang.
+
+00:29:08.120 --> 00:29:10.480
+Wijs het beleid toe voordat de update arriveert, niet erna.
+
+00:29:10.660 --> 00:29:12.020
+Een pin voelt nu als veiligheid.
+
+00:29:12.240 --> 00:29:13.440
+Jij hebt de versie gekozen.
+
+00:29:13.680 --> 00:29:17.100
+Niets verrast je, maar een pin is een beslissing, en elke beslissing heeft een vervaldatum.
+
+00:29:17.260 --> 00:29:18.780
+Windows-versies leven niet eeuwig.
+
+00:29:19.040 --> 00:29:21.800
+Microsoft stopt volgens een vast schema met het ondersteunen van elke versie.
+
+00:29:21.800 --> 00:29:26.320
+De versie die je vandaag pint, heeft een laatste dag voor beveiligingsupdates, en die dag staat al ergens in een agenda.
+
+00:29:26.540 --> 00:29:32.060
+Pin een versie en kijk er niet meer naar om, en je hebt een apparaat dat perfect beheerd wordt, maar langzaam onbeschermd raakt.
+
+00:29:32.260 --> 00:29:35.680
+De echte vraag is dus niet hoe je pint, maar hoe lang de pin mag blijven staan.
+
+00:29:36.080 --> 00:29:38.540
+Windows-levenscyclus en de ondersteuningskalender.
+
+00:29:38.760 --> 00:29:41.580
+Elke Windows-versie heeft een geboortedatum en een sterfdatum.
+
+00:29:41.740 --> 00:29:43.460
+Die tweede datum vergeten mensen vaak.
+
+00:29:43.680 --> 00:29:44.920
+Begin bij Windows 11.
+
+00:29:44.920 --> 00:29:47.500
+Microsoft brengt één functie-update per jaar uit.
+
+00:29:47.680 --> 00:29:51.260
+In de tweede helft van het kalenderjaar krijgt elke release zijn eigen onderhoudsklok.
+
+00:29:51.420 --> 00:29:54.040
+Die klok bepaalt wanneer je pin ingaat en wanneer deze afloopt.
+
+00:29:54.220 --> 00:29:55.320
+Windows 10 is anders.
+
+00:29:55.580 --> 00:29:57.740
+Het is het oudere model en het is op weg naar de uitgang.
+
+00:29:57.940 --> 00:30:02.920
+De laatste feature-release, versie 2.2h2, heeft een vaste einddatum voor gratis beveiligingsupdates,
+
+00:30:03.080 --> 00:30:04.900
+en daarna krijgt de hele productlijn ze niet meer.
+
+00:30:04.900 --> 00:30:10.880
+Alles wat na die datum nog op Windows 10 draait, heeft geen vangnet meer, tenzij je betaalt voor uitgebreide beveiligingsupdates.
+
+00:30:11.060 --> 00:30:14.540
+Dus wanneer je een versie vastzet, kies je ook een deadline voor jezelf.
+
+00:30:14.540 --> 00:30:16.600
+Hoe lang gaat elke versie eigenlijk mee?
+
+00:30:16.840 --> 00:30:18.060
+Dat hangt af van de editie.
+
+00:30:18.260 --> 00:30:22.260
+Enterprise & Education Edities krijgen 36 maanden ondersteuning voor de herfstrelease.
+
+00:30:22.500 --> 00:30:25.520
+36 maanden, drie volle jaren aan maandelijkse beveiligingsfixes.
+
+00:30:25.780 --> 00:30:30.000
+Home & Pro krijgen 24 maanden, en de voorjaarsreleases, voor zover die er zijn, krijgen minder.
+
+00:30:30.000 --> 00:30:35.120
+De editie bepaalt de kalender, dus controleer welke je apparaten echt draaien voordat je vertrouwt op de datum die je onthouden hebt.
+
+00:30:35.320 --> 00:30:36.940
+Dat verschil is belangrijker dan het lijkt.
+
+00:30:37.100 --> 00:30:40.480
+Een gemengd systeem, deels Enterprise en deels Pro, heeft niet één vervaldatum.
+
+00:30:40.640 --> 00:30:43.220
+De Pro-apparaten op dezelfde versie verlopen een vol jaar eerder.
+
+00:30:43.220 --> 00:30:44.740
+Dezelfde pin, een andere afgrond.
+
+00:30:44.920 --> 00:30:46.060
+Dus wat gebeurt er bij die afgrond?
+
+00:30:46.260 --> 00:30:47.020
+Niets dramatisch.
+
+00:30:47.240 --> 00:30:48.120
+Dat is juist het probleem.
+
+00:30:48.280 --> 00:30:49.500
+Het apparaat blijft opstarten.
+
+00:30:49.680 --> 00:30:50.600
+Apps blijven openen.
+
+00:30:50.760 --> 00:30:52.020
+De gebruiker merkt niets.
+
+00:30:52.220 --> 00:30:57.600
+Maar de maandelijkse kwaliteitsubdates stoppen voor die versie en elk lek dat daarna wordt gevonden, blijft voor altijd open.
+
+00:30:57.600 --> 00:31:01.820
+De machine wordt een langzaam verouderend doelwit dat er op een dashboard nog steeds gezond uitziet.
+
+00:31:01.980 --> 00:31:04.060
+En Windows laat een apparaat ook niet met rust.
+
+00:31:04.060 --> 00:31:11.340
+Zodra een versie het einde van de ondersteuning bereikt, kan Windows update het apparaat naar een nieuwere versie duwen, zelfs tegen je zin, tenzij een beleid het tegenhoudt.
+
+00:31:11.400 --> 00:31:14.480
+Een pin kan een versie niet vasthouden voorbij de eigen verloopdatum.
+
+00:31:14.640 --> 00:31:19.460
+Op dat moment heb je de discussie met de kalender verloren en update je volgens jouw planning of die van Microsoft.
+
+00:31:19.880 --> 00:31:22.180
+Daarom kunnen functie-updates geen project zijn.
+
+00:31:22.360 --> 00:31:24.600
+Een project heeft een start, een budget en een einde.
+
+00:31:24.820 --> 00:31:27.760
+Iemand zet het op, een team draait het zes maanden en dan is het voorbij.
+
+00:31:27.760 --> 00:31:32.400
+En dan, twaalf maanden later, komt de volgende versie en weet niemand meer hoe de voorrige verliep.
+
+00:31:32.480 --> 00:31:33.940
+De levenscyclus werkt niet zo.
+
+00:31:34.120 --> 00:31:35.200
+Het is een jaarlijks ritme.
+
+00:31:35.420 --> 00:31:38.120
+Elk jaar komt er één versie uit, elk jaar verloopt er één versie.
+
+00:31:38.260 --> 00:31:40.920
+Er is altijd een versie die je verlaat en een versie waar je naartoe gaat.
+
+00:31:41.080 --> 00:31:42.500
+De planning ziet er dus uit als een lus.
+
+00:31:42.740 --> 00:31:46.700
+Wanneer een nieuwe release uitkomt, test je deze vroegtijdig met behulp van dat release voorbeeldvenster waar we het over hadden.
+
+00:31:46.820 --> 00:31:48.300
+De pilot volgt binnen een paar maanden.
+
+00:31:48.540 --> 00:31:50.480
+De brede uitrol volgt in het half jaar daarna.
+
+00:31:50.640 --> 00:31:55.180
+En tegen de tijd dat de versie waarop je zit nog 18 maanden verwijderd is van het einde, moet de volgende al bewezen zijn.
+
+00:31:55.180 --> 00:31:57.020
+Die timing geeft je de nodige speling.
+
+00:31:57.260 --> 00:32:02.560
+Slack is wat je redt wanneer een app leverancier te laat is met een compatibiliteitsfix of een hardwaremodel een driver nodig heeft die nog niet bestaat.
+
+00:32:02.720 --> 00:32:05.400
+Teams die het als een project behandelen, krijgen het tegenovergestelde.
+
+00:32:05.560 --> 00:32:11.280
+Ze ontdekken de einddatum wanneer deze nog zes weken weg is en pushen in paniek een functie update naar het hele bedrijf zonder pilot en zonder bewijs.
+
+00:32:11.460 --> 00:32:14.760
+Dezelfde beslissing, eens rustig genomen een jaar van tevoren of onder druk genomen.
+
+00:32:15.020 --> 00:32:16.740
+Merk nu op wat we tot nu toe hebben opgebouwd.
+
+00:32:16.900 --> 00:32:19.140
+Rings, deadlines, functiebeleid, een kalender.
+
+00:32:19.360 --> 00:32:20.420
+Elk onderdeel werkt.
+
+00:32:20.420 --> 00:32:24.400
+Elk onderdeel is iets wat je ontwerpt, afstemt en beoordeelt en dat doe je elke maand en elk jaar opnieuw.
+
+00:32:24.580 --> 00:32:27.660
+Sommige organisaties willen die controle, anderen willen dat iemand anders het draagt.
+
+00:32:27.860 --> 00:32:30.400
+Dat is het punt waar het antwoord van Microsoft naar voren komt.
+
+00:32:30.620 --> 00:32:34.520
+Het is een beheerde service gebouwd op alles wat je net hebt geleerd en het heet Autopatch.
+
+00:32:34.760 --> 00:32:36.780
+Wat Windows Autopatch daadwerkelijk is.
+
+00:32:37.140 --> 00:32:38.700
+Autopatch is geen nieuwe update engine.
+
+00:32:38.960 --> 00:32:40.500
+Dat is het eerste wat duidelijk moet zijn.
+
+00:32:40.680 --> 00:32:42.600
+Er zit geen tweede systeem achter verscholen.
+
+00:32:42.960 --> 00:32:46.040
+Autopatch is een beheerde service die bovenop de twee dingen staat die je al kent.
+
+00:32:46.220 --> 00:32:48.960
+In toen voor beleid en Windows Update voor Business voor de levering.
+
+00:32:48.960 --> 00:32:52.380
+Dezelfde vliegtuigen, dezelfde motor, maar iemand anders bestuurt het.
+
+00:32:52.560 --> 00:32:54.980
+Denk na over wat je tot nu toe in deze video hebt opgebouwd.
+
+00:32:55.120 --> 00:32:58.760
+Rings, uitstelopties, deadlines, een beleid voor functieupdates, een kalender.
+
+00:32:59.000 --> 00:33:03.640
+Stuk voor stuk zijn dit beslissingen die door iemand moeten worden gemaakt, gecontroleerd en actueel gehouden.
+
+00:33:03.900 --> 00:33:07.080
+Autopatch neemt een groot deel van dat werk over en verplaatst het naar Microsoft.
+
+00:33:07.420 --> 00:33:09.100
+Dus wat neemt Microsoft precies over?
+
+00:33:09.340 --> 00:33:10.620
+Begin met het maken van de rings.
+
+00:33:10.860 --> 00:33:14.340
+Wanneer een apparaat zich bij de service aansluit, vraagt Autopatch je niet om de fase te ontwerpen.
+
+00:33:14.340 --> 00:33:18.440
+Het bouwt ze, het maakt de groepen aan, schrijft het beleid voor de update rings en wijst ze toe.
+
+00:33:18.440 --> 00:33:21.360
+Je hoeft de pagina update rings niet te openen en vanaf een leegscherm te beginnen.
+
+00:33:21.540 --> 00:33:23.880
+De rings zijn er al, met nummers die Microsoft heeft gekozen.
+
+00:33:24.260 --> 00:33:25.200
+Vervolgens, monitoring.
+
+00:33:25.520 --> 00:33:27.580
+Dit is het onderdeel dat in stilte het belangrijkst is.
+
+00:33:27.840 --> 00:33:30.580
+Autopatch kijkt hoe elke update zich gedraagt terwijl deze door de fase beweegt.
+
+00:33:30.800 --> 00:33:34.300
+Installaties die slagen, installaties die mislukken, apparaten die nooit terug rapporteren.
+
+00:33:34.400 --> 00:33:39.240
+Het leest dat signaal namens jou de klok rond in plaats van te wachten tot iemand op donderdag een dashboard opent.
+
+00:33:39.420 --> 00:33:40.220
+En dan herstel.
+
+00:33:40.460 --> 00:33:42.840
+Wanneer er iets misgaat, merkt de service het niet alleen op.
+
+00:33:42.920 --> 00:33:43.880
+Het onderneemt actie.
+
+00:33:44.060 --> 00:33:46.760
+Het kan een uithol pauzeren voordat de volgende fase de update ontvangt.
+
+00:33:46.760 --> 00:33:50.300
+Het kan apparaten markeren die vastlopen en in sommige gevallen stuurt het ze richting een oplossing.
+
+00:33:50.480 --> 00:33:52.260
+We zullen later dieper op die werking ingaan.
+
+00:33:52.660 --> 00:33:55.280
+Ringcreatie, monitoring, herstel, dat is de overdracht.
+
+00:33:55.560 --> 00:34:00.220
+Microsoft voert de cyclus uit die in een zelfbeheerde opzet toebehoort aan iemand met een vrij gaatje in de agenda.
+
+00:34:00.460 --> 00:34:02.280
+Maar hier krijgen teams een verkeerd idee.
+
+00:34:02.640 --> 00:34:04.120
+Autopatch neemt de beslissingen niet.
+
+00:34:04.280 --> 00:34:05.660
+Het voert de beslissingen uit.
+
+00:34:05.900 --> 00:34:08.140
+Wat bij u blijft, is het deel dat altijd al van u was.
+
+00:34:08.360 --> 00:34:10.260
+Welke apparaten zitten überhaupt in de service?
+
+00:34:10.560 --> 00:34:11.900
+Welke haalt u eruit en waarom?
+
+00:34:12.040 --> 00:34:14.740
+Hoeveel risico draagt de organisatie voor een bepaalde groep?
+
+00:34:14.740 --> 00:34:18.220
+Wat gebeurt er als een update op dinsdagmiddag een bedrijfsapplicatie onklaar maakt?
+
+00:34:18.960 --> 00:34:19.960
+Beleidsbeslissingen blijven bij u.
+
+00:34:20.360 --> 00:34:22.900
+Uitsluitingen blijven bij u en de verantwoordelijkheid blijft bij u.
+
+00:34:23.040 --> 00:34:25.300
+Bij dat laatste is het de moeite waard om even stil te staan.
+
+00:34:25.520 --> 00:34:28.720
+Als een patch te laat op de laptop van een leidinggevende komt en die machine wordt gehackt,
+
+00:34:28.800 --> 00:34:31.320
+zal niemand zeggen dat de Microsoft Service dat had moeten regelen.
+
+00:34:31.500 --> 00:34:33.500
+Het auditraject eindigt bij uw organisatie.
+
+00:34:33.840 --> 00:34:35.700
+Autopatch is een gedelegeerde, geen eigenaar.
+
+00:34:35.800 --> 00:34:36.900
+U geeft het werk uit handen.
+
+00:34:37.020 --> 00:34:38.600
+U geeft de verantwoordelijkheid niet uit handen.
+
+00:34:38.720 --> 00:34:41.020
+Het juiste mentale model is dus een contract met een duidelijke verdeling.
+
+00:34:41.020 --> 00:34:42.740
+Microsoft is eigenaar van de techniek.
+
+00:34:42.860 --> 00:34:44.320
+U bent eigenaar van het resultaat.
+
+00:34:44.440 --> 00:34:46.360
+Even kort over wat er nodig is om het te gebruiken,
+
+00:34:46.560 --> 00:34:51.000
+want licentiedetails veranderen en u moet ze altijd controleren in de actuele documentatie van Microsoft.
+
+00:34:51.240 --> 00:34:54.880
+In grote lijnen is Autopatch inbegrepen bij bepaalde Windows licenties,
+
+00:34:55.080 --> 00:35:01.580
+de zakelijke abonnementen zoals Windows Enterprise E3 en E5 en de Microsoft 365 bundels die deze bevatten.
+
+00:35:01.740 --> 00:35:04.580
+Het is geen los product dat u voor die abonnementen extra aanschaft.
+
+00:35:04.840 --> 00:35:07.100
+Sommige businessabonnementen zijn inmiddels ook toegevoegd,
+
+00:35:07.220 --> 00:35:09.820
+dus de precieze lijst is het bekijken waard voordat u er uw plannen op baseert.
+
+00:35:09.820 --> 00:35:12.080
+De vereisten liggen één niveau onder de licentie.
+
+00:35:12.220 --> 00:35:14.120
+U hebt Intune nodig als beheerplatform.
+
+00:35:14.320 --> 00:35:18.040
+U hebt apparaten nodig die direct of hybride zijn gekoppeld aan Microsoft Entra ID.
+
+00:35:18.340 --> 00:35:21.700
+U hebt ondersteunde Windows-versies nodig en de juiste instellingen voor het Windows-updatebeleid
+
+00:35:21.700 --> 00:35:24.060
+die aan Autopatch zijn overgelaten in plaats van handmatig ingesteld.
+
+00:35:24.260 --> 00:35:28.140
+Dat is de opzet, een licentie die de service bevat, een beheerplatform dat het kan hosten,
+
+00:35:28.300 --> 00:35:29.820
+apparaten die Entra ID herkent.
+
+00:35:30.040 --> 00:35:31.240
+Let echter op het patroon.
+
+00:35:31.420 --> 00:35:34.120
+Alles op die lijst gaat over het apparaat, niet over de service.
+
+00:35:34.420 --> 00:35:36.660
+Microsoft is klaar op het moment dat u het inschakelt.
+
+00:35:36.660 --> 00:35:40.360
+Of uw omgeving klaar is, is een andere vraag en dat is het deel dat niemand mag overslaan,
+
+00:35:40.480 --> 00:35:42.900
+want Autopatch kan geen apparaat beheren dat het niet accepteert.
+
+00:35:43.100 --> 00:35:46.900
+Voordat er één update door die beheerderingen stroomt, moet elke machine een controle doorstaan
+
+00:35:46.900 --> 00:35:49.380
+en vele falen daarvoor om redenen die niemand heeft genoteerd.
+
+00:35:49.540 --> 00:35:52.400
+De echte vraag is dus niet wat Autopatch doet als het eenmaal draait,
+
+00:35:52.540 --> 00:35:55.000
+maar hoe een apparaat eruit moet zien voordat het wordt toegelaten.
+
+00:35:56.000 --> 00:35:58.080
+Autopatch vereist een en apparaatregistratie.
+
+00:35:58.400 --> 00:36:01.200
+Autopatch voert een gereedheidscontrole uit voordat het iets accepteert,
+
+00:36:01.200 --> 00:36:04.320
+Geen formaliteit, maar een echte drempel met echte foutmeldingen.
+
+00:36:04.480 --> 00:36:08.780
+Dit vind je in het Intune beheercentrum onder tenantbeheer en vervolgens Windows Autopatch.
+
+00:36:09.040 --> 00:36:13.920
+Voordat je één apparaat registreert, bekijkt de service je tenant en stelt een korte lijst met vragen
+
+00:36:13.920 --> 00:36:16.600
+en daarna stelt het diezelfde vragen over elk apparaat.
+
+00:36:16.780 --> 00:36:17.620
+Begin met beheer.
+
+00:36:17.800 --> 00:36:20.520
+Het apparaat moet zijn ingeschreven in Intune, niet gepland voor inschrijving,
+
+00:36:20.680 --> 00:36:23.740
+maar echt ingeschreven, incheckend en beleid ontvangend, en dan identiteit.
+
+00:36:23.940 --> 00:36:26.540
+Het apparaat moet gekoppeld zijn aan Microsoft en Traidee.
+
+00:36:26.540 --> 00:36:30.940
+Direct gekoppeld werkt, hybride gekoppeld werkt ook als de machine is verbonden met je on-premises directory
+
+00:36:30.940 --> 00:36:32.120
+en geregistreerd in de cloud.
+
+00:36:32.280 --> 00:36:36.740
+Een apparaat dat alleen het oude domein kent zonder Entra-identiteit, bestaat niet voor de service.
+
+00:36:37.000 --> 00:36:38.180
+Dan de Windows-versie.
+
+00:36:38.420 --> 00:36:42.420
+Autopatch beheert alleen versies die nog worden ondersteund en alleen op ondersteunde edities.
+
+00:36:42.680 --> 00:36:46.920
+Een machine die vast zit op een verouderde versie faalt deze controle direct, wat je al veel vertelt.
+
+00:36:47.100 --> 00:36:51.160
+De service doet niet alsof hij een apparaat beschermt waar Microsoft zelf geen updates meer voor levert.
+
+00:36:51.380 --> 00:36:53.900
+Drie controles, beheer, identiteit, versie.
+
+00:36:53.900 --> 00:36:57.320
+Nu is er een complicatie voor omgevingen die nog Configuration Manager gebruiken.
+
+00:36:57.460 --> 00:36:59.800
+Co-management is waar veel teams tegen een muur aanlopen.
+
+00:37:00.020 --> 00:37:03.820
+Bij een co-managed apparaat praten zowel Configuration Manager als Intune met dezelfde machine,
+
+00:37:04.060 --> 00:37:07.620
+en elk kan eigenaarschap claimen over verschillende taken, wat Microsoft workloads noemt.
+
+00:37:07.740 --> 00:37:11.100
+Voor Autopatch is één workload het belangrijkst, Windows-update-beleid.
+
+00:37:11.280 --> 00:37:12.880
+Die workload moet naar Intune wijzen.
+
+00:37:13.080 --> 00:37:18.440
+Als Configuration Manager dit nog beheert, krijgt de client zijn update-regels daarvandaan en kan Autopatch niets afdwingen.
+
+00:37:18.560 --> 00:37:20.380
+De schuifregelaar moet worden verplaatst.
+
+00:37:20.380 --> 00:37:24.740
+Daarnaast moeten de workloads voor Office Click-to-Run en apparaatconfiguratie ook aan de Intune kant staan,
+
+00:37:24.880 --> 00:37:26.980
+anders markeert de service het apparaat als niet gereed.
+
+00:37:27.100 --> 00:37:29.160
+En dit is een beslissing, geen simpele schakelaar.
+
+00:37:29.280 --> 00:37:32.620
+Het verplaatsen van die workload betekent dat elke update-regel op die machines nu vanuit de cloud komt.
+
+00:37:32.780 --> 00:37:35.060
+Je bestaande implementatie-regels zijn dan niet meer van kracht.
+
+00:37:35.220 --> 00:37:37.720
+Plan de verplaatsing, test het op een kleine groep en breed het dan uit.
+
+00:37:37.940 --> 00:37:39.800
+Oké, het apparaat doorstaat de controles.
+
+00:37:39.980 --> 00:37:40.840
+Hoe komt het er dan in?
+
+00:37:41.020 --> 00:37:42.340
+Via een registratiegroep.
+
+00:37:42.540 --> 00:37:46.020
+Wanneer je de service instelt, maakt Autopatch een Microsoft Entra Groep aan voor registratie.
+
+00:37:46.020 --> 00:37:47.340
+De taak daarvan is simpel.
+
+00:37:47.560 --> 00:37:50.260
+Elk apparaat dat in die groep terechtkomt, wordt opgepikt door de service.
+
+00:37:50.480 --> 00:37:54.160
+De service leest het lidmaatschap, valideert elk apparaat aan de hand van de besproken controles
+
+00:37:54.160 --> 00:37:55.640
+en registreert dan de apparaten die slagen.
+
+00:37:55.820 --> 00:37:58.000
+Dat betekent dat toelating een groepsoperatie is.
+
+00:37:58.160 --> 00:38:00.460
+Je registreert machines niet één voor één in een wizard.
+
+00:38:00.680 --> 00:38:04.100
+Je voegt ze toe aan de groep, wacht tot de service de scan uitvoert en bekijkt de resultaten,
+
+00:38:04.280 --> 00:38:05.920
+en je beheert het lidmaatschap naar eigen inzicht.
+
+00:38:06.060 --> 00:38:09.000
+Een dynamische regel die alle zakelijke Windows-apparaten opvangt,
+
+00:38:09.180 --> 00:38:11.640
+of een statische lijst voor een eerste kleine batch, werkt allebei.
+
+00:38:11.640 --> 00:38:16.040
+Kleinschalig beginnen is slimmer, omdat de eerste scan je dingen leert over je omgeving die je nog niet wist,
+
+00:38:16.140 --> 00:38:17.340
+wat ons bij de blokkades brengt.
+
+00:38:17.500 --> 00:38:19.420
+De meeste fouten komen voort uit twee bronnen.
+
+00:38:19.600 --> 00:38:21.280
+De eerste is tegenstrijdig beleid.
+
+00:38:21.440 --> 00:38:24.320
+Een apparaat heeft al een update ringbeleid dat je zelf hebt gemaakt,
+
+00:38:24.560 --> 00:38:28.660
+een groepsbeleidsinstelling of een registerwaarde die de client naar een andere updatebron verwijst.
+
+00:38:28.900 --> 00:38:31.940
+Autopatch wil de enige bepalende factor zijn voor het updategedrag.
+
+00:38:32.160 --> 00:38:35.740
+Wanneer twee bronnen het oneens zijn, markeert de service het apparaat als een conflict
+
+00:38:35.740 --> 00:38:38.580
+en blijft het buitenschot totdat iemand de oude instelling verwijdert.
+
+00:38:38.580 --> 00:38:42.620
+De tweede is niet ondersteunde configuratie, een apparaat met een toevoeging die de service niet dekt,
+
+00:38:42.720 --> 00:38:45.560
+een machine die wekenlang niet heeft ingecheckt bij Intune en inactief lijkt,
+
+00:38:45.700 --> 00:38:48.020
+of een apparaat met een ontbrekende of afwijkende identiteit,
+
+00:38:48.220 --> 00:38:50.540
+waardoor het Entra-record en het Intune-record niet overeenstemmen.
+
+00:38:50.700 --> 00:38:52.160
+Dit is wat het zo vervelend maakt.
+
+00:38:52.340 --> 00:38:53.400
+Ze zijn geruisloos.
+
+00:38:53.580 --> 00:38:55.800
+Niemand krijgt een melding dat een laptop is overgeslagen.
+
+00:38:56.000 --> 00:38:59.940
+Het apparaat blijft gewoon buiten de service en ziet er in elk ander dashboard prima uit.
+
+00:39:00.100 --> 00:39:02.480
+Je ontdekt het alleen als je de registratieresultaten leest,
+
+00:39:02.720 --> 00:39:04.460
+dus lees die elke keer dat je een batch toevoegt.
+
+00:39:04.640 --> 00:39:06.920
+De apparaten die worden goedgekeurd, wachten niet af.
+
+00:39:06.920 --> 00:39:09.740
+Ze worden ingedeeld in de ringen die Autopatch voor je heeft ontworpen,
+
+00:39:09.920 --> 00:39:11.500
+zonder dat je er zelf een hebt hoeven tekenen.
+
+00:39:11.640 --> 00:39:13.320
+De standaardringen van Autopatch.
+
+00:39:13.520 --> 00:39:15.420
+Test, First, Fast, Broad.
+
+00:39:15.840 --> 00:39:17.260
+Autopatch geeft je vier groepen.
+
+00:39:17.420 --> 00:39:19.260
+Test, First, Fast, Broad.
+
+00:39:19.500 --> 00:39:21.840
+Hetzelfde gefaseerde idee dat we eerder handmatig bouwden,
+
+00:39:21.960 --> 00:39:24.180
+maar dan met Microsoft's benamingen en Microsoft's aantallen.
+
+00:39:24.340 --> 00:39:25.320
+Test is de kleinste.
+
+00:39:25.520 --> 00:39:28.800
+Het is bedoeld voor IT en heeft als taak om de voor de hand liggende fouten op te vangen
+
+00:39:28.800 --> 00:39:30.340
+voordat iemand anders de update ziet.
+
+00:39:30.580 --> 00:39:32.800
+First is een kleine selectie van echte gebruikers.
+
+00:39:33.020 --> 00:39:35.920
+Fast is een grotere groep waar de update je hardware en appmix tegenkomt,
+
+00:39:35.920 --> 00:39:38.240
+en Broad is de rest, het merendeel van de omgeving,
+
+00:39:38.500 --> 00:39:40.440
+achteraan de rij met het meeste bewijs erachter.
+
+00:39:40.640 --> 00:39:41.720
+Let op wat er ontbreekt.
+
+00:39:41.880 --> 00:39:44.000
+Er is geen groep voor kiosken of fabrieksmachines,
+
+00:39:44.180 --> 00:39:46.620
+geen groep voor apparaten die een specifiek venster vereisen.
+
+00:39:46.820 --> 00:39:49.660
+De service geeft je vier fasen en elk apparaat belandt in een daarvan.
+
+00:39:49.860 --> 00:39:51.560
+Dus hoe komt een apparaat in een fase terecht?
+
+00:39:52.000 --> 00:39:52.800
+Autopatch beslist.
+
+00:39:53.080 --> 00:39:55.040
+Wanneer de registratiescan een machine accepteert,
+
+00:39:55.260 --> 00:39:56.840
+wijst de service deze zelf toe aan een groep.
+
+00:39:56.920 --> 00:39:58.420
+Je kunt handmatig apparaten toevoegen aan.
+
+00:39:58.520 --> 00:40:00.220
+Test als je wilt dat een specifiek persoon daarin zit.
+
+00:40:00.360 --> 00:40:03.360
+Al het andere wordt door de service geplaatst en dat gebeurt op basis van percentages.
+
+00:40:03.360 --> 00:40:05.640
+Elke groep heeft een streefaandeel in de omgeving.
+
+00:40:05.840 --> 00:40:08.560
+Test is klein, een paar apparaten of ongeveer 1%.
+
+00:40:08.560 --> 00:40:12.000
+First is ongeveer 10%, fast ongeveer 20% en Broad neemt de rest.
+
+00:40:12.220 --> 00:40:14.140
+Die doelstellingen zijn belangrijker dan ze lijken.
+
+00:40:14.340 --> 00:40:18.680
+Ze bepalen de grootte van elke fase en grootte bepaalt de signaalkwaliteit, zoals we al weten.
+
+00:40:18.880 --> 00:40:23.080
+Een firstgroep die te klein is, kan een probleem missen dat alleen op één laptopmodel voorkomt.
+
+00:40:23.220 --> 00:40:25.140
+Dit is het onderdeel waar teams de mist in gaan.
+
+00:40:25.320 --> 00:40:28.420
+De service houdt die aandelen in evenwicht terwijl apparaten komen en gaan.
+
+00:40:28.420 --> 00:40:33.240
+Registreer een paar honderd nieuwe machines en sommige zullen verschuiven tussen groepen om de ratio's te herstellen.
+
+00:40:33.440 --> 00:40:37.100
+Een apparaat waarvan je dacht dat het in Broad zat, kan na de volgende scan in fast belanden.
+
+00:40:37.320 --> 00:40:41.700
+Als iemand in je team precies moet weten waar een machine staat, controleer dan het groepslidmaatschap.
+
+00:40:41.840 --> 00:40:42.580
+Onthoud het niet.
+
+00:40:42.820 --> 00:40:43.540
+Nu het gedrag.
+
+00:40:43.760 --> 00:40:45.520
+Wat doen deze groepen eigenlijk anders?
+
+00:40:45.760 --> 00:40:46.820
+Het verschil is tijd.
+
+00:40:47.040 --> 00:40:50.760
+Elke groep heeft zijn eigen uitstel en deadline en beide groeien naarmate je verder komt in de rij.
+
+00:40:50.940 --> 00:40:52.840
+Test krijgt de update zonder enig uitstel.
+
+00:40:52.840 --> 00:40:57.680
+Het ziet kwaliteitsupdates zodra ze worden aangeboden met een zeer korte deadline en de herstart wordt snel afgedwongen.
+
+00:40:57.680 --> 00:40:58.680
+Dat is opzettelijk.
+
+00:40:58.860 --> 00:41:00.500
+Test bestaat om als eerste kapot te gaan.
+
+00:41:00.720 --> 00:41:02.860
+First wacht een paar dagen, fast wacht er nog een paar.
+
+00:41:03.080 --> 00:41:08.620
+Broad wacht het langst, bijna een week, en krijgt een langere deadline plus een respijtperiode zodat gebruikers de ruimte hebben om op hun eigen voorwaarden opnieuw op te starten.
+
+00:41:08.740 --> 00:41:12.720
+Ik geef je geen exacte cijfers voor elke instelling omdat Microsoft ze in de loop van de tijd aanpast.
+
+00:41:13.020 --> 00:41:20.500
+Controleer de huidige documentatie voordat je een cijfer noemt aan je beveiligingsteam, maar de vorm blijft stabiel, kort en krachtig aan het begin, geduldig en mild aan het eind.
+
+00:41:20.500 --> 00:41:27.320
+Functie-updates volgen dezelfde spreiding, alleen over weken in plaats van dagen, waarbij de service de versie en de timing voor elke groep beheert.
+
+00:41:27.540 --> 00:41:28.560
+Dus waar past dit model?
+
+00:41:28.800 --> 00:41:35.220
+Het past bij een organisatie met een typische kantooromgeving, een klein IT-team en geen behoefte om ringlogica vanaf nul op te bouwen.
+
+00:41:35.400 --> 00:41:38.760
+Voor die teams zijn de standaardinstellingen beter dan wat ze zelf zouden hebben bedacht.
+
+00:41:39.000 --> 00:41:42.940
+Zinnige fases, zinnige vertragingen, geen leegblad en het past ook bij de tweede taak.
+
+00:41:42.940 --> 00:41:46.080
+Een team dat nog nooit gefaseerde uithol heeft gedaan, krijgt er een op dag 1.
+
+00:41:46.280 --> 00:41:50.620
+Dat alleen al dicht een reëel gat, maar de standaardinstellingen frustreren mensen op een paar voorspelbare plekken.
+
+00:41:50.760 --> 00:41:52.300
+Eén is controle over lidmaatschap.
+
+00:41:52.460 --> 00:41:55.960
+Je kunt niet zeggen dat deze 200 klinische werkstations altijd als laatste moeten komen.
+
+00:41:56.140 --> 00:41:59.520
+De service balanceert percentages en jouw uitzonderingen vechten tegen die logica.
+
+00:41:59.700 --> 00:42:00.860
+Een andere is snelheid.
+
+00:42:01.120 --> 00:42:05.320
+Sommige beveiligingsteams kijken naar de broad deadline en zien een week blootstelling die ze nooit hebben goedgekeurd.
+
+00:42:05.520 --> 00:42:06.920
+Zij hebben dat getal niet gekozen.
+
+00:42:07.180 --> 00:42:09.060
+Microsoft deed dat er een derde is vertrouwen.
+
+00:42:09.060 --> 00:42:14.620
+Beheerders die precies willen weten waarom een apparaat op een bepaald moment is bijgewerkt, voelen zich soms een stap verwijderd van hun eigen beheeromgeving.
+
+00:42:14.800 --> 00:42:16.440
+De onderliggende logica is er nog steeds.
+
+00:42:16.680 --> 00:42:18.980
+Deze bevindt zich alleen in beleidsregels die u zelf niet hebt geschreven.
+
+00:42:19.160 --> 00:42:20.360
+Dat maakt het model niet fout.
+
+00:42:20.560 --> 00:42:23.040
+Het maakt het een standaard en standaarden zijn geen muren.
+
+00:42:23.040 --> 00:42:31.940
+Met Autopatch kunt u veel van dit gedrag aanpassen, van uitstel en extra ringen tot het uitsluiten van specifieke apparaten, maar alleen binnen de kaders die de dienst voor zichzelf stelt.
+
+00:42:32.340 --> 00:42:34.180
+Autopatch aanpassen zonder het te verbreken.
+
+00:42:34.420 --> 00:42:36.180
+Wat kunt u dan daadwerkelijk veranderen?
+
+00:42:36.340 --> 00:42:38.040
+Meer dan men verwacht, minder dan men wil.
+
+00:42:38.040 --> 00:42:40.440
+De belangrijkste knop is de aangepaste update ring.
+
+00:42:40.660 --> 00:42:44.520
+Binnen de release instellingen van Autopatch maakt u naast de vier standaardringen uw eigen ringen aan.
+
+00:42:44.680 --> 00:42:48.680
+U kiest het uitstel, de deadline, de respiteperiode en welke apparaten erbij horen.
+
+00:42:48.680 --> 00:42:54.320
+Een ring voor klinische werkstations, een ring voor de fabrieksvloer, een ring die altijd als laatste komt, ongeacht de percentages.
+
+00:42:54.680 --> 00:42:57.300
+Dat lost de grootste frustratie uit het vorige gedeelte op.
+
+00:42:57.460 --> 00:43:02.820
+De dienst stopt met het balanceren van die apparaten omdat u ze uit de beheerde groepen hebt gehaald en in een groep hebt geplaatst die u zelf controleert.
+
+00:43:02.820 --> 00:43:05.100
+U kunt ook het gedrag van de standaarden aanpassen.
+
+00:43:05.340 --> 00:43:09.840
+Uitstel, deadlines en herstartinstellingen voor de standaardgroepen kunnen binnen bepaalde limieten worden aangepast.
+
+00:43:10.080 --> 00:43:12.000
+Sommige waarden hebben een onder- of bovengrens.
+
+00:43:12.220 --> 00:43:15.720
+Sommige instellingen kunt u helemaal niet wijzigen omdat de dienst ze nodig heeft voor de monitoring.
+
+00:43:15.960 --> 00:43:16.900
+En dat is de grens.
+
+00:43:17.160 --> 00:43:18.860
+Autopatch staat u toe om de timing te wijzigen.
+
+00:43:19.060 --> 00:43:21.660
+Het staat u niet toe om de onderdelen te verwijderen die de dienst laten werken.
+
+00:43:21.840 --> 00:43:25.260
+De pauzelogica, de gezondheidssignalen en de onderliggende groepstructuur blijven behouden.
+
+00:43:25.260 --> 00:43:27.120
+De problemen beginnen nu ergens anders.
+
+00:43:27.340 --> 00:43:29.080
+Het begint bij het beleid dat u al hebt.
+
+00:43:29.240 --> 00:43:32.320
+In de meeste omgevingen is in Toon niet leeg wanneer Autopatch arriveert.
+
+00:43:32.480 --> 00:43:38.800
+Er is een updatering die iemand twee jaar geleden heeft gemaakt, een beleid voor functie-updates of misschien een groepsbeleidsobject dat nog steeds de updatebron bepaalt.
+
+00:43:38.960 --> 00:43:42.740
+Elk beleid is een stem die Windows vertelt wat het moet doen en Autopatch brengt zijn eigen stem in.
+
+00:43:42.920 --> 00:43:46.880
+Wanneer twee beleidsregels dezelfde waarde instellen op hetzelfde apparaat, kan in Toon niet kiezen wie er wint.
+
+00:43:47.020 --> 00:43:48.280
+Het rapporteert een conflict.
+
+00:43:48.500 --> 00:43:51.360
+En op het apparaat betekent een conflict niet dat het strengere beleid wint.
+
+00:43:51.520 --> 00:43:53.820
+Het betekent dat de instelling vaak helemaal niet wordt toegepast.
+
+00:43:53.820 --> 00:43:56.060
+De machine valt terug op iets dat u nooit heeft gekozen.
+
+00:43:56.240 --> 00:43:57.880
+Wat er meestal gebeurt, is geruisloos.
+
+00:43:58.020 --> 00:44:01.960
+Een apparaat wordt geregistreerd, het zit in de snelle ring en iedereen gaat ervan uit dat de snelle regels actief zijn.
+
+00:44:02.120 --> 00:44:06.120
+Maar uw oude ring is nog steeds toegewezen aan dezelfde groep en het uitstelcijfer op de laptop is nog het oude.
+
+00:44:06.280 --> 00:44:08.980
+Het dashboard zegt snel, maar het gedrag zegt iets anders.
+
+00:44:09.200 --> 00:44:10.740
+Dus gaat u op de juiste plek zoeken.
+
+00:44:10.960 --> 00:44:13.820
+Open het apparaat in InToon en lees de configuratiestatus.
+
+00:44:14.140 --> 00:44:16.840
+Zoek naar conflicten en foutmeldingen in de update-instellingen.
+
+00:44:16.960 --> 00:44:18.580
+En dat is waar de tweede stem op duikt.
+
+00:44:18.580 --> 00:44:22.280
+Dan los je het op door hem van de stemmen te verwijderen, bijna nooit door een derde toe te voegen.
+
+00:44:22.280 --> 00:44:24.960
+Soms is de juiste zet om het apparaat zelf te verwijderen.
+
+00:44:25.100 --> 00:44:27.480
+Met Autopatch kun je een apparaat uitsluiten van de service.
+
+00:44:27.720 --> 00:44:29.080
+Het apparaat blijft in InToon.
+
+00:44:29.280 --> 00:44:31.260
+Het behoudt zijn apps en nalevingsregels.
+
+00:44:31.480 --> 00:44:35.340
+Het ontvangt alleen geen updatebeleid van Autopatch meer en telt niet meer mee in de rapportages.
+
+00:44:35.600 --> 00:44:36.620
+Wanneer is dat zinvol?
+
+00:44:36.820 --> 00:44:38.560
+Als een machine het model echt niet kan volgen.
+
+00:44:38.760 --> 00:44:41.300
+Een labpc die vast zit op een oude beeld voor een testopstelling.
+
+00:44:41.480 --> 00:44:44.200
+Een apparaat met software die bij elke functie update kapot gaat.
+
+00:44:44.380 --> 00:44:47.080
+Een systeem onder een leverancierscontract dat het patchschema bepaalt.
+
+00:44:47.220 --> 00:44:49.560
+Maar uitsluiting heeft een prijs en teams vergeten dat.
+
+00:44:49.560 --> 00:44:51.800
+Een uitgesloten apparaat is een onbeheerd risico.
+
+00:44:52.000 --> 00:44:53.080
+Niemand houdt het in de gaten.
+
+00:44:53.340 --> 00:44:55.160
+Niemand pauzeert een uithol voor dit apparaat.
+
+00:44:55.280 --> 00:44:58.340
+Het heeft een eigenaar nodig, een vastgelegde reden en een evaluatiedatum.
+
+00:44:58.540 --> 00:45:01.760
+Anders wordt het de machine die nooit gepatcht wordt omdat iedereen dacht dat iemand anders het deed.
+
+00:45:01.940 --> 00:45:04.560
+Behandel elke uitsluiting als een lening, niet als een geschenk.
+
+00:45:04.680 --> 00:45:06.600
+Dit leidt tot de enige regel die alles verbindt.
+
+00:45:06.700 --> 00:45:07.840
+Eén eigenaar per instelling.
+
+00:45:08.080 --> 00:45:11.480
+Voor elke updateinstelling op een apparaat mag precies één systeem deze definiëren.
+
+00:45:11.720 --> 00:45:13.600
+Autopatch beheert de rings die het zelf aanmaakt.
+
+00:45:13.840 --> 00:45:15.780
+Jouw eigen beleid beheert de rings die jij aanmaakt.
+
+00:45:15.780 --> 00:45:18.640
+Group Policy beheert niets meer zodra je bent overgestapt naar de cloud.
+
+00:45:18.800 --> 00:45:22.100
+Als je niet kunt zeggen welk systeem een instelling beheert, heb je al een conflict.
+
+00:45:22.280 --> 00:45:23.560
+Je hebt het alleen nog niet gezien.
+
+00:45:23.800 --> 00:45:25.040
+Leg dat eigenaarschap vast.
+
+00:45:25.220 --> 00:45:27.660
+Een simpele tabel volstaat instelling, eigenaar, reden.
+
+00:45:27.840 --> 00:45:30.500
+Het kost een uur en beëindigt de meeste discussies voordat ze beginnen.
+
+00:45:30.740 --> 00:45:35.620
+Zodra de instellingen eigenaren hebben, is de levering voorspelbaar en dan zie je waar Autopatch echt voor bedoeld is.
+
+00:45:35.780 --> 00:45:36.720
+Het zijn niet de rings.
+
+00:45:36.960 --> 00:45:38.460
+Je zou zelf rings kunnen bouwen.
+
+00:45:38.660 --> 00:45:44.700
+Het echte product is het toezicht, wat de service doet terwijl een update door die fase gaat en wat het doet als het signaal verslechtert.
+
+00:45:44.700 --> 00:45:48.400
+Releases beheren, pauseren, hervatten en waarborgen.
+
+00:45:48.640 --> 00:45:51.340
+Dit is wat de service daadwerkelijk doet terwijl jij slaapt.
+
+00:45:51.500 --> 00:46:01.680
+Elke update die door de rings gaat, genereert data, installaties die slagen, installaties die falen, apparaten die herstarten en gezond terugkeren en apparaten die herstarten en nooit meer inchecken.
+
+00:46:02.040 --> 00:46:05.600
+Autopatch leest dit alles ring voor ring en vergelijkt het met de verwachtingen.
+
+00:46:05.800 --> 00:46:07.960
+Wanneer de cijfers slecht worden, onderneemt het actie.
+
+00:46:08.120 --> 00:46:11.240
+Het pauzeert de update voor die ring en voor elke ring die deze nog niet heeft ontvangen.
+
+00:46:11.240 --> 00:46:13.940
+Apparaten die zich al in deze fase bevinden, behouden wat ze hebben.
+
+00:46:14.080 --> 00:46:15.560
+Iedereen die daar achterkomt, moet wachten.
+
+00:46:15.820 --> 00:46:18.620
+Dat is precies het slimme van gefaseerde uithol wanneer het werkt zoals het moet.
+
+00:46:18.780 --> 00:46:20.200
+De testfase breekt als eerste.
+
+00:46:20.460 --> 00:46:24.160
+Het signaal bereikt de dienst en de update stopt voordat deze de brede groep bereikt.
+
+00:46:24.360 --> 00:46:26.600
+De ring die je niet hebt geplant, werd de ring die je redde.
+
+00:46:26.760 --> 00:46:28.020
+Wat zorgt er nu voor een pauze?
+
+00:46:28.360 --> 00:46:32.700
+Microsoft hanteert geen vaste drempelwaarde en past de logica aan, maar de input is bekend.
+
+00:46:33.420 --> 00:46:38.860
+Installatiefouten, apparaten die in een wachtstand blijven hangen, brede meldingen over hetzelfde probleem in het Windows-ecosysteem.
+
+00:46:38.860 --> 00:46:42.940
+Niet alleen in jouw tenant. Een slechte update wordt door velen tegelijk opgemerkt.
+
+00:46:43.060 --> 00:46:46.560
+De dienst luistert naar dat bredere signaal en een pauze is geen rollback.
+
+00:46:46.720 --> 00:46:48.000
+Er wordt niets verwijderd.
+
+00:46:48.140 --> 00:46:52.420
+De dienst stopt simpelweg met het aanbieden van de update aan de volgende groep tot men besluit dat het weer veilig is.
+
+00:46:52.580 --> 00:46:56.220
+Er is een tweede soort stop en die gebeurt nog voordat Autopatch erbij betrokken raakt.
+
+00:46:56.400 --> 00:46:59.880
+Windows kan zelf weigeren een update op een specifiek apparaat te installeren.
+
+00:47:00.120 --> 00:47:01.520
+Dit noemen we Safeguard Holds.
+
+00:47:01.780 --> 00:47:06.520
+Microsoft ontdekt dat een bepaalde driver, app of hardware combinatie problemen geeft bij een nieuwe update.
+
+00:47:06.520 --> 00:47:10.820
+Ze markeren die combinatie en elk apparaat dat daaraan voldoet, krijgt de update simpelweg niet aangeboden.
+
+00:47:10.980 --> 00:47:12.920
+Het apparaat toont geen foutmelding of storing.
+
+00:47:13.180 --> 00:47:15.740
+Het blijft gewoon op de oude beeld en de update komt nooit aan.
+
+00:47:15.960 --> 00:47:18.380
+Dat is een compatibiliteitsblokkade en dat is een goede zaak.
+
+00:47:18.500 --> 00:47:22.420
+De blokkade beschermt het systeem tegen een bekend probleem, maar zorgt voor een valkuil in je rapportages.
+
+00:47:22.600 --> 00:47:27.460
+Een geblokkeerd apparaat lijkt achter te lopen en een beheerder die de blokkades niet kent, zal aannemen dat het beleid faalde.
+
+00:47:27.660 --> 00:47:28.420
+Dat was niet zo.
+
+00:47:28.620 --> 00:47:31.040
+Windows heeft een beslissing genomen namens het apparaat.
+
+00:47:31.040 --> 00:47:36.380
+Dus als een handvol machines een update weigert terwijl de rest van de ring hem wel krijgt, check dan eerst de blokkade voordat je het beleid controleert.
+
+00:47:36.500 --> 00:47:38.800
+Kijk eerst naar de hardware en drivers van het apparaat.
+
+00:47:38.960 --> 00:47:42.840
+De blokkade wordt meestal opgeheven zodra Microsoft of de leverancier een oplossing levert.
+
+00:47:43.020 --> 00:47:44.100
+Een waarschuwing vooraf.
+
+00:47:44.340 --> 00:47:47.760
+Sommige teams vinden een manier om deze blokkades te omzeilen via beleid dat ze uitschakelt.
+
+00:47:47.980 --> 00:47:48.480
+Doe dat niet.
+
+00:47:48.660 --> 00:47:50.420
+Die instelling is bedoeld voor testmachines.
+
+00:47:50.660 --> 00:47:53.320
+Op een productiemachine verandert het een bescherming in een gok.
+
+00:47:53.440 --> 00:47:55.860
+De dienst is niet de enige die aan de noodrem kan trekken.
+
+00:47:56.100 --> 00:47:56.920
+Jij kunt dat ook.
+
+00:47:56.920 --> 00:48:00.940
+In de autopatch release instellingen kan een beheerder een update ring handmatig pauseren.
+
+00:48:01.120 --> 00:48:03.680
+Kies de ring, kies het update type en bepaal de duur.
+
+00:48:03.860 --> 00:48:07.640
+De pauze duurt een vast aantal dagen en verloopt daarna, tenzij je deze verlengt.
+
+00:48:07.760 --> 00:48:11.140
+Hervatten werkt de andere kant op, zodra je vindt dat de gegevens weer in orde zijn.
+
+00:48:11.360 --> 00:48:13.200
+Waarom zou je dit doen als de dienst al meekijkt?
+
+00:48:13.360 --> 00:48:15.640
+Omdat jouw signaal niet het Microsoft signaal is.
+
+00:48:15.840 --> 00:48:20.280
+Misschien werkt een bedrijfsapplicatie niet op drie testmachines en zie je daar niets van in de wereldwijde telemetrie.
+
+00:48:20.480 --> 00:48:23.180
+Misschien wil je beveiligingsteam een pauze voor een grote lancering.
+
+00:48:23.180 --> 00:48:26.460
+Misschien heeft een leverancier je net gewaarschuwd voor een compatibiliteitsprobleem.
+
+00:48:26.580 --> 00:48:31.220
+De dienst ziet patronen, jij ziet je bedrijf en dat gat is de reden dat handmatige controle bestaat.
+
+00:48:31.400 --> 00:48:34.260
+Gebruik het wanneer de reden specifiek is en noteer die reden.
+
+00:48:34.440 --> 00:48:39.180
+Een pauze zonder notitie wordt na zes weken een mysterie als iemand vraagt waarom Broad niet is bijgewerkt,
+
+00:48:39.900 --> 00:48:42.100
+wat de vraag oproept die niemand stelt tot de audit.
+
+00:48:42.340 --> 00:48:44.260
+Wat doet een pauze met je compliance nummers?
+
+00:48:44.460 --> 00:48:45.980
+Het laat ze er slechter uitzien.
+
+00:48:46.240 --> 00:48:50.240
+Apparaten in een pauze ring ontvangen de update niet, dus ze blijven achter bij de doelversie.
+
+00:48:50.240 --> 00:48:56.160
+Rapporten tonen ze als niet up-to-date of nog niet aangeboden en het percentage gepatchte apparaten daalt zolang de pauze actief is.
+
+00:48:56.380 --> 00:48:58.240
+Dat is eerlijk, maar het heeft context nodig.
+
+00:48:58.440 --> 00:49:01.200
+Een pauze is een besluit, dus het hoort bij het verhaal dat je vertelt.
+
+00:49:01.420 --> 00:49:06.040
+Als iemand vraagt waarom 80% van het beheer achterloopt, is de ring is gepauseerd voor een bekend probleem,
+
+00:49:06.180 --> 00:49:09.500
+goedgekeurd op deze datum, eindigend op die datum, een verdedigbaar antwoord.
+
+00:49:09.640 --> 00:49:12.560
+We weten het niet, is dat niet, en het dashboard legt dat niet voor je uit.
+
+00:49:12.720 --> 00:49:15.280
+Iemand moet dat doen, maar een pauze dekt maar één soort probleem.
+
+00:49:15.280 --> 00:49:17.700
+Het behandelde update die te riskant is om te versturen.
+
+00:49:17.900 --> 00:49:21.320
+Sommige updates zijn het tegenovergestelde, die zijn te gevaarlijk om op te wachten.
+
+00:49:21.560 --> 00:49:23.840
+Versnelde kwaliteitsupdates voor zero-day dreigingen.
+
+00:49:24.040 --> 00:49:27.300
+Normale ringlevering draait volgens schema, en een versnelde update negeert dat.
+
+00:49:27.540 --> 00:49:28.840
+Denk na over wat een ring doet.
+
+00:49:29.040 --> 00:49:33.120
+Het wacht zeven dagen uitstel, een paar dagen deadline, plus een gratieperiode.
+
+00:49:33.400 --> 00:49:37.900
+Dat geduld is het hele punt van facering, maar geduld gaat ervan uit dat de dreiging ook geduldig is,
+
+00:49:38.100 --> 00:49:38.960
+en soms is die dat niet.
+
+00:49:39.100 --> 00:49:43.820
+Een fout wordt al in het wild gebruikt en Microsoft brengt een fix uit buiten de gebruikelijke cyclus.
+
+00:49:43.820 --> 00:49:47.580
+Wachten tot broad aan de beurt is, is een keuze om twee weken blootgesteld te blijven.
+
+00:49:47.740 --> 00:49:49.180
+Dus Intune geeft je een tweede pad.
+
+00:49:49.360 --> 00:49:51.200
+Het heet een versnelde kwaliteitsupdate.
+
+00:49:51.440 --> 00:49:52.440
+Dit is wat er anders is.
+
+00:49:52.600 --> 00:49:58.620
+Een normale update wacht tot het apparaat incheckt, de ring evalueert, het uitstel respecteert en de update aanbiedt zodra het aan de beurt is.
+
+00:49:58.780 --> 00:50:00.800
+Een versnelde update slaat het meeste daarvan over.
+
+00:50:00.980 --> 00:50:04.160
+Je kiest één specifieke update en Intune zegt tegen apparaten dat ze die nu moeten ophalen.
+
+00:50:04.320 --> 00:50:05.660
+Het uitstel is niet van toepassing.
+
+00:50:05.660 --> 00:50:07.860
+De gebruikelijke deadline logica is ook niet van toepassing.
+
+00:50:08.020 --> 00:50:09.360
+Het is ook gerichter dan mensen denken.
+
+00:50:09.560 --> 00:50:11.120
+Je pusht geen algemene patch cyclus.
+
+00:50:11.120 --> 00:50:14.800
+Je benoemt één kwaliteitsupdate op releasedatum en het beleid richt zich alleen op die ene.
+
+00:50:14.900 --> 00:50:16.860
+En het wordt nog steeds opgehaald, niet gepushed.
+
+00:50:16.940 --> 00:50:20.100
+Het apparaat moet de instructies vernemen, dus het moet online zijn en Intune bereiken.
+
+00:50:20.300 --> 00:50:22.240
+We hebben dat client-side model eerder al besproken.
+
+00:50:22.400 --> 00:50:23.900
+Een versnelling verandert daar niets aan.
+
+00:50:24.080 --> 00:50:26.520
+Het verandert hoe dringend de client reageert op wat hij hoort.
+
+00:50:26.700 --> 00:50:27.660
+Hoe maak je er nu een aan?
+
+00:50:27.840 --> 00:50:31.620
+Ga in het Intune-beheercentrum naar apparaten, dan Windows en vervolgens kwaliteitsupdates.
+
+00:50:31.860 --> 00:50:33.320
+Maak een nieuw versnellingsbeleid aan.
+
+00:50:33.540 --> 00:50:36.800
+Je geeft het een naam en kiest vervolgens de kwaliteitsupdate die moet worden versneld.
+
+00:50:36.800 --> 00:50:40.420
+Intune toont de recente releases, dus je kiest degene die de oplossing bevat.
+
+00:50:40.620 --> 00:50:43.020
+Daarna komt de belangrijkste instelling, de herstart.
+
+00:50:43.200 --> 00:50:45.720
+Je kiest het aantal dagen totdat de herstart wordt afgedwongen.
+
+00:50:45.840 --> 00:50:49.500
+Nul betekent dat het apparaat direct na de installatie herstart met nauwelijks waarschuwing.
+
+00:50:49.680 --> 00:50:53.480
+Een hoger getal geeft gebruikers tijd om hun werk op te slaan en zelf eerst opnieuw op te starten.
+
+00:50:53.660 --> 00:50:55.400
+Daarna vindt de geforceerde herstart plaats.
+
+00:50:55.620 --> 00:50:58.340
+Vervolgens wijs je het beleid toe aan een groep en dat is het hele beleid.
+
+00:50:58.500 --> 00:51:00.740
+Eén update, één herstartregel, één doelgroep.
+
+00:51:00.900 --> 00:51:02.240
+Eén detail is vaak verwarrend.
+
+00:51:02.340 --> 00:51:04.420
+Een versnellingsbeleid moet een tijdelijk object zijn.
+
+00:51:04.420 --> 00:51:08.120
+Zodra de oplossing overal is doorgevoerd, verwijder je het of laat je het verlopen.
+
+00:51:08.340 --> 00:51:13.800
+Laat je oude versnellingsbeleid actief, dan blijft er een instructie staan die niemand zich meer herinnert, wat ons bij de herstart brengt.
+
+00:51:13.880 --> 00:51:14.960
+Want daar merkt het bedrijf het.
+
+00:51:15.060 --> 00:51:17.360
+Een geforceerde herstart is de prijs voor snelheid.
+
+00:51:17.540 --> 00:51:24.920
+De update kan stilletjes op de achtergrond worden geïnstalleerd, maar de patch is pas actief na een herstart, dus het beleid moet een moment kiezen en de gebruiker heeft geen inspraak.
+
+00:51:24.920 --> 00:51:29.940
+Voor de meeste laptops is dat een onderbreking, een niet opgeslagen document, een verbroken verbinding, een verloren presentatie.
+
+00:51:30.140 --> 00:51:32.740
+Sommige mensen zullen boos zijn en sommige verliezen daadwerkelijk werk.
+
+00:51:32.740 --> 00:51:34.720
+Voor andere apparaten is het veel erger.
+
+00:51:34.900 --> 00:51:37.820
+Een herstart op een kassa tijdens openingstijden betekent omzetverlies.
+
+00:51:38.000 --> 00:51:41.040
+Een herstart op een machine die een productielijn aanstuurt, kan de lijn stilleggen.
+
+00:51:41.160 --> 00:51:45.100
+Een herstart op een klinisch werkstation kan op het verkeerde moment een scherm weghalen bij een verpleegkundige.
+
+00:51:45.320 --> 00:51:47.000
+Daarom is versnelling een bot-instrument.
+
+00:51:47.180 --> 00:51:50.220
+Het koopt bescherming door het vertrouwen van de gebruiker op te offeren, en dat gaat snel.
+
+00:51:50.440 --> 00:51:51.380
+Wanneer gebruik je het dan?
+
+00:51:51.540 --> 00:51:54.040
+Gebruik het wanneer de feiten aangeven dat het risico al reëel is.
+
+00:51:54.280 --> 00:51:55.860
+Actieve exploitatie bevestigt.
+
+00:51:56.020 --> 00:51:59.040
+Een lek dat bereikbaar is vanaf het internet of geen actie van de gebruiker vereist.
+
+00:51:59.040 --> 00:52:01.600
+Een zwak punt in iets wat daadwerkelijk in je omgeving draait.
+
+00:52:01.760 --> 00:52:04.600
+In die gevallen is de prijs van uitstel hoger dan de prijs van verstoring.
+
+00:52:04.800 --> 00:52:07.280
+Hanteer het normale schema wanneer de feiten anders liggen.
+
+00:52:07.420 --> 00:52:09.400
+Een kwetsbaarheid die fysieke toegang vereist.
+
+00:52:09.580 --> 00:52:12.360
+Een lek zonder bekende exploit in een functie die je hebt uitgeschakeld.
+
+00:52:12.500 --> 00:52:14.260
+Een patch die belangrijk is, maar niet urgent.
+
+00:52:14.480 --> 00:52:18.860
+Je ringen zijn precies hiervoor gebouwd, en tests en pilots vertellen je iets nuttigs voordat de brede groep het ooit ziet.
+
+00:52:19.020 --> 00:52:20.060
+Er is ook een middenweg.
+
+00:52:20.240 --> 00:52:24.840
+Je kunt alleen de vroege ringen versnellen, sneller bewijs verzamelen en de rest volgens hun normale planning laten verlopen.
+
+00:52:25.020 --> 00:52:26.600
+Maar let op waar die keuze vanaf hangt.
+
+00:52:26.600 --> 00:52:28.180
+Het is geen technische vaardigheid.
+
+00:52:28.340 --> 00:52:33.560
+Het is een beoordeling van de ernst, blootstelling en zakelijke tolerantie, gemaakt met onvolledige informatie, en die beoordeling moet snel gebeuren.
+
+00:52:33.720 --> 00:52:35.840
+De update kan een apparaat binnen enkele uren bereiken.
+
+00:52:36.040 --> 00:52:40.060
+Als het besluit om niet te versturen een week aan vergaderingen kost, betekent de snelheid van de tool niets.
+
+00:52:40.240 --> 00:52:44.180
+De echte ontwerpvraag is dus niet het beleid, maar wie beslist en hoe snel ze dat kunnen.
+
+00:52:44.360 --> 00:52:46.220
+Een out-of-band reactie draaiboek.
+
+00:52:46.340 --> 00:52:48.380
+Het draaiboek begint voordat de melding binnenkomt.
+
+00:52:48.540 --> 00:52:51.760
+Wanneer de volgende out-of-band fiks verschijnt, moet niemand nog het proces hoeven te bedenken.
+
+00:52:51.940 --> 00:52:53.200
+Ze zouden het al moeten uitvoeren.
+
+00:52:53.200 --> 00:52:54.940
+Dit is hoe het er op volgorde uitziet.
+
+00:52:55.120 --> 00:52:56.480
+Eerste vraag, hoe erg is het?
+
+00:52:56.640 --> 00:52:58.400
+De ernst komt uit de waarschuwing zelf.
+
+00:52:58.700 --> 00:53:06.000
+Microsoft publiceert een klassificatie en scoren voor elk lek, maar die score is slechts een beginpunt, want het beschrijft het lek in het algemeen, niet jouw omgeving.
+
+00:53:06.260 --> 00:53:07.000
+Lees de details.
+
+00:53:07.360 --> 00:53:08.820
+Moet een gebruiker ergens op klikken?
+
+00:53:09.020 --> 00:53:10.460
+Moet men op hetzelfde netwerk zitten?
+
+00:53:10.640 --> 00:53:13.180
+Of kan een aanvaller er zonder enige hulp vanaf het internet bij?
+
+00:53:13.340 --> 00:53:15.020
+Tweede vraag, maakt iemand er misbruik van?
+
+00:53:15.980 --> 00:53:18.060
+Explatatiegevoeligheid is de grens tussen het belangrijk en nu.
+
+00:53:18.200 --> 00:53:21.860
+In de waarschuwing staat of het lek openbaar bekend is en of er aanvallen zijn waargenomen.
+
+00:53:21.860 --> 00:53:24.320
+Actieve exploitatie verandert de tijdsdruk.
+
+00:53:24.480 --> 00:53:25.800
+Alles voor dat punt is planning.
+
+00:53:26.060 --> 00:53:27.420
+Alles erna is reactie.
+
+00:53:27.640 --> 00:53:29.880
+Derde vraag, wie in jouw omgeving loopt gevaar?
+
+00:53:30.040 --> 00:53:32.640
+Dit is alleen aan jou en het is wat teams vaak overslaan.
+
+00:53:32.780 --> 00:53:35.320
+Een lek in een functie die je hebt uitgeschakeld, raakt je niet.
+
+00:53:35.500 --> 00:53:38.320
+Een lek in een dienst die alleen op servers draait, raakt geen laptops.
+
+00:53:38.540 --> 00:53:44.620
+Dus controleer je welke apparaten het getroffen onderdeel draaien, welke aan het internet hangen en welke iets bevatten wat een aanvaller wil hebben.
+
+00:53:44.800 --> 00:53:47.340
+Ernst, exploitatiegevoeligheid, blootstelling.
+
+00:53:47.340 --> 00:53:51.020
+Drie vragen en het antwoord bepaalt of dit een versnelde of een normale ring is.
+
+00:53:51.240 --> 00:53:52.740
+Nu komt het deel dat echt tijd kost.
+
+00:53:53.000 --> 00:53:53.680
+Wie zegt ja?
+
+00:53:53.860 --> 00:53:55.660
+In de meeste organisaties weet niemand het.
+
+00:53:55.780 --> 00:53:57.080
+Het beveiligingsteam wil het.
+
+00:53:57.200 --> 00:53:58.660
+Het endpointteam beheert de tool.
+
+00:53:58.880 --> 00:54:00.280
+De business ervaart de verstoring.
+
+00:54:00.560 --> 00:54:02.320
+En dus wordt een besluit dat een uur zou moeten duren.
+
+00:54:02.460 --> 00:54:03.920
+Een e-milfred met negen mensen.
+
+00:54:04.200 --> 00:54:05.360
+Los dat nu schriftelijk op.
+
+00:54:05.560 --> 00:54:08.160
+Wijs één persoon aan die een versnelling kan goedkeuren en één backup.
+
+00:54:08.380 --> 00:54:10.960
+Geef hen de autoriteit om eerst te handelen en daarna pas verslag uit te brengen.
+
+00:54:11.100 --> 00:54:13.660
+Bij een bevestigd, actief misbruikt lek zou de goedkeuring minuten moeten duren.
+
+00:54:13.840 --> 00:54:14.240
+Geen dagen.
+
+00:54:14.240 --> 00:54:15.920
+Bepaal daarna een uiterste termijn.
+
+00:54:16.120 --> 00:54:19.080
+Misschien een besluit binnen twee uur na bevestiging en het beleid live binnen vier.
+
+00:54:19.260 --> 00:54:21.520
+Wat de getallen ook zijn, iemand moet er verantwoordelijk voor zijn.
+
+00:54:21.680 --> 00:54:24.420
+Een snelle tool met een trage goedkeuring is simpelweg een trage tool.
+
+00:54:24.740 --> 00:54:25.700
+Vervolgens het doelwit.
+
+00:54:25.860 --> 00:54:26.800
+Je hebt twee opties.
+
+00:54:27.080 --> 00:54:29.220
+Richt de versnelling op één ring of op alles tegelijk.
+
+00:54:29.460 --> 00:54:31.340
+Richten op één ring is de voorzichtige aanpak.
+
+00:54:31.580 --> 00:54:35.320
+Stuur het eerst naar test en pilot en laat de installatiegegevens bevestigen dat er niets stuk gaat.
+
+00:54:35.560 --> 00:54:37.360
+Dat kan je een dag kosten en soms minder.
+
+00:54:37.360 --> 00:54:41.900
+Als het lek serieus is maar nog niet tegen je wordt gebruikt, is die dag een eerlijke prijs voor bewijs.
+
+00:54:41.900 --> 00:54:44.300
+Richten op het hele systeem is de botte aanpak.
+
+00:54:44.520 --> 00:54:48.780
+Dit doe je wanneer misbruik is bevestigd en de kwetsbare apparaten in elke ring zitten.
+
+00:54:49.040 --> 00:54:51.660
+Wachten op bewijs kost nu meer dan het risico op een slechte patch.
+
+00:54:51.840 --> 00:54:53.720
+Er is een hybride optie en die is vaak de juiste.
+
+00:54:54.000 --> 00:54:56.160
+Versnel de apparaten met de hoogste blootstelling direct.
+
+00:54:56.400 --> 00:54:59.920
+Machines verbonden met internet, werkstations van beheerders, alles wat bereikbaar is.
+
+00:55:00.120 --> 00:55:01.720
+Laat de rest een verkoord schema volgen.
+
+00:55:01.920 --> 00:55:03.960
+Wat je ook kiest, bepaal de rijkwijte bewust.
+
+00:55:03.960 --> 00:55:07.720
+Wijs het beleid toe aan een groep die je zelf hebt gekozen, niet een die je hebt geërfd.
+
+00:55:07.820 --> 00:55:10.420
+En dan volgt de stap die bepaalt hoe mensen hierover denken.
+
+00:55:10.680 --> 00:55:14.720
+Zeg hen, een gedwongen herstart is alleen acceptabel als er een waarschuwing voor afgaat.
+
+00:55:14.860 --> 00:55:19.160
+Dus voordat het beleid live gaat, stuur een bericht, kort, duidelijk, specifiek, wat er gebeurt,
+
+00:55:19.340 --> 00:55:21.160
+waarom het niet kan wachten en wanneer de herstart komt.
+
+00:55:21.380 --> 00:55:22.680
+Vraag hen hun werk op te slaan.
+
+00:55:22.880 --> 00:55:24.800
+Vertel hen wie ze moeten bellen als er iets misgaat.
+
+00:55:24.980 --> 00:55:26.240
+Gebruik meer dan één kanaal.
+
+00:55:26.380 --> 00:55:27.600
+E-mail wordt vaak genegeerd.
+
+00:55:27.780 --> 00:55:31.480
+Plaats een bericht in Teams en licht de service desk in, zodat zij niet verrast worden door de telefoontjes.
+
+00:55:31.480 --> 00:55:34.680
+En stel de uitsteltermijn voor de herstart in het beleid in volgens je belofte.
+
+00:55:34.820 --> 00:55:37.180
+Als je zei, binnen een dag, stel het dan niet in op nul.
+
+00:55:37.420 --> 00:55:39.820
+Doe dat, en een noodgeval voelt als een beheerde gebeurtenis.
+
+00:55:40.020 --> 00:55:43.400
+Sla je dit over, dan leert elke urgente patch mensen om de volgende patch te wantrouwen.
+
+00:55:43.600 --> 00:55:44.800
+Dat dekt het besturingssysteem.
+
+00:55:45.000 --> 00:55:48.600
+Het enige wat op elk apparaat draait en de eerste plek waar een oplossing meestal verschijnt.
+
+00:55:48.740 --> 00:55:51.020
+Maar er is een laag daaronder die andere regels volgt.
+
+00:55:51.240 --> 00:55:52.920
+Software die direct met de hardware praat.
+
+00:55:53.140 --> 00:55:55.740
+Code die op een eigen pad met eigen risico's wordt bijgewerkt.
+
+00:55:56.400 --> 00:55:58.340
+Stuurprogramma's, driver- en firmware-updates.
+
+00:55:58.980 --> 00:56:00.420
+Stuurprogramma's kondigen zichzelf niet aan.
+
+00:56:00.420 --> 00:56:03.280
+Een kwaliteitsupdate heeft een naam, een datum en een releasenoot.
+
+00:56:03.420 --> 00:56:08.120
+Een driver-update verschijnt in Windows-update gekoppeld aan een hardware-idee en de meeste mensen zien het nooit gebeuren.
+
+00:56:08.260 --> 00:56:10.140
+Totdat een touchpad ineens niet meer werkt.
+
+00:56:10.320 --> 00:56:11.880
+Wifi valt weg naar de slaapstand.
+
+00:56:12.080 --> 00:56:17.400
+Een dockingstation dat maandag nog prima werkte, doet woensdag raar en niemand denkt aan een update omdat niemand zich die herinnert.
+
+00:56:17.600 --> 00:56:19.540
+Zo bereiken stuurprogramma's een apparaat.
+
+00:56:19.700 --> 00:56:21.040
+Windows-update levert ze af.
+
+00:56:21.480 --> 00:56:23.580
+Hardwareleveranciers publiceren stuurprogramma's bij Microsoft.
+
+00:56:23.880 --> 00:56:27.200
+Microsoft hosten en apparaten zoeken ernaar op dezelfde manier als voor alles anders.
+
+00:56:27.380 --> 00:56:30.300
+Hetzelfde client-model dat we eerder bespraken, is nog steeds van toepassing.
+
+00:56:30.420 --> 00:56:32.660
+Het apparaat vraagt, evalueert en installeert.
+
+00:56:32.820 --> 00:56:34.900
+Maar stuurprogramma's volgen standaard niet je ringen.
+
+00:56:35.040 --> 00:56:38.420
+Een updatering heeft een instelling die bepaalt of stuurprogramma-updates meekomen met kwaliteitsupdates.
+
+00:56:39.180 --> 00:56:41.820
+Laat deze aanstaan en stuurprogramma's komen volgens het schema van Windows.
+
+00:56:42.080 --> 00:56:44.200
+Zet deze uit en Windows-update stopt met het aanbieden ervan.
+
+00:56:44.420 --> 00:56:47.200
+Dat is een bolte keuze of alles komt door of helemaal niet.
+
+00:56:47.440 --> 00:56:49.020
+Intune voegt betere controle toe.
+
+00:56:49.180 --> 00:56:54.160
+Het heet een beleid voor stuurprogramma-updates en je vindt het onder apparaten, Windows en dan stuurprogramma-updates.
+
+00:56:54.160 --> 00:57:00.400
+In plaats van een aan-uitschakelaar, krijg je een catalogus met stuurprogramma's die Windows-update voor je apparaten heeft gevonden en een besluit voor elk ervan.
+
+00:57:00.560 --> 00:57:03.500
+De besluiten zijn er in drie vormen, goedkeuren, beoordelen en pauseren.
+
+00:57:03.700 --> 00:57:05.780
+Goedkeuren betekent dat het stuurprogramma wordt uitgerold.
+
+00:57:05.940 --> 00:57:08.640
+Je kiest een datum en geschikte apparaten in de toegewezen groep ontvangen het.
+
+00:57:08.840 --> 00:57:11.300
+Beoordelen betekent dat het stuurprogramma in een wachtstatus blijft staan.
+
+00:57:11.480 --> 00:57:14.400
+Het is gevonden en is van toepassing op jouw omgeving, maar niemand heeft nog ja gezegd.
+
+00:57:14.520 --> 00:57:17.660
+Pauseren betekent dat een goedgekeurd stuurprogramma wordt tegengehouden omdat er iets misging.
+
+00:57:17.820 --> 00:57:20.060
+Die middelste status is belangrijker dan de andere twee.
+
+00:57:20.260 --> 00:57:24.120
+Het verandert stuurprogramma-updates van iets dat je overkomt in iets dat je eerst kunt bekijken.
+
+00:57:24.300 --> 00:57:27.400
+Het beleid zelf heeft twee modi en hier ligt de echte beslissing.
+
+00:57:27.600 --> 00:57:30.620
+In de handmatige modus wordt niets goedgekeurd doordat een persoon dit goedkeurt.
+
+00:57:30.820 --> 00:57:33.040
+Elk nieuw stuurprogramma komt in de beoordelingslijst terecht.
+
+00:57:33.040 --> 00:57:36.060
+Je leest het, controleert de hardware waarvoor het geldt en kiest een datum.
+
+00:57:36.200 --> 00:57:37.560
+Het is traag en het is veilig.
+
+00:57:37.720 --> 00:57:40.960
+Een slecht stuurprogramma bereikt nooit een apparaat tenzij iemand het heeft doorgelaten.
+
+00:57:41.140 --> 00:57:45.420
+In de automatische modus keurt in Toon aanbevolen stuurprogramma's zelf goed na een uitstelperiode die je instelt.
+
+00:57:45.600 --> 00:57:48.660
+Je kunt zeggen, wacht tien dagen nadat het stuurprogramma is gepubliceerd en implementeer dan.
+
+00:57:48.840 --> 00:57:49.680
+Niemand leest ze allemaal.
+
+00:57:49.960 --> 00:57:51.040
+Het beleid draait gewoon.
+
+00:57:51.240 --> 00:57:52.440
+Elke modus heeft een prijs.
+
+00:57:52.740 --> 00:57:54.260
+Handmatige goedkeuring kost aandacht.
+
+00:57:54.440 --> 00:57:58.360
+Een drukke omgeving ziet tientallen stuurprogramma-updates per maand en iemand moet ze allemaal bekijken.
+
+00:57:58.580 --> 00:57:59.360
+Diegene wordt moe.
+
+00:57:59.360 --> 00:58:05.100
+Dan groeit de beoordelingslijst, blijven stuurprogramma's maandenlang ongekeurd en lopen apparaten achter op fixies die de leverancier met een goede reden uitbracht.
+
+00:58:05.260 --> 00:58:06.820
+Traag kan veranderen in verouderd.
+
+00:58:07.200 --> 00:58:08.760
+Automatische goedkeuring kost controle.
+
+00:58:08.960 --> 00:58:14.600
+Een driver bereikt de groep volgens schema en de enige bescherming is het uitstel dat je hebt gekozen en de pauzeknop die je niet vergeet in te drukken.
+
+00:58:14.740 --> 00:58:19.460
+Het risico is niet dat automatisch roekeloos is, maar dat het falen onzichtbaar blijft totdat er een ticket binnenkomt.
+
+00:58:19.480 --> 00:58:21.480
+Dus de meeste teams splitsen het uiteindelijk op.
+
+00:58:21.780 --> 00:58:25.840
+Automatisch voor de vroege ringen met kort uitstel, zodat de testgroep als Canary fungeert.
+
+00:58:25.840 --> 00:58:31.540
+Handmatig voor brede en kritieke apparaten waar een slechte driver kostbaar is en een paar weken vertraging acceptabel is.
+
+00:58:31.760 --> 00:58:35.540
+Dezelfde ringlogica die je al hebt opgebouwd, toegepast op een stiller soort update.
+
+00:58:35.720 --> 00:58:37.000
+En nog een gewoonte helpt.
+
+00:58:37.200 --> 00:58:40.380
+Behandel een driver die een bekend probleem oplost anders dan een routine update.
+
+00:58:40.580 --> 00:58:43.760
+Als een driver van een leverancier een beveiligingslek dicht, beoordeel deze dan snel.
+
+00:58:43.940 --> 00:58:45.880
+Als het een kleine functie toevoegt, laat het dan wachten.
+
+00:58:45.880 --> 00:58:46.740
+Nu, firmware.
+
+00:58:46.740 --> 00:58:53.540
+Firmware is de code die onder het besturingssysteem leeft, de BIOS of UEFI op een laptop, de controller in een dak, de microcode op een opslagapparaat.
+
+00:58:53.660 --> 00:58:58.280
+Een deel ervan komt binnen via Windows Update als driver pakket en enkele leveranciers publiceren op deze manier.
+
+00:58:58.540 --> 00:59:01.920
+Wanneer dat gebeurt, behandelen dezelfde driver policies het, maar veel firmware niet.
+
+00:59:02.140 --> 00:59:09.180
+Veel fabrikanten leveren firmware via hun eigen tools, een update hulpprogramma van de leverancier, een beheerconsole, een pakket dat je zelf via Intune implementeert.
+
+00:59:09.180 --> 00:59:13.120
+Dat is een apart pad met een aparte timing, aparte tests en een aparte eigenaar.
+
+00:59:13.280 --> 00:59:16.560
+Windows Update heeft geen idee dat het bestaat en je update ringen raken het niet aan.
+
+00:59:16.740 --> 00:59:19.460
+Die scheiding veroorzaakt een gat in de meeste infrastructuren.
+
+00:59:19.580 --> 00:59:25.160
+Het besturingssysteem wordt volgens een duidelijk schema gepatcht en de firmware eronder veroudert stilletjes omdat het tussen twee teams invalt.
+
+00:59:25.340 --> 00:59:26.640
+Endpoint beheert Windows.
+
+00:59:26.880 --> 00:59:27.980
+Niemand beheert het BIOS.
+
+00:59:28.180 --> 00:59:30.480
+De moeite waard om op te lossen en om te bepalen wie verantwoordelijk is.
+
+00:59:30.600 --> 00:59:32.540
+Maar firmware en drivers delen één eigenschap.
+
+00:59:32.740 --> 00:59:34.600
+Wanneer ze misgaan, falen ze niet opvallend.
+
+00:59:34.740 --> 00:59:37.660
+Een driver die niet goed functioneert, geeft geen duidelijke foutmelding.
+
+00:59:37.660 --> 00:59:42.600
+Het zorgt voor een laptop die iets trager is, een camera die wat hapert, een herstart die niet helemaal voltooit.
+
+00:59:42.820 --> 00:59:46.680
+Dat zijn de stille fouten en die kosten de meeste tijd omdat niemand weet waar hij moet zoeken.
+
+00:59:46.860 --> 00:59:49.040
+Het is dus tijd om direct naar het falen te kijken.
+
+00:59:49.300 --> 00:59:51.620
+Waar updates falen, de taxonomie van het falen.
+
+00:59:51.780 --> 00:59:53.320
+Updates falen niet op één manier.
+
+00:59:53.560 --> 00:59:58.080
+Ze falen in fase en elke fase heeft een andere oorzaak, een ander symptoom en een andere eigenaar.
+
+00:59:58.280 --> 00:59:59.840
+Begin met het eenvoudigste overzicht.
+
+01:00:00.020 --> 01:00:03.340
+Een update moet downloaden, dan moet het installeren, dan moet het apparaat herstarten.
+
+01:00:03.580 --> 01:00:06.100
+Drie stappen en een apparaat kan bij elk van deze stappen uitvallen.
+
+01:00:06.600 --> 01:00:07.680
+Downloadfouten komen als eerste.
+
+01:00:07.920 --> 01:00:10.460
+Het apparaat weet dat er een update is, maar de bytes komen nooit aan.
+
+01:00:10.680 --> 01:00:12.500
+Misschien valt het netwerk uit tijdens de overdracht.
+
+01:00:12.700 --> 01:00:14.800
+Misschien blokkeert een proxy de Microsoft eindpunten.
+
+01:00:14.800 --> 01:00:17.320
+Misschien gaat het apparaat in slaapstand voordat het bestand klaar is.
+
+01:00:17.480 --> 01:00:21.080
+Het resultaat lijkt op een laptop die simpelweg achterloopt zonder dat iemand een fout opmerkt.
+
+01:00:21.720 --> 01:00:23.160
+Installatiefouten zijn duidelijker merkbaar.
+
+01:00:23.340 --> 01:00:26.380
+De bestanden komen aan, Windows begint met toepassen en iets weigert.
+
+01:00:26.540 --> 01:00:30.880
+Je krijgt een foutcode, een terugdraaiing en een machine die zichzelf stilletjes terugzet naar het beginpunt.
+
+01:00:31.040 --> 01:00:34.260
+De update werd geprobeerd, het apparaat maakte het ongedaan, gevolgd door herstartfouten.
+
+01:00:34.440 --> 01:00:35.660
+Deze zijn het meest verraderlijk.
+
+01:00:35.840 --> 01:00:38.600
+De installatie is voltooid, maar de patch is pas actief na een herstart van de machine.
+
+01:00:38.780 --> 01:00:40.360
+Een gebruiker stelt het twee weken uit.
+
+01:00:40.360 --> 01:00:42.300
+Een apparaat is nooit lang genoeg inactief.
+
+01:00:42.440 --> 01:00:44.140
+Een kiosk wordt nooit helemaal afgesloten.
+
+01:00:44.340 --> 01:00:47.240
+De update staat klaar, volledig geïnstalleerd, maar doet niets.
+
+01:00:47.600 --> 01:00:49.300
+Downloaden, installeren, herstarten.
+
+01:00:49.560 --> 01:00:54.400
+Laten we een niveau dieper gaan, want de meeste installatiefouten komen door het apparaat zelf, niet door de update.
+
+01:00:54.800 --> 01:00:56.380
+Schijfruimte is de saaie kampioen.
+
+01:00:56.520 --> 01:01:01.000
+Een functieupdate heeft vele gigabytesvrije ruimte nodig voor tijdelijke bestanden en een reservekopie.
+
+01:01:01.140 --> 01:01:04.760
+Een laptop met een bijna volle schijf faalt elke keer en altijd op dezelfde manier.
+
+01:01:05.000 --> 01:01:07.220
+Geen enkel beleid lost dat op, alleen ruimte doet dat.
+
+01:01:07.480 --> 01:01:08.800
+Vervolgens de surfacing stack.
+
+01:01:08.980 --> 01:01:11.080
+Dit is het onderdeel van Windows dat updates installeert.
+
+01:01:11.220 --> 01:01:14.420
+Als deze verouderd of kapot is, kan hij de update die hem zou repareren niet installeren.
+
+01:01:14.580 --> 01:01:18.780
+Een apparaat kan maandenlang in die lus vastzitten en steeds dezelfde maandelijkse patch proberen te installeren zonder succes.
+
+01:01:18.960 --> 01:01:23.300
+En dan de component store Windows bewaart een opslag van systeembestanden die nodig zijn voor elke update.
+
+01:01:23.540 --> 01:01:27.220
+Wanneer die opslag corrupt is, falen installaties met fouten die nergens nuttig naar wijzen.
+
+01:01:27.380 --> 01:01:30.340
+De machine lijkt gezond, apps draaien, maar een patch installeren lukt niet.
+
+01:01:30.500 --> 01:01:32.200
+Die drie hebben één eigenschap, gemeen.
+
+01:01:32.200 --> 01:01:34.480
+Ze zijn lokaal en specifiek voor één machine.
+
+01:01:34.700 --> 01:01:37.400
+Je vindt ze door naar dat apparaat te kijken, niet naar je beleid.
+
+01:01:37.560 --> 01:01:42.340
+Nu het andere soort fout, degene zonder enige foutmelding, beleidsconflicten blokkeren updates geruisloos.
+
+01:01:42.480 --> 01:01:45.500
+We bespraken dit al bij Autopatch, maar het bereik is groter dan dat.
+
+01:01:45.640 --> 01:01:48.660
+Een oud groepsbeleid wijst de client naar een server die niet meer bestaat.
+
+01:01:48.840 --> 01:01:51.380
+Een registerwaarde zet een versie vast die niemand zich herinnert.
+
+01:01:51.560 --> 01:01:55.300
+Twee in toen beleidsregels stellen verschillende uitsteltermijnen in en het apparaat krijgt er genen.
+
+01:01:55.480 --> 01:01:57.560
+De update faalt nooit omdat hij nooit eens begint.
+
+01:01:57.760 --> 01:01:59.640
+Dit is de ergste categorie om één reden.
+
+01:01:59.640 --> 01:02:03.460
+Er gaat niets kapot. Een apparaat dat faalt tijdens de installatie toont een foutmelding.
+
+01:02:03.620 --> 01:02:06.800
+Een apparaat waaraan nooit is verteld te installeren, toont niets en blijft maanden achter,
+
+01:02:06.940 --> 01:02:09.220
+terwijl elk dashboard meldt dat de update nog niet is aangeboden.
+
+01:02:09.380 --> 01:02:11.560
+Dus hier is een betere manier om dit alles te sorteren.
+
+01:02:11.700 --> 01:02:13.060
+Vraag waar de fout zich bevindt.
+
+01:02:13.200 --> 01:02:15.360
+Sommige fouten bevinden zich in de redeneringslaag.
+
+01:02:15.520 --> 01:02:19.600
+Dat is de laag waar beleid, ringen, uitstel en deadlines bepalen wat een apparaat moet doen.
+
+01:02:19.800 --> 01:02:22.900
+Als de logica faalt, krijgt het apparaat nooit de juiste instructie.
+
+01:02:23.020 --> 01:02:26.680
+Een conflict, een verkeerde toewijzing, een ontbrekende groep, een deadline die te ver weg ligt.
+
+01:02:26.680 --> 01:02:30.440
+Het apparaat is niet defect. De beslissing was onjuist of heeft het apparaat nooit bereikt.
+
+01:02:30.620 --> 01:02:32.800
+Andere fouten bevinden zich in de afleveringen verlaagd.
+
+01:02:32.860 --> 01:02:35.000
+Het apparaat weet precies wat het moet doen, maar kan het niet.
+
+01:02:35.220 --> 01:02:38.620
+Schijf vol, service stack defect, netwerk geblokkeerd, herstart uitgesteld.
+
+01:02:38.800 --> 01:02:41.540
+De instructie was perfect, maar de machine kon deze niet uitvoeren.
+
+01:02:41.760 --> 01:02:43.540
+Dat onderscheid verandert wie wat moet oplossen.
+
+01:02:43.820 --> 01:02:45.960
+Logische fouten zijn voor de eigenaar van het beleid.
+
+01:02:46.160 --> 01:02:49.440
+Je lost ze één keer op één plek op en ze zijn opgelost voor honderden apparaten.
+
+01:02:49.920 --> 01:02:51.800
+Afleverfouten zijn voor de eigenaar van het endpoint.
+
+01:02:51.800 --> 01:02:54.840
+Je lost ze machine voor machine op of je automatiseert het herstel.
+
+01:02:55.000 --> 01:02:56.900
+Haal je ze door elkaar, dan verspil je weken.
+
+01:02:57.100 --> 01:03:01.680
+Een team ziet honderd apparaten achterlopen, denkt dat elk apparaat stuk is en begint laptops handmatig te bewerken.
+
+01:03:01.880 --> 01:03:05.980
+Ondertussen was één verkeerde toewijzing de echte oorzaak en had één wijziging de hele lijst opgelost.
+
+01:03:06.160 --> 01:03:08.940
+Dus voordat je iets repareert, moet je weten in welke laag je zit.
+
+01:03:09.100 --> 01:03:10.660
+En dat kun je niet weten door te gissen.
+
+01:03:10.880 --> 01:03:15.620
+Je kunt het niet weten uit een gebruikersklacht, een onderbuikgevoel of een ticket dat zegt dat de update niet werkte.
+
+01:03:15.840 --> 01:03:16.740
+Je moet het kunnen zien.
+
+01:03:16.740 --> 01:03:20.020
+Welke apparaten faalden bij welke stap met welke fout in welke ring?
+
+01:03:20.200 --> 01:03:22.520
+Dat betekent dat rapportage op de eerste plaats komt.
+
+01:03:22.840 --> 01:03:24.500
+Rapportage in Intune en Autopatch.
+
+01:03:24.680 --> 01:03:26.140
+Intune beschikt al over de rapporten.
+
+01:03:26.300 --> 01:03:28.160
+De meeste teams openen alleen nooit de juiste.
+
+01:03:28.400 --> 01:03:30.020
+Begin met Windows kwaliteitsupdates.
+
+01:03:30.220 --> 01:03:33.160
+Ga in het Intune Admin Center naar rapporten en vervolgens naar Windows updates.
+
+01:03:33.380 --> 01:03:36.140
+Je vindt daar een tabblad voor kwaliteitsupdates en een voor functieupdates.
+
+01:03:36.360 --> 01:03:37.800
+Ze beantwoorden verschillende vragen.
+
+01:03:37.980 --> 01:03:41.340
+Het kwaliteitsrapport laat zien waar elk apparaat staat ten opzichte van de nieuwste maandelijks release.
+
+01:03:41.560 --> 01:03:43.040
+Welke apparaten hebben hem geïnstalleerd?
+
+01:03:43.260 --> 01:03:44.200
+Welke zijn nog bezig?
+
+01:03:44.200 --> 01:03:46.200
+Welke zijn mislukt en met welke foutcode?
+
+01:03:46.380 --> 01:03:49.280
+Je kunt filteren op ring, op groep, op besturingssysteemversie.
+
+01:03:49.440 --> 01:03:53.720
+Dat filter gebruik je het meest, want een cijfer voor de hele omgeving verbergt alle nuttige informatie.
+
+01:03:53.900 --> 01:03:57.240
+Het rapport voor functieupdates werkt hetzelfde, maar de eenheid is de versie.
+
+01:03:57.400 --> 01:03:59.520
+Hoeveel apparaten draaien de versie waarop je je richtte?
+
+01:03:59.620 --> 01:04:01.140
+Hoeveel zitten er nog op de oude versie?
+
+01:04:01.300 --> 01:04:03.100
+Hoeveel worden tegengehouden door een beveiliging?
+
+01:04:03.240 --> 01:04:06.900
+Als je een beleid voor functieupdates hebt gemaakt, is dit waar je controleert of de instelling werkt.
+
+01:04:07.140 --> 01:04:09.220
+Beide rapporten tonen ook details per apparaat.
+
+01:04:09.220 --> 01:04:13.820
+Klik op een machine en je ziet de update status, de laatste check-in en de foutmelding, indien aanwezig.
+
+01:04:14.000 --> 01:04:16.820
+Die detailweergave is waar rapportage verandert in probleemoplossing.
+
+01:04:17.000 --> 01:04:18.760
+We gaan het in een paar secties goed gebruiken.
+
+01:04:18.960 --> 01:04:20.040
+Nu de Autopatch kant.
+
+01:04:20.300 --> 01:04:23.560
+Autopatch heeft zijn eigen rapporten onder rapporten en dan Windows Autopatch.
+
+01:04:23.780 --> 01:04:25.300
+Dit zijn geen kopieën van die van Intune.
+
+01:04:25.540 --> 01:04:27.020
+Ze zijn ingedeeld rondom de service.
+
+01:04:27.300 --> 01:04:28.220
+Welke apparaten zijn geregistreerd?
+
+01:04:29.000 --> 01:04:29.840
+Welke zijn gereed?
+
+01:04:29.980 --> 01:04:31.960
+Hoe presteert elke ring bij de huidige update?
+
+01:04:31.960 --> 01:04:37.020
+Het apparaatrapport beantwoordt als eerste de vraag van alles wat je probeerde te registreren, wat is gelukt en wat niet.
+
+01:04:37.280 --> 01:04:39.100
+Gefaalde registraties tonen een reden.
+
+01:04:39.340 --> 01:04:42.180
+Dat is de lijst die je na elke batch doorneemt, zoals eerder gezegd.
+
+01:04:42.300 --> 01:04:44.580
+Het ringoverzicht is het belangrijkste tijdens een release.
+
+01:04:44.780 --> 01:04:48.140
+Het toont elke groep, van test tot breed, met de voortgang van de huidige update.
+
+01:04:48.320 --> 01:04:52.200
+Je ziet dat test dagen geleden klaar was en, first, op 90% en net begint.
+
+01:04:52.400 --> 01:04:54.380
+Dat is de gefaseerde uithol zichtbaar gemaakt.
+
+01:04:54.560 --> 01:04:57.800
+En als de service een ring heeft gepauzeerd, zie je dat hier met de bijbehorende reden.
+
+01:04:58.000 --> 01:04:59.640
+Dus wat betekenen de statusen eigenlijk?
+
+01:04:59.640 --> 01:05:01.440
+Vier categorieën doen het meeste werk.
+
+01:05:01.620 --> 01:05:03.900
+Up-to-date, in uitvoering, niet gereed, heeft problemen.
+
+01:05:04.000 --> 01:05:05.160
+Up-to-date is de makkelijke.
+
+01:05:05.360 --> 01:05:08.300
+Het apparaat draait de nieuwste release voor zijn ring en er staat niets in de wacht.
+
+01:05:08.460 --> 01:05:12.560
+In uitvoering betekent dat de update onderweg is, aan het downloaden of installeren is, of wacht op een herstart.
+
+01:05:12.720 --> 01:05:15.880
+Elk apparaat doorloopt deze staat, dus er zijn er altijd wel een paar hier.
+
+01:05:16.060 --> 01:05:16.960
+De vraag is hoe lang?
+
+01:05:17.180 --> 01:05:18.460
+Niet gereed is de verwarrende.
+
+01:05:18.620 --> 01:05:22.260
+Het betekent niet dat het kapot is, maar dat het apparaat nu niet door de service beheerd kan worden.
+
+01:05:22.440 --> 01:05:25.940
+Een gefaalde gereedheidscontrole, een beleidsconflict, een ontbrekende voorwaarde,
+
+01:05:25.940 --> 01:05:28.540
+dat zijn de stille blokkades van eerder die nu als status verschijnen.
+
+01:05:28.680 --> 01:05:31.860
+Behandel ze allemaal als een probleem in de reden neerlaag totdat het tegendeel is bewezen.
+
+01:05:32.080 --> 01:05:34.420
+Heeft problemen betekent dat er iets misging op het apparaat.
+
+01:05:34.540 --> 01:05:37.420
+Een installatiefout, een vastgelopen herstart, te lang geen verbinding.
+
+01:05:37.640 --> 01:05:39.240
+Dat is je lijst voor de afleveringslaag.
+
+01:05:39.400 --> 01:05:41.800
+Vier categorieën die elk naar een andere eigenaar wijzen.
+
+01:05:41.960 --> 01:05:43.500
+Hoe ziet een gezond dashboard er dan uit?
+
+01:05:43.960 --> 01:05:46.600
+Grotendeels groen, test en first bijna volledig bijgewerkt,
+
+01:05:46.800 --> 01:05:48.560
+fast en broad die volgens schema stijgen,
+
+01:05:48.780 --> 01:05:51.580
+een kleine staart van apparaten in uitvoering en een korte lijst met
+
+01:05:51.580 --> 01:05:53.480
+heeft problemen die elke week korter wordt.
+
+01:05:53.480 --> 01:05:57.600
+Registratiefouten nabij nul, maar kijk goed, want een gezond dashboard verbergt dingen,
+
+01:05:57.780 --> 01:05:59.900
+zoals apparaten die helemaal niet in het rapport staan.
+
+01:06:00.080 --> 01:06:02.820
+Alles buiten de service, uitgesloten of nooit geregistreerd,
+
+01:06:02.980 --> 01:06:03.980
+telt niet mee voor je percentage.
+
+01:06:04.380 --> 01:06:07.500
+Het getal ziet er goed uit omdat de probleemgevallen uit de noemer zijn verdwenen.
+
+01:06:07.640 --> 01:06:09.300
+Het verbergt de ouderdom van de data.
+
+01:06:09.540 --> 01:06:11.360
+Een apparaat dat een maand niet heeft ingecheckt,
+
+01:06:11.440 --> 01:06:13.280
+kan nog steeds zijn laatst bekende status hebben.
+
+01:06:13.420 --> 01:06:16.740
+Up-to-date volgens een laptop die in een lade ligt en het verbergt pauzes.
+
+01:06:16.960 --> 01:06:19.680
+Een ring in de wacht kan rustig lijken omdat er niets misgaat.
+
+01:06:19.680 --> 01:06:20.940
+Er beweegt ook niets.
+
+01:06:21.360 --> 01:06:22.980
+Percentages verbloemen ook de spreiding.
+
+01:06:22.980 --> 01:06:25.160
+95% gepatcht klinkt prima,
+
+01:06:25.360 --> 01:06:27.860
+totdat de ontbrekende 5% allemaal leidinggevende zijn,
+
+01:06:28.020 --> 01:06:29.980
+of servers, of de machines die er het meest toe doen.
+
+01:06:30.120 --> 01:06:32.640
+Het dashboard is dus accuraat en toch incompleet.
+
+01:06:32.780 --> 01:06:34.440
+Het toont de status van apparaten,
+
+01:06:34.680 --> 01:06:36.340
+maar degene die je naar patching vraagt,
+
+01:06:36.500 --> 01:06:37.620
+vraagt niet naar apparaten.
+
+01:06:37.860 --> 01:06:40.840
+Ze vragen of het bedrijf risico loopt en hoe lang dat al zo is.
+
+01:06:41.080 --> 01:06:43.660
+Dat is een andere vraag en die vereist een ander cijfer.
+
+01:06:43.920 --> 01:06:46.300
+Bij het meten van patch compliance als bedrijfstatistiek
+
+01:06:46.300 --> 01:06:48.760
+is het percentage gepatcht het getal dat iedereen noemt.
+
+01:06:49.760 --> 01:06:50.240
+94%.
+
+01:06:50.240 --> 01:06:52.520
+Het klinkt als een rapportcijfer en het is een momentopname,
+
+01:06:52.740 --> 01:06:55.200
+een bevroren beeld dat aangeeft hoeveel apparaten klaar zijn,
+
+01:06:55.420 --> 01:06:56.660
+niet hoe lang de rest kwetsbaar was.
+
+01:06:56.840 --> 01:06:59.240
+Er is een tweede getal en dat vertelt een beter verhaal.
+
+01:06:59.380 --> 01:07:00.060
+Tijd tot patch.
+
+01:07:00.240 --> 01:07:02.820
+Tijd tot patch is de kloof tussen de dag dat Microsoft een update uitbrengt
+
+01:07:02.820 --> 01:07:04.660
+en de dag dat een apparaat deze daadwerkelijk uitvoert.
+
+01:07:04.820 --> 01:07:06.100
+Eén apparaat, één kloof.
+
+01:07:06.260 --> 01:07:08.980
+Tel ze op voor het hele netwerk en je krijgt een verdeling in plaats van een score.
+
+01:07:09.200 --> 01:07:11.620
+De mediaan, de traagste 10%, het slechtste geval.
+
+01:07:11.840 --> 01:07:12.840
+Dit is waarom dat ertoe doet.
+
+01:07:12.840 --> 01:07:15.680
+Twee netwerken kunnen vandaag allebei 94% aangeven.
+
+01:07:15.840 --> 01:07:19.400
+In het eerste zijn de meeste apparaten binnen drie dagen gepatcht en zit een klein deel vast.
+
+01:07:19.580 --> 01:07:23.420
+In het tweede duurde alles drie weken en zijn de laatste achterblijvers van morgen pas klaargekomen.
+
+01:07:23.640 --> 01:07:25.740
+Hetzelfde percentage, een totaal ander risico.
+
+01:07:25.940 --> 01:07:27.540
+Het percentage ziet dat verschil niet.
+
+01:07:27.680 --> 01:07:31.060
+Tijd wel, dus als iemand hoger opvraagt naar patching, geeft ze dan geen apparaattelling.
+
+01:07:31.280 --> 01:07:33.540
+Zij denken niet in apparaten, zij denken in blootstelling aan risico.
+
+01:07:33.720 --> 01:07:35.480
+Het blootstellingsvenster is een beter kader.
+
+01:07:35.640 --> 01:07:39.280
+Hoeveel dagen nadat er een fix bestond, was een bepaalde groep machines nog steeds kwetsbaar.
+
+01:07:39.280 --> 01:07:40.960
+Dat is waar een aanvaller om geeft.
+
+01:07:41.200 --> 01:07:42.820
+Dat is wat een auditor uiteindelijk vraagt.
+
+01:07:43.000 --> 01:07:45.340
+En het is iets wat een bestuurslid begrijpt zonder woordenlijst.
+
+01:07:45.480 --> 01:07:46.380
+Zeg het in hun taal.
+
+01:07:46.560 --> 01:07:50.000
+Voor de maart-release waren onze zakelijke laptops gemiddeld zes dagen kwetsbaar.
+
+01:07:50.280 --> 01:07:51.780
+Kritieke systemen, negen.
+
+01:07:52.000 --> 01:07:54.200
+Dat is een zin waar een leider actie op kan ondernemen.
+
+01:07:54.460 --> 01:07:56.280
+Vergelijk dat met we zitten op 94%.
+
+01:07:56.920 --> 01:07:57.840
+Wat moet je daarmee?
+
+01:07:58.060 --> 01:07:58.380
+Niets.
+
+01:07:58.580 --> 01:08:00.140
+Het nodigt uit tot een schouder ophalen.
+
+01:08:00.300 --> 01:08:02.760
+En over een tijdvenster kun je op een zinvolle manier discussiëren.
+
+01:08:02.900 --> 01:08:08.140
+Als zes dagen te lang voelt, gaat het gesprek over uitstel, deadlines en de herstartregels die we eerder hebben opgesteld.
+
+01:08:08.140 --> 01:08:10.940
+Het cijfer wijst direct naar de knoppen waaraan je kunt draaien.
+
+01:08:11.100 --> 01:08:14.140
+Nu heb je doelen nodig en één doel voor iedereen is de verkeerde aanpak.
+
+01:08:14.380 --> 01:08:16.340
+Stel ze in per ring en per risicogroep.
+
+01:08:16.440 --> 01:08:20.120
+Tests moeten binnen een dag of twee volledige dekking bereiken, want daar is testen voor bedoeld.
+
+01:08:20.240 --> 01:08:21.620
+Pilot een paar dagen daarna.
+
+01:08:21.860 --> 01:08:25.000
+Broad kan een langer venster hebben, omdat daar het meeste bewijs voor is.
+
+01:08:25.200 --> 01:08:30.380
+Eén getal voor alle vier zou de vroege ringen straffen voor hun snelheid en de late ringen verontschuldigen voor hun vertraging.
+
+01:08:30.620 --> 01:08:32.240
+Voeg daar vervolgens risico aan toe.
+
+01:08:32.440 --> 01:08:36.920
+Machines die verbonden zijn met internet, beheerderswerkstations en apparaten met gevoelige gegevens.
+
+01:08:36.920 --> 01:08:41.020
+Die groepen verdienen een krapper venster dan de gemiddelde laptop, ook al zitten ze in dezelfde ring.
+
+01:08:41.180 --> 01:08:47.760
+En apparaten met een goede reden om te wachten, zoals klinische of fabrieksystemen, krijgen hun eigen afgesproken doel vastgelegd, zodat de vertraging een keuze is en geen verrassing.
+
+01:08:47.920 --> 01:08:50.360
+Hou de lijst kort drie of vier doelen die mensen kunnen onthouden.
+
+01:08:50.520 --> 01:08:52.040
+Twaalf wordt door niemand gecontroleerd.
+
+01:08:52.200 --> 01:08:53.680
+En hou gemiste doelen eerlijk bij.
+
+01:08:53.860 --> 01:08:56.280
+Een apparaat dat zijn doel mist, is geen fout in het rapport.
+
+01:08:56.500 --> 01:08:58.600
+Het is het begin van een vraag waar we zo op terugkomen.
+
+01:08:58.820 --> 01:09:00.260
+Waar komen de trendgegevens vandaan?
+
+01:09:00.400 --> 01:09:02.380
+De ingebouwde rapporten van Intune tonen het heden.
+
+01:09:02.580 --> 01:09:04.840
+Ze zijn goed in het laten zien van de huidige status van deze week.
+
+01:09:04.840 --> 01:09:06.480
+Terug kijken over maanden vereist meer.
+
+01:09:06.720 --> 01:09:08.340
+Daar komt log-analyse om de hoek kijken.
+
+01:09:08.520 --> 01:09:13.440
+Windows Update voor Business Rapporten kunnen updategegevens versturen naar een log-analyse werkruimte die deze in de loop van de tijd opslaat.
+
+01:09:13.560 --> 01:09:18.780
+De werkruimte houdt bij welke apparaten op welke beeld draaiden, welke updates ze kregen aangeboden en hoe elke implementatie verliep.
+
+01:09:18.920 --> 01:09:20.460
+Vervolgens voer je daar een query op uit.
+
+01:09:20.660 --> 01:09:23.220
+Met die historie kun je een lijn trekken in plaats van een punt zien.
+
+01:09:23.220 --> 01:09:35.340
+De medianen tijd tot patching per maand, of de traagste apparaten sneller worden of juist achterblijven, welke ring structureel zijn doel mist, en of de wijziging van de broad deadline van vorig kwartaal het venster echt heeft verkort of alleen de klachten heeft verschoven.
+
+01:09:35.520 --> 01:09:36.880
+Dat laatste is de echte waarde.
+
+01:09:37.080 --> 01:09:39.180
+Een verandering die je niet kunt meten, is een mening.
+
+01:09:39.360 --> 01:09:43.140
+Een verandering die je kunt meten, is bewijs, en bewijsoverleeft de volgende begrotingsvergadering.
+
+01:09:43.320 --> 01:09:47.040
+Een waarschuwing, de werkruimte kost geld en gegevensverzameling vereist instellingen.
+
+01:09:47.200 --> 01:09:50.380
+Begin met een beperkt aantal vragen die je echt wilt stellen en bouw van daaruit verder.
+
+01:09:50.380 --> 01:09:54.280
+Een dashboard dat niemand leest is hetzelfde als geen dashboard, dus nu heb je de juiste cijfers.
+
+01:09:55.180 --> 01:10:02.060
+Blootstellingsvensters, doelen per ring en risico, een trend die je kunt verdedigen, en dat is precies wanneer het ongemakkelijke deel begint, want een goede meting lost niets op.
+
+01:10:02.200 --> 01:10:04.800
+Het laat alleen duidelijk zien welke apparaten te laat zijn.
+
+01:10:05.240 --> 01:10:07.600
+Troubleshooting draaiboek van rapport tot hoofdoorzaak.
+
+01:10:07.740 --> 01:10:11.500
+Begin bij het apparaat, niet bij het beleid of de ring, de ene machine die te laat is.
+
+01:10:11.700 --> 01:10:13.520
+Elke mislukte update laat een nummer achter.
+
+01:10:13.760 --> 01:10:17.240
+Een foutcode, meestal een hexadecimale waarde die begint met 0x8.
+
+01:10:17.420 --> 01:10:19.080
+Het lijkt op ruis, maar dat is het niet.
+
+01:10:19.080 --> 01:10:21.780
+Zoek op de code en je vindt vaak de specifieke oorzaak.
+
+01:10:21.880 --> 01:10:26.000
+Om voldoende schijfruimte, een beschadigde download of een servicing stack die de patch niet kan toepassen.
+
+01:10:26.200 --> 01:10:29.540
+De code vertelt je welke fase is mislukt en dat geeft aan in welke laag je je bevindt.
+
+01:10:29.680 --> 01:10:30.440
+Waar vind je deze?
+
+01:10:30.640 --> 01:10:33.080
+Open in Intune het apparaat en bekijk de update status.
+
+01:10:33.360 --> 01:10:36.000
+Het kwaliteitsupdate report bevat de fout voor die specifieke machine.
+
+01:10:36.220 --> 01:10:39.760
+Open op het apparaat zelfinstellingen, dan Windows Update en vervolgens updategeschiedenis.
+
+01:10:39.940 --> 01:10:43.620
+Mislukte installaties worden daar getoond met dezelfde code plus de naam van de weigerachtige update.
+
+01:10:43.860 --> 01:10:46.180
+Lees de geschiedenis als een patroon, niet als een enkele regel.
+
+01:10:46.180 --> 01:10:50.860
+Eén fout is een incident. Dezelfde fout bij dezelfde update drie maanden achter elkaar is een diagnose.
+
+01:10:51.100 --> 01:10:54.860
+Een apparaat dat op één specifieke patch faalt, maar alle anderen wel accepteert, wijst op die patch.
+
+01:10:55.020 --> 01:10:57.540
+Een apparaat dat op alles faalt, wijst op de machine zelf.
+
+01:10:57.780 --> 01:10:58.980
+Verbreed nu het perspectief.
+
+01:10:59.140 --> 01:11:02.720
+Intune houdt een tijdlijn van het apparaat bij en dat is het onderdeel dat de meeste beheerders overslaan.
+
+01:11:02.860 --> 01:11:06.340
+Open het apparaat, zoek de tijdlijn en je ziet wat er in chronologische volgorde is gebeurd.
+
+01:11:06.540 --> 01:11:10.300
+Beleid ontvangen, update aangeboden, download gestart, herstart in afwachting.
+
+01:11:10.300 --> 01:11:14.880
+Elke gebeurtenis heeft een tijdstempel. Die volgorde is belangrijk, want de kloof vertelt je waar je moet zoeken.
+
+01:11:15.080 --> 01:11:19.140
+Als het beleid is aangekomen maar de update nooit werd aangeboden, ligt het probleemstroom opwaarts in de reden neerlaag.
+
+01:11:19.240 --> 01:11:22.620
+Als de update werd aangeboden maar de download nooit werd voltooid, ligt het aan het netwerk of de schijf.
+
+01:11:22.720 --> 01:11:27.100
+Als alles was voltooid maar de herstart nooit plaatsvond, is het een gebruiker of een apparaat dat nooit inactief is.
+
+01:11:27.320 --> 01:11:29.380
+Wanneer de tijdlijn ophoudt, ga je naar de logboeken.
+
+01:11:29.580 --> 01:11:32.860
+Windows houdt een gedetailleerd Windows Update Logboek bij, maar maakt het niet eenvoudig.
+
+01:11:32.860 --> 01:11:37.200
+De onbewerkte bestanden hebben een indeling die slechts weinigen kunnen lezen, dus vraag je Windows om het te vertalen.
+
+01:11:37.360 --> 01:11:42.120
+Een PowerShell commando genaamd Get Windows Update Log voegt de trace bestanden samen tot één leesbaar tekstbestand.
+
+01:11:42.280 --> 01:11:43.940
+Het duurt even en de uitvoer is lang.
+
+01:11:44.180 --> 01:11:45.640
+Lees het niet van boven naar beneden.
+
+01:11:45.900 --> 01:11:48.100
+Zoek naar de foutcode die je al hebt en lees eromheen.
+
+01:11:48.280 --> 01:11:50.240
+Je zoekt naar de regel net voor de foutmelding.
+
+01:11:50.460 --> 01:11:56.060
+Die regel noemt meestal de oorzaak, een bestand dat niet gevonden kon worden, een bron die niet bereikbaar was, een beleidswaarde die niet werd verwacht.
+
+01:11:56.200 --> 01:11:58.780
+Dit brengt je bij de stilste fouten, degene zonder foutmelding.
+
+01:11:58.780 --> 01:12:02.300
+Als het apparaat de instructie nooit heeft ontvangen, moet je zien wat het daadwerkelijk is verteld.
+
+01:12:02.520 --> 01:12:04.360
+Dat is het overzicht van het resulterende beleid.
+
+01:12:04.500 --> 01:12:07.900
+Open in Intune het apparaat en controleer de configuratiestatus voor update-instellingen.
+
+01:12:08.060 --> 01:12:09.640
+Zoek naar conflicten en foutstatussen.
+
+01:12:09.860 --> 01:12:12.480
+Elk item noemt de instelling en de beleidsregels die erom strijden.
+
+01:12:12.620 --> 01:12:15.220
+Op de machine zelf toont een ander hulpprogramma dezelfde waarheid.
+
+01:12:15.520 --> 01:12:20.020
+Groepsbeleid heeft een eigen resultatenrapport en het register bevat de updatebeleidswaarde die de client daadwerkelijk gebruikt.
+
+01:12:20.240 --> 01:12:22.440
+Vergelijk deze met wat u van plan was te implementeren.
+
+01:12:22.440 --> 01:12:27.740
+Als de cijfers niet overeenkomen, heeft u de tweede stem gevonden, een oud groepsbeleid, een achtergebleven registerwaarde,
+
+01:12:28.780 --> 01:12:32.180
+toe te wijzen. Los dit op door één stem te verwijderen, zoals we eerder zeiden.
+
+01:12:32.600 --> 01:12:35.000
+Synchroniseer vervolgens het apparaat en zie de instelling veranderen.
+
+01:12:35.180 --> 01:12:37.860
+Stel nu dat het beleid in orde is en het apparaat nog steeds niet kan updaten.
+
+01:12:38.040 --> 01:12:42.180
+Het probleem is lokaal. U heeft een kort lijstje met reparaties, variërend van licht tot zwaar.
+
+01:12:42.340 --> 01:12:46.420
+Reset eerst de update-onderdelen. Windows Update houdt een cache bij van gedownloadde bestanden.
+
+01:12:46.680 --> 01:12:49.600
+Wanneer die cache beschadigd is, mislukken installaties op vreemde manieren.
+
+01:12:49.600 --> 01:12:54.620
+Stop de update-services, wist de cache-map, start de services opnieuw en laat de clientverse kopieën downloaden.
+
+01:12:54.740 --> 01:12:56.560
+Het herstelt meer machines dan zou moeten.
+
+01:12:56.560 --> 01:13:00.280
+Repareer ten tweede de service laag. Twee ingebouwde tools regelen dit.
+
+01:13:00.500 --> 01:13:04.880
+DISM controleert en repareert het onderdelenarchief, de verzameling systeembestanden waaruit Windows updates opbouwt.
+
+01:13:05.000 --> 01:13:08.060
+Vervolgens controleert Systemfile Checker de bestanden op de schijf tegen dat archief.
+
+01:13:08.280 --> 01:13:10.880
+Voer ze in die volgorde uit, want de tweede is afhankelijk van de eerste.
+
+01:13:11.100 --> 01:13:13.240
+Ten derde, de zware optie opnieuw installeren.
+
+01:13:13.240 --> 01:13:19.280
+Bij een functie-update die blijft mislukken, brengt een in-place reparatie-installatie Windows opnieuw aan over zichzelf, met behoud van apps en gegevens.
+
+01:13:19.520 --> 01:13:22.520
+Dit duurt een uur en lost bijna alles op, behalve defecte hardware.
+
+01:13:22.520 --> 01:13:28.000
+Als zelfs dat faalt, heeft het apparaat een reset of rijmaasje nodig en op dat punt is de machine zelf de boosdoener.
+
+01:13:28.220 --> 01:13:31.580
+Van licht naar zwaar, stop bij de eerste die werkt, maar kijk naar wat u zojuist heeft gedaan.
+
+01:13:31.780 --> 01:13:34.900
+Eén laptop, één fout, een uur lang laks lezen en reparaties uitvoeren.
+
+01:13:35.100 --> 01:13:36.480
+Dat is prima voor een enkele machine.
+
+01:13:36.700 --> 01:13:38.180
+Het is een ramp voor vijftig machines.
+
+01:13:38.300 --> 01:13:40.040
+Elke stap in dat draaiboek is herhaalbaar.
+
+01:13:40.200 --> 01:13:43.920
+Dezelfde cache reset, dezelfde reparatiecommando's, dezelfde controle op dezelfde vastgelopen service.
+
+01:13:44.120 --> 01:13:47.000
+Een oplossing die u in een lijst kunt beschrijven, is een oplossing die u kunt scripten.
+
+01:13:47.140 --> 01:13:49.160
+De volgende stap is dus niet sneller worden in repareren.
+
+01:13:49.160 --> 01:13:54.160
+Het is zorgen dat herhalende problemen zichzelf oplossen, automatisering van herstel en het afhandelen van achterblijvers.
+
+01:13:54.340 --> 01:13:56.400
+Intune heeft een functie die precies hiervoor is gebouwd.
+
+01:13:56.540 --> 01:14:00.360
+Het heet Remediations, herstelacties, en staat onder Apparaten, dan Scripts en herstelacties.
+
+01:14:00.520 --> 01:14:02.040
+Elke set bestaat uit een paar scripts.
+
+01:14:02.300 --> 01:14:03.720
+Het eerste is een detectiescript.
+
+01:14:03.920 --> 01:14:06.340
+Het draait op het apparaat en beantwoordt een ja- of nee-vraag.
+
+01:14:06.480 --> 01:14:07.980
+Is deze machine in een slechte staat?
+
+01:14:08.180 --> 01:14:09.560
+Het tweede is het herstelscript.
+
+01:14:09.800 --> 01:14:12.520
+Dit draait alleen wanneer detectie, ja, zegt en voert de reparatie uit.
+
+01:14:12.680 --> 01:14:13.660
+Die structuur is belangrijk.
+
+01:14:13.960 --> 01:14:16.380
+Het detectiescript is lichtgewicht en draait vaak, dagelijks als u wilt.
+
+01:14:16.380 --> 01:14:18.700
+De oplossing wordt alleen uitgevoerd op de systemen die het nodig hebben.
+
+01:14:18.840 --> 01:14:20.260
+Niemand komt aan de gezonde systemen.
+
+01:14:20.420 --> 01:14:21.440
+Wat ga je dus detecteren?
+
+01:14:21.620 --> 01:14:24.040
+Begin met de reparatielijst die je zojuist handmatig hebt uitgevoerd.
+
+01:14:24.200 --> 01:14:26.040
+Is de Windows Update Service uitgeschakeld?
+
+01:14:26.180 --> 01:14:28.000
+Is de update cache te groot of beschadigd?
+
+01:14:28.080 --> 01:14:31.040
+Is de vrije schijfruimte onder de vereiste grens voor een functie-update?
+
+01:14:31.240 --> 01:14:33.320
+Wacht het apparaat al langer dan een week op een herstart?
+
+01:14:33.520 --> 01:14:36.760
+Dit zijn allemaal controles van één regel en elk heeft een bekende oplossing.
+
+01:14:37.040 --> 01:14:38.240
+Daarna koppel je ze aan elkaar.
+
+01:14:38.560 --> 01:14:39.820
+Schijfruimte onder 20 gigabyte?
+
+01:14:40.060 --> 01:14:42.020
+Verwijder tijdelijke bestanden en de oude update cache.
+
+01:14:42.180 --> 01:14:43.160
+Update Service gestopt?
+
+01:14:43.160 --> 01:14:44.900
+Zet deze op automatisch en start hem op.
+
+01:14:44.900 --> 01:14:46.360
+Component Store beschadigd.
+
+01:14:46.440 --> 01:14:48.540
+Voer de reparatiecommando's uit en log het resultaat.
+
+01:14:48.680 --> 01:14:51.500
+Het systeem herstelt zich zelfs nachts en de ticket wordt nooit aangemaakt.
+
+01:14:51.680 --> 01:14:52.760
+Eén waarschuwing vooraf.
+
+01:14:52.920 --> 01:14:57.200
+Een herstelactie heeft veel impact, dus test het eerst in je testomgeving, zoals elke andere wijziging.
+
+01:14:57.340 --> 01:15:00.680
+Een script dat op grote schaal de verkeerde map wist, is een incident op zich.
+
+01:15:00.920 --> 01:15:03.000
+Sommige apparaten reageren nergens op.
+
+01:15:03.200 --> 01:15:04.800
+Ze missen de deadline maand na maand.
+
+01:15:05.040 --> 01:15:06.100
+Zie ze niet als ruis.
+
+01:15:06.340 --> 01:15:07.280
+Zie ze als een lijst.
+
+01:15:07.440 --> 01:15:10.860
+Haal de apparaten op die in de laatste twee of drie cyclie het doelvenster hebben gemist.
+
+01:15:10.860 --> 01:15:14.340
+In Log Analytics is dat een eenvoudige query op de geschiedenis die je al verzamelt.
+
+01:15:14.340 --> 01:15:17.120
+De hardnekkige gevallen vallen meestal in een paar categorieën.
+
+01:15:17.220 --> 01:15:24.880
+Een model met een driverprobleem, een afdeling die nooit herstart, een handvol machines met volle schijven of een locatie achter een proxy die update endpoints blokkeert.
+
+01:15:25.100 --> 01:15:28.520
+Zodra je het patroon ziet, heb je een groep en een groep kun je gericht aanpakken.
+
+01:15:28.720 --> 01:15:34.380
+Plaats die apparaten in een eigen toewijzing met een krappere deadline, striktere herstartregels of specifieke herstelacties.
+
+01:15:34.620 --> 01:15:37.300
+Los de oorzaak op voor de groep en de hele lijst wordt in één keer kleiner.
+
+01:15:37.520 --> 01:15:39.820
+Maar sommige apparaten zijn om een simpelere reden te laat.
+
+01:15:39.820 --> 01:15:42.760
+Ze zijn er niet. Een laptop in een lade kan niets installeren.
+
+01:15:42.940 --> 01:15:46.180
+Een verkoper die twee keer per maand verbinding maakt, biedt de service slechts twee kansen.
+
+01:15:46.300 --> 01:15:50.240
+Een veldapparaat op een zwakke mobiele verbinding downloadt een paar megabytes en verbreekt de sessie.
+
+01:15:50.400 --> 01:15:53.860
+Hiervoor is het beleid prima, maar heeft de levering geen venster om in te draaien.
+
+01:15:54.080 --> 01:15:55.040
+Weet eerst wie ze zijn.
+
+01:15:55.380 --> 01:15:58.240
+Controleer de laatste in-check datum in Intune en sorteer daarop.
+
+01:15:58.340 --> 01:16:04.300
+Alles wat 30 dagen stil is, hoort in een andere categorie en zou niet in je compliantieteller moeten staan alsof het een normaal apparaat is.
+
+01:16:04.300 --> 01:16:07.060
+Behandel ze via een eigen traject en verlaag dan de drempel.
+
+01:16:07.240 --> 01:16:12.000
+Delivery Optimization laat apparaat en update inhoud delen met peers, wat helpt bij beperkte bandbreedte.
+
+01:16:12.120 --> 01:16:18.780
+Kortere deadlines voor zelden verbonden apparaten zorgen dat de update wordt toegepast zodra ze verschijnen, in plaats van te wachten op een perfect venster.
+
+01:16:18.980 --> 01:16:26.960
+En een regel voor verbonden apparaten kan de toegang tot bedrijfsbronnen blokkeren totdat het apparaat is bijgewerkt, wat een stille vertraging zichtbaar maakt en leidt tot het laatste onderdeel.
+
+01:16:27.160 --> 01:16:28.620
+Wat gebeurt er als niets meer werkt?
+
+01:16:28.620 --> 01:16:30.380
+De gebruiker kan niet de oplossing zijn.
+
+01:16:30.560 --> 01:16:34.540
+Iemand vragen om Windows Update uit te voeren en opnieuw op te starten is een instructie, en instructies worden genegeerd.
+
+01:16:34.700 --> 01:16:37.280
+Een vastgelopen apparaat heeft een pad nodig dat zonder hen functioneert.
+
+01:16:37.680 --> 01:16:39.280
+Herstelacties worden als eerste uitgevoerd.
+
+01:16:39.460 --> 01:16:45.660
+Als het apparaat na een vastgesteld aantal dagen nog steeds achterloopt, wordt er automatisch een ticket geopend met de foutmelding en de geschiedenis bijgevoegd.
+
+01:16:45.740 --> 01:16:51.620
+Als het daarna nog steeds achterloopt, verliest het apparaat de toegang, gaat het naar een wachtrij voor re-imaging of komt het bij een aangewezen eigenaar terecht.
+
+01:16:51.840 --> 01:16:53.860
+Elke stap heeft een tijdslimiet en een verantwoordelijke.
+
+01:16:53.860 --> 01:16:55.360
+Leg die stap één keer vast.
+
+01:16:55.360 --> 01:16:57.320
+Daarna is een achterblijver geen verrassing meer.
+
+01:16:57.460 --> 01:17:01.600
+Het is een proces, maar je kunt de beste automatisering ter wereld hebben en nog steeds vechten tegen een onzichtbare vijand.
+
+01:17:01.720 --> 01:17:04.040
+Het laatste risico is het risico dat je zelf creëert.
+
+01:17:04.200 --> 01:17:08.680
+Een tweede systeem, een vergeten beleid, twee besturingen die hetzelfde apparaat twee verschillende dingen vertellen.
+
+01:17:08.860 --> 01:17:11.100
+Gemengde omgevingen en veel voorkomende ontwerpfouten.
+
+01:17:11.260 --> 01:17:12.720
+De meeste omgevingen zijn niet schoon.
+
+01:17:12.920 --> 01:17:13.820
+Ze zijn gelaagd.
+
+01:17:13.880 --> 01:17:16.020
+Iemand heeft in 2014 groepsbeleid ingesteld.
+
+01:17:16.200 --> 01:17:19.780
+Iemand anders voeg de Configuration Manager toe, toen kwam in Toen en niemand heeft iets uitgeschakeld.
+
+01:17:19.780 --> 01:17:22.460
+Dus drie systemen hebben nu een mening over hetzelfde apparaat.
+
+01:17:22.460 --> 01:17:24.240
+Groepsbeleid stelt de updatebron in.
+
+01:17:24.560 --> 01:17:27.760
+Configuration Manager heeft zijn eigen software-update implementaties.
+
+01:17:27.960 --> 01:17:31.140
+In Toen push een update ring en de laptop moet alle drie tegelijk volgen.
+
+01:17:31.380 --> 01:17:32.040
+Dat kan niet.
+
+01:17:32.200 --> 01:17:37.160
+Het volgt de waarde die als laatste binnenkomt of die de client het meest vertrouwt, en die volgorde heb jij niet gekozen.
+
+01:17:37.340 --> 01:17:41.060
+Het resultaat is een apparaat dat zich anders gedraagt dan elk beleid dat je hebt geschreven.
+
+01:17:41.280 --> 01:17:45.640
+Soms bereikt het Microsoft direct, soms vraagt het een server die afgelopen voorjaar is uitgefaseerd.
+
+01:17:45.640 --> 01:17:49.140
+En het rapport zegt niets omdat geen enkel systeem het volledige beeld ziet.
+
+01:17:49.140 --> 01:17:55.000
+Als je hier één ding van onthoudt, onthoud dan dit. Een achtergebleven Group Policy object is de meest voorkomende stille blokkade die ik ken.
+
+01:17:55.160 --> 01:17:58.500
+Het geeft geen foutmelding, het blijft de client simpelweg ergens anders naartoe sturen.
+
+01:17:58.700 --> 01:18:00.440
+Nu wordt co-management pas echt formeel.
+
+01:18:00.680 --> 01:18:05.120
+Wanneer een apparaat door zowel Configuration Manager als Intune wordt beheerd, krijg je workload-schuifregelaars.
+
+01:18:05.260 --> 01:18:08.020
+Een schuifregelaar per gebied, inclusief Windows Update beleid.
+
+01:18:08.200 --> 01:18:10.700
+Verplaats deze naar Intune en Intune beheert het updategedrag.
+
+01:18:10.920 --> 01:18:13.800
+Laat deze op Configuration Manager staan en Configuration Manager doet het.
+
+01:18:13.960 --> 01:18:14.700
+Dat is de regel.
+
+01:18:14.700 --> 01:18:17.800
+De schuifregelaar bepaalt wie wint, maar mensen behandelen het als een suggestie.
+
+01:18:17.940 --> 01:18:20.560
+Ze verplaatsen de schuifregelaar voor een pilotgroep en vergeten het vervolgens,
+
+01:18:20.720 --> 01:18:23.380
+waardoor de helft van de omgeving het ene systeem volgt en de andere helft het andere.
+
+01:18:23.540 --> 01:18:27.140
+Of ze verplaatsen het, maar de oude Configuration Manager implementaties blijven toegewezen,
+
+01:18:27.320 --> 01:18:29.480
+staan daar nog steeds en wachten op een reden om relevant te worden.
+
+01:18:29.680 --> 01:18:31.840
+Een autopatch voegt daar een extra vereiste aan toe.
+
+01:18:32.000 --> 01:18:35.320
+Voor het beheren van een apparaat moet de Windows Update workload bij Intune liggen.
+
+01:18:35.520 --> 01:18:36.920
+Niet gedeeld, niet gedeeltelijk.
+
+01:18:37.120 --> 01:18:41.080
+Gebeurt dit niet, dan faalt het apparaat voor de gereedheidscontrole en belandt het weer op de lijst met niet gereed apparaten.
+
+01:18:41.080 --> 01:18:44.160
+Beschouw de schuifregelaar daarom als een migratie, niet als een schakelaar.
+
+01:18:44.260 --> 01:18:47.760
+Verplaats het per groep, bevestig dat oude implementaties zijn verwijderd,
+
+01:18:47.920 --> 01:18:50.860
+controleer het gedrag van het apparaat en ga dan door naar de volgende groep.
+
+01:18:50.960 --> 01:18:53.360
+Het volgende probleem is het ontwerp dat je daarop toepast.
+
+01:18:53.580 --> 01:18:55.220
+Drie fouten komen steeds weer terug.
+
+01:18:55.400 --> 01:18:59.640
+De eerste is te weinig ringen, meestal twee ringen, een kleine testgroep en vervolgens de rest.
+
+01:18:59.820 --> 01:19:04.200
+Het voelt eenvoudig, maar de sprong van een paar dozijn apparaten naar het hele bedrijf is een afgrond
+
+01:19:04.200 --> 01:19:06.080
+en een slechte update valt daar zo vanaf.
+
+01:19:06.080 --> 01:19:11.240
+Er is geen tussenfase om problemen op te vangen, dus het eerste echte signaal komt direct van 10.000 machines tegelijk.
+
+01:19:11.400 --> 01:19:13.060
+De tweede is deadlines die te lang zijn.
+
+01:19:13.240 --> 01:19:16.400
+Een deadline van 14 dagen op elke ring omdat niemand klachten wilde.
+
+01:19:16.600 --> 01:19:20.800
+Dan is het blootstellingsvenster door het ontwerp twee weken breed en heb je een systeem gebouwd dat bewust traag is.
+
+01:19:20.960 --> 01:19:22.580
+We spraken eerder over het meten daarvan.
+
+01:19:22.740 --> 01:19:25.180
+Het getal dat je hier instelt, wordt het getal waarover je rapporteert.
+
+01:19:25.340 --> 01:19:26.800
+De derde is helemaal geen pilot ring.
+
+01:19:26.980 --> 01:19:29.720
+Updates gaan rechtstreeks van de laptops van IT naar de algemene release.
+
+01:19:29.880 --> 01:19:32.020
+De machines van IT zijn de schoonste in het gebouw.
+
+01:19:32.020 --> 01:19:36.220
+Nieuwe builds, geen vreemde software, niemand die een 20 jaar oude financiële tool draait.
+
+01:19:36.360 --> 01:19:41.000
+Een pilot heeft gebruikers nodig die lijken op je echte gebruikers, anders kan het je nergens voor waarschuwen.
+
+01:19:41.200 --> 01:19:42.480
+Let op wat deze gemeen hebben.
+
+01:19:42.740 --> 01:19:44.360
+Geen van deze is een technisch falen.
+
+01:19:44.560 --> 01:19:49.180
+Elk is een beslissing om wrijving te vermijden en elk verplaatst het risico naar een plek waar je het niet kunt zien.
+
+01:19:49.380 --> 01:19:53.460
+En dan is er de fout die op succes lijkt, autopatch behandelen als instellen en vergeten.
+
+01:19:53.580 --> 01:19:54.700
+De service draait goed.
+
+01:19:54.940 --> 01:19:55.760
+Dat is het probleem.
+
+01:19:55.940 --> 01:20:00.960
+Het creëert de ringen, monitort de uitrol, pauzeert bij slechte signalen en maandenlang gaat alles goed.
+
+01:20:00.960 --> 01:20:06.080
+Dus de aandacht verslapt, niemand leest de registratiefouten, niemand controleert de lijst met niet gereed apparaten.
+
+01:20:06.420 --> 01:20:11.540
+Uitsluitingen stapelen zich op zonder evaluatiedatum en de uitsluitingslijst verandert stilletjes in een tweede domein dat niemand patcht.
+
+01:20:11.800 --> 01:20:12.980
+Autopatch beheert het proces.
+
+01:20:13.240 --> 01:20:15.000
+Het is niet verantwoordelijk voor het resultaat.
+
+01:20:15.200 --> 01:20:21.180
+De beleidsbeslissingen, de uitzonderingen, de verantwoordelijkheid, dat blijft allemaal bij jou of er nu iemand meekijkt of niet.
+
+01:20:21.360 --> 01:20:22.760
+Je hebt dus niet meer tools nodig.
+
+01:20:22.960 --> 01:20:26.180
+Je hebt iemand nodig die toezicht houdt op een planning met de bevoegdheid om te handelen.
+
+01:20:26.340 --> 01:20:26.900
+Dat is een plan.
+
+01:20:27.120 --> 01:20:30.040
+En een plan vereist rollen, ritmes en besluiten die op papier staan.
+
+01:20:30.040 --> 01:20:32.180
+Een bedrijfsmodel dat je kunt uitvoeren.
+
+01:20:32.380 --> 01:20:34.640
+Begin met namen, niet met teams, maar met namen.
+
+01:20:34.840 --> 01:20:38.780
+Drie taken hebben een eigenaar nodig en voor elke taak moet één persoon verantwoordelijk zijn.
+
+01:20:39.020 --> 01:20:39.920
+Beleid is de eerste.
+
+01:20:40.220 --> 01:20:43.960
+Iemand is verantwoordelijk voor de ringen, de uitstelregelingen, de deadlines en de herstartregels.
+
+01:20:44.200 --> 01:20:46.680
+Wanneer een instelling verandert, heeft die persoon dat goedgekeurd.
+
+01:20:46.900 --> 01:20:49.800
+Wanneer twee controles botsen, beslist die persoon welke blijft.
+
+01:20:49.940 --> 01:20:53.040
+Als niemand deze taak heeft, past elke beheerder het beleid een beetje aan...
+
+01:20:53.040 --> 01:20:56.060
+...en na zes maanden kan niemand uitleggen waarom Brad een deadline van negen dagen heeft.
+
+01:20:56.200 --> 01:20:57.260
+Pilots zijn de tweede.
+
+01:20:57.460 --> 01:20:59.200
+Iemand moet de vroege ringen in leven houden.
+
+01:20:59.400 --> 01:21:03.280
+Dat betekent echte gebruikers, echte hardware en een manier voor hen om te melden dat er iets stuk is.
+
+01:21:03.420 --> 01:21:06.900
+Een pilotring zonder eigenaar raakt langzaam gevuld met mensen die het bedrijf hebben verlaten.
+
+01:21:07.080 --> 01:21:11.960
+De eigenaar controleert elk kwartaal het lidmaatschap en zorgt ervoor dat de groep nog steeds lijkt op het netwerk waarvoor hij moet waarschuwen.
+
+01:21:12.320 --> 01:21:15.140
+Uitzonderingen zijn de derde en dat is de taak die vaak wordt overgeslagen.
+
+01:21:15.140 --> 01:21:22.260
+Elk netwerk heeft apparaten die het normale pad niet kunnen volgen, de fabriekscontroller, het klinische werkstation, de leidinggevende die weigert te herstarten.
+
+01:21:22.460 --> 01:21:26.420
+Elke uitzondering heeft een naam nodig, een schriftelijke reden en een evaluatiedatum.
+
+01:21:26.640 --> 01:21:31.760
+Zonder datum wordt een uitzondering permanent en verandert de lijst stilletjes in het tweede netwerk waar we het eerder over hadden.
+
+01:21:31.920 --> 01:21:36.000
+Beleid, pilots, uitzonderingen, drie eigenaren met voor elk één backup.
+
+01:21:36.200 --> 01:21:39.260
+Nu het ritme, want eigenaarschap zonder agenda is slechts een titel.
+
+01:21:39.260 --> 01:21:43.100
+De maandelijkse kadans begint met Patch Tuesday, maar niet op Patch Tuesday zelf.
+
+01:21:43.260 --> 01:21:44.540
+De dag zelf is om te lezen.
+
+01:21:44.780 --> 01:21:51.620
+Wat is er uitgebracht, wat is gemarkeerd als misbruikt, wat zegt Microsoft over bekende problemen, dat is een korte check door de beleidseigenaar en die beantwoordt één vraag.
+
+01:21:51.780 --> 01:21:54.280
+Is dit een normale maand of heeft iets het versnelde pad nodig?
+
+01:21:54.500 --> 01:21:55.780
+Dan nemen de ringen het over.
+
+01:21:55.980 --> 01:21:57.040
+Test krijgt de update.
+
+01:21:57.220 --> 01:22:02.600
+Een paar dagen later bekijkt de pilot-eigenaar het signaal, de fouten, helpdesk oproepen en alles wat vreemd is bij de vroege gebruikers.
+
+01:22:02.600 --> 01:22:08.560
+Die beoordeling eindigt met een besluit op papier, vrijgeven naar de volgende ring, vasthouden of pauseren, dan fast, dan broad.
+
+01:22:08.560 --> 01:22:10.160
+Elke stap met zijn eigen controle.
+
+01:22:10.400 --> 01:22:16.060
+Aan het einde van de cyclus toont de rapportage die we eerder hebben gebouwd de patch tijd voor de maand, en iemand vergelijkt dit met de doelstellingen.
+
+01:22:16.220 --> 01:22:17.020
+Let op wat dit is.
+
+01:22:17.200 --> 01:22:18.140
+Het is geen project.
+
+01:22:18.380 --> 01:22:22.200
+Het is een lus die elke 30 dagen draait met dezelfde paar mensen en dezelfde paar vragen.
+
+01:22:22.380 --> 01:22:25.120
+Het jaarlijkse ritme is langzamer en minstens zo belangrijk.
+
+01:22:25.520 --> 01:22:27.840
+Eén keer per jaar komt de functie update langs.
+
+01:22:27.840 --> 01:22:34.400
+De beleidseigenaar opent de levenscycluskalender, controleert welke versie het einde van de ondersteuning bereikt en kiest het doel.
+
+01:22:34.560 --> 01:22:37.240
+De pilot-ring is de eerste en loopt ver voor op de rest.
+
+01:22:37.240 --> 01:22:42.340
+Maanden vooruit, dan volgen de uitholgolven dezelfde ringlogica, alleen gespreid over weken in plaats van dagen.
+
+01:22:42.580 --> 01:22:45.680
+Tijdens diezelfde beoordeling lees je de uitzonderingenlijst regel voor regel door.
+
+01:22:45.880 --> 01:22:46.900
+Geldt de reden nog steeds?
+
+01:22:47.160 --> 01:22:51.080
+Ondersteunt de leverancier eindelijk de nieuwe versie, kan dat apparaat weer in het normale traject worden opgenomen.
+
+01:22:51.320 --> 01:22:53.220
+Sommige uitzonderingen eindigen hier, en dat is terecht.
+
+01:22:53.400 --> 01:22:55.000
+Plan het een jaar van tevoren in de agenda.
+
+01:22:55.000 --> 01:22:57.880
+Een functie-update die als een verrassing komt, verandert in een project.
+
+01:22:58.060 --> 01:23:00.480
+Een update die volgens schema komt, is gewoon de volgende stap.
+
+01:23:00.580 --> 01:23:02.200
+Het laatste onderdeel, de vergadering.
+
+01:23:02.380 --> 01:23:05.480
+Je hebt een evaluatie nodig die beslissingen oplevert, geen presentaties.
+
+01:23:05.800 --> 01:23:06.920
+Maandelijks, 30 minuten.
+
+01:23:07.080 --> 01:23:08.320
+Per kwartaal, iets langer.
+
+01:23:08.500 --> 01:23:10.380
+De maandelijkse evaluatie heeft een korte agenda.
+
+01:23:10.640 --> 01:23:12.400
+Hebben we onze doelen voor patchtijd per ring behaald?
+
+01:23:12.580 --> 01:23:14.120
+Welke apparaten hebben het twee keer gemist?
+
+01:23:14.280 --> 01:23:15.940
+Is er iets gepauzeerd en wanneer verloopt dat?
+
+01:23:16.100 --> 01:23:17.500
+Verloopt er binnenkort een uitzondering?
+
+01:23:17.700 --> 01:23:20.940
+Elke vraag eindigt met een actie en een eigenaar, of met een simpel, geen wijziging.
+
+01:23:20.940 --> 01:23:22.940
+De kwartaal-evaluatie kijkt verder vooruit.
+
+01:23:23.080 --> 01:23:24.540
+Hebben de ringen nog steeds de juiste omvang?
+
+01:23:24.700 --> 01:23:26.220
+Is de pilot nog steeds representatief?
+
+01:23:26.360 --> 01:23:27.480
+Is er een deadline veranderd?
+
+01:23:27.600 --> 01:23:29.340
+Is het cijfer verschoven zoals de bedoeling was?
+
+01:23:32.200 --> 01:23:34.120
+Zichtbaar is in de gegevens, was het geen verandering.
+
+01:23:34.300 --> 01:23:37.400
+Als een vergadering zonder besluit eindigt, annuleer de volgende dan en pas de agenda aan.
+
+01:23:37.580 --> 01:23:39.520
+Zet alles op een rij en er verandert iets fundamenteels.
+
+01:23:39.680 --> 01:23:41.220
+Je bent niet langer updates aan het uitvoeren.
+
+01:23:41.360 --> 01:23:43.780
+Je draait een lus met eigenaren, een klok en bewijslast.
+
+01:23:43.940 --> 01:23:46.200
+En dat verandert de vraag die je in de eerste plaats stelt.
+
+01:23:46.420 --> 01:23:49.520
+De verschuiving van het patchen van apparaten naar het beheren van verandering.
+
+01:23:49.520 --> 01:23:51.620
+De vraag was nooit, hebben we gepatcht?
+
+01:23:51.740 --> 01:23:54.440
+De vraag was, wie nam het besluit en wat wisten ze op dat moment?
+
+01:23:55.120 --> 01:23:56.080
+Dit is waar het begon.
+
+01:23:56.280 --> 01:24:00.400
+Een update komt binnen, iemand keurt het goed, iemand implementeert het, iedereen hoopt op het beste.
+
+01:24:00.660 --> 01:24:01.700
+Dat was het oude model.
+
+01:24:01.700 --> 01:24:06.320
+Patchen als een gebeurtenis, een taak met een begin en een einde, beheert door wie het die maand toevallig uitvoerde.
+
+01:24:06.520 --> 01:24:08.020
+Wat het heeft vervangen is een systeem.
+
+01:24:08.220 --> 01:24:09.380
+Jij bepaalt het resultaat.
+
+01:24:09.520 --> 01:24:10.900
+De service regelt de aflevering.
+
+01:24:11.080 --> 01:24:13.040
+Windows Update voor Business draait op het apparaat.
+
+01:24:13.180 --> 01:24:14.440
+In Toen voert het beleid uit.
+
+01:24:14.620 --> 01:24:17.380
+Auto-patch houdt de uithol in de gaten en pauzeert wanneer het signaal verslechtert.
+
+01:24:17.500 --> 01:24:18.980
+Je werk is naar een hoger niveau getild.
+
+01:24:19.160 --> 01:24:22.780
+Je bent gestopt met het pushen van updates en bent begonnen met bepalen hoeveel risico het bedrijf accepteert en hoe snel.
+
+01:24:23.000 --> 01:24:24.520
+Dus welk besluit is het belangrijkst?
+
+01:24:24.680 --> 01:24:25.360
+Niet de deadline.
+
+01:24:25.580 --> 01:24:27.960
+Een deadline is een getal en getallen zijn makkelijk aan te passen.
+
+01:24:27.960 --> 01:24:30.560
+Zelfs niet het ringontwerp, hoewel een slecht ontwerp pijn doet.
+
+01:24:30.740 --> 01:24:33.760
+De ringstructuur kun je in een middag herstellen zodra je ziet dat het mis is.
+
+01:24:34.180 --> 01:24:35.480
+Eigenaarschap is het lastige punt.
+
+01:24:35.680 --> 01:24:38.000
+Elke fout die we hebben besproken had dezelfde oorzaak.
+
+01:24:38.120 --> 01:24:44.160
+Een conflict zonder eigenaar, een pilotring die niemand onderhield, een uitzondering zonder naam of datum, een snelle tool die wacht op een trage goedkeuring.
+
+01:24:44.320 --> 01:24:45.500
+De instellingen waren prima.
+
+01:24:45.780 --> 01:24:47.140
+Niemand was er verantwoordelijk voor.
+
+01:24:47.360 --> 01:24:50.660
+Zorg voor goed eigenaarschap en de rest verbeterd na verloop van tijd, omdat er iemand toekijkt.
+
+01:24:50.840 --> 01:24:53.980
+Doe je dat verkeerd, dan vervallen perfecte ringen tot een structuur die niemand kan verklaren.
+
+01:24:54.140 --> 01:24:55.640
+Dus dit zijn je volgende 30 dagen.
+
+01:24:55.640 --> 01:24:57.880
+Eén stap, geen tien. Noteer drie namen.
+
+01:24:58.060 --> 01:24:59.260
+Wie is eigenaar van het beleid?
+
+01:24:59.440 --> 01:25:00.440
+Wie beheert de pilotring?
+
+01:25:00.620 --> 01:25:01.780
+Wie beheert de uitzonderingen?
+
+01:25:01.900 --> 01:25:04.740
+Wijs aan elk een backup toe en zet een maandelijkse evaluatie in de agenda.
+
+01:25:04.900 --> 01:25:06.000
+30 minuten met één regel.
+
+01:25:06.220 --> 01:25:08.240
+Het eindigt met besluiten of het wordt geannuleerd.
+
+01:25:08.460 --> 01:25:09.120
+Dat is alles.
+
+01:25:09.360 --> 01:25:13.220
+Voordat je ook maar één instelling aanpast, want de eerste keer dat je die evaluatie uitvoert, gebeurt er iets.
+
+01:25:13.420 --> 01:25:16.880
+Je opent de uitzonderingslijst en vindt apparaten waarvan niemand meer weet wie ze heeft goedgekeurd.
+
+01:25:17.060 --> 01:25:19.620
+Je kijkt naar de pilotgroep en vindt mensen die vorig jaar zijn vertrokken.
+
+01:25:19.780 --> 01:25:23.040
+Je controleert de lijst met niet gereed en ziet dezelfde machines daar al sinds het voorjaar staan.
+
+01:25:23.040 --> 01:25:26.940
+Daar is geen nieuwe tool voor nodig. Daar is een persoon voor nodig wiens taak het is om te kijken.
+
+01:25:27.160 --> 01:25:28.860
+Ga nu terug naar de aanname waarmee we begonnen.
+
+01:25:29.100 --> 01:25:31.360
+Dat patchen een maandelijkse gebeurtenis is die iemand uitvoert.
+
+01:25:31.560 --> 01:25:36.520
+Dat werkte lang omdat apparaten op een netwerk zaten dat je beheerde en de timing bij de serverbeheerder lag.
+
+01:25:36.680 --> 01:25:42.880
+Die wereld is voorbij. Apparaten zwerven rond, updates stoppen nooit en het venster tussen een fix en een aanval wordt in dagen gemeten.
+
+01:25:43.160 --> 01:25:46.020
+Wat die aanname heeft vervangen, is een kleiner en lastiger idee.
+
+01:25:46.320 --> 01:25:48.940
+Verandering is continu, dus buffernance moet ook continu zijn.
+
+01:25:48.940 --> 01:25:53.400
+Geen heroïsche inspanning eens per maand, maar een cyclus met eigenaren, een klok en bewijs.
+
+01:25:53.580 --> 01:25:55.840
+Doe dat en Patch Tuesday is niet langer een deadline.
+
+01:25:56.060 --> 01:25:59.060
+Het wordt een signaal dat je al weet te lezen. Dat is het model.
+
+01:25:59.340 --> 01:26:02.800
+Outro, als dit je kijkt op patchen heeft veranderd, laat dan een beoordeling achter.
+
+01:26:03.020 --> 01:26:06.440
+Het helpt andere beheerders een beter model te vinden dan goedkeuren, wachten en hopen.
+
+01:26:06.660 --> 01:26:10.260
+Volg mij, Mirko Peters, op LinkedIn en vertel me welk onderwerp je hierna wilt zien.
+
+01:26:10.460 --> 01:26:12.960
+In Toon, Autopilot, Defender, jij kiest.
+
+01:26:13.140 --> 01:26:15.600
+En deel dit met het team dat nu worstelt met mislukte updates.
+
+01:26:15.600 --> 01:26:19.700
+Vandaag, niet volgende maand. De volgende Patch Tuesday staat al in de agenda.
+
+01:26:20.000 --> 01:26:21.420
+Zorg dat er een naam bij staat.

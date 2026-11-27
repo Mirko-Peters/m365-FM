@@ -1,4 +1,5 @@
 """Startseite als Inhalts-Hub: Blog, Community-Podcast, Events und Stick-Man-Videos gemischt, mit Filter (Stick-Man-Videos sind ein Filter-Punkt von vielen)."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import date
 from site_i18n import pfx, T
 from site_learn import esc, _fetch_json, ENTS
@@ -146,7 +147,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False, posts=None):
         if a and a.group(1): auth[a.group(1)] = auth.get(a.group(1), 0) + 1
         for x in (t.group(1).split() if t else []): tcount[x] = tcount.get(x, 0) + 1
     aopts = "".join(f'<option value="{a}">{a} ({n})</option>' for a, n in sorted(auth.items(), key=lambda x: x[0].lower()))
-    topts = "".join(f'<option value="{i}">{esc(ENTS[i]["name"])} ({n})</option>' for i, n in sorted(tcount.items(), key=lambda x: ENTS[x[0]]["name"].lower()))
+    topts = "".join(f'<option value="{i}">{esc(EN.ename(ENTS[i], lang))} ({n})</option>' for i, n in sorted(tcount.items(), key=lambda x: EN.ename(ENTS[x[0]], lang).lower()))
     ctl = (f'<div class="hub-ctl"><input type="search" id="hub-q" placeholder="{esc(T(lang, "Search title or creator", "Titel oder Creator suchen"))}" aria-label="{esc(T(lang, "Search", "Suche"))}">'
            f'<select id="hub-a" aria-label="{esc(T(lang, "Creator", "Creator"))}"><option value="">{esc(T(lang, "All creators", "Alle Creator"))}</option>{aopts}</select>'
            f'<select id="hub-t" aria-label="{esc(T(lang, "Topic", "Thema"))}"><option value="">{esc(T(lang, "Add topic filter", "Thema hinzufügen"))}</option>{topts}</select></div><div id="hub-sel" aria-live="polite"></div>') if (auth or tcount) else ""
@@ -156,4 +157,4 @@ def hub(g, lang, base, api, videos, vid_html, root=False, posts=None):
     PAGES[_key] = {"lang": "en" if root else lang, "prefix": "" if root else lang + "/"}
     _p2 = f"{base}/{PAGES[_key]['prefix']}page/2/"   # eigene Adresse je Seite: Karten jenseits der ersten N stehen auf /page/2/, /page/3/ ... (generate_site)
     _mb = f'<p><a class="btn" id="hub-more" href="{_p2}" rel=next>{esc(T(lang, "Load more", "Mehr laden"))} ({len(cards) - N_FIRST})</a></p>' if len(cards) > N_FIRST else ""
-    return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div>{ctl}<div id="hub" class="thumbs"{(" data-more=" + chr(34) + _more_url + chr(34)) if MORE[_key] else ""}>' + "".join(h for _, _k, h in cards[:N_FIRST]) + "</div>" + _mb + cta + JS.replace("%N%", str(N_FIRST)).replace("%NAMES%", __import__("json").dumps({i: ENTS[i]["name"] for i in tcount}, ensure_ascii=False)).replace("%RM%", esc(T(lang, "remove", "entfernen"))))
+    return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div>{ctl}<div id="hub" class="thumbs"{(" data-more=" + chr(34) + _more_url + chr(34)) if MORE[_key] else ""}>' + "".join(h for _, _k, h in cards[:N_FIRST]) + "</div>" + _mb + cta + JS.replace("%N%", str(N_FIRST)).replace("%NAMES%", __import__("json").dumps({i: EN.ename(ENTS[i], lang) for i in tcount}, ensure_ascii=False)).replace("%RM%", esc(T(lang, "remove", "entfernen"))))

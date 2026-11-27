@@ -292,6 +292,20 @@ async function buildProfilesExport(env) {
   return out;
 }
 
+// Cron (D1-Kosten): der volle Neuaufbau liest rund 20 Tabellen je Profil (300 Personen, 200 Firmen). Statt alle 30 Minuten nur, wenn der
+// Zwischenspeicher fehlt (nach einer Datenschutz-Aenderung verworfen, invalidateProfileExport) oder aelter als PROFILE_EXPORT_REFRESH ist.
+// Die Grenze liegt so, dass ein Seitenbau nie einen Stand ueber 7.200 s sieht (sonst baut /api/profiles/export selbst neu auf):
+// 85 min + hoechstens 30 min bis zum naechsten Cron-Lauf = 115 min. Ergebnis: 16 statt 48 Neuaufbauten am Tag. Ein echter Fingerabdruck
+// aller Quelltabellen wuerde selbst etwa so viel lesen wie der Neuaufbau.
+export const PROFILE_EXPORT_REFRESH = 85 * 60;
+export async function refreshProfilesExportIfStale(env) {
+  const hit = await env.DB.prepare("SELECT updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
+  const age = hit ? now() - hit.updated : null;
+  if (age !== null && age >= 0 && age < PROFILE_EXPORT_REFRESH) return { skipped: "frisch", age };
+  const out = await refreshProfilesExport(env);
+  return { people: out.people.length, orgs: out.orgs.length, ...(out.failed ? { failed: out.failed } : {}) };
+}
+
 export async function handleProfiles(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m; await ensureCols(db); await ensureDirectoryCols(db);
   const need = () => (user ? null : J({ error: "login" }, 401));

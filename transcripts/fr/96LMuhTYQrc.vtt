@@ -1,0 +1,1594 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:06.710
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.430 --> 00:00:11.830
+En janvier prochain, la M365one est de retour et nous voyons plus grand.
+
+00:00:12.830 --> 00:00:18.010
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.770 --> 00:00:20.930
+Pas de diapositif générique, pas de jargon sans fin.
+
+00:00:21.970 --> 00:00:23.150
+Nous abordons les vrais défis.
+
+00:00:23.790 --> 00:00:28.610
+Copilot Studio, les agents IA fabriquent, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.610 --> 00:00:34.330
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, il existe des sessions conçues pour vous.
+
+00:00:35.430 --> 00:00:40.070
+Avec 10 jours complets, vous pourrez explorer de multiples technologies et échanger avec une communauté mondiale.
+
+00:00:40.930 --> 00:00:44.170
+Suivez le direct et rapportez des idées concrètes à votre organisation.
+
+00:00:45.170 --> 00:00:46.550
+Janvier 2027, des 10 jours.
+
+00:00:47.070 --> 00:00:50.570
+Une seule communauté Microsoft, les inscriptions sont ouvertes.
+
+00:00:52.580 --> 00:00:54.840
+Réservez votre place dès aujourd'hui.
+
+00:00:56.380 --> 00:00:58.600
+Rendez-vous sur m365one.net
+
+00:00:59.960 --> 00:01:04.580
+Inscrivez-vous sur m365one.net et nous nous retrouvons en direct en janvier.
+
+00:01:05.240 --> 00:01:07.720
+Une formule dans Excel peut calculer le total d'une colonne en quelques secondes.
+
+00:01:08.100 --> 00:01:16.600
+Imaginez maintenant ce même type de formule déterminant l'affichage d'un bouton d'approbation calculant, une note de frais ou modifiant ce qu'un utilisateur voit après avoir rempli un formulaire.
+
+00:01:17.880 --> 00:01:18.620
+C'est ça, PowerFX.
+
+00:01:18.620 --> 00:01:23.000
+Bonjour à tous et bienvenue dans un nouvel épisode des Microsoft Knowledge Nuggets sur M365.
+
+00:01:23.340 --> 00:01:27.880
+Je suis Mirko Peters et aujourd'hui nous parlons de Microsoft PowerFX en toute simplicité.
+
+00:01:28.340 --> 00:01:30.720
+Vous avez peut-être entendu ce nom en découvrant PowerApp si vous vous êtes demandé.
+
+00:01:31.100 --> 00:01:35.240
+Est-ce du code ? Dois-je apprendre un langage de programmation complet avant de pouvoir créer quelque chose d'utile ?
+
+00:01:35.240 --> 00:01:36.100
+Pas vraiment.
+
+00:01:36.900 --> 00:01:39.400
+PowerFX est le langage de formule de Microsoft pour la Power Platform.
+
+00:01:39.400 --> 00:01:48.520
+Il apporte une approche familière, proche des tableurs, à la création d'applications, vous permettant de définir des règles pour les écrans, formulaires, listes, boutons et données métiers, sans passer par le code traditionnel.
+
+00:01:50.240 --> 00:01:52.140
+Considérez PowerApps comme un immeuble de bureau moderne.
+
+00:01:52.420 --> 00:01:53.240
+Les écrans sont les pièces.
+
+00:01:53.680 --> 00:01:55.620
+Formulaire est une pièce où quelqu'un saisit une demande.
+
+00:01:56.260 --> 00:01:58.460
+Une liste est une pièce où un responsable examine ses demandes.
+
+00:01:59.420 --> 00:02:01.380
+Un bouton est une porte sur laquelle on appuie pour avancer.
+
+00:02:02.140 --> 00:02:04.320
+PowerFX constitue l'ensemble des petites règles en coulisses.
+
+00:02:04.320 --> 00:02:10.220
+Ils contrôlent l'action d'un interrupteur, le ferrouillage d'une porte et le signal qui s'affiche lorsqu'une demande nécessite plus d'informations.
+
+00:02:11.080 --> 00:02:12.660
+La plupart des utilisateurs ne remarquent jamais ces règles.
+
+00:02:12.900 --> 00:02:14.520
+Ils voient juste une application qui réagit à leurs actions.
+
+00:02:14.680 --> 00:02:16.700
+Et c'est essentiel car les applications métiers sont remplies de règles.
+
+00:02:17.140 --> 00:02:19.920
+Une personne saisit des heures et un tarif et l'application doit afficher un total.
+
+00:02:20.420 --> 00:02:23.440
+Quelqu'un choisit un type de demande et l'application doit peut-être afficher des chances supplémentaires.
+
+00:02:24.020 --> 00:02:27.260
+Un responsable ouvre une liste et doit voir uniquement les demandes en attente d'approbation.
+
+00:02:28.020 --> 00:02:31.160
+Sans logique, ce ne sont que des zones, des étiquettes et des boutons sur un écran.
+
+00:02:31.860 --> 00:02:33.140
+PowerFX donne une fonction à ses éléments.
+
+00:02:33.140 --> 00:02:38.700
+Au cours des prochaines minutes, nous partirons de l'état d'esprit Excel que vous connaissez pour passer des cellules aux propriétés d'application
+
+00:02:38.700 --> 00:02:42.900
+afin de comprendre pourquoi une formule contrôle la couleur, la visibilité et plus encore.
+
+00:02:44.280 --> 00:02:48.260
+Ensuite, nous verrons comment les formules aident les applications à répondre aux utilisateurs et à traiter les données métiers.
+
+00:02:49.040 --> 00:02:50.920
+Mais commençons d'abord par ce qui est familier.
+
+00:02:51.260 --> 00:02:55.880
+Car si vous comprenez comment fonctionne une formule de tableur, vous avez déjà une base solide pour PowerFX.
+
+00:02:57.120 --> 00:03:00.780
+Premier bloc de construction, des cellules de tableur aux propriétés d'application.
+
+00:03:00.780 --> 00:03:03.520
+La plupart des gens sont nerveux en entendant le mot code EKU.
+
+00:03:04.020 --> 00:03:07.680
+Mais si vous avez déjà saisi une formule dans Excel, vous avez déjà utilisé une forme simple de logique.
+
+00:03:08.540 --> 00:03:13.060
+Vous avez saisi des valeurs, écrit une formule utilisant ces valeurs et Excel a renvoyé un résultat.
+
+00:03:13.720 --> 00:03:16.780
+S'agissait peut-être d'un total, d'une date ou d'un message tel que le dépassement de budget est plus.
+
+00:03:17.640 --> 00:03:19.240
+PowerFX utilise ce même schéma de base.
+
+00:03:19.240 --> 00:03:24.840
+Voici la définition la plus simple, c'est le langage de formule de Microsoft similaire à Excel pour les outils Power Platform, notamment Power Apps.
+
+00:03:25.660 --> 00:03:31.320
+Il vous permet d'indiquer à une application ce qu'elle doit afficher, quand un élément doit apparaître, ou comment une valeur doit changer selon les informations environnantes.
+
+00:03:31.940 --> 00:03:33.440
+Dans Excel, une formule réside dans une cellule.
+
+00:03:33.800 --> 00:03:35.400
+Pourriez taper quelque chose comme B2P C2.
+
+00:03:36.120 --> 00:03:41.200
+Si B2 contient le nombre d'heures et C2 un taux horaire, la cellule contenant la formule affiche la rémunération totale.
+
+00:03:42.060 --> 00:03:43.800
+Modifiez l'un des nombres et Excel met à jour le résumé.
+
+00:03:44.400 --> 00:03:45.300
+C'est le modèle mental à conserver.
+
+00:03:45.800 --> 00:03:48.720
+Un écran Power Apps ne possède pas de grille de cellule, mais des contrôles.
+
+00:03:49.420 --> 00:03:51.140
+Un contrôle est simplement un élément présent sur l'écran.
+
+00:03:51.760 --> 00:03:58.600
+Une zone de texte pour la saisie, une étiquette pour afficher des informations, un bouton, une liste déroulante, une image ou une galerie, listant des enregistrements.
+
+00:03:59.380 --> 00:04:00.460
+Chaque contrôle possède des propriétés.
+
+00:04:00.960 --> 00:04:03.980
+Une propriété est un paramètre qui décrit l'apparence ou le comportement du contrôle.
+
+00:04:04.460 --> 00:04:05.720
+Une étiquette possède une propriété code.
+
+00:04:05.980 --> 00:04:09.020
+Un bouton possède aussi une propriété comme les cadaks de Gane-Galakome-Kolareko.
+
+00:04:09.440 --> 00:04:10.940
+La propriété est là où PowerFX intervient.
+
+00:04:11.220 --> 00:04:13.660
+Au lieu de mettre une formule dans la cellule D2, vous placez une formule.
+
+00:04:13.800 --> 00:04:17.760
+Dans la propriété TextEge, imaginez que vous construisez une application de feuille de temps simple.
+
+00:04:18.140 --> 00:04:20.720
+Vous ajoutez une zone de saisie pour les heures et une autre pour le taux horaire.
+
+00:04:21.080 --> 00:04:23.180
+Ensuite, vous ajoutez une étiquette nommée avec l'aménération TotalEge.
+
+00:04:23.680 --> 00:04:31.000
+Plutôt que de saisir un nombre fixe dans cette étiquette, vous affectez à sa propriété TextEge, une formule utilisant les valeurs des zones de saisie, des heures et du taux.
+
+00:04:31.460 --> 00:04:33.120
+L'étiquette devient votre cellule calculée.
+
+00:04:33.360 --> 00:04:36.060
+Une personne change les heures de 5 à 8 et le total change.
+
+00:04:36.580 --> 00:04:38.280
+Elle change le taux et le total change à nouveau.
+
+00:04:38.660 --> 00:04:41.140
+Personne n'a besoin d'appuyer sur un bouton de calcul pour rafraîchir l'étiquette.
+
+00:04:41.140 --> 00:04:46.000
+La formule maintient l'étiquette liée aux valeurs dont elle dépend, tout comme Excel lit une cellule à une autre.
+
+00:04:46.500 --> 00:04:48.920
+Cette réponse automatique fait partie intégrante de l'expérience PowerFX.
+
+00:04:49.620 --> 00:04:53.640
+Décrivez le résultat souhaité et PowerApps le maintient un jour pendant que l'utilisateur utilise l'application.
+
+00:04:54.280 --> 00:04:56.620
+Il y a un changement qui surprend beaucoup d'utilisateurs d'Excel au début.
+
+00:04:57.020 --> 00:05:00.000
+Dans un tableur, vous pointez souvent vers une adresse de cellule comme B2 ou C2.
+
+00:05:00.440 --> 00:05:02.440
+Dans PowerFX, vous pointez généralement les éléments par l'ordre.
+
+00:05:02.920 --> 00:05:04.580
+Un contrôle de saisie est l'une de ses propriétés.
+
+00:05:04.980 --> 00:05:06.740
+Un enregistrement d'une liste ou une colonne d'un tableau.
+
+00:05:06.740 --> 00:05:09.960
+Ainsi, la question passe de quelle cellule contient ce nombre à quel contrôle.
+
+00:05:10.560 --> 00:05:13.180
+Enregistrement aux colonnes contient cette information ou contient cette information.
+
+00:05:13.520 --> 00:05:15.460
+Cela semble mineur, mais cela change votre façon de voir l'écran.
+
+00:05:16.080 --> 00:05:18.180
+Vous cessez de voir l'écran comme une image faite de pièces séparées
+
+00:05:18.180 --> 00:05:20.220
+et commencez à le voir comme un ensemble de valeurs connectées.
+
+00:05:20.740 --> 00:05:21.880
+La saisie des heures fournit une valeur.
+
+00:05:22.440 --> 00:05:23.580
+La saisie du taux en fournit une autre.
+
+00:05:24.040 --> 00:05:26.500
+L'étiquette du salaire total lit les deux valeurs et affiche le résultat.
+
+00:05:27.500 --> 00:05:30.180
+Plus tard, cette même idée pourra contrôler l'apparition d'un avertissement,
+
+00:05:30.180 --> 00:05:32.140
+la couleur d'un montant ou le texte affiché.
+
+00:05:32.900 --> 00:05:33.800
+Pour l'instant, restons simples.
+
+00:05:33.800 --> 00:05:36.400
+Commencez par des formules qui décrivent ce qu'un écran doit afficher.
+
+00:05:37.080 --> 00:05:39.560
+Choisissez une étiquette, sélectionnez une valeur qu'une personne peut saisir,
+
+00:05:39.640 --> 00:05:41.020
+puis faites en sorte que l'étiquette y réagisse.
+
+00:05:41.760 --> 00:05:44.760
+Cette première petite connexion rend PowerFX moins semblable à du codage
+
+00:05:44.760 --> 00:05:47.380
+et plus à une construction avec des formules que vous connaissez déjà.
+
+00:05:48.060 --> 00:05:49.200
+Les calculs sont utiles,
+
+00:05:49.480 --> 00:05:52.080
+mais une application doit aussi réagir quand quelqu'un clique sur quelque chose.
+
+00:05:53.300 --> 00:05:54.180
+Deuxième bloc de construction,
+
+00:05:54.560 --> 00:05:56.880
+les propriétés transforment les formules en comportement d'application.
+
+00:05:57.100 --> 00:05:57.900
+Voici le point important.
+
+00:05:58.280 --> 00:05:59.680
+Un calcul indique ce qu'une valeur doit être,
+
+00:05:59.780 --> 00:06:02.480
+mais une application doit aussi réagir lorsqu'une personne fait quelque chose.
+
+00:06:02.480 --> 00:06:05.420
+Un bouton sans logique n'est qu'une forme avec une étiquette.
+
+00:06:06.260 --> 00:06:07.540
+Il peut indiquer soumettre la demande de réel.
+
+00:06:07.820 --> 00:06:09.000
+Mais tant que vous ne lui donnez pas de règles,
+
+00:06:09.180 --> 00:06:09.900
+appuyer dessus ne fait rien.
+
+00:06:10.280 --> 00:06:12.240
+C'est là que les propriétés de l'application deviennent plus intéressantes.
+
+00:06:12.500 --> 00:06:15.120
+Chaque contrôle dans Power Apps possède des paramètres que PowerFX peut manipuler.
+
+00:06:15.460 --> 00:06:17.140
+Certains décrivent l'apparence actuelle du contrôle,
+
+00:06:17.360 --> 00:06:19.380
+tandis que d'autres exécutent une action après un événement.
+
+00:06:19.700 --> 00:06:20.260
+Deux tâches différentes.
+
+00:06:20.840 --> 00:06:21.720
+La première tâche est continue.
+
+00:06:22.380 --> 00:06:24.740
+Une formule décrit en permanence l'état actuel d'un contrôle.
+
+00:06:25.740 --> 00:06:26.960
+Prenez une étiquette qui affiche un total.
+
+00:06:26.960 --> 00:06:30.280
+Sa propriété texte continue de calculer à mesure que l'utilisateur modifie les chiffres.
+
+00:06:30.740 --> 00:06:31.680
+Vous prenez un bouton d'approbation.
+
+00:06:32.160 --> 00:06:34.140
+Sa propriété visible vérifie le statut de la demande.
+
+00:06:34.720 --> 00:06:35.580
+S'il est prêt le bouton apparaît.
+
+00:06:36.060 --> 00:06:36.940
+Sinon, il reste masqué.
+
+00:06:37.460 --> 00:06:39.300
+Vous ne dites pas à l'application de vérifier une seule fois plus d'oubli.
+
+00:06:39.780 --> 00:06:42.780
+Vous lui indiquez quelle doit être la visibilité du bouton à chaque mise à jour de l'écran.
+
+00:06:43.460 --> 00:06:45.240
+Par exemple, une règle sain pourrait ressembler à ceci.
+
+00:06:45.920 --> 00:06:47.800
+Si le statut de la demande est prêt pour approbation,
+
+00:06:48.480 --> 00:06:49.180
+vrai, faux.
+
+00:06:49.180 --> 00:06:53.380
+En termes simples, cela signifie que si le statut indique prêt pour approbation, affichez le bouton.
+
+00:06:54.200 --> 00:06:55.080
+Sinon, masquez-le.
+
+00:06:55.540 --> 00:06:57.300
+PowerFX peut aussi modifier le libellé du bouton.
+
+00:06:57.900 --> 00:07:01.500
+La propriété texte pourrait afficher envoyer pour approbation pendant la préparation.
+
+00:07:01.780 --> 00:07:05.620
+Mais une fois envoyé, ce même bouton pourrait afficher demande soumise ou disparaître complètement.
+
+00:07:06.140 --> 00:07:07.140
+La couleur fonctionne de la même manière.
+
+00:07:07.440 --> 00:07:08.940
+Un montant devient rouge s'il dépasse un budget
+
+00:07:08.940 --> 00:07:12.020
+ou une étiquette de statut change de couleur lorsqu'une demande nécessite une attention.
+
+00:07:13.020 --> 00:07:16.180
+L'écran réagit aux informations au lieu d'afficher la même conception fixe à tout le monde.
+
+00:07:16.180 --> 00:07:19.760
+C'est un aspect de PowerFX, des formules qui maintiennent un contrôle à jour.
+
+00:07:20.300 --> 00:07:21.740
+L'autre aspect commence lorsqu'une personne agit.
+
+00:07:22.440 --> 00:07:24.800
+Dans PowerApps, un bouton possède une propriété appelée Anceler.
+
+00:07:25.340 --> 00:07:28.640
+Cela semble technique, mais cela signifie simplement ce qui doit se passer quand quelqu'un sélectionne ce bouton.
+
+00:07:29.400 --> 00:07:30.800
+Supposons que vous ayez un formulaire de demande simple.
+
+00:07:31.200 --> 00:07:33.860
+Un utilisateur remplit les détails et appuie sur un bouton appelé Envoyer la demande.
+
+00:07:34.580 --> 00:07:37.840
+Vous pouvez définir la propriété Anceler de ce bouton sur Notifier Demande, Envoyer.
+
+00:07:38.580 --> 00:07:42.380
+Lorsqu'on appuie dessus, PowerApps affiche un message à l'écran, donnant un retour immédiat à l'utilisateur.
+
+00:07:43.000 --> 00:07:44.220
+Plus besoin de deviner si cela fonctionne.
+
+00:07:44.220 --> 00:07:46.980
+Vous pouvez aussi utiliser Anceler pour envoyer quelqu'un vers un autre écran.
+
+00:07:47.520 --> 00:07:50.240
+Imaginez une application de notes de frais avec une liste de dépenses existantes.
+
+00:07:50.760 --> 00:07:53.760
+En haut, un bouton Nouvelles dépenses utilise Naviguer vers l'écran Nouvelles dépenses.
+
+00:07:54.280 --> 00:07:57.220
+Appuyez dessus et PowerApps ouvre l'écran pour saisir une nouvelle dépense.
+
+00:07:58.200 --> 00:08:00.120
+C'est le comportement d'une application sous sa forme la plus directe.
+
+00:08:00.460 --> 00:08:02.560
+Un utilisateur choisit une action et PowerFX répond.
+
+00:08:02.920 --> 00:08:04.160
+La différence mérite d'être retenue.
+
+00:08:04.600 --> 00:08:07.340
+Une formule de texte, de visibilité ou de couleur décrit ce qu'une chose doit être,
+
+00:08:07.760 --> 00:08:10.380
+tandis qu'une formule Anceler s'exécute parce qu'une personne a cliqué ou appuyé.
+
+00:08:10.780 --> 00:08:13.140
+Les deux se trouvent dans les propriétés, mais ils résolvent des problèmes différents.
+
+00:08:13.140 --> 00:08:14.480
+C'est là que les débutants restent bloqués.
+
+00:08:14.800 --> 00:08:17.400
+Ils apprennent une fonction comme If ou Notify puis se demandent où la placer.
+
+00:08:17.720 --> 00:08:19.400
+Partez du résultat souhaité, pas du nom de la fonction.
+
+00:08:19.940 --> 00:08:21.300
+Voulez-vous qu'une étiquette change ?
+
+00:08:21.300 --> 00:08:22.820
+Sélectionnez l'étiquette et travaillez sur le texte.
+
+00:08:22.980 --> 00:08:25.440
+Voulez-vous qu'un bouton n'apparaisse que dans une situation précise ?
+
+00:08:25.440 --> 00:08:27.120
+Sélectionnez le bouton et travaillez sur Visible.
+
+00:08:27.480 --> 00:08:29.200
+Voulez-vous que quelque chose se produise après un clic ?
+
+00:08:29.200 --> 00:08:30.660
+Sélectionnez le bouton et travaillez sur Anceler.
+
+00:08:31.020 --> 00:08:34.340
+Un contrôle, une propriété, un résultat clair est une façon beaucoup plus simple de construire.
+
+00:08:34.840 --> 00:08:36.820
+Une fois qu'une application commence à réagir au choix d'une personne,
+
+00:08:36.920 --> 00:08:37.900
+la question suivante est évidente.
+
+00:08:38.400 --> 00:08:40.600
+Où se trouvent toutes ces informations ?
+
+00:08:43.140 --> 00:08:48.240
+Un écran peut calculer un total, afficher un message et rediriger quelqu'un vers une autre page.
+
+00:08:48.880 --> 00:08:52.620
+Mais la plupart des applications professionnelles doivent utiliser des informations existantes au-delà de cet écran.
+
+00:08:53.080 --> 00:08:54.380
+C'est une application de gestion des dates de vote.
+
+00:08:54.660 --> 00:08:56.400
+Les dépenses doivent être stockées quelque part après leur soumission.
+
+00:08:56.940 --> 00:08:59.260
+Un manager ouvre l'application le lendemain et voit les mêmes demandes.
+
+00:08:59.780 --> 00:09:02.580
+Le service financier examine le montant, la catégorie, la date et le nom de l'employé.
+
+00:09:02.860 --> 00:09:03.660
+C'est là qu'interviennent les données.
+
+00:09:03.960 --> 00:09:05.660
+Considérez votre source de données comme un classeur.
+
+00:09:05.980 --> 00:09:07.620
+A l'intérieur, les tables sont les tiroirs.
+
+00:09:08.140 --> 00:09:10.880
+Une table de dépense est un tiroir, une table d'employé un autre.
+
+00:09:10.880 --> 00:09:15.580
+Chaque enregistrement est un dossier dans un tiroir et chaque colonne est une étiquette sur ce dossier.
+
+00:09:16.260 --> 00:09:20.480
+Un enregistrement de dépense peut inclure le nom de l'employé, la date, la catégorie, le montant et le statut d'approbation.
+
+00:09:21.260 --> 00:09:27.000
+PowerFX aide votre application à lire ce classeur, à trouver les dossiers nécessaires et parfois à ajouter ou mettre à jour des informations.
+
+00:09:27.680 --> 00:09:30.140
+Avant d'examiner les formules, gardez trois termes à l'esprit.
+
+00:09:30.560 --> 00:09:32.340
+Une table est un groupe d'enregistrements associés.
+
+00:09:33.160 --> 00:09:34.800
+Un enregistrement est un élément de cette table.
+
+00:09:35.160 --> 00:09:37.780
+Et une colonne est un type d'informations stockées pour chaque enregistrement.
+
+00:09:37.780 --> 00:09:44.240
+Ainsi, dans une table de dépense, un enregistrement pourrait être un billet de train d'un montant de 42,50 dans la catégorie voyage avec le statut soumis.
+
+00:09:44.560 --> 00:09:46.600
+L'application n'a pas toujours besoin d'afficher tous les dossiers du tirant.
+
+00:09:47.280 --> 00:09:50.780
+Imaginez qu'un employé ouvre l'application de dépense et veuille voir uniquement ses propres demandes,
+
+00:09:50.860 --> 00:09:55.180
+tandis qu'un manager ne veut que celle en attente d'approbation et le service financier seulement les frais de déplacement.
+
+00:09:56.120 --> 00:09:56.800
+C'est le rôle du filtre.
+
+00:09:57.140 --> 00:10:00.200
+Une formule de filtre demande un ensemble plus restreint d'enregistrements correspondant à une règle.
+
+00:10:00.200 --> 00:10:06.040
+En termes simples, vous pourriez dire à l'application « Affiche les dépenses où le nom de l'employé correspond à l'utilisateur actuel »
+
+00:10:06.040 --> 00:10:09.600
+ou « Affiche uniquement les enregistrements dont la catégorie est voyage. »
+
+00:10:09.600 --> 00:10:11.000
+Le résultat apparaît dans une galerie.
+
+00:10:11.880 --> 00:10:13.980
+Le contrôle Power Apps qui affiche une liste répétitive.
+
+00:10:14.800 --> 00:10:16.680
+Au lieu de créer des écrans séparés pour chaque catégorie,
+
+00:10:16.840 --> 00:10:19.260
+vous donnez à une galerie une formule qui réagit au choix de l'utilisateur.
+
+00:10:19.940 --> 00:10:21.700
+Choisissez « Voyage » et la galerie affiche les voyages.
+
+00:10:22.360 --> 00:10:23.820
+Choisissez « Equipement » et la liste change.
+
+00:10:24.440 --> 00:10:26.320
+Les enregistrements dans le classeur n'ont pas disparu.
+
+00:10:26.320 --> 00:10:29.480
+L'application a simplement sélectionné les dossiers dont la personne a besoin à cet instant.
+
+00:10:29.880 --> 00:10:31.920
+Que faire si la liste est correcte mais dans le mauvais ordre ?
+
+00:10:31.920 --> 00:10:32.780
+C'est là qu'intervient le tri.
+
+00:10:33.160 --> 00:10:35.420
+Un manager très occupé veut les demandes les plus récentes en haut,
+
+00:10:35.680 --> 00:10:37.680
+tandis que la finance a besoin des montants les plus élevés en premier.
+
+00:10:38.040 --> 00:10:40.040
+Le tri vous permet d'organiser les enregistrements avant de les afficher.
+
+00:10:40.500 --> 00:10:42.760
+Le filtre répond à la question « Quels enregistrements dois-je voir ? »
+
+00:10:42.760 --> 00:10:44.580
+Trier répond à la question « Dans quel ordre ? »
+
+00:10:44.580 --> 00:10:45.940
+Souvent, vous utilisez les deux ensembles.
+
+00:10:46.320 --> 00:10:48.520
+Par exemple, filtrez les demandes en attente, puis trier par date,
+
+00:10:48.840 --> 00:10:50.320
+pour que les plus récentes apparaissent en premier.
+
+00:10:50.860 --> 00:10:51.820
+Il existe un autre besoin court.
+
+00:10:51.820 --> 00:10:53.340
+Parfois, vous n'avez pas besoin d'une liste entière.
+
+00:10:53.520 --> 00:10:54.940
+Vous avez besoin d'un seul enregistrement correspondant.
+
+00:10:55.180 --> 00:10:57.680
+Peut-être qu'une note de frais doit vérifier la limite d'approbation d'un employé.
+
+00:10:58.020 --> 00:10:59.640
+L'application consulte la table des employés,
+
+00:10:59.720 --> 00:11:01.400
+trouve l'enregistrement de la personne et l'isaliment.
+
+00:11:01.620 --> 00:11:02.700
+C'est le principe de la recherche Lookup.
+
+00:11:02.940 --> 00:11:05.320
+La fonction Lookup trouve un enregistrement correspondant à l'arrêt que vous voulez.
+
+00:11:05.660 --> 00:11:07.360
+Imaginez que vous demandez à quelqu'un devant un classeur
+
+00:11:07.360 --> 00:11:09.140
+« Veuillez trouver le dossier de cet employé. »
+
+00:11:09.140 --> 00:11:11.960
+Une fois que vous avez ce dossier, vous pouvez lire les informations qu'il contient.
+
+00:11:12.640 --> 00:11:14.220
+Lire des données ne représente que la moitié du travail.
+
+00:11:14.540 --> 00:11:15.820
+Les applications collectent également des informations.
+
+00:11:15.820 --> 00:11:17.400
+Une personne saisit une nouvelle dépense,
+
+00:11:17.500 --> 00:11:19.200
+un responsable change le statut en t'approuvée aigueux,
+
+00:11:19.280 --> 00:11:20.240
+quelqu'un corrige une catégorie.
+
+00:11:20.640 --> 00:11:22.740
+Power Apps peut ajouter ou mettre à jour ces enregistrements.
+
+00:11:23.180 --> 00:11:24.380
+Cependant, c'est ici qu'il faut ralentir.
+
+00:11:24.800 --> 00:11:26.140
+L'application peut être affichée à un bouton,
+
+00:11:26.260 --> 00:11:27.720
+mais la source de données contrôle qui peut lire,
+
+00:11:27.860 --> 00:11:28.940
+ajouter ou modifier des informations.
+
+00:11:29.540 --> 00:11:31.840
+Une application de dépense ne doit pas donner le même accès à tous les utilisateurs
+
+00:11:31.840 --> 00:11:32.940
+simplement parce qu'ils peuvent ouvrir un écran.
+
+00:11:33.360 --> 00:11:34.420
+Les autorisations de données sont répandues.
+
+00:11:34.700 --> 00:11:36.060
+Power Apps peut se connecter aux endroits
+
+00:11:36.060 --> 00:11:37.920
+où de nombreuses entreprises conservent déjà leurs informations.
+
+00:11:38.340 --> 00:11:40.240
+SharePoint, Excel, SQL, Dataverse.
+
+00:11:40.880 --> 00:11:42.460
+Ces sources ne fonctionnent pas toutes de la même manière
+
+00:11:42.460 --> 00:11:44.140
+et le bon choix dépend des besoins de votre application.
+
+00:11:44.760 --> 00:11:46.040
+Mais pour un débutant, le point est plus simple.
+
+00:11:47.020 --> 00:11:49.860
+Vos formules et la structure de vos données vont de pair.
+
+00:11:50.380 --> 00:11:51.660
+Si la table a des colonnes peu claires,
+
+00:11:51.760 --> 00:11:53.300
+la formule devient plus difficile à écrire.
+
+00:11:54.140 --> 00:11:55.620
+Si la formule pose des questions peu claires,
+
+00:11:55.720 --> 00:11:57.260
+l'application renvoie des résultats confus.
+
+00:11:58.120 --> 00:11:59.120
+Nommez vos colonnes clairement,
+
+00:11:59.360 --> 00:12:00.560
+sachez quel enregistrement vous voulez,
+
+00:12:00.980 --> 00:12:02.220
+puis écrivez la formule qui trouve,
+
+00:12:02.360 --> 00:12:04.440
+filtre, tri ou mets à jour ces informations.
+
+00:12:05.740 --> 00:12:08.300
+Lire et modifier des enregistrements couvrent une grande partie du travail.
+
+00:12:08.600 --> 00:12:10.240
+Mais les règles peuvent devenir difficiles à gérer
+
+00:12:10.240 --> 00:12:12.440
+lorsqu'une réponse doit apparaître à plusieurs endroits.
+
+00:12:12.460 --> 00:12:14.860
+Quatrième bloc de construction,
+
+00:12:15.280 --> 00:12:17.480
+variables, collections et règles réutilisables.
+
+00:12:18.020 --> 00:12:19.820
+Ainsi, dès que votre application comporte plus d'un écran,
+
+00:12:19.900 --> 00:12:22.060
+elle a besoin d'un moyen de se souvenir de petites choses pendant la navigation.
+
+00:12:22.820 --> 00:12:24.660
+Imaginez que quelqu'un sélectionne une dépense dans une liste.
+
+00:12:25.180 --> 00:12:26.140
+Il ouvre un écran de détails,
+
+00:12:26.240 --> 00:12:28.920
+mais ce second écran doit savoir quelle dépense a été sélectionnée,
+
+00:12:29.000 --> 00:12:30.560
+bien que la liste se trouve sur un autre écran.
+
+00:12:31.040 --> 00:12:32.140
+C'est là qu'intervient une variable.
+
+00:12:32.560 --> 00:12:34.600
+Considérez une variable comme une boîte étiquetée à l'intérieur de l'application.
+
+00:12:34.800 --> 00:12:36.300
+Vous y placez une valeur ou lui donnez un nom clair,
+
+00:12:36.400 --> 00:12:39.060
+puis utilisez cette valeur ailleurs pendant l'exécution de l'application.
+
+00:12:39.060 --> 00:12:41.280
+La valeur peut être une dépense sélectionnée,
+
+00:12:41.340 --> 00:12:42.620
+la catégorie choisie par une personne,
+
+00:12:42.720 --> 00:12:44.580
+ou un total cumulé pour des articles ajoutés à une demande.
+
+00:12:45.020 --> 00:12:46.960
+Par exemple, un utilisateur sélectionne une dépense dans une galerie.
+
+00:12:47.720 --> 00:12:49.840
+L'application enregistre cet enregistrement dans une variable
+
+00:12:49.840 --> 00:12:50.720
+et passe à un écran des dettes.
+
+00:12:51.300 --> 00:12:52.100
+Sur cet écran suivant,
+
+00:12:52.160 --> 00:12:54.200
+les étiquettes lisent la dépense sélectionnée depuis la variable
+
+00:12:54.200 --> 00:12:56.380
+et affichent le montant, la date, la catégorie et le statut.
+
+00:12:56.800 --> 00:12:58.080
+L'utilisateur voit un parcours fluide,
+
+00:12:58.220 --> 00:13:00.040
+mais en arrière-plan, l'application a mémorisé son choix.
+
+00:13:00.520 --> 00:13:01.480
+Certes, les variables sont utiles,
+
+00:13:01.880 --> 00:13:03.080
+mais elles ne constituent pas un stockage permanent.
+
+00:13:03.460 --> 00:13:04.600
+Si vous avez besoin qu'un relevé de dépense
+
+00:13:04.600 --> 00:13:06.420
+soit disponible demain pour la comptabilité ou un manager,
+
+00:13:06.800 --> 00:13:08.300
+il doit se trouver dans votre ressource de données connectée.
+
+00:13:08.860 --> 00:13:10.140
+Une variable aide seulement l'application
+
+00:13:10.140 --> 00:13:11.280
+à garder une trace de quelque chose
+
+00:13:11.280 --> 00:13:12.260
+pendant que la session est active.
+
+00:13:12.900 --> 00:13:14.640
+Connaître la différence permet d'éviter bien des confusions.
+
+00:13:15.100 --> 00:13:16.040
+Une boîte contient une valeur,
+
+00:13:16.220 --> 00:13:17.840
+mais parfois votre application doit retenir
+
+00:13:17.840 --> 00:13:19.040
+une petite liste de valeurs.
+
+00:13:19.600 --> 00:13:20.480
+C'est là que les collections interviennent.
+
+00:13:20.920 --> 00:13:22.240
+Une collection est comme une table temporaire
+
+00:13:22.240 --> 00:13:23.000
+à l'intérieur de l'application.
+
+00:13:23.380 --> 00:13:24.600
+Elle peut contenir plusieurs enregistrements
+
+00:13:24.600 --> 00:13:25.760
+pendant que l'utilisateur effectue une tâche.
+
+00:13:26.160 --> 00:13:27.800
+Un simple panier d'achat est un exemple facile.
+
+00:13:28.740 --> 00:13:30.000
+Une personne sélectionne trois articles
+
+00:13:30.000 --> 00:13:30.900
+dans une liste de produits,
+
+00:13:30.900 --> 00:13:32.340
+l'application les ajoute à une collection
+
+00:13:32.340 --> 00:13:34.360
+et l'écran du panier affiche les articles choisis,
+
+00:13:34.580 --> 00:13:35.240
+calcule le total
+
+00:13:35.240 --> 00:13:37.020
+et permet à l'utilisateur d'en supprimer un
+
+00:13:37.020 --> 00:13:37.900
+avant de soumettre la commande.
+
+00:13:39.520 --> 00:13:40.440
+Pourriez utiliser la même idée
+
+00:13:40.440 --> 00:13:41.440
+pour une liste de contrôles de séquences.
+
+00:13:41.740 --> 00:13:42.560
+Un travailleur sur le terrain
+
+00:13:42.560 --> 00:13:43.900
+marque plusieurs contrôles comme terminé
+
+00:13:43.900 --> 00:13:45.120
+et l'application conserve ses choix
+
+00:13:45.120 --> 00:13:45.700
+dans une collection
+
+00:13:45.700 --> 00:13:46.840
+pendant qu'il remplit le formulaire.
+
+00:13:47.380 --> 00:13:47.980
+Lorsqu'il a terminé,
+
+00:13:48.020 --> 00:13:49.540
+l'application enregistre le résultat final
+
+00:13:49.540 --> 00:13:50.600
+dans la source de données appropriée.
+
+00:13:51.320 --> 00:13:53.020
+Collections sont utiles pour le travail à court terme,
+
+00:13:53.220 --> 00:13:54.100
+mais elles ne remplacent pas la source
+
+00:13:54.100 --> 00:13:55.440
+où résident vos enregistrements métiers.
+
+00:13:56.040 --> 00:13:57.440
+C'est important lorsque vous construisez quelque chose
+
+00:13:57.440 --> 00:13:58.500
+sur lequel les gens vont compter.
+
+00:13:59.080 --> 00:14:00.360
+Si une collection contient la seule copie
+
+00:14:00.360 --> 00:14:01.160
+d'une demande importante,
+
+00:14:01.260 --> 00:14:02.020
+vous allez créer un problème.
+
+00:14:02.780 --> 00:14:04.160
+L'utilisateur pourrait fermer l'application,
+
+00:14:04.260 --> 00:14:05.840
+perdre sa connexion ou recommencer plus tard
+
+00:14:05.840 --> 00:14:07.360
+et cette liste temporaire pourrait disparaître.
+
+00:14:07.820 --> 00:14:08.680
+Utilisez donc les collections
+
+00:14:08.680 --> 00:14:10.280
+lorsque l'application a besoin d'une liste de travail
+
+00:14:10.280 --> 00:14:11.140
+et votre source de données
+
+00:14:11.140 --> 00:14:12.720
+lorsque l'entreprise a besoin d'un enregistrement durable.
+
+00:14:13.560 --> 00:14:14.740
+À mesure que votre application grandit,
+
+00:14:14.800 --> 00:14:15.360
+un autre défi apparaît.
+
+00:14:15.660 --> 00:14:16.420
+Les mêmes règles métiers
+
+00:14:16.420 --> 00:14:17.900
+commencent à apparaître à plusieurs endroits.
+
+00:14:18.660 --> 00:14:19.700
+Peut-être qu'une commande bénéficie
+
+00:14:19.700 --> 00:14:20.440
+de la livraison gratuite
+
+00:14:20.440 --> 00:14:22.040
+seulement lorsque le total atteint un certain montant
+
+00:14:22.040 --> 00:14:23.500
+et qu'un code de réduction est encore valide.
+
+00:14:27.440 --> 00:14:28.620
+dans un processus automatisé.
+
+00:14:29.200 --> 00:14:30.540
+Copier la même longue formule à chaque endroit
+
+00:14:30.540 --> 00:14:31.400
+semble rapide au début,
+
+00:14:31.540 --> 00:14:33.340
+mais la règle de livraison finit par changer.
+
+00:14:33.780 --> 00:14:34.940
+Quelqu'un met à jour une copie
+
+00:14:34.940 --> 00:14:35.680
+et oublie les deux autres
+
+00:14:35.680 --> 00:14:36.860
+et désormais différentes parties
+
+00:14:36.860 --> 00:14:37.540
+de la même solution
+
+00:14:37.540 --> 00:14:38.720
+donnent des réponses différentes.
+
+00:14:39.160 --> 00:14:40.780
+Les fonctions PowerFX réutilisables
+
+00:14:40.780 --> 00:14:41.760
+vous aident à éviter ce désordre.
+
+00:14:42.320 --> 00:14:43.440
+Vous définissez une fonction une fois,
+
+00:14:43.700 --> 00:14:44.760
+vous lui donnez les entrées nécessaires
+
+00:14:44.760 --> 00:14:45.600
+et elle renvoie un résultat.
+
+00:14:46.200 --> 00:14:47.020
+Pour l'exemple de livraison,
+
+00:14:47.100 --> 00:14:48.600
+la fonction reçoit un sous-total de commandes
+
+00:14:48.600 --> 00:14:49.860
+et vérifie si le code de réduction
+
+00:14:49.860 --> 00:14:51.120
+respecte la règle de date.
+
+00:14:51.860 --> 00:14:53.020
+Son résultat est soit vrai, soit faux.
+
+00:14:53.020 --> 00:14:55.380
+Vraie signifie que la livraison gratuite s'applique,
+
+00:14:55.480 --> 00:14:56.200
+faux signifie que non.
+
+00:14:56.940 --> 00:14:57.740
+L'application n'a pas besoin
+
+00:14:57.740 --> 00:14:58.900
+de transporter toute la règle partout.
+
+00:14:59.560 --> 00:15:00.480
+Elle peut demander la réponse
+
+00:15:00.480 --> 00:15:01.480
+à la fonction partagée.
+
+00:15:02.200 --> 00:15:03.220
+Cela rend la règle plus facile
+
+00:15:03.220 --> 00:15:04.080
+à vérifier et modifier
+
+00:15:04.080 --> 00:15:05.260
+et à maintenir cohérente.
+
+00:15:06.060 --> 00:15:07.080
+PowerFX apparaît plus clairement
+
+00:15:07.080 --> 00:15:08.040
+dans les applications Canvas
+
+00:15:08.040 --> 00:15:08.880
+où vous travaillez directement
+
+00:15:08.880 --> 00:15:10.160
+avec les contrôles dans la barre de formule.
+
+00:15:10.260 --> 00:15:11.220
+Mais le même langage de formule
+
+00:15:11.220 --> 00:15:12.200
+existe aussi dans Dataverse
+
+00:15:12.200 --> 00:15:13.520
+et d'autres expériences Power Platform.
+
+00:15:14.460 --> 00:15:15.340
+Vous n'avez pas besoin de maîtriser
+
+00:15:15.340 --> 00:15:16.180
+chaque endroit où il apparaît
+
+00:15:16.180 --> 00:15:16.680
+avant de commencer.
+
+00:15:17.260 --> 00:15:18.560
+Comprenez simplement la direction prise
+
+00:15:18.560 --> 00:15:19.080
+par Microsoft
+
+00:15:19.080 --> 00:15:20.660
+car la même manière d'écrire des règles métiers
+
+00:15:20.660 --> 00:15:21.800
+peut aller au-delà d'un seul écran
+
+00:15:21.800 --> 00:15:22.680
+dans une seule application.
+
+00:15:23.420 --> 00:15:25.020
+Pour vous, la leçon pratique est simple.
+
+00:15:25.720 --> 00:15:26.660
+Lorsqu'une valeur n'a d'importance
+
+00:15:26.660 --> 00:15:27.320
+que pendant le parcours
+
+00:15:27.320 --> 00:15:28.380
+de l'utilisateur dans l'application,
+
+00:15:28.760 --> 00:15:29.880
+utilisez une variable ou une collection
+
+00:15:29.880 --> 00:15:30.800
+avec un objectif clair.
+
+00:15:31.380 --> 00:15:32.320
+Lorsque la même règle métier
+
+00:15:32.320 --> 00:15:32.860
+doit renvoyer,
+
+00:15:32.960 --> 00:15:34.100
+la même réponse à plusieurs endroits,
+
+00:15:34.220 --> 00:15:34.960
+conservez cette règle
+
+00:15:34.960 --> 00:15:36.340
+en un seul bloc au lieu de la copier.
+
+00:15:36.780 --> 00:15:37.300
+Tous ces éléments
+
+00:15:37.300 --> 00:15:38.460
+peuvent sembler séparés au début,
+
+00:15:38.640 --> 00:15:39.500
+mais ils prennent tout leur sens
+
+00:15:39.500 --> 00:15:40.860
+lorsque vous les voyez fonctionner ensemble
+
+00:15:40.860 --> 00:15:41.940
+dans une petite application,
+
+00:15:42.220 --> 00:15:42.960
+dans une petite application.
+
+00:15:43.420 --> 00:15:44.400
+Comment les parties se connectent
+
+00:15:44.400 --> 00:15:45.900
+à un système de formule unique ?
+
+00:15:45.900 --> 00:15:46.340
+Passons en revue
+
+00:15:46.340 --> 00:15:47.060
+une application simple
+
+00:15:47.060 --> 00:15:47.900
+d'approbation de dépense
+
+00:15:47.900 --> 00:15:48.520
+du début à la fin.
+
+00:15:49.080 --> 00:15:50.140
+Un employé ouvre l'application
+
+00:15:50.140 --> 00:15:51.400
+et commence une nouvelle note de frais.
+
+00:15:51.900 --> 00:15:52.600
+Il saisit un montant,
+
+00:15:52.840 --> 00:15:53.500
+choisit une catégorie,
+
+00:15:53.700 --> 00:15:54.200
+ajoute une date
+
+00:15:54.200 --> 00:15:55.120
+et écrit une courte description.
+
+00:15:55.880 --> 00:15:56.700
+Chaque contrôle de saisie
+
+00:15:56.700 --> 00:15:57.580
+contient maintenant une valeur.
+
+00:15:58.100 --> 00:15:59.000
+PowerFX peut utiliser
+
+00:15:59.000 --> 00:15:59.940
+ces valeurs immédiatement.
+
+00:16:00.880 --> 00:16:02.180
+Une étiquette peut calculer un total,
+
+00:16:02.460 --> 00:16:03.240
+une formule peut vérifier
+
+00:16:03.240 --> 00:16:03.980
+si le montant dépasse
+
+00:16:03.980 --> 00:16:05.080
+la limite habituelle de l'employé
+
+00:16:05.080 --> 00:16:05.840
+et une autre formule
+
+00:16:05.840 --> 00:16:06.600
+peut afficher un message
+
+00:16:06.600 --> 00:16:07.500
+si la description est vide.
+
+00:16:08.580 --> 00:16:09.620
+L'écran change au fur et à mesure
+
+00:16:09.620 --> 00:16:10.440
+que l'emploi est le formulaire.
+
+00:16:11.080 --> 00:16:12.560
+Ensuite, il appuie sur « Envoyer ».
+
+00:16:12.560 --> 00:16:13.660
+La formule d'action de ce bouton
+
+00:16:13.660 --> 00:16:14.460
+enregistre la demande
+
+00:16:14.460 --> 00:16:15.220
+et dirige la personne
+
+00:16:15.220 --> 00:16:16.080
+vers un écran de confirmation.
+
+00:16:16.800 --> 00:16:18.080
+L'application stocke l'enregistrement
+
+00:16:18.080 --> 00:16:18.820
+nouvellement sélectionné
+
+00:16:18.820 --> 00:16:19.360
+dans une variable
+
+00:16:19.360 --> 00:16:20.260
+pour que l'écran de confirmation
+
+00:16:20.260 --> 00:16:20.880
+sache exactement
+
+00:16:20.880 --> 00:16:21.480
+quelle demande affichée.
+
+00:16:21.800 --> 00:16:22.180
+En même temps,
+
+00:16:22.220 --> 00:16:22.960
+l'application écrit
+
+00:16:22.960 --> 00:16:23.980
+les informations durables
+
+00:16:23.980 --> 00:16:25.300
+dans la source de données connectée.
+
+00:16:26.180 --> 00:16:26.480
+Plus tard,
+
+00:16:26.520 --> 00:16:27.200
+un responsable ouvre
+
+00:16:27.200 --> 00:16:27.960
+l'écran d'approbation.
+
+00:16:28.520 --> 00:16:29.240
+La galerie n'a pas besoin
+
+00:16:29.240 --> 00:16:30.080
+d'afficher toutes les dépenses
+
+00:16:30.080 --> 00:16:30.580
+de l'entreprise.
+
+00:16:31.100 --> 00:16:32.120
+Une formule peut ne renvoyer
+
+00:16:32.120 --> 00:16:32.980
+que les enregistrements
+
+00:16:32.980 --> 00:16:33.960
+en attente pour ce manager
+
+00:16:33.960 --> 00:16:34.920
+et une autre peut trier
+
+00:16:34.920 --> 00:16:35.900
+ses enregistrements par date
+
+00:16:35.900 --> 00:16:36.420
+ou par montant
+
+00:16:36.420 --> 00:16:37.360
+selon les besoins de l'équipe.
+
+00:16:38.080 --> 00:16:38.940
+Le manager sélectionne
+
+00:16:38.940 --> 00:16:39.520
+un enregistrement.
+
+00:16:39.740 --> 00:16:40.340
+L'écran des détails
+
+00:16:40.340 --> 00:16:40.780
+lit ce choix,
+
+00:16:40.960 --> 00:16:41.800
+affiche la demande complète
+
+00:16:41.800 --> 00:16:42.560
+et vérifie la règle
+
+00:16:42.560 --> 00:16:43.420
+d'approbation correspondante.
+
+00:16:43.940 --> 00:16:44.880
+Si le montant est inférieur
+
+00:16:44.880 --> 00:16:45.300
+à la limite,
+
+00:16:45.420 --> 00:16:46.440
+l'action d'approbation apparaît.
+
+00:16:46.940 --> 00:16:47.720
+Si la demande nécessite
+
+00:16:47.720 --> 00:16:48.320
+plus de détails,
+
+00:16:48.560 --> 00:16:49.200
+l'application affiche
+
+00:16:49.200 --> 00:16:49.920
+un message différent
+
+00:16:49.920 --> 00:16:50.740
+ou renvoie le manager
+
+00:16:50.740 --> 00:16:51.260
+vers l'employé
+
+00:16:51.260 --> 00:16:52.380
+pour obtenir plus d'informations.
+
+00:16:53.140 --> 00:16:53.740
+Une règle métier
+
+00:16:53.740 --> 00:16:54.640
+peut également être partagée.
+
+00:16:54.980 --> 00:16:55.640
+Une règle de livraison,
+
+00:16:55.720 --> 00:16:56.400
+de dépense ou de remise
+
+00:16:56.400 --> 00:16:56.980
+peut être intégrée
+
+00:16:56.980 --> 00:16:57.940
+dans une fonction réutilisable
+
+00:16:57.940 --> 00:16:58.540
+afin que l'application
+
+00:16:58.540 --> 00:16:59.360
+ne crée pas une application
+
+00:16:59.360 --> 00:16:59.800
+de la réponse
+
+00:16:59.800 --> 00:17:00.380
+sur chaque écran.
+
+00:17:01.100 --> 00:17:01.800
+C'est souvent à ce moment-là
+
+00:17:01.800 --> 00:17:02.220
+que l'on comprend.
+
+00:17:02.760 --> 00:17:03.560
+PowerFX ne se trouve pas
+
+00:17:03.560 --> 00:17:04.500
+à côté de votre application
+
+00:17:04.500 --> 00:17:05.900
+comme un bloc de code séparé.
+
+00:17:06.160 --> 00:17:06.800
+Il applique les règles
+
+00:17:06.800 --> 00:17:07.880
+directement au sein de l'application.
+
+00:17:08.520 --> 00:17:09.240
+Les contrôles utilisent
+
+00:17:09.240 --> 00:17:09.640
+des formules
+
+00:17:09.640 --> 00:17:10.760
+pour afficher les bonnes informations.
+
+00:17:11.040 --> 00:17:11.580
+Les boutons utilisent
+
+00:17:11.580 --> 00:17:12.500
+des formules pour interagir
+
+00:17:12.500 --> 00:17:13.260
+avec les utilisateurs
+
+00:17:13.260 --> 00:17:14.060
+et les formules de données
+
+00:17:14.060 --> 00:17:14.860
+sélectionnent et mettent à jour
+
+00:17:14.860 --> 00:17:15.860
+les enregistrements nécessaires.
+
+00:17:16.640 --> 00:17:17.580
+Les variables et les collections
+
+00:17:17.580 --> 00:17:18.400
+conservent le contexte
+
+00:17:18.400 --> 00:17:18.880
+à court terme
+
+00:17:18.880 --> 00:17:20.040
+tandis que les fonctions partagées
+
+00:17:20.040 --> 00:17:20.860
+assurent la cohérence
+
+00:17:20.860 --> 00:17:21.600
+des règles répétées.
+
+00:17:22.080 --> 00:17:23.140
+Les anciens projets d'application
+
+00:17:23.140 --> 00:17:24.080
+divisaient souvent ces tâches
+
+00:17:24.080 --> 00:17:25.060
+entre des scripts séparés,
+
+00:17:25.060 --> 00:17:26.080
+des pages construites manuellement
+
+00:17:26.080 --> 00:17:27.180
+et une logique personnalisée
+
+00:17:27.180 --> 00:17:27.960
+écrite loin de l'écran
+
+00:17:27.960 --> 00:17:28.860
+utilisé par les personnes.
+
+00:17:29.740 --> 00:17:30.800
+PowerFX maintient une grande partie
+
+00:17:30.800 --> 00:17:31.720
+de la logique à proximité
+
+00:17:31.720 --> 00:17:32.580
+du contrôle de l'écran
+
+00:17:32.580 --> 00:17:33.240
+ou de l'étape de données
+
+00:17:33.240 --> 00:17:33.800
+qu'elle affecte.
+
+00:17:34.520 --> 00:17:35.000
+Cela peut rendre
+
+00:17:35.000 --> 00:17:35.820
+une application métier
+
+00:17:35.820 --> 00:17:36.520
+plus facile à lire
+
+00:17:36.520 --> 00:17:37.400
+surtout lorsque vous nommez
+
+00:17:37.400 --> 00:17:38.220
+des éléments clairement.
+
+00:17:39.160 --> 00:17:40.620
+Cependant, PowerFX ne garantit pas
+
+00:17:40.620 --> 00:17:41.100
+que tous les problèmes
+
+00:17:41.100 --> 00:17:42.160
+d'application resteront simples.
+
+00:17:42.860 --> 00:17:44.120
+Les besoins importants
+
+00:17:44.120 --> 00:17:44.460
+en données,
+
+00:17:44.560 --> 00:17:45.760
+les règles de sécurité strictes,
+
+00:17:45.820 --> 00:17:46.440
+les changements de bases
+
+00:17:46.440 --> 00:17:47.100
+de données complexes
+
+00:17:47.100 --> 00:17:47.940
+et le travail connectant
+
+00:17:47.940 --> 00:17:48.560
+de nombreux systèmes
+
+00:17:48.560 --> 00:17:49.380
+peuvent nécessiter l'aide
+
+00:17:49.380 --> 00:17:50.380
+de développeurs expérimentés,
+
+00:17:50.440 --> 00:17:50.920
+d'équipes de données
+
+00:17:50.920 --> 00:17:52.120
+ou d'autres outils Power Platform.
+
+00:17:52.840 --> 00:17:53.640
+Ce n'est pas un échec
+
+00:17:53.640 --> 00:17:54.040
+du low-code.
+
+00:17:54.600 --> 00:17:55.020
+Il s'agit simplement
+
+00:17:55.020 --> 00:17:55.400
+de choisir.

@@ -21,6 +21,7 @@ Produkt-/Plattform-Felder
 Personen-Felder
   positions       [{title, org (Entitaets-ID), start (YYYY-MM), end?}]
 """
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import html
 import json
 import re
@@ -126,14 +127,17 @@ def logo_html(lang, e):
 
 
 def sections(lang, e, root, ents):
-    """Sichtbare Abschnitte: Referenzkunden, Partner, Zertifizierungen."""
+    """Sichtbare Abschnitte: Referenzkunden, Partner, Zertifizierungen; je Abschnitt (und je Untergruppe mit Liste) ein Einleitungssatz mit der Beziehung
+    zur Seite (site_linkctx fx.*, Paket 6)."""
+    import site_linkctx as LC
     out = ""
+    nm = EN.label(e, lang)
     cu = [c for c in (e.get("customers") or []) if c.get("name")]
     if cu:
-        h = f'<section class="en-customers"><h2>{esc(T(lang, "Reference customers", "Referenzkunden"))}</h2>'
+        h = f'<section class="en-customers"><h2>{esc(T(lang, "Reference customers", "Referenzkunden"))}</h2>{LC.intro(lang, "fx.customers", s=nm)}'
         cs = [c for c in cu if _url(c.get("case_study_url"))]
         if cs:
-            h += f'<h3>{esc(T(lang, "Case studies", "Fallstudien"))}</h3><ul>' + "".join(
+            h += f'<h3>{esc(T(lang, "Case studies", "Fallstudien"))}</h3>{LC.intro(lang, "fx.cases", s=nm)}<ul>' + "".join(
                 f'<li><a href="{esc(c["case_study_url"])}" rel="noopener">{esc(c.get("title") or c["name"])}</a> <span class="mut">· {esc(c["name"])}</span></li>' for c in cs) + "</ul>"
         groups = {}
         for c in cu:
@@ -141,7 +145,7 @@ def sections(lang, e, root, ents):
             if ind or not _url(c.get("case_study_url")):
                 groups.setdefault(ind or "", []).append(c)
         for ind, items in groups.items():
-            lab = (f'<a href="{root}{ind}/">{esc(ents[ind]["name"])}</a>' if ind in ents else esc(ind)) if ind else esc(T(lang, "Further customers", "Weitere Kunden"))
+            lab = (EN.list_link(f"{root}{ind}/", ents[ind], lang, e.get("id"), ents, skip_type=True) if ind in ents else esc(ind)) if ind else esc(T(lang, "Further customers", "Weitere Kunden"))
             names = ", ".join((f'<a href="{esc(c["case_study_url"])}" rel="noopener">{esc(c["name"])}</a>' if _url(c.get("case_study_url")) else esc(c["name"])) for c in items)
             h += f'<p><b>{lab}:</b> {names}</p>'
         srcs = [c["source"] for c in cu if _url(c.get("source")) and not _url(c.get("case_study_url"))]
@@ -150,12 +154,12 @@ def sections(lang, e, root, ents):
         out += h + "</section>"
     pa = [p for p in (e.get("partners") or []) if p.get("name")]
     if pa:
-        h = f'<section class="en-partners"><h2>{esc(T(lang, "Partners", "Partner"))}</h2>'
+        h = f'<section class="en-partners"><h2>{esc(T(lang, "Partners", "Partner"))}</h2>{LC.intro(lang, "fx.partners", s=nm)}'
         srcs = []
         for kind, en, de in KINDS:
             items = [p for p in pa if p.get("kind") == kind]
             if items:
-                h += f'<h3>{esc(T(lang, en, de))}</h3><ul>' + "".join(f'<li>{_a(p["url"], p["name"]) if _url(p.get("url")) else esc(p["name"])}</li>' for p in items) + "</ul>"
+                h += f'<h3>{esc(T(lang, en, de))}</h3>{LC.intro(lang, "fx.partner_kind", s=nm, k=T(lang, en, de))}<ul>' + "".join(f'<li>{_a(p["url"], p["name"]) if _url(p.get("url")) else esc(p["name"])}</li>' for p in items) + "</ul>"
                 srcs += [p["source"] for p in items if _url(p.get("source"))]
         srcs = list(dict.fromkeys(srcs))
         if srcs:
@@ -163,7 +167,7 @@ def sections(lang, e, root, ents):
         out += h + "</section>"
     ce = [c for c in (e.get("certifications") or []) if c.get("name")]
     if ce:
-        out += (f'<section class="en-certs"><h2>{esc(T(lang, "Certifications", "Zertifizierungen"))}</h2><ul>' + "".join(
+        out += (f'<section class="en-certs"><h2>{esc(T(lang, "Certifications", "Zertifizierungen"))}</h2>{LC.intro(lang, "fx.certs", s=nm)}<ul>' + "".join(
             f'<li>{esc(c["name"])}' + (f' <span class="mut">· {esc(T(lang, "issued by", "ausgestellt von"))} {esc(c["issuer"])}</span>' if c.get("issuer") else "") + _src(lang, c.get("source")) + "</li>" for c in ce) + "</ul></section>")
     return out
 

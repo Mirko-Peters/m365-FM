@@ -1,0 +1,667 @@
+WEBVTT
+
+00:00:00.260 --> 00:00:06.100
+Willkommen beim M3 65 FM Podcast, wo wir die Menschenideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.880 --> 00:00:08.700
+Warum wirkt DAX komplizierter als es ist?
+
+00:00:10.100 --> 00:00:15.440
+Power BI verbirgt über 250 Funktionen hinter einer kleinen Bearbeitungsleiste und diese gesamte Toolbox nennt sich DAX.
+
+00:00:16.380 --> 00:00:21.880
+Es steht für Data Analysis Expressions und ist die Sprache, die ihre importierten Tabellen in Antworten verwandelt, die man nicht durch einfaches Klicken erreicht.
+
+00:00:22.340 --> 00:00:26.320
+Man könnte eine steile Lernkurve erwarten, aber in der Praxis werden sie die meisten dieser Funktion nicht benutzt.
+
+00:00:26.320 --> 00:00:29.440
+Was die Leute abschreckt, ist nicht die lange Liste, sondern ein Konzept namens Kontext.
+
+00:00:29.440 --> 00:00:31.640
+Und sobald man das verstanden hat, wird der Rest viel einfacher.
+
+00:00:32.160 --> 00:00:35.780
+Am Ende werden sie wissen, was DAX ist, wo es steckt und warum es sich so verhält, wie es das tut.
+
+00:00:36.960 --> 00:00:37.960
+Was ist DAX eigentlich?
+
+00:00:38.720 --> 00:00:40.600
+DAX steht für Data Analysis Expressions.
+
+00:00:41.120 --> 00:00:46.200
+Wenn sie schon einmal Power BI Desktop geöffnet und oben in die Bearbeitungsleiste geklickt haben, standen sie bereits direkt davor.
+
+00:00:46.980 --> 00:00:54.180
+Es ist die Sprache, die Power BI für Berechnungen verwendet und dieselbe Sprache findet sich in Excels Power Pivot und einem Microsoft Server Produkt namens Analysis Services.
+
+00:00:55.600 --> 00:00:57.600
+Microsoft beschreibt es in einem einfachen Satz.
+
+00:00:57.600 --> 00:01:01.880
+DAX hilft Ihnen, neue Informationen aus Daten zu erstellen, die bereits in Ihrem Modell vorhanden sind.
+
+00:01:02.120 --> 00:01:02.840
+Das ist die gesamte Aufgabe.
+
+00:01:03.160 --> 00:01:08.260
+Sie haben Tabellen vorliegen und möchten etwas, das die Tabellen noch nicht direkt enthalten, wie eine Wachstumsrate oder eine Gewinnspanne.
+
+00:01:08.920 --> 00:01:11.740
+Nehmen wir an, Ihre Daten enthalten bereits jeden Verkauf, den das Unternehmen in diesem Jahr getätigt.
+
+00:01:11.740 --> 00:01:16.620
+Diese Tabellen verraten Ihnen, was verkauft wurde, aber Sie sagen Ihnen nicht, ob dieses Quartal besser war als das gleiche Quartal im Vorjahr.
+
+00:01:16.620 --> 00:01:20.820
+Dieser Vergleich ist eine neue Information und genau dafür ist DAX gedacht.
+
+00:01:21.540 --> 00:01:23.340
+Eine DAX-Formel kann in einem von vier Orten existieren.
+
+00:01:23.820 --> 00:01:26.980
+Imeasure ist eine Berechnung, die sich beim Filtern eines Berichts live aktualisiert.
+
+00:01:27.100 --> 00:01:30.680
+Und eine berechnete Spalte ist eine neue Spalte, die Sie einer Tabelle hinzufügen und zahlenweise füllen.
+
+00:01:30.900 --> 00:01:34.340
+Es gibt auch die berechnete Tabelle, die aus einer Formel eine völlig neue Tabelle erstellt,
+
+00:01:34.700 --> 00:01:37.440
+sowie die Sicherheitsregel, die bestimmt, welche Zeilen eine Person sehen darf.
+
+00:01:37.960 --> 00:01:42.240
+Für Anfänger sind die ersten beiden am wichtigsten und sie sind die einzigen beiden, die Sie für lange Zeit benötigen.
+
+00:01:42.240 --> 00:01:46.180
+Die Sprache verfügt über mehr als 250 Funktionen, die nach Ihrem Zweck in Gruppen unterteilt sind.
+
+00:01:46.960 --> 00:01:50.320
+Einige verarbeiten Datums und Zeitangaben, andere Texte, manche addieren Zahlen.
+
+00:01:50.560 --> 00:01:53.180
+Und eine Gruppe ist darauf ausgelegt, diesen Monat mit dem letzten zu vergleichen.
+
+00:01:53.360 --> 00:01:54.400
+Sie werden die meisten davon nicht verwenden.
+
+00:01:54.780 --> 00:01:58.280
+Leute, die beruflich mit DAX arbeiten, schlagen ständig Dinge nach und das ist völlig normal.
+
+00:01:59.120 --> 00:02:01.340
+Was Sie tatsächlich eingeben, ist freundlicher als der Name vermutende.
+
+00:02:01.940 --> 00:02:06.260
+Eine einfache Formel besteht meist aus dem kurzen Namen, einem Gleichheitszeichen und einem Wort, das eine Spalte summiert.
+
+00:02:06.860 --> 00:02:11.060
+Man muss sich am ersten Tag keine geschweiften Klammern merken und der Editor schlägt Funktionen während der Eingabe vor.
+
+00:02:12.240 --> 00:02:13.520
+Wie sich DAX von Excel unterscheidet.
+
+00:02:14.340 --> 00:02:17.520
+Wenn Sie Excel bereits kennen, ist dies der Punkt, der den Rest von DAX verständlich macht.
+
+00:02:18.060 --> 00:02:21.680
+Excel-Formeln arbeiten mit Zellen und Bereichen und sind daran gebunden, wo die Daten im Raster stehen.
+
+00:02:22.400 --> 00:02:25.620
+Verschieben Sie eine Spalte, geht die Formel kaputt, weil sie auf einen Ort statt auf ein Objekt verwies.
+
+00:02:26.360 --> 00:02:27.960
+DAX arbeitet mit ganzen Spalten und ganzen Tabellen.
+
+00:02:28.560 --> 00:02:32.520
+Wenn Sie in DAX auf eine Spalte verweisen, meinen Sie die gesamte Spalte, nicht eine einzelne Zelle darin.
+
+00:02:33.060 --> 00:02:35.640
+Das klingt nach einem kleinen Unterschied, aber es verändert Ihre gesamte Denkweise.
+
+00:02:36.300 --> 00:02:37.280
+Nehmen wir ein konkretes Beispiel.
+
+00:02:37.280 --> 00:02:42.580
+Wenn Sie in Excel den Preis aus einer Produkttabelle neben einer Verkaufszahle anzeigen möchten, würden Sie wahrscheinlich einen ins Verweis schreiben.
+
+00:02:43.160 --> 00:02:47.220
+In einem Power BI-Modell sind die Verkaufstabelle und die Produkttabelle bereits durch eine Beziehung verbunden.
+
+00:02:47.320 --> 00:02:48.560
+Der Preis ist also einfach verfügbar.
+
+00:02:49.120 --> 00:02:53.320
+Meistens müssen Sie überhaupt keine Suchformel schreiben, weil das Modell bereits weiß, wie die Tabellen zusammenpassen.
+
+00:02:53.900 --> 00:02:56.500
+Der Vorteil ist, dass eine einzige Formel 100 verschiedene Fragen beantworten kann.
+
+00:02:56.500 --> 00:03:03.920
+Sie schreiben den Gesamtumsatz einmal und er liefert die Zahl für jede Region, jeden Monat und jedes Produkt, da er sich für das, was der Bericht gerade anzeigt, neu berechnet.
+
+00:03:04.800 --> 00:03:07.040
+Sie kopieren sie nicht wie in Excel eine Spalte hinunter.
+
+00:03:07.740 --> 00:03:11.140
+Excel ist nach wie vor brillant für seinen Zweck, nämlich wenn eine Person eine einzelne Tabelle bearbeitet.
+
+00:03:11.920 --> 00:03:17.960
+DAX wurde für den anderen Fall entwickelt, in dem hunderte von Menschen denselben Bericht ansehen und die Zahlen korrekt bleiben müssen, egal wie sie gefiltert werden.
+
+00:03:18.720 --> 00:03:19.680
+Es gibt hier auch eine ehrliche Grenze.
+
+00:03:20.060 --> 00:03:23.900
+Es gibt kein Feld A1 in DAX, daher werden Sie manche Excel-Gewohnheiten aktiv in Ihrer Führung.
+
+00:03:23.900 --> 00:03:32.080
+Wenn Sie ein Measure schreiben, das nur auf eine Spalte verweist, etwa um den Umsatzbetrag allein abzufragen, gibt DAX einen Fehler aus, da es keine einzelne Zeile zum Abrufen gibt.
+
+00:03:32.760 --> 00:03:35.240
+Sie müssen angeben, wie die Spalte kombiniert werden soll, meist durch Summierung.
+
+00:03:35.420 --> 00:03:37.840
+Das bringt fast jeden durcheinander, der von einer Tabellenkalkulation kommt.
+
+00:03:38.640 --> 00:03:39.760
+Measures und berechnete Spalten
+
+00:03:39.760 --> 00:03:44.640
+Fast jedes Anfängerproblem in DAX läuft auf eine Entscheidung hinaus, die Sie treffen, bevor Sie eine einzige Formel schreiben.
+
+00:03:45.800 --> 00:03:48.740
+Sie entscheiden, ob Sie eine berechnete Spalte oder ein Measure benötigen.
+
+00:03:49.400 --> 00:03:51.320
+Beide verwenden DAX, verhalten sich aber sehr unterschiedlich.
+
+00:03:51.480 --> 00:03:53.740
+Eine berechnete Spalte ist diejenige, die sich vertraut anfühlt.
+
+00:03:54.100 --> 00:03:58.260
+Sie fügen einer Tabelle eine neue Spalte hinzu und DAX füllt sie für jede Zeile aus, Zeile für Zeile.
+
+00:03:58.780 --> 00:04:03.480
+Wenn Ihre Verkaufstabelle Menge und Preis enthält, kann eine berechnete Spalte den Betrag für jede Zeile ermitteln
+
+00:04:03.480 --> 00:04:07.920
+und wenn Sie Kunden in Altersgruppen einteilen möchten, kann eine berechnete Spalte jede einzelne kennzeichnen.
+
+00:04:07.920 --> 00:04:10.440
+Das wichtige Detail ist der Zeitpunkt der Ausführung.
+
+00:04:10.920 --> 00:04:15.080
+Die Berechnung erfolgt bei der Datenaktualisierung und die Ergebnisse werden dann in Ihrem Modell gespeichert.
+
+00:04:15.840 --> 00:04:18.320
+Ein Measure ist das Gegenteil, da es überhaupt kein Ergebnis speichert.
+
+00:04:18.980 --> 00:04:23.340
+Es berechnet die Antwort live, in dem Moment, in dem jemand den Bericht betrachtet, basierend auf dem Müllschirm zu sehen ist.
+
+00:04:23.860 --> 00:04:30.180
+Ein Measure für den Gesamtumsatz zeigt eine Zahl für das gesamte Unternehmen, eine andere Zahl für eine Region und wieder eine andere Zahl für einen Monat.
+
+00:04:30.340 --> 00:04:31.600
+Alles basierend auf derselben Formel.
+
+00:04:31.600 --> 00:04:34.420
+Nichts wird gespeichert, da sich die Antwort ständig ändert.
+
+00:04:34.860 --> 00:04:37.080
+Es gibt eine Falle, die Menschen den Unterschied auf die Harte tun lehren.
+
+00:04:37.580 --> 00:04:40.100
+Dennen Sie sie vor, Sie möchten die Gewinnspanne, also Gewinn geteilt durch Umsatz.
+
+00:04:40.800 --> 00:04:44.480
+Wenn Sie dies als berechnete Spalte erstellen, erhalten Sie einen korrekten Prozentsatz für jede einzelne Zeile.
+
+00:04:45.100 --> 00:04:49.000
+Sobald Sie jedoch eine durchschnittliche Spanne für eine ganze Region anzeigen möchten, ist die Zahl falsch,
+
+00:04:49.440 --> 00:04:53.880
+da Sie einen Haufen von Prozentsätzen gemittelt haben, anstatt den Gesamtgewinn durch den Gesamtumsatz zu teilen.
+
+00:04:54.660 --> 00:04:58.500
+Sie benötigen das Verhältnis der Summe, nicht die Summe der Verhältnisse und nur ein Measure erreicht das richtig.
+
+00:04:59.180 --> 00:05:01.500
+Die Wahl zwischen beiden hängt davon ab, was Sie mit dem Ergebnis tun.
+
+00:05:02.060 --> 00:05:06.040
+Wenn das Ergebnis als Bezeichnung, Slicer, Zeilenüberschrift oder Kategorie zum Filtern dienen soll,
+
+00:05:06.120 --> 00:05:08.140
+verwenden Sie eine berechnete Spalte, Falte.
+
+00:05:08.520 --> 00:05:12.380
+Wenn Sie eine Zahl in der Mitte eines Diagramms oder einer Tabelle benötigen, die auf Klicks reagiert, verwenden Sie ein Measure.
+
+00:05:12.760 --> 00:05:14.480
+Wenn beides funktionieren würde, tendieren Sie zum Measure.
+
+00:05:14.980 --> 00:05:16.440
+Dieser letzte Punkt ist wichtiger, als es klingt.
+
+00:05:17.260 --> 00:05:20.840
+Jede berechnete Spalte belegt Speicherplatz in Ihrem Modell und dieser Speicher kostet etwas.
+
+00:05:21.600 --> 00:05:22.840
+Measures nehmen diesen Platz nicht in Anspruch.
+
+00:05:23.160 --> 00:05:29.240
+Bei einer kleinen Datei werden Sie es nie bemerken, aber bei einer echten mit Millionen von Zeilen kann eine Handvoll unbedachter Spalten alles verlangsamen.
+
+00:05:29.240 --> 00:05:35.620
+Es gibt auch ein Konzept, das beiden zugrunde liegt und fast jedes seltsame DAX-Ergebnis erklärt, es ist der Grund, warum Menschen aufgeben.
+
+00:05:36.280 --> 00:05:39.380
+Es ist das eine Konzept, das ihre volle Aufmerksamkeit verdient und über das jeder stolpert.
+
+00:05:40.300 --> 00:05:44.460
+Unter beiden Türen verbirgt sich ein Konzept, das entscheidet, ob DAX sich einfach oder unmöglich anfühlt.
+
+00:05:44.460 --> 00:05:49.500
+Es wird Kontext genannt und bedeutet einfach die Menge an Zeilen, die eine Formel während der Ausführung betrachten darf.
+
+00:05:50.180 --> 00:05:52.620
+Ändern Sie den Kontext und dieselbe Formel liefert ein anderes Ergebnis.
+
+00:05:53.020 --> 00:05:54.440
+Das ist kein Fehler, das ist das gesamte Design.
+
+00:05:54.820 --> 00:05:57.700
+Es gibt zwei Arten von Kontext und die Namen sind weniger einschüchternd, als sie aussehen.
+
+00:05:58.760 --> 00:06:00.120
+Zeilenkontext bedeutet die aktuelle Zeile.
+
+00:06:00.480 --> 00:06:07.220
+Er tritt auf, wenn DAX eine Tabelle Zeile für Zeile durchläuft, entweder weil sie eine berechnete Spalte erstellt haben oder weil sie eine Funktion verwenden, die gezielt über Zeilen iteriert.
+
+00:06:07.700 --> 00:06:11.540
+Wenn nichts durchlaufen wird, gibt es keinen Zeilenkontext und diese Regel sollte man sich immer wieder vor Augen führen.
+
+00:06:11.540 --> 00:06:15.420
+Der Filterkontext ist alles, was bereits gefiltert wurde, bevor Ihre Formel überhaupt beginnt.
+
+00:06:16.060 --> 00:06:17.940
+Jede Zelle in einem Bericht hat ihren eigenen Filterkontext.
+
+00:06:18.380 --> 00:06:24.000
+Ein Datenschnitt für das Jahr, ein nach Region unterteiltes Diagramm, ein Seitenfilter oder sogar der Klick auf einen Balken in einem anderen Diagramm fließen dort ein.
+
+00:06:24.860 --> 00:06:28.580
+Hier machen Anfänger Fehler. Das ist so häufig, dass DAX-Lehrer explizit davor warnen.
+
+00:06:29.720 --> 00:06:34.660
+Viele nehmen an, dass jede Zeile eines Tabellenvisuals einzeln berechnet wird, als ob die Formel pro Zeile ausgeführt würde.
+
+00:06:35.080 --> 00:06:35.820
+Diese Annahme ist falsch.
+
+00:06:36.040 --> 00:06:40.820
+Jede Zelle wird unter ihrem eigenen Filter berechnet und dieser Filter kann stillschweigend viele Zeilen auf einmal umfassen.
+
+00:06:41.540 --> 00:06:44.700
+Wenn jemand sagt, eine DAX-Zahl sei falsch, ist meist dieses Missverständnis der Grund.
+
+00:06:45.660 --> 00:06:48.420
+Stellen Sie sich eine Tabelle mit Gesamtumsetzen vor, bei der die Marken an der Seite gelistet sind.
+
+00:06:49.180 --> 00:06:54.440
+Die Formel ändert sich nie, aber die Zahl neben jeder Marke ist unterschiedlich, da jede Zelle ihren eigenen Filter für diese Marke enthält.
+
+00:06:55.100 --> 00:06:57.840
+Zwischen den Zeilen wurde nichts bearbeitet, also hat der Kontext die ganze Arbeit erledigt.
+
+00:06:58.220 --> 00:07:02.660
+Dasselbe passiert mit einem Datenschnitt, bei dem das Klicken auf eine Region jede Zelle unter dem neuen Filter neu berechnet.
+
+00:07:02.660 --> 00:07:06.420
+Sobald Sie sich das vorstellen können, können Sie vorhersagen, was ein Measure tun wird, noch bevor Sie es schreiben.
+
+00:07:07.420 --> 00:07:08.180
+Filter wandern auch.
+
+00:07:08.500 --> 00:07:13.620
+Wenn Sie eine Produkttabelle filtern, fließt dieser Filter durch die Beziehung nach unten in die Verkaufstabelle, sodass Sie auch die Umsatzzahlen eingrenzen.
+
+00:07:14.320 --> 00:07:17.520
+Zahlenkontext wandert nicht auf diese Weise, was ein weiterer Grund dafür ist, dass sich beide so unterschiedlich vereinen.
+
+00:07:17.660 --> 00:07:20.660
+Die eine Funktion, die den Kontext von einer Falle in ein Werkzeug verwandelt, heißt Calculate.
+
+00:07:21.000 --> 00:07:25.940
+Sie erlaubt es Ihnen, die Filter zu ändern, unter denen eine Formel läuft, sodass Sie eine Zahl abfragen können, als wäre nur das letzte Jahr ausgewählt.
+
+00:07:25.940 --> 00:07:31.240
+Microsoft nennt sie eine der mächtigsten Funktionen in DAX und sobald Sie den Kontext verstanden haben, werden Sie wissen, warum.
+
+00:07:31.800 --> 00:07:34.160
+Ich möchte ehrlich bezüglich der Schwierigkeiten sein, denn das haben Sie verdient.
+
+00:07:34.580 --> 00:07:37.500
+Der Kontext ist wirklich der schwierigste Teil und erfordert Wiederholungen, um ihn zu verinnerlichen.
+
+00:07:37.860 --> 00:07:40.680
+Alles andere in DAX ist meistens nur das Auswendiglernen, welche Funktion was tut.
+
+00:07:40.780 --> 00:07:42.840
+Dieser Teil ist eher nachschlagen als eine echte Fähigkeit.
+
+00:07:43.280 --> 00:07:44.900
+Verstehen Sie den Kontext und der Rest ergibt sich von selbst.
+
+00:07:45.300 --> 00:07:46.780
+Was Leute tatsächlich mit DAX bauen.
+
+00:07:47.320 --> 00:07:49.180
+Kontext ist abstrakt, bis man sieht, wofür er gut ist.
+
+00:07:49.280 --> 00:07:52.240
+Daher hilft es, sich die kurze Liste der Dinge anzusehen, die Leute tatsächlich damit bauen.
+
+00:07:52.240 --> 00:07:56.160
+Jeder einzelne davon ist eine Frage, die ein normales Diagramm nicht von allein beantworten kann.
+
+00:07:56.520 --> 00:07:57.620
+Der ist das Wachstum im Zeitverlauf.
+
+00:07:58.080 --> 00:08:01.960
+Dies umfasst den Jahresvergleich, den Quartalsvergleich und laufende Summen, die sich im Laufe der Monate auferdieren.
+
+00:08:02.380 --> 00:08:05.280
+Dies ist meist der Moment, in dem jemand zum ersten Mal die Bearbeitungsleiste öffnet,
+
+00:08:05.620 --> 00:08:07.520
+da ein einfaches Diagramm zwar den aktuellen Monat anzeigt,
+
+00:08:07.640 --> 00:08:10.340
+aber sofort jemand in der Besprechung fragt, wie dieser im Vergleich zum Vorjahr aussieht.
+
+00:08:11.360 --> 00:08:13.960
+DAX verfügt über eine ganze Gruppe von Funktionen, die genau dafür entwickelt werden.
+
+00:08:14.520 --> 00:08:16.820
+An zweiter Stelle stehen Kennzahlen, die Filtervorgänge überstehen müssen.
+
+00:08:16.820 --> 00:08:19.780
+Das bedeutet gewinnschbar eine Konversionsrate und durchschnittliche Auftragswerte.
+
+00:08:19.780 --> 00:08:22.840
+Dies sind die Berechnungen, die fehlschlagen, wenn man sie falsch aufbaut.
+
+00:08:22.960 --> 00:08:24.480
+Deshalb kamen sie im letzten Abschnitt vor.
+
+00:08:25.100 --> 00:08:27.440
+Anfolgen stehen an dritter Stelle, sie beantworten Fragen wie
+
+00:08:27.440 --> 00:08:31.100
+welches Produkt ist in welcher Region führend und welcher Verkäufer liegt in welcher Kategorie vorn.
+
+00:08:31.940 --> 00:08:35.400
+Ein einfaches Sortieren reicht hier nicht aus, da der Rang innerhalb jeder Gruppe zurückgesetzt werden muss.
+
+00:08:35.980 --> 00:08:40.720
+An vierter Stelle steht die Gruppierung, Bucketing, Kunden in Altersgruppen oder Aufträge in Wertstufen einzuteilen,
+
+00:08:40.800 --> 00:08:42.720
+damit sie die Gruppen statt der Rohdaten auswerten können.
+
+00:08:43.420 --> 00:08:47.340
+Dies ist eine Aufgabe für eine berechnete Spalte, da die Gruppe ein Label ist, das sie als Datenschnitt verwenden möchten.
+
+00:08:47.340 --> 00:08:50.620
+Gehen wir nun ein kleines Beispiel durch, damit es nicht mehr so abstrakt wirkt.
+
+00:08:51.400 --> 00:08:53.540
+Sie haben eine Verkaufstabelle mit den tatsächlichen Transaktionen,
+
+00:08:53.800 --> 00:08:57.440
+eine Produkttabelle mit Namen und Kategorien und eine Datumstabelle mit einer Zeile pro Tag.
+
+00:08:57.940 --> 00:08:59.460
+Sie schreiben einen Measure für den Gesamtumsatz,
+
+00:08:59.760 --> 00:09:02.700
+dann ein zweites für den Umsatz im Vorjahr und ein drittes, das beides vergleicht.
+
+00:09:03.200 --> 00:09:07.300
+Das zweite und dritte basieren auf dem ersten, da Measures andere Measures als Bausteine verwenden können.
+
+00:09:07.720 --> 00:09:09.860
+Beachten Sie, dass Sie die ursprünglichen Tabellen überhaupt nicht verändert haben.
+
+00:09:09.860 --> 00:09:13.860
+Sie haben drei kleine Measures hinzugefügt und der Bericht wurde zu etwas, mit dem eine Führungskraft tatsächlich steuern kann.
+
+00:09:13.860 --> 00:09:18.340
+Diese Schichtung ist das, was ein echtes Modell lesbar hält, anstatt es in eine riesige Formel zu verwandeln.
+
+00:09:19.040 --> 00:09:20.500
+Das ist das Muster, das Sie immer wieder sehen werden.
+
+00:09:21.140 --> 00:09:25.320
+Es gibt kleine Measures, die gestapelt und wiederverwendet werden, wobei jedes eine klare Frage beantwortet.
+
+00:09:26.360 --> 00:09:28.300
+Wo Anfänger stecken bleiben und die ehrlichen Grenzen.
+
+00:09:29.180 --> 00:09:31.700
+Wenn die letzten Abschnitte DAX zugänglich erscheinen, lesen Sie das gut,
+
+00:09:31.820 --> 00:09:33.460
+aber ich werde nicht so tun, als sei alles problemlos.
+
+00:09:34.020 --> 00:09:37.280
+Hier stolpern die Leute tatsächlich und hier leistet die Sprache echten Widerstand.
+
+00:09:38.240 --> 00:09:42.360
+Der häufigste Fehler ist der, den wir gerade behandelt haben, die Verwechslung von Zeilenkontext und Filterkontext.
+
+00:09:42.360 --> 00:09:47.120
+Dies zeigt sich in Summen, die nicht übereinstimmen, durchschnitten, die leicht daneben liegen und Prozentsätzen, die keinen Sinn ergeben.
+
+00:09:47.760 --> 00:09:51.640
+Die Lösungen sind nicht mehr Funktionen, sondern innezuhalten und zu fragen, welche Zeilen die Formel sehen kann.
+
+00:09:52.140 --> 00:09:55.140
+Ein enger zweiter Platz ist das Verlassen auf berechnete Spalten, da sie sich sicherer anfangen.
+
+00:09:55.580 --> 00:09:58.360
+Die verhalten sich wie die Excel-Spalten, denen sie bereits vertrauen, daher sind sie verlockt.
+
+00:09:59.020 --> 00:10:02.120
+Sie verbrauchen außerdem Arbeitsspeicher und viele von ihnen sind schlicht unnötig,
+
+00:10:02.360 --> 00:10:05.800
+da das gleiche Ergebnis oft durch ein Measure erzielt werden kann, das schlanker und korrekter ist.
+
+00:10:06.700 --> 00:10:11.120
+Das Aktivieren bidirektionaler Beziehungen ist die dritte Falle und viele tun dies, ohne sie zu verstehen.
+
+00:10:11.120 --> 00:10:14.920
+Eine Beziehung filtert normalerweise in eine Richtung von der einen Seite zu viele Seite.
+
+00:10:15.780 --> 00:10:19.760
+Bidirektionales Filtern lässt Filter in beide Richtungen fließen und ist in bestimmten Fällen wirklich nützlich.
+
+00:10:20.120 --> 00:10:20.400
+Nützlich.
+
+00:10:20.900 --> 00:10:24.580
+Es ist jedoch auch gefährlich, da es im Stillen mehr deutige Pfade und falsche Ergebnisse erzeugen kann.
+
+00:10:25.080 --> 00:10:27.920
+Diejenigen, die sich mit DAX am besten auskennen, behandeln es mit echter Vorsicht.
+
+00:10:28.040 --> 00:10:30.140
+Anfänger sollten es meiden, bis das Modell Sinn ergibt.
+
+00:10:30.760 --> 00:10:34.300
+Der vierte Fehler ist, DAX für einen langsamen Bericht verantwortlich zu machen, wenn das Modell das Problem ist.
+
+00:10:34.300 --> 00:10:39.700
+Langsame Visuals und Formeln sind oft ein Symptom für ein schlecht strukturiertes Modell und nicht für eine schlechte Formel.
+
+00:10:40.600 --> 00:10:45.980
+Power BI enthält ein Tool namens Leistungsanalyse, das Ihnen genau zeigt, welches Visual und welche Formel die Zeit fressen.
+
+00:10:46.080 --> 00:10:49.360
+Es ist der erste Anlaufpunkt, bevor Sie irgendetwas umschreiben, bevor Sie umschreiben.
+
+00:10:49.460 --> 00:10:50.940
+Nun zu den ehrlichen Grenzen.
+
+00:10:51.160 --> 00:10:53.900
+Denn ein Anfängervideo, das diese auslässt, ist nicht aufrichtig zu Ihnen.
+
+00:10:54.480 --> 00:10:55.320
+Die Lernkurve ist real.
+
+00:10:55.760 --> 00:10:58.620
+Microsofts eigene Anleitung für Anfänger besagt, dass DAX schwierig zu erlernen sein kann.
+
+00:10:58.680 --> 00:10:59.380
+Und damit haben Sie recht.
+
+00:10:59.380 --> 00:11:03.960
+Berechnete Spalten und komplexe Formeln kosten Sie beide etwas, entweder Speicher oder Zeit.
+
+00:11:05.200 --> 00:11:08.440
+Nicht jede Funktion existiert in jeder Version der Tools und die Sprache ändert sich ständig.
+
+00:11:08.600 --> 00:11:10.920
+Daher kann ein altes Tutorial schnell veraltet sein.
+
+00:11:11.720 --> 00:11:13.400
+Es gibt in DAX auch nirgendwo Zellbezüge.
+
+00:11:13.720 --> 00:11:17.220
+Daher müssen Sie ein wenig von Ihrem Tabellenkalkulationsinstinkt ablegen, bevor sich der Neue festigt.
+
+00:11:17.600 --> 00:11:18.840
+Nichts davon ist ein Grund, es zu meiden.
+
+00:11:19.280 --> 00:11:22.300
+Es ist ein Grund, eher ein paar frustrierende Nachmittage zu erwarten anstatt Magie.
+
+00:11:22.300 --> 00:11:27.780
+Und falls Sie sich jemals zurückgeblieben fühlen, denken Sie daran, dass selbst diejenigen, die beruflich mit DAX arbeiten, fast jede Woche Dinge nachschlagen.
+
+00:11:27.780 --> 00:11:30.700
+Niemand hat all diese Funktionen im Kopf und das müssen Sie auch nicht.
+
+00:11:32.400 --> 00:11:35.640
+Wo DAX in Microsoft 365 Fabric und Azure passt, das alles existiert.
+
+00:11:35.880 --> 00:11:38.340
+An mehr als einem Ort in der Microsoft-Welt, für die Sie bereits bezahlen.
+
+00:11:38.420 --> 00:11:40.240
+Und das ist eine gute Nachricht für Ihre Fähigkeiten.
+
+00:11:41.200 --> 00:11:44.080
+DAX ist kein Trick eines einzelnen Produkts, der verschwindet, wenn Sie das Tool wechseln.
+
+00:11:44.660 --> 00:11:47.640
+Power BI Desktop ist das erste Zuhause und kann kostenlos heruntergeladen werden.
+
+00:11:48.060 --> 00:11:49.940
+Dort schreiben die meisten Leute ihre erste Formel.
+
+00:11:50.440 --> 00:11:52.480
+Power Pivot ist das zweite und befindet sich in Excel.
+
+00:11:52.480 --> 00:11:58.020
+Wenn Sie dort jemals eine Pivot-Tabelle auf Basis eines Datenmodells erstellt haben, waren Sie nur ein Klick von DAX entfernt, ohne es zu merken.
+
+00:11:58.700 --> 00:12:02.860
+Das dritte Zuhause ist Analysis Services, das Microsoft-Server-Produkt, auf dem die Modelle von Power BI basieren.
+
+00:12:03.600 --> 00:12:05.700
+Diese gemeinsame Engine ist der Grund, warum DAX in allen drei vorkommt.
+
+00:12:06.200 --> 00:12:08.340
+Es sind nicht drei verschiedene Sprachen, die sich zufällig ähneln.
+
+00:12:08.700 --> 00:12:11.280
+Es ist eine einzige Sprache und wenn man sie einmal gelernt hat, gilt sie überall.
+
+00:12:12.400 --> 00:12:14.740
+Power BI selbst ist inzwischen Teil von Microsoft Fabric.
+
+00:12:15.420 --> 00:12:20.720
+Falls Sie den Namen gehört haben und sich nicht sicher waren, was das ist, die einfache Antwort ist, dass Fabric die Datenplattform ist, auf der die Power BI-Modelle liegen.
+
+00:12:21.480 --> 00:12:29.160
+Deshalb wird ein Power BI-Modell als Fabric-Element bezeichnet und warum die Einstellungen für Dinge wie Co-Pilot eher nach Fabric als nach Power BI-Einstellungen aussehen.
+
+00:12:30.040 --> 00:12:31.400
+Azure gehört aufgrund der selben Abstammung dazu.
+
+00:12:31.800 --> 00:12:37.800
+Die Tabular Engine und die Modellierungskonzepte hinter DAX stammen aus der Microsoft-SQL-Server-Familie, einer Server-Technologie, die auch in Azure läuft.
+
+00:12:38.760 --> 00:12:44.200
+Sie brauchen das alles nicht, um Ihr erstes Measure zu schreiben, aber es erklärt, warum dieselben Konzepte immer wieder in Stellenanzeigen für Datenrollen auftauchen.
+
+00:12:44.900 --> 00:12:50.620
+Dann ist da noch die Frage, der sich ein Anfänger im Jahr 2026 zuerst stellen wird, kann Co-Pilot einfach das DAX für einschreiben?
+
+00:12:51.000 --> 00:12:52.120
+Die ehrliche Antwort lautet teilweise.
+
+00:12:52.760 --> 00:12:58.740
+Co-Pilot für Power BI kann DAX generieren und DAX-Abfragen schreiben, benötigt aber eine kostenpflichtige Fabric- oder Premium-Kapazität.
+
+00:12:59.440 --> 00:13:04.000
+Einige Funktionen sind noch in der Vorschau und Microsoft betont deutlich, dass es auf ein gut vorbereitetes Modell ankommt.
+
+00:13:04.660 --> 00:13:07.340
+Ohne diese Vorbereitung kann es allgemein oder schlichtweg falsche Antworten liefern.
+
+00:13:07.480 --> 00:13:12.440
+Co-Pilot ist also ein echter Vorsprung, aber die Grundlagen entscheiden immer noch darüber, ob die Antwort korrekt ist.
+
+00:13:13.440 --> 00:13:14.900
+Die Kurzfassung und eine Frage an Sie.
+
+00:13:15.740 --> 00:13:16.960
+Hier ist also die Kurzfassung zu mir.
+
+00:13:17.600 --> 00:13:23.840
+DAX ist die Formelsprache hinter Power BI und hinter Power Pivot in Excel und sie arbeitet mit ganzen Tabellen und Spalten statt mit einzelnen Zellen.
+
+00:13:23.840 --> 00:13:25.080
+Wert mit einzelnen Zellen.
+
+00:13:26.160 --> 00:13:30.960
+Measures berechnen ihr Ergebnis live während des Filterns und berechnete Spalten speichern einen Wert für jede Zeile.
+
+00:13:32.000 --> 00:13:38.780
+Unter allem liegt der Kontext, das Konzept, das bestimmt, welche Zeilen eine Formel sehen kann und das man so lange üben sollte, bis es offensichtlich erscheint.
+
+00:13:39.520 --> 00:13:42.020
+Das ist alles viel weniger beängstigend, als Sie drei Buchstaben vermuten lassen.
+
+00:13:42.280 --> 00:13:43.160
+Und jetzt haben Sie den Überblick.
+
+00:13:43.160 --> 00:13:44.840
+Meine Frage an Sie, Leute, wie folgt.
+
+00:13:45.140 --> 00:13:49.640
+Was ist die eine Berechnung, die Sie in Excel immer wieder von Hand machen, von der Sie sich wünschen, dass ein Bericht Sie einfach anzeigen könnte?
+
+00:13:50.380 --> 00:13:54.520
+Schreiben Sie es in die Kommentare, denn genau dieser Wunsch ist meist der Punkt, an dem DAX Sinn ergibt.
+
+00:13:55.180 --> 00:14:01.640
+Wenn das Thema dadurch weniger einschüchternd wirkt, abonnieren Sie M365FM, um die Tools und die Denkweise zu meistern, die die Zukunft der Arbeit prägen.

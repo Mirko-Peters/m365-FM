@@ -1,0 +1,5827 @@
+WEBVTT
+
+00:00:00.440 --> 00:00:06.560
+Grande, limpio, fácil de capturar en pantalla y es donde empieza a salir mal porque el liderazgo no lo lee como una medición, lo leen como una calificación.
+
+00:00:07.120 --> 00:00:12.320
+72% es un SEMA, ¿cierto? Ni terrible. Llevemoslo un B para el próximo trimestre. Suena razonable.
+
+00:00:12.780 --> 00:00:15.640
+En realidad, la primera suposición era. Una calificación implica un alímetro.
+
+00:00:15.840 --> 00:00:20.340
+Tú días mejoras, llegas a 90, terminaste. El examen termina, pero la seguridad no tiene línea de meta.
+
+00:00:20.660 --> 00:00:24.940
+Los atacantes no califican con Q. No les importa si aprobaste. Les importa si una puerta está abierta hoy.
+
+00:00:25.420 --> 00:00:28.120
+Entonces, ¿qué te está diciendo realmente ese número? Aquí está la falla estructural.
+
+00:00:28.120 --> 00:00:32.480
+El puntaje mide la configuración. No mide los resultados. Te dice qué configuración está activa.
+
+00:00:32.980 --> 00:00:39.980
+No te dice cuántos ataques fallaron, qué tan rápido detectarías una brecha, o si tu cuenta más expuesta sobreviviría a un correo de phishing un martes por la tarde.
+
+00:00:40.840 --> 00:00:43.280
+La configuración es un insumo. El resultado es una consecuencia.
+
+00:00:43.580 --> 00:00:47.720
+El tablero muestra el insumo y te hace sentir que estás viendo el resultado. Y eso no es culpa de Microsoft.
+
+00:00:48.300 --> 00:00:52.240
+El portal es bastante claro sobre lo que cuenta. El problema es lo que sucede después de que el número sale del portal.
+
+00:00:53.140 --> 00:00:57.900
+Lo que suele suceder es esto. Alguien pone el puntaje en un informe mensual. Te coloca junto a otros números.
+
+00:00:58.220 --> 00:01:00.200
+Conteo de tickets. Tazas de parches. Tiempo de actividad.
+
+00:01:00.940 --> 00:01:03.820
+Luego alguien pide una meta, porque eso es lo que haces con un número en un informe.
+
+00:01:04.380 --> 00:01:07.440
+Estableces una meta. 80% para fin de año. Y ahora el puntaje es un KPE.
+
+00:01:07.760 --> 00:01:10.600
+Pero esto es lo que le pasa a cada KPE tarde o temprano. Se convierte en un objetivo.
+
+00:01:11.240 --> 00:01:14.440
+Y una vez que una medida se convierte en objetivo, la gente deja de preguntar qué debe decirles.
+
+00:01:14.940 --> 00:01:16.680
+Empiezan a preguntar cómo vuelvo. Nadie lee.
+
+00:01:17.060 --> 00:01:20.820
+Nadie se sentó y decidió optimizar lo incorrecto. Simplemente sigue el incentivo.
+
+00:01:20.820 --> 00:01:23.740
+El tablero recompensa los puntos. El informe recompensa el progreso.
+
+00:01:24.000 --> 00:01:29.920
+El equipo entrega puntos. Así que el equipo elige las acciones que suman más puntos con menor esfuerzo, silenciosamente, razonablemente, un ticket a la vez.
+
+00:01:30.420 --> 00:01:33.580
+Tres meses después, el número es más alto y la exposición podría no haberse movido en absoluto.
+
+00:01:33.860 --> 00:01:35.820
+Eso no es un fallo de seguridad. Es un fallo de modelo.
+
+00:01:36.220 --> 00:01:38.200
+El porcentaje nunca estuvo destinado a cargar con tanto peso.
+
+00:01:38.760 --> 00:01:39.860
+Estaba destinado a señalar el drop.
+
+00:01:40.260 --> 00:01:41.460
+Cambio fue ascendido a un veredicto.
+
+00:01:41.460 --> 00:01:44.440
+Y no puedes arreglar eso intentando más alcanzar el número.
+
+00:01:44.860 --> 00:01:47.140
+Lo solucionas entendiendo cómo se construye ese número.
+
+00:01:47.580 --> 00:01:51.400
+Porque una vez que ves cómo se calculan realmente los puntos, la calificación deja de parecer una calificación.
+
+00:01:52.100 --> 00:01:52.880
+Es para hacer una lista.
+
+00:01:53.940 --> 00:01:54.900
+¿Qué mide realmente Secure Score?
+
+00:01:55.680 --> 00:01:56.600
+Comienza con la unidad.
+
+00:01:56.880 --> 00:01:58.580
+La unidad no es un porcentaje. Es un.
+
+00:01:59.060 --> 00:02:01.980
+Cada recomendación en la puntuación se denomina acción de mejora.
+
+00:02:02.580 --> 00:02:05.160
+Activar mi fervor es bloquear la autenticación y la edad.
+
+00:02:05.980 --> 00:02:07.040
+Habilitar una directiva de vínculo.
+
+00:02:07.640 --> 00:02:09.920
+Cada acción conlleva un número determinado de puntos.
+
+00:02:09.920 --> 00:02:13.060
+Y los obtienes cuando tu configuración coincide con lo que pide la acción.
+
+00:02:13.480 --> 00:02:14.200
+Ese es todo el mecanismo.
+
+00:02:14.620 --> 00:02:15.560
+Observa lo que falta en él.
+
+00:02:15.780 --> 00:02:16.540
+No se detectó ningún ataque.
+
+00:02:16.840 --> 00:02:17.680
+No se detectó una amenaza.
+
+00:02:18.060 --> 00:02:18.960
+No se cerró ningún incidente.
+
+00:02:19.340 --> 00:02:21.980
+El portal observa el estado de tu configuración y lo compara con la lista.
+
+00:02:22.240 --> 00:02:24.780
+Por lo tanto, la puntuación es un recuento de controles, no un recuento de protección.
+
+00:02:25.100 --> 00:02:27.280
+Ahora observa los dos números que aparecen uno al lado del otro.
+
+00:02:27.360 --> 00:02:28.940
+Tu puntuación actual y tu puntuación máxima.
+
+00:02:29.300 --> 00:02:33.360
+La mayoría de la gente interpreta la puntuación máxima como un límite fijo, un 100%, pero el máximo 100.
+
+00:02:33.440 --> 00:02:34.260
+Pero el máximo no es fijo.
+
+00:02:34.260 --> 00:02:40.780
+Es el total de puntos disponibles para tu inquilino según los productos que tienes bajo licencia y las cargas de trabajo que realmente ejecutas, lo que significa que el denominador cambia.
+
+00:02:41.220 --> 00:02:42.660
+Si añades una licencia, el máximo sube.
+
+00:02:42.920 --> 00:02:44.700
+Si Microsoft lanza una acción, el máximo sube.
+
+00:02:45.060 --> 00:02:46.400
+Si retiras una carga de trabajo, baja.
+
+00:02:46.660 --> 00:02:49.420
+Tu porcentaje puede cambiar mientras tu configuración permanece exactamente igual.
+
+00:02:49.740 --> 00:02:52.920
+Volveremos a esto más adelante, porque provoca verdaderas discusiones en reuniones reales.
+
+00:02:53.440 --> 00:02:54.400
+Por ahora, manténela clara.
+
+00:02:54.960 --> 00:02:57.960
+El porcentaje es una proporción, y ambos lados de la proporción pueden cambiar sin ti.
+
+00:02:58.440 --> 00:02:59.080
+Entonces, ¿qué se incluyen?
+
+00:02:59.080 --> 00:03:11.460
+El alcance cubre las capas principales de un entorno de Microsoft 365, identidad, que son tus cuentas, autenticación y reales de administrador, dispositivos, que es la protección de puntos de conexión y la configuración de dispositivos, aplicaciones que cubren la protección del core electrónico y la core.
+
+00:03:12.120 --> 00:03:14.460
+Datos que abarcan la protección y el intercambio de información.
+
+00:03:15.120 --> 00:03:19.140
+Cada categoría aporta su propio grupo de puntos, y los grupos no son iguales en tamaño.
+
+00:03:19.480 --> 00:03:20.420
+Eso importa más de lo que parece.
+
+00:03:20.980 --> 00:03:24.100
+Si una categoría simplemente tiene más acciones disponibles, dominará el total.
+
+00:03:24.740 --> 00:03:28.420
+Un montón de pequeñas configuraciones de dispositivos puede superar a un puñado de acciones de identidad.
+
+00:03:28.420 --> 00:03:31.980
+Incluso cuando las acciones de identidad son las que realmente persiguen los atacantes.
+
+00:03:33.040 --> 00:03:35.580
+Los puntos reflejan cuántas cosas puede verificar Microsoft.
+
+00:03:35.980 --> 00:03:39.280
+No reflejan la frecuencia con la que se usa de cada cosa, y esa es una pregunta muy diferente.
+
+00:03:39.700 --> 00:03:40.880
+Esta es la forma más clara de decirlo.
+
+00:03:41.300 --> 00:03:43.620
+Secure Score es una instantánea de la postura de los controles.
+
+00:03:44.220 --> 00:03:45.040
+Responde una sola cosa.
+
+00:03:45.160 --> 00:03:47.580
+¿Cuántas de las configuraciones recomendadas están vigentes en este momento?
+
+00:03:47.860 --> 00:03:50.000
+No responde la probabilidad de que sufras una vulneración.
+
+00:03:50.680 --> 00:03:53.020
+No responde cuál de tus cuentas elegiría un atacante primero.
+
+00:03:53.020 --> 00:03:56.720
+Y no puede decirte si una configuración activada cubre a las personas que la necesitan.
+
+00:03:57.200 --> 00:03:57.740
+Tómeme fea.
+
+00:03:57.740 --> 00:04:03.040
+La puntuación puede decirte que una política existe, pero no que los tres asistentes ejecutivos con delegación de buzón quedaron fuera de ella.
+
+00:04:03.400 --> 00:04:04.440
+O tomeme una política de positivo.
+
+00:04:04.720 --> 00:04:05.500
+La puntuación ve la poli.
+
+00:04:05.960 --> 00:04:07.500
+No ve las laptops que nunca se inscribieron.
+
+00:04:08.040 --> 00:04:09.400
+La postura es el estado de tus controles.
+
+00:04:09.840 --> 00:04:12.460
+El riesgo es la probabilidad de que algo malo suceda y que tan grave sea.
+
+00:04:12.940 --> 00:04:13.380
+Son primos.
+
+00:04:13.920 --> 00:04:14.720
+No son la misma persona.
+
+00:04:15.180 --> 00:04:18.020
+Cuando los tratas como lo mismo, obtienes el problema de calificación de hace un momento.
+
+00:04:18.580 --> 00:04:20.400
+Un número ordenado representando una verdad de su orden.
+
+00:04:20.600 --> 00:04:21.780
+Pero aquí está la parte útil.
+
+00:04:22.240 --> 00:04:25.320
+Una vez que dejas de leer la puntuación como riesgo, se convierte en algo mucho mejor.
+
+00:04:25.320 --> 00:04:29.580
+Se convierte en un mapa de brechas de configuración, trazado por alguien que conoce bien la plataforma.
+
+00:04:30.260 --> 00:04:33.200
+Microsoft creó esa lista basándose en lo que ven inquiliones de inquilinos.
+
+00:04:33.540 --> 00:04:34.340
+Eso es conocimiento real.
+
+00:04:34.660 --> 00:04:38.180
+Solo conocimiento sobre lo que falta, no conocimiento sobre lo que más te importa a ti.
+
+00:04:38.820 --> 00:04:39.540
+Es el juicio de trabajo.
+
+00:04:40.080 --> 00:04:44.520
+Y antes de que puedas hacer ese trabajo, hay otra capa que entender porque la forma en que se otorgan los puntos tiene algunas peculiaridades.
+
+00:04:44.520 --> 00:04:47.560
+Algunas acciones se pagan por completo, otras parcialmente.
+
+00:04:47.900 --> 00:04:50.520
+Y algunas pueden marcarse como completas sin que cambies un solo ajuste.
+
+00:04:50.940 --> 00:04:52.560
+Ahí es donde el número comienza a sorprender a las personas.
+
+00:04:53.680 --> 00:04:54.580
+¿Cómo se ganan los puntos?
+
+00:04:54.780 --> 00:04:56.080
+Completo, parcial y de tercero.
+
+00:04:56.580 --> 00:04:58.160
+Abre cualquier acción de mejora en el portal.
+
+00:04:58.900 --> 00:05:00.460
+Busca la línea que desimpacto en la puntuación.
+
+00:05:01.100 --> 00:05:02.060
+Muestra un número de puntos.
+
+00:05:02.320 --> 00:05:05.680
+Y ese número es el máximo que puedes ganar con esa acción, no lo que ganarás con seguridad.
+
+00:05:06.220 --> 00:05:06.520
+En...
+
+00:05:06.520 --> 00:05:09.980
+Algunas acciones se pagan por completo en el momento en que se cumplan la condición.
+
+00:05:10.480 --> 00:05:11.660
+Activa la configuración, obtén los puntos.
+
+00:05:12.120 --> 00:05:13.120
+Otras se pagan parcialmente.
+
+00:05:13.460 --> 00:05:18.160
+Microsoft verifica cuánto de tu entorno cubre realmente el control y te otorga una parte proporcional de los puntos.
+
+00:05:18.620 --> 00:05:19.620
+Tomemos el registro de MFA.
+
+00:05:20.000 --> 00:05:23.280
+Si el 70% de tus usuarios están registrados, no obtienes cero ni obtienes el total.
+
+00:05:23.660 --> 00:05:24.500
+Obtienes algo intermedio.
+
+00:05:24.900 --> 00:05:27.160
+Así que los puntos parciales son en realidad el diseño más o menos.
+
+00:05:27.620 --> 00:05:30.420
+Recompensan la cobertura, no solo la existencia, pero incluso eso es un límite.
+
+00:05:30.720 --> 00:05:31.280
+¿Cobertura de qué?
+
+00:05:31.520 --> 00:05:33.700
+El 70% de los usuarios no te dice cuál 70%.
+
+00:05:33.700 --> 00:05:36.660
+Los administradores podrían estar en el grupo faltante y la puntuación no se varía a saludar.
+
+00:05:37.100 --> 00:05:38.680
+Ahora mire el campo de estado en cada acción.
+
+00:05:39.240 --> 00:05:39.960
+¿Qué es donde se pone interesante?
+
+00:05:40.400 --> 00:05:45.640
+Puedes marcar una acción como abordar, planificada, riesgo aceptado, resuelta por terceros o completada.
+
+00:05:46.620 --> 00:05:48.280
+La mayoría son etiquetas para tu propio signo.
+
+00:05:48.660 --> 00:05:49.960
+Planeado significa que tienes donde hacerlo.
+
+00:05:50.520 --> 00:05:52.040
+Riesgo aceptado significa que decidiste hacerlo.
+
+00:05:52.440 --> 00:05:56.820
+Ninguno cambia tu configuración, por lo que ninguno debería cambiar tus puntos de forma que implique protección.
+
+00:05:57.280 --> 00:05:58.560
+Pero dos de ellos se comportan de manera distinta.
+
+00:05:58.960 --> 00:06:02.580
+Resuelto por terceros significa que cubres ese riesgo con una herramienta que Microsoft no ve.
+
+00:06:02.580 --> 00:06:05.340
+Quizá una puerta de enlace, seguridad de correo.
+
+00:06:05.440 --> 00:06:07.460
+Quizá un proveedor de identidad para parte del entorno.
+
+00:06:08.220 --> 00:06:10.560
+Informas al portal y la acción se registra como completada.
+
+00:06:10.940 --> 00:06:11.960
+Y aquí está el problema de silencios.
+
+00:06:12.380 --> 00:06:13.460
+Microsoft no verifica esa firmación.
+
+00:06:14.480 --> 00:06:16.920
+No tiene visibilidad del otro producto, así que la puntuación confía en ti.
+
+00:06:17.200 --> 00:06:19.660
+Lo cual suena bien hasta que preguntas quién hizo esa confianza exactamente.
+
+00:06:20.400 --> 00:06:23.860
+En muchas organizaciones la persona que hace clic en ese botón está bajo presión para mover un número.
+
+00:06:24.240 --> 00:06:24.760
+Tiene un proveedor.
+
+00:06:25.120 --> 00:06:26.620
+Tiene una idea vaga de que el proveedor lo cubre.
+
+00:06:27.060 --> 00:06:28.380
+Nadie ha probado si realmente lo hace.
+
+00:06:28.540 --> 00:06:30.060
+Y el crédito se otorga de todos modos.
+
+00:06:30.060 --> 00:06:32.560
+Ahí es donde se rompe la confianza, no porque alguien mintiera,
+
+00:06:32.780 --> 00:06:35.680
+sino porque la acción se cerró basada en una suposición o una suposición en el resultado.
+
+00:06:36.100 --> 00:06:36.900
+Y existe un caso racional.
+
+00:06:37.300 --> 00:06:39.980
+Una configuración puede estar bien ajustada y aún así no protegerá a nadie.
+
+00:06:40.500 --> 00:06:43.480
+Habilitas una política pero la limitas a un grupo piloto y olvidas ampliarla.
+
+00:06:43.680 --> 00:06:46.380
+Activas una función en un nivel de licencia que la mitad de tu personal no tiene.
+
+00:06:46.600 --> 00:06:47.420
+La casilla está marcada.
+
+00:06:47.840 --> 00:06:48.700
+La cobertura es insuficiente.
+
+00:06:49.060 --> 00:06:49.980
+Así que esto es lo que significa.
+
+00:06:50.300 --> 00:06:52.760
+Un número puede subir sin que un solo riesgo real disminuya.
+
+00:06:53.320 --> 00:06:54.600
+Piensa en cómo sucede esto en la práctica.
+
+00:06:55.420 --> 00:06:57.700
+Alguien marca tres acciones como cubiertas por un tercero.
+
+00:06:57.700 --> 00:07:01.140
+Otra persona habilita dos configuraciones en un pequeño grupo de pruebas.
+
+00:07:01.360 --> 00:07:03.020
+Una política cambia de auditoría habilitada,
+
+00:07:03.160 --> 00:07:05.760
+pero excluye una larga lista de cuentas que nadie revisa.
+
+00:07:06.060 --> 00:07:06.660
+La puntuación sub.
+
+00:07:06.980 --> 00:07:07.700
+El informe se ve mejor.
+
+00:07:08.040 --> 00:07:09.580
+Y la puerta abierta sigue exactamente donde está.
+
+00:07:09.860 --> 00:07:10.980
+Nada de esto requiere mala intención.
+
+00:07:11.500 --> 00:07:13.620
+Solo requiere un panel que recompense los cambios de estado
+
+00:07:13.620 --> 00:07:14.800
+y un equipo que esté ocupado.
+
+00:07:15.380 --> 00:07:17.320
+Entonces, ¿cómo te proteges de tu propio número?
+
+00:07:18.120 --> 00:07:20.020
+Haz una pregunta sobre cada acción que obtuvo puntos.
+
+00:07:20.660 --> 00:07:21.840
+¿Qué vería si este control fallara?
+
+00:07:21.840 --> 00:07:24.120
+Si la respuesta es nada, no tienes evidencia.
+
+00:07:24.440 --> 00:07:24.840
+Tienes estado.
+
+00:07:25.380 --> 00:07:27.200
+Pero una reclamación de terceros se supondría ser micrónoma.
+
+00:07:27.800 --> 00:07:30.280
+Vio una muestra de phishing conocida y observa qué hace la otra herramienta.
+
+00:07:30.820 --> 00:07:33.720
+Para una acción de puntos parciales significa mirar quién está en el grupo no cubierto
+
+00:07:33.720 --> 00:07:35.740
+porque los puntos te dicen que Microsoft vio algo.
+
+00:07:36.340 --> 00:07:37.280
+No te dicen que funcione.
+
+00:07:37.860 --> 00:07:39.740
+Hay un detalle más que importa antes de continuar.
+
+00:07:40.240 --> 00:07:42.100
+Los puntos no tienen el mismo peso en todas las acciones.
+
+00:07:42.480 --> 00:07:42.920
+Algunas valen.
+
+00:07:43.400 --> 00:07:44.420
+Algunos casi no tienen valor.
+
+00:07:44.760 --> 00:07:47.340
+Una configuración insignificante y un control de identidad crucial
+
+00:07:47.340 --> 00:07:48.600
+pueden aparecer juntos en la misma lista.
+
+00:07:48.600 --> 00:07:51.840
+Y los pesos no siempre coinciden con la importancia que cada uno tiene por un atacante.
+
+00:07:52.300 --> 00:07:54.980
+Ese peso desigual es lo que hace que el siguiente comportamiento sea tan predecible.
+
+00:07:55.460 --> 00:07:58.640
+Cuando un panel de control ofrece distintas recompensas por distintos esfuerzos,
+
+00:07:58.720 --> 00:08:00.120
+no hay que decirle a la gente qué hacer.
+
+00:08:00.920 --> 00:08:02.420
+Ellos encuentran los puntos fáciles por sí mismos.
+
+00:08:03.240 --> 00:08:04.600
+La trampa de marcar casillas es definida.
+
+00:08:05.100 --> 00:08:06.300
+Aquí está la trampa en una sola frase.
+
+00:08:06.760 --> 00:08:08.840
+Empiezas a optimizar el número en lugar de la exposición.
+
+00:08:09.340 --> 00:08:10.980
+Esas dos cosas suenan parecidas, pero no lo son.
+
+00:08:11.760 --> 00:08:13.020
+La exposición es el problema real.
+
+00:08:13.280 --> 00:08:14.460
+Una cuenta que puede ser atacada.
+
+00:08:14.980 --> 00:08:16.020
+Una rotación al administrador.
+
+00:08:16.020 --> 00:08:17.420
+Un buzón que nadie protege.
+
+00:08:17.420 --> 00:08:20.500
+El número es solo un recuento de cuántas casillas se marcaron en el camino.
+
+00:08:20.740 --> 00:08:22.980
+Y ambos pueden distanciarse por meses sin que nadie lo note.
+
+00:08:23.800 --> 00:08:24.140
+Comienza.
+
+00:08:25.140 --> 00:08:26.920
+Llega alguien el primer día y dice, vamos a conseguir puntos.
+
+00:08:27.380 --> 00:08:29.180
+Todo empieza con una petición perfectamente sensual.
+
+00:08:29.600 --> 00:08:30.140
+Abre la lista.
+
+00:08:30.620 --> 00:08:31.860
+Ordena por impacto en la puntuación.
+
+00:08:32.080 --> 00:08:33.380
+Y mira que podemos terminar en este sprint.
+
+00:08:33.700 --> 00:08:34.460
+Ese no es un mal instinto.
+
+00:08:34.940 --> 00:08:36.120
+Así es como trabaja la mayoría de los equipos.
+
+00:08:36.320 --> 00:08:37.120
+Busca la victoria rápido.
+
+00:08:37.380 --> 00:08:38.380
+Despeja es primero más sencilla.
+
+00:08:38.900 --> 00:08:42.060
+Pero una lista ordenada por puntos no es una lista ordenada por riesgo.
+
+00:08:42.440 --> 00:08:44.140
+Los puntos te dicen lo que el panel de control recomienda.
+
+00:08:44.400 --> 00:08:45.960
+No te dicen lo que un atacante utilizará.
+
+00:08:45.960 --> 00:08:47.960
+Así que los elementos fáciles van primero.
+
+00:08:48.200 --> 00:08:49.280
+Configuraciones que toman 10 minutos.
+
+00:08:49.400 --> 00:08:52.780
+Las que no impactan al usuario sin reuniones, sin conversaciones incómodas con el jefe del departamento.
+
+00:08:53.460 --> 00:08:55.080
+Son rápidas, seguras y mejoran el número.
+
+00:08:55.240 --> 00:08:56.500
+Mientras que las difíciles esperan.
+
+00:08:56.600 --> 00:08:57.720
+Las que necesitan una prueba piloto.
+
+00:08:57.800 --> 00:08:59.460
+Una política que afecte cada inicio de sesión.
+
+00:08:59.540 --> 00:09:01.760
+Un cambio que pueda molestar al equipo de finanzas un lunes por la mañana.
+
+00:09:02.260 --> 00:09:05.300
+Estas tienen el peso real y se quedan al fondo porque son las que cuestan más trabajo.
+
+00:09:05.940 --> 00:09:08.380
+Ese es el comportamiento natural cuando un panel de control premia el volumen.
+
+00:09:08.840 --> 00:09:10.740
+Hacen muchas cosas pequeñas y te sientes productivo.
+
+00:09:10.740 --> 00:09:12.440
+La gráfica sube hacia la derecha.
+
+00:09:13.460 --> 00:09:15.260
+Luego está la versión más silenciosa del mismo problema.
+
+00:09:15.400 --> 00:09:16.360
+Manipular el sistema sin maldición.
+
+00:09:16.840 --> 00:09:19.360
+Un ticket se cierra porque era pequeño, no porque fuera importante.
+
+00:09:20.200 --> 00:09:22.720
+Una configuración se activa porque estaba ahí al alcance de la mano.
+
+00:09:23.520 --> 00:09:29.100
+Una acción se marca como planeada, luego como cubierta y después se elimina discretamente de la revisión porque nadie quiere explicar por qué sigue abierta.
+
+00:09:29.560 --> 00:09:30.460
+Nadie está haciendo trampa.
+
+00:09:30.580 --> 00:09:31.460
+Todos están ocupados.
+
+00:09:31.460 --> 00:09:36.280
+Y la gente ocupada toma el camino con menos fricción, que en este caso resulta ser el que favorece la puntuación.
+
+00:09:36.780 --> 00:09:39.180
+Vale la pena decirlo en voz alta porque la reacción habitual es buscar culpable.
+
+00:09:39.540 --> 00:09:40.340
+¿Quién cerró esos tickets?
+
+00:09:40.580 --> 00:09:41.760
+¿Por qué no priorizaron mejor?
+
+00:09:42.140 --> 00:09:43.080
+Pero eso no viene al caso.
+
+00:09:43.500 --> 00:09:46.240
+Si un sistema paga por el trabajo fácil, tendrás trabajo fácil.
+
+00:09:46.720 --> 00:09:48.600
+El comportamiento es un síntoma y el incentivo es la causa.
+
+00:09:49.080 --> 00:09:52.180
+Hay una segunda fuerza que empuja en la misma dirección y es el reflejo de cumplimiento.
+
+00:09:52.720 --> 00:09:56.980
+En muchas organizaciones llega una lista de seguridad y la primera pregunta es ¿qué tenemos que hacer?
+
+00:09:57.280 --> 00:09:58.240
+¿Cuáles de esos son obligatorios?
+
+00:09:58.600 --> 00:09:59.400
+¿Qué quiere ver el auditor?
+
+00:09:59.680 --> 00:10:01.240
+Es una pregunta válida para el cumplimiento.
+
+00:10:01.460 --> 00:10:02.880
+Es la pregunta equivocada para la seguridad.
+
+00:10:03.260 --> 00:10:04.880
+El cumplimiento pregunta si existe un control.
+
+00:10:05.540 --> 00:10:08.540
+La seguridad pregunta si el control detendría lo que realmente te amenaza.
+
+00:10:09.200 --> 00:10:11.240
+Ambas pueden ser ciertas, pero a menudo no lo son.
+
+00:10:11.600 --> 00:10:13.940
+Puedes cumplir con un marco de trabajo y aún así dejar una vía abierta.
+
+00:10:14.560 --> 00:10:19.140
+Puedes completar cada elemento de una lista y aún así no tener idea de qué tres elementos intentaría un atacante primero.
+
+00:10:19.700 --> 00:10:21.460
+El razonamiento de cumplimiento termina cuando se marca la casa.
+
+00:10:21.980 --> 00:10:25.760
+El razonamiento de seguridad solo comienza ahí porque la siguiente pregunta es ¿marcada para quién?
+
+00:10:25.940 --> 00:10:27.640
+¿Cubriendo qué? ¿Y qué sucede si falla?
+
+00:10:28.340 --> 00:10:30.340
+Entonces, la trampa tiene tres partes móviles.
+
+00:10:30.340 --> 00:10:36.920
+Un panel que premie el volumen, equipos que toman los puntos más fáciles primero y un reflejo que trata la finalización como si fuera lo mismo que la protección.
+
+00:10:37.580 --> 00:10:42.460
+Úntalos y obtendrás un inquilino que se ve mejor cada mes y que podría no ser más seguro en ningún aspecto que importe.
+
+00:10:43.060 --> 00:10:44.320
+Y esto es lo que hace que sea difícil de atacar.
+
+00:10:44.320 --> 00:10:46.360
+Cada paso del camino parecía razonable.
+
+00:10:46.880 --> 00:10:47.820
+Nadie tomó una mala decisión.
+
+00:10:48.400 --> 00:10:49.820
+La trampa no es un error que alguien cometió.
+
+00:10:50.400 --> 00:10:55.160
+Es la forma en que el sistema se asienta cuando nadie hace la pregunta de fondo, lo que significa que no puede resolverlo solo con disciplina.
+
+00:10:56.260 --> 00:11:02.340
+Decirle a la gente que priorice mejor no funcionará porque el próximo informe seguirá mostrando un número y el próximo objetivo seguirá pidiendo que cambie.
+
+00:11:02.840 --> 00:11:03.500
+Este es un problema modelo.
+
+00:11:04.000 --> 00:11:07.820
+Reside en cómo se usa la puntuación, quién la lee y qué preguntas espera que responda.
+
+00:11:08.520 --> 00:11:11.640
+Así que ahí es donde debemos mirar, no en el panel, sino en el modelo que lo rodea.
+
+00:11:21.810 --> 00:11:24.950
+Listo para 10 días de Microsoft 365 Copilot EI.
+
+00:11:25.350 --> 00:11:27.910
+Azure y las personas que dan forma al futuro del trabajo y...
+
+00:11:28.990 --> 00:11:32.990
+Este enero, M365, con Regresa y venimos con más fuerza.
+
+00:11:34.030 --> 00:11:39.490
+Únete a nosotros para sesiones en vivo, demostraciones reales y conocimientos prácticos de MVPs y expertos de la industria de todo el mundo.
+
+00:11:39.490 --> 00:11:42.490
+Nada de diapositivas genéricas, nada de palabras de moda interminables.
+
+00:11:43.070 --> 00:11:44.290
+Estamos abordando los desafíos.
+
+00:11:45.030 --> 00:11:49.690
+Copilot Studio, agentes de IA, fábric, seguridad, gobernanza y automatización.
+
+00:11:50.990 --> 00:11:53.930
+Ya seas un profesional de TI, desarrollador o líder empresarial.
+
+00:11:54.230 --> 00:11:55.510
+Hay sesiones diseñadas para ti.
+
+00:11:56.670 --> 00:12:01.130
+Con 10 días completos, puede explorar diversas tecnologías y conectar con una comunidad global.
+
+00:12:02.070 --> 00:12:05.290
+Véalo en vivo y lleve conocimientos prácticos a su organización.
+
+00:12:06.290 --> 00:12:07.530
+Enero de 2027.
+
+00:12:08.130 --> 00:12:08.670
+10 días.
+
+00:12:08.670 --> 00:12:10.130
+Una comunidad Microsoft.
+
+00:12:10.670 --> 00:12:11.690
+La inscripción ya está abierta.
+
+00:12:13.030 --> 00:12:16.910
+Vaya a M365.net y asegure su lugar hoy mismo.
+
+00:12:17.630 --> 00:12:19.910
+Eso es M365.net.
+
+00:12:21.190 --> 00:12:24.470
+Únete ahora en M365.net y nos veremos.
+
+00:12:24.850 --> 00:12:25.770
+En vivo en enero.
+
+00:12:26.850 --> 00:12:28.550
+El viejo modelo, el puntaje como marcador.
+
+00:12:29.010 --> 00:12:31.490
+En la mayoría de las organizaciones, el puntaje tiene su espacio en el calendario.
+
+00:12:31.930 --> 00:12:33.430
+Una vez al mes, alguien exporta el número.
+
+00:12:33.650 --> 00:12:34.390
+Para una presentación.
+
+00:12:34.390 --> 00:12:37.990
+Junto a él, una línea muestra el mes anterior y otra el punto de referencia.
+
+00:12:38.310 --> 00:12:39.070
+Dos puntos arriba, bien.
+
+00:12:39.290 --> 00:12:40.130
+Un punto abajo, ¿por qué?
+
+00:12:40.390 --> 00:12:41.050
+Es esto del ritual.
+
+00:12:41.450 --> 00:12:43.970
+El puntaje se convierte en un marcador y la reunión en una revisión de juego.
+
+00:12:44.410 --> 00:12:45.350
+Nadie está mirando la jugada.
+
+00:12:45.770 --> 00:12:46.410
+Está mirando el total.
+
+00:12:47.050 --> 00:12:48.870
+Debajo de ese ritual, subyace una suposición.
+
+00:12:49.170 --> 00:12:50.050
+Más cierto significa más seguro.
+
+00:12:50.430 --> 00:12:50.910
+Parece obvio.
+
+00:12:51.330 --> 00:12:52.690
+Más puntos, más control y más protección.
+
+00:12:53.170 --> 00:12:55.070
+Si le pidiera a los presentes votar, nadie se opondría.
+
+00:12:55.570 --> 00:12:56.530
+Es exactamente por eso que sobrevive.
+
+00:12:56.930 --> 00:12:58.950
+Nunca se cuestiona porque suena a sentido común.
+
+00:12:59.630 --> 00:13:00.730
+Pero observe lo que hemos cubierto hasta.
+
+00:13:01.190 --> 00:13:03.130
+Se cuentan puntos, configuraciones, ataques, etc.
+
+00:13:03.430 --> 00:13:04.230
+La cobertura parciata.
+
+00:13:04.710 --> 00:13:05.830
+Se puede reclamar crédito simple.
+
+00:13:06.450 --> 00:13:08.550
+Las ponderaciones no siguen lo que los atacantes usan realmente.
+
+00:13:08.910 --> 00:13:11.270
+Sí que más alto puede significar más seguro y también puede no significar nada.
+
+00:13:11.510 --> 00:13:12.170
+Enumores cuál es el caso.
+
+00:13:12.590 --> 00:13:13.650
+Luego llega a la línea de referencia.
+
+00:13:13.870 --> 00:13:15.650
+Aquí es donde la comodidad se vuelve peligrosa.
+
+00:13:15.910 --> 00:13:18.230
+El portal lo compara con organizaciones como la suya, a tamaño similar.
+
+00:13:18.630 --> 00:13:19.210
+Industria similar.
+
+00:13:19.570 --> 00:13:20.270
+Te tiene 72.
+
+00:13:20.690 --> 00:13:21.510
+Promedio es 61.
+
+00:13:21.770 --> 00:13:22.230
+La por delante.
+
+00:13:22.510 --> 00:13:23.190
+Eso parece una prueba.
+
+00:13:23.630 --> 00:13:24.010
+No lo es.
+
+00:13:24.450 --> 00:13:26.150
+Piensa en lo que la comparación le dice realmente.
+
+00:13:26.530 --> 00:13:29.330
+Le dice que marcó más casillas que un grupo de otras organizaciones.
+
+00:13:29.970 --> 00:13:31.430
+No le dice si ese grupo es seguro.
+
+00:13:32.230 --> 00:13:34.690
+Por lo que sabe, todo el grupo de pares deja la misma puerta abierta
+
+00:13:34.690 --> 00:13:36.870
+y usted solo la deja abierta con mejor documentación.
+
+00:13:37.270 --> 00:13:40.090
+Estar por encima del promedio en una medida defectuosa sigue siendo un resultado defectuoso.
+
+00:13:40.190 --> 00:13:41.150
+Y hay un efecto más silencioso.
+
+00:13:41.530 --> 00:13:43.790
+Un punto de referencia le da permiso al liderazgo para dejar de pregunte.
+
+00:13:44.090 --> 00:13:45.670
+Si está por delante del grupo, ¿por qué va a estar mal?
+
+00:13:46.070 --> 00:13:47.430
+Si está por detrás, ¿por qué entrar en pánico?
+
+00:13:48.070 --> 00:13:50.790
+De cualquier manera, la pregunta cambia de qué podría hacernos daño,
+
+00:13:50.950 --> 00:13:52.210
+a cuál es nuestro rango.
+
+00:13:53.970 --> 00:13:55.270
+Esas son conversaciones distintas.
+
+00:13:55.450 --> 00:13:56.610
+Solo una de ellas lo hace más seguro.
+
+00:13:57.050 --> 00:13:58.470
+Así que el viejo modelo se mantiene abinuido.
+
+00:13:58.810 --> 00:14:01.290
+Un número, un objetivo, una comparación, una revisión mensual.
+
+00:14:01.290 --> 00:14:03.310
+Todos conocen su papel hasta que se rompe.
+
+00:14:03.790 --> 00:14:05.290
+El momento en que esto se rompe es un incidente.
+
+00:14:05.550 --> 00:14:06.790
+Y generalmente no es uno dramático.
+
+00:14:07.190 --> 00:14:08.930
+Alguien en finanza recibe un correo electrónico convincente.
+
+00:14:09.190 --> 00:14:11.050
+Aprueban un aviso de inicio de sesión que no deberían aprobar.
+
+00:14:11.570 --> 00:14:12.310
+Un token es robado.
+
+00:14:12.790 --> 00:14:15.010
+Aparece una regla de buzón y, pocos días después,
+
+00:14:15.130 --> 00:14:17.170
+envía una factura con los datos bancarios incorrectos.
+
+00:14:17.610 --> 00:14:19.890
+Entonces comienza la revisión del incidente y alguien abre el panel.
+
+00:14:20.390 --> 00:14:21.890
+Un 80% era encima del estándar.
+
+00:14:22.130 --> 00:14:22.750
+Flechas verdes.
+
+00:14:23.130 --> 00:14:24.650
+Y ahora la sala tiene un problema que no puede explicar.
+
+00:14:24.990 --> 00:14:27.750
+¿Cómo es que un inquilino al 80% es vulnerado a través de un buzón?
+
+00:14:28.290 --> 00:14:29.690
+La respuesta es incómoda, pero simple.
+
+00:14:30.370 --> 00:14:31.610
+La puntuación nunca mide ese camino.
+
+00:14:32.370 --> 00:14:34.910
+La cuenta que fue objeto de phishing estaba fuera de la cobertura de MFA
+
+00:14:34.910 --> 00:14:37.410
+o estaba cubierta por un método que un atacante puede saltarse.
+
+00:14:38.210 --> 00:14:39.130
+El número era preciso.
+
+00:14:39.270 --> 00:14:41.290
+Se ganó cada punto y la puerta seguía abierta.
+
+00:14:42.290 --> 00:14:43.930
+Ese es el costo real del modelo de marcado.
+
+00:14:44.190 --> 00:14:45.690
+No solo no logra prevenir el incidente.
+
+00:14:46.190 --> 00:14:47.770
+Hace que el incidente sea más difícil de entender
+
+00:14:47.770 --> 00:14:49.970
+porque la evidencia en pantalla dice que lo estaban haciendo bien.
+
+00:14:50.450 --> 00:14:51.470
+La confianza recibe este golpe.
+
+00:14:52.030 --> 00:14:53.530
+El liderazgo pidió un número, obtuvo un número
+
+00:14:53.530 --> 00:14:55.930
+y vio cómo no significaba nada cuando más importaba.
+
+00:14:55.930 --> 00:14:58.110
+Así que la próxima vez que seguridad pida presupuesto,
+
+00:14:58.190 --> 00:14:59.730
+la respuesta será, restábamos el 80%.
+
+00:14:59.730 --> 00:15:01.310
+Ese es el daño, no una mala puntuación,
+
+00:15:01.390 --> 00:15:03.490
+sino una buena puntuación que enseñó a toda la elección equivocada
+
+00:15:03.490 --> 00:15:05.170
+y no puedes corregir eso persiguiendo un número más alto.
+
+00:15:05.250 --> 00:15:06.830
+Un 90%, un 90% más alto.
+
+00:15:06.910 --> 00:15:07.670
+No habría cambiado ese incidente.
+
+00:15:07.790 --> 00:15:09.110
+Solo habría hecho que la sorpresa fuera mayor.
+
+00:15:09.470 --> 00:15:11.730
+Lo que debe cambiar es la pregunta que se espera que responda a la puntuación.
+
+00:15:12.170 --> 00:15:13.590
+El marcador pregunta, ¿cómo vamos?
+
+00:15:14.010 --> 00:15:15.190
+Esa pregunta invita a una calificación.
+
+00:15:15.690 --> 00:15:18.050
+La mejor pregunta es, ¿en qué deberíamos trabajar a continuación?
+
+00:15:18.130 --> 00:15:18.510
+¿Y por qué?
+
+00:15:18.950 --> 00:15:20.670
+¿Se tiene un responsable, una razón y una dirección?
+
+00:15:21.070 --> 00:15:22.990
+No termina en un número, termina en una decisión.
+
+00:15:22.990 --> 00:15:23.990
+Y ese es el nuevo modelo.
+
+00:15:25.930 --> 00:15:28.830
+Empieza con una descripción de trabajo diferente, pero no.
+
+00:15:29.270 --> 00:15:30.990
+La puntuación no es un resultado, es una lista.
+
+00:15:31.150 --> 00:15:32.750
+Una lista priorizada de posibles tareas
+
+00:15:32.750 --> 00:15:34.790
+elaborada por personas que han visto muchos inquilinos
+
+00:15:34.790 --> 00:15:36.250
+y saben dónde suelen estar las brechas.
+
+00:15:37.130 --> 00:15:39.290
+Esa es una afirmación más pequeña que qué tan seguros están.
+
+00:15:39.670 --> 00:15:40.390
+Pero es mucho más útil.
+
+00:15:40.870 --> 00:15:42.530
+Una lista se puede ordenar, se puede debatir.
+
+00:15:43.030 --> 00:15:45.370
+Puedes mirar el punto 14 y decir no para nosotros y dar una razón.
+
+00:15:45.790 --> 00:15:47.010
+Una calificación no puede hacer nada de eso.
+
+00:15:47.290 --> 00:15:48.010
+Así que el modelo cambia.
+
+00:15:48.330 --> 00:15:50.310
+En la versión anterior, la puntuación es el producto final.
+
+00:15:50.610 --> 00:15:52.890
+Haces el trabajo, el número cambia, el número es el veredicto.
+
+00:15:52.890 --> 00:15:54.630
+En la nueva versión, la puntuación es un insumo.
+
+00:15:54.630 --> 00:15:57.930
+Lo lees junto con otras cosas que sabes y la decisión surge al otro lado.
+
+00:15:58.590 --> 00:16:00.410
+Un insumo para decisiones de riesgo, no el resultado de él.
+
+00:16:00.830 --> 00:16:01.830
+¿Y cuáles son esas otras cosas?
+
+00:16:02.090 --> 00:16:02.930
+Ahí es donde entra el contexto.
+
+00:16:03.450 --> 00:16:06.650
+Antes de abrir la lista, pregúntese qué hacen realmente los atacantes con inquilinos como el suyo.
+
+00:16:06.730 --> 00:16:07.830
+No en teoría, sino en la práctica.
+
+00:16:08.590 --> 00:16:09.390
+¿A qué apunta primero?
+
+00:16:09.730 --> 00:16:10.530
+¿A qué cuenta esa ruta?
+
+00:16:11.190 --> 00:16:12.230
+¿Qué han intentado ya contra usted?
+
+00:16:12.230 --> 00:16:15.450
+Si ha visto algo de eso es porque la lista es genérica, pero su situación no lo es.
+
+00:16:16.190 --> 00:16:20.850
+Una recomendación puede parecer menor en el portal y estar justo en la ruta que un atacante tomaría hacia su entorno.
+
+00:16:21.830 --> 00:16:25.130
+Otra puede otorgar muchos puntos y cubrir algo que nunca fue una vía de acceso realista.
+
+00:16:25.950 --> 00:16:26.990
+Sobre el contexto le dice cuál es.
+
+00:16:26.990 --> 00:16:31.050
+El portal no puede hacerlo porque no conoce su negocio, su personal ni su historial.
+
+00:16:31.790 --> 00:16:34.090
+Piensa en una pequeña empresa donde tres personas puedan aprobarlo.
+
+00:16:34.530 --> 00:16:37.090
+Sus buzones importan más que casi cualquier otra cosa en el inquilino.
+
+00:16:37.430 --> 00:16:39.250
+La puntuación trata a sus buzones como a cualquier otro.
+
+00:16:39.530 --> 00:16:40.010
+Te no debería.
+
+00:16:40.350 --> 00:16:40.770
+Ese es el cambio.
+
+00:16:41.210 --> 00:16:42.510
+La puntuación le dice lo que es posible.
+
+00:16:42.750 --> 00:16:43.810
+Tú decide lo que vale la pena hacer.
+
+00:16:43.990 --> 00:16:45.730
+Por avión, una lista necesita a alguien que se encargue de ella.
+
+00:16:45.910 --> 00:16:47.930
+Y esta es la parte que la mayoría de las organizaciones pasan por alto.
+
+00:16:48.050 --> 00:16:49.890
+Bajo el antiguo modelo, nadie es realmente dueño de la puntuación.
+
+00:16:50.150 --> 00:16:53.170
+Pertenece al panel que pertenece a todos, lo que significa que no pertenece a nadie.
+
+00:16:53.730 --> 00:16:54.570
+Es el reporte.
+
+00:16:54.610 --> 00:16:55.090
+No se decide.
+
+00:16:55.090 --> 00:17:00.010
+El nuevo modelo necesita a un propietario, una persona nombrada, alguien responsable de las decisiones, no de los puntos.
+
+00:17:00.370 --> 00:17:01.590
+Eso suena como una pequeña distinción.
+
+00:17:02.070 --> 00:17:02.890
+Cambio que consiste el trabajo.
+
+00:17:03.410 --> 00:17:05.050
+Un dueño de puntos pregunta cómo subo el número.
+
+00:17:05.430 --> 00:17:07.690
+Un dueño de decisiones pregunta cuáles de estas deberíamos hacer.
+
+00:17:08.050 --> 00:17:08.770
+¿Cuáles deberíamos omitir?
+
+00:17:09.210 --> 00:17:11.450
+Y puedo defender cualquiera de las dos opciones ante la junta directiva.
+
+00:17:11.770 --> 00:17:13.490
+Uno de sus roles produce casillas marcadas.
+
+00:17:13.810 --> 00:17:15.290
+El otro produce un criterio que se puede explicar.
+
+00:17:15.530 --> 00:17:17.090
+Ese propietario tiene permiso para decir que no.
+
+00:17:17.550 --> 00:17:18.550
+Esto importa más de lo que parece.
+
+00:17:19.050 --> 00:17:23.030
+Si omitir una acción reduce la puntuación y el propietario es juzgado por la puntuación, nunca omitirá nada.
+
+00:17:23.030 --> 00:17:23.590
+Nada.
+
+00:17:24.030 --> 00:17:24.690
+Simplemente lo marca.
+
+00:17:25.090 --> 00:17:32.210
+Pero si se les juzga por si las decisiones fueron acertadas, pueden dejar un elemento abierto a propósito, explicar por qué y pasar al trabajo que cuenta.
+
+00:17:32.870 --> 00:17:34.650
+Eso es lo que convierte un panel en herramienta de trabajo.
+
+00:17:35.150 --> 00:17:37.550
+Mire también lo que el planteamiento del trabajo pendiente le hace el Ornium en Zoom.
+
+00:17:38.010 --> 00:17:39.630
+La diapositiva deja decir que estamos en 72.
+
+00:17:40.530 --> 00:17:42.810
+Empieza diciendo, aquí están cinco cosas en las que estamos trabajando.
+
+00:17:43.210 --> 00:17:44.070
+Aquí el porqué es un prioridad.
+
+00:17:44.470 --> 00:17:45.470
+Y aquí lo que elegimos más ser.
+
+00:17:45.850 --> 00:17:46.750
+Esa es una mejor conversación.
+
+00:17:46.750 --> 00:17:52.110
+Es más difícil de tener porque requiere criterio en lugar de un número, pero la única que le dice algo verdadero a la dirección.
+
+00:17:52.910 --> 00:17:53.870
+Y note lo que deja afuera.
+
+00:17:54.270 --> 00:17:57.290
+Sin notas, sin línea de metas, sin rango de referencia por el cual sentirse bien.
+
+00:17:57.290 --> 00:18:00.450
+O mal, solo una cola de trabajo ordenada por una razón que alguien puede explicar.
+
+00:18:01.030 --> 00:18:03.450
+Por supuesto, eso plantea la pregunta obvia, ordenada por qué razón.
+
+00:18:03.990 --> 00:18:07.130
+Si los puntos del portal no son la forma correcta de ordenar la lista, ¿cuál es?
+
+00:18:07.890 --> 00:18:09.110
+Necesitas tu propia perspectiva.
+
+00:18:09.270 --> 00:18:11.070
+Una construida antes de tocar un solo ajuste.
+
+00:18:11.070 --> 00:18:16.130
+Para construir una perspectiva de riesgo antes de tocar un ajuste, empieza con una lista corta.
+
+00:18:16.250 --> 00:18:19.150
+No de ajustes, sino de cosas que no puedes permitirte perder tus joyas de la corona.
+
+00:18:19.810 --> 00:18:21.450
+Para la mayoría de los inquilinos, cuatro lugares.
+
+00:18:22.190 --> 00:18:24.330
+Identidades, porque cualquier otro activo se encuentra detrás de una.
+
+00:18:24.750 --> 00:18:27.310
+Busones de correo, porque es ahí donde se mueve el dinero y se toman la decisión.
+
+00:18:27.930 --> 00:18:33.630
+Almacenes de datos, los sitios de SharePoint y recursos compartidos que contienen contratos, nóminas, registros de clientes y rutas de administración,
+
+00:18:33.630 --> 00:18:36.010
+las raíces mediante las cuales alguien se vuelve poderoso.
+
+00:18:36.430 --> 00:18:36.910
+Escríbelo.
+
+00:18:37.350 --> 00:18:37.850
+Nombra lo real.
+
+00:18:38.330 --> 00:18:39.690
+¿En qué buzones pueden aprobar un pago?
+
+00:18:40.050 --> 00:18:42.970
+¿Qué sitios contienen los archivos que más dañarían si desaparecieran?
+
+00:18:43.430 --> 00:18:44.530
+¿Qué cuenta pueden cambiar una política?
+
+00:18:44.890 --> 00:18:45.310
+Toma una.
+
+00:18:45.730 --> 00:18:47.470
+La mayoría de las organizaciones nunca lo hay.
+
+00:18:47.910 --> 00:18:52.490
+Y sin esto, cada recomendación en el portal parece igualmente urgente, lo que es otra forma de decir que ninguna lo es, lo es.
+
+00:18:52.830 --> 00:18:54.490
+Ahora añada las dos preguntas detrás de cualquier riesgo.
+
+00:18:54.930 --> 00:18:56.070
+¿Qué probabilidades hay de que esto ocurra?
+
+00:18:56.170 --> 00:18:57.230
+¿Y qué tan grave es si sucede?
+
+00:18:57.510 --> 00:18:57.950
+Eso es todo.
+
+00:18:58.450 --> 00:18:59.190
+Probabilidad de impacto.
+
+00:18:59.650 --> 00:19:03.150
+No necesitas una cuadrícula codificada por colores con 25 celdas y un taller para completar.
+
+00:19:03.150 --> 00:19:07.470
+El teatro de la matriz parece riguroso y mayormente genera discusiones sobre si algo es un 3 o un 4.
+
+00:19:07.950 --> 00:19:08.970
+Esa palabra simple es en su lugar.
+
+00:19:09.230 --> 00:19:11.050
+¿Probable, improbable, doloroso o sobrevivible?
+
+00:19:11.470 --> 00:19:13.690
+Si algo es probable y doloroso, va a la parte superior.
+
+00:19:14.230 --> 00:19:18.190
+Si es improbable y sobrevivible, puede esperar y nadie necesita sentirse culpable por ello.
+
+00:19:18.870 --> 00:19:20.190
+La dificultad honesta es la probabilidad.
+
+00:19:20.430 --> 00:19:21.370
+¿Cómo sabes que es probable?
+
+00:19:21.870 --> 00:19:24.390
+No tienes que adivinar a ciegas porque el patrón está bien documentado.
+
+00:19:24.850 --> 00:19:27.470
+Los atacantes no son creativos como los inquilinos de Microsoft 3.5.
+
+00:19:27.870 --> 00:19:28.250
+Un efficient.
+
+00:19:28.670 --> 00:19:29.770
+Van donde el esfuerzo es menor.
+
+00:19:30.090 --> 00:19:30.730
+Y mira dónde es eso.
+
+00:19:30.730 --> 00:19:34.870
+Sigue casi cualquier intrusión real hacia atrás y encontrarás una identidad al principio.
+
+00:19:35.390 --> 00:19:36.450
+Una contraseña que fue adivinada.
+
+00:19:36.770 --> 00:19:38.350
+Un aviso de inicio de sesión que Agna probó poco.
+
+00:19:38.830 --> 00:19:39.910
+Un token extraído de un navegador.
+
+00:19:40.470 --> 00:19:42.470
+Una pantalla de consentimiento aceptada un viernes por la tarde.
+
+00:19:42.870 --> 00:19:48.090
+Los dispositivos importan, los datos importan, pero la forma de entrar suele ser la cuenta de una persona y la forma de subir suele ser otra cuenta con más derechos.
+
+00:19:48.570 --> 00:19:49.790
+Eso no significa ignorar todo lo demás.
+
+00:19:49.790 --> 00:19:53.090
+Significa que cuando evalúas la probabilidad, la identidad lleva a la delantera.
+
+00:19:53.570 --> 00:19:59.150
+Un control que protege los inicios de sesión tiene prioridad sobre una configuración que arregla un rincón que nadie ataca.
+
+00:20:00.070 --> 00:20:03.410
+Así que tienes tus activos más variosos y una lectura clara sobre probabilidad de impacto.
+
+00:20:04.010 --> 00:20:08.530
+Ahora necesitas algo que puedas aplicar rápidamente a cada elemento de la lista sin un comité.
+
+00:20:09.210 --> 00:20:09.750
+¿Qué tiene funfield?
+
+00:20:10.150 --> 00:20:10.590
+Le preguntas.
+
+00:20:11.090 --> 00:20:12.170
+Primero, ¿qué protege esto?
+
+00:20:12.750 --> 00:20:13.090
+Nómbrala.
+
+00:20:13.790 --> 00:20:18.030
+Si la respuesta honesta es nada en particular, solo está en la lista, ya has aprendido algo.
+
+00:20:18.030 --> 00:20:20.950
+Segundo, ¿cómo lo superaría un atacante si no estuviera?
+
+00:20:21.850 --> 00:20:22.910
+Recorre la ruta en tu mente.
+
+00:20:23.190 --> 00:20:26.830
+¿Hay un camino realista desde afuera o necesitarían tres fallos previos?
+
+00:20:27.330 --> 00:20:30.010
+Una brecha con una ruta corta y obvio importa más que una que depende de la suerte.
+
+00:20:30.850 --> 00:20:32.610
+Tercero, ¿qué veríamos si este control fallara?
+
+00:20:32.870 --> 00:20:33.610
+Hablamos de esto antes.
+
+00:20:34.150 --> 00:20:38.050
+Si la respuesta es nada, no puedes confiar en él, ni saber si funciona, ni saber si funciona.
+
+00:20:38.430 --> 00:20:40.910
+Un control que no puedes observar es un control que confías a ciegas.
+
+00:20:41.770 --> 00:20:43.230
+Pasa cualquier recomendación por esos tres puntos.
+
+00:20:43.690 --> 00:20:44.410
+Toma unos dos minutos.
+
+00:20:44.950 --> 00:20:47.750
+Digamos que el portal sugiere bloquear cierto tipo de archivos adjuntos.
+
+00:20:48.490 --> 00:20:48.990
+¿Qué protege?
+
+00:20:49.430 --> 00:20:50.190
+Todos los buzones.
+
+00:20:50.570 --> 00:20:51.630
+¿Cómo lo superaría un atacante?
+
+00:20:52.410 --> 00:20:53.990
+Fácilmente enviando el archivo en otro formato.
+
+00:20:54.330 --> 00:20:55.170
+¿Qué vería si fallara?
+
+00:20:55.610 --> 00:20:57.470
+Una queja de un usuario, probablemente mucho después.
+
+00:20:58.090 --> 00:20:59.370
+Eso es un elemento medio en una emergencia.
+
+00:20:59.870 --> 00:21:03.130
+Ahora digamos que el portal sugiere exigir un inicio de sesión más fuerte para administradores.
+
+00:21:03.490 --> 00:21:04.070
+¿Qué protege?
+
+00:21:04.490 --> 00:21:05.150
+Las llaves de todo.
+
+00:21:05.670 --> 00:21:07.430
+¿Cómo lo superaría un atacante si faltara?
+
+00:21:07.990 --> 00:21:09.150
+Mediandre phishing para administrador.
+
+00:21:09.590 --> 00:21:10.650
+¿Qué vería si fallara?
+
+00:21:11.150 --> 00:21:13.110
+Posiblemente nada hasta que el daño sea evidente.
+
+00:21:13.810 --> 00:21:15.630
+Ese se mueve al frente y no necesita debate.
+
+00:21:15.870 --> 00:21:16.490
+Nota lo que sucede ahí.
+
+00:21:16.850 --> 00:21:18.190
+Ningún elemento fue ordenado por portal.
+
+00:21:18.650 --> 00:21:20.450
+Ambos fueron ordenados por una razón que puede decir en voz.
+
+00:21:20.690 --> 00:21:21.990
+Ese es el propósito del enfoque.
+
+00:21:22.370 --> 00:21:23.470
+No reemplaza la lista del portal.
+
+00:21:24.050 --> 00:21:27.590
+Pone tu situación sobre ella para que el orden refleje lo que realmente perderías.
+
+00:21:28.230 --> 00:21:29.630
+No lo que el tablero prioriza.
+
+00:21:30.550 --> 00:21:34.570
+Como la identidad sigue apareciendo al principio, ahí es donde debe empezar el trabajo real.
+
+00:21:34.570 --> 00:21:36.630
+La identidad primero.
+
+00:21:37.110 --> 00:21:38.430
+¿Por qué la mayoría de los puntos deberían empezar aquí?
+
+00:21:38.930 --> 00:21:40.250
+Abre la lista y filtra por identidad.
+
+00:21:41.070 --> 00:21:42.170
+Luego mira lo que está arriba.
+
+00:21:42.810 --> 00:21:44.290
+Autenticación resistente a phishing port.
+
+00:21:44.490 --> 00:21:45.230
+Cobertura de MFA.
+
+00:21:45.430 --> 00:21:46.510
+Bloqueo de protocolos antiguos.
+
+00:21:46.730 --> 00:21:47.590
+Limitar roles de admin.
+
+00:21:48.170 --> 00:21:52.090
+No son los elementos con más puntos, pero pásalos por las tres preguntas y ganan casi siempre.
+
+00:21:52.690 --> 00:21:53.330
+Protegen las llaves.
+
+00:21:53.690 --> 00:21:56.610
+La ruta para evitarlos es corta y cuando fallan a menudo no ves nada.
+
+00:21:56.910 --> 00:21:57.590
+Piense con MFA.
+
+00:21:58.010 --> 00:21:59.250
+La mayoría de los tenants lo tienen en una.
+
+00:21:59.470 --> 00:22:00.550
+La pregunta se detiene.
+
+00:22:00.950 --> 00:22:01.570
+Existe una política.
+
+00:22:01.970 --> 00:22:02.130
+Bien.
+
+00:22:02.550 --> 00:22:03.230
+Ahora pregunta quién queda.
+
+00:22:03.230 --> 00:22:04.590
+Cuentas de servicio.
+
+00:22:04.910 --> 00:22:05.610
+Pusones compartidos.
+
+00:22:05.710 --> 00:22:06.790
+Alguien convertido en inicio de sesión.
+
+00:22:07.230 --> 00:22:10.450
+El ejecutivo que se quejó una vez y obtuvo una exención que nadie revisó jamás.
+
+00:22:11.150 --> 00:22:14.690
+Esas brechas son a donde van los atacantes porque leen la misma lista que tuve y prueban los límites.
+
+00:22:15.030 --> 00:22:16.390
+Así que la cuerda no importa más que la política.
+
+00:22:17.270 --> 00:22:23.230
+Un control que protege al 90% de las personas y omite al asistente del CFO es un control con un agujero justo en donde está el dinero.
+
+00:22:23.910 --> 00:22:24.510
+Pero está el método.
+
+00:22:25.150 --> 00:22:26.750
+No todo MFA detiene los mismos ataques.
+
+00:22:27.210 --> 00:22:29.030
+Un código por mensaje de texto puede ser objeto difícil.
+
+00:22:29.470 --> 00:22:32.170
+Un aviso de aprobación puede ser aceptado por una persona cansada al final de un algodín.
+
+00:22:32.170 --> 00:22:34.930
+Un token de sesión puede ser robado después de que se convierta en inicio de sesión.
+
+00:22:35.790 --> 00:22:40.390
+Los métodos resistentes al phishing como PASC y llaves FIDO2 inicio de sesión con certificados funcionan de forma distinta.
+
+00:22:40.970 --> 00:22:44.010
+La credencial está vinculada al sitio real así que una página falsa no obtiene nada útil.
+
+00:22:44.490 --> 00:22:45.470
+Esa es otra clase de protección.
+
+00:22:45.470 --> 00:22:49.670
+También es más difícil de implementar, por lo que suele estar más abajo en la lista de lo que debería.
+
+00:22:50.190 --> 00:22:51.690
+Ahora, la autenticación heredada.
+
+00:22:52.230 --> 00:22:54.090
+Es fácil de olvidar porque nadie se queja de ella.
+
+00:22:55.850 --> 00:22:59.810
+Protocolos antiguos como POP, IMAP y SMTP básico no entienden los avisos de inicio de sesión moderna.
+
+00:23:00.210 --> 00:23:02.590
+Toman un nombre de usuario y una contraseña y esa es toda la conversación.
+
+00:23:03.110 --> 00:23:08.110
+Sí que un atacante con una contraseña invitado puede entrar por esa puerta trasera incluso cuando tu política de MFA parece perfecta en papel.
+
+00:23:08.490 --> 00:23:09.210
+Parece perfecta en papel.
+
+00:23:09.210 --> 00:23:10.270
+Esa es la parte silenciosa.
+
+00:23:10.630 --> 00:23:14.050
+Tu política dice que todo un segundo paso, el protocolo antiguo nunca lo pide.
+
+00:23:14.510 --> 00:23:16.490
+Y como el inicio de sesión tiene éxito o nada, parece estar mal.
+
+00:23:16.890 --> 00:23:18.930
+Bloquearlo suele ser una victoria fácil, pero revisa primero.
+
+00:23:19.230 --> 00:23:22.770
+Un escáner en la esquina, una aplicación de negocio antigua, un cliente de correo de hace una década.
+
+00:23:23.230 --> 00:23:24.410
+Cualquiera de ellos podría depender todavía.
+
+00:23:24.710 --> 00:23:26.930
+¿Quieres saber eso antes de activar el interruptor, no después?
+
+00:23:27.550 --> 00:23:30.950
+Las cuentas de administradores son lo siguiente y aquí los cambios pequeños tienen mayor peso.
+
+00:23:31.390 --> 00:23:32.110
+Pensa con la separación.
+
+00:23:32.570 --> 00:23:36.310
+Un administrador no debería leer correo ni navegar por la web con la misma cuenta que puede cambiar políticas.
+
+00:23:36.810 --> 00:23:38.910
+Dales una segunda cuenta usada solo para tareas administrativas.
+
+00:23:39.450 --> 00:23:42.770
+Si la cuenta cotidiana sufre phishing, el atacante termina en un lugar sin poder.
+
+00:23:43.630 --> 00:23:44.230
+Luego mira la casa.
+
+00:23:44.730 --> 00:23:46.150
+¿Cuántas personas tienen el rol de administrador?
+
+00:23:46.390 --> 00:23:49.570
+En muchos tenants, la respuesta honesta es demasiada y nadie puede decir por qué.
+
+00:23:50.490 --> 00:23:52.050
+La mayoría de ellos necesita un rol más restringido.
+
+00:23:52.350 --> 00:23:54.990
+Alguien que restablece contraseñas no necesita el derecho de eliminar el tenant.
+
+00:23:55.350 --> 00:23:56.010
+Luego está el factor tío.
+
+00:23:56.510 --> 00:23:59.770
+El acceso permanente significa que la energía siempre está encendida sin importar si la usa.
+
+00:24:00.170 --> 00:24:01.230
+El acceso justo a tiempo inviertes.
+
+00:24:01.590 --> 00:24:02.930
+La función está desactivada por defecto.
+
+00:24:02.930 --> 00:24:04.570
+La solicitas, la usas y expira.
+
+00:24:04.990 --> 00:24:07.850
+Un atacante que roba la cuenta o martes tranquilo no encuentra nada con que trabajar.
+
+00:24:07.850 --> 00:24:11.150
+Si juntas esos tres elementos, habrás cambiado la naturaleza del poder escenario.
+
+00:24:11.530 --> 00:24:14.830
+No añadiendo más controles, sino reduciendo lo que una sola cuenta puede hacer.
+
+00:24:15.310 --> 00:24:16.730
+Lo que nos lleva a la comparación que importa.
+
+00:24:17.230 --> 00:24:19.850
+¿Por qué una acción de identidad puede pesar más que 10 configuraciones de dispositivo?
+
+00:24:20.090 --> 00:24:20.850
+Lo que cada una de tiene.
+
+00:24:21.530 --> 00:24:24.210
+Una configuración de dispositivo protege una máquina contra un tipo de ataque.
+
+00:24:24.650 --> 00:24:27.530
+Un control de identidad se sitúa frente a todo lo que esa cuenta puede alcanzar.
+
+00:24:27.530 --> 00:24:29.870
+Correo, archivos, aplicaciones, datos de otros.
+
+00:24:29.990 --> 00:24:32.030
+Al cerrar esa puerta, cierras el camino hacia todo ello.
+
+00:24:32.530 --> 00:24:35.190
+Y un atacante que tiene un inicio de sesión valido no necesita vencer a tus dispositivos.
+
+00:24:35.570 --> 00:24:36.290
+Realmente inicia sesión.
+
+00:24:36.510 --> 00:24:38.850
+Es por eso que la mayor parte de tu esfuerzo inicial debe centrarse aquí.
+
+00:24:39.150 --> 00:24:43.370
+No porque las otras categorías no sean importantes, sino porque aquí es donde una sola decisión abarca más terreno.
+
+00:24:43.890 --> 00:24:44.710
+Ni embargo, hay un conveniente.
+
+00:24:45.030 --> 00:24:46.590
+Cada una de estas acciones afecta a las personas.
+
+00:24:46.850 --> 00:24:48.930
+Un inicio de sesión más seguro cambia la forma en que alguien comienza.
+
+00:24:49.830 --> 00:24:50.790
+Bloquear un protocolo antiguo.
+
+00:24:50.910 --> 00:24:52.330
+Puede silenciar una herramienta de la que alguien depende.
+
+00:24:52.790 --> 00:24:54.630
+El portal etiqueta ese costo con una sola palabra.
+
+00:24:54.830 --> 00:24:55.770
+Bajo, moderado o alto.
+
+00:24:56.530 --> 00:24:57.930
+Esa palabra oculta más de lo que revela.
+
+00:24:59.110 --> 00:24:59.630
+Acto en el usuario.
+
+00:25:00.050 --> 00:25:01.410
+El costo que nada incluye en la puntuación.
+
+00:25:02.070 --> 00:25:05.350
+Abre cualquier acción de mejora en el portal y busca el campo llamado impacto en el usuario.
+
+00:25:06.070 --> 00:25:06.550
+Tres valores.
+
+00:25:06.750 --> 00:25:07.950
+Bajo, moderado, alto.
+
+00:25:08.550 --> 00:25:08.890
+Es útil.
+
+00:25:09.690 --> 00:25:11.690
+Pero es una respuesta muy corta para una pregunta muy larga.
+
+00:25:12.110 --> 00:25:13.250
+Esa calificación proviene de Microsoft.
+
+00:25:13.730 --> 00:25:15.030
+En Microsoft no conoces a tus usuarios.
+
+00:25:15.030 --> 00:25:17.530
+No sabe que tu personal de almacén comparte tabletas.
+
+00:25:18.070 --> 00:25:22.210
+No sabe que el departamento de finanzas usa una herramienta de hace 10 años que envía correos mediante un protocolo que estás por bloque.
+
+00:25:22.610 --> 00:25:24.150
+¿Sabes lo que hace el cambio en un entorno típico?
+
+00:25:24.590 --> 00:25:25.110
+El tuyo encima.
+
+00:25:25.530 --> 00:25:28.190
+Sí que considera esa etiqueta como una estimación inicial, no como una promesa.
+
+00:25:28.330 --> 00:25:29.450
+Ahora divide el costo en dos partes.
+
+00:25:30.110 --> 00:25:30.990
+Te comportan de benedicto.
+
+00:25:31.230 --> 00:25:32.550
+La primera es el costo de implementación.
+
+00:25:32.930 --> 00:25:34.370
+Es el trabajo necesario para poner en marcha.
+
+00:25:34.810 --> 00:25:38.050
+Alguien debe planificarlo, probarlo, redactar el aviso, cambiar la configuración.
+
+00:25:38.290 --> 00:25:39.450
+Y es un gasto único.
+
+00:25:39.950 --> 00:25:41.070
+Puedes verlo venir y ponerle fecha.
+
+00:25:41.610 --> 00:25:42.670
+La segunda es la ficción continua.
+
+00:25:42.670 --> 00:25:44.610
+Y esta parte nunca aparece en el portal.
+
+00:25:45.130 --> 00:25:47.210
+Un índice de sesión más seguro añade unos segundos a cada mañana.
+
+00:25:47.910 --> 00:25:50.450
+Multiplica eso por 2.000 personas, 200 días laborables.
+
+00:25:50.830 --> 00:25:51.950
+Nadie lo nota en un día cualquiera.
+
+00:25:52.610 --> 00:25:53.890
+Pero es real y nunca se detiene.
+
+00:25:54.530 --> 00:25:59.630
+Pídele a la gente que haga algo incómodo cada vez que inicie sesión y buscarán la forma de evitarlo o empezarán a ignorar el aviso.
+
+00:26:00.170 --> 00:26:01.130
+Ambos resultados anulan el control.
+
+00:26:01.650 --> 00:26:04.330
+Por eso la fricción es un costo de seguridad, no solo un costo de comodidad.
+
+00:26:04.830 --> 00:26:06.950
+Un control contra el que la gente lucha es un control que se degrada.
+
+00:26:07.370 --> 00:26:08.110
+Entonces, ¿cómo lo visualiza?
+
+00:26:08.330 --> 00:26:08.930
+Cuéntase algo.
+
+00:26:09.330 --> 00:26:11.090
+El volumen de consultas hacia asistencia es la mejor se analiza.
+
+00:26:11.090 --> 00:26:14.850
+Antes de cambiar nada, anota cuántos tickets llegan por semana y de qué tratan.
+
+00:26:15.650 --> 00:26:17.130
+Restablecimiento de contraseñas, cuenta de bloquear.
+
+00:26:17.470 --> 00:26:18.390
+No puedo abrir mi corona en el teléfono.
+
+00:26:19.190 --> 00:26:20.730
+Luego observa qué sucede después de cada cambio.
+
+00:26:21.110 --> 00:26:24.810
+Una semana después, si los tickets de inicio de sesión se han duplicado, habrás descubierto el impacto real.
+
+00:26:24.930 --> 00:26:25.970
+No la etiqueta, sino el resultado.
+
+00:26:26.750 --> 00:26:30.150
+Y lo descubriste de una forma que puedes mostrarle a un gerente, lo cual es mejor que cualquier opinión.
+
+00:26:30.770 --> 00:26:32.290
+Elige dos o tres números y mantén los simples.
+
+00:26:32.750 --> 00:26:37.030
+Cantidad de tickets para el tema afectado, tiempo de resolución y cuántas personas vieron un nuevo aviso y se dieron por vencidas.
+
+00:26:37.330 --> 00:26:39.190
+Incluso los contos aproximados tendrán más que la calificación.
+
+00:26:39.810 --> 00:26:41.810
+Ahora, aquí está la trampa oculta tras una calificación baja.
+
+00:26:42.270 --> 00:26:44.430
+Un bajo impacto significa que pocos usuarios notarán el cambio.
+
+00:26:44.750 --> 00:26:45.810
+No significa que el cambio sea seguro.
+
+00:26:46.150 --> 00:26:46.830
+Son cosas distintas.
+
+00:26:47.230 --> 00:26:48.470
+Imagina un ajuste calificado como bajo.
+
+00:26:48.950 --> 00:26:49.630
+Casi no afecta a nadie.
+
+00:26:50.170 --> 00:26:50.410
+Genial.
+
+00:26:50.470 --> 00:26:55.350
+Pero el único equipo al que afecta es el que envía facturas a los clientes a través de un antiguo buzón automatizado.
+
+00:26:55.950 --> 00:26:57.150
+El cambio detiene ese correo sencioso.
+
+00:26:57.570 --> 00:27:00.030
+Nadie se queja durante tres días porque nadie se da cuenta de que se detuvo.
+
+00:27:00.650 --> 00:27:02.850
+Entonces, un cliente llama preguntando qué pasó con su solicitud.
+
+00:27:03.290 --> 00:27:04.090
+Pocas personas.
+
+00:27:04.650 --> 00:27:05.330
+Gran problema comercial.
+
+00:27:05.770 --> 00:27:06.650
+Es el patrón que hay que vigilar.
+
+00:27:07.170 --> 00:27:08.790
+Las calificaciones cuentan cuántos usuarios afectados.
+
+00:27:09.370 --> 00:27:10.530
+No evalúan lo que hacen esos usuarios.
+
+00:27:10.930 --> 00:27:16.290
+Un cambio que afecta a cinco personas en nómina el último día del mes puede ser más importante que uno que afecte a 500 personas en un martes cualquiera.
+
+00:27:17.110 --> 00:27:18.130
+Sí que añade tu propia columnar.
+
+00:27:18.730 --> 00:27:23.370
+Junto a la calificación del portal, escribe quién se ve afectado y qué dejarían de poder hacer si algo saliera mal.
+
+00:27:23.890 --> 00:27:24.830
+Dos soluciones son suficientes.
+
+00:27:25.310 --> 00:27:26.390
+Verá que la mayoría de las acciones están.
+
+00:27:26.830 --> 00:27:27.770
+Unas pocas estarán a dudar.
+
+00:27:28.130 --> 00:27:30.110
+Esas pocas son las que vale la pena discutir antes del cambio.
+
+00:27:30.310 --> 00:27:30.770
+No después.
+
+00:27:31.370 --> 00:27:33.130
+Y esa conversación es diferente a pedir permiso.
+
+00:27:33.950 --> 00:27:34.950
+No estás buscando un veto.
+
+00:27:35.530 --> 00:27:36.670
+Estás buscando aquello que no sabes.
+
+00:27:37.430 --> 00:27:38.430
+Hazle al jefe de equipo una pregunta.
+
+00:27:38.970 --> 00:27:41.510
+¿Qué usan que podría depender todavía de la vieja forma de hacer esto?
+
+00:27:41.990 --> 00:27:45.230
+La gente suele responder en un minuto y te ahorrará una semana de trabajo de limpieza.
+
+00:27:45.730 --> 00:27:47.290
+Hay un costo más que vale la pena mencionar.
+
+00:27:47.430 --> 00:27:48.070
+El costo de esperar.
+
+00:27:48.450 --> 00:27:50.250
+Si la fricción no es un precio real, también lo es el retraso.
+
+00:27:50.370 --> 00:27:52.730
+Cada mes que una cuenta administrará permanece sin inicio de sesión más seguro.
+
+00:27:52.810 --> 00:27:53.190
+Es un mes seguro.
+
+00:27:53.270 --> 00:27:54.470
+Es un mes en el que puedes ser víctima de phishing.
+
+00:27:54.470 --> 00:27:56.650
+El impacto en los usuarios es real, al igual que el impacto en el riesgo.
+
+00:27:56.850 --> 00:28:01.170
+El objetivo no es evitar las fricciones, invertirla donde brinde mayor protección y hacerlo a propósito.
+
+00:28:01.710 --> 00:28:04.670
+Eso significa que no eliges entre proteger a las personas o proteger al inquilino.
+
+00:28:05.090 --> 00:28:07.690
+Eliges cómo introducir el cambio para que nadie sea tomado por sorpresa.
+
+00:28:08.190 --> 00:28:09.770
+Y existe una manera segura de hacer exactamente eso.
+
+00:28:10.070 --> 00:28:12.650
+Te permite ver quién sería bloqueado antes de que alguien lo sea realmente.
+
+00:28:12.650 --> 00:28:15.490
+Modo de solo informe y despliegues por etapas
+
+00:28:15.490 --> 00:28:18.190
+El acceso condicional tiene un ajuste que la mayoría pasa por algo.
+
+00:28:18.590 --> 00:28:19.950
+Se encuentra junto a activado y desactivado.
+
+00:28:20.470 --> 00:28:21.190
+Se llama solo informe.
+
+00:28:21.810 --> 00:28:22.590
+La política se cura.
+
+00:28:23.130 --> 00:28:24.990
+Evalúa cada inicio de sesión frente a sus reglas.
+
+00:28:25.750 --> 00:28:26.710
+Registra lo que habría sucedido.
+
+00:28:26.990 --> 00:28:28.330
+Y luego permite el acceso a todos modos.
+
+00:28:28.850 --> 00:28:29.450
+Nadie es bloqueado.
+
+00:28:29.590 --> 00:28:30.590
+A nadie se le solicita nada.
+
+00:28:30.770 --> 00:28:32.430
+Pero obtienes un registro de quién habría sido afectado.
+
+00:28:32.710 --> 00:28:34.030
+Ese es el primer paso más seguro que tiene.
+
+00:28:34.490 --> 00:28:37.550
+Le haces una pregunta al inquilino y obtienes la respuesta antes de que le cueste algo a él.
+
+00:28:37.950 --> 00:28:39.730
+Antes de activar algo, sin embargo, prepara la salida.
+
+00:28:40.270 --> 00:28:41.530
+Dos cosas deben existir primero.
+
+00:28:41.890 --> 00:28:42.550
+Cuentas de emergencia.
+
+00:28:43.150 --> 00:28:45.670
+Son cuentas de administrador de emergencia excluidas de tus políticas
+
+00:28:45.670 --> 00:28:48.110
+con contraseñas largas guardadas en un lugar seguro.
+
+00:28:48.690 --> 00:28:51.510
+Si una política falla y bloquea a todos, así es como recuperas el acceso.
+
+00:28:52.250 --> 00:28:53.250
+Sin ella, es una mala regla.
+
+00:28:53.370 --> 00:28:56.630
+Puede significar una llamada al soporte de Microsoft y una tarde muy larga.
+
+00:28:57.690 --> 00:28:58.310
+Y un grupo piloto.
+
+00:28:58.350 --> 00:29:00.250
+Un pequeño conjunto de personas reales que saben que son la prueba.
+
+00:29:00.490 --> 00:29:01.790
+Un grupo ficticio donde no participan.
+
+00:29:02.390 --> 00:29:03.390
+Ahora, la parte que se omite.
+
+00:29:03.590 --> 00:29:04.230
+Las exclusiones.
+
+00:29:04.730 --> 00:29:05.770
+Toda política termina teniéndolo.
+
+00:29:06.330 --> 00:29:07.190
+Las cuentas de emergencia.
+
+00:29:07.670 --> 00:29:09.610
+Una cuenta de servicio que no puede realizar un segundo paso.
+
+00:29:09.670 --> 00:29:10.330
+Un kiosco compartido.
+
+00:29:10.850 --> 00:29:11.330
+Eso es normal.
+
+00:29:11.330 --> 00:29:14.330
+Pero cada uno es un agujero que decidiste dejar abierto, así que cada uno necesita
+
+00:29:14.330 --> 00:29:16.790
+una nota de quién está excluido, por quién y quién lo aprobó.
+
+00:29:16.790 --> 00:29:17.950
+Y cuando lo revises de nuevo.
+
+00:29:18.250 --> 00:29:21.430
+Una exclusión, si notas como una excepción temporal, se convierte en el bypass permanente
+
+00:29:21.430 --> 00:29:22.890
+del director financiero tres años después.
+
+00:29:23.550 --> 00:29:26.110
+Ahora ejecuta la política en modo solo informe durante un par de semanas.
+
+00:29:26.290 --> 00:29:27.150
+Y luego lee lo que encontró.
+
+00:29:27.290 --> 00:29:28.410
+Luego lo registra de inicio de sesión.
+
+00:29:28.410 --> 00:29:31.090
+Para cada inicio de sesión, hay una pestaña que muestra los resultados de eso.
+
+00:29:31.370 --> 00:29:34.250
+Indica si la política habría tenido éxito o fallado, o si no se habría aplicado en
+
+00:29:34.250 --> 00:29:34.690
+absoluto.
+
+00:29:35.030 --> 00:29:35.870
+Filtra por el fallo.
+
+00:29:36.090 --> 00:29:37.730
+Esos son tus futuros tickets de soporte técnico.
+
+00:29:37.990 --> 00:29:38.450
+Mira quiénes son.
+
+00:29:38.870 --> 00:29:41.650
+Un cliente antiguo que aún usa un protocolo heredado, un script programado.
+
+00:29:41.770 --> 00:29:42.890
+Inicia sesión como persona.
+
+00:29:42.950 --> 00:29:43.530
+Un contratista.
+
+00:29:43.910 --> 00:29:44.930
+En una computadora personal.
+
+00:29:44.930 --> 00:29:47.970
+Un equipo de ventas que se conecta desde un país que olvidaste que visitaban.
+
+00:29:48.570 --> 00:29:50.670
+Cada uno es una conversación que puedes tener ahora con calma.
+
+00:29:51.010 --> 00:29:53.130
+En lugar de a las nueve de lunes con una fila de espera formándose.
+
+00:29:53.550 --> 00:29:54.930
+Y observa también los resultados no aplicados.
+
+00:29:55.270 --> 00:29:56.670
+Te indican dónde no llega tu política.
+
+00:29:57.170 --> 00:30:00.610
+Si esperabas que cubriera todo, si el grupo entero aparece como no aplicado, tu alcance
+
+00:30:00.610 --> 00:30:01.230
+es incorrecto.
+
+00:30:01.850 --> 00:30:04.170
+Es mejor aprender eso de un registro que de un incidente.
+
+00:30:04.950 --> 00:30:05.710
+Un hábito útil aquí.
+
+00:30:06.450 --> 00:30:08.230
+Elige diez fallas y rastrear la causa de cada una.
+
+00:30:08.690 --> 00:30:09.370
+No todas las diez.
+
+00:30:09.830 --> 00:30:11.910
+Por lo general encontrarás tres o cuatro patrones que se repiten.
+
+00:30:11.910 --> 00:30:14.170
+Erige los patrones y la mayor parte del ruido desaparecerá.
+
+00:30:14.170 --> 00:30:16.750
+Una vez que el registro luzca limpio, no actives el interruptor para todo.
+
+00:30:17.030 --> 00:30:17.650
+¿Avanza por anillos?
+
+00:30:18.010 --> 00:30:18.670
+El primer anillo es T.
+
+00:30:18.950 --> 00:30:21.790
+Son técnicos, son comprensivos y te dirán exactamente qué se rompió.
+
+00:30:22.150 --> 00:30:23.070
+Ejecutalo ahí durante una semana.
+
+00:30:23.330 --> 00:30:24.750
+El segundo anillo son tus campeones.
+
+00:30:24.890 --> 00:30:27.990
+Un puñado de personas de distintos departamentos que están dispuestos a dar retroalimentación.
+
+00:30:28.170 --> 00:30:29.410
+No son técnicos y es el punto.
+
+00:30:29.930 --> 00:30:31.770
+Se toparán con la fricción tal como lo harán los usuarios común.
+
+00:30:32.150 --> 00:30:33.390
+Tercer anillo es un departamento completo.
+
+00:30:33.790 --> 00:30:36.610
+Elige uno con un gerente que haya sido advertido y con una vía clara para pedir el vídeo.
+
+00:30:36.770 --> 00:30:37.990
+Ahora estás probando un volumen real.
+
+00:30:38.390 --> 00:30:38.870
+Cuarto del mundo.
+
+00:30:39.350 --> 00:30:40.590
+Entre cada anillo detente y observa.
+
+00:30:40.590 --> 00:30:43.570
+Número de tickets, fallas de inicio de sesión, cualquier cosa extraña de los registros.
+
+00:30:43.930 --> 00:30:45.230
+Si los números se mantienen, amplía.
+
+00:30:45.530 --> 00:30:47.110
+Si no hace una pausa, corregí y vuelve a intentar.
+
+00:30:47.530 --> 00:30:48.510
+Esa pausa es todo el valor.
+
+00:30:49.110 --> 00:30:51.830
+Un despliegue sin puntos de pausa es solo un gran interruptor con retraso.
+
+00:30:52.230 --> 00:30:52.950
+Para ambos enfoques.
+
+00:30:53.510 --> 00:30:54.390
+Lo activas para todos.
+
+00:30:54.630 --> 00:30:56.370
+Y cada problema llega junto desde todos.
+
+00:30:56.470 --> 00:30:57.810
+Los rincones, la misma mañana.
+
+00:30:58.450 --> 00:31:00.570
+Clementan anillos y los problemas llegan en pequeños lotes.
+
+00:31:00.630 --> 00:31:02.810
+Un grupo a la vez, cuando aún tienes margen para responder.
+
+00:31:03.310 --> 00:31:04.530
+Mismo control, mismo estado final.
+
+00:31:04.690 --> 00:31:05.670
+Una semana muy diferente.
+
+00:31:06.390 --> 00:31:07.970
+Por supuesto, las políticas son solo una parte de esto.
+
+00:31:08.370 --> 00:31:10.750
+Mucho de lo que recomienda Secure Score no es una política en absoluto.
+
+00:31:11.330 --> 00:31:12.410
+Parte de ello es arquitectura.
+
+00:31:12.570 --> 00:31:14.270
+Y la arquitectura no tiene un modo de solo informe.
+
+00:31:15.070 --> 00:31:17.130
+Acceso condicional sin interrupciones autoinfligidas.
+
+00:31:17.930 --> 00:31:21.410
+Esa es la falla de la que todos escuchan y que un número sorprendente de personas causa de todos modos.
+
+00:31:21.770 --> 00:31:25.930
+Un administrador crea una nueva política, requiere dispositivos compatibles, todos los usuarios, todas las aplicaciones.
+
+00:31:26.390 --> 00:31:28.290
+Se ve como una buena seguridad.
+
+00:31:28.390 --> 00:31:31.670
+La guarda, la activa y en menos de un minuto el inquilino deja de responder.
+
+00:31:32.490 --> 00:31:35.410
+Nadie puede iniciar sesión, incluido el administrador que acaba de realizar el cambio.
+
+00:31:36.050 --> 00:31:36.990
+Las razones son aburridas.
+
+00:31:37.330 --> 00:31:40.370
+El alcance incluía a todos los usuarios y nadie eliminó la cuenta del administrador.
+
+00:31:40.990 --> 00:31:44.370
+Los datos de cumplimiento del dispositivo no se ven sincronizados, por lo que cada portátil parecía no cumplir con las.
+
+00:31:44.770 --> 00:31:48.930
+O bien, la política aplicada a un inicio de sesión en el portal de administración depende de causas distintas cada vez.
+
+00:31:49.290 --> 00:31:51.050
+No es habitual y la solución rara vez es ingenua.
+
+00:31:51.570 --> 00:31:54.110
+Es lo que configuraste antes del problema, lo que nos lleva de vuelta.
+
+00:31:54.190 --> 00:31:57.090
+Las cuentas de emergencia las mencionamos antes como una salida.
+
+00:31:57.450 --> 00:31:58.430
+Ahora veamos qué las hace.
+
+00:31:58.810 --> 00:32:04.910
+Dos cuentas como mínimo, solo en la nube, para que no dependan de tu sincronización de directorio o de un servidor de federación que podría hacer lo que esté fallando.
+
+00:32:05.590 --> 00:32:15.050
+Excluidas de toda política de acceso condicional, contraseñas largas y aleatorias repartidas entre dos personas o guardadas en una caja fuerte física, idealmente un método resistente al phishing que no dependa de un solo número de teléfono.
+
+00:32:15.570 --> 00:32:16.710
+Pero aquí está la parte que la gente ignora.
+
+00:32:16.710 --> 00:32:23.010
+Una cuenta que nunca inicia sesión es una cuenta que nadie vigila, y a un atacante le encantaría una cuenta de administrador que nadie vigila, así que monitoreala.
+
+00:32:23.650 --> 00:32:26.130
+Configura una alerta para cualquier inicio de sesión de esas cuentas.
+
+00:32:26.570 --> 00:32:31.370
+Si se activa en una tarde cualquiera, es porque olvidaste una prueba o tienes un incidente.
+
+00:32:31.850 --> 00:32:33.210
+Ambos vale la pena saberlos en minuto.
+
+00:32:33.550 --> 00:32:38.150
+Luego prueba las cuentas dos veces al año a propósito para saber que las contraseñas siguen funcionando y las alertas se activan.
+
+00:32:38.530 --> 00:32:39.430
+Las políticas de sí mismas.
+
+00:32:40.070 --> 00:32:41.850
+Donde fallan incluso cuando nada te bloquea el acceso.
+
+00:32:41.850 --> 00:32:47.930
+Su ubicación es con nombres 1, marca las direcciones de tu oficina como confiables y una política relaja las reglas de inicio de sesión desde esas direcciones.
+
+00:32:48.310 --> 00:32:48.670
+Sensato.
+
+00:32:49.450 --> 00:32:50.970
+Pero un rango de IP no es una persona.
+
+00:32:51.830 --> 00:32:57.270
+Cualquiera en esa red hereda la confianza, incluido un invitado en el Wi-Fi o un equipo comprometido en un rincón.
+
+00:32:57.810 --> 00:33:01.610
+El personal remoto nunca recibe el beneficio, por lo que terminas con dos conjuntos de reglas que se desvíen.
+
+00:33:02.090 --> 00:33:04.990
+Trata la ubicación como una señal más, nunca como un pase libre.
+
+00:33:05.410 --> 00:33:06.470
+El cumplimiento del dispositivo es otro.
+
+00:33:06.930 --> 00:33:09.230
+Una política que requiere un dispositivo compatible es un hermérico.
+
+00:33:09.230 --> 00:33:15.110
+Luego recuerdas los no gestionados, teléfonos personales, la computadora de un contratista, un navegador en una computadora de hotel.
+
+00:33:15.670 --> 00:33:20.330
+O esos usuarios son bloqueados, lo que crean una nación de excepciones, o son excluidos, lo que crea un agujero.
+
+00:33:20.810 --> 00:33:22.950
+Debes decidir cuál es la propósito y dejarlo por escrito.
+
+00:33:23.290 --> 00:33:24.590
+El punto SEO no es la política.
+
+00:33:24.870 --> 00:33:28.690
+Es el grupo de dispositivos que la política nunca ve y está en las aplicaciones que la gente olvida.
+
+00:33:29.350 --> 00:33:33.870
+Las políticas que apuntan a todas las aplicaciones en la nube a veces excluyen algunas y los atacantes también leen esas exclusiones.
+
+00:33:33.870 --> 00:33:39.770
+Los clientes heredados, el inicio es un código de dispositivo y las conexiones de servicio antiguos pueden eludir una regla que parece completa en pantalla.
+
+00:33:40.370 --> 00:33:43.030
+Revisa las condiciones de cada política para ver lo que excluye, no solo lo que cubre.
+
+00:33:43.690 --> 00:33:46.250
+Luego llega el problema lento, que no es una sola política mala.
+
+00:33:46.810 --> 00:33:47.210
+Las políticas.
+
+00:33:47.710 --> 00:33:50.510
+Cada incidente, cada solicitud y cada hallazgo de auditoría añade una regla.
+
+00:33:50.510 --> 00:33:53.190
+Una política para ventas, otra para contratistas.
+
+00:33:53.390 --> 00:33:55.550
+Una temporal de hace dos años que nadie eliminó.
+
+00:33:56.490 --> 00:34:00.430
+Al tiempo tienes 40 políticas y nadie sabe qué pasa cuando tres aplican al mismo inicio de sesión.
+
+00:34:00.910 --> 00:34:04.310
+Se acumulan, chocan entre sí y cada uno es un lugar donde puede esconderse una interrupción.
+
+00:34:04.730 --> 00:34:05.570
+Lo ideal es algo pequeño.
+
+00:34:06.170 --> 00:34:09.630
+Un conjunto breve de políticas, cada una con un fin claro, un nombre descriptivo y un responsable.
+
+00:34:10.670 --> 00:34:12.310
+Exige acceso fuerte para administradores.
+
+00:34:12.610 --> 00:34:13.610
+Bloquea autenticación antigua.
+
+00:34:13.790 --> 00:34:15.550
+Pide dispositivos compatibles para apps sensibles.
+
+00:34:15.730 --> 00:34:16.390
+Gestiona invitados.
+
+00:34:16.390 --> 00:34:21.750
+Dos, aparte, si no puedes explicar una política en una frase, quizás hace demasiado o debería dividirse en dos.
+
+00:34:23.150 --> 00:34:28.930
+Menos reglas son más fáciles de probar y reportar, de implementar gradualmente y de justificar si alguien fue bloqueado.
+
+00:34:29.870 --> 00:34:33.470
+Esa es la disciplina, no más políticas sino mejores, con una salida y alguien que las vigile.
+
+00:34:34.270 --> 00:34:37.350
+Todo esto se basa en la identidad, pero la identidad solo rige quien inicia sesión.
+
+00:34:37.730 --> 00:34:39.550
+Dicen muy poco sobre la máquina de la que se conectan.
+
+00:34:39.970 --> 00:34:41.770
+Eso es una capa distinta que forma diferentes.
+
+00:34:43.350 --> 00:34:45.030
+Dispositivos, donde la puntuación se encuentra en realidad.
+
+00:34:45.030 --> 00:34:47.130
+La identidad te dice quién es en una sesión.
+
+00:34:47.710 --> 00:34:49.270
+Los dispositivos te dicen desde qué equipo lo hace.
+
+00:34:49.950 --> 00:34:53.030
+Aquí es donde la puntuación y el mundo real empiezan a discrepar de forma muy específica.
+
+00:34:54.030 --> 00:34:58.550
+La mayoría de acciones de dispositivos en el portal tratan sobre ajustes, pero el mayor problema nunca es un ajuste.
+
+00:34:58.810 --> 00:34:59.290
+Es la cobertura.
+
+00:34:59.690 --> 00:35:00.610
+Tomemos de Fender Foreign Point.
+
+00:35:01.010 --> 00:35:04.350
+El portal mostrará felizmente recomendaciones ordenadas para las máquinas que conoce.
+
+00:35:04.630 --> 00:35:06.070
+Protección contra alteraciones activada.
+
+00:35:06.170 --> 00:35:07.210
+Protección en tiempo real activa.
+
+00:35:07.310 --> 00:35:08.170
+Protección en la nube activa.
+
+00:35:08.370 --> 00:35:09.890
+Bien, pero hasta otra pregunta.
+
+00:35:10.310 --> 00:35:11.830
+¿A cuántas dos máquinas está vigilando realmente?
+
+00:35:11.830 --> 00:35:16.630
+¿Por qué una configuración perfecta en 800 portátiles no dice nada de los 200 que nunca se incorporaron?
+
+00:35:17.510 --> 00:35:18.790
+Un servidor que nadie recuerda.
+
+00:35:19.390 --> 00:35:21.550
+Un portátil que volvió de reparación y nunca se reconectó.
+
+00:35:22.090 --> 00:35:24.190
+El equipo de un empleado nuevo que emite el paso de configuración.
+
+00:35:24.470 --> 00:35:25.710
+Esas máquinas no bajan tu puntuación.
+
+00:35:26.110 --> 00:35:27.230
+No aparecen como una acción fallada.
+
+00:35:27.670 --> 00:35:28.330
+Simplemente no están ahí.
+
+00:35:28.710 --> 00:35:30.030
+Y un atacante solo necesita una de ellas.
+
+00:35:30.530 --> 00:35:31.410
+Así que empieza por inventar.
+
+00:35:32.070 --> 00:35:34.310
+Compara lo que quieres poseer contra lo que estás portando.
+
+00:35:34.310 --> 00:35:37.330
+La brecha entre ambas listas es tu riesgo real de dispositivo.
+
+00:35:37.470 --> 00:35:38.690
+Y ningún porcentaje te lo mostrará.
+
+00:35:39.030 --> 00:35:40.570
+A continuación, reglas de reducción de la superficie.
+
+00:35:41.010 --> 00:35:43.150
+Estos bloquean comportamientos específicos que me ha elaborado.
+
+00:35:43.570 --> 00:35:45.010
+Aplicaciones de Office que inician procesos secundarios.
+
+00:35:45.390 --> 00:35:46.970
+Scripts que descargan a ejecutar en ejecutar.
+
+00:35:47.510 --> 00:35:48.970
+Robo de credenciales de la memoria del sistema.
+
+00:35:49.270 --> 00:35:50.850
+Son algunos de los controles más fuertes de la lista.
+
+00:35:51.350 --> 00:35:52.930
+También son los más fáciles con los que se puede romper.
+
+00:35:53.130 --> 00:35:56.930
+Una regla que bloquea una macro de Office al iniciar un proceso detendrá una carga útil de phishing.
+
+00:35:57.190 --> 00:36:01.330
+También detendrá la hoja de cálculo financiera que ha ejecutado silenciosamente una macro cada mes desde 2014.
+
+00:36:01.330 --> 00:36:03.290
+Así que no los actives en modo de bloqueo.
+
+00:36:03.430 --> 00:36:04.670
+Activa los primeros modos de auditoría.
+
+00:36:05.010 --> 00:36:05.910
+La regla se ejecuta.
+
+00:36:06.030 --> 00:36:07.730
+Regístra lo que habría detenido y no afecta a nadie.
+
+00:36:08.110 --> 00:36:09.130
+Luego lee los datos del auditoría.
+
+00:36:09.430 --> 00:36:11.010
+Mira lo que habría sido bloqueado y por qué aplicación.
+
+00:36:11.510 --> 00:36:12.950
+La mayor parte será ruido que puedes ignorar.
+
+00:36:13.330 --> 00:36:15.290
+Una pequeña parte será un proceso de negocio real.
+
+00:36:15.690 --> 00:36:18.450
+Y querrás añadir una exclusión o arreglar el proceso antes de aplicarlo.
+
+00:36:18.990 --> 00:36:20.390
+Hazlo regla por regla, no todas a la vez.
+
+00:36:20.830 --> 00:36:24.310
+16 reglas activadas juntas significan 16 causas posibles cuando algo se rompe.
+
+00:36:24.950 --> 00:36:26.010
+Las políticas de cumplimiento de IND.
+
+00:36:26.330 --> 00:36:30.110
+Estas son el puente entre la capa de dispositivo y todo lo que cubrimos sobre exceso condicional.
+
+00:36:30.110 --> 00:36:32.710
+Una política de cumplimiento define cómo es un dispositivo seguro.
+
+00:36:33.090 --> 00:36:38.110
+Cifrado, disco activado, firewall encendido, versión mínima del SEO, reporte de Defender sin amenazas activas.
+
+00:36:38.410 --> 00:36:40.330
+Por sí sola, una política de cumplimiento es solo una etiqueta.
+
+00:36:40.630 --> 00:36:41.350
+Una máquina cumple o no.
+
+00:36:41.850 --> 00:36:46.370
+El poder viene cuando el acceso condicional lee esa etiqueta y decide que puede acceder al inicio de sesión.
+
+00:36:47.190 --> 00:36:49.270
+Dispositivo no conforme, sin acceso al correo de la empresa.
+
+00:36:49.730 --> 00:36:52.130
+Así es como un ajuste de dispositivo se convierte en una barrera real.
+
+00:36:52.370 --> 00:36:53.990
+Pero solo funciona si la política es realista.
+
+00:36:53.990 --> 00:36:57.930
+Pon el listón muy alto el primer día y la mitad de tus equipos no cumplirán de la noche a la mañana.
+
+00:36:58.070 --> 00:36:59.330
+Habrás creado tu propia interrupción.
+
+00:36:59.770 --> 00:37:01.250
+Ponlo demasiado bajo y la etiqueta no significan.
+
+00:37:01.830 --> 00:37:03.530
+Empieza donde la mayoría de las máquinas ya están.
+
+00:37:03.730 --> 00:37:04.890
+Luego sube el listón gradualmente.
+
+00:37:05.550 --> 00:37:06.570
+Y luego la parte incómoda.
+
+00:37:06.710 --> 00:37:07.710
+Dispositivos no gestionados.
+
+00:37:07.830 --> 00:37:08.470
+Teléfonos personales.
+
+00:37:08.530 --> 00:37:09.390
+La laptop de un contratista.
+
+00:37:09.450 --> 00:37:10.230
+El navegador de un socio.
+
+00:37:10.430 --> 00:37:12.490
+Una PC de casa que alguien usa para revisar rápido su correo.
+
+00:37:12.830 --> 00:37:12.970
+Ah.
+
+00:37:13.550 --> 00:37:15.170
+La puntuación no puede contar lo que no está inscrito.
+
+00:37:15.570 --> 00:37:17.090
+Ve tu entorno gestionado y califica eso.
+
+00:37:17.270 --> 00:37:19.450
+La parte no gestionada es el riesgo no contabilizado.
+
+00:37:19.550 --> 00:37:21.050
+Y a menudo es donde vive la higiene más débil.
+
+00:37:21.590 --> 00:37:22.350
+Tienes opciones aquí.
+
+00:37:22.990 --> 00:37:27.470
+Políticas de protección de aplicaciones que envuelven los datos de la empresa en un teléfono personal sin gestionar todo el teléfono.
+
+00:37:27.930 --> 00:37:29.930
+Acceso solo por navegador con descargas bloqueadas.
+
+00:37:30.190 --> 00:37:33.110
+O una línea firme de que las aplicaciones sensibles requieren un dispositivo gestionado.
+
+00:37:33.250 --> 00:37:33.690
+Punto final.
+
+00:37:34.190 --> 00:37:35.930
+Cada una tiene un costo en fricción y un costo en cobertura.
+
+00:37:36.330 --> 00:37:40.230
+Lo importante es que elijas una a propósito en lugar de descubrir la brecha después de un incidente.
+
+00:37:40.770 --> 00:37:44.750
+Los dispositivos son la capa donde el panel de control parece más completo y a menudo está incompleto.
+
+00:37:44.750 --> 00:37:47.790
+Pero existe otra superficie que recibe más tráfico de ataques diario que cualquier laptop.
+
+00:37:48.290 --> 00:37:50.190
+Llega a través de la bandeja de entrada todo el día, todos los días.
+
+00:37:50.970 --> 00:37:52.110
+Correo electrónico y colaboración.
+
+00:37:52.270 --> 00:37:54.030
+Acciones de Defender para Office 365.
+
+00:37:54.570 --> 00:37:56.870
+La mayoría de los ataques que verán no comienzan con un exploit.
+
+00:37:57.150 --> 00:38:01.690
+Comienzan con un mensaje, un enlace, un archivo adjunto, una nota amable de alguien que parece un proveedor hedor.
+
+00:38:01.690 --> 00:38:06.030
+Y el control que se sitúa frente a todo eso es Defender para Office 365.
+
+00:38:06.950 --> 00:38:07.930
+Comienzan con Safe Links.
+
+00:38:07.930 --> 00:38:14.010
+Cuando un usuario hace clic en un enlace en un correo, Safe Links verifica el destino en ese momento, no solo cuando llegó el mensaje.
+
+00:38:14.770 --> 00:38:19.370
+Esto es importante porque los atacantes a menudo envían un enlace limpio y lo cambian a algo malicioso una hora después.
+
+00:38:19.870 --> 00:38:21.250
+La verificación en un momento del clic se ya sabe.
+
+00:38:21.250 --> 00:38:25.350
+Actívenlo también para Teams y aplicaciones de Office, no solo para el correo, ya que la gente pega enlaces en todas partes.
+
+00:38:25.870 --> 00:38:26.430
+Luego Safe Links.
+
+00:38:26.870 --> 00:38:30.310
+Esos archivos se abren primero en un entorno aislado, sandbox, y solo se liberan si no ocurre nada malo.
+
+00:38:30.530 --> 00:38:31.170
+El costo es tiempo.
+
+00:38:31.550 --> 00:38:33.630
+Un análisis puede añadir un minuto o dos antes de que llegue el chip.
+
+00:38:33.630 --> 00:38:35.130
+Para la mayoría de las personas eso es invisible.
+
+00:38:35.590 --> 00:38:37.830
+Para la persona que espera un contrato a las 4 de un viernes no lo es.
+
+00:38:38.430 --> 00:38:39.410
+Así que informenles que existen.
+
+00:38:39.910 --> 00:38:42.050
+Una nota breve, el equipo de ventas ahorra una docena ética.
+
+00:38:42.450 --> 00:38:43.750
+Ahora la política contra el FIF.
+
+00:38:43.930 --> 00:38:45.170
+En donde la configuración personalizada.
+
+00:38:45.610 --> 00:38:49.310
+La protección contra suplantación de identidad le permite nombrar a las personas que los atacantes aman copian.
+
+00:38:49.530 --> 00:38:55.350
+Su CEO, su líder financiero, las tres personas que pueden aprobar un pago, agréguelos, y cualquier mensaje que pretenda hacer ellos será trato con sospecha.
+
+00:38:56.490 --> 00:39:01.650
+La inteligencia del buzón se basa en eso, al aprender con quien habla normalmente cada usuario, por lo que un remitente extraño destaca.
+
+00:39:01.950 --> 00:39:02.970
+Pero esa lista de mantenerse.
+
+00:39:02.970 --> 00:39:04.410
+Las personas cambian de puesto.
+
+00:39:05.130 --> 00:39:06.150
+Si un nuevo personal de finanza.
+
+00:39:06.570 --> 00:39:08.930
+Una lista protegida de hace dos años protege a las personas equivocadas.
+
+00:39:09.190 --> 00:39:11.190
+Entonces, ¿cómo configura todo esto sin empezar desde CER?
+
+00:39:11.590 --> 00:39:12.590
+Microsoft le ofrece dos rutas.
+
+00:39:13.050 --> 00:39:15.770
+Las políticas de seguridad preestablecida vienen en modo estándar y stricto.
+
+00:39:15.890 --> 00:39:17.970
+Hacen usuarios a una y Microsoft mantiene la configuración.
+
+00:39:19.070 --> 00:39:20.550
+A medida que llegan nuevas protecciones se aplica.
+
+00:39:20.970 --> 00:39:22.850
+Para la mayoría de las organizaciones es el lugar comenzar.
+
+00:39:23.530 --> 00:39:26.590
+Es rápido, consistente y elimina toda una clase de desviación.
+
+00:39:26.890 --> 00:39:28.510
+Las políticas personalizadas le brindan con...
+
+00:39:28.510 --> 00:39:29.890
+Usted elige cada umbral y cada acción.
+
+00:39:29.890 --> 00:39:33.970
+Eso ayuda cuando tiene una necesidad específica, como un departamento con patrones de correo inusuales.
+
+00:39:34.210 --> 00:39:37.830
+También significa que usted se encargue del mantenimiento y con el tiempo las políticas personalizadas quedan obsoletas.
+
+00:39:37.930 --> 00:39:38.390
+Quedan obsoletas.
+
+00:39:38.490 --> 00:39:39.270
+Entra en conflicto entre sí.
+
+00:39:39.330 --> 00:39:40.710
+Nadie recuerda porque se cambia una configuración.
+
+00:39:40.810 --> 00:39:41.490
+Nadie recuerda configuración.
+
+00:39:41.590 --> 00:39:42.650
+Un patrón sensato es simple.
+
+00:39:43.050 --> 00:39:43.850
+Lo que la mayoría de las personas.
+
+00:39:43.850 --> 00:39:47.170
+Ponga a sus usuarios de mayor riesgo a ejecutivos, finanzas y administradores en unidad.
+
+00:39:47.350 --> 00:39:50.510
+Luego añada políticas personalizadas solo cuando puede explicar la razón o en oración.
+
+00:39:50.990 --> 00:39:52.670
+La parte que pone nerviosa a la gente es flujo de correo.
+
+00:39:53.090 --> 00:39:55.750
+Un filtrado más estricto significa que parte del correo legítimo será interceptado.
+
+00:39:56.030 --> 00:39:57.290
+Eso es un falso positivo y sucederá.
+
+00:39:57.670 --> 00:39:59.270
+La factura de un proveedor termina en cuarentena.
+
+00:39:59.690 --> 00:40:01.290
+Un boletín informativo queda en que desaparece.
+
+00:40:01.930 --> 00:40:04.690
+La reacción suele ser relajar todo y esa es la respuesta incorrecta.
+
+00:40:05.190 --> 00:40:06.150
+Manéjelo con calma en su lugar.
+
+00:40:06.630 --> 00:40:08.270
+Revise la cuarentena regularmente durante las semanas.
+
+00:40:08.850 --> 00:40:10.390
+Observa por qué fue interceptado cada mensaje.
+
+00:40:10.390 --> 00:40:12.390
+A menudo es un remitente con autenticación fallida.
+
+00:40:12.670 --> 00:40:14.610
+La solución es una autorización específica para ese remitente.
+
+00:40:14.690 --> 00:40:15.790
+No una política más débil para todos.
+
+00:40:16.550 --> 00:40:19.510
+Use las herramientas de envío para que Microsoft aprenda de sus correcciones.
+
+00:40:20.010 --> 00:40:22.370
+Y dé a los usuarios una forma clara de reportar mensajes faltantes
+
+00:40:22.370 --> 00:40:24.290
+para que el problema le llegue en horas, no en días.
+
+00:40:25.050 --> 00:40:25.710
+Rastre un número aquí.
+
+00:40:26.710 --> 00:40:29.810
+¿Cuánto mensaje legítimo fueron puestos en cuarentena por semana y cuánto fueron liberados?
+
+00:40:30.150 --> 00:40:32.710
+Si ese conteo disminuye con el tiempo, su ajuste está funcionando.
+
+00:40:32.930 --> 00:40:34.510
+Sin embargo, el correo electrónico es solo un anoram.
+
+00:40:34.610 --> 00:40:36.330
+La otra mitad es donde las personas trabajan juntos.
+
+00:40:36.670 --> 00:40:38.730
+Teams y SharePoint conllevan una exposición más silenciosa
+
+00:40:38.730 --> 00:40:40.070
+y residen en el uso compartido externo.
+
+00:40:40.390 --> 00:40:42.950
+Por defecto, muchos inquilinos permiten que los usuarios compartan archivos
+
+00:40:42.950 --> 00:40:44.090
+con cualquier persona que tenga un enlace.
+
+00:40:44.370 --> 00:40:46.390
+Los invitados se unen a canales de Teams y se quedan por año.
+
+00:40:46.890 --> 00:40:47.450
+Nadie los revisa.
+
+00:40:47.990 --> 00:40:48.730
+Revise tres convicciones.
+
+00:40:49.230 --> 00:40:51.330
+¿Quién puede compartir fuera de la organización y con quién?
+
+00:40:51.770 --> 00:40:54.550
+Si se pueden crear enlaces para cualquier persona o solo para personas nombradas.
+
+00:40:54.890 --> 00:40:56.430
+¿Y cuánto tiempo vive una cuenta de invitado
+
+00:40:56.430 --> 00:40:58.090
+antes de que alguien confirme que todavía necesite existir?
+
+00:40:58.630 --> 00:41:00.590
+Ninguna de estas genera un salto drástico en la puntuación,
+
+00:41:00.710 --> 00:41:03.350
+pero un invitado obsoleto con acceso a un sitio de finanzas es una entrada real
+
+00:41:03.350 --> 00:41:04.930
+y ningún filtro de correo lo verá.
+
+00:41:05.690 --> 00:41:08.690
+Eso deja a lo que los atacantes realmente buscan una vez que están dentro los datos en sí.
+
+00:41:09.650 --> 00:41:12.070
+Datos y aplicaciones, las partes que la puntuación subrepresenta.
+
+00:41:12.470 --> 00:41:14.510
+Abre el lado de datos del portal y encontrar acciones.
+
+00:41:14.990 --> 00:41:15.950
+Cree etiquetas de sensibilidad.
+
+00:41:16.350 --> 00:41:17.670
+Active la prevención de pérdida de datos.
+
+00:41:17.870 --> 00:41:19.050
+Revise sus configuraciones de retención.
+
+00:41:19.330 --> 00:41:22.730
+Son controles reales, pero observe de cerca lo que una acción de puntuación puede probar realmente.
+
+00:41:23.350 --> 00:41:24.270
+Tome las etiquetas de sensibilidad.
+
+00:41:24.750 --> 00:41:26.570
+La acción pregunta si existe una política de etiquetas.
+
+00:41:27.150 --> 00:41:28.390
+No pregunta si alguien usa las etiquetas.
+
+00:41:29.050 --> 00:41:30.970
+Puede publicar cinco etiquetas, marcar la casilla
+
+00:41:30.970 --> 00:41:34.370
+y ver cómo el número sube mientras el 90% de sus archivos no tienen ninguna etiqueta.
+
+00:41:34.370 --> 00:41:36.510
+El control existe, la cobertura no.
+
+00:41:37.130 --> 00:41:38.690
+Y la puntuación no tiene forma de notar la diferencia.
+
+00:41:39.690 --> 00:41:41.070
+La prevención de pérdida de datos funciona de manera.
+
+00:41:41.490 --> 00:41:44.270
+Una política que detecta números de tarjetas de crédito cuenta como una política.
+
+00:41:45.190 --> 00:41:47.890
+Si cubre el sitio de SharePoint donde finanzas, guarda realmente esas cifras.
+
+00:41:47.990 --> 00:41:48.570
+Es otra cuestión.
+
+00:41:49.150 --> 00:41:51.430
+Al igual que si alguien lee las alertas que crea.
+
+00:41:52.530 --> 00:41:55.090
+Una regla que envía alertas a un buzón vacío no protege nada
+
+00:41:55.090 --> 00:41:57.350
+y obtiene los mismos puntos que una que detiene una fuga.
+
+00:41:57.990 --> 00:41:58.970
+Ese es el patrón con los datos.
+
+00:41:59.450 --> 00:42:01.470
+La puntuación puede demostrar que un mecanismo fue activado.
+
+00:42:01.930 --> 00:42:04.830
+No puede demostrar que el mecanismo afecta las cosas que no puedes permitirte perder.
+
+00:42:05.590 --> 00:42:07.770
+Para eso, vuelves a la lista de joyas de la corona anterior
+
+00:42:07.770 --> 00:42:09.330
+y revisas cada elemento manualmente.
+
+00:42:09.850 --> 00:42:10.650
+¿Qué sitio contiene un anónimo?
+
+00:42:11.190 --> 00:42:12.090
+Te han etiquetado ese sitio.
+
+00:42:12.690 --> 00:42:13.110
+¿Qué sucede?
+
+00:42:13.530 --> 00:42:16.250
+Cuando alguien intenta compartir un archivo desde allí con una dirección personal.
+
+00:42:16.910 --> 00:42:19.490
+Ahora las aplicaciones y aquí es donde el punto ciego se hace más grande.
+
+00:42:19.830 --> 00:42:23.070
+Piensa en lo que sucede cuando alguien hace clic en un botón de iniciar sesión con Microsoft
+
+00:42:23.070 --> 00:42:24.210
+en un sitio web que nunca ha visto.
+
+00:42:24.590 --> 00:42:25.550
+Parece una pantalla de consentimiento.
+
+00:42:26.070 --> 00:42:28.290
+Enumerar los permisos, leer tu correo, acceder a tus archivos,
+
+00:42:28.290 --> 00:42:30.150
+mantenerte conectado cuando no estás usando la aplicación.
+
+00:42:30.570 --> 00:42:32.170
+La mayoría de las personas se hace clic en aceptar
+
+00:42:32.170 --> 00:42:33.870
+porque la pantalla parece oficial y el botón es azul.
+
+00:42:34.330 --> 00:42:36.770
+Eso es consentimiento a Outh y los atacantes han aprendido a usarlo.
+
+00:42:37.290 --> 00:42:39.790
+Crean una aplicación, envían un enlace y esperan a que alguien lo apruebe.
+
+00:42:40.190 --> 00:42:42.790
+No se roba ninguna contraseña, no se omite ninguna solicitud de MF.
+
+00:42:43.150 --> 00:42:44.610
+El usuario simplemente entrega el acceso
+
+00:42:44.610 --> 00:42:46.850
+y sigue funcionando después de que cambien su contraseña.
+
+00:42:47.170 --> 00:42:49.010
+Así que mira cómo está configurado el consentimiento en Twinkie.
+
+00:42:49.330 --> 00:42:50.890
+Puede cualquiera aprobar cualquier aplicación.
+
+00:42:51.350 --> 00:42:53.590
+Si es así, cada persona en la empresa es una posible vía de entrada.
+
+00:42:53.990 --> 00:42:55.030
+Existen opciones más estrictas.
+
+00:42:55.470 --> 00:42:57.550
+Limita a los usuarios a aplicaciones de editor de verificado.
+
+00:42:57.550 --> 00:43:01.090
+Exige la aprobación del administrador para todo lo que solicite permisos amplios.
+
+00:43:01.610 --> 00:43:03.010
+Y luego revisa lo que ya ha sido aprobado
+
+00:43:03.010 --> 00:43:05.230
+porque la lista suele ser más larga de lo que cualquiera espera.
+
+00:43:06.170 --> 00:43:07.270
+Luego hay un problema más silencioso.
+
+00:43:07.470 --> 00:43:09.170
+Los registros de aplicaciones y las entidades de servicio.
+
+00:43:09.990 --> 00:43:11.930
+Cada vez que un desarrollador conecta un script a tu inquilino,
+
+00:43:12.010 --> 00:43:12.830
+se crea una identidad.
+
+00:43:13.670 --> 00:43:14.730
+Tiene un secreto o un certificado.
+
+00:43:15.290 --> 00:43:17.430
+Tiene permisos y no tiene ninguna persona asignada,
+
+00:43:17.610 --> 00:43:19.370
+por lo que nunca se le establece su contraseña,
+
+00:43:19.490 --> 00:43:20.470
+no pasa por un proceso de baja,
+
+00:43:20.550 --> 00:43:22.370
+ni tiene un gerente que pregunta si todavía es necesaria.
+
+00:43:23.450 --> 00:43:24.410
+Desarrollador cambia de equipo.
+
+00:43:24.410 --> 00:43:25.530
+El proyecto termina.
+
+00:43:25.930 --> 00:43:27.210
+El registro de la aplicación permanece.
+
+00:43:27.650 --> 00:43:29.990
+Su secreto permanece en un archivo de configuración en algún lugar,
+
+00:43:30.170 --> 00:43:32.410
+aún válido, aún con derechos para leer el correo en todo el inquilino.
+
+00:43:32.710 --> 00:43:34.910
+Nadie es dueño de él, lo que significa que nadie lo revisa.
+
+00:43:35.490 --> 00:43:37.310
+Esa es una identidad que sobrevivió a su propietario
+
+00:43:37.310 --> 00:43:40.510
+y es el tipo de camino que un atacante buscará porque nadie le está vigilando.
+
+00:43:41.050 --> 00:43:41.950
+Si crea un inventario,
+
+00:43:42.070 --> 00:43:43.270
+enumera cada registro de aplicación,
+
+00:43:43.550 --> 00:43:44.710
+encuentra al propietario de cada una,
+
+00:43:44.930 --> 00:43:47.310
+verifica cuando se usó su secreto por última vez y a que pueda acceder.
+
+00:43:47.310 --> 00:43:50.530
+Cualquier cosa sin propietario y sin actividad reciente es candidata a ser eliminada.
+
+00:43:51.130 --> 00:43:53.350
+Cualquier cosa con permisos amplios merece una segunda revisión,
+
+00:43:53.430 --> 00:43:54.430
+incluso si alguien la respalda.
+
+00:43:54.890 --> 00:43:56.250
+Note lo que estas brechas tienen en común.
+
+00:43:56.590 --> 00:43:58.050
+Una etiqueta de sensibilidad sin cobertura.
+
+00:43:58.370 --> 00:44:00.110
+Una concesión de consentimiento que nadie recuerda.
+
+00:44:00.330 --> 00:44:01.510
+Una entidad de servicio sin propietario.
+
+00:44:01.870 --> 00:44:03.410
+Ninguna de ellas aparece como una acción falla.
+
+00:44:03.690 --> 00:44:04.830
+Ninguna de ellas reduce el porcentaje.
+
+00:44:05.310 --> 00:44:07.190
+Están fuera de lo que contabiliza la puntuación,
+
+00:44:07.590 --> 00:44:10.050
+por lo que el número permanece tranquilo mientras aumenta la exposición,
+
+00:44:10.390 --> 00:44:11.710
+lo que plantea la pregunta más difícil.
+
+00:44:11.710 --> 00:44:13.750
+Si el porcentaje no puede estas cosas,
+
+00:44:14.050 --> 00:44:15.990
+¿qué puede usar para saber si realmente está mejorando?
+
+00:44:15.990 --> 00:44:18.190
+Trastrero de mejoras.
+
+00:44:18.610 --> 00:44:19.410
+Más allá del porcentaje.
+
+00:44:20.010 --> 00:44:21.750
+Comience con la herramienta que el portal ya le proporciona.
+
+00:44:22.250 --> 00:44:24.930
+La vista de historia y tendencias traza su puntuación a lo largo del tiempo.
+
+00:44:25.270 --> 00:44:26.610
+Una línea sube, una línea baja.
+
+00:44:27.050 --> 00:44:27.970
+Tentador dejar de leer ahí.
+
+00:44:28.850 --> 00:44:30.530
+Una línea sin causa es solo decoración,
+
+00:44:30.630 --> 00:44:31.970
+así que asigne un nombre a cada movimiento.
+
+00:44:32.490 --> 00:44:33.430
+¿Subió cuatro puntos en marzo?
+
+00:44:33.490 --> 00:44:33.910
+Anote por qué.
+
+00:44:34.430 --> 00:44:36.430
+La política de MFA para administradores entró en vigor,
+
+00:44:36.570 --> 00:44:37.110
+bajó 12 en mayo.
+
+00:44:37.190 --> 00:44:37.630
+Anótelo también.
+
+00:44:38.330 --> 00:44:39.510
+Apareció una nueva recomendación.
+
+00:44:39.510 --> 00:44:41.770
+O alguien que no sabía cambió la configuración.
+
+00:44:42.430 --> 00:44:43.610
+Manténgalo en un registro sencillo,
+
+00:44:43.670 --> 00:44:45.110
+una nota compartida, una tabla simple.
+
+00:44:45.730 --> 00:44:47.730
+Incluye una fecha, el cambio y la persona responsable.
+
+00:44:48.430 --> 00:44:50.250
+Seis meses después, ese registro vale más que el gráfico.
+
+00:44:50.510 --> 00:44:51.750
+El gráfico le dice que algo se movió.
+
+00:44:52.110 --> 00:44:53.350
+El registro le dice que hizo al respecto.
+
+00:44:53.950 --> 00:44:54.650
+Ahora, ¿de qué lo aceptó?
+
+00:44:55.170 --> 00:44:57.770
+Un número oculta la forma de su inquilino y la forma es lo que importa.
+
+00:44:58.390 --> 00:45:00.950
+El portal le permite ver puntos por categoría y por acción individual.
+
+00:45:01.890 --> 00:45:02.270
+Use ambos.
+
+00:45:02.730 --> 00:45:05.390
+Digamos que identidad está al 80% y los dispositivos el 40%.
+
+00:45:05.390 --> 00:45:07.170
+El total puede parecer aceptable.
+
+00:45:07.330 --> 00:45:10.250
+65, pero ahora sabe dónde está la capa débil o sabe antes que un atacante.
+
+00:45:10.850 --> 00:45:12.550
+O digamos que el total no se ha movido en dos meses,
+
+00:45:12.650 --> 00:45:14.310
+mientras tres acciones de identidad se cerraron
+
+00:45:14.310 --> 00:45:16.830
+y un conjunto de configuraciones de dispositivos de bajo valor se reabrieron
+
+00:45:16.830 --> 00:45:17.970
+tras un restablecimiento político.
+
+00:45:18.510 --> 00:45:20.030
+La línea plana habría ocultado todo eso.
+
+00:45:20.370 --> 00:45:23.410
+Sí que observe las categorías para obtener dirección y las acciones para tomar decisión.
+
+00:45:23.630 --> 00:45:25.850
+Cuáles están terminadas, cuáles están planificadas, cuáles están aceptadas.
+
+00:45:25.990 --> 00:45:26.610
+Esa es la vista de trabajo.
+
+00:45:27.030 --> 00:45:28.670
+El total es solo el resumen en la parte superior,
+
+00:45:28.790 --> 00:45:30.870
+pero incluso el mejor desglose solo mide la configuración.
+
+00:45:31.490 --> 00:45:33.090
+Sigue sin poder decirle si es más difícil de atacar.
+
+00:45:33.570 --> 00:45:35.270
+Para eso necesita un número fuera de la puntuación.
+
+00:45:35.870 --> 00:45:36.990
+Elige algunos que describan resulta.
+
+00:45:37.330 --> 00:45:38.550
+La cobertura de MFA es la más o menos.
+
+00:45:38.910 --> 00:45:39.790
+No sé si existe una política,
+
+00:45:39.930 --> 00:45:43.290
+sino qué porcentaje de cuentas activas completaron realmente un inicio de sesión seguro el mes pasado.
+
+00:45:43.870 --> 00:45:46.590
+Desglóselo para los administradores y para las cuentas que pueden aprobar pagos.
+
+00:45:47.090 --> 00:45:50.190
+Si la cobertura de administradores es del 99%, pregunte por lo que falta.
+
+00:45:50.770 --> 00:45:52.270
+Esa es tu respuesta por dónde podrían entrar.
+
+00:45:53.170 --> 00:45:54.170
+La detencia de los parches es otra.
+
+00:45:54.610 --> 00:45:58.010
+¿Cuántos días pasan entre que se lance una corrección y se instala en tus equipos?
+
+00:45:58.010 --> 00:46:03.430
+Un inquilino que parchea problemas críticos en 5 días vive en un mundo distinto a uno que tarda 40.
+
+00:46:03.810 --> 00:46:05.670
+El porcentaje del portal nunca te mostrará de saber hecho.
+
+00:46:06.170 --> 00:46:07.410
+Luego el tiempo en medida de resolución.
+
+00:46:07.750 --> 00:46:08.430
+Cuando algo se marca,
+
+00:46:08.930 --> 00:46:10.830
+un inicio de sesión darías algún dispositivo vulnerable,
+
+00:46:10.950 --> 00:46:12.010
+una regla de buzón maliciosa.
+
+00:46:12.290 --> 00:46:13.190
+¿Cuánto tarda en cerrarse?
+
+00:46:13.570 --> 00:46:14.330
+¿Horas, días, semanas?
+
+00:46:14.970 --> 00:46:17.070
+Esto mide la respuesta de tu equipo, no tus configuraciones.
+
+00:46:17.550 --> 00:46:19.230
+A menudo es el mejor predictor de cómo será un incidente.
+
+00:46:20.290 --> 00:46:21.210
+Tres números son suficientes.
+
+00:46:21.550 --> 00:46:23.330
+Manténlos estables para la tendencia a lo largo de un año.
+
+00:46:23.970 --> 00:46:26.250
+Cambiar las métricas cada trimestre solo crea una historia de ruido.
+
+00:46:26.250 --> 00:46:29.190
+Ponlos junto a la puntuación y la imagen se vuelve honesta.
+
+00:46:29.570 --> 00:46:31.750
+Si el porcentaje sube mientras la cobertura de MFA se estanca,
+
+00:46:31.830 --> 00:46:32.850
+estás sumando puntos fáciles.
+
+00:46:33.490 --> 00:46:36.970
+Si el porcentaje se mantiene igual mientras el tiempo de resolución cae de 10 días a 2,
+
+00:46:37.150 --> 00:46:39.050
+te estás volviendo más seguro y el panel no lo sabe.
+
+00:46:39.650 --> 00:46:40.730
+Ese segundo caso es el que importa.
+
+00:46:41.230 --> 00:46:42.890
+Le dice que la puntuación puede quedarse quieta
+
+00:46:42.890 --> 00:46:44.490
+mientras ocurre un progreso real debajo.
+
+00:46:44.950 --> 00:46:46.730
+Un hábito más hace que todo sea confiable.
+
+00:46:47.310 --> 00:46:47.610
+Anota.
+
+00:46:48.370 --> 00:46:49.550
+Cada vez que la puntuación se mueva,
+
+00:46:49.770 --> 00:46:50.450
+registra la causa.
+
+00:46:50.910 --> 00:46:52.190
+Clasifica la causa en unos pocos grupos.
+
+00:46:52.910 --> 00:46:53.630
+Algo que cambiaste.
+
+00:46:53.750 --> 00:46:54.690
+Una licencia que añadiste.
+
+00:46:54.870 --> 00:46:56.830
+Porque Microsoft altera las recomendaciones mismas.
+
+00:46:57.070 --> 00:46:57.390
+Mismas.
+
+00:46:57.810 --> 00:46:59.250
+Ese último grupo es el que la gente pasa por alto.
+
+00:46:59.970 --> 00:47:01.970
+Puedes no hacer nada durante un mes y ver cómo cambia el número.
+
+00:47:02.550 --> 00:47:04.010
+Y cuando ocurra alguien preguntará por qué.
+
+00:47:04.330 --> 00:47:05.050
+Ese es el siguiente problema.
+
+00:47:05.690 --> 00:47:07.550
+¿Por qué la puntuación cambia sin que hagas nada?
+
+00:47:08.070 --> 00:47:09.010
+¿Abres el panel un lunes?
+
+00:47:09.650 --> 00:47:10.830
+Semana pasada dice 74.
+
+00:47:11.130 --> 00:47:11.910
+Ahora dice 71.
+
+00:47:12.410 --> 00:47:13.110
+Nadie tocó una política.
+
+00:47:13.550 --> 00:47:14.230
+Nadie se abritó nada.
+
+00:47:14.690 --> 00:47:15.330
+Y el número se movió.
+
+00:47:15.650 --> 00:47:16.230
+Esto no es un error.
+
+00:47:16.230 --> 00:47:17.630
+Es como está construida la puntuación.
+
+00:47:17.990 --> 00:47:19.290
+La lista de acciones de mejora no es fija.
+
+00:47:19.870 --> 00:47:20.850
+Microsoft añade nuevas.
+
+00:47:21.050 --> 00:47:23.530
+Retira antiguas y cambia el valor de algunas de ellas y ellas.
+
+00:47:23.870 --> 00:47:24.810
+Tu inquilino sigue igual.
+
+00:47:25.310 --> 00:47:25.930
+La regla cambia.
+
+00:47:26.170 --> 00:47:26.810
+Piezas por las adiciones.
+
+00:47:27.270 --> 00:47:30.550
+Aparece una nueva amenaza o se lanza un nuevo control y llega una recomendación coincidente
+
+00:47:30.550 --> 00:47:30.970
+a tu lista.
+
+00:47:31.210 --> 00:47:33.110
+Aún no la tienes configurada así que cuenta en tu control.
+
+00:47:33.350 --> 00:47:34.250
+Punto que podría ganar aumento.
+
+00:47:34.670 --> 00:47:35.450
+Los puntos que ha ganado no.
+
+00:47:35.870 --> 00:47:36.590
+El porcentaje cae.
+
+00:47:37.050 --> 00:47:38.130
+Los retiros funcionan a la inversa.
+
+00:47:38.650 --> 00:47:40.250
+Se elimina una acción que ya no tiene sentido.
+
+00:47:40.410 --> 00:47:44.110
+A veces será algo que ya habías completado así que pierdes puntos que tenías acumulados.
+
+00:47:44.410 --> 00:47:47.130
+Otras veces será algo que habías omitido y tu puntuación sube sin razón
+
+00:47:47.130 --> 00:47:47.850
+que puedas reclamar.
+
+00:47:48.130 --> 00:47:48.850
+Regó el reajuste de peso.
+
+00:47:49.090 --> 00:47:52.110
+Microsoft puede decidir que una acción es más importante que antes y darle más puntos.
+
+00:47:52.470 --> 00:47:53.730
+Si no la has realizado, la brecha se amplía.
+
+00:47:54.370 --> 00:47:54.790
+¿Se la has hecho?
+
+00:47:55.170 --> 00:47:56.730
+De cualquier manera, no se te consultó.
+
+00:47:57.210 --> 00:47:58.190
+Ahora, otra fuente de variación.
+
+00:47:58.610 --> 00:47:58.970
+Alcance.
+
+00:47:59.330 --> 00:48:01.850
+La puntuación solo cuenta lo que aplica a los productos que tienes licenciados.
+
+00:48:02.370 --> 00:48:05.530
+Añade una licencia nueva, por ejemplo, Defender for Endpoint o Defender for Identity,
+
+00:48:05.830 --> 00:48:07.910
+y aparecerá un conjunto de acciones que antes no estaban.
+
+00:48:08.410 --> 00:48:10.370
+Activa una nueva carga de trabajo y sucederá lo mismo.
+
+00:48:10.690 --> 00:48:13.110
+La puntuación máxima aumenta porque hay más cosas que asegurar.
+
+00:48:13.510 --> 00:48:14.970
+Ese es el denominador del que hablamos antes.
+
+00:48:14.970 --> 00:48:18.210
+Cuando crece, tu porcentaje puede bajar, aunque no hayas hecho nada a mano.
+
+00:48:18.630 --> 00:48:19.650
+De hecho, puede que hayas hecho algo bien.
+
+00:48:20.450 --> 00:48:23.230
+Expandiste la protección y el panel lo tomó como una nueva tarea.
+
+00:48:23.610 --> 00:48:24.710
+Así es como se ve esto en la práctica.
+
+00:48:25.070 --> 00:48:26.690
+Un inquilino compra el producto de ampone abrir.
+
+00:48:27.070 --> 00:48:28.570
+200 máquinas comienzan a reportar ahora.
+
+00:48:29.090 --> 00:48:31.990
+Aparece un nuevo grupo de recomendaciones de dispositivos y casi ninguna está lista aún.
+
+00:48:32.250 --> 00:48:33.390
+La puntuación cae 8 puntos en la semana.
+
+00:48:34.030 --> 00:48:36.230
+Si lees esa caída, literalmente, parece un retroceso.
+
+00:48:36.570 --> 00:48:37.890
+Si la lees correctamente, es todo lo contrario.
+
+00:48:38.150 --> 00:48:40.750
+La organización no la puede ver una parte de sus equipos que antes no podía ver.
+
+00:48:40.750 --> 00:48:42.610
+La exposición siempre estuvo ahí.
+
+00:48:43.110 --> 00:48:46.850
+El número simplemente la alcanzó, así que necesitas una forma de distinguir una regresión real de un aumento de alcance.
+
+00:48:47.210 --> 00:48:49.490
+El registro de anotaciones que discutimos hace la mayor parte del trabajo.
+
+00:48:49.890 --> 00:48:51.510
+Compara la fecha de la caída con tres cosas.
+
+00:48:52.070 --> 00:48:53.250
+Alguien cambió una política ese día.
+
+00:48:53.670 --> 00:48:55.070
+Se añadió una licencia o carga de trabajo.
+
+00:48:55.350 --> 00:48:56.790
+Cambió la lista de recomendaciones en sí.
+
+00:48:57.470 --> 00:48:58.990
+Por lo general, una de esas respuestas es sí.
+
+00:48:59.290 --> 00:49:01.030
+Y si no es ninguna, entonces podrás estar en un problema real.
+
+00:49:01.410 --> 00:49:02.330
+La configuración fue revertida.
+
+00:49:02.330 --> 00:49:11.370
+Si alguien desactivó una política por accidente, vale la pena detectar ese caso rápidamente, razón por la cual debes mirar el historial a nivel de acción, y no solo el total, a la parte más difícil.
+
+00:49:12.990 --> 00:49:15.450
+El instinto cuando un número baja es explicarlo a la defensiva.
+
+00:49:16.930 --> 00:49:17.750
+No es realmente una caída.
+
+00:49:18.210 --> 00:49:19.290
+Es por el cambio de licencia.
+
+00:49:21.330 --> 00:49:23.210
+Al establecer ese tono, son excusas cuando es verdad.
+
+00:49:23.770 --> 00:49:24.650
+Así que cambia el enfoque.
+
+00:49:25.070 --> 00:49:25.850
+Empieza por la puntuación.
+
+00:49:26.290 --> 00:49:28.850
+Piensa por lo que cambia en tu cobertura y deja que la puntuación siga descuidado.
+
+00:49:29.450 --> 00:49:29.930
+Algo como eso.
+
+00:49:30.710 --> 00:49:35.430
+Añadimos protección de endpoint a 200 máquinas, lo que nos dio visibilidad sobre una serie de brechas que antes no podíamos meter.
+
+00:49:35.770 --> 00:49:37.690
+El porcentaje bajó porque el área medida creció.
+
+00:49:38.590 --> 00:49:39.950
+Aquí están las tres brechas que cerraremos.
+
+00:49:40.590 --> 00:49:41.010
+Lo que es solo.
+
+00:49:41.670 --> 00:49:44.290
+Convierte un movimiento que no provocaste en una decisión que sí tomaste.
+
+00:49:44.430 --> 00:49:47.070
+Y mantiene la conversación en la exposición, que es donde debe estar.
+
+00:49:47.850 --> 00:49:49.450
+Aún mejor adviértela a la gente con anticipación.
+
+00:49:49.910 --> 00:49:53.590
+Informa al liderazgo antes de cualquier cambio de licencia que el número podría caer y por qué.
+
+00:49:54.070 --> 00:49:55.950
+Una caída que predijiste se interpreta como planifico.
+
+00:49:55.950 --> 00:49:58.350
+Una caída que explicas después se interpreta como control de daño.
+
+00:49:58.850 --> 00:50:00.930
+Sin embargo, esa conversación es solo una de varias.
+
+00:50:01.610 --> 00:50:04.350
+Alguien de alto rango espera la próxima actualización y querrá una diapositiva.
+
+00:50:05.130 --> 00:50:06.870
+Lo que pongas en ella importa más de lo que la gente cree.
+
+00:50:07.910 --> 00:50:09.710
+Informar a los ejecutivos sin crear un blanco.
+
+00:50:10.310 --> 00:50:11.570
+Imagina la diapositiva que lo no es un.
+
+00:50:12.110 --> 00:50:13.030
+Un número grande.
+
+00:50:13.450 --> 00:50:14.090
+Una flecha verde.
+
+00:50:14.650 --> 00:50:17.270
+Tal vez una pequeña línea de bajo que diga promedio de la industria 68.
+
+00:50:18.330 --> 00:50:18.950
+Parece claro.
+
+00:50:19.310 --> 00:50:19.390
+No.
+
+00:50:19.950 --> 00:50:23.730
+Y en el momento en que la muestras, has entregado un blanco de rumores porque un número invita a una pregunta.
+
+00:50:23.730 --> 00:50:25.290
+Y la pregunta es siempre la misma.
+
+00:50:25.690 --> 00:50:26.570
+¿Por qué no estamos en 90?
+
+00:50:26.990 --> 00:50:28.970
+Ahora estás respondiendo por puntos, no por exposición.
+
+00:50:29.410 --> 00:50:31.710
+Y el equipo pasa el próximo trimestre persiguiendo el porcentaje.
+
+00:50:32.250 --> 00:50:33.790
+Esa es exactamente la trampa que hemos estado gritando.
+
+00:50:34.210 --> 00:50:35.510
+Así que cambia lo que va en la diapositiva.
+
+00:50:35.950 --> 00:50:37.690
+En lugar de decir, estamos al 74%.
+
+00:50:37.690 --> 00:50:38.770
+Y algo más parecido a esto.
+
+00:50:39.110 --> 00:50:40.270
+Tres exposiciones están cerradas.
+
+00:50:40.630 --> 00:50:41.090
+Dos permanecen.
+
+00:50:41.310 --> 00:50:42.270
+Esto es lo que significa cada uno.
+
+00:50:42.550 --> 00:50:42.910
+Mira el nivel.
+
+00:50:43.490 --> 00:50:44.810
+La primera oración es una calificación.
+
+00:50:45.310 --> 00:50:47.730
+La segunda es un informe de estado sobre cosas que podrían dañarte.
+
+00:50:48.150 --> 00:50:49.590
+Una invita a un debate sobre aritmética.
+
+00:50:50.150 --> 00:50:51.070
+La otra invita a una decisión.
+
+00:50:51.610 --> 00:50:52.210
+Hazlo concreto.
+
+00:50:53.150 --> 00:50:55.570
+Las cuentas de administrador ahora requieren un inicio de sesión resistente al fin.
+
+00:50:55.790 --> 00:50:59.030
+Los protocolos heredados están bloqueados después de mover las dos aplicaciones que dependían.
+
+00:50:59.570 --> 00:51:03.150
+El acceso de invitados sigue abierto en los sitios de finanzas y los cerraremos a finales del próximo mes.
+
+00:51:03.710 --> 00:51:05.590
+Un ejecutivo puede repetir esa oración en el pasillo.
+
+00:51:06.150 --> 00:51:07.370
+Nadie puede repetir subir cuatro puntos.
+
+00:51:07.930 --> 00:51:08.670
+¿Ese es el verdadero cambio?
+
+00:51:09.030 --> 00:51:10.150
+Muestra riesgo reducido.
+
+00:51:10.490 --> 00:51:11.190
+No puntos ganados.
+
+00:51:11.610 --> 00:51:13.990
+Una buena forma de cumplirlo es una vista de una sola página, solo una.
+
+00:51:13.990 --> 00:51:15.850
+Si necesita dos páginas, es un informe.
+
+00:51:15.930 --> 00:51:16.930
+Y los informes no se leen.
+
+00:51:17.190 --> 00:51:18.050
+Cuatro cosas van en ellas.
+
+00:51:18.150 --> 00:51:19.510
+Primero, los riesgos principales.
+
+00:51:19.590 --> 00:51:20.430
+No veinte de tres a cinco.
+
+00:51:20.530 --> 00:51:22.010
+Escritos en palabras claras cada uno.
+
+00:51:22.310 --> 00:51:23.890
+Vinculado a algo que le importa al negocio.
+
+00:51:25.270 --> 00:51:27.170
+Un inicio de sesión robado en un buzón de pagos.
+
+00:51:27.290 --> 00:51:28.870
+No una brecha de MFA y categoría de entidad.
+
+00:51:29.770 --> 00:51:31.390
+Segundo, un responsable para cada uno.
+
+00:51:31.710 --> 00:51:32.930
+Un nombre en un equipo, una persona.
+
+00:51:33.310 --> 00:51:34.970
+Alguien que pueda decir sí o no y hacerse responsable.
+
+00:51:35.510 --> 00:51:38.470
+Tercero, una fecha en la que se cierra o cuando lo revisarás nuevamente.
+
+00:51:38.810 --> 00:51:40.150
+Un riesgo sin fecha es un deseo.
+
+00:51:40.750 --> 00:51:42.250
+Cuarto, los riesgos aceptados.
+
+00:51:42.250 --> 00:51:46.910
+Las cosas que decidió no solucionar con una justificación para que nadie las descubra después y diga que fue un descuido.
+
+00:51:47.350 --> 00:51:48.530
+Volveremos a hablar de por qué es importante.
+
+00:51:48.830 --> 00:51:49.530
+Observe lo que falta.
+
+00:51:49.870 --> 00:51:50.730
+No hay ningún porcentaje en la página.
+
+00:51:51.290 --> 00:51:54.710
+Puede poner la puntuación en una esquina si a la dirección le gusta verla, pero que sea contexto.
+
+00:51:55.110 --> 00:51:56.430
+Algo pequeño y discreto, no el titular.
+
+00:51:56.930 --> 00:52:00.850
+Luego está el punto de referencia a esa línea que le compara con organizaciones similares a la suya y que es tentador incluir.
+
+00:52:01.250 --> 00:52:03.670
+Parece una prueba, pero piensa en lo que realmente dice.
+
+00:52:04.370 --> 00:52:07.330
+Su inquilino se obtuviera una puntuación superior a la media de un grupo que usted no eligió.
+
+00:52:07.590 --> 00:52:11.870
+Medido por una regla que no controla en una lista, que incluye configuraciones, que incluye configuraciones que quizás no necesitan.
+
+00:52:12.290 --> 00:52:14.570
+Eso no le dice casi nada sobre si un atacante puede entrar.
+
+00:52:14.990 --> 00:52:16.130
+Peor aún, es un arma de doble filo.
+
+00:52:16.130 --> 00:52:18.570
+Si la puntuación es superior a la media, la dirección se relaja.
+
+00:52:19.130 --> 00:52:22.930
+Si es inferior, alguien pedirá un programa urgente que produzca puntos fáciles y poco más.
+
+00:52:22.930 --> 00:52:28.550
+Cualquiera de las dos reacciones desvía la atención de su verdadera exposición, así que use la comparación para lo que sirve, contexto.
+
+00:52:29.050 --> 00:52:30.290
+Una idea aproximada de dónde se encuentra.
+
+00:52:30.570 --> 00:52:31.450
+Déjalo una vez y pese a lo siguiente.
+
+00:52:31.850 --> 00:52:36.070
+Nunca lo establezca como meta, porque el momento en que se convierte en meta, deja de ser una medida útil.
+
+00:52:36.530 --> 00:52:38.770
+Es un problema antiguo, más viejo que cualquier panel de control.
+
+00:52:39.110 --> 00:52:39.830
+Un hábito más ayuda.
+
+00:52:40.410 --> 00:52:41.990
+De a la dirección una pregunta que responder.
+
+00:52:42.490 --> 00:52:43.690
+No solo un estado, que leer.
+
+00:52:44.250 --> 00:52:49.010
+Podemos cerrar la brecha de acceso de invitados en dos semanas, pero interrumpirá el intercambio de archivos de tres equipos asociados.
+
+00:52:49.610 --> 00:52:51.370
+¿Lo quiere ahora o después de que cierre el trimestre?
+
+00:52:51.370 --> 00:52:54.130
+Es una decisión real, con un coste real.
+
+00:52:54.410 --> 00:52:57.530
+Y atrae al ejecutivo hacia el modelo, en lugar de dejarle solo mirando un número.
+
+00:52:58.150 --> 00:53:00.990
+Cuando la gente ve las compensaciones, deja de pedir una puntuación más alta.
+
+00:53:01.690 --> 00:53:02.910
+Empiezan a hacer mejores preguntas.
+
+00:53:03.430 --> 00:53:07.650
+Y a veces la respuesta correcta a una de esas preguntas es no, no ahora, no de esta forma, quizás nunca.
+
+00:53:08.270 --> 00:53:09.550
+Esa respuesta necesita un lugar donde está.
+
+00:53:09.970 --> 00:53:11.530
+La aceptación de riesgos es una respuesta válida.
+
+00:53:11.990 --> 00:53:19.710
+Abra una acción de mejora y verás opciones de estado, planificado, completado, resuelto por un tercero y una que incomoda a la gente que riesgo acepta.
+
+00:53:19.710 --> 00:53:21.950
+Se siente como admitir la error, no lo ve.
+
+00:53:22.290 --> 00:53:24.630
+Es una decisión y las decisiones son el objetivo principal de este modelo.
+
+00:53:24.970 --> 00:53:26.590
+La puntuación le entrega una lista de posibles tareas.
+
+00:53:27.050 --> 00:53:31.050
+Algunas las hará, otras las observará, las opesará frente a su propio inquilino y decidirá no hacerlas.
+
+00:53:31.470 --> 00:53:32.650
+Pero el estado se puede usar de dos maneras.
+
+00:53:33.150 --> 00:53:34.350
+Si se usa bien, es un registro.
+
+00:53:34.790 --> 00:53:39.710
+Alguien analizó la acción, entendió contra qué protege y decidió que el costo o la interrupción no valen la pena en este momento.
+
+00:53:39.710 --> 00:53:41.490
+Si se usa mal, es una escondida.
+
+00:53:41.750 --> 00:53:42.410
+La acción es difícil.
+
+00:53:42.910 --> 00:53:46.150
+Nadie quiere hacerse cargo, así que se marca como aceptada y el elemento sale de la lista.
+
+00:53:46.490 --> 00:53:48.310
+El número mejora, pero la exposición persiste.
+
+00:53:48.890 --> 00:53:50.350
+Puedes notar la diferencia por lo que está escrito.
+
+00:53:51.070 --> 00:53:52.370
+Una aceptación real tiene tres elementos.
+
+00:53:52.790 --> 00:53:55.870
+La razón en palabras claras, un responsable con nombre y una fecha de revisión.
+
+00:53:56.290 --> 00:53:57.410
+Sin los tres, no es una aceptación.
+
+00:53:57.970 --> 00:53:59.490
+Es un encogimiento de hombros con estado de junta.
+
+00:54:00.210 --> 00:54:00.910
+Empecemos por la razón.
+
+00:54:01.690 --> 00:54:02.630
+Demasiado difícil no es una razón.
+
+00:54:02.630 --> 00:54:11.010
+Bloquear este protocolo detendría a las impresoras de etiquetas de la planta, que no se pueden reemplazar hasta la actualización de enero y las impresoras están en una red aislada, si es una razón.
+
+00:54:11.890 --> 00:54:14.450
+Cualquiera que lo lea un año después puede juzgar si todavía es válido.
+
+00:54:14.890 --> 00:54:17.350
+El responsable importa porque la aceptación transfiere el riesgo a una persona.
+
+00:54:17.810 --> 00:54:20.450
+Si algo sale mal debido a esa brecha, hay un hombre detrás de la decisión.
+
+00:54:20.730 --> 00:54:21.990
+Suena duro, pero funciona a tu favor.
+
+00:54:22.610 --> 00:54:25.930
+La gente piensa mejor antes de firmar una brecha y se esfuerza por cerrarla antes.
+
+00:54:26.230 --> 00:54:28.330
+La fecha de revisión es lo que mantiene la aceptación.
+
+00:54:28.730 --> 00:54:29.810
+Las circunstancias cambian.
+
+00:54:29.910 --> 00:54:31.050
+Las impresoras se reemplazan.
+
+00:54:31.050 --> 00:54:33.330
+Un nuevo ataque hace que la brecha sea más peligrosa.
+
+00:54:33.410 --> 00:54:36.150
+Si no una fecha o un riesgo ha aceptado, se convierte silenciosamente en uno permanente.
+
+00:54:36.610 --> 00:54:40.150
+Ponla a tres meses, así como máximo, y colócalo en un calendario que alguien realmente consulte.
+
+00:54:40.550 --> 00:54:43.510
+Ahora a veces no necesitas aceptar un riesgo en absoluto porque algo más ya lo cubre.
+
+00:54:44.450 --> 00:54:45.330
+Es un control compensatorio.
+
+00:54:46.050 --> 00:54:52.050
+Digamos que una recomendación te pide restringir cierto tipo de inicio de sesión, pero ya los bloqueaste en el borde de la red y monitoreas cualquier intento.
+
+00:54:52.670 --> 00:54:53.450
+La acción es redundante.
+
+00:54:53.970 --> 00:54:55.970
+Has logrado la misma protección por un camino diferente.
+
+00:54:56.350 --> 00:54:56.890
+Ten cuidado aquí.
+
+00:54:57.030 --> 00:54:59.650
+Un control compensatorio debe hacer genuinamente el mismo trabajo.
+
+00:54:59.650 --> 00:55:03.050
+Tener un firewall no compensa una brecha de identidad.
+
+00:55:04.370 --> 00:55:09.110
+Pregúntate si un atacante que intentara la ruta exacta que la acción cierra se toparía contigo y si lo verías.
+
+00:55:09.750 --> 00:55:12.650
+Si no puedes responder si a ambas, tienes una aceptación, no un reemplazo.
+
+00:55:13.110 --> 00:55:14.370
+Escribe también el control compensatorio.
+
+00:55:15.030 --> 00:55:16.070
+Ponle nombre en nombre a quien lo mantiene.
+
+00:55:16.630 --> 00:55:17.950
+Anota que haría que dejar de funcionar.
+
+00:55:18.210 --> 00:55:20.490
+Si el control desaparece, el riesgo original vuelve.
+
+00:55:20.690 --> 00:55:21.650
+Y alguien debe saberlo.
+
+00:55:22.090 --> 00:55:24.290
+Lo que nos lleva a la comparación que suele resolver discusiones.
+
+00:55:24.930 --> 00:55:25.650
+Imagina dos inquilinos.
+
+00:55:25.650 --> 00:55:29.290
+Uno está al 80% y nadie puede explicar qué brechas quedan ni por qué.
+
+00:55:29.850 --> 00:55:33.290
+El otro está al 75% y cada elemento abierto tiene una razón o un responsable de una fecha.
+
+00:55:34.010 --> 00:55:35.070
+El segundo inquilino es más seguro.
+
+00:55:35.250 --> 00:55:37.510
+No por los cinco puntos, sino porque alguien conoce al inquilino.
+
+00:55:38.270 --> 00:55:41.650
+Cuando ocurre un incidente, ese equipo sabe que puertas se dejaron abiertas a propósito.
+
+00:55:42.110 --> 00:55:43.030
+Y cuáles nadie notó.
+
+00:55:43.470 --> 00:55:44.690
+Pasa en la primera hora investigando.
+
+00:55:45.090 --> 00:55:45.610
+No descubriendo.
+
+00:55:45.610 --> 00:55:48.230
+Una puntuación más baja que el razonamiento documentado es un mapa.
+
+00:55:48.610 --> 00:55:50.890
+Una puntuación más alta sin él es solo un número que alguien obtuvo.
+
+00:55:51.110 --> 00:55:54.510
+Y por eso el liderazgo debería sentirse cómodo, viendo riesgos aceptados en la página.
+
+00:55:55.090 --> 00:55:59.010
+No son fracasos, son evidencia de que el equipo está tomando decisiones en lugar de perseguir un porcentaje.
+
+00:55:59.590 --> 00:56:01.730
+Pero hay un límite a cuán buenas pueden ser esas decisiones.
+
+00:56:02.410 --> 00:56:05.890
+Solo puedes decidir que un riesgo es aceptable si sabes qué tan probable es que se use en tu contra.
+
+00:56:06.290 --> 00:56:07.970
+Eso significa saber qué hacen realmente los atacantes.
+
+00:56:08.630 --> 00:56:10.650
+Pensamiento basado en amenazas, empezando por el atacante.
+
+00:56:11.030 --> 00:56:12.650
+Hay dos formas de leer esa lista de su mejora.
+
+00:56:13.150 --> 00:56:14.110
+La primera está basada en control.
+
+00:56:14.110 --> 00:56:16.030
+Miras la lista y preguntas que faltan.
+
+00:56:16.330 --> 00:56:17.290
+Cada acción pendiente es una brecha.
+
+00:56:17.710 --> 00:56:18.630
+Cada brecha es un fracaso.
+
+00:56:19.070 --> 00:56:20.190
+Y el trabajo es cerrarlas todas.
+
+00:56:20.590 --> 00:56:22.950
+Esa es la lectura natural porque el panel se creó para producirla.
+
+00:56:23.550 --> 00:56:24.870
+La segunda está basada en amenazas.
+
+00:56:25.270 --> 00:56:25.970
+Así es una pregunta de fe.
+
+00:56:26.410 --> 00:56:27.210
+¿Qué es probable?
+
+00:56:27.350 --> 00:56:27.990
+No, ¿qué falta en general?
+
+00:56:28.510 --> 00:56:32.570
+¿Qué intentaría realmente alguien contra un inquilino como el mío este mes con las herramientas que ella tiene?
+
+00:56:32.870 --> 00:56:33.990
+Estas dos preguntas suenan similares.
+
+00:56:34.410 --> 00:56:35.550
+Producen listas de tareas muy diferentes.
+
+00:56:36.090 --> 00:56:40.050
+El pensamiento basado en control es clasifique el trabajo por categoría, identidad, dispositivos, explicaciones, datos.
+
+00:56:40.410 --> 00:56:43.730
+El pensamiento basado en amenazas clasen el trabajo por lo que es un atacante paso a paso,
+
+00:56:43.730 --> 00:56:47.390
+y una vez que ve los pasos, gran parte de la lista se reorganiza.
+
+00:56:47.850 --> 00:56:49.370
+Empieza con el camino que aparece una y otra vez.
+
+00:56:49.790 --> 00:56:50.570
+Phishing para el robo de token.
+
+00:56:50.990 --> 00:56:53.310
+Un empleado recibe un mensaje que parece un documento compartido.
+
+00:56:53.730 --> 00:56:56.750
+El enlace lleva a una página de inicio de sesión falsa que se sitúa entre el usuario y la red.
+
+00:56:57.210 --> 00:57:02.290
+El usuario escribe una contraseña, aprueba el aviso de MFA y la página copia discretamente el token de sesión que recibe.
+
+00:57:02.790 --> 00:57:03.970
+El atacante no necesita la contraseña.
+
+00:57:04.530 --> 00:57:07.010
+Tiene una sesión válida que ya pasó al MFA ahí.
+
+00:57:07.870 --> 00:57:10.610
+Lee tus acciones pendientes con ese camino a mente, o lo interrumpen.
+
+00:57:10.850 --> 00:57:13.790
+El inicio de sesión resistente del phishing interrumpe porque la credencial no puede ser retransmitida.
+
+00:57:14.470 --> 00:57:18.910
+Requiere un dispositivo compatible lo interrumpe, porque el token robado no funcionará desde la máquina del atacante.
+
+00:57:19.450 --> 00:57:20.850
+Sesiones de menor duración lo reducen.
+
+00:57:21.170 --> 00:57:23.210
+La verificación de enlaces al hacer clic hace que el primer paso decide.
+
+00:57:23.790 --> 00:57:26.050
+Nota que esas acciones provienen de cuatro categorías diferentes.
+
+00:57:26.310 --> 00:57:29.010
+Una vista por categorías nunca las habría puesto en un mismo grupo.
+
+00:57:29.950 --> 00:57:31.530
+Segundo camino, ataque de fuerza bruta con control.
+
+00:57:31.870 --> 00:57:32.550
+Aquí no hay astucia.
+
+00:57:32.550 --> 00:57:39.070
+El atacante toma una lista breve de contraseñas muy comunes y las prueba una a una en miles de cuentas, lentamente para no bloquear ninguna cuenta.
+
+00:57:40.450 --> 00:57:42.110
+Siempre alguien elegía Primavera 2025.
+
+00:57:43.070 --> 00:57:46.710
+Luego inician sesión a través de cualquier puerta que no pida un segundo paso, lo cual suele ser un protocolo heredado.
+
+00:57:47.010 --> 00:57:51.910
+Es por esto que bloquear la autenticación heredada y cubrir cada cuenta con MFA es prioritario, ante casi cualquier otra cosa.
+
+00:57:52.190 --> 00:57:53.090
+Reducen el camino a la mitad.
+
+00:57:53.510 --> 00:57:54.630
+Tercer camino, abuso de consentimiento.
+
+00:57:55.030 --> 00:57:55.930
+Lo mencionamos con la explicación.
+
+00:57:56.310 --> 00:57:57.850
+El atacante nunca llega a robar una credencial.
+
+00:57:58.530 --> 00:58:03.810
+Envían un enlace, un usuario aprueba una aplicación y esta mantiene acceso a correos y archivos mucho después de cualquier cambio de contraseña.
+
+00:58:04.270 --> 00:58:07.510
+Las acciones importantes aquí tienen que ver con la configuración de consentimiento y la revisión de aplicación.
+
+00:58:07.730 --> 00:58:10.630
+Son fáciles de pasar por alto porque suman pocos puntos y parecen menores en la lista.
+
+00:58:11.050 --> 00:58:12.190
+Ese es el beneficio de este enfoque.
+
+00:58:12.870 --> 00:58:16.150
+Algunas acciones que parecen pequeñas se vuelven obvias al ver qué caminos bloquean.
+
+00:58:16.570 --> 00:58:19.670
+Y otras que parecen grandes resultan proteger contra algo que nadie te está haciendo ahora.
+
+00:58:20.030 --> 00:58:20.830
+Así que aquí está la práctica.
+
+00:58:21.190 --> 00:58:23.270
+Elígete los cuatro caminos de ataque relevantes para tu inquilino.
+
+00:58:23.610 --> 00:58:27.410
+Para cada uno, escribe los pasos en orden y luego coloca tus acciones pendientes frente a cada paso.
+
+00:58:28.750 --> 00:58:30.230
+De un paso no tengo una acción que lo cubra.
+
+00:58:30.290 --> 00:58:31.230
+Has encontrado una brecha real.
+
+00:58:31.470 --> 00:58:33.050
+Donde un paso tiene tres, pero la entidad tiene suficiente.
+
+00:58:33.550 --> 00:58:34.530
+Hazlo en una página con flechas.
+
+00:58:35.230 --> 00:58:37.550
+Toma una hora y es mejor que un mes de organizar por puntos.
+
+00:58:38.230 --> 00:58:39.230
+Ahora, ¿cómo eliges los caminos?
+
+00:58:39.630 --> 00:58:40.130
+No tiene el given.
+
+00:58:40.130 --> 00:58:43.050
+Microsoft publica mucho sobre lo que observa.
+
+00:58:43.830 --> 00:58:48.970
+Los informes de inteligencia sobre amenazas describen qué grupos están activos, qué técnicas prefieren y qué industrias atacan.
+
+00:58:49.830 --> 00:58:50.570
+Léelos con una pregunta.
+
+00:58:51.110 --> 00:58:52.050
+¿Esto se aplica a mí?
+
+00:58:52.050 --> 00:58:57.970
+Un grupo de ransomware que ataca hospitales le dice menos a un minorista que un grupo de fraude que busca equipos de pago.
+
+00:58:58.690 --> 00:59:01.690
+Elige lo que coincida con tu tamaño, tu sector y tu exposición.
+
+00:59:02.410 --> 00:59:03.390
+Sus propios datos son mejores.
+
+00:59:03.810 --> 00:59:04.510
+¿Qué te ha afectado antes?
+
+00:59:05.010 --> 00:59:06.910
+¿Qué cuentas reciben intentos de contraseña que hacen?
+
+00:59:06.910 --> 00:59:08.710
+¿Mensajes de phishing llegaron a bandeja a entrar?
+
+00:59:09.130 --> 00:59:11.630
+¿Qué inicios de sesión desde países extraños detectó el sistema?
+
+00:59:12.030 --> 00:59:14.090
+Eso es evidencia sobre tu inclino y ningún punto de referencia.
+
+00:59:14.690 --> 00:59:17.470
+Luego está la disciplina de tratar los incidentes como información de entrada.
+
+00:59:18.030 --> 00:59:22.790
+Cuando algo sale mal, incluso algo pequeño, pregunta qué paso tomó el atacante y qué acción lo habría detenido.
+
+00:59:23.290 --> 00:59:25.690
+Esa respuesta debería mover un elemento a tu lista esa misma semana.
+
+00:59:25.990 --> 00:59:27.290
+Esto cambia el propósito de la puntuación.
+
+00:59:27.750 --> 00:59:30.850
+Deja de ser una lista de tareas por terminar y se convierte en un catálogo para consultar.
+
+00:59:31.210 --> 00:59:35.010
+Llegas con una pregunta sobre un atacante y buscas en él los controles que la responden.
+
+00:59:35.010 --> 00:59:37.850
+Y el portal ya tiene un puente exactamente para esto.
+
+00:59:38.530 --> 00:59:41.270
+No reside dentro de Secure Score en sí, sino justo al lado.
+
+00:59:42.210 --> 00:59:45.710
+Al conectar Secure Score con la señal de Defender, el puente es la gestión de exposición.
+
+00:59:46.210 --> 00:59:49.770
+Se encuentra en uno portal de Defender a unos clics de la puntuación y la mayoría de los equipos nunca lo abren.
+
+00:59:50.870 --> 00:59:52.590
+Secure Score le indica qué controles faltan.
+
+00:59:53.350 --> 00:59:56.850
+La gestión de exposición añade a la ruta que la puntuación no puede, como se conectan esas brechas.
+
+00:59:57.370 --> 01:00:00.110
+Esto es lo que significa en la práctica, el portal construye rutas de ataque.
+
+01:00:00.110 --> 01:00:05.490
+Mapea paso a paso como un atacante podría moverse desde un punto de su entorno hacia algo importante.
+
+01:00:06.190 --> 01:00:11.030
+Un dispositivo con una debilidad conocida, una sesión de administrador asignada en él y una ruta desde ahí hasta un servidor crítico.
+
+01:00:11.690 --> 01:00:12.550
+Cada pieza parece parado.
+
+01:00:13.150 --> 01:00:15.790
+Al encadenarse son una vía de acceso y marcan qué activos son críticos.
+
+01:00:16.210 --> 01:00:19.070
+Controladores de dominio, cuentas de administrador, sistemas vinculados a datos de confianza.
+
+01:00:19.390 --> 01:00:24.830
+Si una configuración débil en un potátil que nadie usa y la misma configuración en una máquina con toques de administrador ya no parecen iguales,
+
+01:00:25.250 --> 01:00:26.390
+dejen de compartir la misma en la lista.
+
+01:00:26.890 --> 01:00:27.570
+Ese es el contexto.
+
+01:00:28.010 --> 01:00:28.750
+Falta del porcentaje.
+
+01:00:28.750 --> 01:00:33.530
+En lugar de preguntar qué acción vale más puntos, pregunte qué brechas se encuentra en el camino a algo que no puede perder.
+
+01:00:33.750 --> 01:00:34.030
+Perder.
+
+01:00:34.430 --> 01:00:35.750
+Esas dos listas rara vez coinciden.
+
+01:00:36.090 --> 01:00:37.450
+Ahora mire lo que ya ha ocurrido en su inquilino.
+
+01:00:37.970 --> 01:00:41.250
+Los incidentes y alertas son pruebas y están en el portal ahora mismo.
+
+01:00:41.610 --> 01:00:42.190
+Tómelos de un mes.
+
+01:00:42.650 --> 01:00:43.450
+¿Qué técnicas aparecen?
+
+01:00:43.890 --> 01:00:48.130
+Tal vez una serie de inicios de sesión de ubicaciones extrañas o una regla de buzón que reenvía todo el exterior.
+
+01:00:48.570 --> 01:00:51.250
+Un archivo adjunto malicioso que llegó a una bandeja de entrada antes de ser detectado.
+
+01:00:51.570 --> 01:00:53.610
+Cada uno le dice algo que el punto de referencia jamás podría.
+
+01:00:54.250 --> 01:00:56.250
+Esto es lo que la gente realmente intenta contra usted.
+
+01:00:56.250 --> 01:00:59.170
+Luego haga la pregunta de seguimiento. ¿Qué control lo habría detenido antes?
+
+01:00:59.970 --> 01:01:03.950
+Si se usó una sesión robada desde una máquina no administrada, la respuesta apunta al cumplimiento del dispositivo.
+
+01:01:04.330 --> 01:01:08.470
+Si una regla de reenvío sobrevive por días, apunta a la auditoría de buzones y al ajuste de alertas.
+
+01:01:09.110 --> 01:01:11.650
+Te está leyendo su propio incidente como un voto sobre qué acciones importa.
+
+01:01:12.350 --> 01:01:13.730
+Ese voto debería cambiar el trabajo pendiente.
+
+01:01:13.730 --> 01:01:17.710
+Una acción que tenía en el puesto 40 pasa al tercero porque un atacante ha acabado por echar la brecha que cubre.
+
+01:01:18.170 --> 01:01:21.990
+Ningún panel le habría dicho eso, lo que lleva a algo que vale la pena integrar en la rutina.
+
+01:01:22.670 --> 01:01:26.270
+Tras cualquier incidente real, haga un breve análisis posterior con propósito reclasificar la lista.
+
+01:01:26.610 --> 01:01:28.030
+No un informe largo, solo tres preguntas.
+
+01:01:28.590 --> 01:01:29.490
+Hizo el atacante primero.
+
+01:01:29.870 --> 01:01:30.990
+¿Qué acción pendiente intervenía y se pasa?
+
+01:01:31.490 --> 01:01:32.470
+¿Qué más se encuentra en la misma ruta?
+
+01:01:33.050 --> 01:01:34.930
+Suba esos elementos en la lista y anote el motivo.
+
+01:01:35.270 --> 01:01:40.130
+Haces unas cuantas veces al año y tu lista de pendientes dejará de reflejar lo que Microsoft considera importante de forma genérica.
+
+01:01:40.570 --> 01:01:42.170
+Empezará a reflejar lo que se ha intentado contra él.
+
+01:01:42.570 --> 01:01:45.430
+La misma lógica se aplica a los dispositivos mediante la gestión de vulnerabilidad.
+
+01:01:45.990 --> 01:01:49.070
+Esta parte de Defender analiza tus máquinas en busca de debilidades conocidas.
+
+01:01:49.210 --> 01:01:52.030
+Software sin actualizar, configuraciones arriesgadas y servicios expuestos.
+
+01:01:52.330 --> 01:01:55.810
+Califica cada uno según su facilidad de explotación y si los atacantes lo están usando ahora mismo.
+
+01:01:56.390 --> 01:01:57.750
+Esa segunda parte es la que más se muestra.
+
+01:01:57.750 --> 01:02:01.610
+Una configuración de dispositivo y una puntuación segura pueden ver algunos puntos independientemente de si alguien está atacando.
+
+01:02:01.750 --> 01:02:04.430
+Una vulnerabilidad que se está utilizando en campañas reales es algo distinto.
+
+01:02:04.710 --> 01:02:05.470
+Eso pasa al frente de la fin.
+
+01:02:05.710 --> 01:02:06.330
+Piénsalo de esta manera.
+
+01:02:06.750 --> 01:02:10.030
+La puntuación te da una lista permanente y los datos de vulnerabilidad te dicen que
+
+01:02:10.030 --> 01:02:11.010
+elementos te llamas hoy.
+
+01:02:11.610 --> 01:02:12.410
+Así que integra una con la.
+
+01:02:13.090 --> 01:02:16.290
+Mira las recomendaciones de tus dispositivos y comproba que máquinas tienen debilidades
+
+01:02:16.290 --> 01:02:17.250
+explotadas activamente.
+
+01:02:17.770 --> 01:02:18.730
+Corrige primero esa intersección.
+
+01:02:19.670 --> 01:02:22.870
+Una máquina con una configuración pendiente y una vulnerabilidad activa es donde debes
+
+01:02:22.870 --> 01:02:24.090
+dedicar tus horas antes que nada.
+
+01:02:24.930 --> 01:02:26.410
+Nota cómo esto cambia el trabajo diario.
+
+01:02:26.810 --> 01:02:27.830
+Sigues abriendo la puntuación.
+
+01:02:28.150 --> 01:02:31.310
+Pero la lees junto con las rutas de ataque, las alertas y los datos de vulnerabilidad y cada
+
+01:02:31.310 --> 01:02:32.150
+uno corrige a los demás.
+
+01:02:32.750 --> 01:02:33.910
+La puntuación dice lo que está pendiente.
+
+01:02:34.390 --> 01:02:35.690
+Las señales dicen lo que es peligroso.
+
+01:02:36.010 --> 01:02:37.250
+Es más fácil de ver que de escribir.
+
+01:02:37.250 --> 01:02:41.230
+Así que tomamos dos inquilinos con el mismo porcentaje y veamos cómo se diferencian.
+
+01:02:42.190 --> 01:02:43.210
+Un ejemplo práctico.
+
+01:02:43.670 --> 01:02:44.810
+Dos inquilinos, misma puntuación.
+
+01:02:45.350 --> 01:02:46.670
+Dos inquilinos, dos equipos de seguridad.
+
+01:02:47.470 --> 01:02:48.830
+Ambos abren el panel la misma mañana.
+
+01:02:49.150 --> 01:02:50.110
+Ambos ven un 70%.
+
+01:02:50.110 --> 01:02:51.950
+El mismo número, la misma flecha verde.
+
+01:02:52.410 --> 01:02:55.030
+Ponlos en una diapositiva y una junta directiva diría que están en la misma situación.
+
+01:02:55.270 --> 01:02:55.670
+No lo están.
+
+01:02:56.070 --> 01:02:56.450
+Ni de cero.
+
+01:02:56.950 --> 01:02:57.910
+Empecemos con el inquilino A.
+
+01:02:58.090 --> 01:03:00.130
+Una empresa de servicios mediana de unas 900 personas.
+
+01:03:00.130 --> 01:03:01.710
+La puntuación proviene de muchos pequeños logros.
+
+01:03:01.970 --> 01:03:03.050
+Vínculos seguros activados.
+
+01:03:03.290 --> 01:03:04.550
+Políticas contra phishing ajustadas.
+
+01:03:04.730 --> 01:03:06.110
+Etiquetas de confidencialidad publicadas.
+
+01:03:06.270 --> 01:03:07.410
+Y registro de auditorio habilitado.
+
+01:03:07.730 --> 01:03:10.410
+Hay muchos elementos en la columna de completados, pero mira las cuentas de administrador.
+
+01:03:10.990 --> 01:03:13.910
+Cuatro de los 11 administradores globales no tienen MFA registrado.
+
+01:03:14.130 --> 01:03:14.930
+Ni siquiera MFA débil.
+
+01:03:16.070 --> 01:03:19.170
+Y la autenticación heredada sigue abierta porque una vieja aplicación de escaneo depende
+
+01:03:19.170 --> 01:03:20.490
+de ella y nadie quiso tocarla.
+
+01:03:20.990 --> 01:03:23.370
+Ahora el inquilino ve a un fabricante de tamaño similar.
+
+01:03:23.530 --> 01:03:24.530
+El mismo 70% aquí.
+
+01:03:24.890 --> 01:03:26.070
+La capa de identidad es sólida.
+
+01:03:26.610 --> 01:03:28.570
+Cada administrador inicia sesión con métodos resistentes al phishing.
+
+01:03:29.050 --> 01:03:30.310
+Los protocolos de dados están bloqueados.
+
+01:03:30.730 --> 01:03:33.690
+El acceso condicional es pequeño y limpio con un propietario para cada política, pero
+
+01:03:33.690 --> 01:03:34.850
+los dispositivos son escasos.
+
+01:03:35.390 --> 01:03:37.410
+Defender for Empower cubre quizás la mitad de los portátiles.
+
+01:03:37.670 --> 01:03:38.610
+Nadie inventaría el resto.
+
+01:03:39.150 --> 01:03:41.270
+Las reglas de reducción de superficie de ataque aún no existen.
+
+01:03:41.270 --> 01:03:43.910
+Y las políticas de cumplimiento son tan flexibles que la mayoría de las máquinas
+
+01:03:43.910 --> 01:03:44.850
+pasan sin mucha revisión.
+
+01:03:45.270 --> 01:03:46.430
+Mismo puntaje, problema opuesto.
+
+01:03:46.850 --> 01:03:47.470
+¿Cómo sucede esto?
+
+01:03:47.870 --> 01:03:49.290
+Porque los puntos provienen de diferentes lugares.
+
+01:03:49.290 --> 01:03:51.990
+El inquilino A acumuló una gran cantidad de acciones de bajo esfuerzo.
+
+01:03:52.430 --> 01:03:55.270
+El inquilino B puso su esfuerzo en las pocas acciones pesadas y emitió una categoría
+
+01:03:55.270 --> 01:03:55.590
+completa.
+
+01:03:55.970 --> 01:03:57.990
+El porcentaje suma todo y descarta la estructura.
+
+01:03:59.030 --> 01:04:00.330
+Ahora ejecuta la prueba de atacante de antes.
+
+01:04:00.730 --> 01:04:02.810
+Primero, prueba el rociado de contraseñas contra el inquilino A.
+
+01:04:02.870 --> 01:04:03.290
+Es un regalo.
+
+01:04:03.730 --> 01:04:07.110
+Cuatro cuentas de administrador tiene una sola contraseña entre el atacante y todo el inquilino
+
+01:04:07.110 --> 01:04:09.670
+y la puerta de la edad significa que nunca se solicita un segundo paso.
+
+01:04:10.210 --> 01:04:13.310
+Una contraseña débil unicia sesión exitoso y el atacante obtiene una sesión de
+
+01:04:13.310 --> 01:04:14.290
+una sesión de administrador rojo.
+
+01:04:14.470 --> 01:04:15.870
+Es un camino corto, ha sido un día muy malo.
+
+01:04:15.870 --> 01:04:18.310
+Contra el inquilino B, el mismo ataque rebota en su mayoría.
+
+01:04:18.770 --> 01:04:21.750
+Los protocolos helados están cerrados y los administradores usan credenciales que no se
+
+01:04:21.750 --> 01:04:22.790
+pueden adivinar ni retransmitir.
+
+01:04:22.930 --> 01:04:23.770
+El atacante sigue adelante.
+
+01:04:24.090 --> 01:04:24.550
+Ahora invirtamos.
+
+01:04:24.850 --> 01:04:27.750
+Tomemos un correo de phishing con un archivo adjunto malicioso dirigido a una computadora
+
+01:04:27.750 --> 01:04:27.930
+por.
+
+01:04:28.130 --> 01:04:29.730
+El inquilino B es ahora el objetivo fácil.
+
+01:04:30.130 --> 01:04:32.730
+Si la máquina no está incorporada, Defender nunca ve la ejecución del payload.
+
+01:04:33.430 --> 01:04:34.370
+Nada bloquea el proceso segundo.
+
+01:04:34.850 --> 01:04:35.730
+No se dispara en ninguna alerta.
+
+01:04:35.730 --> 01:04:38.850
+El atacante aterriza en un dispositivo invisible para el equipo de seguridad y desde allí
+
+01:04:38.850 --> 01:04:40.550
+busca tokens y se mueve lateralmente.
+
+01:04:41.490 --> 01:04:42.670
+El inquilino A maneja esto mejor.
+
+01:04:43.010 --> 01:04:46.410
+Su cobertura de dispositivos es decente e incluso si una computadora cae, el daño tiene
+
+01:04:46.410 --> 01:04:49.390
+un límite ya que el atacante aún debe encontrar la forma de llegar a esas cuentas de administrador,
+
+01:04:49.750 --> 01:04:50.850
+lo cual hay que admitirlo claro.
+
+01:04:51.450 --> 01:04:54.670
+Sí que ninguno de los dos está seguro, pero están expuestos en lugares diferentes y
+
+01:04:54.670 --> 01:04:55.870
+el número no puede decirte en qué lugar.
+
+01:04:56.330 --> 01:04:57.310
+¿Qué debería hacer cada uno primero?
+
+01:04:57.830 --> 01:04:59.410
+El inquilino A tiene una lista corta y urgente.
+
+01:04:59.910 --> 01:05:02.510
+Registrar MFI fuerte en esas cuatro cuentas de administrador esta semana.
+
+01:05:02.990 --> 01:05:05.410
+Luego separar los roles de administrador de las cuentas diarias para que nadie navegue
+
+01:05:05.410 --> 01:05:06.590
+por el correo como administrador global.
+
+01:05:07.210 --> 01:05:08.970
+Luego tratar la autenticación heredada correcta.
+
+01:05:09.770 --> 01:05:12.890
+Encontrar la aplicación de escaneo, moverla, un método moderno, aislarle el bloqueo del
+
+01:05:12.890 --> 01:05:13.350
+protocolo.
+
+01:05:13.850 --> 01:05:17.630
+Todo esto reside en la identidad y probablemente solo movería el puntaje en unos pocos puntos.
+
+01:05:17.990 --> 01:05:18.450
+Ese es el punto.
+
+01:05:18.750 --> 01:05:21.250
+La mayor reducción en el riesgo real vale lo menos en el tablero.
+
+01:05:21.570 --> 01:05:22.810
+El inquilino B comienza en otro lugar.
+
+01:05:23.170 --> 01:05:24.470
+Construir inventarios y dispositivos primero.
+
+01:05:25.010 --> 01:05:28.490
+Comparar lo que dice el directorio contra lo que va a defender y encontrar las laptops faltantes
+
+01:05:28.490 --> 01:05:29.290
+e incorporarlas.
+
+01:05:29.410 --> 01:05:33.150
+Luego activar las reglas de reducción de superficie de ataque en modo auditoría, leer los registros
+
+01:05:33.150 --> 01:05:35.310
+por unas semanas y aplicar regla por regla.
+
+01:05:35.750 --> 01:05:38.550
+Aumentar los sumbreres de cumplimiento por etapas para que el acceso condicional tenga
+
+01:05:38.550 --> 01:05:39.390
+algo real que leer.
+
+01:05:39.870 --> 01:05:40.370
+Lo que es común.
+
+01:05:40.910 --> 01:05:42.570
+Ningún plan comienza con la acción de mayor puntal.
+
+01:05:43.070 --> 01:05:45.810
+Ambos comienzan con el mayor agujero en la ruta de ataque más corta.
+
+01:05:46.190 --> 01:05:47.170
+Eso es lo que ocultaba el porcentaje.
+
+01:05:47.890 --> 01:05:48.950
+Dos totales idénticos.
+
+01:05:49.110 --> 01:05:50.670
+Dos prioridades completamente distintas.
+
+01:05:50.830 --> 01:05:53.870
+Y un panel que habría dicho a ambos equipos que fueran arreglar lo que fuera que valiera
+
+01:05:53.870 --> 01:05:54.490
+más puntos.
+
+01:05:55.510 --> 01:05:57.190
+Un solo número no puede contener tanta información.
+
+01:05:57.810 --> 01:05:59.050
+Pero un equipo que conoce sus rutas.
+
+01:05:59.510 --> 01:06:02.010
+Por supuesto, conocer el orden correcto de trabajo es solo la mitad del problema.
+
+01:06:02.370 --> 01:06:03.250
+Las prioridades se degradan.
+
+01:06:03.950 --> 01:06:07.410
+Sin una rutina para revisarlas, incluso un buen plan termina desviándose hacia lo que
+
+01:06:07.410 --> 01:06:08.850
+sea que el portal muestre primero.
+
+01:06:09.850 --> 01:06:11.310
+Un ritmo de revisión que realmente se mantenga.
+
+01:06:11.770 --> 01:06:13.190
+La mayoría de los planes no fallan el primer día.
+
+01:06:13.610 --> 01:06:16.990
+Fallan alrededor de la sexta semana cuando el trabajo urgente del mes desplaza la revisión
+
+01:06:16.990 --> 01:06:18.390
+del calendario y no te quede desaparecido.
+
+01:06:18.390 --> 01:06:20.030
+Así que la solución es un mejor.
+
+01:06:20.430 --> 01:06:23.070
+Es un ritmo lo suficientemente pequeño como para sobrevivir a un trimestre general.
+
+01:06:23.330 --> 01:06:24.310
+Comienza con el traje mensual.
+
+01:06:24.810 --> 01:06:27.650
+Una hora a la misma hora cada mes, las mismas pocas personas en la sala.
+
+01:06:28.030 --> 01:06:28.850
+La agenda nunca cambia.
+
+01:06:29.010 --> 01:06:29.570
+Ese es el punto.
+
+01:06:30.030 --> 01:06:30.830
+Primero, ¿qué hay de nuevo?
+
+01:06:31.170 --> 01:06:34.290
+Revise las acciones de mejora por cualquier cosa añadida desde la última vez y por cualquier
+
+01:06:34.290 --> 01:06:35.430
+acción cuyos puntos se hayan cambiado.
+
+01:06:35.910 --> 01:06:36.970
+Segundo, ¿qué se movió por su cuenta?
+
+01:06:37.530 --> 01:06:40.930
+Mire el registro de anotaciones y confirme que cada cambio de puntaje tenga una causa escrita
+
+01:06:40.930 --> 01:06:41.190
+al lado.
+
+01:06:41.850 --> 01:06:42.750
+Tercero, ¿qué se cerró?
+
+01:06:43.070 --> 01:06:46.670
+Marque el trabajo terminado y compruebe que siguió terminado porque una configuración revertida
+
+01:06:46.670 --> 01:06:48.130
+rara vez se anuncia solo. Es esto.
+
+01:06:48.490 --> 01:06:49.710
+No está arreglando nada en esta reunión.
+
+01:06:50.150 --> 01:06:50.690
+La clasifican.
+
+01:06:51.030 --> 01:06:52.730
+Cada elemento nuevo va a uno de tres lugares.
+
+01:06:53.390 --> 01:06:55.850
+Es el pronto, programar o considerar para aceptación.
+
+01:06:56.310 --> 01:06:59.130
+Luego se retira y el trabajo ocurre a través de su proceso de cambio.
+
+01:06:59.830 --> 01:07:03.550
+La hora mensual evita que la lista se acumule, pero no puede responder a una pregunta más
+
+01:07:03.550 --> 01:07:05.810
+importante, si realmente está trabajando en las cosas correctas.
+
+01:07:06.210 --> 01:07:08.990
+Esa es la revisión trimestral de amenazas y es un tipo de reunión diferente.
+
+01:07:09.470 --> 01:07:11.390
+Dedíquale dos horas y traiga a alguien del equipo de incidentes.
+
+01:07:11.990 --> 01:07:12.630
+La pregunta es simple.
+
+01:07:13.010 --> 01:07:14.470
+¿Qué hicieron realmente los atacantes de este trimestre?
+
+01:07:14.470 --> 01:07:18.070
+Traiga los incidentes, las tendencias de alerta, los intentos de spam, el phishing
+
+01:07:18.070 --> 01:07:19.010
+que llevó a las bandejas de entrada.
+
+01:07:19.150 --> 01:07:20.410
+Luego realice el ejercicio de antes.
+
+01:07:21.090 --> 01:07:23.470
+¿Qué paso tomaron y qué acción abierta estaba en ese paso?
+
+01:07:23.890 --> 01:07:25.230
+De ahí surge un backlog reordenado.
+
+01:07:25.730 --> 01:07:28.370
+Tal vez el abuso de consentimiento apareció dos veces, así que las acciones de consentimiento
+
+01:07:28.370 --> 01:07:30.190
+de aplicaciones suben de aplicaciones suben de prioridad.
+
+01:07:30.350 --> 01:07:33.110
+Tal vez nada afectó a los dispositivos, así que ese trabajo puede esperar un poco más.
+
+01:07:33.730 --> 01:07:36.530
+También lea aquí la nueva inteligencia sobre amenazas de Microsoft y hágase una
+
+01:07:36.530 --> 01:07:37.670
+pregunta honesta.
+
+01:07:38.450 --> 01:07:39.410
+Algo de esto nos describe a nosotros.
+
+01:07:39.770 --> 01:07:40.450
+Si hace ajuste.
+
+01:07:40.810 --> 01:07:42.210
+Si no, admítalo y sigue adelante.
+
+01:07:42.210 --> 01:07:44.030
+Luego está el reajuste anual.
+
+01:07:44.530 --> 01:07:47.830
+Una vez al año, aléjese de las acciones individuales y revise el marco general.
+
+01:07:48.170 --> 01:07:50.370
+¿Qué licencias tiene ahora que no tenía hace 12 meses?
+
+01:07:50.910 --> 01:07:52.090
+¿Qué cargas de trabajo están?
+
+01:07:52.310 --> 01:07:55.530
+El alcance se desvía silenciosamente y la lista de acciones se desvía con él.
+
+01:07:55.810 --> 01:07:57.410
+Este es también el momento de verificar la propiedad.
+
+01:07:57.750 --> 01:07:59.150
+La gente se va, los equipos se fusionan.
+
+01:07:59.310 --> 01:08:01.850
+Una acción que pertenece a alguien que se fue en marzo o en octubre y no pertenece a
+
+01:08:01.850 --> 01:08:02.030
+nadie.
+
+01:08:02.930 --> 01:08:05.890
+Y revise cada riesgo aceptado con una fecha de revisión en el próximo año.
+
+01:08:06.810 --> 01:08:08.170
+Algunos se mantendrán, otros no.
+
+01:08:08.530 --> 01:08:11.510
+Ahora bien, a través de estos tres ritmos existe una regla que hace la mayor parte del
+
+01:08:11.510 --> 01:08:11.770
+trabajo.
+
+01:08:12.310 --> 01:08:15.230
+Cada acción abierta tiene un responsable o una aceptación documentada, una cosa o
+
+01:08:15.230 --> 01:08:15.450
+la otra.
+
+01:08:16.050 --> 01:08:17.570
+Nada debe quedar en un tercer estado llamado.
+
+01:08:17.750 --> 01:08:18.530
+Alguien debería ver eso.
+
+01:08:19.730 --> 01:08:21.590
+Ese tercer estado es donde mueren los registros de opinión.
+
+01:08:22.570 --> 01:08:25.850
+Una acción sin responsable no tiene fecha límite ni preguntas ni a quién hacérselas.
+
+01:08:26.450 --> 01:08:27.130
+Simplemente envejece.
+
+01:08:27.670 --> 01:08:30.550
+Un año después sigue ahí y todos asumen que alguien más se encarga.
+
+01:08:31.110 --> 01:08:33.030
+Por eso en la reunión mensual busca acciones huérfanas.
+
+01:08:33.170 --> 01:08:36.110
+Toda acción sin nombre recibe uno antes de salir de la sala o pasa aceptación con un
+
+01:08:36.110 --> 01:08:37.030
+motivo y una fecha.
+
+01:08:37.830 --> 01:08:38.990
+Ambos resultados son aceptables.
+
+01:08:39.070 --> 01:08:39.970
+Quedarse sin responsable no.
+
+01:08:40.390 --> 01:08:42.310
+Unos pocos hábitos sencillos mantienen todo el sistema vivo.
+
+01:08:42.650 --> 01:08:45.690
+Programa las reuniones en los calendarios como eventos recurrentes, no como recordatorios
+
+01:08:45.690 --> 01:08:46.270
+que establecerá más.
+
+01:08:46.670 --> 01:08:47.710
+Mantenga la agenda en una sola parte.
+
+01:08:48.250 --> 01:08:50.850
+Anota los resultados, aunque sea brevemente, ya que las notas de marzo son las que hacen
+
+01:08:50.850 --> 01:08:51.930
+que la reunión de septiembre se acorde.
+
+01:08:52.330 --> 01:08:56.230
+Y rólate a quien la dirige para que la rutina no dependa de que una sola persona siga empleada.
+
+01:08:57.130 --> 01:08:59.870
+Note de qué le protege este ritmo, no directamente de los atacantes.
+
+01:09:00.330 --> 01:09:03.770
+Le protege de la deriva, el lento deslizamiento hacia lo que el tablero coloca en la parte
+
+01:09:03.770 --> 01:09:04.130
+superior.
+
+01:09:04.590 --> 01:09:06.230
+Pero un calendario solo logra que la reunión salga.
+
+01:09:06.650 --> 01:09:08.710
+No decide quién en esa sala tiene permitido decir que sí.
+
+01:09:09.390 --> 01:09:12.230
+Y esa pregunta ha hundido más programas buenos que cualquier problema técnico.
+
+01:09:13.070 --> 01:09:14.450
+Propiedad y gobernanza, ¿quién decide?
+
+01:09:15.070 --> 01:09:17.070
+Mire quién toca realmente una acción de puntuación segura.
+
+01:09:17.610 --> 01:09:18.370
+Nunca es una sola persona.
+
+01:09:19.250 --> 01:09:21.230
+Las acciones de identidad pertenecen al equipo de identidad.
+
+01:09:21.710 --> 01:09:24.730
+La configuración de dispositivos depende de quien administre Intune y Defender para Empol.
+
+01:09:25.190 --> 01:09:26.790
+El filtro de correo pertenece a los mensajerí.
+
+01:09:27.490 --> 01:09:29.650
+Si etiquetas de datos a menudo pertenecen al cumplimiento a nadie.
+
+01:09:30.170 --> 01:09:31.110
+Una lista en el tablero.
+
+01:09:31.270 --> 01:09:32.510
+Cuatro o cinco propietarios detrás.
+
+01:09:32.850 --> 01:09:33.890
+Ese es el primer hecho estructural.
+
+01:09:34.490 --> 01:09:37.590
+La puntuación pretende ser un registro único, pero el trabajo se divide entre equipos que
+
+01:09:37.590 --> 01:09:39.390
+no comparten gerente, ni sprint, ni presupuesto.
+
+01:09:40.190 --> 01:09:43.590
+Por lo tanto, el ritmo de revisión solo funciona si cada parte tiene un responsable nombrado.
+
+01:09:43.830 --> 01:09:46.690
+Y el líder de seguridad tiene la visión completa sin poseer cada tarea.
+
+01:09:47.210 --> 01:09:49.190
+Piensa en ese líder como un editor, no como un autor.
+
+01:09:49.830 --> 01:09:52.710
+Ellos rastrean la lista completa, impulsan los elementos estancados y aportan lo mismo.
+
+01:09:53.110 --> 01:09:54.430
+Los responsables de cada área son los...
+
+01:09:54.430 --> 01:09:58.490
+Cuando esos roles se confunden, terminas con una persona sobrecargada que se vuelve el cuello de botella
+
+01:09:58.490 --> 01:09:59.650
+para cada configuración en él.
+
+01:09:59.830 --> 01:10:00.630
+Ahora, la pregunta difícil.
+
+01:10:00.910 --> 01:10:02.610
+¿Quién autoriza un cambio que los usuarios sentirán?
+
+01:10:03.110 --> 01:10:06.670
+Tomamos como ejemplo imponer MFE en un departamento o bloquear un protocolo del que depende una
+
+01:10:06.670 --> 01:10:07.130
+aplicación a ti.
+
+01:10:07.370 --> 01:10:10.150
+El equipo de seguridad puede argumentar que es correcto, pero no pueden decidir solos
+
+01:10:10.150 --> 01:10:11.170
+porque ellos no asumen el costo.
+
+01:10:11.670 --> 01:10:12.350
+La mesa de llamadas.
+
+01:10:12.950 --> 01:10:14.290
+El gerente de ventas recibe las quejas.
+
+01:10:14.670 --> 01:10:16.990
+Alguien debe decir que sí en nombre de las personas que vivirán con él.
+
+01:10:17.250 --> 01:10:19.810
+Así que divide los cambios en dos tipos antes de que comience la reunión.
+
+01:10:19.810 --> 01:10:23.690
+Los cambios sin efecto visible para el usuario, como activar el registro de auditoría, ajustar
+
+01:10:23.690 --> 01:10:26.290
+una configuración interna, solo requieren la aprobación interna, solo requieren el
+
+01:10:26.290 --> 01:10:27.250
+responsable en otro registro.
+
+01:10:28.110 --> 01:10:30.510
+Los cambios que los usuarios notarán necesitan un segundo nombre.
+
+01:10:30.830 --> 01:10:33.710
+Un dueño del negocio o servicio de TI que puede avalar la interrupción y aceptarla.
+
+01:10:34.230 --> 01:10:37.170
+Escribe esa regla una vez, entonces nadie tiene que discutirla caso por caso.
+
+01:10:37.570 --> 01:10:38.070
+Siguiente problema.
+
+01:10:38.170 --> 01:10:39.330
+Los comités de asesoría de cambios.
+
+01:10:39.830 --> 01:10:41.190
+Muchas organizaciones ya tienen uno.
+
+01:10:41.670 --> 01:10:44.790
+Se reúnen semanalmente o cada dos semanas y para un cambio de seguridad puede añadir
+
+01:10:44.790 --> 01:10:45.450
+tres semanas de espera.
+
+01:10:46.170 --> 01:10:49.430
+Para entonces, la amenaza se ha movido o quien propuso el cambio ha olvidado los detalles.
+
+01:10:50.090 --> 01:10:51.970
+No tienes que evitar el proceso, tienes que darle forma.
+
+01:10:52.450 --> 01:10:55.570
+Preaprueba una clase de cambios de bajo riesgo para que los elementos estándar eviten la
+
+01:10:55.570 --> 01:10:55.670
+fe.
+
+01:10:56.090 --> 01:10:59.310
+Pasan los cambios que afectan al usuario por el comité, pero llega con los resultados del
+
+01:10:59.310 --> 01:11:00.970
+piloto y el plan de reversión ya adjuntos.
+
+01:11:00.970 --> 01:11:04.330
+Un comité que ve datos de solo reporte y una salida aprobada dice que sí rápidamente.
+
+01:11:04.910 --> 01:11:07.330
+Un comité que ve una solicitud vacía dice que regreses el próximo mes.
+
+01:11:07.850 --> 01:11:09.070
+Dales a las emergencias su propia puerta.
+
+01:11:09.890 --> 01:11:13.290
+Si aparece una brecha explotada activamente, un dueño y un aprobador senior pueden actuar
+
+01:11:13.290 --> 01:11:15.310
+el mismo día y el comité lo revisa después.
+
+01:11:15.970 --> 01:11:18.710
+Si el camino debe existir antes de que lo necesites, lo cual nos deja con el no.
+
+01:11:18.910 --> 01:11:21.150
+Cuando deben estar ellos involucrados, no para cada configuración.
+
+01:11:21.510 --> 01:11:24.630
+El liderazgo no necesita una opinión sobre la política de enlaces seguros, pero sí necesita
+
+01:11:24.630 --> 01:11:25.590
+escuchar sobre tres cosas.
+
+01:11:26.150 --> 01:11:29.470
+Cualquier cosa que cambie, como la gente inicia sesión o comparte archivos en toda la empresa.
+
+01:11:29.470 --> 01:11:32.790
+Cualquier aceptación de riesgo en un camino hacia tus activos críticos, ya que el negocio
+
+01:11:32.790 --> 01:11:34.150
+asume la pérdida si se usa esa brecha.
+
+01:11:34.690 --> 01:11:37.890
+Cualquier concesión donde la seguridad y un proceso de ingresos choquen, como el ejemplo
+
+01:11:37.890 --> 01:11:41.890
+de intercambio de archivos con socios anterior, para sus casos presenta una elección.
+
+01:11:42.590 --> 01:11:46.210
+Aquí está la exposición, aquí la solución, aquí lo que rompe y aquí la fecha límite
+
+01:11:46.210 --> 01:11:46.810
+para decidir.
+
+01:11:47.130 --> 01:11:48.590
+Fíjese lo que es realmente la gobernanza aquí.
+
+01:11:48.990 --> 01:11:49.550
+No es un comité.
+
+01:11:50.190 --> 01:11:51.130
+Son tres respuestas claras.
+
+01:11:51.470 --> 01:11:52.030
+¿Quién hace el trabajo?
+
+01:11:52.590 --> 01:11:53.530
+¿Quién acepta la interrupción?
+
+01:11:53.950 --> 01:11:55.050
+¿Y quién asume el riesgo remanente?
+
+01:11:55.050 --> 01:11:58.690
+Si un equipo puede decir esto en voz alta por cada acción abierta, el proceso es
+
+01:11:58.690 --> 01:12:01.770
+si no pueden, las mismas brechas seguirán surgiendo en la reunión mensual.
+
+01:12:02.430 --> 01:12:04.690
+Cuando falta gobernanza, los fallos parecen familiares.
+
+01:12:05.450 --> 01:12:09.190
+Los equipos repiten los mismos errores, en el mismo orden, en entornos de todo tamaño.
+
+01:12:10.790 --> 01:12:12.450
+Patrones comunes de fallo y cómo detectarlos.
+
+01:12:13.010 --> 01:12:14.370
+Cuatro errores aparecen una y otra vez.
+
+01:12:14.690 --> 01:12:15.630
+Se ven diferentes en la superficie.
+
+01:12:16.330 --> 01:12:17.510
+Debajo comparte una misma raíz.
+
+01:12:18.190 --> 01:12:19.430
+Alguien dejó de preguntar para qué le traba.
+
+01:12:19.430 --> 01:12:22.650
+El primero es perseguir el porcentaje como objetivo trimestral.
+
+01:12:23.070 --> 01:12:24.370
+Suele empezar con una buena intención.
+
+01:12:24.730 --> 01:12:25.910
+El liderazgo quiere una meta medible.
+
+01:12:26.430 --> 01:12:30.290
+El equipo elige el único número que da el portal y la meta es llegar a 85 para junio.
+
+01:12:30.950 --> 01:12:33.270
+Desde ese día, el trabajo pendiente se ordena por puntos por hora.
+
+01:12:33.630 --> 01:12:34.610
+Las acciones fáciles van primero.
+
+01:12:35.190 --> 01:12:38.270
+Las difíciles, las que abren caminos reales, se posponen para el próximo trimestre.
+
+01:12:38.890 --> 01:12:40.110
+Puedes detectarlo en cómo habla la gente.
+
+01:12:40.590 --> 01:12:42.030
+Escucha frases como necesitamos cuatro puntos.
+
+01:12:42.670 --> 01:12:44.670
+¿O cuál es la forma más rápida de superar el 80?
+
+01:12:45.490 --> 01:12:47.030
+Nadie menciona un atacante o un usuario.
+
+01:12:47.530 --> 01:12:48.470
+La reunión es sobre el método.
+
+01:12:48.470 --> 01:12:52.070
+Si el equipo alcanza la meta en mayo y pasa a junio inactivo, esa es la prueba.
+
+01:12:52.590 --> 01:12:53.230
+El objeto número.
+
+01:12:53.670 --> 01:12:55.310
+Sí que cuando llegó el número, el trabajo se detuvo.
+
+01:12:55.750 --> 01:12:58.350
+El segundo es aplicar sin probar y luego revertir con pánico.
+
+01:12:58.910 --> 01:13:00.330
+Alguien lee una recomendación un viernes.
+
+01:13:00.690 --> 01:13:02.310
+Dice requerir MFI para todos los usuarios.
+
+01:13:02.950 --> 01:13:03.430
+Parece claro.
+
+01:13:03.770 --> 01:13:04.430
+Vale muchos puntos.
+
+01:13:05.030 --> 01:13:06.950
+Y la política se activa para todos el lunes.
+
+01:13:08.550 --> 01:13:10.110
+A las 10 la cola de soporte técnico es larga.
+
+01:13:10.710 --> 01:13:14.030
+Un almacén no puede escanear inventario porque sus cuentas compartidas no pueden completar el aviso.
+
+01:13:14.370 --> 01:13:15.750
+Y un director está al teléfono.
+
+01:13:15.750 --> 01:13:18.670
+Así que la política se desactiva rápidamente sin una revisión.
+
+01:13:19.230 --> 01:13:20.250
+Y ahora hay un segundo costo.
+
+01:13:20.590 --> 01:13:24.870
+El negocio ha visto a seguridad romper algo y la siguiente solicitud será rechazada antes de que nadie la lea.
+
+01:13:25.550 --> 01:13:27.170
+El control no falló, falló el despliegue.
+
+01:13:27.170 --> 01:13:32.170
+Pero el daño recae en la confianza y la confianza tarda más en reconstruirse que una política en reescribirse.
+
+01:13:32.830 --> 01:13:34.770
+La señal aquí es un registro de cambios con un hueco en medio.
+
+01:13:35.190 --> 01:13:40.890
+Una política creada, activada y desactivada en uno o dos días, sin grupo de prueba y sin datos de reporte detrás.
+
+01:13:41.750 --> 01:13:43.570
+Si ves ese patrón una vez, pregunta a quién lo aprobó.
+
+01:13:44.130 --> 01:13:46.890
+Si lo ves dos veces, has encontrado un problema de proceso, no algo aislado.
+
+01:13:47.490 --> 01:13:49.910
+La tercera es tratar el crédito de terceros como prueba de protección.
+
+01:13:50.550 --> 01:13:53.070
+Vimos cómo una herramienta de terceros puede otorgar puntos a una acción.
+
+01:13:53.550 --> 01:13:54.550
+El fallo lo que sucede después.
+
+01:13:55.230 --> 01:13:56.310
+La acción aparece como resuelta.
+
+01:13:57.230 --> 01:13:59.850
+El elemento sale de la lista y nadie vuelve a abrir la herramienta.
+
+01:14:00.390 --> 01:14:02.510
+Se configuró para todos los buzones o solo para el grupo piloto.
+
+01:14:02.890 --> 01:14:03.650
+Todavía tiene licencia.
+
+01:14:03.990 --> 01:14:05.850
+Sigue funcionando después de la última reorganización.
+
+01:14:06.310 --> 01:14:08.810
+El crédito es una declaración, una prueba y las declaraciones cada uno.
+
+01:14:09.370 --> 01:14:12.790
+Un producto comprado hace dos años, implementado por alguien que ya se fue,
+
+01:14:13.270 --> 01:14:16.170
+puede figurar como acción terminada mientras cubre una fracción del entorno.
+
+01:14:16.830 --> 01:14:20.590
+Para detectarlo, elige una acción acreditada cada trimestre y verifícala desde cero.
+
+01:14:21.090 --> 01:14:21.790
+No le das el portal.
+
+01:14:21.790 --> 01:14:25.190
+Ve a la herramienta, comprueba la cobertura e intenta activar lo que debería de tener.
+
+01:14:25.650 --> 01:14:27.890
+Si fallas, has aprendido algo que el porcentaje nunca te diría.
+
+01:14:28.750 --> 01:14:31.190
+La cuarta es ignorar las acciones de alto impacto y alto esfuerzo.
+
+01:14:31.710 --> 01:14:33.050
+Son fáciles de ver y difíciles de empezar.
+
+01:14:33.850 --> 01:14:35.890
+Retirar un protocolo heredado que tres aplicaciones usan,
+
+01:14:35.990 --> 01:14:38.470
+rediseñar roles de administración con años de permisos,
+
+01:14:38.590 --> 01:14:39.850
+reemplazar cuentas compartidas.
+
+01:14:41.130 --> 01:14:42.590
+Cada una requiere semanas de preparación,
+
+01:14:43.110 --> 01:14:46.230
+conversaciones incómodas y un equipo dispuesto a ser impopular un tiempo.
+
+01:14:46.230 --> 01:14:51.350
+Así que se quedan al fondo trimestre tras trimestre porque los elementos fáciles parecen más razonables,
+
+01:14:51.470 --> 01:14:53.890
+pero esa pila contiene lo que está en las rutas de ataque más cortas.
+
+01:14:55.210 --> 01:14:58.790
+El esfuerzo es el precio de reducir el riesgo y evitarlo no disminuye el riesgo.
+
+01:14:59.530 --> 01:15:01.590
+Comprueba el valor ordenando tu lista de pendiente por antigüedad.
+
+01:15:02.030 --> 01:15:04.630
+Si los elementos más antiguos están ligados a tus activos críticos,
+
+01:15:04.810 --> 01:15:06.750
+proteges tu comodidad en lugar de tu entorno.
+
+01:15:07.290 --> 01:15:10.170
+Divide uno en etapas, asignan un responsable y pon una fecha a la primera fase.
+
+01:15:10.770 --> 01:15:12.910
+Detecta estos cuatro pronto y solo te costarán de conversas.
+
+01:15:13.830 --> 01:15:16.150
+Si los detectas tarde, te costarán un incidente.
+
+01:15:16.230 --> 01:15:17.990
+Por eso lo último es un plan que lo ordene todo.
+
+01:15:19.590 --> 01:15:21.530
+Un plan de 90 días que respete a los usuarios y el riesgo.
+
+01:15:22.010 --> 01:15:24.130
+90 días pueden cambiar un entorno, no repararlo.
+
+01:15:24.450 --> 01:15:26.090
+Así que el plan se basa en el orden, no en el olomón.
+
+01:15:26.390 --> 01:15:28.310
+Los días del 1 al 30 son sobre la realidad actual.
+
+01:15:28.850 --> 01:15:29.630
+Empieza con la base.
+
+01:15:29.910 --> 01:15:31.110
+Exporta la puntuación actual,
+
+01:15:31.810 --> 01:15:33.870
+el desglose por categorías y cada elemento abierto.
+
+01:15:34.390 --> 01:15:35.070
+Cóngele esa copia.
+
+01:15:35.610 --> 01:15:37.130
+Es tu foto del antes y la necesitarás.
+
+01:15:37.130 --> 01:15:40.210
+Luego dale a cada acción responsable a una aceptación documentada.
+
+01:15:40.850 --> 01:15:43.970
+Cualquier cosa sin propietario se resuelve en la primera reunión mensual, no en la tercera.
+
+01:15:44.410 --> 01:15:45.810
+Ahora ocúpese del trabajo de silencioso.
+
+01:15:46.370 --> 01:15:47.570
+Crea dos cuentas de acceso a emergencia.
+
+01:15:48.530 --> 01:15:50.430
+Extrúyalas de todas las políticas de acceso condicional.
+
+01:15:51.230 --> 01:15:52.450
+Guarda las credenciales sin conexión.
+
+01:15:52.790 --> 01:15:55.350
+Configura una alerta que se dispare en cuanto a cualquiera de las dos inicia sesión.
+
+01:15:55.610 --> 01:15:57.270
+Haga esto ante redactar una sola política nueva.
+
+01:15:57.670 --> 01:16:00.970
+Si lo omite, una regla incorrecta puede dejarlo fuera del inquilino que intenta proteger.
+
+01:16:01.290 --> 01:16:02.330
+Todos los primeros movimientos reales.
+
+01:16:02.710 --> 01:16:04.910
+Elija las acciones de entidad en sus rutas de ataque más cortas.
+
+01:16:05.310 --> 01:16:06.330
+MFA fuerte para administradores.
+
+01:16:06.330 --> 01:16:08.130
+Bloqueo de autenticación de edad.
+
+01:16:08.490 --> 01:16:09.430
+Cuentas de administrador de semana.
+
+01:16:10.190 --> 01:16:12.890
+Cree esas políticas, pero actívelas en modo de solo informe.
+
+01:16:13.450 --> 01:16:14.270
+Nadie nota nada todavía.
+
+01:16:14.710 --> 01:16:15.490
+Estás recopilando evidencia.
+
+01:16:16.070 --> 01:16:18.390
+Los días 31 y 60 son donde comienza la aplicación.
+
+01:16:18.970 --> 01:16:19.450
+En anillos.
+
+01:16:19.950 --> 01:16:21.590
+Lea los registros de inicio de sesión del primer mes.
+
+01:16:21.730 --> 01:16:22.170
+¿Quién habría sido?
+
+01:16:22.670 --> 01:16:24.410
+¿Qué aplicaciones siguen usando protocolos antiguos?
+
+01:16:24.810 --> 01:16:26.530
+¿Qué cuentas compartidas no pueden completar un aviso?
+
+01:16:26.830 --> 01:16:29.650
+Solucione esos casos primero uno por uno con las personas involucradas.
+
+01:16:29.870 --> 01:16:31.030
+Luego aplique para el anillo de TI.
+
+01:16:31.390 --> 01:16:32.390
+Una semana después de su secado.
+
+01:16:32.830 --> 01:16:34.510
+Luego un departamento a la vez y finalmente todos.
+
+01:16:34.510 --> 01:16:38.370
+Vigile el volumen de la mesa de ayuda en cada paso, ya que es su advertencia temprana más barata.
+
+01:16:38.610 --> 01:16:41.630
+Si los tickets aumentan, pause el anillo y encuentre la causa antes de continuar.
+
+01:16:42.690 --> 01:16:44.930
+Mientras se despliega la identidad, comience las capas más silenciosas.
+
+01:16:45.130 --> 01:16:48.790
+Verifique la cobertura de Fender for Endpoint frente a su inventario de dispositivos e incorpore las brechas.
+
+01:16:49.490 --> 01:16:51.710
+Active la reducción de superficie de ataque en modo de auditoría.
+
+01:16:52.190 --> 01:16:55.350
+Revise las políticas de correo electrónico y ajustelas donde aparezcan falsos positivos.
+
+01:16:55.350 --> 01:16:56.710
+Nada de esto necesita un gran anuncio.
+
+01:16:57.110 --> 01:16:58.070
+Necesita paciencia en registro.
+
+01:16:58.490 --> 01:17:00.810
+Los días 61 al 90 son para comprobar si algo de esto funcionó.
+
+01:17:01.490 --> 01:17:02.170
+Regrese a resultados.
+
+01:17:02.850 --> 01:17:05.270
+¿Qué porcentaje de cuentas activas completa ahora un inicio de su inseguro?
+
+01:17:05.450 --> 01:17:06.170
+¿Cuál es el administrador?
+
+01:17:06.670 --> 01:17:09.330
+¿Cuánto tardan en cerrarse los elementos marcados en comparación con el primer día?
+
+01:17:09.510 --> 01:17:12.370
+Póngalos al lado de la puntuación y anote cada movimiento con su causa.
+
+01:17:12.970 --> 01:17:15.910
+Luego revise los datos de inicio de sesión de nuevo, esta vez para las políticas aplicadas.
+
+01:17:16.690 --> 01:17:19.990
+Cualquiera que siga siendo bloqueado repetidamente necesita una solución o resolución registrada.
+
+01:17:20.510 --> 01:17:24.930
+Ejecute un ejercicio de ruta de ataque contra lo que ha construido y observe que pasos aún no tienen control detrás.
+
+01:17:25.570 --> 01:17:27.150
+Finalmente, documente las aceptaciones.
+
+01:17:27.850 --> 01:17:31.430
+Cada acción que decidió no tomar obtiene una razón, un propietario y una fecha de revisión.
+
+01:17:31.850 --> 01:17:32.750
+Póngalos en la vista de una página.
+
+01:17:33.270 --> 01:17:36.010
+Luego realice la primera revisión trimestral de amenazas y reclasifique lo que quede.
+
+01:17:36.290 --> 01:17:37.270
+Entonces, ¿cómo sabe que funcionó?
+
+01:17:37.570 --> 01:17:38.210
+No puede presentar.
+
+01:17:38.670 --> 01:17:41.350
+Probablemente subirá y eso está bien, pero no puede ser el veredicto.
+
+01:17:41.730 --> 01:17:43.010
+El éxito significa exposición cerrada.
+
+01:17:43.450 --> 01:17:44.710
+Las cuentas del administrador no es buen veredicto.
+
+01:17:45.130 --> 01:17:46.670
+La puerta de los protocolos antiguos está.
+
+01:17:46.950 --> 01:17:49.970
+Los dispositivos importantes son visibles y cuando algo se activa, su equipo lo realiza.
+
+01:17:49.990 --> 01:17:51.330
+Lo resuelve en horas, no en semanas.
+
+01:17:52.110 --> 01:17:53.450
+Esa última parte es la verdadera prueba.
+
+01:17:53.870 --> 01:17:56.050
+Primer incidente después del día 90 debería sentirse distinto.
+
+01:17:56.490 --> 01:18:00.310
+Menos sorpresas, respuestas más rápidas y un equipo que sabe que brechas se dejaron abiertas a propósito.
+
+01:18:00.810 --> 01:18:02.030
+Mantenga el ritmo después de que termine el plan.
+
+01:18:02.490 --> 01:18:03.430
+El ritmo es lo que lo sostiene.
+
+01:18:03.790 --> 01:18:06.770
+Triage mensual, amenazas trimestrales, revaluación anual,
+
+01:18:07.430 --> 01:18:08.990
+inclusión de la casilla de verificación en contexto.
+
+01:18:09.350 --> 01:18:10.270
+Entonces, la puntuación ha señal.
+
+01:18:10.610 --> 01:18:11.310
+No es un veredicto.
+
+01:18:11.630 --> 01:18:12.610
+El objetivo nunca fue el número.
+
+01:18:13.090 --> 01:18:16.550
+Era el modelo detrás de él, el que trataba una lista de trabajo posible como una calificación.
+
+01:18:16.550 --> 01:18:19.830
+Si esto cambió su forma de pensar sobre la postura, dejé una reseña.
+
+01:18:20.130 --> 01:18:23.190
+Ayuda a que más personas lo encuentren y se conecten conmigo, Mirko Peters en LinkedIn,
+
+01:18:23.370 --> 01:18:24.870
+para decirme qué tema analizar después.
+
+01:18:25.330 --> 01:18:28.550
+¿Por qué un inquilino puede estar al 90% en una cuenta de administrador sin MFA
+
+01:18:28.550 --> 01:18:30.970
+y el tablero seguirá en verde y el tablero seguirá en verde?

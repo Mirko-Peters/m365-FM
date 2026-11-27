@@ -232,7 +232,7 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
     await db.prepare("INSERT OR IGNORE INTO programs(owner_type,owner_id,program,year,url,verified) VALUES('u',?,'mvp',0,'https://mvp.microsoft.com/de-DE/mvp/profile/9b0ca797-db5a-493a-a845-8b9158046cf5',1)").bind(owner.id).run();
     for (const [k, u] of [["linkedin", "https://www.linkedin.com/in/m365showpodcast/"], ["youtube", "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"], ["website", "https://www.m365.fm"], ["website", "https://m365con.net"], ["github", "https://github.com/Mirko-Peters"], ["podcast", "https://www.spreaker.com/show/7393187"], ["podcast", "https://www.spreaker.com/show/6704921"]])
       await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url) VALUES('u',?,?,?)").bind(owner.id, k, u).run();
-    for (const eid of ["microsoft-365", "copilot", "copilot-studio", "azure", "azure-ai-foundry", "power-platform", "fabric", "purview", "teams", "sharepoint", "ai-agent", "entra-id"])
+    for (const eid of ["microsoft-365", "copilot", "copilot-studio", "azure", "microsoft-foundry", "power-platform", "fabric", "purview", "teams", "sharepoint", "ai-agent", "entra-id"])
       await db.prepare("INSERT OR IGNORE INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',?,?,3,1)").bind(owner.id, eid).run();
     await db.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES('seed_admin_profile','1')").run();
   }

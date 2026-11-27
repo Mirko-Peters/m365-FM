@@ -13,6 +13,13 @@ alle Eintraege in data/r2_map.json zeigen danach auf die neue URL, data/r2_dims.
 Alte Objekte bleiben im Bucket (nichts wird geloescht). Ohne --apply nur Testlauf.
 Zugang ueber R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.
 
+--recopy-escaped (27.11.2026) kopiert Bilder neu, deren Schluessel HTML-maskiert ist ('&amp;') und deren gespeicherte Masse deutlich von den in der
+Adresse verlangten (w/h) abweichen: Fruehere Kopien liefen mit der maskierten Adresse, der Bilddienst (Pexels/imgix) sah dann nur den ersten Parameter
+und lieferte das Vollbild (z. B. Pexels 4665930: 3409x4261, 1,63 MB statt 1200x675). Geladen wird die echte Adresse (fetch_url), abgelegt unter einem
+NEUEN Schluessel i/<sha1(Schluessel)[:20]>-r<Breite>x<Hoehe>.<endung> - existiert er schon, wird abgebrochen (nie ueberschrieben, nichts geloescht).
+Nur dieser Eintrag in data/r2_map.json zeigt danach auf die neue URL, data/r2_dims.json bekommt ihre Masse (alte Masse und Objekte bleiben).
+Ohne --apply nur Testlauf. Laedt keine lokalen Dateien und kopiert keine anderen offenen Bilder.
+
 Dauerhaft fehlende Bilder (Ursprung antwortet HTTP 404 oder 410) landen in data/r2_dead.json (URL -> {"date", "status"}) und werden
 bei spaeteren Laeufen nicht erneut versucht; site_r2.py gibt sie beim Seitenbau nicht als <img> aus. Ist ein Bild wieder da,
 den Eintrag aus data/r2_dead.json entfernen, dann kopiert der naechste --apply-Lauf es.
@@ -58,7 +65,15 @@ def urls():
             found |= set(URL_RX.findall(gzip.open(f, "rt", encoding="utf-8").read() if f.suffix == ".gz" else f.read_text("utf-8")))
     found = {u.rstrip(".,;") for u in found}
     return sorted({u for u in found if u.startswith("http") and any(h in u for h in HOSTS)
-                   and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u)} | entity_logos())
+                   and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u)} | entity_logos() | youtube_thumbs())
+
+
+def youtube_thumbs():
+    """Vorschaubilder der Sticky-Man-Videos (data/videos.json) in den drei Groessen, die die Seiten nutzen (mq 320, hq 480, maxres 1280).
+    Fehlt eine Groesse bei YouTube (404), landet sie in data/r2_dead.json und die Seite nimmt die naechste."""
+    f = ROOT / "data" / "videos.json"
+    vids = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    return {f"https://i.ytimg.com/vi/{v}/{n}.jpg" for v in vids if re.fullmatch(r"[A-Za-z0-9_-]{6,20}", str(v)) for n in ("mqdefault", "hqdefault", "maxresdefault")}
 
 
 def entity_logos():
@@ -307,6 +322,114 @@ def shrink(s3, bucket, done, dims, get=None, workers=8):
     return moved, repoint(done, moved), failed
 
 
+RECOPY_TOL = 1.3   # gespeicherte Breite/Hoehe hoechstens so viel groesser als verlangt, Seitenverhaeltnis hoechstens 10 % daneben - sonst neu kopieren
+
+
+def requested_size(u):
+    """Verlangte Masse aus der echten Adresse (Parameter w und h, wie bei Pexels/imgix) -> (w, h) oder None."""
+    from urllib.parse import parse_qs, urlsplit
+    q = parse_qs(urlsplit(fetch_url(u)).query)
+    try:
+        w, h = int(q["w"][0]), int(q["h"][0])
+    except (KeyError, ValueError, IndexError):
+        return None
+    return (w, h) if w > 0 and h > 0 else None
+
+
+def _off(size, want):
+    """Weichen gespeicherte Masse deutlich von den verlangten ab (zu gross oder anderes Seitenverhaeltnis)?"""
+    (sw, sh), (w, h) = size, want
+    return sw > w * RECOPY_TOL or sh > h * RECOPY_TOL or abs((sw / sh) / (w / h) - 1) > 0.10
+
+
+def recopy_candidates(mapping, dims):
+    """Schluessel (fremde Bilder), die HTML-maskiert sind, w/h verlangen und laut dims deutlich anders gespeichert sind."""
+    out = []
+    for k, v in sorted(mapping.items()):
+        if not (k.startswith("http") and isinstance(v, str) and v.startswith(PUBLIC + "/")) or fetch_url(k) == k:
+            continue
+        want, size = requested_size(k), dims.get(v)
+        if want and size and _off(size, want):
+            out.append(k)
+    return out
+
+
+def recopy_key(u, size, ct):
+    return "i/" + hashlib.sha1(u.encode()).hexdigest()[:20] + f"-r{size[0]}x{size[1]}" + EXT[ct]
+
+
+def exists(s3, bucket, key):
+    """Liegt der Schluessel schon im Bucket? Nur ein sicheres 'fehlt' (404/NoSuchKey/NotFound) gilt als nein, jeder andere Fehler bricht ab."""
+    try:
+        s3.head_object(Bucket=bucket, Key=key)
+        return True
+    except Exception as e:
+        code = str(((getattr(e, "response", None) or {}).get("Error") or {}).get("Code", ""))
+        if code in ("404", "NoSuchKey", "NotFound") or type(e).__name__ in ("NoSuchKey", "NotFound"):
+            return False
+        raise
+
+
+def recopy_one(s3, bucket, u, get=None):
+    """Ein maskiert kopiertes Bild mit der echten Adresse neu laden, optimieren, unter neuem Schluessel ablegen -> (neue URL, [Breite, Hoehe], Bytes).
+    Fehler (kein Bild, Masse weiter daneben, Schluessel existiert): ValueError, nichts hochgeladen."""
+    data, ct = (get or http_get)(fetch_url(u))
+    if ct not in SHRINK_TYPES.values() or len(data) < 100 or len(data) > 15_000_000:
+        raise ValueError(f"kein passendes Bild ({ct}, {len(data)} Byte)")
+    data, ct = optimize(data, ct)
+    size = image_dimensions(data)
+    want = requested_size(u)
+    if not size or not want or _off(size, want):
+        raise ValueError(f"Masse weiter daneben ({size}, verlangt {want})")
+    key = recopy_key(u, size, ct)
+    if exists(s3, bucket, key):
+        raise ValueError(f"Schluessel {key} existiert schon - nicht ueberschrieben")
+    s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=31536000, immutable")
+    return f"{PUBLIC}/{key}", size, len(data)
+
+
+def recopy(s3, bucket, done, dims, get=None):
+    """Alle Kandidaten neu kopieren; nur der jeweilige Eintrag wird umgestellt. -> ([(Schluessel, alt, neu, Masse, Bytes)], Fehlerliste)."""
+    moved, failed = [], []
+    for u in recopy_candidates(done, dims):
+        try:
+            new, size, n = recopy_one(s3, bucket, u, get)
+        except Exception as e:
+            failed.append((u, str(e)[:120]))
+            continue
+        moved.append((u, done[u], new, size, n))
+        done[u] = new
+        dims[new] = size
+    return moved, failed
+
+
+def object_bytes(s3, bucket, url):
+    try:
+        return int(s3.head_object(Bucket=bucket, Key=url[len(PUBLIC) + 1:]).get("ContentLength") or 0)
+    except Exception:
+        return 0
+
+
+def main_recopy(apply):
+    done, dims = load_data()
+    todo = recopy_candidates(done, dims)
+    print(f"{len(todo)} maskiert kopierte Bilder mit abweichenden Massen")
+    for u in todo:
+        print("  ", dims.get(done[u]), "verlangt", requested_size(u), done[u], "<-", u)
+    if not apply:
+        print("Testlauf, nichts hochgeladen. Mit --recopy-escaped --apply ausfuehren.")
+        return 0
+    s3, bucket = s3_client(), os.environ["R2_BUCKET"]
+    before = {u: object_bytes(s3, bucket, done[u]) for u in todo}
+    moved, failed = recopy(s3, bucket, done, dims)
+    write_data(done, dims)
+    for u, old, new, size, n in moved:
+        print(f"  NEU {new} {size[0]}x{size[1]} {n} Byte (vorher {old} {dims.get(old)} {before.get(u, 0)} Byte)")
+    print(f"{len(moved)} neu kopiert, {len(failed)} fehlgeschlagen (bleiben bei der alten URL); alte Objekte bleiben im Bucket")
+    print_failed(failed)
+    return 1 if failed else 0
+
+
 def load_dead():
     """data/r2_dead.json -> dict (Schluessel mit '_' sind Kommentare und bleiben beim Schreiben erhalten)."""
     try:
@@ -405,6 +528,8 @@ def main():
     if "--shrink" in sys.argv:
         main_shrink(apply)
         return
+    if "--recopy-escaped" in sys.argv:
+        sys.exit(main_recopy(apply))
     todo = urls()
     done, dims = load_data()
     dead = load_dead()

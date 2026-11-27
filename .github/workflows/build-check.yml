@@ -12,7 +12,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 150   # generate_site.py braucht inzwischen gut 100 min (site.yml 25.11.2026); mit 60 brach die Probe in den Community-Seiten ab
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -25,6 +25,8 @@ jobs:
           restore-keys: exports-
       - run: pip install -q requests cryptography
       - run: python generate_site.py
+      - name: Feste Aehnliche Folgen (site_related.py) - Umfang
+        run: python3 -c "import json,os;f='data/sidebar_related.json';d=json.load(open(f));print('Eintraege:',len(d['items']),'Bytes:',os.path.getsize(f))" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Vor/Zurueck pruefen
         run: python tools/check_pager.py
       - name: Interne Links pruefen (wie im Seitenbau nicht blockierend, bekannte Altfaelle)

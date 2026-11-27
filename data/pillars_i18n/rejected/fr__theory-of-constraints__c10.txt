@@ -1,0 +1,61 @@
+<translation>
+## Ordonnancement tambour-tampon-corde avec chiffres
+
+Le tambour-tampon-corde (DBR, Drum-Buffer-Rope) est la méthode TOC pour l'ordonnancement et le pilotage de la production. Goldratt et Robert E. Fox l'ont décrite dans *The Race* (1986), en s'appuyant sur la métaphore de la troupe de scouts de *The Goal* [3][8]. Le *Theory of Constraints Handbook* décrit la forme actuelle, y compris la gestion des tampons et la classification des flux VATI [9].
+
+- **Tambour :** le planning de la contrainte. C'est le seul planning détaillé de l'usine qui doit être respecté.
+- **Tampon :** des tampons temporels qui protègent le débit de l'usine contre la variabilité. Le DBR traditionnel utilise des tampons au niveau de la contrainte, aux points d'assemblage où les pièces de la contrainte rencontrent les pièces hors contrainte, et à l'expédition [6].
+- **Corde :** le mécanisme de lancement. La matière entre dans l'usine un temps tampon avant d'être nécessaire à la contrainte ; la lancer plus tôt ne fait qu'augmenter les en-cours [6].
+
+Les tampons du DBR se mesurent en **temps**, et non en pièces [6]. Un tampon de contrainte de 16 heures signifie que la matière est lancée 16 heures ouvrées avant son début planifié à la contrainte.
+
+### Étape 1 : établir le planning tambour
+
+De retour dans l'usine de collecteurs, la cellule CNC est le tambour. Son planning pour le mercredi (équipe 1 : 06h00–14h00, équipe 2 : 14h00–22h00), avec les changements de série de 18 minutes de la section 5 :
+
+| Ordre | Produit et quantité | Réglage + usinage (min) | Début CNC | Fin CNC |
+|---|---|---|---|---|
+| 1041 | A × 10 | 18 + 250 = 268 | Mer 06h00 | Mer 10h28 |
+| 1042 | B × 5 | 18 + 200 = 218 | Mer 10h28 | Mer 14h06 |
+| 1043 | A × 10 | 268 | Mer 14h06 | Mer 18h34 |
+| 1044 | B × 4 | 18 + 160 = 178 | Mer 18h34 | Mer 21h32 |
+
+La séquence suit la décision de mix produit de la section 5 et la demande hebdomadaire, avec des lots assez petits pour garder des délais courts. Les 28 minutes restant en fin d'équipe sont consacrées à un contrôle planifié des outils.
+
+### Étape 2 : fixer les tampons
+
+- **Tampon de contrainte :** 16 heures ouvrées (deux équipes). La scie et la manutention demandent moins d'une heure de temps de manipulation par ordre ; le reste protège contre les pannes de scie, les manques de matière et les programmes.
+- **Tampon d'expédition :** 16 heures ouvrées après la cellule CNC. L'ébavurage, l'assemblage et le test demandent environ une heure de temps de manipulation par ordre.
+- **Zone tampon physique :** une zone de sol délimitée devant la cellule CNC, dimensionnée pour environ une journée de travail, avec des voies FIFO par famille de gabarits. Si la zone déborde, le lancement est en avance sur la corde ; si elle est vide, la cellule CNC est menacée.
+
+Quelle doit être la taille d'un tampon au départ ? Gray, Felan, Umble et Umble notent qu'il existe des règles empiriques, mais que, d'après leur expérience, les tailles de tampon sont généralement fixées pour obtenir un système stable, puis ajustées [24] ; la gestion des tampons (section 9) assure cet ajustement. Une valeur de départ souvent citée dans la pratique TOC est d'environ la moitié du délai actuel de ce segment [non vérifié]. Dans l'exemple, les pièces attendaient auparavant 2,5 jours devant la cellule CNC ; l'équipe a commencé avec une journée et prévu d'ajuster.
+
+### Étape 3 : tendre la corde
+
+Heure de lancement = début planifié à la contrainte − tampon de contrainte.
+
+| Ordre | Début CNC | Tampon de contrainte | Lancement vers la scie | Date d'expédition (fin CNC + tampon d'expédition) |
+|---|---|---|---|---|
+| 1041 | Mer 06h00 | 16 h | Mar 06h00 | Jeu 10h28 |
+| 1042 | Mer 10h28 | 16 h | Mar 10h28 | Jeu 14h06 |
+| 1043 | Mer 14h06 | 16 h | Mar 14h06 | Jeu 18h34 |
+| 1044 | Mer 18h34 | 16 h | Mar 18h34 | Jeu 21h32 |
+
+Aucune matière n'est lancée avant son heure de lancement, même si la scie est inactive. C'est ce qui maintient bas les en-cours et le délai.
+
+### Étape 4 : faire tourner l'usine selon l'état des tampons
+
+Les hors-contraintes ne reçoivent pas de planning détaillé. Ils travaillent par ordre d'état des tampons (section 9) : les ordres dont le tampon est le plus consommé passent en premier. La cellule CNC suit sa séquence.
+
+### DBR contre poussée MRP : ce qui change
+
+| Sujet | Poussée MRP | DBR |
+|---|---|---|
+| Lancement | délais planifiés par opération, souvent gonflés | planning de la contrainte moins le tampon |
+| Plannings détaillés | pour chaque poste de travail | seulement pour la contrainte |
+| En-cours | augmentent quand les délais sont gonflés | limités par la corde |
+| Priorités à l'atelier | listes d'urgence, expédition accélérée | codes couleur de l'état des tampons |
+| Réponse à la variabilité | plus de délai, plus d'en-cours | tampons en quelques points, dimensionnés et ajustés |
+
+Le guide [production scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/) explique comment le DBR s'intègre à l'ordonnancement à capacité finie et quand un APS apporte de la valeur.
+</translation>

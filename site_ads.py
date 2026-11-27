@@ -516,11 +516,24 @@ def _place_intro(body, block):
         lede = re.match(r'\s*<p class="[^"]*\blede\b[^"]*"[^>]*>.*?</p>', region[start:], re.S)
         if lede:
             start += lede.end()
+    before_lc = -1
     for c in re.finditer(r"</p>|<h2\b", region[start:]):
         pos = start + (c.end() if c.group(0) == "</p>" else c.start())
+        if c.group(0) == "</p>":
+            po = region.rfind("<p", start, pos - 4)
+            while po >= 0 and not re.match(r"<p[\s>]", region[po:po + 3]):
+                po = region.rfind("<p", start, po)
+            if po >= 0 and _LC_P.match(region, po):   # Einleitungssatz (site_linkctx, p.lc) gehoert zu seiner Liste: nie zwischen Satz und Liste
+                if before_lc < 0 and _depth_ok(region[:po]): before_lc = po
+                continue
         if _depth_ok(region[:pos]):
             return body[:a] + region[:pos] + block + region[pos:] + body[z:]
+    if before_lc >= 0:   # nach der Liste kein Platz mehr: vor dem Satz
+        return body[:a] + region[:before_lc] + block + region[before_lc:] + body[z:]
     return body
+
+
+_LC_P = re.compile(r'<p\b[^>]*(?:\bclass="(?:[^"]*\s)?lc(?:\s[^"]*)?"|\bdata-own-text="no")')
 
 
 def _far_enough(body, gap):

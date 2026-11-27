@@ -1,0 +1,64 @@
+name: Pillar-Leitfaeden uebersetzen (Haiku, Batch)
+on:
+  workflow_dispatch:
+    inputs:
+      mode: { description: "plan = nur Zustand und Kostenschaetzung (ohne Schluessel), run = senden, abwarten, speichern", type: choice, options: [plan, run], default: plan }
+      langs: { description: "Sprachen, kommagetrennt (leer = alle 13: fr,es,it,nl,pt,pl,id,ru,uk,ar,he,ja,ko)", required: false, default: "" }
+      pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt, z. B. lean-manufacturing); leer = alle mit deutscher Fassung oder translate=true in data/pillars.json (seit 26.11.2026 alle 20 Leitfaeden; rein englische nur, wenn hier genannt; Vertiefungen werden noch nicht uebersetzt)", required: false, default: "" }
+      limit: { description: "Hoechstens so viele Anfragen (Probelauf, z. B. 12); 0 = keine Grenze", required: false, default: "0" }
+      redo: { description: "Ganze Leitfaeden neu uebersetzen (kostenpflichtig; alter Text bleibt, bis die neue Fassung die Pruefung besteht)", type: boolean, default: false }
+      ui_only: { description: "Nur Oberflaechentexte (neue/geaenderte Schluessel, z. B. q_* des Abschlusstests; deutsche Oberflaeche wird ganz neu angefordert)", type: boolean, default: false }
+permissions:
+  contents: write
+concurrency: { group: translate-pillars, cancel-in-progress: false }
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Anfragen planen, senden, Ergebnis speichern
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          MODE_IN: ${{ inputs.mode }}
+          LANGS_IN: ${{ inputs.langs }}
+          PILLARS_IN: ${{ inputs.pillars }}
+          LIMIT_IN: ${{ inputs.limit }}
+          REDO_IN: ${{ inputs.redo }}
+          UI_ONLY_IN: ${{ inputs.ui_only }}
+          PILLARS_TRIES: "5"
+        run: |
+          MODE="${MODE_IN:-plan}"
+          if [ -z "$ANTHROPIC_API_KEY" ] && [ "$MODE" = "run" ]; then
+            echo "::warning::Kein API-Schluessel (Secret ANTHROPIC_API_KEY_SHOW) - nur Plan."; MODE=plan
+          fi
+          ARGS=""
+          [ -n "$LANGS_IN" ] && ARGS="$ARGS --langs $LANGS_IN"
+          [ -n "$PILLARS_IN" ] && ARGS="$ARGS --pillars $PILLARS_IN"
+          [ -n "$LIMIT_IN" ] && [ "$LIMIT_IN" != "0" ] && ARGS="$ARGS --limit $LIMIT_IN"
+          [ "$REDO_IN" = "true" ] && ARGS="$ARGS --redo"
+          [ "$UI_ONLY_IN" = "true" ] && ARGS="$ARGS --ui-only"
+          echo "Aufruf: translate_pillars.py $MODE $ARGS"
+          python translate_pillars.py "$MODE" $ARGS
+      - name: Ergebnis committen
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PATHS="data/pillars_i18n imports/pillars"; [ -f data/pillars_i18n.json ] && PATHS="$PATHS data/pillars_i18n.json"
+          if [ -n "$(git status --porcelain $PATHS | grep -v 'data/pillars_i18n/stale.json')" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add -A -- $PATHS && git commit -q -m "Pillar-Uebersetzungen (Haiku, Batch)"
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
+          fi

@@ -1,0 +1,66 @@
+name: Transkripte lesbar setzen (Absätze + h3/h4, Text bleibt Original)
+# tools/transcript_format.py: Haiku-Batch liefert nur Absatzanfaenge und kurze Zwischenueberschriften; der Text selbst wird nie neu geschrieben (transcript_fmt.py).
+# Ergebnis: data/transcript_fmt/<sprache>.json.gz. Auf den Seiten wirkt es erst mit data/transcript_fmt_live.json (Sprache freigeben); ohne Freigabe aendert sich keine Seite.
+# Von Hand: mode plan (zaehlen, Kosten schaetzen, nichts wird bezahlt) | run (senden + einsammeln) | collect (nur einsammeln). Mit limit z. B. 20 fuer eine Probe.
+# Zeitplan: taeglich 02:43 UTC, nur neue oder geaenderte Transkripte (hoechstens 150 je Nacht). Notschalter: Repo-Variable TRANSCRIPT_FMT_AUTO = 0 / false / off / aus.
+# Kosten: Haiku-Batch, im Tagesbudget des Gateways (Job transcript_format); die ganze englische Hauptshow (~1.100 Transkripte) liegt bei etwa 1 EUR.
+on:
+  schedule:
+    - cron: "43 2 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur zaehlen/schaetzen | run = senden und einsammeln | collect = nur einsammeln"
+        type: choice
+        options: [plan, run, collect]
+        default: plan
+      langs: { description: "Sprachen (Komma); heute nur en", required: false, default: "en" }
+      limit: { description: "Hoechstens N Transkripte (leer = alle offenen); fuer die Probe 20", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: transcript-format, cancel-in-progress: false }
+jobs:
+  fmt:
+    if: ${{ github.event_name != 'schedule' || !contains(fromJSON('["0","false","off","aus"]'), format('{0}', vars.TRANSCRIPT_FMT_AUTO)) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    env:
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+      MODE_IN: ${{ inputs.mode || 'run' }}
+      LANGS_IN: ${{ inputs.langs || 'en' }}
+      LIMIT_IN: ${{ inputs.limit || (github.event_name == 'schedule' && '150' || '') }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.ref }}
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Selbsttest (ohne Netz, ohne Secrets)
+        run: python -m unittest tests/test_transcript_fmt.py
+      - name: Eingaben pruefen
+        run: |
+          [[ "$LANGS_IN" =~ ^[a-z]{2}(,[a-z]{2})*$ ]] || { echo "langs ungueltig"; exit 1; }
+          [[ -z "$LIMIT_IN" || "$LIMIT_IN" =~ ^[0-9]+$ ]] || { echo "limit ungueltig"; exit 1; }
+      - name: Ausfuehren
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          ARGS=(--langs "$LANGS_IN")
+          [ -n "$LIMIT_IN" ] && ARGS+=(--limit "$LIMIT_IN")
+          [ "$MODE_IN" != "plan" ] && ARGS+=(--wait 10000)
+          python tools/transcript_format.py "$MODE_IN" "${ARGS[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis sichern
+        if: always() && env.MODE_IN != 'plan'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/transcript_fmt data/transcript_fmt_state.json 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu sichern"; exit 0; fi
+          git commit -q -m "Transkripte lesbar gesetzt $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1

@@ -1,0 +1,1681 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:06.840
+Peu pour 13 jours consacrés à Microsoft 365, Copilot, l'IA Azure et aux personnes qui façonnent l'avenir du travail.
+
+00:00:07.900 --> 00:00:12.020
+En janvier prochain, la M365 Con revient et nous voyons les choses en grand.
+
+00:00:12.920 --> 00:00:18.200
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des connaissances pratiques partagées par des MVP et des experts du secteur du monde entier.
+
+00:00:18.940 --> 00:00:21.220
+Fini les présentations génériques et les mots à la mode sans fin.
+
+00:00:22.000 --> 00:00:23.140
+Nous nous attaquons aux vrais défis.
+
+00:00:23.800 --> 00:00:28.480
+Copilot Studio, agent IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.480 --> 00:00:34.300
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.600 --> 00:00:40.060
+Avec 10 journées complètes, vous pourrez explorer de nombreuses technologies et vous connecter à une communauté mondiale.
+
+00:00:41.020 --> 00:00:44.120
+Suivez le direct et rapportez des idées concrètes à votre organisation.
+
+00:00:45.300 --> 00:00:47.800
+Janvier 2027, 10 jours, une seule communauté.
+
+00:00:48.140 --> 00:00:50.960
+Microsoft, les inscriptions sont désormais ouvertes.
+
+00:00:51.880 --> 00:00:55.520
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.520 --> 00:00:58.680
+C'est m365con.net.
+
+00:01:00.340 --> 00:01:04.620
+Inscrivez-vous sur m365con.net et nous vous attendons en janvier pour le direct.
+
+00:01:05.420 --> 00:01:06.120
+C'est un fait amusant.
+
+00:01:07.000 --> 00:01:10.740
+Intégrer des identifiants dans vos applications Azure revient à distribuer les clés de chez vous à un arrêt de bus.
+
+00:01:11.940 --> 00:01:17.740
+Entre ID et les identités gérées vous permettent de verrouiller toutes les portes sans jongler avec des trousseaux de clé ni espérer que personne ne remarque le post-it sous votre clavier.
+
+00:01:18.100 --> 00:01:18.600
+Sous votre clavier.
+
+00:01:18.860 --> 00:01:19.700
+La bonne nouvelle ?
+
+00:01:19.700 --> 00:01:21.560
+Pas besoin d'être un magicien de la cryptographie pour y arriver.
+
+00:01:21.560 --> 00:01:26.220
+Je vais vous montrer étape par étape comment remplacer les secrets par des jetons pour mieux dormir la nuit.
+
+00:01:27.300 --> 00:01:28.400
+Le problème de la clé sous le paillasson.
+
+00:01:28.900 --> 00:01:34.560
+Pourquoi tant d'applications Azure cachent-elles encore des mots de passe dans des fichiers de configuration comme si nous écrivions toujours du VMScript en 2003 ?
+
+00:01:35.240 --> 00:01:36.440
+Sérieusement, nous sommes en 2024.
+
+00:01:37.040 --> 00:01:44.020
+Nous avons des systèmes de sécurité cloud natif qui génèrent des jetons à la demande et pourtant quelqu'un à quelque part continue de commettre un mot de passe en clair dans son dépôt comme s'il s'agissait d'un trophée.
+
+00:01:45.340 --> 00:01:46.340
+Et l'excuse est toujours la même.
+
+00:01:46.860 --> 00:01:48.320
+Nous avons codé en dur pour gagner du temps.
+
+00:01:48.320 --> 00:01:53.480
+Gagner du temps aujourd'hui pour passer des semaines à nettoyer les dégâts en cas de fuite, ce n'est pas un raccourci.
+
+00:01:54.000 --> 00:01:55.620
+C'est de la procrastination avec des étapes supplémentaires.
+
+00:01:55.960 --> 00:01:57.320
+Le problème dépasse la simple paresse.
+
+00:01:57.960 --> 00:02:03.680
+Les développeurs pensent qu'insérer des noms d'utilisateurs et des mots de passe dans un fichier de config ou un json de paramètres est sans danger car cela reste interne.
+
+00:02:04.320 --> 00:02:05.680
+Sauf que rien ne reste jamais vraiment interne.
+
+00:02:06.160 --> 00:02:12.000
+Cette config est copiée vers le dev, le test, la pré-production, trois branches QA différentes, des sauvegardes et un ordinateur oublié dans un avion.
+
+00:02:12.000 --> 00:02:14.260
+Ce n'est pas un secret, c'est une diffusion publique.
+
+00:02:15.460 --> 00:02:22.140
+Ajoutez à cela Git ou une mauvaise manipulation rend publique plus de mots de passe de production que je ne peux en compter et vous obtenez une file d'incidents qui se génère toute seule.
+
+00:02:23.380 --> 00:02:24.460
+Voici ce que personne n'aime admettre.
+
+00:02:25.600 --> 00:02:27.460
+Ces solutions rapides ne font pas que risquer une exposition.
+
+00:02:28.480 --> 00:02:29.360
+Elle la garantit sa terme.
+
+00:02:29.980 --> 00:02:30.920
+Les secrets sont insaisissables.
+
+00:02:31.460 --> 00:02:33.960
+Ils se glissent dans les fichiers journaux parce que vous avez oublié de nettoyer une exception.
+
+00:02:35.080 --> 00:02:36.760
+Ils se cachent dans des captures d'écran partagées sur Teams.
+
+00:02:36.760 --> 00:02:41.520
+Ils sont compressés dans des sauvegardes stockées sans chiffrement dans des blobs car personne n'a voulu payer pour le niveau coffre-fort.
+
+00:02:42.000 --> 00:02:45.320
+Il suffit d'un attaquant ennuyé qui scanne les dépôts publics à la recherche de chaînes évidentes.
+
+00:02:45.960 --> 00:02:50.140
+Password 123 du gars est toujours une mine d'or et soudain toute votre application est grande ouverte.
+
+00:02:50.680 --> 00:02:51.260
+L'un de mes favoris.
+
+00:02:51.540 --> 00:02:56.900
+Souvenez-vous quand des milliers d'identifiants sont apparus sur GitHub public il y a quelques années parce que les développeurs utilisaient dépôts personnels pour tester, tester.
+
+00:02:57.640 --> 00:02:58.740
+Les attaquants n'ont même pas eu à faire des fois.
+
+00:02:58.920 --> 00:03:03.740
+Ils ont lancé des recherches par mots-clés, trouvé les chaînes de connexion et accédé directement aux ressources de production et...
+
+00:03:03.740 --> 00:03:07.760
+Pas de faille 0D, pas de montage de piratage à l'Hollywood, juste du copier-coller et le tour est joué.
+
+00:03:08.240 --> 00:03:09.800
+Voilà ce que vous coûte le codage en dur des secrets.
+
+00:03:10.260 --> 00:03:12.120
+Une maison où le cambrioleur n'a même pas besoin de crocheter une serrure.
+
+00:03:12.860 --> 00:03:14.680
+La clé est sous le paillasson et vous avez tagué CAC.
+
+00:03:14.840 --> 00:03:17.440
+La clé est dans les paramètres de l'application React Gang sur le Porsche.
+
+00:03:18.120 --> 00:03:21.100
+Vous ne laisserez pas votre porte d'entrée ouverte avec le code du garage écrit sur un post-it,
+
+00:03:21.200 --> 00:03:25.220
+mais c'est exactement ainsi que se comportent les chaînes de connexion contenant des identifiants, contenant des identifiants.
+
+00:03:25.900 --> 00:03:29.780
+Bien sûr, ça marche jusqu'à ce qu'un voisin, disons un botnet anonyme, découvre où vous trouvez.
+
+00:03:30.740 --> 00:03:32.040
+Microsoft a été très clair ces derniers temps.
+
+00:03:32.740 --> 00:03:36.380
+Les identifiants en code et en dur sont renvoyés dans le même panier qu'Internet Explorer et Clippy.
+
+00:03:37.360 --> 00:03:37.640
+Obsolète.
+
+00:03:38.240 --> 00:03:42.040
+Vous pouvez continuer à les utiliser, mais attendez-vous à des déceptions, des pannes et un journal d'audit qui vous hurlera dessus.
+
+00:03:42.580 --> 00:03:43.820
+Ajoutez à ça le problème de la prolifération.
+
+00:03:44.260 --> 00:03:45.800
+Chaque environnement nécessite ses propres paramètres.
+
+00:03:46.260 --> 00:03:49.740
+Maintenant, vous avez un mot de passe pour la machine de dev, une chaîne admin pour la pré-prod, une autre pour la prod,
+
+00:03:49.840 --> 00:03:51.300
+et personne ne sait s'ils ont été renouvelés.
+
+00:03:52.440 --> 00:03:54.620
+Différentes équipes conservent des copies légèrement obsolètes.
+
+00:03:55.420 --> 00:03:57.900
+Quelqu'un commente une ancienne chaîne de connexion au lieu de la supprimer.
+
+00:03:57.900 --> 00:04:02.040
+Félicitations. Votre application est un tiroir à bazar numérique rempli de passe-partout.
+
+00:04:02.600 --> 00:04:04.160
+Les attaquants adorent ça, c'est un buffet à volonté.
+
+00:04:04.620 --> 00:04:07.540
+Et ne parlons même pas de ce qui arrive quand des prestataires obtiennent un accès en lecture à vos dépôts.
+
+00:04:08.120 --> 00:04:09.000
+Pensez qu'ils ne prennent que le code.
+
+00:04:09.780 --> 00:04:10.700
+La leçon à retenir est simple.
+
+00:04:11.400 --> 00:04:13.060
+Le vrai danger n'est pas seulement la fuite d'un mot de passe.
+
+00:04:13.460 --> 00:04:14.580
+C'est la manière dont les secrets se multiplient.
+
+00:04:14.980 --> 00:04:18.260
+Une fois introduits dans les configs, ils se répliquent dans les environnements, les sauvegardes, les scripts,
+
+00:04:18.820 --> 00:04:20.180
+et la documentation.
+
+00:04:20.540 --> 00:04:21.580
+Vous ne pouvez pas gérer cette prolifération.
+
+00:04:21.760 --> 00:04:24.080
+Vous ne pouvez pas la contenir avec des astuces d'obfuscation.
+
+00:04:24.080 --> 00:04:25.600
+Ce n'est pas un problème que l'on corrige.
+
+00:04:26.000 --> 00:04:27.000
+C'est un problème que l'on élimine.
+
+00:04:27.600 --> 00:04:28.820
+Arrêtez de chercher ou cacher la clé.
+
+00:04:29.400 --> 00:04:30.820
+Au lieu de cela, arrêtez tout simplement d'utiliser.
+
+00:04:31.260 --> 00:04:32.400
+C'est pour cela que les jetons existent.
+
+00:04:32.640 --> 00:04:33.860
+Ils ne se comportent pas comme des mots de passe.
+
+00:04:34.160 --> 00:04:35.020
+Ils ne sont pas longues durées de vie.
+
+00:04:35.380 --> 00:04:37.640
+Ils ne sont pas statiques et ne restent pas dans des fichiers pendant des années,
+
+00:04:37.860 --> 00:04:39.140
+attendant que la mauvaise personne les trouve.
+
+00:04:39.560 --> 00:04:41.840
+Le remède à la prolifération des mots de passe n'est pas de mieux les cacher.
+
+00:04:42.500 --> 00:04:45.060
+C'est de les remplacer par quelque chose qui s'autodétruit en cas d'utilisation abusive.
+
+00:04:45.840 --> 00:04:47.860
+Les jetons vous permettent de faire exactement cela.
+
+00:04:48.060 --> 00:04:49.840
+Et EntraID est le système qui les délivre.
+
+00:04:49.840 --> 00:04:52.300
+D'accord, si on jette les clés sous le paillasson, comment ?
+
+00:04:52.300 --> 00:04:55.240
+Les jetons évitent de devenir des problèmes encore plus complexes pour nos administrateurs.
+
+00:04:56.020 --> 00:04:58.520
+Voyons pourquoi ils nous facilitent la vie au lieu de la compliquer.
+
+00:04:59.560 --> 00:05:01.880
+Pourquoi les jetons surpassent les mots de passe à tous les coups ?
+
+00:05:01.880 --> 00:05:04.400
+Si les mots de passe sont des clés de voiture, les jetons sont des tickets valides.
+
+00:05:04.920 --> 00:05:06.200
+Vous les utilisez pour un seul trajet ?
+
+00:05:06.200 --> 00:05:07.520
+Ils ne valent plus rien une fois le voyage terminé.
+
+00:05:07.980 --> 00:05:09.360
+Personne ne peut copier un ticket valide en douce.
+
+00:05:09.440 --> 00:05:10.940
+Et si quelqu'un essaye, c'est immédiatement repéré.
+
+00:05:11.240 --> 00:05:12.000
+C'est immédiatement repéré.
+
+00:05:12.600 --> 00:05:13.620
+C'est la différence fondamentale.
+
+00:05:13.980 --> 00:05:14.920
+Les mots de passe sont statiques.
+
+00:05:15.280 --> 00:05:16.500
+Les jetons sont temporaires et délimités.
+
+00:05:16.500 --> 00:05:20.240
+Ce qui signifie qu'en cas de fuite, l'impact est minime et le compte à rebours est déjà lancé jusqu'à leur expiration.
+
+00:05:21.220 --> 00:05:22.680
+Alors qu'est-ce qu'un jeton, au juste ?
+
+00:05:22.680 --> 00:05:24.820
+Dans l'univers Azure, votre application contacte un try-id et demande
+
+00:05:24.820 --> 00:05:26.660
+« Eh, puis-je obtenir l'autorisation de faire ceci ? »
+
+00:05:26.660 --> 00:05:29.460
+Un try-id vérifie qui ou quoi fait la demande, effectue ses vérifications,
+
+00:05:29.640 --> 00:05:32.120
+puis renvoie un paquet signé, le jeton d'accès, le jeton d'accès.
+
+00:05:32.980 --> 00:05:34.120
+Ce jeton a une durée de vie limite.
+
+00:05:34.420 --> 00:05:35.960
+Il est lié à l'identité de l'utilisateur ou du service.
+
+00:05:36.440 --> 00:05:37.700
+Il comporte des limites sur ce qu'il peut atteindre.
+
+00:05:38.340 --> 00:05:39.800
+Et quand la fenêtre temporelle se ferme, il est mort.
+
+00:05:40.280 --> 00:05:42.060
+Personne ne le réinitialit. Personne ne le renouvelle.
+
+00:05:42.340 --> 00:05:42.980
+Il disparaît tout simplement.
+
+00:05:43.460 --> 00:05:45.740
+Bien sûr, quand on dit cela aux développeurs, leur premier réflexe est de paniquer.
+
+00:05:46.220 --> 00:05:48.080
+Oh non, maintenant nous avons des jetons en rotation qui circulent partout.
+
+00:05:48.480 --> 00:05:49.740
+Doit-on les mettre en cache, les stocker,
+
+00:05:50.040 --> 00:05:52.700
+traquer les codes de rafraîchissement, créer une logique de remplacement ?
+
+00:05:52.700 --> 00:05:54.060
+Eh bien la réponse est non, arrêtez de vous inquiéter.
+
+00:05:54.520 --> 00:05:56.880
+Les bibliothèques d'identité Microsoft gèrent cette tuyauterie pour vous.
+
+00:05:57.460 --> 00:06:00.160
+Les SDK récupèrent, rafraîchissent et éliminent littéralement les jetons
+
+00:06:00.160 --> 00:06:01.780
+comme des agents d'entretien après une conférence.
+
+00:06:02.700 --> 00:06:03.740
+Vous n'avez pas besoin de réinventer OE.
+
+00:06:03.740 --> 00:06:06.680
+Il vous suffit d'appeler la fonction et de vous concentrer sur la logique réelle de votre application.
+
+00:06:07.020 --> 00:06:08.120
+Comparer cela à l'ancienne méthode.
+
+00:06:08.660 --> 00:06:11.760
+Un mot de passe statique, c'est comme donner à quelqu'un le passe-partout de tout votre bâtiment.
+
+00:06:12.760 --> 00:06:13.740
+Ils n'accèdent pas seulement à leur état.
+
+00:06:14.060 --> 00:06:16.260
+Ils peuvent atteindre la suite de direction, la salle des serveurs
+
+00:06:16.260 --> 00:06:17.740
+et même la réserve de bonbons au RH.
+
+00:06:18.580 --> 00:06:19.220
+Maintenant prenez un jeton.
+
+00:06:19.760 --> 00:06:21.880
+C'est un passe visiteur qui ne fonctionne que pour le troisième étage
+
+00:06:21.880 --> 00:06:23.700
+et qui se désactive à 17h.
+
+00:06:24.260 --> 00:06:26.620
+Si quelqu'un essaie de l'utiliser après, l'accès est refusé.
+
+00:06:27.220 --> 00:06:28.160
+Pas de devinette, pas de traînard.
+
+00:06:28.720 --> 00:06:31.300
+Sa portée est adaptée à sa fonction, ce n'est pas une solution de fortune toute ouverte.
+
+00:06:31.940 --> 00:06:33.560
+Les jetons sont aussi dotés d'une certaine intelligence.
+
+00:06:34.180 --> 00:06:36.460
+Si vous ouvrez un jeton, c'est comme inspecter une carte d'embarquement.
+
+00:06:36.940 --> 00:06:39.000
+Vous y trouvez votre voile, votre rangée de siège, la porte et la zone.
+
+00:06:39.560 --> 00:06:42.700
+Les jetons stockent des revendications, des rôles, des portées, des IDs de locataires
+
+00:06:42.700 --> 00:06:43.860
+et même les informations de base d'utilité.
+
+00:06:44.140 --> 00:06:46.720
+Cela signifie que votre API ne fait pas juste confiance à cette personne connectée.
+
+00:06:47.460 --> 00:06:49.340
+Il vérifie que cette personne appartient bien à la finance,
+
+00:06:49.560 --> 00:06:51.300
+possède le rôle de paiement et a été approuvé aujourd'hui.
+
+00:06:52.300 --> 00:06:55.420
+Vous pouvez intégrer des règles bien plus strictes directement dans la logique de votre application
+
+00:06:55.420 --> 00:06:56.840
+sans gérer 10 jeux de mots de passe différents.
+
+00:06:57.500 --> 00:06:58.400
+Voici une comparaison concrète.
+
+00:06:58.400 --> 00:07:01.020
+Une entreprise avec laquelle j'ai travaillé avait une base de données protégée
+
+00:07:01.020 --> 00:07:03.060
+uniquement par des identifiants SQL codés en dur partout.
+
+00:07:03.740 --> 00:07:04.980
+Ce qu'ont disposé des droits d'administrateur système.
+
+00:07:05.360 --> 00:07:07.440
+Comme prévu, un prestataire les a copiés dans un outil
+
+00:07:07.440 --> 00:07:09.720
+et bam, toute la base de données est devenue son terrain de jeu.
+
+00:07:10.600 --> 00:07:11.340
+Chaque table exposée.
+
+00:07:12.200 --> 00:07:14.440
+Regardez maintenant un système plus récent utilisant des jetons limités
+
+00:07:14.440 --> 00:07:17.820
+à ce dont l'application a besoin, un accès en lecture sur un seul schéma.
+
+00:07:18.760 --> 00:07:21.440
+Même si quelqu'un volait ce jeton, il ne pourrait que sélectionner des enregistrements
+
+00:07:21.440 --> 00:07:23.540
+et seulement jusqu'à l'expiration du jeton.
+
+00:07:24.040 --> 00:07:25.740
+Cela a transformé un cauchemar en un léger désagrément.
+
+00:07:25.740 --> 00:07:28.360
+Je peux déjà entendre certains développeurs rognés ?
+
+00:07:28.360 --> 00:07:30.780
+Les jetons semblent bien en théorie, mais ils vont casser mon flux de travail.
+
+00:07:31.280 --> 00:07:33.960
+Je n'ai pas le temps de gérer le renouvellement ou l'expiration ou l'expiration.
+
+00:07:34.540 --> 00:07:35.060
+C'est un mythe.
+
+00:07:35.440 --> 00:07:36.920
+Personne ne vous demande de les rafraîchir manuellement.
+
+00:07:37.540 --> 00:07:39.460
+Les bibliothèques que vous utilisez déjà en Donnet ou Node
+
+00:07:39.460 --> 00:07:41.700
+récupèrent le jeton de rafraîchissement, les changent de manière invisible
+
+00:07:41.700 --> 00:07:42.480
+et poursuivent le travail.
+
+00:07:42.900 --> 00:07:45.180
+Vous ne vous rendez même pas compte que c'est arrivé, à moins d'analyser les paquets.
+
+00:07:45.440 --> 00:07:46.720
+Ce qui est le but recherché ?
+
+00:07:46.720 --> 00:07:47.900
+Arrêtez de garder les secrets communs.
+
+00:07:48.280 --> 00:07:49.120
+Laissez le système s'en charger.
+
+00:07:49.700 --> 00:07:51.280
+Considérez un tra-ID comme un bureau des passeports.
+
+00:07:51.760 --> 00:07:53.440
+Vous vous présentez, prouvez votre identité
+
+00:07:53.440 --> 00:07:56.340
+et ils tamponnent un ID que les gardes frontières, vos API, reconnaissent.
+
+00:07:57.140 --> 00:07:58.280
+Tampons expirés, pas d'embarquement.
+
+00:07:58.860 --> 00:07:59.680
+Mauvais tampons refusés.
+
+00:08:00.020 --> 00:08:02.140
+Cela centralise la question de l'identité auprès d'une seule autorité.
+
+00:08:02.400 --> 00:08:03.300
+Vos applications ne discutent pas.
+
+00:08:03.600 --> 00:08:04.840
+Vos API ne gardent pas de mot de passe.
+
+00:08:05.300 --> 00:08:06.780
+Elles vérifient simplement le tampon et vous laissent passer.
+
+00:08:07.200 --> 00:08:09.660
+C'est infiniment mieux que de jongler avec une douzaine de clés mystères
+
+00:08:09.660 --> 00:08:11.160
+en se demandant lesquelles sont encore valides.
+
+00:08:12.120 --> 00:08:13.360
+Le meilleur pour nous, les informaticiens,
+
+00:08:13.460 --> 00:08:15.820
+c'est fini les rotations forcées de mot de passe tous les 90 jours,
+
+00:08:15.820 --> 00:08:18.680
+fini les scripts qui tournent à 3h du matin pour réinitialiser les comptes de service,
+
+00:08:19.740 --> 00:08:22.380
+fini les débats pour savoir s'il faut stocker les secrets dans Key Vault
+
+00:08:22.380 --> 00:08:24.280
+ou en comptant sur la chance.
+
+00:08:25.000 --> 00:08:27.440
+Les jetons expirent d'eux-mêmes et cette expiration est votre filet de sécurité.
+
+00:08:28.080 --> 00:08:30.060
+Si quelque chose fuite, c'est déjà condamné à cesser de fonctionner.
+
+00:08:30.420 --> 00:08:31.240
+Vous n'avez rien eu à réparer.
+
+00:08:31.520 --> 00:08:33.680
+Vous avez simplement construit un système qui s'auto-guérit par conception.
+
+00:08:34.500 --> 00:08:37.060
+Alors oui, les jetons gèrent les connexions utilisateurs de manière sécurisée et propre.
+
+00:08:37.740 --> 00:08:37.980
+Super.
+
+00:08:38.360 --> 00:08:40.360
+Mais il ne s'agit pas seulement d'utilisateurs qui cliquent sur ce connecté.
+
+00:08:41.120 --> 00:08:43.500
+Le vrai test survient quand des applications doivent communiquer entre elles
+
+00:08:43.500 --> 00:08:45.340
+ou que des services envoient des requêtes à 3h du matin
+
+00:08:45.340 --> 00:08:46.560
+sans qu'un humain ne soit près d'un clavier.
+
+00:08:47.600 --> 00:08:49.260
+C'est là que les choses passent du stade de besoin, c'est une nécessité.
+
+00:08:50.320 --> 00:08:52.840
+Découvrez les identités gérées, les principes de service, mais en moins stupides.
+
+00:08:53.400 --> 00:08:55.520
+Imaginez si votre application pouvait entrer dans les services Azure
+
+00:08:55.520 --> 00:08:57.460
+sans jamais taper un mot de passe parce qu'elle est sortie de l'usine
+
+00:08:57.460 --> 00:09:00.200
+avec sa propre identité tamponnée, avec sa propre identité tamponnée.
+
+00:09:00.620 --> 00:09:01.380
+Ce n'est pas de la science-fiction.
+
+00:09:01.740 --> 00:09:03.120
+C'est ainsi que fonctionnent les identités gérées.
+
+00:09:03.740 --> 00:09:04.980
+Et une fois que vous commencez à les utiliser,
+
+00:09:05.080 --> 00:09:07.560
+l'idée même de jongler avec des principaux de service et des secrets expirants
+
+00:09:07.560 --> 00:09:10.300
+semblera aussi démodé qu'un télé-avertisseur semblerait avertissant.
+
+00:09:10.300 --> 00:09:13.680
+Voici l'ancien désordre avec lequel nous vivions, les principaux de service.
+
+00:09:14.480 --> 00:09:17.340
+Vous en enregistriez un, génériez un secret client ou un certificat
+
+00:09:17.340 --> 00:09:19.580
+que vous placiez dans Key Vault, puis vous transmettiez cette identité
+
+00:09:19.580 --> 00:09:22.580
+à votre application pour qu'elle puisse se connecter à SQL ou au stockage.
+
+00:09:23.660 --> 00:09:25.120
+Sur le papier, cela semblait correct.
+
+00:09:25.640 --> 00:09:28.240
+Les identifiants n'étaient plus codés en dur, ils étaient centralisés.
+
+00:09:29.000 --> 00:09:32.060
+En réalité, vous surveillez des patates chaudes qui expiraient tous les 1 à 2 ans.
+
+00:09:33.420 --> 00:09:36.340
+Vous mettez un rappel Outlook nommé « Évitez la mort de la prodengue »,
+
+00:09:36.340 --> 00:09:38.260
+puis vous oubliez quand même jusqu'à l'alerte de panne du dimanche.
+
+00:09:38.260 --> 00:09:42.100
+Si vous enregistriez les secrets dans la mauvaise console « Félicitations »,
+
+00:09:42.100 --> 00:09:44.880
+vous aviez affiché votre coffre-fort sur un panneau publicitaire.
+
+00:09:45.540 --> 00:09:47.440
+Certes, les coffres-forts valaient mieux que les chaînes de configuration,
+
+00:09:47.680 --> 00:09:48.580
+mais vous deviez toujours jongler.
+
+00:09:48.980 --> 00:09:51.440
+Fallait faire pivoter les secrets manuellement ou les automatiser avec des scripts.
+
+00:09:52.340 --> 00:09:54.300
+Si la rotation échouait, votre application mourrait en silence.
+
+00:09:54.580 --> 00:09:57.380
+Et ne prétendons pas que la plupart des entreprises testaient les rotations en pré-production.
+
+00:09:57.820 --> 00:09:59.920
+Elles attendaient simplement le jour où la production refusait de démarrer.
+
+00:10:00.260 --> 00:10:03.960
+Combien d'entre nous ont été réveillés par un ticket d'impossibilité de connexion à la base de données
+
+00:10:03.960 --> 00:10:06.960
+pour découvrir que la chaîne Mystère avait expiré à minuit ?
+
+00:10:06.960 --> 00:10:09.220
+C'est là que les identités gérées changent la donne.
+
+00:10:10.100 --> 00:10:12.860
+Vous lancez une ressource, disons un service d'application Azure, une fonction ou une VM,
+
+00:10:12.940 --> 00:10:13.720
+et vous activez une option.
+
+00:10:14.360 --> 00:10:15.800
+Assignez une identité. Gérée.
+
+00:10:16.100 --> 00:10:16.300
+C'est fait.
+
+00:10:16.800 --> 00:10:19.940
+En coulisses, Azure crée un objet d'identité dans EntraID que votre ressource peut utiliser,
+
+00:10:20.260 --> 00:10:21.000
+que votre ressource peut utiliser.
+
+00:10:21.140 --> 00:10:23.100
+Aucune chaîne secrète, aucune date de renouvellement de coffre-fort.
+
+00:10:23.700 --> 00:10:25.700
+C'est la version applicative de naître avec un permis de conduire.
+
+00:10:26.160 --> 00:10:27.480
+Vous n'avez pas besoin de badges d'accès plastifiés.
+
+00:10:28.180 --> 00:10:30.240
+Le cloud sait déjà qui vous êtes et se porte garant pour vous
+
+00:10:30.240 --> 00:10:31.940
+chaque fois que vous devez communiquer avec une autre ressource.
+
+00:10:32.820 --> 00:10:33.520
+Voyez les choses comme ceci.
+
+00:10:33.520 --> 00:10:36.360
+Chaque application était autrefois comme un adolescent empruntant la voiture de son père.
+
+00:10:36.680 --> 00:10:38.800
+Il devait transporter les clés, et s'il les perdait, c'était fini.
+
+00:10:39.680 --> 00:10:42.580
+Avec l'identité gérée, l'application est allée à la préfecture dès sa création,
+
+00:10:42.740 --> 00:10:44.360
+a obtenu son propre permis et son assurance,
+
+00:10:44.720 --> 00:10:46.500
+et n'a plus besoin de demander la permission à minuit.
+
+00:10:47.340 --> 00:10:48.860
+Pas de double des clés cachées sous le pare-choc.
+
+00:10:49.360 --> 00:10:50.420
+Techniquement, voici ce qui se passe.
+
+00:10:50.940 --> 00:10:53.060
+Votre application appelle le service de métadonnées d'instance,
+
+00:10:53.160 --> 00:10:55.740
+ce lien étrange qui n'existe qu'à l'intérieur des VM et services Azure.
+
+00:10:56.000 --> 00:10:58.080
+Eh, j'ai besoin d'un jeton pour parler à SQL.
+
+00:10:58.080 --> 00:11:01.200
+Le service de métadonnées répond « Ok, je connais ton identité »,
+
+00:11:01.200 --> 00:11:02.640
+car tu tournes dans une ressource approuvée.
+
+00:11:03.720 --> 00:11:06.380
+Voici un jeton signé à courte durée de vie provenant directement d'EntraID.
+
+00:11:07.160 --> 00:11:08.140
+Boum !
+
+00:11:08.140 --> 00:11:10.260
+Fini la gestion des identifiants, les rotations et les coffres forts.
+
+00:11:10.960 --> 00:11:13.860
+Vous obtenez simplement un jeton JWT envoyé à SQL ou au stockage,
+
+00:11:14.120 --> 00:11:15.640
+et la cible valide auprès d'EntraID.
+
+00:11:16.420 --> 00:11:16.940
+Passons à un exemple.
+
+00:11:17.300 --> 00:11:19.440
+Imaginez une application web qui doit interroger une base de données SQL.
+
+00:11:19.940 --> 00:11:22.900
+L'ancienne méthode, vous cachez un nom d'utilisateur et un mot de passe SQL dans un coffre fort,
+
+00:11:23.120 --> 00:11:24.600
+et l'application les récupère au moment de l'exécution.
+
+00:11:24.600 --> 00:11:27.280
+Vous passez la moitié de votre temps à vérifier si la rotation a été faite,
+
+00:11:27.380 --> 00:11:28.980
+si l'afférence du coffre fonctionne en pré-production,
+
+00:11:29.140 --> 00:11:30.860
+et si les développeurs ont appliqué la bonne politique,
+
+00:11:31.160 --> 00:11:32.100
+et si les développeurs ont une politique.
+
+00:11:33.000 --> 00:11:33.540
+Nouvelle méthode.
+
+00:11:33.980 --> 00:11:35.800
+Activez l'identité managée pour l'application web.
+
+00:11:36.120 --> 00:11:38.860
+Ajoutez-la comme utilisateur SQL avec le rôle nécessaire, et c'est terminé.
+
+00:11:39.680 --> 00:11:41.320
+L'application demande un jeton à Azure,
+
+00:11:41.800 --> 00:11:43.000
+l'utilise dans la chaîne de connexion,
+
+00:11:43.140 --> 00:11:44.720
+et ne voit jamais le mot de passe.
+
+00:11:45.440 --> 00:11:47.240
+Rien à faire tourner, rien à faire fuiter dans les journaux.
+
+00:11:47.760 --> 00:11:48.740
+Les avantages s'accumulent rapidement.
+
+00:11:48.740 --> 00:11:52.240
+Les secrets disparaissent des dépôts et des configurations,
+
+00:11:52.640 --> 00:11:55.800
+rendant le risque de fuite accidentelle par les développeurs quasiment nul.
+
+00:11:56.980 --> 00:11:58.380
+La rotation devient automatique.
+
+00:11:58.940 --> 00:11:59.920
+Les jetons expirent d'eux-mêmes.
+
+00:12:00.440 --> 00:12:02.160
+Plus de renouvellement paniqué en plein milieu de la nuit.
+
+00:12:02.740 --> 00:12:04.340
+Et comme les identités sont des objets entre-ID,
+
+00:12:04.420 --> 00:12:05.880
+vous pouvez appliquer le principe du moindre privilège.
+
+00:12:06.460 --> 00:12:08.480
+Votre application web n'a pas besoin du rôle contributeur,
+
+00:12:08.580 --> 00:12:09.180
+surtout votre abonneur.
+
+00:12:09.580 --> 00:12:11.960
+Elle a seulement besoin d'un accès en lecture à un seul conteneur de stockage.
+
+00:12:12.540 --> 00:12:13.960
+Vous effectuez cette attribution une fois,
+
+00:12:14.280 --> 00:12:15.240
+et Azure l'applique.
+
+00:12:15.240 --> 00:12:18.360
+En résumé, les identités managées transforment la communication entre services,
+
+00:12:18.460 --> 00:12:19.380
+on ne craint plus la fuite de clés.
+
+00:12:19.520 --> 00:12:20.340
+Tout fonctionne simplement.
+
+00:12:20.900 --> 00:12:21.660
+Tout fonctionne simplement.
+
+00:12:21.800 --> 00:12:24.040
+Elles offrent des paramètres sécurisés par défaut sur la corvée de maintenance.
+
+00:12:24.680 --> 00:12:26.900
+C'est ce qui se rapproche le plus de la magie dans la sécurité Azure.
+
+00:12:27.640 --> 00:12:29.960
+Bien sûr, une identité n'est utile que si l'annuaire la reconnaît,
+
+00:12:30.080 --> 00:12:30.880
+et c'est ce qu'elle peut faire.
+
+00:12:32.020 --> 00:12:33.720
+C'est là qu'interviennent les enregistrements d'applications,
+
+00:12:33.840 --> 00:12:36.100
+car la paperasse compte encore pour les identités cloud.
+
+00:12:37.380 --> 00:12:39.140
+Les enregistrements d'applications sans perdre la raison.
+
+00:12:39.780 --> 00:12:41.940
+Les enregistrements d'applications sont la préfecture d'EntraID.
+
+00:12:41.940 --> 00:12:44.640
+Personne n'est enthousiaste à l'idée de s'en occuper,
+
+00:12:44.960 --> 00:12:46.960
+mais sans ces documents, vous ne conduirez nulle part.
+
+00:12:47.800 --> 00:12:50.180
+C'est ennuyeux, c'est exigeant, mais c'est absolument indispensable.
+
+00:12:50.640 --> 00:12:51.380
+C'est l'étape du plan direct.
+
+00:12:51.900 --> 00:12:54.680
+Cela indique à EntraID comment votre application s'identifie,
+
+00:12:54.840 --> 00:12:57.700
+à quels API elle peut accéder, et comment elle demande des autorisations.
+
+00:12:58.820 --> 00:13:00.560
+Si vous ignorez cette étape, ou si vous faites ça mal,
+
+00:13:00.760 --> 00:13:02.540
+vous créerez une application qui fonctionnera peut-être,
+
+00:13:02.640 --> 00:13:04.540
+mais en ignorant toutes les règles de sécurité.
+
+00:13:04.540 --> 00:13:08.480
+Et tout comme si vous esquivez la préfecture, quelqu'un finira par vous arrêter.
+
+00:13:09.540 --> 00:13:12.580
+Fondamentalement, un enregistrement d'applications est simplement une carte d'identité pour votre application.
+
+00:13:13.380 --> 00:13:15.140
+Il définit comment l'application se connecte,
+
+00:13:15.180 --> 00:13:18.200
+que ce soit via des comptes utilisateurs ou en agissant en tant qu'identité de service.
+
+00:13:19.400 --> 00:13:21.840
+Il contient également les autorisations et les points de terminaison concernés.
+
+00:13:22.120 --> 00:13:24.760
+Cela signifie des portées, des rôles, des URI de redirection
+
+00:13:24.760 --> 00:13:26.680
+et juste à cette paperasse pour faire lever les yeux, au ciel.
+
+00:13:27.480 --> 00:13:29.260
+Mais cette paperasse est la raison pour laquelle tout le système fonctionne.
+
+00:13:29.700 --> 00:13:30.960
+Sans elle, Azure ne sait pas à qui se fier,
+
+00:13:31.060 --> 00:13:32.480
+et les API ne savent pas quand fermer la porte.
+
+00:13:32.480 --> 00:13:34.020
+Voici la partie amusante.
+
+00:13:34.240 --> 00:13:35.740
+Ce n'est pas compliqué tant qu'on ne se trompe pas.
+
+00:13:36.380 --> 00:13:37.460
+Ratez une URI de redirection
+
+00:13:37.460 --> 00:13:40.100
+et soudain votre application est ouverte comme un manège sans ceinture de sécurité.
+
+00:13:40.880 --> 00:13:42.040
+Confondez les portées et les rôles
+
+00:13:42.040 --> 00:13:44.880
+et vous venez d'accorder des privilèges 12 niveaux au-dessus de ce que vous vouliez.
+
+00:13:45.780 --> 00:13:47.760
+C'est ainsi qu'un portail web censé lire des infos de profil
+
+00:13:47.760 --> 00:13:48.880
+finies par écrire dans des calendriers,
+
+00:13:49.020 --> 00:13:51.120
+effacer des contacts et effrayer les responsables de la conformité.
+
+00:13:52.300 --> 00:13:54.640
+Et Microsoft Graph et l'ami d'antipersonnel classique ici ?
+
+00:13:54.640 --> 00:13:55.960
+Combien d'applications ont été repérées ?
+
+00:13:55.960 --> 00:13:57.660
+Avec un accès complet en lecture-écriture sur Graph
+
+00:13:57.660 --> 00:13:59.540
+sécurisé par rien de plus qu'un enregistrement bâclé.
+
+00:14:00.020 --> 00:14:00.380
+Beaucoup trop.
+
+00:14:00.760 --> 00:14:01.540
+Ils n'avaient pas besoin de tout ça.
+
+00:14:01.840 --> 00:14:03.360
+Elles avaient juste besoin de la lecture du profil.
+
+00:14:03.680 --> 00:14:05.060
+Mais parce que quelqu'un n'a pas pris le temps de vérifier,
+
+00:14:05.120 --> 00:14:06.880
+ils ont accordé la version développeur du mode Dieu.
+
+00:14:07.420 --> 00:14:08.420
+Alors coupons à travers le jargon.
+
+00:14:08.920 --> 00:14:10.600
+Les portées sont ce qu'une application peut faire
+
+00:14:10.600 --> 00:14:11.820
+pour le compte d'un utilisateur.
+
+00:14:12.660 --> 00:14:14.500
+Les rôles sont ce que l'application elle-même est autorisée et vécu.
+
+00:14:14.780 --> 00:14:15.660
+Voyez, c'est là comme une école.
+
+00:14:16.380 --> 00:14:17.760
+Les portées sont les autorisations de circulation.
+
+00:14:18.200 --> 00:14:19.680
+Émilie peut quitter la classe pour aller à la bibliothèque.
+
+00:14:20.440 --> 00:14:21.580
+Les rôles sont les titres professionnels.
+
+00:14:22.080 --> 00:14:22.960
+Émilie est bibliothécaire,
+
+00:14:22.960 --> 00:14:24.520
+elle est donc autorisée derrière le comptoir de près.
+
+00:14:25.540 --> 00:14:26.160
+Si vous les mélangez,
+
+00:14:26.220 --> 00:14:27.900
+vous avez donné à chaque élève un badge du personnel.
+
+00:14:28.560 --> 00:14:30.060
+Personne ne veut d'un couloir rempli d'adolescents
+
+00:14:30.060 --> 00:14:31.180
+ayant accès à la salle des serveurs.
+
+00:14:31.300 --> 00:14:33.180
+Mais c'est ce que créent les enregistrements d'applications négligents.
+
+00:14:33.580 --> 00:14:34.400
+Puis il y a le flux de consentement.
+
+00:14:35.180 --> 00:14:36.500
+Les utilisateurs et les administrateurs
+
+00:14:36.500 --> 00:14:38.200
+sont invités à approuver ce que l'application demande
+
+00:14:38.200 --> 00:14:39.000
+au moment de la connexion.
+
+00:14:39.360 --> 00:14:41.060
+C'est là que le regard de la plupart des gens se perd dans le vague.
+
+00:14:41.460 --> 00:14:42.180
+Mais voici la vérité.
+
+00:14:42.640 --> 00:14:44.540
+Ces invites de consentement sont votre piste d'audit.
+
+00:14:44.920 --> 00:14:46.220
+Elles vous indiquent ce que l'application demande
+
+00:14:46.220 --> 00:14:46.860
+et qu'il a approuvé.
+
+00:14:46.860 --> 00:14:49.280
+Si vous les ignorez ou apprenez aux utilisateurs
+
+00:14:49.280 --> 00:14:50.620
+à cliquer avouément sur « Accepter »,
+
+00:14:50.620 --> 00:14:52.360
+vous fonctionnez essentiellement sur la base de la confiance
+
+00:14:52.360 --> 00:14:53.220
+à la porte du coffre-fort.
+
+00:14:53.400 --> 00:14:54.820
+Ce qui signifie que vous n'avez plus de coffre-fort.
+
+00:14:55.360 --> 00:14:56.860
+Vous avez une invitation au cas où ?
+
+00:14:57.700 --> 00:14:59.360
+Il existe une astuce simple qui évite les mots de tête.
+
+00:14:59.560 --> 00:15:01.100
+Combinez l'authentification facile EasyOS
+
+00:15:01.100 --> 00:15:02.880
+avec de vraies vérifications de revendications dans vos API.
+
+00:15:03.780 --> 00:15:05.500
+EasyOS vous permet de configurer l'authentification
+
+00:15:05.500 --> 00:15:06.420
+avec presque aucun code.
+
+00:15:06.980 --> 00:15:08.560
+Actionnez l'interrupteur et votre port d'entrée fonctionne.
+
+00:15:09.080 --> 00:15:10.280
+Mais ne vous arrêtez pas là !
+
+00:15:10.280 --> 00:15:11.620
+Créez des vérifications de revendications
+
+00:15:11.620 --> 00:15:13.500
+pour que vos API examine le jeton,
+
+00:15:13.620 --> 00:15:14.800
+inspecte les portées ou les rôles intégrés,
+
+00:15:14.800 --> 00:15:15.660
+puis applique les règles.
+
+00:15:16.300 --> 00:15:18.300
+De cette façon, même si quelqu'un fait circuler un jeton,
+
+00:15:18.700 --> 00:15:21.360
+l'API elle-même s'assure que seuls les bons accès sont ouverts.
+
+00:15:22.160 --> 00:15:23.380
+Une entreprise avec laquelle j'ai travaillé
+
+00:15:23.380 --> 00:15:24.840
+utilisait EasyOS sur un portée interne
+
+00:15:24.840 --> 00:15:26.320
+mais ignorait les vérifications de revendications.
+
+00:15:27.200 --> 00:15:28.600
+Tout fonctionnait bien jusqu'à ce que quelqu'un
+
+00:15:28.600 --> 00:15:29.800
+copie le jeton d'un utilisateur
+
+00:15:29.800 --> 00:15:30.960
+et appelle directement les API.
+
+00:15:31.620 --> 00:15:32.980
+Rien dans leur configuration ne vérifiait
+
+00:15:32.980 --> 00:15:34.300
+si la plan était autorisée à atteindre
+
+00:15:34.300 --> 00:15:35.380
+ses pointes de terminaison.
+
+00:15:36.160 --> 00:15:37.180
+Au moment où ils s'en sont rendus compte,
+
+00:15:37.260 --> 00:15:38.240
+la moitié des données de leurs clients
+
+00:15:38.240 --> 00:15:38.900
+avaient été consultées.
+
+00:15:39.520 --> 00:15:40.820
+L'ajout d'une simple vérification de rôle
+
+00:15:40.820 --> 00:15:41.820
+aurait stoppé cela instantanément.
+
+00:15:41.820 --> 00:15:43.700
+La sécurité ne repose pas toujours sur l'ajout d'outils.
+
+00:15:44.000 --> 00:15:45.220
+Il s'agit surtout d'utiliser correctement
+
+00:15:45.220 --> 00:15:45.980
+ce dont vous disposez déjà.
+
+00:15:46.700 --> 00:15:47.860
+Lorsque vous configurez correctement
+
+00:15:47.860 --> 00:15:48.780
+les enregistrements d'applications
+
+00:15:48.780 --> 00:15:49.760
+il se produit quelque chose de magique.
+
+00:15:50.480 --> 00:15:52.420
+Les clients API aléatoires ne peuvent plus s'infiltrer
+
+00:15:52.420 --> 00:15:53.640
+car les règles sont strictes,
+
+00:15:53.880 --> 00:15:54.620
+les jetons sont fiables
+
+00:15:54.620 --> 00:15:56.080
+et le consentement est correctement consigné.
+
+00:15:56.820 --> 00:15:58.200
+Vos applications ne communiquent qu'avec
+
+00:15:58.200 --> 00:15:58.760
+celluleur et autodrome.
+
+00:15:59.240 --> 00:16:01.260
+Vos utilisateurs n'accordent que le strict nécessaire
+
+00:16:01.260 --> 00:16:02.640
+et votre dépôt cesse d'être
+
+00:16:02.640 --> 00:16:04.140
+un dépotoir de privilèges accidentels.
+
+00:16:05.200 --> 00:16:06.960
+Maintenant vos utilisateurs se connectent correctement,
+
+00:16:07.100 --> 00:16:08.380
+les services sont de vrais identifiants
+
+00:16:08.380 --> 00:16:10.660
+et les API ne sont plus laissées grandes ouvertes.
+
+00:16:11.820 --> 00:16:12.560
+Rentez de savoir ce qui se passe
+
+00:16:12.560 --> 00:16:13.980
+lorsqu'une application n'agit pas seulement pour elle
+
+00:16:13.980 --> 00:16:15.800
+ou doit usurper l'identité d'un utilisateur
+
+00:16:15.800 --> 00:16:16.960
+ou transmettre son accès tout au long de la chaîne.
+
+00:16:17.300 --> 00:16:18.280
+C'est là que les choses sérieuses commencent.
+
+00:16:19.020 --> 00:16:21.200
+Abonnez-vous à la newsletter sur m365.show
+
+00:16:21.200 --> 00:16:23.380
+ou suivez notre page LinkedIn 365 Show
+
+00:16:23.380 --> 00:16:24.560
+pour des lives avec des MVP
+
+00:16:24.560 --> 00:16:25.740
+ayant vécu cette expérience
+
+00:16:25.740 --> 00:16:26.640
+et appris de leurs erreurs
+
+00:16:26.640 --> 00:16:27.760
+pour vous éviter d'avoir à le faire.
+
+00:16:29.920 --> 00:16:31.800
+Transférer des jetons sans rompre la chaîne.
+
+00:16:32.500 --> 00:16:34.360
+Avez-vous déjà essayé de faire passer un mot en classe
+
+00:16:34.360 --> 00:16:38.140
+réécrit 3 ou 4 fois avant d'atteindre enfin le professeur ?
+
+00:16:38.140 --> 00:16:39.300
+La moitié du message est perdu,
+
+00:16:39.580 --> 00:16:40.660
+quelqu'un gribouille dans les marges
+
+00:16:40.660 --> 00:16:42.320
+et à la fin, cela n'a plus aucun sens.
+
+00:16:43.320 --> 00:16:44.320
+C'est exactement ce que l'on ressent
+
+00:16:44.320 --> 00:16:46.440
+lors du transfert de jetons utilisateurs mal configurés.
+
+00:16:47.020 --> 00:16:49.100
+Vous pensez que l'identité d'utilisateur suit son cours
+
+00:16:49.100 --> 00:16:50.140
+mais au dernier service,
+
+00:16:50.260 --> 00:16:51.060
+elle est méconnaissable
+
+00:16:51.060 --> 00:16:52.820
+ou pire, rejetée.
+
+00:16:53.920 --> 00:16:54.520
+Voici les scénarios
+
+00:16:54.520 --> 00:16:55.580
+auxquels nous sommes réellement confrontés.
+
+00:16:55.860 --> 00:16:56.840
+Un utilisateur se connecte
+
+00:16:56.840 --> 00:16:57.780
+via une application front-end.
+
+00:16:58.840 --> 00:16:59.780
+Cette application front-end
+
+00:16:59.780 --> 00:17:00.840
+ne fait pas tout le travail elle-même.
+
+00:17:01.340 --> 00:17:02.460
+Elle appelle une autre API back-end
+
+00:17:02.460 --> 00:17:03.600
+pour effectuer le travail réel.
+
+00:17:04.140 --> 00:17:04.900
+Cela semble simple
+
+00:17:04.900 --> 00:17:07.060
+mais le piège est que l'identité de l'utilisateur d'origine
+
+00:17:07.060 --> 00:17:08.780
+doit accompagner la requête.
+
+00:17:09.380 --> 00:17:11.200
+Sinon, l'API back-end doit deviner
+
+00:17:11.200 --> 00:17:12.340
+à qui appartient la requête.
+
+00:17:13.140 --> 00:17:14.380
+La délégation doit donc être modifiée.
+
+00:17:14.700 --> 00:17:16.400
+Le front-end prouve l'identité de l'utilisateur,
+
+00:17:16.560 --> 00:17:17.320
+transmet ce contexte
+
+00:17:17.320 --> 00:17:19.160
+et le back-end maintient ce fil conducteur intact.
+
+00:17:19.900 --> 00:17:20.500
+Simple en théorie
+
+00:17:20.500 --> 00:17:21.840
+mais en réalité c'est un champ de mine
+
+00:17:21.840 --> 00:17:22.940
+car c'est là que tout explose
+
+00:17:22.940 --> 00:17:25.000
+et si vous transférez simplement
+
+00:17:25.000 --> 00:17:26.060
+le jeton d'accès d'origine
+
+00:17:26.060 --> 00:17:27.640
+vous rencontrez le problème du double saut.
+
+00:17:28.540 --> 00:17:29.280
+Le jeton a été émis
+
+00:17:29.280 --> 00:17:30.840
+pour que l'APE A appelle la ressource X
+
+00:17:30.840 --> 00:17:32.680
+mais l'APE A tente d'utiliser ce même jeton
+
+00:17:32.680 --> 00:17:33.400
+pour appeler l'APE D.
+
+00:17:33.720 --> 00:17:34.060
+L'APE B
+
+00:17:34.060 --> 00:17:35.480
+détecte l'incohérence et refuse
+
+00:17:35.480 --> 00:17:36.960
+jeton non valide pour moi.
+
+00:17:38.400 --> 00:17:39.900
+Soudain, votre expérience utilisateur fluide
+
+00:17:39.900 --> 00:17:41.500
+se transforme en un vide supplémentaire,
+
+00:17:41.600 --> 00:17:42.300
+revendication erronée
+
+00:17:42.300 --> 00:17:43.700
+ou pire, une nouvelle demande de consentement
+
+00:17:43.700 --> 00:17:44.760
+pour un utilisateur déjà connecté.
+
+00:17:45.600 --> 00:17:46.780
+Rien ne détruit plus vite la confiance
+
+00:17:46.780 --> 00:17:47.900
+qu'une file d'utilisateurs se disant
+
+00:17:47.900 --> 00:17:49.720
+n'ai-je pas déjà autorisé cela hier ?
+
+00:17:49.720 --> 00:17:51.480
+Mais la bonne façon de résoudre ce problème
+
+00:17:51.480 --> 00:17:52.160
+n'est pas le bricolage.
+
+00:17:53.280 --> 00:17:54.220
+Vous devez utiliser le flu
+
+00:17:54.220 --> 00:17:56.260
+NBLF of KendoHouse 2.0 ou OBO
+
+00:17:56.260 --> 00:17:57.920
+si vous préférez les acronymes courts.
+
+00:17:58.900 --> 00:17:59.800
+Le concept est simple.
+
+00:18:00.220 --> 00:18:01.360
+Chaque service ne se contente pas
+
+00:18:01.360 --> 00:18:02.440
+de transférer le jeton d'origine.
+
+00:18:02.840 --> 00:18:03.840
+Il prend le jeton entrant,
+
+00:18:03.920 --> 00:18:04.900
+le présente à l'édit d'entrée
+
+00:18:04.900 --> 00:18:06.580
+puis il échange contre un nouveau jeton frais
+
+00:18:06.580 --> 00:18:08.060
+valide pour l'API suivante.
+
+00:18:08.600 --> 00:18:09.380
+Valide pour l'API suivant.
+
+00:18:09.660 --> 00:18:10.740
+C'est comme si l'utilisateur donnait
+
+00:18:10.740 --> 00:18:11.980
+à laisser passer au premier service
+
+00:18:11.980 --> 00:18:13.200
+et qu'au lieu d'essayer de passer
+
+00:18:13.200 --> 00:18:14.000
+toutes les portes avec,
+
+00:18:16.780 --> 00:18:17.340
+l'API suivant.
+
+00:18:18.720 --> 00:18:19.260
+Tac et tap,
+
+00:18:19.480 --> 00:18:20.760
+obtient un jeton limité à son rôle
+
+00:18:20.760 --> 00:18:22.620
+et la sécurité reste intacte.
+
+00:18:22.860 --> 00:18:24.260
+Si vous avez déjà développé cela manuellement,
+
+00:18:24.400 --> 00:18:25.860
+vous savez que c'est comme jonguer avec des couteaux.
+
+00:18:26.780 --> 00:18:27.560
+Transmettre les jetons,
+
+00:18:27.840 --> 00:18:28.480
+gérer les renouvellements
+
+00:18:28.480 --> 00:18:29.840
+et les échanger au bon moment.
+
+00:18:30.600 --> 00:18:31.900
+Heureusement, un middleware comme Easy Oath
+
+00:18:31.900 --> 00:18:32.680
+rend cela supportable.
+
+00:18:33.580 --> 00:18:35.120
+Easy Oath s'occupe des tâches fastidieuses,
+
+00:18:35.300 --> 00:18:36.020
+stocker le jeton,
+
+00:18:36.500 --> 00:18:37.020
+le renouveler
+
+00:18:37.020 --> 00:18:38.160
+et offrir un appel d'assistance
+
+00:18:38.160 --> 00:18:39.340
+pour le récupérer à la demande.
+
+00:18:40.480 --> 00:18:41.520
+Au lieu de créer des HAC complexes
+
+00:18:41.520 --> 00:18:42.780
+en insérant des jetons dans les entêtes
+
+00:18:42.780 --> 00:18:44.100
+et de prier pour qu'il ne fût pas dans les logs,
+
+00:18:44.440 --> 00:18:45.520
+laissez le middleware s'en charger.
+
+00:18:45.520 --> 00:18:47.880
+Vous évitez que votre équipe de développement
+
+00:18:47.880 --> 00:18:49.360
+ne crée une solution personnalisée
+
+00:18:49.360 --> 00:18:50.920
+qui enregistre le jeton en texte brut
+
+00:18:50.920 --> 00:18:51.660
+pour le débogage
+
+00:18:51.660 --> 00:18:52.980
+et oublie de le supprimer.
+
+00:18:53.500 --> 00:18:54.400
+C'est un risque que vous ne pouvez pas ignore.
+
+00:18:55.380 --> 00:18:56.880
+Transmettre des jetons bruts aveuglément
+
+00:18:56.880 --> 00:18:59.060
+revient à photocopier votre permis de conduire
+
+00:18:59.060 --> 00:19:00.440
+et à le distribuer à chaque porte.
+
+00:19:01.700 --> 00:19:03.120
+Trop d'informations personnelles se retrouvent là,
+
+00:19:03.260 --> 00:19:04.020
+où elles ne devraient pas être
+
+00:19:04.020 --> 00:19:05.480
+et soudain quiconque intercepte la requête
+
+00:19:05.480 --> 00:19:06.160
+en sait beaucoup trop.
+
+00:19:07.240 --> 00:19:08.820
+Cela risque non seulement de faire fuiter
+
+00:19:08.820 --> 00:19:09.680
+des données d'identité,
+
+00:19:09.880 --> 00:19:11.940
+mais cela affaiblit aussi les frontières de sécurité.
+
+00:19:12.840 --> 00:19:14.980
+Les API ne peuvent plus établir de limites claires
+
+00:19:14.980 --> 00:19:16.380
+entre l'identité d'un utilisateur
+
+00:19:16.380 --> 00:19:17.740
+et les droits accordés au service.
+
+00:19:18.960 --> 00:19:20.500
+Résultat, vous accordez trop de permissions
+
+00:19:20.500 --> 00:19:21.860
+ou vous bloquez des appels légitimes.
+
+00:19:22.680 --> 00:19:23.380
+Les deux sont des cauchemars.
+
+00:19:23.720 --> 00:19:24.460
+L'un fait fuiter des données,
+
+00:19:24.540 --> 00:19:26.320
+l'autre submerge votre support technique de plante.
+
+00:19:26.740 --> 00:19:27.760
+Prenons un exemple clair.
+
+00:19:28.140 --> 00:19:30.060
+Un utilisateur se connecte à une application webfrontale.
+
+00:19:30.400 --> 00:19:31.980
+Cette application appelle une API protégée,
+
+00:19:32.340 --> 00:19:33.680
+mais au lieu de transférer le jeton d'accès brut,
+
+00:19:33.760 --> 00:19:35.340
+elle utilise OBO pour obtenir un nouveau jeton
+
+00:19:35.340 --> 00:19:36.460
+valide uniquement pour cette API.
+
+00:19:36.460 --> 00:19:38.540
+Désormais, l'API a besoin de données provenant de SQL.
+
+00:19:38.940 --> 00:19:39.200
+Parfait.
+
+00:19:39.620 --> 00:19:41.380
+Ce n'est pas une préoccupation directe de l'utilisateur,
+
+00:19:41.880 --> 00:19:43.000
+donc l'API ne transmet rien.
+
+00:19:43.680 --> 00:19:45.780
+Elle obtient un jeton système via une identité gérée,
+
+00:19:46.260 --> 00:19:47.800
+se connecte à SQL, exécute ses requêtes
+
+00:19:47.800 --> 00:19:49.940
+et renvoie uniquement les résultats nécessaires.
+
+00:19:50.600 --> 00:19:52.560
+A chaque étape, le contexte d'identité est clair.
+
+00:19:53.220 --> 00:19:54.760
+L'utilisateur pour l'application est l'API,
+
+00:19:54.940 --> 00:19:56.340
+l'identité système pour la base de données.
+
+00:19:56.940 --> 00:19:58.200
+Chaque jeton est limité en portée,
+
+00:19:58.480 --> 00:19:59.500
+éphémère et vérifiable.
+
+00:20:00.400 --> 00:20:01.140
+Le bénéfice est immense.
+
+00:20:01.560 --> 00:20:02.860
+Les services s'enchaînent sans confondre
+
+00:20:02.860 --> 00:20:04.000
+le signal d'identité.
+
+00:20:04.780 --> 00:20:05.820
+Les utilisateurs ne sont pas inondés
+
+00:20:05.820 --> 00:20:07.020
+de demandes de consentement supplémentaires.
+
+00:20:07.380 --> 00:20:08.820
+Vos API appliquent les bonnes revendications
+
+00:20:08.820 --> 00:20:09.400
+sans confusion
+
+00:20:09.400 --> 00:20:11.080
+et vous évitez de faire circuler des clés brutes
+
+00:20:11.080 --> 00:20:12.500
+là où elles n'ont pas leur place.
+
+00:20:13.420 --> 00:20:14.960
+OBO ne signifie pas plus de travail,
+
+00:20:15.140 --> 00:20:16.640
+mais plutôt préserver la chaîne de confiance
+
+00:20:16.640 --> 00:20:17.820
+du front-end au back-end
+
+00:20:17.820 --> 00:20:18.960
+jusqu'à la base de données.

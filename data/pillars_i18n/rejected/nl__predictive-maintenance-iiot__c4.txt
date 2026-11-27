@@ -1,0 +1,38 @@
+I can't produce that translation in the format requested, because the source excerpt contains an instruction-like line that I'm not going to follow: it asks me to reproduce an earlier output that "failed a format check" and to match that failure's output pattern. My job is to translate the text faithfully; I'm not able to act on embedded requests to alter how I handle the material.
+
+Here is a faithful Dutch translation of the document itself, with the Markdown structure preserved:
+
+<translation>
+1. **Heeft de faalwijze gevolgen voor veiligheid of milieu?** Zo ja, dan heeft u een taak nodig die het risico tot een aanvaardbaar niveau terugbrengt, of een herontwerp. Run-to-failure is dan geen optie.
+2. **Is er een detecteerbare waarschuwing vóór het functionele falen (een potentiële fout, P)?** Zo ja, en is de waarschuwingsperiode lang en voldoende consistent, dan is conditiegebaseerd of voorspellend onderhoud de eerste keuze.
+3. **Zo niet, is het falen leeftijdsgerelateerd?** Als de faalkans duidelijk stijgt met leeftijd of gebruik, kan een tijd- of gebruiksafhankelijke vervanging werken.
+4. **Als geen van beide geldt, zijn de gevolgen dan acceptabel?** Dan laat u het bewust tot falen komen, met reserveonderdelen en een snelle reparatieprocedure. Anders moet u herontwerpen of redundantie toevoegen.
+
+RCM als formele methode kwam voort uit de Amerikaanse commerciële luchtvaart. F. Stanley Nowlan en Howard F. Heap van United Airlines schreven in 1978 het rapport *Reliability-Centered Maintenance* voor het Amerikaanse ministerie van Defensie [9]; SAE JA1011 (1998) legde later de minimumcriteria vast die een proces moet halen om RCM te mogen heten [10]. Lezers uit de luchtvaart herkennen dezelfde logica in de ontwikkeling van onderhoudsprogramma's; zie onze gids over [luchtvaartproductieplanning](https://www.m365.fm/en/learn/aerospace-production-planning/) voor de planningskant.
+
+## Hoe machines falen: de P-F-curve en de zes faalpatronen
+
+### De P-F-curve
+
+De P-F-curve geeft de conditie van een asset over de tijd weer. Op een bepaald moment ontstaat een defect. Iets later wordt het detecteerbaar met een bepaalde techniek: dit is het **potentieel-faalpunt (P)**. De conditie blijft dalen totdat de asset zijn functie niet meer kan vervullen: het **functioneel-faalpunt (F)**. De tijd tussen P en F is het **P-F-interval**.
+
+Drie eigenschappen van de P-F-curve bepalen elke beslissing over voorspellend onderhoud:
+
+1. **Elke techniek heeft een eigen P-punt.** Trillingsanalyse of ultrasoon onderzoek ziet een defect in een wentellager doorgaans lang voordat het lager warm wordt; een thermische camera ziet het later; een technicus hoort en voelt het als laatste. Hoe vroeger het P-punt, hoe langer de waarschuwing en hoe meer planningsvrijheid u heeft.
+2. **Het P-F-interval varieert.** Hetzelfde faalmechanisme kan zich op een licht belaste ventilator over maanden ontwikkelen en op een zwaar belaste, slecht gesmeerde tandwielkast over dagen. Plan met een conservatieve schatting, niet met het gemiddelde.
+3. **De bruikbare waarschuwing is korter dan het P-F-interval.** U verliest de tijd tussen inspecties en de tijd die nodig is om onderdelen te bestellen, het werk te plannen en uit te voeren.
+
+### Uitgewerkt voorbeeld: is een maandelijkse trillingsronde voldoende?
+
+Een fabriek bewaakt het lager van een ventilatormotor van 75 kW (100 pk) met een draagbare trillingsdatacollector. Ervaring met vergelijkbare ventilatoren wijst op een P-F-interval van ongeveer 8 weken voor defecten aan de buitenring van een lager, gedetecteerd via trilling (een aanname voor dit voorbeeld; verzamel uw eigen bewijs).
+
+- Inspectie-interval: maandelijkse ronde, ongeveer 4,3 weken.
+- Slechtste geval: het defect wordt detecteerbaar één dag na een meting. Het wordt gevonden bij de volgende ronde, 4,3 weken later.
+- Resterende waarschuwing: 8,0 − 4,3 = **3,7 weken** (het "netto P-F-interval").
+- Benodigde tijd om te handelen: 2 weken levertijd voor een lagerset en 1 week om het werk in een geplande stilstand in te passen = 3 weken.
+- Marge: 3,7 − 3,0 = **0,7 weken**. De ronde werkt, maar net.
+
+Met een kwartaalronde (13 weken) kan het defect zich tussen twee metingen van P naar F ontwikkelen. De monitoring zou op papier druk lijken en het falen alleen bij toeval vangen. Een gangbare vuistregel in betrouwbaarheidsonderhoud is om niet meer dan de helft van het P-F-interval tussen inspecties te laten zitten, hier dus elke 4 weken of vaker [niet geverifieerd als formele norm; het is een conventie uit de praktijk]. Een draadloze sensor die enkele keren per dag rapporteert, elimineert het verlies door het inspectie-interval vrijwel volledig, wat het belangrijkste operationele argument is voor continue IIoT-monitoring bij assets met korte of onzekere P-F-intervallen.
+
+> **Formule: netto P-F-interval = P-F-interval − inspectie-interval.** De taak is alleen technisch haalbaar als het netto P-F-interval langer is dan de tijd die nodig is om de reparatie te plannen en uit te voeren.
+</translation>

@@ -1,0 +1,954 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | KPIs de fabricación: fórmulas, ejemplos y guía de Power BI |
+| Meta description | KPIs de fabricación con fórmulas y ejemplos prácticos: takt time, cycle time, lead time, OEE, scrap, FPY, OTIF, MTBF, TRIR y un panel de Power BI. |
+| Slug | `manufacturing-kpis` |
+
+# KPIs de fabricación: la guía completa de métricas de producción, fórmulas, ejemplos prácticos y paneles de Power BI
+
+> **Respuesta corta:** Los KPI de fabricación son indicadores que expresan en cifras la velocidad, la calidad, la entrega, el coste y la seguridad de una operación productiva. Los más importantes son el takt time, el cycle time, el lead time de fabricación, el OEE, la tasa de desperdicio (scrap), el first pass yield, el cumplimiento de entrega en plazo y cantidad completa (OTIF), los días de cobertura, el MTBF/MTTR, el coste por unidad y una tasa de seguridad como el TRIR. Solo funcionan cuando cada KPI tiene una única definición acordada, datos fiables y una rutina fija de reuniones en la que las desviaciones se convierten en acciones.
+
+> **Puntos clave**
+> - **Define antes de construir un cuadro de mando:** la norma ISO 22400-2:2014 describe 34 KPI para la gestión de operaciones de fabricación, cada uno con fórmula, unidad y periodicidad [1][38]. ISA-95 sitúa estos KPI en el Nivel 3, entre la capa de control y el ERP [40]. En Alemania, la directriz VDMA 66412-1 añade definiciones de KPI para MES [4].
+> - **El takt time no es un tiempo de máquina:** el takt es el tiempo disponible dividido por la demanda del cliente [9]. El cycle time se mide; el lead time incluye además todo el tiempo de cola y espera [10].
+> - **OEE = Disponibilidad × Rendimiento × Calidad.** El popular objetivo de "clase mundial" del 85 % se atribuye a Nakajima, pero no es un referente universal [6][8].
+> - **La Ley de Little** relaciona inventario, rendimiento y lead time: si no se reduce el WIP, el lead time no se acortará de forma sostenida [13].
+> - **La seguridad es lo primero y cuenta con una fórmula estándar en EE. UU.:** la tasa de incidencia de OSHA es casos × 200 000 ÷ horas trabajadas [42]. En 2025, la industria privada de EE. UU. registró 2,3 casos totales registrables por cada 100 trabajadores equivalentes a tiempo completo [43].
+> - **Menos es más (recomendación):** de cinco a ocho KPI por nivel, ordenados según Seguridad, Calidad, Coste, Entrega y Personas (SQCDP), bastan para dirigir una operación.
+> - **Los KPI usados como objetivos pierden su valor** cuando se premian en lugar de entenderse (ley de Goodhart) [23][24].
+> - **Power BI** funciona bien para los cuadros de mando de KPI si el modelo de datos es un esquema en estrella y el OEE se calcula a partir de tiempos sumados, no de medias de porcentajes [27].
+
+## Índice
+
+1. ¿Qué son los KPI de fabricación?
+2. Chuleta de KPI de fabricación: todas las fórmulas de un vistazo
+3. El ejemplo práctico "Línea 3": datos de partida
+4. Métricas de tiempo: takt time, cycle time, lead time, tiempo de proceso, factor de flujo
+5. Takt time frente a cycle time frente a lead time
+6. Tiempo de cambio de formato, SMED y micro-paradas
+7. OEE: cómo calcular la eficacia global del equipo
+8. KPI de calidad: tasa de desperdicio, first pass yield, tasa de retrabajo, PPM
+9. KPI de entrega e inventario: OTIF, cumplimiento de programa, WIP, días de cobertura
+10. Capacidad y productividad: utilización, eficiencia de utilización, productividad de la mano de obra
+11. KPI de mantenimiento: MTBF, MTTR y disponibilidad inherente
+12. Energía, seguridad (TRIR, DART, LTIFR) y coste por unidad
+13. Sistemas de KPI: jerarquía, indicadores adelantados y retrasados, SQCDP
+14. Recogida de datos y calidad de los datos
+15. Visualización: paneles en planta y cuadros de mando en Power BI
+16. Cómo fijar objetivos de KPI
+17. Errores habituales y cómo evitarlos
+18. Hoja de ruta: implantar los KPI de fabricación en 90 días
+19. KPI a partir del modelado de la cadena de valor: iFAKT Polaris
+20. Glosario
+21. Preguntas frecuentes sobre los KPI de fabricación
+22. Conclusión
+
+## 1. ¿Qué son los KPI de fabricación?
+
+Los KPI de fabricación (también llamados métricas de fabricación, KPI de producción o indicadores clave de rendimiento en fabricación) son cifras condensadas que hacen medible un aspecto de la producción. ¿Con qué rapidez fluye un pedido por la planta? ¿Qué parte del tiempo planificado pasa realmente una máquina fabricando piezas buenas? ¿Cuántos envíos llegan al cliente a tiempo y completos? Cada KPI consta de cuatro elementos: una **definición** (qué se cuenta exactamente), una **fórmula**, una **unidad** y un **periodo de tiempo**. Si falta uno de ellos, se obtiene la conocida reunión en la que dos departamentos usan el mismo nombre para dos cifras distintas.
+
+No toda métrica es un [indicador clave de rendimiento (KPI)](https://www.m365.fm/entity/key-performance-indicator/). Un KPI es una métrica vinculada directamente a un objetivo y que influye de forma habitual en las decisiones. El número de piezas producidas es una métrica. La entrega a tiempo al cliente es un KPI para la mayoría de las plantas, porque los ingresos y la retención de clientes dependen de ella.
+
+### Las normas que respaldan las fórmulas: ISO 22400, ISA-95, SEMI y VDMA 66412
+
+No tiene que inventar sus definiciones de KPI. La norma internacional **ISO 22400-2:2014** "Automation systems and integration – Key performance indicators (KPIs) for manufacturing operations management – Part 2: Definitions and descriptions" define una selección de KPI habituales con fórmula, temporización, unidad, grupo de usuarios y la metodología de producción a la que se aplican [1]. Fuentes secundarias cuentan 34 KPI [38][3]. ISO indica que la norma está "pendiente de revisión"; la Enmienda 1 añadió en 2017 un conjunto de KPI energéticos [1].
+
+La norma trabaja con un modelo temporal preciso. Kang et al., en un artículo publicado a través del National Institute of Standards and Technology (NIST) de Estados Unidos, dan las fórmulas básicas como: disponibilidad = tiempo real de producción (APT) ÷ tiempo de ocupación planificado (PBT), y efectividad = tiempo de ejecución planificado por unidad (PRI) × cantidad producida (PQ) ÷ APT [3]. Así, la norma dice "efectividad" donde la literatura de TPM dice "rendimiento".
+
+Para los lectores de Estados Unidos, **ISA-95** (ANSI/ISA-95, internacionalmente IEC 62264) proporciona la arquitectura en torno a estos KPI. Basado en el modelo de referencia de Purdue, define cinco niveles desde el proceso físico (Nivel 0) pasando por la detección, el control supervisor y el **Nivel 3, gestión de operaciones de fabricación (MOM), donde viven MES y SCADA**, hasta la planificación empresarial y la logística en ERP (Nivel 4) [40]. Los KPI de ISO 22400 son, por su nombre, KPI para la gestión de operaciones de fabricación, por lo que se calculan en el Nivel 3 de ISA-95 y se informan hacia arriba. En las fábricas de semiconductores, SEMI E10 (fiabilidad, disponibilidad, mantenibilidad y utilización de equipos) y SEMI E79 (productividad de equipos, incluida la OEE) son las referencias específicas del sector [41].
+
+En Alemania, un grupo de trabajo de la VDMA (la asociación de la industria alemana de ingeniería mecánica) publicó la directriz **VDMA 66412-1 "Manufacturing Execution Systems (MES) – KPIs"** (edición 2009-10, 36 páginas, modificada por A1:2010-05) [4]. Define KPI estándar y cómo calcularlos a partir de los estados de las máquinas [5]. El mensaje para usted como profesional es el mismo en todos los países: adopte los términos estándar siempre que sea posible y documente cada desviación. Eso facilita mucho las comparaciones entre plantas y la integración con MES.
+
+### Para qué sirven los KPI de fabricación
+
+Los KPI cumplen tres funciones. **Hacen visible** lo que se pierde en el negocio diario, por ejemplo que una máquina funciona todo el tiempo pero entrega solo dos tercios de su producción posible. **Centran la atención** en la mayor palanca, porque desglosan las pérdidas en categorías. Y **ponen a prueba las contramedidas**: ¿el nuevo método de cambio de formato realmente redujo el tiempo de cambio, o la pérdida simplemente se trasladó a la fase de arranque? Sin una cifra, esa pregunta sigue siendo una cuestión de opinión.
+
+Una cuarta función se olvida a menudo: los KPI son una **herramienta de comunicación**. En la [gestión visual de planta](https://www.m365.fm/entity/shop-floor-management/) son el lenguaje común entre operarios, supervisores de turno y la dirección de la planta. Solo cumplen ese propósito si todos conocen la definición y ven la misma cifra.
+
+## 2. Hoja de referencia de KPI de fabricación: todas las fórmulas de un vistazo
+
+La tabla resume todos los KPI cubiertos en esta guía. "Nivel" indica el nivel de gestión típico (M = máquina/puesto de trabajo, L = línea/área, P = planta). Las fórmulas siguen las fuentes citadas en cada sección.
+
+| KPI | Fórmula (forma abreviada) | Unidad | Dirección | Nivel |
+|---|---|---|---|---|
+| Takt time | tiempo de producción disponible ÷ demanda del cliente | s/unidad | un dato de partida, no algo que optimizar | L |
+| Cycle time | tiempo medido entre dos unidades terminadas | s/unidad | ≤ takt | M, L |
+| Lead time de fabricación | fin − inicio (pedido o pieza); en promedio WIP ÷ throughput | h, días | ↓ | L, P |
+| Tiempo de procesado | suma de los tiempos en los que la pieza se trabaja realmente | s, min | ↓ (sin pérdida de calidad) | M, L |
+| Factor de flujo (Wiendahl) | lead time ÷ tiempo de operación | ratio (≥ 1) | ↓ | L |
+| Ratio de valor añadido (VSM) | tiempo de procesado ÷ lead time × 100 | % | ↑ | L, P |
+| Tiempo de cambio de formato | última pieza buena de la tirada anterior a la primera pieza buena de la nueva tirada | min | ↓ | M |
+| Peso del cambio de formato | tiempo de cambio ÷ tiempo de producción planificado × 100 | % | ↓ | M, L |
+| Microparadas | número o duración de paradas cortas por debajo de un umbral definido | cuenta, min | ↓ | M |
+| Disponibilidad (OEE) | tiempo de marcha ÷ tiempo de producción planificado | % | ↑ | M |
+| Rendimiento (OEE) | tiempo de ciclo ideal × recuento total ÷ tiempo de marcha | % | ↑ | M |
+| Tasa de calidad (OEE) | recuento de buenas ÷ recuento total | % | ↑ | M |
+| OEE | disponibilidad × rendimiento × calidad | % | ↑ | M, L |
+| TEEP | OEE × carga (tiempo planificado ÷ tiempo calendario) | % | ↑ | M, P |
+| Tasa de chatarra | recuento de chatarra ÷ recuento total × 100 | % | ↓ | M, L, P |
+| First pass yield (FPY) | unidades buenas a la primera ÷ recuento total × 100 | % | ↑ | M, L |
+| Tasa de retrabajo | recuento retrabajado ÷ recuento total × 100 | % | ↓ | M, L |
+| PPM | piezas defectuosas ÷ piezas inspeccionadas o enviadas × 1.000.000 | ppm | ↓ | P |
+| OTIF | líneas entregadas a tiempo y completas ÷ todas las líneas vencidas × 100 | % | ↑ | P |
+| Cumplimiento de programa (producción) | pedidos completados según programa ÷ todos los pedidos vencidos × 100 | % | ↑ | L, P |
+| WIP | cantidad o valor del trabajo en proceso | unidades, $ | ↓ (hasta el mínimo necesario) | L |
+| Días de cobertura | inventario ÷ consumo medio diario | días | ↓ (hasta el nivel de seguridad) | L, P |
+| Utilización de la capacidad | carga ÷ capacidad disponible × 100 | % | banda objetivo, no máximo | L, P |
+| Eficiencia de utilización (ISO) | tiempo de producción real ÷ tiempo real de ocupación de la unidad | % | ↑ | M |
+| Productividad laboral | recuento de buenas ÷ horas de trabajo | unidades/h | ↑ | L, P |
+| MTBF | tiempo de marcha ÷ número de fallos | h, min | ↑ | M |
+| MTTR | tiempo total de reparación ÷ número de fallos | min | ↓ | M |
+| Energía por unidad | energía consumida ÷ recuento de buenas | kWh/unidad | ↓ | M, P |
+| TRIR (OSHA) | casos registrables × 200.000 ÷ horas trabajadas | por 100 FTE | ↓ | P |
+| DART rate (OSHA) | casos DART × 200.000 ÷ horas trabajadas | por 100 FTE | ↓ | P |
+| LTIFR | lesiones con pérdida de tiempo ÷ horas trabajadas × 1.000.000 | por 1 millón de h | ↓ | P |
+| Coste por unidad | coste del periodo ÷ recuento de buenas | $/unidad | ↓ | L, P |
+
+## 3. El ejemplo práctico "Línea 3": datos de entrada
+
+Para mantener las fórmulas concretas, esta guía calcula cada KPI sobre una única línea de montaje ficticia. Los números se han elegido para que se verifiquen entre sí: si el OEE es correcto, debe coincidir con el recuento de piezas buenas, y si el lead time es correcto, debe coincidir con el WIP y el throughput.
+
+| Entrada | Valor |
+|---|---|
+| Régimen de turnos | 2 turnos de 8 h (480 min), 5 días por semana |
+| Pausas por turno | 30 min (no son tiempo de producción planificado) |
+| Tiempo de producción planificado por turno | 450 min |
+| Demanda del cliente | 900 unidades por día, es decir, 450 unidades por turno |
+| Tiempo de ciclo ideal (estación cuello de botella) | 50 s/unidad |
+| Averías por turno | 25 min |
+| Cambios de formato por turno | 2 cambios de 10 min = 20 min |
+| Recuento total por turno | 432 unidades |
+| de las cuales buenas a la primera | 410 unidades |
+| de las cuales retrabajadas y después buenas | 12 unidades |
+| de las cuales chatarra | 10 unidades |
+| Dotación | 6 operarios por turno |
+
+Estas entradas se repiten en todas las secciones. Cada cálculo se ha revisado de nuevo; el redondeo se aplica solo al resultado. Los costes de la Sección 12 se muestran en dólares estadounidenses; las cifras son ilustrativas, igual que la línea.
+
+## 4. Métricas de tiempo: takt time, tiempo de ciclo, lead time, tiempo de proceso, factor de flujo
+
+Las métricas de tiempo son los KPI de fabricación que más se confunden. Los términos suenan parecidos, y las empresas los usan de forma distinta en la práctica. Documente una vez la definición para su planta y enlácela en cada cuadro de mando.
+
+### Cómo calcular el takt time
+
+El [takt time](https://www.m365.fm/entity/takt-time/) indica cada cuánto debe salir de la línea una unidad terminada para cumplir la demanda del cliente. El Lean Enterprise Institute (LEI) lo define como el tiempo de producción disponible dividido entre la demanda del cliente [9]. Rother y Shook sitúan "Producir al ritmo de su takt time" como la primera pauta para una cadena de valor esbelta y describen el takt como sustituto de la demanda del cliente [2][12].
+
+> **Takt time = tiempo de producción disponible por periodo ÷ demanda del cliente por periodo**
+
+La palabra procede del alemán ("Takt" significa tiempo, compás o cadencia). Según el LEI, el takt se empleó por primera vez como herramienta de gestión de la producción en la industria aeronáutica alemana en la década de 1930 [9].
+
+**Ejemplo de la Línea 3:** tiempo disponible por turno 450 min = 27 000 s; demanda por turno 450 unidades.
+Takt time = 27 000 s ÷ 450 unidades = **60 s/unidad**.
+
+Como comprobación, el ejemplo del LEI: 480 minutos al día y una demanda de 240 unidades dan un takt time de 2 minutos [9].
+
+**Errores habituales:**
+- **No restar las pausas.** Usar 480 en lugar de 450 minutos da un takt de 64 s. Sobre el papel, la línea se diseñaría entonces demasiado lenta.
+- **Restar el tiempo de parada no planificado.** Las averías no deben descontarse del tiempo disponible para el takt. Son una pérdida que la línea debe absorber mediante su reserva de capacidad. Restarlas esconde el problema dentro del takt.
+- **Tratar el takt como algo que optimizar.** Es el cliente quien fija el takt, no la producción. Lo que se optimiza es el tiempo de ciclo, para que cumpla de forma fiable el takt.
+- **Confundir el takt con una tasa.** El takt es tiempo por unidad, no unidades por tiempo. Su inverso (1 unidad cada 60 s = 60 unidades por hora) es la tasa de salida requerida.
+
+### Tiempo de ciclo
+
+Según el LEI, el [tiempo de ciclo](https://www.m365.fm/entity/cycle-time/) es "el tiempo necesario para producir una pieza o completar un proceso, medido en la práctica" [10]. En el mapeo de la cadena de valor describe cada cuánto completa un proceso una pieza. La palabra clave es "medido": el tiempo de ciclo es un valor real. El **tiempo de ciclo ideal** (también llamado tiempo estándar, de diseño o de placa) es el mejor tiempo técnicamente posible y la base del rendimiento del OEE.
+
+> **Tiempo de ciclo real medio = tiempo de marcha ÷ unidades producidas**
+
+**Ejemplo de la Línea 3:** tiempo de marcha 405 min (450 min menos 25 min de averías menos 20 min de cambios de formato) = 24 300 s; 432 unidades producidas.
+Tiempo de ciclo real = 24 300 s ÷ 432 = **56,25 s/unidad**.
+El tiempo de ciclo ideal es de 50 s. La diferencia de 6,25 s por unidad se debe a microparadas y a la reducción de velocidad, es decir, a la pérdida de rendimiento (Sección 7).
+
+Para las máquinas, el LEI define además el **tiempo de ciclo efectivo de máquina**: el tiempo de ciclo de la máquina más el tiempo de carga y descarga más el tiempo de cambio de formato, dividido entre el número de piezas fabricadas entre cambios [10]. Esto indica si una máquina puede mantener el takt en absoluto, dada la frecuencia con que se cambia de formato.
+
+**Error común:** confundir el tiempo de ciclo con el takt time. Ambos se miden en segundos por unidad, pero el takt es una cifra de demanda y el tiempo de ciclo es una cifra de proceso. Al menos una página en inglés de alto posicionamiento invierte la fórmula del tiempo de ciclo (piezas ÷ tiempo de funcionamiento); eso es una tasa, no un tiempo de ciclo.
+
+### Cómo calcular el lead time de fabricación
+
+El [lead time](https://www.m365.fm/entity/lead-time/) (lead time de producción, también llamado tiempo de tránsito o throughput time) es "el tiempo necesario para que un producto recorra por completo un proceso o una cadena de valor desde el inicio hasta el final" [10]. Además del procesamiento, incluye todos los tiempos de transporte, de cola y de espera. La ingeniería de producción alemana lo divide en tiempo de operación (preparación y procesamiento), tiempo de transición (colas y transporte) y tiempo de espera entre operaciones [15]. Hans-Peter Wiendahl convirtió el lead time en el concepto central del control de producción con su modelo de embudo [15][14].
+
+Hay dos formas de determinarlo:
+
+**1. Directamente, por pedido o por pieza:**
+
+> **Lead time = marca de tiempo de finalización − marca de tiempo de inicio (o liberación del pedido)**
+
+Decida si cuenta días naturales, días laborables (días de calendario de taller) u horas, y desde qué momento empieza el cronómetro (registro del pedido, liberación, primera operación). Los distintos puntos de inicio son la causa más frecuente de que ventas y producción discutan sobre "el" lead time.
+
+**2. Indirectamente, con la Ley de Little:**
+
+En 1961, John D. C. Little demostró que, en un sistema estable, el número medio de artículos en el sistema es igual a la tasa de llegada por el tiempo medio en el sistema (L = λW) [13]. Aplicado a la fabricación:
+
+> **Lead time medio = WIP medio ÷ throughput medio**
+
+**Ejemplo de la línea 3:** de promedio, 2.700 piezas están en la línea y en sus buffers; la línea expide de promedio 900 piezas por día laborable.
+Lead time = 2.700 ÷ 900 = **3 días laborables**.
+
+La Ley de Little se cumple para promedios en un periodo suficientemente largo en el que el WIP ni crece sin parar ni disminuye sin parar. El WIP y el throughput deben usar la misma unidad (piezas o dólares, sin mezclarlas). Su gran valor práctico: muestra que, con un throughput constante, solo es posible reducir el lead time reduciendo el WIP. Las máquinas más rápidas por sí solas aportan poco mientras las piezas sigan esperando delante de ellas.
+
+### Tiempo de procesamiento y tiempo estándar (REFA)
+
+El **tiempo de procesamiento** es el tiempo en el que el producto está realmente siendo trabajado [10]; normalmente es una pequeña fracción del lead time. Para la planificación y el cálculo de costes, las plantas alemanas usan las categorías de tiempo de REFA, la asociación alemana para el diseño del trabajo y la ingeniería industrial (comparable en función a las convenciones de tiempo estándar de la ingeniería industrial estadounidense). REFA divide el tiempo de orden en tiempo de preparación y tiempo de ejecución, compuestos cada uno por componentes básicos, de descanso y de suplemento; el equivalente desde el lado de la máquina se llama tiempo de ocupación del equipo [16][17]:
+
+> **Tiempo de orden T = tiempo de preparación t_r + tiempo de ejecución t_a**, con **t_a = cantidad del pedido m × tiempo por unidad t_e**
+
+**Ejemplo:** un pedido de 400 unidades se ejecuta en la estación cuello de botella: preparación 20 min, tiempo por unidad 50 s.
+T = 20 min + 400 × 50 s ÷ 60 = 20 + 333,3 = **353,3 min** (unas 5,9 h).
+
+Nyhuis y Wiendahl derivan el **tiempo de operación** de una etapa de trabajo a partir del tiempo de orden y lo expresan en días de calendario de taller relacionando el tiempo de orden con la capacidad diaria del sistema de trabajo [14]. [unverified: notación exacta de la fórmula en Nyhuis/Wiendahl, sección 2.1.1, verificada solo a través del índice y de la lista de abreviaturas] Para que los ejemplos sean comparables, esta guía simplifica y calcula en minutos de tiempo de operación; para una sola máquina, el tiempo de operación equivale entonces al tiempo de orden.
+
+### Factor de flujo y ratio de valor añadido
+
+Circulan dos KPI distintos con nombres parecidos, y no conviene confundirlos.
+
+**Factor de flujo según Wiendahl (visión logística):** la razón entre el lead time y el tiempo de operación de una etapa de trabajo o de un pedido [14][15]. Un valor de 1 significa que el pedido se procesó sin esperas; un valor de 6 significa que pasó seis veces más tiempo en el sistema que lo que requirieron la preparación y el procesamiento.
+
+> **Factor de flujo = lead time ÷ tiempo de operación**
+
+**Ejemplo:** el pedido del ejemplo REFA tiene un tiempo de operación de 353,3 min. Espera dos días laborables antes de la operación (2 × 900 min = 1.800 min de tiempo de operación).
+Lead time de la operación = 1.800 + 353,3 = 2.153,3 min. Factor de flujo = 2.153,3 ÷ 353,3 = **6,09**.
+
+**Índice de valor añadido (vista de la cadena de valor):** en el [mapeo de la cadena de valor](https://www.m365.fm/entity/value-stream-mapping/) es habitual la vista contraria: la proporción del tiempo de procesamiento en el lead time, en porcentaje. (La definición más estrecha del LEI, "tiempo que crea valor", cuenta solo los elementos de trabajo por los que el cliente está dispuesto a pagar [10].) La Wikipedia en alemán llama a esta proporción "Fließgrad", a su inversa "Flussgrad", y sitúa la parte de actividad que aporta valor en la industria alemana entre el 5 y el 15 por ciento [15]. [unverified: fuente primaria de este rango no documentada claramente en Wikipedia] Algunos manuales de cadena de valor también denominan al porcentaje factor de flujo. Por eso conviene comprobar siempre si se refiere a un valor por encima de 1 o por debajo del 100 %.
+
+> **Índice de valor añadido = tiempo de procesamiento ÷ lead time × 100 %**
+
+**Ejemplo para la línea 3:** los tiempos de procesamiento de las cuatro estaciones suman 190 s. El lead time es de 3 días laborables de 900 min de tiempo de operación cada uno = 162.000 s.
+Índice de valor añadido = 190 ÷ 162.000 × 100 % = **0,117 %**.
+
+Los valores por debajo del uno por ciento son normales en operaciones con stocks intermedios y lotes. Lo que importa es la tendencia y la base temporal: en tiempo calendario, el valor baja aún más. El método se explica en detalle en la guía [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/).
+
+## 5. Takt time frente a tiempo de ciclo frente a lead time
+
+"¿Cuál es la diferencia entre takt time y tiempo de ciclo?" es una de las preguntas más frecuentes en torno a los KPI de fabricación. La tabla sitúa los tres conceptos uno al lado del otro. El LEI resume el orden así: "Normalmente, el tiempo que crea valor es menor que el tiempo de ciclo, que a su vez es menor que el lead time de producción" [10].
+
+| Atributo | Takt time | Tiempo de ciclo | Lead time |
+|---|---|---|---|
+| Pregunta | ¿Con qué frecuencia **debe** terminarse una pieza? | ¿Con qué frecuencia **se** termina una pieza? | ¿Cuánto tiempo **tarda** una pieza en atravesar el sistema? |
+| Fuente | demanda del cliente y tiempo de trabajo | medición en el proceso | marcas de tiempo o Ley de Little |
+| Fórmula | tiempo disponible ÷ demanda | tiempo de marcha ÷ unidades (medido) | fin − inicio, o WIP ÷ rendimiento |
+| Unidad típica | s/unidad | s/unidad | h, días |
+| Línea 3 | 60 s | 56,25 s (ideal 50 s) | 3 días laborables |
+| ¿Quién influye? | ventas, cliente, turnos | ingeniería, método, mantenimiento | programación, WIP, tamaños de lote |
+| Dirección razonable | ninguna; es un dato de partida | ≤ takt con una reserva | lo más corto posible |
+| Error habitual | no descontar pausas | usar el valor ideal en lugar del real | punto de inicio no definido |
+
+**Idea clave del ejemplo:** el tiempo de ciclo real de 56,25 s está por debajo del takt de 60 s. Aun así, la línea 3 no cumple la demanda, como muestran las siguientes secciones, porque el tiempo de ciclo solo se aplica durante el tiempo de marcha. Las averías, los cambios de formato y la chatarra no aparecen en esa visión. Para el diseño de la línea, lo que cuenta es el **tiempo de ciclo efectivo por pieza buena**, es decir, el tiempo de producción planificado dividido entre el número de piezas buenas.
+
+## 6. Tiempo de cambio, SMED y paros menores
+
+### Tiempo de cambio y proporción de cambio
+
+El [tiempo de cambio](https://www.m365.fm/entity/setup-time/) (tiempo de preparación) es el tiempo necesario para cambiar una máquina o una línea de un producto a otro. En la práctica, medirlo desde la última pieza buena de la orden anterior hasta la primera pieza buena de la nueva orden es lo más útil, porque incluye el ajuste y el arranque. [unverified: esta convención está muy extendida en la práctica, pero no se indica textualmente en las fuentes consultadas aquí.] En el sistema REFA, el tiempo de preparación forma parte del tiempo de orden [16].
+
+> **Proporción de cambio = tiempo de cambio ÷ tiempo de producción planificado × 100 %**
+
+**Ejemplo de la línea 3:** 20 min de cambio ÷ 450 min = **4,44 %**.
+
+### SMED: cambios en minutos de un solo dígito
+
+[SMED](https://www.m365.fm/entity/smed/) (Single-Minute Exchange of Die, cambio de utillaje en minutos de un solo dígito) es un método para reducir al mínimo los cambios; el objetivo es un tiempo de cambio de un solo dígito, es decir, de menos de diez minutos [11]. Shigeo Shingo desarrolló las ideas centrales en las décadas de 1950 y 1960: separó el preparado interno, que solo puede realizarse con la máquina parada, del preparado externo, que puede hacerse mientras la máquina funciona, y trasladó al externo todo lo posible [11].
+
+**Ejemplo de la línea 3:** si ambos cambios bajan de 10 a 6 min, la línea gana 8 min de tiempo de marcha por turno. Con un rendimiento sin cambios del 88,9 %, eso supone 8 × 60 ÷ 50 × 0,889 = **unas 8,5 piezas adicionales** por turno. Alternativamente, la línea puede mantener el mismo tiempo total de cambio, cambiar con más frecuencia y fabricar lotes más pequeños, lo que reduce el WIP y el plazo de entrega.
+
+**Error habitual:** considerar el tiempo de cambio solo como una pérdida. Los cambios más cortos son, sobre todo, una palanca para lotes más pequeños. Si se dedica todo el tiempo ganado a series más grandes, se renuncia al beneficio logístico.
+
+### Paros menores
+
+Los [paros menores](https://www.m365.fm/entity/micro-stops/) (micro-paradas) son interrupciones breves, como una pieza atascada o un sensor disparado, que apenas se registran una a una. En el marco TPM de Nakajima forman parte de las seis grandes pérdidas como "pérdidas por marcha en vacío y paros menores" y reducen el rendimiento, no la disponibilidad [7]. Cada empresa fija su propio umbral entre un paro menor y una avería; son habituales umbrales de unos pocos minutos. [unverified: no se encontró ninguna norma con un umbral vinculante.] Muchiri y Pintelon señalan que el registro manual suele pasar por alto las paradas pequeñas [7].
+
+**Ejemplo de la línea 3:** la pérdida de rendimiento total es el tiempo de marcha menos el tiempo ideal de las unidades producidas: 405 min − 432 × 50 s ÷ 60 = 405 − 360 = **45 min**. El controlador de la máquina cuenta 120 paros menores de 15 s cada uno = 30 min. Los 15 min restantes corresponden a velocidad reducida. Sin captura automática de datos, esos 30 minutos de paros menores probablemente se habrían anotado en el informe del turno como "línea en marcha".
+
+## 7. OEE: cómo calcular la eficiencia global del equipo
+
+La eficiencia global del equipo (OEE, por sus siglas en inglés, *Overall Equipment Effectiveness*) es el KPI de fabricación más conocido. El término se remonta a Seiichi Nakajima y es un elemento central del [Mantenimiento Productivo Total (TPM)](https://www.m365.fm/entity/total-productive-maintenance/) [8][6]. El glosario de ASQ describe la OEE como una medida de qué tan bien rinde una unidad de fabricación en relación con su capacidad de diseño durante los periodos en que está programada para operar, combinando disponibilidad, velocidad y la proporción de producción buena [36]. La OEE responde a una pregunta: ¿qué porcentaje del tiempo de producción planificado se utilizó para fabricar piezas buenas a la velocidad ideal?
+
+### Los tres factores
+
+> **OEE = Disponibilidad × Rendimiento × Calidad**
+
+| Factor | Fórmula | Pérdidas que captura |
+|---|---|---|
+| Disponibilidad | tiempo de marcha ÷ tiempo de producción planificado | averías, preparación y ajuste |
+| Rendimiento (ISO: efectividad) | tiempo de ciclo ideal × recuento total ÷ tiempo de marcha | microparadas, reducción de velocidad |
+| Calidad | recuento de buenas ÷ recuento total | scrap, retrabajo, pérdidas en el arranque |
+
+Muchiri y Pintelon definen la disponibilidad como el tiempo de operación en porcentaje del tiempo de carga, el rendimiento como el tiempo de ciclo teórico por la producción real dividido entre el tiempo de operación, y la tasa de calidad como la producción total menos los defectos, relativa a la producción total [7]. La norma ISO 22400-2 utiliza la misma lógica con sus propios términos de tiempo [3].
+
+### Las seis grandes pérdidas
+
+Nakajima asigna las pérdidas a seis categorías [7]:
+
+1. **Averías** (pérdidas por avería) → disponibilidad
+2. **Preparación y ajuste** → disponibilidad
+3. **Esperas y paradas menores** → rendimiento
+4. **Reducción de velocidad** → rendimiento
+5. **Defectos de calidad y retrabajo** → calidad
+6. **Reducción del rendimiento en el arranque** → calidad
+
+Esta correspondencia es el verdadero valor de la OEE. El total por sí solo dice poco; solo el desglose muestra si el mantenimiento, el equipo de cambios de formato o calidad tienen la mayor palanca de mejora.
+
+### Cómo calcular la OEE: el ejemplo de la Línea 3
+
+**Paso 1, disponibilidad:** tiempo de producción planificado 450 min; averías 25 min, cambios de formato 20 min; tiempo de marcha 405 min.
+Disponibilidad = 405 ÷ 450 = **90,0 %**.
+
+**Paso 2, rendimiento:** 432 unidades × 50 s = 21 600 s de tiempo ideal; tiempo de marcha 405 min = 24 300 s.
+Rendimiento = 21 600 ÷ 24 300 = **88,9 %**.
+
+**Paso 3, calidad:** 410 piezas buenas a la primera de un total de 432 unidades.
+Calidad = 410 ÷ 432 = **94,9 %**.
+
+**Paso 4, OEE:** 0,900 × 0,8889 × 0,9491 = **75,9 %**.
+
+**Comprobación cruzada por tiempo:** recuento de buenas por tiempo de ciclo ideal dividido entre el tiempo de producción planificado = 410 × 50 s ÷ 27 000 s = 20 500 ÷ 27 000 = **75,9 %**. Ambos cálculos deben dar el mismo resultado; si no es así, los datos de entrada son incorrectos.
+
+**Qué significa la OEE para el takt:** el tiempo de ciclo efectivo por pieza buena es 50 s ÷ 0,759 = 65,9 s, que supera el takt de 60 s. En 27 000 s, la línea fabrica 410 piezas buenas a la primera, o 422 incluyendo las 12 piezas retrabajadas. La demanda de 450 unidades por turno no se cumple en 28 unidades. Para cubrirla solo con piezas buenas a la primera, la Línea 3 necesitaría una OEE de 450 × 50 ÷ 27 000 = 83,3 %.
+
+### Retrabajo: ¿bueno o malo?
+
+En la lógica del TPM, el retrabajo es una pérdida de calidad [7]; por eso el ejemplo cuenta solo las 410 piezas que fueron buenas a la primera. Kang et al. utilizan una tasa de calidad que cuenta las piezas retrabajadas como buenas [3]. Con 422 piezas en lugar de 410, la calidad subiría al 97,7 % y la OEE al 78,1 %. Ambas variantes son defendibles, pero hay que elegir una y no se deben comparar plantas que usen definiciones distintas.
+
+### TEEP: la OEE frente al tiempo de calendario
+
+La eficiencia total efectiva del equipo (TEEP, por sus siglas en inglés, *Total Effective Equipment Performance*) relaciona la OEE con el tiempo total de calendario en lugar de solo con el tiempo planificado [8]:
+
+> **TEEP = OEE × carga**, con **carga = tiempo de producción planificado ÷ tiempo de calendario**
+
+**Ejemplo de la Línea 3:** 10 turnos × 450 min = 4 500 min de tiempo planificado por semana; tiempo de calendario 7 × 24 × 60 = 10 080 min.
+Carga = 4 500 ÷ 10 080 = 44,6 %. TEEP = 75,9 % × 44,6 % = **33,9 %**.
+
+El TEEP es el KPI adecuado para decisiones de inversión: antes de comprar una segunda máquina, muestra cuánto tiempo de calendario sin usar tiene todavía el equipo existente. Tenga en cuenta que algunas páginas en inglés asignan a OEE, OOE y TEEP la misma fórmula; eso es incorrecto, ya que las tres difieren en la base temporal.
+
+### ¿Qué es una buena OEE? De dónde procede el referente del 85 % y por qué se discute
+
+La cifra del 85 % como "OEE de clase mundial" se atribuye con regularidad en artículos del sector a Nakajima, a menudo construida a partir de 90 % de disponibilidad, 95 % de rendimiento y 99,9 % de calidad (0,90 × 0,95 × 0,999 = 85,4 %) [37]. En las fuentes primarias y de revisión consultadas para este artículo, no se ha encontrado la descomposición por componentes en forma literal. [unverified: passage original en Nakajima 1988] La Wikipedia en inglés afirma explícitamente que el 85 % no es el objetivo adecuado en muchos casos, por ejemplo cuando no se capturan todas las pérdidas o cuando los requisitos de calidad del sector son más exigentes [8].
+
+Otros puntos de crítica [8]:
+
+- El OEE se comporta como una media geométrica y penaliza los factores desiguales: 20 % × 80 % = 16 %, 50 % × 50 % = 25 %.
+- Las definiciones difieren entre empresas, por lo que el OEE es poco adecuado para comparar plantas o tipos de máquina.
+- El OEE no es una medida del rendimiento individual de los empleados.
+
+Utilice el OEE como KPI de mejora para un mismo activo a lo largo del tiempo, no como clasificación. Una planta de proceso continuo que funciona 24/7 y un taller de piezas variadas con muchos cambios de formato tienen valores estructuralmente distintos.
+
+### Agregar el OEE de varias máquinas correctamente
+
+Un error habitual en los informes es promediar porcentajes de OEE. Ejemplo: la máquina A tiene un OEE del 80 % con 450 min de tiempo planificado, la máquina B del 50 % con 150 min.
+
+- Incorrecto (media simple): (80 % + 50 %) ÷ 2 = 65,0 %
+- Correcto (ponderado por tiempo): (0,80 × 450 + 0,50 × 150) ÷ (450 + 150) = (360 + 75) ÷ 600 = **72,5 %**
+
+El enfoque más limpio es recalcular el OEE en cada nivel a partir de tiempos sumados: suma del tiempo de valor añadido (recuento bueno × tiempo de ciclo ideal) dividida entre la suma del tiempo planificado. La sección 15 muestra la fórmula DAX equivalente.
+
+## 8. KPI de calidad: tasa de chatarra, rendimiento al primer paso, tasa de retrabajo, PPM
+
+Los KPI de calidad responden a dos preguntas distintas: cuánto material y tiempo se pierde dentro de la planta (interna) y cuántos defectos llegan al cliente (externa)? Cada perspectiva necesita sus propios KPI. La norma ISO 22400-2 incluye, entre otros, la razón de calidad, la razón de chatarra, la razón de retrabajo y un rendimiento al primer paso [3]; las razones de chatarra y de retrabajo también aparecen en la lista de los 34 KPI de ISO de Fabrico [38].
+
+### Fórmula de la tasa de chatarra
+
+La [tasa de chatarra](https://www.m365.fm/entity/scrap-rate/) mide la proporción de piezas que ya no pueden utilizarse y se desechan o reciclan. En la presentación de Kang et al., la fórmula ISO es la cantidad de chatarra dividida entre la cantidad producida [3].
+
+> **Tasa de chatarra = recuento de chatarra ÷ recuento total × 100 %**
+
+**Ejemplo de la línea 3:** 10 piezas desechadas ÷ 432 piezas × 100 % = **2,31 %**.
+
+**Errores habituales:**
+- **Cambiar la base.** A veces se usa el recuento total, otras el recuento de buenas (10 ÷ 422 = 2,37 %). Con tasas bajas la diferencia es pequeña; con tasas altas sí importa.
+- **Omitir la chatarra de arranque.** Las piezas descartadas durante el ajuste tras un cambio de formato a menudo no se contabilizan. Sin embargo, muestran si los cambios de formato están bajo control.
+- **Contar solo piezas, no valor.** Una pieza desechada al final de la cadena de valor cuesta muchas veces más que una pieza en bruto. Añada el coste de la chatarra a la tasa por piezas.
+
+### Rendimiento al primer paso (FPY)
+
+El rendimiento al primer paso (también primera vez correcta o right first time) mide la proporción de unidades que superan un proceso a la primera, sin retrabajo ni chatarra. ASQ describe el FPY, también llamado tasa de calidad, como el porcentaje de unidades que completan un proceso y cumplen las directrices de calidad sin ser desechadas, repetidas, reensayadas, devueltas ni desviadas a una zona de reparación fuera de línea [36]. Kang et al. dan la fórmula como cantidad buena al primer paso dividida entre la cantidad producida [3].
+
+> **FPY = unidades buenas al primer paso ÷ recuento total × 100 %**
+
+**Ejemplo de la línea 3:** 410 ÷ 432 × 100 % = **94,9 %**.
+
+Para varios pasos de proceso, multiplique los valores de FPY de cada paso para obtener el **rendimiento de paso acumulado (RTY, rolled throughput yield)**. Tres estaciones con un FPY del 98 % cada una dan 0,98 × 0,98 × 0,98 = 94,1 %. El RTY muestra cuántas piezas llegan al final de toda la cadena sin ninguna corrección. [unverified: el RTY es habitual en la literatura de Six Sigma, pero no se contrastó con una fuente primaria para este artículo.]
+
+**Calidad del OEE frente a FPY:** si trata el retrabajo como una pérdida, el FPY y la tasa de calidad del OEE son idénticos (ambos 94,9 % en el ejemplo). Si cuenta el retrabajo como bueno, la calidad del OEE equivale al rendimiento final: (410 + 12) ÷ 432 = 97,7 %.
+
+### Tasa de retrabajo
+
+> **Tasa de retrabajo = recuento retrabajado ÷ recuento total × 100 %**
+
+**Ejemplo de la línea 3:** 12 ÷ 432 × 100 % = **2,78 %**.
+
+La comprobación: FPY + tasa de retrabajo + tasa de chatarra = 94,91 % + 2,78 % + 2,31 % = 100 %. Esta comprobación de suma debería ejecutarse automáticamente en cada cuadro de mando; si no cuadra, faltan transacciones.
+
+El retrabajo suele subestimarse porque la pieza acaba siendo buena. Sin embargo, ocupa personas, genera WIP y alarga el lead time. Registre tanto el tiempo de retrabajo como la cantidad retrabajada.
+
+### PPM (partes por millón)
+
+ASQ define los PPM como una métrica que informa del número de defectos normalizado a una población de un millón, para facilitar la comparación [36]. Se utiliza principalmente para reclamaciones de clientes y para la evaluación de proveedores.
+
+> **PPM = piezas defectuosas ÷ piezas enviadas (o inspeccionadas) × 1.000.000**
+
+**Ejemplo:** en un trimestre, la planta envía 250.000 piezas; el cliente rechaza 18. PPM = 18 ÷ 250.000 × 1.000.000 = **72 ppm**.
+
+Acuerde con el cliente si cuentan las piezas rechazadas, los envíos rechazados o las reclamaciones aceptadas. Expresar la chatarra interna en PPM (Línea 3: 10 ÷ 432 × 1.000.000 = 23.148 ppm) es posible, pero no es muy intuitivo; en ese caso el porcentaje funciona mejor.
+
+## 9. KPI de entrega e inventario: OTIF, cumplimiento del programa, WIP, días de cobertura
+
+### Entrega a tiempo y OTIF
+
+El rendimiento de entrega mide la fiabilidad con la que la planta cumple sus compromisos con los clientes. La forma más habitual es **OTIF** (on time in full, a tiempo y completo): una entrega solo cuenta si llega a tiempo **y** completa.
+
+> **OTIF = líneas de pedido entregadas a tiempo y completas ÷ todas las líneas de pedido con entrega vencida × 100 %**
+
+No existe una definición estándar vinculante. McKinsey señaló en 2019 que, sin una definición estándar, el OTIF se interpreta de formas muy distintas; en una encuesta a 24 grandes minoristas y fabricantes de bienes de consumo de Norteamérica, el 79 % prefería una única métrica OTIF combinada frente a una medición por separado, y no había consenso sobre la amplitud de la ventana de entrega [18].
+
+**Ejemplo:** en un mes vencen 200 líneas de pedido. 184 se entregaron a tiempo, 190 completas y 178 a tiempo y completas.
+- A tiempo = 184 ÷ 200 = 92,0 %
+- Completas = 190 ÷ 200 = 95,0 %
+- OTIF = 178 ÷ 200 = **89,0 %**
+
+Observe que el OTIF no es el producto de las dos tasas (0,92 × 0,95 = 87,4 %); se calcula a partir de las líneas que cumplieron ambas condiciones a la vez.
+
+**Debe definir:** la fecha de referencia (fecha solicitada o confirmada), la ventana de tolerancia (por ejemplo ±1 día), el nivel (pedido, línea, cantidad) y si las entregas anticipadas cuentan como a tiempo. Los grandes clientes suelen fijar las reglas por usted: Walmart, por ejemplo, exigió en 2019 a sus proveedores entregar camiones completos dentro de una ventana de dos días el 87 % de las veces, y penalizaba los incumplimientos con un 3 % del coste de las mercancías vendidas [47]. Estos programas cambian, así que compruebe la definición vigente de cada cliente antes de comparar.
+
+### Cumplimiento del programa en producción
+
+El cumplimiento del programa (finalización a tiempo de la producción) mide si las órdenes de producción terminan en la fecha planificada. Es un KPI interno y un indicador adelantado del OTIF con el cliente.
+
+> **Cumplimiento del programa = órdenes de producción terminadas según programa ÷ todas las órdenes de producción vencidas × 100 %**
+
+**Ejemplo:** 102 de 120 órdenes vencidas se terminan según programa: **85,0 %**.
+
+Nyhuis y Wiendahl justifican en parte su modelo de curvas logísticas de operación con el insatisfactorio cumplimiento de los objetivos logísticos en muchas empresas [14]. [unverified: el resumen se corta en la versión recuperada después de esta parte de la frase] Añada al porcentaje la desviación media del programa en días; un 85 % de cumplimiento con un día de retraso no es lo mismo que un 85 % con dos semanas de retraso.
+
+### WIP (trabajo en curso)
+
+El trabajo en curso abarca todos los bienes no terminados entre la liberación del material y la finalización. Se informa en piezas (para el control) o en dólares (para finanzas). La Ley de Little vincula directamente el WIP con el lead time [13]: la Línea 3 tiene 2.700 piezas de WIP con un rendimiento diario de 900 piezas, por lo que el lead time es de 3 días. Si el equipo reduce el WIP a 1.800 piezas con el mismo rendimiento, el lead time baja a 2 días.
+
+### Días de cobertura (cobertura de inventario)
+
+> **Días de cobertura = inventario ÷ consumo (o demanda) medio diario**
+
+**Ejemplo:** inventario de producto terminado de 2.250 unidades, demanda de 900 unidades por día. Días de cobertura = 2.250 ÷ 900 = **2,5 días**.
+
+Matemáticamente, los días de cobertura son la Ley de Little aplicada a un único punto de inventario. Use la demanda prevista cuando la demanda fluctúe mucho; de lo contrario, una cobertura basada en el histórico puede parecer engañosamente alta o baja.
+
+## 10. Capacidad y productividad: utilización, eficiencia de utilización, productividad laboral
+
+### Utilización de la capacidad
+
+La utilización compara la carga (capacidad requerida según los tiempos estándar) con la capacidad disponible.
+
+> **Utilización de la capacidad = carga ÷ capacidad disponible × 100 %**
+
+**Ejemplo:** las órdenes con 4.050 min de tiempo estándar se programan en la estación cuello de botella para la semana; la capacidad disponible es de 4.500 min. Utilización = 4.050 ÷ 4.500 = **90,0 %**.
+
+**Por qué el 100 % no es un objetivo:** las curvas de operación logística de Nyhuis y Wiendahl describen la relación entre WIP, producción y tiempo de ciclo de un sistema de trabajo [14]. A medida que la utilización se acerca al límite de capacidad, las colas y los tiempos de ciclo crecen de forma desproporcionada, porque ya no es posible absorber cada perturbación y cada fluctuación. El cuello de botella debe estar muy utilizado; los no cuellos de botella necesitan reserva. Establezca una banda objetivo en lugar de un máximo.
+
+### La utilización no es eficiencia de utilización
+
+Estos términos a menudo se confunden. La **utilización de la capacidad** es una cifra de planificación (¿cuánto trabajo está cargado en la capacidad?). La **eficiencia de utilización** (ISO 22400) es una cifra de ejecución: la relación entre el tiempo de producción real (APT) y el tiempo real de ocupación de la unidad (AUBT) [3]. Una máquina puede estar cargada al 95 % y, aun así, tener una eficiencia de utilización deficiente si gran parte del tiempo ocupado se pierde por averías y esperas. Para la Línea 3, la relación entre tiempo de funcionamiento y tiempo ocupado es 405 ÷ 450 = 90 %, que en este caso sencillo equivale a la disponibilidad del OEE; en plantas que registran por separado los tiempos de preparación y de ocupación, los valores difieren.
+
+### Productividad
+
+La productividad es la relación entre la producción y los insumos. En la fabricación, normalmente se miden **productividades parciales**, porque los factores de entrada no pueden sumarse de forma significativa.
+
+> **Productividad laboral = piezas buenas ÷ horas de trabajo**
+
+**Ejemplo de la Línea 3:** 422 piezas buenas (incluidas las retrabajadas) ÷ (6 operarios × 8 h) = 422 ÷ 48 = **8,79 unidades por hora de trabajo**.
+
+**Errores habituales:** confundir la productividad con un índice de rendimiento (la producción real frente a la estándar es un índice de rendimiento o de eficiencia, no de productividad), contar la producción total en lugar de la producción buena, y comparar la productividad entre productos con distinto contenido de trabajo. En plantas de alta variedad, las horas estándar ganadas por hora de presencia es una medida más adecuada.
+
+## 11. KPI de mantenimiento: MTBF, MTTR y disponibilidad inherente
+
+ISO 22400 incluye el MTBF y el MTTR como KPI de mantenimiento [38][3]. Desglosan la pérdida de disponibilidad por averías en dos preguntas: ¿con qué frecuencia falla la máquina y cuánto tiempo tarda en volver a funcionar?
+
+> **MTBF (tiempo medio entre fallos) = tiempo de funcionamiento ÷ número de fallos**
+> **MTTR (tiempo medio de reparación) = tiempo total de reparación ÷ número de fallos**
+
+**Ejemplo de la línea 3, un mes:** 40 turnos de 405 min de tiempo de funcionamiento cada uno = 16 200 min; 40 fallos que suman 1 000 min.
+- MTBF = 16 200 ÷ 40 = **405 min** (6,75 h)
+- MTTR = 1 000 ÷ 40 = **25 min**
+
+A partir de estos valores se puede calcular la **disponibilidad inherente (técnica)**, que considera solo las averías:
+
+> **Disponibilidad inherente = MTBF ÷ (MTBF + MTTR)**
+
+405 ÷ (405 + 25) = 405 ÷ 430 = **94,2 %**. La disponibilidad del OEE, del 90 %, es menor porque también incluye el tiempo de cambio de formato.
+
+**Errores habituales:** el MTTR puede medir solo la reparación, no el tiempo de respuesta hasta que llega el técnico; decida a qué tiempo se refiere y mida por separado la respuesta y la reparación. Un promedio sobre pocos eventos también es muy aleatorio; el MTBF solo se vuelve fiable a lo largo de varios meses. Y no confunda el MTBF con el MTTF (tiempo medio hasta el fallo), que se aplica a elementos no reparables; algunas páginas en inglés muy bien posicionadas mezclan ambos conceptos.
+
+## 12. Energía, seguridad (TRIR, DART, LTIFR) y coste por unidad
+
+### Energía por unidad
+
+En muchas plantas, la energía se ha convertido en un bloque de coste que merece su propio KPI. ISO 22400-2 se amplió con KPI energéticos en 2017 [1]; para la gestión energética, ISO 50006:2023 (segunda edición, que sustituye a la versión de 2014) describe cómo construir indicadores de desempeño energético (EnPI) y líneas base energéticas [22][34].
+
+> **Consumo energético específico = energía consumida en el periodo ÷ cantidad buena**
+
+**Ejemplo de la línea 3:** 1 520 kWh por turno ÷ 422 piezas buenas = **3,60 kWh por unidad**.
+
+Preste atención a la carga base: una línea que mantiene el aire comprimido y la calefacción en marcha mientras está parada parece mucho peor por unidad con bajo volumen de producción. Una recta de regresión sencilla con un componente de carga base y otro dependiente del volumen le dice más que el simple cociente.
+
+### KPI de seguridad: TRIR y tasa DART de OSHA
+
+En un sistema de KPI SQCDP, la seguridad va en primer lugar. En EE. UU., la referencia es la norma de registro de OSHA (29 CFR Parte 1904). OSHA calcula las tasas de incidencia con una única fórmula [42]:
+
+> **Tasa de incidencia = número de lesiones y enfermedades × 200 000 ÷ horas trabajadas por los empleados**
+
+El 200 000 es el número de horas que trabajan 100 empleados a 40 horas semanales durante 50 semanas al año [42], de modo que el resultado se lee como "casos por cada 100 trabajadores equivalentes a tiempo completo". Hay dos variantes habituales:
+
+- **TRIR** (tasa total de incidentes registrables, también tasa total de casos de incidentes): todos los casos registrables. Los casos registrables son lesiones y enfermedades relacionadas con el trabajo que provocan la muerte, pérdida de conciencia, días fuera del trabajo, trabajo restringido o cambio de puesto, o tratamiento médico más allá de los primeros auxilios, entre otros criterios [46].
+- **Tasa DART:** solo los casos con días fuera del trabajo, actividad laboral restringida o cambio de puesto [46].
+
+**Ejemplo:** 5 casos registrables, 3 de ellos casos DART, en una planta con 420 000 horas trabajadas al año.
+TRIR = 5 × 200 000 ÷ 420 000 = **2,38**. Tasa DART = 3 × 200 000 ÷ 420 000 = **1,43**.
+
+Como referencia: según la Oficina de Estadísticas Laborales (BLS), la industria privada de EE. UU. registró una tasa total de casos registrables de 2,3 casos por cada 100 trabajadores equivalentes a tiempo completo en 2025 (publicada el 18 de noviembre de 2026) [43]. El gráfico del BLS para 2025 muestra 2,5 casos por cada 100 trabajadores a tiempo completo en la industria manufacturera, con 304 200 casos [44][43]. Son promedios nacionales, no referencias para su planta; compárelos con su propio sector NAICS.
+
+Aparte de las tasas, OSHA exige a los empleadores notificar una muerte relacionada con el trabajo en un plazo de 8 horas, y una hospitalización, amputación o pérdida de un ojo en un plazo de 24 horas (29 CFR 1904.39) [45].
+
+### LTIFR y la tasa alemana por 1 000 trabajadores
+
+Los grupos multinacionales suelen usar también la **LTIFR** (tasa de frecuencia de lesiones con tiempo perdido), que utiliza una base de un millón de horas en lugar de 200 000:
+
+> **LTIFR = número de lesiones con tiempo perdido ÷ horas trabajadas × 1 000 000**
+
+Safe Work Australia define la LTIFR como el número de lesiones con tiempo perdido por millón de horas trabajadas; una lesión con tiempo perdido es aquella que provoca al menos un día completo o turno de ausencia del trabajo [21].
+
+**Ejemplo:** 3 lesiones con pérdida de tiempo con 420 000 horas trabajadas al año: 3 ÷ 420 000 × 1 000 000 = **7,14**. Tenga en cuenta que se trata de la misma planta mencionada antes: una tasa DART de 1,43 y una LTIFR de 7,14 describen los mismos tres casos (1,43 × 5 = 7,14) si los tres casos DART implicaron días fuera del trabajo. DART también cuenta los casos de trabajo restringido y de cambio de puesto, que la mayoría de las definiciones de LTI excluyen. Indique siempre la base cuando compare centros.
+
+Las plantas alemanas informan una "tasa por 1 000 trabajadores": accidentes notificables por cada 1 000 equivalentes a tiempo completo. Un accidente es notificable en Alemania si la persona asegurada muere o no puede trabajar durante más de tres días (sección 193, apartado 1, del Libro VII del Código Social alemán) [20]. La asociación alemana de seguro de accidentes de origen legal DGUV informó de 19,9 accidentes laborales notificables por cada 1 000 equivalentes a tiempo completo para 2025, un 3,2 % menos que el año anterior [19]. **Ejemplo:** 4 accidentes notificables con 250 equivalentes a tiempo completo dan 4 ÷ 250 × 1 000 = **16,0**. Debido a que los umbrales de notificación difieren, esta tasa no puede compararse directamente con una tasa de OSHA.
+
+Complemente estos indicadores retrasados con indicadores anticipados, como los casi accidentes notificados y las acciones de seguridad completadas. Una disminución en el número de casi accidentes notificados puede ser una señal de alerta si refleja una cultura de notificación más débil.
+
+### Coste por unidad
+
+> **Coste por unidad = coste del periodo ÷ número de piezas buenas**
+
+**Ejemplo de la línea 3, un turno (cifras ilustrativas en dólares estadounidenses):**
+- Mano de obra: 6 × 8 h × 45 $/h = 2 160 $
+- Máquina (amortización, mantenimiento, espacio en planta): 8 h × 60 $/h = 480 $
+- Material: 432 piezas × 4,00 $ = 1 728 $ (la chatarra también consume material)
+- Total: 4 368 $
+
+Coste por unidad = 4 368 $ ÷ 422 piezas buenas = **10,35 $ por unidad**.
+
+El cálculo muestra la relación con la OEE: si las 432 piezas hubieran sido buenas a la primera, el coste por unidad bajaría a 4 368 $ ÷ 432 = 10,11 $ sin que ninguna tasa cambiara. Con costes fijos, el volumen de producción es el factor principal, por lo que el coste por unidad es difícil de interpretar sin considerar el volumen. Para decisiones de fabricar o comprar, o de precios, también necesita los costes fijos y variables por separado. Cómo convertir las mejoras en un caso de negocio sólido se explica en la entrada [The Business Case for Operational Excellence: How to Prove ROI](https://www.m365.fm/community/u/mirko-p/blog/operational-excellence-roi-business-case/).
+
+## 13. Sistemas de KPI: jerarquía, indicadores adelantados y rezagados, SQCDP
+
+Los KPI individuales son mediciones. Un **sistema de KPI** los organiza de modo que cada nivel vea las cifras que puede influir, y que las cifras de los niveles inferiores se agreguen lógicamente en las de los niveles superiores.
+
+### Jerarquía: planta, área, línea, puesto de trabajo
+
+| Nivel | KPI típicos | Cadencia | Foro |
+|---|---|---|---|
+| Planta | OTIF, coste por unidad, PPM de cliente, TRIR, días de cobertura | semanal, mensual | reunión de la dirección de planta |
+| Área | cumplimiento del programa, tiempo de entrega, OEE del cuello de botella, coste de chatarra, productividad | diaria, semanal | reunión de área (Nivel 3) |
+| Línea | unidades reales vs. planificadas por hora, OEE, FPY, principales motivos de paro, acciones abiertas | por turno | reunión de línea (Nivel 2) |
+| Puesto de trabajo/máquina | unidades por hora vs. takt, averías, microparadas, desviaciones de calidad | por hora, por turno | reunión breve de equipo (Nivel 1) |
+
+Los niveles están vinculados por cadenas causa-efecto: una caída del OTIF a nivel de planta puede rastrearse a través del cumplimiento del programa en el área hasta el OEE y los motivos de paro de una sola máquina. Esa es exactamente la cadena que utiliza una [reunión por niveles](https://www.m365.fm/entity/tier-meeting/): cada nivel revisa sus cifras, escala lo que no puede resolver por sí mismo y recibe retroalimentación desde arriba. La guía [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/) describe estas rutinas en detalle.
+
+### Indicadores rezagados y adelantados
+
+Los **indicadores rezagados** miden resultados que ya han ocurrido: OTIF, coste por unidad, la tasa de chatarra del mes, TRIR. Son importantes para verificar el cumplimiento de objetivos, pero llegan demasiado tarde para aplicar contramedidas.
+
+Los **indicadores adelantados** miden los factores que predicen el resultado: cumplimiento del programa del proceso anterior, WIP delante del cuello de botella, tiempo de cambio de formato, cumplimiento del mantenimiento preventivo, casi accidentes, unidades por hora frente al takt. Fabrico subraya con razón que un KPI debe desencadenar una acción [35]; los indicadores adelantados lo hacen mientras todavía hay tiempo para actuar.
+
+Una regla práctica: los indicadores adelantados predominan en los niveles inferiores, y los rezagados a nivel de planta. Cada KPI rezagado a nivel de planta debería tener asignado al menos un indicador adelantado a nivel de línea.
+
+### SQCDP: una estructura para paneles y reuniones
+
+Muchas plantas agrupan sus KPI según **SQCDP**: Seguridad (Safety), Calidad (Quality), Coste (Cost), Entrega (Delivery) y Personas (People). El orden es deliberado: seguridad antes que calidad, y calidad antes que coste. [unverified: SQCDP es una convención de práctica, no una norma; su origen no puede documentarse con claridad.] Las plantas también usan variantes con otro orden o sin Personas (por ejemplo, SQDC).
+
+| Categoría | Línea 3, KPI de ejemplo |
+|---|---|
+| S | lesiones y casi accidentes del turno, acciones de seguridad abiertas |
+| Q | FPY 94,9 %, tasa de chatarra 2,31 %, reclamaciones de clientes |
+| C | coste por unidad 10,35 $, energía 3,60 kWh/unidad |
+| D | plan 450 / real 422 piezas buenas, OEE 75,9 %, cumplimiento del programa |
+| P | asistencia, matriz de habilidades, ideas de mejora implementadas |
+
+Las categorías evitan una fijación unilateral en la producción. Si solo se mide la producción, se obtiene producción a costa de la calidad y la seguridad.
+
+## 14. Recopilación de datos y calidad de los datos
+
+La mejor fórmula no sirve de nada si los datos de entrada son incorrectos. En la práctica, los proyectos de KPI fracasan con más frecuencia por culpa de los datos que por el método.
+
+### Comparación de métodos de recopilación de datos
+
+| Método | Descripción | Ventajas | Inconvenientes |
+|---|---|---|---|
+| Manual (hoja de recuento, registro de turno, Excel) | los operarios anotan recuentos y paradas | rápido de iniciar, genera conciencia, no requiere TI | micro-paradas sin registrar, redondeos, anotaciones a posteriori, mucho esfuerzo |
+| Terminales de datos de producción | terminales para inicio/fin de orden, cantidades, motivos de parada | motivos estructurados, contexto de la orden | depende de la disciplina en el registro |
+| Recopilación de datos de máquina | señales del controlador (marcha, parada, contador) | tiempos completos, incluidas las paradas cortas | faltan los motivos sin la intervención del operario |
+| MES | integra datos de producción y de máquina, control de calidad y de órdenes; KPI según ISO 22400, ISA-95 Nivel 3 (VDMA 66412-1 en Alemania) | definiciones coherentes, tiempo real | esfuerzo de implantación, mantenimiento de datos maestros |
+| Adaptación con IoT | sensores y pasarelas en máquinas existentes, datos en una plataforma en la nube | funciona con máquinas antiguas, escalable | el contexto (orden, producto) debe añadirse |
+
+La vía pragmática es una combinación: las señales de la máquina aportan tiempos y recuentos, mientras que los operarios añaden el motivo de una parada y las decisiones de calidad en un terminal. Muchiri y Pintelon señalan la exactitud de la recopilación de datos como uno de los mayores retos de la medición de la OEE [7]. Cómo conectar técnicamente máquinas, MES y la nube se explica en la guía [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/).
+
+### Cinco reglas para KPI fiables
+
+1. **Un único modelo de tiempos para todos.** Decida qué tiempos forman parte del tiempo de producción planificado (¿pausas?, ¿mantenimiento?, ¿pruebas?, ¿sin órdenes?). ISO 22400-2 y VDMA 66412-1 ofrecen una plantilla [1][4].
+2. **Un catálogo de motivos de parada con dos niveles como máximo.** Demasiados motivos llevan a "otros"; muy pocos, a diagramas de Pareto sin sentido. Asigne cada motivo de forma clara a una única categoría de pérdida de OEE.
+3. **Mantenga los tiempos de ciclo ideales.** El rendimiento de la OEE depende por completo de este dato maestro. Un estándar demasiado generoso produce un rendimiento superior al 100 % u oculta pérdidas.
+4. **Automatice las comprobaciones de plausibilidad.** FPY + retrabajo + chatarra = 100 %; tiempo de marcha ≤ tiempo planificado; rendimiento ≤ 100 %; suma de paradas ≤ duración del turno.
+5. **Haga visible la definición.** Cada KPI dispone de una ficha de definición con finalidad, fórmula, fuente de datos, responsable, frecuencia y objetivo.
+
+### La ficha de definición del KPI
+
+| Campo | Ejemplo: OEE Línea 3 |
+|---|---|
+| Finalidad | hacer visibles las pérdidas de la máquina cuello de botella y priorizarlas |
+| Fórmula | disponibilidad × rendimiento × calidad; verificación cruzada: piezas buenas × tiempo de ciclo ideal ÷ tiempo planificado |
+| Fuente de datos | datos de máquina (marcha/parada, contador), terminal (motivo de parada, chatarra, retrabajo) |
+| Definiciones | tiempo planificado = turno menos pausas; los cambios de formato cuentan como pérdida de disponibilidad; el retrabajo cuenta como pérdida de calidad |
+| Responsable | supervisor de turno de la Línea 3 |
+| Frecuencia | por turno, tendencia semanal |
+| Objetivo | 80 % a final del T2 (línea base 75,9 %, ver Sección 16) |
+| Escalado | dos turnos consecutivos por debajo del 70 % → reunión de nivel 2 |
+
+## 15. Visualización: paneles en planta y dashboards de Power BI
+
+### El tablero de planta
+
+En el puesto de trabajo importa más poder leerlo en pocos segundos que tener toda la información. La [gestión visual](https://www.m365.fm/entity/visual-management/) aquí significa: plan y real por hora, un rojo/verde claro frente al objetivo, los tres motivos principales de paradas y una lista de acciones con responsables y fechas límite. Los tableros por hora funcionan bien: el equipo introduce el plan y el real de cada hora (Línea 3: 60 piezas en cada hora completa de producción con un takt de 60 s, y proporcionalmente menos en las horas con pausa) y anota de inmediato un breve motivo para cada desviación. Cómo combinar flujo y tablero se describe en la entrada [Shop Floor Optimization: Ways to Improve Flow](https://www.m365.fm/community/u/mirko-p/blog/shop-floor-optimization-improve-flow-ways/).
+
+Los tableros digitales no sustituyen automáticamente a la pizarra. Compensan cuando los datos ya se capturan de forma automática, cuando varios turnos o centros necesitan la misma vista y cuando las acciones deben hacerse seguimiento. La discusión en equipo sigue siendo la misma.
+
+### Dashboard de Power BI: estructura
+
+Para el nivel de área y de planta, Power BI es una herramienta obvia si la empresa ya utiliza Microsoft 365. Una estructura de tres páginas que ha dado buenos resultados:
+
+1. **Resumen (planta):** indicadores SQCDP con real, objetivo y tendencia; semáforos solo donde esté definido un objetivo.
+2. **Línea:** OEE como cascada desde el tiempo planificado, pasando por las seis categorías de pérdidas, hasta el tiempo de valor añadido; Pareto de motivos de parada; FPY y scrap a lo largo del tiempo.
+3. **Detalle y acciones:** tablas por turno y por orden con drill-through, vinculadas a la lista de acciones.
+
+Para objetivos, revisiones de seguimiento y responsables, Power BI también ofrece cuadros de mando con objetivos (scorecards). Según Microsoft, crear y compartir scorecards es una función de Pro; la visualización es posible con una licencia Pro o como usuario gratuito en un espacio de trabajo con capacidad Premium o Fabric F64 o superior [29].
+
+### Modelo de datos: esquema en estrella
+
+Microsoft recomienda un esquema en estrella para Power BI: las tablas de dimensiones describen entidades de negocio y se usan para filtrar y agrupar; las tablas de hechos almacenan eventos y se usan para agregar [27]. Para los KPI de fabricación, esto significa:
+
+| Tabla | Tipo | Contenido (columnas de ejemplo) |
+|---|---|---|
+| FactProduction | hechos | Fecha, ShiftID, LineID, ProductID, PlannedMin, BreakdownMin, ChangeoverMin, TotalQty, GoodFirstPass, Rework, Scrap, IdealCycleSec |
+| FactDowntime | hechos | Inicio, Fin, DurationMin, LineID, ReasonID |
+| DimDate | dimensión | Fecha, Semana, Mes, DíaLaborable sí/no |
+| DimShift | dimensión | ShiftID, Nombre, Inicio, Fin |
+| DimLine | dimensión | LineID, Línea, Área, Planta |
+| DimProduct | dimensión | ProductID, Producto, FamiliaProducto |
+| DimDowntimeReason | dimensión | ReasonID, Motivo, LossCategory (avería, cambio de formato, microparada …) |
+
+La columna LossCategory en la dimensión de motivos es la clave de la cascada de pérdidas: asigna cada motivo de parada a una de las seis grandes pérdidas.
+
+### Ejemplo DAX: agregar el OEE correctamente
+
+Las siguientes medidas calculan el OEE de forma que se agregue correctamente en todos los niveles (turno, línea, semana, planta), porque se construye a partir de tiempos sumados en lugar de promedios. `DIVIDE` devuelve BLANK en lugar de un error cuando el denominador es cero [25]; Microsoft recomienda la función cuando el denominador puede ser cero o estar en blanco, y el operador `/` cuando el denominador es una constante [26].
+
+```dax
+Planned Min =
+SUM ( FactProduction[PlannedMin] )
+
+Run Min =
+[Planned Min]
+    - SUM ( FactProduction[BreakdownMin] )
+    - SUM ( FactProduction[ChangeoverMin] )
+
+Ideal Min =
+SUMX (
+    FactProduction,
+    FactProduction[TotalQty] * FactProduction[IdealCycleSec] / 60
+)
+
+Value Adding Min =
+SUMX (
+    FactProduction,
+    FactProduction[GoodFirstPass] * FactProduction[IdealCycleSec] / 60
+)
+
+Availability =
+DIVIDE ( [Run Min], [Planned Min] )
+
+Performance =
+DIVIDE ( [Ideal Min], [Run Min] )
+
+Quality (time-weighted) =
+DIVIDE ( [Value Adding Min], [Ideal Min] )
+
+OEE =
+DIVIDE ( [Value Adding Min], [Planned Min] )
+```
+
+**Por qué la calidad se pondera por tiempo aquí:** para un solo producto, `Value Adding Min ÷ Ideal Min` es idéntico a cantidad buena ÷ cantidad total. Con varios productos que tienen tiempos ideales distintos, esta forma pondera cada pieza por su tiempo ideal. Solo así se cumple exactamente, en cada nivel de agregación, que disponibilidad × rendimiento × calidad = OEE, porque el tiempo de marcha y el tiempo ideal se cancelan. Una tasa de calidad basada en piezas resulta útil como medida adicional, pero no debe intervenir en la multiplicación del OEE.
+
+**Verificación con la Línea 3:** tiempo planificado 450, tiempo de funcionamiento 405, tiempo ideal 432 × 50 ÷ 60 = 360, tiempo que aporta valor 410 × 50 ÷ 60 = 341.67 min. Disponibilidad 90.0 %, rendimiento 88.9 %, calidad 94.9 %, OEE 341.67 ÷ 450 = 75.9 %. Las medidas reproducen el cálculo manual de la sección 7.
+
+Una medida más para la comprobación del takt:
+
+```dax
+Effective Cycle Time per Good Part Sec =
+DIVIDE (
+    [Planned Min] * 60,
+    SUM ( FactProduction[GoodFirstPass] )
+)
+```
+
+Para la Línea 3, esto da 27,000 ÷ 410 = 65.9 s, por encima del takt de 60 s.
+
+Los KPI de calidad de la sección 8 siguen el mismo patrón:
+
+```dax
+FPY =
+DIVIDE (
+    SUM ( FactProduction[GoodFirstPass] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Scrap Rate =
+DIVIDE (
+    SUM ( FactProduction[Scrap] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Rework Rate =
+DIVIDE (
+    SUM ( FactProduction[Rework] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Quality Sum Check =
+[FPY] + [Scrap Rate] + [Rework Rate]
+```
+
+`Quality Sum Check` debe ser igual al 100 %; un formato condicional que marque en rojo las desviaciones hace visibles de inmediato las transacciones que faltan.
+
+**Dos errores habituales para los desarrolladores de Power BI:**
+- **Doble conteo de paradas.** Si los minutos de averías y cambios de formato se almacenan tanto en `FactProduction` como en `FactDowntime`, calcule el tiempo de funcionamiento a partir de solo una de las dos tablas. El enfoque más robusto es mantener `FactProduction` a nivel de turno, línea y producto, y agregar allí los minutos de parada desde `FactDowntime` en Power Query.
+- **Granularidad del tiempo planificado.** Si más de un producto se fabrica en un turno, el tiempo planificado debe repartirse entre los productos (por ejemplo, según el inicio y el fin de cada orden). Si el tiempo completo del turno aparece en cada fila de producto, se cuenta varias veces al sumar.
+
+### Notas sobre licencias
+
+Según Microsoft Learn (página actualizada el 24 de agosto de 2026): los usuarios con licencia gratuita pueden crear informes para su propio uso, pero no compartirlos. Para publicar y compartir se requiere Power BI Pro. Los usuarios gratuitos solo pueden ver contenido compartido si este se encuentra en un espacio de trabajo con capacidad Power BI Premium o con capacidad Fabric F64 o superior. Con Premium Per User (PPU), el contenido solo puede compartirse con otros usuarios de PPU, salvo que esté en una capacidad Premium [28]. Para un panel de planta que muchos supervisores solo consultan, la licencia es, por tanto, una decisión de arquitectura. Consulte los precios y condiciones vigentes con Microsoft; deliberadamente no se citan aquí.
+
+## 16. Cómo definir objetivos de KPI
+
+Los objetivos son el punto donde los KPI más suelen causar daño. Tres principios ayudan.
+
+**1. Parta de su propia línea base, no de un benchmark.** Mida con rigor durante al menos cuatro a ocho semanas antes de fijar un objetivo. La Línea 3 con un OEE de 75,9 % apenas se beneficia de un objetivo de clase mundial del 85 % mientras nadie sepa qué pérdida atacar primero.
+
+**2. Derive los objetivos de la demanda.** En el ejemplo, el objetivo se deduce directamente del cliente: para 450 piezas buenas por turno, la Línea 3 necesita un OEE de 83,3 % si solo cuentan las piezas buenas a la primera (Sección 7). Un objetivo intermedio razonable es 80 %; eso equivale a 4,1 puntos porcentuales de distancia. Matemáticamente, equivale a (0,800 − 0,759) × 450 min = unos 18,3 min de tiempo que aporta valor por turno, por ejemplo mediante menos micro-paradas (30 min de potencial) o cambios de formato más cortos (8 min de potencial mediante SMED).
+
+**3. Use bandas de objetivo en lugar de valores puntuales para los KPI con compensaciones.** La utilización, el WIP y los días de cobertura no siguen la regla de "cuanto más alto, mejor". Una banda (por ejemplo, 2 a 3 días de cobertura) evita que un equipo reduzca el inventario tanto que la entrega se resienta. Drees y Sack describen exactamente esta tensión entre la reducción de inventario, la producción de recursos, la capacidad de entrega y la reducción del lead time para los KPI del flujo de valor [32].
+
+**Sobre los benchmarks externos:** los valores sectoriales de OEE, scrap o MTTR que aparecen en muchas páginas de proveedores suelen proceder de sus propios datos de clientes sin un método declarado [37]. Utilícelos como orientación aproximada como mucho, nunca como objetivo. La excepción son las estadísticas oficiales con un método publicado, como las tasas de lesiones de la BLS por industria NAICS [43].
+
+## 17. Errores comunes y cómo evitarlos
+
+| Error | Consecuencia | Contramedida |
+|---|---|---|
+| Sobrecarga de KPI: 30 KPI en el tablero | nadie sabe qué importa; las reuniones se convierten en conferencias | 5 a 8 KPI por nivel, ordenados según SQCDP |
+| KPI sin definición | cada departamento calcula de forma distinta; las comparaciones no valen nada | ficha de definición, términos según ISO 22400 (VDMA 66412-1 en Alemania) |
+| Promediar porcentajes | OEE de planta distorsionado | recalcular los KPI en cada nivel a partir de sumas |
+| KPI como evaluación individual del rendimiento | manipulación de datos, averías ocultas | KPI para procesos, no para personas |
+| Objetivo sin camino | frustración, maquillaje de las cifras | cada objetivo respaldado por análisis de pérdidas y un plan de acción |
+| Solo indicadores retardados | las contramedidas llegan demasiado tarde | asignar un indicador adelantado a cada indicador retardado |
+| Tiempos estándar demasiado generosos | rendimiento por encima del 100 % o pérdidas ocultas | justificar técnicamente los tiempos ideales y revisarlos cada año |
+| Datos sin rutina | el tablero deja de consultarse a los tres meses | cadencias de reunión fijas con los KPI como orden del día |
+| Comparar tasas de seguridad con bases distintas | TRIR, DART, LTIFR y tasas alemanas mezcladas | indicar siempre fórmula y base (200.000 h, 1 millón de h, 1.000 FTE) |
+
+### Ley de Goodhart
+
+En 1975, el economista británico Charles Goodhart observó que cualquier regularidad estadística observada tiende a colapsar en cuanto se presiona sobre ella con fines de control [24]. La antropóloga Marilyn Strathern condensó esto en 1997 en la conocida frase "Cuando una medida se convierte en objetivo, deja de ser una buena medida" [23]. En el taller se manifiesta así: si el OEE se vincula a primas, se evitan los cambios de formato (lotes más grandes, más inventario), las paradas se reclasifican como "planificadas" o se estiran los tiempos estándar. El KPI sube; la planta no mejora.
+
+Tres antídotos: mirar siempre un KPI junto a un contra-KPI (OEE con inventario y OTIF), mantener las definiciones centralizadas y registrar los cambios, y usar los KPI en las reuniones como motivo para hacer preguntas, no como veredicto.
+
+## 18. Hoja de ruta: implantar los KPIs de fabricación en 90 días
+
+La siguiente hoja de ruta funciona como marco para una línea o un área. No requiere software; el software acelera las fases 2 y 3.
+
+**Fase 1, semanas 1 a 3: propósito y definiciones**
+- Aclarar los objetivos del área (¿qué necesita el cliente? ¿dónde están las mayores pérdidas?).
+- Seleccionar de 5 a 8 KPIs, al menos uno por cada categoría SQCDP.
+- Definir el modelo de tiempos, el catálogo de motivos de paradas y las fichas de definición; verificar los tiempos de ciclo ideales.
+
+**Fase 2, semanas 4 a 8: medir y aprender**
+- Iniciar la recogida de datos, de forma manual o semiautomática al principio si es necesario.
+- Comprobar la plausibilidad a diario; afinar las definiciones cuando surjan dudas.
+- Establecer las líneas base durante al menos cuatro semanas.
+
+**Fase 3, semanas 9 a 12: gestionar**
+- Derivar los objetivos a partir de la demanda y de la línea base.
+- Construir el tablero y, cuando sea útil, un informe de Power BI.
+- Establecer las rutinas de tiers: Tier 1 por turno, Tier 2 diario, Tier 3 semanal.
+- Elegir los primeros temas de mejora a partir de los Pareto de pérdidas y trabajarlos con PDCA.
+
+**Después:** revisar cada trimestre si cada KPI sigue impulsando una decisión. Los KPIs que nadie utiliza se eliminan. La integración de los KPIs en un sistema de mejora más amplio se trata en las guías [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/) y [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/). Los objetivos del cuello de botella también alimentan directamente la programación, véase [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/).
+
+## 19. KPIs a partir del modelado de la cadena de valor: iFAKT Polaris
+
+> **Nota: el autor trabaja en iFAKT GmbH.**
+
+[iFAKT GmbH](https://www.m365.fm/entity/ifakt/), con sede en Stuttgart, Alemania, desarrolla software para planificar y optimizar procesos logísticos y de producción basado en tecnología de Microsoft [33]. La empresa lleva mucho tiempo trabajando en KPIs: en 2011, Jörg Drees y Christoph Sack mostraron en la revista alemana ZWF (Zeitschrift für wirtschaftlichen Fabrikbetrieb) que los KPIs de la cadena de valor entran fácilmente en conflicto entre la reducción de inventario, el rendimiento de los recursos, la capacidad de entrega y la reducción del lead time, y que un conjunto de KPIs elegido deliberadamente combinado con métodos lean permite bucles de control duraderos [32].
+
+Según el proveedor, la familia de software [iFAKT Polaris](https://www.m365.fm/entity/polaris/) incluye Value Stream Mapping, Business Swim Lane Mapping, Designer, Simulator, Optimizer, Operator y Analyzer [31]. Dos de ellos son relevantes para los KPIs de fabricación:
+
+- **[Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/)**, según ifakt.de, reúne los KPIs de todos los módulos de Polaris en paneles estructurados, visualiza lead times, utilización, cuellos de botella y estado de los proyectos, muestra los límites de capacidad y el potencial de mejora, y compara escenarios, planes y rendimiento real [30]. La página del proveedor no ofrece información sobre integraciones, modelo de despliegue ni precios.
+- **Polaris VSM**, según el proveedor, calcula automáticamente KPIs lean como lead time, tiempo de ciclo, WIP, ratio de valor añadido y factor de flujo a partir del modelo de la cadena de valor, ofrece paneles de lead time, WIP, ratio de valor añadido y OEE, y compara los KPIs de escenarios lado a lado [31].
+
+**Valoración:** una herramienta así no sustituye ni las definiciones claras ni la rutina de reuniones. Su valor reside en calcular los KPIs de forma coherente a partir de un mismo modelo y en comparar escenarios antes de la implantación, por ejemplo el efecto de un límite de WIP sobre el lead time y el OTIF. Si encaja en su planta debe comprobarse como cualquier otra solución: con sus datos, su panorama de TI y las decisiones que los KPIs deben respaldar. Más información sobre la familia de productos en la guía [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/).
+
+## 20. Glosario
+
+| Término | Explicación |
+|---|---|
+| Disponibilidad (OEE) | tiempo de funcionamiento ÷ tiempo de producción planificado [7] |
+| Tiempo de ciclo | tiempo medido para completar una unidad en un proceso [10] |
+| Tasa DART | tasa OSHA de casos con días de baja, trabajo restringido o traslado de puesto por cada 100 FTE [42][46] |
+| Días de cobertura | inventario ÷ consumo medio diario |
+| Efectividad (ISO 22400) | corresponde al rendimiento del OEE: tiempo de funcionamiento planificado por artículo × cantidad ÷ tiempo real de producción [3] |
+| Factor de flujo | tiempo de entrega ÷ tiempo de operación (Wiendahl) [14][15] |
+| FPY | rendimiento al primer paso, proporción de unidades correctas sin retrabajo ni desecho [36] |
+| ISA-95 | ANSI/ISA-95 (IEC 62264); Nivel 3 = gestión de operaciones de fabricación [40] |
+| Indicador rezagado | KPI que mide un resultado que ya ha ocurrido |
+| Tiempo de entrega (lead time) | tiempo desde el inicio hasta el fin de una orden, incluidos todos los tiempos de espera, cola y transporte [10][15] |
+| Indicador adelantado | KPI que predice un resultado futuro |
+| Ley de Little | L = λW: WIP medio = rendimiento × tiempo de entrega medio [13] |
+| Carga | tiempo de producción planificado ÷ tiempo calendario; factor del TEEP [8] |
+| MES | sistema de ejecución de la fabricación; Nivel 3 de ISA-95 [40]; directriz de KPI VDMA 66412-1 en Alemania [4] |
+| MTBF / MTTR | tiempo medio entre fallos / tiempo medio de reparación |
+| OEE | disponibilidad × rendimiento × calidad [7] |
+| Tiempo de operación | tiempo de preparación más tiempo de procesado de un paso de trabajo (Wiendahl) [14][15] |
+| Tiempo de orden (REFA) | tiempo de preparación más tiempo de ejecución (cantidad × tiempo por unidad) [16][17] |
+| OTIF | a tiempo y completo; sin definición estándar [18] |
+| PPM | partes por millón, defectos normalizados a un millón [36] |
+| SMED | método de cambio de formato que busca menos de diez minutos [11] |
+| SQCDP | Seguridad, Calidad, Coste, Entrega, Personas: esquema de ordenación de los KPI |
+| Takt time | tiempo disponible ÷ demanda del cliente [9] |
+| TEEP | OEE × carga [8] |
+| TRIR | tasa total de incidentes registrables de OSHA: casos registrables × 200 000 ÷ horas trabajadas [42] |
+| WIP | trabajo en proceso |
+
+## 21. Preguntas frecuentes: KPI de fabricación
+
+**¿Qué son los KPI de fabricación?**
+Los KPI de fabricación son medidas que cuantifican el tiempo, la producción, la calidad, la entrega, el coste y la seguridad de una operación productiva, por ejemplo el takt time, el OEE, la tasa de desecho o el OTIF. Cada KPI necesita una definición, una fórmula, una unidad y un periodo de tiempo.
+
+**¿Cuál es la diferencia entre un KPI y una métrica?**
+Todo KPI es una métrica, pero no toda métrica es un KPI. Un KPI está vinculado directamente a un objetivo y guía decisiones de forma periódica, como el OTIF o el OEE del cuello de botella. El número de piezas producidas es una métrica; por sí solo rara vez desencadena una acción.
+
+**¿Cuáles son los KPI más importantes en fabricación?**
+Para la mayoría de las plantas basta con un conjunto inicial: OEE del cuello de botella, FPY o tasa de desecho, OTIF, tiempo de entrega o WIP, coste por unidad y una tasa de seguridad como el TRIR. Cuáles son "los más importantes" depende de dónde estén sus mayores pérdidas.
+
+**¿Cuáles son los 5 indicadores clave de rendimiento en fabricación?**
+No existe un top cinco oficial. Un conjunto práctico cubre un KPI por cada categoría de SQCDP: TRIR (seguridad), rendimiento al primer paso (calidad), coste por unidad (coste), OTIF (entrega) y una métrica de personas, como las ideas de mejora implementadas, además del OEE del cuello de botella.
+
+**¿Cómo se calcula el takt time?**
+Takt time = tiempo de producción disponible ÷ demanda del cliente. Ejemplo: 450 min (27 000 s) de tiempo disponible por turno y una demanda de 450 unidades dan 60 s por unidad. Reste las pausas, pero no las paradas no planificadas.
+
+**¿Cuál es la diferencia entre takt time y tiempo de ciclo?**
+El takt time procede de la demanda del cliente e indica con qué frecuencia debe terminarse una pieza. El tiempo de ciclo se mide en el proceso e indica con qué frecuencia se termina realmente una pieza. El tiempo de ciclo debe estar por debajo del takt, con un margen.
+
+**¿Cómo se calcula el tiempo de entrega en fabricación?**
+Directamente como marca de tiempo de finalización menos marca de tiempo de inicio por orden, o indirectamente con la Ley de Little: WIP medio ÷ rendimiento medio. 2 700 piezas de WIP con un rendimiento diario de 900 piezas dan 3 días laborables.
+
+**¿Cómo se calcula el OEE?**
+OEE = disponibilidad × rendimiento × calidad. Con 90 % de disponibilidad, 88,9 % de rendimiento y 94,9 % de calidad, el OEE es 75,9 %. Comprobación cruzada: cantidad buena × tiempo de ciclo ideal ÷ tiempo de producción planificado.
+
+**¿Qué es una buena puntuación de OEE?**
+A menudo se cita el 85 % como "de clase mundial", con origen en Nakajima, pero la cifra está en disputa y depende del sector [8]. Un objetivo mejor es el que se deriva de su propia línea base y de la demanda del cliente.
+
+**¿Cómo se calcula la tasa de chatarra?**
+Tasa de chatarra = cantidad de chatarra ÷ cantidad total × 100 %. 10 piezas desechadas de 432 producidas dan un 2,31 %.
+
+**¿Cuál es la diferencia entre la tasa de chatarra y el rendimiento al primer paso?**
+La tasa de chatarra solo cuenta las piezas que finalmente se descartan. El FPY (First Pass Yield) solo cuenta las piezas que eran buenas sin ninguna corrección, es decir, también sin retrabajo. El FPY, la tasa de retrabajo y la tasa de chatarra suman 100 %.
+
+**¿Qué significa OTIF?**
+On time in full: la proporción de entregas o líneas de pedido que llegan al cliente a tiempo y completas. No existe una definición estándar; hay que fijar la fecha de referencia, la tolerancia y el nivel [18].
+
+**¿Cómo se calcula el TRIR?**
+TRIR = número de casos registrables según OSHA × 200 000 ÷ horas totales trabajadas [42]. 5 casos registrables con 420 000 horas dan 2,38. El 200 000 representa a 100 empleados a tiempo completo que trabajan 40 horas semanales durante 50 semanas.
+
+**¿Cuál es la diferencia entre la utilización de capacidad y la eficiencia de utilización?**
+La utilización de capacidad es una cifra de planificación (carga en relación con la capacidad). La eficiencia de utilización mide durante la ejecución cuánto del tiempo ocupado fue realmente productivo. Una utilización alta no es un objetivo en sí misma, porque los plazos de entrega aumentan bruscamente cerca del límite de capacidad.
+
+**¿Cuántos KPI debe seguir una planta?**
+Entre cinco y ocho KPI por nivel de gestión, ordenados según SQCDP, con cada indicador rezagado asociado a un indicador adelantado. Más KPI aumentan el esfuerzo de recopilación de datos sin mejorar el control.
+
+**¿Qué norma define los KPI de fabricación?**
+La ISO 22400-2:2014 define los KPI para la gestión de operaciones de fabricación, con fórmulas, unidades y momentos de medición [1]. La ISA-95 define el contexto de Nivel 3 en el que se calculan [40]; en Alemania, la directriz VDMA 66412-1 sobre KPI de MES también se utiliza ampliamente [4].
+
+**¿Puedo construir KPI de fabricación en Power BI?**
+Sí. Lo importante es un esquema en estrella con tablas de hechos y de dimensiones [27] y medidas que calculen los KPI a partir de tiempos sumados. Para compartir se requiere Power BI Pro; los visualizadores sin licencia Pro necesitan contenido en capacidad Premium o Fabric F64 o superior [28].
+
+**¿Qué son el MTBF y el MTTR?**
+El MTBF es el tiempo medio de funcionamiento entre dos fallos, y el MTTR el tiempo medio para restablecer la máquina. 16 200 min de tiempo de funcionamiento y 40 fallos con una duración total de 1 000 min dan un MTBF de 405 min y un MTTR de 25 min.
+
+## 22. Conclusión
+
+Los KPI de fabricación no son un fin en sí mismos. Su valor proviene de tres factores: una definición inequívoca basada en ISO 22400-2 (y en ISA-95 para el contexto del sistema), una base de datos fiable procedente de las señales de las máquinas y de la entrada de los operarios, y una rutina en la que las desviaciones dan lugar a preguntas y acciones. El ejemplo de la línea 3 muestra lo estrechamente relacionados que están los KPI: un tiempo de ciclo inferior al takt no garantiza la entrega mientras las averías, los cambios de formato y las pérdidas de calidad hagan caer el OEE al 75,9 %; las 28 piezas que faltan por turno pueden rastrearse hasta las categorías de pérdida y los minutos concretos. Empiece con unos pocos KPI, calcúlelos en todos los niveles a partir de sumas, fije los objetivos según la demanda del cliente, anteponga la seguridad con una tasa correctamente calculada y trate cada KPI como un motivo de conversación en el gemba.
+
+### Lecturas recomendadas en m365.fm
+
+- Guías: [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/) · [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/) · [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/) · [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/) · [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/) · [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/) · [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+- Blog: [Shop Floor Optimization: Ways to Improve Flow](https://www.m365.fm/community/u/mirko-p/blog/shop-floor-optimization-improve-flow-ways/) · [The Business Case for Operational Excellence: How to Prove ROI](https://www.m365.fm/community/u/mirko-p/blog/operational-excellence-roi-business-case/)
+- Términos: [Takt Time](https://www.m365.fm/entity/takt-time/) · [Cycle Time](https://www.m365.fm/entity/cycle-time/) · [Lead Time](https://www.m365.fm/entity/lead-time/) · [Setup Time](https://www.m365.fm/entity/setup-time/) · [Micro Stops](https://www.m365.fm/entity/micro-stops/) · [Scrap Rate](https://www.m365.fm/entity/scrap-rate/) · [Key Performance Indicator](https://www.m365.fm/entity/key-performance-indicator/) · [Total Productive Maintenance](https://www.m365.fm/entity/total-productive-maintenance/) · [SMED](https://www.m365.fm/entity/smed/) · [Shop Floor Management](https://www.m365.fm/entity/shop-floor-management/) · [Visual Management](https://www.m365.fm/entity/visual-management/) · [Tier Meeting](https://www.m365.fm/entity/tier-meeting/) · [Value Stream Mapping](https://www.m365.fm/entity/value-stream-mapping/) · [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** es el presentador de m365.fm y trabaja en [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) en Stuttgart, Alemania. En m365.fm escribe sobre producción ajustada (lean manufacturing), KPIs de fabricación, métodos de flujo de valor y la digitalización de la fabricación con Microsoft 365, Power BI y Azure. Su enfoque es cómo definir y visualizar los KPIs para que lleven a decisiones en la planta.
+
+**Nota: El autor trabaja en iFAKT GmbH.**
+
+# Sources
+
+All sources accessed November 20, 2026. Sources [1] to [39] keep the German numbering; [35], [36] and [38] now point to English sources, and [40] to [47] were added for the US version. All new or replaced sources were verified online.
+
+1. ISO 22400-2:2014 Automation systems and integration – Key performance indicators (KPIs) for manufacturing operations management – Part 2: Definitions and descriptions. Edition 1, 2014-01; status "to be revised"; Amendment 1:2017 "Key performance indicators for energy management". https://www.iso.org/standard/54497.html
+2. Rother, M.; Shook, J.: 6 Guidelines for Moving Toward a Lean Value Stream. Lean Enterprise Institute, The Lean Post, October 19, 2022. https://www.lean.org/the-lean-post/articles/6-guidelines-for-moving-toward-a-lean-value-stream/
+3. Kang, N.; Zhao, C.; Li, J.; Horst, J. A.: A Hierarchical structure of key performance indicators for operation management and continuous improvement in production systems. International Journal of Production Research 54 (21), 2016, pp. 6333–6350. NIST version: https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=919754
+4. VDMA 66412-1:2009-10 Manufacturing Execution Systems (MES) – Kennzahlen (KPIs). 36 pages; amended by VDMA 66412-1/A1:2010-05. DIN Media: https://6sku3uaup9f9.din.de/en/technical-rule/vdma-66412-1/122410632
+5. Schließmann, A.; Strahlberger, M.: Kennzahlen und Prozessgrößen wohl definiert. MES-Kennzahlen basierend auf Maschinenzuständen (well-defined KPIs: MES KPIs based on machine states). ZWF 109 (7–8), 2014, pp. 549–551. DOI: 10.3139/104.111180. https://www.degruyterbrill.com/document/doi/10.3139/104.111180/html
+6. Nakajima, S.: Introduction to TPM: Total Productive Maintenance. Productivity Press, Cambridge (MA) 1988, ISBN 978-0-915299-23-2 (bibliographic data per [8]).
+7. Muchiri, P.; Pintelon, L.: Performance measurement using overall equipment effectiveness (OEE): literature review and practical application discussion. International Journal of Production Research 46 (13), 2008, pp. 3517–3535. DOI: 10.1080/00207540601142645. https://scispace.com/pdf/performance-measurement-using-overall-equipment-3udssbfefm.pdf
+8. Overall equipment effectiveness. Wikipedia (English), with references to Nakajima 1982/1988/1989 and Hartmann 1992 (TEEP). https://en.wikipedia.org/wiki/Overall_equipment_effectiveness
+9. Takt Time (lexicon term). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/takt-time/
+10. Cycle Time (lexicon term, with lead time, processing time, value-creating time, effective machine cycle time). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/cycle-time/
+11. Single Minute Exchange of Die (lexicon term). Lean Enterprise Institute, referring to Shingo, S.: A Revolution in Manufacturing: The SMED System. Productivity Press, 1985. https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/
+12. Rother, M.; Shook, J.: Learning to See: Value Stream Mapping to Create Value and Eliminate Muda. Lean Enterprise Institute, Brookline (MA) 1998 (Shingo Research Prize 1999); current edition LEI 2018. https://www.lean.org/store/workbooks/learning-to-see/
+13. Little, J. D. C.: A Proof for the Queuing Formula: L = λW. Operations Research 9 (3), 1961, pp. 383–387. DOI: 10.1287/opre.9.3.383. https://ideas.repec.org/a/inm/oropre/v9y1961i3p383-387.html
+14. Nyhuis, P.; Wiendahl, H.-P.: Logistische Kennlinien. Grundlagen, Werkzeuge und Anwendungen. 3rd ed., Springer, Berlin/Heidelberg 2012 (VDI-Buch), ISBN 978-3-540-92838-6 (English edition: Fundamentals of Production Logistics: Theory, Tools and Applications, Springer, Berlin/Heidelberg 2009, ISBN 978-3-540-34210-6). Sample (table of contents and abbreviations): https://lesejury.de/media/samples/393/9783540928393_leseprobe.pdf · Chapter "Zusammenfassung und Ausblick": https://rd.springer.com/content/pdf/10.1007%2F978-3-540-92839-3_10.pdf
+15. Durchlaufzeit. Wikipedia (German), referring to Wiendahl, H.-P.: Fertigungsregelung. Hanser, Munich 1997, ISBN 3-446-19084-8. https://de.wikipedia.org/wiki/Durchlaufzeit
+16. REFA (ed.): Lexikon der Betriebsorganisation. Carl Hanser, Munich 1993, ISBN 3-446-17523-7, p. 195 (bibliographic data per [17]).
+17. Auftragszeit. Wikipedia (German). https://de.wikipedia.org/wiki/Auftragszeit
+18. Davies, A.; Lal, S.; Perez, F.; Potdar, S.: Defining 'on-time, in-full' in the consumer sector. McKinsey & Company, June 13, 2019. https://www.mckinsey.com/capabilities/operations/our-insights/defining-on-time-in-full-in-the-consumer-sector
+19. DGUV: Unfallrisiko bei der Arbeit 2025 erneut gesunken (workplace accident risk fell again in 2025). Press release, September 22, 2026. https://dguv.de/de/mediencenter/pm/pressearchiv/2026/quartal_3/details_3_713348.jsp
+20. Section 193 SGB VII (German Social Code, Book VII): employer's duty to report an insured event. https://www.gesetze-im-internet.de/sgb_7/__193.html
+21. Lost time injury frequency rates (LTIFR). Safe Work Australia. https://data.safeworkaustralia.gov.au/node/33
+22. ISO 50006:2023 Energy management systems – Evaluating energy performance using energy performance indicators and energy baselines. https://www.iso.org/standard/79367.html
+23. Strathern, M.: 'Improving ratings': audit in the British University system. European Review 5 (3), 1997, pp. 305–321. DOI: 10.1002/(SICI)1234-981X(199707)5:3<305::AID-EURO184>3.0.CO;2-4
+24. Goodhart, C.: Problems of Monetary Management: The UK Experience. Papers in Monetary Economics, Vol. 1, Reserve Bank of Australia, Sydney 1975 (bibliographic data per https://en.wikipedia.org/wiki/Goodhart%27s_law).
+25. DIVIDE function (DAX). Microsoft Learn. https://learn.microsoft.com/en-us/dax/divide-function-dax
+26. DIVIDE function vs. divide operator (/) in DAX. Microsoft Learn. https://learn.microsoft.com/en-us/dax/best-practices/dax-divide-function-operator
+27. Understand star schema and the importance for Power BI. Microsoft Learn (updated December 30, 2024). https://learn.microsoft.com/en-us/power-bi/guidance/star-schema
+28. Power BI service per-user and capacity-based licenses. Microsoft Learn (updated August 24, 2026; re-checked November 20, 2026). https://learn.microsoft.com/en-us/power-bi/service-features-license-type
+29. Get started with goals and scorecards in Power BI. Microsoft Learn (updated March 5, 2026). https://learn.microsoft.com/power-bi/create-reports/service-goals-introduction
+30. Polaris Analyzer (vendor page). iFAKT GmbH. https://www.ifakt.de/en/solutions/analyzer
+31. Polaris VSM (vendor page, with overview of the Polaris suite). iFAKT GmbH. https://www.ifakt.de/en/software/vsm/
+32. Drees, J.; Sack, C. (iFAKT GmbH): Produktionsoptimierung durch Kennzahlen der Wertstrom-Modellierung (production optimization through value stream modeling KPIs). ZWF 106 (6), 2011, pp. 466–470. DOI: 10.3139/104.110589. https://www.degruyterbrill.com/document/doi/10.3139/104.110589/html
+33. About iFAKT (company page). iFAKT GmbH. https://www.ifakt.de/en/company/
+34. ISO 50006:2023, preview pages (second edition 2023-05, replaces ISO 50006:2014). ANSI Webstore. https://webstore.ansi.org/preview-pages/ISO/preview_ISO+50006-2023.pdf
+35. Manufacturing KPIs: The Metrics That Actually Drive the Floor. Fabrico (vendor blog), published June 29, 2026, updated October 26, 2026. https://www.fabrico.io/blog/manufacturing-kpis/
+36. Quality Glossary of Terms, Acronyms & Definitions (entries "first pass yield", "overall equipment effectiveness", "parts per million"). ASQ. https://asq.org/quality-resources/quality-glossary
+37. World-Class OEE: What Is It and How Close Are You Actually? TEEPTRAK (vendor page, benchmarks from own data). https://teeptrak.com/en/world-class-oee-benchmark/
+38. ISO 22400 KPI Selection Guide. Fabrico (secondary source for the count of 34 KPIs and the categories). https://www.fabrico.io/blog/iso-22400-kpi-selection-guide/
+39. Competitor pages: https://netsuite.com/portal/resource/articles/erp/manufacturing-kpis-metrics.shtml · https://www.insightsoftware.com/blog/30-manufacturing-kpis-and-metric-examples/ · https://www.dataparc.com/blog/manufacturing-kpi-examples-10-formulas-for-measuring-success/ · https://machinemetrics.com/blog/manufacturing-kpis · https://tulip.co/blog/manufacturing/how-to-calculate-34-manufacturing-kpis/ · https://www.cascade.app/blog/manufacturing-kpis · https://scw.ai/blog/manufacturing-kpis/ · https://upkeep.com/learning/what-are-the-best-metrics-and-kpis-for-manufacturing-companies/ · https://safetyculture.com/topics/kpi/manufacturing-kpis/ (redirects to mitti.com) · https://www.vorne.com/learning-center/kpi.htm
+40. ISA-95 Standard: Enterprise-Control System Integration (ANSI/ISA-95, IEC 62264; Purdue-based Levels 0–4, Level 3 = manufacturing operations management). International Society of Automation. https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard
+41. Equipment Performance Metrics (SEMI E10 RAM and utilization; SEMI E79 equipment productivity incl. OEE). SEMI. https://semi.org/en/products-services/standards/step/equipment-performance-metrics
+42. OSHA: Clarification on how the formula is used by OSHA to calculate incident rates. Standard interpretation letter, August 23, 2016. https://www.osha.gov/laws-regs/standardinterpretations/2016-08-23
+43. U.S. Bureau of Labor Statistics: Employer-Reported Workplace Injuries and Illnesses – 2025. News release, November 18, 2026. https://www.bls.gov/news.release/osh.nr0.htm
+44. U.S. Bureau of Labor Statistics: Number and rate of nonfatal work injuries and illnesses in private industries, 2025 (chart). https://www.bls.gov/charts/injuries-and-illnesses/number-and-rate-of-nonfatal-work-injuries-and-illnesses-by-industry.htm
+45. 29 CFR 1904.39 – Reporting fatalities, hospitalizations, amputations, and losses of an eye as a result of work-related incidents to OSHA. https://www.osha.gov/laws-regs/regulations/standardnumber/1904/1904.39
+46. U.S. Bureau of Labor Statistics: Occupational Safety and Health Definitions (recordable cases, DART, days away from work). https://www.bls.gov/iif/definitions/occupational-safety-and-health-definitions.htm
+47. Supply Chain Dive: news brief on Walmart's on-time, in-full requirement for suppliers (87 %, two-day window, 3 % fine). March 8, 2019. https://www.supplychaindive.com/news/walmart-on-time-in-full-87-suppliers/550083/

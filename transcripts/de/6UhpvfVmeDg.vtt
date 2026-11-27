@@ -1,0 +1,670 @@
+WEBVTT
+
+00:00:00.280 --> 00:00:05.620
+Willkommen beim M355O6CFM Podcast, in dem wir die Menschen Ideen und Technologien erforschen, die die Zukunft der Arbeit prägen.
+
+00:00:06.800 --> 00:00:08.920
+Was Azure Data Lake Storage wirklich ist.
+
+00:00:09.680 --> 00:00:12.980
+Azure Data Lake Storage klingt wie ein völlig neues Produkt, das man lernen muss, aber das ist es nicht.
+
+00:00:13.640 --> 00:00:16.400
+Es ist derselbe günstige Azure-Speicher, von dem Sie wahrscheinlich schon gehört haben.
+
+00:00:16.720 --> 00:00:18.840
+Nur mit einer aktivierten Einstellung, die echte Ordner ermöglicht.
+
+00:00:19.260 --> 00:00:23.000
+Diese eine Einstellung verändert, wie schnell Großanalyseaufträge abgeschlossen werden, was wichtig ist,
+
+00:00:23.180 --> 00:00:25.480
+da die Rechenleistung für diese Aufträge den Großteil ihres Budgets verschlingt.
+
+00:00:25.800 --> 00:00:29.460
+Es ist zudem eine Einbahnstraße, denn sobald diese Einstellung aktiviert ist, lässt sie sich nicht mehr ausschalten.
+
+00:00:29.460 --> 00:00:33.900
+Hier erfahren Sie also, was es wirklich ist, wie Teams es nutzen und welche Fehler die Rechnung unbemerkt in die Höhe treiben.
+
+00:00:34.260 --> 00:00:39.300
+Die meisten Anfänger nehmen an, sie müssten einen völlig neuen Dienst erlernen und diese Annahme kostet sie wochenlang Zeit.
+
+00:00:39.940 --> 00:00:44.780
+Azure Data Lake Storage ist kein separates Produkt, das man kauft und auch kein spezieller Kontotyp, den man von Grund auf neu erstellt.
+
+00:00:45.500 --> 00:00:50.780
+Microsoft hat es als eine Reihe von Funktionen innerhalb des gewöhnlichen Blob-Speichers konzipiert, dem einfachen Speicher, den Azure seit Jahren anbietet.
+
+00:00:51.400 --> 00:00:54.900
+Sie schalten diese Funktion frei, indem Sie beim Erstellen des Kontos eine einzige Option aktivieren.
+
+00:00:55.260 --> 00:00:58.640
+Diese Option befindet sich in einer kurzen Einstellungsliste auf dem Bildschirm, auf dem Sie ein neues Speichern können.
+
+00:00:58.640 --> 00:01:01.680
+Man klickt leicht darüber hinweg, weil man nicht weiß, wonach man sucht.
+
+00:01:02.040 --> 00:01:06.800
+Nächst auf dieser Seite weist darauf hin, dass dieser kleine Schalter den Unterschied zwischen einem Dateibehälter und einem echten Data Lake ausmacht.
+
+00:01:06.940 --> 00:01:08.000
+Und einem echten Data Lake ausmacht.
+
+00:01:08.080 --> 00:01:13.240
+Das finden Sie erst später heraus, entweder weil Ihre Aufträge schnell und günstig laufen oder weil Sie im Kriechen und Ihre Rechnung ständig steigt.
+
+00:01:13.660 --> 00:01:18.900
+Um zu verstehen, warum diese Option so wichtig ist, benötigen Sie zunächst ein klares Bild davon, was ein Data Lake eigentlich ist.
+
+00:01:19.280 --> 00:01:21.380
+Und warum er nicht nur ein Ordner voller Dateien ist.
+
+00:01:22.340 --> 00:01:25.640
+Ein Data Lake ist ein zentraler Ort, an dem Sie all Ihre Daten speichern.
+
+00:01:25.640 --> 00:01:28.120
+Das Wort all hat in diesem Satz eine große Bedeutung.
+
+00:01:28.500 --> 00:01:32.920
+Er speichert strukturierte Daten, die sauberen Zeilen und Spalten, die Sie in einer Tabelle oder Datenbank finden würden.
+
+00:01:33.380 --> 00:01:36.640
+Er speichert auch unstrukturierte Daten wie Bilder, PDFs, Protokolle und reine Textdateien.
+
+00:01:38.060 --> 00:01:42.500
+Anstatt alles in eine ordentliche Form zu zwingen, lässt ein Data Lake Daten in der Form landen, in der Sie eintreffen.
+
+00:01:43.060 --> 00:01:44.820
+Diese Flexibilität ist der eigentliche Kernpunkt.
+
+00:01:44.900 --> 00:01:46.260
+Es lohnt sich zu verstehen, warum Sie so wichtig sind.
+
+00:01:46.260 --> 00:01:48.180
+Stellen Sie sich ein kleines Unternehmen vor, das Online verkauft.
+
+00:01:48.820 --> 00:01:50.040
+Verkaufsdaten stammen aus einem System.
+
+00:01:50.380 --> 00:01:53.440
+Support-Tickets aus einem anderen und Produktfotos liegen auf dem Laptop eines Mitarbeiters.
+
+00:01:53.440 --> 00:01:58.800
+Eine herkömmliche Datenbank würde verlangen, dass jede Quelle in strikte Tabellen umgewandelt wird, bevor sie einen einzigen Datensatz akzeptiert.
+
+00:01:59.360 --> 00:02:04.120
+Ein Data Lake nimmt alles nebeneinander auf und überlässt die Umwandlung dem Zeitpunkt, an dem tatsächlich jemand eine Antwort benötigt.
+
+00:02:04.620 --> 00:02:06.060
+Der Name leitet sich von diesem Kontrast ab.
+
+00:02:06.600 --> 00:02:11.160
+Ein Warehouse speichert Daten, die bereits bereinigt, beschriftet und wie Waren in Regalen organisiert wurden.
+
+00:02:11.820 --> 00:02:16.920
+Ein See ähnelt eher einem Reservoir, groß und weitgehend roh, bereit, gefiltert zu werden, sobald eine konkrete Frage auftaucht.
+
+00:02:17.380 --> 00:02:19.600
+Der Kompromiss ist real und genau der Grund, warum es Data Lakes überhaupt gibt.
+
+00:02:19.600 --> 00:02:23.720
+Wenn man Rohdaten aufbewahrt, kann man später Fragen beantworten, an die heute noch niemand gedacht hat.
+
+00:02:24.440 --> 00:02:27.120
+Ein Warehouse zwingt Sie, vor der Speicherung festzulegen, was wichtig ist.
+
+00:02:27.200 --> 00:02:28.660
+Alles, was Sie wegwerfen, ist für immer verlor.
+
+00:02:29.220 --> 00:02:33.540
+Ein See setzt darauf, dass das ungeordnete Original wertvoller ist als die Ordnung, die man durch vorherige Bereinigung erhielte.
+
+00:02:34.140 --> 00:02:36.820
+Das bedeutet nicht, dass ein See eine Rumpelkammer ist, denn er braucht Struktur.
+
+00:02:37.200 --> 00:02:39.060
+Und diese Struktur bilden die Ordner, die Sie gleich kennenlernen.
+
+00:02:39.500 --> 00:02:41.940
+Ein See weigert sich jedoch, das Original wegzuwerfen,
+
+00:02:42.320 --> 00:02:45.280
+da dieses oft der einzige Beleg für ein tatsächlich stattgefundenes Ereignis ist.
+
+00:02:46.020 --> 00:02:47.860
+Ein Detail ist jedoch wichtiger als alle anderen.
+
+00:02:47.860 --> 00:02:53.360
+Ein See muss irgendwo existieren und in Azure ist dieser Ort ein Speicherkonto mit einer aktivierten Option.
+
+00:02:54.120 --> 00:02:58.180
+Diese Option ist der Ausgangspunkt der eigentlichen Geschichte und dort fällt auch die erste endgültige Entscheidung.
+
+00:02:59.540 --> 00:03:01.960
+Die eine Einstellung, die Blob Storage in einen Data Lake verwandelt.
+
+00:03:02.560 --> 00:03:05.080
+Azure Blob Storage ist das Arbeitspferd, das all dem zugrunde liegt.
+
+00:03:05.720 --> 00:03:09.180
+Es ist günstiger Objektspeicher, was einfach bedeutet, dass Sie Dateien ablegen und wieder abrufen können.
+
+00:03:09.640 --> 00:03:11.100
+Was sich darin befindet, ist für das System 2.3.
+
+00:03:11.520 --> 00:03:15.720
+Was es nie hatte, war ein echter Ordner und genau diese Lücke ist der Grund für die Existenz von Azure Data Lake Storage.
+
+00:03:15.720 --> 00:03:21.600
+In einem normalen Blob-Konto ist ein Pfad wie Sales 202626 March kein Ordner, der eine Datei enthält.
+
+00:03:22.220 --> 00:03:26.220
+Es ist ein langer Dateiname mit integrierten Schrägstrichen und das System behandelt ihn exakt so.
+
+00:03:26.740 --> 00:03:31.560
+Der Speicher wirkt für Sie organisiert, weil die Schrägstriche eine Struktur vortäuschen, die eigentlich gar nicht vorhanden ist.
+
+00:03:31.560 --> 00:03:38.080
+Objektspeicher wurde absichtlich so konzipiert, da eine flache Liste von Namen einfach über eine Vielzahl von Maschinen verteilt werden kann.
+
+00:03:39.280 --> 00:03:42.580
+Dieser Trick verursacht stille Probleme, sobald Sie versuchen, auf Ordnerebene etwas zu ändern.
+
+00:03:43.300 --> 00:03:49.100
+Wenn diese Schrägstriche keine echten Ordner sind, bedeutet das Umbenennen eines Ordners, jede Datei mit diesem Pfad einzeln finden zu müssen.
+
+00:03:49.900 --> 00:03:54.820
+Bei großen Datensätzen mit Millionen von Dateien kann sich eine Aufgabe, die Sekunden dauern sollte, über Stunden hinziehen.
+
+00:03:54.820 --> 00:03:57.680
+Das Aktivieren des hierarchischen Namespace ändert genau das.
+
+00:03:58.320 --> 00:04:02.320
+Es verleiht dem Konto echte Verzeichnisse und Unterverzeichnisse dieselbe Struktur, die Ihr Computer schon immer verwendet hat.
+
+00:04:03.160 --> 00:04:07.020
+Ein Ordner wird zu einem eigenständigen Objekt und nicht nur zu Text innerhalb eines Dateinamens.
+
+00:04:08.080 --> 00:04:12.520
+Ein Klick und der Speicher verhält sich wie ein richtiges Dateisystem statt wie ein Eimer mit hübschen Etiketten.
+
+00:04:13.480 --> 00:04:17.360
+In älteren Beiträgen und Anleitungen werden Sie auch den Namen Data Lake Storage Gen 2 finden.
+
+00:04:17.780 --> 00:04:22.740
+Das ist nur die zweite Version derselben Idee, der aktuelle Name lässt die Zahl weg, also behandeln Sie beides als das gleiche.
+
+00:04:22.740 --> 00:04:28.140
+Sie wählen diese Option bei der Erstellung des Speicherkontos, können aber auch ein Konto mit bestehenden Daten aktualisieren.
+
+00:04:28.820 --> 00:04:31.640
+Microsoft übernimmt den Wechsel für Sie, aber es gibt nur eine Richtung.
+
+00:04:32.280 --> 00:04:34.620
+Sie können von flach zu hierarchisch wechseln, aber nicht mehr zurück.
+
+00:04:35.080 --> 00:04:38.060
+Es gibt eine Besonderheit bei der Benennung, die Sie kennen sollten, damit die Dokumentation nicht verwirrt.
+
+00:04:39.180 --> 00:04:43.480
+In Microsofts eigenen Anleitungen bedeutet das Wort Blockdatei und Container bedeutet Dateisystem.
+
+00:04:44.080 --> 00:04:47.620
+Es sind dieselben zwei Dinge mit unterschiedlichen Bezeichnungen, je nachdem, welche Seite Sie gerade lesen.
+
+00:04:48.060 --> 00:04:50.460
+Wichtig ist, dass dieses Kontrollkästchen permanent ist.
+
+00:04:50.460 --> 00:04:54.240
+Sobald das aktiviert ist, lässt sich das Konto nicht mehr auf den früheren flachen Stil zurückstellen.
+
+00:04:54.980 --> 00:04:56.800
+Warum ändern echte Ordner die Geschwindigkeit und die Kosten?
+
+00:04:57.240 --> 00:05:00.060
+Der Grund, warum Microsoft echte Ordner eingeführt hat, ist nicht Ordnung, sondern Geschwindigkeit.
+
+00:05:00.420 --> 00:05:04.460
+Wenn Verzeichnisse echt sind, wird das Umbenennen oder Löschen zu einer schnellen Änderung des Verzeichniseintrags.
+
+00:05:05.740 --> 00:05:10.100
+Es gibt keine Liste von einer Million Dateien, die durchsucht werden muss, da das System eine Sache aktualisiert und die Arbeit erledigt ist.
+
+00:05:10.560 --> 00:05:14.760
+Die gleiche Abkürzung gilt beim Löschen, sodass das Bereinigen alter Daten kein ganztägiges Projekt mehr ist.
+
+00:05:14.760 --> 00:05:18.320
+Ein Beispiel, das dies verdeutlicht, ist das Verhalten von Analyse-Tools in der Praxis.
+
+00:05:19.140 --> 00:05:23.080
+Bug und Hive, zwei der am häufigsten genutzten Engines, schreiben ihre Ergebnisse oft an einen temporären Ort.
+
+00:05:23.880 --> 00:05:25.660
+Wenn der Job fertig ist, benennen sie diesen Ort um.
+
+00:05:26.480 --> 00:05:30.260
+Auf Speicher ohne echte Ordner kann diese finale Umbenennung länger dauern als die eigentliche Analyse.
+
+00:05:31.020 --> 00:05:35.160
+Sie sehen einem Job zu, der seine Arbeit bereits beendet hat und nun nur noch Namen hin- und herschiebt.
+
+00:05:35.580 --> 00:05:37.600
+Diese Verzögerung ist nicht nur ärgerlich, sondern teuer.
+
+00:05:38.040 --> 00:05:39.440
+Und der Grund dafür ist bedenkenswert.
+
+00:05:39.440 --> 00:05:44.140
+Bei vielen Analyse-Workloads machen die Rechenkosten mehr als 85% der Gesamtkosten aus.
+
+00:05:44.600 --> 00:05:47.320
+Die Maschinen, die die Arbeit verrichten, kosten weitaus mehr als die runden Daten.
+
+00:05:47.980 --> 00:05:51.640
+Wenn eine langsame Umbenennung dieser Maschinen eine zusätzliche Stunde laufen lässt, bezahlen sie diese Stunde.
+
+00:05:52.040 --> 00:05:56.380
+Beschleunigen sie den Speicher, ist die Berechnung früher fertig und die Rechnung sinkt, obwohl sich der Speicherpreis kaum geändert hat.
+
+00:05:57.140 --> 00:05:59.780
+Das Feature skaliert zudem sauber, was früher der schwierige Teil war.
+
+00:06:00.620 --> 00:06:05.700
+Ältere Systeme opferten die Ordnerstruktur für Skalierbarkeit, da echte Verzeichnisse bei massiver Größe teuer zu verwalten waren.
+
+00:06:05.880 --> 00:06:08.500
+Ein hierarchischer Namespace wächst hier in einer geraden Linie.
+
+00:06:09.440 --> 00:06:13.120
+Das Hinzufügen von mehr Daten verlangsamt die Verzeichnisse also nicht, was zur praktischen Frage führt.
+
+00:06:13.740 --> 00:06:16.260
+Wie gelangen Daten eigentlich in eines dieser Konten hinein und wieder heraus?
+
+00:06:17.160 --> 00:06:18.900
+Wie kommen die Daten tatsächlich rein und wieder raus?
+
+00:06:19.520 --> 00:06:23.220
+Die Infrastruktur ist benutzerfreundlicher, als sie klingt, und hier wird die Theorie greifbar.
+
+00:06:24.120 --> 00:06:28.340
+Analyse-Tools greifen über einen Treiber namens ABFS, kurz für Azure Blob Filesystem, auf dem Data Lake zu.
+
+00:06:29.100 --> 00:06:32.300
+Die Serviceadresse endet immer auf dfs.core.windows.net.
+
+00:06:32.660 --> 00:06:36.480
+Sie geben diese Adresse selten selbst ein, aber sie ist die Verbindung, die Ihre Tools im Hintergrund nutzen.
+
+00:06:36.480 --> 00:06:39.940
+Die Tools selbst sind Namen, denen Sie immer wieder begegnen werden, wenn Sie in dieser Welt bleiben.
+
+00:06:40.480 --> 00:06:47.360
+Während Data Factory Daten aus anderen Systemen kopiert, verarbeiten und analysieren Databricks und Synapse diese, und Power BI liest die Ergebnisse für Berichte aus.
+
+00:06:48.000 --> 00:06:55.040
+Wenn Sie Dateien lieber manuell verschieben möchten, bietet Ihnen der Azure Storage Explorer eine Benutzeroberfläche und das Kommandozeilentool als Copy für Massenübertragungen.
+
+00:06:55.040 --> 00:06:58.100
+Sie benötigen keine dieser Tools, um einfach nur zu starten.
+
+00:06:58.580 --> 00:07:02.320
+Das Azure-Portal, PowerShell und die Befehlszeile können alle auf denselben Speicher zugreifen.
+
+00:07:03.080 --> 00:07:07.300
+Sie können eine erste Datei hochladen und sehen, wie sie in einem Ordner erscheint, doch bevor Sie eine einzige Zeile kurzschreiben.
+
+00:07:07.780 --> 00:07:10.160
+Die meisten fangen mit einem Ordner und einer Handvoll Dateien an.
+
+00:07:10.380 --> 00:07:13.660
+Und der Lake wächst, wenn mehr Systeme Daten einspeisen, einspeisen.
+
+00:07:14.220 --> 00:07:16.740
+Berechtigungen funktionieren hier feingranulare als bei einfachem Speichern.
+
+00:07:17.120 --> 00:07:20.280
+Sie können das Rollensystem von Azure verwenden, das auch alles andere in Azure steuert.
+
+00:07:20.280 --> 00:07:25.380
+Sie können auch PUSIX-konforme Zugriffssteuerungslisten festlegen, die einen einzelnen Ordner oder sogar eine einzelne Datei absehen.
+
+00:07:25.740 --> 00:07:30.500
+Belast es bei den Details, denn es geht nur darum, dass ein Lake geteilt werden kann, ohne jedem die vollen Zugriffsrechte zu geben.
+
+00:07:31.380 --> 00:07:33.700
+Wenn Daten ankommen, landen Sie als Blob in einem Container.
+
+00:07:33.860 --> 00:07:36.660
+Das ist das Prinzip von Datei und Dateisystemen, nur unter anderem Namen.
+
+00:07:37.600 --> 00:07:42.260
+Von dort aus kann eine Lebenszyklusrichtlinie ältere Dateien in eine günstigere Ebene verschieben oder nach einer gewissen Zeit löschen.
+
+00:07:42.620 --> 00:07:45.740
+Der Lake kommt sich selbst auf, anstatt darauf zu warten, dass jemand die Ordner manuell sortiert.
+
+00:07:46.100 --> 00:07:47.780
+Kalierbarkeit ist der letzte Punkt und dies groß durchbümmelt.
+
+00:07:47.780 --> 00:07:51.520
+Microsoft setzt keine Begrenzung dafür, wie groß das Konto oder eine einzelne Datei sein darf.
+
+00:07:52.380 --> 00:07:58.340
+Eine Datei kann von wenigen Kilobytes bis zu hunderten Terabytes groß sein und Anfragen werden konstant schnell beantwortet, egal wie viel sich angesammelt hat.
+
+00:07:59.160 --> 00:08:02.440
+Nachdem die Grundlagen geklärt sind, hilft es zu sehen, wie ein echtes Setup aussieht.
+
+00:08:03.660 --> 00:08:07.500
+In der realen Welt werfen Teams selten alles auf einen riesigen Haufen.
+
+00:08:07.640 --> 00:08:10.600
+Das Muster, zu dem sie greifen, nennt sich Medaillenarchitektur.
+
+00:08:11.240 --> 00:08:12.560
+Es ist einfacher, als der Name vermuten lässt.
+
+00:08:13.140 --> 00:08:15.320
+Rohdaten landen zuerst in der Ebene, die man Bronze nennt.
+
+00:08:15.320 --> 00:08:20.840
+Bereinigte und korrigierte Daten wandern in den Silver-Bereich und die aufbereiteten Daten, denen ein Bericht vertrauen kann, landen in Gold.
+
+00:08:21.300 --> 00:08:24.420
+Jede Schicht ist einfach ein Ordner und die Daten bewegen sich vorwärts, während sie verbessert werden.
+
+00:08:24.720 --> 00:08:32.780
+Die Goldschicht ist diejenige, die ein Bericht tatsächlich liest, da es sich um einen Ordner mit gut strukturierten Dateien handelt, aus denen jedes Tool Daten abrufen kann, ohne zu wissen, wie die Rohdaten ankamen.
+
+00:08:32.780 --> 00:08:37.220
+Die Ordnerstruktur ist im Nachhinein von großer Bedeutung und es gibt zwei Muster, die es wert sind, übernommen zu werden.
+
+00:08:37.600 --> 00:08:44.660
+Für Daten, die von Geräten oder Sensoren kommen, sieht ein gängiges Layout Regionen, dann Subjekt, dann Jahr, Monat, Tag und Stunde vor.
+
+00:08:45.200 --> 00:08:51.280
+Die Messwerte eines Flugzeugtriebwerks könnten unter UK, dann Flugzeuge, dann dem spezifischen Flugzeug gefolgt von Datum und Uhrzeit abgelegt werden.
+
+00:08:51.280 --> 00:08:55.820
+Für Batch-Jobs, die auf Dateien ausgeführt werden, nutzen Teams einen Inordner für Arbeitung warten, die auf ihre Bearbeitung.
+
+00:08:56.120 --> 00:08:59.480
+Sie verwenden einen Out-Ordner für fertige Ergebnisse und einen Bad-Ordner für alles, was fehlschlägt.
+
+00:08:59.760 --> 00:09:01.140
+Die Reihenfolge dieser Ordner ist nicht willkürlich.
+
+00:09:01.900 --> 00:09:06.820
+Wenn man Region und Subjekt an die erste Stelle setzt, kann man leicht festlegen, dass diese Personen nur UK-Daten sehen dürfen und sonst nichts.
+
+00:09:07.340 --> 00:09:11.000
+Man setzt diese Berechtigung einmal für den Ordner und alles darunter erbt sie automatisch.
+
+00:09:11.620 --> 00:09:16.520
+Wenn man die Reihenfolge umdreht und mit dem Datum beginnt, muss man Berechtigungen immer wieder für unzählige kleine Ordner festlegen.
+
+00:09:17.720 --> 00:09:20.600
+Das Zeitformat ist die letzte praktische Entscheidung und sie bestimmt stillschweigend ihre Kosten.
+
+00:09:20.600 --> 00:09:24.080
+Verwenden Sie ein spaltenbasiertes Format wie Paket für Daten, die Sie häufig lesen,
+
+00:09:24.160 --> 00:09:26.760
+da eine Abfrage nur die benötigten Spalten abrufen und der Leistung überspringen kann.
+
+00:09:26.920 --> 00:09:30.100
+Diese Dateien sind komprimiert und jede enthält eine eigene Beschreibung Ihres Inhalts.
+
+00:09:30.980 --> 00:09:34.760
+Verwenden Sie ein zeilenbasiertes Format wie Avro, wenn Sie hauptsächlich Daten in einem stetigen Strom schreiben,
+
+00:09:34.860 --> 00:09:36.300
+wie etwa bei Ereignissen, die von einer App einfließen.
+
+00:09:36.620 --> 00:09:38.600
+Ein gutes Layout und das richtige Format sparen Geld.
+
+00:09:38.920 --> 00:09:41.680
+Aber eine Handvoll verbreiteter Gewohnheiten bewirkt stillschweigendes Gegenteil
+
+00:09:41.680 --> 00:09:43.820
+und taucht fast in jedem ersten Data Lake eines Anfängers auf.
+
+00:09:45.180 --> 00:09:47.060
+Die Fehler, die Sie still und leise Geld kosten
+
+00:09:47.060 --> 00:09:51.940
+Der erste Fehler, den man überall sieht, ist es, die Daten als einen Berg winziger Dateien zu hinterlassen.
+
+00:09:53.020 --> 00:09:55.220
+Analyse-Engines investieren echte Zeit in jede Datei,
+
+00:09:55.420 --> 00:09:57.520
+nur um sie aufzulisten, Berechtigungen zu prüfen und sie zu öffnen.
+
+00:09:57.940 --> 00:10:00.500
+Tausend kleine Dateien erfordern weitaus mehr Aufmerksamkeit als eine große.
+
+00:10:01.500 --> 00:10:05.880
+Microsofts eigene Empfehlung lautet, Dateien zwischen 256 MB und 100 GB anzustreben.
+
+00:10:06.720 --> 00:10:09.340
+Fassen Sie kleine Dateien zu größeren zusammen, bevor versucht wird, sie zu lesen.
+
+00:10:09.340 --> 00:10:12.160
+Das ist eine Gewohnheit, die sich vom ersten Tag an lohnt,
+
+00:10:12.260 --> 00:10:14.240
+da sich kleine Dateien schneller anhäufen, als man denkt.
+
+00:10:15.140 --> 00:10:18.360
+Es gibt ein Detail bei der Abrechnung, das fast jeden trifft und leicht zu übersehen ist.
+
+00:10:19.000 --> 00:10:21.360
+Lese- und Schreibvorgänge werden in 4 MB-Blöcken abgerechnet.
+
+00:10:22.020 --> 00:10:25.480
+Eine Datei, die nur wenige Kilobyte enthält, wird trotzdem so berechnet, als enthielte sie 4 MB.
+
+00:10:26.420 --> 00:10:28.880
+Wenn Ihre Daten auf Millionen kleiner Dateien verteilt sind,
+
+00:10:28.960 --> 00:10:31.680
+zahlen Sie immer wieder den vollen Preis für größtenteils leeren Speicherplatz.
+
+00:10:32.340 --> 00:10:34.800
+Wenn Rohdaten als Strom winzige Ereignisse eintreffen,
+
+00:10:35.240 --> 00:10:37.420
+besteht die übliche Lösung darin, sie mit einem Streaming-Tool zu sammeln
+
+00:10:37.420 --> 00:10:38.640
+und in größeren Badges zu schreiben.
+
+00:10:39.740 --> 00:10:42.520
+Die zweite Falle ist das Aktivieren des hierarchischen Namespace,
+
+00:10:42.620 --> 00:10:43.600
+wenn Sie ihn gar nicht benötigen.
+
+00:10:44.140 --> 00:10:45.400
+Denken Sie daran, das ist eine Einbahnstraße.
+
+00:10:45.800 --> 00:10:48.520
+Sobald er eingeschaltet ist, können Sie das Konto nicht mehr auf einen flachen Namespace zurücksetzen.
+
+00:10:48.800 --> 00:10:51.140
+Wenn Sie ihn für ein Backup-Archiv oder einen Bilderordner aktivieren,
+
+00:10:51.220 --> 00:10:53.620
+haben Sie eine dauerhafte Änderung vorgenommen, die Ihnen nichts bringt.
+
+00:10:54.160 --> 00:10:56.880
+Backups und Fotobibliotheken benötigen keine schnellen Ordnerumbenennungen,
+
+00:10:57.100 --> 00:10:58.320
+da die Daten nicht analysiert werden.
+
+00:10:58.740 --> 00:11:00.420
+Die dritte Falle ist das Ignorieren von Speicherebenen.
+
+00:11:01.220 --> 00:11:05.600
+Er so erlaubt es Ihnen, Daten je nach Lesehäufigkeit in Hot, Cool, Cold oder Archivebenen zu parken.
+
+00:11:06.420 --> 00:11:09.360
+Alte Daten, die in der Hot-Ebene liegen, sind unnötig ausgegebenes Geld.
+
+00:11:10.160 --> 00:11:12.140
+Passen Sie die Ebene an die tatsächliche Nutzung an
+
+00:11:12.140 --> 00:11:14.360
+und dieselben Dateien können nur einen Bruchteil kosten.
+
+00:11:15.180 --> 00:11:17.620
+Archiv ist der günstigste Ort für Daten, die Sie fast nie öffnen,
+
+00:11:17.720 --> 00:11:20.640
+aber der Zugriff erfolgt nicht sofort, da eine Datei erst wiederhergestellt werden muss.
+
+00:11:21.300 --> 00:11:23.100
+Eine wichtige Einschränkung sollten Sie im Hinterkopf behalten.
+
+00:11:23.780 --> 00:11:27.560
+Selbst bei aktivierter Einstellung hinken einige Blob-Funktionen in diesen Konten noch hinterher.
+
+00:11:27.780 --> 00:11:29.640
+Wenn Sie auf eine bestimmte Funktion angewiesen sind,
+
+00:11:29.720 --> 00:11:31.720
+prüfen Sie deren aktuelle Unterstützung, bevor Sie es festlegen.
+
+00:11:32.020 --> 00:11:33.760
+Damit ist der Teil abgedeckt, den Sie selbst kontrollieren.
+
+00:11:33.760 --> 00:11:36.700
+Für viele von Ihnen wird ein Data Lake jedoch nichts sein, das Sie allein aufbauen.
+
+00:11:36.980 --> 00:11:39.140
+Die nächste Frage ist, wo das in Microsofts Gesamtbild passt.
+
+00:11:39.900 --> 00:11:43.020
+Wo sich das in Fabric, Power BI und Microsoft 365 einfügt.
+
+00:11:43.400 --> 00:11:45.160
+Wenn Sie sich mit Microsoft Fabric beschäftigt haben,
+
+00:11:45.240 --> 00:11:47.180
+sind Sie einem Data Lake bereits begegnet, ohne es zu wissen.
+
+00:11:48.040 --> 00:11:51.960
+One Lake, die Speicherebene im Herzen von Fabric, basiert auf Azure Data Lake Storage.
+
+00:11:53.200 --> 00:11:56.900
+Es speichert Tabellen in offenen Formaten wie Delta, Parquet und Iceberg, die jedes Tool lesen kann.
+
+00:11:57.540 --> 00:12:01.020
+Derselbe Engine, der ein Data Lake in Azure betreibt, läuft die ganze Zeit auch unter Fabric.
+
+00:12:01.020 --> 00:12:04.860
+Wenn Ihr Team bereits in Fabric arbeitet, ist One Lake der Lake, den Sie zuerst kennenlernen werden.
+
+00:12:04.960 --> 00:12:06.480
+Und alles, was Sie gerade gelernt haben, gilt auch nicht.
+
+00:12:06.980 --> 00:12:08.800
+One Lake übernimmt zudem die Struktur, die Sie bereits kennen.
+
+00:12:09.400 --> 00:12:12.420
+Jeder Fabric-Tenant erhält genau ein One Lake und Sie können keinen zweiten erstellen.
+
+00:12:12.960 --> 00:12:16.000
+Die gesamte Organisation teilt sich einen einzigen Lake anstatt einer verstreuten Menge davon.
+
+00:12:16.680 --> 00:12:20.740
+Darin erscheint ein Workspace als Container und die enthaltenen Elemente als Ordner.
+
+00:12:21.460 --> 00:12:24.020
+Das ist dasselbe Blob- und Containerpaar wie zuvor, nur in Fabrik gewandt.
+
+00:12:24.020 --> 00:12:27.860
+Das Cleverte daran ist, wie One Lake auf Daten zugreift, die woanders liegen.
+
+00:12:28.240 --> 00:12:32.280
+Eine Funktion namens Shortcuts ermöglicht den Zugriff auf Dateien in einem Azure Data Lake Storage-Konto,
+
+00:12:32.420 --> 00:12:35.440
+einem Amazon S3-Bucket, einer Dataverse-Tabelle oder sogar einem lokalen System.
+
+00:12:35.780 --> 00:12:37.660
+Sie werden direkt an dem Speicherort gelesen, ohne dass in der Kopier steht.
+
+00:12:38.020 --> 00:12:41.120
+Teams arbeiten weiterhin in ihren eigenen Umgebungen und teilen Daten über Shortcuts,
+
+00:12:41.200 --> 00:12:42.640
+anstatt Gigabytes an Daten zu duplizieren.
+
+00:12:42.840 --> 00:12:44.640
+Dieses Konzept der einen Kopie findet sich on Power BI wieder.
+
+00:12:45.180 --> 00:12:49.280
+Ein Modus namens Direct Lake ließ Daten direkt aus One Lake, ohne sie vorher zu importieren oder zu kopieren.
+
+00:12:49.280 --> 00:12:53.220
+Deshalb spricht Fabrik immer von einer einzigen Kopie, die von jedem Tool gemeinsam genutzt werden kann.
+
+00:12:54.080 --> 00:12:56.520
+One Lake bewahrt gelöschte Dateien zudem sieben Tage lang auf,
+
+00:12:56.540 --> 00:12:59.940
+sodass ein versehentliches Löschen nicht die Katastrophe ist, die es in einem Ordner ohne Sicherheitsnetz wäre.
+
+00:13:00.320 --> 00:13:02.100
+Es gibt eine echte Abwägung zwischen den beiden Wegen.
+
+00:13:02.500 --> 00:13:04.780
+One Lake wird für Sie verwaltet und richtet sich an Fabrik-Benutzer.
+
+00:13:05.280 --> 00:13:09.920
+Ein einfaches Azure Data Lake Storage-Konto gibt Ihnen die direkte Kontrolle und funktioniert im gesamten Azure-Toolset.
+
+00:13:10.560 --> 00:13:11.620
+Beide nutzen dieselbe API.
+
+00:13:11.880 --> 00:13:14.140
+Die Entscheidung hängt also von Bequemlichkeit gegenüber Kontrolle ab.
+
+00:13:15.120 --> 00:13:17.000
+Was Sie über Azure Data Lake Storage wissen sollten.
+
+00:13:17.220 --> 00:13:18.300
+Hier ist die Kurzfassung.
+
+00:13:18.300 --> 00:13:23.320
+Azure Data Lake Storage ist Blob-Speicher mit einer aktivierten Einstellung, die für echte Ordner sorgt.
+
+00:13:24.280 --> 00:13:26.640
+Diese Ordner lassen große Analyse-Jobs schneller fertig werden,
+
+00:13:26.720 --> 00:13:29.520
+was die Rechnung senken kann, wenn die Rechenleistung den Großteil der Kosten ausmacht.
+
+00:13:29.880 --> 00:13:33.400
+Einmal aktiviert ist dies dauerhaft und eine Menge winziger Dateien kostet Sie mehr, als Sie erwarten.
+
+00:13:34.020 --> 00:13:38.200
+Behalten Sie diese wenigen Dinge im Kopf und der kompliziert wirkende Dienst wird so etwas, das Sie leicht verstehen können.
+
+00:13:38.480 --> 00:13:39.160
+Hier ist meine Frage an Sie.
+
+00:13:39.720 --> 00:13:43.260
+Wenn Sie Ihren ersten Data Lake planen, bei welchem Aspekt sind Sie sich im Moment am wenigsten sicher?
+
+00:13:43.760 --> 00:13:46.400
+Die Ordnerstruktur, die Kosten oder die Einbindung in Fabrik?
+
+00:13:46.400 --> 00:13:53.900
+Wenn das Thema dadurch weniger einschüchternd wirkt, abonnieren Sie M365FM, um die Tools und Denkweisen zu meistern, die die Zukunft der Arbeit prägen.

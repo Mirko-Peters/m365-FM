@@ -476,6 +476,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE (?:sponsor_clicks_daily|ad_stats_daily|ad_house_stats) ADD COLUMN clicks_filtered INTEGER NOT NULL DEFAULT 0$/i.test(s)) continue;   // 0051: gefilterte Klicks (Bots/Scanner) getrennt, Spalte mit Standardwert
     if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
     if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
+    if (/^ALTER TABLE lib_items ADD COLUMN (?:reviewed INTEGER NOT NULL DEFAULT 0|origin TEXT NOT NULL DEFAULT '')$/i.test(s)) continue;   // 0054: Kennzeichen "von der Redaktion geprueft" der Bibliothek, Spalte mit Standardwert; library.js legt sie zur Laufzeit nur an, wenn sie fehlt
     if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0054: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
     if (/^INSERT OR IGNORE INTO mig0054_backup\(tabelle, schluessel, wert, zeit\)\s+SELECT 'entity_claims', /i.test(s)) continue;   // 0054 (Runde 11): Sicherung vor dem Loeschen, UNIQUE (tabelle, schluessel) behaelt beim zweiten Lauf das erste Original
     if (/^DELETE FROM entity_claims WHERE via IN \('owner', 'manual'\) AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0054: verwaiste Owner- und manuelle Ansprueche geloeschter Konten (Altbestand), idempotent
@@ -570,6 +571,14 @@ test("levels: syncExpertise baut Belege aus den Quelltabellen und setzt Stufen (
   assert.equal(sc.score, 17); assert.equal(sc.endorsed, 2);
   // zweiter Lauf: keine doppelte Uebernahme, nichts aendert sich; Bestaetigungen bis zur Stufe Evangelist werden nachgezogen
   const r2 = await syncExpertise({ DB: db }, async () => emap); assert.equal(r2.seeded, 0); assert.equal(r2.changed, 0);
+  assert.deepEqual([r2.added, r2.removed, r2.reweighted], [0, 0, 0], "D1-Kosten: unveraenderte Belege werden nicht neu geschrieben");
+  raw.exec("UPDATE expertise_evidence SET created=1 WHERE kind<>'self'");
+  raw.exec("UPDATE blog_posts SET status='draft' WHERE id=2");
+  const r3 = await syncExpertise({ DB: db }, async () => emap);
+  assert.deepEqual([r3.added, r3.removed, r3.reweighted], [0, 1, 0], "nur der entfallene Beleg wird geloescht");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM expertise_evidence WHERE kind<>'self' AND created<>1").get().n, 0, "created bleibt");
+  raw.exec("UPDATE blog_posts SET status='live' WHERE id=2");
+  assert.equal((await syncExpertise({ DB: db }, async () => emap)).added, 1);
   for (let i = 10; i < 110; i++) raw.exec(`INSERT INTO endorsements(owner_id,eid,by_id,created) VALUES(1,'power-bi',${i},${t})`);
   await computeLevels(db, { uid: 1, eid: "power-bi" });
   assert.equal(raw.prepare("SELECT level FROM expertise WHERE owner_id=1 AND eid='power-bi'").get().level, 4, "102 Bestaetigungen: Evangelist");
@@ -657,6 +666,25 @@ test("contentblog: viele unveraenderte Pakete kosten nur eine Abfrage, neue Pake
     calls = 0; r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1300);
     assert.deepEqual([r.created, r.updated, r.published], [0, 0, 0]);
     assert.ok(calls <= 3, "unveraenderte Pakete: keine Abfrage je Paket, war " + calls);
+  } finally { globalThis.fetch = old; }
+});
+
+test("contentblog: auch Pakete nach Nummer 500 im Index werden angelegt (Review #509, SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; } };
+  raw.exec(`INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'g','1','Mirko','user',0,1);
+    INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'mirko-p','','','','','',1,1)`);
+  const P = (n) => ({ slug: "post-" + String(n).padStart(4, "0"), lang: "en", title: "Beitrag " + n, summary: "Kurz", html: "<p>Text</p>", author: "mirko-p", topics: [], faq: [], publish: true, published: 100, hash: "h" + n });
+  const items = Array.from({ length: 520 }, (_, i) => P(i));
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ ok: true, json: async () => ({ items }) });
+  try {
+    const { importContentBlog } = await import("../src/contentblog.js");
+    for (let i = 0; i < 14; i++) await importContentBlog({ DB: db, SITE: "https://x" }, () => 1000 + i);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_posts WHERE status='live'").get().n, 520);
+    assert.ok(raw.prepare("SELECT id FROM blog_posts WHERE slug='post-0519'").get(), "Paket 520 angelegt");
   } finally { globalThis.fetch = old; }
 });
 
@@ -1083,6 +1111,8 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
     assert.equal((await importSearchIndex(env)).changed, 0);
     assert.equal((await importSearchIndex(env)).changed, 0);
     assert.equal(indexWrites(), before, "unveraenderte Dokumente werden nicht erneut geschrieben");
+    assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_title_norm_done'").get().v, "1", "Titel-Nachfuellung ist erledigt und entfaellt kuenftig");
+    assert.match(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, /^0:/, "geaenderter Import weckt den Vektor-Abgleich");
 
     raw.prepare("UPDATE search_doc SET title_norm='' WHERE id=?").run(docs[0].id);
     const beforeTitleNormBackfill = indexWrites();
@@ -1341,12 +1371,57 @@ test("search: Vectorize-Sync ist begrenzt, inkrementell und entfernt gone-Vektor
   assert.equal(raw.prepare("SELECT vid FROM search_vector WHERE id=?").get(docs[0].id).vid, upserts[0].id);
 
   raw.prepare("UPDATE search_doc SET h='changed' WHERE id=?").run(docs[0].id);
+  assert.deepEqual(await syncSearchVectors(env), { skipped: "unveraendert", processed: 0 }, "D1-Kosten: nach leerem Volllauf ruht der Abgleich bis zum naechsten geaenderten Import");
+  raw.exec("UPDATE meta SET v='0' WHERE k='search_vectors_idle'");   // wie importSearchIndex bei changed>0
   assert.equal((await syncSearchVectors(env)).processed, 1, "geanderte Hashes werden erneut eingebettet");
   assert.equal(upserts.length, 503);
   raw.prepare("UPDATE search_doc SET gone=1 WHERE id=?").run(docs[1].id);
+  raw.exec("UPDATE meta SET v='0' WHERE k='search_vectors_idle'");   // wie importSearchIndex bei gone>0
   assert.deepEqual(await syncSearchVectors(env), { deleted: 1 });
   assert.deepEqual(deletions, [await vectorId(docs[1].id)]);
   assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[1].id).gone, 1, "Quelldokument bleibt erhalten");
+});
+
+test("search: Vektor-Abgleich verliert kein Wecken durch parallelen Import (sync-Abfrage -> import schreibt -> sync setzt Ruhetag)", async () => {
+  const { db, raw } = await searchDb();
+  seedSearchDocs(raw, [{ id: "en:a", url: "https://www.m365.fm/a/", lang: "en", type: "page", title: "Vector document a" }]);
+  const env = {
+    DB: db,
+    AI: { async run(_m, { text }) { return { data: text.map(() => Array(1024).fill(0.1)) }; } },
+    VEC: { async upsert() {}, async deleteByIds() {} },
+  };
+  const { syncSearchVectors, wakeVectors } = await import("../src/search.js");
+  assert.equal((await syncSearchVectors(env)).processed, 1);
+  assert.equal((await syncSearchVectors(env)).processed, 0, "leerer Volllauf setzt den Ruhetag");
+  const today = new Date().toISOString().slice(0, 10);
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, today);
+  // Wettlauf: der Import weckt (neues Dokument), waehrend ein schon gestarteter Abgleich noch nichts gefunden hat
+  await wakeVectors(db);
+  const wokeA = raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v;
+  const realPrepare = db.prepare.bind(db);
+  let injected = false;
+  const racing = {
+    ...env,
+    DB: { ...db, batch: db.batch?.bind(db), prepare(sql) {
+      const st = realPrepare(sql);
+      if (!injected && /LEFT JOIN search_vector/.test(sql)) {   // nach der leeren Abfrage schreibt der Import neue Dokumente und weckt erneut
+        const all = st.bind.bind(st);
+        return { bind: (...a) => { const b = all(...a); return { ...b, all: async () => { const r = await b.all(); injected = true; await wakeVectors(db); return r; } }; } };
+      }
+      return st;
+    } },
+  };
+  raw.prepare("UPDATE meta SET v=? WHERE k='search_vectors_idle'").run(wokeA);
+  assert.equal((await syncSearchVectors(racing)).processed, 0);
+  assert.ok(injected);
+  const after = raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v;
+  assert.notEqual(after, today, "das Wecken des Imports bleibt stehen, der naechste Lauf arbeitet");
+  assert.match(after, /^0:/);
+  assert.equal((await syncSearchVectors(env)).processed, 0);
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, today, "ohne Wettlauf ruht der Abgleich wieder");
+  raw.exec("DELETE FROM meta WHERE k='search_vectors_idle'");
+  assert.equal((await syncSearchVectors(env)).processed, 0);
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='search_vectors_idle'").get().v, today, "fehlende Zeile wird angelegt");
 });
 
 test("vectors: Embeddings, Upsert, gefilterte Abfrage und RRF sind wiederverwendbar", async () => {
@@ -1531,4 +1606,19 @@ test("search: 80.000 Dokumente ohne SQL-Vollscan und mit höchstens 150 ms Hybri
   const plan = raw.prepare(`EXPLAIN QUERY PLAN ${query.sql}`).all(...query.params);
   assert.ok(plan.length > 0);
   assert.equal(plan.filter(({ detail }) => /(?:SCAN d\b|SEARCH d USING INDEX)/.test(detail)).length, 1);
+});
+
+test("d1 backup (D1-Kosten): Sicherung nur bei ausstehenden Migrationen, unklarer Stand sichert wie bisher; TOKEN_ONLY ohne Export und Deploy", async () => {
+  const { d1PendingMigrations } = await import("../src/d1_backup.js");
+  assert.equal(d1PendingMigrations(0, "✅ No migrations to apply!\n"), "none");
+  assert.equal(d1PendingMigrations(0, "Migrations to be applied:\n┌──────────────────────┐\n│ name                 │\n├──────────────────────┤\n│ 0057_cost.sql        │\n└──────────────────────┘\n"), "pending");
+  assert.equal(d1PendingMigrations(0, "Migrations to be applied:\n"), "pending");
+  assert.equal(d1PendingMigrations(1, "No migrations to apply!"), "unknown", "Fehler -> sichern");
+  assert.equal(d1PendingMigrations(0, "irgendwas"), "unknown");
+  assert.equal(d1PendingMigrations(0, "", "✅ No migrations to apply!"), "none");
+  const src = readFileSync(new URL("../setup.mjs", import.meta.url), "utf8");
+  const gate = src.indexOf('if (pending !== "none")'), exp = src.indexOf("run(d1BackupExportArgs(tables))"), apply = src.indexOf('run(["d1", "migrations", "apply"');
+  assert.ok(gate > 0 && gate < exp && exp < apply, "Export und apply nur im Zweig mit ausstehenden (oder unklaren) Migrationen, Sicherung vor apply");
+  assert.ok(src.indexOf('if (tokenOnly)') < src.indexOf('run(["d1", "migrations", "list"') && src.indexOf('run(["deploy"])') > src.indexOf("else {"), "TOKEN_ONLY: weder Liste noch Export noch Deploy");
+  assert.match(src, /process\.env\.TOKEN_ONLY === "1"/);
 });

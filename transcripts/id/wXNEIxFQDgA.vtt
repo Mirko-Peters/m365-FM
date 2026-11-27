@@ -1,0 +1,724 @@
+WEBVTT
+
+00:00:07.500 --> 00:00:13.660
+Selamat datang di podcast M365FM, tempat kita menjelajahi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:14.520 --> 00:00:15.420
+Apa sebenarnya VPN itu?
+
+00:00:16.100 --> 00:00:18.400
+Aplikasi VPN yang Anda install melakukan lebih sedikit dari yang Anda.
+
+00:00:18.620 --> 00:00:22.180
+Aplikasi ini membangun terowongan treenkripsi antara perangkat Anda dan server di tempat lain,
+
+00:00:22.300 --> 00:00:26.380
+lalu mengirimkan lalu lintas Anda melalunya agar situs yang Anda kunjungi melihat alamat server itu bukan alamat Anda.
+
+00:00:26.720 --> 00:00:30.740
+Terdengar seperti perisai, tetapi kenyataannya VPN sebagian besar hanya mengubah siapa yang mengawasi Anda,
+
+00:00:30.900 --> 00:00:32.180
+bukan apakah Anda bisa mengawasi atau tidak.
+
+00:00:32.560 --> 00:00:35.600
+Panduan resmi Microsoft menyebutkan bahwa VPN kantor yang Anda gunakan
+
+00:00:35.600 --> 00:00:37.760
+dan seringkali justru memperlambat Teams dan SharePoint.
+
+00:00:37.880 --> 00:00:40.580
+Itulah sebabnya perusahaan kini menyarankan admin untuk mengarahkan admin
+
+00:00:40.580 --> 00:00:43.620
+untuk mengarahkan lalu lintas Microsoft 365 agar tidak melewati VPN.
+
+00:00:44.020 --> 00:00:46.680
+Dan VPN gratis di ponsel Anda adalah hal pertama yang saya periksa
+
+00:00:46.680 --> 00:00:50.500
+karena pengujian independen terus menemukan bahwa gratis biasanya berarti data Anda adalah produknya.
+
+00:00:50.840 --> 00:00:53.700
+Di akhir nanti Anda akan tahu apa fungsi VPN, apa yang tidak pernah dilakukannya,
+
+00:00:53.800 --> 00:00:55.140
+dan di mana posisinya dalam cloud Microsoft.
+
+00:00:55.460 --> 00:00:58.260
+Jika iklan disingkirkan, VPN ternyata hanyalah satu hal sederhana,
+
+00:00:58.600 --> 00:01:01.040
+yaitu rute pribadi antara perangkat Anda dan server di tempat lain.
+
+00:01:01.740 --> 00:01:04.820
+Lalu lintas Anda mengalir melaluinya alih-alih langsung menuju ke web terbuka.
+
+00:01:04.820 --> 00:01:08.860
+Server itu menjadi pengganti Anda, sehingga setiap situs yang Anda buka melihat alamat server tersebut
+
+00:01:08.860 --> 00:01:10.440
+alih-alih alamat yang diberikan penyediaan internet.
+
+00:01:10.680 --> 00:01:12.000
+Bayangkan sebuah amplop di dalam amplop.
+
+00:01:12.500 --> 00:01:14.580
+Lalu lintas Anda disegel di dalam amplop pertama,
+
+00:01:14.780 --> 00:01:17.360
+dan amplop itu dimasukkan ke dalam amplop kedua yang ditujukan hanya untuk server VPN.
+
+00:01:17.720 --> 00:01:20.260
+Siapapun yang mengawasi jalur tersebut bisa melihat Anda mengirim surat,
+
+00:01:20.320 --> 00:01:23.520
+dan mereka bahkan tahu Anda menggunakan VPN tetapi tidak ada amplop yang bisa dibuka tanpa kunci.
+
+00:01:23.800 --> 00:01:26.720
+Itulah mengapa hal pertama yang diubah VPN adalah alamat Anda di internet.
+
+00:01:27.120 --> 00:01:30.840
+Nyalakan VPN dan situs web di sisi lain tidak akan mudah mengetahui di kota mana Anda sebenarnya berada.
+
+00:01:30.840 --> 00:01:33.000
+Yang mereka lihat server mana yang Anda gunakan untuk terhubung.
+
+00:01:33.680 --> 00:01:35.980
+Satu kata digunakan untuk dua alat yang sangat berbeda,
+
+00:01:36.060 --> 00:01:38.500
+dan membedakannya sejak awal akan mencegah banyak kebingungan nantinya.
+
+00:01:38.880 --> 00:01:40.760
+Ada aplikasi privasi yang Anda beli untuk laptop,
+
+00:01:40.940 --> 00:01:44.720
+lalu ada terowongan yang wajib digunakan untuk mengakses sistem perusahaan yang tidak bisa dijangkau dunia luar.
+
+00:01:45.140 --> 00:01:46.620
+Keduanya berbagi nama dan bentuk dasar,
+
+00:01:46.920 --> 00:01:48.740
+namun keduanya ada karena alasan yang sangat berbeda.
+
+00:01:49.160 --> 00:01:50.020
+Kita akan membahas keduanya,
+
+00:01:50.160 --> 00:01:52.820
+karena yang kedua adalah tempat Microsoft 365 dan Azure berperan.
+
+00:01:52.820 --> 00:01:55.000
+Cara kerja terowongan terengkripsi.
+
+00:01:55.460 --> 00:01:58.640
+Menyiapkan terowongan itu hanya membutuhkan beberapa langkah dan urutannya sangat penting.
+
+00:01:59.020 --> 00:02:01.140
+Aplikasi Anda menghubungi server dan kedua pihak,
+
+00:02:01.260 --> 00:02:02.680
+membuktikan identitas masing-masing.
+
+00:02:03.520 --> 00:02:05.400
+Kemudian mereka menyepakati kunci rahasia untuk sesi tersebut.
+
+00:02:05.740 --> 00:02:07.500
+Pertukaran kunci adalah bagian cerdiknya,
+
+00:02:07.620 --> 00:02:09.700
+karena kedua belah pihak mendapatkan rahasia yang sama,
+
+00:02:09.860 --> 00:02:11.520
+tanpa pernah mengirimkannya melalui koneksi.
+
+00:02:11.740 --> 00:02:16.120
+Cara kerjanya mirip seperti dua orang mencampur cat di ruangan terpisah dengan hanya menukar warna.
+
+00:02:16.720 --> 00:02:20.300
+Pada akhirnya mereka mendapatkan warna identik yang tidak bisa ditiru oleh siapapun yang menguping.
+
+00:02:20.300 --> 00:02:26.180
+Setelah terowongan terbuka, data asli Anda dikunci lalu dibungkus lapisan luar biasa yang hanya berisi tujuan pengiriman.
+
+00:02:26.940 --> 00:02:28.640
+Server VPN membuka lapisan luar itu,
+
+00:02:28.860 --> 00:02:29.840
+membuka kunci lapisan dalam,
+
+00:02:30.000 --> 00:02:31.520
+dan meneruskan permintaan Anda ke situs web,
+
+00:02:31.640 --> 00:02:33.000
+lalu balasannya kembali dengan cara yang sama.
+
+00:02:33.460 --> 00:02:37.200
+Aturan untuk semua ini disebut protokol dan empat nama mencakup sebagian besar yang akan Anda temui.
+
+00:02:38.220 --> 00:02:41.580
+Open VPN adalah pekerja keras sumber terbuka fleksibel yang sudah ada paling lama.
+
+00:02:42.160 --> 00:02:44.200
+WireGuard adalah yang lebih baru, cepat dan sederhana,
+
+00:02:44.420 --> 00:02:46.560
+dan inilah yang digunakan banyak orang tanpa mereka sadari.
+
+00:02:46.680 --> 00:02:49.480
+Di ponsel, eCave 2 menjaga koneksi tetap tersambung
+
+00:02:49.480 --> 00:02:50.960
+saat Anda beralih dari wifi ke seluler.
+
+00:02:51.520 --> 00:02:54.440
+PPTP adalah protokol lama yang harus dihindari karena dianggap tidak aman.
+
+00:02:55.060 --> 00:02:57.880
+Namanya terdengar teknis, padahal hanya resep berbeda untuk pekerjaan yang sama
+
+00:02:57.880 --> 00:03:00.060
+dan sebagian besar aplikasi memilihkan yang tepat untuk Anda.
+
+00:03:00.560 --> 00:03:02.500
+Di balik nama-nama itu terdapat pengacakan data
+
+00:03:02.500 --> 00:03:06.380
+dan layanan modern menggunakan sandi kuat seperti AS-256 atau CC20.
+
+00:03:07.140 --> 00:03:09.520
+WireGuard memperbarui kuncinya sekitar setiap 2 menit,
+
+00:03:09.860 --> 00:03:13.180
+yang membatasi seberapa banyak kunci tunggal bisa mengungkap data jika berhasil dicuri.
+
+00:03:13.180 --> 00:03:16.960
+Ada detail kecil yang sering luput dari perhatian, yaitu kebocoran DNS.
+
+00:03:17.360 --> 00:03:20.560
+Perangkat Anda harus mencari alamat setiap situs yang Anda kunjungi sebelum bisa mengaksesnya.
+
+00:03:21.640 --> 00:03:23.480
+Jika pencarian tersebut keluar dari terowongan,
+
+00:03:23.780 --> 00:03:27.260
+penyedia layanan Anda tetap tahu daftar situs yang Anda buka meskipun halamannya tetap teracak.
+
+00:03:28.340 --> 00:03:30.660
+VPN yang baik juga merupakan pencarian tersebut melalui terowongan.
+
+00:03:31.320 --> 00:03:32.420
+Satu hal lebih penting daripada yang lain,
+
+00:03:32.760 --> 00:03:34.300
+setiap terowongan berakhir di suatu tempat
+
+00:03:34.300 --> 00:03:37.320
+dan perusahaan pemilik ujung terowongan tersebut dapat melihat trafik Anda dengan jelas.
+
+00:03:37.320 --> 00:03:39.280
+Jadi VPN tidak menghilangkan pengintai,
+
+00:03:39.620 --> 00:03:41.660
+tetapi mengubah perusahaan mana yang menjadi pengintai.
+
+00:03:41.840 --> 00:03:44.580
+Dan pilihan tunggal itu menentukan apakah Anda mendapatkan manfaatnya.
+
+00:03:45.700 --> 00:03:47.460
+Momen di mana VPN benar-benar membantu.
+
+00:03:48.080 --> 00:03:51.160
+Keuntungan paling jelas adalah menyembunyikan daftar penusuran Anda dari penyedia internetan.
+
+00:03:51.520 --> 00:03:54.360
+Tanpa terowongan, penyedia Anda dapat melihat situs mana yang Anda hubungi
+
+00:03:54.360 --> 00:03:56.540
+dan VPN menghapus catatan itu dari layar mereka.
+
+00:03:56.840 --> 00:04:00.420
+Hal yang tidak dilakukan VPN adalah menyembunyikan situs tersebut dari perusahaan VPN itu sendiri.
+
+00:04:00.560 --> 00:04:02.140
+Dan itulah pertukaran yang Anda lakukan secara diam.
+
+00:04:02.280 --> 00:04:05.480
+Bayangkan seseorang dalam perjalanan bisnis membuka email pribadi di jaringan hotel.
+
+00:04:05.480 --> 00:04:08.220
+VPN tidak mengubah email itu sendiri,
+
+00:04:08.400 --> 00:04:12.700
+tetapi mencegah jaringan hotel membuat daftar rapi tentang setiap situs yang dikunjungi orang tersebut malam itu.
+
+00:04:14.080 --> 00:04:15.920
+Wifi adalah tempat kedua kegunaan yang terbukti,
+
+00:04:16.260 --> 00:04:19.300
+karena di jaringan hotel atau bandara Anda tidak tahu siapa saja yang sedang mengintip.
+
+00:04:19.900 --> 00:04:23.900
+VPN menjaga lalu lintas data Anda agar tidak terbaca oleh orang lain yang berbagi koneksi tersebut
+
+00:04:23.900 --> 00:04:26.280
+meski kenyataannya sebagian besar situs sudah menggunakan HTTPS.
+
+00:04:27.080 --> 00:04:29.080
+Ikon gembok di peramban Anda sudah bekerja dengan baik
+
+00:04:29.080 --> 00:04:31.220
+dan Google sedang mendorong seluruh web ke arah tersebut.
+
+00:04:31.220 --> 00:04:34.860
+Dengan Chrome 154 pada Oktober 2026,
+
+00:04:35.000 --> 00:04:38.240
+peramban ini diatur untuk selalu menggunakan koneksi aman secara bawaan.
+
+00:04:38.900 --> 00:04:40.620
+VPN memberikan privasi tambahan di atasnya,
+
+00:04:40.800 --> 00:04:42.300
+bukan sekadar menjadi satu-satunya kunci di pinta.
+
+00:04:43.200 --> 00:04:45.880
+Lokasi adalah kasus ketiga, dan inilah yang paling sering Anda dengar.
+
+00:04:46.480 --> 00:04:49.460
+Hubungkan ke server di negara lain dan situs web akan menganggap Anda berada di sana,
+
+00:04:49.600 --> 00:04:52.100
+itulah cara orang mengakses konten yang diblokir di tempat tinggal mereka.
+
+00:04:52.660 --> 00:04:55.580
+Rik itu berhasil, meskipun platform streaming besar pandai mendeteksinya
+
+00:04:55.580 --> 00:04:56.940
+dan terkadang menolak untuk memutar kont.
+
+00:04:56.940 --> 00:04:59.180
+Hal ini juga lebih penting di beberapa negara dibanding kerennya.
+
+00:04:59.380 --> 00:05:02.300
+VPN legal di banyak tempat, namun dibatasi atau dilarang di beberapa negara,
+
+00:05:02.460 --> 00:05:04.400
+dan menggunakannya di sana bisa membawa konsekuensi nyata.
+
+00:05:04.820 --> 00:05:06.640
+Kasus keempat adalah hal yang mungkin sudah Anda alami sehari-hari.
+
+00:05:07.460 --> 00:05:08.820
+Jika kantor Anda memberikan VPN,
+
+00:05:09.000 --> 00:05:12.040
+itu bukan untuk privasi melainkan sebagai terowongan ke dalam jaringan perusahaan sendiri.
+
+00:05:12.800 --> 00:05:14.580
+Itulah cara Anda membuka berbagai berkas internal
+
+00:05:14.580 --> 00:05:17.140
+atau aplikasi bisnis yang tidak pernah terhubung ke internet terbuka.
+
+00:05:17.640 --> 00:05:20.340
+Itu juga merupakan jalur yang terhubung langsung ke Microsoft di Kira Meribah.
+
+00:05:20.800 --> 00:05:22.300
+Perhatikan kesamaan dari keempat kasus ini,
+
+00:05:22.380 --> 00:05:24.380
+karena tidak satu pun di antaranya tentang menghilang dari internet.
+
+00:05:24.380 --> 00:05:28.220
+Masih-masih bertujuan untuk mencegah pihak tertentu melihat bagian tertentu dari lalu lintas data Anda.
+
+00:05:28.520 --> 00:05:31.680
+Masalah muncul ketika orang berharap keempat kasus tersebut mencakup segalanya
+
+00:05:31.680 --> 00:05:34.960
+karena daftar hal yang tidak bisa dilakukan VPN jauh lebih panjang dari yang diakui iklan.
+
+00:05:35.820 --> 00:05:36.840
+Apa yang tidak bisa dilakukan prib Anda?
+
+00:05:37.140 --> 00:05:38.720
+Sekarang mari kita lihat bagian yang tidak disebutkan.
+
+00:05:39.080 --> 00:05:42.680
+VPN adalah alat privasi, bukan cuba tembus pandang dan memang tidak pernah dirancang seperti itu.
+
+00:05:42.920 --> 00:05:46.140
+Saat Anda terhubung, lalu lintas data Anda tetap harus pergi ke suatu tempat
+
+00:05:46.140 --> 00:05:47.600
+dan penyedia VPN lah yang membawanya.
+
+00:05:47.960 --> 00:05:50.720
+Anda hanya mengubah siapa yang bisa melihat, yang memang membantu, tapi Anda tidak membuat diri.
+
+00:05:50.720 --> 00:05:55.520
+Oke, pikirkan apalagi yang mengidentifikasi Anda secara dari akun yang Anda masuki kartu yang Anda gunakan untuk membayar
+
+00:05:55.520 --> 00:05:58.200
+dan sirik jari digital perambahan Anda semuanya bisa mengarah kembali ke Anda.
+
+00:05:58.920 --> 00:06:01.020
+Tidak ada satu pun yang berubah hanya karena alamat IP Anda berubah.
+
+00:06:01.380 --> 00:06:04.760
+Jika seseorang bertekad melacak Anda, pertukaran alamat bukanlah penghalang bagi mereka.
+
+00:06:05.540 --> 00:06:07.700
+Ini juga tidak menghentikan hal-hal yang merugikan kebanyakan orang.
+
+00:06:08.200 --> 00:06:10.840
+VPN tidak bisa membersihkan malware yang sudah berjalan di laptop Anda
+
+00:06:10.840 --> 00:06:14.380
+dan tidak bisa menyelamatkan Anda dari halaman phishing meyakinkan tempat Anda masukkan kata sandi.
+
+00:06:14.380 --> 00:06:19.660
+Perusahaan keamanan berterus terang soal ini mengatakan bahwa VPN tidak melindungi dari ancaman yang melewati terowongan
+
+00:06:19.660 --> 00:06:21.580
+seperti melewat lokal atau situs phishing yang melipu.
+
+00:06:22.340 --> 00:06:27.380
+Hal ini perlu dikatakan dengan jelas karena rasa takut itu laris, padahal alat tersebut tidak benar-benar memberikan keamanan seperti itu.
+
+00:06:27.460 --> 00:06:30.540
+Yang bisa dilakukannya adalah membatasi siapa yang melihat lalu lintas Anda selama perjalanan
+
+00:06:30.540 --> 00:06:32.180
+yang merupakan jalan yang lebih kecil dan cukup masuk.
+
+00:06:32.280 --> 00:06:35.100
+Satu hal lagi yang tidak disembunyikannya adalah faktor bahwa Anda menggunakan alat VPN.
+
+00:06:35.100 --> 00:06:40.940
+Siapapun yang mengawasi jaringan seringkali dapat mengetahui lalu lintas Anda masuk ke dalam terowongan meskipun mereka tidak bisa membaca isinya.
+
+00:06:41.220 --> 00:06:46.700
+Cara yang berguna untuk memahami semua ini adalah dengan menganggap VPN melindungi perjalanan, bukan tujuan, bukan tujuan.
+
+00:06:47.380 --> 00:06:52.520
+Begitu lalu lintas Anda sampai situs yang Anda gunakan masih bisa melacak Anda dengan kuki dan akun Anda tetap tahu persis siapa Anda.
+
+00:06:53.100 --> 00:06:55.500
+Dan VPN tentu saja tidak menggantikan antivirus atau penilaian Anda.
+
+00:06:55.840 --> 00:07:01.320
+Jika Anda mengeklik tautan berbahaya dan memberikan login tidak ada terowongan di dunia akan menangkapnya untuk Anda karena terowongan hanya melindungi data saturnya.
+
+00:07:01.320 --> 00:07:06.260
+Versi berbayar pun lebih terbatas dari yang diiklankan yang membuat versi gratis perlu diteliti lebih dalam mengapa.
+
+00:07:06.740 --> 00:07:08.620
+Biasanya lebih merugikan daripada menguntungkan.
+
+00:07:09.360 --> 00:07:13.900
+Jika versi berbayar lebih terbatas dari janji iklannya, versi gratis layak mendapatkan kecurigaan yang lebih besar lag.
+
+00:07:14.500 --> 00:07:20.540
+Peneliti independen menginstall 100 VPN Android gratis terpopuler dan melakukan serangkaian pengujian dan hasilnya suram.
+
+00:07:21.180 --> 00:07:26.460
+Aplikasi-aplikasi tersebut tumbuh dari sekitar 260 juta pemasangan pada tahun 2018 menjadi lebih dari 2,5 miliar.
+
+00:07:26.720 --> 00:07:28.160
+Ini bukan bagian pinggiran dari toko aplikasi.
+
+00:07:28.160 --> 00:07:35.000
+88 diantaranya membocorkan data dalam beberapa bentuk dan 83 membocorkan permintaan DNS yang mengungkap situs mana yang ada kunjung.
+
+00:07:35.380 --> 00:07:39.400
+11 mengalami kegagalan enkripsi langsung yang berarti lalu lintas yang seharusnya diajak ternyata tidak.
+
+00:07:39.800 --> 00:07:43.040
+Lalu ada kesenjangan antara apa yang diklaim aplikasi tersebut dan apa yang sebenarnya mereka lakukan.
+
+00:07:43.440 --> 00:07:46.720
+71 dari 100 aplikasi membagikan data pribadi kepada pihak ketiga.
+
+00:07:47.000 --> 00:07:50.600
+Dan 93 memiliki label privasi yang tidak sesuai dengan kebijakan privasi mereka sendiri.
+
+00:07:51.060 --> 00:07:57.600
+Sekitar 1 dari 5 ditandai sebagai malware oleh pemindai antivirus dan lebih dari sepertiganya menggunakan enkripsi yang lebih lemah dari yang seharusnya.
+
+00:07:57.600 --> 00:07:59.020
+Alasannya kembali pada matematika dasar.
+
+00:07:59.420 --> 00:08:02.880
+Server dan bandwidth butuh biaya dan jika Anda tidak membayar sesuatu yang lain yang menanggung tagian.
+
+00:08:03.440 --> 00:08:08.000
+Pada sebagian besar VPN gratis, sesuatu itu adalah aktivitas penelusuran Anda yang dikemas dan dijual kepada siapapun yang menginginkan.
+
+00:08:08.360 --> 00:08:15.700
+Saat sebuah aplikasi berjanji tidak menyimpan log, Anda hanya bisa mempercayai kata-kata mereka dan ketidaksesuaian label di atas adalah alasan mengapa janji tersebut perlu dipertimbangkan ulang.
+
+00:08:16.420 --> 00:08:18.600
+Ini bukan aturan bahwa setiap opsi gratis adalah jebakan.
+
+00:08:18.600 --> 00:08:24.480
+Beberapa yang memang ada, tetapi ada konsekuensinya seperti batas data, kecepatan lebih lambat, atau daftar lokasi yang terbatas.
+
+00:08:24.740 --> 00:08:26.500
+Pelajaran di sini bukan untuk tidak pernah menggunakan yang gratis.
+
+00:08:26.580 --> 00:08:28.660
+Pelajaran utamanya adalah periksa siapa di baliknya sebelum Anda berhasil.
+
+00:08:29.000 --> 00:08:33.940
+Dan jika Anda mengira aplikasi gratis adalah satu-satunya masalah, VPN yang diberikan perusahaan Anda akan mengejutkan Anda.
+
+00:08:34.680 --> 00:08:36.600
+VPN kerja dan Microsoft 365.
+
+00:08:36.600 --> 00:08:40.680
+Ini adalah bagian yang mengejutkan orang-orang yang bekerja di dunia Microsoft setiap hari.
+
+00:08:41.260 --> 00:08:45.600
+VPN kerja tidak ada untuk privasi karena fungsinya untuk menempatkan Anda di dalam jaringan pribadi perusahaan.
+
+00:08:45.600 --> 00:08:50.720
+Selama bertahun-tahun, terowongan itu membawa hampir segalanya karena hampir semua hal tersimpan di server perusahaan.
+
+00:08:51.280 --> 00:08:53.560
+Kemudian pekerjaan berpindah ke cloud dan lalu lintas pun beruk.
+
+00:08:53.860 --> 00:08:57.300
+Dokumentasi Microsoft sendiri menjelaskan pergeseran tersebut dan angkanya sangat mencolok.
+
+00:08:57.760 --> 00:09:02.400
+Pelangan melaporkan bahwa lalu lintas yang dulunya sekitar 80% terlalu turun menjadi 20% atau kurang.
+
+00:09:02.720 --> 00:09:05.300
+Lebih dari 80% lalu lintas kini mengarah klienan cloud.
+
+00:09:06.460 --> 00:09:08.900
+Moda lama tetap memaksa semua itu melalui VPN.
+
+00:09:09.100 --> 00:09:11.880
+Itulah sebabnya panggilan tims tersendat dan halaman SharePoint melambat.
+
+00:09:11.880 --> 00:09:15.680
+Jadi panduan Microsoft sekarang mengatakan kebalikan dari yang Anda duga.
+
+00:09:16.220 --> 00:09:20.500
+Arahkan lalu lintas Microsoft 365 yang berat langsung ke Microsoft, bukan melalui VPN.
+
+00:09:21.100 --> 00:09:27.340
+Itu memungkinkan tim SharePoint dan Exchange Online terhubung sendiri sementara terowongan tetap dikhususkan untuk lalu lintas yang benar-benar membutuhkannya.
+
+00:09:28.500 --> 00:09:32.520
+Pendekatan itu disebut split tunneling dan ini adalah solusi tunggal terbaik untuk VPN kerja yang lama.
+
+00:09:32.660 --> 00:09:38.780
+Lalu lintas yang ingin diarahkan langsung oleh Microsoft adalah sekumpulan titik akhir yang kecil dan terdefinisi dengan ketat dan angka-angkanya menjelaskan mengapa hal itu.
+
+00:09:38.780 --> 00:09:45.740
+Titik akhir tersebut saat ini berjumlah sekitar 20 subnet IP, namun membawa sekitar 70 hingga 80 persen volume melalui lintas Microsoft 365.
+
+00:09:46.700 --> 00:09:51.880
+Mengirimnya secara langsung akan membebaskan terowongan untuk yang lain, dan Microsoft mengatakan perubahan itu bisa dilakukan dalam hitungan jam.
+
+00:09:52.240 --> 00:09:54.400
+Dua detail praktis layak untuk Anda simpan sebagai catatan.
+
+00:09:55.160 --> 00:09:58.760
+Microsoft merekomendasikan konfigurasi ini berdasarkan rentang IP daripada alamat web,
+
+00:09:58.760 --> 00:10:01.800
+karena pendekatan berbasis alamat bisa melewatkan skenario penting.
+
+00:10:02.540 --> 00:10:08.060
+Dan saran tersebut memiliki satu pengecualian jelas karena tidak berlaku bagi pengguna di Tiongkok pada layanan global akibat kemacetan lintas batas.
+
+00:10:08.060 --> 00:10:12.360
+Ada cara sederhana untuk menggambarkan perbaikannya meskipun Anda tidak pernah menyentuh pengaturannya sendiri.
+
+00:10:12.760 --> 00:10:20.020
+Anggap VPN sebagai jalan layanan sempit yang berguna untuk mencapai gedung pribadi perusahaan dan rute yang buruk untuk jalan raya umum yang sibuk seperti Microsoft 365.
+
+00:10:21.300 --> 00:10:24.040
+Tunneling hanya menjaga setiap jenis lalu lintas di jalur yang semestinya.
+
+00:10:24.500 --> 00:10:27.860
+Hal yang menenangkan bagi siapapun yang khawatir akan keaman adalah tidak ada yang dikorbankan di sini.
+
+00:10:28.640 --> 00:10:37.780
+Pemeriksaan keamanan yang dianggap hanya ada di jaringan seperti pencegahan, kehilangan data, antivirus, autentikasi multifaktor, dan kontrol akses sudah terpasang di dalam Microsoft 365 itu sendiri.
+
+00:10:38.520 --> 00:10:41.360
+Itulah alasan mengapa Microsoft merasa nyaman membiarkan lalu lintas tersebut melewat itu.
+
+00:10:41.680 --> 00:10:47.320
+Sekarang setelah Microsoft menarangkan orang untuk tidak menggunakan VPN, pertanyaan berikutnya adalah apa yang sebenarnya ditawarkan Azure saat Anda benar-benar membutuhkan it.
+
+00:10:47.320 --> 00:10:50.460
+Alat VPN Azure dalam bahasa sederhana
+
+00:10:50.460 --> 00:10:57.840
+Jika VPN kerja, menghubungkan Anda ke jaringan perusahaan, Azure VPN Gateway memiliki konsep yang sama di mana jaringannya berada di cloud Microsoft.
+
+00:10:58.540 --> 00:11:03.240
+Ini mengirimkan lalu lintas terenkripsi antara jaringan virtual Azure dan lokasi on-premise Anda melalui internet publik.
+
+00:11:03.340 --> 00:11:07.260
+Ini juga dapat menghubungkan jaringan Azure satu sama lain melalui jaringan milik Microsoft sendiri.
+
+00:11:07.720 --> 00:11:09.280
+Anda akan paling sering mendengar dua bentuk utama.
+
+00:11:09.840 --> 00:11:15.980
+Satu site menghubungkan seluruh kantor atau pusat data ke Azure menggunakan tunnel terenkripsi antara gateway dan perangkat VPN di sisi Anda.
+
+00:11:15.980 --> 00:11:23.280
+Point to site adalah yang menyerupai VPN pekerja jarak jauh klasik karena memungkinkan satu laptop terhubung ke Azure dari rumah atau hotel.
+
+00:11:24.220 --> 00:11:30.920
+Microsoft juga mendukung bentuk ketiga yang menghubungkan dua jaringan virtual Azure secara langsung yang berguna saat layanan di dalamnya perlu saling berkomunikasi.
+
+00:11:31.920 --> 00:11:33.580
+Sekalanya patut dijelaskan dengan istilah sederha.
+
+00:11:33.940 --> 00:11:36.240
+Gateway terkecil memiliki tolak ukur sekitar 100 Mbps.
+
+00:11:36.760 --> 00:11:43.260
+Yang terbesar dengan rendansi zona mencapai hingga 10 Mbps dan dapat menampung hingga 10 ribu koneksi Point to Site.
+
+00:11:43.260 --> 00:11:49.900
+Gateway juga dapat disebar di seluruh zona ketersediaan Azure sehingga kegagalan di satu zona tidak akan memutus konektivitas Anda.
+
+00:11:50.860 --> 00:11:53.400
+Ada pengaturan yang lebih cerdas daripada mengandalkan tunnel untuk segala.
+
+00:11:53.980 --> 00:12:02.200
+Azure VPN Gateway dapat berfungsi sebagai jalur cadangan untuk express route, koneksi khusus pribadi Microsoft yang mengubah tunnel terenkripsi menjadi jaring pengaman alih-alih jalur utama.
+
+00:12:02.900 --> 00:12:05.260
+Sebuah bisnis melakukan semua ini karena alasan sederhana.
+
+00:12:05.700 --> 00:12:08.380
+Perusahaan mungkin menyimpan database di Azure yang hanya boleh diakses oleh aplikasi.
+
+00:12:08.920 --> 00:12:13.200
+Gateway memberikan jalur pribadi bagi aplikasi tersebut tanpa mengekspos database itu ke internet terbuka.
+
+00:12:13.960 --> 00:12:19.680
+Bagi orang yang bekerja dari meja dapur, Point to Site adalah hal yang mengubah laptop menjadi tamu terpercaya di jaringan cloud perusahaan.
+
+00:12:20.820 --> 00:12:27.480
+Dan karena Gateway berada di cloud Microsoft bukan di lemari di lorong, Gateway dapat disiapkan dalam hitungan menit dan diturunkan skalanya saat kesibukan berlalu.
+
+00:12:28.220 --> 00:12:30.320
+Model biaya yang cukup sederhana untuk disebutkan dalam satu terdekat.
+
+00:12:30.820 --> 00:12:34.320
+Anda membayar tarif per jam untuk Gateway itu sendiri ditambah biaya untuk data yang keluar darinya.
+
+00:12:34.320 --> 00:12:43.640
+Ada satu pengecualian yang menguntungkan karena lalu lintas antara jaringan virtual di wilayah yang sama-sama sekali tidak dikenai biaya data dan dasar dari semua ini terus berubah karena alat-alatnya mulai berubah bentuk.
+
+00:12:44.740 --> 00:12:46.060
+Pergeseran diam-diam yang menjauhi VPN.
+
+00:12:46.580 --> 00:12:51.580
+Perusahaan yang menjual alat VPN kepada Anda kini mengatakan bahwa Anda tidak akan terlalu membutuhkannya dan ketegangan itu patut direnungkan.
+
+00:12:51.580 --> 00:12:58.020
+Microsoft memasarkan intra-private access sebagai alternatif terbaik untuk VPN dan itu menunjukkan kemana arah akses nantinya.
+
+00:12:58.840 --> 00:13:00.880
+Perbedaannya paling mudah dilihat sebagai masalah cakupan.
+
+00:13:01.420 --> 00:13:06.880
+VPN tradisional biasanya memberikan akses luas begitu Anda berada di dalam terowongan jadi satu login bisa membuka banyak pintu sekaligus.
+
+00:13:07.600 --> 00:13:13.000
+Model berbasis identitas yang lebih baru memeriksa siapa Anda dan perangkat apa yang Anda gunakan lalu hanya memberikan aplikasi spesifik yang Anda miliki.
+
+00:13:13.140 --> 00:13:17.020
+Itu jauh lebih ketat cara desain dan itulah mengapa Microsoft menyebutnya lebih granular daripada VPN.
+
+00:13:17.020 --> 00:13:22.760
+Nama payung untuk semuanya adalah Global Secure Access yang mencakup akses internet dan akses aplikasi pribadi.
+
+00:13:23.300 --> 00:13:29.380
+Layanan ini berjalan di jaringan yang mencakup 70 wilayah dan lebih dari 190 lokasi edge sehingga layanan ini jarang jauh dari pengguna.
+
+00:13:29.880 --> 00:13:35.380
+Pergeseran itu penting bagi cara Anda berpikir tentang keamanan karena terowongan yang mungkin Anda menjangkau segalanya juga merupakan terowongan yang mungkin banyak.
+
+00:13:35.500 --> 00:13:40.940
+Akses per aplikasi yang terbatas memperkecil permukaan serangan itu dan melakukannya tanpa meminta pengguna memahami jaringan.
+
+00:13:41.300 --> 00:13:45.280
+Ini adalah perubahan yang lebih senyap daripada aplikasi baru tetapi menurut ulang apa arti jaringan bro sendiri.
+
+00:13:45.280 --> 00:13:49.160
+Kendalanya adalah ini merupakan arah berlisensi bukan saklar yang bisa Anda belikan dalam smart.
+
+00:13:49.860 --> 00:13:54.260
+Entra Private Access memerlukan lisensi Entra ID P1 atau P2 atau paket Entra dan dijual perpengguna.
+
+00:13:54.880 --> 00:14:04.720
+Jadi VPN tidak akan hilang besok tetapi arah perjalanannya jelas dan mengarah ke identitas bukan terowongan dan arah itu layak diperhatikan karena mengubah fungsi VPN di meja Anda.
+
+00:14:05.780 --> 00:14:07.660
+Kesalahan batasan dan satu pertanyaan untuk Anda.
+
+00:14:08.160 --> 00:14:09.060
+Jadi mari kita rangkum semuanya.
+
+00:14:09.600 --> 00:14:14.400
+VPN adalah terowongan terenkripsi yang menyembunyikan alamat Anda dan mencegah penyedia layanan Anda melihat situs yang Anda buka.
+
+00:14:14.400 --> 00:14:15.600
+Itulah cakupan sejudut.
+
+00:14:16.140 --> 00:14:21.260
+Itu bukan jubah ajaib dan dalam dunia Microsoft VPN semakin menjadi sesuatu yang Anda lewati bukan sesuatu untuk bersembunyi di balik.
+
+00:14:21.580 --> 00:14:24.060
+Kabar baiknya adalah tidak ada dari semua ini yang menentu Anda menjadi tech.
+
+00:14:24.500 --> 00:14:27.460
+Anda hanya perlu tahu untuk apa terowongan itu dan apa fungsi yang sebenarnya tidak dimiliki.
+
+00:14:28.000 --> 00:14:31.880
+Setelah itu dipahami iklan tidak akan lagi memengaruhi Anda dan pengaturannya masuk akal.
+
+00:14:32.420 --> 00:14:34.160
+Kesalahan-kesalahan terus terulang dengan cara yang itu saja.
+
+00:14:34.680 --> 00:14:39.020
+Orang mengandalkan VPN sebagai anonimitas padahal yang sebenarnya dilakukannya hanyalah memindahkan siapa yang bisa mengawasi.
+
+00:14:39.020 --> 00:14:42.240
+Mereka mempercayai layanan gratis tambah bertanya siapa pengelolahannya dan bagaimana cara mereka.
+
+00:14:42.480 --> 00:14:48.500
+Lalu mereka memaksa setiap update pekerjaan Microsoft 365 mereka melalui terowongan kemudian menyalakan Microsoft atas panggilan Teams yang tersendat.
+
+00:14:49.180 --> 00:14:52.380
+Batasan-batasan ini perlu dibahas lagi karena lebih penting daripada daftar fiturnya.
+
+00:14:52.820 --> 00:14:57.200
+VPN tidak akan menghentikan malware dan tidak akan menyelamatkan Anda jika Anda memberikan kata sandi ke halaman login palsu.
+
+00:14:57.400 --> 00:14:58.560
+Jadi izinkan saya meninggalkan satu anak.
+
+00:14:58.900 --> 00:15:03.640
+Jika Anda memeriksa sekarang apakah Anda tahu siapa yang menjalankan VPN di ponsel Anda atau apa yang mereka lakukan dengan tanpa lintas data Anda?
+
+00:15:03.760 --> 00:15:05.500
+Beritahu saya di kolom komentar karena saya membaca semuanya.
+
+00:15:05.500 --> 00:15:35.480
+Terima kasih telah menonton!

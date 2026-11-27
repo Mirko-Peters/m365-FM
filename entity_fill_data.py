@@ -46,6 +46,17 @@ def load_gentext():
     return g
 
 
+def load_sources():
+    """Belegte Quellen je Entitaet (data/entity_sources/*.json, von Hand/Agenten gesammelt): {id: {url, title, notes}}. notes = Fakten in eigenen Worten
+    (Quelle fuer den Langtext-Modus von fill_entities), url/title erscheinen im Abschnitt Quellen der Entitaetsseite. Eintraege ohne Quelle (null) fehlen."""
+    out = {}
+    for f in sorted((ROOT / "data" / "entity_sources").glob("*.json")):
+        for k, v in _load(f).items():
+            if isinstance(v, dict) and str(v.get("url", "")).startswith("https://") and (v.get("title") or "").strip():
+                out[k] = {"url": v["url"].strip(), "title": v["title"].strip(), "notes": (v.get("notes") or "").strip()}
+    return out
+
+
 def sponsored_ids():
     ids = set()
     for x in (_load(ROOT / "data" / "sponsorships.json").get("sponsorships") or []):
@@ -93,6 +104,15 @@ def _rec(eid, lang):
     return (EN if lang == "en" else I18N.get(lang, {})).get(eid) or {}
 
 
+LONG_MIN = 2500   # wie site_entities.LONG_INDEX_MIN: ab hier zaehlt ein Langtext als "lang genug" fuer den Index
+
+
+def prefer_ai(own, ai):
+    """True, wenn der KI-Langtext (ai) einen kuerzeren Ueberblickstext (own, GENTEXT) ersetzt: nur wenn ai die Schwelle LONG_MIN erreicht und own nicht.
+    Redaktionelle Texte (e["long"]) sind nie betroffen; ein GENTEXT ab LONG_MIN bleibt."""
+    return bool((ai or "").strip()) and len(ai.strip()) >= LONG_MIN and len((own or "").strip()) < LONG_MIN
+
+
 def effective_en(e, gen=None, fill=None):
     """Englischer Quelltext der Uebersetzungen: redaktionell > GENTEXT > KI-Text. -> {desc?, long?, faq?}"""
     gen = GEN if gen is None else gen; fill = EN if fill is None else fill
@@ -100,7 +120,8 @@ def effective_en(e, gen=None, fill=None):
     src = {}
     desc = d if len(d) >= SHORT_DESC else (fe.get("desc") or d)
     if desc: src["desc"] = desc
-    long = (e.get("long") or {}).get("en") or (gen.get(eid) or {}).get("en") or fe.get("long") or ""
+    g_en = (gen.get(eid) or {}).get("en") or ""
+    long = (e.get("long") or {}).get("en") or ((fe.get("long") if prefer_ai(g_en, fe.get("long")) else "") or g_en or fe.get("long")) or ""
     if long: src["long"] = long
     if fe.get("faq"): src["faq"] = fe["faq"]
     return src

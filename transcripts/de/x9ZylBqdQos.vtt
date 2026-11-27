@@ -1,0 +1,604 @@
+WEBVTT
+
+00:00:00.470 --> 00:00:05.650
+Willkommen beim M35560FM Podcast, wo wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.550 --> 00:00:11.730
+Azure betreibt mehr als 70 Regionen und jede, die Zonen unterstützt, verbirgt mindestens drei separate Gebäude darin.
+
+00:00:12.570 --> 00:00:16.490
+Die meisten von uns gehen davon aus, dass eine App in der Cloud immer läuft, egal was passiert, aber so funktioniert es nicht.
+
+00:00:17.630 --> 00:00:23.330
+Willkommen beim M35560FM Podcast, wo wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:24.130 --> 00:00:28.490
+Heute erklären wir Azure-Verfügbarkeitszonen für absolute Anfänger in einfachen Worten.
+
+00:00:28.490 --> 00:00:34.590
+Am Ende werden Sie wissen, wie Zonen, Verfügbarkeitsgruppen und Regionspaare zusammenpassen und warum Betriebszeit eine Designentscheidung ist.
+
+00:00:35.550 --> 00:00:40.490
+Regionen, das große Ganze. Beginnen wir mit dem einfachsten Teil, denn alles andere in dieser Folge basiert darauf.
+
+00:00:41.210 --> 00:00:46.850
+Eine Azure-Region ist eine Gruppe von Rechenzentren, die durch schnelle private Netzwerkverbindungen verbunden sind und meist in einem Großstadtgebiet liegen.
+
+00:00:47.490 --> 00:00:49.650
+Microsoft hat weltweit mehr als 70 dieser Regionen.
+
+00:00:50.370 --> 00:00:55.170
+Jeder liegt innerhalb einer Geografie, die im Grunde nur eine Grenze für die Datenresigenz darstellt, wie etwa die USA oder Europa.
+
+00:00:55.170 --> 00:00:58.830
+Die Wahl einer Region entscheidet über zwei Dinge gleichzeitig und beide sind wichtig.
+
+00:00:59.470 --> 00:01:01.470
+Sie bestimmt, wie nah Sie eine Person sind, die Ihre App nutzen.
+
+00:01:02.410 --> 00:01:06.190
+Entfernung erzeugt Verzögerung und Verzögerung lässt eine App für den Anwender träge wirken.
+
+00:01:07.110 --> 00:01:10.150
+Sie entscheidet auch darüber, ob Ihre Daten an diesem Ort überhaupt gespeichert werden dürfen.
+
+00:01:10.670 --> 00:01:15.690
+Viele Organisationen haben strenge Regeln für den Speicherort von Kundendaten und einige Regionen existieren nur, um diese Regeln zu erfüllen.
+
+00:01:15.690 --> 00:01:21.610
+Stellen Sie sich die Region als Stadt und die Geografie als das Land vor, zu dem die Stadt gehört, um es einfach zu halten.
+
+00:01:22.730 --> 00:01:26.790
+Der Standort bringt Ihnen die Schwindigkeit und Compliance, beides ist für ein unternehmbares Geld wert.
+
+00:01:27.910 --> 00:01:30.610
+Jede Geografie verfügt über mindestens eine Region, die Zone anbietet.
+
+00:01:31.130 --> 00:01:34.210
+Das bedeutet, dass es fast immer einen Weg gibt, diesen Schutz in der Nähe Ihrer Nutzer zu erhalten.
+
+00:01:35.170 --> 00:01:38.430
+Was der Standort jedoch nicht tut, ist, den Betrieb aufrechtzuerhalten, wenn etwas darin ausfällt.
+
+00:01:39.230 --> 00:01:41.030
+Genau diese Lücke füllt der Rest dieser Folge.
+
+00:01:41.030 --> 00:01:49.250
+Wenn also jemand fragt, welche Region man wählen soll, ist die ehrliche Antwort, es hängt von Ihren Nutzern, Datenrichtlinien und den Funktionen der Region ab.
+
+00:01:49.790 --> 00:01:52.070
+Wenn diese drei Punkte stimmen, wird der Rest Ihres Designs einfacher.
+
+00:01:52.550 --> 00:01:54.450
+Sie haben bereits den Boden ausgewählt, auf dem Sie aufbauen will.
+
+00:01:55.330 --> 00:01:57.030
+Innerhalb einer Region Verfügbarkeitszonen
+
+00:01:57.030 --> 00:02:02.270
+Eine Region ist kein einzelnes riesiges Gebäude und aus dieser Tatsache heraus entstanden Verfügbarkeitszonen.
+
+00:02:02.750 --> 00:02:07.070
+Azure nimmt eine Region und teilt sie in separate Gruppen von Rechenzentren auf, die als Verfügbarkeitszonen bezeichnet werden.
+
+00:02:07.270 --> 00:02:10.550
+Jede Zone verfügt über eine eigene Stromversorgung, eigene Kühlung und ein eigenes Netzwerk.
+
+00:02:11.030 --> 00:02:15.010
+Fällt in einer Zone der Strom aus, laufen die anderen weiter, da sie keine kritischen Ressourcen teilen.
+
+00:02:15.830 --> 00:02:17.990
+Der Abstand zwischen den Zonen wird sehr sorgfältig gewählt.
+
+00:02:18.750 --> 00:02:22.430
+Sie liegen meist einige Kilometer und fast immer im Umkreis von etwa 100 Kilometern voneinander entfernt.
+
+00:02:22.910 --> 00:02:28.630
+Das ist nah genug für schnelle Kommunikation und weit genug, damit ein Sturm oder lokaler Ausfall kaum beide gleichzeitig trifft.
+
+00:02:29.410 --> 00:02:34.310
+Microsoft strebt eine Netzwerklatenz von unter zwei Millisekunden zwischen den Zonen an und dieser Wert ist wichtig.
+
+00:02:34.310 --> 00:02:39.850
+So können sie Datenkopien zonenübergreifend synchron halten, ohne dass ihre Nutzer den Aufwand bemerken.
+
+00:02:40.470 --> 00:02:44.490
+Die meisten Regionen mit Zonenunterstützung bieten drei davon, einige wenige wie East USY sogar vier.
+
+00:02:45.130 --> 00:02:49.230
+Drei Zonen sind ideal, da bei Ausfall einer Zone zwei weitere für die Synchronisation ihrer Kopien bleiben.
+
+00:02:50.110 --> 00:02:54.570
+Azure verteilt auch eigene Wartungsarbeiten auf die Zonen und aktualisiert nach Möglichkeit eine Zone nach der anderen.
+
+00:02:55.110 --> 00:02:58.190
+Ihre Arbeitslast läuft in anderen Zonen weiter, während eine einzelne Zone gewartet wird.
+
+00:02:58.190 --> 00:03:00.630
+Es gibt ein Detail, das fast jeden überrascht.
+
+00:03:01.530 --> 00:03:03.190
+Ihre Zone 1 ist nicht unbedingt meine Zone 1.
+
+00:03:03.950 --> 00:03:09.350
+Azure ordnet physische Zonen logischen Zonen pro Abonnement zu, was zu unterschiedlichen Zuordnungen führen kann, kann.
+
+00:03:09.990 --> 00:03:11.830
+Die Zonennummern, die Sie sehen, sind für Ihr Konto individuell.
+
+00:03:12.270 --> 00:03:17.650
+Zwei Personen in derselben Region können Ressourcen in Zone 1 platzieren und in völlig unterschiedlichen Gebäuden landen, landen.
+
+00:03:18.010 --> 00:03:21.530
+Gehen Sie deshalb nie davon aus, dass zwei Bereitstellungen nebeneinander liegen, nur weil die Nummern übereinstimmt.
+
+00:03:21.530 --> 00:03:28.350
+Diese drei Gebäude bilden auch die Grundlage für die bekannten Verfügbarkeitsversprechen, die wir in wenigen Minuten erläutern, erläutern.
+
+00:03:29.050 --> 00:03:30.670
+Warum reicht ein einzelnes Rechenzentrum nicht aus?
+
+00:03:31.210 --> 00:03:34.770
+Ein einzelnes Rechenzentrum ist ein Single Point of Failure, genau das Problem, das Zonen lösen sollen.
+
+00:03:35.470 --> 00:03:39.410
+Alles in einem Gebäude teilt sich dieselbe Stromversorgung, Kühlung und Netzwerkausrüstung.
+
+00:03:39.810 --> 00:03:41.690
+Ein einziges Ereignis kann alles gleichzeitig lahmlegen.
+
+00:03:42.170 --> 00:03:46.550
+Die Aufteilung einer Region in Zonen beseitigt diese gemeinsame Abhängigkeit, das ist das gesamte Konzept in einem Satz.
+
+00:03:47.310 --> 00:03:51.650
+Eine Region mit drei Zonen ist so konzipiert, dass der Ausfall einer Zone die anderen nicht mit in den Abgrund zieht.
+
+00:03:52.290 --> 00:03:56.650
+Dieses Design entscheidet für die Nutzer über eine kleine Unannehmlichkeit oder einen vollständigen Ausfall.
+
+00:03:57.010 --> 00:03:59.490
+Zonen schützen vor mehr als nur dem Ausfall eines kompletten Gebäudes.
+
+00:03:59.890 --> 00:04:03.890
+Sie fangen auch kleinere Fehler ab, wie etwa den Ausfall eines Server-Racks oder Clusters innerhalb einer Zone.
+
+00:04:04.090 --> 00:04:09.510
+In diesen Fällen bedient der Rest ihrer App weiterhin Anfragen aus den intakten Zonen, während der beschädigte Teil nur noch eingeschränkt läuft.
+
+00:04:09.930 --> 00:04:14.850
+Das ist ein großer Vorteil, der weitaus häufiger eintritt als ein dramatischer Ausfall, weshalb man ihn leicht unterschätzt.
+
+00:04:14.850 --> 00:04:19.550
+Man neigt dazu anzunehmen, dass die Zonen einen standardmäßig schützen und genau diese Annahme ist die Falle.
+
+00:04:20.530 --> 00:04:24.910
+Allein das Vorhandensein von Zonen in ihrer Region schützt sie nicht, da schon ihre Ressourcen nicht automatisch über diese verteilt.
+
+00:04:26.190 --> 00:04:31.550
+Standardmäßig landen einige Ressourcen in einer Zone und bleiben dort, was bedeutet, dass ein einzelner Zonenausfall ihre App offline nehmen kann.
+
+00:04:32.350 --> 00:04:34.710
+Die Zonen waren die ganze Zeit verfügbar und niemand hat sie genutzt.
+
+00:04:35.190 --> 00:04:39.670
+Darüber hinaus decken Zonen keinen vollständigen Regionsausfall ab und schützen sie nicht vor Fehlern in ihrem eigenen Code.
+
+00:04:39.670 --> 00:04:43.110
+Sie lösen ein Problem gut, statt jedes Problem auf einmal zu beheben.
+
+00:04:43.750 --> 00:04:49.170
+Das wirft einen praktischen Punkt auf, da Zonen nur in einigen Regionen existieren und viele Workloads dort laufen, wo es sie nicht gibt.
+
+00:04:50.350 --> 00:04:51.510
+Verfügbarkeitsgruppen das ältere Werkzeug.
+
+00:04:52.070 --> 00:04:56.250
+Bevor Zonen verbreitet waren, hatte Azure eine andere Antwort auf das selbe Problem und die gibt es heute noch.
+
+00:04:57.350 --> 00:05:03.450
+Eine Verfügbarkeitsgruppe ist eine logische Gruppierung virtueller Maschinen in einem Rechenzentrum, die so angeordnet sind, dass sie nicht gemeinsam ausfallen.
+
+00:05:04.390 --> 00:05:07.590
+Azure weist jeder Maschine in der Gruppe eine Fehlerdomäne und eine Update-Domäne zu.
+
+00:05:07.590 --> 00:05:11.690
+Eine Fehlerdomäne besteht aus Servern, die sich eine Stromquelle und ein Netzwerkswitch teilen.
+
+00:05:12.050 --> 00:05:13.890
+Eine Gruppe kann sich über bis zu drei davon erstrecken.
+
+00:05:14.490 --> 00:05:19.730
+Eine Update-Domäne ist eine Gruppe, die bei Wartungsarbeiten gemeinsam neu gestartet wird und eine Gruppe kann bis zu 20 davon enthalten.
+
+00:05:20.530 --> 00:05:21.470
+Die Logik ist recht einfach.
+
+00:05:21.990 --> 00:05:27.710
+Wenn eine Fehlerdomäne oder eine Update-Domäne ausfällt, bedienen die anderen Maschinen weiterhin Anfragen, während der Rest der Gruppe unberührt bleibt.
+
+00:05:27.950 --> 00:05:34.730
+Der Vorteil hierbei ist das schriftliche Versprechen von 99% Verfügbarkeit, wenn sie zwei oder mehr virtuelle Maschinen in einer Verfügbarkeitsgruppe betreiben.
+
+00:05:35.210 --> 00:05:36.690
+Die Gruppe selbst kostet keinen Aufpreis.
+
+00:05:36.690 --> 00:05:38.490
+Sie zahlen für die Maschine, nicht für die Gruppierung.
+
+00:05:39.070 --> 00:05:44.210
+Der Kompromiss ist, dass Maschinen in einer Gruppe nah beieinander liegen und daher schneller kommunizieren, als Maschinen, die über Zonen verteilt sind L.
+
+00:05:44.850 --> 00:05:47.750
+Diese Geschwindigkeit hilft sehr bei kommunikationsintensiven Workloads, die ständig starten.
+
+00:05:47.910 --> 00:05:49.310
+Der Haken ist jedoch ebenso real.
+
+00:05:49.730 --> 00:05:55.430
+Ein Ausfall auf Ebene des Rechenzentrums wie ein Netzwerkausfall für das gesamte Gebäude kann immer noch alle Maschinen in der Gruppe gleichzeitig lahmlegen.
+
+00:05:55.890 --> 00:05:57.470
+Ein kurzes Beispiel macht das Ganze verständlich.
+
+00:05:57.830 --> 00:06:00.190
+Stellen Sie sich also zwei Web-Server in einer Verfügbarkeitsgruppe vor.
+
+00:06:00.630 --> 00:06:04.990
+Azure platziert sie in unterschiedlichen Fehlerdomänen, sodass ein Stromproblem an einem Racks die andere Maschine nicht beinträchtigt.
+
+00:06:04.990 --> 00:06:07.350
+Ihre Website antwortet weiter, während sich die erste Maschine auch.
+
+00:06:08.170 --> 00:06:12.110
+Für ein klares Bild, ein Set ist das Rack-Layout in einem Gebäude, während eine Zone ein komplett separates Gebäude.
+
+00:06:12.210 --> 00:06:14.370
+Weiter die Straße runter ist, weiter die Straße unten.
+
+00:06:14.690 --> 00:06:17.230
+Sets sind immer noch die richtige Antwort an Regionen, die gar keine Zonen anbieten.
+
+00:06:17.810 --> 00:06:20.530
+Das ist ein Detail, das Anfänger oft übersehen, wenn sie annehmen, Sets seien veraltet.
+
+00:06:21.530 --> 00:06:26.770
+Für die erste App gilt, Sets sind das ältere, günstigere Werkzeug und Zonen sind die stärkere Wahl, sofern ihre Region sie anbietet.
+
+00:06:27.730 --> 00:06:29.410
+Zonal versus Zone und redundante Dienste.
+
+00:06:29.410 --> 00:06:34.790
+Diese nächste Unterscheidung entscheidet darüber, ob ihre App einen Ausfall überlebt und sie sorgt bei vielen für die größte Verwirrung.
+
+00:06:35.430 --> 00:06:38.750
+Wenn Sie einen Azure-Dienst nutzen, kann dieser zonenredundant oder zonal sein.
+
+00:06:39.030 --> 00:06:41.670
+Und diese Begriffe bedeuten sehr unterschiedliche Dinge für den Arbeitsaufwand.
+
+00:06:42.230 --> 00:06:45.390
+Ein zonenredundanter Dienst verteilt Ihre Ressource automatisch für Sie auf mehrere Zonen.
+
+00:06:45.930 --> 00:06:51.430
+Azure kopiert die Daten oder verteilt die Arbeitslast, überwacht die Zonen und führt automatisch ein Failover aus, falls eine Zone ausfällt.
+
+00:06:51.910 --> 00:06:53.850
+Sie erhalten die Ausfallsicherheit, ohne sie selbst aufbauen zu müssen.
+
+00:06:53.850 --> 00:06:56.830
+Deshalb greifen die meisten Leute zuerst zur zonenredundanten Optionen.
+
+00:06:56.870 --> 00:07:02.750
+Stellen Sie sich einen Speicher vor, der Ihre Dateien in mehreren Zonen gleichzeitig hält, sodass ein Ausfall an einer Zone die Kopie, die Ihre Benutzer lesen, nie beeinträchtigt.
+
+00:07:02.990 --> 00:07:04.730
+Ein zonaler Dienst funktioniert genau umgekehrt.
+
+00:07:05.090 --> 00:07:07.610
+Sie wählen eine Zone aus und Ihre Ressource lebt dort und nur dort.
+
+00:07:08.190 --> 00:07:13.050
+Sie ist vollständig von Fehlern in anderen Zonen isoliert und kann die schnellste Wahl für sehr kommunikative Workloads sein.
+
+00:07:13.790 --> 00:07:16.310
+Sie überlebt den Verlust Ihrer Zone nicht, es sei denn, Sie bauen diesen Schutz selbst.
+
+00:07:16.770 --> 00:07:21.330
+Eine einzelne virtuelle Maschine oder eine öffentliche IP-Adresse sind gute Beispiele, da Sie genau dort leben, wo Sie sie platzieren.
+
+00:07:21.330 --> 00:07:25.310
+Wenn diese Zone ausfällt, geht die Ressource mit ihr unter und Sie müssen sie selbst verschieben.
+
+00:07:25.770 --> 00:07:27.270
+Es gibt noch eine dritte Kategorie, die man kennen soll.
+
+00:07:27.670 --> 00:07:32.530
+Einige Ressourcen sind regional, was bedeutet, dass Azure Sie platziert, wo es will und Sie kein Mitspracherecht bei der Zone haben.
+
+00:07:32.790 --> 00:07:37.650
+Diese können in jeder beliebigen Zone der Region liegen, sodass ein Ausfall in der Zone, in der Sie sich gerade befinden, Sie überraschen kann.
+
+00:07:38.690 --> 00:07:41.590
+Genau deshalb ist es hilfreich zu wissen, welche Ihrer Ressourcen regional sind.
+
+00:07:42.170 --> 00:07:43.090
+Die Faustriege bleibt kurz.
+
+00:07:43.770 --> 00:07:46.730
+Eine Ressource gilt als zonenresilient, sobald sie zwei oder mehr Zonen nutzt.
+
+00:07:46.730 --> 00:07:51.870
+Microsoft empfiehlt selbst, Produktionsworkloads über Zonen zu verteilen, wann immer die Region dies unterstützt.
+
+00:07:52.250 --> 00:07:57.610
+Die nützliche Frage zu jedem Dienst, den Sie verwenden, lautet also, übernimmt der Dienst die Verteilung für Sie oder müssen Sie das selbst tun?
+
+00:07:58.010 --> 00:08:01.410
+Wenn Sie nicht sicher sind, um welche Art von Dienst es sich handelt, sagt Ihnen die Dokumentation das ganz deutlich.
+
+00:08:01.990 --> 00:08:06.090
+Es lohnt sich, dies vor der Erstellung zu prüfen, da dies eine jene Entscheidung ist, die im Nachhinein nur schwer zu ändern sind.
+
+00:08:07.090 --> 00:08:12.030
+Nachdem Sie nun wissen, wer die Arbeit erledigt, müssen wir als nächstes festlegen, was die jeweilige Konfiguration Ihnen tatsächlich verspricht.
+
+00:08:12.030 --> 00:08:14.950
+Die Antwort lässt sich auf ein paar Zahlen reduzieren, die das gesamte Bild verändern.
+
+00:08:15.710 --> 00:08:16.710
+Was SLA es eigentlich bedeutet.
+
+00:08:17.190 --> 00:08:22.130
+Ein SLA ist das schriftliche Versprechen von Microsoft bezüglich der Verfügbarkeit und jede gewählte Konfiguration bringt ein anderes Versprechen.
+
+00:08:22.410 --> 00:08:25.410
+Diese Zahlen klingen nach Marketing, aber sie lassen sich in echte Minuten umrechnen.
+
+00:08:25.930 --> 00:08:27.750
+Daher ist es hilfreich, Sie in etwas Konkretes zu übersetzen.
+
+00:08:28.250 --> 00:08:32.450
+Betreiben Sie eine einzelne virtuelle Maschine mit Premium-Datenträgern, erhalten Sie ein Versprechen von 99 Prozent.
+
+00:08:33.410 --> 00:08:37.810
+Betreiben Sie zwei oder mehr Maschinen in einer Verfügbarkeitsgruppe, steigt das Versprechen auf 995 Prozent.
+
+00:08:37.810 --> 00:08:42.690
+Denn verteilen Sie zwei oder mehr Maschinen auf zwei oder mehr Zonen, erreichen Sie 99 Tonnen zu Zonen und Hund.
+
+00:08:43.630 --> 00:08:47.790
+Der Sprung von 99,9 Prozent auf 99 Prozent sieht auf dem Papier winzig aus, ist er aber nicht.
+
+00:08:48.650 --> 00:08:55.410
+In einem Monat mit 30 Tagen erlauben 99,99 Prozent etwa vier Minuten Ausfallzeit, während 99,9 wird sich Minuten zulassen.
+
+00:08:56.170 --> 00:08:58.750
+Das ist der Unterschied zwischen einem kurzen Aussetzer und einem verlorenen Nachmittag.
+
+00:08:59.210 --> 00:09:00.530
+Es gibt einen Haken, der viele überrascht.
+
+00:09:00.990 --> 00:09:05.210
+Wer Microsoft das Versprechen nicht einhält, erhalten Sie als Entschädigung eine Servicegutschrift, also Geld zurück auf Ihre Weg.
+
+00:09:05.210 --> 00:09:09.550
+Das stellt nicht Ihre Verfügbarkeit wieder her und bringt auch keine Kunden zurück, die während des Ausfalls Ihrer App gegangen sind.
+
+00:09:09.810 --> 00:09:16.070
+Das SLA ist eher eine Rückerstattungsrichtlinie als ein Sicherheitsnetz, weshalb Sie auf Resilienz setzen sollten, anstatt darauf zu vertrauen, dass die Garantie Sie rettet.
+
+00:09:17.530 --> 00:09:20.730
+Die Zahlen hängen auch von Ihren Datenträgern ab, eine Anfängerfalle, die man kennen sollte.
+
+00:09:21.130 --> 00:09:25.670
+Eine einzelne Maschine auf günstigeren Standard-Datenträgern erhält ein niedriges Versprechen als dieselbe Maschine auf Premium-Daten.
+
+00:09:25.930 --> 00:09:28.790
+Der von Ihnen gewählte Speicher verschiebt Ihr eigenes Verfügbarkeitsziel nach oben oder unten.
+
+00:09:28.790 --> 00:09:33.490
+Denken Sie auch daran, dass ein SLA nur den genannten Dienst abdeckt und sonst nichts.
+
+00:09:34.270 --> 00:09:38.230
+Ein starkes Versprechen für einen Dienst schützt nicht automatisch die anderen Dienste, die Sie darum herum aufgebaut haben.
+
+00:09:38.590 --> 00:09:38.810
+Orden.
+
+00:09:39.690 --> 00:09:40.590
+Design für Resilienz.
+
+00:09:41.210 --> 00:09:43.730
+Die Zahlen zu kennen ist eine Sache, Sie in die Praxis umzusetzen, eine andere.
+
+00:09:44.290 --> 00:09:45.590
+Hier ist also, wie das in der Praxis aussieht.
+
+00:09:46.170 --> 00:09:51.870
+Wenn Ihre Regionzonen unterstützt, verteilen Sie Ihre Produktionslasten darauf und nutzen Sie überall dort zonale, redundante Dienste.
+
+00:09:52.630 --> 00:09:56.610
+Platzieren Sie einen Loadbalancer vor Ihrer App, damit der Datenverkehr sofort auf eine federfreie Zone umgeleitet wird, sobald er aussieht.
+
+00:09:57.250 --> 00:10:02.190
+Diese Kombination deckt den häufigsten Fehler ab, den Ausfall einer einzelnen Zone, während der Rest der Region einwandfrei funktioniert.
+
+00:10:02.990 --> 00:10:05.350
+Für die wirklich wichtigen Dinge sollten Sie über eine einzelne Region hinausgehen.
+
+00:10:05.650 --> 00:10:10.390
+Zonen schützen Sie vor dem Ausfall eines Gebäudes oder einer Zone, helfen aber nicht, wenn eine ganze Region ein Problem hat.
+
+00:10:11.030 --> 00:10:13.110
+Geschäftskritische Workloads benötigen Kopien in mehr als einer Region.
+
+00:10:13.470 --> 00:10:16.790
+Backups sind eine separate Aufgabe und es ist wichtig, diese Dinge voneinander zu treiben.
+
+00:10:17.130 --> 00:10:20.870
+Redundanz hält Ihren Betrieb aufrecht, während Sie mit Backups verloren gegangene oder gelöschte Daten wiederherstellen.
+
+00:10:20.870 --> 00:10:21.850
+Dann können Sie brauchen also beides.
+
+00:10:22.050 --> 00:10:24.450
+Entscheiden Sie schließlich, mit wie viel Ausfallzeit Sie wirklich leben können.
+
+00:10:24.570 --> 00:10:26.910
+Denn diese Zahl bestimmt den nötigen Aufwand für Design und Budget.
+
+00:10:27.930 --> 00:10:30.870
+Ein Hobbyprojekt und ein Gehaltsabrechnungssystem benötigen nicht dieselbe Einrichtung.
+
+00:10:31.010 --> 00:10:34.310
+Das Gegenteil anzunehmen, verschwendet auf der einen Seite Geld und riskiert auf der anderen echten Schaden.
+
+00:10:35.510 --> 00:10:38.190
+Beginnen Sie mit dem Ziel, das Sie erreichen müssen und wählen Sie dann die passenden Tools dafür aus.
+
+00:10:38.810 --> 00:10:40.470
+Eine weitere Gewohnheit sollte man sich früh aneignen.
+
+00:10:40.850 --> 00:10:45.870
+Testen Sie Ihr Failover, bevor Sie es brauchen, denn ein Wiederherstellungsplan, den Sie nie erprobt haben, ist nur eine Vermutung im Gewand eines Plans.
+
+00:10:46.190 --> 00:10:49.230
+Der schlechteste Zeitpunkt, um Lücken zu finden, ist während eines tatsächlichen Auswirkens.
+
+00:10:49.230 --> 00:10:50.410
+Regionspaar
+
+00:10:50.410 --> 00:10:53.250
+Eine weitere Ebene, die Microsoft integriert hat, ist das Regionspaar.
+
+00:10:53.870 --> 00:10:59.270
+Microsoft koppelt einige Regionen mit einer anderen, meist in derselben Geografie, sodass ein zweiter Standort bereits für Sie bereitsteht.
+
+00:10:59.870 --> 00:11:00.930
+Ein Paar bietet Ihnen eine Gevorteile.
+
+00:11:01.570 --> 00:11:04.630
+Geordundanter Speicher kann Ihre Daten automatisch in die gepaarte Region kopieren.
+
+00:11:05.390 --> 00:11:09.390
+Geplante Updates sind zeitversetzt, damit ein fehlerhaftes Update nicht beide Regionen gleichzeitig trifft.
+
+00:11:09.390 --> 00:11:14.050
+Sollte eine ganze Geografie ausfallen, wird eine Region in jedem Paar bei der Wiederherstellung priorisiert.
+
+00:11:14.590 --> 00:11:17.390
+Das sind echte Vorteile, die Sie ohne eigenes Zutun erhalten.
+
+00:11:18.030 --> 00:11:18.870
+Doch hier liegt die Täuschung.
+
+00:11:19.350 --> 00:11:21.710
+Eine gepaarte Region ist kein automatisches Disaster Recovery.
+
+00:11:21.950 --> 00:11:24.330
+Das stellt Microsoft auch direkt in der eigenen Dokumentation klar.
+
+00:11:24.830 --> 00:11:27.150
+Die Bereitstellung in Ihrem Paar macht Sie nicht automatisch resilient.
+
+00:11:27.610 --> 00:11:32.030
+Und das automatische Failover für Speicher greift nur in wirklich katastrophalen Situationen nach wiederholten Fehlversuchen.
+
+00:11:32.410 --> 00:11:33.330
+Nach wiederholten Fehlversuchen.
+
+00:11:33.330 --> 00:11:36.410
+Ein Paar ist eine nützliche Standardeinstellung, aber kein Plan, auf den Sie sich verlassen.
+
+00:11:36.750 --> 00:11:39.810
+Die wichtigere Entwicklung ist, dass viele der neueren Azure-Regionen überhaupt nicht mehr gepaart sind.
+
+00:11:40.410 --> 00:11:45.470
+Sie setzen stattdessen auf Verfügbarkeitszonen als Hauptform der Redundanz, was die Ausrichtung der gesamten Plattform verdeutlicht.
+
+00:11:45.990 --> 00:11:50.870
+Sie können ein resilientes Design mit Paaren, ohne Paare oder einer Mischung aus beidem aufbauen, solange Sie es aktiv planen.
+
+00:11:51.130 --> 00:11:52.910
+Betrachten Sie das Paar also als Bonus, nicht als Fundament.
+
+00:11:53.230 --> 00:11:58.310
+Falls Ihre Region ein Paar hat, nutzen Sie die Speicherreplikation, aber erstellen Sie dennoch einen eigenen Plan für kritische Komponenten.
+
+00:11:58.390 --> 00:12:02.190
+Wenn Ihre Region kein Paar hat, haben Sie nichts verloren, was Zonen nicht für Sie abdecken können.
+
+00:12:02.190 --> 00:12:03.950
+Die Kosten und Abwägungen
+
+00:12:03.950 --> 00:12:07.810
+Nun zu der Frage, die jeden Anfänger im Hinterkopf beschäftigt, was kostet das alles?
+
+00:12:08.450 --> 00:12:09.310
+Zuerst die gute Nachricht.
+
+00:12:09.730 --> 00:12:13.390
+Azure berechnet keine Gebühren mehr für Daten, die zwischen Verfügbarkeitszonen innerhalb derselben Region übertragen.
+
+00:12:13.710 --> 00:12:17.870
+Die Kommunikation zwischen Ihren Zonen ist kostenlos, unabhängig davon, ob Sie private oder öffentliche Adressen verwenden.
+
+00:12:18.290 --> 00:12:20.530
+Die wirklichen Kosten sind nicht die Zonen selbst, sondern die Kopien.
+
+00:12:21.190 --> 00:12:25.950
+Alles doppelt oder dreifach auszuführen kostet mehr als einmal und die Rechnung steigt mit der Resilienz, die Sie benötigen.
+
+00:12:26.450 --> 00:12:27.450
+Dieser Kompromiss bleibt fair.
+
+00:12:27.890 --> 00:12:31.410
+Mehr Kopien bedeuten mehr Verfügbarkeit und höhere monatliche Kosten, daran führt kein Weg vorbei.
+
+00:12:31.410 --> 00:12:33.510
+Ein paar andere Kompromisse sind ebenfalls erwähnenswert.
+
+00:12:33.990 --> 00:12:39.230
+Zonen liegen nah beieinander, aber nicht instantan, deshalb bevorzugen einige sehr kommunikationsintensive Workloads eine Zone für mehr Geschwindigkeit.
+
+00:12:39.990 --> 00:12:46.510
+Zonenredundante Dienste sind einfacher, da Microsoft das Failover übernimmt, während zonale Dienste ihnen die Kontrolle geben und die Failover-Arbeit aufladen.
+
+00:12:47.550 --> 00:12:55.130
+Die Abdeckung ist auch nicht überall gleich, da nicht jede Region Zonen hat, nicht jeder Dienst sie unterstützt und einige Zonenunterstützung nur in bestimmten Tarifen bieten.
+
+00:12:55.130 --> 00:13:01.650
+Die Antwort darauf, ob sich der Aufwand lohnt, hängt vom Wert der Workload ab, bei allem, worauf Menschen angewiesen sind, lautet sie.
+
+00:13:01.910 --> 00:13:08.470
+Meist ja, Zonen, Sets und Paare dienen dazu, sich Zeit zu erkaufen und nur sie können beurteilen, was diese Zeit wert ist.
+
+00:13:09.010 --> 00:13:11.250
+Eine Demo, die niemand nutzt, kann ewig in einer Zone bleiben.
+
+00:13:11.590 --> 00:13:15.590
+Ein geschäftskritisches System nicht die Kunst ist, den Unterschied zu kennen, bevor etwas ausfällt.
+
+00:13:15.590 --> 00:13:18.270
+Zusammenfassung und eine Frage.
+
+00:13:18.810 --> 00:13:20.070
+Hier ist die Kurzfassung zum Mitnehmen.
+
+00:13:21.410 --> 00:13:29.430
+Eine Region ist die Stadt, eine Verfügbarkeitszone, ein separates Gebäude darin, ein Verfügbarkeitsset verteilt Maschinen auf Racks in einem Gebäude und eine Region im Paar ist ihre Backup-Stadt.
+
+00:13:31.250 --> 00:13:35.130
+Wichtig ist, Verfügbarkeit ist eine Designentscheidung, kein Feature, das man kostenlos bekommt.
+
+00:13:35.850 --> 00:13:38.930
+Wenn Sie mehr Analysen wie diese möchten, abonnieren Sie M365FM.
+
+00:13:39.350 --> 00:13:40.710
+Bevor Sie gehen, habe ich noch eine Frage an Sie.
+
+00:13:41.130 --> 00:13:44.350
+Was von dem, das Sie heute betreiben, würde den Verlust eines ganzen Gebäudes tatsächlich überstehen?
+
+00:13:45.590 --> 00:14:15.570
+Was von dem, das Sie heute betreiben, würde den Verlust eines Gebäudes tatsächlich überstehen?

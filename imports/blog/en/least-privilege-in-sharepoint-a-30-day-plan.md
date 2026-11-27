@@ -1,8 +1,8 @@
 ---
 title: "Least privilege in SharePoint: a 30-day plan"
 summary: "A practical 30-day plan to apply least privilege in SharePoint: map current access, tighten site permissions, control sharing links, and set up recurring access reviews with Microsoft Entra."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-23
 topics: [least-privilege, sharepoint-permissions, access-reviews]

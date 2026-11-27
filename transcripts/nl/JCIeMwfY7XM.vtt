@@ -1,0 +1,703 @@
+WEBVTT
+
+00:00:00.220 --> 00:00:04.280
+Cementic Kernel is de laag onder de AI-tools van Microsoft die bijna niemand uitlegt.
+
+00:00:04.480 --> 00:00:10.260
+Het is een gratis, open-source pakket waarmee je eigen code kan praten met een groot taalmodel en dat model jouw code kan terugroepen.
+
+00:00:10.400 --> 00:00:14.680
+Je verwacht misschien een chatbot-bouwer, maar het is eigenlijk middelwerk, het stille onderdeel in het midden.
+
+00:00:14.880 --> 00:00:20.040
+Zodra je de handvol onderdelen erin ziet, voelt de manier waarop Microsoft Agents bouwt niet langer als een mysterie.
+
+00:00:20.260 --> 00:00:26.760
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:26.760 --> 00:00:30.760
+Vandaag breken we Cementic Kernel stuk voor stuk af in begrijpelijke taal.
+
+00:00:31.020 --> 00:00:37.220
+Wat Cementic Kernel werkelijk is, laten we beginnen met de simpelste versie, want de naam laat het zwaarder klinken dan het werkelijk is.
+
+00:00:37.460 --> 00:00:45.660
+Cementic Kernel is een gratis, open-source pakket van Microsoft dat de software die je al bouwt verbindt met een AI-model en het model vervolgens jouw eigen code laat terugroepen.
+
+00:00:46.180 --> 00:00:53.780
+Microsoft beschrijft het als middelwerk, wat simpelweg een woord is voor de laag die in het midden zit en berichten doorgeeft tussen twee zaken die niet dezelfde taal spreken.
+
+00:00:54.020 --> 00:00:56.100
+Nu is het minstens zo belangrijk wat het niet is.
+
+00:00:56.100 --> 00:01:01.200
+Het is geen app die je opent, geen chatbot waarin je typt en het is geen model zoals die achter Copilot draaien.
+
+00:01:01.360 --> 00:01:06.360
+Je installeert het in een project waar je al aan werkt en het neemt het lastige gedeelte van de communicatie met AI over.
+
+00:01:06.580 --> 00:01:11.020
+Het pakket verscheen voor het eerst in maart 2023 onder een open licentie genaamd MIT.
+
+00:01:11.320 --> 00:01:17.720
+Die licentie betekent dat iedereen het kan gebruiken, de code kan lezen en aanpassen aan eigen behoeften, wat een belangrijke reden is dat het zich snel verspreidt onder ontwikkelaars.
+
+00:01:17.880 --> 00:01:19.780
+Het maakt ook niet uit waar je software draait.
+
+00:01:19.780 --> 00:01:25.280
+Het pakket werkt binnen je eigen applicatie, in de cloud van Microsoft, in een andere cloud of op een machine onder je bureau.
+
+00:01:25.280 --> 00:01:29.480
+Azure is de meest gebruikelijke plek ervoor, maar Microsoft benadrukt dat Azure niet vereist is.
+
+00:01:29.640 --> 00:01:31.820
+Er is een duidelijke reden waarom deze laag bestaat.
+
+00:01:32.060 --> 00:01:36.400
+Stel je een werkende app voor vol met echte functies, zoals het opzoeken van bestellingen of het versturen van e-mails.
+
+00:01:36.620 --> 00:01:40.900
+Een taalmodel is uitstekend in het begrijpen van verzoeken, maar kan daaruit zichzelf niet bij.
+
+00:01:41.160 --> 00:01:45.440
+Cementic kernel dicht die kloof, zodat het model bij jouw app kan en jouw app terug kan bij het model.
+
+00:01:45.440 --> 00:01:47.740
+Hier is een klein voorbeeld om het concreet te maken.
+
+00:01:48.060 --> 00:01:53.980
+Stel, een klant typt een vraag over een bestelling en jouw app moet die bestelling opzoeken, de status controleren en antwoorden in begrijpelijke taal.
+
+00:01:54.120 --> 00:01:57.400
+Een model kan dat antwoord schrijven, maar kan de bestelling niet zelfstandig opzoeken.
+
+00:01:57.620 --> 00:02:03.660
+Cementic kernel laat het model aan jouw app vragen om de zoekopdracht uit te voeren en het antwoord daarna te verwerken in de reactie, allemaal in één flow.
+
+00:02:04.060 --> 00:02:11.820
+Microsoft zegt dat Fortune 500 bedrijven er al op bouwen en de reden die ze geven is dat het flexibel, modulair en gemakkelijk te volgen is tijdens het werk.
+
+00:02:11.820 --> 00:02:13.780
+De kernel en de naam
+
+00:02:13.780 --> 00:02:17.700
+Het eerste woord waar mensen over struikelen is kernel, dus laten we de naam uit elkaar halen.
+
+00:02:17.860 --> 00:02:21.560
+Semantisch wijst naar betekenis en natuurlijke taal, het soort ding waar een model goed in is.
+
+00:02:21.740 --> 00:02:25.100
+Kernel wijst naar het centrum, het ene object waar al het andere op wordt aangesloten.
+
+00:02:25.620 --> 00:02:27.900
+Microsoft's eigen omschrijving is verfrissend simpel.
+
+00:02:27.900 --> 00:02:33.580
+Op zijn eenvoudigst is de kernel een container die alle services en plugins bevat die je AI-applicatie nodig heeft om te draaien.
+
+00:02:33.780 --> 00:02:38.640
+Zie het als een enkele doos waar elk onderdeel van je AI-app wordt geregistreerd, zodat de app altijd weet waar ze te vinden zijn.
+
+00:02:38.820 --> 00:02:40.520
+Je geeft de kernel twee soorten dingen.
+
+00:02:40.520 --> 00:02:45.280
+De eerste zijn services, wat de AI-modellen zelf zijn, plus gewone hulpprogramma's zoals logging.
+
+00:02:45.520 --> 00:02:50.320
+De tweede zijn plugins, de onderdelen die het eigenlijke werk doen, en daar komen we zo op terug.
+
+00:02:50.560 --> 00:02:54.380
+Wanneer je app een verzoek verstuurt, doorloopt de kernel een korte reeks taken.
+
+00:02:54.380 --> 00:03:01.800
+Hij kiest de beste AI-service voor de taak, bouwt de prompt op basis van je schabloon, verstuurt deze, leest het antwoord en geeft het resultaat terug aan je applicatie.
+
+00:03:01.980 --> 00:03:05.300
+Als dat klinkt als leidingwerk dat je eerder hebt gezien, dan komt dat omdat het dat ook is.
+
+00:03:05.300 --> 00:03:13.960
+Microsoft modelleerde de kernel naar een algemeen patroon uit punt net genaamd dependency injection, waarbij één centrale plek de onderdelen levert die andere delen van de code nodig hebben, zodat niemand ze hard hoeft te coderen.
+
+00:03:14.140 --> 00:03:15.760
+Voor jou is het praktische punt simpel.
+
+00:03:15.960 --> 00:03:17.480
+De kernel is de controlekamer.
+
+00:03:17.480 --> 00:03:22.740
+Al het andere is een tool die je daar registreert, en vanaf die ene plek kun je het hele proces opzetten en in de gaten houden.
+
+00:03:22.880 --> 00:03:25.340
+Er is nog één detail over de kernel en dan gaan we verder.
+
+00:03:25.340 --> 00:03:31.920
+Hij is lichtgewicht omdat het eigenlijk gewoon een container is, dus Microsoft raadt aan om voor elk gebruik een nieuwe te maken in plaats van er voor altijd een te behouden.
+
+00:03:32.120 --> 00:03:36.960
+Dat klinkt onslachtig, maar het voorkomt dat je plugins statuslekken tussen verzoeken, plugins en functies.
+
+00:03:37.220 --> 00:03:40.160
+Dit is waar cementen kernel nuttig wordt, dus laten we vertragen.
+
+00:03:40.380 --> 00:03:43.040
+Een plugin is een groep functies die je blootstelt aan de AI.
+
+00:03:43.260 --> 00:03:49.640
+In andere tools worden die functies vaak tools of acties genoemd, en in de vroegste versie van cementen kernel werden pluginskills genoemd.
+
+00:03:49.760 --> 00:03:53.740
+Een functie is gewoon een stukje van je eigen code met een eenvoudige beschrijving eraan gekoppeld.
+
+00:03:53.740 --> 00:03:58.220
+De beschrijving vertelt de AI wat de functie doet, wat erin gaat en wat eruit komt.
+
+00:03:58.760 --> 00:04:06.620
+Microsoft's eigen voorbeeld is een verlichtingsplugin met drie functies, een die alle lampen opzomt, een die de status van één lamp rapporteert en een die de status van een lamp wijzigt.
+
+00:04:06.800 --> 00:04:10.020
+Het model leest die beschrijvingen en kiest de juiste functie voor het verzoek.
+
+00:04:10.220 --> 00:04:12.040
+Beginners missen hier meestal één detail.
+
+00:04:12.280 --> 00:04:13.820
+De beschrijving is geen versiering.
+
+00:04:14.020 --> 00:04:18.620
+Als deze vaag is, raadt het model verkeerd of slaat de functie volledig over, waardoor alles in het 100 loopt.
+
+00:04:18.860 --> 00:04:23.360
+Schrijf de beschrijving zoals je de functie aan een nieuwe collega zou uitleggen, dan zal het model deze correct gebruiken.
+
+00:04:23.360 --> 00:04:25.140
+Plugins kunnen uit drie bronnen komen.
+
+00:04:25.320 --> 00:04:33.540
+Je kunt ze in je eigen code schrijven, importeren via een gedeelde webstandaard genaamd OpenAPI, of ze binnenhalen via een zogeheten MCP-server, wat staat voor modelcontextprotocol.
+
+00:04:33.740 --> 00:04:38.100
+Die laatste is belangrijk omdat het één team in staat stelt een functionaliteit te bouwen en deze met iedereen te delen.
+
+00:04:38.300 --> 00:04:40.600
+Delen is het echte voordeel van die laatste twee opties.
+
+00:04:40.820 --> 00:04:49.920
+Als je een functionaliteit beschrijft met OpenAPI of verpakt in een MCP-server, kan een ander team deze gebruiken zonder hem te herschrijven, en zelfs een maker in een low-code tool kan dezelfde functionaliteit benutten.
+
+00:04:50.120 --> 00:04:52.900
+Zo helpt één goed gebouwde functie uiteindelijk het hele bedrijf.
+
+00:04:52.900 --> 00:04:56.420
+Plugins werken ook goed samen met de manier waarop echte teams software bouwen.
+
+00:04:56.560 --> 00:05:01.540
+Een plugin kan zijn eigen databaseverbinding of webclient bevatten, zodat de AI nooit de gevoelige details ziet.
+
+00:05:01.720 --> 00:05:04.260
+Hij ziet alleen de eenvoudige beschrijving en het resultaat.
+
+00:05:04.420 --> 00:05:07.660
+Er is één praktische waarschuwing voordat je een gigantische gereedschapskist bouwt.
+
+00:05:07.800 --> 00:05:15.300
+OpenAI raadt aan om niet meer dan twintig tools in één verzoek te gebruiken, en idealiter niet meer dan tien, omdat de nauwkeurigheid van het model afneemt naarmate de lijst langer wordt.
+
+00:05:15.500 --> 00:05:19.000
+Minder, duidelijkere functies zijn altijd beter dan een gigantische stapel ervan.
+
+00:05:19.000 --> 00:05:27.220
+Planning en functie aanroepen. Zodra je meerdere functies hebt en er een nieuw probleem opduikt, moet de AI beslissen welke functies in welke volgorde gebruikt moeten worden om een verzoek te beantwoorden.
+
+00:05:27.400 --> 00:05:31.140
+In cementen kernel heet die taak planning. Het oorspronkelijke antwoord was planners.
+
+00:05:31.380 --> 00:05:35.500
+Je gaf de kit een set functies, en deze schreef een prompt waarin het model werd gevraagd om een plan voor je te kiezen.
+
+00:05:35.700 --> 00:05:39.160
+Dat werkte, maar het vertrouwde erop dat het model al gokkend zijn weg door de keuze vond.
+
+00:05:39.160 --> 00:05:45.820
+Toen bouwde OpenAI functie aanroepen direct in zijn modellen, en andere modelmakers zoals Gemini, Klood en Mistral volgden met hetzelfde idee.
+
+00:05:46.060 --> 00:05:52.880
+Functie aanroepen betekent dat het model simpelweg om een specifieke functie op naam kan vragen met de juiste invoer, in plaats van in een alinea te beschrijven wat het wil.
+
+00:05:53.040 --> 00:05:57.240
+Omdat dat betrouwbaarder bleek te zijn, maakt de cementen kernel het de voornaamste manier om te plannen.
+
+00:05:57.480 --> 00:06:00.120
+Die verandering heeft een direct gevolg waar je vanaf moet weten.
+
+00:06:00.360 --> 00:06:04.620
+De oudere Stepwise en Handlebars planners zijn als verouderd gemarkeerd en uit het pakket verwijderd.
+
+00:06:05.000 --> 00:06:08.480
+Microsoft adviseert ontwikkelaars nu om in plaats daarvan functie aanroepen te gebruiken.
+
+00:06:08.480 --> 00:06:13.940
+In elke taal die de kit ondersteunt, is er een reden waarom Microsoft is afgestapt van de oude planners en dat is het waard om duidelijk te benoemen.
+
+00:06:14.120 --> 00:06:18.200
+Een planner vroeg het model om in woorden een plan te bedenken, wat flexibel maar onvoorspelbaar was.
+
+00:06:18.440 --> 00:06:24.420
+Functie aanroepen zijn specifieker en beter herhaalbaar, waardoor je minder verrassingen hebt in productie, precies wat een zakelijke app nodig heeft.
+
+00:06:24.640 --> 00:06:26.920
+De werking ervan is eenvoudiger dan het klinkt.
+
+00:06:26.960 --> 00:06:32.740
+Het model vraagt om een functie, cementen kernel voert deze uit, geeft het resultaat terug en het model beslist wat de volgende stap is.
+
+00:06:32.920 --> 00:06:34.940
+Die lus herhaalt zich totdat de taak is voltooid.
+
+00:06:34.940 --> 00:06:40.640
+Het kan zelfs meerdere functies tegelijk aanroepen, wat de manier is waarop het een verzoek afhandelt zoals het uitschakelen van alle lampen in een kamer.
+
+00:06:40.780 --> 00:06:43.720
+Je kunt de lus zien als een kort gesprek tussen jouw code en het model.
+
+00:06:43.960 --> 00:06:48.820
+Het model spreekt, jouw code luistert en handelt en dan spreekt het model opnieuw met wat het heeft geleerd.
+
+00:06:49.100 --> 00:06:50.240
+Geheugen en opslag.
+
+00:06:50.420 --> 00:06:52.960
+Er is een beperking die iedereen de eerste keer verrast.
+
+00:06:53.160 --> 00:06:55.280
+Een taalmodel heeft op zichzelf geen geheugen.
+
+00:06:55.480 --> 00:07:00.740
+Elk verzoek begint fris, zonder enig idee van jouw documenten, jouw data of het gesprek dat je vijf minuten geleden had.
+
+00:07:00.740 --> 00:07:03.800
+De oplossing is een patroon genaamd Retrieval Augmented Generation.
+
+00:07:04.000 --> 00:07:06.840
+In begrijpelijke taal, je zoekt het eerst op en daarna geef je antwoord.
+
+00:07:06.980 --> 00:07:12.100
+In plaats van te hopen dat het model zich iets herinnert, haal je het relevante materiaal op en geef je dat samen met de vraag door.
+
+00:07:12.260 --> 00:07:16.360
+Om te begrijpen waarom dit belangrijk is, denk aan de laatste keer dat een chatbot vol zelfvertrouwen iets verzon.
+
+00:07:16.540 --> 00:07:18.900
+Dat gebeurt wanneer het model niets echts heeft om mee te werken.
+
+00:07:19.160 --> 00:07:24.280
+Retrieval lost dat op door het feitelijke document of record aan te reiken, zodat het antwoord is gebaseerd op iets waar je naar kunt verwijzen.
+
+00:07:24.480 --> 00:07:27.240
+Cement de kernel bouwt dat geheugen op basis van vectoropslag.
+
+00:07:27.240 --> 00:07:34.400
+Een vector store is een database die is afgestemd op betekenis in plaats van op exacte woorden, en de connectoren van de kit bieden één gedeelde interface voor velen ervan.
+
+00:07:34.960 --> 00:07:40.540
+Azure iSerge is de gebruikelijke keuze, en andere zoals Postgres, Redis en Q-Drant worden ook ondersteund.
+
+00:07:40.720 --> 00:07:44.060
+Het woord vector verdient één zin, omdat het minder eng is dan het klinkt.
+
+00:07:44.180 --> 00:07:48.400
+Het systeem zet je tekst om in reekse getallen, embeddingsgenaamd, die de betekenis van de tekst vastleggen,
+
+00:07:48.580 --> 00:07:52.500
+zodat het passages kan vinden die qua betekenis dichtbij liggen, zelfs als de woorden niet overeenkomen.
+
+00:07:52.660 --> 00:07:54.300
+Er is hier een mooi detail voor beginners.
+
+00:07:54.300 --> 00:08:00.140
+Vector zoeken kan aan het model worden aangeboden als een plugin, wat betekent dat de AI zelf dingen kan opzoeken wanneer een vraag daarom vraagt,
+
+00:08:00.260 --> 00:08:02.680
+met gebruik van dezelfde functie aanroepen die we net hebben behandeld.
+
+00:08:02.840 --> 00:08:05.540
+Er is één belangrijke kanttekening om in gedachten te houden.
+
+00:08:05.700 --> 00:08:08.960
+De vector store functie is nog in preview en kan dus veranderen,
+
+00:08:09.200 --> 00:08:13.040
+en de oudere memory store connectors zijn vervangen door de nieuwere connectors en prompts.
+
+00:08:13.320 --> 00:08:15.880
+Geheugen is een soort plug, en de kit heeft er nog meer.
+
+00:08:16.060 --> 00:08:21.260
+Een connector is een adapter waarmee een blok van je code met veel verschillende modellen kan praten via dezelfde ingang.
+
+00:08:21.260 --> 00:08:26.860
+De lijst is langer dan je zou verwachten en bevat Azure OpenAI, gewone OpenAI, Google's Gemini, Mistral,
+
+00:08:26.980 --> 00:08:30.080
+en zelfs modellen die op je eigen machine draaien via een toegenaamd Ollama.
+
+00:08:30.260 --> 00:08:34.340
+Amazon Bedrock zit er ook in, evenals elke service die de OpenAI-stijl volgt.
+
+00:08:34.520 --> 00:08:36.920
+De winst wordt duidelijk wanneer er een nieuw model verschijnt.
+
+00:08:37.060 --> 00:08:41.020
+In plaats van je applicatie te herschrijven, wissel je de connector om en behoud je de rest.
+
+00:08:41.300 --> 00:08:43.260
+Microsoft noemt de kit om precies deze reden toekomstbestendig,
+
+00:08:44.120 --> 00:08:46.560
+omdat het je code niet uitmaakt welk model eronder draait.
+
+00:08:46.720 --> 00:08:49.800
+Het praktische voordeel is keuzevrijheid zonder vast te zitten aan één leverancier.
+
+00:08:49.800 --> 00:08:52.940
+Als je bedrijf al betaalt voor Azure OpenAI, begin je daar.
+
+00:08:53.060 --> 00:08:55.500
+En als er volgend jaar een goedkoper of beter model verschijnt,
+
+00:08:55.720 --> 00:08:57.580
+stap je over zonder de rest van je app aan te raken.
+
+00:08:57.780 --> 00:09:00.880
+Die vrijheid is de stille reden waarom teams überhaupt voor zo'n kit kiezen.
+
+00:09:01.120 --> 00:09:03.220
+Connectors dekken overigens meer dan alleen chat.
+
+00:09:03.420 --> 00:09:06.060
+Hetzelfde idee geldt voor embeddings, afbeeldingen en zelfs audio,
+
+00:09:06.280 --> 00:09:08.280
+zodat één app verschillende soorten AI kan combineren.
+
+00:09:08.440 --> 00:09:10.460
+Elke taal ondersteunt een iets ander deel van die lijst,
+
+00:09:10.560 --> 00:09:12.740
+wat de moeite waard is om te controleren voordat je je vastlegt.
+
+00:09:12.940 --> 00:09:14.420
+Dan zijn er nog prompt templates.
+
+00:09:14.660 --> 00:09:16.240
+Een template combineert je instructies,
+
+00:09:16.240 --> 00:09:19.380
+de input van de gebruiker en de output van een functie tot één enkele prompt.
+
+00:09:19.540 --> 00:09:22.060
+Je kunt die template als bestand opslaan en delen met je team,
+
+00:09:22.240 --> 00:09:25.020
+wat het schrijven van prompts iets maakt dat je kunt volgen en beoordelen.
+
+00:09:25.180 --> 00:09:27.520
+Het laatste onderdeel in dit gedeelte zijn filters.
+
+00:09:27.780 --> 00:09:31.500
+Met een filter kun je je eigen controles uitvoeren voor en na de actie van het model,
+
+00:09:31.780 --> 00:09:34.360
+waar teams hun veiligheids- en beveiligingsregels plaatsen.
+
+00:09:34.620 --> 00:09:38.100
+Microsoft wijst filters aan als de plek voor verantwoord AI-werk,
+
+00:09:38.420 --> 00:09:40.520
+en het is een kleine functie met een grote taak.
+
+00:09:40.520 --> 00:09:45.840
+Je vraagt je misschien af of dit past bij de taal die je al kent,
+
+00:09:46.100 --> 00:09:47.560
+en het antwoord is waarschijnlijk ja.
+
+00:09:47.820 --> 00:09:50.840
+Cement de Kernel is beschikbaar voor C-Sharp, Python en Java.
+
+00:09:51.100 --> 00:09:53.280
+Elke versie volgt bewust de gewoonte van de eigen taal,
+
+00:09:53.500 --> 00:09:55.680
+zodat het natuurlijk aanvoelt in plaats van erbij geplakt.
+
+00:09:55.820 --> 00:09:58.460
+Python-code die ermee is geschreven, leest nog steeds als Python,
+
+00:09:58.700 --> 00:10:00.640
+en C-Sharp-code leest nog steeds als C-Sharp.
+
+00:10:00.740 --> 00:10:01.960
+Microsoft heeft dat bewust gedaan,
+
+00:10:01.960 --> 00:10:04.840
+want een tool die je gewoonte tegenwerkt, is een tool die je niet meer zult gebruiken.
+
+00:10:04.980 --> 00:10:06.560
+Het begin is bewust klein gehouden.
+
+00:10:06.740 --> 00:10:08.320
+In C-Sharp voeg je één pakket toe.
+
+00:10:08.320 --> 00:10:10.400
+In Python voer je één installatiecommando uit,
+
+00:10:10.480 --> 00:10:12.480
+en in Java haal je het uit de gebruikelijke repository.
+
+00:10:12.860 --> 00:10:16.160
+Er staan geen enorme installatiestappen tussen jou en je eerste werkende voorbeeld.
+
+00:10:16.320 --> 00:10:18.040
+Er is nog een reden waarom dit belangrijk is.
+
+00:10:18.200 --> 00:10:21.960
+Het betekent dat je geen nieuwe taal hoeft te leren om de ideeën in deze aflevering uit te proberen.
+
+00:10:22.100 --> 00:10:25.160
+Als je al Python schrijft voor een zijproject, kun je het Python-pad volgen,
+
+00:10:25.420 --> 00:10:27.640
+en als je werk op Polarity draait, kun je die gebruiken.
+
+00:10:27.800 --> 00:10:29.700
+Er is één ding dat je moet weten voordat je kiest.
+
+00:10:29.700 --> 00:10:31.440
+Ze zijn niet volledig gelijk aan elkaar.
+
+00:10:31.680 --> 00:10:34.540
+Sommige functies verschijnen eerst in C-Sharp en Python voordat ze Java bereiken,
+
+00:10:34.720 --> 00:10:36.500
+en de Vector Store-connectoren neigen naar de eerste twee.
+
+00:10:36.500 --> 00:10:40.340
+Het is de moeite waard om even naar de lijst met functies voor jouw taal te kijken voordat je ergens op plant.
+
+00:10:40.500 --> 00:10:42.820
+Nog een belofte is het waard om te hebben als je aan het leren bent.
+
+00:10:43.060 --> 00:10:46.660
+Versie 1 en later komen met een toezegging van geen ingrijpende wijzigingen,
+
+00:10:46.860 --> 00:10:50.800
+wat betekent dat de code die je vandaag leert niet wordt weggegooid door de volgende update.
+
+00:10:52.000 --> 00:10:54.020
+Copilot, Foundry en wat er daarna komt.
+
+00:10:54.280 --> 00:10:57.680
+Nu de vraag die de meeste mensen verwart, en die verdient een eerlijk antwoord.
+
+00:10:57.920 --> 00:11:00.860
+Semantic Kernel is niet Microsoft 365 Copilot,
+
+00:11:01.100 --> 00:11:02.900
+en je hebt het niet nodig om Copilot te gebruiken.
+
+00:11:02.900 --> 00:11:05.340
+Copilot is een afgewerkt product dat je opent en gebruikt,
+
+00:11:05.520 --> 00:11:09.620
+terwijl Semantic Kernel een bouwmateriaal is dat ontwikkelaars gebruiken om hun eigen AI-functies te maken.
+
+00:11:09.820 --> 00:11:12.380
+De echte link is een gedeelde manier om dingen te beschrijven.
+
+00:11:12.600 --> 00:11:15.320
+Semantic Kernel gebruikt dezelfde webstandaard, OpenAPI,
+
+00:11:15.500 --> 00:11:19.100
+die Microsoft 365 Copilot gebruikt om te beschrijven wat een extensie kan doen.
+
+00:11:19.240 --> 00:11:20.920
+Omdat beide kanten dezelfde taal spreken,
+
+00:11:21.100 --> 00:11:25.200
+kan een functionaliteit die je bouwt worden gedeeld met andere ontwikkelaars en zelfs met makers die geen code schrijven.
+
+00:11:25.360 --> 00:11:28.900
+Er is hier ook een brug voor het bouwen van je eigen agent in de wereld van Microsoft 365.
+
+00:11:28.900 --> 00:11:37.140
+De Microsoft 365 Agents SDK regelt de Microsoft 365 kant en de AI-kant wordt afgehandeld door Semantic Kernel of zijn opvolger.
+
+00:11:37.360 --> 00:11:40.620
+Samen zorgen ze er dus voor dat een aangepaste agent Copilot kan bereiken.
+
+00:11:40.840 --> 00:11:46.560
+Aan de cloudkant vermeldt het nieuwere framework Microsoft Foundry als een van de plaatsen om modellen en agenten uit te voeren.
+
+00:11:46.720 --> 00:11:49.400
+Het helpt om deze als lagen te zien in plaats van als rivalen.
+
+00:11:49.560 --> 00:11:52.320
+Copilot is de afgewerkte ervaring die je collega's gebruiken.
+
+00:11:52.320 --> 00:12:00.120
+Copilot Studio is waar makers hun eigen agenten bouwen met weinig of geen code en Semantic Kernel is de ontwikkelkit daaronder die een idee omzet in werkende code.
+
+00:12:00.320 --> 00:12:02.800
+Ze zijn bedoeld om samen te gaan, niet om te concurreren.
+
+00:12:03.000 --> 00:12:04.560
+Dat brengt het eerlijke deel naar voren.
+
+00:12:04.860 --> 00:12:10.620
+Microsoft bouwde een nieuwe framework, het Microsoft Agent Framework, door Semantic Kernel te combineren met een ander project genaamd Autogen.
+
+00:12:10.780 --> 00:12:14.040
+Het is sindsdien het aanbevolen startpunt geworden voor gloednieuwe agentprojecten.
+
+00:12:14.180 --> 00:12:16.700
+De echte spanning hier is simpel en je hebt het waarschijnlijk al gevoeld.
+
+00:12:16.860 --> 00:12:20.180
+Je wilt geen maanden besteden aan het leren van iets dat Microsoft op het punt staat te vervangen.
+
+00:12:20.180 --> 00:12:23.820
+Laten we die angst dus direct aanpakken. Dit is wat dat wel en niet betekent.
+
+00:12:24.020 --> 00:12:28.660
+Nieuwe functies gaan nu naar het nieuwere framework, maar Semantic Kernel is niet dood en niet verlaten.
+
+00:12:29.020 --> 00:12:31.780
+Microsoft ondersteunt het nog steeds en brengt nog steeds fixies uit.
+
+00:12:31.980 --> 00:12:38.160
+En Microsoft's eigen richtlijnen zeggen dat het voor een bestaand project of wanneer je snel iets moet opleveren, prima is om op Semantic Kernel te blijven.
+
+00:12:38.340 --> 00:12:40.740
+Voor jou als leerling zijn de ideeën direct overdraagbaar.
+
+00:12:40.920 --> 00:12:44.960
+Een plugin hier wordt een tool daar en het mentale model dat je net hebt opgebouwd is hetzelfde.
+
+00:12:45.260 --> 00:12:48.920
+Semantic Kernel leren is eigenlijk leren hoe Microsoft agents benadert.
+
+00:12:48.920 --> 00:12:51.960
+Die manier van denken overleeft elke individuele tool.
+
+00:12:52.720 --> 00:12:54.360
+Wanneer gebruik je Semantic Kernel?
+
+00:12:54.500 --> 00:12:57.820
+Laten we eindigen met de praktische vraag wanneer je daadwerkelijk naar deze kit moet grijpen.
+
+00:12:58.040 --> 00:13:00.580
+Begin met de regel die op bijna elke tool van toepassing is.
+
+00:13:00.760 --> 00:13:04.240
+Als je een simpele functie kunt schrijven om het werk te doen, schrijf dan die simpele functie.
+
+00:13:04.560 --> 00:13:09.780
+Microsoft zegt dit over agents en het is een goed advies, want AI gebruiken wanneer een simpel stukje code volstaat,
+
+00:13:10.020 --> 00:13:11.920
+zorgt alleen voor extra kosten en verwarring.
+
+00:13:12.100 --> 00:13:18.020
+Gebruik daarom Semantic Kernel als je een ontwikkelaar bent die AI toevoegt aan een app die je al hebt en je wilt dat je eigen code aanroepbaar is door het model.
+
+00:13:18.020 --> 00:13:21.000
+Dat is het kernscenario en dat is waar de kit uitblinkt.
+
+00:13:21.120 --> 00:13:24.280
+Gebruik het wanneer je één code base nodig hebt die met verschillende modellen werkt,
+
+00:13:24.480 --> 00:13:27.000
+zodat je van aanbieder kunt wisselen zonder iets te herschrijven.
+
+00:13:27.200 --> 00:13:30.260
+En gebruik het wanneer je bedrijf op internet draait en behoefte heeft aan de logging,
+
+00:13:30.520 --> 00:13:34.000
+beveiliging en controle waar grote IT-teams om vragen voordat ze iets goedkeuren.
+
+00:13:34.140 --> 00:13:36.680
+Er zijn twee situaties waarin je ergens anders moet kijken.
+
+00:13:36.900 --> 00:13:39.180
+Als je nooit code schrijft, is deze kit niet voor jou,
+
+00:13:39.420 --> 00:13:44.660
+want het pad voor makers is Copilot Studio en Semantic Kernel bevindt zich onder die wereld in plaats van aan de voorkant ervan.
+
+00:13:44.660 --> 00:13:50.000
+Als je alleen een simpele chatbot op een website wilt, los je een kleiner probleem op dan waar deze kit voor is gebouwd.
+
+00:13:50.120 --> 00:13:54.280
+Een carrièreperspectief is hier ook van belang, aangezien vele van jullie daar precies voor kwamen.
+
+00:13:54.460 --> 00:13:59.960
+De ideeën in deze kitplugins, functie aanroepen, geheugen en connectoren duiken ook op in andere AI-tools,
+
+00:14:00.140 --> 00:14:02.000
+inclusief degene die niet van Microsoft zijn.
+
+00:14:02.240 --> 00:14:04.500
+Leer ze hier en je zult ze overal elders herkennen.
+
+00:14:04.680 --> 00:14:06.960
+Er is nog één laatste ding voor iedereen die fris begint.
+
+00:14:06.960 --> 00:14:11.540
+Als je iets compleet nieuws start, stuurt Microsoft ontwikkelaars nu eerst naar de opvolger.
+
+00:14:11.780 --> 00:14:16.000
+Leer de Semantic Kernel voor de ideeën en grijp naar het nieuwe framework wanneer je begint.
+
+00:14:16.180 --> 00:14:19.600
+De concepten zijn hetzelfde en dat is het deel dat de moeite waard is om te behouden.
+
+00:14:19.900 --> 00:14:21.540
+De samenvatting en één vraag.
+
+00:14:21.780 --> 00:14:24.440
+Laten we de stukjes dus in een paar korte regels samenvoegen.
+
+00:14:24.660 --> 00:14:28.280
+Semantic Kernel is middelware, de laag die jouw code met een AI-model verbindt.
+
+00:14:28.380 --> 00:14:30.380
+De Kernel houdt alles op één plek bij elkaar.
+
+00:14:30.580 --> 00:14:32.940
+Plag-ins geven de AI toegang tot jouw eigen functies.
+
+00:14:33.140 --> 00:14:35.300
+Functie aanroepen bepalen wat er uitgevoerd moet worden.
+
+00:14:35.300 --> 00:14:39.640
+Geheugen onthoudt jouw data en connectoren maken het makkelijk om later van model te wisselen.
+
+00:14:39.760 --> 00:14:41.920
+Als je één ding moet onthouden, laat het dan dit zijn.
+
+00:14:42.120 --> 00:14:46.020
+Het model is het onderdeel dat steeds zal veranderen naarmate de technologie voortschrijpt.
+
+00:14:46.180 --> 00:14:50.900
+De verbinding tussen jouw code en het model is wat je echt beheert en die verbinding biedt Semantic Kernel je.
+
+00:14:51.100 --> 00:14:57.080
+Als dit hielp, abonneer je dan op de M365FM podcast om de tools en de mindset die de toekomst van werk vormen onder de knie te krijgen.
+
+00:14:57.260 --> 00:14:58.460
+Hier is mijn vraag voor jou.
+
+00:14:58.460 --> 00:15:04.160
+Als je morgen één taak uit je eigen werk aan een AI zou kunnen overdragen, welke taak zou je hem dan als eerste toevertrouwen?

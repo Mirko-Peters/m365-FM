@@ -1,0 +1,631 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:04.300
+Semantic Kernel to warstwa pod narzędziami AI firmy Microsoft, której prawie nikt nie wyjaśnia.
+
+00:00:04.440 --> 00:00:10.440
+To darmowy, opensorowy zestaw narzędzi, który pozwala Twojemu kodowi komunikować się z dużym modelem języka i pozwala temu modelowi wywoływać Twój kod z powrotem.
+
+00:00:10.620 --> 00:00:14.640
+Możesz oczekiwać kreatora hotbotów, ale tak naprawdę jest to middleware, cicha część po środku.
+
+00:00:14.860 --> 00:00:20.100
+Kiedy zobaczysz garść jego elementów, sposób w jaki Microsoft tworzy agentów przestaje wydawać się tajemnicą.
+
+00:00:20.360 --> 00:00:26.500
+Witamy w podcaście M365FM, gdzie zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:26.500 --> 00:00:30.740
+Dzisiaj rozkładamy Semantic Kernel na czynniki pierwsze, mówiąc prostym językiem.
+
+00:00:30.900 --> 00:00:32.800
+Czym właściwie jest Semantic Kernel?
+
+00:00:33.000 --> 00:00:37.180
+Zacznijmy od najprostszej wersji, ponieważ nazwa brzmi ciężej niż jest w rzeczywistości.
+
+00:00:37.400 --> 00:00:45.640
+Semantic Kernel to darmowy, opensorowy zestaw narzędzi firmy Microsoft, który łączy oprogramowanie, które już tworzysz z modelem AI, a następnie pozwala modelowi wywoływać Twój własny kod z powrotem.
+
+00:00:45.800 --> 00:00:53.700
+Microsoft opisuje go jako middleware, co jest po prostu określeniem warstwy pośredniczącej, która przekazuje wiadomości między dwoma elementami, które nie posługują się tym samym językiem.
+
+00:00:53.700 --> 00:00:56.040
+Teraz to, czym ona jest, nie ma aż takiego znaczenia.
+
+00:00:56.040 --> 00:01:01.320
+To nie jest aplikacja, którą się otwiera, nie jest hotbot, do którego się pisze, ani model taki jak te, które stoją za kopilotem.
+
+00:01:01.560 --> 00:01:06.040
+Instalujesz go w projekcie, nad którym już pracujesz, a on przejmuje niewygodną część komunikacji ze sztuczną inteligencją.
+
+00:01:06.880 --> 00:01:11.080
+Zestaw pojawił się po raz pierwszy w marcu 2023 roku na otwartej licencji MIT.
+
+00:01:11.240 --> 00:01:17.620
+Licencja ta oznacza, że każdy może z niego korzystać, czytać kod i modyfikować go do własnych potrzeb, co jest głównym powodem, dla którego szybko rozprzestrzenił się wśród deweloperów.
+
+00:01:17.780 --> 00:01:19.980
+Nie ma też znaczenia, gdzie działa Twoje oprogramowanie.
+
+00:01:19.980 --> 00:01:25.140
+Zestaw działa w Twojej własnej aplikacji, w chmurze Microsoftu, w innej chmurze lub na komputerze pod Twoim biurkiem.
+
+00:01:25.340 --> 00:01:29.500
+Azure jest jego najpopularniejszą platformą, ale Microsoft szybko zastrzega, że Azure nie jest wymagany.
+
+00:01:29.700 --> 00:01:31.960
+Istnieje jasny powód, dla którego ta warstwa istnieje.
+
+00:01:32.120 --> 00:01:36.640
+Wyobraź sobie działającą aplikację pełną rzeczywistych funkcji, takich jak wyszukiwanie zamówień czy wysyłanie e-maili.
+
+00:01:36.840 --> 00:01:40.520
+Model języka świetnie rozumie prośby, ale sam nie jest w stanie tego zrobić.
+
+00:01:40.780 --> 00:01:45.800
+Semantic Kernel wypełnia tę lukę, dzięki czemu model może sięgnąć do Twojej aplikacji, a Twoja aplikacja może wrócić do modelu.
+
+00:01:45.800 --> 00:01:47.760
+Oto mały przykład, który to urzeczywistni.
+
+00:01:47.900 --> 00:01:54.000
+Powiedzmy, że klient wpisuje pytanie o zamówienie, a Twoja aplikacja musi wyszukać to zamówienie, sprawdzić jego status i odpowiedzieć prostym językiem.
+
+00:01:54.220 --> 00:01:57.320
+Model może napisać tę odpowiedź, ale nie może samodzielnie wyszukać zamówienia.
+
+00:01:57.560 --> 00:02:03.700
+Semantic Kernel pozwala modelowi poprosić Twoją aplikację o wykonanie wyszukiwania, a następnie użycie odpowiedzi w swojej odpowiedzi wszystko w jednym przepływie.
+
+00:02:03.900 --> 00:02:11.940
+Microsoft twierdzi, że firmy z listy Fortune 500 już na nim bazują, a powodem, który podają, jest jego elastyczność, modułowość i łatwość obserwowania podczas pracy.
+
+00:02:11.940 --> 00:02:17.560
+Jądro i nazwa. Pierwszym słowem, które myli ludzi, jest jądro, więc rozłóżmy nazwę na czynniki pierwsze.
+
+00:02:17.840 --> 00:02:21.500
+Semantic wskazuje na znaczenie i język naturalny, czyli na to, w czym model jest dobry.
+
+00:02:21.700 --> 00:02:25.360
+Jądro wskazuje na środek ten jeden obiekt, do którego podłącza się wszystko inne.
+
+00:02:25.560 --> 00:02:27.800
+Opis Microsoftu jest orzeźwiająco prosty.
+
+00:02:28.040 --> 00:02:33.400
+Najprościej rzecz ujmując, jądro to kontener, który przechowuje wszystkie usługi i wtyczki potrzebne do uruchomienia aplikacji AI.
+
+00:02:33.620 --> 00:02:38.840
+Wyobraź sobie to jako pojedyncze pudełko, w którym rejestrowana jest każda część aplikacji AI, dzięki czemu aplikacja zawsze wie, gdzie je znaleźć.
+
+00:02:38.840 --> 00:02:45.360
+Jądro przekazuje się dwa rodzaje rzeczy. Pierwszym z nich są usługi, czyli same modele, a i plus zwykłe narzędzia, takie jak rejestrowanie.
+
+00:02:45.620 --> 00:02:50.380
+Drugim są wtyczki, czyli części wykonujące faktyczną pracę, do których przejdziemy za chwilę.
+
+00:02:50.620 --> 00:02:54.580
+Gdy aplikacja wysyła żądanie, jądro wykonuje krótką sekwencję zadań.
+
+00:02:54.760 --> 00:03:01.740
+Wybiera najlepszą usługę, a i dla zadania, buduje monit z szablonu, wysyła go, odczytuje odpowiedź i przekazuje wynik z powrotem do aplikacji.
+
+00:03:01.980 --> 00:03:05.240
+Jeśli brzmi to jak hydraulika, którą już widziałeś, to dlatego, że nią jest.
+
+00:03:05.240 --> 00:03:13.920
+Microsoft zmodelował jądro na popularnym wzorcu z net, zwanym wstrzykiwaniem zależności, gdzie jedno centralne miejsce dostarcza elementy potrzebne innym częściom kodu, więc nikt nie musi ich montować na stałe.
+
+00:03:14.120 --> 00:03:15.880
+Dla Ciebie praktyczny punkt jest prosty.
+
+00:03:16.060 --> 00:03:22.460
+Jądro to centrum sterowania, wszystko inne to narzędzie, które tam rejestrujesz i z tego jednego miejsca możesz skonfigurować i monitorować całość.
+
+00:03:22.720 --> 00:03:25.580
+Jest jeszcze jeden szczegół dotyczący jądra, a potem przejdziemy dalej.
+
+00:03:25.820 --> 00:03:31.820
+Jest lekkie, ponieważ jest w rzeczywistości tylko kontenerem, dlatego Microsoft zaleca budowanie nowego dla każdego użycia, zamiast trzymania jednego na zawsze.
+
+00:03:31.820 --> 00:03:36.700
+Brzmi to skomplikowanie, ale zapobiega to wyciekaniu stanu wtyczek między żądaniami, wtyczkami i funkcjami.
+
+00:03:36.900 --> 00:03:40.120
+W tym miejscu jądro semantyczne staje się przydatne, więc zwolnijmy tempo.
+
+00:03:40.360 --> 00:03:42.820
+Wtyczka to grupa funkcji, które udostępniasz sztucznej inteligencji.
+
+00:03:43.560 --> 00:03:49.800
+W innych narzędziach funkcje te są często nazywane narzędziami lub akcjami, a we wczesnej wersji jądra semantycznego wtyczki nazywano umiejętnościami.
+
+00:03:50.000 --> 00:03:53.540
+Funkcja to po prostu fragment Twojego własnego kodu z dołączonym prostym opisem.
+
+00:03:53.740 --> 00:03:58.220
+Opis informuje sztuczną inteligencję, co robi funkcja, co się w nią wprowadza i co z niej wychodzi.
+
+00:03:58.220 --> 00:04:06.740
+Przykładem Microsoftu jest wtyczka do oświetlenia z trzema funkcjami, jedną, która wyświetla wszystkie światła, jedną, która raportuje stan pojedynczego światła i jedną, która zmienia stan światła.
+
+00:04:06.920 --> 00:04:09.840
+Model odczytuje te opisy i wybiera odpowiednią funkcję dla żądania.
+
+00:04:09.840 --> 00:04:12.420
+Początkujący zazwyczaj pomijają tutaj jeden szczegół.
+
+00:04:12.600 --> 00:04:13.760
+Opis nie jest ozdobą.
+
+00:04:14.000 --> 00:04:18.660
+Jeśli jest niejasny, model zgaduje źle lub całkowicie pomija funkcję, a cały projekt się rozpada.
+
+00:04:18.880 --> 00:04:23.220
+Napisz opis tak, jak wyjaśniłbyś funkcję nowemu współpracownikowi, a model użyje jej poprawnie.
+
+00:04:23.420 --> 00:04:25.160
+Wtyczki mogą pochodzić z trzech miejsc.
+
+00:04:25.420 --> 00:04:33.400
+Możesz je napisać we własnym kodzie, zaimportować ze wspólnego standardu internetowego o nazwie Open API lub pobrać z czegoś, co nazywa się serwerem MCP, co jest skrótem od Model Context Protocol.
+
+00:04:33.400 --> 00:04:37.940
+Ta ostatnia opcja ma znaczenie, ponieważ pozwala jednemu zespołowi zbudować funkcję i udostępnić ją wszystkim innym.
+
+00:04:38.140 --> 00:04:40.900
+Dzielenie się jest prawdziwą nagrodą w przypadku tych dwóch ostatnich opcji.
+
+00:04:41.140 --> 00:04:49.700
+Jeśli opiszesz możliwość za pomocą Open API lub opakowujesz ją na serwerze MCP, inny zespół może ją przejąć bez przepisywania, a nawet twórca w narzędziu Low Code może użyć tej samej możliwości.
+
+00:04:49.940 --> 00:04:52.760
+W ten sposób jedna dobrze zbudowana funkcja pomaga całej firmie.
+
+00:04:52.960 --> 00:04:56.520
+Wtyczki również dobrze współpracują ze sposobem, w jaki prawdziwe zespoły tworzą oprogramowanie.
+
+00:04:56.520 --> 00:05:02.180
+Wtyczka może przechowywać własne połączenie z bazą danych lub klienta internetowego, więc sztuczna inteligencja nigdy nie widzi wrażliwych szczegółów.
+
+00:05:02.340 --> 00:05:04.060
+Widzi tylko prosty opis i wynik.
+
+00:05:04.140 --> 00:05:07.600
+Jest jedno praktyczne ostrzeżenie przed zbudowaniem gigantycznego zestawu narzędzi.
+
+00:05:07.760 --> 00:05:15.320
+Open API zaleca nie więcej niż 20 narzędzi w jednym żądaniu, a idealnie nie więcej niż 10, ponieważ dokładność modelu spada wraz z wydłużeniem się listy.
+
+00:05:15.540 --> 00:05:18.940
+Mniej przejrzystych funkcji za każdym razem pokonuje ich gigantyczną stertę.
+
+00:05:19.080 --> 00:05:20.600
+Planowanie i wywoływanie funkcji.
+
+00:05:20.600 --> 00:05:27.120
+Gdy masz kilka funkcji i pojawia się nowy problem, sztuczna inteligencja musi zdecydować, które funkcje użyć i w jakiej kolejności, aby odpowiedzieć na jedno żądanie.
+
+00:05:27.300 --> 00:05:29.500
+Semantic kernel to zadanie nazywa się planowaniem.
+
+00:05:29.700 --> 00:05:31.360
+Pierwotną odpowiedzią były planiści.
+
+00:05:31.580 --> 00:05:35.600
+Podawałeś zestaw funkcji, a on wyświetlał monit z prośbą do modelu o wybranie planu.
+
+00:05:35.720 --> 00:05:38.820
+To działało, ale wymagało od modelu zgadywania sposobu wyboru.
+
+00:05:39.000 --> 00:05:45.900
+Następnie Open AI wbudowało wywołanie funkcji bezpośrednio w swoje modele, a inni twórcy modeli, tacy jak Gemini, Cloud i Mistral, poszli w ślady tego pomysłu.
+
+00:05:45.900 --> 00:05:52.700
+Wywołanie funkcji oznacza, że model może po prostu poprosić o konkretną funkcję po nazwie z odpowiednimi danymi wejściowymi, zamiast opisywać, czego chce w akapicie.
+
+00:05:52.880 --> 00:05:57.220
+Ponieważ okazało się to bardziej niezawodne, semantic kernel uczyniło je głównym sposobem planowania.
+
+00:05:57.420 --> 00:06:00.480
+Ta zmiana ma bezpośrednie konsekwencje, o których powinieneś wiedzieć.
+
+00:06:00.760 --> 00:06:04.720
+Starsze planery Stepways i Handlebars zostały wycofane i usunięte z pakietu.
+
+00:06:04.940 --> 00:06:08.200
+Microsoft zaleca teraz deweloperom korzystanie z wywołań funkcji.
+
+00:06:08.400 --> 00:06:13.880
+W każdym języku obsługiwanym przez zestaw istnieje powód, dla którego Microsoft odszedł od starych planerów i warto to powiedzieć wprost.
+
+00:06:13.880 --> 00:06:18.240
+Planer prosił model o wymyślenie planu za pomocą słów, co było elastyczne, ale nieprzewidywalne.
+
+00:06:18.420 --> 00:06:24.640
+Wywoływanie funkcji jest węższe i bardziej powtarzalne, więc w środowisku produkcyjnym występuje mniej niespodzianek, a właśnie tego potrzebuje aplikacja biznesowa.
+
+00:06:24.860 --> 00:06:26.920
+Sposób działania jest prostszy niż się wydaje.
+
+00:06:27.240 --> 00:06:32.380
+Model prosi o funkcję, jądro semantyczne ją uruchamia, zwraca wynik, a model decyduje, co dalej.
+
+00:06:32.580 --> 00:06:35.060
+Ta pętla powtarza się, aż zadanie zostanie zakończone.
+
+00:06:35.280 --> 00:06:40.380
+Może nawet wywołać kilka funkcji jednocześnie, w ten sposób obsługując żądanie, takie jak wyłączenie wszystkich świateł w pokoju.
+
+00:06:40.380 --> 00:06:43.980
+Możesz wyobrazić sobie pętlę jako krótką rozmowę między kodem a modelem.
+
+00:06:44.200 --> 00:06:48.900
+Model mówi, kod słucha i działa, a następnie model mówi ponownie, wykorzystując to, czego się nauczył.
+
+00:06:48.980 --> 00:06:50.000
+Pamięć i stojak.
+
+00:06:50.200 --> 00:06:53.240
+Istnieje ograniczenie, które zaskakuje wszystkich za pierwszym razem.
+
+00:06:53.560 --> 00:06:55.280
+Sam model języka nie ma pamięci.
+
+00:06:55.520 --> 00:07:00.740
+Każde żądanie zaczyna się od nowa, nie mając pojęcia o dokumentach, danych ani rozmowie, którą odbyłeś 5 minut temu.
+
+00:07:00.740 --> 00:07:03.840
+Rozwiązaniem jest wzorzec zwany generacją rozszerzoną pobierania.
+
+00:07:04.080 --> 00:07:06.880
+Mówiąc prościej, najpierw wyszukujesz, a potem odpowiadasz.
+
+00:07:07.000 --> 00:07:11.920
+Zamiast liczyć na to, że model coś zapamięta, pobierasz odpowiedni materiał i przekazujesz go wraz z pytaniem.
+
+00:07:12.140 --> 00:07:16.280
+Aby zrozumieć, dlaczego to ma znaczenie, pomyśl o ostatnim przypadku, kiedy hotbot z pewnością siebie coś wymyślił.
+
+00:07:16.460 --> 00:07:19.080
+Dzieje się tak, gdy model nie ma niczego konkretnego, na czym mógłby się oprzeć.
+
+00:07:19.220 --> 00:07:24.400
+Pobieranie rozwiązuje ten problem, przekazując mu rzeczywisty dokument lub rekord, dzięki czemu odpowiedź jest oparta na czymś, na co można wskazać.
+
+00:07:24.400 --> 00:07:27.360
+Jądro semantyczne buduje tę pamięć na bazie pamięci wektorów.
+
+00:07:27.460 --> 00:07:34.400
+Pamięć wektorów to baza danych dostrojona pod kątem znaczenia, a nie konkretnych słów, a łączniki zestawu zapewniają jeden współdzielony interfejs dla wielu z nich.
+
+00:07:34.900 --> 00:07:40.340
+Azure AI Search to typowy wybór, a inne, takie jak Postgres, Redis i Quadrant, również są obsługiwane.
+
+00:07:40.600 --> 00:07:44.320
+Słowo wektor zasługuje na jedno zdanie, ponieważ jest mniej straszne niż brzmi.
+
+00:07:44.560 --> 00:07:52.200
+System zamienia tekst na listy liczb zwane osadzeniami, które rejestrują znaczenie tekstu, dzięki czemu może znaleźć fragmenty o zbliżonym znaczeniu, nawet jeśli słowa nie pasują do siebie.
+
+00:07:52.200 --> 00:07:54.520
+Jest tu ciekawy szczegół dla początkujących.
+
+00:07:54.680 --> 00:08:02.540
+Wyszukiwanie wektorowe można udostępnić modelowi jako wtyczkę, co oznacza, że sztuczna inteligencja może samodzielnie wyszukiwać elementy, gdy pytanie tego wymaga, używając tego samego wywołania funkcji, które właśnie omówiliśmy.
+
+00:08:02.760 --> 00:08:05.600
+Jest jednak jedno uczciwe zastrzeżenie, o którym należy pamiętać.
+
+00:08:05.760 --> 00:08:13.140
+Funkcja magazynu wektorów jest nadal w wersji zapoznawczej, więc może ulec zmianie, a starsze łączniki magazynu pamięci zostały zastąpione nowszymi łącznikami i monitami.
+
+00:08:13.320 --> 00:08:15.880
+Pamięć to jeden rodzaj wtyczki, a zestaw ma inne.
+
+00:08:15.880 --> 00:08:21.320
+Łącznik to adapter, który pozwala jednemu blokowi kodu komunikować się z wieloma różnymi modelami przez to samo przejście.
+
+00:08:21.540 --> 00:08:30.160
+Lista jest dłuższa niż można by się spodziewać i obejmuje Azure OpenEye, Plain OpenEye, Gemini firmy Google, Mistral, a nawet modele działające na własnym komputerze za pomocą narzędzia o nazwie Olama.
+
+00:08:30.340 --> 00:08:34.420
+Podstawa Amazona również tam jest wraz z każdą usługą zgodną ze stylem OpenEye.
+
+00:08:34.580 --> 00:08:36.860
+Korzyści pojawiają się, gdy pojawia się nowy model.
+
+00:08:37.120 --> 00:08:40.880
+Zamiast przepisywać aplikację, zamieniasz łącznik i zachowujesz wszystko inne.
+
+00:08:40.880 --> 00:08:46.980
+Microsoft nazywa zestaw przyszłości owym właśnie z tego powodu, ponieważ kod przestaje się przejmować, który model jest pod spodem.
+
+00:08:47.180 --> 00:08:49.500
+Praktyczną korzyścią jest wybór bez ograniczeń.
+
+00:08:49.700 --> 00:08:52.780
+Jeśli Twoja firma już płaci za Azure OpenEye, zaczynasz od tego.
+
+00:08:52.960 --> 00:08:57.480
+A jeśli w przyszłym roku pojawi się tańszy lub lepszy model, przechodzisz na niego bez ingerencji w resztę aplikacji.
+
+00:08:57.640 --> 00:09:00.860
+Ta swoboda jest cichym powodem, dla którego zespoły wybierają taki zestaw.
+
+00:09:01.000 --> 00:09:03.400
+Nawiasem mówiąc, łączniki obejmują więcej niż tylko czat.
+
+00:09:03.500 --> 00:09:08.440
+Ta sama idea dotyczy osadzenia, obrazów, a nawet dźwięku, dzięki czemu jedna aplikacja może łączyć kilka rodzajów sztucznej inteligencji.
+
+00:09:08.440 --> 00:09:12.700
+Każdy język obsługuje nieco inny fragment tej listy, co warto sprawdzić przed zatwierdzeniem.
+
+00:09:12.860 --> 00:09:14.720
+Istnieją również szablony komunikatów.
+
+00:09:14.880 --> 00:09:19.140
+Szablon łączy instrukcje, dane wejściowe użytkownika i dane wyjściowe funkcji w jednym komunikacie.
+
+00:09:19.400 --> 00:09:25.380
+Możesz zapisać ten szablon jako plik i udostępnić go zespołowi, dzięki czemu pisanie komunikatów staje się czymś, co możesz śledzić i przeglądać.
+
+00:09:25.480 --> 00:09:27.640
+Ostatnim elementem tej sekcji są filtry.
+
+00:09:27.880 --> 00:09:34.140
+Filtr pozwala na przeprowadzanie własnych sprawdzeń przed i po uruchomieniu modelu, gdzie zespoły umieszczają swoje reguły bezpieczeństwa.
+
+00:09:34.140 --> 00:09:40.620
+Microsoft wskazuje filtry jako miejsce odpowiedzialnej pracy nad sztuczną inteligencją, a to mała funkcja o dużym znaczeniu.
+
+00:09:41.180 --> 00:09:42.700
+Jeden zestaw, trzy języki.
+
+00:09:42.960 --> 00:09:47.860
+Możesz się zastanawiać, czy cokolwiek z tego pasuje do języka, który już znasz, i odpowiedź brzmi prawdopodobnie tak.
+
+00:09:48.040 --> 00:09:51.020
+Jądro semantyczne jest dostępne dla C-Sharp, Pythona i Javy.
+
+00:09:51.260 --> 00:09:55.680
+Każda wersja celowo podąża za nawykami swojego języka, więc wydaje się natywna, a nie dodana.
+
+00:09:55.680 --> 00:10:00.500
+Kod Pythona napisany w tym jądrze nadal czyta się jak Python, a kod C-Sharp nadal czyta się jak C-Sharp.
+
+00:10:00.540 --> 00:10:04.880
+Microsoft zrobił to celowo, ponieważ narzędzie, które walczy z twoimi nawykami, to narzędzie, którego przestajesz używać.
+
+00:10:05.180 --> 00:10:06.560
+Rozpoczęcie jest celowo krótkie.
+
+00:10:06.760 --> 00:10:08.320
+W C-Sharp dodajesz jeden pakiet.
+
+00:10:08.460 --> 00:10:12.580
+W Pythonie uruchamiasz jedno polecenie instalacyjne, a w DAWie pobierasz je ze standardowego repozytorium.
+
+00:10:12.760 --> 00:10:16.320
+Nie ma żadnych gigantycznych kroków konfiguracyjnych stojących między tobą, a twoim pierwszym działającym przykładem.
+
+00:10:16.480 --> 00:10:18.160
+Jest jeszcze jeden powód, który ma znaczenie.
+
+00:10:18.160 --> 00:10:21.820
+Oznacza to, że nie musisz uczyć się nowego języka, aby wypróbować pomysły z tego odcinka.
+
+00:10:22.000 --> 00:10:27.700
+Jeśli już piszesz Pythona w projekcie pobocznym, możesz podążać ścieżką Pythona, a jeśli twoja praca działa w Polarity, możesz jej użyć.
+
+00:10:27.840 --> 00:10:29.980
+Jest jedna rzecz, którą warto wiedzieć przed wyborem.
+
+00:10:30.180 --> 00:10:31.440
+Nie są one idealnie równe.
+
+00:10:31.640 --> 00:10:36.460
+Kilka funkcji trafia do C-Sharp i Pythona, zanim dotrą do Java, a łączniki magazynu wektorów skłaniają się ku pierwszym dwóm.
+
+00:10:36.660 --> 00:10:40.240
+Warto szybko przejrzeć listę funkcji dla swojego języka, zanim zaczniesz planować coś wokół niego.
+
+00:10:40.520 --> 00:10:42.740
+Warto mieć jeszcze jedną obietnicę, jeśli się uczysz.
+
+00:10:42.740 --> 00:10:51.200
+Wersja pierwsza i późniejsza zawierają zobowiązanie do braku zmian powodujących przerwanie kodu, co oznacza, że kod, którego nauczysz się dzisiaj, nie zostanie odrzucony przez następną aktualizację.
+
+00:10:51.780 --> 00:10:53.840
+Copilot, Foundry i to, co będzie dalej?
+
+00:10:54.040 --> 00:10:58.020
+Teraz pytanie, które dezorientuje większość osób i zasługuje na prostą odpowiedź.
+
+00:10:58.180 --> 00:11:02.720
+Semantic Kernel nie jest Microsoft 365 Copilot i nie potrzebujesz go do korzystania z Copilot.
+
+00:11:02.900 --> 00:11:09.660
+Copilot to gotowy produkt, który otwierasz i używasz, podczas gdy Semantic Kernel to materiał konstrukcyjny, którego programiści używają do tworzenia własnych funkcji sztucznej inteligencji.
+
+00:11:09.660 --> 00:11:12.420
+Prawdziwym połączeniem jest wspólny sposób opisywania rzeczy.
+
+00:11:12.740 --> 00:11:19.000
+Semantic Kernel używa tego samego standardu internetowego, Open API, którego Microsoft 365 Copilot używa do opisywania możliwości rozszerzenia.
+
+00:11:19.160 --> 00:11:25.440
+Ponieważ obie strony posługują się tym samym językiem, stworzoną przez Ciebie funkcjonalnością, można podzielić się z innymi programistami, a nawet twórcami, którzy nie piszą kodu.
+
+00:11:25.620 --> 00:11:28.360
+Istnieje tu również pomost umożliwiający zbudowanie własnego agenta w świecie.
+
+00:11:28.460 --> 00:11:37.120
+Microsoft 365 pakiet Microsoft 365 Agents SDK obsługuje stronę Microsoft 365, a stroną sztucznej inteligencji zajmuje się Semantic Kernel lub jego następca.
+
+00:11:37.120 --> 00:11:40.580
+Razem pozwalają one niestandardowemu agentowi dotrzeć do Copilota.
+
+00:11:40.580 --> 00:11:46.340
+Po stronie chmury nowszy framework wymienia Microsoft Foundry jako jedno z miejsc do uruchamiania modeli i agentów.
+
+00:11:46.500 --> 00:11:49.320
+Pomaga to postrzegać je jako warstwy, a nie rywalizujące ze sobą.
+
+00:11:49.500 --> 00:11:52.420
+Copilot to gotowe środowisko, z którego korzystają Twoi współpracownicy.
+
+00:11:52.580 --> 00:11:56.540
+Copilot Studio to miejsce, w którym twórcy tworzą własnych agentów z niewielką ilością kodu lub bez niego,
+
+00:11:56.660 --> 00:12:00.320
+a Semantic Kernel to zestaw narzędzi dla programistów, który przekształca pomysł w działający kod.
+
+00:12:00.520 --> 00:12:02.900
+Są one przeznaczone do współpracy, a nie do konkurowania.
+
+00:12:02.900 --> 00:12:04.520
+To prowadzi do uczciwej części.
+
+00:12:04.820 --> 00:12:10.440
+Microsoft stworzył nowszy framework Microsoft Agent Framework, łącząc Semantic Kernel z innym projektem o nazwie Autogen.
+
+00:12:10.640 --> 00:12:14.100
+Od tego czasu stał się on zalecanym punktem wyjścia dla zupełnie nowych projektów agentów.
+
+00:12:14.240 --> 00:12:16.800
+Prawdziwe napięcie jest proste i prawdopodobnie już je odczułeś.
+
+00:12:16.940 --> 00:12:19.960
+Nie chcesz spędzać miesięcy na nauce czegoś, co Microsoft zamierza zastąpić.
+
+00:12:20.160 --> 00:12:21.980
+Zajmijmy się więc tym strachem bezpośrednio.
+
+00:12:22.140 --> 00:12:23.680
+Oto co to oznacza, a czego nie.
+
+00:12:23.880 --> 00:12:28.960
+Prace nad nowymi funkcjami przechodzą teraz do nowszego frameworka, ale Semantic Kernel nie umarł i nie został porzucony.
+
+00:12:28.960 --> 00:12:37.940
+Microsoft nadal go wspiera i dostarcza poprawki, a jego własne wytyczne mówią, że w przypadku istniejącego projektu lub gdy trzeba coś szybko dostarczyć, pozostanie przy Semantic Kernel jest całkowicie w porządku.
+
+00:12:38.140 --> 00:12:40.920
+Dla Ciebie, jako osoby uczącej się, pomysły przenoszą się bezpośrednio.
+
+00:12:41.100 --> 00:12:45.000
+Wtyczka tutaj staje się narzędziem tam, a model mentalny, który właśnie zbudowałeś, jest tym samym.
+
+00:12:45.220 --> 00:12:49.060
+Nauka Semantic Kernel to tak naprawdę nauka podejścia Microsoftu do agentów.
+
+00:12:49.200 --> 00:12:52.040
+Ten sposób myślenia przetrwa każde pojedyncze narzędzie.
+
+00:12:52.840 --> 00:12:54.440
+Kiedy używać Semantic Kernel?
+
+00:12:54.640 --> 00:12:57.780
+Zakończmy praktycznym pytaniem, kiedy faktycznie sięgnąć po ten zestaw.
+
+00:12:57.780 --> 00:13:00.640
+Zacznij od reguły, która pasuje do prawie każdego narzędzia.
+
+00:13:00.780 --> 00:13:04.000
+Jeśli możesz napisać prostą funkcję, która wykona zadanie, napisz ją.
+
+00:13:04.200 --> 00:13:10.660
+Microsoft mówi to o agentach i to dobra rada, ponieważ sięganie po sztuczną inteligencję, gdy wystarczy prosty fragment kodu, jedynie zwiększa koszty i wprowadza zamieszanie,
+
+00:13:10.740 --> 00:13:17.880
+a następnie sięganie po Semantic Kernel, gdy jesteś programistą dodającym sztuczną inteligencję do aplikacji, którą już posiadasz i chcesz, aby Twój własny kod był wywoływalny przez model.
+
+00:13:18.080 --> 00:13:21.100
+To jest główny przypadek i to właśnie w tym przypadku zestaw się sprawdza.
+
+00:13:21.100 --> 00:13:26.580
+Sięgnij po niego, gdy potrzebujesz jednej bazy kodu do pracy z kilkoma modelami, aby móc zmieniać dostawców bez przepisywania czegokolwiek
+
+00:13:26.580 --> 00:13:34.100
+i sięgnij po niego, gdy Twoja firma działa w internecie i chce takiego rodzaju rejestrowania, bezpieczeństwa i nadzoru, jakiego wymagają duże zespoły IT przed zatwierdzeniem czegokolwiek.
+
+00:13:34.300 --> 00:13:36.560
+Są dwa momenty, w których warto szukać gdzie indziej.
+
+00:13:36.780 --> 00:13:44.560
+Jeśli nigdy nie piszesz kodu, zestaw nie jest dla Ciebie, ponieważ przyjazną dla twórców ścieżką jest Copilot Studio, a Semantic Kernel znajduje się pod tym światem, a nie na jego czele.
+
+00:13:44.560 --> 00:13:50.320
+Jeśli chcesz tylko prostego hotbota na stronie internetowej, rozwiązujesz mniejszy problem niż ten, dla którego ten zestaw został stworzony.
+
+00:13:50.480 --> 00:13:54.100
+Kont kariery ma tu również znaczenie, ponieważ wielu z Was przyszło tu właśnie po to.
+
+00:13:54.280 --> 00:14:01.980
+Pomysły zawarte w tym zestawie, wtyczki, wywoływanie funkcji, pamięć i łączniki pojawiają się również w innych narzędziach, a i także tych, które nie pochodzą od Microsoftu.
+
+00:14:02.180 --> 00:14:04.380
+Naucz się ich tutaj, a rozpoznasz je wszędzie indziej.
+
+00:14:04.620 --> 00:14:06.960
+Jest jeszcze jedna rzecz dla każdego, kto zaczyna od nowa.
+
+00:14:07.140 --> 00:14:11.640
+Jeśli zaczynasz coś zupełnie nowego, Microsoft teraz kieruje deweloperów najpierw w stronę następcy.
+
+00:14:11.640 --> 00:14:16.080
+Naucz się więc Semantic Kernel, aby poznać ideę i sięgnij po nowe ramy, gdy zaczniesz.
+
+00:14:16.260 --> 00:14:19.700
+Koncepcje są takie same i to jest ta część, którą warto zachować.
+
+00:14:20.180 --> 00:14:21.500
+Podsumowanie i jedno pytanie.
+
+00:14:21.820 --> 00:14:24.260
+Złóżmy więc te elementy w kilka krótkich linijek.
+
+00:14:24.460 --> 00:14:28.380
+Semantic Kernel to oprogramowanie pośredniczące warstwa łącząca Twój kod z modelem AI.
+
+00:14:28.600 --> 00:14:30.600
+Jądro przechowuje wszystko w jednym miejscu.
+
+00:14:30.780 --> 00:14:32.460
+Wtyczki dają AI własne funkcje.
+
+00:14:32.700 --> 00:14:35.340
+Wywoływanie funkcji to sposób, w jaki decyduje, co uruchomić.
+
+00:14:35.440 --> 00:14:39.780
+Pamięć to sposób, w jaki zapamiętuje Twoje dane, a łączniki pozwalają Ci później swobodnie zamieniać modele.
+
+00:14:39.780 --> 00:14:42.040
+Jeśli pamiętasz jedną rzecz, niech to będzie to.
+
+00:14:42.260 --> 00:14:45.760
+Model to część, która będzie się zmieniać raz po raz w miarę rozwoju technologii.
+
+00:14:45.900 --> 00:14:48.920
+Połączenie między kodem a modelem to część, którą faktycznie kontrolujesz,
+
+00:14:49.020 --> 00:14:51.240
+a to połączenie to to, co daje Ci jądro semantyczne.
+
+00:14:51.420 --> 00:14:53.780
+Jeśli to pomogło, zasubskrybuj podcast M365FM,
+
+00:14:54.480 --> 00:14:57.100
+aby poznać narzędzia i sposób myślenia kształtujący przyszłość pracy.
+
+00:14:57.280 --> 00:14:58.460
+Oto moje pytanie do Ciebie.
+
+00:14:58.660 --> 00:15:02.000
+Gdybyś jutro mógł powierzyć sztucznej inteligencji jedno zadanie ze swojej pracy,
+
+00:15:02.160 --> 00:15:04.160
+które z nich powierzyłbyś jej w pierwszej kolejności?

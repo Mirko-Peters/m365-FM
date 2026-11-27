@@ -139,6 +139,8 @@ test("expert requests: private matching, age/week limits, replies, reports, and 
   };
   assert.equal((await syncExpertVectors(vectorEnv)).processed, 4);
   assert.equal(upserted.filter((vector) => vector.metadata.type === "expert").length, 4);
+  assert.equal((await syncExpertVectors(vectorEnv)).processed, 0, "zweiter Lauf ohne Aenderung bettet niemanden neu ein (Hash h wird verglichen)");
+  assert.equal(upserted.filter((vector) => vector.metadata.type === "expert").length, 4);
   assert.equal(JSON.stringify(upserted).includes("expert@example.com"), false, "contact data is absent from vector values and metadata");
   const vectorPreview = await call("/api/expert-requests/preview", { id: 1 }, "POST", data, vectorEnv);
   assert.equal(vectorPreview.data.count, 3, `vector results can match without shared entity topics: ${JSON.stringify(vectorPreview.data)}`);

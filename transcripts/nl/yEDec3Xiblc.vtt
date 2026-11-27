@@ -1,0 +1,631 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:06.120
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.320 --> 00:00:08.580
+Wat SAP S4HANA eigenlijk is.
+
+00:00:08.800 --> 00:00:14.960
+SAP zegt dat haar klanten meer dan 87% van de wereldwijde handel genereren en het meeste daarvan verloopt via software die je nooit ziet.
+
+00:00:15.160 --> 00:00:20.700
+De nieuwste versie van die software heet SAP S4HANA en de naam laat het veel ingewikkelder klinken dan het is.
+
+00:00:20.900 --> 00:00:23.260
+Onder het acroniem schuilt één eenvoudige verandering.
+
+00:00:23.480 --> 00:00:28.880
+De data verplaatste zich van schijf naar geheugen en daarom worden rapporten die voorheen s'nachts draaiden nu bijgewerkt terwijl je kijkt.
+
+00:00:28.880 --> 00:00:36.040
+Die verandering dwong elk bedrijf dat het oudere SAP systeem gebruikte ook tot een beslissing omdat de reguliere ondersteuning daarvoor eindigt in 2027.
+
+00:00:36.440 --> 00:00:44.560
+Dus we bespreken wat S4HANA is, hoe het werkt, hoe bedrijven het draaien en migreren, waar Microsoft in het plaatje past en de onderdelen die de verwachtingen niet waarmaken.
+
+00:00:44.800 --> 00:00:46.720
+Laten we beginnen met de eenvoudige definitie.
+
+00:00:47.800 --> 00:00:49.280
+S4HANA is een ERP systeem.
+
+00:00:49.440 --> 00:00:58.300
+ERP staat simpelweg voor de software die een bedrijf gebruikt om de kernactiviteiten uit te voeren, orders aannemen, materialen inkopen, voorraad bijhouden, mensen betalen en de boekhouding afsluiten.
+
+00:00:58.300 --> 00:01:04.480
+Als je bedrijf op grote schaal iets maakt of verkoopt, zit zoiets onder alles en houdt het in stilte de cijfers op orde.
+
+00:01:04.680 --> 00:01:10.380
+Mensen in de sector noemen het het system of record een chique manier om te zeggen dat het de officiële versie van de waarheid bevat.
+
+00:01:10.600 --> 00:01:13.820
+Wanneer iemand vraagt wat een ERP eigenlijk doet, is dat het eerlijke antwoord.
+
+00:01:13.980 --> 00:01:17.780
+Het onthoudt alles wat het bedrijf heeft gedaan op een manier die later vertrouwd kan worden.
+
+00:01:18.000 --> 00:01:20.140
+De naam is makkelijker te verklaren dan het lijkt.
+
+00:01:20.140 --> 00:01:25.740
+Het S4-gedeelte staat voor SAP Business Suite 4 en het HANA-gedeelte is de database waarop het draait.
+
+00:01:25.960 --> 00:01:32.500
+SAP bracht het in 2015 uit als de opvolger van SAP ECC dat zelf in 1992 het R3-systeem verving.
+
+00:01:32.700 --> 00:01:37.440
+Die afkomst is belangrijk omdat de meeste bedrijven die dit luisteren op dit moment een van die oudere systemen draaien.
+
+00:01:37.600 --> 00:01:38.880
+Eén detail hier verrast mensen.
+
+00:01:39.120 --> 00:01:41.400
+S4 HANA draait alleen op SAP HANA.
+
+00:01:41.620 --> 00:01:47.540
+SAP is gestopt met de ondersteuning van haar kernproduct op andere databases, dus dit was geen cosmetische upgrade of een nieuw likje verf op een oude motor.
+
+00:01:47.540 --> 00:01:52.280
+Het was een herbouw van het fundament en bijna al het andere in deze aflevering vloeit voort uit die ene beslissing.
+
+00:01:52.460 --> 00:01:57.540
+Het is ook de reden waarom een migratie nooit zomaar een software-update is, want je verplaatst de vloer waar een bedrijf op staat.
+
+00:01:57.780 --> 00:02:00.020
+Waarom de onderliggende database alles veranderde.
+
+00:02:00.200 --> 00:02:04.180
+Om te begrijpen waarom de database ertoe doet, stel je voor hoe het oude systeemdata opsloeg.
+
+00:02:04.300 --> 00:02:11.740
+ECC bewaarde records op schijf, georganiseerd in rijen, dus een enkel klantrecord stond direct naast de order van die klant, een adres en een factuur.
+
+00:02:11.740 --> 00:02:18.000
+Het lezen van één veld betekende dat een hele rij werd meegetrokken, wat traag wordt als je een vraag stelt die miljoenen records omvat.
+
+00:02:18.160 --> 00:02:19.720
+HANA gooit beide keuzes om.
+
+00:02:19.920 --> 00:02:25.060
+Het houdt gegevens in het geheugen in plaats van op schijf en het organiseert die gegevens in kolommen in plaats van rijen.
+
+00:02:25.220 --> 00:02:31.900
+Een kolom bevat één soort waarde, zoals elke orderdatum in het systeem, zodat de database alleen het deel kan lezen dat een query nodig heeft en de rest kan overslaan.
+
+00:02:32.100 --> 00:02:33.260
+Dat is de kern van de truc.
+
+00:02:33.640 --> 00:02:39.000
+Kolomopslag comprimeert ook goed omdat vergelijkbare waarden naast elkaar staan, waardoor dezelfde hoeveelheid geheugen meer bevat dan je zou verwachten.
+
+00:02:39.000 --> 00:02:44.660
+Die efficiëntie is belangrijk omdat geheugen meer kost dan schijfruimte en het correct dimensioneren van de hardware is werk op zich.
+
+00:02:44.780 --> 00:02:46.840
+De winst is groter dan alleen pure snelheid.
+
+00:02:47.040 --> 00:02:54.220
+In de oude wereld leefden analyses en dagelijkse transacties in aparte systemen en rapporteren betekende meestal het s'nachts kopiëren van gegevens naar een warehouse.
+
+00:02:54.660 --> 00:03:01.220
+Met HANA draaien beide soorten werk tegen één gedeelde kopie van de gegevens, dus de cijfers hoeven nergens heen te reizen om bruikbaar te zijn.
+
+00:03:01.220 --> 00:03:03.000
+Laten we een praktisch voorbeeld nemen.
+
+00:03:03.180 --> 00:03:10.840
+Een financiële afdeling die aan het eind van de maand de boeken sloot, wachtte voorheen op badge taken die tot laat in de nacht liepen en als er iets misleek, was de persoon die het kon herstellen al naar huis.
+
+00:03:11.060 --> 00:03:19.040
+Met S4HANA zijn de cijfers al aanwezig zodra transacties binnenkomen, zodat de afsluiting overdag kan plaatsvinden terwijl de mensen die de cijfers begrijpen nog aan hun bureau zitten.
+
+00:03:19.260 --> 00:03:22.800
+Iedereen die op een badgevenster heeft gewacht, weet hoeveel die ene verandering waard is.
+
+00:03:22.960 --> 00:03:25.060
+Het tweede voordeel is makkelijk over het hoofd te zien.
+
+00:03:25.060 --> 00:03:28.580
+Eén datamodel betekent minder plekken waar hetzelfde cijfer met elkaar in tegenspraak kan zijn.
+
+00:03:28.740 --> 00:03:35.020
+Het verkoopcijfer in het ene rapport komt overeen met dat in het andere, omdat beide uit één tabel lezen in plaats van uit twee systemen die jaren geleden aan elkaar zijn geknoopt.
+
+00:03:35.180 --> 00:03:38.460
+Eén eerlijke kanttekening voordat we verder gaan, en daar komen we later op terug.
+
+00:03:38.820 --> 00:03:45.960
+SAP's eigen marketing zegt dat HANA duizenden malen sneller is dan oudere databases, en dat moet je zien als een bewering van de leverancier in plaats van een gemeten resultaat.
+
+00:03:46.120 --> 00:03:51.940
+De werkelijke snelheid hangt af van het datavolume, de configuratie van het systeem en of de queries zelf goed zijn geschreven.
+
+00:03:51.940 --> 00:03:59.000
+Door de nieuwe interface, het vereenvoudigde datamodel en de databaseverandering kon SAP ook de schermen die mensen daadwerkelijk bekijken opnieuw opbouwen.
+
+00:03:59.200 --> 00:04:06.800
+S4 HANA was het eerste SAP-product dat gebruik maakte van Fiori dat de dichte groene schermen van de oude SAP Kooi vervangt door app-tegels die zijn gebaseerd op de taak waar je mee bezig bent.
+
+00:04:06.980 --> 00:04:10.760
+Als je nooit met de oude interface hebt gewerkt, dan begrijp je hierom waarom mensen erom geven.
+
+00:04:10.980 --> 00:04:16.700
+Het oude SAP stond bekend om transactiecodes, korte reekse letters en cijfers die je uit je hoofd moest leren om iets gedaan te krijgen.
+
+00:04:16.960 --> 00:04:20.020
+Fiori organiseert hetzelfde werk in apps met duidelijke namen.
+
+00:04:20.020 --> 00:04:25.340
+Een magazijnmedewerker opent dus een app voor goederenontvangst in plaats van een code te typen die hij jaren geleden tijdens de training leerde.
+
+00:04:25.580 --> 00:04:26.940
+Fiori is niet alleen mooier.
+
+00:04:27.160 --> 00:04:35.260
+Elke app is gebouwd voor een rol, dus een manager die een aankoop goedkeurt en een medewerker die een factuur invoert, krijgen verschillende schermen voor verschillende taken in plaats van een overvolle transactie die iedereen moet leren.
+
+00:04:35.420 --> 00:04:37.960
+Het is een kleine verandering met een groot effect op het dagelijkse werk.
+
+00:04:38.120 --> 00:04:41.340
+Het datamodel is ook eenvoudiger geworden en Finance is daarvan het duidelijkste voorbeeld.
+
+00:04:41.520 --> 00:04:46.900
+Oudere SAP Finance versies verspreiden de cijfers over veel aparte tabellen, wat betekende dat er afstemmingswerk nodig was om tot een totaal te komen.
+
+00:04:46.900 --> 00:04:51.780
+S4 HANA plaatst de kerndata van Finance in één tabel met regelitems, bekend als het Universal Journal.
+
+00:04:52.040 --> 00:04:55.700
+Zo bevat één boeking tegelijkertijd zowel het boekhoudkundige als het kostentechnische perspectief.
+
+00:04:55.860 --> 00:05:00.680
+Voor die verandering betekende een betrouwbaar winstcijfer vaak dat er aan het einde van de maand verschillende tabellen met elkaar vergeleken moesten worden.
+
+00:05:00.860 --> 00:05:04.860
+Nu worden beide perspectieven naar één regelitem geschreven en dat bespaart echt werk in de financiële kalender.
+
+00:05:05.080 --> 00:05:07.160
+Dat is belangrijk voor de persoon die het werk uitvoert.
+
+00:05:07.320 --> 00:05:13.340
+Een crediteurenadministrateur die voorheen cijfers uit verschillende rapporten moest halen, kan nu één regelitem openen en het hele verhaal zien.
+
+00:05:13.340 --> 00:05:16.640
+Dat betekent minder puzzelwerk en minder discussie over welk rapport correct is.
+
+00:05:17.180 --> 00:05:18.740
+De bedrijfsonderdelen die het dekt
+
+00:05:18.740 --> 00:05:24.560
+S4 HANA is modulair, wat simpelweg betekent dat het een verzameling verbonden gebieden is in plaats van één gigantisch blok.
+
+00:05:24.700 --> 00:05:30.900
+De belangrijkste omvatte Finance, Inkoop, Verkoop, Productie, Supply Chain, Asset Management, Projectwerk en Mensen,
+
+00:05:31.060 --> 00:05:34.680
+waarbij Human Resources vaak wordt afgehandeld door SAP SuccessFactors dat naast de kern draait.
+
+00:05:34.840 --> 00:05:39.820
+In plaats van ze op te sommen, laten we één order door het systeem volgen, want daar komt het ontwerp in de praktijk naar voren.
+
+00:05:39.820 --> 00:05:43.640
+Een klant plaatst een order, dus verkoop registreert deze en controleert de beschikbaarheid.
+
+00:05:43.800 --> 00:05:47.180
+Die controle reikt tot in de voorraad, die deel uitmaakt van het supply chain gebied.
+
+00:05:47.360 --> 00:05:53.140
+Bij een tekort kan het systeem productie of inkoop activeren en zodra de goederen worden verzonden, gaat er een factuur uit en worden de boeken bijgewerkt.
+
+00:05:53.340 --> 00:05:55.560
+Merk op hoeveel gebieden die ene stroom heeft geraakt.
+
+00:05:55.760 --> 00:05:59.880
+Verkoop, voorraad, productie of inkoop en finance werkten allemaal aan dezelfde order,
+
+00:06:00.160 --> 00:06:05.180
+lezend uit één gedeelde database zonder dat iemand gegevens tussen systemen hoefde te kopiëren of spreadsheets hoefde te mailen.
+
+00:06:05.280 --> 00:06:08.400
+Eén systeem, één set gegevens, dat is wat de processen laat werken.
+
+00:06:08.400 --> 00:06:10.980
+Een tweede stroom laat het patroon aan de inkoopkant zien.
+
+00:06:11.160 --> 00:06:16.680
+Iemand maakt een inkoopaanvraag aan, die een inkooporder wordt, daarna een goederenontvangst en tot slot een betaling aan de leverancier.
+
+00:06:16.880 --> 00:06:21.800
+Elk van die stappen wordt direct in finance geboekt, zodat de kosten zichtbaar zijn terwijl het proces nog loopt.
+
+00:06:21.980 --> 00:06:24.960
+Een derde paar stromen verbindt het systeem met de top van het bedrijf.
+
+00:06:25.100 --> 00:06:31.480
+Order to Cash volgt een verkoop tot het geld op de bank staat en Record to Report haalt transacties uit elk gebied naar de financiële afdeling.
+
+00:06:31.700 --> 00:06:36.000
+Die 2N2N stromen zijn hoe de meeste teams beschrijven wat S4HANA voor hen doet.
+
+00:06:36.000 --> 00:06:38.160
+Daaronder liggen de gedeelde stamgegevens.
+
+00:06:38.380 --> 00:06:43.300
+De klant, het materiaal en de leverancier bestaan elk slechts één keer en elk onderdeel leest uit diezelfde definitie,
+
+00:06:43.440 --> 00:06:46.460
+zodat een order door afdelingen kan bewegen zonder dat iemand deze opnieuw hoeft in te voeren.
+
+00:06:46.660 --> 00:06:47.580
+Dat is de essentie.
+
+00:06:48.420 --> 00:06:52.920
+S4HANA is niet zozeer één product, maar een gedeelde set processen gebouwd op één gedeelde databron
+
+00:06:52.920 --> 00:06:55.740
+en de waarde komt voort uit hoe nou die onderdelen op elkaar aansluiten.
+
+00:06:55.920 --> 00:06:57.620
+Hoe bedrijven het daadwerkelijk draaien.
+
+00:06:57.620 --> 00:07:02.300
+Nu over naar de beslissing waar de meeste teams maandenlang over discussiëren, waar bevindt het systeem zich fysiek.
+
+00:07:02.440 --> 00:07:06.320
+Er zijn drie hoofdkeuzes en elk daarvan ruilt controle in voor inspanning op een andere manier.
+
+00:07:06.520 --> 00:07:08.260
+Elke keuze kent echte afwegingen.
+
+00:07:08.420 --> 00:07:12.760
+On-premise betekent dat het bedrijf de hardware bezit en het systeem in het eigen datacenter draait.
+
+00:07:12.900 --> 00:07:19.240
+U bepaalt wanneer u upgradet, u kunt bijna alles aanpassen en u draagt de kosten en de verantwoordelijkheid die bij al die vrijheid horen.
+
+00:07:19.420 --> 00:07:26.540
+Private Cloud is de middenweg verkocht als S4HANA Cloud Private Edition en vaak geleverd onder een programma genaamd Rise with Sub.
+
+00:07:26.540 --> 00:07:32.420
+Het wordt voor u beheerd en draait achter uw eigen firewall, maar u behoudt de meeste aanpassingsmogelijkheden van de on-premise wereld.
+
+00:07:32.600 --> 00:07:38.540
+De gestandardiseerde optie is de Public Cloud, genaamd S4HANA Cloud Public Edition, verkocht via Grow with Sub.
+
+00:07:38.680 --> 00:07:40.500
+Deze draait op gedeelde infrastructuur.
+
+00:07:40.720 --> 00:07:44.540
+Sub voert de upgrades door volgens hun eigen planning en het is goedkoper in gebruik.
+
+00:07:44.600 --> 00:07:48.020
+Wat u inlevert, is de vrijheid om de software aan te passen aan oude gewoontes.
+
+00:07:48.200 --> 00:07:52.600
+Een vierde optie is hybride, waarbij een deel van het systeem in de cloud draait en de rest blijft waar het is.
+
+00:07:52.600 --> 00:07:58.340
+Bedrijven gebruiken dit om geleidelijk over te stappen of om een gevoelig bedrijfsonderdeel dicht bij huis te houden terwijl de rest moderniseert.
+
+00:07:58.500 --> 00:08:00.400
+De afweging moet duidelijk worden benoemd.
+
+00:08:00.520 --> 00:08:06.940
+Public Cloud geeft u minder upgrades, zorgen en minder controle, terwijl Private Cloud en on-premise u meer controle en meer werk bezorgen.
+
+00:08:07.100 --> 00:08:12.560
+Er is geen universeel goed antwoord en de keuze hangt meestal af van de bereidheid van het bedrijf om de werkwijze te veranderen.
+
+00:08:12.560 --> 00:08:17.640
+Die beslissing ligt evenzeer bij de business als bij IT, wat verklaart waarom het zo lang duurt om dit vast te stellen.
+
+00:08:17.800 --> 00:08:25.660
+Hoe u daar komt en de deadline van 2027, welke thuisbasis u ook kiest, u moet er nog steeds zien te komen vanaf waar u nu staat, en dat is de migratie.
+
+00:08:25.800 --> 00:08:29.560
+Er zijn drie gangbare wegen en de namen klinken vreemder dan de ideeën erachter.
+
+00:08:29.700 --> 00:08:30.940
+Timing is hierbij van belang.
+
+00:08:31.240 --> 00:08:32.780
+Greenfield betekent een frisse start.
+
+00:08:33.000 --> 00:08:36.420
+Je bouwt een nieuw systeem vanaf nul op en herontwerpt je processen terwijl je het toevoegt.
+
+00:08:36.420 --> 00:08:42.880
+Het is het meest zuivere resultaat en meestal het duurst, omdat je de werkwijze van mensen verandert en niet alleen gegevens tussen machines verplaatst.
+
+00:08:43.220 --> 00:08:45.960
+Brownfield betekent het omzetten van het systeem dat je al hebt.
+
+00:08:46.120 --> 00:08:52.920
+Het is sneller en behoudt je historie, maar het neemt oude gewoontes en maatwerkkode mee naar het nieuwe platform, wat de winst stilletjes kan beperken.
+
+00:08:53.120 --> 00:08:55.080
+Een conversie is ook geen simpele kopie.
+
+00:08:55.260 --> 00:09:02.920
+Het haalt het bestaande systeem door een technisch conversieproces, controleert de maatwerkkode op zaken die de nieuwe release niet meer ondersteunt en repareert wat stuk gaat.
+
+00:09:03.300 --> 00:09:05.780
+Bluefield, soms hybride genoemd, zit daartussenin.
+
+00:09:05.780 --> 00:09:13.540
+Je verplaatst sommige processen naar een nieuw model terwijl je de rest van het bestaande systeem omzet, waardoor de verandering wordt gespreid in plaats van in één keer doorgevoerd.
+
+00:09:13.700 --> 00:09:19.360
+Er is hier geen standaardkeuze, de juiste weg hangt af van hoeveel procesverandering de onderneming daadwerkelijk kan opvangen.
+
+00:09:19.560 --> 00:09:21.480
+Voor veel bedrijven is dit inmiddels urgent.
+
+00:09:21.720 --> 00:09:29.680
+Het reguliere onderhoud voor het oudere ECC-systeem eindigt in december 2027 en optioneel uitgebreid onderhoud loopt tegen extra betaling tot eind 2030.
+
+00:09:29.680 --> 00:09:38.820
+Er was ook een brug genaamd compatibiliteitspakketten waarmee klassieke ECC-functies binnen S4HA en A on-premise konden blijven draaien en die brug sloot grotendeels op 31 mei 2026.
+
+00:09:39.040 --> 00:09:42.960
+De klok tikt dus echt, ook al wordt er nog gedebatteerd over de precieze kosten van te laat zijn.
+
+00:09:43.160 --> 00:09:51.060
+Wat nu telt is dat de beslissing niet eeuwig uitstelbaar is en hoe langer een bedrijf wacht, hoe minder comfortabele opties erover blijven om de kern schoon te houden.
+
+00:09:51.060 --> 00:09:56.880
+Wanneer een migratie wordt gehaast, grijpen teams vaak naar hetgeen dat later de meeste problemen veroorzaakt.
+
+00:09:57.100 --> 00:09:59.520
+Het direct aanpassen van de standaardcode van SAP.
+
+00:09:59.660 --> 00:10:02.680
+De oplossing heeft een naam, Clean Core, en het idee is simpel.
+
+00:10:02.920 --> 00:10:05.880
+Herschrijft de motor niet, maar bouw het ons die overleven bij een upgrade.
+
+00:10:06.060 --> 00:10:10.620
+In de praktijk betekent dit het uitbreiden van het systeem via vrijgegeven interfaces in plaats van het aanpassen ervan.
+
+00:10:10.620 --> 00:10:20.480
+SAP biedt hiervoor een reeks tools, waaronder het SAP Business Technology Platform voor Bouwen Buiten de Kern, een ontwikkelmodel genaamd ABAP Cloud en Side-by-Side apps die de kern aanroepen via ondersteunde APIs.
+
+00:10:20.480 --> 00:10:22.760
+De term om te onthouden is Released API.
+
+00:10:22.980 --> 00:10:27.760
+Een API is simpelweg een ondersteunde toegangspoort tot het systeem en SAP geeft aan welke poorten veilig zijn om te gebruiken.
+
+00:10:27.960 --> 00:10:30.340
+Bouw je hierop, dan laat een upgrade je meestal met rust.
+
+00:10:30.540 --> 00:10:33.840
+Pas je de standaardcode aan, dan wordt elke upgrade een reparatieklus.
+
+00:10:34.100 --> 00:10:35.320
+Neem een concreet voorbeeld.
+
+00:10:35.620 --> 00:10:37.920
+Stel dat een bedrijf een scherm wil voor klantgoedkeuring.
+
+00:10:37.920 --> 00:10:44.540
+In plaats van een standaard SAP-programma aan te passen, bouwt een ontwikkelaar een kleine aparte app die data leest en schrijft via een ondersteunde interface.
+
+00:10:44.760 --> 00:10:49.660
+Wanneer SAP een upgrade uitbrengt, blijft die app werken en hoeft niemand door de code te spitten om te zien wat er kapot is.
+
+00:10:49.660 --> 00:10:52.000
+Het voordeel daarvan wordt pas jaren later duidelijk.
+
+00:10:52.160 --> 00:10:58.200
+Elke upgrade is of een rustige middag, of een project van zes maanden, en het verschil zit bijna volledig in hoe diep de core is aangepast.
+
+00:10:58.420 --> 00:11:00.500
+Dat is precies waar het bij een clean core om draait.
+
+00:11:00.680 --> 00:11:04.940
+Waar S4HA en A en Microsoft samenkomen, ontmoeten de twee werelden waarin velen van ons werken elkaar hier.
+
+00:11:04.940 --> 00:11:07.280
+De verbindingen zijn praktischer dan ze misschien klinken.
+
+00:11:07.480 --> 00:11:18.940
+Voor data kan Microsoft Fabric SAP informatie ophalen via ingebouwde connectoren voor SAP HANA, SAP-tabellen en SAP BW, en het kan SAP Data spiegelen naar de OneLake-opslag zodat rapporten actueel blijven zonder nachtelijke kopieertaken.
+
+00:11:19.700 --> 00:11:23.180
+Het is de moeite waard om het spiegelingsproces te kennen als je de term voorbij hebt horen komen.
+
+00:11:23.420 --> 00:11:28.620
+SAP Data kan via SAP Datasphere naar Microsoft's cloud-opslag reizen en Fabric houdt het vanaf daar synchroon.
+
+00:11:28.620 --> 00:11:33.900
+Voor eenvoudigere gevallen halen de eigen connectoren van Fabric direct gegevens uit S4HA-tabellen of SAP BW.
+
+00:11:34.080 --> 00:11:36.480
+Een eenvoudige versie van die stroom ziet er als volgt uit.
+
+00:11:36.640 --> 00:11:42.560
+Een verkooporder komt binnen in S4HA en A, Fabric detecteert de wijziging en een Power BI-rapport ververst met het nieuwe cijfer.
+
+00:11:42.720 --> 00:11:46.380
+De mensen die dat rapport lezen, loggen helemaal niet in bij SAP, en dat is precies de bedoeling.
+
+00:11:46.560 --> 00:11:48.860
+Het is een echte kortere weg voor zakelijke gebruikers.
+
+00:11:49.140 --> 00:11:52.600
+Identiteit is de tweede verbinding, en dat is degene die de meeste kopzorgen scheelt.
+
+00:11:52.900 --> 00:11:57.300
+Microsoft Entra ID regelt aanmelding en multifactor-authenticatie voor SAP-apps zoals Fiori,
+
+00:11:57.300 --> 00:12:00.600
+zodat gebruikers eenmalig inloggen in plaats van met aparte wachtwoorden te jongleren.
+
+00:12:00.720 --> 00:12:02.220
+Eén kanttekening is hier belangrijk.
+
+00:12:02.440 --> 00:12:07.200
+Entra ID kan de authenticatie afhandelen, maar vervangt niet de eigen autorisatieregels van SAP,
+
+00:12:07.380 --> 00:12:09.860
+die nog steeds bepalen wat iemand mag zien en doen binnen het systeem.
+
+00:12:10.320 --> 00:12:12.680
+Automatisering en beveiliging maken het plaatje compleet.
+
+00:12:12.820 --> 00:12:16.300
+Power Platform en Azure Logic apps maken verbinding met SAP via connectoren,
+
+00:12:16.520 --> 00:12:19.940
+zodat een zakelijke gebeurtenis een workflow in Microsoft Tools kan triggeren,
+
+00:12:20.100 --> 00:12:23.800
+en Microsoft Sentinel voor SAP controleert SAP audit logs op tekenen van problemen.
+
+00:12:23.800 --> 00:12:26.820
+Power Platform levert ook kant-en-klare SAP-schablonen,
+
+00:12:26.980 --> 00:12:31.900
+zodat de maker een goedkeuringstroom kan samenstellen zonder direct code te schrijven tegen de SAP-interface.
+
+00:12:32.060 --> 00:12:38.180
+Er is ook beweging op AI-gebied met SAP Assistantial die wordt geïntegreerd met Microsoft 365 Copilot
+
+00:12:38.180 --> 00:12:40.500
+en SAP-schermen die binnen Teams kunnen worden getoond.
+
+00:12:40.720 --> 00:12:43.400
+Zie dit als een ontwikkeling, want de beschikbaarheid verandert continu,
+
+00:12:43.540 --> 00:12:46.800
+en aankondigingen zijn niet hetzelfde als functies die je vandaag al kunt inschakelen.
+
+00:12:46.980 --> 00:12:49.400
+Wat betreft de kosten is het verstandig de kleine lettertjes te lezen,
+
+00:12:49.400 --> 00:12:55.040
+omdat sommige replicatiewerkzaamheden gratis zijn, terwijl de queries en rapporten die je daarop bouwt tegen normale cloudtarieven worden berekend.
+
+00:12:55.160 --> 00:12:57.480
+De eerlijke beperkingen en veel voorkomende fouten.
+
+00:12:57.680 --> 00:13:00.020
+Nu komen we bij de zaken die de verwachtingen niet waarmaken.
+
+00:13:00.260 --> 00:13:01.600
+Laten we beginnen met snelheid.
+
+00:13:01.780 --> 00:13:05.100
+De spectaculaire prestatiecijfers komen uit SAP's eigen marketing,
+
+00:13:05.320 --> 00:13:08.900
+en een slecht ontworpen query zal traag blijven, ongeacht welke database eronder ligt.
+
+00:13:09.060 --> 00:13:11.760
+De volgende fout is het onderschatten van de migratie zelf.
+
+00:13:12.000 --> 00:13:13.920
+Teams begroten voor software en licenties,
+
+00:13:13.920 --> 00:13:19.660
+om er vervolgens achter te komen dat het opschonen van decennia aan rommelige data en het herontwerpen van processen de echte tijd en het geld kost.
+
+00:13:19.820 --> 00:13:21.720
+De software is zelden het lastige deel.
+
+00:13:21.960 --> 00:13:24.180
+Lift & Shift is een naaste verwant van die fout.
+
+00:13:24.420 --> 00:13:29.840
+ECC, zoals het is, verplaatsen kan dezelfde verwarde aangepaste code en trage rapporten direct naar een nieuw platform brengen,
+
+00:13:30.020 --> 00:13:32.320
+waardoor het doel van de overstap grotendeels teniet wordt gedaan.
+
+00:13:32.500 --> 00:13:34.280
+Public cloud verrast mensen ook vaak.
+
+00:13:34.440 --> 00:13:37.020
+Teams die gewend zijn alles naar wens aan te passen on-premise,
+
+00:13:37.180 --> 00:13:39.340
+ontdekken dat de gestandardiseerde versie dit niet toestaat,
+
+00:13:39.440 --> 00:13:42.400
+en die verrassing komt vaak pas laat als het project al is vastgelegd.
+
+00:13:42.400 --> 00:13:44.680
+Twee stillere valkuilen zijn het benoemen waard.
+
+00:13:44.820 --> 00:13:47.100
+Eén is verwachten dat de voordelen direct zichtbaar zijn,
+
+00:13:47.240 --> 00:13:50.700
+terwijl de winst in rapportage en processen meestal pas maanden na livegang komt,
+
+00:13:50.880 --> 00:13:52.660
+zodra mensen het systeem echt vertrouwen.
+
+00:13:52.820 --> 00:13:55.500
+De andere is het hele gebeuren als een IT-project behandelen,
+
+00:13:55.780 --> 00:13:59.360
+terwijl de belangrijkste beslissingen bij de business liggen in plaats van bij het technisch team.
+
+00:13:59.540 --> 00:14:01.520
+Het moeilijkste deel is zelden technisch.
+
+00:14:01.800 --> 00:14:07.760
+Mensen trainen, hun werkwijze veranderen en de business laten instemmen met nieuwe processen bepaald of het project slaagt,
+
+00:14:07.980 --> 00:14:09.900
+en dat deel krijgt meestal het kleinste budget.
+
+00:14:09.900 --> 00:14:13.120
+Niets daarvan is een reden om de overstap te vermijden.
+
+00:14:13.280 --> 00:14:14.300
+Wat neem je hiervan mee?
+
+00:14:14.480 --> 00:14:15.700
+Hier is de korte versie.
+
+00:14:15.900 --> 00:14:19.280
+S4 HANA is het systeem waarop een bedrijf zijn kernactiviteiten draait,
+
+00:14:19.400 --> 00:14:24.040
+herbouwt in 2015 op een database die data in het geheugen houdt, wat live-rapportage mogelijk maakt.
+
+00:14:24.200 --> 00:14:29.220
+Het vereenvoudigde datamodel dekt de belangrijkste bedrijfsgebieden en dwingt tot een echte keuze over cloud,
+
+00:14:29.500 --> 00:14:32.220
+migratiepad en hoeveel maatwerk je toestaat naar beide kernen.
+
+00:14:32.220 --> 00:14:36.060
+Microsoft tools sluiten aan op de data, identiteits- en automatiseringslagen,
+
+00:14:36.320 --> 00:14:39.940
+en de deadline van 2027 is de reden waarom dit niet eeuwig kan wachten.
+
+00:14:40.140 --> 00:14:42.180
+Hier is de vraag waar ik je over na wil laten denken.
+
+00:14:42.400 --> 00:14:46.240
+Als jouw team nog op ECC zit, weet je dan echt welk migratiepad er wordt gevolgd,
+
+00:14:46.320 --> 00:14:47.980
+of is dat nog steeds onderwerp van discussie?
+
+00:14:48.100 --> 00:14:50.040
+Als dit onderwerp minder intimiderend voelt,
+
+00:14:50.200 --> 00:14:55.620
+abonneer je dan op M365FM om de tools en de mindset die de toekomst van werk vormgeven te beheersen.
+
+00:14:55.620 --> 00:15:25.600
+TV Gelderland 2021

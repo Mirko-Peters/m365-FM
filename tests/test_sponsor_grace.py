@@ -72,10 +72,10 @@ class Grace(unittest.TestCase):
 
     def test_lead_formular_und_sponsors_json(self):
         src = (ROOT / "site_entities.py").read_text("utf-8")
-        self.assertIn('if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS))', src)   # Bedingung des Lead-Formulars
+        self.assertIn('if any(o["id"] == e["id"] for o in SPM.lead_orgs(SPM._state()["today"], ENTS))', src)   # Bedingung des Lead-Formulars (nur bezahlte Sponsorings, Review #509)
         for name, (d, on) in DAYS.items():
             st = self.init(d)
-            orgs = SPM.active_sponsor_orgs(st["today"], ENTS)
+            orgs = SPM.lead_orgs(st["today"], ENTS)
             self.assertEqual([o["id"] for o in orgs], ["cognillo"] if on else [], name)
             lead = ADS.sponsor_lead("https://www.m365.fm", "de", "cognillo", "Cognillo") if any(o["id"] == "cognillo" for o in orgs) else ""
             self.assertEqual('data-sponsor-lead="cognillo"' in lead, on, name)

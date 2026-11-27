@@ -1,0 +1,664 @@
+WEBVTT
+
+00:00:00.560 --> 00:00:04.740
+Benvenuti al podcast M365FM, dove esploriamo le persone, le idee e le
+
+00:00:04.740 --> 00:00:07.840
+tecnologie che plasmano il futuro del lavoro. Da qualche parte nella vostra
+
+00:00:07.840 --> 00:00:10.320
+organizzazione, un'app è in funzione senza che nessuno ricordi che l'abbia
+
+00:00:10.320 --> 00:00:13.360
+creato. Funziona ancora, quindi nessuno fa domande. E questo è il problema che la
+
+00:00:13.360 --> 00:00:17.980
+governance ha risolto. Benvenuti al podcast M365FM, dove esploriamo le
+
+00:00:17.980 --> 00:00:20.980
+persone, le idee e le tecnologie che plasmano il futuro del lavoro. Oggi
+
+00:00:20.980 --> 00:00:23.620
+cercheremo di capire la governance della Power Platform, le regole che
+
+00:00:23.620 --> 00:00:27.200
+impediscono al low-code di andare in pezzi mentre cresce. Alla fine ambienti,
+
+00:00:27.200 --> 00:00:30.420
+policy sui dati e centro di eccellenza saranno chiari e comprensibili a tutti.
+
+00:00:31.400 --> 00:00:34.540
+Cosa significa davvero governance? Governance è la parola meno entusiasmante di
+
+00:00:34.540 --> 00:00:36.860
+tutta questa conversazione ed è esattamente il motivo per cui quasi tutti
+
+00:00:36.860 --> 00:00:39.840
+ne ho. Eliminando il gergo tecnico, si tratta delle regole e delle abitudini che
+
+00:00:39.840 --> 00:00:42.820
+un'azienda usa per decidere come viene utilizzato uno strumento. Microsoft
+
+00:00:42.820 --> 00:00:45.960
+descrive la governance della Power Platform come l'insieme di policy, pratiche e
+
+00:00:45.960 --> 00:00:48.860
+strumenti che mantengono la piattaforma efficiente, sicura e conforme. Un concetto
+
+00:00:48.860 --> 00:00:53.060
+complesso. La versione semplice è molto più immediata. Qualcuno deve decidere cosa va
+
+00:00:53.060 --> 00:00:57.000
+dove, cosa può interagire con cosa e chi chiamare quando qualcosa si rompe. La maggior
+
+00:00:57.000 --> 00:00:59.880
+parte dei principianti sente la parola governance e pensa che serve a fermare.
+
+00:01:00.440 --> 00:01:03.880
+Questa idea va sfatata subito perché una governance fatta male blocca le persone
+
+00:01:03.880 --> 00:01:07.300
+mentre una fatta bene ottiene l'esatto contrario. Il guardare su una strada di
+
+00:01:07.300 --> 00:01:10.140
+montagna non ti rallenta affatto ed è il motivo per cui puoi affrontare la curva
+
+00:01:10.140 --> 00:01:13.400
+velocemente senza finire tra gli alberi. Ora la tensione è sottesa a tutto ciò che
+
+00:01:13.400 --> 00:01:17.740
+stiamo per trattare. La Power Platform è facile di provare. Chiunque può creare un'app
+
+00:01:17.740 --> 00:01:20.960
+funzionante in un pomeriggio senza chiedere il permesso a nessuno e quella stessa
+
+00:01:20.960 --> 00:01:25.040
+apertura rende difficile mantenere il tutto in ordine dopo sei mesi. La piattaforma
+
+00:01:25.040 --> 00:01:28.080
+invita tutti a entrare e poi lascia il lavoro di pulizia a chi se ne accorge per
+
+00:01:28.080 --> 00:01:31.340
+prima. C'è un'ultima idea da mettere a fuoco prima di proseguire. La governance
+
+00:01:31.340 --> 00:01:34.200
+non è un interruttore che si aziona un solo lavoro. È un'abitudine che un'azienda
+
+00:01:34.200 --> 00:01:36.820
+adatta man mano che l'uso della piattaforma cresce e torna sempre ai
+
+00:01:36.820 --> 00:01:40.880
+soliti quattro punti chiave. Il tuo lavoro ha bisogno di una casa, di limiti su ciò che
+
+00:01:40.880 --> 00:01:43.760
+puoi raggiungere, di un responsabile per le regole e di qualcuno che controlli che non
+
+00:01:43.760 --> 00:01:47.220
+ci siano problemi. Ogni altro dettaglio di questa conversazione ruota attorno a uno di
+
+00:01:47.220 --> 00:01:51.720
+questi quattro punti. Un'ultima cosa sulla parola in sé. La governance viene usata come se fosse un
+
+00:01:51.720 --> 00:01:55.120
+dipartimento, una persona, ma in realtà è un rapporto tra chi crea le soluzioni e chi è
+
+00:01:55.120 --> 00:01:59.780
+responsabile della piattaforma sottostante. Quando questo rapporto è sano, nessuno nota
+
+00:01:59.780 --> 00:02:04.480
+la governance perché nulla si rompe e nessuno viene escluso. Se ne sente parlare solo quando
+
+00:02:04.480 --> 00:02:08.120
+manca. Perché qualcuno dovrebbe preoccupare? Le regole sembrano innocui in astratto, quindi
+
+00:02:08.120 --> 00:02:12.300
+rendiamole concrete. Senza alcuna governance le cose che le persone creano quotidianamente
+
+00:02:12.300 --> 00:02:16.380
+iniziano a scontrarsi. Due colleghi risolvono lo stesso problema, creano la stessa app e ora ci
+
+00:02:16.380 --> 00:02:20.720
+sono due versioni in circolazione senza che nessuno sappia quale sia quella giusta. Il problema più grande è dove tutto
+
+00:02:20.720 --> 00:02:26.100
+quel lavoro finisce semente. Microsoft usa un paragone che rende bene l'idea ed è questo. Immagina che
+
+00:02:26.100 --> 00:02:29.900
+tutti in azienda condividano un'unica cartella OneDrive per ogni documento che possiedono. Ecco
+
+00:02:29.900 --> 00:02:34.640
+un'idea approssimativa di un ambiente Power Platform condiviso. Sembra comodo finché non smette di
+
+00:02:34.640 --> 00:02:40.040
+esserlo. Prima di andare avanti vale la pena chiarire un termine. Un tenant è lo spazio privato della tua
+
+00:02:40.040 --> 00:02:44.420
+organizzazione all'interno del cloud di Microsoft e tutto ciò di cui stiamo discutendo risiede lì dentro.
+
+00:02:45.220 --> 00:02:48.480
+All'interno di quello spazio troverai gli ambienti e ogni ambiente ha un piccolo contenitore a sé
+
+00:02:48.480 --> 00:02:52.460
+costante. Risco che toglie il sonno agli amministratori è di natura umana. Qualcuno
+
+00:02:52.460 --> 00:02:57.440
+crea un'app, diventa l'unica persona a capirla e poi cambia lavoro. Microsoft definisce tali risorse
+
+00:02:57.440 --> 00:03:01.020
+senza proprietario e le segnala come un vero rischio per la continuità aziendale e un modo
+
+00:03:01.020 --> 00:03:04.040
+formale per dire che la cosa continua a funzionare senza che nessuno sia in grado di ripararla.
+
+00:03:04.620 --> 00:03:08.220
+Esiste una versione silenziosa dello stesso Pro. Un'app creata come favore veloce cresce fino a
+
+00:03:08.220 --> 00:03:11.220
+quando un intero team ne diventa dipendente senza mai ottenere un backup, un proprietario,
+
+00:03:11.260 --> 00:03:14.840
+un piano. Quando qualcuno se ne accorge la posta in gioco molto più alta del pomeriggio impiegato
+
+00:03:14.840 --> 00:03:19.960
+per costruirlo. Quindi la governance non serve a fare ordine fine a sé stesso. Serve ad assicurarsi
+
+00:03:19.960 --> 00:03:24.060
+che le cose da cui dipendono le persone non diventino silenziosamente fragili. Pensa all'ultima
+
+00:03:24.060 --> 00:03:28.200
+cosa utile che hai creato e poi pensa a cosa succederebbe se tu semplicemente sparissi. Non
+
+00:03:28.200 --> 00:03:32.420
+è un pensiero morboso. È esattamente lo scenario che la governance è progettata per gestire. La
+
+00:03:32.420 --> 00:03:36.520
+soluzione inizia con qualcosa di semplice come una stanza, è lì che ci stiamo dirigendo. Gli
+
+00:03:36.520 --> 00:03:41.520
+ambienti sono solo stanze. Un ambiente è esattamente ciò che suggerisce il nome. Una stanza dove le
+
+00:03:41.520 --> 00:03:46.500
+tue app, i tuoi flussi e i loro dati convivono. Puoi avere tutte le stanze di cui hai bisogno e
+
+00:03:46.500 --> 00:03:51.460
+ognuna può avere le proprie regole. Il senso delle stanze è la separazione, così il lavoro su un
+
+00:03:51.460 --> 00:03:55.460
+progetto non interferisce con quello su un altro. Quella separazione è imposta non solo suggerita.
+
+00:03:56.260 --> 00:04:00.780
+Un'app creata in un ambiente può raggiungere solo le fonti dati presenti nello stesso ambiente. Chi
+
+00:04:00.780 --> 00:04:05.600
+presume che tutto si colleghi all'esempio di Microsoft troverà che un'app in una stanza di test non può
+
+00:04:05.600 --> 00:04:10.740
+vedere il database in quella di sviluppo, anche se appartengono alla stessa azienda. Le stanze
+
+00:04:10.740 --> 00:04:13.860
+esistono in diverse varianti. Le differenze contano più di quanto un principiante si
+
+00:04:13.860 --> 00:04:18.020
+aspetterebbe. La stanza predefinita arriva automaticamente, condivisa da tutti in azienda
+
+00:04:18.020 --> 00:04:21.560
+ed è il posto che Microsoft dichiara privo di garanzia di backup e non adatto a carichi di
+
+00:04:21.560 --> 00:04:25.640
+lavoro di produzione. Una stanza di produzione è l'opposto, costruita per un lavoro permanente
+
+00:04:25.640 --> 00:04:29.340
+su cui fai effettivamente. Una sandbox è una stanza di prova che puoi copiare e resettare
+
+00:04:29.340 --> 00:04:33.840
+quando vuoi. Un ambiente di sviluppo è il tuo spazio di lavoro personale e una stanza di prova è
+
+00:04:33.840 --> 00:04:37.600
+temporanea e si elimina da sola dopo un pop-in, il che ci riporta alla domanda che ho lasciato in
+
+00:04:37.600 --> 00:04:42.120
+sospeso poco fa. La stanza più pericolosa in un tenant è solitamente l'ambiente predefinito e il
+
+00:04:42.120 --> 00:04:45.940
+motivo è quasi comico. È il posto in cui tu ti inizia. È molto probabile che la tua prima app si
+
+00:04:45.940 --> 00:04:49.580
+trovi proprio in questo, condivisa con l'intera azienda. Non può essere eliminata e Microsoft
+
+00:04:49.580 --> 00:04:53.460
+afferma apertamente che non è pensata per nulla su cui tu debba fare affidamento. Eppure è il
+
+00:04:53.460 --> 00:04:57.060
+punto di approdo predefinito per i nuovi utenti che significa che il posto che sembra più sicuro
+
+00:04:57.060 --> 00:05:00.760
+è spesso il più rischioso. La soluzione consigliata da Microsoft è più delicata di quanto
+
+00:05:00.760 --> 00:05:04.680
+potresti. Invece di vietare la stanza condivisa, indirizzi i nuovi creatori verso le loro stanze
+
+00:05:04.680 --> 00:05:08.100
+personali mentre lavorano, così lo spazio condiviso rimane per esperimenti leggeri.
+
+00:05:08.940 --> 00:05:12.380
+Tutto ciò che è serio passa in una stanza con vere tutele e questa è una fine molto
+
+00:05:12.380 --> 00:05:16.560
+migliore rispetto a un'app che cresce in pubblico. È anche qui che alcuni titoli di lavoro iniziano
+
+00:05:16.560 --> 00:05:20.560
+ad avere senso. Ogni stanza, persone che possono crearvi contenuti, chiamate maker e persone
+
+00:05:20.560 --> 00:05:24.260
+che la gestiscono, chiamate amministratori di ambiente. I maker creano app e flussi.
+
+00:05:24.840 --> 00:05:27.740
+Gli amministratori decidono chi può accedere, quali sono le regole, quando una stanza deve
+
+00:05:27.740 --> 00:05:32.140
+essere ritirata. La maggior parte dei principianti sono maker e va benissimo così perché il lavoro
+
+00:05:32.140 --> 00:05:35.840
+del maker è costruire cose buone piuttosto che gestire l'infrastruttura sottostante.
+
+00:05:36.660 --> 00:05:39.220
+Le funzionalità più recenti si spingono oltre e consentono ai amministratori di applicare
+
+00:05:39.220 --> 00:05:42.900
+un set condiviso di regola a un intergruppo di stanze contemporaneamente. Ciò significa
+
+00:05:42.900 --> 00:05:46.220
+che una policy non può essere cambiata silenziosamente in un posto mentre un altro mantiene
+
+00:05:46.220 --> 00:05:50.040
+un'impostazione bene. Per te che crei si traduce principalmente in coerenza poiché le regole
+
+00:05:50.040 --> 00:05:52.120
+che impari il primo giorno rimangono valide anche un anno dopo.
+
+00:05:53.500 --> 00:05:57.940
+Policy sui dati, le regole del gioco. Le stanze decidono dove vive il tuo lavoro ma non dicono
+
+00:05:57.940 --> 00:06:01.980
+nulla su cosa sei autorizzato a toccare. Per questo ti serve il secondo elemento, le policy
+
+00:06:01.980 --> 00:06:06.900
+sui dati e per capirle devi prima conoscere una piccola parola. Un connettore è la spina
+
+00:06:06.900 --> 00:06:10.780
+che permette a un app o a un flusso di comunicare con altro, che si tratti di Outlook, SharePoint
+
+00:06:10.780 --> 00:06:15.960
+o un servizio esterno a Microsoft. Ogni app che hai creato non è altro che un insieme di
+
+00:06:15.960 --> 00:06:20.700
+queste spine collegate e più delle volte non ci pensi nemmeno. Una policy sui dati è una
+
+00:06:20.700 --> 00:06:26.540
+protezione che agisce su quelle spine. La definizione di Microsoft dice che le policy riducono il rischio
+
+00:06:26.540 --> 00:06:30.980
+che gli utenti espongano involontariamente dati aziendali, in breve, impediscono a qualcuno in
+
+00:06:30.980 --> 00:06:36.300
+buona fede di spostare dati sensibili dove non dovrebbero andare. Ogni connettore viene inserito
+
+00:06:36.300 --> 00:06:40.740
+in uno di tre contenitori. C'è il contenitore business per i dati lavorativi, quello non business
+
+00:06:40.740 --> 00:06:45.960
+per i servizi personali e quello bloccato per ciò che non vuoi che venga toccato? Due di questi
+
+00:06:45.960 --> 00:06:50.060
+contenitori sono operativi, mentre uno è chiuso definitivamente. Esiste anche una regola su questi
+
+00:06:50.060 --> 00:06:54.180
+contenitori che sorprende quasi tutti e la vedremo tra un momento. Ecco la regola che quasi tutti di
+
+00:06:54.180 --> 00:06:58.300
+sorpresa. Due connettori, entrambi perfettamente consentiti, possono comunque essere proibiti se usati.
+
+00:06:58.300 --> 00:07:02.540
+Metti SharePoint nel contenitore business è un servizio mail personale in quello non business
+
+00:07:02.540 --> 00:07:06.560
+e non potrai creare alcun flusso che li usi entrambi. All'interno dello stesso contenitore
+
+00:07:06.560 --> 00:07:10.640
+si è libero di convivere. Tra contenitori diversi la porta rimane chi. C'è anche un dettaglio
+
+00:07:10.640 --> 00:07:14.880
+importante che sorprende le persone. Quando si crea una nuova policy ogni connettore finisce di
+
+00:07:14.880 --> 00:07:19.700
+default nel contenitore non business, così nulla viene attivato per sbaglio. Questa impostazione
+
+00:07:19.700 --> 00:07:24.360
+predefinita è voluta e garantisce che la scelta più sicura sia quella predefinita. Ora immagina cosa
+
+00:07:24.360 --> 00:07:28.260
+succede quando una regola cambia improvvisamente. Qualcuno pianifica un flusso che deve essere
+
+00:07:28.260 --> 00:07:32.100
+eseguito ogni mattina alle tre. Funziona da mesi, poi un giorno fallisce con un messaggio che indica
+
+00:07:32.100 --> 00:07:36.040
+che la connessione è interrotta. Chi l'ha creato non ha fatto nulla di sbagliare. La policy è
+
+00:07:36.040 --> 00:07:40.080
+semplicemente cambiata e il flusso si basava su una combinazione non più consentita. Microsoft
+
+00:07:40.080 --> 00:07:43.300
+chiarisce che l'applicazione delle policy non è instant. La maggior parte delle modifiche
+
+00:07:43.300 --> 00:07:47.960
+effettua entro un'ora. Nei casi più estremi può volerci fino a un giorno a seconda del carico di lavoro.
+
+00:07:48.500 --> 00:07:51.800
+È bene saperlo prima di farsi prendere dal panico se una policy sembra non aver ancora sortito.
+
+00:07:51.800 --> 00:07:55.280
+Gli amministratori possono essere più precisi dei tre contenitori quando necessario. Possono
+
+00:07:55.280 --> 00:07:58.480
+consentire l'accesso in sola lettura a un servizio bloccando nelle modifiche ad esempio
+
+00:07:58.480 --> 00:08:03.500
+restringere l'accesso a end point specifici anziché enter i servizi anziché enter i servizi. Non hai
+
+00:08:03.500 --> 00:08:06.880
+bisogno di quel livello di dettaglio per iniziare ma il sistema può essere regolato invece di essere
+
+00:08:06.880 --> 00:08:11.400
+solo acceso o spento. Una regola pratica evita molta confusione in questo caso. Se due strumenti
+
+00:08:11.400 --> 00:08:15.080
+devono funzionare insieme nella stessa app devono trovarsi nello stesso contenitore e questa è una
+
+00:08:15.080 --> 00:08:18.400
+decisione presa appositamente da un amministratore non qualcosa che puoi ignorare dall'interno
+
+00:08:18.400 --> 00:08:22.820
+di un flusso. Quindi lo scopo non è mai stato quello di impedirti di creare. Serve ad assicurarsi
+
+00:08:22.820 --> 00:08:26.260
+che la combinazione scelta sia sicura e che tutto ciò che si trova in un singolo contenitore
+
+00:08:26.260 --> 00:08:28.400
+continua a funzionare esattamente come è sempre fatto.
+
+00:08:29.900 --> 00:08:33.260
+Chi è il vero responsabile di tutto questo? Le regole non si applicano da sole il che significa
+
+00:08:33.260 --> 00:08:36.440
+che la responsabilità deve risiedere da qualche parte e questo ci porta a una frase che sentirai
+
+00:08:36.440 --> 00:08:41.240
+costantemente. Un centro di eccellenza solitamente abbreviato in COE è un team all'interno di un'azienda
+
+00:08:41.240 --> 00:08:45.260
+che stabilisce gli standard, condivide ciò che funziona e supporta chi crea. È meno
+
+00:08:45.260 --> 00:08:48.900
+un dipartimento e più un piccolo gruppo con un compito chiaro. Microsoft è piacevolmente
+
+00:08:48.900 --> 00:08:53.260
+onesta su cosa sia realmente. La documentazione afferma che un centro di eccellenza ha bisogno
+
+00:08:53.260 --> 00:08:57.220
+di persone, comunicazione, processi definiti e che gli strumenti sono un mezzo per raggiungere
+
+00:08:57.220 --> 00:09:01.100
+un fine. In altre parole, acquistare un kit di strumenti non ti garantisce la govern. Averne
+
+00:09:01.100 --> 00:09:05.640
+qualcuno che se ne occupi concretamente invece sì. Allora ti sorprende. Se cerchi la governance
+
+00:09:05.640 --> 00:09:09.800
+di Power Platform troverai ovunque il COE Starter Kit che per anni è stata la risposta a questa
+
+00:09:09.800 --> 00:09:14.800
+domanda. La documentazione stessa di Microsoft ora afferma chiaramente che il COE Starter Kit non viene
+
+00:09:14.800 --> 00:09:18.340
+più gestito attivamente e che le sue funzionalità principali sono state spostate nel centro
+
+00:09:18.340 --> 00:09:21.980
+di amministrazione di Power Platform. È utile sapere cosa fosse perché così il cambiamento
+
+00:09:21.980 --> 00:09:26.400
+ha più senso. Il kit era una build di riferimento realizzata interamente con gli strumenti della
+
+00:09:26.400 --> 00:09:30.100
+piattaforma, con dashboard per individuare cosa esiste nel tenant, processi per riordinare
+
+00:09:30.100 --> 00:09:34.600
+ciò che non serve e persino un benvenuto amichevole per chi era appena agli inizi. Non è mai stato
+
+00:09:34.600 --> 00:09:38.660
+The Room Product. Era un ottimo esempio da poter copiare. La buona notizia è che nulla di utile è andato
+
+00:09:38.660 --> 00:09:43.320
+perduto. Le parti importanti sono state integrate nel prodotto stesso, dove vengono gestite
+
+00:09:43.320 --> 00:09:46.780
+per te invece di essere copiate e monitorate costantemente dal tuo team. Quel percorso
+
+00:09:46.780 --> 00:09:50.940
+integrato è un nome che sentirai spesso. Gli ambienti gestiti consentono all'amministratore
+
+00:09:50.940 --> 00:09:54.000
+di stabilire le regole una volta solo e di applicarle a molte stanze contemporaneamente,
+
+00:09:54.080 --> 00:09:57.820
+con molti meno clic rispetto a farlo stanza per stanza. Per te che sei agli inizi, il concetto
+
+00:09:57.820 --> 00:10:01.620
+chiave è semplice. La governance ha un responsabile, solitamente si tratta di un piccolo team piuttosto
+
+00:10:01.620 --> 00:10:04.960
+che di un gigantesco ripartito. C'è un motivo pratico per cui questo ti riguarda, anche se non
+
+00:10:04.960 --> 00:10:08.700
+gestirai mai un certo di eccellenza in prima persona. Quando ti serve qualcosa che non hai, che si tratti
+
+00:10:08.700 --> 00:10:12.320
+di un nuovo connettore, di un ambiente fresco, esiste un posto preciso a cui rivolgersi. Il team
+
+00:10:13.320 --> 00:10:18.560
+testa non svanisca nel vuoto. Osservare cosa succede. Definire le regole è un compito, capire
+
+00:10:18.560 --> 00:10:22.460
+cosa sta realmente accadendo è un altro. Questa è la parte a cui i principianti non pensano mai, ed è
+
+00:10:22.460 --> 00:10:26.160
+ciò che determina il successo e il fallimento di tutto il resto. Senza di essa nessuno saprebbe
+
+00:10:26.160 --> 00:10:29.420
+dell'esistenza di un app o del fatto che ha smesso di funzionare sei settimane. È qui che entra in gioco
+
+00:10:29.420 --> 00:10:33.500
+il monitoraggio. L'analisi a livello di tenant raccoglie l'attività di ogni ambiente nel tuo tenant e nel
+
+00:10:33.500 --> 00:10:37.140
+tuo tenant in un'unica visualizzazione, così un amministratore può vedere cosa viene creato e cosa viene
+
+00:10:37.140 --> 00:10:41.500
+creato e cosa viene al mento. Microsoft segnala che i report richiedono uno o due giorni per popolarsi
+
+00:10:41.500 --> 00:10:45.860
+dopo l'attivazione, il che è utile ricordare prima di pensare che non stia succedendo nulla. C'è anche
+
+00:10:45.860 --> 00:10:49.860
+un elenco sempre aggiornato di elementi che meritano uso. Metti in evidenza le risorse cui il proprietario
+
+00:10:49.860 --> 00:10:54.400
+ha lasciato l'azienda e quelle che nessuno tocca da molto tempo. Provisamente l'app senza proprietario
+
+00:10:54.400 --> 00:10:58.020
+di prima non è più solo un racconto, ma una voce e un elenco sullo schermo. La soluzione per quella
+
+00:10:58.020 --> 00:11:02.820
+voce è piacevolmente noiosa. O trovi un nuovo proprietario per l'app o la dismetti e in ogni caso qualcuno
+
+00:11:02.820 --> 00:11:07.000
+finalmente sa che esiste. È molto più di quanto offrisse l'anno scorso. Oltre ai report un breve
+
+00:11:07.000 --> 00:11:10.940
+riepilogo settimanale segnala app flussi diventati inattivi, così i problemi emergono prima che
+
+00:11:10.940 --> 00:11:15.740
+un intero team inizia a dipenderne. Un'app sana ha un proprietario, una casa e un percorso sicuro
+
+00:11:15.740 --> 00:11:19.840
+dalla stanza di prova a quella reale senza dover essere ricostruita da zero ogni volta. Anche le
+
+00:11:19.840 --> 00:11:23.100
+persone che possono vedere questi report sono importanti. Gli amministratori di ambiente vedono
+
+00:11:23.100 --> 00:11:27.680
+le stanze di loro competenza mentre gli amministratori di piattaforma vedono tutto. Questo rende la
+
+00:11:27.680 --> 00:11:32.800
+visibilità utile senza dare a chiunque le chiavi dell'intero edificio. Un'onesta avvertenza riguarda
+
+00:11:32.800 --> 00:11:36.860
+tutta questa visibilità. Se disattivi la reportistica la cronologia viene eliminata, quindi è qualcosa che va
+
+00:11:36.860 --> 00:11:40.160
+attivato intenzionalmente e poi lasciato a te. C'è un piccolo dettaglio qui che è facile trascurare.
+
+00:11:40.940 --> 00:11:44.840
+Il monitoraggio non ti dice solo cose rotto, ti dice cose popolari e spesso le due cose coincidono.
+
+00:11:45.220 --> 00:11:48.340
+L'app che tutti amano è solitamente quella di cui tutti sentirebbero la mancanza e il che la rende
+
+00:11:48.340 --> 00:11:51.260
+esattamente quella che vale la pena proteggere con un proprietario a proteggere un piano. Niente di
+
+00:11:51.260 --> 00:11:54.840
+tutto questo avviene automaticamente. Qualcuno deve attivare il report, decidere cosa considerare
+
+00:11:54.840 --> 00:11:58.680
+inutilizzato e agire concretamente in base a ciò che dice l'elenco. Questa è la parte poco
+
+00:11:58.680 --> 00:12:03.260
+affascinante della governance ed è solitamente ciò che salva un'azienda. Controllo senza uccidere la
+
+00:12:03.260 --> 00:12:08.380
+libertà. Ora possiamo porci la domanda che determinerà se tutto questo funzionerà. L'unica vera decisione è quanto
+
+00:12:08.380 --> 00:12:12.560
+stringere i blu. Se stringi troppo, le persone creeranno in segreto sui propri laptop usando
+
+00:12:12.560 --> 00:12:16.020
+strumenti che non conosci. Se allenti troppo, lo spazio condiviso diventerà un ripostiglio
+
+00:12:16.020 --> 00:12:21.220
+disordinato. Entrambi sono fallimenti di governance ed entrambi sono comuni. L'equilibrio raccomandato
+
+00:12:21.220 --> 00:12:25.320
+da Microsoft è più ragionevole di quanto sei. Mantieni stretto lo spazio condiviso, rendi
+
+00:12:25.320 --> 00:12:28.980
+flessibile la zona di produzione e considera le regole come qualcosa da spiegare, non come
+
+00:12:28.980 --> 00:12:33.840
+un'imposizione a sorpresa. Quest'ultima parte conta più della tecnologia stessa. Le linee guida
+
+00:12:33.840 --> 00:12:38.160
+sono chiare. Se attivi una nuova strategia senza avvisare nessuno, gli utenti la vivranno
+
+00:12:38.160 --> 00:12:42.120
+come una restrizione e cercheranno soluzioni alternative. Una regola che nessuno comprende
+
+00:12:42.120 --> 00:12:45.180
+è una regola che le persone aggireranno. L'equilibrio si presenta solitamente come
+
+00:12:45.180 --> 00:12:48.480
+una struttura a livelli piuttosto che come un'unica regola generale. Lo spazio condiviso
+
+00:12:48.480 --> 00:12:51.840
+mantiene le regole più rigide perché è quella accessibile a tutti. Le aree per i team e per
+
+00:12:51.840 --> 00:12:54.680
+la produzione hanno più libertà di manovra perché chi vi lavora sacrando qualcosa con lo scopo
+
+00:12:54.680 --> 00:12:58.860
+preciso. Nulla di tutto ciò è complicato e rispecchia, in modo in cui le aziende più sensate
+
+00:12:58.860 --> 00:13:02.400
+gestiscono già unità condivise e sale e riunioni. Esiste anche un lato creativo in questo
+
+00:13:02.400 --> 00:13:05.880
+equilibrio. Consigli di Microsoft per chi crea soluzioni sono brevi, vale la pena
+
+00:13:05.880 --> 00:13:10.620
+ricordarli. Mantieni pulito lo spazio di lavoro, condividi con attenzione e proteggi i dati
+
+00:13:10.620 --> 00:13:14.560
+che ti sono stati affidati. Queste tre abitudini prevengono la maggior parte dei problemi che
+
+00:13:14.560 --> 00:13:18.620
+la governance mi risolve. Quindi dal tuo punto di vista una buona governance si riduce
+
+00:13:18.620 --> 00:13:23.300
+a tre cose semplici. Sai dove creare, sai a cosa ti è permesso collegarti e sai esattamente
+
+00:13:23.300 --> 00:13:27.280
+a chi rivolgerti quando ti serve di più, il che riporta il concetto al punto di partenza.
+
+00:13:28.000 --> 00:13:31.280
+Ciò che desideri davvero non è un manuale di regole che nessuno legge, ma un insieme di
+
+00:13:31.280 --> 00:13:34.160
+abitudini che tutti comprendono. Questa differenza è il punto fondamentale.
+
+00:13:35.120 --> 00:13:39.240
+Da versione breve. Riassumiamo il tutto. La governance è l'insieme di regole che mantiene
+
+00:13:39.240 --> 00:13:42.800
+la power platform utilizzata. Gli ambienti sono le stanze in cui vive il tuo lavoro, le
+
+00:13:42.800 --> 00:13:46.660
+policy sui dati, sono le norme stradali che decidono quali connettori combinare e il
+
+00:13:46.660 --> 00:13:50.360
+center of excellence è il team che gestisce tali regole. Monitoraggio è il modo in cui
+
+00:13:50.360 --> 00:13:53.680
+chiunque può scoprire quando qualcosa richiede attenzione. Presi singolarmente, nessuno di questi
+
+00:13:53.680 --> 00:13:56.780
+elementi è complicato. Il trucco sta nel capire come si incastrano tra loro ed è proprio la parte
+
+00:13:56.780 --> 00:14:00.080
+che la maggior parte delle guide per principianti tra. Ecco il cambio di prospettiva da portare a casa
+
+00:14:00.080 --> 00:14:03.280
+dopo questo episodio. La governance non è il prezzo da pagare per usare la tua platform,
+
+00:14:03.480 --> 00:14:06.420
+è il motivo per cui puoi continuare a usarla mentre il tuo lavoro cresce e la ragione per
+
+00:14:06.420 --> 00:14:08.900
+cui ciò che hai costruito l'anno scorso funziona l'anno scorso, funziona l'anno scorso, funziona
+
+00:14:08.900 --> 00:14:11.880
+ancora il prossimo. Una volta che riesci a dare un nome ai pezzi, la governance mette di essere
+
+00:14:11.880 --> 00:14:14.900
+un muro contro cui sbatti, diventa una serie di scelte che poi effettivamente compie. Quindi
+
+00:14:14.900 --> 00:14:18.940
+vi lascio con una domanda davvero aperta. Se domani uscissi dalla porta, qualcun altro nella
+
+00:14:18.940 --> 00:14:22.760
+tua organizzazione saprebbe spiegare le app e i flussi che hai creato. Se hai una risposta, voglio
+
+00:14:22.760 --> 00:14:27.880
+sentirla. Scrivila nei commenti, scriviti a M365FM se vuoi altri strumenti e la mentalità dietro
+
+00:14:27.880 --> 00:14:28.700
+un lavoro che dura nel tempo.

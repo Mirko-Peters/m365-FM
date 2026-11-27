@@ -24,7 +24,7 @@
   function t(k, vars) { var s = T[k] || k; Object.keys(vars || {}).forEach(function (v) { s = s.replace("{" + v + "}", vars[v]); }); return s; }
   function api(path, opt) {
     opt = opt || {};
-    var o = { method: opt.method || "GET", credentials: "include", headers: { "x-requested-with": "m365" } };
+    var o = { method: opt.method || "GET", credentials: "include", headers: opt.method && opt.method !== "GET" ? { "x-requested-with": "m365" } : {} };   // nur schreibend: GET ohne CORS-Preflight
     if (opt.body) { o.headers["content-type"] = "application/json"; o.body = JSON.stringify(opt.body); }
     return fetch(C.api + path, o).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j || {} }; });

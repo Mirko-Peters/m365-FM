@@ -37,6 +37,25 @@ PROFILE_REDIRECT = "0"
 # "0" = wie bisher (GitHub Pages zuerst, R2 nur fuer Seiten, die es nur dort gibt). Notschalter: hier auf "0" setzen und mergen.
 # Seit 16.11.2026 "1" (Wunsch Mirko): Spiegel und Bau-Kennung liefen im Bau 684 vollstaendig durch.
 R2_PRIMARY = "1"
+# Kanten-Cache fuer Seiten und Dateien aus R2 (Schluessel /__r2f<pfad>) in Sekunden, seit 25.11.2026 1 Tag statt 4 h (Kostenanalyse D1/R2): jede
+# geaenderte Adresse leert der Deploy gezielt (tools/purge_changed.py --r2), seit die Liste "Neueste Folgen" weg ist, gibt es keine Aenderung ohne Purge mehr.
+# Notschalter: "14400" (4 h wie vorher). Erlaubt 600 bis 604800; sonst gilt 14400 (sitewrk/index.js r2EdgeTtl).
+R2_EDGE_TTL = "86400"
+# R2 ueber den Zonen-Cache statt Cache API (Ladezeit 27.11.2026, sitewrk/index.js zoneGet): "1" = r2First holt Seiten und Dateien zuerst als Zonen-Abruf von
+# R2_ZONE_HOST/pages/<schluessel> (Tiered Cache, Request Collapsing), nur Treffer; alles andere nimmt in derselben Anfrage den heutigen Weg.
+# Live bleibt "0", bis auf Staging belegt ist, dass es wirkt, UND alle bestehenden Entfernt-Markierungen den Marker tragen (python tools/r2_site_sync.py
+# --remark-gone): sonst kaeme eine als entfernt markierte Seite ohne Marker aus der Zone. Dann in einem eigenen kleinen PR auf "1".
+# Bei "1" leert tools/purge_changed.py (liest diesen Wert) zusaetzlich https://img.m365.fm/pages/... . R2_ZONE_HOST: live nur https://img.m365.fm.
+# Pflicht vor "1" (Gegenpruefung 25.11.2026): auf Staging belegen, dass ein mit m365-gone markiertes Objekt mit genau diesem Cache-Control beim Worker ankommt
+# (zoneGet nimmt Treffer nur bei Cache-Control "public, max-age=600" bzw. "no-store", sonst Server-Timing zc="cc" und der heutige Weg). Purge: der Wert
+# wird aus dem Checkout des Seitenbaus gelesen - beim Umschalten darf kein site.yml-Lauf mit altem Stand laufen; nach dem Zurueckschalten auf "0" eine
+# Stunde (R2_ZONE_TTL) im Deploy-Job R2_ZONE_PURGE=1 setzen, damit Zonen-Eintraege nicht veralten.
+# R2_ZONE_TTL: Obergrenze der Kanten-Dauer im Zonen-Weg (60 bis 604800 s), zum Start 1 h.
+R2_ZONE_CACHE = "0"
+R2_ZONE_HOST = "https://img.m365.fm"
+R2_ZONE_TTL = "3600"
+# Preload-Link-Header (CSS mit data-sbar, LCP-Bild aus dem Kopf) auf HTML-Seiten, Grundlage fuer Early Hints (sitewrk/index.js withPreload). Notschalter: "0".
+PRELOAD_LINK = "1"
 # Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" = Anfragen fremder Hosts (CNAME-Domains der Mitglieder) fragen den Community-Worker; Standard "0" = aus.
 # Eigene Hosts (m365.fm, *.m365.fm) sind nie betroffen. Zusaetzlich noetig (Mirko): Zone fuer die Blog-Domains mit Worker-Route, siehe Dokument.
 BYOD = "0"
@@ -50,6 +69,13 @@ API = "https://api-dub.m365.fm"
 binding = "PAGES"   # Seiten, die der Seitenbau nach R2 laedt (pages/<pfad>/index.html), statt in GitHub Pages
 bucket_name = "m365-fm"
 
+# Workers Logs (Dashboard: Workers -> m365-dub-site -> Logs): console.log des Workers wird gespeichert und ist abfragbar. Genutzt fuer die Messung der
+# R2-only-Seiten (/entity/*, Sprachseiten): je Seitenaufruf eine JSON-Zeile {m:"r2page", p, src, ready, cache, r2, origin, colo, country} (logR2Page in index.js).
+# head_sampling_rate = 1: jede Anfrage (Verkehr ist klein). Abschalten: enabled = false.
+[observability]
+enabled = true
+head_sampling_rate = 1
+
 # ================================================================ Testumgebung (Staging) - STAGING.md
 # Eigener Worker auf staging.m365.fm. Liefert NUR Seiten aus dem eigenen Bucket m365-fm-staging (pages/<pfad>), nie GitHub Pages und nie den Live-Bucket
 # (sitewrk/index.js, stagingFetch). Alles noindex/nofollow, robots.txt sperrt alles. Deploy ausschliesslich ueber .github/workflows/site-staging.yml
@@ -58,13 +84,22 @@ bucket_name = "m365-fm"
 [env.staging]
 name = "m365-dub-site-staging"
 workers_dev = false
-routes = [{ pattern = "staging.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
+# img-staging.m365.fm: R2-Domain des Staging-Buckets nur fuer den Zonen-Cache (R2_ZONE_CACHE); oeffentlich antwortet dieser Worker dort immer 404.
+# Reihenfolge: erst diesen Worker mit der Route deployen, DANN die Domain am Bucket m365-fm-staging anlegen (sonst ist der Bucket kurz oeffentlich lesbar).
+routes = [{ pattern = "staging.m365.fm", custom_domain = true, zone_name = "m365.fm" }, { pattern = "img-staging.m365.fm/*", zone_name = "m365.fm" }]
 
 [env.staging.vars]
 ENVIRONMENT = "staging"
 ORIGIN = "https://staging.m365.fm"
 MIGRATED = "0"
 R2_PRIMARY = "0"
+# Zonen-Cache auf Staging an (eigene Domain, nie img.m365.fm; tools/check_staging_isolation.py prueft das), kurze TTL statt Purge.
+# Entfernt-Markierungen gibt es im Staging-Bucket nicht (tools/staging_upload.py markiert nichts). Fuer die gone-Probe ein Testobjekt mit Metadaten gone=1
+# UND Cache-Control "public, max-age=600, m365-gone" anlegen (wie tools/r2_site_sync.py); erst dann ist die Messung zu gone aussagekraeftig.
+R2_ZONE_CACHE = "1"
+R2_ZONE_HOST = "https://img-staging.m365.fm"
+R2_ZONE_TTL = "300"
+PRELOAD_LINK = "1"
 
 [[env.staging.r2_buckets]]
 binding = "PAGES"

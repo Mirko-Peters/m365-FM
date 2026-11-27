@@ -1,4 +1,5 @@
 """Creator-Videos auf dem YouTube-Kanal m365 Show: Seiten fuer von der Redaktion veroeffentlichte Videos, Verzeichnis und RSS."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
@@ -6,6 +7,8 @@ from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitene
 import site_player as PL   # YouTube-Player erst nach Klick
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Video)
+import site_entmatch as EM   # Kontext-Links in der Beschreibung
+import site_linkctx as LC   # Beziehungskontext der Linklisten (data/link_context.json)
 
 
 def fetch_videos(api):
@@ -43,23 +46,27 @@ def build(g, vids, people, api):
         for v in mine:
             u = f"{croot}video/{v['slug']}/"; au = f"{BASE}/community/u/{v['handle']}/"
             topics = [t for t in v.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(EN.list_link(f"{BASE}/entity/{t}/", ENTS[t], lang, cls="mb-tag") + " " for t in topics)   # Paket 6: Themen-Chips mit Zusatz
             player = PL.player("youtube", v["video_id"], v["title"], T(lang, "Watch on YouTube", "Auf YouTube ansehen"), link=f"https://youtu.be/{v['video_id']}")
             gs = [g for g in (v.get("guests") or []) if g.get("handle") != v["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""
+            # Beschreibung mit Kontext-Links (site_entmatch): erste Nennung je Entitaet, Kontext = Themen, Ziel in der Sprache der Seite
+            _used = EM.Used()
+            _desc, _ = EM.shared(ENTS).link_html("".join("<p>" + esc(par) + "</p>" for par in (v.get("description") or "").split(chr(10) * 2) if par.strip()), EM.url_in(BASE, lang), lang, topics, used=_used)
+            _ment = EM.mentions(BASE, [i for i in _used if i in ENTS], topics)
             b = shell(lang, f'<p class="mut"><a href="{croot}video/">{esc(ttl)}</a></p><article><h1>{esc(v["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{v["handle"]}/" rel="author">{esc(v["name"])}</a> · {iso(v["published"])}</p>{guests_html}{player}'
-                            f'{"".join("<p>" + esc(par) + "</p>" for par in (v.get("description") or "").split(chr(10) * 2) if par.strip())}'
-                            f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article><p>{tl}</p>'
+                            f'{_desc}'
+                            f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article>{(LC.intro(lang, "video.topics") + "<p>" + tl + "</p>") if tl else ""}'
                             f'<p><a class="btn" href="https://youtu.be/{v["video_id"]}" rel="noopener">{esc(T(lang, "Watch on YouTube", "Auf YouTube ansehen"))}</a> <a href="{croot}video/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}video/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[v['slug']])], kind="video") + '<section id="c-comments"></section>'
                             + (ctags(lang, "video%d" % v["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": (v.get("description") or "")[:500], "inLanguage": lang,
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
                    "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
-                   "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}]
+                   "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": _ment} if _ment else {})}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, v["title"], u)   # zweite Spur nach dem Hauptthema (nur JSON-LD)
             if _tbc: ld.append(_tbc)
-            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics, topics_h=LC.plain(lang, "side.video") if topics else "", key=f"vid:{v['slug']}") if g.get("side") else "")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span></li>' for v in it) + "</ul>"

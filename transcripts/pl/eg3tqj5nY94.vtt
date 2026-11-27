@@ -1,0 +1,592 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:06.860
+Witamy w podcaście M365FM, w którym badamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:07.100 --> 00:00:10.680
+Branching brzmi jak drobny szczegół, dopóki dwie osoby nie zmienią tego samego pliku.
+
+00:00:10.920 --> 00:00:14.900
+Wtedy ktoś musi ustalić, która wersja jest tą właściwą i to jest właśnie problem z branchingiem.
+
+00:00:15.120 --> 00:00:20.580
+Branch to po prostu bezpieczna kopia projektu, a strategia branchingu to zasady zespołu dotyczące łączenia tych kopii.
+
+00:00:20.800 --> 00:00:26.820
+Istnieją trzy główne podejścia – GitFlow, GitHubFlow oraz Rank-Based Development, a każde z nich stworzono dla innego typu zespołu.
+
+00:00:26.820 --> 00:00:30.680
+Na koniec dowiesz się, które z nich pasuje do twojego zespołu i jakich błędów unikać.
+
+00:00:30.840 --> 00:00:37.160
+Witamy w podcaście M365FM, w którym badamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:37.440 --> 00:00:38.280
+Czym jest branch?
+
+00:00:38.460 --> 00:00:41.940
+Słowo branch brzmi technicznie, ale kryjąca się za nim idea jest prosta.
+
+00:00:42.260 --> 00:00:45.720
+Repozytorium to folder projektu z całą jego historią zapisaną przez Git.
+
+00:00:45.900 --> 00:00:52.760
+Oznacza to każdą wersję każdego pliku aż od pierwszego dnia, a branch to kopia projektu, którą możesz zmieniać bez dotykania oryginału.
+
+00:00:52.760 --> 00:00:56.280
+Nic nie jest blokowane i nic nie jest usuwane podczas tworzenia brancha.
+
+00:00:56.280 --> 00:01:00.380
+Po prostu deklarujesz, że chcesz coś wypróbować bez psucia wersji, która już działa.
+
+00:01:00.640 --> 00:01:03.920
+Dlatego branching wydaje się bezpieczny, gdy zrobisz to kilka razy.
+
+00:01:04.100 --> 00:01:10.000
+Główny branch, który niektóre zespoły nazywają main, a inne master, to kopia traktowana przez wszystkich jako działająca wersja projektu.
+
+00:01:10.160 --> 00:01:13.480
+Jeśli widziałeś obie nazwy i zastanawiałeś się, czy to różne rzeczy nie są.
+
+00:01:13.700 --> 00:01:19.420
+Main i master oznaczają to samo, a przejście z jednej nazwy na drugą było kwestią nazewnictwa, a nie nową funkcją do nauki.
+
+00:01:19.420 --> 00:01:24.700
+Branch w gicie są również tanie i to jest część, w którą osobom korzystającym ze starszych narzędzi najtrudniej uwierzyć.
+
+00:01:24.900 --> 00:01:29.700
+W systemach sprzed gita tworzenie brancha było powolną, ciężką operacją, którą wykonywano rzadko i ostrożnie.
+
+00:01:29.900 --> 00:01:33.680
+W gicie dzieje się to natychmiast, dlatego nowoczesne zespoły tworzą branch niemal do wszystkiego.
+
+00:01:33.920 --> 00:01:39.180
+Jeśli słyszałeś, jak ludzie wspominają o komicie, to jest to zapisany punkt kontrolny, zarejestrowana zmiana z dołączoną wiadomością.
+
+00:01:39.440 --> 00:01:44.640
+Branch to tak naprawdę ruchoma etykieta wskazująca na linię tych punktów kontrolnych, dlatego przełączanie między nimi jest tak szybkie.
+
+00:01:44.640 --> 00:01:53.100
+Ale ta jedna idea stanowi fundament całości. Każda strategia i każdy spór między programistami sprowadza się do pytania o to, jak tworzone są kopie i jak są one ponownie łączone.
+
+00:01:53.320 --> 00:01:55.300
+Dlaczego strategie branchingu istnieją?
+
+00:01:55.540 --> 00:01:58.680
+Gdy zespół przestaje być jednoosobowy, zasady zaczynają mieć znaczenie.
+
+00:01:58.920 --> 00:02:04.540
+Git sprawia, że tworzenie gałęzi jest tanie, a łączenie łatwe, co stanowi dużą zmianę w porównaniu ze starszymi narzędziami, gdzie łączenie wydawało się ryzykowne i rzadkie.
+
+00:02:04.720 --> 00:02:07.400
+Vincent Driessen, twórca GitFlow, sam zwrócił na to uwagę.
+
+00:02:07.400 --> 00:02:13.660
+W Gicie tworzenie gałęzi i łączenie stało się codziennym elementem pracy, zamiast być specjalnym wydarzeniem planowanym z kilkutygodniowym wyprzedzeniem.
+
+00:02:13.820 --> 00:02:16.000
+Ta niegałęziowanie stwarza jednak nowy problem.
+
+00:02:16.260 --> 00:02:21.280
+Jeśli każdy tworzy kopię, kiedy tylko chce i nikt nie ustala zasad ich łączenia, praca zaczyna się kolidować.
+
+00:02:21.500 --> 00:02:26.600
+Czyjaś niedokończona zmiana miesza się z czymś, co miało być gotowe i teraz zespół nie może wydać żadnej z nich.
+
+00:02:26.820 --> 00:02:31.800
+Wyobraź sobie programistę w połowie prac nad przeprojektowaniem, podczas gdy współpracownik cicho naprawia błąd w tym samym pliku.
+
+00:02:32.000 --> 00:02:34.800
+Obie zmiany trafiają w to samo miejsce, a nikt się tego nie spodziewał.
+
+00:02:34.800 --> 00:02:38.460
+Strategia gałęziowania jest rozwiązaniem, choć brzmi to mniej efektownie niż mogłoby się wydawać.
+
+00:02:38.520 --> 00:02:42.180
+To nie jest oprogramowanie, które instalujesz, ani ustawienie, które zmieniasz raz i zapominasz.
+
+00:02:42.320 --> 00:02:48.780
+To wspólne porozumienie dotyczące tego, kto gdzie pracuje, jak długo gałąź może istnieć i jak zmiany są sprawdzane przed trafieniem do głównej wersji.
+
+00:02:48.960 --> 00:02:52.500
+Kiedy brakuje takiego porozumienia, powstaje bałagan, o którym wspomnieliśmy na początku odcinka.
+
+00:02:52.740 --> 00:02:56.280
+Dwie osoby, jeden plik, dwie wersje prawdy i nikt nie jest pewien, która jest właściwa.
+
+00:02:56.560 --> 00:02:59.900
+Strategia to sposób, w jaki zespół zapobiega powtórzeniu się takiej sytuacji.
+
+00:02:59.900 --> 00:03:07.380
+Trzy elementy składowe. Prawie każda strategia zbudowana jest z tych samych trzech rodzajów gałęzi i gdy już je poznasz, model przestaje brzmieć jak obcy język.
+
+00:03:07.460 --> 00:03:10.980
+Pierwszą jest główna gałąź, zawsze działająca wersja, z której dokonujesz wydań.
+
+00:03:11.080 --> 00:03:12.980
+To jedyna gałąź, która nigdy nie znika.
+
+00:03:13.240 --> 00:03:16.100
+Drugą jest gałąź funkcyjna i to tutaj odbywa się właściwa praca.
+
+00:03:16.300 --> 00:03:20.620
+Tworzysz ją dla konkretnego zadania, jak dodanie strony logowania czy naprawa niedziałającego przycisku.
+
+00:03:20.860 --> 00:03:24.480
+Nazywasz ją zgodnie z wykonywaną pracą, aby każdy mógł od razu rozpoznać, do czego służy.
+
+00:03:24.480 --> 00:03:29.420
+Gałęzie funkcyjne mają być tymczasowe, a w momencie połączenia pracy z główną wersją gałąź jest usuwana.
+
+00:03:29.600 --> 00:03:33.440
+Trzecią jest gałąź wydania, która pojawia się tylko wtedy, gdy publikujesz wersje numerowane.
+
+00:03:33.620 --> 00:03:36.340
+To sposób na zamrożenie migawki kodu do ostatecznych testów.
+
+00:03:36.480 --> 00:03:41.840
+Tworzysz ją, gdy kod jest prawie gotowy, używasz do naprawy drobnych błędów i nadajesz numer wersji przed wysyłką do klientów.
+
+00:03:41.980 --> 00:03:43.200
+To cały zestaw narzędzi.
+
+00:03:43.380 --> 00:03:46.820
+To, co odróżnia trzy główne modele, sprowadza się do częstotliwości tworzenia gałęzi.
+
+00:03:47.040 --> 00:03:49.680
+GitFlow wykorzystuje wszystkie trzy oraz drugą stałą gałąź.
+
+00:03:49.840 --> 00:03:52.820
+GitHub Flow używa głównie gałęzi głównej oraz gałęzi funkcyjnych.
+
+00:03:54.480 --> 00:03:57.180
+Prawie wszystko bezpośrednio do głównej gałęzi i prawie w ogóle nie tworzy odgałęzień.
+
+00:03:57.340 --> 00:04:00.060
+Warto wspomnieć o jeszcze jednym elemencie, choć nie jest to gałąź.
+
+00:04:00.220 --> 00:04:04.960
+Pull request to sposób, w jaki przegląda się gotową gałąź i pojawia się on w każdej nowoczesnej strategii.
+
+00:04:05.160 --> 00:04:08.700
+Wrócimy do tego, ponieważ jest to mechanizm, z którego będziesz korzystać najczęściej na co dzień.
+
+00:04:08.920 --> 00:04:10.760
+GitFlow, czyli ta ustrukturyzowana metoda.
+
+00:04:10.920 --> 00:04:15.520
+Ta najsłynniejsza strategia ma konkretną datę powstania, a jej znajomość wyjaśnia, dlaczego wygląda tak, jak wygląda.
+
+00:04:15.520 --> 00:04:19.520
+Vincent Driessen opublikował GitFlow w styczniu 2010 roku w poście pod tytułem
+
+00:04:19.520 --> 00:04:21.060
+Asuccessful Git Branching Model.
+
+00:04:21.060 --> 00:04:25.120
+Przez kolejne lata była to domyślna odpowiedź na każde pytanie o to, jak używać gałęzi.
+
+00:04:25.320 --> 00:04:27.580
+GitFlow opiera się na dwóch stałych gałęziach.
+
+00:04:27.760 --> 00:04:33.400
+Master przechowuje kod gotowy do wdrożenia w każdej chwili, a develop zawiera wszystko, co ukończono, ale jeszcze nie wydano.
+
+00:04:33.560 --> 00:04:37.020
+Te dwie gałęzie nigdy nie znikają, a wszystkie inne krążą wokół nich.
+
+00:04:37.220 --> 00:04:40.340
+Gałęzie funkcji Feature wywodzą się z develop i są do niej z powrotem scalane.
+
+00:04:40.340 --> 00:04:45.160
+Gałęzie wydań Release powstają z develop, przechodzą ostatnie szlify, a następnie są scalane zarówno z develop, jak i master.
+
+00:04:45.360 --> 00:04:51.420
+Gałęzie poprawek Hotfix powstają z master, aby naprawić pilny błąd i są scalane z obiema gałęziami, by poprawka nie zginęła w kolejnym wydaniu.
+
+00:04:51.580 --> 00:04:54.580
+Ta struktura sprawdza się najlepiej, gdy dostarczasz oprogramowanie w wersjach.
+
+00:04:54.800 --> 00:04:59.840
+Załóżmy, że wspierasz wersję drugą, podczas gdy trzecia jest w przygotowaniu, a klient korzystający z wersji pierwszej potrzebuje poprawki.
+
+00:05:00.040 --> 00:05:05.840
+GitFlow daje Ci przejrzyste, dobrze oznaczone miejsce na wykonanie tej pracy, ale tutaj pojawia się zwrot akcji, który zaskakuje prawie każdego.
+
+00:05:05.840 --> 00:05:10.960
+W marcu 2020 roku, 10 lat po opublikowaniu posta, Driesen dodał notatkę na górze swojego artykułu.
+
+00:05:11.140 --> 00:05:14.560
+Napisał, że GitFlow był traktowany jak dogmat, a nie jak jeden z wyborów.
+
+00:05:14.640 --> 00:05:20.720
+Stwierdził, że nie został zaprojektowany dla aplikacji webowych wdrażanych w sposób ciągły i że zespoły tak pracujące powinny wybrać coś prostszego jak GitHub Flow.
+
+00:05:20.920 --> 00:05:22.780
+Jego końcowe zdanie warto zapamiętać.
+
+00:05:22.960 --> 00:05:26.140
+Nie ma złotych środków, więc rozważ swój kontekst i zdecyduj sam.
+
+00:05:26.360 --> 00:05:29.240
+Dla zespołów, dla których to stworzono, nic z tego nie jest problemem.
+
+00:05:29.240 --> 00:05:35.720
+Jeśli tworzysz oprogramowanie, które ma jasno określone wersje lub wspierasz kilka z nich jednocześnie, ten model nadal pasuje tak samo dobrze jak dawniej.
+
+00:05:36.240 --> 00:05:38.040
+GitHub Flow, czyli ta prosta metoda.
+
+00:05:38.300 --> 00:05:41.020
+GitHub Flow podchodzi do problemu z zupełnie innej strony.
+
+00:05:41.360 --> 00:05:47.300
+Scott Chacon opisał go w sierpniu 2011 roku, a sedno tkwiło w tym, że sam GitHub wcale nie używał GitFlow.
+
+00:05:47.520 --> 00:05:48.480
+Powód był prosty.
+
+00:05:48.700 --> 00:05:55.500
+GitHub wdrażał kod na produkcję codziennie, często kilka razy dziennie, a proces oparty na wydaniach po prostu nie pasował do tej rzeczywistości.
+
+00:05:55.500 --> 00:05:59.240
+Dlatego ograniczyli wszystko do jednej twardej zasady i krótkiej listy kroków.
+
+00:05:59.420 --> 00:06:05.760
+Zasada jest taka, że wszystko w gałęzi main nadaje się do wdrożenia, co oznacza, że z main zawsze można bezpiecznie wypuścić wersję i tworzyć nowe gałęzie.
+
+00:06:05.980 --> 00:06:11.680
+Aby rozpocząć pracę, tworzysz nową gałąź od main z jasną nazwą, np. dodaj stronę logowania lub napraw przycisk.
+
+00:06:11.880 --> 00:06:17.020
+Stamtąd często wypychasz swoją pracę do tej gałęzi, aby mieć kopię zapasową i żeby wszyscy widzieli, nad czym pracujesz.
+
+00:06:17.020 --> 00:06:29.240
+Gdy chcesz uzyskać informację zwrotną lub uważasz, że praca jest skończona, otwierasz pull request, ktoś go sprawdza, uruchamiane są testy i po zatwierdzeniu scalasz go z main, a następnie od razu wdrażasz, ponieważ main ma być zawsze gotowy do wydania.
+
+00:06:29.420 --> 00:06:35.060
+To cały proces, żadnych gałęzi develop, release czy hotfix, tylko main i krótkotrwałe gałęzie funkcjonalne.
+
+00:06:35.220 --> 00:06:40.460
+W tamtym czasie GitHub zatrudniał 35 pracowników, z czego około 15 do 20 pracowało nad tym samym projektem jednocześnie.
+
+00:06:40.460 --> 00:06:44.520
+Wpis z Hacona pokazuje 6 różnych osób wdrażających około 24 razy w ciągu jednego dnia.
+
+00:06:44.700 --> 00:06:49.280
+Kompromis polega na tym, że zakłada on możliwość wdrażania na żądanie i brak konieczności wspierania starych wersji.
+
+00:06:49.500 --> 00:06:54.580
+W przypadku aplikacji internetowej lub małego zespołu zazwyczaj tak jest, a prostota jest bardzo cenna na początku drogi.
+
+00:06:54.780 --> 00:07:01.360
+Jeśli gałąź pozostaje dłużej niż planowałeś, rozwiązaniem jest scalenie z nią najnowszego kodu z main, aby nie odbiegała od niego w trakcie pracy.
+
+00:07:01.560 --> 00:07:03.760
+Trunk-based development, ten szybki sposób.
+
+00:07:04.040 --> 00:07:08.060
+Jeśli GitHub Flow jest prosty, to trunk-based development jest jego jeszcze bardziej odchudzoną wersją.
+
+00:07:08.060 --> 00:07:12.680
+Wszyscy zatwierdzają małe zmiany w jednej wspólnej gałęzi, trunk, która jest po prostu inną nazwą dla main.
+
+00:07:12.860 --> 00:07:15.900
+Gałęzie, jeśli w ogóle istnieją, żyją godziny, a nie tygodnie.
+
+00:07:16.060 --> 00:07:19.900
+Ten krótki cykl życia to sedno całego pomysłu i warto się nad nim chwilę zastanowić.
+
+00:07:20.100 --> 00:07:26.120
+Im dłużej gałąź istnieje, tym bardziej reszta projektu wyprzedza ją, a scalanie staje się trudniejsze, gdy w końcu wraca.
+
+00:07:26.320 --> 00:07:31.680
+Krótkie gałęzie oznaczają małe scalenia, a małe scalenia można naprawić w minutę zamiast w całe popołudnie.
+
+00:07:31.920 --> 00:07:33.820
+Gałęzie release są tutaj opcjonalne.
+
+00:07:33.940 --> 00:07:36.900
+To po prostu migawki, które tworzysz, gdy musisz oznaczyć wersję.
+
+00:07:36.900 --> 00:07:41.880
+Jeśli wdrażasz wiele razy dziennie, w ogóle ich nie potrzebujesz, ponieważ sam trunk jest zawsze gotowy do wydania.
+
+00:07:42.140 --> 00:07:45.840
+Warto poznać dowody stojące za tą metodą, ponieważ to coś więcej niż czyjeś widzimisię.
+
+00:07:46.040 --> 00:07:52.200
+Dora, program badawczy analizujący sposób dostarczania oprogramowania przez zespoły, przeanalizował własne dane z 2016 i 2017 roku.
+
+00:07:52.400 --> 00:07:55.760
+Odkryto, że zespoły osiągają lepsze wyniki, gdy utrzymują trzy lub mniej aktywnych gałęzi,
+
+00:07:55.900 --> 00:07:59.560
+scalają się z trunk przynajmniej raz dziennie i pomijają zamrażanie kodu oraz oddzielne fazy integracji.
+
+00:07:59.560 --> 00:08:06.820
+Google to słynny przykład takiego stylu pracy, a praktyka ta ma tam długą historię, co jest częścią powodu, dla którego model ten pojawia się zawsze, gdy mowa o szybkich zespołach.
+
+00:08:06.980 --> 00:08:09.940
+Haczyk polega na tym, że wymaga on od Ciebie więcej niż pozostałe dwa.
+
+00:08:10.200 --> 00:08:16.860
+Musisz dzielić pracę na małe kawałki i ufać szybkim testom automatycznym, ponieważ nie ma długiego okresu stabilizacji, by wyłapać problemy na końcu.
+
+00:08:17.040 --> 00:08:21.560
+Dlatego trunk-based development najlepiej sprawdza się w zespołach, które stale wdrażają kod i zainwestowały w testowanie.
+
+00:08:21.840 --> 00:08:25.060
+Jest to również model, który może wydawać się najbardziej obcy, jeśli dopiero zaczynasz.
+
+00:08:25.060 --> 00:08:28.380
+Nie ma tu długo żyjących gałęzi, w których można ukryć niedokończoną pracę.
+
+00:08:28.520 --> 00:08:29.840
+Pull requesty wyjaśnienie.
+
+00:08:30.060 --> 00:08:35.080
+Wszystkie trzy strategie opierają się na tym samym narzędziu do łączenia pracy i to z niego będziesz korzystać każdego dnia.
+
+00:08:35.280 --> 00:08:39.580
+Pull request, zazwyczaj skracany do PR, to prośba o scalenie Twojej gałęzi z inną.
+
+00:08:39.760 --> 00:08:43.280
+Posiada wbudowane miejsce, w którym można najpierw przejrzeć wprowadzone zmiany.
+
+00:08:43.400 --> 00:08:45.060
+To mniej przycisk, a bardziej konwersacja.
+
+00:08:45.840 --> 00:08:50.000
+Recenzenci mogą komentować poszczególne linie, zadawać pytania i prosić o zmiany.
+
+00:08:50.220 --> 00:08:54.340
+Wysyłasz kolejne komity do tej samej gałęzi, a pull request aktualizuje się na bieżąco.
+
+00:08:54.340 --> 00:08:58.800
+Staje się on zapisem dyskusji, dopóki wszyscy nie będą zadowoleni, a zmiana nie będzie gotowa do scalenia.
+
+00:08:58.940 --> 00:09:00.740
+Cała wartość tkwi w odpowiednim momencie.
+
+00:09:01.000 --> 00:09:03.540
+Przegląd odbywa się, zanim zmiana trafi do głównej gałęzi.
+
+00:09:03.720 --> 00:09:09.380
+Oznacza to, że błędy są wyłapywane, gdy ich naprawa jest jeszcze tania, zamiast po tym, jak trafią do klientów i zaczną sprawiać kłopoty.
+
+00:09:09.620 --> 00:09:15.560
+GitHub nie wynalazł pomysłu przeglądania kodu, ale spopularyzował pull requesty, a funkcja ta sięga około 2008 roku.
+
+00:09:15.820 --> 00:09:19.680
+Dziś niemal każdy hosting git ma swoją własną wersję, nawet jeśli nazwa nieco się różni.
+
+00:09:19.860 --> 00:09:22.520
+Istnieje też aspekt społeczny, który za chwilę będzie miał znaczenie.
+
+00:09:24.340 --> 00:09:27.880
+Mogą zobaczyć twoją gałąź i zacząć na niej budować, co po cichu zmienia ją we wspólną rzecz.
+
+00:09:28.080 --> 00:09:32.000
+Zapamiętaj tę myśl, ponieważ to dokładnie powód, dla którego jedna z nadchodzących zasad istnieje.
+
+00:09:32.200 --> 00:09:33.280
+Merge contra rebase.
+
+00:09:33.500 --> 00:09:38.540
+Gdy pull request zostanie zatwierdzony, musisz włączyć swoją pracę z powrotem do głównej gałęzi i istnieją na to dwa sposoby.
+
+00:09:38.740 --> 00:09:41.780
+Powierzchownie wyglądają podobnie, ale pod spodem zachowują się zupełnie inaczej.
+
+00:09:42.000 --> 00:09:44.980
+Wybierz niewłaściwy na złej gałęzi, a możesz usunąć pracę członka zespołu.
+
+00:09:45.140 --> 00:09:47.360
+Więc ta kolejna część jest ważniejsza niż się wydaje.
+
+00:09:47.360 --> 00:09:51.940
+Merge łączy twoją gałąź z główną i dodaje komis scalający, który rejestruje obie historie jednocześnie.
+
+00:09:52.100 --> 00:09:54.140
+Nic nie jest nadpisywane i nic nie jest tracone.
+
+00:09:54.360 --> 00:09:57.220
+Zawsze możesz zobaczyć, że dwie linie pracy zeszły się w określonym dniu.
+
+00:09:57.340 --> 00:10:00.760
+Ten zapis jest użyteczny, gdy później próbujesz ustalić, co i kiedy się zmieniło.
+
+00:10:00.960 --> 00:10:02.580
+Rebasing obiera inną ścieżkę.
+
+00:10:02.760 --> 00:10:08.160
+Pobiera twoje komity, przenosi je tak, aby znalazły się na samym szczycie najnowszej gałęzi main i przy okazji tworzy zupełnie nowe komity.
+
+00:10:08.360 --> 00:10:12.540
+Efektem jest czysta, prosta linia bez komitów scalających, co dla wielu zespołów jest znacznie czytelniejsze.
+
+00:10:12.760 --> 00:10:15.220
+Kompromisem jest coś, co początkujący zazwyczaj pomijają.
+
+00:10:15.460 --> 00:10:18.040
+Scalanie zachowuje pełną historię dokładnie tak, jak miała miejsce.
+
+00:10:18.280 --> 00:10:23.780
+Rebasing sprawia, że historia wygląda schludniej, ale zastępuje oryginalne komity, więc zapis o tym, kiedy praca została włączona, znika.
+
+00:10:23.940 --> 00:10:27.000
+Prowadzi to do jednej zasady, która jest najważniejszą zasadą w tym odcinku.
+
+00:10:27.220 --> 00:10:29.840
+Nigdy nie wykonuj rebasa na gałęzi, nad którą pracują inni.
+
+00:10:30.000 --> 00:10:33.200
+Atlasian ujmuje to jako jedno pytanie, które warto zadać przed każdym rebasem.
+
+00:10:33.260 --> 00:10:34.680
+Czy ktoś jeszcze korzysta z tej gałęzi?
+
+00:10:34.860 --> 00:10:36.880
+Jeśli odpowiedź brzmi, tak nie przepisuj jej.
+
+00:10:36.880 --> 00:10:41.740
+Powód, dla którego jest to tak problematyczne, jest taki, że rebase na współdzielonej gałęzi psuje kopię każdego innego użytkownika.
+
+00:10:41.920 --> 00:10:47.400
+Twoja historia przestaje pasować do ich historii, a wymuszenie pusha, by to naprawić, nadpisuje pracę, na której oni wciąż budowali.
+
+00:10:47.600 --> 00:10:49.940
+Jeśli masz jakiekolwiek wątpliwości, po prostu scalaj.
+
+00:10:50.120 --> 00:10:57.300
+Zachowaj rebase dla własnej, prywatnej gałęzi, gdzie jest świetnym sposobem na uporządkowanie bałaganu w komitach przed otwarciem pool requesta i zostaw współdzielone gałęzie w spokoju.
+
+00:10:57.500 --> 00:10:59.600
+Wybór strategii dla małych i dużych zespołów.
+
+00:10:59.600 --> 00:11:04.380
+Wybór sprowadza się do kilku prostych pytań o twój zespół, a nie do tego, który model brzmi najbardziej profesjonalnie.
+
+00:11:04.500 --> 00:11:06.260
+Po pierwsze, jak często wdrażasz zmiany.
+
+00:11:06.380 --> 00:11:09.020
+Po drugie, czy wspierasz starsze wersje, z których ludzie wciąż korzystają.
+
+00:11:09.200 --> 00:11:11.780
+Po trzecie, ile osób pracuje nad tym samym kodem w tym samym czasie.
+
+00:11:11.980 --> 00:11:14.420
+Po czwarte, jak bardzo ufasz swoim testom automatycznym.
+
+00:11:14.600 --> 00:11:19.540
+Te cztery odpowiedzi wskażą odpowiedni model znacznie szybciej niż jakakolwiek tabela porównawcza i to właśnie te pytania mają znaczenie.
+
+00:11:19.760 --> 00:11:23.840
+Jeśli jesteś w małym zespole lub pracujesz samodzielnie, GitHub Flow zazwyczaj w zupełności wystarczy.
+
+00:11:23.840 --> 00:11:29.560
+Jedna główna gałąź i krótkie gałęzie funkcjonalne wystarczą na długo, a strukturę zawsze można dodać później, jeśli zajdzie taka potrzeba.
+
+00:11:29.740 --> 00:11:36.480
+Jeśli dostarczasz oprogramowanie wersjonowane lub musisz wspierać kilka wydanych wersji jednocześnie, gałęzie Release i Hotfix w GitFlow stają się bardzo użyteczne.
+
+00:11:36.640 --> 00:11:39.840
+To świat, dla którego został stworzony i w tym świecie wciąż sprawdza się dobrze.
+
+00:11:40.100 --> 00:11:44.740
+Jeśli jesteś częścią większego zespołu, który wdraża zmiany w trybie ciągłym i włożyłeś spory wysiłek w testy automatyczne,
+
+00:11:44.820 --> 00:11:47.760
+trunk-based development sprawi, że scalenia będą małe, a wydania częste.
+
+00:11:47.920 --> 00:11:50.040
+To dokładnie ten kompromis, którego ten model wymaga.
+
+00:11:50.040 --> 00:11:52.220
+Jest jeszcze jedna rzecz, o której warto pamiętać.
+
+00:11:53.840 --> 00:11:55.260
+Że nie ma jednej właściwej odpowiedzi.
+
+00:11:55.440 --> 00:11:59.480
+Wybierasz model, który pasuje do twojego kontekstu i zmieniasz go, gdy zmienia się twój kontekst.
+
+00:11:59.680 --> 00:12:04.720
+Dobrym sposobem na start jest wybór najprostszego działającego modelu i dodawanie formalności dopiero, gdy coś zaczyna się psuć.
+
+00:12:04.900 --> 00:12:10.200
+Zespoły często wybierają GitFlow, bo wygląda imponująco, a potem odkrywają, że dodatkowe gałęzie kosztują więcej niż oszczędzają.
+
+00:12:10.380 --> 00:12:11.920
+Typowe błędy początkujących.
+
+00:12:12.120 --> 00:12:18.080
+Niezależnie od wybranej strategii istnieje garść błędów, na których prawie każdy potyka się w pierwszym roku i żaden z nich nie jest niezwykły.
+
+00:12:18.260 --> 00:12:21.420
+Największym z nich jest zbyt długie utrzymywanie gałęzi funkcyjnych.
+
+00:12:23.840 --> 00:12:27.480
+Zescalenie staje się walką, więc trzymaj gałęzie krótko i scalaj je często.
+
+00:12:27.700 --> 00:12:34.400
+Praca bezpośrednio na gałęzi głównej bez przeglądu wydaje się szybsza, dopóki zepsuta zmiana nie trafi do użytkowników, a między nią a nimi nie ma żadnej ochrony.
+
+00:12:34.560 --> 00:12:37.840
+Kolejną kwestią jest nadpisywanie gałęzi, z której wciąż korzystają inni.
+
+00:12:38.040 --> 00:12:43.860
+Rebase lub wymuszone wypchnięcie zmian na czyjąś pracę to błąd, który psuje dzień członkowi zespołu, ponieważ jego historia przestaje zgadzać się z twoją.
+
+00:12:44.060 --> 00:12:48.460
+Wrzucanie niezwiązanych zmian do jednej gałęzi lub jednego pull requesta to kolejny częsty błąd.
+
+00:12:48.460 --> 00:12:53.720
+Spowalnia to przegląd, a jeśli trzeba coś później wycofać, nie da się oddzielić dobrych zmian od złych.
+
+00:12:53.880 --> 00:13:00.280
+Kopiowanie struktury dużej firmy bez ich procesu testów i wydań jest kuszące, ale rzadko działa, bo sam model nie jest magiczny.
+
+00:13:00.520 --> 00:13:02.440
+Magiczne są praktyki, które go otaczają.
+
+00:13:02.640 --> 00:13:04.300
+Ostatni błąd jest mniej oczywisty.
+
+00:13:04.520 --> 00:13:09.360
+Jeśli traktujesz strategię jak osobiste preferencje i tylko ty się do niej stosujesz, to wciąż nie jest to strategia.
+
+00:13:09.520 --> 00:13:10.440
+To po prostu nawyk.
+
+00:13:10.640 --> 00:13:15.440
+Każdy z tych błędów to typowy sposób na zmarnowanie popołudnia przez zespół i każdy z nich ma proste rozwiązanie.
+
+00:13:15.440 --> 00:13:17.980
+Który z nich pasuje do ciebie? To by było na tyle.
+
+00:13:18.260 --> 00:13:25.060
+Gałąź, jak widzieliście, to bezpieczna kopia pracy, a strategia gałęzi to porozumienie zespołu co do tego, jak te kopie mają się łączyć.
+
+00:13:25.300 --> 00:13:29.160
+GitFlow to strukturalny model stworzony dla oprogramowania wydawanego w numerowanych wersjach.
+
+00:13:29.360 --> 00:13:33.000
+GitHubFlow to prosty model stworzony dla zespołów wydających oprogramowanie w sposób ciągły.
+
+00:13:33.140 --> 00:13:38.260
+Trunk-based development to szybki model odpowiedni dla zespołów, które potrafią komitować małe zmiany i mają silne testy.
+
+00:13:38.420 --> 00:13:44.160
+Jeśli chodzi o scalanie pracy, Merge zachowuje historię, podczas gdy Rebase ją porządkuje i powinien być używany tylko na prywatnych gałęziach.
+
+00:13:44.160 --> 00:13:49.040
+Subskrybuj M365FM, aby uczyć się o narzędziach i podejściu kształtującym przyszłość pracy.
+
+00:13:49.220 --> 00:13:50.400
+A teraz pytanie do ciebie.
+
+00:13:50.600 --> 00:13:56.880
+Z jakiej strategii gałęzi korzysta twój zespół i czy była to świadoma decyzja, czy może tylko nawyk, którego nikt jeszcze nie zakwestionował?

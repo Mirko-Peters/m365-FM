@@ -1,0 +1,2281 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.750
+Bereit für 12 Tage Microsoft 365, Co-Pilot, KI, Azure und die Menschen, die die Zukunft der Arbeit gestalten.
+
+00:00:08.010 --> 00:00:11.610
+Diesen Januar ist die Android 65-Con zurück und wird noch größer.
+
+00:00:12.610 --> 00:00:18.030
+Seien Sie dabei bei Live-Sessions, Demos aus der Praxis und praktischem Wissen von MVPs und Branchenexperten aus aller Welt.
+
+00:00:18.910 --> 00:00:21.210
+Keine generischen Folien, keine endlosen Schlagworte.
+
+00:00:21.990 --> 00:00:23.250
+Wir stellen uns den echten Herausforderungen.
+
+00:00:23.890 --> 00:00:28.790
+Co-Pilot Studio, KI-Agents, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.790 --> 00:00:34.330
+Ganz gleich, ob Sie IT-Experte, Entwickler oder Führungskraft sind, es gibt speziell auf Sie zugeschnittene Sessions.
+
+00:00:35.570 --> 00:00:39.990
+An 10 vollen Tagen können Sie verschiedene Technologien kennenlernen und sich mit einer globalen Community vernetzen.
+
+00:00:40.970 --> 00:00:44.310
+Sehen Sie sich die Live-Übertragung an und nehmen Sie praktische Einblicke mit nach Hause in Ihr Unternehmen.
+
+00:00:45.210 --> 00:00:48.750
+Januar 2027, 10 Tage, eine Microsoft-Community.
+
+00:00:49.490 --> 00:00:50.650
+Die Registrierung ist ab sofort möglich.
+
+00:00:51.790 --> 00:00:55.690
+Besuchen Sie mtrein556con.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:55.690 --> 00:00:58.530
+Das ist mtrein556con.net.
+
+00:01:00.270 --> 00:01:03.410
+Melden Sie sich jetzt auf mtrein55.net an und wir sehen uns im Januar.
+
+00:01:03.630 --> 00:01:04.570
+Live, knife!
+
+00:01:05.410 --> 00:01:08.370
+Haben Sie schon einmal eine Linkabfrage geschrieben, die in C einwandfrei funktioniert hat,
+
+00:01:08.430 --> 00:01:11.750
+aber bei der Überprüfung des generierten SQL-Codes haben Sie sich gefragt, wie das überhaupt möglich war.
+
+00:01:12.570 --> 00:01:16.170
+In dieser Sitzung lernen Sie drei Dinge, wie Ausdrucksbaumstrukturen die Übersetzung steuern,
+
+00:01:16.470 --> 00:01:19.030
+wie das Zwischenspeichern die Leistung und die Speichernutzung beeinflusst
+
+00:01:19.030 --> 00:01:22.450
+und worauf Sie achten müssen, wenn sich die Null-Logik nicht wie erwartet verhält, erhält.
+
+00:01:23.430 --> 00:01:26.230
+Wenn Sie vermutet haben, dass Entity-Framework-Core hinter einer Blackbox steckt,
+
+00:01:26.290 --> 00:01:28.250
+liegt die Wahrheit näher an der Architektur als an der Magie.
+
+00:01:29.010 --> 00:01:31.210
+EF-Core verwendet eine mehrschichtige Abfrage-Pipeline,
+
+00:01:31.290 --> 00:01:34.630
+die die Übergabe, Übersetzung, das Abfang und die Materialisierung im Hintergrund verarbeitet.
+
+00:01:35.190 --> 00:01:38.030
+Zuerst sehen wir uns an, wie aus Link-Core-Core eine Ausdrucksbaumstruktur wird,
+
+00:01:38.190 --> 00:01:42.070
+dann die Rolle des Anbieters, das Zwischenspeichern, die Nulls im Antik und schließlich SQL und die Materialisierung.
+
+00:01:43.070 --> 00:01:44.250
+Und alles beginnt ganz am Anfang.
+
+00:01:44.250 --> 00:01:47.010
+Was passiert eigentlich, wenn Sie eine Link-Abfrage ausführen?
+
+00:01:48.630 --> 00:01:50.030
+Von Link-Core zur Ausdrucksbaumstruktur.
+
+00:01:50.630 --> 00:01:53.830
+Wenn Sie eine Link-Abfrage schreiben, beherrscht der Code nicht automatisch SQL.
+
+00:01:54.610 --> 00:01:55.590
+Link-Core ist einfach nur CPO.
+
+00:01:56.010 --> 00:01:57.670
+Es weiß nichts über Datenbanken oder Tabellen.
+
+00:01:58.670 --> 00:02:00.810
+Wenn Sie also etwas wie A oder SELECT hinzufügen,
+
+00:02:00.910 --> 00:02:03.910
+rufen Sie in CI tatsächlich Methoden auf und geben keine Befehle an SQL aus.
+
+00:02:04.550 --> 00:02:06.630
+Die Aufgabe von Entity-Framework-Core besteht darin,
+
+00:02:06.690 --> 00:02:09.130
+diese Aufrufe in einem Format zu erfassen, das analysiert werden kann,
+
+00:02:09.210 --> 00:02:11.430
+bevor Entscheidungen über die Übersetzung oder Ausführung getroffen werden.
+
+00:02:11.850 --> 00:02:14.010
+Diese Erfassung erfolgt über Ausdrucksbaumstrukturen.
+
+00:02:14.410 --> 00:02:16.070
+Anstatt sofort auf die Datenbank zuzugreifen,
+
+00:02:16.430 --> 00:02:18.510
+zeichnet EF-Core ihre Abfrage als Struktur von Objekten,
+
+00:02:18.570 --> 00:02:19.770
+auf die die einzelnen Teile beschreiben.
+
+00:02:20.110 --> 00:02:22.250
+Eine Where-Klausel bedeutet noch nicht, dass zeilengefiltert wird.
+
+00:02:22.770 --> 00:02:24.430
+Sie wird zu einem Knoten in der Struktur, der besagt,
+
+00:02:24.690 --> 00:02:26.910
+hier ist ein Methodenaufruf, hier ist die verglichene Eigenschaft
+
+00:02:26.910 --> 00:02:28.110
+und hier ist der konstante Wert.
+
+00:02:29.350 --> 00:02:30.870
+Zu diesem Zeitpunkt wurde noch nichts ausgeführt.
+
+00:02:31.330 --> 00:02:33.690
+EF dokumentiert einfach die Absicht in einer strukturierten Form,
+
+00:02:33.750 --> 00:02:34.870
+die später durchgegangen werden kann.
+
+00:02:35.490 --> 00:02:37.730
+Man kann dies auch als Struktur vor Bedeutung betrachten.
+
+00:02:38.450 --> 00:02:41.370
+So wie ein Satz vor dem Versuch einer Übersetzung in Subjekt und Verb zerlegt wird,
+
+00:02:41.370 --> 00:02:45.410
+erstellt EF eine Struktur, in der Verknüpfungen, Filter, Projektionen und Reihenfolgen
+
+00:02:45.410 --> 00:02:46.470
+als Knoten dargestellt werden.
+
+00:02:47.570 --> 00:02:50.090
+Erst wenn diese Struktur vorhanden ist, kann die SQL-Übersetzung überhaupt beginnen.
+
+00:02:50.830 --> 00:02:53.530
+EF-Core verwendet Ausdrucksbaumstrukturen als primären Mechanismus
+
+00:02:53.530 --> 00:02:55.410
+zur Überprüfung von Leakabfragen, bevor entschieden wird,
+
+00:02:55.450 --> 00:02:56.390
+wie mit ihnen umgegangen werden soll.
+
+00:02:56.390 --> 00:02:59.190
+Jede Klausel, die sie schreiben, egal ob Join oder Filter,
+
+00:02:59.370 --> 00:03:00.970
+fügt diesem Objektmodell neue Knoten hinzu.
+
+00:03:01.870 --> 00:03:04.710
+Eine Bedingung wie C-City-Paris wird beispielsweise zu einem Zweig
+
+00:03:04.710 --> 00:03:07.350
+mit linken und rechten Teilen, von denen einer auf die Eigenschaft City
+
+00:03:07.350 --> 00:03:10.690
+und der andere auf die konstante Zeichenfolge Paris verweist und esst.
+
+00:03:11.650 --> 00:03:13.550
+Durch das Durchlaufen dieser Struktur kann EF ermitteln,
+
+00:03:13.650 --> 00:03:16.110
+welche Teile ihrer Abfrage SQL zugeordnet werden können und welche nicht.
+
+00:03:17.050 --> 00:03:19.070
+Im Hintergrund sind diese Bäume keine abstrakten Konzepte,
+
+00:03:19.150 --> 00:03:20.630
+sondern tatsächliche Objekte im Arbeitsspeicher.
+
+00:03:21.390 --> 00:03:23.390
+Jeder Knoten stellt einen Methodenaufruf,
+
+00:03:23.390 --> 00:03:25.950
+eine Eigenschaft oder einen konstanten Wert Darteile,
+
+00:03:26.230 --> 00:03:28.090
+die EF überprüfen und kategorisieren kann.
+
+00:03:28.610 --> 00:03:30.730
+Dieses Design bietet EF eine zuverlässige Möglichkeit,
+
+00:03:30.870 --> 00:03:32.650
+ihre Abfrage zu übergeben, ohne sie bereits auszuführen.
+
+00:03:33.530 --> 00:03:35.850
+Intern behandelt EF den Baum als Modell und entscheidet,
+
+00:03:35.930 --> 00:03:37.650
+welche Konstrukte an SQL gesendet werden können
+
+00:03:37.650 --> 00:03:39.270
+und welche im Arbeitsspeicher verarbeitet werden müssen.
+
+00:03:40.130 --> 00:03:41.850
+Dieser Unterschied erklärt, warum sich einige Abfragen
+
+00:03:41.850 --> 00:03:43.250
+in Link-to-Objects in eine Richtung verhalten,
+
+00:03:43.330 --> 00:03:44.230
+in EF jedoch fehlschlagen.
+
+00:03:44.870 --> 00:03:46.950
+Denn sie sich vor sie fügen eine benutzerdefinierte Hilfsfunktion
+
+00:03:46.950 --> 00:03:47.570
+in einen Lambda-Filter.
+
+00:03:47.990 --> 00:03:49.710
+Im Arbeitsspeicher führt Links sie einfach aus,
+
+00:03:49.710 --> 00:03:52.270
+aber mit EF enthält die Ausdrucksbaumstruktur jetzt einen Knoten,
+
+00:03:52.270 --> 00:03:53.910
+der auf ihre benutzerdefinierte Methode verweist
+
+00:03:53.910 --> 00:03:56.250
+und EF verfügt über keine SQL-Entsprechung für diese Methode.
+
+00:03:56.710 --> 00:03:58.590
+An dieser Stelle werden sie häufig einen Laufzeitfehler,
+
+00:03:58.670 --> 00:04:00.110
+eine Warnung oder einen Rückfall von SQL
+
+00:04:00.110 --> 00:04:01.610
+in die kleinseitige Auswertung bemerken.
+
+00:04:02.010 --> 00:04:03.290
+Dies ist in der Regel ein Hinweis darauf,
+
+00:04:03.390 --> 00:04:04.950
+dass ein Teil ihrer Abfrage nicht übersetzbar ist.
+
+00:04:05.910 --> 00:04:06.750
+Wichtig ist zu verstehen,
+
+00:04:06.850 --> 00:04:08.750
+dass EF ihren Code beim Schreiben nicht ausführt,
+
+00:04:08.830 --> 00:04:10.810
+sondern ihn in dieser Objektstruktur grafisch darstellt.
+
+00:04:11.390 --> 00:04:12.510
+Und wenn ein Teil dieser Struktur
+
+00:04:12.510 --> 00:04:14.090
+keinem bekannten SQL-Muster entspricht,
+
+00:04:14.190 --> 00:04:15.450
+wird EF entweder angehalten
+
+00:04:15.450 --> 00:04:17.830
+oder dieser Teil der Arbeit in den Arbeitsspeicher verschoben,
+
+00:04:17.830 --> 00:04:19.110
+was kostspielig sein kann.
+
+00:04:19.930 --> 00:04:21.150
+Da treten häufig Leistungsprobleme auf?
+
+00:04:21.150 --> 00:04:23.530
+Abfragen, die in CSAS harmlos erscheinen,
+
+00:04:23.590 --> 00:04:24.230
+führen plötzlich dazu,
+
+00:04:24.350 --> 00:04:26.210
+dass kleinseitig Tausende von Zeilen abgerufen werden,
+
+00:04:26.270 --> 00:04:28.010
+weil EF einen kleinen Teil nicht übersetzen konnte.
+
+00:04:28.930 --> 00:04:30.530
+Aus diesem Grund sind Ausdrucksbaumstrukturen
+
+00:04:30.530 --> 00:04:31.730
+für Entwickler, die mit EF arbeiten, wichtig.
+
+00:04:32.370 --> 00:04:33.890
+Sie sind nicht nur ein internes Detail,
+
+00:04:34.030 --> 00:04:35.670
+sondern der Fahrplan, den EF verwendet,
+
+00:04:35.790 --> 00:04:37.350
+bevor SQL überhaupt ins Spiel kommt.
+
+00:04:38.170 --> 00:04:40.390
+Jede Linkabfrage wird zunächst in diesen Strukturplan umgewandelt,
+
+00:04:40.450 --> 00:04:41.610
+den EF sorgfältig untersucht.
+
+00:04:42.610 --> 00:04:43.830
+Ob eine Abfrage erfolgreich ist,
+
+00:04:43.830 --> 00:04:44.810
+fehlschlägt oder langsamer wird,
+
+00:04:44.810 --> 00:04:46.250
+hängt oft davon ab, wie dieser Plan aussieht.
+
+00:04:46.970 --> 00:04:48.670
+Es gibt jedoch noch einen weiteren Schritt im Prozess.
+
+00:04:49.050 --> 00:04:51.010
+Sobald EF über diese Ausdrucksbaumstruktur verfügt,
+
+00:04:51.010 --> 00:04:52.490
+kann sie nicht einfach an die Datenbank gesendet werden.
+
+00:04:52.670 --> 00:04:53.630
+Es wird ein Gatekeeper benötigt.
+
+00:04:54.050 --> 00:04:54.950
+Irgendwas muss entscheiden,
+
+00:04:55.050 --> 00:04:56.890
+ob jeder Teil der Struktur SQL-konform ist
+
+00:04:56.890 --> 00:04:58.570
+oder ob er CSAS niemals verlassen sollte.
+
+00:04:59.190 --> 00:05:00.430
+Und hier kommt die nächste Stufe ins Spiel.
+
+00:05:01.350 --> 00:05:03.150
+Der Gatekeeper, der Abfrageanbieter von EF Core.
+
+00:05:03.710 --> 00:05:05.190
+Nicht jede Abfrage, die Sie in CS schreiben,
+
+00:05:05.250 --> 00:05:06.430
+ist dazu bestimmt, zu SQL zu werden.
+
+00:05:06.890 --> 00:05:08.670
+In der Mitte der Pipeline befindet sich ein Prüfpunkt,
+
+00:05:08.770 --> 00:05:10.090
+dessen Aufgabe es ist, zu entscheiden,
+
+00:05:10.090 --> 00:05:11.870
+was weitergeleitet und was blockiert wird.
+
+00:05:12.510 --> 00:05:14.850
+Dieser Prüfpunkt wird von der Abfrageanbieter-Komponente
+
+00:05:14.850 --> 00:05:16.050
+von EF Core implementiert,
+
+00:05:16.430 --> 00:05:18.750
+die auswertet, ob die Knoten der Ausdrucksbaumstruktur SQL
+
+00:05:18.750 --> 00:05:19.690
+zugeordnet werden können
+
+00:05:19.690 --> 00:05:21.450
+oder im Arbeitsspeicher verarbeitet werden müssen.
+
+00:05:21.850 --> 00:05:23.770
+Sie können sich den Anbieter wie einen Türstern im Club vorstellen.
+
+00:05:24.350 --> 00:05:25.270
+Jeder kann sich anstellen,
+
+00:05:25.390 --> 00:05:26.110
+aber nur die Abfragen,
+
+00:05:26.190 --> 00:05:27.950
+die in SQL-kompatible Muster gekleidet sind,
+
+00:05:28.050 --> 00:05:28.930
+gelangen tatsächlich hinein.
+
+00:05:29.330 --> 00:05:30.470
+Der Rest wird entweder abgewiesen
+
+00:05:30.470 --> 00:05:32.230
+oder zur kleinseitigen Verarbeitung umgeleitet.
+
+00:05:32.550 --> 00:05:34.290
+Es geht nicht darum, wählerisch oder willkürlich zu sein.
+
+00:05:34.690 --> 00:05:36.610
+Der Anbieter erzwingt die Übersetzungsgrenzen.
+
+00:05:37.010 --> 00:05:38.350
+Linko kann weit mehr darstellen,
+
+00:05:38.470 --> 00:05:40.310
+als relationale Datenbanken jemals verstehen werden.
+
+00:05:41.130 --> 00:05:43.230
+EF Core muss die Ausdrucksbaumstruktur durchlaufen
+
+00:05:43.230 --> 00:05:44.570
+und bei jedem Knoten nachfragen,
+
+00:05:44.710 --> 00:05:45.950
+ob SQL damit umgehen kann
+
+00:05:45.950 --> 00:05:47.630
+oder ob nur Neti dies ausführen kann.
+
+00:05:47.630 --> 00:05:49.750
+Dieser Aufruf erfolgt früh,
+
+00:05:49.830 --> 00:05:51.010
+bevor die SQL-Generierung beginnt.
+
+00:05:51.370 --> 00:05:51.830
+Aus diesem Grund
+
+00:05:51.830 --> 00:05:53.170
+dreht manchmal Laufzeitfehler direkt auf,
+
+00:05:53.250 --> 00:05:54.850
+anstatt erst später verwirrende Ergebnisse zu halten.
+
+00:05:55.970 --> 00:05:57.150
+Für den Entwickler ist die Überraschung
+
+00:05:57.150 --> 00:05:58.390
+oft die uneinheitliche Unterstützung.
+
+00:05:58.950 --> 00:06:00.490
+Viele Konstrukte werden sauber zugeordnet,
+
+00:06:00.570 --> 00:06:01.750
+wobei Select- und Order-Buy-Win
+
+00:06:01.750 --> 00:06:03.210
+in der Regel problemlos übersetzt werden.
+
+00:06:04.250 --> 00:06:05.070
+Andere sind komplizierter.
+
+00:06:05.930 --> 00:06:08.310
+Group-Buy kann beispielsweise schwieriger zu übersetzen sein
+
+00:06:08.310 --> 00:06:10.030
+und je nach Anbieter und Szenario
+
+00:06:10.030 --> 00:06:11.190
+entweder komplett fehlschlagen
+
+00:06:11.190 --> 00:06:12.190
+oder SQL erzeugen,
+
+00:06:12.250 --> 00:06:13.290
+das nicht sehr effizient ist.
+
+00:06:14.490 --> 00:06:15.630
+Entwickler sehen dies oft genug,
+
+00:06:15.630 --> 00:06:17.610
+sodass es sich um einen bekannten Vorsichtsgrund handelt.
+
+00:06:17.610 --> 00:06:18.870
+Das genaue Verhalten hängt jedoch
+
+00:06:18.870 --> 00:06:20.750
+von den Übersetzungsregeln des Anbieters ab.
+
+00:06:21.610 --> 00:06:22.450
+Der Anbieter führt hier vor allem
+
+00:06:22.450 --> 00:06:23.130
+ein Musterabgleich durch.
+
+00:06:23.550 --> 00:06:25.550
+Er findet SQL nicht spontan auf magische Weise.
+
+00:06:26.290 --> 00:06:28.030
+Stattdessen vergleicht er die Ausdrucksbaumstruktur
+
+00:06:28.030 --> 00:06:29.750
+mit einer Bibliothek von Übersetzungsmustern,
+
+00:06:29.830 --> 00:06:30.370
+die er versteht.
+
+00:06:31.150 --> 00:06:32.190
+Erkannte Formen der Struktur
+
+00:06:32.190 --> 00:06:33.610
+werden SQL-Vorlagen zugeordnen.
+
+00:06:34.370 --> 00:06:35.410
+Nicht erkannte werden entweder
+
+00:06:35.410 --> 00:06:37.170
+zur kleinseitigen Ausführung zurückgestellt
+
+00:06:37.170 --> 00:06:37.870
+oder abgelehnt.
+
+00:06:38.850 --> 00:06:39.810
+Aus diesem Grund funktionieren
+
+00:06:39.810 --> 00:06:41.430
+einige komplexe Abfragen einwandfrei,
+
+00:06:41.590 --> 00:06:42.450
+während andere zu Meldungen
+
+00:06:42.450 --> 00:06:43.830
+über nicht unterstützte Übersetzungen führen.
+
+00:06:43.830 --> 00:06:45.170
+Die Entscheidung ist deterministisch.
+
+00:06:45.610 --> 00:06:46.090
+Es geht darum,
+
+00:06:46.190 --> 00:06:46.990
+ob ein bestimmtes Muster
+
+00:06:46.990 --> 00:06:49.370
+eine bekannte, gültige SQL-Ausgabe hat.
+
+00:06:50.210 --> 00:06:50.930
+Dies ist auch die Phase,
+
+00:06:51.010 --> 00:06:52.090
+in der die kleinseitige Auswertung
+
+00:06:52.090 --> 00:06:52.650
+zum Tragen kommt.
+
+00:06:53.230 --> 00:06:54.070
+Wenn ein Teil der Abfrage
+
+00:06:54.070 --> 00:06:55.370
+nicht in SQL umgewandelt werden kann,
+
+00:06:55.450 --> 00:06:56.870
+kann EF Core ihn nach dem Abrufen der Daten
+
+00:06:56.870 --> 00:06:57.870
+dennoch im Arbeitsspeicher ausschließen.
+
+00:06:58.150 --> 00:06:59.610
+Auf den ersten Blick scheint das praktikabel.
+
+00:07:00.230 --> 00:07:01.230
+SQL liefert Ihnen die Daten,
+
+00:07:01.330 --> 00:07:02.190
+.NET erledigt den Rest.
+
+00:07:02.530 --> 00:07:03.790
+Die Kosten können jedoch immens sein,
+
+00:07:04.030 --> 00:07:05.010
+wenn die Datenbank tausende
+
+00:07:05.010 --> 00:07:06.590
+oder sogar Millionen von Zeilen übergibt.
+
+00:07:07.110 --> 00:07:07.970
+Genau zu diesem Zweck
+
+00:07:07.970 --> 00:07:09.670
+kann .NET diese anschließend filtern.
+
+00:07:09.970 --> 00:07:10.690
+Die Leistung bricht ein.
+
+00:07:11.150 --> 00:07:12.830
+Etwas, das in einer lokalen Testdatenbank
+
+00:07:12.830 --> 00:07:14.150
+harmlos aussah, kann in der Produktion
+
+00:07:14.150 --> 00:07:15.090
+ernsthaft ins Stocken geraten,
+
+00:07:15.150 --> 00:07:15.910
+wenn das Datenvolumen wächst.
+
+00:07:16.210 --> 00:07:17.750
+Entwickler unterschätzen diese Verschiebung oft.
+
+00:07:18.150 --> 00:07:19.270
+Stellen Sie sich eine Abfrage vor,
+
+00:07:19.330 --> 00:07:20.690
+die bei der Entwicklung für einen Datensatz
+
+00:07:20.690 --> 00:07:21.730
+mit einigen hundert Zeilen scheint,
+
+00:07:21.810 --> 00:07:22.690
+völlig in Ordnung zu sein scheint.
+
+00:07:23.010 --> 00:07:24.530
+In der Produktion ruft dieselbe Abfrage
+
+00:07:24.530 --> 00:07:25.990
+zehntausende von Datensätzen ab
+
+00:07:25.990 --> 00:07:27.030
+und führt einen langsamen Vorgang
+
+00:07:27.030 --> 00:07:28.090
+auf dem Anwendungs-Server aus.
+
+00:07:28.790 --> 00:07:30.170
+An dieser Stelle beschweren sich die Benutzer,
+
+00:07:30.250 --> 00:07:31.450
+dass sich alles festgefahren anfühlt.
+
+00:07:32.010 --> 00:07:33.410
+Hier sind die Leitplanken des Anbieters wichtig
+
+00:07:33.410 --> 00:07:34.590
+und in vielen Fällen ist es sicherer,
+
+00:07:34.630 --> 00:07:35.210
+einen Fehler zu erhalten,
+
+00:07:35.310 --> 00:07:36.050
+als EF versuchen zu lassen,
+
+00:07:36.130 --> 00:07:37.490
+etwas Ineffizientes zu tun zu lassen.
+
+00:07:37.490 --> 00:07:39.030
+Für alle, die mit EF entwickeln,
+
+00:07:39.110 --> 00:07:40.470
+ist die praktische Erkenntnis einfach.
+
+00:07:41.210 --> 00:07:42.690
+Testen Sie Abfragen immer anhand
+
+00:07:42.690 --> 00:07:44.190
+echter oder repräsentativer Daten
+
+00:07:44.190 --> 00:07:45.290
+und achten Sie darauf,
+
+00:07:45.390 --> 00:07:46.470
+ob die Leistung in der Produktion
+
+00:07:46.470 --> 00:07:47.210
+plötzlich abfällt.
+
+00:07:48.010 --> 00:07:49.610
+Wenn sich die Leistung lokal schnell anfühlt,
+
+00:07:49.670 --> 00:07:50.450
+aber unter Last nachlässt,
+
+00:07:50.490 --> 00:07:51.410
+ist dies häufig ein Zeichen dafür,
+
+00:07:51.490 --> 00:07:52.690
+dass der Anbieter einen Teil ihrer Logik
+
+00:07:52.690 --> 00:07:54.250
+zur kleinzeitigen Auswertung verschoben hat.
+
+00:07:54.770 --> 00:07:55.890
+Das ist nicht automatisch falsch,
+
+00:07:56.170 --> 00:07:56.810
+aber es ist ein Signal,
+
+00:07:56.910 --> 00:07:57.950
+dass Sie genauer aufpassen müssen.
+
+00:07:58.830 --> 00:08:00.150
+Der Anbieter ist also der Gatekeeper,
+
+00:08:00.270 --> 00:08:00.890
+er steht nicht nur Wache.
+
+00:08:01.450 --> 00:08:02.590
+Er schützt sowohl die Korrektheit
+
+00:08:02.590 --> 00:08:03.430
+als auch die Leistung,
+
+00:08:03.550 --> 00:08:04.270
+indem er filtert,
+
+00:08:04.270 --> 00:08:05.730
+was in SQL übersetzt werden kann
+
+00:08:05.730 --> 00:08:07.950
+und steuert, wann auf die kleinseitige Ausführung
+
+00:08:07.950 --> 00:08:09.050
+zurückgegriffen werden soll.
+
+00:08:09.590 --> 00:08:10.970
+So bleibt Ihre Pipeline vorhersehbar.
+
+00:08:11.510 --> 00:08:13.070
+Gleichzeitig steht er unter ständigem Druck,
+
+00:08:13.190 --> 00:08:14.450
+diese Entscheidungen schnell zu treffen,
+
+00:08:14.790 --> 00:08:16.190
+ohne die Abfragestruktur jedes Mal
+
+00:08:16.190 --> 00:08:17.450
+von Grund auf neu schreiben zu müssen.
+
+00:08:18.030 --> 00:08:19.350
+Und hier wird ein weiterer Bestandteil
+
+00:08:19.350 --> 00:08:20.950
+des EF-Core-Designs unerlässlich.
+
+00:08:21.070 --> 00:08:22.450
+Ein System, das Entscheidungen speichert
+
+00:08:22.450 --> 00:08:23.170
+und wiederverwendet,
+
+00:08:23.230 --> 00:08:24.990
+anstatt bei jeder Anforderung bei Null anzufangen.
+
+00:08:26.150 --> 00:08:27.830
+Zwischenspeichern die geheime Leistungswaffe von EF.
+
+00:08:28.370 --> 00:08:29.950
+Hier hört die Leistung auf, theoretisch zu sein.
+
+00:08:31.170 --> 00:08:32.450
+Entity Framework Core verlässt sich
+
+00:08:32.450 --> 00:08:33.250
+auf das Zwischenspeichern
+
+00:08:33.250 --> 00:08:34.750
+als eines seiner wichtigsten Leistungstools
+
+00:08:34.750 --> 00:08:36.350
+und ohne dieses wäre die Abfrageübersetzung
+
+00:08:36.350 --> 00:08:37.030
+äußerst ineffizient.
+
+00:08:37.870 --> 00:08:39.250
+Jede Linkabfrage beginnt Ihr Leben
+
+00:08:39.250 --> 00:08:40.230
+als Ausdrucksbaumstruktur,
+
+00:08:40.330 --> 00:08:41.310
+muss analysiert, validiert
+
+00:08:41.310 --> 00:08:42.970
+und für die SQL-Übersetzung vorbereitet werden.
+
+00:08:43.450 --> 00:08:44.310
+Diese Arbeit ist Kostenpflicht.
+
+00:08:44.990 --> 00:08:46.170
+Wenn die EF sie bei jeder Ausführung
+
+00:08:46.170 --> 00:08:47.190
+von Grund auf wiederholen müsste,
+
+00:08:47.310 --> 00:08:48.470
+würden selbst einfache Abfragen
+
+00:08:48.470 --> 00:08:50.110
+nach häufiger Wiederholung ins Stocken geraten.
+
+00:08:50.870 --> 00:08:51.590
+Um sich vorzustellen,
+
+00:08:51.650 --> 00:08:52.810
+was das in der Praxis bedeuten würde,
+
+00:08:52.890 --> 00:08:53.390
+stellen Sie sich vor,
+
+00:08:53.430 --> 00:08:54.990
+dieselbe Abfrage tausende Male pro Sekunde
+
+00:08:54.990 --> 00:08:56.130
+in einer Produktions-App auszuführen.
+
+00:08:56.530 --> 00:08:57.910
+Ohne Zwischenspeichern würde EF Core
+
+00:08:57.910 --> 00:08:59.390
+bei jedem Aufruf eine vollständige Analyse
+
+00:08:59.390 --> 00:09:00.270
+und Übersetzung durchlaufen.
+
+00:09:00.750 --> 00:09:02.210
+Die Datenbank wäre nicht unbedingt das Problem.
+
+00:09:02.210 --> 00:09:03.770
+Ihre CPU-Auslastung wird allein
+
+00:09:03.770 --> 00:09:04.310
+durch die Wiederholung
+
+00:09:04.310 --> 00:09:05.270
+der Vorbereitungsarbeiten steigen.
+
+00:09:05.690 --> 00:09:07.050
+Aus diesem Grund ist das Zwischenspeichern
+
+00:09:07.050 --> 00:09:08.050
+keine optionale Optimierung.
+
+00:09:08.250 --> 00:09:09.010
+Es ist die Grundlage,
+
+00:09:09.130 --> 00:09:11.110
+die EF Core in der Praxis praktikabel macht.
+
+00:09:11.590 --> 00:09:12.390
+Wie hilft das nun konkret?
+
+00:09:12.910 --> 00:09:13.910
+EF Core verwendet Caching,
+
+00:09:14.030 --> 00:09:14.430
+um zu erkennen,
+
+00:09:14.550 --> 00:09:16.210
+wann eine bereits verarbeitete Abfrageform
+
+00:09:16.210 --> 00:09:17.050
+erneut angezeigt wird.
+
+00:09:17.830 --> 00:09:18.870
+Anstatt die Ausdrucksbaumstruktur
+
+00:09:18.870 --> 00:09:20.310
+Knoten für Knoten erneut zu analysieren,
+
+00:09:20.410 --> 00:09:21.730
+kann EF die frühere Arbeit wiederverwenden.
+
+00:09:22.410 --> 00:09:22.890
+Das bedeutet,
+
+00:09:22.990 --> 00:09:24.450
+wenn sie nach etwas wie der Kunden-ID filtern,
+
+00:09:24.550 --> 00:09:25.710
+dauert die erste Ausführung länger,
+
+00:09:25.810 --> 00:09:26.750
+da EF herausfinden muss,
+
+00:09:26.790 --> 00:09:28.590
+wie dieser Filter in SQL zugeordnet werden kann.
+
+00:09:28.590 --> 00:09:30.890
+Danach sind nachfolgende Ausführungen
+
+00:09:30.890 --> 00:09:32.250
+mit anderen Parameterwerten schnell,
+
+00:09:32.370 --> 00:09:34.070
+da die schwere Arbeit bereits gespeichert wurde.
+
+00:09:34.830 --> 00:09:35.250
+Kurz gesagt,
+
+00:09:35.330 --> 00:09:36.410
+der erste Durchlauf erstellt den Plan,
+
+00:09:36.510 --> 00:09:37.950
+spätere Durchläufe verwenden ihn wieder.
+
+00:09:38.850 --> 00:09:39.390
+Die Details,
+
+00:09:39.510 --> 00:09:40.590
+wie dieser Cache strukturiert ist,
+
+00:09:40.670 --> 00:09:42.430
+variieren je nach EF Core-Version und Anbieter,
+
+00:09:42.510 --> 00:09:44.490
+aber das allgemeine Prinzip ist einheitlich.
+
+00:09:45.490 --> 00:09:47.370
+Der Cache verfolgt wiederholte Abfrageformer.
+
+00:09:47.930 --> 00:09:48.990
+Wenn sich das Modell ändert,
+
+00:09:48.990 --> 00:09:50.570
+zum B, wenn sie einer Entität
+
+00:09:50.570 --> 00:09:51.510
+eine Eigenschaft hinzufügen,
+
+00:09:51.590 --> 00:09:52.670
+sind die zwischengespeicherten Elemente
+
+00:09:52.670 --> 00:09:53.510
+nicht mehr gültig, nur gültig.
+
+00:09:53.750 --> 00:09:54.410
+Dadurch wird verhindert,
+
+00:09:54.490 --> 00:09:55.450
+dass nicht die Übereinstimmung des SQL
+
+00:09:55.450 --> 00:09:56.250
+jemals wiederverwendet wird.
+
+00:09:56.250 --> 00:09:57.530
+Die Implementierungsdetails,
+
+00:09:57.710 --> 00:09:59.290
+zum B, mehrere Caching-Ebenen
+
+00:09:59.290 --> 00:10:00.130
+oder Entfernungsregeln,
+
+00:10:00.330 --> 00:10:02.170
+sind an Versions- und Konfigurationsdetails gebunden
+
+00:10:02.170 --> 00:10:03.430
+und sollten in der offiziellen
+
+00:10:03.430 --> 00:10:04.890
+EF Core-Dokumentation überprüft werden.
+
+00:10:06.030 --> 00:10:07.010
+Aus der Sicht eines Entwicklers
+
+00:10:07.010 --> 00:10:08.190
+ist das Ergebnis unkompliziert.
+
+00:10:08.750 --> 00:10:10.210
+Abfragen werden nach der ersten Ausführung
+
+00:10:10.210 --> 00:10:11.170
+deutlich schneller ausgeführt.
+
+00:10:11.510 --> 00:10:12.210
+Das Caching in Aktion.
+
+00:10:12.770 --> 00:10:14.030
+Der Vorteil wird leicht unterschätzt,
+
+00:10:14.130 --> 00:10:16.010
+da die Geschwindigkeitssteigerung unsichtbar erscheint,
+
+00:10:16.070 --> 00:10:17.510
+bis Sie das Caching deaktivieren
+
+00:10:17.510 --> 00:10:18.290
+und auf ein Muster stoßen,
+
+00:10:18.370 --> 00:10:19.930
+das nicht so effizient wiederverwendet werden kann.
+
+00:10:20.990 --> 00:10:22.170
+Sobald Sie verstehen, was es bewirkt,
+
+00:10:22.230 --> 00:10:22.670
+wird Ihnen klar,
+
+00:10:22.770 --> 00:10:24.030
+warum EF selbst bei hoher Auslastung
+
+00:10:24.030 --> 00:10:24.930
+reaktionsfähig bleiben kann.
+
+00:10:25.250 --> 00:10:26.350
+Das Caching ist jedoch kein Selbstläufer.
+
+00:10:26.750 --> 00:10:28.350
+Jeder Cachee-Eintrag belegt Arbeitsspeicher
+
+00:10:28.350 --> 00:10:29.690
+und Anwendungen mit einer hohen Anzahl
+
+00:10:29.690 --> 00:10:30.730
+eindeutiger Abfrageformen
+
+00:10:30.730 --> 00:10:32.350
+können einen Anstieg der Arbeitsspeichernutzung verzeichnen.
+
+00:10:32.850 --> 00:10:34.890
+Wenn Sie sich stark auf dynamisch erstellte Abfragen,
+
+00:10:35.230 --> 00:10:36.750
+Prädikate zur Zeichenfolgenerstellung,
+
+00:10:36.830 --> 00:10:38.210
+zur Laufzeit generierte Projektionen
+
+00:10:38.210 --> 00:10:39.050
+oder Code verlassen,
+
+00:10:39.150 --> 00:10:41.250
+der bei jedem Aufruf leicht unterschiedliche Formeln erzeugt,
+
+00:10:41.430 --> 00:10:42.590
+generieren Sie viele Cache-Einträge,
+
+00:10:42.690 --> 00:10:43.630
+die nie wiederverwendet werden.
+
+00:10:44.570 --> 00:10:45.490
+In diesem Fall wird der Cache
+
+00:10:45.490 --> 00:10:46.790
+zu einer Belastung statt zu einem Vorteil.
+
+00:10:47.130 --> 00:10:48.510
+Entwickler sollten nach diesem Muster ausschauen.
+
+00:10:49.150 --> 00:10:50.530
+Weniger konsistentere Abfrageformen
+
+00:10:50.530 --> 00:10:51.450
+nutzen das Caching optimal
+
+00:10:51.450 --> 00:10:52.930
+und vermeiden die Verschwendung von Arbeitsspeichern.
+
+00:10:53.450 --> 00:10:54.630
+Der Trick für Teams besteht darin,
+
+00:10:54.690 --> 00:10:56.110
+zu erkennen, dass zwischengespeicherte Abfragen
+
+00:10:56.110 --> 00:10:57.050
+sowohl einen Leistungsvorteil
+
+00:10:57.050 --> 00:10:58.670
+als auch eine potenzielle Arbeitsspeicherbeleistung darstellen.
+
+00:10:58.850 --> 00:11:00.170
+Sie möchten die Vorteile der Zwischenspeicherung
+
+00:11:00.170 --> 00:11:01.270
+bei sich wiederholenden Aufgaben nutzen,
+
+00:11:01.350 --> 00:11:02.350
+also bei Abfragen, von denen Sie wissen,
+
+00:11:02.410 --> 00:11:03.230
+dass Sie tausende Mal ausgeführt werden.
+
+00:11:03.330 --> 00:11:04.530
+Seien Sie sich jedoch darüber im Klaren,
+
+00:11:04.610 --> 00:11:05.690
+wie Ihre Anwendung Abfragen erstellt.
+
+00:11:06.410 --> 00:11:08.190
+Wenn Sie zu viele eindeutige Abfragen generieren,
+
+00:11:08.330 --> 00:11:09.230
+muss der Cache Formen speichern,
+
+00:11:09.270 --> 00:11:10.730
+die wahrscheinlich nicht noch einmal angezeigt werden.
+
+00:11:11.270 --> 00:11:13.170
+Dies kann Ihr System unerwartet belasten,
+
+00:11:13.330 --> 00:11:14.570
+insbesondere bei großem Umfang.
+
+00:11:15.430 --> 00:11:16.610
+In der Praxis empfiehlt es sich,
+
+00:11:16.610 --> 00:11:18.070
+die Zwischenspeicherung automatisch
+
+00:11:18.070 --> 00:11:19.470
+von EF-Core durchführen zu lassen,
+
+00:11:19.610 --> 00:11:21.770
+aber beim Schreiben von Abfragen bewusst vorzugehen.
+
+00:11:22.290 --> 00:11:23.310
+Wenn Sie in Ihrer Anwendung
+
+00:11:23.310 --> 00:11:24.750
+eine Überlastung des Arbeitsspeichers feststellen,
+
+00:11:24.830 --> 00:11:25.990
+während die Datenbanklast normal erscheint,
+
+00:11:26.050 --> 00:11:26.690
+sollten Sie in Betracht ziehen,
+
+00:11:26.750 --> 00:11:28.230
+dass das Problem möglicherweise
+
+00:11:28.230 --> 00:11:29.910
+mit vielen zwischengespeicherten Abfrageformen zusammenhängt.
+
+00:11:30.050 --> 00:11:31.030
+Dies ist nicht die erste Stelle,
+
+00:11:31.130 --> 00:11:31.830
+an der Entwicklersuchen,
+
+00:11:31.930 --> 00:11:32.950
+aber oft ein stiller Faktor.
+
+00:11:33.630 --> 00:11:34.870
+Das Optimieren von Abfragemustern
+
+00:11:34.870 --> 00:11:35.710
+kann genauso wichtig sein,
+
+00:11:35.770 --> 00:11:36.990
+wie das Optimieren der Datenbank selbst.
+
+00:11:37.430 --> 00:11:38.530
+Das Zwischenspeichern erklärt oft,
+
+00:11:38.530 --> 00:11:39.410
+warum Sie EF-Abfragen
+
+00:11:39.410 --> 00:11:40.970
+nach dieser anfänglichen Verzögerung schnell anfügen.
+
+00:11:41.890 --> 00:11:43.370
+Dabei wird dieselbe Aufgabe noch einmal ausgeführt
+
+00:11:43.370 --> 00:11:44.390
+und dann der Mehraufwand bei Wiederschuhen.
+
+00:11:44.690 --> 00:11:45.730
+Einfach, aber wirkungsvoll.
+
+00:11:46.270 --> 00:11:47.630
+Doch selbst wenn die Abfrageausführung
+
+00:11:47.630 --> 00:11:48.510
+reibungslos verläuft,
+
+00:11:48.610 --> 00:11:49.310
+lauert gleich um die Ecke
+
+00:11:49.310 --> 00:11:50.610
+eine weitere Quelle subtiler Fehler,
+
+00:11:50.710 --> 00:11:52.070
+die die Verarbeitung von Nullwerten betreffen.
+
+00:11:52.570 --> 00:11:53.710
+An dieser Stelle muss EF-Core
+
+00:11:53.710 --> 00:11:55.110
+zwei sehr unterschiedliche Definitionen
+
+00:11:55.110 --> 00:11:55.690
+von nichts überbrücken.
+
+00:11:56.730 --> 00:11:58.190
+Entwickler stoßen immer wieder auf dieses Problem.
+
+00:11:59.350 --> 00:11:59.970
+Null-Semantik,
+
+00:12:00.030 --> 00:12:01.530
+wenn nichts unterschiedliche Bedeutungen hat.
+
+00:12:02.250 --> 00:12:03.930
+In den meisten alltäglichen Programmiersprachen
+
+00:12:03.930 --> 00:12:04.770
+können Entwickler Null
+
+00:12:04.770 --> 00:12:06.110
+als einfaches Konzept behandeln.
+
+00:12:06.610 --> 00:12:07.970
+Die Realität ist jedoch komplizierter,
+
+00:12:08.050 --> 00:12:09.250
+sobald EF-Core zwischen C-Shirt
+
+00:12:09.250 --> 00:12:10.790
+und einer SQL-Datenbank eingesetzt wird.
+
+00:12:10.790 --> 00:12:13.910
+Hier rückt das Thema Null in den Mittelpunkt.
+
+00:12:14.570 --> 00:12:16.670
+Die Regeln, die Sie in .NET anzuwenden glauben,
+
+00:12:17.090 --> 00:12:18.190
+bedeuten nicht immer dasselbe,
+
+00:12:18.230 --> 00:12:19.830
+wenn sie von der Datenbank ausgewertet werden.
+
+00:12:20.790 --> 00:12:22.090
+In C ist Null-Ul unkompliziert.
+
+00:12:22.550 --> 00:12:23.610
+Ein fehlender Objektverweis,
+
+00:12:23.710 --> 00:12:24.990
+eine nicht zugewiesene Zeichenfolge
+
+00:12:24.990 --> 00:12:25.670
+und eine Eigenschaft,
+
+00:12:25.730 --> 00:12:26.450
+die nicht festgelegt wurde,
+
+00:12:26.510 --> 00:12:27.450
+laufen alle auf dasselbe hinaus.
+
+00:12:27.970 --> 00:12:28.930
+SQL funktioniert auch anders.
+
+00:12:29.390 --> 00:12:30.750
+Es verbindet Null nicht auf eine Weise,
+
+00:12:30.850 --> 00:12:32.050
+die direkt mit .NET übereinstimmt.
+
+00:12:33.150 --> 00:12:35.050
+SQL behandelt es eher wie einen unbekannten Wert,
+
+00:12:35.130 --> 00:12:36.610
+was sich auf das Verhalten von Vergleichen auswirkt.
+
+00:12:37.010 --> 00:12:37.990
+Wenn Sie in SQL beispielsweise
+
+00:12:37.990 --> 00:12:39.370
+eine Spalte mit dem Wert Null schreiben,
+
+00:12:39.450 --> 00:12:40.770
+verhält sich das nicht wie ein Testaufwahlschweig.
+
+00:12:41.530 --> 00:12:43.490
+Stattdessen wird eine spezielle Verarbeitung durchgeführt,
+
+00:12:43.550 --> 00:12:44.510
+die Nullprüfungen erfordert.
+
+00:12:44.950 --> 00:12:46.010
+Dies ist ein wichtiger Unterschied,
+
+00:12:46.090 --> 00:12:47.250
+den Entwickler berücksichtigen müssen.
+
+00:12:47.710 --> 00:12:49.070
+Ein kurzes Beispiel verdeutlicht den Unterschied.
+
+00:12:50.470 --> 00:12:51.970
+Angenommen, Sie schreiben eine Abfrage.
+
+00:12:52.430 --> 00:12:54.470
+Unter Customers, wobei CNC-Name gleich Null ist.
+
+00:12:55.150 --> 00:12:56.610
+Führen Sie diese Abfrage im Arbeitsspeicher
+
+00:12:56.610 --> 00:12:57.930
+für die Liste der Kundenobjekte aus
+
+00:12:57.930 --> 00:12:59.450
+und Sie erhalten zuverlässig diejenigen zurück,
+
+00:12:59.530 --> 00:13:00.550
+deren Name tatsächlich Null ist.
+
+00:13:01.210 --> 00:13:03.350
+Übersetzen Sie dieselbe Logik ohne Anpassung in SQL
+
+00:13:03.350 --> 00:13:04.170
+und Sie würden erwarten,
+
+00:13:04.250 --> 00:13:05.730
+dass WHENAME gleich Null ist, nun ist.
+
+00:13:06.570 --> 00:13:08.590
+In der Praxis würde dies überhaupt keine Zeilen zurückgeben.
+
+00:13:08.590 --> 00:13:11.250
+Die korrekte SQL-Form wäre WHENAME ist Null.
+
+00:13:12.170 --> 00:13:13.710
+Es ist wichtig, diesen Unterschied zu berücksichtigen.
+
+00:13:14.130 --> 00:13:16.430
+Als Entwickler sollten Sie die SQL-Ausgabe überprüfen,
+
+00:13:16.510 --> 00:13:17.910
+wenn Ihr Link von Nullvergleichen abhängt,
+
+00:13:18.050 --> 00:13:19.690
+insbesondere um Überraschungen beim Wechsel
+
+00:13:19.690 --> 00:13:21.070
+zu Produktionsdaten zu vermeiden.
+
+00:13:21.930 --> 00:13:23.370
+Diese Diskrepanz ist die Ursache dafür,
+
+00:13:23.470 --> 00:13:24.890
+dass sich Nullabfragen in die F-Core
+
+00:13:24.890 --> 00:13:26.370
+manchmal so merkwürdig verhalten.
+
+00:13:27.010 --> 00:13:28.730
+Wenn etwas, das in C-Plus vorhersehbar erscheint,
+
+00:13:28.790 --> 00:13:29.770
+nicht korrigiert wird, kann es sein,
+
+00:13:29.850 --> 00:13:31.610
+dass Stillschweigen keine Ergebnisse in der Datenbank liefern.
+
+00:13:32.050 --> 00:13:33.630
+Gelegentlich kann es sogar zu Ergebnissen kommen,
+
+00:13:33.710 --> 00:13:34.890
+die in kleinen Tests in Ordnung aussehen,
+
+00:13:34.950 --> 00:13:35.650
+in realen Szenarien,
+
+00:13:35.730 --> 00:13:37.310
+die Nullwerte häufiger auftreten, jedoch fehlschlagen.
+
+00:13:37.710 --> 00:13:39.190
+Auf diese Weise können sich subtile Fehler
+
+00:13:39.190 --> 00:13:40.290
+ohne Vorwarnung einschleichen.
+
+00:13:40.750 --> 00:13:41.970
+Um dieses Risiko zu verringern,
+
+00:13:42.050 --> 00:13:44.130
+werden Ihre Nullvergleiche nicht einfach von EF-Core durchlaufen.
+
+00:13:44.530 --> 00:13:45.790
+Stattdessen werden Regeln angewendet,
+
+00:13:45.830 --> 00:13:47.930
+um das Verhalten von Link und SQL aufeinander abzustimmen.
+
+00:13:48.330 --> 00:13:50.150
+Bei Gleichheitsprüfungen werden diese von EF
+
+00:13:50.150 --> 00:13:52.230
+in der Regel an CIST-Null-Bedingungen angepasst
+
+00:13:52.230 --> 00:13:53.330
+und nicht nur angepasst.
+
+00:13:53.330 --> 00:13:56.230
+Bei komplexeren Prädikaten führt die Pipeline
+
+00:13:56.230 --> 00:13:57.950
+häufig kompensierende Transformationen durch,
+
+00:13:58.250 --> 00:14:00.150
+damit die Datenbankergebnisse mit den Ergebnissen
+
+00:14:00.150 --> 00:14:02.010
+der .NET-Laufzeitlogik synchron bleiben.
+
+00:14:02.850 --> 00:14:04.810
+Die genauen internen Abläufe dieser Anpassungen
+
+00:14:04.810 --> 00:14:06.330
+hängen von der Version und dem Anbieter ab,
+
+00:14:06.370 --> 00:14:07.810
+das Leitprinzip ist jedoch einheitlich.
+
+00:14:08.670 --> 00:14:09.930
+Bewahren Sie die Erwartungen der Entwickler,
+
+00:14:10.010 --> 00:14:11.310
+indem Sie die Nulllogik normalisieren.
+
+00:14:12.070 --> 00:14:13.550
+Diese Ausrichtung hat jedoch ihren Preis.
+
+00:14:13.910 --> 00:14:15.730
+Diese kompensierenden Transformationen können dazu führen,
+
+00:14:15.730 --> 00:14:17.470
+dass SQL-Abfragen länger und komplexer werden,
+
+00:14:17.550 --> 00:14:18.310
+als Sie sie geschrieben haben.
+
+00:14:18.710 --> 00:14:20.890
+EF priorisiert Korrektheit gegenüber Einfachheit,
+
+00:14:20.970 --> 00:14:22.470
+manchmal auf Kosten der Effizienz.
+
+00:14:22.470 --> 00:14:25.130
+Aus diesem Grund wird gelegentlich eine generierte Fortsetzung
+
+00:14:25.130 --> 00:14:26.430
+mit zusätzlichen Bedingungen angezeigt,
+
+00:14:26.550 --> 00:14:28.410
+die nicht mit Ihrer Klinikanweisung übereinstimmen.
+
+00:14:29.750 --> 00:14:31.210
+EF stellt so sicher, dass Sie später nicht
+
+00:14:31.210 --> 00:14:32.850
+mit inkonsistenten Ergebnissen aufwachen.
+
+00:14:33.770 --> 00:14:35.370
+Die Komplexität der generierten Abfrage
+
+00:14:35.370 --> 00:14:37.510
+ist häufig der sichtbare Nebeneffekt der Sicherstellung
+
+00:14:37.510 --> 00:14:39.030
+der Nunsemantik in zwei Systemen
+
+00:14:39.030 --> 00:14:40.910
+mit den Konflikt stehenden Definitionen.
+
+00:14:42.430 --> 00:14:43.810
+Für Entwickler ist es am wichtigsten,
+
+00:14:43.850 --> 00:14:45.610
+das potenzielle Risiko bei der Nullwertmahnung zu erkennen.
+
+00:14:46.250 --> 00:14:47.610
+Wenn eine Abfrage seltsam langsam
+
+00:14:47.610 --> 00:14:48.970
+oder übermäßig komplex erscheint,
+
+00:14:49.070 --> 00:14:50.790
+sind Nullüberprüfungen ein guter Ausgangspunkt
+
+00:14:50.790 --> 00:14:51.610
+für die Problembehandlung.
+
+00:14:52.470 --> 00:14:53.870
+Hier ein kurzer, aber praktischer Tipp.
+
+00:14:54.330 --> 00:14:56.210
+Wenn sich eine Abfrage mit Nullwerten seltsam verhält,
+
+00:14:56.310 --> 00:14:57.890
+überprüfen Sie sie auf Übersetzungsunterschiede
+
+00:14:57.890 --> 00:14:58.930
+oder versteckte Umschreibungen.
+
+00:14:59.610 --> 00:15:00.530
+Dies sind weniger Fehler
+
+00:15:00.530 --> 00:15:02.890
+als vielmehr integrierte Schutzmaßnahmen in EF-Core.
+
+00:15:03.890 --> 00:15:04.990
+Die eigentliche Gefahr besteht darin,
+
+00:15:05.030 --> 00:15:05.570
+davon auszugehen,
+
+00:15:05.630 --> 00:15:06.790
+dass sich harmlose Nullüberprüfungen
+
+00:15:06.790 --> 00:15:07.630
+bei den Geben gleich verhalten.
+
+00:15:07.950 --> 00:15:08.850
+Das ist nicht der Fall
+
+00:15:08.850 --> 00:15:10.130
+und das kann als Fehler auftreten,
+
+00:15:10.190 --> 00:15:11.170
+die nur bei Produktionsdaten
+
+00:15:11.170 --> 00:15:13.070
+und nicht in einem übersichtlichen Testdatensatz auftreten.
+
+00:15:13.530 --> 00:15:14.910
+Wir könnten beispielsweise davon ausgehen,
+
+00:15:14.970 --> 00:15:16.130
+dass ein Filter Nullwerte ausschließt,
+
+00:15:16.130 --> 00:15:16.570
+bis Sie feststellen,
+
+00:15:16.670 --> 00:15:17.470
+dass bestimmte Datensätze
+
+00:15:17.470 --> 00:15:18.250
+auf mysteriöse Weise fehlen.
+
+00:15:18.250 --> 00:15:20.750
+Diese Art von stillschweigender Nichtübereinstimmung
+
+00:15:20.750 --> 00:15:22.770
+kann eines der am schwierigsten zu findenden Probleme sein,
+
+00:15:22.850 --> 00:15:23.150
+es sei denn,
+
+00:15:23.210 --> 00:15:24.230
+Sie haben die generierte Fortsetzung
+
+00:15:24.230 --> 00:15:25.930
+anhand echter Datenmengen und Muster validiert.
+
+00:15:27.270 --> 00:15:28.530
+Null-Semantik ist zwar ein Problem,
+
+00:15:28.670 --> 00:15:30.430
+stellt aber auch eine der wichtigsten Interventionen
+
+00:15:30.430 --> 00:15:31.250
+von EF-Core dar.
+
+00:15:32.190 --> 00:15:33.570
+Durch den Ausgleich von Diskrepanzen
+
+00:15:33.570 --> 00:15:35.270
+hilft EF, eine Lücke zu schließen,
+
+00:15:35.370 --> 00:15:37.690
+die andernfalls zu unvorhersehbaren Fehlern führen könnte.
+
+00:15:38.530 --> 00:15:40.110
+Entwicklern gefällt die zusätzliche Fortsetzung,
+
+00:15:40.210 --> 00:15:41.190
+die im Prozess angezeigt wird,
+
+00:15:41.250 --> 00:15:41.850
+möglicherweise nicht,
+
+00:15:41.850 --> 00:15:43.690
+aber ohne sie wären die Ergebnisse unzuverlässig.
+
+00:15:43.690 --> 00:15:45.470
+Nach der Behandlung von Nullen
+
+00:15:45.470 --> 00:15:46.810
+führt EF nun eine Abfrage aus,
+
+00:15:46.870 --> 00:15:47.310
+die übergeben,
+
+00:15:47.430 --> 00:15:48.390
+über den Anbieter gefiltert,
+
+00:15:48.410 --> 00:15:49.550
+zwischengespeichert und angepasst wurde,
+
+00:15:49.570 --> 00:15:50.710
+um die Logik konsistent zu halten.
+
+00:15:51.210 --> 00:15:52.070
+Die letzte Frage ist,
+
+00:15:52.110 --> 00:15:52.670
+wie es weitergeht.
+
+00:15:53.350 --> 00:15:54.570
+Wie wird diese vorbereitete Abfrage
+
+00:15:54.570 --> 00:15:55.610
+zu einem Fortsetzungsbefehl,
+
+00:15:55.830 --> 00:15:57.230
+den die Datenbank tatsächlich ausführen kann?
+
+00:15:57.710 --> 00:15:58.450
+Und wie werden die Rohdaten
+
+00:15:58.450 --> 00:15:59.730
+wieder in verwendbare Daten umgewandelt?
+
+00:16:00.750 --> 00:16:01.890
+Und wie werden Nettoobjekte
+
+00:16:01.890 --> 00:16:03.030
+für die Fortsetzungsgenerierung
+
+00:16:03.030 --> 00:16:04.310
+und Materialisierung umgewandelt?
+
+00:16:04.770 --> 00:16:06.070
+Die letzte Phase der Pipeline
+
+00:16:06.070 --> 00:16:07.170
+ist die Fortsetzungsgenerierung
+
+00:16:07.170 --> 00:16:07.930
+und Materialisierung,
+
+00:16:08.050 --> 00:16:08.330
+der Punkt,
+
+00:16:08.430 --> 00:16:09.510
+an dem sich die gesamte Vorbereitung
+
+00:16:09.510 --> 00:16:10.890
+entweder auszahlt oder zunichte macht.
+
+00:16:10.890 --> 00:16:13.250
+Bisher ging es nur darum,
+
+00:16:13.310 --> 00:16:14.070
+die Absicht zu formen,
+
+00:16:14.290 --> 00:16:14.990
+Muster zu validieren
+
+00:16:14.990 --> 00:16:16.110
+und die Konsistenz zu schützen.
+
+00:16:16.930 --> 00:16:18.350
+Abfragen werden jedoch nur dann nützlich,
+
+00:16:18.450 --> 00:16:19.290
+wenn EF diese Absicht
+
+00:16:19.290 --> 00:16:20.810
+in einen Fortsetzungsbefehl umwandeln kann,
+
+00:16:20.870 --> 00:16:21.910
+den Ihre Datenbank versteht
+
+00:16:21.910 --> 00:16:23.150
+und dann die flachen Ergebnisse
+
+00:16:23.150 --> 00:16:24.510
+in umfangreiche Objekte umformt,
+
+00:16:24.570 --> 00:16:26.050
+mit denen Ihr Code tatsächlich arbeiten kann.
+
+00:16:27.350 --> 00:16:28.150
+Zwei bewegliche Teile
+
+00:16:28.150 --> 00:16:29.070
+für den Großteil dieser Arbeit,
+
+00:16:29.230 --> 00:16:30.070
+der Fortsetzungsgenerator
+
+00:16:30.070 --> 00:16:30.870
+und der Materialisierer.
+
+00:16:31.530 --> 00:16:32.750
+Sie lösen gegensätzliche Probleme,
+
+00:16:32.910 --> 00:16:33.770
+hängen aber voneinander ab.
+
+00:16:34.230 --> 00:16:35.090
+Die Fortsetzungsgenerierung
+
+00:16:35.090 --> 00:16:35.670
+ist anbieterbewusst.
+
+00:16:36.550 --> 00:16:37.350
+Anbieterkomponenten beeinflussen,
+
+00:16:37.450 --> 00:16:38.370
+wie Abfragen für einen bestimmten
+
+00:16:38.370 --> 00:16:39.530
+Datenbank-Dialekt ausgedrückt werden.
+
+00:16:40.290 --> 00:16:41.630
+Die Materialisierung verwendet dann
+
+00:16:41.630 --> 00:16:42.550
+die zurückgegebenen Zeilen
+
+00:16:42.550 --> 00:16:44.070
+und erstellt Entitäten und Projektionen.
+
+00:16:45.070 --> 00:16:46.250
+Keine Seite allein ist ausreichend.
+
+00:16:46.730 --> 00:16:48.010
+Die Fortsetzungsgenerierung stellt sicher,
+
+00:16:48.090 --> 00:16:49.350
+dass die Datenbank die Abfrage ausführen kann.
+
+00:16:49.850 --> 00:16:51.110
+Die Materialisierung stellt sicher,
+
+00:16:51.230 --> 00:16:51.750
+dass die Ergebnisse
+
+00:16:51.750 --> 00:16:52.930
+für ihre Anwendung sinnvoll sind.
+
+00:16:53.590 --> 00:16:54.490
+Dieses Hin und Her ist der Grund,
+
+00:16:54.590 --> 00:16:55.250
+warum sich diese Phase
+
+00:16:55.250 --> 00:16:55.930
+wie eine Übersetzung
+
+00:16:55.930 --> 00:16:56.810
+in zwei Richtungen anfühlt.
+
+00:16:57.770 --> 00:16:58.490
+Ein Linkfilter,
+
+00:16:58.650 --> 00:16:59.930
+der in C-Teilen harmlos aussah,
+
+00:16:59.990 --> 00:17:01.010
+muss als gültige Fortsetzung
+
+00:17:01.010 --> 00:17:02.510
+für PostgreSQL, SQL-Server
+
+00:17:02.510 --> 00:17:03.390
+oder einen anderen von Ihnen
+
+00:17:03.390 --> 00:17:04.190
+verwendeten Anbieter
+
+00:17:04.190 --> 00:17:04.770
+geschrieben werden.
+
+00:17:04.770 --> 00:17:07.530
+Wenn die Datenbank antwortet,
+
+00:17:07.850 --> 00:17:09.430
+erhält EF lediglich Zeilen und Spalten,
+
+00:17:09.510 --> 00:17:10.130
+die es Ihnen nicht einfach
+
+00:17:10.130 --> 00:17:11.310
+ohne Kontext übergeben kann.
+
+00:17:12.370 --> 00:17:12.830
+Sie erwarten,
+
+00:17:12.930 --> 00:17:13.510
+dass Sie Entitäten
+
+00:17:13.510 --> 00:17:14.270
+mit verknüpften
+
+00:17:14.270 --> 00:17:15.470
+Navigationseigenschaften
+
+00:17:15.470 --> 00:17:16.330
+typisierten Werten
+
+00:17:16.330 --> 00:17:17.170
+an den richtigen Stellen
+
+00:17:17.170 --> 00:17:18.590
+und intakten Beziehungen erhalten.
+
+00:17:19.470 --> 00:17:20.070
+Diese Schritte
+
+00:17:20.070 --> 00:17:21.270
+sollen diese Lücke schließen.
+
+00:17:21.790 --> 00:17:22.250
+Stellen Sie sich das
+
+00:17:22.250 --> 00:17:23.250
+anhand eines einfachen Beispiels.
+
+00:17:23.610 --> 00:17:24.810
+Wenn Sie eine Abfrage geschrieben haben,
+
+00:17:24.850 --> 00:17:25.870
+die verwandte Entitäten enthält,
+
+00:17:26.370 --> 00:17:26.990
+B. einen Auftrag
+
+00:17:26.990 --> 00:17:27.970
+mit seiner Auftragsposition,
+
+00:17:28.090 --> 00:17:28.510
+möchten Sie nicht
+
+00:17:28.510 --> 00:17:29.730
+ein halbes Dutzend Teilzeilen sehen
+
+00:17:29.730 --> 00:17:30.970
+und diese manuell zusammenfügen.
+
+00:17:30.970 --> 00:17:32.950
+Sie erwarten ein Auftragsobjekt,
+
+00:17:33.070 --> 00:17:33.730
+das eine aufgefüllte
+
+00:17:33.730 --> 00:17:35.210
+Auftragspositionsauflistung enthält.
+
+00:17:35.990 --> 00:17:37.310
+Das ist Materialisierung in Aktion.
+
+00:17:38.470 --> 00:17:39.210
+EF rekonstruiert
+
+00:17:39.210 --> 00:17:39.890
+einen vollständigen
+
+00:17:39.890 --> 00:17:41.130
+Objektgrafen aus Zeilensätzen.
+
+00:17:41.770 --> 00:17:42.430
+Im Praktischen Hinweis.
+
+00:17:43.050 --> 00:17:43.650
+Wenn Sie doppelte,
+
+00:17:43.710 --> 00:17:44.630
+nachverfolgte Objekte
+
+00:17:44.630 --> 00:17:45.110
+oder fehlende
+
+00:17:45.110 --> 00:17:46.210
+Navigationswerte bemerken,
+
+00:17:46.290 --> 00:17:46.910
+liegt das oft daran,
+
+00:17:46.970 --> 00:17:47.650
+wie diese Verknüpfungen
+
+00:17:47.650 --> 00:17:48.310
+gestaltet wurden
+
+00:17:48.310 --> 00:17:48.910
+und wie EF
+
+00:17:48.910 --> 00:17:50.150
+die Ergebnisse materialisiert hat.
+
+00:17:51.550 --> 00:17:52.670
+Die Fortsetzungsgenerierung
+
+00:17:52.670 --> 00:17:53.250
+selbst verdeutlicht
+
+00:17:53.250 --> 00:17:54.090
+die Abhängigkeit von EF
+
+00:17:54.090 --> 00:17:54.510
+von Amitern.
+
+00:17:54.990 --> 00:17:55.830
+Das Framework versucht nicht,
+
+00:17:55.950 --> 00:17:56.690
+jedes Intaxi-Teil
+
+00:17:56.690 --> 00:17:57.310
+hart zu kodieren.
+
+00:17:57.870 --> 00:17:58.870
+Stattdessen stellen Anbieter
+
+00:17:58.870 --> 00:18:00.310
+die Logik für Ihre Datenbank bereit.
+
+00:18:01.190 --> 00:18:01.670
+Das bedeutet,
+
+00:18:01.810 --> 00:18:02.650
+dass dieselbe Abfrage
+
+00:18:02.650 --> 00:18:03.610
+in verschiedenen Umgebungen
+
+00:18:03.610 --> 00:18:04.150
+möglicherweise
+
+00:18:04.150 --> 00:18:04.970
+leicht unterschiedliche
+
+00:18:04.970 --> 00:18:05.810
+Fortsetzungen rendert.
+
+00:18:06.970 --> 00:18:07.410
+Klammern können
+
+00:18:07.410 --> 00:18:08.410
+in SQL-Server-Vorkommen
+
+00:18:08.410 --> 00:18:10.090
+bezeichnen in PostgreSQL
+
+00:18:10.090 --> 00:18:10.650
+und anderswo
+
+00:18:10.650 --> 00:18:11.750
+unterschiedliche Typumwandlungen.
+
+00:18:12.210 --> 00:18:12.910
+Diese Variationen
+
+00:18:12.910 --> 00:18:13.270
+sind wichtig,
+
+00:18:13.350 --> 00:18:13.830
+da Sie bestimmen,
+
+00:18:13.950 --> 00:18:14.970
+ob die Abfrage tatsächlich
+
+00:18:14.970 --> 00:18:16.390
+für die Zieldatenbank gültig ist.
+
+00:18:17.530 --> 00:18:18.070
+Dieses Prinzip
+
+00:18:18.070 --> 00:18:19.450
+sollte anhand der EF-Core-Dokumentation
+
+00:18:19.450 --> 00:18:20.230
+für die jeweilige Version
+
+00:18:20.230 --> 00:18:21.110
+und den jeweiligen Anbieter,
+
+00:18:21.130 --> 00:18:21.570
+die Sie verwenden,
+
+00:18:21.650 --> 00:18:22.170
+überprüft werden,
+
+00:18:22.250 --> 00:18:22.850
+da sich die Funktionen
+
+00:18:22.850 --> 00:18:23.330
+weiterentwickeln.
+
+00:18:24.110 --> 00:18:25.170
+Auf der Materialisierungsseite
+
+00:18:25.170 --> 00:18:26.110
+muss EF mehr als nur
+
+00:18:26.110 --> 00:18:27.270
+einfache Zuordnungen verarbeiten.
+
+00:18:28.010 --> 00:18:29.470
+Es muss Datenbankspalten-Typen
+
+00:18:29.470 --> 00:18:30.690
+mit Nettotypen abgleichen,
+
+00:18:30.790 --> 00:18:31.230
+bei Bedarf
+
+00:18:31.230 --> 00:18:32.410
+die Konvertierung erzwingen
+
+00:18:32.410 --> 00:18:33.450
+und Fremdschlüssel reparieren,
+
+00:18:33.850 --> 00:18:34.470
+damit Beziehungen
+
+00:18:34.470 --> 00:18:35.870
+zu echten Objekt verweisen werden.
+
+00:18:36.510 --> 00:18:37.090
+Projektionen fügen
+
+00:18:37.090 --> 00:18:37.770
+eine weitere Schwierigkeit.
+
+00:18:38.290 --> 00:18:38.770
+Eine Abfrage,
+
+00:18:38.850 --> 00:18:39.550
+die ein Benutzer definiert,
+
+00:18:39.590 --> 00:18:40.390
+das DTO oder einen
+
+00:18:40.390 --> 00:18:41.190
+anonymen Typ anfordert,
+
+00:18:41.250 --> 00:18:42.130
+muss direkt aus dem Result-Set
+
+00:18:42.130 --> 00:18:42.810
+zusammengestellt werden,
+
+00:18:42.890 --> 00:18:43.330
+ohne dass jemals
+
+00:18:43.330 --> 00:18:44.370
+eine vollständige Entität erstellt wird.
+
+00:18:44.550 --> 00:18:45.330
+Diese Flexibilität
+
+00:18:45.330 --> 00:18:45.750
+ist der Punkt,
+
+00:18:45.810 --> 00:18:46.810
+an dem Entwickler das Gefühl haben,
+
+00:18:46.890 --> 00:18:47.970
+dass sich EF an ihre Anforderungen
+
+00:18:47.970 --> 00:18:48.310
+anpasst,
+
+00:18:48.370 --> 00:18:49.290
+aber sie erhöht die Komplexität
+
+00:18:49.290 --> 00:18:49.770
+der zugrunden
+
+00:18:49.770 --> 00:18:51.750
+Es gibt auch Fälle,
+
+00:18:51.890 --> 00:18:53.250
+in denen er Materialisierereigenschaften
+
+00:18:53.250 --> 00:18:53.630
+verfolgt,
+
+00:18:53.670 --> 00:18:55.050
+die sie nicht explizit definiert haben.
+
+00:18:56.290 --> 00:18:57.510
+Features wie Schatteneigenschaften
+
+00:18:57.510 --> 00:18:58.390
+oder Lazy Loading Hooks
+
+00:18:58.390 --> 00:18:59.030
+sind hier geeignet,
+
+00:18:59.110 --> 00:18:59.850
+diese variieren jedoch
+
+00:18:59.850 --> 00:19:01.330
+je nach F-Core-Version und Anbieter.
+
+00:19:01.890 --> 00:19:02.610
+Überprüfen Sie daher
+
+00:19:02.610 --> 00:19:03.310
+die Dokumentation
+
+00:19:03.310 --> 00:19:04.110
+Ihrer Zielumgebung,
+
+00:19:04.190 --> 00:19:05.190
+bevor Sie sich darauf verlassen.
+
+00:19:06.130 --> 00:19:06.790
+Am wichtigsten ist,
+
+00:19:06.870 --> 00:19:07.750
+dass die Materialisierung
+
+00:19:07.750 --> 00:19:08.670
+diesen gesamten Prozess
+
+00:19:08.670 --> 00:19:09.230
+verbergen kann.
+
+00:19:09.910 --> 00:19:10.510
+Entwickler sehen
+
+00:19:10.510 --> 00:19:11.670
+ein sauberes Objektmodell,
+
+00:19:11.730 --> 00:19:13.090
+während EF erhebliche Anstrengungen
+
+00:19:13.090 --> 00:19:13.590
+unternommen hat,
+
+00:19:13.670 --> 00:19:14.470
+um Leistung und Korrektheit
+
+00:19:14.470 --> 00:19:15.090
+in Einklang zu bringen.
+
+00:19:15.470 --> 00:19:16.090
+Beziehungen bieten
+
+00:19:16.090 --> 00:19:16.990
+eine gute Momentaufnahme
+
+00:19:16.990 --> 00:19:18.150
+mit der damit verbundenen Versteckner ab.
+
+00:19:18.670 --> 00:19:19.970
+Anstatt Ihnen Zeilen zu übergeben,
+
+00:19:20.050 --> 00:19:21.290
+die PID aufeinander verweisen,
+
+00:19:21.410 --> 00:19:22.450
+löst EF diese Verweise
+
+00:19:22.450 --> 00:19:23.850
+in Navigationseigenschaften auf.
+
+00:19:24.510 --> 00:19:25.370
+Der Tipp dazu ist einfach.
+
+00:19:25.850 --> 00:19:26.970
+Wenn Navigationseigenschaften
+
+00:19:26.970 --> 00:19:27.990
+leer oder inkonsistent sind,
+
+00:19:28.350 --> 00:19:28.790
+kann das Problem
+
+00:19:28.790 --> 00:19:29.590
+häufig behoben werden,
+
+00:19:29.670 --> 00:19:30.590
+indem Sie die Abfragestruktur
+
+00:19:30.590 --> 00:19:31.050
+überarbeiten,
+
+00:19:31.170 --> 00:19:31.990
+insbesondere mit Include
+
+00:19:31.990 --> 00:19:33.050
+oder Projektionsoptionen.
+
+00:19:33.430 --> 00:19:33.610
+In
+
+00:19:33.610 --> 00:19:35.170
+In der Praxis
+
+00:19:35.170 --> 00:19:36.490
+verleihen die SQL-Generierung
+
+00:19:36.490 --> 00:19:37.590
+und Materialisierung EF
+
+00:19:37.590 --> 00:19:38.610
+seine sichtbarste Wirkung.
+
+00:19:39.430 --> 00:19:40.150
+Dies sind die Phasen,
+
+00:19:40.190 --> 00:19:40.690
+die den Unterschied
+
+00:19:40.690 --> 00:19:41.150
+zwischen einer
+
+00:19:41.150 --> 00:19:42.150
+entwicklerfreundlichen Erfahrung
+
+00:19:42.150 --> 00:19:43.530
+und einer Datenaufbereitung ausmachen,
+
+00:19:43.610 --> 00:19:44.030
+die ansonsten
+
+00:19:44.030 --> 00:19:44.510
+stundenlanges
+
+00:19:44.510 --> 00:19:47.390
+wenn Sie mit EF
+
+00:19:47.390 --> 00:19:48.410
+eine Abfrage ausführen,
+
+00:19:48.510 --> 00:19:49.330
+erhalten Sie etwas zurück,
+
+00:19:49.410 --> 00:19:50.550
+das sich in Net natürlich anfühlt.
+
+00:19:50.650 --> 00:19:51.450
+Nicht, weil SQL Ihnen
+
+00:19:51.450 --> 00:19:52.250
+Objekte geliefert hat,
+
+00:19:52.330 --> 00:19:52.930
+sondern weil EF sie
+
+00:19:52.930 --> 00:19:53.470
+auf diese Weise
+
+00:19:53.470 --> 00:19:54.370
+neu erstellt hat.
+
+00:19:54.810 --> 00:19:55.310
+Aus diesem Grund
+
+00:19:55.310 --> 00:19:56.010
+fühlt sich der Prozess
+
+00:19:56.010 --> 00:19:56.690
+auf die Magie an.
+
+00:19:57.370 --> 00:19:58.210
+Zwei verschiedene Engines,
+
+00:19:58.270 --> 00:19:58.830
+von denen eine fließende
+
+00:19:58.830 --> 00:19:59.790
+Datenbank-Dialekt beherrscht,
+
+00:19:59.850 --> 00:20:00.630
+die andere fließende SRK.

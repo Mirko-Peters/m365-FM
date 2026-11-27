@@ -10,6 +10,9 @@ const trusted = async (db, u) => !!(u && (u.admin || u.editor || u.pro || (await
 export async function handleVotes(env, request, url, path, user, J) {
   const db = env.DB;
   if (path === "/api/edits/pending" && request.method === "GET") {
+    // D1-Kosten: jede Entitaets- und Wiki-Seite fragt das beim Laden ab. Ohne Anmeldung kann niemand abstimmen; die Liste bleibt dann leer und
+    // kostet keine Abfrage (assets/entity.js fragt ohne Anmeldehinweis gar nicht erst). Angemeldete (Seite, MCP) bekommen sie wie bisher.
+    if (!user) return J({ kind: url.searchParams.get("kind") === "entity" ? "entity" : "wiki", can_vote: false, edits: [] });
     const kind = url.searchParams.get("kind") === "entity" ? "entity" : "wiki", key = url.searchParams.get("key") || "", lang = url.searchParams.get("lang") || "";
     const rows = kind === "wiki"
       ? (await db.prepare("SELECT r.id,r.body,r.summary,r.created,r.user_id,COALESCE(u.name,'') name FROM wiki_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.term=? AND r.lang=? AND r.status='pending' ORDER BY r.created DESC LIMIT 10").bind(key, lang).all()).results || []

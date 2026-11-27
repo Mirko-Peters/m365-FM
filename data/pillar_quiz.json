@@ -1,0 +1,3599 @@
+{
+ "_": "Fragen des Abschlusstests (tools/pillar_quiz.py). Ohne Loesungen: die Antwortschluessel liegen verschluesselt in data/pillar_quiz_keys.enc und in der Datenbank des Workers. IDs bleiben fest; neue Fragen bekommen neue IDs. IDs unter retired sind stillgelegt und werden nie wieder vergeben. src = Vertiefung, aus der eine Frage stammt (Gruppe = Eltern-Leitfaden). hold = Leitfaeden/Vertiefungen, die run ohne ausdrueckliches --pillars nicht erzeugt (Freigabe durch Mirko: ID aus hold entfernen oder pillar-quiz.yml mit pillars=<IDs> starten).",
+ "path": "manufacturing-excellence",
+ "version": "2026-11-26",
+ "pillars": {
+  "lean-manufacturing": {
+   "en": [
+    {
+     "id": "lean-manufacturing-7",
+     "q": "In the LEI truck example (a three-ton truck must move six tons), which delivery pattern avoids muda, mura and muri?",
+     "opts": [
+      "One trip carrying six tons",
+      "Two trips with three tons each",
+      "Three trips with two tons each",
+      "Two trips with four and two tons"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-8",
+     "q": "What is the main purpose of the Shine step in 5S?",
+     "opts": [
+      "Removing unnecessary items from the work area",
+      "Preparing the workplace for customer audits and visits",
+      "Polishing equipment to extend its service life",
+      "Cleaning the area so inspection reveals leaks and loose parts"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-9",
+     "q": "In SMED, what distinguishes internal setup from external setup?",
+     "opts": [
+      "Internal setup is done by maintenance staff, external by operators",
+      "Internal setup covers dies; external setup covers software settings",
+      "Internal setup is standardized; external setup is improvised",
+      "Internal setup needs the machine stopped; external can run while it operates"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-10",
+     "q": "According to the guide, why is a shutdown poka-yoke considered the most effective type?",
+     "opts": [
+      "It is the cheapest device to install",
+      "It only alerts operators with a sound or light",
+      "It records errors for later statistical analysis",
+      "It prevents the error from occurring at all"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-11",
+     "q": "Why does a Toyota-style andon line not necessarily stop the moment an operator pulls the cord?",
+     "opts": [
+      "Cord pulls are only logged, never acted on",
+      "Stops are allowed only between shifts",
+      "The team leader must first approve the stop",
+      "The line stops only at a fixed position if the problem is not solved within takt"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-12",
+     "q": "What do the three elements of standard work consist of?",
+     "opts": [
+      "Value, flow and pull",
+      "Cycle time, lead time and batch size",
+      "Takt time, work sequence and standard inventory",
+      "Process capacity, cost target and defect rate"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-13",
+     "q": "Which pairing correctly describes how daily kaizen and a kaizen event relate, according to the guide?",
+     "opts": [
+      "Events replace daily kaizen once a team has enough trained facilitators",
+      "Daily kaizen builds frontline problem solving; events give fast step changes but should not stand alone",
+      "Daily kaizen covers whole value streams, while events fix single workstations",
+      "Events build lasting skills, while daily kaizen produces only cosmetic changes"
+     ],
+     "src": "kaizen"
+    },
+    {
+     "id": "lean-manufacturing-14",
+     "q": "Why does the guide say a kaizen needs a stable standard before improvement starts?",
+     "opts": [
+      "Standards let the team skip the check step of the PDCA cycle",
+      "Standards reduce the number of people needed on the event team",
+      "Without a baseline, the team cannot tell whether its change actually helped",
+      "Auditors require written standards before any improvement can be approved"
+     ],
+     "src": "kaizen"
+    },
+    {
+     "id": "lean-manufacturing-15",
+     "q": "A team lead proposes judging the kaizen program by the number of events held this year. What does the guide say is wrong with this?",
+     "opts": [
+      "Event counts are too hard to collect from different departments",
+      "Event counts ignore the cost of facilitators and materials",
+      "Counting events hides whether safety, quality, delivery and cost actually improved",
+      "Event counts reward only the sites with the largest teams"
+     ],
+     "src": "kaizen"
+    },
+    {
+     "id": "lean-manufacturing-16",
+     "q": "A team writes down the expected scrap rate and extra cost in the Plan step before testing. What does this prediction mainly allow in the Check step?",
+     "opts": [
+      "A faster rollout of the change to every machine in the plant",
+      "A real comparison of result with expectation, revealing whether the theory was right",
+      "A guarantee that the tested change will meet the target",
+      "Skipping the measurement plan because the outcome is already known"
+     ],
+     "src": "pdca-cycle"
+    },
+    {
+     "id": "lean-manufacturing-17",
+     "q": "Why did Deming prefer \"Study\" over \"Check\" in the third step of the cycle?",
+     "opts": [
+      "Check implied stopping production for a formal quality inspection",
+      "Check was a mistranslation that changed the order of the steps",
+      "Study allows the Act step to be skipped when results are good",
+      "Study focuses on predicting results, examining outcomes and revising the theory"
+     ],
+     "src": "pdca-cycle"
+    },
+    {
+     "id": "lean-manufacturing-18",
+     "q": "A team keeps launching new countermeasures, but nobody measures whether earlier ones changed the KPI. Which common PDCA mistake is this?",
+     "opts": [
+      "Plan, do, do, do: actions pile up without a check of their effect",
+      "Testing the change on too large a scale",
+      "Planning at the conference table without visiting the gemba",
+      "Blaming operators during the Check step"
+     ],
+     "src": "pdca-cycle"
+    },
+    {
+     "id": "lean-manufacturing-19",
+     "q": "Which statement correctly describes the split of content on an A3 report?",
+     "opts": [
+      "Plan and follow-up sit on the left; background and current condition sit on the right",
+      "Countermeasures sit on the left; background and root cause analysis sit on the right",
+      "Data and charts sit on the left; all text explanations sit on the right",
+      "Problem analysis sits on the left; countermeasures, plan and follow-up sit on the right"
+     ],
+     "src": "a3-problem-solving"
+    },
+    {
+     "id": "lean-manufacturing-20",
+     "q": "In the worked A3 example, why did the owner note that fixing the housing cause alone would not meet the target?",
+     "opts": [
+      "Removing housing lateness still leaves more late orders than a 95 percent target allows",
+      "Housing delays account for only a small share of the late orders",
+      "The target was set before any current condition data existed",
+      "Overtime was ruled out, so housing delays could not be addressed"
+     ],
+     "src": "a3-problem-solving"
+    },
+    {
+     "id": "lean-manufacturing-21",
+     "q": "What is the key rule for a mentor coaching an A3 owner?",
+     "opts": [
+      "Ask questions and let the owner keep writing the sheet",
+      "Rewrite weak sections so the sheet is correct before review",
+      "Give the root cause early to save the owner's time",
+      "Approve the A3 once all planned actions are marked done"
+     ],
+     "src": "a3-problem-solving"
+    },
+    {
+     "id": "lean-manufacturing-22",
+     "q": "Shingo's source inspection, as used in poka-yoke, differs from successive inspection mainly in which way?",
+     "opts": [
+      "It has the next worker check the previous step, one step late",
+      "It verifies conditions before the step starts, catching errors before they become defects",
+      "It sorts good from bad parts at the end of the line",
+      "It relies on a second operator signing off completed work"
+     ],
+     "src": "poka-yoke"
+    },
+    {
+     "id": "lean-manufacturing-23",
+     "q": "An operator tightens bolts, and the fixture clamp releases only after the controller has counted six torque-OK tightenings. Which poka-yoke method is this?",
+     "opts": [
+      "Contact method",
+      "Fixed-value method",
+      "Information enhancement",
+      "Motion-step method"
+     ],
+     "src": "poka-yoke"
+    },
+    {
+     "id": "lean-manufacturing-24",
+     "q": "A plant installs a poka-yoke device that catches errors but never investigates why they occur. What does the guide say the device becomes?",
+     "opts": [
+      "Just a scrap sorter",
+      "A durable quality standard",
+      "A leading indicator",
+      "A source inspection"
+     ],
+     "src": "poka-yoke"
+    }
+   ],
+   "de": [
+    {
+     "id": "lean-manufacturing-7",
+     "q": "Im LEI-LKW-Beispiel (ein Lkw mit drei Tonnen Nutzlast muss sechs Tonnen transportieren): Welches Lieferschema vermeidet Muda, Mura und Muri?",
+     "opts": [
+      "Eine Fahrt mit sechs Tonnen",
+      "Zwei Fahrten mit je drei Tonnen",
+      "Drei Fahrten mit je zwei Tonnen",
+      "Zwei Fahrten mit vier und zwei Tonnen"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-8",
+     "q": "Was ist der Hauptzweck des Schritts Shine in 5S?",
+     "opts": [
+      "Das Entfernen nicht benötigter Gegenstände aus dem Arbeitsbereich",
+      "Die Vorbereitung des Arbeitsplatzes auf Kundenaudits und Besuche",
+      "Das Polieren von Betriebsmitteln zur Verlängerung der Nutzungsdauer",
+      "Die Reinigung des Bereichs, damit Undichtigkeiten und lose Teile bei der Prüfung sichtbar werden"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-9",
+     "q": "Was unterscheidet beim SMED das interne vom externen Rüsten?",
+     "opts": [
+      "Internes Rüsten wird von der Instandhaltung, externes von den Bedienern durchgeführt",
+      "Internes Rüsten betrifft Werkzeuge, externes Rüsten Softwareeinstellungen",
+      "Internes Rüsten ist standardisiert, externes Rüsten erfolgt improvisiert",
+      "Internes Rüsten erfordert einen Maschinenstillstand, externes kann bei laufender Maschine erfolgen"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-10",
+     "q": "Warum gilt laut Leitfaden die Abschaltende Poka-Yoke als wirksamste Art?",
+     "opts": [
+      "Sie ist das günstigste Gerät zur Installation",
+      "Sie alarmiert den Bediener nur mit Ton oder Licht",
+      "Sie erfasst Fehler für eine spätere statistische Auswertung",
+      "Sie verhindert, dass der Fehler überhaupt auftritt"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-11",
+     "q": "Warum stoppt eine Andon-Linie nach Toyota-Vorbild nicht unbedingt in dem Moment, in dem ein Bediener die Leine zieht?",
+     "opts": [
+      "Das Ziehen der Leine wird nur protokolliert, nie ausgewertet",
+      "Stopps sind nur zwischen den Schichten erlaubt",
+      "Der Teamleiter muss den Stopp zunächst genehmigen",
+      "Die Linie stoppt erst an einer festen Position, wenn das Problem nicht innerhalb der Taktzeit gelöst ist"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-12",
+     "q": "Woraus bestehen die drei Elemente der Standardarbeit?",
+     "opts": [
+      "Wertschöpfung, Fluss und Pull",
+      "Zykluszeit, Durchlaufzeit und Losgröße",
+      "Taktzeit, Arbeitsfolge und Standardbestand",
+      "Prozesskapazität, Kostenziel und Ausschussquote"
+     ]
+    },
+    {
+     "id": "lean-manufacturing-13",
+     "q": "Welche Paarung beschreibt laut Leitfaden zutreffend, wie tägliches Kaizen und ein Kaizen-Event zusammenhängen?",
+     "opts": [
+      "Events ersetzen das tägliche Kaizen, sobald ein Team genügend geschulte Moderatoren hat",
+      "Tägliches Kaizen baut die Problemlösung an der Basis auf; Events bringen schnelle Sprünge, dürfen aber nicht allein stehen",
+      "Tägliches Kaizen deckt ganze Wertströme ab, während Events einzelne Arbeitsplätze korrigieren",
+      "Events bauen dauerhafte Fähigkeiten auf, während tägliches Kaizen nur oberflächliche Veränderungen bringt"
+     ],
+     "src": "kaizen"
+    },
+    {
+     "id": "lean-manufacturing-14",
+     "q": "Warum verlangt der Leitfaden, dass vor Beginn einer Verbesserung ein stabiler Standard vorliegt?",
+     "opts": [
+      "Standards erlauben dem Team, den Prüfschritt des PDCA-Zyklus zu überspringen",
+      "Standards verringern die Zahl der Personen, die im Event-Team benötigt werden",
+      "Ohne Ausgangsbasis kann das Team nicht erkennen, ob seine Änderung tatsächlich geholfen hat",
+      "Auditoren verlangen schriftliche Standards, bevor eine Verbesserung genehmigt werden kann"
+     ],
+     "src": "kaizen"
+    },
+    {
+     "id": "lean-manufacturing-15",
+     "q": "Ein Teamleiter schlägt vor, das Kaizen-Programm an der Anzahl der in diesem Jahr durchgeführten Events zu messen. Was sagt der Leitfaden dazu, was daran falsch ist?",
+     "opts": [
+      "Event-Zahlen sind über verschiedene Abteilungen hinweg zu schwer zu erfassen",
+      "Event-Zahlen berücksichtigen nicht die Kosten für Moderatoren und Material",
+      "Das Zählen von Events verdeckt, ob Sicherheit, Qualität, Liefertreue und Kosten tatsächlich verbessert wurden",
+      "Event-Zahlen belohnen nur die Standorte mit den größten Teams"
+     ],
+     "src": "kaizen"
+    },
+    {
+     "id": "lean-manufacturing-16",
+     "q": "Ein Team dokumentiert die erwartete Ausschussquote und die zusätzlichen Kosten im Schritt Plan, bevor getestet wird. Was ermöglicht diese Prognose hauptsächlich im Schritt Check?",
+     "opts": [
+      "Eine schnellere Einführung der Änderung an allen Maschinen im Werk",
+      "Einen echten Vergleich von Ergebnis und Erwartung, der zeigt, ob die Theorie zutreffend war",
+      "Eine Garantie, dass die getestete Änderung das Ziel erreicht",
+      "Das Überspringen des Messplans, weil das Ergebnis bereits bekannt ist"
+     ],
+     "src": "pdca-cycle"
+    },
+    {
+     "id": "lean-manufacturing-17",
+     "q": "Warum bevorzugte Deming im dritten Schritt des Zyklus \"Study\" gegenüber \"Check\"?",
+     "opts": [
+      "Check bedeutete das Anhalten der Produktion für eine formelle Qualitätsprüfung",
+      "Check war eine Fehlübersetzung, die die Reihenfolge der Schritte veränderte",
+      "Study erlaubt, den Schritt Act zu überspringen, wenn die Ergebnisse gut sind",
+      "Study konzentriert sich auf das Vorhersagen von Ergebnissen, das Untersuchen der Resultate und das Überarbeiten der Theorie"
+     ],
+     "src": "pdca-cycle"
+    },
+    {
+     "id": "lean-manufacturing-18",
+     "q": "Ein Team startet immer neue Gegenmaßnahmen, aber niemand misst, ob frühere die Kennzahl verändert haben. Welcher typische PDCA-Fehler liegt hier vor?",
+     "opts": [
+      "Plan, Do, Do, Do: Maßnahmen häufen sich an, ohne dass ihre Wirkung überprüft wird",
+      "Die Änderung wird im zu großen Maßstab getestet",
+      "Planung am Besprechungstisch ohne Besuch am Gemba",
+      "Schuldzuweisungen an die Mitarbeiter im Schritt Check"
+     ],
+     "src": "pdca-cycle"
+    },
+    {
+     "id": "lean-manufacturing-19",
+     "q": "Welche Aussage beschreibt die Aufteilung der Inhalte auf einem A3-Bericht korrekt?",
+     "opts": [
+      "Plan und Nachverfolgung stehen links; Hintergrund und Ist-Zustand stehen rechts",
+      "Gegenmaßnahmen stehen links; Hintergrund und Ursachenanalyse stehen rechts",
+      "Daten und Diagramme stehen links; alle Texterläuterungen stehen rechts",
+      "Die Problemanalyse steht links; Gegenmaßnahmen, Plan und Nachverfolgung stehen rechts"
+     ],
+     "src": "a3-problem-solving"
+    },
+    {
+     "id": "lean-manufacturing-20",
+     "q": "Warum stellte der Verantwortliche im durchgearbeiteten A3-Beispiel fest, dass die Behebung der Ursache am Gehäuse allein das Ziel nicht erreichen würde?",
+     "opts": [
+      "Ohne die Gehäuseverspätungen bleiben mehr verspätete Aufträge übrig, als ein Ziel von 95 Prozent zulässt",
+      "Gehäuseverzögerungen machen nur einen kleinen Anteil der verspäteten Aufträge aus",
+      "Das Ziel wurde festgelegt, bevor es Daten zum Ist-Zustand gab",
+      "Überstunden waren ausgeschlossen, sodass Gehäuseverzögerungen nicht behoben werden konnten"
+     ],
+     "src": "a3-problem-solving"
+    },
+    {
+     "id": "lean-manufacturing-21",
+     "q": "Was ist die zentrale Regel für einen Mentor, der einen A3-Verantwortlichen coacht?",
+     "opts": [
+      "Fragen stellen und den Verantwortlichen das Blatt selbst schreiben lassen",
+      "Schwache Abschnitte umschreiben, damit das Blatt vor der Prüfung korrekt ist",
+      "Die Grundursache früh nennen, um die Zeit des Verantwortlichen zu sparen",
+      "Den A3 genehmigen, sobald alle geplanten Maßnahmen als erledigt markiert sind"
+     ],
+     "src": "a3-problem-solving"
+    },
+    {
+     "id": "lean-manufacturing-22",
+     "q": "Was unterscheidet Shingos Quelleninspektion im Rahmen von Poka-Yoke hauptsächlich von der Nachfolgeprüfung (Successive Inspection)?",
+     "opts": [
+      "Der nachfolgende Mitarbeiter prüft den vorherigen Arbeitsschritt, allerdings einen Schritt verzögert",
+      "Sie prüft die Bedingungen vor Beginn des Arbeitsschritts und erkennt Fehler, bevor sie zu Fehlteilen werden",
+      "Sie sortiert am Ende der Linie gute von schlechten Teilen",
+      "Sie stützt sich darauf, dass ein zweiter Bediener die abgeschlossene Arbeit abzeichnet"
+     ],
+     "src": "poka-yoke"
+    },
+    {
+     "id": "lean-manufacturing-23",
+     "q": "Ein Bediener zieht Schrauben an, und die Vorrichtungsklemme gibt erst frei, nachdem die Steuerung sechs Anzugsvorgänge mit korrektem Drehmoment gezählt hat. Welche Poka-Yoke-Methode liegt hier vor?",
+     "opts": [
+      "Kontaktmethode",
+      "Methode mit festem Wert",
+      "Informationsverstärkung",
+      "Bewegungsschrittmethode"
+     ],
+     "src": "poka-yoke"
+    },
+    {
+     "id": "lean-manufacturing-24",
+     "q": "Ein Werk installiert eine Poka-Yoke-Vorrichtung, die Fehler erkennt, aber nie untersucht, warum sie auftreten. Was wird die Vorrichtung laut Leitfaden dadurch?",
+     "opts": [
+      "Lediglich eine Ausschusssortierung",
+      "Ein dauerhafter Qualitätsstandard",
+      "Ein Frühindikator",
+      "Eine Quelleninspektion"
+     ],
+     "src": "poka-yoke"
+    }
+   ]
+  },
+  "operational-excellence": {
+   "en": [
+    {
+     "id": "operational-excellence-7",
+     "q": "Why does the guide advise comparing OEE mainly against your own history instead of against a blanket world-class figure?",
+     "opts": [
+      "OEE cannot be measured reliably on more than one line",
+      "Industries, batch sizes and product mix produce very different OEE values",
+      "World-class OEE has been formally abolished by ISO standards",
+      "Only quality losses are comparable between plants"
+     ]
+    },
+    {
+     "id": "operational-excellence-8",
+     "q": "What does the guide say is the best place to start improvement work in a production plant?",
+     "opts": [
+      "The area with the loudest complaints",
+      "The area with the most employees",
+      "The newest equipment, to show quick wins",
+      "The bottleneck line"
+     ]
+    },
+    {
+     "id": "operational-excellence-9",
+     "q": "What is the purpose of leader standard work in shop floor management?",
+     "opts": [
+      "To document each worker's individual output",
+      "To replace operator work instructions",
+      "To give leaders a fixed routine so day-to-day business does not push the leadership system aside",
+      "To let leaders skip the daily meetings"
+     ]
+    },
+    {
+     "id": "operational-excellence-10",
+     "q": "What distinguishes the Improvement Kata and Coaching Kata from an A3 in the guide's treatment?",
+     "opts": [
+      "They are statistical methods replacing DMAIC",
+      "They train problem solving as a daily habit rather than solving one specific problem",
+      "They apply only to equipment maintenance",
+      "They can only be used by external consultants"
+     ]
+    },
+    {
+     "id": "operational-excellence-11",
+     "q": "How does the guide's pillar model treat the 'data and systems' pillar?",
+     "opts": [
+      "A dashboard counts as success once it is installed",
+      "Success depends on having the largest possible amount of data",
+      "Systems should drive desired behavior, and an unused dashboard is decoration",
+      "Data matters only in plants with MES software"
+     ]
+    },
+    {
+     "id": "operational-excellence-12",
+     "q": "Which statement best describes the Baldrige Excellence Framework compared with the Shingo Model?",
+     "opts": [
+      "It is limited to production tools",
+      "It is broader and organization-wide, with less tool depth for the shop floor",
+      "It only applies in Europe",
+      "It replaces principles with a list of tools"
+     ]
+    },
+    {
+     "id": "operational-excellence-13",
+     "q": "A plant's kWh per unit falls 8.5% in a high-volume month with no floor changes. According to the guide, what best explains the apparent improvement?",
+     "opts": [
+      "Fixed baseload energy is spread over more units",
+      "Variable energy per unit dropped",
+      "Emission factors were updated for the month",
+      "Scope 2 market-based accounting lowered the figure"
+     ],
+     "src": "sustainable-manufacturing"
+    },
+    {
+     "id": "operational-excellence-14",
+     "q": "A plant buys renewable energy certificates and reports two different Scope 2 figures. What does the GHG Protocol's Scope 2 Guidance call this requirement?",
+     "opts": [
+      "Double counting of purchased steam and electricity",
+      "Dual reporting of location-based and market-based figures",
+      "Boundary adjustment between Scope 2 and Scope 3",
+      "Mandatory offsetting of grid emissions"
+     ],
+     "src": "sustainable-manufacturing"
+    },
+    {
+     "id": "operational-excellence-15",
+     "q": "In the value stream example, why does raising coating yield from 92% to 98% cut CO2 per good unit even though no energy asset changes?",
+     "opts": [
+      "Higher yield lowers the grid emission factor for electricity",
+      "Scrapped parts carry all upstream cutting, machining and heat-treat energy",
+      "Coating ovens automatically run at lower temperature",
+      "Fewer good units are counted in the denominator"
+     ],
+     "src": "sustainable-manufacturing"
+    },
+    {
+     "id": "operational-excellence-16",
+     "q": "A plant tracks time to survive and time to recover for a critical part. When does the plant lose output?",
+     "opts": [
+      "When both values are identical for the part",
+      "When time to recover is shorter than time to survive",
+      "When time to survive is shorter than time to recover",
+      "When the supplier has more than one production site"
+     ],
+     "src": "supply-chain-resilience"
+    },
+    {
+     "id": "operational-excellence-17",
+     "q": "In the supplier risk scoring matrix, why does the cheap custom gasket rank almost as high as the wire harness?",
+     "opts": [
+      "It is sole-sourced with a long recovery time, a hidden spend-based blind spot",
+      "Its purchase price is far higher than the harness",
+      "Gaskets always have higher disruption likelihood than harnesses",
+      "Impact is scored by purchase volume rather than lost revenue"
+     ],
+     "src": "supply-chain-resilience"
+    },
+    {
+     "id": "operational-excellence-18",
+     "q": "Why does statistical safety stock fail to protect against a long supplier outage such as 20 weeks?",
+     "opts": [
+      "It sizes for normal demand and lead-time variation, not rare long disruptions",
+      "The formula assumes suppliers never deliver late",
+      "The service factor z is always set too low",
+      "Safety stock may only be held for finished goods"
+     ],
+     "src": "supply-chain-resilience"
+    },
+    {
+     "id": "operational-excellence-19",
+     "q": "In the worked skills matrix example, why was a 60% flexibility index misleading about the risk in the cell?",
+     "opts": [
+      "It is calculated plant-wide, so one weak cell ruins it",
+      "It only counts level 4 trainers instead of qualified operators",
+      "It hides tasks that rely on one or two qualified people",
+      "It ignores OSHA-required qualifications such as forklift operation"
+     ],
+     "src": "manufacturing-workforce-skills"
+    },
+    {
+     "id": "operational-excellence-20",
+     "q": "In TWI Job Instruction, what does a written job breakdown sheet contain for each important step?",
+     "opts": [
+      "Key points (how) and reasons for them (why)",
+      "Cycle time and the name of the qualified operator",
+      "Safety rating and required torque tolerance",
+      "Quality checks and the expiry date of training"
+     ],
+     "src": "manufacturing-workforce-skills"
+    },
+    {
+     "id": "operational-excellence-21",
+     "q": "Why does the guide recommend putting OSHA training and the skills ratings in the same matrix with expiry dates?",
+     "opts": [
+      "It removes the need for supervisors to sign off ratings",
+      "Supervisors can see in one place whether a person may do a task today",
+      "It lets the plant skip the annual lockout/tagout procedure inspection",
+      "It replaces ISO 9001 competence records with OSHA records"
+     ],
+     "src": "manufacturing-workforce-skills"
+    }
+   ],
+   "de": [
+    {
+     "id": "operational-excellence-7",
+     "q": "Warum rät der Leitfaden dazu, OEE vor allem mit der eigenen Historie zu vergleichen statt mit einem pauschalen Weltklasse-Wert?",
+     "opts": [
+      "OEE lässt sich auf mehr als einer Linie nicht verlässlich messen",
+      "Branchen, Losgrößen und Produktmix führen zu sehr unterschiedlichen OEE-Werten",
+      "Weltklasse-OEE wurde durch ISO-Normen formal abgeschafft",
+      "Nur Qualitätsverluste sind zwischen Werken vergleichbar"
+     ]
+    },
+    {
+     "id": "operational-excellence-8",
+     "q": "Was nennt der Leitfaden als besten Ansatzpunkt für Verbesserungsarbeit in einer Produktion?",
+     "opts": [
+      "Den Bereich mit den lautesten Beschwerden",
+      "Den Bereich mit den meisten Mitarbeitenden",
+      "Die neuesten Anlagen, um schnelle Erfolge zu zeigen",
+      "Den Engpass"
+     ]
+    },
+    {
+     "id": "operational-excellence-9",
+     "q": "Welchem Zweck dient die Führungsstandardarbeit im Shopfloor Management?",
+     "opts": [
+      "Der Dokumentation der individuellen Leistung jedes Mitarbeitenden",
+      "Dem Ersatz der Arbeitsanweisungen für Werker",
+      "Der Vorgabe einer festen Routine für Führungskräfte, damit das Tagesgeschäft das Führungssystem nicht verdrängt",
+      "Dem Überspringen der täglichen Besprechungen durch Führungskräfte"
+     ]
+    },
+    {
+     "id": "operational-excellence-10",
+     "q": "Worin unterscheiden sich Improvement Kata und Coaching Kata nach der Darstellung des Leitfadens von einem A3?",
+     "opts": [
+      "Sie sind statistische Methoden, die DMAIC ersetzen",
+      "Sie trainieren Problemlösung als tägliche Gewohnheit statt ein bestimmtes Problem zu lösen",
+      "Sie gelten nur für die Instandhaltung",
+      "Sie können nur von externen Beratern angewendet werden"
+     ]
+    },
+    {
+     "id": "operational-excellence-11",
+     "q": "Wie behandelt das Säulenmodell des Leitfadens die Säule „Daten und Systeme“?",
+     "opts": [
+      "Ein Dashboard gilt als erfolgreich, sobald es installiert ist",
+      "Erfolg hängt davon ab, möglichst viele Daten zu besitzen",
+      "Systeme sollen das gewünschte Verhalten steuern, und ein ungenutztes Dashboard ist reine Dekoration",
+      "Daten sind nur in Werken mit MES-Software relevant"
+     ]
+    },
+    {
+     "id": "operational-excellence-12",
+     "q": "Welche Aussage beschreibt das Baldrige Excellence Framework im Vergleich mit dem Shingo Model am treffendsten?",
+     "opts": [
+      "Es beschränkt sich auf Produktionswerkzeuge",
+      "Es ist breiter und unternehmensweit angelegt, mit geringerer Werkzeugtiefe für den Shopfloor",
+      "Es gilt nur in Europa",
+      "Es ersetzt Prinzipien durch eine Werkzeugliste"
+     ]
+    },
+    {
+     "id": "operational-excellence-13",
+     "q": "Der kWh-Verbrauch pro Einheit eines Werks sinkt in einem Monat mit hohem Volumen um 8,5 % ohne Änderungen an der Fertigung. Was erklärt laut Leitfaden die scheinbare Verbesserung am besten?",
+     "opts": [
+      "Die fixe Grundlast verteilt sich auf mehr Einheiten",
+      "Die variable Energie pro Einheit ist gesunken",
+      "Die Emissionsfaktoren wurden für den Monat aktualisiert",
+      "Die marktbasierte Scope-2-Bilanzierung hat den Wert gesenkt"
+     ],
+     "src": "sustainable-manufacturing"
+    },
+    {
+     "id": "operational-excellence-14",
+     "q": "Ein Werk kauft Zertifikate für erneuerbare Energien und weist daher zwei unterschiedliche Scope-2-Werte aus. Wie nennt der Scope 2 Guidance des GHG Protocol diese Anforderung?",
+     "opts": [
+      "Doppelzählung von zugekauftem Dampf und Strom",
+      "Duale Berichterstattung von standortbasierten und marktbasierten Werten",
+      "Grenzanpassung zwischen Scope 2 und Scope 3",
+      "Verpflichtende Kompensation der Netzemissionen"
+     ],
+     "src": "sustainable-manufacturing"
+    },
+    {
+     "id": "operational-excellence-15",
+     "q": "Warum senkt im Wertstrom-Beispiel die Steigerung der Beschichtungsausbeute von 92 % auf 98 % das CO2 pro Gutteil, obwohl sich keine Energieanlage verändert?",
+     "opts": [
+      "Eine höhere Ausbeute senkt den Netzemissionsfaktor für Strom",
+      "Ausschussteile tragen die gesamte vorgelagerte Energie für Schneiden, Bearbeiten und Wärmebehandlung",
+      "Beschichtungsöfen laufen automatisch mit niedrigerer Temperatur",
+      "Es werden weniger Gutteile im Nenner gezählt"
+     ],
+     "src": "sustainable-manufacturing"
+    },
+    {
+     "id": "operational-excellence-16",
+     "q": "Ein Werk erfasst für ein kritisches Teil die Zeit bis zum Überleben und die Zeit bis zur Wiederherstellung. Wann verliert das Werk Output?",
+     "opts": [
+      "Wenn beide Werte für das Teil identisch sind",
+      "Wenn die Zeit bis zur Wiederherstellung kürzer ist als die Zeit bis zum Überleben",
+      "Wenn die Zeit bis zum Überleben kürzer ist als die Zeit bis zur Wiederherstellung",
+      "Wenn der Lieferant mehr als einen Produktionsstandort hat"
+     ],
+     "src": "supply-chain-resilience"
+    },
+    {
+     "id": "operational-excellence-17",
+     "q": "Warum rangiert das günstige kundenspezifische Dichtungsteil in der Lieferantenrisiko-Bewertungsmatrix fast so hoch wie der Kabelbaum?",
+     "opts": [
+      "Es ist Single Source mit langer Wiederherstellungszeit, ein verdeckter Schwachpunkt bei ausgabenbasierter Betrachtung",
+      "Sein Einkaufspreis liegt weit über dem des Kabelbaums",
+      "Dichtungen haben immer eine höhere Störungswahrscheinlichkeit als Kabelbäume",
+      "Die Auswirkung wird nach Einkaufsvolumen statt nach entgangenem Umsatz bewertet"
+     ],
+     "src": "supply-chain-resilience"
+    },
+    {
+     "id": "operational-excellence-18",
+     "q": "Warum schützt statistischer Sicherheitsbestand nicht gegen einen langen Lieferantenausfall von 20 Wochen?",
+     "opts": [
+      "Er wird für normale Nachfrage- und Lieferzeitschwankungen dimensioniert, nicht für seltene lange Störungen",
+      "Die Formel geht davon aus, dass Lieferanten nie verspätet liefern",
+      "Der Servicefaktor z wird immer zu niedrig angesetzt",
+      "Sicherheitsbestand darf nur für Fertigwaren vorgehalten werden"
+     ],
+     "src": "supply-chain-resilience"
+    },
+    {
+     "id": "operational-excellence-19",
+     "q": "Warum war ein Flexibilitätsindex von 60 % in dem durchgerechneten Qualifikationsmatrix-Beispiel irreführend in Bezug auf das Risiko in der Zelle?",
+     "opts": [
+      "Er wird werksweit berechnet, sodass eine schwache Zelle ihn verfälscht",
+      "Er zählt nur Trainer der Stufe 4 statt qualifizierter Bediener",
+      "Er verdeckt Aufgaben, die von ein oder zwei qualifizierten Personen abhängen",
+      "Er ignoriert von OSHA vorgeschriebene Qualifikationen wie den Staplerschein"
+     ],
+     "src": "manufacturing-workforce-skills"
+    },
+    {
+     "id": "operational-excellence-20",
+     "q": "Was enthält ein schriftliches Arbeitsunterweisungsblatt nach TWI Job Instruction für jeden wichtigen Schritt?",
+     "opts": [
+      "Schlüsselpunkte (Wie) und deren Begründungen (Warum)",
+      "Zykluszeit und den Namen des qualifizierten Bedieners",
+      "Sicherheitsbewertung und vorgeschriebene Drehmomenttoleranz",
+      "Qualitätsprüfungen und das Ablaufdatum der Schulung"
+     ],
+     "src": "manufacturing-workforce-skills"
+    },
+    {
+     "id": "operational-excellence-21",
+     "q": "Warum empfiehlt der Leitfaden, die OSHA-Schulungen und die Kompetenzbewertungen mit Ablaufdaten in derselben Matrix zu führen?",
+     "opts": [
+      "Es entfällt die Notwendigkeit, dass Vorgesetzte Bewertungen unterzeichnen",
+      "Vorgesetzte sehen auf einen Blick, ob eine Person eine Aufgabe heute ausführen darf",
+      "Das Werk kann die jährliche Prüfung des Lockout/Tagout-Verfahrens auslassen",
+      "Sie ersetzt die Kompetenznachweise nach ISO 9001 durch OSHA-Nachweise"
+     ],
+     "src": "manufacturing-workforce-skills"
+    }
+   ]
+  },
+  "shop-floor-management": {
+   "en": [
+    {
+     "id": "shop-floor-management-7",
+     "q": "In a plant running three shifts, how does the guide suggest handling escalations that arise on second or third shift, when tiers 2 to 4 meet only in the daytime?",
+     "opts": [
+      "Night teams solve every issue alone since higher tiers never meet during their shift",
+      "Second and third shift teams wait and raise issues at their own next weekly tier 3 meeting",
+      "The plant manager moves the tier 4 meeting to the night shift so issues are heard",
+      "Shift leads enter open items on the board or shift log and hand them over in person"
+     ]
+    },
+    {
+     "id": "shop-floor-management-8",
+     "q": "Which question, from the guide's KPI selection principle, decides whether a metric belongs on a team's own board?",
+     "opts": [
+      "Is the metric required by the customer contract or corporate reporting",
+      "Is the metric already available in the ERP system without manual capture",
+      "Can the team itself influence the metric and does it have a target",
+      "Does the metric match what other plants display on their boards"
+     ]
+    },
+    {
+     "id": "shop-floor-management-9",
+     "q": "A recurring defect has an unclear cause, but the problem is limited to one line. Which method does the guide match to this problem type?",
+     "opts": [
+      "Direct action with a due date set in the tier meeting",
+      "A3 problem solving with a cross-functional team over several weeks",
+      "Value stream mapping of the entire product family",
+      "Five Whys or a fishbone diagram, taking hours"
+     ]
+    },
+    {
+     "id": "shop-floor-management-10",
+     "q": "Who, according to the guide, is the gemba walk type best suited to check whether boards, standards and escalations keep operations stable?",
+     "opts": [
+      "A problem-focused walk by specialists on one defect",
+      "A value stream walk by executives once a year",
+      "A management system walk by leaders at all levels",
+      "An informal chat with operators during breaks"
+     ]
+    },
+    {
+     "id": "shop-floor-management-11",
+     "q": "Why does the guide warn when a Toyota-style team leader role is added on top of a lead operator fully tied to line cycle time?",
+     "opts": [
+      "Such a person cannot respond quickly to andon calls",
+      "Union rules forbid hourly employees from holding leadership titles",
+      "The team leader would then lack access to the shop floor board",
+      "Toyota requires team leaders to be salaried supervisors"
+     ]
+    },
+    {
+     "id": "shop-floor-management-12",
+     "q": "According to the guide, why must a Power BI board for the line consider licensing carefully when many people view it?",
+     "opts": [
+      "Free viewers are limited to one report per workspace",
+      "Power BI reports cannot be shown on screens without Premium hardware",
+      "Embedding in Teams automatically grants all channel members edit rights",
+      "Viewers below Fabric F64 capacity each need a Pro or PPU license"
+     ]
+    },
+    {
+     "id": "shop-floor-management-13",
+     "q": "A cell's total work content is 160 seconds per unit and takt time is 75 seconds. How many operators does the guide's formula call for?",
+     "opts": [
+      "Four operators, because 160 divided by 40 is four",
+      "Two operators, because 2.13 rounds down",
+      "Three operators, because 2.13 rounds up",
+      "Two operators, because the margin covers the rest"
+     ],
+     "src": "standard-work"
+    },
+    {
+     "id": "shop-floor-management-14",
+     "q": "During an audit, an operator does not follow the standard because the standard no longer works. What action does the guide prescribe?",
+     "opts": [
+      "Fix the standard together with the operator",
+      "Retrain the operator with Job Instruction",
+      "Issue a written warning to the operator",
+      "Increase the audit frequency on that shift"
+     ],
+     "src": "standard-work"
+    },
+    {
+     "id": "shop-floor-management-15",
+     "q": "Which sequence lists the four steps of TWI Job Instruction in the correct order?",
+     "opts": [
+      "Present, prepare, try-out, follow up",
+      "Prepare, try-out, present, follow up",
+      "Prepare, present, try-out, follow up",
+      "Prepare, present, follow up, try-out"
+     ],
+     "src": "standard-work"
+    },
+    {
+     "id": "shop-floor-management-16",
+     "q": "Which condition makes an andon call count as a true call that requires action, rather than just status information?",
+     "opts": [
+      "It is triggered automatically by a machine controller",
+      "It is shown on an overhead board with station numbers",
+      "It requires a defined response from someone who must act",
+      "It is displayed in red rather than green or yellow"
+     ],
+     "src": "andon"
+    },
+    {
+     "id": "shop-floor-management-17",
+     "q": "A responder is busy with andon calls 90% of the time. What does the single-server queueing math predict about response waiting?",
+     "opts": [
+      "Waiting stays short because calls are handled one by one",
+      "Waiting grows roughly in proportion to utilization",
+      "Waiting grows far faster than utilization, producing very long average waits",
+      "Waiting only depends on how many lights are installed"
+     ],
+     "src": "andon"
+    },
+    {
+     "id": "shop-floor-management-18",
+     "q": "What is the main weakness of letting people decide at their own discretion whether to escalate an andon call?",
+     "opts": [
+      "It makes the escalation matrix too long to print",
+      "People hesitate to bother the next level, so escalation fails",
+      "It forces the line to stop at every call",
+      "It removes the need for reason codes on closed calls"
+     ],
+     "src": "andon"
+    },
+    {
+     "id": "shop-floor-management-19",
+     "q": "A plant wants to start digitizing production documents while keeping validation effort and regulatory risk low. Which document family does the guide recommend digitizing first?",
+     "opts": [
+      "Documents that tell people what to do, such as work instructions",
+      "Documents that prove what was done, such as batch records",
+      "Inspection records for critical characteristics only",
+      "Paper travelers used in medical device production"
+     ],
+     "src": "paperless-manufacturing"
+    },
+    {
+     "id": "shop-floor-management-20",
+     "q": "A plant lets operators log in to terminals with one shared account to speed up work. Why is this a problem for regulated records?",
+     "opts": [
+      "It prevents audit trails from being time-stamped",
+      "It slows the terminal because of simultaneous sessions",
+      "It removes attribution, so signatures and actions cannot be tied to individuals",
+      "It requires biometric signatures instead of passwords"
+     ],
+     "src": "paperless-manufacturing"
+    },
+    {
+     "id": "shop-floor-management-21",
+     "q": "In the worked business case, why does the project fail on hard savings alone?",
+     "opts": [
+      "Validation costs recur annually",
+      "Devices must be replaced every year",
+      "Recurring costs exceed the savings from escapes and paper costs",
+      "Content conversion is paid for each year"
+     ],
+     "src": "paperless-manufacturing"
+    }
+   ],
+   "de": [
+    {
+     "id": "shop-floor-management-7",
+     "q": "Wie schlägt der Leitfaden vor, Eskalationen aus der zweiten oder dritten Schicht zu behandeln, wenn die Ebenen 2 bis 4 nur tagsüber zusammenkommen?",
+     "opts": [
+      "Nachtteams lösen jedes Problem allein, da höhere Ebenen während ihrer Schicht nie zusammenkommen",
+      "Die Teams der zweiten und dritten Schicht warten und bringen die Themen in ihrer nächsten wöchentlichen Ebene-3-Besprechung vor",
+      "Der Werkleiter verlegt die Ebene-4-Besprechung in die Nachtschicht, damit die Themen gehört werden",
+      "Schichtleiter tragen offene Punkte auf dem Board oder im Schichtbuch ein und übergeben sie persönlich"
+     ]
+    },
+    {
+     "id": "shop-floor-management-8",
+     "q": "Welche Frage aus dem KPI-Auswahlprinzip des Leitfadens entscheidet, ob eine Kennzahl auf das eigene Board eines Teams gehört?",
+     "opts": [
+      "Ist die Kennzahl im Kundenvertrag oder in der Konzernberichterstattung vorgeschrieben",
+      "Ist die Kennzahl bereits im ERP-System ohne manuelle Erfassung verfügbar",
+      "Kann das Team die Kennzahl selbst beeinflussen und gibt es dafür ein Ziel",
+      "Entspricht die Kennzahl dem, was andere Werke auf ihren Boards zeigen"
+     ]
+    },
+    {
+     "id": "shop-floor-management-9",
+     "q": "Ein wiederkehrender Fehler hat eine unklare Ursache, das Problem beschränkt sich aber auf eine Linie. Welche Methode ordnet der Leitfaden diesem Problemtyp zu?",
+     "opts": [
+      "Sofortmaßnahme mit einem in der Besprechung der Ebene festgelegten Fälligkeitstermin",
+      "A3-Problemlösung mit einem bereichsübergreifenden Team über mehrere Wochen",
+      "Wertstromanalyse der gesamten Produktfamilie",
+      "Five Whys oder Ishikawa-Diagramm, das Stunden in Anspruch nimmt"
+     ]
+    },
+    {
+     "id": "shop-floor-management-10",
+     "q": "Wer soll laut Leitfaden den Gemba-Rundgang vom Typ Managementsystem durchführen, um zu prüfen, ob Boards, Standards und Eskalationen den Betrieb stabil halten?",
+     "opts": [
+      "Ein problemorientierter Rundgang durch Fachexperten zu einem bestimmten Fehler",
+      "Ein Wertstrom-Rundgang durch die Geschäftsleitung einmal im Jahr",
+      "Ein Rundgang durch Führungskräfte aller Ebenen zur Prüfung des Managementsystems",
+      "Ein informelles Gespräch mit Bedienern während der Pausen"
+     ]
+    },
+    {
+     "id": "shop-floor-management-11",
+     "q": "Warum warnt der Leitfaden, wenn eine Teamleiterrolle nach Vorbild von Toyota zusätzlich zu einem Linienführer eingeführt wird, der voll an die Taktzeit der Linie gebunden ist?",
+     "opts": [
+      "Eine solche Person kann auf Andon-Rufe nicht schnell genug reagieren",
+      "Tarifregeln verbieten Stundenlöhnern, Führungstitel zu tragen",
+      "Der Teamleiter hätte dann keinen Zugang zum Shopfloor-Board",
+      "Toyota verlangt, dass Teamleiter angestellte Vorgesetzte sind"
+     ]
+    },
+    {
+     "id": "shop-floor-management-12",
+     "q": "Warum muss bei einem Power-BI-Board für die Linie die Lizenzierung sorgfältig bedacht werden, wenn viele Personen es ansehen, laut Leitfaden?",
+     "opts": [
+      "Kostenlose Betrachter sind auf einen Bericht pro Arbeitsbereich beschränkt",
+      "Power-BI-Berichte lassen sich ohne Premium-Hardware nicht auf Bildschirmen anzeigen",
+      "Die Einbettung in Teams gewährt allen Kanalmitgliedern automatisch Bearbeitungsrechte",
+      "Betrachter unterhalb einer Fabric-F64-Kapazität benötigen jeweils eine Pro- oder PPU-Lizenz"
+     ]
+    },
+    {
+     "id": "shop-floor-management-13",
+     "q": "Die Gesamtarbeitsinhalt einer Zelle beträgt 160 Sekunden pro Einheit, und die Taktzeit beträgt 75 Sekunden. Wie viele Werker verlangt die Formel des Leitfadens?",
+     "opts": [
+      "Vier Werker, denn 160 geteilt durch 40 ergibt vier",
+      "Zwei Werker, denn 2,13 wird abgerundet",
+      "Drei Werker, denn 2,13 wird aufgerundet",
+      "Zwei Werker, denn der Puffer deckt den Rest ab"
+     ],
+     "src": "standard-work"
+    },
+    {
+     "id": "shop-floor-management-14",
+     "q": "Bei einem Audit hält sich ein Werker nicht an den Standard, weil dieser nicht mehr funktioniert. Welche Maßnahme schreibt der Leitfaden vor?",
+     "opts": [
+      "Den Standard gemeinsam mit dem Werker korrigieren",
+      "Den Werker mit Job Instruction nachschulen",
+      "Dem Werker eine schriftliche Abmahnung erteilen",
+      "Die Auditfrequenz in dieser Schicht erhöhen"
+     ],
+     "src": "standard-work"
+    },
+    {
+     "id": "shop-floor-management-15",
+     "q": "Welche Reihenfolge nennt die vier Schritte der TWI Job Instruction in der richtigen Abfolge?",
+     "opts": [
+      "Präsentieren, vorbereiten, erproben, nachverfolgen",
+      "Vorbereiten, erproben, präsentieren, nachverfolgen",
+      "Vorbereiten, präsentieren, erproben, nachverfolgen",
+      "Vorbereiten, präsentieren, nachverfolgen, erproben"
+     ],
+     "src": "standard-work"
+    },
+    {
+     "id": "shop-floor-management-16",
+     "q": "Welche Bedingung macht einen Andon-Ruf zu einem echten Ruf, der Handlung erfordert, und nicht nur zu einer Statusinformation?",
+     "opts": [
+      "Er wird automatisch durch eine Maschinensteuerung ausgelöst",
+      "Er wird auf einer Übersichtstafel mit Stationsnummern angezeigt",
+      "Er erfordert eine festgelegte Reaktion von einer Person, die handeln muss",
+      "Er wird rot statt grün oder gelb angezeigt"
+     ],
+     "src": "andon"
+    },
+    {
+     "id": "shop-floor-management-17",
+     "q": "Ein Verantwortlicher ist in 90 % der Zeit mit Andon-Rufen ausgelastet. Was sagt die Warteschlangenrechnung mit einem einzelnen Bediener für die Wartezeit auf Reaktion voraus?",
+     "opts": [
+      "Die Wartezeit bleibt kurz, weil Rufe nacheinander abgearbeitet werden",
+      "Die Wartezeit wächst etwa proportional zur Auslastung",
+      "Die Wartezeit wächst weit schneller als die Auslastung, mit sehr langen mittleren Wartezeiten",
+      "Die Wartezeit hängt nur davon ab, wie viele Leuchten installiert sind"
+     ],
+     "src": "andon"
+    },
+    {
+     "id": "shop-floor-management-18",
+     "q": "Was ist die Hauptschwäche, wenn Mitarbeitende nach eigenem Ermessen entscheiden, ob ein Andon-Ruf eskaliert wird?",
+     "opts": [
+      "Die Eskalationsmatrix wird zu lang, um sie auszudrucken",
+      "Die Mitarbeitenden zögern, die nächste Ebene zu informieren, sodass die Eskalation scheitert",
+      "Die Linie muss bei jedem Ruf stehen bleiben",
+      "Es entfällt die Notwendigkeit von Ursachencodes bei geschlossenen Rufen"
+     ],
+     "src": "andon"
+    },
+    {
+     "id": "shop-floor-management-19",
+     "q": "Ein Werk möchte mit der Digitalisierung der Produktionsdokumente beginnen und dabei den Validierungsaufwand und das regulatorische Risiko gering halten. Welche Dokumentenfamilie empfiehlt der Leitfaden zuerst zu digitalisieren?",
+     "opts": [
+      "Dokumente, die festlegen, was Mitarbeitende tun sollen, etwa Arbeitsanweisungen",
+      "Dokumente, die belegen, was getan wurde, etwa Chargenprotokolle",
+      "Prüfprotokolle nur für kritische Merkmale",
+      "Papierlaufkarten in der Medizinproduktefertigung"
+     ],
+     "src": "paperless-manufacturing"
+    },
+    {
+     "id": "shop-floor-management-20",
+     "q": "Ein Werk lässt Mitarbeitende zur Beschleunigung der Arbeit mit einem gemeinsamen Konto an den Terminals anmelden. Warum ist das für regulierte Aufzeichnungen ein Problem?",
+     "opts": [
+      "Es verhindert, dass Audit-Trails mit Zeitstempel versehen werden",
+      "Es verlangsamt das Terminal durch gleichzeitige Sitzungen",
+      "Es hebt die Zuordenbarkeit auf, sodass Signaturen und Handlungen keiner Einzelperson zugeordnet werden können",
+      "Es erfordert biometrische Signaturen statt Passwörtern"
+     ],
+     "src": "paperless-manufacturing"
+    },
+    {
+     "id": "shop-floor-management-21",
+     "q": "Warum scheitert das Projekt im ausgearbeiteten Business Case allein an den harten Einsparungen?",
+     "opts": [
+      "Die Validierungskosten fallen jährlich wiederkehrend an",
+      "Geräte müssen jedes Jahr ersetzt werden",
+      "Die laufenden wiederkehrenden Kosten übersteigen die Einsparungen durch Fehlerkosten und Papierkosten",
+      "Die Inhaltskonvertierung wird jedes Jahr neu bezahlt"
+     ],
+     "src": "paperless-manufacturing"
+    }
+   ]
+  },
+  "5s-visual-management": {
+   "en": [
+    {
+     "id": "5s-visual-management-1",
+     "q": "In the Cell 4 pilot, how are red-tagged items treated after tagging, according to the guide's Sort step?",
+     "opts": [
+      "Thrown away at the end of the Sort event to clear space quickly",
+      "Moved to a marked holding area and reviewed by decision owners within a set period",
+      "Returned to their original location until the next 5S audit",
+      "Stored in the supervisor's office until someone asks for them"
+     ]
+    },
+    {
+     "id": "5s-visual-management-2",
+     "q": "Why does the guide say the Cell 4 search-time saving alone may not pay for 5S in year 1?",
+     "opts": [
+      "Search time cannot be measured by observing operators on the floor",
+      "Search time saved only counts when the time becomes needed output or avoided cost",
+      "Labor rates are excluded from any 5S business case",
+      "5S materials are always capitalized and spread over many years"
+     ]
+    },
+    {
+     "id": "5s-visual-management-3",
+     "q": "A machine cleaning task requires removing guards and reaching into a danger zone. What does the guide say applies?",
+     "opts": [
+      "No special control, because cleaning is routine housekeeping",
+      "Energy control under lockout/tagout, since cleaning counts as servicing",
+      "Only a visual warning sign near the machine",
+      "A red tag attached to the machine during cleaning"
+     ]
+    },
+    {
+     "id": "5s-visual-management-4",
+     "q": "According to the guide, what does OSHA require regarding floor marking of aisles?",
+     "opts": [
+      "Aisles need marking only where forklifts operate at night",
+      "All aisles must be marked in yellow lines exactly 4 inches wide",
+      "Every aisle must use a color matching the material stored beside it",
+      "Permanent aisles must be appropriately marked, with no mandated color scheme"
+     ]
+    },
+    {
+     "id": "5s-visual-management-5",
+     "q": "Which pair of steps does the guide identify as where most 5S programs fail?",
+     "opts": [
+      "Set in order and Shine",
+      "Sort and Set in order",
+      "Standardize and Sustain",
+      "Sort and Shine"
+     ]
+    },
+    {
+     "id": "5s-visual-management-6",
+     "q": "Which visual device is a visual control rather than only an indicator?",
+     "opts": [
+      "A sign posted at the area entrance",
+      "A label naming the item on a shelf",
+      "A min/max line on a rack that guides replenishment",
+      "A photo of the area's standard condition"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "5s-visual-management-1",
+     "q": "Wie werden rot markierte Gegenstände in Zelle 4 nach dem Markieren laut dem Schritt Sortieren im Leitfaden behandelt?",
+     "opts": [
+      "Am Ende der Sortierveranstaltung weggeworfen, um schnell Platz zu schaffen",
+      "In einen gekennzeichneten Zwischenlagerbereich verbracht und innerhalb eines festgelegten Zeitraums von den Entscheidungsverantwortlichen geprüft",
+      "Bis zum nächsten 5S-Audit an ihren ursprünglichen Platz zurückgebracht",
+      "Im Büro des Vorgesetzten gelagert, bis jemand danach fragt"
+     ]
+    },
+    {
+     "id": "5s-visual-management-2",
+     "q": "Warum sagt der Leitfaden, dass die Einsparung der Suchzeit in Zelle 4 allein im ersten Jahr möglicherweise nicht die Kosten für 5S deckt?",
+     "opts": [
+      "Suchzeit lässt sich nicht durch Beobachtung der Mitarbeiter in der Produktion messen",
+      "Eingesparte Suchzeit zählt nur dann, wenn sie in benötigte Ausbringung oder vermiedene Kosten umgesetzt wird",
+      "Lohnsätze sind aus jeder 5S-Wirtschaftlichkeitsbetrachtung ausgeschlossen",
+      "5S-Materialien werden immer aktiviert und über viele Jahre abgeschrieben"
+     ]
+    },
+    {
+     "id": "5s-visual-management-3",
+     "q": "Eine Maschinenreinigung erfordert das Entfernen von Schutzvorrichtungen und das Greifen in einen Gefahrenbereich. Was gilt laut Leitfaden?",
+     "opts": [
+      "Keine besondere Sicherung, da Reinigung zur routinemäßigen Ordnungshaltung gehört",
+      "Energiesicherung nach Lockout/Tagout, da Reinigung als Instandhaltung gilt",
+      "Nur ein visuelles Warnschild in der Nähe der Maschine",
+      "Ein roter Anhänger an der Maschine während der Reinigung"
+     ]
+    },
+    {
+     "id": "5s-visual-management-4",
+     "q": "Was verlangt OSHA laut Leitfaden in Bezug auf die Bodenmarkierung von Gängen?",
+     "opts": [
+      "Gänge müssen nur dort markiert werden, wo Gabelstapler nachts fahren",
+      "Alle Gänge müssen mit gelben Linien von genau 4 Zoll Breite markiert werden",
+      "Jeder Gang muss eine Farbe haben, die dem daneben gelagerten Material entspricht",
+      "Dauerhafte Gänge müssen angemessen markiert werden, ein vorgeschriebenes Farbschema gibt es nicht"
+     ]
+    },
+    {
+     "id": "5s-visual-management-5",
+     "q": "Welches Schrittpaar nennt der Leitfaden als Stelle, an der die meisten 5S-Programme scheitern?",
+     "opts": [
+      "Set in order und Shine",
+      "Sort und Set in order",
+      "Standardize und Sustain",
+      "Sort und Shine"
+     ]
+    },
+    {
+     "id": "5s-visual-management-6",
+     "q": "Welches visuelle Hilfsmittel ist eine visuelle Steuerung und nicht nur ein Indikator?",
+     "opts": [
+      "Ein Schild am Bereichseingang",
+      "Ein Etikett mit der Benennung des Artikels auf einem Regal",
+      "Eine Min/Max-Markierung an einem Regal, die die Nachfüllung steuert",
+      "Ein Foto des Standardzustands des Bereichs"
+     ]
+    }
+   ]
+  },
+  "kanban-pull-system": {
+   "en": [
+    {
+     "id": "kanban-pull-system-1",
+     "q": "A pull system is defined by which single property, according to the guide's definition from Hopp and Spearman?",
+     "opts": [
+      "It only makes products to customer orders",
+      "It explicitly limits the amount of work in process",
+      "It uses physical cards for every part number",
+      "It eliminates all finished goods inventory"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-2",
+     "q": "Demand is 960 pieces per day, replenishment lead time is 0.25 day, safety factor is 10 percent, container holds 40. How many kanbans does the basic formula give?",
+     "opts": [
+      "6",
+      "9",
+      "7",
+      "11"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-3",
+     "q": "A press needs long changeovers and must run batches. Which kanban type triggers a batch when inventory falls to a minimum quantity of containers?",
+     "opts": [
+      "Withdrawal kanban",
+      "Two-bin kanban",
+      "Signal (triangle) kanban",
+      "Supplier kanban"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-4",
+     "q": "A plant has hundreds of variants on a common route, with irregular demand per variant. Which control method does the guide say fits better than part-specific kanban?",
+     "opts": [
+      "Two-bin replenishment for every variant",
+      "A supermarket for every part number",
+      "CONWIP cards for the whole line",
+      "Supplier e-kanban only"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-5",
+     "q": "With takt time of 0.9375 minutes and 40 pieces per container, what is the pitch, and what does it represent?",
+     "opts": [
+      "0.9375 minutes, the time to make one piece",
+      "37.5 minutes, the time to make one container",
+      "900 minutes, the daily available time",
+      "24 minutes, the time to change a model"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-6",
+     "q": "How does the guide recommend handling the relationship between MRP and kanban for kanban-controlled parts?",
+     "opts": [
+      "Let MRP keep creating planned orders alongside cards",
+      "Remove MRP from the plant completely",
+      "Flag them so MRP plans only capacity and forecasts, not daily orders",
+      "Use MRP only for runner parts on kanban"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "kanban-pull-system-1",
+     "q": "Ein Pull-System wird laut der Definition im Leitfaden von Hopp und Spearman durch welche einzige Eigenschaft bestimmt?",
+     "opts": [
+      "Es fertigt Produkte ausschließlich nach Kundenauftrag",
+      "Es begrenzt explizit die Menge an Work in Process",
+      "Es verwendet physische Karten für jede Teilenummer",
+      "Es eliminiert jeglichen Fertigwarenbestand"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-2",
+     "q": "Der Bedarf beträgt 960 Teile pro Tag, die Wiederbeschaffungszeit 0,25 Tage, der Sicherheitsfaktor 10 Prozent und ein Behälter fasst 40 Teile. Wie viele Kanbans ergibt die Grundformel?",
+     "opts": [
+      "6",
+      "9",
+      "7",
+      "11"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-3",
+     "q": "Eine Presse hat lange Rüstzeiten und muss in Losen produziert werden. Welche Kanban-Art löst ein Los aus, wenn der Bestand auf eine Mindestmenge an Behältern sinkt?",
+     "opts": [
+      "Entnahme-Kanban",
+      "Zwei-Behälter-Kanban",
+      "Signal-Kanban (Dreieck)",
+      "Lieferanten-Kanban"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-4",
+     "q": "Eine Anlage hat Hunderte Varianten auf einer gemeinsamen Route mit unregelmäßigem Bedarf je Variante. Welche Steuerungsmethode passt laut Leitfaden besser als teilespezifisches Kanban?",
+     "opts": [
+      "Zwei-Behälter-Versorgung für jede Variante",
+      "Ein Supermarkt für jede Teilenummer",
+      "CONWIP-Karten für die gesamte Linie",
+      "Nur E-Kanban beim Lieferanten"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-5",
+     "q": "Bei einer Taktzeit von 0,9375 Minuten und 40 Teilen je Behälter: Wie hoch ist der Pitch, und was stellt er dar?",
+     "opts": [
+      "0,9375 Minuten, die Zeit zur Fertigung eines Teils",
+      "37,5 Minuten, die Zeit zur Fertigung eines Behälters",
+      "900 Minuten, die tägliche verfügbare Zeit",
+      "24 Minuten, die Zeit für einen Modellwechsel"
+     ]
+    },
+    {
+     "id": "kanban-pull-system-6",
+     "q": "Wie empfiehlt der Leitfaden, das Verhältnis zwischen MRP und Kanban für kanbangesteuerte Teile zu handhaben?",
+     "opts": [
+      "MRP weiterhin Planaufträge neben den Karten erzeugen lassen",
+      "MRP vollständig aus dem Werk entfernen",
+      "Diese Teile kennzeichnen, sodass MRP nur Kapazität und Prognosen plant, nicht tägliche Aufträge",
+      "MRP nur für Laufteile mit Kanban verwenden"
+     ]
+    }
+   ]
+  },
+  "smed-changeover-reduction": {
+   "en": [
+    {
+     "id": "smed-changeover-reduction-1",
+     "q": "A shop starts timing a changeover when the machine stops and ends when the die is clamped. Why does this understate the real loss?",
+     "opts": [
+      "It counts external setup work twice",
+      "It omits run-down, run-up, adjustment and ramp to normal speed",
+      "It includes the operator's breaks",
+      "It ignores the time spent filming"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-2",
+     "q": "During a SMED project, which type of action does the guide say should come last in Shingo's list of techniques?",
+     "opts": [
+      "Separating internal from external setup",
+      "Mechanization",
+      "Standardizing function",
+      "Parallel operations"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-3",
+     "q": "Setup cost per changeover falls to one quarter. According to the classic lot-size formula, what happens to the economic lot size?",
+     "opts": [
+      "It falls to one quarter",
+      "It halves",
+      "It falls to one eighth",
+      "It stays unchanged"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-4",
+     "q": "Why should a team using SMED not simply speed up lockout/tagout steps to meet a time target?",
+     "opts": [
+      "OSHA exempts all die and mold changes",
+      "Lockout is only needed for stamping presses",
+      "Lockout steps are always external setup work",
+      "Setting up counts as servicing under OSHA's standard, so lockout is by default required"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-5",
+     "q": "A SMED team cuts changeover time sharply, but planning keeps old lot sizes and the machine idles longer. What did the project most likely skip?",
+     "opts": [
+      "Deciding beforehand how the saved time would be used",
+      "Filming the changeover",
+      "Buying quick-change hardware",
+      "Writing a pre-changeover checklist"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-6",
+     "q": "Which criticism of SMED practice did researchers raise, according to the guide?",
+     "opts": [
+      "It favors low-cost organizational fixes and overlooks equipment design solutions",
+      "It cannot be applied to presses",
+      "It requires costly hardware from the start",
+      "It ignores external setup entirely"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "smed-changeover-reduction-1",
+     "q": "Eine Anlage beginnt die Messung einer Umrüstung, wenn die Maschine stillsteht, und endet, wenn das Werkzeug gespannt ist. Warum unterschätzt dies den tatsächlichen Verlust?",
+     "opts": [
+      "Externe Rüstarbeiten werden doppelt gezählt",
+      "Auslaufen, Anlaufen, Einstellen und Hochfahren auf die Normalgeschwindigkeit werden nicht erfasst",
+      "Die Pausen des Bedieners werden mitgerechnet",
+      "Die für das Filmen aufgewendete Zeit wird ignoriert"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-2",
+     "q": "Welche Art von Maßnahme soll laut Leitfaden bei einem SMED-Projekt in Shingos Liste der Techniken an letzter Stelle stehen?",
+     "opts": [
+      "Trennung von interner und externer Rüstung",
+      "Mechanisierung",
+      "Standardisierung der Funktion",
+      "Parallele Arbeitsvorgänge"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-3",
+     "q": "Die Rüstkosten pro Umrüstvorgang sinken auf ein Viertel. Was geschieht nach der klassischen Losgrößenformel mit der wirtschaftlichen Losgröße?",
+     "opts": [
+      "Sie sinkt auf ein Viertel",
+      "Sie halbiert sich",
+      "Sie sinkt auf ein Achtel",
+      "Sie bleibt unverändert"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-4",
+     "q": "Warum sollte ein Team, das SMED anwendet, die Schritte zur Sperrung und Kennzeichnung (Lockout/Tagout) nicht einfach beschleunigen, um ein Zeitziel zu erreichen?",
+     "opts": [
+      "OSHA befreit alle Werkzeug- und Formwechsel von der Pflicht",
+      "Eine Sperrung ist nur bei Stanzpressen erforderlich",
+      "Sperrschritte sind immer externe Rüstarbeiten",
+      "Das Rüsten gilt nach dem OSHA-Standard als Wartung, daher ist die Sperrung standardmäßig vorgeschrieben"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-5",
+     "q": "Ein SMED-Team verkürzt die Umrüstzeit deutlich, doch die Planung behält die alten Losgrößen bei und die Maschine steht länger still. Was hat das Projekt vermutlich ausgelassen?",
+     "opts": [
+      "Die vorherige Festlegung, wie die gewonnene Zeit genutzt werden soll",
+      "Das Filmen der Umrüstung",
+      "Der Kauf von Schnellwechsel-Hardware",
+      "Das Erstellen einer Checkliste vor der Umrüstung"
+     ]
+    },
+    {
+     "id": "smed-changeover-reduction-6",
+     "q": "Welche Kritik an der SMED-Praxis haben Forscher laut Leitfaden geäußert?",
+     "opts": [
+      "Sie bevorzugt kostengünstige organisatorische Maßnahmen und übersieht konstruktive Lösungen an den Anlagen",
+      "Sie lässt sich nicht auf Pressen anwenden",
+      "Sie erfordert von Beginn an teure Hardware",
+      "Sie ignoriert die externe Rüstung vollständig"
+     ]
+    }
+   ]
+  },
+  "value-stream-mapping": {
+   "en": [
+    {
+     "id": "value-stream-mapping-7",
+     "q": "A plant holds 280 pieces of inventory between two processes and daily demand is 80 pieces. How many days of inventory should be written on the map?",
+     "opts": [
+      "3.5 days",
+      "0.3 days",
+      "2.8 days",
+      "22,400 days"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-8",
+     "q": "In the worked example, why must changeover times be cut with SMED in the future state?",
+     "opts": [
+      "Customers demand smaller packaging each month",
+      "Every variant is built daily, so five changeovers per process must fit into capacity",
+      "SMED removes the need for a supermarket after sawing",
+      "Changeovers are the only waste on the timeline"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-9",
+     "q": "What does a signal kanban do in a future state map?",
+     "opts": [
+      "Moves finished goods to the truck dock",
+      "Triggers a batch when supermarket inventory reaches a reorder point",
+      "Shows which operator is absent",
+      "Records electronic orders from the customer"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-10",
+     "q": "When should a FIFO lane with a maximum quantity be preferred over kanban between two processes?",
+     "opts": [
+      "When parts are high-variety and should not be built to stock",
+      "When the supplier is overseas",
+      "When the process has no operators",
+      "When takt time is unknown"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-11",
+     "q": "What is a core addition of Value Stream Mapping 4.0 compared with the classic method?",
+     "opts": [
+      "Mapping only the shop floor, not order handling",
+      "Replacing the timeline with a cost ledger",
+      "Dropping the future state map",
+      "Systematic analysis of information logistics alongside material flow"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-12",
+     "q": "What does the guide recommend before digitizing a complex process with value stream tools?",
+     "opts": [
+      "Establish a stable, lean flow with classic value stream design",
+      "Install sensors on all machines first",
+      "Replace the ERP system",
+      "Reduce the product family to one variant"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "value-stream-mapping-7",
+     "q": "Eine Anlage hält 280 Teile Bestand zwischen zwei Prozessen, und der tägliche Bedarf beträgt 80 Teile. Wie viele Tage Bestand sollen in die Wertstromkarte eingetragen werden?",
+     "opts": [
+      "3,5 Tage",
+      "0,3 Tage",
+      "2,8 Tage",
+      "22.400 Tage"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-8",
+     "q": "Warum müssen im Rechenbeispiel die Rüstzeiten im zukünftigen Zustand mit SMED reduziert werden?",
+     "opts": [
+      "Kunden verlangen jeden Monat kleinere Verpackungen",
+      "Jede Variante wird täglich gefertigt, daher müssen pro Prozess fünf Rüstvorgänge täglich in die Kapazität passen",
+      "SMED macht ein Supermarkt nach dem Sägen überflüssig",
+      "Rüstvorgänge sind die einzige Verschwendung in der Zeitleiste"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-9",
+     "q": "Was bewirkt ein Signal-Kanban in einer Zukunftszustandskarte?",
+     "opts": [
+      "Es bewegt Fertigwaren zur LKW-Rampe",
+      "Es löst eine Charge aus, wenn der Supermarktbestand einen Meldebestand erreicht",
+      "Es zeigt, welcher Mitarbeiter abwesend ist",
+      "Es erfasst elektronische Bestellungen des Kunden"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-10",
+     "q": "Wann sollte eine FIFO-Spur mit Maximalmenge gegenüber Kanban zwischen zwei Prozessen bevorzugt werden?",
+     "opts": [
+      "Wenn Teile mit hoher Variantenvielfalt vorliegen und nicht auf Lager gefertigt werden sollen",
+      "Wenn der Lieferant im Ausland sitzt",
+      "Wenn der Prozess keine Mitarbeiter hat",
+      "Wenn der Takt unbekannt ist"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-11",
+     "q": "Was ist eine zentrale Ergänzung des Value Stream Mapping 4.0 gegenüber der klassischen Methode?",
+     "opts": [
+      "Nur die Fertigungsfläche, nicht die Auftragsabwicklung wird abgebildet",
+      "Die Zeitleiste wird durch ein Kostenbuch ersetzt",
+      "Die Zukunftszustandskarte entfällt",
+      "Systematische Analyse der Informationslogistik neben dem Materialfluss"
+     ]
+    },
+    {
+     "id": "value-stream-mapping-12",
+     "q": "Was empfiehlt der Leitfaden, bevor ein komplexer Prozess mit Wertstromwerkzeugen digitalisiert wird?",
+     "opts": [
+      "Einen stabilen, schlanken Fluss mit klassischer Wertstromgestaltung herstellen",
+      "Zuerst Sensoren an allen Maschinen installieren",
+      "Das ERP-System ersetzen",
+      "Die Produktfamilie auf eine einzige Variante reduzieren"
+     ]
+    }
+   ]
+  },
+  "manufacturing-kpis": {
+   "en": [
+    {
+     "id": "manufacturing-kpis-7",
+     "q": "Two machines report OEE of 80% (450 min planned time) and 50% (150 min planned time). What is the correct way to report combined OEE?",
+     "opts": [
+      "Weight each machine's OEE by its planned time",
+      "Average the two percentages without weights",
+      "Take the lower of the two values",
+      "Multiply the two percentages together"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-8",
+     "q": "Rolled throughput yield for a chain of three process steps is obtained how?",
+     "opts": [
+      "Average the first pass yields of the steps",
+      "Multiply the first pass yields of the individual steps",
+      "Take the lowest first pass yield of any step",
+      "Add the scrap rates of all steps"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-9",
+     "q": "According to Little's Law, how can lead time be shortened at constant throughput?",
+     "opts": [
+      "Lengthen the planned production time",
+      "Increase the number of parts released",
+      "Raise capacity utilization toward 100%",
+      "Reduce the average work in process"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-10",
+     "q": "MTBF is 405 min and MTTR is 25 min. How is inherent availability derived, and what does it consider?",
+     "opts": [
+      "MTBF ÷ MTTR; breakdowns and changeovers",
+      "MTBF ÷ (MTBF + MTTR); breakdowns only",
+      "MTTR ÷ (MTBF + MTTR); breakdowns only",
+      "MTBF − MTTR; breakdowns and micro-stops"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-11",
+     "q": "Why can the OSHA TRIR not be compared directly with the German reportable-accident rate per 1,000 full-time equivalents?",
+     "opts": [
+      "The German rate excludes manufacturing plants",
+      "TRIR counts only fatal accidents",
+      "Reporting thresholds and rate bases differ",
+      "TRIR is calculated per calendar year only"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-12",
+     "q": "In a Power BI OEE model, what is the most robust way to avoid double-counting downtime minutes?",
+     "opts": [
+      "Store breakdown minutes in both fact tables and sum both",
+      "Aggregate downtime into the production fact at shift, line and product grain",
+      "Average the downtime percentages per row",
+      "Copy the full shift time into every product row"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "manufacturing-kpis-7",
+     "q": "Zwei Maschinen melden eine OEE von 80 % (450 min geplante Zeit) bzw. 50 % (150 min geplante Zeit). Wie wird die kombinierte OEE korrekt ausgewiesen?",
+     "opts": [
+      "Die OEE jeder Maschine nach ihrer geplanten Zeit gewichten",
+      "Die beiden Prozentwerte ohne Gewichtung mitteln",
+      "Den niedrigeren der beiden Werte übernehmen",
+      "Die beiden Prozentwerte miteinander multiplizieren"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-8",
+     "q": "Wie ergibt sich die gerollte Durchlaufausbeute (RTY) für eine Kette aus drei Prozessschritten?",
+     "opts": [
+      "Die Erstdurchlaufausbeuten der Schritte mitteln",
+      "Die Erstdurchlaufausbeuten der einzelnen Schritte multiplizieren",
+      "Die niedrigste Erstdurchlaufausbeute eines Schritts übernehmen",
+      "Die Ausschussquoten aller Schritte addieren"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-9",
+     "q": "Wie lässt sich nach Little's Law die Durchlaufzeit bei konstantem Durchsatz verkürzen?",
+     "opts": [
+      "Die geplante Produktionszeit verlängern",
+      "Die Anzahl der freigegebenen Teile erhöhen",
+      "Die Kapazitätsauslastung in Richtung 100 % steigern",
+      "Den durchschnittlichen Bestand in Arbeit (WIP) senken"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-10",
+     "q": "Die MTBF beträgt 405 min, die MTTR 25 min. Wie ergibt sich die inhärente Verfügbarkeit, und was berücksichtigt sie?",
+     "opts": [
+      "MTBF ÷ MTTR; Störungen und Rüstvorgänge",
+      "MTBF ÷ (MTBF + MTTR); nur Störungen",
+      "MTTR ÷ (MTBF + MTTR); nur Störungen",
+      "MTBF − MTTR; Störungen und Kleinstillstände"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-11",
+     "q": "Warum kann die TRIR nach OSHA nicht direkt mit der deutschen meldepflichtigen Unfallquote je 1.000 Vollzeitäquivalente verglichen werden?",
+     "opts": [
+      "Die deutsche Quote schließt Fertigungsstandorte aus",
+      "Die TRIR zählt nur tödliche Unfälle",
+      "Meldeschwellen und Bezugsgrößen unterscheiden sich",
+      "Die TRIR wird nur je Kalenderjahr berechnet"
+     ]
+    },
+    {
+     "id": "manufacturing-kpis-12",
+     "q": "Welches ist in einem Power-BI-OEE-Modell der robusteste Weg, Stillstandsminuten nicht doppelt zu zählen?",
+     "opts": [
+      "Stillstandsminuten in beiden Faktentabellen speichern und beide summieren",
+      "Stillstände im Produktionsfaktum auf Ebene Schicht, Linie und Produkt aggregieren",
+      "Die Stillstandsanteile je Zeile mitteln",
+      "Die volle Schichtzeit in jede Produktzeile kopieren"
+     ]
+    }
+   ]
+  },
+  "tpm-oee": {
+   "en": [
+    {
+     "id": "tpm-oee-1",
+     "q": "A company runs OEE reports but nobody uses the loss breakdown. According to the guide, where does OEE's real value lie in a TPM program?",
+     "opts": [
+      "In replacing the need for operators to inspect machines",
+      "In the single percentage compared with other plants each month",
+      "In the bonus target it gives each shift supervisor",
+      "In the minutes lost to each of the six losses, in Pareto order"
+     ]
+    },
+    {
+     "id": "tpm-oee-2",
+     "q": "A machine has OEE of 73.6% and planned production time covers 91.7% of calendar time. What does TEEP tell you that OEE alone does not?",
+     "opts": [
+      "How many breakdowns occur between two consecutive failures",
+      "How much calendar time existing equipment still offers for capacity decisions",
+      "Whether operators complete their cleaning and inspection routines",
+      "Which of the six losses is largest on that machine"
+     ]
+    },
+    {
+     "id": "tpm-oee-3",
+     "q": "A plant has stops of 3 minutes and stops of 40 minutes. Why must it fix one threshold between minor stops and breakdowns in writing?",
+     "opts": [
+      "ISO 22400 fixes the threshold at exactly five minutes",
+      "OSHA requires a documented threshold for every production stop",
+      "No standard fixes it, and silent changes make trends jump without physical cause",
+      "Minor stops are excluded from OEE if they are too short"
+     ]
+    },
+    {
+     "id": "tpm-oee-4",
+     "q": "A team calculates OEE as 73.6% from the three factors. Which quick check does the guide offer to detect wrong input data?",
+     "opts": [
+      "Good count times ideal cycle time divided by planned production time",
+      "Averaging the three factor percentages arithmetically",
+      "Comparing the result with the 85% world-class figure",
+      "Dividing run time by calendar time"
+     ]
+    },
+    {
+     "id": "tpm-oee-5",
+     "q": "In autonomous maintenance, what is the purpose of step 2, eliminating sources of contamination and hard-to-access areas?",
+     "opts": [
+      "Write the first complete lubrication and inspection standard",
+      "Stop dirt and leaks at the source and make inspection points reachable",
+      "Train operators on fasteners, hydraulics and pneumatics",
+      "Let teams set their own loss targets"
+     ]
+    },
+    {
+     "id": "tpm-oee-6",
+     "q": "An operator wants to clear a jam inside the clamp area of a molding machine. Under the guide's task sorting, how should this be treated?",
+     "opts": [
+      "As normal production needing no special control",
+      "As a group C task needing full lockout/tagout and authorized training",
+      "As routine minor servicing allowed with any alternative measure",
+      "As a maintenance-only task excluded from every OSHA rule"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "tpm-oee-1",
+     "q": "Ein Unternehmen erstellt OEE-Berichte, aber niemand nutzt die Aufschlüsselung der Verluste. Worin liegt laut Leitfaden der eigentliche Nutzen von OEE in einem TPM-Programm?",
+     "opts": [
+      "Darin, die Notwendigkeit zu ersetzen, dass Bediener Maschinen prüfen",
+      "In dem einen Prozentwert, der jeden Monat mit anderen Werken verglichen wird",
+      "In dem Bonusziel, das es jedem Schichtleiter vorgibt",
+      "In den Minuten, die durch jeden der sechs Verluste verloren gehen, sortiert nach Pareto"
+     ]
+    },
+    {
+     "id": "tpm-oee-2",
+     "q": "Eine Maschine hat eine OEE von 73,6 % und die geplante Produktionszeit umfasst 91,7 % der Kalenderzeit. Was zeigt die TEEP, das die OEE allein nicht zeigt?",
+     "opts": [
+      "Wie viele Störungen zwischen zwei aufeinanderfolgenden Ausfällen auftreten",
+      "Wie viel Kalenderzeit die vorhandenen Anlagen noch für Kapazitätsentscheidungen bieten",
+      "Ob Bediener ihre Reinigungs- und Inspektionsroutinen abschließen",
+      "Welcher der sechs Verluste an dieser Maschine am größten ist"
+     ]
+    },
+    {
+     "id": "tpm-oee-3",
+     "q": "Ein Werk hat Stillstände von 3 Minuten und Stillstände von 40 Minuten. Warum muss es eine Grenze zwischen Kleinstillständen und Störungen schriftlich festlegen?",
+     "opts": [
+      "ISO 22400 legt die Grenze auf genau fünf Minuten fest",
+      "OSHA verlangt für jeden Produktionsstillstand eine dokumentierte Grenze",
+      "Kein Standard legt sie verbindlich fest, und stille Änderungen lassen Trends ohne physikalische Ursache springen",
+      "Kleinstillstände werden aus der OEE ausgeschlossen, wenn sie zu kurz sind"
+     ]
+    },
+    {
+     "id": "tpm-oee-4",
+     "q": "Ein Team berechnet die OEE aus den drei Faktoren mit 73,6 %. Welche schnelle Prüfung bietet der Leitfaden, um falsche Eingangsdaten zu erkennen?",
+     "opts": [
+      "Gutmenge mal ideale Taktzeit, geteilt durch geplante Produktionszeit",
+      "Arithmetische Mittelung der drei Faktorprozente",
+      "Vergleich des Ergebnisses mit dem Weltklasse-Wert von 85 %",
+      "Division der Laufzeit durch die Kalenderzeit"
+     ]
+    },
+    {
+     "id": "tpm-oee-5",
+     "q": "Was ist im Rahmen der autonomen Instandhaltung der Zweck von Schritt 2, der Beseitigung von Verschmutzungsquellen und schwer zugänglichen Bereichen?",
+     "opts": [
+      "Das erste vollständige Schmier- und Prüfstandard schreiben",
+      "Schmutz und Leckagen an der Quelle stoppen und Prüfstellen erreichbar machen",
+      "Bediener in Verbindungselementen, Hydraulik und Pneumatik schulen",
+      "Teams ihre Verlustziele selbst festlegen lassen"
+     ]
+    },
+    {
+     "id": "tpm-oee-6",
+     "q": "Ein Bediener möchte einen Stau im Spannbereich einer Spritzgießmaschine beseitigen. Wie ist diese Tätigkeit nach der Aufgabensortierung des Leitfadens zu behandeln?",
+     "opts": [
+      "Als normale Produktion ohne besondere Kontrolle",
+      "Als Gruppe-C-Aufgabe, die vollständige Sperr- und Kennzeichnungsverfahren (Lockout/Tagout) und eine autorisierte Schulung erfordert",
+      "Als routinemäßige Kleinwartung, die mit jeder Ersatzmaßnahme erlaubt ist",
+      "Als reine Instandhaltungsaufgabe, die von allen OSHA-Regeln ausgenommen ist"
+     ]
+    }
+   ]
+  },
+  "six-sigma-root-cause-analysis": {
+   "en": [
+    {
+     "id": "six-sigma-root-cause-analysis-1",
+     "q": "A process shows both high Cp and low Cpk. What does the guide say this means and suggests doing first?",
+     "opts": [
+      "The specification limits are set too tight by the customer",
+      "The process variation is too wide and needs new equipment",
+      "The data is non-normal and needs a transformation",
+      "The process is off-center; center it before reducing variation"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-2",
+     "q": "A team's RCA ends with 'operator did not follow the work instruction.' What does the guide recommend next?",
+     "opts": [
+      "Record it as the root cause and retrain the operator",
+      "Ask why the system made that possible or likely",
+      "Add the operator's shift to the control chart",
+      "Close the report to protect honest reporting"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-3",
+     "q": "After a fishbone workshop, the team votes for the most likely cause and starts corrective action. What is the guide's objection?",
+     "opts": [
+      "Fishbone diagrams only work with five categories",
+      "The fishbone yields hypotheses, so the cause remains unverified",
+      "The fishbone needs a cumulative percentage line first",
+      "Voting should be done by the Champion alone"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-4",
+     "q": "A customer is receiving defective parts right now. According to the guide, which problem-solving method fits best?",
+     "opts": [
+      "PDCA, because it suits small daily improvements",
+      "DMAIC, because it has the deepest statistical analysis",
+      "8D, because containment comes before root cause analysis",
+      "A3, because the supervisor can own the problem"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-5",
+     "q": "Why does the guide warn that adding 1.5 to a sigma level computed from long-term data is misleading?",
+     "opts": [
+      "Long-term data always has fewer defects than short-term data",
+      "The 1.5 value only applies to attribute data",
+      "The long-term data already contains drift, so the shift is double-counted",
+      "Sigma levels must be rounded to whole numbers first"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-6",
+     "q": "What does the guide say about the Analyze phase before any improvement spending begins?",
+     "opts": [
+      "It should rank solutions by cost before data is collected",
+      "It can be skipped when the Pareto shows two main causes",
+      "It must prove causes with data, ideally verifying them on and off",
+      "It is complete once the fishbone has been drawn"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "six-sigma-root-cause-analysis-1",
+     "q": "Ein Prozess zeigt einen hohen Cp-Wert und einen niedrigen Cpk-Wert. Was besagt der Leitfaden dazu, und was wird als Erstes empfohlen?",
+     "opts": [
+      "Die Spezifikationsgrenzen wurden vom Kunden zu eng festgelegt",
+      "Die Prozessstreuung ist zu breit und erfordert neue Anlagen",
+      "Die Daten sind nicht normalverteilt und benötigen eine Transformation",
+      "Der Prozess ist nicht zentriert; zuerst zentrieren, dann die Streuung reduzieren"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-2",
+     "q": "Eine Ursachenanalyse endet mit der Feststellung „Der Bediener hat die Arbeitsanweisung nicht befolgt“. Was empfiehlt der Leitfaden als Nächstes?",
+     "opts": [
+      "Als Grundursache festhalten und den Bediener nachschulen",
+      "Fragen, warum das System dies ermöglicht oder begünstigt hat",
+      "Die Schicht des Bedieners in die Regelkarte aufnehmen",
+      "Den Bericht schließen, um ehrliche Berichterstattung zu schützen"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-3",
+     "q": "Nach einem Ishikawa-Workshop stimmt das Team für die wahrscheinlichste Ursache ab und beginnt mit der Korrekturmaßnahme. Was ist der Einwand des Leitfadens?",
+     "opts": [
+      "Ishikawa-Diagramme funktionieren nur mit fünf Kategorien",
+      "Das Ishikawa-Diagramm liefert Hypothesen, die Ursache bleibt also unbestätigt",
+      "Das Ishikawa-Diagramm benötigt zuerst eine kumulative Prozentlinie",
+      "Die Abstimmung sollte allein vom Champion durchgeführt werden"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-4",
+     "q": "Ein Kunde erhält gerade fehlerhafte Teile. Welche Problemlösungsmethode passt laut Leitfaden am besten?",
+     "opts": [
+      "PDCA, da sie sich für kleine tägliche Verbesserungen eignet",
+      "DMAIC, da sie die tiefste statistische Analyse bietet",
+      "8D, da die Eindämmung vor der Ursachenanalyse erfolgt",
+      "A3, da der Vorgesetzte das Problem übernehmen kann"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-5",
+     "q": "Warum warnt der Leitfaden davor, zu einem aus Langzeitdaten berechneten Sigma-Niveau 1,5 zu addieren?",
+     "opts": [
+      "Langzeitdaten weisen immer weniger Fehler auf als Kurzzeitdaten",
+      "Der Wert 1,5 gilt nur für Attributdaten",
+      "Die Langzeitdaten enthalten bereits Drift, sodass die Verschiebung doppelt berücksichtigt wird",
+      "Sigma-Niveaus müssen zuerst auf ganze Zahlen gerundet werden"
+     ]
+    },
+    {
+     "id": "six-sigma-root-cause-analysis-6",
+     "q": "Was sagt der Leitfaden zur Analysephase, bevor Verbesserungsinvestitionen beginnen?",
+     "opts": [
+      "Lösungen sollten vor der Datenerhebung nach Kosten gereiht werden",
+      "Sie kann übersprungen werden, wenn das Pareto-Diagramm zwei Hauptursachen zeigt",
+      "Ursachen müssen mit Daten belegt werden, idealerweise durch Verifizierung im und außerhalb des Prozesses",
+      "Sie ist abgeschlossen, sobald das Ishikawa-Diagramm gezeichnet wurde"
+     ]
+    }
+   ]
+  },
+  "production-scheduling-aps": {
+   "en": [
+    {
+     "id": "production-scheduling-aps-7",
+     "q": "Planners respond to late orders by raising planned lead times in the ERP. According to the guide, what typically follows?",
+     "opts": [
+      "Bottleneck throughput rises because material arrives earlier",
+      "Queues shrink because orders get more time to flow through",
+      "Earlier releases raise WIP, which lengthens actual lead time again",
+      "Due-date performance improves permanently once buffers are larger"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-8",
+     "q": "A machine's utilization rises from 80% to 95%, with variability and processing time unchanged. According to the VUT equation, what happens to average queue time?",
+     "opts": [
+      "It rises by about 19 percent",
+      "It grows almost fivefold",
+      "It roughly doubles",
+      "It stays about the same"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-9",
+     "q": "Order 4711 must start at the bottleneck Thursday, and the time buffer is three working days. When should material be released?",
+     "opts": [
+      "Thursday, exactly when the bottleneck starts",
+      "Monday, three working days before the bottleneck start",
+      "As early as possible, to keep the shop busy",
+      "Whenever the first machine is idle"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-10",
+     "q": "A line has 9.6 minutes of work per unit and 2.0-minute takt time, and needs 6 stations in practice. What is its balance efficiency?",
+     "opts": [
+      "60%",
+      "96%",
+      "80%",
+      "75%"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-11",
+     "q": "Why can a lot size larger than the EOQ still be a reasonable choice in practice?",
+     "opts": [
+      "The EOQ formula ignores holding costs entirely",
+      "Larger lots always shorten lead times",
+      "The cost curve is flat near the optimum, so rounding costs little",
+      "Setup cost is irrelevant at the optimum"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-12",
+     "q": "A planner wants the safety stock to protect against stockouts in a replenishment cycle. Which service measure does the formula SS = z × σ_D × √L use?",
+     "opts": [
+      "Cycle service level, the chance of no stockout per cycle",
+      "On-time delivery rate to customers",
+      "Fill rate, the share of demand served from stock",
+      "Inventory turnover per year"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-13",
+     "q": "For an item with lumpy, time-phased MRP requirements and moderate setup cost, which rule family does the guide recommend instead of a fixed EOQ?",
+     "opts": [
+      "Quantity discount analysis based on supplier price breaks",
+      "A larger fixed order quantity to cover the peaks",
+      "Dynamic rules such as Silver-Meal, part period balancing or Wagner-Whitin",
+      "The EPQ formula with a higher production rate"
+     ],
+     "src": "lot-sizing"
+    },
+    {
+     "id": "production-scheduling-aps-14",
+     "q": "Why does the economic production quantity (EPQ) give a larger lot than the EOQ for the same demand, setup cost and holding cost?",
+     "opts": [
+      "Inventory builds only at the rate P minus D during the run, so average inventory is lower",
+      "Setup costs rise when production runs at a finite rate",
+      "Holding costs are ignored while the machine is running",
+      "Production capacity is assumed to be unlimited in the EPQ model"
+     ],
+     "src": "lot-sizing"
+    },
+    {
+     "id": "production-scheduling-aps-15",
+     "q": "Why does the guide recommend checking lot sizes against capacity at a bottleneck work center even when the cost curve is flat?",
+     "opts": [
+      "Because bottleneck machines always need lot-for-lot ordering",
+      "Because holding cost is higher at bottleneck machines",
+      "Because EOQ cannot be calculated for bottleneck items",
+      "Because setup hours at the bottleneck are lost plant output, not just setup cost"
+     ],
+     "src": "lot-sizing"
+    },
+    {
+     "id": "production-scheduling-aps-16",
+     "q": "A purchased part has a ten-day lead time and is reviewed weekly. What protection interval must safety stock cover compared with continuous review?",
+     "opts": [
+      "Lead time plus the review period",
+      "Lead time alone, since review timing does not matter",
+      "Only the review period",
+      "Lead time minus the review period"
+     ],
+     "src": "manufacturing-inventory-management"
+    },
+    {
+     "id": "production-scheduling-aps-17",
+     "q": "A plant targets \"99% of requested units ship from stock.\" Why can a 95% cycle service level overshoot this target?",
+     "opts": [
+      "A 95% cycle service level never exceeds a 99% fill rate",
+      "Cycle service level always requires less safety stock than fill rate",
+      "Fill rate ignores order quantity, so it is always lower",
+      "Fill rate measures units served, and the same stock can give a higher fill rate than cycle service level"
+     ],
+     "src": "manufacturing-inventory-management"
+    },
+    {
+     "id": "production-scheduling-aps-18",
+     "q": "A seasonal item has a predictable trend that the forecast captures. Which standard deviation should the safety stock formula use?",
+     "opts": [
+      "Standard deviation of forecast errors",
+      "Standard deviation of the raw demand history",
+      "Average demand divided by lead time",
+      "Maximum daily usage minus average usage"
+     ],
+     "src": "manufacturing-inventory-management"
+    },
+    {
+     "id": "production-scheduling-aps-19",
+     "q": "A milk run route cycle takes 27.6 minutes against a 30-minute pitch. Why does the guide consider this design too tight?",
+     "opts": [
+      "Handling time should always exceed travel time on a route",
+      "The route is too short to justify using a tugger train",
+      "Any blocked crossing makes the train late and drains line-side safety containers",
+      "The cycle must equal the pitch exactly to avoid idle time"
+     ],
+     "src": "intralogistics"
+    },
+    {
+     "id": "production-scheduling-aps-20",
+     "q": "From-to chart analysis shows the largest flow is supermarket to assembly. What does the guide conclude about where the supermarket should be placed?",
+     "opts": [
+      "Close to the point of use, near the line",
+      "Next to receiving, to shorten inbound moves",
+      "Next to the warehouse, to shorten replenishment moves",
+      "Next to shipping, to balance outbound moves"
+     ],
+     "src": "intralogistics"
+    },
+    {
+     "id": "production-scheduling-aps-21",
+     "q": "A kanban loop has a 30-minute pitch, order lag of 1 and 15 minutes safety time. How does a shorter pitch affect the loop?",
+     "opts": [
+      "It leaves line-side stock unchanged and only changes route length",
+      "It increases line-side stock because deliveries become smaller",
+      "It reduces line-side stock but requires more frequent trips and handling",
+      "It removes the need for safety time in the formula"
+     ],
+     "src": "intralogistics"
+    }
+   ],
+   "de": [
+    {
+     "id": "production-scheduling-aps-7",
+     "q": "Planer reagieren auf verspätete Aufträge, indem sie die geplanten Durchlaufzeiten im ERP erhöhen. Was folgt laut Leitfaden typischerweise darauf?",
+     "opts": [
+      "Der Durchsatz des Engpasses steigt, weil das Material früher eintrifft",
+      "Die Warteschlangen werden kürzer, weil die Aufträge mehr Zeit zum Durchlaufen haben",
+      "Frühere Freigaben erhöhen den WIP, wodurch sich die tatsächliche Durchlaufzeit wieder verlängert",
+      "Die Liefertreue verbessert sich dauerhaft, sobald die Puffer größer sind"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-8",
+     "q": "Die Auslastung einer Maschine steigt von 80 % auf 95 %, während Variabilität und Bearbeitungszeit unverändert bleiben. Was passiert laut VUT-Gleichung mit der mittleren Warteschlangenzeit?",
+     "opts": [
+      "Sie steigt um etwa 19 Prozent",
+      "Sie wächst auf nahezu das Fünffache",
+      "Sie verdoppelt sich ungefähr",
+      "Sie bleibt etwa gleich"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-9",
+     "q": "Auftrag 4711 muss am Donnerstag am Engpass starten, und der Zeitpuffer beträgt drei Arbeitstage. Wann sollte das Material freigegeben werden?",
+     "opts": [
+      "Donnerstag, genau dann, wenn der Engpass startet",
+      "Montag, drei Arbeitstage vor dem Start am Engpass",
+      "So früh wie möglich, damit die Fertigung ausgelastet bleibt",
+      "Immer dann, wenn die erste Maschine im Leerlauf ist"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-10",
+     "q": "Eine Linie hat 9,6 Minuten Arbeitsinhalt pro Einheit und eine Taktzeit von 2,0 Minuten und benötigt in der Praxis 6 Stationen. Wie hoch ist ihre Abstimmungseffizienz?",
+     "opts": [
+      "60 %",
+      "96 %",
+      "80 %",
+      "75 %"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-11",
+     "q": "Warum kann eine Losgröße über der optimalen Bestellmenge (EOQ) in der Praxis dennoch eine sinnvolle Wahl sein?",
+     "opts": [
+      "Die EOQ-Formel berücksichtigt Lagerhaltungskosten überhaupt nicht",
+      "Größere Llose verkürzen immer die Durchlaufzeiten",
+      "Die Kostenkurve verläuft nahe dem Optimum flach, sodass Runden wenig kostet",
+      "Rüstkosten sind im Optimum irrelevant"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-12",
+     "q": "Ein Planer möchte den Sicherheitsbestand so auslegen, dass er Fehlbestände innerhalb eines Wiederbeschaffungszyklus verhindert. Welche Servicekennzahl verwendet die Formel SS = z × σ_D × √L?",
+     "opts": [
+      "Zyklusservicegrad, also die Wahrscheinlichkeit für keinen Fehlbestand je Zyklus",
+      "Termintreue der Lieferungen an Kunden",
+      "Lieferbereitschaftsgrad, der Anteil der Bedarfe aus dem Lager",
+      "Lagerumschlag pro Jahr"
+     ]
+    },
+    {
+     "id": "production-scheduling-aps-13",
+     "q": "Bei einem Artikel mit unregelmäßigen, zeitlich verteilten MRP-Bedarfen und moderaten Rüstkosten empfiehlt der Leitfaden anstelle einer festen EOQ welche Regelfamilie?",
+     "opts": [
+      "Mengenrabattanalyse auf Basis von Lieferantenpreisstaffeln",
+      "Eine größere feste Bestellmenge, um die Bedarfsspitzen abzudecken",
+      "Dynamische Regeln wie Silver-Meal, Part-Period-Balancing oder Wagner-Whitin",
+      "Die EPQ-Formel mit einer höheren Produktionsrate"
+     ],
+     "src": "lot-sizing"
+    },
+    {
+     "id": "production-scheduling-aps-14",
+     "q": "Warum ergibt die wirtschaftliche Produktionsmenge (EPQ) bei gleichem Bedarf, gleichen Rüst- und Lagerhaltungskosten eine größere Losgröße als die EOQ?",
+     "opts": [
+      "Während des Laufs baut sich der Bestand nur mit der Rate P minus D auf, daher ist der durchschnittliche Bestand niedriger",
+      "Rüstkosten steigen, wenn mit endlicher Rate produziert wird",
+      "Lagerhaltungskosten werden während der Maschinenlaufzeit ignoriert",
+      "Im EPQ-Modell wird unbegrenzte Produktionskapazität angenommen"
+     ],
+     "src": "lot-sizing"
+    },
+    {
+     "id": "production-scheduling-aps-15",
+     "q": "Warum empfiehlt der Leitfaden, Losgrößen an einem Engpassarbeitsplatz gegen die Kapazität zu prüfen, selbst wenn die Kostenkurve flach verläuft?",
+     "opts": [
+      "Weil Engpassmaschinen immer eine Bestellung Los für Los benötigen",
+      "Weil die Lagerhaltungskosten an Engpassmaschinen höher sind",
+      "Weil für Engpassartikel keine EOQ berechnet werden kann",
+      "Weil Rüststunden am Engpass verlorene Anlagenleistung sind, nicht nur Rüstkosten"
+     ],
+     "src": "lot-sizing"
+    },
+    {
+     "id": "production-scheduling-aps-16",
+     "q": "Ein zugekauftes Teil hat eine Wiederbeschaffungszeit von zehn Tagen und wird wöchentlich überprüft. Welches Schutzintervall muss der Sicherheitsbestand im Vergleich zur kontinuierlichen Überwachung abdecken?",
+     "opts": [
+      "Wiederbeschaffungszeit plus Überprüfungsperiode",
+      "Nur die Wiederbeschaffungszeit, da der Überprüfungszeitpunkt keine Rolle spielt",
+      "Nur die Überprüfungsperiode",
+      "Wiederbeschaffungszeit minus Überprüfungsperiode"
+     ],
+     "src": "manufacturing-inventory-management"
+    },
+    {
+     "id": "production-scheduling-aps-17",
+     "q": "Ein Werk hat das Ziel \"99 % der angeforderten Einheiten werden ab Lager versandt\". Warum kann ein Zyklus-Servicegrad von 95 % dieses Ziel übertreffen?",
+     "opts": [
+      "Ein Zyklus-Servicegrad von 95 % überschreitet nie eine Lieferbereitschaft von 99 %",
+      "Ein Zyklus-Servicegrad erfordert immer weniger Sicherheitsbestand als die Lieferbereitschaft",
+      "Die Lieferbereitschaft berücksichtigt die Bestellmenge nicht und ist daher immer niedriger",
+      "Die Lieferbereitschaft misst die gelieferten Einheiten, und derselbe Bestand kann eine höhere Lieferbereitschaft ergeben als der Zyklus-Servicegrad"
+     ],
+     "src": "manufacturing-inventory-management"
+    },
+    {
+     "id": "production-scheduling-aps-18",
+     "q": "Ein saisonaler Artikel folgt einem vorhersagbaren Trend, den die Prognose erfasst. Welche Standardabweichung sollte die Formel für den Sicherheitsbestand verwenden?",
+     "opts": [
+      "Standardabweichung der Prognosefehler",
+      "Standardabweichung der ursprünglichen Bedarfshistorie",
+      "Durchschnittlicher Bedarf geteilt durch die Wiederbeschaffungszeit",
+      "Maximaler Tagesverbrauch minus durchschnittlicher Verbrauch"
+     ],
+     "src": "manufacturing-inventory-management"
+    },
+    {
+     "id": "production-scheduling-aps-19",
+     "q": "Eine Milk-Run-Route benötigt 27,6 Minuten pro Zyklus bei einem Takt von 30 Minuten. Warum hält der Leitfaden diese Auslegung für zu knapp?",
+     "opts": [
+      "Die Bearbeitungszeit auf einer Route muss immer länger sein als die Fahrzeit",
+      "Die Route ist zu kurz, um den Einsatz eines Schleppzugs zu rechtfertigen",
+      "Jede blockierte Kreuzung führt zu einer verspäteten Schleife und leert die Sicherheitsbehälter an der Linie",
+      "Der Zyklus muss exakt dem Takt entsprechen, um Leerlaufzeiten zu vermeiden"
+     ],
+     "src": "intralogistics"
+    },
+    {
+     "id": "production-scheduling-aps-20",
+     "q": "Die Analyse der Von-Nach-Matrix zeigt, dass der größte Materialfluss vom Supermarkt zur Montage verläuft. Welche Schlussfolgerung zieht der Leitfaden für die Platzierung des Supermarkts?",
+     "opts": [
+      "Nahe am Verbrauchsort, in der Nähe der Linie",
+      "Neben dem Wareneingang, um die Zulaufwege zu verkürzen",
+      "Neben dem Lager, um die Nachschubwege zu verkürzen",
+      "Neben dem Versand, um die Ausgangswege zu verteilen"
+     ],
+     "src": "intralogistics"
+    },
+    {
+     "id": "production-scheduling-aps-21",
+     "q": "Ein Kanban-Regelkreis hat einen Takt von 30 Minuten, einen Auftragsverzug von 1 und 15 Minuten Sicherheitszeit. Wie wirkt sich ein kürzerer Takt auf den Regelkreis aus?",
+     "opts": [
+      "Der Bestand an der Linie bleibt unverändert, nur die Routenlänge ändert sich",
+      "Der Bestand an der Linie steigt, weil die Lieferungen kleiner werden",
+      "Der Bestand an der Linie sinkt, erfordert aber häufigere Fahrten und Handhabungen",
+      "Die Sicherheitszeit entfällt in der Formel"
+     ],
+     "src": "intralogistics"
+    }
+   ]
+  },
+  "digital-twin-manufacturing": {
+   "en": [
+    {
+     "id": "digital-twin-manufacturing-7",
+     "q": "A factory team plans a capital decision on a new assembly building that does not exist yet. Which integration level does the guide say is usually sufficient?",
+     "opts": [
+      "A well-validated digital model",
+      "A full digital twin with closed-loop control",
+      "A digital shadow fed by live MES data",
+      "A machine-level digital shadow with sensors"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-8",
+     "q": "According to the guide, why is a 3D visualization of a plant alone not enough to answer capacity questions?",
+     "opts": [
+      "It lacks process logic such as routings, times and resources",
+      "It cannot display moving vehicles",
+      "It needs more sensors than the plant has",
+      "It cannot be exported to ERP systems"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-9",
+     "q": "What is the purpose of the warm-up period in a discrete event simulation run?",
+     "opts": [
+      "To reduce the number of replications needed",
+      "To discard distorted results caused by the empty starting state",
+      "To calibrate standard times from the ERP system",
+      "To let the PLC controller initialize its program"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-10",
+     "q": "What distinguishes Azure Digital Twins from a simulation tool, according to the guide?",
+     "opts": [
+      "It only supports 3D geometry import",
+      "It models graphs and events but provides no discrete event simulation",
+      "It requires physical sensors on every asset",
+      "It replaces the ERP system as planning source"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-11",
+     "q": "What is the main risk of using a language model on top of a twin without a clean semantic model?",
+     "opts": [
+      "Plausible but wrong answers from faulty underlying data",
+      "Higher licensing costs for simulation replications",
+      "Loss of the Asset Administration Shell structure",
+      "Automatic write-back to PLC controllers"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-12",
+     "q": "Which problem in ERP master data does the guide describe as typical for setup times?",
+     "opts": [
+      "They are overwritten by MES confirmations nightly",
+      "They are always stored in minutes instead of seconds",
+      "They are missing for every purchased part",
+      "They are stored as flat values although they depend on sequence"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-13",
+     "q": "What distinguishes verification from validation of a simulation model?",
+     "opts": [
+      "Verification checks the model is built right; validation checks it is the right model",
+      "Verification compares against real plant data; validation checks the code for errors",
+      "Verification sets the number of runs; validation sets the warm-up length",
+      "Verification is done by the vendor; validation is done by the operators"
+     ],
+     "src": "manufacturing-simulation"
+    },
+    {
+     "id": "digital-twin-manufacturing-14",
+     "q": "Why does the guide say a bigger buffer between A and B barely helped in the worked example?",
+     "opts": [
+      "The buffer cannot hold more than five parts in this model",
+      "Station A is not the constraint, so the queue is only stored elsewhere",
+      "Station A's breakdowns dominate and cancel any buffer effect",
+      "Buffer size only affects throughput, never lead time"
+     ],
+     "src": "manufacturing-simulation"
+    },
+    {
+     "id": "digital-twin-manufacturing-15",
+     "q": "A team wants to halve the confidence interval width of a lead-time estimate. Roughly how many more replications are needed?",
+     "opts": [
+      "About four times as many",
+      "About twice as many",
+      "About eight times as many",
+      "About the same number with a longer run"
+     ],
+     "src": "manufacturing-simulation"
+    },
+    {
+     "id": "digital-twin-manufacturing-16",
+     "q": "A plant wants to find out where its production orders actually spend their lead time. Which minimum data does an event log need for process mining?",
+     "opts": [
+      "Operator name, machine ID and shift number",
+      "Case ID, activity and timestamp for each event",
+      "Planned routing, bill of materials and cost center",
+      "Order quantity, scrap count and customer name"
+     ],
+     "src": "process-mining-manufacturing"
+    },
+    {
+     "id": "digital-twin-manufacturing-17",
+     "q": "One bar-stock lot feeds two production orders, and the single staging event is counted twice in an order-centric log. Which approach does the guide recommend to avoid this?",
+     "opts": [
+      "Delete one of the two orders from the log",
+      "Use only PLC signals instead of ERP data",
+      "Object-centric process mining linking one event to several objects",
+      "Round all timestamps to the nearest hour"
+     ],
+     "src": "process-mining-manufacturing"
+    },
+    {
+     "id": "digital-twin-manufacturing-18",
+     "q": "In the worked example, one order shows milling before material staging. What does the guide conclude about this trace?",
+     "opts": [
+      "A true process deviation requiring operator discipline",
+      "A routing error that must be fixed in the ERP",
+      "Proof that the milling machine needs no staged material",
+      "A data-quality finding caused by a late staging scan"
+     ],
+     "src": "process-mining-manufacturing"
+    }
+   ],
+   "de": [
+    {
+     "id": "digital-twin-manufacturing-7",
+     "q": "Ein Fertigungsteam plant eine Investitionsentscheidung für ein neues Montagegebäude, das noch nicht existiert. Welche Integrationsstufe hält der Leitfaden in der Regel für ausreichend?",
+     "opts": [
+      "Ein gut validiertes digitales Modell",
+      "Ein vollständiger digitaler Zwilling mit geschlossenem Regelkreis",
+      "Ein digitaler Schatten, gespeist mit Live-Daten aus dem MES",
+      "Ein digitaler Schatten auf Maschinenebene mit Sensorik"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-8",
+     "q": "Warum reicht nach dem Leitfaden eine 3D-Visualisierung einer Anlage allein nicht aus, um Kapazitätsfragen zu beantworten?",
+     "opts": [
+      "Ihr fehlt die Prozesslogik wie Arbeitspläne, Zeiten und Ressourcen",
+      "Sie kann keine fahrenden Fahrzeuge darstellen",
+      "Sie benötigt mehr Sensoren, als die Anlage besitzt",
+      "Sie kann nicht in ERP-Systeme exportiert werden"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-9",
+     "q": "Welchem Zweck dient die Einschwingphase in einem Lauf einer diskreten Ereignissimulation?",
+     "opts": [
+      "Die Anzahl der benötigten Wiederholungen zu verringern",
+      "Verzerrte Ergebnisse zu verwerfen, die durch den leeren Startzustand entstehen",
+      "Standardzeiten aus dem ERP-System zu kalibrieren",
+      "Dem SPS-Regler die Initialisierung seines Programms zu ermöglichen"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-10",
+     "q": "Wodurch unterscheidet sich Azure Digital Twins nach dem Leitfaden von einem Simulationswerkzeug?",
+     "opts": [
+      "Es unterstützt nur den Import von 3D-Geometrie",
+      "Es modelliert Graphen und Ereignisse, bietet aber keine diskrete Ereignissimulation",
+      "Es benötigt physische Sensoren an jedem Asset",
+      "Es ersetzt das ERP-System als Planungsquelle"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-11",
+     "q": "Was ist das Hauptrisiko, wenn man ein Sprachmodell auf einen Zwilling aufsetzt, ohne ein sauberes semantisches Modell?",
+     "opts": [
+      "Plausible, aber falsche Antworten aus fehlerhaften Grunddaten",
+      "Höhere Lizenzkosten für Simulationswiederholungen",
+      "Verlust der Struktur der Verwaltungsschale",
+      "Automatisches Zurückschreiben in SPS-Steuerungen"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-12",
+     "q": "Welches Problem in den ERP-Stammdaten beschreibt der Leitfaden als typisch für Rüstzeiten?",
+     "opts": [
+      "Sie werden nachts von MES-Rückmeldungen überschrieben",
+      "Sie sind stets in Minuten statt in Sekunden hinterlegt",
+      "Sie fehlen für jedes zugekaufte Teil",
+      "Sie sind als feste Werte gespeichert, obwohl sie von der Reihenfolge abhängen"
+     ]
+    },
+    {
+     "id": "digital-twin-manufacturing-13",
+     "q": "Was unterscheidet Verifikation von Validierung eines Simulationsmodells?",
+     "opts": [
+      "Verifikation prüft, ob das Modell richtig gebaut ist; Validierung prüft, ob es das richtige Modell ist",
+      "Verifikation vergleicht mit realen Anlagendaten; Validierung prüft den Code auf Fehler",
+      "Verifikation legt die Anzahl der Läufe fest; Validierung legt die Einschwingzeit fest",
+      "Verifikation wird vom Anbieter durchgeführt; Validierung wird von den Bedienern durchgeführt"
+     ],
+     "src": "manufacturing-simulation"
+    },
+    {
+     "id": "digital-twin-manufacturing-14",
+     "q": "Warum sagt der Leitfaden, dass ein größerer Puffer zwischen A und B im Beispiel kaum half?",
+     "opts": [
+      "Der Puffer kann in diesem Modell nicht mehr als fünf Teile aufnehmen",
+      "Station A ist nicht der Engpass, daher wird die Warteschlange nur anderswo gespeichert",
+      "Die Störungen von Station A dominieren und heben jeden Puffereffekt auf",
+      "Die Puffergröße beeinflusst nur den Durchsatz, nie die Durchlaufzeit"
+     ],
+     "src": "manufacturing-simulation"
+    },
+    {
+     "id": "digital-twin-manufacturing-15",
+     "q": "Ein Team möchte die Breite des Konfidenzintervalls einer Durchlaufzeitschätzung halbieren. Wie viele zusätzliche Replikationen sind etwa nötig?",
+     "opts": [
+      "Etwa viermal so viele",
+      "Etwa doppelt so viele",
+      "Etwa achtmal so viele",
+      "Etwa dieselbe Anzahl mit längerer Laufzeit"
+     ],
+     "src": "manufacturing-simulation"
+    },
+    {
+     "id": "digital-twin-manufacturing-16",
+     "q": "Ein Werk möchte herausfinden, wo seine Fertigungsaufträge tatsächlich ihre Durchlaufzeit verbringen. Welche Mindestdaten benötigt ein Ereignisprotokoll für Process Mining?",
+     "opts": [
+      "Name des Bedieners, Maschinen-ID und Schichtnummer",
+      "Fall-ID, Aktivität und Zeitstempel für jedes Ereignis",
+      "Geplanter Arbeitsplan, Stückliste und Kostenstelle",
+      "Auftragsmenge, Ausschussanzahl und Kundenname"
+     ],
+     "src": "process-mining-manufacturing"
+    },
+    {
+     "id": "digital-twin-manufacturing-17",
+     "q": "Eine Stangenmaterial-Charge versorgt zwei Fertigungsaufträge, und das einzelne Bereitstellungsereignis wird in einem auftragszentrierten Protokoll doppelt gezählt. Welchen Ansatz empfiehlt der Leitfaden, um dies zu vermeiden?",
+     "opts": [
+      "Einen der beiden Aufträge aus dem Protokoll löschen",
+      "Nur SPS-Signale statt ERP-Daten verwenden",
+      "Objektzentriertes Process Mining, bei dem ein Ereignis mit mehreren Objekten verknüpft wird",
+      "Alle Zeitstempel auf die nächste volle Stunde runden"
+     ],
+     "src": "process-mining-manufacturing"
+    },
+    {
+     "id": "digital-twin-manufacturing-18",
+     "q": "Im durchgerechneten Beispiel erscheint bei einem Auftrag das Fräsen vor der Materialbereitstellung. Was schließt der Leitfaden aus diesem Trace?",
+     "opts": [
+      "Eine echte Prozessabweichung, die Disziplin der Bediener erfordert",
+      "Ein Arbeitsplanfehler, der im ERP korrigiert werden muss",
+      "Der Beweis, dass die Fräsmaschine kein bereitgestelltes Material benötigt",
+      "Ein Datenqualitätsbefund, verursacht durch einen verspäteten Bereitstellungsscan"
+     ],
+     "src": "process-mining-manufacturing"
+    }
+   ]
+  },
+  "sop-mrp-production-planning": {
+   "en": [
+    {
+     "id": "sop-mrp-production-planning-1",
+     "q": "What is the main purpose of S&OP in the planning hierarchy?",
+     "opts": [
+      "Set one cross-functional plan for demand, supply and inventory by product family",
+      "Sequence individual operations on each machine by hour",
+      "Calculate dated orders for every part and raw material",
+      "Replace the master production schedule with a sales forecast"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-2",
+     "q": "Why can MRP's planned orders look feasible on paper but fail on the shop floor?",
+     "opts": [
+      "MRP assumes infinite capacity and fixed lead times",
+      "MRP uses forecasts for components instead of the bill of materials",
+      "MRP only plans purchased parts, not made parts",
+      "MRP ignores inventory on hand when netting requirements"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-3",
+     "q": "In the MRP example, why must tube S-5 be netted at low-level code 2 rather than at level 1?",
+     "opts": [
+      "Level 1 netting would ignore the demand from the leg-frame releases",
+      "Purchased items are always netted at the lowest level",
+      "Low-level codes shorten the purchasing lead time",
+      "Level 2 items have no safety stock requirement"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-4",
+     "q": "A forecast shows 94% accuracy but is consistently about 2% too high. What is the likely consequence if supply follows it?",
+     "opts": [
+      "Service level rises because of the high accuracy",
+      "Tracking signal stays near zero indefinitely",
+      "Inventory builds up over time",
+      "Capacity becomes the constraint at every resource"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-5",
+     "q": "In the MPS example, what does discrete available to promise (ATP) in a period with an MPS receipt represent?",
+     "opts": [
+      "The forecast minus the planned production",
+      "The projected available balance at the end of the period",
+      "MPS quantity less customer orders until the next MPS receipt",
+      "Total safety stock held for that item"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-6",
+     "q": "According to the guide, which remedy against MRP nervousness performed better than extra safety stock?",
+     "opts": [
+      "Running MRP more often than daily",
+      "Switching all items to lot-for-lot at every level",
+      "Shortening all planned lead times",
+      "Freezing the near-term schedule and change-cost rules"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "sop-mrp-production-planning-1",
+     "q": "Was ist der Hauptzweck von S&OP in der Planungshierarchie?",
+     "opts": [
+      "Einen übergreifenden Plan für Bedarf, Versorgung und Bestand je Produktfamilie festlegen",
+      "Einzelne Arbeitsgänge an jeder Maschine stundengenau reihenfolgen",
+      "Terminierte Aufträge für jedes Teil und jeden Rohstoff berechnen",
+      "Den Master Production Schedule durch eine Absatzprognose ersetzen"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-2",
+     "q": "Warum können die geplanten Aufträge aus MRP auf dem Papier machbar wirken, aber auf dem Shopfloor scheitern?",
+     "opts": [
+      "MRP geht von unendlicher Kapazität und festen Durchlaufzeiten aus",
+      "MRP verwendet für Komponenten Prognosen statt der Stückliste",
+      "MRP plant nur Zukaufteile, nicht Eigenfertigungsteile",
+      "MRP berücksichtigt beim Nettobedarf keinen vorhandenen Lagerbestand"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-3",
+     "q": "Warum muss das Rohr S-5 im MRP-Beispiel auf der Dispositionsstufe 2 und nicht auf Stufe 1 verrechnet werden?",
+     "opts": [
+      "Eine Verrechnung auf Stufe 1 würde den Bedarf aus den Gestellholm-Freigaben ignorieren",
+      "Zukaufteile werden immer auf der niedrigsten Stufe verrechnet",
+      "Dispositionsstufen verkürzen die Beschaffungsdurchlaufzeit",
+      "Teile der Stufe 2 benötigen keinen Sicherheitsbestand"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-4",
+     "q": "Eine Prognose zeigt 94 % Genauigkeit, liegt aber stetig etwa 2 % zu hoch. Welche Folge ist bei einer Versorgung nach dieser Prognose wahrscheinlich?",
+     "opts": [
+      "Der Servicegrad steigt wegen der hohen Genauigkeit",
+      "Das Tracking-Signal bleibt dauerhaft nahe null",
+      "Der Bestand baut sich im Zeitverlauf auf",
+      "Die Kapazität wird an jeder Ressource zum Engpass"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-5",
+     "q": "Was stellt im MPS-Beispiel das diskrete Available to Promise (ATP) in einer Periode mit MPS-Zugang dar?",
+     "opts": [
+      "Die Prognose abzüglich der geplanten Produktion",
+      "Den projizierten verfügbaren Saldo am Ende der Periode",
+      "Die MPS-Menge abzüglich Kundenaufträge bis zum nächsten MPS-Zugang",
+      "Den gesamten Sicherheitsbestand für diesen Artikel"
+     ]
+    },
+    {
+     "id": "sop-mrp-production-planning-6",
+     "q": "Welche Maßnahme gegen die Nervosität von MRP war laut Leitfaden wirksamer als zusätzlicher Sicherheitsbestand?",
+     "opts": [
+      "MRP häufiger als täglich laufen lassen",
+      "Alle Artikel auf allen Stufen auf Losgröße 1 umstellen",
+      "Alle geplanten Durchlaufzeiten verkürzen",
+      "Den kurzfristigen Plan fixieren und Regeln für Änderungskosten anwenden"
+     ]
+    }
+   ]
+  },
+  "theory-of-constraints": {
+   "en": [
+    {
+     "id": "theory-of-constraints-1",
+     "q": "A plant's output is limited by one resource. What does the theory of constraints say about an hour saved at a non-constraint?",
+     "opts": [
+      "It lowers operating expense for the whole plant",
+      "It raises plant output by about the same hour",
+      "It changes nothing unless it relieves the constraint",
+      "It moves the constraint to the next machine"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-2",
+     "q": "Why does the guide say a wrongly identified constraint is not a serious reason to delay step 1?",
+     "opts": [
+      "Every machine in a plant is equally likely to be the constraint",
+      "Wrong choices are easy to correct without lasting damage",
+      "Subordination cancels the effect of a wrong choice",
+      "The five steps are repeated only once per year"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-3",
+     "q": "Why does the guide say 'constraint' and 'bottleneck' are not quite synonyms?",
+     "opts": [
+      "A bottleneck is always the most expensive machine",
+      "A bottleneck always refers to a policy rather than a machine",
+      "A constraint only exists when a machine has breakdowns",
+      "A constraint can also be the market, a material or a policy"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-4",
+     "q": "Why can the cost report and throughput accounting rank two products differently in the manifold plant?",
+     "opts": [
+      "Throughput accounting ranks by price per unit only",
+      "Throughput accounting ignores material cost completely",
+      "Standard costing includes the market price but throughput does not",
+      "Throughput accounting ranks by throughput per constraint minute, not margin per unit"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-5",
+     "q": "In the active period method, which resource is the momentary bottleneck?",
+     "opts": [
+      "The one with the longest uninterrupted active period",
+      "The one with the highest average utilization over the week",
+      "The one with the largest queue of finished parts",
+      "The one with the most breakdown minutes"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-6",
+     "q": "In drum-buffer-rope, what does the rope do?",
+     "opts": [
+      "Sets the detailed schedule for every work center",
+      "Protects the constraint with a pile of finished goods",
+      "Releases material at the pace the constraint can absorb",
+      "Ranks orders by their buffer penetration color"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "theory-of-constraints-1",
+     "q": "Eine Anlage wird durch eine einzige Ressource begrenzt. Was besagt die Theorie der Engpässe über eine eingesparte Stunde an einem Nicht-Engpass?",
+     "opts": [
+      "Sie senkt die Betriebskosten für die gesamte Anlage",
+      "Sie erhöht die Anlagenleistung um etwa dieselbe Stunde",
+      "Sie ändert nichts, es sei denn, sie entlastet den Engpass",
+      "Sie verlagert den Engpass auf die nächste Maschine"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-2",
+     "q": "Warum sagt der Leitfaden, dass ein falsch identifizierter Engpass kein ernsthafter Grund ist, Schritt 1 aufzuschieben?",
+     "opts": [
+      "Jede Maschine in einer Anlage ist gleichermaßen wahrscheinlich der Engpass",
+      "Falsche Entscheidungen lassen sich leicht korrigieren, ohne dauerhaften Schaden",
+      "Die Unterordnung hebt die Wirkung einer falschen Wahl auf",
+      "Die fünf Schritte werden nur einmal pro Jahr wiederholt"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-3",
+     "q": "Warum sagt der Leitfaden, dass „Engpass“ und „Bottleneck“ nicht ganz synonym sind?",
+     "opts": [
+      "Ein Bottleneck ist immer die teuerste Maschine",
+      "Ein Bottleneck bezeichnet immer eine Richtlinie statt einer Maschine",
+      "Ein Engpass existiert nur, wenn eine Maschine Ausfälle hat",
+      "Ein Engpass kann auch der Markt, ein Material oder eine Richtlinie sein"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-4",
+     "q": "Warum können Kostenrechnung und Durchsatzrechnung zwei Produkte in der Mehrproduktanlage unterschiedlich einstufen?",
+     "opts": [
+      "Die Durchsatzrechnung ordnet ausschließlich nach Preis pro Einheit",
+      "Die Durchsatzrechnung ignoriert die Materialkosten vollständig",
+      "Die Standardkostenrechnung berücksichtigt den Marktpreis, die Durchsatzrechnung jedoch nicht",
+      "Die Durchsatzrechnung ordnet nach Durchsatz pro Engpassminute, nicht nach Deckungsbeitrag pro Einheit"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-5",
+     "q": "Welche Ressource ist bei der Methode der aktiven Perioden der momentane Engpass?",
+     "opts": [
+      "Diejenige mit der längsten ununterbrochenen aktiven Periode",
+      "Diejenige mit der höchsten durchschnittlichen Auslastung über die Woche",
+      "Diejenige mit der größten Warteschlange fertiger Teile",
+      "Diejenige mit den meisten Ausfallminuten"
+     ]
+    },
+    {
+     "id": "theory-of-constraints-6",
+     "q": "Was bewirkt das Seil (Rope) in Drum-Buffer-Rope?",
+     "opts": [
+      "Es legt den Detailplan für jeden Arbeitsplatz fest",
+      "Es schützt den Engpass mit einem Stapel fertiger Erzeugnisse",
+      "Es gibt Material im Takt frei, den der Engpass aufnehmen kann",
+      "Es reiht Aufträge nach ihrer Puffer-Durchdringungsfarbe"
+     ]
+    }
+   ]
+  },
+  "aerospace-production-planning": {
+   "en": [
+    {
+     "id": "aerospace-production-planning-7",
+     "q": "A supplier lacks a complete back-to-birth record for a rotating engine disk. What is the planning consequence in MRO?",
+     "opts": [
+      "The disk cannot be reinstalled, so a replacement must be sourced",
+      "The disk may be reinstalled after an extra inspection",
+      "The disk can be reinstalled if its remaining cycles are estimated",
+      "The disk may be used on non-critical aircraft positions only"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-8",
+     "q": "Which event, among others, triggers a full or partial first article inspection under AS9102?",
+     "opts": [
+      "A change of shift pattern in the machining cell",
+      "A production break of more than two years",
+      "A routine recalibration of an existing gage",
+      "A price renegotiation with the raw material supplier"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-9",
+     "q": "What does AS9145 require that goes beyond approving a single sample part?",
+     "opts": [
+      "Only a signed certificate of conformity for each lot",
+      "Demonstrating that the process delivers conforming parts at customer rate",
+      "A guaranteed fixed price for the first five years",
+      "Certification of every employee as a Nadcap auditor"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-10",
+     "q": "Why does the guide advise planners not to treat rate targets such as rate 75 as commitments?",
+     "opts": [
+      "They are planning assumptions with high uncertainty and have slipped before",
+      "Aircraft makers never publish rate targets in advance",
+      "Rates only apply to engine suppliers, not structural suppliers",
+      "Regulators fix rates by law and suppliers cannot influence them"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-11",
+     "q": "In the guide's learning curve example, how does a 90 % curve compare with an 85 % curve for the first 100 units?",
+     "opts": [
+      "Required hours are about 46 % lower",
+      "Required hours are about the same",
+      "Required hours are about 46 % higher",
+      "Required hours double exactly"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-12",
+     "q": "According to queueing theory as described in the guide, why should a bottleneck not be planned at about 98 % utilization?",
+     "opts": [
+      "Machines wear out faster above 90 % utilization",
+      "Waiting time grows disproportionately as utilization approaches 100 %",
+      "Regulators prohibit planning above 95 % utilization",
+      "Setup times double above 90 % utilization"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "aerospace-production-planning-7",
+     "q": "Einer Lieferantin fehlt eine lückenlose Historie vom Anfang bis zum aktuellen Stand (back-to-birth) für eine rotierende Triebwerksscheibe. Welche Folge hat das für die Planung in MRO?",
+     "opts": [
+      "Die Scheibe kann nicht wieder eingebaut werden, daher muss ein Ersatzteil beschafft werden",
+      "Die Scheibe darf nach einer zusätzlichen Prüfung wieder eingebaut werden",
+      "Die Scheibe kann wieder eingebaut werden, wenn die Restzyklen geschätzt werden",
+      "Die Scheibe darf nur an unkritischen Flugzeugpositionen verwendet werden"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-8",
+     "q": "Welches Ereignis löst unter anderem eine vollständige oder teilweise Erstmusterprüfung nach AS9102 aus?",
+     "opts": [
+      "Ein Wechsel des Schichtmodells in der Bearbeitungszelle",
+      "Eine Produktionspause von mehr als zwei Jahren",
+      "Eine routinemäßige Kalibrierung einer bestehenden Prüflehre",
+      "Eine Neuverhandlung des Preises mit dem Rohstofflieferanten"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-9",
+     "q": "Was fordert AS9145 über die Freigabe eines einzelnen Musterteils hinaus?",
+     "opts": [
+      "Nur ein unterzeichnetes Konformitätszertifikat für jedes Los",
+      "Den Nachweis, dass der Prozess konforme Teile in der vom Kunden geforderten Rate liefert",
+      "Einen garantierten Festpreis für die ersten fünf Jahre",
+      "Die Zertifizierung jedes Mitarbeiters als Nadcap-Auditor"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-10",
+     "q": "Warum rät der Leitfaden Planern davon ab, Ratenziele wie Rate 75 als feste Zusagen zu behandeln?",
+     "opts": [
+      "Es handelt sich um Planungsannahmen mit hoher Unsicherheit, die sich bereits mehrfach verschoben haben",
+      "Flugzeughersteller veröffentlichen Ratenziele grundsätzlich nicht im Voraus",
+      "Raten gelten nur für Triebwerkslieferanten, nicht für Strukturlieferanten",
+      "Die Raten werden gesetzlich von den Behörden festgelegt, und Lieferanten können sie nicht beeinflussen"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-11",
+     "q": "Wie verhält sich im Lernkurvenbeispiel des Leitfadens eine 90-%-Kurve zu einer 85-%-Kurve für die ersten 100 Einheiten?",
+     "opts": [
+      "Der Stundenbedarf liegt etwa 46 % niedriger",
+      "Der Stundenbedarf liegt etwa gleich",
+      "Der Stundenbedarf liegt etwa 46 % höher",
+      "Der Stundenbedarf verdoppelt sich genau"
+     ]
+    },
+    {
+     "id": "aerospace-production-planning-12",
+     "q": "Warum sollte ein Engpass laut der Warteschlangentheorie im Leitfaden nicht mit einer Auslastung von etwa 98 % geplant werden?",
+     "opts": [
+      "Maschinen verschleißen oberhalb von 90 % Auslastung schneller",
+      "Die Wartezeit steigt überproportional, wenn sich die Auslastung 100 % nähert",
+      "Behörden verbieten eine Planung oberhalb von 95 % Auslastung",
+      "Rüstzeiten verdoppeln sich oberhalb von 90 % Auslastung"
+     ]
+    }
+   ]
+  },
+  "manufacturing-it-azure": {
+   "en": [
+    {
+     "id": "manufacturing-it-azure-7",
+     "q": "Why does the guide advise against building business logic on preview services such as the retired manufacturing data model and factory agents?",
+     "opts": [
+      "Previews cannot connect to OPC UA machines at all",
+      "Microsoft can retire previews quickly, as happened about a year after launch",
+      "Previews always cost more than generally available services",
+      "Previews cannot store data in open formats like Delta tables"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-8",
+     "q": "What does the guide say about the unified namespace (UNS)?",
+     "opts": [
+      "It is an ISA standard replacing the ISA-95 object model",
+      "It is a cloud service that Fabric provides",
+      "It is an architecture pattern where systems publish state to a hierarchical broker",
+      "It is a database for storing years of machine history"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-9",
+     "q": "What does the guide recommend for the Defender for IoT OT security retirement when planning a replacement?",
+     "opts": [
+      "Wait until October 2029 before starting evaluation",
+      "Move OT monitoring into IoT Central instead",
+      "Rely on a first-party Microsoft replacement product",
+      "Plan with the earlier date and finish replacement before mid-2028"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-10",
+     "q": "Why does the guide say a downtime reason Power App at the workstation helps predictive maintenance?",
+     "opts": [
+      "It creates the labeled failure history the model needs",
+      "It trains the model directly on the tablet",
+      "It reduces Fabric capacity consumption",
+      "It replaces the need for any sensor data"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-11",
+     "q": "Which relationship types does a robust genealogy data model need, according to the guide?",
+     "opts": [
+      "Material-in-material, material-to-process, process-to-result",
+      "Asset-to-signal, signal-to-unit, unit-to-shift",
+      "Order-to-customer, customer-to-invoice, invoice-to-payment",
+      "Sensor-to-gateway, gateway-to-broker, broker-to-cloud"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-12",
+     "q": "A team builds an OEE dashboard across several plants. What must be agreed first to keep the numbers comparable?",
+     "opts": [
+      "Definitions of availability, performance reference and quality",
+      "The Fabric capacity size per plant",
+      "The broker topic depth",
+      "The dashboard color scheme"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "manufacturing-it-azure-7",
+     "q": "Warum rät der Leitfaden davon ab, Geschäftslogik auf Vorschau-Diensten wie dem eingestellten Manufacturing-Datenmodell und den Factory Agents aufzubauen?",
+     "opts": [
+      "Vorschauen können sich überhaupt nicht mit OPC-UA-Maschinen verbinden",
+      "Microsoft kann Vorschauen schnell einstellen, wie es etwa ein Jahr nach dem Start geschehen ist",
+      "Vorschauen sind immer teurer als allgemein verfügbare Dienste",
+      "Vorschauen können keine Daten in offenen Formaten wie Delta-Tabellen speichern"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-8",
+     "q": "Was sagt der Leitfaden über den Unified Namespace (UNS)?",
+     "opts": [
+      "Er ist ein ISA-Standard, der das ISA-95-Objektmodell ersetzt",
+      "Er ist ein Cloud-Dienst, den Fabric bereitstellt",
+      "Er ist ein Architekturmuster, bei dem Systeme ihren Zustand an einen hierarchisch strukturierten Broker veröffentlichen",
+      "Er ist eine Datenbank zur Speicherung von jahrelanger Maschinenhistorie"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-9",
+     "q": "Was empfiehlt der Leitfaden für die Außerbetriebnahme von Defender for IoT OT Security bei der Planung eines Ersatzes?",
+     "opts": [
+      "Bis Oktober 2029 mit der Evaluierung warten",
+      "Die OT-Überwachung stattdessen in IoT Central verlagern",
+      "Sich auf ein Microsoft-Ersatzprodukt aus eigener Entwicklung verlassen",
+      "Mit dem früheren Datum planen und den Ersatz vor Mitte 2028 abschließen"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-10",
+     "q": "Warum sagt der Leitfaden, dass eine Power App zur Erfassung von Stillstandsgründen am Arbeitsplatz der vorausschauenden Instandhaltung hilft?",
+     "opts": [
+      "Sie erzeugt die beschriftete Fehlerhistorie, die das Modell benötigt",
+      "Sie trainiert das Modell direkt auf dem Tablet",
+      "Sie verringert den Verbrauch der Fabric-Kapazität",
+      "Sie macht Sensordaten überflüssig"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-11",
+     "q": "Welche Beziehungstypen benötigt ein belastbares Genealogie-Datenmodell laut Leitfaden?",
+     "opts": [
+      "Material-in-Material, Material-zu-Prozess, Prozess-zu-Ergebnis",
+      "Asset-zu-Signal, Signal-zu-Einheit, Einheit-zu-Schicht",
+      "Auftrag-zu-Kunde, Kunde-zu-Rechnung, Rechnung-zu-Zahlung",
+      "Sensor-zu-Gateway, Gateway-zu-Broker, Broker-zu-Cloud"
+     ]
+    },
+    {
+     "id": "manufacturing-it-azure-12",
+     "q": "Ein Team erstellt ein OEE-Dashboard über mehrere Werke. Was muss zuerst vereinbart werden, damit die Kennzahlen vergleichbar bleiben?",
+     "opts": [
+      "Die Definitionen von Verfügbarkeit, Leistungsreferenz und Qualität",
+      "Die Größe der Fabric-Kapazität pro Werk",
+      "Die Topic-Tiefe des Brokers",
+      "Das Farbschema des Dashboards"
+     ]
+    }
+   ]
+  },
+  "ifakt-polaris": {
+   "en": [
+    {
+     "id": "ifakt-polaris-7",
+     "q": "A buyer searches for \"value stream management software\" to improve a factory. What risk does the guide point out about the search results?",
+     "opts": [
+      "Results mix in software-delivery pipeline platforms that do not handle material or inventory",
+      "Results only list free drawing tools without any calculation logic",
+      "Results only show simulation vendors that ignore lean symbols",
+      "Results are limited to ERP vendors that cannot map flows"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-8",
+     "q": "A plant maps its value stream once a year in a kaizen workshop and needs only documentation. Which category does the guide suggest?",
+     "opts": [
+      "A drawing tool with a VSM template",
+      "An APS system with constraint-based scheduling",
+      "A discrete-event simulation package",
+      "A MES with process mining"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-9",
+     "q": "What does the guide say about the Polaris VSM module regarding dynamic simulation?",
+     "opts": [
+      "It describes scenarios and sensitivity analysis but no dynamic simulation",
+      "It simulates breakdowns and variability over time natively",
+      "It runs discrete-event simulation on shared resources",
+      "It simulates product mix through its Optimizer connection"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-10",
+     "q": "What is the main purpose of the Polaris Operator module?",
+     "opts": [
+      "Calculate value-added ratio for business process swimlanes",
+      "Present the optimized schedule as tasks on the shop floor and collect confirmations",
+      "Build the product-process-resource knowledge graph from ERP data",
+      "Display KPI dashboards across all other modules"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-11",
+     "q": "A US security team requires a SOC 2 report from a software vendor. What does the guide recommend regarding ISO/IEC 27001?",
+     "opts": [
+      "Accept it only if the vendor hosts in the US",
+      "Ignore it, since only SOC 2 shows audited controls",
+      "Treat it as an acceptable alternative and ask for the certificate's scope and expiry",
+      "Treat it as proof of GDPR compliance"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-12",
+     "q": "What does the guide say about Polaris hosting and data location for US buyers?",
+     "opts": [
+      "Hosting location is not stated anywhere by the vendor",
+      "All modules run in a US Azure region by default",
+      "Hosting is only possible on the customer's own servers",
+      "VSM and BSM run on Azure West Europe; a US region is not mentioned"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "ifakt-polaris-7",
+     "q": "Ein Käufer sucht nach \"Software für Wertstrommanagement\", um eine Fabrik zu verbessern. Auf welches Risiko der Suchergebnisse weist der Leitfaden hin?",
+     "opts": [
+      "Die Ergebnisse vermischen Plattformen für Software-Auslieferungspipelines, die kein Material oder Bestände verwalten",
+      "Die Ergebnisse listen nur kostenlose Zeichenwerkzeuge ohne jede Berechnungslogik auf",
+      "Die Ergebnisse zeigen nur Simulationsanbieter, die Lean-Symbole ignorieren",
+      "Die Ergebnisse beschränken sich auf ERP-Anbieter, die keine Flüsse abbilden können"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-8",
+     "q": "Ein Werk bildet seinen Wertstrom einmal pro Jahr in einem Kaizen-Workshop ab und benötigt nur eine Dokumentation. Welche Kategorie schlägt der Leitfaden vor?",
+     "opts": [
+      "Ein Zeichenwerkzeug mit einer VSM-Vorlage",
+      "Ein APS-System mit engpassbasierter Feinplanung",
+      "Ein Paket für ereignisdiskrete Simulation",
+      "Ein MES mit Process Mining"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-9",
+     "q": "Was sagt der Leitfaden zum Polaris-VSM-Modul in Bezug auf dynamische Simulation?",
+     "opts": [
+      "Es beschreibt Szenarien und Sensitivitätsanalysen, aber keine dynamische Simulation",
+      "Es simuliert nativ Störungen und Schwankungen über die Zeit",
+      "Es führt eine ereignisdiskrete Simulation mit gemeinsam genutzten Ressourcen durch",
+      "Es simuliert den Produktmix über seine Optimizer-Anbindung"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-10",
+     "q": "Was ist der Hauptzweck des Polaris-Operator-Moduls?",
+     "opts": [
+      "Berechnung der Wertschöpfungsquote für Prozessbahnen einer Geschäftsprozessanalyse",
+      "Den optimierten Plan als Aufgaben auf dem Shopfloor darstellen und Rückmeldungen erfassen",
+      "Aufbau des Produkt-Prozess-Ressourcen-Wissensgraphen aus ERP-Daten",
+      "Anzeige von KPI-Dashboards über alle anderen Module hinweg"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-11",
+     "q": "Ein US-Sicherheitsteam verlangt von einem Softwareanbieter einen SOC-2-Bericht. Was empfiehlt der Leitfaden hinsichtlich ISO/IEC 27001?",
+     "opts": [
+      "Nur akzeptieren, wenn der Anbieter in den USA hostet",
+      "Ignorieren, da nur SOC 2 geprüfte Kontrollen belegt",
+      "Als gleichwertige Alternative behandeln und Geltungsbereich sowie Ablaufdatum des Zertifikats erfragen",
+      "Als Nachweis der DSGVO-Konformität behandeln"
+     ]
+    },
+    {
+     "id": "ifakt-polaris-12",
+     "q": "Was sagt der Leitfaden zum Hosting von Polaris und zum Datenstandort für US-Käufer?",
+     "opts": [
+      "Der Standort des Hostings wird vom Anbieter nirgends angegeben",
+      "Alle Module laufen standardmäßig in einer Azure-Region in den USA",
+      "Hosting ist nur auf den eigenen Servern des Kunden möglich",
+      "VSM und BSM laufen auf Azure West Europe; eine US-Region wird nicht erwähnt"
+     ]
+    }
+   ]
+  },
+  "mes-isa-95": {
+   "en": [
+    {
+     "id": "mes-isa-95-1",
+     "q": "According to the guide, what is the main focus of the ISA-95 standard's interface definitions?",
+     "opts": [
+      "The interface between Level 3 and Level 4",
+      "The interface between PLCs and sensors at Levels 1 and 2",
+      "The network zones between plant and internet",
+      "The interface between ERP and the finance ledger"
+     ]
+    },
+    {
+     "id": "mes-isa-95-2",
+     "q": "How does the Part 3 activity model structure Level 3?",
+     "opts": [
+      "Eleven functions in one production column",
+      "Five levels, each with its own activities",
+      "Four categories, each repeating the same eight activities",
+      "Eight categories, each with four activities"
+     ]
+    },
+    {
+     "id": "mes-isa-95-3",
+     "q": "Which statement about a unified namespace (UNS) and the MES matches the guide?",
+     "opts": [
+      "The UNS moves data, but business logic and records stay in the MES",
+      "The UNS replaces the ISA-95 vocabulary",
+      "The UNS stores the auditable batch history",
+      "The UNS makes ERP interfaces unnecessary"
+     ]
+    },
+    {
+     "id": "mes-isa-95-4",
+     "q": "What does review by exception change in electronic batch record handling?",
+     "opts": [
+      "QA reviews system-flagged deviations instead of every page",
+      "Operators sign the whole batch record at shift end",
+      "The MES stops enforcing the recipe sequence",
+      "Batch records no longer need audit trails"
+     ]
+    },
+    {
+     "id": "mes-isa-95-5",
+     "q": "In the worked ROI example, what drives the difference between the positive base-case NPV and the negative conservative case?",
+     "opts": [
+      "Hardware costs are higher in the conservative case",
+      "The discount rate changes between the two cases",
+      "The WIP cash release is dropped",
+      "The throughput benefit on the constraint line is only half as large"
+     ]
+    },
+    {
+     "id": "mes-isa-95-6",
+     "q": "A team fills in the 4 × 8 activity matrix for its pilot area. What is it mainly used for?",
+     "opts": [
+      "Calculating OEE for each line",
+      "Scoring vendors on usability",
+      "Deciding which cells to digitize first by cost",
+      "Finding gaps and overlaps in which system owns each activity"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "mes-isa-95-1",
+     "q": "Laut dem Leitfaden: Worauf liegt der Schwerpunkt der Schnittstellendefinitionen der Norm ISA-95?",
+     "opts": [
+      "Die Schnittstelle zwischen Ebene 3 und Ebene 4",
+      "Die Schnittstelle zwischen SPS und Sensoren auf den Ebenen 1 und 2",
+      "Die Netzwerkzonen zwischen Werk und Internet",
+      "Die Schnittstelle zwischen ERP und dem Finanzhauptbuch"
+     ]
+    },
+    {
+     "id": "mes-isa-95-2",
+     "q": "Wie gliedert das Aktivitätenmodell aus Teil 3 die Ebene 3?",
+     "opts": [
+      "Elf Funktionen in einer Fertigungsspalte",
+      "Fünf Ebenen, jede mit eigenen Aktivitäten",
+      "Vier Kategorien, die jeweils dieselben acht Aktivitäten wiederholen",
+      "Acht Kategorien, jede mit vier Aktivitäten"
+     ]
+    },
+    {
+     "id": "mes-isa-95-3",
+     "q": "Welche Aussage zu einem Unified Namespace (UNS) und dem MES entspricht dem Leitfaden?",
+     "opts": [
+      "Der UNS verschiebt Daten, aber Geschäftslogik und Datensätze bleiben im MES",
+      "Der UNS ersetzt das ISA-95-Vokabular",
+      "Der UNS speichert die prüfbare Chargenhistorie",
+      "Der UNS macht ERP-Schnittstellen überflüssig"
+     ]
+    },
+    {
+     "id": "mes-isa-95-4",
+     "q": "Was ändert das Prüfen nach dem Ausnahmeprinzip (Review by Exception) bei der Verarbeitung elektronischer Chargenprotokolle?",
+     "opts": [
+      "Die QS prüft vom System markierte Abweichungen statt jeder Seite",
+      "Die Bediener unterschreiben das gesamte Chargenprotokoll am Schichtende",
+      "Das MES erzwingt die Rezeptreihenfolge nicht mehr",
+      "Chargenprotokolle benötigen keine Audit-Trails mehr"
+     ]
+    },
+    {
+     "id": "mes-isa-95-5",
+     "q": "Was bewirkt im durchgerechneten ROI-Beispiel den Unterschied zwischen dem positiven Kapitalwert im Basisfall und dem negativen Kapitalwert im konservativen Fall?",
+     "opts": [
+      "Die Hardwarekosten sind im konservativen Fall höher",
+      "Der Diskontierungssatz unterscheidet sich zwischen beiden Fällen",
+      "Die Freisetzung von Umlaufbestand (WIP) als Cash entfällt",
+      "Der Durchsatznutzen am Engpassbereich ist nur halb so groß"
+     ]
+    },
+    {
+     "id": "mes-isa-95-6",
+     "q": "Ein Team füllt für seinen Pilotbereich die Matrix aus 4 × 8 Aktivitäten aus. Wozu dient sie hauptsächlich?",
+     "opts": [
+      "Berechnung der OEE für jede Linie",
+      "Bewertung der Lieferanten nach Bedienbarkeit",
+      "Festlegung nach Kosten, welche Zellen zuerst digitalisiert werden",
+      "Auffinden von Lücken und Überschneidungen, welches System für welche Aktivität zuständig ist"
+     ]
+    }
+   ]
+  },
+  "predictive-maintenance-iiot": {
+   "en": [
+    {
+     "id": "predictive-maintenance-iiot-1",
+     "q": "A failure has a P-F interval of 8 weeks and the monthly inspection interval is about 4.3 weeks. What is the net P-F interval?",
+     "opts": [
+      "About 8 weeks",
+      "About 12.3 weeks",
+      "About 3.7 weeks",
+      "About 1.9 weeks"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-2",
+     "q": "Why is a vibration sensor that samples only a few hundred hertz considered a trend device rather than a diagnostic device for bearing defects?",
+     "opts": [
+      "Bearing defects only show up in temperature readings",
+      "It only works on motors above 15 kW",
+      "It cannot capture defect frequencies well above twice its sampling rate",
+      "It measures displacement instead of acceleration"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-3",
+     "q": "A Weibull fit of failure times on a pump fleet gives a shape parameter close to 1. What does this imply for maintenance strategy?",
+     "opts": [
+      "Failures are infant mortality, so add more commissioning tests",
+      "Failures are wear-out, so replace at a fixed age",
+      "Failures are random, so fixed replacement intervals will not reduce them",
+      "Failures are age-related, so extend all preventive intervals"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-4",
+     "q": "In the guide's ROI sensitivity table, what is the most decisive variable separating a quick payback from no payback?",
+     "opts": [
+      "Number of wireless sensors per asset",
+      "Detection rate of failures caught early enough",
+      "Choice of cloud provider",
+      "Length of the sensor battery warranty"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-5",
+     "q": "Why does the guide advise sending features and alarms upstream instead of streaming raw high-rate vibration data continuously to the cloud?",
+     "opts": [
+      "OPC UA cannot transport vibration data",
+      "Features are always more accurate than raw waveforms",
+      "Cloud platforms cannot store time series",
+      "Raw streaming volume is huge, roughly gigabytes per channel per day"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-6",
+     "q": "When scoring pilot candidates, why does the guide rank the packaging robot out of predictive maintenance despite high consequence?",
+     "opts": [
+      "Robots cannot be fitted with sensors",
+      "Its failures are mostly electronic with little measurable warning",
+      "Its likelihood of failure is zero",
+      "Robots are covered by OSHA lockout rules only"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "predictive-maintenance-iiot-1",
+     "q": "Ein Ausfall hat ein P-F-Intervall von 8 Wochen, und das monatliche Prüfintervall beträgt etwa 4,3 Wochen. Wie groß ist das Netto-P-F-Intervall?",
+     "opts": [
+      "Etwa 8 Wochen",
+      "Etwa 12,3 Wochen",
+      "Etwa 3,7 Wochen",
+      "Etwa 1,9 Wochen"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-2",
+     "q": "Warum gilt ein Schwingungssensor, der nur wenige hundert Hertz abtastet, eher als Trendgerät denn als Diagnosegerät für Lagerschäden?",
+     "opts": [
+      "Lagerschäden zeigen sich nur in Temperaturwerten",
+      "Er funktioniert nur bei Motoren über 15 kW",
+      "Er kann Schadfrequenzen weit oberhalb der doppelten Abtastrate nicht erfassen",
+      "Er misst Auslenkung statt Beschleunigung"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-3",
+     "q": "Ein Weibull-Fit von Ausfallzeiten einer Pumpenflotte ergibt einen Formparameter nahe 1. Was bedeutet das für die Instandhaltungsstrategie?",
+     "opts": [
+      "Die Ausfälle sind Frühausfälle, also mehr Inbetriebnahmetests ergänzen",
+      "Die Ausfälle sind Verschleißausfälle, also zu festem Alter austauschen",
+      "Die Ausfälle sind zufällig, daher verringern feste Austauschintervalle sie nicht",
+      "Die Ausfälle sind alterabhängig, also alle vorbeugenden Intervalle verlängern"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-4",
+     "q": "Welche Größe in der ROI-Sensitivitätstabelle des Leitfadens trennt am stärksten eine schnelle Amortisation von fehlender Amortisation?",
+     "opts": [
+      "Anzahl der Funksensoren pro Anlage",
+      "Erkennungsquote von Ausfällen, die früh genug entdeckt werden",
+      "Wahl des Cloud-Anbieters",
+      "Länge der Garantie auf die Sensorbatterie"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-5",
+     "q": "Warum empfiehlt der Leitfaden, Merkmale und Alarme vorgelagert zu übertragen, statt Rohdaten der Schwingungen mit hoher Rate dauerhaft in die Cloud zu streamen?",
+     "opts": [
+      "OPC UA kann keine Schwingungsdaten transportieren",
+      "Merkmale sind immer genauer als Rohsignale",
+      "Cloud-Plattformen können keine Zeitreihen speichern",
+      "Der Rohdaten-Stream ist riesig, etwa Gigabytes pro Kanal und Tag"
+     ]
+    },
+    {
+     "id": "predictive-maintenance-iiot-6",
+     "q": "Warum stuft der Leitfaden bei der Bewertung von Pilotkandidaten den Verpackungsroboter trotz hoher Tragweite aus der prädiktiven Instandhaltung heraus?",
+     "opts": [
+      "Roboter können nicht mit Sensoren ausgestattet werden",
+      "Seine Ausfälle sind überwiegend elektronisch und kündigen sich kaum messbar an",
+      "Seine Ausfallwahrscheinlichkeit ist null",
+      "Für Roboter gelten nur die Sperr- und Kennzeichnungsregeln nach OSHA"
+     ]
+    }
+   ]
+  },
+  "ot-cybersecurity-iec-62443": {
+   "en": [
+    {
+     "id": "ot-cybersecurity-iec-62443-1",
+     "q": "In IEC 62443, what does a security level of SL 3 target for a zone?",
+     "opts": [
+      "Intentional violation with sophisticated means, IACS-specific skills and moderate resources",
+      "Intentional violation with simple means, low resources and low motivation",
+      "Casual or coincidental violation, such as a technician plugging into the wrong port",
+      "Intentional violation by an attacker with extended resources and high motivation"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-2",
+     "q": "A plant must keep safety, control and operator view functioning during an attack. Which IEC 62443 concept describes these functions?",
+     "opts": [
+      "Essential functions",
+      "Foundational requirements",
+      "Compensating controls",
+      "Conduit requirements"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-3",
+     "q": "In the 62443-3-2 workflow, what does the initial risk assessment assume?",
+     "opts": [
+      "That existing security controls reduce the likelihood of attack",
+      "That only external attackers need to be considered",
+      "That all zones need the same security level",
+      "That the system is compromised, using unmitigated worst-case consequences"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-4",
+     "q": "Why does the guide say the Purdue model is only a starting map for zones?",
+     "opts": [
+      "Because it applies only to continuous process plants",
+      "Because it has been withdrawn by ISA",
+      "Because IIoT, cloud links and shared services such as Active Directory cut across its levels",
+      "Because it requires no firewalls between levels"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-5",
+     "q": "When planning an industrial DMZ, how should traffic between the enterprise and the plant flow?",
+     "opts": [
+      "Directly through one firewall between the two networks",
+      "Through a computer with one network card in each network",
+      "Over a VPN that ends inside the site operations zone",
+      "Only through services in the DMZ, never directly from enterprise to plant"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-6",
+     "q": "According to the guide, what is the sound approach to OT asset discovery on a plant network?",
+     "opts": [
+      "Run a full vulnerability scan on all controllers at night",
+      "Send test packets to every address during production",
+      "Rely on the IT department's office asset list only",
+      "Start passive, listening to traffic, or use vendor engineering tools"
+     ]
+    }
+   ],
+   "de": [
+    {
+     "id": "ot-cybersecurity-iec-62443-1",
+     "q": "Was soll eine Sicherheitsstufe SL 3 in IEC 62443 für eine Zone erreichen?",
+     "opts": [
+      "Vorsätzliche Verletzung mit ausgefeilten Mitteln, IACS-spezifischen Fähigkeiten und mittleren Ressourcen",
+      "Vorsätzliche Verletzung mit einfachen Mitteln, geringen Ressourcen und geringer Motivation",
+      "Beiläufige oder zufällige Verletzung, etwa durch einen Techniker, der in den falschen Anschluss steckt",
+      "Vorsätzliche Verletzung durch einen Angreifer mit erweiterten Ressourcen und hoher Motivation"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-2",
+     "q": "Eine Anlage muss während eines Angriffs Sicherheit, Steuerung und die Bedienersicht aufrechterhalten. Welches Konzept aus IEC 62443 beschreibt diese Funktionen?",
+     "opts": [
+      "Wesentliche Funktionen",
+      "Grundlegende Anforderungen",
+      "Kompensierende Maßnahmen",
+      "Anforderungen an Leitungen (Conduits)"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-3",
+     "q": "Was setzt die initiale Risikobewertung im Workflow nach 62443-3-2 voraus?",
+     "opts": [
+      "Dass bestehende Sicherheitsmaßnahmen die Eintrittswahrscheinlichkeit eines Angriffs verringern",
+      "Dass nur externe Angreifer berücksichtigt werden müssen",
+      "Dass alle Zonen dieselbe Sicherheitsstufe benötigen",
+      "Dass das System als kompromittiert gilt und ungemilderte Worst-Case-Folgen angesetzt werden"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-4",
+     "q": "Warum sagt der Leitfaden, dass das Purdue-Modell nur eine Ausgangskarte für Zonen ist?",
+     "opts": [
+      "Weil es nur für kontinuierliche Prozessanlagen gilt",
+      "Weil ISA es zurückgezogen hat",
+      "Weil IIoT, Cloud-Anbindungen und gemeinsam genutzte Dienste wie Active Directory seine Ebenen durchbrechen",
+      "Weil zwischen den Ebenen keine Firewalls erforderlich sind"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-5",
+     "q": "Wie sollte der Datenverkehr zwischen Unternehmensnetz und Anlage bei der Planung einer industriellen DMZ fließen?",
+     "opts": [
+      "Direkt über eine einzige Firewall zwischen den beiden Netzen",
+      "Über einen Rechner mit je einer Netzwerkkarte in jedem Netz",
+      "Über ein VPN, das innerhalb der Zone Standortbetrieb endet",
+      "Ausschließlich über Dienste in der DMZ, nie direkt vom Unternehmensnetz in die Anlage"
+     ]
+    },
+    {
+     "id": "ot-cybersecurity-iec-62443-6",
+     "q": "Was ist laut Leitfaden der sinnvolle Ansatz für die OT-Asset-Erkennung in einem Anlagennetz?",
+     "opts": [
+      "Nachts einen vollständigen Schwachstellenscan aller Steuerungen durchführen",
+      "Während der Produktion Testpakete an jede Adresse senden",
+      "Sich ausschließlich auf die Asset-Liste der IT-Abteilung für Büros verlassen",
+      "Passiv beginnen, den Datenverkehr mitlesen, oder Engineering-Werkzeuge des Herstellers nutzen"
+     ]
+    }
+   ]
+  }
+ },
+ "retired": {
+  "lean-manufacturing": [
+   "lean-manufacturing-1",
+   "lean-manufacturing-2",
+   "lean-manufacturing-3",
+   "lean-manufacturing-4",
+   "lean-manufacturing-5",
+   "lean-manufacturing-6"
+  ],
+  "operational-excellence": [
+   "operational-excellence-1",
+   "operational-excellence-2",
+   "operational-excellence-3",
+   "operational-excellence-4",
+   "operational-excellence-5",
+   "operational-excellence-6"
+  ],
+  "shop-floor-management": [
+   "shop-floor-management-1",
+   "shop-floor-management-2",
+   "shop-floor-management-3",
+   "shop-floor-management-4",
+   "shop-floor-management-5",
+   "shop-floor-management-6"
+  ],
+  "value-stream-mapping": [
+   "value-stream-mapping-1",
+   "value-stream-mapping-2",
+   "value-stream-mapping-3",
+   "value-stream-mapping-4",
+   "value-stream-mapping-5",
+   "value-stream-mapping-6"
+  ],
+  "manufacturing-kpis": [
+   "manufacturing-kpis-1",
+   "manufacturing-kpis-2",
+   "manufacturing-kpis-3",
+   "manufacturing-kpis-4",
+   "manufacturing-kpis-5",
+   "manufacturing-kpis-6"
+  ],
+  "production-scheduling-aps": [
+   "production-scheduling-aps-1",
+   "production-scheduling-aps-2",
+   "production-scheduling-aps-3",
+   "production-scheduling-aps-4",
+   "production-scheduling-aps-5",
+   "production-scheduling-aps-6"
+  ],
+  "digital-twin-manufacturing": [
+   "digital-twin-manufacturing-1",
+   "digital-twin-manufacturing-2",
+   "digital-twin-manufacturing-3",
+   "digital-twin-manufacturing-4",
+   "digital-twin-manufacturing-5",
+   "digital-twin-manufacturing-6"
+  ],
+  "aerospace-production-planning": [
+   "aerospace-production-planning-1",
+   "aerospace-production-planning-2",
+   "aerospace-production-planning-3",
+   "aerospace-production-planning-4",
+   "aerospace-production-planning-5",
+   "aerospace-production-planning-6"
+  ],
+  "manufacturing-it-azure": [
+   "manufacturing-it-azure-1",
+   "manufacturing-it-azure-2",
+   "manufacturing-it-azure-3",
+   "manufacturing-it-azure-4",
+   "manufacturing-it-azure-5",
+   "manufacturing-it-azure-6"
+  ],
+  "ifakt-polaris": [
+   "ifakt-polaris-1",
+   "ifakt-polaris-2",
+   "ifakt-polaris-3",
+   "ifakt-polaris-4",
+   "ifakt-polaris-5",
+   "ifakt-polaris-6"
+  ]
+ }
+}

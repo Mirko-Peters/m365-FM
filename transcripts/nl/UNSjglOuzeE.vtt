@@ -1,0 +1,5125 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.960
+De meeste teams behandelen dataverse beveiliging als een checklist.
+
+00:00:03.120 --> 00:00:06.580
+Iemand vraagt om toegang, je zoekt de juiste rol, wijst deze toe, ticket gesloten.
+
+00:00:06.780 --> 00:00:08.760
+Maar dat is niet wat dataverse beveiliging is.
+
+00:00:08.920 --> 00:00:11.840
+Het is een structureel model en een checklist kan geen model draaien.
+
+00:00:12.000 --> 00:00:12.900
+Dus hier is de stelling.
+
+00:00:13.120 --> 00:00:17.600
+Een dataverse beveiligingsmodel schaalt alleen als het ontworpen is rond eigenaarschap en hiërarchie,
+
+00:00:17.780 --> 00:00:19.500
+niet rond individuele toegangsverzoeken.
+
+00:00:19.700 --> 00:00:23.860
+Want elk verzoek dat je stuk voor stuk toekent, is een beslissing die de structuur voor je had moeten nemen.
+
+00:00:24.020 --> 00:00:25.340
+We gaan het op volge orde af.
+
+00:00:25.520 --> 00:00:28.720
+Business units, beveiligingsrollen, teams, record eigenaarschap,
+
+00:00:28.720 --> 00:00:33.720
+kolombeveiliging, hiërarchie, delen, en hoe je dit alles ontwerpt zodat het niet onder zijn eigen gewicht bezwijkt.
+
+00:00:33.880 --> 00:00:38.200
+Als je de structurele visie op het platform wilt, in plaats van een rondleiding door functies, abonneer je dan.
+
+00:00:38.380 --> 00:00:40.000
+Maar eerst een kort woord van de sponsor.
+
+00:00:40.760 --> 00:00:42.860
+Sponsorsegment Stella Migrator for Exchange
+
+00:00:42.860 --> 00:00:45.660
+Deze aflevering wordt gesponsord door Stella Migrator for Exchange,
+
+00:00:45.880 --> 00:00:48.060
+en het sluit beter aan bij het onderwerp van vandaag dan je zou denken.
+
+00:00:48.300 --> 00:00:53.980
+Wanneer je mailboxen migreert, verplaats je niet alleen gegevens, maar ook rechten, eigenaarschap en grenzen over wie wat kan zien.
+
+00:00:54.440 --> 00:00:58.140
+Gevolmachtigde, gedeelde mailboxen, maprechten, alles moet correct overkomen,
+
+00:00:58.140 --> 00:01:01.260
+anders breekt het oude beveiligingsmodel stilletjes aan de nieuwe kant.
+
+00:01:01.460 --> 00:01:03.840
+Stella Migrator for Exchange is een migratietool.
+
+00:01:04.020 --> 00:01:07.160
+Het verplaatst mailboxen tussen exchange-omgevingen, on-premises of online,
+
+00:01:07.320 --> 00:01:11.300
+en is gebouwd voor beheerders en consultants die tenantverhuizingen, fusies of consolidaties uitvoeren.
+
+00:01:11.520 --> 00:01:15.880
+Dat is het. Het doet één taak, en die taak is dingen verplaatsen zonder de structuur eromheen te verliezen.
+
+00:01:16.040 --> 00:01:17.500
+Je vindt de link in de beschrijving.
+
+00:01:17.720 --> 00:01:20.740
+Nu, terug naar dataverse en de vraag waarmee alles begint.
+
+00:01:20.920 --> 00:01:23.440
+De vraag die dataverse daadwerkelijk beantwoordt.
+
+00:01:23.560 --> 00:01:26.660
+Vraag de meeste mensen wat dataverse beveiliging doet, en je hoort dit.
+
+00:01:26.660 --> 00:01:30.820
+Het beheert wie de app kan openen. Dat is onjuist, of in ieder geval de verkeerde laag.
+
+00:01:30.940 --> 00:01:32.520
+Een app openen is het makkelijke deel.
+
+00:01:32.880 --> 00:01:34.960
+Dataverse beveiliging beantwoordt een andere vraag.
+
+00:01:35.160 --> 00:01:37.380
+Welke rijen kan deze gebruiker zien, en waarom?
+
+00:01:37.560 --> 00:01:39.440
+Niet welke schermen, niet welke menus.
+
+00:01:39.700 --> 00:01:40.100
+Rijen.
+
+00:01:40.320 --> 00:01:42.980
+Elke toegangsbeslissing in dataverse is een koppeling.
+
+00:01:43.260 --> 00:01:44.360
+Drie dingen komen samen.
+
+00:01:44.580 --> 00:01:46.840
+Wie je bent, waar je zit en wie de eigenaar van de rij is.
+
+00:01:47.080 --> 00:01:48.220
+Dat is het hele mechanisme.
+
+00:01:48.600 --> 00:01:50.280
+Identiteit, positie, eigenaarschap.
+
+00:01:50.480 --> 00:01:52.500
+Verander één van deze, en het antwoord verandert.
+
+00:01:52.680 --> 00:01:55.640
+Vergelijk dat nu eens met het oudere model waarmee de meeste van ons zijn opgegroeid.
+
+00:01:55.640 --> 00:01:58.140
+In het oude model had je toestemmingslijsten per object.
+
+00:01:58.380 --> 00:01:59.960
+Deze groep kan deze tabel lezen.
+
+00:02:00.140 --> 00:02:01.620
+Groep kan dat formulier bewerken.
+
+00:02:01.800 --> 00:02:05.180
+Je onderhoudt de lijsten, en wanneer iemand iets nieuws nodig had, voegde je een regel toe.
+
+00:02:05.540 --> 00:02:08.240
+Eenvoudig, zichtbaar en het schaalt precies mee met uw patiënten.
+
+00:02:08.680 --> 00:02:09.760
+Dataverse werkt anders.
+
+00:02:10.000 --> 00:02:12.300
+Het vraagt niet alleen, mag je deze tabel aanraken?
+
+00:02:12.440 --> 00:02:13.620
+Het stelt twee vragen.
+
+00:02:13.880 --> 00:02:16.360
+Welke rechten heb je, en tot waar rijk die bevoegdheid?
+
+00:02:16.600 --> 00:02:17.740
+Rechten plus rijkwijten.
+
+00:02:17.920 --> 00:02:19.700
+Je hebt wellicht leestoegang tot accounts, prima.
+
+00:02:19.920 --> 00:02:21.280
+Maar leestoegang tot welke accounts?
+
+00:02:21.280 --> 00:02:25.120
+Die van jezelf, die van je teams, die van je bedrijfseenheden, van iedereen.
+
+00:02:25.360 --> 00:02:26.980
+Die tweede vraag vormt de kern van het model.
+
+00:02:27.180 --> 00:02:29.360
+En het is de vraag die de meeste ontwerpen bewust vermijden.
+
+00:02:29.520 --> 00:02:31.040
+Dus waarom hebben architecten dit fout?
+
+00:02:31.220 --> 00:02:32.580
+Omdat ze bij het appscherm beginnen.
+
+00:02:32.820 --> 00:02:34.260
+Ze openen de model Driven app.
+
+00:02:34.380 --> 00:02:36.060
+Ze kijken naar de formulieren en de weergave.
+
+00:02:36.280 --> 00:02:37.500
+Ze vragen, wie moet dit zien?
+
+00:02:37.660 --> 00:02:39.440
+En ze werken terug vanaf het scherm naar een rol.
+
+00:02:39.660 --> 00:02:40.680
+Dat voelt natuurlijk aan.
+
+00:02:40.840 --> 00:02:42.120
+Het is echter de omgekeerde wereld.
+
+00:02:42.300 --> 00:02:43.860
+Het scherm is het laatste onderdeel in de keten.
+
+00:02:44.000 --> 00:02:45.040
+Het is slechts een venster.
+
+00:02:45.280 --> 00:02:47.360
+Over de data was al beslist voordat deze daar verscheen.
+
+00:02:47.360 --> 00:02:49.320
+Dus ontwerp je vanuit de data naar buiten toe.
+
+00:02:49.460 --> 00:02:50.540
+Wie bezit deze rollen?
+
+00:02:50.680 --> 00:02:51.880
+Welke grenzen scheiden hen?
+
+00:02:52.080 --> 00:02:54.220
+Welke groepen mensen vallen binnen welke grens?
+
+00:02:54.520 --> 00:02:55.920
+Vervolgens de rollen en dan de app.
+
+00:02:56.100 --> 00:02:57.140
+Bijna als bijzaak.
+
+00:02:57.340 --> 00:03:00.020
+Wanneer je de richting omdraait, ontstaan veel problemen niet.
+
+00:03:00.200 --> 00:03:02.160
+Even een opmerking over hoe u dit kunt volgen.
+
+00:03:02.400 --> 00:03:03.740
+Aangezien u geen diagram ziet.
+
+00:03:03.940 --> 00:03:06.660
+Hou één mentale stroom in uw hoofd voor de rest van de aflevering.
+
+00:03:06.980 --> 00:03:07.620
+Identiteit eerst.
+
+00:03:07.760 --> 00:03:08.660
+Wie is deze gebruiker?
+
+00:03:08.860 --> 00:03:09.520
+Dan bevoegdheid.
+
+00:03:09.680 --> 00:03:11.400
+Wat mag deze persoon doen met dit type tabel?
+
+00:03:11.580 --> 00:03:12.460
+Dan rijkwijten.
+
+00:03:12.600 --> 00:03:13.420
+Hoe ver rijk dat?
+
+00:03:13.600 --> 00:03:14.280
+Dan het record.
+
+00:03:14.280 --> 00:03:16.560
+Valt deze specifieke rol binnen dat bereik?
+
+00:03:16.560 --> 00:03:19.580
+Identiteit, bevoegdheid, rijkwijten, record.
+
+00:03:19.800 --> 00:03:22.760
+Elk concept dat we bespreken past in een van die vier stappen.
+
+00:03:22.920 --> 00:03:25.440
+En als u de draad kwijtraakt, keer dan terug naar die volgorde.
+
+00:03:25.640 --> 00:03:27.700
+En rijkwijten is de stap die de meeste schade aanricht.
+
+00:03:27.880 --> 00:03:29.960
+Dus daar beginnen we, want rijkwijten is geen instelling.
+
+00:03:30.160 --> 00:03:31.760
+Het wordt gedefinieerd door de structuur.
+
+00:03:31.960 --> 00:03:33.140
+De vier lagen van het model.
+
+00:03:33.580 --> 00:03:35.160
+Dataverse beveiliging is niet één ding.
+
+00:03:35.360 --> 00:03:38.740
+Het zijn vier lagen die op elkaar zijn gestapeld en elke laag beantwoordt een andere vraag.
+
+00:03:38.980 --> 00:03:40.160
+Laag 1 is de omgeving.
+
+00:03:40.400 --> 00:03:41.660
+Dit is de buitenste grens.
+
+00:03:41.800 --> 00:03:46.460
+Voordat een gebruiker een rij kan aanraken, moet deze toegang krijgen tot de plek waar dataverse leeft.
+
+00:03:46.560 --> 00:03:49.440
+Als ze buiten die muur staan, doet al het andere er niet meer toe.
+
+00:03:49.640 --> 00:03:54.220
+Laag 2 is de organisatiestructuur, bedrijfseenheden, teams, gebruikers.
+
+00:03:54.480 --> 00:03:57.180
+Dit is de vorm van uw bedrijf zoals het platform deze ziet.
+
+00:03:57.400 --> 00:04:01.380
+Het bepaalt waar iemand zich bevindt en die positie wordt de rijkwijte waar we het net over hadden.
+
+00:04:01.580 --> 00:04:02.880
+Laag 3 is bevoegdheden.
+
+00:04:03.140 --> 00:04:04.460
+Dit zijn de beveiligingsrollen.
+
+00:04:04.600 --> 00:04:07.540
+Een rol bepaalt wat je kunt doen met welk type tabel en tot hoever dat rijkt.
+
+00:04:07.720 --> 00:04:09.840
+Aanmaken, lezen, schrijven, verwijderen.
+
+00:04:09.960 --> 00:04:11.460
+En voor elk daarvan een bereik.
+
+00:04:11.660 --> 00:04:13.280
+Laag 4 is de verfijningslaag.
+
+00:04:13.480 --> 00:04:15.420
+Controles op recordniveau en kolomniveau.
+
+00:04:15.420 --> 00:04:19.560
+Een enkele rij gedeeld met één persoon, een salarisveld dat de meeste gebruikers niet kunnen lezen.
+
+00:04:19.800 --> 00:04:21.620
+Deze bouwen geen toegang vanaf nul op.
+
+00:04:21.740 --> 00:04:24.380
+Ze passen aan wat de eerste drie lagen al hebben opgeleverd.
+
+00:04:24.620 --> 00:04:27.140
+Omgeving, structuur, privileges, verfijning.
+
+00:04:27.340 --> 00:04:28.740
+Hoe combineren deze lagen nu?
+
+00:04:28.920 --> 00:04:31.280
+Dit is het deel waar mensen de fout in gaan, dus luister goed.
+
+00:04:31.440 --> 00:04:34.240
+Toegang in dataverse is de optelsom van wat elke laag verleent.
+
+00:04:34.400 --> 00:04:35.200
+Het is additief.
+
+00:04:35.400 --> 00:04:37.280
+Je rol geeft je leesrechten op business unit niveau.
+
+00:04:37.540 --> 00:04:39.360
+Je team geeft je schrijfrechten op een andere tabel.
+
+00:04:39.500 --> 00:04:40.880
+Een collega deelt één rij met je.
+
+00:04:41.020 --> 00:04:42.240
+Je krijgt het allemaal bij elkaar.
+
+00:04:42.240 --> 00:04:44.080
+En dit is de regel die daaruit voortvloeit.
+
+00:04:44.260 --> 00:04:46.460
+Geen enkele laag kan wegnemen wat een andere laag heeft gegeven.
+
+00:04:46.620 --> 00:04:48.700
+Er bestaat geen weigeren in het privilige model.
+
+00:04:48.920 --> 00:04:51.500
+Je kunt geen rol schrijven die alles toestaat behalve dit.
+
+00:04:51.700 --> 00:04:55.380
+Je kunt alleen bepalen wat je verleent en de totale rechten klein genoeg houden.
+
+00:04:55.600 --> 00:04:57.020
+Dat verandert je manier van denken.
+
+00:04:57.280 --> 00:04:59.420
+Je bouwt geen muren in een grote open ruimte.
+
+00:04:59.620 --> 00:05:02.820
+Je bepaalt per verlening hoeveel van de ruimte iemand te zien krijgt.
+
+00:05:02.980 --> 00:05:06.680
+Er is één echte uitzondering en die is het waard om nu te benoemen, zodat deze je later niet verrast.
+
+00:05:07.320 --> 00:05:08.280
+Kolombeveiliging werkt anders.
+
+00:05:08.280 --> 00:05:11.500
+Het kan een waarde maskeren, zelfs als alles daarboven zegt dat de rij zichtbaar is.
+
+00:05:11.640 --> 00:05:13.260
+We komen daar nog op, maar merk op wat het is.
+
+00:05:13.420 --> 00:05:15.760
+Het is een beperking op een veld, geen intrekking van een recht.
+
+00:05:15.960 --> 00:05:18.160
+De rijtoegang blijft bestaan, alleen de waarde is verborgen.
+
+00:05:18.340 --> 00:05:19.480
+Dus wat gaat er doorgaans mis?
+
+00:05:19.660 --> 00:05:20.580
+Iemand krijgt een ticket.
+
+00:05:20.840 --> 00:05:21.920
+Ik kan dit record niet zien.
+
+00:05:22.120 --> 00:05:25.440
+En de eerste stap is het openen van de beveiligingsrol van de gebruiker om rechten toe te voegen.
+
+00:05:25.620 --> 00:05:28.680
+Maar de rol kan in orde zijn, terwijl de gebruiker in de verkeerde businessunit zit.
+
+00:05:28.840 --> 00:05:31.120
+De rol kan eigendom zijn van een team buiten hun bereik.
+
+00:05:31.280 --> 00:05:33.960
+De omgeving heeft hem misschien niet eens in de juiste beveiligingsgroep staan.
+
+00:05:33.960 --> 00:05:37.220
+Wanneer je op de verkeerde laag debugt, verhelp je het symptoom en breek je het model.
+
+00:05:37.420 --> 00:05:39.240
+Je verhoogt het bereik naar organisatieniveau.
+
+00:05:39.400 --> 00:05:42.460
+Het ticket wordt gesloten en nu kan die persoon elke rij in de tabel lezen.
+
+00:05:42.660 --> 00:05:43.840
+Niemand merkt het tot de audit.
+
+00:05:44.040 --> 00:05:45.760
+Dus de gewoonte die je moet opbouwen is simpel.
+
+00:05:45.980 --> 00:05:48.480
+Voordat je een rol aanpast, vraag je af welke laag daadwerkelijk faalde.
+
+00:05:48.660 --> 00:05:51.100
+Was het de muur, de structuur, het privilege of de verfijning?
+
+00:05:51.260 --> 00:05:53.880
+Het antwoord is bijna nooit degene waar je als eerste naar grijpt.
+
+00:05:54.040 --> 00:05:55.860
+En omdat elke laag op de voorgaande rust,
+
+00:05:56.140 --> 00:05:59.360
+beginnen we onderaan met het fundament dat bepaalt wie überhaupt toegang krijgt.
+
+00:05:59.360 --> 00:06:02.980
+De omgevingsgrens, omgevingen en beveiligingsgroepen, het buitenste.
+
+00:06:03.300 --> 00:06:05.360
+Laten we beginnen met wat een omgeving eigenlijk is.
+
+00:06:05.540 --> 00:06:08.840
+Een omgeving is een container, één dataverse database met eigen tabellen,
+
+00:06:09.100 --> 00:06:11.780
+eigen rijen, eigen gebruikers en een eigen beveiligingsinstelling.
+
+00:06:12.040 --> 00:06:13.760
+Niets binnenin lekt naar een andere omgeving.
+
+00:06:14.000 --> 00:06:16.700
+Niets van buitenaf dringt naar binnen, tenzij je bewust een brug slaat.
+
+00:06:16.820 --> 00:06:20.180
+De eerste beveiligingsbeslissing is dus geen rol, maar in welke omgeving de data leeft.
+
+00:06:20.340 --> 00:06:21.980
+En die beslissing wordt vaak over het hoofd gezien,
+
+00:06:22.060 --> 00:06:24.240
+omdat deze plaatsvindt voordat iemand een ontwerptool opent.
+
+00:06:24.400 --> 00:06:26.620
+Iemand creëert een omgeving om iets uit te proberen.
+
+00:06:26.620 --> 00:06:29.140
+Een maand later staan er echte klantgegevens in.
+
+00:06:29.280 --> 00:06:30.580
+De muur is nooit ontworpen.
+
+00:06:30.760 --> 00:06:31.740
+Hij verscheen gewoon.
+
+00:06:32.020 --> 00:06:33.260
+Wie komt er nu langs die muur?
+
+00:06:33.420 --> 00:06:35.280
+Hier komt de beveiligingsgroep in beeld.
+
+00:06:35.520 --> 00:06:39.460
+Wanneer je een omgeving maakt, kun je er één Microsoft Entra beveiligingsgroep aan koppelen.
+
+00:06:39.700 --> 00:06:42.240
+Alleen leden van die groep kunnen gebruiker worden in die omgeving.
+
+00:06:42.480 --> 00:06:45.900
+Iedereen anders wordt bij de deur tegengehouden, ongeacht welke licenties ze hebben.
+
+00:06:46.100 --> 00:06:47.840
+Laat je het leeg, dan blijft de deur open.
+
+00:06:48.060 --> 00:06:50.740
+Elke gelicentieerde gebruiker in de tenant kan worden toegevoegd.
+
+00:06:50.900 --> 00:06:54.180
+Dat is een bewuste keuze en voor de meeste productieomgevingen is het de verkeerde,
+
+00:06:54.180 --> 00:06:59.620
+want een open deur betekent dat je grens de licentielijst is en die lijst beantwoordt een facturatievraag, geen beveiligingsvraag.
+
+00:06:59.720 --> 00:07:01.280
+De groepsbenadering draait dat om.
+
+00:07:01.440 --> 00:07:05.340
+Toegang tot de omgeving wordt een beslissing over het lidmaatschap, beheerd door wie de groep beheert.
+
+00:07:05.500 --> 00:07:07.780
+Voeg iemand toe aan de groep en ze kunnen worden toegevoegd.
+
+00:07:08.020 --> 00:07:09.640
+Verwijder ze en ze verliezen de toegang.
+
+00:07:09.820 --> 00:07:13.260
+Eén detail is belangrijk, de groep bepaalt wie als gebruiker kan worden toegevoegd.
+
+00:07:13.360 --> 00:07:14.720
+Het is geen vervanging voor rollen.
+
+00:07:14.860 --> 00:07:16.700
+In de groep zitten betekent dat je binnen de muur bent.
+
+00:07:16.880 --> 00:07:18.640
+Het geeft je niet zodra je daar eenmaal bent.
+
+00:07:18.860 --> 00:07:20.580
+Dat deel behoort tot de volgende drie lagen.
+
+00:07:20.580 --> 00:07:21.840
+Denk nu eens aan scheiding.
+
+00:07:22.080 --> 00:07:26.800
+De meeste teams hebben dev, test en productie en scharren dit onder applicatie levenscyclusbeheer.
+
+00:07:27.000 --> 00:07:29.160
+Bouwen hier, valideren daar, vrijgeven gins.
+
+00:07:29.400 --> 00:07:31.440
+Dat klopt, maar het is ook een beveiligingsstrategie.
+
+00:07:31.560 --> 00:07:33.840
+Je ontwikkelaars hebben brede toegang nodig in de ontwikkelomgeving.
+
+00:07:34.040 --> 00:07:36.640
+Ze maken tabellen, bewerken rollen, maken dingen expres kapot.
+
+00:07:36.780 --> 00:07:39.980
+In productie zou bijna niemand van hen meer dan alleen leestoegang moeten hebben als dat dan nodig is.
+
+00:07:40.160 --> 00:07:44.040
+Verschillende omgevingen stellen je in staat om verschillende mensen verschillende rechten te geven zonder uitzonderingen te hoeven maken.
+
+00:07:44.200 --> 00:07:45.700
+En testdata is ook belangrijk.
+
+00:07:45.700 --> 00:07:50.720
+Als testdraaien op een kopie van productiedata, dan is je testomgeving een productiegeheim in een minder beveiligde ruimte.
+
+00:07:50.900 --> 00:07:53.260
+Gescheiden omgevingen stellen je in staat om dat te controleren.
+
+00:07:53.400 --> 00:07:56.040
+Maskeer de gegevens, begrens de groep of kopieer het helemaal niet.
+
+00:07:56.280 --> 00:07:58.700
+Vervolgens provisioning, want dit beïnvloedt later direct het eigenaarschap.
+
+00:07:59.420 --> 00:08:04.200
+Wanneer een gelicentieerde gebruiker uit de beveiligingsgroep wordt toegevoegd aan de omgeving, maakt dataverse een rij voor hen aan.
+
+00:08:04.360 --> 00:08:09.960
+Een systeemgebruikersrij, deze staat in een tabel met een business unit, een managerveld en een eigenaarsrelatie met alles wat ze ooit zullen aanmaken.
+
+00:08:09.960 --> 00:08:14.000
+Een gebruiker is dus niet zomaar een lock-in, een gebruiker is een record en records kunnen andere records bezitten.
+
+00:08:14.160 --> 00:08:14.920
+Onthoud dat goed.
+
+00:08:15.140 --> 00:08:19.660
+Wanneer we bij eigenaarschap komen, verklaart dit waarom een vertrokken werknemer nog steeds duizenden rijen kan bezitten.
+
+00:08:19.860 --> 00:08:21.220
+Dus, waar laten teams dit liggen?
+
+00:08:21.400 --> 00:08:25.960
+Meestal bij de eerste omgeving, iemand werkt snel, het groepsveld lijkt optioneel en ze laten het leeg.
+
+00:08:26.080 --> 00:08:30.040
+De omgeving groeit, apps zijn ervan afhankelijk, niemand wil nu nog aan de instellingen komen.
+
+00:08:30.280 --> 00:08:34.260
+Dan komt de audit en stelt een simpele vraag, wie heeft er toegang tot deze omgeving?
+
+00:08:34.260 --> 00:08:36.820
+En het eerlijke antwoord is iedereen met een licentie.
+
+00:08:36.960 --> 00:08:41.400
+Er is geen groep om naar te verwijzen, geen eigenaar van de lijst, geen bewijs dat iemand het heeft goedgekeurd.
+
+00:08:41.620 --> 00:08:43.320
+Dat is wat het overslaan van de muur kost.
+
+00:08:43.560 --> 00:08:46.040
+Niet per se een inbreuk, maar wel een antwoord dat je niet kunt geven.
+
+00:08:46.220 --> 00:08:47.260
+De muur staat nu dus.
+
+00:08:47.500 --> 00:08:51.000
+Daarbinnen maken we de eerste structurele keuze die alles daarna vormgeeft.
+
+00:08:51.200 --> 00:08:53.400
+Business units, business units uitgelegd.
+
+00:08:53.420 --> 00:08:55.760
+Hier is de definitie en dit is wat de meesten nooit horen.
+
+00:08:55.920 --> 00:08:57.680
+Een business unit is een beveiligingsgrens.
+
+00:08:57.860 --> 00:08:59.100
+Het is ook een gegevensbereik.
+
+00:08:59.280 --> 00:09:00.640
+Het is geen vakje in een organigram.
+
+00:09:01.000 --> 00:09:02.020
+Dat verschil is belangrijk.
+
+00:09:02.020 --> 00:09:04.600
+Een organigram beantwoordt wie aan wie rapporteert.
+
+00:09:04.780 --> 00:09:09.140
+Een business unit beantwoordt een andere vraag, wiens rij je kan deze persoon bereiken en wiens rij je niet.
+
+00:09:09.280 --> 00:09:12.960
+Elke dataverse omgeving begint met één business unit die er al is, de root.
+
+00:09:13.180 --> 00:09:14.860
+Deze wordt aangemaakt bij de omgeving.
+
+00:09:15.080 --> 00:09:17.940
+Hij draagt de naam van je organisatie en staat bovenaan de boom.
+
+00:09:18.120 --> 00:09:21.140
+Je kunt hem niet verwijderen, je kunt hem hernoemen, maar hij blijft.
+
+00:09:21.320 --> 00:09:25.860
+Elke andere business unit die je ooit aanmaakt, hangt ergens daaronder, direct of via andere units.
+
+00:09:26.060 --> 00:09:28.720
+De boom heeft dus altijd één stam en al het andere is een tak.
+
+00:09:28.720 --> 00:09:32.520
+Waarom is die boomvorm belangrijk? Omdat de boom de diepte van de toegang bepaalt.
+
+00:09:32.760 --> 00:09:35.760
+Straks gaan we in detail in op de diepteniveaus, maar onthoud dit verband.
+
+00:09:36.000 --> 00:09:40.660
+Wanneer een rol toegang verleent op business unit diepte, kijkt het platform naar de business unit waar de gebruiker in zit.
+
+00:09:40.900 --> 00:09:45.340
+Wanneer het toegang verleent op ouder kind diepte, kijkt het platform naar die unit en alle units daaronder.
+
+00:09:45.500 --> 00:09:47.580
+Eer daaronder, niet ernaast, niet erboven.
+
+00:09:47.780 --> 00:09:49.320
+Die richting is het hele mechanisme.
+
+00:09:49.560 --> 00:09:52.460
+Toegang rijdt naar beneden in de boom, nooit omhoog en nooit opzij.
+
+00:09:52.460 --> 00:09:58.220
+Dus een gebruiker bij de stam met ouder kind diepte kan alles bereiken, want elke eenheid is een kind of een kind van een kind.
+
+00:09:58.380 --> 00:10:01.940
+Een gebruiker in een blaadje met dezelfde instelling bereikt alleen dat blaadje.
+
+00:10:02.160 --> 00:10:06.500
+Zelfde rol, zelfde privilege, compleet ander bereik bepaald door waar de persoon zit.
+
+00:10:06.720 --> 00:10:09.620
+Dat brengt ons bij het feit dat de meeste ontwerpkeuzes stuurt.
+
+00:10:09.820 --> 00:10:12.580
+Elke gebruiker behoort tot exact één bedrijfseenheid.
+
+00:10:12.780 --> 00:10:15.000
+1. Niet 2. Niet primair en secundair.
+
+00:10:15.000 --> 00:10:24.200
+1. Je kunt een gebruiker verplaatsen van de ene naar de andere eenheid, maar op elk moment zitten ze op één plek en die plek gebruikt het platform om hun bereik te berekenen.
+
+00:10:24.400 --> 00:10:26.240
+Denk na over wat je daardoor moet beslissen.
+
+00:10:26.480 --> 00:10:30.240
+Stel dat je iemand hebt die twee regio's ondersteunt en in een spreadsheet noem je ze allebei.
+
+00:10:30.420 --> 00:10:33.220
+In dataverse zitten ze in één eenheid, dus je hebt een keuze.
+
+00:10:33.400 --> 00:10:40.380
+Plaats ze in een hogere eenheid die beide regio's bevat, wat hun bereik vergroot, of hou ze in één regio en dek de andere af via andere middelen zoals een team of een deling.
+
+00:10:40.380 --> 00:10:46.380
+Geen van beide antwoorden is gratis. Dat is de afweging en daar kom je niet onderuit omdat het model geen manier heeft om één persoon op twee plekken te zetten.
+
+00:10:46.540 --> 00:10:50.180
+Het meeste gedoe dat je later in deze aflevering zult zien, is terug te voeren op deze ene beperking.
+
+00:10:50.380 --> 00:10:53.500
+Teams die dit niet respecteren, eindigen met het aanpassen van al het andere om te compenseren.
+
+00:10:53.700 --> 00:10:57.500
+Nu de tweede band, rollen. Elke beveiligingsrol behoort ook tot een bedrijfseenheid.
+
+00:10:57.740 --> 00:11:01.280
+Wanneer je een rol aanmaakt, wordt deze binnen een specifieke eenheid gemaakt en stroomt deze naar beneden.
+
+00:11:01.620 --> 00:11:07.080
+Onderliggende eenheden erven een kopie van de rol, dus dezelfde rol kan worden toegewezen aan gebruikers overal onder de eenheid waar deze werd gedefinieerd.
+
+00:11:07.080 --> 00:11:13.560
+Die overerving is nuttig. Je definieert een rol één keer bovenaan en elke eenheid eronder kan hem gebruiken, maar let op wat dat betekent.
+
+00:11:13.740 --> 00:11:18.260
+Een rol heeft een thuisbasis en een gebruiker kan alleen rollen krijgen toegewezen die in een eigen bedrijfseenheid bestaan.
+
+00:11:18.480 --> 00:11:22.360
+Wanneer je een gebruiker naar een andere eenheid verplaatst, gaan hun bestaande roltoewijzingen niet mee.
+
+00:11:22.560 --> 00:11:27.720
+De rollen zijn gebonden aan de oude eenheid, dus de gebruiker eindigt zonder rollen totdat je de bijbehorende rollen toewijst op de nieuwe plek.
+
+00:11:27.920 --> 00:11:29.700
+Veel beheerders leren dat op de harde manier.
+
+00:11:29.940 --> 00:11:34.060
+Iemand wisselt op maandag van team en op dinsdag openen ze een ticket omdat de app leeg lijkt.
+
+00:11:34.060 --> 00:11:35.900
+Dus laten we de stukjes samenvoegen.
+
+00:11:35.900 --> 00:11:43.180
+Een boom met een enkele stam, toegan die naar beneden in de takken rijkt, gebruikers die op exact één plek zitten, rollen die op een plek leven en daarvandaan naar beneden stromen.
+
+00:11:43.360 --> 00:11:47.440
+Het is een overzichtelijk model zolang de boomstructuur goed is opgezet, maar dat is nu juist het probleem.
+
+00:11:47.560 --> 00:11:52.860
+De vorm van hun boom is het eerste wat de meeste teams fout doen en het is de reden dat zoveel ontwerpen instorten als het bedrijf groeit.
+
+00:11:53.060 --> 00:11:55.420
+Waarom bedrijfsunit bomen bij schaling kapot gaan?
+
+00:11:55.640 --> 00:11:57.520
+Dit is wat bijna elk team als eerste doet.
+
+00:11:57.760 --> 00:12:02.280
+Ze pakken de verrijsten erbij, openen het organogram en bouwen het vakje voor vakje na in dataverse.
+
+00:12:02.280 --> 00:12:09.560
+Sales wordt een business unit, daaronder Noord-Amerika en Europa, daaronder binnendienst en buitendienst, dan finance, dan hour.
+
+00:12:09.560 --> 00:12:14.220
+Vervolgens krijgt elke regio zijn eigen kopie van finance, omdat iemand ze later misschien wil scheiden.
+
+00:12:14.380 --> 00:12:18.300
+Het ziet er netjes uit, het komt overeen met de presentatie die de leiding al heeft goedgekeurd.
+
+00:12:18.480 --> 00:12:21.300
+En het voelt als de veilige keuze, omdat iedereen de vorm herkent.
+
+00:12:21.460 --> 00:12:23.000
+Maar dat is de valkuil van het organogram.
+
+00:12:23.260 --> 00:12:25.820
+De boom is gekopieerd uit een document dat een andere vraag beantwoord.
+
+00:12:25.980 --> 00:12:27.820
+Het organogram zegt wie aan wie rapporteert.
+
+00:12:27.980 --> 00:12:30.560
+De beveiligingsboom moet zeggen wiens data van wie is afgeschermd.
+
+00:12:30.700 --> 00:12:33.500
+Die twee zaken overlappen alleen bij toeval en dat toeval duurt niet lang.
+
+00:12:33.500 --> 00:12:35.480
+Wat er meestal gebeurt, is een reorganisatie.
+
+00:12:35.660 --> 00:12:38.140
+Misschien een fusie, misschien een nieuwe regionale structuur.
+
+00:12:38.320 --> 00:12:40.820
+Misschien besluit iemand dat binnen- en buitendienst samen moeten vallen.
+
+00:12:40.980 --> 00:12:43.800
+In een normaal bedrijf is dat een PowerPoint-aanpassing en een paar e-mails.
+
+00:12:44.020 --> 00:12:47.860
+In dataverse is het een herbouw, omdat de bedrijfsunitboom geen afspiegeling was van het bedrijf.
+
+00:12:47.980 --> 00:12:49.380
+Hij zat verweven in de toegang.
+
+00:12:49.580 --> 00:12:50.900
+Elke rol valt binnen een unit.
+
+00:12:51.080 --> 00:12:52.420
+Elke gebruiker zit er in één.
+
+00:12:52.600 --> 00:12:54.680
+Elke rol draagt de unit van de eigenaar met zich mee.
+
+00:12:54.860 --> 00:12:59.740
+Dus als het organogram verschuift, moet de beveiligingsstructuur mee verschuiven en moet alles wat daaraan vast zit worden gecontroleerd.
+
+00:12:59.900 --> 00:13:00.780
+Begin bij de mensen.
+
+00:13:00.780 --> 00:13:03.480
+Je verplaatst een gebruiker van de ene business-unit naar de andere.
+
+00:13:03.720 --> 00:13:05.300
+Simpel genoeg in het admin-centrum.
+
+00:13:05.500 --> 00:13:10.920
+Maar de rijen waarvan die persoon de eigenaar is, bevatten een eigenaars-unit en die blijven niet automatisch synchroon zoals je zou hopen.
+
+00:13:11.180 --> 00:13:13.780
+Afhankelijk van hoe de verplaatsing verloopt en hoe je relaties kaskaderen,
+
+00:13:14.560 --> 00:13:18.820
+kunnen die rijen eigendom worden van iemand in een andere unit dan waar de rij volgens de database bij hoort.
+
+00:13:19.040 --> 00:13:22.540
+Of ze blijven achter bij de oude unit terwijl de gebruiker ergens anders zit.
+
+00:13:22.760 --> 00:13:24.320
+Beeld je nu in wat dat doet met de toegang.
+
+00:13:24.480 --> 00:13:27.660
+Een manager in de oude unit op business-unit-niveau ziet die rijen nog steeds.
+
+00:13:27.860 --> 00:13:29.580
+De gebruiker die ze bezit, is vertrokken.
+
+00:13:29.580 --> 00:13:32.120
+Een nieuwe collega's op hetzelfde niveau kunnen ze helemaal niet zien.
+
+00:13:32.260 --> 00:13:34.680
+De data staat nog op dezelfde plek en de mensen zitten ergens anders.
+
+00:13:34.940 --> 00:13:36.740
+Ondertussen volgen de rollen van de gebruiker hen niet.
+
+00:13:36.940 --> 00:13:37.980
+Dat hebben we al behandeld.
+
+00:13:38.180 --> 00:13:42.380
+Op de dag van de verhuizing komen ze aan in de nieuwe unit met niets toegewezen en een hoop rijen die ze nog in de oude hebben staan.
+
+00:13:42.600 --> 00:13:44.240
+Dan is er nog het opnieuw toewijzen van ouders.
+
+00:13:44.460 --> 00:13:47.460
+Dit is wanneer je een hele business-unit neemt en deze onder een andere ouder plaatst.
+
+00:13:47.600 --> 00:13:49.780
+Op papier is het één sleep-actie in de boomstructuur.
+
+00:13:49.980 --> 00:13:53.080
+In de praktijk verandert het het antwoord op elke ouder kindvraag daaronder.
+
+00:13:53.080 --> 00:13:57.400
+Iedereen met ouder kindtypte boven de nieuwe locatie bereikt nu deze unit en alles daaronder.
+
+00:13:57.580 --> 00:13:59.980
+Iedereen die dat bereik had vanaf de oude ouder, verliest het.
+
+00:14:00.120 --> 00:14:01.380
+De rijen zijn niet veranderd.
+
+00:14:01.500 --> 00:14:02.900
+De eigenaars zijn niet veranderd.
+
+00:14:03.000 --> 00:14:06.280
+Maar wie ze kan lezen, is zojuist veranderd voor elke gebruiker in twee pakken van de boom.
+
+00:14:06.440 --> 00:14:10.080
+En niemand testte dat, want niemand dacht dat slepen in een diagram een beveiligingswijziging was.
+
+00:14:10.300 --> 00:14:12.800
+Dat zijn de echte kosten, niet de inspanning van de herbouw.
+
+00:14:12.900 --> 00:14:14.320
+Het is het stille rimpel-effect.
+
+00:14:14.320 --> 00:14:20.480
+Toegang verschuift op plekken waar niemand kijkt en je ontdekt het pas als iemand een record ziet dat ze niet zouden moeten zien of niet kunnen zien wanneer nodig.
+
+00:14:20.740 --> 00:14:21.600
+Dus wat is de regel?
+
+00:14:21.840 --> 00:14:24.540
+Business units modelleren datagrenzen, geen menselijke grenzen.
+
+00:14:24.740 --> 00:14:28.620
+Mensen verhuizen, afdelingen krijgen andere namen, rapportagelijnen veranderen, elke jaar of twee.
+
+00:14:29.080 --> 00:14:30.080
+Datagrenzen zijn anders.
+
+00:14:30.340 --> 00:14:35.240
+Ze komen voort uit wetgeving, contracten en regelgeving en ze veranderen zelden, meestal met veelwaarschuwing.
+
+00:14:35.420 --> 00:14:39.980
+Als de boom het pad volgt dat zelden verandert, stoppen reorganisaties beveiligingsgebeurtenissen te zijn.
+
+00:14:39.980 --> 00:14:44.740
+Het worden roltoewijzingen en teamlidmaatschappen die goedkoop zijn om aan te passen en makkelijk te controleren.
+
+00:14:44.900 --> 00:14:46.740
+Dat wijst op een andere manier om te beginnen.
+
+00:14:47.000 --> 00:14:50.300
+Vraag voordat je één business unit aanmaakt niet hoe het bedrijf eruit ziet.
+
+00:14:50.580 --> 00:14:54.540
+Stel één vraag en het antwoord daarop bepaalt of de unit überhaupt zou moeten bestaan.
+
+00:14:54.780 --> 00:14:57.060
+Business units ontwerpen rond datagrenzen.
+
+00:14:57.260 --> 00:14:58.020
+Dit is de vraag.
+
+00:14:58.260 --> 00:15:01.460
+Moet deze groep mensen worden afgeschermd van de data van een andere groep?
+
+00:15:01.600 --> 00:15:02.380
+Dat is de test.
+
+00:15:02.620 --> 00:15:06.220
+Niet of ze op een andere afdeling werken, niet of ze een andere manager hebben.
+
+00:15:06.640 --> 00:15:09.800
+Afgeschermd in de zin van als de ene groep de rijen van de andere zou kunnen lezen?
+
+00:15:09.980 --> 00:15:11.100
+Zou er iets ergs gebeuren?
+
+00:15:11.260 --> 00:15:14.120
+Als het antwoord ja is, heb je een kandidaat voor een business unit.
+
+00:15:14.280 --> 00:15:17.140
+Als het antwoord is, nou, ze doen gewoon ander werk, dan niet.
+
+00:15:17.340 --> 00:15:19.600
+Dat is een taak voor rollen en teams en daar komen we zo bij.
+
+00:15:19.800 --> 00:15:21.040
+Dus wat telt als een echte muur?
+
+00:15:21.240 --> 00:15:22.740
+Drie dingen komen telkens weer naar boven.
+
+00:15:23.040 --> 00:15:24.660
+Wetgeving, regelgeving en contracten.
+
+00:15:24.780 --> 00:15:26.780
+Een juridische muur is het meest duidelijke voorbeeld.
+
+00:15:26.980 --> 00:15:31.800
+Twee bedrijven onder één paraplu, elk een aparte juridische entiteit, elk met eigen klanten en eigen verplichtingen.
+
+00:15:31.980 --> 00:15:34.000
+Hun data mag zelfs per ongeluk niet vermengen.
+
+00:15:34.000 --> 00:15:37.580
+Een business unit per entiteit geeft je een grens die het platform voor je afdwingt.
+
+00:15:37.680 --> 00:15:39.440
+Een reglementaire muur lijkt daarop.
+
+00:15:39.440 --> 00:15:42.360
+Misschien beheert één afdeling medische dossiers en de rest van het bedrijf niet.
+
+00:15:42.540 --> 00:15:44.220
+Misschien beheert er één betaalgegevens.
+
+00:15:44.480 --> 00:15:46.560
+De regel is niet dat de meeste mensen dit niet mogen zien.
+
+00:15:46.780 --> 00:15:49.040
+De regel is dat alleen een gedefinieerde groep dit mag.
+
+00:15:49.220 --> 00:15:54.440
+Een eenheid rond die groep maakt de grens structureel in plaats van een gewoonte en contracten wegen zwaarder dan mensen verwachten.
+
+00:15:54.680 --> 00:15:58.040
+De klant stelt schriftelijk dat alleen hun eigen personeel bij hun gegevens mag.
+
+00:15:58.240 --> 00:16:00.500
+Nu heb je iemand buiten het bedrijf een muur beloofd.
+
+00:16:00.660 --> 00:16:04.480
+Dat is een grens die de moeite waard is om in de boomstructuur op te nemen, want die moet je later bewijzen.
+
+00:16:04.680 --> 00:16:05.920
+Let op wat deze gemeen hebben.
+
+00:16:06.140 --> 00:16:07.940
+Elk ervan komt van buiten het organogram.
+
+00:16:07.940 --> 00:16:11.320
+Iemand anders heeft de regel bepaald en die verandert niet door een reorganisatie.
+
+00:16:11.500 --> 00:16:13.680
+Nu geografie, want daar struikelen mensen vaak over.
+
+00:16:14.060 --> 00:16:15.400
+Regio's voelen als grenzen aan.
+
+00:16:15.600 --> 00:16:20.460
+Ze hebben namen, budgetten en leiders, maar een regio is alleen een bedrijfseenheid als de data gescheiden moet blijven.
+
+00:16:20.620 --> 00:16:26.660
+Als een verkoopteam in het noorden en een team in het zuiden legaal en logischerwijs dezelfde accounts mogen zien, dan is splitsen puur decoratie.
+
+00:16:26.840 --> 00:16:31.140
+Je hebt een muur toegevoegd waar niemand om vroeg en je betaalt er elke keer voor als iemand er overheen moet werken.
+
+00:16:31.300 --> 00:16:33.180
+Data soevereiniteit verandert het antwoord.
+
+00:16:33.180 --> 00:16:37.740
+Als regels zeggen dat de gegevens van het ene land niet toegankelijk mogen zijn voor personeel elders, dan is dat een muur.
+
+00:16:37.960 --> 00:16:38.720
+Bouw de eenheid.
+
+00:16:39.340 --> 00:16:40.920
+Dochterondernemingen volgen dezelfde logica.
+
+00:16:41.140 --> 00:16:45.760
+Een dochteronderneming die klanten en systemen deelt met het moederbedrijf heeft waarschijnlijk geen eigen eenheid nodig.
+
+00:16:45.940 --> 00:16:49.900
+Een dochteronderneming die juridisch gescheiden is met eigen boeken en een eigen addit, waarschijnlijk wel.
+
+00:16:50.100 --> 00:16:51.120
+Dan is er nog de diepte.
+
+00:16:51.280 --> 00:16:52.580
+Hou de boomstructuur ondiep.
+
+00:16:52.740 --> 00:16:54.320
+Twee niveaus, maximaal drie.
+
+00:16:54.580 --> 00:16:57.300
+Dat dekt de meeste echte organisaties, ook de grote.
+
+00:16:57.460 --> 00:17:03.460
+Elk extra niveau vermenigvuldigt wat de hiërarchie kan bereiken en elk extra niveau is een plek waar een reorganisatie iets kan breken.
+
+00:17:03.640 --> 00:17:06.860
+Een boomstructuur van vijf niveaus diep is bijna altijd een vermondorganogram.
+
+00:17:07.100 --> 00:17:10.680
+Als je merkt dat je er zo in bouwt, stop dan en vraag je af welk van die niveaus een echte muur is.
+
+00:17:10.880 --> 00:17:12.140
+Laten we dit concreet maken.
+
+00:17:12.400 --> 00:17:14.380
+Stel je een bedrijf voor met drie dochterondernemingen.
+
+00:17:14.640 --> 00:17:17.880
+Noem ze het Noordse bedrijf, het Duitse bedrijf en het Britse bedrijf.
+
+00:17:17.880 --> 00:17:28.940
+Elk is een afzonderlijke juridische entiteit met eigen klanten, contracten en additers en daarnaast is er één gedeeld serviceteam, financiële operaties, IT-ondersteuning en een klantenservice voor alle drie.
+
+00:17:29.100 --> 00:17:30.080
+Hoe modelleer je dat?
+
+00:17:30.240 --> 00:17:31.160
+Begin met de muren.
+
+00:17:31.440 --> 00:17:33.980
+Drie juridische entiteiten betekenen drie echte grenzen.
+
+00:17:34.180 --> 00:17:37.800
+Dus de boom heeft de route met daaronder drie bedrijfseenheden, één per dochteronderneming.
+
+00:17:37.960 --> 00:17:41.620
+Het personeel van elke dochteronderneming zit in hun eigen eenheid en hun rijen blijven daarbinnen.
+
+00:17:41.820 --> 00:17:46.740
+Wat betreft het Shared Serviceteam, het is verleidelijk om er een vierde eenheid van te maken naast de andere drie, maar denk na over wat het doet.
+
+00:17:46.740 --> 00:17:49.420
+Het moet werken met de data van alle drie de dochterondernemingen.
+
+00:17:49.560 --> 00:17:51.480
+Een eenheid ernaast kan niet zijwaarts rijken.
+
+00:17:51.640 --> 00:17:55.320
+Toegang stroomt alleen naar beneden, dus plaats je het Shared Serviceteam aan de basis.
+
+00:17:55.720 --> 00:17:59.560
+Van daaruit, met ouderkindhierarchie, bereikt het elke dochteronderneming eronder.
+
+00:17:59.800 --> 00:18:03.680
+Eén positie, één rol, volledige dekking en geen gedeelde zaken of omwegen.
+
+00:18:03.940 --> 00:18:06.160
+Drie dochterondernemingen, één team aan de top.
+
+00:18:06.320 --> 00:18:10.480
+Dat is de hele boom, twee niveaus en elk vakje bestaat omdat de muur dat vereiste.
+
+00:18:10.700 --> 00:18:15.740
+Al het andere, de afdelingen, regio's, projectgroepen, wordt elders afgehandeld, niet in de boom.
+
+00:18:15.740 --> 00:18:17.200
+De structuur staat vast.
+
+00:18:17.440 --> 00:18:21.360
+Nu komt de laag die er doorheen loopt en bepaalt wat elk persoon binnen zijn plek kan doen.
+
+00:18:21.560 --> 00:18:22.540
+De beveiligingsrol.
+
+00:18:22.720 --> 00:18:25.220
+De beveiligingsrollen, privileges als een matrix.
+
+00:18:25.440 --> 00:18:27.460
+Een beveiligingsrol ziet eruit als een lijst.
+
+00:18:27.660 --> 00:18:28.280
+Dat is het niet.
+
+00:18:28.440 --> 00:18:29.260
+Het is een raster.
+
+00:18:29.500 --> 00:18:30.800
+Aan de zijkant heb je tabellen.
+
+00:18:31.140 --> 00:18:32.160
+Bovenaan heb je acties.
+
+00:18:32.380 --> 00:18:36.500
+En in elke cel waar die twee samenkomen, staat een instelling die bepaalt hoe ver de actie reikt.
+
+00:18:36.700 --> 00:18:37.740
+Dat is het hele verhaal.
+
+00:18:37.920 --> 00:18:41.260
+Een set privileges, elk gericht op een tabel, elk met een diepte.
+
+00:18:41.400 --> 00:18:45.200
+Dus als iemand zegt dat deze gebruiker de verkooprol heeft, bedoelen ze eigenlijk dit.
+
+00:18:45.200 --> 00:18:48.080
+Voor elke tabel in het systeem is er een rij met instellingen.
+
+00:18:48.180 --> 00:18:50.480
+En de gebruiker krijgt wat die instellingen voorschrijven.
+
+00:18:50.660 --> 00:18:52.760
+Laten we de acties benoemen, want je moet ze paraat hebben.
+
+00:18:52.980 --> 00:18:53.340
+Aanmaken.
+
+00:18:53.460 --> 00:18:54.780
+De gebruiker kan een nieuwe rij maken.
+
+00:18:55.000 --> 00:18:55.260
+Lezen.
+
+00:18:55.460 --> 00:18:56.480
+De gebruiker kan een rij zien.
+
+00:18:56.680 --> 00:18:57.000
+Schrijven.
+
+00:18:57.220 --> 00:18:58.400
+De gebruiker kan een rij wijzigen.
+
+00:18:58.660 --> 00:18:59.020
+Verwijderen.
+
+00:18:59.160 --> 00:19:00.320
+De gebruiker kan er een verwijderen.
+
+00:19:00.440 --> 00:19:02.060
+Dan drie die simpel klinken, maar dat niet zijn.
+
+00:19:02.240 --> 00:19:02.560
+Toevoegen.
+
+00:19:02.740 --> 00:19:03.740
+Toevoegen aan en toewijzen.
+
+00:19:03.880 --> 00:19:04.900
+En nog één, delen.
+
+00:19:05.080 --> 00:19:06.080
+Toewijzen is de makkelijke.
+
+00:19:06.300 --> 00:19:08.500
+Hiermee kan de gebruiker een rij aan een andere eigenaar overdragen.
+
+00:19:08.760 --> 00:19:09.680
+Delen is ook direct.
+
+00:19:09.680 --> 00:19:13.160
+Hiermee kan de gebruiker iemand anders toegang verlenen tot een specifieke rij, waar we later
+
+00:19:13.160 --> 00:19:14.020
+uitgebreid op ingaan.
+
+00:19:14.160 --> 00:19:16.800
+Maar toevoegen en toevoegen aan, dat zijn de acties die mensen verwarren.
+
+00:19:16.980 --> 00:19:17.560
+Dit is waarom.
+
+00:19:17.740 --> 00:19:20.340
+De meeste beheerders gaan ervan uit dat elk privilege over de rij voor hen gaat.
+
+00:19:20.540 --> 00:19:21.800
+Lezen betekent dat ik dit kan lezen.
+
+00:19:22.020 --> 00:19:23.380
+Schrijven betekent dat ik dit kan bewerken.
+
+00:19:23.560 --> 00:19:25.340
+Dus toevoegen moet betekenen dat ik hier iets aan kan toevoegen.
+
+00:19:25.540 --> 00:19:26.080
+Niet helemaal.
+
+00:19:26.300 --> 00:19:28.140
+Toevoegen en toevoegen aan gaan over relaties.
+
+00:19:28.360 --> 00:19:29.720
+Neem een contactpersoon en een account.
+
+00:19:29.960 --> 00:19:31.760
+Je wilt de contactpersoon aan het account koppelen.
+
+00:19:31.920 --> 00:19:34.540
+Die koppeling is een verbinding tussen twee rijen en raakt ze allebei.
+
+00:19:34.540 --> 00:19:36.400
+Het platform controleert dus twee dingen.
+
+00:19:36.640 --> 00:19:39.220
+Heeft de gebruiker toevoegen op de rij die wordt gekoppeld?
+
+00:19:39.400 --> 00:19:42.640
+En heeft de gebruiker toevoegen aan op de rij waaraan wordt gekoppeld?
+
+00:19:42.840 --> 00:19:45.440
+Toevoegen is het recht om deze rij aan iets anders te koppelen.
+
+00:19:45.640 --> 00:19:47.620
+Toevoegen aan is het recht om er dingen aan te koppelen.
+
+00:19:47.860 --> 00:19:49.300
+Beide kanten moeten toestemming geven.
+
+00:19:49.540 --> 00:19:51.240
+Als er één ontbreekt, mislukt de koppeling.
+
+00:19:51.440 --> 00:19:52.880
+En dat verklaart een klassiek ticket.
+
+00:19:53.060 --> 00:19:54.920
+Een gebruiker kan een account openen en bewerken.
+
+00:19:55.140 --> 00:19:56.520
+Ze kunnen ook het contact openen.
+
+00:19:56.640 --> 00:19:59.960
+Maar wanneer ze proberen de twee te koppelen, krijgen ze een foutmelding dat ze geen toestemming hebben.
+
+00:20:00.160 --> 00:20:01.760
+Niets lijkt mis met lezen of schrijven.
+
+00:20:01.760 --> 00:20:06.100
+Het ontbrekende stukje zit aan één kant van de relatie in een privilege waar niemand aandacht.
+
+00:20:06.300 --> 00:20:09.060
+Dus wanneer je een rol bouwt, bepaal je niet alleen wie wat ziet.
+
+00:20:09.240 --> 00:20:11.400
+Je bepaalt welke rijen met welke verbonden kunnen worden.
+
+00:20:11.640 --> 00:20:14.720
+Dat is een ander soort toegang en die vergeet je makkelijk totdat er iets misgaat.
+
+00:20:14.880 --> 00:20:17.660
+Nu is er een tweede groep privileges en die horen bij geen enkele tabel.
+
+00:20:17.880 --> 00:20:20.780
+Ze worden diverse privileges genoemd en ze reguleren functies.
+
+00:20:20.960 --> 00:20:24.860
+Gegevens naar Excel exporteren, een bulkverwijdering uitvoeren, een aanpassing publiceren,
+
+00:20:25.080 --> 00:20:28.000
+de mobiele app gebruiken, persoonlijke weergave maken, offline gaan.
+
+00:20:28.180 --> 00:20:31.160
+Elk daarvan is een schakelaar en elk bevindt zich buiten het tabelraster.
+
+00:20:31.160 --> 00:20:33.240
+Ze zijn belangrijk omdat ze onopvallend zijn.
+
+00:20:33.420 --> 00:20:36.260
+Een gebruiker heeft misschien perfecte tabeltoegang en loopt toch tegen een muur aan
+
+00:20:36.260 --> 00:20:39.360
+omdat een functie die ze nodig hebben ergens anders in de rol uitstaat, of andersom.
+
+00:20:39.500 --> 00:20:42.240
+Een gebruiker heeft een schakelaar die ze niet zouden moeten hebben, zoals exporteren,
+
+00:20:42.340 --> 00:20:44.680
+en nu kan elke rij die ze kunnen lezen ook het gebouw verlaten als spreadsheet.
+
+00:20:44.920 --> 00:20:47.380
+Niemand beoordeelt die cellen zo zorgvuldig als de tabelcellen.
+
+00:20:47.520 --> 00:20:48.620
+Dat zouden ze wel moeten doen.
+
+00:20:48.840 --> 00:20:51.080
+Nog één regel en die vormt alles in het ontwerp.
+
+00:20:51.160 --> 00:20:52.160
+Rollen zijn additief.
+
+00:20:52.340 --> 00:20:54.220
+Een gebruiker kan meerdere rollen tegelijk hebben.
+
+00:20:54.460 --> 00:20:56.380
+Wanneer ze dat doen, kiest het platform er niet één.
+
+00:20:56.380 --> 00:20:57.440
+Het voegt ze samen.
+
+00:20:57.680 --> 00:21:02.100
+Voor elk privilege op elke tabel krijgt de gebruiker de hoogste diepte die hem van hun rollen toekent.
+
+00:21:02.300 --> 00:21:06.720
+Dus als één rol leesrechten op gebruikersniveau geeft voor accounts en een andere op businessunitniveau,
+
+00:21:06.900 --> 00:21:08.560
+leest de gebruiker op businessunitniveau.
+
+00:21:08.760 --> 00:21:10.420
+De ruimste toekenning wint altijd.
+
+00:21:10.660 --> 00:21:14.040
+Dat betekent dat je geen beperkende rol kunt bouwen in de verwachting dat hij stand houdt.
+
+00:21:14.140 --> 00:21:18.020
+Als dezelfde persoon ook ergens anders een ruimere rol heeft, neemt de ruimere rol het over.
+
+00:21:18.220 --> 00:21:22.480
+Er is geen manier om te zeggen, behalve hier, en daarom draait Rollover Ontwerp echt om terughoudendheid.
+
+00:21:22.480 --> 00:21:24.720
+Je beslist wat je geeft en je houdt het totaal klein.
+
+00:21:24.860 --> 00:21:27.160
+En zodra je het raster ziet, blijft er één vraag over.
+
+00:21:27.360 --> 00:21:28.520
+Elke cel heeft een instelling.
+
+00:21:28.800 --> 00:21:29.740
+Wat zijn de instellingen?
+
+00:21:29.900 --> 00:21:30.620
+Dat is diepte.
+
+00:21:30.760 --> 00:21:33.180
+En dat is waar een rol zijn echte kracht vandaan haalt.
+
+00:21:33.840 --> 00:21:35.360
+Toegangsniveaus en diepte uitgelegd.
+
+00:21:35.460 --> 00:21:37.620
+Elk privilege in dat raster heeft een instelling.
+
+00:21:37.880 --> 00:21:39.100
+Vier daarvan zijn scopes.
+
+00:21:39.320 --> 00:21:41.060
+Eén ervan betekent helemaal geen toegang.
+
+00:21:41.260 --> 00:21:45.500
+Geen, bovenliggende en onderliggende bedrijfseenheid, bedrijfseenheid, gebruiker, organisatie.
+
+00:21:45.860 --> 00:21:48.320
+Dataverse toont deze als kleine cirkels in de rolleditor.
+
+00:21:48.560 --> 00:21:50.600
+Leeg, kwart, half, drie kwart, vol.
+
+00:21:50.600 --> 00:21:53.020
+Mensen noemen ze Harvey Bals en dat beeld klopt precies.
+
+00:21:53.200 --> 00:21:54.920
+Hoe voller de cirkel, hoe groter het bereik.
+
+00:21:55.120 --> 00:21:57.160
+Laten we ze één voor één doornemen, van het kleinst naar het grootst.
+
+00:21:57.320 --> 00:21:58.400
+Geen betekent ook echt geen.
+
+00:21:58.560 --> 00:22:00.860
+Het privilege staat in het raster, maar is uitgeschakeld.
+
+00:22:01.000 --> 00:22:04.340
+De gebruiker kan die actie niet uitvoeren op die tabel, ongeacht andere rechten.
+
+00:22:05.020 --> 00:22:06.140
+Gebruikersdiepte is de kleinste.
+
+00:22:06.360 --> 00:22:11.320
+Op gebruikersniveau zie je rijen die je bezit en rijen die direct met jou of je team zijn gedeeld.
+
+00:22:11.560 --> 00:22:14.180
+Je eigen werk plus alles wat bewust met je is gedeeld.
+
+00:22:14.420 --> 00:22:15.100
+Dat is alles.
+
+00:22:15.320 --> 00:22:18.780
+Een collega in dezelfde eenheid met dezelfde functie bezit rijen die jij niet ziet.
+
+00:22:18.780 --> 00:22:21.440
+Bij gebruikersdiepte is het alsof ze bij een ander bedrijf werken.
+
+00:22:22.000 --> 00:22:23.440
+Bedrijfseenheid diepte verbreedt de cirkel.
+
+00:22:23.620 --> 00:22:26.580
+Op dit niveau zie je alle rijen van iedereen in jouw bedrijfseenheid.
+
+00:22:26.820 --> 00:22:29.740
+Niet alleen jouw rijen, maar van iedereen in dezelfde eenheid.
+
+00:22:30.000 --> 00:22:31.780
+Let op wat het platform hier controleert.
+
+00:22:31.960 --> 00:22:34.280
+Het kijkt niet met wie je werkt of aan wie je rapporteert.
+
+00:22:34.460 --> 00:22:37.680
+Het kijkt naar de bedrijfseenheid van de rij en vergelijkt die met de jouwe.
+
+00:22:37.900 --> 00:22:40.620
+Zelfde eenheid, dan heb je toegang, andere eenheid, dan niet.
+
+00:22:40.780 --> 00:22:43.680
+En dit is waar het eerdere ontwerpwerk zich terugbetaalt of juist niet.
+
+00:22:43.680 --> 00:22:48.040
+Als eenheden echte muren zijn, geeft deze diepte een gedeeld beeld van data.
+
+00:22:48.780 --> 00:22:54.560
+Als eenheden het organigram kopiëren, zie je willekeurige groepen mensen elkaars rijen inzien.
+
+00:22:55.260 --> 00:22:56.820
+Dan volgt de ouder kinddiepte.
+
+00:22:57.000 --> 00:23:01.140
+Op dit niveau zie je rijen in je eigen bedrijfseenheid en alle eenheden daaronder.
+
+00:23:01.380 --> 00:23:03.880
+Kinderen en kleinkinderen, helemaal tot onderaan.
+
+00:23:04.100 --> 00:23:06.220
+Dit is de instelling die de boomstructuur volgt.
+
+00:23:06.440 --> 00:23:09.700
+Iemand in het midden van een tak ziet de eigen eenheid en alles eronder.
+
+00:23:09.980 --> 00:23:12.000
+Iemand in een blad ziet alleen dat blad.
+
+00:23:12.000 --> 00:23:16.060
+Zelfde privilege, zelfde rol, heel ander bereikt door de positie.
+
+00:23:16.280 --> 00:23:18.220
+En onthou de richting alleen naar beneden.
+
+00:23:18.560 --> 00:23:21.920
+Met ouder kinddiepte zie je niet naar boven of naar een zuster eenheid.
+
+00:23:22.160 --> 00:23:26.020
+Als een eenheid naast de jouwe staat, is die onzichtbaar, ondanks de gezamenlijke ouder.
+
+00:23:26.220 --> 00:23:27.900
+Als laatste is er de organisatiediepte.
+
+00:23:28.060 --> 00:23:32.980
+Elke rij in de omgeving, ongeacht de eigenaar, ongeacht de business unit, ongeacht alles wat we tot nu toe hebben besproken,
+
+00:23:32.980 --> 00:23:37.300
+alles wat we tot dit punt hebben opgebouwd, de boomstructuur, de muren, de eenheden, doet er niet meer toe.
+
+00:23:37.460 --> 00:23:40.020
+Een privilege op organisatieniveau negeert dat allemaal.
+
+00:23:40.240 --> 00:23:42.880
+Dus hier is waarom dit de gevaarlijkste instelling in het product is.
+
+00:23:43.040 --> 00:23:43.840
+Omdat het werkt.
+
+00:23:44.040 --> 00:23:44.880
+Dat is het probleem.
+
+00:23:45.060 --> 00:23:46.120
+Er komt een ticket binnen.
+
+00:23:46.340 --> 00:23:47.520
+Ik kan dit record niet zien.
+
+00:23:47.720 --> 00:23:52.240
+De beheerder controleert de rol, vindt leesrechten op business unit niveau en verhoogt dit naar organisatieniveau.
+
+00:23:52.420 --> 00:23:53.680
+De gebruiker ververst de pagina.
+
+00:23:53.880 --> 00:23:56.040
+Het record verschijnt, ticket gesloten in minder dan een minuut.
+
+00:23:56.180 --> 00:23:57.820
+Maar de oplossing loste het probleem niet op.
+
+00:23:57.940 --> 00:23:59.800
+Het verwijderde de structuur die het veroorzaakte.
+
+00:23:59.800 --> 00:24:03.380
+Die persoon kan nu elke rij in de tabel lezen, in elke eenheid, voor elke klant.
+
+00:24:03.520 --> 00:24:05.100
+En hetzelfde geldt voor schrijfrechten.
+
+00:24:05.280 --> 00:24:07.760
+Als de beheerder dat ook heeft aangepast, ziet niemand de schade.
+
+00:24:07.940 --> 00:24:09.780
+Er is geen foutmelding en geen waarschuwing.
+
+00:24:09.960 --> 00:24:13.800
+De gebruiker heeft simpelweg stilletjes meer rechten dan zou moeten en het model heeft geen verslag van het waarom.
+
+00:24:14.020 --> 00:24:18.220
+Doe dat een paar dozijn keer over een paar jaar en je eindigt met een boomstructuur die zorgvuldig ontworpen lijkt,
+
+00:24:18.420 --> 00:24:19.560
+maar die bijna niets afdwingt.
+
+00:24:19.700 --> 00:24:23.420
+Muren getekend op een diagram, terwijl honderd mensen de sleutels hebben van elke deur.
+
+00:24:23.640 --> 00:24:26.500
+Behandel organisatieniveau dus zoals je een loper behandelt.
+
+00:24:26.500 --> 00:24:31.720
+Een klein aantal mensen heeft het nodig, beheerders, integratieaccounts, misschien een of twee datastewards.
+
+00:24:31.900 --> 00:24:35.740
+Iedereen anders zou in één zin moeten kunnen uitleggen binnen welke muur zij werken.
+
+00:24:36.360 --> 00:24:40.300
+Als de enige uitleg is dat het sneller ging, dan is dat het antwoord dat je kwam herstellen.
+
+00:24:40.560 --> 00:24:43.360
+Stap nu terug, want er is een patroon in alle vijfde niveaus.
+
+00:24:43.560 --> 00:24:45.120
+Kijk naar wat elk niveau vergelijkt.
+
+00:24:45.120 --> 00:24:47.540
+Gebruikersniveau vergelijkt de eigenaar van de rij met jou.
+
+00:24:47.960 --> 00:24:50.180
+Businessunitniveau vergelijkt de eenheid van de rij met die van jou.
+
+00:24:50.480 --> 00:24:53.120
+Bovenliggend onderliggend vergelijkt die eenheid met de jouwe en alles daaronder.
+
+00:24:53.880 --> 00:24:55.300
+Organisatieniveau vergelijkt helemaal niets.
+
+00:24:55.480 --> 00:24:58.340
+Elk van die vergelijkingen wijst naar hetzelfde, de rij zelf.
+
+00:24:58.620 --> 00:25:03.260
+Specifiek twee feiten die erin zijn opgeslagen, wie de eigenaar is en welke businessunit die eigenaar heeft meegebracht.
+
+00:25:03.460 --> 00:25:04.680
+Niveau is slechts een meetlat.
+
+00:25:04.860 --> 00:25:07.760
+Het meet alleen iets omdat elke rij die informatie met zich meedraagt.
+
+00:25:08.000 --> 00:25:09.940
+Zonder eigenaar is er niets om tegen te meten.
+
+00:25:09.940 --> 00:25:12.260
+Dus de volgende vraag gaat helemaal niet over rollen.
+
+00:25:12.380 --> 00:25:13.340
+Het gaat over de rij.
+
+00:25:13.620 --> 00:25:14.860
+Record eigenaarschap.
+
+00:25:14.920 --> 00:25:16.180
+Het stille middelpunt van alles.
+
+00:25:16.400 --> 00:25:19.000
+Open een willekeurige rij in een tabel die eigendom is van een gebruiker.
+
+00:25:19.180 --> 00:25:21.120
+Je vindt twee kolommen waar de meeste mensen nooit naar kijken.
+
+00:25:21.280 --> 00:25:22.640
+Eigenaar en eigendom van businessunit.
+
+00:25:22.800 --> 00:25:24.640
+De eigenaar is ofwel een gebruiker of een team.
+
+00:25:24.880 --> 00:25:26.100
+Dat is de volledige lijst.
+
+00:25:26.240 --> 00:25:29.200
+Een rij kan niet door twee mensen worden bezeten en kan niet door niemand worden bezeten.
+
+00:25:29.400 --> 00:25:35.280
+In een tabel die eigendom is van een gebruiker, is er altijd een eigenaar en diegene vormt het anker voor elke diepteberekening die we net hebben besproken.
+
+00:25:35.520 --> 00:25:36.940
+Denk eens na over wat dat betekent voor gebruikersdiepte.
+
+00:25:36.940 --> 00:25:39.860
+Deze gebruikersdiepte, rijen waarvan jij de eigenaar bent, zijn geen vaag concept.
+
+00:25:40.040 --> 00:25:41.180
+Het is een letterlijke match.
+
+00:25:41.360 --> 00:25:46.300
+Het platform vergelijkt de eigenaarkolom met jouw identiteit of met de teams waar je bij hoort en als ze overeenkomen, heb je toegang.
+
+00:25:46.460 --> 00:25:48.720
+Nu de tweede kolom, de verantwoordelijke businessunit.
+
+00:25:48.920 --> 00:25:50.340
+Niemand voert deze handmatig in.
+
+00:25:50.540 --> 00:25:53.600
+Wanneer een rij een eigenaar krijgt, neemt deze ook de businessunit van die eigenaar over.
+
+00:25:53.800 --> 00:25:57.660
+De twee reizen als een paar samen en worden op het moment van eigenaarschap op de rij gestempeld.
+
+00:25:57.660 --> 00:26:03.420
+Als een gebruiker in de Noordse eenheid een account aanmaakt, krijgt het account die gebruiker als eigenaar en de Noordse eenheid als eigenaar unit.
+
+00:26:03.420 --> 00:26:07.320
+Dat koppel wordt gelezen door businessunit diepte, zonder ooit te kijken waar de maker nu werkt.
+
+00:26:07.460 --> 00:26:09.280
+Het leest de unit die op de rij staat geschreven.
+
+00:26:09.440 --> 00:26:10.940
+De rij draagt dus zijn eigen bereik bij zich.
+
+00:26:11.140 --> 00:26:12.200
+Dat is het onopvallende aspect.
+
+00:26:12.460 --> 00:26:13.600
+Je ziet het niet op een formulier.
+
+00:26:13.800 --> 00:26:14.920
+Het is niet zichtbaar in de app.
+
+00:26:15.080 --> 00:26:20.460
+Maar elke toegangsbeslissing in het systeem verloopt via die twee waarden en als die onjuist zijn, is alles wat daarop is gebouwd ook onjuist.
+
+00:26:20.620 --> 00:26:22.140
+Er is echter een addertje onder het gras.
+
+00:26:22.400 --> 00:26:23.860
+Niet elke tabel werkt op deze manier.
+
+00:26:24.240 --> 00:26:26.940
+Dataverse kent een tweede type tabel genaamd, organisatie-eigendom.
+
+00:26:26.940 --> 00:26:30.760
+Hier hebben rijen helemaal geen eigenaar, geen gebruiker, geen team, geen verantwoordelijke unit.
+
+00:26:30.920 --> 00:26:33.340
+De rij behoort simpelweg toe aan de organisatie als geheel.
+
+00:26:33.480 --> 00:26:34.780
+Hoe werkt de beveiliging daar dan?
+
+00:26:34.920 --> 00:26:38.320
+Op tabelniveau heeft een gebruiker ofwel de rechten op die tabel, of niet.
+
+00:26:38.480 --> 00:26:42.160
+Er is geen diepte om toe te passen, omdat er niets op de rij staat om mee te vergelijken.
+
+00:26:42.400 --> 00:26:45.220
+Lezen is lezen voor iedereen die die rechten heeft, voor elke rij.
+
+00:26:45.440 --> 00:26:51.000
+Dat is perfect voor bepaalde data, referentielijsten, valutacodes, productcategorieën, instellingstabellen.
+
+00:26:51.160 --> 00:26:54.540
+Alles wat het hele bedrijf nodig heeft en wat niemand rij voor rij zou moeten afschermen.
+
+00:26:54.540 --> 00:26:57.220
+Voor dat soort gegevens is eigenaarschap alleen maar overhead.
+
+00:26:57.380 --> 00:26:59.340
+Maar dit is wat architecten vaak over het hoofd zien.
+
+00:26:59.540 --> 00:27:05.400
+Voor alles wat gevoelig is, gekoppeld aan een klant, een zaak of een persoon, betekent organisatie-eigendom, dat je het hele bereikmodel opgeeft.
+
+00:27:05.600 --> 00:27:07.440
+Geen muren, geen units, geen diepte.
+
+00:27:07.560 --> 00:27:09.020
+Eén schakelaar voor de hele tabel.
+
+00:27:09.240 --> 00:27:10.720
+Nu het deel dat de inzet verhoogt.
+
+00:27:10.840 --> 00:27:14.560
+Je kiest het type eigenaarschap bij het aanmaken van de tabel en daarna kun je het niet meer wijzigen.
+
+00:27:14.740 --> 00:27:17.200
+Er is geen instelling om aan te passen, geen migratieknop.
+
+00:27:17.200 --> 00:27:24.040
+Als je een tabel aanmaakt als organisatie-eigendom en iemand zegt een jaar later dat we deze rijen per regio moeten beperken, is het antwoord opnieuw opbouwen.
+
+00:27:24.220 --> 00:27:29.420
+Nieuwe tabel, nieuwe relaties, data verplaatst naar elke app, flow en rapportage die naar de vervanger wijst.
+
+00:27:29.560 --> 00:27:31.260
+Het omgekeerde is niet vriendelijker.
+
+00:27:31.440 --> 00:27:37.640
+Een tabel in eigendom van een gebruiker die u open wilde houden, krijgt voor elke rij een eigenaar en een eenheid en elke rij die eraan raakt heeft een diepte nodig.
+
+00:27:37.860 --> 00:27:42.140
+Vooruit, u kunt alles instellen op organisatieniveau, maar nu heeft u een model gebouwd dat u nooit wilde gebruiken.
+
+00:27:42.140 --> 00:27:48.080
+Dit is dus een van de weinige beveiligingsbeslissingen die bijna definitief is, wat vreemd is omdat het al in de eerste tien minuten van het modelleren wordt genomen.
+
+00:27:48.260 --> 00:27:52.180
+Iemand klikt door het tabel aanmaakformulier, kiest de standaardinstelling en gaat verder met het toevoegen van kolommen.
+
+00:27:52.360 --> 00:27:53.820
+De standaardinstelling is belangrijk.
+
+00:27:54.060 --> 00:27:58.240
+Aangepaste tabellen zijn standaard in eigendom van een gebruiker, tenzij u anders aangeeft en de meeste teams doen dat nooit.
+
+00:27:58.420 --> 00:27:59.920
+Dus wat is de juiste ontwerpgewoonte?
+
+00:28:00.180 --> 00:28:03.440
+Bepaal het eigendomstype bewust en doe dit met beveiliging in het achterhoofd.
+
+00:28:03.520 --> 00:28:05.880
+Voordat u één kolom benoemt, stelt u één vraag.
+
+00:28:06.080 --> 00:28:08.600
+Zal iemand ooit sommige van deze rijen moeten zien en andere niet?
+
+00:28:08.600 --> 00:28:11.700
+Als het antwoord ja of zelfs misschien is, maak het dan eigendom van een gebruiker.
+
+00:28:12.020 --> 00:28:14.700
+Eigenaren, eenheden, diepte, het hoort er allemaal bij de tabel.
+
+00:28:14.840 --> 00:28:20.180
+Als het eerlijke antwoord nooit is, dit is gedeelde referentiedata, dan is organisatie eigendom schoner en goedkoper.
+
+00:28:20.400 --> 00:28:24.080
+Kies hier in de verkeerde richting en u merkt het later, wanneer het het duurst is om te herstellen.
+
+00:28:24.280 --> 00:28:27.800
+En zodra u accepteert dat elke rij een eigenaar heeft, komt er een andere vraag naar boven.
+
+00:28:28.060 --> 00:28:29.140
+Eigenaren zijn niet permanent.
+
+00:28:29.480 --> 00:28:31.920
+Mensen gaan weg, rollen veranderen, werk wordt overgedragen.
+
+00:28:32.160 --> 00:28:34.280
+Wat gebeurt er met de rij wanneer de eigenaar verandert?
+
+00:28:34.560 --> 00:28:37.040
+Toewijzen, opnieuw toewijzen en het eigendomspad.
+
+00:28:37.040 --> 00:28:39.620
+Het veranderen van een eigenaar heeft een naam in een database.
+
+00:28:39.860 --> 00:28:40.720
+Het heet toewijzen.
+
+00:28:40.960 --> 00:28:45.920
+Wanneer iemand een rij toewijst, verandert de eigenaarkolom en de bijbehorende bedrijfseenheid verandert mee omdat de twee als een paar reizen.
+
+00:28:46.100 --> 00:28:49.440
+De rij neemt de eenheid van de nieuwe eigenaar over op het moment dat de overdracht plaatsvindt.
+
+00:28:49.580 --> 00:28:51.320
+Dat is een stille beveiligingsgebeurtenis.
+
+00:28:51.500 --> 00:28:55.880
+Een rij die gisteren binnen één muur viel, kan er vandaag binnen een andere vallen en elke diepteberekening volgt die mee.
+
+00:28:56.080 --> 00:28:57.580
+Nu staan rijen er echt alleen voor.
+
+00:28:57.760 --> 00:29:00.620
+Een account heeft contacten, verkoopkansen, cases, notices.
+
+00:29:00.620 --> 00:29:05.300
+Dus het platform moet beslissen wat er met al die zaken gebeurt wanneer de bovenliggende rij van eigenaar wisselt.
+
+00:29:05.440 --> 00:29:09.000
+Die beslissing is het kaskadegedrag en dat wordt ingesteld op elke relatie.
+
+00:29:09.260 --> 00:29:13.900
+Vijf acties krijgen een instelling, toewijzen, delen, delen ongedaan maken, opnieuw ouder maken en verwijderen.
+
+00:29:14.020 --> 00:29:18.140
+Elk kan worden ingesteld op kaskade alles wat betekent dat de actie doorstroomt naar elke gerelateerde rij.
+
+00:29:18.340 --> 00:29:20.320
+Actief, wat het beperkt tot openstaande rijen.
+
+00:29:20.480 --> 00:29:23.440
+Eigendom van gebruiker, wat alleen rijen raakt die eigendom zijn van dezelfde persoon.
+
+00:29:23.600 --> 00:29:26.320
+Of geen, wat betekent dat de onderliggende gegevens precies blijven waar ze zijn.
+
+00:29:26.320 --> 00:29:30.120
+De meeste teams zien dit als handige instellingen. Kies de standaard en doorgaan.
+
+00:29:30.260 --> 00:29:31.680
+Maar kijk eens naar wat ze aansturen.
+
+00:29:31.880 --> 00:29:35.460
+Toewijzen met kaskade al betekent dat één klik een hele boom aan rijen overdraagt,
+
+00:29:35.600 --> 00:29:37.700
+inclusief rijen die de nieuwe eigenaar nooit had mogen krijgen.
+
+00:29:37.940 --> 00:29:41.780
+Delen met kaskade al betekent dat één keer delen stilletjes toegang geeft tot elk kinditem,
+
+00:29:41.920 --> 00:29:43.960
+zonder dat die extra rechten ergens duidelijk zichtbaar zijn.
+
+00:29:44.120 --> 00:29:45.880
+En het omgekeerde is net zo riskant.
+
+00:29:46.120 --> 00:29:50.380
+Zet toewijzen op none en het account gaat naar een nieuwe eigenaar terwijl de cases bij de oude blijven.
+
+00:29:50.540 --> 00:29:54.280
+Nu staan klantgegevens bij twee personen, mogelijk zelfs in twee verschillende bedrijfseenheden.
+
+00:29:54.380 --> 00:29:55.820
+Niemand had die splitsing geplant.
+
+00:29:56.320 --> 00:29:57.640
+Simpelweg wat de instelling deed.
+
+00:29:58.640 --> 00:30:00.400
+Kaskadeconfiguratie is dus een beveiligingsbeslissing.
+
+00:30:00.580 --> 00:30:02.940
+Het bepaalt hoe ver een actie doordringt in je data.
+
+00:30:03.260 --> 00:30:06.280
+Doe het bewust, relatie voor relatie, en noteer waarom.
+
+00:30:06.500 --> 00:30:09.940
+Dan is er het probleem dat elk jaar in elke omgeving opduikt, mensen vertrekken.
+
+00:30:10.140 --> 00:30:13.140
+Wanneer een gebruiker wordt uitgeschakeld, blijft de systeemgebruikersrij behouden.
+
+00:30:13.280 --> 00:30:14.720
+En ook alle rijen die zij bezitten.
+
+00:30:14.980 --> 00:30:16.920
+Niets verplaatst, niets wordt opnieuw toegewezen.
+
+00:30:17.120 --> 00:30:19.600
+De eigenaarkolom wijst nog steeds naar iemand die niet kan inloggen.
+
+00:30:19.800 --> 00:30:21.660
+Noem het het probleem van de uitgeschakelde gebruiker.
+
+00:30:21.660 --> 00:30:25.440
+Die rijen staan in een eenheid waar niemand meer werkt, beheerd door een account waar niemand naar omkijkt.
+
+00:30:25.640 --> 00:30:28.720
+Managers op gebruikersniveau kunnen ze niet zien omdat ze er geen eigenaar van zijn.
+
+00:30:28.940 --> 00:30:33.860
+Mensen op het niveau van de bedrijfseenheid kunnen er misschien nog bij, of ook niet, en klantgegevens raken buiten beeld.
+
+00:30:34.020 --> 00:30:36.440
+Een deal zonder eigenaar, een case waar niemand aan werkt.
+
+00:30:36.580 --> 00:30:37.620
+En het stapelt zich op.
+
+00:30:37.780 --> 00:30:41.180
+Laat het een paar jaar zo en de grootste eigenaar in je systeem is een verzameling voor malige medewerkers.
+
+00:30:41.340 --> 00:30:43.700
+De oplossing is geen eenmalig opruimproject, maar een vast patroon.
+
+00:30:43.860 --> 00:30:46.660
+Maak van het opnieuw toewijzen bij uitdienstreding een workflow, geen handmatige taak.
+
+00:30:46.660 --> 00:30:49.340
+Wanneer iemand vertrekt, wordt het proces automatisch gestart.
+
+00:30:49.480 --> 00:30:56.220
+Het zoekt alle rijen van de vertrekkende gebruiker, draagt ze over aan een vaste eigenaar, meestal een team of manager, en schakelt dan pas het account uit.
+
+00:30:56.400 --> 00:30:57.540
+De volgorde is belangrijk.
+
+00:30:57.880 --> 00:30:59.620
+Eerst toewijzen, dan pas uitschakelen.
+
+00:30:59.840 --> 00:31:02.820
+Zodra het account uitstaat, wordt het vinden en verplaatsen lastiger.
+
+00:31:03.000 --> 00:31:04.480
+En de bestemming is ook belangrijk.
+
+00:31:04.700 --> 00:31:09.740
+Als rijen van één vertrekkend persoon naar één overblijvend persoon gaan, creëer je hetzelfde probleem met een langere lont.
+
+00:31:09.940 --> 00:31:12.860
+Die persoon vertrekt uiteindelijk ook en de rijen gaan weer mee.
+
+00:31:12.860 --> 00:31:19.520
+Dat wijst op een ander type eigenaar, een die niet ontslag neemt, niet van afdeling wisselt en geen rijen meeneemt als hij gaat.
+
+00:31:20.000 --> 00:31:23.800
+Het team, eigenaar teams en toegangsteams, twee verschillende tools.
+
+00:31:24.400 --> 00:31:27.620
+Dataverse heeft meer dan één soort team en ze doen niet hetzelfde werk.
+
+00:31:27.840 --> 00:31:29.140
+Begin met het eigenaarsteam.
+
+00:31:29.320 --> 00:31:30.760
+Dat is de meest eenvoudige optie.
+
+00:31:30.940 --> 00:31:33.620
+Je maakt het aan, plaatst het in de business unit en geeft het een beveiligingsrol.
+
+00:31:33.820 --> 00:31:35.660
+Daarna kan het twee dingen die een gebruiker ook kan.
+
+00:31:35.660 --> 00:31:38.200
+Het kan privileges bevatten en het kan eigenaar zijn van rijen.
+
+00:31:38.340 --> 00:31:39.940
+Dat tweede deel is wat het onderscheidt.
+
+00:31:40.000 --> 00:31:42.200
+Een eigenaarsteam kan in de eigenaarkolom van een rij staan.
+
+00:31:42.200 --> 00:31:44.820
+De bijbehorende business unit wordt dan de eigende business unit.
+
+00:31:44.980 --> 00:31:46.820
+Het team heeft dus niet alleen toegang tot gegevens.
+
+00:31:47.020 --> 00:31:49.400
+Het bezit de gegevens op dezelfde manier als een persoon dat doet.
+
+00:31:49.620 --> 00:31:52.040
+Dan het toegangsteam, een ander hulpmiddel, een ander doel.
+
+00:31:52.180 --> 00:31:54.220
+Een toegangsteam bezit niets en heeft geen rol.
+
+00:31:54.420 --> 00:31:55.680
+Het bestaat om één reden.
+
+00:31:55.920 --> 00:31:59.380
+Om toegang te verlenen tot specifieke rijen, koppel je het aan één record,
+
+00:31:59.640 --> 00:32:01.960
+voeg je mensen toe en krijgen zij de rechten uit een schabloon.
+
+00:32:02.180 --> 00:32:04.920
+Lezen, schrijven, toevoegen, wat het schabloon ook aangeeft.
+
+00:32:05.100 --> 00:32:07.580
+Het team bestaat alleen zolang die samenwerking het nodig heeft.
+
+00:32:07.820 --> 00:32:09.540
+Denk aan het accounting voor een grote klant.
+
+00:32:09.760 --> 00:32:11.460
+Vier mensen moeten aan één account werken.
+
+00:32:11.460 --> 00:32:13.740
+Ze delen geen unit en hun rollen rijken daar niet.
+
+00:32:13.900 --> 00:32:16.400
+Een toegangsteam geeft hen rechten tot die rij en alleen die rij,
+
+00:32:16.600 --> 00:32:18.180
+zonder het onderliggende model aan te passen.
+
+00:32:18.340 --> 00:32:21.080
+Het eigenaarsteam is dus een container voor gegevens en privileges.
+
+00:32:21.440 --> 00:32:24.100
+Het toegangsteam is een lichtgewicht manier om één deur te openen.
+
+00:32:24.260 --> 00:32:26.820
+Dan is er nog een derde optie die een heel ander probleem oplost.
+
+00:32:27.020 --> 00:32:28.260
+Wie onderhoudt het lidmaatschap?
+
+00:32:28.440 --> 00:32:31.440
+Bij een gewoon eigenaarsteam voegt iemand handmatig leden toe en verwijdert ze.
+
+00:32:31.580 --> 00:32:33.520
+In het beheercentrum één persoon tegelijk.
+
+00:32:33.720 --> 00:32:35.080
+Dat werkt voor een dozijn mensen.
+
+00:32:35.340 --> 00:32:37.800
+Het werkt niet meer bij een paar honderd en het gaat stilletjes mis
+
+00:32:37.800 --> 00:32:40.140
+als iemand van baan wisselt en niemand het team bijwerkt.
+
+00:32:40.280 --> 00:32:42.520
+Een Microsoft en traag groepsteam lost dat op.
+
+00:32:42.600 --> 00:32:44.380
+Je koppelt het team aan een groep in je directory.
+
+00:32:44.660 --> 00:32:47.060
+Het lidmaatschap wordt niet langer in dataverse beheerd.
+
+00:32:47.240 --> 00:32:48.160
+Het volgt de groep.
+
+00:32:48.320 --> 00:32:51.400
+Iemand wordt lid van de groep en zit de volgende keer dat ze inloggen in het team.
+
+00:32:51.620 --> 00:32:53.280
+Ze verlaten de groep en zijn eruit.
+
+00:32:53.520 --> 00:32:56.120
+Dat verplaatst de beslissing naar waar identiteit al wordt beheerd.
+
+00:32:56.120 --> 00:32:58.620
+Toegangscontroles, processen voor in- en uitdienstreding,
+
+00:32:58.780 --> 00:33:00.680
+goedkeuringen, alles bevindt zich in de directory.
+
+00:33:01.220 --> 00:33:02.800
+Dataverse leest alleen het resultaat.
+
+00:33:02.940 --> 00:33:04.440
+Er zit nu wel een detail in die optie.
+
+00:33:04.600 --> 00:33:06.160
+Je kiest het groepstype en er zijn er twee,
+
+00:33:06.340 --> 00:33:09.060
+beveiligingsgroepen en Microsoft 365 groepen.
+
+00:33:09.600 --> 00:33:11.900
+Beveiligingsgroepen zijn de gebruikelijke keuze voor toegangsbeheer.
+
+00:33:12.060 --> 00:33:14.020
+Ze zijn bedoeld om mensen te groeperen voor rechten.
+
+00:33:14.340 --> 00:33:17.760
+Microsoft 365 groepen komen met een mailbox, een gedeelde site,
+
+00:33:17.960 --> 00:33:18.840
+een teams werkruimte.
+
+00:33:18.840 --> 00:33:22.500
+Ze zijn gebouwd voor samenwerking en groeien vaak vanzelf omdat mensen ze aanmaken voor projecten.
+
+00:33:22.500 --> 00:33:26.640
+Het gebruik van een groep als beveiligingsbron werkt, maar je erft alles wat de eigenaren ermee doen.
+
+00:33:26.780 --> 00:33:30.860
+Je kiest ook een lidmaatschapstype, alleen leden, wat betekent enkel de mensen die direct in de groep zitten.
+
+00:33:31.140 --> 00:33:33.120
+Eigenaren, wat staat voor de eigenaren van de groep.
+
+00:33:33.280 --> 00:33:37.940
+Leden en eigenaren, wat beide dekt, of gasten, waaronder externe gebruikers die zijn uitgenodigd in de directory.
+
+00:33:38.200 --> 00:33:39.740
+Dat laatste verdient even aandacht.
+
+00:33:39.960 --> 00:33:42.000
+Als je een lidmaatschapstype kiest dat gasten omvat,
+
+00:33:42.160 --> 00:33:47.220
+besluit je dat externe identiteiten dataverse toegang krijgen via een groep waarvan ze wellicht niet weten dat deze bestaat.
+
+00:33:47.440 --> 00:33:48.320
+Soms is dat terecht.
+
+00:33:48.600 --> 00:33:52.000
+Meestal zou dit een bewuste keuze moeten zijn, geen standaardinstelling die aanstaat.
+
+00:33:52.500 --> 00:33:53.440
+Eindelijk hulpmiddel kies je?
+
+00:33:53.660 --> 00:33:54.560
+Stel één vraag.
+
+00:33:54.760 --> 00:33:57.560
+Is dit team eigenaar van gegevens of moeten deze alleen kunnen zien?
+
+00:33:57.560 --> 00:34:03.860
+Als rijen bij de groep horen en blijven staan wanneer mensen komen en gaan, wil je een eigenaarsteam, meestal ondersteund door een entra-groep.
+
+00:34:03.900 --> 00:34:09.780
+Als een paar mensen tijdelijk toegang nodig hebben tot een specifieke rij en het eigendom niet mag veranderen, wil je een toegangsteam.
+
+00:34:10.020 --> 00:34:16.120
+Beantwoord je die vraag verkeerd, dan eindig je met eigenaarsteams die enkel zichtbaarheid bieden of toegangsteams die stilletjes de rol van eigenaar vervullen.
+
+00:34:16.300 --> 00:34:18.200
+Maar het kiezen van het team is nog maar de helft.
+
+00:34:18.200 --> 00:34:23.560
+Een team beheert rechten anders dan een gebruiker en dat verschil verandert wat de mensen daarin daadwerkelijk kunnen doen.
+
+00:34:24.080 --> 00:34:25.200
+Teamrollen en effectieve machtigingen.
+
+00:34:26.020 --> 00:34:29.900
+Wijs een beveiligingsrol toe aan een team en elk lid van dat team krijgt die rechten.
+
+00:34:30.140 --> 00:34:33.200
+Voeg 40 mensen toe aan de groep en 40 mensen krijgen de privileges.
+
+00:34:33.620 --> 00:34:36.640
+Verwijder er één en die persoon verliest ze bij de volgende sessieverversing.
+
+00:34:36.880 --> 00:34:38.120
+Dat is de aantrekkingskracht.
+
+00:34:38.280 --> 00:34:42.220
+Je hoeft gebruikers niet meer één voor één aan te passen en de rol staat op één plek waar je deze kunt inzien.
+
+00:34:42.400 --> 00:34:46.180
+Maar er is een instelling op de gebruiker die bepaalt hoe die teamrechten zich feitelijk gedragen.
+
+00:34:46.180 --> 00:34:49.560
+Deze heet overerving van lidmaatschapsrechten en heeft twee opties.
+
+00:34:49.780 --> 00:34:51.680
+De eerste is alleen teamprivileges.
+
+00:34:51.980 --> 00:34:56.440
+Hierbij behoudt de gebruiker wat hun eigen rollen bieden en ook wat de teamrollen hen geven.
+
+00:34:56.820 --> 00:34:58.000
+Maar hier zit het addertje.
+
+00:34:58.200 --> 00:35:03.220
+De teamprivileges kunnen alleen worden gebruikt op rijen waarvan het team eigenaar is of die met het team zijn gedeeld.
+
+00:35:03.460 --> 00:35:07.720
+Wanneer deze gebruiker iets maakt is het van hen en bepalen hun eigen rollen wat ze ermee kunnen doen.
+
+00:35:07.900 --> 00:35:11.540
+De tweede optie is direct toegangsniveau voor gebruikers en teamprivileges.
+
+00:35:11.820 --> 00:35:12.980
+Dit is de standaardinstelling.
+
+00:35:12.980 --> 00:35:17.740
+De eigen rollen van de gebruiker zijn van toepassing en daarnaast gelden de teamrollen ook voor het eigen werk van de gebruiker.
+
+00:35:17.980 --> 00:35:20.380
+Teamrechten strekken zich uit over alles wat de persoon aanraakt.
+
+00:35:20.560 --> 00:35:22.720
+Kijk nu wat dat doet met het aanmaken en bezitten van rijen.
+
+00:35:22.940 --> 00:35:28.920
+Stel dat een gebruiker geen aanmaakrechten heeft voor accounts binnen hun eigen rollen, enkel leesrechten, maar hun team wel een rol heeft met aanmaakrechten voor accounts.
+
+00:35:29.140 --> 00:35:32.600
+Onder de eerste instelling kan die gebruiker nog steeds geen account aanmaken als zichzelf.
+
+00:35:32.780 --> 00:35:35.820
+Het recht van het team om aan te maken werkt alleen voor rijen die het team bezit.
+
+00:35:35.960 --> 00:35:39.320
+De gebruiker moet ze aanmaken namens het team door het team als eigenaar in te stellen.
+
+00:35:39.320 --> 00:35:43.100
+Onder de tweede instelling kan dezelfde gebruiker een account aanmaken en persoonlijk bezitten.
+
+00:35:43.280 --> 00:35:48.600
+De rol van het team vulde het gat in hun eigen rechten op, dus één selectievakje bepaalt of mensen rijen als individu kunnen bezitten.
+
+00:35:48.780 --> 00:35:51.220
+En dat is van belang omdat eigenaarschap is wat diepte leest.
+
+00:35:51.380 --> 00:35:53.900
+Een rij die door een persoon wordt bezeten, volgt die persoon.
+
+00:35:54.060 --> 00:35:58.920
+Een rij die door het team wordt bezeten, volgt het team, wat ons brengt bij waarom een eigenaarteam als container werkt.
+
+00:35:59.140 --> 00:36:02.760
+Wanneer een team de rij bezit, is niets van die rij afhankelijk van iemands dienstverband.
+
+00:36:02.760 --> 00:36:04.580
+De eigenaarkolom wijst naar het team.
+
+00:36:04.760 --> 00:36:07.100
+De bezittende bedrijfseenheid is de eenheid van het team.
+
+00:36:07.260 --> 00:36:11.060
+Iemand vertrekt, wordt uitgeschakeld of verhuisd naar een andere stad, de rij merkt er niets van.
+
+00:36:11.300 --> 00:36:15.540
+Deze blijft waar hij was met dezelfde rijkwijte, zichtbaar voor iedereen die toegang heeft tot de data van dat team.
+
+00:36:15.780 --> 00:36:17.640
+Vergelijk dat met wat we eerder hebben besproken.
+
+00:36:17.900 --> 00:36:21.900
+Rijen van een vertrokken gebruiker worden ontoegankelijk en je hebt een workflow nodig om ze te redden.
+
+00:36:22.140 --> 00:36:23.840
+Rijen van een team gaan nergens heen.
+
+00:36:23.980 --> 00:36:26.800
+De afboarding taak wordt kleiner omdat er minder verplaatst hoeft te worden.
+
+00:36:27.000 --> 00:36:29.500
+Er zit dus een patroon in en het is de moeite waard om dat duidelijk uit te spreken.
+
+00:36:29.500 --> 00:36:31.620
+Teams bezitten de data, gebruikers voeren het werk uit.
+
+00:36:31.760 --> 00:36:33.620
+Het team is de permanente thuisbasis van het record.
+
+00:36:33.800 --> 00:36:35.620
+De gebruiker is degene die er vandaag aan werkt.
+
+00:36:35.800 --> 00:36:38.460
+Die splitsing komt overeen met hoe organisaties in de praktijk werken.
+
+00:36:38.620 --> 00:36:42.860
+Een klantrelatie is van het bedrijf, niet van de vertegenwoordiger die het dit kwartaal toevallig beheert.
+
+00:36:43.020 --> 00:36:47.740
+In de praktijk betekent dit ontwerpen zodat nieuwe rijen onder het eigenaarschap van een team vallen, niet van een persoon.
+
+00:36:47.900 --> 00:36:50.360
+Een formulier dat bij aanmaak de eigenaar op het juiste team zet,
+
+00:36:50.520 --> 00:36:53.920
+een flow die inkomende cases naar een wachtrij team stuurt in plaats van naar de eerste de beste,
+
+00:36:54.100 --> 00:36:57.440
+en een gebruikersinstelling waarmee mensen aan teamdata kunnen werken zonder de eigenaar te zijn.
+
+00:36:57.440 --> 00:36:59.480
+Doe dat en reorganisaties worden kleiner.
+
+00:36:59.680 --> 00:37:02.060
+Mensen verhuizen tussen teams en hun toegang verhuisd met hen mee.
+
+00:37:02.220 --> 00:37:03.800
+De rijen verplaatsen zich helemaal niet.
+
+00:37:03.960 --> 00:37:05.360
+De structuur doet dus wat hij moet doen.
+
+00:37:05.920 --> 00:37:08.320
+Bedrijfseenheden schermen de data af, rollen bepalen de acties,
+
+00:37:08.500 --> 00:37:10.840
+diepte stelt het bereik in en teams houden de rijen stabiel.
+
+00:37:11.060 --> 00:37:12.660
+Dat alles werkt op het niveau van de hele rij,
+
+00:37:12.820 --> 00:37:15.480
+maar sommige rijen bevatten één veld dat niet met de rest mee moet reizen,
+
+00:37:15.740 --> 00:37:17.180
+zoals een salaris of een fiscaal nummer.
+
+00:37:17.340 --> 00:37:19.600
+En daarvoor is rijkwijd de controle te grofmazig.
+
+00:37:19.740 --> 00:37:21.740
+We hebben een fijne record nodig, de kolom.
+
+00:37:22.140 --> 00:37:23.860
+Beveiliging op kolomniveau uitgelegd.
+
+00:37:23.860 --> 00:37:27.900
+Denk eens aan wat er in een rij staat, een contactpersoon, een naam, e-mail, telefoonnummer,
+
+00:37:28.140 --> 00:37:31.460
+en drie kolommen verder een salaris, fiscaal nummer of een medische notitie.
+
+00:37:31.600 --> 00:37:34.440
+Alles wat we tot nu toe hebben gebouwd, beschermt de rij als geheel.
+
+00:37:34.620 --> 00:37:37.300
+Als je het contact kunt lezen, kun je elke kolom ervan lezen.
+
+00:37:37.480 --> 00:37:40.380
+Het bereikmodel kan niet zeggen, wel deze rij, maar niet dat veld.
+
+00:37:40.580 --> 00:37:42.460
+Dat is het gat dat kolombeveiliging opvult.
+
+00:37:42.660 --> 00:37:45.760
+Het beschermt de velden waar één verkeerde kijker een groot probleem vormt.
+
+00:37:46.360 --> 00:37:49.340
+Salarisgegevens, burgerservice nummers, bankgegevens, gezondheidsdata,
+
+00:37:49.480 --> 00:37:52.700
+alles wat in de rij gedeeld mag worden, maar waarvan één waarde niet voor iedereen bestemd is.
+
+00:37:52.700 --> 00:37:55.680
+Hoe stel je dit in? Drie stappen en de volgorde is belangrijk.
+
+00:37:55.860 --> 00:37:57.900
+Ten eerste markeer je de kolom als beveiligd.
+
+00:37:58.000 --> 00:38:01.180
+Het is een eigenschap van de kolom zelf, een simpele schakelaar in de kolominstellingen.
+
+00:38:01.280 --> 00:38:02.940
+Totdat je die omzet, verandert er niets.
+
+00:38:03.120 --> 00:38:04.760
+De kolom gedraagt zich als elke andere.
+
+00:38:04.980 --> 00:38:07.200
+Ten tweede maak je een veldbeveiligingsprofiel aan.
+
+00:38:07.380 --> 00:38:12.340
+Een profiel is een benoemde set regels, die voor elke beveiligde kolom aangeeft wat het profiel toestaat.
+
+00:38:12.460 --> 00:38:15.460
+Ten derde wijs je personen toe aan het profiel, gebruikers of teams.
+
+00:38:15.720 --> 00:38:19.480
+Iedereen die niet is toegewezen, ziet niets in die kolom, geen beperkte versie, helemaal niets.
+
+00:38:19.480 --> 00:38:21.520
+Dat laatste punt brengt mensen vaak in verwarring.
+
+00:38:21.740 --> 00:38:28.120
+Zodra je een kolom beveiligt, is deze voor iedereen afgesloten, ook voor mensen die hem gisteren nog konden lezen, inclusief beheerders die hier geen uitzondering vormen.
+
+00:38:28.660 --> 00:38:33.060
+Systeembeheerders kunnen beveiligde kolommen alleen zien als een profiel hen net als ieder ander toegang geeft.
+
+00:38:33.240 --> 00:38:35.620
+Je stelt het weer open, bewust en per profiel.
+
+00:38:35.820 --> 00:38:38.840
+Elk profiel kan drie rechten verlenen op een beveiligde kolom.
+
+00:38:39.080 --> 00:38:40.760
+Lezen, de persoon kan de waarde zien.
+
+00:38:41.000 --> 00:38:43.420
+Bijwerken, de persoon kan een bestaande waarde wijzigen.
+
+00:38:43.660 --> 00:38:46.760
+Maken, de persoon kan een waarde invoeren wanneer de rij wordt aangemaakt.
+
+00:38:46.760 --> 00:38:48.880
+Deze rechten zijn gescheiden en dat is nuttig.
+
+00:38:49.080 --> 00:38:54.000
+Denk aan een ouder medewerker die een salaris invoert bij het aanmaken van een nieuw personeelsdossier, maar het daarna niet meer kan wijzigen.
+
+00:38:54.200 --> 00:38:56.100
+Maken, ja, bijwerken, nee.
+
+00:38:56.280 --> 00:38:58.900
+Of een manager die het getal moet zien, maar er nooit iets in mag veranderen.
+
+00:38:59.020 --> 00:38:59.620
+Alleen lezen.
+
+00:38:59.820 --> 00:39:02.400
+Je bouwt het profiel afgestemd op de functie, niet slechts een ja of nee.
+
+00:39:02.620 --> 00:39:04.580
+Wat ziet iemand dan wanneer diegene geen toegang heeft?
+
+00:39:04.780 --> 00:39:06.580
+Geen leeg veld, geen ontbrekend veld.
+
+00:39:06.760 --> 00:39:13.060
+De kolom staat nog steeds op het formulier, in de weergave, in het raster, maar de waarde verschijnt als een rij sterretjes, gemaskeerd, niet verborgen.
+
+00:39:13.060 --> 00:39:16.740
+En dat is bewust gedaan. De gebruiker merkt dat er iets in het veld staat.
+
+00:39:16.960 --> 00:39:18.320
+Ze kunnen het alleen niet lezen.
+
+00:39:18.580 --> 00:39:21.920
+Zo oogt een formulier niet kapot en weet de gebruiker waar hij naartoe moet.
+
+00:39:22.100 --> 00:39:24.980
+Maar het betekent ook dat het bestaan van de kolom geen geheim is.
+
+00:39:25.200 --> 00:39:28.720
+Als de naam van het veld zelf gevoelig is, verbergt kolombeveiliging dat niet.
+
+00:39:28.900 --> 00:39:31.960
+Nu de beperkingen, want die zijn er en ze zijn belangrijker dan de configuratie.
+
+00:39:32.140 --> 00:39:33.980
+Het is niet van toepassing op elk kolomtype.
+
+00:39:34.200 --> 00:39:35.980
+Je kunt de meeste enkelvoudige velden beveiligen.
+
+00:39:36.180 --> 00:39:38.480
+Tekst, getallen, datums, valuta, opzoekvelden.
+
+00:39:38.720 --> 00:39:42.260
+Sommige typen kunnen echter niet worden beveiligd, zoals de primaire naamkolom van een tabel.
+
+00:39:42.260 --> 00:39:45.080
+Controleer de specifieke kolom voordat je er je ontwerp op baseert.
+
+00:39:45.260 --> 00:39:46.300
+Ga nergens van uit.
+
+00:39:46.480 --> 00:39:49.280
+De tweede beperking is wat kolombeveiliging betrouwbaar maakt.
+
+00:39:49.440 --> 00:39:55.180
+Het geldt voor elk toegangspad, het formulier, de weergave, een rapport, export, de web-API,
+
+00:39:55.340 --> 00:39:58.420
+een flow, een plugin of een powerb-query via dataverse.
+
+00:39:58.640 --> 00:40:02.380
+De controle vindt plaats op platformniveau, dus de ingang maakt niet uit.
+
+00:40:02.560 --> 00:40:04.060
+De maskering volgt de data.
+
+00:40:04.380 --> 00:40:06.920
+Dat is het verschil met het verbergen van een veld op een formulier.
+
+00:40:07.120 --> 00:40:11.180
+Verwijder je een kolom van een formulier, dan kan iemand via een weergave of API alsnog lezen.
+
+00:40:11.180 --> 00:40:15.860
+Beveilig de kolom en het formulier, de weergave en de API geven hetzelfde schema's keer de resultaat.
+
+00:40:15.960 --> 00:40:17.960
+Op papier is kolombeveiliging dus helder.
+
+00:40:18.100 --> 00:40:21.160
+Drie stappen, drie rechten, consistent gedrag overal.
+
+00:40:21.360 --> 00:40:25.120
+In de praktijk gaat het elders mis, niet in het platform, maar in het gebruik.
+
+00:40:25.580 --> 00:40:29.580
+Ontwerppatronen en valkuilen voor kolombeveiliging, niet in het platform, maar in de gewoontes eromheen.
+
+00:40:29.760 --> 00:40:32.100
+De meest voorkomende fout is een wildgroei aan profielen.
+
+00:40:32.340 --> 00:40:33.020
+Zo begint het.
+
+00:40:33.180 --> 00:40:35.160
+Iemand van de loonadministratie moet salarissen kunnen zien.
+
+00:40:35.340 --> 00:40:37.260
+Er wordt een profiel aangemaakt voor loonadministratie.
+
+00:40:37.260 --> 00:40:40.580
+Een week later heeft een regiomanager hetzelfde veld nodig, maar alleen om te lezen.
+
+00:40:40.740 --> 00:40:41.420
+Nieuw profiel.
+
+00:40:41.660 --> 00:40:43.580
+Dan heeft een auditor een maandlang leestoegang nodig.
+
+00:40:43.800 --> 00:40:44.440
+Nieuw profiel.
+
+00:40:44.680 --> 00:40:47.540
+Dan een projectleider, een contractor, een team dat is gefuseerd.
+
+00:40:47.700 --> 00:40:49.320
+Een jaar later heb je veertig profielen.
+
+00:40:49.560 --> 00:40:51.520
+Elk met een naam die logisch leek voor de maker.
+
+00:40:51.800 --> 00:40:54.900
+Niemand weet welke overlappen, welke verouderd zijn of wie erin zit.
+
+00:40:55.120 --> 00:40:58.900
+Vraag wie salarissen mag lezen en je bent een middag aan het klikken om het uit te zoeken.
+
+00:40:59.180 --> 00:41:00.720
+Dat is één profiel per verzoek.
+
+00:41:00.860 --> 00:41:02.380
+De weg naar een onbegrijpelijk model.
+
+00:41:02.700 --> 00:41:04.980
+De oplossing is veranderen waar een profiel voor staat.
+
+00:41:04.980 --> 00:41:07.080
+Bouw geen profielen rond teams of personen.
+
+00:41:07.240 --> 00:41:08.860
+Bouw ze rond de gevoeligheid van de data.
+
+00:41:09.140 --> 00:41:09.840
+Denk in klassen.
+
+00:41:10.020 --> 00:41:12.000
+Een profiel voor vertrouwelijke salarisgegevens.
+
+00:41:12.220 --> 00:41:13.560
+Een profiel voor persoonsgegevens.
+
+00:41:13.740 --> 00:41:15.320
+Een profiel voor gezondheidsinformatie.
+
+00:41:15.500 --> 00:41:18.840
+Elk profiel koppelt aan een type gegevens en beantwoordt één enkele vraag.
+
+00:41:19.080 --> 00:41:20.360
+Wie mag deze klasse inzien?
+
+00:41:20.560 --> 00:41:21.660
+Dan draait het werk om.
+
+00:41:21.900 --> 00:41:24.660
+Wanneer iemand nieuw toegang nodig heeft, creëer je niets nieuws.
+
+00:41:24.860 --> 00:41:27.700
+Je voegt de persoon of het team toe aan een profiel dat al bestaat.
+
+00:41:27.920 --> 00:41:32.680
+Wanneer er een nieuwe gevoelige kolom verschijnt, bepaal je bij welke klasse deze hoort en voeg je deze toe aan dat profiel.
+
+00:41:32.680 --> 00:41:36.640
+De lijst met profielen blijft kort omdat de lijst met vertrouwelijkheidsklasse kort blijft.
+
+00:41:36.820 --> 00:41:39.520
+Drie of vier profielen kunnen de meeste organisaties afdekken.
+
+00:41:39.660 --> 00:41:42.500
+Als je er meer dan tien hebt, wordt er waarschijnlijk op verzoek gemodelleerd.
+
+00:41:42.660 --> 00:41:43.700
+Nu een stiller risico.
+
+00:41:43.960 --> 00:41:46.160
+Beveiligde kolommen blijven niet alleen op formulieren staan.
+
+00:41:46.400 --> 00:41:49.200
+Weergave, rapporten en exports halen allemaal dezelfde gegevens op.
+
+00:41:49.340 --> 00:41:56.020
+Een G-maskeerde waarde in een overzicht is prima, maar denk aan een Excel-export, een Power BI-dataset of een flow die de waarde naar een ander systeem kopieert.
+
+00:41:56.540 --> 00:41:58.420
+Kolombeveiliging beschermt het lezen in dataverse.
+
+00:41:58.420 --> 00:42:03.360
+Zodra iemand met toegang het getal ergens anders kopieert, is het masker verdwenen en stopt jouw controle bij de grens.
+
+00:42:03.620 --> 00:42:06.000
+Controleer dus wat het systeem verlaat, niet alleen wat er wordt weergegeven.
+
+00:42:06.160 --> 00:42:09.000
+De mensen die leestoegang hebben tot een beveiligde kolom vormen de echte perimeter.
+
+00:42:09.240 --> 00:42:10.900
+Hou die groep klein genoeg om ze bij naam te kennen.
+
+00:42:11.120 --> 00:42:11.780
+Dan het testen.
+
+00:42:11.880 --> 00:42:13.480
+En hier is een gewoonte die het waard is om aan te leren.
+
+00:42:13.680 --> 00:42:15.080
+Ga er niet vanuit dat het profiel werkt.
+
+00:42:15.560 --> 00:42:16.040
+Controleer het.
+
+00:42:16.140 --> 00:42:21.980
+Met de tool voor toegangscontrole kun je een gebruiker kiezen en zien wat deze daadwerkelijk kan doen, inclusief welke beveiligde kolommen ze kunnen lezen, bijwerken of aanmaken.
+
+00:42:22.100 --> 00:42:23.020
+Het kost maar een minuut.
+
+00:42:23.020 --> 00:42:26.380
+Het overslaan betekent dat je er via de gebruiker achterkomt, meestal op het slechtst mogelijke moment.
+
+00:42:26.540 --> 00:42:28.660
+Nog één punt, en dat is van belang voor het hele ontwerp.
+
+00:42:29.260 --> 00:42:30.300
+Kolombeveiliging is een verfijning.
+
+00:42:30.500 --> 00:42:32.580
+Het is nooit een vervanging voor het goed opzetten van de tabel.
+
+00:42:32.740 --> 00:42:36.160
+Als de helft van de kolommen in een tabel vergrendeld moet worden, zijn het waarschijnlijk twee tabellen.
+
+00:42:36.340 --> 00:42:42.240
+Als het ene team de rijen van het andere team helemaal niet mag zien, is dat een vraag over bedrijfseenheden en hiërarchie, geen veldvraag.
+
+00:42:42.960 --> 00:42:45.960
+Kolombeveiliging beperkt wat zichtbaar is binnen rijen die iemand al mag inzien.
+
+00:42:46.140 --> 00:42:49.380
+Het kan geen model repareren waarbij iemand toegang kreeg tot de verkeerde rijen.
+
+00:42:49.580 --> 00:42:51.740
+Gebruik het voor de weinige velden die het echt nodig hebben.
+
+00:42:51.920 --> 00:42:55.240
+Hou het aantal profielen beperkt en koppel ze aan de data, niet aan het organigram.
+
+00:42:55.540 --> 00:42:59.540
+Dat brengt ons terug bij de boomstructuur, want er is een tweede manier om toegang langs die weg uit te breiden.
+
+00:42:59.720 --> 00:43:02.520
+Een manier die niet afhangt van waar iemand zit, maar van aan wie ze rapporteren.
+
+00:43:03.680 --> 00:43:04.660
+Beveiligingsontwerppatronen en valkuilen.
+
+00:43:04.840 --> 00:43:06.320
+Het platform faalt hier zelden.
+
+00:43:06.520 --> 00:43:07.700
+De gewoontes eromheen wel.
+
+00:43:07.900 --> 00:43:09.840
+De meest voorkomende is de wildgroei aan profielen.
+
+00:43:09.840 --> 00:43:10.880
+Het begint klein.
+
+00:43:11.080 --> 00:43:14.600
+De loonadministratie moet salarissen zien, dus maakt iemand een loonadministratieprofiel aan.
+
+00:43:14.740 --> 00:43:18.980
+Een week later heeft een regiodirecteur hetzelfde veld nodig voor alleenlezen, dus komt er een tweede profiel.
+
+00:43:19.180 --> 00:43:24.520
+Dan heeft een auditor een maand toegang nodig, dan een contractant, dan fuseren twee teams en niemand ruimt de oude profielen op.
+
+00:43:24.600 --> 00:43:28.400
+Een jaar later heb je veertig profielen, elk genoemd door degene die die daghaast had.
+
+00:43:28.600 --> 00:43:32.040
+Vraag wie salarissen mag inzien en het eerlijke antwoord kost een middag klikken.
+
+00:43:32.260 --> 00:43:33.880
+Dat is één profiel per verzoek.
+
+00:43:33.980 --> 00:43:36.080
+Het is de weg naar een model dat niemand kan uitleggen.
+
+00:43:36.080 --> 00:43:38.580
+De oplossing is om te veranderen waar een profiel voor staat.
+
+00:43:38.780 --> 00:43:40.360
+Bouw het niet rond een team of een persoon.
+
+00:43:40.600 --> 00:43:42.040
+Bouw het rond een type gegevens.
+
+00:43:42.040 --> 00:43:47.380
+Een profiel voor vertrouwelijke beloning, een profiel voor persoonsgegevens, een profiel voor gezondheidsinformatie.
+
+00:43:47.560 --> 00:43:49.640
+Elk profiel beantwoordt één enkele vraag.
+
+00:43:49.840 --> 00:43:51.360
+Wie mag dit soort gegevens inzien?
+
+00:43:51.600 --> 00:43:54.200
+Wanneer iemand nieuwe toegang nodig heeft, maak je niets aan.
+
+00:43:54.400 --> 00:43:57.540
+Je voegt de persoon of het team toe aan een profiel dat al bestaat.
+
+00:43:57.820 --> 00:44:02.940
+Wanneer er een nieuwe gevoelige kolom verschijnt, bepaal je bij welke klasse deze hoort en plaats je deze daar.
+
+00:44:02.940 --> 00:44:07.040
+De lijst met profielen blijft kort omdat de lijst met gevoeligheidsklasse kort blijft.
+
+00:44:07.240 --> 00:44:09.440
+Drie of vier zijn voor de meeste organisaties voldoende.
+
+00:44:09.440 --> 00:44:12.160
+Als je er meer dan tien hebt, wordt er gemodelleerd op basis van verzoeken.
+
+00:44:12.320 --> 00:44:13.360
+Nu een stiller risico.
+
+00:44:13.660 --> 00:44:15.500
+Beveiligde kolommen blijven niet binnen formulieren.
+
+00:44:15.780 --> 00:44:18.840
+Weergave, rapporten en exports halen allemaal gegevens uit dezelfde tabel.
+
+00:44:18.980 --> 00:44:25.560
+Een Gema's keer de waarde in een raster is prima, maar denk aan een Excel export, een Power BI dataset of een flow die het getal naar een ander systeem kopieert.
+
+00:44:25.720 --> 00:44:28.160
+Kolom beveiliging beschermt de leesactie vanuit dataverse.
+
+00:44:28.160 --> 00:44:33.120
+Zodra iemand met toegang de waarde ergens anders naartoe verplaatst, is het masker weg en stopt je controle bij de grens.
+
+00:44:33.120 --> 00:44:36.460
+Dus de mensen die leesrechten hebben op een beveiligde kolom vormen de echte perimeter.
+
+00:44:36.680 --> 00:44:41.380
+Hou die groep klein genoeg zodat je elk lid kunt benoemen en kunt kijken wat het platform verlaat, niet alleen wat er op het scherm staat.
+
+00:44:41.600 --> 00:44:43.680
+Dan is er nog het testen en hier is de gewoonte simpel.
+
+00:44:43.900 --> 00:44:45.380
+Ga er niet vanuit dat het profiel werkt.
+
+00:44:45.880 --> 00:44:46.360
+Controleer het.
+
+00:44:46.500 --> 00:44:52.240
+Met de tool voor toegangscontrole kun je een gebruiker selecteren en zien wat deze werkelijk kan, inclusief welke beveiligde kolommen ze kunnen lezen, bijwerken of aanmaken.
+
+00:44:52.240 --> 00:44:53.640
+Het duurt ongeveer een minuut.
+
+00:44:53.840 --> 00:45:01.100
+Sla je dit over, dan hoor je van de fout via de gebruiker, meestal op het slechtst mogelijke moment en meestal omdat het profiel drie maanden geleden aan het verkeerde team is toegewezen.
+
+00:45:01.260 --> 00:45:03.180
+Eén laatste punt en het vormt het hele ontwerp.
+
+00:45:03.280 --> 00:45:04.860
+Kolom beveiliging is een verfijning.
+
+00:45:05.040 --> 00:45:07.360
+Het is nooit een vervanging voor het goed opzetten van de tabel zelf.
+
+00:45:07.540 --> 00:45:11.080
+Als de helft van de kolommen in een tabel vergrendeld moet worden, zijn het waarschijnlijk twee tabellen.
+
+00:45:11.260 --> 00:45:16.700
+Als een groep de rijen van een andere groep helemaal niet mag zien, is dat een kwestie van bedrijfseenheid en diepte, niet van velden.
+
+00:45:16.700 --> 00:45:20.420
+Kolom beveiliging beperkt wat zichtbaar is in rijen die iemand al mag inzien.
+
+00:45:20.620 --> 00:45:24.360
+Het herstelt geen model dat hen in eerste instantie al toegang gaf tot de verkeerde rijen.
+
+00:45:24.540 --> 00:45:27.060
+Gebruik het dus alleen voor de weinige velden die het echt nodig hebben.
+
+00:45:27.240 --> 00:45:30.560
+Hou het aantal profielen beperkt en koppel ze aan de data, niet aan het organigram.
+
+00:45:30.840 --> 00:45:36.540
+Dat brengt ons terug bij de boomstructuur, want er is een tweede manier om toegang hierbinnen uit te breiden en deze hangt niet af van iemands positie.
+
+00:45:36.700 --> 00:45:38.400
+Het hangt af van aanwiezen rapporteren.
+
+00:45:39.080 --> 00:45:43.280
+Hierarchiebeveiliging, managers en posities, de diepte van bedrijfseenheden werkt op basis van locatie.
+
+00:45:43.280 --> 00:45:45.920
+Waar een rij zich in de boom bevindt, bepaalt wie er toegang toe heeft.
+
+00:45:46.540 --> 00:45:48.060
+Hierarchiebeveiliging werkt op basis van de lijn.
+
+00:45:48.180 --> 00:45:51.200
+Wie aan wie rapporteert bepaalt het bereik en de boomstructuur is nauwelijks van belang.
+
+00:45:51.640 --> 00:45:54.880
+Dataverse biedt twee versies hiervan, managerhierarchie en positiehierarchie.
+
+00:45:55.080 --> 00:45:57.640
+Ze lossen hetzelfde probleem op, maar via verschillende wegen.
+
+00:45:57.940 --> 00:45:59.260
+Begin met de managerhierarchie.
+
+00:45:59.420 --> 00:46:01.400
+Elke gebruikersrij heeft een veld genaamd manager.
+
+00:46:01.620 --> 00:46:03.440
+Het is een opzoekveld naar een andere gebruiker.
+
+00:46:03.660 --> 00:46:05.040
+Dat is de volledige databron.
+
+00:46:05.280 --> 00:46:08.960
+Vul dit voor iedereen in en het platform kan een rapportage keten bouwen uit die koppelingen.
+
+00:46:09.120 --> 00:46:11.180
+Schakel nu de functie in en dit is wat er verandert.
+
+00:46:11.180 --> 00:46:14.300
+Een manager krijgt toegang tot de rijen waar hun directe ondergeschikten bij kunnen.
+
+00:46:14.480 --> 00:46:18.080
+Niet rijen die ze zelf bezitten of in dezelfde eenheid staan, maar rijen van de mensen onder hen.
+
+00:46:18.220 --> 00:46:19.140
+En dit stroomt omhoog.
+
+00:46:19.280 --> 00:46:21.300
+De toegang van een persoon gaat over naar hun manager.
+
+00:46:21.540 --> 00:46:25.980
+Als die manager ook een manager heeft, kan de volgende schakel in de keten er ook bij, tot aan een limiet die je instelt.
+
+00:46:26.160 --> 00:46:28.700
+Toegang gaat omhoog in de lijn, nooit zijwaarts naar collega's.
+
+00:46:28.860 --> 00:46:30.140
+Die limiet is de diepte instelling.
+
+00:46:30.360 --> 00:46:33.460
+Het is een getal dat aangeeft hoeveel niveaus van ondergeschikten een manager kan zien.
+
+00:46:33.720 --> 00:46:36.540
+Zet dit op één en managers zien alleen de rijen van hun directe ondergeschikten.
+
+00:46:36.540 --> 00:46:40.720
+Zet dit op drie en ze zien ondergeschikten, ondergeschikten van ondergeschikten en één niveau daarbuiten.
+
+00:46:40.900 --> 00:46:42.240
+Kies dat getal zorgvuldig.
+
+00:46:42.380 --> 00:46:45.020
+Een diepte van twee of drie dekt de meeste reële behoeften.
+
+00:46:45.220 --> 00:46:49.760
+Verhoog het en een regiodirecteur kan rijen zien van iemand vijf lagen lager die ze nog nooit hebben ontmoet.
+
+00:46:49.960 --> 00:46:51.420
+Dat is zelden wat iemand bedoelde.
+
+00:46:51.640 --> 00:46:53.640
+Nu het tweede model, de positiehierarchie.
+
+00:46:53.840 --> 00:46:55.760
+Deze leest het managerveld helemaal niet uit.
+
+00:46:55.960 --> 00:46:57.640
+In plaats daarvan definieer je posities.
+
+00:46:58.040 --> 00:47:00.760
+Regionaal verkoopdirecteur, verkoopmanager, accountmanager.
+
+00:47:00.960 --> 00:47:05.020
+Je rangschikt die posities in een boomstructuur met ouders en kinderen en wijst daar gebruikers aan toe.
+
+00:47:05.020 --> 00:47:07.240
+Toegang stroomt omhoog door de posities heen.
+
+00:47:07.320 --> 00:47:11.260
+Iemand in een ouderpositie heeft toegang tot de rijen van mensen in de onderliggende kinderposities.
+
+00:47:11.520 --> 00:47:13.740
+Zelfde diepte instelling, zelfde opwaartse richting.
+
+00:47:13.940 --> 00:47:14.640
+Waarom dan beide?
+
+00:47:14.840 --> 00:47:18.040
+Omdat het managerveld individuen beschrijft en individuen veranderen.
+
+00:47:18.180 --> 00:47:23.400
+Iemand vertrekt, iemand vervult een rol voor drie maanden, iemand rapporteert op papier aan twee personen en in de praktijk aan één.
+
+00:47:23.560 --> 00:47:26.460
+Het managerveld moet elke keer per persoon worden aangepast.
+
+00:47:26.660 --> 00:47:27.820
+Een functie blijft staan.
+
+00:47:28.040 --> 00:47:31.540
+De functie van salesmanager bestaat of Pria deze nu invult of Marcus.
+
+00:47:31.540 --> 00:47:35.860
+Verplaats een persoon en je verandert één toewijzing, niet een hele keten van rapportagelijnen.
+
+00:47:36.040 --> 00:47:39.660
+Voor organisaties waar rollen stabiel zijn maar mensen wisselen, werken functies beter.
+
+00:47:39.860 --> 00:47:41.820
+Maar functies brengen hun eigen kosten met zich mee.
+
+00:47:41.980 --> 00:47:45.440
+Iemand moet de structuur definiëren, actueel houden en elke gebruiker aan een plek toewijzen.
+
+00:47:45.580 --> 00:47:47.960
+Het is een tweede structuur die naast de eerste moet worden onderhouden.
+
+00:47:48.140 --> 00:47:49.940
+Nu het onderdeel waar bijna iedereen de mist in gaat.
+
+00:47:50.140 --> 00:47:51.700
+Hierarchie verleent niet uit zichzelf toegang.
+
+00:47:51.860 --> 00:47:53.380
+Het bouwt voort op een bestaand privilege.
+
+00:47:53.640 --> 00:47:54.720
+Dit is wat dat betekent.
+
+00:47:54.720 --> 00:47:58.640
+De beveiligingsrol van de manager heeft leesrechten nodig op de tabel, minimaal op gebruikersniveau.
+
+00:47:58.840 --> 00:47:59.960
+Waarom gebruikersniveau?
+
+00:48:00.100 --> 00:48:02.560
+Omdat hiërarchie uitbreidt wat gebruikersniveau al doet.
+
+00:48:02.760 --> 00:48:06.160
+Het neemt rijen die ik bezit en breidt dit uit naar rijen die mijn ondergeschikte bezitten.
+
+00:48:06.380 --> 00:48:10.060
+Dus als de rol van de manager geen leesrechten geeft, heeft hiërarchie niets om uit te breiden.
+
+00:48:10.240 --> 00:48:15.280
+En als hun rol al leesrechten op bedrijfsunitniveau geeft, voegt hiërarchie weinig toe omdat ze die rijen al kunnen bereiken.
+
+00:48:15.440 --> 00:48:17.380
+Het klassieke support ticket leest als volgt.
+
+00:48:17.380 --> 00:48:21.820
+De beheerder schakelt de managerhierarchie in, stelt de diepte op twee in en vraagt de managers het te proberen.
+
+00:48:21.940 --> 00:48:22.880
+Er verandert niets.
+
+00:48:23.080 --> 00:48:25.380
+Elke manager ziet nog steeds alleen hun eigen rijen.
+
+00:48:25.560 --> 00:48:27.360
+De oorzaak is bijna altijd hetzelfde.
+
+00:48:27.520 --> 00:48:33.760
+De rol heeft het privilege verkeerd ingesteld of de tabel is nooit ingeschakeld voor de functie, omdat hiërarchie per tabel wordt ingeschakeld, niet wereldwijd.
+
+00:48:33.900 --> 00:48:35.520
+Dus drie voorwaarden moeten samenkomen.
+
+00:48:35.720 --> 00:48:37.400
+Het hiërarchiemodel is ingeschakeld.
+
+00:48:37.580 --> 00:48:42.200
+De rol verleent toegang op gebruikersniveau voor die tabel en de managergegevens of functietoewijzingen zijn daadwerkelijk ingevuld.
+
+00:48:42.200 --> 00:48:44.180
+Misser 1 en je krijgt geen enkele reactie.
+
+00:48:44.180 --> 00:48:47.280
+Geen foutmelding, geen waarschuwing, alleen toegang die maar niet verschijnt.
+
+00:48:47.440 --> 00:48:51.220
+Die kwetsbaarheid is goed om in gedachten te houden, want hiërarchie is niet altijd het juiste hulpmiddel.
+
+00:48:51.420 --> 00:48:55.900
+Soms is het precies wat een verkooporganisatie nodig heeft en soms trekt het stilletjes de verkeerde mensen aan.
+
+00:48:56.040 --> 00:48:58.940
+Dus wanneer verdient het zijn plek en wanneer is het het verkeerde antwoord?
+
+00:48:59.160 --> 00:49:01.140
+Wanneer hiërarchiebeveiliging gebruiken?
+
+00:49:01.340 --> 00:49:02.440
+Begin bij waar het past.
+
+00:49:03.340 --> 00:49:09.220
+Verkooporganisaties, serviceorganisaties, overal waar werk door individuen wordt beheerd en de mensen daarboven het totaaloverzicht moeten zien.
+
+00:49:09.220 --> 00:49:14.600
+Een salesmanager wil de pipeline van hun team zien, niet op locatie, niet per unit, maar op basis van wie voor hen werkt.
+
+00:49:14.740 --> 00:49:18.100
+Een service lead wil de openstaande cases zien van de agenten die zij aansturen.
+
+00:49:18.300 --> 00:49:20.820
+De vraag die die managers stellen is, waar werken mijn mensen aan?
+
+00:49:20.960 --> 00:49:23.980
+En dat is een vraag over een hiërarchische lijn, niet over een locatie.
+
+00:49:24.160 --> 00:49:27.460
+In dat soort organisaties doet hiërarchie iets wat businessunits niet kunnen.
+
+00:49:27.620 --> 00:49:29.340
+Je hoeft geen unit per team aan te maken.
+
+00:49:29.560 --> 00:49:31.280
+Je hoeft geen bredere rollen uit te delen.
+
+00:49:31.400 --> 00:49:35.020
+Je vult in wie aan wie rapporteert, stelt een diepte in en het bereik volgt de keten.
+
+00:49:35.020 --> 00:49:39.440
+Wanneer een vertegenwoordiger van manager wisselt, verandert één veld en de toegang verhuist mee.
+
+00:49:39.680 --> 00:49:46.500
+Dan de slechte pasvorm, matrixorganisaties, waarbij iemand voor zijn carrière aan één manager rapporteert en voor een project voor iemand anders werkt,
+
+00:49:46.660 --> 00:49:50.440
+of twee mensen met dezelfde titel in dezelfde unit die totaal andere gegevens nodig hebben.
+
+00:49:50.600 --> 00:49:54.120
+Hier zegt de rapportagelijn niets over de gegevens die een persoon moet kunnen inzien.
+
+00:49:54.320 --> 00:49:56.720
+Het managerveld legt vast wie vakantie goedkeurt.
+
+00:49:56.920 --> 00:49:59.220
+Het legt niet vast wie het contract van een klant mag zien.
+
+00:49:59.440 --> 00:50:05.060
+Schakel in zo'n omgeving hiërarchie in en managers krijgen rijen te zien vanwege een oude relatie, niet vanwege een werkelijke databehoefte.
+
+00:50:05.180 --> 00:50:06.380
+Het is toegang bij toeval.
+
+00:50:06.580 --> 00:50:07.980
+Je zult het symptoom herkennen.
+
+00:50:08.180 --> 00:50:12.280
+Iemand vraagt waarom een directeur een deal kan lezen in een divisie waar ze nooit mee te maken hebben gehad,
+
+00:50:12.460 --> 00:50:16.080
+en het antwoord is dat drie niveaus lager iemands managerveld de verkeerde kant op wijst.
+
+00:50:16.280 --> 00:50:17.620
+Dan is er nog de kostprijs.
+
+00:50:17.860 --> 00:50:19.060
+Hierarchie is niet gratis.
+
+00:50:19.260 --> 00:50:22.260
+Bij elke query moet het platform uitzoeken wie er onder de gebruiker valt,
+
+00:50:22.500 --> 00:50:24.360
+en dat wordt zwaarder naarmate de keten dieper wordt.
+
+00:50:24.520 --> 00:50:26.200
+Een ondiepe hiërarchie is goedkoop.
+
+00:50:26.200 --> 00:50:30.180
+Een diepe hiërarchie met duizenden gebruikers en ruime diepteinstellingen maakt het ophalen trager,
+
+00:50:30.380 --> 00:50:32.880
+en dat merk je in weergaven en rapporten die voorheen snel laden.
+
+00:50:33.020 --> 00:50:35.200
+Dat is nog een reden om het dieptegetal klein te houden.
+
+00:50:35.360 --> 00:50:37.880
+Twee of drie niveaus beantwoorden de meeste reële vragen.
+
+00:50:38.060 --> 00:50:41.240
+Alles daarbuiten is meestal het kopen van zichtbaarheid waar niemand om vroeg,
+
+00:50:41.380 --> 00:50:42.800
+en daar betaal je voor met snelheid.
+
+00:50:42.960 --> 00:50:45.620
+En hier is de afhankelijkheid die minder aandacht krijgt dan zou moeten.
+
+00:50:45.840 --> 00:50:47.780
+De hele functie draait op datakwaliteit.
+
+00:50:48.000 --> 00:50:50.200
+Manager-hierarchie leest één veld op de gebruikersrij.
+
+00:50:50.360 --> 00:50:52.240
+Als dat veld fout is, is de toegang fout.
+
+00:50:52.240 --> 00:50:55.740
+Iemand die zes maanden geleden een team heeft verlaten, staat nog steeds onder de oude manager
+
+00:50:55.740 --> 00:50:57.200
+en die manager ziet nog steeds hun rijen.
+
+00:50:57.320 --> 00:51:01.160
+Een nieuwe medewerker zonder ingevulde manager staat buiten de keten en niemand boven hen ziet iets.
+
+00:51:01.340 --> 00:51:02.380
+Dus wie beheert die data?
+
+00:51:02.620 --> 00:51:05.400
+Dat is de vraag die je moet beantwoorden voordat je de functie inschakelt.
+
+00:51:05.600 --> 00:51:08.780
+In veel bedrijven wordt het managerveld één keer ingevuld tijdens de provisioning
+
+00:51:08.780 --> 00:51:10.280
+en daarna kijkt niemand er meer naar om.
+
+00:51:10.460 --> 00:51:12.680
+Auer wijzigt de rapportagelijn in één systeem.
+
+00:51:13.060 --> 00:51:14.360
+Dataverse hoort daar nooit iets van.
+
+00:51:14.560 --> 00:51:18.120
+Als je deze weg bewandelt, koppel het veld dan aan een bron die ook daadwerkelijk wordt onderhouden.
+
+00:51:18.600 --> 00:51:21.320
+Synchroniseer het vanuit de directory of Auer en koppel er een naam aan.
+
+00:51:21.320 --> 00:51:25.520
+Anders is je beveiligingsmodel stilletjes afhankelijk van een veld waar niemand verantwoordelijk voor is.
+
+00:51:25.720 --> 00:51:28.120
+Zet ze nu naast elkaar, want het contrast is nuttig.
+
+00:51:28.300 --> 00:51:30.320
+Business unit diepte is gebaseerd op locatie.
+
+00:51:30.500 --> 00:51:34.160
+Het kijkt waar de rij in de boomstructuur staat en waar jij staat en vergelijkt die twee.
+
+00:51:34.380 --> 00:51:36.080
+Hierarchie diepte is gebaseerd op lijn.
+
+00:51:36.240 --> 00:51:38.880
+Het vraagt wie aan wie rapporteert en volgt die keten naar boven.
+
+00:51:39.080 --> 00:51:42.820
+De een leest structuur, de ander leest relaties en ze beantwoorden verschillende vragen.
+
+00:51:42.980 --> 00:51:46.720
+Een ontwerp kan dus beide gebruiken, zolang je weet welke vraag elk onderdeel oplost.
+
+00:51:46.900 --> 00:51:49.860
+Maar zelfs een goede boomstructuur en een goede keten laten gaten open.
+
+00:51:49.860 --> 00:51:55.360
+Soms moet één rij bij één persoon terechtkomen, terwijl niets in hun eenheid, rol of manager daar aanleiding voor geeft.
+
+00:51:55.620 --> 00:51:57.200
+Daarvoor is er een ander mechanisme.
+
+00:51:57.400 --> 00:52:00.640
+Je verandert de structuur niet, je maakt een uitzondering en deelt de rij.
+
+00:52:01.080 --> 00:52:03.000
+Delen is het uitzonderingsmechanisme.
+
+00:52:03.280 --> 00:52:04.940
+Delen is eenvoudig te beschrijven.
+
+00:52:05.160 --> 00:52:09.980
+Je kiest één rij, je kiest een persoon of team en je geeft ze specifieke rechten op die rij en niets anders.
+
+00:52:10.280 --> 00:52:13.840
+Geen wijziging van eenheid, geen nieuwe rol, geen instelling van diepte wordt aangeraakt.
+
+00:52:13.980 --> 00:52:17.200
+De structuur blijft precies zoals die was en er wordt een deur in één rij gemaakt.
+
+00:52:17.200 --> 00:52:20.040
+De rechten die je kunt verlenen zijn dezelfde als in het rechteraster.
+
+00:52:20.280 --> 00:52:25.600
+Lezen, schrijven, verwijderen, toevoegen, toevoegen aan, toewijzen en delen, wat het recht is om de rij door te geven aan iemand anders.
+
+00:52:25.800 --> 00:52:26.780
+Je kiest ze een voor een.
+
+00:52:26.960 --> 00:52:29.180
+Iemand krijgt lees- en schrijfrechten, maar niet verwijderen.
+
+00:52:29.300 --> 00:52:30.880
+Iemand anders krijgt alleen leesrechten.
+
+00:52:31.100 --> 00:52:35.320
+Een derde persoon krijgt leesrechten plus het recht om het verder te delen en dat is waar de controle kan ontsnappen,
+
+00:52:35.540 --> 00:52:38.400
+omdat de persoon die je vertrouwde nu dezelfde deur kan openen voor wie zij maar willen.
+
+00:52:38.560 --> 00:52:41.780
+En dit is het onderdeel dat delen anders maakt dan al het andere wat we hebben behandeld.
+
+00:52:41.940 --> 00:52:43.580
+Het is additief en het is onopvallend.
+
+00:52:43.580 --> 00:52:46.260
+Delen kan alleen toevoegen. Het haalt nooit iets weg.
+
+00:52:46.440 --> 00:52:50.600
+Een gebruiker die de rij al bereikt via diepte, hiërarchie of een team, behoudt dat allemaal.
+
+00:52:50.860 --> 00:52:53.020
+Het delen stapelt er gewoon een extra pad bovenop.
+
+00:52:53.100 --> 00:52:54.260
+Er is ook niets dat het markeert.
+
+00:52:54.440 --> 00:52:55.980
+Er verschijnt geen verandering op het formulier.
+
+00:52:56.140 --> 00:52:56.980
+De rol verandert niet.
+
+00:52:57.140 --> 00:52:58.980
+De business unit boomstructuur ziet er hetzelfde uit.
+
+00:52:59.120 --> 00:53:01.820
+Als je het beveiligingsmodel in het beheercentrum opent, staat de deling daar niet.
+
+00:53:01.960 --> 00:53:04.880
+Het leeft op de rij zelf en je vindt het alleen als je specifiek naar die ene rij kijkt.
+
+00:53:05.080 --> 00:53:06.440
+Dat is waarom het zich opstapelt.
+
+00:53:06.640 --> 00:53:09.780
+Tijdens het ontwerpen kun je een deling niet zien, omdat er nog geen deling bestaat.
+
+00:53:09.780 --> 00:53:12.780
+Zes maanden later deelt een vertegenwoordiger een account met een collega.
+
+00:53:13.020 --> 00:53:14.740
+Een manager deelt een case met een specialist.
+
+00:53:14.960 --> 00:53:17.480
+Iemand deelt een hele set aan verkoopkansen voordat hij op verlof gaat.
+
+00:53:17.660 --> 00:53:18.580
+Elk duurt seconde.
+
+00:53:18.740 --> 00:53:20.820
+Elk lost een echt probleem op voor een echt persoon.
+
+00:53:21.060 --> 00:53:23.880
+En geen van hen laat een spoor achter in het model dat je hebt ontworpen.
+
+00:53:24.060 --> 00:53:27.660
+Dus het ontwerp blijft op papier schoon terwijl de data volstroomt met uitzonderingen.
+
+00:53:27.820 --> 00:53:29.100
+Voeg daar nu cascading aan toe.
+
+00:53:29.360 --> 00:53:32.960
+Denk aan de kaskade-instellingen bij relaties, die bepalen hoe ver een actie doorwerkt.
+
+00:53:33.180 --> 00:53:34.360
+Delen is een van de vijf.
+
+00:53:34.360 --> 00:53:41.560
+Zet het op kaskade-all en één keer delen van een account bereikt elke gerelateerde rij, de contacten, de verkoopkansen, de cases, de notities.
+
+00:53:41.800 --> 00:53:47.700
+Eén klik op het bovenliggende item geeft toegang tot een hele boom aan onderliggende items en degene die het deelt weet mogelijk niet hoeveel rijen dat zijn.
+
+00:53:47.860 --> 00:53:49.820
+En het vermenigvuldigt ook de andere kant op.
+
+00:53:49.960 --> 00:53:55.000
+Eén keer delen van een account met kaskade-all door drie niveaus van relaties kan honderden toegangsregels creëren.
+
+00:53:55.180 --> 00:53:56.240
+Niemand vroeg om honderden.
+
+00:53:56.420 --> 00:53:59.940
+De instelling deed dat stilletjes bij elke deelactie die vanaf dat moment werd uitgevoerd.
+
+00:54:00.100 --> 00:54:01.920
+Dus hoe ziet delen eruit als het gezond is?
+
+00:54:01.920 --> 00:54:11.720
+Zeldzaam. Het is de uitzondering waar het naar vernoemd is een eenmalig verzoek, een tijdelijke overdracht, een specialist die bij een enkele deal wordt betrokken, een paar shares hier en daar, elk met een reden die je in één zin kunt uitleggen.
+
+00:54:11.840 --> 00:54:13.580
+En hoe ziet het eruit als dat niet zo is?
+
+00:54:13.760 --> 00:54:17.780
+Je vraagt hoe mensen toegang krijgen tot klant rijen en het antwoord is dat ze worden gedeeld.
+
+00:54:17.940 --> 00:54:22.460
+Je vraagt wat er gebeurt als er iemand nieuw bij het team komt en het antwoord is dat iemand alles met hen deelt.
+
+00:54:22.460 --> 00:54:28.400
+Je vraagt hoe een gebruiker vorige maand de toegang verloor en niemand kan het zeggen omdat de share handmatig is verwijderd en er niets is vastgelegd.
+
+00:54:28.520 --> 00:54:29.740
+Dat is het waarschuwingssignaal.
+
+00:54:29.740 --> 00:54:34.020
+Als delen je voornaamste toegangsweg is, dan klopt het model niet, niet het delen, maar het model eronder.
+
+00:54:34.260 --> 00:54:41.840
+Mensen delen omdat de structuur niet de juiste rij en aan de juiste mensen toont, de eenheid verkeerd is getekend, de diepte te beperkt is of de data bij een team hoort en nu bij één persoon ligt.
+
+00:54:42.060 --> 00:54:45.060
+Delen is slechts een symptoom waar mensen naar grijpen om het werk gedaan te krijgen.
+
+00:54:45.260 --> 00:54:48.240
+Maar delen heeft nog een tweede probleem en dit heeft niets met het ontwerp te maken.
+
+00:54:48.240 --> 00:54:53.060
+Het heeft te maken met wat elke share kost om op te slaan en wat een paar miljoen daarvan met het platform doen.
+
+00:54:53.220 --> 00:54:54.660
+De kosten van delen op schaal.
+
+00:54:54.860 --> 00:55:01.620
+Elke share is een rij, geen vlag op het record, geen instelling op het formulier, maar een echte rij in een echte tabel, de Principal Object Access tabel.
+
+00:55:01.980 --> 00:55:03.480
+Platformmensen korten het af tot POA.
+
+00:55:03.700 --> 00:55:09.440
+Elke invoer bevat een paar dingen, welke rij gedeeld wordt, met wie het gedeeld wordt, een gebruiker of een team en welke rechten zijn verleend.
+
+00:55:09.580 --> 00:55:10.780
+Eén deling, één invoer.
+
+00:55:11.000 --> 00:55:12.880
+Deel een account met een team, dat is één invoer.
+
+00:55:13.100 --> 00:55:15.560
+Kaskadeer al die pushjes van die deling naar veertig gerelateerde rijen.
+
+00:55:15.700 --> 00:55:16.720
+Dat zijn er veertig meer.
+
+00:55:16.900 --> 00:55:19.320
+De teller houdt dus niet bij hoe vaak mensen op delen hebben geklikt.
+
+00:55:19.480 --> 00:55:23.060
+Het houdt bij hoeveel rijen elke klik uiteindelijk raakten en die getallen lopen snel uiteen.
+
+00:55:23.240 --> 00:55:24.080
+Waarom doet dat ertoe?
+
+00:55:24.220 --> 00:55:26.200
+Omdat het platform die tabel constant leest.
+
+00:55:26.440 --> 00:55:30.060
+Wanneer een gebruiker een weergave opent, moet het platform bepalen welke rijen ze kunnen zien.
+
+00:55:30.300 --> 00:55:32.400
+Diepte en hiërarchie zijn goedkoop om te controleren.
+
+00:55:32.560 --> 00:55:35.640
+Ze vergelijken waarden die al op de rij staan, maar delingen staan ergens anders.
+
+00:55:35.640 --> 00:55:42.740
+Om ze op te nemen, moet de query in de POA-tabel kijken, invoeren matchen met de gebruiker en elk team waar ze bij horen en het resultaat verwerken in het antwoord.
+
+00:55:42.920 --> 00:55:44.980
+Met een paar duizend invoeren merk je er niets van.
+
+00:55:45.180 --> 00:55:46.400
+Met miljoenen merk je het wel.
+
+00:55:46.660 --> 00:55:49.340
+Weergave die voorheen in een seconde opende, beginnen te vertragen.
+
+00:55:49.540 --> 00:55:50.560
+Rapport de timen uit.
+
+00:55:50.720 --> 00:55:58.480
+Een beveiligingscheck die triviaal was, wordt het traagste onderdeel van de aanvraag en het treft iedereen, niet alleen de mensen met delingen, omdat de opzoeking plaatsvindt bij elke leesactie in die tabel.
+
+00:55:58.620 --> 00:56:00.880
+Teams komen dit probleem meestal op dezelfde manier tegen.
+
+00:56:01.120 --> 00:56:02.080
+Niemand waarschuwt ze.
+
+00:56:02.080 --> 00:56:05.340
+Een systeem dat twee jaar prima draaide, begint zwaar aan te voelen.
+
+00:56:05.780 --> 00:56:10.040
+Supportickets melden dat de app traag is en de prestatieanalyse vindt niets mis met de app.
+
+00:56:10.240 --> 00:56:12.800
+De oorzaak zit in een tabel die niemand heeft ontworpen.
+
+00:56:13.000 --> 00:56:14.000
+Waar ligt dan de grens?
+
+00:56:14.160 --> 00:56:17.500
+Er is geen eenduidig getal en iedereen die je erin geeft, gokt maar wat.
+
+00:56:17.760 --> 00:56:23.540
+Microsoft adviseert om het aantal delingen per rij klein te houden en het delen van één rij met een groot aantal principes te vermijden.
+
+00:56:23.680 --> 00:56:29.140
+Teams ervaren vaak echte problemen zodra een enkele rij honderden delingen heeft of zodra de hele tabel de miljoenen passeert.
+
+00:56:29.320 --> 00:56:30.940
+Beschouw dat als waarschuwingslampjes.
+
+00:56:30.940 --> 00:56:32.640
+Geen limieten waar je omheen plant.
+
+00:56:32.840 --> 00:56:34.860
+Als je in de buurt komt, heb je al te lang gewacht.
+
+00:56:35.040 --> 00:56:38.020
+De betere vraag is hoe je kunt voorkomen dat je überhaupt delingen nodig hebt.
+
+00:56:38.160 --> 00:56:39.500
+En daar zijn drie antwoorden op.
+
+00:56:39.640 --> 00:56:41.840
+Het eerste is om een team-eigenaar van de rij te laten zijn.
+
+00:56:42.040 --> 00:56:46.540
+Als een groep mensen altijd aan dezelfde reeks records werkt, maak die groep dan een eigenaarsteam en maak het team de eigenaar.
+
+00:56:46.680 --> 00:56:49.560
+Toegang komt vanuit één plek, de rol van het team en de diepte ervan.
+
+00:56:49.800 --> 00:56:50.980
+Geen invoeren per rij.
+
+00:56:51.200 --> 00:56:56.120
+Voeg een persoon toe aan het team en ze hebben toegang tot alles wat het team bezit zonder dat er een enkele deling hoeft te worden geschreven.
+
+00:56:56.120 --> 00:57:01.180
+De tweede is het toegangsteam. Dit is geschikt wanneer de groep klein is en de samenwerking aan één record is gekoppeld.
+
+00:57:01.360 --> 00:57:04.900
+Het accountteam voor een grote klant, een deal waarbij een specialist wordt betrokken.
+
+00:57:05.180 --> 00:57:06.720
+Toegangsteams zijn precies hiervoor gemaakt.
+
+00:57:06.880 --> 00:57:11.620
+Ze verlenen toegang via een schabloon zodat het patroon consistent blijft in plaats van dat het telkens handmatig moet worden opgebouwd.
+
+00:57:11.800 --> 00:57:16.040
+Ze maken ook schrijfinvoer aan, maar deze zijn begrenst en worden beheerd als team, niet als verspreide incidenten.
+
+00:57:16.180 --> 00:57:18.120
+De derde is de moeilijkste, de bedrijfsunits herstructureren.
+
+00:57:18.920 --> 00:57:22.260
+Als mensen steeds over een grens heen delen, staat de grens wellicht op de verkeerde plek.
+
+00:57:22.260 --> 00:57:25.760
+Soms is de juiste oplossing de muur verplaatsen, in plaats van er meer deuren in te hakken.
+
+00:57:25.900 --> 00:57:28.300
+Als je dit probleem al hebt, lees dan hier hoe je eruit komt.
+
+00:57:28.500 --> 00:57:29.380
+Begin met een audit.
+
+00:57:29.640 --> 00:57:34.360
+Zoek uit welke tabellen de meeste gedeelde items bevatten en welke gebruikers of teams het vaakst als ontvanger verschijnen.
+
+00:57:34.620 --> 00:57:36.000
+Patronen worden snel zichtbaar.
+
+00:57:36.280 --> 00:57:39.260
+Dezelfde twee teams die keer op keer hetzelfde soort rij ontvangen.
+
+00:57:39.500 --> 00:57:43.180
+Dat is een team dat de eigenaar van de gegevens zou moeten zijn of een unitgrens die verkeerd is getrokken.
+
+00:57:43.360 --> 00:57:48.320
+Vervang het patroon vervolgens door structuur, bouw het eigenaarsteam, verplaats de rijen ernaartoe en verwijder de gedeelde items die overbodig zijn geworden.
+
+00:57:48.320 --> 00:57:50.020
+Verwijder niet eerst de gedeelde items.
+
+00:57:50.220 --> 00:57:53.700
+Herstel de structuur, bevestig dat de toegang nog steeds werkt en wist daarna pas de vermeldingen.
+
+00:57:53.860 --> 00:57:57.460
+Doe dit tabel voor tabel en de POA-tabel krimp terwijl het model makkelijker leesbaar wordt.
+
+00:57:57.680 --> 00:58:02.300
+Dat behandelt elke tool afzonderlijk, maar toegang in dataverse wordt niet door een van deze factoren alleen bepaald.
+
+00:58:02.460 --> 00:58:07.180
+Het platform controleert ze in een vaste volgorde en zodra je die volgorde begrijpt, kun je bijna elk resultaat verklaren.
+
+00:58:07.340 --> 00:58:09.580
+Hoe dataverse een toegangsverzoek evalueert.
+
+00:58:09.800 --> 00:58:11.960
+Elke toegangsbeslissing doorloopt dezelfde reeks.
+
+00:58:12.160 --> 00:58:14.000
+Elke keer dezelfde volgorde voor elke rij.
+
+00:58:14.180 --> 00:58:15.980
+Zodra je dit kent, hoef je niet meer te gokken.
+
+00:58:16.100 --> 00:58:20.120
+Een gebruiker zegt, ik kan het account niet zien en in plaats van willekeurig vijf schermen te openen, doorloop je vijf stappen.
+
+00:58:20.280 --> 00:58:21.300
+Stap 1 is het privilege.
+
+00:58:21.680 --> 00:58:23.920
+Heeft deze gebruiker überhaupt leesrechten op deze tabel?
+
+00:58:24.080 --> 00:58:27.700
+Niet leestoegang op sommige rijen, maar leesrechten via een van hun rollen op de tabel zelf.
+
+00:58:27.880 --> 00:58:30.180
+Als geen enkele rol dit geeft, eindigt de controle hier.
+
+00:58:30.400 --> 00:58:33.140
+Diepte, hiërarchie, gedeelde items, niets daarvan telt dan mee.
+
+00:58:33.320 --> 00:58:39.200
+Een gedeeld item kan iemand zonder privilege op de tabel niet redden, omdat het platform eerst het privilege controleert en daarna pas de rij.
+
+00:58:39.200 --> 00:58:42.980
+Dit is de eenvoudigste stap om te controleren en degene die mensen het vaakst overslaan.
+
+00:58:43.140 --> 00:58:46.400
+Ze springen direct naar de rij en vragen zich af waarom niets het resultaat verklaart.
+
+00:58:46.600 --> 00:58:47.640
+Stap 2 is diepte.
+
+00:58:47.800 --> 00:58:49.120
+Het privilege bestaat.
+
+00:58:49.380 --> 00:58:50.360
+Nu, op welk niveau?
+
+00:58:50.620 --> 00:58:52.840
+Hier vergelijkt het platform de rij met de gebruiker.
+
+00:58:53.020 --> 00:58:56.200
+Het leest de eigenaar van de rij en de bijbehorende bedrijfseenheid die erbij hoort.
+
+00:58:56.420 --> 00:58:59.500
+Vervolgens vraagt het zich af of die eigenaar of die eenheid binnen het bereik van de gebruiker valt.
+
+00:59:00.000 --> 00:59:01.660
+Gebruikersniveau betekent dat de gebruiker de eigenaar is.
+
+00:59:02.120 --> 00:59:04.260
+Bedrijfseenheidniveau betekent dat de eigenaar eenheid overeenkomt met die van hen.
+
+00:59:04.540 --> 00:59:07.200
+Bovenliggend onderliggend betekent dat de eigenaar eenheid van hen is of er onder valt.
+
+00:59:07.900 --> 00:59:09.540
+Organisatieniveau betekent dat alles is toegestaan.
+
+00:59:09.680 --> 00:59:13.280
+Als de rij binnen het bereik valt, krijgt de gebruiker toegang en heeft het platform zijn antwoord.
+
+00:59:13.440 --> 00:59:15.240
+Als dat niet zo is, gaat de controle door.
+
+00:59:15.480 --> 00:59:16.620
+Stap 3 is hiërarchie.
+
+00:59:16.780 --> 00:59:18.680
+Is het bereik van de gebruiker zojuist vergroot?
+
+00:59:18.820 --> 00:59:23.340
+Dit geldt alleen als de functie is ingeschakeld voor die tabel en alleen als de rol minimaal gebruikersniveau geeft.
+
+00:59:23.520 --> 00:59:28.060
+Het platform kijkt vervolgens in de rapportagelijn of de positieboom tot aan de dieptelimiet.
+
+00:59:28.260 --> 00:59:31.200
+Bevindt de eigenaar van de rij zich onder deze gebruiker in die keten?
+
+00:59:31.400 --> 00:59:32.700
+Zo ja, toegang verleend.
+
+00:59:32.700 --> 00:59:38.160
+Als de keten leeg is omdat het veld voor manager nooit is ingevuld, wordt er niets uitgebreid en krijg je geen reden te zien.
+
+00:59:38.380 --> 00:59:39.500
+Stap 4 is delen.
+
+00:59:39.660 --> 00:59:42.360
+Alles op structureel niveau heeft de gebruiker geen toegang gegeven.
+
+00:59:42.540 --> 00:59:43.400
+Is er een uitzondering?
+
+00:59:43.620 --> 00:59:46.500
+Nu gaat het platform naar de tabel voor object toegang van hoofdgebruikers.
+
+00:59:46.660 --> 00:59:51.600
+Het zoekt naar een vermelding op deze rij met de naam van de gebruiker en vervolgens naar vermeldingen voor elk team waar de gebruiker deel van uitmaakt.
+
+00:59:51.780 --> 00:59:55.040
+Een overeenkomst is genoeg en de rechten op die vermelding bepalen wat de gebruiker kan doen.
+
+00:59:55.220 --> 00:59:56.960
+Een gedeeld item met leesrechten geeft leesrechten.
+
+00:59:57.140 --> 00:59:58.280
+Het geeft geen schrijfrechten.
+
+00:59:58.280 --> 01:00:01.620
+Zelfs als de rol schrijfrechten toestaat op een ander niveau is dat laatste punt doorslaggevend.
+
+01:00:01.740 --> 01:00:03.440
+Een deelactie verleent alleen wat erin staat.
+
+01:00:03.660 --> 01:00:06.860
+Stap 5 is de laatste en deze bepaalt niet of de gebruiker toegang krijgt tot de rij.
+
+01:00:07.040 --> 01:00:08.920
+Het bepaalt wat ze zien zodra ze toegang hebben.
+
+01:00:09.080 --> 01:00:10.080
+Kolom beveiliging.
+
+01:00:10.260 --> 01:00:13.140
+Voor elke beveiligde kolom op de rij controleert het platform de profielen van de gebruiker.
+
+01:00:13.340 --> 01:00:16.020
+Geen profiel of geen leesrechten betekent dat de waarde gemaskeerd wordt weergegeven.
+
+01:00:16.200 --> 01:00:16.940
+De rij opent.
+
+01:00:17.140 --> 01:00:18.220
+Een veld toont sterretjes.
+
+01:00:18.440 --> 01:00:19.900
+De volledige volgorde is dus als volgt.
+
+01:00:20.060 --> 01:00:22.360
+Privilege, niveau, hiërarchie, gedeelde items, kolommen.
+
+01:00:22.360 --> 01:00:24.900
+De eerste vier zijn poorten en één daarvan passeren is voldoende.
+
+01:00:25.080 --> 01:00:26.080
+De vijfde is een filter.
+
+01:00:26.280 --> 01:00:28.580
+Poorten verlenen toegang en het filter verfijnt het resultaat.
+
+01:00:28.740 --> 01:00:35.100
+Dat onderscheid neemt veel verwarring weg omdat mensen een gemaskeerd veld proberen te verklaren door naar niveau te kijken, terwijl niveau daar niets mee te maken heeft.
+
+01:00:35.340 --> 01:00:36.800
+Waarom is de volgorde zo belangrijk?
+
+01:00:37.100 --> 01:00:41.100
+Omdat elke stap een andere vraag beantwoord en een mislukking er van buitenaf hetzelfde uitziet.
+
+01:00:41.260 --> 01:00:44.160
+De gebruiker ziet een leeg raster, een ontbrekende rij of een foutmelding.
+
+01:00:44.380 --> 01:00:46.800
+Ze kunnen niet vertellen welke stap is mislukt en het scherm even min.
+
+01:00:46.960 --> 01:00:48.140
+Dus loop je het proces langs.
+
+01:00:48.300 --> 01:00:49.460
+Heeft de rol het benodigde privilege?
+
+01:00:49.460 --> 01:00:52.680
+Zo ja, op welke diepte? Valt de eigenaar van de rij binnen die diepte?
+
+01:00:52.860 --> 01:00:54.860
+Zo niet, staat de hiërarchie aan en bereikt de keten deze?
+
+01:00:55.040 --> 01:00:56.180
+Zo niet, is er een deling?
+
+01:00:56.300 --> 01:00:58.520
+En als ze toegang hebben, is een kolom dan gemaskeerd.
+
+01:00:58.760 --> 01:01:02.100
+Vijf vragen op volgorde en het antwoord zit bijna altijd in de eerste drie.
+
+01:01:02.280 --> 01:01:03.340
+Gokkes slaat dat over.
+
+01:01:03.580 --> 01:01:07.600
+Mensen voegen een rol toe, vergroten de diepte of delen de rij alleen om het ticket te sluiten.
+
+01:01:07.920 --> 01:01:11.960
+En elke oplossing buigt stilletjes het model om een fout te herstellen die niemand heeft gelokaliseerd.
+
+01:01:12.200 --> 01:01:14.640
+Deze methode werkt alleen als je elke stap kunt zien.
+
+01:01:14.640 --> 01:01:18.420
+En daarom levert het platform een tool voor het diagnostiseren van toegangsproblemen.
+
+01:01:18.420 --> 01:01:20.260
+De tool heet toegang controleren.
+
+01:01:20.400 --> 01:01:22.940
+Je vindt deze op de gebruikersrecord of op een specifieke rij.
+
+01:01:23.140 --> 01:01:26.380
+Kies een gebruiker, kies een tabel en het platform vertelt je wat die persoon kan doen.
+
+01:01:26.600 --> 01:01:29.400
+Lezen, schrijven, verwijderen, toevoegen, toewijzen, delen.
+
+01:01:29.540 --> 01:01:31.180
+Elk punt komt terug als een ja of een nee.
+
+01:01:31.380 --> 01:01:32.840
+Maar het nuttige gedeelte is de reden.
+
+01:01:33.080 --> 01:01:35.260
+Bij elk recht laat het zien waar de toegang vandaan kwam.
+
+01:01:35.360 --> 01:01:38.120
+Een beveiligingsrol, een team, een deling, een hiërarchie.
+
+01:01:38.260 --> 01:01:40.420
+Dus je leert niet alleen dat iemand de rij kan lezen.
+
+01:01:40.620 --> 01:01:42.160
+Je leert welke poort hen binnen liet.
+
+01:01:42.160 --> 01:01:46.500
+En als het antwoord nee is, vertelt hetzelfde scherm je dat er niets achter dat recht zit.
+
+01:01:46.700 --> 01:01:50.280
+Geen rol verleent het, of de rol verleent het op een diepte die deze rij niet bereikt.
+
+01:01:50.520 --> 01:01:52.380
+Lees het zoals je de vijf stappen zou doorlopen.
+
+01:01:52.740 --> 01:01:55.420
+Privilege eerst, dan diepte, en daarna alles wat volgde.
+
+01:01:55.580 --> 01:01:59.120
+De meeste problemen verschijnen in het eerste scherm en vallen in vier patronen.
+
+01:01:59.280 --> 01:02:00.660
+De eerste komt het meest voor.
+
+01:02:00.860 --> 01:02:03.120
+Het privilege bestaat, maar de diepte is te laag.
+
+01:02:03.240 --> 01:02:04.900
+Een gebruiker heeft leesrecht op accounts.
+
+01:02:05.120 --> 01:02:07.620
+De rol ziet er prima uit, maar de diepte is ingesteld op gebruiker.
+
+01:02:07.800 --> 01:02:10.960
+Dus ze zien alleen rijen die ze zelf bezitten en het account dat ze nodig hebben is van iemand anders.
+
+01:02:10.960 --> 01:02:14.860
+Toegang controleren, toont leesrecht verleend op gebruikersniveau en de eigenaar van de rij is niet zijzelf.
+
+01:02:15.060 --> 01:02:16.740
+De oplossing is niet om een rol toe te voegen.
+
+01:02:16.940 --> 01:02:21.560
+De oplossing is om te vragen of deze persoon toegang moet hebben per eenheid en de diepte te vergroten voor die ene rol.
+
+01:02:21.720 --> 01:02:23.720
+De tweede fout verschijnt na een verplaatsing.
+
+01:02:23.920 --> 01:02:27.320
+Iemand verandert van afdeling en hun gebruikersrecord krijgt een nieuwe bedrijfseenheid.
+
+01:02:27.540 --> 01:02:33.020
+Plotseling kunnen ze de rijen waar ze gisteren aan werkten niet meer zien, of erger, ze kunnen rijen zien van het oude team die ze niet zouden mogen zien.
+
+01:02:33.280 --> 01:02:33.600
+Waarom?
+
+01:02:33.600 --> 01:02:38.340
+Hun rollen waren gekoppeld aan de oude eenheid en de diepte van de bedrijfseenheid vergelijkt nu met een andere plek.
+
+01:02:38.460 --> 01:02:42.180
+Hun oude rijen bevatten nog steeds de oude eigenaar eenheid, dus de diepte bereikt ze niet meer.
+
+01:02:42.480 --> 01:02:45.320
+Controleer eerst de eenheid van de gebruiker en daarna de eenheid in de rijen.
+
+01:02:45.480 --> 01:02:47.520
+Die twee waarden komen zelden per toeval overeen.
+
+01:02:47.640 --> 01:02:49.920
+De derde fout ligt bij de gebruiker, niet bij de rol.
+
+01:02:50.080 --> 01:02:52.200
+Het is de instelling voor overerving van bevoegdheden.
+
+01:02:52.380 --> 01:02:56.900
+Iemand zit in een team en de rol van het team geeft recht op het aanmaken van cases, maar toch kunnen ze er geen aanmaken op eigen naam.
+
+01:02:56.900 --> 01:03:00.820
+De oorzaak is dat de overerving van bevoegdheden van het lid op alleen teambevoegdheden staat.
+
+01:03:01.020 --> 01:03:06.020
+Onder die instelling gelden de teamrechten alleen voor rijen die het team bezit, niet voor rijen van de gebruiker zelf.
+
+01:03:06.200 --> 01:03:09.100
+Toegang controleren laat zien dat de bevoegdheid van het team komt.
+
+01:03:09.300 --> 01:03:12.620
+De instelling is wat het beperkt en dat zie je alleen door de gebruiker te openen.
+
+01:03:12.760 --> 01:03:16.200
+De vierde fout verrast mensen omdat de hoofdtabel er perfect uitziet.
+
+01:03:16.360 --> 01:03:21.980
+Een gebruiker kan een account lezen en schrijven, maar als ze er een contact aan proberen toe te voegen of een notitie koppelen, weigert het platform.
+
+01:03:22.180 --> 01:03:24.200
+De reden is toevoegen en toevoegen aan.
+
+01:03:24.200 --> 01:03:29.380
+Om een rij aan een andere te koppelen, heb je toevoegen nodig op de rij die je koppelt en toevoegen aan op de ontvangende rij.
+
+01:03:29.600 --> 01:03:34.300
+Mis je een van beide op een van de tabellen, dan mislukt de relatie, ook al zien beide tabellen er op zichzelf goed uit.
+
+01:03:34.460 --> 01:03:36.920
+Toegang controleren toont elk recht afzonderlijk.
+
+01:03:37.100 --> 01:03:40.260
+Kijk bij fouten naar beide kanten van de koppeling en let op wat ze gemeen hebben.
+
+01:03:40.500 --> 01:03:44.040
+Geen van deze problemen vereisten een nieuwe rol, een nieuwe eenheid of een nieuwe deling.
+
+01:03:44.260 --> 01:03:49.140
+Elk probleem had een oorzaak die je binnen een minuut kon vinden en de oplossing was klein zodra de oorzaak zichtbaar was.
+
+01:03:49.340 --> 01:03:51.920
+Dat is de waarde van diagnostiseren voordat je iets verandert.
+
+01:03:51.920 --> 01:03:54.960
+Anders wordt elk ticket een labmiddel en worden de labmiddelen het model.
+
+01:03:55.180 --> 01:03:57.920
+Maar deze stappen doorlopen herstelt alleen wat er al gebouwd is.
+
+01:03:58.100 --> 01:04:02.220
+Om te voorkomen dat dezelfde tickets terugkeren, ontwerp je de onderdelen zodat ze niet verouderen.
+
+01:04:02.360 --> 01:04:05.300
+En dat begint bij het onderdeel waar alles van afhangt, de rollen.
+
+01:04:05.480 --> 01:04:07.000
+Rolen ontwerpt dat niet verouderd.
+
+01:04:07.160 --> 01:04:09.400
+De meeste rolproblemen beginnen op de eerste dag.
+
+01:04:09.600 --> 01:04:15.220
+Iemand opent de rol van systeembeheerder, verkoper of basisgebruiker en begint bevoegdheden aan te passen voor het project.
+
+01:04:15.500 --> 01:04:15.880
+Niet doen.
+
+01:04:16.060 --> 01:04:18.080
+De standaardrollen zijn eigendom van Microsoft.
+
+01:04:18.080 --> 01:04:23.540
+Ze worden bijgewerkt wanneer het platform tabellen toevoegt en jouw bewerkingen komen bovenop wijzigingen die je niet zelf maakt en niet kunt voorspellen.
+
+01:04:23.740 --> 01:04:27.380
+Erger nog, niemand kan later zien welke bevoegdheden origineel waren en welke van jou.
+
+01:04:27.560 --> 01:04:28.900
+De rol ziet er standaard uit.
+
+01:04:29.140 --> 01:04:29.800
+Dat is hij niet.
+
+01:04:30.000 --> 01:04:31.220
+Dus kopieer je eerst.
+
+01:04:31.440 --> 01:04:36.460
+Elke rol die je gebruikt is een schone kopie van iets of vanaf nul opgebouwd en draagt vanaf het begin jouw naam.
+
+01:04:36.660 --> 01:04:41.060
+De originele blijven onaangeroerd en nuttig als naslagwerk wanneer je wilt weten hoe de standaard eruit ziet.
+
+01:04:41.240 --> 01:04:42.540
+Hoe moet de kopie er nu uitzien?
+
+01:04:42.540 --> 01:04:45.220
+Klein, dit is het instinct dat de meeste modellen ruïneert.
+
+01:04:45.380 --> 01:04:46.820
+Een rol wordt gebouwd per functie.
+
+01:04:47.080 --> 01:04:51.180
+Sales Rep, Senior Sales Rep, Sales Rep Europa, Sales Rep Europa met offertes.
+
+01:04:51.400 --> 01:04:56.900
+Elke rol herhaalt 90% van de voorrige en elke rol moet worden bijgewerkt zodra er een nieuwe tabel verschijnt.
+
+01:04:57.080 --> 01:04:58.820
+Het alternatief is compositie.
+
+01:04:59.000 --> 01:05:00.460
+Eén basisrol voor iedereen.
+
+01:05:00.740 --> 01:05:02.800
+Deze bevat wat elke gebruiker nodig heeft.
+
+01:05:03.060 --> 01:05:04.760
+Lees toegang tot gedeelde referentietabellen.
+
+01:05:04.960 --> 01:05:06.380
+De rechten om de app zelf te gebruiken.
+
+01:05:06.540 --> 01:05:09.240
+De diverse rechten die voorkomen dat formulieren foutmeldingen geven.
+
+01:05:09.460 --> 01:05:10.640
+Niets over een specifieke functie.
+
+01:05:10.640 --> 01:05:12.880
+Vervolgens add-on rollen één per functie.
+
+01:05:13.040 --> 01:05:14.400
+Een salesrol voor sales tabellen.
+
+01:05:14.560 --> 01:05:16.520
+Een service roll voor cases en wachtrijen.
+
+01:05:16.640 --> 01:05:18.840
+Een rapportage roll voor mensen die exports maken.
+
+01:05:19.020 --> 01:05:22.300
+Een gebruiker krijgt de basis plus alle add-ons die nodig zijn voor het werk.
+
+01:05:22.480 --> 01:05:24.080
+En onthoud, rollen zijn additief.
+
+01:05:24.220 --> 01:05:27.800
+De gebruiker krijgt het totaal, dus je bouwt de basis nooit opnieuw in een add-on.
+
+01:05:27.980 --> 01:05:30.260
+Elk privilege bevindt zich op precies één plek.
+
+01:05:30.480 --> 01:05:35.100
+Wanneer er iets verandert, pas je dit eenmaal aan en krijgt iedereen met die rol de update in een volgende sessie.
+
+01:05:35.100 --> 01:05:37.720
+Dat lost ook een vraag op die anders voor discussies zorgt.
+
+01:05:37.960 --> 01:05:40.240
+Waar plaats je een nieuw privilege als iedereen het nodig heeft?
+
+01:05:40.240 --> 01:05:43.380
+In de basis, als één functie het nodig heeft in de rol van die functie.
+
+01:05:43.520 --> 01:05:45.980
+Als het voor één persoon is, stop dan, want dat is een ander probleem.
+
+01:05:46.320 --> 01:05:48.420
+Naamgeving komt daarna en dat is belangrijker dan het lijkt.
+
+01:05:48.580 --> 01:05:51.620
+Een rolnaam is de enige documentatie die de meeste beheerders ooit zullen lezen.
+
+01:05:51.840 --> 01:05:55.620
+Noem op functie en bereik, sales regionaal, serviceagent, finance alleen lezen.
+
+01:05:55.800 --> 01:05:58.140
+Elke naam zegt wat de rol doet en hoever het bereik is.
+
+01:05:58.400 --> 01:06:01.580
+Noem rollen niet naar personen, want mensen vertrekken en de rol blijft.
+
+01:06:01.580 --> 01:06:07.480
+Noem ze niet naar projecten, want het project eindigt en de rol overleeft het met een naam die niemand twee jaar later nog begrijpt.
+
+01:06:07.660 --> 01:06:11.060
+Een rol genaamd Phoenix Toegang vertelt een nieuwe architect niets.
+
+01:06:11.240 --> 01:06:12.980
+Een goede conventie is kort en saai.
+
+01:06:13.180 --> 01:06:16.880
+Prefix voor de app of het gebied, dan de functie, dan de diepte, indien diepte relevant is.
+
+01:06:17.060 --> 01:06:20.580
+Iedereen kan een lijst van 15 van dergelijke rollen lezen en correct raden wat elke rol doet.
+
+01:06:20.820 --> 01:06:23.820
+Let nu op de waarschuwingssignalen, want rollen wijken af, zelfs bij goede regels.
+
+01:06:24.000 --> 01:06:26.540
+Het is rolexplosie en je kunt dit herkennen met één test.
+
+01:06:26.540 --> 01:06:27.980
+Leg twee rollen naast elkaar.
+
+01:06:28.180 --> 01:06:32.640
+Als ze slechts verschillen door één privilege of één diepte instelling op één tabel, zouden het geen twee rollen moeten zijn.
+
+01:06:32.860 --> 01:06:35.300
+Misschien hoort het verschil in een add-on die slechts enkele mensen hebben.
+
+01:06:35.520 --> 01:06:37.460
+Misschien hoort het in een kolomprofiel of in een team.
+
+01:06:37.680 --> 01:06:40.520
+Misschien is het een eenmalig geval en is dat eenmalige geval het echte probleem.
+
+01:06:40.660 --> 01:06:42.820
+Maar twee bijna identieke rollen zijn een symptoom.
+
+01:06:43.020 --> 01:06:47.280
+Ieder van hen zal zijn eigen weg gaan en over een jaar weet niemand meer welke de juiste had moeten zijn.
+
+01:06:47.480 --> 01:06:52.900
+Als het aantal rollen groeit voorbij wat de functies in je bedrijf kunnen verklaren, wordt er weer iets op verzoek gemodelleerd.
+
+01:06:52.900 --> 01:06:55.300
+Nog één ding en dat beschermt alles hierboven.
+
+01:06:55.300 --> 01:06:58.400
+Rollen zijn configuratie en configuratie heeft een pad nodig.
+
+01:06:58.640 --> 01:06:59.820
+Zet rollen in een oplossing.
+
+01:07:00.120 --> 01:07:01.480
+Bouw ze in de ontwikkelomgeving.
+
+01:07:01.740 --> 01:07:04.920
+Exporteer de oplossing en importeer deze in test en daarna in productie.
+
+01:07:05.140 --> 01:07:09.120
+Bewerk nooit een rol handmatig in productie, want de volgende implementatie overschrijft je wijziging.
+
+01:07:09.360 --> 01:07:12.220
+Of erger nog, niemand merkt dat productie nergens meer mee overeenkomt.
+
+01:07:12.340 --> 01:07:14.020
+En bewaar de oplossing in bronbeheer.
+
+01:07:14.200 --> 01:07:17.680
+Pak het uit, commit het en nu is een rolwijziging een verschil dat iemand kan beoordelen.
+
+01:07:17.880 --> 01:07:19.740
+Wie heeft verwijderen op contracten toegevoegd?
+
+01:07:19.740 --> 01:07:20.520
+Wanneer en waarom?
+
+01:07:20.660 --> 01:07:22.100
+De geschiedenis geeft het antwoord.
+
+01:07:22.300 --> 01:07:24.400
+Zonder dat heb je een tabel en een schouder ophalen.
+
+01:07:24.400 --> 01:07:30.440
+Dat is de rollenlaag, een kleine basis, een paar toevoegingen, namen die een buitenstaander begrijpt en een pad dat omgevingen consistent houdt.
+
+01:07:30.520 --> 01:07:35.380
+Maar rollen zijn pas zinvol als iemand ze heeft en de schoonste manier om ze in bulk toe te wijzen is via Teams.
+
+01:07:35.560 --> 01:07:39.780
+De volgende ontwerpvraag is dus hoe je die Teams bouwt zonder een tweede puinhoop te creëren.
+
+01:07:41.200 --> 01:07:42.400
+Teamontwerp voor onderhoudbaarheid.
+
+01:07:43.260 --> 01:07:44.420
+Begin met één vraag.
+
+01:07:44.660 --> 01:07:46.140
+Waar komt het lidmaatschap vandaan?
+
+01:07:46.280 --> 01:07:50.440
+Als het antwoord is dat iemand mensen toevoegt in het beheercentrum, heb je een tweede directory gebouwd.
+
+01:07:50.600 --> 01:07:53.700
+Het zit in dataverse en niemand stroomopwaarts weet dat het bestaat.
+
+01:07:53.700 --> 01:07:55.700
+Het alternatief is het Microsoft Entra Groepsteam.
+
+01:07:56.360 --> 01:07:59.380
+Het team is gekoppeld aan een directory groep en het lidmaatschap volgt de groep.
+
+01:07:59.460 --> 01:08:02.560
+Als iemand lid wordt van de groep, belandt diegene in het team bij de volgende aanmelding.
+
+01:08:02.740 --> 01:08:04.600
+Als ze de groep verlaten, vallen ze eruit.
+
+01:08:04.800 --> 01:08:11.700
+Toegang is dan geen dataverse klusje meer, maar een bijproduct van identiteitsbeheer, waar al goedkeuringen, beoordelingen en vervaldata aan gekoppeld zijn.
+
+01:08:11.980 --> 01:08:14.620
+Daarom zouden Entra Groepsteams je standaard moeten zijn.
+
+01:08:14.620 --> 01:08:21.280
+Eigenaarsteams en toegangsteams hebben nog steeds hun nut, maar laat voor elk team dat rollen beheert voor een stabiele groep mensen, de directory, het werk doen.
+
+01:08:21.660 --> 01:08:22.860
+Vervolgens, hoeveel teams?
+
+01:08:23.120 --> 01:08:23.960
+Minder dan je denkt.
+
+01:08:24.180 --> 01:08:28.020
+Het patroon dat stand houdt is één team per combinatie van bedrijfsfunctie en bedrijfsonderdeel.
+
+01:08:28.220 --> 01:08:31.880
+Sales in de divisie Europa, service in de divisie Europa, sales in Noord-Amerika.
+
+01:08:31.880 --> 01:08:35.660
+Elk team zegt twee dingen, welk werk deze mensen doen en waar hun data leeft.
+
+01:08:35.860 --> 01:08:41.460
+Die combinatie heeft een rol nodig om logisch te zijn, want de rol geeft het privilege en de divisie geeft het bereik, maar alleen waar nodig.
+
+01:08:41.660 --> 01:08:45.740
+Als sales in twee divisies dezelfde rol en hetzelfde bereik deelt, heb je geen twee teams nodig.
+
+01:08:45.960 --> 01:08:48.780
+Als een functie slechts in één eenheid bestaat, dekt één team deze.
+
+01:08:49.040 --> 01:08:51.740
+Bouw niet het volledige rooster omdat het rooster er netjes uitziet.
+
+01:08:51.960 --> 01:08:54.560
+Bouw de cellen die echt toegang nodig hebben en laat de rest leeg.
+
+01:08:54.700 --> 01:08:57.920
+Nu de vraag die bepaalt of dit alles overleeft, wie beheert het lidmaatschap?
+
+01:08:57.920 --> 01:08:59.080
+Niet het platformteam.
+
+01:08:59.320 --> 01:09:01.580
+Zij weten dit kwartaal niet wie en welke functie werkt.
+
+01:09:01.580 --> 01:09:04.460
+Ze krijgen een verzoek, voegen de persoon toe en denken er nooit meer aan.
+
+01:09:04.640 --> 01:09:07.420
+Zes maanden later kan niemand zeggen waarom de helft van de leden daar staat.
+
+01:09:07.620 --> 01:09:08.820
+De business is de eigenaar.
+
+01:09:08.980 --> 01:09:12.720
+Het hoofdverkoop of iemand die zij aanwijzen, bepaalt wie bij de verkoopgroep hoort.
+
+01:09:12.900 --> 01:09:17.760
+Het platformteam is eigenaar van het ontwerp, de rollen, de eenheid en wat het mag bezitten.
+
+01:09:17.980 --> 01:09:19.520
+Twee taken, twee eigenaren.
+
+01:09:19.780 --> 01:09:23.380
+Wanneer die vervagen, keurt een platformteam verzoeken goed die ze niet kunnen beoordelen.
+
+01:09:23.620 --> 01:09:26.180
+Zet een naam naast elke groep, geen mailbox, een persoon.
+
+01:09:26.180 --> 01:09:29.620
+Als je de eigenaar van een groep niet binnen 30 seconden vindt, drijft die groep al af.
+
+01:09:29.780 --> 01:09:31.120
+Dan is er nog de levenscyclus.
+
+01:09:31.120 --> 01:09:34.080
+Drie momenten en elk beïnvloedt de toegang op een andere manier.
+
+01:09:34.280 --> 01:09:38.320
+De instromer, een nieuwe medewerker, wordt op dag 1 aan de juiste directory groep toegevoegd.
+
+01:09:38.440 --> 01:09:41.900
+Het team pakt ze op, de rollen volgen en ze zien hun werk zonder één ticket.
+
+01:09:42.120 --> 01:09:45.720
+Als instromers nog een handmatige stap nodig hebben, is het model niet af.
+
+01:09:45.880 --> 01:09:47.820
+De doorstromer, hier lekken de meeste modellen.
+
+01:09:48.060 --> 01:09:50.700
+Iemand wisselt van functie en wordt toegevoegd aan de nieuwe groep.
+
+01:09:50.780 --> 01:09:52.200
+Niemand verwijdert ze uit de oude.
+
+01:09:52.420 --> 01:09:55.440
+Nu hebben ze beide en omdat rollen cumulatief zijn, houden ze de unie.
+
+01:09:55.440 --> 01:09:58.960
+Na een jaar vol wisselingen draagt iemand toegang van elke baan die ze ooit hadden.
+
+01:09:59.080 --> 01:10:03.120
+Dus de verplaatsing moet uit twee acties bestaan, één erin en één eruit, gekoppeld aan dezelfde gebeurtenis.
+
+01:10:03.280 --> 01:10:05.980
+De uitstromer verwijdert ze uit de groepen en de toegang eindigt.
+
+01:10:06.160 --> 01:10:09.260
+Maar vergeet niet wat we eerder bespraken, de rollen die ze bezitten blijven achter.
+
+01:10:09.460 --> 01:10:12.200
+Een schone exit neemt de toegang weg en wijst het werk opnieuw toe.
+
+01:10:12.400 --> 01:10:15.460
+Drie gebeurtenissen, één bron van waarheid, dat maakt teams onderhoudbaar.
+
+01:10:15.640 --> 01:10:18.080
+Ze stoppen met iets te zijn dat je bewerkt en worden iets dat je erft.
+
+01:10:18.260 --> 01:10:19.380
+Dat alles is een patroon.
+
+01:10:19.380 --> 01:10:21.340
+Patronen zijn gemakkelijk om mee in te stemmen.
+
+01:10:21.540 --> 01:10:25.440
+Laten we elk onderdeel in één bedrijf plaatsen en kijken waar het ontwerp houdt en waar het wringt.
+
+01:10:25.640 --> 01:10:28.460
+Een uitgewerkt ontwerp waarbij het model wordt samengevoegd.
+
+01:10:28.600 --> 01:10:30.720
+Neem een bedrijf met ongeveer 2000 mensen.
+
+01:10:31.020 --> 01:10:34.080
+Drie regio's, Noord-Amerika, Europa en Azië-Pacific.
+
+01:10:34.240 --> 01:10:36.060
+Een financieel team dat ze allemaal omspant.
+
+01:10:36.260 --> 01:10:39.260
+En één gedeelde service desk die interne verzoeken voor iedereen afhandelt.
+
+01:10:39.400 --> 01:10:41.220
+Het is alledaags en dat is precies het punt.
+
+01:10:41.460 --> 01:10:42.620
+Niets hiervan is exotisch.
+
+01:10:42.860 --> 01:10:45.000
+Begin met de boomstructuur, want alles hangt daarvan af.
+
+01:10:45.120 --> 01:10:47.660
+De hoofdbusiness unit, dan drie onderliggende eenheden, één per regio.
+
+01:10:47.660 --> 01:10:49.620
+Dat is de hele boom. Twee niveaus.
+
+01:10:49.820 --> 01:10:50.880
+Kijk nu wat er ontbreekt.
+
+01:10:51.060 --> 01:10:53.980
+Er is geen eenheid voor verkoop, geen voor service, geen voor financiën.
+
+01:10:54.180 --> 01:10:56.100
+Waarom? Omdat de test eenvoudig is.
+
+01:10:56.300 --> 01:10:58.960
+Moet deze groep worden afgeschermd van de data van een andere groep?
+
+01:10:59.240 --> 01:11:00.140
+Regio's moeten dat wel.
+
+01:11:00.380 --> 01:11:03.120
+Contracten, klanten en lokale regelgeving zijn langs die lijnen verdeeld.
+
+01:11:03.420 --> 01:11:04.060
+Financiën niet.
+
+01:11:04.300 --> 01:11:08.360
+Financiële medewerkers moeten regio-overschrijdend werken, dus een eenheid zou een grens creëren die het bedrijf niet wil.
+
+01:11:08.560 --> 01:11:11.760
+Financiën wordt afgehandeld met rollen en één kolomprofiel, waar we zo op terugkomen.
+
+01:11:11.940 --> 01:11:15.800
+De boom modelleert dus drie datagrenzen, geen vier afdelingen, geen rapportagestructuur.
+
+01:11:15.800 --> 01:11:18.840
+Vervolgens rollen, drie lagen opgebouwd zoals beschreven.
+
+01:11:19.020 --> 01:11:20.240
+Ten eerste een basisrol.
+
+01:11:20.440 --> 01:11:27.140
+Iedereen heeft deze, leestoegang tot gedeelde referentietabellen, privileges om de apps uit te voeren en diverse rechten die voorkomen dat formulierenfout te geven.
+
+01:11:27.400 --> 01:11:29.240
+Niets over verkoop, niets over service.
+
+01:11:29.520 --> 01:11:31.520
+Ten tweede, de oorspronkelijke verkooprol.
+
+01:11:31.760 --> 01:11:35.780
+Lees- en schrijfrechten op accounts, contactpersonen en verkoopkansen ingesteld op businessunitniveau.
+
+01:11:35.780 --> 01:11:41.500
+Een vertegenwoordiger in Europa bereikt elke verkooprij die eigendom is van de Europese eenheid en niets in Noord-Amerika.
+
+01:11:41.700 --> 01:11:44.800
+De grens wordt bepaald door de boom en de rol bepaalt alleen het bereik.
+
+01:11:44.800 --> 01:11:46.720
+Ten derde, een verkoopmanagerrol.
+
+01:11:46.980 --> 01:11:50.440
+Deze staat op gebruikersniveau voor diezelfde tabellen en dat is bewust.
+
+01:11:50.700 --> 01:11:57.380
+Hierarchie werkt op gebruikersniveau, dus de managerrol vormt de basis en de hiërarchie-instelling breidt dit uit naar de rapportage-keten.
+
+01:11:57.600 --> 01:11:58.320
+Diepte van twee.
+
+01:11:58.540 --> 01:12:01.920
+Een manager ziet hun vertegenwoordigers en de vertegenwoordigers van hun vertegenwoordigers, maar niet verder.
+
+01:12:02.140 --> 01:12:05.100
+Managers hebben de basisrol, de regionale verkooprol en de managerrol.
+
+01:12:05.580 --> 01:12:06.740
+Vertegenwoordigers hebben de eerste twee.
+
+01:12:06.960 --> 01:12:08.900
+Elk privilege bevindt zich op precies één plek.
+
+01:12:09.040 --> 01:12:11.080
+Nu de service desk waar teams het zware werk doen.
+
+01:12:11.260 --> 01:12:13.000
+De desk werkt met gedeelde wachtrijen.
+
+01:12:13.000 --> 01:12:18.200
+Tickets komen binnen. Iedereen op de desk pakt ze op en het werk moet de inzet van één persoon overleven.
+
+01:12:18.400 --> 01:12:21.560
+Dus de wachtrijen zijn eigendom van eigenaarsteams, één per deskfunctie.
+
+01:12:21.760 --> 01:12:22.980
+Rijen behoren toe aan het team.
+
+01:12:23.160 --> 01:12:25.780
+Een persoon werkt eraan via de rol van het team en hun lidmaatschap.
+
+01:12:25.920 --> 01:12:27.440
+En het lidmaatschap komt uit Entra.
+
+01:12:27.640 --> 01:12:30.640
+Elk eigenaarsteam is een Entra-groepsteam gekoppeld aan een directory-groep.
+
+01:12:30.800 --> 01:12:34.300
+Hour wijzigt iemands functie, de directory-groep wordt bijgewerkt en het team volgt.
+
+01:12:34.520 --> 01:12:38.340
+Wanneer een agent vertrekt, blijven hun tickets precies waar ze waren omdat het team ze al die tijd bezat.
+
+01:12:38.340 --> 01:12:40.700
+Geen heruitvoeringsactie, geen zwevende rijen.
+
+01:12:40.860 --> 01:12:43.220
+Denk aan de instelling voor privilegeovererving van het lid.
+
+01:12:43.380 --> 01:12:45.160
+Voor agenten geldt alleen team privileges.
+
+01:12:45.500 --> 01:12:47.240
+Ze maken geen rijen aan op hun eigen naam.
+
+01:12:47.400 --> 01:12:49.940
+Het team is eigenaar van het werk en de gebruiker heeft de taak.
+
+01:12:50.060 --> 01:12:51.760
+Het laatste onderdeel, financiën.
+
+01:12:52.280 --> 01:12:55.540
+Salarisgegevens staan in een paar kolommen, salaris, bonus en een loonschaal.
+
+01:12:55.700 --> 01:13:01.620
+Die drie worden gemarkeerd als beveiligd en vallen onder één beveiligingsprofiel, vernoemd naar het soort data, niet naar een team.
+
+01:13:01.780 --> 01:13:04.680
+Een Entra-groep van salarisadministrateurs krijgt lees- en schrijfrechten.
+
+01:13:04.680 --> 01:13:06.560
+Een kleinere groep krijgt alleen leesrechten.
+
+01:13:06.760 --> 01:13:09.200
+Iedereen anders opent dezelfde rij en ziet gemaskeerde waarden.
+
+01:13:09.360 --> 01:13:10.820
+Eén profiel, twee toewijzingen.
+
+01:13:10.960 --> 01:13:14.620
+Als een auditor een maand toegang nodig heeft, voeg je die toe aan de leesgroep en na een maand weer weg.
+
+01:13:14.800 --> 01:13:15.860
+Dat is het hele ontwerp.
+
+01:13:16.040 --> 01:13:19.620
+Drie eenheden, drie rollagen, een paar teams aangestuurd door de directory, één profiel.
+
+01:13:19.760 --> 01:13:21.100
+Kijk nu naar wat dit voorkomt.
+
+01:13:21.200 --> 01:13:25.500
+Er is geen business unit per afdeling, dus een reorganisatie van sales raakt de boomstructuur niet.
+
+01:13:25.720 --> 01:13:30.180
+Geen organisatiediepte om tickets te sussen, geen delen als hoofdweg, geen rol per persoon.
+
+01:13:30.340 --> 01:13:32.600
+Maar zie dit niet als een ontwerp zonder zwakke plekken.
+
+01:13:32.600 --> 01:13:35.760
+Elk model staat onder druk en dit model knelt op drie punten.
+
+01:13:35.940 --> 01:13:37.560
+Het eerste is het managerveld.
+
+01:13:37.800 --> 01:13:40.120
+Hierarchie werkt alleen zolang die data actueel is.
+
+01:13:40.320 --> 01:13:42.100
+Het tweede is de regionale grens.
+
+01:13:42.280 --> 01:13:46.920
+De dag dat een wereldwijd accountteam aan één klant in alle drie de regio's werkt, zal iemand om een share vragen.
+
+01:13:47.100 --> 01:13:48.580
+En het derde is financiën zelf.
+
+01:13:48.820 --> 01:13:50.980
+Het werkt vandaag omdat het aantal mensen klein is.
+
+01:13:51.200 --> 01:13:54.300
+Laat die groep vertienvoudigen en het model begint moeilijke vragen te stellen.
+
+01:13:54.520 --> 01:13:59.440
+Die drukpunten zijn het benoemen waard omdat ze in bijna elke organisatie opduiken, net als de fouten die ze verergeren.
+
+01:13:59.440 --> 01:14:02.380
+Dan zijn er de antipatronen die beveiliging onbeheersbaar maken.
+
+01:14:02.600 --> 01:14:04.160
+Vijf fouten komen steeds weer terug.
+
+01:14:04.320 --> 01:14:06.660
+Verschillende bedrijven, verschillende sectoren, dezelfde patronen.
+
+01:14:06.780 --> 01:14:08.300
+De eerste is de organisatiestructuur.
+
+01:14:08.480 --> 01:14:11.120
+Iemand pakt een organigram van het bedrijf en bouwt dat na in de boomstructuur.
+
+01:14:11.320 --> 01:14:15.740
+Sales krijgt een business unit, marketing krijgt er een juridisch, ouwer, financiën, elk met een eigen hokje.
+
+01:14:15.920 --> 01:14:18.860
+Vervolgens komen regio's onder elke afdeling en teams onder de regio's.
+
+01:14:19.000 --> 01:14:20.340
+Het ziet er georganiseerd uit.
+
+01:14:20.540 --> 01:14:22.000
+Het voelt zelfs als zorgvuldigheid.
+
+01:14:22.160 --> 01:14:24.800
+Maar een business unit is een datagrens en afdelingen zijn datzelfde.
+
+01:14:24.800 --> 01:14:29.120
+Dus de boomstructuur vult zich met muren waar niemand om vroeg en mensen besteden hun dagen aan het maken van doorgangen.
+
+01:14:29.120 --> 01:14:32.040
+Elke taak tussen afdelingen vereist een share of een bredere rol.
+
+01:14:32.220 --> 01:14:37.680
+En op de dag dat het bedrijf reorganiseert, moet de hele boom worden herbouwd, waarbij elke gebruiker en elke rij moet mee verhuizen.
+
+01:14:37.860 --> 01:14:39.620
+Het tweede patroon begint met een ticket.
+
+01:14:39.840 --> 01:14:41.380
+Een gebruiker kan een record niet zien.
+
+01:14:41.580 --> 01:14:46.240
+De beheerder controleert de rol, ziet, read, op business unit niveau en kiest de snelste weg, organisatieniveau.
+
+01:14:46.380 --> 01:14:49.180
+Het ticket is binnen een minuut gesloten en de gebruiker is tevreden.
+
+01:14:49.360 --> 01:14:50.920
+Dan gebeurt het weer en nog eens.
+
+01:14:50.920 --> 01:14:56.580
+Binnen een jaar heeft de helft van het salsteam organisatieniveau op accounts, omdat die instelling nooit een ticket oplevert.
+
+01:14:56.820 --> 01:14:59.340
+Niemand heeft besloten dat iedereen elke klant moet kunnen zien.
+
+01:14:59.520 --> 01:15:00.480
+Het gebeurde gewoon.
+
+01:15:00.700 --> 01:15:02.080
+Eén snelle oplossing per keer.
+
+01:15:02.300 --> 01:15:05.320
+De muur tussen regio's staat nog in het diagram, maar houdt niemand meer tegen.
+
+01:15:05.540 --> 01:15:07.100
+Ten derde wordt delen de standaard.
+
+01:15:07.280 --> 01:15:09.480
+Weet je nog wat we zeiden over dat delen onopvallend is?
+
+01:15:09.700 --> 01:15:10.800
+Dit is waar het misgaat.
+
+01:15:10.940 --> 01:15:15.000
+Een team slaat de structurele vragen over, omdat delen in de werkbalk staat en direct werkt.
+
+01:15:15.160 --> 01:15:16.640
+Heb je een collega nodig voor een deal?
+
+01:15:16.880 --> 01:15:17.300
+Deel hem.
+
+01:15:17.500 --> 01:15:18.360
+Iemand is met verlof?
+
+01:15:18.360 --> 01:15:19.440
+Deel de hele lijst.
+
+01:15:19.600 --> 01:15:20.380
+Nieuwe medewerker?
+
+01:15:20.580 --> 01:15:21.820
+Deel alles wat ze nodig hebben.
+
+01:15:22.060 --> 01:15:26.520
+Zes maanden later bevat de tabel erachter miljoenen records en weet niemand wie waar toegang toe heeft of waarom.
+
+01:15:26.680 --> 01:15:27.920
+Er is geen model meer over.
+
+01:15:28.140 --> 01:15:31.000
+Er is alleen nog een stapel uitzonderingen en de stapel is het model.
+
+01:15:31.220 --> 01:15:34.500
+Het vierde patroon is stiller en groeit vanuit hetzelfde instinct.
+
+01:15:35.080 --> 01:15:37.260
+Rol per persoon, profiel per verzoek.
+
+01:15:37.360 --> 01:15:42.640
+Een manager vraagt om toegang zoals een collega die heeft, dus kopieert de beheerder die rol en wijzigt één privilege.
+
+01:15:42.640 --> 01:15:47.580
+Een externe kracht heeft een veld nodig, dus verschijnt er een nieuw veldbeveiligingsprofiel met zijn naam erop.
+
+01:15:47.580 --> 01:15:51.880
+Elk verzoek krijgt zijn eigen artefact, omdat dat de kleinste verandering is om het gesprek te beëindigen.
+
+01:15:52.080 --> 01:15:53.760
+Na twee jaar heb je 200 rollen.
+
+01:15:53.940 --> 01:15:58.540
+40 daarvan verschillen slechts één privilege van een andere en niemand weet meer welke de originele was.
+
+01:15:58.780 --> 01:16:04.120
+Vraag wie toegang moet hebben tot salarisgegevens en het antwoord zit in het hoofd van één beheerder die op het punt staat van baan te wisselen.
+
+01:16:04.260 --> 01:16:06.760
+En het vijfde gaat over timing, niet over configuratie.
+
+01:16:07.520 --> 01:16:09.300
+Beveiligingsontwerp wordt gedaan nadat de app is gebouwd.
+
+01:16:09.300 --> 01:16:13.320
+Het team bouwt eerste tabellen, formulieren, flows, weergaven en een demo voor de stakeholders.
+
+01:16:13.320 --> 01:16:16.700
+Beveiliging staat als laatste op de planning, dus krijgt het de laatste week.
+
+01:16:16.820 --> 01:16:19.760
+Tegen die tijd staan de eigendomstypes vast en kun je ze niet meer wijzigen.
+
+01:16:20.020 --> 01:16:22.840
+Relaties kaskaderen al op manieren die niemand heeft onderzocht.
+
+01:16:23.080 --> 01:16:27.400
+Rijen worden aangemaakt met de rechten die de ontwikkelaars toevallig hebben, meestal systeembeheerder.
+
+01:16:27.600 --> 01:16:30.900
+Het model wordt dus aangepast aan beslissingen die zonder dat model zijn genomen.
+
+01:16:31.100 --> 01:16:34.620
+De boomstructuur wordt getekend naar de data, terwijl het andersom had moeten zijn.
+
+01:16:35.100 --> 01:16:37.980
+Beveiliging wordt een reparatieklus aan een systeem dat al live is.
+
+01:16:38.120 --> 01:16:39.660
+Kijk naar wat deze vijf gemeen hebben.
+
+01:16:39.880 --> 01:16:43.240
+Iedereen kiest de kortere weg en elk moment is dat op dat moment de rationele keuze.
+
+01:16:43.440 --> 01:16:45.540
+Niemand begint met het bouwen van iets onbeheersbaars.
+
+01:16:45.740 --> 01:16:51.040
+Men lost het probleem van vandaag op met het dichtstbijzijnde hulpmiddel en de kosten komen later in een vorm die niemand aan de oorspronkelijke keuze koppelt.
+
+01:16:51.200 --> 01:16:54.100
+De nuttige vraag is dus niet of deze patronen in jouw omgeving bestaan.
+
+01:16:54.300 --> 01:16:55.580
+Dat is vrijwel zeker het geval.
+
+01:16:55.580 --> 01:16:57.880
+Het gaat erom hoe erg het is geworden en hoe je dat zou merken.
+
+01:16:57.880 --> 01:17:04.260
+Daarvoor zijn cijfers nodig, hoeveel rollen, hoeveel shares, hoeveel mensen hebben organisatiediepte en een gewoonte die voorkomt dat het proces opnieuw verslapt.
+
+01:17:04.440 --> 01:17:07.500
+Die gewoonte is governance en dat klinkt minder glamoureus dan het is.
+
+01:17:07.760 --> 01:17:09.680
+Governance, auditing en wijzigingsbeheer.
+
+01:17:09.880 --> 01:17:12.620
+De meeste beveiligingsmodellen falen niet op de dag van lancering.
+
+01:17:12.820 --> 01:17:15.600
+Ze falen langzaam door wijzigingen die niemand heeft gecontroleerd.
+
+01:17:15.840 --> 01:17:18.100
+Begin dus met een andere blik op wat je hebt gebouwd.
+
+01:17:18.220 --> 01:17:22.640
+Rollen, veldbeveiligingsprofielen en teamdefinities zijn geen instellingen, het zijn artefacten.
+
+01:17:22.800 --> 01:17:25.500
+Ze hebben een vorm, een auteur en een geschiedenis, net als code.
+
+01:17:25.720 --> 01:17:27.480
+Dat betekent dat ze in oplossingen leven.
+
+01:17:27.480 --> 01:17:31.540
+Je bouwt ze in ontwikkeling, exporteert ze en het oplossingsbestand is wat je controleert.
+
+01:17:31.640 --> 01:17:35.160
+Iemand opent een pull request die verwijderrechten op contracten toevoegt aan de verkooprol.
+
+01:17:35.320 --> 01:17:36.600
+Een tweede persoon leest het na.
+
+01:17:36.800 --> 01:17:37.980
+Misschien vragen ze naar het waarom.
+
+01:17:38.180 --> 01:17:40.640
+Misschien vragen ze of de financiële add-on dit in plaats daarvan zou moeten hebben.
+
+01:17:40.840 --> 01:17:43.600
+Dat gesprek duurt twee minuten en is de goedkoopste controle die je ooit zult hebben.
+
+01:17:43.840 --> 01:17:45.360
+Vergelijk dat met de gebruikelijke weg.
+
+01:17:45.500 --> 01:17:48.380
+Een beheerder opent een rol in productie, vinkt het vakje aan en slaat op.
+
+01:17:48.480 --> 01:17:50.400
+Geen controle, geen registratie van het waarom.
+
+01:17:50.400 --> 01:17:54.980
+En de volgende implementatie overschrijft ofwel de wijziging of laat de productie stilletjes afwijken van alles wat daar voorkwam.
+
+01:17:55.120 --> 01:17:56.760
+Review vangt de wijzigingen op die je plant.
+
+01:17:56.980 --> 01:17:58.920
+Additing vangt de wijzigingen op die je niet plant.
+
+01:17:59.160 --> 01:17:59.680
+Zet het aan.
+
+01:18:00.100 --> 01:18:03.440
+Dataverse kan wijzigingen aan gebruikers, rollen en teamlidmaatschappen vastleggen.
+
+01:18:03.600 --> 01:18:07.680
+En het staat uit totdat iemand het eerst op omgevingsniveau inschakelt en daarna op de relevante tabellen.
+
+01:18:07.840 --> 01:18:13.280
+Je wilt weten wanneer een rol een nieuw privilege krijgt, wanneer een gebruiker aan een rol wordt toegevoegd, wanneer een team van eigenaar verandert.
+
+01:18:13.280 --> 01:18:17.020
+Zonder dat lochbestand heeft de vraag wie deze persoon toegang gaf, geen antwoord.
+
+01:18:17.160 --> 01:18:19.480
+En bewaar de lochbestanden lang genoeg om nuttig te zijn.
+
+01:18:19.660 --> 01:18:23.140
+Een vraag over toegang van een additer komt meestal maanden na de wijziging, niet dagen.
+
+01:18:23.340 --> 01:18:25.240
+Maar een lochbestand legt alleen het verleden vast.
+
+01:18:25.440 --> 01:18:27.820
+Het vertelt je niet of de toegang van vandaag nog steeds zinvol is.
+
+01:18:28.040 --> 01:18:30.460
+Daarvoor voer je regelmatig toegangscontroles uit volgens een schema.
+
+01:18:30.660 --> 01:18:34.040
+Per kwartaal werkt voor de meeste organisaties en maandelijks voor de gevoelige rollen.
+
+01:18:34.180 --> 01:18:35.760
+De controle bevat twee vragen.
+
+01:18:35.960 --> 01:18:38.360
+Wie heeft er op dit moment welke rol en wie heeft dat goedgekeurd?
+
+01:18:38.540 --> 01:18:41.000
+Een rol met een gebruiker maar zonder goedkeurder is een bevinding.
+
+01:18:41.000 --> 01:18:45.300
+Net als een gebruiker die in maart van functie is veranderd en nog steeds de toegangsrechten van de oude functie heeft.
+
+01:18:45.500 --> 01:18:46.520
+Haal de lijst uit het platform.
+
+01:18:46.700 --> 01:18:50.000
+Geef elke rol aan de eigenaar uit de business en vragen deze te bevestigen of te verwijderen.
+
+01:18:50.120 --> 01:18:53.020
+Dat is dezelfde verdeling van eigenaarschap die we bespraken voor teamlidmaatschap.
+
+01:18:53.160 --> 01:18:54.560
+De business weet wie toegang moet hebben.
+
+01:18:54.760 --> 01:18:56.620
+Het platformteam weet wat de toegang inhoudt.
+
+01:18:56.780 --> 01:18:58.600
+Geen van beide kan het werk van de ander goed doen.
+
+01:18:58.800 --> 01:19:00.720
+Dan is er nog het traject dat wijzigingen afleggen.
+
+01:19:01.060 --> 01:19:02.520
+Ontwikkeling, test, productie.
+
+01:19:02.700 --> 01:19:03.780
+Altijd in die volgeorde.
+
+01:19:03.980 --> 01:19:05.920
+Een beveiligingswijziging wordt gebouwd in ontwikkeling,
+
+01:19:05.920 --> 01:19:10.740
+als beheerde oplossing in de testomgeving geplaatst en daar gecontroleerd met echte testgebruikers, niet met een beheerdersaccount.
+
+01:19:10.920 --> 01:19:13.720
+Daarna gaat het ongewijzigd via hetzelfde pakket naar productie.
+
+01:19:13.880 --> 01:19:16.120
+Testen met een beheerdersaccount is de klassieke fout.
+
+01:19:16.360 --> 01:19:19.340
+Beheerders slagen voor elke controle, dus de test bewijst niets.
+
+01:19:19.760 --> 01:19:24.120
+Gebruikaccounts die alleen de rollen bevatten die een echt persoon zou hebben en doorloopt de vijf stappen voor elk account.
+
+01:19:24.380 --> 01:19:25.920
+Dezelfde regel beschermt je tegen afwijkingen.
+
+01:19:26.660 --> 01:19:30.320
+Als productie ooit afwijkt van wat in bronbeheer staat, is dat een incident?
+
+01:19:30.560 --> 01:19:31.100
+Geen gemak.
+
+01:19:31.100 --> 01:19:35.700
+Maak het tot slot leesbaar, want de persoon die dit model overneemt, heeft jouw context niet.
+
+01:19:36.180 --> 01:19:38.100
+Een nieuwe architect moet het in een uur kunnen begrijpen.
+
+01:19:38.880 --> 01:19:42.840
+Daarvoor is een kort document nodig dat bij de oplossing wordt bewaard met een paar eenvoudige zaken,
+
+01:19:43.020 --> 01:19:48.280
+de bedrijfstructuur en waarom elke eenheid bestaat, de lijst met rollen, wat elke rol toekent en wie de eigenaar is,
+
+01:19:48.440 --> 01:19:52.440
+de teams, hun interne groepen en eigenaren, de beveiligde kolommen en hun profielen,
+
+01:19:52.680 --> 01:19:55.460
+en de NAAMG-Evingsconventie beschreven in een alinea.
+
+01:19:55.460 --> 01:20:00.460
+Als een van deze zaken een gesprek met de vorige beheerder vereist om uit te leggen, is de documentatie niet af.
+
+01:20:00.460 --> 01:20:02.900
+Dat is buffernance op het niveau van het platformteam.
+
+01:20:03.100 --> 01:20:06.800
+Rollen gecontroleerd, wijzigingen gelogd, toegang bevestigd, omgevingen synchroon,
+
+01:20:06.940 --> 01:20:09.280
+maar de mensen die dit werk financieren, lezen geen adit langs.
+
+01:20:09.440 --> 01:20:13.920
+Zij stellen andere vragen en het beveiligingsontwerp beantwoordt deze op manieren die zelden hardop worden uitgesproken.
+
+01:20:14.100 --> 01:20:16.680
+De uitvoerende laag, wat het beveiligingsontwerp bepaalt.
+
+01:20:16.900 --> 01:20:18.620
+Leiders vragen niet naar diepteinstellingen.
+
+01:20:18.820 --> 01:20:23.060
+Zij vragen hoe lang het duurt om een nieuw team aan de slag te krijgen, wat een reorganisatie kost en of ze de adit kunnen halen.
+
+01:20:23.060 --> 01:20:24.960
+Het beveiligingsontwerp beantwoordt alle drie.
+
+01:20:25.120 --> 01:20:26.400
+Het wordt alleen niet zo gezegd.
+
+01:20:26.400 --> 01:20:31.020
+Begin met onboarding. Een nieuw verkoopteam komt er bij na een overname of wanneer een nieuwe regio opent.
+
+01:20:31.180 --> 01:20:35.760
+In een model gebouwd op structuur is het werk gering, een bedrijfseenheid als de gegevens afgeschermd moeten worden,
+
+01:20:35.900 --> 01:20:38.840
+een mapgroep, een team, rollen die al bestaan, dagen, geen maanden.
+
+01:20:39.040 --> 01:20:43.400
+In een model gebouwd op uitzonderingen betekent elk nieuw team een reeks gedeelde mappen, gekopieerde rollen en tickets.
+
+01:20:43.600 --> 01:20:45.540
+De snelheid wordt niet bepaald door hoe snel mensen werken.
+
+01:20:45.740 --> 01:20:48.220
+Dit wordt bepaald door hoeveel van de toegang al was ontworpen voordat zij verschenen.
+
+01:20:48.220 --> 01:20:52.000
+Nu de reorganisatie. Elk bedrijf krijgt er mee te maken, meestal eerder dan gepland.
+
+01:20:52.000 --> 01:20:55.380
+Sales fuseert met marketing. Twee regio's worden er één, een divisie wordt verkocht.
+
+01:20:55.520 --> 01:20:58.020
+Een model dat rond datagrenzen is gebouwd, vangt dit op.
+
+01:20:58.180 --> 01:21:00.900
+Mensen verhuizen tussen directory groepen en de toegang volgt.
+
+01:21:01.060 --> 01:21:03.840
+De boomstructuur verandert niet omdat deze nooit het organogram beschreef,
+
+01:21:04.020 --> 01:21:06.740
+maar een boom die het organogram spiegelt, breekt zodra het zover is.
+
+01:21:06.900 --> 01:21:10.340
+Eenheden worden verplaatst, gebruikers wisselen en eigendom van rijen verschuift.
+
+01:21:10.520 --> 01:21:13.880
+Iemand besteedt een kwartaal aan het herstellen van toegang die voor de aankondiging prima werkte.
+
+01:21:14.120 --> 01:21:17.540
+Dan de audit. Een auditor vraagt wie salarisgegevens kan zien en waarom.
+
+01:21:17.700 --> 01:21:19.940
+Een structureel model geeft binnen minuten antwoord.
+
+01:21:19.940 --> 01:21:23.880
+Eén profiel, twee teams, elk gekoppeld aan een directory groep met een benoemde eigenaar.
+
+01:21:24.000 --> 01:21:26.560
+Je toont het ontwerp en het ontwerp is het bewijsmateriaal.
+
+01:21:26.740 --> 01:21:29.500
+Zonder dat is het antwoord een spreadsheet die iemand handmatig maakt,
+
+01:21:29.620 --> 01:21:32.520
+die verouderd is zodra deze af is en meestal de deelacties mist.
+
+01:21:32.740 --> 01:21:33.760
+Dit is de nieuwe druk.
+
+01:21:33.940 --> 01:21:36.540
+Co-pilot en agents brengen hun eigen beveiliging niet mee.
+
+01:21:36.760 --> 01:21:39.440
+Ze lezen via hetzelfde model als de gebruiker die de vraag stelt.
+
+01:21:39.640 --> 01:21:42.780
+Als een gebruiker een rij kan bereiken, kan de assistent die voor hen werkt dat ook.
+
+01:21:42.960 --> 01:21:45.240
+Die vindt het, vat het samen en zet het in een antwoord.
+
+01:21:45.440 --> 01:21:47.020
+Dat verandert de kosten van een fout.
+
+01:21:47.020 --> 01:21:51.440
+Een rol diep in de organisatie was vroeger een stil risico omdat men moest weten waar te zoeken.
+
+01:21:51.660 --> 01:21:55.520
+Nu brengt een simpele vraag in natuurlijke taal alles naar boven wat die rol kan bereiken.
+
+01:21:55.760 --> 01:21:59.080
+Fouten die jarenlang onopgemerkt bleven, worden in een middag gevonden
+
+01:21:59.080 --> 01:22:02.280
+en agents stellen sneller meer vragen dan welk persoon ooit deed.
+
+01:22:02.480 --> 01:22:04.660
+De beslissing voor leiders gaat dus over timing.
+
+01:22:04.920 --> 01:22:07.780
+Het model kost het minst voordat de apps zich vermenigvuldigen.
+
+01:22:08.020 --> 01:22:10.840
+Elke nieuwe app, flow en agent leunt op wat er al is.
+
+01:22:11.160 --> 01:22:14.020
+Bouw op een schoon model en iedereen erft schone toegang.
+
+01:22:14.020 --> 01:22:16.580
+Bouw op uitzonderingen en iedereen vermenigvuldigt deze.
+
+01:22:16.580 --> 01:22:18.380
+Het later herstellen is mogelijk.
+
+01:22:18.600 --> 01:22:22.760
+Het betekent alleen dat je shares, rollen en eenheden moet ontwarren terwijl de business daarop doordraait,
+
+01:22:22.880 --> 01:22:24.720
+wat het argument terugbrengt naar waar het begon.
+
+01:22:25.200 --> 01:22:25.560
+Conclusie
+
+01:22:25.560 --> 01:22:30.560
+Van permissies tot structuur, een dataverse beveiligingsmodel schaalt wanneer het is gebouwd op eigenaarschap,
+
+01:22:30.760 --> 01:22:32.580
+scope en hiërarchie, niet op uitzonderingen.
+
+01:22:32.720 --> 01:22:34.860
+Elke share is een post die iemand moet kunnen verklaren.
+
+01:22:35.040 --> 01:22:38.240
+Elke bedrijfseenheid die is gekopieerd uit het organogram is een muur op de verkeerde plek.
+
+01:22:38.420 --> 01:22:40.420
+Iedereen buiten de rol is een kopie die zal afwijken.
+
+01:22:40.600 --> 01:22:42.000
+Geen van deze dingen doet vandaag pijn.
+
+01:22:42.000 --> 01:22:44.880
+Ze moeten allemaal bij de volgende reorganisatie worden betaald, met rente.
+
+01:22:45.000 --> 01:22:48.120
+Als dit heeft veranderd hoe je naar dataverse beveiliging kijkt, laat dan een beoordeling achter.
+
+01:22:48.300 --> 01:22:49.980
+Het helpt meer architecten om het te vinden.
+
+01:22:50.220 --> 01:22:55.260
+En wil je meer weten, volg mij, meer koop peters, dan op LinkedIn en stuur me je volgende onderwerp,
+
+01:22:55.360 --> 01:22:57.800
+want toegang in dataverse wordt nooit via een scherm verleend.
+
+01:22:57.960 --> 01:22:59.800
+Het wordt bepaald door het model erachter.
+
+01:22:59.800 --> 01:23:29.780
+TV Gelderland 2021

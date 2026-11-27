@@ -4,6 +4,7 @@ import { knownIds } from "./entities.js";
 import { notify } from "./mail.js";
 import { gate, logEdit } from "./perm.js";
 import { HIDDEN_PERSON_SQL, isHiddenPerson, acctKeys } from "./privacy.js";
+import { cacheEnv } from "./staging.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 const now = () => Math.floor(Date.now() / 1000);
@@ -27,22 +28,42 @@ export async function answerQuestion(env, user, qid, a) {
     const de = q.lang === "de";
     await notify(env, q.user_id, "reply", de ? "Neue Antwort auf deine Frage" : "New answer to your question", `<p>${de ? "Deine Frage zu" : "Your question about"} <b>${esc(q.eid)}</b> ${de ? "wurde beantwortet:" : "has been answered:"}</p><blockquote>${esc(a)}</blockquote><p><a href="${env.SITE}/entity/${encodeURIComponent(q.eid)}/">${de ? "Frage und Antwort ansehen" : "View question and answer"}</a></p>`, `qa:${r.meta?.last_row_id}`);
   }
-  return { ok: true, id: r.meta?.last_row_id };
+  return { ok: true, id: r.meta?.last_row_id, eid: q.eid };
 }
 const canAccept = async (db, user, eid) => !!(user && (user.admin || user.editor || user.pro || (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, user.id).first())));
+
+// D1-Kosten: jede Entitaetsseite fragt /api/qa beim Laden ab, meist ohne Anmeldung. Die Antwort fuer Abgemeldete ist fuer alle gleich und liegt
+// QA_TTL Sekunden im Kanten-Cache des Rechenzentrums (synthetischer Schluessel, keine Browser-Cache-Angabe: nach der Anmeldung soll die Seite sofort
+// den angemeldeten Stand zeigen). Fragen, Antworten, Stimmen, Annahmen und Loeschungen verwerfen den Eintrag dieses Rechenzentrums; andere
+// Rechenzentren zeigen Neues spaetestens nach QA_TTL. Das gilt auch fuer Entfernungen (Ausblenden durch die Moderation, Sperre eines Kontos):
+// ausserhalb des Rechenzentrums der Moderation bleiben sie fuer Abgemeldete bis zu QA_TTL (5 Minuten) sichtbar. Die Antworten aller Fragen
+// kommen in einer Abfrage (vorher eine je Frage).
+// Staging und live laufen in derselben Zone (api-staging.m365.fm neben api-dub.m365.fm, wrangler.toml); der Cache-API-Speicher gilt je Zone und
+// Rechenzentrum. Der Schluessel traegt deshalb die Umgebung (cacheEnv), sonst saehen Abgemeldete live Testfragen aus der Staging-D1.
+const QA_TTL = 300;
+export const qaKey = (env, eid) => new Request(`https://dedupe.m365.fm/${cacheEnv(env)}/qa/v1/${encodeURIComponent(eid)}`);
+async function dropQaCache(env, eid) { if (eid && globalThis.caches?.default) await globalThis.caches.default.delete(qaKey(env, eid)).catch(() => 0); }
 
 export async function handleQa(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
   const body = async () => request.json().catch(() => ({}));
   if (path === "/api/qa" && method === "GET") {
     const eid = url.searchParams.get("eid") || ""; if (!ID.test(eid)) return J({ error: "bad_request" }, 400);
-    const qs = (await db.prepare(`SELECT q.id,q.q,q.lang,q.created,q.user_id,COALESCE(u.name,'') name FROM entity_q q LEFT JOIN users u ON u.id=q.user_id AND u.banned=0 WHERE q.eid=? AND q.hidden=0 AND q.eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY q.created DESC LIMIT 30`).bind(eid).all()).results || [];   // Runde 6: verborgene Personen ohne Q&A
-    const out = [];
-    for (const q of qs) {
-      const as = (await db.prepare("SELECT a.id,a.a,a.created,a.accepted,a.user_id,COALESCE(u.name,'') name,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes,(SELECT COUNT(*) FROM entity_a_votes v2 WHERE v2.a_id=a.id AND v2.user_id=?) me FROM entity_a a LEFT JOIN users u ON u.id=a.user_id AND u.banned=0 WHERE a.q_id=? AND a.hidden=0 ORDER BY a.accepted DESC, votes DESC, a.created LIMIT 10").bind(user?.id || 0, q.id).all()).results || [];
-      out.push({ id: q.id, q: q.q, lang: q.lang, name: q.name, created: q.created, own: user?.id === q.user_id, answers: as.map((a) => ({ id: a.id, a: a.a, name: a.name, votes: a.votes, me: !!a.me, accepted: !!a.accepted, own: user?.id === a.user_id })) });
+    const cache = !user && globalThis.caches?.default ? globalThis.caches.default : null;
+    if (cache) {
+      const hit = await cache.match(qaKey(env, eid)).catch(() => null), data = hit ? await hit.json().catch(() => null) : null;
+      if (data) return J(data);
     }
-    return J({ questions: out, loggedIn: !!user, canAccept: await canAccept(db, user, eid), min_votes: MIN_VOTES });
+    const qs = (await db.prepare(`SELECT q.id,q.q,q.lang,q.created,q.user_id,COALESCE(u.name,'') name FROM entity_q q LEFT JOIN users u ON u.id=q.user_id AND u.banned=0 WHERE q.eid=? AND q.hidden=0 AND q.eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY q.created DESC LIMIT 30`).bind(eid).all()).results || [];   // Runde 6: verborgene Personen ohne Q&A
+    const byQ = new Map(qs.map((q) => [q.id, []]));
+    if (qs.length) {
+      const rows = (await db.prepare("SELECT a.id,a.q_id,a.a,a.created,a.accepted,a.user_id,COALESCE(u.name,'') name,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes,(SELECT COUNT(*) FROM entity_a_votes v2 WHERE v2.a_id=a.id AND v2.user_id=?) me FROM entity_a a LEFT JOIN users u ON u.id=a.user_id AND u.banned=0 WHERE a.q_id IN (SELECT value FROM json_each(?)) AND a.hidden=0 ORDER BY a.q_id, a.accepted DESC, votes DESC, a.created, a.id").bind(user?.id || 0, JSON.stringify(qs.map((q) => q.id))).all()).results || [];
+      for (const a of rows) { const list = byQ.get(a.q_id); if (list && list.length < 10) list.push(a); }
+    }
+    const out = qs.map((q) => ({ id: q.id, q: q.q, lang: q.lang, name: q.name, created: q.created, own: user?.id === q.user_id, answers: byQ.get(q.id).map((a) => ({ id: a.id, a: a.a, name: a.name, votes: a.votes, me: !!a.me, accepted: !!a.accepted, own: user?.id === a.user_id })) }));
+    const data = { questions: out, loggedIn: !!user, canAccept: await canAccept(db, user, eid), min_votes: MIN_VOTES };
+    if (cache) await cache.put(qaKey(env, eid), new Response(JSON.stringify(data), { headers: { "content-type": "application/json", "cache-control": `public, max-age=${QA_TTL}` } })).catch(() => 0);
+    return J(data);
   }
   if (path === "/api/qa/export" && method === "GET") {   // Top-Antworten fuer die FAQ-Box (statischer Build)
     const rows = (await db.prepare(`SELECT q.eid,q.q,q.lang,a.a,a.accepted,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes FROM entity_q q JOIN entity_a a ON a.q_id=q.id WHERE q.hidden=0 AND a.hidden=0 AND q.eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY q.id, a.accepted DESC, votes DESC`).all()).results || [];
@@ -59,20 +80,22 @@ export async function handleQa(env, request, url, path, user, J) {
     return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (!user) return J({ error: "login" }, 401);
-  if (path === "/api/qa/ask" && method === "POST") { const b = await body(); const r = await askQuestion(env, user, String(b.eid || ""), b.q, b.lang); return r.error ? J(r, r.error === "rate_limit" ? 429 : 400) : J(r); }
-  if (path === "/api/qa/answer" && method === "POST") { const b = await body(); const r = await answerQuestion(env, user, b.qid, b.a); return r.error ? J(r, r.error === "rate_limit" ? 429 : r.error === "not_found" ? 404 : 400) : J(r); }
+  if (path === "/api/qa/ask" && method === "POST") { const b = await body(); const r = await askQuestion(env, user, String(b.eid || ""), b.q, b.lang); if (r.ok) await dropQaCache(env, String(b.eid || "")); return r.error ? J(r, r.error === "rate_limit" ? 429 : 400) : J(r); }
+  if (path === "/api/qa/answer" && method === "POST") { const b = await body(); const r = await answerQuestion(env, user, b.qid, b.a); if (r.ok) await dropQaCache(env, r.eid); return r.error ? J(r, r.error === "rate_limit" ? 429 : r.error === "not_found" ? 404 : 400) : J(r); }
   if (path === "/api/qa/vote" && method === "POST") {
     if (!(await rateLimit(db, `qa:v:${user.id}`, 120, 3600))) return J({ error: "rate_limit" }, 429);
-    const b = await body(), a = await db.prepare("SELECT id,user_id FROM entity_a WHERE id=? AND hidden=0").bind(+b.aid).first(); if (!a) return J({ error: "not_found" }, 404);
+    const b = await body(), a = await db.prepare("SELECT a.id,a.user_id,q.eid FROM entity_a a JOIN entity_q q ON q.id=a.q_id WHERE a.id=? AND a.hidden=0").bind(+b.aid).first(); if (!a) return J({ error: "not_found" }, 404);
     if (a.user_id === user.id) return J({ error: "own" }, 400);
     const has = await db.prepare("SELECT 1 x FROM entity_a_votes WHERE a_id=? AND user_id=?").bind(a.id, user.id).first();
     if (has) await db.prepare("DELETE FROM entity_a_votes WHERE a_id=? AND user_id=?").bind(a.id, user.id).run(); else await db.prepare("INSERT INTO entity_a_votes(a_id,user_id,created) VALUES(?,?,?)").bind(a.id, user.id, now()).run();
+    await dropQaCache(env, a.eid);
     return J({ ok: true, voted: !has });
   }
   if (path === "/api/qa/accept" && method === "POST") {
     const b = await body(), a = await db.prepare("SELECT a.id,a.q_id,q.eid,a.accepted FROM entity_a a JOIN entity_q q ON q.id=a.q_id WHERE a.id=?").bind(+b.aid).first(); if (!a) return J({ error: "not_found" }, 404);
     if (!(await canAccept(db, user, a.eid))) return J({ error: "forbidden" }, 403);
     await db.batch([db.prepare("UPDATE entity_a SET accepted=0 WHERE q_id=?").bind(a.q_id), db.prepare("UPDATE entity_a SET accepted=? WHERE id=?").bind(a.accepted ? 0 : 1, a.id)]);
+    await dropQaCache(env, a.eid);
     return J({ ok: true });
   }
   if (path === "/api/qa/delete" && method === "POST") {
@@ -85,6 +108,7 @@ export async function handleQa(env, request, url, path, user, J) {
       await logEdit(db, g.actor, "review.hide", isQ ? "qa_q" : "qa_a", row.id, { before: { hidden: 0 }, after: { hidden: 1 } });
     }
     await db.prepare(`UPDATE ${isQ ? "entity_q" : "entity_a"} SET hidden=1 WHERE id=?`).bind(row.id).run();
+    await dropQaCache(env, row.eid);
     return J({ ok: true });
   }
   return null;

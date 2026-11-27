@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-10
-topics: [azure-ai-foundry, azure-ai-search, ai-agent, hybrid-search]
+topics: [microsoft-foundry, azure-ai-search, ai-agent, hybrid-search]
 keypoints:
   - "The index needs searchable text fields, searchable vector fields, a retrievable content field to cite and a retrievable source URL field for links."
   - "Add the connection under Connected resources in the project. For keyless auth, give the Foundry account's managed identity Search Index Data Contributor and Search Service Contributor."
@@ -105,7 +105,7 @@ Before sharing the agent, ask questions in three groups: ones answered by exact 
 
 ## Related
 
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Azure AI Search](https://www.m365.fm/entity/azure-ai-search/)
 - [AI agent](https://www.m365.fm/entity/ai-agent/)
 - [Hybrid search](https://www.m365.fm/entity/hybrid-search/)

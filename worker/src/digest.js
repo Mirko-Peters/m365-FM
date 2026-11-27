@@ -93,10 +93,13 @@ const enabled = (prefs, uid, kind) => {
 const uidParams = (ids) => ids.map(() => "?").join(",");
 
 async function adoptLegacyTopicFollows(db) {   // eine Themenliste: aktive Wochenmail-Themen (#194, mail_topic_follows) einmalig in email_topics uebernehmen
+  // Neue aktive Zeilen entstehen nicht mehr (kein INSERT in mail_topic_follows); nach dem ersten Lauf merkt sich meta legacy_topics_adopted das.
   try {
+    if ((await db.prepare("SELECT v FROM meta WHERE k='legacy_topics_adopted'").first())?.v === "1") return;
     await db.batch([
       db.prepare("INSERT OR IGNORE INTO email_topics(user_id,kind,topic_id,lang,timezone,created) SELECT f.user_id,'entity',f.eid,COALESCE(NULLIF(u.lang,''),'en'),'UTC',f.created FROM mail_topic_follows f JOIN users u ON u.id=f.user_id WHERE f.active=1"),
       db.prepare("UPDATE mail_topic_follows SET active=0 WHERE active=1"),
+      db.prepare("INSERT INTO meta(k,v) VALUES('legacy_topics_adopted','1') ON CONFLICT(k) DO UPDATE SET v=excluded.v"),
     ]);
   } catch { /* Tabelle fehlt: nichts zu uebernehmen */ }
 }
@@ -127,7 +130,7 @@ async function topicItems(db, ids, since, until, site) {
     SELECT DISTINCT r.user_id,'library',l.title,l.summary,l.lang,l.published,l.link,''
     FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
     JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='library'
-    JOIN lib_items l ON CAST(l.id AS TEXT)=ct.item_id AND l.status='live'
+    JOIN lib_items l ON CAST(l.id AS TEXT)=ct.item_id AND l.status='live' AND l.origin<>'seed'   -- Start-Eintraege fluten die Wochenmail nicht
     WHERE l.published>=? AND l.published<=?
     UNION ALL
     SELECT DISTINCT r.user_id,'session',s.title,s.abstract,s.lang,s.created,e.handle,''
@@ -242,8 +245,12 @@ async function reserveWeekly(db, recipient, period, time) {
   return !!result.meta.changes;
 }
 
+// D1-Kosten: der Lauf kommt alle 30 Minuten, die Woche ist aber meist am Montag erledigt. Sind alle Empfaenger der Woche beliefert (kein Kandidat
+// mehr), merkt sich meta weekly_done die Woche; bis zur naechsten Woche endet der Lauf vor jedem weiteren Lesen (Empfaenger, Zustellungen,
+// episodes.json). Wer sich mitten in der Woche neu anmeldet, bekommt die erste Wochenmail damit in der Woche darauf.
 export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   const db = env.DB, time = Math.floor(new Date(at).getTime() / 1000), period = weekStart(new Date(at).getTime() - 6 * 3600_000);   // Woche beginnt montags 06:00 UTC
+  if (!dry && mailReady(env) && (await db.prepare("SELECT v FROM meta WHERE k='weekly_done'").first().catch(() => null))?.v === period) return { sent: 0, period, done: true };
   const until = Date.parse(`${period}T06:00:00Z`) / 1000, since = until - 7 * 86400;   // festes Fenster: Vorwoche bis Montag 06:00, gleich fuer alle Nachlaeufe
   const j = await (await fetch(`${env.SITE}/episodes.json`, { cf: { cacheTtl: 0 } })).json();
   const episodes = (j.episodes || []).filter((e) => e.id && e.language && e.url);
@@ -272,7 +279,10 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   if (!start) { await db.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES('weekly_start',?)").bind(period).run(); return { ...result, waiting: true }; }
   if (period <= start) return { ...result, waiting: true };
   await adoptLegacyTopicFollows(db);
-  await db.prepare("DELETE FROM mail_weekly_delivery WHERE week_start<?").bind(period).run();   // Adress-Hashes nur fuer die laufende Woche halten
+  if ((await db.prepare("SELECT v FROM meta WHERE k='weekly_purged'").first())?.v !== period) {   // einmal je Woche statt in jedem Lauf
+    await db.prepare("DELETE FROM mail_weekly_delivery WHERE week_start<?").bind(period).run();   // Adress-Hashes nur fuer die laufende Woche halten
+    await db.prepare("INSERT INTO meta(k,v) VALUES('weekly_purged',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(period).run();
+  }
   const hashes = await Promise.all([...recipients.values()].map(async (recipient) => ({ recipient, hash: await addressHash(recipient.email) })));
   const sentRows = (await db.prepare("SELECT address_hash,week_start,status FROM mail_weekly_delivery").all()).results || [];
   const sentByHash = new Map(sentRows.map((row) => [row.address_hash, row]));
@@ -285,7 +295,10 @@ export async function runDigest(env, { dry = false, at = Date.now() } = {}) {
   const pivot = candidates.findIndex((x) => x.hash > cursor);
   const ordered = pivot > 0 ? [...candidates.slice(pivot), ...candidates.slice(0, pivot)] : candidates;
   const batch = ordered.slice(0, 20);
-  if (!batch.length) return result;
+  if (!batch.length) {
+    await db.prepare("INSERT INTO meta(k,v) VALUES('weekly_done',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(period).run();
+    return { ...result, done: true };
+  }
   const newsletterLangs = new Set(batch.flatMap(({ recipient }) => [...recipient.langs]));
   const byLang = await currentItems(db, episodes, newsletterLangs, since, until, env.SITE);
   const users = [...new Map(batch.flatMap(({ recipient }) => [...recipient.users.values()]).map((user) => [user.id, user])).values()];

@@ -1,0 +1,50 @@
+<translation>
+## Onderhoudskpi's: MTBF, MTTR, PM-naleving en PdM-specifieke metrieken
+
+Meet het programma op basis van het effect op de operatie en het onderhoudswerk, niet op basis van modelnauwkeurigheid. De Society for Maintenance & Reliability Professionals (SMRP), een in de VS gevestigde non-profitvereniging die door praktijkmensen is opgericht, publiceert best practices, metrieken en richtlijnen voor onderhoud en betrouwbaarheid. Als uw bedrijf die gebruikt, stem uw definities dan af op de formuleringen van SMRP [26]. Onze [manufacturing KPI's](https://www.m365.fm/en/learn/manufacturing-kpis/)-gids behandelt MTBF, MTTR en beschikbaarheid naast OEE; de definities hier zijn consistent met die gids.
+
+### Kernkpi's voor betrouwbaarheid
+
+> **MTBF (gemiddelde tijd tussen storingen) = bedrijfstijd ÷ aantal storingen**
+> **MTTR (gemiddelde hersteltijd) = totale reparatietijd ÷ aantal reparaties**
+> **Inherente beschikbaarheid = MTBF ÷ (MTBF + MTTR)**
+
+**Uitgewerkt voorbeeld.** De 12 pilotassets draaiden in het referentiejaar samen 96.000 bedrijfsuren, met 9 storingen en 72 uur totale reparatietijd.
+
+- MTBF = 96.000 ÷ 9 = **10.667 uur**
+- MTTR = 72 ÷ 9 = **8,0 uur**
+- Inherente beschikbaarheid = 10.667 ÷ (10.667 + 8,0) = **99,93%** per asset
+
+In het eerste pilotjaar treden op dezelfde bedrijfstijd 4 functionele storingen op, en worden 5 zich ontwikkelende fouten opgespoord en als gepland werk hersteld.
+
+- MTBF (functionele storingen) = 96.000 ÷ 4 = **24.000 uur**
+
+Wees expliciet over wat als storing geldt. Als door PdM getriggerde geplande reparaties als storingen zouden worden geteld, zou de MTBF onveranderd lijken terwijl de stilstand sterk is gedaald. Rapporteer beide: functionele storingen en door PdM gedetecteerde interventies.
+
+### Kpi's voor onderhoudsprocessen
+
+| KPI | Formule | Waarom het belangrijk is voor PdM |
+|---|---|---|
+| PM-naleving | PM-werkorders die binnen het geplande tijdvenster zijn afgerond ÷ PM-werkorders die in de periode vervallen | Een PdM-programma bovenop een falend PM-programma mislukt; krijg eerst de basisverzorging onder controle |
+| Percentage gepland onderhoud | Geplande onderhoudsuren ÷ totale onderhoudsuren | Moet stijgen naarmate PdM storingen omzet in gepland werk |
+| Aandeel reactief (noodzakelijk) werk | Noodwerkuren ÷ totale onderhoudsuren | Direct verband met de NIST-bevinding over fabrieken met veel reactief onderhoud [4] |
+| Planningsnaleving | Uitgevoerde geplande werkuren volgens plan ÷ geplande uren | Laat zien of geplande taken die door PdM worden getriggerd daadwerkelijk worden uitgevoerd |
+| Onderhoudskosten per eenheid of als aandeel van de vervangingswaarde van assets | Totale onderhoudskosten ÷ output, of ÷ geschatte vervangingswaarde van de assets | Voorkomt dat "besparingen" op stilstand worden teniet gedaan door hogere servicekosten |
+| Ongeplande stilstand op gemonitorde assets | Uren ongeplande stops veroorzaakt door gemonitorde assets | De belangrijkste uitkomstmetriek |
+
+**Uitgewerkt voorbeeld: PM-naleving.** In maart vervielen 240 PM-werkorders op de lijn. 204 daarvan werden binnen het afgesproken tijdvenster afgerond (bijvoorbeeld vervaldatum plus of min 10% van het interval, of een vast aantal dagen; definieer het venster één keer en houd dat aan). PM-naleving = 204 ÷ 240 = **85%**. Veel onderhoudsleiders streven naar 90% of meer voordat ze voorspellende lagen toevoegen [onbevestigd als gepubliceerde benchmark; gebruik alleen als interne streefwaarde].
+
+### PdM-specifieke kpi's
+
+| KPI | Formule | Gewenste richting |
+|---|---|---|
+| Dekking | Kritieke assets onder conditiebewaking ÷ kritieke assets | Omhoog, tot de geplande scope |
+| Detectie-doorlooptijd | Dagen tussen het eerste alarm en de functionele storing (of geplande reparatie) | Langer dan de tijd die nodig is om te plannen |
+| Alarmprecisie | Bevestigde alarmen ÷ alle alarmen | Omhoog, zonder verlies van recall |
+| Detectiegraad (recall) | Storingen voorafgegaan door een tijdig alarm ÷ alle storingen van gemonitorde faalmodi | Omhoog |
+| Reactietijd op alarm | Tijd van alarm tot triagebeslissing | Binnen de afgesproken grens (bijvoorbeeld 1 shift voor hoge prioriteit) |
+| Door PdM gegenereerd werk | Werkorders voortkomend uit conditiebevindingen ÷ alle correctieve werkorders | Omhoog |
+| Terugkoppelingspercentage as-found | PdM-werkorders met vastgelegde as-found-conditie ÷ PdM-werkorders | Dicht bij 100% |
+
+Zet er drie tot vijf van deze op het dagelijks of wekelijks bord van het onderhoudsteam. Voor hoe zulke borden werken, zie [shop floor management](https://www.m365.fm/en/learn/shop-floor-management/).
+</translation>

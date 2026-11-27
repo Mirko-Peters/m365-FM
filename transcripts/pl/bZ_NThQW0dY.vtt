@@ -1,0 +1,934 @@
+WEBVTT
+
+00:00:00.210 --> 00:00:07.330
+Gotowy na 12 dni z Microsoft 365, Copilot, AI, Azure i ludźmi kształtującymi przyszłość pracy?
+
+00:00:08.190 --> 00:00:11.850
+W styczniu M365.com powraca i będzie większy.
+
+00:00:12.130 --> 00:00:18.690
+Dołącz do nas i skorzystaj z sesji na żywo, demonstracji w warunkach rzeczywistych oraz praktycznej wiedzy od MVP i ekspertów branżowych z całego świata.
+
+00:00:18.930 --> 00:00:21.770
+Bez generycznych slajdów, bez niekończących się sloganów.
+
+00:00:21.970 --> 00:00:23.750
+Stawiamy czoła prawdziwym wyzwaniom.
+
+00:00:23.750 --> 00:00:28.810
+Copilot Studio Agenci AI Fabrik, bezpieczeństwo, zarządzanie i automatyzacja.
+
+00:00:28.810 --> 00:00:35.070
+Niezależnie od tego, czy jesteś specjalistą i programistą, czy liderem biznesowym, mamy sesje zaprojektowane dla Ciebie.
+
+00:00:35.290 --> 00:00:40.510
+Przez 10 pełnych dni możesz zapoznać się z wieloma technologiami i nawiązać kontakt z globalną społecznością.
+
+00:00:40.730 --> 00:00:44.630
+Oglądaj na żywo i wykorzystaj praktyczne spostrzeżenia w swojej organizacji.
+
+00:00:44.950 --> 00:00:49.130
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft.
+
+00:00:49.490 --> 00:00:51.110
+Rejestracja jest już otwarta.
+
+00:00:51.110 --> 00:00:56.050
+Wejdź na m365.com.net i zarezerwuj sobie miejsce już dziś.
+
+00:00:56.050 --> 00:00:58.930
+To jest m365.com.net.
+
+00:01:00.130 --> 00:01:04.810
+Dołącz teraz na m365.com.net, a zobaczymy się na żywo w styczniu.
+
+00:01:04.970 --> 00:01:06.310
+Oto moje wyzwanie dla Ciebie.
+
+00:01:06.470 --> 00:01:09.950
+Czy Twój zespół B jest w stanie śledzić każdą zmianę w raportach od etapu deweloperskiego do produkcyjnego,
+
+00:01:10.030 --> 00:01:12.110
+rejestrując zatwierdzenia i przejmując ciężar automatyzacji?
+
+00:01:12.250 --> 00:01:14.490
+Krótki punkt kontrolny, zanim przejdziemy do konkretów.
+
+00:01:14.490 --> 00:01:20.010
+Ta sesja zakłada, że znasz już podstawy PBIP i terminy git, takie jak gałąź, zatwierdzenie i żądanie ściągnięcia.
+
+00:01:20.190 --> 00:01:21.090
+Oto plan działania.
+
+00:01:21.290 --> 00:01:26.290
+Omówimy zatwierdzenia żądań zmiany w GitHub, automatyczne sprawdzanie z akcjami oraz potoki wdrożeń dla Power BI.
+
+00:01:26.450 --> 00:01:30.290
+Te trzy elementy decydują o tym, czy problem się nie zepsuje, czy też o tym, czy rzeczywiście będzie.
+
+00:01:30.470 --> 00:01:31.790
+Ale najpierw bądźmy szczerzy.
+
+00:01:31.950 --> 00:01:34.890
+PBIP nie jest magicznym lekarstwem, za jakie mógłbyś go uważać.
+
+00:01:35.090 --> 00:01:37.310
+Dlaczego PBIP nie jest cudownym lekarstwem?
+
+00:01:37.310 --> 00:01:44.030
+Nowa, błyszcząca rzeczywistość projektów pulpitu Power BI PBP sprawia, że wszystko wygląda bardziej przejrzyście od razu po odwróceniu strony.
+
+00:01:44.290 --> 00:01:52.270
+Zamiast upychać cały model raportów i połączenia w jednej, nieporęcznej czarnej skrzynce PBX, PBIP udostępnia je jako ustrukturyzowany folder pełen plików tekstowych.
+
+00:01:52.530 --> 00:01:56.150
+Model semantyczny otrzymuje własny plik wiązki modelu, który jest nie tylko czytelny.
+
+00:01:56.370 --> 00:01:59.330
+Można go również bezpośrednio podłączyć do narzędzi takich jak tabular editor.
+
+00:01:59.550 --> 00:02:03.190
+Połączenia, wizualizacje i metadany JSON znajdują się w osobnych plikach.
+
+00:02:03.190 --> 00:02:04.670
+Nagle git naprawdę tu działa.
+
+00:02:04.930 --> 00:02:07.110
+Różnice pokazują dokładnie, co się zmieniło.
+
+00:02:07.310 --> 00:02:15.230
+Gałęzie pozwalają wielu osobom eksperymentować bez spotykania się o siebie, a ty odblokowujesz kompatybilność z narzędziami C-CD, takimi jak GitHub Actions czy Azure DevOps.
+
+00:02:15.410 --> 00:02:17.330
+To dobra strona, techniczna odskocznia.
+
+00:02:17.590 --> 00:02:20.930
+Zła strona jest taka, że PBIP nie naprawia magicznie dynamiki zespołu.
+
+00:02:21.070 --> 00:02:23.970
+Tak naprawdę to tylko rzuca światło na chaos, który już istniał.
+
+00:02:24.210 --> 00:02:29.170
+Dzięki PBX każda edycja istniała w ukryciu w pojedynczym pliku binarnym, którego nikt nie mógł prawidłowo śledzić.
+
+00:02:29.170 --> 00:02:34.150
+Dzięki PBIP te same edycje są teraz rozproszone po dziesiątkach małych plików, które wołają o uwagę w gicie.
+
+00:02:34.350 --> 00:02:36.210
+Tak, konflikty scalania są widoczne.
+
+00:02:36.210 --> 00:02:38.870
+Tak, w końcu widać, która miara została zmieniona.
+
+00:02:39.070 --> 00:02:44.170
+Ale jeśli 5 osób będzie pracować nad tym samym zestawem danych w poniedziałek rano, git nadal będzie świecił na czerwono.
+
+00:02:44.390 --> 00:02:49.010
+Różnica polega na tym, że teraz możesz dyskutować o tym plik po pliku, zamiast udawać, że problem nie istnieje.
+
+00:02:49.210 --> 00:02:52.470
+Wyobraź sobie, że zamieniłeś szufladę na śmieci na opisaną skrzynkę z narzędziami.
+
+00:02:52.710 --> 00:02:57.950
+Jasne, każdy śrubokręt ma teraz swoje schludne miejsce, ale gdy połowa biura sięga po śrubokręt krzyżakowy naraz, tarcie nie znika.
+
+00:02:58.130 --> 00:03:00.630
+Po prostu staje się nieco łatwiej zobaczyć, kto za co sięgnął.
+
+00:03:00.630 --> 00:03:03.250
+To właśnie oferuje PB&P przejrzystość bez dyscypliny.
+
+00:03:03.390 --> 00:03:07.630
+Pracowałem z zespołami, które postawiły wszystko na PB&P, oczekując, że rozwiąże on kolidujące edycje.
+
+00:03:07.810 --> 00:03:11.370
+Porzucali reguły, pomijali przeglądy i zaufaną widoczność, aby je uratować.
+
+00:03:11.550 --> 00:03:15.350
+W ciągu kilku sprintów rezultatem był ślad audytu pełen niewyjaśnionych zmian.
+
+00:03:15.630 --> 00:03:21.290
+Kolumny zmieniały nazwy bez powodu, relacje dostosowywano bez ostrzeżenia, miary przepisywane bez kontekstu.
+
+00:03:21.510 --> 00:03:25.990
+Widzenie edycji nie czyniło ich bezpieczniejszymi, po prostu utrwalało zamieszanie w historii gita.
+
+00:03:25.990 --> 00:03:28.210
+Jest też kwestia konfliktów scalania.
+
+00:03:28.390 --> 00:03:31.850
+PB&P sprawia, że są one głośne i wyraźne, czasami boleśnie wyraźne.
+
+00:03:32.030 --> 00:03:36.410
+Zamiast cichego uszkodzenia ukrytego w PB&X, wpatrujesz się w jaskrawo-czerwone znaczniki konfliktów VS Code,
+
+00:03:36.550 --> 00:03:39.030
+pokazujące trzy konkurujące ze sobą wersje tej samej miary DAX.
+
+00:03:39.210 --> 00:03:40.790
+Technicznie rzecz biorąc, to postęp.
+
+00:03:40.970 --> 00:03:44.370
+Przynajmniej wiesz dokładnie, co się zepsuło, ale głośniejsze mówienie nie oznacza, że ból znika.
+
+00:03:44.550 --> 00:03:46.850
+Oznacza to po prostu, że nie możesz go dłużej ignorować.
+
+00:03:46.850 --> 00:03:51.850
+To, czy to błogosławieństwo, czy przekleństwo, zależy od tego, jak zdyscyplinowany jest Twój zespół w kwestii przepływu pracy.
+
+00:03:52.050 --> 00:03:53.170
+I oto sedno sprawy.
+
+00:03:53.330 --> 00:03:57.090
+Prawdziwym przełomem nie jest sam PB&P, ale to, co PB&P umożliwia.
+
+00:03:57.310 --> 00:04:03.150
+Dzieląc raporty i modele na tekstowe pliki z kontrolą wersji, możesz wreszcie nałożyć na nie odpowiednie przepływy pracy w gicie.
+
+00:04:03.390 --> 00:04:07.030
+Gałęzie, żądania ściągnięcia, recenzje, potoki ci, ciąg dalszy.
+
+00:04:07.190 --> 00:04:08.930
+PB&P to drzwi, a nie cel.
+
+00:04:09.190 --> 00:04:14.250
+Daje Ci kontrolę wersji dla poszczególnych komponentów, ale nie mówi osobom trzymającym kierownicę, jak mają prowadzić.
+
+00:04:14.250 --> 00:04:19.130
+Oznacza to, że te same problemy pozostają, jeśli nie opleciesz tej konfiguracji strukturą i automatyzacją.
+
+00:04:19.370 --> 00:04:24.250
+Bez zatwierdzeń i recenzji patrzysz tylko na bardziej widoczne odciski łap tego samego stada kotów.
+
+00:04:24.450 --> 00:04:30.430
+Bez zabezpieczeń, takich jak automatyczne kontrole, nadal ufasz, że programiści nie przemycą wątpliwych edycji prosto do produkcji.
+
+00:04:30.610 --> 00:04:34.550
+PB&P umożliwia nowoczesne praktyki DevOps w Power BI, ale ich nie wymusza.
+
+00:04:34.730 --> 00:04:36.070
+To wciąż kwestia zespołu.
+
+00:04:36.290 --> 00:04:37.210
+Gdzie to nas zostawia?
+
+00:04:37.410 --> 00:04:39.130
+Z przejrzystością, ale bez porządku.
+
+00:04:39.350 --> 00:04:43.650
+PB&P usuwa monolityczną mgłę PBX, ale nie zapobiega chaotycznym kolizjom.
+
+00:04:43.650 --> 00:04:49.650
+W tym celu potrzebne są kontrole, coś, co uniemożliwi użytkownikom nadpisywanie się nawzajem lub przemycanie nieprzetestowanych zmian.
+
+00:04:49.870 --> 00:04:51.550
+Dlatego kolejny krok jest tak ważny.
+
+00:04:51.750 --> 00:04:56.550
+Pull requesty GitHub biorą nieuporządkowany stos plików PB&P i umieszczają na nim sygnalizację świetlną.
+
+00:04:56.790 --> 00:05:02.690
+Zamiast pięciu programistów ścigających się na tym samym skrzyżowaniu otrzymujesz kontrole, sygnały i rejestr tego, kto co faktycznie zrobił.
+
+00:05:02.810 --> 00:05:09.150
+I tu właśnie zmienia się historia, ponieważ choć PRY są przydatne, każdy, kto je przeżył, wie, że mogą być zarówno kołem ratunkowym, jak i punktem krytycznym.
+
+00:05:09.150 --> 00:05:16.350
+Dlatego oczywiste pytanie, zanim przejdziemy do konkretów, brzmi, jak utrzymać porządek, jaki wprowadzają, nie zamieniając każdej drobnej zmiany kolorów spotkanie komitetu?
+
+00:05:16.530 --> 00:05:19.010
+Zatwierdzanie PRU od chaosu po kontrolowane psoty.
+
+00:05:19.230 --> 00:05:24.750
+Porozmawiajmy teraz o prawdziwym punkcie kontrolnym, który zmienia PB i PES zorganizowanego chaosu w coś, co da się ogarnąć.
+
+00:05:24.750 --> 00:05:26.350
+Zatwierdzenia pull requestów.
+
+00:05:26.510 --> 00:05:29.350
+Wyobraź sobie pięciu programistów modyfikujących ten sam raport.
+
+00:05:29.570 --> 00:05:34.490
+Jeden edytuje stosy, drugi zmienia nazwę kolumny, jeden zmienia formatowanie, a dwóch kolejnych bawi się kolorami.
+
+00:05:34.710 --> 00:05:38.390
+Jeśli wszystkie te zmiany nie zostaną zaznaczone, nie ma współpracy, tylko raport Frankena.
+
+00:05:38.670 --> 00:05:40.150
+Właśnie dlatego istnieją PRY.
+
+00:05:40.510 --> 00:05:45.270
+Są strażnikami, którzy spowalniają pracę na tyle, by zapobiec sytuacji, w której pięć osób łączy się na tym samym skrzyżowaniu.
+
+00:05:45.510 --> 00:05:47.750
+Wyobraź sobie PRY jako światła drogowe w GitHubie.
+
+00:05:47.750 --> 00:05:50.170
+Zielone światło oznacza scalanie i poruszanie się naprzód.
+
+00:05:50.170 --> 00:05:54.850
+Czerwone światło powstrzymuje Cię, dopóki recenzenci nie potwierdzą, że Twoja praca nie zderzy się z czymś innym.
+
+00:05:55.070 --> 00:05:59.270
+Nic specjalnego, tylko ustrukturyzowane pauzy, żebyście przypadkiem nie zerwali swoich zmian.
+
+00:05:59.470 --> 00:06:02.210
+I tak zatwierdzenia rzeczywiście sprawiają, że ludzie się denerwują.
+
+00:06:02.430 --> 00:06:04.970
+Nie spowolnią nas, tylko jeśli ich niewłaściwie użyjesz.
+
+00:06:05.170 --> 00:06:08.990
+Nie potrzebujesz menedżerów wyższego szczebla zatwierdzających zmiany koloru wykresu kołowego,
+
+00:06:08.990 --> 00:06:15.570
+ale zdecydowanie potrzebujesz więcej niż jednej pary oczu, gdy ktoś restrukturyzuje schemat zestawu danych lub przebudowuje relacje w modelu.
+
+00:06:15.710 --> 00:06:19.370
+Praktyczne podejście jest takie odwzoruj rygorystyczność przeglądu na wpływ.
+
+00:06:20.170 --> 00:06:23.150
+Taka akceptacja wystarczy w przypadku poprawek kosmetycznych lub tekstowych.
+
+00:06:23.350 --> 00:06:28.890
+Bramki dla wielu recenzentów są wymagane podczas zmiany miar, dodawania kolumn obliczeniowych lub dostosowywania relacji.
+
+00:06:29.110 --> 00:06:34.090
+W ten sposób codzienna praca przebiega szybko, ale ważne kwestie nie przedostają się do produkcji bez kontroli.
+
+00:06:34.250 --> 00:06:35.650
+To nie tylko moja ostrożność.
+
+00:06:35.650 --> 00:06:40.710
+Wytyczne Microsoftu dotyczące gałęzi i obszarów roboczych traktują akceptację żądań zmian PR jako punkt kontrolny.
+
+00:06:40.830 --> 00:06:44.750
+To moment, w którym oficjalnie decydujesz, że zmiana staje się częścią wersji współdzielonej.
+
+00:06:44.930 --> 00:06:48.710
+Bez tego kroku w zasadzie pozwalasz ludziom na szybkie wprowadzanie dowolnych poprawek do modelu podstawowego.
+
+00:06:48.710 --> 00:06:51.930
+To nie jest zarządzanie. To incydent, który czeka, aż się wydarzy.
+
+00:06:52.090 --> 00:06:54.430
+A oto taktyczna wygrana, o której ludzie zapominają.
+
+00:06:54.670 --> 00:06:57.410
+Żądania zmian PR automatycznie generują ślad audytu.
+
+00:06:57.590 --> 00:07:00.170
+Każde zatwierdzenie, komentarz i zatwierdzenie jest rejestrowane.
+
+00:07:00.170 --> 00:07:05.710
+Więc następnym razem, gdy ktoś zapyta, dlaczego raport o przychodach się zepsuł w zeszłym tygodniu, nie musisz przeszukiwać lokalnych plików jak detektyw.
+
+00:07:05.870 --> 00:07:09.930
+Wystarczy sprawdzić historię PR, kto ją zatwierdził, co było omawiane i jakie zmiany zostały wprowadzone.
+
+00:07:10.110 --> 00:07:12.970
+Ten ślad jest wart swojej wagi w zaoszczędzonych nadgodzinach.
+
+00:07:12.970 --> 00:07:15.950
+Podsumowując, zatwierdzenia PR nie są kwestią biurokracji.
+
+00:07:16.190 --> 00:07:17.050
+Chodzi o równowagę.
+
+00:07:17.310 --> 00:07:19.070
+Zbyt luźne zasady zapraszają chaos.
+
+00:07:19.290 --> 00:07:21.690
+Zbyt rygorystyczne utkniesz z powodu drobnych poprawek.
+
+00:07:21.690 --> 00:07:27.550
+Najlepszym rozwiązaniem są skalowalne reguły, lekkie recenzje dla mało istotnych poprawek, ograniczone zatwierdzenia dla dużych refaktoryzacji.
+
+00:07:27.690 --> 00:07:30.370
+To zapewnia bezpieczeństwo repozytorium bez wypalania wszystkich.
+
+00:07:30.590 --> 00:07:33.970
+Mimo to, PR i grek wychwytują tylko to, na co recenzenci zwracają uwagę.
+
+00:07:34.210 --> 00:07:36.430
+Ludzie się męczą, pobieżnie przeglądają zmiany lub klikają
+
+00:07:36.430 --> 00:07:40.950
+Zatwierdź tylko po to, by zwolnić kolejkę, przez co wiele możliwych do uniknięcia problemów może się przedostać.
+
+00:07:41.090 --> 00:07:46.750
+Jeśli kiedykolwiek scalałeś niedbałe DAG i lub zerwaną relację, bo nikt tego nie zauważył podczas recenzji, znasz ten ból.
+
+00:07:46.750 --> 00:07:49.930
+To właśnie tutaj następuje kolejna zmiana automatyzacja oczywistych rzeczy.
+
+00:07:50.190 --> 00:07:54.810
+Zamiast polegać wyłącznie na ludzkich recenzentach, którzy zauważą luki w formatowaniu słabe nazewnictwo lub brakujące opisy,
+
+00:07:54.910 --> 00:07:58.330
+pozwalasz automatyzacji przeskanować każde żądanie zmiany PR jeszcze przed jego zatwierdzeniem.
+
+00:07:58.510 --> 00:07:59.970
+Ludzie skupiają się na kontekście.
+
+00:08:00.210 --> 00:08:01.990
+Maszyny wychwytują przewidywalne błędy.
+
+00:08:01.990 --> 00:08:03.870
+Następny logiczny krok jest więc prosty.
+
+00:08:04.050 --> 00:08:05.910
+Żądania zmiany PR wprowadzają porządek.
+
+00:08:06.030 --> 00:08:12.070
+Automatyzacja sprawia, że ten porządek jest mądrzejszy, a to połączenie zapobiega przekształceniu się głównej gałęzi w wysypisko drobnych, ale kosztownych błędów.
+
+00:08:12.250 --> 00:08:14.910
+Automatyczne sprawdzanie twój cichy zespół recenzentów.
+
+00:08:15.050 --> 00:08:16.330
+Oto więc kolejny element.
+
+00:08:16.570 --> 00:08:19.270
+Automatyczne sprawdzanie twój cichy zespół recenzentów.
+
+00:08:19.390 --> 00:08:24.150
+To psy strażnicze, które nie śpią, nie przeglądają pobieżnie żądań, ściągnięcia i nie rozprasza ich slack.
+
+00:08:24.150 --> 00:08:28.370
+Siedzą przy drzwiach repozytorium i szczekają, gdy coś niechlujnego próbuje się przez nie prześlizgnąć.
+
+00:08:28.630 --> 00:08:30.770
+Mechanizm, który za tym stoi, jest dość prosty.
+
+00:08:30.890 --> 00:08:31.430
+Akcje GitHub.
+
+00:08:31.670 --> 00:08:36.530
+Za każdym razem, gdy przesyłasz commit lub otwierasz żądanie ściągnięcia, akcje uruchamiają skrypty, które im każesz.
+
+00:08:36.710 --> 00:08:38.750
+Wyobraź sobie ich jako bramkarzy z schowkami.
+
+00:08:38.950 --> 00:08:49.090
+Pojawiają się nowe pliki i zamiast domyślnie wprowadzać je do produkcji, akcje uruchamiają szereg sprawdzeń, skrypty w PowerShellu, narzędzia walidacyjne, może kilka zadań węzła i dopiero wtedy dają zielone światło.
+
+00:08:49.090 --> 00:08:53.590
+Nie naciskasz przycisku Odtwórz samodzielnie, uruchamiają się automatycznie po zdefiniowanych przez ciebie zdarzeniach.
+
+00:08:53.690 --> 00:08:56.850
+A teraz haczyk, nie zaczynasz od dodawania do miksu wszystkich możliwych walidatorów.
+
+00:08:57.050 --> 00:08:59.870
+Zrób to, a zamienisz swoje repozytorium w kontrolę bezpieczeństwa na lotnisku.
+
+00:09:00.050 --> 00:09:02.990
+Programiści spędzą więcej czasu na rozpakowywaniu butów niż na pisaniu kodu.
+
+00:09:03.230 --> 00:09:05.310
+Mądrzejszym posunięciem jest zacząć od małych rzeczy.
+
+00:09:05.310 --> 00:09:15.110
+Wybierz sprawdzenia, które zwracają największą wartość przy najmniejszym tarciu, konwencjach nazewnictwa, rażących antywzorcach DAX, oczywistych błędach schematu, takich jak brakujące relacje, a może nawet trochę lintingu w plikach JSON lub modelach.
+
+00:09:15.270 --> 00:09:19.210
+W ten sposób programiści nadal czują się szybcy, ale ty zapewniłeś sobie pewne zabezpieczenia.
+
+00:09:19.410 --> 00:09:20.930
+Połóżmy kilka narzędzi na stole.
+
+00:09:21.210 --> 00:09:25.950
+Model.bim to plik tekstowy, co oznacza, że narzędzia do analizy statycznej mogą go przeszukiwać.
+
+00:09:26.150 --> 00:09:31.750
+Edytor tabelaryczny może uruchamiać skrypty wiersza poleceń w celu walidacji relacji, reguł nazewnictwa lub grup obliczeniowych.
+
+00:09:31.750 --> 00:09:39.290
+Skrypty programu PowerShell z modułu Microsoft Power BI MGT mogą przeszukiwać zestawy danych lub weryfikować, czy obszar roboczy jest aktywny, zanim wprowadzisz w nim zmiany.
+
+00:09:39.450 --> 00:09:44.670
+W połączeniu z interfejsami API REST usługi Power BI można nawet zautomatyzować testy dymne dla zaktualizowanych raportów.
+
+00:09:44.870 --> 00:09:50.370
+Skrypt walidacyjny może przeszukiwać te interfejsy API, sprawdzać metadane lub powiązania ze źródłami danych i usuwać błędy.
+
+00:09:50.570 --> 00:09:52.090
+Nic z tego nie jest hipotetyczne.
+
+00:09:52.250 --> 00:09:54.590
+To właśnie sprawia, że warto wdrożyć PB&P.
+
+00:09:54.850 --> 00:09:59.930
+Dobrym wzorcem, z którego korzystają zespoły, jest skonfigurowanie akcji GitHub przy otwieraniu lub aktualizacji żądania ściągnięcia.
+
+00:09:59.930 --> 00:10:10.430
+Ten przepływ pracy uruchamia niewielki pakiet, być może skrypt programu PowerShell do testowania nazw zestawów danych, skrypt węzła do wychwytywania błędnych fragmentów kodu DAX oraz wiersz poleceń edytora tabelarycznego, aby upewnić się, że model nie ulegnie awarii.
+
+00:10:10.550 --> 00:10:11.930
+Podstawowe najlepsze praktyki.
+
+00:10:12.170 --> 00:10:16.910
+Jeśli coś się nie powiedzie, akcja przesyła komentarze bezpośrednio do konwersacji żądania ściągnięcia i oznacza kompilację na czerwono.
+
+00:10:17.110 --> 00:10:18.430
+Bez scalania, bez klikania.
+
+00:10:18.670 --> 00:10:21.330
+Developer naprawia problem, zanim gałąź zostanie uwzględniona.
+
+00:10:21.510 --> 00:10:22.550
+Oto dlaczego to ważne.
+
+00:10:22.550 --> 00:10:25.510
+Różnice w tekście nie ostrzegają o problemach z wydajnością.
+
+00:10:25.710 --> 00:10:33.790
+Możesz zobaczyć zmienioną nazwę miary lub kolumny i pomyśleć, że wygląda dobrze, ale walidator może wychwycić fakt, że ktoś usunął indeks lub zmienił filtr w sposób, który zamienia zapytania w szlam.
+
+00:10:34.030 --> 00:10:36.570
+Jeden z zespołów, z którymi pracowałem, miał podobny przypadek.
+
+00:10:36.690 --> 00:10:41.550
+Odbudowa zestawu danych wyglądała niewinnie w gicie, ale walidator oznaczył uszkodzoną relację przed wprowadzeniem jej do produkcji.
+
+00:10:41.730 --> 00:10:46.450
+Ten pojedynczy, zautomatyzowany błąd zaoszczędził im godzin gaszenia pożaru i kilku telefonów od użytkowników biznesowych.
+
+00:10:46.450 --> 00:10:48.990
+Wyobraź sobie automatyzację jako filtr do żmudnej pracy.
+
+00:10:49.230 --> 00:10:52.950
+Ludzie nienawidzą sprawdzania reguł dotyczących wielkości liter ani skanowania nazw tabel w arkuszu pierwszym.
+
+00:10:53.150 --> 00:10:54.970
+Skrypt może to obsłużyć w milisekundy.
+
+00:10:55.210 --> 00:11:03.250
+Ludzie nadal mają coś do powiedzenia, ale ich oceny skupiają się na dopasowaniu strategicznym, logice biznesowej i jakości projektu, a nie na tym, czy identyfikator klienta był konsekwentnie zapisywany wielką literą.
+
+00:11:03.410 --> 00:11:05.090
+Podział pracy jest czysty i prosty.
+
+00:11:05.090 --> 00:11:07.770
+Akcje Microsoftu zasadniczo popychają Cię w tym kierunku.
+
+00:11:07.990 --> 00:11:13.810
+Akcje GitHub integrują się z usługami Power BI, a nawet interfejsami API usługi Fabrics, dzięki czemu walidacja staje się częścią Twojej historii C i CD.
+
+00:11:13.810 --> 00:11:16.430
+To nie przesada, to oczywisty sposób na przyszłość.
+
+00:11:16.610 --> 00:11:21.190
+Zautomatyzuj powtarzalną higienę, aby programiści i recenzenci nie marnowali energii na nudne sprawdzanie spójności.
+
+00:11:21.450 --> 00:11:24.310
+Podsumowując, traktuj działania jak swoich współpracowników botów.
+
+00:11:24.490 --> 00:11:29.230
+Zacznij od kilku sprawdzeń, które przynoszą największą wartość, a następnie rozszerzaj je w miarę rozwoju zespołu.
+
+00:11:29.430 --> 00:11:33.630
+Zautomatyzuj sprawdzanie poprawności na poziomie modelu, walidację schematu i reguły nazewnictwa.
+
+00:11:33.870 --> 00:11:38.110
+Daj recenzentom swobodę poświęcania czasu na projektowanie i strategię, a nie na korektę nazw pól.
+
+00:11:38.110 --> 00:11:45.790
+A gdy te sprawdzenia zostaną wdrożone, naturalnie pojawia się pytanie, czy działania mogą blokować wprowadzanie złych zmian, dlaczego nie pozwolić im również na wprowadzanie dobrych zmian.
+
+00:11:45.970 --> 00:11:55.450
+Tu właśnie pojawiają się potoki, nie tylko blokady, ale zautomatyzowane sposoby na przepychanie zatwierdzonych kompilacji z etapu rozwoju, przez testy, aż do produkcji, bez rytuału ręcznego klikania przycisków.
+
+00:11:55.670 --> 00:11:59.510
+Ta zmiana zmienia wdrożenia z przesądów coś, czemu można naprawdę zaufać.
+
+00:11:59.510 --> 00:12:09.990
+Potoki wdrożeniowe to miejsce, w którym cała konfiguracja zmienia się z przyjemnego eksperymentu w coś, co można faktycznie uruchomić w środowisku produkcyjnym bez obgryzania paznokci.
+
+00:12:10.150 --> 00:12:18.750
+To jest część, która przenosi starannie sprawdzony kod między środowiskami w uporządkowany sposób deweloperskim, testowym, a na końcu produkcyjnym bez polegania na szczęśliwych kliknięciach myszką.
+
+00:12:18.750 --> 00:12:21.450
+Ręczne publikowanie w Power BI to dziki zachód.
+
+00:12:21.610 --> 00:12:29.630
+Wyeksportuj PBX, zaimportuj go gdzie indziej, módl się, aby nie wybrać niewłaściwego obszaru roboczego i trzymaj kciuki, aby identyfikatory zestawów danych nadal się zgadzały.
+
+00:12:29.750 --> 00:12:31.930
+To jak noszenie na ręcza zakupów bez torby.
+
+00:12:32.190 --> 00:12:35.450
+Może dotrzesz do samochodu, może jajka odświeżą Twój podjazd.
+
+00:12:35.590 --> 00:12:40.370
+Właśnie dlatego istnieją potoki wdrażania, a dokładniej interfejsy API REST potoków wdrażania.
+
+00:12:40.630 --> 00:12:43.730
+Zostały one stworzone, aby wyeliminować ten stały element przypadkowości.
+
+00:12:43.730 --> 00:12:46.630
+Te interfejsy API to nie tylko przyciski następnego etapu.
+
+00:12:46.630 --> 00:12:50.130
+Obsługują one kilka kluczowych scenariuszy, które powinien znać każdy leader BI.
+
+00:12:50.310 --> 00:12:54.350
+Wdrażanie wszystkich Deploy All wysyła cały obszar roboczy do następnego etapu.
+
+00:12:54.730 --> 00:12:59.530
+Wdrażanie selektywne pozwala wybrać pojedyncze elementy, takie jak raport lub zestaw danych,
+
+00:12:59.670 --> 00:13:06.170
+a wdrażanie wsteczne Izba Quart Deployment True może promować zawartość do poprzedniego etapu, jeśli jej tam brakuje.
+
+00:13:06.650 --> 00:13:10.710
+Co więcej, interfejsy API mogą również aktualizować aplikację powiązaną ze sceną.
+
+00:13:10.710 --> 00:13:13.690
+Dzięki temu, gdy promujesz zawartość do środowiska testowego lub produkcyjnego,
+
+00:13:13.690 --> 00:13:17.650
+powiązana aplikacja może się automatycznie aktualizować, a użytkownicy od razu widzą odświeżone raporty.
+
+00:13:17.770 --> 00:13:21.390
+To prawdziwa kontrola bez konieczności przerzucania plików jak zdesperowany stażysta.
+
+00:13:21.550 --> 00:13:22.690
+A oto brutalna prawda.
+
+00:13:23.030 --> 00:13:26.610
+Zanim cokolwiek z tego zadziała, potrzebne są nudne, ale kluczowe warunki wstępne.
+
+00:13:26.790 --> 00:13:29.690
+Osoba wywołująca, niezależnie od tego, czy jest to konto ludzkie, czy podmiot usługi,
+
+00:13:29.810 --> 00:13:34.170
+musi mieć identyfikator Microsoft Entra ID z odpowiednimi uprawnieniami zarówno do potoku, jak i do celowych obszarów roboczych.
+
+00:13:34.170 --> 00:13:35.710
+Pomiń to, a nic się nie zmieni.
+
+00:13:35.890 --> 00:13:40.750
+A kiedy polegasz na zasadach usługi, co jest absolutnie konieczne w przypadku automatyzacji, napotykasz pewne ograniczenia.
+
+00:13:41.010 --> 00:13:43.650
+Zasady usługi nie mogą skonfigurować protokołu OUF dla źródeł danych,
+
+00:13:43.770 --> 00:13:46.930
+więc niektóre zestawy danych nie odświeżą się, dopóki człowiek nie poprawi poświadczeń.
+
+00:13:47.050 --> 00:13:50.950
+Ponadto zasada usługi staje się właścicielem modeli semantycznych i raportów stronicowanych,
+
+00:13:51.030 --> 00:13:53.290
+które wdraża, co może blokować zaplanowane odświeżanie.
+
+00:13:53.470 --> 00:13:54.990
+I zapomnij o przepływach danych.
+
+00:13:55.250 --> 00:13:57.110
+Zasady usługi w ogóle ich nie wdrażają.
+
+00:13:57.110 --> 00:14:00.690
+Jeszcze jeden haczyk, każde wywołanie wdrożenia ogranicza się do 300 elementów.
+
+00:14:00.850 --> 00:14:05.190
+Jeśli Twoja przestrzeń robocza zamieniła się w wysypisko wizualizacji, ten sufit Cię zaatakuje.
+
+00:14:05.370 --> 00:14:08.830
+To nie jest przyjemna wiedza, to dziury, które musisz od razu zauważyć.
+
+00:14:09.050 --> 00:14:10.950
+Jak więc połączyć to z akcjami GitHub?
+
+00:14:11.470 --> 00:14:15.150
+Sprytną, sprawdzoną metodą jest przechowywanie identyfikatora klienta usługi,
+
+00:14:15.330 --> 00:14:18.950
+service principal client ID i sekretu w sekretach repozytorium GitHub.
+
+00:14:19.110 --> 00:14:21.570
+To chroni je przed kodem i przypadkowymi zatwierdzeniami.
+
+00:14:21.830 --> 00:14:26.170
+Następnie mapujesz foldery repozytoriów na identyfikatory potoków za pomocą pliku konfiguracyjnego YAML.
+
+00:14:26.170 --> 00:14:30.050
+Każdy folder jest powiązany z konkretnym potokiem, a akcja GitHub odczytuje to mapowanie,
+
+00:14:30.190 --> 00:14:31.930
+aby wypchnąć zawartość we właściwe miejsce.
+
+00:14:32.170 --> 00:14:33.850
+To nie jest moja zmyślona historia.
+
+00:14:34.130 --> 00:14:39.010
+Ten schemat pojawia się w akcjach społeczności, takich jak wdrożenie potoku Power BI w sklepie GitHub.
+
+00:14:39.250 --> 00:14:42.510
+Działa dobrze, ale powinieneś wiedzieć, że te akcje w sklepie są stronami zewnętrznymi,
+
+00:14:42.630 --> 00:14:43.930
+a nie certyfikowane przez Microsoft.
+
+00:14:44.230 --> 00:14:46.870
+Mówiąc wprost, są przydatne, ale to Ty ponosisz ryzyko.
+
+00:14:47.070 --> 00:14:51.210
+Jeśli potrzebujesz maksymalnego bezpieczeństwa i wsparcia, wdruż własne skrypty dla interfejsów API.
+
+00:14:51.450 --> 00:14:53.070
+Dobrze, a jak to wygląda w praktyce?
+
+00:14:53.070 --> 00:14:57.230
+Zamykasz żądanie ściągnięcia, uruchamiasz akcję GitHub, wywołujesz API REST potoków wdrożeniowych
+
+00:14:57.230 --> 00:14:59.550
+i przenosisz zawartość z działu deweloperskiego do testowego.
+
+00:14:59.770 --> 00:15:03.690
+Jeśli wszystkie kontrole zakończą się powodzeniem, ten sam przepływ pracy można przenieść do PRO.
+
+00:15:03.970 --> 00:15:06.090
+Cykl jest powtarzalny i audytowalny.
+
+00:15:06.350 --> 00:15:09.270
+Dokładnie wiesz, co poszło, gdzie, kiedy i za czyją zgodą.
+
+00:15:09.450 --> 00:15:12.550
+To zastępuje improwizowane nocne sesje nadziei strukturą.
+
+00:15:12.710 --> 00:15:15.690
+A jeśli szef zapyta, skąd wiemy, że nic nie zostało przeoczone?
+
+00:15:15.690 --> 00:15:18.110
+Masz odpowiedź, której nie da się uniknąć zaufaj mi.
+
+00:15:18.270 --> 00:15:20.510
+Czy to oznacza, że automatyzacja jest idealna?
+
+00:15:20.670 --> 00:15:24.310
+Nie, nadal będziesz napotykać przypadki, w których ręczne poprawki poświadczeń są nieuniknione
+
+00:15:24.310 --> 00:15:27.850
+lub w których limity elementów i przepływów danych zmuszają Cię do ponownego przemyślenia struktury.
+
+00:15:28.070 --> 00:15:32.450
+Różnica polega jednak na tym, że masz do czynienia ze sporadycznymi, znanymi wyjątkami, a nie z ciągłym chaosem.
+
+00:15:32.630 --> 00:15:35.130
+W dziewięciu przypadkach na dziesięć wdrożenie działa bez zarzutu
+
+00:15:35.130 --> 00:15:38.110
+i przestajesz marnować weekendy na szukanie brakujących relacji w PRO.
+
+00:15:38.110 --> 00:15:42.190
+Podsumowując, potoki wdrożeniowe i akcje zapewniają niezawodność bez modlitwy.
+
+00:15:42.410 --> 00:15:47.770
+Zamiast klikania i szeptania do bogów raportowania, masz proces, który spójnie przesyła raporty przez środowiska.
+
+00:15:48.050 --> 00:15:51.450
+Możesz śledzić ich przebieg, w razie potrzeby wycofać zmiany i spać spokojnie,
+
+00:15:51.530 --> 00:15:53.870
+wiedząc, że nikt nie pomylił nazwy obszaru roboczego.
+
+00:15:54.070 --> 00:15:57.530
+A gdy wdrożenia przebiegają już tak sprawnie, prawdziwe wyzwanie się zmienia.
+
+00:15:57.530 --> 00:16:01.610
+Nie chodzi już o to, czy możemy bezpiecznie promować, ale jak wdrożyć zarządzanie warstwami,
+
+00:16:01.690 --> 00:16:03.710
+nie przekształcając całego systemu w biurokrację?
+
+00:16:03.850 --> 00:16:07.630
+Ta równowaga, kontrola bez biurokracji to temat, który zajmiemy się następnym razem.
+
+00:16:07.970 --> 00:16:09.270
+Zarządzanie bez biurokracji.
+
+00:16:09.490 --> 00:16:14.230
+Nikt nie zapisał się na ci CD tylko po to, by czuć się, jakby odnawiał prawo jazdy w urzędzie komunikacji.
+
+00:16:14.450 --> 00:16:18.550
+Celem jest szybkość i bezpieczeństwo, a nie tonięcie w wykresach procesów i zatwierdzeniach.
+
+00:16:18.710 --> 00:16:21.410
+Tradycyjne zarządzanie często zapomina, że stara się poprawić jakość,
+
+00:16:21.410 --> 00:16:25.570
+zasypując programistów formularzami i zgłoszeniami, a końcowym rezultatem nie jest bezpieczniejszy kod,
+
+00:16:25.670 --> 00:16:28.170
+ale sfrustrowani programiści biegający wokół barier ochronnych.
+
+00:16:28.170 --> 00:16:32.090
+Zarządzanie, które faktycznie działa, to zarządzanie, które przypomina bariery ochronne na autostradzie.
+
+00:16:32.270 --> 00:16:36.470
+Nie spowalniają cię, po prostu upewniają się, że twój samochód nie zjedzie z drogi przy prędkości 130 km na godzinę.
+
+00:16:36.590 --> 00:16:39.270
+A praktyczna różnica wynika z tego, jak ustawisz te bariery ochronne.
+
+00:16:39.470 --> 00:16:41.390
+Nie każde repozytorium wymaga tych samych zasad.
+
+00:16:41.570 --> 00:16:42.910
+To pierwsza taktyczna poprawka.
+
+00:16:42.910 --> 00:16:45.950
+W przypadku kosmetycznych zmian w raporcie nie potrzebujesz rady starszych.
+
+00:16:46.130 --> 00:16:49.190
+GitHub można ustawić na prostą opcję jednego kciuka w górę i scalić go.
+
+00:16:49.370 --> 00:16:52.390
+Ale w przypadku aktualizacji modelu o dużym wpływie, które przeliczają połowę logiki biznesowej,
+
+00:16:52.390 --> 00:16:57.030
+zaostrz ograniczenia, zatrudniając wielu recenzentów i zmuszając ich do odpowiadania na szablon PR, który dokładnie określa, co należy sprawdzić.
+
+00:16:57.210 --> 00:16:58.390
+Lekki tam, gdzie to możliwe.
+
+00:16:58.490 --> 00:16:59.610
+Ścisły tam, gdzie musi być.
+
+00:16:59.750 --> 00:17:00.670
+Prosta matematyka.
+
+00:17:00.810 --> 00:17:03.530
+To właśnie tutaj szablony PR faktycznie zarabiają na swoje utrzymanie.
+
+00:17:03.750 --> 00:17:07.470
+Dobry szablon odwołuje się do logiki biznesowej, zależności schematów, notatek testowych,
+
+00:17:07.470 --> 00:17:09.650
+więc recenzent nie musi zgadywać, co jest ważne.
+
+00:17:09.890 --> 00:17:14.810
+Dodaj do tego automatyczne kontrole ścigające nudne rzeczy, a nagle twoi ludzie wracają do ludzkiej pracy.
+
+00:17:15.090 --> 00:17:16.510
+Boty ścigają reguły case.
+
+00:17:16.510 --> 00:17:19.850
+Sprawdzasz, czy metryka sprzedaży nadal odpowiada definicji działu finansowego.
+
+00:17:20.050 --> 00:17:23.250
+To podział pracy, który utrzymuje wysokie tempo bez poświęcania jakości.
+
+00:17:23.490 --> 00:17:26.570
+Dodajmy automatyzację z powrotem do obrazu, ponieważ jest ona kluczowa.
+
+00:17:26.770 --> 00:17:32.270
+Twoje automatyczne kontrole, niezależnie od tego, czy są to skrypty PowerShell wykorzystujące walidację edytora tabelarycznego Microsoft Power BMGMT,
+
+00:17:32.270 --> 00:17:36.450
+czy ukierunkowane linkingi JSON wychwytują rzeczy, którymi żaden ludzki recenzent nie powinien się przejmować.
+
+00:17:36.610 --> 00:17:40.730
+Spójne nazewnictwo, oczywiste błędy podatkowe, brakujące relacje wszystko to jest sygnalizowane,
+
+00:17:40.850 --> 00:17:42.670
+zanim wniosek o pulę otrzyma zielone światło.
+
+00:17:42.670 --> 00:17:48.770
+Oznacza to, że oczy recenzentów kierują się dokładnie tam, gdzie powinny na intencje, projekt i to, czy firma faktycznie zaufa temu raportowi.
+
+00:17:48.930 --> 00:17:50.250
+I to nie jest tylko teoria.
+
+00:17:50.530 --> 00:17:54.770
+Zespoły żyjące w chaosie bez zarządzania często odzyskują zdrowy rozsądek, robiąc właśnie to.
+
+00:17:54.970 --> 00:17:59.010
+Szablony PR, automatyczne walidatory i poziomy zatwierdzania dostosowane do repozytorium.
+
+00:17:59.230 --> 00:18:00.530
+Zmiana jest natychmiastowa.
+
+00:18:00.710 --> 00:18:04.550
+Praca wydaje się lżejsza, ponieważ programiści wiedzą, że nie zostaną zablokowani za zmianę tytułu,
+
+00:18:04.650 --> 00:18:08.750
+ale nie mogą ominąć kontroli, jeśli przekształcają zestaw danych, który napędza pulpity menedżerskie.
+
+00:18:08.750 --> 00:18:13.530
+Jakość pozostaje wysoka, ale nikt nie ma wrażenia, że wypełnia formularze podatkowe, aby wgrywać kod.
+
+00:18:13.670 --> 00:18:17.290
+Teraz pojawia się również szerszy obraz, czyli sposób mapowania środowisk na gałęzie.
+
+00:18:17.510 --> 00:18:20.290
+Większość zespołów stosuje jeden z dwóch obsługiwanych wzorców.
+
+00:18:20.470 --> 00:18:21.070
+Opcja pierwsza.
+
+00:18:21.170 --> 00:18:25.110
+Programiści tworzą obszary robocze funkcji, które są bezpośrednio mapowane na gałęzie funkcji,
+
+00:18:25.250 --> 00:18:28.870
+dzięki czemu każda gałąź eksperymentalna ma zdublowaną piaskownicę w usłudze Power BI.
+
+00:18:29.050 --> 00:18:29.730
+Opcja druga.
+
+00:18:29.850 --> 00:18:35.750
+Programiści wprowadzają zmiany lokalnie w PB&P i synchronizują je z gałęzią funkcji bezrównoległej przestrzeni roboczej,
+
+00:18:35.750 --> 00:18:40.010
+umożliwiając automatyzacji obsługę potoków drażania w środowiskach współdzielonych.
+
+00:18:40.130 --> 00:18:43.670
+Oba podejścia są zgodne z wytycznymi Microsoft Fabric, ci ciąg dalszy.
+
+00:18:43.890 --> 00:18:47.290
+Sztuką jest zdecydować, który styl odpowiada apetytowi zespołu na narzut.
+
+00:18:47.450 --> 00:18:50.270
+Tak czy inaczej, to nadal rozgałęzienia plus obszary robocze.
+
+00:18:50.490 --> 00:18:52.210
+Wystarczy wybrać, czy zdublować oba.
+
+00:18:52.410 --> 00:18:55.650
+Mając na uwadze te wzorce, zarządzanie staje się jeszcze łatwiejsze do skalowania.
+
+00:18:55.650 --> 00:18:58.270
+Lekkie zatwierdzenia poprawek treści w obszarze roboczym funkcji,
+
+00:18:58.410 --> 00:19:02.550
+bardziej rozbudowane przeglądy i skryptowe kontrole zmian modelu, które są wgrywane do testów lub produkcji.
+
+00:19:02.770 --> 00:19:04.090
+Struktura jest przejrzysta.
+
+00:19:04.330 --> 00:19:06.890
+Im dalej posunie się zmiana, tym bardziej zasługuje na kontrolę.
+
+00:19:07.070 --> 00:19:09.250
+Nikt nie sprzeciwia się zasadom, gdy mają one sens.
+
+00:19:09.410 --> 00:19:11.190
+I nie zapominajmy o aspekcie kulturowym.
+
+00:19:11.410 --> 00:19:14.290
+Kiedy programiści widzą, że boty zajmują się sprawdzaniem podstawowych procedur,
+
+00:19:14.350 --> 00:19:16.570
+a ludzie oceniają tylko to, co ich zdaniem jest istotne,
+
+00:19:16.690 --> 00:19:18.410
+przestają postrzegać zarządzanie jako przeszkodę.
+
+00:19:18.610 --> 00:19:22.610
+Szanują je, ponieważ filtruje ono szumy i zapobiega gaszeniu pożarów w produkcji.
+
+00:19:25.650 --> 00:19:27.650
+Zdjęcia

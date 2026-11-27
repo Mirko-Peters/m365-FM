@@ -89,6 +89,32 @@ class Pruefung(unittest.TestCase):
         self.assertTrue(O.problems(m))
         self.assertEqual(O.problems(m, {"duplicate_names": [["oee", "overall-oee"]]}), [])
 
+    def test_alias_gleich_name_einer_anderen_entitaet(self):
+        """Audit Linktexte E1/E2: "Outlook" als Alias von Exchange Online, obwohl es die Entitaet Outlook gibt - derselbe Text zeigte je nach
+        Stelle auf verschiedene Seiten. Nur NEUE Kollisionen sind Fehler; eigener Name als Alias und veraltete Eintraege zaehlen nicht."""
+        ents = [ent("outlook", "Outlook", "product"), ent("exchange-online", "Exchange Online", "product", aliases=["Outlook", "Exchange Online"]),
+                ent("x", "X", aliases=["X"])]
+        m = O.audit(ents)
+        self.assertEqual(m["name_alias_collisions"], ["outlook"])
+        self.assertTrue(any("Name/Alias" in p for p in O.problems(m)))
+        self.assertEqual(O.problems(m, {"name_alias_collisions": ["outlook"]}), [])
+        ents[1]["aliases"] = ["Exchange"]
+        self.assertEqual(O.audit(ents)["name_alias_collisions"], [])
+        ents[1]["outdated"] = True; ents[1]["aliases"] = ["Outlook"]
+        self.assertEqual(O.audit(ents)["name_alias_collisions"], [])
+
+    def test_bericht_falsche_aliase_sind_weg(self):
+        """Die drei falschen Aliase aus dem Audit (gap 2) und die Foundry-Dublette (gap 4) stehen nicht mehr in den Daten."""
+        by = {e["id"]: e for e in json.loads((ROOT / "data" / "entities.json").read_text("utf-8"))}
+        self.assertNotIn("Outlook", by["exchange-online"]["aliases"])
+        self.assertNotIn("SharePoint governance", by["copilot-governance"]["aliases"])
+        self.assertNotIn("Business Central", by["dynamics-365"]["aliases"])
+        self.assertIn("Outlook", by["outlook"]["aliases"])
+        self.assertIn("Business Central", by["dynamics-365-business-central"]["aliases"])
+        self.assertNotIn("azure-ai-foundry", by)
+        self.assertTrue({"Azure AI Foundry", "Azure AI Studio"} <= set(by["microsoft-foundry"]["aliases"]))
+        self.assertNotIn(["related_to", "microsoft-foundry"], by["microsoft-foundry"]["rel"], "Selbstkante")
+
     def test_hauptelternteil_und_brotkrumen(self):
         by = {e["id"]: e for e in [ent("cat", "Tool", "category"), ent("microsoft-tool", "Microsoft tool", "category"),
                                    ent("plat", "Plat", "platform", rel=[["instance_of", "cat"]]),

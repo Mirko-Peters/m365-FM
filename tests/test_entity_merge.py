@@ -22,7 +22,8 @@ D = ROOT / "data"
 LG = ("de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 MERGES = SLN.entity_merges()
 EXPECTED = {"iot-hub-device-provisioning-service": "azure-iot-hub-device-provisioning-service", "oauth": "oauth-2-0",
-            "overall-equipment-effectiveness": "oee", "jean-sebastien-duchene": "jean-sebastien-duche"}
+            "overall-equipment-effectiveness": "oee", "jean-sebastien-duchene": "jean-sebastien-duche",
+            "azure-ai-foundry": "microsoft-foundry"}   # Audit Linktexte E1: alter Produktname, gleiches Produkt
 
 
 def repo_ids():
@@ -34,7 +35,7 @@ def repo_ids():
 
 
 class Daten(unittest.TestCase):
-    def test_die_vier_paare(self):
+    def test_die_paare(self):
         for old, new in EXPECTED.items():
             self.assertEqual(MERGES.get(old), new, old)
 
@@ -108,7 +109,7 @@ class Daten(unittest.TestCase):
             d = json.loads(Path(f).read_text("utf-8"))
             bad += [(f, x["slug"]) for k in ("entities", "new_entities") for x in d.get(k) or [] if x.get("slug") in MERGES]
             bad += [(f, a) for q in d.get("quotes") or [] for a in q.get("entities") or [] if a in MERGES]
-        for pat in ("shownotes/site/*.md", "imports/blog/*/*.md", "imports/blog-queue/*/*.md"):
+        for pat in ("shownotes/site/*.md", "imports/blog/*/*.md", "imports/blog-queue/*/*.md", "imports/blog-queue/*/*/*.md"):
             for f in glob.glob(str(ROOT / pat)):
                 s = Path(f).read_text("utf-8")
                 for m in re.finditer(r"^\s*(?:entities|topics):\s*\[([^\]]*)\]", s, re.M):

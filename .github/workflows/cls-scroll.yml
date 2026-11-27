@@ -1,0 +1,42 @@
+name: CLS beim Scrollen (nur lesen)
+# Misst Layout-Spruenge auf der Live-Seite beim Laden, Scrollen (Mausrad und JS), mit #en-qa und nach Neuladen,
+# einmal mit sichtbarer Bildlaufleiste (wie Chrome unter Windows) und einmal ohne (wie Lighthouse/headless). Aendert nichts.
+on:
+  workflow_dispatch:
+    inputs:
+      paths:
+        description: "Pfade, durch Leerzeichen getrennt"
+        required: false
+        default: "/entity/windows-11/"
+  push:
+    branches: [claude/cls-scroll-test]
+    paths: [.github/workflows/cls-scroll.yml, tools/cls_scroll.mjs]
+permissions:
+  contents: read
+jobs:
+  cls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        scrollbars: ["1", "0"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: { node-version: 24 }
+      - run: npm i --no-save --no-audit --no-fund playwright-core@1.48.2
+      - name: Messen
+        env:
+          CLS_PATHS: ${{ github.event.inputs.paths || '/entity/windows-11/' }}
+          CLS_SCROLLBARS: ${{ matrix.scrollbars }}
+          CLS_JSON: /tmp/cls_scroll.json
+        run: |
+          node tools/cls_scroll.mjs | tee /tmp/cls.md
+          cat /tmp/cls.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: cls-scroll-leiste-${{ matrix.scrollbars }}
+          path: /tmp/cls_scroll.json
+          if-no-files-found: ignore

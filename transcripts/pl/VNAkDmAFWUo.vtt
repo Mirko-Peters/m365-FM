@@ -1,0 +1,736 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:07.440
+Gotowi na 12 dni z Microsoft 365, Copilot, iAzure oraz ludźmi kształtującymi przyszłość pracy?
+
+00:00:07.900 --> 00:00:12.360
+W styczniu M365Con powraca i tym razem z większym rozmachem.
+
+00:00:12.980 --> 00:00:18.280
+Dołącz do sesji na żywo praktycznych pokazów i wiedzy od MVP oraz ekspertów z całego świata.
+
+00:00:18.540 --> 00:00:21.800
+Żadnych ogólnikowych slajdów ani niekończących się modnych haseł.
+
+00:00:22.020 --> 00:00:23.760
+Zajmujemy się prawdziwymi wyzwaniami.
+
+00:00:23.760 --> 00:00:29.160
+Copilot Studio Agenci AI Fabrik, Bezpieczeństwo, Ład Korporacyjny i Automatyzacja.
+
+00:00:29.160 --> 00:00:35.140
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, przygotowaliśmy sesję dla Ciebie.
+
+00:00:35.400 --> 00:00:40.500
+Podczas 10 pełnych dni możesz poznać wiele technologii i połączyć się z globalną społecznością.
+
+00:00:40.860 --> 00:00:44.600
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.920 --> 00:00:49.140
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft.
+
+00:00:49.500 --> 00:00:51.120
+Rejestracja jest już otwarta.
+
+00:00:51.120 --> 00:00:56.160
+Wejdź na m365con.net i zarezerwuj swoje miejsce już dziś.
+
+00:00:56.660 --> 00:00:58.840
+To m365con.net.
+
+00:01:00.160 --> 00:01:04.920
+Dołącz teraz na m365con.net i do zobaczenia na żywo w styczniu.
+
+00:01:05.080 --> 00:01:13.880
+Jeśli Twój tenant Microsoft 365 łączy się z Dynamics 365, Azure i wieloma innymi narzędziami SAS, powierzchnia ataku jest większa niż myślisz.
+
+00:01:14.080 --> 00:01:21.000
+Najgorsze jest to, że większość wdrożeń Zero Trust skupia się na jednym produkcie, ignorując efekt domina w połączonych systemach.
+
+00:01:21.000 --> 00:01:30.880
+W ciągu kilku najbliższych minut wyjaśnimy, dlaczego to problem i jak koncepcja Zero Trust by Design traktuje środowiska M365 i D365 jako jedną współzależną całość.
+
+00:01:31.160 --> 00:01:35.640
+Ponieważ naprawa tylko jednej ściany w wielopokojowym budynku nie ochroni Cię, gdy dach płonie.
+
+00:01:35.900 --> 00:01:37.440
+Zero Trust to nie tylko MFA.
+
+00:01:37.700 --> 00:01:41.900
+Większość ludzi uważa, że wdrożyła Zero Trust, gdy tylko włączy MFA dla wszystkich użytkowników.
+
+00:01:41.900 --> 00:01:48.940
+Wydaje się, że to wielki sukces. Każdy użytkownik otrzymuje monit, każde logowanie wymaga drugiego składnika i na papierze środowisko wygląda na bezpieczne.
+
+00:01:49.120 --> 00:01:51.600
+Problem w tym, że często na tym kończą się wysiłki.
+
+00:01:52.340 --> 00:02:00.000
+M365 otrzymuje pełną uwagę podczas wdrożenia, ale połączone platformy jak Dynamics 365 działają po swojemu, często z innymi zasadami lub wcale.
+
+00:02:00.200 --> 00:02:03.840
+To nie tylko niekompletne działanie, to tworzenie fałszywego poczucia bezpieczeństwa.
+
+00:02:03.840 --> 00:02:05.520
+Oto jak to wygląda w praktyce.
+
+00:02:05.760 --> 00:02:11.640
+Administrator spędza tygodnie na budowaniu i testowaniu dostępu warunkowego dla SharePoint, Teams i Exchange Online.
+
+00:02:11.900 --> 00:02:18.080
+Wymusza MFA przy wszystkich logowaniach, blokuje starsze uwierzytelnianie i czuje się pewnie, że Tenant jest zabezpieczony.
+
+00:02:18.280 --> 00:02:24.560
+Ale D365 pozostaje na uboczu, polegając na Azure Ad przy uwierzytelnianiu, jednak bez tego samego zakresu polityk.
+
+00:02:24.700 --> 00:02:30.900
+Użytkownik logujący się do D365 przez zapisany adres URL może nigdy nie napotkać tego samego przepływu dostępu warunkowego,
+
+00:02:30.900 --> 00:02:33.740
+a administrator nie zauważy problemu, dopóki coś nie pójdzie nie tak.
+
+00:02:33.860 --> 00:02:35.980
+To właśnie tu luki zaczynają generować koszty.
+
+00:02:36.220 --> 00:02:38.900
+Załóżmy, że czyjeś dane logowania zostały skradzione w kampanii phishingowej.
+
+00:02:39.740 --> 00:02:42.140
+Atakujący próbuje najpierw zalogować się do SharePoint.
+
+00:02:42.320 --> 00:02:44.900
+Uruchamia się MFA, atakujący zawodzi i myślisz, że problem rozwiązany.
+
+00:02:45.640 --> 00:02:50.860
+Jednak skoro zasady dostępu warunkowego w D365 nie są zsynchronizowane z M365,
+
+00:02:51.020 --> 00:02:55.640
+ten sam napastnik może połączyć się bezpośrednio z modułem finansowym w Dynamics i wejść jak do siebie.
+
+00:02:55.900 --> 00:02:59.020
+Zapora MFA istnieje, ale nie znajduje się przed każdymi drzwiami.
+
+00:02:59.020 --> 00:03:03.200
+Nagle okazuje się, że ujednolicona obrona, która miała działać, jest w rzeczywistości niespójna.
+
+00:03:03.360 --> 00:03:07.280
+W jednym z obserwowanych przez nas przypadków błędna polityka pozwoliła na dokładnie taki scenariusz.
+
+00:03:07.440 --> 00:03:12.440
+Konto SharePoint użytkownika było chronione rygorystycznymi wymogami logowania, ale jego dostęp do Dynamics już nie.
+
+00:03:12.720 --> 00:03:18.840
+Atakujący całkowicie ominął SharePoint, wszedł do Dynamics, wygenerował raport i wyeksportował wrażliwe dane płatności klientów.
+
+00:03:19.020 --> 00:03:21.400
+Z perspektywy użytkownika wszystko wyglądało w porządku.
+
+00:03:21.620 --> 00:03:24.720
+Nigdy nawet nie otrzymał powiadomienia, że logowano się na jego konto z innego miejsca.
+
+00:03:24.720 --> 00:03:30.040
+Atak był możliwy nie dlatego, że MFA było słabe, ale dlatego, że nie było konsekwentnie egzekwowane wszędzie tam, gdzie powinno.
+
+00:03:30.260 --> 00:03:35.920
+Samo podejście Microsoftu jasno wskazuje, że Zero Trust to nie tylko włączenie MFA i zapomnienie o sprawie.
+
+00:03:36.480 --> 00:03:42.820
+To model oparty na ciągłym potwierdzaniu tożsamości, weryfikacji zgodności urządzeń i sprawdzaniu kontekstu sesji.
+
+00:03:43.060 --> 00:03:45.860
+MFA to tylko jeden z elementów filaru tożsamości.
+
+00:03:46.140 --> 00:03:51.020
+Jeśli ten filar nie jest stosowany w każdej powiązanej usłudze, przestaje być skutecznym zabezpieczeniem.
+
+00:03:51.020 --> 00:03:59.320
+W połączonym środowisku takim jak M365 i D365 atakujący muszą znaleźć tylko jedną usługę, w której kontrola nie jest egzekwowana.
+
+00:03:59.500 --> 00:04:02.580
+Pracowaliśmy z zespołem, który boleśnie przekonał się o tej lekcji.
+
+00:04:02.800 --> 00:04:10.680
+Konto M365 dyrektora finansowego miało MFA, a zespół i trygorystycznie pilnował dostępu do poczty, ale Dynamics 365 był skonfigurowany inaczej.
+
+00:04:10.880 --> 00:04:17.660
+Atakujący uzyskał dostęp do konta dyrektora za pomocą skradzionego tokena odświeżania z mniej zabezpieczonej aplikacji mobilnej innej firmy.
+
+00:04:17.660 --> 00:04:23.460
+Dostęp do M365 został zablokowany, ale użycie tokena w Dynamics nie wywołało tej samej polityki ryzyka.
+
+00:04:23.720 --> 00:04:28.500
+Wygenerowali fałszywe faktury w module finansowym i przeprowadzili je przez standardowy proces zatwierdzania.
+
+00:04:28.760 --> 00:04:31.660
+Gdy incydent został wykryty, środki były już wyprowadzone.
+
+00:04:31.880 --> 00:04:35.920
+Każda analiza po incydencie wskazywała na tę samą przyczynę – niespójność polityk.
+
+00:04:36.040 --> 00:04:42.860
+Problem nie polega na tym, że MFA zawodzi, ale na tym, że na styku zintegrowanych usług Microsoft polityki często się nie pokrywają.
+
+00:04:42.860 --> 00:04:49.300
+Użytkownicy przechodzą między SharePoint, Outlook, OnDrive, Dynamics i innymi połączonymi aplikacjami SaaS bez zastanowienia.
+
+00:04:49.520 --> 00:04:53.240
+Atakujący o tym wiedzą i sprawdzają, które drzwi mają najsłabszy zamek.
+
+00:04:53.400 --> 00:05:00.980
+Dlatego Zero Trust w swoim założeniu nie dotyczy jednego zabezpieczenia, lecz dbania o to, by każdy punkt wejścia stosował te same standardy bez wyjątków.
+
+00:05:01.580 --> 00:05:07.880
+Zasady dostępu warunkowego, kontrola stanu urządzeń i ustawienia sesji muszą tworzyć jeden, ujednolicony fundament.
+
+00:05:07.880 --> 00:05:19.180
+Gdy każda usługa Microsoft stosuje ten sam poziom kontroli, weryfikując tożsamość urządzenia i kontekst sesji przy każdej interakcji, zamykasz tylne furtki, których szukają atakujący.
+
+00:05:19.460 --> 00:05:26.820
+Monit MFA w M365 nie znaczy nic, jeśli D365 bez słowa przepuści tego samego użytkownika 5 sekund później.
+
+00:05:27.740 --> 00:05:34.880
+Celem projektu jest, aby każda transakcja, logowanie czy wywołanie API przechodziły przez ten sam zestaw kontroli, niezależnie od produktu.
+
+00:05:34.880 --> 00:05:42.580
+Jeśli wyrównanie obciążeń to pierwsze rozwiązanie, prawdziwa zmiana następuje, gdy te zasady komunikują się w czasie rzeczywistym.
+
+00:05:42.760 --> 00:05:47.460
+To właśnie wtedy Zero Trust przestaje być pozycją na liście kontrolnej, a staje się żywą obroną.
+
+00:05:47.960 --> 00:05:59.260
+Co jeśli zasady dostępu warunkowego w Microsoft 365 mogłyby natychmiast wywołać reakcję bezpieczeństwa w Dynamics 365 bez powielania reguł czy ręcznej synchronizacji?
+
+00:05:59.260 --> 00:06:03.600
+W większości środowisk to nie jest domyślna rzeczywistość.
+
+00:06:04.060 --> 00:06:07.720
+Zazwyczaj każdy system egzekwuje swoje własne zasady w izolacji.
+
+00:06:08.380 --> 00:06:17.920
+M365 może wymagać MFA przy ryzykownych logowaniach, podczas gdy D365 przyznaje uprawnienia tylko w oparciu o rolę w swoim modelu.
+
+00:06:18.720 --> 00:06:24.740
+Oba korzystają z tych samych tożsamości Azure AD, ale niekoniecznie dzielą się między sobą danymi o ryzyku na żywo.
+
+00:06:24.740 --> 00:06:31.320
+To izolowane podejście oznacza, że możesz idealnie zabezpieczyć jedną platformę, mając wciąż luki w drugiej.
+
+00:06:31.600 --> 00:06:32.400
+Pomyśl o tym.
+
+00:06:32.620 --> 00:06:39.220
+Twój tenant M365 wykrywa logowanie z węzła wyjściowego tor o drugiej w nocy, oznacza konto jako wysokiego ryzyka i nakłada blokadę.
+
+00:06:39.380 --> 00:06:45.400
+Jednak Dynamics, jeśli jego własne kontrole nie są powiązane z tym sygnałem ryzyka, może pozwolić na kontynuację sesji.
+
+00:06:45.600 --> 00:06:51.160
+Token użytkownika może być wciąż ważny dla Dynamics, mimo że znajduje się na liście blokad w M365.
+
+00:06:51.160 --> 00:06:58.420
+Masz więc sytuację, gdzie jedna część środowiska traktuje konto jak pod atakiem, podczas gdy inna bez problemu zatwierdza fakturę.
+
+00:06:58.800 --> 00:07:05.100
+Straconą szansą jest tutaj brak możliwości natychmiastowego propagowania zasad i oceny ryzyka w obu środowiskach.
+
+00:07:05.300 --> 00:07:12.520
+Microsoft daje podstawy do tego dzięki dostępowi warunkowemu Azure AD i zabezpieczeniom opartym na rolach w D365.
+
+00:07:12.520 --> 00:07:21.180
+Dostęp warunkowy ocenia ryzyko logowań w czasie rzeczywistym, używając sygnałów takich jak nieznane lokalizacje, niemożliwe podróże czy złe zakresy IP.
+
+00:07:21.560 --> 00:07:27.800
+Zabezpieczenia oparte na rolach w Dynamics określają natomiast, co użytkownik może zrobić po zalogowaniu aż do poziomu pól.
+
+00:07:27.800 --> 00:07:32.020
+Kiedy te dwie warstwy pozostają rozłączone, powstają luki w polityce bezpieczeństwa.
+
+00:07:32.240 --> 00:07:39.820
+Gdy są połączone, podwyższone ryzyko w Azure AD może natychmiast zmienić uprawnienia tego samego konta w Dynamics bez udziału użytkownika.
+
+00:07:39.820 --> 00:07:44.560
+Wyobraź sobie to w akcji. Sprzedawca loguje się z nietypowej lokalizacji.
+
+00:07:45.380 --> 00:07:52.140
+Azure AD oznacza go jako średnie ryzyko i stosuje zasadę wymagającą dodatkowego uwierzytelnienia dla wrażliwych działań.
+
+00:07:53.360 --> 00:08:00.780
+Dynamics 365 zamiast ignorować ten kontekst przyjmuje stan ryzyka z Azure AD i automatycznie blokuje funkcje, na przykład
+
+00:08:00.780 --> 00:08:04.140
+eksport list klientów czy zmianę cen do czasu weryfikacji.
+
+00:08:04.940 --> 00:08:11.380
+Egzekwowanie zasad odbywa się w czasie rzeczywistym i nie wymaga od nikogo ręcznego wprowadzania zmian ani dwukrotnego tworzenia tej samej logiki.
+
+00:08:11.600 --> 00:08:15.320
+To trochę tak, jakby mieć dwóch ochroniarzy przy dwóch różnych wejściach do biura.
+
+00:08:15.600 --> 00:08:20.880
+Jeden widzi kogoś próbującego wejść po godzinach, zatrzymuje go i przez radio ostrzega drugiego strażnika.
+
+00:08:21.140 --> 00:08:27.640
+Jeśli ochroniarze się nie komunikują, drugi może bez problemu wpuścić tę osobę bocznym wejściem, podczas gdy pierwszy wciąż spisuje raport.
+
+00:08:27.640 --> 00:08:33.140
+Bez sygnałów między usługami właśnie to może wydarzyć się między M365 a D365.
+
+00:08:33.320 --> 00:08:36.420
+Jedne drzwi są zamknięte, ale drugie pozostają szeroko otwarte.
+
+00:08:36.620 --> 00:08:45.020
+Technicznie rzecz biorąc, taka integracja sprowadza się do przesyłania sygnałów ryzyka z Azure AD bezpośrednio do D365, aby stały się częścią procesu decyzyjnego.
+
+00:08:45.260 --> 00:08:52.300
+W tokenie przekazywanym do Dynamics można uwzględnić informacje w czasie rzeczywistym o ryzyku użytkownika, zgodności urządzenia czy lokalizacji.
+
+00:08:52.300 --> 00:08:58.500
+Następnie Dynamics egzekwuje ograniczenia na poziomie roli lub blokuje określone operacje w oparciu o te dane.
+
+00:08:59.980 --> 00:09:05.880
+Dzięki temu czas, w którym atakujący może wykorzystać przejęte konto, skraca się z godzin czy dni do sekund.
+
+00:09:05.880 --> 00:09:12.600
+Oznacza to również, że polityki bezpieczeństwa przestają być statycznymi dokumentami i stają się wspólnym systemem nerwowym dla różnych platform.
+
+00:09:12.900 --> 00:09:19.220
+Gdy decyzje o dostępie w Dynamics odzwierciedlają dokładnie tę samą bieżącą sytuację w zakresie bezpieczeństwa, co w Microsoft 365,
+
+00:09:19.680 --> 00:09:22.100
+Twoja obrona staje się skoordynowana, a nierównoległa.
+
+00:09:22.100 --> 00:09:25.760
+To właśnie ta koordynacja zamyka mikroluki, na których polegają atakujący.
+
+00:09:25.920 --> 00:09:31.800
+Nie mogą już oni przemieszczać się bocznie między usługami, nie uruchamiając tych samych alarmów i nie napotykając tych samych blokad w każdej z nich.
+
+00:09:31.800 --> 00:09:40.400
+Zanim jednak włączysz taką wymianę sygnałów w czasie rzeczywistym, musisz zadbać o to, by same tożsamości były ustrukturyzowane w sposób zrozumiały dla obu systemów.
+
+00:09:40.900 --> 00:09:49.300
+Oznacza to ich segmentację, aby każdą rolę, rodzaj dostępu do danych i profil ryzyka można było przejrzyście zarządzać bez zakłócania bieżącej pracy.
+
+00:09:49.300 --> 00:09:53.480
+Segmentacja tożsamości bez przerywania przepływu pracy.
+
+00:09:53.680 --> 00:09:59.640
+Wszyscy mówią o zabezpieczaniu tożsamości, ale niewielu chce sprawdzić, jak to zrobić, nie niszcząc przy tym produktywności.
+
+00:09:59.900 --> 00:10:03.980
+Segmentacja tożsamości nie polega na zmuszaniu ludzi do pokonywania przeszkód przy każdym kliknięciu.
+
+00:10:03.980 --> 00:10:16.600
+Chodzi o zaprojektowanie dostępu w sposób, który uwzględnia, że nie wszyscy użytkownicy, dane czy działania niosą ten sam poziom ryzyka, a następnie zastosowanie kontroli, które odzwierciedlają tę rzeczywistość w Microsoft 365 i Dynamics 365.
+
+00:10:17.300 --> 00:10:24.900
+W praktyce oznacza to wyznaczenie wyraźnych granic między grupami w oparciu o to, co robią, jak wrażliwe dane obsługują i jakie ryzyko reprezentują.
+
+00:10:24.900 --> 00:10:31.020
+To różnica między daniem każdemu użytkownikowi klucza głównego, a przekazaniem tylko tych kluczy, których naprawdę potrzebują.
+
+00:10:31.280 --> 00:10:40.020
+W M365 i D365 segmentacja ta zazwyczaj przybiera formę przypisania dostępu opartego na rolach powiązanego z konkretnymi obszarami zadań.
+
+00:10:40.200 --> 00:10:47.900
+Koordynator marketingu może potrzebować jedynie dostępu do Teams, SharePoint oraz wglądu w dane klientów w Dynamics w trybie tylko do odczytu,
+
+00:10:48.060 --> 00:10:53.840
+podczas gdy pracownik finansów może mieć uprawnienia do zatwierdzania płatności i pobierania poufnych raportów.
+
+00:10:53.840 --> 00:10:58.640
+Zasada jest prosta. Im bardziej uprzywilejowane działanie, tym bardziej rygorystyczne kontrole.
+
+00:10:58.880 --> 00:11:04.960
+Wyzwanie polega na tym, by robić to bez zamieniania każdego logowania w żmudne oczekiwanie i bez utrudniania codziennej pracy.
+
+00:11:05.180 --> 00:11:07.320
+To właśnie budzi niepokój administratorów.
+
+00:11:07.460 --> 00:11:09.140
+Obawy wyglądają następująco.
+
+00:11:09.320 --> 00:11:18.660
+Jeśli zaczniemy tworzyć osobne ścieżki uwierzytelniania dla każdej roli, użytkownicy będą zasypywani ciągłymi monitami przepływy pracy zwolnią, a zespoły będą stawiać silny opór.
+
+00:11:18.660 --> 00:11:23.580
+Wprowadzasz różne wymagania uwierzytelniania wieloskładnikowego dla sprzedaży i finansów,
+
+00:11:23.700 --> 00:11:29.680
+a nagle połowa działu sprzedaży dzwoni do IT, bo nie może uzyskać dostępu do oferty podczas rozmowy z klientem,
+
+00:11:29.780 --> 00:11:36.040
+albo dział finansów uruchamia Teams do pracy nad budżetem, ale za każdym razem włącza się rozszerzony proces logowania.
+
+00:11:36.340 --> 00:11:38.240
+Jednak druga strona medalu jest gorsza.
+
+00:11:38.240 --> 00:11:47.000
+Bez segmentacji atakujący, który przejmie konto wspomnianego koordynatora marketingu, ma znacznie łatwiejszą drogę do nieuprawnionego przemieszczenia się wewnątrz sieci w stronę cennych danych.
+
+00:11:47.260 --> 00:11:49.660
+Dlatego celem nie jest utrudnianie logowania każdemu.
+
+00:11:49.880 --> 00:11:54.080
+Chodzi o to, by utrudnić dostęp do wrażliwych zasobów, zachowując płynność działań niskiego ryzyka.
+
+00:11:54.340 --> 00:11:56.120
+Oto przykład, który sprawdza się w praktyce.
+
+00:11:56.360 --> 00:12:01.240
+Przedstawiciele handlowi logują się za pomocą standardowego MFA do codziennych narzędzi, takich jak Teams i Outlook.
+
+00:12:01.240 --> 00:12:10.580
+Użytkownicy z działu finansów logują się tak samo, ale otrzymują dodatkowe wyzwanie uwierzytelniania, gdy próbują zatwierdzić przelewy w Dynamics lub wyeksportować szczegółowe dane finansowe w Power BI.
+
+00:12:10.840 --> 00:12:21.600
+W tle system zarządzania tożsamością uprzywilejowaną PIM instruuje Dynamics, aby przyznał tym rolom finansowym podwyższone uprawnienia w trybie Just-in-Time, uprawnienia, które wygasają automatycznie po użyciu.
+
+00:12:22.340 --> 00:12:29.040
+Dzięki temu pracownicy finansów nie są spowalniani podczas rutynowej pracy, ale wciąż istnieje bariera ochronna dla operacji wysokiego ryzyka.
+
+00:12:29.040 --> 00:12:35.460
+Łącząc segmentację poprzez PIM i dostęp Just-in-Time zaczynasz całkowicie eliminować stałe uprawnienia przypisane do kont.
+
+00:12:35.680 --> 00:12:42.040
+Zamiast stale posiadać prawa do zatwierdzania faktur, menedżer finansowy ma je tylko na godzinę, w której musi przetworzyć miesięczne płatności.
+
+00:12:42.320 --> 00:12:51.920
+Nawet jeśli jego dane logowania zostałyby skradzione, atakujący musiałby zsynchronizować atak dokładnie z oknem czasowym przyznanych uprawnień, zakładając, że przeszedłby jeszcze weryfikację kontekstową dotyczącą urządzenia i lokalizacji.
+
+00:12:52.380 --> 00:12:55.540
+Mapowanie tego na codzienne zadania to sedno pracy projektowej.
+
+00:12:55.540 --> 00:13:03.860
+Handlowiec może cały dzień korzystać z czatu w TIMS, zaglądać do SharePointa po oferty i sporadycznie sprawdzać dane CRM w Dynamics.
+
+00:13:04.080 --> 00:13:09.520
+Żadne z tych działań nie wymaga uciążliwego uwierzytelniania, chyba że użytkownik spróbuje zmodyfikować dokumentację finansową.
+
+00:13:09.760 --> 00:13:14.900
+Użytkownik z działu finansów może spędzać większość czasu w pulpitach Power BI i module finansowym Dynamics,
+
+00:13:15.040 --> 00:13:19.240
+ale nie potrzebuje podwyższonych uprawnień tylko po to, by współpracować na kanale w TIMS.
+
+00:13:19.240 --> 00:13:26.860
+Określasz te granice w politykach, aby typowe zadania dla każdej roli były wykonywane szybko, podczas gdy działania wrażliwe pozostają ściśle chronione.
+
+00:13:27.060 --> 00:13:32.900
+Pomyśl o tym jak o posiadaniu różnych kluczy do różnych pomieszczeń w biurowcu, ale wszystko na jednej inteligentnej karcie dostępu.
+
+00:13:33.300 --> 00:13:41.620
+Przesuwasz kartę raz i poruszasz się swobodnie tam, gdzie masz uprawnienia, ale gdy dochodzisz do serwerowni lub archiwum, karta wymaga PIN-u przed otwarciem drzwi.
+
+00:13:41.620 --> 00:13:49.480
+Ten dodatkowy krok ma miejsce tylko tam, gdzie to istotne, dzięki czemu nie musisz się męczyć z pękiem kluczy przy każdych drzwiach po drodze.
+
+00:13:49.860 --> 00:13:57.620
+Taki projekt segmentacji pozwala użytkownikom pracować szybko przy zadaniach o niskim ryzyku, ale wymusza świadomą weryfikację przed dostępem do czegoś krytycznego.
+
+00:13:58.700 --> 00:14:07.360
+To równowaga wystarczająco silna, by zablokować atakującego ze skradzionymi danymi, ale na tyle dyskretna, że zespół nie odczuwa tych zabezpieczeń w codziennej pracy.
+
+00:14:07.360 --> 00:14:13.720
+Nawet przy odpowiednich segmentach dostępu zaufanie ustalone podczas logowania nie może być jedynym punktem kontrolnym.
+
+00:14:13.960 --> 00:14:19.740
+W prawdziwie odpornym systemie każda aktywna sesja jest weryfikowana na bieżąco, a nie tylko w momencie logowania.
+
+00:14:20.180 --> 00:14:23.100
+Potęga ciągłej weryfikacji w środowisku multi-cloud.
+
+00:14:23.360 --> 00:14:30.080
+W świecie, gdzie jeden zestaw danych chmurowych otwiera dostęp do wielu platform, sprawdzanie ich tylko raz to proszenie się o kłopoty.
+
+00:14:30.400 --> 00:14:36.960
+Było to akceptowalne w dawnym modelu lokalnym, gdzie ufaliśmy urządzeniu wewnątrz sieci firmowej, dopóki użytkownik się nie wylogował.
+
+00:14:36.960 --> 00:14:47.720
+Jednak w środowisku Microsoft 365 i Dynamics 365, które łączy się z AWS usługami Google czy aplikacjami SaaS, poziom ryzyka nie jest stały od momentu logowania.
+
+00:14:48.020 --> 00:14:49.340
+Zmienia się on nieustannie.
+
+00:14:49.860 --> 00:14:52.560
+Ciągła weryfikacja zmienia tradycyjne podejście.
+
+00:14:53.940 --> 00:14:59.280
+Zamiast pojedynczej decyzji przy logowaniu, dostęp jest oceniany wielokrotnie w trakcie trwania sesji.
+
+00:14:59.280 --> 00:15:09.240
+Oznacza to, że system pyta ponownie, czy użytkownik nadal jest tym, za kogo się podaje, czy urządzenie nadal spełnia wymogi bezpieczeństwa, czy lokalizacja połączenia jest wciąż zaufana.
+
+00:15:09.400 --> 00:15:15.740
+Te kontrole mogą być wyzwalane przez konkretne zdarzenia, harmonogramy lub sygnały o ryzyku pojawiające się w czasie rzeczywistym.
+
+00:15:15.980 --> 00:15:20.200
+Nie tylko sprawdzasz dostęp, monitorujesz zachowanie i kontekst na każdym etapie pracy.
+
+00:15:20.460 --> 00:15:24.620
+Łatwo zauważyć różnicę, porównując to z podejściem zaloguj się raz i korzystaj.
+
+00:15:24.620 --> 00:15:31.800
+W środowisku lokalnym, gdy podłączyłeś laptopa do sieci firmowej i przeszedłeś pierwszą weryfikację, uznawano Cię za bezpiecznego przez resztę dnia.
+
+00:15:32.020 --> 00:15:35.340
+Usługi chmurowe nie posiadają jednak tak stałego fizycznego obwodu.
+
+00:15:35.580 --> 00:15:40.280
+Użytkownicy przemieszczają się między urządzeniami, sieciami i lokalizacjami podczas jednej sesji pracy.
+
+00:15:40.580 --> 00:15:46.260
+Cyberprzestępcy mogą ukraść aktywne tokeny sesji i użyć ich ponownie, nie widząc już nigdy prośby o uwierzytelnienie MFA.
+
+00:15:46.520 --> 00:15:50.820
+Statyczna decyzja o zaufaniu podjęta o 9 rano może być całkowicie nieaktualna o 9.15.
+
+00:15:51.160 --> 00:15:52.640
+Wyobraź sobie ten scenariusz.
+
+00:15:52.640 --> 00:15:56.700
+Użytkownik loguje się do M365 z zaufanego laptopa w siedzibie głównej.
+
+00:15:56.880 --> 00:16:00.320
+Otwiera Outlooka, Teams i Dynamics 365 Finance.
+
+00:16:00.500 --> 00:16:11.220
+W trakcie sesji jego adres IP zmienia się na lokalizację oddaloną o 3000 km, być może dlatego, że domowe Wi-Fi rozłączyło się, a urządzenie automatycznie połączyło z hotspotem 4G skierowanym za granicę.
+
+00:16:11.860 --> 00:16:17.140
+Ochrona tożsamości w Azure Ad w kilka sekund zmienia poziom ryzyka logowania z żadnego na wysoki.
+
+00:16:17.140 --> 00:16:21.620
+W świecie ciągłej weryfikacji ten poziom ryzyka rozchodzi się natychmiastowo.
+
+00:16:21.880 --> 00:16:27.640
+Microsoft 365 prosi użytkownika o ponowne uwierzytelnienie, zanim pozwoli wysłać plik w Teams.
+
+00:16:27.820 --> 00:16:37.180
+W tym samym momencie Dynamics 365 reaguje, wstrzymując otwarty przepływ pracy zatwierdzania, skutecznie blokując wrażliwe działania do czasu ponownej walidacji sesji.
+
+00:16:37.180 --> 00:16:42.420
+Tego rodzaju koordynacja jest wspierana przez Microsoft Graph oraz Azure Ad Identity Protection.
+
+00:16:42.720 --> 00:16:50.760
+Microsoft Graph stanowi fundament, strumień danych o tożsamości, urządzeniu i aktywności w czasie rzeczywistym, dostępny dla każdej połączonej aplikacji.
+
+00:16:50.980 --> 00:17:02.100
+Identity Protection przetwarza te dane, przypisując dynamiczny wynik ryzyka na podstawie znanych sygnałów, takich jak nietypowe podróże, logowania z adresów IP powiązanych ze złośliwym oprogramowaniem, czy niemożliwe sekwencje zmian lokalizacji.
+
+00:17:02.100 --> 00:17:08.560
+Każda aplikacja zintegrowana z tym frameworkiem może reagować na te zmiany ryzyka w trakcie sesji, a nie tylko podczas początkowego logowania.
+
+00:17:08.760 --> 00:17:12.300
+Korzyści są szczególnie duże, gdy działasz w środowisku wielochmurowym.
+
+00:17:12.580 --> 00:17:18.840
+Wyobraź sobie programistę przełączającego się między Azure DevOps, konsolą, AWS i IRR-ą w różnych kartach przeglądarki.
+
+00:17:19.060 --> 00:17:25.980
+Jeśli urządzenie nie przejdzie kontroli zgodności w Microsoft Endpoint Manager podczas pracy w Azure, sygnał ten może rozprzestrzenić się na zewnątrz.
+
+00:17:25.980 --> 00:17:34.640
+Zintegrowane aplikacje w innych chmurach mogą odebrać tę samą flagę niezaufanego urządzenia i zażądać ponownego uwierzytelnienia lub zablokować wrażliwe funkcje.
+
+00:17:34.900 --> 00:17:39.960
+Żaden człowiek nie musi wymuszać zmiany i żaden atakujący nie może wykorzystać nieaktualnego stanu zaufania.
+
+00:17:40.140 --> 00:17:43.920
+To trochę jak ochroniarz przechadzający się po imprezie, a nie tylko pilnujący wejścia.
+
+00:17:43.920 --> 00:17:51.240
+Ktoś może wejść wyglądając na porządnego, ale jeśli zacznie się podejrzanie zachowywać wyrywać torby czy wszczynać kłótnie, zostaje wyprowadzony, zanim sytuacja się zaostrzy.
+
+00:17:51.420 --> 00:17:53.520
+Ciągła weryfikacja działa w ten sam sposób.
+
+00:17:53.520 --> 00:17:59.700
+Środowisko nieustannie skanuje w poszukiwaniu anomalii i wymusza działanie w trakcie sesji, nawet jeśli początkowe wejścia wydawały się uzasadnione.
+
+00:17:59.900 --> 00:18:03.480
+W konfiguracjach wielochmurowych koszt braku ponownej weryfikacji jest zwielokrotniony.
+
+00:18:03.720 --> 00:18:07.580
+Jedna ryzykowna sesja, która pozostanie niewykryta, nie ogranicza się do jednej aplikacji.
+
+00:18:07.580 --> 00:18:12.460
+Może rozprzestrzenić się na wiele usług poprzez ponowne wykorzystanie tokenów lub integrację API.
+
+00:18:12.780 --> 00:18:22.600
+Jeśli sprawdzasz tożsamość tylko na początku, zakładasz, że kontekst się nie zmieni, poświadczenia nie zostaną skradzione, a urządzenie nie straci zgodności po godzinach aktywności.
+
+00:18:22.600 --> 00:18:24.520
+Nie warto podejmować takiego ryzyka.
+
+00:18:24.800 --> 00:18:30.860
+Gdy ciągła weryfikacja jest zautomatyzowana poprzez odpowiednie usługi Microsoft, przestajesz myśleć o niej jak o osobnej warstwie bezpieczeństwa.
+
+00:18:30.860 --> 00:18:37.880
+Staje się ona naturalną częścią funkcjonowania dostępu, zawsze aktywną, świadomą i gotową do ponownej oceny zaufania, zanim wyrządzone zostaną jakiekolwiek szkody.
+
+00:18:38.060 --> 00:18:41.380
+Efekt końcowy jest taki, że Zero Trust to nie tylko samo logowanie.
+
+00:18:41.580 --> 00:18:45.660
+To stałe działanie w tle, chroniące każdą akcję w każdym połączonym systemie.
+
+00:18:46.440 --> 00:18:48.920
+Zero Trust, które nie wypala użytkowników.
+
+00:18:48.920 --> 00:18:55.280
+Jeśli Twoje wdrożenie Zero Trust sprawia, że ludzie klikają zatwierdź 12 razy dziennie, znajdą sposób, by tego unikać.
+
+00:18:55.360 --> 00:18:57.520
+To nie lenistwo, to instynkt przetrwania.
+
+00:18:57.780 --> 00:19:03.420
+Jest pewna granica przerwań, po której ktoś decyduje, że ważniejsze od zasad jest wykonanie pracy.
+
+00:19:04.100 --> 00:19:10.120
+Problem w tym, że wybrane przez nich obejścia często niwelują zabezpieczenia, nad którymi tak ciężko pracowałeś.
+
+00:19:10.320 --> 00:19:12.840
+W tym miejscu pojawia się zmęczenie uwierzytelnianiem.
+
+00:19:12.840 --> 00:19:18.640
+To sytuacja, w której użytkownicy są tak często proszeni o potwierdzenie tożsamości, że proces staje się jedynie szumem w tle.
+
+00:19:18.820 --> 00:19:24.820
+Komunikat przestaje być istotną weryfikacją, a staje się kolejnym okienkiem do kliknięcia, albo co gorsza, przeszkodą do obejścia.
+
+00:19:25.040 --> 00:19:29.380
+W modelu Zero Trust powtarzalne wyzwania mają chronić działania o wysokiej wartości.
+
+00:19:30.100 --> 00:19:37.040
+Ale gdy te same wyzwania towarzyszą każdej błahej czynności, ludzie przestają odróżniać realne zagrożenia od szumu systemowego.
+
+00:19:37.280 --> 00:19:39.120
+Ta utrata uwagi jest ryzykowna.
+
+00:19:39.120 --> 00:19:44.120
+Dobre z założenia zasady mogą sabotować same siebie, jeśli zbyt szybko zużywają cierpliwość użytkowników.
+
+00:19:44.920 --> 00:19:49.120
+Jeśli polityka wymaga nowego MFA przy każdym przejściu z Outlooka do Teams czy SharePointa,
+
+00:19:49.820 --> 00:19:54.020
+przyzwyczajasz ludzi do bezmyślnego zatwierdzania wszystkiego, byle móc pracować dalej.
+
+00:19:54.220 --> 00:20:00.160
+W takim stanie złośliwe powiadomienie, wysłane na przykład przez atakującego wykorzystującego zmęczenie MFA,
+
+00:20:00.320 --> 00:20:02.440
+ma znacznie większą szansę na zatwierdzenie.
+
+00:20:03.020 --> 00:20:08.840
+Wydałeś budżet na silne technologie bezpieczeństwa, ale warstwa behawioralna jest teraz najsłabszym ogniwem.
+
+00:20:08.840 --> 00:20:10.500
+Oto przykład z życia wzięty.
+
+00:20:10.700 --> 00:20:17.300
+Pracownik zirytowany ciągłymi monitami logowania konfiguruje Outlooka na prywatnym laptopie tak, by zapamiętał dane logowania na zawsze.
+
+00:20:17.620 --> 00:20:18.760
+Wydaje się to niegroźne.
+
+00:20:19.000 --> 00:20:21.260
+Zyskują dzięki temu kilka sekund w ciągu dnia.
+
+00:20:21.880 --> 00:20:28.840
+Ale teraz to prywatne urządzenie ma stały dostęp do poczty firmowej z pominięciem zasad dostępu warunkowego dla urządzeń służbowych.
+
+00:20:28.840 --> 00:20:34.860
+Jeśli laptop zostanie zgubiony lub przejęty, atakujący nie musi nawet przechodzić przez MFA.
+
+00:20:35.140 --> 00:20:37.000
+Ma już aktywną, działającą sesję.
+
+00:20:37.240 --> 00:20:39.780
+Mądrzejszym podejściem jest opieranie wyzwań na kontekście.
+
+00:20:40.040 --> 00:20:42.660
+Zasady adaptacyjnego dostępu są zbudowane wokół tej idei.
+
+00:20:42.880 --> 00:20:46.880
+Zamiast traktować każde logowanie, tak samo weryfikują one poziom ryzyka w czasie rzeczywistym.
+
+00:20:47.120 --> 00:20:52.500
+System sprawdza, czy urządzenie jest zgodne z polityką, czy lokalizacja jest oczekiwana i czy sesja przebiega normalnie.
+
+00:20:52.500 --> 00:20:57.520
+Gdy wszystkie te wskaźniki są zielone, potrzeba powtarzalnego uwierzytelniania zostaje znacznie ograniczona.
+
+00:20:57.760 --> 00:21:01.740
+Użytkownicy nadal są weryfikowani, ale tylko wtedy, gdy sytuacja znacząco się zmienia.
+
+00:21:01.980 --> 00:21:05.980
+W ten sposób zachowujesz równowagę między silnymi zabezpieczeniami a wygodą użytkowania.
+
+00:21:06.260 --> 00:21:11.720
+Zwiększasz czułość w scenariuszach wysokiego ryzyka, takich jak dostęp do danych finansowych z niezarządzanego urządzenia
+
+00:21:11.720 --> 00:21:15.440
+i ograniczasz ją, gdy użytkownik korzysta z zaufanego laptopa w biurze.
+
+00:21:15.600 --> 00:21:16.900
+To nie jest pobłażliwość.
+
+00:21:17.100 --> 00:21:19.040
+To strategiczna alokacja zasobów.
+
+00:21:19.040 --> 00:21:25.420
+Kierujesz czas i uwagę użytkownika tam, gdzie to istotne, zamiast marnować je na nieistotne działania,
+
+00:21:25.600 --> 00:21:28.000
+które nie podnoszą znacząco poziomu zagrożenia.
+
+00:21:28.260 --> 00:21:30.200
+Pomyśl o bezpieczeństwie na lotnisku.
+
+00:21:30.440 --> 00:21:35.520
+Każdy przechodzi podstawową kontrolę, ale przeszukiwanie bagażu i dodatkowe skanowanie są zarezerwowane
+
+00:21:35.520 --> 00:21:40.940
+dla budzących obawy przypadków oznaczonych przedmiotów, nietypowych zachowań lub losowych wyrywkowych kontroli.
+
+00:21:40.940 --> 00:21:46.100
+Nikt nie zdejmuje butów przed każdym przejściem w terminalu, ponieważ system zaprojektowano tak,
+
+00:21:46.220 --> 00:21:48.940
+by równoważyć przepustowość z wykrywaniem zagrożeń.
+
+00:21:49.040 --> 00:21:54.740
+W modelu Zero Trust Twoje losowe kontrole przybierają formę weryfikacji sesji w przypadku zmiany kontekstu,
+
+00:21:54.820 --> 00:21:57.160
+nawet jeśli pierwotne logowanie było poprawne.
+
+00:21:57.420 --> 00:22:01.200
+Eliminując zbędne utrudnienia, nie tylko ułatwiasz życie użytkownikom.
+
+00:22:01.460 --> 00:22:03.880
+Sprawiasz, że zabezpieczenia stają się skuteczniejsze.
+
+00:22:04.160 --> 00:22:06.660
+Im mniej komunikatów widzą, tym poważniej je traktują.
+
+00:22:06.660 --> 00:22:12.660
+Prośba o ponowne uwierzytelnienie podczas zatwierdzania transakcji o wysokiej wartości w Dynamics 365 nie zostanie zignorowana,
+
+00:22:12.760 --> 00:22:14.780
+ponieważ występuje na tyle rzadko, że zwraca uwagę.
+
+00:22:14.980 --> 00:22:20.120
+Ta uwaga jest dokładnie tym, czego potrzebujesz, gdy polegasz na człowieku przy weryfikacji kluczowego działania.
+
+00:22:20.460 --> 00:22:26.920
+Celem modelu Zero Trust w tym kontekście jest bezpieczeństwo, które jest stale obecne, ale rzadko bywa uciążliwe.
+
+00:22:26.920 --> 00:22:35.600
+Automatyzacja działająca w tle stale sprawdza zgodność urządzenia, integralność sesji i sygnały tożsamości, nie sygnalizując każdego poprawnego wyniku.
+
+00:22:35.920 --> 00:22:38.740
+Gdy coś przekroczy próg ryzyka, użytkownik odczuje to.

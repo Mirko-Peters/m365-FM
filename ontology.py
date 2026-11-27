@@ -189,6 +189,9 @@ def audit(ents):
             al[norm(a)].add(e["id"])
     dups = sorted(sorted(v) for v in names.values() if len(v) > 1)
     alias_coll = sorted(k for k, v in al.items() if len(v) > 1)
+    # Alias einer Entitaet = Name einer anderen (Audit Linktexte E1/E2: "Azure AI Foundry" war Name der einen und Alias der anderen,
+    # "Outlook"/"Business Central" zeigten als Alias auf die falsche Seite) - derselbe Linktext fuehrte je nach Stelle zu verschiedenen Zielen
+    name_alias = sorted({k for k, v in al.items() if any(i not in v for i in names.get(k, []))})
     dcache = {}
     depths = Counter(depth(e["id"], by, dcache) for e in live)
     ctypes = [e for e in live if e.get("type") in ("concept", "product")]
@@ -207,7 +210,7 @@ def audit(ents):
         "concepts_no_kind": sum(1 for e in concepts if not e.get("kind")),
         "dangling": dangling, "cycles": find_cycles(by), "max_depth": max(depths) if depths else 0, "depth_hist": dict(sorted(depths.items())),
         "too_deep": sorted(e["id"] for e in live if depth(e["id"], by, dcache) > MAX_DEPTH and depth(e["id"], by, dcache) < 99),
-        "duplicate_names": dups, "alias_collisions": alias_coll,
+        "duplicate_names": dups, "alias_collisions": alias_coll, "name_alias_collisions": name_alias,
         "related_one_sided": one_sided, "related_total": len(sym),
         "missing_de": len(de_missing), "missing_wikidata_products": sum(1 for e in prods if not e.get("wikidata")),
         "missing_wikipedia_products": sum(1 for e in prods if not e.get("wikipedia")), "missing_docs_products": sum(1 for e in prods if not e.get("docs")),
@@ -233,6 +236,9 @@ def problems(m, baseline=None):
     new_a = [a for a in m["alias_collisions"] if a not in set(base.get("alias_collisions", []))]
     if new_a:
         out.append(f"neue Alias-Kollisionen: {new_a[:5]}")
+    new_n = [a for a in m.get("name_alias_collisions", []) if a not in set(base.get("name_alias_collisions", []))]
+    if new_n:
+        out.append(f"neue Kollisionen Name/Alias (Alias einer Entitaet ist der Name einer anderen): {new_n[:5]}")
     return out
 
 
@@ -254,7 +260,7 @@ def render_md(m, added=None, date=""):
          f"- Begriffe/Produkte ohne Oberbegriff: **{m['no_parent']}** von {m['no_parent_of']} ({m['no_parent_share']:.0%}); davon per Regel ableitbar: {m['derivable']}",
          f"- Begriffe ohne Art (kind): {m['concepts_no_kind']} von {m['concepts']}",
          f"- Hierarchie: tiefste Ebene {m['max_depth']}, Verteilung {m['depth_hist']}; tiefer als {MAX_DEPTH}: {len(m['too_deep'])}",
-         f"- Verweise ins Leere: {len(m['dangling'])}; Zyklen: {len(m['cycles'])}; Dubletten (gleicher Name): {len(m['duplicate_names'])}; Alias-Kollisionen: {len(m['alias_collisions'])}",
+         f"- Verweise ins Leere: {len(m['dangling'])}; Zyklen: {len(m['cycles'])}; Dubletten (gleicher Name): {len(m['duplicate_names'])}; Alias-Kollisionen: {len(m['alias_collisions'])}; Name/Alias-Kollisionen: {len(m.get('name_alias_collisions', []))}",
          f"- related_to ohne Gegenrichtung (Anzeige ergaenzt sie): {m['related_one_sided']} von {m['related_total']}",
          f"- Produkte/Plattformen ohne Wikidata: {m['missing_wikidata_products']} von {m['products']}; ohne Wikipedia: {m['missing_wikipedia_products']}; ohne Docs-Link: {m['missing_docs_products']}",
          f"- Ohne deutschen Kurztext: {m['missing_de']} von {m['live']}", ""]

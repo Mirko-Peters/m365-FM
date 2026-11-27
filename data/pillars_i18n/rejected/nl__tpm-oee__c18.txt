@@ -1,0 +1,56 @@
+<translation>
+## De businesscase: wat één OEE-punt waard is
+
+Financiële teams wijzen TPM-cijfers vaak af omdat het voordeel wordt berekend als "OEE-punten × output × prijs". Die snelkoppeling klopt maar onder één voorwaarde.
+
+### Geval 1: de machine is een knelpunt en er is vraag
+
+Als IMM-12 de output van de fabriek beperkt en klanten meer zouden kopen, levert elk goed onderdeel zijn bijdragemarge op. Neem aan dat de verkoopprijs $1,20 per onderdeel is en de variabele kosten (granulaat, energie, verpakking) $0,70, dus een bijdragemarge van $0,50.
+
+- Eén OEE-punt op IMM-12 = 1 % × 1.320 minuten ÷ 0,25 minuten = **52,8 goede onderdelen per dag**.
+- De verbetering van 73,6 % naar 84,3 % = 563 goede onderdelen per dag × $0,50 = **$281,50 per dag**.
+- Bij 250 productiedagen: **$70.375 per jaar** aan extra bijdrage, van één machine.
+
+De [theory of constraints guide](https://www.m365.fm/en/learn/theory-of-constraints/) legt uit waarom een uur winst bij het knelpunt de output van de hele fabriek voor dat uur waard is.
+
+### Geval 2: de machine is geen knelpunt
+
+Als IMM-12 overcapaciteit heeft en de vraag vaststaat, zijn de 563 extra onderdelen niets waard; ze maken zou alleen voorraad opbouwen. Het voordeel is dan de vermeden kost om dezelfde output te maken:
+
+| Voordeel | IMM-12-voorbeeld (per jaar, illustratief) |
+|---|---|
+| Minder afgekeurde onderdelen | (85 + 76 − 50 − 60) = 51 onderdelen/dag × $0,30 materiaal × 250 dagen = $3.825 |
+| Minder geplande tijd voor dezelfde output | bij vaste vraag heeft de machine ongeveer 12,7 % minder geplande productietijd nodig; besparing ontstaat alleen als arbeid, energie of een ploeg daadwerkelijk kan worden geschrapt of herbestemd |
+| Minder storingen | lagere kosten voor noodreparaties, overwerk en spoedlevering: neem werkelijke cijfers uit het CMMS en de salarisadministratie |
+| Uitgestelde kapitaaluitgaven | als TEEP laat zien dat een tweede machine niet meer nodig is: de vermeden investering en de afschrijving daarvan |
+
+De 12,7 % komt uit de OEE-verhouding: dezelfde goede output vraagt 73,6 ÷ 84,3 = 87,3 % van de vorige geplande tijd.
+
+### Kosten van een TPM-programma
+
+| Kostenpost | Investering of exploitatie | Opmerkingen |
+|---|---|---|
+| Tijd van operators en technici voor CILS, tags, training en workshops | exploitatie | de grootste kostenpost; begroot uren expliciet |
+| TPM-coördinator | exploitatie | voltijds of deeltijds |
+| Herstel van basisvoorwaarden (onderdelen, afdichtingen, beschermingen, toegangsdeksels) | grotendeels exploitatie, grotere reparaties kunnen worden geactiveerd | hangt af van de verslechtering die in stap 1 is gevonden |
+| Gereedschap, smeerapparatuur, visuele beheersmiddelen | exploitatie | klein |
+| Dataverzameling (machinesignalen, terminals, OEE- of CMMS-software) | investering of abonnementskosten | hangt af van het bestaande IT/OT-landschap |
+| Externe training of consultancy | exploitatie | NIST MEP-centra bieden lean- en procesverbeteringsdiensten voor kleine en middelgrote producenten [27][28] |
+
+**Illustratieve terugverdientijd in het eerste jaar voor de IMM-12-pilot (knelpuntgeval):**
+
+| Post | Berekening | Bedrag |
+|---|---|---|
+| Pilotworkshops en training (initiële reiniging, SMED, minor stop-project, OPL's) | 400 teamuren × $45 belast tarief | $18.000 |
+| Herstelonderdelen en kleine aanpassingen (slangen, afdichtingen, geleider van de goot, toegangsdeksels) | schatting op basis van de tags uit stap 1 | $8.000 |
+| Aandeel TPM-coördinator voor de pilot | 0,2 FTE × 6 maanden, ca. | $9.000 |
+| **Kosten eerste jaar** | | **$35.000** |
+| Extra bijdrage zodra de volledige verbetering standhoudt | $281,50 × 250 dagen | $70.375 per jaar |
+| **Eenvoudige terugverdientijd** | $35.000 ÷ ($70.375 ÷ 12) | **ongeveer 6 maanden nadat de verbetering standhoudt** |
+
+Alle tarieven en bedragen zijn illustratief; vervang ze door uw eigen salaris- en inkoopgegevens. In het geval zonder knelpunt verdienen dezelfde kosten veel langzamer terug, wat een extra reden is om TPM bij het knelpunt te starten. CILS-tijd staat niet in de tabel omdat die in dit tijdsmodel binnen het bestaande geplande onderhoudsvenster valt.
+
+**Financiële regels voor een geloofwaardige case:** stel de nulmeting vast voordat het programma start, spreek vooraf af welke voordelen meetellen (output van het knelpunt, afkeur, overwerk, vermeden investeringen), volg ze maandelijks samen met de fabrieksccontroller en tel dezelfde minuut niet twee keer (bijvoorbeeld zowel als "meer output" als "minder overwerk").
+
+De EPA schat dat TPM de efficiëntie van apparatuur binnen drie jaar met 15 tot 25 procent kan verhogen [13]. Dat is een overheidsschatting zonder gepubliceerde methode op de pagina, dus gebruik voor de businesscase uw eigen nulmeting en beschouw het EPA-cijfer als oriëntatie. [unverified: de EPA-schatting is niet met een gepubliceerde methode onderbouwd]
+</translation>

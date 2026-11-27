@@ -1,0 +1,628 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.060
+Większość modułów równoważenia obciążenia nigdy nie czyta żądań, które przesyłają.
+
+00:00:03.240 --> 00:00:07.040
+Azure Application Gateway to robi, a ten jeden nawyk zmienia miejsce, do którego trafia Twój ruch.
+
+00:00:07.220 --> 00:00:10.860
+Analizuje ścieżkę URL i nazwę witryny, zanim podejmie jakąkolwiek decyzję,
+
+00:00:10.980 --> 00:00:14.580
+więc żądanie obrazów może trafić na jeden serwer, a żądanie wideo na inny.
+
+00:00:14.720 --> 00:00:19.880
+Ta sama bramka może również obsługiwać szyfrowanie i filtrować żądania pod kątem ataków podczas ich przesyłania.
+
+00:00:20.120 --> 00:00:26.260
+Witamy w podcaście M365FM, w którym badamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:26.260 --> 00:00:30.980
+Po zakończeniu będziesz w stanie prostymi słowami wyjaśnić, dlaczego to pole znajduje się na środku diagramu.
+
+00:00:31.100 --> 00:00:32.260
+Czym ono właściwie jest?
+
+00:00:32.460 --> 00:00:35.080
+Wyobraź sobie recepcjonistę przy wejściu do ruchliwego budynku.
+
+00:00:35.240 --> 00:00:39.360
+Ta osoba decyduje, dokąd powinien udać się każdy gość, a decyzja zależy od tego, kto wchodzi przez drzwi.
+
+00:00:39.520 --> 00:00:42.760
+Teraz zamień gości na żądania internetowe, a budynek na swoją aplikację internetową.
+
+00:00:42.920 --> 00:00:45.300
+To mniej więcej idea kryjąca się za Azure Application Gateway.
+
+00:00:45.580 --> 00:00:47.700
+Jest to moduł równoważenia obciążenia ruchem internetowym.
+
+00:00:47.920 --> 00:00:51.120
+Nazwa brzmi bardziej skomplikowanie niż samo zadanie, ponieważ tak naprawdę bramka siedzi przed aplikacją
+
+00:00:51.120 --> 00:00:53.040
+i decyduje, gdzie powinno trafić każde przychodzące żądanie.
+
+00:00:53.180 --> 00:00:57.440
+Różnica między tym rozwiązaniem, a starszym modułem równoważenia obciążenia sprowadza się do dwóch słów, warstwa siódma.
+
+00:00:57.580 --> 00:01:00.000
+To sformułowanie brzmi jak pytanie z egzaminu certyfikacyjnego.
+
+00:01:00.240 --> 00:01:03.060
+Chodzi tak naprawdę o to, jak dużą część żądania widzi twój moduł równoważenia obciążenia.
+
+00:01:03.280 --> 00:01:05.860
+Tradycyjny moduł równoważenia obciążenia działa niżej w stosie sieciowym.
+
+00:01:06.120 --> 00:01:07.580
+Widzi tylko adres i portugalski.
+
+00:01:07.740 --> 00:01:10.900
+Pomyśl o pracowniku poczty, który czyta adres na kopercie, ale nigdy jej nie otwiera,
+
+00:01:10.900 --> 00:01:13.440
+ponieważ dla niego wszystko, co przychodzi, wygląda mniej więcej tak samo.
+
+00:01:13.440 --> 00:01:19.500
+Application Gateway działa w warstwie aplikacji, czyli siódmej warstwie modelu sieciowego, do którego wszyscy się odwołują.
+
+00:01:19.740 --> 00:01:22.540
+W tej warstwie bramka odczytuje treść samego żądania.
+
+00:01:22.860 --> 00:01:29.780
+Widzi ścieżkę w adresie URL oraz nazwę żądanej witryny, więc podejmuje decyzję na podstawie tego, o co prosi odwiedzający, a nie skąd przybył.
+
+00:01:29.940 --> 00:01:32.900
+Własna dokumentacja firmy Microsoft podaje przejrzysty przykład.
+
+00:01:32.900 --> 00:01:37.020
+Żądanie zawierające obrazy w adresie URL może trafić na serwery dostosowane do obsługi obrazów.
+
+00:01:37.180 --> 00:01:40.460
+Żądanie dotyczące wideo może trafić na serwery przygotowane do obsługi wideo.
+
+00:01:40.460 --> 00:01:44.040
+Na tym polega cały trik i to wyjaśnia, dlaczego ta usługa w ogóle istnieje.
+
+00:01:44.160 --> 00:01:48.280
+To rzeczywiste wdrożenie wewnątrz Twojej sieci, które funkcjonuje w dedykowanej podsieci.
+
+00:01:48.480 --> 00:01:52.940
+Oznacza to, że otrzymuje własny wycinek przestrzeni adresowej Twojej sieci, zamiast dzielić go z innymi zasobami.
+
+00:01:53.140 --> 00:01:55.520
+Ma to znaczenie, nawet jeśli prowadzisz tylko małą witrynę.
+
+00:01:55.680 --> 00:01:59.680
+W momencie, gdy masz więcej niż jeden serwer, ktoś musi zdecydować, który serwer otrzyma które żądanie.
+
+00:01:59.680 --> 00:02:02.800
+Ręczne zarządzanie przestaje działać w dniu, w którym pojawia się prawdziwy ruch.
+
+00:02:02.960 --> 00:02:05.440
+Funkcje, które oferuje, dzielą się na kilka prostych grup.
+
+00:02:05.440 --> 00:02:13.660
+Obsługa ruchu obejmuje routing według ścieżki URL, hostowanie kilku witryn na jednej bramie, przekierowania, nadpisywanie nagłówków oraz sposób przypisania odwiedzającego do tego samego serwera.
+
+00:02:13.820 --> 00:02:17.140
+Bezpieczeństwo obejmuje szyfrowanie, szyfrowanie typu end-to-end oraz zaporę sieciową.
+
+00:02:17.360 --> 00:02:21.800
+Odporność obejmuje automatyczne skalowanie i tendencję strefową oraz stały adres front-endu, który nigdy się nie zmienia.
+
+00:02:21.980 --> 00:02:24.920
+Obecna generacja nazywa się V2 i występuje w dwóch wersjach.
+
+00:02:25.120 --> 00:02:27.680
+Wersja standard V2 obsługuje routing i bezpieczeństwo.
+
+00:02:27.900 --> 00:02:30.420
+Wersja WAF V2 dodaje ochronę blokującą ataki.
+
+00:02:30.420 --> 00:02:37.540
+Jeśli korzystasz ze starszego samouczka i wspomina on o bramie V1, to ta generacja została wycofana, więc traktuj ją jako historię, a nie coś, co warto budować dzisiaj.
+
+00:02:37.780 --> 00:02:41.480
+Sposób, w jaki żądanie trafia do celu, to element, którego nikt nie rysuje na diagramach.
+
+00:02:41.620 --> 00:02:43.820
+Prześledźmy więc jedno żądanie od zewnątrz do środka.
+
+00:02:44.000 --> 00:02:46.020
+Obiekt słuchacza, listener i reguły routingu.
+
+00:02:46.240 --> 00:02:48.960
+Słuchacz to główne wejście i jest prostszy niż sugeruje nazwa.
+
+00:02:49.100 --> 00:02:52.420
+To element konfiguracji, który sprawdza przychodzące żądania połączenia.
+
+00:02:52.660 --> 00:02:57.360
+Kontrole te opierają się na czterech elementach, porcie, protokole, hoście i adresie IP.
+
+00:02:57.360 --> 00:03:00.740
+Gdy żądanie dociera, to słuchacz je wyłapuje i przekazuje dalej.
+
+00:03:01.000 --> 00:03:05.360
+Możesz uruchomić kilku słuchaczy jednocześnie, a oficjalna dokumentacja jasno pokazuje ten wzorzec.
+
+00:03:08.900 --> 00:03:13.900
+Wyobraź sobie dwie strony internetowe, których równoważnik obciążenia nie potrafi obsłużyć.
+
+00:03:17.330 --> 00:03:21.030
+Gdy słuchacz przechwyci żądanie, reguła routingu decyduje o dalszych krokach.
+
+00:03:21.250 --> 00:03:24.770
+Reguła ta łączy słuchacza z pulą backendową, która powinna odebrać żądanie.
+
+00:03:24.990 --> 00:03:28.810
+Łączy ona również ustawienia backendu, które opisują sposób komunikacji z tymi serwerami.
+
+00:03:28.810 --> 00:03:32.750
+Podczas tworzenia bramy w portalu Azure, system automatycznie tworzy jedną z takich reguł.
+
+00:03:32.890 --> 00:03:38.550
+Otrzymujesz domyślnego słuchacza i domyślną pulę backendową, więc masz działający punkt wyjścia przed wprowadzeniem jakichkolwiek zmian.
+
+00:03:38.790 --> 00:03:40.870
+Reguły występują w kilku przydatnych formach.
+
+00:03:41.050 --> 00:03:46.610
+Routing oparty na ścieżce dzieli ruch według zawartości URL, co pozwala na kierowanie obrazów reklamowych i wideo w różne miejsca.
+
+00:03:46.810 --> 00:03:53.570
+Routing wielostronicowy dzieli ruch według nazwy witryny w żądaniu, dzięki czemu jedna brama dyskretnie obsługuje kilka stron, niezauważalnie dla użytkowników.
+
+00:03:53.570 --> 00:03:58.970
+Reguła może również wykonywać kilka innych czynności. Może przekierować ruch na inny port lub całkowicie inną stronę.
+
+00:03:59.170 --> 00:04:02.950
+Może nadpisywać nagłówki żądań i odpowiedzi oraz adresy URL podczas ich przesyłania.
+
+00:04:03.190 --> 00:04:06.610
+Wyobraź sobie, co się dzieje, gdy ktoś wpisuje Twój adres w przeglądarce.
+
+00:04:06.810 --> 00:04:14.110
+Przeglądarka najpierw wyszukuje adres bramy przez DNS, a Azure kontroluje ten wpis, ponieważ każda brama znajduje się w domenie azure.com.
+
+00:04:14.710 --> 00:04:21.770
+Brama akceptuje żądanie na słuchaczu, sprawdza je względem zapory sieciowej, jeśli jest włączona, a następnie przekazuje do pasującej reguły routingu.
+
+00:04:21.770 --> 00:04:27.670
+Ta reguła wybiera pulę zaplecza, a brama przekazuje żądanie do jednego ze sprawnych serwerów, używając kolejności round robin.
+
+00:04:27.830 --> 00:04:31.730
+Otwiera ona nowe połączenie z zapleczem, korzystając z ustawień, które zostały skonfigurowane.
+
+00:04:31.970 --> 00:04:38.010
+Zanim żądanie wyjdzie, brama dodaje kilka dodatkowych nagłówków, aby aplikacja nadal widziała prawdziwego klienta i oryginalny adres.
+
+00:04:38.230 --> 00:04:43.130
+Źle skonfigurowana reguła to cicha awaria, której nikt nie zauważy, dopóki klienci nie zaczną się skarżyć.
+
+00:04:43.370 --> 00:04:46.310
+Brama bez wahania wyśle prawdziwego klienta w niewłaściwe miejsce.
+
+00:04:46.630 --> 00:04:50.410
+Dlatego warto zrozumieć te powiązania, nawet jeśli samemu nigdy się ich nie dotyka.
+
+00:04:50.410 --> 00:04:57.350
+Gdy reguła wybierze już pulę, brama musi odpowiedzieć na jedno trudne pytanie, co się stanie, gdy serwer w tej puli przestanie odpowiadać?
+
+00:04:57.690 --> 00:04:59.410
+Pule zaplecza i sondy kondycji.
+
+00:04:59.610 --> 00:05:02.950
+Pula zaplecza to grupa serwerów, na których faktycznie działa Twoja aplikacja.
+
+00:05:03.130 --> 00:05:05.130
+To cel, na który wskazuje reguła routingu.
+
+00:05:05.330 --> 00:05:11.950
+Pula może zawierać konkretną maszynę wirtualną, zestaw skalowalny maszyn wirtualnych, adres IP, pełną nazwę domeny lub usługę aplikacji.
+
+00:05:12.190 --> 00:05:15.550
+Gdy żądanie dotrze do puli, brama rozdziela je pomiędzy sprawne serwery.
+
+00:05:15.550 --> 00:05:20.870
+Stosuje podejście round robin, co oznacza po prostu, że przetwarza listę po kolei, zamiast przeciążać jedną maszynę.
+
+00:05:21.030 --> 00:05:23.870
+Elementem, który wykonuje najcięższą pracę jest sonda kondycji.
+
+00:05:24.090 --> 00:05:27.690
+Brama samodzielnie sprawdza kondycję każdego serwera w puli bez potrzeby ponaglania.
+
+00:05:27.890 --> 00:05:31.290
+Po cichu przestaje wysyłać ruch do każdego serwera, który uzna za niesprawny.
+
+00:05:31.510 --> 00:05:32.790
+Sonda również się nie poddaje.
+
+00:05:33.050 --> 00:05:37.270
+Nadal sprawdza niedziałający serwer i zaczyna kierować do niego ruch w momencie, gdy znów zacznie poprawnie odpowiadać.
+
+00:05:37.270 --> 00:05:43.370
+Każda instancja bramy wykonuje te sprawdzenia osobno, więc pula jest monitorowana z kilku miejsc jednocześnie, a nie przez jeden odosobniony proces.
+
+00:05:43.630 --> 00:05:45.250
+Domyślne sprawdzenie jest proste.
+
+00:05:45.450 --> 00:05:50.990
+Wysyła ono zwykłe żądanie internetowe do serwera na port określony w ustawieniach zaplecza i traktuje poprawną odpowiedź jako znak życia.
+
+00:05:51.250 --> 00:05:55.530
+Domyślna sonda ma ustawienia, które warto znać, ponieważ wyjaśniają, jak szybko to wszystko się dzieje.
+
+00:05:55.750 --> 00:05:59.450
+Sprawdza każdy serwer co 30 sekund i czeka do 30 sekund na odpowiedź.
+
+00:05:59.590 --> 00:06:02.710
+Oznacza serwer jako niedziałający po trzech nieudanych próbach z rzędu.
+
+00:06:02.710 --> 00:06:12.310
+Wszystko, co odpowiada kodem statusu między 200 a 399 liczy się jako sprawne, co w prostych słowach oznacza, że serwer odpowiedział normalnie, a nie wyrzucił błąd.
+
+00:06:12.430 --> 00:06:16.630
+W praktyce oznacza to, że niedziałający serwer wypada z rotacji i sam do niej wraca.
+
+00:06:16.870 --> 00:06:19.390
+Nikt nie musi siedzieć i pilnować tego o trzeciej nad ranem.
+
+00:06:19.630 --> 00:06:24.170
+Możesz również utworzyć niestandardową sondę, która sprawdza konkretną ścieżkę lub akceptuje określony kod odpowiedzi.
+
+00:06:24.370 --> 00:06:30.570
+Możesz nawet kazać mu szukać konkretnego słowa w treści odpowiedzi, co przydaje się, gdy serwer odpowiada przyjazną stroną błędu zamiast faktyczną awarią.
+
+00:06:30.570 --> 00:06:36.510
+Warto wiedzieć, że błędna ścieżka sondowania jest klasyczną przyczyną, dla której ludzie widzą błędy 502 i nie potrafią ustalić dlaczego.
+
+00:06:36.770 --> 00:06:39.150
+Brama sprawdza również coś jeszcze w każdym żądaniu.
+
+00:06:39.350 --> 00:06:45.550
+Kolejna rzecz nie ma nic wspólnego z samym ruchem, a odnosi się do małej kłódki w przeglądarce, gdzie obsługiwane jest HTTPS.
+
+00:06:45.730 --> 00:06:51.230
+Ta kłódka to TLS, szyfrowanie, które chroni dane przesyłane między przeglądarką a stroną www przed osobami postronnymi.
+
+00:06:51.490 --> 00:06:54.830
+Gdy twój ruch dociera do bramy, szyfrowane połączenie może zakończyć się właśnie tam.
+
+00:06:55.030 --> 00:06:57.050
+Proces ten nazywamy terminacją TLS.
+
+00:06:57.050 --> 00:06:59.930
+Twoje serwery zaplecza otrzymują wtedy od bramy zwykłe żądanie.
+
+00:07:00.150 --> 00:07:02.850
+Nie muszą samodzielnie wykonywać wszystkich obliczeń związanych z szyfrowaniem.
+
+00:07:03.070 --> 00:07:05.790
+Zakończenie szyfrowania na bramie rozwiązuje dwa problemy jednocześnie.
+
+00:07:05.990 --> 00:07:09.930
+Twoje serwery przestają tracić zasoby na kryptografię i mogą skupić się na aplikacji.
+
+00:07:10.190 --> 00:07:14.570
+Zarządzasz też certyfikatami w jednym miejscu, zamiast szukać ich na każdej maszynie w puli.
+
+00:07:14.730 --> 00:07:20.830
+To samo miejsce służy też do odnawiania certyfikatów, więc wygasający certyfikat to jedna rzecz do naprawienia, a nie tuzin.
+
+00:07:21.030 --> 00:07:24.630
+Jeśli wolisz zachować pełne szyfrowanie na całej drodze, brama również to wspiera.
+
+00:07:24.630 --> 00:07:27.950
+Otworzy ona wówczas nowe, szyfrowane połączenie z serwerem zaplecza.
+
+00:07:28.170 --> 00:07:32.070
+Warto znać jeden szczegół, ponieważ wyjaśnia on wiele niejasnych zachowań w przyszłości.
+
+00:07:32.350 --> 00:07:38.850
+Brama dodaje nagłówki do każdego żądania przed jego przekazaniem, a te nagłówki zawierają rzeczywisty adres klienta i pierwotną nazwę hosta.
+
+00:07:38.990 --> 00:07:43.810
+Twoja aplikacja wciąż może rozpoznać, kto faktycznie wysłał żądanie, mimo że połączenie przychodzi teraz od bramy.
+
+00:07:44.010 --> 00:07:48.710
+Dlatego żądanie docierające do serwera wygląda tak, jakby pochodziło z bramy, nawet jeśli zaczęło się gdzieś zupełnie indziej.
+
+00:07:48.710 --> 00:07:53.250
+Bramę można również skonfigurować tak, aby dodawała, usuwała lub aktualizowała nagłówki żądań i odpowiedzi.
+
+00:07:53.450 --> 00:07:57.570
+W ten sposób zespoły naprawiają problemy typu zaplecze, które wymaga konkretnej nazwy hosta.
+
+00:07:57.750 --> 00:08:04.490
+Generacja V2 jest stworzona do tej pracy, a Microsoft informuje, że radzi sobie z odciążeniem TLS znacznie szybciej niż wersja, którą zastąpiła.
+
+00:08:04.710 --> 00:08:07.910
+Dla Ciebie oznacza to głównie, że szyfrowanie nie spowalnia Twojej witryny.
+
+00:08:08.130 --> 00:08:10.670
+Szyfrowanie chroni ruch przed odczytem przez osoby z zewnątrz.
+
+00:08:10.870 --> 00:08:13.830
+Nie robi jednak nic w przypadku celowego przesyłania złośliwego ruchu.
+
+00:08:13.950 --> 00:08:16.010
+To inny problem i wymaga innego narzędzia.
+
+00:08:16.010 --> 00:08:21.290
+Co zatem powstrzymuje ataki? Tym narzędziem jest zapora aplikacji internetowej, zazwyczaj skracana do WAF.
+
+00:08:21.410 --> 00:08:24.230
+To powód, dla którego istnieje wersja WAF V2 Bramy.
+
+00:08:24.410 --> 00:08:29.450
+Routing decyduje, dokąd powinno trafić żądanie, a zapora decyduje, czy w ogóle powinno zostać przepuszczone.
+
+00:08:29.690 --> 00:08:32.070
+Sprawdza całe żądanie, w tym nagłówki i treść.
+
+00:08:32.290 --> 00:08:35.450
+Blokuje ataki, które od lat działają na niezabezpieczonych stronach.
+
+00:08:35.650 --> 00:08:38.910
+Dwa pierwsze to SQL Injection oraz Cross-Site Scripting.
+
+00:08:39.070 --> 00:08:43.210
+SQL Injection to próba przemycenia poleceń bazodanowych przez pole formularza.
+
+00:08:43.210 --> 00:08:47.050
+Cross-Site Scripting to próba umieszczenia własnego kodu na Twojej stronie.
+
+00:08:47.310 --> 00:08:54.670
+Lista jest długa i obejmuje Command Injection, Request Smugling oraz garść innych sztuczek, które atakujący stosują, bo wciąż się opłacają.
+
+00:08:54.950 --> 00:08:57.590
+Zasady pochodzą z zestawu OWASP Core Rule Set.
+
+00:08:57.750 --> 00:09:01.350
+OWASP to publiczny projekt prowadzący wspólną listę typowych ataków internetowych.
+
+00:09:01.590 --> 00:09:04.830
+Firewall Microsoftu korzysta z tych zasad i utrzymuje je w aktualności.
+
+00:09:05.090 --> 00:09:12.350
+Dziedziczysz lata zbiorowych, doświadczeń, zamiast pisać własne reguły od zera i otrzymujesz aktualizację, gdy pojawiają się nowe wzorce ataków.
+
+00:09:12.350 --> 00:09:16.850
+Firewall działa w jednym z dwóch trybów, a różnica jest ważniejsza niż sugerują nazwy.
+
+00:09:17.030 --> 00:09:21.370
+Tryb detekcji obserwuje i loguje, ale niczego nie blokuje, co przypomina jazdę z kółkami pomocniczymi.
+
+00:09:21.530 --> 00:09:25.770
+Tryb prewencji blokuje atak, a atakujący otrzymuje odpowiedź 403 i zamknięte połączenie.
+
+00:09:26.010 --> 00:09:30.330
+Microsoft zaleca uruchomienie nowego Firewalla w trybie detekcji na krótki czas w środowisku produkcyjnym.
+
+00:09:30.530 --> 00:09:34.670
+W ten sposób możesz wyłapać fałszywe alarmy i je wyeliminować, zanim zaczniesz blokować prawdziwy ruch.
+
+00:09:34.670 --> 00:09:38.030
+W tle Firewall ocenia każde żądanie pod kątem stopnia zagrożenia.
+
+00:09:38.230 --> 00:09:43.110
+Krytyczne dopasowanie reguły dodaje 5 punktów, błąd 4, ostrzeżenie 3, a uwaga 2.
+
+00:09:43.310 --> 00:09:46.330
+5 punktów wystarczy, aby zablokować żądanie w trybie prewencji.
+
+00:09:46.590 --> 00:09:49.910
+Jedno poważne dopasowanie wystarczy, podczas gdy pojedyncze drobne ostrzeżenie nie.
+
+00:09:50.110 --> 00:09:52.250
+Dwa dodatkowe elementy są warte po jednym punkcie każdy.
+
+00:09:52.490 --> 00:09:55.770
+Możesz filtrować ruch geograficznie, aby zezwolić na dostęp lub zablokować całe kraje.
+
+00:09:55.990 --> 00:10:01.350
+Dostępny jest również zestaw reguł zarządzania botami, który oddziela zweryfikowane roboty wyszukiwarek od botów kłamiących co do swojej tożsamości.
+
+00:10:01.350 --> 00:10:07.410
+Jedna bramka może obsługiwać do 400 stron internetowych za tym samym Firewallem, dzięki czemu ochrona pozostaje przystępna cenowo wraz z dodawaniem nowych stron.
+
+00:10:07.590 --> 00:10:09.110
+Cała ta ochrona jest bezwartościowa.
+
+00:10:09.270 --> 00:10:15.350
+Jeśli sama bramka zawiedzie w momencie skoku natężenia ruchu, to prowadzi nas do części, o której rzadko myślimy, dopóki nie stanie się istotna.
+
+00:10:15.570 --> 00:10:16.950
+Skalowanie bez zastanowienia.
+
+00:10:17.190 --> 00:10:21.630
+Automatyczne skalowanie oznacza, że bramka zwiększa wydajność, gdy ruch rośnie i zwraca ją, gdy maleje.
+
+00:10:21.850 --> 00:10:24.170
+Nigdy nie musisz z góry zgadywać odpowiedniego rozmiaru.
+
+00:10:24.390 --> 00:10:26.790
+Ustawiasz minimalną liczbę instancji od 0 do 100.
+
+00:10:26.790 --> 00:10:30.910
+Możesz również ustawić maksimum, które domyślnie wynosi 10, jeśli nie określisz własnego.
+
+00:10:31.090 --> 00:10:37.490
+Każda instancja to około 10 jednostek wydajności, więc liczba ta przekłada się bezpośrednio na to, jak dużo pracy może przyjąć bramka.
+
+00:10:37.650 --> 00:10:46.950
+Ponieważ miary działają w jednostkach pojemności, jedna jednostka obejmuje około 2500 połączeń, nieco ponad 2 megabity przepustowości na sekundę i jedną jednostkę obliczeniową.
+
+00:10:46.950 --> 00:10:57.270
+To, które z tych trzech wyczerpiesz najpierw, decyduje o kosztach, dlatego witryna z wieloma małymi żądaniami i witryna przesyłająca duże pliki mogą płacić inaczej za ten sam wolumen ruchu.
+
+00:10:57.470 --> 00:11:01.050
+Nawet przy zerowej minimalnej liczbie instancji brama pozostaje wysoce dostępna.
+
+00:11:01.230 --> 00:11:06.670
+Usługa jest zawsze wdrażana jako więcej niż jedna instancja, a Azure po cichu zastępuje instancję, która przestaje działać.
+
+00:11:06.850 --> 00:11:09.350
+Dwa szczere szczegóły sprawiają, że wydaje się to mniej magiczne.
+
+00:11:09.350 --> 00:11:12.270
+Uruchomienie nowej instancji może zająć od 3 do 5 minut.
+
+00:11:12.450 --> 00:11:19.110
+Kiedy brama zmniejsza skalę, przez 5 minut obsługuje istniejące połączenia przed usunięciem instancji, więc nikt nie zostaje odcięty w trakcie żądania.
+
+00:11:19.310 --> 00:11:24.170
+Na tym polega różnica między planem pojemności, który dobrze wygląda na papierze, a takim, który sprawdza się, gdy jest to ważne.
+
+00:11:24.390 --> 00:11:26.990
+Redundencja strefowa to druga połowa utrzymania dostępności.
+
+00:11:27.230 --> 00:11:30.310
+Brama domyślnie rozprasza się w co najmniej dwóch strefach dostępności.
+
+00:11:30.570 --> 00:11:34.350
+Strefa dostępności to fizycznie oddzielna grupa centrów danych w tym samym regionie.
+
+00:11:34.350 --> 00:11:38.390
+Jeśli jedna z tych stref ulegnie awarii, brama nadal działa, korzystając z pozostałych.
+
+00:11:38.390 --> 00:11:43.890
+To rodzaj odporności, który kiedyś wymagał uruchomienia dwóch oddzielnych bram i menedżera ruchu do zarządzania nimi.
+
+00:11:44.170 --> 00:11:46.330
+Warto jasno wspomnieć o jednym zastrzeżeniu.
+
+00:11:46.530 --> 00:11:50.870
+Strefy istnieją tylko w niektórych regionach, więc poziom odporności zależy od miejsca wdrożenia.
+
+00:11:51.130 --> 00:11:53.650
+Obok tego wszystkiego istnieje mniej oczywista korzyść.
+
+00:11:53.870 --> 00:11:58.230
+Brama V2 używa statycznego adresu, który pozostaje niezmienny przez cały okres wdrożenia.
+
+00:11:58.510 --> 00:12:02.070
+Nawet po restartcie Twoje rekordy DNS nigdy nie muszą gonić ruchomego celu.
+
+00:12:02.070 --> 00:12:06.890
+Zatem brama sama kieruje ruchem, chroni go i skaluje, co rodzi pytanie, z którym przychodzi wiele osób.
+
+00:12:06.890 --> 00:12:10.610
+Pytanie brzmi, czy inne usługi równoważenia obciążenia Azure robią to samo?
+
+00:12:10.790 --> 00:12:17.110
+Trzy usługi równoważenia obciążenia Azure, trzy usługi, trzy nazwy, a dokumentacja Microsoftu umieszcza je wszystkie w tej samej rodzinie.
+
+00:12:17.310 --> 00:12:19.050
+Właśnie dlatego początkujący je mylą.
+
+00:12:19.270 --> 00:12:25.730
+Najprostszym sposobem na ich rozróżnienie jest zwrócenie uwagi na dwie rzeczy, jak dokładnie każda z nich sprawdza ruch oraz jak daleko znajdują się użytkownicy.
+
+00:12:25.730 --> 00:12:28.110
+Load Balancer Azure działa na najniższym poziomie.
+
+00:12:28.250 --> 00:12:34.010
+W warstwie czwartej widzi tylko ruch sieciowy, taki jak TCP i UDP, więc nigdy nie odczytuje adresu URL ani nazwy hosta.
+
+00:12:34.190 --> 00:12:37.870
+Po prostu rozdziela przepływy między maszyny wirtualne niemal bez żadnych opóźnień.
+
+00:12:38.070 --> 00:12:41.370
+Został stworzony z myślą o szybkości i może obsłużyć miliony przepływów jednocześnie.
+
+00:12:41.590 --> 00:12:47.810
+Jeśli Twoja aplikacja korzysta z protokołu innego niż zwykły ruch sieciowy lub zależy Ci na najszybszej możliwej ścieżce, to jest to rozwiązanie dla Ciebie.
+
+00:12:47.810 --> 00:12:54.630
+Ponieważ bramka aplikacji znajduje się warstwę wyżej i pozostaje regionalna, odczytuje ona żądanie, kończy szyfrowanie i może uruchomić zaporę sieciową.
+
+00:12:54.910 --> 00:12:57.730
+Znajduje się ona wewnątrz Twojej własnej sieci, gdzie masz do niej dostęp.
+
+00:12:57.970 --> 00:13:03.810
+Gdy Twoi użytkownicy znajdują się głównie w jednym regionie, a aplikacja jest typową aplikacją internetową, jest to zazwyczaj odpowiednie rozwiązanie pośrednie.
+
+00:13:03.970 --> 00:13:09.890
+Jako że usługa Front Door znajduje się jeszcze wyżej i działa globalnie, jest to w rzeczywistości sieć dostarczania treści połączona z modułem równoważenia obciążenia,
+
+00:13:10.030 --> 00:13:13.230
+dzięki czemu może buforować pliki statyczne blisko użytkowników i kierować ich żądaniami.
+
+00:13:13.230 --> 00:13:19.590
+Jest zbudowana na bazie sieci brzegowej firmy Microsoft z ponad 118 lokalizacjami brzegowymi rozmieszczonymi w 100 obszarach metropolitalnych.
+
+00:13:19.710 --> 00:13:24.450
+Microsoft twierdzi, że może to poprawić opóźnienia nawet trzykrotnie, uruchamiając własną zaporę sieciową na samym brzegu sieci.
+
+00:13:24.630 --> 00:13:30.670
+Jeśli Twoi użytkownicy są rozsiani po całym świecie, a każda milisekunda opóźnienia jest dla Ciebie istotna, to jest to rozwiązanie typu Front Door dla całego świata.
+
+00:13:30.850 --> 00:13:33.910
+Istnieje czwarta opcja, o której warto wspomnieć, aby obraz był kompletny.
+
+00:13:34.070 --> 00:13:38.830
+Azure Traffic Manager wykonuje globalne trasowanie przy użyciu samego DNS, co jest lżejsze niż pozostałe trzy rozwiązania.
+
+00:13:38.830 --> 00:13:44.850
+Nie odczytuje żądań ani nie kończy szyfrowania, więc pasuje, gdy potrzebujesz tylko inteligentnego adresu wskazującego na najbliższy sprawny punkt końcowy.
+
+00:13:45.090 --> 00:13:48.070
+Zaskakujące dla wielu osób jest to, że te usługi nie są swoimi rywalami.
+
+00:13:48.290 --> 00:13:52.190
+Wskazówki firmy Microsoft mówią, że scenariusze end-to-end często korzystają na ich łączeniu.
+
+00:13:52.390 --> 00:13:59.310
+Powszechny wzorzec umieszcza Front Door z przodu dla dostępu globalnego, podczas gdy bramka aplikacji znajduje się regionalnie za nią, wykonując precyzyjną pracę blisko Twojej aplikacji.
+
+00:13:59.470 --> 00:14:02.070
+Koszty zasługują na krótką wzmiankę, aby nikt nie był zaskoczony.
+
+00:14:02.070 --> 00:14:10.770
+Application Gateway V2 nie posiada opłat wstępnych. Płacisz stałą kwotę godzinową, niezależnie od tego, czy ruch dociera oraz opłatę opartą na faktycznie wykorzystanej wydajności.
+
+00:14:11.050 --> 00:14:18.210
+Dla zilustrowania, strona cennika firmy Microsoft podaje stałą stawkę około ćwierć dolara za wersję standardową i nieco więcej za wersję z zaporą ogniową.
+
+00:14:18.450 --> 00:14:23.170
+Te liczby są jedynie przykładami, które różnią się w zależności od regionu, a nie cenami, na podstawie których należy planować budżet.
+
+00:14:23.210 --> 00:14:25.850
+Dlatego sprawdź aktualną stronę z cennikiem, zanim podejmiesz decyzję.
+
+00:14:25.850 --> 00:14:35.190
+Cały obraz można opisać w kilku zdaniach. Bramka aplikacji to moduł równoważenia obciążenia warstwy siódmej, więc odczytuje żądania zamiast tylko adresu, dlatego może wysyłać obrazy jedną drogą, a wideo drugą.
+
+00:14:35.350 --> 00:14:39.750
+Obiekt Listeners stanowi frontowe wejście, podczas gdy reguły trasowania kierują ruch do odpowiedniej puli zaplecza.
+
+00:14:39.970 --> 00:14:43.550
+Sondy kondycji automatycznie eliminują niedziałające serwery z obiegu bez potrzeby nadzoru.
+
+00:14:43.790 --> 00:14:49.290
+Zakończenie TLS odciąża serwery z obsługi szyfrowania, a zapora aplikacji internetowych sprawdza żądania pod kątem znanych ataków.
+
+00:14:49.290 --> 00:14:54.050
+Automatyczne skalowanie z ridandenią strefową utrzymuje całość w działaniu, gdy ruch gwałtownie wzrasta lub centrum danych przestaje odpowiadać.
+
+00:14:54.130 --> 00:14:56.370
+Oto pytanie, nad którym chciałbym, abyś się zastanowił.
+
+00:14:56.490 --> 00:15:02.890
+Jeśli równoważnik obciążenia potrafi odczytać żądanie, nazwę hosta i ścieżkę URL, to gdzie powinna zapadać decyzja o tym, co żądanie może faktycznie zrobić?
+
+00:15:03.030 --> 00:15:06.910
+Czy powinno to odbywać się w bramie na wejściu, czy w aplikacji, która rozumie reguły biznesowe?
+
+00:15:07.110 --> 00:15:11.030
+Zastanów się nad tym przez chwilę, bo zmienia to sposób projektowania wszystkiego za drzwiami wejściowymi.
+
+00:15:11.030 --> 00:15:18.990
+Jeśli chcesz więcej odcinków, dzięki którym Azure i Microsoft 365 przestaną brzmieć jak niezrozumiały żargon, zasubskrybuj M365FM, a będziemy je tworzyć.

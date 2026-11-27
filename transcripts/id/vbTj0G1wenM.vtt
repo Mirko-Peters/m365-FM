@@ -1,0 +1,661 @@
+WEBVTT
+
+00:00:00.150 --> 00:00:05.690
+Selamat datang di podcast M365FM, tempat kami menjelajahi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:06.850 --> 00:00:12.410
+Laporan yang dulunya terbuka dalam hitungan detik, laporan terlambat Anda punya solusinya, dan namanya adalah Azure Synapse.
+
+00:00:13.190 --> 00:00:17.050
+Ini adalah layanan Microsoft untuk menyimpan gudang data perusahaan dan data besarnya dalam satu atap.
+
+00:00:17.630 --> 00:00:19.850
+Namanya membuatnya terdengar seperti pekerjaan khusus begitu insidata saja.
+
+00:00:20.650 --> 00:00:24.810
+Kenyataannya, ini adalah sekumpulan tugas kecil dengan nama sederhana, ditambah label harga yang mengejutkan orang.
+
+00:00:25.210 --> 00:00:29.010
+Tetaplah bersama saya, dan di akhir nanti Anda akan bisa menjelaskannya kepada atasan Anda, termasuk jebakan biaya.
+
+00:00:29.010 --> 00:00:30.950
+Laporan yang lambat itu sebenarnya bukan salah laporan.
+
+00:00:31.310 --> 00:00:35.630
+Yang biasanya terjadi adalah perusahaan Anda terus berkembang dan data Anda terus berlipat ganda di selusin sistem.
+
+00:00:36.090 --> 00:00:37.950
+Alat yang menampung semuanya tidak pernah dibangun seperti itu.
+
+00:00:38.530 --> 00:00:40.810
+Spreadsheet dibuat untuk ratusan baris, bukan puluhan juta.
+
+00:00:41.710 --> 00:00:44.530
+Database kecil dibuat untuk satu departemen, bukan untuk seluruh bisnis.
+
+00:00:45.110 --> 00:00:47.270
+Pada titik tertentu, keretakan muncul dengan cara cak-cang.
+
+00:00:47.770 --> 00:00:53.010
+Penutupan akhir bulan mundur sehari karena angka-angka tersebar di enam tempat, dan tidak ada yang percaya mana yang benar.
+
+00:00:53.570 --> 00:00:56.250
+Dashboard yang Anda cek setiap pagi tiba-tiba mengalami time out,
+
+00:00:56.250 --> 00:00:59.070
+dan direktur penjualan menunggu hingga pukul 10 pagi untuk data kemarin.
+
+00:00:59.590 --> 00:01:03.070
+Seseorang di tim Anda mengekspor semuanya ke dalam satu file raksasa dan menghitungnya secara manual.
+
+00:01:03.850 --> 00:01:06.130
+Orang itu menjadi satu-satunya di kantor yang benar-benar memahaminya.
+
+00:01:06.910 --> 00:01:08.210
+Solusi untuk semua ini memiliki dua sisi.
+
+00:01:08.710 --> 00:01:10.710
+Satu sisi membuat laporan Anda cepat kembali,
+
+00:01:10.970 --> 00:01:14.210
+dan sisi lainnya mengirim kejutan ke kartu kredit Anda jika Anda lengah.
+
+00:01:14.870 --> 00:01:17.950
+Microsoft melihat kekacauan itu dan membangun layanan khusus untuk memenik.
+
+00:01:17.950 --> 00:01:20.670
+Nama yang mereka berikan terdengar lebih berat daripada masalahnya,
+
+00:01:20.830 --> 00:01:22.530
+dan nama itu adalah Azure Synapse Analytics.
+
+00:01:23.430 --> 00:01:25.950
+Ide dibalik nama berat itu jauh lebih sederhana daripada kedengaran.
+
+00:01:26.470 --> 00:01:28.790
+Setelah Anda mempelajari bagian-bagiannya, semuanya tidak lagi menakutkan.
+
+00:01:29.190 --> 00:01:32.690
+Ada alasan mengapa ini terus terjadi pada perusahaan biasa, dan bukan hanya pada perusahaan raksasa.
+
+00:01:33.450 --> 00:01:37.090
+Data tumbuh satu aplikasi baru, dan satu spreadsheet baru pada satu waktu hingga hari,
+
+00:01:37.230 --> 00:01:39.230
+di mana totalnya akhirnya melampaui alat di bawahnya.
+
+00:01:40.110 --> 00:01:41.210
+Apa itu Azure Synapse sebenarnya?
+
+00:01:41.410 --> 00:01:42.770
+Mari mulai dengan versi sederhananya.
+
+00:01:42.770 --> 00:01:48.870
+Azure Synapse Analytics adalah satu layanan di mana perusahaan menyimpan gudang data dan pekerjaan data besarnya secara berdampingan.
+
+00:01:49.450 --> 00:01:52.670
+Layanan ini ada di klub, jadi Anda menyewanya perjam atau perquery alih membeli server.
+
+00:01:53.530 --> 00:01:58.790
+Bayangkan sebuah bangunan tunggal yang menampung lantai gudang, bengkel, dan dermaga bongkar muat dalam satu atap dan satu kunci.
+
+00:01:59.370 --> 00:02:03.510
+Sebelum ini, pekerjaan tersebut ada di alat terpisah dengan login terpisah dan tagihan terpisah.
+
+00:02:03.930 --> 00:02:06.230
+Menjaga sinkronisasi data adalah pekerjaan pernawaktu bagi sesuatu.
+
+00:02:06.230 --> 00:02:09.230
+Dua istilah sering digunakan di sini, jadi mari kita perjelas agar tidak membingung.
+
+00:02:09.230 --> 00:02:14.270
+Data lag adalah penyimpanan yang menampung file mentah apa adanya, berantakan, dan tidak teratur.
+
+00:02:15.030 --> 00:02:20.090
+Data warehouse menampung informasi yang sama setelah dibersihkan dan dibentuk menjadi tabel rapi yang bisa diandalkan.
+
+00:02:20.670 --> 00:02:23.450
+Synapse memungkinkan keduanya berada di satu tempat, dan itulah poin utama.
+
+00:02:23.930 --> 00:02:29.750
+Microsoft mendeskripsikan Synapse sebagai layanan analitik perusahaan yang mempercepat waktu antara memiliki data hingga mendapatkan jawaban.
+
+00:02:30.350 --> 00:02:32.250
+Ya sudah dengar seperti pemasaran, jadi pikirkan dengan cara ini.
+
+00:02:32.550 --> 00:02:36.490
+Ini adalah tempat di mana data Anda yang berantakan, mendarat, dibersihkan, dan diatur.
+
+00:02:36.490 --> 00:02:39.730
+Kemudian data tersebut diserahkan ke alat pelaporan yang membuat visualisasinya.
+
+00:02:40.310 --> 00:02:41.990
+Namanya menceritakan kisah yang baik kita kuih.
+
+00:02:42.050 --> 00:02:48.150
+Layanan ini dulunya disebut Azure SQL Data Warehouse, lalu Microsoft mengganti namanya dan mengembangkannya menjadi sesuatu yang jauh lebih besar.
+
+00:02:48.470 --> 00:02:52.710
+Sejarah itulah yang membuat sebagian besar layanannya masih berkisar pada bahasa SQL dan konsep lama tentang kudang data.
+
+00:02:53.350 --> 00:02:56.930
+Kata Synapse ditambahkan untuk menandakan bahwa ia kini menangani lebih dari sekadar penyimpanan.
+
+00:02:57.390 --> 00:03:01.210
+Konsep satu ruang kerja sangat penting karena mengubah cara tim bekerja sehari-hari.
+
+00:03:01.210 --> 00:03:07.070
+Alih-alih tiga alat yang berebut file yang sama, Anda mendapatkan satu batas keamanan dan satu tampilan tunggal untuk semua yang sedang berjalan.
+
+00:03:07.570 --> 00:03:12.310
+Jika laporan bermasalah pada jam 9 pagi, Anda cukup melihat di satu tempat daripada menobak sistem mana yang mati.
+
+00:03:12.710 --> 00:03:13.850
+Itulah gambaran keseluruhannya.
+
+00:03:14.350 --> 00:03:17.150
+Dan hal itu baru terasa penting saat Anda mengenal bagian-bagian di dalamnya.
+
+00:03:17.810 --> 00:03:18.730
+Mesin-mesin di bawah satu atap.
+
+00:03:19.190 --> 00:03:22.110
+Satu atap adalah klaim besar, jadi ada baiknya kita lihat apa yang sebenarnya ada di dalamnya.
+
+00:03:22.590 --> 00:03:26.250
+Synapse memiliki empat mesin, dan masing-masing sebenarnya hanyalah sebuah tugas dengan nama teknis.
+
+00:03:26.250 --> 00:03:31.730
+Mesin pertama adalah gudang data, dan ia menggunakan SQL, bahasa query yang mungkin sudah digunakan perusahaan Anda di suatu tempat.
+
+00:03:32.390 --> 00:03:36.310
+Synapse memberi Anda dua cara untuk menjalankannya, dan pilihan di antara keduanya lebih penting daripada pengaturan Anda.
+
+00:03:36.730 --> 00:03:39.550
+Dedicated pool memesan blok daya pemrosesan tetap khusus untuk Anda.
+
+00:03:40.190 --> 00:03:43.950
+Itulah yang Anda butuhkan ketika banyak orang membuka dashboard yang sama di saat bersamaan-bersamaan.
+
+00:03:44.530 --> 00:03:49.690
+Serverless pool justru sebaliknya memungkinkan Anda mengarah langsung ke file dan penyimpanan serta pembayar hanya untuk query yang Anda jalankan.
+
+00:03:50.330 --> 00:03:55.790
+Dedicated untuk lalu lintas yang stabil dan padat, sedangkan serverless untuk pertanyaan sesekali pada tumbukan file yang sangat besar.
+
+00:03:56.990 --> 00:04:01.710
+Mesin kedua adalah Apache Spark, alat sumber terbuka yang dibuat untuk mengolah tumbukan data yang sangat besar dan berantakan.
+
+00:04:03.150 --> 00:04:09.350
+Disinilah data engineer membersihkan hal-hal aneh, memperbaiki format tanggal yang salah, dan menyusun semuanya agar bisa digunakan oleh gudang data.
+
+00:04:10.290 --> 00:04:17.090
+Spark juga menjadi tempat dimulainya banyak pekerjaan machine learning karena ia bisa membaca data langsung dari tempatnya tanpa harus menyalih tempatnya tanpa harus menyalih yang terlebih dahulu.
+
+00:04:17.310 --> 00:04:21.550
+Mesin ketiga adalah pipeline, dan tugas utamanya adalah memindahkan data dari satu tempat ke tempat lain.
+
+00:04:22.330 --> 00:04:27.550
+Ini adalah mesin yang sama yang mendukung data factory Anda dan dapat terhubung kelebih dari 90 sumber data yang berbeda.
+
+00:04:28.230 --> 00:04:31.190
+Ia dapat menyalih dan menjadwalkan pekerjaan tersebut tanpa Anda harus menulis satu baris.
+
+00:04:31.670 --> 00:04:34.430
+Tiga mesin sudah dibahas dan kebanyakan orang berhenti sebelum sampai di sini.
+
+00:04:34.730 --> 00:04:39.310
+Mesin keempat menangani lock, yaitu aliran pesan mesin tanpa henti yang dihasilkan oleh server dan perangkat sepanjang hari.
+
+00:04:39.510 --> 00:04:43.910
+Ini masih ditandai sebagai fitur peratinjol, jadi anggaplah ini yang terbaru dan paling belum stabil dari keempatnya.
+
+00:04:43.910 --> 00:04:46.070
+Yang menyatukan semuanya adalah Synapse Studio.
+
+00:04:46.670 --> 00:04:51.890
+Ini adalah satu layar tempat Anda memasukkan data, menjelajahinya, menyiapkannya, dan memantau pekerjaan yang sedang berjalan.
+
+00:04:52.410 --> 00:04:56.790
+Ini memberi Anda satu ruang kerja, satu set izin, dan satu tempat untuk diperiksa saat ada yang tidak beres.
+
+00:04:57.430 --> 00:04:59.730
+SQL dan Spark berbagi katalog tabel, yang sama.
+
+00:05:00.390 --> 00:05:04.510
+Tabel yang Anda buat di satu mesin akan muncul di mesin lainnya, sehingga Anda tidak perlu membuatnya dua kali.
+
+00:05:05.950 --> 00:05:07.410
+Contoh kecilan lebih mudah dipahami.
+
+00:05:07.770 --> 00:05:10.210
+Nama hanyalah satu hal, tapi ini akan lebih mudah dimengerti dengan sebuah cerita sih.
+
+00:05:10.550 --> 00:05:12.150
+Jadi bayangkan sebuah toko yang berjualan secara online.
+
+00:05:12.150 --> 00:05:15.850
+Setiap hari, sistem penjualannya membuang tumpukan file ke penyimpanan cloud.
+
+00:05:16.450 --> 00:05:20.150
+File-file tersebut berantakan dengan nama kolom yang aneh dan beberapa tanggal yang tertulis dengan formanya.
+
+00:05:20.570 --> 00:05:23.810
+Sebuah pipeline aktif sesuai jadwal dan menyalin file-file tersebut ke dalam lag,
+
+00:05:24.190 --> 00:05:26.230
+yang terjadi secara otomatis tanpa perlu menulis kode.
+
+00:05:27.250 --> 00:05:31.710
+Spark kemudian membaca file yang berantakan itu, memperbaiki tanggal yang salah, dan menghasilkan tabel bersih yang akhirnya masuk akal.
+
+00:05:32.070 --> 00:05:36.730
+Mesin gudang data mengambil tabel tersebut dan menyajikannya dengan cepat sehingga laporan terbuka dalam hitungan detik, bukan perpuluh.
+
+00:05:36.730 --> 00:05:40.790
+Power BI, alat yang sudah dikenal manajer Anda, menggambar dashboard di atasnya.
+
+00:05:40.790 --> 00:05:44.210
+Hal yang mengejutkan orang adalah betapa sedikitnya pekerjaan tersebut yang terlihat menang.
+
+00:05:44.490 --> 00:05:47.930
+Kebanyakan adalah pekerjaan teknis dasar dan hal itulah yang membuat dashboard yang cantik bisa teruk.
+
+00:05:48.510 --> 00:05:53.790
+Semua ini tidak menentut kelar ilmu komputer meskipun pekerjaan ini menghargai seseorang yang nyaman dengan cara data berpindah di satu tempat ke tempat lain.
+
+00:05:54.250 --> 00:05:58.990
+Jika Anda bisa mengikuti resep, Anda bisa mengikuti alur data pipeline karena keduanya hanyalah langkah-langkah dalam urutan ini.
+
+00:05:59.330 --> 00:06:01.970
+Dalam tim yang nyata, ini biasanya terbagi menjadi beberapa peran.
+
+00:06:02.310 --> 00:06:06.390
+Satu orang menjaga pipeline tetap berjalan, satu orang membentuk tabel, dan satu orang membangun laporan di atasnya.
+
+00:06:06.390 --> 00:06:13.650
+Di perusahaan kecil, mungkin satu orang harus merangkap tiga jabatan, dan sinaps menarik karena satu alat bisa menangani ketiga pekerjaan tersebut.
+
+00:06:14.430 --> 00:06:16.030
+Ada manfaat di sini yang tidak pernah muncul dalam demo.
+
+00:06:16.670 --> 00:06:21.110
+Ketika semua data itu tersimpan bersama, jawaban atas pertanyaan sederhana tidak lagi bergantung pada siapa yang Anda tanya.
+
+00:06:21.390 --> 00:06:22.830
+Karena semua orang membaca tabel yang sama.
+
+00:06:23.230 --> 00:06:28.230
+Hal itu terdengar membosankan sampai Anda duduk dalam rapat di mana dua angka menyajikan dua angka pendapatan yang berbeda dan keduanya tidak berboh.
+
+00:06:28.570 --> 00:06:30.030
+Mengapati melalui bersemangat tentang hal itu.
+
+00:06:30.030 --> 00:06:34.930
+Begitu Anda melihat sistemnya, daya tariknya mulai masuk akal dan jauh lebih mendalam daripada sekedar dashboard yang lebih cepat.
+
+00:06:35.370 --> 00:06:36.630
+Anda mengatur izin satu kali.
+
+00:06:36.970 --> 00:06:42.310
+Dari satu layar, alih-alih mengulang aturan keamanan yang sama di tiga alat terpisah dan berharap semuanya cocok.
+
+00:06:43.650 --> 00:06:48.450
+Bagi siapapun yang pernah mencari di selusin halaman pengaturan untuk mengetahui siapa yang bisa melihat apa, itu saja sudah melegakan.
+
+00:06:49.110 --> 00:06:50.730
+Data lag bersama juga sama pentingnya.
+
+00:06:51.150 --> 00:06:58.490
+ESGL dan SPAR keduanya dapat membaca file parkway CSV dan JSON yang sama, sehingga Anda berhenti menyalin data antar dunia dan berhenti membayar biaya penyimpanan ganda.
+
+00:06:58.490 --> 00:07:05.690
+Hal itu menghilangkan kategori argumen dalam tim data, yaitu saat dua kelompok bersumpah bahwa angka mereka benar dan tidak ada pihak yang bisa buktikan.
+
+00:07:06.050 --> 00:07:06.770
+Ada juga jangkauannya.
+
+00:07:07.190 --> 00:07:12.730
+Integrasi data bawaannya terhubung ke lebih dari 90 sumber, yang berarti sistem rumit yang tidak ingin disentuh siapapun biasanya sudah teratasi.
+
+00:07:13.550 --> 00:07:20.370
+Karena Power BI berada dalam keluarga yang sama, langkah terakhir menuju dashboard sudah terpecahkan, dan orang yang membuat laporan jarang perlu memikirkan mesin di bawahnya.
+
+00:07:21.430 --> 00:07:24.090
+Secara keseluruhan, sinaps menempati posisi khusus di dunia Microsoft.
+
+00:07:24.090 --> 00:07:29.110
+Azure berjalan di bawahnya, Power BI berada di atasnya, dan Microsoft 365 adalah tempat kerja di sekelilingnya.
+
+00:07:29.450 --> 00:07:33.910
+Ketika orang menyebut sinaps sangat kuat, inilah bagian yang mereka maksud, dan itu adalah hal yang wajar untuk disyukur.
+
+00:07:34.110 --> 00:07:36.090
+Ada aspek biaya di sini juga, meskipun mudah untuk terawat.
+
+00:07:36.750 --> 00:07:40.850
+Melakukan konsolidasi ke satu layanan seringkali berarti satu tagihan dan satu anggaran untuk dikelola,
+
+00:07:40.970 --> 00:07:43.330
+alih-alih mengejar empat langganan yang tidak dimiliki sepenuhnya oleh siapapun.
+
+00:07:43.810 --> 00:07:47.290
+Kerapian itu memiliki nilai nyata di perusahaan besar, meskipun tidak pernah muncul dalam demo.
+
+00:07:47.290 --> 00:07:50.990
+Mengenai posisinya di samping Power BI dan Microsoft 365,
+
+00:07:51.590 --> 00:07:56.790
+hampir setiap pemula mencampur adukan keduanya, jadi ada baiknya diselesaikan sejak awal sebelum kebingungan menyebabkan keputusan yang salah.
+
+00:07:57.290 --> 00:07:59.790
+Power BI adalah jendelanya, dan sinaps adalah ruang mesin.
+
+00:08:00.150 --> 00:08:03.370
+Anda tidak memilih salah satu di antara keduanya karena keduanya dirancang untuk bekerja sebagai pasang.
+
+00:08:03.730 --> 00:08:05.170
+Sinaps menyimpan dan menyiapkan data,
+
+00:08:05.390 --> 00:08:08.710
+sementara Power BI mengubahnya menjadi sesuatu yang bisa dibaca manusia dalam sekejap.
+
+00:08:09.030 --> 00:08:10.490
+Besar kemungkinan Anda sudah memiliki bagian depan.
+
+00:08:10.950 --> 00:08:14.250
+Power BI disertakan dalam banyak paket Microsoft 365 dan data,
+
+00:08:14.250 --> 00:08:20.310
+yang mengisi laporan tersebut seringkali berasal dari Teams, SharePoint, atau file Excel yang dianggap seseorang sebagai sumber kebenaran.
+
+00:08:21.070 --> 00:08:24.570
+Sinaps adalah lapisan yang memungkinkan semua hal itu bertahan saat menghadapi skala yang sebenarnya.
+
+00:08:24.850 --> 00:08:27.670
+Cara cepat untuk membedakan keduanya adalah dengan menanjakan apa yang rusak dulu.
+
+00:08:27.950 --> 00:08:30.410
+Jika laporan Anda terlihat membingungkan, itu adalah masalah power BI.
+
+00:08:30.670 --> 00:08:34.730
+Jika laporan Anda lambat atau salah atau tidak mampu mengunggung semua baris data, itulah tanda ada masalah zero.
+
+00:08:35.150 --> 00:08:38.050
+Anda juga perlu mengetahui nama saudara barunya karena Anda akan terus mendengarnya.
+
+00:08:39.030 --> 00:08:43.390
+Microsoft Fabric mengambil ide yang sama, gudang data, dan no data, alur kerja, dan pelaporan,
+
+00:08:43.390 --> 00:08:45.370
+lalu mengemasnya menjadi satu produk dengan satu tagihan.
+
+00:08:45.650 --> 00:08:49.410
+Itulah arah yang terus ditunjukkan Microsoft, dan itulah mengapa pertanyaan jujur berikutnya adalah
+
+00:08:49.410 --> 00:08:50.830
+apakah sinaps masih layak untuk waktu Anda.
+
+00:08:51.130 --> 00:08:54.490
+Fabric mengubah model pembelian yang patut dipahami meskipun Anda tidak pernah menggunakan.
+
+00:08:55.010 --> 00:08:58.250
+Alia empat pengukur yang bergerak sendiri-sendiri, Fabric berjalan pada satu kapasitas
+
+00:08:58.250 --> 00:09:01.070
+yang bisa Anda naikkan atau turunkan dan semuanya di dalamnya berbagi kapasitas tersebut.
+
+00:09:01.610 --> 00:09:05.350
+Alia itu lebih mudah dipahami dan merupakan alasan utama mengapa Microsoft mengarahkan proyek baru kesan.
+
+00:09:05.350 --> 00:09:08.210
+Bukan berarti waktu Anda terbuang jika Anda mempelajari sinaps terlebih dahulu.
+
+00:09:08.210 --> 00:09:11.570
+Keduanya berbagi begitu banyak kosa kata sehingga berpindah di antara keduanya terasa
+
+00:09:11.570 --> 00:09:14.250
+seperti menata ulang furnitur di rumah yang sudah Anda kenal bukan mulai dari awan.
+
+00:09:16.010 --> 00:09:17.690
+Mengenai biaya sebenarnya, jujur saja.
+
+00:09:18.030 --> 00:09:21.630
+Inilah bagian yang diperingatkan sebelumnya, dan ini menentukan apakah sinaps terasa menguntungkan
+
+00:09:21.630 --> 00:09:22.470
+atau justru kesalahan.
+
+00:09:22.810 --> 00:09:26.010
+Tidak ada harga sederhana pro-orang untuk sinaps karena Anda membayar untuk dua hal,
+
+00:09:26.370 --> 00:09:28.590
+daya komputasi yang Anda gunakan dan jumlah data yang Anda proses.
+
+00:09:29.210 --> 00:09:31.590
+Biaya tersebut dibagi menjadi empat pengukur terpisah,
+
+00:09:31.730 --> 00:09:35.590
+satu untuk gudang tanpa server, satu untuk gudang khusus, satu untuk spark, dan satu untuk kalur kerja.
+
+00:09:35.590 --> 00:09:37.550
+Beberapa angka konkret mubatnya menjadi nyata.
+
+00:09:38.170 --> 00:09:42.310
+Sisi tanpa server memakan biaya sekitar lima halter untuk setiap terbaik data yang dipindahi dan ada pindai.
+
+00:09:42.690 --> 00:09:45.510
+Dan ada biaya minimum kecil bahkan saat query-nya sangat kecil.
+
+00:09:46.150 --> 00:09:49.410
+Gudang khusus pada ukuran awal memakan biaya sekitar satu robotik 29 per jam
+
+00:09:49.410 --> 00:09:52.890
+yang setara dengan sekitar 11 bulan jika Anda membiarkannya menyala sepanjang waktu.
+
+00:09:54.050 --> 00:09:55.710
+Kalimat terakhir itu menyembunyikan kesana klasik.
+
+00:09:56.450 --> 00:09:59.310
+Gudang tersebut terus menagih saat berjalan meskipun tidak ada yang menggunakannya,
+
+00:09:59.310 --> 00:10:03.650
+jadi membiarkannya menyala semalaman dan sepanjang akhir pekan adalah cara orang membuang uang tanpa disadari.
+
+00:10:03.650 --> 00:10:07.630
+Menjeda gudang tersebut akan menghentikan tagihan dan mengingat untuk menjedanya adalah tantangan terbesarnya.
+
+00:10:08.150 --> 00:10:11.330
+Sisi serverless bahkan memungkinkan Anda menetapkan batas pengeluaran harian
+
+00:10:11.330 --> 00:10:13.810
+sehingga query yang tidak terkendali akan terhenti sebelum menguras dompetan.
+
+00:10:13.970 --> 00:10:17.230
+Kisaran harga yang jujur untuk tim berukuran menengah berkisar antara 1.500.
+
+00:10:17.790 --> 00:10:24.230
+Ada cara untuk menghemat biaya, seperti membeli kapasitas di muka untuk mendapatkan diskon,
+
+00:10:24.510 --> 00:10:27.310
+tetapi penawaran tersebut baru akan menguntungkan setelah Anda mengetahui penggunaan relang.
+
+00:10:27.310 --> 00:10:31.490
+Para pengulas mengatakan hal yang sama berulang kali, yaitu struktur biayanya sulit untuk diprediksi.
+
+00:10:31.870 --> 00:10:35.870
+Itu bukan alasan untuk menghindari sinaps, tetapi itu adalah alasan untuk memantau tagihan sejak kedi pertama.
+
+00:10:36.070 --> 00:10:37.990
+Penting untuk memahami mengapa tagihannya begitu sulit diprediksi.
+
+00:10:38.550 --> 00:10:41.750
+Dengan sebagian besar perangkat lunak, Anda membeli lisensi dan harganya hampir tidak berukur.
+
+00:10:42.070 --> 00:10:44.790
+Dengan sinaps, Anda menyewa waktu komputasi dan membayar berdasarkan byte.
+
+00:10:44.910 --> 00:10:49.290
+Jadi query lambat yang ditulis oleh pemula yang ceroboh bisa lebih mahal daripada query cepat yang ditulis oleh seorang ahli.
+
+00:10:50.490 --> 00:10:53.630
+Salahan yang paling merugikan bagi pemula adalah uang sebagai satu jebakan,
+
+00:10:53.630 --> 00:10:55.710
+dan kebiasaan seputar alat tersebut adalah jebakan lain.
+
+00:10:55.710 --> 00:10:59.430
+Kebiasaan paling mahal adalah membiarkan dedicated pool tetap berjalan saat tidak ada yang menggunakannya
+
+00:10:59.430 --> 00:11:01.490
+karena meteran tidak peduli apakah kantor sedang kosong.
+
+00:11:02.250 --> 00:11:04.990
+Biasakan untuk menjadanya, dan Anda sudah menghindari tagihan terbesar.
+
+00:11:05.550 --> 00:11:09.570
+Kesalahan kedua adalah memperlakukan sinaps seperti lemari aksi praksasa untuk semua data perusahaan Anda.
+
+00:11:10.010 --> 00:11:13.730
+Sinaps dibuat untuk memproses data, bukan menjadi tempat penyimpanan permanen bagi setiap file.
+
+00:11:14.270 --> 00:11:16.250
+Penyimpanan di tempat lain jauh lebih murah dan melimpah,
+
+00:11:16.310 --> 00:11:19.190
+dan membebani gudang data dengan hal-hal yang tidak pernah Anda query yang tidak pernah Anda query
+
+00:11:19.190 --> 00:11:20.950
+hanya membuat segalanya menjadi lebih lambat dan mahal.
+
+00:11:20.950 --> 00:11:25.550
+Kesalahan ketiga adalah mengharapkan sinaps terasa seramah Power BI, karena itu tidak akan terjadi.
+
+00:11:26.270 --> 00:11:30.590
+Power BI dibuat untuk pengguna bisnis, sedangkan sinaps dibuat untuk orang yang terbiasa dengan teknis data.
+
+00:11:31.470 --> 00:11:35.150
+Kesenjangan itu nyata, dan itulah alasan seorang pemula harus memahami konsepnya sebelum menyentuh.
+
+00:11:35.270 --> 00:11:35.750
+Tombol-tombol ini.
+
+00:11:36.110 --> 00:11:37.030
+Jebakan kebat lebih tersembunyi.
+
+00:11:37.430 --> 00:11:41.550
+Beberapa tutorial dan panduan mulai cepat membuat sumber daya berbayar di latar belakang tanpa peringatan,
+
+00:11:41.710 --> 00:11:43.950
+dan rasa penasaran di sore hari bisa berujung pada tagihan tata.
+
+00:11:44.310 --> 00:11:47.950
+Pantau dashboard biaya saat Anda bereksperimen dan hapus sumber daya setelah Anda selesai menggunakan.
+
+00:11:47.950 --> 00:11:51.910
+Ada kesalahan kelima yang tidak ada hubungannya dengan uang, dan kesalahan ini bisa menghambat karya.
+
+00:11:51.910 --> 00:11:56.890
+Banyak pemula mencoba mempelajari semua fitur sekaligus, merasa kewalahan lalu menyerah sebelum ada yang dipahami.
+
+00:11:57.930 --> 00:12:01.270
+Mereka yang berhasil memilih satu tugas kecil seperti membuat satu file dan membuat laporannya,
+
+00:12:01.470 --> 00:12:04.510
+lalu membiarkan fitur lain tetap tersembunyi sampai mereka membutuhkannya.
+
+00:12:04.510 --> 00:12:09.830
+Alat ini menghargai kesabaran dan menghukum kepanikan, dan hampir tidak ada orang yang bisa mempelajarinya dalam satu akhir.
+
+00:12:11.090 --> 00:12:13.150
+Apakah masih layak dipelajari di tahun 2026?
+
+00:12:13.750 --> 00:12:16.010
+Sekarang pertanyaan ditanyakan semua orang dan ini pantas mendapatkan janggung.
+
+00:12:16.510 --> 00:12:17.270
+Sinapsidak dihentikan.
+
+00:12:17.870 --> 00:12:21.690
+Microsoft tidak mengumumkan rencana untuk menghentikannya, dan setiap beban kerja utama masih berfungsi hingga satin.
+
+00:12:21.970 --> 00:12:25.470
+Jadi alat ini nyata, didukung, dan banyak perusahaan menjalankannya dalam produksi satin.
+
+00:12:25.570 --> 00:12:27.910
+Luasanya terletak pada di mana Microsoft mencurahkan energinya.
+
+00:12:28.610 --> 00:12:31.630
+Fitur dan ide baru hadir di fabrik dan dokumentasi Microsoft sendiri,
+
+00:12:31.630 --> 00:12:35.030
+kini mengarahkan beberapa kapabilitas baru ke fabrik, bukan sinaps.
+
+00:12:36.150 --> 00:12:41.190
+Para analis menggambarkan sinaps sebagai layanan yang masih berfungsi, namun bukan lagi tempat untuk pengembangan baru.
+
+00:12:41.630 --> 00:12:44.310
+Itu adalah sebuah arahan, bukan tengkat waktu, dan keduanya adalah hal yang sangat berbeda.
+
+00:12:44.790 --> 00:12:48.270
+Bagi karir Anda, kabar baiknya adalah ide-ide tersebut dapat ditransfer hampir sempur.
+
+00:12:48.870 --> 00:12:54.110
+Data lake, warehouse, pipeline, dan lapisan pelaporan ada di sinaps maupun fabrik dengan nama yang sedikit berbeda.
+
+00:12:54.810 --> 00:12:59.570
+Pelajari bagaimana data berpindah melalui warehouse di sinaps, dan Anda sudah memahami sebagian besar cara kerja fabrik.
+
+00:12:59.570 --> 00:13:03.730
+Ada alasan praktis untuk peduli selain masa depan, yaitu masa lalu yang masih berjalan.
+
+00:13:04.350 --> 00:13:08.030
+Ribuan bisnis dibangun di atas sinaps dan seseorang harus menjaga sistem tersebut tetap sehat.
+
+00:13:08.690 --> 00:13:10.990
+Menguasainya adalah keahlian yang atas saat ini bukan sekadar panjang musik.
+
+00:13:11.430 --> 00:13:14.270
+Jadi jawaban jujur untuk pertanyaan besar itu adalah ya dengan catatan.
+
+00:13:14.810 --> 00:13:17.470
+Pelajari idenya karena itu akan bertahan lebih lama dari produknya,
+
+00:13:17.570 --> 00:13:21.290
+dan anggap sinaps sebagai tempat yang bagus untuk mempelajarinya, bukan satu-satunya tempat yang akan selalu penting.
+
+00:13:22.630 --> 00:13:24.350
+Ringkasan singkat dan satu pertanyaan untuk Anda.
+
+00:13:24.350 --> 00:13:25.670
+Jadi inilah kesimpulan kita.
+
+00:13:26.070 --> 00:13:29.810
+Sinaps adalah satu ruang kerja yang menyatukan warehouse dan sekumpulan mesin data besar.
+
+00:13:30.430 --> 00:13:34.470
+Ini terhubung langsung ke Power BI dan memberikan keuntungan bagi siapapun yang ingat untuk menghentikan metran,
+
+00:13:34.710 --> 00:13:35.950
+dan merugikan siapapun yang lupa.
+
+00:13:37.250 --> 00:13:40.230
+Ide-nya terbawa langsung ke Fabric, yang merupakan tujuan Microsoft berikutnya.
+
+00:13:40.990 --> 00:13:43.310
+Sekarang saya ingin mendengar dari Anda, dan ini adalah pertanyaan serius.
+
+00:13:43.810 --> 00:13:47.710
+Apa satu sumber data di dunia Anda yang masih tersimpan dalam spreadsheet yang dijaga seseorang seperti rahasia?
+
+00:13:48.350 --> 00:13:49.530
+Beritahu saya di kolom komentar.
+
+00:13:49.530 --> 00:13:52.850
+Karena file itu biasanya adalah alasan utama mengapa alat seperti ini menjadi diperlukan.
+
+00:13:53.310 --> 00:13:55.870
+Jika ini membuat topik tersebut terasa tidak terlalu mengintimidasi,
+
+00:13:56.030 --> 00:13:59.990
+berlanggananlah ke M365FM untuk memuasai alat dan pola pikir yang membentuk masa depan pekerjaan.

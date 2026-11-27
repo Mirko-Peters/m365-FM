@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-07
-topics: [azure-ai-foundry, managed-identity, ai-agent]
+topics: [microsoft-foundry, managed-identity, ai-agent]
 keypoints:
   - "For OpenAPI tools, the managed identity method uses the Foundry project's managed identity, not the account's, and only works if the target accepts Microsoft Entra tokens."
   - "Per Learn, failing managed identity authentication points to a disabled identity or a missing role on the target. A 401 despite an assigned role points to an audience mismatch."

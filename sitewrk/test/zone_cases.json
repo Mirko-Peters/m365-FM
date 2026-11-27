@@ -1,0 +1,85 @@
+{
+ "_doc": "Gemeinsame Faelle fuer den Zonen-Cache: sitewrk/index.js zoneUrl(ZONE_HOSTS.live, r2Key(pfad)) und tools/purge_changed.py zone_url(pfad) muessen genau diese URL bilden (sonst verfehlt der Purge den Cache-Eintrag). url \"\" = kein Zonen-Weg (Punkt-Segmente).",
+ "cases": [
+  {
+   "path": "/a/",
+   "key": "pages/a/index.html",
+   "url": "https://img.m365.fm/pages/a/index.html"
+  },
+  {
+   "path": "/x.json",
+   "key": "pages/x.json",
+   "url": "https://img.m365.fm/pages/x.json"
+  },
+  {
+   "path": "/ru/tag/облако/",
+   "key": "pages/ru/tag/облако/index.html",
+   "url": "https://img.m365.fm/pages/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/index.html"
+  },
+  {
+   "path": "/ja/tag/クラウド/",
+   "key": "pages/ja/tag/クラウド/index.html",
+   "url": "https://img.m365.fm/pages/ja/tag/%E3%82%AF%E3%83%A9%E3%82%A6%E3%83%89/index.html"
+  },
+  {
+   "path": "/a b/",
+   "key": "pages/a b/index.html",
+   "url": "https://img.m365.fm/pages/a%20b/index.html"
+  },
+  {
+   "path": "/c++/x/",
+   "key": "pages/c++/x/index.html",
+   "url": "https://img.m365.fm/pages/c++/x/index.html"
+  },
+  {
+   "path": "/it's (x)/",
+   "key": "pages/it's (x)/index.html",
+   "url": "https://img.m365.fm/pages/it's%20(x)/index.html"
+  },
+  {
+   "path": "/100%/",
+   "key": "pages/100%/index.html",
+   "url": "https://img.m365.fm/pages/100%25/index.html"
+  },
+  {
+   "path": "/q?x/",
+   "key": "pages/q?x/index.html",
+   "url": "https://img.m365.fm/pages/q%3Fx/index.html"
+  },
+  {
+   "path": "/a#b/",
+   "key": "pages/a#b/index.html",
+   "url": "https://img.m365.fm/pages/a%23b/index.html"
+  },
+  {
+   "path": "/de/show/episodes/a/transcript.vtt",
+   "key": "pages/de/show/episodes/a/transcript.vtt",
+   "url": "https://img.m365.fm/pages/de/show/episodes/a/transcript.vtt"
+  },
+  {
+   "path": "/assets/page.0123abcd89.js",
+   "key": "pages/assets/page.0123abcd89.js",
+   "url": "https://img.m365.fm/pages/assets/page.0123abcd89.js"
+  },
+  {
+   "path": "/sitemap-fr-blog.xml",
+   "key": "pages/sitemap-fr-blog.xml",
+   "url": "https://img.m365.fm/pages/sitemap-fr-blog.xml"
+  },
+  {
+   "path": "/a/../meta/gone.json",
+   "key": "pages/a/../meta/gone.json",
+   "url": ""
+  },
+  {
+   "path": "/a/./b/",
+   "key": "pages/a/./b/index.html",
+   "url": ""
+  },
+  {
+   "path": "/~x/!*/",
+   "key": "pages/~x/!*/index.html",
+   "url": "https://img.m365.fm/pages/~x/!*/index.html"
+  }
+ ]
+}

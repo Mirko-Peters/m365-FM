@@ -1,0 +1,547 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:06.620
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.900 --> 00:00:12.540
+Het rapport dat vroeger in seconden opende, uw traagste rapport, heeft een oplossing en die heet Azure Synapse.
+
+00:00:12.760 --> 00:00:17.420
+Het is de dienst van Microsoft om het data warehouse van een bedrijf en big data onder één dak te brengen.
+
+00:00:17.580 --> 00:00:20.320
+De naam doet vermoeden dat het alleen werk voor data engineers is.
+
+00:00:20.540 --> 00:00:24.980
+In werkelijkheid is het een kleine set taken met eenvoudige namen en een prijskaartje dat mensen verrast.
+
+00:00:25.220 --> 00:00:28.740
+Blijf bij me en aan het einde kun je het aan je baas uitleggen, inclusief de kostenvalkuilen.
+
+00:00:28.740 --> 00:00:31.280
+Dat trage rapport is niet echt de schuld van het rapport zelf.
+
+00:00:31.420 --> 00:00:35.660
+Wat er meestal is gebeurd, is dat uw bedrijf bleef groeien en uw data zich bleven vermenigvuldigen over een dozijn systemen.
+
+00:00:35.780 --> 00:00:38.460
+De tools die dit alles moesten dragen, waren nooit gebouwd voor zoveel gewicht.
+
+00:00:38.780 --> 00:00:41.500
+Spreadsheets waren gemaakt voor honderden rijen, niet voor tientallen miljoenen.
+
+00:00:41.660 --> 00:00:44.880
+Een kleine database was gemaakt voor één afdeling, niet voor het hele bedrijf.
+
+00:00:44.980 --> 00:00:48.180
+Op een gegeven moment worden de barsten zichtbaar op kleine, vervelende manieren.
+
+00:00:48.380 --> 00:00:53.280
+De maandafsluiting loopt een dag uit omdat de cijfers op zes plekken staan en niemand weet welke de juiste is.
+
+00:00:53.280 --> 00:00:59.360
+Een dashboard dat je elke ochtend bekijkt, loopt plotseling vast en de verkoopdirecteur wacht tot 10 uur op de cijfers van gisteren.
+
+00:00:59.460 --> 00:01:03.580
+Iemand in je team exporteert alles naar één gigantisch bestand en doet het rekenwerk met de hand.
+
+00:01:03.780 --> 00:01:06.540
+Die persoon wordt de enige in het gebouw die het echt begrijpt.
+
+00:01:06.740 --> 00:01:08.820
+De oplossing voor dit alles heeft twee kanten.
+
+00:01:09.040 --> 00:01:14.440
+De ene kant maakt je rapporten weer snel en de andere kant stuurt een verrassing naar je creditcard als je niet oplet.
+
+00:01:14.840 --> 00:01:18.120
+Microsoft keek naar die puinhoop en bouwde een dienst voor precies dit moment.
+
+00:01:18.120 --> 00:01:22.860
+De naam die ze eraan gaven klinkt zwaarder dan het probleem en die naam is Azure Synapse Analytics.
+
+00:01:23.140 --> 00:01:26.240
+Het idee achter die zware naam is veel eenvoudiger dan het klinkt.
+
+00:01:26.400 --> 00:01:29.200
+Zodra je de onderdelen leert kennen, is het geheel niet langer eng.
+
+00:01:29.380 --> 00:01:33.420
+Er is een reden waarom dit gewone bedrijven blijft overkomen en niet alleen de giganten.
+
+00:01:33.700 --> 00:01:39.440
+Data groeit met elke nieuwe app en spreadsheet totdat de totale massa de onderliggende tools voorbij streeft.
+
+00:01:39.680 --> 00:01:43.240
+Wat Azure Synapse werkelijk is, laten we beginnen met de eenvoudige versie.
+
+00:01:43.240 --> 00:01:49.100
+Azure Synapse Analytics is één dienst waar een bedrijf zijn data warehouse en big data werk zij aan zij kan bewaren.
+
+00:01:49.220 --> 00:01:53.440
+Het draait in de cloud, dus je huurt het per uur of per query in plaats van een server te kopen.
+
+00:01:53.720 --> 00:01:59.100
+Stel je een enkel gebouw voor met een magazijnvloer, een werkplaats en een laadperron onder één dak en met één slot.
+
+00:01:59.340 --> 00:02:03.660
+Voorheen zaten die taken in aparte tools met aparte inloggegevens en aparte rekeningen.
+
+00:02:03.860 --> 00:02:06.040
+Die synchroon houden was een fulltime baan voor iemand.
+
+00:02:06.260 --> 00:02:09.740
+Twee woorden vliegen hier in het rond, dus laten we ze definiëren voordat ze voor problemen zorgen.
+
+00:02:09.740 --> 00:02:14.780
+Een data lake is opslag voor ruwe bestanden, precies zoals ze binnenkomen, rommelig en ongeorganiseerd.
+
+00:02:14.920 --> 00:02:20.420
+Een data warehouse bevat dezelfde informatie nadat deze is opgeschoond en gevormd tot nette tabellen waar je op kunt vertrouwen.
+
+00:02:20.640 --> 00:02:23.820
+Synapse laat beide op één plek samenleven en dat is precies het punt.
+
+00:02:24.140 --> 00:02:29.880
+Microsoft omschrijft Synapse als een enterprise analytics dienst die de tijd tussen het hebben van data en het krijgen van een antwoord versnelt.
+
+00:02:30.120 --> 00:02:32.820
+Die bewoording klinkt als marketing, dus bekijk het eens zo.
+
+00:02:32.960 --> 00:02:36.800
+Het is de plek waar je rommelige data binnenkomt, wordt opgeschoond en wordt georganiseerd.
+
+00:02:36.800 --> 00:02:39.980
+Daarna wordt het doorgegeven aan een rapportagetool die de plaatjes tekent.
+
+00:02:40.160 --> 00:02:42.420
+De naam vertelt een verhaal dat de moeite waard is om te kennen.
+
+00:02:42.660 --> 00:02:48.220
+Deze dienst heette voorheen Azure SQL Data Warehouse, maar Microsoft heeft het hernoemd en uitgebreid tot iets veel groters.
+
+00:02:48.440 --> 00:02:53.040
+Door die geschiedenis draait nog zoveel eromheen nog steeds om de SQL-taal en het oude idee van een warehouse.
+
+00:02:53.300 --> 00:02:57.100
+Het woord Synapse werd toegevoegd om aan te geven dat het nu veel meer doet dan alleen opslag.
+
+00:02:57.240 --> 00:03:01.640
+Het idee van één werkruimte is het belangrijkst omdat het de dagelijkse manier van werken van een team verandert.
+
+00:03:01.640 --> 00:03:07.560
+In plaats van drie tools die ruzieën om dezelfde bestanden, krijg je één beveiligingsgrens en één overzicht van alles wat draait.
+
+00:03:07.700 --> 00:03:12.540
+Als een rapport om negen uur uitvalt, kijk je op één plek in plaats van te gokken welk systeem stil is gevallen.
+
+00:03:12.760 --> 00:03:17.280
+Dat is de vorm van het geheel en het wordt pas echt belangrijk als je de onderdelen van binnen leert kennen.
+
+00:03:17.500 --> 00:03:18.780
+De engines onder één dak.
+
+00:03:18.940 --> 00:03:22.560
+Eén dak is een grote claim, dus het is de moeite waard om het te openen en te zien wat er echt in zit.
+
+00:03:22.740 --> 00:03:26.640
+Synapse bevat vier engines en elk daarvan is eigenlijk gewoon een taak met een technische naam.
+
+00:03:26.640 --> 00:03:32.100
+De eerste engine is het warehouse en die spreekt SQL, dezelfde querytaal die jouw bedrijf waarschijnlijk al ergens gebruikt.
+
+00:03:32.300 --> 00:03:36.780
+Synapse geeft je twee manieren om het te draaien en de keuze daartussen is belangrijker dan welke instelling dan ook.
+
+00:03:36.900 --> 00:03:39.980
+Een dedicated poll reserveert een vast blok rekenkracht voor je.
+
+00:03:40.180 --> 00:03:44.300
+Dat is precies wat je wilt wanneer veel mensen op hetzelfde moment hetzelfde dashboard openen.
+
+00:03:44.440 --> 00:03:50.180
+Een serverless poll draait dat om, waardoor je direct naar bestanden en opslag wijst en alleen betaalt voor de query die je echt uitvoert.
+
+00:03:50.500 --> 00:03:56.420
+Dedicated is voor constant, zwaar verkeer en serverless is voor de incidentele vraag die je stelt aan een enorme stapel bestanden.
+
+00:03:56.420 --> 00:04:02.740
+De tweede engine is Apache Spark, een open source tool gebouwd om enorme, rommelige bergedata te verwerken.
+
+00:04:03.100 --> 00:04:09.920
+Dit is waar een data engineer de vreemde zaken opschoont, kapotte datums herstelt en alles in een vorm dwingt die het warehouse kan gebruiken.
+
+00:04:10.180 --> 00:04:17.180
+Spark is ook waar veel machine learning werk begint, omdat het de data kan lezen waar deze al staat in plaats van eerst een kopie naar elders te forceren.
+
+00:04:17.340 --> 00:04:22.120
+De derde engine is de pipeline en de enige taak daarvan is data van de ene naar de andere plek verplaatsen.
+
+00:04:22.120 --> 00:04:27.880
+Het is dezelfde engine die uw data factory aanstuurt en het kan verbinding maken met meer dan 90 verschillende databronnen.
+
+00:04:28.020 --> 00:04:31.720
+Het kan dat werk kopiëren en plannen zonder dat u ook maar één regelcode hoeft te schrijven.
+
+00:04:31.940 --> 00:04:34.460
+Drie engines gehad en de meeste mensen stoppen voor deze.
+
+00:04:34.660 --> 00:04:39.740
+De vierde engine verwerkt lags de eindeloze stroommachine berichten die servers en apparaten de hele dag produceren.
+
+00:04:39.880 --> 00:04:44.260
+Het is nog gemarkeerd als preview functie, dus beschouw het als de nieuwste en minst stabiele van de vier.
+
+00:04:44.460 --> 00:04:46.580
+Alles wordt bij elkaar gehouden door Synapse Studio.
+
+00:04:46.580 --> 00:04:52.180
+Het is het ene scherm waar u data binnenhaalt, verkent, voorbereidt en de lopende taken in de gaten houdt.
+
+00:04:52.260 --> 00:04:57.140
+Het biedt u één werkomgeving, één set rechten en één plek om te controleren als er iets misgaat.
+
+00:04:57.280 --> 00:05:00.180
+SQL en Spark delen dezelfde catalogus met tabellen.
+
+00:05:00.340 --> 00:05:05.460
+Een tabel die u in de ene engine bouwt, verschijnt in de andere, wat u bespaart om deze twee keer te bouwen.
+
+00:05:05.600 --> 00:05:07.400
+Een klein voorbeeld om het duidelijk te maken.
+
+00:05:07.680 --> 00:05:10.360
+Namen zijn één ding, maar dit komt beter over met een kort verhaal.
+
+00:05:10.540 --> 00:05:12.700
+Stelt u zich een winkel voor die online spullen verkoopt.
+
+00:05:12.700 --> 00:05:16.220
+Elke dag dumpt het verkoopsysteem een stapel bestanden in cloudopslag.
+
+00:05:16.220 --> 00:05:20.680
+Die bestanden zijn rommelig met vreemde kolomnamen en een paar datums die verkeerd om zijn ingevoerd.
+
+00:05:20.840 --> 00:05:26.640
+Een pipeline wordt volgens schema wakker en kopieert die bestanden naar het leek, wat automatisch gebeurt zonder dat iemand code schrijft.
+
+00:05:26.840 --> 00:05:31.960
+Spark leest vervolgens de rommelige bestanden, corrigeert de foutieve datums en maakt schone tabellen die eindelijk logisch zijn.
+
+00:05:32.140 --> 00:05:37.180
+De warehouse engine neemt die tabellen en serveert ze snel, zodat een rapport in een seconde opent in plaats van in 40 minuten.
+
+00:05:37.300 --> 00:05:41.060
+Power B, de tool die uw manager al kent, tekent het dashboard erbovenop.
+
+00:05:41.060 --> 00:05:44.020
+Wat mensen verrast, is hoe weinig van dat werk glamoureus is.
+
+00:05:44.240 --> 00:05:48.380
+Het meeste is loodgieterswerk, en dat loodgieterswerk is wat het mooie dashboard mogelijk maakt.
+
+00:05:48.580 --> 00:05:54.040
+Niets hiervan vereist een informatica diploma, hoewel het wel iemand beloont die comfortabel is met hoe data van plek naar plek beweegt.
+
+00:05:54.200 --> 00:05:59.220
+Als u een recept kunt volgen, kunt u een data pipeline volgen, want beide zijn slecht stappen in een vaste volgorde.
+
+00:05:59.400 --> 00:06:02.160
+In een echt team wordt dit meestal opgesplitst in een paar rollen.
+
+00:06:02.160 --> 00:06:06.900
+Eén persoon houdt de pipeline draaiende, één vormt de tabellen en één bouwt het rapport daarbovenop.
+
+00:06:06.960 --> 00:06:13.920
+In een klein bedrijf kan dit dezelfde persoon zijn die drie rollen vervult, en Synapse is mede aantrekkelijk omdat één tool alle drie de taken kan dekken.
+
+00:06:14.080 --> 00:06:16.620
+Er is hier een voordeel dat nooit in een demo naar voren komt.
+
+00:06:16.880 --> 00:06:22.960
+Wanneer al die gegevens bij elkaar staan, hangt het antwoord op een simpele vraag niet langer af van wie je het vraagt, omdat iedereen uit dezelfde tabellen leest.
+
+00:06:23.140 --> 00:06:28.320
+Dat klinkt saai totdat je in een vergadering hebt gezeten waar twee mensen twee verschillende omzetcijfers presenteren en geen van beide liegt.
+
+00:06:28.380 --> 00:06:31.920
+Waarom worden teams er eigenlijk enthousiast van? Zodra je de techniek erachter ziet.
+
+00:06:31.920 --> 00:06:35.420
+Begint de aantrekkingskracht logisch te worden en gaat het dieper dan alleen een sneller dashboard.
+
+00:06:35.560 --> 00:06:42.980
+Je stelt je rechten één keer in vanuit één scherm, in plaats van dezelfde beveiligingsregels te herhalen in drie verschillende tools en maar hopen dat ze overeenkomen.
+
+00:06:43.300 --> 00:06:48.740
+Voor iedereen die door een dozijn instellingenpagina's heeft gezocht om te zien wie wat mag zien, is dat alleen al een hele opluchting.
+
+00:06:48.940 --> 00:06:51.100
+Het gedeelde data lake is net zo belangrijk.
+
+00:06:51.320 --> 00:06:59.160
+SQL en Spark kunnen beide dezelfde parquet, CSV en JSON bestanden lezen, dus je hoeft geen gegevens meer tussen werelden te kopiëren en betaalt niet langer dubbel voor opslag.
+
+00:06:59.160 --> 00:07:05.820
+Dat haalt een hele categorie discussies uit een datateam weg, de soort waarbij twee groepen zweren dat hun cijfers kloppen en geen van beide het kan bewijzen.
+
+00:07:05.980 --> 00:07:07.040
+Er is ook het bereik.
+
+00:07:07.200 --> 00:07:13.500
+De ingebouwde data integratie maakt verbinding met meer dan 90 bronnen, wat betekent dat het lastige systeem waar niemand aan wil komen meestal gedekt is.
+
+00:07:13.500 --> 00:07:20.820
+Omdat PowerBee tot dezelfde familie behoort, is de laatste stap naar een dashboard al opgelost en hoeft de persoon die het rapport bouwt zelden na te denken over de techniek eronder.
+
+00:07:21.020 --> 00:07:24.320
+Alles bij elkaar neemt Synapse een specifieke plek in in de Microsoft-wereld.
+
+00:07:24.480 --> 00:07:29.380
+Azure draait eronder, PowerBee staat erbovenop en Microsoft 365 is de werkomgeving eromheen.
+
+00:07:29.640 --> 00:07:33.840
+Wanneer mensen Synapse krachtig noemen, is dit het deel dat ze bedoelen en het is terecht om daar enthousiast over te zijn.
+
+00:07:34.020 --> 00:07:36.740
+Er is hier ook een kostenaspect, al is dat makkelijk over het hoofd te zien.
+
+00:07:36.740 --> 00:07:43.700
+Consolideren naar één dienst betekent vaak één factuur en één budget om te beheren in plaats van vier abonnementen achterna zitten die niemand volledig beheert.
+
+00:07:43.900 --> 00:07:48.100
+Die netheid heeft echte waarde in een groot bedrijf, zelfs als het nooit in een demo verschijnt.
+
+00:07:48.280 --> 00:07:57.200
+Wat betreft de plek naast PowerBee en Microsoft 365, bijna elke beginner haalt deze twee door elkaar, dus het is de moeite waard om dit vroeg op te helderen voordat verwarring leidt tot een slechte beslissing.
+
+00:07:57.420 --> 00:07:59.940
+PowerBee is het venster en Synapse is de machinekamer.
+
+00:08:00.120 --> 00:08:03.520
+Je kiest niet de één boven de ander omdat ze zijn ontworpen om als een paar te werken.
+
+00:08:03.520 --> 00:08:08.800
+Synapse laat de gegevens op en bereidt ze voor, en PowerBee zet ze om in iets dat de mens in één oogopslag kan lezen.
+
+00:08:09.000 --> 00:08:11.060
+De kans is groot dat je het voorste deel al hebt.
+
+00:08:11.300 --> 00:08:20.820
+PowerBee is inbegrepen bij veel Microsoft 365 abonnementen en de data voor die rapporten begint vaak in Teams, SharePoint of een Excel bestand waarvan iemand zweert dat het de bron van de waarheid is.
+
+00:08:21.060 --> 00:08:24.300
+Synapse is de laag die ervoor zorgt dat dit alles bestand is tegen opschaling.
+
+00:08:24.520 --> 00:08:27.880
+Een snelle manier om de twee uit elkaar te houden is door te vragen wat er als eerste stuk gaat.
+
+00:08:27.880 --> 00:08:30.700
+Als je rapport er verwarrend uitziet, is dat een PowerBee probleem.
+
+00:08:30.700 --> 00:08:35.200
+Als je rapport traag of onjuist is of niet alle rijen kan bevatten, dan is dat de machinekamer die roept.
+
+00:08:35.360 --> 00:08:38.720
+Je moet ook de naam van het nieuwere broertje kennen, want die zul je constant horen.
+
+00:08:39.020 --> 00:08:45.440
+Microsoft Fabric neemt dezelfde ideeën het warehouse, de lake, de pipelines en de rapportage en verpakt ze in één product met één enkele factuur.
+
+00:08:45.660 --> 00:08:50.820
+Dat is de richting waar Microsoft naar blijft wijzen en daarom is de volgende eerlijke vraag of Synapse nog wel de moeite waard is.
+
+00:08:51.040 --> 00:08:55.020
+Fabric verandert het aankoopmodel wat de moeite waard is om te begrijpen, zelfs als je het nooit gebruikt.
+
+00:08:55.020 --> 00:09:01.220
+In plaats van vier meters die elk hun eigen kant op gaan, draait Fabric op één capaciteit die je kunt aanpassen en alles daarbinnen deelt die bron.
+
+00:09:01.400 --> 00:09:05.460
+Dat is makkelijker te overzien en het is een belangrijke reden waarom Microsoft nieuwe projecten daarheen stuurt.
+
+00:09:05.660 --> 00:09:08.560
+Dit betekent niet dat je je tijd hebt verspild als je eerst Synapse hebt geleerd.
+
+00:09:08.720 --> 00:09:14.760
+De twee delen zoveel terminologie dat overstappen minder voelt als opnieuw beginnen en meer als het verplaatsen van meubels in een huis dat je al kent.
+
+00:09:16.240 --> 00:09:22.220
+Wat het echt kost, eerlijk gezegd, is dit het deel waarvoor gewaarschuwd werd en het bepaalt of Synapse een koopje is of een fout.
+
+00:09:22.220 --> 00:09:29.060
+Er is geen eenvoudige prijs per persoon voor Synapse omdat je voor twee dingen betaalt, de rekenkracht die je gebruikt en de hoeveelheid data die je verwerkt.
+
+00:09:29.260 --> 00:09:35.880
+Die kosten zijn verdeeld over vier aparte meters, één voor de serverless warehouse, één voor de dedicated warehouse, één voor Spark en één voor de pipelines.
+
+00:09:36.160 --> 00:09:38.060
+Wat concrete cijfers maken het tastbaar?
+
+00:09:38.260 --> 00:09:45.800
+De serverless kant kost ongeveer 5 dollar per terabyte aan gescande data en er is een kleine minimumheffing, zelfs als een query erg klein is.
+
+00:09:45.800 --> 00:09:53.760
+Een dedicated warehouse op zijn startgrote kost ongeveer 1 dollar en 39 cent per uur, wat neerkomt op zo'n 1000 dollar per maand als je het dag en nacht aan laat staan.
+
+00:09:53.960 --> 00:09:56.000
+In die laatste zin schuilt de klassieke fout.
+
+00:09:56.300 --> 00:10:04.160
+Dat warehouse blijft kosten berekenen terwijl het draait, zelfs als niemand er iets aanvraagt, dus het s'nachts en in het weekend aan laten staan, is hoe mensen ongemerkt geld verbranden.
+
+00:10:04.320 --> 00:10:07.700
+Pauzeren stopt de teller en onthouden om te pauzeren is het halve werk.
+
+00:10:07.840 --> 00:10:14.040
+De serverloze kant laat je zelfs een dagelijkse bestedingslimiet instellen, zodat een op hol geslagen query tegen een muur loopt in plaats van tegen je portemonnee.
+
+00:10:14.040 --> 00:10:18.040
+Het reële bereik voor een middelgroot team ligt ergens tussen de 1500 en...
+
+00:10:20.620 --> 00:10:27.500
+Er zijn manieren om dat te beperken, zoals voorafcapaciteit inkopen voor korting, maar die deels lonen pas zodra je je werkelijke verbruik kent.
+
+00:10:27.820 --> 00:10:31.440
+Reviewers zeggen steeds hetzelfde, de kostenstructuur is lastig te voorspellen.
+
+00:10:31.660 --> 00:10:35.820
+Dat is geen reden om Synapse te vermijden, maar wel een reden om de rekening vanaf dag 1 in de gaten te houden.
+
+00:10:35.980 --> 00:10:38.620
+Het helpt om te begrijpen waarom de factuur zo onvoorspelbaar is.
+
+00:10:38.840 --> 00:10:42.200
+Bij de meeste software koop je een licentie en verandert de prijs nauwelijks.
+
+00:10:42.200 --> 00:10:49.680
+Met Synapse huur je rekentijd en betaal je per hap een trage query van een onvoorzichtige nieuwkomer, kan dus meer kosten dan een snelle van een expert.
+
+00:10:50.260 --> 00:10:55.660
+De fouten die beginners het meeste geld kosten zijn enerzijds een valkuil en anderzijds de gewoontes rondom de tool.
+
+00:10:55.880 --> 00:11:01.840
+De duurste gewoonte is een dedicated poll aan laten staan wanneer niemand hem nodig heeft, want die meter boeit het niet of het kantoor leeg is.
+
+00:11:02.060 --> 00:11:05.380
+Maak er een routine van om hem te pauseren en je hebt de grootste rekening al vermeden.
+
+00:11:05.580 --> 00:11:09.900
+De tweede fout is Synapse behandelen als een gigantische archiefkast voor alles wat je bedrijf bezit.
+
+00:11:09.900 --> 00:11:14.360
+Het is gebouwd om data te verwerken, niet om de plek te zijn waar elk bestand voor eeuwig blijft staan.
+
+00:11:14.520 --> 00:11:17.040
+Opslag is elders goedkoop en in overvloed beschikbaar.
+
+00:11:17.180 --> 00:11:20.920
+Het warehouse vol adem met dingen die je nooit bevraagt maakt alles alleen maar trager en duurder.
+
+00:11:21.100 --> 00:11:25.900
+De derde fout is verwachten dat Synapse net zo gebruiksvriendelijk is als Powerbee, want dat is het niet.
+
+00:11:26.080 --> 00:11:31.240
+Powerbee is gemaakt voor zakelijke gebruikers en Synapse is gemaakt voor mensen die thuis zijn in datatechniek.
+
+00:11:31.380 --> 00:11:35.700
+Dat gat is reëel en het is de reden dat een beginner de concepten moet begrijpen voordat hij aan de knoppen zit.
+
+00:11:35.700 --> 00:11:41.580
+De vierde valkuil is sluwer. Sommige handleidingen en snelstartritsen creëren op de achtergrond betaalde resources zonder waarschuwing,
+
+00:11:41.740 --> 00:11:44.140
+waardoor een nieuwsgierige middag kan uitlopen op een verassingsfactuur.
+
+00:11:44.320 --> 00:11:48.400
+Hou het koste dashboard in de gaten terwijl je experimenteert en verwijder de resources zodra je klaar bent.
+
+00:11:48.580 --> 00:11:52.100
+Er is een vijfde fout die niets met geld te maken heeft en deze stagneert carrières.
+
+00:11:52.440 --> 00:11:57.680
+Veel beginners proberen alle functies tegelijk te leren, raken overweldigd en haken af voordat er iets op zijn plek valt.
+
+00:11:57.920 --> 00:12:02.640
+Mensen die slagen kiezen één kleine taak, zoals het laden van een enkel bestand en daarover rapporteren,
+
+00:12:02.640 --> 00:12:05.340
+en laten de rest van de tool onzichtbaar tot ze het nodig hebben.
+
+00:12:05.500 --> 00:12:09.880
+De tool beloont geduld en straft paniek af en bijna niemand leert het in een weekend.
+
+00:12:10.560 --> 00:12:13.300
+Is het nog de moeite waard om in 2026 te leren?
+
+00:12:13.540 --> 00:12:16.180
+Nu de vraag die iedereen stelt en die verdient een eerlijk antwoord.
+
+00:12:16.400 --> 00:12:17.820
+Synapse is niet uitgefaseerd.
+
+00:12:18.020 --> 00:12:21.920
+Microsoft heeft geen plannen aangekondigd om het stop te zetten en elke kernwerkbelasting werkt vandaag de dag nog steeds.
+
+00:12:22.100 --> 00:12:25.640
+De tool is dus echt, hij wordt ondersteund en talloze bedrijven gebruiken hem op dit moment in productie.
+
+00:12:25.780 --> 00:12:28.780
+Het nuanceverschil zit hem in waar Microsoft haar energie aan besteedt.
+
+00:12:28.780 --> 00:12:36.080
+Nieuwe functies en ideeën komen terecht in Fabric en Microsoft's eigen documentatie wijst nu voor sommige nieuwe mogelijkheden naar Fabric in plaats van Synapse.
+
+00:12:36.380 --> 00:12:40.780
+Analisten omschrijven Synapse als een dienst die nog steeds werkt, maar waar niet langer de vernieuwing plaatsvindt.
+
+00:12:41.480 --> 00:12:44.720
+Dat is een richting, geen deadline, en die twee dingen zijn heel verschillend.
+
+00:12:44.900 --> 00:12:48.600
+Voor je carrière is het goede nieuws dat de concepten bijna perfect overdraagbaar zijn.
+
+00:12:48.600 --> 00:12:54.700
+Een data lake, een warehouse, een pipeline en een rapportagelaag bestaan in zowel Synapse als Fabric onder iets andere namen.
+
+00:12:54.700 --> 00:12:59.520
+Leer hoe data door een warehouse in Synapse beweegt en je begrijpt al het grootste deel van wat Fabric doet.
+
+00:12:59.680 --> 00:13:04.240
+Er is een praktische reden om erom te geven, los van de toekomst, het verleden draait namelijk nog steeds.
+
+00:13:04.500 --> 00:13:08.120
+Duizenden bedrijven zijn gebouwd op Synapse en iemand moet die systemen draaiende houden.
+
+00:13:08.300 --> 00:13:11.440
+Het kennen ervan is vandaag de dag een echte vaardigheid, geen museumstuk.
+
+00:13:11.600 --> 00:13:14.800
+Dus het eerlijke antwoord op de grote vraag is ja, met een kanttekening.
+
+00:13:15.060 --> 00:13:21.960
+Leer de concepten, want die overleven het product, en zie Synapse als een goede plek om ze te leren in plaats van de enige plek die er ooit toe zal doen.
+
+00:13:21.960 --> 00:13:26.180
+Een korte samenvatting en één vraag voor jou. Dus dit is waar we zijn geëindigd.
+
+00:13:26.300 --> 00:13:29.960
+Synapse is één werkomgeving die een warehouse en een set big data engines samenbrengt.
+
+00:13:30.580 --> 00:13:36.520
+Het koppelt direct aan Power BI en beloont iedereen die eraan denkt de meter te pauzeren, maar straft wie dat vergeet.
+
+00:13:36.700 --> 00:13:40.620
+De concepten zijn direct toepasbaar in Fabric, waar Microsoft zich nu op richt.
+
+00:13:40.800 --> 00:13:43.580
+Nu wil ik het van jou horen, en ik meen dat als een oprechte vraag.
+
+00:13:43.780 --> 00:13:48.240
+Wat is de enige databron in jouw wereld die nog steeds in een spreadsheet staat die iemand als een geheim bewaart?
+
+00:13:48.240 --> 00:13:53.100
+Laat het weten in de comments, want dat bestand is meestal precies de reden waarom een tool als deze nodig is.
+
+00:13:53.260 --> 00:14:00.720
+Als dit het onderwerp minder intimiderend heeft gemaakt, abonneer je dan op M365FM om de tools en de mindset te beheersen die de toekomst van werk vormgeven.

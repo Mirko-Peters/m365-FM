@@ -1,0 +1,661 @@
+WEBVTT
+
+00:00:00.470 --> 00:00:04.970
+Bienvenidos al podcast M365FM, donde exploramos las personas, ideas y tecnologías que dan
+
+00:00:04.970 --> 00:00:08.210
+forma al futuro del trabajo. ¿Por qué las herramientas de Linux siguen
+
+00:00:08.210 --> 00:00:11.130
+apareciendo en los tutoriales de Windows? La mitad de los tutoriales en línea asumen
+
+00:00:11.130 --> 00:00:14.410
+que no usas Windows, y eso antes significaba que tenías la máquina equivocada. Windows
+
+00:00:14.410 --> 00:00:17.570
+ahora incluye una función gratuita que ejecuta Linux real junto a él, integrada en Windows
+
+00:00:17.570 --> 00:00:21.710
+10 y 11. Podrías pensar que es una máquina virtual que requiere supervisión, pero inicia
+
+00:00:21.710 --> 00:00:26.030
+en menos de un segundo. Al final, sabrás cómo funciona realmente, dónde podría ralentizarte
+
+00:00:26.030 --> 00:00:31.130
+y cómo encaja en azul. Bienvenidos al podcast M365FM, donde exploramos las personas, ideas
+
+00:00:31.130 --> 00:00:34.990
+y tecnologías que dan forma al futuro del trabajo. Probablemente ya te hayas topado con este
+
+00:00:34.990 --> 00:00:39.550
+usarlo. Un tutorial que realmente quieres seguir se ve bien hasta el paso 2. Ahí es donde
+
+00:00:39.550 --> 00:00:44.730
+te pide abrir una terminal y escribir un comando en algo llamado Bash. Tu computadora usa Windows,
+
+00:00:44.830 --> 00:00:48.550
+así que cierras la pestaña y buscas una versión para Windows de ese tutorial que nunca se escribió.
+
+00:00:49.270 --> 00:00:53.030
+Esa brecha es el problema que WCL fue creado para resolver. La función ha estado en tu equipo
+
+00:00:53.030 --> 00:00:58.470
+desde 2016 y se conoce por el largo nombre de subsistema de Windows para Linux. El nombre es
+
+00:00:58.470 --> 00:01:03.090
+complicado así que todos lo llaman simplemente WCL. Este episodio es un recorrido sencillo y no
+
+00:01:03.090 --> 00:01:07.850
+necesitarás conocimientos técnicos para seguirlo. ¿Qué es realmente WCL? El nombre será más pesado
+
+00:01:07.850 --> 00:01:11.470
+que lo que realmente es. WCL es una función de Windows que ejecuta un entorno de Linux directamente
+
+00:01:11.470 --> 00:01:16.330
+en tu PC. Lo haces sin una máquina virtual separada y sin borrar tu disco para instalar un
+
+00:01:16.330 --> 00:01:20.650
+segundo sistema operativo. Lo primero que obtienes es una consola de comando real que es una
+
+00:01:20.650 --> 00:01:24.350
+ventana de texto donde escribes instrucciones en lugar de hacer clic en botones. Lo segundo
+
+00:01:24.350 --> 00:01:27.470
+es software genuino de Linux que se instala y funciona igual que en una máquina Linux.
+
+00:01:28.010 --> 00:01:31.850
+También higes una distribución que es solo una versión de Linux como Ubuntu, Debian o Kali.
+
+00:01:32.610 --> 00:01:35.990
+Cada distribución obtiene su propio sistema de archivos independientes. Tus archivos de Linux
+
+00:01:35.990 --> 00:01:39.590
+viven en un lugar y tus archivos de Windows en otro y ambos permanecen separados a menos
+
+00:01:39.590 --> 00:01:43.470
+que los conectes a propósito. Ubuntu es la opción predeterminada y puedes instalar más
+
+00:01:43.470 --> 00:01:47.650
+de una distribución si quieres compararlas. Debian y Kali están ahí mismo en la lista listos
+
+00:01:47.650 --> 00:01:51.390
+para ser añadidos. Las actualizaciones provienen de Microsoft Store, igual que cualquier aplicación
+
+00:01:51.390 --> 00:01:55.230
+normal en tu equipo. Un detalle sorprende a la gente una vez que lo investigan. El kernel
+
+00:01:55.230 --> 00:01:59.330
+de Linux que ejecuta WSL 2 es creado por Microsoft ajustado para Windows y mantenido a través
+
+00:01:59.330 --> 00:02:03.430
+de las actualizaciones de Windows. En 2025, Microsoft también publicó el código fuente
+
+00:02:03.430 --> 00:02:06.810
+WSL en GitHub para que cualquiera pueda leer cómo funciona o enviar una corrección.
+
+00:02:07.350 --> 00:02:11.110
+No necesitas nada de eso para usar WSL, pero explica por qué la herramienta sigue mejorando
+
+00:02:11.110 --> 00:02:15.230
+sin que tengas que mover un dedo. Si la lista integrada no es suficiente, puedes importar una
+
+00:02:15.230 --> 00:02:18.870
+distribución que no esté en la tienda o crear la tuya propia desde cero. Eso importa
+
+00:02:18.870 --> 00:02:22.990
+cuando un proyecto necesita una configuración específica que nadie publica para ti. No
+
+00:02:22.990 --> 00:02:27.910
+cuesta nada. WSL viene con Windows 10 y Windows 11. Incluso funciona la edición Home que traen
+
+00:02:27.910 --> 00:02:31.810
+las laptops económicas. Imagina una puerta en una segunda computadora. Te quedas en Windows
+
+00:02:31.810 --> 00:02:34.990
+todo el tiempo y, cuando necesitas herramientas de Linux, cruzas la puerta.
+
+00:02:35.930 --> 00:02:41.830
+La verdadera diferencia entre WSL 1 y WSL 2. WSL ha tenido dos versiones y conocer la diferencia
+
+00:02:41.830 --> 00:02:46.790
+te ahorra mucha confusión. La primera, WSL 1, traducía los comandos de Linux a algo que
+
+00:02:46.790 --> 00:02:50.670
+Windows pudiera entender. Esta traducción funcionaba para tareas sencillas. Sin embargo,
+
+00:02:50.790 --> 00:02:53.670
+seguía siendo una traducción, así que cualquier cosa complicada terminaba chocando con una
+
+00:02:53.670 --> 00:02:58.110
+pared. Esa pared es la razón por la que existe WSL 2. En lugar de traducir WSL 2, se ejecuta
+
+00:02:58.110 --> 00:03:02.290
+un kernel de Linux real. El kernel es el núcleo del sistema operativo y reside dentro de una
+
+00:03:02.290 --> 00:03:06.830
+pequeña máquina virtual que Windows inicia y detiene por ti. Como es el kernel genuino, el software
+
+00:03:06.830 --> 00:03:10.810
+de Linux se comporta tal como sus creadores pretendían. Quizás escuches las palabras
+
+00:03:10.810 --> 00:03:15.070
+máquina virtual y te imagines algo pesado. Ese instinto es válido porque las máquinas
+
+00:03:15.070 --> 00:03:19.350
+virtuales tradicionales son pesadas. Esta no lo es. Es ligera arranca en segundos, no en
+
+00:03:19.350 --> 00:03:22.250
+minutos y nunca abres un panel de configuración para mantenerla activa.
+
+00:03:23.010 --> 00:03:26.950
+Las dos versiones son más que una nota técnica porque WSL tiene una breve historia que vale
+
+00:03:26.950 --> 00:03:31.430
+la pena conocer. Microsoft puso herramientas de Linux en Windows por primera vez en 2016, luego
+
+00:03:31.430 --> 00:03:35.650
+anunció la versión basada en kernel en 2019. Más tarde, trasladó todo fuera de la imagen
+
+00:03:35.650 --> 00:03:39.750
+de Windows a la Microsoft Store. Eso permitió al equipo lanzar correcciones según su propio
+
+00:03:39.750 --> 00:03:42.370
+pleno. El beneficio se nota en la velocidad y la compatibilidad.
+
+00:03:42.790 --> 00:03:46.810
+El primer WSL 2 funcionaba hasta 20 veces más rápido que WSL 1 al descomprimir archivos
+
+00:03:46.810 --> 00:03:51.010
+TAR. Era aproximadamente de 2 a 5 veces más rápido en tareas cotidianas como clonar un
+
+00:03:51.010 --> 00:03:54.670
+proyecto o instalar paquetes. La compatibilidad total con llamadas al sistema significa que
+
+00:03:54.670 --> 00:03:57.570
+el software de Linux simplemente funciona, incluido Docker, la herramienta que usan los
+
+00:03:57.570 --> 00:04:01.090
+desarrolladores para empaquetar aplicaciones en cajas portátiles. Vale la pena señalar una peculiaridad
+
+00:04:01.090 --> 00:04:02.730
+si ya ejecutas otro software de virtualización.
+
+00:04:02.730 --> 00:04:07.830
+WSL 1 funcionaba bien con VMware y VirtualBox y teóricamente no lo hacía, aunque las versiones
+
+00:04:07.830 --> 00:04:11.790
+recientes de esas herramientas se han puesto al día. Verifica ese detalle antes de activarlo
+
+00:04:11.790 --> 00:04:13.510
+en la laptop que uses para otras máquinas virtuales.
+
+00:04:13.510 --> 00:04:18.370
+WSL 2 es el estándar actual, así que una instalación nueva te da la versión más reciente.
+
+00:04:18.370 --> 00:04:21.290
+Existe exactamente un caso que aún prefiere la versión anterior. Vale la pena recordarlo
+
+00:04:21.290 --> 00:04:24.730
+para después. Ese caso son los archivos que deben residir en tu unidad de Windows.
+
+00:04:24.730 --> 00:04:29.270
+Instalación con un solo comando. La instalación es realmente un solo comando y los detalles
+
+00:04:29.270 --> 00:04:33.290
+aquí son importantes. Primero, verifica que estés usando Windows 10, versión 2004 o más
+
+00:04:33.290 --> 00:04:39.450
+reciente o Windows 11. Luego abre PowerShell como administrador, escribe WSL, install y reinicia
+
+00:04:39.450 --> 00:04:43.970
+tu equipo. Esa única línea activa las dos funciones de Windows que WSL necesita y añade
+
+00:04:43.970 --> 00:04:48.050
+Ubuntu como tu primera distribución de Linux. Las dos funciones que activas se llaman plataforma
+
+00:04:48.050 --> 00:04:52.390
+de máquina virtual y subsistema de Windows para Linux. Para Linux, puedes activarlas manualmente
+
+00:04:52.390 --> 00:04:57.670
+si el comando único alguna vez te falla. WSL funciona en chips Intel y AMD comunes y en
+
+00:04:57.670 --> 00:05:00.950
+chips ARM de algunas laptops delgadas, así que el hardware rara vez es el problema.
+
+00:05:01.750 --> 00:05:05.410
+Ubuntu es solo el punto de partida, no la única opción. Prefieres comenzar con Debian,
+
+00:05:05.750 --> 00:05:09.210
+Kali u otra cosa, añades el nombre de esa distribución al final del mismo comando.
+
+00:05:09.770 --> 00:05:11.650
+También puedes navegar por una lista para ver todo disponible.
+
+00:05:12.330 --> 00:05:15.630
+Primer inicio de tu nueva configuración de Linux toma un momento, porque descomprime archivos
+
+00:05:15.630 --> 00:05:19.910
+en tu disco. Cada inicio posterior ocurre en menos de un segundo. Esa velocidad es lo que
+
+00:05:19.910 --> 00:05:23.250
+hace que WSL se sienta menos como una máquina separada y más como una pestaña en tu terminal.
+
+00:05:24.270 --> 00:05:28.330
+Una vez configurado todo, puedes ver lo que tienes pidiendo a WSL que enumere tus distribuciones
+
+00:05:28.330 --> 00:05:31.970
+con sus números de versión. También puedes mover una distribución entre las dos versiones
+
+00:05:31.970 --> 00:05:34.970
+en cualquier momento, lo cual es útil cuando quieres probar la diferencia tú mismo.
+
+00:05:35.650 --> 00:05:38.150
+Las actualizaciones ahora funcionan como una aplicación en lugar de una parte de Windows
+
+00:05:38.150 --> 00:05:41.710
+mismo. Las funciones nuevas llegan a través de Microsoft Store sin tener que esperar una
+
+00:05:41.710 --> 00:05:44.970
+actualización completa de Windows. Si tu empresa bloquea la tienda, existe una opción
+
+00:05:44.970 --> 00:05:48.230
+de descarga web que sigue funcionando. Las laptops de trabajo traen consigo un edifico.
+
+00:05:48.230 --> 00:05:52.510
+Algunas organizaciones bloquean a WSL mediante una política de grupo. Cuando eso sucede,
+
+00:05:52.590 --> 00:05:55.690
+la instalación falla con un código de error largo en lugar de un mensaje migrado. Ese
+
+00:05:55.690 --> 00:05:59.350
+bloqueo es una decisión de la empresa, no una laptop rota, y solo tu equipo de TI puede
+
+00:05:59.350 --> 00:06:00.130
+eliminarlo.
+
+00:06:00.810 --> 00:06:04.430
+Como comparten archivos Linux y Windows. Esta es la parte que causa la mayor confusión
+
+00:06:04.430 --> 00:06:08.390
+y frustración porque todo se reduce a donde viven realmente tus archivos. Windows y Linux
+
+00:06:08.390 --> 00:06:12.470
+guardan los archivos en dos lugares diferentes. WSL permite que cada lado vea al otro, pero
+
+00:06:12.470 --> 00:06:16.270
+ambos lados no son igual de rápido. Tus unidades de Windows aparecen dentro de Linux
+
+00:06:16.270 --> 00:06:21.910
+en una carpeta llamada MDT. Tu unidad C, por ejemplo, aparece como MT barra C. Y desde
+
+00:06:21.910 --> 00:06:24.050
+ahí puedes leer y escribir cualquier archivo de Windows que quieras.
+
+00:06:24.550 --> 00:06:27.270
+La dirección contraria también funciona, ya que Windows puede explorar el sistema de
+
+00:06:27.270 --> 00:06:30.330
+archivos de Linux mediante una dirección especial que puedes pegar en el explorador de archivos.
+
+00:06:31.130 --> 00:06:32.670
+Los archivos de Linux siguen un conjunto de reglas.
+
+00:06:32.930 --> 00:06:36.550
+Todo bajo la raíz de Linux distingue entre mayúsculas y minúsculas, por lo que dos archivos
+
+00:06:36.550 --> 00:06:39.290
+con las mismas letras pero diferentes mayúsculas cuentan como archivos distintos.
+
+00:06:40.050 --> 00:06:44.050
+Los enlaces simbólicos se comportan como Linux espera, y comandos como Chumodichown realmente significan
+
+00:06:44.050 --> 00:06:47.110
+algo. Los archivos de Windows no funcionan así, y esa diferencia es donde se esconden
+
+00:06:47.110 --> 00:06:50.790
+las ralentizaciones. Microsoft es directo sobre esto en su propia documentación.
+
+00:06:51.430 --> 00:06:54.390
+La guía es almacenar tus archivos en el mismo sistema operativo que las herramientas que
+
+00:06:54.390 --> 00:06:58.170
+usas en ellos. La misma página también advierte contra cruzar el límite a menos que tengas
+
+00:06:58.170 --> 00:07:01.530
+una razón específica. En términos sencillos, cuando las herramientas son de Linux, mantén
+
+00:07:01.530 --> 00:07:05.170
+el proyecto dentro de él. Si trabajas en PowerShell o en una aplicación de Windows, manténlo
+
+00:07:05.170 --> 00:07:08.890
+del lado de Windows. La razón no importa porque explica una queja que escucharás de todo
+
+00:07:08.890 --> 00:07:13.450
+el mundo. Leer y escribir a través de ese límite es el camino lento. Duele más cuando
+
+00:07:13.450 --> 00:07:16.810
+un proyecto está construido con miles de archivos pequeños, porque cada uno paga el
+
+00:07:16.810 --> 00:07:20.990
+costo de cruce. Un solo documento cruza sin problemas, pero una carpeta llena de paquetes
+
+00:07:20.990 --> 00:07:24.850
+descargados irá paso de todo. El caso común tiene una solución. La extensión remota
+
+00:07:24.850 --> 00:07:28.590
+WSL para Visual Studio Code te permite mantener tu proyecto dentro del sistema de archivos
+
+00:07:28.590 --> 00:07:32.230
+de Linux. Sigues editando esos archivos con un editor de Windows, así que obtienes la
+
+00:07:32.230 --> 00:07:35.150
+velocidad de Linux en renunciar a tus herramientas habituales. También puedes mezclar comandos
+
+00:07:35.150 --> 00:07:39.150
+libremente. Ejecuta el blog de notas desde Linux o ejecuta un comando de Linux directamente
+
+00:07:39.150 --> 00:07:43.250
+desde PowerShell, y ambos se sienten naturales después de un día o dos. Una variable compartida
+
+00:07:43.250 --> 00:07:47.450
+llamada WSLNNW pasa a configuraciones de entorno a través de la división, lo que te ahorra
+
+00:07:47.450 --> 00:07:51.310
+volver a escribir las mismas rutas en ambos lados. Dos hábitos ahorran a los principiantes
+
+00:07:51.310 --> 00:07:54.310
+mucho problema. Mantén los proyectos de Linux dentro de Linux y los de Windows del lado
+
+00:07:54.310 --> 00:07:57.930
+de Windows, lo cual acabamos de cubrir. Luego exporta tu configuración de Linux de vez en
+
+00:07:57.930 --> 00:08:01.950
+cuando, porque vive dentro de un solo archivo grande que puedes respaldar, mover o restaurar
+
+00:08:01.950 --> 00:08:06.790
+en otra máquina. Lo que realmente puedes hacer con él. Una vez que los archivos se comportan,
+
+00:08:06.910 --> 00:08:10.950
+comienza la parte interesante, porque este es un entorno Linux completo. Ejecuta las mismas herramientas
+
+00:08:10.950 --> 00:08:14.570
+que ejecuta un servidor Linux, y esa lista es larga. Obtienes las utilidades de línea
+
+00:08:14.570 --> 00:08:19.190
+de comandos clásicas como grep, set, auk, bim y tmux. Obtienes los lenguajes y stacks
+
+00:08:19.190 --> 00:08:24.110
+que asumen Linux, incluidos Node, Python, Ruby, Go, Rust y la familia C, los servicios.
+
+00:08:24.610 --> 00:08:29.690
+También funcionan. Puedes ejecutar MySQL, PostgreSQL o MongoDB dentro de WDB pequeño.
+
+00:08:30.870 --> 00:08:34.630
+Luego accedes de tu navegador de Windows escribiendo localhost, lo que significa que un proyecto de
+
+00:08:34.630 --> 00:08:38.190
+práctica no necesita su propia máquina. Las aplicaciones gráficas de Linux también son compatibles.
+
+00:08:38.190 --> 00:08:42.570
+Se abren como ventanas comunes en tu escritorio, así que un editor de texto o herramienta de datos
+
+00:08:42.570 --> 00:08:46.550
+de Linux aparece en la barra de tareas junto a tus apps habituales. Si tu trabajo implica
+
+00:08:46.550 --> 00:08:50.270
+aprendizaje automático, WSL puede ceder tu tarjeta gráfica a las cargas de trabajo de Linux.
+
+00:08:50.950 --> 00:08:54.270
+Así es como la gente entrena modelos en una laptop con Windows sin tener que abandonar Windows.
+
+00:08:54.850 --> 00:08:57.930
+Los contenedores merecen su propio momento, porque es aquí donde WSL se convirtió en el
+
+00:08:57.930 --> 00:09:02.290
+estándar. Docker en Windows funciona sobre WSL 2 y eso solo es posible porque WSL 2 tiene un
+
+00:09:02.290 --> 00:09:07.210
+kernel de Linux real debajo, debajo. Si alguna vez instalaste Docker Desktop en Windows,
+
+00:09:07.210 --> 00:09:10.410
+ya has estado usando WSL sin saberlo. Para hacerlo concreto,
+
+00:09:10.610 --> 00:09:14.610
+intenta un proyecto pequeño esta semana. Elige un tutorial para principiantes de
+
+00:09:14.610 --> 00:09:19.590
+Python o Node y síguelo dentro de WSL Windows. Instala los paquetes que solicita y lo ejecuta.
+
+00:09:20.090 --> 00:09:23.270
+Escribirás exactamente los mismos comandos que usó el autor del tutorial, que es el objetivo
+
+00:09:23.270 --> 00:09:27.130
+principal. Los editores y las bases de datos completan esto perfecto. Visual Studio Code puede
+
+00:09:27.130 --> 00:09:30.870
+abrir tus archivos de Linux directamente. La base de datos para un proyecto paralelo también puede
+
+00:09:30.870 --> 00:09:35.270
+vivir dentro de WSL en lugar de en un servidor separado que tendrías que alquilar. El ejemplo de
+
+00:09:35.270 --> 00:09:38.250
+Microsoft sobre este patrón comienza con un desarrollador que crea el problema de canalización
+
+00:09:38.250 --> 00:09:41.850
+localmente. Sea canalización se empaqueta en un contenedor y se envía a la nube, donde
+
+00:09:41.850 --> 00:09:46.150
+se ejecuta en una máquina virtual Linux. Esa es la forma del trabajo de software moderno
+
+00:09:46.150 --> 00:09:50.110
+y WSL su contraparte local. El inconveniente es que todo esto viene con algunos límites
+
+00:09:50.110 --> 00:09:51.290
+reales y esos son los que sí.
+
+00:09:51.290 --> 00:09:56.430
+¿Dónde falla que prestar atención? Ahora la parte honesta, porque una herramienta
+
+00:09:56.430 --> 00:10:00.770
+que no entiendes te sorprenderá de mala manera. WSL es realmente bueno, pero también tiene
+
+00:10:00.770 --> 00:10:04.930
+límites específicos. Conocerlos de antemano es lo que separa una configuración fluida
+
+00:10:04.930 --> 00:10:09.970
+de una tarde frustrante. La memoria da sorpresa sorpresa. Por defecto, WSL 2 tiene permitido
+
+00:10:09.970 --> 00:10:13.470
+usar hasta la mitad de tu memoria de Windows y puede retener memoria caché hasta que se
+
+00:10:13.470 --> 00:10:14.590
+apague toda la instancia.
+
+00:10:14.590 --> 00:10:19.150
+En una sesión larga con un proyecto grande, el administrador de tareas puede parecer como
+
+00:10:19.150 --> 00:10:21.810
+si algo hubiera consumido tú. La solución es un pequeño archivo de configuración
+
+00:10:21.810 --> 00:10:25.010
+donde puedes limitar la memoria y los procesos. Existe una opción de recuperación automática
+
+00:10:25.010 --> 00:10:27.990
+de memoria para este problema exactamente. Vale la pena poner un número de estos dos
+
+00:10:27.990 --> 00:10:32.590
+valores. Una laptop con 16 gigas de memoria le entrega 8 de esos gigas a Linux por defecto
+
+00:10:32.590 --> 00:10:36.810
+defecto. También añade un archivo de intercambio con un tamaño de una cuarta parte de tu memoria
+
+00:10:36.810 --> 00:10:40.550
+que reside en el disco y actúa como desbordamiento. Puedes reducir esos números, aumentarlos o desactivar
+
+00:10:40.550 --> 00:10:44.210
+el intercambio por completo en el mismo archivo de configuración. Los cambios surten de efecto
+
+00:10:44.210 --> 00:10:46.670
+después de que el lado de Linux se reinicie por completo, lo que tomó unos pocos segundos.
+
+00:10:47.570 --> 00:10:51.070
+La segunda sorpresa es que la máquina detrás de WSL se inicia y se detiene por sí sola.
+
+00:10:51.750 --> 00:10:55.710
+Si nada la está utilizando, se apaga para ahorrar recursos. Eso resulta confuso cuando
+
+00:10:55.710 --> 00:10:59.470
+un servidor local deja de repente. Cerrar la última ventana determina el activo y el apagado,
+
+00:10:59.550 --> 00:11:02.490
+así que mantén una abierta si quieres que todo siga funcionando. El espacio en disco
+
+00:11:02.490 --> 00:11:05.990
+tiene su propia especularidad. El lado de Linux vive dentro de un archivo de almacenamiento
+
+00:11:05.990 --> 00:11:09.890
+grande que crece a medida que añades datos. Un ajuste experimental permite que ese archivo
+
+00:11:09.890 --> 00:11:13.470
+se reduzca de nuevo al eliminar cosas en lugar de retener el espacio para siempre, lo que nos lleva.
+
+00:11:13.470 --> 00:11:16.170
+Al mayor límite de todos, y Microsoft lo dice claramente.
+
+00:11:17.010 --> 00:11:20.570
+W está diseñado para el ciclo de desarrollo y prueba en tu propia máquina y no es un
+
+00:11:20.570 --> 00:11:24.510
+servidor de producción. Hay una forma de usar su tecnología de contenedores para trabajo de
+
+00:11:24.510 --> 00:11:28.070
+producción, pero la regla segura para un principiante es simple. Usa WSL para desarrollar
+
+00:11:28.070 --> 00:11:31.530
+aprendizaje. Usa una máquina Linux real o un servicio en la nube para atender a usuarios
+
+00:11:31.530 --> 00:11:35.930
+reales. Las redes tienen su propia prioridad. Por defecto, WSL utiliza una configuración llamada
+
+00:11:35.930 --> 00:11:40.410
+NAT que le da a tu lado de Linux su propia dirección. Acceder a ella desde otro dispositivo en tu red
+
+00:11:40.410 --> 00:11:44.110
+solía requerir trabajo manual. En Windows 11, un modo reflejado más nuevo soluciona.
+
+00:11:44.510 --> 00:11:48.750
+También mejora cómo se comporta WSL en una VPN, lo cual importa si trabajas desde casa en una red
+
+00:11:48.750 --> 00:11:52.850
+corporativa. Vale la pena conocer algunas cosas más pequeñas. Las carpetas de Windows se añaden a la
+
+00:11:52.850 --> 00:11:57.290
+ruta de Linux automáticamente y Linux puede ejecutar programas de Windows, por lo que WSL no es una copia
+
+00:11:57.290 --> 00:12:02.450
+byte a byte de una máquina Linux. Los puertos seriales no son compatibles. Los dispositivos USB necesitan un
+
+00:12:02.450 --> 00:12:06.570
+proyecto auxiliar separado. Se ha reportado que algunas suites de seguridad de terceros como Gaspersky,
+
+00:12:06.570 --> 00:12:12.250
+AVG, Avast, Semantic y F-Secure bloquean el acceso a Internet. Si tu lado de Linux se queda sin
+
+00:12:12.250 --> 00:12:17.170
+Internet de repente, revisa primero tu firewall. Nada de eso debería ahuyentar. Cada límite aquí
+
+00:12:17.170 --> 00:12:21.270
+tiene una causa o solución conocida. El punto es conocer la forma de herramienta antes de apoyarte
+
+00:12:21.270 --> 00:12:27.170
+en ella. ¿Cómo encaja WSL en Azure y Microsoft 365? La pregunta que a mucha gente en el mundo de
+
+00:12:27.170 --> 00:12:31.490
+Microsoft realmente le importa merece una respuesta directa. WSL se distribuye como parte del propio
+
+00:12:31.490 --> 00:12:36.050
+Windows. Nada de esto es parte de un plan de Microsoft 365 o una suscripción de Azure y no añade
+
+00:12:36.050 --> 00:12:40.590
+una línea a tu factura. Si usas Windows 10 o Windows 11, la función ya está ahí. ¿De dónde entra
+
+00:12:40.590 --> 00:12:45.430
+la nube todo? La conexión es un flujo de trabajo en una licencia. Linux ejecuta una gran parte del
+
+00:12:45.430 --> 00:12:49.910
+servicio en la nube y Azure no es la excepción. Los mismos comandos que aprendes localmente son los
+
+00:12:49.910 --> 00:12:54.810
+que despliegan y gestionan sistemas reales en la nube. La versión práctica se ve así. La herramienta
+
+00:12:54.810 --> 00:12:59.970
+de línea de comandos de Azure, llamada Azure CL, se instala y ejecuta dentro de WSL, igual que en
+
+00:12:59.970 --> 00:13:04.010
+Linux. Microsoft documenta cómo instalarla en Linux e incluso mantiene una página de solución de
+
+00:13:04.010 --> 00:13:08.670
+problemas específica para WSL. Una vez instalada, puedes iniciar sesión en Azure y gestionar
+
+00:13:08.670 --> 00:13:12.850
+recursos desde la misma terminal donde ejecutabas comandos de Linux hace un momento. La herramienta
+
+00:13:12.850 --> 00:13:15.290
+también se actualiza en un solo paso para que no te quedes con una versión antigua.
+
+00:13:16.110 --> 00:13:20.650
+Microsoft también ha incluido su propia distribución de Linux en el panorama. Azure Linux es la distribución
+
+00:13:20.650 --> 00:13:25.790
+que Microsoft construye para Azure. Ahora puedes ejecutarla en USL como entorno local usando las
+
+00:13:25.790 --> 00:13:29.430
+mismas herramientas y el mismo comportamiento que tiene en la nube. No se involucra en máquinas
+
+00:13:29.430 --> 00:13:33.910
+virtuales ni se requiere una suscripción de Azure. Eso cierra una brecha que suele causar verdaderos
+
+00:13:33.910 --> 00:13:38.050
+problemas cuando algo funcionaba en tu portátil y fallaba al llegar al servidor. Esa consistencia
+
+00:13:38.050 --> 00:13:41.650
+es lo que más importa para los equipos. Cuando el entorno donde un desarrollador hace pruebas
+
+00:13:41.650 --> 00:13:46.270
+coincide con el entorno de trabajo, hay menos sorpresas al llegar a producción. Para quien
+
+00:13:46.270 --> 00:13:50.130
+aprende por su cuenta, es una forma económica de practicar con las herramientas que te pedirían
+
+00:13:50.130 --> 00:13:54.650
+en un trabajo en la nube. Para el público de Microsoft 365 en específico, quiero establecer
+
+00:13:54.650 --> 00:13:59.250
+expectativas. WSL es el taller de al lado, donde los scripts, las canalizaciones y las herramientas
+
+00:13:59.250 --> 00:14:02.830
+de nube se crean y prueban antes de tocar nada real. Si estás construyendo una carrera en la nube
+
+00:14:02.830 --> 00:14:05.910
+de Microsoft, vale la pena aprender a manejarte en ese taller.
+
+00:14:07.110 --> 00:14:12.690
+La versión corta y una pregunta para ti. Eso es todo en una poca línea. WSL pone un entorno
+
+00:14:12.690 --> 00:14:16.690
+Linux funcional en tu portátil. Es gratis y ya está ahí. Se instala con un solo comando
+
+00:14:16.690 --> 00:14:20.330
+y su principal peculiaridad es que los archivos que pasan de un sistema a otro se mueven lento.
+
+00:14:20.830 --> 00:14:24.330
+Quita una pregunta para ti. ¿Hay algún tutorial que hayas estado evitando porque parecía escrito
+
+00:14:24.330 --> 00:14:28.730
+para Linux? ¿Lo intentarías ahora que sabes que cuentas con WSL? Si esto hizo que el tema
+
+00:14:28.730 --> 00:14:33.070
+se sienta menos intimidante, suscríbete a MD365FM para dominar las herramientas y la mentalidad
+
+00:14:33.070 --> 00:14:34.230
+que dan forma al futuro del trabajo.

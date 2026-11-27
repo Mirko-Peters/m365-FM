@@ -31,6 +31,7 @@ Kandidaten je Seitenart (die about-Liste im JSON-LD bleibt unveraendert):
                     werten R4 mit dem Titel des englischen Originals, damit alle Sprachen dasselbe Hauptthema haben.
   Video             topics.
 """
+import site_ename as EN
 import re
 
 import ontology as ONT
@@ -106,18 +107,16 @@ _IX = []
 
 
 def named_in(text, ents):
-    """Entitaeten, deren Name/Alias im Text steht, in der Reihenfolge des Auftretens - derselbe vorsichtige Abgleich wie die Themen der
-    Sidebar (site_sidebar.Index: laengster Name zuerst, Mindestlaenge, ohne zu allgemeine Einzelwoerter wie "Teams", "Copilot", "Azure")."""
+    """Entitaeten, deren Name/Alias im Text steht, in der Reihenfolge des Auftretens - derselbe Abgleich wie die Themen der Sidebar
+    (site_sidebar.Index ueber den gemeinsamen Namensindex site_entmatch: Eigennamen mit Beachtung der Schreibung, Allerweltswoerter nur in
+    Eigennamen-Stellung und mit Kontext, Sammelbegriffe als Einzelwort nicht)."""
     if not text:
         return []
     if not _IX:
         import site_sidebar as SBR
         _IX.append(SBR.Index())
     ix = _IX[0]
-    if not ix.rx:
-        return []
-    out = [ix.names.get(m.group(1).lower()) for m in ix.rx.finditer(text)]
-    return [i for i in dict.fromkeys(out) if i and i in ents]
+    return [i for i in ix.ids(text) if i and i in ents]
 
 
 def rank(ids, ents, text, first=()):
@@ -163,7 +162,7 @@ def breadcrumb(BASE, lang, about_ids, ents, page_name, page_url, title=None):
     for x in chain(main, ents) + [main]:
         u = crumb_url(BASE, lang, x, ents)
         if u not in seen and ents[x].get("name"):
-            items.append((ents[x]["name"], u)); seen.add(u)
+            items.append((EN.ename(ents[x], lang), u)); seen.add(u)   # Name in der Sprache der Seite (site_ename, Linktexte Paket 4)
     if page_url in seen:
         return None
     items.append((page_name, page_url))

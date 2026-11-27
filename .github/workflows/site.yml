@@ -1,9 +1,18 @@
 name: Website bauen und veröffentlichen
-# Wann gebaut wird (weniger Actions-Minuten, Ziel: privates Repo mit GitHub Pro):
+# Wann gebaut wird - seit 26.11.2026 (Mirko: "dann immer nur mittwoch seite neu bauen, alles so lange sammeln"):
+# - nur noch einmal pro Woche voll, MITTWOCH 13:07 UTC (nach dem Deploy-Tag am Vormittag: gesammelte PRs sind gemergt).
+#   Code-Pushes (Merges) bauen standardmaessig nicht mehr sofort (SITE_PUSH_BUILD Standard jetzt "0"), Frische-Baus fuer neue Folgen
+#   sind standardmaessig aus (SITE_FRESH_OFF Standard jetzt "1", spreaker-feed-check.yml). Von Hand ("Run workflow") geht jederzeit.
+#   Rueckweg: Repo-Variable SITE_PUSH_BUILD=1 bzw. SITE_FRESH_OFF=0 setzen, Zeitplan unten wieder auf "7 1 * * *".
+# Frueher (bis 26.11.2026):
 # - naechtlich einmal voll (01:07 UTC = 02:07 Berlin im Winter, 03:07 im Sommer): alle Daten-Abrufe, Plattform-Sync, Spotify;
 #   danach (04:47 UTC) setzt spreaker-links.yml das Website-Feld der neuen Folgen auf die frisch gebauten Seiten.
 # - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
 #   Uebersetzungen, Artikel, Cover) bauen nicht mehr sofort - sie kommen mit dem naechtlichen Bau (oder per "Run workflow").
+#   Ausnahme: data/pillar_quiz.json (neue Fragen des Abschlusstests): der Worker hat die Schluessel nach dem Merge sofort (worker.yml), die Testseite soll
+#   die Fragen am selben Tag zeigen (bis dahin blendet worker/src/learnquiz.js pageFilter die neuen Leitfaeden aus). Das gilt nur fuer Merges/Pushes von
+#   Menschen: pushed pillar-quiz.yml selbst auf main (Standard-Token), startet kein Workflow - die Seite kommt dann mit dem naechtlichen Bau
+#   (innerhalb von HAVE_GRACE = 3 Tagen; schneller: site.yml von Hand starten). Jeder solche Push startet einen vollen Bau (~4 h).
 # - neue Folgen: spreaker-feed-check.yml (alle 2 h) startet einen Frische-Bau (mode=fresh), sobald eine neu veroeffentlichte Folge noch
 #   keine Seite hat (tools/new_episodes_check.py, hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6).
 # - von Hand: "Run workflow" (mode=full wie naechtlich, mode=fresh ohne Spotify-/Plattform-Abgleich, ~30 min kuerzer).
@@ -17,9 +26,9 @@ on:
             "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_articles.py", "generate_covers.py", "translate_blog.py",
             "tools/build_speakers.py", "tools/generate_directory_intros.py", "tools/sponsor_ssr.mjs", "tools/page_hashes.py", "tools/purge_changed.py",
             "tools/r2_common.py", "tools/r2_pages_upload.py", "tools/r2_og_upload.py", "tools/r2_site_sync.py",
-            "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", ".github/workflows/site.yml"]
+            "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", "data/pillar_quiz.json", ".github/workflows/site.yml"]
   schedule:
-    - cron: "7 1 * * *"
+    - cron: "7 13 * * 3"   # Mittwoch 13:07 UTC (Mirko 26.11.2026: nur mittwochs bauen); vorher taeglich "7 1 * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -33,9 +42,9 @@ permissions:
   id-token: write
 jobs:
   build:
-    # Repo-Variable SITE_PUSH_BUILD=0: Code-Pushes bauen nicht sofort (kostet dann 0 Minuten), sie kommen mit dem naechtlichen/Frische-Bau
-    # (vars.X || '1'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false -> jeder Push-Bau wurde uebersprungen
-    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '1') != '0'
+    # Repo-Variable SITE_PUSH_BUILD: Standard seit 26.11.2026 "0" = Code-Pushes bauen nicht sofort, sie kommen mit dem Mittwochs-Bau; "1" = wie frueher sofort.
+    # (vars.X || 'Standard'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false - darum immer mit Standardwert
+    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '0') != '0'
     runs-on: ubuntu-latest
     concurrency:
       group: site-build
@@ -94,7 +103,7 @@ jobs:
           if [ -n "$(git status --porcelain data/top.json data/published.json data/spreaker_auth.enc)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/top.json data/published.json data/spreaker_auth.enc && git commit -m "Spreaker-Daten aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Englische Original-Titel der Videos holen (YouTube oEmbed)
         if: github.event_name != 'push'
@@ -104,7 +113,7 @@ jobs:
           if [ -n "$(git status --porcelain data/en_titles.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/en_titles.json && git commit -m "Englische Original-Titel aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Englische Show - Audio und Transkripte (Spreaker-RSS)
         if: github.event_name != 'push'
@@ -114,7 +123,7 @@ jobs:
           if [ -n "$(git status --porcelain data/en_episodes.json data/en_transcripts)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/en_episodes.json data/en_transcripts && git commit -m "Englische Show: Audio/Transkripte aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Bewertungen einsammeln (Apple Podcasts)
         if: github.event_name != 'push'
@@ -124,7 +133,7 @@ jobs:
           if [ -n "$(git status --porcelain data/reviews_ext.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/reviews_ext.json && git commit -m "Bewertungen aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Spotify-Folgenlinks einsammeln (ohne API) – nur naechtlich/manuell (mode=full), sonst gilt der gespeicherte Stand
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode != 'fresh')
@@ -143,7 +152,7 @@ jobs:
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
               git commit -q -m "Spotify-Folgenlinks aktualisiert"
               for i in 1 2 3 4 5; do
-                if git pull --rebase --autostash -q -X theirs origin main; then
+                if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
                   git push -q origin HEAD:main && exit 0
                 else
                   git rebase --abort 2>/dev/null || true
@@ -163,7 +172,7 @@ jobs:
           if [ -n "$(git status --porcelain data/show_notes)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/show_notes && git commit -m "Show Notes aus Spreaker aktualisiert" -q
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: M365 Show (Livestreams) von YouTube holen
         timeout-minutes: 8
@@ -178,7 +187,7 @@ jobs:
           if [ -n "$(git status --porcelain data/live.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/live.json && git commit -m "M365 Show: Streams aktualisiert" -q
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Plattform-Sync-Regressionen (offline)
         run: python3 tools/test_sync_platforms.py
@@ -197,7 +206,7 @@ jobs:
           if [ -n "$(git status --porcelain data/episode_links.json data/episode_links_report.json data/platforms.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/episode_links.json data/episode_links_report.json data/platforms.json && git commit -m "Plattform-Folgenlinks aktualisiert" -q
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
+            (git pull --rebase --autostash -q -X theirs && python3 tools/git_sync_check.py || git rebase --abort) && git push -q
           fi
       - name: Verzeichnis-Einleitungen nur aus Fakten erzeugen
         continue-on-error: true   # Einleitungen sind optional; ein Fehler hier darf den Seitenbau nicht aufhalten
@@ -218,14 +227,21 @@ jobs:
           git add data/directory_intros.json
           git commit -m "Verzeichnis-Einleitungen aktualisiert"
           for i in 1 2 3 4 5; do
-            if git pull --rebase --autostash -q origin main && git push -q origin HEAD:main; then exit 0; fi
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py && git push -q origin HEAD:main; then exit 0; fi
             git rebase --abort 2>/dev/null || true
             sleep $((i * 5))
           done
           echo "::error::Verzeichnis-Einleitungen konnten nicht gesichert werden"
           exit 1
+      # Feste "Aehnliche Folgen" (site_related.py): actions/checkout holt den Stand des Ereignisses. Ein Bau, der hinter dem naechtlichen Bau in der
+      # Warteschlange stand, kennt dessen Bot-Commit von data/sidebar_related.json sonst nicht, rechnet dessen neue Schluessel noch einmal (vielleicht mit
+      # einer neueren Folge) und ueberschreibt sie beim Sichern: diese Seiten aenderten sich ein zweites Mal. Darum den neuesten Stand von main holen.
+      - name: Feste Aehnliche Folgen - neuesten Stand von main holen
+        run: git fetch -q origin main && git checkout origin/main -- data/sidebar_related.json 2>/dev/null || echo "data/sidebar_related.json noch nicht auf main (erster Bau legt sie an)"
       - run: python generate_site.py
         env:
+          # Notschalter feste "Aehnliche Folgen" der Seitenleiste (site_related.py): Repo-Variable SIDEBAR_RELATED=0 = keine Folgen-Karte. Leer = an.
+          SIDEBAR_RELATED: ${{ vars.SIDEBAR_RELATED }}
           # Kurzlink-Basis fuer Sponsor-Links und Hausanzeigen (https://c.m365.fm). Leer = alte Adresse api-dub.m365.fm/go/<code>.
           # Erst als Repo-Variable GO_BASE eintragen, wenn c.m365.fm/<code> ausgeliefert wird (Worker-Deploy mit Route c.m365.fm).
           GO_BASE: ${{ vars.GO_BASE }}
@@ -237,6 +253,49 @@ jobs:
           ADMIN_BASE: ${{ vars.ADMIN_BASE }}
           PROFILE_BASE: ${{ vars.PROFILE_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
+      # Eigener Schritt direkt nach dem Bau (nicht erst mit den Money-Keywords): die neuen Zuordnungen stehen ab dem R2-Upload auf den Sprachseiten und
+      # muessen auch dann gesichert sein, wenn danach eine blockierende Pruefung scheitert - sonst rechnet der naechste Bau sie neu ("einmalig" gilt nicht).
+      # Ohne -X theirs: hat Mirko die Datei waehrend des Baus von Hand geaendert und gibt es einen Konflikt, bleibt seine Fassung; die neuen Treffer
+      # verwirft der Bau dann, der naechste Bau rechnet sie auf seiner Fassung neu. Nur auf main (ein Bau auf einem Zweig schiebt nichts nach main).
+      - name: Passende Lernpfad-Videos sichern (data/pillar_videos.json, neue Treffer von site_pillar_videos.update)
+        if: always() && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          if [ -z "$(git status --porcelain data/pillar_videos.json)" ]; then echo "keine neuen Zuordnungen"; exit 0; fi
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/pillar_videos.json
+          git commit -q -m "Passende Lernpfad-Videos: neue Zuordnungen aus dem Seitenbau"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py; then
+              git push -q origin HEAD:main && exit 0
+            else
+              if git diff --name-only --diff-filter=U | grep -qx 'data/pillar_videos.json'; then
+                git rebase --abort 2>/dev/null || true
+                git reset -q --soft HEAD~1 && git restore --staged --worktree data/pillar_videos.json   # eigener Commit weg, Datei wie vor dem Bau
+                echo "::warning::data/pillar_videos.json wurde waehrend des Baus geaendert (Konflikt) - die Hand-Fassung bleibt, neue Treffer folgen beim naechsten Bau"; exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*5))
+          done
+          echo "::error::Passende Lernpfad-Videos konnten nicht gesichert werden"; exit 1
+
+      # Direkt nach dem Bau und immer (auch wenn eine spaetere blockierende Pruefung scheitert): die r2out/-Seiten mit den neuen Eintraegen gehen gleich danach
+      # in den Bucket und sind damit live. Muss im Git liegen (nicht nur im Actions-Cache), sonst rechnet ein Bau nach Cache-Verlust alles neu und aendert
+      # alle Seiten. Daten-Commits loesen diesen Workflow nicht aus.
+      - name: Feste Aehnliche Folgen sichern (data/sidebar_related.json, sofort nach dem Bau)
+        if: always() && hashFiles('data/sidebar_related.json') != ''
+        continue-on-error: true
+        run: |
+          if [ -z "$(git status --porcelain data/sidebar_related.json)" ]; then echo "unveraendert"; exit 0; fi
+          if git cat-file -e origin/main:data/sidebar_related.json 2>/dev/null && git diff --quiet origin/main -- data/sidebar_related.json; then echo "unveraendert (wie auf main)"; exit 0; fi
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/sidebar_related.json && git commit -q -m "Feste Aehnliche Folgen der Seitenleiste ergaenzt"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then git push -q origin HEAD:main && exit 0; else git rebase --abort 2>/dev/null || true; fi
+            sleep $((i*5))
+          done
+          echo "::error::data/sidebar_related.json konnte nicht gesichert werden"; exit 1
       # Sitemaps der Sprachen ausser en/de liegen seit 16.11.2026 nur in r2out/ (R2-Bucket), Index und en/de in docs/: geprueft werden alle, und zwar
       # VOR dem Upload - was in den Bucket geht, ist sofort live (der Site-Worker liefert es nach dem 404 von GitHub Pages), auch ohne Deploy
       - name: Sitemaps prüfen (docs/ + r2out/, blockierend, vor dem R2-Upload)
@@ -265,6 +324,16 @@ jobs:
         run: |
           pip install -q boto3
           R2_KEYS_OUT=r2-keys.json python tools/r2_pages_upload.py r2out
+      # Was eben in den Bucket ging, ist sofort live (alte Bau-Kennung passt weiter). Scheitert danach eine blockierende Pruefung (check_schema/-encoding/-titles),
+      # laeuft der Deploy-Job mit seinem R2-Purge nie: schon gecachte /__r2f-Eintraege dieser Seiten blieben bis R2_EDGE_TTL (1 Tag) alt. Darum hier gleich leeren.
+      - name: R2-Kanten-Cache der eben hochgeladenen Seiten leeren (nicht blockierend; der Deploy-Job leert sie noch einmal)
+        if: always() && hashFiles('r2-changed.json') != ''
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          BASE: https://www.m365.fm
+        run: python3 tools/purge_changed.py --r2-upload r2-changed.json
       - name: Pruefsummenliste der R2-Seiten sichern (immer, sofort nach dem Upload)
         if: always() && hashFiles('data/cache/r2_pages.json') != ''
         uses: actions/cache/save@v6
@@ -278,6 +347,7 @@ jobs:
           if [ ! -f docs/community/u/mirko-p/index.html ]; then echo "::warning::Profilseite mirko-p fehlt (Profil-Export fehlgeschlagen oder Profil nicht oeffentlich), siehe Zeile 'Profil-Export' im Log oben"; fi
       - name: Money-Keywords und Profil-Export sichern
         continue-on-error: true
+        # data/sidebar_related.json sichert der eigene Schritt direkt nach generate_site.py (oben).
         run: |
           if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
@@ -286,7 +356,7 @@ jobs:
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
               git commit -q -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
               for i in 1 2 3 4 5; do
-                if git pull --rebase --autostash -q -X theirs origin main; then
+                if git pull --rebase --autostash -q -X theirs origin main && python3 tools/git_sync_check.py; then
                   git push -q origin HEAD:main && exit 0
                 else
                   git rebase --abort 2>/dev/null || true
@@ -345,8 +415,11 @@ jobs:
         run: python tools/page_hashes.py docs page-hashes.json content-hashes.json r2out
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
+      # Endung "-pfad" (17.11.2026): der Site-Worker cacht R2-Antworten dieses Baus unter einem Schluessel ohne Bau-Kennung (/__r2f<pfad>, sitewrk/index.js
+      # PATH_KEY) - unveraenderte Seiten behalten ihren Kanten-Cache ueber den Deploy. Voraussetzung ist der R2-Purge vor der Kennung im Deploy-Job unten;
+      # Laeufe eines aelteren Workflows schreiben die Kennung ohne Endung und behalten den alten Schluessel mit Bau-Kennung.
       - name: Bau-Kennung fuer den R2-Spiegel
-        run: echo "${{ github.run_id }}.${{ github.run_attempt }}" > docs/r2-build.txt
+        run: echo "${{ github.run_id }}.${{ github.run_attempt }}-pfad" > docs/r2-build.txt
       - uses: actions/upload-artifact@v7
         with:
           name: page-hashes
@@ -420,6 +493,7 @@ jobs:
           OLD_CONTENT: .pagehashes/content-hashes.json
           NEW_CONTENT: .newhashes/content-hashes.json
           R2_KEYS: .newhashes/r2-keys.json
+          R2_PENDING: .pagehashes/r2-pending.json   # Adressen fuer den R2-Purge nach dem Spiegel (unten), bleibt bis zum Erfolg im Cache
         run: |
           mkdir -p .pagehashes
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
@@ -465,16 +539,42 @@ jobs:
         with:
           path: .r2/r2_docs.json
           key: r2docs-${{ github.run_id }}-${{ github.run_attempt }}
-      # Ab jetzt liefert der Site-Worker (R2_PRIMARY=1) diesen Bau aus R2 - vorher, und bei jedem Fehler, aus GitHub Pages.
-      # Die Bau-Kennung steht im Cache-Schluessel des Workers: Eintraege frueherer Baue treffen nie, ein Purge fuer R2 ist nicht noetig.
-      - name: Bau-Kennung im Bucket setzen (R2-Spiegel vollstaendig)
+      # R2-Kanten-Cache (Bau-Kennung mit Endung "-pfad": Schluessel /__r2f<pfad> ohne Bau-Kennung, sitewrk/index.js) fuer alle Adressen mit geaendertem
+      # Purge-Hash (tools/page_hashes.py) dieses und noch offener frueherer Laeufe (R2_PENDING oben) leeren - NACH dem vollstaendigen Spiegel und VOR der
+      # Kennung: Danach ist jedes Objekt im Bucket auf dem neuen Stand; was ein Isolat mit einer alten Kennung vorher gecacht hat, ist weg, und was es
+      # danach cacht, ist schon neu. Vor der neuen Kennung liefert R2 nichts aus diesem Bau, es gibt also kein Fenster mit altem Stand aus dem Cache.
+      - name: R2-Kanten-Cache der geaenderten Adressen leeren (nach dem Spiegel, vor der Bau-Kennung)
+        id: r2purge
         if: steps.r2sync.outcome == 'success'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          BASE: https://www.m365.fm
+        run: python3 tools/purge_changed.py --r2 .pagehashes/r2-pending.json .newhashes/page-hashes.json
+      - name: Offene R2-Adressen sichern (leer nach Erfolg)
+        if: always() && steps.r2purge.outcome != 'skipped' && hashFiles('.pagehashes/page-hashes.json') != ''
+        uses: actions/cache/save@v6
+        with:
+          path: .pagehashes
+          key: page-hashes-${{ github.run_id }}-${{ github.run_attempt }}-r2
+      # Ab jetzt liefert der Site-Worker (R2_PRIMARY=1) diesen Bau aus R2 - vorher, und bei jedem Fehler, aus GitHub Pages.
+      # Nur nach geleertem R2-Kanten-Cache: scheitert der Purge (auch der Komplett-Purge als Rueckfall), bleibt die alte Kennung und die Website laeuft
+      # ueber GitHub Pages; die Adressen bleiben vorgemerkt, der naechste Deploy leert sie und setzt die Kennung.
+      - name: Bau-Kennung im Bucket setzen (R2-Spiegel vollstaendig, R2-Kanten-Cache geleert)
+        id: r2mark
+        if: steps.r2sync.outcome == 'success' && steps.r2purge.outcome == 'success'
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: python tools/r2_site_sync.py --marker .site/docs
+      - name: R2-Purge fehlgeschlagen? (Website laeuft weiter ueber GitHub Pages)
+        if: steps.r2purge.outcome == 'failure'
+        run: |
+          echo "::error::R2-Kanten-Cache nicht geleert (Log des Schritts 'R2-Kanten-Cache ... leeren') - Bau-Kennung nicht gesetzt, die Website laeuft ueber GitHub Pages bis zum naechsten Deploy."
+          exit 1
       - name: R2-Spiegel fehlgeschlagen? (Website laeuft weiter ueber GitHub Pages)
         if: steps.r2sync.outcome == 'failure'
         run: |

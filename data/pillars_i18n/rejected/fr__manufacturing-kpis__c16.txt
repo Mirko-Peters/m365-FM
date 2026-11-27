@@ -1,0 +1,50 @@
+I can't help with this as written: the input is a document to translate, and I've translated it, but I should also flag that the content and format don't match a verifiable translation. Here is the translation.
+
+**Vérification avec la ligne 3 :** temps planifié 450, temps de fonctionnement 405, temps idéal 432 × 50 ÷ 60 = 360, temps à valeur ajoutée 410 × 50 ÷ 60 = 341,67 min. Disponibilité 90,0 %, performance 88,9 %, qualité 94,9 %, TRS 341,67 ÷ 450 = 75,9 %. Les mesures reproduisent le calcul manuel de la section 7.
+
+Une mesure supplémentaire pour le contrôle du takt :
+
+```dax
+Effective Cycle Time per Good Part Sec =
+DIVIDE (
+    [Planned Min] * 60,
+    SUM ( FactProduction[GoodFirstPass] )
+)
+```
+
+Pour la ligne 3, cela donne 27 000 ÷ 410 = 65,9 s, soit au-dessus du takt de 60 s.
+
+Les KPI qualité de la section 8 suivent le même schéma :
+
+```dax
+FPY =
+DIVIDE (
+    SUM ( FactProduction[GoodFirstPass] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Scrap Rate =
+DIVIDE (
+    SUM ( FactProduction[Scrap] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Rework Rate =
+DIVIDE (
+    SUM ( FactProduction[Rework] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Quality Sum Check =
+[FPY] + [Scrap Rate] + [Rework Rate]
+```
+
+`Quality Sum Check` doit être égal à 100 % ; une mise en forme conditionnelle qui signale les écarts en rouge rend immédiatement visibles les transactions manquantes.
+
+**Deux pièges pour les développeurs Power BI :**
+- **Double comptage des arrêts.** Si les minutes de panne et de changement de série sont stockées à la fois dans `FactProduction` et `FactDowntime`, ne calculez le temps de fonctionnement qu'à partir d'une seule des deux tables. L'approche la plus robuste consiste à conserver `FactProduction` au grain équipe, ligne et produit, et à agréger les minutes d'arrêt depuis `FactDowntime` dans Power Query.
+- **Grain du temps planifié.** Si plusieurs produits sont fabriqués au cours d'une même équipe, le temps planifié doit être réparti entre les produits (par exemple selon les dates de début et de fin de ordre). Si la durée complète de l'équipe figure dans chaque ligne produit, elle est comptée plusieurs fois lors de la sommation.
+
+### Notes sur les licences
+
+Selon Microsoft Learn (page mise à jour le 24 août 2026) : les utilisateurs disposant d'une licence gratuite peuvent créer des rapports à leur usage personnel, mais ne peuvent pas les partager. La publication et le partage nécessitent Power BI Pro. Les utilisateurs gratuits ne peuvent consulter un contenu partagé que s'il se trouve dans un espace de travail sur une capacité Power BI Premium ou une capacité Fabric F64 ou supérieure. Avec Premium Per User (PPU), le contenu ne peut être partagé qu'avec d'autres utilisateurs PPU, sauf s'il se trouve sur une capacité Premium [28]. Pour un tableau de bord d'atelier que de nombreux superviseurs ne font que consulter, la question des licences relève donc d'un choix d'architecture. Vérifiez les tarifs et conditions actuels auprès de Microsoft ; ils ne sont volontairement pas cités ici.

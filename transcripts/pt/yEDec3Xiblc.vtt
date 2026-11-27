@@ -1,0 +1,877 @@
+WEBVTT
+
+00:00:00.060 --> 00:00:05.600
+Bem-vindos ao podcast M365FM, onde exploramos as pessoas, ideias e tecnologias que moldam o futuro do trabalho.
+
+00:00:06.600 --> 00:00:08.020
+Que é o SAP S4ANA, na verdade.
+
+00:00:08.680 --> 00:00:14.400
+A SAP afirma que seus clientes geram mais de 87% do comércio global, e grande parte disso roda em softwares que você nunca vê.
+
+00:00:15.040 --> 00:00:20.540
+A versão mais recente desse software se chama SAP S4ANA, e o nome faz parecer muito mais complicado do que realmente é.
+
+00:00:21.060 --> 00:00:22.920
+Por trás da sigla, há uma mudança simples.
+
+00:00:23.320 --> 00:00:28.720
+Os dados migraram do disco para a memória, e é por isso que relatórios que levavam a noite toda para processar agora atualizam enquanto você assiste.
+
+00:00:28.720 --> 00:00:35.480
+Essa mudança também forçou todas as empresas que utilizam o sistema SAP antigo a tomar uma decisão, já que o suporte principal termina em 2027.
+
+00:00:36.620 --> 00:00:44.300
+Portanto, vamos explicar o que é o S4ANA, como ele funciona, como as empresas o executam e migram, onde a Microsoft se encaixa e as partes que não correspondem às promessas.
+
+00:00:45.020 --> 00:00:46.320
+Vamos começar com a definição simples.
+
+00:00:46.800 --> 00:00:48.400
+O S4ANA é um sistema RP.
+
+00:00:49.280 --> 00:00:57.260
+Um RP é apenas o software que uma empresa usa para gerir suas operações principais, receber pedidos, comprar materiais, rastrear estoque, pagar funcionários e fechar o balanço.
+
+00:00:58.720 --> 00:01:03.820
+Se sua empresa fabrica ou vende qualquer coisa em escala, algo como isso está por baixo de tudo, mantendo os números em ordem, silenciosamente.
+
+00:01:04.900 --> 00:01:09.900
+O pessoal da indústria chama isso de sistema de registro, uma maneira sofisticada de dizer que ele mantém a versão oficial da verdade.
+
+00:01:10.780 --> 00:01:13.540
+Quando alguém pergunta o que um RP realmente faz, essa é a resposta honesta.
+
+00:01:14.040 --> 00:01:17.220
+Ele memoriza tudo o que a empresa fez de uma forma que possa ser confiável posteriormente.
+
+00:01:17.780 --> 00:01:19.320
+O nome é mais fácil de decompor do que parece.
+
+00:01:19.320 --> 00:01:25.380
+A parte S4 significa SAP Business Suite 4 e a parte HANA é o banco de dados em que ele roda.
+
+00:01:26.220 --> 00:01:31.740
+A SAP o lançou em 2015 como sucessor do SAP ESC, que por sua vez substituiu o sistema R3 em 1992.
+
+00:01:32.960 --> 00:01:37.060
+Essa linhagem é importante, porque a maioria das empresas que nos ouve está usando um desses sistemas antigos agora.
+
+00:01:37.660 --> 00:01:38.700
+O detalhe é que surpreende as pessoas.
+
+00:01:39.180 --> 00:01:40.800
+O S4ANA roda apenas no SAP HANA.
+
+00:01:41.240 --> 00:01:47.200
+A SAP parou de oferecer suporte ao seu produto principal em outros bancos de dados, então isso não foi uma atualização cosmética ou uma nova pintura em um motor velho.
+
+00:01:47.200 --> 00:01:52.220
+Foi uma reconstrução da fundação, e quase tudo o que trataremos neste episódio decorre dessa única decisão.
+
+00:01:52.520 --> 00:01:57.020
+É também por isso que uma migração nunca é apenas uma atualização de software, que você está mudando só onde a empresa pisa, pisa.
+
+00:01:57.880 --> 00:01:59.720
+O que o banco de dados subjacente mudou tudo?
+
+00:02:00.300 --> 00:02:03.420
+Para entender por que o banco de dados importa, imagine como o sistema antigo armazenava dados.
+
+00:02:04.280 --> 00:02:11.020
+O ECC mantinha registros em disco organizados em linhas, então o único registro de cliente ficava logo lá do pedido, endereço e fatura desse cliente.
+
+00:02:11.020 --> 00:02:17.280
+Ler um campo significava arrastar uma linha inteira junto, o que se torna lento ao fazer uma pergunta que abrange milhões de registros.
+
+00:02:18.180 --> 00:02:19.480
+O HANA inverte essas duas escolhas.
+
+00:02:19.920 --> 00:02:24.500
+Ele mantém os dados na memória, em vez do disco, e organiza esses dados em colunas, em vez de linhas.
+
+00:02:25.300 --> 00:02:28.340
+Uma coluna armazena um tipo de valor, como todas as datas de pedido no sistema,
+
+00:02:28.580 --> 00:02:31.900
+então o banco de dados pode ler apenas a parte necessária para uma consulta e ignorar o restante.
+
+00:02:32.200 --> 00:02:32.900
+Esse é o truque principal.
+
+00:02:33.300 --> 00:02:36.440
+O armazenamento em colunas também comprime bem porque valores semelhantes ficam próximos,
+
+00:02:36.500 --> 00:02:38.700
+permitindo que a mesma quantidade de memória armazene mais do que esperaria.
+
+00:02:38.700 --> 00:02:41.880
+Essa eficiência é importante, já que a memória custa mais que o disco,
+
+00:02:42.220 --> 00:02:44.460
+e dimensionar o hardware corretamente já é um trabalho por si só.
+
+00:02:44.860 --> 00:02:46.580
+A recompensa vai além da velocidade bruta.
+
+00:02:46.920 --> 00:02:50.540
+No passado, a análise de dados e as transações diárias viviam em sistemas separados,
+
+00:02:50.780 --> 00:02:53.560
+e gerar relatórios significava copiar os dados durante a noite para um data warehouse.
+
+00:02:55.060 --> 00:02:58.520
+Com o HANA, ambos os tipos de trabalho rodam em uma cópia compartilhada dos dados,
+
+00:02:58.620 --> 00:03:00.780
+então os números não precisam se mover para serem úteis.
+
+00:03:01.600 --> 00:03:02.480
+Vamos dar um exemplo prático.
+
+00:03:03.120 --> 00:03:07.580
+Uma equipe financeira fechando o balanço no fim do mês costumava esperar por processos em lote que rodavam até tarde da noite,
+
+00:03:07.580 --> 00:03:10.060
+e se algo parecesse errado, quem poderia corrigir já tinha ido embora.
+
+00:03:11.200 --> 00:03:14.260
+Com o S4, HANA, os números já estão lá conforme as transações acontecem,
+
+00:03:14.540 --> 00:03:18.560
+então o fechamento pode ocorrer durante o dia, enquanto as pessoas que entendem os números ainda estão em suas mesas.
+
+00:03:19.400 --> 00:03:22.640
+Qualquer um que já tenha esperado por uma janela de processamento em lote sabe o quanto essa mudança vai.
+
+00:03:23.500 --> 00:03:24.800
+O segundo benefício é faz ignorar.
+
+00:03:25.300 --> 00:03:28.080
+Um modelo de dados único significa menos chances de um mesmo número de verificações.
+
+00:03:28.080 --> 00:03:30.760
+O valor de vendas em um relatório coincide com o de outro,
+
+00:03:30.860 --> 00:03:34.420
+porque ambos leem a mesma tabela em vez de dois sistemas costurados anos atrás.
+
+00:03:35.240 --> 00:03:37.900
+Um aviso sincero antes de seguirmos e voltaremos a isso mais tarde.
+
+00:03:38.780 --> 00:03:42.240
+O próprio marketing da SAP diz que o HANA é milhares de vezes mais rápido que bancos de dados antigos,
+
+00:03:42.560 --> 00:03:45.280
+e você deve tratar isso como uma afirmação do fornecedor, não como um resultado medido.
+
+00:03:46.100 --> 00:03:49.520
+A velocidade real depende do volume de dados de como o sistema está configurado,
+
+00:03:49.600 --> 00:03:51.180
+e se as consultas foram bem escritas.
+
+00:03:51.180 --> 00:03:55.780
+A nova interface, o modelo de dados simplificado e a mudança no banco de dados
+
+00:03:55.780 --> 00:03:58.660
+permitiram que a SAP reconstruísse as telas que as pessoas realmente usam.
+
+00:03:59.180 --> 00:04:01.880
+O S4 HANA foi o primeiro produto de SAP a usar o Fiori,
+
+00:04:02.040 --> 00:04:04.540
+que substitui as densas telas verdes da antiga interface gráfica
+
+00:04:04.540 --> 00:04:06.960
+por aplicativos baseados em blocos focados na tarefa à sua frente.
+
+00:04:07.260 --> 00:04:09.760
+Se você nunca usou interface antiga, veja porque isso é importante para todos.
+
+00:04:10.880 --> 00:04:12.800
+Antoshigo era famoso por códigos de transação,
+
+00:04:12.940 --> 00:04:16.240
+sequências curtas de letras e números que você precisava memorizar para realizar qualquer tarefa.
+
+00:04:17.440 --> 00:04:19.780
+O Fiori organiza o mesmo trabalho em aplicativos com nomes simples.
+
+00:04:19.780 --> 00:04:23.320
+Assim, um funcionário do almoxarifado abre um aplicativo de recebimento de mercadorias
+
+00:04:23.320 --> 00:04:24.880
+em vez de digitar um código que aprendeu em treinamento.
+
+00:04:25.320 --> 00:04:26.520
+Fiori não é apenas mais bonito.
+
+00:04:26.880 --> 00:04:30.060
+Cada aplicativo é criado para uma função, portanto um gerente que aprova uma compra
+
+00:04:30.060 --> 00:04:33.060
+e um funcionário que insere uma fatura vem telas diferentes para tarefas diferentes
+
+00:04:33.060 --> 00:04:35.760
+para tarefas diferentes em vez de uma transação complexa que todos precisam aprender.
+
+00:04:35.940 --> 00:04:37.780
+Uma pequena mudança com grande efeito no trabalho de ar.
+
+00:04:38.100 --> 00:04:40.660
+O modelo de dados também ficou mais simples e as finanças são um exemplo mais claro.
+
+00:04:41.200 --> 00:04:44.320
+O sistema financeiro SAP antigo espalhava seus números por várias tabelas separadas,
+
+00:04:44.320 --> 00:04:46.620
+o que exigia um trabalho de reconciliação apenas para chegar num total.
+
+00:04:46.620 --> 00:04:50.840
+O S4 Gana coloca os dados financeiros principais em uma tabela de itens de linha conhecida
+
+00:04:50.840 --> 00:04:51.540
+como Diário Universal.
+
+00:04:52.020 --> 00:04:55.160
+Portanto, um único lançamento carrega a visão contábil e a visão de custo ao mesmo tempo.
+
+00:04:55.980 --> 00:04:59.300
+Antes dessa mudança, obter um valor de lucro confiável significava muitas vezes combinar
+
+00:04:59.300 --> 00:05:00.500
+várias tabelas no final do mês.
+
+00:05:00.940 --> 00:05:03.800
+Agora, ambas as visões são gravadas em um único item de linha, o que elimina o trabalho
+
+00:05:03.800 --> 00:05:04.960
+real do calendário financeiro.
+
+00:05:05.000 --> 00:05:06.580
+Isso faz diferença para a pessoa que executa a tarefa.
+
+00:05:06.880 --> 00:05:10.180
+Um funcionário de contas a pagar que costumava extrair números de vários relatórios agora
+
+00:05:10.180 --> 00:05:13.800
+pode abrir um único item de linha e ver a história completa, o que significa menos retrabalho
+
+00:05:13.800 --> 00:05:15.900
+e menos discussões sobre qual relatório está correto.
+
+00:05:17.400 --> 00:05:18.560
+As áreas de negócio que ele compra.
+
+00:05:19.140 --> 00:05:22.680
+O S4 Gana é modular, o que significa apenas que ele é uma coleção de áreas conectadas
+
+00:05:22.680 --> 00:05:23.760
+em vez de um bloco gigante.
+
+00:05:24.520 --> 00:05:28.480
+As municipais abrangem finanças, compras, vendas, manufatura, cadeia de suprimentos, gestão
+
+00:05:28.480 --> 00:05:32.180
+de ativos, projetos e pessoas, com os recursos humanos sendo frequentemente tratados pelos
+
+00:05:32.180 --> 00:05:34.080
+CEP Success Factors, que atua junto ao núcleo.
+
+00:05:35.080 --> 00:05:38.780
+Em vez de listá-las, vamos acompanhar um pedido através do sistema, pois é aí que o design
+
+00:05:38.780 --> 00:05:39.620
+se mostra na prática.
+
+00:05:39.620 --> 00:05:43.280
+Um cliente faz um pedido, então a área de vendas, o registro e verifica disponibilidade.
+
+00:05:43.720 --> 00:05:46.520
+Essa verificação alcança o estoque e reside na área de cadeia de suprimentos.
+
+00:05:46.940 --> 00:05:49.760
+Se o estoque estiver baixo, o sistema pode acionar a produção ou uma compra, assim que
+
+00:05:49.760 --> 00:05:52.300
+as mercadorias são enviadas, uma fatura é emitida, uma fatura é emitida, os livros
+
+00:05:52.300 --> 00:05:53.260
+contábeis são atualizados.
+
+00:05:53.480 --> 00:05:55.260
+Note quantas áreas esse fluxo único tocou.
+
+00:05:55.660 --> 00:06:00.080
+Vendas, estoque, manufatura ou compras e finanças agiram sobre o mesmo pedido, lendo
+
+00:06:00.080 --> 00:06:03.740
+uma base de dados compartilhada, sem que ninguém copiasse dados entre sistemas ou enviasse
+
+00:06:03.740 --> 00:06:04.540
+planilhas por e-mail.
+
+00:06:04.980 --> 00:06:05.420
+Um sistema.
+
+00:06:05.620 --> 00:06:08.020
+Conjunto de registros é isso que faz os fluxos funcionarem.
+
+00:06:08.020 --> 00:06:10.380
+Um segundo fluxo mostra o padrão no lado das compras.
+
+00:06:11.100 --> 00:06:14.180
+Alguém gera uma requisição de compra, que se torna um pedido de compra, depois um recebimento
+
+00:06:14.180 --> 00:06:16.020
+de mercadoria e, finalmente, um pagamento ao fornecedor.
+
+00:06:16.940 --> 00:06:20.180
+Cada uma dessas etapas é lançada no financeiro assim que ocorre, portanto o custo fica visível
+
+00:06:20.180 --> 00:06:21.580
+enquanto o processo ainda está em execução.
+
+00:06:22.220 --> 00:06:24.480
+Um terceiro par de fluxos conecta o sistema ao topo da empresa.
+
+00:06:25.200 --> 00:06:28.680
+Do pedido ao recebimento, segue uma venda até o dinheiro no banco e do registro ao relatório
+
+00:06:28.680 --> 00:06:31.020
+puxa transações de cada área para o financeiro.
+
+00:06:31.940 --> 00:06:35.120
+Esses dois fluxos de ponta a ponta são como a maioria das equipes escreve o que o S4 faz por
+
+00:06:35.120 --> 00:06:35.300
+elas.
+
+00:06:35.300 --> 00:06:38.000
+Embaixo disso ficam os dados mestres de compartilho.
+
+00:06:38.360 --> 00:06:42.400
+O cliente, o material e o fornecedor existem apenas uma vez e cada área lê essa mesma definição,
+
+00:06:42.520 --> 00:06:45.860
+então o pedido pode circular entre departamentos sem que ninguém precise redigitá-lo.
+
+00:06:46.540 --> 00:06:47.180
+Esse é o verdadeiro objetivo.
+
+00:06:47.660 --> 00:06:51.580
+O S4 Cana não é tanto um produto, mas um conjunto compartilhado de processos construídos
+
+00:06:51.580 --> 00:06:54.800
+sobre uma única fonte de dados e o valor vem de quão bem essas peças se encaixam.
+
+00:06:55.880 --> 00:06:57.340
+Como as empresas realmente operam.
+
+00:06:57.700 --> 00:07:01.200
+Agora, a decisão sobre a qual a maioria das equipes discute por mês, onde o sistema reside
+
+00:07:01.200 --> 00:07:01.660
+fisicamente.
+
+00:07:02.620 --> 00:07:05.480
+Existem três opções principais e cada uma troca o controle por esforço e o momento
+
+00:07:05.480 --> 00:07:05.800
+de vem.
+
+00:07:06.360 --> 00:07:07.820
+Cada escolha tem suas compensações reais.
+
+00:07:08.260 --> 00:07:11.820
+On-premise significa que a empresa possui o hardware e executa o sistema em seu próprio
+
+00:07:11.820 --> 00:07:12.420
+data center.
+
+00:07:12.840 --> 00:07:16.920
+Você decide quando atualizar, pode personalizar quase tudo e assume o custo e a responsabilidade
+
+00:07:16.920 --> 00:07:18.340
+que vem com toda essa liberdade.
+
+00:07:18.340 --> 00:07:23.800
+A nuvem privada é o caminho do meio, vendida como S4 Cana Cloud Private Edition e frequentemente
+
+00:07:23.800 --> 00:07:25.880
+entregue sob um programa chamado Rise with SAP.
+
+00:07:26.620 --> 00:07:29.900
+É gerenciada para você e roda atrás do seu próprio firewall, mas você mantém a
+
+00:07:29.900 --> 00:07:32.020
+maioria das opções de personalização do mundo on-premise.
+
+00:07:32.780 --> 00:07:37.120
+A opção padronizada é a nuvem pública, chamada S4 Cana Cloud Public Edition e vendida
+
+00:07:37.120 --> 00:07:38.280
+através do Grow with SAP.
+
+00:07:38.800 --> 00:07:40.100
+A roda é uma infraestrutura compartilhada.
+
+00:07:40.640 --> 00:07:44.180
+A SAP realiza as atualizações conforme seu próprio cronograma e custa menos para operar.
+
+00:07:44.620 --> 00:07:47.240
+É a da abrimão, é a liberdade de adaptar o software aos hábitos antigos.
+
+00:07:47.240 --> 00:07:51.920
+Uma quarta opção é a híbrida, onde parte do sistema roda na nuvem e o restante permanece
+
+00:07:51.920 --> 00:07:52.240
+onde está.
+
+00:07:52.820 --> 00:07:56.240
+As empresas a utilizam para migrar gradualmente, ou para manter uma parte sensível do negócio
+
+00:07:56.240 --> 00:07:57.880
+próximo enquanto tudo o resto se moderniza.
+
+00:07:58.420 --> 00:07:59.840
+Vale a pena dizer a compensação claramente.
+
+00:08:00.440 --> 00:08:03.800
+A nuvem pública lhe dá menos dores de cabeça com atualizações e menos controle, enquanto
+
+00:08:03.800 --> 00:08:06.620
+a nuvem privada e o on-premise lhe dão mais controle e mais trabalho para realizar.
+
+00:08:07.080 --> 00:08:08.740
+Não existe uma resposta universalmente correta.
+
+00:08:08.920 --> 00:08:11.720
+A escolha geralmente se resume ao quanto a empresa está disposta a mudar a sua forma de
+
+00:08:11.720 --> 00:08:11.980
+trabalhar.
+
+00:08:12.940 --> 00:08:16.120
+Essa decisão cabe tanto ao negócio quanto à TI, e é por isso que leva tanto tempo para
+
+00:08:16.120 --> 00:08:16.740
+ser definida.
+
+00:08:17.880 --> 00:08:22.640
+Como chegar lá e o relógio de 2027, independentemente da casa que você escolher, ainda terá que
+
+00:08:22.640 --> 00:08:24.580
+chegar lá a partir de onde você está hoje, e isso é a migração.
+
+00:08:24.960 --> 00:08:25.580
+Isso é a migração.
+
+00:08:26.020 --> 00:08:29.360
+Existem três caminhos comuns, e os nomes soam mais estranhos do que as ideias por trás
+
+00:08:29.360 --> 00:08:29.600
+deles.
+
+00:08:30.080 --> 00:08:30.760
+Tempo é fundamental aqui.
+
+00:08:31.120 --> 00:08:32.260
+Greenfield significa um novo começo.
+
+00:08:32.860 --> 00:08:35.960
+Você constrói um novo sistema do zero e redesenha seus processos enquanto adiciona.
+
+00:08:35.960 --> 00:08:39.320
+É o resultado mais limpo e geralmente o mais caro porque você está mudando a forma
+
+00:08:39.320 --> 00:08:42.040
+como as pessoas trabalham e não apenas movendo dados entre máquinas.
+
+00:08:43.140 --> 00:08:45.540
+Brownfield significa converter o sistema que você já possui.
+
+00:08:45.540 --> 00:08:49.760
+É mais rápido e mantém seu histórico, mas carrega seus velhos hábitos e códigos customizados
+
+00:08:49.760 --> 00:08:52.600
+antigos para a nova plataforma, o que pode limitar silenciosamente seus ganhos.
+
+00:08:53.240 --> 00:08:54.700
+Uma conversão também não é uma simples cópia.
+
+00:08:55.260 --> 00:08:58.560
+Ela executa o sistema existente através de um processo técnico de conversão, verifica
+
+00:08:58.560 --> 00:09:01.680
+o código customizado em busca de algo que a nova versão não suporte mais e corrige
+
+00:09:01.680 --> 00:09:02.100
+o que quebrar.
+
+00:09:03.280 --> 00:09:05.520
+Bluefield, às vezes chamado de híbrido, fica no meio termo.
+
+00:09:06.220 --> 00:09:09.640
+Você move alguns processos para um novo modelo enquanto converte o restante do sistema
+
+00:09:09.640 --> 00:09:12.500
+existente, o que espalha a mudança ao longo do tempo em vez de absorver-a de uma
+
+00:09:12.500 --> 00:09:13.000
+sua vez.
+
+00:09:13.960 --> 00:09:17.500
+Não existe uma escolha padrão aqui, e o caminho certo depende de quanta mudança de processo
+
+00:09:17.500 --> 00:09:18.820
+a empresa consegue realmente absorver.
+
+00:09:19.660 --> 00:09:21.060
+Para muitas empresas isso agora é urgente.
+
+00:09:22.200 --> 00:09:25.820
+A manutenção padrão para o antigo sistema ECC termina em dezembro de 2027 e a manutenção
+
+00:09:25.820 --> 00:09:28.800
+estendida opcional vai até o final de 2030 mediante uma taxa extra.
+
+00:09:29.960 --> 00:09:33.140
+Havia também uma ponte chamada pacotes de compatibilidade, que permitia que recursos
+
+00:09:33.140 --> 00:09:35.800
+clássicos do ECC continuassem rodando dentro do S4 ganho local.
+
+00:09:35.940 --> 00:09:38.700
+Essa ponte foi praticamente fechada em 30, fechada em 30, fechada em 30, 26.
+
+00:09:38.700 --> 00:09:42.260
+Portanto, o prazo é real, mesmo que o custo exato de atrasar ainda seja debatido.
+
+00:09:42.980 --> 00:09:45.560
+O que importa agora é que a decisão não é opcional para sempre.
+
+00:09:45.860 --> 00:09:50.520
+Quanto mais uma empresa espera, menos opções confortáveis ela tem, mantendo o núcleo limpo.
+
+00:09:51.320 --> 00:09:55.200
+Quando uma migração é apressada, as equipes tendem a recorrer à única coisa que causa
+
+00:09:55.200 --> 00:09:58.800
+mais problemas depois, que é editar o código padrão da SAP diretamente.
+
+00:10:00.080 --> 00:10:02.420
+A solução tem um nome, Clean Core, e a ideia é simples.
+
+00:10:02.940 --> 00:10:03.760
+Não reescreva o motor.
+
+00:10:03.940 --> 00:10:05.740
+Construa complementos que sobrevivam a uma atualização.
+
+00:10:05.740 --> 00:10:09.300
+Na prática, significa estender o sistema por meio de interfaces liberadas em vez de
+
+00:10:09.300 --> 00:10:09.820
+modificá-lo.
+
+00:10:10.560 --> 00:10:14.580
+A SAP oferece um conjunto de ferramentas para isso, incluindo a SAP Business Technology Platform
+
+00:10:14.580 --> 00:10:18.220
+para construir fora do núcleo, um modelo de desenvolvimento chamado ABAP Cloud e aplicativos
+
+00:10:18.220 --> 00:10:20.520
+paralelos que chamam o núcleo por meio de APIs suportadas.
+
+00:10:21.120 --> 00:10:22.520
+A frase para lembrar é API liderada.
+
+00:10:22.900 --> 00:10:26.420
+Uma API é apenas uma porta de entrada suportada no sistema e a SAP sinaliza quais portas são
+
+00:10:26.420 --> 00:10:27.140
+seguras para uso.
+
+00:10:27.900 --> 00:10:30.120
+Construa com base nelas e uma atualização tende a não afetá-la.
+
+00:10:30.420 --> 00:10:33.960
+Edite o código padrão e cada atualização se transformará em um trabalho de reparo.
+
+00:10:33.960 --> 00:10:35.140
+Vejamos um exemplo concreto.
+
+00:10:35.140 --> 00:10:37.480
+Digamos que uma empresa queira uma tela de aprovação de clientes.
+
+00:10:37.940 --> 00:10:41.420
+Em vez de estar um programa SAP padrão, um desenvolvedor cria um pequeno aplicativo
+
+00:10:41.420 --> 00:10:44.080
+separado que lê e grava dados por meio de uma interface suportada.
+
+00:10:44.980 --> 00:10:48.240
+Quando a SAP lança uma atualização, esse aplicativo continua funcionando e ninguém
+
+00:10:48.240 --> 00:10:49.640
+precisa vasculhar o código para ver o que quebrou.
+
+00:10:50.060 --> 00:10:51.280
+A recompensa aparece anos depois.
+
+00:10:51.700 --> 00:10:54.940
+Cada atualização pode ser uma tarde tranquila, um projeto de seis meses, e a diferença
+
+00:10:54.940 --> 00:10:58.600
+vem quase inteiramente de quão profundamente o núcleo foi modificado, foi modificado.
+
+00:10:58.740 --> 00:10:59.900
+Esse é o objetivo principal do CleanCorp.
+
+00:11:00.680 --> 00:11:04.020
+Onde o S4Cana encontra a Microsoft e os dois mundos em que muitos de nós trabalhamos
+
+00:11:04.020 --> 00:11:04.580
+se encontram aqui.
+
+00:11:04.980 --> 00:11:06.480
+As conexões são mais práticas do que parece.
+
+00:11:07.080 --> 00:11:10.920
+Para dados, o Microsoft Fabric pode extrair informações do SAP por meio de conectores
+
+00:11:10.920 --> 00:11:15.940
+integrados para SAP HANA, tabelas SAP e SAP BW, espelhando dados SAP em seu armazenamento
+
+00:11:15.940 --> 00:11:19.160
+One Lake para que relatórios permaneçam atualizados sem tarefas noturnas de cópia.
+
+00:11:20.320 --> 00:11:22.340
+Vale a pena conhecer o caminho do espelhamento se você jogou este.
+
+00:11:22.900 --> 00:11:26.380
+Dados SAP podem transitar pelo SAP Datasphere até o armazenamento em nuvem da Microsoft
+
+00:11:26.380 --> 00:11:28.320
+e o Fabric os mantém sincronizados a partir daí.
+
+00:11:28.320 --> 00:11:31.860
+Para casos mais simples, os conectores do próprio Fabric extraem dados de tabelas
+
+00:11:31.860 --> 00:11:33.580
+S4CANA ou SAP BW diretamente.
+
+00:11:34.220 --> 00:11:35.820
+Uma versão simples desse fluxo é assim.
+
+00:11:36.560 --> 00:11:40.200
+Um pedido de venda chega ao S4CANA, o Fabric detecta alteração e o relatório do Power BI
+
+00:11:40.200 --> 00:11:42.080
+é atualizado com um novo valor, Tayer.
+
+00:11:42.860 --> 00:11:45.940
+Pessoas que leem esse relatório nunca fazem um login no SAP que é exatamente o ponto.
+
+00:11:46.780 --> 00:11:48.200
+É um verdadeiro atalho para os usuários de negócio.
+
+00:11:48.800 --> 00:11:51.940
+Identidade é a segunda conexão e a que evita a maior parte das dores de cabeça.
+
+00:11:52.880 --> 00:11:56.340
+O Microsoft entra aí de gerencio login e autenticação multifator para aplicativos
+
+00:11:56.340 --> 00:11:59.840
+SAP como o Fiori para que os usuários façam login apenas uma vez em vez de lidar com senhas
+
+00:11:59.840 --> 00:12:00.340
+separadas.
+
+00:12:00.840 --> 00:12:01.780
+Uma ressalva importante aqui.
+
+00:12:02.200 --> 00:12:05.500
+O Entry ID pode lidar com a autenticação, mas não substitui as regras de autorização
+
+00:12:05.500 --> 00:12:08.860
+do próprio SAP, que ainda decidem o que uma pessoa tem permissão para ver e fazer dentro
+
+00:12:08.860 --> 00:12:09.360
+do sistema.
+
+00:12:10.480 --> 00:12:12.140
+Automação e segurança completam o cenário.
+
+00:12:12.580 --> 00:12:16.280
+Power Platform e o Azure Logic Apps conectam-se ao SAP por meio de conectores, permitindo
+
+00:12:16.280 --> 00:12:19.220
+que um evento de negócio dispare um fluxo de trabalho nas ferramentas da Microsoft,
+
+00:12:19.400 --> 00:12:22.720
+e o Microsoft Sentinel para o SAP monitorar os logs de auditoria do SAP em busca de sinais
+
+00:12:22.720 --> 00:12:23.140
+de problemas.
+
+00:12:23.140 --> 00:12:27.920
+Power Platform também oferece modelos SAP pré-construídos para que um criador possa
+
+00:12:27.920 --> 00:12:31.140
+montar um fluxo de aprovação sem precisar escrever código diretamente na interface
+
+00:12:31.140 --> 00:12:31.340
+SAP.
+
+00:12:32.020 --> 00:12:35.740
+Há também avanços no lado da IA com o assistente Júlio da SAP, anunciado com integração
+
+00:12:35.740 --> 00:12:40.660
+ao Microsoft 3Bidas 305 Copilot, e telas SAP que podem ser exibidas dentro do Teams.
+
+00:12:40.900 --> 00:12:44.080
+Considere isso como algo em evolução, pois a disponibilidade muda constantemente e
+
+00:12:44.080 --> 00:12:46.420
+anúncios não são o mesmo que recursos que você pode ativar hoje.
+
+00:12:46.860 --> 00:12:50.380
+No aspecto de custos, vale a pena verificar as letras miúdas, pois parte do trabalho de
+
+00:12:50.380 --> 00:12:53.740
+replicação é gratuita, enquanto as consultas e relatórios criados sobre eles são cobrados
+
+00:12:53.740 --> 00:12:54.360
+pelas taxas novas.
+
+00:12:55.440 --> 00:12:57.120
+Os limites honestos e os erros comum.
+
+00:12:57.760 --> 00:12:59.840
+Agora entramos nas partes que não correspondem ao discurso de venda.
+
+00:13:00.240 --> 00:13:01.060
+Comecemos pela velocidade.
+
+00:13:01.460 --> 00:13:04.960
+Os números dramáticos de desempenho vêm do próprio marketing da SAP, e uma consulta
+
+00:13:04.960 --> 00:13:08.100
+mal projetada ainda será lenda, não importa qual banco de dados esteja por baixo.
+
+00:13:09.160 --> 00:13:11.360
+O próximo erro é subestimar a migração em si.
+
+00:13:11.360 --> 00:13:16.520
+Equipes orçam software e licenças, então descobrem que limpar décadas de dados bagunçados
+
+00:13:16.520 --> 00:13:18.900
+e redesenhar processos consome o dinheiro e o tempo reais.
+
+00:13:19.820 --> 00:13:21.340
+O software raramente é a parte difícil.
+
+00:13:21.940 --> 00:13:23.700
+O lift and shift é um primo próximo desse erro.
+
+00:13:24.260 --> 00:13:28.060
+Mover o ECC como está pode levar ao mesmo código customizado e amaranhado, e relatórios
+
+00:13:28.060 --> 00:13:31.500
+lentos direto para uma nova plataforma, invalidando silenciosamente grande parte do objetivo
+
+00:13:31.500 --> 00:13:31.920
+da mudança.
+
+00:13:32.460 --> 00:13:33.920
+Nuvem pública também pega as pessoas surpresas.
+
+00:13:34.500 --> 00:13:38.320
+Equipes acostumadas a mudar o que quiserem no ambiente local descobrem que a versão padronizada
+
+00:13:38.320 --> 00:13:42.060
+não permite, essa surpresa tende a chegar tarde, quando o projeto já está comprometido.
+
+00:13:42.700 --> 00:13:43.980
+Duas armadilhas mais sancionadas.
+
+00:13:44.700 --> 00:13:47.940
+Uma é esperar que os benefícios apareçam imediatamente, quando os ganhos em relatórios
+
+00:13:47.940 --> 00:13:51.060
+e processos geralmente surgem meses após a implementação, quando as pessoas realmente
+
+00:13:51.060 --> 00:13:52.020
+confiam no novo sistema.
+
+00:13:53.020 --> 00:13:56.960
+A outra é tratar tudo como um projeto de TI, quando as decisões que mais importam pertencem
+
+00:13:56.960 --> 00:13:58.520
+ao negócio, e não à equipe técnica.
+
+00:13:59.540 --> 00:14:01.100
+A parte mais difícil raramente é técnica.
+
+00:14:01.780 --> 00:14:05.560
+Treinar pessoas, mudar como trabalham e fazer o negócio concordar com novos processos
+
+00:14:05.560 --> 00:14:07.160
+é o que decide se o projeto terá sucesso.
+
+00:14:07.160 --> 00:14:09.560
+E essa parte geralmente recebe o menor orçamento.
+
+00:14:10.800 --> 00:14:12.380
+Nada disso é motivo para evitar mudança.
+
+00:14:13.220 --> 00:14:13.940
+O que levar daqui?
+
+00:14:14.580 --> 00:14:15.720
+Então aqui está a versão curta.
+
+00:14:15.900 --> 00:14:19.460
+O S4 ganha um sistema no qual uma empresa executa seu negócio principal, reconstruído
+
+00:14:19.460 --> 00:14:21.760
+em 2015 em um banco de dados que mantém os dados na memória.
+
+00:14:21.940 --> 00:14:23.320
+Eis que permite relatórios em tempo real.
+
+00:14:24.100 --> 00:14:27.540
+Ele simplifica o modelo de dados, cobre as principais áreas de negócio e força uma decisão
+
+00:14:27.540 --> 00:14:31.100
+real sobre nuvem, caminho de migração e quanto código customizado você permite perto
+
+00:14:31.100 --> 00:14:31.620
+do núcleo.
+
+00:14:32.800 --> 00:14:36.280
+As ferramentas da Microsoft se conectam nas camadas de dados, identidade e automação.
+
+00:14:36.280 --> 00:14:39.760
+E o prazo de 2027 é a razão pela qual nada disso pode esperar para sempre.
+
+00:14:40.400 --> 00:14:41.900
+Aqui está a pergunta sobre a qual você reflete-se.
+
+00:14:42.340 --> 00:14:45.820
+Se sua equipe ainda está no ECC, você realmente sabe para qual caminho de migração ela está
+
+00:14:45.820 --> 00:14:47.300
+indo ou isso ainda é uma discussão aberta?
+
+00:14:48.040 --> 00:14:52.720
+Se isso tornou o tópico menos intimidante, inscreva-se no M365FM para dominar as ferramentas
+
+00:14:52.720 --> 00:14:54.720
+e a mentalidade que moldam o futuro do trabalho.
+
+00:14:54.720 --> 00:14:54.740
+E a mentalidade que moldam o futuro do trabalho.

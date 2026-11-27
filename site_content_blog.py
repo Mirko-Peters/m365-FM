@@ -34,9 +34,80 @@ def _ts(d):
         return 0
 
 
-def render(md):
-    """Markdown -> HTML (gleiche Grundlage wie die Shownotes); Bildzeilen werden zu <figure>."""
+_FENCE = re.compile(r"^\s*```")
+_TROW = re.compile(r"^\s*\|.*\|\s*$")
+_TSEP = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$")
+
+
+def _cells(line):
+    """Zellen einer Tabellenzeile | a | b | (\\| bleibt ein Strich im Text)."""
+    s = line.strip()
+    s = s[1:] if s.startswith("|") else s
+    s = s[:-1] if s.endswith("|") and not s.endswith("\\|") else s
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", s)]
+
+
+def _segments(md):
+    """Markdown in Abschnitte: ("code", text) fuer ```-Bloecke, ("table", zeilen) fuer Tabellen (Kopf, Trennzeile |---|, Zeilen), sonst ("md", text).
+    md_blocks (site_shownotes) kennt beides nicht: Tabellen wurden zu Absatztext mit |---|, Codebloecke zu einem Absatz (Review #509)."""
+    lines, out, buf, i = md.split("\n"), [], [], 0
+    def flush():
+        if buf: out.append(("md", "\n".join(buf))); buf.clear()
+    while i < len(lines):
+        ln = lines[i]
+        if _FENCE.match(ln):
+            ind = len(ln) - len(ln.lstrip(" "))
+            j, code = i + 1, []
+            while j < len(lines) and not _FENCE.match(lines[j]):
+                code.append(lines[j][ind:] if lines[j][:ind].strip() == "" else lines[j]); j += 1
+            if j < len(lines):   # geschlossener Block
+                flush(); out.append(("code", "\n".join(code))); i = j + 1; continue
+        if _TROW.match(ln) and i + 1 < len(lines) and _TSEP.match(lines[i + 1]):
+            j = i + 2
+            while j < len(lines) and _TROW.match(lines[j]): j += 1
+            flush(); out.append(("table", lines[i:j])); i = j; continue
+        buf.append(ln); i += 1
+    flush()
+    return out
+
+
+def _table(rows):
+    head, body = _cells(rows[0]), [_cells(r) for r in rows[2:]]
+    th = "".join(f"<th>{SNS._inline(c)}</th>" for c in head)
+    tb = "".join("<tr>" + "".join(f"<td>{SNS._inline(c)}</td>" for c in (r + [""] * (len(head) - len(r)))[:max(len(head), len(r))]) + "</tr>" for r in body)
+    return f'<div class="tbl" style="overflow-x:auto"><table><thead><tr>{th}</tr></thead><tbody>{tb}</tbody></table></div>'
+
+
+RICH = "v2"   # Kopfzeile "render: v2": Tabellen, ```-Bloecke und <ol start> (Review #509). Nur mit diesem Schalter, damit freigegebene Altpakete
+# Byte fuer Byte gleich bleiben: ein neuer Renderer aenderte HTML und Hash von 64 uebersetzten Paketen, die Sprachfassungen fielen weg und
+# translate_blog schickte die neuen Tabellenzellen an die KI (keine neuen KI-Kosten, Mirko 17.11.2026). Die Nerdio-Warteschlange traegt den Schalter.
+
+
+def rich_of(meta):
+    """Paket mit dem Schalter render: v2?"""
+    return str((meta or {}).get("render") or "").strip().lower() == RICH
+
+
+def render(md, rich=True):
+    """Markdown -> HTML (gleiche Grundlage wie die Shownotes); Bildzeilen werden zu <figure>, mit rich zusaetzlich Tabellen zu <table>,
+    ```-Bloecke zu <pre><code> und nummerierte Listen nach einem Codeblock mit start. rich=False: der fruehere Weg (Pakete ohne render: v2)."""
+    if not rich:
+        return "\n".join(_render_md(md, rich=False))
     out = []
+    for kind, seg in _segments(md):
+        if kind == "code":
+            out.append(f"<pre><code>{esc(seg)}</code></pre>")
+        elif kind == "table":
+            out.append(_table(seg))
+        else:
+            out.extend(_render_md(seg))
+    return "\n".join(out)
+
+
+def _render_md(md, rich=True):
+    out = []
+    m0 = re.match(r"\s*(\d+)[.)]\s", md.lstrip("\n")) if rich else None   # nummerierte Liste, die nach einem Codeblock weitergeht: Nummer behalten
+    start = int(m0.group(1)) if m0 and int(m0.group(1)) > 1 else 0
     for b in SNS.md_blocks(IMG.sub(lambda m: f"\n\n@@IMG@@{m.group(2)}@@{m.group(1)}@@\n\n", md)):
         if b[0] == "h":
             lvl, t = b[1]; lvl = min(max(lvl, 2), 4); out.append(f"<h{lvl}>{SNS._inline(t)}</h{lvl}>")
@@ -44,8 +115,9 @@ def render(md):
             m = re.fullmatch(r"@@IMG@@(\S+)@@(.*)@@", b[1].strip())
             out.append(f'<figure><img src="{esc(m.group(1))}" alt="{esc(m.group(2))}" loading="lazy" decoding="async"></figure>' if m else f"<p>{SNS._inline(b[1])}</p>")
         else:
-            out.append(f"<{b[0]}>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in b[1]) + f"</{b[0]}>")
-    return "\n".join(out)
+            st = f' start="{start}"' if b[0] == "ol" and start and not out else ""
+            out.append(f"<{b[0]}{st}>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in b[1]) + f"</{b[0]}>")
+    return out
 
 
 def check(rec, lang, slug, ents):
@@ -71,7 +143,7 @@ def check(rec, lang, slug, ents):
     kp = [str(x).strip() for x in (m.get("keypoints") or []) if str(x).strip()]   # Kernpunkte (3-8, je 10-200 Zeichen): Liste nach dem ersten Absatz, wird mit dem Text uebersetzt
     if kp and (not 3 <= len(kp) <= 8 or any(not 10 <= len(x) <= 200 for x in kp)): err.append("Kernpunkte: 3-8 Punkte mit je 10-200 Zeichen")
     if err: return None, err
-    html = render(body)
+    html = render(body, rich=rich_of(m))
     if kp:
         box = f"<h2>{esc(T(lang, 'Key points', 'Kernpunkte'))}</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"   # Ueberschrift in der Paketsprache (data/py_i18n.json); englische Pakete uebersetzt translate_blog samt h2
         cut = html.find("</p>")

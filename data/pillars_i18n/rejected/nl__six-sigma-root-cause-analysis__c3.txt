@@ -1,0 +1,74 @@
+<translation>
+## Sigmaniveaus en DPMO: de berekening stap voor stap
+
+Geen van de veel gelezen pagina's laat deze berekening in tekst zien, dus hier is ze stap voor stap.
+
+### Eenheden, defecten en kansen
+
+| Term | Betekenis | Voorbeeld (kleplichaam) |
+|---|---|---|
+| Eenheid | het product of de werkstuk dat wordt geproduceerd of verwerkt | één hydraulisch kleplichaam |
+| Defect | elke afwijking van een klanteneis | een lek bij de test, een boring buiten tolerantie |
+| Kans | een afzonderlijke gelegenheid tot een defect die wordt gemeten | 8 kritieke kwaliteitskenmerken gecontroleerd per lichaam |
+| DPU | defecten per eenheid = defecten ÷ eenheden | |
+| DPO | defecten per kans = defecten ÷ (eenheden × kansen) | |
+| DPMO | DPO × 1.000.000 | |
+
+### Uitgewerkt voorbeeld 1: van defectaantallen naar sigmaniveau
+
+Een cel bewerkt in een maand 5.000 kleplichamen. Elk lichaam heeft 8 kenmerken die worden gecontroleerd (kansen). De inspectie registreert 46 defecten.
+
+- DPU = 46 ÷ 5.000 = 0,0092
+- DPO = 46 ÷ (5.000 × 8) = 46 ÷ 40.000 = 0,00115
+- DPMO = 0,00115 × 1.000.000 = **1.150**
+
+Om DPMO om te zetten in een sigmaniveau, zoekt u de z-waarde van de standaardnormale verdeling waarvan de bovenstaart gelijk is aan de DPO, en telt u daar de gebruikelijke 1,5 bij op:
+
+- Opbrengst per kans = 1 − 0,00115 = 0,99885
+- z voor 0,99885 = 3,05 (uit een normaaltabel, of `=NORM.S.INV(0,99885)` in Excel)
+- Sigmaniveau (kortetermijn, met verschuiving) = 3,05 + 1,5 = **4,55**
+
+De formule achter elke sigmatabel is DPMO = 1.000.000 × (1 − Φ(sigmaniveau − 1,5)), waarbij Φ de cumulatieve standaardnormale verdeling is [5]. In Excel: `=NORM.S.INV(1-DPMO/1000000)+1.5`.
+
+**Let op met kansen.** Het aantal kansen is een keuze, en die keuze bepaalt het resultaat. Als dezelfde 46 defecten worden afgezet tegen 20 "kansen" per eenheid, daalt de DPMO naar 460 en stijgt het sigmaniveau naar ongeveer 4,8, zonder dat er iets verbeterd is. Definieer kansen één keer per productfamilie, tel alleen kenmerken die daadwerkelijk worden gecontroleerd, en houd de definitie vast. Voor vergelijkingen tussen processen zijn DPU en first pass yield moeilijker te manipuleren.
+
+### De sigmaconversietabel (berekend)
+
+Waarden berekend met bovenstaande formule (lange-termijn-DPMO met de verschuiving van 1,5 sigma) en, ter vergelijking, voor een perfect gecentreerd proces waarbij beide staarten worden meegeteld:
+
+| Sigmaniveau | DPMO (met verschuiving van 1,5σ) | Opbrengst (met verschuiving) | Defecten per miljoen bij centrering, zonder verschuiving |
+|---|---|---|---|
+| 1 | 691.462 | 30,9% | 317.311 |
+| 2 | 308.538 | 69,1% | 45.500 |
+| 3 | 66.807 | 93,3% | 2.700 |
+| 4 | 6.210 | 99,38% | 63 |
+| 4,5 | 1.350 | 99,865% | 6,8 |
+| 5 | 233 | 99,977% | 0,57 |
+| 6 | 3,4 | 99,99966% | 0,002 |
+
+De laatste kolom laat zien waarom de verschuiving ertoe doet: zonder verschuiving zou een zessigmaproces ongeveer twee defecten per miljard opleveren, niet 3,4 per miljoen.
+
+### Uitgewerkt voorbeeld 2: rolled throughput yield
+
+Een onderdeel doorloopt vier processtappen. De first pass yields zijn 98%, 95%, 99% en 97%. Rolled throughput yield (RTY), de kans dat een eenheid alle stappen doorloopt zonder enige herbewerking, is het product:
+
+RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, oftewel 89,4%
+
+Elke stap lijkt op zichzelf acceptabel; samen moet meer dan één op de tien eenheden ergens worden herbewerkt of afgekeurd. RTY is voor een fabrieksmanager vaak een bruikbaardere maatstaf dan een sigmaniveau, omdat het de "verborgen fabriek" van herbewerkingslussen zichtbaar maakt. Voor de definities van first pass yield en verwante maatstaven, zie de [Manufacturing KPIs guide](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### Uitgewerkt voorbeeld 3: wat één sigmaniveau waard is
+
+Het lopende voorbeeld in dit artikel: een fabriek levert per jaar 48.000 kleplichamen af. 2,8% faalt bij de eindlektest. Elke fout kost $85 aan herbewerking, hertest en afkeur (illustratief bedrag).
+
+- Fouten per jaar: 48.000 × 0,028 = 1.344
+- Kosten: 1.344 × $85 = $114.240 per jaar
+- Sigmaniveau: DPO = 0,028 per eenheid (één kans: lek of geen lek) -> z = 1,91 -> **3,41 sigma**
+
+Als een DMAIC-project het faalpercentage terugbrengt naar 0,6%:
+
+- Fouten: 48.000 × 0,006 = 288; kosten: $24.480
+- Jaarlijkse besparing: $89.760 (vóór projectkosten)
+- Sigmaniveau: z voor 0,994 = 2,51 -> **4,01 sigma**
+
+Een stijging van ongeveer 3,4 naar ongeveer 4,0 sigma is een realistisch resultaat van één project. Een stijging van 4,5 naar 6 sigma vereist meestal een herontwerp, niet een project.
+</translation>

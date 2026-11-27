@@ -1,8 +1,8 @@
 ---
 title: "Restricted SharePoint Search: a bridge, not a fix"
 summary: "Restricted SharePoint Search can limit what Copilot and search surface while you clean up permissions, but it is a temporary measure. Learn what it does, what it does not do, and how to fix the root cause."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-27
 topics: [restricted-sharepoint-search, oversharing, copilot-governance]

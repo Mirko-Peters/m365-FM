@@ -1,6 +1,9 @@
 """Community-Podcast: Seiten fuer veroeffentlichte (von der Redaktion in Spreaker freigegebene) Folgen, Verzeichnis und RSS."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
+import site_entmatch as EM   # Kontext-Links in der Beschreibung
+import site_linkctx as LC   # Beziehungskontext der Linklisten (data/link_context.json)
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_player as PL   # Spreaker-Player erst nach Klick
@@ -42,21 +45,25 @@ def build(g, eps, people, api):
         for e in mine:
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(EN.list_link(f"{BASE}/entity/{t}/", ENTS[t], lang, cls="mb-tag") + " " for t in topics)   # Paket 6: Themen-Chips mit Zusatz
             player = "" if not e["spreaker_id"] else PL.player("spreaker", e["spreaker_id"], e["title"], T(lang, "Listen on Spreaker", "Bei Spreaker anhören"), link=e.get("ep_url"), height=200)
             gs = [g for g in (e.get("guests") or []) if g.get("handle") != e["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""
+            # Beschreibung mit Kontext-Links (site_entmatch): erste Nennung je Entitaet, Kontext = Themen, Ziel in der Sprache der Seite
+            _used = EM.Used()
+            _desc, _ = EM.shared(ENTS).link_html("".join("<p>" + esc(par) + "</p>" for par in (e.get("description") or "").split(chr(10) * 2) if par.strip()), EM.url_in(BASE, lang), lang, topics, used=_used)
+            _ment = EM.mentions(BASE, [i for i in _used if i in ENTS], topics)
             b = shell(lang, f'<p class="mut"><a href="{croot}podcast/">{esc(ttl)}</a></p><article><h1>{esc(e["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{e["handle"]}/" rel="author">{esc(e["name"])}</a> · {iso(e["published"])}</p>{guests_html}{player}'
-                            f'{"".join("<p>" + esc(par) + "</p>" for par in (e.get("description") or "").split(chr(10) * 2) if par.strip())}'
-                            f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if e.get("ai") else ""}</article><p>{tl}</p>'
+                            f'{_desc}'
+                            f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if e.get("ai") else ""}</article>{(LC.intro(lang, "ep.topics") + "<p>" + tl + "</p>") if tl else ""}'
                             f'<p><a class="btn" href="{esc(e["ep_url"])}" rel="noopener">{esc(T(lang, "Listen on Spreaker", "Bei Spreaker anhören"))}</a> <a href="{croot}podcast/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}podcast/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[e['slug']])], kind="episode") + '<section id="c-comments"></section>'
                             + (ctags(lang, "podcast%d" % e["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": u + "#episode", "url": u, "name": e["title"], "description": (e.get("description") or "")[:500], "inLanguage": lang,
                    "datePublished": iso(e["published"]), "author": {"@type": "Person", "@id": au + "#person", "name": e["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
-                   "partOfSeries": {"@type": "PodcastSeries", "name": "M365.FM", "url": f"{BASE}/"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics],
+                   "partOfSeries": {"@type": "PodcastSeries", "name": "M365.FM", "url": f"{BASE}/"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": _ment} if _ment else {}),
                    "associatedMedia": {"@type": "AudioObject", "contentUrl": e["ep_url"]}}]
-            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "podcast", e["title"], e["name"], e.get("description")), u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]"), side=(g["side"](lang, e["title"] + " " + (e.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "podcast", e["title"], e["name"], e.get("description")), u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]"), side=(g["side"](lang, e["title"] + " " + (e.get("description") or "")[:1500], ids=topics, topics_h=LC.plain(lang, "side.episode") if topics else "", key=f"pod:{e['slug']}") if g.get("side") else "")))
             if not e["title"].startswith("[Test]"): sitemap.append((u, iso(e["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}podcast/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}podcast/{e["slug"]}/"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(e["name"])} · {iso(e["published"])}</span></li>' for e in it) + "</ul>"

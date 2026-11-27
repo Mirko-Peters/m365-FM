@@ -1,0 +1,598 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.840
+Witamy w podcaście M365FM, gdzie zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:06.100 --> 00:00:09.580
+Dwa sposoby wyszukiwania i powód, dla którego poleganie na jednym z nich zawsze zawodzi.
+
+00:00:09.760 --> 00:00:12.620
+Twoje pole wyszukiwania od lat wykonuje tylko połowy swojej pracy.
+
+00:00:12.900 --> 00:00:16.280
+Czyta dokładnie wpisane słowa, co jest idealne przy szukaniu kodu polityki,
+
+00:00:16.420 --> 00:00:19.800
+ale bezużyteczne, gdy pytasz o wolne, a w dokumencie widnieje urlop.
+
+00:00:19.980 --> 00:00:26.120
+Azure AI Search naprawia to, uruchamiając dwa różne wyszukiwania jednocześnie i łącząc je w jedną uszeregowaną listę.
+
+00:00:26.120 --> 00:00:31.960
+To połączenie nazywa się wyszukiwaniem hybrydowym i stanowi podstawę odpowiedzi, które już otrzymujesz z narzędzi AI firmy Microsoft.
+
+00:00:32.160 --> 00:00:36.740
+Pod koniec dowiesz się, jak działają obie części, jak są łączone i gdzie po cichu wpływa to na twoją codzienną pracę.
+
+00:00:36.900 --> 00:00:38.720
+Wyszukiwanie nigdy nie było jedną umiejętnością.
+
+00:00:38.840 --> 00:00:41.040
+To dwie umiejętności, z których każda rozwiązuje inny problem.
+
+00:00:41.260 --> 00:00:44.200
+Jedna dopasowuje dokładne wpisane słowa, a druga to, co faktycznie miałeś na myśli.
+
+00:00:44.400 --> 00:00:47.160
+Większość używanych przez ciebie narzędzi dobrze wykonywała tylko jedno z tych zadań.
+
+00:00:47.280 --> 00:00:49.280
+Ta luka wyjaśnia wiele irytujących momentów.
+
+00:00:49.280 --> 00:00:54.100
+Pole wyszukiwania może bezbłędnie znaleźć numer części, a mimo to pominąć proste pytanie o politykę urlopową.
+
+00:00:54.300 --> 00:01:00.940
+Ktoś wpisuje wolne, a system rozkłada ręce, ponieważ potrzebna strona mówi o urlopie i nie ma ani jednej wspólnej litery z zapytaniem.
+
+00:01:01.200 --> 00:01:07.560
+Gdy system wykonuje obie prace naraz i porównuje odpowiedzi, rezultat przestaje przypominać proste szukanie, a zaczyna sprawiać wrażenie zrozumienia.
+
+00:01:07.720 --> 00:01:13.660
+Ta różnica ma większe znaczenie niż kiedyś, ponieważ narzędzia AI opierają się teraz na wynikach wyszukiwania jako materiale źródłowym do swoich odpowiedzi.
+
+00:01:13.820 --> 00:01:17.440
+Jeśli wyszukiwanie zawiedzie, odpowiedź będzie błędna niezależnie od tego, jak inteligentny jest model.
+
+00:01:17.440 --> 00:01:20.460
+Stawka rośnie jeszcze bardziej, gdy w grę wchodzi sztuczna inteligencja.
+
+00:01:20.640 --> 00:01:25.760
+Model językowy nie zna twoich plików, więc odpowiada na podstawie dostarczonego mu tekstu, a ten tekst pochodzi z wyszukiwarki.
+
+00:01:25.980 --> 00:01:31.900
+Słabe wyszukiwanie dostarcza modelowi słabe materiały, a żadna jakość modelu nie naprawi strony, która w ogóle nie została pobrana.
+
+00:01:32.120 --> 00:01:33.860
+Dlatego zajmiemy się tym w trzech krokach.
+
+00:01:34.020 --> 00:01:37.560
+Najpierw połowa dotycząca dokładnych słów, którą już znasz, nawet jeśli nigdy takiej nie nazwałeś.
+
+00:01:37.680 --> 00:01:40.400
+Potem połowa dotycząca znaczenia, w której kryje się największe zaskoczenie.
+
+00:01:40.400 --> 00:01:46.380
+Następnie, jak Azure, a i Search łączy oba te elementy w jedną listę i dlaczego całość pojawia się w narzędziach, które otwierasz codziennie rano.
+
+00:01:46.600 --> 00:01:52.900
+Jedno z najczęstszych założeń na temat wyszukiwania hybrydowego okazuje się błędne, a zrozumienie dlaczego uchroni cię przed pomyłką, którą popełnia wiele zespołów.
+
+00:01:53.040 --> 00:01:55.120
+Co tak naprawdę robi wyszukiwanie słów kluczowych?
+
+00:01:55.320 --> 00:01:58.120
+Wyszukiwanie słów kluczowych zaczyna się od zbudowania mapy twoich treści.
+
+00:01:58.120 --> 00:02:04.060
+Gdy pojawiają się dokumenty, system rejestruje, które słowa występują w których dokumentach, a ta mapa nazywana jest indeksem odwróconym.
+
+00:02:04.300 --> 00:02:10.280
+Brzmi to nudno, a jest powodem, dla którego wyszukiwarka odpowiada w milisekundy przeszukując miliony stron, zanim tekst zostanie w ogóle oczyszczony.
+
+00:02:10.480 --> 00:02:18.740
+Analizatory języka dzielą zdania na słowa, usuwają wypełniacze i sprowadzają odmiany, jak biegnąc, czy pobiegu, do wspólnego źródło słowu, więc wyszukanie biec nadal znajduje oba.
+
+00:02:18.740 --> 00:02:23.180
+Nic z tego nie wymaga twojej uwagi, by działać, ale tłumaczy, dlaczego wyniki pojawiają się tak szybko.
+
+00:02:23.380 --> 00:02:26.820
+Gdy wpiszesz zapytanie, system ocenia, jak dobrze każdy dokument do niego pasuje.
+
+00:02:27.000 --> 00:02:31.800
+Ta metoda oceniania ma nazwę BM25 i możesz ją zrozumieć bez zagłębiania się w matematykę.
+
+00:02:31.800 --> 00:02:38.860
+BM25 nadaje większą wagę słowom, które często pojawiają się w jednym dokumencie, a mniejszą tym, które są w niemal każdym.
+
+00:02:39.040 --> 00:02:42.860
+Weźmy choćby słowo, które pojawia się wszędzie, więc nie mówi ci prawie nic.
+
+00:02:42.860 --> 00:02:47.180
+Rzadki kod, jak XC4471, pojawia się raz, więc mówi ci bardzo wiele.
+
+00:02:47.560 --> 00:02:54.420
+BM25 automatycznie wykorzystuje ten instynkt, więc wyszukiwanie słów kluczowych pozostaje skuteczne przy numerach części, dokładnych nazwach, datach i specjalistycznych terminach.
+
+00:02:54.580 --> 00:02:56.620
+Mały przykład pokazuje, jak to działa w praktyce.
+
+00:02:56.840 --> 00:03:01.660
+Załóżmy, że szukasz wzoru faktury 4471 na współdzielonym dysku z 10 tysięcy plików.
+
+00:03:01.800 --> 00:03:08.120
+Słowo faktura jest wszędzie, więc niewiele zmienia, ale 4471 jest na tyle rzadkie, że wyciąga właściwy plik na samą górę.
+
+00:03:08.220 --> 00:03:10.880
+To właśnie BM25 wykonuje swoje obliczenia w tle.
+
+00:03:10.880 --> 00:03:18.060
+Własne testy Microsoftu potwierdzają, że w zapytaniach opartych wyłącznie na słowach kluczowych, zwykłe wyszukiwanie słów kluczowych wypadało znacznie lepiej niż samo wyszukiwanie znaczeniowe.
+
+00:03:18.200 --> 00:03:22.360
+Kiedy znasz już dokładny identyfikator, którego potrzebujesz, precyzja zawsze wygrywa z pomysłowością.
+
+00:03:22.360 --> 00:03:24.280
+Ta precyzja ma jednak swój słaby punkt.
+
+00:03:24.500 --> 00:03:27.800
+Wyszukiwanie słów kluczowych znajduje tylko słowa, które podałeś i nic więcej.
+
+00:03:28.060 --> 00:03:34.440
+Wyszukaj zasady pracy zdalnej, a strona zatytułowana wytyczne telepracy pozostanie niewidoczna, bo te frazy nie mają wspólnych liter.
+
+00:03:34.660 --> 00:03:39.100
+Ta właśnie luka jest tym, co druga połowa wyszukiwania hybrydowego miała za zadanie wypełnić.
+
+00:03:39.220 --> 00:03:41.420
+Czym właściwie zajmuje się wyszukiwanie wektorowe?
+
+00:03:41.600 --> 00:03:44.640
+Teraz czas na połowę, która wydaje się magiczna, dopóki nie poznasz triku.
+
+00:03:44.860 --> 00:03:48.640
+Wyszukiwanie wektorowe zamienia tekst w długą listę liczb, a ta lista nazywana jest embeddingiem.
+
+00:03:48.640 --> 00:03:54.860
+Liczby te nie są przypadkowe. Umieszczają one znaczenie tekstu w ogromnej przestrzeni, gdzie podobne znaczenia kończą blisko siebie.
+
+00:03:55.080 --> 00:04:00.100
+Coś musi tworzyć te embeddingi i zazwyczaj jest to model embeddingowy, taki jak ten z Azure OpenAI.
+
+00:04:00.300 --> 00:04:05.800
+To miejsce, w którym wielu początkujących utyka, ponieważ model jest osobną usługą z własnymi kosztami i limitami użycia.
+
+00:04:06.100 --> 00:04:08.920
+Wyszukiwarka przechowuje i porównuje wektory, a model je tworzy.
+
+00:04:09.140 --> 00:04:14.480
+Rozmiar embeddingu jest ustalany przez model i zazwyczaj mieści się w przedziale od setek do kilku tysięcy liczb na fragment.
+
+00:04:14.760 --> 00:04:18.140
+Te liczby są również powodem, dla którego wyszukiwanie semantyczne nie jest idealne.
+
+00:04:18.140 --> 00:04:24.660
+Dwa fragmenty mogą znajdować się blisko siebie w przestrzeni, nie będąc prawdziwym dopasowaniem, a takie niemal trafienia są usuwane przez późniejsze etapy rankingu.
+
+00:04:24.860 --> 00:04:27.680
+Gdy znaczenie posiada współrzędne, dopasowywanie zmienia się całkowicie.
+
+00:04:27.940 --> 00:04:34.060
+Słowo, zwrot i fraza, pieniądze z powrotem znajdują się blisko siebie, więc zapytanie może znaleźć jedno za pomocą drugiego, nawet jeśli nie dzielą żadnego słowa.
+
+00:04:34.300 --> 00:04:37.040
+System nie dopasowuje już liter, lecz bliskość znaczeniową.
+
+00:04:37.280 --> 00:04:41.860
+Dwie korzyści wynikają z tego projektu, ponieważ znaczenie znajduje się w tej samej przestrzeni niezależnie od języka.
+
+00:04:41.860 --> 00:04:45.860
+Wyszukiwanie po angielsku może zwrócić niemiecki dokument bez żadnego kroku tłumaczenia.
+
+00:04:46.080 --> 00:04:51.620
+Ten sam pomysł działa w różnych typach treści, więc tekst i obrazy mogą dzielić jedną przestrzeń i być porównywane bezpośrednio.
+
+00:04:51.820 --> 00:04:55.400
+Aby znaleźć najbliższe znaczenia, silnik uruchamia wyszukiwanie najbliższych sąsiadów.
+
+00:04:55.560 --> 00:04:58.080
+Azure AI Search oferuje dwa silniki do tego zadania.
+
+00:04:58.080 --> 00:05:07.200
+Jednym z nich jest metoda grafowa HNSW, która jest szybka i dobrze radzi sobie z dużymi indeksami, a drugim wyczerpujący KNN, który sprawdza więcej kandydatów, poświęcając szybkość na rzecz dokładności.
+
+00:05:07.420 --> 00:05:15.060
+Wyniki wektorowe wahają się od około 0,333 do 1 przy użyciu podobieństwa kosinusowego, więc wyższa liczba oznacza bliższe dopasowanie.
+
+00:05:15.280 --> 00:05:19.220
+Ten zakres zupełnie nie przypomina wyników słów kluczowych, które nie mają żadnego górnego limitu.
+
+00:05:19.360 --> 00:05:25.220
+Utrzymywanie ich osobno ma znaczenie, ponieważ kolejny krok musi połączyć dwie listy, które nawet nie posługują się tym samym językiem liczbowym.
+
+00:05:25.220 --> 00:05:28.380
+Wyszukiwanie hybrydowe uruchamia oba naraz i scala wyniki.
+
+00:05:28.580 --> 00:05:34.300
+Wyszukiwanie hybrydowe to pojedyncze zapytanie, które zawiera zarówno zapytanie tekstowe, jak i wektorowe, realizowane jednocześnie.
+
+00:05:34.520 --> 00:05:37.480
+Nie ma żadnego trzeciego oddzielnego algorytmu wykonującego tę pracę.
+
+00:05:37.700 --> 00:05:43.280
+Wysyłasz swoje słowa oraz ich wersję znaczeniową w jednym wywołaniu, a silnik uruchamia oba zadania równolegle.
+
+00:05:43.480 --> 00:05:45.260
+Teraz masz dwie uszeregowane listy.
+
+00:05:45.480 --> 00:05:50.440
+Jedna jest uporządkowana według BM25, druga według znaczenia i rzadko zgadzają się co do dokładnej kolejności.
+
+00:05:50.440 --> 00:05:58.360
+Azure AI Search scala je metodą zwaną fuzją rank odwrotnych RRF, a jej główna idea jest na tyle prosta, by łatwo ją zapamiętać.
+
+00:05:58.980 --> 00:06:03.940
+RRF przypisuje każdemu dokumentowi wynik 1 podzielony przez jego rangę plus mała stała.
+
+00:06:04.140 --> 00:06:09.840
+W praktyce stała wynosi 60, a jej zadaniem jest zapobieganie całkowitej dominacji pierwszego miejsca w wynikach.
+
+00:06:10.060 --> 00:06:17.200
+Dokument, który zajmuje wysoką pozycję na obu listach, zbiera dwie dobre oceny i awansuje, podczas gdy ten doceniony tylko przez jedną listę wciąż zajmuje miejsce nieco niżej.
+
+00:06:17.200 --> 00:06:22.200
+Wyobraź sobie stronę z polityką, którą wyszukiwanie słów kluczowych umieszcza na piątym miejscu, a wyszukiwanie znaczeniowe na drugim.
+
+00:06:22.340 --> 00:06:26.520
+Zbiera ona solidny wynik z obu stron i wspina się ponad stronę, którą zauważyła tylko jedna metoda.
+
+00:06:26.700 --> 00:06:28.400
+Ta zgodność jest całym sekretem.
+
+00:06:28.560 --> 00:06:32.580
+Kiedy dwie różne metody wskazują na ten sam fragment, możesz mu ufać bardziej niż każdej z nich z osobna.
+
+00:06:32.740 --> 00:06:36.100
+Zapytania hybrydowe zachowują również standardowe funkcje wyszukiwania, których oczekujesz.
+
+00:06:36.280 --> 00:06:41.640
+Filtry, aspekty i sortowanie nadal działają, więc nie tracisz praktycznych narzędzi tylko dlatego, że dołączyło do nich znaczenie.
+
+00:06:41.640 --> 00:06:46.320
+Możesz nawet zwiększyć lub zmniejszyć wagę strony wektorowej, jeśli zauważysz, że Twoi użytkownicy preferują jedno rozwiązanie.
+
+00:06:46.500 --> 00:06:50.300
+Załóżmy, że użytkownicy wpisują głównie krótkie, niechlujne frazy, a nie dokładne identyfikatory.
+
+00:06:50.520 --> 00:06:53.560
+Zwiększenie tej wagi informuje silnik, aby nieco bardziej polegał na znaczeniu.
+
+00:06:53.800 --> 00:06:58.280
+Domyślne ustawienie nie jest nawet podzielone, a zmieniasz je dopiero po zaobserwowaniu, jak wyglądają rzeczywiste zapytania.
+
+00:06:58.520 --> 00:07:04.920
+Domyślnie zapytanie hybrydowe zwraca 50 najlepszych wyników z połączonej listy, a wyszukiwanie tekstowe kończy się po tysiącu dopasowań.
+
+00:07:04.920 --> 00:07:10.840
+Te ustawienia domyślne są wystarczające dla aplikacji czatowej, która zazwyczaj potrzebuje tylko kilku dobrych fragmentów, aby dobrze odpowiedzieć na pytanie.
+
+00:07:11.060 --> 00:07:17.440
+Wyniki testów porównawczych Microsoft pokazują, że metoda hybrydowa przewyższa każdą z osobna w danych klientów i publicznych zbiorach testowych,
+
+00:07:17.560 --> 00:07:20.640
+dlatego stała się domyślnym zaleceniem dla uwiarygadniania odpowiedzi AI.
+
+00:07:20.860 --> 00:07:24.760
+Po drodze nic nie zostało odrzucone, a to ma większe znaczenie niż mogłoby się wydawać.
+
+00:07:24.920 --> 00:07:27.320
+Drugi etap, który zmienia kolejność krótkiej listy.
+
+00:07:27.460 --> 00:07:28.720
+A teraz robi się ciekawie.
+
+00:07:28.880 --> 00:07:32.060
+Połączenie dwóch list daje lepszą krótką listę, ale nie idealną.
+
+00:07:32.060 --> 00:07:36.500
+Dlatego Azure AI Search dodaje drugi etap rankingu, nazywany rankingiem semantycznym.
+
+00:07:36.720 --> 00:07:40.080
+Nazwa sugeruje, że powtarza on pracę wektorową, ale robi coś innego.
+
+00:07:40.340 --> 00:07:45.740
+Ranking semantyczny bierze 50 najlepszych wyników z poprzedniego kroku i czyta każdy z nich w zestawieniu z Twoim zapytaniem.
+
+00:07:45.960 --> 00:07:52.660
+Wykorzystuje modele językowe zaadaptowane z Bing, aby ocenić, jak dobrze fragment odpowiada na faktyczne pytanie, a następnie ocenia każdy z nich w skali od 0 do 4.
+
+00:07:52.900 --> 00:07:56.780
+4 oznacza, że fragment dobrze odpowiada na pytanie, a 0 oznacza, że jest nieistotny.
+
+00:07:57.000 --> 00:07:59.760
+Dwa wyraźne ograniczenia kształtują to, co ten etap może zrobić.
+
+00:07:59.760 --> 00:08:05.580
+Analizuje tylko te 50 najlepszych wyników, więc może przetasować krótką listę, ale nie może uratować dokumentu, którego pierwszy etap nie znalazł.
+
+00:08:05.720 --> 00:08:07.180
+Nie może też niczego wymyślać.
+
+00:08:07.360 --> 00:08:11.820
+Zwracane podpisy i odpowiedzi są pobierane słowo w słowo z Twoich treści, nigdy nie są pisane od zera.
+
+00:08:12.060 --> 00:08:13.780
+Nic z tego nie zastępuje pierwszego etapu.
+
+00:08:13.980 --> 00:08:16.540
+Mechanizm rankingowy może jedynie zmienić kolejność tego, co otrzymał.
+
+00:08:16.640 --> 00:08:19.480
+Więc wszystko, co nie trafiło na krótką listę, nie otrzymuje drugiej szansy.
+
+00:08:19.700 --> 00:08:22.880
+Dobre pobieranie na wcześniejszym etapie daje drugiemu etapowi coś, co warto dopracować.
+
+00:08:23.100 --> 00:08:24.440
+Wiąże się to również z kosztami.
+
+00:08:24.440 --> 00:08:30.660
+Ranking semantyczny to płatna funkcja rozliczana według użycia z darmowym miesięcznym limitem, którego większość użytkowników nigdy nie wyczerpuje podczas testów.
+
+00:08:30.740 --> 00:08:35.280
+To uczciwa wymiana za dokładniejsze wyniki i dlatego włącza się go celowo, a nie wszędzie naraz.
+
+00:08:35.460 --> 00:08:42.260
+Ponowne szeregowanie krótkiej listy jest znacznie tańsze niż ponowne szeregowanie całego korpusu, dlatego drugi przebieg istnieje jako drugi przebieg.
+
+00:08:42.380 --> 00:08:47.220
+Testy firmy Microsoft wykazały, że ranking semantyczny Hybrid plus wyraźnie przewyższa samo rozwiązanie hybrydowe,
+
+00:08:47.300 --> 00:08:51.760
+a różnica była największa w przypadku nieuporządkowanych pytań z życia codziennego, które wpisują użytkownicy.
+
+00:08:51.760 --> 00:08:54.460
+Tutejsze funkcje wykraczają nieco poza samoocenianie.
+
+00:08:54.620 --> 00:09:00.980
+Ranking semantyczny może zwrócić krótki opis podsumowujący, dlaczego dany fragment pasuje, co jest przydatne przy prezentowaniu wyników użytkownikowi.
+
+00:09:01.200 --> 00:09:07.700
+Nowsza opcja potrafi nawet przepisać zapytanie na kilka wariantów, aby wyłapać literówki i brakujące synonimy przed uruchomieniem wyszukiwania.
+
+00:09:07.880 --> 00:09:12.060
+To, co faktycznie czyta drugi przebieg, ma znaczenie, ponieważ pracuje on wyłącznie na tekście.
+
+00:09:12.300 --> 00:09:17.380
+Dokument składający się głównie z liczb lub obraz bez opisu daje algorytmowi szeregującemu niewiele do oceny.
+
+00:09:17.380 --> 00:09:23.700
+Treści bogate w tekst, takie jak dokumentacja czy bazy wiedzy, zyskują najwięcej, co zresztą potwierdza sama firma Microsoft w swoich wytycznych.
+
+00:09:23.880 --> 00:09:27.280
+Wszystko to nieco wydłuża czas każdego zapytania, a jest to kompromis zamierzony.
+
+00:09:27.480 --> 00:09:34.000
+Zyskujesz dokładniejsze sortowanie kosztem wolniejszej odpowiedzi, co zazwyczaj jest uczciwym układem dla chatbota, ale gorszym dla pola wyszukiwania z autouzupełnianiem.
+
+00:09:34.200 --> 00:09:36.260
+Mało efektowny krok, który decyduje o wszystkim.
+
+00:09:36.520 --> 00:09:41.220
+Zanim jakiekolwiek inteligentne dopasowanie zadziała, treść musi zostać przygotowana, a główny ruch nazywa się dzieleniem na fragmenty chunging.
+
+00:09:41.220 --> 00:09:45.820
+Dzielenie na fragmenty polega na krojeniu długich dokumentów na mniejsze części, aby każdą z nich można było dopasować osobno.
+
+00:09:45.980 --> 00:09:50.180
+Podręcznik polityki przestaje być jedną gigantyczną całością i staje się kilkuset skoncentrowanymi elementami.
+
+00:09:50.420 --> 00:09:52.160
+Warto się tym zająć z konkretnego powodu.
+
+00:09:52.360 --> 00:09:58.620
+Pojedynczy wektor musi upchnąć znaczenie całego dokumentu w jeden zestaw liczb, a długie dokumenty zawierają kilka tematów jednocześnie.
+
+00:09:58.880 --> 00:10:04.720
+Gdy spłaszcza się to wszystko do jednego wektora, szczegóły się zacierają, a końcowa część dokumentu bywa całkowicie pomijana.
+
+00:10:04.960 --> 00:10:06.260
+Liczby są tu uderzające.
+
+00:10:06.260 --> 00:10:13.120
+W testach Microsoftu reprezentacja całego dokumentu jednym wektorem uzyskała wynik 28,2 dla zapytań, których odpowiedzi znajdowały się wewnątrz długiego dokumentu.
+
+00:10:13.240 --> 00:10:19.580
+Podzielenie tych samych dokumentów na fragmenty podniosło wynik do 45,7, a w przypadku odpowiedzi ukrytych głęboko w tekście do 51,4.
+
+00:10:20.060 --> 00:10:23.100
+Rozmiar i granice mają równie duże znaczenie, co sama decyzja o podziale.
+
+00:10:23.240 --> 00:10:30.220
+Fragmenty o długości około 512 tokenów uzyskały wynik 42,4, podczas gdy fragmenty 4096 tokenowe spadły do 36,4.
+
+00:10:30.220 --> 00:10:37.560
+Pozwolenie fragmentom na nakładanie się w 1,4 i kończenie ich w miejscach podziału zdań jeszcze bardziej podniosło wynik, ponieważ kontekst nigdy nie jest ucinany w połowie.
+
+00:10:37.780 --> 00:10:45.300
+Wyobraź sobie 80-stronicowy podręcznik HR, dobrze podzielony, sprawi, że pytanie o urlop rodzicielski trafi prosto w cztery akapity, które go dotyczą.
+
+00:10:45.540 --> 00:10:51.120
+Źle podzielone, to samo pytanie wyciągnie podsumowanie całej polityki i pogrzebie prawdziwą odpowiedź gdzieś w środku.
+
+00:10:51.120 --> 00:11:02.380
+Nie zawsze musisz robić to ręcznie. Azure AI Search może przeprowadzać fragmentowanie i wektoryzację wewnątrz potoku indeksatora, pobierając dane ze źródeł takich jak Blob Storage, Azure SQL lub One Lake i generując przy tym embeddingi.
+
+00:11:02.500 --> 00:11:10.100
+Praca nadal jest wykonywana. Dzieje się to po prostu za Ciebie. To część, której nikt nie umieszcza na slajdach, a decyduje ona o jakości wszystkiego, co dzieje się później.
+
+00:11:10.380 --> 00:11:14.560
+Jeśli źle wykonasz fragmentowanie, nawet idealne rankinkowanie nie będzie miało z czym pracować.
+
+00:11:14.560 --> 00:11:28.060
+W kontekście Twojej pracy z Microsoft 365 silnik wyszukiwania, który właśnie omówiliśmy, to Azure AI Search, który zasila także Foundry i Q, zarządzaną warstwę wiedzy Microsoftu, zamieniającą treści firmowe w bazy wiedzy dla agentów.
+
+00:11:28.280 --> 00:11:32.540
+Spotykasz go w Copilot Studio, gdzie Azure AI Search wpasowuje się jako źródło wiedzy.
+
+00:11:32.780 --> 00:11:40.760
+Agenci pobierają tam również dane z SharePoint, Dataverse, przesłanych dokumentów, stron publicznych i konektorów, a każde z tych źródeł zasila ten sam potok odpowiedzi.
+
+00:11:40.760 --> 00:11:50.840
+Jest też Microsoft 365 Copilot. Konektory Copilota wprowadzają zawartość zewnętrzną i biznesową do grafu, więc te same koncepcje wyszukiwania pojawiają się, nawet jeśli nigdy samodzielnie nie dotykasz indeksu.
+
+00:11:51.020 --> 00:11:55.080
+Na pytanie wpisane w oknie czatu można odpowiedzieć na podstawie dokumentu, o którego istnieniu zapomniałeś.
+
+00:11:55.320 --> 00:11:58.140
+Bezpieczeństwo jest obsługiwane w sposób, który powinien dać Ci spokój ducha.
+
+00:11:58.340 --> 00:12:03.900
+Odpowiedzi respektują uprawnienia każdej osoby poprzez Microsoft Entra ID, więc użytkownik widzi tylko te treści, do których ma dostęp.
+
+00:12:03.900 --> 00:12:10.780
+Pytanie finansowe zadane przez osobę spoza działu finansowego otrzymuje inną odpowiedź niż to samo pytanie od szefa finansów, co jest dowodem na poprawne działanie modelu dostępu.
+
+00:12:10.960 --> 00:12:16.040
+Wersja tego procesu wygląda tak. Pracownik pyta wewnętrznego agenta, ile dni urlopu szkoleniowego mu przysługuje.
+
+00:12:16.220 --> 00:12:23.020
+Agent przeszukuje zindeksowaną zawartość SharePoint, znajduje strony z aktualną polityką i odpowiada z podaniem źródła, a cała wymiana informacji nigdy nie opuszcza Tenanta.
+
+00:12:23.240 --> 00:12:26.520
+W Copilot Studio istnieje ustawienie, które opiera się bezpośrednio na tej idei.
+
+00:12:26.520 --> 00:12:35.460
+Ugruntowanie grafu Tenanta za pomocą wyszukiwania semantycznego wykorzystuje indeks semantyczny stojący za Microsoft 365 Copilot, aby wyostrzyć wyszukiwanie, a Microsoft zauważa, że pomaga to najbardziej w przypadku zawartości SharePoint.
+
+00:12:35.600 --> 00:12:36.840
+To jest prawdziwa korzyść.
+
+00:12:37.040 --> 00:12:45.600
+Dobrze zbudowany asystent sprawia wrażenie, jakby przeczytał właściwą stronę, ponieważ wyszukiwanie słów kluczowych, fuzja znaczeniowa i drugi etap rankingu współgrają pod oknem czatu, którego już używasz.
+
+00:12:45.740 --> 00:12:48.560
+Żaden pojedynczy, sprytny model nie wykonuje tej pracy samodzielnie.
+
+00:12:48.800 --> 00:12:51.480
+Szczere ograniczenia i błędy popełniane przez początkujących.
+
+00:12:51.480 --> 00:12:55.300
+Bądźmy szczerzy w kwestii tego, gdzie to zawodzi, ponieważ znajomość przeszkód oszczędza czas.
+
+00:12:55.440 --> 00:12:58.900
+Pierwszym błędem jest zakładanie, że podejście hybrydowe jest automatycznie lepsze we wszystkim.
+
+00:12:59.100 --> 00:13:00.680
+Tak nie jest i ta różnica ma znaczenie.
+
+00:13:00.940 --> 00:13:06.280
+Własne wyniki Microsoftu pokazują, że w przypadku zapytań złożonych z samych słów kluczowych, samo wyszukiwanie słów kluczowych nadal wypada najlepiej.
+
+00:13:06.480 --> 00:13:12.260
+Hybrydowość to mocne ustawienie domyślne, a nie uniwersalny zwycięzca, a właściwa odpowiedź zależy od pytań, które faktycznie zadają Twoi użytkownicy.
+
+00:13:12.260 --> 00:13:16.360
+Drugą pułapką jest pomijanie, dzielenie lub podawanie systemowi ogromnych fragmentów tekstu.
+
+00:13:16.480 --> 00:13:21.800
+Jeśli fragmenty są zbyt duże, znaczenie się zaciera, a koniec każdego z nich marnuje rozwiązanie, jest nudne, ale skuteczne.
+
+00:13:22.020 --> 00:13:25.900
+Dziel tekst w miejscach zakończenia zdań, dbaj o krótkie fragmenty i pozwól im na lekkie nakładanie się.
+
+00:13:26.080 --> 00:13:30.020
+Kolejnym nawykiem jest włączanie rankingu semantycznego wszędzie, bez zwracania uwagi na licznik.
+
+00:13:30.180 --> 00:13:34.920
+Opłaty naliczane są za użycie, więc w aktywnej aplikacji drobny nawyk testowania może stać się realną pozycją na fakturze.
+
+00:13:35.120 --> 00:13:37.540
+Zacznij od darmowego limitu i zwiększaj zakres celowo.
+
+00:13:37.540 --> 00:13:40.260
+Twarde limity to te, na które trafisz w pierwszej kolejności.
+
+00:13:40.460 --> 00:13:45.300
+Ranking semantyczny zawsze przetwarza tylko 50 najlepszych wyników, więc może dopracować krótką listę, ale nigdy jej nie wydłużyć.
+
+00:13:45.460 --> 00:13:48.200
+Pamięć masowa wektorów jest utrzymywana dla każdej partycji z osobna.
+
+00:13:48.400 --> 00:13:53.580
+Limit zmienia się wraz z planem i wiekiem usługi, a jego osiągnięcie zatrzymuje indeksowanie, zamiast je spowalniać.
+
+00:13:53.720 --> 00:13:55.300
+Istnieją też mniejsze ograniczenia.
+
+00:13:55.520 --> 00:14:00.940
+Pole wektorowe ma maksymalnie 4096 wymiarów, a pojedyncze zapytanie wektorowe może dotyczyć co najwyżej 10 pól.
+
+00:14:00.940 --> 00:14:07.220
+Darmowy plan jest dobry do nauki z jedną usługą i 50 MB pamięci, ale może zostać usunięty po długim okresie nieaktywności.
+
+00:14:07.580 --> 00:14:09.380
+Współbieżność również ma swój górny limit.
+
+00:14:09.620 --> 00:14:17.000
+Ranking semantyczny działa w oparciu o kolejkę, a każda jednostka wyszukiwania obsługuje tylko kilka zapytań naraz z krótką kolejką, po której zapytania są odrzucane.
+
+00:14:17.180 --> 00:14:22.700
+W aktywnej aplikacji objawia się to ponownymi próbami, więc planowanie wydajności przestaje być opcjonalne, gdy pojawiają się prawdziwi użytkownicy.
+
+00:14:22.940 --> 00:14:25.200
+Jedno małe udogodnienie w rozliczeniach łatwo przeoczyć.
+
+00:14:25.200 --> 00:14:31.780
+Pusty ciąg zapytania nie jest obciążany kosztami rankingu semantycznego, nawet jeśli typ zapytania jest ustawiony na semantyczny, więc zapytanie filtrujące nie zwiększa kosztów.
+
+00:14:31.900 --> 00:14:33.900
+Cennik ma dwie formy i wybór ma znaczenie.
+
+00:14:34.180 --> 00:14:43.280
+Model dedykowany pobiera stałą stawkę godzinową zależną od wydajności, co pasuje do stałych obciążeń, podczas gdy model serverless rozlicza się za zużycie i jest przeznaczony do pracy o zmiennym lub nieprzewidywalnym natężeniu.
+
+00:14:43.440 --> 00:14:47.960
+Opcja serverless jest wciąż w fazie testów, więc nie jest to miejsce do uruchamiania czegokolwiek, od czego jesteś zależny.
+
+00:14:48.160 --> 00:14:50.660
+Nic z tego nie czyni wyszukiwania hybrydowego złym wyborem.
+
+00:14:50.660 --> 00:14:58.420
+Czyni to wybór specyficznym. Każdy punkt dodatkowej trafności ma swoje źródło, czy to w kosztach, wydajności, czy wysiłku włożonym w przygotowanie treści.
+
+00:14:58.680 --> 00:15:03.100
+Świadomość tego, na jaki kompromis idziesz, to różnica między demem, a czymś, co naprawdę działa.
+
+00:15:03.360 --> 00:15:06.340
+Krótko mówiąc, wyszukiwanie hybrydowe nagradza przygotowanie.
+
+00:15:06.580 --> 00:15:14.540
+Czyste, podzielone na fragmenty, dobrze opisane treści z rozsądnymi zasadami dostępu wyciągają z każdej funkcji więcej, podczas gdy chaotyczne treści dają mniej, niezależnie od liczby przełączników.
+
+00:15:14.720 --> 00:15:16.760
+Krótkie podsumowanie i jedno pytanie do ciebie.
+
+00:15:16.760 --> 00:15:21.300
+Cały obraz mieści się w kilku zdaniach. Wyszukiwanie słów kluczowych dopasowuje dokładne słowa, które wpisujesz.
+
+00:15:21.500 --> 00:15:23.160
+Wyszukiwanie wektorowe dopasowuje znaczenie.
+
+00:15:23.360 --> 00:15:26.620
+Hybrydowe wyszukiwanie uruchamia obie metody jednocześnie i łączy wyniki według rangi.
+
+00:15:26.820 --> 00:15:32.120
+Semantyczne rankowanie porządkuje następnie 50 najlepszych wyników, a wszystko opiera się na treści, która została wcześniej odpowiednio podzielona na fragmenty.
+
+00:15:32.260 --> 00:15:35.060
+Moje pytanie do ciebie jest proste, a odpowiedzi naprawdę mnie ciekawią.
+
+00:15:35.240 --> 00:15:39.840
+W jakim obszarze twojej pracy wyszukiwanie rozumiejące znaczenie, a nie tylko słowa, zmieniłoby najwięcej?
+
+00:15:39.840 --> 00:15:44.540
+Napisz o tym w komentarzach, bo odpowiedzi zazwyczaj ujawniają więcej niż jakakolwiek strona produktu.
+
+00:15:44.720 --> 00:15:51.800
+Jeśli dzięki temu temat stał się mniej onieśmielający, zasubskrybuj M365FM, aby opanować narzędzia i sposób myślenia kształtujące przyszłość pracy.

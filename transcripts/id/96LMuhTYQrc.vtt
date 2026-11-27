@@ -1,0 +1,1303 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:07.420
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI Yur, dan para penggerak masa depan dunia kerja, dunia kerja.
+
+00:00:07.860 --> 00:00:11.980
+Januari ini, M365 Con kembali hadir dan kami akan tampil lebih besar.
+
+00:00:12.740 --> 00:00:18.360
+Bergabunglah dengan kami untuk sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.860 --> 00:00:21.040
+Tanpa slide yang umum, tanpa istilah tele-tele.
+
+00:00:21.980 --> 00:00:28.560
+Kami akan membahas tantangan nyata, Copilot Studio, agen AI Fabric, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.560 --> 00:00:34.360
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.460 --> 00:00:39.960
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.260
+Tonton secara langsung dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.120 --> 00:00:48.960
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.400 --> 00:00:50.500
+Pendaftaran sudah dibuka sekarang.
+
+00:00:52.600 --> 00:00:54.780
+Amankan tempat Anda hari ini.
+
+00:00:54.780 --> 00:00:58.640
+Kunjungi m365.com.net
+
+00:00:58.640 --> 00:01:02.520
+Bergabunglah sekarang di m365.com.net
+
+00:01:02.520 --> 00:01:04.740
+Dan sampai jumpa langsung di bulan Januari.
+
+00:01:05.280 --> 00:01:07.680
+Sebuah rumus di Excel dapat menjumlahkan kolom dalam hitungan detik.
+
+00:01:08.080 --> 00:01:11.800
+Sekarang bayangkan rumus serupa menentukan apakah tombol persetujuan muncul di aplikasi,
+
+00:01:12.480 --> 00:01:16.460
+menghitung klaim pengeluaran, atau mengubah apa yang dilihat pengguna setelah mengisi formulir.
+
+00:01:17.580 --> 00:01:18.540
+Itulah Power Effect.
+
+00:01:18.540 --> 00:01:23.180
+Halo semuanya dan selamat datang di episode lain Microsoft Knowledge Nuggets di M365.
+
+00:01:24.240 --> 00:01:27.760
+Saya Mirko Peters dan hari ini kita akan membahas Microsoft Power FX dengan bahasa yang sederhana.
+
+00:01:28.320 --> 00:01:31.620
+Anda mungkin pernah mendengar nama itu saat melihat Power Apps dan berpikir, apakah ini pemrograman?
+
+00:01:32.000 --> 00:01:34.980
+Apakah saya perlu mempelajari seluruh bahasa pemrograman sebelum bisa membahas sesuatu yang mirko?
+
+00:01:35.560 --> 00:01:36.060
+Tidak juga.
+
+00:01:36.720 --> 00:01:39.420
+Power FX adalah bahasa rumus Microsoft untuk Power Platform.
+
+00:01:39.420 --> 00:01:43.140
+Ini menghadirkan cara berpikir lembar kerja yang familiar ke dalam pembuatan aplikasi
+
+00:01:43.140 --> 00:01:46.860
+sehingga Anda bisa membuat aturan untuk layar, formulir, daftar, tombol, dan data bisnis
+
+00:01:46.860 --> 00:01:48.660
+tanpa harus mulai dari dunia kode tradisional.
+
+00:01:49.980 --> 00:01:52.000
+Bayangkan Power Apps seperti gedung perkantoran modern.
+
+00:01:52.360 --> 00:01:53.280
+Layarnya adalah ruangan doang.
+
+00:01:53.660 --> 00:01:55.840
+Formulir adalah ruangan tempat seseorang memasukkan permintaan.
+
+00:01:56.240 --> 00:01:58.700
+Daftar adalah ruangan tempat manajer meninjau permintaan tersebut.
+
+00:01:59.380 --> 00:02:01.520
+Tombol adalah pintu yang bisa ditekan seseorang untuk melanjutkan.
+
+00:02:01.980 --> 00:02:04.340
+Power FX adalah serangkaian aturan kecil di balik layar.
+
+00:02:04.820 --> 00:02:07.720
+Ini mengontrol fungsi saklar lampu, kapan pintu harus tetap terkunci,
+
+00:02:07.720 --> 00:02:10.500
+dan tanda apa yang muncul saat permintaan membutuhkan komasi lebih lanjut.
+
+00:02:11.140 --> 00:02:12.480
+Kebanyakan pengguna tidak pernah tersebut.
+
+00:02:12.880 --> 00:02:14.700
+Mereka hanya melihat aplikasi yang merespons mereka
+
+00:02:14.700 --> 00:02:16.780
+dan itu penting karena aplikasi bisnis penuh dengan atur.
+
+00:02:17.160 --> 00:02:20.120
+Seseorang memasukkan jam dan tarif, lalu aplikasi perlu menampilkan totalnya.
+
+00:02:20.400 --> 00:02:23.580
+Seseorang memilih jenis permintaan, lalu aplikasi mungkin perlu menampilkan lebih banyak.
+
+00:02:23.820 --> 00:02:27.400
+Seorang manajer membuka daftar dan hanya perlu melihat permintaan yang menunggu pertujuan.
+
+00:02:27.960 --> 00:02:31.180
+Tanpa logika, itu hanyalah kotak, label, dan tombol yang terpampang di layar.
+
+00:02:31.780 --> 00:02:33.380
+Power FX memberikan tugas pada bagian tersebut.
+
+00:02:33.380 --> 00:02:37.400
+Selama beberapa menit ke depan, kita akan mulai dengan pola pikir Excel yang sudah Anda kenal,
+
+00:02:37.660 --> 00:02:39.980
+lalu beralih dari selembar kerja ke properti aplikasi
+
+00:02:39.980 --> 00:02:43.160
+agar Anda memahami mengapa rumus dapat mengontrol warna teks, visibilitas, dan lainnya.
+
+00:02:43.940 --> 00:02:46.900
+Setelah itu, kita akan melihat bagaimana rumus membantu aplikasi merespon guna
+
+00:02:46.900 --> 00:02:48.100
+dan mengolah informasi bisnis.
+
+00:02:48.740 --> 00:02:51.680
+Namun pertama, mari kita mulai dengan bagian yang familiar
+
+00:02:51.680 --> 00:02:54.220
+karena jika Anda memahami cara kerja rumus lembar kerja,
+
+00:02:54.420 --> 00:02:56.160
+Anda sudah memiliki dasar yang kuat untuk Power FX.
+
+00:02:56.860 --> 00:03:00.400
+Blok bangunan pertama, dari selembar kerja ke properti aplikasi.
+
+00:03:00.400 --> 00:03:03.600
+Iya. Kebanyakan orang merasa cemas saat mendengar kata kode,
+
+00:03:03.840 --> 00:03:05.580
+tetapi jika Anda pernah mengetik rumus di Excel,
+
+00:03:05.680 --> 00:03:07.820
+Anda sebenarnya sudah bekerja dengan bentuk logika yang sederhana.
+
+00:03:08.520 --> 00:03:10.040
+Anda memasukkan nilai di suatu tempat,
+
+00:03:10.180 --> 00:03:11.760
+menulis rumus yang menggunakan nilai tersebut,
+
+00:03:12.080 --> 00:03:13.180
+dan Excel memberikan hasilnya.
+
+00:03:13.680 --> 00:03:16.640
+Mungkin itu berupa total, tanggal, atau pesan seperti melebihi anggaran.
+
+00:03:17.500 --> 00:03:19.180
+Power FX menggunakan pola dasar yang sama.
+
+00:03:19.680 --> 00:03:20.800
+Berikut definisi sederhananya.
+
+00:03:20.800 --> 00:03:23.820
+Ini adalah bahasa rumus ala Excel dari Microsoft untuk alat power platform,
+
+00:03:23.960 --> 00:03:24.720
+terutama Power Apps.
+
+00:03:25.460 --> 00:03:28.140
+Bahasa ini mungkinkan Anda memberitahu aplikasi apa yang harus ditampilkan,
+
+00:03:28.260 --> 00:03:28.960
+kapan sesuatu muncul,
+
+00:03:29.080 --> 00:03:31.520
+atau bagaimana sebuah nilai berubah berdasarkan informasi di sekitarnya.
+
+00:03:31.940 --> 00:03:33.160
+Di Excel, rumus berada di alam cell.
+
+00:03:33.720 --> 00:03:35.520
+Anda mungkin mengetik sesuatu seperti XB-coded.
+
+00:03:35.940 --> 00:03:37.520
+Jika B kuadrat berisi jumlah jam,
+
+00:03:37.660 --> 00:03:39.140
+dan C kuadrat berisi tarif per jam,
+
+00:03:39.560 --> 00:03:41.660
+cell dengan rumus tersebut akan menampilkan total pembayaran.
+
+00:03:42.020 --> 00:03:42.780
+Ubah salah satu angkanya,
+
+00:03:42.860 --> 00:03:43.960
+dan Excel akan memperbarui jam.
+
+00:03:44.320 --> 00:03:45.520
+Itulah moda mental yang harus diperlukan.
+
+00:03:45.520 --> 00:03:47.980
+Layar Power Apps tidak memiliki kisi berisi cell,
+
+00:03:47.980 --> 00:03:48.840
+melainkan kontrol.
+
+00:03:49.440 --> 00:03:50.920
+Kontrol hanyalah sesuatu yang ada di layar.
+
+00:03:51.620 --> 00:03:53.060
+Kotak teks tempat pengguna mengetik,
+
+00:03:53.500 --> 00:03:54.960
+label untuk menampilkan informasi,
+
+00:03:55.220 --> 00:03:55.500
+tombol,
+
+00:03:55.940 --> 00:03:56.580
+daftar drop-down,
+
+00:03:56.800 --> 00:03:57.100
+gambar,
+
+00:03:57.340 --> 00:03:58.760
+atau galeri yang menampilkan daftar rekaman.
+
+00:03:59.420 --> 00:04:00.440
+Setiap kontrol memiliki properti.
+
+00:04:00.900 --> 00:04:04.160
+Properti adalah pengaturan yang mendeskripsikan tampilan atau perilaku kontrol tersebut.
+
+00:04:04.580 --> 00:04:05.700
+Label memiliki properti teks.
+
+00:04:05.980 --> 00:04:07.240
+Tombol juga memiliki properti teks
+
+00:04:07.240 --> 00:04:09.040
+beserta properti lain seperti visibilitas dan warna.
+
+00:04:09.440 --> 00:04:11.080
+Properti adalah tempat Power FX berperan.
+
+00:04:11.200 --> 00:04:13.080
+Alih-alih menaruh rumus di cell D2,
+
+00:04:13.240 --> 00:04:15.460
+Anda mengasukkan rumus ke dalam properti teks sebuah label.
+
+00:04:15.460 --> 00:04:17.700
+Bayangkan Anda sedang membangun aplikasi lembar waktu sederhana.
+
+00:04:18.120 --> 00:04:20.840
+Anda menambahkan satu kotak input untuk jam dan satu lagi untuk tarif jam.
+
+00:04:21.120 --> 00:04:23.140
+Kemudian Anda menambahkan label bernama total pembayaran.
+
+00:04:23.740 --> 00:04:25.440
+Daripada mengetik angka tetap di label itu,
+
+00:04:25.680 --> 00:04:27.480
+Anda memberikan rumus pada properti teksnya
+
+00:04:27.480 --> 00:04:31.000
+yang menggunakan nilai dari input jam dan nilai dari input tarif.
+
+00:04:31.520 --> 00:04:33.020
+Label tersebut menjadi cell kalkulasi Anda.
+
+00:04:33.560 --> 00:04:36.260
+Seseorang mengubah jam dari 5 menjadi 8 dan totalnya berubah.
+
+00:04:36.640 --> 00:04:38.360
+Mereka mengubah tarif dan totalnya berubah lagi.
+
+00:04:38.360 --> 00:04:40.960
+Tidak perlu menekan tombol hitung hanya untuk menyegarkan label.
+
+00:04:41.340 --> 00:04:43.760
+Rumus menjaga label tetap terikat pada nilai yang diandalkannya
+
+00:04:43.760 --> 00:04:45.980
+seperti Excel menjaga satu cell tetap terikat ke cell lain.
+
+00:04:46.420 --> 00:04:49.020
+Respons otomatis itu adalah bagian besar dari bagaimana Power Apps Extra.
+
+00:04:49.480 --> 00:04:50.820
+Anda menjelaskan hasil yang diinginkan.
+
+00:04:50.960 --> 00:04:53.900
+Dan Power Apps menjaga hasil tersebut tetap mutakhir saat orang menggunakan aplikasi.
+
+00:04:54.280 --> 00:04:56.680
+Ada satu perubahan yang membuat banyak pengguna Excel tinggung pada awalnya.
+
+00:04:57.080 --> 00:04:59.900
+Dalam lembar bentang, Anda sering menunjuk kalamat cell seperti B2 atau C2.
+
+00:05:00.420 --> 00:05:02.300
+Di Power Apps, Anda biasanya menunjukkan sesuatu berdasarkan.
+
+00:05:02.760 --> 00:05:04.600
+Kontrol input dan salah satu propertinya.
+
+00:05:04.600 --> 00:05:06.700
+Rekaman dari daftar atau kolom dalam tabel.
+
+00:05:07.260 --> 00:05:09.840
+Jadi pertanyaannya bergeser dari cell mana yang menyimpan angka ini
+
+00:05:09.840 --> 00:05:12.880
+menjadi kontrol rekaman atau kolom mana yang menyimpan informasi ini.
+
+00:05:12.880 --> 00:05:15.420
+Itu terdengar kecil tetapi mengubah cara Anda melihat layar.
+
+00:05:15.880 --> 00:05:18.640
+Anda berhenti melihat layar sebagai gambar yang terbuat dari potongan terpisah
+
+00:05:18.640 --> 00:05:20.440
+dan mulai melihatnya sebagai sekumpulan nilai yang terhubung.
+
+00:05:20.740 --> 00:05:21.920
+Input jam memberikan satu nilai.
+
+00:05:22.500 --> 00:05:23.660
+Input tarif memberikan nilai lainnya.
+
+00:05:24.000 --> 00:05:26.700
+Label total pembayaran membaca kedua nilai tersebut dan menampilkan hasilnya.
+
+00:05:27.160 --> 00:05:29.920
+Nantinya, ide yang sama dapat mengontrol apakah peringatan muncul,
+
+00:05:30.080 --> 00:05:32.520
+warna apa yang digunakan jumlah, atau teks apa yang dilihat seseorang.
+
+00:05:32.580 --> 00:05:33.980
+Untuk saat ini, bolehlah tetap sedap.
+
+00:05:34.300 --> 00:05:36.460
+Mulailah dengan rumus yang menjelaskan apa yang harus ditampilkan lain.
+
+00:05:36.460 --> 00:05:39.280
+Pilih satu label, pilih satu nilai yang dapat dimasukkan seseorang,
+
+00:05:39.460 --> 00:05:40.660
+lalu buat label meresponsnya.
+
+00:05:41.640 --> 00:05:44.260
+Koneksi kecil pertama itulah di mana power effects mulai terasa
+
+00:05:44.260 --> 00:05:47.700
+tidak seperti coding dan lebih seperti membangun dengan rumus yang sudah Anda ketahui.
+
+00:05:48.320 --> 00:05:49.200
+Kalkulasi memang berguna,
+
+00:05:49.400 --> 00:05:51.980
+tetapi aplikasi juga perlu merespons saat seseorang menggabung sesuatu.
+
+00:05:53.380 --> 00:05:56.460
+Blok bangunan dua, properti mengubah rumus menjadi perilaku aplikasi.
+
+00:05:57.260 --> 00:05:57.860
+Begini masalahnya.
+
+00:05:58.180 --> 00:06:00.060
+Kalkulasi memberi tahu Anda nilai apa yang seharusnya,
+
+00:06:00.200 --> 00:06:02.700
+tetapi aplikasi juga harus bereaksi saat seseorang melakukan sesuatu.
+
+00:06:02.700 --> 00:06:05.420
+Tombol tanpa logika hanyalah bentuk dengan label.
+
+00:06:06.220 --> 00:06:07.600
+Mungkin tertulis kirim permintaan,
+
+00:06:07.660 --> 00:06:09.840
+tetapi sampai Anda memberi aturan, menekannya tidak akan melakukan.
+
+00:06:10.320 --> 00:06:11.980
+Disitulah properti aplikasi menjadi menarik.
+
+00:06:12.440 --> 00:06:14.980
+Setelah kontrol di Power Apps memiliki pengaturan yang dapat dikerjakan oleh Power Apps.
+
+00:06:15.260 --> 00:06:17.560
+Beberapa menjelaskan seperti apa tampilan kontrol saat ini,
+
+00:06:17.680 --> 00:06:19.640
+sementara yang lain menjalankan tindakan setelah sesuatu terjadi.
+
+00:06:19.780 --> 00:06:20.460
+Dua pekerjaan berbeda.
+
+00:06:20.780 --> 00:06:21.920
+Pekerjaan pertama bersifat berbeda.
+
+00:06:22.440 --> 00:06:24.660
+Sebuah rumus terus menjelaskan status kontrol saat ini.
+
+00:06:25.840 --> 00:06:26.780
+Ambilabilan menunjukkan total.
+
+00:06:27.240 --> 00:06:30.060
+Properti teksnya terus menghitung saat pengguna mengubah angka
+
+00:06:30.060 --> 00:06:31.660
+atau ambil tombol persetujuan.
+
+00:06:31.660 --> 00:06:34.080
+Properti Visible-nya memeriksa status permintaan.
+
+00:06:34.460 --> 00:06:35.600
+Jika sudah siap, tombol akan muncul.
+
+00:06:35.980 --> 00:06:37.140
+Jika tidak, tombol akan tetap tersebut.
+
+00:06:37.540 --> 00:06:39.480
+Anda tidak sudah meminta aplikasi untuk meriksa sekali melupakan.
+
+00:06:39.800 --> 00:06:42.720
+Anda memberi tahu visibilitas tombol tersebut setiap kali layar diperbarui.
+
+00:06:43.420 --> 00:06:45.280
+Sebagai contoh, aturan sederhana mungkin terlihat seperti ini.
+
+00:06:45.900 --> 00:06:49.040
+Jika status permintaan L siap untuk disetujui, benar, salah.
+
+00:06:49.820 --> 00:06:52.640
+Dalam bahasa sederhana, itu berarti jika statusnya siap untuk disetujui,
+
+00:06:52.740 --> 00:06:53.500
+tampilkan tombolnya.
+
+00:06:54.140 --> 00:06:55.040
+Jika tidak, sembunyikan.
+
+00:06:55.540 --> 00:06:57.300
+Power Apps juga bisa mengubah tulisan pada tombol.
+
+00:06:57.500 --> 00:07:01.180
+Mungkin properti teks berbunyi kirim untuk disetujui saat permintaan disiapkan,
+
+00:07:01.180 --> 00:07:02.000
+tapi setelah dikirim.
+
+00:07:02.260 --> 00:07:05.760
+Tombol yang sama bisa menampilkan permintaan dikirim atau hilang sepenuhnya.
+
+00:07:06.180 --> 00:07:07.140
+Warna juga bekerja dengan sama.
+
+00:07:07.440 --> 00:07:09.400
+Jumlah berubah menjadi merah saat melebihi anggaran
+
+00:07:09.400 --> 00:07:12.220
+atau label status berubah warna saat permintaan perlu perhatian.
+
+00:07:12.860 --> 00:07:16.280
+Layar merespons informasi alih-alih menampilkan desain tetap yang sama untuk semua orang.
+
+00:07:16.960 --> 00:07:19.840
+Itu satu sisi dari Power Apps, rumus yang menjaga kontrol tetap mutakhir.
+
+00:07:20.380 --> 00:07:21.920
+Sisi lainnya dimulai saat seseorang bertindak.
+
+00:07:22.420 --> 00:07:24.700
+Di Power Apps, tombol memiliki properti bernama onselet.
+
+00:07:25.120 --> 00:07:28.720
+Terdengar teknis, tapi itu hanya berarti apa yang harus terjadi saat seseorang memilih tombol ini.
+
+00:07:29.380 --> 00:07:30.740
+Misalnya Anda memiliki formulir permintaan.
+
+00:07:31.180 --> 00:07:33.860
+Pengguna mengisi detail dan menekan tombol bernama kirim permintaan.
+
+00:07:34.520 --> 00:07:37.900
+Anda mungkin mengatur properti onselet tombol tersebut untuk memberitahu permintaan terkirim.
+
+00:07:38.540 --> 00:07:42.560
+Saat ditekan, Power Apps menampilkan pesan di layar yang memberikan umpan balik langsung kepada pengguna.
+
+00:07:42.920 --> 00:07:44.280
+Tidak perlu menebak apakah itu berhasil atau tidak.
+
+00:07:44.580 --> 00:07:47.160
+Anda juga bisa menggunakan onselet untuk memindahkan seseorang ke layar lain.
+
+00:07:47.520 --> 00:07:50.180
+Bayangkan aplikasi pengeluaran dengan daftar pengeluaran yang ada.
+
+00:07:50.180 --> 00:07:53.840
+Di bagian atas, tombol pengeluaran baru menggunakan navigasi layar pengeluaran baru.
+
+00:07:54.180 --> 00:07:57.360
+Tekan tombol itu dan Power Apps membuka layar untuk memasukkan pengeluaran baru.
+
+00:07:58.200 --> 00:07:59.820
+Itu berialku aplikasi dalam bentuk yang sangat langsung.
+
+00:07:59.820 --> 00:08:02.420
+Pengguna memilih tindakan dan Power Apps merespon.
+
+00:08:02.960 --> 00:08:04.000
+Perbedaannya layak untuk diingat.
+
+00:08:04.560 --> 00:08:07.420
+Rumus text visible atau warna menjelaskan seperti apa sesuatu nantinya.
+
+00:08:07.660 --> 00:08:10.360
+Sementara rumus onselect berjalan karena seseorang mengeklik atau mengetuk.
+
+00:08:10.760 --> 00:08:13.160
+Keduanya berada di properti tetapi memecahkan masalah yang berbeda.
+
+00:08:13.420 --> 00:08:14.480
+Disinilah pemula sering terjebak.
+
+00:08:14.800 --> 00:08:17.760
+Mereka membelajari fungsi seperti ifatunotify lalu bingung harus menetakannya diputuk.
+
+00:08:17.760 --> 00:08:19.440
+Mulailah dari hasil yang diinginkan bukan nama fungsi.
+
+00:08:19.940 --> 00:08:20.780
+Apakah Anda ingin label berubah?
+
+00:08:21.280 --> 00:08:22.640
+Pilih label tersebut dan kerjakan pada bagian itu.
+
+00:08:22.920 --> 00:08:24.940
+Apakah Anda ingin tombol muncul hanya dalam satu situasi?
+
+00:08:25.340 --> 00:08:26.980
+Pilih tombol tersebut dan kerjakan pada bagian visible.
+
+00:08:27.480 --> 00:08:30.660
+Apakah Anda ingin tombol tersebut dan kerjakan pada bagian itu?
+
+00:08:31.060 --> 00:08:32.700
+Satu kontrol, satu properti, satu hasil yang jelas.
+
+00:08:33.160 --> 00:08:34.440
+Di cara yang jauh lebih mudah untuk membangun.
+
+00:08:34.860 --> 00:08:38.000
+Setelah aplikasi mulai bereaksi terhadap pilihan seseorang, pertanyaan berikutnya sudah jelas.
+
+00:08:38.360 --> 00:08:39.680
+Dimanakah semua informasi itu tersimpan?
+
+00:08:40.660 --> 00:08:41.400
+Blok penyusun ketiga.
+
+00:08:41.940 --> 00:08:43.460
+Power FX pekerja dengan data bisnis.
+
+00:08:43.940 --> 00:08:48.240
+Layar dapat menghitung total, menampilkan pesan, dan memindahkan seseorang ke halaman lain.
+
+00:08:48.880 --> 00:08:52.640
+Namun, sebagian besar aplikasi bisnis perlu bekerja dengan informasi yang ada di luar satu layar itu.
+
+00:08:52.640 --> 00:08:54.340
+Pikirkan tentang aplikasi pengeluaran.
+
+00:08:54.660 --> 00:08:56.700
+Pengeluaran perlu tersimpan di suatu tempat setelah dikirimkan.
+
+00:08:56.940 --> 00:08:59.180
+Seorang manajer membuka aplikasi besok dan melihat permintaan.
+
+00:08:59.460 --> 00:09:02.480
+Bagian keuangan meninjau jumlah, kategori, tanggal, dan nama karyawan.
+
+00:09:02.740 --> 00:09:03.600
+Di setelah peran data di momen.
+
+00:09:03.880 --> 00:09:05.580
+Bayangkan sumber data Anda sebagai lemari arsit.
+
+00:09:05.580 --> 00:09:07.660
+Di dalamnya, tabel adalah laci-lacinya.
+
+00:09:08.120 --> 00:09:09.580
+Tabel pengeluaran adalah satu laci.
+
+00:09:09.840 --> 00:09:11.180
+Tabel karyawan adalah laci lainnya.
+
+00:09:11.840 --> 00:09:15.620
+Setiap catatan ada folder di dalam laci, dan setiap kolom adalah label pada folder tersebut.
+
+00:09:16.280 --> 00:09:20.560
+Satu catatan pengeluaran mungkin mencakup nama karyawan, tanggal, kategori, jumlah, dan status persetujuan.
+
+00:09:20.560 --> 00:09:25.240
+Power FX membantu aplikasi Anda membaca dari lemari arsit itu menemukan folder yang diperlukan,
+
+00:09:25.400 --> 00:09:27.140
+dan terkadang menambah atau memperbarui informasi.
+
+00:09:27.680 --> 00:09:30.020
+Sebelum kita melihat rumus, pahami tiga istilah ini.
+
+00:09:30.540 --> 00:09:32.320
+Tabel adalah sekumpulan catatan yang saling terkait.
+
+00:09:32.800 --> 00:09:34.820
+Catatan adalah satu item dalam tabel tersebut,
+
+00:09:34.960 --> 00:09:38.060
+dan kolom adalah satu jenis informasi yang disimpan untuk setiap catatan.
+
+00:09:38.620 --> 00:09:44.520
+Jadi, dalam tabel pengeluaran, satu catatan bisa berupa tiket kereta dengan jumlah 42,50 kategori perjalanan dan status dikirimkan.
+
+00:09:44.680 --> 00:09:46.740
+Aplikasi tidak selalu perlu menampilkan setiap folder di dalam laci.
+
+00:09:46.740 --> 00:09:50.780
+Bayangkan seorang karyawan membuka aplikasi pengeluaran dan hanya ingin melihat klaim miliknya sendiri,
+
+00:09:50.980 --> 00:09:53.180
+sementara manajer hanya menginginkan klaim yang menunggu persetujuan,
+
+00:09:53.320 --> 00:09:55.420
+dan bagian keuangan hanya menginginkan pengeluaran perjalanan.
+
+00:09:56.000 --> 00:10:00.600
+Dalam tugas rumus filter, rumus filter memintas kumpulan catatan yang lebih kecil yang cocok dengan aturan tertentu.
+
+00:10:01.020 --> 00:10:06.300
+Dalam bahasa sederhana, Anda mungkin memberitahu aplikasi tampilkan pengeluaran di mana nama karyawan cocok dengan pengguna saat ini,
+
+00:10:06.560 --> 00:10:09.240
+atau tampilkan hanya catatan di mana kategorinya adalah perjalanan.
+
+00:10:09.240 --> 00:10:11.440
+Hasilnya muncul di dalam galeri.
+
+00:10:11.920 --> 00:10:13.980
+Tontrol power apps untuk menampilkan daftar berulang.
+
+00:10:14.720 --> 00:10:19.400
+Daripada membuat layar terpisah untuk setiap kategori, Anda memberikan satu rumus ke galeri yang merespons pilihan pengguna.
+
+00:10:19.860 --> 00:10:21.720
+Pilih perjalanan dan galeri akan menampilkan perjalanan.
+
+00:10:22.260 --> 00:10:23.760
+Pilih peralatan dan daftarnya berubah.
+
+00:10:24.460 --> 00:10:26.360
+Catatan di dalam lemari R-Ship tidak menghilang.
+
+00:10:26.820 --> 00:10:29.200
+Aplikasi hanya memilih folder yang dibutuhkan pengguna saat ini.
+
+00:10:29.760 --> 00:10:31.420
+Bagaimana jika daftarnya sudah benar tetapi urutannya salah?
+
+00:10:31.900 --> 00:10:32.660
+Disitulah fungsi software.
+
+00:10:32.900 --> 00:10:35.560
+Manager yang sibuk menginginkan permintaan terbaru di bagian atas,
+
+00:10:35.560 --> 00:10:37.740
+sementara bagian keuangan memerlukan jumlah terbesar terlebih dahulu.
+
+00:10:38.120 --> 00:10:40.080
+Soal memungkinkan Anda mengatur catatan sebelum menampilkan.
+
+00:10:40.720 --> 00:10:42.480
+Filter menjawab catatan mana yang harus saya lihat.
+
+00:10:43.120 --> 00:10:44.200
+Mengurutkan jawaban dalam urutan apa.
+
+00:10:44.680 --> 00:10:46.040
+Sering kalian menggunakan keduanya secara bersama.
+
+00:10:46.240 --> 00:10:48.220
+Contohnya, saring permintaan persetujuan yang tertunda,
+
+00:10:48.640 --> 00:10:50.720
+lalu urutkan berdasarkan tanggal agar yang terbaru muncul.
+
+00:10:51.000 --> 00:10:51.740
+Ada kebutuhan umum lain.
+
+00:10:52.160 --> 00:10:53.100
+Terkadang Anda tidak mengurut-urut.
+
+00:10:53.200 --> 00:10:54.840
+Anda menurutkan satu catatan yang cocok.
+
+00:10:55.120 --> 00:10:57.660
+Mungkin klaim pengeluaran perlu memeriksa batas persetujuan karyawan.
+
+00:10:57.660 --> 00:10:59.260
+Aplikasi mencari di tabel karyawan,
+
+00:10:59.380 --> 00:11:01.140
+menemukan catatan orang tersebut, dan membaca batas.
+
+00:11:01.580 --> 00:11:02.660
+Itulah pola di balik pencarian.
+
+00:11:02.980 --> 00:11:05.100
+Lookup menemukan satu catatan yang sesuai dengan Anda berikan.
+
+00:11:05.620 --> 00:11:07.960
+Anda bisa menganggapnya seperti meminta seseorang di lemari arsip
+
+00:11:07.960 --> 00:11:09.400
+tolong temukan folder untuk karyawan ini.
+
+00:11:09.920 --> 00:11:11.100
+Setelah Anda mendapatkan folder itu,
+
+00:11:11.160 --> 00:11:12.340
+Anda bisa membaca informasi di data.
+
+00:11:12.660 --> 00:11:14.180
+Membaca data hanyalah setengah dari pekerjaan.
+
+00:11:14.600 --> 00:11:15.580
+Aplikasi juga mengonformasi.
+
+00:11:16.100 --> 00:11:17.400
+Seseorang memasukkan pengeluaran baru,
+
+00:11:17.400 --> 00:11:19.260
+manajer mengubah status menjadi disetujui
+
+00:11:19.260 --> 00:11:20.420
+seseorang meloreksi kategori.
+
+00:11:20.640 --> 00:11:22.740
+Power Apps dapat menambah atau memperbarui catatan tersebut.
+
+00:11:22.740 --> 00:11:24.300
+Namun disinilah Anda perlu berhati-hati.
+
+00:11:24.780 --> 00:11:26.020
+Aplikasi mungkin menampilkan tombol,
+
+00:11:26.160 --> 00:11:27.920
+tetapi sumber data yang mengontrol siapa yang bisa membaca,
+
+00:11:28.040 --> 00:11:29.200
+menambah, atau mengubah informasi.
+
+00:11:29.500 --> 00:11:31.440
+Aplikasi pengeluaran tidak boleh memberikan akses yang sama
+
+00:11:31.440 --> 00:11:33.080
+kepada setiap pengguna hanya karena mereka bisa membuka.
+
+00:11:33.420 --> 00:11:34.340
+Ijin data Anda sangat penting.
+
+00:11:34.780 --> 00:11:36.100
+Power Apps dapat terhubung ke tempat
+
+00:11:36.100 --> 00:11:37.840
+di mana banyak perusahaan menyimpan informasi.
+
+00:11:38.340 --> 00:11:40.140
+SharePoint, Excel, SQL, Dataverse.
+
+00:11:40.800 --> 00:11:42.560
+Sumber-sumber tersebut tidak bekerja dengan cara yang sama
+
+00:11:42.560 --> 00:11:44.420
+dan pilihan yang tepat bergantung pada kebutuhan aplikasi Anda.
+
+00:11:44.760 --> 00:11:46.260
+Namun bagi pemula, poinnya lebih sederhana.
+
+00:11:46.960 --> 00:11:49.740
+Rumus dan struktur data Anda harus dibahas secara beriringan.
+
+00:11:49.740 --> 00:11:52.260
+Jika tabel memiliki kolom yang tidak jelas,
+
+00:11:52.420 --> 00:11:53.600
+rumus menjadi lebih sulit ditulis.
+
+00:11:54.100 --> 00:11:55.840
+Jika rumus menanyakan pertanyaan yang tidak jelas,
+
+00:11:56.000 --> 00:11:57.380
+aplikasi akan memberikan hasil yang memut.
+
+00:11:58.020 --> 00:12:00.900
+Beri nama kolom Anda dengan jelas ketahui catatan mana yang Anda butuhkan,
+
+00:12:01.040 --> 00:12:03.240
+lalu tulis rumus yang mencari, menyaring, mengurutkan,
+
+00:12:03.380 --> 00:12:04.740
+atau memperbarui informasi tersebut.
+
+00:12:05.600 --> 00:12:08.340
+Membaca dan mengubah catatan menangani banyak pekerjaan aplikasi,
+
+00:12:08.500 --> 00:12:10.060
+tetapi aturan bisa menjadi sulit dikelola
+
+00:12:10.060 --> 00:12:12.700
+ketika jawaban harus muncul di lebih dari satu tempat.
+
+00:12:13.440 --> 00:12:14.600
+Block Bangunan 4.
+
+00:12:15.020 --> 00:12:17.340
+Variable, koleksi, dan aturan yang dapat digunakan kembali.
+
+00:12:17.340 --> 00:12:19.820
+Jadi, setelah aplikasi Anda memiliki lebih dari satu layar,
+
+00:12:19.960 --> 00:12:22.760
+aplikasi membutuhkan cara untuk mengingat hal-hal kecil saat seseorang berpindah-pindah.
+
+00:12:22.940 --> 00:12:24.720
+Bayangkan seseorang memilih pengeluaran dari daftar.
+
+00:12:25.120 --> 00:12:26.260
+Mereka membuka layar detail,
+
+00:12:26.400 --> 00:12:29.120
+tetapi layar kedua itu perlu mengetahui pengeluaran mana yang mereka pilih
+
+00:12:29.120 --> 00:12:30.840
+meskipun daftarnya berada di layar yang berbeda.
+
+00:12:31.020 --> 00:12:32.160
+Disitulah variable berperan.
+
+00:12:32.520 --> 00:12:34.620
+Anggaplah variable sebagai kotak berlabel di dalam aplikasi.
+
+00:12:34.820 --> 00:12:35.740
+Anda memasukkan nilai,
+
+00:12:36.040 --> 00:12:36.900
+memberinya nama yang jelas,
+
+00:12:37.060 --> 00:12:39.460
+lalu menggunakan nilai tersebut di tempat lain saat aplikasi berjalan.
+
+00:12:39.680 --> 00:12:41.380
+Nilainya bisa berupa pengeluaran yang dipilih,
+
+00:12:41.380 --> 00:12:42.460
+kategori pilihan seseorang,
+
+00:12:42.580 --> 00:12:45.040
+atau total berjalan untuk item yang telah mereka tambahkan keberintahan.
+
+00:12:45.200 --> 00:12:46.680
+Pengguna memilih pengeluaran di galeri.
+
+00:12:47.760 --> 00:12:50.580
+Aplikasi menyimpan catatan tersebut dalam variable dan berpindah ke layar tipe.
+
+00:12:51.200 --> 00:12:51.900
+Di layar berikutnya,
+
+00:12:51.980 --> 00:12:53.940
+label membaca pengeluaran yang dipilih dari variable
+
+00:12:53.940 --> 00:12:56.380
+dan menampilkan jumlah, tanggal, kategori, serta statusnya.
+
+00:12:56.800 --> 00:12:58.080
+Pengguna melihat perjalanan yang mulus,
+
+00:12:58.220 --> 00:13:00.120
+namun di balik layar, aplikasi mengingat pilihan mereka.
+
+00:13:00.520 --> 00:13:01.340
+Variable memang berguna,
+
+00:13:01.560 --> 00:13:03.060
+tetapi variable bukanlah penyimpanan permanen.
+
+00:13:03.380 --> 00:13:05.760
+Jika Anda memerlukan catatan pengeluaran untuk tersedia besok
+
+00:13:05.760 --> 00:13:06.880
+bagi keuangan atau manajer,
+
+00:13:06.880 --> 00:13:08.220
+itu harus ada di sumber data Anda yang terlihat.
+
+00:13:08.940 --> 00:13:11.960
+Variable hanya membantu aplikasi melacak sesuatu selama sesi berlangsung.
+
+00:13:12.860 --> 00:13:14.640
+Pengetah perbedaannya akan menghindari banyak kebingungan.
+
+00:13:14.960 --> 00:13:16.240
+Satu kotak menampung satu nilai,
+
+00:13:16.420 --> 00:13:19.220
+tetapi terkadang aplikasi Anda perlu mengingat daftar nilai yang kecil.
+
+00:13:19.600 --> 00:13:20.540
+Disitulah koleksi berperan.
+
+00:13:20.960 --> 00:13:23.000
+Koleksi seperti tabel sementara di dalam aplikasi.
+
+00:13:23.340 --> 00:13:24.780
+Koleksi dapat menampung beberapa catatan
+
+00:13:24.780 --> 00:13:25.820
+saat pengguna mengejarkan suatu.
+
+00:13:26.140 --> 00:13:27.820
+Keranjang belajar sederhana adalah contoh yang mudah.
+
+00:13:28.620 --> 00:13:30.880
+Seseorang memilih tiga item dari daftar produk,
+
+00:13:30.880 --> 00:13:32.460
+aplikasi menambahkannya ke koleksi,
+
+00:13:32.740 --> 00:13:34.700
+dan layar keranjang menampilkan item yang dipilih,
+
+00:13:34.700 --> 00:13:37.260
+menghitung total, serta memungkinkan pengguna menghapus satu item
+
+00:13:37.260 --> 00:13:38.340
+sebelum mengirimkan pesanan.
+
+00:13:39.420 --> 00:13:41.420
+Anda bisa menggunakan ide yang sama untuk daftar periksa keselam.
+
+00:13:41.700 --> 00:13:44.240
+Pekerja lapangan menandai beberapa pemeriksaan sebagai selesai,
+
+00:13:44.360 --> 00:13:47.040
+dan aplikasi menyimpan pilihan tersebut dalam koleksi saat mereka formulir.
+
+00:13:47.400 --> 00:13:50.480
+Ketua selesai, aplikasi menyimpan hasil akhir ke sumber data yang tepat.
+
+00:13:51.160 --> 00:13:52.900
+Koleksi berguna untuk pekerjaan jangka pendek,
+
+00:13:53.020 --> 00:13:55.780
+tetapi bukan pengganti sumber tempat catatan bisnis Anda seharusnya berada.
+
+00:13:55.780 --> 00:13:58.560
+Hal itu penting saat Anda membangun sesuatu yang akan diandalkan orang lain.
+
+00:13:59.020 --> 00:14:01.280
+Jika koleksi hanya menyimpan satu salinan permintaan penting,
+
+00:14:01.280 --> 00:14:02.360
+Anda telah menciptakan masalah.
+
+00:14:02.840 --> 00:14:04.960
+Pengguna mungkin menutup aplikasi, kehilangan koneksi,
+
+00:14:05.060 --> 00:14:07.180
+atau memulai lagi nanti, dan daftar sementara itu bisa hilang.
+
+00:14:07.700 --> 00:14:10.300
+Jadi, gunakan koleksi saat aplikasi membutuhkan daftar kerja,
+
+00:14:10.420 --> 00:14:12.680
+dan gunakan sumber data saat bisnis membutuhkan catatan permanen.
+
+00:14:13.560 --> 00:14:15.360
+Seiring berkembangnya aplikasi Anda, tantangan muncul.
+
+00:14:15.620 --> 00:14:17.940
+Aturan bisnis yang sama mulai muncul di lebih dari satu tempat.
+
+00:14:18.660 --> 00:14:20.380
+Mungkin pesanan mendapatkan pengiriman gratis
+
+00:14:20.380 --> 00:14:23.500
+hanya jika totalnya mencapai jumlah tertentu dan kode diskon masih berlaku.
+
+00:14:23.900 --> 00:14:26.080
+Anda mungkin memerlukan jawaban itu di layar pembayaran,
+
+00:14:26.200 --> 00:14:28.580
+layar tinjauan pesanan, dan nantinya dalam proses otomatis.
+
+00:14:28.580 --> 00:14:31.800
+Menyalin rumus panjang yang sama ke setiap tempat terasa cepat pada awalnya,
+
+00:14:31.980 --> 00:14:33.460
+tetapi kemudian aturan pengiriman berubah.
+
+00:14:33.820 --> 00:14:36.200
+Seseorang memperbarui satu salinan namun melewatkan dua lainnya,
+
+00:14:36.360 --> 00:14:39.080
+sehingga bagian yang berbeda dari solusi yang sama memberikan jawaban yang berbeda.
+
+00:14:39.380 --> 00:14:41.980
+Fungsi PowerFX yang dapat digunakan kembali membantu Anda menghindari kekacauan.
+
+00:14:42.260 --> 00:14:43.540
+Anda mendefinisikan fungsi sekali saja,
+
+00:14:43.660 --> 00:14:45.680
+berikan input yang diperlukan, dan fungsi tersebut akan memberikan jawaban.
+
+00:14:46.240 --> 00:14:48.620
+Untuk contoh pengiriman, fungsi tersebut menerima subtotal pesanan
+
+00:14:48.620 --> 00:14:51.000
+dan memeriksa apakah kode diskon memenuhi aturan tanggal.
+
+00:14:51.660 --> 00:14:52.980
+Hasilnya adalah benar atau salah.
+
+00:14:52.980 --> 00:14:56.320
+Benar berarti pengiriman gratis berlaku, salah berarti tidak berlaku.
+
+00:14:56.960 --> 00:14:58.880
+Aplikasi tidak perlu membawa seluruh aturan kemana-mana.
+
+00:14:59.500 --> 00:15:01.720
+Aplikasi dapat mencinta jawaban kepada fungsi yang dibagikan tersebut.
+
+00:15:02.180 --> 00:15:05.260
+Hal itu membuat aturan lebih mudah diperiksa, diubah, dan dijaga konsistensinya.
+
+00:15:05.820 --> 00:15:07.980
+PowerFX tampak paling jelas dalam aplikasi Canvas,
+
+00:15:08.100 --> 00:15:10.140
+tempat Anda bekerja langsung dengan kontrol di bilah rumus,
+
+00:15:10.240 --> 00:15:13.680
+tetapi bahasa rumus yang sama juga muncul di Dataverse dan pengalaman Power Platform lainnya.
+
+00:15:14.480 --> 00:15:16.780
+Anda tidak perlu menguasai setiap tempat kemunculannya sebelum memulai.
+
+00:15:16.780 --> 00:15:18.760
+Cukup pahami arah yang diambil Microsoft
+
+00:15:18.760 --> 00:15:21.160
+karena cara penulisan aturan bisnis yang sama dapat digunakan
+
+00:15:21.160 --> 00:15:22.920
+lebih dari satu layar di satu aplikasi.
+
+00:15:23.480 --> 00:15:25.100
+Bagi Anda, pelajaran praktisnya sederhana.
+
+00:15:25.740 --> 00:15:27.980
+Ketika suatu nilai hanya penting selama perjalanan seseorang
+
+00:15:27.980 --> 00:15:30.720
+menggunakan aplikasi, gunakan variable atau koleksi dengan tujuan yang jelas.
+
+00:15:31.280 --> 00:15:33.560
+Ketika aturan bisnis yang sama perlu memberikan jawaban yang sama
+
+00:15:33.560 --> 00:15:34.520
+di lebih dari satu tempat,
+
+00:15:34.640 --> 00:15:36.380
+satukan aturan tersebut alih-alih menyalinnya.
+
+00:15:36.880 --> 00:15:39.700
+Semua bagian ini mungkin terdengar terpisah saat pertama kali Anda menemuinya,
+
+00:15:39.700 --> 00:15:42.960
+tetapi akan lebih masuk akal saat Anda melihatnya bekerja bersama dalam satu aplikasi kecil.
+
+00:15:43.420 --> 00:15:45.240
+Bagaimana bagian tersebut terhubung satu sistem rumus?
+
+00:15:46.780 --> 00:15:48.300
+Persetujuan Pengeluaran Sederhana Dari Awal
+
+00:15:48.300 --> 00:15:51.420
+Seorang karyawan membuka aplikasi dan memulai klaim pengeluaran bank.
+
+00:15:51.780 --> 00:15:54.140
+Mereka memasukkan jumlah, memilih kategori menambahkan tanggal,
+
+00:15:54.340 --> 00:15:55.380
+dan menulis deskripsi singkat.
+
+00:15:55.840 --> 00:15:57.520
+Setiap kontrol input sekarang berisi nilai.
+
+00:15:58.080 --> 00:15:59.920
+Power FX dapat langsung menggunakan nilai tersebut.
+
+00:16:00.880 --> 00:16:02.000
+Label dapat menghitung total,
+
+00:16:02.180 --> 00:16:04.940
+rumus dapat memeriksa apakah jumlahnya melebih batas normal karyawan,
+
+00:16:05.080 --> 00:16:07.640
+dan rumus lain dapat menampilkan pesan jika deskripsi kosong.
+
+00:16:08.360 --> 00:16:10.460
+Layar berubah saat karyawan mengisi formulir.
+
+00:16:11.000 --> 00:16:12.020
+Kemudian mereka menekan kirim.
+
+00:16:12.540 --> 00:16:14.540
+Rumus tindakan tombol tersebut menyimpan permintaan
+
+00:16:14.540 --> 00:16:16.380
+dan memindahkan orang tersebut ke layar konfirmasi.
+
+00:16:16.860 --> 00:16:18.860
+Aplikasi menyimpan catatan yang baru dipilih dalam variable
+
+00:16:18.860 --> 00:16:21.360
+agar layar konfirmasi tahu persis klaim mana yang harus ditampilkan.
+
+00:16:21.820 --> 00:16:22.580
+Pada saat yang sama,
+
+00:16:22.840 --> 00:16:25.340
+aplikasi menulis informasi permanen ke sumber data yang terhubung.
+
+00:16:26.160 --> 00:16:28.060
+Kemudian seorang manajer membuka layar persetujuan.
+
+00:16:28.580 --> 00:16:30.720
+Galeri tidak perlu menampilkan setiap pengeluaran di perusahaan.
+
+00:16:31.100 --> 00:16:32.500
+Sebuah rumus dapat menampilkan catatan
+
+00:16:32.500 --> 00:16:33.880
+yang hanya menunggu manajer tersebut,
+
+00:16:34.000 --> 00:16:35.620
+dan rumus lainnya dapat mengatur catatan tersebut
+
+00:16:35.620 --> 00:16:37.440
+berdasarkan tanggal atau jumlah sesuai kebutuhan tim.
+
+00:16:38.000 --> 00:16:39.260
+Manajer memilih satu catatan.
+
+00:16:39.540 --> 00:16:40.860
+Layar detail membaca pilihan tersebut,
+
+00:16:40.860 --> 00:16:43.620
+menampilkan permintaan lengkap, dan memeriksa aturan persetujuan yang revan.
+
+00:16:43.900 --> 00:16:45.140
+Jika jumlahnya berada dalam batas,
+
+00:16:45.240 --> 00:16:46.420
+tindakan persetujuan akan muncul.
+
+00:16:46.840 --> 00:16:48.640
+Jika permintaan memerlukan detail lebih lanjut,
+
+00:16:48.760 --> 00:16:50.280
+aplikasi akan menampilkan pesan berbeda
+
+00:16:50.280 --> 00:16:52.600
+atau meminta manajer kembali ke karyawan untuk informasi tambah.
+
+00:16:53.040 --> 00:16:54.680
+Satu aturan bisnis juga dapat digunakan bersama.
+
+00:16:54.940 --> 00:16:56.720
+Aturan pengiriman atau aturan diskon dapat berada
+
+00:16:56.720 --> 00:16:58.960
+dalam fungsi yang dapat digunakan kembali sehingga berdigunakan kembali
+
+00:16:58.960 --> 00:17:00.780
+sehingga aplikasi tidak membuat versi jualan baru di setiap.
+
+00:17:00.980 --> 00:17:02.180
+Ini adalah sebagian biasa yang langsung dipahami.
+
+00:17:02.620 --> 00:17:04.860
+PowerFX tidak berada di samping aplikasi Anda layaknya
+
+00:17:04.860 --> 00:17:05.660
+atau bukan kode terpisah.
+
+00:17:06.000 --> 00:17:08.000
+PowerFX menerapkan aturan di dalam aplikasi itu sendiri.
+
+00:17:08.520 --> 00:17:10.860
+Kontrol menggunakan rumus untuk menampilkan informasi yang tepat,
+
+00:17:11.060 --> 00:17:12.860
+tombol menggunakan rumus untuk merespons pengguna,
+
+00:17:13.200 --> 00:17:15.800
+dan rumus data memilih serta memperbarui catatan yang dibutuhkan aplikasi.
+
+00:17:16.620 --> 00:17:18.700
+Variable dan koleksi menyimpan konteks jangka pendek
+
+00:17:18.700 --> 00:17:21.580
+sementara fungsi bersama menjaga aturan yang berulang tetap konsisten.
+
+00:17:22.040 --> 00:17:24.860
+Proyek aplikasi lama seringkali membagi tugas ini ke dalam skrip terpisah,
+
+00:17:24.960 --> 00:17:26.540
+halaman buatan tangan, dan logika custom
+
+00:17:26.540 --> 00:17:28.960
+yang ditulis jauh dari layar tempat pengguna menggunakannya.
+
+00:17:29.560 --> 00:17:31.480
+PowerFX menjaga sebagian besar logika
+
+00:17:31.480 --> 00:17:33.940
+tetap dekat dengan kontrol layar atau langkah data yang bertengah.
+
+00:17:34.360 --> 00:17:36.720
+Hal itu dapat membuat aplikasi bisnis kecil lebih mudah dibaca,
+
+00:17:36.920 --> 00:17:38.580
+terutama saat Anda menamai sesuatu dengan jelas.
+
+00:17:38.980 --> 00:17:42.180
+Namun, PowerFX bukan janji bahwa setiap masalah aplikasi akan tetap sederhana.
+
+00:17:42.780 --> 00:17:44.940
+Kebutuhan data besar, aturan keamanan ketat,
+
+00:17:45.060 --> 00:17:46.240
+perubahan basis data yang kompleks,
+
+00:17:46.300 --> 00:17:47.760
+dan pekerjaan yang menghubungkan banyak sistem
+
+00:17:47.760 --> 00:17:48.940
+mungkin memerlukan banyak sistem,
+
+00:17:49.080 --> 00:17:51.280
+mungkin memerlukan bantuan dari pengembang berpengalaman tim data
+
+00:17:51.280 --> 00:17:52.300
+atau alat power platform lain.
+
+00:17:52.780 --> 00:17:54.120
+Itu bukanlah kegagalan dari low code,
+
+00:17:54.640 --> 00:17:55.260
+tanya ramai milik.

@@ -1,0 +1,2710 @@
+WEBVTT
+
+00:00:00.460 --> 00:00:06.860
+Pré pour 12 jours dédiés à Microsoft 365, Copilot, l'IA, Azure et ceux qui façonnent l'avenir du travail.
+
+00:00:07.900 --> 00:00:12.020
+En janvier prochain, la M365Con est de retour et nous voyons encore plus grand.
+
+00:00:12.820 --> 00:00:17.640
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.740 --> 00:00:21.320
+Fini les diapositives génériques et le jargon marketing interminable.
+
+00:00:22.020 --> 00:00:23.100
+Nous nous attaquons aux vrais défis.
+
+00:00:23.980 --> 00:00:28.620
+Copilot Studio, agent IA Fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.620 --> 00:00:33.880
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.220 --> 00:00:39.980
+Sur 10 jours complets, vous pourrez explorer diverses technologies et échanger avec une communauté mondiale.
+
+00:00:40.980 --> 00:00:44.080
+Assister au direct et rapporter des idées concrètes à votre organisation.
+
+00:00:45.280 --> 00:00:47.800
+Janvier 2027, 10 jours, une seule communauté.
+
+00:00:48.100 --> 00:00:50.620
+Microsoft, les inscriptions sont désormais ouvertes.
+
+00:00:51.840 --> 00:00:55.540
+Rendez-vous sur M365Con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.540 --> 00:00:58.240
+C'est M365Con.net.
+
+00:01:00.320 --> 00:01:04.640
+Scrivez-vous sur M365Con.net et on se retrouve en direct en janvier.
+
+00:01:05.360 --> 00:01:06.940
+Voici le piège que Microsoft ne mentionne jamais.
+
+00:01:07.460 --> 00:01:10.220
+L'historique d'exécution de Power Automate est limitée dans le temps par défaut.
+
+00:01:10.640 --> 00:01:13.140
+La rétention dépend de votre plan et de votre licence, elle n'est pas éternelle.
+
+00:01:13.980 --> 00:01:15.860
+Une fois effacée, c'est comme si cela n'avait jamais eu lieu.
+
+00:01:16.640 --> 00:01:18.980
+Génial pour les serveurs de Microsoft, désastreux pour votre liste d'audit.
+
+00:01:19.940 --> 00:01:22.860
+Concevoir sans journalisation, c'est comme supprimer vos vidéos de surveillance avant l'arrivée de la police.
+
+00:01:23.580 --> 00:01:26.240
+Vous pouvez penser que tout va bien, jusqu'au jour où quelqu'un a réellement besoin d'épreuve.
+
+00:01:27.180 --> 00:01:30.180
+Aujourd'hui, nous allons vous montrer comment enregistrer durablement vos approbations,
+
+00:01:30.280 --> 00:01:33.900
+relancer des flux à une étape précise, utiliser des approbateurs dynamiques et créer des escalades et rappels logiques.
+
+00:01:35.240 --> 00:01:38.580
+Abonnez-vous à la newsletter sur M365.show si vous voulez des solutions directes,
+
+00:01:38.640 --> 00:01:41.560
+plutôt que des présentations marketing, car voici la question à laquelle vous devez faire face.
+
+00:01:42.640 --> 00:01:43.980
+Pensez que vos traces de flux sont permanentes ?
+
+00:01:45.200 --> 00:01:47.520
+Poilers disparaissent plus vite que les donuts gratuits à la cafétéria.
+
+00:01:47.520 --> 00:01:50.520
+Pourquoi l'historique de vos flux s'évapore ?
+
+00:01:51.180 --> 00:01:54.000
+Voyons pourquoi l'historique de vos flux disparaît silencieusement en premier lieu.
+
+00:01:55.480 --> 00:01:57.840
+Vous enregistrez un flux, vous vérifiez l'onglet de l'historique et vous vous dites
+
+00:01:57.840 --> 00:01:59.520
+« Parfait, j'ai ma trace, problème résolu ».
+
+00:02:00.040 --> 00:02:02.200
+Sauf que ce petit journal n'est pas fait pour durer.
+
+00:02:02.680 --> 00:02:04.320
+C'est plutôt comme un post-it collé sur le frigo du bureau.
+
+00:02:04.740 --> 00:02:07.080
+Utile pendant un moment, mais qui finit inévitablement à la corbeille.
+
+00:02:07.780 --> 00:02:08.320
+Voici la vérité.
+
+00:02:08.620 --> 00:02:10.360
+Power Automate ne vous offre pas d'archivage permanent.
+
+00:02:11.000 --> 00:02:13.580
+Il vous fournit un stockage temporaire conçu pour les serveurs de Microsoft,
+
+00:02:13.580 --> 00:02:15.440
+pas pour votre responsable de la conformité.
+
+00:02:15.440 --> 00:02:19.480
+La durée de visibilité de vos exécutions varie selon votre plan et votre licence.
+
+00:02:19.980 --> 00:02:23.600
+Pour les détails, consultez les paramètres de votre tenant ou la documentation officielle de Microsoft.
+
+00:02:24.300 --> 00:02:26.280
+Je mettrai le lien vers les directives de rétention officielle dans les notes.
+
+00:02:26.780 --> 00:02:29.400
+Vérifiez votre configuration, car ce que vous voyez dépend entièrement de votre licence.
+
+00:02:30.720 --> 00:02:33.020
+La plupart des équipes IT supposent que le cloud équivaut à l'éternité.
+
+00:02:33.440 --> 00:02:35.620
+Microsoft suppose que l'éternité équivaut à un cauchemar de stocker.
+
+00:02:36.080 --> 00:02:37.200
+Alors ils font le ménage en toute discrétion.
+
+00:02:37.520 --> 00:02:38.660
+C'est le fonctionnement prévu par défaut.
+
+00:02:39.200 --> 00:02:41.620
+Les journaux expirent, les données s'effacent et votre historique s'évapore.
+
+00:02:41.620 --> 00:02:42.980
+C'est du nettoyage automatique.
+
+00:02:43.440 --> 00:02:45.640
+Vous vous retrouvez sans preuve quand les auditeurs débarquent.
+
+00:02:46.340 --> 00:02:47.200
+Appliquons cela à la réalité.
+
+00:02:47.640 --> 00:02:50.560
+Imaginez que les RH demandent une preuve d'approbation de promotion de l'an dernier.
+
+00:02:51.540 --> 00:02:53.320
+Il y a 14 mois, votre directeur a cliqué sur Approuver.
+
+00:02:53.760 --> 00:02:55.600
+Tout le monde a célébré et le processus a continué.
+
+00:02:56.340 --> 00:02:57.880
+Avance rapide, la conformité veut des rapports.
+
+00:02:58.820 --> 00:03:01.500
+Vous ouvrez Power Automate, vérifiez les exécutions et il ne reste rien.
+
+00:03:01.900 --> 00:03:04.420
+Cette piste d'approbation propre à laquelle vous faisiez confiance a été aspirée.
+
+00:03:04.800 --> 00:03:06.120
+Ce n'est pas Microsoft qui a omis de vous prévenir.
+
+00:03:06.600 --> 00:03:07.720
+C'est écrit noir sur blanc dans la documentation.
+
+00:03:07.720 --> 00:03:11.540
+Il faut juste plisser les yeux sur les petites lignes des licences qui sont claires.
+
+00:03:11.860 --> 00:03:13.060
+Ce n'est pas votre archive de conformité.
+
+00:03:13.500 --> 00:03:14.040
+C'est votre travail.
+
+00:03:14.380 --> 00:03:17.540
+Si vous arrivez à un audit avec des trous dans vos données, la réunion sera pénible.
+
+00:03:17.920 --> 00:03:20.900
+C'est comme si Netflix effaçait votre historique de lecture chaque lundi.
+
+00:03:21.280 --> 00:03:23.040
+Une semaine, vous savez exactement où vous étiez arrêté.
+
+00:03:23.640 --> 00:03:24.500
+La semaine suivante, il se parle.
+
+00:03:24.880 --> 00:03:26.820
+Le système prétend que vous n'avez jamais regardé aucune série.
+
+00:03:27.440 --> 00:03:31.300
+C'est aussi absurde quand un auditeur demande des preuves et que votre historique est vide.
+
+00:03:32.220 --> 00:03:33.360
+Le pire, ce sont les conséquences.
+
+00:03:33.860 --> 00:03:35.580
+Manquer de rapport n'est pas qu'un léger inconvénient.
+
+00:03:35.580 --> 00:03:40.520
+Ne pas pouvoir montrer de documents peut déclencher des contrôles et des sanctions.
+
+00:03:41.560 --> 00:03:44.100
+Dans un secteur réglementé, cela peut coûter cher très rapidement.
+
+00:03:44.520 --> 00:03:47.560
+Et même sans régulateur, la direction s'en rendra compte.
+
+00:03:48.060 --> 00:03:49.620
+On vous a fait confiance pour automatiser les approbations.
+
+00:03:50.260 --> 00:03:53.140
+Si vous ne pouvez pas prouver les approbations passées, félicitations.
+
+00:03:53.540 --> 00:03:54.920
+Vous êtes désormais le maillon faible de la chaîne.
+
+00:03:55.340 --> 00:03:56.540
+Et non, les captures d'écran ne vous sauveront pas.
+
+00:03:57.100 --> 00:03:58.560
+Des captures d'écran, c'est comme des photos de votre dîner.
+
+00:03:59.480 --> 00:04:01.280
+Montrez que c'est arrivé, mais pas que ce n'était pas mis en scène.
+
+00:04:01.280 --> 00:04:04.080
+Les auditeurs veulent des données structurées.
+
+00:04:04.220 --> 00:04:05.900
+Date, heure, nom, décision.
+
+00:04:06.080 --> 00:04:08.280
+Tous, tous les captures ignorent.
+
+00:04:09.500 --> 00:04:11.080
+Et cela n'existe pas dans l'historique temporaire.
+
+00:04:11.900 --> 00:04:13.600
+Voici un test de réalité rapide à faire maintenant.
+
+00:04:14.420 --> 00:04:15.380
+Mettez cette vidéo en pause.
+
+00:04:15.540 --> 00:04:16.700
+Allez dans Power Automate.
+
+00:04:16.780 --> 00:04:17.380
+Cliquez sur mes flux.
+
+00:04:17.500 --> 00:04:19.600
+Ouvrez l'historique d'exécution et cherchez la plus ancienne.
+
+00:04:20.400 --> 00:04:21.280
+C'est votre fenêtre de rétention.
+
+00:04:21.940 --> 00:04:23.780
+S'il manque des approbations que vous pensiez permanentes,
+
+00:04:24.160 --> 00:04:25.480
+vous avez touché le problème du doigt.
+
+00:04:26.440 --> 00:04:29.280
+Voulez-vous la méthode en un clic pour confirmer ce que contient votre tenant ?
+
+00:04:29.280 --> 00:04:29.880
+Restez avec moi.
+
+00:04:30.260 --> 00:04:31.160
+Le monde se reçoit dans la checklist.
+
+00:04:31.560 --> 00:04:32.880
+Alors où cela vous mène-t-il ?
+
+00:04:32.880 --> 00:04:33.340
+C'est simple.
+
+00:04:33.720 --> 00:04:35.480
+Si vous n'intégrez pas la journalisation dans vos workflows,
+
+00:04:35.580 --> 00:04:36.780
+vous n'avez aucun historique.
+
+00:04:37.420 --> 00:04:38.720
+Croire que les réglages par défaut suffisent,
+
+00:04:38.760 --> 00:04:40.700
+c'est comme faire confiance à un ado qui dit avoir rangé sa chambre.
+
+00:04:41.740 --> 00:04:45.280
+Dès lundi, le désordre reviendra et rien d'important n'aura survécu.
+
+00:04:46.120 --> 00:04:48.380
+L'essentiel à retenir, l'historique d'exécution de Power Automate
+
+00:04:48.380 --> 00:04:49.940
+est une aide au débogage, pas un outil d'archivage.
+
+00:04:50.780 --> 00:04:53.180
+Il est conçu pour être temporaire, pas permanent ou prêt pour un audit.
+
+00:04:53.520 --> 00:04:55.080
+Si vous voulez des enregistrements exploitables,
+
+00:04:55.080 --> 00:04:57.820
+vous devez créer vos propres journaux structurés en dehors de ce tampon temporaire,
+
+00:04:57.960 --> 00:04:58.820
+en dehors de ce tampon temps.
+
+00:04:58.920 --> 00:05:00.320
+Il ne s'agit pas seulement de sauvegarder l'historique.
+
+00:05:01.240 --> 00:05:03.180
+Une journalisation faible signifie des flux fragiles
+
+00:05:03.180 --> 00:05:05.160
+et ces derniers s'effondrent dès qu'on dépasse les bases
+
+00:05:05.160 --> 00:05:06.200
+qui nous mènent au problème suivant.
+
+00:05:06.400 --> 00:05:09.220
+Concevoir des flux d'approbation qui résistent à la réalité.
+
+00:05:11.420 --> 00:05:13.060
+Concevoir des flux d'approbation qui ne s'effondrent pas.
+
+00:05:13.640 --> 00:05:15.760
+La dure vérité, c'est que la plupart des flux d'approbation explosent
+
+00:05:15.760 --> 00:05:17.220
+car ils sont construits de manière trop superficielle.
+
+00:05:17.780 --> 00:05:19.760
+Une conception à étapes uniques semble rapide et astucieuse,
+
+00:05:19.860 --> 00:05:20.380
+mais elle est fragile.
+
+00:05:21.000 --> 00:05:22.060
+Cela semble bien sur le papier
+
+00:05:22.060 --> 00:05:24.320
+jusqu'à ce que les gens tentent d'y exécuter de vrais processus.
+
+00:05:24.800 --> 00:05:25.860
+Une personne valide, c'est facile.
+
+00:05:26.660 --> 00:05:28.460
+Mais dès qu'un autre service demande une règle alternative
+
+00:05:28.460 --> 00:05:29.880
+ou un point de contrôle supplémentaire,
+
+00:05:29.960 --> 00:05:31.480
+cette solution rapide commence à se fissurer.
+
+00:05:31.920 --> 00:05:33.620
+Vous êtes coincé à appliquer des correctifs bancales
+
+00:05:33.620 --> 00:05:34.660
+sur des étapes codées en dur.
+
+00:05:35.080 --> 00:05:36.800
+C'est pourquoi les administrateurs se retrouvent en difficulté
+
+00:05:36.800 --> 00:05:37.440
+trois mois plus tard.
+
+00:05:38.180 --> 00:05:39.700
+Vous avez construit la démo, l'avez montré à votre manager
+
+00:05:39.700 --> 00:05:40.460
+et avez joué les héros.
+
+00:05:41.340 --> 00:05:43.240
+Puis les achats arrivent avec des règles à cinq étapes.
+
+00:05:43.600 --> 00:05:45.000
+Les RH veulent un seul approbateur
+
+00:05:45.000 --> 00:05:46.980
+et le juridique en exige deux, plus la conformité.
+
+00:05:47.760 --> 00:05:49.700
+Soudain, votre flux devient le monstre de Frankenstein
+
+00:05:49.700 --> 00:05:52.400
+cousu avec du ruban adhésif et des conditions que personne ne comprend.
+
+00:05:52.760 --> 00:05:54.380
+Certes, il fonctionne, mais il n'attend que de planter.
+
+00:05:54.900 --> 00:05:56.360
+La pire des habitudes, coder les emails en dur.
+
+00:05:56.780 --> 00:05:58.280
+C'est l'arrêt de mort de la réutilisabilité.
+
+00:05:58.760 --> 00:06:00.680
+Vous liez le flux directement à Bob, de la comptabilité.
+
+00:06:01.040 --> 00:06:01.460
+Bob s'en va.
+
+00:06:01.880 --> 00:06:03.540
+Désormais, chaque approbation pour ce processus
+
+00:06:03.540 --> 00:06:04.900
+échoue ou disparaît dans un trou noir.
+
+00:06:06.000 --> 00:06:07.480
+Les approbations critiques mentent en silence,
+
+00:06:07.680 --> 00:06:09.640
+car l'adresse d'une seule personne était ancrée dans la logique.
+
+00:06:10.520 --> 00:06:11.860
+Toquer l'appartenance à un rôle palismé.
+
+00:06:12.220 --> 00:06:13.920
+Utiliser les identifiants d'objets ID si possible
+
+00:06:13.920 --> 00:06:14.880
+pour que les changements ne cassent pas les flux.
+
+00:06:15.100 --> 00:06:15.820
+Voici la meilleure approche.
+
+00:06:15.820 --> 00:06:17.520
+Au lieu de coder les adresses en dur,
+
+00:06:17.680 --> 00:06:19.320
+récupérez les approbateurs dynamiquement.
+
+00:06:20.120 --> 00:06:21.160
+Utilisez une recherche de rôle
+
+00:06:21.160 --> 00:06:22.220
+et un groupe Azure AD,
+
+00:06:22.380 --> 00:06:24.420
+une liste SharePoint ou Dataverse, si vous l'utilisez.
+
+00:06:25.480 --> 00:06:26.980
+Chaque option vous offre un emplacement central
+
+00:06:26.980 --> 00:06:28.620
+pour remplacer les responsables quand ils partent.
+
+00:06:29.180 --> 00:06:29.800
+C'est ça, les jurés habitudes.
+
+00:06:29.980 --> 00:06:32.060
+Par exemple, vous définissez les approbateurs financiers dans l'AD.
+
+00:06:32.900 --> 00:06:33.840
+Si Bob démissionne,
+
+00:06:34.160 --> 00:06:35.920
+retirez-le du groupe, ajoutez son remplaçant
+
+00:06:35.920 --> 00:06:37.100
+et le flux ne s'interrompt jamais.
+
+00:06:37.740 --> 00:06:38.200
+Soyons direct.
+
+00:06:38.520 --> 00:06:40.420
+Si l'email de Joe est codé en dur et que Joe part,
+
+00:06:40.420 --> 00:06:42.500
+les approbations échouent ou disparaissent dans la nature.
+
+00:06:43.060 --> 00:06:43.880
+Évitez ces absurdités.
+
+00:06:43.880 --> 00:06:45.820
+Associez toujours un rôle à un enregistrement de personnes.
+
+00:06:46.040 --> 00:06:47.740
+Ne liez jamais une logique métier à une seule boîte mail.
+
+00:06:48.380 --> 00:06:49.980
+Le problème de rigidité ne s'arrête pas aux emails.
+
+00:06:50.380 --> 00:06:51.460
+J'ai vu des administrateurs enchaîner
+
+00:06:51.460 --> 00:06:53.400
+les approbations personnalisées pour chaque département,
+
+00:06:53.520 --> 00:06:54.280
+sans routage dynamique,
+
+00:06:54.380 --> 00:06:55.200
+sans logique de secours,
+
+00:06:55.300 --> 00:06:56.560
+ni suivi d'état, ni suivi d'état.
+
+00:06:56.700 --> 00:06:57.540
+Ça a l'air génial en démo
+
+00:06:57.540 --> 00:06:59.100
+car tout le monde est à son poste et clique à temps,
+
+00:06:59.240 --> 00:07:00.360
+mais de premier congé,
+
+00:07:00.560 --> 00:07:01.700
+arrêt maladie ou rappel manqué,
+
+00:07:02.160 --> 00:07:02.720
+tout s'effondre.
+
+00:07:03.380 --> 00:07:04.480
+Ce dont vos flux ont vraiment besoin,
+
+00:07:04.580 --> 00:07:05.240
+c'est d'une conscience d'état.
+
+00:07:05.880 --> 00:07:07.620
+Cela signifie un champ d'étapes persistant,
+
+00:07:07.760 --> 00:07:08.520
+un stockage durable
+
+00:07:08.520 --> 00:07:09.760
+qui enregistre où en est la demande.
+
+00:07:11.060 --> 00:07:11.900
+Concevez votre workflow
+
+00:07:11.900 --> 00:07:13.240
+pour lire et écrire cette valeur d'étape.
+
+00:07:14.480 --> 00:07:15.480
+Ainsi, si le flux bloque,
+
+00:07:15.620 --> 00:07:16.900
+vous pouvez le relancer à la bonne étape,
+
+00:07:17.020 --> 00:07:18.880
+sans deviner ni renvoyer tout le processus.
+
+00:07:20.040 --> 00:07:21.200
+C'est un bouton de réinitialisation
+
+00:07:21.200 --> 00:07:22.020
+intégré à la conception
+
+00:07:22.020 --> 00:07:23.800
+qui vous évite de devoir gérer des relances complexes.
+
+00:07:24.940 --> 00:07:25.780
+Passons maintenant à la pratique.
+
+00:07:26.180 --> 00:07:27.180
+Le service financier peut exiger
+
+00:07:27.180 --> 00:07:28.180
+deux approbations pour les achats.
+
+00:07:28.780 --> 00:07:29.580
+Les RH peuvent n'avoir besoin
+
+00:07:29.580 --> 00:07:30.480
+que d'une signature rapide.
+
+00:07:30.900 --> 00:07:32.060
+Ils peuvent craindre que les gens traînent
+
+00:07:32.060 --> 00:07:33.260
+et exiger une logique d'escalade.
+
+00:07:33.960 --> 00:07:34.880
+Si vous essayez de faire entrer
+
+00:07:34.880 --> 00:07:35.640
+ces trois départements
+
+00:07:35.640 --> 00:07:36.560
+dans un seul flux rigide,
+
+00:07:36.740 --> 00:07:37.460
+vous diluez leurs règles
+
+00:07:37.460 --> 00:07:38.560
+ou spammez les mauvaises personnes.
+
+00:07:39.780 --> 00:07:41.200
+Les flux modulaires basés sur des étapes
+
+00:07:41.200 --> 00:07:41.960
+résolvent cela
+
+00:07:41.960 --> 00:07:42.980
+en s'adaptant à chaque besoin
+
+00:07:42.980 --> 00:07:43.720
+sans créer de chaos.
+
+00:07:45.200 --> 00:07:45.780
+Conseil d'experts,
+
+00:07:45.860 --> 00:07:47.200
+testez toujours votre conception multi-étapes
+
+00:07:47.200 --> 00:07:48.320
+avec un seul département d'abord.
+
+00:07:48.960 --> 00:07:49.760
+Ne le déployez pas à l'échelle
+
+00:07:49.760 --> 00:07:50.660
+de tout le tenant dès le premier jour.
+
+00:07:51.000 --> 00:07:52.320
+Vous détecterez les cas limites plus rapidement
+
+00:07:52.320 --> 00:07:53.640
+et n'hériterez pas d'une montagne
+
+00:07:53.640 --> 00:07:54.180
+de dettes techniques
+
+00:07:54.180 --> 00:07:55.180
+avant de connaître les points faibles.
+
+00:07:55.740 --> 00:07:56.440
+La conclusion est simple.
+
+00:07:57.040 --> 00:07:58.580
+Les flux d'approbation fragiles s'effondrent
+
+00:07:58.580 --> 00:07:59.840
+car ils supposent que rien ne change.
+
+00:07:59.840 --> 00:08:00.940
+Même personnel,
+
+00:08:01.100 --> 00:08:01.780
+même processus,
+
+00:08:02.180 --> 00:08:03.000
+même condition parfaite.
+
+00:08:03.300 --> 00:08:03.740
+Mais en réalité,
+
+00:08:03.840 --> 00:08:04.520
+les gens partent,
+
+00:08:04.580 --> 00:08:05.140
+les règles changent
+
+00:08:05.140 --> 00:08:06.600
+et des exceptions surgissent constamment.
+
+00:08:07.960 --> 00:08:08.820
+Rendez vos flux modulaires,
+
+00:08:08.940 --> 00:08:09.580
+conscients des étapes
+
+00:08:09.580 --> 00:08:10.320
+et basés sur les rôles.
+
+00:08:10.840 --> 00:08:11.360
+Stockez des rôles
+
+00:08:11.360 --> 00:08:12.080
+plutôt que des adresses email.
+
+00:08:12.460 --> 00:08:13.020
+Suivez l'étape
+
+00:08:13.020 --> 00:08:14.020
+pour pouvoir récupérer qu'élégance.
+
+00:08:14.520 --> 00:08:15.340
+Chaque raccourci primatant
+
+00:08:15.340 --> 00:08:16.500
+se transforme en retravaille plus tard
+
+00:08:16.500 --> 00:08:17.840
+mais même avec une conception propre,
+
+00:08:17.980 --> 00:08:18.680
+il y a un autre tueur.
+
+00:08:19.740 --> 00:08:20.580
+Les approbations stagnent
+
+00:08:20.580 --> 00:08:21.420
+quand les gens les ignorent
+
+00:08:21.420 --> 00:08:22.500
+et que les administrateurs tentent
+
+00:08:22.500 --> 00:08:23.220
+de corriger cela
+
+00:08:23.220 --> 00:08:24.600
+avec des vagues d'emails de rappel.
+
+00:08:25.380 --> 00:08:26.060
+C'est ainsi que vous créez
+
+00:08:26.060 --> 00:08:26.780
+un tout nouveau problème
+
+00:08:26.780 --> 00:08:27.700
+qui n'attend qu'à exploser.
+
+00:08:28.540 --> 00:08:29.420
+Les escalades et les rappels.
+
+00:08:30.680 --> 00:08:31.380
+Sans parler du spam,
+
+00:08:31.800 --> 00:08:32.980
+rien ne prouve une mauvaise conception.
+
+00:08:33.520 --> 00:08:34.820
+Mieux qu'une pile de 45 emails
+
+00:08:34.820 --> 00:08:35.700
+de rappels non lus en haut
+
+00:08:35.700 --> 00:08:36.580
+de la boîte de réception
+
+00:08:36.580 --> 00:08:37.960
+le lundi matin.
+
+00:08:38.820 --> 00:08:39.660
+Si votre automatisation
+
+00:08:39.660 --> 00:08:40.700
+ressemble moins à un workflow
+
+00:08:40.700 --> 00:08:41.480
+qu'à un canon à spam,
+
+00:08:41.620 --> 00:08:42.240
+vous n'avez pas construit
+
+00:08:42.240 --> 00:08:42.800
+un processus.
+
+00:08:43.060 --> 00:08:43.780
+Vous avez construit
+
+00:08:43.780 --> 00:08:44.500
+du harcèlement au travail
+
+00:08:44.500 --> 00:08:45.220
+avec une ligne d'objets.
+
+00:08:45.820 --> 00:08:46.300
+Et soyons clairs,
+
+00:08:46.360 --> 00:08:47.140
+les rappels ne sont pas l'ennemi.
+
+00:08:47.740 --> 00:08:48.720
+Les escalades ne sont pas le problème.
+
+00:08:49.280 --> 00:08:49.520
+Le souci,
+
+00:08:49.600 --> 00:08:50.600
+c'est quand on confond incitation
+
+00:08:50.600 --> 00:08:51.420
+et pilonnage incessant
+
+00:08:51.420 --> 00:08:52.200
+de la boîte de réception
+
+00:08:52.200 --> 00:08:53.740
+que vous voulez vraiment,
+
+00:08:53.820 --> 00:08:54.380
+c'est de la persistance,
+
+00:08:54.500 --> 00:08:55.320
+pas de la torture numérique.
+
+00:08:56.380 --> 00:08:57.000
+Les rappels existent
+
+00:08:57.000 --> 00:08:57.940
+parce que les gens sont distraits,
+
+00:08:58.160 --> 00:08:58.640
+partent en congé
+
+00:08:58.640 --> 00:08:59.640
+ou supposent que quelqu'un d'autre
+
+00:08:59.640 --> 00:09:00.540
+gérera la tâche.
+
+00:09:01.540 --> 00:09:02.460
+Les escalades existent
+
+00:09:02.460 --> 00:09:03.160
+parce que personne ne veut
+
+00:09:03.160 --> 00:09:03.780
+que des approbations
+
+00:09:03.780 --> 00:09:04.400
+restent en suspens
+
+00:09:04.400 --> 00:09:05.040
+jusqu'à ce que quelqu'un
+
+00:09:05.040 --> 00:09:06.120
+se plaigne trois semaines plus tard.
+
+00:09:07.080 --> 00:09:07.900
+Donc oui, vous en avez besoin,
+
+00:09:08.040 --> 00:09:08.940
+mais vous en avez besoin intelligent.
+
+00:09:09.620 --> 00:09:10.420
+Personne n'est ravi de rejoindre
+
+00:09:10.420 --> 00:09:11.240
+un appel juste pour dire
+
+00:09:11.240 --> 00:09:12.720
+« Merci pour le 19ème rappel
+
+00:09:12.720 --> 00:09:13.200
+de la journée,
+
+00:09:13.700 --> 00:09:15.960
+j'ai enfin cliqué sur approuvé. »
+
+00:09:15.960 --> 00:09:16.600
+C'est comme ça qu'on pousse
+
+00:09:16.600 --> 00:09:17.620
+les utilisateurs de l'agacement
+
+00:09:17.620 --> 00:09:18.500
+à la révolte ouverte.
+
+00:09:18.980 --> 00:09:19.460
+Voici le piège
+
+00:09:19.460 --> 00:09:19.940
+dans lequel tombe
+
+00:09:19.940 --> 00:09:20.660
+la plupart des administratifs.
+
+00:09:21.320 --> 00:09:22.240
+Ils croient que plus de rappels
+
+00:09:22.240 --> 00:09:23.360
+donnent des résultats plus rapides.
+
+00:09:23.960 --> 00:09:24.500
+Si un fonctionne,
+
+00:09:24.620 --> 00:09:25.220
+cinq doivent être meilleurs.
+
+00:09:25.780 --> 00:09:26.460
+Cette logique est bonne
+
+00:09:26.460 --> 00:09:27.100
+pour des bons de pizza,
+
+00:09:27.280 --> 00:09:28.760
+pas pour valider des notes de frais.
+
+00:09:28.940 --> 00:09:30.500
+C'est un bon rappel
+
+00:09:30.500 --> 00:09:31.560
+et contextuel et opportun.
+
+00:09:32.620 --> 00:09:33.840
+Rappel, la demande d'achat
+
+00:09:33.840 --> 00:09:34.300
+de votre équipe
+
+00:09:34.300 --> 00:09:35.660
+attend une validation pour vendredi.
+
+00:09:36.420 --> 00:09:36.940
+Ça, ça fonctionne.
+
+00:09:37.440 --> 00:09:37.860
+En revanche,
+
+00:09:37.940 --> 00:09:39.240
+un flot d'objets identiques.
+
+00:09:39.460 --> 00:09:40.260
+Vous avez une tâche écue
+
+00:09:40.260 --> 00:09:41.380
+à 9h0 habitue
+
+00:09:41.380 --> 00:09:42.540
+les utilisateurs à supprimer
+
+00:09:42.540 --> 00:09:43.780
+plus vite que les règles Outlook
+
+00:09:43.780 --> 00:09:45.400
+ne trie le courrier indésirable.
+
+00:09:46.160 --> 00:09:46.880
+Les règles de conception
+
+00:09:46.880 --> 00:09:47.540
+des rappels sont simples.
+
+00:09:47.820 --> 00:09:48.220
+Soyez précis,
+
+00:09:48.360 --> 00:09:48.840
+soyez ponctuel,
+
+00:09:48.920 --> 00:09:49.460
+soyez conditionnel.
+
+00:09:49.760 --> 00:09:50.240
+C'est moi de vous donner
+
+00:09:50.240 --> 00:09:50.860
+un exemple que j'ai vu.
+
+00:09:51.100 --> 00:09:51.900
+Une directrice financière
+
+00:09:51.900 --> 00:09:52.880
+avait cinq notes de frais en attente.
+
+00:09:53.240 --> 00:09:53.720
+Quelqu'un a pensé
+
+00:09:53.720 --> 00:09:54.640
+qu'un rappel toutes les deux heures
+
+00:09:54.640 --> 00:09:55.380
+jusqu'à exécution
+
+00:09:55.380 --> 00:09:56.400
+était une cadence brillante.
+
+00:09:57.140 --> 00:09:57.740
+À la fin de la journée,
+
+00:09:57.820 --> 00:09:58.540
+elle avait reçu 30 emails.
+
+00:09:59.420 --> 00:10:00.120
+Aucune des approbations
+
+00:10:00.120 --> 00:10:00.640
+n'était terminée.
+
+00:10:00.920 --> 00:10:01.700
+L'informatique a reçu
+
+00:10:01.700 --> 00:10:02.800
+trois messages Slack en colère,
+
+00:10:02.960 --> 00:10:03.720
+une invitation Teams
+
+00:10:03.720 --> 00:10:04.160
+intitulée
+
+00:10:04.160 --> 00:10:05.280
+« Qu'est réparer ce bazar rigueux ? »
+
+00:10:05.280 --> 00:10:06.100
+et une équipe financière
+
+00:10:06.100 --> 00:10:06.800
+qui associe désormais
+
+00:10:06.800 --> 00:10:07.780
+l'automatisation au spam.
+
+00:10:07.780 --> 00:10:09.260
+Le flux n'a pas été plus rapide.
+
+00:10:09.600 --> 00:10:10.240
+Cela a juste créé
+
+00:10:10.240 --> 00:10:11.140
+plus de bruit et de tension.
+
+00:10:11.760 --> 00:10:12.300
+Dites-moi en commentaire
+
+00:10:12.300 --> 00:10:12.880
+quelle est la fréquence
+
+00:10:12.880 --> 00:10:13.760
+de rappel la plus ridicule
+
+00:10:13.760 --> 00:10:14.380
+que votre environnement
+
+00:10:14.380 --> 00:10:15.060
+ait jamais généré
+
+00:10:15.060 --> 00:10:15.560
+peut gêner.
+
+00:10:16.200 --> 00:10:16.700
+Quelqu'un doit sûrement
+
+00:10:16.700 --> 00:10:17.360
+battre les 30 rappels.
+
+00:10:17.640 --> 00:10:17.740
+Alors,
+
+00:10:17.780 --> 00:10:18.540
+quelle est la solution ?
+
+00:10:18.540 --> 00:10:19.140
+Power Automate
+
+00:10:19.140 --> 00:10:19.760
+vous donne les outils
+
+00:10:19.760 --> 00:10:20.620
+mais vous devez les utiliser
+
+00:10:20.620 --> 00:10:21.640
+de manière responsable.
+
+00:10:22.920 --> 00:10:23.560
+Utilisez des délais
+
+00:10:23.560 --> 00:10:24.600
+et des contrôles conditionnels
+
+00:10:24.600 --> 00:10:25.720
+pour n'envoyer un rappel
+
+00:10:25.720 --> 00:10:26.260
+que si la tâche
+
+00:10:26.260 --> 00:10:27.040
+est toujours en attente.
+
+00:10:28.160 --> 00:10:28.880
+Cette simple sécurité
+
+00:10:28.880 --> 00:10:29.400
+suffit à stopper
+
+00:10:29.400 --> 00:10:30.380
+la plupart des vagues de spam.
+
+00:10:31.220 --> 00:10:31.540
+Ensuite,
+
+00:10:31.640 --> 00:10:32.140
+ajoutez des règles
+
+00:10:32.140 --> 00:10:32.900
+d'escalade structurées.
+
+00:10:33.740 --> 00:10:34.000
+D'abord,
+
+00:10:34.060 --> 00:10:34.500
+un seul rappel.
+
+00:10:35.080 --> 00:10:35.600
+S'il est ignoré
+
+00:10:35.600 --> 00:10:36.380
+après une période définie,
+
+00:10:36.440 --> 00:10:37.480
+escaladez vers le responsable.
+
+00:10:38.340 --> 00:10:39.160
+Si c'est toujours ignoré,
+
+00:10:39.260 --> 00:10:40.100
+transférez vers une boîte mail
+
+00:10:40.100 --> 00:10:41.220
+partagée ou une file d'attente.
+
+00:10:42.600 --> 00:10:43.040
+C'est une chaîne
+
+00:10:43.040 --> 00:10:44.020
+de responsabilité claire
+
+00:10:44.020 --> 00:10:44.660
+sans noyer la boîte
+
+00:10:44.660 --> 00:10:45.600
+de réception d'une seule personne.
+
+00:10:46.400 --> 00:10:47.240
+Choisissez judicieusement
+
+00:10:47.240 --> 00:10:47.920
+vos fenêtres de temps
+
+00:10:47.920 --> 00:10:48.400
+lors des tests.
+
+00:10:48.740 --> 00:10:49.460
+Ne devinez pas au hasard
+
+00:10:49.460 --> 00:10:50.280
+pour ensuite déclencher le chaos.
+
+00:10:50.920 --> 00:10:51.560
+Voyez les choses ainsi.
+
+00:10:52.260 --> 00:10:52.920
+Quand un rappel ferme
+
+00:10:52.920 --> 00:10:53.440
+ne suffit pas,
+
+00:10:53.640 --> 00:10:54.380
+n'augmentez pas le volume,
+
+00:10:54.700 --> 00:10:55.200
+changez de canal.
+
+00:10:56.700 --> 00:10:57.560
+Escaladez vers quelqu'un d'autre
+
+00:10:57.560 --> 00:10:58.080
+ayant l'autorité
+
+00:10:58.080 --> 00:10:58.880
+pour faire avancer les choses.
+
+00:10:59.660 --> 00:11:00.360
+Cette approche maintient
+
+00:11:00.360 --> 00:11:00.900
+le processus,
+
+00:11:01.000 --> 00:11:02.020
+démontre la responsabilité
+
+00:11:02.020 --> 00:11:03.320
+et épargne aux utilisateurs
+
+00:11:03.320 --> 00:11:04.320
+la fatigue de la boîte mail.
+
+00:11:05.000 --> 00:11:05.580
+Inondant de rappels,
+
+00:11:05.640 --> 00:11:06.120
+c'est comme faire hurler
+
+00:11:06.120 --> 00:11:06.840
+la même alarme de voiture
+
+00:11:06.840 --> 00:11:07.340
+toute la journée.
+
+00:11:08.260 --> 00:11:08.660
+La première fois,
+
+00:11:08.720 --> 00:11:09.180
+les gens vérifient.
+
+00:11:09.640 --> 00:11:10.160
+Après la dixième,
+
+00:11:10.240 --> 00:11:10.760
+tout le monde l'ignore,
+
+00:11:10.860 --> 00:11:11.360
+même si la voiture
+
+00:11:11.360 --> 00:11:12.100
+est en train d'être volée.
+
+00:11:13.100 --> 00:11:14.080
+Le bruit tue la confiance.
+
+00:11:14.580 --> 00:11:15.300
+Un rappel pertinent
+
+00:11:15.300 --> 00:11:16.500
+et précis avec une échéance claire
+
+00:11:16.500 --> 00:11:17.240
+obtient plus de respect
+
+00:11:17.240 --> 00:11:18.120
+que 50 notifications
+
+00:11:18.120 --> 00:11:18.720
+ne l'auront jamais.
+
+00:11:19.280 --> 00:11:20.100
+L'objectif est que les rappels
+
+00:11:20.100 --> 00:11:20.820
+ressemblent à des événements
+
+00:11:20.820 --> 00:11:21.340
+de calendrier,
+
+00:11:21.520 --> 00:11:22.300
+pas à des sirènes.
+
+00:11:23.040 --> 00:11:23.720
+Un email la veille
+
+00:11:23.720 --> 00:11:24.880
+de l'échéance utile.
+
+00:11:25.500 --> 00:11:26.140
+Un récapitulatif
+
+00:11:26.140 --> 00:11:26.580
+des approbations
+
+00:11:26.580 --> 00:11:27.200
+en attente le lundi.
+
+00:11:27.300 --> 00:11:27.540
+Pratique.
+
+00:11:28.480 --> 00:11:29.400
+Une escalade qui réassigne
+
+00:11:29.400 --> 00:11:30.220
+la tâche après une semaine
+
+00:11:30.220 --> 00:11:31.300
+sans réponse efficace.
+
+00:11:31.720 --> 00:11:32.180
+Vous construisez
+
+00:11:32.180 --> 00:11:32.860
+un système de relance,
+
+00:11:32.960 --> 00:11:34.140
+pas une alerte incendie générale.
+
+00:11:34.920 --> 00:11:35.520
+Et voici le problème.
+
+00:11:36.240 --> 00:11:36.540
+Les rappels,
+
+00:11:36.620 --> 00:11:37.360
+les escalades ne comptent
+
+00:11:37.360 --> 00:11:37.840
+que si vous pouvez
+
+00:11:37.840 --> 00:11:38.800
+prouver leur exécution.
+
+00:11:39.720 --> 00:11:40.180
+Lors d'un audit,
+
+00:11:40.260 --> 00:11:41.140
+dire que nous leur avons envoyé
+
+00:11:41.140 --> 00:11:42.220
+trois emails que ne suffit pas.
+
+00:11:42.500 --> 00:11:42.820
+Ce qui compte,
+
+00:11:42.900 --> 00:11:43.280
+c'est une trace
+
+00:11:43.280 --> 00:11:44.040
+dans vos propres journaux
+
+00:11:44.040 --> 00:11:45.060
+indiquant rappel envoyé,
+
+00:11:45.240 --> 00:11:45.900
+escalade déclenché,
+
+00:11:46.100 --> 00:11:47.040
+résultat enregistré,
+
+00:11:47.220 --> 00:11:47.900
+résultat enregistré.
+
+00:11:47.900 --> 00:11:49.240
+Sans cette piste d'audit
+
+00:11:49.240 --> 00:11:50.080
+où vos rappels ingénieux
+
+00:11:50.080 --> 00:11:51.260
+ne sont que des paroles en l'air.
+
+00:11:52.120 --> 00:11:52.400
+Alors oui,
+
+00:11:52.500 --> 00:11:53.260
+configurez des rappels
+
+00:11:53.260 --> 00:11:53.760
+pour avancer
+
+00:11:53.760 --> 00:11:54.820
+et créer des chemins d'escalade
+
+00:11:54.820 --> 00:11:55.320
+pour que les tâches
+
+00:11:55.320 --> 00:11:55.960
+ne s'enterrent pas
+
+00:11:55.960 --> 00:11:56.760
+dans Outlook.
+
+00:11:57.980 --> 00:11:58.760
+N'oubliez pas les bases.
+
+00:11:59.580 --> 00:12:00.420
+Enregistrez chaque rappel,
+
+00:12:00.500 --> 00:12:01.100
+chaque escalade
+
+00:12:01.100 --> 00:12:02.060
+dans un système pérenne
+
+00:12:02.060 --> 00:12:02.700
+que vous contrôlez.
+
+00:12:03.800 --> 00:12:04.480
+Car quand on vous demandera
+
+00:12:04.480 --> 00:12:05.100
+comment fonctionner
+
+00:12:05.100 --> 00:12:05.860
+votre processus,
+
+00:12:05.960 --> 00:12:06.600
+les captures d'écran
+
+00:12:06.600 --> 00:12:07.480
+et les vagues d'explications
+
+00:12:07.480 --> 00:12:08.220
+ne vous sauveront pas.
+
+00:12:08.860 --> 00:12:09.520
+Seuls les enregistrements
+
+00:12:09.520 --> 00:12:09.800
+sont liés.
+
+00:12:10.460 --> 00:12:10.820
+Ironiquement,
+
+00:12:11.360 --> 00:12:12.000
+l'endroit où la plupart
+
+00:12:12.000 --> 00:12:12.620
+des administrateurs
+
+00:12:12.620 --> 00:12:13.380
+pensent trouver ces preuves
+
+00:12:13.380 --> 00:12:14.200
+à les décevoir cruellement.
+
+00:12:15.540 --> 00:12:15.900
+Le mensonge
+
+00:12:15.900 --> 00:12:16.460
+sur la journalisation
+
+00:12:16.460 --> 00:12:17.140
+auquel tout...
+
+00:12:17.140 --> 00:12:17.660
+Attaquons-nous
+
+00:12:17.660 --> 00:12:18.080
+à l'un des mythes
+
+00:12:18.080 --> 00:12:18.540
+les plus coûteux
+
+00:12:18.540 --> 00:12:19.400
+dans Power Automate.
+
+00:12:19.920 --> 00:12:20.260
+Le mensonge
+
+00:12:20.260 --> 00:12:20.780
+sur la journalisation
+
+00:12:20.780 --> 00:12:21.340
+auquel tout le monde croit.
+
+00:12:21.820 --> 00:12:22.320
+Tout le monde suppose
+
+00:12:22.320 --> 00:12:22.920
+que l'onglet historique
+
+00:12:22.920 --> 00:12:23.440
+des exécutions
+
+00:12:23.440 --> 00:12:24.560
+constitue le registre de conformité.
+
+00:12:25.160 --> 00:12:25.920
+Il semble officiel,
+
+00:12:26.040 --> 00:12:26.760
+affiche les approbations
+
+00:12:26.760 --> 00:12:27.740
+proprement et vous fait penser
+
+00:12:27.740 --> 00:12:29.320
+« Parfait, nous sommes protégés ».
+
+00:12:29.320 --> 00:12:30.080
+Mais cet onglet
+
+00:12:30.080 --> 00:12:30.680
+n'est pas une archive.
+
+00:12:31.260 --> 00:12:32.180
+C'est un tampon de diagnostic
+
+00:12:32.180 --> 00:12:32.840
+à court terme,
+
+00:12:33.140 --> 00:12:34.000
+utile pour le débogage,
+
+00:12:34.080 --> 00:12:35.100
+pas pour l'archivage à long terme.
+
+00:12:36.300 --> 00:12:37.000
+Considéré comme un journal
+
+00:12:37.000 --> 00:12:37.880
+permanent revient à utiliser
+
+00:12:37.880 --> 00:12:38.740
+des post-its sur un frigo
+
+00:12:38.740 --> 00:12:39.860
+comme système de fichier d'entreprise.
+
+00:12:40.400 --> 00:12:40.760
+Ça a l'air bien
+
+00:12:40.760 --> 00:12:41.360
+jusqu'à ce que l'équipe
+
+00:12:41.360 --> 00:12:42.180
+de nettoyage efface tout.
+
+00:12:42.760 --> 00:12:43.420
+Les administrateurs
+
+00:12:43.420 --> 00:12:44.400
+tombent constamment dans ce piège.
+
+00:12:44.740 --> 00:12:45.340
+Ils présentent un flux,
+
+00:12:45.480 --> 00:12:45.980
+montrent l'historique
+
+00:12:45.980 --> 00:12:46.620
+et disent à la direction
+
+00:12:46.620 --> 00:12:49.060
+« Regardez, tout est sauvegardé ici ».
+
+00:12:49.060 --> 00:12:49.780
+Ce qu'ils ne disent pas
+
+00:12:49.780 --> 00:12:50.560
+ou ne réalisent pas
+
+00:12:50.560 --> 00:12:51.020
+c'est que les données
+
+00:12:51.020 --> 00:12:51.480
+de cet onglet
+
+00:12:51.480 --> 00:12:52.860
+sont programmées pour disparaître.
+
+00:12:53.780 --> 00:12:54.840
+C'est conçu pour le dépannage,
+
+00:12:54.880 --> 00:12:55.520
+pas pour la conformité.
+
+00:12:56.360 --> 00:12:57.520
+Microsoft n'a jamais vendu cela
+
+00:12:57.520 --> 00:12:58.600
+comme un coffre-fort éternel.
+
+00:12:59.020 --> 00:12:59.880
+Ils l'ont conçu comme un outil
+
+00:12:59.880 --> 00:13:00.320
+pour corriger
+
+00:13:00.320 --> 00:13:01.280
+les exécutions défaillantes.
+
+00:13:02.200 --> 00:13:03.180
+Faire confiance à ce tampon
+
+00:13:03.180 --> 00:13:04.260
+pour fournir des preuves juridiques
+
+00:13:04.260 --> 00:13:04.940
+est aussi intelligent
+
+00:13:04.940 --> 00:13:05.980
+que d'utiliser votre historique
+
+00:13:05.980 --> 00:13:06.400
+de navigation
+
+00:13:06.400 --> 00:13:07.320
+comme système comptable.
+
+00:13:07.760 --> 00:13:08.440
+Imaginez maintenant cela
+
+00:13:08.440 --> 00:13:08.860
+dans la réalité.
+
+00:13:09.300 --> 00:13:10.100
+Un auditeur demande
+
+00:13:10.100 --> 00:13:12.820
+« Qui a approuvé ce budget en 2021 ? »
+
+00:13:12.820 --> 00:13:13.500
+Vous pensez facile.
+
+00:13:14.320 --> 00:13:15.220
+Vous ouvrez Power Automate,
+
+00:13:15.320 --> 00:13:15.980
+cliquez sur l'historique
+
+00:13:15.980 --> 00:13:16.980
+des exécutions et rien.
+
+00:13:17.540 --> 00:13:18.060
+Peut-être voyez-vous
+
+00:13:18.060 --> 00:13:18.640
+quelques semaines,
+
+00:13:18.740 --> 00:13:19.340
+voire quelques mois.
+
+00:13:19.840 --> 00:13:20.540
+Au-delà, c'est vide.
+
+00:13:21.220 --> 00:13:22.020
+L'équipe d'audit se moque
+
+00:13:22.020 --> 00:13:22.500
+que vous puissiez voir
+
+00:13:22.500 --> 00:13:23.460
+les données du dernier trimestre
+
+00:13:23.460 --> 00:13:24.320
+et veulent des preuves
+
+00:13:24.320 --> 00:13:24.900
+d'attente il y a des années.
+
+00:13:25.400 --> 00:13:26.380
+Si vous n'avez qu'une page vide
+
+00:13:26.380 --> 00:13:26.840
+à présenter,
+
+00:13:26.840 --> 00:13:28.140
+la conversation finit mal.
+
+00:13:28.520 --> 00:13:29.220
+Ne laissez pas une promesse
+
+00:13:29.220 --> 00:13:29.900
+de niveau démonstration
+
+00:13:29.900 --> 00:13:30.960
+devenir un problème juridique plus tard.
+
+00:13:31.320 --> 00:13:32.100
+Je l'ai vu dans les propres yeux.
+
+00:13:32.800 --> 00:13:33.780
+Les RH devaient produire
+
+00:13:33.780 --> 00:13:34.760
+la preuve d'une approbation
+
+00:13:34.760 --> 00:13:35.940
+pour une mesure disciplinaire
+
+00:13:35.940 --> 00:13:36.660
+liée à un procès.
+
+00:13:37.340 --> 00:13:38.000
+Le service informatique
+
+00:13:38.000 --> 00:13:38.340
+avait vérifié
+
+00:13:38.340 --> 00:13:38.940
+l'historique d'exécution
+
+00:13:38.940 --> 00:13:39.320
+et le trouvait.
+
+00:13:39.620 --> 00:13:40.820
+Les journaux avaient déjà été effacés.
+
+00:13:41.260 --> 00:13:42.060
+La confiance qu'ils avaient
+
+00:13:42.060 --> 00:13:42.560
+un an plus tôt
+
+00:13:42.560 --> 00:13:43.140
+s'est transformée
+
+00:13:43.140 --> 00:13:44.560
+en un moment extrêmement gênant
+
+00:13:44.560 --> 00:13:45.300
+face aux avocats.
+
+00:13:45.760 --> 00:13:46.360
+C'est le coût exact
+
+00:13:46.360 --> 00:13:47.180
+de la croyance aveugle
+
+00:13:47.180 --> 00:13:48.020
+en l'historique d'exécution.
+
+00:13:48.320 --> 00:13:49.740
+Alors, quelle est la solution professionnelle ?
+
+00:13:49.740 --> 00:13:50.080
+Vous avez besoin
+
+00:13:50.080 --> 00:13:51.200
+d'une journalisation persistante
+
+00:13:51.200 --> 00:13:51.980
+en dehors de ce nombre ?
+
+00:13:51.980 --> 00:13:52.600
+Dataverse fonctionne
+
+00:13:52.600 --> 00:13:53.620
+si vous voulez un stockage relationnel
+
+00:13:53.620 --> 00:13:54.300
+et de l'extensibilité.
+
+00:13:55.120 --> 00:13:55.680
+Les listes SharePoint
+
+00:13:55.680 --> 00:13:56.340
+sont peu coûteuses,
+
+00:13:56.440 --> 00:13:57.340
+rapides et faciles à interroger.
+
+00:13:57.860 --> 00:13:58.700
+Vous donne un contrôle total
+
+00:13:58.700 --> 00:13:59.360
+si votre organisation
+
+00:13:59.360 --> 00:14:00.420
+utilise déjà des bases de données,
+
+00:14:00.520 --> 00:14:01.000
+bien que cela implique
+
+00:14:01.000 --> 00:14:01.920
+une gestion supplémentaire.
+
+00:14:02.600 --> 00:14:03.600
+Les compromis sont simples.
+
+00:14:03.980 --> 00:14:04.660
+SharePoint est facile
+
+00:14:04.660 --> 00:14:05.140
+mais limité.
+
+00:14:05.880 --> 00:14:06.560
+Dataverse évolue
+
+00:14:06.560 --> 00:14:07.260
+et gère les relations.
+
+00:14:07.960 --> 00:14:08.540
+SQL est puissant
+
+00:14:08.540 --> 00:14:08.980
+mais nécessite
+
+00:14:08.980 --> 00:14:09.900
+de véritables opérations
+
+00:14:09.900 --> 00:14:10.460
+de bases de données.
+
+00:14:11.380 --> 00:14:12.280
+Choisissez ce qui correspond
+
+00:14:12.280 --> 00:14:13.020
+à vos compétences
+
+00:14:13.020 --> 00:14:13.840
+et à votre environnement
+
+00:14:13.840 --> 00:14:15.400
+mais choisissez quelque chose
+
+00:14:15.400 --> 00:14:16.460
+car compter sur l'historique
+
+00:14:16.460 --> 00:14:17.420
+n'est pas une stratégie.
+
+00:14:17.420 --> 00:14:18.800
+Voici un schéma pratique
+
+00:14:18.800 --> 00:14:19.760
+que tout le monde peut mettre en oeuvre.
+
+00:14:20.260 --> 00:14:20.980
+A chaque approbation
+
+00:14:20.980 --> 00:14:22.240
+stocker ses champs du RAM inimé.
+
+00:14:22.620 --> 00:14:23.120
+L'ID demande
+
+00:14:23.120 --> 00:14:24.240
+pour corréler les enregistrements,
+
+00:14:24.420 --> 00:14:25.060
+le nom de l'étape,
+
+00:14:25.160 --> 00:14:26.220
+l'action approuvée ou rejetée,
+
+00:14:26.460 --> 00:14:27.280
+l'ID de l'approbateur,
+
+00:14:27.380 --> 00:14:28.440
+l'ID objet de l'utilisateur,
+
+00:14:28.540 --> 00:14:29.160
+pas seulement l'email,
+
+00:14:29.480 --> 00:14:29.940
+le redatage
+
+00:14:29.940 --> 00:14:30.860
+et les commentaires optionnels.
+
+00:14:31.300 --> 00:14:31.860
+Le redatage
+
+00:14:31.860 --> 00:14:32.760
+et les commentaires optionnels.
+
+00:14:33.140 --> 00:14:33.580
+C'est suffisant
+
+00:14:33.580 --> 00:14:34.600
+pour se présenter devant un auditeur
+
+00:14:34.600 --> 00:14:35.140
+et dire exactement
+
+00:14:35.140 --> 00:14:35.680
+ce qui s'est passé,
+
+00:14:35.820 --> 00:14:36.540
+par qui et quand.
+
+00:14:37.460 --> 00:14:37.940
+Sans ces champs
+
+00:14:37.940 --> 00:14:38.520
+écrits quelque part
+
+00:14:38.520 --> 00:14:39.240
+de manière permanente,
+
+00:14:39.300 --> 00:14:39.940
+vous n'avez pas de journal,
+
+00:14:39.940 --> 00:14:41.260
+vous avez juste des vœux pieux.
+
+00:14:41.960 --> 00:14:42.640
+Soyons directs,
+
+00:14:42.700 --> 00:14:43.540
+l'historique d'exécution
+
+00:14:43.540 --> 00:14:44.100
+est essentiellement
+
+00:14:44.100 --> 00:14:44.660
+le Snapchat
+
+00:14:44.660 --> 00:14:45.620
+des données de workflow.
+
+00:14:46.480 --> 00:14:47.100
+Amusant sur le moment,
+
+00:14:47.180 --> 00:14:47.840
+disparu quand vous en avez
+
+00:14:47.840 --> 00:14:48.320
+vraiment besoin.
+
+00:14:49.000 --> 00:14:50.040
+Microsoft ne cache pas ce fait.
+
+00:14:50.620 --> 00:14:51.240
+Qu'ençoivent ces journaux
+
+00:14:51.240 --> 00:14:51.940
+pour qu'ils expirent,
+
+00:14:52.020 --> 00:14:52.780
+car le stockage à long terme
+
+00:14:52.780 --> 00:14:53.760
+est votre responsabilité.
+
+00:14:54.700 --> 00:14:55.440
+Le danger n'est pas seulement
+
+00:14:55.440 --> 00:14:56.400
+de perdre une piste d'approbation.
+
+00:14:57.260 --> 00:14:58.380
+C'est le faux sentiment de sécurité
+
+00:14:58.380 --> 00:14:59.480
+qui empêche les administrateurs
+
+00:14:59.480 --> 00:14:59.920
+de construire
+
+00:14:59.920 --> 00:15:01.200
+de vrais systèmes de journalisation.
+
+00:15:02.120 --> 00:15:02.640
+Tout le monde suppose
+
+00:15:02.640 --> 00:15:03.460
+que les enregistrements existent
+
+00:15:03.460 --> 00:15:04.540
+alors qu'ils n'existent absolument pas.
+
+00:15:04.940 --> 00:15:05.620
+Voici donc l'essentiel.
+
+00:15:05.620 --> 00:15:06.880
+La journalisation n'est pas facultée.
+
+00:15:07.220 --> 00:15:07.940
+Si vous ne capturez pas
+
+00:15:07.940 --> 00:15:08.560
+de données durables,
+
+00:15:08.620 --> 00:15:09.320
+vous n'aurez rien à montrer.
+
+00:15:09.840 --> 00:15:10.540
+Les captures d'écran,
+
+00:15:10.660 --> 00:15:10.960
+sans valeur.
+
+00:15:11.620 --> 00:15:12.500
+Les histoires, sans valeur.
+
+00:15:13.560 --> 00:15:14.000
+Ce qui fonctionne,
+
+00:15:14.100 --> 00:15:14.960
+ce sont des journaux structurés
+
+00:15:14.960 --> 00:15:15.600
+que vous pouvez interroger
+
+00:15:15.600 --> 00:15:16.100
+avec confiance.
+
+00:15:16.520 --> 00:15:17.440
+Si cette analyse vous évite
+
+00:15:17.440 --> 00:15:17.940
+des maux de tête,
+
+00:15:18.100 --> 00:15:18.640
+cliquez sur Enjoy.
+
+00:15:19.380 --> 00:15:20.660
+Cela aide les autres administrateurs
+
+00:15:20.660 --> 00:15:21.520
+à trouver ce guide de survie.
+
+00:15:21.880 --> 00:15:22.740
+La meilleure pratique est simple.
+
+00:15:23.740 --> 00:15:24.620
+Chaque action d'approbation
+
+00:15:24.620 --> 00:15:25.200
+doit se terminer
+
+00:15:25.200 --> 00:15:26.160
+en notant qui a approuvé
+
+00:15:26.160 --> 00:15:27.040
+l'étape du processus,
+
+00:15:27.120 --> 00:15:27.800
+l'action entreprise,
+
+00:15:28.160 --> 00:15:28.560
+leur ID,
+
+00:15:29.000 --> 00:15:29.600
+leur redatage
+
+00:15:29.600 --> 00:15:30.620
+et tout commentaire.
+
+00:15:31.640 --> 00:15:31.900
+C'est tout.
+
+00:15:32.280 --> 00:15:33.240
+Prenez cette habitude dès maintenant,
+
+00:15:33.240 --> 00:15:34.200
+sinon vous rédigerez des emails
+
+00:15:34.200 --> 00:15:35.460
+d'excuses à la conformité plus tard.
+
+00:15:36.240 --> 00:15:37.000
+La vraie question n'est pas
+
+00:15:37.000 --> 00:15:38.180
+de savoir s'il faut journaliser
+
+00:15:38.180 --> 00:15:39.280
+mais où et comment stocker
+
+00:15:39.280 --> 00:15:40.140
+ces logs pour qu'ils durent
+
+00:15:40.140 --> 00:15:41.100
+3, 5, voire 10 ans
+
+00:15:41.100 --> 00:15:42.360
+sans devenir un cauchemar
+
+00:15:42.360 --> 00:15:43.460
+de migration informatique.
+
+00:15:44.860 --> 00:15:45.420
+C'est là que les choses
+
+00:15:45.420 --> 00:15:46.160
+deviennent intéressantes.
+
+00:15:47.060 --> 00:15:47.920
+Pérennisez vos processus
+
+00:15:47.920 --> 00:15:48.620
+pour des approbations
+
+00:15:48.620 --> 00:15:49.340
+prêtes pour l'audit.
+
+00:15:49.960 --> 00:15:50.760
+Pérenniser vos approbations
+
+00:15:50.760 --> 00:15:51.920
+ne consiste pas à faire bonne figure
+
+00:15:51.920 --> 00:15:52.620
+lors d'une démonstration.
+
+00:15:53.880 --> 00:15:54.720
+Il s'agit de s'assurer que,
+
+00:15:54.920 --> 00:15:55.340
+dans 5 ans,
+
+00:15:55.420 --> 00:15:56.180
+vous puissiez toujours produire
+
+00:15:56.180 --> 00:15:57.180
+un journal fiable et clair
+
+00:15:57.180 --> 00:15:58.020
+quand quelqu'un demandera
+
+00:15:58.020 --> 00:15:59.040
+qui a approuvé quoi et quand.
+
+00:15:59.040 --> 00:16:01.100
+C'est cela le véritable test
+
+00:16:01.100 --> 00:16:01.920
+de conformité pour un audit.
+
+00:16:02.200 --> 00:16:02.900
+Les journaux à courte durée de vie
+
+00:16:02.900 --> 00:16:03.200
+sont inus.
+
+00:16:03.620 --> 00:16:04.800
+Les listes SharePoint aléatoires
+
+00:16:04.800 --> 00:16:05.420
+sont à peine meilleures.
+
+00:16:05.820 --> 00:16:06.780
+Votre entreprise ne demande pas
+
+00:16:06.780 --> 00:16:07.820
+de preuves d'attente mardi dernier.
+
+00:16:08.180 --> 00:16:09.040
+Elle les demande lors d'un contrôle
+
+00:16:09.040 --> 00:16:09.860
+de conformité portant
+
+00:16:09.860 --> 00:16:10.620
+sur les 5 dernières années.
+
+00:16:11.460 --> 00:16:12.180
+Les auditeurs se moquent
+
+00:16:12.180 --> 00:16:13.700
+de l'esthétique de votre vue SharePoint.
+
+00:16:14.460 --> 00:16:14.940
+Ils veulent savoir
+
+00:16:14.940 --> 00:16:16.120
+si les enregistrements ont survécu
+
+00:16:16.120 --> 00:16:16.940
+aux migrations système,
+
+00:16:17.380 --> 00:16:18.140
+au roulement du personnel
+
+00:16:18.140 --> 00:16:19.400
+et à ce dossier à régler
+
+00:16:19.400 --> 00:16:19.720
+plus tard,
+
+00:16:19.820 --> 00:16:21.020
+guet que personne n'a jamais traité.
+
+00:16:21.980 --> 00:16:23.000
+Le plus difficile est de savoir
+
+00:16:23.000 --> 00:16:24.280
+comment conserver des journaux
+
+00:16:24.280 --> 00:16:26.160
+pendant 3, 5, voire 10 ans
+
+00:16:26.160 --> 00:16:27.120
+sans créer un imbroglio.
+
+00:16:27.780 --> 00:16:28.620
+Les cimetières informatiques
+
+00:16:28.620 --> 00:16:29.580
+regorgent d'exports CSV,
+
+00:16:29.820 --> 00:16:30.500
+de PDF obsolètes
+
+00:16:30.500 --> 00:16:31.180
+et de fichiers Excel
+
+00:16:31.180 --> 00:16:32.040
+nommés importants
+
+00:16:32.040 --> 00:16:33.240
+indoscrofinal, indoscrofinal,
+
+00:16:33.320 --> 00:16:34.660
+indoscrofesset.xxsxp.
+
+00:16:35.080 --> 00:16:36.020
+Rien de tout cela n'est durable.
+
+00:16:36.500 --> 00:16:37.260
+Ces fichiers disparaissent,
+
+00:16:37.320 --> 00:16:37.760
+se corrompent
+
+00:16:37.760 --> 00:16:38.980
+et ne tiennent absolument pas la route
+
+00:16:38.980 --> 00:16:39.900
+devant un comité d'audit.
+
+00:16:40.580 --> 00:16:41.320
+Vous ne pouvez pas baser
+
+00:16:41.320 --> 00:16:42.380
+votre stratégie de conformité
+
+00:16:42.380 --> 00:16:43.160
+sur un désordre numérique.
+
+00:16:43.960 --> 00:16:44.740
+Imaginez le pire scénario.
+
+00:16:45.360 --> 00:16:46.020
+Les auditeurs arrivent,
+
+00:16:46.080 --> 00:16:46.640
+vous êtes soulagés
+
+00:16:46.640 --> 00:16:47.760
+car vous avez conservé les journaux.
+
+00:16:48.860 --> 00:16:49.380
+Puis vous découvrez
+
+00:16:49.380 --> 00:16:50.820
+que la moitié sont des CSV corrompus
+
+00:16:50.820 --> 00:16:51.700
+sur le OneDrive de quelqu'un
+
+00:16:56.160 --> 00:16:57.120
+Péréniser signifie construire
+
+00:16:57.120 --> 00:16:58.040
+quelque chose de structuré
+
+00:16:58.040 --> 00:16:58.420
+dès le départ.
+
+00:16:59.060 --> 00:17:00.180
+L'objectif est un enregistrement
+
+00:17:00.180 --> 00:17:01.400
+centralisé, structuré et durable.
+
+00:17:02.200 --> 00:17:02.980
+Choisissez une plateforme
+
+00:17:02.980 --> 00:17:03.780
+dont la fonction principale
+
+00:17:03.780 --> 00:17:04.580
+est la persistance des données.
+
+00:17:05.120 --> 00:17:06.280
+Dataverse est un candidat solide
+
+00:17:06.280 --> 00:17:07.280
+pour les environnements de Microsoft
+
+00:17:07.280 --> 00:17:08.240
+car il gère bien mieux
+
+00:17:08.240 --> 00:17:09.020
+les données relationnelles,
+
+00:17:09.100 --> 00:17:10.240
+la sécurité basée sur les rôles
+
+00:17:10.240 --> 00:17:11.100
+et la mise à l'échelle
+
+00:17:11.100 --> 00:17:11.900
+qu'une simple liste.
+
+00:17:12.740 --> 00:17:13.740
+SQL est tout aussi valable
+
+00:17:13.740 --> 00:17:14.480
+si votre environnement
+
+00:17:14.480 --> 00:17:15.340
+le prend déjà en charge.
+
+00:17:16.120 --> 00:17:16.800
+Et oui, les listes SharePoint
+
+00:17:16.800 --> 00:17:17.620
+peuvent servir de point de départ
+
+00:17:17.620 --> 00:17:18.580
+si vous avez besoin de rapidité.
+
+00:17:19.120 --> 00:17:19.700
+L'objectif n'est pas
+
+00:17:19.700 --> 00:17:20.940
+de poursuivre la technologie à la mode
+
+00:17:20.940 --> 00:17:21.400
+mais d'assurer
+
+00:17:21.400 --> 00:17:21.960
+que votre infrastructure
+
+00:17:21.960 --> 00:17:22.660
+ne craquera pas
+
+00:17:22.660 --> 00:17:23.240
+si quelqu'un demande
+
+00:17:23.240 --> 00:17:24.100
+des journaux de 2017.
+
+00:17:24.820 --> 00:17:25.520
+Le choix de la plateforme
+
+00:17:25.520 --> 00:17:25.900
+est une chose.
+
+00:17:26.220 --> 00:17:26.780
+Le plus important
+
+00:17:26.780 --> 00:17:27.600
+est la structure de vos données.
+
+00:17:27.940 --> 00:17:28.560
+Ne vous contentez pas
+
+00:17:28.560 --> 00:17:29.420
+de déverser des notes en vrac
+
+00:17:29.420 --> 00:17:30.240
+dans un champ texte.
+
+00:17:30.640 --> 00:17:31.660
+Cela produit des rapports inexploitables.
+
+00:17:32.000 --> 00:17:33.020
+Capturez des champs distincts.
+
+00:17:33.100 --> 00:17:33.780
+Étape d'approbation,
+
+00:17:33.920 --> 00:17:34.860
+identité de l'approbateur,
+
+00:17:35.020 --> 00:17:35.960
+redatage et résultat.
+
+00:17:36.560 --> 00:17:37.180
+Si vous stockez tout
+
+00:17:37.180 --> 00:17:38.040
+dans une note textuelle,
+
+00:17:38.360 --> 00:17:39.280
+vos rapports et vos auditeurs
+
+00:17:39.280 --> 00:17:39.860
+seront bloqués
+
+00:17:39.860 --> 00:17:40.820
+et vous finirez par parcourir
+
+00:17:40.820 --> 00:17:41.440
+des journaux intimes
+
+00:17:41.440 --> 00:17:42.040
+au lieu d'exécuter
+
+00:17:42.040 --> 00:17:42.780
+des requêtes propres.
+
+00:17:43.800 --> 00:17:44.520
+Des champs structurés
+
+00:17:44.520 --> 00:17:45.340
+vous permettent d'afficher
+
+00:17:45.340 --> 00:17:46.060
+en quelques secondes
+
+00:17:46.060 --> 00:17:46.800
+toutes les approbations
+
+00:17:46.800 --> 00:17:47.240
+de Gendo
+
+00:17:47.240 --> 00:17:48.260
+entre avril et juin.
+
+00:17:49.420 --> 00:17:50.160
+Lorsque vous stockez
+
+00:17:50.160 --> 00:17:51.120
+correctement vos approbations,
+
+00:17:51.200 --> 00:17:52.040
+le reporting devient simple.
+
+00:17:52.620 --> 00:17:53.440
+La demande de conformité
+
+00:17:53.440 --> 00:17:54.100
+passe du mode panique
+
+00:17:54.100 --> 00:17:55.060
+à une tâche de 5 minutes.
+
+00:17:55.840 --> 00:17:56.240
+Au lieu de créer
+
+00:17:56.240 --> 00:17:56.820
+une cellule de crise,
+
+00:17:56.900 --> 00:17:57.660
+vous exécutez une requête,
+
+00:17:57.780 --> 00:17:59.000
+exportez et transmettez le résultat.
+
+00:17:59.640 --> 00:18:00.180
+C'est la différence
+
+00:18:00.180 --> 00:18:01.340
+entre passer pour un professionnel
+
+00:18:01.340 --> 00:18:02.280
+serein qui a ses preuves
+
+00:18:02.280 --> 00:18:03.560
+et l'administrateur
+
+00:18:03.560 --> 00:18:04.380
+qui fouille dans des boîtes mail
+
+00:18:04.380 --> 00:18:05.340
+vieilles de 4 ans.
+
+00:18:06.440 --> 00:18:06.980
+Et les avantages
+
+00:18:06.980 --> 00:18:07.760
+ne s'arrêtent pas à l'audit.
+
+00:18:08.660 --> 00:18:09.520
+Centralisez les approbations
+
+00:18:09.520 --> 00:18:10.500
+dans Dataverse ou SQL
+
+00:18:10.500 --> 00:18:11.700
+et vous obtenez soudainement
+
+00:18:11.700 --> 00:18:12.760
+des tableaux de bord Power BI
+
+00:18:12.760 --> 00:18:13.560
+ou des tableaux croisés
+
+00:18:13.560 --> 00:18:14.180
+Dynamics Excel
+
+00:18:14.180 --> 00:18:14.940
+permettant à la direction
+
+00:18:14.940 --> 00:18:15.640
+de voir qui approuve
+
+00:18:15.640 --> 00:18:16.460
+combien de temps cela prend
+
+00:18:16.460 --> 00:18:17.120
+et où se situent
+
+00:18:17.120 --> 00:18:17.740
+les goudos d'être en mode.
+
+00:18:18.180 --> 00:18:19.000
+Les données de conformité
+
+00:18:19.000 --> 00:18:20.120
+servent aussi d'intelligence métier.
+
+00:18:20.640 --> 00:18:21.460
+Cela signifie que vous arrêtez
+
+00:18:21.460 --> 00:18:22.020
+de gérer les urgences
+
+00:18:22.020 --> 00:18:22.980
+et commencez à démontrer votre valeur.
+
+00:18:23.360 --> 00:18:24.220
+Si cela ressemble à du travail,
+
+00:18:24.320 --> 00:18:24.500
+c'en est,
+
+00:18:24.660 --> 00:18:25.420
+mais c'est un travail à faire
+
+00:18:25.420 --> 00:18:25.920
+une seule fois.
+
+00:18:26.700 --> 00:18:27.520
+Les solutions de facilité
+
+00:18:27.520 --> 00:18:28.480
+vous obligeront à faire le ménage
+
+00:18:28.480 --> 00:18:29.460
+à chaque visite des auditeurs.
+
+00:18:30.220 --> 00:18:30.880
+Les listes SharePoint
+
+00:18:30.880 --> 00:18:32.180
+sans planification gonflent rapidement
+
+00:18:32.180 --> 00:18:32.940
+et finissent par s'effondrer.
+
+00:18:33.520 --> 00:18:34.340
+Les exportations aléatoires
+
+00:18:34.340 --> 00:18:34.780
+sont la garantie
+
+00:18:34.780 --> 00:18:35.300
+d'une paire de données.
+
+00:18:35.700 --> 00:18:36.560
+Mettre en place un stockage
+
+00:18:36.560 --> 00:18:37.320
+durable très tôt et vite
+
+00:18:37.320 --> 00:18:38.300
+des mots de tête 3 ans plus tard.
+
+00:18:39.240 --> 00:18:39.660
+Envie de commencer
+
+00:18:39.660 --> 00:18:40.520
+avec peu de contrats ?
+
+00:18:40.520 --> 00:18:41.360
+Écrivez des journaux minimaux
+
+00:18:41.360 --> 00:18:42.060
+dans une liste SharePoint.
+
+00:18:42.780 --> 00:18:43.640
+Capturez l'essentiel
+
+00:18:43.640 --> 00:18:44.800
+ID de demande,
+
+00:18:45.200 --> 00:18:45.880
+étape, action,
+
+00:18:46.580 --> 00:18:47.440
+ID de l'approbateur,
+
+00:18:47.760 --> 00:18:48.300
+au redatage
+
+00:18:48.300 --> 00:18:49.380
+et lien de corrélation
+
+00:18:49.380 --> 00:18:50.540
+à chaque approbation
+
+00:18:50.540 --> 00:18:51.100
+ou escalade.
+
+00:18:52.040 --> 00:18:52.340
+Plus tard,
+
+00:18:52.420 --> 00:18:52.780
+si vous avez besoin
+
+00:18:52.780 --> 00:18:53.340
+de monter en charge,
+
+00:18:53.460 --> 00:18:54.700
+migrez vers Dataverse ou SQL.
+
+00:18:55.500 --> 00:18:56.060
+Mieux vaut capturer
+
+00:18:56.060 --> 00:18:57.140
+des données structurées aujourd'hui
+
+00:18:57.140 --> 00:18:57.640
+que d'attendre
+
+00:18:57.640 --> 00:18:58.640
+que la direction exige
+
+00:18:58.640 --> 00:18:59.780
+un historique de 5 ans demain.
+
+00:19:00.540 --> 00:19:01.240
+Voici une liste rapide
+
+00:19:01.240 --> 00:19:02.080
+du pire au meilleur scénario.
+
+00:19:02.700 --> 00:19:03.060
+Premièrement,
+
+00:19:03.320 --> 00:19:04.480
+choisissez un stockage persistant,
+
+00:19:04.640 --> 00:19:05.780
+Dataverse, SQL ou SharePoint
+
+00:19:05.780 --> 00:19:06.920
+avec une sauvegarde appropriée.
+
+00:19:07.640 --> 00:19:08.000
+Deuxièmement,
+
+00:19:08.080 --> 00:19:09.020
+définissez un schéma minimal.
+
+00:19:09.360 --> 00:19:09.840
+ID de demande,
+
+00:19:10.000 --> 00:19:10.580
+étape, action,
+
+00:19:10.860 --> 00:19:11.560
+ID de l'approbateur,
+
+00:19:11.760 --> 00:19:12.240
+au redatage,
+
+00:19:12.460 --> 00:19:12.980
+lien de corrélation.
+
+00:19:14.240 --> 00:19:14.500
+Ensuite,
+
+00:19:14.580 --> 00:19:15.220
+enregistrez les journaux
+
+00:19:15.220 --> 00:19:15.900
+à chaque approbation
+
+00:19:15.900 --> 00:19:16.380
+ou escalade.
+
+00:19:17.220 --> 00:19:17.480
+Enfin,
+
+00:19:17.660 --> 00:19:18.420
+créez de petits rapports
+
+00:19:18.420 --> 00:19:19.380
+dans Power BI ou Excel
+
+00:19:19.380 --> 00:19:20.000
+pour que les auditeurs
+
+00:19:20.000 --> 00:19:20.540
+aient une vision claire
+
+00:19:20.540 --> 00:19:21.160
+en quelques secondes.
+
+00:19:21.940 --> 00:19:22.620
+C'est à assurer l'avenir
+
+00:19:22.620 --> 00:19:23.040
+en un instant.
+
+00:19:23.440 --> 00:19:23.940
+Pas de superflu,
+
+00:19:24.000 --> 00:19:24.640
+juste des étapes concrètes
+
+00:19:24.640 --> 00:19:25.160
+sur lesquelles agir.
+
+00:19:25.900 --> 00:19:26.780
+Alors ne misez pas votre carrière
+
+00:19:26.780 --> 00:19:27.500
+sur des fichiers CSV
+
+00:19:27.500 --> 00:19:28.180
+cachés sur des bureaux.
+
+00:19:29.140 --> 00:19:29.900
+Stockez les approbations
+
+00:19:29.900 --> 00:19:30.420
+de la voie son durable.
+
+00:19:30.780 --> 00:19:31.700
+Gardez une structure cohérente
+
+00:19:31.700 --> 00:19:32.200
+et interrogeable.
+
+00:19:32.680 --> 00:19:33.280
+Créez de petits rapports
+
+00:19:33.280 --> 00:19:33.880
+maintenant pour travailler
+
+00:19:33.880 --> 00:19:34.380
+en toute confiance.
+
+00:19:34.380 --> 00:20:04.360
+Sous-titrage Société Radio-Canada

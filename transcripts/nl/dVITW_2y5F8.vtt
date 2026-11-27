@@ -1,0 +1,781 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:06.700
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.860 --> 00:00:10.420
+Ergens in jouw organisatie draait een app waarvan niemand meer weet wie hem heeft gebouwd.
+
+00:00:10.560 --> 00:00:12.600
+Hij werkt nog steeds, dus niemand stelt vragen.
+
+00:00:12.820 --> 00:00:14.600
+Dat is het probleem dat governance moet oplossen.
+
+00:00:14.860 --> 00:00:20.720
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:20.900 --> 00:00:26.080
+Vandaag ontrafelen we Power Platform Governance, de regels die voorkomen dat low-code werk uit elkaar valt naarmate het groeit.
+
+00:00:26.080 --> 00:00:31.100
+Aan het eind zullen omgevingen, databeleid en een center of excellence begrijpelijk zijn in gewone taal.
+
+00:00:31.280 --> 00:00:32.700
+Wat governance echt betekent.
+
+00:00:32.920 --> 00:00:37.300
+Governance is het minst opwindende woord in dit hele gesprek en dat is precies waarom de meeste mensen het overslaan.
+
+00:00:37.440 --> 00:00:42.300
+Als je het jargon weglaat, betekent het de regels en gewoontes die een bedrijf gebruikt om te bepalen hoe een tool wordt ingezet.
+
+00:00:42.560 --> 00:00:49.760
+Microsoft omschrijft Power Platform Governance als het beleid, de praktijken en de tools die het platform efficiënt, veilig en compliant houden, een hele mond vol.
+
+00:00:49.920 --> 00:00:51.980
+De eenvoudige versie is makkelijker dan dat.
+
+00:00:51.980 --> 00:00:56.120
+Iemand moet bepalen wat waar hoort, wat waarbij mag en wie je moet bellen als het kapot gaat.
+
+00:00:56.300 --> 00:01:00.240
+De meeste beginners horen het woord governance en gaan ervan uit dat het bestaat om hen tegen te houden.
+
+00:01:00.440 --> 00:01:06.360
+Die aanname moet als eerste weg, want slecht uitgevoerde governance blokkeert mensen juist, terwijl goed uitgevoerde governance het tegenovergestelde doet.
+
+00:01:06.520 --> 00:01:11.820
+Een fanrail op een bergweg vertraagt je helemaal niet, het is de reden dat je met snelheid door de bocht kunt zonder in de bomen te belanden.
+
+00:01:12.060 --> 00:01:14.580
+Nu, de spanning die onder alles ligt wat we gaan bespreken.
+
+00:01:14.740 --> 00:01:16.860
+Power Platform is bewust makkelijk gemaakt.
+
+00:01:16.860 --> 00:01:24.000
+Iedereen kan in een middag een werkende app bouwen zonder toestemming te vragen en diezelfde openheid maakt het lastig om alles na zes maanden netjes te houden.
+
+00:01:24.200 --> 00:01:28.320
+Het platform nodigt iedereen uit en laat het opruimwerk over aan degene die het als eerste opmerkt.
+
+00:01:28.460 --> 00:01:30.800
+Er is nog één idee dat we moeten planten voordat we verder gaan.
+
+00:01:31.060 --> 00:01:33.220
+Governance is geen schakelaar die je één keer omzet.
+
+00:01:33.400 --> 00:01:38.820
+Het is een gewoonte die een bedrijf aanpast naarmate het gebruik van het platform groeit en het komt steeds terug op dezelfde vier zorgen.
+
+00:01:38.820 --> 00:01:44.620
+Je werk heeft een thuis nodig, limieten op wat het kan bereiken, een eigenaar voor de regels en iemand die op problemen let.
+
+00:01:44.780 --> 00:01:48.020
+Elk ander detail in dit gesprek hangt samen met een van die vier punten.
+
+00:01:48.260 --> 00:01:49.720
+Nog één ding over het woord zelf.
+
+00:01:49.980 --> 00:01:57.240
+Governance wordt gebruikt alsof het een afdeling of een persoon is, maar het is eigenlijk een relatie tussen de mensen die dingen bouwen en de mensen die verantwoordelijk zijn voor het platform eronder.
+
+00:01:57.500 --> 00:02:02.900
+Wanneer die relatie gezond is, merkt niemand iets van governance, omdat er niets kapot gaat en niemand buitengesloten wordt.
+
+00:02:03.060 --> 00:02:04.780
+Je hoort er alleen over als het ontbreekt.
+
+00:02:05.020 --> 00:02:06.460
+Waarom zou iemand zich er druk om maken?
+
+00:02:06.460 --> 00:02:09.680
+Regels klinken abstract onschuldig, dus laten we ze concreet maken.
+
+00:02:09.900 --> 00:02:13.420
+Zonder enige vorm van beheer botsen de dagelijkse dingen die mensen bouwen met elkaar.
+
+00:02:13.620 --> 00:02:16.120
+Twee collega's lossen hetzelfde probleem op, bouwen dezelfde app.
+
+00:02:16.320 --> 00:02:19.300
+En nu zijn er twee versies die rondwalen zonder dat iemand weet welke de juiste is.
+
+00:02:19.440 --> 00:02:22.260
+Het grotere probleem is waar al dat werk stilletjes terechtkomt.
+
+00:02:22.420 --> 00:02:25.720
+Microsoft heeft een vergelijking die dit duidelijk maakt en die gaat als volgt.
+
+00:02:25.920 --> 00:02:33.000
+Stel je voor dat iedereen in je bedrijf een OneDrive map deelt voor elk document dat ze bezitten, dan krijg je een idee van een gedeelde power platform omgeving.
+
+00:02:33.000 --> 00:02:35.420
+Het voelt handig aan, totdat het dat niet meer is.
+
+00:02:35.420 --> 00:02:38.400
+Voordat we verder gaan, is er één term die we moeten verduidelijken.
+
+00:02:38.600 --> 00:02:44.820
+Een tenant is de eigen privéruimte van jouw organisatie in de cloud van Microsoft en alles wat we bespreken bevindt zich daarin.
+
+00:02:45.020 --> 00:02:49.140
+Binnen die ruimte vind je omgevingen en elke omgeving is een eigen klein containertje.
+
+00:02:49.300 --> 00:02:52.280
+Het risico waar beheerders wakker van liggen is een menselijk risico.
+
+00:02:52.520 --> 00:02:55.860
+Iemand bouwt een app, is de enige die het begrijpt en wisselt dan van baan.
+
+00:02:55.860 --> 00:03:04.100
+Microsoft noemt zulke middelen eigenaarloos en markeert ze als een bedrijfscontinuïteitsrisico, wat een formele manier is om te zeggen dat het doorgaat terwijl niemand het kan repareren.
+
+00:03:04.260 --> 00:03:06.360
+Er is een stille variant van hetzelfde probleem.
+
+00:03:06.520 --> 00:03:11.800
+Een app die als een snel gunstje is gebouwd, groeit uit tot iets waar een heel team afhankelijk van is, zonder backup, eigenaar of plan.
+
+00:03:12.000 --> 00:03:16.280
+Tegen de tijd dat iemand het merkt, zijn de belangen veel groter dan die ene middag die het kostte om het te bouwen.
+
+00:03:16.640 --> 00:03:18.880
+Governance gaat dus niet om opruimen voor de netheid.
+
+00:03:18.880 --> 00:03:23.020
+Het gaat erom dat de dingen waar mensen op vertrouwen niet stilletjes kwetsbaar worden.
+
+00:03:23.260 --> 00:03:27.780
+Denk aan het laatste nuttige ding dat je hebt gebouwd en bedenk wat er zou gebeuren als jij zomaar zou verdwijnen.
+
+00:03:28.000 --> 00:03:29.280
+Dat is geen morbide gedachte.
+
+00:03:29.520 --> 00:03:32.280
+Het is precies het scenario waarvoor governance is ontworpen.
+
+00:03:32.480 --> 00:03:36.120
+De oplossing begint bij iets simpels als een kamer en daar gaan we het nu over hebben.
+
+00:03:36.520 --> 00:03:38.320
+Omgevingen zijn simpelweg kamers.
+
+00:03:39.000 --> 00:03:43.640
+Een omgeving is precies wat het klinkt, een kamer waar je apps, flows en data samenleven.
+
+00:03:44.220 --> 00:03:48.100
+Je kunt zoveel kamers hebben als je nodig hebt en elk met eigen regels.
+
+00:03:48.100 --> 00:03:53.300
+Het hele punt van die kamers is scheiding, zodat het werk aan het ene project het andere niet in de weg zit.
+
+00:03:53.500 --> 00:03:56.160
+Die scheiding wordt afgedwongen in plaats van slechts aangeraden.
+
+00:03:56.340 --> 00:04:02.560
+Een app die in de ene omgeving is gebouwd, heeft alleen toegang tot de databronnen in diezelfde omgeving, wat mensen die aannemen dat alles verbonden is.
+
+00:04:02.800 --> 00:04:07.860
+Verrast, Microsoft's eigen voorbeeld is een app in een testruimte die simpelweg de database in de ontwikkelomgeving niet kan zien.
+
+00:04:08.040 --> 00:04:10.080
+Ook al behoren beide ruimtes tot hetzelfde bedrijf.
+
+00:04:10.240 --> 00:04:14.340
+Ruimtes komen in verschillende soorten en de verschillen zijn belangrijker dan een beginner zou verwachten.
+
+00:04:14.340 --> 00:04:22.720
+De standaardruimte wordt automatisch meegeleverd, gedeeld door iedereen in het bedrijf, en het is de plek waarvan Microsoft zegt dat deze geen back-up garanties bieten geen productieomgevingen zou moeten bevatten.
+
+00:04:22.860 --> 00:04:26.920
+Een productieruimte is het tegenovergestelde, gebouwd voor permanent werk waar je echt op vertrouwt.
+
+00:04:27.040 --> 00:04:30.320
+Een sandbox is een oefenruimte die je naar believen kunt kopiëren en resetten.
+
+00:04:30.480 --> 00:04:38.400
+Een ontwikkelomgeving is je eigen persoonlijke werkruimte, en een proefruimte is tijdelijk en ruimt zichzelf na een tijdje op, wat ons terugbrengt bij de vraag die ik zojuist open liet.
+
+00:04:38.400 --> 00:04:42.920
+De gevaarlijkste ruimte in een tenant is meestal de standaardomgeving, en de reden is bijna grappig.
+
+00:04:43.020 --> 00:04:44.500
+Het is de plek waar iedereen begint.
+
+00:04:44.680 --> 00:04:46.680
+De kans is erg groot dat daar je eerste app nu staat.
+
+00:04:46.860 --> 00:04:48.400
+Het wordt gedeeld met het hele bedrijf.
+
+00:04:48.540 --> 00:04:52.720
+Het kan niet worden verwijderd, en Microsoft zegt openlijk dat het niet is gebouwd voor zaken waar je afhankelijk van bent.
+
+00:04:52.900 --> 00:04:58.200
+Toch is het de standaard landingsplaats voor iedereen die nieuw is, wat betekent dat de plek die het veiligst voelt vaak de meest riskante is.
+
+00:04:58.360 --> 00:05:01.460
+De aanbevolen oplossing van Microsoft is milder dan je misschien zou verwachten.
+
+00:05:01.460 --> 00:05:08.640
+In plaats van de gedeelde ruimte te verbieden, stuur je nieuwe makers naar hun eigen persoonlijke ruimtes terwijl ze bouwen, zodat de gedeelde ruimte beschikbaar blijft voor lichte experimenten.
+
+00:05:08.760 --> 00:05:14.520
+Alles wat serieus is, verhuist naar een ruimte met echte vanwils eromheen, en dat is een veel beter einde dan een app die in het openbaar opgroeit.
+
+00:05:14.680 --> 00:05:17.520
+Dit is ook het punt waarop een paar functietitels logisch beginnen te worden.
+
+00:05:17.740 --> 00:05:22.940
+Elke ruimte heeft mensen die erin kunnen bouwen, makers genoemd, en mensen die het beheren, omgevingsbeheerders genoemd.
+
+00:05:23.100 --> 00:05:24.560
+Makers bouwen apps en flows.
+
+00:05:24.820 --> 00:05:28.460
+Beheerders bepalen wie er toegang heeft, wat de regels zijn en wanneer een ruimte moet worden uitgefaseerd.
+
+00:05:28.460 --> 00:05:36.680
+De meeste beginners zijn makers, en dat is volkomen prima, want de taak van een maker is om goede dingen te bouwen in plaats van de techniek eronder te onderhouden.
+
+00:05:36.880 --> 00:05:41.960
+Nieuwere functies gaan nog verder en laten beheerders eengedeelde set regels tegelijk op een hele groep ruimtes toepassen.
+
+00:05:42.180 --> 00:05:47.100
+Dat betekent dat een beleid niet stilletjes op de ene plek kan worden gewijzigd terwijl een andere plek een oude instelling behoudt.
+
+00:05:47.200 --> 00:05:53.260
+Voor jou als bouwer uitzicht dit vooral in consistentie, omdat de regels die je op de eerste dag leert, een jaar later nog steeds gelden.
+
+00:05:53.860 --> 00:05:55.540
+Databeleid, de verkeersregels.
+
+00:05:55.540 --> 00:05:59.580
+Ruimtes bepalen waar je werk staat, maar ze zeggen niets over waar het toegang toe mag hebben.
+
+00:05:59.840 --> 00:06:02.620
+Daarvoor heb je het tweede onderdeel nodig, databeleid.
+
+00:06:02.780 --> 00:06:05.380
+Om dat te begrijpen, moet je eerst een klein woord kennen.
+
+00:06:05.580 --> 00:06:12.900
+Een connector is de stekker waarmee een app of flow met iets anders kan communiceren, of dat nu Outlook, SharePoint of een dienst buiten Microsoft is.
+
+00:06:13.100 --> 00:06:19.420
+Elke app die je ooit hebt gebouwd, is eigenlijk niets meer dan een paar van deze stekkers aan elkaar verbonden, en meestal denk je er helemaal niet bij na.
+
+00:06:19.420 --> 00:06:22.780
+Databeleid is als een vangrail die bovenop die stekkers is geplaatst.
+
+00:06:23.060 --> 00:06:29.100
+Microsoft omschrijft databeleid als een manier om het risico te verkleinen dat gebruikers onbedoeld bedrijfsgegevens blootstellen.
+
+00:06:29.260 --> 00:06:34.700
+Een beleefde manier om te zeggen dat het voorkomt dat goedbedoelende mensen gevoelige informatie verplaatsen naar plekken waar die niet hoort.
+
+00:06:34.900 --> 00:06:37.620
+Elke connector wordt ingedeeld in een van de drie categorieën.
+
+00:06:37.760 --> 00:06:44.920
+Er is een zakelijke categorie voor werkgegevens, een nietzakelijke voor persoonlijke diensten, en een geblokkeerde categorie voor alles waarvan je niet wilt dat iemand het gebruikt.
+
+00:06:44.920 --> 00:06:48.720
+Twee van die categorieën zijn beschikbaar voor gebruik, en de derde is volledig afgesloten.
+
+00:06:48.880 --> 00:06:52.760
+Er is ook een regel over die categorieën die bijna iedereen verrast, en die komt zo meteen aan bod.
+
+00:06:52.940 --> 00:06:54.860
+Dit is de regel die bijna iedereen overvalt.
+
+00:06:55.060 --> 00:06:58.740
+Twee connectors die beide volledig zijn toegestaan, kunnen samen alsnog verboden zijn.
+
+00:06:58.920 --> 00:07:05.180
+Plaats SharePoint in de zakelijke categorie en een persoonlijke e-mail dienst in de nietzakelijke, en je kunt geen flow meer bouwen die beide gebruikt.
+
+00:07:05.400 --> 00:07:07.620
+Binnen één categorie ben je vrij om te combineren.
+
+00:07:07.760 --> 00:07:09.900
+Tussen categorieën in blijft de deur gesloten.
+
+00:07:10.120 --> 00:07:12.240
+Er is ook een oprecht detail dat mensen verrast.
+
+00:07:12.240 --> 00:07:18.820
+Wanneer een nieuw beleid wordt aangemaakt, belandt elke connector standaard in de nietzakelijke categorie, zodat er niets per ongeluk wordt ingeschakeld.
+
+00:07:18.980 --> 00:07:23.520
+Die standaardinstelling is bewust, het betekent dat de veilige keuze de optie is die je krijgt zonder iets te doen.
+
+00:07:23.740 --> 00:07:26.480
+Stel je nu voor wat er gebeurt als een regel onder je handen verandert.
+
+00:07:26.640 --> 00:07:29.540
+Iemand plant een flow in die elke ochtend om drie uur s'nachts draait.
+
+00:07:29.700 --> 00:07:33.740
+Het heeft maandenlang gewerkt, en dan op een dag mislukt het met de melding dat de verbinding is verbroken.
+
+00:07:33.960 --> 00:07:35.420
+De maker heeft niets verkeerd gedaan.
+
+00:07:35.420 --> 00:07:39.400
+Het beleid is simpelweg veranderd en de flow vertrouwde op een combinatie die niet langer is toegestaan.
+
+00:07:39.640 --> 00:07:42.420
+Microsoft is er duidelijk over dat handhaving niet onmiddellijk plaatsvindt.
+
+00:07:42.540 --> 00:07:48.260
+De meeste beleidswijzigingen worden binnen een uur van kracht, en in extreme gevallen kan het tot een dag duren, afhankelijk van de werklast.
+
+00:07:48.460 --> 00:07:51.940
+Dat is goed om te weten voordat je in paniek raakt over beleid dat nog niets lijkt te hebben gedaan.
+
+00:07:52.260 --> 00:07:55.220
+Beheerders kunnen preciezer zijn dan drie categorieën wanneer dat nodig is.
+
+00:07:55.440 --> 00:07:59.280
+Ze kunnen bijvoorbeeld alleen leestoegang tot een dienst toestaan terwijl wijzigingen worden geblokkeerd,
+
+00:07:59.460 --> 00:08:02.880
+en ze kunnen de toegang beperken tot specifieke eindpunten in plaats van hele diensten.
+
+00:08:02.880 --> 00:08:08.180
+Je hebt niet zo'n detailniveau nodig om te beginnen, maar het systeem kan worden afgesteld in plaats van alleen aan- en uit worden gezet.
+
+00:08:08.320 --> 00:08:10.540
+Een vuistregel voorkomt hier een hoop verwarring.
+
+00:08:10.760 --> 00:08:15.100
+Als twee tools in dezelfde app moeten samenwerken, moeten ze in dezelfde, bucket, zitten,
+
+00:08:15.400 --> 00:08:19.540
+en dat is een besluit dat een beheerder bewust neemt in plaats van iets dat je vanuit een flow kunt overroelen.
+
+00:08:19.760 --> 00:08:21.960
+Het doel was dus nooit om je te stoppen met bouwen.
+
+00:08:22.140 --> 00:08:25.440
+Het is bedoeld om ervoor te zorgen dat de combinatie die je kiest veilig is,
+
+00:08:25.700 --> 00:08:28.700
+en alles binnen één bucket nog steeds precies zo werkt als voorheen.
+
+00:08:29.280 --> 00:08:31.180
+Wie is hier eigenlijk de eigenaar van?
+
+00:08:31.400 --> 00:08:34.940
+Regels handhaven zichzelf niet, wat betekent dat eigenaarschap ergens moet liggen,
+
+00:08:35.080 --> 00:08:37.240
+en dat brengt ons bij een term die je constant zult horen.
+
+00:08:37.420 --> 00:08:40.280
+Een center of excellence, meestal afgekoord tot COE,
+
+00:08:40.440 --> 00:08:44.720
+is een team binnen een bedrijf dat de standaarden bepaalt, deelt wat werkt en de mensen die bouwen ondersteunt.
+
+00:08:44.880 --> 00:08:47.960
+Het is minder een afdeling en meer een kleine groep met een duidelijke taak.
+
+00:08:48.200 --> 00:08:50.780
+Microsoft is verfrissend eerlijk over wat dat nu echt is.
+
+00:08:50.960 --> 00:08:55.920
+De documentatie zegt dat een center of excellence mensen, communicatie en gedefinieerde processen nodig heeft,
+
+00:08:55.920 --> 00:08:57.740
+en dat tools slechts een middel tot een doel zijn.
+
+00:08:57.900 --> 00:09:01.220
+Met andere woorden, het kopen van een toolkit levert je geen governance op.
+
+00:09:01.300 --> 00:09:02.880
+Iemand hebben die er echt om geeft wel.
+
+00:09:03.120 --> 00:09:04.420
+Nu het verrassende gedeelte.
+
+00:09:04.640 --> 00:09:08.540
+Als je zoekt op Power Platform Governance, vind je overal de COE Starter Kit,
+
+00:09:08.840 --> 00:09:10.800
+en jarenlang was dat het antwoord op deze vraag.
+
+00:09:10.980 --> 00:09:16.320
+De eigen documentatie van Microsoft stelt nu duidelijk dat de COE Starter Kit niet langer actief wordt onderhouden,
+
+00:09:16.400 --> 00:09:19.560
+en dat de kernfuncties zijn verplaatst naar het Power Platform Beheerscentrum.
+
+00:09:19.560 --> 00:09:23.100
+Het helpt om te weten wat het was, omdat de verandering op die manier logischer wordt.
+
+00:09:23.280 --> 00:09:26.940
+De kit was een referentieontwerp dat volledig was gemaakt met de eigen tools van het platform,
+
+00:09:27.100 --> 00:09:28.980
+met dashboards om te zien wat er in de tenant bestaat,
+
+00:09:29.260 --> 00:09:30.960
+processen om op te ruimen wat overbodig is,
+
+00:09:31.140 --> 00:09:33.360
+en zelfs een vriendelijk welkom voor mensen die net begonnen waren.
+
+00:09:33.520 --> 00:09:35.160
+Het was eigenlijk nooit een echt product.
+
+00:09:35.400 --> 00:09:37.380
+Het was een heel goed voorbeeld dat je kon kopiëren.
+
+00:09:37.580 --> 00:09:39.780
+Het goede nieuws is dat er niets nuttigs is weggegooid.
+
+00:09:39.980 --> 00:09:42.720
+De belangrijke onderdelen zijn opgenomen in het product zelf,
+
+00:09:42.940 --> 00:09:46.160
+waar ze voor je worden onderhouden in plaats van gekopieerd en beheerd door je eigen team.
+
+00:09:46.160 --> 00:09:48.880
+Dat ingebouwde pad heeft een naam die je vaak zult horen.
+
+00:09:48.880 --> 00:09:51.840
+Met beheerde omgevingen kan een beheerder de regels één keer instellen
+
+00:09:51.840 --> 00:09:53.780
+en ze tegelijkertijd op veel ruimtes toepassen,
+
+00:09:53.960 --> 00:09:56.240
+met veel minder klikwerk dan wanneer je dit per ruimte moet doen.
+
+00:09:56.420 --> 00:09:58.420
+Voor jou als beginner is de conclusie simpel.
+
+00:09:58.660 --> 00:09:59.800
+Governess heeft een eigenaar,
+
+00:09:59.820 --> 00:10:02.600
+en die eigenaar is meestal een klein team in plaats van een gigantische afdeling.
+
+00:10:02.800 --> 00:10:04.840
+Er is een praktische reden waarom dit voor jou belangrijk is,
+
+00:10:04.940 --> 00:10:06.920
+zelfs als je zelf nooit een expertisecentrum zult leiden.
+
+00:10:07.140 --> 00:10:08.460
+Wanneer je iets nodig hebt dat je niet hebt,
+
+00:10:08.620 --> 00:10:10.400
+of dat nu een nieuwe connector is of een frisse omgeving,
+
+00:10:10.640 --> 00:10:12.220
+is er een bekend adres waar je kunt aankloppen.
+
+00:10:12.340 --> 00:10:15.300
+Het team bestaat zodat dat verzoek niet in een zwart gat verdwijnt.
+
+00:10:15.300 --> 00:10:16.640
+To zien wat er gebeurt.
+
+00:10:16.840 --> 00:10:18.220
+De regels bepalen is één ding,
+
+00:10:18.380 --> 00:10:20.300
+maar weten wat er werkelijk gebeurt is iets anders.
+
+00:10:20.620 --> 00:10:22.600
+Dit is het onderdeel waar beginners nooit aan denken
+
+00:10:22.600 --> 00:10:24.560
+en het is wat alles daarvoor maakt of breekt.
+
+00:10:24.800 --> 00:10:26.440
+Zonder dat zou niemand weten dat een app bestaat
+
+00:10:26.440 --> 00:10:28.560
+of dat deze zes weken geleden is gestopt met werken.
+
+00:10:28.760 --> 00:10:30.500
+Dit is waar monitoring om de hoek komt kijken.
+
+00:10:30.760 --> 00:10:33.800
+Analytics op tenantniveau verzamelt activiteiten uit elke omgeving
+
+00:10:33.800 --> 00:10:35.120
+in je tenant in één overzicht,
+
+00:10:35.320 --> 00:10:36.960
+zodat een beheerder kan zien wat er wordt gebouwd
+
+00:10:36.960 --> 00:10:38.300
+en wat er daadwerkelijk wordt gebruikt.
+
+00:10:38.660 --> 00:10:40.980
+Microsoft merkt op dat de rapporten een dag of twee nodig hebben
+
+00:10:40.980 --> 00:10:42.700
+om in te vullen nadat ze zijn ingeschakeld.
+
+00:10:42.700 --> 00:10:45.000
+Dat is goed om te onthouden voordat je aanneemt dat er niets gebeurt.
+
+00:10:45.160 --> 00:10:48.020
+Er is ook een actuele lijst met zaken die een tweede blik waard zijn.
+
+00:10:48.180 --> 00:10:50.780
+Het toont bronnen waarvan de eigenaar het bedrijf heeft verlaten
+
+00:10:50.780 --> 00:10:53.080
+en bronnen die al heel lang door niemand zijn aangeraakt.
+
+00:10:53.280 --> 00:10:55.840
+Ineens is die app zonder eigenaar van daarnet geen verhaal meer,
+
+00:10:55.960 --> 00:10:57.020
+maar een item op een scherm.
+
+00:10:57.240 --> 00:10:59.380
+De oplossing voor dat item is verfrissend saai.
+
+00:10:59.560 --> 00:11:01.860
+Of je zoekt een nieuwe eigenaar voor de app of je verwijdert hem
+
+00:11:01.860 --> 00:11:03.880
+en hoe dan ook weet iemand eindelijk dat hij bestaat.
+
+00:11:04.080 --> 00:11:06.100
+Dat is meer dan wat het afgelopen jaar te bieden had.
+
+00:11:06.300 --> 00:11:08.620
+Naast de rapporten markeert een kortwekelijks overzicht apps
+
+00:11:08.620 --> 00:11:09.740
+en flows die stil zijn geworden,
+
+00:11:09.740 --> 00:11:12.800
+zodat problemen aan het licht komen voordat een heel team ervan afhankelijk is.
+
+00:11:12.960 --> 00:11:15.540
+Een gezonde app heeft een eigenaar, een thuis en een veilige route
+
+00:11:15.540 --> 00:11:17.320
+van een testomgeving naar de echte omgeving
+
+00:11:17.320 --> 00:11:19.240
+zonder dat deze elke keer opnieuw gebouwd moet worden.
+
+00:11:19.420 --> 00:11:21.940
+De mensen die deze rapporten kunnen inzien zijn ook belangrijk.
+
+00:11:22.600 --> 00:11:24.980
+Omgevingsbeheerders kunnen de ruimtes zien waarvoor ze verantwoordelijk zijn,
+
+00:11:25.220 --> 00:11:27.320
+terwijl de bredere platformbeheerders alles kunnen zien
+
+00:11:27.320 --> 00:11:30.820
+wat het overzicht nuttig houdt zonder iedereen de sleutels van het hele gebouw te geven.
+
+00:11:31.300 --> 00:11:33.660
+Een eerlijke waarschuwing over al deze zichtbaarheid.
+
+00:11:33.920 --> 00:11:36.000
+Zet de rapportage uit en de geschiedenis wordt verwijderd,
+
+00:11:36.000 --> 00:11:38.240
+dus het is iets dat je bewust inschakelt en daarna aan laat staan.
+
+00:11:38.240 --> 00:11:40.860
+Er is hier een klein detail dat makkelijk over het hoofd wordt gezien.
+
+00:11:41.140 --> 00:11:42.740
+Monitoring vertelt je niet alleen wat er kapot is,
+
+00:11:42.900 --> 00:11:45.220
+het vertelt je ook wat populair is, en dat is vaak hetzelfde.
+
+00:11:45.380 --> 00:11:47.900
+De app waar iedereen van houdt, is meestal de app die iedereen zou missen,
+
+00:11:48.040 --> 00:11:50.660
+wat het precies de app maakt die het waard is om te beschermen met een eigenaar en een plan.
+
+00:11:50.900 --> 00:11:52.460
+Niets hiervan gebeurt automatisch.
+
+00:11:52.660 --> 00:11:54.120
+Iemand moet de rapporten inschakelen,
+
+00:11:54.360 --> 00:11:57.940
+bepalen wat als ongebruikt geldt en daadwerkelijk handelen op basis van wat de lijst zegt.
+
+00:11:58.180 --> 00:12:01.860
+Dat is het onaantrekkelijke deel van governance en het is meestal wat een bedrijf redt.
+
+00:12:02.100 --> 00:12:03.800
+Controle zonder de vrijheid te doden.
+
+00:12:03.800 --> 00:12:06.720
+Nu kunnen we de vraag stellen die bepaalt of dit allemaal werkt.
+
+00:12:06.720 --> 00:12:09.520
+De enige echte beslissing is hoe strak je de knop aandraait.
+
+00:12:09.720 --> 00:12:13.000
+Draai alles vast en mensen gaan in het geheim aan de slag op hun eigen laptops met tools
+
+00:12:13.000 --> 00:12:14.200
+waar je nog nooit van hebt gehoord.
+
+00:12:14.360 --> 00:12:16.700
+Laat alles los en de gedeelde ruimte verandert in een rommelkast.
+
+00:12:16.960 --> 00:12:20.260
+Beide situaties zijn voorbeelden van falend beheer en beide komen veel voor.
+
+00:12:20.460 --> 00:12:23.460
+De balans die Microsoft adviseert is logischer dan het klinkt.
+
+00:12:23.580 --> 00:12:24.880
+Hou de gedeelde ruimte strak,
+
+00:12:25.120 --> 00:12:28.740
+hou de productieomgeving redelijk en behandel de regels als iets dat je uitlegt
+
+00:12:28.740 --> 00:12:30.360
+in plaats van iets dat je mensen oplegt.
+
+00:12:30.360 --> 00:12:33.380
+Dat laatste onderdeel is belangrijker dan de technologie zelf.
+
+00:12:33.560 --> 00:12:36.120
+Het advies is duidelijk als je een nieuwe strategie activeert
+
+00:12:36.120 --> 00:12:39.180
+Zonder het iemand te vertellen, ervaren gebruikers dit als een beperking
+
+00:12:39.180 --> 00:12:40.460
+en gaan ze op zoek naar omwegen.
+
+00:12:40.680 --> 00:12:43.740
+Een regel die niemand begrijpt, is een regel waar mensen omheen werken.
+
+00:12:43.960 --> 00:12:47.540
+De balans uit zich meestal in een gelaagde opzet in plaats van één algemene regel.
+
+00:12:47.740 --> 00:12:50.800
+De gedeelde ruimte kent de strengste regels omdat iedereen erbij kan.
+
+00:12:50.980 --> 00:12:53.260
+Team- en productieomgevingen krijgen meer ademruimte
+
+00:12:53.260 --> 00:12:55.180
+omdat de mensen daar met een specifiek doel bouwen.
+
+00:12:55.400 --> 00:12:58.740
+Niets daarvan is ingewikkeld en het komt overeen met hoe de meeste verstandige bedrijven
+
+00:12:58.740 --> 00:13:00.900
+al omgaan met gedeelde schijven en vergaderuimtes.
+
+00:13:01.060 --> 00:13:03.280
+Er is ook een kant voor de makers in deze balans.
+
+00:13:03.280 --> 00:13:07.020
+Het advies van Microsoft voor de bouwers is kort en het onthouden waard.
+
+00:13:07.200 --> 00:13:11.820
+Hou de werkomgeving schoon, deel zorgvuldig en bescherm de data die aan je is toevertrouwd.
+
+00:13:11.980 --> 00:13:16.080
+Die drie gewoontes voorkomen de meeste problemen waarvoor beheer in het leven is geroepen.
+
+00:13:16.260 --> 00:13:19.640
+Goed beheer komt vanuit jouw perspectief dus neer op drie simpele dingen.
+
+00:13:19.860 --> 00:13:22.520
+Je weet waar je moet bouwen, je weet waar je op mag aansluiten
+
+00:13:22.520 --> 00:13:25.360
+en je weet precies aan wie je het moet vragen als je meer nodig hebt,
+
+00:13:25.620 --> 00:13:27.660
+wat het hele idee terugbrengt naar waar we begonnen.
+
+00:13:27.880 --> 00:13:30.440
+Wat je eigenlijk wilt is geen regelboek dat niemand leest,
+
+00:13:30.440 --> 00:13:34.580
+maar een set gewoontes die iedereen begrijpt en dat verschil is precies waar het om draait.
+
+00:13:34.780 --> 00:13:37.520
+De korte versie, laten we alles eens op een rij zetten.
+
+00:13:37.760 --> 00:13:40.700
+Beheer is de setregels die het power platform bruikbaar houdt.
+
+00:13:40.940 --> 00:13:42.680
+Omgevingen zijn de ruimtes waar je werk in leeft,
+
+00:13:42.920 --> 00:13:46.600
+data beleid zijn de verkeersregels die bepalen welke connectoren gecombineerd mogen worden
+
+00:13:46.600 --> 00:13:49.200
+en een center of excellence is het team dat die regels beheert.
+
+00:13:49.540 --> 00:13:52.000
+Monitoring is hoe men ontdekt wanneer er iets aandacht nodig heeft.
+
+00:13:52.260 --> 00:13:54.480
+Geen van deze onderdelen is op zichzelf ingewikkeld.
+
+00:13:54.660 --> 00:13:58.540
+De kunst is om te zien hoe ze samenkomen en dat is het deel dat de meeste beginnershandleidingen overslaan.
+
+00:13:58.540 --> 00:14:01.280
+Dit is het nieuwe perspectief om mee te nemen uit deze aflevering.
+
+00:14:01.440 --> 00:14:03.960
+Beheer is niet de prijs die je betaalt voor het gebruik van het power platform,
+
+00:14:04.140 --> 00:14:06.600
+het is de reden dat je het kunt blijven gebruiken naarmate je werk groeit
+
+00:14:06.600 --> 00:14:09.360
+en de reden dat wat je vorig jaar hebt gebouwd, volgend jaar nog steeds werkt.
+
+00:14:09.560 --> 00:14:10.960
+Zodra je de onderdelen kunt benoemen,
+
+00:14:11.140 --> 00:14:12.900
+is governance niet langer een muur waar je tegenaan loopt,
+
+00:14:13.020 --> 00:14:14.540
+maar een reeks keuzes die je echt kunt maken.
+
+00:14:14.700 --> 00:14:16.900
+Ik laat je daarom achter met één oprechte open vraag.
+
+00:14:17.100 --> 00:14:18.280
+Als je morgen de deur uit zou lopen,
+
+00:14:18.420 --> 00:14:21.620
+zou iemand anders in je organisatie dan de apps en flows kunnen uitleggen die jij hebt gebouwd.
+
+00:14:21.760 --> 00:14:23.660
+Als je een antwoord hebt, dan hoor ik het graag.
+
+00:14:23.660 --> 00:14:26.640
+Deel het in de comments en abonneer je op M365 FM
+
+00:14:26.640 --> 00:14:29.420
+als je meer wilt weten over de tools en de mindset voor werk dat blijft staan.

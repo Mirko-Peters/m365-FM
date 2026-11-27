@@ -1,0 +1,2470 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.020
+Willkommen beim M3-Turm vom 60FM-Podcast, wo wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.960 --> 00:00:09.720
+Eingangs. Ihre Daten sind bereit, bis jemand sie bereinigen muss.
+
+00:00:10.400 --> 00:00:12.600
+Ihre Berichte scheitern nicht, weil es dem Unternehmen an Daten mangelt.
+
+00:00:13.280 --> 00:00:18.080
+Sie scheitern, weil immer noch jemand diesen Excel-Export öffnen, Datumsangaben korrigieren, leere Zeilen löschen, Spalten umbenennen
+
+00:00:18.080 --> 00:00:20.740
+und dann hoffen muss, dass sich bis zur nächsten Aktualisierung nichts geändert hat.
+
+00:00:21.480 --> 00:00:23.520
+Der eigentliche Problem hier ist nicht der Zugriff, sondern das Vertrauen.
+
+00:00:24.040 --> 00:00:27.600
+Sie denken vielleicht, Sie brauchen ein weiteres Dashboard, aber was Sie tatsächlich brauchen, ist ein wiederholbarer Weg,
+
+00:00:27.600 --> 00:00:31.740
+um unordentliche Eingaben in Tabellen zu verwandeln, die genutzt werden können, ohne Fragen zu müssen, welche Version korrekt ist.
+
+00:00:32.460 --> 00:00:38.260
+Willkommen beim M3-Turm vom 60FM-Podcast, wo wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:38.940 --> 00:00:45.780
+Dataflows Gen 2 bringt die vertraute Power-Query-Erfahrung in Microsoft Fabric und ändert, wer Daten aufbereiten kann, ohne auf einen Entwickler warten zu müssen.
+
+00:00:47.560 --> 00:00:52.660
+Das ist wichtig, weil der Engpass in den meisten Unternehmen nicht das Dashboard ist, sondern die Bereinigung, bevor jemand eines erstellen kann.
+
+00:00:53.600 --> 00:00:55.000
+Was Dataflows Gen 2 eigentlich macht?
+
+00:00:55.000 --> 00:01:01.000
+Dataflows Gen 2 ist das Low-Code-Tool von Fabric, das Daten abruft, bereinigt und das Ergebnis dorthin sendet, wo es benötigt wird.
+
+00:01:01.860 --> 00:01:08.080
+Es steht zwischen dem Quellsystem und den Leuten, die saubere Daten für Berichte, Analysen oder was auch immer als nächstes in der Pipeline ansteht, benötigen.
+
+00:01:08.640 --> 00:01:10.100
+Hier ist, was ein Team normalerweise ausbremst.
+
+00:01:10.660 --> 00:01:16.380
+Ein Verkaufsexport kommt mit nutzlosen Spalten an, Datumsangaben erscheinen als Text, vollständige Namen müssen in Vor- und Nachnamen aufgeteilt werden.
+
+00:01:16.640 --> 00:01:22.520
+Testkonten sind mit echten Transaktionen vermischt und zwei Tabellen müssen zusammengeführt werden, weil eine die Transaktion und die andere die Produktnamen enthält.
+
+00:01:22.520 --> 00:01:30.120
+Diese Aufgaben sind nicht schwierig, weil die Logik geheimnisvoll ist, sie sind schwierig, weil sie sich wiederholen und manuelle Bereinigung jedes Mal ein etwas anderes Ergebnis liefert.
+
+00:01:30.900 --> 00:01:33.520
+Dataflows Gen 2 verwandelt diese manuellen Entscheidungen in gespeicherte Schritte.
+
+00:01:34.060 --> 00:01:40.340
+Sie verbinden sich mit einer Quelle, Power Query zeigt Ihnen eine Vorschau und von dort aus können Sie Spalten entfernen, Zeilen filtern, einen Datentyp ändern,
+
+00:01:40.340 --> 00:01:46.280
+einen fehlerhaften Wert ersetzen, ein Feld aufteilen, Datensätze gruppieren, Tabellen zusammenführen oder Daten von Breit nach Schmal umformen.
+
+00:01:47.580 --> 00:01:52.340
+Jede Aktion landet in der Liste der angewendeten Schritte und das ist wichtig, weil der Dataflow nicht nur die heutige Datei bereinigt.
+
+00:01:53.240 --> 00:01:56.540
+Er merkt sich den gesamten Prozess und führt ihn erneut aus, wenn die Datei von morgen eintrifft.
+
+00:01:57.420 --> 00:01:59.160
+Unter der Haube schreibt Power Query M Sprache.
+
+00:02:00.080 --> 00:02:02.420
+Sie müssen sie für normale Arbeit nicht schreiben, aber sie ist da, wenn Sie sie brauchen.
+
+00:02:02.420 --> 00:02:09.040
+Jeder Klick wird zu einem lesbaren Transformationsschritt, was Ihnen einen Ausweg bietet, wenn der visuelle Editor einen Sonderfall nicht abdeckt.
+
+00:02:09.820 --> 00:02:12.940
+Beginnen Sie mit der Benutzeroberfläche und wechseln Sie nur dann zu M, wenn die Aufgabe es erfordert.
+
+00:02:13.500 --> 00:02:19.260
+Fabric bietet Dataflows Gen 2 Zugriff auf eine Vielzahl von Connectoren, Dateien, Datenbanken, Webdiensten, Geschäftsanwendungen und APIs,
+
+00:02:19.460 --> 00:02:21.560
+einschließlich der vertrauten Quellen, die täglich genutzt werden.
+
+00:02:22.500 --> 00:02:27.420
+Excel, SharePoint, SQL Server, Azure SQL, Dynamics, Salesforce und JSON-basierte Dienste.
+
+00:02:27.960 --> 00:02:29.820
+Doch ein Connector allein löst noch keine Probleme.
+
+00:02:29.820 --> 00:02:33.060
+Die Anbindung an 10 Systeme kann einfach 10 neue Fehlerquellen schaffen.
+
+00:02:33.900 --> 00:02:39.440
+Der echte Mehrwert entsteht erst, wenn Sie klare Bereinigungsregeln anwenden und die Ausgabe dorthin senden, wo andere Fabric Workloads Sie nutzen können.
+
+00:02:39.920 --> 00:02:41.180
+Der normale Ablauf ist unkompliziert.
+
+00:02:41.620 --> 00:02:46.200
+Quelle wählen, anmelden, Daten in Power Query aufbereiten, ein Ziel für jede Ausgabeabfrage festlegen,
+
+00:02:46.340 --> 00:02:51.340
+den Dataflow veröffentlichen, ausführen und einen Aktualisierungszeitplan einrichten, damit der Prozess ohne manuelle Eingriffe weiterlagt.
+
+00:02:51.600 --> 00:02:53.280
+Dieser Ablauf klingt grundlegend, weil er das auch sein soll.
+
+00:02:53.720 --> 00:02:56.860
+Ein Business Analyst sollte kein maßgeschneidertes Python-Projekt benötigen,
+
+00:02:56.860 --> 00:03:00.360
+nur um leere Datensätze aus einer wöchentlichen Datei zu entfernen und einen Produktcode zu standardisieren.
+
+00:03:00.860 --> 00:03:03.100
+Verwechseln Sie jedoch eine einfache Erstellung nicht mit einem Umbedeutenden auf.
+
+00:03:03.440 --> 00:03:06.840
+Ein gut strukturierter Dataflow macht aus einer persönlichen Tabellenkalkulationsroutine
+
+00:03:06.840 --> 00:03:09.200
+einen verwalteten Prozess, auf den sich das gesamte Team verlassen kann.
+
+00:03:09.560 --> 00:03:11.740
+Die Bereinigung wird transparent, die Schritte werden wiederholbar
+
+00:03:11.740 --> 00:03:13.880
+und das Ergebnis steht mehr als nur einer Person zur Verfügung.
+
+00:03:14.780 --> 00:03:16.060
+Und das bringt uns zur nächsten Frage.
+
+00:03:16.060 --> 00:03:18.800
+Saubere Daten helfen nur, wenn Sie an einem nützlichen Ort landen,
+
+00:03:19.820 --> 00:03:22.220
+an einem Ort an dem Fabric sie als geteilte Daten behandeln kann,
+
+00:03:22.280 --> 00:03:24.420
+statt als weitere private Datei auf dem Desktop eines Mitarbeiters.
+
+00:03:25.400 --> 00:03:27.900
+Von der fehlerhaften Quelle zur Fabriktabelle. Worum geht es?
+
+00:03:28.880 --> 00:03:31.760
+Jeden Montagmorgen startet Ihr Finanzteam auf denselben Excel-Export,
+
+00:03:32.200 --> 00:03:34.260
+doch die Datei kommt nie so an wie in der Vorwoche.
+
+00:03:34.840 --> 00:03:37.720
+In einer Woche enthält die Datumspalte echte Daten, in der nächsten stecken sie als Text fest.
+
+00:03:38.000 --> 00:03:39.140
+Leere Zeilen tauchen oben auf.
+
+00:03:39.680 --> 00:03:41.240
+Aus der Kundennummer wird plötzlich eine Kunden-ID.
+
+00:03:41.920 --> 00:03:43.840
+Jemand fügt Notizen in die Mitte des Tabellenblatts ein
+
+00:03:43.840 --> 00:03:45.280
+und die gesamte Berichtaktualisierung bricht ab.
+
+00:03:45.560 --> 00:03:47.420
+Sie denken, das Problem ist die Datei. Die falsche Pferde.
+
+00:03:47.800 --> 00:03:50.380
+Das eigentliche Problem ist, dass Sie keinen Prozess haben, der mit diesem Chaos rechnet.
+
+00:03:50.700 --> 00:03:52.520
+Genau hier beweist ein Dataflow Gen 2 sein wird.
+
+00:03:52.900 --> 00:03:54.040
+Sie verbinden sich einmal mit der Quelle
+
+00:03:54.040 --> 00:03:57.220
+und erstellen dann eine Reihe von Schritten, die alles bewältigen, was die Quelle Ihnen liefert.
+
+00:03:57.560 --> 00:04:00.020
+Entfernen Sie leere Zeilen, fördern Sie die richtige Kopfzeile,
+
+00:04:00.200 --> 00:04:02.240
+benennen Sie schwankende Spalten gemäß Ihrem Modell um,
+
+00:04:02.420 --> 00:04:04.140
+konvertieren Sie Daten vor der Berichterstellung,
+
+00:04:04.140 --> 00:04:06.860
+filtern Sie Testkonten heraus und behalten Sie Testkonten heraus
+
+00:04:06.860 --> 00:04:09.180
+und behalten Sie nur die Felder, die das Unternehmen wirklich benötigt.
+
+00:04:09.980 --> 00:04:12.220
+Die Datei mag zu uns aber ankommen, Ihr Prozess muss es aber nicht sein.
+
+00:04:13.840 --> 00:04:16.980
+Eine Abfrage hinterlegt, sodass die nächste Aktualisierung denselben Regeln folgt.
+
+00:04:17.760 --> 00:04:19.980
+Wenn eine Spalte verschwindet oder sich die Quelle so ändert,
+
+00:04:20.020 --> 00:04:21.440
+dass der Datenfluss sie nicht verarbeiten kann,
+
+00:04:21.520 --> 00:04:24.040
+schlägt die Aktualisierung fehl, anstatt unbemerkt Zahlen zu liefern,
+
+00:04:24.120 --> 00:04:25.000
+denen niemand vertrauen kann.
+
+00:04:25.940 --> 00:04:28.220
+Dieser Fehler ist zwar ärgerlich, aber wesentlich sicherer,
+
+00:04:28.240 --> 00:04:30.220
+als ein Bericht, der normal aussieht, aber falsche Daten enthält.
+
+00:04:31.080 --> 00:04:31.920
+Hier kommt der neue Ansatz.
+
+00:04:32.360 --> 00:04:33.580
+Vorbereitung ist nur der halbe Erfolg.
+
+00:04:33.920 --> 00:04:35.960
+Sobald die Abfrage eine saubere Tabelle erzeugt,
+
+00:04:36.000 --> 00:04:37.400
+müssen Sie entscheiden, wo diese gespeichert wird.
+
+00:04:37.980 --> 00:04:39.660
+Eine Lakehouse-Tabelle ist meist am sinnvollsten,
+
+00:04:39.720 --> 00:04:41.640
+wenn Fabric Workloads die Daten gemeinsam nutzen sollen.
+
+00:04:41.640 --> 00:04:43.780
+Sie können die Ausgabe auch an ein Warehouse
+
+00:04:43.780 --> 00:04:45.820
+wie SQL oder Snowflake senden, je nachdem,
+
+00:04:46.160 --> 00:04:48.140
+wo das nächste Team oder der nächste Prozess Sie benötigen.
+
+00:04:48.640 --> 00:04:50.500
+Diese Wahl verändert den Weg nach der Vorbereitung
+
+00:04:50.500 --> 00:04:52.160
+und genau das übersehen die meisten Leute.
+
+00:04:52.820 --> 00:04:54.720
+Ein Lakehouse speichert Daten in einem einzigen Lake,
+
+00:04:54.820 --> 00:04:56.340
+der gemeinsamen Speicherebene von Fabric,
+
+00:04:56.440 --> 00:04:57.720
+ein Ort für alle Fabric-Daten,
+
+00:04:58.040 --> 00:05:00.600
+statt dass jedes Team Dateien in verschiedene Ecken des Unternehmens kopiert.
+
+00:05:01.460 --> 00:05:03.760
+Wenn ein Dataflow Gen 2 dort eine Tabelle schreibt,
+
+00:05:03.860 --> 00:05:05.320
+lesen andere Fabric-Tools diese direkt,
+
+00:05:05.500 --> 00:05:07.040
+ohne dass jemand eine Datei herunterladen,
+
+00:05:07.120 --> 00:05:08.840
+umbenennen und woanders hochladen muss.
+
+00:05:08.840 --> 00:05:11.620
+Viele Lakehouse-Tabellen verwenden das Delta-Funk.
+
+00:05:12.020 --> 00:05:13.960
+Sie müssen kein Storage-Experte werden, um damit zu arbeiten.
+
+00:05:14.400 --> 00:05:15.680
+Für die Datennutzer bedeutet dies,
+
+00:05:15.760 --> 00:05:17.700
+dass die Tabelle strikte Spalten und Typ-Regeln einhält
+
+00:05:17.700 --> 00:05:19.540
+und Änderungen als Tabellenoperationen stattfinden,
+
+00:05:19.660 --> 00:05:21.560
+anstatt dass zufällige Dateien während der Aktualisierung
+
+00:05:21.560 --> 00:05:22.200
+überschrieben werden.
+
+00:05:23.100 --> 00:05:24.780
+Das ermöglicht eine zuverlässige Übergabe
+
+00:05:24.780 --> 00:05:26.500
+zwischen der Person, die die Daten aufbereitet,
+
+00:05:26.580 --> 00:05:27.680
+und der Person, die ein Modell erstellt,
+
+00:05:27.760 --> 00:05:29.000
+SQL schreibt oder ein Notebook ausführt.
+
+00:05:29.500 --> 00:05:31.100
+Vielleicht arbeitet Ihr Team aber hauptsächlich mit SQL.
+
+00:05:31.440 --> 00:05:32.580
+Ein Warehouse ist sinnvoller,
+
+00:05:32.620 --> 00:05:34.080
+wenn Sie strukturierte Tabellen für Berichte
+
+00:05:34.080 --> 00:05:35.320
+und geschäftliche Abfragen benötigen.
+
+00:05:35.320 --> 00:05:37.260
+Azure SQL oder Snowflake passen dann,
+
+00:05:37.340 --> 00:05:39.620
+wenn Fabrik Daten für Systeme außerhalb von Fabrik vorbereitet.
+
+00:05:39.880 --> 00:05:41.220
+Das richtige Ziel hängt nicht davon ab,
+
+00:05:41.280 --> 00:05:42.460
+welche Option fortschrittlicher klingt,
+
+00:05:42.760 --> 00:05:44.200
+sondern davon, wer die Tabelle als nächstes braucht
+
+00:05:44.200 --> 00:05:44.960
+und wie sie verwendet wird.
+
+00:05:45.480 --> 00:05:46.620
+Dann planen Sie die Aktualisierung.
+
+00:05:46.780 --> 00:05:48.200
+Vielleicht wird die Quelle stündlich aktualisiert,
+
+00:05:48.300 --> 00:05:49.780
+vielleicht nur nach einem wöchentlichen Export.
+
+00:05:50.520 --> 00:05:52.400
+So oder so läuft der Datenfluss in diesem Rhythmus,
+
+00:05:52.460 --> 00:05:53.440
+anstatt sich darauf zu verlassen,
+
+00:05:53.520 --> 00:05:55.280
+dass jemand an das Tabellenkalkulationsritual denkt.
+
+00:05:55.900 --> 00:05:56.980
+Das entlastet die Analysten,
+
+00:05:57.120 --> 00:05:58.460
+schafft aber auch eine Erwartungshaltung.
+
+00:05:58.660 --> 00:06:00.900
+Die Tabelle hat nun ein bekanntes Aktualisierungsmuster
+
+00:06:00.900 --> 00:06:02.580
+und die Leute werden sie als gemeinsame Quelle nutzen.
+
+00:06:02.580 --> 00:06:04.540
+Bei Tabellen, die ständig wachsen,
+
+00:06:04.640 --> 00:06:06.360
+reduziert eine inkrementelle Aktualisierung die Arbeitslast.
+
+00:06:06.780 --> 00:06:07.860
+Anstatt bei jedem Durchlauf
+
+00:06:07.860 --> 00:06:09.340
+jeden historischen Datensatz zu lesen,
+
+00:06:09.520 --> 00:06:11.660
+konzentriert sich der Datenfluss auf neue oder geänderte Zeilen,
+
+00:06:11.740 --> 00:06:13.560
+sofern die Quelle und das Design dieses Muster unterstützen.
+
+00:06:14.180 --> 00:06:16.020
+Eine Verkaufstabelle mit jahrelangen Transaktionen
+
+00:06:16.020 --> 00:06:17.580
+muss nicht die gesamte Historie neu verarbeiten,
+
+00:06:17.780 --> 00:06:19.340
+nur weil die Bestellungen von gestern eingetroffen sind.
+
+00:06:19.840 --> 00:06:20.460
+Sie könnten denken,
+
+00:06:20.560 --> 00:06:22.180
+dass bei No-Code Design Entscheidungen wegfallen.
+
+00:06:22.640 --> 00:06:23.180
+Das tun sie nicht.
+
+00:06:23.480 --> 00:06:25.420
+Sie werden lediglich einfacher zu treffen und besser sichtbar.
+
+00:06:26.060 --> 00:06:26.960
+Ihr Zielort beeinflusst,
+
+00:06:26.960 --> 00:06:28.060
+wer die Daten konsumieren kann.
+
+00:06:28.560 --> 00:06:30.060
+Ihr Aktualisierungsplan steuert die Aktualität
+
+00:06:30.060 --> 00:06:30.840
+und die Kapazitätsausfläche.
+
+00:06:30.840 --> 00:06:32.720
+Ihr inkrementelles Muster bestimmt,
+
+00:06:32.800 --> 00:06:34.140
+wie viele Daten jedes Mal gelesen werden.
+
+00:06:34.700 --> 00:06:36.900
+Dataflows Gen 2 beseitigen also die wiederkehrende Bereinigung,
+
+00:06:37.120 --> 00:06:37.560
+verlangen aber,
+
+00:06:37.660 --> 00:06:39.240
+dass sie sich über die zu erstellende Tabelle im Klang sind.
+
+00:06:39.500 --> 00:06:40.040
+Wird sie gespeichert?
+
+00:06:40.340 --> 00:06:40.860
+Wer will sie nutzen?
+
+00:06:41.240 --> 00:06:42.060
+Wie aktuell muss sie sein?
+
+00:06:42.640 --> 00:06:44.300
+Diese Fragen führen direkt zum größeren Wandel
+
+00:06:44.300 --> 00:06:45.380
+von Gen 1 zu Gen 2,
+
+00:06:45.480 --> 00:06:47.340
+denn Gen 2 verändert weit mehr als nur den Editor,
+
+00:06:47.480 --> 00:06:48.360
+indem sie die Schritte erstellen.
+
+00:06:49.380 --> 00:06:51.460
+Gen 1 vs. Gen 2, mehr als nur neuer Namen.
+
+00:06:51.800 --> 00:06:52.640
+Lassen Sie mich mit dem Micken beginnen.
+
+00:06:53.320 --> 00:06:55.160
+Dataflow Gen 1 stammte aus der Power BI-Welt.
+
+00:06:55.460 --> 00:06:57.940
+Er bot Teams eine cloudbasierte Power Query-Erfahrung,
+
+00:06:58.000 --> 00:06:59.260
+mit der sie Daten einmal aufbereiten
+
+00:06:59.260 --> 00:07:01.000
+und den ganz Power BI wiederverwenden konnten.
+
+00:07:01.700 --> 00:07:03.380
+Für viele Teams löste das ein echtes Problem.
+
+00:07:03.720 --> 00:07:04.680
+Statt dass jeder Berichtsersteller
+
+00:07:04.680 --> 00:07:06.120
+dieselben Bereinigungsschritte neu aufbaute,
+
+00:07:06.260 --> 00:07:07.660
+konnten sie einen Dataflow gemeinsam nutzen,
+
+00:07:07.740 --> 00:07:09.060
+der die Dataflow genackert aufbereitete.
+
+00:07:09.520 --> 00:07:10.380
+Gen 1 ist nicht verschwunden.
+
+00:07:10.780 --> 00:07:12.420
+Bestehende Gen 1 Dataflows laufen weiterhin
+
+00:07:12.420 --> 00:07:13.760
+und eignen sich in manchen Umgebungen
+
+00:07:13.760 --> 00:07:14.960
+für Power BI-fokussierte Arbeiten.
+
+00:07:15.300 --> 00:07:16.140
+Aber hier kommt die Täuschung.
+
+00:07:16.400 --> 00:07:17.820
+Sie denken, Gen 2 sei nur ein neuer Editor
+
+00:07:17.820 --> 00:07:18.920
+mit ein paar zusätzlichen Funktionen.
+
+00:07:19.420 --> 00:07:20.260
+Die eigentliche Geschichte ist,
+
+00:07:20.360 --> 00:07:22.720
+dass Gen 2 dieselbe vertraute Bearbeitungserfahrung nimmt
+
+00:07:22.720 --> 00:07:24.040
+und sie in Fabric integriert,
+
+00:07:24.040 --> 00:07:25.680
+wo aufbereitete Daten weit mehr
+
+00:07:25.680 --> 00:07:27.340
+als nur ein Power BI-Modell speisen können.
+
+00:07:28.220 --> 00:07:30.000
+Das verändert die Aufgabe des Dataflows grundlegend.
+
+00:07:30.600 --> 00:07:32.060
+Bei Gen 1 konzentrierte sich das Muster
+
+00:07:32.060 --> 00:07:32.980
+auf den Power BI-Speicher
+
+00:07:32.980 --> 00:07:34.340
+und den Zugriff über Dataflow Connectors.
+
+00:07:34.900 --> 00:07:36.300
+Bei Gen 2 sendet jede Abfrage
+
+00:07:36.300 --> 00:07:38.100
+ihr Ergebnis an einen Zielort ihrer Wahl.
+
+00:07:39.220 --> 00:07:40.600
+Eine Fabric Lakehouse-Tabelle,
+
+00:07:40.780 --> 00:07:41.660
+ein Warehouse,
+
+00:07:41.780 --> 00:07:43.120
+eine Fabric SQL-Datenbank,
+
+00:07:43.240 --> 00:07:44.400
+Azure SQL, Snowflake,
+
+00:07:44.500 --> 00:07:45.220
+Azure Data Explorer,
+
+00:07:45.360 --> 00:07:46.240
+eine KQL-Datenbank,
+
+00:07:46.360 --> 00:07:47.200
+Azure Data Lake Storage,
+
+00:07:47.300 --> 00:07:48.480
+Gen 2 oder SharePoint-Dateien.
+
+00:07:48.900 --> 00:07:50.440
+Sie bereiten Daten also nicht mehr
+
+00:07:50.440 --> 00:07:51.360
+nur für einen Bericht auf.
+
+00:07:51.920 --> 00:07:52.600
+Sie bereiten sie vielleicht
+
+00:07:52.600 --> 00:07:53.460
+für einen SQL-Analysten,
+
+00:07:53.560 --> 00:07:53.980
+ein Notebook,
+
+00:07:54.040 --> 00:07:54.500
+eine Pipeline,
+
+00:07:54.580 --> 00:07:55.580
+eine Echtzeitanalyse-Workload
+
+00:07:55.580 --> 00:07:57.100
+oder eine nachgelagerte Anwendung vor.
+
+00:07:57.600 --> 00:07:59.100
+Die Power Query-Schritte bleiben vertraut,
+
+00:07:59.180 --> 00:07:59.680
+während die Daten
+
+00:07:59.680 --> 00:08:00.580
+Teil eines umfassenderen
+
+00:08:00.580 --> 00:08:01.540
+Fabric-Prozesses werden.
+
+00:08:02.740 --> 00:08:03.720
+Gen 2 nutzt zudem
+
+00:08:03.720 --> 00:08:04.720
+Fabric SQL-Compute
+
+00:08:04.720 --> 00:08:05.680
+für die Datenaufbereitung.
+
+00:08:06.220 --> 00:08:06.920
+Microsoft nennt es
+
+00:08:06.920 --> 00:08:07.960
+High-Performance-Compute,
+
+00:08:08.220 --> 00:08:09.280
+das verwaltete Lakehouse-
+
+00:08:09.280 --> 00:08:10.140
+und Warehouse-Elemente
+
+00:08:10.140 --> 00:08:11.060
+im Arbeitsbereich nutzt.
+
+00:08:11.820 --> 00:08:12.640
+Möglicherweise sehen sie
+
+00:08:12.640 --> 00:08:13.600
+automatisch Elemente
+
+00:08:13.600 --> 00:08:15.020
+wie Dataflow Staging Lakehouse
+
+00:08:15.020 --> 00:08:16.280
+oder Dataflow Staging Warehouse
+
+00:08:16.280 --> 00:08:16.820
+auftauchen.
+
+00:08:17.780 --> 00:08:18.400
+Lassen Sie diese in Ruhe.
+
+00:08:20.440 --> 00:08:21.480
+Funktionsweise von Gen 2.
+
+00:08:21.960 --> 00:08:22.780
+Die Bearbeitungserfahrung
+
+00:08:22.780 --> 00:08:23.260
+fühlt sich zudem
+
+00:08:23.260 --> 00:08:23.960
+weniger einfällig an.
+
+00:08:24.320 --> 00:08:25.260
+Gen 2 speichert Änderungen
+
+00:08:25.260 --> 00:08:26.100
+automatisch während der Arbeit.
+
+00:08:26.480 --> 00:08:27.680
+Wenn sich also Ihr Browser schließt
+
+00:08:27.680 --> 00:08:28.640
+oder die Verbindung unterbrochen wird,
+
+00:08:28.720 --> 00:08:29.620
+verlieren Sie keine lange Kette
+
+00:08:29.620 --> 00:08:30.480
+von Transformationen,
+
+00:08:30.520 --> 00:08:31.180
+nur weil Sie das Speichern
+
+00:08:31.180 --> 00:08:32.300
+im perfekten Moment vergessen haben.
+
+00:08:32.460 --> 00:08:33.040
+Wenn Sie bereit sind,
+
+00:08:33.100 --> 00:08:33.600
+veröffentlichen Sie.
+
+00:08:33.900 --> 00:08:34.940
+Das speichert den Datenfluss
+
+00:08:34.940 --> 00:08:35.620
+und führt die Validierung
+
+00:08:35.620 --> 00:08:36.260
+im Hintergrund aus.
+
+00:08:36.500 --> 00:08:37.460
+Kein Warten mehr auf Prüfungen,
+
+00:08:37.540 --> 00:08:38.300
+bevor Sie fortfahren können.
+
+00:08:38.400 --> 00:08:39.000
+Klingt nach einer kleinen
+
+00:08:39.000 --> 00:08:39.820
+Komfortverbesserung,
+
+00:08:40.040 --> 00:08:40.620
+aber wer schon einmal
+
+00:08:40.620 --> 00:08:41.740
+eine verlorene Power Query-Kette
+
+00:08:41.740 --> 00:08:42.460
+neu aufbauen musste,
+
+00:08:42.560 --> 00:08:43.500
+weiß genau, warum das wichtig ist.
+
+00:08:43.860 --> 00:08:44.820
+Auch der Betrieb verbessert sich.
+
+00:08:45.140 --> 00:08:46.460
+N2 arbeitet mit dem Monitoring Hub
+
+00:08:46.460 --> 00:08:47.080
+von Fabric zusammen
+
+00:08:47.080 --> 00:08:47.920
+und bietet einen umfassenden
+
+00:08:47.920 --> 00:08:48.680
+Aktualisierungsverlauf,
+
+00:08:48.760 --> 00:08:49.060
+sodass Sie sehen,
+
+00:08:49.140 --> 00:08:49.940
+ob ein Vorgang erfolgreich war,
+
+00:08:50.000 --> 00:08:50.460
+fehlgeschlagen ist,
+
+00:08:50.500 --> 00:08:50.940
+weil geschlagen ist.
+
+00:08:51.280 --> 00:08:52.060
+Ein geplanter Prozess
+
+00:08:52.060 --> 00:08:53.160
+braucht mehr als nur einen grünen Hack.
+
+00:08:53.660 --> 00:08:53.940
+Sie müssen,
+
+00:08:54.020 --> 00:08:55.040
+welcher Durchlauf fehlgeschlagen ist,
+
+00:08:55.080 --> 00:08:55.820
+wann das geschah und wo Sie
+
+00:08:55.820 --> 00:08:56.700
+nach der Ursache suchen müssen.
+
+00:08:57.100 --> 00:08:57.860
+Und hier ist der Knackpunkt.
+
+00:08:58.400 --> 00:08:59.180
+Co-Pilot in Fabric
+
+00:08:59.180 --> 00:09:00.200
+kann auch bei der Erstellung helfen.
+
+00:09:00.700 --> 00:09:01.780
+Beschreiben Sie eine Transformation
+
+00:09:01.780 --> 00:09:02.720
+in einfacher Sprache,
+
+00:09:02.860 --> 00:09:03.720
+etwa nur Kunden aus einer
+
+00:09:03.720 --> 00:09:04.700
+bestimmten Region zu behalten
+
+00:09:04.700 --> 00:09:05.960
+oder Mitarbeiter nach Stadt zu kopieren.
+
+00:09:06.280 --> 00:09:07.840
+Co-Pilot liefert eine Antwortkarte
+
+00:09:07.840 --> 00:09:09.440
+und fügt die entsprechenden Schritte hinzu,
+
+00:09:09.660 --> 00:09:10.960
+damit Sie das Ergebnis prüfen können,
+
+00:09:11.200 --> 00:09:12.020
+bevor Sie es akzeptieren.
+
+00:09:12.180 --> 00:09:12.680
+Behalten Sie aber
+
+00:09:12.680 --> 00:09:13.660
+die menschliche Kontrolle bei.
+
+00:09:13.920 --> 00:09:15.080
+Eine Anweisung kann klarklingen,
+
+00:09:15.260 --> 00:09:16.460
+während Sie eine Geschäftsregel verbirgt,
+
+00:09:16.520 --> 00:09:17.280
+auf die sich niemand geeinigt.
+
+00:09:17.620 --> 00:09:18.780
+Wenn jemand zum Beispiel verlangt,
+
+00:09:18.820 --> 00:09:19.960
+inaktive Kunden zu entfernen,
+
+00:09:20.540 --> 00:09:21.000
+müssen Sie wissen,
+
+00:09:21.080 --> 00:09:22.280
+wie die Quelle inaktiv definiert
+
+00:09:22.280 --> 00:09:23.340
+und ob diese Regel überhaupt
+
+00:09:23.340 --> 00:09:24.780
+in diesen speziellen Datenfluss gehört.
+
+00:09:25.800 --> 00:09:26.900
+Leistung ist ein weiterer Teil
+
+00:09:26.900 --> 00:09:27.700
+der Gen 2-Geschichte,
+
+00:09:27.820 --> 00:09:28.680
+benötigt aber Kontext.
+
+00:09:29.380 --> 00:09:30.500
+In einem unabhängigen Test
+
+00:09:30.500 --> 00:09:31.540
+mit etwa 30 Millionen
+
+00:09:31.540 --> 00:09:32.640
+New Yorker Taxifahrten
+
+00:09:32.640 --> 00:09:33.540
+benötigte Gen 2
+
+00:09:33.540 --> 00:09:34.660
+durchschnittlich 5 Minuten
+
+00:09:34.660 --> 00:09:36.020
+und 55 Sekunden.
+
+00:09:36.900 --> 00:09:37.640
+Gen 1 lag bei
+
+00:09:37.640 --> 00:09:38.580
+durchschnittlich 19 Minuten
+
+00:09:38.580 --> 00:09:39.520
+und 34 Sekunden
+
+00:09:39.520 --> 00:09:40.500
+unter Fabrikkapazität
+
+00:09:40.500 --> 00:09:41.440
+und etwa 14 Minuten
+
+00:09:41.440 --> 00:09:42.380
+und 54 Sekunden
+
+00:09:42.380 --> 00:09:43.300
+in einem Pro-Arbeitsbereich.
+
+00:09:43.680 --> 00:09:44.820
+Diese Zahlen sind kein Versprechen
+
+00:09:44.820 --> 00:09:46.040
+für Ihren spezifischen Datenfluss.
+
+00:09:46.300 --> 00:09:47.340
+Ihre Quelle, Transformation,
+
+00:09:47.580 --> 00:09:48.700
+Kapazität, Zielvorgaben
+
+00:09:48.700 --> 00:09:49.600
+und andere Arbeitslasten
+
+00:09:49.600 --> 00:09:50.360
+beeinflussen die Laufzeit.
+
+00:09:50.780 --> 00:09:51.520
+Dennoch zeigt der Test
+
+00:09:51.520 --> 00:09:52.020
+die Richtung an.
+
+00:09:52.620 --> 00:09:53.340
+Gen 2 bietet Ihnen
+
+00:09:53.340 --> 00:09:54.320
+nicht einfach nur mehr Zielorte.
+
+00:09:54.760 --> 00:09:56.020
+Läuft als natives Fabrikelement,
+
+00:09:56.120 --> 00:09:56.800
+das für umfangreichere
+
+00:09:56.800 --> 00:09:58.200
+Datenintegrationsaufgaben ausgelegt.
+
+00:09:58.520 --> 00:09:59.080
+Aktuelle Änderungen,
+
+00:09:59.140 --> 00:09:59.640
+die Sie kennen sollten.
+
+00:10:00.460 --> 00:10:01.860
+Seit April 2026
+
+00:10:01.860 --> 00:10:02.680
+erlaubt Microsoft
+
+00:10:02.680 --> 00:10:03.460
+nicht mehr das Erstellen
+
+00:10:03.460 --> 00:10:04.900
+des früheren Gen 2 Classic-Typs
+
+00:10:04.900 --> 00:10:06.140
+ohne Unterstützung für CICD
+
+00:10:06.140 --> 00:10:07.020
+und Git-Integration.
+
+00:10:07.540 --> 00:10:08.620
+Neue Gen 2 Elemente
+
+00:10:08.620 --> 00:10:09.380
+folgen standardmäßig
+
+00:10:09.380 --> 00:10:10.380
+dem Pfad mit CICD
+
+00:10:10.380 --> 00:10:11.120
+und Git-Unterstützung.
+
+00:10:11.420 --> 00:10:12.840
+Ältere klassische Gen 2 Elemente
+
+00:10:12.840 --> 00:10:13.560
+funktionieren weiterhin
+
+00:10:13.560 --> 00:10:14.440
+und Microsoft bietet
+
+00:10:14.440 --> 00:10:15.140
+Migrationspfade
+
+00:10:15.140 --> 00:10:15.900
+wie Speichern und an.
+
+00:10:16.300 --> 00:10:16.900
+Sie könnten denken,
+
+00:10:16.940 --> 00:10:17.600
+die Upgrade-Geschichte
+
+00:10:17.600 --> 00:10:18.320
+endet bei schnelleren
+
+00:10:18.320 --> 00:10:18.880
+Aktualisierungen
+
+00:10:18.880 --> 00:10:19.460
+und Git-Supporten.
+
+00:10:19.660 --> 00:10:20.020
+Das tut sie.
+
+00:10:20.160 --> 00:10:21.320
+Ein schnelleres Werkzeug
+
+00:10:21.320 --> 00:10:21.780
+kann immer noch
+
+00:10:21.780 --> 00:10:22.620
+Kapazität verschwenden,
+
+00:10:22.780 --> 00:10:23.880
+langsame Aufträge erzeugen
+
+00:10:23.880 --> 00:10:24.780
+und ein Team verwirren,
+
+00:10:24.840 --> 00:10:25.500
+wenn der zugrunde liegende
+
+00:10:25.500 --> 00:10:26.600
+Rechenpfad unklar ist.
+
+00:10:27.520 --> 00:10:28.000
+Diese Spannung,
+
+00:10:28.040 --> 00:10:29.260
+die wir noch nicht thematisiert haben,
+
+00:10:29.380 --> 00:10:30.440
+werden wir als nächstes untersuchen.
+
+00:10:31.000 --> 00:10:31.580
+Die Entscheidung über
+
+00:10:31.580 --> 00:10:32.360
+Rechenleistung und Staging
+
+00:10:32.360 --> 00:10:33.200
+die meisten Teams übersehen.
+
+00:10:33.620 --> 00:10:34.560
+Unter der benutzerfreundlichen
+
+00:10:34.560 --> 00:10:35.620
+Oberfläche von Power Query
+
+00:10:35.620 --> 00:10:37.000
+muss Dataflow Gen 2 entscheiden,
+
+00:10:37.080 --> 00:10:37.800
+wo jede Transformation
+
+00:10:37.800 --> 00:10:38.500
+ausgeführt wird.
+
+00:10:38.980 --> 00:10:39.960
+Genau bei dieser einen Entscheidung
+
+00:10:39.960 --> 00:10:40.820
+verlieren die meisten Teams
+
+00:10:40.820 --> 00:10:41.500
+stillschweigend Zeit
+
+00:10:41.500 --> 00:10:42.500
+und Kapazität und Kapazität
+
+00:10:42.500 --> 00:10:42.860
+zu bemerken.
+
+00:10:43.600 --> 00:10:45.020
+Wenn ein Dataflow-Fabrik-seitige
+
+00:10:45.020 --> 00:10:45.940
+Verarbeitung benötigt,
+
+00:10:46.020 --> 00:10:47.180
+wird er über ein Staging-Lakehaus
+
+00:10:47.180 --> 00:10:47.560
+geleitet,
+
+00:10:47.760 --> 00:10:49.160
+das im Grunde als Tempo-Wehrer-Speicher
+
+00:10:49.160 --> 00:10:49.760
+zwischen der Quelle
+
+00:10:49.760 --> 00:10:50.860
+und ihrer Zieltabelle dient.
+
+00:10:51.540 --> 00:10:52.380
+Fabrik lädt die Daten,
+
+00:10:52.560 --> 00:10:53.600
+führt Transformationen durch,
+
+00:10:53.660 --> 00:10:54.300
+die das Quellsystem
+
+00:10:54.300 --> 00:10:55.120
+nicht verarbeiten kann
+
+00:10:55.120 --> 00:10:56.100
+und schreibt das Endergebnis
+
+00:10:56.100 --> 00:10:57.380
+in das von Ihnen gewählte Ziel.
+
+00:10:57.800 --> 00:10:58.040
+Ziel.
+
+00:10:58.700 --> 00:10:59.220
+Vielleicht sehen Sie
+
+00:10:59.220 --> 00:10:59.900
+Staging-Elemente
+
+00:10:59.900 --> 00:11:00.540
+in Ihrem Arbeitsbereich
+
+00:11:00.540 --> 00:11:00.920
+und nehmen an,
+
+00:11:00.940 --> 00:11:01.540
+dass diese bereinigt
+
+00:11:01.540 --> 00:11:02.300
+oder manuell angepasst
+
+00:11:02.300 --> 00:11:02.620
+werden müssen.
+
+00:11:03.080 --> 00:11:03.680
+Lassen Sie diese in Ruhe.
+
+00:11:04.160 --> 00:11:05.400
+Fabrik verwaltet diese Elemente
+
+00:11:05.400 --> 00:11:06.360
+gezielt, um den Rechenpfad
+
+00:11:06.360 --> 00:11:07.220
+hinter Ihren Dataflots
+
+00:11:07.220 --> 00:11:07.720
+zu unterstützen.
+
+00:11:08.560 --> 00:11:09.240
+Staging ist jedoch
+
+00:11:09.240 --> 00:11:10.000
+nicht automatisch
+
+00:11:10.000 --> 00:11:10.640
+der schnellste Weg
+
+00:11:10.640 --> 00:11:11.300
+für jede Abfrage.
+
+00:11:11.880 --> 00:11:13.000
+Die Entscheidung hängt oft
+
+00:11:13.000 --> 00:11:14.100
+vom Query-Folding ab,
+
+00:11:14.300 --> 00:11:15.060
+bei dem Power Query
+
+00:11:15.060 --> 00:11:15.940
+Ihre Schritte in Aufgaben
+
+00:11:15.940 --> 00:11:16.340
+übersetzt,
+
+00:11:16.400 --> 00:11:16.760
+die die Quelle
+
+00:11:16.760 --> 00:11:17.700
+selbst ausführen kann.
+
+00:11:18.540 --> 00:11:18.920
+Angenommen,
+
+00:11:19.020 --> 00:11:20.160
+Ihre Quelle ist SQL-Server
+
+00:11:20.160 --> 00:11:21.060
+und Sie filtern Bestellungen
+
+00:11:21.060 --> 00:11:22.040
+der letzten 30 Tage,
+
+00:11:22.040 --> 00:11:23.220
+entfernen ungenutzte Spalten
+
+00:11:23.220 --> 00:11:24.420
+und wählen nur aktive Kunden aus.
+
+00:11:25.040 --> 00:11:25.580
+Wenn diese Schritte
+
+00:11:25.580 --> 00:11:26.260
+gefoldet werden,
+
+00:11:26.400 --> 00:11:27.240
+sendet Fabrik die Arbeit
+
+00:11:27.240 --> 00:11:28.260
+zurück an SQL-Server,
+
+00:11:28.380 --> 00:11:29.180
+anstatt erst jede Zeile
+
+00:11:29.180 --> 00:11:29.660
+abzurufen.
+
+00:11:30.300 --> 00:11:31.440
+Dies reduziert die Datenmenge,
+
+00:11:31.500 --> 00:11:32.080
+die über die Verbindung
+
+00:11:32.080 --> 00:11:32.720
+übertragen wird
+
+00:11:32.720 --> 00:11:34.040
+und senkt den Verarbeitungsaufwand
+
+00:11:34.040 --> 00:11:34.560
+für Fabrik.
+
+00:11:35.260 --> 00:11:35.800
+Einige Quellen
+
+00:11:35.800 --> 00:11:36.840
+unterstützen kaum Query-Folding.
+
+00:11:37.360 --> 00:11:37.880
+Excel-Dateien,
+
+00:11:37.960 --> 00:11:38.420
+viele APIs
+
+00:11:38.420 --> 00:11:39.580
+und locker strukturierte Dateien
+
+00:11:39.580 --> 00:11:40.500
+erfordern nach dem Erreichen
+
+00:11:40.500 --> 00:11:41.000
+von Fabrik
+
+00:11:41.000 --> 00:11:41.980
+meist zusätzliche Arbeit.
+
+00:11:43.040 --> 00:11:43.660
+Hier hilft Staging,
+
+00:11:43.780 --> 00:11:44.340
+da der Dataflow
+
+00:11:44.340 --> 00:11:45.120
+einen verwalteten Ort
+
+00:11:45.120 --> 00:11:46.100
+zum Speichern der Daten hat,
+
+00:11:46.140 --> 00:11:46.940
+während er die Transformation
+
+00:11:46.940 --> 00:11:47.480
+anwendet.
+
+00:11:47.980 --> 00:11:48.620
+Sie können Staging
+
+00:11:48.620 --> 00:11:49.640
+für eine einzelne Abfrage
+
+00:11:49.640 --> 00:11:50.240
+deaktivieren,
+
+00:11:50.400 --> 00:11:50.920
+sollten dies jedoch
+
+00:11:50.920 --> 00:11:52.020
+als getestete Designentscheidung
+
+00:11:52.020 --> 00:11:52.620
+betrachten und nicht
+
+00:11:52.620 --> 00:11:53.280
+als Performance-Schalter,
+
+00:11:53.360 --> 00:11:54.140
+den man überall ausschalte.
+
+00:11:54.740 --> 00:11:55.400
+Wenn eine Abfrage
+
+00:11:55.400 --> 00:11:56.460
+vollständig gefoldet wird
+
+00:11:56.460 --> 00:11:57.520
+oder nur eine geringe Datenmenge
+
+00:11:57.520 --> 00:11:58.340
+im Arbeitsspeicher verbleibt,
+
+00:11:58.400 --> 00:11:59.340
+kann das Deaktivieren von Staging
+
+00:11:59.340 --> 00:12:00.100
+die Geschwindigkeit erhöhen.
+
+00:12:00.320 --> 00:12:01.160
+Wenn Sie Staging jedoch
+
+00:12:01.160 --> 00:12:02.140
+bei einer Abfrage erzwingen,
+
+00:12:02.160 --> 00:12:03.400
+die Fabrik Rechenleistung benötigt,
+
+00:12:03.440 --> 00:12:04.340
+erhalten Sie eine langsamere
+
+00:12:04.340 --> 00:12:05.640
+und weniger zuverlässige Aktualisierung.
+
+00:12:05.960 --> 00:12:07.260
+Testen Sie daher das genaue Muster,
+
+00:12:07.320 --> 00:12:08.020
+das Sie ausführen möchten
+
+00:12:08.020 --> 00:12:08.860
+und prüfen Sie die Quelle,
+
+00:12:08.980 --> 00:12:10.020
+die Transformation und das Ziel.
+
+00:12:10.640 --> 00:12:11.200
+Eine Änderung,
+
+00:12:11.240 --> 00:12:12.220
+die eine Abfrage beschleunigt,
+
+00:12:18.620 --> 00:12:20.060
+dass Fabrik den Staging-Pfad benötigt,
+
+00:12:20.120 --> 00:12:21.220
+bevor die Tabelle geladen wird.
+
+00:12:21.780 --> 00:12:22.380
+Ein Lakehouse-Ziel
+
+00:12:22.380 --> 00:12:23.080
+kann in einigen Fällen
+
+00:12:23.080 --> 00:12:24.020
+auf Staging verzichten,
+
+00:12:24.100 --> 00:12:25.260
+was Ihnen mehr Flexibilität bietet,
+
+00:12:25.340 --> 00:12:25.980
+wenn die Transformation
+
+00:12:25.980 --> 00:12:27.080
+und die Quelle es unterstützen.
+
+00:12:27.700 --> 00:12:28.900
+Es gibt auch eine Arbeitsbereichsregel,
+
+00:12:28.960 --> 00:12:29.740
+die Anwender oft erst später
+
+00:12:29.740 --> 00:12:30.560
+im Entwicklungsprozess bemühten.
+
+00:12:30.840 --> 00:12:31.520
+Wenn hier Dataflow
+
+00:12:31.520 --> 00:12:32.700
+in ein Fabrik Warehouse geladen wird,
+
+00:12:32.800 --> 00:12:33.280
+müssen sich beide
+
+00:12:33.280 --> 00:12:34.400
+im selben Arbeitsbereich befinden.
+
+00:12:35.600 --> 00:12:36.920
+Lakehouse-Ziele bieten mehr Spielraum,
+
+00:12:36.980 --> 00:12:37.860
+da Sie eines in einem anderen
+
+00:12:37.860 --> 00:12:38.980
+Arbeitsbereich auswählen können,
+
+00:12:39.040 --> 00:12:40.120
+sofern Sie Zugriff darauf haben.
+
+00:12:40.720 --> 00:12:41.320
+Plane Sie dies,
+
+00:12:41.420 --> 00:12:42.380
+bevor Sie ein Dutzend Abfragen
+
+00:12:42.380 --> 00:12:43.160
+für ein Ziel erstellen,
+
+00:12:43.240 --> 00:12:44.080
+das Sie nicht verwenden können.
+
+00:12:44.540 --> 00:12:45.300
+Überprüfen Sie anschließend
+
+00:12:45.300 --> 00:12:46.240
+die Abfragen innerhalb des Dataflow.
+
+00:12:46.580 --> 00:12:47.360
+Ein häufiger Fehler
+
+00:12:47.360 --> 00:12:48.620
+ist das Laden jedes Zwischenschritts
+
+00:12:48.620 --> 00:12:49.420
+als eigene Ausgabe.
+
+00:12:49.800 --> 00:12:50.920
+Das erzeugt zusätzliche Arbeit,
+
+00:12:51.020 --> 00:12:51.700
+zusätzliche Tabellen
+
+00:12:51.700 --> 00:12:52.720
+und zusätzliche Möglichkeiten
+
+00:12:52.720 --> 00:12:53.900
+für Missverständnisse bei den Daten.
+
+00:12:54.280 --> 00:12:54.920
+Erstellen Sie stattdessen
+
+00:12:54.920 --> 00:12:55.560
+eine Quellabfrage,
+
+00:12:55.660 --> 00:12:56.680
+die die gemeinsamen Eingabedaten
+
+00:12:56.680 --> 00:12:57.400
+liest und bereinigt
+
+00:12:57.400 --> 00:12:58.240
+und erstellen Sie dann davon
+
+00:12:58.240 --> 00:12:58.920
+Abfrageverweise
+
+00:12:58.920 --> 00:13:00.100
+für die tatsächlich benötigten Ausgaben.
+
+00:13:00.300 --> 00:13:01.240
+Die Basisabfrage dient
+
+00:13:01.240 --> 00:13:02.520
+als kontrollierter Ausgangspunkt
+
+00:13:02.520 --> 00:13:03.620
+und jede verwiesene Abfrage
+
+00:13:03.620 --> 00:13:04.640
+kann filtern, umformen
+
+00:13:04.640 --> 00:13:05.360
+oder eine Teilmenge
+
+00:13:05.360 --> 00:13:06.580
+an ein separates Ziel senden,
+
+00:13:06.660 --> 00:13:07.360
+ohne für jede Tabelle
+
+00:13:07.360 --> 00:13:08.620
+erneut die gleiche Quelle zu lesen.
+
+00:13:09.540 --> 00:13:10.100
+Die Kosten machen
+
+00:13:10.100 --> 00:13:11.140
+diese Designentscheidung konkret.
+
+00:13:11.700 --> 00:13:12.460
+Dataflow Gen 2
+
+00:13:12.460 --> 00:13:13.740
+berechnet pro Ausgabeabfrage
+
+00:13:13.740 --> 00:13:14.900
+zwölf Kapazitätseinheiten
+
+00:13:14.900 --> 00:13:15.400
+pro Sekunde
+
+00:13:15.400 --> 00:13:16.340
+für die ersten zehn Minuten
+
+00:13:16.340 --> 00:13:16.940
+und danach
+
+00:13:16.940 --> 00:13:18.300
+1,5 Kapazitätseinheiten
+
+00:13:18.300 --> 00:13:18.840
+pro Sekunde.
+
+00:13:19.600 --> 00:13:20.200
+Ein Datenfluss
+
+00:13:20.200 --> 00:13:21.260
+mit vielen Ausgabeabfragen
+
+00:13:21.260 --> 00:13:21.920
+kann Kapazität
+
+00:13:21.920 --> 00:13:22.600
+schneller verbrauchen
+
+00:13:22.600 --> 00:13:23.120
+als erwartet,
+
+00:13:23.340 --> 00:13:24.520
+insbesondere wenn jeder Einzelne
+
+00:13:24.520 --> 00:13:25.460
+einen Quellesevorgang
+
+00:13:25.460 --> 00:13:26.560
+oder eine komplexe Transformation
+
+00:13:26.560 --> 00:13:26.980
+wiederholt.
+
+00:13:27.380 --> 00:13:27.960
+Das bedeutet nicht,
+
+00:13:28.040 --> 00:13:28.760
+dass Staging schlecht ist
+
+00:13:28.760 --> 00:13:29.360
+oder dass Gen 2
+
+00:13:29.360 --> 00:13:30.140
+klein bleiben sollte.
+
+00:13:30.900 --> 00:13:31.320
+Es bedeutet,
+
+00:13:31.480 --> 00:13:32.120
+dass die Rechenleistungen
+
+00:13:32.120 --> 00:13:33.240
+der Struktur ihres Designs folgen.
+
+00:13:34.480 --> 00:13:35.520
+Staging, Folding,
+
+00:13:35.920 --> 00:13:36.960
+Abfrageverweise, Ziele
+
+00:13:36.960 --> 00:13:38.040
+und die Anzahl der Ausgaben
+
+00:13:38.040 --> 00:13:38.540
+beeinflussen,
+
+00:13:38.540 --> 00:13:39.820
+was Fabric bei jedem
+
+00:13:39.820 --> 00:13:41.120
+Aktualisierungsvorgang tun muss.
+
+00:13:42.280 --> 00:13:43.020
+Wobei sie das erkennen,
+
+00:13:43.100 --> 00:13:44.140
+wird die nächste Entscheidung klarer.
+
+00:13:44.880 --> 00:13:46.040
+Selbst ein gut entworfener Datenfluss
+
+00:13:46.040 --> 00:13:46.980
+ist nicht das richtige Werkzeug
+
+00:13:46.980 --> 00:13:47.900
+für jede Art von Datenaufgaben.
+
+00:13:48.880 --> 00:13:49.780
+Wann Dataflow Gen 2
+
+00:13:49.780 --> 00:13:50.780
+überzeugt und wann nicht.
+
+00:13:51.220 --> 00:13:51.920
+Dataflow Gen 2
+
+00:13:51.920 --> 00:13:52.780
+funktionieren am besten,
+
+00:13:52.920 --> 00:13:53.840
+wenn sich die Arbeit wiederholt,
+
+00:13:53.900 --> 00:13:54.820
+die Transformationslogik
+
+00:13:54.820 --> 00:13:55.940
+in Power Query verständlich bleibt
+
+00:13:55.940 --> 00:13:56.480
+und die Person,
+
+00:13:56.820 --> 00:13:57.880
+die am nächsten an den Daten ist,
+
+00:13:57.940 --> 00:13:58.880
+den Prozess besitzen muss.
+
+00:14:00.180 --> 00:14:01.460
+Das könnte ein Analyst sein,
+
+00:14:01.540 --> 00:14:01.980
+der wöchentlich
+
+00:14:01.980 --> 00:14:03.080
+eine Betriebsdatei abruft,
+
+00:14:03.140 --> 00:14:03.740
+ein Finanzteam,
+
+00:14:03.820 --> 00:14:04.980
+das Kontodaten standardisiert
+
+00:14:04.980 --> 00:14:05.920
+oder ein Berichtsteam,
+
+00:14:06.020 --> 00:14:07.080
+das einen Datenbank extrakt
+
+00:14:07.080 --> 00:14:07.840
+nach einem Zeitplan
+
+00:14:07.840 --> 00:14:08.540
+in Fabric-Lead.
+
+00:14:09.420 --> 00:14:10.780
+Das eigentliche Spannungsfeld hier
+
+00:14:10.780 --> 00:14:11.860
+ist Skalierung versus Einfachheit.
+
+00:14:12.320 --> 00:14:13.020
+Man wählt ein Werkzeug
+
+00:14:13.020 --> 00:14:13.540
+nicht nur deshalb,
+
+00:14:13.620 --> 00:14:14.100
+weil es die Aufgabe
+
+00:14:14.100 --> 00:14:14.840
+technisch erledigen kann.
+
+00:14:15.160 --> 00:14:15.700
+Man wählt es,
+
+00:14:15.740 --> 00:14:16.460
+weil dieses Werkzeug
+
+00:14:16.460 --> 00:14:17.280
+die nächsten sechs Monate
+
+00:14:17.280 --> 00:14:18.140
+einfacher zu betreiben,
+
+00:14:18.200 --> 00:14:19.200
+zu reparieren und zu erklären wird.
+
+00:14:19.460 --> 00:14:20.600
+Ein starkes Gen 2-Muster
+
+00:14:20.600 --> 00:14:21.920
+beginnt mit einer gemeinsamen Quelle
+
+00:14:21.920 --> 00:14:23.200
+wie einer SharePoint-Excel-Datei,
+
+00:14:23.280 --> 00:14:24.320
+die Produkt-, Verkaufs-, Budget
+
+00:14:24.320 --> 00:14:25.620
+und regionale Informationen enthält.
+
+00:14:26.260 --> 00:14:27.700
+Statt separate Verbindungen aufzubauen,
+
+00:14:27.740 --> 00:14:28.860
+die alle dieselbe Datei lesen,
+
+00:14:28.940 --> 00:14:30.100
+erstellen Sie eine Basisabfrage,
+
+00:14:30.180 --> 00:14:31.340
+die diese einmal liest und bereinigt
+
+00:14:31.340 --> 00:14:32.600
+und erstellen Sie dann Referenzen
+
+00:14:32.600 --> 00:14:33.280
+von dieser Abfrage
+
+00:14:33.280 --> 00:14:34.540
+für die benötigten Ausgabetabellen.
+
+00:14:35.260 --> 00:14:36.120
+Eine Referenz könnte
+
+00:14:36.120 --> 00:14:37.180
+Produktspalten beibehalten
+
+00:14:37.180 --> 00:14:38.380
+und eine Produkttabelle laden,
+
+00:14:38.440 --> 00:14:39.460
+eine andere könnte nach Verkäufen
+
+00:14:39.460 --> 00:14:40.380
+des aktuellen Jahres filtern
+
+00:14:40.380 --> 00:14:40.740
+und eine dritte
+
+00:14:40.740 --> 00:14:42.040
+können die Budgetdatensitze vorbereiten.
+
+00:14:42.400 --> 00:14:43.920
+Der Quelllesevorgang bleibt kontrolliert
+
+00:14:43.920 --> 00:14:45.080
+und jede Ausgabeabfrage
+
+00:14:45.080 --> 00:14:45.860
+hat einen klaren Zweck.
+
+00:14:46.280 --> 00:14:47.560
+Dies funktioniert besonders gut
+
+00:14:47.560 --> 00:14:48.640
+für geschäftseigene Daten,
+
+00:14:48.760 --> 00:14:49.700
+die in vertrauten Formaten
+
+00:14:49.700 --> 00:14:50.700
+wie Excel-Exporten,
+
+00:14:50.840 --> 00:14:51.600
+SharePoint-Dateien,
+
+00:14:51.680 --> 00:14:52.360
+SQL-Tabellen,
+
+00:14:52.500 --> 00:14:53.100
+SAS-Extrakten
+
+00:14:53.100 --> 00:14:54.060
+und API-Antworten
+
+00:14:54.060 --> 00:14:54.460
+ankommen,
+
+00:14:54.620 --> 00:14:55.560
+SAS-Extrakten ankommen.
+
+00:14:55.940 --> 00:14:56.680
+Diese benötigen oft
+
+00:14:56.680 --> 00:14:57.520
+eine leichte Bereinigung,
+
+00:14:57.620 --> 00:14:58.720
+bevor sie in Fabric nützlich werden.
+
+00:14:59.280 --> 00:14:59.920
+Ein Datenfluss
+
+00:14:59.920 --> 00:15:00.700
+bietet dem Geschäftsteam
+
+00:15:00.700 --> 00:15:01.500
+einen visuellen Prozess,
+
+00:15:01.580 --> 00:15:02.300
+den Sie überprüfen können,
+
+00:15:02.380 --> 00:15:03.220
+ohne jede kleine Änderung
+
+00:15:03.220 --> 00:15:04.400
+in eine Entwicklungsanfrage zu verwandeln.
+
+00:15:04.760 --> 00:15:05.660
+Geplante Aktualisierungen
+
+00:15:05.660 --> 00:15:06.600
+fügen sich hier ebenfalls natürlich hin.
+
+00:15:07.040 --> 00:15:07.660
+Wenn jeden Morgen
+
+00:15:07.660 --> 00:15:08.860
+ein CRM-Export eintrifft
+
+00:15:08.860 --> 00:15:09.740
+oder eine SQL-Tabelle
+
+00:15:09.740 --> 00:15:11.000
+stündlich neue Transaktionen erhält,
+
+00:15:11.080 --> 00:15:12.660
+kann Gen 2 das Ziel aktuell halten.
+
+00:15:13.640 --> 00:15:14.740
+Wenn die Quelle es unterstützt
+
+00:15:14.740 --> 00:15:15.540
+und das Design stimmt,
+
+00:15:15.860 --> 00:15:16.840
+kann ein inkrementelles Muster
+
+00:15:16.840 --> 00:15:18.480
+sich auf aktuelle Datensätze konzentrieren,
+
+00:15:18.540 --> 00:15:19.020
+statt jedes Mal
+
+00:15:19.020 --> 00:15:20.200
+den gesamten Verlauf zu lesen.
+
+00:15:20.800 --> 00:15:21.700
+Aber Dataflow Gen 2
+
+00:15:21.700 --> 00:15:23.200
+ist kein Ersatz für jedes Fabric-Tool.
+
+00:15:23.880 --> 00:15:25.100
+Verwenden Sie Fabric-Pipelines,
+
+00:15:25.180 --> 00:15:25.980
+wenn der Job zu einer Kette
+
+00:15:25.980 --> 00:15:27.180
+voneinander abhängige Aktivitäten.
+
+00:15:27.680 --> 00:15:28.980
+Zum Beispiel das Kopieren einer Datei,
+
+00:15:29.060 --> 00:15:30.080
+das Warten auf deren Eingang,
+
+00:15:30.140 --> 00:15:31.140
+das Ausführen einer Prozedur,
+
+00:15:31.220 --> 00:15:32.440
+das Auslösen eines Datenflusses,
+
+00:15:32.520 --> 00:15:33.300
+das Ausführen eines Notebooks
+
+00:15:33.300 --> 00:15:34.600
+und die Aktualisierung eines Notebooks
+
+00:15:34.600 --> 00:15:36.040
+und die Aktualisierung eines Notebooks,
+
+00:15:36.120 --> 00:15:36.320
+aber nur,
+
+00:15:36.400 --> 00:15:37.440
+wenn jeder vorherige Schritt erfolgreich war.
+
+00:15:37.700 --> 00:15:38.880
+Das ist nicht nur Datenaufbereitung,
+
+00:15:38.960 --> 00:15:39.660
+das ist Orchestrierung.
+
+00:15:40.200 --> 00:15:41.840
+Eine Pipeline fungiert als Steuerungsebene.
+
+00:15:42.280 --> 00:15:43.260
+Sie bestimmt die Reihenfolge
+
+00:15:43.260 --> 00:15:44.020
+über Gibt-Parameter,
+
+00:15:44.120 --> 00:15:45.040
+verwaltet Abhängigkeiten
+
+00:15:45.040 --> 00:15:45.900
+und protokolliert den Lauf
+
+00:15:45.900 --> 00:15:47.000
+über verschiedene Aktivitäten hinweg.
+
+00:15:47.640 --> 00:15:48.460
+Ein Dataflow Gen 2
+
+00:15:48.460 --> 00:15:49.280
+kann eine Aktivität
+
+00:15:49.280 --> 00:15:50.440
+innerhalb dieses Prozesses sein,
+
+00:15:50.740 --> 00:15:51.240
+sollte aber nicht
+
+00:15:51.240 --> 00:15:52.540
+den gesamten Workflow allein tragen.
+
+00:15:52.540 --> 00:15:54.080
+Notebooks übernehmen,
+
+00:15:54.200 --> 00:15:54.940
+wenn die Transformation
+
+00:15:54.940 --> 00:15:55.880
+selbst aufwendig
+
+00:15:55.880 --> 00:15:57.140
+oder hochgradig individuell wird,
+
+00:15:57.240 --> 00:15:58.200
+wie bei komplexen Joints
+
+00:15:58.200 --> 00:15:59.060
+über riesige Tabellen,
+
+00:15:59.160 --> 00:16:00.560
+fortgeschrittenen Fensterfunktionen,
+
+00:16:00.960 --> 00:16:02.180
+benutzerdefinierter Python-Logik
+
+00:16:02.180 --> 00:16:02.980
+oder SQL-Mustern,
+
+00:16:03.040 --> 00:16:04.200
+die eine präzise Steuerung erfordern.
+
+00:16:04.660 --> 00:16:05.680
+Dasselbe gilt für Aufgaben
+
+00:16:05.680 --> 00:16:06.020
+vom Typ
+
+00:16:06.020 --> 00:16:07.360
+Slowly Changing Dimension Type 2,
+
+00:16:07.420 --> 00:16:08.580
+bei denen Sie den Verlauf bewahren müssen,
+
+00:16:08.660 --> 00:16:09.280
+während sich Attribute
+
+00:16:09.280 --> 00:16:10.000
+im Zeitverlauf ändern.
+
+00:16:10.580 --> 00:16:11.500
+Zwingen Sie diese Logik
+
+00:16:11.500 --> 00:16:12.220
+nicht in eine lange,
+
+00:16:12.320 --> 00:16:13.480
+fragile Power-Query-Kette,
+
+00:16:13.800 --> 00:16:14.600
+nur weil die ersten Schritte
+
+00:16:14.600 --> 00:16:15.320
+funktioniert haben.
+
+00:16:15.800 --> 00:16:17.000
+Stellen Sie sich eine Fakten-Tabelle
+
+00:16:17.000 --> 00:16:18.180
+mit 200 Millionen Zeilen
+
+00:16:18.180 --> 00:16:19.680
+und mehreren Fensterfunktionen vor,
+
+00:16:19.760 --> 00:16:20.240
+die Rankings,
+
+00:16:20.240 --> 00:16:21.420
+kontrollierende Summen und Änderungen
+
+00:16:21.420 --> 00:16:23.080
+gegenüber vorherigen Datensätzen berechnen.
+
+00:16:23.420 --> 00:16:25.060
+Dataflow Gen 2 nutzt die Mashup-Engine,
+
+00:16:25.120 --> 00:16:26.200
+die an ihre Grenzen stoßen kann,
+
+00:16:26.280 --> 00:16:27.080
+wenn diese Art von Arbeit
+
+00:16:27.080 --> 00:16:27.920
+den Speicher und die Laufzeit
+
+00:16:27.920 --> 00:16:28.920
+auf einem einzelnen Knoten belastet.
+
+00:16:29.260 --> 00:16:30.160
+In einem Fabric-Notebook
+
+00:16:30.160 --> 00:16:30.960
+kann diese Verarbeitung
+
+00:16:30.960 --> 00:16:32.160
+auf mehrere Knoten verteilt werden,
+
+00:16:32.240 --> 00:16:33.260
+was viel besser zum Problem passt.
+
+00:16:33.700 --> 00:16:34.160
+Bei den Kosten
+
+00:16:34.160 --> 00:16:34.980
+folgt man demselben Muster.
+
+00:16:35.600 --> 00:16:36.740
+Wenn Sie viele kleine Tabellen
+
+00:16:36.740 --> 00:16:38.020
+aus einer gemeinsamen Quelle haben,
+
+00:16:38.500 --> 00:16:39.960
+können Abfragereferenzen in Gen 2
+
+00:16:39.960 --> 00:16:40.900
+wiederholte Lesezugriffe
+
+00:16:40.900 --> 00:16:41.660
+auf die Quelle vermeiden
+
+00:16:41.660 --> 00:16:42.820
+und den Prozess effizient halten.
+
+00:16:43.660 --> 00:16:44.680
+Wenn Sie riesige Volumina
+
+00:16:44.680 --> 00:16:45.900
+über viele zusammenhängende Tabellen
+
+00:16:45.900 --> 00:16:46.820
+hinweg verarbeiten müssen,
+
+00:16:46.820 --> 00:16:48.080
+kann eine Spark-Notebook-Sitzung
+
+00:16:48.080 --> 00:16:48.700
+weniger kosten
+
+00:16:48.700 --> 00:16:49.560
+als eine große Menge
+
+00:16:49.560 --> 00:16:51.240
+separater Dataflow-Ausgabe abfragen.
+
+00:16:51.940 --> 00:16:52.740
+Die beste Eichsiktur
+
+00:16:52.740 --> 00:16:53.520
+nutzt daher auf beides.
+
+00:16:54.000 --> 00:16:54.800
+Dataflows Gen 2
+
+00:16:54.800 --> 00:16:55.500
+können Rohdaten
+
+00:16:55.500 --> 00:16:56.960
+in eine Bronze- oder Silver-Ebene bringen,
+
+00:16:57.120 --> 00:16:57.960
+wo Formate bereinigt,
+
+00:16:58.040 --> 00:16:58.820
+Spalten standardisiert
+
+00:16:58.820 --> 00:17:00.340
+und Eingaben zu nutzbaren Tabellen werden.
+
+00:17:01.040 --> 00:17:01.960
+Ein Notebook übernimmt
+
+00:17:01.960 --> 00:17:03.400
+dann die schwierige Logik der Gold-Ebene,
+
+00:17:03.660 --> 00:17:04.960
+wo Daten zu komplexen Fakten,
+
+00:17:05.060 --> 00:17:05.680
+Verlaufstabellen
+
+00:17:05.680 --> 00:17:06.820
+oder Geschäftsberechnungen werden,
+
+00:17:06.940 --> 00:17:08.320
+die Code und verteilte Rechenleistung
+
+00:17:08.320 --> 00:17:09.500
+erfordern, ohne Kompromisse.
+
+00:17:09.880 --> 00:17:10.940
+Es ist eine saubere Arbeitsteil.
+
+00:17:11.300 --> 00:17:12.620
+Überlassen Sie dem No-Code-Tool
+
+00:17:12.620 --> 00:17:13.880
+die wiederholbare Aufbereitung
+
+00:17:13.880 --> 00:17:14.900
+und dem Code-basierten Tool
+
+00:17:14.900 --> 00:17:16.160
+die Logik, die Code erfordert.
+
+00:17:17.100 --> 00:17:18.140
+Erstellen Sie einen Datenfluss,
+
+00:17:18.220 --> 00:17:18.860
+dem die Leute vertrauen.
+
+00:17:19.280 --> 00:17:20.160
+Die meisten Teams denken,
+
+00:17:20.260 --> 00:17:21.800
+sie müssten jedes Quellsystem anbinden,
+
+00:17:21.920 --> 00:17:23.120
+bevor jemand den Zahlen glaubt.
+
+00:17:23.340 --> 00:17:24.280
+Aber das eigentliche Problem
+
+00:17:24.280 --> 00:17:25.040
+ist viel einfacher
+
+00:17:25.040 --> 00:17:26.160
+und viel schwerer zu lösen.
+
+00:17:26.900 --> 00:17:27.720
+Vertrauen skaliert nicht
+
+00:17:27.720 --> 00:17:28.500
+durch das Verbinden von allen.
+
+00:17:29.020 --> 00:17:29.780
+Beginn mit einem einzigen
+
+00:17:29.780 --> 00:17:30.680
+engbegrenzten Anlaufsfall.
+
+00:17:31.240 --> 00:17:32.460
+Suchen Sie sich ein wiederkehrendes Problem
+
+00:17:32.460 --> 00:17:33.320
+aus, das Zeit verschwendet
+
+00:17:33.320 --> 00:17:34.320
+oder zu Fehlern in Berichten führt.
+
+00:17:34.840 --> 00:17:35.980
+Verwandeln Sie diesen einen Prozess
+
+00:17:35.980 --> 00:17:36.680
+in einen Datenfluss,
+
+00:17:36.740 --> 00:17:37.720
+den man tatsächlich testen kann
+
+00:17:37.720 --> 00:17:38.560
+und schon geht es los.
+
+00:17:39.100 --> 00:17:39.920
+Eine wöchentliche Datei,
+
+00:17:39.940 --> 00:17:40.760
+die jemand manuell anpasst,
+
+00:17:40.760 --> 00:17:41.680
+reicht meistens für den Anfang.
+
+00:17:42.240 --> 00:17:42.900
+Geben Sie Ihrer Abfrage
+
+00:17:42.900 --> 00:17:43.520
+einen Zwischennamen.
+
+00:17:44.300 --> 00:17:45.400
+Abfrage 1 sagt der nächsten Person
+
+00:17:45.400 --> 00:17:45.900
+absolut gar nichts.
+
+00:17:46.540 --> 00:17:47.420
+Salesforce Clean erklärt genau,
+
+00:17:47.500 --> 00:17:48.160
+woher die Daten kommen
+
+00:17:48.160 --> 00:17:48.980
+und was damit passiert.
+
+00:17:49.820 --> 00:17:50.760
+Behandeln Sie Zieltabellen
+
+00:17:50.760 --> 00:17:51.500
+mit der gleichen Sorgfalt.
+
+00:17:52.020 --> 00:17:52.740
+Diese Namen tauchen
+
+00:17:52.740 --> 00:17:53.640
+in der Herkunftsübersicht,
+
+00:17:53.720 --> 00:17:54.680
+dem Aktualisierungsverlauf
+
+00:17:54.680 --> 00:17:55.840
+und den täglichen Gesprächen auf,
+
+00:17:55.900 --> 00:17:57.100
+sobald ein Bericht nicht mehr funktioniert.
+
+00:17:57.760 --> 00:17:58.760
+Trennen Sie die Quellenbereinigung,
+
+00:17:58.860 --> 00:17:59.340
+wann immer möglich,
+
+00:17:59.400 --> 00:18:00.100
+von den Geschäftsregeln.
+
+00:18:00.700 --> 00:18:01.440
+Eine Abfrage könnte
+
+00:18:01.440 --> 00:18:02.800
+Datumsformate standardisieren,
+
+00:18:02.940 --> 00:18:03.820
+leere Zeilen entfernen
+
+00:18:03.820 --> 00:18:04.880
+und Datentypen korrigieren,
+
+00:18:04.960 --> 00:18:06.260
+während eine referenzierte Abfrage
+
+00:18:06.260 --> 00:18:07.060
+eine Regel anwendet,
+
+00:18:07.060 --> 00:18:08.400
+etwa den Ausschluss interner Verkäufe
+
+00:18:08.400 --> 00:18:09.380
+oder die Gruppierung von Produkten.
+
+00:18:10.120 --> 00:18:11.180
+Wenn Zahlen falsch aussehen,
+
+00:18:11.280 --> 00:18:12.580
+zeigt Ihnen diese Trennung in Sekunden,
+
+00:18:12.760 --> 00:18:13.720
+ob das Problem in der Quelle
+
+00:18:13.720 --> 00:18:14.600
+oder in der Logik liegt.
+
+00:18:15.160 --> 00:18:16.280
+Prüfen Sie Datentypen frühzeitig?
+
+00:18:16.900 --> 00:18:18.200
+Als textgespeicherte Datumsangaben
+
+00:18:18.200 --> 00:18:18.800
+machen wir der Umbrauch.
+
+00:18:19.140 --> 00:18:20.260
+Als textgespeicherte Zahlen
+
+00:18:20.260 --> 00:18:21.160
+führen zu fehlerhaften Summen.
+
+00:18:21.740 --> 00:18:22.920
+IDs verlieren führende Nullen,
+
+00:18:23.000 --> 00:18:24.320
+wenn sie als Zahlen formatiert werden
+
+00:18:24.320 --> 00:18:25.620
+und Nullwerte verändern
+
+00:18:25.620 --> 00:18:27.100
+stillschweigend verknüpfte Ergebnisse.
+
+00:18:27.780 --> 00:18:29.220
+Das sind keine spektakulären Probleme,
+
+00:18:29.360 --> 00:18:30.420
+aber genau die Art von Fehlern,
+
+00:18:30.480 --> 00:18:31.560
+die eine vertrauenswürdige Tabelle
+
+00:18:31.560 --> 00:18:32.860
+zu einer zweistündigen Fehlersuche machen.
+
+00:18:33.160 --> 00:18:34.660
+Governance muss die Arbeit nicht ausbremsen.
+
+00:18:34.660 --> 00:18:36.200
+Nutzen Sie Arbeitsbereichsrollen,
+
+00:18:36.220 --> 00:18:37.000
+damit die richtigen Personen
+
+00:18:37.000 --> 00:18:38.420
+den Datenfluss bearbeiten oder ausfüllen können.
+
+00:18:38.820 --> 00:18:39.900
+Prüfen Sie die Herkunftsübersicht,
+
+00:18:39.960 --> 00:18:40.940
+um zu sehen, wer die Ausgabe nutzt.
+
+00:18:41.800 --> 00:18:43.320
+Verlassen Sie sich auf den Aktualisierungsverlauf
+
+00:18:43.320 --> 00:18:44.200
+und das Monitoring Center,
+
+00:18:44.320 --> 00:18:45.600
+um Ausfälle, längere Laufzeiten
+
+00:18:45.600 --> 00:18:46.280
+und Muster zu erkennen,
+
+00:18:46.480 --> 00:18:47.220
+bevor Sie eskalieren.
+
+00:18:47.820 --> 00:18:48.700
+Bevor jemand die Tabelle
+
+00:18:48.700 --> 00:18:49.740
+als gemeinsame Quelle nutzt,
+
+00:18:49.840 --> 00:18:50.440
+validieren Sie sie.
+
+00:18:50.800 --> 00:18:51.840
+Vergleichen Sie Zahlen an Zahlen,
+
+00:18:51.920 --> 00:18:52.840
+öffnen Sie eine Stichprobe.
+
+00:18:53.140 --> 00:18:53.980
+Prüfen Sie bekannte Summen
+
+00:18:53.980 --> 00:18:56.020
+und beobachten Sie einige geplante Durchläufe,
+
+00:18:56.100 --> 00:18:56.680
+bevor Sie das Muster
+
+00:18:56.680 --> 00:18:57.800
+auf weitere Tabellen ausweiten.
+
+00:18:58.520 --> 00:18:59.540
+No-Code beseitigt zwar
+
+00:18:59.540 --> 00:19:00.340
+die Programmierhürde,
+
+00:19:00.520 --> 00:19:01.980
+aber nicht die Verantwortung für die Zahlen.
+
+00:19:02.720 --> 00:19:03.320
+Wenn eine Tabelle
+
+00:19:03.320 --> 00:19:04.320
+klare Zuständigkeiten,
+
+00:19:04.440 --> 00:19:05.680
+klare Namen, getestete Regeln
+
+00:19:05.680 --> 00:19:07.480
+und eine sichtbare Aktualisierungshistorie hat,
+
+00:19:07.540 --> 00:19:07.960
+hört man auf,
+
+00:19:08.000 --> 00:19:09.280
+sie als temporären Export zu betrachten
+
+00:19:09.280 --> 00:19:10.000
+und beginnt sie als Teil
+
+00:19:10.000 --> 00:19:10.880
+des Datenprodukts zu sehen.
+
+00:19:11.660 --> 00:19:12.620
+Beginnen Sie mit einem einzigen
+
+00:19:12.620 --> 00:19:13.460
+wiederkehrenden Problem.
+
+00:19:14.280 --> 00:19:15.020
+DataFluss Gen 2
+
+00:19:15.020 --> 00:19:16.380
+macht aus routinemäßiger Bereinigung
+
+00:19:16.380 --> 00:19:17.640
+einen verwalteten Fabrikprozess,
+
+00:19:17.820 --> 00:19:18.640
+aber es funktioniert am besten,
+
+00:19:18.720 --> 00:19:20.000
+wenn die Transformation übersichtlich bleibt
+
+00:19:20.000 --> 00:19:21.080
+und das Ziel einen klaren Zweck hat.
+
+00:19:21.900 --> 00:19:23.440
+Abonnieren Sie M365FM
+
+00:19:23.440 --> 00:19:24.780
+und verpassen Sie nicht unsere nächste Folge,
+
+00:19:24.940 --> 00:19:25.580
+bevor eine Entscheidung
+
+00:19:25.580 --> 00:19:26.260
+für eine Pipeline,
+
+00:19:26.360 --> 00:19:27.340
+ein Notebook oder ein Datenfluss
+
+00:19:27.340 --> 00:19:27.620
+Ihr Team
+
+00:19:27.620 --> 00:19:29.180
+in monatelange vermeidbare Nacharbeit stürzen.

@@ -1,0 +1,970 @@
+WEBVTT
+
+00:00:07.570 --> 00:00:13.570
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et la technologie qui façonnent l'avenir du travail.
+
+00:00:14.410 --> 00:00:16.470
+Ce qui est réellement Copilot dans Power Automate.
+
+00:00:17.210 --> 00:00:19.830
+Copilot dans Power Automate n'est pas l'outil que les débutants imaginent.
+
+00:00:20.390 --> 00:00:23.490
+Vous n'avez pas besoin de créer des flux manuellement ou d'écrire du code pour qu'il commence à vous aider.
+
+00:00:24.210 --> 00:00:28.890
+Vous décrivez l'automatisation souhaitée dans une phrase simple, comme si vous demandiez un service à un collègue et il rédige le déclencheur.
+
+00:00:29.130 --> 00:00:30.050
+Et les étapes pour vous.
+
+00:00:31.310 --> 00:00:35.830
+Il est présent à quatre endroits dans le produit et possède de vraies limites que personne ne devrait vous cacher.
+
+00:00:35.830 --> 00:00:39.150
+A la fin, vous saurez exactement où il vous aide et où il s'arrête et où il s'arrête.
+
+00:00:39.550 --> 00:00:40.670
+Commençons donc par une version simple.
+
+00:00:41.270 --> 00:00:47.510
+Copilot dans Power Automate est l'assistant IA intégré à l'outil d'automatisation de Microsoft, dont le seul but est de transformer vos mots en automatisation.
+
+00:00:47.950 --> 00:00:49.990
+Vous ne l'achetez pas séparément et vous n'avez rien de nouveau à installer.
+
+00:00:50.570 --> 00:00:53.950
+Il se trouve dans Power Automate, dans un volet de chat, attendant que vous décriviez ce que vous voulez accomplir.
+
+00:00:54.650 --> 00:00:58.290
+Un flux, en termes simples, est une suite d'étapes qui s'exécute automatiquement lorsqu'un événement survient.
+
+00:00:58.710 --> 00:01:00.670
+Comme la réception d'un email ou le téléchargement d'un fichier.
+
+00:01:01.250 --> 00:01:02.890
+Vous pouvez toujours en créer un manuellement si vous préférez.
+
+00:01:02.890 --> 00:01:09.350
+Copilot est simplement là pour les moments où vous préférez décrire le résultat et le laisser gérer le premier brouillon, sans aucune obligation de l'utiliser.
+
+00:01:10.390 --> 00:01:15.190
+Le moteur derrière lui provient du service Azure OpenAI, qu'est le service d'IA de Microsoft dans son cloud Azure.
+
+00:01:15.710 --> 00:01:20.370
+Cette même base alimente d'autres expériences Microsoft Copilot, ce n'est donc pas une simple expérience secondaire.
+
+00:01:20.810 --> 00:01:22.990
+C'est la même famille de technologies appliquées à une tâche différente.
+
+00:01:23.630 --> 00:01:26.390
+Une chose à savoir dès le départ est que Copilot est conçu d'abord pour l'anglais.
+
+00:01:26.390 --> 00:01:32.150
+La prise en charge d'autres langues reste limitée, donc certaines réponses peuvent être en anglais même si vous utilisez une autre langue.
+
+00:01:32.690 --> 00:01:35.650
+Il apparaît à quatre endroits et les connaître vous évitera toute confusion plus tard.
+
+00:01:36.410 --> 00:01:39.830
+Vous trouverez Copilot dans les flux cloud où vous créez des automatisations qui s'exécutent en ligne.
+
+00:01:40.470 --> 00:01:44.510
+Il y en a aussi un dans les flux de bureaux pour les automatisations qui interagissent avec les applications sur votre propre ordinateur.
+
+00:01:45.090 --> 00:01:46.410
+Les deux autres endroits sont moins évidents.
+
+00:01:47.030 --> 00:01:50.950
+Il y a Copilot dans Process Mining qui aide à comprendre le fonctionnement réel d'un processus métier,
+
+00:01:50.950 --> 00:01:55.050
+et un autre dans le centre d'automatisation pour répondre aux questions sur vos automatisations existantes.
+
+00:01:55.650 --> 00:01:58.390
+Celui que la plupart des débutants découvrent en premier est le concepteur de flux cloud,
+
+00:01:58.530 --> 00:02:00.010
+et c'est là que nous passerons le plus clair de notre temps.
+
+00:02:00.350 --> 00:02:03.750
+Ouvrez un flux, et Copilot apparaît sous forme de volet de chat sur le côté droit de l'écran.
+
+00:02:05.070 --> 00:02:07.230
+A partir de là, il peut créer un flux entièrement nouveau,
+
+00:02:08.070 --> 00:02:11.570
+en modifier un existant sur demande, répondre à des questions sur le flux affiché,
+
+00:02:12.110 --> 00:02:13.770
+et même en rédiger la description.
+
+00:02:14.910 --> 00:02:19.210
+Considérez-le moins comme un robot qui vous remplace que, comme un collègue ayant déjà lu, le manuel.
+
+00:02:19.210 --> 00:02:21.250
+Il élabore une première ébauche sous vos yeux,
+
+00:02:21.610 --> 00:02:25.810
+et vous restez maître de sa pertinence, de la façon dont vous lui parlez, et de la suite des opérations.
+
+00:02:26.490 --> 00:02:28.550
+La manière dont vous vous adressez à Copilot est primordiale,
+
+00:02:28.730 --> 00:02:31.710
+et les recommandations de Microsoft vous indiquent le modèle le plus efficace.
+
+00:02:33.030 --> 00:02:34.810
+Dites ce qui doit se produire, puis dites ce que vous voulez qu'il fasse.
+
+00:02:35.470 --> 00:02:37.770
+Quand ceci se produit, faites cela, uxez toute la structure d'une bonne requête.
+
+00:02:38.330 --> 00:02:39.530
+Une requête peu précise ressemble à
+
+00:02:39.530 --> 00:02:41.210
+« Uberg, je veux traiter un email ».
+
+00:02:41.210 --> 00:02:44.590
+Copilot ne peut pas faire grand-chose avec cela, car il ne sait pas ce que traiter signifie pour vous.
+
+00:02:45.650 --> 00:02:46.750
+Une requête efficace ressemble à
+
+00:02:46.750 --> 00:02:50.650
+gaguez lorsqu'un email arrive, publiez son objet dans le canal « Teams compte aux trucs ».
+
+00:02:50.650 --> 00:02:53.630
+Désormais, il connaît le déclencheur, l'action et la destination en même temps.
+
+00:02:54.210 --> 00:02:56.230
+Voici ce qui se passe concrètement, après que vous ayez tapé cela.
+
+00:02:56.530 --> 00:02:58.270
+Vous commencez sur la page d'accueil de Power Automate,
+
+00:02:58.530 --> 00:03:00.050
+vous choisissez l'option de création avec Copilot,
+
+00:03:00.230 --> 00:03:02.030
+et vous décrivez votre flux dans la zone prévue.
+
+00:03:02.870 --> 00:03:03.870
+Copilot lit votre phrase,
+
+00:03:04.010 --> 00:03:05.930
+et propose une structure composée d'un déclencheur,
+
+00:03:06.030 --> 00:03:06.930
+et d'une ou plusieurs actions.
+
+00:03:07.610 --> 00:03:08.810
+Déclencheur est l'événement qui lance le flux,
+
+00:03:08.930 --> 00:03:10.810
+et les actions sont les étapes qui s'exécutent ensuite.
+
+00:03:11.430 --> 00:03:13.330
+S'il ébauche semble correcte, vous la conservez et poursuivez.
+
+00:03:13.330 --> 00:03:15.690
+S'il n'est pas le cas, vous ajoutez des détails en langage clair,
+
+00:03:15.790 --> 00:03:17.030
+et ils se reconstruisent autour de vos indications.
+
+00:03:17.450 --> 00:03:18.850
+Ensuite, il vérifie les connexions pour vous.
+
+00:03:19.210 --> 00:03:20.950
+Une coche verte signifie qu'une connexion est prête,
+
+00:03:21.050 --> 00:03:23.290
+et un point d'exclamation rouge indique qu'elle nécessite votre attention
+
+00:03:23.290 --> 00:03:24.610
+avant que le flux ne puisse s'exécuter.
+
+00:03:25.130 --> 00:03:26.330
+C'est la partie qui surprend les utilisateurs.
+
+00:03:26.710 --> 00:03:28.530
+Copilot configure automatiquement ces connexions,
+
+00:03:28.610 --> 00:03:30.250
+lorsque c'est possible, vous obtenez, donc souvent,
+
+00:03:30.330 --> 00:03:32.370
+une automatisation fonctionnelle plus rapidement que prévu.
+
+00:03:32.950 --> 00:03:34.650
+Vous appuyez sur « Créer », le concepteur s'ouvre,
+
+00:03:34.770 --> 00:03:36.270
+et le volet de discussion est juste là, à vos côtés.
+
+00:03:36.630 --> 00:03:38.290
+Une fois à l'intérieur, vous pouvez continuer à dialoguer avec lui.
+
+00:03:38.290 --> 00:03:42.250
+Vous pouvez dire « Envoie plutôt l'objet de l'email dans Tim's Hugga explique ce que fait ce flux
+
+00:03:42.250 --> 00:03:45.150
+que vous supprime cette action, Hugga. »
+
+00:03:45.150 --> 00:03:46.910
+Cette fonction d'explication est discrètement puissante,
+
+00:03:47.010 --> 00:03:49.210
+car elle ne vous guidera pas à travers un flux créé par quelqu'un d'autre
+
+00:03:49.210 --> 00:03:50.570
+avec des mots simples à suivre.
+
+00:03:51.350 --> 00:03:52.670
+Il répond aussi aux questions sur le produit,
+
+00:03:52.810 --> 00:03:55.370
+comme la manière de lire un flux enfant ou l'emplacement d'un paramètre spécifique
+
+00:03:55.370 --> 00:03:57.550
+pour que vous puissiez vous débloquer sans quitter votre écran de travail,
+
+00:03:57.750 --> 00:03:58.750
+sans quitter votre écran de travail.
+
+00:03:58.930 --> 00:04:00.510
+Si vous préférez ne pas créer de requête de zéro,
+
+00:04:00.870 --> 00:04:02.930
+Microsoft propose une bibliothèque de requête prête à l'emploi
+
+00:04:02.930 --> 00:04:04.770
+que vous pouvez emprunter et adapter, et ce n'est qu'un début.
+
+00:04:04.770 --> 00:04:07.690
+Ce même assistant peut aussi examiner vos automatisations après leur exécution,
+
+00:04:08.030 --> 00:04:09.730
+une fonctionnalité que beaucoup de gens ne découvrent jamais.
+
+00:04:10.650 --> 00:04:13.870
+Une tâche réelle pour débutants, d'une page blanche à un flux opérationnel.
+
+00:04:14.530 --> 00:04:16.830
+Suivons une tâche réelle d'une page blanche à un flux terminé,
+
+00:04:16.890 --> 00:04:18.350
+car c'est là que cela cesse d'être abstrait.
+
+00:04:18.690 --> 00:04:19.210
+D'être abstrait.
+
+00:04:19.570 --> 00:04:21.110
+Imaginez que vous gérez l'intégration des employés,
+
+00:04:21.170 --> 00:04:23.890
+que chaque lundi, un groupe de nouvelles recrues doit recevoir un email de bienvenue.
+
+00:04:24.610 --> 00:04:26.690
+Les noms et adresses email sont déjà dans une liste SharePoint,
+
+00:04:26.810 --> 00:04:29.330
+qui est un tableau d'information partagé au sein de Microsoft 365.
+
+00:04:30.390 --> 00:04:31.950
+Vous ouvrez Copilot et vous tapez quelque chose comme
+
+00:04:31.950 --> 00:04:34.750
+« Chaque semaine, envoyez un email pour chaque élément d'une liste SharePoint. »
+
+00:04:34.770 --> 00:04:36.890
+Copilot vous répond avec un brouillon.
+
+00:04:37.290 --> 00:04:38.830
+Le déclencheur est une planification hebdomadaire,
+
+00:04:38.910 --> 00:04:39.970
+disons le lundi à 9h00 du matin.
+
+00:04:40.650 --> 00:04:42.970
+La première action lit les éléments de votre liste SharePoint,
+
+00:04:43.150 --> 00:04:46.850
+et la seconde envoie un email personnalisé à chaque personne de cette liste.
+
+00:04:47.370 --> 00:04:48.910
+Vous le pointez vers votre site SharePoint réel,
+
+00:04:48.990 --> 00:04:51.230
+vous choisissez la bonne liste et vous ajustez le contenu de l'email.
+
+00:04:51.750 --> 00:04:53.790
+Ensuite, vous l'enregistrez et le testez une fois avant de lui faire confiance.
+
+00:04:54.070 --> 00:04:55.950
+C'est une automatisation d'intégration opérationnelle.
+
+00:04:56.110 --> 00:04:57.690
+Vous l'avez construite en la décrivant en une phrase.
+
+00:04:58.350 --> 00:05:00.350
+Si une étape semble incorrecte, vous la corrigez simplement,
+
+00:05:00.350 --> 00:05:02.350
+et vous pouvez désactiver tout le flux ultérieurement,
+
+00:05:02.550 --> 00:05:03.530
+en un seul clic si besoin.
+
+00:05:03.530 --> 00:05:06.210
+Faisons maintenant un deuxième exemple, car le schéma se répète,
+
+00:05:06.350 --> 00:05:07.050
+et c'est là tout l'intérêt.
+
+00:05:07.570 --> 00:05:09.290
+Supposons que vous souhaitiez que votre équipe soit informée
+
+00:05:09.290 --> 00:05:11.730
+quand quelqu'un dépose un nouveau fichier dans un dossier de projet sur OneDrive.
+
+00:05:12.870 --> 00:05:15.150
+Vous tapez « Envoyez un email à l'équipe chaque fois qu'un nouveau fichier
+
+00:05:15.150 --> 00:05:17.050
+est ajouté au dossier document du projet sur OneDrive,
+
+00:05:17.170 --> 00:05:19.990
+en incluant le nom du fichier et le lien. »
+
+00:05:19.990 --> 00:05:22.670
+Copilot le créer, puis vous l'affinez avec une petite précision supplémentaire.
+
+00:05:23.230 --> 00:05:24.150
+Vous dites, au lieu d'un email,
+
+00:05:24.570 --> 00:05:26.990
+« Publiez un message dans Teams avec le lien du fichier. »
+
+00:05:26.990 --> 00:05:27.810
+Il met à jour le flux,
+
+00:05:27.810 --> 00:05:30.330
+et maintenant votre équipe reçoit une alerte dans le canal qu'elle utilise déjà
+
+00:05:30.330 --> 00:05:32.230
+sans que vous ayez à modifier manuellement le moindre paramètre.
+
+00:05:32.590 --> 00:05:34.430
+C'est là tout l'avantage, et cela ne vous a pris que deux phrases.
+
+00:05:34.890 --> 00:05:35.730
+Remarquez ce que vous n'avez pas fait.
+
+00:05:36.070 --> 00:05:38.470
+Vous n'avez pas décrit tout le processus dans un immense paragraphe,
+
+00:05:38.510 --> 00:05:40.630
+et vous n'avez pas cherché à ce que ce soit parfait dès le premier essai.
+
+00:05:41.110 --> 00:05:42.230
+Vous lui avez donné une étape claire,
+
+00:05:42.510 --> 00:05:44.270
+vérifier le résultat, puis donner l'étape suivante.
+
+00:05:44.690 --> 00:05:46.950
+Cette habitude fait la différence entre un flux qui fonctionne discrètement
+
+00:05:46.950 --> 00:05:48.450
+et un désordre que vous devrez démêler plus tard.
+
+00:05:49.030 --> 00:05:50.050
+Si vous voulez essayer par vous-même,
+
+00:05:50.190 --> 00:05:51.370
+commencez par la plus petite chose possible.
+
+00:05:51.770 --> 00:05:53.190
+Choisissez une tâche que vous répétez chaque semaine.
+
+00:05:53.550 --> 00:05:54.590
+Décrivez simplement cette tâche,
+
+00:05:54.970 --> 00:05:56.310
+et laissez Copilot vous en montrer la structure.
+
+00:05:56.310 --> 00:05:59.950
+On apprend davantage d'un petit flux que d'une heure de lecture sur les plus grands.
+
+00:06:01.050 --> 00:06:03.210
+L'autre moitié, c'est Copilot qui lit vos automatisations pour vous.
+
+00:06:03.950 --> 00:06:06.150
+Créer des flux ne représente que la moitié du travail de cet assistant,
+
+00:06:06.330 --> 00:06:08.050
+l'autre moitié se trouve dans le centre d'automatisation.
+
+00:06:09.190 --> 00:06:10.670
+C'est là que Copilot cesse de vous aider à créer,
+
+00:06:10.770 --> 00:06:11.990
+pour commencer à vous aider à comprendre,
+
+00:06:12.770 --> 00:06:14.050
+poser des questions en langage naturel,
+
+00:06:14.430 --> 00:06:14.850
+et il y répond.
+
+00:06:15.510 --> 00:06:16.550
+Il traite quatre types de questions.
+
+00:06:17.230 --> 00:06:18.970
+Il peut vous renseigner sur vos exécutions de flux cloud,
+
+00:06:19.090 --> 00:06:20.070
+qui sont les automatisations en ligne.
+
+00:06:20.770 --> 00:06:22.630
+Il en va de même pour les exécutions de flux de bureaux,
+
+00:06:22.630 --> 00:06:23.670
+celles qui agissent sur un ordinateur.
+
+00:06:23.950 --> 00:06:26.030
+Les deux derniers concernent vos fils d'attente de travail,
+
+00:06:26.030 --> 00:06:27.250
+qui sont des listes de tâches à traiter,
+
+00:06:27.510 --> 00:06:29.750
+et des questions générales sur le fonctionnement de Power Automate.
+
+00:06:30.470 --> 00:06:31.110
+Vous pourriez donc demander,
+
+00:06:31.290 --> 00:06:32.790
+combien de flux ont échoué hier ?
+
+00:06:32.790 --> 00:06:34.730
+Montrez-moi les erreurs d'exécution les plus fréquentes du modèle.
+
+00:06:35.230 --> 00:06:37.970
+Ou quelles machines ont connu le plus d'échecs aujourd'hui ?
+
+00:06:37.970 --> 00:06:39.550
+Au lieu de parcourir des rapports et des filtres,
+
+00:06:39.630 --> 00:06:40.710
+vous posez simplement la question,
+
+00:06:41.090 --> 00:06:42.470
+et il répond par un chiffre ou un graphique.
+
+00:06:43.290 --> 00:06:44.910
+Sous le capot, il se passe quelque chose d'intéressant.
+
+00:06:45.410 --> 00:06:47.570
+Copilot transforme votre question en requête de base de données,
+
+00:06:47.810 --> 00:06:49.710
+puis choisit la meilleure façon de vous présenter le résultat,
+
+00:06:49.710 --> 00:06:52.130
+comme un tableau, un histogramme ou un graphique circulaire.
+
+00:06:52.670 --> 00:06:54.290
+Vous pouvez même ouvrir cette requête, la modifier,
+
+00:06:54.290 --> 00:06:56.890
+et l'exécuter à nouveau si vous souhaitez changer les critères de recherche.
+
+00:06:57.610 --> 00:06:59.450
+Si vous savez déjà comment vous souhaitez lire une réponse,
+
+00:06:59.550 --> 00:07:01.170
+vous pouvez le demander explicitement, par exemple,
+
+00:07:01.270 --> 00:07:04.490
+montre-le-moi sous forme d'histogramme et il adaptera le résultat.
+
+00:07:05.270 --> 00:07:06.410
+Il y a deux points importants à noter ici.
+
+00:07:06.950 --> 00:07:09.550
+Cette partie de copilote nécessite actuellement un compte professionnel ou scolaire
+
+00:07:09.550 --> 00:07:11.290
+avec un environnement Power Automate aux Etats-Unis,
+
+00:07:11.490 --> 00:07:13.050
+et ne fonctionne que dans des environnements basés là-bas.
+
+00:07:13.350 --> 00:07:15.750
+De plus, dans le chat, il ne se souvient que des dix dernières questions posées.
+
+00:07:16.270 --> 00:07:18.610
+Une longue conversation s'éloigne donc progressivement de votre point de départ.
+
+00:07:18.950 --> 00:07:21.510
+Il peut également renvoyer des données incomplètes ou tout simplement erronées.
+
+00:07:21.510 --> 00:07:24.810
+Si un chiffre est vraiment important, ouvrez la requête utilisée et vérifiez-la par vous-même.
+
+00:07:25.450 --> 00:07:28.630
+Pourtant, pour quiconque s'est déjà senti perdu face à un historique d'exécution interminable,
+
+00:07:29.170 --> 00:07:32.810
+pouvoir demander ce qui n'a pas fonctionné le mois dernier en une phrase change vraiment, la donne.
+
+00:07:33.550 --> 00:07:36.430
+C'est la différence entre fouiller dans des journaux et poser simplement une question.
+
+00:07:37.110 --> 00:07:39.150
+Ce changement pointe vers quelque chose de plus vaste.
+
+00:07:39.230 --> 00:07:42.590
+La même IA qui vous aide à créer un flux doit également s'intégrer au monde plus large des outils,
+
+00:07:42.790 --> 00:07:44.670
+licences et services cloud de Microsoft.
+
+00:07:45.610 --> 00:07:47.530
+Et c'est là que se trouve la dernière pièce du puzzle.
+
+00:07:47.530 --> 00:07:50.070
+Ce que Copilot ne peut pas encore faire.
+
+00:07:50.590 --> 00:07:52.530
+La plupart des explications omettent cette partie, pourtant.
+
+00:07:52.950 --> 00:07:54.990
+C'est elle qui détermine si vous allez perdre votre après-midi.
+
+00:07:55.710 --> 00:07:58.310
+Microsoft affirme qu'être transparent sur les limites permet de gagner du temps.
+
+00:07:58.590 --> 00:07:59.550
+Alors les voici sans détour.
+
+00:08:00.010 --> 00:08:01.610
+Copilot ne peut pas déboguer une erreur d'exécution.
+
+00:08:01.930 --> 00:08:04.150
+Il n'a pas accès à votre historique d'exécution, à vos journaux d'erreur,
+
+00:08:04.210 --> 00:08:06.830
+ni au contexte de ce qui s'est passé lorsqu'un flux a tourné, lorsqu'un flux a...
+
+00:08:06.830 --> 00:08:09.090
+Il ne peut donc pas vous dire pourquoi une exécution spécifique a échoué.
+
+00:08:09.330 --> 00:08:10.850
+C'est une barrière franchissable, pas un simple obstacle.
+
+00:08:11.170 --> 00:08:12.090
+Il ne peut pas non plus lire vos données.
+
+00:08:12.090 --> 00:08:16.370
+Il ne regarde pas à l'intérieur de vos listes SharePoint, de vos tables Dataverse ou de vos bases Données SQL.
+
+00:08:17.170 --> 00:08:20.310
+Il ne peut pas confirmer si un nom de colonne existe ou si une valeur est correcte.
+
+00:08:20.390 --> 00:08:22.610
+Donc si vous lui demandez ce que contiennent vos données, il n'a aucun moyen de le savoir,
+
+00:08:22.730 --> 00:08:23.730
+peu importe la clarté de votre demande.
+
+00:08:24.150 --> 00:08:25.590
+Il ne peut pas non plus réparer vos connexions.
+
+00:08:26.090 --> 00:08:29.850
+Les mots de passe expirés, les problèmes d'autorisation et les soucis de passerelle dépassent ses capacités
+
+00:08:29.850 --> 00:08:33.530
+et nécessitent l'intervention d'une personne, voire d'un administrateur.
+
+00:08:34.310 --> 00:08:36.390
+Pour être juste, Copilot sait rester dans son domaine.
+
+00:08:36.390 --> 00:08:40.510
+Il filtre les questions sans rapport avec Power Automate ou le flux que vous modifiez
+
+00:08:40.510 --> 00:08:44.890
+et vous avertit lorsque vous touchez à quelque chose qu'il ne peut pas modifier en toute sécurité.
+
+00:08:45.970 --> 00:08:46.930
+La liste ne s'arrête pas là.
+
+00:08:47.210 --> 00:08:49.150
+Copilot a du mal avec la logique profondément imbriquée
+
+00:08:49.150 --> 00:08:52.770
+lorsqu'une condition est placée à l'intérieur d'une autre, elle-même dans une autre, elle-même dans une autre.
+
+00:08:53.070 --> 00:08:56.070
+Il ne peut pas non plus voir au-delà des flux si votre flux en appelle un secondaire
+
+00:08:56.070 --> 00:08:57.970
+et il traite chacun d'eux comme si l'autre n'existait pas.
+
+00:08:58.790 --> 00:09:01.190
+Il ne peut pas écrire de manière fiable des expressions complexes,
+
+00:09:01.370 --> 00:09:04.570
+surtout celles qui empilent plusieurs fonctions ou utilisent des données provenant d'étapes lointaines.
+
+00:09:04.570 --> 00:09:08.710
+Et il ne fonctionne qu'avec un sous-ensemble des connecteurs pris en charge par Power Automate.
+
+00:09:09.470 --> 00:09:11.330
+Une autre limite pratique mérite d'être gardée en mémoire.
+
+00:09:11.810 --> 00:09:14.830
+Copilot n'est disponible que dans le nouveau concepteur, pas dans l'ancien modèle classique.
+
+00:09:15.330 --> 00:09:18.150
+Donc, si votre écran semble différent d'un tutoriel, c'est généralement la raison.
+
+00:09:19.270 --> 00:09:22.530
+Une partie de cela est déjà en train de changer, ce qui devrait plutôt vous rassurer.
+
+00:09:23.410 --> 00:09:25.250
+Le conseil de Microsoft est que pour certaines tâches,
+
+00:09:25.750 --> 00:09:28.050
+comme lire un message d'erreur confus ou créer une expression complexe,
+
+00:09:28.150 --> 00:09:31.090
+vous devriez aujourd'hui copier le contenu dans un outil d'IA généraliste
+
+00:09:31.090 --> 00:09:32.510
+puis ramener la réponse dans Power Automate.
+
+00:09:32.510 --> 00:09:35.930
+Ce n'est pas une critique sur la qualité de Copilot, c'est une question de champ d'action.
+
+00:09:36.450 --> 00:09:38.630
+Copilot est conçu pour modifier le flux sur lequel vous travaillez,
+
+00:09:38.670 --> 00:09:40.910
+tandis que les outils généralistes sont faits pour des connaissances étendues
+
+00:09:40.910 --> 00:09:42.470
+et ses limites sont présentées comme temporaires.
+
+00:09:43.030 --> 00:09:46.270
+Microsoft indique que l'équipe travaille à donner à Copilot l'accès à l'historique d'exécution
+
+00:09:46.270 --> 00:09:49.030
+et aux détails des erreurs, ce qui comblerait la plus grande lacune de cette liste.
+
+00:09:49.810 --> 00:09:50.910
+Les requêtes qui vous font perdre votre temps.
+
+00:09:51.470 --> 00:09:54.830
+La plupart des frustrations rencontrées avec Copilot viennent de la manière de poser les questions,
+
+00:09:55.210 --> 00:09:56.190
+et non des capacités de l'outil.
+
+00:09:56.190 --> 00:09:59.050
+Passons donc en revue les invites qui vous font perdre du temps,
+
+00:09:59.050 --> 00:10:00.570
+et ce qu'il vaut mieux dire, à la place.
+
+00:10:01.690 --> 00:10:03.910
+La première est tout simplement « Corrige mon flux ».
+
+00:10:03.910 --> 00:10:06.070
+Cela semble naturel, mais Copilot ne voit pas l'erreur,
+
+00:10:06.150 --> 00:10:07.770
+et ne sait pas ce que « Corriger » signifie pour vous.
+
+00:10:08.090 --> 00:10:10.110
+Il va deviner, et sa supposition est généralement fausse.
+
+00:10:10.950 --> 00:10:14.410
+La deuxième est « Pourquoi mon flux a-t-il échoué hier, à 15h00 ? »
+
+00:10:14.410 --> 00:10:16.410
+Cette question nécessite l'historique d'exécution,
+
+00:10:16.570 --> 00:10:18.250
+et Copilot n'y a pas accès dans le concepteur.
+
+00:10:19.830 --> 00:10:21.530
+La troisième erreur est une instruction trop longue et d'écoute.
+
+00:10:22.170 --> 00:10:24.690
+Vous tapez, ajoute un déclencheur, récupère les détails de l'élément,
+
+00:10:25.010 --> 00:10:26.270
+vérifie si le statut est approuvé,
+
+00:10:26.910 --> 00:10:27.830
+envoie un email au manager,
+
+00:10:28.110 --> 00:10:29.750
+attend l'approbation, mais ajoute l'élément,
+
+00:10:30.190 --> 00:10:30.910
+et publie sur Teams.
+
+00:10:31.910 --> 00:10:34.390
+Cela semble efficace, mais Copilot gère bien les étapes isolées,
+
+00:10:34.550 --> 00:10:35.970
+et perd en précision sur une longue chaîne.
+
+00:10:36.470 --> 00:10:38.510
+Découpez vos instructions, et les résultats seront nettement meilleurs.
+
+00:10:38.890 --> 00:10:41.090
+Quatrième erreur consiste à poser des questions sur vos propres données,
+
+00:10:41.430 --> 00:10:43.190
+comme « Quelle colonne contient ma liste Sherpa ? »
+
+00:10:43.190 --> 00:10:43.930
+et ne peut pas les voir.
+
+00:10:44.730 --> 00:10:45.630
+Vérifiez vous-même la liste,
+
+00:10:45.710 --> 00:10:47.950
+puis indiquez à Copilot les noms exacts des champs à utiliser,
+
+00:10:48.430 --> 00:10:49.170
+et il construira autour.
+
+00:10:49.570 --> 00:10:51.410
+Inversons la tendance et voyons ce qui fonctionne réellement.
+
+00:10:52.050 --> 00:10:54.310
+Soyez précis, et ne lui donnez qu'une seule requête à la fois.
+
+00:10:55.590 --> 00:10:57.670
+Commencez votre phrase par un verbe comme « Ajouter »,
+
+00:10:57.670 --> 00:10:59.690
+modifiez, supprimez, expliquez ou déplacé,
+
+00:10:59.750 --> 00:11:01.510
+car cela correspond à ce qu'il sait vraiment faire.
+
+00:11:02.610 --> 00:11:05.210
+Nommez les champs et les valeurs pour qu'il n'ait pas à deviner ce que vous vouliez dire.
+
+00:11:06.490 --> 00:11:08.330
+Examinez ensuite ce qu'il a construit avant d'enregistrer,
+
+00:11:08.450 --> 00:11:10.670
+surtout les parties qui extraient des données d'étape précédente.
+
+00:11:11.210 --> 00:11:12.450
+Une habitude permet de lier tout cela.
+
+00:11:13.210 --> 00:11:16.010
+Enregistrez votre flux avant de laisser Copilot effectuer des changements importants
+
+00:11:16.010 --> 00:11:18.510
+afin d'avoir toujours une version de secours si le résultat ne vous convient pas.
+
+00:11:18.970 --> 00:11:20.310
+Considérez l'enregistrement comme un point de contrôle,
+
+00:11:20.370 --> 00:11:22.190
+vous ne perdrez jamais votre adag ou votre travail à cause de mesure.
+
+00:11:22.510 --> 00:11:25.170
+Si vous prenez cette habitude, Copilot commencera à ressembler à un véritable raccourci.
+
+00:11:25.370 --> 00:11:27.570
+Si vous ne le faites pas, vous aurez l'impression qu'il vous freine à chaque étape.
+
+00:11:28.090 --> 00:11:31.090
+Et s'il se trompe, utilisez les boutons de retour sous sa réponse.
+
+00:11:32.170 --> 00:11:34.630
+Ce retour est transmis à l'équipe pour qu'un mauvais résultat ne soit pas vain,
+
+00:11:35.010 --> 00:11:37.890
+c'est une petite façon de contribuer à rendre la prochaine version un peu plus performante.
+
+00:11:37.890 --> 00:11:41.450
+Où cela s'inscrit-il dans Microsoft 365 et Azure ?
+
+00:11:41.450 --> 00:11:44.650
+Analysons la situation dans son ensemble, car c'est là que beaucoup de débutants se perdent.
+
+00:11:45.030 --> 00:11:48.390
+L'IA utilisée dans Copilot et Power Automate est le même service Azure Open AI
+
+00:11:48.390 --> 00:11:51.510
+qui alimente les autres outils Copilot de Microsoft et elle fonctionne sur Azure,
+
+00:11:51.650 --> 00:11:53.530
+la plateforme Cloud de Microsoft.
+
+00:11:54.330 --> 00:11:56.270
+Power Automate fait partie de la Power Platform,
+
+00:11:56.450 --> 00:12:00.330
+une famille qui inclut aussi Power Apps, Power BI et Copilot Studio, MAT.
+
+00:12:00.330 --> 00:12:04.710
+Il est utile de dissiper une confusion dès le début, car il s'agit de deux assistants différents.
+
+00:12:05.690 --> 00:12:10.470
+Microsoft 365 Copilot réside dans Word, Outlook et Teams pour vous aider à rédiger et résumer.
+
+00:12:11.370 --> 00:12:14.310
+Celui intégré à Power Automate sert à créer et à comprendre des flux.
+
+00:12:14.810 --> 00:12:19.130
+Ils partagent la même base Azure, mais ils occupent des espaces différents et effectuent des tâches distinctes.
+
+00:12:19.250 --> 00:12:19.970
+Ils peuvent cependant se connecter.
+
+00:12:20.350 --> 00:12:24.390
+En version préliminaire, les flux peuvent être utilisés comme des plugins dans Microsoft 365 Copilot,
+
+00:12:24.530 --> 00:12:27.350
+permettant à vos automatisations d'apparaître dans l'assistant que vous utilisez au quotidien.
+
+00:12:27.350 --> 00:12:29.250
+Vient ensuite la question du coût.
+
+00:12:29.350 --> 00:12:31.210
+La précision honnête vaut mieux que n'importe quel slogan.
+
+00:12:31.930 --> 00:12:34.990
+La version premium de Power Automate est affichée à 15$ par utilisateur et par mois,
+
+00:12:35.110 --> 00:12:37.910
+couvrant les flux cloud, les flux de bureaux assistés et les bases du processus de minage.
+
+00:12:38.950 --> 00:12:41.930
+La version premium de Power Apps est affichée à 20$ par utilisateur et par mois.
+
+00:12:42.370 --> 00:12:44.590
+Les connecteurs premium et les robots non assistés coûtent davantage,
+
+00:12:44.670 --> 00:12:46.270
+et c'est généralement là que surviennent les factures surprises.
+
+00:12:46.830 --> 00:12:49.330
+Un changement important à anticiper est à noter si vous planifiez vos projets.
+
+00:12:50.050 --> 00:12:55.090
+Les crédits AI Builder inclus dans les licences premium prendront fin le 1er novembre 2026.
+
+00:12:55.090 --> 00:12:59.470
+Après cette date, les automatisations intensives en IA passeront au crédit Copilot à acheter séparément.
+
+00:13:00.490 --> 00:13:03.530
+Si votre automatisation repose sur des fonctionnalités d'IA, c'est une ligne budgétaire assurée.
+
+00:13:04.190 --> 00:13:06.050
+Pour un débutant, cependant, l'aspect rassurant est simple.
+
+00:13:07.010 --> 00:13:10.090
+L'expérience Copilot est incluse dans la licence Power Automate que vous possédez déjà,
+
+00:13:10.490 --> 00:13:11.610
+ce n'est donc pas un achat séparé.
+
+00:13:11.890 --> 00:13:14.350
+Il vaut donc la peine de vérifier quel plan votre organisation possède déjà
+
+00:13:14.350 --> 00:13:16.210
+avant de supposer que vous avez besoin de quelque chose de nouveau.
+
+00:13:16.790 --> 00:13:18.790
+Commencez par un essai gratuit ou le plan développeur.
+
+00:13:19.430 --> 00:13:22.010
+Créer quelque chose de simple pour tester avant de dépenser quoi que ce soit.
+
+00:13:22.010 --> 00:13:24.990
+Un cours récapitulatif et une question pour vous.
+
+00:13:25.250 --> 00:13:26.190
+Voici donc, nous en sommes arrivés.
+
+00:13:26.610 --> 00:13:29.670
+Copilot en Power Automate transforme des phrases simples en automatisation fonctionnelle.
+
+00:13:29.970 --> 00:13:31.150
+Il apparaît à 4 endroits dans le produit,
+
+00:13:31.310 --> 00:13:33.950
+et le concepteur de flux cloud est le point de départ pour la plupart des utilisateurs.
+
+00:13:34.590 --> 00:13:36.010
+Il peut créer un flux à partir d'une description.
+
+00:13:36.350 --> 00:13:38.990
+Expliquez un flux que vous n'avez pas écrit et répondez à des questions sur vos exécutions
+
+00:13:38.990 --> 00:13:40.050
+dans le centre d'automatisation.
+
+00:13:40.910 --> 00:13:42.530
+Le conseil honnête à garder en tête est simple.
+
+00:13:42.870 --> 00:13:44.770
+Il ne peut pas voir vos données, vos erreurs ou l'ensemble de vos flux.
+
+00:13:44.850 --> 00:13:46.990
+Vous restez donc le concepteur et lui l'assistant pour le premier jet.
+
+00:13:46.990 --> 00:13:49.270
+Ce n'est pas une faiblesse à craindre.
+
+00:13:49.630 --> 00:13:51.110
+C'est simplement là que se situe la limite,
+
+00:13:51.210 --> 00:13:53.130
+et connaître cette limite vous évitera de vous blâmer
+
+00:13:53.130 --> 00:13:55.110
+lorsqu'une requête ne donne pas le résultat attendu.
+
+00:13:55.350 --> 00:13:56.590
+Maintenant, je voudrais vous laisser avec une question.
+
+00:13:57.130 --> 00:13:59.550
+Quelle est cette tâche hebdomadaire que vous répétez manuellement à chaque fois
+
+00:13:59.550 --> 00:14:02.990
+et à quoi ressemblerait-elle si vous la décriviez simplement à voix haute ?
+
+00:14:02.990 --> 00:14:08.310
+Prêt pour 10 jours consacrés à Microsoft 365, copilote, l'IA, Azure
+
+00:14:08.310 --> 00:14:10.430
+et aux personnes qui façonnent l'avenir du travail ?
+
+00:14:10.430 --> 00:14:15.510
+En janvier prochain, la M365Con est de retour et nous voyons encore plus grand.
+
+00:14:16.350 --> 00:14:18.850
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes
+
+00:14:18.850 --> 00:14:21.650
+et les connaissances pratiques de MVPs et d'experts du secteur du monde entier.
+
+00:14:21.650 --> 00:14:51.630
+Sous-titrage Société Radio-Canada

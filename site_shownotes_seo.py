@@ -150,12 +150,14 @@ def esc(s):
     return _h.escape(str(s), quote=True)
 
 
-def _links(ids, ents, base):
+def _links(ids, ents, base, lang="en"):
+    """[(Linktext-HTML, URL)]: Name in der Sprache der Seite (site_ename), englischer Rest mit lang="en", RTL in <bdi>."""
+    import site_ename as EN
     out = []
     for i in ids:
         e = ents.get(i)
         if e and e.get("name"):
-            out.append((e["name"], f"{base}/entity/{i}/"))
+            out.append((EN.html_name(e, lang), f"{base}/entity/{i}/"))
     return out
 
 
@@ -174,11 +176,11 @@ def html_for_translation(notes, labels=None):
     return "".join(o)
 
 
-def topics_html(notes, ents, base, label="Topics"):
+def topics_html(notes, ents, base, label="Topics", lang="en"):
     """Themen-Zeile: Links auf die Entitaetsseiten der Folge (nur dieser Code setzt Links). Englische Seite: in render(); Sprachfassungen: site_podpage haengt sie
-    mit dem Wort der Sprache (site_taxonomy.TOPICS) an die uebersetzten Notes."""
-    lk = _links((notes or {}).get("entities") or [], ents, base)
-    return (f'<p class="mut">{esc(label)}: ' + ", ".join(f'<a href="{esc(u)}">{esc(n)}</a>' for n, u in lk) + "</p>") if lk else ""
+    mit dem Wort der Sprache (site_taxonomy.TOPICS) an die uebersetzten Notes; Namen dann in der Sprache der Fassung (lang)."""
+    lk = _links((notes or {}).get("entities") or [], ents, base, lang)
+    return (f'<p class="mut">{esc(label)}: ' + ", ".join(f'<a href="{esc(u)}">{n}</a>' for n, u in lk) + "</p>") if lk else ""
 
 
 def render(notes, ents, base):

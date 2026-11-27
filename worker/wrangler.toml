@@ -57,10 +57,23 @@ ADS_BOOKING = "0"
 BYOD = "0"
 # Blog-Import per Feed (BLOG_OWN_DOMAIN.md, Teil 3): "1" schaltet /api/byod/import/* und die Oberflaeche ein, Standard "0" = aus. Unabhaengig von BYOD.
 BYOD_IMPORT = "0"
+# Copilot-Bibliothek: Start-Eintraege (worker/src/library_seed.json) einmalig unter dem Profil LIB_SEED_HANDLE anlegen. "1" schaltet den Import im Cron ein
+# (je Cron-Lauf um :00 und :30 hoechstens 40 neue oder geaenderte Eintraege), Standard "0" = aus. Nach dem Lauf wieder auf "0" stellen; der Import ist wiederholbar
+# und merkt sich, wenn alles eingespielt ist (meta lib_seed_done).
+LIB_SEED_IMPORT = "1"
+LIB_SEED_HANDLE = "mirko-p"
 # BYOD_CNAME_TARGET = "blogs.example.net"   # CNAME-Ziel, auf das Mitglieder zeigen (Zone der Blog-Domains, Cloudflare for SaaS); Mirko setzt es nach dem Anlegen der Zone
 # BYOD_CANONICAL = "platform"               # "platform" (Standard: Canonical auf m365.fm) oder "own" (Canonical auf die eigene Domain), Entscheidung Mirko
 # BYOD_INDEX_VOTES = "10"                   # Upvotes, ab denen ein Beitrag der eigenen Domain indexierbar ist (wie INDEX_VOTES der Plattform)
 # Worker-Secrets (nie hier): CF_API_TOKEN, CF_ZONE_ID (Cloudflare for SaaS, Custom Hostnames). Ohne sie ruft der Code Cloudflare nie auf.
+# Lernpfad-Abschlusstest + Zertifikat (learnquiz.js, CERTOPUS.md): Certopus-Zuordnung je Lernpfad (Organisation, Event, Kategorie, Kursname je Sprache).
+# Weitere Lernpfade: einfach einen Eintrag ergaenzen. Schluessel nur als Secret CERTOPUS_API_KEY (GitHub-Secret, setup.mjs), nie hier.
+CERTOPUS_PATHS = '{"manufacturing-excellence":{"org":"projectmanagementgroup","event":"1b364220-e7df-11f1-a542-95dd4baa2628","category":"1b361b10-e7df-11f1-a542-95dd4baa2628","course":{"en":"Manufacturing Excellence: From Lean Basics to Digital Production Planning","de":"Manufacturing Excellence: von den Lean-Grundlagen zur digitalen Produktionsplanung"}}}'
+# Notschalter Zertifikate: "1" = an (Mirko 25.11.2026), "0" = aus (Test laeuft, Zertifikat bleibt "pending", Seite zeigt "Zertifikat folgt").
+# Wartende Zertifikate stellt der Cron (*/30) selbst aus. Felder kommen nur, soweit die Vorlage sie laut recipient_fields kennt.
+CERTOPUS_ON = "1"
+# Platzhalter der Vorlage (optional, JSON): ohne Angabe gelten {Name},{Course},{Score},{Date}, soweit die Vorlage sie laut recipient_fields kennt.
+# CERTOPUS_FIELDS = '{"name":"{Name}","course":"{Course}","score":"{Score}","date":"{Date}"}'
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
 
 [[send_email]]
@@ -70,6 +83,14 @@ name = "EMAIL"
 [[r2_buckets]]
 binding = "PAGES"
 bucket_name = "m365-fm"
+
+# Ratenlimit der Suche ohne D1 (Workers Rate Limiting, 60 Anfragen je 60 s und IP-Hash; worker/src/search.js searchAllowed). Kein Schritt in der
+# Cloudflare-Konsole noetig: namespace_id ist eine frei gewaehlte Zahl je Konto. Die Zaehlung gilt je Standort und ist ungefaehr - fuer den
+# Missbrauchsschutz der Suche genuegt das. Ohne Bindung (Staging erbt sie nicht) gilt wie bisher die D1-Tabelle ratelimit.
+[[ratelimits]]
+name = "RL_SEARCH"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
 
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)

@@ -1,0 +1,823 @@
+WEBVTT
+
+00:00:07.920 --> 00:00:13.580
+Bienvenidos al podcast M365FM, donde exploramos las personas, ideas y tecnologías que dan forma al futuro del trabajo.
+
+00:00:14.540 --> 00:00:15.400
+¿Qué es realmente una VPN?
+
+00:00:15.860 --> 00:00:18.380
+La aplicación VPN que instalaste hace menos de lo que crees.
+
+00:00:18.720 --> 00:00:21.380
+Crea un túnel cifrado entre tu dispositivo y un servidor en otro lugar,
+
+00:00:21.740 --> 00:00:26.540
+luego envía discretamente tu tráfico a través de él para que los sitios que visitas vean la dirección de ese servidor en lugar de la tuya.
+
+00:00:26.960 --> 00:00:31.800
+Suena como un escudo, pero el gil es que principalmente cambie a quien puede observarte, no si alguien puede hacerlo.
+
+00:00:31.800 --> 00:00:38.160
+La propia guía de Microsoft dice que la VPN de trabajo que te piden usar suele ser lo que ralentiza Teams y SharePoint,
+
+00:00:38.340 --> 00:00:43.220
+por lo cual la empresa ahora indica a los administradores que desvíen el tráfico de Microsoft 1365.
+
+00:00:44.100 --> 00:00:46.400
+Y la VPN gratuita en tu teléfono es lo primero que realizo,
+
+00:00:46.480 --> 00:00:50.360
+porque las pruebas independientes siguen encontrando que gratis suele significar que tus datos son el producto.
+
+00:00:51.000 --> 00:00:54.840
+Al final sabrás qué hace una VPN que nunca hizo y dónde encaja en la nube de Microsoft.
+
+00:00:55.420 --> 00:00:58.320
+Quítale la publicidad y una VPN resulta ser algo muy sencillo.
+
+00:00:58.320 --> 00:01:01.160
+Es una ruta privada entre tu dispositivo y un servidor en otro lugar.
+
+00:01:01.760 --> 00:01:04.940
+Tu tráfico viaja a través de ella en lugar de dirigirse directamente a la web abierta.
+
+00:01:05.220 --> 00:01:07.020
+Ese servidor se convierte en tu representante,
+
+00:01:07.120 --> 00:01:10.260
+así que cada sitio que abres ve su dirección en el lugar de la que te dio tu proveedor de Internet.
+
+00:01:10.660 --> 00:01:11.920
+Imagina un sobre dentro de otro sobre.
+
+00:01:12.440 --> 00:01:15.800
+Tu tráfico queda sellado en el primero y ese sobre se desliza en un segundo,
+
+00:01:16.020 --> 00:01:17.240
+dirigido solo al servidor VPN.
+
+00:01:17.880 --> 00:01:20.120
+Cualquiera que vigila el camino puede ver que envías correo,
+
+00:01:20.200 --> 00:01:23.280
+e incluso pueden saber que usas una VPN, pero ninguno de los sobres se abre sin la llave.
+
+00:01:23.760 --> 00:01:26.600
+Es por eso que lo primero que cambia una VPN es tu dirección en Internet.
+
+00:01:27.040 --> 00:01:30.920
+Enciéndela el sitio web en el otro extremo no tiene forma fácil de saber en qué ciudad te encuentras realmente.
+
+00:01:31.360 --> 00:01:33.120
+Todo lo que ves a través de qué servidor te conecta.
+
+00:01:33.720 --> 00:01:38.480
+Se usa una misma palabra para dos herramientas muy distintas y acláralo desde el principio ahorra mucha confusión después.
+
+00:01:38.860 --> 00:01:40.800
+Está la aplicación de privacidad que compras para tu laptop,
+
+00:01:40.960 --> 00:01:44.840
+y luego está el túnel que tu trabajo te obliga a usar para acceder a sistemas corporativos que el mundo exterior no puede tocar.
+
+00:01:45.200 --> 00:01:48.700
+Comparte nombre y una forma básica, pero existen por razones completamente diferentes.
+
+00:01:49.260 --> 00:01:52.700
+Analizaremos ambas, porque la segunda es donde entra Microsoft 365 y Azure.
+
+00:01:53.760 --> 00:01:54.940
+¿Cómo funciona el túnel cifra?
+
+00:01:55.420 --> 00:01:58.580
+Configurar ese túnel requiere solo unos pocos pasos, y el orden es importante.
+
+00:01:58.920 --> 00:02:02.720
+Tu aplicación contacta al servidor y ambas partes demuestran ser quienes dicen ser.
+
+00:02:03.540 --> 00:02:05.320
+Luego acuerdan una clave secreta para la sesión.
+
+00:02:05.820 --> 00:02:11.600
+El intercambio de claves es la parte inteligente, porque ambos lados terminan con el mismo secreto sin haberlo enviado nunca a través de la conexión.
+
+00:02:12.180 --> 00:02:16.000
+Funciona un poco como dos personas mezclando pintura en habitaciones separadas, intercambiando solo los colores.
+
+00:02:16.740 --> 00:02:20.280
+Al final, llegan a un tono idéntico que nadie que esté escuchando podría reproducir jamás.
+
+00:02:20.920 --> 00:02:26.420
+Una vez abierto el túnel, tus datos originales se bloquean, y luego se envuelven en una capa exterior simple que solo indica a dónde entregarlos.
+
+00:02:27.180 --> 00:02:32.680
+Servidor o VPN abre esa capa exterior, desbloquea el interior y reenvía tu solicitud al sitio web, la respuesta regresa de la misma manera.
+
+00:02:33.460 --> 00:02:37.260
+Las reglas para todo esto se llaman protocolos y cuatro nombres cur en la mayor parte de lo que encontrarán.
+
+00:02:38.260 --> 00:02:41.660
+OpenVPN es el caballo de batalla flexible de código abierto que existe desde hace más tiempo.
+
+00:02:41.660 --> 00:02:46.420
+WireGuard es el más nuevo, rápido y simple, y es el que mucha gente termina usando sin darse cuenta.
+
+00:02:47.140 --> 00:02:50.920
+En los teléfonos, Ikev2 mantiene la conexión unida cuando cambias de Wi-Fi a datos móviles.
+
+00:02:51.540 --> 00:02:54.480
+PPTP es el antiguo que debes evitar, ya que se considera ampliamente inseguro.
+
+00:02:54.960 --> 00:03:00.460
+Los nombres suenan técnicos, pero en realidad son solo recetas diferentes para el mismo trabajo, y la mayoría de las aplicaciones se le llaman una sensata por defecto.
+
+00:03:00.460 --> 00:03:06.400
+Debajo de esos nombres se encuentra el cifrado real, y los servicios modernos usan algoritmos sólidos como AS256 o CH20.
+
+00:03:06.400 --> 00:03:13.000
+WireGuard actualiza sus claves aproximadamente cada dos minutos, lo que limita cuánto podría exponer una sola clave si fuera capturada.
+
+00:03:13.760 --> 00:03:20.620
+Hay un detalle silencioso que confunda a la gente, y se llama fuga de DNS, tu dispositivo de buscar la dirección de cada sitio que visitas antes de poder acceder a él.
+
+00:03:21.380 --> 00:03:27.420
+Si esas consultas se escapan fuera del túnel, tu proveedor aún conoce la lista de sitios que abres aunque las páginas en sí permanezcan cifradas.
+
+00:03:28.080 --> 00:03:30.720
+Una buena VPN también ruta esas consultas a través del túnel.
+
+00:03:31.300 --> 00:03:37.200
+Una cosa importa más que el resto, todo túnel termina en algún lugar, y la empresa propietaria del extremo lejano puede ver tu tráfico sin cifrar.
+
+00:03:37.640 --> 00:03:44.740
+Así que una VPN no elimina al observador, cambia qué empresa puede ser el observador, y esa única elección decide si realmente has ganado algo.
+
+00:03:45.660 --> 00:03:47.560
+Los momentos en los que una VPN realmente ayuda.
+
+00:03:48.100 --> 00:03:51.080
+La victoria más clara es ocultar tu lista de navegación a tu proveedor de internet.
+
+00:03:51.660 --> 00:03:56.280
+Sin un túnel, tu proveedor puede ver a qué sitios te conectas, y una VPN elimina ese registro de su pantalla.
+
+00:03:56.280 --> 00:04:01.640
+Lo que no hace es ocultar esos sitios a la empresa de VPN, ese es el intercambio que hace silenciosamente.
+
+00:04:02.360 --> 00:04:05.480
+Imagina a alguien en un viaje de trabajo abriendo su correo personal en la red del hotel.
+
+00:04:06.620 --> 00:04:12.460
+La VPN no cambia el correo en sí, pero evita que la red del hotel cree una lista ordenada de cada sitio que esa persona visitó esa noche.
+
+00:04:14.040 --> 00:04:19.160
+El Wi-Fi es el segundo lugar donde vale la pena, porque en la red de un hotel o aeropuerto no sabes quién más está escuchando.
+
+00:04:19.740 --> 00:04:26.120
+Una VPN hace que tu tráfico sea elegible para cualquiera que comparta la conexión, aunque hay que admitir que la mayoría de los sitios ya usan HTTPS.
+
+00:04:27.000 --> 00:04:31.280
+El candado en tu navegador hace un trabajo real por sí solo y Google está impulsando toda la web en esa dirección.
+
+00:04:32.120 --> 00:04:38.260
+Con Chrome 154 en octubre de 2026, el navegador activará por defecto el uso de conexiones seguras en todo momento.
+
+00:04:38.920 --> 00:04:42.240
+Una VPN añade privacidad sobre eso, en lugar de ser el único cerrojo de la puerta.
+
+00:04:43.240 --> 00:04:45.860
+La ubicación es el tercer caso, y es del que más escuchas hablar.
+
+00:04:46.680 --> 00:04:51.900
+Conéctate a un servidor en otro país y los sitios web creerán que estás allí, que es como la gente accede a contenido bloqueado donde vive.
+
+00:04:52.680 --> 00:04:56.880
+Ese truco funciona, aunque las grandes plataformas de streaming lo detectan fácilmente y a veces se niegan a reproducir.
+
+00:04:57.140 --> 00:04:58.980
+También es más importante en algunos países que en otros.
+
+00:04:59.360 --> 00:05:04.400
+Una VPN es legal en casi todos lados, pero está restringida o prohibida en algunos, y usarla allí puede tener consecuencias reales.
+
+00:05:04.720 --> 00:05:06.520
+El cuarto caso es uno con el que quizás ya convives.
+
+00:05:06.520 --> 00:05:11.420
+Si tu trabajo te da una VPN, no es para tu privacidad, sino un túnel hacia la propia red de la empresa.
+
+00:05:12.580 --> 00:05:17.020
+Si es como abres archivos compartidos internos o aplicaciones de negocio que nunca tocan el Internet abierto.
+
+00:05:17.680 --> 00:05:20.100
+Es también el hilo que te lleva directo a Microsoft 365.
+
+00:05:20.840 --> 00:05:24.120
+Nota que tienen en común estos cuatro casos, porque ninguno trata sobre desaparecer de Internet.
+
+00:05:24.700 --> 00:05:28.220
+Cada uno trata sobre evitar que ojos específicos vean una parte específica de tu tráfico.
+
+00:05:28.580 --> 00:05:30.900
+El problema empieza cuando la gente espera que esos cuatro casos cubran todo,
+
+00:05:31.000 --> 00:05:35.020
+porque la lista de lo que una VPN no hace es más larga de lo que admiten los anuncios es más dulce.
+
+00:05:35.020 --> 00:05:36.900
+¿Qué es lo que una VPN no hará por ti?
+
+00:05:37.260 --> 00:05:38.700
+Ahora veamos la parte que los anunció Zomi.
+
+00:05:39.120 --> 00:05:42.220
+Una VPN es una herramienta de privacidad, no una capa de invisibilidad, y nunca lo fue.
+
+00:05:42.880 --> 00:05:47.420
+Al conectarte, tu tráfico debe ir a alguna parte, y el proveedor de VPN se convierte en quien lo transporta.
+
+00:05:47.960 --> 00:05:50.720
+Has cambiado a quien puede vigilarlo, cual ayuda, pero no te has vuelto anónimo.
+
+00:05:51.140 --> 00:05:52.760
+Piensa en qué más te identifica en línea.
+
+00:05:53.280 --> 00:05:58.280
+Las cuentas donde inicias sesión, la tarjeta con la que pagas y la huella digital de tu navegador pueden llevar de vuelta a ti.
+
+00:05:58.960 --> 00:06:00.820
+Nada de eso cambia porque tu dirección IP haya cambiado.
+
+00:06:01.140 --> 00:06:04.800
+Si alguien está decidido a rastrearte, un cambio de dirección no es el muro con el que se topará.
+
+00:06:05.580 --> 00:06:07.600
+Tampoco detiene las cosas que afectan a la mayor gente.
+
+00:06:08.320 --> 00:06:11.120
+Una VPN no puede limpiar el malware que ya se está ejecutando en tu laptop,
+
+00:06:11.360 --> 00:06:14.340
+ni puede rescatarte de una página de phishing convincente donde escribiste tu contraseña.
+
+00:06:15.040 --> 00:06:19.320
+Las compañías de seguridad son directas al respecto y dicen que una VPN no protege contra amenazas que evaden el túnel,
+
+00:06:19.420 --> 00:06:21.460
+como malware local o un sitio de phishing engañoso.
+
+00:06:22.520 --> 00:06:26.600
+Vale la pena decirlo claramente, porque el miedo vende y la herramienta no puede ofrecer realmente ese tipo de seguridad.
+
+00:06:27.460 --> 00:06:31.620
+Lo que sí puede hacer es limitar quién ve tu tráfico durante el trayecto, lo cual es una promesa más pequeña y justa.
+
+00:06:32.340 --> 00:06:34.820
+Otra cosa que no oculta es el hecho de que estás usando una herramienta VPN.
+
+00:06:35.580 --> 00:06:40.760
+Cualquiera que vigile la red a menudo puede notar que tu tráfico entra en un túnel, incluso si no pueden leer ni una palabra de lo que contiene.
+
+00:06:40.760 --> 00:06:46.360
+Una forma útil de entender todo esto es pensar en la VPN como algo que protege el viaje, no el destino.
+
+00:06:47.500 --> 00:06:52.380
+Una vez que llega tu tráfico, el sitio que usas aún puede seguirte con cookies si tu cuenta sigue sabiendo exactamente quién eres
+
+00:06:52.380 --> 00:06:55.440
+y ciertamente no reemplaza a tu antivirus ni a tu propio juicio.
+
+00:06:55.920 --> 00:06:59.360
+Si haces clic en un enlace malicioso y entregas tus datos, ningún túnel en el mundo te salvará,
+
+00:06:59.380 --> 00:07:01.400
+porque el túnel solo protege los datos mientras se atan en movimiento.
+
+00:07:01.660 --> 00:07:04.140
+La versión de pago es entonces más limitada a lo que se anuncia,
+
+00:07:04.220 --> 00:07:08.680
+lo que hace que la versión gratuita merezca un análisis más profundo sobre por qué cuesta más de lo que ahorran.
+
+00:07:08.680 --> 00:07:13.700
+Si la versión de pago es más limitada a lo que prometen los anuncios, la versión gratuita merecía aún más sospecha.
+
+00:07:14.520 --> 00:07:18.000
+Investigadores independientes instalaron las 100 VPN gratuitas para Android más populares
+
+00:07:18.000 --> 00:07:20.800
+y sometieron a cada una serie de pruebas, y los resultados fueron desalentadores.
+
+00:07:21.200 --> 00:07:26.140
+Esas aplicaciones habían crecido de unos 260 millones de instalaciones en 2018 a más de 2.500 millones.
+
+00:07:26.620 --> 00:07:28.420
+Esto no es un rincón marginal de las tiendas de aplicación.
+
+00:07:28.820 --> 00:07:30.920
+88 de ellas filtraron datos de alguna forma.
+
+00:07:31.200 --> 00:07:34.760
+83 filtraron las solicitudes de ANS que revelan qué sitios visitaste.
+
+00:07:34.760 --> 00:07:39.540
+11 tuvieron fallas de cifrado totales, lo que significa que el tráfico que debía estar codificado simplemente no lo estaba.
+
+00:07:39.860 --> 00:07:42.920
+Luego está la brecha entre lo que esas aplicaciones afirmaban y lo que realmente hacían.
+
+00:07:43.540 --> 00:07:46.380
+71 de las 100 compartieron datos personales con terceros,
+
+00:07:46.960 --> 00:07:50.800
+y 93 tenían etiquetas de privacidad que no coincidían con sus propias políticas de privacidad.
+
+00:07:51.660 --> 00:07:54.800
+Aproximadamente una de cada cinco fue marcada como malware por escáneres antivirus,
+
+00:07:54.920 --> 00:07:57.200
+y más de un tercio usaba un cifrado más débil del que debería.
+
+00:07:57.540 --> 00:07:59.120
+La razón se reduce a una cuestión matemática más.
+
+00:07:59.440 --> 00:08:01.040
+Los servidores y el ancho de banda cuestan dinero,
+
+00:08:01.120 --> 00:08:02.780
+y si tú no estás pagando algo más, se está cubriendo la cuenta.
+
+00:08:02.780 --> 00:08:04.820
+En la mayoría de las VPN gratuitas,
+
+00:08:04.880 --> 00:08:07.900
+si hace algo es tu actividad de navegación empaquetada y vendida a quien quiera comprarla.
+
+00:08:08.740 --> 00:08:10.560
+Cuando una aplicación promete no guardar registros,
+
+00:08:10.620 --> 00:08:11.700
+le estás creyendo bajo su palabra,
+
+00:08:11.960 --> 00:08:15.340
+y las discrepacias en las etiquetas que vimos son la razón por la que esa palabra merece ser cuestionada.
+
+00:08:16.380 --> 00:08:18.640
+No se trata de una regla que diga que toda opción gratuita es una trampa.
+
+00:08:19.060 --> 00:08:22.120
+Existen algunas legítimas, pero conllevan limitaciones como límites de datos,
+
+00:08:22.260 --> 00:08:24.360
+velocidad más lentas, o una lista reducida de ubicaciones.
+
+00:08:24.840 --> 00:08:26.240
+La lección no es que nunca uses lo gratuito,
+
+00:08:26.540 --> 00:08:28.520
+es que verifiques quién está detrás antes de entregarle tu trampa.
+
+00:08:28.520 --> 00:08:31.400
+Si piensas que las aplicaciones gratuitas son el único problema,
+
+00:08:31.500 --> 00:08:33.740
+la VPN que te da a tu empleador está a punto de sorprenderte.
+
+00:08:34.640 --> 00:08:36.840
+La VPN de trabajo y Microsoft 365.
+
+00:08:37.440 --> 00:08:40.700
+Esta es la parte que sorprende a quienes trabajan en el mundo de Microsoft todos los días.
+
+00:08:41.360 --> 00:08:43.160
+La VPN de trabajo no está ahí por privacidad,
+
+00:08:43.620 --> 00:08:45.860
+ya que existe para colocarte dentro de la red privada de tu empresa.
+
+00:08:46.500 --> 00:08:48.420
+Durante años, ese túnel transportaba casi todo,
+
+00:08:48.560 --> 00:08:50.640
+porque casi todo residía en los servidores de la compañía.
+
+00:08:51.340 --> 00:08:53.520
+Luego el trabajo se trasladó a la nube y el tráfico cambió.
+
+00:08:53.520 --> 00:08:55.860
+La propia documentación de Microsoft describe ese cambio,
+
+00:08:56.000 --> 00:08:57.040
+y las cifras son impresionantes.
+
+00:08:57.720 --> 00:09:02.040
+Los clientes informaron que el tráfico que solía ser 80% en NOP cayó al 20% menos,
+
+00:09:02.180 --> 00:09:05.440
+más del 80% del mismo se dirige ahora a servicios en NAP.
+
+00:09:06.060 --> 00:09:08.600
+El modelo antiguo seguía forzando todo a través de la VPN,
+
+00:09:08.780 --> 00:09:10.800
+y así es como terminas con llamadas de Teams que se cortan
+
+00:09:10.800 --> 00:09:12.180
+y páginas de SharePoint que cargan lento.
+
+00:09:13.260 --> 00:09:15.780
+Por eso la guía de Microsoft ahora dice lo contrario de lo que esperarías.
+
+00:09:16.320 --> 00:09:20.320
+Dirige el tráfico pesado de Microsoft 365 directamente a Microsoft en lugar de usar la VPN.
+
+00:09:20.320 --> 00:09:24.400
+Eso permite que Teams, SharePoint y Exchange Online se conecten por su cuenta,
+
+00:09:24.520 --> 00:09:27.180
+mientras el túnel queda reservado para el tráfico que realmente lo necesita.
+
+00:09:28.540 --> 00:09:29.900
+Ese enfoque se llama túnel dividido,
+
+00:09:30.040 --> 00:09:32.440
+y es la mayor solución para una VPN de trabajo lenta.
+
+00:09:33.020 --> 00:09:34.820
+El tráfico que Microsoft quiere que se envíe directo
+
+00:09:34.820 --> 00:09:36.920
+es un conjunto pequeño y definido de puntos finales,
+
+00:09:37.240 --> 00:09:38.640
+y las cifras explican por qué importa.
+
+00:09:39.520 --> 00:09:41.700
+Esos puntos finales son actualmente unas 20 subredes IP,
+
+00:09:42.140 --> 00:09:45.600
+pero transportan entre el 70 y el 80% del volumen de tráfico de Microsoft 365.
+
+00:09:46.780 --> 00:09:49.000
+Enviarlos directamente libera el túnel para todo lo demás,
+
+00:09:49.000 --> 00:09:51.760
+y Microsoft dice que el cambio puede hacerse en cuestión de horas.
+
+00:09:52.260 --> 00:09:54.420
+¿Vale la pena tener en cuenta dos detalles prácticos?
+
+00:09:55.220 --> 00:09:58.360
+Microsoft recomienda configurar esto por rangos de IP en lugar de direcciones web,
+
+00:09:58.460 --> 00:10:01.760
+porque el enfoque, basado en direcciones, puede pasar por altas situaciones importantes.
+
+00:10:02.700 --> 00:10:03.960
+El consejo tiene una excepción clara,
+
+00:10:04.040 --> 00:10:06.220
+ya que no aplica para usuarios en China que usan el servicio global
+
+00:10:06.220 --> 00:10:07.800
+debido a la congestión transfronteriza.
+
+00:10:08.520 --> 00:10:10.440
+Hay una forma sencilla de visualizar la solución,
+
+00:10:10.520 --> 00:10:12.300
+incluso si nunca ajustas la configuración tú mismo.
+
+00:10:12.760 --> 00:10:15.020
+Imagina la VPN como una carretera de servicio estrecha,
+
+00:10:15.140 --> 00:10:16.720
+útil para llegar a los edificios privados de la empresa,
+
+00:10:16.720 --> 00:10:20.220
+pero una mala ruta para la concurrida autopista pública que es Microsoft 365.
+
+00:10:21.320 --> 00:10:24.140
+El túnel simplemente mantiene a cada tipo de tráfico en la ruta que le corresponde.
+
+00:10:24.460 --> 00:10:27.780
+Lo tranquilizador para cualquiera que se preocupe por la seguridad es que aquí nada se deja al azar.
+
+00:10:28.560 --> 00:10:31.160
+Los controles de seguridad que la gente asume que solo residen en la red,
+
+00:10:31.300 --> 00:10:32.740
+como la prevención de pérdida de datos,
+
+00:10:32.900 --> 00:10:35.160
+antivirus, autenticación multifactor y control de acceso,
+
+00:10:35.420 --> 00:10:37.360
+están integrados en el propio Microsoft 365.
+
+00:10:38.020 --> 00:10:41.380
+Es precisamente la razón por la que Microsoft se siente cómodo dejando que ese tráfico se salde.
+
+00:10:41.380 --> 00:10:43.520
+Ahora que Microsoft recomienda evitar la VPN,
+
+00:10:43.800 --> 00:10:47.080
+la siguiente pregunta es ¿qué ofrece Azure realmente cuando sí se necesita una?
+
+00:10:48.720 --> 00:10:50.760
+Las herramientas de VPN de Azure, explicadas de forma sencilla.
+
+00:10:51.140 --> 00:10:53.360
+Si la VPN de trabajo lo conecta a la red de su empresa,
+
+00:10:53.780 --> 00:10:57.900
+la puerta de enlace VPN de Azure es la misma idea donde la red reside en la nube de Microsoft.
+
+00:10:58.560 --> 00:11:03.260
+Envía tráfico cifrado entre una red virtual de Azure y sus ubicaciones locales a través de la red pública de Internet.
+
+00:11:03.800 --> 00:11:07.240
+También puede vincular redes de Azure entre sí a través de la propia red de Microsoft.
+
+00:11:07.760 --> 00:11:09.280
+Escuchará sobre dos formas de usar LogNover.
+
+00:11:09.280 --> 00:11:14.400
+Sitio a sitio conecta toda una oficina o centro de datos a Azure usando un túnel cifrado entre la puerta de enlace
+
+00:11:14.400 --> 00:11:16.060
+y un dispositivo VPN de su lado.
+
+00:11:16.700 --> 00:11:19.480
+Punto a sitio es el que se parece a la VPN clásica de trabajador remoto
+
+00:11:19.480 --> 00:11:23.340
+porque permite que una sola computadora portátil se conecte a Azure desde casa o un hotel.
+
+00:11:24.280 --> 00:11:28.260
+Microsoft también admite una tercera forma que vincula dos redes virtuales de Azure directamente,
+
+00:11:28.680 --> 00:11:31.180
+lo cual es útil cuando los servicios dentro de ellas necesitan comunicarse.
+
+00:11:31.960 --> 00:11:33.600
+Vale la pena explicar la escala en términos sencillos.
+
+00:11:33.600 --> 00:11:36.480
+La puerta de enlace más pequeña tiene un rendimiento aproximado de 100 megabits por semana.
+
+00:11:36.480 --> 00:11:40.820
+Las más grandes con redundancia de zona alcanzan hasta 10 gigabits por segundo
+
+00:11:40.820 --> 00:11:43.320
+y pueden mantener hasta 10.000 conexiones de punto a sitio.
+
+00:11:44.120 --> 00:11:46.980
+Una puerta de enlace también puede distribuirse entre zonas de disponibilidad,
+
+00:11:47.460 --> 00:11:50.040
+de Azure por lo que una falla en una zona no interrumpe su conectividad.
+
+00:11:50.920 --> 00:11:53.520
+Existe una disposición más inteligente que depender de un túnel para todo.
+
+00:11:53.900 --> 00:11:57.620
+La puerta de enlace VPN de Azure puede actuar como una ruta de respaldo para ExpressRoute,
+
+00:11:57.860 --> 00:11:59.320
+la conexión privada dedicada a Microsoft,
+
+00:11:59.320 --> 00:12:02.620
+lo que convierte al túnel cifrado en una red de seguridad en lugar de la vía principal.
+
+00:12:02.620 --> 00:12:05.340
+Una empresa se preocupa por todo esto por una razón simple.
+
+00:12:05.740 --> 00:12:08.220
+Podría mantener una base de datos en Azure a la que solo deberían acceder sus propias.
+
+00:12:08.720 --> 00:12:11.340
+La puerta de enlace proporciona a esas aplicaciones una ruta privada
+
+00:12:11.340 --> 00:12:13.360
+sin exponer la base de datos a la Internet abierta.
+
+00:12:13.840 --> 00:12:15.740
+Para la persona que trabaja desde la mesa de la cocina,
+
+00:12:15.880 --> 00:12:17.960
+punto a sitio es lo que convierte una computadora portátil
+
+00:12:17.960 --> 00:12:19.960
+en un invitado de confianza en la red en la nube de la empresa.
+
+00:12:20.840 --> 00:12:23.000
+Y debido a que la puerta de enlace reside en la nube de Microsoft
+
+00:12:23.000 --> 00:12:24.440
+vino en un armario final del pasillo,
+
+00:12:24.500 --> 00:12:27.500
+se puede configurar en minutos y reducir su escala una vez que pase la urgencia.
+
+00:12:28.240 --> 00:12:30.380
+El modelo de costo es lo suficientemente simple como para decirlo.
+
+00:12:30.380 --> 00:12:33.220
+Usted paga una tarifa por hora por la puerta de enlace en sí más un cargo
+
+00:12:33.220 --> 00:12:34.260
+por los datos que salen de ella.
+
+00:12:35.000 --> 00:12:36.200
+Existe una excepción favorable,
+
+00:12:36.380 --> 00:12:38.620
+ya que el tráfico entre redes virtuales en la misma región
+
+00:12:38.620 --> 00:12:41.180
+no tiene costo de datos y los cimientos de todo esto están cambiando
+
+00:12:41.180 --> 00:12:43.360
+porque las herramientas están empezando a transformarse.
+
+00:12:44.500 --> 00:12:46.160
+El cambio silencioso que se deja de la zona.
+
+00:12:46.560 --> 00:12:49.700
+Una empresa que te vende herramientas VPN ahora te dice que las necesitarás menos
+
+00:12:49.700 --> 00:12:51.480
+y vale la pena reflexionar sobre esa tensión.
+
+00:12:52.440 --> 00:12:55.780
+Microsoft promociona Entraperer Access como la mejor alternativa a una VPN
+
+00:12:55.780 --> 00:12:57.980
+y eso dice mucho sobre hacia dónde se dirige el acceso.
+
+00:12:57.980 --> 00:13:00.960
+La diferencia es más fácil de entender como una cuestión de alcance.
+
+00:13:01.400 --> 00:13:04.740
+Una VPN tradicional suele otorgar acceso amplio una vez que estás dentro del túnel,
+
+00:13:04.880 --> 00:13:07.140
+por lo que un solo inicio de sesión puede abrir muchas puertas a la vez.
+
+00:13:07.620 --> 00:13:09.280
+El modelo más nuevo, basado en la identidad,
+
+00:13:09.400 --> 00:13:10.900
+verifica quién eres y qué dispositivo usas
+
+00:13:10.900 --> 00:13:12.920
+y luego te entregas solo la aplicación específica que solicitas.
+
+00:13:13.460 --> 00:13:14.660
+Eso es más estricto por diseño,
+
+00:13:14.720 --> 00:13:17.040
+es la razón por la que Microsoft lo llama más granular que una VPN.
+
+00:13:18.040 --> 00:13:20.180
+El nombre general para todo esto es Global Secure Access,
+
+00:13:20.340 --> 00:13:22.900
+que cubre tanto el acceso a Internet como el acceso a aplicaciones privadas.
+
+00:13:22.900 --> 00:13:27.220
+Funciona en una red que abarca 70 regiones y más de 190 ubicaciones periféricas,
+
+00:13:27.520 --> 00:13:29.380
+por lo que el servicio rara vez está lejos de quién lo usa.
+
+00:13:29.960 --> 00:13:32.240
+Ese cambio es importante para tu forma de pensar sobre la seguridad,
+
+00:13:32.380 --> 00:13:35.340
+porque un túnel que te permite llegar a todo es también un túnel que permite que mucho llegue a ti.
+
+00:13:35.920 --> 00:13:38.420
+El acceso limitado por aplicación reduce esa superficie
+
+00:13:38.420 --> 00:13:40.860
+y lo hace sin pedirle al usuario que entienda sobre redes.
+
+00:13:41.320 --> 00:13:43.120
+Es un cambio más silencioso que una nueva aplicación,
+
+00:13:43.320 --> 00:13:45.120
+pero redefine lo que significa una red empresarial.
+
+00:13:45.880 --> 00:13:47.760
+Detalle es que esta es una dirección basada en licencias,
+
+00:13:47.900 --> 00:13:49.340
+no un interruptor que activas de la noche a la mañana.
+
+00:13:49.340 --> 00:13:52.720
+Entra Private Access, requiere una licencia, entra ID P1 o P2,
+
+00:13:52.800 --> 00:13:54.200
+o la suite entra y se vende por usuario.
+
+00:13:54.840 --> 00:13:58.140
+Así que la VPN no desaparecerá mañana, pero la dirección del camino es clara
+
+00:13:58.140 --> 00:14:00.680
+y apunta hacia la identidad en lugar de los túneles.
+
+00:14:01.340 --> 00:14:02.660
+Y esa dirección vale la pena seguirla,
+
+00:14:02.840 --> 00:14:05.080
+porque cambia incluso el propósito de la VPN en tu escritorio.
+
+00:14:05.940 --> 00:14:07.560
+Errores, límites y una pregunta para ti.
+
+00:14:08.180 --> 00:14:09.080
+Pues resumamos todo esto.
+
+00:14:09.600 --> 00:14:11.860
+Una VPN es un túnel cifrado que oculta tu dirección
+
+00:14:11.860 --> 00:14:14.440
+y evita que tu proveedor vea los sitios que abres.
+
+00:14:14.840 --> 00:14:15.720
+Ese es el alcance del mismo.
+
+00:14:16.140 --> 00:14:17.060
+No es una capa mágica,
+
+00:14:17.060 --> 00:14:19.420
+y dentro del mundo de Microsoft haces cada vez más algo que rodeas
+
+00:14:19.420 --> 00:14:21.060
+en lugar de algo detrás de lo cual te escondes.
+
+00:14:21.520 --> 00:14:24.160
+La buena noticia es que nada de esto requiere que te vuelvas un experto técnico.
+
+00:14:24.600 --> 00:14:27.520
+Solo necesitas saber para qué sirve el túnel y para qué silenciosamente no sirve.
+
+00:14:27.960 --> 00:14:28.820
+Una vez que eso queda claro,
+
+00:14:29.120 --> 00:14:30.520
+los anuncios dejan de funcionar contigo
+
+00:14:30.520 --> 00:14:31.980
+y los ajustes empiezan a tener sentido.
+
+00:14:32.520 --> 00:14:34.340
+Los errores se siguen repitiendo de la misma poca manera.
+
+00:14:34.820 --> 00:14:36.480
+La gente trata la VPN como anonimato,
+
+00:14:36.760 --> 00:14:38.700
+cuando en realidad solo cambia quién es el que observa.
+
+00:14:39.140 --> 00:14:41.980
+Confían en lo gratuito sin preguntar quién lo dirige ni cómo se financia.
+
+00:14:41.980 --> 00:14:45.560
+Y fuerzan todo su trabajo de Microsoft 365 a través de un túnel
+
+00:14:45.560 --> 00:14:48.520
+para luego ocupar a Microsoft por las llamadas de Teams que se entrecortan.
+
+00:14:49.160 --> 00:14:50.780
+Las limitaciones merecen una mención más,
+
+00:14:50.860 --> 00:14:52.380
+porque importan más que la lista de funciones.
+
+00:14:52.860 --> 00:14:54.320
+Una VPN no detendrá el malware
+
+00:14:54.320 --> 00:14:57.220
+y no evitará que entregues tu contraseña a una página de inicio de sesión falsa.
+
+00:14:57.500 --> 00:14:58.760
+Así que permítanme dejarlos con una pregunta.
+
+00:14:59.020 --> 00:15:00.060
+Si revisaran ahora mismo,
+
+00:15:00.180 --> 00:15:03.120
+¿sabrían quién administra la VPN en su teléfono o qué hacen con su tráfico?
+
+00:15:03.520 --> 00:15:05.140
+Cuéntame en los comentarios porque los leo todos.
+
+00:15:05.140 --> 00:15:06.140
+¡Gracias!
+
+00:15:06.140 --> 00:15:07.140
+¡Gracias!

@@ -1,0 +1,40 @@
+<translation>
+## Gestão de correções e vulnerabilidades em OT
+
+No TI corporativo, a regra é "corrigir rápido". Em OT, a regra é "decidir com critério". Uma correção pode exigir aprovação do fornecedor, reinicialização de controladores, revalidação em indústrias reguladas ou um teste completo da linha. Em plantas reguladas pelo FDA (farmacêutica, dispositivos médicos, alimentos) e sob exigências de clientes automotivos ou aeroespaciais, uma alteração em um sistema validado normalmente aciona o seu procedimento de controle de mudanças e de validação; planeje o tempo de revisão da equipe de qualidade dentro da janela de correção. A ISA-TR62443-2-3 trata da gestão de correções no ambiente IACS [1].
+
+### Fontes de informação sobre vulnerabilidades
+
+- Avisos de segurança dos fornecedores e portais de segurança de produtos dos seus fornecedores de CLP, IHM, acionamentos e software.
+- Os avisos ICS da CISA, que publicam vulnerabilidades em produtos industriais, frequentemente coordenados com os fornecedores [não verificado quanto ao volume atual; consulte a página de avisos da CISA].
+- Sua ferramenta de monitoramento OT, que compara as versões de firmware do inventário com os avisos.
+
+### Uma tabela de decisão para cada aviso
+
+| Pergunta | Se sim | Se não |
+|---|---|---|
+| O produto afetado está no nosso inventário? | Continuar | Encerrar, documentar |
+| A função vulnerável é usada ou acessível na nossa configuração? | Continuar | Documentar o motivo; reavaliar na próxima mudança |
+| Há conhecimento de exploração ou existe um exploit público disponível? | Prioridade alta | Prioridade pela pontuação de consequência |
+| O ativo é acessível a partir de uma zona de menor confiança ou remotamente? | Prioridade alta | Prioridade média |
+| O fornecedor aprova a correção para a nossa versão? | Planejar a correção na próxima janela | Aplicar medidas compensatórias |
+| A correção pode ser aplicada sem parada? | Agendar na manutenção normal | Agendar na parada planejada |
+
+### Medidas compensatórias quando não é possível corrigir
+
+Quando a correção não está disponível, não é aprovada ou não é possível antes da próxima parada:
+
+- Restrinja o conduto: permita apenas os hosts e protocolos que precisam do ativo.
+- Desative serviços e portas não utilizados.
+- Coloque a chave seletora do controlador em RUN para bloquear alterações remotas de programa, quando o controlador suportar.
+- Aumente o monitoramento do ativo (alertas para novas conexões ou downloads de programa).
+- Documente o risco residual e obtenha a aprovação do responsável pelo ativo.
+
+### Exemplo de decisão
+
+Um aviso descreve uma vulnerabilidade de negação de serviço explorável remotamente no servidor web do modelo de CLP usado no controle da Prensa Z3. O inventário mostra quatro CLPs afetados. O servidor web está habilitado, mas não é utilizado. A correção de firmware está disponível, mas exige reinicialização do controlador, e o fornecedor recomenda um teste funcional. Decisão: desabilitar o servidor web nos quatro CLPs durante a próxima janela de fim de semana (30 minutos por prensa), bloquear HTTP e HTTPS para os CLPs no conduto C4, e instalar o firmware na parada planejada em oito semanas. O risco provisório é documentado e aprovado pelo gerente de engenharia da planta.
+
+### Sistemas legados e fim de vida útil
+
+Toda planta tem sistemas que nunca mais receberão uma correção: IHMs em versões do Windows sem suporte, controladores cujo fornecedor descontinuou. Trate-os como um problema de ciclo de vida com orçamento, e não como uma exceção de segurança a ser renovada indefinidamente. O campo de inventário "status de suporte do fornecedor" alimenta um plano de substituição alinhado às reformas de linha e ao planejamento de investimentos.
+</translation>

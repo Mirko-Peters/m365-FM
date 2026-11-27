@@ -1,0 +1,27 @@
+<translation>
+## Use case 2: Traceerbaarheid en genealogie
+
+Traceerbaarheid beantwoordt de vraag "Waar is dit onderdeel ingebouwd, en waaruit is het opgebouwd?". Genealogie beschrijft de volledige herkomstketen van een product: materiaal, partij, processtap, machine, parameters, inspectieresultaat en operator. In gereguleerde sectoren is dit verplicht; overal elders versnelt het de afhandeling van klachten en beperkt het terugroepacties. De aflevering [Traceability and Genealogy](https://www.m365.fm/show/episodes/traceability-and-genealogy/) behandelt het onderwerp uitgebreid.
+
+### Eisen per sector
+
+| Sector / regel | Kernvereiste voor gegevens | Opmerking |
+|---|---|---|
+| Voedsel, FDA Food Traceability Rule (FSMA Section 204) | Key data elements (KDEs) voor elk kritiek traceringsevenement (CTE), zoals ontvangst, transformatie en verzending, gekoppeld aan een traceability lot code; gegevens binnen 24 uur aan de FDA verstrekken op verzoek, plus een elektronische, sorteerbare spreadsheet tijdens uitbraken of terugroepacties | [59]; de FDA handhaaft niet vóór 20 juli 2028 na een opdracht van het Congres (oorspronkelijke datum 20 januari 2026) |
+| Medische hulpmiddelen, FDA QMSR (21 CFR Part 820) | Sinds 2 februari 2026 neemt de Quality Management System Regulation ISO 13485:2016 door verwijzing op, inclusief de eisen voor identificatie en traceerbaarheid | [61] |
+| Door de FDA gereguleerde elektronische records, 21 CFR Part 11 | Beveiligde, door computer gegenereerde, van tijdstempel voorziene audittrails die invoer en wijzigingen door operators vastleggen zonder eerdere invoer te verbergen, bewaard zolang de records bestaan | [60]; relevant voor farma, medische hulpmiddelen en voedselrecords die elektronisch worden bewaard |
+| Automotive, IATF 16949 | Paragraaf 8.5.2.1 vult de eisen voor identificatie en traceerbaarheid van ISO 9001 aan (waaronder een traceerbaarheidsplan op basis van risicoanalyse); paragraaf 7.5.3.2.1 behandelt de bewaring van bepaalde records, doorgaans gelezen als de duur van de productie en levering van serviceonderdelen plus één kalenderjaar, tenzij de klant of toezichthouder anders eist | Normtekst is betaald; details uit secundaire bronnen. Klantspecifieke eisen van OEM's (CSR's) gaan vaak verder |
+| Luchtvaart en ruimtevaart, AS9100D (EN 9100 in Europa, JIS Q 9100 in Japan) | Traceerbaarheid over de levenscyclus van het product, identificatie van de configuratie, en de mogelijkheid om producten te traceren die zijn gemaakt van dezelfde grondstofpartij of productiebatch | AS9100D (2016) is de huidige revisie; EN 9100 is de technisch gelijkwaardige Europese uitgave [62]. Verwijzing naar de clausule (8.5.2) is niet gecontroleerd aan de originele normtekst [unverified: clausulenummer niet gecontroleerd tegen de originele normtekst] |
+| Batterijen verkocht in de EU, EU Battery Regulation (Verordening (EU) 2023/1542) | Elektronisch batterijpaspoort vanaf 18 februari 2027 voor EV-tractiebatterijen, batterijen voor lichte transportmiddelen (bijvoorbeeld e-bikes, e-steps) en industriële batterijen boven 2 kWh | [29]; tijdpad volgens de Europese Commissie is indicatief; relevant voor Amerikaanse exporteurs naar de EU |
+| Producten verkocht in de EU onder de Ecodesign-verordening (ESPR, Verordening (EU) 2024/1781) | Digitaal productpaspoort, afhankelijk van de gedelegeerde handeling; EU DPP-register in gebruik sinds 20 juli 2026 (aanvankelijk met een testomgeving); gedelegeerde handeling voor ijzer en staal gepland voor het vierde kwartaal van 2026, textiel, aluminium en banden in 2027; minimaal 18 maanden overgangstermijn na vaststelling van een gedelegeerde handeling | [29]; tijdpad volgens de Europese Commissie is indicatief |
+
+Voor de luchtvaart legt Mirko Peters in zijn bijdrage [Aerospace Production Planning: Lead Time and Traceability](https://www.m365.fm/community/u/mirko-p/blog/aerospace-production-planning-lead-time-traceability/) uit waarom doorlooptijd en traceerbaarheid daar nauw met elkaar verbonden zijn; onze gids over [aerospace production planning](https://www.m365.fm/en/learn/aerospace-production-planning/) behandelt de context van AS9100, FAA en exportcontrole.
+
+### Het genealogiedatamodel
+
+Een robuuste genealogie vereist drie typen relaties:
+
+1. **Materiaal-in-materiaal:** Partij A en component B gaan op in samenstelling C (BOM-verwijzing, serie- of partijnummer).
+2. **Materiaal-naar-proces:** Samenstelling C werd bewerkt in bewerking 30 op station 20 met parameterset X door ploeg Y.
+3. **Proces-naar-resultaat:** Bewerking 30 leverde inspectieresultaat Z op en, waar van toepassing, een afwijking.
+</translation>

@@ -93,14 +93,19 @@ test("R2 als Ursprung: Exporte direkt aus dem Bucket (application/json, noindex,
   assert.equal(origins, 0, "kein Abruf bei GitHub Pages");
   const g = await run(req("/episodes-register-4.json"), e2); assert.equal(g.status, 404, "als entfernt markiert: auch mit R2 als Ursprung nicht");
 });
-test("R2_PRIMARY=1, Bau-Kennung passt nicht (Spiegel laeuft oder gescheitert): GitHub Pages zuerst, nach dem 404 der Export-Rueckfall wie ohne R2 als Ursprung", async () => {
+// Seit 27.11.2026 (Ladezeit, Kaltstart): Dateien nur im Bucket gehen ohne gueltige Kennung gleich in den Export-Rueckfall (src=r2direct), GitHub Pages erst,
+// wenn er nichts liefert (gone=1, src=docs, fehlt) - dann ohne zweites Lesen des Buckets.
+test("R2_PRIMARY=1, Bau-Kennung passt nicht (Spiegel laeuft oder gescheitert): Export gleich aus dem Bucket (gleiche Pruefung wie der Rueckfall), sonst GitHub Pages", async () => {
   store.clear(); __resetR2Ready();
   const P2 = { get: async (k) => (k === "pages/r2-build.txt" ? obj("b0\n", "text/plain; charset=utf-8") : B[k] || null) };
   const e3 = { PAGES: P2, MIGRATED: "1", R2_PRIMARY: "1" };
   await run(req("/x/"), e3); await new Promise((r) => setTimeout(r, 10));   // Bau-Kennung im Hintergrund pruefen: b1 (GitHub Pages) != b0 (Bucket)
   origins = 0;
   const s = await run(req("/episodes-register-3.json"), e3); assert.equal(s.status, 200); hdr(s); assert.equal(await s.text(), J);
-  assert.equal(s.headers.get("x-m365-src"), null, "nicht aus R2 zuerst"); assert.equal(origins, 1, "erst GitHub Pages gefragt (404)");
+  assert.equal(s.headers.get("x-m365-src"), null, "nicht aus R2 zuerst"); assert.equal(origins, 0, "kein Umweg ueber GitHub Pages (404)");
+  assert.match(s.headers.get("server-timing") || "", /src;desc="r2direct"/);
   const h = await run(req("/og-manifest.json", {}, "HEAD"), e3); assert.equal(h.status, 200); assert.equal(h.body, null); hdr(h);
+  assert.equal(origins, 0);
   for (const p of ["/episodes-register-4.json", "/translations-register-de.json"]) assert.equal((await run(req(p), e3)).status, 404, p + ": gone=1 bzw. src=docs wie ohne R2 als Ursprung");
+  assert.equal(origins, 2, "gone/src=docs: danach GitHub Pages (404) wie bisher");
 });

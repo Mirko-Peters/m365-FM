@@ -1,0 +1,565 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:06.940
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:07.160 --> 00:00:08.760
+Waarom lijkt DAX moeilijker dan het is?
+
+00:00:09.400 --> 00:00:16.040
+PowerBee verbergt meer dan 250 functies achter één kleine formulebalk en de naam voor die hele gereedschapskist is DAX.
+
+00:00:16.220 --> 00:00:22.140
+Het staat voor Data Analysis Expressions en het is de taal die je geïmporteerde tabellen omzet in antwoorden die je niet met klikken kunt bereiken.
+
+00:00:22.320 --> 00:00:26.100
+Je verwacht misschien een stijle leerkurve, maar in de praktijk heb je de meeste van die functies niet nodig.
+
+00:00:26.100 --> 00:00:29.500
+Wat mensen afschrikt is niet de lange lijst, maar één concept genaamd context.
+
+00:00:29.500 --> 00:00:32.260
+En zodra dat kwartje valt, wordt de rest een stuk makkelijker.
+
+00:00:32.440 --> 00:00:36.400
+Aan het eind weet je wat DAX is, waar het staat en waarom het zich gedraagt zoals het doet.
+
+00:00:37.260 --> 00:00:38.180
+Wat is DAX eigenlijk?
+
+00:00:38.480 --> 00:00:41.160
+DAX is de afkorting voor Data Analysis Expressions.
+
+00:00:41.380 --> 00:00:46.760
+Als je ooit PowerBee Desktop hebt geopend en in de formulebalk bovenaan hebt geklikt, stond je er al recht voor.
+
+00:00:46.940 --> 00:00:55.100
+Het is de taal die PowerBee gebruikt om berekeningen te maken en dezelfde taal zie je terug in Excel's Power Pivot en in een Microsoft Server product genaamd Analysis Services.
+
+00:00:55.660 --> 00:00:57.760
+Microsoft beschrijft het in één simpele zin.
+
+00:00:57.760 --> 00:01:02.060
+DAX helpt je bij het creëren van nieuwe informatie op basis van gegevens die je al in je model hebt staan.
+
+00:01:02.300 --> 00:01:03.300
+Dat is de hele taak.
+
+00:01:03.420 --> 00:01:08.580
+Je hebt tabellen en je wilt iets dat die tabellen nog niet letterlijk bevatten, zoals een groeipercentage of een winstmarge.
+
+00:01:08.860 --> 00:01:12.080
+Stel dat je data al elke verkoop bevat die het bedrijf dit jaar heeft gedaan.
+
+00:01:12.340 --> 00:01:17.280
+Die tabellen kunnen vertellen wat er is verkocht, maar niet of dit kwartaal beter was dan hetzelfde kwartaal vorig jaar.
+
+00:01:17.480 --> 00:01:21.340
+Die vergelijking is nieuwe informatie en die bouwen is precies waar DAX voor is.
+
+00:01:21.340 --> 00:01:23.640
+Een DAX-formule kan op vier plaatsen staan.
+
+00:01:23.840 --> 00:01:30.660
+Een measure is een berekening die live bijwerkt als je een rapport filtert en een berekende kolom is een nieuwe kolom die je aan een tabel toevoegt en rij voor rij invult.
+
+00:01:30.860 --> 00:01:37.820
+Er is ook de berekende tabel die een compleet nieuwe tabel opbouwt vanuit een formule en de beveiligingsregel die bepaalt welke rijen iemand mag zien.
+
+00:01:38.020 --> 00:01:42.460
+Voor een beginner zijn de eerste twee het belangrijkst en dat zijn de enige twee die je voorlopig nodig hebt.
+
+00:01:42.640 --> 00:01:46.700
+De taal heeft meer dan 250 functies ingedeeld in groepen op basis van wat ze doen.
+
+00:01:46.700 --> 00:01:53.060
+Sommige verwerken datums en tijden, andere verwerken tekst, weer andere tellen getallen op en één groep is bedoeld voor het vergelijken van deze maand met de vorige maand.
+
+00:01:53.200 --> 00:01:54.620
+Je zult de meeste nooit gebruiken.
+
+00:01:54.860 --> 00:01:59.040
+Mensen die hun brood verdienen met het schrijven van DAX zoeken nog steeds voortdurend dingen op en dat is voorkomen normaal.
+
+00:01:59.220 --> 00:02:01.880
+Wat je daadwerkelijk typt is vriendelijker dan de naam doet vermoeden.
+
+00:02:02.080 --> 00:02:06.920
+Een eenvoudige formule bestaat meestal uit een korte naam, een gelijkteken en één woord om een kolom op te tellen.
+
+00:02:06.920 --> 00:02:11.860
+Je hoeft op de eerste dag geen accolades te onthouden en de editor suggereert functies terwijl je typt.
+
+00:02:12.300 --> 00:02:13.720
+Hoe DAX verschilt van Excel?
+
+00:02:13.720 --> 00:02:17.680
+Als je Excel al kent, is dit het onderdeel waardoor de rest van DAX op zijn plek valt.
+
+00:02:17.880 --> 00:02:22.060
+Excel-formules werken met cellen en bereiken en ze zijn gebonden aan de plek waar de data in het raster staat.
+
+00:02:22.260 --> 00:02:26.200
+Verplaats een kolom en de formule breekt, omdat deze naar een locatie verwees in plaats van naar een object.
+
+00:02:26.460 --> 00:02:28.440
+DAX werkt met hele kolommen en hele tabellen.
+
+00:02:28.700 --> 00:02:32.800
+Wanneer je in DAX naar een kolom verwijst, verwijs je naar de gehele kolom, niet naar één cel daarin.
+
+00:02:32.800 --> 00:02:36.160
+Dat klinkt als een klein verschil, maar het verandert alles in je manier van denken.
+
+00:02:36.420 --> 00:02:37.660
+Neem een concreet voorbeeld.
+
+00:02:37.880 --> 00:02:43.060
+In Excel schrijf je waarschijnlijk een verb zoeken als je de prijs uit een producttabel naast een rij met verkopen wilt tonen.
+
+00:02:43.060 --> 00:02:48.940
+In een Power BI model zijn de verkoop- en producttabel al via een relatie verbonden, dus de prijs is simpelweg beschikbaar.
+
+00:02:49.180 --> 00:02:53.560
+Meestal schrijf je helemaal geen zoekformule, omdat het model al weet hoe de tabellen bij elkaar horen.
+
+00:02:53.740 --> 00:02:56.900
+Het voordeel is dat één formule honderd verschillende vragen kan beantwoorden.
+
+00:02:56.900 --> 00:03:04.460
+Je schrijft één keer de totale verkoop en het geeft je het getal voor elke regio, maand en elk product, omdat het wordt herberekend voor wat het rapport op dat moment toont.
+
+00:03:04.620 --> 00:03:07.560
+Je kopieert het niet naar beneden in een kolom zoals je in Excel zou doen.
+
+00:03:07.760 --> 00:03:11.700
+Excel is nog steeds briljant voor waar het voor bedoeld is één persoon die in één spreadsheet werkt.
+
+00:03:11.700 --> 00:03:18.480
+DAX is gebouwd voor het andere scenario, waarin honderden mensen hetzelfde rapport bekijken en de cijfers altijd correct moeten blijven, hoe ze ook filteren.
+
+00:03:18.600 --> 00:03:20.060
+Er is hier ook een eerlijke grens.
+
+00:03:20.240 --> 00:03:24.520
+Er is geen cel A1 in DAX, dus sommige Excel-gewoontes zullen je actief op het verkeerde been zetten.
+
+00:03:24.520 --> 00:03:32.300
+Als je een measure schrijft die alleen naar een kolom verwijst, zoals vragen om het verkoopbedrag op zichzelf, geeft DAX een foutmelding omdat er geen enkele rij is om uit te putten.
+
+00:03:32.460 --> 00:03:38.480
+Je moet vertellen hoe de kolom gecombineerd moet worden, meestal door op te tellen, en dat brengt bijna iedereen in verwarring die uit een spreadsheet-omgeving komt.
+
+00:03:38.480 --> 00:03:45.420
+Measures en berekende kolommen. Bijna elk beginnersprobleem in DAX komt neer op één keuze die je moet maken voordat je ook maar één formule schrijft.
+
+00:03:45.700 --> 00:03:48.860
+Je beslist of wat je nodig hebt een berekende kolom of een measure is.
+
+00:03:49.140 --> 00:03:51.580
+Beide gebruiken DAX en ze gedragen zich heel verschillend.
+
+00:03:51.580 --> 00:03:58.700
+Een berekende kolom is degene die vertrouwd aanvoelt. Je voegt een nieuwe kolom toe aan een tabel en DAX vult deze voor elke rij, één rij per keer.
+
+00:03:58.700 --> 00:04:08.500
+Als je verkooptabel, aantal en prijs bevat, kan een berekende kolom het bedrag voor elke rij uitrekenen en als je klanten wilt indelen in leeftijdsgroepen, kan een berekende kolom ze elk een label geven.
+
+00:04:08.720 --> 00:04:15.300
+Het belangrijke detail is wanneer dit gebeurt. Het wordt berekend wanneer de gegevens verversen en de resultaten worden vervolgens in je model opgeslagen.
+
+00:04:15.520 --> 00:04:19.140
+Een measure of meeting is het tegenovergestelde, omdat deze helemaal geen resultaat opslaat.
+
+00:04:19.320 --> 00:04:23.800
+Die berekent het antwoord live op het moment dat iemand het rapport bekijkt, gebaseerd op wat er op het scherm staat.
+
+00:04:23.800 --> 00:04:30.500
+Een measure voor totale verkoop toont één getal voor het hele bedrijf, een ander getal voor één regio en weer een ander getal voor één maand.
+
+00:04:30.640 --> 00:04:34.660
+Allemaal met dezelfde formule. Er wordt niets opgeslagen omdat het antwoord steeds verandert.
+
+00:04:34.820 --> 00:04:37.280
+Er is een valkuil die mensen het verschil op de harde manier leert.
+
+00:04:37.520 --> 00:04:40.700
+Stel je voor dat je de winstmarge wilt weten wat winstgedeeld door verkoop is.
+
+00:04:40.880 --> 00:04:45.060
+Als je dat als een berekende kolom bouwt, krijg je een correct percentage voor elke individuele rij.
+
+00:04:45.300 --> 00:04:49.440
+Zodra je echter een gemiddelde marge voor een hele regio wilt tonen, is het getal fout,
+
+00:04:49.440 --> 00:04:54.420
+omdat je een stapel percentages hebt gemiddeld in plaats van de totale winst door de totale verkoop te delen.
+
+00:04:54.540 --> 00:04:59.140
+Je hebt de verhouding van de sommen nodig, niet de som van de verhoudingen, en alleen een measure krijgt dat goed.
+
+00:04:59.320 --> 00:05:01.840
+Kiezen tussen beiden hangt af van wat het resultaat moet doen.
+
+00:05:02.060 --> 00:05:07.980
+Als het antwoord moet dienen als label, slicer, rijkop of categorie waarop je kunt filteren, gebruik dan een berekende kolom.
+
+00:05:08.160 --> 00:05:12.580
+Als je een getal in het midden van een grafiek of tabel nodig hebt dat reageert als mensen rondklikken, gebruik dan een measure.
+
+00:05:12.840 --> 00:05:14.900
+Wanneer beide zouden werken, kies dan voor de measure.
+
+00:05:14.900 --> 00:05:21.280
+Dat laatste punt is belangrijker dan het klinkt. Elke berekende kolom leeft in het geheugen van je model, en dat geheugen kost iets.
+
+00:05:21.540 --> 00:05:23.320
+Measures nemen die ruimte niet in beslag.
+
+00:05:23.560 --> 00:05:29.640
+Bij een klein bestand merk je er niets van, maar bij een echt bestand met miljoenen rijen kan een handvol onzorgvuldige kolommen alles vertragen.
+
+00:05:29.840 --> 00:05:35.860
+Er is ook één idee dat aan beide ten grondslag ligt en bijna elk vreemddaksresultaat verklaart, en het is de reden dat mensen afhaken.
+
+00:05:36.040 --> 00:05:40.320
+Het is het enige dat je volledige aandacht verdient, het enige idee waar iedereen over struikelt.
+
+00:05:40.320 --> 00:05:44.740
+Onder beide deuren ligt één idee, en dat bepaalt of DAX simpel of onmogelijk aanvoelt.
+
+00:05:44.900 --> 00:05:49.740
+Het heet context, en het betekent simpelweg de set rijen waar een formule naar mag kijken terwijl deze draait.
+
+00:05:49.920 --> 00:05:52.800
+Verander de context, en dezelfde formule geeft je een ander antwoord.
+
+00:05:52.980 --> 00:05:54.980
+Dat is geen fout, het is het hele ontwerp.
+
+00:05:55.020 --> 00:05:58.480
+Er zijn twee soorten context, en de namen zijn minder intimiderend dan ze lijken.
+
+00:05:58.900 --> 00:06:00.480
+Rijcontext betekent de huidige rij.
+
+00:06:00.680 --> 00:06:07.360
+Het treed op wanneer DAX rij voor rij door een tabel loopt, omdat je een berekende kolom hebt gemaakt of een functie gebruikt die bewust over rijen loopt.
+
+00:06:07.360 --> 00:06:11.940
+Als er niets loopt, is er geen rijcontext, en dat is een regel die je jezelf moet blijven voorhouden.
+
+00:06:12.440 --> 00:06:15.680
+Filtercontext is alles wat al gefilterd is voordat je formule überhaupt begint.
+
+00:06:15.900 --> 00:06:18.420
+Elke cel in een rapport heeft zijn eigen filtercontext.
+
+00:06:18.600 --> 00:06:24.460
+Een slicer voor het jaar, een grafiek per regio, een pagina filter en zelfs een klik op een staaf in een andere grafiek dragen hieraan bij.
+
+00:06:24.660 --> 00:06:29.360
+Dit is waar beginners de mist in gaan, en het is zo algemeen dat DAX docenten er expliciet voor waarschuwen.
+
+00:06:29.360 --> 00:06:34.820
+Velen gaan ervan uit dat elke rij van een tabel visueel apart wordt berekend, alsof de formule per rij wordt uitgevoerd.
+
+00:06:35.000 --> 00:06:36.280
+Die aanname is onjuist.
+
+00:06:36.500 --> 00:06:41.380
+Elke cel wordt berekend onder zijn eigen filter, en dat filter kan stilletjes vele rijen tegelijk omvatten.
+
+00:06:41.580 --> 00:06:45.320
+Wanneer iemand zegt dat een DAX getal niet klopt, is dit misverstand meestal de reden.
+
+00:06:45.580 --> 00:06:48.860
+Stel je een tabel voor met de totale verkoop en de merken aan de zijkant.
+
+00:06:49.040 --> 00:06:54.720
+De formule verandert nooit, maar het getal naast elk merk is anders omdat elke cel zijn eigen filter voor dat merk bevat.
+
+00:06:54.880 --> 00:06:58.040
+Er is niets gewijzigd tussen de rijen, dus de context heeft al het werk gedaan.
+
+00:06:58.040 --> 00:07:03.040
+Hetzelfde gebeurt met een slicer, waarbij het klikken op één regio elke cel opnieuw berekent onder het nieuwe filter.
+
+00:07:03.260 --> 00:07:07.180
+Zodra je je dat kunt voorstellen, kun je voorspellen wat de measure zal doen voordat je hem zelf schrijft.
+
+00:07:07.360 --> 00:07:08.420
+Filters reizen ook.
+
+00:07:08.600 --> 00:07:13.740
+Wanneer je een producttabel filtert, vloeit dat filter door de relatie door naar de verkooptabel, waardoor de verkoopcijfers ook nauwer worden.
+
+00:07:14.080 --> 00:07:17.480
+Rijcontext reist niet op die manier, wat een andere reden is waarom de twee zich zo verschillend gedragen.
+
+00:07:17.680 --> 00:07:21.040
+De enige functie die context verandert van een valstrik in een hulpmiddel, heet Kelkje Leed.
+
+00:07:21.040 --> 00:07:26.420
+Hiermee kun je de filters waaronder een formule draait wijzigen, zodat je een getal kunt opvragen alsof alleen het vorig jaar was geselecteerd.
+
+00:07:26.620 --> 00:07:31.540
+Microsoft noemt het een van de krachtigste functies in DAX, en zodra je context aanvoelt, begrijp je waarom.
+
+00:07:31.700 --> 00:07:34.240
+Ik wil eerlijk zijn over het moeilijke deel, want dat verdien je.
+
+00:07:34.420 --> 00:07:38.000
+Context is oprecht het lastigste onderdeel, en het vergt herhaling om het te internaliseren.
+
+00:07:38.200 --> 00:07:43.040
+Al het andere in DAX is vooral onthouden welke functie wat doet, en dat deel is meer een opzoeklus dan een vaardigheid.
+
+00:07:43.280 --> 00:07:45.280
+Begrijp context en de rest volgt vanzelf.
+
+00:07:45.280 --> 00:07:47.280
+Wat mensen daadwerkelijk bouwen met DAX
+
+00:07:47.280 --> 00:07:52.560
+Context is abstract, totdat je ziet waar het voor dient, dus het helpt om naar een korte lijst te kijken van wat mensen echt bouwen.
+
+00:07:52.740 --> 00:07:56.260
+Elk daarvan is een vraag die een normale grafiek niet uit zichzelf kan beantwoorden.
+
+00:07:56.480 --> 00:07:57.860
+De eerste is groei over tijd.
+
+00:07:58.140 --> 00:08:02.580
+Dit omvat jaar op jaar, kwartaal op kwartaal, en lopende totalen die oplopen naarmate de maanden verstrijken.
+
+00:08:02.820 --> 00:08:10.860
+Dit is meestal het moment waarop iemand voor het eerst de formulebalk opent, omdat een simpele grafiek deze maand toont en iemand in een vergadering direct vraagt hoe zich dat verhoudt tot vorig jaar.
+
+00:08:11.100 --> 00:08:13.960
+DAX heeft een hele groep functies die precies hiervoor zijn gebouwd.
+
+00:08:13.960 --> 00:08:16.940
+Ratio's die filtering moeten overleven komen op de tweede plaats.
+
+00:08:17.140 --> 00:08:20.400
+Dat betekent winstmarge, conversiepercentage en gemiddelde orderwaarden.
+
+00:08:20.620 --> 00:08:25.020
+Dit zijn de berekeningen die fout gaan als je ze verkeerd opbouwt, en daarom kwamen ze in het voorrige deel aanbod.
+
+00:08:25.280 --> 00:08:31.600
+Rangschikking komt op de derde plaats en beantwoordt vragen zoals welk product nummer 1 is in elke regio en welke verkoper leidt in elke categorie.
+
+00:08:31.780 --> 00:08:35.860
+Een eenvoudige sortering is niet voldoende omdat de rangschikking moet resetten binnen elke groep.
+
+00:08:35.860 --> 00:08:43.300
+Bucketing is het vierde, wat betekent dat klanten worden gegroepeerd in leeftijdscategorieën of orders in waardetayers, zodat je kunt rapporteren over de groepen in plaats van de ruwe cijfers.
+
+00:08:43.520 --> 00:08:47.700
+Dit is een taak voor een berekende kolom omdat de categorie een label is dat je wilt gebruiken als slicer.
+
+00:08:47.940 --> 00:08:51.220
+Laten we nu een klein voorbeeld doorlopen zodat het minder abstract aanvoelt.
+
+00:08:51.220 --> 00:08:57.660
+Je hebt een verkoopstabel met de daadwerkelijke transacties, een producttabel met namen en categorieën en een datumtabel met één rij per dag.
+
+00:08:57.820 --> 00:09:03.040
+Je schrijft één maatstaf voor de totale verkoop, dan een tweede maatstaf voor de verkoop van vorig jaar en een derde die de twee vergelijkt.
+
+00:09:03.200 --> 00:09:07.580
+De tweede en derde zijn gebouwd op de eerste omdat maatstaven andere maatstaven kunnen gebruiken als bouwstenen.
+
+00:09:07.760 --> 00:09:10.060
+Merk op dat je de ruwe tabellen helemaal niet hebt aangeraakt.
+
+00:09:10.220 --> 00:09:14.360
+Je hebt drie kleine maatstaven toegevoegd en het rapport veranderde in iets waar een manager echt op kan sturen.
+
+00:09:14.560 --> 00:09:18.840
+Die gelaagdheid is wat een echt model leesbaar houdt in plaats van dat het verandert in één gigantische formule.
+
+00:09:18.840 --> 00:09:20.920
+Dat is het patroon dat je steeds weer zult zien.
+
+00:09:21.100 --> 00:09:26.180
+Er zijn kleine maatstaven die worden gestapeld en hergebruikt, waarbij elk één duidelijke vraag beantwoordt.
+
+00:09:26.260 --> 00:09:28.640
+Waar beginners vastlopen en de eerlijke grenzen.
+
+00:09:28.860 --> 00:09:34.280
+Als de vorige paar secties daks toegankelijk lieten lijken, mooi, maar ik ga niet doen alsof het allemaal van een leie dakje gaat.
+
+00:09:34.520 --> 00:09:37.860
+Dit is waar mensen echt struikelen en waar de taal oprecht weerstand biedt.
+
+00:09:37.960 --> 00:09:42.640
+De meest gemaakte fout is degene die we net hebben behandeld, het verwarren van rijkontext en filtercontext.
+
+00:09:42.880 --> 00:09:47.700
+Dit uit zich in totalen die niet kloppen, gemiddelden die net niet lijken te kloppen en percentages die nergens op slaan.
+
+00:09:47.700 --> 00:09:52.000
+De oplossing is niet meer functies, maar gas terugnemen en je afvragen welke rij je de formule kan zien.
+
+00:09:52.180 --> 00:09:55.400
+Een goede tweede is het leunen op berekende kolommen, omdat die veiliger voelen.
+
+00:09:55.580 --> 00:09:59.100
+Ze gedragen zich als de Excel-kolommen die je al vertrouwt, dus ze zijn verleidelijk.
+
+00:09:59.220 --> 00:10:06.360
+Ze verbruiken ook geheugen en veel ervan zijn simpelweg overbodig omdat hetzelfde resultaat vaak komt uit een meting die lichter en correcter is.
+
+00:10:06.540 --> 00:10:11.340
+Het inschakelen van bidirectionele relaties is de derde valkuil en mensen doen het zonder ze te begrijpen.
+
+00:10:11.520 --> 00:10:15.380
+Een relatie filtert normaal gesproken in één richting, van de één kant naar de veelkant.
+
+00:10:15.380 --> 00:10:20.680
+Bidirectionele filtering zorgt ervoor dat filters beide kanten opstromen, wat in specifieke gevallen echt nuttig is.
+
+00:10:20.840 --> 00:10:24.980
+Het is ook gevaarlijk omdat het stilletjes dubbelzinnige paden en verkeerde resultaten kan creëren.
+
+00:10:25.160 --> 00:10:30.600
+De mensen die DAX het beste kennen, gaan er zeer voorzichtig mee om en beginners moeten ervan afblijven totdat het model logisch is.
+
+00:10:30.780 --> 00:10:34.700
+De vierde fout is DAX de schuld geven van een traag rapport terwijl het model het probleem is.
+
+00:10:34.900 --> 00:10:40.340
+Trage visuals en trage formules zijn vaak een symptoom van een slecht vormgegeven model in plaats van een slechte formule.
+
+00:10:40.340 --> 00:10:49.480
+Power B wordt geleverd met een tool genaamd de Performance Analyzer, die precies laat zien welke visual en formule tijd vreten en het is de eerste plek om te kijken voordat je iets herschrijft.
+
+00:10:49.660 --> 00:10:54.120
+Nu de eerlijke beperkingen, want een beginnersvideo die deze overslaat is niet oprecht tegen je.
+
+00:10:54.340 --> 00:10:55.480
+De leerkurve is echt.
+
+00:10:55.700 --> 00:11:00.120
+De eigen beginnershandleiding van Microsoft zegt dat DAX lastig te leren kan zijn en daar hebben ze gelijk in.
+
+00:11:00.120 --> 00:11:04.780
+Berekende kolommen en complexe formules kosten je allebei iets, ofwel geheugen ofwel tijd.
+
+00:11:05.020 --> 00:11:11.420
+Niet elke functie bestaat in elke versie van de tools en de taal blijft veranderen, dus een oude handleiding kan stilletjes verouderd zijn.
+
+00:11:11.600 --> 00:11:17.240
+Er zijn ook nergens zelfverwijzingen in DAX, dus je zult een beetje van je spreadsheet-instinct moeten afleren voordat het nieuwe zich nestelt.
+
+00:11:17.440 --> 00:11:19.120
+Niets daarvan is een reden om het te vermijden.
+
+00:11:19.320 --> 00:11:22.680
+Het is een reden om een paar frustrerende middagen te verwachten in plaats van magie te verwachten.
+
+00:11:22.680 --> 00:11:28.280
+En als je je ooit achtergebleven voelt, onthoud dan dat zelfs de mensen die hun brood verdienen met DAX de meeste weken nog steeds dingen opzoeken.
+
+00:11:28.280 --> 00:11:31.400
+Niemand heeft al die functies in zijn hoofd, en dat hoef jij ook niet.
+
+00:11:32.100 --> 00:11:40.720
+Waar DAX past in Microsoft 365 Fabric & Azure, dit alles leeft op meer dan één plek in de Microsoft-wereld waar je al voor betaalt, en dat is goed nieuws voor je vaardigheden.
+
+00:11:40.920 --> 00:11:44.420
+DAX is geen trucje voor één enkel product dat verdwijnt wanneer je van tool wisselt.
+
+00:11:44.540 --> 00:11:48.080
+Power B Desktop is de eerste thuisbasis, en het is gratis te downloaden.
+
+00:11:48.240 --> 00:11:50.540
+Dat is waar de meeste mensen hun eerste formule schrijven.
+
+00:11:50.540 --> 00:11:58.140
+Power Pivot is de tweede, en het zit in Excel, dus als je daar ooit een draaitabel bovenop een datamodel hebt gebouwd, was je één klik verwijderd van DAX zonder dat je het wist.
+
+00:11:58.280 --> 00:12:03.100
+De derde thuisbasis is Analysis Services, het Microsoft-serverproduct dat de modellen van Power B aandrijft.
+
+00:12:03.280 --> 00:12:06.080
+Die gedeelde engine is de reden waarom DAX in alle drie voorkomt.
+
+00:12:06.180 --> 00:12:08.720
+Het zijn niet drie verschillende talen die toevallig op elkaar lijken.
+
+00:12:08.900 --> 00:12:12.160
+Het is één taal, en als je die eenmaal leert, kun je die overal gebruiken.
+
+00:12:12.360 --> 00:12:15.120
+Power B zelf is nu onderdeel van Microsoft Fabric.
+
+00:12:15.120 --> 00:12:21.480
+Als je die naam hebt gehoord en niet wist wat het was, het simpele antwoord is dat Fabric het data platform is waar de modellen van Power B leven.
+
+00:12:21.740 --> 00:12:29.420
+Daarom wordt een Power B model omschreven als een Fabric item en zien instellingen zoals Copilot eruit als Fabric instellingen in plaats van Power B instellingen.
+
+00:12:29.560 --> 00:12:31.900
+Azure komt erbij kijken via dezelfde afkomst.
+
+00:12:32.080 --> 00:12:38.460
+De tabulaire engine en de ideeën achterdags komen uit de Microsoft SQL Server familie, een server technologie die ook in Azure draait.
+
+00:12:38.460 --> 00:12:44.860
+Je hebt dat allemaal niet nodig om je eerste measure te schrijven, maar het verklaart waarom dezelfde concepten steeds opduiken in vacatures voor data gerelateerde rollen.
+
+00:12:45.000 --> 00:12:49.020
+Dan is er nog het punt waar een beginner in 2026 zich als eerste over zal verbazen.
+
+00:12:49.140 --> 00:12:50.860
+Kan Copilot de DAX gewoon voor je schrijven?
+
+00:12:51.020 --> 00:12:52.620
+Het eerlijke antwoord is deels.
+
+00:12:52.860 --> 00:12:58.460
+Copilot voor Power B kan DAX genereren en DAX queries schrijven, maar het vereist een betaalde Fabric of premium capaciteit.
+
+00:12:59.360 --> 00:13:04.160
+Sommige functies zijn nog in preview, en Microsoft geeft duidelijk aan dat het afhangt van een goed voorbereid model.
+
+00:13:04.440 --> 00:13:07.840
+Zonder die voorbereiding kan het algemene of simpelweg foutieve antwoorden geven.
+
+00:13:07.840 --> 00:13:13.360
+De Scope Pilot geeft je een echte voorsprong, en de basis is nog steeds wat je nodig hebt om te zien of het antwoord klopt.
+
+00:13:13.540 --> 00:13:15.360
+De korte versie en een vraag voor jou.
+
+00:13:15.580 --> 00:13:17.480
+Hier is de korte versie om mee te nemen.
+
+00:13:17.740 --> 00:13:25.440
+DAX is de formulesoftware achter Power B en Power Pivot in Excel, en het werkt met hele tabellen en kolommen in plaats van individuele cellen.
+
+00:13:26.040 --> 00:13:31.420
+Measures berekenen hun resultaat live terwijl je filtert, en berekende kolommen slaan een waarde op voor elke rij.
+
+00:13:31.420 --> 00:13:38.980
+Onder dit alles ligt context, het principe dat bepaalt welke rijen een formule kan zien, het enige dat de moeite waard is om te oefenen tot het logisch voelt.
+
+00:13:39.200 --> 00:13:43.660
+Dat is een stuk minder eng dan die drie letters op het eerste gezicht doen vermoeden, en je hebt nu de kaart in handen.
+
+00:13:43.800 --> 00:13:45.140
+Mijn vraag aan jou is deze.
+
+00:13:45.340 --> 00:13:50.200
+Wat is de berekening die je in Excel steeds handmatig uitvoert, waarvan je wenst dat een rapport die gewoon voor je kon tonen?
+
+00:13:50.380 --> 00:13:55.120
+Laat het achter in de reacties, want die specifieke wens is meestal precies het punt waarop DAX logisch begint te worden.
+
+00:13:55.120 --> 00:14:02.580
+Als dit onderwerp hierdoor minder intimiderend aanvoelt, abonneer je dan op M365FM om de tools en de mindset te beheersen die de toekomst van werk vormgeven.

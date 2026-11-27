@@ -470,7 +470,7 @@ test("Last (317-06): ein Lauf bleibt gedeckelt und weit unter 1.000 D1-Aufrufen;
   assert.deepEqual(ex.find((e) => e.handle === "ev-40").organizer, { kind: "u", handle: "orga-p", name: "Orga" }); assert.deepEqual(ex.find((e) => e.handle === "ev-41").organizer, { kind: "u", handle: "", name: "UG 41" });
   // Der Import laeuft nicht im Aufruf der Digests (0 6 * * * und */30), sondern zur Minute 15/45 im */15-Aufruf
   const idx = readFileSync(new URL("../src/index.js", import.meta.url), "utf8"), six = idx.slice(idx.indexOf('if (event.cron === "0 6 * * *")'));
-  assert.ok(/if \(event\.cron === "\*\/15 \* \* \* \*"\) \{[\s\S]*?getUTCMinutes\(\) % 30 === 15\) ctx\.waitUntil\(reminders\.catch\(\(\) => 0\)\.then\(\(\) => track\(env, "eventImport", \(\) => runEventImport\(env\)\)\)\);\s*return;/.test(idx)); assert.ok(!/EventImport/.test(six));
+  assert.ok(/if \(event\.cron === "\*\/15 \* \* \* \*"\) \{[\s\S]*?getUTCMinutes\(\) % 30 === 15\) ctx\.waitUntil\(reminders\.catch\(\(\) => 0\)\.then\(\(\) => track\(env, "eventImport", \((?:env)?\) => runEventImport\(env\)\)\)\);\s*return;/.test(idx)); assert.ok(!/EventImport/.test(six));
 });
 test("Speaker-Import (317-07): gleicher Name reicht nie fuer ein fremdes Event oder fuer die Speaker-Identitaet; nur der Nachweis auf der Sessionize-Seite wirkt ueber Events hinweg", async () => {
   const { raw, env, pages, opts } = await setup(), ev = via(handleEvents, env);

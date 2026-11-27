@@ -107,6 +107,12 @@ jobs:
         run: python check_titles.py
       - name: Encoding prüfen (Mojibake)
         run: python check_encoding.py
+      # Wie im Seitenbau (site.yml, dort blockierend vor dem R2-Upload): ohne diese beiden Schritte zeigte sich ein Fehler in Sitemap/hreflang oder ein
+      # interner Link ueber eine Weiterleitung erst nach dem Merge im Live-Bau. Geprueft wird der verkleinerte Bau (de, en; mit "voll" alle Sprachen).
+      - name: Sitemaps prüfen (wie site.yml)
+        run: python check_sitemaps.py docs r2out
+      - name: Interne Links ohne Weiterleitung (wie site.yml)
+        run: python check_redirect_links.py docs r2out
       - name: Größe des Baus ins Protokoll
         if: always()
         run: |

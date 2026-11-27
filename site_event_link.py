@@ -98,11 +98,13 @@ def html(BASE, lang, eid, today):
     up, pa = split(evs, today)
     li = lambda lst: "".join(f'<li><a href="{EV.eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(EV.span(e, lang))}'
                              + (f' · {esc(_place(e, s))}' if _place(e, s) else "") + "</span></li>" for e in lst)
-    out = f'<h2>{esc(T(lang, "Dates", "Termine"))}</h2>'
+    import site_ename as EN, site_linkctx as LC   # Einleitungssaetze mit der Beziehung zur Seite (Paket 6)
+    nm = EN.label(ENTS.get(eid) or {"name": eid}, lang)
+    out = f'<h2>{esc(T(lang, "Dates", "Termine"))}</h2>{LC.intro(lang, "ent.events", s=nm)}'
     if up:
-        out += f'<h3>{esc(s["upcoming"])}</h3><ul class="en-evs">{li(up)}</ul>'
+        out += f'<h3>{esc(s["upcoming"])}</h3>{LC.intro(lang, "ent.ev_up", s=nm)}<ul class="en-evs">{li(up)}</ul>'
     if pa:
-        out += f'<h3>{esc(s["past"])}</h3><ul class="en-evs">{li(pa)}</ul>'
+        out += f'<h3>{esc(s["past"])}</h3>{LC.intro(lang, "ent.ev_past", s=nm)}<ul class="en-evs">{li(pa)}</ul>'
     for ev in (up + pa)[:MAX_DETAIL]:
         u = EV.eurl_(BASE, lang, ev["handle"])
         ses = [x for x in ev.get("sessions", []) if x.get("title")]
@@ -112,7 +114,7 @@ def html(BASE, lang, eid, today):
         for se in ses:
             for x in se.get("speakers", []):
                 spk.setdefault((x.get("e") or x.get("h") or x.get("n") or "").lower(), x)
-        out += f'<h3>{esc(ev["title"])}: {esc(s["sessions"])} ({len(ses)})</h3><ul class="en-evs">'
+        out += f'<h3>{esc(ev["title"])}: {esc(s["sessions"])} ({len(ses)})</h3>{LC.intro(lang, "event.sessions", s=ev["title"])}<ul class="en-evs">'
         for se in ses[:MAX_SESSIONS]:
             who = ", ".join(person_link(BASE, lang, x) for x in se.get("speakers", []))
             when = EV.fdate(se["start"], lang) if se.get("start") else ""
@@ -120,7 +122,7 @@ def html(BASE, lang, eid, today):
             out += f'<li><a href="{u}">{esc(se["title"])}</a>' + (f' <span class="mut">· {meta}</span>' if meta else "") + "</li>"
         out += "</ul>"
         if spk:
-            out += f'<h3>{esc(ev["title"])}: {esc(s["speakers"])} ({len(spk)})</h3><p>' + ", ".join(person_link(BASE, lang, x) for x in sorted(spk.values(), key=lambda a: (a.get("n") or a.get("h") or "").lower())[:MAX_SPEAKERS]) + "</p>"
+            out += f'<h3>{esc(ev["title"])}: {esc(s["speakers"])} ({len(spk)})</h3>{LC.intro(lang, "event.speakers", s=ev["title"])}<p>' + ", ".join(person_link(BASE, lang, x) for x in sorted(spk.values(), key=lambda a: (a.get("n") or a.get("h") or "").lower())[:MAX_SPEAKERS]) + "</p>"
     return out
 
 

@@ -164,6 +164,9 @@ class Chain(unittest.TestCase):
             class Ix:
                 names = {"conditional access": "conditional-access", "microsoft teams": "teams", "jane doe": "jane-doe"}
                 rx = re.compile(r"(?<![\w-])(conditional access|microsoft teams|jane doe)(?![\w-])", re.I)
+
+                def ids(self, text, lang="en", ctx=()):
+                    return {self.names[m.group(1).lower()]: 1 for m in self.rx.finditer(text)}
             with patch.object(SBR, "Index", Ix):
                 self.assertEqual(TC.named_in("Microsoft Teams and Conditional Access with Jane Doe", ENTS), ["teams", "conditional-access", "jane-doe"])
                 self.assertEqual(TC.named_in("", ENTS), [])

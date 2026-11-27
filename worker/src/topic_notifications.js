@@ -254,9 +254,12 @@ async function emailUnsubscribeUrl(env, uid) {
   return `${env.API}/api/topics/email-unsub?t=${uid}.${sig}`;
 }
 
-export async function dispatchTopicNotifications(env, { at = new Date(), limit = 120 } = {}) {
+// cleanup: Aufraeumen alter Zeilen (14 Tage). topic_deliveries.created und topic_recipient_state.updated haben keinen Index, jedes DELETE liest die
+// ganze Tabelle; der Cron (index.js) raeumt deshalb nur einmal am Tag (*/15-Lauf um 06:00) auf, statt bei jedem der 96 Laeufe (D1-Kosten).
+// Abgelaufene, nie gesendete Zeilen stoeren bis dahin nicht: alle Abfragen unten filtern expires>jetzt.
+export async function dispatchTopicNotifications(env, { at = new Date(), limit = 120, cleanup = true } = {}) {
   const db = env.DB, nowTs = Math.floor(at.getTime() / 1000), maxRecipients = Math.max(1, Math.min(120, limit));
-  await db.batch([
+  if (cleanup) await db.batch([
     db.prepare("DELETE FROM topic_queue WHERE (sent=0 AND expires<=?) OR (sent=1 AND created<?)").bind(nowTs, nowTs - 14 * 86400),
     db.prepare("DELETE FROM topic_deliveries WHERE created<?").bind(nowTs - 14 * 86400),
     db.prepare("DELETE FROM topic_recipient_state WHERE updated<?").bind(nowTs - 14 * 86400),

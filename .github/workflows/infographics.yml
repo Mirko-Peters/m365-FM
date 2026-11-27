@@ -1,0 +1,106 @@
+name: Infografiken (Kopfbild + 2-3 Infografiken je Inhalt, 15 Sprachen)
+# Nur von Hand. Reihenfolge: plan (zaehlen, Kosten schaetzen, nichts wird bezahlt) -> specs limit=20 (Probe: englische Bildtexte per Haiku-Batch) -> translate (je Sprache)
+# -> render (Standbilder mit Playwright, Pruefung auf Layoutfehler, WebP nach R2, Index data/infographics/*.json.gz) -> in data/infographics_live.json Sprache/Art freigeben.
+# Ohne Freigabe aendert sich keine Seite. Details, Kosten und Notschalter: INFOGRAPHICS.md. Fertiges wird nie ein zweites Mal bezahlt oder gerendert.
+on:
+  workflow_call:   # aufgerufen von infographics-auto.yml (samstags); gleiche Eingaben, ref = Zweig, damit jede Stufe den Stand der vorigen sieht
+    inputs:
+      mode: { type: string, required: true }
+      kinds: { type: string, required: false, default: "entity,blog,episode,pillar" }
+      langs: { type: string, required: false, default: "en,de" }
+      limit: { type: string, required: false, default: "" }
+      ref: { type: string, required: false, default: "" }
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur zaehlen/schaetzen | specs = englische Bildtexte (Batch) | translate = Bildtexte uebersetzen (Batch je Sprache) | collect = offene Batches einsammeln | render = Bilder erzeugen, hochladen, Index schreiben"
+        type: choice
+        options: [plan, specs, translate, collect, render]
+        default: plan
+      kinds: { description: "Arten (Komma): entity, blog, episode, pillar", required: false, default: "entity,blog,episode,pillar" }
+      langs: { description: "Sprachen (Komma), fuer translate und render. Zuerst en,de; spaeter alle: en,de,es,fr,it,pt,nl,pl,id,ru,uk,ar,he,ja,ko", required: false, default: "en,de" }
+      limit: { description: "Hoechstens N Inhalte (leer = alle offenen); fuer die Probe 20", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: infographics, cancel-in-progress: false }
+jobs:
+  ig:
+    runs-on: ubuntu-24.04   # fest: ubuntu-latest ist jetzt 26.04, dort kann Playwright 1.56.1 keine Abhaengigkeiten installieren
+    timeout-minutes: 355
+    defaults:
+      run:
+        shell: bash   # bash -eo pipefail: ein Absturz vor `| tee` bricht den Schritt ab
+    env:
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+      MODE_IN: ${{ inputs.mode }}
+      KINDS_IN: ${{ inputs.kinds }}
+      LANGS_IN: ${{ inputs.langs }}
+      LIMIT_IN: ${{ inputs.limit }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}   # Zweig (nicht SHA): sonst detached HEAD und der Push der Stand-Commits schluege fehl
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Python-Pakete
+        run: pip install boto3 pillow
+      - name: Schriften, Node und Browser (nur zum Rendern)
+        if: inputs.mode == 'render'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-core fonts-noto-cjk fonts-noto-ui-core >/dev/null
+          fc-cache -f
+          mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i --silent playwright@1.56.1
+          npx playwright install --with-deps chromium >/dev/null
+          echo "NODE_PATH=/tmp/pw/node_modules" >> "$GITHUB_ENV"
+      - name: Eingaben pruefen
+        run: |
+          [[ "$KINDS_IN" =~ ^[a-z]+(,[a-z]+)*$ ]] || { echo "kinds ungueltig"; exit 1; }
+          [[ "$LANGS_IN" =~ ^[a-z]{2}(,[a-z]{2})*$ ]] || { echo "langs ungueltig"; exit 1; }
+          [[ -z "$LIMIT_IN" || "$LIMIT_IN" =~ ^[0-9]+$ ]] || { echo "limit ungueltig"; exit 1; }
+      - name: Ausfuehren
+        env:
+          ANTHROPIC_API_KEY: ${{ (inputs.mode == 'specs' || inputs.mode == 'translate' || inputs.mode == 'collect') && secrets.ANTHROPIC_API_KEY_SHOW || '' }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          ARGS=(--kinds "$KINDS_IN" --langs "$LANGS_IN")
+          [ -n "$LIMIT_IN" ] && ARGS+=(--limit "$LIMIT_IN")
+          [ "$MODE_IN" = "render" ] && ARGS+=(--max-min 320)
+          python tools/infographics.py "$MODE_IN" "${ARGS[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Stand sichern (Batch-IDs, Index)
+        if: always() && inputs.mode != 'plan'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/infographics_state.json data/infographics 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu sichern"; exit 0; fi
+          git commit -q -m "Infografiken: ${MODE_IN} $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1
+      - name: Batches einsammeln (3,5 Stunden warten)
+        if: inputs.mode == 'specs' || inputs.mode == 'translate' || inputs.mode == 'collect'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python tools/infographics.py collect --wait 12600 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis sichern
+        if: always() && (inputs.mode == 'specs' || inputs.mode == 'translate' || inputs.mode == 'collect')
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/infographics_state.json 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu sichern"; exit 0; fi
+          git commit -q -m "Infografiken: Bildtexte eingesammelt $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1

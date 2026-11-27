@@ -1,0 +1,38 @@
+<translation>
+## TOC KPI : comment mesurer les progrès
+
+| KPI | Formule | Niveau | Fréquence | Commentaire |
+|---|---|---|---|---|
+| Débit (T) | ventes − coût réellement variable | usine | hebdomadaire, mensuelle | l'indicateur principal de l'objectif |
+| Charges d'exploitation (OE) | toutes les autres dépenses | usine | mensuelle | doit croître plus lentement que T |
+| Stock/investissement (I) | valeur matière des stocks et des en-cours (plus les actifs dans la vue élargie) | usine | mensuelle | la part des en-cours doit baisser avec le DBR |
+| Bénéfice net | T − OE | usine | mensuelle | |
+| ROI | (T − OE) ÷ I | usine | trimestrielle | |
+| Minutes productives de la contrainte | minutes de pièces bonnes à la contrainte ÷ minutes disponibles | contrainte | par poste | le rythme cardiaque quotidien |
+| Respect du planning de la contrainte | ordres lancés dans la fenêtre planifiée ÷ ordres planifiés | contrainte | quotidienne | montre si le tambour tient |
+| Part des ordres rouges | ordres rouges ÷ ordres ouverts | tampon | quotidienne | trop élevée : tampon trop petit ou process instable |
+| Respect des dates de livraison | ordres expédiés à la date promise ou avant ÷ ordres expédiés | client | hebdomadaire | le résultat le plus visible |
+| Délai de traversée | du lancement à l'expédition, médiane et 90e percentile | flux de valeur | hebdomadaire | à vérifier avec la loi de Little |
+| En-cours en jours | en-cours ÷ débit quotidien moyen | flux de valeur | hebdomadaire | |
+| Throughput-dollar-days (TDD) | Σ (valeur T de la commande en retard × jours de retard) | responsabilité | hebdomadaire | une mesure TOC des « choses qui auraient dû être faites » ; origine dans les travaux de mesure de Goldratt [non vérifié] |
+| Inventory-dollar-days (IDD) | Σ (valeur du stock × jours de détention) | responsabilité | hebdomadaire | mesure les « choses qui n'auraient pas dû être faites » [non vérifié] |
+
+Deux règles pour le tableau de bord des KPI : afficher les KPI de contrainte à la contrainte, et ne pas afficher le taux d'utilisation des non-contraintes comme objectif de performance. Le guide sur les [KPI de production](https://www.m365.fm/en/learn/manufacturing-kpis/) définit les KPI de production standard qui accompagnent ceux-ci.
+
+## Erreurs courantes
+
+| Erreur | Pourquoi c'est néfaste | Mieux vaut |
+|---|---|---|
+| Choisir la contrainte au pif | le problème visible est souvent un symptôme (l'assemblage était en manque) | tableau de charge plus contrôle au sol, données de période active si disponibles |
+| Passer directement à l'étape 4 | de l'argent dépensé alors que la contrainte perd encore 20 à 25 % de son temps | exploiter et subordonner d'abord |
+| Garder des objectifs d'utilisation pour les non-contraintes | lancements anticipés, plus d'en-cours, la contrainte traite le mauvais travail | mesurer les non-contraintes sur « la contrainte n'attend jamais après nous » |
+| Lancer le travail en avance « par sécurité » | les en-cours et les délais augmentent ; les priorités se perdent | lancement strict par la corde |
+| Tampons fixés une fois pour toutes puis oubliés | trop grands : les en-cours restent élevés ; trop petits : des rouges permanents | ajuster à partir des données d'ordres rouges |
+| Aucune barrière qualité avant la contrainte | la contrainte usine des pièces déjà au rebut | contrôle ou poka-yoke avant la contrainte |
+| Rebut détecté loin en aval | le temps de la contrainte est gaspillé en silence | contrôler les caractéristiques critiques juste après la contrainte |
+| Ignorer la contrainte de marché | une usine avec une capacité excédentaire partout continue d'« optimiser » les machines | S-DBR, offres de délai de traversée, implication des ventes |
+| Choisir la gamme selon la marge unitaire | moins de profit avec la même capacité | classer par T par minute de contrainte |
+| Deux systèmes de priorité concurrents | listes d'urgence et couleurs de tampon se contredisent | une seule règle : l'état du tampon |
+| La contrainte se déplace, les règles restent | anciennes tailles de lot et anciens devis bloquent le gain suivant | revue de l'étape 5 à chaque cycle |
+| Opérateurs de la contrainte laissés de côté | ceux qui voient les pertes ne sont pas consultés | les opérateurs sont responsables des causes de perte et des contre-mesures |
+</translation>

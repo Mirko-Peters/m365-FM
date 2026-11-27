@@ -1,0 +1,34 @@
+<translation>
+1. **O modo de falha tem consequências de segurança ou ambientais?** Se sim, você precisa de uma tarefa que reduza o risco a um nível aceitável, ou de um redesenho. Deixar falhar não é uma opção.
+2. **Existe um aviso detectável antes da falha funcional (uma falha potencial, P)?** Se sim, e o período de aviso for longo e suficientemente consistente, a manutenção baseada na condição ou preditiva é a primeira escolha.
+3. **Se não, a falha está relacionada à idade?** Se a probabilidade de falha aumenta claramente com a idade ou o uso, uma substituição baseada em tempo ou em uso pode funcionar.
+4. **Se nenhuma das opções se aplica, as consequências são aceitáveis?** Então deixe falhar de forma deliberada, com peças de reposição e um procedimento de reparo rápido. Caso contrário, redesenhe ou adicione redundância.
+
+A RCM, como método formal, surgiu na aviação comercial dos Estados Unidos. F. Stanley Nowlan e Howard F. Heap, da United Airlines, escreveram o relatório de 1978 *Reliability-Centered Maintenance* para o Departamento de Defesa dos Estados Unidos [9]; a SAE JA1011 (1998) definiu depois os critérios mínimos que um processo deve atender para ser chamado de RCM [10]. Leitores da área aeronáutica reconhecerão a mesma lógica no desenvolvimento de programas de manutenção; veja nosso guia sobre [planejamento da produção aeroespacial](https://www.m365.fm/en/learn/aerospace-production-planning/) para o lado do planejamento.
+
+## Como as máquinas falham: a curva P-F e os seis padrões de falha
+
+### A curva P-F
+
+A curva P-F representa a condição de um ativo ao longo do tempo. Em algum momento surge um defeito. Um pouco depois, ele se torna detectável com uma determinada técnica: este é o **ponto de falha potencial (P)**. A condição continua a piorar até que o ativo não consiga mais desempenhar sua função: o **ponto de falha funcional (F)**. O tempo entre P e F é o **intervalo P-F**.
+
+Três propriedades da curva P-F orientam toda decisão de manutenção preditiva:
+
+1. **Cada técnica tem seu próprio ponto P.** A análise de vibração ou a ultrassonografia normalmente detectam um defeito em rolamento de elementos rolantes muito antes de o rolamento aquecer; uma câmera térmica o detecta mais tarde; um técnico o percebe por último, pelo som e pelo toque. Quanto mais cedo o ponto P, maior o aviso e maior a liberdade para planejar.
+2. **O intervalo P-F varia.** O mesmo modo de falha pode se desenvolver ao longo de meses em um ventilador com carga leve e em poucos dias em um redutor com carga pesada e lubrificação deficiente. Planeje com uma estimativa conservadora, não com a média.
+3. **O aviso útil é menor que o intervalo P-F.** Você perde o tempo entre as inspeções e o tempo necessário para encomendar peças, planejar e executar o serviço.
+
+### Exemplo prático: uma rota mensal de vibração é suficiente?
+
+Uma planta monitora o rolamento de um motor de ventilador de 75 kW (100 hp) com um coletor portátil de dados de vibração. A experiência com ventiladores semelhantes sugere um intervalo P-F de cerca de 8 semanas para defeitos na pista externa do rolamento detectados por vibração (uma premissa para este exemplo; colete suas próprias evidências).
+
+- Intervalo de inspeção: rota mensal, cerca de 4,3 semanas.
+- Pior caso: o defeito se torna detectável um dia após uma medição. Ele é encontrado na próxima rota, 4,3 semanas depois.
+- Aviso restante: 8,0 − 4,3 = **3,7 semanas** (o "intervalo P-F líquido").
+- Tempo necessário para agir: 2 semanas de prazo de entrega para um conjunto de rolamentos e 1 semana para encaixar o serviço em uma parada planejada = 3 semanas.
+- Margem: 3,7 − 3,0 = **0,7 semana**. A rota funciona, mas por pouco.
+
+Com uma rota trimestral (13 semanas), o defeito poderia evoluir de P para F entre duas medições. O monitoramento pareceria ativo no papel e detectaria a falha por sorte. Uma regra prática comum em confiabilidade é inspecionar em no máximo metade do intervalo P-F, o que aqui significa a cada 4 semanas ou com mais frequência [não verificado como norma formal; é uma convenção de práticas do setor]. Um sensor sem fio que transmite várias vezes por dia elimina quase totalmente a perda causada pelo intervalo de inspeção, que é o principal argumento operacional para o monitoramento IIoT contínuo em ativos com intervalos P-F curtos ou incertos.
+
+> **Fórmula: intervalo P-F líquido = intervalo P-F − intervalo de inspeção.** A tarefa só é tecnicamente viável se o intervalo P-F líquido for maior que o tempo necessário para planejar e executar o reparo.
+</translation>

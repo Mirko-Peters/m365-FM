@@ -1,0 +1,934 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.020
+El control de acceso basado en los roles de Azure es realmente como una tarjeta de acceso
+
+00:00:03.020 --> 00:00:06.400
+en un interruptor de luz. Un interruptor de luz está encendido o apagado para toda una
+
+00:00:06.400 --> 00:00:09.500
+habitación, mientras que una tarjeta abre puertas específicas para una persona específica.
+
+00:00:10.120 --> 00:00:13.360
+La mayoría aprendimos los permisos al estilo del interruptor, por lo que el acceso suele
+
+00:00:13.360 --> 00:00:15.180
+terminar siendo más amplio de lo planeado.
+
+00:00:16.100 --> 00:00:20.320
+Bienvenidos al podcast M365FM, donde exploramos las personas, ideas y tecnologías que dan
+
+00:00:20.320 --> 00:00:21.440
+forma al futuro del trabajo.
+
+00:00:22.220 --> 00:00:25.960
+Hoy analizamos cómo funciona el acceso en Azure y todo se reduce a tres partes móviles
+
+00:00:25.960 --> 00:00:26.960
+que puedes retener en tu mente.
+
+00:00:26.960 --> 00:00:31.500
+Al final, podrás ver el acceso de cualquiera en tu suscripción y saber exactamente por
+
+00:00:31.500 --> 00:00:34.300
+qué existe que hace realmente el R-Vax.
+
+00:00:34.940 --> 00:00:38.900
+El control de acceso basado en roles responde tres preguntas sobre cada recurso que posees
+
+00:00:38.900 --> 00:00:40.380
+y las plantea de nuevo en cada solicitud.
+
+00:00:40.800 --> 00:00:44.380
+Esas preguntas son quién puede entrar, qué se le permite hacer una vez dentro y qué
+
+00:00:44.380 --> 00:00:46.340
+tan lejos llega su alcance.
+
+00:00:47.140 --> 00:00:48.600
+Eso suena como mucha maquinaria, no lo ve.
+
+00:00:49.540 --> 00:00:52.720
+Microsoft lo describe como un sistema de autorización construido sobre Azure Resource
+
+00:00:52.720 --> 00:00:55.740
+Manager, el servicio que recibe una solicitud y decide si ejecutarla.
+
+00:00:55.740 --> 00:00:59.620
+La autorización es simplemente la decisión sobre lo que a una persona que ya inició
+
+00:00:59.620 --> 00:01:00.720
+sesión se le permite hacer.
+
+00:01:01.180 --> 00:01:04.020
+Imagina un edificio con una puerta principal compartida y muchas habitaciones cerradas.
+
+00:01:04.640 --> 00:01:06.440
+Todos entran por la misma entrada ya que inició la sesión.
+
+00:01:06.580 --> 00:01:09.900
+Prueba quiénes son y luego cada persona una tarjeta para las habitaciones que necesita.
+
+00:01:11.000 --> 00:01:13.980
+Algunas tarjetas abren un armario de almacenamiento y otras abren un piso interno.
+
+00:01:14.400 --> 00:01:15.800
+Nada en Azure está abierto de forma pletermin.
+
+00:01:16.360 --> 00:01:20.020
+El acceso existe porque alguien crea una asignación de roles y desaparece cuando alguien elimina
+
+00:01:20.020 --> 00:01:20.580
+esa asignación.
+
+00:01:21.280 --> 00:01:24.300
+Ningún interruptor se activa solo para bien y ningún permiso se enciende mientras no estás
+
+00:01:24.300 --> 00:01:28.140
+mirando. Así que cuando un compañero puede ver de repente un recurso que nunca ha tocado,
+
+00:01:28.300 --> 00:01:29.740
+la explicación es casi siempre la misma.
+
+00:01:30.380 --> 00:01:32.540
+En alguna parte de la jerarquía existe una asignación incontrolada.
+
+00:01:32.620 --> 00:01:33.680
+Te cuenta toda la historia.
+
+00:01:34.920 --> 00:01:38.220
+Algo que vale la pena aclarar desde el principio es que esto no es un extra de pago o una función
+
+00:01:38.220 --> 00:01:38.560
+premium.
+
+00:01:39.360 --> 00:01:42.180
+Microsoft afirma que Azure Resource es gratuito y está incluido en tu suscripción.
+
+00:01:42.900 --> 00:01:46.120
+Te lo encuentras en el portal en una página llamada Control de Acceso, donde la etiqueta
+
+00:01:46.120 --> 00:01:48.200
+IAM aparece en cada nivel de la jerarquía.
+
+00:01:48.200 --> 00:01:52.360
+La ventaja es que puedes darle a alguien es exactamente el acceso que requiere su trabajo
+
+00:01:52.360 --> 00:01:53.120
+y nada más.
+
+00:01:54.160 --> 00:01:57.780
+Una persona gestiona máquinas virtuales, otra cuida las redes y un equipo de bases de datos
+
+00:01:57.780 --> 00:02:00.540
+gestiona las bases de datos, todo sin interferir entre sí.
+
+00:02:01.300 --> 00:02:03.480
+Esas tres piezas son las que lo hacen posible, así que vamos a abrirlas.
+
+00:02:04.520 --> 00:02:05.820
+Las tres piezas de toda asignación de roles.
+
+00:02:06.620 --> 00:02:09.680
+Cada asignación en Azure se construye a partir de las mismas tres partes y Microsoft trata
+
+00:02:09.680 --> 00:02:11.760
+esa estructura como el núcleo de cómo se aplican los permisos.
+
+00:02:12.500 --> 00:02:15.200
+Si falta una parte, la asignación deja de tener sentido.
+
+00:02:15.200 --> 00:02:18.760
+El portal le guía a través de las tres cada vez que añade una asignación, solicitando
+
+00:02:18.760 --> 00:02:20.720
+un miembro, un rol y un ámbito antes de guardar.
+
+00:02:21.320 --> 00:02:24.300
+Primero está el principio de seguridad, que es el nombre formal para lo que sea que
+
+00:02:24.300 --> 00:02:25.120
+esté recibiendo el acceso.
+
+00:02:25.760 --> 00:02:29.580
+Puede ser un usuario, un grupo, la identidad de una aplicación o una identidad administrada
+
+00:02:29.580 --> 00:02:31.380
+que Azure crea y rota en su nombre.
+
+00:02:32.400 --> 00:02:35.200
+Segundo está la definición del rol, que es el conjunto de acciones que un rol permite
+
+00:02:35.200 --> 00:02:35.560
+realizar.
+
+00:02:36.260 --> 00:02:39.440
+La lista abarca desde lectura y escritura hasta eliminación, con varios cientos de varias
+
+00:02:39.440 --> 00:02:40.160
+estrellas a estrés.
+
+00:02:40.580 --> 00:02:44.400
+Los roles vienen en todos los tamaños, desde el enorme rol de propietario hasta algo limitado
+
+00:02:44.400 --> 00:02:45.800
+como el lector de máquinas virtuales.
+
+00:02:46.200 --> 00:02:48.940
+Tercero está el ámbito, que es el conjunto de recursos a los que se aplica el rol.
+
+00:02:49.360 --> 00:02:52.680
+El ámbito es la parte que decide qué tanto de su entorno puede afectar un solo error,
+
+00:02:53.140 --> 00:02:55.080
+por lo que merece el mayor cuidado al configurar las cosas.
+
+00:02:55.660 --> 00:02:58.460
+Solo la combinación tiene significado, que es el detalle que los principiantes suelen
+
+00:02:58.460 --> 00:02:59.200
+pasar por alto.
+
+00:02:59.760 --> 00:03:02.920
+El rol de colaborador en un grupo de recursos permite administrar todo lo que hay dentro
+
+00:03:02.920 --> 00:03:04.180
+de esa carpeta y nada fuera de ella.
+
+00:03:04.640 --> 00:03:08.220
+El rol de colaborador en toda una suscripción permite a esa misma persona administrar cada recurso
+
+00:03:08.220 --> 00:03:10.860
+que usted posee, lo cual es un resultado totalmente distinto con la misma palabra.
+
+00:03:10.860 --> 00:03:14.440
+Dos elementos de esa lista suena a mi extraño si nunca ha administrado un entorno en la
+
+00:03:14.440 --> 00:03:14.660
+nube.
+
+00:03:15.660 --> 00:03:19.060
+Un principio de servicio es un nombre de usuario y contraseña para una aplicación, para que
+
+00:03:19.060 --> 00:03:21.500
+el software pueda iniciar sesión y trabajar sin una persona presente.
+
+00:03:22.220 --> 00:03:25.800
+Una identidad administrada funciona igual pero sin contraseña, porque Azure guarda las
+
+00:03:25.800 --> 00:03:29.040
+credenciales por usted y ningún secreto termina nunca en un archivo de configuración.
+
+00:03:29.480 --> 00:03:30.680
+Las dos primeras partes son las masillas.
+
+00:03:31.220 --> 00:03:34.740
+O eligió a la persona correcta o no y eligió el rol correcto o no, ambas decisiones suelen
+
+00:03:34.740 --> 00:03:36.500
+resolverse rápidamente por sí mismas.
+
+00:03:36.500 --> 00:03:40.000
+El ámbito es donde se aconden los verdaderos problemas, así que ahí es a donde iremos
+
+00:03:40.000 --> 00:03:40.340
+a continuar.
+
+00:03:40.900 --> 00:03:42.200
+Los cuatro tamaños de ámbito.
+
+00:03:42.560 --> 00:03:45.680
+El ámbito tiene exactamente cuatro tamaños y Microsoft los enumera desde el más amplio
+
+00:03:45.680 --> 00:03:46.560
+hasta el más restringido.
+
+00:03:46.900 --> 00:03:47.500
+Hasta el más restringido.
+
+00:03:47.700 --> 00:03:50.620
+Estos son el grupo de administración, la suscripción, el grupo de recursos y el recurso.
+
+00:03:51.180 --> 00:03:54.540
+Un grupo de administración es un contenedor que se sitúa por encima de las suscripciones
+
+00:03:54.540 --> 00:03:57.920
+y existe para que grandes organizaciones puedan organizar muchas suscripciones en un solo
+
+00:03:57.920 --> 00:03:58.220
+árbol.
+
+00:03:59.460 --> 00:04:02.780
+La mayoría de los principiantes nunca tocan uno, pero aún debe saber que existe porque el
+
+00:04:02.780 --> 00:04:05.480
+acceso otorgado a ese nivel llega a toda suscripción debajo de él.
+
+00:04:06.500 --> 00:04:09.520
+Lo siguiente en la jerarquía de la suscripción, que suele ser el primer límite que usted
+
+00:04:09.520 --> 00:04:13.420
+encuentra, contiene su facturación, los límites de sus servicios y un conjunto de recursos
+
+00:04:13.420 --> 00:04:14.400
+que pertenecen al mismo grupo.
+
+00:04:14.620 --> 00:04:16.620
+Y para la mayoría de las personas es el único límite en el que piensan.
+
+00:04:17.620 --> 00:04:20.960
+De abajo se encuentra el grupo de recursos, una carpeta dentro de una suscripción que
+
+00:04:20.960 --> 00:04:23.900
+contiene recursos relacionados, por lo que los equipos suelen organizarlos por proyecto
+
+00:04:23.900 --> 00:04:24.820
+en torno a departamento.
+
+00:04:25.640 --> 00:04:28.740
+La unidad más pequeña de todas es un recurso individual y significa una sola cosa.
+
+00:04:29.040 --> 00:04:31.780
+Puede ser una cuenta de almacenamiento, una máquina virtual o una base de datos.
+
+00:04:32.280 --> 00:04:35.820
+El portal muestra esto como un menú desplegable y el nivel que elija ahí determina cuánto
+
+00:04:35.820 --> 00:04:37.380
+del árbol cubre una sola asignación.
+
+00:04:38.040 --> 00:04:41.160
+La herencia es la regla que hace que esta jerarquía sea importante y funcione en una
+
+00:04:41.160 --> 00:04:41.780
+sola dirección.
+
+00:04:42.480 --> 00:04:44.940
+El acceso otorgado en un nivel superior fluye hacia todo lo que está debajo.
+
+00:04:46.060 --> 00:04:49.080
+Asigna el rol del lector a nivel de grupo de administración y esa persona podrá leer
+
+00:04:49.080 --> 00:04:51.840
+todos los recursos en cada suscripción dentro de ese grupo de administración.
+
+00:04:52.280 --> 00:04:55.240
+Lo inverso nunca sucede porque el acceso otorgado profundamente en el árbol no escala
+
+00:04:55.240 --> 00:04:55.600
+hacia arriba.
+
+00:04:56.180 --> 00:04:57.820
+La regla aditiva sorprende a aún más personas.
+
+00:04:57.820 --> 00:05:02.060
+Como Azure calcula sus permisos efectivos sumando cada asignación que tiene, una asignación
+
+00:05:02.060 --> 00:05:03.460
+amplia anula una limitada.
+
+00:05:04.660 --> 00:05:07.780
+Imagine a alguien que tiene el rol del lector al nivel de suscripción y colaborador en un
+
+00:05:07.780 --> 00:05:08.560
+solo grupo de recursos.
+
+00:05:09.480 --> 00:05:12.620
+Su acceso efectivo para esa suscripción es colaborador porque la suma de ambos roles
+
+00:05:12.620 --> 00:05:16.360
+es colaborador y la asignación del lector no cambia nada en absoluto.
+
+00:05:17.120 --> 00:05:19.780
+Es por eso que agregar un rol pequeño para solucionar un problema grande a la defensa.
+
+00:05:20.220 --> 00:05:23.180
+La pertenencia a grupos añade una capa más ya que las asignaciones hechas a grupos
+
+00:05:23.180 --> 00:05:23.780
+son transitivas.
+
+00:05:24.660 --> 00:05:28.020
+Si usted está en un grupo y ese grupo está dentro de otro que tiene una asignación,
+
+00:05:28.140 --> 00:05:30.200
+usted da esos permisos, ya sea que alguien lo haya planeado o no.
+
+00:05:31.400 --> 00:05:34.580
+Una vez que pueda ver hasta dónde llega el alcance, la siguiente pregunta es para la
+
+00:05:34.580 --> 00:05:36.560
+que vino aquí, ¿qué rol debe aplicarle?
+
+00:05:37.500 --> 00:05:38.680
+Los roles que realmente encontrar.
+
+00:05:39.480 --> 00:05:43.240
+Microsoft ofrece más de 100 roles integrados para Azure y cinco de ellos forman la base
+
+00:05:43.240 --> 00:05:44.100
+de todo el sistema.
+
+00:05:45.420 --> 00:05:49.440
+Conocerá a los demás uno a uno a medida que su trabajo lo lleve a ellos, propietarios
+
+00:05:49.440 --> 00:05:50.200
+el más grande de los cinco.
+
+00:05:50.200 --> 00:05:54.240
+Otorga control total sobre cada recurso del alcance y también otorga la capacidad de
+
+00:05:54.240 --> 00:05:55.340
+asignar acceso a otras personas.
+
+00:05:55.740 --> 00:05:58.200
+Ese segundo poder es la parte que cambia como debería usarlo.
+
+00:05:58.680 --> 00:06:02.320
+Colaborador otorga el mismo control total sobre los recursos con una diferencia importante.
+
+00:06:03.100 --> 00:06:07.180
+Un colaborador no puede asignar roles a nadie, puede crear y eliminar cosas, pero no puede
+
+00:06:07.180 --> 00:06:08.300
+abrir puertas a otros.
+
+00:06:09.160 --> 00:06:10.420
+Lector es exactamente lo que parece.
+
+00:06:10.880 --> 00:06:13.440
+Alguien con el rol de lector puede ver los recursos, pero no puede cambiar nada, lo
+
+00:06:13.440 --> 00:06:15.940
+que lo convierte en el punto de partida más seguro para cualquier proyecto.
+
+00:06:16.520 --> 00:06:18.420
+Los dos últimos son los administradores de acceso.
+
+00:06:18.420 --> 00:06:21.180
+El administrador de acceso de usuarios y el administrador de control de acceso basado
+
+00:06:21.180 --> 00:06:22.580
+en roles gestionan quien puede acceder aquí.
+
+00:06:22.960 --> 00:06:26.260
+Microsoft los agrupa con el rol de propietario como roles privilegiados, ya que cualquiera
+
+00:06:26.260 --> 00:06:28.460
+de ellos puede asignarse al rol de propietario a sí mismo u otros.
+
+00:06:28.860 --> 00:06:31.760
+Más allá de esos cinco, existe una larga lista de roles por función laboral, cada uno
+
+00:06:31.760 --> 00:06:33.820
+orientado a un servicio o a un tipo de tarea específico.
+
+00:06:34.640 --> 00:06:38.060
+El colaborador de máquinas virtuales permite crear y gestionar máquinas virtuales sin tocar
+
+00:06:38.060 --> 00:06:38.940
+la red ni los datos.
+
+00:06:39.800 --> 00:06:43.720
+El lector de datos de blobs de almacenamiento permite leer archivos en una sola cuenta de almacenamiento
+
+00:06:43.720 --> 00:06:44.620
+sin acceso de escritura.
+
+00:06:44.620 --> 00:06:48.580
+Hay un detalle sutil en esos roles por función laboral que confunde a muchos al principio
+
+00:06:48.580 --> 00:06:50.160
+y conviene entenderlo antes de asignar nada.
+
+00:06:51.020 --> 00:06:53.980
+Gestionar un recurso y leer los datos que contiene son dos permisos distintos en Azure.
+
+00:06:54.940 --> 00:06:58.480
+El rol de colaborador en una cuenta de almacenamiento permite crear y configurar dicha cuenta, pero
+
+00:06:58.480 --> 00:07:00.040
+no permite leer ni un solo archivo en su interior.
+
+00:07:00.600 --> 00:07:03.320
+Leer los datos requiere un rol independiente orientado a los datos mismos.
+
+00:07:03.660 --> 00:07:06.900
+Cuando busque el rol adecuado, comience por la categoría de servicio en lugar de por
+
+00:07:06.900 --> 00:07:07.940
+el principio de la lista.
+
+00:07:07.940 --> 00:07:11.760
+La página de roles integrados de Microsoft está organizada por servicio, por lo que
+
+00:07:11.760 --> 00:07:15.640
+buscar palabras como blob o máquina virtual reduce cientos de opciones a un puñado.
+
+00:07:16.760 --> 00:07:19.340
+La guía de Microsoft para elegir entre ellos es gratamente sencilla.
+
+00:07:20.320 --> 00:07:23.440
+Empiece con el rol más restrictivo que permita realizar el trabajo y solo suba de nivel
+
+00:07:23.440 --> 00:07:26.180
+si no hay otra forma de completar la tarea, si no hay que completar la tarea.
+
+00:07:26.380 --> 00:07:30.140
+Si alguien necesita leer blobs, el rol del lector es suficiente, mientras que el de colaborador
+
+00:07:30.140 --> 00:07:31.620
+les otorga mucho más de lo necesario.
+
+00:07:32.420 --> 00:07:33.840
+El principio de menor privilegio es lo más importante.
+
+00:07:33.840 --> 00:07:38.200
+El menor privilegio es el nombre de ese hábito y significa dar a alguien el rol más pequeño
+
+00:07:38.200 --> 00:07:42.300
+en el ámbito más pequeño y por el tiempo mínimo necesario para hacer su trabajo.
+
+00:07:42.860 --> 00:07:44.900
+La razón por la que esto importa no es por orden burocracia.
+
+00:07:45.740 --> 00:07:49.000
+Limitar el rol y el ámbito reduce lo que un atacante puede alcanzar si la cuenta llega
+
+00:07:49.000 --> 00:07:49.880
+a verse comprometida.
+
+00:07:50.340 --> 00:07:52.040
+Por tanto, una situación pequeña es sin impacto pequeño.
+
+00:07:52.680 --> 00:07:54.480
+La propia guía de Microsoft lo expresa con claridad.
+
+00:07:55.020 --> 00:07:58.840
+Evite asignar roles más amplios en ámbitos más extensos e incluso si parecen más convenientes
+
+00:07:58.840 --> 00:08:01.800
+en el momento porque la comodidad de hoy se convierte en el radio de impacto de mañana.
+
+00:08:01.800 --> 00:08:05.720
+Hay una cifra de documentación de Microsoft que vale la pena recordar.
+
+00:08:06.120 --> 00:08:09.700
+Microsoft recomienda un máximo de tres propietarios por suscripción, ya que cada propietario adicional
+
+00:08:09.700 --> 00:08:12.180
+añade una vía más para la propagación de una cuenta comprometida.
+
+00:08:13.000 --> 00:08:15.880
+El menor privilegio no es un proyecto que se programa, sino un hábito que se aplica en
+
+00:08:15.880 --> 00:08:17.180
+el momento en que se crea una asignación.
+
+00:08:17.840 --> 00:08:21.140
+Alguien que necesite acceso para una migración de dos semanas obtiene un rol por dos semanas,
+
+00:08:21.260 --> 00:08:22.120
+no un rol permanente.
+
+00:08:23.040 --> 00:08:26.020
+Retirarlo después es una simple eliminación, una búsqueda en una hoja de calco.
+
+00:08:26.580 --> 00:08:29.340
+La otra razón por la que los equipos se mantienen así es que las asignaciones pequeñas
+
+00:08:29.340 --> 00:08:29.980
+son fáciles de explicar.
+
+00:08:29.980 --> 00:08:33.280
+Cuando un gerente pregunta a quién puede acceder a la suscripción financiera, basta
+
+00:08:33.280 --> 00:08:35.260
+un minuto para explicar unas cuantas asignaciones de grupo.
+
+00:08:35.800 --> 00:08:38.100
+Cuatro ciendas individuales requieren toda una tarde de investigación.
+
+00:08:38.880 --> 00:08:41.300
+Para los roles privilegiados, el patrón se vuelve aún más estricto.
+
+00:08:41.800 --> 00:08:45.160
+Use el ámbito más limitado posible como un solo grupo de recursos en lugar de toda la
+
+00:08:45.160 --> 00:08:45.600
+suscripción.
+
+00:08:46.240 --> 00:08:49.860
+Luego, active la activación justo a tiempo mediante Microsoft Enter Privileged Identity
+
+00:08:49.860 --> 00:08:52.560
+Management para que el privilegio exista por un breve periodo en vez de para siempre.
+
+00:08:53.460 --> 00:08:56.540
+Esa última opción requiere una suscripción de pago de EntraID, así que considere
+
+00:08:56.540 --> 00:08:58.500
+algo a futuro y no una función básica que esté perdiendo.
+
+00:08:58.500 --> 00:09:02.660
+Y si los roles integrados realmente no se ajustan a su situación, ese es el único
+
+00:09:02.660 --> 00:09:05.820
+caso donde crear uno propio tiene sentido que es precisamente hacia donde nos dirigimos.
+
+00:09:06.920 --> 00:09:07.880
+Integrados o personalizado.
+
+00:09:08.600 --> 00:09:11.640
+Los roles integrados están listos para usarse y Microsoft los mantiene, que es la razón
+
+00:09:11.640 --> 00:09:12.620
+principal para empezar por ahí.
+
+00:09:13.140 --> 00:09:16.380
+Los roles personalizados cubren el vacío cuando ningún rol integrado coincide con
+
+00:09:16.380 --> 00:09:19.240
+lo que un equipo necesita y pueden compartirse entre suscripciones que confían en el mismo
+
+00:09:19.240 --> 00:09:19.500
+inquilino.
+
+00:09:19.500 --> 00:09:24.020
+Microsoft mantiene la lista de roles integrados al día conforme cambian los servicios y ese
+
+00:09:24.020 --> 00:09:26.100
+mantenimiento es precisamente lo que usted hereda al crear el suyo.
+
+00:09:26.820 --> 00:09:30.540
+Un rol es solo una lista escrita de operaciones permitidas, así que un rol personalizado significa
+
+00:09:30.540 --> 00:09:32.140
+que su equipo es responsable de salirse de ese momento.
+
+00:09:32.400 --> 00:09:34.500
+El proceso en sí es menos intimidante de lo que sugiere el nombre.
+
+00:09:34.500 --> 00:09:39.240
+Normalmente, uno empieza clonando el rol integrado más similar y eliminando los permisos que
+
+00:09:39.240 --> 00:09:39.840
+no necesita.
+
+00:09:40.600 --> 00:09:43.500
+A partir de ahí, se le asigna el rol en un conjunto de ámbitos para que Azure sepa
+
+00:09:43.500 --> 00:09:44.420
+dónde puede utilizarse.
+
+00:09:44.980 --> 00:09:47.520
+Luego, se prueba con una tarea real antes de entregárselo a alguien.
+
+00:09:48.080 --> 00:09:48.960
+La contrapartida es la propia.
+
+00:09:49.440 --> 00:09:52.620
+En el momento en que crea un rol personalizado, se convierte en algo que su equipo debe mantener.
+
+00:09:52.920 --> 00:09:55.860
+Los servicios añaden nuevos permisos con el tiempo, por lo que un rol que encaja a la
+
+00:09:55.860 --> 00:09:57.140
+perfección hoy puede quedar desactualizado.
+
+00:09:57.500 --> 00:10:00.680
+Microsoft tiene una advertencia específica sobre cómo la gente redacta los roles personalizados.
+
+00:10:01.220 --> 00:10:04.420
+Usar un asterisco en lugar de especificar las acciones deseadas hace que el rol también
+
+00:10:04.420 --> 00:10:08.840
+adquiera permisos que Microsoft añade después, y ese es un acceso que nadie erigió ni revisó.
+
+00:10:09.540 --> 00:10:10.980
+Los límites también mantienen el modelo bajo común.
+
+00:10:11.340 --> 00:10:14.820
+Puede tener hasta 5.000 roles personalizados en un inquilino, y un rol que incluye acciones
+
+00:10:14.820 --> 00:10:17.560
+de datos no puede asignarse en el ámbito de grupo de administración.
+
+00:10:18.460 --> 00:10:20.200
+Para principiantes, el consejo práctico es breve.
+
+00:10:20.960 --> 00:10:24.040
+Recurra primero a un rol integrado y trate al rol personalizado como la excepción que
+
+00:10:24.040 --> 00:10:26.180
+puede justificar, no como la opción predeterminada.
+
+00:10:27.080 --> 00:10:28.760
+Los roles de Azure no son roles.
+
+00:10:29.420 --> 00:10:33.100
+Hay una fuente más de confusión y no tiene nada que ver con los roles personalizados.
+
+00:10:33.100 --> 00:10:36.840
+La palabra rol aparece en dos lugares distintos en el mundo de Microsoft y son sistemas separados
+
+00:10:36.840 --> 00:10:37.900
+con asignaciones separadas.
+
+00:10:38.600 --> 00:10:41.560
+Los roles de Azure controlan el acceso a los recursos de Azure, lo que significa máquinas
+
+00:10:41.560 --> 00:10:43.680
+virtuales, almacenamiento, redes y bases de datos.
+
+00:10:44.280 --> 00:10:47.760
+Los roles de Microsoft Entra controlan el acceso a los recursos del directorio, lo que
+
+00:10:47.760 --> 00:10:50.360
+significa usuarios, grupos, dominios y licencias.
+
+00:10:51.140 --> 00:10:52.220
+Los alcances tampoco coinciden.
+
+00:10:52.760 --> 00:10:55.660
+Un rol de Azure puede asignarse en el alcance de grupo de administración, suscripción,
+
+00:10:55.780 --> 00:10:56.880
+grupo de recursos o recursos.
+
+00:10:56.880 --> 00:11:02.180
+Un rol de Entra se asigna a nivel de inquilino, en una unidad administrativa o en un solo objeto
+
+00:11:02.180 --> 00:11:03.060
+como una aplicación.
+
+00:11:03.620 --> 00:11:07.300
+Si alguna vez no saben qué sistema se encuentra, pregunte quién necesita cambiar la persona.
+
+00:11:08.120 --> 00:11:12.200
+Cambiar personas, grupos o licencias lo sitúa en Microsoft Entra y cambiar máquinas virtuales,
+
+00:11:12.260 --> 00:11:14.600
+almacenamiento o redes lo sitúa en Azure.
+
+00:11:15.340 --> 00:11:17.580
+Muchas personas tienen roles en ambos sistemas al mismo tiempo.
+
+00:11:18.320 --> 00:11:20.500
+Luego viene la consecuencia que suele afectar más a las personas.
+
+00:11:20.500 --> 00:11:24.760
+Un administrador global no obtiene acceso automáticamente a los recursos de Azure, porque
+
+00:11:24.760 --> 00:11:26.940
+ese distintivo gestiona su directorio y no sus suscripciones.
+
+00:11:27.820 --> 00:11:30.960
+Esa persona puede cambiar la situación y vale la pena conocer el mecanismo.
+
+00:11:31.980 --> 00:11:35.520
+Un administrador global puede activar una opción en el portal que le otorgue el rol
+
+00:11:35.520 --> 00:11:38.280
+de administrador de acceso de usuario en todas las suscripciones del inquilino.
+
+00:11:38.680 --> 00:11:41.880
+Es una acción deliberada y no predeterminada, y muchas organizaciones nunca se dan cuenta
+
+00:11:41.880 --> 00:11:43.640
+hasta que una auditoría pregunta quién tiene qué.
+
+00:11:44.180 --> 00:11:46.080
+Detrás de todo esto hay un dato histórico más.
+
+00:11:46.600 --> 00:11:49.400
+Su antiguo rol es clásico, de administrador de suscripción están totalmente retirados.
+
+00:11:49.400 --> 00:11:53.220
+Aquellos llamados administrador de cuenta, administrador de servicio y coadministrador.
+
+00:11:53.720 --> 00:11:56.400
+Eso significa que toda decisión de acceso en Azure hoy en día pasa por el control de
+
+00:11:56.400 --> 00:11:57.240
+acceso basado en roles.
+
+00:11:58.120 --> 00:12:01.300
+Cuando puede distinguir ambos sistemas, los hábitos que causan problemas se vuelven mucho
+
+00:12:01.300 --> 00:12:02.400
+más fáciles de detectar.
+
+00:12:04.340 --> 00:12:05.100
+Los errores que autocomete
+
+00:12:05.100 --> 00:12:09.600
+La mayor parte de los problemas en suscripciones reales proviene de una breve lista de hábitos,
+
+00:12:09.800 --> 00:12:11.880
+y cada uno es fácil de corregir una vez que sabe qué buscar.
+
+00:12:13.100 --> 00:12:16.680
+Esta parte parece un consejo para grandes empresas, pero se aplica igual a una suscripción
+
+00:12:16.680 --> 00:12:17.680
+con solo tres recursos.
+
+00:12:17.680 --> 00:12:20.840
+Comencemos con el hábito que casi todos adoptan primero.
+
+00:12:21.320 --> 00:12:23.840
+El rol de propietario aparece al principio de la lista, por lo que se convierte en opción
+
+00:12:23.840 --> 00:12:24.440
+predeterminada.
+
+00:12:25.040 --> 00:12:28.180
+Debido a que el propietario puede otorgar acceso, una cuenta del propietario se convierte
+
+00:12:28.180 --> 00:12:30.840
+en una forma de crear más cuentas de propietarios sin que nadie se dé cuenta.
+
+00:12:31.640 --> 00:12:33.940
+Luego está el hábito de asignar roles a personas en lugar de a grupos.
+
+00:12:34.880 --> 00:12:38.680
+Las asignaciones al grupo reducen docenas de asignaciones individuales a una, y cuando Microsoft
+
+00:12:38.680 --> 00:12:41.600
+explica cómo arreglar una suscripción que se ha quedado sin espacio, este es el primer
+
+00:12:41.600 --> 00:12:42.720
+paso que recomienda.
+
+00:12:42.720 --> 00:12:46.480
+Es fácil pasar por alto otro hábito porque no es un error que se cometa a propósito.
+
+00:12:47.020 --> 00:12:50.180
+Los permisos se heredan y se acumulan, así es como alguien termina excediendo a un recurso
+
+00:12:50.180 --> 00:12:53.440
+que nadie recuerda haber asignado, y la asignación suele estar más arriba en el árbol de lo
+
+00:12:53.440 --> 00:12:54.540
+que nadie se demora molestia de buscar.
+
+00:12:55.300 --> 00:12:57.980
+La suposición que le cuesta a la gente toda una tarde es que un rol de administrador de
+
+00:12:57.980 --> 00:12:59.040
+toda la oficina desbloquea a Azure.
+
+00:12:59.040 --> 00:13:02.720
+No es así, no por defecto, y los administradores terminan habitualmente mirando un mensaje de
+
+00:13:02.720 --> 00:13:04.700
+acceso denegado a una suscripción que crean controlar.
+
+00:13:05.680 --> 00:13:09.000
+Escribir una regla de denegación parece la solución obvia, pero Microsoft establece
+
+00:13:09.000 --> 00:13:12.120
+que no puedes crear directamente tus propias asignaciones de denegación porque Azure las
+
+00:13:12.120 --> 00:13:12.920
+crea y gestiona.
+
+00:13:13.340 --> 00:13:16.960
+El acceso desaparece cuando eliminas la asignación que lo otorgó, o cuando escribes un bloqueo.
+
+00:13:17.660 --> 00:13:19.340
+Algunos equipos descubren el límite de la manera de ver.
+
+00:13:19.740 --> 00:13:24.080
+Azure permite 5.000 asignaciones de roles por suscripción y 500 por grupo de administración,
+
+00:13:24.220 --> 00:13:25.360
+y ambos límites son fijos.
+
+00:13:25.360 --> 00:13:29.240
+La causa habitual de alcanzar ese límite son miles de asignaciones individuales entregadas
+
+00:13:29.240 --> 00:13:30.120
+a personas individuales.
+
+00:13:30.420 --> 00:13:33.680
+Los grupos anidados llevan los permisos más lejos de lo que la mayoría espera.
+
+00:13:34.120 --> 00:13:37.300
+Una persona está en un grupo, ese grupo pertenece a otro más grande, y las asignaciones
+
+00:13:37.300 --> 00:13:40.720
+vinculadas al grupo mayor recaen en la persona sin que nadie lo anuncie, sin que nadie lo
+
+00:13:40.720 --> 00:13:40.960
+anuncie.
+
+00:13:41.380 --> 00:13:43.720
+El último caso aparece en la automatización en lugar de en el portal.
+
+00:13:44.300 --> 00:13:47.800
+Microsoft recomienda usar el ID único de un rol en lugar de su nombre para mostrar.
+
+00:13:48.560 --> 00:13:52.260
+Los nombres cambian, los roles en vista previa se renombran al lanzarse, y cualquier
+
+00:13:52.260 --> 00:13:54.680
+automatización basada en el nombre antiguo se rompe sin previo aviso.
+
+00:13:54.680 --> 00:13:57.380
+Cada uno de estos casos se reduce a la misma pequeña decisión.
+
+00:13:58.060 --> 00:14:01.220
+Elige el rol más pequeño que haga el trabajo, asignalo a un grupo en lugar de una persona
+
+00:14:01.220 --> 00:14:04.000
+y define el alcance lo más bajo posible en el árbol según lo permite la tarea.
+
+00:14:04.620 --> 00:14:07.620
+Haz esto de forma consistente, y la mayoría de estos problemas nunca tendrán la oportunidad
+
+00:14:07.620 --> 00:14:08.200
+de comenzar.
+
+00:14:08.700 --> 00:14:09.760
+Resumen en una pregunta abierta.
+
+00:14:10.220 --> 00:14:11.100
+Así que recopilemos cubierto.
+
+00:14:11.100 --> 00:14:16.100
+Cada asignación de rol en Azure tiene un qué y un hasta dónde, y nada se concede hasta
+
+00:14:16.100 --> 00:14:17.380
+que alguien crea una.
+
+00:14:18.080 --> 00:14:22.120
+Los plugin hacia abajo se acumulan y desaparecen cuando eliminas la asignación en lugar de
+
+00:14:22.120 --> 00:14:22.620
+bloquearla.
+
+00:14:23.080 --> 00:14:24.660
+Mantén el hábito y el resto seguirá sencillo.
+
+00:14:25.140 --> 00:14:28.100
+La regla es el rol más pequeño en el alcance más pequeño, asignado a un grupo.
+
+00:14:28.100 --> 00:14:32.400
+Si esto hizo que Azure se sintiera un poco menos intimidante, suscríbete a M365FM porque
+
+00:14:32.400 --> 00:14:35.400
+tomamos una parte de la plataforma a la vez y la explicamos en palabras sencillas.
+
+00:14:35.960 --> 00:14:38.060
+Antes de irte, te dejaré con una pregunta para reflexionar.
+
+00:14:38.580 --> 00:14:42.260
+Si abrieras tu suscripción hoy y revisaras cada asignación en ella, serías capaz de
+
+00:14:42.260 --> 00:14:43.560
+explicar por qué está ahí cada una.
+
+00:14:43.560 --> 00:15:13.540
+Gracias por ver el video.

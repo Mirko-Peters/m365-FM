@@ -1,0 +1,592 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.180
+Anda telah menggunakan REST API selama bertahun-tahun tanpa mengetahui namanya.
+
+00:00:03.780 --> 00:00:06.940
+Setiap kali Power Automate mengambil kalender Anda atau Copilot Studio membaca file,
+
+00:00:07.120 --> 00:00:08.960
+satu program meminta informasi dari program lain.
+
+00:00:09.660 --> 00:00:11.960
+Selamat datang di podcast M3 & 5 FM tempat kami.
+
+00:00:12.400 --> 00:00:16.420
+Menjelajahi orang, ide, dan teknologi yang membentuk masa depan pekerjaan, pekerjaan.
+
+00:00:16.720 --> 00:00:20.720
+Hari ini kita berbicara tentang REST API, pola sederhana di balik hampir setiap aplikasi yang Anda sentuh.
+
+00:00:21.580 --> 00:00:24.480
+Di akhir Anda akan membaca permintaan dan memahami dengan tepat apa yang muncul.
+
+00:00:24.660 --> 00:00:26.940
+Dan Anda akan melihat mengapa nama REST tidak berarti apa yang tampak.
+
+00:00:27.780 --> 00:00:28.880
+Apa sebenarnya API itu?
+
+00:00:28.880 --> 00:00:31.640
+API adalah singkatan dari Application Programming Interface
+
+00:00:31.640 --> 00:00:33.700
+dan namanya membuatnya terdengar lebih sulit daripada yang sebenarnya.
+
+00:00:34.320 --> 00:00:37.840
+Singkirkan labelnya dan API adalah serangkaian pintu yang boleh diketuk oleh satu program.
+
+00:00:38.480 --> 00:00:41.960
+Setiap pintu disertai dengan perjanjian tentang apa yang dapat Anda minta dan seperti apa bentuk jawabannya.
+
+00:00:42.320 --> 00:00:43.380
+Perbandingan plastiknya adalah REST.
+
+00:00:43.580 --> 00:00:46.460
+Anda tidak pernah masuk ke dapur dan tidak pernah memberitahu koki cara memasak.
+
+00:00:46.700 --> 00:00:49.960
+Anda memberitahu pelayan apa yang Anda inginkan dari menu dan piring akan kembali kemejaan.
+
+00:00:50.220 --> 00:00:54.680
+Menu adalah perjanjian dan pelayan adalah antarmuka yang membawa pesanan Anda di antara kedua pelapian.
+
+00:00:55.100 --> 00:00:56.380
+Lata antarmuka benar-benar berfungsi di sana.
+
+00:00:56.380 --> 00:01:03.020
+Antarmuka hanyalah batas bersama tempat dua hal bertemu dan berfungsi paling baik jika masing-masing pihak menjaga privasi bisnisnya sendiri.
+
+00:01:03.640 --> 00:01:08.320
+Situs web dan API sama-sama memindahkan informasi di internet tetapi keduanya dibuat untuk pembaca yang berbeda.
+
+00:01:09.140 --> 00:01:12.200
+Situs web dirancang untuk mata Anda yang penuh dengan warna tombol dan juduh.
+
+00:01:12.820 --> 00:01:16.700
+API dirancang untuk program lain jadi ia mengembalikan data mentah alih-alih sesuatu yang dekoratif.
+
+00:01:17.420 --> 00:01:19.480
+Perbedaan itu menjelaskan mengapa perjanjian itu sangat penting.
+
+00:01:20.060 --> 00:01:23.700
+Ketika dua program berbagi pintu tetap, tidak ada yang perlu tahu bagaimana yang lain bekerja di dalam.
+
+00:01:24.380 --> 00:01:29.660
+Anda dapat membangun kembali, dapur, menukar koki, dan menulis ulang resep tanpa mengubah menu di meja sama sekali.
+
+00:01:30.100 --> 00:01:31.920
+Pikirkan mengapa program membutuhkannya sejak awal.
+
+00:01:32.520 --> 00:01:35.340
+Sebuah program tidak dapat melirik layar program lain dan menebak apa yang harus dilakukan selanjutnya.
+
+00:01:35.340 --> 00:01:42.200
+Ia membutuhkan cara tertulis yang tetap untuk meminta sesuatu dan ia membutuhkan janji bahwa balasan akan tiba dalam bentuk yang sudah diketahuinya cara membacanya.
+
+00:01:42.660 --> 00:01:44.580
+Cara tertulis itulah yang menjadi antarmuka dalam namanya.
+
+00:01:45.160 --> 00:01:51.760
+Salesforce dan eBay membuka beberapa API web besar pertama pada tahun 2000 dan panggilan tersebut telah berjalan di bawah permukaan sejak saat itu.
+
+00:01:52.340 --> 00:01:54.840
+Anda tidak pernah menyadarinya karena panggilan tersebut tidak pernah dibutuhkan.
+
+00:01:55.460 --> 00:01:59.100
+Anda hampir pasti telah menggunakan API saat ini meskipun tidak ada seorang pun di ruangan itu yang menyebutnya demikian.
+
+00:01:59.160 --> 00:02:03.580
+Jadi API sebenarnya hanyalah pintu gerbang dengan aturan dan aturan itulah yang membuat pertukaran dapat diprediksi.
+
+00:02:03.580 --> 00:02:07.220
+Sekarang perhatikan apa yang terjadi ketika permintaan berjalan pada pintu berjalan.
+
+00:02:07.800 --> 00:02:12.660
+Perjalanan perut. Ikuti satu permintaan dari saat permintaan meninggalkan aplikasi Anda hingga saat jawaban masuk.
+
+00:02:13.220 --> 00:02:16.020
+Perjalanan tersebut memiliki dua bagian permintaan keluar dan respons kembali.
+
+00:02:16.420 --> 00:02:18.480
+Kedua bagian tersebut mengikuti bentuk yang dapat Anda pelajari.
+
+00:02:19.580 --> 00:02:20.900
+Permintaan membawa hingga empat hal.
+
+00:02:21.520 --> 00:02:24.420
+Yang pertama adalah alamat yang merupakan URL yang menunjukkan hal yang Anda ingat.
+
+00:02:24.900 --> 00:02:27.740
+Yang kedua adalah kata kerja yang memberitahu server apa yang harus dilakukan dengan hal ini.
+
+00:02:28.180 --> 00:02:32.800
+Yang ketiga adalah header, serangkaian instruksi tambahan yang menyertai pesan termasuk bukti tentang siapa Anda.
+
+00:02:32.800 --> 00:02:37.180
+Yang keempat adalah badan yang hanya muncul saat Anda mengirim data, bukan saat memintanya.
+
+00:02:37.600 --> 00:02:38.680
+Responnya mencerminkan semua itu.
+
+00:02:39.220 --> 00:02:43.060
+Diawali dengan nomor status 3 digit yang menunjukkan bagaimana keadaannya diikuti dengan tajuknya sendiri.
+
+00:02:43.720 --> 00:02:46.680
+Lalu muncul badan yang memuat data yang Anda minta jika ada data yang akan dikirim.
+
+00:02:47.320 --> 00:02:49.920
+Microsoft Grab menunjukkan pola ini dalam bentuk yang benar-benar dapat Anda baca.
+
+00:02:50.560 --> 00:02:52.320
+Setiap permintaan Grab mengikuti bentuk yang sama.
+
+00:02:52.700 --> 00:02:56.020
+Dimulai dengan alamat Grab, lalu versi, lalu sumber daya yang Anda inginkan.
+
+00:02:56.440 --> 00:02:59.720
+Versinya adalah vis atau bt.0 untuk produksi atau beta untuk hal-hal yang masih dalam perhatian.
+
+00:02:59.720 --> 00:03:03.260
+Kirim permintaan get ke alamat tersebut, diikuti oleh pengguna dan alamat email.
+
+00:03:03.840 --> 00:03:07.040
+Lalu server akan menjawab dengan 200 ok dan badan yang menjelaskan orang tersebut.
+
+00:03:07.580 --> 00:03:10.740
+Bayangkan alamat sebagai amplop dan badan sebagai surat di dalamnya.
+
+00:03:11.540 --> 00:03:16.460
+Amplop memberitahu sistem post kemana pesan itu ditujukan dan surat itu memuat apapun yang sebenarnya ingin Anda katakan.
+
+00:03:17.140 --> 00:03:22.580
+Kata kerja juga terdapat pada amplop sehingga server tahu sebelum membuka apapun apakah Anda mengajukan pertanyaan atau menyerahkan informasi baru.
+
+00:03:23.140 --> 00:03:25.000
+Perhatikan betapa sedikit yang perlu Anda ketahui untuk mengikuti.
+
+00:03:25.000 --> 00:03:28.420
+Anda memiliki satu alamat, satu kata kerja, dan balasan yang dapat Anda bacakan dengan lantang.
+
+00:03:28.820 --> 00:03:32.960
+Itulah keseluruhan ritme REST API dan ia berulang untuk setiap panggilan yang Anda buat.
+
+00:03:34.160 --> 00:03:34.520
+Kata kerja.
+
+00:03:34.880 --> 00:03:38.700
+Setiap permintaan membawa kata kerja dan kata kerja tersebut memberitahu server jenis tindakan yang andaik.
+
+00:03:39.140 --> 00:03:43.420
+Nama teknisnya adalah metode HTTP dan hanya ada beberapa yang akan Anda temui dalam pekerjaan normal.
+
+00:03:43.980 --> 00:03:45.600
+Diminta informasi dan tidak mengubah apapun.
+
+00:03:46.120 --> 00:03:49.760
+Post biasanya membuat sesuatu yang baru seperti mengirim email atau menambahkan komentar ke daftar.
+
+00:03:50.480 --> 00:03:52.380
+Put mengganti seluruh catatan dengan versi baru.
+
+00:03:52.780 --> 00:03:54.360
+Patch memperbarui sebagian catatan.
+
+00:03:54.360 --> 00:03:55.580
+Delete menghapusnya.
+
+00:03:56.020 --> 00:04:01.540
+Head dan options juga ada, tetapi keduanya digunakan untuk memeriksa hal-hal di balik layar dan Anda dapat melakukannya bertahun-tahun tanpa menyentuh kedua.
+
+00:04:01.720 --> 00:04:04.840
+Kata kerja berada tepat di sebelah alamat, jadi pasangan tersebut dibaca hampir seplikali.
+
+00:04:06.480 --> 00:04:09.340
+Dapatkan hal ini berarti tunjukkan kepada saya dan posting hal itu wujudkan.
+
+00:04:10.340 --> 00:04:11.820
+Dua kata lebih penting daripada yang lain di sini.
+
+00:04:11.980 --> 00:04:15.080
+Dan bersama-sama keduanya menjelaskan kesalahan yang hampir semua orang buat di beberapa titik.
+
+00:04:15.420 --> 00:04:19.280
+Metode yang aman tidak mengubah apapun di server, jadi mengirimkannya dua kali tidak memerlukan biaya.
+
+00:04:19.840 --> 00:04:23.420
+Metode idempotent memberikan hasil yang sama, baik Anda mengirimkannya sekali atau lima kali.
+
+00:04:23.420 --> 00:04:28.600
+Get, Head, Put, Delete, dan option untuk bersifat idempotent, sedangkan post dan patch tidak.
+
+00:04:29.620 --> 00:04:31.540
+Perbedaan itu benar-benar mengaruhi perangkat Anda sehari-hari.
+
+00:04:32.000 --> 00:04:36.800
+Jika otomatisasi mencoba lagi get yang gagal, tidak ada yang rusak karena jawaban yang sama akan muncul lagi.
+
+00:04:37.300 --> 00:04:42.380
+Jika mencoba lagi post yang gagal, Anda mungkin membuat email kedua, baris kedua, baris kedua, atau urutan kedua tanpa sengaja.
+
+00:04:42.840 --> 00:04:45.160
+Permintaannya tampak identik, tetapi hasilnya sangat berbeda.
+
+00:04:45.520 --> 00:04:51.280
+Ingatlah ide terakhir itu, karena post juga merupakan kata kerja yang paling sering memaksa server untuk melanyakan siapa Anda sebelum setuju untuk melakukan apa-apa.
+
+00:04:52.160 --> 00:04:53.020
+Sumber daya dan alamat.
+
+00:04:53.420 --> 00:04:55.620
+Sumber daya adalah apapun yang Anda bicarakan dalam panggilan tersebut.
+
+00:04:55.880 --> 00:05:01.880
+Itu mungkin pengguna email, file, atau satu baris dalam tabel, dan URL hanyalah tempat sumber daya itu berada di server.
+
+00:05:02.860 --> 00:05:07.400
+Tiap alamat dibangun dari basis yang memberi nama layanan ditambah jalur yang mengarah ke hal yang Anda inginkan.
+
+00:05:08.000 --> 00:05:09.980
+Ide desain di bawahnya jelas setelah Anda melihatnya.
+
+00:05:10.700 --> 00:05:14.860
+Alamat memberi nama pada suatu hal dan kata kerja menyatakan apa yang harus dilakukan dengannya jadi permintaan seringkalinya.
+
+00:05:15.420 --> 00:05:20.560
+Get me slash messages berarti memberi saya pesan saya, dan post me slash send mail berarti mengirim email atas nama saya.
+
+00:05:20.560 --> 00:05:23.720
+Microsoft Grab memanfaatkan ini dengan beberapa pintasan yang perlu diketat.
+
+00:05:24.320 --> 00:05:28.380
+Data memengarah ke siapapun yang masuk jadi Anda tidak perlu mencari pengenal Anda sendiri terlebih dahulu.
+
+00:05:29.020 --> 00:05:34.600
+Data terkait berada di jalur yang sama seperti me slash events, me slash drive, atau me slash messages.
+
+00:05:34.600 --> 00:05:41.560
+Kumpulan seperti users menyimpan banyak hal yang sama, dan menambahkan pengenal di akhir daftar tersebut menunjukkan satu anggota tertentu dari kumpulan tersebut.
+
+00:05:42.180 --> 00:05:47.480
+Itulah sebabnya alamat yang sama dapat menggambarkan seluruh kelompok atau satu orang tergantung pada seberapa jauh Anda menelusuri jalur tersebut.
+
+00:05:47.940 --> 00:05:52.320
+Terkadang Anda ingin memangkas jawaban tanpa mengubah sumber daya itu sendiri, dan itulah gunanya parameter query.
+
+00:05:52.880 --> 00:05:57.820
+Tambahkan select ke permintaan, dan server hanya mengembalikan bidang yang Anda beri nama, seperti nama tampilan dan kota.
+
+00:05:58.600 --> 00:06:03.320
+Tambahkan filter, dan itu mempersempit daftar panjang menjadi kumpulan yang lebih kecil seperti sitpah pengguna dengan jabatan tertentu.
+
+00:06:03.320 --> 00:06:06.600
+Alamat-alamatnya terasa acak pada awalnya, tetapi mengikuti pola yang dapat Anda pelajari.
+
+00:06:07.160 --> 00:06:09.200
+Setelah Anda dapat membaca satu, Anda biasanya dapat menunjukkan.
+
+00:06:09.400 --> 00:06:13.640
+Sekarang setelah Anda tahu di mana harus bertanya, pertanyaan berikutnya adalah apa yang muncul, dan jawabannya dimulai dengan angka.
+
+00:06:14.080 --> 00:06:20.040
+Pada status, setiap respons dimulai dengan angka tiga digit, dan angka itu adalah server yang memberitahu Anda dengan tepat bagaimana permintaan Anda terjadi.
+
+00:06:20.400 --> 00:06:23.940
+Digit pertama membawa sebagian besar makna, jadi hanya ada lima keluarga yang perlu dipelajari.
+
+00:06:24.300 --> 00:06:30.580
+Angka yang dimulai dengan satu berarti permintaan masih dalam proses, angka dua berarti berhasil, angka tiga berarti jawabannya ada di tempat lain, jadi carilah di sana.
+
+00:06:30.580 --> 00:06:36.800
+Nah, angka empat berarti masalahnya ada di pihak Anda, angka lima berarti masalahnya ada di pihak server, dan Anda tidak melakukan kesalahan apapun.
+
+00:06:36.840 --> 00:06:38.480
+Berikut adalah situasi yang benar-benar di alamimu.
+
+00:06:38.800 --> 00:06:41.960
+Dua ratus oke berarti berhasil, dan dua ratus satu berarti sesuatu yang baru telah dibuat.
+
+00:06:42.140 --> 00:06:44.960
+Dua dan empat berarti berhasil, dan tidak ada yang perlu dikirim kembali.
+
+00:06:45.160 --> 00:06:47.060
+Sedangkan empat ratus berarti permintaan Anda salah format.
+
+00:06:47.320 --> 00:06:50.040
+Sisanya mencakup situasi yang akan Anda temui dalam alur yang terputus.
+
+00:06:50.580 --> 00:06:55.800
+Empat tolong satu berarti Anda tidak membuktikan siapa Anda, dan empat tolong sehingga berarti Anda membuktikan siapa Anda, dan tetap tidak diizinkan untuk melakon ini.
+
+00:06:55.800 --> 00:06:57.800
+Empat terasa umpah berarti tidak ada yang hidup di alamatnya.
+
+00:06:58.100 --> 00:07:01.460
+Empat tolong dua berarti Anda meminta terlalu cepat, dan server ingin Anda memperlambat.
+
+00:07:01.940 --> 00:07:02.880
+Lima ratus server rusak.
+
+00:07:03.400 --> 00:07:05.580
+Server mengirim angka alih-alih kalimat karena suatu alasan.
+
+00:07:06.220 --> 00:07:12.580
+Program lain harus membaca balasan itu tanpa ada manusia di sana untuk menafsirkannya, jadi kode tetap yang pendek jauh lebih mudah untuk ditindaklanjuti oleh perangkat lunak.
+
+00:07:13.100 --> 00:07:17.640
+Aplikasi Anda dapat memeriksa dua ratus dan melanjutkan atau menangkap empat tolong sembilan dan menunggu dengan tenang sebelum mencoba.
+
+00:07:17.640 --> 00:07:21.080
+Pasangan yang paling sering membingungkan orang adalah empat ratus satu dan empat ratus tiga.
+
+00:07:21.200 --> 00:07:24.880
+Autentikasi adalah tentang siapa Anda, sementara otorisasi adalah tentang apa yang diizinkan untuk Anda lakukan.
+
+00:07:25.180 --> 00:07:31.220
+Empat tarus satu berarti proses masuk Anda tidak berhasil, dan empat tarus tiga berarti proses masuk Anda berhasil, tetapi akun Anda tidak memiliki izin yang Anda butuhkan.
+
+00:07:31.660 --> 00:07:37.640
+Satu perbedaan itu akan menghemat waktu Anda satu jam saat otomatisasi berikutnya gagal dan pesan kesalahan tidak memberitahu Anda apapun yang berguna semestinya.
+
+00:07:38.360 --> 00:07:39.220
+JSON bahasa bersama.
+
+00:07:39.220 --> 00:07:42.820
+Ketika server mengirimkan data kembali, biasanya data tersebut dikirimkan sebagainya.
+
+00:07:43.120 --> 00:07:47.960
+JSON adalah cara menulis data sebagai teks biasa sehingga program apapun yang ditulis dalam bahasa apapun dapat membacanya.
+
+00:07:48.500 --> 00:07:52.880
+Nama tersebut merupakan singkatan dari JavaScript Object Notation, tetapi Anda tidak perlu mengetahui JavaScript untuk menggunakan.
+
+00:07:53.300 --> 00:07:54.800
+Bentuknya lebih sederhana di pengen kesihatan dinamai.
+
+00:07:55.300 --> 00:07:58.440
+Anda menulis label, lalu nilai, dan Anda membungkus pasangan tersebut dalam kurung krok.
+
+00:07:58.880 --> 00:08:04.060
+Daftar pasangan tersebut berada di dalam tanda kurung siku, dan Anda dapat menyarankan satu daftar di dalam daftar lainnya sedalam data tersebut.
+
+00:08:04.060 --> 00:08:07.620
+Jelas bagian besar formatnya, dan Anda dapat membacanya dengan lantang tanpa pelatihan apapun.
+
+00:08:08.080 --> 00:08:09.360
+Sebuah contoh kecil membuatnya konkret.
+
+00:08:09.740 --> 00:08:16.000
+Permintaan untuk pengguna, mungkin kembali dengan label nama yang bertuliskan Jondo, label kota yang bertuliskan Redmond, dan label departemen yang bertuliskan Pusat Bantuan.
+
+00:08:16.600 --> 00:08:20.200
+Anda langsung melihat polanya karena format tersebut ditulis untuk dibaca oleh manusia dan juga oleh mesin.
+
+00:08:20.860 --> 00:08:24.560
+JSON salah satunya karena tetap kecil dan mudah dibaca sementara format di sekitarnya menjadi berat.
+
+00:08:25.320 --> 00:08:30.540
+Itu diformalkan sebagai RFG 8259 pada bulan Desember 2017 dan sebagai standar EQM 404,
+
+00:08:30.540 --> 00:08:34.200
+sehingga hampir setiap API modern memperlakukannya sebagai cara default untuk mengirim data, sara.
+
+00:08:34.960 --> 00:08:43.620
+Pelajari cara membaca JSON dan Anda dapat membaca jawaban untuk hampir semua panggilan API yang mengubah sekumpulan teks menjadi sesuatu yang dapat Anda pindai dalam hitungan detik untuk membuktikan siapa Anda.
+
+00:08:44.420 --> 00:08:48.700
+Semua ini tidak akan berhasil kecuali server mercaya Anda, jadi sebagian besar permintaan membawa beberapa bukti identitas.
+
+00:08:48.920 --> 00:08:52.900
+Bukti itu disebut autentikasi dan itu menghentikan siapapun untuk membaca email Anda atau menghapus file Anda.
+
+00:08:53.260 --> 00:08:54.680
+Ada dua pendekatan yang paling sering Anda tahu.
+
+00:08:54.680 --> 00:08:58.860
+Kunci API adalah setering tetap panjang yang Anda kirim dengan setiap permintaan dan mudah untuk memulai.
+
+00:08:59.120 --> 00:09:03.860
+Masalahnya adalah kunci itu luas, jarang kedaluarsa, dan merotasinya berarti menyentuh setiap tempat yang menggunakannya.
+
+00:09:04.200 --> 00:09:05.460
+O-out 2.0 bekerja server.
+
+00:09:06.180 --> 00:09:09.280
+Aplikasi mendapatkan token akses berumur pendek yang sering disebut token pembawa,
+
+00:09:09.420 --> 00:09:12.320
+yang mewakili pengguna yang masuk dan dapat dicabut jika terjadi kesalahan.
+
+00:09:13.120 --> 00:09:14.840
+Perbedaannya paling penting saat kredensial bocok.
+
+00:09:15.260 --> 00:09:19.120
+Kunci API yang dicuri dapat digunakan kembali selama masih berlaku yang mungkin berlangsung selamanya.
+
+00:09:19.120 --> 00:09:25.140
+Token pembawa yang dicuri rancang untuk jangka waktu yang singkat sehingga berhenti berfungsi dengan sendirinya dan memberi Anda kesempatan untuk memutus akses.
+
+00:09:25.500 --> 00:09:28.280
+Yang mengejutkan adalah kredensial biasanya bukan kata sandi Anda.
+
+00:09:28.900 --> 00:09:35.460
+Aplikasi Anda memasukkan Anda sekali menerima token, lalu menyerahkan token tersebut ke API pada setiap panggilan sehingga kata sandi Anda tidak pernah disertakan dalam permintaan.
+
+00:09:35.640 --> 00:09:38.560
+Token adalah pengganti dan dibuat untuk dibuang dan diganti.
+
+00:09:38.880 --> 00:09:44.400
+Dalam permintaan, ini muncul sebagai satu baris tambahan di header yang bertuliskan otorisasi lalu kata pembawa lalu token itu sendiri.
+
+00:09:44.400 --> 00:09:50.560
+Dalam contoh grafik Microsoft sebelumnya, header itulah yang mengubah panggilan yang ditolak menjadi panggilan yang berhasil.
+
+00:09:51.240 --> 00:09:53.120
+Ini juga alasan mengapa partung satu ada sejauh.
+
+00:09:53.740 --> 00:09:56.620
+Tidak ada bukti yang valid berarti tidak ada jawaban dan tidak ada pengecualian.
+
+00:09:57.160 --> 00:10:02.240
+Tiap kegagalan masuk yang pernah Anda lihat dalam alur dapat ditelusuri kembali ke satu gagasan ini tentang arti sebenarnya dari Ress.
+
+00:10:02.700 --> 00:10:05.500
+Kata Ress memiliki cerita asal yang mengubah cara Anda mendengarnya.
+
+00:10:05.920 --> 00:10:11.440
+Istilah ini dicetuskan bertahun 2000 oleh seorang ilmuwan komputer bernama Roy Fielding dalam disertasi doktoralnya di University of California Irvine.
+
+00:10:11.740 --> 00:10:12.640
+Ketilah bagian yang diulang-ulang semua.
+
+00:10:12.640 --> 00:10:15.560
+Yang mereka lewatkan adalah tentang apa sebenarnya disertasi itu.
+
+00:10:15.960 --> 00:10:18.700
+Disertasi itu bukan tentang API web, disertasi tentang web itu sendiri.
+
+00:10:19.020 --> 00:10:25.800
+Fielding ikut menulis spesifikasi HTTP 1.1 yang diterbitkan pada tahun 1999 dan disertasinya menguraikan prinsip-prinsip desain yang telah memandu disertasi itu.
+
+00:10:26.280 --> 00:10:30.860
+Ia menggambarkan gaya arsitektur untuk menghubungkan dokumen di seluruh internet dan ia menyebutkan enam kendala.
+
+00:10:31.420 --> 00:10:36.200
+Klien dan server, statelessness, catching, antarmuka yang seragam, sistem berlapis, dan kode sesuai permintaan.
+
+00:10:37.080 --> 00:10:39.220
+Hanya satu bab disertasi yang membahas sisanya.
+
+00:10:39.220 --> 00:10:42.720
+Fielding juga menolak gagasan bahwa satu gaya cocok untuk semuanya.
+
+00:10:43.600 --> 00:10:50.280
+Ia berpendapat bahwa desainer yang baik harus memiliki gaya yang cocok dengan masalah yang dipecahkan daripada memperlakukan satu pendekatan sebagai solusi ajaib untuk semua perangkat lunak.
+
+00:10:51.080 --> 00:10:55.140
+Jalur dari esai desain tentang web ke label default untuk API berjalan langsung melalui SOAP.
+
+00:10:55.820 --> 00:11:00.980
+SOAP merupakan cara awal untuk membangun layanan web dan bertele-tele, menggunakan XML secara berlebihan dan sulit digunakan.
+
+00:11:01.680 --> 00:11:05.260
+Ruby on Rails menghentikan dukungan SOAP pada tahun 2007 dan para pengembang pun meninggalkannya.
+
+00:11:05.260 --> 00:11:09.060
+Mereka ingin menulis di HTTP biasa dan REST memberikan nama yang layak untuk pendekatan mereka.
+
+00:11:09.560 --> 00:11:12.280
+Masalah yang lebih dalam adalah bahwa REST yang ketat digerakkan oleh Hipertax,
+
+00:11:12.460 --> 00:11:17.880
+yang berarti REST API yang sebenarnya memungkinkan Anda menemukan setiap titik akhir dengan mengikuti tautan dari titik akhir dengan mengikuti tautan dari kawal.
+
+00:11:18.080 --> 00:11:23.400
+Hampir tidak ada API yang kita sebut RESTful yang benar-benar melakukan itu dan Fielding sendiri menunjukkannya pada tahun 2008.
+
+00:11:23.940 --> 00:11:27.200
+Nama itu dipinjam, diperluas, dan disematkan ke sesuatu yang tidak pernah ditulis untuk itu.
+
+00:11:27.720 --> 00:11:30.520
+Itulah tipuan utama dan itulah alasan topik ini yang akhirnya masuk akal.
+
+00:11:31.260 --> 00:11:36.380
+Tidak satu pun dari ini membuat pola itu menjadi REST API berfungsi dengan baik untuk pekerjaan yang dibutuhkan kebanyakan orang,
+
+00:11:36.540 --> 00:11:38.460
+yaitu membiarkan satu program meminta data dari programnya.
+
+00:11:38.780 --> 00:11:40.060
+Intinya lebih sempit dan lebih berguna.
+
+00:11:40.700 --> 00:11:43.940
+Kata itu menggambarkan serangkaian pilihan desain dari tahun 2000, bukan serangkaian hukum.
+
+00:11:44.280 --> 00:11:48.840
+Jadi tidak ada yang melilai API Anda berdasarkan buku aturan tersembunyi, yang sudah Anda penuhi.
+
+00:11:49.600 --> 00:11:53.040
+Semua ini menyentuh alat-alat di layar Anda saat ini dan lebih dalam dari yang Anda duga.
+
+00:11:53.040 --> 00:11:58.000
+Microsoft Graph adalah satu-satunya pintu masuk ke kode Microsoft dan mengikuti pola yang sama persis dari episode ini.
+
+00:11:58.760 --> 00:12:03.780
+Ia menggunakan alamat kata kerja, tajuk yang membuktikan identitas Anda, dan jawaban dengan nomor di atasnya.
+
+00:12:04.440 --> 00:12:06.480
+Semua yang kita bahas muncul di sana dalam urutan yang sama.
+
+00:12:07.320 --> 00:12:09.540
+Jadi kosa kata penting, jauh melampaui podcast.
+
+00:12:10.040 --> 00:12:13.640
+Konektor yang Anda klik di Power Automate adalah panggilan REST yang menampilkan wajah ramah.
+
+00:12:13.780 --> 00:12:16.280
+Saat Anda menyerah tindakan dan mengisi beberapa kotak,
+
+00:12:16.480 --> 00:12:20.680
+konektor membuat permintaan untuk Anda mengirimkannya dan mengembalikan jawaban kepada Anda dalam kartu kecilnya.
+
+00:12:20.680 --> 00:12:25.200
+Tindakan Copilot Studio dan sebagian besar skrip PowerShell yang berkomunikasi dengan Microsoft 3 yang sama di bawahnya,
+
+00:12:25.340 --> 00:12:26.140
+bekerja dengan cara yang sama.
+
+00:12:26.240 --> 00:12:28.020
+Disitulah kosa kata bermanfaat dalam praktik.
+
+00:12:28.500 --> 00:12:32.000
+Sealur gagal dengan 401, Anda sekarang tahu bahwa proses masuk Anda tidak berhasil.
+
+00:12:32.300 --> 00:12:35.720
+Ketika gagal dengan 400 busman, Anda tahu Anda meminta terlalu cepat dan mencoba lagi.
+
+00:12:36.540 --> 00:12:39.560
+Kode kesalahan berhenti menjadi noise dan berubah menjadi kalimat yang dapat Anda tidak lancur.
+
+00:12:39.840 --> 00:12:42.840
+Jadi lain kali konektor berfungsi, ingat apa yang terjadi di bawahnya.
+
+00:12:43.800 --> 00:12:47.440
+Satu program meminta sesuatu kepada program lain, membuktikan siapa itu, dan mendapatkan jawaban yang jelas.
+
+00:12:47.440 --> 00:12:52.460
+Anda tidak perlu melihat permintaan untuk memahaminya, dan setelah Anda memahaminya, alat di sekitar Anda berhenti terasa seperti sih.
+
+00:12:53.200 --> 00:12:55.840
+RACE API adalah satu program yang meminta sesuatu kepada program lain,
+
+00:12:55.980 --> 00:13:01.320
+menggunakan alamat, kata kebeja, beberapa bukti identitas, dan jawaban dengan angka di atasnya, dan jawaban dengan angka di atasnya.
+
+00:13:01.420 --> 00:13:05.580
+Kesalahan adalah bahasa bersama, dan RACE adalah nama yang dipinjam dari sertasi, bukan buku aturan untuk dihafal.
+
+00:13:05.840 --> 00:13:09.080
+Jika RACE tidak pernah ditulis untuk API yang kita buat hari ini, apa yang harus kita sebut?
+
+00:13:09.080 --> 00:13:10.980
+Ditahu siapa nama yang akan Anda berikan di komentar.

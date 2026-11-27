@@ -1,0 +1,74 @@
+<translation>
+## Poziomy sigma i DPMO: obliczenia krok po kroku
+
+Żadna z powszechnie czytanych stron nie pokazuje tego obliczenia w tekście, więc poniżej przedstawiam je krok po kroku.
+
+### Jednostki, wady i możliwości
+
+| Termin | Znaczenie | Przykład (korpus zaworu) |
+|---|---|---|
+| Jednostka | wytwarzany lub przetwarzany element | jeden korpus zaworu hydraulicznego |
+| Wada | każde niespełnienie wymagania klienta | nieszczelność przy teście, otwór poza tolerancją |
+| Możliwość | odrębna szansa na wystąpienie wady, która jest mierzona | 8 krytycznych dla jakości cech sprawdzanych na korpus |
+| DPU | wady na jednostkę = wady ÷ jednostki | |
+| DPO | wady na możliwość = wady ÷ (jednostki × możliwości) | |
+| DPMO | DPO × 1 000 000 | |
+
+### Przykład 1: od liczby wad do poziomu sigma
+
+Gniazdo obrabia w ciągu miesiąca 5 000 korpusów zaworów. Każdy korpus ma 8 cech, które są kontrolowane (możliwości). Kontrola rejestruje 46 wad.
+
+- DPU = 46 ÷ 5 000 = 0,0092
+- DPO = 46 ÷ (5 000 × 8) = 46 ÷ 40 000 = 0,00115
+- DPMO = 0,00115 × 1 000 000 = **1 150**
+
+Aby przeliczyć DPMO na poziom sigma, należy znaleźć wartość z standardowego rozkładu normalnego, dla której prawy ogon równa się DPO, a następnie dodać konwencjonalne 1,5:
+
+- Wydajność na możliwość = 1 − 0,00115 = 0,99885
+- z dla 0,99885 = 3,05 (z tabeli rozkładu normalnego lub `=NORM.S.INV(0,99885)` w Excelu)
+- Poziom sigma (krótkoterminowy, z przesunięciem) = 3,05 + 1,5 = **4,55**
+
+Wzór leżący u podstaw każdej tabeli sigma to DPMO = 1 000 000 × (1 − Φ(poziom sigma − 1,5)), gdzie Φ jest dystrybuantą standardowego rozkładu normalnego [5]. W Excelu: `=NORM.S.INV(1-DPMO/1000000)+1.5`.
+
+**Uwaga na możliwości.** Liczba możliwości jest wyborem i wpływa na wynik. Jeśli te same 46 wad policzymy względem 20 „możliwości” na jednostkę, DPMO spada do 460, a poziom sigma wzrasta do około 4,8 bez żadnej poprawy procesu. Należy zdefiniować możliwości raz, dla każdej rodziny produktów, liczyć wyłącznie cechy faktycznie sprawdzane i utrzymać tę definicję bez zmian. Przy porównywaniu procesów DPU i wydajność za pierwszym razem są trudniejsze do zmanipulowania.
+
+### Tabela przeliczeń poziomów sigma (wyliczona)
+
+Wartości obliczone powyższym wzorem (długoterminowe DPMO z przesunięciem 1,5 σ) oraz, dla porównania, dla idealnie wycentrowanego procesu przy uwzględnieniu obu ogonów:
+
+| Poziom sigma | DPMO (z przesunięciem 1,5σ) | Wydajność (z przesunięciem) | Wady na milion przy centrowaniu, bez przesunięcia |
+|---|---|---|---|
+| 1 | 691 462 | 30,9% | 317 311 |
+| 2 | 308 538 | 69,1% | 45 500 |
+| 3 | 66 807 | 93,3% | 2 700 |
+| 4 | 6 210 | 99,38% | 63 |
+| 4,5 | 1 350 | 99,865% | 6,8 |
+| 5 | 233 | 99,977% | 0,57 |
+| 6 | 3,4 | 99,99966% | 0,002 |
+
+Ostatnia kolumna pokazuje, dlaczego przesunięcie ma znaczenie: bez niego proces sześciosigmowy produkowałby około dwóch wad na miliard, a nie 3,4 na milion.
+
+### Przykład 2: skumulowana wydajność przepływu
+
+Część przechodzi przez cztery etapy procesu. Wydajności za pierwszym razem wynoszą 98%, 95%, 99% i 97%. Skumulowana wydajność przepływu (RTY), czyli prawdopodobieństwo, że jednostka przejdzie wszystkie etapy bez poprawek, jest iloczynem:
+
+RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, czyli 89,4%
+
+Każdy etap z osobna wygląda akceptowalnie; razem jednak ponad jedna jednostka na dziesięć wymaga poprawki lub złomowania gdzieś po drodze. RTY jest dla kierownika zakładu często bardziej użytecznym wskaźnikiem niż poziom sigma, ponieważ pokazuje „ukrytą fabrykę” pętli poprawek. Definicje wydajności za pierwszym razem i pokrewnych wskaźników znajdują się w [przewodniku po KPI produkcyjnych](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### Przykład 3: wartość jednego poziomu sigma
+
+Przykład przewodni tego artykułu: zakład wysyła 48 000 korpusów zaworów rocznie. 2,8% nie przechodzi końcowego testu szczelności. Każda awaria kosztuje 85 USD na poprawki, ponowny test i złom (dane poglądowe).
+
+- Awarie rocznie: 48 000 × 0,028 = 1 344
+- Koszt: 1 344 × 85 USD = 114 240 USD rocznie
+- Poziom sigma: DPO = 0,028 na jednostkę (jedna możliwość: nieszczelny lub szczelny) -> z = 1,91 -> **3,41 sigma**
+
+Jeśli projekt DMAIC obniży wskaźnik awarii do 0,6%:
+
+- Awarie: 48 000 × 0,006 = 288; koszt: 24 480 USD
+- Roczna oszczędność: 89 760 USD (przed kosztami projektu)
+- Poziom sigma: z dla 0,994 = 2,51 -> **4,01 sigma**
+
+Przejście z około 3,4 do około 4,0 sigma to realistyczny wynik jednego projektu. Przejście z 4,5 do 6 sigma zwykle wymaga przeprojektowania, a nie projektu.
+</translation>

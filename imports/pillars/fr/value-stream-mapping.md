@@ -1,0 +1,854 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | Cartographie du flux de valeur : symboles, indicateurs et exemple |
+| Meta description | Cartographie du flux de valeur (VSM) étape par étape : symboles, formules du takt time et du lead time, exemple chiffré complet, état futur et logiciels VSM. |
+| Slug | `value-stream-mapping` |
+
+# Cartographie du flux de valeur : le guide complet des symboles VSM, des indicateurs, de la conception de l'état futur et de la gestion des flux de valeur
+
+> **Réponse courte :** La cartographie du flux de valeur (VSM, *Value Stream Mapping*) est une méthode Lean qui représente, sur une seule page et avec des symboles standard, le flux de matière et d'information d'une famille de produits, du fournisseur jusqu'au client. Une chronologie indiquant le délai de traversée, le temps de traitement et le nombre de jours de stock montre la faible part du temps total qui crée de la valeur. Une carte de l'état futur conçoit ensuite un flux plus maigre, et un plan de mise en œuvre permet de le réaliser.
+
+Dans de nombreuses usines, une commande reste trois ou quatre semaines dans l'atelier, alors que le travail réel qui lui est consacré ne représente que quelques minutes. La Wikipédia en langue allemande cite un cas typique : quatre semaines de délai de traversée pour dix minutes de temps de traitement pur [27]. Si l'on n'observe que des machines isolées, on ne voit jamais cet écart. La cartographie du flux de valeur impose de considérer le flux dans son ensemble : où la matière attend-elle, et pourquoi ? Qui indique à chaque processus ce qu'il doit produire, et quand ?
+
+Ce guide présente la méthode depuis les fondamentaux. Vous y trouverez l'ensemble complet des symboles, un guide pas à pas, chaque indicateur important avec sa formule et un exemple entièrement calculé, les règles de conception de l'état futur, les limites de la méthode sur papier, la cartographie dynamique et numérique du flux de valeur, Value Stream 4.0, le management du flux de valeur comme tâche de direction, et un aperçu neutre des catégories de logiciels. Pour une définition condensée, consultez la page d'entité m365.fm [Value Stream Mapping](https://www.m365.fm/entity/value-stream-mapping/).
+
+Remarque sur les sources : la cartographie du flux de valeur (en allemand : *Wertstromanalyse*) possède une forte tradition de recherche en Allemagne, notamment au Fraunhofer IPA et à la TU Darmstadt. Lorsqu'une source allemande apporte un élément que la littérature anglophone ne couvre pas, il est conservé dans le texte avec une brève explication.
+
+### Points clés
+
+- La cartographie du flux de valeur porte toujours sur une **famille de produits** et sur l'ensemble du flux, de la porte d'entrée à la porte de sortie, et non sur des machines ou des services isolés.
+- On dessine **à partir du client, en remontant vers l'amont**, au crayon, sur le lieu même de la production, au gemba (mot japonais signifiant « le lieu réel », ici l'atelier de production).
+- Les indicateurs centraux sont le **takt time, le temps de cycle, les jours de stock, le délai de traversée et le taux de flux** (aussi appelé efficacité du cycle de processus ou ratio d'activité). Les jours de stock découlent de la loi de Little : le stock divisé par la demande.
+- La carte de l'état actuel ne représente que la moitié de la méthode. Les résultats proviennent de la **carte de l'état futur**, construite selon des règles de conception claires, et d'un **plan de mise en œuvre** avec responsables et échéances.
+- La carte classique est un **instantané** fondé sur des moyennes. En cas de forte variété de produits et de demande volatile, la simulation dynamique et la collecte automatique de données prolongent l'analyse.
+- Le **management du flux de valeur** transforme un atelier ponctuel en une tâche de direction permanente, confiée à un responsable du flux de valeur comptable de ses résultats.
+
+### Parcours de lecture pour lecteurs pressés
+
+| Vous êtes … | Lisez d'abord |
+|---|---|
+| Nouveau dans le Lean, ou étudiant | Sections 1 à 4 (définition, historique, objectifs, symboles) |
+| Animateur ou coach Lean débutant | Sections 5 à 8 (guide pas à pas avec programme d'atelier, indicateurs, exemple, conception de l'état futur) et 14 (erreurs fréquentes) |
+| Directeur d'usine ou responsable des opérations | Section 7 (exemple avec les chiffres de l'état actuel et futur), sections 10 à 13 (limites, VSM dynamique et numérique, Value Stream 4.0, management du flux de valeur) |
+| Responsable IT, MES ou Microsoft 365/Azure | Sections 11 (VSM dynamique et numérique), 12 (Value Stream 4.0) et 15 (catégories de logiciels) |
+
+## Table des matières
+
+1. Qu'est-ce que la cartographie de la chaîne de valeur ? Définition et différences avec la cartographie des processus
+2. Historique : du diagramme des flux de matières et d'informations de Toyota à « Learning to See »
+3. Objectifs et avantages de la cartographie de la chaîne de valeur
+4. Symboles de la cartographie de la chaîne de valeur : table de référence complète
+5. Comment créer une cartographie de la chaîne de valeur : guide étape par étape pour l'état actuel
+6. Indicateurs et formules de la cartographie de la chaîne de valeur
+7. Exemple de cartographie de la chaîne de valeur : une chaîne de valeur entièrement calculée
+8. Cartographie de l'état futur : lignes directrices de conception selon Rother/Shook et Erlach
+9. Repérer les gaspillages : les 8 gaspillages et le diagramme spaghetti
+10. Limites de la cartographie traditionnelle de la chaîne de valeur
+11. Cartographie dynamique et numérique de la chaîne de valeur
+12. Value Stream 4.0 : la logistique de l'information comme seconde dimension
+13. Value Stream Management : piloter la chaîne de valeur comme une mission de management
+14. Erreurs courantes en cartographie de la chaîne de valeur et comment les éviter
+15. Logiciels de cartographie de la chaîne de valeur : comparaison des catégories
+16. Cartographie numérique de la chaîne de valeur avec iFAKT Polaris VSM et BSM
+17. Value Stream Management dans la livraison de logiciels : en quoi c'est différent
+18. Preuves et publications de recherche
+19. FAQ : réponses aux questions sur la cartographie de la chaîne de valeur
+20. Conclusion
+
+## 1. Qu'est-ce que la cartographie de la chaîne de valeur ? Définition et différences avec la cartographie des processus
+
+Le Lean Enterprise Institute (LEI) définit la cartographie de la chaîne de valeur comme « la représentation de chaque étape impliquée dans les flux de matières et d'informations nécessaires pour amener un produit de la commande à la livraison » [45]. L'ASQ la décrit comme « un outil lean qui utilise un logigramme documentant chaque étape du processus » [46]. Plus précisément : pour une famille de produits donnée, une cartographie de la chaîne de valeur montre chaque activité nécessaire pour amener un produit de la matière première jusqu'au client. Cela comprend les activités à valeur ajoutée et sans valeur ajoutée, le flux physique de matières et le flux d'informations qui le pilote. Le résultat tient sur une grande feuille, généralement au format 11 × 17 in (tabloïd, proche du format A3 utilisé en Europe), et se dessine avec des symboles standard.
+
+La **chaîne de valeur** (*value stream*) est l'ensemble de ces activités. En anglais, « value stream mapping » et « VSM » sont les termes standard ; « value stream analysis » est également utilisé, surtout pour le travail sur l'état actuel. Klaus Erlach, de l'Institut Fraunhofer d'ingénierie de la fabrication et de l'automatisation IPA à Stuttgart, établit une distinction nette entre **l'analyse de la chaîne de valeur** (enregistrement et évaluation de l'état actuel) et **la conception de la chaîne de valeur** (conception de l'état futur) [3][4]. Ensemble, ils forment la méthode de la chaîne de valeur. L'association allemande d'ingénierie industrielle REFA définit l'analyse en des termes similaires, comme une méthode permettant de montrer tous les processus et flux d'un processus à valeur ajoutée [37].
+
+Depuis mars 2020, une norme internationale existe : **ISO 22468:2020 « Value stream management (VSM) »**. L'ISO la décrit comme des lignes directrices pour collecter, évaluer et améliorer en continu les données de la chaîne de valeur, et pour évaluer les chaînes de valeur à l'aide d'indicateurs clés définis, applicables aux processus liés aux matières, à l'énergie et aux données [40]. La table des matières (publiée par le DIN, l'organisme allemand de normalisation) structure le management de la chaîne de valeur en procédure de base, analyse de la chaîne de valeur, conception de la chaîne de valeur, planification de la chaîne de valeur, et évaluation et ajustement des chaînes de valeur, avec une annexe informative sur les data boxes et des exemples d'application [40]. L'ISO a confirmé que la norme était toujours en vigueur lors de sa révision de 2025 [40]. C'est une référence utile si vous souhaitez ancrer la méthode dans un système de production à l'échelle de l'entreprise.
+
+### En quoi la VSM diffère des méthodes apparentées
+
+| Méthode | Focus | Différence avec la cartographie de la chaîne de valeur |
+|---|---|---|
+| Cartographie des processus / logigramme | procédures individuelles, souvent au sein d'un service | pas de flux d'informations, pas de stocks, pas de chronologie |
+| Analyse des flux de matières | itinéraires de transport, quantités, implantation | examine la logistique, pas la façon dont l'information pilote le flux |
+| Analyse de la valeur / ingénierie de la valeur (en Allemagne : VDI 2800) | fonctions et coût d'un produit | lié au produit, pas au flux |
+| Chaîne de valeur de Porter | activités stratégiques d'une entreprise | modèle de management, pas un diagramme de flux opérationnel ; Wikipedia en anglais fait la même distinction [49] |
+| Diagramme en swimlanes / BPMN | processus métier avec responsabilités | solide pour le bureau, plus faible sur les stocks et le takt |
+| Simulation | comportement dans le temps d'un système | dynamique et détaillée mais plus coûteuse ; complète la VSM (voir section 11) |
+
+Ce qui distingue la cartographie de la chaîne de valeur, c'est la combinaison de trois éléments sur une même page : le flux de matières, le flux d'informations et une frise chronologique. L'introduction de *Learning to See* explique que Toyota enseigne trois flux en fabrication (matières, informations et personnes/processus) et que la méthode de cartographie couvre les deux premiers afin que les industriels « pensent en termes de flux plutôt que de processus de production discrets » [1].
+
+## 2. Historique : du diagramme de flux de matières et d'informations de Toyota à « Learning to See »
+
+La cartographie de la chaîne de valeur est issue du Toyota Production System. Chez Toyota, cet outil s'appelle « Material and Information Flow Mapping ». Les praticiens de Toyota l'utilisaient pour représenter les états actuel et cible lors de la planification des déploiements Lean, et non comme outil de formation [1]. L'expression « value stream » elle-même est rarement employée chez Toyota [1]. Le lexique de LEI décrit également cet outil comme un développement de Toyota, que Toyota désigne sous le nom de diagramme de flux de matières et d'informations [45].
+
+Mike Rother a découvert la méthode de cartographie en étudiant les pratiques de déploiement Lean de Toyota, l'a formalisée et a construit autour d'elle une méthode de formation [1]. Avec John Shook, qui avait passé onze ans chez Toyota, au Japon et aux États-Unis [1], il a publié le cahier d'exercices **« Learning to See »** chez LEI en 1998 (l'introduction est signée à Ann Arbor, Michigan, et datée de mai 1998 ; le sous-titre de la première édition était « Value Stream Mapping to Create Value and Eliminate Muda », celui de l'édition actuelle se lit « … to Add Value and Eliminate Muda ») [1]. Le livre a reçu le prix Shingo de la recherche et de la publication professionnelle en 1999 [1]. Son étude de cas sur l'entreprise fictive de emboutissage « Acme Stamping » conduit le lecteur de l'état actuel à la recherche des gaspillages, puis à l'état cible [1]. L'édition actuelle de LEI est datée de 2018 (ISBN 978-0-9667843-0-5, 148 pages) [1].
+
+Dans les pays germanophones, trois ouvrages ont façonné la diffusion de la méthode, dont l'un est paru plus tard en anglais :
+
+- **Rother/Shook : « Sehen lernen »**, l'édition allemande du cahier d'exercices de LEI, publiée par le Lean Management Institut à Aix-la-Chapelle (version 1.1, 2004, ISBN 978-3-9809521-1-8) [2].
+- **Klaus Erlach : « Wertstromdesign. Der Weg zur schlanken Fabrik »** (Springer ; 1re éd. 2007, 2e éd. 2010, ISBN 978-3-540-89867-2 ; 3e éd. 2020, ISBN 978-3-662-58906-9) [3]. Erlach systématise la méthode pour la planification d'usine. Une édition anglaise, **« Value Stream Design: The Way Towards a Lean Factory »**, est parue chez Springer en 2012 (copyright 2013, ISBN 978-3-642-12568-3) [4].
+- **Thomas Klevers : « Wertstrom-Mapping und Wertstrom-Design »** (mi-Fachverlag, Landsberg am Lech 2007, ISBN 978-3-636-03097-9) [5].
+
+La méthode a ensuite été transposée au travail de bureau et au travail intellectuel, notamment par Karen Martin et Mike Osterling dans « Value Stream Mapping: How to Visualize Work and Align Leadership for Organizational Transformation » (McGraw-Hill, publié en octobre 2013, copyright 2014, ISBN 978-0-07-182891-8) [6].
+
+Aux États-Unis, la méthode fait partie de la boîte à outils Lean standard enseignée par LEI, l'ASQ et le Manufacturing Extension Partnership (MEP) du NIST. Le MEP du NIST qualifie la VSM de « souvent la première étape dans l'application des améliorations de processus Lean » [47]. En Allemagne, elle fait partie des systèmes de production dits holistiques, dont les bases sont décrites dans la directive **VDI 2870 partie 1** (juillet 2012) de l'Association des ingénieurs allemands (VDI). Selon la VDI, la directive reste en partie en vigueur et fait l'objet d'une révision [7].
+
+## 3. Objectifs et avantages de la cartographie de la chaîne de valeur
+
+L'objectif global est un flux aligné sur le client : la matière doit traverser l'usine avec le moins d'attente possible, et chaque processus ne doit produire que ce dont le processus suivant a réellement besoin. Cela conduit à des objectifs concrets :
+
+- **Réduire le délai de traversée.** La chronologie montre la part de l'attente dans le délai total. Comme les stocks représentent généralement la plus grande partie du délai, leur réduction constitue le levier le plus puissant.
+- **Rendre le gaspillage visible.** La surproduction, les stocks, l'attente et les transports inutiles apparaissent directement sur la carte.
+- **Simplifier l'ordonnancement.** La carte montre le nombre de points auxquels le système ERP transmet des ordres. L'objectif est de ne planifier qu'en un seul point, dans la mesure du possible.
+- **Créer un langage commun.** La production, la logistique, la planification et les ventes discutent du même flux sur la même page.
+- **Prioriser les améliorations.** Au lieu d'une optimisation locale, on obtient un plan de mise en œuvre qui vise l'ensemble du flux.
+
+### Quand la cartographie de la chaîne de valeur est-elle utile ?
+
+La méthode convient mieux à la production répétitive et à la production en modèles mixtes portant sur des produits récurrents, aux stocks élevés et aux délais de livraison longs, avant les modifications d'implantation, les nouvelles conceptions d'usine ou les investissements de capacité, lorsque le respect des délais de livraison est médiocre malgré un taux d'utilisation élevé, et comme point d'entrée dans un programme Lean. La forme classique convient moins bien à la production à l'unité ou sur commande d'ingénierie, où les gammes changent, car il est difficile d'y définir une famille de produits stable. Des approches étendues, telles que la simulation ou l'analyse fondée sur les données, aident dans ces cas (voir la section 11). Les petits et moyens fabricants américains qui souhaitent un accompagnement extérieur peuvent s'adresser aux centres NIST MEP, qui citent la cartographie de la chaîne de valeur parmi les méthodes Lean qu'ils aident à appliquer [47].
+
+### Avantages et inconvénients en bref
+
+| Avantages | Inconvénients |
+|---|---|
+| vue de bout en bout du flux du point de vue du client | photographie fondée sur des moyennes |
+| symboles simples et standardisés | peu de détails sur les variantes et les séquences de changement de série |
+| seuil d'entrée bas : papier, crayon, chronomètre | la collecte manuelle des données prend du temps et devient vite obsolète |
+| résultats quantitatifs (délai de traversée, taux de flux) | la variabilité, les pannes et les effets de la taille des lots ne sont pas représentés |
+| relie le flux de matière et le flux d'information | les états futurs ne peuvent pas être testés sur papier |
+| bonne base pour les actions d'amélioration et la communication | l'impact dépend d'une mise en œuvre rigoureuse |
+
+La colonne de droite explique pourquoi la recherche et l'industrie étendent la méthode dans des directions dynamiques et numériques depuis plus de dix ans [16][23]. Nous y revenons à partir de la section 10.
+
+## 4. Symboles de la cartographie de la chaîne de valeur : table de référence complète
+
+Les symboles remontent à *Learning to See* [1][2] et sont volontairement simples afin que chacun puisse les dessiner au crayon. Les ouvrages et les bibliothèques logicielles diffèrent légèrement. Ce qui compte, c'est que votre équipe se mette d'accord sur une légende et l'applique de manière cohérente. Les tableaux ci-dessous décrivent les symboles courants tels qu'utilisés par Rother/Shook et Erlach [1][3].
+
+### Symboles des flux de processus et de matières
+
+| Symbole (aspect) | Nom | Signification et utilisation |
+|---|---|---|
+| bâtiment d'usine à toit en dents de scie | client / fournisseur (source externe) | client en haut à droite, fournisseur en haut à gauche ; sous celui-ci une boîte de données avec la demande, la fréquence de livraison et l'emballage |
+| rectangle avec une ligne d'en-tête et le nom du processus | boîte de processus | un processus à travers lequel la matière circule en continu ; une nouvelle boîte commence là où le flux s'arrête et où un stock s'accumule |
+| rectangle sous la boîte de processus | boîte de données | données du processus : temps de cycle, temps de changement de série, taux de disponibilité, taille de lot, nombre d'opérateurs, postes, rebuts |
+| triangle avec un « I » | stock | matière placée entre deux processus ; la quantité et le nombre de jours de stock sont inscrits en dessous |
+| flèche large rayée | flèche de poussée | la matière est poussée par le processus amont selon son propre planning, et non selon les besoins du processus suivant |
+| flèche large creuse | expédition | matières premières du fournisseur vers l'usine, ou produits finis de l'usine vers le client |
+| camion (ou train, avion, navire) | expédition externe | moyen de transport avec fréquence de livraison, par exemple « 2× par semaine » |
+| étagère ouverte à gauche | supermarché | stock tampon maîtrisé dans lequel le processus client se sert ; le processus fournisseur ne remplace que ce qui a été prélevé |
+| flèche circulaire | prélèvement (tirage) | prélèvement physique au supermarché par le processus aval |
+| flèche avec « FIFO » et une quantité maximale | voie FIFO | file d'attente limitée entre deux processus ; les pièces sont traitées dans l'ordre d'arrivée, et le processus fournisseur s'arrête lorsque le maximum est atteint |
+| triangle avec une note de sécurité | stock de sécurité ou tampon | stock contre les fluctuations de la demande (tampon) ou les pannes de processus (sécurité) |
+| cercle avec une tête d'opérateur | opérateur | nombre de personnes à un processus |
+
+### Symboles des flux d'information
+
+| Symbole (aspect) | Nom | Signification et utilisation |
+|---|---|---|
+| flèche fine droite | flux d'information manuel | information sur papier ou orale, par exemple gamme de fabrication, bon de livraison, consigne verbale |
+| flèche en éclair (en zigzag) | flux d'information électronique | messages EDI, ERP ou MES, courriel |
+| rectangle « Production Control » | pilotage de la production | planification, MRP ou ERP, souvent avec la fréquence de planification |
+| carte à coin coupé, pleine | kanban de production | signal donnant à un processus l'ordre de fabriquer une quantité définie |
+| carte à coin coupé, hachurée ou autrement marquée selon la bibliothèque | kanban de prélèvement | instruction donnée à un manutentionnaire d'aller chercher des pièces au supermarché |
+| triangle posé sur sa pointe | kanban de signal | déclenche un lot lorsque le stock du supermarché atteint un point de réapprovisionnement ; typique des processus à changements de série |
+| symbole de type boîte aux lettres | boîte à kanban | lieu où les kanbans sont collectés pour enlèvement |
+| flèche en pointillés avec kanban | parcours kanban | trajet des cartes vers le processus fournisseur |
+| boîte avec une grille de cases « OXOX » | boîte heijunka (boîte de lissage de charge) | outil de lissage des volumes et du mix au processus pacemaker |
+| lunettes | ordonnancement à vue | ordonnancement par contrôle visuel plutôt que par signaux systématiques ; signe qu'une amélioration est nécessaire |
+
+### Symboles généraux
+
+| Symbole (aspect) | Nom | Signification et utilisation |
+|---|---|---|
+| étoile dentelée (« kaizen burst ») | besoin d'amélioration | marque un point de la carte de l'état actuel ou futur où une amélioration est nécessaire |
+| onde carrée le long du bas | ligne du temps (échelle du délai de traversée) | temps d'attente (jours de stock) sur un niveau, temps de traitement sur l'autre ; totaux du délai de traversée et du temps de traitement à droite |
+
+Certains guides en ligne décrivent la flèche en pointillés comme un flux d'information électronique [38]. Dans *Learning to See*, la flèche en éclair représente l'information électronique et la flèche fine droite l'information manuelle [1]. Respectez cette convention afin que les cartes restent lisibles d'une usine et d'un outil logiciel à l'autre. Une présentation illustrée des symboles figure dans l'article [Value Stream Mapping Symbols and Icons Explained](https://www.m365.fm/community/u/mirko-p/blog/value-stream-mapping-symbols-icons/).
+
+Pour les processus administratifs, comme le traitement des commandes avant la production, Polaris BSM ajoute des couloirs BPMN aux symboles de la cartographie de flux de valeur [30]. La recherche a repris la même idée : l'approche Value Stream Mapping 4.0 de la TU Darmstadt inclut explicitement tous les services de traitement des commandes, à partir du tout premier contact avec le client [14].
+
+## 5. Comment créer une cartographie de flux de valeur : guide pas à pas pour l'état actuel
+
+Le guide ci-dessous suit la logique de Rother/Shook et d'Erlach [1][3] et ajoute des détails pratiques. Pour une première cartographie d'un flux de valeur de taille raisonnable, prévoyez un à deux jours avec une petite équipe [unverified: durée et taille d'équipe indicatives, non validées par une source]. Les recommandations sur la taille de l'équipe diffèrent : l'ASQ juge idéal un groupe d'environ 10 membres et suggère un événement kaizen de trois jours pour le lancement [46], tandis qu'un guide pratique allemand de Mind Logistik privilégie une petite équipe d'au plus six personnes [42]. Il s'agit de recommandations de pratique, et non de résultats de recherche. Choisissez l'équipe la plus réduite si le flux de valeur est court, et la plus large si de nombreux services y participent.
+
+> **Si vous animez un atelier pour la première fois : un programme éprouvé**
+>
+> - **Équipe :** des personnes de la production (responsable d'équipe ou chef d'équipe posté), de la logistique, de la planification de production, de la maintenance et de la qualité ; ajoutez les ventes ou la gestion des commandes si le délai de livraison est le problème. Le futur responsable du flux de valeur participe.
+> - **Matériel :** papier au format 11 × 17 pouces ou rouleau de papier kraft, crayon et gomme, écritoire, chronomètre, feuille de comptage des stocks et légende des symboles convenue à l'avance.
+> - **À clarifier au préalable :** famille de produits, demande client des derniers mois, organisation des postes et pauses. Annoncez la visite dans les zones concernées et expliquez qu'on évalue des processus, et non des personnes.
+> - **Jour 1 :** introduction à l'objectif et aux symboles (environ une heure), parcours du flux à rebours depuis l'expédition, par binômes, fusion des données dans une seule cartographie, calcul des indicateurs.
+> - **Jour 2 ou séance de suivi :** validation de la cartographie avec les services, ajout des kaizen bursts, traitement des questions de l'état futur (section 8), lancement du plan de mise en œuvre avec des responsables désignés.
+>
+> Les durées et la composition des équipes sont des valeurs issues de l'expérience et dépendent de la taille du flux de valeur [unverified: valeurs d'expérience, non validées par une source].
+
+### Étape 1 : définir l'objectif et le périmètre
+
+Avant la première visite, décidez de la question à laquelle la cartographie doit répondre. Exemples : pourquoi notre délai de livraison est-il de 15 jours alors que le client en attend 5 ? De combien de surface au sol gagnons-nous en réduisant les stocks ? Fixez les limites. Le périmètre habituel est « de la porte à la porte », de la réception à l'expédition au sein d'un même site [1]. Un flux de valeur couvrant plusieurs sites ou fournisseurs (flux de valeur étendu) constitue la deuxième étape, non la première.
+
+Désignez également un responsable. Rother/Shook recommandent de confier la responsabilité du flux de valeur à une seule personne, le responsable du flux de valeur, plutôt que de la répartir entre plusieurs services. Le LEI définit ce rôle comme « une personne chargée d'une responsabilité claire quant au succès d'un flux de valeur » [10]. Voir la section 13 pour plus de détails.
+
+### Étape 2 : définir la famille de produits
+
+Une famille de produits est un groupe de produits qui suivent des étapes de transformation similaires sur des équipements partagés. L'outil correspondant est la **matrice produits-processus** : les produits ou variantes figurent en lignes, les processus en colonnes. Les produits qui présentent majoritairement les mêmes cases cochées forment une famille. L'ASQ suggère de rechercher des produits partageant environ 80 % de leurs étapes [46]. Par règle empirique, le contenu de travail des produits d'une même famille ne devrait pas trop varier [unverified: règle empirique, non validée par une source]. L'article allemand de Wikipédia souligne que les flux de valeur se constituent le long des chaînes de processus ou des flux de matières, et que les découper par fonction est inhabituel car cela nuit à des délais courts [27].
+
+Pour votre première cartographie, choisissez une famille représentant une part élevée du chiffre d'affaires ou un problème pressant. Une analyse de Pareto (ABC) par volume et par chiffre d'affaires vous y aidera.
+
+### Étape 3 : recueillir la demande client
+
+Commencez la cartographie en haut à droite avec le symbole client. Dans la zone de données, indiquez la demande (par exemple, pièces par mois), le mix de variantes, la taille des lots ou la quantité par conditionnement, la fréquence de livraison et le délai de livraison exigé. À partir de la demande et du temps de travail disponible, calculez le **temps takt** (formule en section 6). Le temps takt est la référence de toute autre évaluation.
+
+### Étape 4 : parcourir le processus au gemba, à rebours depuis l'expédition
+
+Parcourez le flux à contre-sens, de l'expédition vers la réception. Rother/Shook expliquent qu'ainsi on commence par les processus les plus proches du client, qui doivent donner le rythme [1]. L'article allemand de Wikipédia décrit également un relevé à rebours, depuis le client, en passant par le producteur, jusqu'au fournisseur [27].
+
+Dessinez une case de processus pour chaque section où le matériau circule en continu. Là où le matériau s'arrête, une case de processus se termine et un triangle d'inventaire commence. Utilisez vos propres observations et un chronomètre, et non les données de l'ERP. Le système ERP connaît les temps standards issus des gammes, pas ce qui se passe réellement au poste de travail.
+
+### Étape 5 : Remplir les cases de données
+
+Relevez au minimum les données suivantes pour chaque processus :
+
+| Champ de données | Abréviation | Explication |
+|---|---|---|
+| Temps de cycle | C/T | temps entre deux pièces bonnes en sortie du processus |
+| Temps de traitement (temps à valeur ajoutée) | P/T, VA | temps pendant lequel le travail ajoute réellement de la valeur à la pièce |
+| Temps de changement de série | C/O | temps entre la dernière pièce bonne de l'ancien lot et la première pièce bonne du nouveau lot |
+| Taux de disponibilité / disponibilité | | part du temps planifié pendant laquelle l'équipement peut réellement produire ; décidez si les changements de série sont inclus ou suivis séparément |
+| Taille de lot / EPEI | | nombre de pièces par lot, ou « every part every interval » : fréquence de production de chaque variante |
+| Opérateurs | | nombre de personnes par équipe |
+| Équipes | | nombre d'équipes et temps disponible par équipe après les pauses |
+| Rebuts / retouches | | part des pièces défectueuses |
+
+Pour les processus comportant plusieurs machines en parallèle, notez le nombre de machines et calculez le temps de cycle effectif du processus (temps de cycle par machine divisé par le nombre de machines).
+
+### Étape 6 : Compter l'inventaire
+
+Comptez l'inventaire sur le terrain, et non dans le système. Notez la quantité sous chaque triangle d'inventaire et convertissez-la en **jours d'inventaire** à partir de la demande journalière. Comptez aussi l'inventaire qui « ne compte pas » : pièces dans les zones d'attente, sur les chariots, dans les coins de retouche. C'est souvent là que se cache la plus grande partie du temps d'attente.
+
+### Étape 7 : Ajouter les flux matière externes
+
+En haut à gauche, dessinez le fournisseur principal (ou les fournisseurs des matières premières les plus importantes) et reliez fournisseur, réception, expédition et client avec des symboles de camion et les fréquences de livraison.
+
+### Étape 8 : Dessiner le flux d'information
+
+Le flux d'information est la partie que les équipes négligent le plus souvent, alors qu'elle explique pourquoi le matériau reste en attente. Demandez-vous, pour chaque processus : comment ce processus sait-il quoi fabriquer ensuite ? Les réponses typiques sont un planning hebdomadaire issu de l'ERP, une liste quotidienne donnée par le superviseur, un kanban, un cri par-dessus l'allée, ou « ce qui est là ». Dessinez le contrôle de production en haut au centre, reliez client et fournisseur par des flèches électroniques ou manuelles, et indiquez quelle information atteint chaque processus. Lorsqu'un processus reçoit plusieurs signaux ou plannings par simple observation, ajoutez les lunettes pour l'ordonnancement par observation (go-see scheduling).
+
+Marquez ensuite les flux de matière entre processus comme poussés (flèche rayée), FIFO ou tirés (supermarché et prélèvement).
+
+### Étape 9 : Dessiner la chronologie et calculer les indicateurs
+
+La chronologie se place sous les processus. Sur un premier niveau, indiquez les jours d'inventaire ; sur un second, les temps de traitement des processus. À droite, additionnez-les pour obtenir le **délai de traversée** et le **temps de traitement**, puis calculez le **taux de flux**. Dans les chaînes de valeur ramifiées, c'est le chemin le plus long qui détermine le délai de traversée [41].
+
+### Étape 10 : Marquer les gaspillages et valider
+
+Signalez les problèmes par des éclats kaizen : processus dont le temps de cycle dépasse le takt, inventaire élevé, changements de série longs, disponibilité faible, points de planification multiples. Revoyez la carte finale avec les employés des secteurs concernés. La validation par les personnes du terrain évite qu'une équipe d'atelier dessine une chaîne de valeur qui n'existe pas dans l'usine.
+
+### Liste de contrôle de l'état actuel
+
+- [ ] Objectif, périmètre et responsable de la chaîne de valeur définis
+- [ ] Famille de produits définie avec une matrice produit-processus
+- [ ] Demande client, variantes et takt time déterminés
+- [ ] Tous les processus relevés sur le terrain et en remontant le flux
+- [ ] Cases de données remplies avec des valeurs mesurées
+- [ ] Inventaire compté et converti en jours
+- [ ] Fournisseurs, client et transports dessinés
+- [ ] Flux d'information clarifié pour chaque processus
+- [ ] Chronologie, délai de traversée, temps de traitement et taux de flux calculés
+- [ ] Éclats kaizen ajoutés et carte validée avec les employés
+
+## 6. Formules et métriques de la cartographie du flux de valeur
+
+Les métriques rendent les cartographies du flux de valeur comparables. Dans ZWF (Zeitschrift für wirtschaftlichen Fabrikbetrieb, revue allemande d'ingénierie de production publiée par De Gruyter), Jörg Drees et Christoph Sack montrent que les métriques du flux de valeur, telles que la réduction des stocks, l'utilisation des ressources, la capacité de livraison et les délais courts, semblent poursuivre des objectifs contradictoires mais, appliquées correctement, donnent des recommandations cohérentes. Ils proposent un ensemble de métriques de base qui forment des boucles de contrôle avec des méthodes Lean ciblées [19]. Les formules ci-dessous couvrent cet ensemble de base. D'autres définitions figurent sur les pages d'entité [Lead Time](https://www.m365.fm/entity/lead-time/), [Cycle Time](https://www.m365.fm/entity/cycle-time/) et [Takt Time](https://www.m365.fm/entity/takt-time/).
+
+**Une note sur la terminologie.** Les guides américains utilisent plusieurs noms pour le même ratio. Ce que les textes allemands appellent *Flussgrad* apparaît en anglais sous les termes flow ratio, process cycle efficiency (PCE), value-added ratio, flow efficiency ou, dans la terminologie de Karen Martin, activity ratio (« la somme des temps de processus pour toutes les étapes individuelles divisée par le Total Lead Time ») [44]. Ce guide utilise **flow ratio** tout au long du texte. De même, « inventory days », « days of supply » et « days of inventory » désignent la même chose.
+
+### Takt time
+
+> **Takt time = temps de travail disponible par période ÷ demande client par période**
+
+LEI donne l'exemple d'une usine de widgets qui fonctionne 480 minutes par jour alors que les clients demandent 240 widgets par jour, ce qui donne un takt time de deux minutes [8]. ASQ applique la même formule avec 22 000 secondes et 200 pièces, ce qui donne 110 secondes par pièce [46]. Le temps de travail disponible correspond à la durée de l'équipe moins les pauses planifiées. Les arrêts non planifiés ne sont pas soustraits ; ils relèvent de la disponibilité. Le mot « takt » est allemand (il signifie battement ou pulsation, comme en musique). Selon LEI, takt a été utilisé pour la première fois comme outil de gestion de production dans l'industrie aéronautique allemande dans les années 1930 et largement employé chez Toyota dans les années 1950 [8].
+
+### Cycle time et effective cycle time
+
+Le cycle time est le temps écoulé entre deux pièces bonnes en sortie de processus. Pour le comparer au takt time, il faut tenir compte de la disponibilité et des rebuts :
+
+> **Effective cycle time = cycle time ÷ (disponibilité × taux de premier passage)**
+
+Un processus avec un cycle time de 98 secondes et une disponibilité de 85 % produit en réalité une pièce toutes les 115 secondes. Face à un takt time de 117 secondes, il est presque entièrement chargé, alors que le cycle time nominal suggère une marge de 16 %.
+
+Attention à une confusion courante : certains guides anglophones utilisent « cycle time » pour désigner le temps total qu'une unité passe dans le processus, voire le délai de livraison du fournisseur. Sur une cartographie du flux de valeur, le cycle time désigne toujours l'intervalle entre deux pièces bonnes en sortie d'un même processus.
+
+### Inventory days et loi de Little
+
+> **Inventory days = stock (pièces) ÷ demande journalière (pièces par jour)**
+
+La version allemande de Wikipédia calcule 280 pièces pour une demande journalière de 80 pièces comme 3,5 jours de stock [27]. Ce calcul applique la **loi de Little**, que John D. C. Little a démontrée en 1961 dans la revue Operations Research [12] :
+
+> **L = λ × W**, réarrangée : **W = L ÷ λ**
+
+L est le stock moyen dans le système, λ le débit moyen et W le temps moyen passé dans le système. Appliqué à un flux de valeur : le temps moyen d'attente d'une pièce dans un tampon est égal au stock divisé par le taux de consommation. La loi de Little est valable pour les systèmes stables sur le long terme. Pour des journées isolées présentant des pics de demande, ou pour un système en phase de montée en cadence, la formule n'est qu'une approximation. C'est l'une des raisons de la cartographie dynamique du flux de valeur (section 11).
+
+### Lead time
+
+> **Production lead time = Σ inventory days + Σ temps de traitement (le long du chemin le plus long)**
+
+Comme les temps de traitement sont généralement mesurés en secondes ou en minutes et le stock en jours, la somme des inventory days domine le résultat. Une thèse de diplôme de la Hochschule Mittweida (une haute école d'enseignement appliqué allemande) résume la définition d'Erlach du production lead time comme la somme des temps de traitement et des temps de process ainsi que des plages de stock, le chemin le plus long étant déterminant [41]. Le glossaire de Martin la formule de manière plus générale : lead time égale process time plus wait time [44].
+
+### Processing time et process time
+
+**Temps de traitement** désigne la durée pendant laquelle la pièce est effectivement travaillée. Erlach distingue également le **temps de processus** pour des étapes comme le séchage, le durcissement ou le traitement thermique, qui prennent du temps sans que personne ne travaille sur la pièce [41]. Les deux comptent dans le taux de flux.
+
+### Taux de flux (efficacité du cycle de processus)
+
+> **Taux de flux = (temps de traitement + temps de processus) ÷ délai de traversée × 100 %**
+
+L'article de Wikipédia en allemand décrit le taux de flux comme la part du temps de traitement pur dans le délai de traversée total et le présente comme l'indicateur clé de l'analyse de la chaîne de valeur [27]. Soyez attentif à la base de temps. Si le délai de traversée est exprimé en jours ouvrés, convertissez-le en secondes à l'aide du temps de travail quotidien, comme le fait la formule d'Erlach avec son facteur « temps de travail quotidien » [41]. Si vous calculez en jours calendaires, le taux de flux baisse encore. Choisissez une convention et tenez-vous-y, sinon les états actuel et futur ne seront pas comparables.
+
+### Autres indicateurs
+
+| Indicateur | Formule / définition | Utilisation |
+|---|---|---|
+| Charge par rapport au takt | temps de cycle effectif ÷ temps takt | des valeurs supérieures à 100 % signalent un goulot d'étranglement |
+| Nombre d'opérateurs nécessaires | Σ contenu de travail ÷ temps takt | base de l'équilibrage de ligne |
+| EPEI | temps nécessaire pour produire une fois chaque variante | met en évidence la flexibilité et les effets de la taille des lots |
+| Part des changements de série | (nombre de changements × durée de changement) ÷ temps disponible | montre quelle capacité reste disponible pour des lots plus petits |
+| Charge y compris changements de série | (demande quotidienne × temps de cycle + nombre de changements × durée de changement) ÷ (temps disponible × disponibilité) | vérifie si un état futur à petits lots peut encore respecter le takt (exemple à la section 7) |
+| Livraison à temps | commandes livrées à temps ÷ toutes les commandes | indicateur de résultat du point de vue du client |
+| %C&A (pourcentage complet et exact) | part du travail que l'étape suivante reçoit complet et sans erreur | qualité des transferts ; principalement utilisé dans les chaînes de valeur administratives [44] |
+| TRS | disponibilité × performance × qualité | efficacité des équipements ; la fiche de données raccourcit souvent l'indicateur en taux de disponibilité |
+
+Un graphique d'équilibrage des opérateurs (un diagramme à barres des temps de cycle effectifs avec une ligne horizontale pour le temps takt) rend visibles d'un coup d'œil les goulots d'étranglement et les surcapacités. Erlach l'utilise pour montrer dans quelle mesure la capacité est alignée sur le takt [3]. L'article de Wikipédia en allemand souligne que des temps de cycle proches du takt indiquent un goulot d'étranglement, tandis que des temps de cycle nettement inférieurs au takt signalent une surcapacité et du gaspillage [27].
+
+## 7. Exemple de cartographie de la chaîne de valeur : une chaîne de valeur entièrement calculée
+
+L'exemple suivant est **fictif et conçu pour ce guide**. Il montre comment les indicateurs s'articulent et fait fonctionner l'état actuel et l'état futur avec les mêmes données de base.
+
+### Point de départ
+
+Un fournisseur fabrique une famille de produits de corps de distributeurs hydrauliques en cinq variantes, avec le même gamme de fabrication : sciage, tournage, fraisage, lavage, assemblage. Le client appelle en moyenne 9 200 pièces par mois, réparties sur 20 jours ouvrés. L'usine fonctionne en deux équipes de 8 heures, chacune avec une pause de 30 minutes.
+
+**Étape A : calcul du temps takt**
+
+- Demande quotidienne : 9 200 pièces ÷ 20 jours = **460 pièces par jour**
+- Temps de travail disponible : 2 × (480 min − 30 min) = 900 min = **54 000 s par jour**
+- Temps takt : 54 000 s ÷ 460 pièces = **117,4 s par pièce**
+
+### État actuel : données des processus
+
+| Processus | Temps de cycle | Temps de changement de série | Disponibilité | Temps de cycle effectif | Charge par rapport au takt |
+|---|---|---|---|---|---|
+| Sciage | 45 s | 30 min | 95 % | 47,4 s | 40 % |
+| Tournage | 98 s | 60 min | 85 % | 115,3 s | 98 % |
+| Fraisage | 125 s | 45 min | 90 % | 138,9 s | **118 %** |
+| Lavage | 40 s | 0 min | 98 % | 40,8 s | 35 % |
+| Assemblage | 105 s | 15 min | 95 % | 110,5 s | 94 % |
+
+Simplifications : ici, le temps de traitement est égal au temps de cycle, car chaque processus travaille une pièce après l'autre. Les rebuts sont ignorés. La disponibilité ne couvre que les pannes ; les changements de série sont traités séparément.
+
+**Constat sur le goulot d'étranglement :** le fraisage dépasse déjà le takt avec un temps nominal de 125 s, et avec un temps effectif de 138,9 s, il se situe 18 % au-dessus. En une journée, le fraisage produit 54 000 s × 0,90 ÷ 125 s = **389 pièces** au lieu des 460 nécessaires. Les changements de série réduisent encore ce chiffre. L'usine comble l'écart avec des équipes supplémentaires le samedi. Le tournage semble non critique sur le papier (98 s), mais il est chargé à 98 % une fois la disponibilité prise en compte. Si l'on ignore la disponibilité, on passe à côté de ce second goulot quasi critique.
+
+### État actuel : stocks et délais
+
+| Stock | Quantité | Jours de stock (quantité ÷ 460) |
+|---|---|---|
+| Matière première avant sciage | 4 600 pièces | 10,0 jours |
+| Après sciage | 1 380 pièces | 3,0 jours |
+| Après tournage | 920 pièces | 2,0 jours |
+| Après fraisage | 690 pièces | 1,5 jour |
+| Après lavage | 460 pièces | 1,0 jour |
+| Produits finis | 1 150 pièces | 2,5 jours |
+| **Total** | **9 200 pièces** | **20,0 jours** |
+
+- **Temps de traitement :** 45 + 98 + 125 + 40 + 105 = **413 s** (un peu moins de 7 minutes)
+- **Délai de traversée :** 20,0 jours ouvrés + 413 s ≈ **20 jours ouvrés**
+- **Taux de flux (base temps de travail) :** 413 s ÷ (20 × 54 000 s) = 413 ÷ 1 080 000 = **0,038 %**
+- **Taux de flux (base temps calendaire) :** 20 jours ouvrés correspondent à environ 28 jours calendaires ; 413 s ÷ (28 × 86 400 s) = **0,017 %**
+
+**Contrôle de plausibilité avec la loi de Little :** stock total de 9 200 pièces ÷ débit de 460 pièces par jour = 20 jours [12]. La somme des jours de stock individuels et le calcul global concordent. Si ce contrôle ne fonctionne pas sur votre cartographie, vous avez soit oublié des stocks, soit mélangé des valeurs de référence.
+
+**Constat sur le flux d'information :** la planification de production envoie un planning hebdomadaire à chacun des cinq processus. Chaque processus produit selon son propre planning et pousse la matière vers l'aval. Il n'existe aucune limite de quantité entre les processus, si bien que les stocks s'accumulent devant le goulot d'étranglement. Le responsable de l'assemblage intervient chaque jour avec des commandes urgentes (planification à vue).
+
+### État futur : actions d'amélioration
+
+En appliquant les principes de conception de la section 8, l'équipe conçoit l'état futur suivant :
+
+1. **Supprimer le goulot d'étranglement du fraisage :** les améliorations d'outillage et de montage réduisent le temps de cycle de 125 à 95 s ; une initiative TPM (total productive maintenance, maintenance productive totale, maintenance préventive avec la participation des opérateurs) porte la disponibilité de 90 à 95 %.
+2. **Stabiliser le tournage :** l'optimisation des programmes réduit le temps de cycle de 98 à 90 s ; la TPM porte la disponibilité de 85 à 92 %.
+3. **Équilibrer l'assemblage :** le contenu de travail est redistribué, et le temps de cycle passe de 105 à 95 s.
+4. **Réduire les temps de changement de série (SMED) :** comme chaque variante sera fabriquée chaque jour, chaque processus doit effectuer cinq changements de série par jour. Le SMED (single-minute exchange of die : préparation du changement de série pendant que la machine tourne encore) réduit le temps de changement de série au tournage de 60 à 10 min, au fraisage de 45 à 10 min et à l'assemblage de 15 à 5 min. Sans cette étape, l'état futur ne serait pas réalisable : cinq changements de série de 60 minutes chacun ne rentrent pas dans la capacité libre du tournage.
+5. **Liaisons en FIFO :** le tournage, le fraisage, le lavage et l'assemblage sont reliés par trois voies FIFO dont les quantités maximales sont de 60, 30 et 30 pièces.
+6. **Supermarché après le sciage :** comme le sciage est beaucoup plus rapide et doit changer de série, un supermarché contenant une demi-journée de stock (230 pièces) le découple. Un kanban de signal déclenche les nouveaux lots.
+7. **Assemblage comme pacemaker :** la planification n'envoie les commandes clients qu'à l'assemblage. Une boîte heijunka répartit régulièrement les cinq variantes sur la journée. Avec une quantité de conditionnement de 20 pièces, la cadence (pitch) est de 20 × 117,4 s ≈ 39 minutes.
+8. **Supermarché de produits finis :** un jour de stock (460 pièces) amortit les fluctuations des appels de livraison des clients.
+9. **Liaison fournisseur :** les livraisons de matières premières passent de une à deux fois par semaine ; le stock de matières premières descend à cinq jours (2 300 pièces).
+
+### État futur : vérification de la capacité avec les changements de série
+
+Un état futur doit respecter le takt time même avec des changements de série quotidiens. La vérification calcule donc deux valeurs : le temps de cycle effectif comparé au takt, et la charge incluant les changements de série.
+
+> **Charge incluant les changements de série = (demande quotidienne × temps de cycle + nombre de changements × temps de changement de série) ÷ (temps disponible × disponibilité)**
+
+| Processus | Temps de cycle | Temps de changement de série | Disponibilité | Temps de cycle effectif | Charge vs takt | Charge avec 5 changements |
+|---|---|---|---|---|---|---|
+| Sciage | 45 s | 30 min | 95 % | 47,4 s | 40 % | 58 % |
+| Tournage | 90 s | 10 min | 92 % | 97,8 s | 83 % | 89 % |
+| Fraisage | 95 s | 10 min | 95 % | 100,0 s | 85 % | **91 %** |
+| Lavage | 40 s | 0 min | 98 % | 40,8 s | 35 % | 35 % |
+| Assemblage | 95 s | 5 min | 95 % | 100,0 s | 85 % | 88 % |
+
+Calcul détaillé pour le fraisage : (460 × 95 s + 5 × 600 s) ÷ (54 000 s × 0,95) = 46 700 ÷ 51 300 = 91 %. Tous les processus restent en dessous de 100 %, la valeur la plus élevée étant celle du fraisage. Le pacemaker, l'assemblage, dispose d'une certaine marge pour les fluctuations des appels de livraison, avec 88 %.
+
+### État futur : résultat
+
+| Indicateur | Actuel | Futur | Évolution |
+|---|---|---|---|
+| Stock total | 9 200 pièces | 2 300 + 230 + 120 + 460 = 3 110 pièces | −66 % |
+| Délai de traversée (Little) | 20,0 jours ouvrés | 3 110 ÷ 460 = 6,8 jours ouvrés | −66 % |
+| Temps de traitement | 413 s | 45 + 90 + 95 + 40 + 95 = 365 s | −12 % |
+| Taux de flux (base temps de travail) | 0,038 % | 365 ÷ (6,76 × 54 000) = 0,100 % | facteur 2,6 |
+| Goulot d'étranglement | fraisage 118 % (sans changements de série) | charge la plus élevée au fraisage 91 % avec changements de série | takt respecté sans postes le samedi |
+| Points de planification | 5 (planning hebdomadaire vers tous) | 1 (assemblage pacemaker) | planification simplifiée |
+
+Les voies FIFO sont comptées à leurs quantités maximales (60 + 30 + 30 = 120 pièces). En fonctionnement, elles sont rarement pleines : le stock futur est donc une limite haute prudente.
+
+Deux enseignements de cet exemple. Premièrement, ce sont les mesures de planification et de stock, et non des machines plus rapides, qui apportent la plus grande part de la réduction du délai : le temps de traitement baisse de 12 %, le délai de traversée de 66 %. Deuxièmement, même le taux de flux amélioré de 0,1 % reste faible. C'est typique des usines disposant d'un stock tampon de matières premières. Ce qui compte, c'est la direction suivie, et un takt time qui peut être tenu de façon fiable même avec des changements de série quotidiens.
+
+## 8. Cartographie de l'état futur : lignes directrices de conception selon Rother/Shook et Erlach
+
+La conception de l'état futur répond à la question de la manière dont le flux de valeur doit circuler. *Learning to See* conduit le lecteur de l'état actuel à une « carte d'un futur plus lean » et à un plan de flux de valeur qui guide la mise en œuvre et fait l'objet d'un examen régulier [1].
+
+### Questions clés pour l'état futur selon Rother/Shook
+
+Rother et Shook structurent la conception autour d'une série de questions clés [1] (reformulées) :
+
+1. Quel est le temps takt ?
+2. Produisons-nous pour un supermarché de produits finis ou directement pour l'expédition ?
+3. Où pouvons-nous utiliser un flux continu ?
+4. Où avons-nous besoin de systèmes de tirage par supermarché ?
+5. En quel point unique de la chaîne de production (le processus pacemaker) programmons-nous la production ?
+6. Comment lissons-nous le mix de production au niveau du processus pacemaker ?
+7. Quel incrément de travail libérons-nous et prélevons-nous de manière constante au niveau du pacemaker ?
+8. Quelles améliorations de processus sont nécessaires pour que l'état futur fonctionne ?
+
+### Les lignes directrices de Rother et Shook
+
+Dans un article publié sur le Lean Post de LEI (19 octobre 2022), Mike Rother et John Shook résument ainsi les lignes directrices d'une chaîne de valeur lean [11] :
+
+| N° | Ligne directrice (formulation originale) | Ce que cela signifie |
+|---|---|---|
+| 1 | « Produce to your takt time » | aligner la production sur la demande client |
+| 2 | « Develop continuous flow wherever possible » | créer un flux à pièce unique partout où c'est possible |
+| 3 | « Use supermarkets to control production where continuous flow does not extend upstream » | utiliser des supermarchés là où le flux ne peut pas remonter |
+| 4 | « Try to send the customer schedule only to one production process » | n'envoyer les commandes client qu'à un seul processus de production (le pacemaker) |
+| 5 | « Distribute the production of different products evenly over a set time at the pacemaker process » | lisser le mix de produits au niveau du pacemaker (heijunka) |
+| 6 | « Create an 'initial pull' by releasing and withdrawing small, consistent increments of work at the pacemaker process » | lisser le volume de production |
+
+Des sources secondaires citent une septième ligne directrice tirée de *Learning to See* : la capacité à fabriquer chaque pièce chaque jour dans les processus situés en amont du pacemaker (« every part every day »), puis chaque équipe ou chaque heure [1] [unverified: non vérifié par rapport au texte du livre]. L'exemple de la section 7 montre pourquoi cette ligne directrice exige des temps de changement de série courts.
+
+### Les lignes directrices de conception d'Erlach
+
+Klaus Erlach organise la conception des flux de valeur en huit lignes directrices qui s'appuient les unes sur les autres [3]. Elles se répartissent en trois groupes : conception des processus de production (lignes directrices 1 et 2), pilotage de la production (3 à 5) et planification de la production (6 à 8). Les intitulés ci-dessous suivent le livre allemand d'Erlach et la présentation de son site web ; l'édition anglaise (Springer 2012/2013) est décrite par son éditeur comme présentant « ten design guidelines » [4], de sorte que la numérotation peut différer dans le texte anglais.
+
+| N° | Ligne directrice de conception [3] | Question clé pour votre flux de valeur |
+|---|---|---|
+| 1 | Alignement sur le temps takt | Tous les processus sont-ils conçus pour respecter le temps takt de façon fiable, et où existe-t-il une surcapacité ? |
+| 2 | Intégration des processus | Quelles étapes de processus peuvent être regroupées physiquement et organisationnellement en flux continu ? |
+| 3 | Couplage FIFO | Où les processus peuvent-ils être reliés par des voies FIFO limitées plutôt que par des stockages illimités ? |
+| 4 | Pilotage Kanban | Où un supermarché avec kanban est-il nécessaire parce que les processus ont des temps de cycle ou des changements de série différents ? |
+| 5 | Processus pacemaker | À quel processus unique les commandes client sont-elles programmées ? |
+| 6 | Définition de l'unité de lancement | Selon quel intervalle de temps le travail est-il lancé au niveau du pacemaker (pitch) ? |
+| 7 | Lissage du mix de production | Comment les variantes sont-elles réparties uniformément, et où la constitution de campagnes a-t-elle un sens ? |
+| 8 | Pilotage du goulot d'étranglement | Comment un goulot d'étranglement résiduel est-il piloté pour ne jamais tourner à vide ? |
+
+L'ordre suit la logique des trois groupes : un mix de production lissé (ligne directrice 7) suppose que les processus sont alignés sur le takt et que le pilotage par FIFO, kanban et pacemaker fonctionne (lignes directrices 1 à 5).
+
+### Termes de l'état futur en bref
+
+- **Flux continu (flux unitaire) :** les pièces passent une à une d'un processus à l'autre, sans stock intermédiaire.
+- **Supermarché et kanban :** le processus aval prélève, le processus amont ne remplace que ce qui a été prélevé. Pour en savoir plus, consultez les pages d'entités [Kanban](https://www.m365.fm/entity/kanban/) et [Pull System](https://www.m365.fm/entity/pull-system/).
+- **Voie FIFO :** une file d'attente dont la quantité maximale est définie ; lorsqu'elle est pleine, le processus amont s'arrête. Le FIFO est plus simple que le kanban et convient aux pièces très variées qui ne doivent pas être fabriquées pour le stock.
+- **Processus pacemaker :** le seul processus qui reçoit les commandes clients. Les processus amont sont pilotés par les supermarchés en tirage ou par les voies FIFO ; les processus aval fonctionnent en flux continu ou en FIFO.
+- **Heijunka :** lissage des volumes et du mix, par exemple à l'aide d'une boîte heijunka comportant un emplacement par intervalle de temps.
+- **Pitch / unité de lancement :** l'intervalle de temps pendant lequel le travail est lancé et les produits finis sont enlevés : temps takt × quantité par conditionnement, soit dans l'exemple de la section 7, 20 × 117,4 s ≈ 39 minutes.
+- **SMED et TPM :** le SMED réduit les temps de changement de série en préparant les opérations de changement pendant que la machine tourne encore ; le TPM améliore la disponibilité grâce à la maintenance préventive. Ces deux démarches sont souvent des préalables à un état futur à petits lots.
+
+### De l'état futur au plan de mise en œuvre
+
+Un état futur sans plan n'est qu'un beau poster. Découpez l'état futur en **boucles de chaîne de valeur** : la boucle pacemaker (du pacemaker au client) et les boucles amont jusqu'à chaque supermarché. Chaque boucle reçoit des objectifs, des actions, des responsables et des échéances. Rother et Shook recommandent de commencer par la boucle pacemaker, car elle est la plus proche du client [unverified: source non confirmée pour cette recommandation précise]. Planifiez par cycles de quelques mois et faites le point régulièrement, par exemple lors d'une revue mensuelle de la chaîne de valeur.
+
+La valorisation est un obstacle fréquent. Busch, Niehues et Maassen décrivent dans ZWF que l'industrie ne réalise souvent pas le potentiel de la chaîne de valeur, car le bénéfice est mal quantifié. Ils enrichissent la méthode de la chaîne de valeur d'un modèle de valorisation fondé sur les coûts, qui relie indicateurs opérationnels et indicateurs stratégiques [25]. Pour votre plan de mise en œuvre, cela signifie : chiffrez en euros la réduction des stocks, l'espace au sol libéré et la réduction des délais avant de demander un budget.
+
+## 9. Identifier les gaspillages : les 8 gaspillages et le diagramme spaghetti
+
+La cartographie de la chaîne de valeur est un outil pour identifier les gaspillages (en japonais : muda). La classification des sept gaspillages remonte à Taiichi Ohno [9][32] ; LEI les énumère comme suit : surproduction, attente, transport, surtraitement, stocks, mouvements et correction [9]. Jeffrey Liker en a ajouté un huitième dans « The Toyota Way » (2004) : la créativité et les compétences inutilisées des collaborateurs [33]. Aux États-Unis, les huit sont souvent enseignés à l'aide de l'acronyme DOWNTIME : defects (défauts), overproduction (surproduction), waiting (attente), non-utilized talent (talents non exploités), transportation (transport), inventory (stocks), motion (mouvements), extra processing (traitements superflus) [51]. Un aperçu synthétique figure sur la page de l'entité [Eight Wastes](https://www.m365.fm/entity/eight-wastes/).
+
+| N° | Gaspillage | Comment le repérer sur la cartographie de la chaîne de valeur |
+|---|---|---|
+| 1 | Surproduction | flèches de type poussé, grands lots, stocks après des processus rapides ; selon LEI « la pire forme de gaspillage, car elle alimente les six autres » [9] |
+| 2 | Attente | opérateurs qui attendent les machines, les matières ou les validations ; charge faible par rapport au takt |
+| 3 | Transport | nombreuses flèches de camions et de transport, stockage intermédiaire entre les processus |
+| 4 | Surtraitement | étapes de processus sans valeur pour le client, contrôles en double |
+| 5 | Stocks | triangles de stock avec plusieurs jours de couverture, supermarchés sans quantités maximales |
+| 6 | Mouvements | longs déplacements des collaborateurs, recherche de pièces et d'outils (plus visible sur un diagramme spaghetti) |
+| 7 | Défauts / correction | rebuts et retouches dans l'encadré de données, flèches de flux de retour |
+| 8 | Talents inutilisés | planification de go-see, absence d'implication dans l'élaboration de la cartographie, aucune suggestion d'amélioration |
+
+### Le diagramme spaghetti en complément
+
+La cartographie de la chaîne de valeur montre le flux à un niveau abstrait. Elle ne montre pas la distance réellement parcourue par les pièces et les personnes. C'est à cela que sert le **diagramme spaghetti** : sur un plan d'implantation à l'échelle, on trace au crayon chaque trajet d'une pièce ou d'une personne. Le résultat ressemble souvent à une assiette de spaghettis et rend immédiatement visibles les gaspillages de transport et de mouvement. LEI rapporte le cas de Thrustmaster of Texas, un fabricant d'équipements de propulsion marine basé à Houston, où un diagramme spaghetti de la zone d'assemblage des propulseurs a révélé plus de sept miles de déplacements et près de 10 heures de temps sans valeur ajoutée par unité ; après une refonte de l'implantation axée sur le flux et le travail standardisé, l'entreprise a annoncé une livraison à 100 % dans les temps 18 mois plus tard [43]. Utilisez le diagramme spaghetti après la cartographie de la chaîne de valeur, pour les processus présentant les plus fortes poussées de kaizen. Détails sur la page de l'entité [Spaghetti Diagram](https://www.m365.fm/entity/spaghetti-diagram/).
+
+## 10. Limites de la cartographie traditionnelle du flux de valeur
+
+La cartographie papier du flux de valeur est volontairement simple. Cette simplicité fait sa force, mais aussi sa limite. La littérature évoque surtout cinq faiblesses.
+
+**1. Instantané.** La carte montre l'état d'une journée ou d'une semaine. Dans ZWF, Lugert et Winkler notent que le caractère statique de la cartographie du flux de valeur devient un problème croissant face aux mégatendances actuelles de la production, et ils plaident pour une gestion dynamique du flux de valeur [23]. Le Fraunhofer IPA se demande si des instantanés isolés suffisent pour analyser un processus de production dans son ensemble [22].
+
+**2. Moyennes plutôt que distributions.** Les encadrés de données contiennent des moyennes. Les temps de cycle fluctuants, les pannes et les pics de demande disparaissent dans la moyenne. La loi de Little vaut pour la moyenne à long terme des systèmes stables [12], mais elle ne dit rien de la dispersion des commandes individuelles.
+
+**3. Variété des produits.** Dès 2011, Drees et Sack ont souligné l'accroissement de la complexité des chaînes de valeur, le nombre croissant de variantes de produits et les fluctuations quotidiennes de la demande [19]. Avec des centaines de variantes et des gammes de fabrication différentes, il devient presque impossible de constituer une famille de produits aux temps de cycle homogènes.
+
+**4. Collecte manuelle des données.** Selon le Fraunhofer IPA, les données relevées sur papier et les moyennes estimées sont moins à jour, moins précises et moins complètes que les données collectées numériquement [22]. Dans de nombreuses entreprises, les données de la cartographie du flux de valeur ne sont relevées que manuellement, sous forme d'instantanés [21]. L'effort requis fait que les cartes sont rarement mises à jour.
+
+**5. Aucun test de l'état futur.** Le fait que des voies FIFO de 30 pièces suffisent, ou qu'un supermarché se vide lors des pics de demande, ne peut pas être vérifié sur papier. Türck, Weimer, Schubert et Drees (iFAKT GmbH) demandent donc quelles nouvelles possibilités d'optimisation apparaissent lorsque le facteur temps est pris en compte [16].
+
+Il existe aussi un manque sur le fond : la méthode classique améliore surtout le flux de matières. Le flux d'information est représenté, mais à peine évalué. C'est là qu'intervient la cartographie du flux de valeur 4.0 (section 12) [13][15].
+
+## 11. Cartographie dynamique et numérique du flux de valeur
+
+La méthode évolue selon deux axes : le **dynamique** (simulation du comportement temporel et de la variabilité) et le **numérique** (collecte automatique des données et calcul continu des indicateurs). Ces deux axes complètent la méthode classique sans la remplacer.
+
+### De la carte statique à la simulation
+
+Dès 2014, Stefan Türck, Andreas Weimer, Lars Schubert et Jörg Drees d'iFAKT GmbH ont décrit dans ZWF le passage de l'analyse statique des flux de valeur et de leurs indicateurs à la **simulation dynamique** [16]. Leur point de départ était que la modélisation des flux de valeur est établie dans de nombreuses entreprises manufacturières et que les outils numériques correspondants gagnent en acceptation [16]. La cartographie dynamique du flux de valeur ne demande pas seulement quel est le niveau moyen des stocks, mais comment il évolue dans le temps lorsque les commandes fluctuent, que des machines tombent en panne ou que les séquences de changement d'outillage varient.
+
+En pratique, la carte du flux de valeur devient un modèle dont chaque symbole possède un comportement. Un processus n'a plus un temps de cycle fixe mais une distribution ; un supermarché a un point de réapprovisionnement et un maximum ; la demande client suit une série temporelle. La simulation montre si l'état futur fonctionne dans des conditions réalistes, où les stocks tampons sont trop petits et quelle distribution des délais de traversée il faut attendre. Pour en savoir plus sur la simulation d'usine en général, consulter la page thématique [Factory Simulation](https://www.m365.fm/entity/factory-simulation/).
+
+### Comparaison : cartographie statique et dynamique du flux de valeur
+
+| Critère | VSM statique (classique) | VSM dynamique / simulation |
+|---|---|---|
+| Base de données | moyennes issues d'un seul relevé sur site | distributions, séries temporelles, données d'événements |
+| Référence temporelle | photographie instantanée | évolution sur des jours, des semaines, des mois |
+| Variété des produits | famille de produits aux valeurs uniformes | variantes avec leurs propres gammes et séquences de changement de série |
+| Variabilité et pannes | non représentées | modélisées au moyen de distributions et de profils de pannes |
+| Indicateurs | délai de traversée, ratio de flux, jours de stock sous forme de valeurs uniques | en plus, dispersion, percentiles, charge dans le temps |
+| Test de l'état futur | impossible, seul le jugement d'experts est disponible | scénarios comparables avant la mise en œuvre |
+| Effort | faible : papier et chronomètre | plus élevé : modélisation et maintenance des données |
+| Outils | papier, tableau blanc, logiciels de schématisation | logiciel VSM spécialisé avec lien vers la simulation, suites de simulation |
+| Force | compréhension, communication, implication | réduction des risques liés aux investissements et dimensionnement des stocks tampons |
+| Usage typique | initiation, atelier, formation Lean | planification d'usine, production à forte variété, décisions de capacité |
+
+### Cartographie numérique du flux de valeur : des données issues de l'usine plutôt que du presse-papiers
+
+Le second axe concerne la collecte des données. Dans ZWF, Christian Urnauer montre comment le **process mining** peut déduire des processus, leurs liens et des indicateurs de performance à partir des horodatages de production, offrant ainsi à la cartographie du flux de valeur une perspective fondée sur les données [24].
+
+Fraunhofer IPA suit une voie similaire sous la devise « Nous automatisons le gemba walk » : de la saisie numérique des données dans l'atelier à la visualisation des indicateurs du flux de valeur, avec des analyses actualisées, des indicateurs cohérents fondés sur les données et une intégration simple des KPI d'énergie et d'empreinte carbone [22]. Les industriels américains disposent également d'une référence publique pour le volet environnemental : la boîte à outils Lean & Environment de l'EPA recommande de sélectionner « un ou deux indicateurs de performance environnementale à mesurer pour chaque processus du flux de valeur », comme la quantité de déchets dangereux par équipe, et de les inscrire dans les encadrés de processus à côté du temps de cycle et du taux de disponibilité [48].
+
+Selon la terminologie ISA-95 (ANSI/ISA-95, connue à l'international sous le nom de CEI 62264), les données d'un flux de valeur numérique proviennent des systèmes d'entreprise de niveau 4 tels que l'ERP, des systèmes d'exploitation de fabrication de niveau 3 tels que le MES, et des systèmes de contrôle et capteurs de niveau 2 [50]. Cette superposition aide à discuter avec le service informatique de la question de savoir quel système fournit quel champ de données à chaque encadré.
+
+Un exemple concret est le projet de recherche **ECOWERT** (« analyse du flux de valeur orientée temps réel pour l'optimisation de la production durable ») mené par Fraunhofer IPA et iFAKT GmbH. Il s'est déroulé du 1er septembre 2021 au 31 août 2022, avec un budget de 500 000 €, et a été financé par le Land allemand de Bade-Wurtemberg via son programme Invest BW [20]. L'objectif était une analyse du flux de valeur qui collecte automatiquement les données ERP, MES, des machines et des capteurs, les actualise en continu et y ajoute les données énergétiques du flux de valeur [20]. Jörg Drees et Steffi Stambera (iFAKT) ainsi que Markus Böhm (Fraunhofer IPA) décrivent l'architecture : les données brutes transitent par une passerelle IIoT et MQTT (avec la spécification de charge utile Sparkplug) vers une base de données de séries temporelles, puis sont évaluées par le logiciel Polaris VSM. Leur conclusion : l'approche permet de produire des analyses de flux de valeur quasiment en temps réel, et l'équipement des machines avec des capteurs simples suffit déjà à générer les données [21].
+
+Pour réutiliser ces données, Böhm, Drees, Sai, Erlach, Stambera et Teriete ont développé une **interface de données universelle pour les services de flux de valeur numériques**. Ils traitent les événements de l'atelier comme des données brutes structurées destinées aux services d'optimisation et standardisent le flux de données afin que les services puissent se connecter via une interface unique. Un service de calcul et de visualisation des indicateurs a été connecté dans le projet ECOWERT [18]. Parmi les auteurs figure Klaus Erlach (Fraunhofer IPA), auteur de l'ouvrage de référence sur la conception des flux de valeur [18][3].
+
+### Du flux de valeur numérique au jumeau numérique
+
+Lorsque la cartographie du flux de valeur est mise à jour en continu à partir de données en temps réel et couplée à un modèle de simulation, elle devient un élément constitutif d'un jumeau numérique de la production. Siemens, par exemple, propose un module complémentaire VSM Library pour Plant Simulation X qui permet aux utilisateurs de « exécuter des simulations dynamiques de flux de valeur » et de « créer et comparer plusieurs scénarios », comme l'état actuel et l'état futur [35]. Pour en savoir plus sur ce concept, consultez la page d'entité [Digital Twin](https://www.m365.fm/entity/digital-twin/) ainsi que le guide [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/).
+
+La manière dont un flux de valeur fonctionne comme un modèle de données vivant est également abordée dans l'épisode de m365.fm [Value Stream Mapping with a Live Data Model](https://www.m365.fm/show/episodes/value-stream-mapping-live-data-model/).
+
+**Mise en garde importante :** la numérisation ne corrige pas un mauvais flux. La TU Darmstadt recommande explicitement d'établir d'abord un flux stable et au lean grâce à une conception classique du flux de valeur, puis seulement d'aborder les améliorations numériques. Elle déconseille de numériser des processus complexes avant qu'ils ne soient stabilisés [14].
+
+## 12. Value Stream 4.0 : la logistique de l'information comme seconde dimension
+
+**Value Stream Mapping 4.0** a été développé à l'Institut de gestion de la production, de technologie et de machines-outils (PTW) de la TU Darmstadt, en Allemagne. Tobias Meudt, Joachim Metternich et Eberhard Abele l'ont présenté en 2017 dans CIRP Annals, sous le titre « Value stream mapping 4.0: Holistic examination of value stream and information logistics in production » [13]. Un ouvrage en anglais a suivi : « Value Stream 4.0: A Systems View of Information Flow for Digitalization », de Metternich, Meudt et Hartmann (CRC Press, publié en juillet 2025, copyright 2026) [15].
+
+L'idée centrale : en parallèle du flux matériel, la **logistique de l'information** est analysée de manière systématique. L'information doit être disponible au bon moment, au bon endroit, en quantité et en qualité adéquates, avec le moins de gaspillage possible [14]. Selon le guide « Industrie 4.0 trifft Lean » (l'Industrie 4.0 rencontre le Lean) de la fédération allemande de l'industrie mécanique VDMA, élaboré scientifiquement par Metternich, Meudt et Hartmann, la méthode comprend les éléments suivants [14] :
+
+- **Périmètre élargi :** du premier contact avec le client jusqu'à l'utilisation du produit, à travers tous les services impliqués dans le traitement des commandes.
+- **Cases de processus étendues :** avec les sources d'information, les intervalles d'enregistrement, le type d'enregistrement (automatisé, semi-automatisé, manuel) et les valeurs actuelles.
+- **Supports de stockage représentés par des lignes :** papier, ERP, MES, Excel et autres supports de stockage sont dessinés sous forme de lignes horizontales et reliés aux sources par des lignes verticales.
+- **Huit types de gaspillage en logistique de l'information**, organisés selon le cycle de vie des données : à la création et au transfert (sélection des données, qualité des données, saisie des données, transfert des données), au traitement et au stockage (attente et stock d'information ; transport, mouvement et recherche) et à l'utilisation (analyse des données, aide à la décision).
+- **Indicateurs :** disponibilité de l'information, utilisation de l'information et degré de numérisation.
+
+Dans l'exemple d'un constructeur de machines spéciales, l'analyse a relevé douze supports de stockage en usage, une saisie manuelle et redondante des données, ainsi qu'un degré de numérisation et d'utilisation des données de zéro pour cent dans chaque cas [14].
+
+Bega et ses collègues ont étendu Value Stream Mapping 4.0 en 2023 dans la revue Production Engineering, afin d'identifier de manière complète les flux de données et d'informations [26]. Cela montre que Value Stream 4.0 n'est pas une méthode achevée, mais un domaine de recherche actif.
+
+En 2018, Jörg Drees a adopté un point de vue voisin, depuis la perspective d'un éditeur de logiciels, dans la revue ZWF sous le titre « Wertstrom Management 4.0: Next Generation » : l'interconnexion croissante de l'information grâce à l'Industrie 4.0 et à l'Internet industriel des objets (IIoT) crée de nouvelles attentes, et la méthode comme le logiciel doivent s'adapter aux nouvelles formes d'organisation et de pilotage de la chaîne de valeur [17].
+
+## 13. Management du flux de valeur : piloter le flux de valeur comme une mission de direction
+
+Un projet de cartographie du flux de valeur a un début et une fin. Le **management du flux de valeur** est continu. Il consiste à piloter un flux de valeur à travers les frontières des services sur le long terme, avec des mises à jour régulières de la cartographie, des objectifs au niveau du flux de valeur et des responsabilités claires. Une introduction détaillée figure dans l'article [What Is Value Stream Management?](https://www.m365.fm/community/u/mirko-p/blog/what-is-value-stream-management/).
+
+Lugert et Winkler soutiennent que les seules solutions techniques de l'Industrie 4.0 ne suffisent pas à transformer la cartographie statique du flux de valeur en une approche de management dynamique. L'organisation et les personnes doivent être prises en compte au même titre [23]. La norme ISO 22468:2020 reflète ce cycle dans sa structure : analyse, conception, planification, évaluation et ajustement des flux de valeur [40].
+
+### Le cycle du management du flux de valeur
+
+1. **Analyser :** enregistrer l'état actuel, idéalement avec des données collectées automatiquement.
+2. **Concevoir :** dessiner l'état futur à l'aide des règles de conception, idéalement validé par simulation.
+3. **Planifier :** plan de mise en œuvre par boucle de flux de valeur, avec objectifs et responsables.
+4. **Mettre en œuvre :** actions lors d'événements kaizen et dans le travail quotidien.
+5. **Évaluer :** suivre les indicateurs en continu et valoriser l'impact en argent [25].
+6. **Ajuster :** mettre à jour la cartographie et définir l'état futur suivant.
+
+### Le rôle du responsable du flux de valeur
+
+LEI décrit le responsable du flux de valeur comme « une personne à qui est assignée une responsabilité claire du succès d'un flux de valeur ». Cette personne identifie la valeur du point de vue du client, conçoit le flux de valeur et pousse vers un flux toujours plus rapide. Comme les budgets, les actifs et les personnes relèvent généralement des services fonctionnels, le responsable du flux de valeur « dirige par l'influence, non par la position hiérarchique ». LEI cite le chief engineer de Toyota comme modèle de ce rôle [10].
+
+En pratique, le responsable du flux de valeur :
+
+- est responsable des cartographies de l'état actuel et futur ainsi que du plan de mise en œuvre
+- anime la revue régulière du flux de valeur
+- suit les indicateurs du flux de valeur (délai de traversée, stocks, livraison à temps, productivité)
+- arbitre les conflits d'objectifs entre services
+- remonte les obstacles à la direction de l'usine
+
+L'article [Value Stream Manager: Role and Responsibilities](https://www.m365.fm/community/u/mirko-p/blog/value-stream-manager-role-responsibilities/) décrit en détail le profil, l'autorité et les pièges typiques de ce rôle. La manière dont des logiciels soutiennent le management du flux de valeur dans l'industrie est traitée dans [Value Stream Management Software in Manufacturing](https://www.m365.fm/community/u/mirko-p/blog/value-stream-management-software-manufacturing/).
+
+Le management du flux de valeur est étroitement lié au [management Lean](https://www.m365.fm/entity/lean-management/) dans son ensemble ; voir les guides [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/) et [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/). Les routines quotidiennes qui maintiennent un état futur en vie, comme les réunions à plusieurs niveaux et les gemba walks, font l'objet du guide [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+## 14. Erreurs courantes dans la cartographie de la chaîne de valeur et comment les éviter
+
+| Erreur | Conséquence | Contre-mesure |
+|---|---|---|
+| cartographier au bureau à partir des données ERP | la carte montre des temps standard, pas la réalité | relever au gemba avec chronomètre et comptages |
+| aucune famille de produits définie | la carte devient confuse et impossible à évaluer | matrice produits-processus avant la première visite |
+| trop de détails | l'atelier se perd dans des étapes isolées | ne dessiner une case de processus que là où le flux s'arrête |
+| flux d'information omis | la cause des stocks reste floue | demander à chaque processus : comment sait-il quoi produire ? |
+| disponibilité non prise en compte | les goulots d'étranglement passent inaperçus | comparer le temps de cycle effectif au takt time |
+| état actuel seul, sans état futur | analyse sans effet | la conception de l'état futur et le plan de mise en œuvre sont obligatoires |
+| état futur présenté comme une image idéale sans plan | frustration, rien ne se passe | boucles de la chaîne de valeur avec objectifs, responsables, échéances |
+| collaborateurs non associés | résistance, données erronées | valider la carte avec les services concernés |
+| projet ponctuel sans responsable | la carte est obsolète en quelques semaines | nommer un responsable de la chaîne de valeur, fixer un rythme de revue |
+| numériser avant de stabiliser | le gaspillage est automatisé | stabiliser d'abord le flux, puis numériser [14] |
+| bases de temps différentes pour l'état actuel et l'état futur | ratios de flux non comparables | fixer la convention (jours ouvrés ou jours calendaires) une fois pour toutes |
+
+## 15. Logiciels de cartographie de la chaîne de valeur : comparaison par catégories
+
+Les personnes qui recherchent « logiciel de cartographie de la chaîne de valeur » veulent surtout savoir quel outil convient, quelles fonctionnalités il doit proposer et s'il existe des options gratuites. Plutôt qu'un classement de produits isolés, une répartition par catégories est plus utile, car les outils diffèrent moins par le dessin que par ce qui se passe après le dessin.
+
+| Catégorie | Exemples typiques | Points forts | Limites | Idéal pour |
+|---|---|---|---|---|
+| Papier et tableau blanc | papier kraft, post-it, crayon | implication maximale, aucune compétence logicielle requise, gratuit | aucun calcul, difficile à partager et à versionner | première carte au gemba, formation |
+| Logiciels généralistes de diagrammes et de tableau blanc | Microsoft Visio, Lucidchart, Miro, EdrawMax | bibliothèques de symboles, collaboration, souvent des offres d'entrée gratuites | indicateurs surtout manuels, aucune logique derrière les symboles | documentation, équipes distribuées |
+| Logiciels VSM spécialisés avec calcul des indicateurs | iFAKT Polaris VSM, SimVSM (SimPlan), visTable | symboles avec formules intégrées, chronologie automatique, comparaison de variantes et de scénarios | coûts de licence, courbe d'apprentissage | travail régulier sur la chaîne de valeur, management de la chaîne de valeur |
+| Logiciels VSM avec lien vers la simulation | SimVSM Pro [34], Plant Simulation X avec VSM Library [35] | analyse dynamique, test de l'état futur | davantage d'efforts de modélisation et de données | production à forte variété, décisions d'investissement |
+| Analyse fondée sur les données / process mining | ONIQ [36], approches de recherche comme ECOWERT [20] | indicateurs issus des données de production, analyse continue au lieu d'une analyse ponctuelle | la qualité des données et l'intégration informatique sont déterminantes | sites disposant d'une base de données MES/ERP |
+| Plateformes de management de la chaîne de valeur (livraison logicielle) | plateformes selon la définition de marché de Gartner [31] | mesure de bout en bout de la chaîne de livraison logicielle | non conçues pour la production physique | organisations informatiques et logicielles |
+
+Lisez les allégations des éditeurs avec esprit critique. ONIQ, par exemple, affirme que l'automatisation réduit de jusqu'à 90 % l'effort d'analyse de la chaîne de valeur [36] ; aucune méthodologie indépendante n'a été publiée. SimPlan décrit SimVSM comme couvrant l'enregistrement numérique et les indicateurs statiques, SimVSM Pro ajoutant des paramètres dynamiques et une interface vers la simulation [34].
+
+### Critères de sélection
+
+- **Symboles :** L'outil prend-il en charge les symboles courants de Rother/Shook, et peut-on ajouter les siens ?
+- **Logique de calcul :** Le takt time, les jours de stock, le lead time et le ratio de flux sont-ils calculés automatiquement ? Les formules sont-elles transparentes et ajustables ?
+- **Scénarios :** Peut-on versionner et comparer les états actuel, futur et intermédiaire ?
+- **Dynamique :** Existe-t-il une simulation ou un lien vers un outil de simulation ?
+- **Connexion aux données :** L'outil peut-il démarrer sans connexion ERP ou MES, puis reprendre les données automatiquement plus tard ?
+- **Mise en œuvre :** Les actions, les kaizen bursts et les responsables sont-ils gérés dans le même outil ?
+- **Collaboration et exploitation :** rôles et droits, multi-locataire, cloud ou sur site, intégration dans le paysage informatique existant (pour les usines basées sur Microsoft, voir le guide [Azure for Manufacturing](https://www.m365.fm/en/learn/manufacturing-it-azure/)).
+- **Coût :** modèle de licence, essai, effort de formation.
+
+Une bonne question de contrôle : l'outil sert-il uniquement à documenter l'état actuel, ou permet-il aussi de piloter l'état futur pendant que l'usine évolue semaine après semaine ?
+
+## 16. Cartographie numérique de la chaîne de valeur avec iFAKT Polaris VSM et BSM
+
+> **Note : l'auteur travaille chez iFAKT GmbH.**
+
+[iFAKT GmbH](https://www.m365.fm/entity/ifakt/), basée à Stuttgart en Allemagne, a été fondée en 2001 selon l'entreprise [19]. Des collaborateurs de la société ont rédigé plusieurs des articles ZWF sur la cartographie dynamique et numérique de la chaîne de valeur cités dans ce guide (vue d'ensemble à la section 18, « Publications de recherche »). La famille de logiciels [iFAKT Polaris](https://www.m365.fm/entity/polaris/) est issue de ces travaux ; un guide distinct est disponible à l'adresse [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/). Deux modules sont pertinents pour la cartographie de la chaîne de valeur :
+
+**[Polaris VSM](https://www.m365.fm/entity/polaris-vsm/)** est un outil numérique de management Lean que les industriels utilisent pour cartographier les chaînes d'approvisionnement et les chaînes de valeur. Selon le billet de Microsoft sur sa fiche AppSource, les indicateurs peuvent être calculés, vérifiés et visualisés grâce à un système de formules, complété par des tableaux Kanban et Kaizen et une collaboration accessible de n'importe où [29]. Sur ifakt.de, le fournisseur énumère les fonctions suivantes [28] :
+
+- cartes de chaîne de valeur en glisser-déposer avec symboles standard et hiérarchies à plusieurs niveaux
+- indicateurs automatiques tels que lead time, cycle time, taux de valeur ajoutée et TRS dans des tableaux de bord, avec rapports prêts à l'export
+- scénarios illimités, analyse de sensibilité, historique des versions avec retour arrière et comparaison côte à côte des indicateurs
+- droits basés sur les rôles, multi-locataire et documentation PDCA
+- démarrage sans connexion ERP ou MES, avec connexion aux données optionnelle ultérieurement
+
+Dans le projet de recherche ECOWERT, Polaris VSM a servi d'outil d'évaluation pour les données collectées automatiquement (voir la section 11) [21]. Le fournisseur ne mentionne pas de fonction de simulation au sens strict ; pour l'analyse dynamique, il faut un outil de la catégorie « lien vers la simulation » (section 15). Les chiffres de gain figurant sur la page du fournisseur (comme une réduction de 25 % du lead time) ne sont pas repris ici, faute de méthodologie indiquée.
+
+**[Polaris BSM](https://www.m365.fm/entity/polaris-bsm/)** (Business Swimlane Modeling) ajoute les processus métier à la vue de la chaîne de valeur. Selon la fiche AppSource, les étapes de processus sont regroupées en pools et en lanes, et les facteurs temporels et les indicateurs sont enregistrés et comparés ; les offres vont de « Read Only » à « Basic » (enregistrements BPMN, modèles de swimlanes, formules de base, lead time et graphique d'équilibrage), puis « Excellence » et « Integrate & Customize » [30]. C'est utile lorsque la chaîne de valeur ne commence pas en production mais au chiffrage, à l'ingénierie et au traitement des commandes.
+
+Les deux modules sont référencés sur Microsoft AppSource [29][30]. Le fournisseur ne publie pas de prix ; une démonstration est disponible sur demande [30].
+
+**Évaluation :** Un outil comme Polaris VSM ne remplace ni le passage au gemba, ni la conception de l'état futur. Il prend en charge les calculs, rend les scénarios comparables et peut maintenir la carte à jour lorsque les données arrivent automatiquement. Son adéquation à votre usine dépend de la variété des produits, des données disponibles et du paysage informatique. Évaluez-le selon les critères de sélection de la section 15, comme toute autre solution.
+
+## 17. Gestion de la chaîne de valeur dans la livraison de logiciels : en quoi elle diffère
+
+Si l'on recherche « value stream mapping » ou « value stream management » sur google.com, beaucoup de résultats proviennent du développement logiciel et du DevOps. Gartner décrit les plateformes de gestion de la chaîne de valeur comme des outils qui « permettent aux organisations d'optimiser la livraison de produits de bout en bout et d'améliorer les résultats métier » ; elles sont indépendantes des outils et se connectent aux outils existants tout au long du cycle de vie de la livraison logicielle [31]. Le Flow Framework de Mik Kersten, présenté dans « Project to Product » (IT Revolution, 2018), a introduit pour ce domaine des indicateurs tels que le temps de flux et la charge de flux [39].
+
+L'idée de base est la même qu'en usine : rendre visible le flux allant de la demande du client à la livraison et réduire l'attente. Les différences sont toutefois importantes. Dans la livraison logicielle, ce sont des éléments de travail qui circulent à la place de la matière, les stocks sont des tickets non terminés, et le takt time est difficile à définir de façon pertinente. Martin et Osterling ont transposé la méthode au travail de bureau et au travail intellectuel, en plaçant au centre des indicateurs tels que le pourcentage complet et exact (%C&A) : la part du travail que l'étape suivante trouve complète et sans erreur. Multiplié sur l'ensemble des étapes, il donne le %C&A cumulé, que le glossaire de Martin appelle rolled first pass yield [6][44]. Pour la fabrication, la méthode classique avec takt time, stock et délai reste le point de référence.
+
+## 18. Données probantes et publications de recherche
+
+Des chiffres de cas robustes et publiés de manière indépendante pour le value stream mapping sont plus rares que ne le suggèrent les nombreuses affirmations de succès en ligne. Les cas suivants sont documentés :
+
+- **Constructeur de machines spéciales (TU Darmstadt / VDMA) :** douze supports de stockage et un degré de numérisation de zéro pour cent (détails à la section 12) [14].
+- **ECOWERT (Fraunhofer IPA et iFAKT) :** analyse de la chaîne de valeur presque en temps réel à l'aide de capteurs installés ultérieurement (détails à la section 11) [20][21].
+- **HELLA (ZWF 2018) :** élaboration d'un modèle d'évaluation des actions de la chaîne de valeur fondé sur les coûts, avec le fournisseur automobile allemand HELLA GmbH & Co. KGaA, afin de hiérarchiser des améliorations concurrentes en termes économiques [25].
+- **Schaeffler (ZWF 2017) :** Andreas Lugert, management Lean chez Schaeffler AG, et Herwig Winkler (BTU Cottbus-Senftenberg) décrivent le passage du value stream mapping statique à la gestion dynamique de la chaîne de valeur [23].
+- **Thrustmaster of Texas (LEI) :** rapport de cas sur le diagramme spaghetti comme complément à l'analyse de flux, avec une livraison à 100 % dans les délais rapportée 18 mois plus tard [43].
+
+Le cas bien connu « Acme Stamping », tiré de *Learning to See*, est fictif [1] mais se prête bien à la pratique.
+
+### Publications de recherche sur le value stream mapping dynamique et numérique
+
+Les articles suivants ont été rédigés par des auteurs de iFAKT GmbH, en partie avec le Fraunhofer IPA. Ils sont en allemand et peuvent être vérifiés par DOI auprès de l'éditeur. Ensemble, ils retracent l'évolution depuis le calcul d'indicateurs jusqu'à la simulation, puis jusqu'à une interface de données pilotée par événements :
+
+| Année | Titre (traduction anglaise) | Auteurs | Publication |
+|---|---|---|---|
+| 2011 | Produktionsoptimierung durch Kennzahlen der Wertstrom-Modellierung (Production optimization through value stream modeling metrics) | J. Drees, C. Sack | ZWF 106 (6), pp. 466–470, DOI 10.3139/104.110589 [19] |
+| 2014 | Dynamische Simulation von Wertströmen (Dynamic simulation of value streams) | S. Türck, A. Weimer, [L. Schubert](https://www.m365.fm/entity/lars-schubert/), [J. Drees](https://www.m365.fm/entity/jorg-drees/) | ZWF 109 (11), pp. 839–842, DOI 10.3139/104.111242 [16] |
+| 2018 | Neue Perspektiven für die Wertstrom-Methode: Wertstrom Management 4.0 – Next Generation (New perspectives for the value stream method) | J. Drees | ZWF 113 (9), pp. 605–609, DOI 10.3139/104.111974 [17] |
+| 2023 | Universelle Datenschnittstelle für digitale Wertstromdienste (Universal data interface for digital value stream services) | M. Böhm, J. Drees, B. Sai, K. Erlach, S. Stambera, T. Teriete | ZWF 118 (5), pp. 293–297, DOI 10.1515/zwf-2023-1062 [18] |
+| 2023 | Daten für Wertstromanalysen automatisch erfassen (Collecting data for value stream analyses automatically) | J. Drees, S. Stambera, M. Böhm | IT&Production, 12 janvier 2023 [21] |
+
+D'autres articles indépendants de la ZWF sur l'extension de la méthode incluent Lugert/Winkler (2017) [23], Busch/Niehues/Maassen (2018) [25] et Urnauer (2019) [24]. En anglais, les principales lignes de recherche sont Meudt et al. dans CIRP Annals (2017) [13] et Bega et al. dans Production Engineering (2023) [26].
+
+## 19. FAQ : Réponses aux questions sur la cartographie de la chaîne de valeur
+
+### Qu'est-ce que la cartographie de la chaîne de valeur, en termes simples ?
+Une carte de chaîne de valeur est une carte d'une page de votre flux de production. Des symboles simples indiquent les processus par lesquels passe un produit, les endroits où les matières sont stockées, la durée de ces étapes et les informations qui pilotent les processus. Elle montre la faible part du délai de traversée qui apporte réellement de la valeur.
+
+### Quelles sont les étapes de la cartographie de la chaîne de valeur ?
+Définir l'objectif et le périmètre, définir la famille de produits, relever la demande client et le takt time, remonter le processus à partir de l'expédition, remplir les encadrés de données, compter les stocks, ajouter les fournisseurs et les transports, dessiner le flux d'informations, dessiner la chronologie et calculer les indicateurs, puis repérer les gaspillages et valider la carte. Viennent ensuite la carte de l'état futur et le plan de mise en œuvre. La section 5 détaille chaque étape.
+
+### Quelle différence y a-t-il entre la carte de l'état actuel et la carte de l'état futur ?
+La carte de l'état actuel décrit, à partir de données mesurées, la façon dont les matières et les informations circulent aujourd'hui. La carte de l'état futur conçoit la circulation souhaitée, en suivant des principes tels que produire au rythme du takt time, un flux continu lorsque c'est possible, des supermarchés lorsque le flux continu ne l'est pas, et un processus pilote unique [11]. Ensemble, elles forment la méthode de la chaîne de valeur, suivie d'un plan de mise en œuvre.
+
+### Quelle différence y a-t-il entre la cartographie de la chaîne de valeur et la cartographie de processus ?
+Une cartographie de processus montre les étapes d'une procédure, souvent au sein d'un seul service. Une carte de chaîne de valeur couvre une famille de produits de bout en bout et ajoute ce qui manque à une cartographie de processus : les stocks entre les étapes, le flux d'informations qui pilote la production, et une chronologie avec le délai de traversée et le temps de traitement.
+
+### Quelle différence y a-t-il entre la cartographie de la chaîne de valeur et le management de la chaîne de valeur ?
+La cartographie de la chaîne de valeur est un projet : une équipe relève l'état actuel et conçoit un état futur. Le management de la chaîne de valeur est le pilotage continu de la chaîne de valeur par un responsable désigné, avec une carte régulièrement mise à jour, des indicateurs et des revues. La norme ISO 22468:2020 décrit ce cycle d'analyse, de conception, de planification, d'évaluation et d'ajustement [40].
+
+### Quels symboles utilise-t-on dans la cartographie de la chaîne de valeur ?
+Les plus importants sont l'encadré de processus, l'encadré de données, le triangle de stock, la flèche de poussée, le supermarché, la voie FIFO, le camion, les symboles kanban, les flèches d'information manuelles et électroniques, la boîte heijunka, l'éclat kaizen et la chronologie. Le tableau complet figure à la section 4.
+
+### Quels indicateurs figurent sur une carte de la chaîne de valeur ?
+Par processus : temps de cycle, temps de changement de série, disponibilité (temps de fonctionnement), taille de lot et effectifs. Par point de stock : quantité et jours de stock. Pour l'ensemble de la chaîne : takt time, délai de traversée, temps de traitement et taux de flux. Les formules figurent à la section 6.
+
+### Comment calcule-t-on l'efficacité du cycle de processus (taux de flux) ?
+Divisez le temps de traitement (plus les temps de processus, comme le durcissement) par le délai de traversée, puis multipliez par 100 %. Exprimez les deux grandeurs dans la même unité et sur la même base (jours ouvrés ou jours calendaires). Dans l'exemple de la section 7 : 413 s ÷ 1 080 000 s = 0,038 %.
+
+### Pourquoi cartographier depuis le client vers l'amont ?
+Parce que le client fixe le rythme. Si vous partez de l'expédition et remontez le flux, vous identifiez d'abord les processus qui doivent piloter le flux, puis vous évaluez tous les autres par rapport à la demande client [1][27].
+
+### Combien de temps dure la cartographie de la chaîne de valeur ?
+Pour une chaîne de valeur gérable dans une seule usine, un à deux jours pour l'état actuel et un autre atelier pour l'état futur sont réalistes [unverified : estimation non sourcée]. L'ASQ décrit un événement kaizen de trois jours pour le lancement [46]. L'effort réel réside dans la mise en œuvre, qui prend des mois.
+
+### La cartographie de la chaîne de valeur relève-t-elle du Lean ou du Six Sigma ?
+C'est un outil Lean issu du système de production Toyota, que l'ASQ classe dans le Lean [46]. Wikipédia en anglais la présente comme « une méthode reconnue utilisée dans le cadre des méthodologies Lean Six Sigma » [49]. Elle ne nécessite pas les statistiques du Six Sigma pour fonctionner.
+
+### Quels sont les inconvénients de la cartographie de la chaîne de valeur ?
+C'est une photographie fondée sur des moyennes, qui rend mal compte de la variété et de la variabilité des produits, qui nécessite une collecte de données manuelle et qui ne permet pas de tester l'état futur [22][23]. La simulation dynamique et la collecte automatique de données comblent en partie ces lacunes.
+
+### Qu'est-ce que la cartographie dynamique de la chaîne de valeur ?
+Une cartographie de la chaîne de valeur qui prend en compte le comportement dans le temps. Les processus reçoivent des distributions au lieu de moyennes, la demande suit des séries temporelles, et une simulation montre comment les stocks et les délais de traversée évoluent dans le temps [16].
+
+### Existe-t-il une norme pour la cartographie du flux de valeur ?
+Oui. La norme ISO 22468:2020 « Management du flux de valeur (VSM) » couvre l'analyse du flux de valeur, la conception du flux de valeur, la planification du flux de valeur, ainsi que l'évaluation et l'ajustement des flux de valeur [40]. L'ISO l'a confirmée comme étant en vigueur en 2025. En Allemagne, la directive VDI 2870 sur les systèmes de production globaux est également pertinente [7].
+
+### Existe-t-il un logiciel gratuit de cartographie du flux de valeur ?
+De nombreux outils de diagrammes généralistes proposent des offres d'entrée gratuites comprenant des symboles VSM, et les modèles de tableurs sont courants. Ils ne calculent généralement pas les indicateurs automatiquement. Les logiciels VSM spécialisés sont en général payants, souvent avec une période d'essai. Pour votre première cartographie, le papier et le crayon restent le meilleur choix gratuit.
+
+### Un MES peut-il remplacer la cartographie du flux de valeur ?
+Non. Un MES fournit des données précieuses, telles que les temps de cycle, les temps d'arrêt et les stocks, qui peuvent alimenter une carte numérique du flux de valeur [20]. La conception du flux, c'est-à-dire la décision concernant les supermarchés, les voies FIFO et le pacemaker, reste du ressort de la méthode du flux de valeur et des personnes qui l'appliquent.
+
+## 20. Conclusion
+
+Depuis la parution de « Learning to See » en 1998, la cartographie du flux de valeur est l'outil standard pour rendre le flux visible dans la production [1]. Sa valeur ne réside pas dans la carte elle-même, mais dans ce qu'elle déclenche : une compréhension partagée de l'ensemble du flux, un chiffre honnête pour le taux de flux et un état futur conçu selon des lignes directrices claires [3][11].
+
+Retenez trois points. Premièrement, calculez avec soin. Le takt time, le temps de cycle effectif, les jours de stock issus de la loi de Little et un taux de flux sur une base de temps fixe transforment un dessin en une base fiable pour la décision. Deuxièmement, ne vous arrêtez pas à l'état actuel. La conception de l'état futur, un plan de mise en œuvre et un responsable du flux de valeur comptable déterminent si quelque chose change réellement. Troisièmement, utilisez les extensions là où la méthode classique atteint ses limites. La simulation dynamique, la collecte automatisée des données et la vue de logistique de l'information de Value Stream 4.0 préparent la méthode à une grande variété de produits et aux usines numériques [13][16][18], à condition que le flux soit d'abord stable [14].
+
+Commencez avec du papier, un crayon et une seule famille de produits. Passez au numérique lorsque vous voudrez mettre la carte à jour régulièrement.
+
+## Pour aller plus loin sur m365.fm
+
+**Articles de blog**
+- [Qu'est-ce que le management du flux de valeur ?](https://www.m365.fm/community/u/mirko-p/blog/what-is-value-stream-management/)
+- [Responsable du flux de valeur : rôle et responsabilités](https://www.m365.fm/community/u/mirko-p/blog/value-stream-manager-role-responsibilities/)
+- [Logiciels de management du flux de valeur dans l'industrie](https://www.m365.fm/community/u/mirko-p/blog/value-stream-management-software-manufacturing/)
+- [Symboles et icônes de la cartographie du flux de valeur expliqués](https://www.m365.fm/community/u/mirko-p/blog/value-stream-mapping-symbols-icons/)
+
+**Épisode de podcast**
+- [La cartographie du flux de valeur avec un modèle de données en direct](https://www.m365.fm/show/episodes/value-stream-mapping-live-data-model/)
+
+**Glossaire**
+[Cartographie du flux de valeur](https://www.m365.fm/entity/value-stream-mapping/) · [Les huit gaspillages](https://www.m365.fm/entity/eight-wastes/) · [Diagramme spaghetti](https://www.m365.fm/entity/spaghetti-diagram/) · [Lead time](https://www.m365.fm/entity/lead-time/) · [Temps de cycle](https://www.m365.fm/entity/cycle-time/) · [Takt time](https://www.m365.fm/entity/takt-time/) · [Kanban](https://www.m365.fm/entity/kanban/) · [Système pull](https://www.m365.fm/entity/pull-system/) · [Simulation d'usine](https://www.m365.fm/entity/factory-simulation/) · [Jumeau numérique](https://www.m365.fm/entity/digital-twin/) · [Management Lean](https://www.m365.fm/entity/lean-management/) · [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) · [Polaris BSM](https://www.m365.fm/entity/polaris-bsm/)
+
+**Entreprises et personnes**
+[iFAKT GmbH](https://www.m365.fm/entity/ifakt/) · [iFAKT Polaris](https://www.m365.fm/entity/polaris/) · [Lars Schubert](https://www.m365.fm/entity/lars-schubert/) · [Jörg Drees](https://www.m365.fm/entity/jorg-drees/) · [Mirko Peters](https://www.m365.fm/entity/mirko-peters/)
+
+**Guides associés**
+- [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/)
+- [Excellence opérationnelle](https://www.m365.fm/en/learn/operational-excellence/)
+- [Jumeau numérique dans la fabrication](https://www.m365.fm/en/learn/digital-twin-manufacturing/)
+- [Ordonnancement de production et APS](https://www.m365.fm/en/learn/production-scheduling-aps/)
+- [Gestion de l'atelier](https://www.m365.fm/en/learn/shop-floor-management/)
+- [Indicateurs de performance de la fabrication (KPI)](https://www.m365.fm/en/learn/manufacturing-kpis/)
+- [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+- [Azure pour la fabrication](https://www.m365.fm/en/learn/manufacturing-it-azure/)
+- [Planification de la production aéronautique](https://www.m365.fm/en/learn/aerospace-production-planning/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** est l'animateur de m365.fm et travaille chez [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) à Stuttgart, en Allemagne. Sur m365.fm, il écrit sur le management Lean, la cartographie du flux de valeur et la numérisation de la production avec Microsoft 365 et Azure. Il s'intéresse à la manière dont les outils Lean éprouvés, comme la cartographie du flux de valeur, s'articulent avec les données en temps réel, la simulation et les plateformes de données modernes, sans perdre leur cœur méthodologique.
+
+**Remarque : l'auteur travaille chez iFAKT GmbH.** Les publications de recherche d'iFAKT citées peuvent être vérifiées par DOI dans ZWF.
+
+# Sources
+
+All sources accessed November 20, 2026. Sources marked "verified 11/20/2026" were opened for this English version; the others were verified for the German original on the same date and spot-checked.
+
+1. Rother, M.; Shook, J.: Learning to See: Value Stream Mapping to Create Value and Eliminate Muda. Lean Enterprise Institute, 1998 (introduction dated May 1998, Ann Arbor); current edition subtitled "… to Add Value and Eliminate Muda", LEI, September 2018, 148 pages, ISBN 978-0-9667843-0-5. Publisher page (Shingo award 1999, Shook eleven years at Toyota): https://www.lean.org/store/workbooks/learning-to-see/ · Introduction (PDF): https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-introduction.pdf (verified 11/20/2026)
+2. Rother, M.; Shook, J.: Sehen lernen. Mit Wertstromdesign die Wertschöpfung erhöhen und Verschwendung beseitigen. German edition, version 1.1. Lean Management Institut, Aachen 2004, ISBN 978-3-9809521-1-8 (German Digital Library catalog).
+3. Erlach, K.: Wertstromdesign. Der Weg zur schlanken Fabrik. Springer, 1st ed. 2007; 2nd ed. 2010 (VDI-Buch), ISBN 978-3-540-89867-2; 3rd ed. Springer Vieweg, Berlin/Heidelberg 2020, ISBN 978-3-662-58906-9 (eBook 978-3-662-58907-6). Sample of 2nd ed.: https://lesejury.de/media/samples/672/9783540898672_leseprobe.pdf · Overview with the eight design guidelines: http://www.wertstromdesign.de/wertstromdesign.html (verified 11/20/2026)
+4. Erlach, K.: Value Stream Design: The Way Towards a Lean Factory. Springer, Lecture Notes in Logistics, published September 2012 (copyright 2013), ISBN 978-3-642-12568-3 (hardcover), eBook 978-3-642-12569-0. https://link.springer.com/978-3-642-12568-3 · Publisher description ("ten design guidelines") via https://ebooks.mpdl.mpg.de/ebooks/Record/EB000384257 (verified 11/20/2026)
+5. Klevers, T.: Wertstrom-Mapping und Wertstrom-Design. Verschwendung erkennen – Wertschöpfung steigern. mi-Fachverlag, Landsberg am Lech 2007, ISBN 978-3-636-03097-9 (bibliographic data per [27]).
+6. Martin, K.; Osterling, M.: Value Stream Mapping: How to Visualize Work and Align Leadership for Organizational Transformation. McGraw-Hill, New York, published October 2013 (copyright 2014), ISBN 978-0-07-182891-8. https://www.mheducation.com/highered/mhp/product/value-stream-mapping-how-visualize-work-align-leadership-organizational-transformation.html (verified 11/20/2026)
+7. VDI 2870 Part 1: Lean production systems; basic principles, introduction and review. VDI (Association of German Engineers), July 2012. https://vdi.de/richtlinien/details/vdi-2870-blatt-1-lean-production-systems-basic-principles-introduction-and-review
+8. Takt Time (Lexicon Term). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/takt-time/ (verified 11/20/2026)
+9. Seven Wastes (Lexicon Term). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/seven-wastes/ (verified 11/20/2026)
+10. Value-Stream Manager (Lexicon Term). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/value-stream-manager/ (verified 11/20/2026)
+11. Rother, M.; Shook, J.: 6 Guidelines for Moving Toward a Lean Value Stream. Lean Enterprise Institute, The Lean Post, October 19, 2022. https://www.lean.org/the-lean-post/articles/6-guidelines-for-moving-toward-a-lean-value-stream/ (verified 11/20/2026)
+12. Little, J. D. C.: A Proof for the Queuing Formula: L = λW. Operations Research 9 (3), 1961, pp. 383–387. DOI: 10.1287/opre.9.3.383. https://econpapers.repec.org/RePEc:inm:oropre:v:9:y:1961:i:3:p:383-387 (verified 11/20/2026)
+13. Meudt, T.; Metternich, J.; Abele, E.: Value stream mapping 4.0: Holistic examination of value stream and information logistics in production. CIRP Annals 66 (1), 2017, pp. 413–416. DOI: 10.1016/j.cirp.2017.04.005 (bibliographic data per the reference list of [26]).
+14. VDMA / PTW TU Darmstadt (Metternich, J.; Meudt, T.; Hartmann, L.): Leitfaden Industrie 4.0 trifft Lean, excerpt on Value Stream Mapping 4.0 (German). https://www.ptw.tu-darmstadt.de/media/fachgebietptw/dokumente_3/wissenssammlung_ptw/leitfaeden_2/Leitfaden_I40_Lean.pdf
+15. Metternich, J.; Meudt, T.; Hartmann, L.: Value Stream 4.0: A Systems View of Information Flow for Digitalization. CRC Press, released July 20, 2025 (copyright 2026), ISBN 978-1-032-95831-6. https://www.routledge.com/Value-Stream-40-A-Systems-View-of-Information-Flow-for-Digitalization/Metternich-Meudt-Hartmann/p/book/9781032958316 (verified 11/20/2026)
+16. Türck, S.; Weimer, A.; Schubert, L.; Drees, J. (iFAKT GmbH): Dynamische Simulation von Wertströmen. Zeitschrift für wirtschaftlichen Fabrikbetrieb (ZWF) 109 (11), 2014, pp. 839–842. DOI: 10.3139/104.111242. https://www.degruyterbrill.com/document/doi/10.3139/104.111242/html (verified 11/20/2026)
+17. Drees, J. (iFAKT GmbH): Neue Perspektiven für die Wertstrom-Methode: Wertstrom Management 4.0 – Next Generation. ZWF 113 (9), 2018, pp. 605–609. DOI: 10.3139/104.111974. https://www.degruyterbrill.com/document/doi/10.3139/104.111974/html
+18. Böhm, M.; Drees, J.; Sai, B.; Erlach, K.; Stambera, S.; Teriete, T. (Fraunhofer IPA, iFAKT GmbH): Universelle Datenschnittstelle für digitale Wertstromdienste. Eventbasierte Wertstromanalyse als einheitliche Datenbasis für individuelle Dienste zur Produktionsoptimierung. ZWF 118 (5), 2023, pp. 293–297. DOI: 10.1515/zwf-2023-1062. https://www.degruyterbrill.com/document/doi/10.1515/zwf-2023-1062/html
+19. Drees, J.; Sack, C. (iFAKT GmbH): Produktionsoptimierung durch Kennzahlen der Wertstrom-Modellierung. ZWF 106 (6), 2011, pp. 466–470. DOI: 10.3139/104.110589. https://www.degruyterbrill.com/document/doi/10.3139/104.110589/html
+20. ECOWERT – Echtzeitorientierte Wertstromanalyse für die nachhaltige Produktionsoptimierung (reference project). Fraunhofer IPA. https://www.ipa.fraunhofer.de/de/referenzprojekte/ECOWERT.html (verified 11/20/2026)
+21. Drees, J.; Stambera, S.; Böhm, M.: Daten für Wertstromanalysen automatisch erfassen. IT&Production, January 12, 2023 (updated July 23, 2024). https://www.it-production.com/industrie-4-0-iot/wertstromanalyse-mit-iiot-anbindung/ (verified 11/20/2026)
+22. Digitalized value stream analysis: We are automating the gemba walk. Fraunhofer IPA. https://www.ipa.fraunhofer.de/en/current-research/factory-planning-and-production-management/production-management-and-value-stream-mapping-and-design/WertstromDigital.html (verified 11/20/2026)
+23. Lugert, A.; Winkler, H.: Von der Wertstromanalyse zum Wertstrommanagement. ZWF 112 (4), 2017, pp. 261–265. DOI: 10.3139/104.111703. https://www.degruyterbrill.com/document/doi/10.3139/104.111703/html
+24. Urnauer, C.: Die digitale Wertstrommethode. ZWF 114, 2019 (issue and pages not shown at access). DOI: 10.3139/104.112203. https://www.degruyterbrill.com/document/doi/10.3139/104.112203/html
+25. Busch, O.; Niehues, M.; Maassen, K.: Die monetäre Bewertung von Wertströmen. ZWF 113 (6), 2018, pp. 389–392. DOI: 10.3139/104.111935. https://www.degruyterbrill.com/document/doi/10.3139/104.111935/html
+26. Bega, M.; Sapel, P.; Ercan, F.; Schramm, T.; Spitz, M.; Kuhlenkötter, B.; Hopmann, C.: Extension of value stream mapping 4.0 for comprehensive identification of data and information flows within the manufacturing domain. Production Engineering 17 (6), 2023, pp. 915–927. DOI: 10.1007/s11740-023-01207-5. https://link.springer.com/10.1007/s11740-023-01207-5
+27. Wertstromanalyse. Wikipedia (German-language). https://de.wikipedia.org/wiki/Wertstromanalyse (verified 11/20/2026)
+28. Polaris VSM – Digital Value Stream Tool in Lean Management (vendor page). iFAKT GmbH. https://www.ifakt.de/en/software/vsm/ (verified 11/20/2026)
+29. Learn about iFAKT GmbH's ISV Success for Business Applications solution in Microsoft AppSource (Polaris VSM). Microsoft Tech Community, Marketplace Blog, July 11, 2024. https://techcommunity.microsoft.com/t5/marketplace-blog/learn-about-ifakt-gmbh-s-isv-success-for-business-applications/ba-p/4182536 (verified 11/20/2026)
+30. Polaris BSM (Business Swimlane Modeling). Microsoft AppSource. https://appsource.microsoft.com/bg-bg/product/saas/ifaktgmbh.ifakt_bsm_1 (verified 11/20/2026)
+31. Value Stream Management Platforms. Gartner Peer Insights. https://www.gartner.com/reviews/market/value-stream-management-platforms (verified 11/20/2026)
+32. Ohno, T.: Toyota Production System: Beyond Large-Scale Production. Productivity Press, 1988 (Japanese original 1978). https://www.routledge.com/Toyota-Production-System/Ohno/p/book/9780915299140
+33. Liker, J. K.: The Toyota Way: 14 Management Principles from the World's Greatest Manufacturer. McGraw-Hill, New York 2004, ISBN 978-0-07-139231-0.
+34. SimVSM – digital value stream analysis. SimPlan AG. https://www.simplan.de/en/software/simvsm (verified 11/20/2026)
+35. Plant Simulation X – Value Stream Mapping. Siemens. https://www.siemens.com/en-us/products/tecnomatix/offerings/plant-simulation-x-value-stream-mapping/ (verified 11/20/2026)
+36. Was ist eine Wertstromanalyse? (What is a value stream analysis?) ONIQ (German). https://oniq.com/de/ressourcen/was-ist-eine-wertstromanalyse (verified 11/20/2026)
+37. Wertstromanalyse (REFA lexicon). REFA Bundesverband. https://refa.de/service/refa-lexikon/wertstromanalyse
+38. Wertstromanalyse: Anleitung, Kennzahlen, Symbole. Industriezeitschrift (German). https://industriezeitschrift.de/qualitaet/wertstromanalyse/
+39. Kersten, M.: Project to Product: How to Survive and Thrive in the Age of Digital Disruption with the Flow Framework. IT Revolution Press, Portland 2018, ISBN 978-1-942788-39-3.
+40. ISO 22468:2020 Value stream management (VSM). ISO/TC 154, published March 9, 2020, confirmed June 25, 2025. https://committee.iso.org/standard/73292.html (verified 11/20/2026) · Table of contents (DIN): https://www.din.de/de/mitwirken/normenausschuesse/nia/veroeffentlichungen/wdc-beuth:din21:322285827/toc-3156892/download
+41. Fuchs, H.-W.: Wertstrom-Methode (diploma thesis). Hochschule Mittweida. https://monami.hs-mittweida.de/frontdoor/deliver/index/docId/796/file/DA_Wertstrommethode.pdf
+42. Wertstromanalyse (Value Stream Mapping). Mind Logistik (German). https://mind-logistik.de/knowhow/wertstromanalyse/
+43. Small Chart, Big Impact: How a Simple Spaghetti Chart Led to Huge Wins at Thrustmaster of Texas. Lean Enterprise Institute, The Lean Post, February 4, 2016. https://www.lean.org/the-lean-post/articles/small-chart-big-impact-how-a-simple-spaghetti-chart-led-to-huge-wins-at-thrustmaster-of-texas/ (verified 11/20/2026)
+44. The Karen Martin Group: Lean Terminology (glossary, PDF, 2014): definitions of activity ratio, lead time, process time, %C&A and rolled first pass yield. https://tkmg.com/wp-content/files/Lean-Terminology.pdf (verified 11/20/2026)
+45. Value-Stream Mapping (Lexicon Term). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/value-stream-mapping/ (verified 11/20/2026)
+46. Value Stream Mapping. ASQ, Quality Resources (adapted from "Lean Lessons: Value Stream Mapping – An Introduction", Quality Progress). https://asq.org/quality-resources/lean/value-stream-mapping (verified 11/20/2026)
+47. Lean and Process Improvement. NIST Manufacturing Extension Partnership (MEP). https://www.nist.gov/mep/lean-and-process-improvement (verified 11/20/2026)
+48. Lean & Environment Toolkit, Chapter 3 (Value Stream Mapping). US Environmental Protection Agency. https://epa.gov/sustainability/lean-environment-toolkit-chapter-3 (verified 11/20/2026)
+49. Value-stream mapping. Wikipedia (English). https://en.wikipedia.org/wiki/Value-stream_mapping (verified 11/20/2026)
+50. ISA-95 framework and layers. Siemens. https://www.siemens.com/en-us/technology/isa-95-framework-layers/ (verified 11/20/2026)
+51. 8 Wastes (DOWNTIME). GoLeanSixSigma.com. https://goleansixsigma.com/8-wastes/ (verified 11/20/2026)

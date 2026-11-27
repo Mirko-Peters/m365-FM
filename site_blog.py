@@ -1,4 +1,5 @@
 """Blog je Mitglied: oeffentliche Beitragsseiten (BlogPosting) und Verzeichnisse je Sprache. Beitraege kommen freigegeben aus /api/blog/export."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import json, re
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
@@ -6,9 +7,13 @@ from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_image
 import site_notes as SNT
 import site_members as MEM
 import site_topics as TOP
+import site_linkctx as LC   # Beziehungskontext der Linklisten: Einleitungssatz je Liste (data/link_context.json)
+import site_entmatch as EM   # JSON-LD mentions der Kontext-Links
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Beitrag)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
+import site_pillars as PIL   # Kasten "Teil des Lernpfads" unter zugeordneten Beitraegen (nur en/de)
+import site_infographics as IG   # Kopfbild, Infografiken und og:image je Beitrag (nur mit Freigabe data/infographics_live.json)
 import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026), gilt weiter fuer Sprachfassungen
 import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
@@ -36,6 +41,17 @@ def disclosures(p, body_html, lang, skip=()):
     import site_entities as SENT
     ids = dict.fromkeys([t for t in (p.get("topics") or []) if isinstance(t, str)] + re.findall(r'/entity/([a-z0-9][a-z0-9-]{1,79})/', body_html or ""))
     return list(dict.fromkeys(d for i in ids if i in ENTS and i not in skip for d in [SENT.disclosure_of(ENTS[i], lang)] if d))
+
+
+def faq_in_html(p):
+    """Steht die FAQ des Beitrags schon in seinem HTML (uebernommene Podpage- oder Altbeitraege)? Content-Pakete (imports/blog, site_content_blog)
+    bringen HTML ohne FAQ mit: dann zeigt die Seite die FAQ sichtbar, sonst stuende sie nur im FAQPage-Schema (Review #509)."""
+    import html as _h
+    qs = [str(x.get("q") or "").strip() for x in (p.get("faq") or []) if isinstance(x, dict) and str(x.get("q") or "").strip()]
+    if not qs: return True
+    text = _h.unescape(re.sub(r"<[^>]+>", " ", p.get("html") or ""))
+    norm = lambda s: re.sub(r"\s+", " ", s).strip().lower()
+    return norm(qs[0]) in norm(text)
 
 
 def fetch_posts(api):
@@ -103,13 +119,13 @@ def iso(ts):
 
 
 VOTEJS = ('(function(){var A="%API%",H="%H%",bs=[].slice.call(document.querySelectorAll(".bl-vote"));if(!bs.length)return;'
-          'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+          'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign(/^(GET)?$/i.test(o.method||"")?{}:{"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
           'f("/api/blog/votes?handle="+H).then(function(d){bs.forEach(function(b){var s=b.dataset.s;b.querySelector(".n").textContent=(d.votes||{})[s]||0;if((d.mine||[]).indexOf(s)>-1)b.setAttribute("aria-pressed","true")})}).catch(function(){});'
           'bs.forEach(function(b){b.addEventListener("click",function(){f("/api/blog/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,slug:b.dataset.s})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}'
           'if(d.ok){b.querySelector(".n").textContent=d.votes;b.setAttribute("aria-pressed",d.voted?"true":"false")}}).catch(function(){})})})})();')
 
 FOLLOWJS = ('(function(){var A="%API%",b=document.querySelector(".bl-follow");if(!b)return;var H=b.dataset.h,t=b.querySelector(".t");'
-            'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+            'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign(/^(GET)?$/i.test(o.method||"")?{}:{"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
             'function set(on){b.setAttribute("aria-pressed",on?"true":"false");t.textContent=on?"%FOLLOWING%":"%FOLLOW%"}'
             'f("/api/blog/following").then(function(d){if(d.following)set(d.following.indexOf(H)>-1)}).catch(function(){});'
             'b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")!=="true";f("/api/blog/follow",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,on:on})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}if(d.ok)set(on)}).catch(function(){})})})();')
@@ -137,6 +153,7 @@ def build(g, posts, people, api):
         if p.get("tr_of"): _ntr[p["lang"]] = _ntr.get(p["lang"], 0) + 1
     for _l, _n in sorted(_ntr.items()): print(f"Blog: {_n} Sprachfassungen {_l}, indexierbar: {sum(1 for p in posts if p.get('tr_of') and p['lang'] == _l and p.get('tr_index'))}")
     _en_title = {(p["handle"], p["slug"]): p["title"] for p in posts if p.get("lang") == "en" and not is_translation(p)}   # Themen-Brotkrumen: Sprachfassungen waehlen das Hauptthema nach dem Titel des Originals (gleiches Thema in allen Sprachen)
+    _written = set()   # (Sprache, Autor) mit eigener Blog-Uebersicht; fehlt die englische, baut der Rueckfall am Ende sie (Kanal-Link im Profil zeigt dorthin)
     for lang in COMM_LANGS:
         mine = [p for p in posts if p["lang"] == lang]
         if not mine:
@@ -147,7 +164,8 @@ def build(g, posts, people, api):
             continue
         INDEX_VOTES = 10   # nur noch fuer automatische Sprachfassungen ohne Freigabe (bisherige Regel); Originale stehen immer auf index
         w = WT.get(lang, WT["en"]); croot = f"{BASE}{pfx(lang)}/community/"
-        links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
+        links_l = {i: [EN.ename(e, lang), f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
+        _eu = EM.url_in(BASE, lang)   # Ziel der Kontext-Links (einmal je Sprache, Ergebnis je id zwischengespeichert)
         title_blog = T(lang, "Blog", "Blog")
         _idx_keys = set(); _lifted = 0   # (handle, slug) der indexierbaren Beitraege dieser Sprache: Grundlage der Verzeichnisse; _lifted: Sprachfassungen nur wegen der Laenge auf index
         _seq = {}   # Beitraege je Autor in dieser Sprache, neueste zuerst: Vor/Zurueck blaettert durch den Blog der Autorin bzw. des Autors
@@ -164,33 +182,43 @@ def build(g, posts, people, api):
                 import site_legacy_blog as LBL
                 body_html = LBL.better_links(p, body_html, lang, BASE)
             body_html = one_h1(body_html, p["title"])   # Bing-SEO-Bericht: nur die Seitenueberschrift ist <h1>; <h1> im Beitragstext wird <h2>, eine Wiederholung des Titels entfaellt
-            if p.get("html"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus), in allen Sprachen
-                body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
+            _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
+            # Kontext-Links (site_entmatch): erste Nennung jeder Entitaet auf der Seite (Kernpunkte, dann Text), ohne Obergrenze, in allen Sprachen und fuer
+            # alle Beitragsarten (fruehere Podpage-Beitraege, Content-Pakete, Sponsor-/Partnerartikel, Community-Beitraege); Kontext = Themen des Beitrags
+            # Ziel wie bei Folgen, Videos und Show-Sprachfassungen (site_entmatch.url_in): Entitaetsseite der Sprache nur, wenn sie dort auf index steht
+            _used = EM.Used(); _lu = lambda i: _eu(i) if i in ENTS else None; _ctx = [t for t in p.get("topics", []) if t in ENTS]
+            _kp, _ = TOP.autolink_html(_kp, ENTS, _lu, lang=lang, ctx=_ctx, used=_used)
+            body_html, _al = TOP.autolink_html(body_html, ENTS, _lu, lang=lang, ctx=_ctx, used=_used)
+            _ment = [i for i in _used if i in ENTS]
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.alt_text(body_html, lang, p["title"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter, englisch auf Sprachfassungen) aus data/r2_alt.json.gz in der Seitensprache
+            _ig = p.get("legacy") or (p["handle"] == "mirko-p" and bool(p.get("html")))   # Infografiken gibt es zu den frueheren Podpage-Beitraegen (tools/infographics.py); die meisten stehen inzwischen in der Datenbank (kein "legacy"), gleicher Slug. Nur solange der uebernommene Text unveraendert ist (im Editor ueberarbeitet: html leer, Bilder passten nicht mehr)
+            body_html, _igkw = IG.apply_post(body_html, p["slug"], lang) if _ig else (body_html, {})   # neues Kopfbild ersetzt das alte, 2-3 Infografiken im Text; ohne Freigabe unveraendert
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             _own_txt = IR.plain_text(body_html)   # Haupttext vor den Anhoeren-Karten (die zeigen Folgentitel, keinen Beitragstext)
             _ms = MST.is_milestone(p)
             if not _ms: body_html = LST.apply(BASE, body_html, p, lang, ENTS)   # "Anhoeren"-Karten (site_listen): 1-2 passende Folgen und "Show folgen", nur bei guter Uebereinstimmung
             _rel = [] if _ms else TOP.related(_content, p, k=6)
-            relbox = MST.more_box(lang, BASE, posts, p) if _ms else (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2><ul class="bl-list">' + "".join(
+            _rt = TOP.common_topic(p, _rel)   # gemeinsames Thema aller verwandten Artikel: "Weitere Artikel zu {Thema}", sonst "zu verwandten Themen"
+            _rin = LC.intro(lang, "post.more", t=EN.label(ENTS[_rt], lang)) if _rt in ENTS else LC.intro(lang, "post.more0")
+            relbox = MST.more_box(lang, BASE, posts, p) if _ms else (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2>{_rin}<ul class="bl-list">' + "".join(
                 f'<li><a href="{croot}u/{r["handle"]}/blog/{r["slug"]}/"><b>{esc(r["title"])}</b></a> <span class="mut">· {iso(r["published"])}</span></li>' for r in _rel) + "</ul></section>") if _rel else ""
             if p.get("html") and not p.get("images"): p["images"] = re.findall(r'<img[^>]+src="(https://[^"]+)"', p["html"])
             _spr = SPM.post(p["handle"], p["slug"])   # T37 Sponsor: Beitrag aus einem Sponsoring (alle Sprachfassungen, dauerhaft)
-            _spr_ex = SPM.post_extras(_spr, SPM._state()["today"], ENTS)   # Mirko 6.11.2026: Sponsor-Entitaeten extra zur Obergrenze von 10
+            _spr_ex = SPM.post_extras(_spr, SPM._state()["today"], ENTS)   # Mirko 6.11.2026: Sponsor-Entitaeten extra zur Obergrenze von 10 (nur bezahlte Sponsorings, nicht neutrale Partner)
+            _spr_skip = SPM.post_extras(_spr, SPM._state()["today"], ENTS, paid_only=False)   # Transparenzhinweise, die SPM.note schon abdeckt (auch Partner)
             topics, _spx = SPM.split_topics([t for t in p.get("topics", []) if t in ENTS], [x for x in _spr_ex if x in ENTS])
-            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2><p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
+            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2>{LC.intro(lang, "post.topics")}<p>' + "".join(EN.list_link(links_l[t][1], ENTS[t], lang, cls="mb-tag") + " " + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
-            _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
-            if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
+            if p.get("html") and faq_in_html(p): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
-            _disc = "".join(f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(d)}</p>' for d in disclosures(p, body_html, lang, skip=_spr_ex))
+            _disc = "".join(f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(d)}</p>' for d in disclosures(p, body_html, lang, skip=_spr_skip))
             b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr, "post")}{_disc}'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
-                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
+                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{PIL.article_box(p, lang, BASE)}{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
                             + ((g.get("author_box")(lang) if g.get("author_box") and p["handle"] == "mirko-p" and lang in ("en", "de") else ""))
                             + PG(lang, *[(f'{croot}u/{x["handle"]}/blog/{x["slug"]}/', x["title"]) if x else None for x in NB(_seq[_sk(p)], _pos[(p["handle"], p["slug"])])], kind="article")
@@ -200,13 +228,14 @@ def build(g, posts, people, api):
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, **({"image": p["images"][:6]} if p.get("html") and p.get("images") else ({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {})), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": [_author_node(BASE, a, au)] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
-                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs],
+                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": EM.mentions(BASE, _ment, topics)} if EM.mentions(BASE, _ment, topics) else {}), "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs],
                    "publisher": {"@id": f"{BASE}/#org"}}] + _fld + [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [   # T4: Verlag und Brotkrumen
                        {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
-                       {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
+                       {"@type": "ListItem", "position": 3, "name": "Blog", "item": f"{croot}u/{a['handle']}/blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, p["title"], u, title=_en_title.get((p["handle"], p["slug"])) if is_translation(p) else None)   # zweite Spur nach dem Hauptthema (nur JSON-LD); Wochenzusammenfassungen (Thema m365fm) bleiben ohne
             if _tbc: ld.append(_tbc)
-            if _spr:
+            if _ig: ld += IG.image_ld(BASE, "blog", p["slug"], lang, u, title=p["title"], date=iso(p["published"]))   # Urheber, Credit und Lizenz der Kopf- und Infografik-Bilder (nur mit Freigabe)
+            if SPM.ld(_spr):   # neutraler Partner (label "partner"): kein sponsor
                 ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
             b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert
             if not is_translation(p):
@@ -224,7 +253,7 @@ def build(g, posts, people, api):
                 _alt = {"en": f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/", **{l: f"{BASE}{pfx(l)}/community/u/{p['handle']}/blog/{p['slug']}/" for l in tr_langs[(p["slug"], p["handle"])]}}
                 if noidx or len(_alt) < 2: _alt = None
             _og = f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/" if p.get("tr_of") else None   # Sprachfassungen teilen das Teilen-Bild des Originals (sonst Tausende neue Bilder)
-            (g.get("write_r2") if (p.get("tr_of") and g.get("write_r2")) else write)(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, _alt, ld, xdefault=(_alt or {}).get("en"), og_type="article", extra_head=LCSS, noindex=noidx, og_of=_og, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics) if g.get("side") else "")))   # Sprachfassungen liegen im R2-Bucket
+            (g.get("write_r2") if (p.get("tr_of") and g.get("write_r2")) else write)(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, _alt, ld, xdefault=(_alt or {}).get("en"), og_type="article", extra_head=LCSS, noindex=noidx, og_of=_og, **_igkw, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics, topics_h=LC.plain(lang, "side.post") if topics else "", key=f"blog:{p['handle']}/{p['slug']}") if g.get("side") else "")))   # Sprachfassungen liegen im R2-Bucket
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), _alt))
         if _lifted: print(f"Blog {lang}: {_lifted} Sprachfassungen ab {IR.MIN_CHARS} Zeichen Text auf index")
@@ -246,13 +275,13 @@ def build(g, posts, people, api):
                     nav = f'<nav class="pages" aria-label="{esc(T(lang, "Pages", "Seiten"))}" style="margin:1em 0">{esc(T(lang, "Page", "Seite"))} {links}</nav>'
                 prev_next = ((f'<link rel="prev" href="{ru if pno == 1 else f"{ru}page/{pno}/"}">' if pno else "") + (f'<link rel="next" href="{ru}page/{pno + 2}/">' if pno + 1 < npg else ""))
                 b = shell(lang, f'{CSS}{head_html}{first_html if pno == 0 else ""}{nav}{lst(part)}{nav}')
-                write(f"{pfx2(lang)}{rel}{'' if pno == 0 else f'page/{pno + 1}/'}index.html", page(lang, title + (f" ({pno + 1})" if pno else ""), desc, pu, b, None, ld if pno == 0 else None, og_type="website", extra_head=LCSS + prev_next, noindex=noidx))
-                if not noidx:
+                write(f"{pfx2(lang)}{rel}{'' if pno == 0 else f'page/{pno + 1}/'}index.html", page(lang, title + (f" ({pno + 1})" if pno else ""), desc, pu, b, None, ld if pno == 0 else None, og_type="website", extra_head=LCSS + prev_next, noindex=noidx or pno > 0))   # Seite 2 ff. der Verzeichnisse: immer noindex,follow (Mirko 18.11.2026)
+                if not noidx and pno == 0:
                     sitemap.append((pu, (iso(part[0]["published"]) if part else TODAY), None))
         for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
             noidx = not any(is_by(p, h) and _pub(p) for p in mine)
             it = sorted([p for p in mine if is_by(p, h)], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
-            nm = pb[h]["name"]
+            nm = pb[h]["name"]; _written.add((lang, h))
             paged(it, ru, f"community/u/{h}/blog/", f'<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>', f'{title_blog} – {nm} | M365.FM', nm, noidx)
             write(f"{pfx2(lang)}community/u/{h}/blog/feed.xml", rss(f"{title_blog} – {nm}", ru, it, croot, pb, lang))
         noidx = not any(_pub(p) for p in mine)
@@ -262,6 +291,31 @@ def build(g, posts, people, api):
                "blogPost": [{"@id": f"{croot}u/{p['handle']}/blog/{p['slug']}/#post"} for p in it[:50]]}]
         write(f"{pfx2(lang)}community/blog/feed.xml", rss("M365.FM " + title_blog, ru, it, croot, pb, lang))
         paged(it, ru, "community/blog/", f'<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>', f'{title_blog} – M365.FM', intro, noidx, ld, first_html=top_block(lang, mine, croot, api))
+    _fallback_en_index(g, posts, pb, _written, shell)
+
+
+def _fallback_en_index(g, posts, pb, written, shell):
+    """Autorin/Autor ohne Beitrag auf Englisch: /community/u/<handle>/blog/ gaebe es sonst nicht (404), obwohl der Blog-Kanal im Profil
+    (worker/src/blog.js syncFeed) dorthin zeigt. Die Seite listet die Originalbeitraege mit Links auf ihre Sprachfassung, noindex und ohne Sitemap
+    (kein eigener Inhalt). Sobald es einen englischen Beitrag oder eine englische Sprachfassung gibt, baut die normale Uebersicht die Seite."""
+    if "en" not in COMM_LANGS:
+        return
+    BASE, write, page = g["BASE"], g["write"], g["page"]
+    by = {}
+    for p in posts:
+        if is_translation(p) or p.get("lang") not in COMM_LANGS:   # nur Beitraege, deren Seite dieser Bau auch schreibt (Teilbau mit SITE_LANGS)
+            continue
+        for h in dict.fromkeys([p["handle"]] + [c["handle"] for c in (p.get("coauthors") or []) if c.get("handle") in pb]):   # je Autor einmal, auch bei doppelten Co-Autoren
+            if ("en", h) not in written:
+                by.setdefault(h, []).append(p)
+    for h, items in sorted(by.items()):
+        items = sorted(items, key=lambda x: -(x.get("published") or 0)); nm = pb[h]["name"]
+        ru = f"{BASE}/community/u/{h}/blog/"
+        li = "".join(f'<li><a href="{BASE}{pfx(p["lang"])}/community/u/{p["handle"]}/blog/{p["slug"]}/" hreflang="{p["lang"]}" lang="{p["lang"]}"><b>{esc(p["title"])}</b></a> '
+                     f'<span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>{("<br><span lang=" + chr(34) + p["lang"] + chr(34) + ">" + esc(p["summary"]) + "</span>") if p.get("summary") else ""}</li>' for p in items)
+        note = "No posts in English yet. These posts are available in their original language:"
+        b = shell("en", f'{CSS}<h1>Blog – {esc(nm)}</h1><p><a href="{BASE}/community/u/{h}/">{esc(nm)}</a></p><p class="mut">{esc(note)}</p><ul class="bl-list">{li}</ul>')
+        write(f"community/u/{h}/blog/index.html", page("en", f"Blog – {nm} | M365.FM", nm, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
 
 
 def rss(title, link, items, croot, pb, lang):

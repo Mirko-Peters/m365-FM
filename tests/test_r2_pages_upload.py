@@ -13,17 +13,17 @@ class NoSuchKey(Exception):
 class FakeS3:
     """Bucket im Speicher: Objekte mit Inhalt, Content-Type und Metadaten; Listen seitenweise wie S3."""
     def __init__(self):
-        self.obj, self.log, self.fail_put, self.fail_once = {}, [], set(), set()
+        self.obj, self.log, self.fail_put, self.fail_once, self.cc = {}, [], set(), set(), {}   # cc: Cache-Control je Schluessel
     def put_object(self, Bucket, Key, Body, ContentType, CacheControl, Metadata=None):
         if Key in self.fail_put: raise RuntimeError("boom")
         if Key in self.fail_once: self.fail_once.discard(Key); raise RuntimeError("SlowDown")
-        self.obj[Key] = {"body": Body, "ct": ContentType, "meta": dict(Metadata or {})}; self.log.append(("put", Key))
+        self.obj[Key] = {"body": Body, "ct": ContentType, "meta": dict(Metadata or {})}; self.cc[Key] = CacheControl; self.log.append(("put", Key))
     def copy_object(self, Bucket, Key, CopySource, MetadataDirective, ContentType, CacheControl, Metadata):
         assert CopySource == {"Bucket": Bucket, "Key": Key} and MetadataDirective == "REPLACE"
-        self.obj[Key] = {**self.obj[Key], "ct": ContentType, "meta": dict(Metadata)}; self.log.append(("copy", Key))
+        self.obj[Key] = {**self.obj[Key], "ct": ContentType, "meta": dict(Metadata)}; self.cc[Key] = CacheControl; self.log.append(("copy", Key))
     def head_object(self, Bucket, Key):
         if Key not in self.obj: raise NoSuchKey(Key)
-        return {"Metadata": self.obj[Key]["meta"]}
+        return {"Metadata": self.obj[Key]["meta"], "ContentType": self.obj[Key].get("ct"), "CacheControl": self.cc.get(Key)}
     def get_object(self, Bucket, Key):
         if Key not in self.obj: raise NoSuchKey(Key)
         return {"Body": io.BytesIO(self.obj[Key]["body"])}
@@ -45,6 +45,7 @@ def run(mod, argv, env, s3):
         for m in ("r2_common", mod): sys.modules.pop(m, None)
         m = importlib.import_module(mod)
         if mod == "r2_site_sync":
+            if argv[0] == "--remark-gone": return m.remark_gone()
             return m.marker(Path(argv[1])) if argv[0] == "--marker" else m.main(Path(argv[0]))
         return m.main()
     finally:
@@ -144,6 +145,30 @@ class SyncTest(Base):
         self.assertFalse(self.s3.gone("pages/entity/m365/index.html"), "noch im Bau: bleibt")
         self.assertFalse(self.s3.gone("pages/foo.bin"), "fremde Objekte unberuehrt")
 
+    def test_gone_marker_in_cache_control_and_remark_old_marks(self):
+        """27.11.2026: Markierung setzt Cache-Control mit m365-gone (Zonen-Cache des Site-Workers sieht keine Custom-Metadaten); --remark-gone holt das fuer
+        alte Markierungen nach (gleiche Metadaten, gleicher Typ, Inhalt bleibt), laesst wieder geladene und schon markierte Objekte in Ruhe, loescht nichts."""
+        tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
+        self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))
+        self.assertEqual(self.sync(), 0)
+        self.assertEqual(self.s3.cc["pages/p1/index.html"], "public, max-age=600", "normaler Upload ohne Marker")
+        (self.docs / "p3" / "index.html").unlink()
+        self.assertEqual(self.sync(), 0)
+        o = self.s3.obj["pages/p3/index.html"]; self.assertTrue(self.s3.gone("pages/p3/index.html")); self.assertEqual(self.s3.cc["pages/p3/index.html"], "public, max-age=600, m365-gone")
+        # Altbestand: Markierung von vor dem 27.11. (ohne Marker), ein inzwischen wieder geladenes Objekt (in der Liste, aber nicht mehr gone)
+        self.s3.obj["pages/alt/x.json"] = {"body": b"alt", "ct": "application/json; charset=utf-8", "meta": {"src": "docs", "gone": "1"}}; self.s3.cc["pages/alt/x.json"] = "public, max-age=600"
+        self.s3.obj["pages/zurueck/index.html"] = {"body": b"z", "ct": "text/html; charset=utf-8", "meta": {"src": "docs"}}; self.s3.cc["pages/zurueck/index.html"] = "public, max-age=600"
+        lst = json.loads(self.s3.obj["meta/gone.json"]["body"]) + ["pages/alt/x.json", "pages/zurueck/index.html"]
+        self.s3.obj["meta/gone.json"]["body"] = json.dumps(lst).encode()
+        n_before = len(self.s3.obj); self.s3.log.clear()
+        self.assertEqual(run("r2_site_sync", ["--remark-gone"], self.denv, self.s3), 0)
+        a = self.s3.obj["pages/alt/x.json"]
+        self.assertEqual((self.s3.cc["pages/alt/x.json"], a["ct"], a["meta"], a["body"]), ("public, max-age=600, m365-gone", "application/json; charset=utf-8", {"src": "docs", "gone": "1"}, b"alt"))
+        self.assertEqual(self.s3.cc["pages/zurueck/index.html"], "public, max-age=600", "wieder geladen: unberuehrt")
+        self.assertEqual([x for x in self.s3.log], [("copy", "pages/alt/x.json")], "nur das alte, nichts geloescht, nichts neu geladen")
+        self.assertEqual(len(self.s3.obj), n_before)
+        self.s3.log.clear(); self.assertEqual(run("r2_site_sync", ["--remark-gone"], self.denv, self.s3), 0); self.assertEqual(self.s3.log, [], "zweiter Lauf: nichts zu tun")
+
     def test_lost_manifest_still_marks_from_bucket_listing(self):
         tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
         self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))
@@ -241,6 +266,19 @@ class R2outOrderTest(Base):
             self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0); self.assertIn("pages/ru/tag/облако/index.html", self.s3.obj)
             tree(self.r2out, {"ru/tag/облако/index.html": "ru2"}); self.s3.fail_put.add("pages/ru/tag/облако/index.html")
             self.assertEqual(self.r2out_run(), 0, "alte Fassung liegt noch im Bucket")
+        self._with_clean_manifest(body)
+
+    def test_failed_hashed_asset_blocks_pages_and_deploy(self):
+        """Gegenpruefung 25.11.2026: neue Seiten verweisen nur auf gehashte Skripte/Stylesheets (site_assets.py). Scheitert eines davon endgueltig, laedt der
+        Upload keine Seite (sonst live mit 404 fuer das Skript) und endet mit 1 (kein Deploy); der naechste Lauf laedt beides."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "assets/entity.0123456789.js": "e()", "search/part-1.json": "{}"})
+            self.s3.fail_put.add("pages/assets/entity.0123456789.js")
+            self.assertEqual(self.r2out_run(), 1, "gehashtes Skript fehlt")
+            self.assertNotIn("pages/pl/x/index.html", self.s3.obj, "keine Seite ohne ihr Skript")
+            self.assertIn("pages/search/part-1.json", self.s3.obj, "andere Dateien schon")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertIn("pages/pl/x/index.html", self.s3.obj); self.assertIn("pages/assets/entity.0123456789.js", self.s3.obj)
         self._with_clean_manifest(body)
 
     def test_sitemap_upload_type_and_missing_sitemap_blocks_deploy(self):
@@ -358,6 +396,69 @@ class R2outOrderTest(Base):
             self.assertEqual(self.r2out_run(), 0, "Blog-Import blockiert den Deploy nicht")
             self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0); self.assertEqual(self.s3.obj["pages/blog-import/part-1.json"]["meta"], {}, "naechster Lauf heilt")
         self._with_clean_manifest(body)
+
+
+
+class R2outBucketEtagTest(Base):
+    """Kostenanalyse 25.11.2026: fehlt das Manifest (Actions-Cache verdraengt), vergleicht der Upload mit den ETags aus der Bucket-Liste statt alles
+    neu zu laden. Ergebnis in der Step-Summary."""
+    def setUp(self):
+        super().setUp()
+        import hashlib
+        from test_r2_og_upload import EtagS3
+        self.s3 = EtagS3(); self.md5 = lambda b: hashlib.md5(b).hexdigest()
+        self.sumf = Path(self.tmp.name) / "summary.md"
+
+    def go(self):
+        os.makedirs(ROOT / "data" / "cache", exist_ok=True)
+        return run("r2_pages_upload", [self.r2out], {"R2_KEYS_OUT": str(self.keys), "R2_CHANGED_OUT": str(self.changed), "GITHUB_STEP_SUMMARY": str(self.sumf)}, self.s3)
+
+    def test_lost_manifest_uses_bucket_etags(self):
+        mpath = ROOT / "data" / "cache" / "r2_pages.json"; backup = mpath.read_bytes() if mpath.exists() else None
+        try:
+            if mpath.exists(): mpath.unlink()
+            tree(self.r2out, {**{f"pl/p{i}/index.html": f"p{i}" for i in range(5)}, "search/manifest.json": "{}", "fr/x/transcript.txt": "t"})
+            self.assertEqual(self.go(), 0)
+            self.assertEqual(len([k for op, k in self.s3.log if op == "put"]), 7, "erster Lauf ohne Bucket-Inhalt: alles")
+            mpath.unlink()   # Actions-Cache verloren
+            tree(self.r2out, {"pl/p2/index.html": "neu"})   # eine Seite geaendert
+            self.s3.obj["pages/pl/p3/index.html"]["meta"] = {"gone": "1"}   # eine als entfernt markiert (wieder erzeugt)
+            self.s3.obj["meta/gone.json"] = {"body": json.dumps(["pages/pl/p3/index.html"]).encode(), "ct": "", "meta": {}}
+            self.s3.log.clear(); self.sumf.write_text("")
+            self.assertEqual(self.go(), 0)
+            self.assertEqual(sorted(k for op, k in self.s3.log if op == "put"), ["pages/pl/p2/index.html", "pages/pl/p3/index.html"], "nur Geaendertes und wieder Erzeugtes")
+            self.assertEqual(sorted(json.loads(self.changed.read_text())), ["/pl/p2/", "/pl/p3/"])
+            man = json.loads(mpath.read_text()); self.assertEqual(len(man), 7, "Manifest wieder vollstaendig"); self.assertEqual(man["pages/pl/p2/index.html"], self.md5(b"neu"))
+            sm = self.sumf.read_text(); self.assertIn("ETags aus dem Bucket", sm); self.assertIn("hochgeladen (PUT): 2", sm)
+            self.s3.obj["meta/gone.json"]["body"] = b"[]"   # der Spiegel im Deploy-Job nimmt die Markierung zurueck
+            self.s3.log.clear(); self.sumf.write_text(""); self.assertEqual(self.go(), 0)
+            self.assertEqual([k for op, k in self.s3.log if op == "put"], []); self.assertIn("Manifest aus dem Actions-Cache", self.sumf.read_text())
+        finally:
+            if backup is not None: mpath.write_bytes(backup)
+            elif mpath.exists(): mpath.unlink()
+
+    def test_multipart_etag_and_unreadable_listing_reload(self):
+        mpath = ROOT / "data" / "cache" / "r2_pages.json"; backup = mpath.read_bytes() if mpath.exists() else None
+        try:
+            if mpath.exists(): mpath.unlink()
+            tree(self.r2out, {"pl/a/index.html": "a", "pl/b/index.html": "b"})
+            self.assertEqual(self.go(), 0); mpath.unlink()
+            orig = self.s3.list_objects_v2
+            def multi(**kw):
+                r = orig(**kw)
+                for o in r["Contents"]:
+                    if o["Key"] == "pages/pl/b/index.html": o["ETag"] = '"' + self.md5(b"b") + '-2"'
+                return r
+            self.s3.list_objects_v2 = multi; self.s3.log.clear()
+            self.assertEqual(self.go(), 0); self.assertEqual([k for op, k in self.s3.log if op == "put"], ["pages/pl/b/index.html"], "mehrteiliger ETag: unbekannt -> neu")
+            mpath.unlink()
+            def broken(**kw): raise RuntimeError("AccessDenied")
+            self.s3.list_objects_v2 = broken; self.s3.log.clear(); self.sumf.write_text("")
+            self.assertEqual(self.go(), 0); self.assertEqual(len([k for op, k in self.s3.log if op == "put"]), 2, "Liste nicht lesbar: wie bisher alles")
+            self.assertIn("alles neu", self.sumf.read_text())
+        finally:
+            if backup is not None: mpath.write_bytes(backup)
+            elif mpath.exists(): mpath.unlink()
 
 
 if __name__ == "__main__":

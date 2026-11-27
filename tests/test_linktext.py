@@ -268,8 +268,9 @@ class EntityPages(unittest.TestCase):
         self.assertIn('<small class="mut">learn.microsoft.com</small>', de, "Domain klein daneben")
         self.assertIn(">Microsoft 365 Copilot – official website</a>", en)
         self.assertIn(">Wikidata entry for Microsoft 365 Copilot</a>", en)
-        self.assertIn('aria-label="Video auf YouTube: Copilot Agents erklärt">Video auf YouTube</a>', de)
-        self.assertIn('aria-label="Video on YouTube: Copilot Agents erklärt">Video on YouTube</a>', en)
+        # Paket 6: sichtbar "YouTube: {Titel}" (nie derselbe Text fuer jede Folge), Ziel weiter im aria-label
+        self.assertIn('aria-label="Video auf YouTube: Copilot Agents erklärt: alles">YouTube: Copilot Agents erklärt: alles</a>', de)
+        self.assertIn('aria-label="Video on YouTube: Copilot Agents erklärt: alles">YouTube: Copilot Agents erklärt: alles</a>', en)
 
     def test_aka_quelle_mit_ziel(self):
         import site_entities as ENT

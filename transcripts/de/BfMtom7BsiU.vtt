@@ -1,0 +1,760 @@
+WEBVTT
+
+00:00:00.020 --> 00:00:03.480
+Die Ebene, die Sie bei Azure App Service wählen, bestimmt, was Ihre App überhaupt tun darf.
+
+00:00:04.120 --> 00:00:06.840
+Es ist Microsofts verwaltetes Zuhause für Web-Apps und APIs.
+
+00:00:07.080 --> 00:00:09.280
+Sie liefern den Code und Microsoft betreibt die zugrunde liegende Maschinen.
+
+00:00:09.840 --> 00:00:13.360
+Sie denken, Sie wählen ein Hosting, aber tatsächlich entscheiden Sie sich für Funktionsumfang,
+
+00:00:13.600 --> 00:00:16.380
+da der Plan Domain-Namen, Staging-Slots und Skalierbarkeit beinhaltet.
+
+00:00:17.420 --> 00:00:20.680
+An dieser einen Entscheidung entscheidet sich, ob die meisten Anfängerprojekte erfolgreich sind oder scheitert.
+
+00:00:21.460 --> 00:00:26.040
+Willkommen beim M-DRA 55 CFM Podcast, wo wir Menschen Ideen und Technologien erforschen,
+
+00:00:26.260 --> 00:00:27.560
+die die Zukunft der Arbeit prägen.
+
+00:00:27.560 --> 00:00:32.160
+Am Ende werden Sie wissen, was App Service ist, welche Ebene ein Anfängerprojekt wirklich braucht
+
+00:00:32.160 --> 00:00:34.140
+und welche Fehler Zeit und Geld kosten.
+
+00:00:35.420 --> 00:00:36.160
+Was es wirklich ist.
+
+00:00:36.880 --> 00:00:40.740
+Azure App Service ist der verwaltete Ort von Microsoft für Web-Apps, APIs und Backends,
+
+00:00:41.080 --> 00:00:42.660
+mit denen mobile Apps kommunizieren.
+
+00:00:43.500 --> 00:00:45.540
+Die offizielle Bezeichnung besagt, dass Sie Ihre App ausführen,
+
+00:00:45.640 --> 00:00:47.800
+ohne sich um die zugrunde liegende Infrastruktur sorgen zu müssen.
+
+00:00:48.120 --> 00:00:50.360
+Dieser Satz klingt nach Marketing, leistet hier aber echte Arbeit,
+
+00:00:50.520 --> 00:00:51.760
+da er genau beschreibt, womit Sie aufhören.
+
+00:00:52.280 --> 00:00:55.080
+Sie hören auf, ein Betriebssystem zu patchen, die Hardware zu dimensionieren
+
+00:00:55.080 --> 00:00:57.180
+oder eine Ersatzmaschine für Ausfälle bereitzuhalten.
+
+00:00:58.080 --> 00:00:59.480
+Was Sie weiterhin tun, ist das, was wirklich zählt.
+
+00:00:59.860 --> 00:01:03.140
+Sie schreiben den Code, wählen die Einstellungen und besitzen die Daten, die Ihre App verarbeitet.
+
+00:01:03.540 --> 00:01:05.300
+Microsoft besitzt die Hardware und kümmert sich um die Wartung.
+
+00:01:05.600 --> 00:01:08.720
+Diese Aufteilung ist die Grundidee von Platform as a Service, kurz PAS,
+
+00:01:08.960 --> 00:01:12.020
+und der Grund, warum Anfänger an einem Nachmittag eine App online bringen können,
+
+00:01:12.120 --> 00:01:13.880
+ohne zu lernen, wie ein Server startet.
+
+00:01:14.600 --> 00:01:15.820
+Die einsetzbaren Stacks sind vielfältig.
+
+00:01:15.820 --> 00:01:20.780
+.NET, Java, Node.js, Python und PHP laufen hier unter Windows oder Linux
+
+00:01:20.780 --> 00:01:24.680
+und falls Ihre App bereits als Container verpackt ist, können Sie stattdessen diesen bereitstellen.
+
+00:01:25.080 --> 00:01:27.660
+Sie wählen den Stack bei der Erstellung der App und können sich später umentscheiden,
+
+00:01:27.740 --> 00:01:30.360
+indem Sie etwas anderes bereitstellen, indem Sie etwas anderes bereitstellen.
+
+00:01:30.480 --> 00:01:33.560
+Das Wort verwaltet verdient einen weiteren Satz, da es sehr viel Bedeutung trägt.
+
+00:01:33.900 --> 00:01:36.520
+Wenn Sie hier bereitstellen, erhalten Sie keine Maschine, auf der Ihr Name steht.
+
+00:01:37.000 --> 00:01:39.540
+Sie erhalten einen Dienst, der bereits weiß, wie man Ihre App online hält,
+
+00:01:39.920 --> 00:01:43.100
+sich selbst patcht und Traffic auf mehrere Kopien verteilt, wenn Sie es wünschen.
+
+00:01:43.100 --> 00:01:46.140
+Deshalb kann sich die erste Bereitstellung unspektakulär anfühlen.
+
+00:01:46.380 --> 00:01:49.340
+Sie übertragen Ihren Code, warten eine Minute und Ihre App ist einfach da.
+
+00:01:50.500 --> 00:01:52.640
+Der Unterschied zu einem virtuellen Computer lässt sich leicht erklären.
+
+00:01:53.260 --> 00:01:54.940
+Ein virtueller Computer ist ein gemieteter Rechner,
+
+00:01:55.040 --> 00:01:57.320
+bei dem alles ab dem Betriebssystem aufwärts Ihr Problem ist.
+
+00:01:58.120 --> 00:02:01.600
+App Service ist ein gemieteter Dienst, bei dem das Betriebssystem nie Ihr Problem ist.
+
+00:02:02.340 --> 00:02:04.360
+Microsoft bietet auch speziellere Optionen an,
+
+00:02:04.600 --> 00:02:07.880
+wie Managed Instances für ältere Windows-Apps, die tiefen Systemzugriff benötigen,
+
+00:02:07.880 --> 00:02:11.100
+sowie App Service Environments für Teams, die ein eigenes privates Netzwerk brauchen.
+
+00:02:11.680 --> 00:02:12.660
+Ein Anfänger benötigt beides.
+
+00:02:13.200 --> 00:02:14.460
+Alles bisher genannte ist der einfache Teil.
+
+00:02:14.780 --> 00:02:17.960
+Die Entscheidung, die Ihre Rechnung bestimmt und die Funktionen festlegt, die Sie aktivieren können,
+
+00:02:18.240 --> 00:02:20.700
+liegt in einem völlig anderen Bereich und genau dorthin gehen wir als nächstes.
+
+00:02:22.200 --> 00:02:23.240
+Der Plan ist das Produkt.
+
+00:02:23.840 --> 00:02:25.360
+Nun zu dem Punkt, der fast jeden erwischt.
+
+00:02:26.360 --> 00:02:27.980
+Bevor Sie irgendetwas im App Service erstellen,
+
+00:02:28.420 --> 00:02:31.260
+legen Sie einen App Service Plan an und dieser Plan ist das, was Sie tatsächlich kaufen.
+
+00:02:31.900 --> 00:02:35.260
+Der Plan ist ein Bündel von Computerressourcen, das auf einen Schlag fünf Entscheidungen festlegt.
+
+00:02:35.260 --> 00:02:40.340
+Das Betriebssystem, die Region, in der Ihre App lebt, die Größe der Maschinen, deren Anzahl und die Preisstufe.
+
+00:02:41.100 --> 00:02:42.240
+Ihre App läuft innerhalb dieses Bündel.
+
+00:02:42.720 --> 00:02:45.560
+Microsoft drückt es klar aus, App Service läuft immer in einem App Service Plan.
+
+00:02:46.220 --> 00:02:48.140
+Sie kaufen also kein Hosting für eine einzelne App.
+
+00:02:48.540 --> 00:02:52.760
+Es ist ein gemeinsamer Pool von Maschinen und alles, was Sie dort hineinlegen, bedient sich aus derselben Quelle.
+
+00:02:53.360 --> 00:02:55.440
+Zwei Web Apps in einem Plan laufen auf denselben Maschinen.
+
+00:02:55.440 --> 00:02:58.020
+Das gilt auch für die Bereitstellungsslots dieser Apps,
+
+00:02:58.120 --> 00:03:00.980
+sowie für Backups, Diagnoseprotokolle und alle Hintergrundjobs, die Sie hinzufügen.
+
+00:03:01.820 --> 00:03:04.980
+Nichts davon wird separat abgerechnet, da alles lediglich Teil der Arbeit Ihres Plans.
+
+00:03:05.460 --> 00:03:09.060
+Dieses Teilen hat eine Konsequenz, über die viele stolpern, und Microsoft weiß direkt darauf hin.
+
+00:03:09.880 --> 00:03:13.100
+Alle Apps in einem Plan skalieren gemeinsam, da sie sich dieselben zugrunde liegenden Maschinen teilen.
+
+00:03:13.540 --> 00:03:17.060
+Wenn Sie den Plan manuell oder durch eine Regel skalieren, ändern sich alle darin enthaltenen Apps gleichzeitig.
+
+00:03:17.320 --> 00:03:20.060
+Eine App, die einen arbeitsreichen Nachmittag hat, kann Ihre Nachbarn am selben Plan verlangsamen.
+
+00:03:20.860 --> 00:03:23.460
+Die Rechenleistung ist auf der Ebene des Plans dediziert, nicht auf App-Ebene,
+
+00:03:23.560 --> 00:03:25.200
+und dieser Satz verdient es, zweimal gelesen zu werden.
+
+00:03:25.600 --> 00:03:29.760
+Wenn Sie möchten, dass eine App Ihre eigenen Ressourcen hat, ist die Antwort ein zweiter Plan und keine Einstellung.
+
+00:03:30.420 --> 00:03:32.360
+Die klassische Version dieser Geschichte sieht so aus.
+
+00:03:33.080 --> 00:03:35.980
+Jemand erstellt eine Demo, sie funktioniert, also fügt man eine zweite App hinzu und dann er tritt.
+
+00:03:36.720 --> 00:03:40.320
+Ein paar Monate später kommt ein Support-Ticket, weil die erste App-Timeouts verursacht.
+
+00:03:40.920 --> 00:03:42.580
+Nichts ist kaputt gegangen, Sie haben einfach den Plan vorgelegt.
+
+00:03:42.720 --> 00:03:47.400
+Ein Plan hat eine feste Menge an CPU und Arbeitsspeicher, und jede App darin konkurriert um denselben Anteil.
+
+00:03:48.160 --> 00:03:50.760
+Die Abrechnung folgt demselben Must. Die kostenlose Stufe kostet nichts.
+
+00:03:51.260 --> 00:03:54.320
+In der Shared-Stufe wird jede App für die CPU-Menge berechnet, die sie nutzen darf.
+
+00:03:54.320 --> 00:03:59.640
+In den dedizierten Stufen zahlen Sie für die Maschinen im Plan und nicht für die Anzahl der Apps, die darauf laufen.
+
+00:04:00.340 --> 00:04:04.560
+Eigene Domänen, Zertifikate, Bereitstellungsslots und Backups in Funktion und keine einzelnen Abrechnungsposten.
+
+00:04:04.980 --> 00:04:06.660
+Daher entstehen später keine zusätzlichen Kosten.
+
+00:04:06.660 --> 00:04:09.820
+Es gibt eine ungefähre Obergrenze für die Anzahl der Apps pro Plan.
+
+00:04:09.940 --> 00:04:15.220
+Microsoft empfiehlt etwa 8 bei einem kleinen B1- oder S1-Plan, 16 bei einem mittleren und 32 bei einem großen Plan.
+
+00:04:15.760 --> 00:04:16.740
+Darüber hinaus splittet man auch.
+
+00:04:17.140 --> 00:04:22.000
+Behalten Sie einen Gedanken aus diesem Abschnitt im Kopf, denn der gewählte Tarif bestimmt mehr als nur die Größe, und darauf kommen wir gleich zurück.
+
+00:04:22.180 --> 00:04:23.060
+Und darauf kommen wir gleich zurück.
+
+00:04:23.320 --> 00:04:24.120
+Web-Apps und APIs.
+
+00:04:24.120 --> 00:04:26.980
+Vor wir über Geld sprechen, ist es hilfreich zu wissen, was Sie dort unterbringen.
+
+00:04:27.480 --> 00:04:30.760
+App-Service hostet Web-Apps, REST-APIs und Mobile-Backends.
+
+00:04:31.220 --> 00:04:33.480
+Und Microsoft fasst alle drei als einen Dienst zusammen.
+
+00:04:34.540 --> 00:04:37.800
+Das Portal bietet Ihnen unterschiedliche Vorlagen dafür, doch die zugrunde liegende Engine ist dieselbe.
+
+00:04:38.360 --> 00:04:40.080
+Eine Web-App liefert Seiten an einen Browser.
+
+00:04:40.400 --> 00:04:47.160
+Eine API liefert Daten an etwas anderes, was in Ihrer Welt eine mobile App, ein Power-Automate-Flow oder ein Power-BI-Bericht mit aktuellen Zahlen sein könnte.
+
+00:04:47.160 --> 00:04:51.100
+Das ist der ganze Unterschied und er ist kleiner, als Sie getrennten Bezeichnungen vermuten lassen.
+
+00:04:51.880 --> 00:04:55.860
+Eine REST-API folgt einfach den üblichen Web-Konventionen für das Abrufen und Empfangen von Daten.
+
+00:04:56.980 --> 00:04:58.920
+Was Leute hier bauen, basiert auf ganz alltägliche Arbeiten.
+
+00:04:59.800 --> 00:05:10.360
+Interne Team-Apps, eine API hinter einer mobilen App, ein Web-Hook-Empfänger für Systemereignisse, eine Marketing-Seite oder eine fertige Vorlage aus dem Azure-Marketplace wie WordPress, Django oder Node.
+
+00:05:11.460 --> 00:05:12.180
+Suchen Sie die Entstattung.
+
+00:05:12.760 --> 00:05:15.400
+Sie erhalten auch einige integrierte Funktionen, die Anfänger selten erwarten.
+
+00:05:15.400 --> 00:05:20.920
+Die Anmeldung mit Google, Facebook X oder einem Microsoft-Konto funktioniert, ohne dass Sie ein Authentifizierungssystem bauen müssen.
+
+00:05:21.380 --> 00:05:26.200
+Die Bereitstellung kann direkt mit GitHub oder Azure Pipelines verbunden werden, sodass ein Puschen an Branch zu einer Live-App wird.
+
+00:05:26.960 --> 00:05:32.960
+Wenn Ihre Welt die Power-Plattform ist, betrachten Sie die API als das Element, das Ihre Flows und Berichte aufrufen, wenn Sie Daten aus einer Eigenentwicklung benötigen.
+
+00:05:34.380 --> 00:05:37.620
+Dieser letzte Gedanke ist wichtig, denn eine einzige App kann all diese gleichzeitig bedienen.
+
+00:05:38.160 --> 00:05:44.700
+Viele Teams bauen eine API und lassen dann einen Power-BI-Bericht, einen Power-Automate-Flow und eine kleine interne Webseite darauf zugreifen.
+
+00:05:44.700 --> 00:05:48.100
+Das ist eine Bereitstellung, drei Abnehmer und keine zusätzlichen Hosting-Kosten.
+
+00:05:49.440 --> 00:05:50.400
+Preisebenen entschlüsselt.
+
+00:05:51.040 --> 00:05:55.720
+Hier ist die Staffelung, die von kostenlos und shared unten über Basic, Standard und Premium bis hin zu Isolated an der Spitze reicht.
+
+00:05:56.480 --> 00:06:00.200
+Die ersten beiden betreiben ihre App auf Maschinen, die mit anderen Kunden geteilt werden und weisen ihnen ein CPU-Kontingent zu.
+
+00:06:00.920 --> 00:06:03.420
+Ab Base laufen die Apps auf Maschinen, die exklusiv für ihren Plan reserviert sind.
+
+00:06:03.420 --> 00:06:07.100
+Isolated geht einen Schritt weiter und platziert diese Maschinen in ihrem eigenen privaten Netzwerk.
+
+00:06:07.520 --> 00:06:10.080
+Die kostenlose Stufe ist eine Probefahrt und die Zahlen machen das deutlich.
+
+00:06:10.480 --> 00:06:17.500
+Sie erhalten eine App pro Plan, ein Gigabyte Speicher, ein Gigabyte Arbeitsspeicher, 60 CPU-Minuten pro Tag und etwa 165 Megabyte Bandbreite pro Tag.
+
+00:06:18.040 --> 00:06:21.160
+Eigene Domains sind überhaupt nicht verfügbar, daher läuft Ihre App unter einer Microsoft-Adresse.
+
+00:06:21.820 --> 00:06:26.700
+60 CPU-Minuten klingen großzügig, bis man merkt, dass es ein Tagesbudget ist, das eine stark frequentierte Seite schnell aufbrauchen kann.
+
+00:06:26.700 --> 00:06:36.700
+Die Shared-Stufe ist kaum großzügiger. Sie erhalten 240 CPU-Minuten pro Tag, sind aber immer noch auf geteilten Maschinen, weiterhin ohne eigene Domain und können nicht mehr als eine Instanz Ihrer App ausführen.
+
+00:06:37.720 --> 00:06:40.300
+Basic ist die erste Stufe, in der sich ein echtes Projekt sicher anfühlt.
+
+00:06:41.120 --> 00:06:47.660
+Sie erhalten dedizierte Maschinen, eigene Domains, HTTPS, eine Einstellung namens Always-On, die verhindert, dass Ihre App in den hohen Modus geht und bis zu drei Instanzen.
+
+00:06:48.140 --> 00:06:51.060
+Wenn Sie etwas für einen Kunden oder ein Portfolio bauen, ist dies das Minimum.
+
+00:06:51.240 --> 00:06:56.060
+Standard ist die Stufe, in der die zwei Funktionen erscheinen, die sich die Leute schließlich wünschen, Autoskalierung und Deployment-Slots.
+
+00:06:56.060 --> 00:06:58.660
+Außerdem erhalten Sie 10 Instanzen und 50 Gigabyte Speicherplatz.
+
+00:06:59.000 --> 00:07:02.540
+Premium erhöht dies auf 20 Slots, 30 Instanzen und 250 Gigabyte.
+
+00:07:03.220 --> 00:07:05.380
+Isolated geht hoch auf 100 Instanzen und 1 Terabyte.
+
+00:07:06.120 --> 00:07:06.940
+Hier wird es nun interessant.
+
+00:07:07.740 --> 00:07:10.600
+Ein Upgrade kauft Ihnen nicht nur eine größere Maschine, es schaltet Funktionen frei.
+
+00:07:11.320 --> 00:07:15.940
+Microsoft sagt, Sie können mit dem Testen in der kostenlosen Stufe beginnen und upgraden, sobald Sie eine eigene Domain-Arme hinzufügen.
+
+00:07:16.440 --> 00:07:19.040
+Und dieser Satz sagt Ihnen, dass die Stufe eher ein Tor als eine Größe ist.
+
+00:07:19.840 --> 00:07:23.360
+Eigene Domains pro App steigen von 0 in der kostenlosen Stufe auf 500 in allen anderen.
+
+00:07:23.360 --> 00:07:27.860
+Deployment-Slots steigen von 0 auf 5 bei Standard, dann auf 20 bei Premium und Isolated.
+
+00:07:28.740 --> 00:07:31.040
+Autoskalierung, Always-On erreichen unterschiedliche Sprossen des 7-Line.
+
+00:07:31.540 --> 00:07:32.780
+Es gibt ein Muster in dieser Liste.
+
+00:07:33.140 --> 00:07:35.120
+Das erklärt, warum Anfänger oft enttäuscht sind.
+
+00:07:36.020 --> 00:07:40.660
+Die Funktionen, die eine App professionell machen, also eine echte Domain, ein Schlosssymbol, eine Version zum Zurückrollen
+
+00:07:40.660 --> 00:07:43.980
+und eine Möglichkeit, einen geschäftigen Tag zu überstehen, sind über drei verschiedene Stufen verteilt.
+
+00:07:44.520 --> 00:07:45.740
+Man steigt selten nur eine Sprosse auf.
+
+00:07:46.040 --> 00:07:46.980
+Die meisten Leute steigen zwei Stufen.
+
+00:07:46.980 --> 00:07:49.200
+Es gibt ein Abrechnungsdetail, das Ihre Planung beeinflusst.
+
+00:07:49.560 --> 00:07:52.360
+Sie bezahlen für die Maschinen des Plans und nicht pro App und diese Rechnung läuft.
+
+00:07:52.460 --> 00:07:54.040
+Egal, ob jemand die Seite besucht oder nicht.
+
+00:07:55.040 --> 00:07:55.580
+Deployment-Slots
+
+00:07:55.580 --> 00:07:58.280
+Deployment-Slots tauchen immer wieder als Grenze zwischen den Stufen auf.
+
+00:07:58.600 --> 00:07:59.420
+Also hier ist, was das ist.
+
+00:08:00.040 --> 00:08:02.900
+Ein Slot ist eine zweite Live-Kopie Ihrer App mit einer eigenen Web-Adresse.
+
+00:08:03.420 --> 00:08:06.720
+Sie stellen dort Ihre neue Version bereit, testen sie und tauschen sie dann in die Produktion aus.
+
+00:08:07.080 --> 00:08:08.040
+Der Tauschvorgang ist der Ende der.
+
+00:08:08.440 --> 00:08:11.700
+Bevor Traffic verschoben wird, startet AppService die Instanzen im Slot und wärmt sie auf,
+
+00:08:11.760 --> 00:08:14.780
+damit niemand einen Kaltstart erlebt und keine Anfragen mittendrin abgebrochen werden.
+
+00:08:14.780 --> 00:08:18.200
+Sollte die neue Version Probleme bereiten, tauschen Sie die beiden Slots einfach zurück
+
+00:08:18.200 --> 00:08:20.080
+und Ihre letzte funktionierende Version ist wieder live.
+
+00:08:20.740 --> 00:08:22.820
+Aber hier gibt es einen Haken, der viele Leute überrascht.
+
+00:08:23.280 --> 00:08:24.440
+Ein Tauschvorgang bewegt mehr in Code.
+
+00:08:24.880 --> 00:08:26.540
+App-Einstellungen und Verbindungszeichen folgen.
+
+00:08:26.700 --> 00:08:29.260
+Wandern mit dem Tausch mit, sofern Sie diese nicht als Slot-Einstellungen markieren.
+
+00:08:29.380 --> 00:08:32.380
+Genauso landet ein Team bei einer Produktions-App, die plötzlich auf eine Test-Datenbank zukommt.
+
+00:08:32.760 --> 00:08:36.020
+Sie können jede Einstellung als fest markieren und zu den Einstellungen, die immer festbleiben,
+
+00:08:36.100 --> 00:08:38.260
+gehören benutzerdefinierte Domänen namens Skalierungseinstellungen,
+
+00:08:38.380 --> 00:08:40.260
+permanente IP-Beschränkungen und Netzwerkintegration.
+
+00:08:40.820 --> 00:08:42.860
+Zwei Regeln entscheiden, ob Sie Slots überhaupt nutzen können.
+
+00:08:42.860 --> 00:08:45.980
+Sie benötigen den Tarifstandard oder höher, wobei Standard auf fünf Slots begrenzt.
+
+00:08:46.360 --> 00:08:49.980
+Wenn eine App bereits mehr als fünf Slots verwendet, können Sie sie später nicht mehr auf Standard herunterskalieren.
+
+00:08:50.480 --> 00:08:51.820
+Es gibt auch eine sanftere Version des Taten.
+
+00:08:52.200 --> 00:08:55.200
+Ein Tausch mit Vorschau führt die erste Hälfte des Tauschs aus und hält dann an,
+
+00:08:55.420 --> 00:08:58.800
+damit Sie die neue Version mit Produktionseinstellungen prüfen können, bevor Sie sich endgültig entscheiden.
+
+00:08:59.560 --> 00:09:03.140
+Und wenn Sie bei einem Release nervös sind, können Sie einen Teil Ihres Traffics an den Slot senden
+
+00:09:03.140 --> 00:09:06.100
+und beobachten, wie echte Benutzer reagieren, bevor alle die neue Version erhalten.
+
+00:09:06.840 --> 00:09:08.720
+Die Kostenseite ist freundlicher als viele erwarten.
+
+00:09:08.720 --> 00:09:13.160
+Microsoft gibt an, dass für die Nutzung von Bereitstellungsslots keine zusätzlichen Gebühren anfallen,
+
+00:09:13.260 --> 00:09:14.780
+Sie zahlen also nur den Preis für den höheren Tarif.
+
+00:09:15.020 --> 00:09:17.780
+Die eigene Bereitstellungsanleitung von Microsoft empfiehlt eine Vorgehensweise, die man übernimmt.
+
+00:09:18.040 --> 00:09:20.540
+Aktivieren Sie niemals die kontinuierliche Bereitstellung für Ihren Produktionsslot.
+
+00:09:20.780 --> 00:09:23.540
+Senden Sie Ihren Hauptzweig an einen Slot und tauschen Sie ihn erst aus, wenn Sie bereit sind.
+
+00:09:23.940 --> 00:09:25.020
+Hochskalieren versus Aufskalieren
+
+00:09:25.020 --> 00:09:29.460
+Die Skalierung eines App-Service gibt es in zwei Varianten und diese zu verwechseln, sorgt für viel Verwirrung.
+
+00:09:29.960 --> 00:09:32.640
+Hochskalieren bedeutet, auf einen größeren Rechner oder einen höheren Tarif zu wechseln.
+
+00:09:33.000 --> 00:09:35.980
+Aufskalieren bedeutet, mehr Kopien Ihrer App unter derselben Adresse auszuführen,
+
+00:09:38.720 --> 00:09:42.040
+Linkkapazität und Funktionen. Letzteres schafft Platz für mehr Benutzer gleichzeitig.
+
+00:09:42.820 --> 00:09:43.760
+Obergrens und Südwest definiert.
+
+00:09:44.220 --> 00:09:47.980
+Basic skaliert auf drei Instanzen, Standard auf 10, Premium auf 30 und Isolated auf 100.
+
+00:09:48.380 --> 00:09:48.620
+100.
+
+00:09:49.280 --> 00:09:53.480
+Die Tarife Free und Shared können überhaupt nicht ausskaliert werden, was der ehrliche Grund dafür ist, dass es Test und keine Startertarife sind.
+
+00:09:54.140 --> 00:09:58.420
+Die automatische Skalierung, die Instanzen basierend auf Regeln oder Zeitplänen hinzufügt und entfernt, beginnt bei Standard.
+
+00:09:59.000 --> 00:10:02.800
+Darunter können Sie die Instanzanzahl zwar noch manuell ändern, aber von alleine passiert nichts.
+
+00:10:03.600 --> 00:10:06.620
+Was Leute, die von eigenen Servern kommen, immer wieder schockiert ist, wie schnell das geht.
+
+00:10:06.620 --> 00:10:08.900
+Skalierungseinstellungen sind in Sekunden aktiv.
+
+00:10:09.440 --> 00:10:13.620
+Sie betreffen jede App im Plan, ohne Codeänderungen oder erneute Bereitstellung.
+
+00:10:14.160 --> 00:10:16.460
+Ihre App merkt es gar nicht, sie findet einfach nur mehr Kopien ihrer selbst vor.
+
+00:10:16.800 --> 00:10:19.020
+Es gibt auch ein praktisches Detail, das man im Hinterkopf behalten soll.
+
+00:10:19.460 --> 00:10:23.920
+Wenn ein Plan eine CPU oder Speicherauslastung von über 90 Prozent hat, kann selbst die Bereitstellung fehlschlagen.
+
+00:10:24.560 --> 00:10:28.680
+Die dokumentierte Lösung besteht darin, für die Bereitstellung Instanzen hinzuzufügen und danach wieder zu verringern.
+
+00:10:28.680 --> 00:10:37.500
+Microsoft bietet zudem eine neuere Option namens automatische Skalierung an, die eingehende Anfragen überwacht und die Instanzanzahl anpasst, ohne dass Sie eine einzige Regel schreiben müssen.
+
+00:10:38.640 --> 00:10:41.540
+Wenn Ihnen Regeln und Zeitpläne wie Hausaufgaben vorkommen, ist das die Einstellung, nach der Sie suchen.
+
+00:10:41.860 --> 00:10:43.540
+Eine ehrliche Warnung zur Skalierung.
+
+00:10:43.780 --> 00:10:46.080
+Für jede Instanz, die Sie hinzufügen, müssen Sie auch bezahlen.
+
+00:10:46.620 --> 00:10:50.540
+Eine Regel, die zur Mittagszeit fünf Instanzen hinzufügt, taucht also am Monatsende auf der Rechnung auf.
+
+00:10:51.100 --> 00:10:53.500
+Skalierung ist ein Regler mit Preisschild, kein kostenloser Schalter.
+
+00:10:54.640 --> 00:10:55.640
+Domänen und Zertifikate.
+
+00:10:55.640 --> 00:10:57.820
+Das Erste, was Sie in Ordnung bringen wollen, ist die Adresse.
+
+00:10:58.640 --> 00:11:05.000
+Jede App startet unter etwas wie ihrappname.azure-websites, funktioniert aber exakt wie ein Test aussieht, aber exakt wie ein Test aussieht.
+
+00:11:05.180 --> 00:11:09.080
+Für einen eigenen Namen benötigen Sie einen kostenpflichtigen Tarif, da Freeinsure keine benutzerdefinierten Domänen zulassen.
+
+00:11:09.440 --> 00:11:15.520
+Ab dem Basic-Tarif oder höher erhalten Sie 500 Domänslots pro App mehr als jeder braucht und HTTPS ist einfacher als Sie denken.
+
+00:11:15.820 --> 00:11:17.460
+Und hier gibt es zwei Wege.
+
+00:11:17.580 --> 00:11:24.740
+Sie können eine Domäne über Azure kaufen, was Abrechnung und DNS-Einträge zentralisiert oder eine vorhandene Domäne verwenden und deren Einträge auf Ihre App verweisen.
+
+00:11:24.740 --> 00:11:28.980
+Beide Wege führen zum selben Ergebnis, wählen Sie also den, der für Sie weniger umständlich ist.
+
+00:11:29.500 --> 00:11:31.720
+Das kostenlose App Service Managed Certificate hält, was so spricht.
+
+00:11:32.180 --> 00:11:36.660
+Microsoft stellt es für Ihre Domäne aus, bindet es ein und erneuert es automatisch, sodass Sie nichts kaufen oder installieren müssen.
+
+00:11:37.440 --> 00:11:39.500
+DigiSite ist der Aussteller hinter diesen kostenlosen Zertifikaten.
+
+00:11:39.960 --> 00:11:41.160
+Die Grenzen sollten Sie im Vorfeld kennen.
+
+00:11:41.580 --> 00:11:42.580
+Es gibt kein Wildcard-Zertifikat.
+
+00:11:43.060 --> 00:11:45.920
+Sie erhalten ein Zertifikatproben und sei definierter Domäne und können es nicht exportieren.
+
+00:11:46.160 --> 00:11:49.100
+Letzteres ist wichtig, falls Sie das Zertifikat jemals woanders verwenden möchten.
+
+00:11:49.720 --> 00:11:51.380
+Ein Fachbegriff erfordert eine kurze Erläuterung.
+
+00:11:51.380 --> 00:11:54.780
+ILS ist der moderne Name für das, was jeder immer noch SSL nennt.
+
+00:11:54.860 --> 00:11:56.920
+Und es ist das, was das Vorhängeschloss im Browser anzeigt.
+
+00:11:57.520 --> 00:11:59.360
+Das kostenlose Zertifikat legt die gängigen Anwendungsfälle.
+
+00:11:59.800 --> 00:12:04.100
+IP-basierte Verbindungen werden stattdessen stündlich aufgebaut, obwohl Standard und Höhe eine ohne Aufpreis beinhalten.
+
+00:12:04.980 --> 00:12:08.000
+Es gibt ein Detail, das bei Root Domains, also solchen ohne WW davor, zu Problemen führt.
+
+00:12:08.340 --> 00:12:12.940
+Der DNS-Eintrag muss auf die IP-Adresse Ihrer App zeigen und die App darf keine IP-Beschränkung aktiviert haben,
+
+00:12:13.040 --> 00:12:15.140
+da das Zertifikat Ihre App zur Erneuerung erreichen muss.
+
+00:12:15.140 --> 00:12:16.860
+Fehler, die Anfänger machen.
+
+00:12:17.480 --> 00:12:19.820
+Nun zu der Liste, die ich jedem vor dem ersten Deployment geben würde,
+
+00:12:19.900 --> 00:12:21.980
+denn jeder Punkt hier ist eine Entscheidung, die Sie bald treffen werden.
+
+00:12:22.720 --> 00:12:25.960
+Das Entwickeln im Free-Tarif und das spätere Entdecken der Grenzen ist der häufigste Fehler.
+
+00:12:27.120 --> 00:12:30.820
+Eigene Domains, HTTPS, Deployment Slots und Scale-Out sind dort einfach nicht verfügbar.
+
+00:12:30.960 --> 00:12:32.240
+Und Abwarten ändert daran nichts.
+
+00:12:33.320 --> 00:12:36.220
+Nutzen Sie es zum Lernen und steigen Sie um, wenn echte Benutzer die Seite besuchen sollen.
+
+00:12:36.220 --> 00:12:40.440
+Entwicklung und Produktion in denselben Plan zu legen, schafft das gleiche Problem aus einer anderen Richtung.
+
+00:12:40.960 --> 00:12:42.940
+Sie teilen sich dieselben Maschinen, skalieren gemeinsam
+
+00:12:42.940 --> 00:12:46.200
+und eine ausgelastete Testumgebung kann die Anwendung Ihrer Kunden ausbremsen.
+
+00:12:46.740 --> 00:12:48.880
+Microsofts Antwort ist eindeutig, geben Sie einen eigenen Plan.
+
+00:12:49.280 --> 00:12:52.620
+Die Annahme, dass jede App ein eigenes Stück der Maschine bekommt, ist ein weiterer Punkt, den man verlernen muss.
+
+00:12:53.280 --> 00:12:54.740
+Rechenleistung gehört zum Plan und nicht zur App.
+
+00:12:54.740 --> 00:12:58.240
+Ein Plan funktioniert wie eine WG und nicht wie eine Reihe separater Häuser und Always-On.
+
+00:12:58.360 --> 00:12:59.960
+Zu vergessen kostet sie wertvolle Sekunden.
+
+00:13:01.020 --> 00:13:03.800
+Ohne diese Funktion muss eine inaktive App aufwachen, wenn jemand kommt
+
+00:13:03.800 --> 00:13:06.080
+und der erste Besucher des Tages zahlt dafür mit Wartezeit.
+
+00:13:06.620 --> 00:13:10.080
+Always-On beginnt bei Basic, was bedeutet, dass eine App im Free-Tarif beim Aufwachen immer langsam wirkt.
+
+00:13:10.440 --> 00:13:14.020
+Slots zu tauschen ohne Verbindungszeichen folgen und App-Einstellungen festzubehren, ist der Fehler der am hättesten Strafe.
+
+00:13:14.540 --> 00:13:17.680
+Das ist der Schritt, der Ihre Produktions-App dazu bringt, auf eine Test-Datenbank zuzugreifen
+
+00:13:17.680 --> 00:13:19.480
+und ein Kontrollkästchen pro Einstellung verhindert das.
+
+00:13:19.840 --> 00:13:22.520
+Das Aktivieren von Continuous Deployment für den Produktions-Slot ist ein weiterer Fehler.
+
+00:13:23.060 --> 00:13:24.600
+Microsofts Deployment-Eitfaden ist hier sehr direkt.
+
+00:13:25.040 --> 00:13:27.880
+Ihr Produktionsbranche gehört auf einen Slot und Sie verschieben ihn, wenn Sie bereit sind.
+
+00:13:28.680 --> 00:13:32.180
+Geheld-Up und Scale-Out zu verwechseln, führt dazu, dass Leute auf einen ausgegrauten Autoscale-Button starren.
+
+00:13:32.180 --> 00:13:36.380
+Autoscale erfordert den Standard-Tarif und keine Geduld der Welt wird es in einem niedrigeren Tarif aktivieren.
+
+00:13:37.120 --> 00:13:40.960
+Den Plan als permanent zu betrachten ist der letzte Punkt und das ist eher eine Einstellung als ein Fehler.
+
+00:13:41.940 --> 00:13:45.880
+Tarifänderungen dauern Sekunden, Sie können herauf- oder herunterstufen und Ihre App muss nicht neu bereitgestellt werden.
+
+00:13:46.300 --> 00:13:48.380
+Klein anzufangen ist der richtige Weg, kein Risiko.
+
+00:13:48.380 --> 00:13:54.380
+Und noch einer, der weniger dramatisch ist, aber echtes Geld kostet, einen kostenpflichtigen Plan für ein Projekt laufen zu lassen, das niemand mehr besucht.
+
+00:13:54.980 --> 00:14:01.460
+Da sich die Rechnung nach den Maschinen richtet und nicht nach dem Traffic, kostet ein vergessener Plan Geld, egal ob die App ausgelastet, inaktiv oder völlig ungenutzt ist.
+
+00:14:02.300 --> 00:14:02.900
+Die Kurzfassung.
+
+00:14:03.660 --> 00:14:04.700
+So sieht das Ganze also aus.
+
+00:14:05.300 --> 00:14:09.620
+Da Ihr App-Service ein verwaltetes Zuhause für Ihre Web-Apps und APIs ist, kaufen Sie einen Plan statt eines Servers.
+
+00:14:09.940 --> 00:14:14.960
+Und der gewählte Tarif bestimmt sowohl, was Sie aktivieren dürfen, als auch wie viel Leistung Sie erhalten, als auch wie viel Leistung Sie erhalten.
+
+00:14:15.340 --> 00:14:18.040
+Slots und Zertifikate nehmen in dem Deployment den größten Teil des Schreckens.
+
+00:14:18.040 --> 00:14:22.300
+Wenn Sie weitere Erklärungen in einfacher Sprache wie diese möchten, abonnieren Sie M365M.
+
+00:14:22.800 --> 00:14:23.620
+Und hier ist meine Frage an Sie.
+
+00:14:23.940 --> 00:14:28.760
+Jetzt, wo alles verständlich erklärt wurde, was würden Sie zuerst in den App-Service stellen und mit welchem Tarif würden Sie ehrlicherweise beginnen?

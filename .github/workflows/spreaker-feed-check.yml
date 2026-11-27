@@ -26,7 +26,8 @@ jobs:
           SITE_FRESH_GAP_H: ${{ vars.SITE_FRESH_GAP_H || '6' }}
         run: python tools/new_episodes_check.py
       - name: Seitenbau fuer neue Folgen starten (mode=fresh)
-        if: steps.neweps.outputs.dispatch == '1' && vars.SITE_FRESH_OFF != '1'
+        # seit 26.11.2026 Standard aus (Mirko: nur mittwochs bauen); SITE_FRESH_OFF=0 schaltet die Frische-Baus wieder ein
+        if: steps.neweps.outputs.dispatch == '1' && (vars.SITE_FRESH_OFF || '1') != '1'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -38,5 +39,5 @@ jobs:
           git add reports/spreaker-feed-check.md reports/spreaker-feed-check.json
           if git diff --cached --quiet; then echo "unveraendert"; exit 0; fi
           git commit -q -m "Spreaker-Feed-Pruefung $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
-          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && python3 tools/git_sync_check.py && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done
           exit 1

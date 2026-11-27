@@ -6,7 +6,7 @@
   var T = W.t || window.M365WT || {}, L = W.links || window.M365WL || {}, root = document.getElementById("c-wiki"); if (!root) return;
   function h(tag, a, kids) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === "class") e.className = a[k]; else if (k === "text") e.textContent = a[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), a[k]); else e.setAttribute(k, a[k]); } (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return e; }
   function txt(s) { return document.createTextNode(s); }
-  function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(W.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
+  function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});   /* nur schreibend: GET ohne CORS-Preflight (Worker prueft nur Nicht-GET) */ if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(W.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
   function date(ts) { try { return new Date(ts * 1000).toLocaleDateString(W.lang === "en" ? undefined : W.lang); } catch (e) { return ""; } }
 
   /* ---------- Darstellung ---------- */

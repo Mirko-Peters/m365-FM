@@ -1,0 +1,2980 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.800
+Mais pour 12 jours dédiés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.940 --> 00:00:12.060
+En janvier prochain, la N365-Con est de retour et nous voyons encore plus grand.
+
+00:00:12.960 --> 00:00:17.940
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques de MVP et d'experts mondiaux.
+
+00:00:18.540 --> 00:00:21.320
+Fini les diapositives génériques et le jargon marketing interminable.
+
+00:00:22.040 --> 00:00:23.300
+Nous nous attaquons aux véritables défis.
+
+00:00:23.960 --> 00:00:28.680
+Copilot Studio, agent IA Fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.680 --> 00:00:34.460
+Que vous soyez professionnel de l'IT, développeur ou dirigeant, des sessions sont conçues pour vous, n'est.
+
+00:00:35.560 --> 00:00:39.860
+Avec 10 jours complets, explorez diverses technologies et connectez-vous à une communauté mondiale.
+
+00:00:40.980 --> 00:00:44.180
+Suivez le direct et rapportez des idées exploitables au sein de votre organisation.
+
+00:00:45.280 --> 00:00:48.560
+Janvier 2027, 10 jours, une seule communauté, Microsoft.
+
+00:00:49.440 --> 00:00:50.680
+Les inscriptions sont désormais ouvertes.
+
+00:00:51.920 --> 00:00:55.520
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.520 --> 00:00:58.200
+C'est m365con.net.
+
+00:01:00.300 --> 00:01:04.560
+Inscrivez-vous sur m365con.net et retrouvons-nous en direct en janvier.
+
+00:01:05.600 --> 00:01:10.500
+Si votre tenant Microsoft 365 communique avec Dynamics 365, Azure et d'autres outils SAS,
+
+00:01:10.640 --> 00:01:13.520
+votre surface d'attaque est plus large que vous ne le pensez.
+
+00:01:14.060 --> 00:01:17.960
+Le plus effrayant est que la plupart des déploiements Zero Trust se concentrent sur un seul produit,
+
+00:01:18.160 --> 00:01:20.160
+ignorant l'effet domino sur les systèmes connectés.
+
+00:01:20.160 --> 00:01:24.500
+Dans les prochaines minutes, nous verrons pourquoi c'est un problème et comment le Zero Trust part.
+
+00:01:24.960 --> 00:01:29.880
+Conception, traite vos environnements M365 et D365 et D365 comme un tout interdépendant.
+
+00:01:31.160 --> 00:01:34.900
+Car réparer un seul mur dans un bâtiment ne vous protégera pas si le toit est en feu.
+
+00:01:36.020 --> 00:01:37.460
+Le Zero Trust n'est pas seulement le MFA.
+
+00:01:38.020 --> 00:01:41.180
+Beaucoup pensent avoir adopté le Zero Trust dès l'instant où le MFA est activé pour tout le monde.
+
+00:01:41.940 --> 00:01:42.780
+Une belle victoire en apparence.
+
+00:01:43.220 --> 00:01:46.200
+Chaque utilisateur est sollicité, chaque connexion nécessite un second facteur,
+
+00:01:46.200 --> 00:01:48.200
+et sur le papier, l'environnement semble sécurisé.
+
+00:01:49.000 --> 00:01:50.820
+Le problème est que les efforts s'arrêtent souvent là.
+
+00:01:52.200 --> 00:01:54.040
+M365 reçoit toute l'attention lors du déploiement,
+
+00:01:54.120 --> 00:01:57.260
+mais des plateformes connectées comme Dynamics 365 continuent de fonctionner de leur côté
+
+00:01:57.260 --> 00:01:59.800
+avec des règles différentes, voire inexistantes.
+
+00:02:00.300 --> 00:02:02.920
+Ce n'est pas seulement incomplet, cela crée un faux sentiment de sécurité.
+
+00:02:03.640 --> 00:02:05.040
+Voici ce que cela donne dans la pratique.
+
+00:02:05.540 --> 00:02:10.800
+Un administrateur passe des semaines à tester l'accès conditionnel pour SharePoint, Teams et Exchange Online.
+
+00:02:11.240 --> 00:02:12.220
+Ah !
+
+00:02:12.220 --> 00:02:15.520
+Il impose le MFA à toutes les connexions, bloque l'authentification héritée
+
+00:02:15.520 --> 00:02:17.300
+et pense que le tenant est verrouillé.
+
+00:02:18.740 --> 00:02:22.200
+Mais D365 reste à l'écart, dépendant d'Azure AD pour l'authentification,
+
+00:02:22.300 --> 00:02:23.480
+mais sans la même étendue de politique.
+
+00:02:24.500 --> 00:02:27.900
+Un utilisateur se connectant à D365 via un favori
+
+00:02:27.900 --> 00:02:29.900
+pourrait ne jamais déclencher le même accès conditionnel,
+
+00:02:30.420 --> 00:02:33.360
+et l'administrateur ne s'en rendra compte qu'après un incident.
+
+00:02:34.080 --> 00:02:35.680
+C'est là que cette faille commence à vous coûter cher.
+
+00:02:36.340 --> 00:02:38.720
+Imaginons que les identifiants de quelqu'un soient volés via une campagne de fichiers.
+
+00:02:39.720 --> 00:02:41.900
+L'attaquant tente d'abord de se connecter à SharePoint.
+
+00:02:42.420 --> 00:02:44.760
+MFA s'active, ils échouent, et vous pensez que le problème est résolu.
+
+00:02:45.640 --> 00:02:49.820
+Mais comme les règles d'accès conditionnels de D365 ne correspondent pas à celles de M365,
+
+00:02:49.920 --> 00:02:53.480
+ce même attaquant peut se connecter directement au module financier de Dynamics
+
+00:02:53.480 --> 00:02:54.700
+et entrer comme dans un moulin.
+
+00:02:56.500 --> 00:02:58.160
+Le mur MFA existe, mais pas devant chaque porte.
+
+00:02:59.580 --> 00:03:02.580
+Soudain, la défense unifiée que vous pensiez en place s'avère fragmentée.
+
+00:03:03.660 --> 00:03:06.720
+Dans un exemple que nous avons observé, une politique mal alignée a permis exactement cela.
+
+00:03:07.200 --> 00:03:10.580
+Le compte SharePoint d'un utilisateur était protégé par des exigences de connexion strictes,
+
+00:03:10.660 --> 00:03:11.780
+mais pas son accès de Dynamics.
+
+00:03:11.780 --> 00:03:16.500
+L'attaquant a totalement contourné SharePoint, est entré dans Dynamics, a généré un rapport
+
+00:03:16.500 --> 00:03:18.460
+et a exporter des données de paiement client sensibles.
+
+00:03:19.360 --> 00:03:21.140
+Du point de vue de l'utilisateur, tout semblait normal.
+
+00:03:21.520 --> 00:03:24.120
+Il n'a même jamais reçu d'alerte indiquant que son compte avait été consulté ailleurs.
+
+00:03:24.800 --> 00:03:26.760
+L'attaque a été rendue possible non pas par une MFA faible,
+
+00:03:26.940 --> 00:03:29.220
+mais parce qu'elle n'était pas appliquée systématiquement là où elle aurait dû l'être.
+
+00:03:29.960 --> 00:03:31.460
+Le positionnement même de Microsoft est clair,
+
+00:03:31.640 --> 00:03:35.320
+le Zero Trust ne se résume pas à activer la MFA et passer à autre chose, et passer à autre chose.
+
+00:03:35.320 --> 00:03:40.260
+C'est un cadre fondé sur la validation de l'identité, la vérification de la conformité des appareils
+
+00:03:40.260 --> 00:03:43.000
+et l'inspection continue du contexte de cession.
+
+00:03:43.660 --> 00:03:45.240
+La MFA n'est qu'un élément du pilier d'identité.
+
+00:03:45.920 --> 00:03:50.100
+Si ce pilier n'est pas appliqué à chaque service connecté, il cesse d'être un contrôle fiable.
+
+00:03:51.200 --> 00:03:54.440
+Et dans un environnement connecté comme M365 et D365,
+
+00:03:54.640 --> 00:03:58.300
+les attaquants n'ont besoin de trouver qu'un seul service où le contrôle n'est pas appliqué.
+
+00:03:58.300 --> 00:04:02.040
+Nous avons travaillé avec une équipe qui a appris cette leçon à ses dépens.
+
+00:04:03.040 --> 00:04:05.700
+Le compte M365 du directeur financier était protégé par la MFA
+
+00:04:05.700 --> 00:04:07.740
+et l'équipe informatique était stricte sur l'accès aux e-mails,
+
+00:04:08.040 --> 00:04:10.220
+mais Dynamics 365 était configuré différemment.
+
+00:04:10.780 --> 00:04:14.080
+L'attaquant a accédé au compte du directeur financier via un jeton d'actualisation
+
+00:04:14.080 --> 00:04:17.100
+volé à une application mobile tierce moins sécurisée.
+
+00:04:18.100 --> 00:04:19.540
+L'accès M365 a été bloqué,
+
+00:04:19.540 --> 00:04:22.880
+mais la réutilisation du jeton dans Dynamics n'a pas déclenché la même politique de risque.
+
+00:04:23.620 --> 00:04:25.800
+Ils ont généré des factures frauduleuses dans le module financier
+
+00:04:25.800 --> 00:04:27.840
+et les ont fait passer par le processus d'approbation normale.
+
+00:04:28.840 --> 00:04:31.120
+Au moment où l'incident a été découvert, les fonds avaient déjà disparu.
+
+00:04:31.840 --> 00:04:34.220
+Chaque analyse post-incident a pointé vers la même cause profonde,
+
+00:04:34.460 --> 00:04:35.400
+l'incohérence des politiques.
+
+00:04:35.980 --> 00:04:37.120
+Ce n'est pas la MFA qui échoue,
+
+00:04:37.400 --> 00:04:40.060
+c'est aux frontières, entre les services Microsoft intégrés,
+
+00:04:40.140 --> 00:04:42.020
+que les politiques ne sont souvent pas alignées.
+
+00:04:43.440 --> 00:04:45.440
+Les utilisateurs passent de SharePoint à Outlook,
+
+00:04:45.640 --> 00:04:48.440
+OneDrive, Dynamics et d'autres applications s'ass connectées sans y penser.
+
+00:04:49.380 --> 00:04:52.480
+Les attaquants le savent et testent quelle porte possède la serrure la plus faible.
+
+00:04:53.380 --> 00:04:54.800
+C'est pourquoi le Zero Trust, par conception,
+
+00:04:55.080 --> 00:04:56.320
+ne repose pas sur un contrôle unique,
+
+00:04:56.420 --> 00:04:57.860
+mais sur l'assurance que chaque point d'entrée
+
+00:04:57.860 --> 00:04:59.920
+impose les mêmes normes sans exception.
+
+00:05:01.520 --> 00:05:02.980
+Les règles d'accès conditionnelles,
+
+00:05:03.060 --> 00:05:04.160
+les contrôles d'état des appareils
+
+00:05:04.160 --> 00:05:06.000
+et les contrôles de session doivent tous faire partie
+
+00:05:06.000 --> 00:05:07.400
+d'une base de référence unifiée.
+
+00:05:08.940 --> 00:05:11.340
+Lorsque chaque service Microsoft applique le même niveau d'examen,
+
+00:05:11.620 --> 00:05:15.160
+validant l'identité, l'appareil et le contexte de session
+
+00:05:15.160 --> 00:05:16.140
+à chaque interaction,
+
+00:05:16.320 --> 00:05:18.480
+vous fermez les portes dérobées recherchées par les attaquants.
+
+00:05:18.480 --> 00:05:22.480
+L'authentification multifacteur sur M365 ne sert à rien
+
+00:05:22.480 --> 00:05:25.880
+si D365 laisse passer le même utilisateur sans contrôle 5 secondes plus tard.
+
+00:05:27.020 --> 00:05:29.060
+L'objectif de conception est que chaque transaction,
+
+00:05:29.220 --> 00:05:30.660
+chaque connexion et chaque appel API
+
+00:05:30.660 --> 00:05:32.980
+passe par le même ensemble de vérifications,
+
+00:05:33.220 --> 00:05:35.000
+quel que soit le produit concerné.
+
+00:05:35.780 --> 00:05:37.740
+Si l'alignement des charges de travail est une première étape,
+
+00:05:37.860 --> 00:05:39.520
+le véritable changement survient
+
+00:05:39.520 --> 00:05:41.860
+quand ces politiques communiquent réellement, en temps réel.
+
+00:05:41.860 --> 00:05:44.160
+C'est là que le modèle Zero Trust
+
+00:05:44.160 --> 00:05:46.400
+passe d'un simple élément sur une liste de contrôle à une défense active.
+
+00:05:47.580 --> 00:05:48.900
+Si les systèmes communiquent,
+
+00:05:49.440 --> 00:05:51.220
+imaginez que la politique d'accès conditionnel
+
+00:05:51.220 --> 00:05:52.760
+définie dans Microsoft 365
+
+00:05:52.760 --> 00:05:55.320
+déclenche instantanément une réponse de sécurité
+
+00:05:55.320 --> 00:05:56.660
+dans Dynamics 365
+
+00:05:56.660 --> 00:05:59.120
+sans duplication ni synchronisation manuelle.
+
+00:06:00.480 --> 00:06:02.760
+Ce n'est pas la réalité par défaut pour la plupart des environnements.
+
+00:06:04.320 --> 00:06:06.260
+Généralement, chaque système applique ses propres règles
+
+00:06:06.260 --> 00:06:07.120
+de manière isolée.
+
+00:06:09.160 --> 00:06:11.420
+M365 peut exiger une authentification multifacteur
+
+00:06:11.420 --> 00:06:12.320
+pour les connexions risquées,
+
+00:06:12.600 --> 00:06:14.940
+tandis que D365 accorde ou refuse des fonctions
+
+00:06:14.940 --> 00:06:16.920
+uniquement basées sur les rôles stockés dans son propre modèle.
+
+00:06:19.500 --> 00:06:21.220
+Ils utilisent tous deux les mêmes identités Azure AD,
+
+00:06:21.380 --> 00:06:22.420
+mais ils ne partagent pas nécessairement
+
+00:06:22.420 --> 00:06:23.580
+les mêmes données de risque en temps réel.
+
+00:06:25.660 --> 00:06:26.860
+Cette approche cloisonnée signifie
+
+00:06:26.860 --> 00:06:28.740
+que vous pouvez verrouiller une plateforme parfaitement
+
+00:06:28.740 --> 00:06:30.840
+tout en ayant des angles morts dans l'autre.
+
+00:06:31.960 --> 00:06:32.440
+Réfléchissez-y.
+
+00:06:32.960 --> 00:06:35.180
+Votre tenant M365 détecte une connexion
+
+00:06:35.180 --> 00:06:36.720
+depuis un nœud de sortie torse à 2h du matin
+
+00:06:36.720 --> 00:06:38.340
+marque le compte comme à haut risque et le bloc.
+
+00:06:39.580 --> 00:06:41.360
+Mais Dynamics, à moins que ses propres contrôles
+
+00:06:41.360 --> 00:06:43.120
+ne soient liés à ce signal de risque en temps réel,
+
+00:06:43.120 --> 00:06:44.700
+pourrait laisser la session se poursuivre.
+
+00:06:45.740 --> 00:06:47.940
+Le jeton de l'utilisateur pourrait rester valide pour Dynamics
+
+00:06:47.940 --> 00:06:49.820
+malgré son blocage sur M365.
+
+00:06:51.180 --> 00:06:52.540
+Vous vous retrouvez alors dans une situation
+
+00:06:52.540 --> 00:06:54.300
+où une partie de votre environnement
+
+00:06:54.300 --> 00:06:55.680
+traite le compte comme étant compromis,
+
+00:06:55.740 --> 00:06:58.060
+tandis qu'une autre continue de valider des factures.
+
+00:06:58.960 --> 00:07:01.260
+L'opportunité manquée d'ici la capacité pour les politiques
+
+00:07:01.260 --> 00:07:03.180
+et les scores de risque de se propager instantanément
+
+00:07:03.180 --> 00:07:04.540
+entre les deux environnements.
+
+00:07:05.400 --> 00:07:07.280
+Microsoft fournit en réalité les bases pour cela
+
+00:07:07.280 --> 00:07:09.260
+avec l'accès conditionnel d'Azure AD
+
+00:07:09.260 --> 00:07:11.600
+et la sécurité basée sur les rôles de D365.
+
+00:07:12.880 --> 00:07:15.200
+L'accès conditionnel évalue les risques de connexion
+
+00:07:15.200 --> 00:07:16.400
+en temps réel grâce à des signaux,
+
+00:07:16.640 --> 00:07:17.500
+comme les lieux inhabituels,
+
+00:07:17.640 --> 00:07:18.560
+les déplacements impossibles
+
+00:07:18.560 --> 00:07:20.500
+ou les plages IP malveillantes connues.
+
+00:07:21.260 --> 00:07:23.320
+La sécurité basée sur les rôles dans Dynamics
+
+00:07:23.320 --> 00:07:25.700
+définit ensuite ce qu'un utilisateur peut faire une fois connecté
+
+00:07:25.700 --> 00:07:27.100
+jusqu'au niveau du champ.
+
+00:07:27.100 --> 00:07:29.660
+Lorsque ces deux couches restent déconnectées,
+
+00:07:29.720 --> 00:07:30.900
+vous obtenez des failles dans vos politiques.
+
+00:07:31.960 --> 00:07:32.960
+Mais lorsqu'elles sont connectées,
+
+00:07:33.400 --> 00:07:34.940
+un signal de risque élevé dans Azure AD
+
+00:07:34.940 --> 00:07:36.720
+peut modifier immédiatement les droits
+
+00:07:36.720 --> 00:07:39.420
+de ce même compte dans Dynamics sans intervention humaine.
+
+00:07:40.620 --> 00:07:41.400
+Imaginez cela en action.
+
+00:07:41.980 --> 00:07:44.000
+Un commercial se connecte depuis un emplacement inhabituel.
+
+00:07:45.340 --> 00:07:46.780
+Azure AD le marque comme risque moyen
+
+00:07:46.780 --> 00:07:48.840
+et applique une politique conditionnelle
+
+00:07:48.840 --> 00:07:50.620
+exigeant une authentification renforcée
+
+00:07:50.620 --> 00:07:51.580
+pour les actions sensibles.
+
+00:07:53.580 --> 00:07:55.760
+Dynamics 365, au lieu d'ignorer ce contexte,
+
+00:07:55.760 --> 00:07:57.820
+intègre l'état de risque Azure AD
+
+00:07:57.820 --> 00:07:59.560
+et verrouille automatiquement des fonctions
+
+00:07:59.560 --> 00:08:00.680
+comme l'export de listes clients
+
+00:08:00.680 --> 00:08:02.260
+ou la modification de tarifs
+
+00:08:02.260 --> 00:08:04.060
+jusqu'à la vérification de la session.
+
+00:08:05.260 --> 00:08:06.800
+L'application se fait en temps réel
+
+00:08:06.800 --> 00:08:08.280
+et ne dépend pas d'une intervention manuelle
+
+00:08:08.280 --> 00:08:10.500
+ou de la reconstruction répétée de la même logique.
+
+00:08:11.660 --> 00:08:13.120
+C'est un peu comme avoir deux agents de sécurité
+
+00:08:13.120 --> 00:08:14.760
+à deux portes différentes de votre bureau.
+
+00:08:15.760 --> 00:08:17.680
+L'un voit quelqu'un tenter d'entrer après les heures de bureau.
+
+00:08:17.840 --> 00:08:20.320
+L'arrêt et prévient votre agent par radio d'être en alerte.
+
+00:08:20.320 --> 00:08:20.720
+D'alerte.
+
+00:08:21.580 --> 00:08:22.640
+Si ces agents ne communiquent pas,
+
+00:08:22.920 --> 00:08:24.500
+le second pourrait très bien laisser entrer la personne
+
+00:08:24.500 --> 00:08:25.220
+par l'accès latéral
+
+00:08:25.220 --> 00:08:26.860
+pendant que le premier rédige encore son rapport.
+
+00:08:27.920 --> 00:08:28.720
+Sans signaux inter-service,
+
+00:08:28.820 --> 00:08:29.700
+c'est exactement ce qui peut arriver
+
+00:08:29.700 --> 00:08:33.040
+entre M365 et E, D365 et D365.
+
+00:08:33.460 --> 00:08:34.280
+Une porte est verrouillée,
+
+00:08:34.800 --> 00:08:35.640
+mais l'autre est grande ouverte.
+
+00:08:37.340 --> 00:08:38.540
+Techniquement, ce type d'intégration
+
+00:08:38.540 --> 00:08:39.920
+permet aux signaux de risque d'Azure AD
+
+00:08:39.920 --> 00:08:42.020
+d'être transmis directement à D365
+
+00:08:42.020 --> 00:08:43.900
+et d'intégrer son processus de décision d'accès.
+
+00:08:45.480 --> 00:08:46.600
+Des revendications en temps réel
+
+00:08:46.600 --> 00:08:47.540
+sur le risque utilisateur.
+
+00:08:47.780 --> 00:08:49.340
+La conformité de l'appareil ou la localisation
+
+00:08:49.340 --> 00:08:51.300
+peuvent être incluses dans le jeton présenté à Dynamics.
+
+00:08:51.300 --> 00:08:54.160
+Dynamics applique alors des restrictions
+
+00:08:54.160 --> 00:08:55.020
+au niveau du rôle
+
+00:08:55.020 --> 00:08:56.680
+ou refuse des opérations spécifiques
+
+00:08:56.680 --> 00:08:58.320
+en fonction de ses revendications.
+
+00:09:00.040 --> 00:09:00.840
+Cela réduit la fenêtre
+
+00:09:00.840 --> 00:09:01.740
+dont dispose un attaquant
+
+00:09:01.740 --> 00:09:03.020
+pour exploiter un compte compromis
+
+00:09:03.020 --> 00:09:03.620
+passant d'heures,
+
+00:09:03.960 --> 00:09:04.540
+voire de jours,
+
+00:09:04.880 --> 00:09:05.640
+à quelques secondes.
+
+00:09:06.540 --> 00:09:07.220
+Cela signifie aussi
+
+00:09:07.220 --> 00:09:08.280
+que vos politiques de sécurité
+
+00:09:08.280 --> 00:09:09.580
+cessent d'être des documents statiques
+
+00:09:09.580 --> 00:09:10.620
+pour devenir un système nerveux
+
+00:09:10.620 --> 00:09:11.800
+partagé entre les plateformes.
+
+00:09:13.360 --> 00:09:14.940
+Lorsque les décisions d'accès dans Dynamics
+
+00:09:14.940 --> 00:09:16.720
+reflètent exactement la posture de sécurité
+
+00:09:16.720 --> 00:09:18.440
+en temps réel de Microsoft 365,
+
+00:09:18.440 --> 00:09:20.140
+vos défenses deviennent coordonnées
+
+00:09:20.140 --> 00:09:21.540
+au lieu d'être parallèles.
+
+00:09:22.600 --> 00:09:23.280
+C'est cette coordination
+
+00:09:23.280 --> 00:09:24.240
+qui comble les micro-failles
+
+00:09:24.240 --> 00:09:25.300
+sur lesquelles comptent les attaquants.
+
+00:09:26.000 --> 00:09:27.360
+Ils ne peuvent plus se déplacer latéralement
+
+00:09:27.360 --> 00:09:27.840
+entre les services
+
+00:09:27.840 --> 00:09:28.860
+sans déclencher les mêmes alarmes
+
+00:09:28.860 --> 00:09:29.800
+et se heurter aux mêmes obstacles
+
+00:09:29.800 --> 00:09:30.840
+dans chacun d'eux, chacun d'eux.
+
+00:09:32.100 --> 00:09:33.160
+Mais avant de pouvoir activer
+
+00:09:33.160 --> 00:09:34.280
+ce niveau de partage de signaux
+
+00:09:34.280 --> 00:09:34.820
+en temps réel,
+
+00:09:34.940 --> 00:09:35.660
+vous devez vous assurer
+
+00:09:35.660 --> 00:09:37.260
+que les identités sont structurées
+
+00:09:37.260 --> 00:09:38.320
+de manière cohérente
+
+00:09:38.320 --> 00:09:39.220
+pour les deux systèmes.
+
+00:09:41.720 --> 00:09:42.820
+Cela implique de les segmenter
+
+00:09:42.820 --> 00:09:43.820
+afin que chaque rôle,
+
+00:09:44.000 --> 00:09:44.980
+chaque type d'accès aux données
+
+00:09:44.980 --> 00:09:45.920
+et chaque profil de risque
+
+00:09:45.920 --> 00:09:46.840
+soient gérés proprement
+
+00:09:46.840 --> 00:09:48.380
+sans entraver le travail quotidien.
+
+00:09:48.380 --> 00:09:51.800
+Segmentation des identités
+
+00:09:51.800 --> 00:09:53.080
+sans interrompre les flux de travail.
+
+00:09:53.900 --> 00:09:54.360
+Tout le monde parle
+
+00:09:54.360 --> 00:09:55.420
+de verrouiller les identités,
+
+00:09:55.640 --> 00:09:56.680
+mais peu cherchent à savoir
+
+00:09:56.680 --> 00:09:57.320
+comment le faire
+
+00:09:57.320 --> 00:09:58.780
+sans nuire à la productivité.
+
+00:10:00.140 --> 00:10:01.100
+La segmentation des identités
+
+00:10:01.100 --> 00:10:01.600
+ne consiste pas
+
+00:10:01.600 --> 00:10:02.480
+à multiplier les obstacles
+
+00:10:02.480 --> 00:10:03.500
+pour chaque clic de l'utilisateur.
+
+00:10:04.500 --> 00:10:05.340
+Il s'agit de concevoir
+
+00:10:05.340 --> 00:10:06.240
+un accès qui reconnaît
+
+00:10:06.240 --> 00:10:07.340
+que tous les utilisateurs,
+
+00:10:07.860 --> 00:10:08.760
+données ou actions
+
+00:10:08.760 --> 00:10:09.540
+ne comportent pas
+
+00:10:09.540 --> 00:10:10.580
+le même niveau de risque,
+
+00:10:10.720 --> 00:10:11.760
+puis d'appliquer des contrôles
+
+00:10:11.760 --> 00:10:12.720
+reflétant cette réalité
+
+00:10:12.720 --> 00:10:14.020
+dans Microsoft 365
+
+00:10:14.020 --> 00:10:15.460
+et Dynamics 365.
+
+00:10:15.460 --> 00:10:17.820
+En pratique,
+
+00:10:17.960 --> 00:10:18.740
+cela signifie définir
+
+00:10:18.740 --> 00:10:19.400
+des frontières claires
+
+00:10:19.400 --> 00:10:19.940
+entre les groupes
+
+00:10:19.940 --> 00:10:20.980
+en fonction de leurs activités,
+
+00:10:21.200 --> 00:10:21.920
+de la sensibilité
+
+00:10:21.920 --> 00:10:22.800
+des éléments manipulés
+
+00:10:22.800 --> 00:10:24.580
+et du risque qu'ils représentent.
+
+00:10:25.220 --> 00:10:25.720
+C'est la différence
+
+00:10:25.720 --> 00:10:26.900
+entre donner à chaque utilisateur
+
+00:10:26.900 --> 00:10:27.560
+un passe-partout
+
+00:10:27.560 --> 00:10:29.740
+ou seulement les clés exactes
+
+00:10:29.740 --> 00:10:30.440
+dont il a besoin.
+
+00:10:31.820 --> 00:10:33.820
+Dans M365 et D365,
+
+00:10:34.180 --> 00:10:34.780
+cette segmentation
+
+00:10:34.780 --> 00:10:35.380
+prend généralement
+
+00:10:35.380 --> 00:10:36.440
+la forme d'attribution d'accès
+
+00:10:36.440 --> 00:10:37.260
+basée sur les rôles
+
+00:10:37.260 --> 00:10:38.040
+et liée à des charges
+
+00:10:38.040 --> 00:10:38.900
+de travail spécifiques.
+
+00:10:38.900 --> 00:10:41.980
+Un coordinateur marketing
+
+00:10:41.980 --> 00:10:42.820
+n'a peut-être besoin
+
+00:10:42.820 --> 00:10:43.440
+que de Teams,
+
+00:10:43.640 --> 00:10:44.100
+SharePoint
+
+00:10:44.100 --> 00:10:45.360
+et d'un accès en lecture
+
+00:10:45.360 --> 00:10:46.280
+seul au dossier
+
+00:10:46.280 --> 00:10:47.540
+client dans Dynamics
+
+00:10:47.540 --> 00:10:48.300
+tandis qu'une personne
+
+00:10:48.300 --> 00:10:48.840
+de la finance
+
+00:10:48.840 --> 00:10:50.680
+pourrait approuver des paiements
+
+00:10:50.680 --> 00:10:51.460
+et extraire
+
+00:10:51.460 --> 00:10:52.840
+des rapports sensibles.
+
+00:10:54.440 --> 00:10:55.180
+Le principe est simple.
+
+00:10:55.520 --> 00:10:56.520
+Plus l'action est privilégiée,
+
+00:10:56.600 --> 00:10:57.740
+plus les contrôles sont stricts.
+
+00:10:59.040 --> 00:10:59.700
+Le défi consiste
+
+00:10:59.700 --> 00:11:00.180
+à y parvenir
+
+00:11:00.180 --> 00:11:00.780
+sans transformer
+
+00:11:00.780 --> 00:11:01.460
+chaque connexion
+
+00:11:01.460 --> 00:11:02.400
+en attente interminable
+
+00:11:02.400 --> 00:11:03.360
+ni rendre
+
+00:11:03.360 --> 00:11:04.560
+les tâches quotidiennes pénibles.
+
+00:11:05.560 --> 00:11:06.080
+C'est ce qui inquiète
+
+00:11:06.080 --> 00:11:06.980
+les administrateurs.
+
+00:11:07.520 --> 00:11:08.240
+La crainte est la suivante.
+
+00:11:08.680 --> 00:11:09.160
+Si nous créons
+
+00:11:09.160 --> 00:11:10.280
+des chemins d'authentification
+
+00:11:10.280 --> 00:11:11.480
+distincts pour chaque rôle,
+
+00:11:11.860 --> 00:11:12.580
+les utilisateurs
+
+00:11:12.580 --> 00:11:13.880
+seront submergés de demandes,
+
+00:11:14.080 --> 00:11:14.860
+les flux de travail
+
+00:11:14.860 --> 00:11:15.680
+ralentiront
+
+00:11:15.680 --> 00:11:17.240
+et les équipes protesteront
+
+00:11:17.240 --> 00:11:18.660
+et les équipes protesteront.
+
+00:11:19.640 --> 00:11:20.280
+Si vous imposez
+
+00:11:20.280 --> 00:11:20.880
+des exigences
+
+00:11:20.880 --> 00:11:21.520
+d'authentification
+
+00:11:21.520 --> 00:11:22.460
+multifacteurs différentes
+
+00:11:22.460 --> 00:11:22.960
+pour les ventes
+
+00:11:22.960 --> 00:11:23.420
+et la finance,
+
+00:11:23.540 --> 00:11:24.260
+la moitié de votre équipe
+
+00:11:24.260 --> 00:11:24.700
+commerciale
+
+00:11:24.700 --> 00:11:25.360
+appellera soudainement
+
+00:11:25.360 --> 00:11:25.920
+l'informatique
+
+00:11:25.920 --> 00:11:26.760
+incapable d'accéder
+
+00:11:26.760 --> 00:11:27.340
+à une proposition
+
+00:11:27.340 --> 00:11:28.180
+lors d'un appel client
+
+00:11:28.180 --> 00:11:28.840
+ou l'équipe.
+
+00:11:29.380 --> 00:11:30.460
+Finance lancera Teams
+
+00:11:30.460 --> 00:11:31.620
+pour collaborer sur un budget
+
+00:11:31.620 --> 00:11:32.700
+mais leur processus
+
+00:11:32.700 --> 00:11:33.840
+de connexion renforcé
+
+00:11:33.840 --> 00:11:34.500
+se déclenchera
+
+00:11:34.500 --> 00:11:35.600
+pour chaque fil de discussion.
+
+00:11:35.600 --> 00:11:37.320
+Le revers de la médaille
+
+00:11:37.320 --> 00:11:37.560
+est pire.
+
+00:11:38.040 --> 00:11:38.760
+Sans segmentation,
+
+00:11:38.860 --> 00:11:39.260
+un attaquant
+
+00:11:39.260 --> 00:11:40.060
+qui compromet le compte
+
+00:11:40.060 --> 00:11:40.500
+de ce même
+
+00:11:40.500 --> 00:11:41.520
+coordinateur marketing
+
+00:11:41.520 --> 00:11:42.140
+a un chemin
+
+00:11:42.140 --> 00:11:42.940
+beaucoup plus facile
+
+00:11:42.940 --> 00:11:44.600
+pour se déplacer latéralement
+
+00:11:44.600 --> 00:11:45.300
+vers des données
+
+00:11:45.300 --> 00:11:46.460
+de grande valeur.
+
+00:11:46.460 --> 00:11:48.140
+C'est pourquoi l'objectif
+
+00:11:48.140 --> 00:11:48.460
+n'est pas de rendre
+
+00:11:48.460 --> 00:11:49.140
+la connexion plus difficile
+
+00:11:49.140 --> 00:11:49.540
+pour tout le monde.
+
+00:11:49.800 --> 00:11:50.300
+Il s'agit de rendre
+
+00:11:50.300 --> 00:11:51.360
+l'accès aux éléments sensibles
+
+00:11:51.360 --> 00:11:51.980
+plus complexes
+
+00:11:51.980 --> 00:11:52.760
+tout en fluidifiant
+
+00:11:52.760 --> 00:11:54.100
+les actions à faible risque.
+
+00:11:54.640 --> 00:11:55.640
+Voici un exemple efficace.
+
+00:11:56.000 --> 00:11:56.900
+Les commerciaux se connectent
+
+00:11:56.900 --> 00:11:57.840
+avec une MFA standard
+
+00:11:57.840 --> 00:11:58.920
+pour les outils quotidiens
+
+00:11:58.920 --> 00:11:59.460
+comme Teams
+
+00:11:59.460 --> 00:12:00.320
+et Outlook.
+
+00:12:01.220 --> 00:12:02.060
+Les utilisateurs finances
+
+00:12:02.060 --> 00:12:03.000
+ont la même connexion de base
+
+00:12:03.000 --> 00:12:03.700
+mais reçoivent un défi
+
+00:12:03.700 --> 00:12:04.900
+d'authentification supplémentaire
+
+00:12:04.900 --> 00:12:05.360
+lorsqu'ils tentent
+
+00:12:05.360 --> 00:12:05.980
+d'approuver des virements
+
+00:12:05.980 --> 00:12:06.560
+dans Dynamics
+
+00:12:06.560 --> 00:12:08.100
+ou d'exporter des données financières
+
+00:12:08.100 --> 00:12:08.740
+détaillées
+
+00:12:08.740 --> 00:12:09.720
+dans Power BI.
+
+00:12:11.100 --> 00:12:11.920
+En arrière-plan,
+
+00:12:12.280 --> 00:12:13.180
+la gestion des identités
+
+00:12:13.180 --> 00:12:13.760
+privilégiées.
+
+00:12:16.460 --> 00:12:17.340
+des autorisations élevées
+
+00:12:17.340 --> 00:12:18.140
+juste à temps aiguë
+
+00:12:18.140 --> 00:12:18.740
+pour ses actions,
+
+00:12:18.880 --> 00:12:19.580
+des droits qui expirent
+
+00:12:19.580 --> 00:12:20.660
+automatiquement après usage.
+
+00:12:23.170 --> 00:12:23.990
+Ainsi, l'équipe finance
+
+00:12:23.990 --> 00:12:24.590
+n'est pas entravée
+
+00:12:24.590 --> 00:12:25.390
+dans son travail courant
+
+00:12:25.390 --> 00:12:26.170
+mais un obstacle,
+
+00:12:26.350 --> 00:12:27.390
+subsiste pour les opérations
+
+00:12:27.390 --> 00:12:28.270
+à risque plus élevé.
+
+00:12:29.570 --> 00:12:30.770
+En superposant la segmentation
+
+00:12:30.770 --> 00:12:31.490
+via PIM et l'accès
+
+00:12:31.490 --> 00:12:32.190
+juste à temps aiguë,
+
+00:12:32.290 --> 00:12:33.130
+vous commencez à supprimer
+
+00:12:33.130 --> 00:12:33.930
+totalement les privilèges
+
+00:12:33.930 --> 00:12:34.770
+permanents des comptes.
+
+00:12:36.010 --> 00:12:37.210
+Au lieu qu'un responsable financier
+
+00:12:37.210 --> 00:12:37.790
+dispose toujours
+
+00:12:37.790 --> 00:12:38.850
+des droits d'approbation de facture,
+
+00:12:38.950 --> 00:12:40.010
+il ne les a que pour leur nécessaire
+
+00:12:40.010 --> 00:12:41.050
+retraitement des paiements du mois.
+
+00:12:42.930 --> 00:12:43.810
+Même si leurs identifiants
+
+00:12:43.810 --> 00:12:44.230
+étaient volés,
+
+00:12:44.310 --> 00:12:45.370
+l'attaquant devrait faire coïncider
+
+00:12:45.370 --> 00:12:46.310
+l'intrusion avec la fenêtre
+
+00:12:46.310 --> 00:12:47.330
+d'autorisation exacte
+
+00:12:47.330 --> 00:12:48.110
+en supposant qu'ils puissent
+
+00:12:48.110 --> 00:12:49.170
+passer les contrôles contextuels
+
+00:12:49.170 --> 00:12:50.050
+de conformité des appareils
+
+00:12:50.050 --> 00:12:50.750
+et de localisation.
+
+00:12:52.330 --> 00:12:53.690
+Adapter cela aux tâches quotidiennes
+
+00:12:53.690 --> 00:12:54.210
+est tout l'enjeu
+
+00:12:54.210 --> 00:12:55.150
+de la phase de conception.
+
+00:12:56.830 --> 00:12:57.790
+Un utilisateur commercial
+
+00:12:57.790 --> 00:12:58.590
+peut passer sa journée
+
+00:12:58.590 --> 00:12:59.030
+sur Teams,
+
+00:12:59.150 --> 00:12:59.750
+consulter SharePoint
+
+00:12:59.750 --> 00:13:00.470
+pour des propositions
+
+00:13:00.470 --> 00:13:01.490
+et vérifier occasionnellement
+
+00:13:01.490 --> 00:13:02.530
+les données CRM
+
+00:13:02.530 --> 00:13:03.110
+dans Dynamics.
+
+00:13:04.270 --> 00:13:05.050
+Rien de tout cela
+
+00:13:05.050 --> 00:13:06.530
+ne nécessite une authentification forte
+
+00:13:06.530 --> 00:13:07.510
+sauf s'il tente de modifier
+
+00:13:07.510 --> 00:13:08.650
+des enregistrements financiers.
+
+00:13:09.530 --> 00:13:10.730
+Un utilisateur finance
+
+00:13:10.730 --> 00:13:11.570
+peut passer beaucoup de temps
+
+00:13:11.570 --> 00:13:12.250
+dans les tableaux de bord
+
+00:13:12.250 --> 00:13:12.790
+Power BI
+
+00:13:12.790 --> 00:13:14.470
+et le module finance de Dynamics
+
+00:13:14.470 --> 00:13:15.130
+mais il n'a pas besoin
+
+00:13:15.130 --> 00:13:16.430
+d'autorisation élevée
+
+00:13:16.430 --> 00:13:17.410
+simplement pour collaborer
+
+00:13:17.410 --> 00:13:18.390
+dans un canal Teams.
+
+00:13:19.290 --> 00:13:20.270
+Vous définissez ses limites
+
+00:13:20.270 --> 00:13:20.830
+dans des politiques
+
+00:13:20.830 --> 00:13:21.870
+afin que les flux de travail
+
+00:13:21.870 --> 00:13:22.690
+courants de chaque rôle
+
+00:13:22.690 --> 00:13:23.370
+restent rapides
+
+00:13:23.370 --> 00:13:24.610
+tandis que les actions sensibles
+
+00:13:24.610 --> 00:13:26.230
+restent étroitement verrouillées.
+
+00:13:27.270 --> 00:13:27.770
+Imaginez cela
+
+00:13:27.770 --> 00:13:28.770
+comme avoir des clés différentes
+
+00:13:28.770 --> 00:13:29.490
+pour différentes salles
+
+00:13:29.490 --> 00:13:30.290
+d'un immeuble de bureau
+
+00:13:30.290 --> 00:13:31.870
+mais toutes sur une seule carte à puce.
+
+00:13:32.730 --> 00:13:33.810
+Vous passez votre carte une fois
+
+00:13:33.810 --> 00:13:34.930
+et vous circulez librement
+
+00:13:34.930 --> 00:13:35.910
+là où vous êtes autorisé
+
+00:13:35.910 --> 00:13:37.070
+mais lorsque vous atteignez
+
+00:13:37.070 --> 00:13:37.810
+la salle des serveurs
+
+00:13:37.810 --> 00:13:38.430
+ou les archives
+
+00:13:38.430 --> 00:13:40.370
+la carte demande un code PIN
+
+00:13:40.370 --> 00:13:41.890
+avant que la porte ne s'ouvre.
+
+00:13:42.990 --> 00:13:43.770
+Cette étape supplémentaire
+
+00:13:43.770 --> 00:13:44.470
+ne se produit que là
+
+00:13:44.470 --> 00:13:45.050
+où c'est nécessaire
+
+00:13:45.050 --> 00:13:45.990
+vous évitant de jongler
+
+00:13:45.990 --> 00:13:47.210
+avec un énorme trousseau de clé
+
+00:13:47.210 --> 00:13:47.950
+à chaque porte.
+
+00:13:49.710 --> 00:13:51.090
+Une conception de segmentation
+
+00:13:51.090 --> 00:13:51.550
+de ce type
+
+00:13:51.550 --> 00:13:52.490
+permet aux utilisateurs
+
+00:13:52.490 --> 00:13:53.290
+de travailler rapidement
+
+00:13:53.290 --> 00:13:54.250
+sur des tâches à faible risque
+
+00:13:54.250 --> 00:13:54.930
+tout en imposant
+
+00:13:54.930 --> 00:13:55.970
+une validation délibérée
+
+00:13:55.970 --> 00:13:57.070
+avant toute action critique.
+
+00:13:58.710 --> 00:13:59.630
+C'est un équilibre
+
+00:13:59.630 --> 00:14:00.670
+suffisamment robuste
+
+00:14:00.670 --> 00:14:01.590
+pour bloquer un attaquant
+
+00:14:01.590 --> 00:14:03.010
+utilisant des identifiants volés
+
+00:14:03.010 --> 00:14:03.670
+tout en étant
+
+00:14:03.670 --> 00:14:04.990
+assez invisible au quotidien
+
+00:14:04.990 --> 00:14:05.690
+pour que votre équipe
+
+00:14:05.690 --> 00:14:06.270
+ne remarque pas
+
+00:14:06.270 --> 00:14:06.870
+les gardes fous.
+
+00:14:07.870 --> 00:14:08.550
+Et même avec les bons
+
+00:14:08.550 --> 00:14:09.410
+segments d'accès en place
+
+00:14:09.410 --> 00:14:10.190
+la confiance établie
+
+00:14:10.190 --> 00:14:10.930
+lors de la connexion
+
+00:14:10.930 --> 00:14:11.350
+ne peut pas être
+
+00:14:11.350 --> 00:14:11.950
+le seul contrôle
+
+00:14:11.950 --> 00:14:12.770
+que vous effectuez.
+
+00:14:13.830 --> 00:14:14.770
+Dans une configuration
+
+00:14:14.770 --> 00:14:15.490
+vraiment résiliente
+
+00:14:15.490 --> 00:14:16.190
+chaque session active
+
+00:14:16.190 --> 00:14:17.250
+est réévaluée au fur et à mesure
+
+00:14:17.250 --> 00:14:17.690
+pas seulement
+
+00:14:17.690 --> 00:14:18.690
+au point d'entrée.
+
+00:14:20.230 --> 00:14:21.410
+La puissance de la vérification
+
+00:14:21.410 --> 00:14:22.570
+continue dans le multicloud.
+
+00:14:23.650 --> 00:14:24.050
+Dans un monde
+
+00:14:24.050 --> 00:14:24.510
+où un seul jeu
+
+00:14:24.510 --> 00:14:25.270
+d'identifiant cloud
+
+00:14:25.270 --> 00:14:25.990
+peut ouvrir des portes
+
+00:14:25.990 --> 00:14:26.850
+sur plusieurs plateformes
+
+00:14:26.850 --> 00:14:27.770
+ne les vérifier qu'une fois
+
+00:14:27.770 --> 00:14:29.170
+est un appel aux ennuis.
+
+00:14:30.650 --> 00:14:31.210
+Cela fonctionnait
+
+00:14:31.210 --> 00:14:32.150
+dans l'ancien modèle sur site
+
+00:14:32.150 --> 00:14:32.930
+où nous faisions confiance
+
+00:14:32.930 --> 00:14:33.470
+à un appareil
+
+00:14:33.470 --> 00:14:34.850
+à l'intérieur du périmètre réseau
+
+00:14:34.850 --> 00:14:35.330
+jusqu'à ce que
+
+00:14:35.330 --> 00:14:36.550
+l'utilisateur se déconnecte.
+
+00:14:36.550 --> 00:14:38.450
+Mais dans un environnement
+
+00:14:38.450 --> 00:14:39.550
+Microsoft 365
+
+00:14:39.550 --> 00:14:40.790
+et Dynamics 365
+
+00:14:40.790 --> 00:14:41.590
+qui communiquent aussi
+
+00:14:41.590 --> 00:14:42.150
+avec AWS
+
+00:14:42.150 --> 00:14:42.810
+des services Google
+
+00:14:42.810 --> 00:14:43.430
+ou des applications
+
+00:14:43.430 --> 00:14:44.150
+s'astierces
+
+00:14:44.150 --> 00:14:45.050
+le niveau de risque
+
+00:14:45.050 --> 00:14:45.930
+n'est pas figé
+
+00:14:45.930 --> 00:14:46.830
+dès la connexion.
+
+00:14:47.970 --> 00:14:48.930
+Il change continuellement.
+
+00:14:49.770 --> 00:14:50.670
+La vérification continue
+
+00:14:50.670 --> 00:14:50.950
+bouleverse
+
+00:14:50.950 --> 00:14:52.050
+la mentalité traditionnelle.
+
+00:14:52.950 --> 00:14:53.690
+Au lieu d'une décision
+
+00:14:53.690 --> 00:14:54.330
+unique lors
+
+00:14:54.330 --> 00:14:55.230
+de la connexion
+
+00:14:55.230 --> 00:14:56.570
+l'accès est évalué
+
+00:14:56.570 --> 00:14:57.230
+encore
+
+00:14:57.230 --> 00:14:57.890
+et encore
+
+00:14:57.890 --> 00:14:58.370
+pendant
+
+00:14:58.370 --> 00:14:59.530
+la saison.
+
+00:15:01.030 --> 00:15:01.630
+Cela signifie
+
+00:15:01.630 --> 00:15:02.070
+que le système
+
+00:15:02.070 --> 00:15:02.390
+redemande
+
+00:15:02.390 --> 00:15:02.850
+l'utilisateur
+
+00:15:02.850 --> 00:15:03.310
+est-il toujours
+
+00:15:03.310 --> 00:15:04.850
+celui qu'il prétend être ?
+
+00:15:04.850 --> 00:15:06.670
+L'appareil est-il toujours conforme ?
+
+00:15:06.670 --> 00:15:07.410
+L'emplacement de connexion
+
+00:15:07.410 --> 00:15:08.190
+est-il toujours considéré
+
+00:15:08.190 --> 00:15:09.790
+comme sûr ?
+
+00:15:09.790 --> 00:15:10.310
+Ces contrôles
+
+00:15:10.310 --> 00:15:11.110
+peuvent être déclenchés
+
+00:15:11.110 --> 00:15:12.270
+par des événements spécifiques,
+
+00:15:12.590 --> 00:15:13.610
+des intervalles planifiés
+
+00:15:13.610 --> 00:15:14.450
+ou des signaux de risque
+
+00:15:14.450 --> 00:15:15.010
+en temps réel.
+
+00:15:15.950 --> 00:15:16.630
+Vous ne validez pas
+
+00:15:16.630 --> 00:15:17.210
+seulement l'entrée,
+
+00:15:17.310 --> 00:15:18.270
+vous surveillez le comportement
+
+00:15:18.270 --> 00:15:18.890
+et le contexte
+
+00:15:18.890 --> 00:15:19.590
+à chaque étape.
+
+00:15:20.490 --> 00:15:20.890
+Il est facile
+
+00:15:20.890 --> 00:15:21.470
+de voir l'écart
+
+00:15:21.470 --> 00:15:22.230
+quand on compare cela
+
+00:15:22.230 --> 00:15:23.190
+à l'approche de connexion
+
+00:15:23.190 --> 00:15:24.030
+unique et permanente.
+
+00:15:25.210 --> 00:15:25.870
+Dans un monde sur site,
+
+00:15:25.950 --> 00:15:26.710
+une fois votre ordinateur
+
+00:15:26.710 --> 00:15:27.710
+connecté au réseau d'entreprise
+
+00:15:27.710 --> 00:15:28.670
+est le premier contrôle passé,
+
+00:15:28.950 --> 00:15:29.610
+vous étiez considéré
+
+00:15:29.610 --> 00:15:30.050
+comme sûr
+
+00:15:30.050 --> 00:15:30.990
+pour le reste de la journée.
+
+00:15:30.990 --> 00:15:32.950
+Mais les services cloud
+
+00:15:32.950 --> 00:15:33.850
+n'ont pas ce périmètre
+
+00:15:33.850 --> 00:15:34.610
+physique stable.
+
+00:15:35.750 --> 00:15:36.290
+Les utilisateurs
+
+00:15:36.290 --> 00:15:36.730
+se déplacent
+
+00:15:36.730 --> 00:15:37.410
+entre les appareils,
+
+00:15:37.590 --> 00:15:37.950
+les réseaux
+
+00:15:37.950 --> 00:15:38.770
+et les zones géographiques
+
+00:15:38.770 --> 00:15:39.790
+au cours d'une seule session de travail.
+
+00:15:41.090 --> 00:15:41.830
+Les acteurs malveillants
+
+00:15:41.830 --> 00:15:42.210
+peuvent voler
+
+00:15:42.210 --> 00:15:43.210
+des jetons de session actifs
+
+00:15:43.210 --> 00:15:43.930
+et les réutiliser
+
+00:15:43.930 --> 00:15:44.470
+sans jamais voir
+
+00:15:44.470 --> 00:15:45.490
+une autre demande MFA.
+
+00:15:46.850 --> 00:15:47.930
+Une décision de confiance statique
+
+00:15:47.930 --> 00:15:48.670
+prise à 9h15
+
+00:15:48.670 --> 00:15:49.950
+peut être totalement obsolète
+
+00:15:49.950 --> 00:15:50.550
+à 9h15.
+
+00:15:51.350 --> 00:15:52.010
+Imaginez ce scénario.
+
+00:15:52.610 --> 00:15:53.450
+Un utilisateur se connecte
+
+00:15:53.450 --> 00:15:54.230
+à N365
+
+00:15:54.230 --> 00:15:55.230
+depuis un ordinateur portable
+
+00:15:55.230 --> 00:15:56.110
+approuvé au siège social.
+
+00:15:56.910 --> 00:15:57.690
+Il ouvre Outlook,
+
+00:15:57.790 --> 00:15:59.470
+Teams et Dynamics 365 Finance.
+
+00:16:00.990 --> 00:16:01.670
+En cours de session,
+
+00:16:01.830 --> 00:16:02.350
+son adresse IP
+
+00:16:02.350 --> 00:16:03.050
+bascule vers un lieu
+
+00:16:03.050 --> 00:16:04.290
+situé à 3000 km,
+
+00:16:04.570 --> 00:16:05.510
+peut-être parce que
+
+00:16:05.510 --> 00:16:06.370
+son Wi-Fi a coupé
+
+00:16:06.370 --> 00:16:07.070
+et que son appareil
+
+00:16:07.070 --> 00:16:08.050
+s'est connecté automatiquement
+
+00:16:08.050 --> 00:16:08.950
+à un hotspot 4G
+
+00:16:08.950 --> 00:16:10.070
+routé à l'étranger.
+
+00:16:11.950 --> 00:16:13.090
+La protection d'identité
+
+00:16:13.090 --> 00:16:13.550
+d'Azure AD
+
+00:16:13.550 --> 00:16:14.330
+fait passer le niveau
+
+00:16:14.330 --> 00:16:15.430
+de risque de connexion nulle
+
+00:16:15.430 --> 00:16:16.530
+à élever en quelques secondes.
+
+00:16:17.970 --> 00:16:18.390
+Dans un monde
+
+00:16:18.390 --> 00:16:19.490
+de vérification continue,
+
+00:16:19.830 --> 00:16:20.330
+ce niveau de risque
+
+00:16:20.330 --> 00:16:21.330
+se propage instantanément.
+
+00:16:22.150 --> 00:16:23.110
+Microsoft 365
+
+00:16:23.110 --> 00:16:24.170
+demande à l'utilisateur
+
+00:16:24.170 --> 00:16:24.990
+de se réauthentifier
+
+00:16:24.990 --> 00:16:25.510
+avant de pouvoir
+
+00:16:25.510 --> 00:16:26.650
+envoyer ce fichier Teams.
+
+00:16:27.830 --> 00:16:28.350
+Au même moment,
+
+00:16:28.450 --> 00:16:29.850
+Dynamics 365 réagit
+
+00:16:29.850 --> 00:16:30.670
+en mettant en pause
+
+00:16:30.670 --> 00:16:31.430
+le flux d'approbation
+
+00:16:31.430 --> 00:16:32.430
+ouvert par l'utilisateur,
+
+00:16:32.710 --> 00:16:33.190
+verrouillant ainsi
+
+00:16:33.190 --> 00:16:33.990
+les actions sensibles
+
+00:16:33.990 --> 00:16:34.870
+jusqu'à ce que la session
+
+00:16:34.870 --> 00:16:36.090
+soit validée à nouveau.
+
+00:16:36.590 --> 00:16:36.630
+Aise.
+
+00:16:37.690 --> 00:16:38.550
+Ce type de coordination
+
+00:16:38.550 --> 00:16:39.910
+est assuré par Microsoft Graph
+
+00:16:39.910 --> 00:16:41.430
+et Azure AD Identity Protection.
+
+00:16:42.690 --> 00:16:43.590
+Microsoft Graph
+
+00:16:43.590 --> 00:16:44.530
+fournit l'infrastructure,
+
+00:16:44.930 --> 00:16:45.810
+le flux en temps réel,
+
+00:16:45.890 --> 00:16:46.690
+des données d'identité,
+
+00:16:46.890 --> 00:16:47.910
+d'appareils et d'activité
+
+00:16:47.910 --> 00:16:49.130
+disponibles pour chaque application
+
+00:16:49.130 --> 00:16:49.910
+connectée.
+
+00:16:50.370 --> 00:16:50.430
+Point.
+
+00:16:50.430 --> 00:16:52.930
+Identity Protection
+
+00:16:52.930 --> 00:16:53.730
+utilise ces données
+
+00:16:53.730 --> 00:16:54.210
+pour attribuer
+
+00:16:54.210 --> 00:16:55.190
+un score de risque dynamique
+
+00:16:55.190 --> 00:16:55.950
+basé sur des signaux
+
+00:16:55.950 --> 00:16:56.910
+connus tels que
+
+00:16:56.910 --> 00:16:57.670
+des voyages atypiques,
+
+00:16:57.750 --> 00:16:58.750
+des connexions depuis des IP
+
+00:16:58.750 --> 00:16:59.570
+liées à des malwares
+
+00:16:59.570 --> 00:17:00.210
+ou des changements de lieu
+
+00:17:00.210 --> 00:17:00.690
+impossibles.
+
+00:17:02.590 --> 00:17:03.510
+Toute application intégrée
+
+00:17:03.510 --> 00:17:04.250
+à ce cadre peut agir
+
+00:17:04.250 --> 00:17:05.050
+sur ces changements de risque
+
+00:17:05.050 --> 00:17:05.650
+en cours de session
+
+00:17:05.650 --> 00:17:06.350
+et non plus seulement
+
+00:17:06.350 --> 00:17:07.650
+lors de la connexion initiale.
+
+00:17:07.810 --> 00:17:08.170
+Initial.
+
+00:17:08.670 --> 00:17:09.750
+Le bénéfice est particulièrement
+
+00:17:09.750 --> 00:17:10.770
+important lorsque vous travaillez
+
+00:17:10.770 --> 00:17:11.390
+dans un environnement
+
+00:17:11.390 --> 00:17:11.950
+multicloud.
+
+00:17:13.070 --> 00:17:13.810
+Imaginez un développeur
+
+00:17:13.810 --> 00:17:14.590
+passant d'Azure DevOps
+
+00:17:14.590 --> 00:17:15.670
+à la console AWS
+
+00:17:15.670 --> 00:17:16.230
+et à Jira
+
+00:17:16.230 --> 00:17:17.050
+dans différents onglets
+
+00:17:17.050 --> 00:17:17.810
+de son navigateur.
+
+00:17:17.810 --> 00:17:20.210
+Si l'appareil échoue
+
+00:17:20.210 --> 00:17:21.190
+à un contrôle de conformité
+
+00:17:21.190 --> 00:17:22.410
+dans Microsoft Endpoint Manager
+
+00:17:22.410 --> 00:17:23.310
+alors qu'il est sur Azure,
+
+00:17:23.430 --> 00:17:24.470
+ce signal peut se propager
+
+00:17:24.470 --> 00:17:25.110
+vers l'extérieur.
+
+00:17:25.930 --> 00:17:27.050
+Les applications intégrées
+
+00:17:27.050 --> 00:17:27.810
+dans d'autres clouds
+
+00:17:27.810 --> 00:17:28.470
+peuvent détecter
+
+00:17:28.470 --> 00:17:29.350
+le même indicateur
+
+00:17:29.350 --> 00:17:30.810
+d'appareil non fiable
+
+00:17:30.810 --> 00:17:32.450
+et demander une réauthentification
+
+00:17:32.450 --> 00:17:33.150
+ou verrouiller
+
+00:17:33.150 --> 00:17:34.510
+les fonctions sensibles.
+
+00:17:35.330 --> 00:17:36.050
+Aucune intervention humaine
+
+00:17:36.050 --> 00:17:36.530
+est nécessaire
+
+00:17:36.530 --> 00:17:37.310
+et aucun attaquant
+
+00:17:37.310 --> 00:17:37.930
+ne peut exploiter
+
+00:17:37.930 --> 00:17:39.050
+un état de confiance obsolète.
+
+00:17:40.150 --> 00:17:40.570
+C'est un peu comme
+
+00:17:40.570 --> 00:17:41.250
+un agent de sécurité
+
+00:17:41.250 --> 00:17:41.970
+qui circule à l'intérieur
+
+00:17:41.970 --> 00:17:42.370
+d'une soirée
+
+00:17:42.370 --> 00:17:43.010
+plutôt que de simplement
+
+00:17:43.010 --> 00:17:43.490
+garder l'entrée.
+
+00:17:44.370 --> 00:17:45.010
+Quelqu'un peut entrer
+
+00:17:45.010 --> 00:17:45.450
+sans problème.
+
+00:17:45.690 --> 00:17:46.770
+Mais si son comportement change,
+
+00:17:46.770 --> 00:17:47.610
+qu'il attrape des sacs
+
+00:17:47.610 --> 00:17:48.350
+ou commence une dispute
+
+00:17:48.350 --> 00:17:49.410
+il est escorté vers la sortie
+
+00:17:49.410 --> 00:17:50.030
+avant que la situation
+
+00:17:50.030 --> 00:17:50.570
+ne s'envenime.
+
+00:17:51.630 --> 00:17:52.510
+La vérification continue
+
+00:17:52.510 --> 00:17:53.290
+fonctionne de la même manière.
+
+00:17:53.830 --> 00:17:54.290
+L'environnement
+
+00:17:54.290 --> 00:17:55.130
+analyse en permanence
+
+00:17:55.130 --> 00:17:55.630
+les anomalies
+
+00:17:55.630 --> 00:17:56.310
+et impose des mesures
+
+00:17:56.310 --> 00:17:56.910
+en cours de session
+
+00:17:56.910 --> 00:17:58.090
+même si les connexions initiales
+
+00:17:58.090 --> 00:17:58.870
+semblent légitimes.
+
+00:18:00.130 --> 00:18:00.650
+Dans les configurations
+
+00:18:00.650 --> 00:18:01.090
+multi-cloud
+
+00:18:01.090 --> 00:18:01.610
+le coût de l'absence
+
+00:18:01.610 --> 00:18:02.470
+de vérification répétée
+
+00:18:02.470 --> 00:18:02.950
+est multiplié.
+
+00:18:03.690 --> 00:18:04.370
+Une session risquée
+
+00:18:04.370 --> 00:18:05.070
+qui passe inaperçue
+
+00:18:05.070 --> 00:18:05.650
+ne se limite pas
+
+00:18:05.650 --> 00:18:06.430
+à une seule application.
+
+00:18:07.530 --> 00:18:08.150
+Elle peut se propager
+
+00:18:08.150 --> 00:18:09.230
+à travers plusieurs services
+
+00:18:09.230 --> 00:18:10.190
+via la réutilisation
+
+00:18:10.190 --> 00:18:10.610
+de jetons
+
+00:18:10.610 --> 00:18:11.670
+ou l'intégration d'API.
+
+00:18:11.670 --> 00:18:13.350
+Si vous ne vérifiez
+
+00:18:13.350 --> 00:18:14.270
+l'identité qu'au début
+
+00:18:14.270 --> 00:18:15.070
+vous pariez
+
+00:18:15.070 --> 00:18:15.890
+qu'aucun contexte
+
+00:18:15.890 --> 00:18:16.310
+ne changera
+
+00:18:16.310 --> 00:18:17.090
+qu'aucune information
+
+00:18:17.090 --> 00:18:17.850
+d'identification
+
+00:18:17.850 --> 00:18:18.430
+ne sera volée
+
+00:18:18.430 --> 00:18:19.190
+et qu'aucun appareil
+
+00:18:19.190 --> 00:18:20.610
+ne deviendra non conforme
+
+00:18:20.610 --> 00:18:21.510
+après plusieurs heures
+
+00:18:21.510 --> 00:18:22.150
+d'activité.
+
+00:18:23.330 --> 00:18:23.930
+Ce n'est pas un pari
+
+00:18:23.930 --> 00:18:24.370
+qui en vaut la peine.
+
+00:18:24.870 --> 00:18:25.510
+Lorsque la vérification
+
+00:18:25.510 --> 00:18:26.470
+continue est automatisée
+
+00:18:26.470 --> 00:18:26.970
+via les services
+
+00:18:26.970 --> 00:18:27.870
+Microsoft appropriés
+
+00:18:27.870 --> 00:18:28.830
+vous cessez de la considérer
+
+00:18:28.830 --> 00:18:29.330
+comme une couche
+
+00:18:29.330 --> 00:18:30.710
+de sécurité distincte.
+
+00:18:31.070 --> 00:18:31.350
+Elle devient
+
+00:18:31.350 --> 00:18:31.890
+vraiment naturelle
+
+00:18:31.890 --> 00:18:32.370
+du fonctionnement
+
+00:18:32.370 --> 00:18:32.770
+des accès
+
+00:18:32.770 --> 00:18:33.390
+toujours active
+
+00:18:33.390 --> 00:18:34.110
+toujours vigilante
+
+00:18:34.110 --> 00:18:34.590
+et toujours prête
+
+00:18:34.590 --> 00:18:35.470
+à réévaluer la confiance
+
+00:18:35.470 --> 00:18:36.610
+avant que des dommages réels
+
+00:18:36.610 --> 00:18:37.190
+ne soient causés.
+
+00:18:37.190 --> 00:18:38.610
+Fin de compte
+
+00:18:38.610 --> 00:18:39.110
+le Zero Trust
+
+00:18:39.110 --> 00:18:39.850
+ne se limite pas
+
+00:18:39.850 --> 00:18:40.810
+à une simple connexion.
+
+00:18:41.370 --> 00:18:42.010
+C'est un processus
+
+00:18:42.010 --> 00:18:42.830
+constant en arrière-plan
+
+00:18:42.830 --> 00:18:43.830
+qui protège chaque action
+
+00:18:43.830 --> 00:18:44.930
+dans chaque système connecté.
+
+00:18:46.190 --> 00:18:46.870
+Un Zero Trust
+
+00:18:46.870 --> 00:18:48.010
+qui n'épuise pas
+
+00:18:48.010 --> 00:18:48.830
+les utilisateurs.
+
+00:18:49.670 --> 00:18:50.410
+Si votre déploiement
+
+00:18:50.410 --> 00:18:50.930
+Zero Trust
+
+00:18:50.930 --> 00:18:51.430
+oblige les gens
+
+00:18:51.430 --> 00:18:52.270
+à valider leur connexion
+
+00:18:52.270 --> 00:18:52.890
+12 fois par jour
+
+00:18:52.890 --> 00:18:53.530
+ils trouveront un moyen
+
+00:18:53.530 --> 00:18:54.450
+de contourner le système.
+
+00:18:55.390 --> 00:18:55.990
+Ce n'est pas de la paresse
+
+00:18:55.990 --> 00:18:56.670
+c'est une question de survie.
+
+00:18:57.090 --> 00:18:57.470
+Il y a une limite
+
+00:18:57.470 --> 00:18:58.110
+aux interruptions
+
+00:18:58.110 --> 00:18:58.830
+avant que quelqu'un
+
+00:18:58.830 --> 00:18:59.950
+ne choisisse de privilégier
+
+00:18:59.950 --> 00:19:01.170
+le travail accompli
+
+00:19:01.170 --> 00:19:01.990
+plutôt que le respect
+
+00:19:01.990 --> 00:19:02.670
+des règles
+
+00:19:02.670 --> 00:19:03.390
+euh...
+
+00:19:03.390 --> 00:19:04.970
+le problème est que
+
+00:19:04.970 --> 00:19:05.990
+les solutions de contournement
+
+00:19:05.990 --> 00:19:06.570
+qu'ils choisissent
+
+00:19:06.570 --> 00:19:07.690
+annulent souvent
+
+00:19:07.690 --> 00:19:08.570
+les contrôles de sécurité
+
+00:19:08.570 --> 00:19:09.010
+que vous avez eu
+
+00:19:09.010 --> 00:19:09.850
+tant de mal à mettre en place.
+
+00:19:10.730 --> 00:19:11.270
+C'est là qu'intervient
+
+00:19:11.270 --> 00:19:11.770
+la fatigue liée
+
+00:19:11.770 --> 00:19:12.370
+à l'authentification.
+
+00:19:13.270 --> 00:19:13.810
+C'est ce qui se produit
+
+00:19:13.810 --> 00:19:14.790
+lorsque les utilisateurs
+
+00:19:14.790 --> 00:19:15.650
+doivent s'identifier
+
+00:19:15.650 --> 00:19:16.070
+si souvent
+
+00:19:16.070 --> 00:19:16.870
+que le processus
+
+00:19:16.870 --> 00:19:17.990
+devient un bruit de fond.
+
+00:19:19.370 --> 00:19:19.790
+La vie de cesse
+
+00:19:19.790 --> 00:19:20.510
+d'être une vérification
+
+00:19:20.510 --> 00:19:21.130
+significative
+
+00:19:21.130 --> 00:19:21.490
+pour devenir
+
+00:19:21.490 --> 00:19:22.330
+une simple case à cocher
+
+00:19:22.330 --> 00:19:22.650
+ou pire
+
+00:19:22.650 --> 00:19:23.670
+un obstacle à franchir.
+
+00:19:24.890 --> 00:19:25.770
+Dans le modèle Zero Trust
+
+00:19:25.770 --> 00:19:26.610
+les défis répétés
+
+00:19:26.610 --> 00:19:27.350
+sont censés protéger
+
+00:19:27.350 --> 00:19:27.790
+les actions
+
+00:19:27.790 --> 00:19:28.830
+à haute valeur ajoutée.
+
+00:19:30.330 --> 00:19:30.710
+Mais lorsque
+
+00:19:30.710 --> 00:19:31.290
+ces mêmes défis
+
+00:19:31.290 --> 00:19:31.890
+sont disséminés
+
+00:19:31.890 --> 00:19:32.690
+dans chaque tâche banale
+
+00:19:32.690 --> 00:19:33.610
+les gens ne distinguent plus
+
+00:19:33.610 --> 00:19:34.330
+les événements
+
+00:19:34.330 --> 00:19:35.230
+de sécurité légitime
+
+00:19:35.230 --> 00:19:36.070
+du bruit du système.
+
+00:19:37.370 --> 00:19:38.270
+Cette perte d'attention
+
+00:19:38.270 --> 00:19:38.690
+est risquée.
+
+00:19:39.550 --> 00:19:39.930
+Des politiques
+
+00:19:39.930 --> 00:19:40.550
+bien intentionnées
+
+00:19:40.550 --> 00:19:41.170
+peuvent se saboter
+
+00:19:41.170 --> 00:19:41.430
+elles-mêmes
+
+00:19:41.430 --> 00:19:41.950
+si elles épuisent
+
+00:19:41.950 --> 00:19:42.350
+trop rapidement
+
+00:19:42.350 --> 00:19:42.950
+la bonne volonté
+
+00:19:42.950 --> 00:19:43.650
+des utilisateurs.
+
+00:19:45.330 --> 00:19:46.150
+Si une politique
+
+00:19:46.150 --> 00:19:46.830
+exige une nouvelle
+
+00:19:46.830 --> 00:19:47.390
+invite MFA
+
+00:19:47.390 --> 00:19:48.090
+à chaque passage
+
+00:19:48.090 --> 00:19:48.550
+d'Outlook
+
+00:19:48.550 --> 00:19:48.910
+à Teams
+
+00:19:48.910 --> 00:19:49.510
+ou SharePoint
+
+00:19:49.510 --> 00:19:50.390
+vous les conditionnez
+
+00:19:50.390 --> 00:19:51.110
+à tout valider
+
+00:19:51.110 --> 00:19:51.770
+machinalement
+
+00:19:51.770 --> 00:19:52.330
+pour continuer
+
+00:19:52.330 --> 00:19:53.050
+à travailler.
+
+00:19:54.330 --> 00:19:54.850
+Dans cet état
+
+00:19:54.850 --> 00:19:55.850
+une invite malveillante
+
+00:19:55.850 --> 00:19:56.410
+par exemple
+
+00:19:56.410 --> 00:19:57.270
+de la part d'un attaquant
+
+00:19:57.270 --> 00:19:57.830
+tentant de prendre
+
+00:19:57.830 --> 00:19:58.690
+le contrôle d'une session
+
+00:19:58.690 --> 00:19:59.690
+par fatigue MFA
+
+00:19:59.690 --> 00:20:01.050
+a beaucoup plus de chances
+
+00:20:01.050 --> 00:20:01.810
+d'être acceptée
+
+00:20:01.810 --> 00:20:02.110
+à
+
+00:20:02.110 --> 00:20:03.730
+vous avez investi
+
+00:20:03.730 --> 00:20:04.310
+dans des technologies
+
+00:20:04.310 --> 00:20:05.710
+de sécurité robustes
+
+00:20:05.710 --> 00:20:06.770
+mais la couche comportementale
+
+00:20:06.770 --> 00:20:07.110
+est devenue
+
+00:20:07.110 --> 00:20:08.390
+le maillon faible.
+
+00:20:09.430 --> 00:20:10.190
+Voici un exemple concret.
+
+00:20:10.990 --> 00:20:11.750
+Un employé frustré
+
+00:20:11.750 --> 00:20:12.250
+par les invites
+
+00:20:12.250 --> 00:20:13.130
+de connexion constante
+
+00:20:13.130 --> 00:20:13.870
+configure Outlook
+
+00:20:13.870 --> 00:20:14.930
+sur son ordinateur personnel
+
+00:20:14.930 --> 00:20:16.250
+pour mémoriser indéfiniment
+
+00:20:16.250 --> 00:20:17.050
+ses identifiants.
+
+00:20:17.710 --> 00:20:18.470
+Cela semble inoffensif.
+
+00:20:18.830 --> 00:20:19.630
+Il gagne quelques secondes
+
+00:20:19.630 --> 00:20:20.110
+sur sa journée.
+
+00:20:20.830 --> 00:20:22.690
+Mais voilà que cet appareil personnel
+
+00:20:22.690 --> 00:20:23.450
+possède un jeton
+
+00:20:23.450 --> 00:20:24.150
+d'accès permanent
+
+00:20:24.150 --> 00:20:25.170
+à la messagerie
+
+00:20:25.170 --> 00:20:25.770
+d'organisation
+
+00:20:25.770 --> 00:20:26.650
+en dehors des règles
+
+00:20:26.650 --> 00:20:27.390
+d'accès conditionnels
+
+00:20:27.390 --> 00:20:28.290
+définis pour les appareils
+
+00:20:28.290 --> 00:20:28.850
+d'entreprise
+
+00:20:28.850 --> 00:20:30.010
+définis pour les appareils
+
+00:20:30.010 --> 00:20:30.410
+d'entreprise.
+
+00:20:30.830 --> 00:20:31.350
+Si l'ordinateur
+
+00:20:31.350 --> 00:20:32.110
+est perdu ou compromis
+
+00:20:32.110 --> 00:20:33.010
+l'attaquant n'a même pas besoin
+
+00:20:33.010 --> 00:20:34.430
+de tenter une authentification MFA.
+
+00:20:35.250 --> 00:20:35.850
+Il dispose déjà
+
+00:20:35.850 --> 00:20:36.730
+d'une session active.
+
+00:20:37.350 --> 00:20:38.250
+L'approche la plus intelligente
+
+00:20:38.250 --> 00:20:38.830
+consiste à baser
+
+00:20:38.830 --> 00:20:39.810
+les défis sur le contexte.
+
+00:20:40.290 --> 00:20:41.250
+Les politiques d'accès adaptatif
+
+00:20:41.250 --> 00:20:41.730
+sont construites
+
+00:20:41.730 --> 00:20:42.170
+hors de cette idée.
+
+00:20:42.570 --> 00:20:43.030
+Au lieu de traiter
+
+00:20:43.030 --> 00:20:43.650
+chaque connexion
+
+00:20:43.650 --> 00:20:44.270
+de la même manière
+
+00:20:44.270 --> 00:20:44.890
+elles évaluent
+
+00:20:44.890 --> 00:20:45.490
+le niveau de risque
+
+00:20:45.490 --> 00:20:46.150
+en temps réel.
+
+00:20:47.150 --> 00:20:47.850
+Le système sait
+
+00:20:47.850 --> 00:20:49.090
+si l'appareil est conforme
+
+00:20:49.090 --> 00:20:50.130
+si l'emplacement est attendu
+
+00:20:50.130 --> 00:20:50.710
+et si la session
+
+00:20:50.710 --> 00:20:51.770
+se comporte normalement.
+
+00:20:52.710 --> 00:20:53.430
+Lorsque tous ces voyants
+
+00:20:53.430 --> 00:20:53.870
+sont au vert
+
+00:20:53.870 --> 00:20:54.970
+le besoin de réauthentification
+
+00:20:54.970 --> 00:20:55.450
+répétitive
+
+00:20:58.850 --> 00:20:59.290
+sollicité
+
+00:20:59.290 --> 00:20:59.790
+mais uniquement
+
+00:20:59.790 --> 00:21:00.350
+lorsque quelque chose
+
+00:21:00.350 --> 00:21:01.450
+change de manière significative.
+
+00:21:01.950 --> 00:21:02.730
+C'est ainsi que l'on parvient
+
+00:21:02.730 --> 00:21:03.510
+à trouver l'équilibre
+
+00:21:03.510 --> 00:21:04.370
+entre contrôle strict
+
+00:21:04.370 --> 00:21:05.190
+et convivialité.
+
+00:21:06.470 --> 00:21:06.930
+Vous augmentez
+
+00:21:06.930 --> 00:21:07.570
+la sensibilité
+
+00:21:07.570 --> 00:21:08.130
+dans les scénarios
+
+00:21:08.130 --> 00:21:08.470
+à risque
+
+00:21:08.470 --> 00:21:08.910
+comme l'accès
+
+00:21:08.910 --> 00:21:09.690
+à des dossiers financiers
+
+00:21:09.690 --> 00:21:10.710
+depuis un appareil non géré
+
+00:21:10.710 --> 00:21:11.810
+et réduisez la friction
+
+00:21:11.810 --> 00:21:12.810
+lorsque l'utilisateur
+
+00:21:12.810 --> 00:21:13.710
+est sur un ordinateur
+
+00:21:13.710 --> 00:21:14.630
+fiable au bureau.
+
+00:21:15.790 --> 00:21:16.470
+Ce n'est pas de laxisme.
+
+00:21:16.890 --> 00:21:17.470
+C'est une allocation
+
+00:21:17.470 --> 00:21:18.490
+stratégique des ressources.
+
+00:21:19.470 --> 00:21:19.990
+Vous orientez
+
+00:21:19.990 --> 00:21:20.750
+le temps et l'attention
+
+00:21:20.750 --> 00:21:21.430
+des utilisateurs
+
+00:21:21.430 --> 00:21:22.050
+là où ça compte
+
+00:21:22.050 --> 00:21:22.970
+au lieu de les gaspiller
+
+00:21:22.970 --> 00:21:23.810
+sur des actions
+
+00:21:23.810 --> 00:21:24.630
+sans conséquence
+
+00:21:24.630 --> 00:21:25.350
+qui n'augmentent pas
+
+00:21:25.350 --> 00:21:26.150
+significativement
+
+00:21:28.850 --> 00:21:29.310
+c'est à la sécurité
+
+00:21:29.310 --> 00:21:29.830
+dans les aéroports.
+
+00:21:30.610 --> 00:21:31.210
+Tout le monde passe
+
+00:21:31.210 --> 00:21:32.270
+par un contrôle de base
+
+00:21:32.270 --> 00:21:33.450
+mais les fouilles intégrales
+
+00:21:33.450 --> 00:21:34.470
+et les scanners secondaires
+
+00:21:34.470 --> 00:21:35.050
+sont réservés
+
+00:21:35.050 --> 00:21:35.870
+aux cas préoccupants
+
+00:21:35.870 --> 00:21:36.910
+comme un objet signalé,
+
+00:21:37.230 --> 00:21:38.470
+un comportement anormal
+
+00:21:38.470 --> 00:21:39.910
+ou un contrôle aléatoire.
+
+00:21:41.290 --> 00:21:41.930
+Personne n'enlève
+
+00:21:41.930 --> 00:21:42.330
+ses chaussures
+
+00:21:42.330 --> 00:21:43.210
+à chaque porte du terminal
+
+00:21:43.210 --> 00:21:43.830
+car le système
+
+00:21:43.830 --> 00:21:44.510
+est conçu pour
+
+00:21:44.510 --> 00:21:45.930
+équilibrer le flux
+
+00:21:45.930 --> 00:21:46.430
+de passagers
+
+00:21:46.430 --> 00:21:47.390
+et la détection
+
+00:21:47.390 --> 00:21:48.090
+des menaces.
+
+00:21:49.530 --> 00:21:50.450
+En termes de Zero Trust,
+
+00:21:50.550 --> 00:21:51.330
+vos contrôles aléatoires
+
+00:21:51.330 --> 00:21:51.850
+prennent la forme
+
+00:21:51.850 --> 00:21:52.910
+de vérification de session
+
+00:21:52.910 --> 00:21:54.030
+lorsque le contexte change
+
+00:21:54.030 --> 00:21:54.830
+même si la connexion
+
+00:21:54.830 --> 00:21:56.290
+initiale était légitime.
+
+00:21:57.410 --> 00:21:57.910
+En supprimant
+
+00:21:57.910 --> 00:21:58.710
+les frictions inutiles
+
+00:21:58.710 --> 00:21:59.570
+vous ne facilitez pas
+
+00:21:59.570 --> 00:22:00.150
+seulement la vie
+
+00:22:00.150 --> 00:22:01.050
+des utilisateurs
+
+00:22:01.050 --> 00:22:02.270
+mais vous rendez
+
+00:22:02.270 --> 00:22:03.250
+les contrôles plus efficaces.
+
+00:22:03.830 --> 00:22:04.550
+Moins ils voient de messages,
+
+00:22:04.810 --> 00:22:05.830
+plus ils les prennent au sérieux.
+
+00:22:06.830 --> 00:22:08.030
+Une demande de reauthentification
+
+00:22:08.030 --> 00:22:08.810
+lors de l'approbation
+
+00:22:08.810 --> 00:22:09.810
+d'une transaction importante
+
+00:22:09.810 --> 00:22:10.890
+dans Dynamics 365
+
+00:22:10.890 --> 00:22:11.730
+n'est pas ignorée
+
+00:22:11.730 --> 00:22:12.730
+car elle est suffisamment rare
+
+00:22:12.730 --> 00:22:13.430
+pour se démarquer
+
+00:22:13.430 --> 00:22:14.470
+pour se démarquer.
+
+00:22:14.970 --> 00:22:15.510
+C'est précisément
+
+00:22:15.510 --> 00:22:16.050
+cette attention
+
+00:22:16.050 --> 00:22:16.790
+dont vous avez besoin
+
+00:22:16.790 --> 00:22:17.830
+lorsque vous comptez sur l'humain
+
+00:22:17.830 --> 00:22:19.570
+pour vérifier une action cruciale.
+
+00:22:20.390 --> 00:22:21.050
+L'objectif final
+
+00:22:21.050 --> 00:22:21.550
+du Zero Trust
+
+00:22:21.550 --> 00:22:22.110
+par conception
+
+00:22:22.110 --> 00:22:22.990
+dans ce contexte
+
+00:22:22.990 --> 00:22:23.730
+est une sécurité
+
+00:22:23.730 --> 00:22:24.670
+constamment présente
+
+00:22:24.670 --> 00:22:26.150
+mais rarement intrusive.
+
+00:22:26.150 --> 00:22:28.610
+l'automatisation en arrière-plan
+
+00:22:28.610 --> 00:22:29.050
+en vérifiant
+
+00:22:29.050 --> 00:22:29.790
+permanence
+
+00:22:29.790 --> 00:22:30.890
+la conformité des appareils,
+
+00:22:31.090 --> 00:22:31.890
+l'intégrité des sessions
+
+00:22:31.890 --> 00:22:32.850
+et les signaux d'identité
+
+00:22:32.850 --> 00:22:33.810
+sans alerter
+
+00:22:33.810 --> 00:22:35.210
+à chaque résultat conforme.
+
+00:22:36.010 --> 00:22:36.510
+Lorsqu'un élément
+
+00:22:36.510 --> 00:22:37.390
+déclenche le seuil de risque,
+
+00:22:37.490 --> 00:22:38.110
+l'utilisateur ressent
+
+00:22:38.110 --> 00:22:38.530
+dans la...

@@ -1,0 +1,757 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.660
+A maioria dos balanceadores de carga nunca lê a solicitação que está entregue.
+
+00:00:03.020 --> 00:00:06.180
+O Azure Application Gateway lê, e esse simples hábito muda o destino do seu tráfego.
+
+00:00:06.920 --> 00:00:10.100
+Ele analisa o caminho da URL e o nome do site antes de decidir qualquer coisa,
+
+00:00:10.500 --> 00:00:13.980
+então uma solicitação de imagens pode ir para um servidor, enquanto uma divide e vai para a outra.
+
+00:00:14.980 --> 00:00:19.540
+O mesmo Gateway também pode gerenciar o cadeado de criptografia e filtrar as solicitações de ataques durante o processo.
+
+00:00:20.060 --> 00:00:26.000
+Bem-vindos ao podcast M365FM, onde exploramos as pessoas, ideias e tecnologias que moldam o futuro do trabalho.
+
+00:00:26.000 --> 00:00:30.000
+Ao final, você será capaz de explicar em termos simples por que aquela caixa fica no meio do diagrama...
+
+00:00:31.380 --> 00:00:32.060
+...o que ele realmente é.
+
+00:00:32.600 --> 00:00:34.700
+Imagine um recepcionista na entrada de um prédio movimentado.
+
+00:00:35.080 --> 00:00:39.100
+Essa pessoa decide para onde cada visitante devia, e a decisão depende de quem passa pela porta.
+
+00:00:39.580 --> 00:00:42.700
+Agora, substitua os visitantes por solicitações web e o prédio pelo seu aplicativo.
+
+00:00:42.940 --> 00:00:46.880
+Essa é a ideia básica por trás do Azure Application Gateway, e não um balanceador de carga de tráfego web.
+
+00:00:47.260 --> 00:00:51.160
+O nome parece mais complexo do que a função, porque tudo o que ele faz é ficar na frente do seu aplicativo
+
+00:00:51.160 --> 00:00:52.760
+e decidir para onde cada solicitação devia.
+
+00:00:52.760 --> 00:00:57.080
+A diferença entre ele e um balanceador de carga mais antigo se resume a duas palavras, camada 7.
+
+00:00:57.860 --> 00:00:59.880
+Essa frase soa como uma pergunta de exame de certificação.
+
+00:01:00.200 --> 00:01:03.080
+Na verdade, trata-se de quanto da solicitação o seu balanceador de carga conseguiu.
+
+00:01:03.260 --> 00:01:05.360
+O balanceador de carga tradicional funciona em uma camada inferior.
+
+00:01:05.580 --> 00:01:07.140
+Ele apenas enxerga um endereço e uma porta.
+
+00:01:07.600 --> 00:01:10.500
+Pense em um funcionário da sala de correspondência que lê o envelope, mas nunca o abre,
+
+00:01:10.580 --> 00:01:12.540
+porque tudo o que chega parece praticamente igual para ele.
+
+00:01:13.400 --> 00:01:19.020
+O Application Gateway funciona na camada de aplicação, que é a camada 7 do modelo de rede que todos mencionam.
+
+00:01:19.740 --> 00:01:22.300
+Nessa camada, o Gateway lê a solicitação propriamente dita.
+
+00:01:22.760 --> 00:01:25.620
+Ele pode ver o caminho na URL e o nome do site solicitado,
+
+00:01:25.980 --> 00:01:29.080
+então decide com base no que o visitante está pedindo e veja apenas de onde ele veio.
+
+00:01:30.400 --> 00:01:32.760
+A própria documentação do Microsoft usa um exemplo claro.
+
+00:01:33.460 --> 00:01:36.640
+Uma solicitação com imagens na URL pode ir para servidores ajustados para imagens.
+
+00:01:37.000 --> 00:01:39.900
+Uma solicitação com vídeo pode ser direcionada para servidores feitos para vir.
+
+00:01:40.640 --> 00:01:43.160
+Esse é todo o segredo e é o que explica por que o serviço existe.
+
+00:01:43.160 --> 00:01:47.980
+É uma implantação real dentro da sua rede e ele reside em sua própria subrede dedicada.
+
+00:01:47.980 --> 00:01:52.860
+Isso significa que ele obtém sua própria fatia do seu espaço de endereçamento de rede em vez de compartilhar com outros recursos.
+
+00:01:53.180 --> 00:01:55.240
+Isso importa mesmo se você estiver executando apenas um site pequeno.
+
+00:01:55.720 --> 00:01:59.200
+No momento em que você tem mais de um servidor, alguém precisa decidir qual servidor recebe e qual solicitação.
+
+00:02:00.080 --> 00:02:02.260
+Fazer isso manualmente deixa de funcionar no dia em que você tem tráfego.
+
+00:02:02.260 --> 00:02:04.900
+Os recursos que ele traz se dividem em alguns grupos simples.
+
+00:02:05.340 --> 00:02:10.920
+O gerenciamento de tráfego abrange roteamento por caminho e por caminho de URL, hospedagem de vários sites e um gateway e redirecionamentos,
+
+00:02:11.020 --> 00:02:13.880
+agravação de cabeçalhos e uma forma de manter um visitante conectado ao mesmo servidor.
+
+00:02:14.220 --> 00:02:16.760
+Segurança abrange criptografia, criptografia de ponta a ponta e o firewall.
+
+00:02:17.260 --> 00:02:21.380
+A resiliência abrange escalonamento automático, redundância de zona e o endereço de front-end que nunca muda.
+
+00:02:21.960 --> 00:02:24.700
+A geração atual é chamada de V2 e ela chega em duas versões.
+
+00:02:25.480 --> 00:02:27.240
+A V2 Standard lida com roteamento e segurança.
+
+00:02:27.600 --> 00:02:29.900
+A UAF V2 adiciona proteção que bloqueia ataques.
+
+00:02:29.900 --> 00:02:34.600
+Se você seguir um tutorial mais antigo que mencione um gateway V1, essa geração já foi desativada,
+
+00:02:34.940 --> 00:02:37.140
+então trate-a como história em vez de algo para construir hoje.
+
+00:02:37.960 --> 00:02:41.440
+A maneira como uma solicitação encontra seu destino é a parte que ninguém desenha no diagrama.
+
+00:02:41.840 --> 00:02:43.680
+Portanto, acompanhe uma solicitação de fora para dentro.
+
+00:02:44.320 --> 00:02:45.400
+Listeners e regras de roteamento.
+
+00:02:45.900 --> 00:02:48.460
+Um listener à porta de entrada é mais simples do que o nome sugere.
+
+00:02:48.900 --> 00:02:51.660
+É um componente de configuração que verifica solicitações de conexão recebidas.
+
+00:02:52.600 --> 00:02:54.660
+Essas verificações são executadas com base em quatro itens.
+
+00:02:54.800 --> 00:02:57.060
+Porta, protocolo, host e endereço IP.
+
+00:02:57.060 --> 00:03:00.300
+Quando uma solicitação chega, o listener é quem a detecta e encaminha.
+
+00:03:01.100 --> 00:03:04.600
+Você pode executar vários listeners ao mesmo tempo e a documentação oficial mostra o padrão claramente.
+
+00:03:05.400 --> 00:03:13.580
+Imagine dois sites o que um balanceador de carga não consegue fazer.
+
+00:03:14.380 --> 00:03:16.320
+Não consegue fazer.
+
+00:03:17.380 --> 00:03:20.980
+Assim que um listener captura uma solicitação, uma regra de roteamento decide o que acontece assim.
+
+00:03:21.340 --> 00:03:24.060
+Essa regra vincula o listener ao pool de back-end que deve receber a solicitação.
+
+00:03:24.060 --> 00:03:28.400
+Ela também se conecta às configurações de back-end que descrevem como se comunicar com esses servidores.
+
+00:03:29.100 --> 00:03:32.140
+Ao criar um gateway no portal do Azure, ele constrói uma dessas regras para você.
+
+00:03:32.620 --> 00:03:38.420
+Você obtém um listener padrão e um pool de back-end padrão para ter um ponto de partida funcional, antes de personalizar qualquer coisa.
+
+00:03:38.980 --> 00:03:40.160
+As regras vêm em alguns formatos.
+
+00:03:40.420 --> 00:03:45.900
+O roteamento baseado em caminho de vídeo tráfego pelo que está na URL, que é como imagens de anúncios e vídeos, acabam em lugares diferentes.
+
+00:03:45.900 --> 00:03:53.420
+O roteamento de vários sites divide o tráfego pelo nome do site na solicitação, que é como um gateway, atende discretamente a vários sites sem que ninguém perceba.
+
+00:03:54.080 --> 00:03:55.640
+Uma regra também pode fazer algumas outras coisas.
+
+00:03:55.960 --> 00:03:58.620
+Ela pode redirecionar o tráfego para outra porta ou para um site totalmente diferente.
+
+00:03:59.080 --> 00:04:02.680
+Ela pode reescrever cabeçalhos de solicitação e resposta, bem como o URL, essa medida que passa.
+
+00:04:03.040 --> 00:04:05.720
+Então imagine o que acontece quando alguém digita seu endereço ao navegador.
+
+00:04:06.580 --> 00:04:09.280
+O navegador primeiro procura o endereço do gateway via DNS.
+
+00:04:09.580 --> 00:04:12.900
+E o Azure controla essa entrada, pois todo o gateway reside no domínio azure.com.
+
+00:04:12.900 --> 00:04:21.400
+O gateway aceita a solicitação em um listener, verifica no firewall, caso esteja ativado, e então entrega a regra de roteamento correspondente.
+
+00:04:22.100 --> 00:04:27.520
+Essa regra escolhe um pool de back-end e o gateway encaminha a solicitação para um dos servidores íntegros usando aquela ordem round-robin.
+
+00:04:28.040 --> 00:04:31.080
+Ele abre uma nova conexão com o back-end usando as configurações que você definiu.
+
+00:04:31.680 --> 00:04:37.420
+Antes que a solicitação saia, o gateway anexa alguns cabeçalhos extras para que sua aplicação ainda possa ver o cliente real e o endereço original.
+
+00:04:38.300 --> 00:04:42.480
+Uma regra mal configurada é aquela falha silenciosa que ninguém percebe até que os clientes reclamem.
+
+00:04:43.540 --> 00:04:46.020
+O gateway enviará alegremente um cliente real para o lugar errado.
+
+00:04:46.600 --> 00:04:49.700
+Por isso que vale a pena entender a configuração, mesmo que você nunca altere pessoalmente.
+
+00:04:50.620 --> 00:04:54.140
+Uma vez que uma regra escolheu um pool, o gateway ainda precisa responder a uma pergunta desconfortável.
+
+00:04:54.400 --> 00:04:56.520
+O que acontece quando o servidor nesse pool para de responder?
+
+00:04:58.180 --> 00:04:59.420
+Pool de back-end e teste de integridade.
+
+00:04:59.960 --> 00:05:02.560
+O pool de back-end é o grupo de servidores que realmente executa sua aplicação.
+
+00:05:02.920 --> 00:05:04.660
+É o destino para o qual a regra de roteamento aponta.
+
+00:05:04.660 --> 00:05:11.580
+Um pool pode conter uma máquina virtual específica, um conjunto de escala de máquinas virtuais, um endereço IP, nome de domínio completo ou um serviço de aplicativo.
+
+00:05:12.100 --> 00:05:15.300
+Assim que uma solicitação chega ao pool, o gateway é distribuído entre os servidores íntegros.
+
+00:05:15.700 --> 00:05:20.680
+Ele usa uma abordagem round-robin, o que significa simplesmente que ele percorre a lista em ordem em vez de sobrecarregar uma única máquina.
+
+00:05:21.360 --> 00:05:23.220
+A parte que justifica seu valor é o teste de integridade.
+
+00:05:23.720 --> 00:05:27.300
+O gateway verifica a integridade de cada servidor no pool por conta própria, sem que ninguém precise pedir.
+
+00:05:27.300 --> 00:05:31.040
+Ele para silenciosamente de enviar tráfego para qualquer servidor que considere nada.
+
+00:05:31.040 --> 00:05:32.480
+O teste também não desiste.
+
+00:05:32.980 --> 00:05:36.660
+Ele continua verificando o servidor inativo e começa a rotear tráfego para ele novamente, assim que ele responde corretamente.
+
+00:05:37.360 --> 00:05:43.280
+Cada instância do gateway executa essas verificações separadamente, então um pool é monitorado de vários lugares ao mesmo tempo em vez de por um processo isolado.
+
+00:05:43.720 --> 00:05:44.620
+A verificação padrão é sim.
+
+00:05:45.080 --> 00:05:50.800
+Ela envia uma solicitação web normal para o servidor na porta especificada nas configurações de back-end e trata uma resposta limpa como um sinal de vida.
+
+00:05:51.000 --> 00:05:55.160
+O teste padrão possui configurações que vale a pena conhecer, pois explicam a rapidez com que tudo isso acontece.
+
+00:05:56.040 --> 00:05:58.540
+Ele verifica cada servidor a cada 30 segundos por uma resposta.
+
+00:05:58.540 --> 00:06:01.960
+Ele marca um servidor como inativo após três falhas consecutivas.
+
+00:06:02.680 --> 00:06:11.800
+Qualquer resposta com um código de status entre 200 e 399 conta como íntegra, o que, em termos simples, significa que o servidor respondeu normalmente em vez de gerar um erro.
+
+00:06:12.340 --> 00:06:16.220
+O efeito prático é que um servidor inativo sai da rotação e retorna automaticamente.
+
+00:06:17.060 --> 00:06:19.100
+Ninguém precisa ficar sentado monitorando isso às 3 da manhã.
+
+00:06:19.680 --> 00:06:24.040
+Você também pode criar um teste personalizado que verifica um caminho específico ou aceita um código de resposta específico.
+
+00:06:24.040 --> 00:06:30.340
+Você pode até configurar para buscar uma palavra específica no corpo da resposta, o que ajuda quando um servidor responde com uma página de erro migável em vez de uma falha real.
+
+00:06:30.880 --> 00:06:35.920
+Vale saber que um caminho de verificação errado é o motivo clássico pelo qual as pessoas veem erros que em D2 e não conseguem entender.
+
+00:06:36.200 --> 00:06:38.760
+O gateway também verifica outra coisa em cada solicitação.
+
+00:06:39.420 --> 00:06:45.180
+Este próximo ponto não tem nada a ver com o tráfego e sim com aquele pequeno cadeado no seu navegador, onde o HTTPS é gerenciado.
+
+00:06:45.180 --> 00:06:50.740
+Esse cadeado é o TLS, a criptografia que impede que estranhos leiam o que trafega entre um navegador e um site.
+
+00:06:51.500 --> 00:06:54.760
+Quando o seu tráfego chega ao gateway, a conexão criptografada pode terminar ali mesmo.
+
+00:06:55.220 --> 00:06:56.620
+O nome disso é terminação TLS.
+
+00:06:57.200 --> 00:06:59.880
+Seus servidores de back-end recebem então uma solicitação normal vindo do gateway.
+
+00:07:00.300 --> 00:07:02.500
+Eles não precisam fazer todos os cálculos de criptografia por conta...
+
+00:07:02.500 --> 00:07:05.320
+Encerrar a criptografia no gateway resolve dois problemas de uma vez só.
+
+00:07:05.780 --> 00:07:09.000
+Seus servidores param de gastar esforço com criptografia e podem focar na sua aplicação.
+
+00:07:10.000 --> 00:07:14.200
+Você também gerencia certificados em um só lugar, em vez de buscá-los em cada máquina no pool.
+
+00:07:14.200 --> 00:07:17.380
+Esse local único é também onde ocorrem as inovações de certificados,
+
+00:07:17.460 --> 00:07:20.400
+então um certificado inspirando vira uma única coisa para corrigir em vez de uma dúzia.
+
+00:07:21.200 --> 00:07:24.520
+Se você preferir manter tudo criptografado durante todo o trajeto, o gateway também suporta isso.
+
+00:07:25.000 --> 00:07:27.140
+Ele abrirá uma nova conexão criptografada com o back-end.
+
+00:07:28.080 --> 00:07:31.460
+Um detalhe vale a pena saber, pois explica muitos comportamentos confusos mais tarde.
+
+00:07:32.260 --> 00:07:35.380
+O gateway adiciona cabeçalhos a cada solicitação antes de encaminhá-las,
+
+00:07:35.440 --> 00:07:38.360
+e esses cabeçalhos carregam o endereço real do cliente e o nome do host original.
+
+00:07:38.960 --> 00:07:41.900
+Sua aplicação ainda consegue identificar quem realmente fez a solicitação,
+
+00:07:42.000 --> 00:07:43.600
+embora a conexão venha agora do gateway.
+
+00:07:43.600 --> 00:07:46.740
+Por isso que uma solicitação que chega ao seu servidor parece ter vindo do gateway,
+
+00:07:46.840 --> 00:07:48.140
+mesmo quando começou em outro lugar.
+
+00:07:48.980 --> 00:07:52.680
+O gateway também pode ser configurado para adicionar, remover ou atualizar a cabeçalha de solicitação e resposta.
+
+00:07:53.240 --> 00:07:57.280
+É assim que as equipes corrigem situações como um back-end que insiste em ver um nome de host específico.
+
+00:07:57.760 --> 00:07:59.660
+A geração V2 foi criada para este trabalho,
+
+00:07:59.780 --> 00:08:04.160
+e a Microsoft relata que ela lida com um descarregamento de TLS muito mais rápido do que a versão anterior que substituiu.
+
+00:08:04.640 --> 00:08:07.720
+Para vocês, significa principalmente que a criptografia não é o que está deixando seu site lento.
+
+00:08:08.340 --> 00:08:10.380
+A criptografia impede que pessoas de fora leiam o tráfego.
+
+00:08:10.380 --> 00:08:13.500
+Ela não faz nada contra alguém enviando tráfego malicioso de propósito para você.
+
+00:08:13.860 --> 00:08:15.740
+Esse é um problema diferente, precisa de uma ferramenta diferente.
+
+00:08:16.420 --> 00:08:17.200
+O que impede os ataques?
+
+00:08:17.820 --> 00:08:20.620
+Essa ferramenta é o firewall de aplicação web, geralmente abreviado como o W.
+
+00:08:20.620 --> 00:08:23.540
+É a razão pela qual a versão do W.S. do Gateway existe.
+
+00:08:24.380 --> 00:08:28.900
+O roteamento decide para onde uma solicitação deve ir, e o firewall decide se ela deve ou não ser permitida.
+
+00:08:29.660 --> 00:08:31.880
+Ele inspeciona toda a solicitação, incluindo os cabeçalhos e o cú.
+
+00:08:32.160 --> 00:08:35.020
+Ele bloqueia os ataques que funcionam em sites desprotegidos há ano.
+
+00:08:35.540 --> 00:08:38.440
+Os dois primeiros a serem citados são a injeção de SQL e o cross-site script.
+
+00:08:38.900 --> 00:08:42.880
+A injeção de SQL ocorre quando o invasor tenta inserir comandos de banco de dados em um campo de formulário.
+
+00:08:43.620 --> 00:08:46.680
+O cross-site script acontece quando eles tentam inserir seu próprio código dentro da sua página.
+
+00:08:46.680 --> 00:08:54.400
+A lista continua a partir daí, cobrindo injeção de comando, request smuggling e vários outros truques que os invasores reutilizam porque continuam sendo eficazes.
+
+00:08:55.480 --> 00:08:57.440
+As regras vêm do Coral Set da Wasp.
+
+00:08:57.920 --> 00:09:00.900
+O Wasp é um projeto público que mantém uma lista compartilhada de ataques comuns ao web.
+
+00:09:01.440 --> 00:09:03.920
+O firewall da Microsoft usa essas regras e as mantém atualizadas.
+
+00:09:04.560 --> 00:09:12.220
+Herda anos de experiência coletiva em vez de escrever suas próprias regras de detecção do zero e recebe atualizações conforme novos padrões de ataque surgem em vez de corrigir sua própria lista, surgem.
+
+00:09:12.220 --> 00:09:16.820
+O firewall opera em um de dois modos e a diferença é mais importante do que os nomes sugerem.
+
+00:09:17.900 --> 00:09:20.080
+O modo de detecção monitora, registra e não bloqueia nada.
+
+00:09:21.580 --> 00:09:25.440
+O modo de prevenção bloqueia o ataque e o invasor recebe uma resposta 403 e uma conexão encerrada.
+
+00:09:26.020 --> 00:09:29.940
+A Microsoft recomenda executar um novo firewall no modo de detecção por um curto período em produção.
+
+00:09:30.620 --> 00:09:34.160
+Dessa forma, você pode identificar alarmes falsos e ajustá-los antes de começar a bloquear tráfego real.
+
+00:09:34.700 --> 00:09:37.420
+Nos bastidores, o firewall pontua cada solicitação por nível de gravidade.
+
+00:09:37.420 --> 00:09:43.000
+Uma correspondência de regra crítica adiciona cinco pontos, um erro adiciona quatro, um aviso adiciona três e uma notificação adiciona dois.
+
+00:09:43.600 --> 00:09:46.140
+Cinco pontos são suficientes para bloquear a solicitação no modo de prevenção.
+
+00:09:46.760 --> 00:09:50.060
+Uma correspondência séria é suficiente por si só, enquanto um único aviso menor não é.
+
+00:09:50.460 --> 00:09:51.640
+Dois extras valem uma linha cada.
+
+00:09:52.060 --> 00:09:55.100
+Você pode filtrar o tráfego por geografia para permitir ou bloquear países inteiros.
+
+00:09:55.420 --> 00:10:01.280
+Há também um conjunto de regras de gerenciamento de bots que separa rastreadoras de mecanismos de busca e verificados de bots que mentem sobre quem são.
+
+00:10:01.700 --> 00:10:06.920
+Um gateway pode colocar até 400 sites atrás do mesmo firewall, por isso essa proteção permanece acessível à medida que você adiciona sites.
+
+00:10:07.780 --> 00:10:10.980
+Toda essa proteção é inútil se o próprio gateway cair no momento em que o tráfego aumentar.
+
+00:10:11.780 --> 00:10:14.620
+Isso nos leva à parte na qual as pessoas raramente pensam até que seja importante.
+
+00:10:15.780 --> 00:10:16.760
+Escalabilidade sem preocupações.
+
+00:10:17.060 --> 00:10:21.700
+O escalonamento automático significa que o gateway adiciona a capacidade quando o tráfego aumenta e a libera quando o tráfego cai.
+
+00:10:21.920 --> 00:10:23.720
+Você nunca precisa adivinhar o tamanho certo com antecedência.
+
+00:10:24.260 --> 00:10:26.560
+Eu defino uma contagem mínima de instâncias de 0 a 100.
+
+00:10:27.040 --> 00:10:30.100
+Você também pode definir um máximo que é padronizado como 10 se você não especificar um.
+
+00:10:30.660 --> 00:10:37.100
+Cada instância vale aproximadamente 10 unidades de capacidade, então a contagem traduz de forma bastante direta o quanto de trabalho o gateway pode assumir.
+
+00:10:37.420 --> 00:10:46.440
+Como suas medidas funcionam em unidades de capacidade, uma única unidade cobre cerca de 2.500 conexões, pouco mais de 2 megabits por segundo de throughput e uma unidade de computação.
+
+00:10:46.860 --> 00:10:57.400
+Qualquer um desses três que você esgotar primeiro é o que define o custo e é por isso que um site com muitas requisições pequenas e um site transmitindo arquivos grandes podem acabar pagando valores diferentes pelo mesmo volume de tráfego.
+
+00:10:57.400 --> 00:11:00.680
+Mesmo com um mínimo de zero instâncias, o gateway permanece altamente disponível.
+
+00:11:01.260 --> 00:11:06.460
+O serviço é sempre implantado com mais de uma instância e o Azure substitui silenciosamente uma instância que para de funcionar.
+
+00:11:07.140 --> 00:11:08.840
+Dois detalhes honestos fazem isso parecer menos mágico.
+
+00:11:09.260 --> 00:11:11.740
+Colocar uma nova instância online pode levar de 3 a 5 minutos.
+
+00:11:12.160 --> 00:11:18.420
+Quando o gateway reduz a escala, ele drena as conexões existentes por 5 minutos antes de remover uma instância para que ninguém seja desconectado no meio de uma requisição.
+
+00:11:18.420 --> 00:11:23.720
+Essa é a diferença entre um plano de capacidade que parece bom no papel e um que funciona bem na hora que é preciso.
+
+00:11:24.620 --> 00:11:26.640
+Redundância de zona é outra metade do segredo para permanecer.
+
+00:11:26.960 --> 00:11:29.880
+Gateway se distribui por padrão em pelo menos duas zonas de disponibilidade.
+
+00:11:30.480 --> 00:11:33.960
+Uma zona de disponibilidade é um grupo fisicamente separado de data centers dentro da mesma região.
+
+00:11:34.940 --> 00:11:37.600
+Se uma dessas zonas falhar, o gateway continua operando a partir das outras.
+
+00:11:38.200 --> 00:11:43.360
+Esse é o tipo de resiliência que antes exigia a execução de dois gateways separados e um gerenciador de tráfego para equilibrá-los.
+
+00:11:44.680 --> 00:11:45.940
+Vale a pena mencionar um aviso claramente.
+
+00:11:45.940 --> 00:11:50.700
+As zonas só existem em algumas regiões, então quanta resiliência você terá depende de onde você faz a implantação.
+
+00:11:51.260 --> 00:11:53.060
+O benefício mais discreto acompanha tudo isso.
+
+00:11:53.760 --> 00:11:58.000
+O gateway V2 usa um endereço estático e permanece o mesmo durante toda a vida útil da implantação.
+
+00:11:58.400 --> 00:12:01.800
+Mesmo após uma reinicialização, seus registros de DNS nunca precisam perseguir um alvo móvel.
+
+00:12:02.240 --> 00:12:06.620
+Portanto, o gateway roteia, protege e dimensiona a si mesmo, o que levanta a pergunta que muitos fazem.
+
+00:12:07.140 --> 00:12:09.820
+Essa pergunta é se os outros balanceadores de carga do Azure fazem a mesma coisa.
+
+00:12:10.920 --> 00:12:12.420
+Os três balanceadores de carga do Azure.
+
+00:12:12.420 --> 00:12:16.700
+Três serviços, três nomes e a própria documentação da Microsoft os coloca na mesma família.
+
+00:12:17.220 --> 00:12:19.040
+Exatamente por isso que os iniciantes os confundem.
+
+00:12:19.120 --> 00:12:21.760
+A maneira mais clara de diferenciá-los é observar duas coisas.
+
+00:12:21.900 --> 00:12:25.100
+O quão detalhadamente cada um inspeciona o tráfego e a distância dos seus usuários.
+
+00:12:26.160 --> 00:12:29.200
+Como o seu balanceador de carga fica no nível mais baixo e trabalha na câmara 4,
+
+00:12:29.280 --> 00:12:33.360
+ele só vê o tráfego de rede, como o TCP e o DP, então ele nunca leu uma URL ou um nome de host.
+
+00:12:34.140 --> 00:12:37.840
+Ele simplesmente distribui os fluxos entre máquinas virtuais com quase nenhum atraso adicional.
+
+00:12:37.840 --> 00:12:40.780
+Ele foi querido para a velocidade e pode processar milhões de fluxos de uma só vida.
+
+00:12:41.340 --> 00:12:44.080
+Se sua aplicação usa um protocolo diferente do tráfego da web comum,
+
+00:12:44.300 --> 00:12:47.020
+ou se você deseja o caminho mais rápido possível, é esse que você deve escolher.
+
+00:12:48.140 --> 00:12:51.140
+Como o seu gateway de aplicativo fica uma camada acima e permanece regional,
+
+00:12:51.300 --> 00:12:54.460
+ele lê a solicitação, encerca a criptografia, pode executar um firewall.
+
+00:12:55.220 --> 00:12:57.080
+Ele vem dentro da sua própria rede, onde você pode vê-lo.
+
+00:12:58.120 --> 00:13:01.620
+Quando seus usuários estão principalmente em uma região e seu aplicativo é um aplicativo web normal.
+
+00:13:01.980 --> 00:13:03.160
+Esse é geralmente o meio termo ideal.
+
+00:13:03.160 --> 00:13:05.760
+Como seu front door fica ainda mais alto e é global,
+
+00:13:05.980 --> 00:13:09.240
+ele é na verdade uma rede de entrega de conteúdo envolvido em torno de um balanceador de carga
+
+00:13:09.240 --> 00:13:12.060
+para que possa armazenar seus arquivos estáticos em cache perto de seus usuários,
+
+00:13:12.140 --> 00:13:13.200
+além de rotear suas sucessões.
+
+00:13:13.580 --> 00:13:15.480
+Ele é construído na rede Edge da Microsoft,
+
+00:13:15.580 --> 00:13:19.200
+com mais de 118 locais de bordo espalhados por 100 áreas metropolitanas.
+
+00:13:19.960 --> 00:13:22.280
+A Microsoft diz que ele pode melhorar a latência até 3 vezes,
+
+00:13:22.440 --> 00:13:24.040
+enquanto executa seu próprio firewall na bordo.
+
+00:13:24.580 --> 00:13:28.300
+Se seus usuários estão espalhados pelo mundo e cada milissegundo de atraso custa algo,
+
+00:13:28.500 --> 00:13:30.340
+esta é a porta de entrada mundial.
+
+00:13:30.340 --> 00:13:33.420
+Há uma quarta opção que vale a pena mencionar porque o quadro esteja com.
+
+00:13:34.040 --> 00:13:36.800
+O Azure Traffic Manager faz roteamento global usando apenas DNS,
+
+00:13:36.900 --> 00:13:38.140
+o que é mais leve que os outros três.
+
+00:13:38.940 --> 00:13:40.880
+Ele não lê solicitações nem encerra a criptografia,
+
+00:13:40.960 --> 00:13:43.260
+por isso se encaixa quando tudo que você precisa é um endereço inteligente
+
+00:13:43.260 --> 00:13:44.660
+que aponta para a endpoint integral mais próxima.
+
+00:13:45.220 --> 00:13:47.280
+O que surpreende as pessoas é que esses serviços não são rivais.
+
+00:13:48.240 --> 00:13:50.280
+A orientação da Microsoft diz que cenários de ponta a ponta
+
+00:13:50.280 --> 00:13:51.740
+frequentemente se beneficiam da combinação dele.
+
+00:13:52.300 --> 00:13:55.000
+Um padrão comum coloca o front door na frente para a entrada global,
+
+00:13:55.000 --> 00:13:57.440
+enquanto um gateway de aplicativo fica regionalmente atrás dele,
+
+00:13:57.520 --> 00:13:59.340
+fazendo trabalho cuidadoso perto do seu aplicativo.
+
+00:13:59.340 --> 00:14:01.800
+O custo merece uma breve nota para que ninguém seja peruza.
+
+00:14:02.160 --> 00:14:03.900
+A Application Gateway V2 não tem cobrança inicial.
+
+00:14:04.380 --> 00:14:07.360
+Você paga um valor fixo por hora, independentemente de chegar a tráfego ou não,
+
+00:14:07.720 --> 00:14:10.360
+além de uma cobrança baseada na capacidade que você realmente consome.
+
+00:14:11.080 --> 00:14:13.320
+Como ilustração, a página de preços da Microsoft
+
+00:14:13.320 --> 00:14:15.960
+lista uma taxa fixa de cerca de um quarto de dólar por hora
+
+00:14:15.960 --> 00:14:18.200
+para a versão padrão e um pouco mais para a versão com Firewall.
+
+00:14:19.000 --> 00:14:22.680
+Esses números são exemplos que variam por região e não preços para planejar um orçamento.
+
+00:14:22.680 --> 00:14:25.420
+Portanto, verifia a página de preços atualizada antes de se comprometer.
+
+00:14:25.860 --> 00:14:27.240
+O quadro geral cabe em algumas poucas palavras.
+
+00:14:27.860 --> 00:14:30.320
+O Application Gateway é um balanceador de carga de camada 7,
+
+00:14:30.400 --> 00:14:32.560
+então ele lê as solicitações e veja apenas o endereço,
+
+00:14:32.640 --> 00:14:34.840
+e é por isso que ele pode enviar imagens para um lado e vídeo para outro.
+
+00:14:35.560 --> 00:14:36.720
+Os ouvintes são a porta de entrada,
+
+00:14:36.800 --> 00:14:39.360
+enquanto as regras de roteamento conectam essa porta ou o pull de back-end correto.
+
+00:14:39.880 --> 00:14:43.380
+A sonda de integridade mantém servidores inativos fora de rotação sem que ninguém precise monitorar.
+
+00:14:43.380 --> 00:14:46.380
+A terminação TLS remove o trabalho de criptografia dos seus servidores
+
+00:14:46.380 --> 00:14:49.260
+e o firewall de aplicativo web filtra as solicitações contra ataques conhecidos.
+
+00:14:49.600 --> 00:14:51.380
+O dimensionamento automático com redundância de zona
+
+00:14:51.380 --> 00:14:53.920
+mantém tudo funcionando quando o tráfego aumenta um datacenter fignativo.
+
+00:14:54.320 --> 00:14:55.640
+Aqui está a pergunta com a coisa refletíssima.
+
+00:14:56.100 --> 00:14:59.460
+Se um balanceador de carga consegue ler a solicitação, o nome do host e o caminho da URL,
+
+00:14:59.680 --> 00:15:02.480
+onde deve ficar a decisão sobre o que uma solicitação realmente tem permissão para fazer?
+
+00:15:03.160 --> 00:15:06.320
+Ela pertence ao Gateway na frente ou a aplicação que entende a regra de negócio?
+
+00:15:07.140 --> 00:15:08.020
+Pense nisso por um minuto,
+
+00:15:08.100 --> 00:15:10.460
+porque isso muda como você projeta tudo que está atrás da parte de entrada.
+
+00:15:10.460 --> 00:15:14.240
+Se você quer mais episódios que façam o Azure e o Microsoft 365
+
+00:15:14.240 --> 00:15:15.820
+parecerem menos uma parede de jargões,
+
+00:15:15.940 --> 00:15:18.360
+inscreva-se no M305FM e continuaremos a fazê-los.

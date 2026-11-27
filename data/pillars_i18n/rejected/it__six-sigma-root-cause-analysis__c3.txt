@@ -1,0 +1,74 @@
+<translation>
+## Livelli sigma e DPMO: il calcolo passo dopo passo
+
+Nessuna delle pagine più lette mostra questo calcolo in forma testuale, quindi lo riportiamo qui passo dopo passo.
+
+### Unità, difetti e opportunità
+
+| Termine | Significato | Esempio (corpo valvola) |
+|---|---|---|
+| Unità | l'articolo prodotto o lavorato | un corpo valvola idraulica |
+| Difetto | qualsiasi mancato rispetto di un requisito del cliente | una perdita al collaudo, un alesaggio fuori tolleranza |
+| Opportunità | una distinta possibilità di difetto che viene misurata | 8 caratteristiche critiche per la qualità controllate per corpo |
+| DPU | difetti per unità = difetti ÷ unità | |
+| DPO | difetti per opportunità = difetti ÷ (unità × opportunità) | |
+| DPMO | DPO × 1.000.000 | |
+
+### Esempio svolto 1: dal conteggio dei difetti al livello sigma
+
+Una cella lavora 5.000 corpi valvola al mese. Ogni corpo ha 8 caratteristiche che vengono ispezionate (opportunità). L'ispezione registra 46 difetti.
+
+- DPU = 46 ÷ 5.000 = 0,0092
+- DPO = 46 ÷ (5.000 × 8) = 46 ÷ 40.000 = 0,00115
+- DPMO = 0,00115 × 1.000.000 = **1.150**
+
+Per convertire il DPMO in un livello sigma, si trova lo z-value della distribuzione normale standard la cui coda superiore è uguale al DPO, e poi si aggiunge il consueto 1,5:
+
+- Resa per opportunità = 1 − 0,00115 = 0,99885
+- z per 0,99885 = 3,05 (da una tabella normale, oppure `=NORM.S.INV(0,99885)` in Excel)
+- Livello sigma (a breve termine, con spostamento) = 3,05 + 1,5 = **4,55**
+
+La formula alla base di ogni tabella sigma è DPMO = 1.000.000 × (1 − Φ(livello sigma − 1,5)), dove Φ è la distribuzione normale standard cumulativa [5]. In Excel: `=NORM.S.INV(1-DPMO/1000000)+1.5`.
+
+**Attenzione alle opportunità.** Il numero di opportunità è una scelta e determina il risultato. Se gli stessi 46 difetti vengono conteggiati rispetto a 20 "opportunità" per unità, il DPMO scende a 460 e il livello sigma sale a circa 4,8 senza che nulla sia migliorato. Definite le opportunità una sola volta per famiglia di prodotti, contate solo le caratteristiche effettivamente controllate e mantenete fissa la definizione. Per i confronti tra processi, DPU e resa al primo passaggio sono più difficili da manipolare.
+
+### La tabella di conversione sigma (calcolata)
+
+Valori calcolati con la formula sopra (DPMO di lungo periodo con lo spostamento di 1,5 sigma) e, per confronto, per un processo perfettamente centrato con entrambe le code conteggiate:
+
+| Livello sigma | DPMO (con spostamento 1,5σ) | Resa (con spostamento) | Difetti per milione se centrato, senza spostamento |
+|---|---|---|---|
+| 1 | 691.462 | 30,9% | 317.311 |
+| 2 | 308.538 | 69,1% | 45.500 |
+| 3 | 66.807 | 93,3% | 2.700 |
+| 4 | 6.210 | 99,38% | 63 |
+| 4,5 | 1.350 | 99,865% | 6,8 |
+| 5 | 233 | 99,977% | 0,57 |
+| 6 | 3,4 | 99,99966% | 0,002 |
+
+L'ultima colonna mostra perché lo spostamento conta: senza di esso, un processo a sei sigma produrrebbe circa due difetti per miliardo, non 3,4 per milione.
+
+### Esempio svolto 2: resa di processo cumulata (rolled throughput yield)
+
+Un componente attraversa quattro fasi di processo. Le rese al primo passaggio sono del 98%, 95%, 99% e 97%. La resa di processo cumulata (RTY), cioè la probabilità che un'unità superi tutte le fasi senza alcuna rilavorazione, è il prodotto:
+
+RTY = 0,98 × 0,95 × 0,99 × 0,97 = **0,894**, ovvero 89,4%
+
+Ogni fase, presa singolarmente, sembra accettabile; insieme, più di un'unità su dieci richiede rilavorazione o scarto in qualche punto. L'RTY è spesso una metrica più utile per un responsabile di stabilimento rispetto al livello sigma, perché evidenzia la "fabbrica nascosta" dei cicli di rilavorazione. Per le definizioni della resa al primo passaggio e delle metriche correlate, vedere la [guida ai KPI manifatturieri](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### Esempio svolto 3: il valore di un livello sigma
+
+L'esempio guida di questo articolo: uno stabilimento spedisce 48.000 corpi valvola all'anno. Il 2,8% non supera il collaudo di tenuta finale. Ogni guasto costa 85 $ di rilavorazione, ricollaudo e scarto (cifra illustrativa).
+
+- Guasti all'anno: 48.000 × 0,028 = 1.344
+- Costo: 1.344 × 85 $ = 114.240 $ all'anno
+- Livello sigma: DPO = 0,028 per unità (una sola opportunità: perdita o nessuna perdita) -> z = 1,91 -> **3,41 sigma**
+
+Se un progetto DMAIC riduce il tasso di guasto allo 0,6%:
+
+- Guasti: 48.000 × 0,006 = 288; costo: 24.480 $
+- Risparmio annuo: 89.760 $ (al netto dei costi del progetto)
+- Livello sigma: z per 0,994 = 2,51 -> **4,01 sigma**
+
+Passare da circa 3,4 a circa 4,0 sigma è un risultato realistico di un solo progetto. Passare da 4,5 a 6 sigma richiede di solito una riprogettazione, non un progetto.
+</translation>
