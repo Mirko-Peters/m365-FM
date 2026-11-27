@@ -1,0 +1,1516 @@
+WEBVTT
+
+00:00:00.320 --> 00:00:05.900
+Willkommen zum M365FM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.220 --> 00:00:07.880
+Eröffnung, warum sollte man einen ganzen Server mieten?
+
+00:00:08.840 --> 00:00:13.380
+Warum sollte man einen ganzen physischen Server in Azure mieten, wenn man einfach eine virtuelle Maschine erstellen und dafür bezahlen kann?
+
+00:00:13.740 --> 00:00:16.420
+Hier ist ein einfacher Denkansatz. Stellen Sie sich ein Bürogebäude vor.
+
+00:00:16.880 --> 00:00:19.220
+Eine normale virtuelle Azure-Maschine ist wie ein gemietetes Büro.
+
+00:00:19.800 --> 00:00:23.280
+Sie arbeiten hinter einer verschlossenen Tür, aber andere Unternehmen mieten Büros im selben Gebäude an.
+
+00:00:24.360 --> 00:00:28.060
+Da ist es so, als würden Sie mit Ihrem dedizierten Host eine ganze Etage für Ihr eigenes Unternehmen reservieren.
+
+00:00:28.060 --> 00:00:29.940
+Das klingt komfortabel, kostet aber auch mehr.
+
+00:00:30.480 --> 00:00:35.120
+Am Ende dieses Beitrags werden Sie die Gründe für die Isolierung, die Wartungskontrolle und die Lizenzierung verstehen.
+
+00:00:35.560 --> 00:00:39.640
+Außerdem werden Sie den teuren Fehler verstehen, den Menschen machen, wenn Sie einen Host reservieren und ihn dann größtenteils leerlassen.
+
+00:00:40.760 --> 00:00:42.460
+Das Problem, das ein dedizierter Host löst.
+
+00:00:42.900 --> 00:00:46.520
+Die meisten virtuellen Azure-Maschinen werden im Hintergrund auf gemeinsam genutzter physische Hardware ausgeführt.
+
+00:00:47.120 --> 00:00:49.360
+Ihre VM bleibt von der VM eines anderen Unternehmens getrennt.
+
+00:00:50.180 --> 00:00:56.120
+Azure verwendet Virtualisierung, um das Betriebssystem, die Dateien, den Arbeitsspeicher und den Netzwerkverkehr jedes Kunden getrennt zu halten.
+
+00:00:56.120 --> 00:00:58.540
+Für die meisten Workloads ist das genau das, was Sie brauchen.
+
+00:00:59.100 --> 00:01:04.440
+Sie erstellen eine VM, wählen Ihre Größe aus, installieren Ihre App und Azure stellt Sie auf verfügbare Hardware in einem seiner Rechenzentren bereit.
+
+00:01:04.720 --> 00:01:05.940
+Sie sehen den physischen Server nicht.
+
+00:01:06.320 --> 00:01:10.220
+Das ist in der Regel nicht erforderlich, aber einige Organisationen benötigen mehr als nur eine logische Trennung.
+
+00:01:10.760 --> 00:01:14.360
+Sie müssen wissen, dass kein anderer Kunde virtuelle Maschinen auf demselben physischen Server, wie sie selbst ausführt.
+
+00:01:14.700 --> 00:01:15.600
+Warum sollte das wichtig sein?
+
+00:01:15.980 --> 00:01:19.120
+Manchmal ist es auf eine Unternehmensregel, eine Branchenvorschrift oder einen Kundenvertrag zurückzuführen.
+
+00:01:19.120 --> 00:01:27.420
+Eine Bank, ein Gesundheitsdienstleister, eine Regierungsstelle oder ein Unternehmen, das mit vertraulichen Informationen umgeht, benötigt möglicherweise eine Hardware-Isolierung als Teil seiner Sicherheitsüberprüfung.
+
+00:01:27.620 --> 00:01:31.520
+Sie müssen nachweisen, wo eine Workload ausgeführt wird und belegen, dass der Host nur Ihrer Organisation gehört.
+
+00:01:32.000 --> 00:01:34.660
+In anderen Fällen ist die Software-Lizenzierung das Problem.
+
+00:01:35.140 --> 00:01:39.300
+Einige Windows-Server- und SQL-Server-Lizenzen funktionieren anders, wenn Sie einen physischen Host lizenzieren.
+
+00:01:39.300 --> 00:01:45.100
+Wenn ein Unternehmen bereits überberechtigte Lizenzen verfügt, kann das Platzieren vieler VMs auf einem dedizierten Host die Kostenkalkulation ändern.
+
+00:01:45.760 --> 00:01:47.000
+Das bedeutet nicht, dass es immer Geld spart.
+
+00:01:47.420 --> 00:01:51.100
+Der Host selbst kostet immer noch Geld, aber schafft eine Option, die gemeinsam genutzte VMs nicht bietet.
+
+00:01:51.360 --> 00:01:53.060
+Dann gibt es Workloads, bei denen die Platzierung wichtig ist.
+
+00:01:53.460 --> 00:02:00.060
+Stellen Sie sich vor, ein Unternehmen führt mehrere stark ausgelastete Anwendungs-VMs auf normale, gemeinsam genutzte Azure-Hardware aus der Azure den Host und der Host unter jeder VHS will.
+
+00:02:00.240 --> 00:02:05.100
+Dadurch bleibt Azure flexibel, was nützlich ist, aber das Unternehmen wählt nicht genau aus, auf welchem physischen Server diese VMs ausgeführt werden.
+
+00:02:05.100 --> 00:02:10.080
+Mit einem dedizierten Host kann die Organisation entscheiden, welche ihrer VMs sich einen physischen Server teilen.
+
+00:02:10.420 --> 00:02:16.720
+Das kann hilfreich sein, wenn eine App kontinuierlichen Zugriff auf die Arbeitsspeicher- und Speicherressourcen des Hosts benötigt oder wenn ein Team eine genaue Kontrolle darüber wünscht, wo sich die Workloads befinden.
+
+00:02:17.160 --> 00:02:17.860
+Beachten Sie den Unterschied.
+
+00:02:18.400 --> 00:02:20.340
+Eine normale Azure VM bietet Ihnen einen virtuellen Computer.
+
+00:02:21.100 --> 00:02:24.900
+Ein dedizierter Host gibt Ihnen die Kontrolle über den physischen Server unter einer Gruppe virtueller Computer.
+
+00:02:25.140 --> 00:02:34.500
+Vor der Einführung von Cloud-Diensten kauften Unternehmen Server, installierten sie in ihren eigenen Serverräumen, ersetzten defekte Teile, planten die Stromversorgung und Kühlung und warteten auf neue Hardware, wenn der Platz nicht ausreichte.
+
+00:02:35.100 --> 00:02:38.740
+Das brachte Kontrolle, aber auch viel Arbeit, ändert diese Regelung.
+
+00:02:39.340 --> 00:02:40.660
+Azure besitzt nach wie vor das Rechenzentrum.
+
+00:02:41.060 --> 00:02:45.920
+Azure kümmert sich um das Gebäude, die Stromversorgung, die Kühlung, die Hardware-Reparaturen und die Plattform und die Plattform, auf der die VW ausgeführt wird.
+
+00:02:46.280 --> 00:02:49.680
+Ihre Organisation erhält keinen Server per Post oder beginnt um Mitternacht mit dem Austausch von Datenträgern.
+
+00:02:50.140 --> 00:02:53.780
+Stattdessen reservieren Sie die Kapazität eines physischen Azure-Servers für Ihre eigenen Workloads.
+
+00:02:54.320 --> 00:02:55.220
+Dieser Mittelweg ist wichtig.
+
+00:02:55.620 --> 00:03:00.760
+Sie erhalten mehr Kontrolle als bei einer regulären gemeinsam genutzten VM, während Azure weiterhin das physische Rechenzentrum im Hintergrund betreibt.
+
+00:03:00.760 --> 00:03:05.220
+Was genau erhalten Sie also, wenn Sie einen dedizierten Azure-Host erstellen?
+
+00:03:06.060 --> 00:03:07.760
+Was ist ein dedizierter Azure-Host eigentlich?
+
+00:03:08.440 --> 00:03:09.380
+Das ist die einfachste Definition.
+
+00:03:09.920 --> 00:03:15.280
+Ein dedizierter Azure-Host ist ein physischer Server in einem Azure-Rechenzentrum, den Azure für ein Abonnement reserviert.
+
+00:03:15.640 --> 00:03:16.180
+Nur für eine einzige.
+
+00:03:16.480 --> 00:03:17.280
+Das ist die einfache Version.
+
+00:03:18.080 --> 00:03:22.380
+Sie erstellen weiterhin normale virtuelle Azure-Maschinen und diese werden weiterhin auf einer Virtualisierungsebene ausgeführt.
+
+00:03:22.380 --> 00:03:28.040
+Sie melden sich nicht direkt bei einem bare Metal-Server an oder installieren selbst ein Betriebssystem auf der physischen Maschine.
+
+00:03:28.960 --> 00:03:35.040
+Stattdessen steht Azure Ihrem Abonnement einen privaten Pool an physischer Kapazität zur Verfügung und kein anderer Kunde kann seine virtuellen Maschinen auf diesem Host platzieren.
+
+00:03:35.340 --> 00:03:39.920
+Stellen Sie es sich weniger so vor, als ob Sie ein Gebäude besitzen, sondern eher wie die Reservierung einer privaten Etage in einer privaten Etage im Büro.
+
+00:03:40.060 --> 00:03:40.740
+Azure besitzt ein Tor.
+
+00:03:41.160 --> 00:03:45.540
+Azure kümmert sich um Stromversorgung, Kühlung, Netzwerk, Sicherheit am Haupteingang und Reparaturen, wenn Hardware ausfällt.
+
+00:03:45.840 --> 00:03:49.680
+Ihr Unternehmen reserviert diese Etage und entscheidet dann, welche seiner Teams die Räume darauf nutzen.
+
+00:03:50.020 --> 00:03:51.700
+Diese private Etage ist der dedizierter Host.
+
+00:03:51.700 --> 00:03:52.960
+Das wichtige Wort ist Host.
+
+00:03:53.780 --> 00:03:58.840
+Ein Host ist der physische Computer, der Prozessorkerne, Arbeitsspeicher und andere Ressourcen für virtuelle Maschinen bereitstellt.
+
+00:03:59.280 --> 00:04:02.040
+Bei einer standardmäßigen Azure VM bildet Azure im Hintergrund einen geeigneten Host aus.
+
+00:04:02.580 --> 00:04:07.040
+Mit einem dedizierten Azure-Host erstellen Sie den Host als Azure-Ressource und platzieren kompatible VMs darauf.
+
+00:04:07.540 --> 00:04:11.580
+So erhalten Sie Einblick in die physische Ebene, ohne die Aufgabe des Betriebs eines Rechenzentrums zu übernehmen.
+
+00:04:11.960 --> 00:04:13.540
+Ein Host kann mehr als seine VM ausführen.
+
+00:04:14.020 --> 00:04:18.820
+Sie können beispielsweise mehrere Anwendungs-Server, einen Datenbank-Server und einen Testserver auf demselben dedizierten Host platzieren.
+
+00:04:18.820 --> 00:04:23.440
+Solange der Host über genügend Speicherplatz verfügt, können diese VMs unterschiedliche Größen haben.
+
+00:04:23.520 --> 00:04:25.760
+Sie müssen jedoch aus der VM-Größenfamilie stammen, die der Host unterstützt.
+
+00:04:26.000 --> 00:04:27.320
+Der letzte Teil ist für manche Leute verwirrend.
+
+00:04:27.660 --> 00:04:31.440
+Sie können keinen dedizierten Host erstellen und davon ausgehen, dass jede Azure-VM-Größe darauf ausgeführt werden kann.
+
+00:04:31.680 --> 00:04:36.380
+Eine Host-School, die Bezeichnung von Azure für einen Host-Typ, entspricht einer bestimmten VM-Familie und einem bestimmten Hardware-Typ.
+
+00:04:36.380 --> 00:04:41.020
+Falls Ihr Host eine Familie unterstützt, wählen Sie beim Befüllen die VM-Größen aus dieser Familie aus.
+
+00:04:41.700 --> 00:04:43.740
+Stellen Sie sich ein Parkhaus vor, das für normale Autos gebaut ist.
+
+00:04:44.240 --> 00:04:48.760
+Sie können Kleinwagen, Limousinen und SUVs in den Stellplätzen parken, wenn Sie den Regeln für dieses Parkhaus entsprechen.
+
+00:04:49.680 --> 00:04:52.580
+Sie können jedoch keinen Lieferwagen in ein Parkhaus fahren, das nicht dafür gebaut wurde.
+
+00:04:53.140 --> 00:04:54.180
+Dasselbe Konzept gilt hier.
+
+00:04:54.560 --> 00:04:57.460
+Wenn Sie die auf dem Host verbleibende Kapazität durch das Platzieren von VMs nutzen,
+
+00:04:57.800 --> 00:05:00.740
+kann auf dem Host, sofern auf dem Host noch Platz ist, eine weitere kompatible VM gestartet werden.
+
+00:05:00.740 --> 00:05:03.980
+Wenn auf dem Host nicht mehr genügend Prozesse oder Arbeitsweicherkapazität vorhanden ist,
+
+00:05:04.100 --> 00:05:07.040
+kann Azure keine weitere VM darauf unterbringen, selbst wenn Sie eine hinzufügen möchten.
+
+00:05:07.780 --> 00:05:11.740
+Ein dedizierter Host bedeutet auch nicht, dass seine VM automatisch alle Ressourcen auf dem Server erhält.
+
+00:05:12.300 --> 00:05:14.780
+Entscheidend, wie die Host-Kapazität zwischen Ihren VMs aufgeteilt wird.
+
+00:05:15.380 --> 00:05:17.660
+Ein Unternehmen stellt möglicherweise einige große VM-Host bereit.
+
+00:05:18.120 --> 00:05:20.080
+Ein anderes Unternehmen betreibt möglicherweise eine große Anzeige ab.
+
+00:05:20.680 --> 00:05:23.860
+Beide Ansätze verwenden dasselbe grundlegende Modell, einen physischen Server,
+
+00:05:24.200 --> 00:05:26.280
+der in virtuelle Computer für eine Organisation unterteilt ist.
+
+00:05:26.640 --> 00:05:30.120
+Bevor Sie die physischen Hosts erstellen, erstellen Sie normalerweise eine sogenannte Host-Gruppe.
+
+00:05:30.740 --> 00:05:32.940
+Eine Host-Gruppe ist ein Container für dedizierte Hosts.
+
+00:05:33.580 --> 00:05:37.040
+Sie teilt Azure mit, wo diese Hosts hingehören, in welcher Azure-Region Sie sie auswählen
+
+00:05:37.040 --> 00:05:38.580
+und wo Sie einen Host verwenden, also eine Verfügbarkeit zu haben.
+
+00:05:39.000 --> 00:05:41.920
+Sie können sich eine Host-Gruppe als eine Bezeichnung für eine Reihe reservierter Etagen
+
+00:05:41.920 --> 00:05:43.380
+innerhalb eines Azure-Standorts vorstellen.
+
+00:05:44.100 --> 00:05:46.200
+Sie hält zusammengehörige Hosts aus Verwaltungssicht zusammen
+
+00:05:46.200 --> 00:05:49.240
+und gibt Azure gleichzeitig die erforderlichen Informationen darüber, wo Sie sich befinden sollen.
+
+00:05:49.840 --> 00:05:51.880
+Die Host-Gruppe führt Ihre App nicht aus, sondern der Host.
+
+00:05:52.140 --> 00:05:54.340
+Und die VM führt Ihr Betriebssystem und Ihre Anwendung aus.
+
+00:05:54.560 --> 00:05:57.120
+Das klingt nach vielen Ebenen, ist aber einfacher, wenn Sie die Reihenfolge sehen.
+
+00:05:57.740 --> 00:05:58.840
+Zuerst erstellen Sie eine Host-Gruppe.
+
+00:05:58.840 --> 00:06:01.280
+Darin erstellen Sie einen oder mehrere dedizierte Hosts.
+
+00:06:01.520 --> 00:06:04.220
+Dann erstellen Sie kompatible VMs und platzieren Sie auf diesen Hosts.
+
+00:06:04.860 --> 00:06:06.860
+Sie können einen bestimmten Host für eine VM auswählen
+
+00:06:06.860 --> 00:06:10.560
+oder Azure in einigen Setups einen verfügbaren Host innerhalb der Host-Gruppe auswählen lassen.
+
+00:06:11.380 --> 00:06:14.620
+Das bedeutet, dass Sie mit einem dedizierten Host die Kontrolle über die Platzierung haben,
+
+00:06:14.740 --> 00:06:15.980
+Azure jedoch nicht aus dem Spiel nehmen.
+
+00:06:16.620 --> 00:06:18.920
+Azure führt weiterhin die Plattform aus, überwacht die Integrität der Hosts
+
+00:06:18.920 --> 00:06:20.500
+und sorgt dafür, dass das Rechenzentrum betriebsbereit ist.
+
+00:06:20.960 --> 00:06:24.000
+Sie entscheiden, wo Ihre VMs innerhalb der bereits reservierten Kapazität landen.
+
+00:06:24.000 --> 00:06:28.440
+Als nächstes fügen wir die einzelnen Komponenten zusammen, da Host-Gruppen,
+
+00:06:28.800 --> 00:06:32.320
+Hosts, VMs, Zonen und Philodomänen jeweils einen anderen Teil des Problems lösen.
+
+00:06:33.860 --> 00:06:34.920
+Wie die Bausteine zusammenpassen.
+
+00:06:35.640 --> 00:06:39.020
+Wie richten Sie dies also so ein, dass ein Problem mit einer Hardware-Komponente überstanden werden kann?
+
+00:06:39.680 --> 00:06:40.520
+Beginnen Sie mit der Host-Gruppe.
+
+00:06:40.960 --> 00:06:44.660
+Wenn Sie eine Host-Gruppe erstellen, wählen Sie eine Azure-Region wie Europa, Westen oder USA aus.
+
+00:06:45.360 --> 00:06:49.200
+Dadurch wird die Gruppe im weiteren Azure-Standort platziert, an dem Ihre VMs und Unterstützendienste ausgeführt werden.
+
+00:06:49.600 --> 00:06:51.200
+Sie können auch eine Verfügbarkeitszone auswählen.
+
+00:06:51.680 --> 00:06:55.280
+Eine Verfügbarkeitszone ist ein separater physischer Standort innerhalb einer Azure-Region.
+
+00:06:55.820 --> 00:06:58.420
+Jede Zone verwendet ihre eigene Stromversorgung, Kühlung und Netzwerkausstatt.
+
+00:06:58.800 --> 00:07:01.360
+Wenn ein Problem eine Zone betrifft, kann eine andere Zone weiter ausgeführt werden.
+
+00:07:01.740 --> 00:07:03.560
+Das bedeutet, dass eine Host-Gruppe zu einer Zone gehört.
+
+00:07:03.960 --> 00:07:07.380
+Wenn Sie die Zonenplatzierung auswählen, können Sie eine Host-Gruppe nicht über mehrere Zonen hinweg platzieren.
+
+00:07:07.580 --> 00:07:11.620
+Wenn Ihre Anwendung in Zone 1 und Zone 2 ausgeführt werden muss, erstellen Sie separate Host-Gruppen.
+
+00:07:11.920 --> 00:07:14.320
+Eine Gruppe wird in Zone 1 und eine andere in Zone 2 platziert.
+
+00:07:14.660 --> 00:07:17.080
+Dann fügen Sie jeder Gruppe Hosts hinzu und verteilen Ihre VMs darauf.
+
+00:07:17.500 --> 00:07:19.100
+Das klingt nach einem zusätzlichen Setup als auch ist.
+
+00:07:19.600 --> 00:07:23.240
+Sie entscheiden jedoch, wo die physischen Grenzen liegen, bevor ein Fehler das Problem verursacht.
+
+00:07:24.280 --> 00:07:27.360
+Nachdem die Host-Gruppe erstellt wurde, erstellen Sie darin dedizierte Hosts.
+
+00:07:28.200 --> 00:07:31.200
+Jeder Host ist einem physischen Server in einem Azure-Rechenzentrum zugeordnet.
+
+00:07:31.600 --> 00:07:34.180
+Und Azure reserviert diese Kapazität, wenn der Host erstellt wird.
+
+00:07:34.460 --> 00:07:37.300
+Sie wählen den Host-Typ basierend auf der VM-Familie aus, die Sie verwenden möchten.
+
+00:07:37.640 --> 00:07:40.440
+Anschließend erhalten Sie von Azure einen Server, auf dem kompatible VMs ausgeführt werden.
+
+00:07:40.640 --> 00:07:41.760
+Planen Sie in dieser Phase im Voraus.
+
+00:07:41.760 --> 00:07:46.040
+Wenn Ihre Anwendung heute eine VM-Familie verwendet, aber später eine andere Familie benötigt,
+
+00:07:46.100 --> 00:07:48.520
+die möglicherweise einen anderen dedizierten Host-Typ erfordert,
+
+00:07:48.920 --> 00:07:51.440
+wird ein Host nach dem Erstellen nicht zu einem anderen Hardware-Typ.
+
+00:07:52.100 --> 00:07:55.600
+Die Auswahl des Host-Typs beginnt also mit den VM-Größen, die Ihre Workloads tatsächlich benötigen.
+
+00:07:55.880 --> 00:07:57.760
+Sobald die Hosts bereit sind, platzieren Sie die VMs darauf.
+
+00:07:58.120 --> 00:08:00.740
+Sie können einen bestimmten Host auswählen, wenn Sie die Platzierung direkt streiten möchten.
+
+00:08:01.100 --> 00:08:05.980
+Sie können beispielsweise festlegen, dass eine Anwendungs-VM auf Host A und eine andere auf Host B gehört.
+
+00:08:05.980 --> 00:08:10.900
+Azure kann VMs auch automatisch in einer Host-Gruppe platzieren, wenn die automatische Platzierung aktiviert ist.
+
+00:08:11.380 --> 00:08:13.840
+In diesem Fall teilen Sie Azure mit, welche Host-Gruppe verwendet werden soll,
+
+00:08:13.980 --> 00:08:16.380
+und Azure wählt einen verfügbaren Host mit ausreichender Kapazität aus.
+
+00:08:16.760 --> 00:08:20.320
+Sie bleiben weiterhin innerhalb Ihrer reservierten Hardware, aber Azure übernimmt die letzte Platzierungsentscheidung.
+
+00:08:20.860 --> 00:08:21.700
+Beide Ansätze funktionieren.
+
+00:08:22.100 --> 00:08:24.980
+Die manuelle Platzierung bietet Ihnen eine klare Übersicht darüber, wo genau jede Faust geführt wird.
+
+00:08:25.260 --> 00:08:29.100
+Die automatische Platzierung kann den Aufwand reduzieren, wenn Sie über mehrere Hosts und kompatible VMs verfügen.
+
+00:08:29.100 --> 00:08:31.640
+Sie benötigen jedoch weiterhin ausreichend freien Speicherplatz auf diesen.
+
+00:08:32.020 --> 00:08:33.820
+Azure überprüft die Kapazität beim Starten jeder Form.
+
+00:08:34.280 --> 00:08:37.060
+Ein Host verfügt möglicherweise über verfügbare Prozessorkapazität,
+
+00:08:37.160 --> 00:08:39.680
+die VM muss jedoch auch zur unterstützten Größenfamilie des Hosts passen.
+
+00:08:39.980 --> 00:08:41.880
+Bei der Platzierung geht es also nicht nur darum, leeren Speicherplatz.
+
+00:08:42.300 --> 00:08:44.300
+Die VM muss dem Typ des reservierten Servers entsprechen.
+
+00:08:44.920 --> 00:08:46.860
+Zonen schützen Sie nun vor einem größeren Standortproblem.
+
+00:08:47.620 --> 00:08:49.100
+Fehlerdomänen helfen bei kleineren Hardwareproblemen.
+
+00:08:49.780 --> 00:08:52.080
+Denken Sie an die Reihen von Server-Racks in einem Rechenzentrum.
+
+00:08:52.900 --> 00:08:55.880
+Eine Fehlerdomäne trennt Hosts über verschiedene physische Rack-Gruppen hinweg,
+
+00:08:55.880 --> 00:08:59.300
+sodass ein Problem auf Rack-Ebene weniger wahrscheinlich jeden Host in Ihrem Entwurf betrifft.
+
+00:08:59.860 --> 00:09:03.140
+Wenn Sie eine Host-Gruppe erstellen, wählen Sie die Anzahl der benötigten Fehlerdomänen aus.
+
+00:09:03.660 --> 00:09:06.900
+Wenn Sie dann Hosts erstellen, weisen Sie jeden Host einer Fehlerdomäne zu.
+
+00:09:07.560 --> 00:09:09.580
+Ihre VMs benötigen keine eigenen Fehlerdomäneinstellungen.
+
+00:09:10.000 --> 00:09:11.520
+Der Host trifft diese Platzierungsentscheidung.
+
+00:09:12.000 --> 00:09:12.760
+Hier ist ein Detail wichtig.
+
+00:09:13.340 --> 00:09:16.300
+Zwei Hosts, die verschiedenen Fehlerdomänen zugewiesen sind, werden voneinander getrennt.
+
+00:09:16.880 --> 00:09:19.920
+Hosts mit derselben Fehlerdomäne befinden sich jedoch nicht automatisch nebeneinander.
+
+00:09:20.840 --> 00:09:23.760
+Bei einer Fehlerdomäne geht es darum, das Risiko gemeinsamer Ausfälle zu reduzieren
+
+00:09:23.760 --> 00:09:25.180
+und nicht darum, Computer nahe zu platzieren.
+
+00:09:25.180 --> 00:09:26.400
+Nehmen wir ein einfaches Beispiel.
+
+00:09:27.080 --> 00:09:29.140
+Stellen Sie sich vor, Ihr Unternehmen führt eine interne Bestell-Lab aus.
+
+00:09:29.560 --> 00:09:32.400
+Sie verfügt über zwei Anwendungs-VMs, die dieselbe Aufgabe erledigen
+
+00:09:32.400 --> 00:09:34.920
+und ein Lastenausgleich seiner Benutzer an die jeweils verfügbare Fahrer.
+
+00:09:35.320 --> 00:09:36.640
+Sie erstellen zwei dedizierte Hosts.
+
+00:09:37.040 --> 00:09:38.160
+Wird in Fehlerdomäne 1 verschoben.
+
+00:09:38.620 --> 00:09:40.080
+Host B wird in Fehlerdomäne 2 verschoben.
+
+00:09:40.380 --> 00:09:42.660
+Anschließend platzieren Sie eine Anwendungs-VM auf jedem Host.
+
+00:09:42.960 --> 00:09:45.320
+Wenn Azure Hardware reparieren muss, die sich auf Host A auswirkt,
+
+00:09:45.380 --> 00:09:48.220
+ist die VM auf Host A möglicherweise für einen bestimmten Zeitraum nicht verfügbar,
+
+00:09:48.220 --> 00:09:51.680
+aber die zweite VM wird auf Host B fortgesetzt, sodass Mitarbeiter weiter weiter in Bestellungen aufgeben können.
+
+00:09:51.920 --> 00:09:52.700
+Das ist das Entwurfsziel.
+
+00:09:52.700 --> 00:09:55.400
+Sie kaufen nicht zwei Hosts, weil Sie gerne für zwei Hosts bezahlen.
+
+00:09:55.860 --> 00:09:59.180
+Sie verwenden separate Hosts, da eine zweite Kopie der Anwendung nur dann sinnvoll ist,
+
+00:09:59.240 --> 00:10:01.180
+wenn sie nicht von demselben physischen Computer abhängen.
+
+00:10:01.640 --> 00:10:03.380
+Dieselbe Idee gilt für alle Verfügbarkeitszonen.
+
+00:10:04.120 --> 00:10:06.520
+Wenn Sie eine Anwendungs-VM in einer Hostgruppe in Zone 1
+
+00:10:06.520 --> 00:10:08.980
+und eine weitere in einer Hostgruppe in Zone 2 platzieren,
+
+00:10:09.420 --> 00:10:11.980
+erhalten Sie Schutz vor Problemen, die eine gesamte Zone betreffen.
+
+00:10:12.920 --> 00:10:14.060
+Dies erfordert mehr Planung.
+
+00:10:14.060 --> 00:10:16.960
+Und Ihre Anwendung muss die Ausführung an mehr als einem Ort unterstützen,
+
+00:10:17.160 --> 00:10:18.660
+schafft jedoch breitere Trennungsgrenzen.
+
+00:10:19.140 --> 00:10:20.800
+Die Bausteine folgen also einer einfachen Reihenfolge.
+
+00:10:20.800 --> 00:10:23.840
+Wählen Sie die Region aus, erstellen Sie eine oder mehrere Hostgruppen,
+
+00:10:23.940 --> 00:10:27.460
+verwenden Sie Zonen, wenn Ihre App eine Trennung zwischen physischen Azure-Standorten benötigt,
+
+00:10:27.800 --> 00:10:30.640
+fügen Sie dedizierte Hosts hinzu und platzieren Sie diese Hosts auf Fehlerdomänen,
+
+00:10:30.700 --> 00:10:32.180
+wenn Sie eine Trennung auf Rack-Ebene benötigen,
+
+00:10:32.300 --> 00:10:35.260
+und verteilen Sie dann Ihre VMs, sodass nicht ein Host jede Kopie der Anwendung enthält.
+
+00:10:35.740 --> 00:10:37.740
+Ein privater Host bietet Ihnen mehr Kontrolle über die Platzierung,
+
+00:10:37.840 --> 00:10:39.520
+aber die Hardware muss möglicherweise trotzdem repariert werden.
+
+00:10:40.520 --> 00:10:42.240
+Kontrolle über Isolierung, Sicherheit und Wartung.
+
+00:10:42.240 --> 00:10:45.280
+Lassen Sie uns darüber sprechen, was sich durch die physische Isolation tatsächlich hat.
+
+00:10:45.700 --> 00:10:50.260
+Ihre VMs auf einen dedizierten Host teilen sich diesen physischen Server nicht mit den VMs anderer Azure-Kunden.
+
+00:10:51.560 --> 00:10:56.280
+Wenn Ihr Team Regeln für Single-Tenant-Hardware hat, erhalten Sie bei einer Sicherheitsüberprüfung eine klare Antwort.
+
+00:10:56.760 --> 00:11:00.000
+Diese Workloads werden auf einer Kapazität ausgeführt, die nur für Ihre Organisation reserviert ist.
+
+00:11:00.140 --> 00:11:02.240
+Es handelt sich um einen übersichtlichen Bereich, auf den Sie verweisen können,
+
+00:11:02.300 --> 00:11:04.700
+wenn ein Vertragsführer oder eine Vertragsführer oder eine Aufsichtsbehörde fordert.
+
+00:11:04.700 --> 00:11:05.900
+Aber hier ist der Clou.
+
+00:11:06.100 --> 00:11:09.280
+Dedizierte Hardware ist nicht dasselbe wie die vollständige Kontrolle über alles darunter.
+
+00:11:09.740 --> 00:11:12.100
+Azure betreibt weiterhin das Rechenzentrum und die physische Plattform.
+
+00:11:12.780 --> 00:11:16.260
+Microsoft kümmert sich um Stromversorgung, Kühlung, Netzwerkbetrieb, ausgefallene Komponenten
+
+00:11:16.260 --> 00:11:18.580
+und die Virtualisierungsebene, auf der Ihre VMs ausgeführt werden.
+
+00:11:19.260 --> 00:11:22.760
+Sie können den Host für Ihre Workloads auswählen, werden aber nicht zum Betreiber des Rechenzentrums.
+
+00:11:23.120 --> 00:11:23.900
+Das ist ein wichtiger Unterschied.
+
+00:11:24.400 --> 00:11:26.040
+Auch Ihre Sicherheitsaufgaben bleiben gleich.
+
+00:11:26.580 --> 00:11:28.820
+Sie müssen weiterhin das Betriebssystem auf jeder VM schützen.
+
+00:11:29.240 --> 00:11:32.460
+Sie verwalten weiterhin Identitäten, Netzwerkregeln und Updates im Gastbetriebssystem.
+
+00:11:32.460 --> 00:11:34.940
+Sie kontrollieren weiterhin den Zugriff auf Ihre Apps und Daten.
+
+00:11:35.260 --> 00:11:37.320
+Ein dedizierter Host ändert, wo die VM ausgeführt wird.
+
+00:11:37.700 --> 00:11:39.100
+Er patcht keine ungeschützten VMs für Sie.
+
+00:11:39.620 --> 00:11:40.800
+Diese Aufgabe bliegt weiterhin Ihnen.
+
+00:11:41.220 --> 00:11:42.840
+Bei einigen Workloads ist der Wartung sehr wichtig.
+
+00:11:43.560 --> 00:11:45.900
+Azure aktualisiert gelegentlich die Plattformen unter Ihren VMs,
+
+00:11:45.960 --> 00:11:47.900
+um die Zuverlässigkeit, Leistung oder Sicherheit zu verbessern
+
+00:11:47.900 --> 00:11:49.680
+oder Unterstützung für neue Funktionen hinzuzufügen.
+
+00:11:50.560 --> 00:11:53.140
+Die meisten Wartungsarbeiten verursachen kaum bis gar keine Unterbrechungen,
+
+00:11:53.260 --> 00:11:55.220
+aber bei einigen Anwendungen treten sogar kurze Unterbrechungen.
+
+00:11:55.880 --> 00:12:00.220
+Ein Handelssystem, ein Fabrikssystem oder ein eng getakteter Geschäftsprozess könnten dies bemerken.
+
+00:12:00.220 --> 00:12:04.440
+Mit Dedicated Host erhalten Sie die Kontrolle über die Wartung der unterstützten Plattform.
+
+00:12:05.100 --> 00:12:07.240
+Sie können ein reguläres Update verschieben und es anwenden,
+
+00:12:07.460 --> 00:12:10.920
+wenn Ihr Team dies innerhalb eines rollierenden Wartungsfensters von 35 Tagen wünscht.
+
+00:12:11.360 --> 00:12:12.500
+Das gibt Ihnen Zeit zur Vorbereitung.
+
+00:12:12.940 --> 00:12:14.400
+Sie können die Benutzer zuerst benachrichtigen,
+
+00:12:14.480 --> 00:12:16.520
+den Datenverkehr auf eine andere Kopie der App umleiten
+
+00:12:16.520 --> 00:12:18.160
+oder die Arbeiten in einer ruhigen Zeit planen.
+
+00:12:18.480 --> 00:12:19.880
+Es geht nicht darum, dass die Wartung verschwindet.
+
+00:12:20.940 --> 00:12:23.620
+Sie können den Zeitpunkt für den Vorgang innerhalb des von Azure vorgesehenen Zeit feststellen.
+
+00:12:23.940 --> 00:12:26.560
+Sobald dieses Zeitfenster endet, wendet Azure die ausstehende Wartung an.
+
+00:12:26.560 --> 00:12:28.820
+Stellen Sie es sich also als kontrollierte Zeitplanung vor,
+
+00:12:28.880 --> 00:12:30.380
+nicht als eine dauerhafte Schaltfläche zum Überspringen.
+
+00:12:30.520 --> 00:12:32.600
+Es gibt noch ein weiteres Detail, das die Art und Weise beeinflusst, wie Sie die App haben.
+
+00:12:33.180 --> 00:12:35.820
+Azure Dedicated Host unterstützt keine Live-Migration.
+
+00:12:36.620 --> 00:12:39.240
+Bei einigen gemeinsam genutzten Azure-Setups verschiebt Azure eine ausgeführte VM
+
+00:12:39.240 --> 00:12:41.960
+möglicherweise mit geringer oder gar keiner sichtbaren Unterbrechung auf andere Hardware.
+
+00:12:42.020 --> 00:12:43.240
+Dedicated Hosts funktionieren anders.
+
+00:12:43.860 --> 00:12:45.840
+Wenn auf dem zugrunde liegenden Host ein Fehler auftritt,
+
+00:12:46.020 --> 00:12:49.320
+kann Azure ihn beheben, indem der Host und seine VMs auf fehlerfreie Hardware verschoben
+
+00:12:49.320 --> 00:12:51.300
+und diese VMs dann neu gestartet werden.
+
+00:12:51.980 --> 00:12:53.740
+Dieser Vorgang führt zu einer kurzen Ausfallzeit.
+
+00:12:53.740 --> 00:12:56.460
+Der Host wird mit denselben grundlegenden Platzierungseinstellungseinstellungen
+
+00:12:56.460 --> 00:12:59.100
+seiner Region, Hostgruppe, Fehlerdomäne und dem Hosttyp zurückgegeben.
+
+00:12:59.280 --> 00:13:01.380
+Ihre VMs müssen jedoch im Rahmen der Wiederherstellung neu gestartet.
+
+00:13:01.780 --> 00:13:03.460
+Sie können beim Erstellen des Hosts auch auswählen,
+
+00:13:03.540 --> 00:13:05.480
+ob Azure ihn nach einem Fehler automatisch ersetzt.
+
+00:13:06.500 --> 00:13:09.460
+Teams mit strengen Compliance-Anforderungen entscheiden sich möglicherweise dagegen,
+
+00:13:09.560 --> 00:13:11.420
+Azure den Host automatisch ersetzen zu lassen,
+
+00:13:11.520 --> 00:13:13.360
+da sie eine stärkere Verbindung zwischen ihrer Host-Ressource
+
+00:13:13.360 --> 00:13:14.920
+und dem zugrunde liegenden Computer benötigen.
+
+00:13:15.380 --> 00:13:16.860
+Diese Auswahl bringt auch mehr Verantwortung mit sich.
+
+00:13:17.240 --> 00:13:18.600
+Wenn der Host nicht wiederhergestellt werden kann,
+
+00:13:18.680 --> 00:13:20.640
+müssen Sie möglicherweise einen anderen Host erstellen und die verschieben.
+
+00:13:20.880 --> 00:13:23.240
+Planen Sie also nicht so, dass ein dedizierter Host niemals ausfällt.
+
+00:13:23.740 --> 00:13:25.700
+Planen Sie, dass die Anwendung einen Hostausfall übersteht.
+
+00:13:26.220 --> 00:13:28.420
+Führen Sie Kopien wichtiger Workloads auf separaten Hosts aus.
+
+00:13:28.720 --> 00:13:29.940
+Verwenden Sie den Lastenausgleich, wo er passt.
+
+00:13:30.340 --> 00:13:31.940
+Testen Sie, ob eine App sauber neu gestartet werden kann.
+
+00:13:32.340 --> 00:13:34.200
+Halten Sie Sicherung und Wiederherstellungspläne bereit,
+
+00:13:34.320 --> 00:13:37.260
+da die physische Isolierung die normalen Risiken der Ausführung von Software nicht beseitigt.
+
+00:13:37.960 --> 00:13:39.740
+Und sobald Sie einen ganzen physischen Server reservieren,
+
+00:13:39.980 --> 00:13:41.260
+wird die nächste Frage sehr praktisch.
+
+00:13:41.820 --> 00:13:44.360
+Wofür bezahlen Sie und wie viel von diesem Server werden Sie tatsächlich verwenden?
+
+00:13:44.360 --> 00:13:47.940
+Preise, Lizenzen und die Kapazitätsfalle.
+
+00:13:48.420 --> 00:13:51.020
+Bei einer normalen Azure VM denken Sie normalerweise in VM-Preisen.
+
+00:13:51.560 --> 00:13:53.840
+Sie wählen eine Größe aus, finden sie so lange aus, wie Sie sie benötigen
+
+00:13:53.840 --> 00:13:55.280
+und bezahlen für die Computennutzung dieser VM.
+
+00:13:55.840 --> 00:13:57.760
+Bei einem dedizierten Host wird dieses Konzept umgekehrt.
+
+00:13:58.020 --> 00:13:59.600
+Sie bezahlen für den physischen Host selbst,
+
+00:13:59.720 --> 00:14:03.100
+unabhängig davon, ob eine VM, zehn kompatible VMs oder gar keine VMs ausführt.
+
+00:14:03.580 --> 00:14:05.240
+Azure stellt die Kosten für den Host in Rechnung,
+
+00:14:05.400 --> 00:14:06.300
+solange er zugewiesen bleibt,
+
+00:14:06.400 --> 00:14:08.880
+da Azure diese physische Kapazität für ihre Organisation reserviert hat.
+
+00:14:09.180 --> 00:14:10.360
+Das ist die Kapazitätsfalle.
+
+00:14:10.360 --> 00:14:13.080
+Stellen Sie sich vor, Sie reservieren einen großen Besprechungsraum für einen ganzen Tag
+
+00:14:13.080 --> 00:14:14.040
+und dann kommen nur zwei Personen.
+
+00:14:14.400 --> 00:14:15.460
+Der Raum kostet immer noch dasselbe.
+
+00:14:15.820 --> 00:14:17.280
+Ein dedizierter Host funktioniert ähnlich.
+
+00:14:17.760 --> 00:14:20.800
+Leere Prozessorkapazität und ungenutzte Arbeitsspeicher senken die Hostrechnung nicht.
+
+00:14:21.240 --> 00:14:22.780
+Die VMs, die Sie auf diesem Host platzieren,
+
+00:14:22.880 --> 00:14:24.480
+werden weiterhin in Ihrer Azure-Rechnung angezeigt,
+
+00:14:24.560 --> 00:14:25.900
+aber Ihre Computegebühr wird null angezeigt,
+
+00:14:25.960 --> 00:14:27.140
+da Sie bereits für den Host bezahlt haben.
+
+00:14:27.880 --> 00:14:29.060
+Die Nutzung kostet immer noch Geld.
+
+00:14:30.440 --> 00:14:32.100
+Auch Softwarelizenzen können immer noch Geld kosten.
+
+00:14:32.720 --> 00:14:35.420
+Lesen Sie den Computepreis von null für VMs, also nicht als Nullkosten.
+
+00:14:36.440 --> 00:14:37.240
+Er bedeutet lediglich,
+
+00:14:37.240 --> 00:14:39.280
+dass die Computegebühr von jeder VM auf den Host verschoben.
+
+00:14:39.280 --> 00:14:40.600
+Bevor Sie einen Host erstellen,
+
+00:14:40.680 --> 00:14:42.160
+nissen Sie die VMs auf, die Sie dort ausführen möchten.
+
+00:14:42.560 --> 00:14:44.400
+Sehen Sie sich die VM-Familie, die Prozessoranforderungen
+
+00:14:44.400 --> 00:14:46.160
+und die Gesamtkapazität an, die Sie verwenden werden.
+
+00:14:46.600 --> 00:14:48.900
+Vergleichen Sie dann diesen Plan mit der Kapazität des Hosttyps,
+
+00:14:48.960 --> 00:14:50.440
+der in Ihrer Azure-Region verfügbar ist.
+
+00:14:51.060 --> 00:14:52.380
+Dies ist kein Kauf, bei dem Sie nur raten.
+
+00:14:52.940 --> 00:14:55.540
+Ein Host unterstützt VMs aus der zugehörigen VM-Familie
+
+00:14:55.540 --> 00:14:56.960
+und verfügt über eine feste Kapazität.
+
+00:14:57.520 --> 00:14:59.540
+Sie können verschiedene kompatible VM-Größen mischen,
+
+00:14:59.900 --> 00:15:02.120
+aber jede hinzugefügte VM belegt einen Teil des Hosts.
+
+00:15:02.520 --> 00:15:04.500
+Wobei die Kapazität erschöpft ist, passt keine weitere Wäume hin.
+
+00:15:04.500 --> 00:15:05.760
+Es gibt ein zweites Planungsproblem.
+
+00:15:05.760 --> 00:15:08.040
+Sie können die Größe eines dedizierten Hosts nicht mehr ändern,
+
+00:15:08.120 --> 00:15:08.800
+nachdem Sie ihn erstellt haben.
+
+00:15:09.080 --> 00:15:10.380
+Wenn Sie später einen anderen Host-Typ
+
+00:15:10.380 --> 00:15:11.960
+oder eine andere Hardware-Generation benötigen,
+
+00:15:12.040 --> 00:15:14.080
+erstellen Sie einen neuen Host und planen den Umzug für Ihre VM.
+
+00:15:14.400 --> 00:15:15.700
+Das bedeutet, dass die Wahl des Hosts
+
+00:15:15.700 --> 00:15:16.820
+sowohl Ihrer aktuellen Workload
+
+00:15:16.820 --> 00:15:18.200
+als auch Ihren wahrscheinlichen Anforderungen
+
+00:15:18.200 --> 00:15:19.020
+in der Zukunft entsprechen.
+
+00:15:19.200 --> 00:15:21.000
+Ein dedizierter Host eignet sich häufig für Workloads,
+
+00:15:21.040 --> 00:15:21.920
+die kontinuierlich ausgeführt werden.
+
+00:15:22.260 --> 00:15:24.200
+Möglicherweise haben Sie eine Gruppe von Windows-Server VMs,
+
+00:15:24.220 --> 00:15:25.540
+die jeden Tag den ganzen Tag ausgeführt werden.
+
+00:15:25.940 --> 00:15:27.600
+Möglicherweise haben Sie SQL-Server-Workloads,
+
+00:15:27.640 --> 00:15:29.100
+die bereits eine feste Kapazität benötigen.
+
+00:15:29.100 --> 00:15:31.380
+Wenn diese VMs einen Großteil eines Hosts belegen können,
+
+00:15:31.380 --> 00:15:33.120
+dann sind Preise auf Host-Ebene möglicherweise eine gute.
+
+00:15:33.340 --> 00:15:34.980
+Wenn sich Ihre Workload jedoch wöchentlich ändert
+
+00:15:34.980 --> 00:15:36.640
+oder nur für kurze Zeiträume ausgeführt wird,
+
+00:15:36.700 --> 00:15:38.960
+ist eine reguläre Azure VM möglicherweise besser geeignet.
+
+00:15:39.020 --> 00:15:40.400
+Reguläre VMs bieten Ihnen mehr frei
+
+00:15:40.400 --> 00:15:42.020
+beim Erweitern und Verkleinern und Verkleinern
+
+00:15:42.020 --> 00:15:43.340
+ohne die Kosten physischen Speicherplatz.
+
+00:15:43.600 --> 00:15:44.840
+Die Lizenzierung kann die Rechnung enden.
+
+00:15:45.160 --> 00:15:47.280
+Mit dem Azure-Hybrid-Vorteil können berechtigte Kunden
+
+00:15:47.280 --> 00:15:49.620
+vorhandene Windows-Server- und SQL-Server-Lizenzen
+
+00:15:49.620 --> 00:15:50.440
+in Azure verwenden.
+
+00:15:51.180 --> 00:15:53.200
+Bei dedizierten Hosts kann dies den Softwareanteil
+
+00:15:53.200 --> 00:15:54.040
+der Kosten reduzieren,
+
+00:15:54.040 --> 00:15:56.200
+wenn Ihre Lizenzen unter den aktuellen Bedingungen qualifiziert sind.
+
+00:15:56.580 --> 00:15:57.540
+Das Wort qualifiziert ist wichtig.
+
+00:15:58.040 --> 00:15:59.760
+Die Lizenzierung hängt von der Produktedition,
+
+00:15:59.760 --> 00:16:01.380
+dem Lizenztyp, Software Assurance
+
+00:16:01.380 --> 00:16:02.720
+oder gleichwertigen Abonnementrechten
+
+00:16:02.720 --> 00:16:04.700
+sowie den Regeln ab, die für Ihre Organisation gelten.
+
+00:16:05.380 --> 00:16:06.040
+Gehen Sie nicht davon aus,
+
+00:16:06.100 --> 00:16:07.380
+dass jede alte Lizenz auf die gleiche Weise
+
+00:16:07.380 --> 00:16:08.640
+auf einen dedizierten Host verschoben wird.
+
+00:16:09.060 --> 00:16:12.000
+Für einige Organisationen können Windows-Server-Data-Center-Lizenzen
+
+00:16:12.000 --> 00:16:13.820
+oder SQL-Server-Enterprise-Lizenzen
+
+00:16:13.820 --> 00:16:14.940
+mit den erforderlichen Rechten
+
+00:16:14.940 --> 00:16:16.440
+und begrenzte Virtualisierungsrechte
+
+00:16:16.440 --> 00:16:17.980
+auf einem dedizierten Host bereitstellen,
+
+00:16:18.320 --> 00:16:19.720
+nachdem die verfügbaren physischen Kerne
+
+00:16:19.720 --> 00:16:20.900
+auf diesem Host lizenziert wurden.
+
+00:16:21.760 --> 00:16:22.780
+Hier die einfache Erklärung.
+
+00:16:22.780 --> 00:16:25.240
+Anstatt jede Windows-Server- oder SQL-Server-VM
+
+00:16:25.240 --> 00:16:26.280
+einzeln zu lizenzieren,
+
+00:16:26.580 --> 00:16:28.500
+können Sie die physischen Kerne des Hosts lizenzieren
+
+00:16:28.500 --> 00:16:30.340
+und so viele qualifizierte VMs ausführen,
+
+00:16:30.480 --> 00:16:31.700
+wie der Host physisch aufnehmen kann.
+
+00:16:32.460 --> 00:16:33.700
+Das kann von großer Bedeutung sein,
+
+00:16:33.740 --> 00:16:34.980
+wenn auf einem Host viele Windows-Server-
+
+00:16:34.980 --> 00:16:36.260
+oder SQL-Server-VMs ausgeführt werden.
+
+00:16:36.780 --> 00:16:37.660
+Dennoch schafft die Lizenzierung
+
+00:16:37.660 --> 00:16:38.680
+keine zusätzliche Kapazität.
+
+00:16:39.120 --> 00:16:40.880
+Sie können über unbegrenzte Virtualisierungsrechte
+
+00:16:40.880 --> 00:16:42.440
+unter den richtigen Lizenzbedingungen verfügen,
+
+00:16:42.720 --> 00:16:43.880
+aber der Host führt nur die VMs aus,
+
+00:16:43.940 --> 00:16:45.100
+die innerhalb seiner tatsächlichen Prozess-
+
+00:16:45.100 --> 00:16:45.940
+und Arbeitsspeicherlimits liegen.
+
+00:16:46.380 --> 00:16:48.660
+Die Lizenzierungsregel ändert das Softwarekostenmodell.
+
+00:16:49.240 --> 00:16:50.060
+Sie macht aus einem Server
+
+00:16:50.060 --> 00:16:51.100
+keinen unbegrenzten Server.
+
+00:16:51.660 --> 00:16:52.920
+Azure verfügt auch über Reservierungen
+
+00:16:52.920 --> 00:16:53.860
+für dedizierte Hosts.
+
+00:16:54.280 --> 00:16:55.880
+Eine Reservierung ist eine längere Verpflichtung
+
+00:16:55.880 --> 00:16:57.480
+für einen passenden Host-Typ und Standort.
+
+00:16:58.320 --> 00:16:59.640
+Sie kann die Hostkosten für konstante
+
+00:16:59.640 --> 00:17:00.720
+langfristige Anforderungen senken,
+
+00:17:00.820 --> 00:17:01.960
+bedeutet aber auch, dass Sie darauf wetten,
+
+00:17:02.020 --> 00:17:03.580
+dass Sie diese Kapazität weiterhin nutzen werden.
+
+00:17:04.280 --> 00:17:05.800
+Das ist sinnvoll, wenn die Workload stabil ist.
+
+00:17:06.340 --> 00:17:07.820
+Es ist riskant, wenn die Workload möglicherweise
+
+00:17:07.820 --> 00:17:09.200
+bald verschwindet, die VM-Familie ändert
+
+00:17:09.200 --> 00:17:10.100
+oder in andere Regionen verschoben.
+
+00:17:11.660 --> 00:17:13.080
+Verwenden Sie den Azure-Preisrechner
+
+00:17:13.080 --> 00:17:14.380
+für die Region und den Host-Typ,
+
+00:17:14.420 --> 00:17:15.300
+den Sie verwenden möchten.
+
+00:17:15.820 --> 00:17:16.920
+Überprüfen Sie die aktuelle Seite
+
+00:17:16.920 --> 00:17:18.380
+mit den Preisen für dedizierte Hosts
+
+00:17:18.380 --> 00:17:19.320
+und wenden Sie sich dann an Ihren
+
+00:17:19.320 --> 00:17:20.580
+Microsoft-Lizenzierungskontakt
+
+00:17:20.580 --> 00:17:21.540
+oder Lizenzierungspartner,
+
+00:17:21.600 --> 00:17:22.080
+um zu bestätigen,
+
+00:17:22.080 --> 00:17:23.360
+was Ihre vorhandenen Lizenzen zulassen.
+
+00:17:23.780 --> 00:17:25.080
+Sie benötigen den Gesamtüberblick,
+
+00:17:25.220 --> 00:17:27.220
+Hostpreis, Speicher, Netzwerknutzung,
+
+00:17:27.420 --> 00:17:28.580
+Sicherung, Softwarelizenzen,
+
+00:17:29.000 --> 00:17:29.940
+reservierte Kapazität
+
+00:17:29.940 --> 00:17:31.380
+und die Kosten für Kapazität,
+
+00:17:31.440 --> 00:17:32.100
+für die Sie bezahlen,
+
+00:17:32.160 --> 00:17:32.880
+die Sie aber nicht nutzen.
+
+00:17:33.600 --> 00:17:34.800
+Ein dedizierter Host kann die Kosten
+
+00:17:34.800 --> 00:17:35.760
+bei richtiger Auslegung senken.
+
+00:17:36.160 --> 00:17:37.900
+Außerdem kann er eine kleine Gruppe von VMs
+
+00:17:37.900 --> 00:17:39.460
+in einen sehr teuren privaten Server verwandeln.
+
+00:17:39.920 --> 00:17:40.800
+Planen Sie also sorgfältig,
+
+00:17:40.840 --> 00:17:41.240
+dann wissen Sie,
+
+00:17:41.300 --> 00:17:42.500
+auf welcher Seite der Gleichung Sie stehen.
+
+00:17:43.660 --> 00:17:45.120
+Wann ein dedizierter Host geeignet ist,
+
+00:17:45.160 --> 00:17:45.460
+ist immer nicht.
+
+00:17:46.040 --> 00:17:46.940
+Heute sprechen wir darüber,
+
+00:17:46.940 --> 00:17:48.300
+wann ein dedizierter Azure-Host
+
+00:17:48.300 --> 00:17:49.200
+tatsächlich Sinn macht
+
+00:17:49.200 --> 00:17:49.780
+und wann nicht.
+
+00:17:50.160 --> 00:17:50.700
+Und wann nicht.
+
+00:17:50.700 --> 00:17:51.940
+Stellen Sie sich das so vor,
+
+00:17:52.000 --> 00:17:52.480
+stellen Sie sich vor,
+
+00:17:52.520 --> 00:17:53.700
+in Ihrem Unternehmen gibt es eine Regel,
+
+00:17:53.760 --> 00:17:54.620
+die besagt, dass Ihre Server
+
+00:17:54.620 --> 00:17:55.760
+physisch von allen anderen Servern
+
+00:17:55.760 --> 00:17:56.420
+getrennt sein müssen.
+
+00:17:56.640 --> 00:17:57.480
+Oder möglicherweise ist dies
+
+00:17:57.480 --> 00:17:58.440
+in einem Kundenvertrag vorgeschrieben.
+
+00:17:58.780 --> 00:18:00.300
+Ein dedizierter Host bietet Ihnen diese Trennung.
+
+00:18:00.740 --> 00:18:01.860
+Es ist, als würden Sie ein ganzes Haus
+
+00:18:01.860 --> 00:18:02.600
+statt einer Wohnung liegen.
+
+00:18:03.080 --> 00:18:04.040
+Sie erhalten die volle Kontrolle
+
+00:18:04.040 --> 00:18:04.600
+über das Gebäude,
+
+00:18:04.800 --> 00:18:05.880
+zahlen aber für die gesamte Fläche,
+
+00:18:06.220 --> 00:18:06.760
+unabhängig davon,
+
+00:18:06.860 --> 00:18:07.880
+ob Sie alle Zimmer nutzen oder nicht.
+
+00:18:08.420 --> 00:18:09.140
+Auch die Lizenzierung
+
+00:18:09.140 --> 00:18:09.640
+kann Sie in Richtung
+
+00:18:09.640 --> 00:18:10.700
+eines dedizierten Hosts lenken.
+
+00:18:11.360 --> 00:18:12.860
+Wenn Sie bereits Lizenzen für Windows-Server
+
+00:18:12.860 --> 00:18:14.020
+oder SQL-Server besitzen
+
+00:18:14.020 --> 00:18:15.960
+und eine konstante Anzahl an VMs betreiben,
+
+00:18:16.080 --> 00:18:16.800
+können Sie mit den Preisen
+
+00:18:20.700 --> 00:18:21.580
+genügend VMs betreiben,
+
+00:18:21.660 --> 00:18:22.320
+um den Server zu füllen.
+
+00:18:22.520 --> 00:18:23.740
+Andernfalls geht die Rechnung nicht auf.
+
+00:18:24.160 --> 00:18:24.740
+Und hier ist der Clou.
+
+00:18:25.020 --> 00:18:26.240
+Ihre Anwendung muss die Wartung
+
+00:18:26.240 --> 00:18:27.380
+reibungslos durchführen können.
+
+00:18:28.020 --> 00:18:29.000
+Mit einem dedizierten Host
+
+00:18:29.000 --> 00:18:29.540
+können Sie steuern,
+
+00:18:29.620 --> 00:18:30.540
+wann der Host aktualisiert wird.
+
+00:18:30.940 --> 00:18:32.100
+Wenn jedoch die Betriebszeit wichtig ist,
+
+00:18:32.160 --> 00:18:32.620
+sollte Ihre App
+
+00:18:32.620 --> 00:18:33.860
+auf mindestens zwei Hosts ausgeführt werden.
+
+00:18:34.300 --> 00:18:35.180
+Ein Host wird für Updates
+
+00:18:35.180 --> 00:18:35.740
+nicht unterstützt,
+
+00:18:35.800 --> 00:18:36.360
+während der Reiter hat.
+
+00:18:37.020 --> 00:18:37.720
+Andererseits eignet sich
+
+00:18:37.720 --> 00:18:38.480
+ein dedizierter Host
+
+00:18:38.480 --> 00:18:39.320
+nicht für jedes Szenario.
+
+00:18:39.780 --> 00:18:41.400
+Wenn Sie nur ein oder zwei kleine VMs haben,
+
+00:18:41.440 --> 00:18:42.020
+die sich häufig ändern,
+
+00:18:42.140 --> 00:18:43.180
+ist dies wahrscheinlich zu viel des Guten.
+
+00:18:43.740 --> 00:18:45.160
+Dasselbe gilt für kurzfristige Projekte,
+
+00:18:45.220 --> 00:18:45.880
+die schnell kommen und gehen.
+
+00:18:45.880 --> 00:18:46.980
+In diesen Fällen
+
+00:18:46.980 --> 00:18:48.140
+sind reguläre Azure VMs
+
+00:18:48.140 --> 00:18:49.240
+einfacher und kostengünstiger,
+
+00:18:49.380 --> 00:18:49.980
+da Sie für die von Ihnen
+
+00:18:49.980 --> 00:18:51.120
+genutzte Kapazität bezahlen
+
+00:18:51.120 --> 00:18:52.000
+und nicht für den gesamten Server.
+
+00:18:52.400 --> 00:18:53.320
+Ist eine kurze Checkliste.
+
+00:18:53.740 --> 00:18:54.580
+Stellen Sie sich drei Fragen.
+
+00:18:55.480 --> 00:18:56.140
+Benötigen Sie wirklich
+
+00:18:56.140 --> 00:18:56.960
+einen physischen Server,
+
+00:18:57.080 --> 00:18:58.140
+der nur Ihnen gewidmet ist?
+
+00:18:58.740 --> 00:18:59.640
+Können Ihre VMs tatsächlich
+
+00:18:59.640 --> 00:19:00.800
+genügend Platz auf dem Host nutzen,
+
+00:19:00.860 --> 00:19:01.560
+um die Kosten zu rechtfertigen?
+
+00:19:01.920 --> 00:19:02.980
+Kann Ihre Anwendung überleben,
+
+00:19:03.060 --> 00:19:04.080
+wenn ein Host nicht verfügbar ist?
+
+00:19:04.760 --> 00:19:05.220
+Falls die Antwort
+
+00:19:05.220 --> 00:19:06.380
+auf die erste Frage Nein lautet,
+
+00:19:06.520 --> 00:19:07.700
+beginnen Sie mit regulären VMs.
+
+00:19:08.260 --> 00:19:08.700
+Falls die Antwort
+
+00:19:08.700 --> 00:19:09.700
+auf die zweite Frage Nein lautet,
+
+00:19:09.800 --> 00:19:10.220
+seien Sie vorsichtig.
+
+00:19:10.920 --> 00:19:11.720
+Sie lösen möglicherweise
+
+00:19:11.720 --> 00:19:12.680
+eine technische Anforderung
+
+00:19:12.680 --> 00:19:13.780
+und schaffen gleichzeitig ein Budgetpunkt.
+
+00:19:14.300 --> 00:19:14.680
+Fazit,
+
+00:19:14.680 --> 00:19:16.020
+wählen Sie das richtige Maß an Kontrolle.
+
+00:19:16.780 --> 00:19:17.440
+Hier ist Ihr Fazit.
+
+00:19:18.160 --> 00:19:19.060
+Da Ihr dedizierter Host
+
+00:19:19.060 --> 00:19:20.320
+Ihnen einen privaten physischen Server
+
+00:19:20.320 --> 00:19:20.960
+in der Cloud bietet,
+
+00:19:21.200 --> 00:19:21.980
+zahlen Sie für diesen Server,
+
+00:19:22.060 --> 00:19:22.600
+unabhängig davon,
+
+00:19:22.720 --> 00:19:23.380
+ob er belegt ist oder nicht.
+
+00:19:23.860 --> 00:19:24.460
+Passen Sie das Tool
+
+00:19:24.460 --> 00:19:25.580
+also an Ihre Arbeitslast an,
+
+00:19:25.700 --> 00:19:26.360
+nicht umgekehrt.
+
+00:19:26.820 --> 00:19:27.560
+Vielen Dank fürs Zuhören
+
+00:19:27.560 --> 00:19:28.660
+bei den Microsoft Knowledge Nuggets.
+
+00:19:29.000 --> 00:19:29.560
+Wenn mir kopiert das.
+
+00:19:29.880 --> 00:19:30.640
+Wenn dies hilfreich war,
+
+00:19:30.740 --> 00:19:32.020
+abonnieren Sie M360 FM.
+
+00:19:32.540 --> 00:19:33.260
+In der nächsten Folge
+
+00:19:33.260 --> 00:19:33.780
+erfahren Sie,
+
+00:19:33.840 --> 00:19:35.320
+wie Sie die Azure Compute Option auswählen,
+
+00:19:35.380 --> 00:19:36.800
+die tatsächlich zu Ihrer Arbeitslast passt,
+
+00:19:36.860 --> 00:19:37.660
+damit Sie nicht für leeren
+
+00:19:37.660 --> 00:19:38.580
+Serverplatz bezahlen.
+
+00:19:38.580 --> 00:19:39.120
+Ah.

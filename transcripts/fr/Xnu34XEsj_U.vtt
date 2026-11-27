@@ -1,0 +1,1114 @@
+WEBVTT
+
+00:00:00.320 --> 00:00:06.320
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent le futur du travail.
+
+00:00:07.240 --> 00:00:11.420
+Un pipeline CICD est une chaîne de montage pour logiciel. Une fois que vous le voyez ainsi, vous ne pouvez plus le voir autrement.
+
+00:00:12.100 --> 00:00:17.720
+La matière première entre à une extrémité, un produit vérifié, emballé sort à l'autre et les mêmes étapes s'exécutent dans le même ordre à chaque fois, à chaque fois.
+
+00:00:18.000 --> 00:00:23.700
+Qui surprend les gens, c'est que le pipeline n'a jamais vraiment été une question de vitesse, car les équipes qui livrent le plus vite sont aussi celles qui récupèrent le plus rapidement.
+
+00:00:23.700 --> 00:00:30.520
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent le futur du travail.
+
+00:00:31.320 --> 00:00:36.320
+A la fin, les 4 lettres de CICD ne seront plus du jargon pour vous et vous saurez ce que chaque étape de cette chaîne vérifie réellement.
+
+00:00:37.460 --> 00:00:38.980
+Ce qui est réellement un pipeline ?
+
+00:00:38.980 --> 00:00:40.400
+Commençons par la définition la plus simple du terme.
+
+00:00:41.060 --> 00:00:45.880
+Un pipeline est une liste fixe d'étapes qu'un ordinateur exécute de la même manière à chaque fois que quelqu'un modifie le logiciel.
+
+00:00:46.420 --> 00:00:49.520
+C'est tout le concept. L'analogie de la chaîne de montage mérite d'être poussée un peu plus loin.
+
+00:00:49.520 --> 00:00:55.940
+Une unité qui échoue au contrôle est retirée de la ligne au lieu d'être discrètement emballée, et la ligne elle-même se fiche de savoir qui a construit une unité.
+
+00:00:56.500 --> 00:01:01.700
+Les humains oublient des étapes. Nous oublions les tâches ennuyeuses et nous les oublions tard le vendredi, pile au moment où une erreur coûte le plus cher.
+
+00:01:02.280 --> 00:01:07.200
+Le pipeline n'oublie pas, car les étapes sont enregistrées une fois, puis exécutées exactement de la même manière pour chaque modification ultérieure.
+
+00:01:08.000 --> 00:01:10.180
+C'est cette cohérence qui rend cette configuration si précieuse.
+
+00:01:10.820 --> 00:01:15.680
+Personne n'a besoin de connaître la liste de contrôle par cœur, et personne n'a à se demander en fin de journée si le dernier changement était sûr à déployer.
+
+00:01:16.420 --> 00:01:18.080
+Un pipeline n'est pas un outil que l'on achète prêt à l'emploi.
+
+00:01:18.080 --> 00:01:24.560
+C'est une habitude accompagnée d'une machine, et les équipes qui en tirent le meilleur parti ont généralement changé leur façon de travailler plutôt que le logiciel installé.
+
+00:01:25.460 --> 00:01:28.440
+Il existe une histoire de 2009 qui concrétise cela, et nous y reviendrons plus tard.
+
+00:01:29.240 --> 00:01:35.200
+A l'époque, une entreprise poussait du nouveau code sur son site web en direct environ 50 fois par jour, ce qui semble devoir finir en désastre.
+
+00:01:35.840 --> 00:01:36.820
+Pour l'instant, retenez une seule chose.
+
+00:01:37.360 --> 00:01:44.280
+Le pipeline n'a de sens que si vous savez ce qu'il a remplacé, et il a remplacé un processus si douloureux que les ingénieurs en parlent encore des décennies plus tard.
+
+00:01:45.360 --> 00:01:46.760
+Le problème qu'il a été conçu pour réseau.
+
+00:01:46.760 --> 00:01:50.240
+Ovenons aux années 1980, car l'histoire des origines explique tout le concept.
+
+00:01:50.740 --> 00:01:53.860
+Un jeune Martin Fowler effectuait un stage d'été dans une grande entreprise d'électronique,
+
+00:01:54.280 --> 00:01:58.040
+et son responsable lui a fait visiter un immense entrepôt sans fenêtre rempli de programmeurs travaillant dans des cubicules.
+
+00:01:58.700 --> 00:02:00.120
+Le détail qui compte le plus est venu ensuite.
+
+00:02:00.520 --> 00:02:05.540
+Leur code avait été écrit pendant deux ans, et à ce stade, les éléments séparés étaient en train d'être fusionnés, et il l'était depuis des mois.
+
+00:02:06.100 --> 00:02:07.920
+Personne ne savait vraiment combien de temps il faudrait pour terminer.
+
+00:02:07.920 --> 00:02:10.460
+C'est l'échec avec lequel tout le monde vivait, et y porte un an.
+
+00:02:11.600 --> 00:02:16.420
+Appeler cela l'enfer de l'intégration, le moment où rassembler le travail de chacun prend plus de temps que de l'écrire à l'origine.
+
+00:02:17.240 --> 00:02:19.160
+La version quotidienne est plus petite et bien plus familiale.
+
+00:02:20.040 --> 00:02:21.040
+Deux personnes modifient la même chose.
+
+00:02:21.360 --> 00:02:25.740
+L'une a modifié des lignes en premier, et la seconde passe, l'après-midi a démêlé un travail qui était pourtant parfait le matin même.
+
+00:02:26.900 --> 00:02:28.920
+Le vrai coup n'est pas la fusion elle-même, c'est le timing.
+
+00:02:28.920 --> 00:02:34.600
+Car lorsque le problème surgit des semaines après sa création, la personne qui l'a créée a déjà oublié ce qu'elle pensait.
+
+00:02:36.000 --> 00:02:39.120
+Il existe aussi une petite phrase brutale dans ce monde, à qu'est-ce que ça marchait sur ma machine ?
+
+00:02:39.120 --> 00:02:45.280
+Cela signifie que le logiciel a fonctionné sur un ordinateur mais a échoué ailleurs, ce qui indique qu'un processus manuel vous ment silencieusement.
+
+00:02:45.700 --> 00:02:47.520
+La solution n'a donc jamais été un outil de fusion plus intelligent.
+
+00:02:47.960 --> 00:02:54.280
+La solution consistait à intégrer constamment de petits morceaux plutôt qu'un seul énorme morceau à la fin, et à laisser une machine vérifier le résultat à chaque fois, à chaque fois.
+
+00:02:54.980 --> 00:02:58.360
+La description d'une équipe saine par Fowler est presque ennuieuse à lire, et c'est bien là le but.
+
+00:02:58.920 --> 00:03:03.700
+Le travail de n'importe quel développeur n'est qu'à quelques heures du projet partagé et peut être réintégré en quelques minutes.
+
+00:03:04.300 --> 00:03:05.340
+Les deux chiffres racontent l'histoire.
+
+00:03:06.180 --> 00:03:11.580
+Des mois d'intégration d'un côté, des minutes de l'autre, et la seule vraie différence, c'est la fréquence à laquelle les gens fusionnaient et qui effectuaient les vérifications.
+
+00:03:12.960 --> 00:03:14.380
+Les conflits trouvés en quelques heures coûtent peu.
+
+00:03:14.800 --> 00:03:15.860
+Presque rien n'a encore changé.
+
+00:03:16.280 --> 00:03:19.640
+La correction est mineure, et la personne se souvient encore pourquoi elle a écrit la ligne en question.
+
+00:03:20.520 --> 00:03:26.200
+Conflits découverts des semaines plus tard coûtent cher, car le travail environnant a évolué, et vous reconstruisez quelque chose que vous ne pouvez plus visualiser pleinement.
+
+00:03:26.200 --> 00:03:30.860
+Si vous créez des powerapps ou des flux au lieu d'écrire du code, cela vous concerne tout autant.
+
+00:03:32.120 --> 00:03:36.460
+Chaque fois que vous modifiez une solution que quelqu'un d'autre modifie aussi, vous vivez la même histoire, simplement avec un écran plus convivial.
+
+00:03:37.380 --> 00:03:40.060
+Cette solution a un nom, et ce nom arrive en premier dans l'acronyme.
+
+00:03:40.880 --> 00:03:42.200
+Que signifie réellement l'intégration continue ?
+
+00:03:42.200 --> 00:03:46.020
+L'intégration continue est le premier des trois mots, et aussi le plus ancien.
+
+00:03:46.500 --> 00:03:51.200
+L'intégration continue signifie que chacun fusionne son travail dans la copie principale partagée au moins une fois par jour,
+
+00:03:51.420 --> 00:03:54.360
+et qu'une compilation automatisée avec des tests vérifie le tout, à chaque fois.
+
+00:03:55.000 --> 00:03:56.820
+Séparer les mots, car chaque moitié joue un rôle.
+
+00:03:57.320 --> 00:03:59.540
+Continue signifie tout le temps plutôt qu'une seule fois à la toute fin,
+
+00:03:59.720 --> 00:04:02.900
+et intégration signifie combiner votre travail avec celui des autres.
+
+00:04:03.880 --> 00:04:07.580
+Martin Foller, qui a rédigé la description canonique de ce concept, est stricte sur ce qui compte.
+
+00:04:07.580 --> 00:04:12.460
+Si un test échoue, la compilation est rouge, et l'équipe s'arrête pour corriger, car presque vert, c'est toujours rouge.
+
+00:04:13.060 --> 00:04:15.300
+Cette rigueur n'est pas du perfectionnisme pour le plaisir.
+
+00:04:15.880 --> 00:04:18.160
+Une compilation rouge qu'il reste est un pipeline auquel personne ne se fie,
+
+00:04:18.640 --> 00:04:21.180
+et un pipeline auquel personne ne se fie, un pipeline que les gens contournent discrètement.
+
+00:04:21.600 --> 00:04:23.400
+L'aspect quotidien demande plus d'efforts qu'il n'y paraît.
+
+00:04:23.960 --> 00:04:26.960
+Une modification qui reste isolée pendant une semaine est une modification que personne d'autre.
+
+00:04:27.540 --> 00:04:30.820
+Et les surprises sont précisément ce qui fait échouer une mise en production le soir où c'est le plus important.
+
+00:04:31.640 --> 00:04:33.380
+Un autre élément de cette habitude est facile à négliger.
+
+00:04:33.720 --> 00:04:34.680
+La compilation doit être rapide.
+
+00:04:35.060 --> 00:04:37.520
+Une vérification qui prend une heure est une vérification pour laquelle les gens cessent d'attendre.
+
+00:04:37.800 --> 00:04:40.080
+Et une vérification pour laquelle personne n'attend pourrait aussi bien ne pas existir.
+
+00:04:40.620 --> 00:04:43.900
+En 1991, Grady Butch a proposé le terme intégration continue.
+
+00:04:44.800 --> 00:04:46.940
+L'extrême programming en a fait une pratique fondamentale en 1980.
+
+00:04:47.660 --> 00:04:51.160
+Et le premier outil open source connu pour cela, Cruise Control, est apparu en 2001.
+
+00:04:51.720 --> 00:04:53.320
+Rien de tout cela ne nécessite un produit sophistiqué non.
+
+00:04:53.920 --> 00:04:56.300
+Le cœur de l'intégration continue est une copie principale partagée,
+
+00:04:56.520 --> 00:04:59.220
+une compilation qui s'autoteste et la discipline de corriger dès qu'elle casse.
+
+00:05:00.000 --> 00:05:01.720
+L'intégration n'est cependant que la première partie d'histoire.
+
+00:05:01.940 --> 00:05:04.720
+Les deux autres mots de l'acronyme sont ceux que les gens confondent réellement.
+
+00:05:04.880 --> 00:05:07.120
+Et il vaut la peine de les distinguer, de les distinguer.
+
+00:05:08.080 --> 00:05:09.100
+Livraison versus déploiement.
+
+00:05:09.600 --> 00:05:11.100
+Deux mots, une lettre de différence.
+
+00:05:11.300 --> 00:05:12.840
+Et la plupart des explications les mélangent.
+
+00:05:13.460 --> 00:05:15.240
+La livraison et le déploiement ne sont pas la même chose.
+
+00:05:15.580 --> 00:05:18.300
+Et la différence détermine ce que votre pipeline est autorisé à faire seul.
+
+00:05:18.700 --> 00:05:21.280
+La livraison continue signifie que le logiciel est toujours dans un état
+
+00:05:21.280 --> 00:05:23.580
+permettant une publication à la demande quand l'équipe le choisit.
+
+00:05:24.020 --> 00:05:26.420
+Vous gardez le bouton disponible et vous appuyez dessus quand l'entreprise est prête,
+
+00:05:26.500 --> 00:05:27.780
+que ce soit aujourd'hui ou le mois prochain.
+
+00:05:28.280 --> 00:05:29.760
+Le déploiement continu va encore plus loin.
+
+00:05:29.760 --> 00:05:33.200
+Chaque modification validée par le pipeline est mise en ligne automatiquement
+
+00:05:33.200 --> 00:05:35.740
+et personne ne pousse rien car le pipeline l'a déjà fait.
+
+00:05:36.220 --> 00:05:37.740
+La limite entre les deux tient en une respiration.
+
+00:05:38.300 --> 00:05:39.940
+La livraison signifie que vous pouvez déployer à tout moment
+
+00:05:39.940 --> 00:05:41.600
+et le déploiement signifie que vous le faites réellement.
+
+00:05:42.140 --> 00:05:45.180
+Chaque fois qu'une modification passe, il existe une manière pratique de ressentir la différence.
+
+00:05:45.660 --> 00:05:48.160
+Une équipe faisant de la livraison continue pourrait publier immédiatement,
+
+00:05:48.500 --> 00:05:49.300
+mais attend un lancement.
+
+00:05:49.660 --> 00:05:53.480
+Une équipe faisant du déploiement continu a une modification fusionnée en ligne avant le déjeuner,
+
+00:05:53.580 --> 00:05:54.420
+sans annonce préalable.
+
+00:05:55.240 --> 00:05:57.500
+Fowler propose un test qui tranche tout débat sur les étiquettes.
+
+00:05:58.240 --> 00:05:59.960
+Demandez si un responsable métier pourrait demander
+
+00:05:59.960 --> 00:06:02.800
+une mise en ligne immédiate de la version actuelle sans que personne ne panique.
+
+00:06:03.660 --> 00:06:05.400
+Si la réponse est oui, alors vous faites de la livraison.
+
+00:06:05.780 --> 00:06:06.780
+L'ordre ne fonctionne que dans un sens.
+
+00:06:07.160 --> 00:06:09.060
+On ne peut pas automatiser une mise en production qui n'est pas prête
+
+00:06:09.060 --> 00:06:11.380
+et le déploiement continu nécessite donc d'abord une livraison continue
+
+00:06:11.380 --> 00:06:13.500
+qui elle-même repose sur l'habitude de l'intégration quotidienne.
+
+00:06:14.620 --> 00:06:16.220
+Il y a une raison pour laquelle les équipes s'imposent tout cela.
+
+00:06:16.860 --> 00:06:19.560
+Des mises en production plus petites et fréquentes limitent les risques et toute erreur
+
+00:06:19.560 --> 00:06:22.220
+et plus faciles à corriger, ce qui est préférable à une grosse livraison,
+
+00:06:22.540 --> 00:06:23.780
+tenue uniquement par l'espoir.
+
+00:06:25.930 --> 00:06:29.250
+Fowler décrit un commerçant qui a déployé son nouveau système en ligne par étapes prudentes.
+
+00:06:29.990 --> 00:06:32.590
+Il a d'abord été accessible aux employés, puis à un groupe de clients invités
+
+00:06:32.590 --> 00:06:34.490
+et seulement après, à tout le monde.
+
+00:06:35.570 --> 00:06:37.070
+Remarquez aussi ce que la livraison n'impose pas.
+
+00:06:37.590 --> 00:06:39.010
+Elle ne vous oblige pas à le déployer constamment.
+
+00:06:39.210 --> 00:06:40.870
+De nombreuses équipes excellentes dans la livraison
+
+00:06:40.870 --> 00:06:43.010
+tout en suivant un calendrier défini par l'entreprise.
+
+00:06:44.010 --> 00:06:45.350
+Une fois ces deux concepts clarifiés,
+
+00:06:45.730 --> 00:06:48.910
+le pipeline devient beaucoup plus simple à comprendre en parcourant ces étapes.
+
+00:06:49.850 --> 00:06:52.630
+Abordons maintenant la machinerie dans l'ordre réel de circulation d'un changement.
+
+00:06:53.330 --> 00:06:54.610
+Un pipeline n'est qu'une séquence
+
+00:06:54.610 --> 00:06:58.330
+et chaque étape a un rôle unique, ce qui permet à un débutant de suivre sans connaître les outils.
+
+00:06:59.130 --> 00:07:00.170
+Tout commence par un déclencheur.
+
+00:07:00.790 --> 00:07:01.950
+Quelque chose lance l'exécution,
+
+00:07:02.170 --> 00:07:03.470
+le plus souvent un changement enregistré,
+
+00:07:03.630 --> 00:07:06.630
+bien que cela puisse être un calendrier ou quelqu'un qui appuie sur un bouton.
+
+00:07:07.330 --> 00:07:08.010
+Vient ensuite la construction.
+
+00:07:08.570 --> 00:07:10.830
+La machine prend le code et le transforme en quelque chose d'exécutable.
+
+00:07:11.230 --> 00:07:13.710
+Elle effectue la compilation et le packaging qu'un humain faisait manuellement,
+
+00:07:14.030 --> 00:07:14.750
+et elle ne varie jamais.
+
+00:07:15.330 --> 00:07:16.070
+Puis les tests exécutent.
+
+00:07:16.070 --> 00:07:19.510
+Cela va des petits tests unitaires vérifiant une fonction aux analyses de sécurité
+
+00:07:19.510 --> 00:07:21.550
+cherchant des problèmes connus dans les bibliothèques importées.
+
+00:07:22.350 --> 00:07:23.270
+L'objectif n'est pas la perfection.
+
+00:07:23.690 --> 00:07:25.950
+C'est de détecter les erreurs faciles à corriger avant qu'un client ne les trouve.
+
+00:07:26.770 --> 00:07:28.610
+L'exécution produit alors un artefact,
+
+00:07:28.790 --> 00:07:31.330
+le package versionné final que toute la suite utilisera.
+
+00:07:32.450 --> 00:07:34.550
+C'est ici que réside la règle la plus importante du pipeline.
+
+00:07:34.550 --> 00:07:35.870
+On construit le package une seule fois,
+
+00:07:35.970 --> 00:07:38.250
+puis on déplace ce même package vers la suite.
+
+00:07:39.230 --> 00:07:41.170
+Reconstruire pour chaque environnement est un désastre silencieux,
+
+00:07:41.290 --> 00:07:44.310
+car vous finissez par tester une chose et en livrer une légèrement différente.
+
+00:07:45.610 --> 00:07:47.110
+La version qui a réussi dans l'environnement de test
+
+00:07:47.110 --> 00:07:48.710
+doit être exactement celle qui atteint la production,
+
+00:07:48.890 --> 00:07:49.850
+sinon les tests ne prouvent rien.
+
+00:07:51.270 --> 00:07:52.370
+L'ordre est volontairement fixe.
+
+00:07:52.930 --> 00:07:54.830
+Vous ne pouvez pas tester un package que vous n'avez pas construit,
+
+00:07:54.930 --> 00:07:56.530
+ni déployer un package qui a échoué à ces tests.
+
+00:07:57.330 --> 00:07:59.690
+Chaque étape existe donc en partie pour protéger la suivante.
+
+00:08:00.610 --> 00:08:03.570
+Enfin, le package est déployé d'abord dans un environnement de test,
+
+00:08:03.570 --> 00:08:05.830
+puis en production, le pipeline répétant les mêmes étapes
+
+00:08:05.830 --> 00:08:07.390
+et rapportant les mêmes résultats à chaque fois.
+
+00:08:08.130 --> 00:08:10.210
+Si vous avez déjà suivi manuellement une liste de vérification
+
+00:08:10.210 --> 00:08:12.490
+pour une mise en production, vous comprenez déjà la valeur de cette démarche.
+
+00:08:12.910 --> 00:08:14.390
+La machine ne se fatigue pas après une longue journée
+
+00:08:14.390 --> 00:08:16.030
+et elle ne saute jamais une ligne ennuyeuse.
+
+00:08:16.610 --> 00:08:18.370
+Les noms changent d'un outil à l'autre, mais pas la forme.
+
+00:08:19.970 --> 00:08:22.750
+Tout comme vos pipelines organisent cela en étapes, tâches et séquences,
+
+00:08:22.890 --> 00:08:25.250
+et que GitHub Actions conserve la même idée dans les fichiers de workflow,
+
+00:08:25.370 --> 00:08:27.690
+Power Platform possède aussi sa propre fonctionnalité de pipeline
+
+00:08:27.690 --> 00:08:30.050
+permettant à un créateur de déployer une solution en quelques clics.
+
+00:08:31.290 --> 00:08:33.070
+Nommer les étapes est la partie la plus facile à ce point.
+
+00:08:33.070 --> 00:08:36.090
+Le moment intéressant est celui où un pipeline s'arrête volontairement
+
+00:08:36.090 --> 00:08:37.310
+pour attendre une personne.
+
+00:08:38.530 --> 00:08:39.990
+Les environnements et la porte d'accès avant la production.
+
+00:08:40.670 --> 00:08:43.210
+Un pipeline peut construire et tester parfaitement et quand même marquer une pause.
+
+00:08:43.350 --> 00:08:45.230
+Et cette pause est un choix de conception plutôt qu'un défaut.
+
+00:08:46.210 --> 00:08:47.690
+Cela se produit à la limite de l'environnement.
+
+00:08:47.770 --> 00:08:49.570
+L'idée d'environnement mérite donc 30 secondes d'attention.
+
+00:08:50.550 --> 00:08:51.990
+Un environnement est simplement une copie du monde.
+
+00:08:52.110 --> 00:08:54.330
+Votre logiciel s'exécutive et en conserve une série échelonnée.
+
+00:08:54.690 --> 00:08:55.010
+Échelonnée.
+
+00:08:55.070 --> 00:08:57.570
+Le développement vient en premier, puis un environnement de test
+
+00:08:57.570 --> 00:08:59.510
+y ressemble à la production et enfin la production elle-même.
+
+00:08:59.870 --> 00:09:00.990
+Cette hiérarchie existe pour une seule raison.
+
+00:09:00.990 --> 00:09:03.810
+Ou les rencontrer les surprises ailleurs que dans l'environnement réel.
+
+00:09:04.490 --> 00:09:06.390
+Un bug dans un environnement de test coûte un rapport de bug.
+
+00:09:06.650 --> 00:09:08.030
+Mais un bug en production coûte des clients.
+
+00:09:08.670 --> 00:09:10.490
+L'automatisation s'arrête délibérément à un moment donné.
+
+00:09:10.930 --> 00:09:12.290
+Dans des outils comme Azure Pipelines,
+
+00:09:12.370 --> 00:09:14.510
+vous pouvez associer une approbation manuelle à une étape de production.
+
+00:09:14.950 --> 00:09:16.850
+Et l'exécution attend simplement qu'une personne dise oui.
+
+00:09:17.370 --> 00:09:17.530
+Oui.
+
+00:09:17.790 --> 00:09:18.490
+C'est le compromis honnête.
+
+00:09:18.490 --> 00:09:20.750
+La machine gère le travail répétitif et la mémoire,
+
+00:09:20.850 --> 00:09:23.510
+tandis que l'humain garde la décision sur la dernière porte.
+
+00:09:24.210 --> 00:09:27.290
+La documentation de Microsoft qualifie l'approbation manuelle de contrôle courant
+
+00:09:27.290 --> 00:09:28.590
+pour gérer les déploiements en production,
+
+00:09:28.790 --> 00:09:31.130
+ce qui montre que même les entreprises les plus automatisées
+
+00:09:31.130 --> 00:09:32.810
+attendent une intervention humaine à cette étape.
+
+00:09:37.330 --> 00:09:40.090
+Un créateur déploie une solution du développement vers un environnement de test.
+
+00:09:40.730 --> 00:09:42.910
+Le déploiement est vérifié par rapport à la cible avant de commencer,
+
+00:09:43.110 --> 00:09:44.870
+puis quelqu'un approuve le passage en production.
+
+00:09:46.010 --> 00:09:47.930
+Cette porte existe parce que les choses finissent par mal tourner,
+
+00:09:48.150 --> 00:09:49.470
+même avec toutes les vérifications en place.
+
+00:09:49.470 --> 00:09:51.870
+La plupart des équipes ne réfléchissent sérieusement à cet aspect
+
+00:09:51.870 --> 00:09:53.110
+qu'après leur première mauvaise mise en production.
+
+00:09:53.810 --> 00:09:54.870
+Quand un déploiement tourne mal,
+
+00:09:55.130 --> 00:09:56.870
+chaque porte finira par laisser passer quelque chose,
+
+00:09:56.970 --> 00:09:59.850
+donc la vraie question n'est pas de savoir si une version va casser quelque chose.
+
+00:10:00.590 --> 00:10:03.510
+La vraie question est la vitesse à laquelle l'équipe peut restaurer la dernière bonne version.
+
+00:10:04.170 --> 00:10:05.990
+Commencez par le mouvement le plus simple, qui est le retour en arrière.
+
+00:10:06.530 --> 00:10:07.570
+Lorsqu'un changement pose problème,
+
+00:10:07.770 --> 00:10:10.190
+la réponse la plus sûre est généralement de restaurer la version précédente
+
+00:10:10.190 --> 00:10:11.110
+pour laisser les gens respirer.
+
+00:10:11.710 --> 00:10:14.410
+C'est pourquoi il est si important de conserver le dernier bon paquet disponible.
+
+00:10:15.030 --> 00:10:17.030
+Tout le reste de cette section répond à une seule question,
+
+00:10:17.130 --> 00:10:19.050
+à quelle vitesse pouvez-vous annuler l'opération
+
+00:10:19.050 --> 00:10:20.690
+si quelque chose tourne mal ?
+
+00:10:20.690 --> 00:10:22.810
+Les stratégies diffèrent principalement par le niveau de sécurité obtenu
+
+00:10:22.810 --> 00:10:24.350
+et la complexité que vous acceptez en échange.
+
+00:10:24.870 --> 00:10:26.470
+Un déploiement basique remplace tout en une seule fois.
+
+00:10:27.070 --> 00:10:28.890
+C'est simple, peu coûteux et le plus risqué,
+
+00:10:29.010 --> 00:10:31.130
+car vous n'avez pas de solution de repli sécurisé en cas de problème.
+
+00:10:32.010 --> 00:10:34.010
+Un déploiement par vague remplace les machines par lot,
+
+00:10:34.190 --> 00:10:36.050
+permettant à certaines de continuer à servir l'ancienne version
+
+00:10:36.050 --> 00:10:37.150
+pendant que les autres se mettent à jour.
+
+00:10:37.830 --> 00:10:39.950
+C'est facile à annuler et plus doux pour vos utilisateurs,
+
+00:10:40.250 --> 00:10:41.270
+bien que cela prenne plus de temps
+
+00:10:41.270 --> 00:10:43.470
+et nécessite que les anciennes et nouvelles versions soient compatibles.
+
+00:10:43.470 --> 00:10:46.530
+Le déploiement bleu-vert maintient deux environnements identiques
+
+00:10:46.530 --> 00:10:47.810
+et bascule le trafic de l'un à l'autre,
+
+00:10:47.910 --> 00:10:49.490
+rendant le retour arrière quasi instantané
+
+00:10:49.490 --> 00:10:50.730
+puisqu'il suffit de basculer à nouveau.
+
+00:10:51.630 --> 00:10:52.370
+L'inconvénient est le coût,
+
+00:10:52.510 --> 00:10:54.450
+car vous payez pour un second environnement qui reste en attente.
+
+00:10:55.090 --> 00:10:56.770
+Le déploiement canarie envoie d'abord le changement
+
+00:10:56.770 --> 00:10:57.990
+à une petite fraction d'utilisateurs,
+
+00:10:58.210 --> 00:10:58.770
+surveille les données,
+
+00:10:58.990 --> 00:11:00.690
+et tend le déploiement si tout se passe bien.
+
+00:11:01.350 --> 00:11:02.990
+C'est le plus sûr du groupe et moins cher que le bleu-vert,
+
+00:11:03.110 --> 00:11:04.430
+mais aussi le plus complexe à mettre en œuvre,
+
+00:11:04.430 --> 00:11:06.930
+car vous surveillez du trafic réel plutôt qu'un test...
+
+00:11:06.930 --> 00:11:07.490
+plutôt qu'un test.
+
+00:11:07.970 --> 00:11:08.890
+Revenons à l'histoire précédente,
+
+00:11:08.890 --> 00:11:10.170
+car c'est ici qu'elle prend tout son sens.
+
+00:11:10.650 --> 00:11:12.450
+En 2009, une entreprise nommée IMVU
+
+00:11:12.450 --> 00:11:14.690
+effectuait en moyenne environ 50 déploiements par jour.
+
+00:11:15.650 --> 00:11:16.490
+Son script de publication
+
+00:11:16.490 --> 00:11:17.650
+envoyait chaque nouvelle version
+
+00:11:17.650 --> 00:11:19.010
+vers un petit ensemble de machines,
+
+00:11:19.150 --> 00:11:20.090
+desservant les premiers clients.
+
+00:11:20.710 --> 00:11:21.250
+Une minute plus tard,
+
+00:11:21.330 --> 00:11:22.430
+il vérifiait les indicateurs de santé
+
+00:11:22.430 --> 00:11:23.650
+et effectuait une annulation automatique
+
+00:11:23.650 --> 00:11:24.550
+si une anomalie était détectée.
+
+00:11:24.750 --> 00:11:26.730
+C'est un déploiement canarie avec annulation automatique
+
+00:11:26.730 --> 00:11:28.270
+et cela fonctionnait bien avant que les fournisseurs
+
+00:11:28.270 --> 00:11:29.130
+ne le proposent officiellement.
+
+00:11:29.550 --> 00:11:30.670
+Azure Pipelines propose désormais
+
+00:11:30.670 --> 00:11:31.830
+ces mêmes stratégies prêtes à l'emploi,
+
+00:11:32.150 --> 00:11:33.990
+sous les noms exécutées une fois par Vague et canarie.
+
+00:11:34.350 --> 00:11:36.070
+Le manuel de reprise est donc bien réel et prouvé.
+
+00:11:36.070 --> 00:11:37.530
+Les échecs qui surviennent encore
+
+00:11:37.530 --> 00:11:39.430
+sont généralement dus à une courte liste d'habitudes
+
+00:11:39.430 --> 00:11:41.010
+et il vaut la peine de les examiner.
+
+00:11:42.610 --> 00:11:43.910
+Les erreurs qui brisent les pipelines
+
+00:11:43.910 --> 00:11:46.470
+Si la reprise est le héros de cette histoire,
+
+00:11:46.650 --> 00:11:48.290
+le méchant est généralement une habitude
+
+00:11:48.290 --> 00:11:49.130
+plutôt qu'un outil.
+
+00:11:49.690 --> 00:11:50.890
+La plupart des pipelines cassés
+
+00:11:50.890 --> 00:11:52.090
+échouent de manière prévisible
+
+00:11:52.090 --> 00:11:54.070
+et chacune d'elles peut être évitée.
+
+00:11:54.410 --> 00:11:56.110
+La première et la plus importante
+
+00:11:56.110 --> 00:11:56.910
+est le traitement par groupe.
+
+00:11:58.190 --> 00:11:59.190
+Les recherches du programme Dora
+
+00:11:59.190 --> 00:12:00.570
+étudient la livraison de logiciels
+
+00:12:00.570 --> 00:12:01.490
+depuis plus d'une décennie
+
+00:12:01.490 --> 00:12:02.850
+et reviennent toujours aux mêmes conseils.
+
+00:12:03.530 --> 00:12:04.330
+Faites en sorte que chaque changement
+
+00:12:04.330 --> 00:12:05.050
+soit le plus petit possible.
+
+00:12:05.050 --> 00:12:07.090
+Les petits changements sont plus faciles à analyser,
+
+00:12:07.230 --> 00:12:08.050
+plus rapides à déployer
+
+00:12:08.050 --> 00:12:08.890
+et plus simples à annuler.
+
+00:12:09.390 --> 00:12:10.430
+Ensuite, il y a les tests instables,
+
+00:12:10.650 --> 00:12:11.510
+ceux qui échouent aléatoirement
+
+00:12:11.510 --> 00:12:12.810
+et réussissent quand on les relance.
+
+00:12:13.270 --> 00:12:14.410
+Un tel test apprend à toute l'équipe
+
+00:12:14.410 --> 00:12:15.350
+à ignorer les alertes rouges.
+
+00:12:15.830 --> 00:12:16.870
+Et une fois que les gens ignorent le rouge,
+
+00:12:16.930 --> 00:12:17.890
+le pipeline n'est que de la décoration.
+
+00:12:18.390 --> 00:12:19.310
+IMVU a placé la barre
+
+00:12:19.310 --> 00:12:20.650
+à un niveau presque absurdement élevé ici.
+
+00:12:21.210 --> 00:12:22.150
+Leur norme était qu'un test
+
+00:12:22.150 --> 00:12:22.930
+ne devrait pas échouer
+
+00:12:22.930 --> 00:12:24.590
+plus d'une fois sur un million d'exécutions.
+
+00:12:25.190 --> 00:12:26.350
+Ils traitent les échecs intermittents
+
+00:12:26.350 --> 00:12:27.170
+comme des bugs à traquer
+
+00:12:27.170 --> 00:12:28.270
+plutôt que des relances à cliquer.
+
+00:12:29.430 --> 00:12:30.350
+Reconstruire au lieu de promouvoir
+
+00:12:30.350 --> 00:12:31.470
+est un autre tueur silencieux.
+
+00:12:32.110 --> 00:12:33.010
+Si le paquet que vous avez testé
+
+00:12:33.010 --> 00:12:34.030
+n'est pas le paquet que vous avez livré,
+
+00:12:34.150 --> 00:12:34.930
+vous n'avez rien testé.
+
+00:12:35.330 --> 00:12:36.530
+C'est pourquoi l'artefact est construit
+
+00:12:36.530 --> 00:12:37.790
+une fois et conservé tout du long.
+
+00:12:38.430 --> 00:12:39.610
+Les secrets méritent aussi d'être mentionnés.
+
+00:12:39.990 --> 00:12:40.670
+Les mots de passe et les clés
+
+00:12:40.670 --> 00:12:41.910
+doivent être dans un stockage sécurisé
+
+00:12:41.910 --> 00:12:42.710
+comme un groupe de variables
+
+00:12:42.710 --> 00:12:43.410
+dans Azure Pipelines.
+
+00:12:44.130 --> 00:12:44.830
+Les taper dans un script
+
+00:12:44.830 --> 00:12:45.570
+les laisse à la portée
+
+00:12:45.570 --> 00:12:46.710
+de tous les membres de l'équipe.
+
+00:12:47.350 --> 00:12:48.110
+Ah, c'est la responsabilité.
+
+00:12:48.530 --> 00:12:49.430
+Quand la build vire au rouge
+
+00:12:49.430 --> 00:12:50.830
+et que personne ne se sent responsable,
+
+00:12:50.990 --> 00:12:51.770
+l'habitude s'effondre
+
+00:12:51.770 --> 00:12:52.910
+car l'intégration continue
+
+00:12:52.910 --> 00:12:53.850
+est une promesse d'équipe
+
+00:12:53.850 --> 00:12:55.730
+plutôt qu'un plugin à installer.
+
+00:12:55.730 --> 00:12:57.290
+Le dernier piège
+
+00:12:57.290 --> 00:12:58.050
+qui mérite d'être cité
+
+00:12:58.050 --> 00:12:58.750
+est le piège de la mesure.
+
+00:12:59.270 --> 00:12:59.890
+Dora prévient que
+
+00:12:59.890 --> 00:13:01.170
+transformer une métrique en objectif
+
+00:13:01.170 --> 00:13:02.030
+pousse surtout les gens
+
+00:13:02.030 --> 00:13:03.030
+à manipuler les chiffres.
+
+00:13:03.630 --> 00:13:04.410
+Exigez un certain nombre
+
+00:13:04.410 --> 00:13:05.270
+de déploiements par jour
+
+00:13:05.270 --> 00:13:06.410
+et vous obtiendrez ce chiffre
+
+00:13:06.410 --> 00:13:07.290
+plutôt qu'un meilleur travail.
+
+00:13:07.870 --> 00:13:08.610
+La nouveauté est l'IA
+
+00:13:08.610 --> 00:13:10.050
+et la recherche est plus intéressante
+
+00:13:10.050 --> 00:13:10.810
+que les gros titres.
+
+00:13:11.650 --> 00:13:12.370
+Dora a constaté
+
+00:13:12.370 --> 00:13:13.470
+qu'une hausse de l'adoption de l'IA
+
+00:13:13.470 --> 00:13:14.050
+était associée
+
+00:13:14.050 --> 00:13:14.990
+à un meilleur travail individuel
+
+00:13:14.990 --> 00:13:16.770
+incluant 3,4% d'amélioration
+
+00:13:16.770 --> 00:13:17.690
+de la qualité du code.
+
+00:13:18.610 --> 00:13:19.770
+La même recherche l'a liée
+
+00:13:19.770 --> 00:13:20.450
+à une légère baisse
+
+00:13:20.450 --> 00:13:21.210
+du débit de livraison
+
+00:13:21.210 --> 00:13:22.150
+et une chute plus importante
+
+00:13:22.150 --> 00:13:22.930
+de la stabilité.
+
+00:13:23.590 --> 00:13:25.010
+La leçon est qu'écrire plus vite
+
+00:13:25.010 --> 00:13:26.510
+ne répare pas un pipeline lent.
+
+00:13:27.870 --> 00:13:28.830
+Pour savoir où cela vous mène,
+
+00:13:29.190 --> 00:13:30.490
+gardez cette version courte en tête.
+
+00:13:31.310 --> 00:13:32.110
+L'intégration consiste
+
+00:13:32.110 --> 00:13:32.970
+à fusionner votre travail
+
+00:13:32.970 --> 00:13:33.450
+en permanence
+
+00:13:33.450 --> 00:13:33.990
+pendant qu'une machine
+
+00:13:33.990 --> 00:13:34.450
+monte la garde.
+
+00:13:34.950 --> 00:13:35.670
+La livraison consiste
+
+00:13:35.670 --> 00:13:36.670
+à rester pré-publié à tout moment.
+
+00:13:37.030 --> 00:13:37.770
+Le déploiement consiste
+
+00:13:37.770 --> 00:13:38.950
+à laisser le pipeline publié pour vous
+
+00:13:38.950 --> 00:13:39.810
+et les étapes ne sont que
+
+00:13:39.810 --> 00:13:40.630
+cette liste de vérifications
+
+00:13:40.630 --> 00:13:41.410
+s'exécutant dans l'ordre.
+
+00:13:41.690 --> 00:13:42.450
+La raison d'être de tout cela
+
+00:13:42.450 --> 00:13:42.910
+est plus simple
+
+00:13:42.910 --> 00:13:43.710
+que ce que gère l'acronyme.
+
+00:13:44.630 --> 00:13:45.610
+Les équipes qui livrent le plus
+
+00:13:45.610 --> 00:13:46.530
+sont celles qui peuvent annuler
+
+00:13:46.530 --> 00:13:47.150
+le plus rapidement.
+
+00:13:47.870 --> 00:13:48.930
+Ainsi, vitesse et sécurité
+
+00:13:48.930 --> 00:13:50.130
+s'avèrent être la même compétence
+
+00:13:50.130 --> 00:13:51.070
+plutôt que des notions opposées.
+
+00:13:51.550 --> 00:13:52.550
+Une question mérite réflexion
+
+00:13:52.550 --> 00:13:52.890
+après cela.
+
+00:13:53.730 --> 00:13:54.510
+Quelle est l'étape manuelle
+
+00:13:54.510 --> 00:13:55.250
+dans votre propre travail
+
+00:13:55.250 --> 00:13:56.210
+que vous confieriez volontiers
+
+00:13:56.210 --> 00:13:56.810
+à une machine
+
+00:13:56.810 --> 00:13:57.550
+si elle pouvait l'exécuter
+
+00:13:57.550 --> 00:13:58.070
+de la même manière
+
+00:13:58.070 --> 00:13:59.090
+à chaque fois ?
+
+00:13:59.090 --> 00:13:59.590
+Euh...

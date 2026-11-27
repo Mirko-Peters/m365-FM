@@ -1,0 +1,607 @@
+WEBVTT
+
+00:00:00.480 --> 00:00:05.280
+Bienvenidos al podcast M305FM, donde exploramos a las personas, ideas y tecnologías que dan
+
+00:00:05.280 --> 00:00:09.540
+forma al futuro del trabajo. Un pipeline de CCD es una línea de fábrica para software,
+
+00:00:09.880 --> 00:00:13.460
+y una vez que lo ves así, no puedes dejar de verlo. La materia prima entra por un extremo,
+
+00:00:13.620 --> 00:00:17.020
+un producto verificado y empaquetado sale por el otro, y los mismos pasos se ejecutan en el mismo
+
+00:00:17.020 --> 00:00:20.540
+orden cada vez. Lo que sorprende a la gente es que el pipeline nunca se trató realmente de velocidad,
+
+00:00:20.920 --> 00:00:23.740
+porque los equipos que envían más rápido son también los que se recuperan más rápido.
+
+00:00:24.820 --> 00:00:29.720
+Bienvenidos al podcast M305FM, donde exploramos a las personas, ideas y tecnologías que dan
+
+00:00:29.720 --> 00:00:34.120
+forma al futuro del trabajo. Cuando terminemos, las cuatro letras de CCD dejarán de ser jerga y
+
+00:00:34.120 --> 00:00:38.020
+sabrás lo que cada etapa de esa línea está verificando realmente. ¿Qué es realmente un
+
+00:00:38.020 --> 00:00:42.880
+pipeline? Empecemos con la versión más simple de la palabra. Un pipeline es una lista fija de pasos
+
+00:00:42.880 --> 00:00:46.680
+que una computadora ejecuta de la misma manera cada vez que alguien cambia el software. Esa es
+
+00:00:46.680 --> 00:00:50.580
+toda la idea. Vale la pena extender un poco más la comparación con la línea de fábrica. Una unidad
+
+00:00:50.580 --> 00:00:54.480
+que no pasa a la inspección se retira de la línea en lugar de ser empaquetada silenciosamente, y a la
+
+00:00:54.480 --> 00:00:58.460
+línea no le importa quién construyó la unidad. Los humanos olvidan pasos. Olvidamos los aburridos y los
+
+00:00:58.460 --> 00:01:02.740
+olvidamos tarde un viernes que es precisamente cuando un error es más costoso. El pipeline no
+
+00:01:02.740 --> 00:01:06.100
+olvida porque los pasos se escriben una vez y luego se ejecutan exactamente de la misma manera
+
+00:01:06.100 --> 00:01:10.220
+para cada cambio posterior. Esa consistencia es lo que hace que la configuración valga la pena.
+
+00:01:10.860 --> 00:01:14.160
+Nadie tiene que recordar la lista de verificación de memoria y nadie tiene que adivinar al final del
+
+00:01:14.160 --> 00:01:17.920
+día si el último cambio era seguro para enviar. Un pipeline no es una herramienta que compras ya
+
+00:01:17.920 --> 00:01:22.200
+hecha. Es un hábito con una máquina adjunta, y los equipos que más provecho le sacan por lo general
+
+00:01:22.200 --> 00:01:27.180
+cambiaron su forma de trabajar en lugar del software que instalaron. Hay una historia de 2009 que hace esto real,
+
+00:01:27.180 --> 00:01:31.940
+y volveremos a ella más tarde. Una empresa en aquel entonces enviaba código nuevo a su sitio web
+
+00:01:31.940 --> 00:01:36.120
+en vivo unas 50 veces al día, lo cual suena a que debe haber terminado en desastre. Por ahora
+
+00:01:36.120 --> 00:01:40.620
+quédate con una cosa. El pipeline solo tiene sentido una vez que sabes que reemplazó, y lo que reemplazó
+
+00:01:40.620 --> 00:01:44.460
+era un proceso tan doloroso que los ingenieros todavía cuentan historias al respecto décadas después.
+
+00:01:45.540 --> 00:01:49.740
+El problema que se creó para resolver. Volvamos a la década de 1980 porque la historia de origen
+
+00:01:49.740 --> 00:01:53.600
+explica todavía. Un joven Martin Fowler tomó una pasantía de verano en una gran empresa de
+
+00:01:53.600 --> 00:01:57.240
+electrónica, y su gerente lo llevó a través de un enorme almacén sin ventanas lleno de programadores
+
+00:01:57.240 --> 00:02:01.560
+trabajando en cubículos. El detalle que más importa vino después. Su código se había escrito durante
+
+00:02:01.560 --> 00:02:05.100
+un par de años, y para entonces las piezas separadas estaban fusionando y llevaban meses
+
+00:02:05.100 --> 00:02:09.440
+haciéndolo. Nadie sabía realmente cuánto tiempo tomaría terminar. Ese es el fracaso con el que todos
+
+00:02:09.440 --> 00:02:14.300
+vivían y tienen nombre. Llámenlo infierno de integración, que es el punto donde unir el trabajo
+
+00:02:14.300 --> 00:02:18.820
+de todos lleva más tiempo que escribirlo originalmente. La versión cotidiana es más pequeña y mucho más
+
+00:02:18.820 --> 00:02:23.780
+familiar. Dos personas editan. Uno cambió líneas primero y la segunda persona pasa la tarde desenredando
+
+00:02:23.780 --> 00:02:29.000
+trabajo que estaba perfectamente bien por la mañana. El costo real no es la fusión en sí,
+
+00:02:29.100 --> 00:02:33.620
+es el momento. Porque cuando el problema surge semanas después, ¿quién lo creó? Ya olvidó lo
+
+00:02:33.620 --> 00:02:38.540
+que estaba pensando. También hay una pequeña frase brutal en este mundo. Eso funcionaba en mi
+
+00:02:38.540 --> 00:02:43.340
+computadora. Significa que el software pasó en una máquina y falló en otra, y eso suena un proceso
+
+00:02:43.340 --> 00:02:47.260
+manual, mintiéndote silenciosamente. Así que la solución nunca fue una herramienta de fusión
+
+00:02:47.260 --> 00:02:50.920
+más inteligente. La solución fue integrar piezas pequeñas constantemente en lugar de una enorme
+
+00:02:50.920 --> 00:02:55.840
+al final y dejar que una máquina verifique el resultado cada vez. La descripción de Fowler
+
+00:02:55.840 --> 00:02:59.720
+de un equipo saludable es casi aburrida de leer, y ese es el punto. El trabajo de cualquier
+
+00:02:59.720 --> 00:03:03.580
+desarrollador está a solo unas horas del proyecto compartido y puede integrarse de nuevo en minutos.
+
+00:03:04.300 --> 00:03:08.220
+Los dos números cuentan la historia. Meses de integración de un lado, minutos del otro,
+
+00:03:08.340 --> 00:03:11.860
+y la única diferencia real es la frecuencia con la que se fusionaba y quién revisaba.
+
+00:03:13.040 --> 00:03:17.140
+Los conflictos encontrados en baratos. Casi nada ha cambiado todavía. La solución es pequeña,
+
+00:03:17.140 --> 00:03:21.400
+y la persona aún recuerda por qué escribió la línea en cuestión. Los conflictos encontrados
+
+00:03:21.400 --> 00:03:24.920
+semanas después son costosos porque el trabajo circundante avanzó y está reconstruyendo algo
+
+00:03:24.920 --> 00:03:29.440
+que ya no puedes visualizar. Si construyes power-ups o flujos en lugar de escribir código,
+
+00:03:29.740 --> 00:03:34.100
+esto también te afecta. Cada vez que editas una solución que alguien más también edita,
+
+00:03:34.260 --> 00:03:38.320
+vives la misma historia pero con una pantalla más amigable. Esa solución tiene un nombre,
+
+00:03:38.520 --> 00:03:42.440
+y el nombre viene primero en el acrónimo. ¿Qué significa realmente la integración continua?
+
+00:03:42.440 --> 00:03:45.980
+La integración continua es la primera de las tres palabras y también la más antigua.
+
+00:03:46.700 --> 00:03:49.880
+La integración continua significa que todo fusiona en su trabajo en la copia principal
+
+00:03:49.880 --> 00:03:54.160
+compartida al menos una vez al día, y una compilación automatizada con pruebas lo verifica
+
+00:03:54.160 --> 00:03:58.480
+siempre. Repara las palabras porque cada mitad cumple una función. Continua significa todo el tiempo
+
+00:03:58.480 --> 00:04:02.540
+en lugar de una vez al final. La integración significa combinar tu trabajo con el de los demás
+
+00:04:02.540 --> 00:04:06.160
+demás. Martin Fowler, quien escribió la descripción canónica de esto,
+
+00:04:06.160 --> 00:04:10.360
+es estricto sobre lo que cuenta. Si una prueba falla, la compilación está en rojo y el equipo
+
+00:04:10.360 --> 00:04:14.740
+se detiene a repararlo porque Casi Verde sigue siendo rojo. Esa rigurosidad no es perfeccionismo
+
+00:04:14.740 --> 00:04:18.240
+por sí mismo. Una compilación roja que permanece roja es una línea de procesamiento en la que hay.
+
+00:04:18.540 --> 00:04:21.340
+Y una línea de procesamiento en la que nadie confía es una que la gente evita discretamente.
+
+00:04:21.680 --> 00:04:25.800
+La parte diaria hace más trabajo del que parece. Un cambio que permanece solo por una semana es un
+
+00:04:25.800 --> 00:04:29.740
+cambio que nadie más puede ver. Y las sorpresas son exactamente lo que arruina el lanzamiento
+
+00:04:29.740 --> 00:04:34.640
+la noche que más importa. Una parte más del hábito es fácil de pasar por alta. La compilación debe cerrar.
+
+00:04:34.640 --> 00:04:38.340
+Una verificación que toma una hora es una verificación que la gente evita. Una verificación
+
+00:04:38.340 --> 00:04:43.580
+que nadie espera podría no existir en absoluto. En 1991, Granny Butch propuso el término integración
+
+00:04:43.580 --> 00:04:48.100
+continua. La programación extrema la convirtió en una práctica fundamental en 17. Y la primera
+
+00:04:48.100 --> 00:04:52.300
+herramienta de código abierto conocida para ello, Cruise Control, llegó en 2001. Nada de esto requiere
+
+00:04:52.300 --> 00:04:55.960
+tampoco un producto sofisticado. El núcleo de la integración continua es una copia principal
+
+00:04:55.960 --> 00:04:59.340
+compartida, una compilación que separa a sí misma y la disciplina para reparar la pena falla.
+
+00:05:00.020 --> 00:05:03.380
+Sin embargo, la integración es solo la primera parte de vista. Las otras dos palabras en el
+
+00:05:03.380 --> 00:05:06.740
+acrónimo son las que la gente realmente confunde. Vale la pena separarlas por su cuenta.
+
+00:05:08.120 --> 00:05:12.380
+Entrega frente despliegue. Dos palabras separadas por una letra y la mayoría de las explicaciones
+
+00:05:12.380 --> 00:05:16.460
+las mezclan. Entrega y despliegue no son lo mismo y la diferencia decide lo que tu línea
+
+00:05:16.460 --> 00:05:20.220
+de procesamiento puede hacer por sí sola. La entrega continua significa que el software
+
+00:05:20.220 --> 00:05:23.500
+siempre está en un estado en el que podría lanzarse bajo demanda cuando el equipo lo decida.
+
+00:05:24.040 --> 00:05:27.280
+Mantienes el botón disponible y lo presionas cuando el negocio está listo, lo cual podría ser
+
+00:05:27.280 --> 00:05:31.240
+hoy o el próximo mes. El despliegue continuo va un paso más allá. Cada cambio que pasa
+
+00:05:31.240 --> 00:05:34.700
+por lo de mi procesamiento se publica automáticamente y nadie empuja nada porque la línea
+
+00:05:34.700 --> 00:05:39.500
+ya lo hizo. La línea que lo separa cabe en un suspiro. Entrega significa que puedes desplegar
+
+00:05:39.500 --> 00:05:43.100
+en cualquier momento y despliegue significa que realmente lo haces. Cada vez que un cambio pasa
+
+00:05:43.100 --> 00:05:47.460
+hay una forma práctica de notar la diferencia. Un equipo que hace entrega continua podría lanzar
+
+00:05:47.460 --> 00:05:51.900
+ahora mismo pero espera el momento del lanzamiento. Un equipo que hace despliegue continuo tiene un
+
+00:05:51.900 --> 00:05:55.880
+cambio fusionado en vivo antes del almuerzo sin que nadie tuviera que anunciarlo. Fowler ofrece una
+
+00:05:55.880 --> 00:06:00.080
+prueba que corta cualquier argumento sobre etiqueta. Pregunta si un patrocinador del negocio podría
+
+00:06:00.080 --> 00:06:02.860
+solicitar que la versión actual se publique en cualquier momento y nadie entraría en
+
+00:06:02.860 --> 00:06:07.420
+pánico. Si la respuesta es sí, tienes entrega. El orden solo funciona de una manera. No puedes
+
+00:06:07.420 --> 00:06:10.380
+automatizar un lanzamiento que no está listo, así que el despliegue continuo necesita primero
+
+00:06:10.380 --> 00:06:13.020
+una entrega continua, la entrega continua, la entrega necesita ese hábito de integración
+
+00:06:13.020 --> 00:06:16.260
+diaria como base. Hay una razón por la que los equipos se toman la molestia, ¿cierto?
+
+00:06:16.800 --> 00:06:20.140
+Lanzamientos más pequeños y frecuentes significan que menos cosas salen mal a la vez y lo que
+
+00:06:20.140 --> 00:06:23.120
+sí salen mal es más fácil de corregir, lo cual es mejor que mantener un lanzamiento gigante
+
+00:06:23.120 --> 00:06:28.300
+unito solo con esperanza. Fowler describió a un minorista que implementó un nuevo sistema en línea
+
+00:06:28.300 --> 00:06:32.340
+mediante pasos cuidadosos. Primero llegó a los empleados de la propia empresa, luego a un grupo
+
+00:06:32.340 --> 00:06:36.640
+de clientes invitados y solo después de eso, a todos los demás. Observa también lo que la entrega
+
+00:06:36.640 --> 00:06:40.640
+no exige. No te obliga a desplegar constantemente y muchos equipos mantienen una excelente capacidad
+
+00:06:40.640 --> 00:06:44.340
+de entrega mientras lanzan actualizaciones según un calendario definido por el negocio. En esos dos
+
+00:06:44.340 --> 00:06:48.040
+términos aclarados, el pipeline es y se vuelve mucho más fácil de recorrer, como si se caminara a
+
+00:06:48.040 --> 00:06:52.800
+través de sus etapas. Ahora llegamos a la maquinaria, en el orden en que un cambio realmente viaja.
+
+00:06:53.240 --> 00:06:56.820
+Un pipeline es en realidad solo una secuencia y cada etapa tiene una función, por lo cual un principiante
+
+00:06:56.820 --> 00:07:01.500
+puede seguirlo sin conocer las herramientas. Todo comienza con un disparador. Algo pone en marcha
+
+00:07:01.500 --> 00:07:05.060
+la ejecución y la mayoría de las veces ese algo es un cambio guardado, aunque también puede ser un
+
+00:07:05.060 --> 00:07:09.760
+horario o una persona presionando un botón. Después viene la compilación. La máquina toma el código y lo
+
+00:07:09.760 --> 00:07:13.880
+convierte en algo ejecutable. Realiza la compilación y el empaquetado que antes hacía un humano a mano
+
+00:07:13.880 --> 00:07:18.340
+y nunca varía. Luego se ejecutan las pruebas. Estas van desde pequeñas pruebas unitares que verifican
+
+00:07:18.340 --> 00:07:21.500
+una sola función hasta escaneos de seguridad que buscan problemas conocidos en las bibliotecas que
+
+00:07:21.500 --> 00:07:25.340
+integraste. El objetivo no es la perfección, es detectar los errores evitables antes de que los
+
+00:07:25.340 --> 00:07:29.440
+encuentre un cliente. La ejecución produce entonces un artefacto que es el paquete versionado
+
+00:07:29.440 --> 00:07:34.420
+final que todo lo posterior utilizará. Aquí es donde reside la regla más importante de todo el
+
+00:07:34.420 --> 00:07:39.600
+pipeline. Construyes el paquete una vez y luego mueves ese mismo paquete hacia adelante. Recompilar
+
+00:07:39.600 --> 00:07:43.320
+para cada entorno es un desastre silencioso porque terminas probando una cosa y enviando algo
+
+00:07:43.320 --> 00:07:48.220
+ligeramente diferente. La versión que pasó en el entorno de prueba debe ser la versión exacta que llega
+
+00:07:48.220 --> 00:07:53.640
+a producción o las pruebas no habrán servido de nada. El orden es fijo a propósito. No puedes probar un
+
+00:07:53.640 --> 00:07:57.700
+paquete que no has construido y no puedes desplegar un paquete que no pasó sus pruebas. Así que cada
+
+00:07:57.700 --> 00:08:02.660
+etapa existe en parte para proteger a la siguiente. Finalmente, el paquete se despliega primero en un
+
+00:08:02.660 --> 00:08:06.520
+entorno de prueba y luego en producción, con el pipeline repitiendo los mismos pasos e informando
+
+00:08:06.520 --> 00:08:10.540
+los mismos resultados cada vez. Si alguna vez has completado una lista de verificación de
+
+00:08:10.540 --> 00:08:14.800
+lanzamiento manual, ya entiendes el valor de esto. La máquina no se cansa después de un día largo y
+
+00:08:14.800 --> 00:08:19.580
+nunca se salta una línea aburrida. Los nombres cambian de una herramienta a otra, pero la estructura no. Así como
+
+00:08:19.580 --> 00:08:24.420
+sus canalizaciones organizan todo esto en etapas, trabajos y pasos. Y GitHub Actions mantiene la
+
+00:08:24.420 --> 00:08:27.860
+misma idea en archivos de flujo de trabajo. Power Platform también tiene su propia función de
+
+00:08:27.860 --> 00:08:31.740
+canalizaciones, que permite a un creador desplegar una solución con unos pocos clics. Nombrar las
+
+00:08:31.740 --> 00:08:35.400
+etapas es la parte fácil, sin embargo. Un momento interesante es aquel en el que una canalización
+
+00:08:35.400 --> 00:08:40.000
+se detiene a propósito y espera a una persona. Entornos y la puerta de acceso antes de producción.
+
+00:08:40.540 --> 00:08:44.480
+Una canalización puede compilar y probar perfectamente, y aún así pausarse y esa pausa es una
+
+00:08:44.480 --> 00:08:49.360
+elección de diseño en un fallo. Ocurre en el límite del entorno, así que vale la pena dedicar 30 segundos a la idea de
+
+00:08:49.360 --> 00:08:53.500
+un entorno. Un entorno es simplemente una copia de mundo donde se ejecuta su software y la mayoría de
+
+00:08:53.500 --> 00:08:57.280
+los equipos mantienen una escala de ellos. El desarrollo es lo primero, luego un entorno de
+
+00:08:57.280 --> 00:09:00.960
+prueba que se parece a la producción y después la producción misma. La escala existe por una razón.
+
+00:09:01.640 --> 00:09:05.400
+Ir a encontrar las sorpresas en algún lugar que no sea el entorno real. Un error en torno de prueba
+
+00:09:05.400 --> 00:09:09.760
+cuesta un reporte de error, y un error en producción cuesta clientes. La automatización se detiene
+
+00:09:09.760 --> 00:09:14.220
+deliberadamente. En herramientas como Azure Pipelines puedes juntar una aprobación manual a una etapa de
+
+00:09:14.220 --> 00:09:18.420
+producción. La ejecución simplemente espera hasta que una persona diga que sí. Ese es el intercambio.
+
+00:09:18.420 --> 00:09:23.060
+La máquina se encarga del trabajo repetitivo y de recordar, y el humano mantiene la decisión sobre
+
+00:09:23.060 --> 00:09:27.020
+la última puerta. La propia documentación de Microsoft llama a la aprobación manual una
+
+00:09:27.020 --> 00:09:30.720
+verificación común para controlar los despliegues a producción, lo que le dice que incluso las
+
+00:09:30.720 --> 00:09:34.760
+tiendas más automatizadas esperan a un humano en ese paso. El mismo patrón aparece en el mundo de
+
+00:09:34.760 --> 00:09:39.180
+Power Platform con una interfaz más amable. Un creador despliega una solución desde el desarrollo
+
+00:09:39.180 --> 00:09:44.040
+hacia un entorno de prueba. Despliegue se verifica contra el objetivo antes de comenzar, y luego alguien
+
+00:09:44.040 --> 00:09:47.980
+aprueba el movimiento a producción. Esa puerta existe porque las cosas salen mal eventualmente,
+
+00:09:48.060 --> 00:09:51.460
+incluso con todas las verificaciones implementadas. La mayoría de los equipos solo piensan seriamente
+
+00:09:51.460 --> 00:09:55.300
+en esa parte después de su primer lanzamiento fallido. Cuando un despliegue sale mal, cada
+
+00:09:55.300 --> 00:09:58.840
+puerta en el mundo eventualmente dejará pasar algo, por lo que la pregunta real no es si un
+
+00:09:58.840 --> 00:10:02.840
+lanzamiento romperá algo. La pregunta real es qué tan rápido puede el equipo restaurar la
+
+00:10:02.840 --> 00:10:07.100
+última versión buena. Comience con el movimiento más simple, que es el retroceso. Cuando un cambio se
+
+00:10:07.100 --> 00:10:10.780
+comporta mal, la respuesta más segura suele ser restaurar la versión anterior y dejar que la gente
+
+00:10:10.780 --> 00:10:15.720
+respire. Es por eso que mantener cerca el último paquete bueno es tan importante. Todo lo demás
+
+00:10:15.720 --> 00:10:19.720
+en esta sección es una respuesta a una pregunta. ¿Qué tan rápido puedes revertir esto si algo sale
+
+00:10:19.720 --> 00:10:23.540
+mal? Las estrategias difieren principalmente en cuánta seguridad compras y cuánta complejidad
+
+00:10:23.540 --> 00:10:28.340
+pagas por ella. Un despliegue básico intercambia toda la vez. Es simple, barato y más arriesgado de
+
+00:10:28.340 --> 00:10:32.380
+todos porque no hay una mitad segura donde apoyarse mientras arreglas el problema. Un despliegue
+
+00:10:32.380 --> 00:10:36.340
+progresivo intercambia las máquinas por lote, así que algunas siguen sirviendo la versión antigua mientras
+
+00:10:36.340 --> 00:10:40.760
+las demás se actualizan. Es fácil de revertir y más amable con los usuarios, aunque termina más
+
+00:10:40.760 --> 00:10:45.280
+dentro y requiere que las versiones antigua y nuevas sean compatibles. El despliegue azul-verde
+
+00:10:45.280 --> 00:10:48.740
+mantiene dos entornos idénticos y cambia el tráfico de uno a otro, lo que hace que la reversión sea
+
+00:10:48.740 --> 00:10:52.680
+casi instantánea porque es instantánea porque simplemente regresas. El inconveniente es el costo
+
+00:10:52.680 --> 00:10:56.560
+ya que pagas por un segundo entorno que se queda esperado. El despliegue canario envía el cambio a una
+
+00:10:56.560 --> 00:11:00.460
+pequeña parte de los usuarios primero, observa los números y se amplía solo si esa parte se mantiene
+
+00:11:00.460 --> 00:11:04.880
+saludable. Es el más seguro del grupo y más barato que el azul-verde y también el más difícil de
+
+00:11:04.880 --> 00:11:09.020
+construir porque observas tráfico real en lugar de una prueba. Ahora volvemos a la historia de antes
+
+00:11:09.020 --> 00:11:13.600
+porque es aquí donde todo encaja. En 2009, una empresa llamada Inbu realizaba un promedio de
+
+00:11:13.600 --> 00:11:18.200
+50 despliegues al día. Su script de lanzamiento enviaba cada nueva versión a un pequeño conjunto
+
+00:11:18.200 --> 00:11:22.660
+de máquinas que atendían a los primeros clientes. Un minuto después verificaba los datos de salud y
+
+00:11:22.660 --> 00:11:26.980
+revertía automáticamente si algo se veía mal. Eso es un despliegue canario con reversión automática y
+
+00:11:26.980 --> 00:11:30.900
+funcionaba mucho antes de que cualquier proveedor lo ofreciera. Azure Pipelines ahora ofrece esas mismas
+
+00:11:30.900 --> 00:11:34.740
+estrategias de forma predeterminada bajo los nombres de ejecutar una vez, progresivo y canario. Así que el
+
+00:11:34.740 --> 00:11:38.760
+manual de recuperación es real y es antiguo. Las fallas que aún ocurren generalmente se reducen a un
+
+00:11:38.760 --> 00:11:45.060
+vista corta de hábitos y vale la pena repasarla. Los errores que rompen las canalizaciones. Si la
+
+00:11:45.060 --> 00:11:49.240
+recuperación es el héroe de esta historia, el villano suele ser un hábito más que una herramienta.
+
+00:11:49.760 --> 00:11:53.800
+La mayoría de las canalizaciones rotas fallan de unas pocas maneras predecibles y todas son
+
+00:11:53.800 --> 00:11:59.820
+evitables. El primero y más grande es el lote gigante. La investigación del programa Dora ha estudiado
+
+00:11:59.820 --> 00:12:04.260
+la entrega de software durante más de una década y siempre llega al mismo consejo. Haz que cada cambio sea
+
+00:12:04.260 --> 00:12:08.620
+lo más pequeño posible. Los cambios pequeños son más fáciles de entender, más rápidos de mover y más fáciles de
+
+00:12:08.620 --> 00:12:13.160
+revertir. Luego están las pruebas inestables, las que fallan aleatoriamente y pasan al volver a ejecutarlas.
+
+00:12:13.520 --> 00:12:17.160
+Una prueba así enseña a todo el equipo a ignorar el error. Y una vez que la gente ignora el color rojo
+
+00:12:17.160 --> 00:12:21.580
+del pipeline su alumnador, IMBU puso el listón increíblemente alto en este aspecto. Su estándar
+
+00:12:21.580 --> 00:12:25.800
+era que una prueba no debería fallar más de una vez por cada millón de ejecuciones. Tratan los fallos
+
+00:12:25.800 --> 00:12:28.580
+intermitentes como errores que hay que cazar, no como reintentos que hay que hacer clic.
+
+00:12:29.540 --> 00:12:33.680
+Reconstruir en lugar de promover es otro asesino silencioso. Si el paquete que probaste no es el paquete
+
+00:12:33.680 --> 00:12:37.840
+que enviaste, no probaste nada. Pero si el artefacto se construye una sola vez y se lleva adelante.
+
+00:12:38.440 --> 00:12:41.760
+Las contraseñas y claves también la mención. Las contraseñas y claves deben estar en un almacén
+
+00:12:41.760 --> 00:12:45.620
+seguro, como un grupo de variables en Azure Pipeline. Escribirlas en un script las deja expuestas
+
+00:12:45.620 --> 00:12:49.680
+para que todos en el equipo puedan leer. Luego está la responsabilidad. Cuando la compilación falla y
+
+00:12:49.680 --> 00:12:53.380
+nadie se siente responsable, el hábito colapsa porque la integración continua funciona como una
+
+00:12:53.380 --> 00:12:58.300
+promesa de equipo, no como un complemento que se instala. La última trampa que vale la pena mencionar es la
+
+00:12:58.300 --> 00:13:02.480
+trampa de las métricas. Dora advierte que convertir una métrica en un objetivo solo invita a la gente a manipular
+
+00:13:02.480 --> 00:13:07.140
+los números. Exige un cierto número de despliegues por día y obtendrás ese número en lugar de un mejor
+
+00:13:07.140 --> 00:13:10.920
+trabajo. La novedad más reciente es la IA y la investigación es más interesante que los titulares.
+
+00:13:11.640 --> 00:13:15.180
+Dora descubrió que un aumento en la adopción de la IA se asoció con un mejor trabajo individual
+
+00:13:15.180 --> 00:13:20.220
+incluyendo una mejora del 3.4% en la calidad del código. La misma investigación lo vinculó con una
+
+00:13:20.220 --> 00:13:24.340
+pequeña caída en la velocidad de entrega y una mayor caída en la estabilidad de entrega. La lección es
+
+00:13:24.340 --> 00:13:30.040
+que escribir más rápido no soluciona un pipeline lento. Donde esto te deja, la versión corta vale la pena
+
+00:13:30.040 --> 00:13:33.880
+tenerla presente. La integración es fusionar tu trabajo constantemente mientras una máquina
+
+00:13:33.880 --> 00:13:37.680
+vigila la puerta. La entrega es estar listo para lanzar en cualquier momento. El despliegue es dejar
+
+00:13:37.680 --> 00:13:40.740
+que el pipeline realice el lanzamiento por ti. Las etapas son solo esa lista de verificación
+
+00:13:40.740 --> 00:13:43.880
+ejecutándose en una. La razón por la que todo esto existe es más sencilla de lo que sugieren
+
+00:13:43.880 --> 00:13:47.380
+la sigla. Los equipos que más envían son los equipos que pueden deshacer los cambios más rápido.
+
+00:13:47.860 --> 00:13:50.840
+Así que la velocidad y la seguridad resultan ser la misma habilidad, no habilidad de su
+
+00:13:50.840 --> 00:13:55.080
+puesta. Vale la pena reflexionar sobre una pregunta después de esto. ¿Cuál es ese paso manual en tu propio
+
+00:13:55.080 --> 00:13:58.740
+trabajo que cedería felizmente a una máquina si la ejecutara de la misma manera cada vez?
+
+00:13:59.080 --> 00:13:59.380
+Ya es.

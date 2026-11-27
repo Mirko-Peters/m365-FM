@@ -1,0 +1,652 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:06.700
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.860 --> 00:00:11.820
+Een CI-CD pipeline is een lopende band voor software en als je het eenmaal zo ziet, kun je het niet meer anders zien.
+
+00:00:12.120 --> 00:00:15.820
+Grondstoffen gaan er aan de ene kant in, een gecontroleerd en verpakt product komt er aan de andere kant uit...
+
+00:00:15.820 --> 00:00:18.000
+...en dezelfde stappen worden telkens in dezelfde volgorde uitgevoerd.
+
+00:00:18.180 --> 00:00:21.180
+Wat mensen verbaast, is dat de pipeline nooit echt om snelheid ging...
+
+00:00:21.180 --> 00:00:24.280
+...want de teams die het snelst leveren, zijn ook de teams die het snelst herstellen.
+
+00:00:24.280 --> 00:00:30.940
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:31.100 --> 00:00:34.720
+Tegen de tijd dat we klaar zijn, zullen de vier letters in CI-CD geen jargon meer zijn...
+
+00:00:34.720 --> 00:00:37.080
+...en weet je precies wat elke fase van die lijn daadwerkelijk controleert.
+
+00:00:37.260 --> 00:00:38.740
+Wat een pipeline nu eigenlijk is.
+
+00:00:38.960 --> 00:00:40.820
+Begin met de simpelste versie van het woord.
+
+00:00:41.020 --> 00:00:46.080
+Een pipeline is een vaste lijst met stappen die een computer elke keer op dezelfde manier uitvoert wanneer iemand de software wijzigt.
+
+00:00:46.280 --> 00:00:47.200
+Dat is het hele idee.
+
+00:00:47.400 --> 00:00:50.180
+De vergelijking met een lopende band is de moeite waard om iets verder door te trekken.
+
+00:00:50.180 --> 00:00:54.160
+Een eenheid die niet door de inspectie komt, wordt van de lijn gehaald in plaats van stilletjes te worden ingepakt.
+
+00:00:54.340 --> 00:00:56.220
+En de lijn zelf maakt het niet uit wie de eenheid heeft gebouwd.
+
+00:00:56.360 --> 00:00:57.420
+Mensen vergeten stappen.
+
+00:00:57.580 --> 00:01:02.080
+We vergeten de saaie klusjes en we vergeten ze laat op een vrijdag, precies het moment waarop een fout het duurst is.
+
+00:01:02.240 --> 00:01:07.820
+De pipeline vergeet niets omdat de stappen één keer worden opgeschreven en daarna voor elke volgende wijziging exact hetzelfde worden uitgevoerd.
+
+00:01:08.000 --> 00:01:10.420
+Die consistentie maakt de investering de moeite waard.
+
+00:01:10.640 --> 00:01:16.040
+Niemand hoeft de checklist uit het hoofd te leren en niemand hoeft aan het eind van de dag te gokken of de laatste wijziging veilig was om te publiceren.
+
+00:01:16.200 --> 00:01:18.840
+Een pipeline is geen gereedschap dat je zomaar in de winkel koopt.
+
+00:01:18.840 --> 00:01:21.880
+Het is een gewoonte gekoppeld aan een machine en teams die er het meeste uithalen,
+
+00:01:21.880 --> 00:01:25.120
+hebben meestal hun werkwijze aangepast in plaats van de software die ze installeerden.
+
+00:01:25.240 --> 00:01:29.100
+Er is een verhaal uit 2009 dat dit tastbaar maakt en daar komen we later op terug.
+
+00:01:29.260 --> 00:01:33.580
+Een bedrijf in die tijd publiceerde ongeveer 50 keer per dag nieuwe code naar zijn live website,
+
+00:01:33.860 --> 00:01:35.780
+wat klinkt als iets dat in een ramp had moeten eindigen.
+
+00:01:35.980 --> 00:01:37.120
+Onthoud voor nu één ding.
+
+00:01:37.320 --> 00:01:39.720
+De pipeline is pas logisch als je weet wat hij verving.
+
+00:01:39.940 --> 00:01:45.000
+En wat hij verving was een proces dat zo pijnlijk was dat ingenieurs er decennia later nog steeds over praten.
+
+00:01:45.000 --> 00:01:50.620
+Het probleem dat het moest oplossen, ga terug naar de jaren tachtig, want het oorsprongsverhaal verklaart het hele concept.
+
+00:01:50.620 --> 00:01:58.280
+Een jonge Martin Fowler liep een zomerstage bij een groot elektronica bedrijf en zijn manager leidde hem rond door een enorm raamloos magazijn vol programmeurs die in cubicles werkte.
+
+00:01:58.460 --> 00:02:00.580
+Het detail dat er het meest toe doet, kwam daarna.
+
+00:02:00.740 --> 00:02:05.720
+Het was al een paar jaar in de maak en tegen die tijd werden de afzonderlijke stukken samengevoegd, wat al maanden duurde.
+
+00:02:05.920 --> 00:02:08.220
+Niemand wist echt hoe lang het nog zou duren voordat het af was.
+
+00:02:08.480 --> 00:02:11.180
+Dat is de mislukking waar iedereen mee leefde en het heeft een naam.
+
+00:02:11.180 --> 00:02:16.840
+Noem het integratiehel het punt waarop ieders werk samenvoegen langer duurt dan het oorspronkelijk schrijven ervan.
+
+00:02:17.060 --> 00:02:19.460
+De alledaagse versie is kleiner en veel bekender.
+
+00:02:19.720 --> 00:02:21.240
+Twee mensen bewerken hetzelfde.
+
+00:02:21.460 --> 00:02:26.640
+De een veranderd eerstregels en de tweede persoon besteedt een middag aan het ontwarren van werk dat die ochtend nog perfect in orde was.
+
+00:02:26.840 --> 00:02:35.360
+De werkelijke kosten zitten niet in het samenvoegen zelf, maar in de timing, want wanneer het probleem pas weken later aan het licht komt, is de maker al vergeten wat hij dacht.
+
+00:02:35.360 --> 00:02:39.420
+Er is ook een vrede uitdrukking in deze wereld, het werkte op mijn machine.
+
+00:02:39.640 --> 00:02:45.480
+Het betekent dat de software op de ene computer slaagde en ergens anders faalde, en dat geluid is een handmatig proces dat stilletjes tegen je liegt.
+
+00:02:45.660 --> 00:02:48.000
+De oplossing was dus nooit een slimmere tool voor samenvoegen.
+
+00:02:48.180 --> 00:02:54.680
+De oplossing was om voortdurend kleine stukjes te integreren in plaats van één enorm stuk aan het einde en een machine het resultaat telkens te laten controleren.
+
+00:02:54.860 --> 00:02:58.760
+Fowlers beschrijving van een gezond team is bijna saai om te lezen, en dat is precies het punt.
+
+00:02:58.760 --> 00:03:04.160
+Het werk van elke individuele ontwikkelaar staat slechts een paar uur af van het gedeelde project en kan binnen minuten worden toegevoegd.
+
+00:03:04.160 --> 00:03:05.900
+De twee cijfers vertellen het verhaal.
+
+00:03:06.100 --> 00:03:12.140
+Maanden aan integratie staan aan de ene kant, minuten aan de andere, en het enige echte verschil is hoe vaak mensen samenvoegden en wie de controle deed.
+
+00:03:12.380 --> 00:03:14.920
+Conflicten die binnen enkele uren worden gevonden, zijn goedkoop.
+
+00:03:14.980 --> 00:03:16.480
+Er is nog bijna niets veranderd.
+
+00:03:16.620 --> 00:03:20.220
+De reparatie is klein en de persoon weet nog waarom hij de bewuste regel heeft geschreven.
+
+00:03:20.520 --> 00:03:26.660
+Conflicten die weken later worden gevonden, zijn duur omdat het omliggende werk is doorgegaan en je iets herbouwt wat je niet meer volledig voor de geest kunt halen.
+
+00:03:26.660 --> 00:03:31.160
+Als je powerapps of flows bouwt in plaats van code te schrijven, krijg je hier nog steeds mee te maken.
+
+00:03:31.160 --> 00:03:37.180
+Elke keer dat je een oplossing bewerkt waar iemand anders ook aan werkt, beleef je hetzelfde verhaal, alleen met een vriendelijker scherm.
+
+00:03:37.420 --> 00:03:40.380
+Die oplossing heeft een naam en die naam komt als eerste in het acroniem.
+
+00:03:40.620 --> 00:03:42.780
+Wat betekent continu integratie nu echt?
+
+00:03:43.000 --> 00:03:46.300
+Continu integratie is het eerste van de drie woorden en ook het oudste.
+
+00:03:46.540 --> 00:03:54.640
+Continu integratie betekent dat iedereen zijn werk minstens één keer per dag samenvoegt met de gedeelde hoofdversie en dat een geautomatiseerde beeld met tests dit elke keer controleert.
+
+00:03:54.640 --> 00:04:03.500
+Haal de woorden uit elkaar, want elk deel doet zijn werk. Continu betekent de hele tijd in plaats van één keer helemaal aan het einde en integratie betekent je werk combineren met dat van anderen.
+
+00:04:03.700 --> 00:04:07.800
+Martin Fowler, die de kanonieke beschrijving hiervan schreef, is streng over wat telt.
+
+00:04:07.960 --> 00:04:12.620
+Als een test faalt, is de beeld rood en stopt het team om dit te repareren, want bijna groen is nog steeds rood.
+
+00:04:12.780 --> 00:04:15.540
+Die strengheid is geen perfectionisme omwille van het perfectionisme.
+
+00:04:15.700 --> 00:04:18.460
+Een rode beeld die rood blijft, is een pipeline die niemand vertrouwt.
+
+00:04:18.560 --> 00:04:21.380
+En een pipeline die niemand vertrouwt, is er een waar mensen stilletjes omheen werken.
+
+00:04:21.380 --> 00:04:24.120
+Het dagelijkse aspect doet meer werk dan het op het eerste gezicht lijkt.
+
+00:04:24.240 --> 00:04:27.380
+Een wijziging die een week blijft liggen, is een wijziging die niemand anders ziet.
+
+00:04:27.540 --> 00:04:31.040
+En verrassingen zijn precies wat een release breekt op de avond dat het er het meest toe doet.
+
+00:04:31.240 --> 00:04:33.600
+Nog een onderdeel van de gewoonte is makkelijk over het hoofd te zien.
+
+00:04:33.780 --> 00:04:37.700
+De beeld moet snel zijn. Een controle die een uur duurt, is een controle waar mensen niet op wachten.
+
+00:04:37.880 --> 00:04:40.500
+En een controle waar niemand op wacht, kan net zo goed niet bestaan.
+
+00:04:40.680 --> 00:04:44.240
+In 1991 stelde Grady boog de term continuous integration voor.
+
+00:04:44.480 --> 00:04:47.500
+Extreme programming maakte het in 1997 tot een kernpraktijk.
+
+00:04:47.500 --> 00:04:51.580
+En de eerste bekende open source tool hiervoor, Cruise Control, verscheen in 2001.
+
+00:04:51.820 --> 00:04:53.600
+Niets hiervan vereist een ingewikkeld product.
+
+00:04:53.800 --> 00:04:59.700
+De kern van continuous integration is een gedeelde hoofdversie, een beeld die zichzelf test en de discipline om hem te repareren zodra hij breekt.
+
+00:05:00.060 --> 00:05:02.240
+Integratie is echter maar het eerste deel van het verhaal.
+
+00:05:02.420 --> 00:05:07.640
+De andere twee woorden in het acroniem zijn de woorden die mensen vaak verwarren en die zijn het waard om apart te bekijken.
+
+00:05:07.840 --> 00:05:09.260
+Delivery versus deployment.
+
+00:05:09.600 --> 00:05:13.100
+Twee woorden één letter verschil en de meeste uitleg haalt ze door elkaar.
+
+00:05:13.100 --> 00:05:18.280
+Delivery en deployment zijn niet hetzelfde en het verschil bepaalt wat je pipeline zelfstandig mag doen.
+
+00:05:18.520 --> 00:05:23.720
+Continuous delivery betekent dat de software altijd in een staat is waarin deze opverzoek kan worden vrijgegeven wanneer het team dat kiest.
+
+00:05:23.880 --> 00:05:28.200
+Je houdt de knop beschikbaar en drukt erop wanneer de business er klaar voor is, wat vandaag kan zijn of volgende maand.
+
+00:05:28.440 --> 00:05:30.260
+Continuous deployment gaat nog een stap verder.
+
+00:05:30.520 --> 00:05:35.780
+Elke wijziging die door de pipeline komt gaat automatisch live en niemand hoeft op iets te drukken omdat de pipeline dat al deed.
+
+00:05:35.960 --> 00:05:38.060
+Het verschil tussen de twee is in één adem te noemen.
+
+00:05:38.280 --> 00:05:41.960
+Delivery betekent dat je op elk moment kunt deployen en deployment betekent dat je dat ook echt doet.
+
+00:05:41.960 --> 00:05:45.580
+Elke keer dat een wijziging erdoor komt, is er een praktische manier om het verschil te voelen.
+
+00:05:45.760 --> 00:05:49.660
+Een team dat aan continuous delivery doet, zou direct kunnen releasen, maar wacht op een lancering.
+
+00:05:49.840 --> 00:05:54.820
+Een team dat aan continuous deployment doet, heeft een geaccepteerde wijziging live voor de launch, zonder dat iemand het hoeft aan te kondigen.
+
+00:05:55.000 --> 00:05:57.880
+Fowler biedt een test die korte mette maakt met elke discussie over labels.
+
+00:05:58.140 --> 00:06:03.340
+Vraag of een business sponsor zou kunnen vragen of de huidige versie live mag gaan op elk gewenst moment, zonder dat iemand in paniek raakt.
+
+00:06:03.500 --> 00:06:05.320
+Als het antwoord ja is, heb je delivery.
+
+00:06:05.540 --> 00:06:07.180
+De volgorde werkt maar één kant op.
+
+00:06:07.180 --> 00:06:14.240
+Je kunt een release die niet klaar is niet automatiseren, dus continuous deployment vereist eerst continuous delivery en delivery vereist die dagelijkse integratiegewoonte daaronder.
+
+00:06:14.400 --> 00:06:16.580
+Er is een reden waarom teams zich hiermee bezighouden.
+
+00:06:16.760 --> 00:06:24.760
+Kleinere en frequentere releases betekenen dat er minder tegelijk misgaat en wat er ook misgaat is makkelijker terug te draaien, wat beter is dan hopen dat een enorme release goed gaat.
+
+00:06:24.760 --> 00:06:29.760
+Fowler beschrijft een retailer die een nieuw online systeem in zorgvuldige stappen uitrolde.
+
+00:06:29.900 --> 00:06:35.260
+Eerst ging het naar de eigen medewerkers van het bedrijf, toen naar een groep uitgenodigde klanten en pas daarna naar iedereen.
+
+00:06:35.520 --> 00:06:37.280
+Let op wat delivery ook niet vereist.
+
+00:06:37.480 --> 00:06:43.800
+Het dwingt je niet om constant te deployen en veel teams blijven uitstekend in delivery terwijl ze releasen op een schema dat de business heeft gekozen.
+
+00:06:44.020 --> 00:06:49.280
+Nu die twee termen duidelijk zijn, is de pipeline zelf veel makkelijker te doorlopen dan het doorlopen van de fase.
+
+00:06:49.280 --> 00:06:53.080
+Nu komen we bij de techniek in de volgorde waarin een wijziging daadwerkelijk reist.
+
+00:06:53.240 --> 00:06:59.000
+Een pipeline is eigenlijk gewoon een reeks en elke fase heeft één taak, daarom kan een beginner het volgen zonder de tools te kennen.
+
+00:06:59.180 --> 00:07:00.380
+Alles begint met een trigger.
+
+00:07:00.620 --> 00:07:06.920
+Iets zet de run in gang en meestal is dat iets een opgeslagen wijziging, hoewel het ook een planning kan zijn of iemand die op een knop drukt.
+
+00:07:07.200 --> 00:07:08.180
+Daarna komt de beeld.
+
+00:07:08.380 --> 00:07:11.020
+De machine neemt de code en verandert deze in iets uitvoerbaars.
+
+00:07:11.180 --> 00:07:14.880
+Het doet het compileren en verpakken dat een mens vroeger handmatig deed en het is altijd constant.
+
+00:07:15.100 --> 00:07:16.440
+Dan worden de tests uitgevoerd.
+
+00:07:16.440 --> 00:07:22.200
+Deze variëren van kleine unit tests die een enkele functie controleren tot beveiligingsscans die zoeken naar bekende problemen in de gebruikte bibliotheken.
+
+00:07:22.320 --> 00:07:23.540
+Het doel is niet perfectie.
+
+00:07:23.740 --> 00:07:26.580
+Het gaat om het vangen van goedkope fouten voordat een klant ze vindt.
+
+00:07:26.700 --> 00:07:32.240
+De run produceert vervolgens een artifact, het voltooide versiebeheerde pakket dat alles downstream zal gebruiken.
+
+00:07:32.420 --> 00:07:35.000
+Hier leeft de belangrijkste regel in de hele pipeline.
+
+00:07:35.200 --> 00:07:38.700
+Je bouwt het pakket één keer en verplaatst datzelfde pakket vervolgens verder.
+
+00:07:39.020 --> 00:07:44.680
+Opnieuw bouwen voor elke omgeving is een stille ramp omdat je uiteindelijk het ene test en iets anders verstuurt.
+
+00:07:44.680 --> 00:07:49.140
+De versie die slaagde in de testomgeving moet exact de versie zijn die productie bereikt.
+
+00:07:49.340 --> 00:07:50.780
+Anders bewezen de tests niets.
+
+00:07:50.980 --> 00:07:52.540
+De volgorde ligt bewust vast.
+
+00:07:52.740 --> 00:07:57.180
+Je kunt geen pakket testen dat je niet hebt gebouwd en je kunt geen pakket deployen dat niet door de tests kwam.
+
+00:07:57.360 --> 00:08:00.080
+Dus elke fase bestaat deels om de volgende te beschermen.
+
+00:08:00.080 --> 00:08:07.860
+Uiteindelijk wordt het pakket eerst in een testomgeving en daarna in productie gay deployed, waarbij de pipeline dezelfde stappen herhaalt en telkens dezelfde resultaten rapporteert.
+
+00:08:07.860 --> 00:08:12.600
+Als je ooit een handmatige checklist voor releases hebt doorlopen, begrijp je de waarde hiervan al.
+
+00:08:12.760 --> 00:08:16.220
+De machine wordt niet moe na een lange dag en slaat nooit de saaie regels over.
+
+00:08:16.420 --> 00:08:19.100
+De namen veranderen per tool, maar de vorm blijft gelijk.
+
+00:08:19.100 --> 00:08:25.640
+Terwijl Azure Pipelines dit alles organiseert in fase, taken en stappen en GitHub Actions hetzelfde concept aanhoudt in workflow bestanden,
+
+00:08:25.840 --> 00:08:30.960
+heeft Power Platform ook zijn eigen pipelines functie, waarmee een maker een oplossing met een paar klikken kan implementeren.
+
+00:08:31.120 --> 00:08:33.560
+Het benoemen van de fasen is echter het makkelijke deel.
+
+00:08:33.740 --> 00:08:37.840
+Het interessante moment is wanneer een pipeline bewust stopt en wacht op een persoon.
+
+00:08:38.520 --> 00:08:40.240
+Omgevingen en de poort voor productie
+
+00:08:40.240 --> 00:08:45.600
+Een pipeline kan perfect bouwen en testen en toch pauseren, die pauze is een bewuste ontwerpkeuze en geen fout.
+
+00:08:45.600 --> 00:08:50.240
+Het gebeurt bij de grens van de omgeving, dus het concept van een omgeving is 30 seconden aandacht waard.
+
+00:08:50.400 --> 00:08:55.220
+Een omgeving is simpelweg een kopie van de wereld waar je software draait en de meeste teams houden een reeks daarvan bij.
+
+00:08:55.440 --> 00:08:59.700
+Ontwikkeling komt eerst, daarna een testomgeving die op productie lijkt en dan de productieomgeving zelf.
+
+00:08:59.900 --> 00:09:04.380
+Die reeks bestaat om één reden. Je wilt verrassingen tegenkomen op een plek die niet de live omgeving is.
+
+00:09:04.560 --> 00:09:08.420
+Een bak in een testomgeving kost een bakrapport, maar een bak in productie kost klanten.
+
+00:09:09.000 --> 00:09:10.780
+Automatisering stopt bewust op een bepaald punt.
+
+00:09:10.780 --> 00:09:14.980
+In tools zoals Azure Pipelines kun je een handmatige goedkeuring toevoegen aan een productiefase
+
+00:09:14.980 --> 00:09:17.480
+en de uitvoering wacht simpelweg tot een persoon ja zegt.
+
+00:09:17.700 --> 00:09:19.020
+Dat is de eerlijke afruil.
+
+00:09:19.220 --> 00:09:23.840
+De machine doet het repetitieve werk en onthoudt de zaken en de mens beslist over de laatste deur.
+
+00:09:24.200 --> 00:09:29.640
+Microsoft's eigen documentatie noemt handmatige goedkeuring een gebruikelijke controle voor het beheren van implementaties naar productie,
+
+00:09:29.820 --> 00:09:33.120
+wat laat zien dat zelfs de meest geautomatiseerde bedrijven een mens verwachten bij die stap.
+
+00:09:33.220 --> 00:09:36.980
+Hetzelfde patroon zien we in de wereld van Power Platform met een vriendelijkere interface.
+
+00:09:36.980 --> 00:09:40.460
+Een maker implementeert een oplossing vanuit ontwikkeling naar een testomgeving.
+
+00:09:40.460 --> 00:09:45.740
+De implementatie wordt gecontroleerd tegen het doel voordat deze start en daarna keurt iemand de verplaatsing naar productiegoed.
+
+00:09:45.920 --> 00:09:49.820
+Die poort bestaat omdat dingen uiteindelijk toch fout gaan, zelfs met elke controle op zijn plek.
+
+00:09:49.960 --> 00:09:53.540
+De meeste teams denken pas echt goed na over dat onderdeel na hun eerste slechte release.
+
+00:09:53.780 --> 00:09:57.920
+Wanneer een implementatie misgaat, zal elke poort ter wereld uiteindelijk iets doorlaten,
+
+00:09:58.060 --> 00:10:00.320
+dus de echte vraag is niet of een release iets zal breken.
+
+00:10:00.520 --> 00:10:03.960
+De echte vraag is hoe snel het team de laatst werkende versie kan terugzetten.
+
+00:10:04.180 --> 00:10:06.100
+Begin met de simpelste stap, rollback.
+
+00:10:06.100 --> 00:10:11.720
+Wanneer een wijziging problemen veroorzaakt, is de veiligste reactie meestal de vorige versie herstellen en iedereen weer rust gunnen.
+
+00:10:11.900 --> 00:10:15.240
+Daarom is het zo belangrijk om het laatst goede pakket achter de hand te houden.
+
+00:10:15.420 --> 00:10:20.000
+Alles in dit gedeelte is een antwoord op één vraag, hoe snel kun je dit ongedaan maken als het misgaat.
+
+00:10:20.120 --> 00:10:24.480
+De strategieën verschillen vooral in hoeveel veiligheid je koopt en hoeveel complexiteit je daarvoor terugkrijgt.
+
+00:10:24.620 --> 00:10:26.960
+Een basisimplementatie vervangt alles in één keer.
+
+00:10:27.140 --> 00:10:29.100
+Het is eenvoudig, goedkoop en het meest risicovol,
+
+00:10:29.240 --> 00:10:32.040
+omdat er geen veilige basis is om op de rug te vallen terwijl je het probleem oplost.
+
+00:10:32.040 --> 00:10:37.660
+Een rolling deployment vervangt de machines in batches, zodat sommige de oude versie blijven draaien terwijl de rest bijwerkt.
+
+00:10:37.800 --> 00:10:40.720
+Het is makkelijk terug te draaien en vriendelijker voor gebruikers,
+
+00:10:40.960 --> 00:10:43.940
+al duurt het langer en moeten de oude en nieuwe versie elkaar verdragen.
+
+00:10:44.220 --> 00:10:48.200
+Bij Blue Green Deployment houd je twee identieke omgevingen en schakel je het verkeer om,
+
+00:10:48.300 --> 00:10:50.900
+wat een rollback direct maakt omdat je simpelweg terugschakelt.
+
+00:10:51.060 --> 00:10:54.940
+Het nadeel zijn de kosten, aangezien je betaalt voor een tweede omgeving die alleen maar staat te wachten.
+
+00:10:55.120 --> 00:10:58.240
+Canary Deployment stuurt de wijziging eerst naar een kleine groep gebruikers,
+
+00:10:58.400 --> 00:11:01.200
+houdt de cijfers in de gaten en schaalt pas op als alles goed blijft gaan.
+
+00:11:01.200 --> 00:11:03.940
+Het is de veiligste methode en goedkoper dan Blue Green,
+
+00:11:04.080 --> 00:11:07.400
+maar ook het moeilijkste bouwen omdat je echt verkeer monitort in plaats van een test.
+
+00:11:07.600 --> 00:11:10.560
+Nu komen we terug op het eerdere verhaal, want dit is waar het samenkomt.
+
+00:11:10.660 --> 00:11:15.420
+In 2009 voerde een bedrijf genaamd IMVU gemiddeld zo'n 50 uitrolmomenten per dag uit.
+
+00:11:15.600 --> 00:11:20.240
+Hun release script pushte elke nieuwe versie naar een kleine set machines die de eerste paar klanten bedienden.
+
+00:11:20.380 --> 00:11:24.620
+Een minuut later controleerde het systeem de gezondheidsdata en draaide het automatisch terug als er iets misleek.
+
+00:11:24.780 --> 00:11:26.800
+Dat is een Canary Deployment met automatische rollback,
+
+00:11:26.960 --> 00:11:29.340
+en dat gebeurde al lang voordat leveranciers het als standaard aanboden.
+
+00:11:29.340 --> 00:11:34.260
+Azure Pipelines biedt nu diezelfde strategieën standaard aan onder de namen Run Once, Rolling en Canary.
+
+00:11:34.440 --> 00:11:36.540
+Het herstelplan is dus bewezen en beproefd.
+
+00:11:36.660 --> 00:11:40.300
+De fouten die nog steeds voorkomen, komen meestal door een kort lijstje gewoontes,
+
+00:11:40.500 --> 00:11:41.940
+en dat lijstje is het bekijken waard.
+
+00:11:42.740 --> 00:11:44.400
+De fouten die pipelines breken
+
+00:11:44.400 --> 00:11:49.320
+Als herstel de held van dit verhaal is, dan is de schurk meestal een gewoonte in plaats van een tool.
+
+00:11:49.580 --> 00:11:53.180
+De meeste kapotte pipelines falen op een handvol voorspelbare manieren,
+
+00:11:53.560 --> 00:11:54.860
+en elk daarvan is vermijdbaar.
+
+00:11:54.860 --> 00:11:57.320
+De eerste en grootste is de gigantische batch.
+
+00:11:57.660 --> 00:12:03.120
+Onderzoek van het Dora-programma bestudeert softwarelevering al meer dan 10 jaar en komt steeds tot hetzelfde advies.
+
+00:12:03.340 --> 00:12:05.160
+Maak elke wijziging zo klein mogelijk.
+
+00:12:05.340 --> 00:12:09.140
+Kleine wijzigingen zijn makkelijker te overzien, sneller te verwerken en eenvoudiger terug te draaien.
+
+00:12:09.340 --> 00:12:12.940
+Dan zijn er nog onbetrouwbare tests, die willen keurig falen en slagen als je ze opnieuw draait.
+
+00:12:13.140 --> 00:12:15.620
+Zo'n test leert het hele team om rode waarschuwingen te negeren.
+
+00:12:15.720 --> 00:12:18.560
+En zodra mensen rood negeren, is de pipeline slechts decoratie.
+
+00:12:18.900 --> 00:12:21.200
+IMVU legde de lat hierbij bijna absurd hoog.
+
+00:12:21.200 --> 00:12:24.680
+Hun standaard was dat een test niet vaker dan eens in een miljoen keer mocht falen.
+
+00:12:24.860 --> 00:12:28.940
+Zij zien incidentele fouten als bugs die moeten worden opgelost in plaats van als hertests om aan te klikken.
+
+00:12:29.100 --> 00:12:31.780
+Opnieuw bouwen in plaats van promoveren is een andere stille doder.
+
+00:12:31.940 --> 00:12:35.140
+Als het pakket dat je hebt getest niet het pakket is dat je hebt verzonden, heb je niets getest.
+
+00:12:35.300 --> 00:12:38.180
+En dit is waarom het artefact één keer wordt gebouwd en daarna wordt doorgezet.
+
+00:12:38.360 --> 00:12:39.840
+Geheime verdienen ook een vermelding.
+
+00:12:40.100 --> 00:12:43.980
+Wachtwoorden en sleutels horen thuis in een veilige opslag, zoals een variabele groep in Azure Pipelines.
+
+00:12:44.220 --> 00:12:47.040
+Ze in een script typen laat ze achter waar iedereen in het team ze kan lezen.
+
+00:12:47.040 --> 00:12:56.080
+Dan is er nog het eigenaarschap. Wanneer de beeldrood wordt en niemand zich er verantwoordelijk voor voelt, stort de gewoonte in omdat continu integratie werkt als een team below of de in plaats van een plugin die je installeert.
+
+00:12:56.260 --> 00:12:59.120
+De laatste valstrik die het benoemen waard is, is de meetvalstrik.
+
+00:12:59.320 --> 00:13:03.040
+Dora waarschuwt dat van een metriek een doel maken er meestal toe leidt dat mensen het getal gaan manipuleren.
+
+00:13:03.760 --> 00:13:07.520
+Hij is een bepaald aantal deplois per dag en je krijgt dat aantal in plaats van beter werk.
+
+00:13:07.660 --> 00:13:11.300
+De nieuwste ontwikkeling is AI en het onderzoek is interessanter dan de krantenkoppen.
+
+00:13:11.300 --> 00:13:18.580
+Dora ontdekte dat een toename in AI-adoptie geassocieerd werd met beter individueel werk, inclusief een verbetering van 3,4% in codekwaliteit.
+
+00:13:18.800 --> 00:13:23.780
+Hetzelfde onderzoek koppelde het aan een kleine daling in doorloopsnelheid en een grotere daling in leveringstabiliteit.
+
+00:13:24.000 --> 00:13:27.080
+De lay is dat sneller schrijven een trage pipeline niet oplost.
+
+00:13:27.640 --> 00:13:30.720
+Waar dit je laat, de korte versie is het waard om bij de hand te houden.
+
+00:13:31.080 --> 00:13:34.580
+Integratie is constant je werk samenvoegen terwijl een machine de deur controleert.
+
+00:13:34.780 --> 00:13:37.020
+Levering is op elk moment klaarstaan om uit te rollen.
+
+00:13:37.020 --> 00:13:41.420
+Deployment is de pipeline het voor je laten doen en de fases zijn simpelweg die checklist die op volgorde wordt afgewerkt.
+
+00:13:41.600 --> 00:13:44.400
+De reden dat dit alles bestaat is eenvoudiger dan het acroniem suggereert.
+
+00:13:44.580 --> 00:13:47.660
+De teams die het meest verzenden zijn de teams die het snelst ongedaan kunnen maken.
+
+00:13:47.900 --> 00:13:51.360
+Dus snelheid en veiligheid blijken dezelfde vaardigheid te zijn in plaats van tegengestelde.
+
+00:13:51.540 --> 00:13:53.780
+Eén vraag is het waard om na dit alles bij stil te staan.
+
+00:13:54.020 --> 00:14:00.020
+Wat is de ene handmatige stap in je eigen werk die je graag aan een machine zou overlaten als die het elke keer op dezelfde manier zou uitvoeren?
