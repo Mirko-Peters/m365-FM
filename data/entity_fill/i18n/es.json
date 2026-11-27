@@ -32756,12 +32756,29 @@
  },
  "passive-dns": {
   "desc": "Un registro histórico de las direcciones IP a las que resolvían los nombres de dominio a lo largo del tiempo, utilizado en inteligencia de amenazas para relacionar la infraestructura de los atacantes.",
+  "faq": [
+   {
+    "a": "Passive DNS es un registro histórico de las direcciones IP a las que los nombres de dominio se resolvieron a lo largo del tiempo. Se utiliza en la inteligencia de amenazas para conectar la infraestructura de los atacantes.",
+    "q": "¿Qué es Passive DNS?"
+   },
+   {
+    "a": "Los analistas utilizan los registros históricos de resolución para vincular dominios y direcciones IP entre sí. Esto ayuda a conectar indicadores separados que pertenecen a la misma infraestructura de un atacante.",
+    "q": "¿Cómo se utiliza Passive DNS en la inteligencia de amenazas?"
+   },
+   {
+    "a": "Como el registro abarca resoluciones pasadas, muestra cómo se asociaron los dominios y las direcciones IP a lo largo del tiempo, y no solo su relación actual.",
+    "q": "¿Qué aporta el aspecto histórico?"
+   }
+  ],
   "h": "38ce330f1b90499b",
+  "long": "Passive DNS es un registro histórico de las direcciones IP a las que los nombres de dominio se resolvieron a lo largo del tiempo. En lugar de mostrar únicamente hacia dónde apunta un dominio hoy, conserva las resoluciones anteriores, de modo que un analista puede ver cómo se asociaron un nombre y una dirección en distintos momentos del pasado.\n\nEn la inteligencia de amenazas, este historial se utiliza para conectar la infraestructura de los atacantes. Cuando se identifica un dominio o una dirección IP sospechosa, los datos de Passive DNS pueden mostrar qué otros dominios se resolvieron a la misma dirección, o qué direcciones utilizó antes un dominio determinado. Estas coincidencias ayudan a los analistas a relacionar indicadores separados entre sí y a mapear la infraestructura detrás de una actividad.\n\nEl concepto forma parte de la práctica más amplia de investigar indicadores de red, como dominios y direcciones IP. Es una fuente de datos que facilita pasar de un indicador conocido a otros relacionados, y no es por sí misma un producto ni un servicio de detección.\n\nActualmente, ningún episodio de M365.FM está vinculado a esta entrada, y no se enumeran temas relacionados ni documentación oficial para ella.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "6c235c64"
+   "desc": "6c235c64",
+   "faq": "9f55d33d",
+   "long": "16aa366e"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-27"
  },
  "passkey": {
   "desc": "Una credencial de inicio de sesión resistente al phishing basada en un par de claves pública/privada definido por los estándares FIDO2; la clave privada permanece en el dispositivo del usuario y se desbloquea con un dato biométrico o un PIN.",
@@ -34270,12 +34287,29 @@
  },
  "power-automate-trigger": {
   "desc": "El evento que inicia un flujo de Power Automate, como un correo nuevo, un formulario enviado, un clic en un botón o una programación; cada flujo tiene un desencadenador seguido de una o más acciones.",
+  "faq": [
+   {
+    "a": "Un desencadenador es el evento que inicia un flujo de Power Automate. Entre los ejemplos se incluyen un correo nuevo, un formulario enviado, un clic en un botón o una programación.",
+    "q": "¿Qué es un desencadenador en Power Automate?"
+   },
+   {
+    "a": "Cada flujo tiene un desencadenador, seguido de una o más acciones.",
+    "q": "¿Cuántos desencadenadores puede tener un flujo de Power Automate?"
+   },
+   {
+    "a": "El desencadenador inicia el flujo, y las acciones que lo siguen se ejecutan en respuesta. El desencadenador va primero, y las acciones definen lo que hace el flujo.",
+    "q": "¿Cómo se relaciona un desencadenador con las acciones?"
+   }
+  ],
   "h": "3ce41a4fd06c267e",
+  "long": "Un desencadenador en Power Automate es el evento que inicia un flujo. Entre los ejemplos se incluyen la llegada de un correo nuevo, el envío de un formulario, el clic en un botón o el momento en que se alcanza una programación definida. Cada flujo tiene exactamente un desencadenador, seguido de una o más acciones que se ejecutan una vez que el desencadenador se activa.\n\nEl desencadenador determina cuándo y por qué se ejecuta un flujo, por lo que suele ser el primer elemento que se elige al diseñar un flujo. Las acciones que siguen definen lo que hace el flujo en respuesta, como procesar datos o enviar un mensaje. Como un desencadenador siempre va primero, establece el punto de partida y el contexto de entrada para todo lo demás en el flujo.\n\nTrigger (Power Automate) es un concepto dentro del tema más amplio Power Automate. Microsoft documenta los desencadenadores en su documentación de Power Automate, en una introducción a los desencadenadores, que es la referencia oficial sobre su funcionamiento.\n\nActualmente no hay episodios de M365.FM vinculados a esta entrada.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "a5864b14"
+   "desc": "a5864b14",
+   "faq": "611c00e8",
+   "long": "7471c233"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-27"
  },
  "power-bi": {
   "desc": "La herramienta de inteligencia de negocios de Microsoft para convertir datos en informes y paneles interactivos. Los modelos semánticos definen los datos y las medidas, y los informes pueden compartirse en el servicio de Power BI o incrustarse en otras aplicaciones.",
@@ -39677,12 +39711,29 @@
  },
  "server-message-block": {
   "desc": "SMB es el protocolo estándar de uso compartido de archivos en red de Windows; Azure Files lo admite, y SMB 3.0 y versiones posteriores cifran los datos en tránsito.",
+  "faq": [
+   {
+    "a": "Server Message Block (SMB) es el protocolo estándar de Windows para compartir archivos en red. Permite a los clientes acceder a archivos y recursos compartidos en sistemas remotos a través de una red.",
+    "q": "¿Qué es Server Message Block (SMB)?"
+   },
+   {
+    "a": "Sí. Azure Files admite SMB, por lo que los recursos compartidos de archivos alojados en Azure pueden utilizarse con el mismo protocolo que se emplea habitualmente para los recursos compartidos de red de Windows.",
+    "q": "¿Azure Files admite SMB?"
+   },
+   {
+    "a": "SMB 3.0 y versiones posteriores cifran los datos en tránsito. Las versiones anteriores del protocolo no ofrecen este cifrado.",
+    "q": "¿SMB cifra los datos en tránsito?"
+   }
+  ],
   "h": "d284af6cb44d8b9d",
+  "long": "Server Message Block (SMB) es un protocolo de red utilizado para compartir archivos entre equipos. Es el protocolo estándar para compartir archivos en entornos Windows, que permite a los clientes acceder a archivos y recursos compartidos alojados en sistemas remotos a través de una red.\n\nEn el ecosistema de Microsoft, SMB es relevante tanto para el almacenamiento de archivos basado en la nube como para los servidores de archivos tradicionales locales. Azure Files admite SMB, por lo que los recursos compartidos de archivos alojados en Azure pueden utilizarse con el mismo protocolo que ya emplean los clientes de Windows para los recursos compartidos de red.\n\nLa seguridad es una consideración clave al trabajar con SMB. Las versiones 3.0 y posteriores del protocolo cifran los datos en tránsito, lo que protege el tráfico de archivos mientras se desplaza por la red. Por lo tanto, la versión del protocolo que se utiliza determina si la transferencia de datos está cifrada.\n\nSMB se registra como un concepto en la base de conocimiento de M365.FM. Por el momento, no hay episodios específicos ni relaciones adicionales vinculadas a esta entrada.",
   "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "a5e77716"
+   "desc": "a5e77716",
+   "faq": "80847ad2",
+   "long": "de041444"
   },
-  "ts": "2026-11-18"
+  "ts": "2026-11-27"
  },
  "serverless-computing": {
   "desc": "Un modelo de ejecución en la nube en el que el proveedor ejecuta y escala los servidores, mientras que usted solo aporta el código o los flujos de trabajo que se ejecutan en respuesta a eventos. Usted paga por las ejecuciones y los recursos utilizados, no por las máquinas inactivas.",
