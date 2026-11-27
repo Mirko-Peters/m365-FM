@@ -1,0 +1,2059 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:06.620
+Bereit für 13 Tage Microsoft 365, Co-Pilot, KI Azure und die Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.740 --> 00:00:11.720
+Diesen Januar ist die M365-Con zurück und wird noch größer?
+
+00:00:13.020 --> 00:00:17.980
+Seien Sie dabei bei Live-Sessions, Demos aus der Praxis und praktischem Wissen von MVPs und Branchenexperten aus aller Welt.
+
+00:00:18.860 --> 00:00:21.260
+Keine generischen Folien, keine endlosen Schlagworte.
+
+00:00:21.960 --> 00:00:23.120
+Wir stellen uns in echten Herausforderungen.
+
+00:00:23.900 --> 00:00:28.720
+Co-Pilot Studio, KI Agents, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.720 --> 00:00:34.300
+Ganz gleich, ob Sie IT-Experte, Entwickler oder Führungskraft sind, es gibt speziell auf Sie zugeschnittene Sessions.
+
+00:00:35.600 --> 00:00:39.900
+An zehn vollen Tagen können Sie verschiedene Technologien kennenlernen und sich mit einer globalen Community vernetzen.
+
+00:00:40.860 --> 00:00:44.320
+Sehen Sie sich die Live-Übertragung an und nehmen Sie praktische Einblicke mit nach Hause in Ihr Unternehmen.
+
+00:00:45.220 --> 00:00:48.800
+Januar 2027, zehn Tage, eine Microsoft-Community.
+
+00:00:49.540 --> 00:00:50.660
+Die Registrierung ist ab sofort möglich.
+
+00:00:51.800 --> 00:00:55.360
+Besuchen Sie m365.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:55.360 --> 00:00:58.760
+Das ist m365.net.
+
+00:01:00.140 --> 00:01:04.220
+Melden Sie sich jetzt auf m365.net an und wir sehen uns im Januar live.
+
+00:01:05.360 --> 00:01:11.200
+Falls Sie jemals dachten, Ihre .NET App sei sicher, nur weil Sie das neueste Framework verwenden, könnte dies der Weckruf sein, mit dem Sie nicht gerechnet haben.
+
+00:01:11.880 --> 00:01:15.880
+Das bevorstehende Update von OWASP pippt Änderungen hervor, die es wert sind, in Ihrer Architektur überdacht zu werden.
+
+00:01:15.880 --> 00:01:20.720
+In diesem Video erfahren Sie, welche OWASP 2025 Kategorien für .NET am wichtigsten sind.
+
+00:01:20.800 --> 00:01:25.200
+Drei Dinge, auf die Sie Ihre Pipelines noch heute scannen sollten und ein häufiges Codemuster, das Sie diese Woche beheben sollten.
+
+00:01:25.760 --> 00:01:29.120
+Einige dieser Risiken ergeben sich aus alltäglichen Programmiergewohnheiten, auf die Sie sich möglichst weit verlassen.
+
+00:01:29.460 --> 00:01:33.560
+Bleiben Sie dran, wir werden diese Änderungen in praktische Schritte umwandeln, die Ihr .NET Team noch heute verwenden kann.
+
+00:01:33.560 --> 00:01:39.920
+Die Kategorien, die Sie nicht kommen sahen, sind diejenigen, die Teams zwingen, einen Schritt zurückzutreten und das Gesamtbild zu betrachten.
+
+00:01:41.300 --> 00:01:50.180
+Das neueste OWASP Update beseitigt nicht nur bekannte Risiken, erscheint die Aufmerksamkeit auf blinde Flecken in der Architektur und im Ökosystem zu lenken, die die meisten Entwickler nie zu überprüfen dachten.
+
+00:01:51.020 --> 00:01:58.040
+Das ist bezeichnend, denn jahrelang gingen viele davon aus, dass es ausreicht, bei der neuesten .NET Version zu bleiben, die Standardeinstellungen zu aktivieren und die Frameworks zu patchen.
+
+00:01:58.040 --> 00:02:08.900
+Unsere Beobachtungen deuten jedoch darauf hin, dass selbst bei einer abgesicherten Laufzeitumgebung Risiken durch die Art und Weise entstehen können, wie Komponenten verbunden werden, welche Abhängigkeiten verwendet werden, welche Abhängigkeiten verwendet werden und in welchen Umgebungen die Bereitstellung erfolgt.
+
+00:02:09.460 --> 00:02:13.800
+Stellen Sie sich ein einfaches Beispiel aus der Praxis vor, Sie haben einen Microservice in .NET erstellt, der eine externe RPA aufruft.
+
+00:02:14.480 --> 00:02:15.120
+Das klingt einfach genug.
+
+00:02:15.620 --> 00:02:21.960
+Aber unter der Oberfläche greift dieser Service möglicherweise auf NewGet-Pakete zu, die Sie nicht direkt installiert haben, die direkt installiert haben, die direkte Abhängigkeiten, die 3 oder 4 eben nicht, die vergraben sind.
+
+00:02:21.960 --> 00:02:23.960
+Stellen Sie sich nun vor, eine dieser Bibliotheken wird kompromittiert.
+
+00:02:23.960 --> 00:02:29.580
+Selbst wenn Sie alle Patches für .NET 8 oder 9 installiert haben, weist Ihr Code plötzlich eine Sicherheitslücke auf, die Sie nicht eingebaut haben.
+
+00:02:30.120 --> 00:02:35.140
+Was passiert, wenn eine häufig verwendete Bibliothek, auf die Sie angewiesen sind, kompromittiert wird und Sie nicht einmal wissen, dass Ihnen Ihr Bild enthalten ist?
+
+00:02:35.420 --> 00:02:37.340
+Das ist die Art von Szenario, die Ovasper vorhebt.
+
+00:02:38.040 --> 00:02:43.360
+Dabei geht es weniger um eine verpfuschte Abfrage in Ihrem eigenen Code als vielmehr um Risiken für das Ökosystem, die sich unbemerkt in der Produktion ausbreiten.
+
+00:02:44.500 --> 00:02:46.260
+Lieferkettenbedenken wie diese sind nicht hypothetisch.
+
+00:02:46.440 --> 00:02:51.660
+Wir haben in verschiedenen Ökosystemen Muster beobachtet, bei denen sich ein vergiftetes Update über Nacht in Tausenden von Anwendungen ausbreitet.
+
+00:02:51.660 --> 00:02:55.060
+Für .NET ist NuGet in dieser Hinsicht sowohl eine Stärke als auch eine Schwäche.
+
+00:02:55.860 --> 00:03:01.300
+Es beschleunigt die Entwicklung, erschwert aber auch die manuelle Überprüfung jeder Abhängigkeit bei jeder Ausführung Ihrer Pipeline.
+
+00:03:02.440 --> 00:03:06.620
+Die Ovasp-Umstellung scheint zu erkennen, dass die heutigen Sicherheitsverletzungen häufig nicht von Ihrer Logik stammen,
+
+00:03:06.720 --> 00:03:09.400
+sondern von dem, was Sie automatisch ohne vollständige Transparenz abrufen.
+
+00:03:10.260 --> 00:03:15.260
+Aus diesem Grund verlagert sich die Diskussion auf Muster wie Softwarestücklisten und automatisierte Abhängigkeitsüberprüfungen.
+
+00:03:15.880 --> 00:03:19.840
+Wir werden später praktische Muster zur Risikominderung durchgehen, die Sie übernehmen können, aber der Punkt ist vorerst klar.
+
+00:03:19.840 --> 00:03:22.340
+Die Eigentumsgrenze endet nicht dort, wo Ihr Code endet.
+
+00:03:23.400 --> 00:03:27.540
+Der zweite blinde Fleck ist die Transparenz von Assets in heutigen kontainerisierten .NET-Bereistellungen.
+
+00:03:28.160 --> 00:03:32.140
+Wenn Teams Cloud-Mative-Muster übernehmen, steigt die Anzahl der zu verfolgenden Artefakte in der Regel schnell an.
+
+00:03:32.660 --> 00:03:35.680
+Möglicherweise haben Sie Dutzende von Images, die über verschiedene Registrierungen verteilt sind,
+
+00:03:35.800 --> 00:03:38.740
+jedes mit seinen eigenen Basisebenen und Abhängigkeiten, die an einem Cluster zusammengeführt sind.
+
+00:03:39.060 --> 00:03:41.300
+Die Herausforderung besteht nicht darin, sichere Funktionen zu schreiben,
+
+00:03:41.380 --> 00:03:43.620
+sondern genau zu wissen, welche Images ausgeführt werden und was sie in ihnen befinden.
+
+00:03:43.980 --> 00:03:47.840
+Ohne diese Transparenz können Sie wochenlang kompromittierte Ebenen ausliefern, ohne dies zu bemerken.
+
+00:03:47.840 --> 00:03:50.060
+Das Risiko besteht nicht nur in der Theorie.
+
+00:03:50.540 --> 00:03:54.500
+Die Angriffsfläche vergrößert sich, wenn Sie den Überblick darüber verlieren, was sich tatsächlich in der Produktion befindet.
+
+00:03:55.180 --> 00:03:59.860
+Anders ausgedrückt, Frameworks wie .NET 8 haben große Fortschritte bei der standardmäßig sicheren Authentifizierung,
+
+00:03:59.960 --> 00:04:01.720
+Eingabevalidierung und Tokenverarbeitung gemacht.
+
+00:04:02.220 --> 00:04:03.540
+Das sind echte Vorteile für Entwickler.
+
+00:04:04.060 --> 00:04:06.580
+Aber Angreifer betrachten einzelne Funktionen nicht isoliert.
+
+00:04:07.220 --> 00:04:07.960
+Sie suchen nach dem Lücken.
+
+00:04:08.400 --> 00:04:12.080
+Eine starke Identitätsbibliothek schützt Sie nicht vor einem veralteten Basis-Image in einem Container.
+
+00:04:12.080 --> 00:04:17.720
+Eine gehärtete Minimal-API schließt nicht die Möglichkeit aus, dass ein vergiftetes New-Get-Paket in Ihren Microservice gelang.
+
+00:04:18.220 --> 00:04:22.980
+Diese neuen Kategorien verdeutlichen, wie schnell Architekturentscheidungen sich ihre Kodierungspraktiken in den Schatten stellen können.
+
+00:04:23.820 --> 00:04:27.400
+Wenn wir also von Kategorien sprechen, die Sie nicht kommen sahen, beziehen wir uns eigentlich auf Risiken,
+
+00:04:27.540 --> 00:04:30.100
+die auch über der Funktionsebene liegen und auf die Sie sich heute konzentrieren sollten.
+
+00:04:31.080 --> 00:04:34.880
+Die Gefährdung der Lieferkette durch New-Get und Transparenzlücken bei containerisierten Bereitstellungen
+
+00:04:34.880 --> 00:04:39.460
+wirken sich beide direkt auf .NET-Projekte aus, da sie eng mit der Art und Weise zusammenhängen wie moderne Apps erstellt werden.
+
+00:04:40.080 --> 00:04:43.100
+Sie können sauberen Code ausliefern und trotzdem gefährdet sein, wenn Sie eine selber in Situationen übersehen.
+
+00:04:43.680 --> 00:04:45.060
+Und hier ist die Verschiebung, die die Sache interessiert.
+
+00:04:45.700 --> 00:04:49.940
+Das Oversp-Update scheint sich weniger darum zu kümmern, welchen Fehler ein einzelner Entwickler in einem Controller gemacht hat,
+
+00:04:50.160 --> 00:04:54.580
+sondern mehr darum, welche architektonischen Entscheidungen ganze Teams in Bezug auf Abhängigkeiten und Bereitstellungspfade getroffen haben.
+
+00:04:55.580 --> 00:04:58.320
+Um Ihre Apps zu schützen, können Sie nicht einfach hineinzoomen, sondern Sie müssen herauszoomen.
+
+00:04:58.880 --> 00:05:04.000
+Wenn nun neue Kategorien in den Top 10 auftauchen, wirft das auch die gegenteilige Frage auf, welche sind herausgefallen
+
+00:05:04.000 --> 00:05:06.060
+und bedeutet das, dass wir uns keine Sorgen mehr darum machen müssen.
+
+00:05:07.140 --> 00:05:10.340
+Einige der größten Überraschungen im Update betreffen nicht das, was überhaupt hinzugefügt wurde,
+
+00:05:10.420 --> 00:05:11.800
+sondern das, was still und heimlich verschwunden ist.
+
+00:05:12.680 --> 00:05:14.240
+Was fehlt und warum Sie nicht aus dem Schneider sind?
+
+00:05:14.880 --> 00:05:17.440
+Diese Verschiebung führt direkt zu der Frage, die wir jetzt auspacken müssen.
+
+00:05:18.020 --> 00:05:21.560
+Was passiert mit den Risiken, die in der neuesten Oversp-Liste nicht mehr im Vordergrund stehen?
+
+00:05:22.600 --> 00:05:25.100
+Das Detail mit dem Titel Was fehlt und warum Sie nicht aus dem Schneider sind.
+
+00:05:25.960 --> 00:05:28.380
+An dieser Stelle können Teams ihre Gefährdung leicht falsch einschätzen.
+
+00:05:29.180 --> 00:05:31.760
+Wenn alle Kategorien heruntergespielt werden, gehen manche Entwickler davon aus,
+
+00:05:31.760 --> 00:05:33.660
+dass sie sich einfach keine Sorgen mehr machen müssen, müssen.
+
+00:05:34.320 --> 00:05:35.120
+Diese Annahme ist riskant.
+
+00:05:35.660 --> 00:05:38.640
+Nur weil eine Schwachstelle nicht als eine der häufigsten Angriffsarten hervorgehoben wird,
+
+00:05:38.880 --> 00:05:40.520
+bedeutet das nicht, dass sie nicht mehr existiert.
+
+00:05:41.420 --> 00:05:44.740
+In Wahrheit sind viele dieser bekannten Probleme in Produktionssystemen immer noch aktiv.
+
+00:05:46.080 --> 00:05:47.800
+Sie tauchen in den Forschungsdaten seltener auf,
+
+00:05:47.900 --> 00:05:51.200
+da neuere Risiken wie Lieferketten und Anlagentransparenz jetzt die Zahlen dominieren.
+
+00:05:51.640 --> 00:05:53.980
+Aber geringere Transparenz ist nicht dasselbe wie deren Beseitigung.
+
+00:05:54.820 --> 00:05:55.860
+Injektionsfehler verdeutlichen dies.
+
+00:05:56.240 --> 00:05:59.960
+Seit Jahrzehnten wird in Entwicklerschulungen darauf geachtet, unsichere Abfragen zu vermeiden.
+
+00:05:59.960 --> 00:06:04.280
+Und Init hat stärkere Standardeinstellungen wie parametrisierte Abfragen über das Entity-Framework eingeführt.
+
+00:06:04.620 --> 00:06:06.640
+Diese Verbesserungen führen zur Reduzierung des Vorfallaufkommens.
+
+00:06:07.100 --> 00:06:10.740
+Dennoch können Angreifer dies immer noch ausnutzen, wenn Teams in unsichere Gewohnheiten zurückfallen.
+
+00:06:11.180 --> 00:06:12.840
+Eine hinderige Einstufung bedeutet nicht, dass sie verschwunden ist.
+
+00:06:13.160 --> 00:06:15.080
+Es bedeutet, dass Angreifer immer noch die Leistung lücken aus.
+
+00:06:15.080 --> 00:06:17.620
+Ältere Komponenten bieten eine ähnliche Lektion.
+
+00:06:18.280 --> 00:06:21.720
+Wir haben wiederholt Probleme erlebt, wenn ältere Bibliotheken oder Parser unbemerkt herumliegen.
+
+00:06:22.580 --> 00:06:25.980
+Teams stufen diese unter Umständen herab, nur weil sie nicht mehr in den Schlagzeilenkategorien auftauchen.
+
+00:06:26.940 --> 00:06:27.700
+Dann steigt das Risiko.
+
+00:06:28.200 --> 00:06:31.360
+Wenn ein veralteter XML-Parser oder Serializer monatelang unbemerkt läuft,
+
+00:06:31.480 --> 00:06:34.540
+reicht ein einziger Missbrauchspfad, um ihn in eine direkte Sicherheitsverletzung zu verwandeln.
+
+00:06:35.140 --> 00:06:36.500
+Die wichtigste Erkenntnis ist praktische Natur.
+
+00:06:37.160 --> 00:06:40.120
+Priorisieren Sie ältere Komponenten nicht herab, nur weil sie sich alt anfühlen.
+
+00:06:40.720 --> 00:06:43.180
+Angreifer nutzen oft genau das aus, was Teams vergessen zu überwachen.
+
+00:06:43.180 --> 00:06:48.220
+Deshalb ist es irreführend, die Top 10 als Checkliste zu betrachten, die Zeile für Zeile abgehakt werden muss.
+
+00:06:48.960 --> 00:06:52.540
+Die Rangfolge spiegelt Häufigkeit und Auswirkungen in verschiedenen Branchen in einem bestimmten Zeitraum wider.
+
+00:06:53.420 --> 00:06:55.260
+Das bedeutet nicht, dass alle anderen Risiken verschwunden sind.
+
+00:06:55.820 --> 00:06:59.700
+Wenn überhaupt, sollte eine Kategorie, die auf der Liste weiter unten steht, eine andere Art von Alarm auslösen.
+
+00:07:00.640 --> 00:07:03.940
+Sie müssen diszipliniert genug sein, um sich sowohl gegen die sehr sichtbaren Bedrohungen von heute
+
+00:07:03.940 --> 00:07:06.040
+als auch gegen die weniger Auffälligen von gestern zu verteidigen.
+
+00:07:07.100 --> 00:07:08.640
+Sicherheit erfordert ein Ausgewogenes zwischen beiden.
+
+00:07:09.140 --> 00:07:11.760
+Auf der anderen Seite ist die unsichere Serialisierung ein klassisches Beispiel.
+
+00:07:11.760 --> 00:07:15.520
+Es mag im Moment nicht weit oben stehen, aber die Untergrenze erlaubt es Angreifern immer noch,
+
+00:07:15.620 --> 00:07:19.920
+beliebigen Code einzuschleusen oder private Daten zu lesen, wenn Entwickler unsichere Standardeinstellungen verwenden.
+
+00:07:20.540 --> 00:07:24.040
+Viele Teams greifen auf JSON-Bibliotheken zurück oder verlassen sich auf altbewährte Muster,
+
+00:07:24.220 --> 00:07:26.500
+ohne die in neueren Leitlinien empfohlenen Schutzmaßnahmen zu ergreifen.
+
+00:07:27.120 --> 00:07:29.740
+Angriffe müssen nicht unbedingt ein großes Volumen haben, um großen Schaden anzurichten.
+
+00:07:30.120 --> 00:07:33.280
+Ein einziger übersehender Desrealisierungsfehler kann Kundendaten offenlegen
+
+00:07:33.280 --> 00:07:35.740
+oder zu einem Sprungbrett für tiefere Kompromittierungen werden.
+
+00:07:36.620 --> 00:07:38.100
+Angreifer folgen dieser Denkweise natürlich.
+
+00:07:38.100 --> 00:07:43.460
+Sie bemerken des Entwicklungsteams aufatmen, wenn eine Kategorie nicht mehr im Vordergrund steht.
+
+00:07:44.560 --> 00:07:46.300
+Vor Jahren geschriebener Code bleibt unverändert.
+
+00:07:46.820 --> 00:07:47.820
+Beprüfte Regeln werden verworfen.
+
+00:07:48.100 --> 00:07:48.880
+Patching verlangsamt sich.
+
+00:07:49.720 --> 00:07:51.940
+Für einen Angreifer sind diese Bedingungen einfache Gewinne.
+
+00:07:52.560 --> 00:07:54.500
+Anstatt mit jedem Sicherheitsteam zu konkurrieren,
+
+00:07:54.560 --> 00:07:57.260
+das sich auf das neueste Tool zur Überwachung der Lieferkette konzentriert,
+
+00:07:57.480 --> 00:07:59.180
+zielen Sie auf den vergessenen Injektionsvektor ab,
+
+00:07:59.280 --> 00:08:00.660
+der immer noch in einem Berichtsmodul lauert
+
+00:08:00.660 --> 00:08:03.820
+oder auf einen ungenutzten Serviceanpunkt der Daten über eine veraltete Bibliothek offenlegen.
+
+00:08:03.820 --> 00:08:07.780
+Aus ihrer Sicht ist es weniger aufwendig, dorthin zu gehen, wo die Verteidiger nicht suchen.
+
+00:08:08.380 --> 00:08:09.620
+Die praktische Lektion hier ist einfach.
+
+00:08:10.120 --> 00:08:11.920
+Wenn eine Kategorie weniger Aufmerksamkeit erhält,
+
+00:08:12.000 --> 00:08:14.600
+wird das zugrunde liegende Risiko für Angreifer oft attraktiver und nicht weniger.
+
+00:08:15.800 --> 00:08:17.880
+Was aus dem Blickfeld verschwunden ist, ist immer noch von Bedeutung
+
+00:08:17.880 --> 00:08:20.800
+und es ist kurzsichtig, das Fehlen als grünes Licht für eine Herabstufung zu werten.
+
+00:08:21.900 --> 00:08:24.560
+Für .NET Teams sollte die Verteidigungshaltung immer das Bewusstsein
+
+00:08:24.560 --> 00:08:26.440
+für aufkommende Risiken mit der konsequenten Behebung
+
+00:08:26.440 --> 00:08:28.040
+sogenannter älterer Schwachstellen kombinieren.
+
+00:08:28.700 --> 00:08:30.680
+Beides ist aktuell, eines ist nur lauter als das andere.
+
+00:08:31.620 --> 00:08:33.340
+Als nächstes werden wir dies in einen Kontext setzen,
+
+00:08:33.420 --> 00:08:35.900
+indem wir uns die Arten von alltäglichen .NET-Code-Mustern ansehen,
+
+00:08:35.960 --> 00:08:37.800
+die oft direkt mit diesen übersehenden Risiken in Verbindung stehen.
+
+00:08:38.800 --> 00:08:40.260
+Einige der am häufigsten übersehenden Risiken
+
+00:08:40.260 --> 00:08:42.460
+sind nicht in neuen Frameworks oder ausgeklüge Exploits versteckt.
+
+00:08:42.860 --> 00:08:45.180
+Sie befinden sich direkt im Code, den Sie möglicherweise vorher angeschrieben haben.
+
+00:08:45.800 --> 00:08:47.320
+Dies ist das Gebiet der versteckten Fallen,
+
+00:08:47.580 --> 00:08:49.920
+in dem gewöhnliche Entitätsmuster, die einst alltäglich waren,
+
+00:08:49.920 --> 00:08:52.260
+jetzt als Sicherheitsrisiken neu interpretiert werden, werden.
+
+00:08:53.120 --> 00:08:54.560
+Das Beunruhigende daran ist,
+
+00:08:54.640 --> 00:08:56.920
+dass viele dieser Muster immer noch in der Produktion ausgeführt werden
+
+00:08:56.920 --> 00:08:58.720
+und obwohl sie zu diesem Zeitpunkt harmlos erschienen,
+
+00:08:58.800 --> 00:09:00.600
+werden sie jetzt direkt mit höheren Risikokategorien
+
+00:09:00.600 --> 00:09:02.100
+in den heutigen Bedrohungsmodellen verknüpft.
+
+00:09:03.340 --> 00:09:06.540
+Eines der deutlichsten Beispiele ist die schwache oder teilweise Eingabevalidierung.
+
+00:09:06.960 --> 00:09:09.420
+Viele Projekte verlassen sich immer noch auf kleinseitige Überprüfungen
+
+00:09:09.420 --> 00:09:10.660
+oder einfache Regex-Filterung,
+
+00:09:10.760 --> 00:09:13.100
+da sie davon ausgehen, dass dies ausreicht, bevor Daten weitergegeben werden.
+
+00:09:13.280 --> 00:09:14.300
+Er scheint sicher, bis man erkennt,
+
+00:09:14.400 --> 00:09:16.640
+dass Angreifer diese Schutzmaßnahmen problemlos umgehen können.
+
+00:09:17.420 --> 00:09:18.620
+Hinzu kommt die Tatsache,
+
+00:09:19.000 --> 00:09:21.920
+dass viele clevere Anwendungen immer noch Objekte direkt aus Benutzereingaben
+
+00:09:21.920 --> 00:09:24.000
+ohne zusätzliche Überprüfung deserialisieren
+
+00:09:24.000 --> 00:09:27.160
+und plötzlich wird diese alte Leistungsverknüpfung zu einer strukturellen Schwachstelle.
+
+00:09:28.160 --> 00:09:29.820
+Das Problem ist nicht ein einzelner übersehner Fehler.
+
+00:09:30.180 --> 00:09:30.920
+Es ist die Art und Weise,
+
+00:09:31.020 --> 00:09:32.480
+wie die wiederholte Verwendung dieser Verknüpfungen
+
+00:09:32.480 --> 00:09:34.600
+im Laufe der Zeit die Widerstandsfähigkeit des Systems untergräbt.
+
+00:09:34.800 --> 00:09:37.360
+Ein weiterer häufiger Fall ist die vergessene offengelassene Debug-Funktion.
+
+00:09:37.780 --> 00:09:39.920
+Ein Entwickler kann während des Tests einen Endpunkt einrichten,
+
+00:09:40.020 --> 00:09:41.140
+ihn für die Ablaufverfolgung verwenden
+
+00:09:41.140 --> 00:09:43.040
+und ihn dann vergessen, wenn der Dienst in die Produktion übergeht.
+
+00:09:44.660 --> 00:09:46.240
+Monate später entdeckt ein Angreifer,
+
+00:09:46.300 --> 00:09:48.680
+dass er ihn verwendet, um tiefer in die Umgebung einzudringen,
+
+00:09:48.760 --> 00:09:49.180
+Hebel dringend.
+
+00:09:49.180 --> 00:09:52.400
+Was einst wie ein harmloser Helfer für die interne Diagnose wirkte,
+
+00:09:52.500 --> 00:09:53.660
+entwickelt sich zu einem Einstiegspunkt,
+
+00:09:53.760 --> 00:09:55.400
+der heute als unsicheres Design eingestuft wird.
+
+00:09:55.880 --> 00:09:56.840
+Der Haken an der Sache ist,
+
+00:09:56.920 --> 00:09:58.340
+dass diese Fehler selten gefährlich erscheinen,
+
+00:09:58.400 --> 00:10:00.140
+bis jemand die Punkte von einer kleinen Debugging-Hilfe
+
+00:10:00.140 --> 00:10:02.200
+zum Dreh- und Angelpunkt für die laterale Bewegung verbindet.
+
+00:10:03.820 --> 00:10:06.120
+Um zu veranschaulichen, wie subtil diese Risiken sein können,
+
+00:10:06.260 --> 00:10:08.000
+stellen Sie sich einen sehr einfachen Get-End-Punkt vor,
+
+00:10:08.000 --> 00:10:09.960
+der ein Benutzer anhand seiner ID abruft.
+
+00:10:10.880 --> 00:10:11.860
+Sehen Sie sich dazu mal einen Code
+
+00:10:11.860 --> 00:10:14.280
+im M365-Show-Blogpost für diesen Podcast an.
+
+00:10:14.580 --> 00:10:16.040
+Oberflächlich betrachtet wirkt das ganz normal.
+
+00:10:16.160 --> 00:10:17.320
+Etwas, das Sie oder Ihre Teamkollegen
+
+00:10:17.320 --> 00:10:19.760
+möglicherweise schon hunderte Male in EF-Core oder Link geschrieben haben.
+
+00:10:20.140 --> 00:10:22.280
+Doch dahinter verbergen sich mehrere versteckte Fallstricke.
+
+00:10:22.720 --> 00:10:24.580
+Es gibt keine Typeinschränkung für den ID-Parameter.
+
+00:10:25.020 --> 00:10:26.540
+Es gibt keine Überprüfung, um zu bestätigen,
+
+00:10:26.600 --> 00:10:28.680
+dass der Aufrufer zum Anzeigen eines bestimmten Benutzers berechtigt ist.
+
+00:10:28.800 --> 00:10:29.960
+Es gibt auch keine Rückverfolgbarkeit,
+
+00:10:30.020 --> 00:10:31.180
+es werden keine Protokolle aufgezeichnet,
+
+00:10:31.220 --> 00:10:32.880
+wenn wiederholt nicht autorisierte Versuche entnommen werden.
+
+00:10:33.280 --> 00:10:34.000
+Stellen Sie sich nun vor,
+
+00:10:34.000 --> 00:10:36.300
+dies befindet sich in einem API-Gateway von mehreren Diensten.
+
+00:10:37.140 --> 00:10:39.300
+Ein ungeschützter Pfad kann sich in Ihrer Umgebung ausbreiten.
+
+00:10:39.920 --> 00:10:41.040
+Das ist das Szenario, das Sie berücksichtigen.
+
+00:10:41.400 --> 00:10:43.000
+Was geschieht, wenn ein angemeldeter Benutzer
+
+00:10:43.000 --> 00:10:45.280
+die ID-Zeichenfolge in der Anforderung einfach in anderen Wert ändern.
+
+00:10:45.940 --> 00:10:47.560
+Plötzlich bedeutet eine unachtsame Codezeile,
+
+00:10:47.680 --> 00:10:48.900
+dass auf das Profil einer anderen Person,
+
+00:10:49.040 --> 00:10:50.500
+oder schlimmer noch, auf Datensätze
+
+00:10:50.500 --> 00:10:52.340
+in der gesamten Datenbank zugegriffen werden kann.
+
+00:10:52.720 --> 00:10:54.280
+Es bedarf keines ausgeklügelten Exploits,
+
+00:10:54.360 --> 00:10:56.060
+um aus diesem Versehen eine Datenschutzverletzung zu machen.
+
+00:10:56.600 --> 00:10:58.060
+Ruhig können Sie diesen Endpunkt also absichern,
+
+00:10:58.140 --> 00:10:59.300
+ohne die gesamte App neu zu erstellen.
+
+00:10:59.560 --> 00:11:00.820
+Drei praktische Lösungen stechen hervor.
+
+00:11:01.200 --> 00:11:03.260
+Erstens geben Sie die Eingabe streng ein und validieren Sie sie.
+
+00:11:03.500 --> 00:11:05.020
+Erzwingen Sie beispielsweise eine Richtlinie
+
+00:11:05.020 --> 00:11:06.860
+für numerische Einschränkungen der Stammdefinition,
+
+00:11:06.940 --> 00:11:08.800
+damit keine schädlichen Eingaben unkontrolliert durchkommen.
+
+00:11:08.800 --> 00:11:11.680
+Zweitens erzwingen Sie eine Autorisierungsprüfung,
+
+00:11:11.760 --> 00:11:12.840
+bevor Sie einen Datensatz zurückgeben.
+
+00:11:13.500 --> 00:11:15.180
+Fügen Sie eine ressourcenbasierte Prüfung hinzu,
+
+00:11:15.300 --> 00:11:16.700
+autorisieren Sie sie und wenden Sie sie an,
+
+00:11:16.760 --> 00:11:18.260
+damit der Aufrufer nur seine eigenen Daten sieht.
+
+00:11:18.680 --> 00:11:20.940
+Drittens fügen Sie eine strukturierte Protokollierung hinzu,
+
+00:11:21.020 --> 00:11:22.800
+um fehlgeschlagene Autorisierungsversuche zu erfassen
+
+00:11:22.800 --> 00:11:24.420
+und Ihrem Team Einblick in Missbrauchsmuster zu geben,
+
+00:11:24.480 --> 00:11:25.180
+bevor diese eskalieren.
+
+00:11:25.700 --> 00:11:27.320
+Diese Schritte erfordern nur minimalen Aufwand,
+
+00:11:27.420 --> 00:11:28.900
+beseitigen aber die gefährlichsten blinden Flecken
+
+00:11:28.900 --> 00:11:30.220
+in diesem routinemäßigen Code-Stück.
+
+00:11:30.700 --> 00:11:31.920
+Dieser Perspektivwechsel ist wichtig.
+
+00:11:32.380 --> 00:11:34.000
+In der Vergangenheit bedeuteten Diskussionen
+
+00:11:34.000 --> 00:11:35.600
+über sicheren Code-Off darüber zu debattieren,
+
+00:11:35.600 --> 00:11:37.260
+ob eine einzelne Anweisung mit schädlichen Werten
+
+00:11:37.260 --> 00:11:38.240
+injiziert werden könnte oder nicht.
+
+00:11:38.520 --> 00:11:39.520
+Jetzt ist der Fokus breiter gefällig.
+
+00:11:39.860 --> 00:11:41.560
+Der Kontext ist genauso wichtig wie die Syntax.
+
+00:11:42.140 --> 00:11:44.520
+Eine sicher aussehende Methode kann isoliert zum Schwachpunkt werden,
+
+00:11:44.620 --> 00:11:45.620
+sobald sie in einer verteilten,
+
+00:11:45.660 --> 00:11:47.560
+in der Cloud gehosteten Umgebung verfügbar gemacht wird.
+
+00:11:48.280 --> 00:11:49.700
+Die Entwurfsoberfläche, nicht die Codezeile,
+
+00:11:49.800 --> 00:11:50.760
+definiert die Angriffsfläche.
+
+00:11:51.760 --> 00:11:54.020
+Neuere .NET-Versionen bieten zwar stärkere Vorlagen
+
+00:11:54.020 --> 00:11:56.360
+und Bibliotheken, die insbesondere bei der Identitätsverwaltung
+
+00:11:56.360 --> 00:11:57.340
+und dem Routing helfen können,
+
+00:11:57.440 --> 00:11:59.620
+aber das sind standardmäßig nur Tools und keine Schutzmaßnahmen.
+
+00:12:00.020 --> 00:12:02.060
+Sie müssen weiterhin Autorisierungsprüfungen konfigurieren,
+
+00:12:02.060 --> 00:12:03.000
+die Validierung erzwingen
+
+00:12:03.000 --> 00:12:04.440
+und eine strukturierte Fehlerbehandlung anwenden.
+
+00:12:05.180 --> 00:12:06.760
+Durch die Ausführung der neuesten Framework-Versionen
+
+00:12:06.760 --> 00:12:08.100
+werden unsichere Programmiergewohnheiten,
+
+00:12:08.140 --> 00:12:09.500
+die sich in früheren Bilds eingeschlichen haben,
+
+00:12:09.560 --> 00:12:10.640
+nicht automatisch rückgängig gemacht.
+
+00:12:11.420 --> 00:12:12.740
+Leitplanken können die Reibung verringern,
+
+00:12:12.980 --> 00:12:14.740
+aber Sicherheit hängt von aktivem Engagement ab,
+
+00:12:14.820 --> 00:12:15.760
+nicht von passiver Vererbung.
+
+00:12:16.580 --> 00:12:17.600
+Die eigentliche Erkenntnis ist einfach.
+
+00:12:18.040 --> 00:12:20.000
+Einige der riskantesten Muster in Ihren Anwendungen
+
+00:12:20.000 --> 00:12:21.920
+sind nicht die neuen Codezeilen, die Sie morgen schreiben.
+
+00:12:22.340 --> 00:12:23.140
+Es sind die vertrauten Routinen,
+
+00:12:23.200 --> 00:12:24.220
+die bereits heute bereitgestellt werden.
+
+00:12:24.900 --> 00:12:26.440
+Diese Realität zur Erkenntnis ist der erste Schritt,
+
+00:12:26.520 --> 00:12:27.240
+um Sie zu bereinigen.
+
+00:12:27.920 --> 00:12:29.240
+Dies wirft auch eine größere Frage auf.
+
+00:12:29.240 --> 00:12:31.900
+Wenn sich viele dieser Fallen bereits in Ihrer Code-Basis befinden,
+
+00:12:31.980 --> 00:12:32.760
+wie können Sie dann verhindern,
+
+00:12:32.840 --> 00:12:34.540
+dass Sie sich beim nächsten Projekt erneut einschleichen?
+
+00:12:35.080 --> 00:12:37.300
+Hier sind Prozesse und Workflows genauso wichtig wie Code
+
+00:12:37.300 --> 00:12:38.780
+und deshalb besteht der nächste Schritt darin,
+
+00:12:38.860 --> 00:12:40.780
+Sicherheit von Anfang an in die Art und Weise zu integrieren,
+
+00:12:40.860 --> 00:12:41.700
+wie Sie Software entwickeln,
+
+00:12:41.760 --> 00:12:42.600
+wie Sie Software entwickeln
+
+00:12:42.600 --> 00:12:43.860
+und sie nicht erst am Ende hinzuzufügen.
+
+00:12:44.720 --> 00:12:46.740
+Integration von Sicherheit in Ihren Netzwerkfluss
+
+00:12:46.740 --> 00:12:49.300
+Die meisten Entwicklungsteams verfallen immer noch der Gewohnheit,
+
+00:12:49.380 --> 00:12:50.420
+Sicherheit als etwas zu behandeln,
+
+00:12:50.500 --> 00:12:52.080
+das erst kurz vor der Veröffentlichung überprüft wird.
+
+00:12:52.760 --> 00:12:54.720
+Features werden erstellt, zusammengeführt und bereitgestellt.
+
+00:12:55.340 --> 00:12:56.780
+Erst danach werden Probleme durch Scanner
+
+00:12:56.780 --> 00:12:58.580
+oder externe Penetrationstests aufgezeigt.
+
+00:12:58.580 --> 00:13:00.580
+Zu diesem Zeitpunkt sind Ihre Möglichkeiten begrenzt.
+
+00:13:00.980 --> 00:13:02.460
+Sie müssen entweder schnell Patches installieren,
+
+00:13:02.540 --> 00:13:03.240
+während die Benutzer warten
+
+00:13:03.240 --> 00:13:04.500
+oder Sie akzeptieren das Risiko und hoffen,
+
+00:13:04.620 --> 00:13:05.800
+dass es nicht vor dem nächsten Zyklus explodiert.
+
+00:13:06.600 --> 00:13:08.040
+Es ist keine Überraschung, dass dieses Muster existiert.
+
+00:13:08.340 --> 00:13:09.760
+Die Zeitpläne für Veröffentlichungen sind eng
+
+00:13:09.760 --> 00:13:11.400
+und alles, was keine sichtbaren Features hervorbringt,
+
+00:13:11.480 --> 00:13:12.320
+fühlt sich oft optional an.
+
+00:13:12.900 --> 00:13:13.640
+Der Haken an der Sache ist,
+
+00:13:13.680 --> 00:13:15.320
+dass dieser verzögerte Ansatz nicht mehr zeitgemäß ist.
+
+00:13:15.780 --> 00:13:17.520
+Änderungen in der neuesten Liste von OVA bekräftigen,
+
+00:13:17.600 --> 00:13:19.400
+dass Probleme genauso stark mit der Art und Weise zusammenhängen,
+
+00:13:19.440 --> 00:13:20.400
+wie sie entwickeln, wie sie entwickeln,
+
+00:13:20.460 --> 00:13:21.200
+wie mit dem, was sie kodieren.
+
+00:13:21.800 --> 00:13:23.480
+Wenn die Bedrohungen im Workflow selbst liegen,
+
+00:13:23.480 --> 00:13:25.660
+können Sie durch Warten bis zum Schluss sicherstellen,
+
+00:13:25.920 --> 00:13:27.640
+dass Sie immer reagieren, anstatt sie zu verhindern.
+
+00:13:28.280 --> 00:13:29.540
+Anstatt Sicherheitsüberprüfungen
+
+00:13:29.540 --> 00:13:31.000
+wie späte Brandbekämpfung zu behandeln,
+
+00:13:31.200 --> 00:13:32.780
+sollten Sie die OVA-Kategorien von vornherein
+
+00:13:32.780 --> 00:13:33.620
+als Eingaben verwenden.
+
+00:13:34.120 --> 00:13:35.780
+Wenn Probleme wie die Sichtbarkeit von Assets
+
+00:13:35.780 --> 00:13:36.840
+oder die Gefährdung der Lieferkette
+
+00:13:36.840 --> 00:13:38.440
+als systemische Risiken hervorgehoben werden,
+
+00:13:38.560 --> 00:13:39.940
+besteht dieses Risiko bereits in dem Moment,
+
+00:13:40.020 --> 00:13:41.660
+in dem Sie eine neue New-Get-Abhängigkeit hinzufügen
+
+00:13:41.660 --> 00:13:43.060
+oder ein Container-Image veröffentlichen.
+
+00:13:43.320 --> 00:13:44.480
+Oder ein Container-Image veröffentlichen.
+
+00:13:44.680 --> 00:13:45.860
+Ein später Scannen wird es nicht ausschließen.
+
+00:13:46.400 --> 00:13:47.720
+Wenn Sie Sicherheit in jeder Phase
+
+00:13:47.720 --> 00:13:48.900
+in den Designprozess einbetten,
+
+00:13:48.960 --> 00:13:49.920
+fangen Sie diese Schwachstellen ab,
+
+00:13:53.480 --> 00:13:54.560
+um Bestandteil der Funktionsweise
+
+00:13:54.560 --> 00:13:55.340
+Ihrer Pipeline zu machen.
+
+00:13:56.180 --> 00:13:57.860
+Schutz durch Prävention, nicht durch Bereinigung.
+
+00:13:58.320 --> 00:13:59.900
+Derzeit haben viele Teams zwar formal Richtlinien,
+
+00:14:00.000 --> 00:14:01.300
+aber diese Richtlinien sind in Wikis
+
+00:14:01.300 --> 00:14:02.700
+und nicht im tatsächlichen Code hinterlegt.
+
+00:14:03.480 --> 00:14:05.480
+Architekten schreiben Seiten über Eingabevalidierung,
+
+00:14:05.600 --> 00:14:06.700
+parametrisierte Abfragen
+
+00:14:06.700 --> 00:14:07.960
+oder die Verwaltung von Geheimnissen.
+
+00:14:08.620 --> 00:14:09.040
+Alle nicken.
+
+00:14:09.540 --> 00:14:10.820
+Aber sobald der Sprintdruck zunimmt,
+
+00:14:11.240 --> 00:14:11.940
+siegt die Bequemlichkeit.
+
+00:14:12.700 --> 00:14:13.720
+Pullanforderungen werden übersehen
+
+00:14:13.720 --> 00:14:14.820
+und die schriftlichen Anleitungen
+
+00:14:14.820 --> 00:14:16.000
+werden im Alltag kaum noch wahrgenommen.
+
+00:14:16.880 --> 00:14:17.740
+Das ist nicht böse gemeint.
+
+00:14:18.340 --> 00:14:20.220
+So funktioniert Softwarebereitstellung unter Druck einfach.
+
+00:14:21.060 --> 00:14:22.560
+Wenn diese Regeln nicht in Tools integriert sind,
+
+00:14:22.620 --> 00:14:23.460
+brechen sie schnell zusammen.
+
+00:14:24.260 --> 00:14:25.380
+Abhängigkeitsprüfungen sind ein gutes Beispiel.
+
+00:14:25.820 --> 00:14:26.820
+Viele Pipelines erstellen
+
+00:14:26.820 --> 00:14:28.100
+und liefern Software munter aus,
+
+00:14:28.160 --> 00:14:29.900
+ohne die Pakete vor der Bereitstellung zu prüfen.
+
+00:14:30.660 --> 00:14:31.760
+Um es direkter auszudrücken,
+
+00:14:31.860 --> 00:14:33.420
+wenn eine schädliche Abhängigkeit durchkommt,
+
+00:14:33.540 --> 00:14:34.440
+erfolgt die Warnung erst,
+
+00:14:34.520 --> 00:14:36.580
+wenn die Kunden den Kompromiss bereits erstellt haben.
+
+00:14:38.220 --> 00:14:38.960
+Unterm Strich ist es so,
+
+00:14:39.020 --> 00:14:39.800
+dass das Testen der Sicherheit
+
+00:14:39.800 --> 00:14:41.020
+nach der Bereitstellung zu spät erfolgt.
+
+00:14:41.600 --> 00:14:42.740
+Wir wollen diese Warnungen erhalten,
+
+00:14:42.840 --> 00:14:44.080
+bevor ein Release CCD verlässt.
+
+00:14:44.420 --> 00:14:45.560
+Aus diesem Grund werden bei modernen
+
+00:14:45.560 --> 00:14:46.300
+DevSecOps-Ansätzen
+
+00:14:46.300 --> 00:14:47.460
+Schutzmaßnahmen bereits früher integriert.
+
+00:14:47.840 --> 00:14:50.080
+Man denke nur an automatisierte statische Analysen,
+
+00:14:50.140 --> 00:14:51.380
+die in jeden Commit integriert sind,
+
+00:14:51.380 --> 00:14:52.380
+an Abhängigkeitsaudits,
+
+00:14:52.380 --> 00:14:53.080
+die ausgeführt werden,
+
+00:14:53.140 --> 00:14:54.440
+bevor Bild-Artefakte gepackt werden.
+
+00:14:54.580 --> 00:14:55.300
+Sogar an Merch-Checks,
+
+00:14:55.360 --> 00:14:56.720
+die Pull-Requests mit schwerwiegenden Problemen
+
+00:14:56.720 --> 00:14:57.500
+blockieren, blockieren.
+
+00:14:58.280 --> 00:14:59.400
+Keine dieser Maßnahmen erfordert,
+
+00:14:59.480 --> 00:15:00.460
+dass sich Entwickler in Wiki regeln.
+
+00:15:00.660 --> 00:15:01.840
+Sie werden bei jeder Codeverschiebung
+
+00:15:01.840 --> 00:15:02.640
+automatisch ausgeführt.
+
+00:15:03.200 --> 00:15:04.220
+Heute kann man beispielsweise
+
+00:15:04.220 --> 00:15:06.000
+die automatische Abhängigkeitsprüfung
+
+00:15:06.000 --> 00:15:07.460
+in der Bild-Pipeline aktivieren
+
+00:15:07.460 --> 00:15:08.440
+und bei jedem Release
+
+00:15:08.440 --> 00:15:10.220
+die Generierung einer Softwarestückliste,
+
+00:15:10.360 --> 00:15:11.620
+SBOM, hinzufügen.
+
+00:15:13.620 --> 00:15:15.660
+Beide Schritte erhöhen direkt die Transparenz darüber,
+
+00:15:15.740 --> 00:15:16.580
+was ausgeliefert wird,
+
+00:15:16.700 --> 00:15:17.900
+ohne den Entwickler auszubremsen.
+
+00:15:17.900 --> 00:15:20.620
+Plattformfunktionen unterstützen diese Ausrichtung.
+
+00:15:21.040 --> 00:15:22.760
+Minimale APIs in 1.8 drängen
+
+00:15:22.760 --> 00:15:24.300
+nicht zu breit gefächerten Endpunkten.
+
+00:15:24.800 --> 00:15:26.240
+Sie fördern sichere Standardeinstellungen.
+
+00:15:26.880 --> 00:15:28.520
+Integrierte Authentifizierungsbibliotheken
+
+00:15:28.520 --> 00:15:30.460
+lassen sich in Standard-Identitätsanbieter integrieren,
+
+00:15:30.560 --> 00:15:31.560
+sodass für die Tokenverarbeitung
+
+00:15:31.560 --> 00:15:32.480
+oder die Anspruchsvalidierung
+
+00:15:32.480 --> 00:15:34.120
+kein benutzerdefinierter und fehleranfälliger Code
+
+00:15:34.120 --> 00:15:34.660
+erforderlich ist.
+
+00:15:35.680 --> 00:15:36.740
+Das sind nicht einfach nur Extras,
+
+00:15:36.860 --> 00:15:37.360
+sondern Leitplanken.
+
+00:15:37.920 --> 00:15:38.660
+Wenn man sie verwendet,
+
+00:15:38.720 --> 00:15:39.880
+reduziert man sowohl das Risiko
+
+00:15:39.880 --> 00:15:40.860
+gefährlicher Abkürzungen
+
+00:15:40.860 --> 00:15:41.920
+als auch den Entwickleraufwand,
+
+00:15:42.020 --> 00:15:42.880
+alles manuell zu sichern.
+
+00:15:43.380 --> 00:15:44.160
+Eine klare Möglichkeit,
+
+00:15:44.280 --> 00:15:45.240
+diese Praktiken zu formulieren,
+
+00:15:45.240 --> 00:15:45.960
+ist der ID-Workflow.
+
+00:15:46.860 --> 00:15:47.560
+Jede Phase lässt sich
+
+00:15:47.560 --> 00:15:48.580
+in einer konkreten Sicherheitsmaßnahme
+
+00:15:48.580 --> 00:15:49.100
+genau zuordnen.
+
+00:15:49.660 --> 00:15:51.300
+Inventur der Komponenten in der Analyse.
+
+00:15:52.080 --> 00:15:52.700
+Stellen Sie eine Liste
+
+00:15:52.700 --> 00:15:53.820
+aller Abhängigkeiten und Assets,
+
+00:15:53.900 --> 00:15:55.060
+bevor Sie sie einem Projekt hinzufügen.
+
+00:15:55.540 --> 00:15:56.200
+Führen Sie im Design
+
+00:15:56.200 --> 00:15:57.900
+ein einfaches Bedrohungsmodell aus,
+
+00:15:58.080 --> 00:15:59.340
+um unsichere Designentscheidungen
+
+00:15:59.340 --> 00:15:59.940
+hervorzuheben,
+
+00:16:00.020 --> 00:16:01.240
+während Sie noch an Diagrammen arbeiten.
+
+00:16:01.760 --> 00:16:02.740
+Integrieren Sie in der Entwicklung
+
+00:16:02.740 --> 00:16:03.540
+statische Analysen
+
+00:16:03.540 --> 00:16:04.420
+und Abhängigkeitsprüfungen
+
+00:16:04.420 --> 00:16:04.940
+direkt in CI,
+
+00:16:05.040 --> 00:16:06.080
+damit Probleme gekennzeichnet werden,
+
+00:16:06.160 --> 00:16:07.440
+bevor die Zusammenführung abgeschlossen ist.
+
+00:16:08.320 --> 00:16:09.520
+Konfigurieren Sie in der Implementierung
+
+00:16:09.520 --> 00:16:10.460
+Ihre Bereitstellungspipelern,
+
+00:16:10.520 --> 00:16:11.540
+sodass Releases blockiert werden,
+
+00:16:11.540 --> 00:16:12.500
+die diese Prüfung nicht bestehen.
+
+00:16:13.180 --> 00:16:14.380
+Und planen Sie in der Evaluierung
+
+00:16:14.380 --> 00:16:15.580
+regelmäßige Aktualisierungen
+
+00:16:15.580 --> 00:16:16.360
+Ihres Bedrohungsmodells,
+
+00:16:16.440 --> 00:16:17.600
+damit es den aktuellsten Risiken entspricht.
+
+00:16:17.860 --> 00:16:18.740
+Diese konkreten Schritte
+
+00:16:18.740 --> 00:16:19.520
+sind nicht abstrakt,
+
+00:16:19.620 --> 00:16:20.660
+sondern praktische Empfehlungen,
+
+00:16:21.040 --> 00:16:22.560
+die Netteams sofort anwenden können.
+
+00:16:23.180 --> 00:16:24.260
+Das Ergebnis ist ein Workflow,
+
+00:16:24.340 --> 00:16:25.060
+der nicht mehr reaktiv,
+
+00:16:25.140 --> 00:16:26.160
+sondern widerstandsfähig ist.
+
+00:16:27.300 --> 00:16:28.060
+Ein riskantes Muster,
+
+00:16:28.120 --> 00:16:29.140
+das während des Designs erkannt wird,
+
+00:16:29.220 --> 00:16:29.940
+kostet Minuten bis zu wenig.
+
+00:16:30.460 --> 00:16:31.460
+Wenn es während der Evaluierung
+
+00:16:31.460 --> 00:16:32.340
+gefunden wird, kostet es Stunden.
+
+00:16:32.660 --> 00:16:33.860
+Wenn es in der Produktion gefunden wird,
+
+00:16:33.920 --> 00:16:34.760
+kann es Monate oder schlimmer
+
+00:16:34.760 --> 00:16:35.760
+noch Reputationsverluste kosten.
+
+00:16:36.360 --> 00:16:37.400
+Je mehr Sie nach links verschieben,
+
+00:16:37.500 --> 00:16:38.160
+desto mehr spart Ihr Team.
+
+00:16:38.160 --> 00:16:39.100
+Was sich zunächst
+
+00:16:39.100 --> 00:16:40.220
+wie Sicherheitsaufwand anfühlt,
+
+00:16:40.300 --> 00:16:40.880
+verschafft Ihnen am Ende
+
+00:16:40.880 --> 00:16:41.860
+Vorhersehbarkeit und weniger
+
+00:16:41.860 --> 00:16:43.040
+Last-Minute-Feuerwehrübungen.
+
+00:16:43.860 --> 00:16:44.320
+Kurz gesagt,
+
+00:16:44.400 --> 00:16:45.300
+bei der Integration von Sicherheit
+
+00:16:45.300 --> 00:16:46.220
+in den Workflow geht es nicht
+
+00:16:46.220 --> 00:16:47.340
+um Papierkram oder das Abhaken
+
+00:16:47.340 --> 00:16:48.100
+von Kästchen, sondern darum,
+
+00:16:48.180 --> 00:16:48.980
+Prozesse so zu strukturieren,
+
+00:16:49.040 --> 00:16:49.700
+dass die richtige Entscheidung
+
+00:16:49.700 --> 00:16:50.580
+auch die Entscheidung aus dem Fall ist.
+
+00:16:51.060 --> 00:16:52.160
+Auf diese Weise verlassen sich
+
+00:16:52.160 --> 00:16:53.080
+Entwickler nicht auf Erinnerungen
+
+00:16:53.080 --> 00:16:53.640
+oder Absichten,
+
+00:16:54.120 --> 00:16:54.920
+sondern werden von integrierten
+
+00:16:54.920 --> 00:16:56.400
+Prüfungen und Plattformunterstützung geleitet.
+
+00:16:56.780 --> 00:16:57.920
+Und als nächstes kommt der Entschirmtest.
+
+00:16:58.200 --> 00:16:59.140
+Wie lässt sich nach dem Erstellen
+
+00:16:59.140 --> 00:17:00.260
+dieses Workflows sicherstellen,
+
+00:17:00.340 --> 00:17:00.820
+dass er funktioniert?
+
+00:17:01.320 --> 00:17:01.960
+Wie lässt sich messen,
+
+00:17:02.020 --> 00:17:03.100
+ob die integrierten Schutzmaßnahmen
+
+00:17:03.100 --> 00:17:04.520
+tatsächlich mit den Risiken übereinstimmen,
+
+00:17:04.600 --> 00:17:05.720
+die OVAS Bearzeit kennzeichnen?
+
+00:17:06.000 --> 00:17:06.900
+Das ist die nächste Herausforderung,
+
+00:17:06.960 --> 00:17:07.460
+die wir angehen müssen.
+
+00:17:08.380 --> 00:17:09.460
+Ihre Anwendung an den Standards
+
+00:17:09.460 --> 00:17:10.720
+von 2025 messen.
+
+00:17:11.220 --> 00:17:11.980
+Wenn Sie Ihre Anwendung
+
+00:17:11.980 --> 00:17:13.800
+an den Standards von 2025 messen,
+
+00:17:13.860 --> 00:17:14.700
+müssen Sie Ihre Maßstäbe ändern.
+
+00:17:15.360 --> 00:17:15.940
+Die Frage ist nicht,
+
+00:17:16.020 --> 00:17:16.560
+ob Ihre Pipeline
+
+00:17:16.560 --> 00:17:17.460
+ein grünes Häkchen aufweist,
+
+00:17:17.540 --> 00:17:18.100
+sondern ob die Tools,
+
+00:17:18.160 --> 00:17:18.860
+auf die Sie sich verlassen,
+
+00:17:18.960 --> 00:17:20.080
+tatsächlich den Risiken entsprechen,
+
+00:17:20.200 --> 00:17:21.340
+den Entwickler heute ausgesetzt sind.
+
+00:17:22.600 --> 00:17:23.160
+Zu viele Teams
+
+00:17:23.160 --> 00:17:24.320
+verwenden immer noch Benchmarks,
+
+00:17:24.400 --> 00:17:25.040
+die auf den Bedrohungen
+
+00:17:25.040 --> 00:17:25.840
+von gestern basieren.
+
+00:17:26.000 --> 00:17:26.920
+Und diese Lücke erzeugt
+
+00:17:26.920 --> 00:17:28.440
+eine gefährliche Illusion von Sicherheit.
+
+00:17:28.980 --> 00:17:30.460
+Verstandene Scans mögen beruhigend wirken,
+
+00:17:30.560 --> 00:17:31.260
+aber Beruhigung ist nicht
+
+00:17:31.260 --> 00:17:32.160
+dasselbe wie Resilienz.
+
+00:17:32.620 --> 00:17:34.000
+Dies ist eine branchenweite Fehlerquelle.
+
+00:17:34.700 --> 00:17:35.480
+Unternehmen stützen sich
+
+00:17:35.480 --> 00:17:36.700
+auf veraltete Sicherheitschecklisten,
+
+00:17:36.780 --> 00:17:37.140
+da sie glauben,
+
+00:17:37.220 --> 00:17:37.760
+diese seien aktuell.
+
+00:17:38.640 --> 00:17:39.140
+Doch diese Listen
+
+00:17:39.140 --> 00:17:39.920
+haben oft mehr Gewicht
+
+00:17:39.920 --> 00:17:40.760
+in Bezug auf Compliance
+
+00:17:40.760 --> 00:17:41.220
+als auf Schutz.
+
+00:17:42.020 --> 00:17:43.140
+Man sieht immer noch Formulare,
+
+00:17:43.200 --> 00:17:44.380
+die sich auf SQL, Injection
+
+00:17:44.380 --> 00:17:45.260
+oder SSL-Einstellungen
+
+00:17:45.260 --> 00:17:46.460
+von vor allem Jahrzehnten konzentrieren,
+
+00:17:46.540 --> 00:17:47.380
+während ganze Kategorien
+
+00:17:47.380 --> 00:17:48.040
+moderner Risiken
+
+00:17:48.040 --> 00:17:48.740
+wie unsachgemäße
+
+00:17:48.740 --> 00:17:49.700
+Autorisierungsabläufe
+
+00:17:49.700 --> 00:17:50.820
+und Beeinträchtigungsabläufe
+
+00:17:50.820 --> 00:17:51.520
+und Beeinträchtigungen
+
+00:17:51.520 --> 00:17:51.980
+der Lieferkette
+
+00:17:51.980 --> 00:17:52.860
+nicht einmal auf der Seite ist.
+
+00:17:53.340 --> 00:17:54.140
+Wenn Teams die Einhaltung
+
+00:17:54.140 --> 00:17:54.900
+von Vorschriften feiern,
+
+00:17:54.980 --> 00:17:55.840
+verwechseln sie deren Erfüllung
+
+00:18:01.260 --> 00:18:02.420
+und dieser Unterschied
+
+00:18:02.420 --> 00:18:03.140
+ist wichtiger denn je.
+
+00:18:03.800 --> 00:18:04.440
+Die eigentliche Falle
+
+00:18:04.440 --> 00:18:04.880
+besteht darin,
+
+00:18:04.940 --> 00:18:05.480
+davon auszugehen,
+
+00:18:05.540 --> 00:18:06.020
+dass das Bestehen
+
+00:18:06.020 --> 00:18:06.900
+vorhandener Tests bedeutet,
+
+00:18:06.980 --> 00:18:07.740
+dass man abgesichert ist.
+
+00:18:08.660 --> 00:18:09.920
+Pipelines zeigen möglicherweise,
+
+00:18:10.040 --> 00:18:10.840
+dass alle Abhängigkeiten
+
+00:18:10.840 --> 00:18:11.880
+vollständig gepatcht sind
+
+00:18:11.880 --> 00:18:12.740
+und die statische Analyse
+
+00:18:12.740 --> 00:18:13.840
+nichts Kritisches gefunden hat,
+
+00:18:13.900 --> 00:18:14.520
+doch dieselben Tools
+
+00:18:14.520 --> 00:18:15.640
+übersehen oft strukturelle Mängel.
+
+00:18:15.980 --> 00:18:16.940
+Eine häufige Fehlerquelle,
+
+00:18:17.100 --> 00:18:18.500
+insbesondere in .NET-Umgebungen,
+
+00:18:18.660 --> 00:18:19.800
+ist die fehlerhafte Autorisierung
+
+00:18:19.800 --> 00:18:20.620
+auf Objektebene.
+
+00:18:21.540 --> 00:18:22.440
+Automated ist möglicherweise
+
+00:18:22.440 --> 00:18:23.260
+nicht dafür konzipiert,
+
+00:18:23.320 --> 00:18:23.860
+einen Fall zu erkennen,
+
+00:18:23.960 --> 00:18:24.440
+in dem ein Benutzer
+
+00:18:24.440 --> 00:18:25.660
+eine ID in einer Anforderung ändert,
+
+00:18:25.700 --> 00:18:26.380
+um Daten abzurufen,
+
+00:18:26.440 --> 00:18:26.900
+die ihm nicht gehören.
+
+00:18:26.900 --> 00:18:27.560
+Auf dem Papier
+
+00:18:27.560 --> 00:18:28.340
+sieht die App in Ordnung aus.
+
+00:18:28.620 --> 00:18:29.120
+In Wirklichkeit
+
+00:18:29.120 --> 00:18:29.900
+ist die Lücke weit offen.
+
+00:18:30.280 --> 00:18:31.300
+Die Tools waren nicht nachlässig.
+
+00:18:31.700 --> 00:18:32.680
+Sie haben schlichtweg nicht gemessen,
+
+00:18:32.760 --> 00:18:33.280
+worauf Angreifer
+
+00:18:33.280 --> 00:18:34.140
+ist heute am meisten abgesehen.
+
+00:18:34.580 --> 00:18:35.420
+Um diese Lücke zu schließen,
+
+00:18:35.500 --> 00:18:36.000
+muss die Bewertung
+
+00:18:36.000 --> 00:18:36.580
+angepasst werden.
+
+00:18:36.980 --> 00:18:37.500
+Das bedeutet nicht,
+
+00:18:37.560 --> 00:18:38.280
+dass wir die Automatisierung
+
+00:18:38.280 --> 00:18:38.760
+über Bord werben.
+
+00:18:39.100 --> 00:18:39.780
+Sie bedeutet vielmehr,
+
+00:18:39.820 --> 00:18:40.820
+sie mit Prüfungen zu ergänzen,
+
+00:18:40.860 --> 00:18:41.640
+die auf moderne Kategorien
+
+00:18:41.640 --> 00:18:42.120
+abgestimmt sind.
+
+00:18:42.700 --> 00:18:43.700
+Drei praktische Schritte
+
+00:18:43.700 --> 00:18:44.800
+sind für jedes Team
+
+00:18:44.800 --> 00:18:45.420
+von Bedeutung.
+
+00:18:45.800 --> 00:18:46.200
+Erstens,
+
+00:18:46.500 --> 00:18:47.500
+entwerfen Sie automatisierte
+
+00:18:47.500 --> 00:18:48.320
+Integrationstests,
+
+00:18:48.320 --> 00:18:49.060
+die die Autorisierung
+
+00:18:49.060 --> 00:18:50.160
+auf Objektebene bestätigen.
+
+00:18:51.640 --> 00:18:52.800
+Hier ein kurzes Beispiel,
+
+00:18:52.900 --> 00:18:53.660
+führen Sie einen Test durch,
+
+00:18:53.720 --> 00:18:54.840
+bei dem ein angemeldeter Benutzer
+
+00:18:54.840 --> 00:18:55.120
+versucht,
+
+00:18:55.180 --> 00:18:55.720
+auf den Datensatz
+
+00:18:55.720 --> 00:18:56.380
+eines anderen Benutzers
+
+00:18:56.380 --> 00:18:56.840
+zuzugreifen
+
+00:18:56.840 --> 00:18:57.280
+und bestätigen Sie
+
+00:18:57.280 --> 00:18:58.160
+die IP-Antwort mit der Entwicklung.
+
+00:18:58.400 --> 00:18:58.800
+Zweitens,
+
+00:18:58.840 --> 00:18:59.520
+führen Sie Scantools
+
+00:18:59.520 --> 00:19:00.420
+auf AP-Ebene ein,
+
+00:19:00.500 --> 00:19:01.220
+die Autorisierungs-
+
+00:19:01.220 --> 00:19:02.360
+und Identitätsabläufe testen.
+
+00:19:02.800 --> 00:19:03.740
+Anstatt nach veralteten
+
+00:19:03.740 --> 00:19:04.680
+Bibliotheken zu suchen,
+
+00:19:04.960 --> 00:19:05.740
+simulieren diese Scanner
+
+00:19:05.740 --> 00:19:06.520
+echte Anforderungen,
+
+00:19:06.640 --> 00:19:06.900
+um zu sehen,
+
+00:19:06.980 --> 00:19:07.620
+ob sich Rollenprüfungen
+
+00:19:07.620 --> 00:19:08.400
+und Tokenvalidierungen
+
+00:19:08.400 --> 00:19:09.080
+wie erwartet verhalten.
+
+00:19:10.200 --> 00:19:10.600
+Drittens,
+
+00:19:10.720 --> 00:19:11.240
+runden Sie die Lücken
+
+00:19:11.240 --> 00:19:12.080
+in der Automatisierung ab,
+
+00:19:12.160 --> 00:19:13.200
+indem Sie vierteljährliche Workshops
+
+00:19:13.200 --> 00:19:13.860
+zur Bedrohungsmodellierung
+
+00:19:13.860 --> 00:19:14.220
+durchführen.
+
+00:19:14.880 --> 00:19:15.700
+Bringen Sie Entwickler,
+
+00:19:15.920 --> 00:19:16.380
+Architekten
+
+00:19:16.380 --> 00:19:17.460
+und Sicherheitsverantwortliche
+
+00:19:17.460 --> 00:19:17.840
+zusammen,
+
+00:19:18.040 --> 00:19:18.500
+um was wäre,
+
+00:19:18.600 --> 00:19:19.400
+wenn Fragen zu stellen,
+
+00:19:19.460 --> 00:19:20.500
+die sich über Dienste erstrecken?
+
+00:19:21.260 --> 00:19:21.700
+Was wäre,
+
+00:19:21.800 --> 00:19:23.160
+wenn ein Containerregistrierungseintrag
+
+00:19:23.160 --> 00:19:23.680
+veraltet ist
+
+00:19:23.680 --> 00:19:24.400
+oder wenn ein Nachrichten
+
+00:19:24.400 --> 00:19:25.120
+Warteschlange Daten
+
+00:19:25.120 --> 00:19:25.820
+zwischen Mandanten fällt?
+
+00:19:26.360 --> 00:19:27.060
+Keiner dieser Schritte
+
+00:19:27.060 --> 00:19:28.020
+ist schwer zu implementieren,
+
+00:19:28.120 --> 00:19:29.100
+aber Sie verlagern die Bewertung
+
+00:19:29.100 --> 00:19:29.720
+von der Überprüfung
+
+00:19:29.720 --> 00:19:30.720
+von Kästchen zur Risikokategie.
+
+00:19:31.280 --> 00:19:31.820
+Wichtig ist,
+
+00:19:31.880 --> 00:19:32.380
+dass Sie Ihre Tools
+
+00:19:32.380 --> 00:19:33.620
+an das tatsächliche Bedrohungsmodell
+
+00:19:33.620 --> 00:19:33.980
+anpassen.
+
+00:19:34.440 --> 00:19:35.060
+Tooling-Bewertungen
+
+00:19:35.060 --> 00:19:36.100
+können absolut irreführend sein,
+
+00:19:36.180 --> 00:19:36.540
+wenn die Tools
+
+00:19:36.540 --> 00:19:37.820
+nicht auf die Kategorien abgestimmt sind,
+
+00:19:37.860 --> 00:19:38.860
+für die sie am anfälligsten sind.
+
+00:19:44.220 --> 00:19:47.640
+Anstatt Blindlings 100% zu erreichen,
+
+00:19:47.860 --> 00:19:48.980
+sollten Sie sich darauf konzentrieren,
+
+00:19:49.060 --> 00:19:49.620
+ob Ihre Prüfungen
+
+00:19:49.620 --> 00:19:50.740
+die schwierigen Fragen beantworten,
+
+00:19:50.780 --> 00:19:51.280
+die sich ergeben.
+
+00:19:52.080 --> 00:19:53.100
+Kann Ihr Prozess bestätigen,
+
+00:19:53.180 --> 00:19:54.220
+dass nur autorisierte Benutzer
+
+00:19:54.220 --> 00:19:55.160
+Ihre eigenen Daten sehen?
+
+00:19:55.680 --> 00:19:56.520
+Kann er genau anzeigen,
+
+00:19:56.600 --> 00:19:57.320
+welche Abhängigkeiten
+
+00:19:57.320 --> 00:19:58.340
+in jedem Bild ausgeliefert werden?
+
+00:19:58.640 --> 00:20:00.200
+Kann er architektonische Risiken aufdecken,
+
+00:20:00.240 --> 00:20:00.880
+die bei der Interaktion
+
+00:20:00.880 --> 00:20:01.540
+von Diensten auftreten?
+
+00:20:02.080 --> 00:20:03.120
+Wenn die Antwort Nein lautet,
+
+00:20:03.200 --> 00:20:04.220
+ist Ihr Score unvollständig,
+
+00:20:04.300 --> 00:20:05.460
+egal wie gut er auf dem Papier aussieht.
+
+00:20:06.060 --> 00:20:06.940
+Die manuelle Überprüfung
+
+00:20:06.940 --> 00:20:07.820
+hat in diesem Zusammenhang
+
+00:20:07.820 --> 00:20:08.500
+dennoch ihren Platz,
+
+00:20:08.580 --> 00:20:09.320
+da Designrisiken nicht
+
+00:20:09.320 --> 00:20:10.220
+ans Licht gebracht werden können.
+
+00:20:10.900 --> 00:20:12.040
+Logikfehler entstehen oft dadurch,
+
+00:20:12.120 --> 00:20:13.080
+wie Services zusammenpassen
+
+00:20:13.080 --> 00:20:14.360
+durch die Lücken zwischen Komponenten,
+
+00:20:14.440 --> 00:20:15.020
+nicht durch die darin
+
+00:20:15.020 --> 00:20:15.940
+enthaltenen Codezeilen.
+
+00:20:16.840 --> 00:20:17.700
+Workshops, in denen Teams
+
+00:20:17.700 --> 00:20:18.560
+Missbrauchsfälle simulieren
+
+00:20:18.560 --> 00:20:19.740
+und architektonische Schwachstellen
+
+00:20:19.740 --> 00:20:20.320
+identifizieren,
+
+00:20:20.380 --> 00:20:20.740
+sind der Ort,
+
+00:20:20.820 --> 00:20:21.420
+an dem diese Probleme
+
+00:20:21.420 --> 00:20:21.900
+ans Licht kommen.
+
+00:20:22.520 --> 00:20:23.240
+Sie sind auch der Ort,
+
+00:20:23.320 --> 00:20:23.840
+an dem Entwickler
+
+00:20:23.840 --> 00:20:24.560
+den Unterschied zwischen
+
+00:20:24.560 --> 00:20:25.620
+dem Schreiben von gutem Code
+
+00:20:25.620 --> 00:20:26.220
+und dem Entwerfen
+
+00:20:26.220 --> 00:20:27.380
+sicherer Systeme verinnerlichen.
+
+00:20:27.800 --> 00:20:28.700
+Das ist der Kulturwandel,
+
+00:20:28.780 --> 00:20:30.300
+den OWASP 2025 anstrebt
+
+00:20:30.300 --> 00:20:31.480
+und deshalb muss die Messung
+
+00:20:31.480 --> 00:20:32.600
+heute sowohl technische Scans
+
+00:20:32.600 --> 00:20:33.680
+als auch menschliche Überprüfungen
+
+00:20:33.680 --> 00:20:34.040
+umfassen.
+
+00:20:35.120 --> 00:20:36.320
+Der Vorteil ist einfach,
+
+00:20:36.440 --> 00:20:37.200
+Sie messen den Erfolg
+
+00:20:37.200 --> 00:20:38.340
+nicht mehr anhand alter Metriken,
+
+00:20:38.660 --> 00:20:39.540
+sondern anhand der Risiken,
+
+00:20:39.540 --> 00:20:40.360
+die Angreifer derzeit
+
+00:20:40.360 --> 00:20:41.360
+tatsächlich ausnutzen.
+
+00:20:43.040 --> 00:20:43.760
+Für .NET Teams
+
+00:20:43.760 --> 00:20:44.320
+bedeutet dies
+
+00:20:44.320 --> 00:20:45.220
+einen stärkeren Fokus
+
+00:20:45.220 --> 00:20:45.940
+auf Autorisierung,
+
+00:20:46.100 --> 00:20:46.740
+Transparenz über
+
+00:20:46.740 --> 00:20:47.760
+Lieferkettenabhängigkeiten
+
+00:20:47.760 --> 00:20:48.440
+und die Validierung,
+
+00:20:48.760 --> 00:20:49.720
+wie sich Cloud Native Services
+
+00:20:49.720 --> 00:20:50.360
+in der Produktion
+
+00:20:50.360 --> 00:20:51.060
+kombinieren lassen.
+
+00:20:52.060 --> 00:20:52.800
+Wenn Sie die Bewertung
+
+00:20:52.800 --> 00:20:53.880
+als fortlaufenden Zyklus
+
+00:20:53.880 --> 00:20:54.720
+und nicht als statisches
+
+00:20:54.720 --> 00:20:55.400
+Gate betrachten,
+
+00:20:55.660 --> 00:20:56.500
+erkennen Sie die Schwachstellen
+
+00:20:56.500 --> 00:20:56.920
+von morgen,
+
+00:20:57.020 --> 00:20:58.100
+bevor Sie zu Sicherheitsverletzungen
+
+00:20:58.100 --> 00:20:58.720
+von gestern werden.
+
+00:20:59.680 --> 00:21:00.700
+Ist eine Frage direkt an Sie.
+
+00:21:01.200 --> 00:21:02.220
+Wenn Sie Ihrer CI-Pipeline
+
+00:21:02.220 --> 00:21:02.660
+diese Woche
+
+00:21:02.660 --> 00:21:03.740
+nur eine Sicherheitskontrolle
+
+00:21:03.740 --> 00:21:04.480
+hinzufügen müssten,
+
+00:21:04.540 --> 00:21:05.580
+wäre es ein Autorisierungstest
+
+00:21:05.580 --> 00:21:06.660
+oder eine Lieferkettenprüfung.
+
+00:21:07.460 --> 00:21:08.020
+Geben Sie Ihre Antwort
+
+00:21:08.020 --> 00:21:10.020
+an Sie.

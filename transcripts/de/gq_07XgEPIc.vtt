@@ -1,0 +1,700 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:05.940
+Willkommen zum M3 65 FM Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.540 --> 00:00:07.700
+Warum brechen Flows plötzlich ab?
+
+00:00:08.100 --> 00:00:11.420
+Ein Flow, den Sie letzten Monat erstellt haben, funktioniert bereits nicht mehr, ohne dass Sie etwas davon gehört.
+
+00:00:11.680 --> 00:00:16.180
+Das ist das Merkwürdige an Power Automate, denn wenn ein Flow abbricht, geschieht dies meist plötzlich und ohne, dass Sie etwas davon mitbekommen.
+
+00:00:16.400 --> 00:00:21.080
+Ein Bericht wird nicht mehr verschickt, ein Ordner fühlt sich nicht mehr und der erste, der es bemerkt, ist derjenige, der darauf wartet.
+
+00:00:21.900 --> 00:00:26.740
+Mithilfe der Fehlerbehandlung können Sie dafür sorgen, dass ein Flow Sie benachrichtigt, wenn etwas nicht stimmt und verhindern, dass ein Fehler schlittert und ein Zunichte macht.
+
+00:00:26.740 --> 00:00:32.880
+Willkommen zum M3 65 FM Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:33.540 --> 00:00:37.400
+Am Ende wissen Sie, wie Sie ihn selbst einrichten können, ohne eine einzige Zeile Code schreiben zu müssen.
+
+00:00:38.660 --> 00:00:40.000
+Was bedeutet Fehlerbehandlung wirklich?
+
+00:00:40.960 --> 00:00:46.360
+Fehlerbehandlung klingt nach etwas, worüber sich Entwickler Sorgen machen, aber in Power Automate ist sie lediglich eine Reihe von Entscheidungen, die Sie im Designer treffen.
+
+00:00:46.840 --> 00:00:50.720
+Diese Entscheidungen legen fest, was Ihr Flow tut, wenn ein Schritt fehlschlägt, anstatt einfach anzuhalten.
+
+00:00:51.160 --> 00:00:51.720
+Das ist die ganze Idee.
+
+00:00:52.160 --> 00:00:56.500
+Stellen Sie sich einen Flow vor, der ein Microsoft-Formular überwacht und jede neue Antwort in eine SharePoint-Liste kopiert.
+
+00:00:57.080 --> 00:01:01.640
+Sie haben ihn in 10 Minuten erstellt, er hat funktioniert und dann ist eines Tages eine Spalte leer und der Flow bleibt stehen.
+
+00:01:02.260 --> 00:01:06.580
+Niemand erhält eine E-Mail darüber und Sie erfahren es erst, wenn jemand fragt, warum sein Eintrag nicht angezeigt wurde.
+
+00:01:07.040 --> 00:01:09.460
+Die Idee selbst stammt direkt aus der Programmierung und hat auch einen Namen.
+
+00:01:10.220 --> 00:01:16.140
+Entwickler platzieren ihre riskanten Schritte in einem Try-Block und wenn ein Fehler auftritt, wird ein Catch-Block ausgeführt, anstatt dass das gesamte Programm abstürzt.
+
+00:01:16.700 --> 00:01:21.320
+Power Automate kopiert dieses Muster mit visuellen Blöcken, sodass Sie den Schutz erhalten, ohne Code eingeben zu müssen.
+
+00:01:21.780 --> 00:01:23.860
+Die Fehlerbehandlung ist also ein Plan für den Fall, dass es so schief ist.
+
+00:01:24.080 --> 00:01:27.000
+Sie verhindert nicht, dass Fehler auftreten und sie macht ihren Flow nicht perfekt.
+
+00:01:27.660 --> 00:01:33.360
+Sie entscheidet lediglich über den nächsten Schritt, wenn etwas schief geht und diese eine Änderung trennt eine Automatisierung, die verschwindet, von einer, die sich meldet.
+
+00:01:34.180 --> 00:01:37.280
+Bevor wir fortfahren, sollten wir uns ein paar Begriffe merken, da sie immer wieder auftauchen.
+
+00:01:37.280 --> 00:01:41.620
+Ein Trigger ist ein Ereignis, das ein Flow startet, wie das Hinzufügen einer neuen Datei zu einem Ort.
+
+00:01:41.940 --> 00:01:45.660
+Eine Aktion ist ein einzelner Schritt danach, wie das Senden einer E-Mail oder das Aktualisieren einer Zeit.
+
+00:01:46.040 --> 00:01:48.120
+Ein Bereich ist ein Feld, das eine Gruppe von Aktionen zusammenhält.
+
+00:01:48.700 --> 00:01:49.900
+Sie werden gleich sehen, warum das wichtig ist.
+
+00:01:50.440 --> 00:01:51.980
+Eine weitere Sache ist es wert, dargesagt zu werden.
+
+00:01:52.520 --> 00:01:54.100
+Fehlerbehandlung ist nicht dasselbe wie Fehlerbehebung.
+
+00:01:54.600 --> 00:01:57.720
+Der Flow kann am Blatt zum Umbenennen nicht selbstständig reparieren oder eine leere Spalte füllen.
+
+00:01:58.420 --> 00:02:00.700
+Anfänger sind frustriert, wenn sie erwarten, dass er das selbst erledigt.
+
+00:02:01.480 --> 00:02:06.720
+Er kann das Problem jedoch erkennen, die richtige Person informieren und verhindern, dass es noch schlimmer wird, während das Problem bestehen bleibt.
+
+00:02:07.920 --> 00:02:09.060
+Was passiert, wenn ein Schritt fehlschlägt?
+
+00:02:09.780 --> 00:02:12.160
+Standardmäßig wird ein Flow in dem Moment gestoppt, in dem Aktion fehlschlägt.
+
+00:02:12.980 --> 00:02:16.000
+Jede Aktion in der Kette wird nur ausgeführt, wenn der vorherige Schritt erfolgreich war.
+
+00:02:16.360 --> 00:02:18.100
+Ein fehlerhafter Schritt beendet die Ausführung also vor.
+
+00:02:18.460 --> 00:02:20.000
+Es wird nichts fortgesetzt und Sie erhalten keine Information.
+
+00:02:20.440 --> 00:02:22.220
+Führen Sie sich durch, was in diesem Moment tatsächlich passiert.
+
+00:02:22.660 --> 00:02:26.820
+Ein Connector stellt eine Verbindung zu einem anderen Dienst her und die Anforderung läuft ab oder ein Wert kommt leer an
+
+00:02:26.820 --> 00:02:29.660
+oder der Dienst sendet einen Push zurück, weil zu viele Anforderungen gleichzeitig eingegangen sind.
+
+00:02:29.740 --> 00:02:32.200
+Jeder dieser Fälle wird als Fehler gewertet und die Ausführung wird gestoppt.
+
+00:02:32.440 --> 00:02:33.660
+Nehmen Sie den wöchentlichen Berichtsflow.
+
+00:02:33.660 --> 00:02:37.900
+Er zieht neue Zeilen aus seiner Tabelle, erstellt eine Zusammenfassung und sendet sie am Montagmorgen per E-Mail an das Team.
+
+00:02:38.340 --> 00:02:42.740
+Der Schritt, der die Zeilen abruft, schlägt fehl, weil jemand das Blatt umbenannt hat, sodass die E-Mail nie gesendet wird.
+
+00:02:43.340 --> 00:02:46.160
+Das Team geht davon aus, dass die Zahlen in Ordnung waren, da niemand etwas anderes gesagt hat.
+
+00:02:46.720 --> 00:02:49.720
+Eine Ebene wird ausgeführt, bevor ein Fehler auftritt und zwar der erneute Versuch.
+
+00:02:50.200 --> 00:02:52.640
+Power Automate versucht, eine fehlgeschlagene Aktion selbstständig erneut auszunehmen.
+
+00:02:52.880 --> 00:02:54.920
+Aus diesem Grund dauert es eine Weile, bis einige Fehler angezeigt werden.
+
+00:02:54.980 --> 00:02:58.600
+Wir werden später noch einmal darauf zurückkommen, wie viele Versuche genau erforderlich sind, da sich die Anplan ändern.
+
+00:02:59.340 --> 00:03:02.080
+Wiederholungsversuche sind jedoch keine Lösung für einen falschen Wert und das bringt die Leute in Stolz.
+
+00:03:02.360 --> 00:03:05.380
+Wenn eine Spalte leer ist, wird sie durch einen erneuten Versuch zehn Minuten später nicht gefüllt.
+
+00:03:06.500 --> 00:03:11.020
+Wiederholungsversuche helfen nur bei vorübergehenden Problemen wie einem kurzen Netzwerkausfall oder einem Dienst, der kurzzeitig ausgelastet ist.
+
+00:03:11.460 --> 00:03:14.940
+Wenn Sie es also mit einem tatsächlichen Fehler zu tun haben, verzögert der erneute Versuch nur die schlechten Nachrichten.
+
+00:03:15.980 --> 00:03:19.100
+Im Ausführungsverlauf wird all dies sichtbar und es lohnt sich zu wissen, wie man ihn liest.
+
+00:03:19.100 --> 00:03:24.980
+Bei jedem Durchlauf wird jede Aktion aufgezeichnet und eine rote Markierung neben einer Aktion zeigt Ihnen genau, an welcher Stelle der Flow aufgegeben wurde.
+
+00:03:26.020 --> 00:03:31.620
+Für einen Anfänger führt diese einzelne Ansicht dazu, dass mein Flow unterbrochen ist und dieser Schritt aus diesem Grund derzeit fehlschlägt.
+
+00:03:31.880 --> 00:03:35.900
+Und Fehler treten in verschiedenen Varianten auf und es ist hilfreich, sie zu erkennen.
+
+00:03:36.680 --> 00:03:38.940
+Ein Timeout bedeutet, dass der Dienst zu lange zum Antworten benötigt.
+
+00:03:39.340 --> 00:03:41.480
+Ein ungültiger Wert bedeutet, dass die Daten selbst falsch schwangen.
+
+00:03:41.880 --> 00:03:44.080
+Eine Drosselung bedeutet, dass sie zu schnell zu viel angefordert haben.
+
+00:03:44.360 --> 00:03:46.320
+Ein Berechtigungsproblem bedeutet, dass die Verbindung sind zugriff.
+
+00:03:46.320 --> 00:03:50.840
+Der Flow reagiert auf alle vier Arten auf die gleiche Weise, in dem er anhält, aber ihre Lösung ist in jedem Fall anders.
+
+00:03:51.760 --> 00:03:52.600
+Die Einstellung aussuchen
+
+00:03:52.600 --> 00:03:56.440
+Wenn die Standardeinstellung anhalten und ruhig bleiben ist, können Sie sie mit der Einstellung ausführen nachher.
+
+00:03:56.920 --> 00:03:59.260
+Jede Aktion verfügt hinter Ihren drei Punkten über ein kleines Menü.
+
+00:03:59.720 --> 00:04:03.820
+In diesem Menü können Sie angeben, was für den Schritt zutreffen muss, bevor diese Aktion ausgeführt werden darf.
+
+00:04:04.720 --> 00:04:05.960
+Sie können auf vier Ergebnisse reagieren.
+
+00:04:06.460 --> 00:04:10.120
+Der vorherige Schritt war erfolgreich, erst fehlgeschlagen, wurde übersprungen oder es ist eine Zeitüberschreitung aufgetan.
+
+00:04:10.520 --> 00:04:12.260
+Erfolgreich ist die Standardeinstellung, mit der alle beginnen.
+
+00:04:12.720 --> 00:04:15.840
+Fehlgeschlagen ist die Einstellung, die Sie am häufigsten verwenden werden, da Sie damit eine Nachricht senden können,
+
+00:04:15.840 --> 00:04:16.560
+sobald etwas schief geht.
+
+00:04:16.620 --> 00:04:18.060
+Nehme ein kleines Beispiel, das Sie sich vorstellen können.
+
+00:04:18.420 --> 00:04:22.520
+Dein Flow aktualisiert eine Zeile in einer Dataverse-Tabelle und direkt danach fügst du die Aktion E-Mail-Sendens.
+
+00:04:22.820 --> 00:04:25.820
+Du öffnest Ausführen nach für die E-Mail und aktivierst nur das Kontrollkästchen Fehlgeschlagen.
+
+00:04:26.080 --> 00:04:29.260
+Jetzt wird die E-Mail nur ausgelöst, wenn das Update abbricht und sie kann etwas so Einfaches sagen wie,
+
+00:04:29.320 --> 00:04:30.240
+das Update ist Fehlgeschlagen.
+
+00:04:30.660 --> 00:04:31.980
+Bitte überprüfe den Flow-Anschlusswort.
+
+00:04:32.260 --> 00:04:33.760
+Es lohnt sich, an dem mentalen Bild festzuhalten.
+
+00:04:34.340 --> 00:04:38.540
+Anstelle einer geraden Linie von Schritten zeichnest du einen zweiten Pfad, der nur geöffnet wird, wenn etwas schief geht.
+
+00:04:39.320 --> 00:04:42.160
+Der Hauptpfad behält seinen Zweck und der Nebenpfad kümmert sich um das Chaos.
+
+00:04:42.720 --> 00:04:46.280
+Übersprungen ist das Ergebnis, das Anfänger am häufigsten übersehen, daher verdient es eine einfache Beschreibung.
+
+00:04:46.520 --> 00:04:49.280
+Ein Schritt wird übersprungen, wenn der Flow beschließt, ihn nicht auszuführen normalerweise,
+
+00:04:49.600 --> 00:04:51.100
+weil eine darüber liegende Bedingung nicht erfüllt wurde.
+
+00:04:51.620 --> 00:04:54.980
+Das ist kein Fehler, aber es kann dich trotzdem überraschen, wenn du davon ausgehst, dass der Schritt immer ausgeführt wird.
+
+00:04:55.480 --> 00:04:58.220
+Ausführen nach arbeitet eine Aktion nach der anderen ab und das ist seine größte Schwachstelle.
+
+00:04:58.220 --> 00:05:03.540
+In einem Flow mit 30 Aktionen ist es langsam und leicht, ein Fehlerpfad manuell über alle Aktionen hinweg zu verdrahten.
+
+00:05:04.720 --> 00:05:06.840
+Genau für dieses Problem wurden Scope-Löcke entwickelt.
+
+00:05:07.640 --> 00:05:09.620
+Die Einstellung zu finden ist einfacher, als es sich anhört.
+
+00:05:09.860 --> 00:05:12.860
+Öffnen Sie den Flow im Designer, bewegen Sie den Mauszeiger über die Aktion, die Sie schützen möchten,
+
+00:05:12.960 --> 00:05:15.640
+klicken Sie auf die drei Punkte und wählen Sie auf die drei Punkte und wählen Sie Ausführen nach Konfigurieren.
+
+00:05:15.780 --> 00:05:20.080
+Ein kleines Fenster mit vier Kontrollkästchen wird geöffnet und das Kontrollkästchen für Erfolgreich ist bereits für Sie aktiviert.
+
+00:05:20.400 --> 00:05:23.180
+Von dort aus entscheiden Sie, welche zusätzlichen Ergebnisse die Aktion aktivieren soll.
+
+00:05:23.740 --> 00:05:24.740
+Bereiche und Idee von Catch
+
+00:05:24.740 --> 00:05:30.040
+Ein Bereich gruppiert Aktionen und herrnliches Superkraft besteht darin, dass Ausführen im gesamten Block gleichzeitig festgelegt werden kann.
+
+00:05:30.640 --> 00:05:33.080
+Das bedeutet, dass Sie ein Dutzend Schritte als eine Einheit behandeln können.
+
+00:05:33.600 --> 00:05:37.000
+Das Erstellen des Try- und Catch-Masters im Power Automate dauert etwa drei Schritte.
+
+00:05:38.060 --> 00:05:40.260
+Platzieren Sie Ihre eigentliche Arbeit in einem Bereich und nennen Sie ihn Tray.
+
+00:05:40.540 --> 00:05:42.000
+Fügen Sie darunter einen zweiten Bereich hinzu.
+
+00:05:42.500 --> 00:05:45.080
+Legen Sie dann Ausführen nach für den Bereich Catch fest und aktivieren Sie das Kontrollkästchen Fehlgeschlagen,
+
+00:05:45.080 --> 00:05:45.840
+damit die Aktion nur ausgeführt wird.
+
+00:05:45.940 --> 00:05:48.380
+Jetzt verfügt der Flow über den Sicherheits.
+
+00:05:48.640 --> 00:05:50.720
+Der Bereich Try ruft die Zeilen ab und erstellt den Bericht.
+
+00:05:51.220 --> 00:05:53.940
+Wenn der ein etwas fehlschlägt, wird der Bereich Catch aktiviert und übernimmt.
+
+00:05:53.940 --> 00:05:55.360
+Für nichts davon ist Code erforderlich.
+
+00:05:55.860 --> 00:05:59.620
+Im Bereich Catch findet die nützliche Arbeit statt und zwei Funktionen tragen den Großteil der Last.
+
+00:06:00.300 --> 00:06:06.040
+Die Ergebnisfunktion fragt einen Bereich ab, was darin passiert ist und gibt den Ausführungsverlauf aller Elemente in diesem Block zurück.
+
+00:06:06.720 --> 00:06:12.140
+Eine Filterreaktion wählt dann nur die Fehler aus, sodass Sie nur den Schrittnamen und die Fehlermeldung erhalten und nicht mehr mit Informationen überhäuft werden.
+
+00:06:12.580 --> 00:06:14.780
+Die Workflow-Funktion beantwortet eine andere Frage.
+
+00:06:15.420 --> 00:06:17.860
+Sie gibt Details zum aktuellen Lauf zurück, einschließlich der Lauf-ID.
+
+00:06:18.380 --> 00:06:22.760
+Anhand dieser Details können Sie einen Link direkt zum fehlgeschlagenen Lauf erstellen und diesen Link in Ihre Benachrichtigung einfügen.
+
+00:06:22.760 --> 00:06:25.980
+Die Person, die ihn liest, kann dann mit nur einem Klick zum genauen Lauf springen.
+
+00:06:26.260 --> 00:06:29.540
+Microsoft ruft hier eine Warnung hinzu, die es wert ist, wiederholt zu werden, da man es leicht übertreiben kann.
+
+00:06:29.880 --> 00:06:32.580
+Jede Protokollierungsaktion, die Sie hinzufügen, verlängert und verlangsamt den Ablauf.
+
+00:06:33.000 --> 00:06:36.340
+Ein Ablauf, der jedes nur so kleine Ereignis erfasst und benachrichtigt wird, also zu einem eigenen Problem.
+
+00:06:37.020 --> 00:06:39.100
+Protokollieren Sie die wichtigen Fehler und lassen Sie den Rest in Ruhe.
+
+00:06:39.560 --> 00:06:41.020
+Sie können bei Bedarf einen dritten Bereich hinzufügen.
+
+00:06:41.400 --> 00:06:42.060
+Dieser heißt Finally.
+
+00:06:42.060 --> 00:06:45.900
+Ein Finally-Bereich enthält Bereinigungsschritte, die unabhängig davon ausgeführt werden sollten, wie der Tribe-End.
+
+00:06:46.240 --> 00:06:48.300
+Bei jedem Schließen eines Datensatzes oder das Lehrende temporäre.
+
+00:06:48.540 --> 00:06:50.060
+Es ist dieselbe Idee wie bei Catch.
+
+00:06:50.540 --> 00:06:53.000
+Nur, dass es darauf abzielt, aufzuräumen, statt das Problem zu melden.
+
+00:06:53.280 --> 00:06:55.520
+Es lohnt sich, das Muster einmal zu erstellen und dann wieder zu verwenden.
+
+00:06:56.420 --> 00:06:58.420
+Speichern Sie das Part Tree on Catch als Vorlage.
+
+00:06:58.840 --> 00:07:01.720
+Und jeder neue Flow beginnt mit einem bereits eingerichteten Sicherheitsnetz.
+
+00:07:02.260 --> 00:07:07.400
+Diese kleine Angewohnheit zahlt sich aus, wenn ein Flow zum ersten Mal an einem Freitagnachmittag fehlschlägt und Sie davon erfahren, bevor Ihre Benutzer es tun.
+
+00:07:07.400 --> 00:07:09.760
+Ein Detail entscheidet, ob Ihnen das alles tatsächlich hilft.
+
+00:07:09.940 --> 00:07:11.520
+Und es ist der Teil, den Anfänger gerne überspringen.
+
+00:07:11.920 --> 00:07:13.740
+Er wird erst angezeigt, nachdem ein Fehler abgefangen wird.
+
+00:07:14.080 --> 00:07:17.760
+Denken Sie also daran, während wir uns die Einstellungen ansehen, die Wiederholungsversuche und Zeitüberschreitungen steuern.
+
+00:07:18.960 --> 00:07:19.580
+Wiederholungsversuche und beenden.
+
+00:07:20.240 --> 00:07:24.260
+Einen Fehler abzufangen ist nur die halbe Miete, da Sie immer noch entscheiden müssen, was als nächstes mit dem Flow geschieht.
+
+00:07:24.640 --> 00:07:26.640
+Manchmal ist es die faireste Antwort, absichtlich anzuhalten.
+
+00:07:26.760 --> 00:07:28.120
+Und genau dafür ist die Aktion beendet gedacht.
+
+00:07:28.540 --> 00:07:33.040
+Beendet den Flow und stempelt ihn mit einem von Ihnen gewählten Status zum Fehlgeschlagen sowie einer von Ihnen verfassten Nachrichten.
+
+00:07:33.320 --> 00:07:34.940
+Stellen Sie sich einen Flow vor, der einen Kunden in der Richtung stellt.
+
+00:07:34.940 --> 00:07:40.400
+Falls der Zahlungsschritt fehlschlägt, möchten Sie nicht, dass der restliche Ablauf fortgesetzt wird und Erquittung für Geld, das nie bewegt wurde, per E-Mail gesendet wird.
+
+00:07:40.720 --> 00:07:44.660
+Mit Beenden wird der Ablauf sauber beendet und ein Status mit genauen Informationen zum Vorfall hinterlassen.
+
+00:07:45.500 --> 00:07:47.660
+Wiederholungsversuche sind die andere Hälfte und können für jede Aktion angepasst werden.
+
+00:07:48.180 --> 00:07:51.300
+Bei einer festen Wiederholungsrichtlinie zwischen den Versuchen die gleiche Zeitspanne abgewartet,
+
+00:07:51.540 --> 00:07:54.420
+während bei einer exponentiellen Richtlinie nach jedem Versuch eine längere Wartezeit festgelegt wird.
+
+00:07:54.860 --> 00:07:59.680
+Microsoft empfiehlt die exponentielle Strategie, da sie verhindert, dass ein bereits angeschlagener Dienst weiter belastet wird und ihm Raum zur Erholung gibt.
+
+00:08:00.100 --> 00:08:02.260
+Die Standardwerte sind wissenswert und hängen von ihrem Plan ab.
+
+00:08:02.260 --> 00:08:07.880
+Bei einem typischen Microsoft 365-Plan gewährt Ihnen die Standardrichtlinie bis zu zwei Wiederholungsversuche in wachsenden Intervallen.
+
+00:08:08.360 --> 00:08:10.000
+Bei höheren Plänen sind es sogar bis zu zwölf.
+
+00:08:10.060 --> 00:08:16.460
+Wenn Sie Ihre eigene Richtlinie festlegen, liegen die Obergrenzen bei 90 Versuchen, einer minimalen Verzögerung von fünf Sekunden und einer maximalen Verzögerung von ein Tag.
+
+00:08:17.120 --> 00:08:20.480
+Timeouts sind der letzte Aspekt und erklären viele der Momente, in denen mein Workflow feststeckt.
+
+00:08:21.240 --> 00:08:26.380
+Wenn ein Schritt eine Anforderung stellt und auf eine Antwort wartet, gibt er nach 120 Sekunden, also zwei Minuten, auf.
+
+00:08:27.260 --> 00:08:30.780
+Anforderungen, die im Hintergrund ausgeführt werden, können so eingestellt werden, dass Sie viel länger warten, bis zu 30 Tage.
+
+00:08:30.780 --> 00:08:36.640
+Wenn Sie die Wiederholungszahlen mit dem Zeitlimit kombinieren, wird deutlich, warum ein unterbrochener Flow manchmal eine Weile warten muss, bevor er aufgibt.
+
+00:08:37.020 --> 00:08:38.800
+Ist nicht eingefroren, sondern versucht es erneut.
+
+00:08:39.000 --> 00:08:41.480
+Und bei jedem Versuch muss ein Zeitlimit überschritten werden, bevor der nächste gestartet.
+
+00:08:41.660 --> 00:08:46.960
+Sie legen die Wiederholungsrichtlinie in den Einstellungen der Aktion selbst fest, sodass Sie bei einem Schritt großzügig und bei einem anderen streng sein können.
+
+00:08:47.360 --> 00:08:54.280
+Ein Schritt, der einen ausgelasteten Dienstaufruf verdient möglicherweise eine geduldige Richtlinie, während ein Schritt, der in einen für Sie wichtigen Datensatz schreibt, schnell viel schlagen sollte, dann viel schlagen, sehr schnell viel damit.
+
+00:08:54.280 --> 00:08:57.300
+Bei Wiederholungsversuchen ist Vorsicht geboten, da Sie ein echtes Problem verwerben können.
+
+00:08:57.580 --> 00:09:03.520
+Wenn ein Schritt nur nach einem erneuten Versuch erfolgreich ist, ist das ein Zeichen dafür, dass der dahinterstehende Dienst nicht funktioniert und der erneute Versuch soll dies vertuschen.
+
+00:09:03.880 --> 00:09:08.220
+Achten Sie auf solche Muster, da Sie sich in der Regel als langsamer Flow zeigen, lange bevor Sie als fehlgeschlagener Flow angezeigen.
+
+00:09:08.780 --> 00:09:10.580
+Fehler werden protokolliert, bevor Ihre Benutzer sie finden.
+
+00:09:10.920 --> 00:09:12.940
+Alles, was bisher geschah, sorgt dafür, dass ein Flow als Fehler erkannt wird.
+
+00:09:13.260 --> 00:09:16.680
+Die Protokollierung sorgt dafür, dass eine Person den Fehler bemerkt und das ist der Teil, der ihre Woche verändern.
+
+00:09:16.680 --> 00:09:20.900
+Das einfachste Setup schreibt die Details in eine SharePoint-Liste und benachrichtigt dann den Besitzer.
+
+00:09:21.400 --> 00:09:27.500
+Jede fehlgeschlagene Ausführung fügt eine Zeile hinzu und die Zeile kann den Flow-Namen, den fehlgeschlagenen Schritt, die Fehlermeldung und einen Link zur Ausführung enthalten.
+
+00:09:27.760 --> 00:09:29.980
+Wenn etwas schief geht, haben Sie einen Datensatz anstelle eines Rätsels.
+
+00:09:30.640 --> 00:09:31.900
+Hier erhalten Sie kostenlos ein wenig Hilfe.
+
+00:09:32.420 --> 00:09:38.380
+Power Automate sendet bereits E-Mails an Flow-Besitzer für häufige und kritische Fehler zum BN unterbrochene Verbindung oder einen gedrosselten Flow.
+
+00:09:38.860 --> 00:09:45.040
+Diese E-Mails sind ein Sicherheitsnetz, kein vollständiger Plan, da Sie Sie nicht darüber informieren, dass ein Schritt unbemerkt die falschen Daten zurückgegeben hat.
+
+00:09:45.040 --> 00:09:47.820
+Wenn Sie viele Flows ausführen, ist der Application Insights die bessere Wahl.
+
+00:09:48.260 --> 00:09:51.360
+Sie können es mit Ihren Cloud-Flows verbinden und sich benachrichtigen lassen, wenn etwas fehlschlägt.
+
+00:09:51.660 --> 00:09:53.460
+Das ist besser, als die Ausführungsverläufe einzeln zu lesen.
+
+00:09:54.000 --> 00:09:57.860
+Das Detail, das Anfänger überspringen sollten, entscheidet darüber, ob das Abfangen eines Fehlers tatsächlich hilft.
+
+00:09:58.380 --> 00:10:02.220
+Anfänger protokollieren oft die Tatsache, dass ein Fehler aufgetreten ist und lassen dann den Teil weg, der hilfreich wird.
+
+00:10:02.560 --> 00:10:05.440
+Eine Zeile mit dem Hinweis Flow fehlgeschlagen sagt Ihnen nichts, worauf Sie reagieren können.
+
+00:10:05.860 --> 00:10:11.240
+Eine Zeile, die den Schritt benennt, den Fehler zitiert und einen Link zum Durchlauf enthält, verwandelt eine zweistündige Suche in eine fünfminütige Behebung.
+
+00:10:11.240 --> 00:10:13.120
+Eine Warnung, bevor Sie bei allem einen Alarm auslösen.
+
+00:10:13.460 --> 00:10:18.360
+Wenn jeder Flow bei jedem Schluck auf eine E-Mail schickt, hören die Leute auf, die E-Mails zu lesen und damit auch die einen, auf die es ankommt, begraben.
+
+00:10:18.920 --> 00:10:21.760
+Wählen Sie die Fehler aus, die wirklich einen Menschen erfordern und schweigen Sie über den Rest.
+
+00:10:22.580 --> 00:10:26.520
+Eine gute Benachrichtigung ist kurz, da das Ziel eine schnelle Entscheidung und kein langer Bericht ist.
+
+00:10:27.200 --> 00:10:32.500
+Teams eignet sich natürlich dafür, da eine Kanalnachricht leichter zu erkennen ist, als eine E-Mail, die in einem überfüllten Posteingang landet.
+
+00:10:33.500 --> 00:10:34.420
+Fehler, die Anfänger machen.
+
+00:10:34.420 --> 00:10:38.000
+Selbst mit einem guten Plan tappen Anfänger in dieselben Fallen.
+
+00:10:38.700 --> 00:10:41.060
+Wenn Sie diese im Voraus kennen, ersparen Sie sich einen schlechten Nachmittag.
+
+00:10:41.560 --> 00:10:43.600
+Ein Fehler ist es, den kritischen Pfad nicht zu berücksichtigen.
+
+00:10:44.380 --> 00:10:50.140
+Wenn der wichtige Schritt keinen Run-After hat, wird ein echter Fehler nie abgefangen und der Ablauf stoppt einfach so, wie er es getan hat, bevor Sie das alles gelernt haben.
+
+00:10:51.020 --> 00:10:52.900
+Den Fehler abzufangen und da nichts damit zu tun, ist ein weiterer.
+
+00:10:53.320 --> 00:10:59.360
+Ein Catch-Bereich, der eine leere Aktion ausführt oder einfach still und leise endet, verbirgt den Fehler, anstatt ihn ans Licht zu bringen, was schlimmer ist, als gar keinen Plan zu haben.
+
+00:10:59.360 --> 00:11:01.560
+Also denkt, sie einen Plan zu haben, weil sie denken, sie ist eine tiefe Schachtelung.
+
+00:11:01.560 --> 00:11:09.420
+Microsoft begrenzt die Verschachtelungstiefe von Aktionen auf acht Ebenen und ein Ablauf, der Bereich in Bereich in Bereich stapelt, wird schwer lesbar und noch schwerer zu debuggen.
+
+00:11:10.300 --> 00:11:11.720
+Flach und klar ist immer besser als clever.
+
+00:11:12.180 --> 00:11:14.220
+Darauf zu vertrauen, dass Wiederholungsversuche alles beheben ist ein vierter Punkt.
+
+00:11:14.560 --> 00:11:20.960
+Sie helfen nur bei vorübergehenden Problemen, sodass das Tool, wenn nach der Verzögerung erneut ein falscher Wert fehlschlägt, für ein Datenproblem verantwortlich gemacht wird, dass es nicht löst.
+
+00:11:21.260 --> 00:11:24.200
+Warnungen bei allem sind ein fünfter Punkt, der die Mitarbeiter dazu bringt, Warnungen zu geben.
+
+00:11:24.520 --> 00:11:25.960
+Der sechste Punkt ist leise, aber aufwendiger.
+
+00:11:26.680 --> 00:11:28.580
+Fehlgeschlagene Aktionen werden trotzdem auf ihr Verantwortungslimits.
+
+00:11:28.580 --> 00:11:36.360
+Ein Flow, der in einer Schleife fehlschlägt, verbraucht also sein Kontingent und ein Flow, der immer wieder fehlschlägt, wird nach 14 Tagen kontinuierlicher Fehler abgeschaltet.
+
+00:11:38.000 --> 00:11:39.600
+Letzteres sind die Warnkosten eines Stellenfehlers.
+
+00:11:40.100 --> 00:11:41.920
+Ein unbehandelter Fehler unterbricht nicht nur den Durchlauf.
+
+00:11:42.360 --> 00:11:44.600
+Wenn man ihn nicht behebt, kann er ihre Automatisierung still und heimlich.
+
+00:11:45.000 --> 00:11:48.120
+Eine siebte Fall ist eher eine Denkweise und die, in die man am leichtesten tappt.
+
+00:11:48.120 --> 00:11:52.880
+Anfänger fügen die Fehlerbehandlung oft ganz am Ende hinzu, nachdem der Flow erstellt und bereits verwendet wird.
+
+00:11:53.260 --> 00:11:53.820
+Das ist verkehrt.
+
+00:11:54.260 --> 00:11:59.120
+Am besten fügen sie einen Fehlerpfad hinzu, während sie den Schritt erstellen, da sie sich dann noch daran erinnern, was schief gehen könnte.
+
+00:12:00.920 --> 00:12:02.940
+Wo dies in Microsoft 365 und Azure 1 ordnen.
+
+00:12:03.440 --> 00:12:07.220
+Vergrößern Sie kurz das Bild, denn der Standort von Power Automate sagt viel darüber aus, was es kann und was nicht.
+
+00:12:07.760 --> 00:12:13.560
+Power Automate ist Teil von Microsoft 365 und der Power Plattform und basiert auf einem Azure Dienst namens Logic Apps.
+
+00:12:13.560 --> 00:12:16.140
+Im Grunde dieselbe Idee, aber mit anderen Ansätzen.
+
+00:12:16.660 --> 00:12:20.660
+Power Automate wurde für Entwickler und normale Benutzer entwickelt, die mit Microsoft 365 arbeiten,
+
+00:12:20.760 --> 00:12:23.480
+während Logic Apps für IT-Experten und Entwickler gedacht ist, die mit Azure arbeiten.
+
+00:12:24.260 --> 00:12:27.900
+Beide stellen eine Verbindung zu hunderten von Diensten her, sodass die Wahl selten über Konnektoren bestimmt wird.
+
+00:12:29.180 --> 00:12:31.600
+Insbesondere in Bezug auf die Fehlerbehandlung bietet Logic Apps mehr.
+
+00:12:32.420 --> 00:12:38.040
+Es bietet eine umfassendere Wiederholungskontrolle, eine erweiterte Handhabung und eine unternehmensweite Überwachung über die eigenen Tools von Azure,
+
+00:12:38.040 --> 00:12:40.700
+weshalb Teams ihre wichtigsten Backend-Integrationen dorthin verlagern.
+
+00:12:41.320 --> 00:12:43.020
+Ein praktischer Aspekt ist für Anfänger erwähnenswert.
+
+00:12:43.860 --> 00:12:49.900
+Power Automate ist in vielen Microsoft 365 Lizenzen enthalten, was ein wichtiger Grund dafür ist, dass es der naheliegende Ort zum Starten ist.
+
+00:12:50.420 --> 00:12:55.580
+Logic Apps wird in der Regel in einem separaten Azure-Abonnement mit eigener Abrechnung ausgeführt, sodass eine andere Art von Verpflichtung mit sich bringt.
+
+00:12:55.880 --> 00:12:57.880
+Ein zweiter Unterschied besteht darin, wer die Sache verwaltet.
+
+00:12:58.740 --> 00:13:03.160
+Ein Power Automate Flow kann von der Person, die ihn verwendet, besessen und bearbeitet werden, sodass die Arbeit nahe am Team bleibt.
+
+00:13:03.500 --> 00:13:09.060
+Eine Logic App befindet sich in der Regel bei einem Entwicklungs- oder Plattform-Team, was Prozesse hinzufügt und eine kleine Änderung verlangsamen kann.
+
+00:13:09.500 --> 00:13:11.120
+Hier ist die Anleitung für Ihren aktuellen Standort.
+
+00:13:11.120 --> 00:13:14.720
+Bleiben Sie in Power Automate, während Sie lernen und der Flow Ihr Team unterstützt.
+
+00:13:15.140 --> 00:13:21.240
+Wenn ein Flow zum Rückgrat eines Geschäftsprozesses wird und echte Menschen dafür verantwortlich sind, wenn er fehlschlägt, ist das ein Zeichen dafür, dass Sie sich Logic Apps ansehen sollten.
+
+00:13:23.380 --> 00:13:24.580
+Ein fairer Hinweis zu diesem Vergleich.
+
+00:13:24.580 --> 00:13:29.020
+Die Grenze zwischen den beiden ist keine von Microsoft festgelegte Regel und der Community-Leitfaden, der dies festlegt ist, ist Open Source.
+
+00:13:29.440 --> 00:13:32.560
+Betrachten Sie dies daher als hilfreiche Ermessensentscheidung und nicht als feste Grenze.
+
+00:13:33.460 --> 00:13:34.620
+Die Einzige wohnt sich anzueignen.
+
+00:13:35.100 --> 00:13:36.380
+Hier ist die Kurzfassung, die Sie mitnehmen sollten.
+
+00:13:37.000 --> 00:13:41.300
+Die Fehlerbehandlung läuft auf einen Plan für den Moment hinaus, in dem ein Schritt fehlt, schlägt, und Sie bauen ihn aus ein paar Teilen auf.
+
+00:13:41.880 --> 00:13:43.740
+Ausführer nach teilt dem Flow mit, was als nächstes zu tun ist.
+
+00:13:44.080 --> 00:13:45.460
+Ein Bereich gibt Ihnen die Möglichkeit, zu versuchen.
+
+00:13:45.940 --> 00:13:47.480
+Beenden beendet eine Ausführung absichtlich.
+
+00:13:47.820 --> 00:13:52.140
+Die Wiederholungsrichtlinie entscheidet, wie geduldig der Flow ist, und die Protokollierung stellt sicher, dass eine Person davon erfährt.
+
+00:13:53.280 --> 00:13:55.140
+Das Ziel war nie ein Flow, der nicht fehlschlagen kann.
+
+00:13:55.500 --> 00:14:00.420
+Das Ziel ist ein Flow, der laut fehlschlägt, sodass Sie ihn nach Ihren Vorstellungen beheben können, anstatt es von jemandem zu erfahren, der darauf gewartet hat.
+
+00:14:00.720 --> 00:14:02.200
+Bevor Sie gehen, sollten Sie sich eine Frage stellen.
+
+00:14:02.280 --> 00:14:05.920
+Wenn Sie sich Ihre Abläufe jetzt ansehen, welcher würde scheitern, ohne es Ihnen jemals zu sagen?
+
+00:14:06.480 --> 00:14:12.900
+Wenn Ihnen das Thema jetzt weniger einschüchternd vorkommt, abonnieren Sie M365FM, um die Tools und die Denkweise zu beherrschen, die die Zukunft der Arbeit prägen.
