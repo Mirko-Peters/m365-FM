@@ -1,0 +1,745 @@
+WEBVTT
+
+00:00:00.320 --> 00:00:05.740
+Willkommen beim M365FM-Podcast, wo wir die Menschen Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.780 --> 00:00:08.160
+Was macht Row-Level-Security eigentlich?
+
+00:00:08.820 --> 00:00:12.180
+Stellen Sie sich vor, Sie öffnen einen Power-BI-Bericht und sehen Zahlen, die gar nicht für Sie bestimmt waren.
+
+00:00:12.580 --> 00:00:15.980
+Niemand hat etwas gehackt, denn der Bericht selbst hat Ihnen den falschen Datenausschnitt geliefert.
+
+00:00:16.700 --> 00:00:21.540
+Sie würden annehmen, die Lösung sei in strengere Berechtigung, aber die wahre Antwort ist eine Einstellung, die man leicht übersieht, bis etwas schief geht.
+
+00:00:22.060 --> 00:00:26.240
+Sie nennt sich Row-Level-Security und funktioniert weniger wie eine verschlossene Tür, sondern eher wie eine Brille.
+
+00:00:26.240 --> 00:00:33.120
+Willkommen beim M365FM-Podcast, wo wir die Menschen Ideen und Technologien erforschen, die die Zukunft der Arbeit gestalten.
+
+00:00:34.280 --> 00:00:39.160
+Am Ende dieser Folge werden Sie wissen, wie Power-BI entscheidet, was jede Person sieht und wo dieser Schutz nicht mehr greift.
+
+00:00:39.980 --> 00:00:42.740
+Das Problem tritt in dem Moment auf, in dem ein Bericht für eine ganze Gruppe dienen muss.
+
+00:00:43.600 --> 00:00:46.300
+Der Vertrieb will seine eigenen Zahlen, die Finanzabteilung will die Summen.
+
+00:00:46.300 --> 00:00:52.700
+Und ein Regionalmanager sollte nur seine Region sehen, allen die gleiche ungefilterte Ansicht zu geben, führt dazu, dass private Zahlen auf dem falschen Bildschirm landen.
+
+00:00:52.700 --> 00:00:57.840
+Row-Level-Security, oft als RLS abgekürzt, ist die Art und Weise, wie Power-BI das innerhalb eines einzigen Berichts löst.
+
+00:00:58.400 --> 00:01:03.760
+Anstatt für jedes Publikum eine separate Kopie zu erstellen, behalten Sie ein Modell und lassen es zeilenweise entscheiden, was jede Person sehen darf.
+
+00:01:04.340 --> 00:01:05.740
+Es hilft sich wieder, diese Brille vorzustellen.
+
+00:01:06.220 --> 00:01:09.820
+Jeder öffnet denselben Bericht und die Brille entscheidet, welche Zeilen auf der Seite erscheinen.
+
+00:01:10.220 --> 00:01:15.420
+Die Diagramme, die Schaltflächen und das Layout bleiben identisch, während sich die zugrunde liegenden Daten von Person zu Person ändern.
+
+00:01:16.000 --> 00:01:17.420
+Drei einfache Teile lassen es funktionieren.
+
+00:01:17.800 --> 00:01:20.340
+Eine Rolle ist der Name für eine Gruppe von Personen, die dasselbe sehen sollen.
+
+00:01:20.340 --> 00:01:24.480
+Der Filter ist die Regel, die diesen Inhalt definiert, etwa nur Zeilen anzuzeigen, indem die Region West.
+
+00:01:24.820 --> 00:01:27.200
+Die Mitgliedschaft ist die Liste der Personen, die sie dieser Rolle zuweisen.
+
+00:01:28.000 --> 00:01:32.280
+Eine Rolle namens Vertrieb West enthält also eine Regel und diese besagt, dass die Region West sein muss.
+
+00:01:32.960 --> 00:01:37.520
+Wenn Sie jemanden aus dieser Region zu der Rolle hinzufügen, schließt Power-BI alle anderen Regionen von seiner Ansicht aus.
+
+00:01:38.020 --> 00:01:40.540
+Sie öffnen weiterhin exakt den Bericht, den auch alle anderen öffnen.
+
+00:01:41.020 --> 00:01:44.200
+Dieser letzte Punkt ist es wert, wiederholt zu werden, da Anfänger meist das Gegenteil erwarten.
+
+00:01:44.200 --> 00:01:47.640
+RLS blendet keine Spalten aus und sperrt niemanden vom Bericht aus.
+
+00:01:48.160 --> 00:01:51.400
+Es filtert Zeilen und alles andere am Bericht bleibt exakt, wo es war.
+
+00:01:52.840 --> 00:01:54.320
+Wie entscheidet Power-BI, was Sie sehen?
+
+00:01:55.040 --> 00:01:58.880
+Wenn Sie eine Regel schreiben, schreiben Sie eigentlich einen Test, den Power-BI für jede einzelne Zeile ausführt.
+
+00:01:59.540 --> 00:02:03.600
+Für jede Zeile beantwortet der Test eine einfache Frage und die Antwort lautet entweder wahr oder falsch.
+
+00:02:04.080 --> 00:02:05.140
+Wenn es wahr ist, erscheint die Zeile.
+
+00:02:05.280 --> 00:02:09.400
+Wenn es falsch ist, ist die Zeile weg, komplett entfernt, statt nur ausgegraut oder hinter einem Klick versteckt.
+
+00:02:09.400 --> 00:02:14.160
+Dieses Detail ist wichtiger, als es klingt, denn eine gefilterte Zeile wartet nicht darauf, enthüllt zu werden.
+
+00:02:14.500 --> 00:02:17.040
+Sie ist einfach nicht Teil der Daten, die Power-BI dieser Person zur Verfügung stellt.
+
+00:02:17.360 --> 00:02:18.240
+Lassen Sie mich konkret machen.
+
+00:02:18.520 --> 00:02:22.020
+Stellen Sie sich eine Verkaufstabelle mit fünf Zeilen vor, zwei für West, zwei für Ost und eine für Süd.
+
+00:02:22.560 --> 00:02:26.760
+Eine Regel, die besagt, Region ist West, macht aus diesen fünf Zeilen zwei für jeden, der diese Rolle innehat.
+
+00:02:27.260 --> 00:02:32.780
+Die Ost- und Südzeilen erreichen ihren Bildschirm, daher ergeben die Summen, Diagramme und Drilldowns ein kleineres und sicheres Bild.
+
+00:02:33.360 --> 00:02:36.320
+Sie erstellen all dies im Power-BI-Desktop, bevor Sie irgendetwas mit jemandem teilen.
+
+00:02:36.760 --> 00:02:39.100
+Öffnen Sie das Modell, erstellen Sie eine Rolle und weisen Sie eine Regel zu.
+
+00:02:39.340 --> 00:02:41.620
+Und wenn Sie veröffentlichen, wandern diese Rollen mit dem Modell mit.
+
+00:02:41.980 --> 00:02:44.260
+Die Sicherheit ist bereits aktiv, sobald es im Dienst landet.
+
+00:02:45.080 --> 00:02:46.020
+Jetzt wird es interessant.
+
+00:02:46.980 --> 00:02:49.820
+Power-BI hat zwei sehr unterschiedliche Konzepte, die beide das Wort Rolle verwenden.
+
+00:02:49.920 --> 00:02:51.900
+Und sie zu verwechseln, führt zu echten Problemen.
+
+00:02:52.340 --> 00:02:54.440
+Die Rolle, die Sie für die Sicherheit erstellen, lebt innerhalb des Modells.
+
+00:02:54.860 --> 00:02:57.620
+Die Rolle, die jemand in einem Arbeitsbereich innehat, bestimmt, wer Dinge bearbeiten kann.
+
+00:02:57.680 --> 00:02:59.200
+Und diese zweite Rolle übersteuert Ihre Regeln.
+
+00:02:59.760 --> 00:03:03.560
+Jeder mit der Rolle Admin, Mitglied oder Mitwirkender in einem Arbeitsbereich kann jede Zeile sehen.
+
+00:03:04.220 --> 00:03:05.600
+Egal, welche Filter Sie geschrieben haben.
+
+00:03:05.820 --> 00:03:07.340
+Nur Personen mit der Betrachterrolle werden gefüllt.
+
+00:03:07.340 --> 00:03:11.180
+Sobald Sie einem Manager, also Mitwirkenden, in Zugriff geben, haben Sie ihm die ganze Tabelle gegeben.
+
+00:03:11.680 --> 00:03:13.900
+Dieses eine Detail erklärt viele verwirrende Gespräche.
+
+00:03:14.780 --> 00:03:19.520
+Jemand erstellt sorgfältige Regeln, teilt den Bericht und sieht dann zu, wie ein Kollege sie einfach umgeht.
+
+00:03:20.000 --> 00:03:20.920
+Die Regeln sind nicht kaputt.
+
+00:03:21.360 --> 00:03:23.700
+Der Kollege hat einfach eine Arbeitsbereichsrolle, die über diesen Regeln steht.
+
+00:03:24.260 --> 00:03:25.860
+Die gleiche Logik erklärt einen leeren Bericht.
+
+00:03:26.280 --> 00:03:31.120
+Wenn jemand gar keine Rolle zugewiesen hat, erzwingt Power BI dennoch die Sicherheit, aber es gibt keine Regel, die auf ihn zutrifft.
+
+00:03:31.120 --> 00:03:32.140
+Also sieht er nichts.
+
+00:03:32.780 --> 00:03:36.820
+Ein leerer Bildschirm bedeutet meist eine fehlende oder falsche Zuweisung und nicht einen defekten Bericht.
+
+00:03:37.460 --> 00:03:38.660
+Ich habe noch eine Besonderheit, die man kennen soll.
+
+00:03:39.040 --> 00:03:43.920
+Wenn eine Zeile herausgefiltert wird, zeigt Power BI dieselbe Meldung wie bei einem Feld, das gelöscht wurde oder nie existierte.
+
+00:03:44.580 --> 00:03:46.920
+Für die Person, die davor sitzt, sieht der Bericht defekt aus.
+
+00:03:47.140 --> 00:03:49.320
+Das ist ein harter Weg, um zu entdecken, dass sich der eigene Zugriff geändert.
+
+00:03:49.880 --> 00:03:53.560
+Die gute Nachricht ist, dass Sie nicht für jeden neuen Mitarbeiter im Team eine neue Regel schreiben müssen.
+
+00:03:54.100 --> 00:03:56.120
+Es gibt eine Möglichkeit, eine Regel zu erstellen, die sich selbst erhält.
+
+00:03:56.340 --> 00:03:58.300
+Wenn Sie das einmal gesehen haben, werden Sie nicht mehr darauf verzichten.
+
+00:03:58.300 --> 00:04:01.060
+Die Einrichtung erfolgt ohne das Schreiben von Kunden.
+
+00:04:01.460 --> 00:04:05.240
+Wenn Sie beim Begriff Sicherheitsregeln an Programmierung denken, können Sie sich entspannen und dem meistreicht ein Mausklick.
+
+00:04:05.840 --> 00:04:09.260
+Power BI Desktop bietet einen Point-and-Click-Editor für Standardfälle.
+
+00:04:09.760 --> 00:04:11.840
+Formeln brauchen Sie nur für komplexere Anforderungen.
+
+00:04:12.420 --> 00:04:13.520
+Der Ablauf sieht folgendermaßen aus.
+
+00:04:13.840 --> 00:04:16.720
+Öffnen Sie Ihr Modell, suchen Sie Menübanden nach Rollenverwaltenden und stellen Sie eine neue Rolle.
+
+00:04:17.000 --> 00:04:20.480
+Geben Sie einen aussagekräftigen Namen, etwa Westvertrieb, denn in einer Woche werden Sie froh darüber sein.
+
+00:04:20.680 --> 00:04:23.760
+Wählen Sie dann die zu schützende Tabelle aus und erstellen Sie die Regel mit dem Dropdown-Editor.
+
+00:04:24.200 --> 00:04:25.420
+Speichern Sie sie und die Rolle ist erstellt.
+
+00:04:25.700 --> 00:04:28.120
+Ein Punkt bringt Anwender oft durcheinander und verdient eine Klara.
+
+00:04:28.620 --> 00:04:32.500
+Sie können Personen im Desktop keiner Rolle zuweisen, da diese Aufgabe im Dienst erfolgt.
+
+00:04:32.980 --> 00:04:36.180
+Im Desktop werden die Regeln geschrieben und im Dienst werden Personen diesen zugewiesen.
+
+00:04:36.920 --> 00:04:38.600
+Als nächstes kommt der Teil, den Anfänger oft überspringen.
+
+00:04:39.020 --> 00:04:40.580
+Veröffentlichen Sie den Bericht im Power BI-Dienst.
+
+00:04:40.920 --> 00:04:44.280
+Die Rollen werden mit dem Modell übertragen, sodass Ihre Regeln nun in der Cloud aktiv sind.
+
+00:04:44.880 --> 00:04:46.100
+Der letzte Schritt findet im Dienst statt.
+
+00:04:46.800 --> 00:04:51.300
+Öffnen Sie das Dataset, suchen Sie die Sicherheitsseite und fügen Sie der erstellten Rolle Personen oder Gruppen hinzu.
+
+00:04:51.860 --> 00:04:56.800
+Sie können die E-Mail-Adresse direkt eingeben oder eine Gruppe angeben, um die Mitgliedschaft von da an zentral zu verwalten.
+
+00:04:56.800 --> 00:05:00.860
+Diese letzte Option erfordert genauere Betrachtung, da nicht jeder Gruppentyp funktioniert.
+
+00:05:00.860 --> 00:05:05.340
+Verteilergruppen, E-Mail-aktivierte Gruppen und Microsoft Entrer-Sicherheitsgruppen funktionieren einwandfrei.
+
+00:05:06.020 --> 00:05:09.660
+Microsoft 335 Gruppen hingegen nicht, was die meisten beim ersten Versuch waren.
+
+00:05:10.060 --> 00:05:11.560
+Bevor Sie sich darauf verlassen, testen Sie es.
+
+00:05:11.840 --> 00:05:14.620
+Verwenden Sie in Desktop-Anzeigen als Ütembericht aus der Sicht einer Rolle zu sehen.
+
+00:05:15.080 --> 00:05:18.900
+Öffnen Sie im Dienst die Rolle und verwenden Sie als Rolletesten, um zu prüfen, was diese Person sehen würde.
+
+00:05:19.460 --> 00:05:21.260
+Seien Sie jedoch vorsichtig, wie weit Sie diesem Test vertrauen.
+
+00:05:21.660 --> 00:05:24.580
+Als Rolletesten funktioniert nicht bei Modellen mit Live-Verbindung per Single Sign-On.
+
+00:05:24.780 --> 00:05:27.820
+Es wird immer als Sie selbst ausgeführt und kann nicht alles zeigen, was eine andere Person sieht.
+
+00:05:28.620 --> 00:05:32.640
+Wenn ein Bericht wichtig ist, melden Sie sich mit einem echten Testkonto an und prüfen Sie es selbst.
+
+00:05:32.840 --> 00:05:34.620
+Es gibt zwei Arten von Regeln, die Sie erstellen können.
+
+00:05:35.200 --> 00:05:36.640
+Zurück zu dieser sich selbst aktualisierenden Rolle.
+
+00:05:36.980 --> 00:05:38.420
+Regeln gibt es in zwei Ausprägungen.
+
+00:05:38.660 --> 00:05:40.240
+Der Unterschied liegt darin, woher der Wert stammt.
+
+00:05:40.240 --> 00:05:45.540
+In der einfachen Variante legen Sie den Wert fest, sodass die Regel besagt, Region muss West entsprechen und das ändert sich nie.
+
+00:05:46.000 --> 00:05:47.240
+Für jede Zielgruppe eine solche Regel.
+
+00:05:47.340 --> 00:05:48.800
+Fügen Sie die richtigen Personen hinzu und Sie sind fertig.
+
+00:05:49.160 --> 00:05:52.380
+Es ist schnell, leicht zu lesen und eine gute Wahl, wenn man nur wenige feste Gruppen hat.
+
+00:05:52.740 --> 00:05:53.560
+Der Haken ist die Wartung.
+
+00:05:54.260 --> 00:05:59.940
+Jede neue Region, jede Umstrukturierung und jedes neue Team bedeutet eine weitere Rolle und eine weitere Liste, die man aktuell halten muss.
+
+00:06:00.280 --> 00:06:03.000
+Tun Sie das für 100 Vertriebsmitarbeiter und die Arbeit wächst Ihnen über den Kopf.
+
+00:06:03.340 --> 00:06:05.600
+Die zweite Variante löst das, indem Sie prüfen, wer angemeldet ist.
+
+00:06:06.340 --> 00:06:09.940
+Statt West fest zu kodieren, sucht die Regel in einer kleinen Tabelle nach der E-Mail des angemeldeten Benutzers,
+
+00:06:10.240 --> 00:06:11.780
+fast jede Person Ihrer Region zuordnet.
+
+00:06:12.320 --> 00:06:13.720
+Diese Tabelle ist Ihre Sicherheitsliste.
+
+00:06:14.020 --> 00:06:17.600
+Sie kann in einer Kalkulationstabelle oder Datenbank liegen, wo auch immer Sie solche Daten speichern.
+
+00:06:18.220 --> 00:06:18.900
+Nun zur Belohnung.
+
+00:06:19.380 --> 00:06:22.440
+Wenn ein neuer Vertriebsmitarbeiter dazu kommt, fügen Sie eine Zeile zur Tabelle hinzu
+
+00:06:22.440 --> 00:06:24.700
+und die Regel filtert die Daten korrekt, sobald er sich anmeldet.
+
+00:06:25.480 --> 00:06:27.540
+Keine neue Rolle, keine neue Zuweisung, nur eine einzige Zeile.
+
+00:06:27.820 --> 00:06:30.940
+Das ist die Version, die die meisten Teams nutzen, weil sie mitwächst, ohne zur lästigen Pflicht zu werden.
+
+00:06:31.720 --> 00:06:33.980
+Damit das funktioniert, muss Power BI wissen, wer den Bericht ansieht.
+
+00:06:34.480 --> 00:06:39.540
+Es liest die Identität des angemeldeten Benutzers meist eine E-Mail-Adresse und vergleicht sie mit dem Wert in ihrer Tabelle.
+
+00:06:40.240 --> 00:06:42.640
+Wenn beides nicht exakt übereinstimmt, sieht die Person nichts.
+
+00:06:42.860 --> 00:06:45.960
+Ein Leerzeichen oder eine alte Adresse kann also zu einem leeren Bericht führen.
+
+00:06:46.440 --> 00:06:49.600
+Es gibt eine kleine Falle bei dieser Identität, die oft während des Testens zuschlägt.
+
+00:06:50.600 --> 00:06:56.160
+Der Wert, den Power BI liest, kann je nachdem, ob man auf dem Desktop testet oder den Bericht im Service ansieht, leicht variieren.
+
+00:06:57.520 --> 00:07:00.600
+Eine Regel, die auf Ihrem Laptop perfekt funktioniert, kann für alle anderen scheitern.
+
+00:07:01.100 --> 00:07:04.380
+Prüfen Sie also den exakten Wert, den Ihre Nutzer erhalten, bevor Sie der Regel vertrauen.
+
+00:07:04.380 --> 00:07:06.760
+Noch etwas, das Sie vor der Erstellung wissen sollten.
+
+00:07:07.220 --> 00:07:08.780
+Rollen summieren sich und das überrascht viele.
+
+00:07:09.400 --> 00:07:13.920
+Wenn jemand zwei Rollen hat, sieht er die kombinierten Zeilen aus beiden, statt nur die eingeschränkte Sicht.
+
+00:07:14.620 --> 00:07:16.220
+Das deutlichste Beispiel kommt aus der Gehaltsabrechnung.
+
+00:07:16.560 --> 00:07:19.740
+Stellen Sie sich eine Rolle vor, die keine Gehaltsdaten zeigt und eine andere, die alle zeigt.
+
+00:07:20.380 --> 00:07:25.000
+Geben Sie einer Person beide Rollen, sieht sie alles, da die Regeln addiert, statt gegeneinander abgewogen werden.
+
+00:07:25.960 --> 00:07:28.800
+Bekannte Vorstellungen, dass ein Verbot ein Erlaubnis sticht, gilt hier einfach nicht.
+
+00:07:29.560 --> 00:07:32.020
+Diese Regeln sind also mächtig und zugleich ein wenig gefährlich.
+
+00:07:32.460 --> 00:07:37.140
+Der beste Weg, Ihnen zu vertrauen, ist zu sehen, wo Teams Sie bereits einsetzen und tatsächlich damit arbeiten.
+
+00:07:37.740 --> 00:07:41.740
+Diese Regeln bewähren sich jeden Tag, weil Teams Sie in Situationen nutzen, die Sie von Ihrem eigenen Job kennen werden.
+
+00:07:42.440 --> 00:07:44.760
+Wenn man das Muster einmal kennt, entdeckt man es überall.
+
+00:07:45.500 --> 00:07:46.440
+Nehmen wir den Vertrieb als Beispiel.
+
+00:07:46.880 --> 00:07:50.760
+Ein Regionalleiter öffnet das gemeinsame Dashboard und sieht nur die Zahlen für sein Gebiet,
+
+00:07:50.760 --> 00:07:53.740
+während der Vertriebsleiter dasselbe Dashboard öffnet und das ganze Land sieht.
+
+00:07:54.240 --> 00:07:58.060
+Gleicher Bericht, gleiche Diagramme, zwei völlig verschiedene Ansichten und niemand musste um eine Spezialversion bitten.
+
+00:07:58.060 --> 00:07:59.760
+Das Gesundheitswesen setzt noch stärker darauf.
+
+00:08:00.340 --> 00:08:05.540
+Ein Kliniker braucht die Akten seiner eigenen Patienten und sollte nicht das restliche Krankenhaus durchsuchen können, nur weil er ein Login hat.
+
+00:08:06.620 --> 00:08:10.240
+Zeilenebene Sicherheit bewahrt diese Grenze innerhalb des einen Systems, das bereits alle nutzen.
+
+00:08:11.100 --> 00:08:13.520
+Softwareunternehmen nutzen sie, um viele Kunden mit einem einzigen Produkt zu bedienen.
+
+00:08:14.180 --> 00:08:18.940
+Jeder Kunde öffnet dieselbe App und dasselbe Dashboard und die Regeln stellen sicher, dass sie immer nur ihre eigenen Daten sehen.
+
+00:08:19.340 --> 00:08:22.120
+Sie sehen niemals den Kunden, der in derselben Datenbank neben Ihnen sitzt.
+
+00:08:22.740 --> 00:08:27.500
+Der Druck auf diese Firma ist real, denn ein Fehler in der Zuordnungstabelle kann die Grenze zwischen zwei Kunden verwischen.
+
+00:08:28.060 --> 00:08:29.680
+Und das ist die Art von Fehler, die Verträge beendet.
+
+00:08:30.260 --> 00:08:33.740
+Dann gibt es die alltägliche Büroversion, die oft der erste Ort ist, an dem Anfänger damit in Berührung kommen.
+
+00:08:34.360 --> 00:08:36.700
+Das Finanzteam teilt einen Kostenbericht mit jeder Abteilung.
+
+00:08:37.680 --> 00:08:42.600
+Jeder Abteilungsleiter sieht seine eigene Budgetzeile und nur die Finanzleitung sieht die Gesamtsumme des Unternehmens.
+
+00:08:43.160 --> 00:08:44.960
+Dies ersetzt die alte Gewohnheit des Kopierens.
+
+00:08:44.960 --> 00:08:52.120
+Vor solchen Regeln bedeutete es, Personen voneinander fernzuhalten, meist einen zweiten Bericht zu erstellen, dann einen dritten, dann einen Ordner voll nahezu identischer Versionen.
+
+00:08:53.000 --> 00:08:56.140
+Jede Kopie war ein weiteres Ding zum Aktualisieren und ein weiterer Ort, an dem sich ein Fehler versteckt.
+
+00:08:56.480 --> 00:09:01.780
+Ein gefülltes Modell beseitigt die meiste dieser Arbeit und verhindert den Moment, in dem die falsche Kopie an die falsche Gruppe weitergegeben wird.
+
+00:09:01.780 --> 00:09:10.200
+Der Grund, warum das so sauber funktioniert, liegt im Verhalten des Filters, da er Zeilen an der Quelle entfernt, kann ein Slicer sie nicht enthüllen und ein Drilldown sie nicht wieder hervorholen.
+
+00:09:10.680 --> 00:09:17.080
+Wenn eine Zeile jemanden nie erreicht, ist sie aus den Summen aus jedem Diagramm und aus jeder darauf basierenden Detailansicht verschwunden, Badellansicht verschwunden.
+
+00:09:17.460 --> 00:09:19.800
+Das klingt absolut sicher und für die Daten selbst ist es das auch.
+
+00:09:20.440 --> 00:09:24.340
+Die Probleme kommen selten von den Regeln, sondern fast immer von den gewöhnlichen Schritten drumherum.
+
+00:09:25.100 --> 00:09:26.140
+Die Fehler, die Anfänger erwischen.
+
+00:09:26.580 --> 00:09:31.720
+Der meiste Ärger mit der Zeilenebene Sicherheit geht auf eine kurze Liste von Fehlern zurück und jeder einzelne sieht wie ein Bug aus.
+
+00:09:31.780 --> 00:09:32.660
+Bis man die Ursache kennt.
+
+00:09:33.020 --> 00:09:33.760
+Bis man die Ursache kennt.
+
+00:09:34.400 --> 00:09:37.040
+Der erste ist der, den wir schon kennen und er ist der häufigste von allen.
+
+00:09:37.880 --> 00:09:42.480
+Jemand erhält eine Arbeitsbereichsrolle wie Admin, Mitglied oder Mitwirkender statt Betrachter und sieht dann alles.
+
+00:09:42.920 --> 00:09:47.200
+Wenn ein Bericht Datenpreis gibt und ihre Regeln perfekt aussehen, prüfen sie diese Arbeitsbereichsrolle, bevor sie eben das anfangen.
+
+00:09:47.540 --> 00:09:49.360
+Der zweite Fehler ist, das erneute Veröffentlichen zu vergessen.
+
+00:09:49.920 --> 00:09:54.160
+Regeln sind im Modell gespeichert, daher bleiben Änderungen, die sie im Desktop vornehmen auf ihrem Rechner, bis sie diese veröffentlichen.
+
+00:09:54.160 --> 00:09:59.680
+In der Zwischenzeit liefert der Dienst weiterhin die alte Version aus und sie verbringen eine Stunde, damit eine Regel zu Debuggen, die nie wirklich existierte.
+
+00:10:00.100 --> 00:10:01.380
+Der dritte Fehler ist für jeden offensichtlich.
+
+00:10:02.060 --> 00:10:08.000
+Ihre Regel vergleicht die angemeldete Identität mit einem Wert in ihrer Tabelle und wenn diese nicht übereinstimmen, sieht die Person einen leeren Bericht.
+
+00:10:08.440 --> 00:10:12.180
+Ein Spitzname, eine alte Adresse oder ein zusätzliches Leerzeichen reichen aus, um die Übereinstimmung zu verändern.
+
+00:10:12.300 --> 00:10:17.140
+Wenn jemand einen leeren Bildschirm meldet, vergleichen sie dessen genauen Anmeldewert mit der Tabelle, bevor sie irgendetwas neu erstellen.
+
+00:10:17.380 --> 00:10:20.140
+Der vierte Fehler besteht darin, für jede einzelne Person eine eigene Rolle zu erstellen.
+
+00:10:20.140 --> 00:10:24.560
+Zuerst funktioniert das, doch dann wächst das Team und jede neue Einstellung wird zu einem kleinen, manuellen Projekt.
+
+00:10:25.320 --> 00:10:28.020
+Es gibt Gruppen- und Zuordnungstabellen, damit sie nie auf diese Weise arbeiten müssen.
+
+00:10:28.500 --> 00:10:31.380
+Der fünfte Fehler ist die Annahme, dass die Regeln mehr schützen, als sie es tatsächlich tun.
+
+00:10:31.780 --> 00:10:34.080
+Sie schützen nur die Zeilen im Modell und nichts darüber hinaus.
+
+00:10:34.080 --> 00:10:39.980
+Sie schützen weder die Quelldatei auf dem Laptop eines Mitarbeiters, noch eine Tabelle, die sie exportieren und versehentlich weitergeben.
+
+00:10:40.720 --> 00:10:43.360
+Es gibt ein Gegenstück zum vierten Fehler, das erst viel später auftaucht.
+
+00:10:43.940 --> 00:10:47.820
+Das Team erstellt diese Zuordnungstabelle, füllt sie sorgfältig aus und schaut sie danach nie wieder an.
+
+00:10:48.260 --> 00:10:52.720
+Mitarbeiter wechseln ihre Rolle oder verlassen das Unternehmen und alte Adressen verbleiben lange nach deren Ausscheiden in der Tabelle.
+
+00:10:53.080 --> 00:10:56.140
+Halten Sie die Liste aktuell, sonst driftet die Sicherheit von der Realität ab.
+
+00:10:56.540 --> 00:10:57.860
+Der sechste Fehler ist das Auslassenseng.
+
+00:10:58.000 --> 00:11:03.000
+Die als Rolle anzeigen Tests sind praktisch, aber sie laufen unter ihrem Konto und können genau die Abweichung verbergen, die sie suchen.
+
+00:11:03.000 --> 00:11:07.360
+Eine schnelle Anmeldung als echter Testbenutzer deckt Probleme auf, die integrierte Tools nie zeigen.
+
+00:11:07.780 --> 00:11:11.240
+Diese Tools haben durchaus ihr Nutzen und sind schnell für den ersten Durchgang, also verwenden Sie sie weiterhin.
+
+00:11:12.020 --> 00:11:17.520
+Lassen Sie sie nur nicht als einzigen Beweis für die Sicherheit gelten, denn die Lücke, die Sie hinterlassen, ist genau der Ort, an dem sich das echte Problem versteckt.
+
+00:11:18.100 --> 00:11:19.360
+Keiner dieser Fehler ist exotisch.
+
+00:11:19.760 --> 00:11:23.040
+Es sind die üblichen Flüchtigkeitsfehler, die passieren, wenn man alles richtig macht, außer beim allerletzten.
+
+00:11:23.520 --> 00:11:24.860
+Das Sicherheit auf Zeilenebene nicht leisten kann.
+
+00:11:25.040 --> 00:11:26.240
+Nun zum ehrlichen Teil.
+
+00:11:26.600 --> 00:11:30.860
+Denn zu wissen, wo ein Tool an seine Grenzen stößt, unterscheidet einen entspannten Einsatz von einer bösen Überraschung.
+
+00:11:31.720 --> 00:11:34.080
+Sicherheit auf Zeilenebene, Filterzeilen und das ist ihre einzige Aufgabe.
+
+00:11:34.580 --> 00:11:35.440
+Sie kann keine Spalten ausblenden.
+
+00:11:35.880 --> 00:11:40.600
+Wenn jemand eine Zeile sehen kann, sieht er jedes Feld darin einschließlich Gehalt oder Marge, die Sie lieber vertraulich behandeln würden.
+
+00:11:41.980 --> 00:11:46.100
+Das Ausblenden von Spalten ist eine separate Funktion und am Sicherheit auf Objektebene verwechseln Sie die beiden also nicht.
+
+00:11:46.460 --> 00:11:49.440
+Sie kann auch keine sichere Zusammenfassung anzeigen und gleichzeitig die zugrunde liegende Details finden.
+
+00:11:49.440 --> 00:11:53.220
+Wenn eine Person Zugriff auf die Gesamtsumme hat, kann sie auch auf die Zeilen zugreifen, aus denen Sie sich zusammeln.
+
+00:11:53.400 --> 00:11:56.480
+Man kann also niemandem ein bequemes Ergebnis liefern und gleichzeitig die Belege unter Verschluss halten.
+
+00:11:56.700 --> 00:11:59.240
+Der Filter folgt nur den aktiven Beziehungen in Ihrem Modell.
+
+00:11:59.900 --> 00:12:02.260
+Wenn eine Tabelle nicht mit der Regel verbunden ist, ist sie nicht geschützt.
+
+00:12:02.640 --> 00:12:05.020
+Deshalb ist ein gut strukturiertes Modell genauso wichtig wie wir ihn selbst.
+
+00:12:05.560 --> 00:12:08.120
+Wenn das Modell stimmt, fließen die Filter genau dorthin, wo Sie sie erwarten.
+
+00:12:08.560 --> 00:12:10.580
+Es ist außerdem wichtig zu wissen, wo diese Regeln überhaupt nicht greifen.
+
+00:12:11.180 --> 00:12:16.140
+Wenn Power BI eine Live-Verbindung zu einem externen Modell herstellt, etwa zu einem gehosteten Analysis-Services-Modell,
+
+00:12:16.380 --> 00:12:18.200
+übernimmt dieses externe Modell seine eigene Sicherheit.
+
+00:12:18.200 --> 00:12:21.560
+Hier gibt es nichts einzurichten und die Sicherheitsoption wird nicht einmal angezeigt,
+
+00:12:21.640 --> 00:12:23.200
+was Benutzer, die danach suchen, oft verwirrt.
+
+00:12:23.600 --> 00:12:24.860
+Es gibt auch Auswirkungen auf die Leistung.
+
+00:12:25.200 --> 00:12:28.980
+Jede Abfrage beinhaltet nun diese zusätzliche Filterung, sodass ein umfangreicher Bericht langsamer werden kann.
+
+00:12:29.300 --> 00:12:32.280
+Sie können den Unterschied messen, indem Sie die Abfragezeiten bei aktivierten Regeln vergleichen.
+
+00:12:32.880 --> 00:12:35.780
+Der Unterschied ist selten drastischer, aber real, also überprüfen Sie dies, bevor Sie es gelingen.
+
+00:12:36.140 --> 00:12:37.300
+Manche Türen bleiben absichtlich auf.
+
+00:12:38.000 --> 00:12:40.240
+Arbeitsbereichs-Admins, Mitglieder und Mitwirkende sehen immer alles
+
+00:12:40.240 --> 00:12:43.920
+und Berichte, auf die über ein automatisiertes Dienstkonto zugegriffen wird, sind ebenfalls ungefiltert.
+
+00:12:44.660 --> 00:12:47.280
+Funktionen wie im Web veröffentlichen, heben die Sicherheit komplett auf,
+
+00:12:47.280 --> 00:12:49.120
+verwenden Sie sie daher niemals für geschützte Daten.
+
+00:12:49.820 --> 00:12:51.680
+Und manchmal ist die ehrliche Antwort darauf zu verzichten.
+
+00:12:52.320 --> 00:12:54.080
+Wenn Ihre Regeln nur wenige und feststehend sind,
+
+00:12:54.160 --> 00:12:57.040
+ist die Veröffentlichung separater Modelle für jede Zielgruppe einfacher und oft schneller,
+
+00:12:57.140 --> 00:12:59.260
+sofern Sie den höheren Wartungsaufwand für die Berichte in Kauf nehmen.
+
+00:12:59.980 --> 00:13:03.140
+RLS ist dann sinnvoll, wenn ein Modell für viele verschiedene Zielgruppen dienen muss.
+
+00:13:04.140 --> 00:13:06.620
+Wenn man betrachtet, wo dies im Microsoft-3-Summen-Fabrik passt,
+
+00:13:06.740 --> 00:13:08.720
+wirkt es nicht mehr wie ein reiner Power BI-Trick,
+
+00:13:08.800 --> 00:13:10.840
+sondern wie eine Ebene in einem größeren System.
+
+00:13:10.840 --> 00:13:14.520
+Zahlenbasierte Sicherheit steht neben der Sicherheit auf Objektebene,
+
+00:13:14.600 --> 00:13:15.800
+die Spalten und Tabellen verbirgt,
+
+00:13:16.080 --> 00:13:18.940
+und Arbeitsbereichsberechtigungen, die bestimmen, wer überhaupt Zugriff erhält.
+
+00:13:20.180 --> 00:13:22.200
+Gemeinsam bestimmen Sie, wie Ihre Daten geschützt werden.
+
+00:13:22.760 --> 00:13:25.180
+In Microsoft Fabric lässt sich das gleiche Konzept direkt übertragen.
+
+00:13:25.800 --> 00:13:27.400
+Es funktioniert bei Fabric-Semantik-Modellen,
+
+00:13:27.560 --> 00:13:29.200
+einschließlich der neueren Direct-Lake-Variante,
+
+00:13:29.440 --> 00:13:31.880
+sodass Ihr Wissen auch dann gilt, wenn Ihre Daten zu Fabric umziehen.
+
+00:13:32.440 --> 00:13:35.300
+Und da die Regeln auf der gleichen Microsoft-Entre-Anmeldung basieren,
+
+00:13:35.380 --> 00:13:37.620
+wie Teams, SharePoint und der Rest von Microsoft 365,
+
+00:13:37.620 --> 00:13:40.620
+folgt eine Identität Ihren Mitarbeitern über alle Oberflächen hinweg.
+
+00:13:41.220 --> 00:13:42.040
+Hier ist die Kurzfassung.
+
+00:13:42.860 --> 00:13:43.940
+Zeilenbasierte Sicherheit bedeutet,
+
+00:13:44.080 --> 00:13:46.320
+dass derselbe Bericht jedem Benutzer einen anderen Ausschnitt zeigt,
+
+00:13:46.420 --> 00:13:47.600
+er filtert Zeilen anhand von Rollen,
+
+00:13:47.640 --> 00:13:49.180
+die Sie im Desktop erstellen und im Dienst zuweisen.
+
+00:13:49.660 --> 00:13:51.300
+Die eigentliche Herausforderung ist nie die Einrichtung,
+
+00:13:51.500 --> 00:13:53.020
+sondern daran zu denken, wen Ihre Regeln ausschließen.
+
+00:13:53.540 --> 00:13:54.600
+Das führt mich zu einer Frage an Sie.
+
+00:13:55.120 --> 00:13:57.400
+Welchen Bericht würden Sie in Ihrem Umfeld zuerst schützen wollen?
+
+00:13:57.500 --> 00:13:59.180
+Und wer sieht ihn derzeit häufiger, als er sollte?
+
+00:14:00.160 --> 00:14:02.140
+Wenn Ihnen das Thema nun weniger einschüchternd vorkommt,
+
+00:14:02.140 --> 00:14:05.340
+abonnieren Sie N365FM, um die Tools und die Denkweise zu meistern,
+
+00:14:05.360 --> 00:14:06.520
+die die Zukunft der Arbeit prägen.
