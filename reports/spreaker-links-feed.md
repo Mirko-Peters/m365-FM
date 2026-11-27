@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-26 04:55 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-27 04:52 UTC)
 
-Gesetzt laut Protokoll: 5094 · im Feed gleich: 4950 · im Feed anders: 0 · nicht im Feed: 144 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 5094 · im Feed gleich: 4948 · im Feed anders: 0 · nicht im Feed: 146 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
