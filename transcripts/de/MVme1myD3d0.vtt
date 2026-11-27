@@ -1,0 +1,1768 @@
+WEBVTT
+
+00:00:00.130 --> 00:00:03.150
+Der Azure-Dienst der Anfängern am meisten Angst macht es eigentlich der einfachste.
+
+00:00:03.730 --> 00:00:06.350
+Er heißt Azure VPN Gateway und der Name klingt komplizierter als er ist.
+
+00:00:07.050 --> 00:00:12.010
+Willkommen zum M35560FM Podcast, in dem wir Menschen, Ideen und Technologien erkunden,
+
+00:00:12.110 --> 00:00:13.330
+die die Zukunft der Arbeit gestalten.
+
+00:00:13.890 --> 00:00:16.190
+Heute klären wir, was ein Azure VPN Gateway eigentlich tut
+
+00:00:16.190 --> 00:00:18.710
+und wie sich Site-to-Site und Point-to-Site-Verbindung unterscheiden.
+
+00:00:19.270 --> 00:00:19.630
+Unterscheiden.
+
+00:00:19.990 --> 00:00:22.290
+Am Ende werden Sie wissen, welches Gateway zu Ihrer Situation passt
+
+00:00:22.290 --> 00:00:24.230
+und warum die Wahl der Größe wichtiger ist, als Sie denken.
+
+00:00:25.250 --> 00:00:27.170
+Was ist ein Azure VPN Gateway eigentlich?
+
+00:00:27.890 --> 00:00:29.210
+Beginnen wir mit dem Grundkonzept.
+
+00:00:29.210 --> 00:00:30.870
+Denn das Grundkonzept ist einfach.
+
+00:00:31.350 --> 00:00:33.430
+Azure VPN Gateway erstellt einen verschlüsselten Tunnel,
+
+00:00:33.510 --> 00:00:36.530
+der Datenverkehr zwischen Ihrem Azure-Netzwerk und einem anderen Netzwerk überträgt.
+
+00:00:37.330 --> 00:00:39.170
+Und meistens ist dieses andere Netzwerk Ihr Büro.
+
+00:00:40.030 --> 00:00:41.950
+Der Datenverkehr läuft zwar über das öffentliche Internet,
+
+00:00:42.210 --> 00:00:45.570
+ist aber verschlüsselt, sodass jeder in der Mitte nur Datensalat statt ihrer Daten sieht.
+
+00:00:46.650 --> 00:00:48.350
+Diese Verpackung ist der Grund für die Existenz dieses Dienste.
+
+00:00:48.870 --> 00:00:52.090
+Ohne sie würde das Senden privater Daten über das offene Internet bedeuten,
+
+00:00:52.210 --> 00:00:54.270
+jedem Netzwerk zwischen Ihnen und Azure vertrauen zu müssen.
+
+00:00:54.990 --> 00:00:57.510
+Damit erhalten Sie einen privaten Pfad über eine öffentliche Straße.
+
+00:00:57.510 --> 00:00:59.130
+Das ist der Trick, auf dem dieser Dienst basiert.
+
+00:00:59.590 --> 00:01:02.210
+Sie fragen sich vielleicht, warum das öffentliche Internet überhaupt eine Rolle spielt,
+
+00:01:02.270 --> 00:01:03.670
+da die Verschlüsselung die ganze Arbeit übernimmt.
+
+00:01:04.290 --> 00:01:06.330
+Die ehrliche Antwort lautet, das Internet ist unvorhersehbar.
+
+00:01:06.710 --> 00:01:09.750
+Es ist günstig und überall verfügbar, weshalb VPN Gateway für die meisten Teams
+
+00:01:09.750 --> 00:01:13.070
+der einfache Ausgangspunkt ist, auch wenn es nicht der schnellste oder konsistenteste Pfad ist,
+
+00:01:13.110 --> 00:01:13.750
+den man kaufen kann.
+
+00:01:14.650 --> 00:01:16.490
+Das Wort Gateway sorgt oft für Verwirrung.
+
+00:01:17.030 --> 00:01:18.770
+Man stellt sich sofort eine physische Box vor, die man bestellt,
+
+00:01:18.870 --> 00:01:20.530
+anschließt und ein Rechenzentrum in einen Rack einbaut.
+
+00:01:20.530 --> 00:01:21.250
+So ist es hier aber nicht.
+
+00:01:21.770 --> 00:01:24.550
+Ein Azure VPN Gateway besteht aus zwei oder mehr virtuellen Maschinen,
+
+00:01:24.550 --> 00:01:25.970
+die Azure für Sie bereitstellt und betreibt,
+
+00:01:25.970 --> 00:01:28.750
+verborgen hinter einem Dienst, den Sie nie mal neu patchen oder neu starten müssen.
+
+00:01:29.530 --> 00:01:31.410
+Diese virtuellen Maschinen befinden sich in einem Subnetz,
+
+00:01:31.450 --> 00:01:32.810
+das Sie in Ihrem virtuellen Netzwerk erstellen.
+
+00:01:33.090 --> 00:01:35.070
+Dieses Subnetz muss exakt Gateway Subnet heißen.
+
+00:01:35.910 --> 00:01:39.170
+Falls Sie neu bei Azure sind, ein virtuelles Netzwerk ist Ihr privates Netzwerk in der Cloud
+
+00:01:39.170 --> 00:01:42.050
+und On-Premises ist der Begriff für Ihr physisches Büro oder Rechenzentrum.
+
+00:01:43.050 --> 00:01:44.950
+Das Gateway Subnetz ist für das Gateway reserviert,
+
+00:01:45.030 --> 00:01:47.810
+daher sollten Sie dort keine virtuellen Maschinen, Datenbanken oder anderes ablegen.
+
+00:01:47.910 --> 00:01:51.070
+Es gibt noch eine Sache, die Sie vor der Erstellung wissen sollten und die hat mit Geduld zu tun.
+
+00:01:51.070 --> 00:01:54.330
+Das Erstellen des Gateways dauert 45 Minuten oder länger.
+
+00:01:54.870 --> 00:01:56.710
+Das ist kein Fehler und kein Zeichen dafür, dass etwas kaputt ist.
+
+00:01:57.410 --> 00:01:59.410
+Azure baut verwaltete Infrastruktur für Sie auf
+
+00:01:59.410 --> 00:02:02.350
+und gute Dinge in der Netzwerktechnik geschehen, selten in Sekunden.
+
+00:02:03.230 --> 00:02:03.950
+Das ist also ein Grundkonzept.
+
+00:02:04.930 --> 00:02:06.970
+Sie haben ein Netzwerk in Azure, Sie haben ein Netzwerk anderswo
+
+00:02:06.970 --> 00:02:09.070
+und das Gateway ist das sichere Tor dazwischen.
+
+00:02:10.230 --> 00:02:12.790
+Es ist kein Raum, in dem Sie arbeiten und keine Maschine, die Sie betreuen müssen.
+
+00:02:13.370 --> 00:02:15.850
+Azure hält die Scharniere geölt und Sie erhalten eine geschützte Verbindung
+
+00:02:15.850 --> 00:02:17.590
+zwischen zwei Orten, die sich früher fremd waren.
+
+00:02:18.070 --> 00:02:19.750
+Über diesen letzten Gedanken lohnt es sich nachzudenken,
+
+00:02:19.750 --> 00:02:21.510
+denn er ist der Grund, warum Leute diesen Dienst überhaupt erlernen.
+
+00:02:21.950 --> 00:02:24.790
+Azure verwendet dasselbe Gateway auch, um zwei virtuelle Azure-Netzwerke
+
+00:02:24.790 --> 00:02:27.030
+über das Microsoft-Eigen-Netzwerk miteinander zu verbinden.
+
+00:02:27.550 --> 00:02:29.490
+Das Tool dient also nicht nur dazu, Ihr Büro zu erreichen,
+
+00:02:29.830 --> 00:02:31.890
+sondern alles, was Sie besitzen, wo immer es sich auch befindet.
+
+00:02:32.930 --> 00:02:34.510
+Standort zu Standort versus Punkt zu Standort.
+
+00:02:35.030 --> 00:02:36.470
+Nun wissen Sie, dass das Gateway eine Tür ist,
+
+00:02:36.550 --> 00:02:38.190
+also stellt sich als nächstes die Frage, wer geht hindurch.
+
+00:02:38.730 --> 00:02:41.090
+Genau diese Frage unterscheidet die beiden Verbindungstypen
+
+00:02:41.090 --> 00:02:44.510
+und die falsche Wahl zu Beginn ist der Fehler, der Anfänger einen Neuaufbau kostet.
+
+00:02:45.150 --> 00:02:46.990
+Standort zu Standort ist die Methode, mit der die meisten annehmen.
+
+00:02:46.990 --> 00:02:50.090
+Sie bauen einen einzigen verschlüsselten Tunnel zwischen dem Azure-Gateway
+
+00:02:50.090 --> 00:02:51.590
+und einem VPN-Gerät in Ihrem Büro auf
+
+00:02:51.590 --> 00:02:54.010
+und sobald dieser steht, verhalten sich die beiden Netzwerke wie eines.
+
+00:02:55.250 --> 00:02:58.170
+Ein Server in Ihrem Gebäude kann eine virtuelle Maschine in Azure erreichen,
+
+00:02:58.310 --> 00:03:00.430
+als stünden Sie auf derselben Etage und genau das benötigen Sie,
+
+00:03:00.590 --> 00:03:02.710
+wenn ein ganzes Büro oder ein Rechenzentrum Azure nutzen soll.
+
+00:03:03.110 --> 00:03:04.450
+Denken Sie einen Moment darüber nach, was es bedeutet.
+
+00:03:04.770 --> 00:03:07.310
+Sie verbinden nicht einen Laptop, Sie verknüpfen zwei komplette Netzwerke.
+
+00:03:07.710 --> 00:03:09.990
+So kann jedes Gerät auf der Büroseite mit allem kommunizieren,
+
+00:03:10.050 --> 00:03:11.490
+was Sie auf der Azure-Seite zugelassen haben,
+
+00:03:11.750 --> 00:03:13.350
+unter Verwendung der Regeln, die Sie bereits besitzen.
+
+00:03:13.350 --> 00:03:15.610
+Ein einfacher Weg, dies auseinanderzuhalten, ist voll.
+
+00:03:16.150 --> 00:03:18.690
+Bei Standort zu Standort geht es um einen Ort, bei Punkt zu Standort um einen Ort.
+
+00:03:19.050 --> 00:03:21.750
+Wenn Ihr Finanzteam das ganze Büro den ganzen Tag mit Azure verbunden haben muss,
+
+00:03:21.770 --> 00:03:22.670
+ist das Standort zu Standort.
+
+00:03:23.490 --> 00:03:26.170
+Wenn Ihre Entwickler von einem Café aus auf eine Datenbank zugreifen müssen,
+
+00:03:26.270 --> 00:03:27.110
+ist das Punkt zu Standort.
+
+00:03:27.210 --> 00:03:28.550
+Meist lässt sich das schneller einrichten,
+
+00:03:29.090 --> 00:03:30.810
+da Sie nicht auf ein Netzwerkteam im Büro warten müssen.
+
+00:03:31.530 --> 00:03:32.990
+Punkt zu Standort ist eine völlig andere Aufgabe.
+
+00:03:33.530 --> 00:03:34.810
+Anstatt zwei Netzwerke zu verbinden,
+
+00:03:34.910 --> 00:03:36.050
+verbindet es eine einzelne Person.
+
+00:03:36.050 --> 00:03:38.850
+Jemand öffnet den Laptop im Hotelzimmer, meldet sich an
+
+00:03:38.850 --> 00:03:41.530
+und landet in Ihrem Azure-Netzwerk, als hätte er das Büro nie verlassen.
+
+00:03:42.210 --> 00:03:43.750
+Es wurde für Remote-Mitarbeiter entwickelt
+
+00:03:43.750 --> 00:03:46.750
+und für kleinere Fälle, in denen nur eine Handvoll Leute Zugriff benötigt.
+
+00:03:47.390 --> 00:03:48.810
+Bei Punkt zu Standort ist es zudem sehr wichtig,
+
+00:03:48.910 --> 00:03:50.210
+wie Personen ihre Identität nachweisen.
+
+00:03:50.590 --> 00:03:52.730
+Sie können es mit Zertifikaten, mit Microsoft Entra-ID
+
+00:03:52.730 --> 00:03:54.510
+oder mit einem Radius-Server einrichten.
+
+00:03:55.410 --> 00:03:56.330
+Diese Wahl entscheidet darüber,
+
+00:03:56.430 --> 00:03:58.390
+ob sich die Anmeldung wie ein normaler Arbeitslogin anfühlt
+
+00:03:58.390 --> 00:03:59.590
+oder technischer ist, daher lohnt es sich,
+
+00:03:59.670 --> 00:04:00.450
+früh darüber nachzudenken.
+
+00:04:01.410 --> 00:04:04.150
+Im Hintergrund läuft Punkt zu Standort über eines von drei Protokollen.
+
+00:04:04.150 --> 00:04:07.530
+Sie haben OpenVPN, die flexible, plattformübergreifende Wahl,
+
+00:04:07.970 --> 00:04:10.270
+dann Ike 4.2, eine solide, standardbasierte Option
+
+00:04:10.270 --> 00:04:13.590
+und schließlich SSTP, den älteren Weg nur für Windows.
+
+00:04:14.270 --> 00:04:15.710
+Sie müssen diese nicht auswendig lernen,
+
+00:04:16.070 --> 00:04:17.650
+aber es ist gut zu wissen, dass sie existieren,
+
+00:04:17.730 --> 00:04:19.670
+da Ihre Wahl bestimmt, welche Geräte sich verbinden können
+
+00:04:19.670 --> 00:04:20.870
+und wie sich Benutzer anmelden.
+
+00:04:21.370 --> 00:04:22.710
+Ein Detail ist es wert, sich zu merken.
+
+00:04:23.110 --> 00:04:25.010
+Point-to-Site erfordert ein routenbasiertes Gateway
+
+00:04:25.010 --> 00:04:27.010
+und dieser Begriff wird in wenigen Minuten wieder auftauchen,
+
+00:04:27.110 --> 00:04:28.250
+da er einschränkt, was Sie bauen können.
+
+00:04:28.690 --> 00:04:29.750
+Es gibt auch ein drittes Muster,
+
+00:04:29.750 --> 00:04:31.190
+wenn Sie mit Azure kommunizieren,
+
+00:04:31.430 --> 00:04:33.690
+verbindet VNet zu Finet zwei virtuelle Netzwerke
+
+00:04:33.690 --> 00:04:35.270
+mit der gleichen Art von verschlüsseltem Tunnel,
+
+00:04:35.390 --> 00:04:36.630
+sodass Sie ein Netzwerk in einer Region
+
+00:04:36.630 --> 00:04:38.070
+mit einem in einer anderen verknüpfen können,
+
+00:04:38.150 --> 00:04:39.530
+ohne jeden Pfad manuell zu konfigurieren.
+
+00:04:39.930 --> 00:04:41.290
+Die Entscheidung läuft also auf eine Sache hinaus.
+
+00:04:41.710 --> 00:04:43.590
+Wenn Sie einen Standort verbinden, benötigen Sie SITUS.
+
+00:04:43.770 --> 00:04:46.170
+Wenn Sie eine Person verbinden, benötigen Sie Point-to-Site.
+
+00:04:46.590 --> 00:04:47.750
+Und wenn Azure mit Azure spricht,
+
+00:04:47.950 --> 00:04:49.390
+benötigen Sie VNet zu Farnet.
+
+00:04:50.590 --> 00:04:51.710
+Gateway, Schools und Tunnel.
+
+00:04:52.370 --> 00:04:53.830
+Sie haben sich also für einen Verbindungstyp entschieden,
+
+00:04:53.930 --> 00:04:55.610
+müssen nun festlegen, wie groß das Gateway sein soll.
+
+00:04:56.110 --> 00:04:57.750
+Wenn Sie es erstellen, fordert Azure Sie auf,
+
+00:04:57.750 --> 00:04:59.810
+eine SKU zu wählen und der SKU ist nur ein schickes Wort
+
+00:04:59.810 --> 00:05:01.510
+für die Größen- und Geschwindigkeitsstufe, die Sie mieten.
+
+00:05:01.510 --> 00:05:03.770
+Wir stocken Anfänger oft, also machen wir es konkret,
+
+00:05:03.870 --> 00:05:04.630
+statt beängstigend.
+
+00:05:05.250 --> 00:05:06.430
+Die Basic-Screw ist die kleinste.
+
+00:05:06.970 --> 00:05:08.710
+Sie läuft mit etwa 100 Megabit pro Sekunde,
+
+00:05:09.070 --> 00:05:10.690
+unterstützt bis zu 10 Side-to-Site-Tunnel
+
+00:05:10.690 --> 00:05:12.950
+und kann kein BGP, was wir gleich noch erläutern werden.
+
+00:05:13.510 --> 00:05:14.930
+Basic ist zudem nicht so unredondant.
+
+00:05:15.390 --> 00:05:17.430
+Es ist gut für eine Testumgebung oder ein Proof-of-Concept,
+
+00:05:17.550 --> 00:05:19.270
+aber ungeeignet für alles, auf das Sie angewiesen sind.
+
+00:05:20.030 --> 00:05:21.910
+Über Basic steht die VPN-GW-Familie,
+
+00:05:22.030 --> 00:05:23.130
+die in klaren Schritten aufsteigt.
+
+00:05:23.570 --> 00:05:26.990
+VPN-GW1-AZ bietet Ihnen etwa 650 Megabit pro Sekunde
+
+00:05:26.990 --> 00:05:27.950
+und bis zu 30 Tunnel.
+
+00:05:28.370 --> 00:05:30.410
+VPN-GW2-AZ verdoppelt die Geschwindigkeit
+
+00:05:30.410 --> 00:05:31.730
+ungefähr auf 1,2 Gigabit.
+
+00:05:32.430 --> 00:05:33.370
+Wenn Sie weiter aufsteigen,
+
+00:05:33.430 --> 00:05:35.810
+erreicht VPN-GW5-AZ 10 Gigabit pro Sekunde
+
+00:05:35.810 --> 00:05:36.890
+mit bis zu 100 Tunneln.
+
+00:05:37.790 --> 00:05:38.810
+Jede Stufe kostet mehr
+
+00:05:38.810 --> 00:05:41.050
+und jede Stufe erkauft Ihnen Geschwindigkeit und Spielraum.
+
+00:05:41.470 --> 00:05:42.650
+Wenn die Zahlen zu viel erscheinen,
+
+00:05:42.890 --> 00:05:43.550
+hier die Kurzfassung.
+
+00:05:44.230 --> 00:05:45.130
+Basic ist zum Lernen gedacht,
+
+00:05:45.230 --> 00:05:47.070
+VPN-GW1-AZ für kleine Setups
+
+00:05:47.070 --> 00:05:48.650
+und die höheren VPN-GW-Stufen
+
+00:05:48.650 --> 00:05:50.430
+für Organisationen mit hohem Datenaufkommen.
+
+00:05:51.370 --> 00:05:53.270
+Sie können auch klein anfangen und später aufsteigen,
+
+00:05:53.530 --> 00:05:54.370
+da Azure Ihnen erlaubt,
+
+00:05:54.370 --> 00:05:55.650
+eine Gateway-Screw zu aktualisieren,
+
+00:05:55.730 --> 00:05:57.330
+ohne alles von Grund auf neu erstellen zu müssen.
+
+00:05:57.730 --> 00:05:58.510
+Nun zum Begriff Tunnel.
+
+00:05:58.510 --> 00:06:00.810
+Ein Tunnel ist eine einzelne separate verschlüsselte Verbindung,
+
+00:06:00.890 --> 00:06:01.770
+die das Gateway gleichzeitig hat.
+
+00:06:02.050 --> 00:06:03.130
+30 Tunnel bedeuten also,
+
+00:06:03.210 --> 00:06:04.790
+dass 30 verschiedene Standorte oder Netzwerke
+
+00:06:04.790 --> 00:06:05.810
+gleichzeitig verbunden sein können.
+
+00:06:06.150 --> 00:06:06.990
+Wenn Sie ein Büro haben,
+
+00:06:07.070 --> 00:06:07.810
+nutzen Sie eines davon
+
+00:06:07.810 --> 00:06:09.590
+und der Rest bleibt als Wachstumspotenzial bestehen.
+
+00:06:10.290 --> 00:06:10.910
+Nun zu dem Teil,
+
+00:06:10.970 --> 00:06:11.910
+den Anfänger niemand verrät
+
+00:06:11.910 --> 00:06:13.530
+und das ist der wichtigste Satz in diesem Abschnitt.
+
+00:06:14.270 --> 00:06:14.930
+All diese Tunnel
+
+00:06:14.930 --> 00:06:16.710
+teilen sich die Gesamtbandbreite des Gateways.
+
+00:06:16.910 --> 00:06:18.410
+Die angegebene Zahl ist also kein Versprechen
+
+00:06:18.410 --> 00:06:19.290
+für jede einzelne Verbindung.
+
+00:06:19.610 --> 00:06:20.970
+Wenn Sie 10 Tunnel über ein Gateway
+
+00:06:20.970 --> 00:06:21.890
+mit dieser Leistung schicken,
+
+00:06:21.890 --> 00:06:23.170
+teilen diese sich die Kapazität
+
+00:06:23.170 --> 00:06:24.610
+und eine Verbindung läuft oft weit
+
+00:06:24.610 --> 00:06:25.910
+unter der beworbenen Geschwindigkeit.
+
+00:06:25.910 --> 00:06:28.010
+Deshalb ist die Frage nach der Dimensionierung
+
+00:06:28.010 --> 00:06:29.130
+eigentlich eine Frage nach Mitarbeitern
+
+00:06:29.130 --> 00:06:29.550
+und Datenverkehr.
+
+00:06:29.850 --> 00:06:30.890
+Zählen Sie die Standorte,
+
+00:06:31.230 --> 00:06:32.610
+schätzen Sie das Datenaufkommen ab
+
+00:06:32.610 --> 00:06:34.810
+und wählen Sie die SKU mit etwas Spielraum,
+
+00:06:34.990 --> 00:06:36.530
+denn ein späteres Upgrade ist zwar möglich,
+
+00:06:36.650 --> 00:06:37.230
+erfordert aber
+
+00:06:37.230 --> 00:06:39.190
+eine zeitweilige Abschaltung des Gateways.
+
+00:06:40.130 --> 00:06:41.230
+Noch eine Anmerkung zu dem Bezeichnen.
+
+00:06:41.630 --> 00:06:43.110
+Einige SKUs enthalten ein AZ,
+
+00:06:43.310 --> 00:06:44.670
+wie etwa VPN GW1 AZ,
+
+00:06:44.850 --> 00:06:46.150
+was für Availability Zone steht.
+
+00:06:47.110 --> 00:06:48.290
+Ein zonenredundantes Gateway
+
+00:06:48.290 --> 00:06:49.190
+funktioniert auch dann weiter,
+
+00:06:49.190 --> 00:06:50.630
+wenn eine gesamte Rechenzentrumszone
+
+00:06:50.630 --> 00:06:51.470
+in dieser Region ausfällt.
+
+00:06:51.930 --> 00:06:53.230
+Wählen Sie für ernsthafte Projekte
+
+00:06:53.230 --> 00:06:54.170
+eine aktuelle AZ-School.
+
+00:06:54.630 --> 00:06:55.110
+Beachten Sie,
+
+00:06:55.190 --> 00:06:56.090
+dass Microsoft die ältere
+
+00:06:56.090 --> 00:06:57.390
+nicht AZ-School zusammenführt.
+
+00:06:57.510 --> 00:06:58.490
+Sie sollten neue Gateways,
+
+00:06:58.570 --> 00:06:59.850
+also auf Basis der AZ-Varianten,
+
+00:06:59.990 --> 00:07:00.330
+aufbauen.
+
+00:07:01.150 --> 00:07:02.070
+Und darunter verbirgt sich
+
+00:07:02.070 --> 00:07:03.270
+eine noch wichtigere Entscheidung,
+
+00:07:03.390 --> 00:07:04.010
+die darüber bestimmt,
+
+00:07:04.090 --> 00:07:05.110
+ob Sie einige dieser Funktionen
+
+00:07:05.110 --> 00:07:05.730
+überhaupt nutzen können.
+
+00:07:06.150 --> 00:07:06.970
+Darauf kommen wir gleich zu sprechen.
+
+00:07:07.910 --> 00:07:09.170
+Routenbasiert versus Richtlinienbasiert.
+
+00:07:09.650 --> 00:07:10.570
+Diese wichtigere Entscheidung
+
+00:07:10.570 --> 00:07:11.670
+betrifft die Handhabung des Routings
+
+00:07:11.670 --> 00:07:12.210
+durch das Gateway,
+
+00:07:12.330 --> 00:07:13.090
+wofür es zwei Varianten gibt.
+
+00:07:13.510 --> 00:07:14.830
+Routenbasiert ist der moderne Standard,
+
+00:07:15.130 --> 00:07:16.590
+Richtlinienbasiert ist das ältere Design.
+
+00:07:17.210 --> 00:07:18.150
+Sobald Sie den Unterschied kennen,
+
+00:07:18.230 --> 00:07:19.950
+ergibt der allseits wiederholte Rat endlich Sinn.
+
+00:07:20.750 --> 00:07:21.830
+Ein routenbasiertes Gateway
+
+00:07:21.830 --> 00:07:22.790
+führt eine Routing-Tabelle
+
+00:07:22.790 --> 00:07:23.850
+und entscheidet anhand des Ziels,
+
+00:07:23.910 --> 00:07:24.770
+wohin der Datenverkehr geleitet.
+
+00:07:25.170 --> 00:07:25.890
+Das klingt technisch,
+
+00:07:25.950 --> 00:07:26.970
+hat aber praktische Vorteile.
+
+00:07:27.750 --> 00:07:29.210
+Es ermöglicht dem Gateway mehrere Tunnel,
+
+00:07:29.470 --> 00:07:30.250
+den Betrieb von BGP
+
+00:07:30.250 --> 00:07:31.330
+und der Unterstützung von Point-to-Side.
+
+00:07:31.990 --> 00:07:32.650
+Mit anderen Worten,
+
+00:07:32.710 --> 00:07:34.470
+routenbasiert bietet Ihnen fast alles,
+
+00:07:34.550 --> 00:07:35.850
+was Sie von einem Gateway erwarten.
+
+00:07:36.550 --> 00:07:37.570
+Ein richtlinienbasiertes Gateway
+
+00:07:37.570 --> 00:07:38.170
+funktioniert anders.
+
+00:07:38.730 --> 00:07:39.530
+Es gleicht den Datenverkehr
+
+00:07:39.530 --> 00:07:40.690
+mit einem festen Regelsatz ab
+
+00:07:40.690 --> 00:07:41.570
+und diese einzelne Regel
+
+00:07:41.570 --> 00:07:42.710
+bestimmt die gesamte Verbindung.
+
+00:07:43.730 --> 00:07:44.470
+Richtlinienbasiert läuft nur
+
+00:07:44.470 --> 00:07:45.210
+auf der Basic-School,
+
+00:07:45.370 --> 00:07:46.510
+unterstützt nur IAG-V1
+
+00:07:46.510 --> 00:07:47.710
+und erlaubt nur einen einzigen
+
+00:07:47.710 --> 00:07:48.490
+Side-to-Side-Tunnel.
+
+00:07:49.090 --> 00:07:49.790
+Es gibt keinen Platz
+
+00:07:49.790 --> 00:07:50.610
+für eine zweite Verbindung
+
+00:07:50.610 --> 00:07:51.930
+und keinen Platz für Point-to-Side.
+
+00:07:52.490 --> 00:07:53.630
+Die Namen erklären die Sache von selbst,
+
+00:07:53.690 --> 00:07:54.490
+wenn man sie auf diese Weise betreibt.
+
+00:07:55.550 --> 00:07:56.250
+Routenbasiert bedeutet,
+
+00:07:56.350 --> 00:07:57.010
+das Gateway routet
+
+00:07:57.010 --> 00:07:57.790
+anhand der Zieladresse,
+
+00:07:57.910 --> 00:07:59.390
+so wie die Post eine Postleitzahl liest.
+
+00:07:59.590 --> 00:07:59.950
+Es ist ein liest.
+
+00:08:01.030 --> 00:08:01.690
+Richtlinienbasiert bedeutet,
+
+00:08:01.790 --> 00:08:02.450
+das Gateway routet
+
+00:08:02.450 --> 00:08:03.570
+durch Abgleich einer festen Regel,
+
+00:08:03.690 --> 00:08:04.350
+so wie ein Türsteher
+
+00:08:04.350 --> 00:08:05.330
+eine einzige Tür prüft.
+
+00:08:06.150 --> 00:08:07.070
+Die eine Option ist skalierbar,
+
+00:08:07.110 --> 00:08:07.590
+die andere nicht.
+
+00:08:08.150 --> 00:08:09.290
+Deshalb lautet der Standardrat,
+
+00:08:09.370 --> 00:08:10.410
+verwenden Sie einfach routenbasiert.
+
+00:08:10.710 --> 00:08:11.570
+Das ist keine Frage der Vorliebe.
+
+00:08:11.970 --> 00:08:12.570
+Es ist der Unterschied
+
+00:08:12.570 --> 00:08:13.310
+zwischen einem Gateway,
+
+00:08:13.390 --> 00:08:14.150
+das mit Ihnen wachsen kann
+
+00:08:14.150 --> 00:08:14.490
+und einem,
+
+00:08:14.590 --> 00:08:15.770
+das von Anfang an eingeschränkt ist.
+
+00:08:16.370 --> 00:08:16.850
+Es gibt hier auch noch
+
+00:08:16.850 --> 00:08:17.390
+gravierende Haar.
+
+00:08:17.930 --> 00:08:19.210
+Seit Ende 2023
+
+00:08:19.210 --> 00:08:20.410
+können Sie über das Azure-Portal
+
+00:08:20.410 --> 00:08:20.950
+nicht einmal mehr
+
+00:08:20.950 --> 00:08:22.350
+ein richtlinienbasiertes Gateway erstellen
+
+00:08:22.350 --> 00:08:23.030
+und eine Umwandlung
+
+00:08:23.030 --> 00:08:23.970
+in ein routenbasiertes Gateway
+
+00:08:23.970 --> 00:08:24.730
+ist später nicht möglich.
+
+00:08:25.130 --> 00:08:26.630
+Wenn Sie richtlinienbasiert begonnen haben
+
+00:08:26.630 --> 00:08:28.130
+und routenbasierte Funktionen benötigen,
+
+00:08:28.210 --> 00:08:29.070
+müssen Sie das Gateway löschen
+
+00:08:29.070 --> 00:08:29.730
+und ein neues erstellen.
+
+00:08:29.870 --> 00:08:30.830
+Das Beruhigende ist jedoch folgend.
+
+00:08:31.190 --> 00:08:31.990
+Viele Anfänger müssen
+
+00:08:31.990 --> 00:08:33.090
+richtlinienbasierte Gateways
+
+00:08:33.090 --> 00:08:33.690
+überhaupt nicht nutzen.
+
+00:08:34.030 --> 00:08:35.370
+Sie existieren für alte Geräte,
+
+00:08:35.490 --> 00:08:36.930
+die nur das ältere Protokoll beherrschen.
+
+00:08:37.310 --> 00:08:38.350
+Wenn Sie heute neu anfangen,
+
+00:08:38.450 --> 00:08:40.110
+erstellt Azure routenbasierte Gateways
+
+00:08:40.110 --> 00:08:40.410
+für Sie
+
+00:08:40.410 --> 00:08:41.630
+und Sie können direkt weitermachen.
+
+00:08:42.090 --> 00:08:42.630
+Wenn Sie eine Sache
+
+00:08:42.630 --> 00:08:43.470
+aus diesem Abschnitt mitnehmen,
+
+00:08:43.550 --> 00:08:43.770
+dann diese.
+
+00:08:46.850 --> 00:08:48.570
+BGP und Active-Active
+
+00:08:48.570 --> 00:08:50.470
+Nachdem das Routing geklärt ist,
+
+00:08:50.510 --> 00:08:51.590
+sind die nächsten beiden Begriffe
+
+00:08:51.590 --> 00:08:52.830
+BGP und Active-Active.
+
+00:08:52.930 --> 00:08:53.910
+Bei beiden geht es um eines,
+
+00:08:54.170 --> 00:08:55.350
+die Verbindung aufrechtzuerhalten,
+
+00:08:55.450 --> 00:08:56.190
+wenn etwas schief geht.
+
+00:08:57.410 --> 00:08:58.290
+BGP ist eine Methode,
+
+00:08:58.350 --> 00:08:59.330
+mit der beide Seiten des Tunnels
+
+00:08:59.330 --> 00:09:00.750
+automatisch Routing-Informationen austauschen.
+
+00:09:01.310 --> 00:09:02.550
+Anstatt jeden Netzwerkbereich
+
+00:09:02.550 --> 00:09:03.970
+auf beiden Seiten manuell einzugeben,
+
+00:09:04.390 --> 00:09:05.030
+teilen das Gateway
+
+00:09:05.030 --> 00:09:06.270
+und Ihr Bürogerät einander mit,
+
+00:09:06.330 --> 00:09:07.070
+was Sie erreichen können
+
+00:09:07.070 --> 00:09:08.790
+und aktualisieren dieses Bild bei Änderungen.
+
+00:09:09.330 --> 00:09:09.850
+Das bedeutet,
+
+00:09:10.050 --> 00:09:10.890
+wenn Sie ein neues Subnetz
+
+00:09:10.890 --> 00:09:11.690
+in Azure hinzufügen,
+
+00:09:11.850 --> 00:09:12.850
+erfährt die Büroseite davon,
+
+00:09:12.970 --> 00:09:14.150
+ohne dass jemand die Konfiguration anfassen.
+
+00:09:14.470 --> 00:09:15.710
+BGP wird auf jeder SKU
+
+00:09:15.710 --> 00:09:16.750
+außer Basic unterstützt,
+
+00:09:16.850 --> 00:09:17.370
+ein weiterer Grund,
+
+00:09:17.470 --> 00:09:18.650
+warum Basic im Labor bleiben sollte.
+
+00:09:19.090 --> 00:09:19.610
+Wenn Sie möchten,
+
+00:09:19.690 --> 00:09:20.910
+dass Sie Ihr Routing von Selbstverwalter
+
+00:09:20.910 --> 00:09:21.810
+benötigen, Sie BGP
+
+00:09:21.810 --> 00:09:22.990
+und BGP läuft nicht mit Basic.
+
+00:09:23.450 --> 00:09:24.390
+Stellen Sie sich den Unterschied
+
+00:09:24.390 --> 00:09:25.610
+zwischen einem Telefonbuch vor,
+
+00:09:25.770 --> 00:09:26.730
+das sich selbst aktualisiert
+
+00:09:26.730 --> 00:09:27.090
+und einem,
+
+00:09:27.330 --> 00:09:27.910
+das Sie bei jeder Nummer
+
+00:09:27.910 --> 00:09:28.810
+eine Änderung von Hand umschreiben.
+
+00:09:29.250 --> 00:09:30.330
+In einem wachsenden Netzwerk
+
+00:09:30.330 --> 00:09:31.850
+wollen Sie das sich selbst aktualisierende.
+
+00:09:32.330 --> 00:09:33.590
+Nun zum Teil über die Ausfallsicherheit.
+
+00:09:34.230 --> 00:09:36.170
+Ein VPN-Gateway besteht aus zwei Instanzen,
+
+00:09:36.330 --> 00:09:37.030
+die standardmäßig
+
+00:09:37.030 --> 00:09:38.390
+im Aktiv-Standby-Modus laufen.
+
+00:09:38.850 --> 00:09:40.290
+Eine Instanz verarbeitet den Datenverkehr,
+
+00:09:40.390 --> 00:09:40.990
+während die andere wartet.
+
+00:09:41.530 --> 00:09:42.410
+Wenn die aktive Instanz
+
+00:09:42.410 --> 00:09:43.990
+wegen Wartung oder eines Fehlers ausfällt,
+
+00:09:43.990 --> 00:09:45.130
+übernimmt die Standby-Instanz
+
+00:09:45.130 --> 00:09:46.410
+und es kommt zu einer kurzen Unterbrechung.
+
+00:09:46.930 --> 00:09:47.870
+Für Point-to-Site-Benutzer
+
+00:09:47.870 --> 00:09:48.390
+bedeutet das,
+
+00:09:48.450 --> 00:09:49.230
+dass die Verbindung abbricht
+
+00:09:49.230 --> 00:09:50.270
+und Sie sich neu verbinden müssen.
+
+00:09:50.690 --> 00:09:51.570
+Der Active-Active-Modus
+
+00:09:51.570 --> 00:09:52.350
+ändert diese Rechnung.
+
+00:09:52.610 --> 00:09:53.270
+In diesem Setup
+
+00:09:53.270 --> 00:09:54.830
+arbeiten beide Instanzen gleichzeitig,
+
+00:09:54.990 --> 00:09:55.650
+jede mit ihrer eigenen
+
+00:09:55.650 --> 00:09:56.570
+öffentlichen IP-Adresse
+
+00:09:56.570 --> 00:09:57.510
+und der Datenverkehr
+
+00:09:57.510 --> 00:09:58.610
+kann beide Tunnel auf einmal nutzen.
+
+00:09:59.010 --> 00:10:00.050
+Wenn eine Instanz ausfällt,
+
+00:10:00.130 --> 00:10:00.730
+verarbeitet die andere
+
+00:10:00.730 --> 00:10:01.650
+bereits Datenverkehr,
+
+00:10:02.010 --> 00:10:02.810
+daher ist die Unterbrechung
+
+00:10:02.810 --> 00:10:03.510
+wesentlich kürzer.
+
+00:10:04.030 --> 00:10:04.850
+Es gelten ein paar Regeln,
+
+00:10:04.930 --> 00:10:05.970
+wenn Sie Active-Active einrichten.
+
+00:10:06.430 --> 00:10:08.130
+Sie benötigen zwei öffentliche IP-Adressen,
+
+00:10:08.270 --> 00:10:09.610
+beide mit Standards-Crew und statisch.
+
+00:10:10.210 --> 00:10:10.650
+Das Gateway
+
+00:10:10.650 --> 00:10:11.650
+muss routenbasiert sein
+
+00:10:11.650 --> 00:10:13.270
+und darf nicht die Basics-Crew verwenden.
+
+00:10:13.350 --> 00:10:13.810
+Der Vorteil ist,
+
+00:10:13.890 --> 00:10:14.990
+dass Active-Active genauso viel kostet
+
+00:10:14.990 --> 00:10:15.570
+wie Active-Standby,
+
+00:10:15.650 --> 00:10:16.630
+der Preis ändert sich also nicht.
+
+00:10:16.790 --> 00:10:17.130
+Also nicht.
+
+00:10:17.350 --> 00:10:18.050
+Sie benötigen lediglich
+
+00:10:18.050 --> 00:10:18.930
+die zusätzliche Öffentlichkeit.
+
+00:10:19.190 --> 00:10:20.750
+Für das ausfallsicherste Design
+
+00:10:20.750 --> 00:10:21.770
+kombinieren Sie beide Enden.
+
+00:10:22.170 --> 00:10:23.530
+Betreiben Sie Active-Active in Azure,
+
+00:10:23.650 --> 00:10:24.750
+fügen Sie zwei VPN-Geräte
+
+00:10:24.750 --> 00:10:25.310
+vor Ort hinzu
+
+00:10:25.310 --> 00:10:26.390
+und Sie erhalten vier Tunnel,
+
+00:10:26.470 --> 00:10:27.390
+die ein vollständiges Match bilden.
+
+00:10:27.670 --> 00:10:28.410
+Das ist das Setup,
+
+00:10:28.490 --> 00:10:29.610
+das ein Unternehmen verbunden hält,
+
+00:10:29.950 --> 00:10:30.790
+wenn die Hardware streikt
+
+00:10:30.790 --> 00:10:31.490
+und das unterscheidet
+
+00:10:31.490 --> 00:10:32.570
+einen schlechten Nachmittag
+
+00:10:32.570 --> 00:10:33.530
+von einer schlechten Woche.
+
+00:10:34.810 --> 00:10:36.370
+VPN-Gateway versus Express Route.
+
+00:10:37.090 --> 00:10:38.070
+Alles bisher Gesagte
+
+00:10:38.070 --> 00:10:39.150
+führt zu einer ehrlichen Frage,
+
+00:10:39.310 --> 00:10:40.050
+die sich jeder Anfänger
+
+00:10:40.050 --> 00:10:41.010
+früh oder später stellt.
+
+00:10:41.290 --> 00:10:41.790
+Ist dies überhaupt
+
+00:10:41.790 --> 00:10:42.650
+das richtige Werkzeug
+
+00:10:42.650 --> 00:10:43.630
+oder sollte man direkt
+
+00:10:43.630 --> 00:10:44.690
+zur Express Route wechseln?
+
+00:10:45.250 --> 00:10:45.810
+Der Hauptunterschied
+
+00:10:45.810 --> 00:10:46.870
+lässt sich in einem Satz zusammenfassen.
+
+00:10:47.190 --> 00:10:48.110
+Das VPN-Gateway
+
+00:10:48.110 --> 00:10:48.710
+baut seinen Tunnel
+
+00:10:48.710 --> 00:10:50.170
+direkt über das öffentliche Internet auf,
+
+00:10:50.430 --> 00:10:51.070
+während Express Route
+
+00:10:51.070 --> 00:10:52.430
+eine private, dedizierte Verbindung
+
+00:10:52.430 --> 00:10:54.010
+über einen Konnektivitätsanbieter herstellt.
+
+00:10:54.690 --> 00:10:56.050
+Ihr Datenverkehr über Express Route
+
+00:10:56.050 --> 00:10:57.390
+läuft niemals über das offene Internet
+
+00:10:57.390 --> 00:10:58.170
+und genau das ist der Punkt.
+
+00:10:58.410 --> 00:10:59.170
+Dieser private Pfad
+
+00:10:59.170 --> 00:11:00.050
+bietet Ihnen echte Vorteile.
+
+00:11:00.490 --> 00:11:01.370
+Mehr Zuverlässigkeit,
+
+00:11:01.630 --> 00:11:03.330
+schnellere und konsistentere Geschwindigkeiten,
+
+00:11:03.550 --> 00:11:04.110
+höhere Sicherheit
+
+00:11:04.110 --> 00:11:05.070
+und Bandbreitenoptionen
+
+00:11:05.070 --> 00:11:06.350
+von 50 Megabit pro Sekunde
+
+00:11:06.350 --> 00:11:07.190
+bis zu 10 Gigabit,
+
+00:11:07.410 --> 00:11:08.310
+wobei Express Route Direct
+
+00:11:08.310 --> 00:11:09.230
+sogar noch höher geht,
+
+00:11:09.470 --> 00:11:10.210
+sogar noch höher geht.
+
+00:11:11.110 --> 00:11:11.570
+Wenn Ihr Unternehmen
+
+00:11:11.570 --> 00:11:12.550
+von vorhersehbarer Leistung
+
+00:11:12.550 --> 00:11:13.130
+in Azure abhängt,
+
+00:11:13.210 --> 00:11:13.990
+ist diese Konsistenz
+
+00:11:13.990 --> 00:11:15.150
+das entscheidende Verkaufsargument.
+
+00:11:15.770 --> 00:11:16.410
+Ein Detail überrascht
+
+00:11:16.410 --> 00:11:16.930
+die Leute hier oft.
+
+00:11:17.330 --> 00:11:17.950
+Express Route
+
+00:11:17.950 --> 00:11:18.470
+ersetzt nicht
+
+00:11:18.470 --> 00:11:19.530
+ihre normale Internetverbindung.
+
+00:11:19.990 --> 00:11:20.850
+Es fügt eine zweite
+
+00:11:20.850 --> 00:11:21.810
+private Spur hinzu,
+
+00:11:21.930 --> 00:11:22.810
+die für die Microsoft Cloud
+
+00:11:22.810 --> 00:11:23.470
+reserviert ist,
+
+00:11:23.730 --> 00:11:24.310
+während der gesamte
+
+00:11:24.310 --> 00:11:24.990
+andere Datenverkehr
+
+00:11:24.990 --> 00:11:25.890
+weiterhin wie bisher fließt.
+
+00:11:26.230 --> 00:11:27.090
+Natürlich ist das nicht umsonst.
+
+00:11:27.690 --> 00:11:28.250
+Express Route
+
+00:11:28.250 --> 00:11:28.830
+kostet mehr
+
+00:11:28.830 --> 00:11:30.050
+und die Einrichtung dauert länger,
+
+00:11:30.230 --> 00:11:31.290
+da ein Anbieter involviert ist
+
+00:11:31.290 --> 00:11:32.070
+und ein weiterer Partner
+
+00:11:32.070 --> 00:11:32.930
+zu ihren Plänen hinzukommen.
+
+00:11:33.410 --> 00:11:33.850
+Für Anfänger
+
+00:11:33.850 --> 00:11:34.830
+mit einer kleinen Umgebung
+
+00:11:34.830 --> 00:11:35.910
+ist das meistens übertrieben.
+
+00:11:36.570 --> 00:11:37.030
+Daher ist meine
+
+00:11:37.030 --> 00:11:37.930
+ehrliche Empfehlung diese.
+
+00:11:38.570 --> 00:11:39.050
+Beginnen Sie mit einem
+
+00:11:39.050 --> 00:11:39.630
+VPN Gateway,
+
+00:11:39.750 --> 00:11:39.950
+es sei denn,
+
+00:11:39.990 --> 00:11:40.850
+Sie haben einen zwingenden Bedarf
+
+00:11:40.850 --> 00:11:41.410
+an vorhersehbaren
+
+00:11:41.410 --> 00:11:42.930
+privaten Hochgeschwindigkeitsverbindungen.
+
+00:11:43.810 --> 00:11:44.530
+Es ist günstiger,
+
+00:11:44.630 --> 00:11:45.390
+schneller eingerichtet
+
+00:11:45.390 --> 00:11:46.550
+und deckt die große Mehrheit
+
+00:11:46.550 --> 00:11:47.570
+der Situationen ab.
+
+00:11:48.310 --> 00:11:49.010
+Und das Beste daran ist,
+
+00:11:49.350 --> 00:11:49.870
+Sie müssen sich nicht
+
+00:11:49.870 --> 00:11:50.370
+für immer entscheiden.
+
+00:11:50.810 --> 00:11:51.330
+Express Route
+
+00:11:51.330 --> 00:11:52.230
+und VPN Gateway
+
+00:11:52.230 --> 00:11:53.150
+können koexistieren,
+
+00:11:53.250 --> 00:11:53.710
+was bedeutet,
+
+00:11:53.830 --> 00:11:54.150
+dass Sie einen
+
+00:11:54.150 --> 00:11:54.890
+Side-to-Side-VPN
+
+00:11:54.890 --> 00:11:56.170
+als sicheren Failover-Fahrt
+
+00:11:56.170 --> 00:11:56.490
+hinter Ihrer
+
+00:11:56.490 --> 00:11:57.290
+Express Route-Leitung
+
+00:11:57.290 --> 00:11:57.950
+betreiben können.
+
+00:11:58.730 --> 00:11:59.230
+Wenn die private
+
+00:11:59.230 --> 00:12:00.110
+Verbindung Probleme hat,
+
+00:12:00.170 --> 00:12:00.890
+fängt der Tunnel sie auf.
+
+00:12:00.890 --> 00:12:02.410
+Häufige Fehlerbehebung.
+
+00:12:02.850 --> 00:12:03.490
+Selbst die richtige Wahl
+
+00:12:03.490 --> 00:12:04.050
+kann einmal scheitern.
+
+00:12:04.550 --> 00:12:05.070
+Sprechen wir also
+
+00:12:05.070 --> 00:12:05.790
+über die wenigen Dinge,
+
+00:12:05.890 --> 00:12:06.390
+die den Großteil
+
+00:12:06.390 --> 00:12:07.310
+der Probleme verursachen.
+
+00:12:07.850 --> 00:12:08.530
+Das Ermutigende ist,
+
+00:12:08.610 --> 00:12:09.210
+dass es sich meist nur
+
+00:12:09.210 --> 00:12:10.070
+um eine Einstellung handelt,
+
+00:12:10.170 --> 00:12:10.450
+nicht um einen
+
+00:12:10.450 --> 00:12:11.150
+kompletten Neuaufbau.
+
+00:12:11.490 --> 00:12:12.570
+Der häufigste Anfängerfehler
+
+00:12:12.570 --> 00:12:13.710
+betrifft das Gateway-Subnetz.
+
+00:12:14.190 --> 00:12:14.750
+Es muss exakt
+
+00:12:14.750 --> 00:12:15.770
+Gateway-Subnet heißen
+
+00:12:15.770 --> 00:12:16.790
+und Sie dürfen keine
+
+00:12:16.790 --> 00:12:17.950
+benutzerdefinierten Routen
+
+00:12:17.950 --> 00:12:19.110
+oder Netzwerksicherheitsgruppen
+
+00:12:19.110 --> 00:12:19.710
+daran anfügen.
+
+00:12:20.350 --> 00:12:20.990
+Wenn Sie das tun,
+
+00:12:21.070 --> 00:12:21.590
+kann das Gateway
+
+00:12:21.590 --> 00:12:22.790
+möglicherweise nicht starten
+
+00:12:22.790 --> 00:12:23.630
+und die Fehlermeldung
+
+00:12:23.630 --> 00:12:24.610
+verrät selten den Grund.
+
+00:12:25.510 --> 00:12:26.450
+Aktivieren Sie als nächstes
+
+00:12:26.450 --> 00:12:27.430
+die BGP-Routenverbreitung
+
+00:12:27.430 --> 00:12:27.890
+in diesem Summen.
+
+00:12:28.150 --> 00:12:28.610
+Es klingt wie eine
+
+00:12:28.610 --> 00:12:29.490
+optionale Zusatzfunktion,
+
+00:12:29.590 --> 00:12:29.970
+ist das aber nicht.
+
+00:12:30.270 --> 00:12:31.130
+Wenn sie deaktiviert ist,
+
+00:12:31.170 --> 00:12:31.910
+funktioniert das Gateway nicht.
+
+00:12:32.270 --> 00:12:32.630
+Dann kommen die
+
+00:12:32.630 --> 00:12:33.310
+klassischen Tunnel-Killer.
+
+00:12:33.850 --> 00:12:34.770
+Ein nicht übereinstimmender
+
+00:12:34.770 --> 00:12:36.070
+Pre-Shared-Key oder Unterschiede
+
+00:12:36.070 --> 00:12:36.710
+bei den IP-Serk
+
+00:12:36.710 --> 00:12:37.390
+und Ikea-Richtlinien
+
+00:12:37.390 --> 00:12:38.290
+auf beiden Seiten verhindern,
+
+00:12:38.350 --> 00:12:39.350
+dass ein Tunnel zustande kommt.
+
+00:12:39.890 --> 00:12:40.590
+Beide Enden müssen sich
+
+00:12:40.590 --> 00:12:41.310
+auf dieselben Regeln ein.
+
+00:12:41.770 --> 00:12:42.770
+Überlappende Adressbereiche
+
+00:12:42.770 --> 00:12:44.090
+sind tückischer und problematischer.
+
+00:12:44.730 --> 00:12:45.630
+Wenn Ihr Azure-Netzwerk
+
+00:12:45.630 --> 00:12:46.450
+und Ihr Büronetzwerk
+
+00:12:46.450 --> 00:12:47.310
+denselben Bereich nutzen,
+
+00:12:47.430 --> 00:12:48.430
+kommt das Routing durcheinander
+
+00:12:48.430 --> 00:12:49.350
+und der Datenverkehr
+
+00:12:49.350 --> 00:12:50.210
+gelangt nirgendwo hin.
+
+00:12:50.770 --> 00:12:51.510
+Bei Pointosite
+
+00:12:51.510 --> 00:12:52.190
+sind die üblichen
+
+00:12:52.190 --> 00:12:53.230
+verdächtigen abgelaufene
+
+00:12:53.230 --> 00:12:54.210
+Zertifikate und Probleme
+
+00:12:54.210 --> 00:12:54.990
+mit dem Kleinen Profil.
+
+00:12:55.410 --> 00:12:56.190
+Normalerweise lässt sich das
+
+00:12:56.190 --> 00:12:56.950
+durch eine Neugenerierung
+
+00:12:56.950 --> 00:12:57.650
+des Kleinen Profils B.
+
+00:12:57.910 --> 00:12:58.830
+Es ist ein guter Angewohnheit
+
+00:12:58.830 --> 00:12:59.670
+in der Bestimm-Dream-Fizit.
+
+00:13:00.110 --> 00:13:00.850
+Bestätigen Sie zuerst
+
+00:13:00.850 --> 00:13:01.370
+das Subnetz,
+
+00:13:01.430 --> 00:13:01.870
+dann das Routing,
+
+00:13:02.010 --> 00:13:02.550
+danach die Schlüssel
+
+00:13:02.550 --> 00:13:03.050
+und Richtlinien
+
+00:13:03.050 --> 00:13:04.050
+und schließlich die Adressbereiche.
+
+00:13:04.430 --> 00:13:05.810
+Diese Vorgehensweise erspart es Ihnen,
+
+00:13:05.950 --> 00:13:07.170
+ein Zertifikatsproblem zu suchen,
+
+00:13:07.290 --> 00:13:08.170
+wenn das eigentliche Problem
+
+00:13:08.170 --> 00:13:09.110
+ein Subnetzname war.
+
+00:13:09.550 --> 00:13:10.430
+Nichts davon ist beängstigend,
+
+00:13:10.470 --> 00:13:10.930
+sobald Sie wissen,
+
+00:13:10.970 --> 00:13:11.470
+wo Sie suchen müssen.
+
+00:13:11.830 --> 00:13:12.870
+Prüfen Sie den Subnetzname,
+
+00:13:12.950 --> 00:13:13.710
+die Routenverbreitung,
+
+00:13:13.710 --> 00:13:14.130
+die Schlüssel,
+
+00:13:14.230 --> 00:13:14.710
+die Richtlinien
+
+00:13:14.710 --> 00:13:15.550
+und die Adressbereiche
+
+00:13:15.550 --> 00:13:16.810
+und Sie werden die meisten
+
+00:13:16.810 --> 00:13:17.410
+Tunnelprobleme
+
+00:13:17.410 --> 00:13:18.230
+vor dem Mittagessen lösen.
+
+00:13:19.190 --> 00:13:20.210
+Zusammenfassung und offene Frage.
+
+00:13:20.690 --> 00:13:21.550
+Passen wir also alles zusammen.
+
+00:13:21.990 --> 00:13:23.050
+Das Azure VPN Gateway
+
+00:13:23.050 --> 00:13:23.990
+ist der verschlüsselte Tunnel
+
+00:13:23.990 --> 00:13:25.090
+zwischen Ihrem Azure-Netzwerk
+
+00:13:25.090 --> 00:13:26.010
+und einem anderen Ort,
+
+00:13:26.110 --> 00:13:26.710
+der auf verwalteten
+
+00:13:26.710 --> 00:13:27.550
+virtuellen Maschinen
+
+00:13:27.550 --> 00:13:28.290
+in einem sogenannten
+
+00:13:28.290 --> 00:13:29.490
+Gateway-Subnetz basiert.
+
+00:13:30.510 --> 00:13:31.190
+Side-to-Side verbindet
+
+00:13:31.190 --> 00:13:31.710
+ein ganzes Netzwerk.
+
+00:13:32.110 --> 00:13:32.890
+Point-to-Side verbindet
+
+00:13:32.890 --> 00:13:33.770
+eine einzelne Person
+
+00:13:33.770 --> 00:13:34.630
+und die gewählte SKU
+
+00:13:34.630 --> 00:13:35.610
+bestimmt ihre Geschwindigkeit
+
+00:13:35.610 --> 00:13:36.410
+und die Anzahl der Tunnel.
+
+00:13:36.910 --> 00:13:37.950
+Routenbasiert ist der Standard,
+
+00:13:38.150 --> 00:13:39.570
+da es BGP mehrere Tunnel
+
+00:13:39.570 --> 00:13:40.710
+und Point-to-Side ermöglicht
+
+00:13:40.710 --> 00:13:41.510
+und Aktiv-Aktiv
+
+00:13:41.510 --> 00:13:42.170
+hält sie verbunden,
+
+00:13:42.430 --> 00:13:43.610
+wenn eine Instanz ausfällt.
+
+00:13:44.290 --> 00:13:44.870
+Wenn Sie stattdessen
+
+00:13:44.870 --> 00:13:45.710
+eine private Verbindung
+
+00:13:45.710 --> 00:13:46.830
+mit hoher Bandbreite benötigen,
+
+00:13:46.890 --> 00:13:47.690
+ist ExpressRoute die Lösung.
+
+00:13:48.030 --> 00:13:48.450
+Ich möchte Ihnen
+
+00:13:48.450 --> 00:13:49.190
+eine letzte Frage
+
+00:13:49.190 --> 00:13:49.970
+mit auf den Weg geben,
+
+00:13:50.050 --> 00:13:50.910
+die für Ihr eigenes Setup
+
+00:13:50.910 --> 00:13:51.650
+am wichtigsten ist.
+
+00:13:52.530 --> 00:13:53.490
+Wenn Sie morgen Ihre Welt
+
+00:13:53.490 --> 00:13:54.530
+mit Azure verbinden müssten,
+
+00:13:54.630 --> 00:13:55.290
+würden Sie einen Ort
+
+00:13:55.290 --> 00:13:56.410
+oder eine Person verbinden?

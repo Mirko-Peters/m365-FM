@@ -1,0 +1,637 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:05.520
+Selamat datang di podcast M365FM, tempat kami menjelajahi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:06.080 --> 00:00:07.760
+Dua cara untuk melakukan hal yang sama.
+
+00:00:08.240 --> 00:00:13.100
+Anda bisa membuat angka yang persis sama di Power BI dengan dua cara berbeda dan keduanya berperilaku sangat berlawanan.
+
+00:00:13.760 --> 00:00:16.840
+Salah satunya disimpan di dalam model data Anda dan mengikuti setiap barisnya.
+
+00:00:17.220 --> 00:00:21.800
+Yang lainnya tidak ada sampai seseorang meng-e-klik grafik atau mengubah filter, lalu ia menghitung ulang seketika itu juga.
+
+00:00:22.440 --> 00:00:28.320
+Selamat datang di podcast M365FM, tempat kami menjelajahi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:28.320 --> 00:00:33.860
+Hari ini kita akan mengulas kolom kalkulasi dan ukuran, dua cara untuk membuat angka di Power BI.
+
+00:00:34.460 --> 00:00:39.140
+Ada satu pertanyaan sederhana yang membuat pilihannya menjadi jelas dan pada akhirnya Anda akan menggunakannya tambah berpikir panjang.
+
+00:00:40.000 --> 00:00:42.120
+Apa yang sebenarnya dilakukan Power BI saat Anda menge-klik?
+
+00:00:42.440 --> 00:00:46.020
+Sebelum kita masuk ke pilihannya, ada baiknya melihat apa yang dilakukan Power BI di balik layar.
+
+00:00:46.340 --> 00:00:51.580
+Anda mengarahkannya ke suatu data, mungkin file Excel atau basis data, lalu ia memuat data tersebut ke dalam sesuatu yang disebut model.
+
+00:00:51.800 --> 00:00:53.920
+Model hanyalah sekumpulan tabel yang tersimpan di dalam memori.
+
+00:00:54.260 --> 00:00:57.920
+Tabel terdiri dari baris dan kolom persis seperti lembar kerja yang sudah Anda kenal.
+
+00:00:58.320 --> 00:01:04.860
+Setiap kolom berisi satu jenis data seperti tanggal, kota, atau jumlah penjualan, dan setiap baris adalah satu catatan seperti satu catatan seperti satu transaksi penjualan.
+
+00:01:04.980 --> 00:01:09.240
+Setelah data ada di dalam model, Anda menarik kolom ke grafik dan Power BI membuatkan gambar untuk Anda.
+
+00:01:09.960 --> 00:01:14.220
+Bagian itu terasa sederhana dan memang begitu sampai Anda membutuhkan angka yang belum ada di data Anda.
+
+00:01:14.640 --> 00:01:16.980
+Mungkin Anda menginginkan profit sementara Anda hanya memiliki data pendapatan, ya?
+
+00:01:17.160 --> 00:01:19.860
+Mungkin Anda menginginkan data penjualan tahun depan sementara Anda hanya punya data-data.
+
+00:01:20.060 --> 00:01:21.740
+Saat itulah Anda membuat kalkulasi sendiri.
+
+00:01:22.020 --> 00:01:24.760
+Dan Power BI memberi Anda dua alat yang sangat berbeda untuk tugas tersebut.
+
+00:01:24.760 --> 00:01:30.540
+Kedua alat menggunakan bahasa rumus yang sama bernama DAX, dan nama itu patut diketahui karena muncul di mana-mana dalam dunia Microsoft.
+
+00:01:31.180 --> 00:01:35.780
+DAX sangat mirip dengan rumus Excel yang mungkin pernah Anda tulis dengan penjumlahan, rata-rata, dan matematika sederhana.
+
+00:01:36.240 --> 00:01:40.840
+Bahasa ini dilengkapi dengan pustaka berisi lebih dari 200 fungsi, jadi bahasanya sendiri bukanlah bagian yang sulit.
+
+00:01:40.920 --> 00:01:43.700
+Nanti untuk mengatakan apa yang dipertaruhkan di sini, karena ini bukan sekadar poin akademis.
+
+00:01:43.700 --> 00:01:49.040
+Laporan yang butuh 10 detik untuk terbuka akan terasa rusak bagi pengguna, meskipun semua angka di dalamnya benar.
+
+00:01:49.580 --> 00:01:55.040
+Laporan yang terbuka instan namun menunjukkan persentase yang sedikit salah jauh lebih buruk, karena tidak ada yang mempertanyakan angka yang terlihat masuk akal.
+
+00:01:55.300 --> 00:02:00.200
+Jadi keputusan kecil ini terletak tepat di bawah dua hal yang digunakan orang untuk menilai laporan Anda, yaitu kecepatan kepercayaan.
+
+00:02:00.540 --> 00:02:05.460
+Bagian tersulitnya adalah Power BI memberikan Anda dua alat yang terlihat mirip, namun memiliki cara kerja yang sangat berbeda.
+
+00:02:05.460 --> 00:02:11.420
+Memilih alat yang salah adalah penyebab paling umum seorang pemula berakhir dengan laporan yang lambat atau lebih buruk lagi, angka yang salah secara diam-diam.
+
+00:02:11.740 --> 00:02:14.800
+Itulah pilihan di hadapan Anda, dan Anda akan menentukannya di setiap laporan yang Anda buat.
+
+00:02:15.500 --> 00:02:17.260
+Apa itu kolom terhitung, calculated column yang sebenarnya?
+
+00:02:17.720 --> 00:02:21.160
+Kolom terhitung lebih mudah dibayangkan karena cara kerjanya seperti kolom di lembar kerja spreadsheet.
+
+00:02:21.160 --> 00:02:26.420
+Anda mengambil tabel yang sudah ada, menambahkan kolom baru ke dalamnya, dan menulis satu rumus yang berjalan di setiap baris.
+
+00:02:26.720 --> 00:02:29.860
+Katakanlah Anda memiliki tabel penjualan dengan kolom jumlah penjualan dan kolom total biaya.
+
+00:02:30.320 --> 00:02:33.020
+Anda menambahkan kolom margin kotor yang mengurangi biaya dari penjualan.
+
+00:02:33.020 --> 00:02:36.520
+Setiap baris mendapatkan jawabannya sendiri dan jawaban itu menetap di baris tersebut selamat.
+
+00:02:36.900 --> 00:02:39.540
+Microsoft menggunakan contoh sederhana dalam dokumentasi mereka sendiri.
+
+00:02:40.420 --> 00:02:45.580
+Seorang manajer pengiriman memiliki tabel geografi dengan kolom kota dan negara bagian terpisah, lalu dia ingin menggabungkannya menjadi satu bidang.
+
+00:02:45.580 --> 00:02:51.160
+Dia menambahkan kolom terhitung yang menyatukan kota dan negara bagian tersebut, sehingga bidang itu sekarang bisa diletakkan di peta seperti yang lainnya.
+
+00:02:51.620 --> 00:02:54.880
+Kota dan negara bagian tetap terkunci di baris yang sama yang memang sesuai dengan kebutuhannya.
+
+00:02:55.400 --> 00:02:56.900
+Satu detail mengubah segalanya di kemudian hari.
+
+00:02:57.260 --> 00:02:59.480
+Kolom terhitung tidak dihitung saat Anda melihat laporan.
+
+00:02:59.480 --> 00:03:03.080
+Kolom ini dihitung sekali saat data diperbarui, lalu disimpan di dalam model Anda.
+
+00:03:03.800 --> 00:03:07.300
+Penyimpanan itulah alasan mengapa kolom terhitung instan saat dilihat tetapi mahal untuk disimpan.
+
+00:03:07.760 --> 00:03:12.180
+Setiap kolom yang Anda tambahkan memakan raw memori dan tetap di sana terlepas dari apakah ada yang menggunakannya atau tidak.
+
+00:03:12.180 --> 00:03:13.580
+Ada konsekuensi kedua juga.
+
+00:03:14.200 --> 00:03:18.240
+Nilai yang tersimpan tidak berubah saat seseorang menggabungkuk filter karena sudah ditentukan selama proses pembaruan.
+
+00:03:19.160 --> 00:03:22.480
+Persentase yang dibuat dengan cara ini hanya akan dia membeku tidak peduli apa yang dilakukan oleh pelihat.
+
+00:03:23.000 --> 00:03:25.980
+Dan kualitas beku itu adalah fitur dalam berapa kasus dan jebakan dalam kasus lain.
+
+00:03:26.320 --> 00:03:27.900
+Nanti kita akan melihat tepat di mana itu bisa merugikan.
+
+00:03:27.900 --> 00:03:34.460
+Satu hal lagi yang bisa dilakukan kolom terhitung sering membuat orang tidak menyadari manfaatnya karena kolom terhitung tahu, barisnya sendiri.
+
+00:03:35.320 --> 00:03:38.560
+Kolom ini juga dapat menjangkau hubungan relationship untuk mengambil nilai di tabel terkait.
+
+00:03:38.560 --> 00:03:44.980
+Anda bisa menarik kategori produk ke baris penjualan dan menyimpannya di sana yang membuat kolom terhitung praktis untuk membuat label dan kunci.
+
+00:03:45.900 --> 00:03:49.740
+Ini juga berarti setiap nilai yang tersimpan tersebut harus dihitung ulang saat data berubah di lain waktu.
+
+00:03:50.900 --> 00:03:52.060
+Apa itu ukuran measure yang sebenar?
+
+00:03:52.560 --> 00:03:56.740
+Sebuah ukuran tidak tinggal di dalam baris, ukuran tinggal di dalam grafik dan hanya muncul saat seseorang sedang melihatnya.
+
+00:03:56.740 --> 00:04:01.880
+Anda menulis rumus yang menjumlahkan banyak baris dan hasilnya berubah tergantung pada pilihan penampil.
+
+00:04:02.420 --> 00:04:09.080
+Total penjualan adalah ukuran karena menjumlahkan setiap penjualan dalam irisan data apapun di layar dan nilai rata-rata pesanan adalah ukuran karena alasan yang sama.
+
+00:04:10.480 --> 00:04:14.500
+Contoh dari Microsoft adalah seorang manajer penjualan yang perlu memproyeksikan penjualan tahun depan.
+
+00:04:14.580 --> 00:04:17.740
+Dia memiliki angka tahun lalu dan dia tahu bisnisnya merencanakan kenaikan 6%.
+
+00:04:17.740 --> 00:04:22.340
+Jadi, dia menulis satu ukuran yang menjumlahkan penjualan tahun lalu dan mengalikannya dengan 1,6.
+
+00:04:22.840 --> 00:04:25.720
+Sekarang dia bisa membagi proyeksi itu berdasarkan wilayah produk atau bulan.
+
+00:04:26.380 --> 00:04:27.940
+Dan angkanya terus menyesuaikan dirisip saat.
+
+00:04:28.320 --> 00:04:29.800
+Bagian terakhir itulah inti dari sebuah ukuran.
+
+00:04:30.440 --> 00:04:34.340
+Ukuran dihitung saat seseorang melihat bagian berdasarkan filter apapun yang diterapkan saat itu.
+
+00:04:34.920 --> 00:04:39.080
+Mengklik satu wilayah akan menghitung ulang untuk wilayah tersebut dan menambahkan tahun akan menghitung ulang untuk utang.
+
+00:04:39.400 --> 00:04:40.640
+Tidak ada yang disimpan sebelumnya.
+
+00:04:40.860 --> 00:04:44.400
+Itulah mengapa ukuran tidak memakan memori atau ruang disk seperti kolom kalkulasi.
+
+00:04:44.400 --> 00:04:47.660
+Itu dihitung sesuai permintaan dan hanya untuk irisan yang ada di depan Anda.
+
+00:04:48.120 --> 00:04:50.920
+Ada batasan yang perlu diketahui dan itu menjelaskan kesalahan yang akan kita bahas.
+
+00:04:51.320 --> 00:04:55.660
+Ukuran harus menjumlahkan sesuatu jadi Anda tidak bisa menulisnya hanya untuk menunjuk ke satu sel di satu baris.
+
+00:04:55.820 --> 00:04:59.160
+Ukuran tidak memiliki baris saat ini sebagai tumpuan yang berarti harus selalu meringkas.
+
+00:04:59.660 --> 00:05:02.920
+Itu adalah petunjuk tentang cara kedua alat tersebut berpikir dan itu hal berikutnya yang perlu kita urek.
+
+00:05:03.340 --> 00:05:06.960
+Ukuran memiliki tabel asal dalam model Anda yang sebenarnya hanyalah folder tempat ia muncul.
+
+00:05:07.400 --> 00:05:11.380
+Anda bisa memindahkannya ke tempat yang lebih rapi tanpa merusak apapun dan itu adalah tanda kecil dari sesuatu yang lebih besar.
+
+00:05:11.380 --> 00:05:17.540
+Ukuran tidak terikat pada baris di bawahnya, ukuran terikat pada pertanyaan dan menjawab pertanyaan itu dengan segera setiap kali seseorang bertanya.
+
+00:05:18.240 --> 00:05:20.200
+Perbedaan sebenarnya adalah di mana kalkulasi itu berada.
+
+00:05:20.760 --> 00:05:25.000
+Tiap kalkulasi di Power BI berjalan di dalam konteks tertentu dan hanya ada dua yang perlu Anda ketahui.
+
+00:05:25.660 --> 00:05:28.900
+Yang pertama adalah konteks baris yang berarti baris saat ini tempat rumus berada.
+
+00:05:29.560 --> 00:05:34.520
+Saat Anda menulis kolom kalkulasi, Power BI berjalan menyusuri tabel satu per satu dan memberikan baris tersebut ke rumus Anda.
+
+00:05:34.620 --> 00:05:38.620
+Ia tahu jumlah penjualan untuk baris ini dan biaya untuk baris ini karena ia berada tepat di sana.
+
+00:05:38.620 --> 00:05:43.060
+Yang kedua adalah konteks filter yang berarti irisan data yang telah dipilih oleh penampil.
+
+00:05:43.840 --> 00:05:46.080
+Saat Anda menulis ukuran Power BI tidak memberikan baris apapun,
+
+00:05:46.400 --> 00:05:50.480
+ia memberikan semua yang masih ada di layar setelah filter diterapkan dan rumus Anda meringkas tumpukan tersebut.
+
+00:05:51.220 --> 00:05:54.020
+Ubah filternya, tumpukannya ikut berubah dan jawabannya pun berubah.
+
+00:05:54.540 --> 00:05:58.620
+Perbedaan ini menjelaskan jebakan yang menjerat hampir semua pemula dan patut dipelajari perlahan.
+
+00:05:58.880 --> 00:06:04.440
+Bayangkan Anda membuat persentase margin kotor sebagai kolom kalkulasi dengan membagi margin dengan penjualan setiap baris.
+
+00:06:04.860 --> 00:06:07.940
+Setiap baris mendapatkan persentase yang masuk akal dan terlihat sempurna di tabel.
+
+00:06:07.940 --> 00:06:11.420
+Sekarang Anda mencoba menampilkan rata-rata persentase margin untuk seluruh perusahaan,
+
+00:06:11.480 --> 00:06:13.220
+jadi Anda merata-ratakan semua persentase baris tersebut.
+
+00:06:13.540 --> 00:06:17.620
+Angka yang Anda dapatkan salah dan terlihat sangat masuk akal padahal salah, itulah yang membuatnya berbahaya.
+
+00:06:18.200 --> 00:06:20.500
+Jawaban yang benar sama sekali bukan rata-rata dari persentase.
+
+00:06:21.300 --> 00:06:25.100
+Jawabannya adalah total margin dibagi total penjualan, yang berarti membagi jumlah dengan jumlah.
+
+00:06:25.540 --> 00:06:29.200
+Itu harus berupa ukuran karena bekerja pada seluruh irisan sekaligus bukan baris demi baris.
+
+00:06:29.660 --> 00:06:30.500
+Pegang erat ide tersebut.
+
+00:06:31.040 --> 00:06:34.880
+Bagilah jumlah dengan jumlah karena itu akan menyelamatkan Anda dari kesalahan angka paling umum di power bank.
+
+00:06:35.440 --> 00:06:37.320
+Ada bagian kedua dari hal ini yang sama pentingnya.
+
+00:06:37.940 --> 00:06:43.600
+Filter mengalir antar tabel di model Anda, jadi filter pada tabel produk mencapai tabel penjualan dan mempersempit penjualan juga.
+
+00:06:44.280 --> 00:06:45.720
+Konteks baris tidak berpindah dengan cara itu.
+
+00:06:45.980 --> 00:06:51.180
+Kolom kalkulasi berada di dalam tabelnya sendiri dan tidak bisa melihat nilai yang difilter di tempat lain tanpa usaha ekstra untuk mengambilnya,
+
+00:06:51.300 --> 00:06:55.680
+sedangkan ukuran berada dalam konteks filter dan melihat seluruh model yang difilter dan melihat seluruh model yang difilter.
+
+00:06:55.880 --> 00:07:00.820
+Itulah mengapa ukuran adalah tempat alami bagi apapun yang harus bereaksi terhadap cara laporan digunakan.
+
+00:07:00.820 --> 00:07:03.560
+Di mana masing-masing berada dalam laporan?
+
+00:07:03.560 --> 00:07:08.080
+Sekarang pilihannya menjadi konkret karena setiap alat memiliki tempatnya sendiri di halaman.
+
+00:07:08.740 --> 00:07:12.900
+Kolom kalkulasi berguna kapanpun suatu nilai harus berada di baris dan diperlakukan seperti data.
+
+00:07:13.680 --> 00:07:16.220
+Jika Anda menginginkannya di slicer, itu harus berupa kolom.
+
+00:07:16.340 --> 00:07:19.180
+Begitu juga untuk judul baris, judul kolom, atau sumbu bagian.
+
+00:07:19.180 --> 00:07:23.740
+Mengelompokkan pelanggan ke dalam rentang usia atau produk ke dalam rentang harga juga merupakan pekerjaan kolom karena Anda memberi label pada baris.
+
+00:07:23.840 --> 00:07:27.540
+Begitu pula memberi label pada baris, begitu pula membuat kunci yang menghubungkan dua tabelis, begitu pula membuat kunci yang menghubungkan dua tabel.
+
+00:07:27.880 --> 00:07:31.520
+Ukuran adalah alat yang tepat kapanpun suatu nilai harus berubah saat pengguna mengeklik.
+
+00:07:32.160 --> 00:07:36.320
+Persentase laba pada wilayah terpilih, pertumbuhan pada bulan terpilih, total berjalan, hingga tanggal terpilih.
+
+00:07:37.020 --> 00:07:38.000
+Semua itu adalah ukuran.
+
+00:07:38.400 --> 00:07:41.740
+Semuanya berada di area nilai bagian yang dihitung ulang setiap kali filter berubah.
+
+00:07:41.740 --> 00:07:45.380
+Jadi satu pertanyaan yang menyelesaikannya adalah ini dan Anda bisa mengingatnya terus.
+
+00:07:46.000 --> 00:07:48.000
+Apakah angka ini perlu berubah saat seorang mengeklik filter?
+
+00:07:48.520 --> 00:07:49.980
+Jika jawabannya ya, Anda mengingatkan ukuran.
+
+00:07:50.520 --> 00:07:56.300
+Jika jawabannya tidak dan nilainya harus ada di baris agar bisa diiris atau digunakan sebagai kunci, Anda memerlukan kolom kalkulasi.
+
+00:07:56.860 --> 00:07:57.880
+Dua contoh akan memperjelasnya.
+
+00:07:58.380 --> 00:08:02.160
+Rentang usia adalah kolom kalkulasi karena setiap pelanggan mendapatkan satu rentang dan Anda ingin memfilternya.
+
+00:08:02.940 --> 00:08:06.360
+Persentase margin untuk kuartal yang dipilih adalah ukuran karena nilainya harus berubah mengikuti kuartal.
+
+00:08:06.360 --> 00:08:11.060
+Tabel yang sama, data yang sama, dua alat berbeda, kini pilihan tersebut menjadi keputusan, bukan tebakan.
+
+00:08:13.210 --> 00:08:14.990
+Tagian memori dibalik laporan Anda yang lambat.
+
+00:08:15.510 --> 00:08:18.330
+Tadi saya katakan kolom kalkulasi akan disimpan dan penyimpan itu ada harganya.
+
+00:08:18.810 --> 00:08:22.770
+Inilah bagian yang mengubah pilihan kecil yang rapi menjadi laporan yang berjalan cepat dan lambat.
+
+00:08:23.550 --> 00:08:28.510
+Power BI menyimpan data impor di memori dan menyimpan data tersebut kolom demi kolom, bukan baris demi baris.
+
+00:08:28.670 --> 00:08:31.190
+Terdengar seperti detail teknis tetapi Anda bisa merasakan dampaknya.
+
+00:08:32.150 --> 00:08:36.050
+Menjumlahkan satu kolom hanya membaca kolom itu saja, itulah mengapa total besar muncul dalam sekejap.
+
+00:08:36.110 --> 00:08:39.230
+Kolom kalkulasi berada di memori tersebut sebagai kolom yang disimpan
+
+00:08:39.230 --> 00:08:43.530
+dan panduan Microsoft menyatakan kolom ini tidak terkompresi sebaik kolom yang Anda buat di Power Query.
+
+00:08:44.030 --> 00:08:47.210
+Power Query adalah alat untuk membentuk data Anda sebelum mencapai model.
+
+00:08:47.850 --> 00:08:48.970
+Ada biaya kedua yang tersebutnya di sini.
+
+00:08:49.590 --> 00:08:53.430
+Kolom kalkulasi dihitung setelah semua tabel Power Query dimuat yang memperpanjang waktu pembaruan.
+
+00:08:53.670 --> 00:08:56.790
+Hek, ditagihannya datang dua kali sekali di memori dan sekali dalam hal waktu.
+
+00:08:57.870 --> 00:09:04.050
+Untuk mendapat gambaran skala, Microsoft mengatakan Power BI dapat mengompresi sekitar 10 GB data sumber menjadi sekitar 1 GB
+
+00:09:04.050 --> 00:09:06.150
+dan ada penghematan lagi saat ditulis ke disk.
+
+00:09:06.950 --> 00:09:10.110
+Kompresi itulah alasan model kecil dapat menampung jumlah data yang mengejutkan.
+
+00:09:10.650 --> 00:09:13.690
+Namun, setiap kolom kalkulasi yang Anda tambahkan akan mengurangi penghematan tersebut
+
+00:09:13.690 --> 00:09:16.470
+dan jumlahnya bertambah secara diam-diam karena tidak ada yang menyandari satu kolom tabel.
+
+00:09:16.550 --> 00:09:19.130
+Ada satu lagi batasan jujur dan itu bergantung pada bagaimana data rup.
+
+00:09:19.550 --> 00:09:22.450
+Jika model Anda mengimpor datanya, kolom kalkulasi akan disimpan.
+
+00:09:22.830 --> 00:09:25.350
+Jika model Anda melakukan query data secara langsung,
+
+00:09:25.690 --> 00:09:28.090
+kolom tersebut tidak disimpan sama sekali dan dihitung saat query
+
+00:09:28.090 --> 00:09:30.690
+yang mengalihkan biaya dari pembaruan ke klik tanpa menghilangkannya.
+
+00:09:30.690 --> 00:09:33.850
+Bagaimanapun, kolom tersebut bekerja di suatu tempat
+
+00:09:33.850 --> 00:09:36.790
+dan pekerjaan itulah sebabnya pembuat model berhati-hati dalam menambahkannya.
+
+00:09:37.210 --> 00:09:39.450
+Aturan praktis di sini cukup sederhana untuk diikuti oleh pemula.
+
+00:09:39.970 --> 00:09:42.310
+Jika kolom baru adalah perhitungan baris demi baris yang sederhana
+
+00:09:42.310 --> 00:09:44.330
+dan Anda bisa membuatnya di power query, buatlah di sana.
+
+00:09:45.350 --> 00:09:48.390
+Simpan kolom kalkulasi DAX Anda untuk pekerjaan yang benar-benar membutuhkannya
+
+00:09:48.390 --> 00:09:51.310
+seperti nilai yang harus menggabungkan dua tabel atau mengurutkan baris ke dalam kolom.
+
+00:09:51.730 --> 00:09:53.370
+Jika perhitungannya hanyalah sebuah ringkasan,
+
+00:09:53.370 --> 00:09:56.870
+gunakanlah measure karena measure tidak membebani Anda sampai saat seseorang melihatnya.
+
+00:09:57.790 --> 00:09:58.570
+Tidak ada alat yang beratih.
+
+00:09:58.570 --> 00:10:01.150
+Keduanya hanya menagih Anda di waktu yang berbeda
+
+00:10:01.150 --> 00:10:04.290
+di mana kolom tersimpan menagih saat refresh dan measure langsung menagih saat diklik.
+
+00:10:05.790 --> 00:10:06.970
+Kesalahan yang terus dilakukan pemula.
+
+00:10:07.470 --> 00:10:09.970
+Setelah mekanismenya jelas, kesalahan-kesalahan tersebut mulai terlihat familial.
+
+00:10:10.370 --> 00:10:13.790
+Empat diantaranya muncul berulang kali dan masing-masing terasa menggoda karena suatu alasan.
+
+00:10:14.350 --> 00:10:17.550
+Yang pertama adalah membuat persentase sebagai kolom kalkulasi lalu merata-ratakannya.
+
+00:10:18.070 --> 00:10:21.870
+Yang paling nyakitkan, karena laporannya tidak crash dan tidak terlihat rusak.
+
+00:10:22.570 --> 00:10:24.850
+Laporan hanya menampilkan angka yang salah dengan sangat yakin
+
+00:10:24.850 --> 00:10:27.890
+dan solusinya adalah aturan sebelumnya, yaitu membagi total dengan total.
+
+00:10:28.570 --> 00:10:32.030
+Yang kedua adalah menumpuk kolom kalkulasi perantara untuk mencapai satu jawaban akhir.
+
+00:10:32.730 --> 00:10:35.150
+Anda membuat satu kolom, lalu kolom kedua yang menggunakan yang pertama,
+
+00:10:35.310 --> 00:10:37.730
+lalu kolom ketiga yang menggunakan yang kedua, dan itu terasa terorganisasi.
+
+00:10:38.390 --> 00:10:39.930
+Selama pengembangan, hal ini bahkan bisa menurut dikit.
+
+00:10:40.290 --> 00:10:43.250
+Namun, setiap langkah dalam rantai tersebut disimpan di memori dan tetap di sana
+
+00:10:43.250 --> 00:10:45.570
+sehingga tangga kecil yang rapi itu diam-diam membengkakkan model Anda.
+
+00:10:45.950 --> 00:10:49.470
+Satu measure dengan beberapa variable bisa melakukan pekerjaan yang sama tanpa menyimpan apapun.
+
+00:10:49.950 --> 00:10:53.490
+Yang ketiga adalah memilih kolom kalkulasi padahal measure bisa melakukan pekerjaan yang sama secara langsung.
+
+00:10:53.490 --> 00:10:56.950
+Mengalihkan kuantitas dengan harga di setiap baris adalah kasus klasik.
+
+00:10:57.310 --> 00:10:59.690
+Anda bisa membuatnya sebagai kolom, lalu menjumlahkannya,
+
+00:10:59.830 --> 00:11:03.270
+atau membiarkan satu measure melakukan perkalian saat ia menjumlahkan, dan pilihan kedua membuat menit.
+
+00:11:03.710 --> 00:11:06.250
+Yang keempat adalah mengharapkan kolom tersimpan bereaksi terhadap slicer.
+
+00:11:06.990 --> 00:11:10.970
+Kolom kalkulasi ditentukan saat refresh, jadi ia tidak akan berubah saat pengguna mengeklik, dan itu bukan bug.
+
+00:11:11.330 --> 00:11:14.870
+Itulah definisi alat tersebut, dan setelah Anda melihatnya seperti itu, Anda akan berhenti melawan.
+
+00:11:14.870 --> 00:11:18.330
+Catan jujur sebelum kita lanjut, karena disinilah pemula cenderung terlalu mengoreksi.
+
+00:11:18.970 --> 00:11:21.170
+Kolom kalkulasi tidak salah dan tidak ketinggalan zaman.
+
+00:11:22.090 --> 00:11:26.530
+Ada pekerjaan yang hanya bisa dilakukan olehnya, dan saat model Anda kecil, argumen memori hampir tidak berpengaruh.
+
+00:11:26.870 --> 00:11:29.670
+Jika kolom kalkulasi adalah hal yang membuat laporan Anda berfungsi hari ini,
+
+00:11:29.810 --> 00:11:32.590
+gunakanlah dan ketahuilah biayanya agar pilihan tetap di tangan Anda.
+
+00:11:33.470 --> 00:11:36.310
+Di mana hal ini ditempatkan Microsoft 365 Fabric dan Azure.
+
+00:11:36.930 --> 00:11:41.110
+Sebelum kita akhiri, penting untuk melihat di mana pilihan kecil ini berada dalam gambaran Microsoft yang lebih besar.
+
+00:11:41.110 --> 00:11:47.070
+Power BI adalah alat pelaporan Microsoft, dan saat ini ia berada di dalam Microsoft Fabric, platform data perusahaan yang lebih luas.
+
+00:11:48.050 --> 00:11:51.090
+Dua alat yang sedang Anda pelajari ini, muncul di seluruh ekosistemnya,
+
+00:11:51.410 --> 00:11:56.810
+yakni di Power BI Desktop, di Excel melalui fitur bernama Power Pivot, dan di produk server bernama Analysis Services.
+
+00:11:57.850 --> 00:12:01.050
+Jadi, ini bukan sekadar trik Power BI yang Anda pelajari lalu dilupakan mengainkan Galsberg.
+
+00:12:01.390 --> 00:12:05.570
+Azure hadir dalam alur ini sebagai tempat data Anda biasanya tersimpan sebelum mencapai laporan Anda.
+
+00:12:06.270 --> 00:12:09.550
+Angka penjualan Anda mungkin tersimpan di basis data Azure, di file SharePoint,
+
+00:12:09.550 --> 00:12:11.630
+atau di sistem yang berjalan di kantor Anda sendiri.
+
+00:12:12.350 --> 00:12:15.590
+Fabric adalah lapisan yang menyatukannya dan menjadi wadah bagi model yang Anda bangun di atas.
+
+00:12:15.750 --> 00:12:17.170
+Satu batasan jujur sebagai penutup.
+
+00:12:17.510 --> 00:12:21.090
+Model yang lebih besar membutuhkan kapasitas yang lebih besar, dan kapasitas adalah mesin penggerak segalanya.
+
+00:12:21.850 --> 00:12:25.090
+Kapasitas bersama Microsoft dapat menampung model hingga sekitar 1 GB,
+
+00:12:25.490 --> 00:12:27.730
+dan yang lebih besar membutuhkan kapasitas premium atau fabrik.
+
+00:12:28.330 --> 00:12:31.710
+Itu adalah keputusan biaya, yang biasa menjadi ranah mereka yang lebih senia, jadi Anda belum perlu.
+
+00:12:32.130 --> 00:12:32.950
+Mengkhawatirkannya sekarang.
+
+00:12:32.950 --> 00:12:38.950
+Anda hanya perlu tahu bahwa kebiasaan kecil memilih antara kolom atau measure adalah kunci agar model Anda tetap ramping saat berkembang.
+
+00:12:39.550 --> 00:12:42.190
+Ringkasan singkat dan satu pertanyaan untuk Anda.
+
+00:12:42.810 --> 00:12:43.850
+Versi singkatnya seperti ini.
+
+00:12:44.690 --> 00:12:50.330
+Kolom terhitung-dihitung baris demi baris disimpan di dalam model dan siap untuk diiris, difilter, atau diurutkan.
+
+00:12:51.010 --> 00:12:55.910
+Measure dihitung saat seseorang melihat bagan mengikuti setiap filter yang diterapkan pengguna dan tidak memakan sumber daya hingga saat itu tiba.
+
+00:12:56.310 --> 00:13:00.210
+Yang satu adalah nilai untuk sebuah baris, sementara yang lainnya adalah nilai untuk sebuah tampilan.
+
+00:13:01.210 --> 00:13:03.130
+Aturan yang harus Anda ingat adalah aturan yang tadi.
+
+00:13:03.130 --> 00:13:06.990
+Jika sebuah angka perlu berubah saat seseorang mengeklik filter, maka ia harus menjadi measured.
+
+00:13:07.350 --> 00:13:11.050
+Dan jika angka tersebut harus berada di baris agar bisa diiris, maka ia harus menjadi kolom terhitung.
+
+00:13:11.630 --> 00:13:15.030
+Aturan tunggal itu akan menghemat waktu Anda lebih banyak daripada tutorial rumus apapun.
+
+00:13:15.330 --> 00:13:16.370
+Sekarang giliran pertanyaan saya untuk itu.
+
+00:13:16.710 --> 00:13:19.690
+Mana dari keduanya yang sering Anda gunakan tanpa benar-benar memikirkannya?
+
+00:13:20.070 --> 00:13:23.350
+Dan apakah itu pernah membuat laporan Anda lambat atau membuat Anda harus menjelaskan angka tersebut doang?
+
+00:13:23.850 --> 00:13:25.970
+Beritahu saya di kolom komentar kanan di sana pelajarannya sebenarnya.
+
+00:13:25.970 --> 00:13:32.810
+Jika ini membuat topik tersebut terasa tidak terlalu menakutkan, berlanggananlah ke M365FM untuk menguasai alat dan pola pikir yang untuk masa depan pekerjaan.

@@ -1,0 +1,583 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.100
+Witaj w podcaście M365FM, gdzie odkrywamy ludzi, idee i technologie kształtujące przyszłość pracy.
+
+00:00:06.380 --> 00:00:08.220
+Dwa sposoby na zrobienie tego samego.
+
+00:00:08.480 --> 00:00:13.320
+Możesz uzyskać tę samą liczbę w Power BI na dwa różne sposoby, a zachowują się one zupełnie inaczej.
+
+00:00:13.620 --> 00:00:17.180
+Jeden z nich jest zapisywany w modelu danych i przypisany do każdego wiersza.
+
+00:00:17.440 --> 00:00:22.400
+Drugi nie istnieje, dopóki ktoś nie kliknie wykresu lub nie zmieni filtra, wtedy przelicza się na miejscu.
+
+00:00:22.620 --> 00:00:29.240
+Witaj w podcaście M365FM, gdzie odkrywamy ludzi, idee i technologie kształtujące przyszłość pracy.
+
+00:00:29.240 --> 00:00:34.260
+Dziś omawiamy kolumny obliczeniowe i miary, czyli dwa sposoby tworzenia liczb w Power BI.
+
+00:00:34.460 --> 00:00:39.560
+Istnieje jedno proste pytanie, które ułatwia wybór, a z czasem będziesz je stosować bez namysłu.
+
+00:00:39.800 --> 00:00:42.120
+Co tak naprawdę robi Power BI, gdy klikasz?
+
+00:00:42.320 --> 00:00:46.300
+Zanim przejdziemy do wyboru, warto zobaczyć, co Power BI robi pod Twoimi palcami.
+
+00:00:46.540 --> 00:00:51.320
+Wskazujesz dane, może plik Excel lub bazę danych, a program ładuje je do czegoś, co nazywamy modelem.
+
+00:00:51.580 --> 00:00:54.120
+Model to po prostu zestaw tabel znajdujących się w pamięci.
+
+00:00:54.320 --> 00:00:58.280
+Tabela składa się z wierszy i kolumn, dokładnie jak w arkuszu kalkulacyjnym, który już znasz.
+
+00:00:58.280 --> 00:01:03.660
+Każda kolumna zawiera jeden rodzaj danych, jak datę, miasto lub kwotę sprzedaży, a każdy wiersz to jeden rekord, na przykład.
+
+00:01:04.000 --> 00:01:05.000
+Pojedyncza sprzedaż.
+
+00:01:05.200 --> 00:01:09.720
+Gdy dane są już w modelu, przeciągasz pola na wykres, a Power BI rysuje dla Ciebie obraz.
+
+00:01:09.860 --> 00:01:14.340
+To wydaje się proste i takie jest, dopóki nie potrzebujesz liczby, której jeszcze nie ma w Twoich danych.
+
+00:01:14.580 --> 00:01:17.020
+Może potrzebujesz zysku, a masz tylko przychód i koszty.
+
+00:01:17.240 --> 00:01:20.200
+Może chcesz poznać sprzedaż za rok, a masz tylko dane z zeszłego roku.
+
+00:01:20.200 --> 00:01:24.620
+Wtedy tworzysz własne obliczenie, a Power BI daje Ci do tego dwa zupełnie różne narzędzia.
+
+00:01:24.800 --> 00:01:30.760
+Oba narzędzia używają tego samego języka formuł o nazwie DAX, którą warto znać, bo pojawia się wszędzie w świecie Microsoft.
+
+00:01:31.100 --> 00:01:36.140
+DAX przypomina formuły Excela, które pewnie już znasz, z sumami, średnimi i prostą matematyką.
+
+00:01:36.380 --> 00:01:40.400
+Oferuje bibliotekę ponad 200 funkcji, więc sam język nie jest tu najtrudniejszy.
+
+00:01:40.660 --> 00:01:44.080
+Warto podkreślić, o co toczy się gra, bo to nie jest kwestia czysto akademicka.
+
+00:01:44.280 --> 00:01:49.420
+Raport, który ładuje się 10 sekund, wydaje się zepsuty w oczach użytkownika, nawet jeśli każda liczba jest poprawna.
+
+00:01:49.420 --> 00:01:55.340
+Raport, który otwiera się natychmiast, ale pokazuje nieco błędny procent, jest gorszy, bo nikt nie podważa liczby, która wygląda wiarygodnie.
+
+00:01:55.480 --> 00:02:00.320
+Ta mała decyzja leży u podstaw dwóch rzeczy, po których ludzie oceniają Twój raport, szybkości i zaufania.
+
+00:02:00.500 --> 00:02:05.660
+Trudność polega na tym, że Power BI oferuje dwa narzędzia, które wyglądają na wymienne, a działają zupełnie inaczej.
+
+00:02:05.880 --> 00:02:11.560
+Wybranie niewłaściwego to najczęstszy powód, dla którego początkujący otrzymują raport, który działa wolno lub co gorsza pokazuje błędne dane.
+
+00:02:11.780 --> 00:02:15.200
+Taki wybór stoi przed Tobą i będziesz go dokonywać w każdym tworzonym raporcie.
+
+00:02:15.200 --> 00:02:17.340
+Czym właściwie jest kolumna obliczeniowa?
+
+00:02:17.340 --> 00:02:21.480
+Kolumnę obliczeniową łatwiej sobie wyobrazić, ponieważ działa jak kolumna w arkuszu kalkulacyjnym.
+
+00:02:21.680 --> 00:02:26.460
+Bierzesz istniejącą tabelę, dodajesz do niej nową kolumnę i wpisujesz jedną formułę, która wykonuje się dla każdego wiersza.
+
+00:02:26.660 --> 00:02:30.280
+Załóżmy, że masz tabelę sprzedaży z kolumną wartości sprzedaży i kolumną kosztów całkowitych.
+
+00:02:30.460 --> 00:02:33.320
+Dodajesz kolumnę marży brutto, która odejmuje koszty od sprzedaży.
+
+00:02:33.520 --> 00:02:36.860
+Każdy wiersz otrzymuje swój własny wynik, który jest do niego na stałe przypisany.
+
+00:02:37.080 --> 00:02:40.260
+Microsoft używa przejrzystego przykładu w swojej własnej dokumentacji.
+
+00:02:40.260 --> 00:02:45.640
+Menedżer wysyłki ma tabelę geograficzną z oddzielnymi kolumnami miasta i stanu i chce je połączyć w jedno pole.
+
+00:02:45.900 --> 00:02:51.060
+Dodaję kolumnę obliczeniową, która łączy miasto ze stanem, dzięki czemu to pole można nanieść na mapę jak każde inne.
+
+00:02:51.320 --> 00:02:54.980
+Miasto i stan pozostają przypisane do tego samego wiersza, co jest dokładnie tym, czego potrzebuje.
+
+00:02:55.180 --> 00:02:57.080
+Jeden szczegół zmienia wszystko w późniejszym czasie.
+
+00:02:57.300 --> 00:03:00.040
+Kolumna obliczeniowa nie jest przeliczana w momencie, gdy przeglądasz raport.
+
+00:03:00.240 --> 00:03:03.640
+Jest obliczana raz podczas odświeżania danych, a następnie przechowywana w Twoim modelu.
+
+00:03:03.640 --> 00:03:07.720
+To przechowywanie sprawia, że kolumna obliczeniowa jest błyskawiczna w odczycie, ale kosztowna w utrzymaniu.
+
+00:03:07.860 --> 00:03:12.240
+Każda dodana kolumna zajmuje miejsce w pamięci i pozostaje tam, niezależnie od tego, czy ktoś jej używa.
+
+00:03:12.400 --> 00:03:14.100
+Istnieje również druga konsekwencja.
+
+00:03:14.340 --> 00:03:18.960
+Zapisana wartość nie zmienia się, gdy ktoś kliknie filtr, ponieważ została ustalona już podczas odświeżania.
+
+00:03:19.140 --> 00:03:22.640
+Procent wyliczony w ten sposób pozostaje niezmienny, bez względu na działania użytkownika.
+
+00:03:22.840 --> 00:03:26.120
+Ta zamrożona natura jest w niektórych przypadkach zaletą, a w innych pułapką.
+
+00:03:26.340 --> 00:03:28.580
+Później zobaczymy dokładnie, kiedy może być kłopotliwa.
+
+00:03:28.580 --> 00:03:35.220
+Jeszcze jedna rzecz, którą potrafi kolumna obliczeniowa, zaskakuje ludzi i jest naprawdę przydatna, ponieważ kolumna obliczeniowa zna swój wiersz.
+
+00:03:35.360 --> 00:03:38.760
+Może również sięgnąć poprzez relacje, aby pobrać wartość z powiązanej tabeli.
+
+00:03:39.020 --> 00:03:45.480
+Możesz przenieść kategorię produktu do wiersza sprzedaży i zapisać ją tam, co czyni kolumny obliczeniowe użytecznymi do tworzenia etykiet i kluczy.
+
+00:03:45.700 --> 00:03:50.660
+Oznacza to również, że każda z tych zapisanych wartości musi zostać przeliczona na nowo przy następnej zmianie danych.
+
+00:03:50.880 --> 00:03:52.100
+Czym właściwie jest miara?
+
+00:03:52.320 --> 00:03:53.760
+Miara nie mieszka w wierszu.
+
+00:03:53.960 --> 00:03:57.140
+Istnieje ona na wykresie i pojawia się tylko wtedy, gdy ktoś na nią patrzy.
+
+00:03:57.140 --> 00:04:02.400
+Piszesz formułę, która sumuje wartości w wielu wierszach, a wynik zmienia się w zależności od wyboru użytkownika.
+
+00:04:02.680 --> 00:04:06.740
+Suma sprzedaży to miara, ponieważ sumuje każdą sprzedaż w wycinku danych na ekranie.
+
+00:04:06.880 --> 00:04:09.620
+Średnia wartość zamówienia jest miarą z tego samego powodu.
+
+00:04:09.900 --> 00:04:14.320
+Przykład Microsoftu dotyczy kierownika sprzedaży, który musi prognozować sprzedaż na przyszły rok.
+
+00:04:14.500 --> 00:04:18.120
+Ma wyniki z zeszłego roku i wie, że firma planuje wzrost o 6%.
+
+00:04:18.120 --> 00:04:22.340
+Tworzy więc jedną miarę, która sumuje zeszłoroczną sprzedaż i mnoży ją przez 1,06.
+
+00:04:22.340 --> 00:04:28.220
+Teraz może filtrować te prognozy według regionu, produktu lub miesiąca, a wynik aktualizuje się za każdym razem.
+
+00:04:28.500 --> 00:04:30.240
+Właśnie to jest głównym celem miary.
+
+00:04:30.520 --> 00:04:34.900
+Jest obliczana w momencie, gdy ktoś patrzy na wykres w oparciu o aktywne w danej chwili filtry.
+
+00:04:35.080 --> 00:04:39.220
+Kliknięcie regionu przelicza ją dla tego regionu, a dodanie roku przelicza ją dla tego roku.
+
+00:04:39.480 --> 00:04:44.660
+Nic nie jest przechowywany z góry, dlatego miara nie zajmuje pamięci ani miejsca na dysku, jak kolumna obliczeniowa.
+
+00:04:44.900 --> 00:04:47.840
+Jest wyliczana na żądanie i tylko dla wycinka danych, który widzisz.
+
+00:04:47.840 --> 00:04:51.340
+Warto znać pewne ograniczenie, które wyjaśnia błąd, do którego wrócimy później.
+
+00:04:51.540 --> 00:04:55.680
+Miara musi coś sumować, więc nie możesz napisać takiej, która wskazuje tylko na jedną komórkę w jednym wierszu.
+
+00:04:55.880 --> 00:04:59.440
+Nie ma ona bieżącego wiersza, na którym mogłaby bazować, więc zawsze musi podsumowywać.
+
+00:04:59.560 --> 00:05:03.240
+To wskazówka, jak działają te dwa narzędzia i jest to kolejna rzecz, którą musimy wyjaśnić.
+
+00:05:03.400 --> 00:05:07.280
+Miara ma tabelę nadrzędną w modelu, która jest w rzeczywistości tylko folderem, w którym się wyświetla.
+
+00:05:07.480 --> 00:05:11.560
+Możesz ją przenieść w bardziej uporządkowane miejsce bez psucia czegokolwiek, co jest sygnałem czegoś większego.
+
+00:05:11.560 --> 00:05:17.940
+Miara nie jest powiązana z wierszami pod nią. Jest powiązana z pytaniem i odpowiada na nie od nowa za każdym razem, gdy ktoś zapyta.
+
+00:05:18.080 --> 00:05:20.760
+Prawdziwa różnica polega na tym, gdzie odbywa się obliczenie.
+
+00:05:21.000 --> 00:05:25.160
+Każde obliczenie w Power BI działa w określonym kontekście, a musisz znać tylko dwa.
+
+00:05:25.380 --> 00:05:29.360
+Pierwszym jest kontekst wiersza, czyli bieżący wiersz, na którym znajduje się formuła.
+
+00:05:29.560 --> 00:05:34.740
+Gdy tworzysz kolumnę obliczeniową, Power BI przechodzi przez tabelę wiersz po wierszu i przekazuje formule dany wiersz.
+
+00:05:34.940 --> 00:05:39.360
+Zna kwotę sprzedaży dla tego wiersza i koszt dla tego wiersza, ponieważ stoi dokładnie w tym miejscu.
+
+00:05:39.360 --> 00:05:43.260
+Drugim jest kontekst filtru, czyli wycinek danych wybrany przez użytkownika.
+
+00:05:43.520 --> 00:05:46.240
+Gdy tworzysz miarę, Power BI w ogóle nie przekazuje jej wiersza.
+
+00:05:46.460 --> 00:05:51.180
+Przekazuje jej wszystko, co pozostało na ekranie po zastosowaniu filtrów, a twoja formuła sumuje ten zbiór.
+
+00:05:51.400 --> 00:05:54.220
+Zmień filtr, a stos się zmieni, a wraz z nim wynik.
+
+00:05:54.340 --> 00:05:59.080
+Ta różnica tłumaczy pułapkę, w którą wpada prawie każdy początkujący i warto się przy niej zatrzymać.
+
+00:05:59.260 --> 00:06:04.700
+Wyobraź sobie, że tworzysz procent marży brutto jako kolumnę obliczeniową, dzieląc marżę przez sprzedaż w każdym wierszu.
+
+00:06:04.900 --> 00:06:08.160
+Każdy wiersz otrzymuje sensowny procent i wygląda to idealnie w tabeli.
+
+00:06:08.160 --> 00:06:13.400
+Teraz próbujesz pokazać średni procent marży dla całej firmy, więc wyciągasz średnią z tych wszystkich procentów z wierszy.
+
+00:06:13.580 --> 00:06:17.900
+Otrzymana liczba jest błędna, a mimo to wygląda zupełnie sensownie, co czyni ją niebezpieczną.
+
+00:06:18.080 --> 00:06:21.040
+Poprawny wynik wcale nie jest średnią z wartości procentowych.
+
+00:06:21.220 --> 00:06:25.340
+To łączna marża podzielona przez łączną sprzedaż, co oznacza dzielenie sumy przez sumę.
+
+00:06:25.560 --> 00:06:29.400
+Musi to być miara, ponieważ działa na całym wycinku danych jednocześnie, a nie wiersz po wierszu.
+
+00:06:29.740 --> 00:06:31.060
+Zapamiętaj tę jedną ideę.
+
+00:06:31.260 --> 00:06:35.040
+Dziel sumę przez sumę, ponieważ uchroni Cię to przed najczęstszym błędnym wynikiem w Power BI.
+
+00:06:35.040 --> 00:06:38.000
+Jest jeszcze druga połowa tego zagadnienia, która jest równie ważna.
+
+00:06:38.200 --> 00:06:44.020
+Filtry przepływają między tabelami w modelu, więc filtr na tabeli produktów dociera do tabeli sprzedaży i zawęża również sprzedaż.
+
+00:06:44.180 --> 00:06:46.180
+Kontekst wiersza nie przemieszcza się w ten sposób.
+
+00:06:46.420 --> 00:06:51.900
+Kolumna obliczeniowa znajduje się wewnątrz swojej tabeli i nie widzi przefiltrowanych wartości, gdzie indziej bez dodatkowej pracy,
+
+00:06:52.060 --> 00:06:55.660
+podczas gdy miara znajduje się w kontekście filtra i widzi cały przefiltrowany model.
+
+00:06:55.940 --> 00:07:01.040
+Dlatego miary są naturalnym miejscem dla wszystkiego, co musi reagować na sposób używania raportu.
+
+00:07:01.040 --> 00:07:04.140
+Gdzie każdy z nich znajduje swoje miejsce w raporcie.
+
+00:07:04.360 --> 00:07:08.360
+Teraz wybór staje się konkretny, ponieważ każde narzędzie ma swoje miejsce na stronie.
+
+00:07:08.580 --> 00:07:13.480
+Kolumna obliczeniowa jest przydatna zawsze wtedy, gdy wartość musi znajdować się w wierszu i być traktowana jak dane.
+
+00:07:13.720 --> 00:07:16.440
+Jeśli chcesz użyć jej w fragmentatorze, musi to być kolumna.
+
+00:07:16.600 --> 00:07:19.700
+To samo dotyczy nagłówka wiersza, nagłówka kolumny lub osi wykresu.
+
+00:07:19.880 --> 00:07:24.060
+Sortowanie klientów według przedziałów wiekowych czy produktów według przedziałów cenowych to również praca dla kolumn,
+
+00:07:24.160 --> 00:07:27.260
+ponieważ etykietujesz wiersze, podobnie jak tworzenie klucza łączącego dwie tabele.
+
+00:07:27.260 --> 00:07:31.960
+Miara jest właściwym narzędziem zawsze wtedy, gdy wartość musi się zmieniać w miarę klikania przez użytkownika.
+
+00:07:32.140 --> 00:07:36.980
+Procent zysku dla wybranego regionu, wzrost w wybranym miesiącu, suma bieżąca do wybranej daty.
+
+00:07:37.160 --> 00:07:38.100
+Wszystko to są miary.
+
+00:07:38.360 --> 00:07:42.060
+Znajdują się w obszarze wartości wykresu, który jest przeliczany przy każdej zmianie filtra.
+
+00:07:42.280 --> 00:07:45.780
+Zatem jedyne pytanie, które rozstrzyga sprawę, brzmi tak i możesz je zawsze mieć przy sobie.
+
+00:07:45.960 --> 00:07:48.340
+Czy ta liczba musi się zmieniać, gdy ktoś kliknie filtr?
+
+00:07:48.500 --> 00:07:50.460
+Jeśli odpowiedź brzmi tak, potrzebujesz miary.
+
+00:07:50.460 --> 00:07:56.500
+Jeśli odpowiedź brzmi nie, a wartość musi znajdować się w wierszu, aby można ją było filtrować lub użyć jako klucza, potrzebujesz kolumny obliczeniowej.
+
+00:07:56.700 --> 00:07:58.200
+Dwa przykłady wyjaśnią to najlepiej.
+
+00:07:58.400 --> 00:08:02.760
+Przedziały wiekowe to kolumna obliczeniowa, ponieważ każdy klient otrzymuje jeden przedział i chcesz móc według niego filtrować.
+
+00:08:02.900 --> 00:08:06.720
+Procent marży dla wybranego kwartału to miara, ponieważ musi się ona zmieniać wraz z kwartałem.
+
+00:08:06.880 --> 00:08:11.720
+Ta sama tabela, te same dane, dwa różne narzędzia, teraz wybór jest decyzją, a nie zgadywaniem.
+
+00:08:12.240 --> 00:08:15.140
+Koszt pamięci stojący za Twoim wolno działającym raportem.
+
+00:08:15.140 --> 00:08:18.980
+Wcześniej wspomniałem, że kolumna obliczeniowa jest przechowywana, a to przechowywanie ma swoją cenę.
+
+00:08:19.100 --> 00:08:23.580
+To właśnie sprawia, że prosty wybór zmienia się w raport, który albo działa błyskawicznie, albo się wlecze.
+
+00:08:23.760 --> 00:08:28.360
+Power B przechowuje zaimportowane dane w pamięci, robiąc to kolumnami, a nie wierszami.
+
+00:08:28.640 --> 00:08:31.580
+Brzmi to jak szczegół techniczny, ale efekt jest odczuwalny.
+
+00:08:31.820 --> 00:08:36.260
+Sumowanie jednej kolumny wymaga odczytu tylko tej kolumny, dlatego suma pojawia się w mgnieniu oka.
+
+00:08:36.460 --> 00:08:39.300
+Kolumna obliczeniowa zajmuje miejsce w pamięci jako zapisana kolumna,
+
+00:08:39.300 --> 00:08:43.800
+a według wskazówek Microsoftu kolumny te nie kompresują się tak dobrze, jak te stworzone wcześniej w Power Query.
+
+00:08:43.800 --> 00:08:47.740
+Power Query to narzędzie, w którym kształtujesz dane, zanim trafią one do modelu.
+
+00:08:47.880 --> 00:08:49.380
+Kryje się tu również drugi koszt.
+
+00:08:49.560 --> 00:08:54.220
+Kolumny obliczeniowe są tworzone po załadowaniu wszystkich tabel Power Query, co wydłuża czas odświeżania.
+
+00:08:54.460 --> 00:08:57.440
+Rachunek pojawia się więc dwukrotnie, raz w pamięci i raz w czasie.
+
+00:08:57.720 --> 00:09:04.080
+Aby mieć pojęcie o skali, Microsoft podaje, że Power B potrafi skompresować około 10 GB danych źródłowych do 1 GB,
+
+00:09:04.260 --> 00:09:06.700
+a przy zapisie na dysk oszczędności są jeszcze większe.
+
+00:09:06.900 --> 00:09:10.340
+Dzięki tej kompresji mały model może pomieścić zaskakującą ilość danych.
+
+00:09:10.340 --> 00:09:16.200
+Każda dodana kolumna obliczeniowa uszczupla te oszczędności, a ponieważ nikt nie zauważa jednej dodatkowej kolumny, straty sumują się po cichu.
+
+00:09:16.360 --> 00:09:19.540
+Istnieje jeszcze jedno ograniczenie i zależy ono od sposobu połączenia danych.
+
+00:09:19.760 --> 00:09:23.040
+Jeśli Twój model importuje dane, kolumna obliczeniowa jest zapisywana.
+
+00:09:23.260 --> 00:09:31.240
+Jeśli model korzysta z danych na żywo, kolumna nie jest przechowywana, lecz obliczana w momencie zapytania, co przenosi koszt z odświeżania na kliknięcie użytkownika.
+
+00:09:31.460 --> 00:09:36.440
+Tak czy inaczej, kolumna wykonuje pracę, dlatego twórcy modeli uważają na liczbę dodawanych kolumn.
+
+00:09:36.440 --> 00:09:40.120
+Praktyczna zasada jest na tyle prosta, że może ją stosować nawet początkujący.
+
+00:09:40.300 --> 00:09:45.100
+Jeśli nowa kolumna to zwykłe obliczenie wierszowe i możesz stworzyć ją w Power Query, zrób to właśnie tam.
+
+00:09:45.320 --> 00:09:51.440
+Zachowaj kolumny obliczeniowe DAX dla zadań, które ich naprawdę wymagają, takich jak wartość łącząca dwie tabele lub sortująca wiersze w grupy.
+
+00:09:51.640 --> 00:09:57.200
+Gdy obliczenia są w istocie podsumowaniem, sięgnij po miarę, ponieważ miara nic nie kosztuje, dopóki ktoś jej nie wyświetli.
+
+00:09:57.400 --> 00:09:59.140
+Żadne z tych narzędzi nie jest darmowe.
+
+00:09:59.140 --> 00:10:04.800
+Różnią się jedynie momentem wystawienia rachunku, kolumna jest opłacana podczas odświeżania, a miara w momencie kliknięcia.
+
+00:10:05.040 --> 00:10:07.220
+Błędy, które wciąż popełniają początkujący.
+
+00:10:07.400 --> 00:10:10.500
+Gdy mechanika staje się jasna, te błędy zaczynają wydawać się znajome.
+
+00:10:10.700 --> 00:10:13.760
+Cztery z nich powtarzają się ciągle i każdy z nich z jakiegoś powodu kusi.
+
+00:10:13.980 --> 00:10:18.400
+Pierwszym jest tworzenie wartości procentowej jako kolumny obliczeniowej, a następnie wyciąganie z niej średniej.
+
+00:10:18.560 --> 00:10:22.380
+To boli najbardziej, ponieważ raport nie ulega awarii i nie wygląda na zepsuty.
+
+00:10:22.600 --> 00:10:28.140
+Po prostu pewnie wyświetla błędną liczbę, a rozwiązaniem jest wspomniana wcześniej zasada dzielenia sumy przez sumę.
+
+00:10:28.140 --> 00:10:32.540
+Drugim błędem jest piętrzenie pośrednich kolumn obliczeniowych w celu uzyskania ostatecznej odpowiedzi.
+
+00:10:32.700 --> 00:10:38.020
+Tworzysz jedną kolumnę, potem drugą, która korzysta z pierwszej, a potem trzecią, która korzysta z drugiej i wydaje się to uporządkowane.
+
+00:10:38.220 --> 00:10:40.300
+Podczas tworzenia może to nawet ułatwiać myślenie.
+
+00:10:40.500 --> 00:10:45.640
+Jednak każdy krok w tym łańcuchu jest zapisywany w pamięci i tam pozostaje, więc ta schludna drabinka po cichu obciąża twój model.
+
+00:10:45.840 --> 00:10:49.780
+Pojedyncza miara z kilkoma zmiennymi może wykonać tę samą pracę, nie zapisując niczego w pamięci.
+
+00:10:49.780 --> 00:10:54.220
+Trzecim błędem jest sięganie po kolumnę obliczeniową, gdy miara mogłaby wykonać tę samą pracę w czasie rzeczywistym.
+
+00:10:54.380 --> 00:10:57.060
+Mnożenie ilości przez cenę w każdym wierszu to klasyczny przykład.
+
+00:10:57.340 --> 00:11:03.340
+Możesz zbudować to jako kolumnę i ją zsumować, albo pozwolić jednej mierze wykonać mnożenie podczas sumowania, ta druga opcja utrzymuje model w lekkiej formie.
+
+00:11:03.480 --> 00:11:06.780
+Czwartym błędem jest oczekiwanie, że zapisana kolumna zareaguje na fragmentator.
+
+00:11:06.940 --> 00:11:11.300
+Kolumna obliczeniowa jest ustalana przy odświeżaniu, więc nie zmieni się, gdy użytkownik kliknie i nie jest to błąd.
+
+00:11:11.300 --> 00:11:14.920
+Taka jest natura tego narzędzia i gdy spojrzysz na to w ten sposób, przestaniesz z tym walczyć.
+
+00:11:15.100 --> 00:11:19.120
+Szczera uwaga, zanim pójdziemy dalej, ponieważ tutaj początkujący często popadają w przesadę.
+
+00:11:19.240 --> 00:11:21.680
+Kolumny obliczeniowe nie są złe ani przestarzałe.
+
+00:11:21.900 --> 00:11:26.300
+Są zadania, do których tylko one się nadają, a gdy Twój model jest mały, argument o pamięci jest niemal niezauważalny.
+
+00:11:27.040 --> 00:11:33.160
+Jeśli kolumna obliczeniowa sprawia, że Twój raport dziś działa, użyj jej, ale bądź świadomy jej kosztów, aby wybór pozostał w Twoich rękach.
+
+00:11:33.380 --> 00:11:36.700
+Gdzie to pasuje? Microsoft 365, Fabric i Azure.
+
+00:11:36.700 --> 00:11:41.500
+Zanim skończymy, warto zobaczyć, gdzie ten drobny wybór sytuuje się w szerszym kontekście Microsoftu.
+
+00:11:41.660 --> 00:11:47.640
+Power BI to narzędzie raportowe Microsoftu, które obecnie jest częścią Microsoft Fabric, szerszej platformy danych tej firmy.
+
+00:11:47.820 --> 00:11:57.160
+Te same dwa narzędzia, których się uczysz, występują w całej tej rodzinie w Power BI Desktop, w Excelu poprzez funkcję Power Pivot oraz w produkcie serwerowym o nazwie Analysis Services.
+
+00:11:57.400 --> 00:12:01.400
+To nie jest więc sztuczka z Power BI, której uczysz się raz i zapominasz. Ona pozostaje z Tobą.
+
+00:12:01.400 --> 00:12:06.320
+Azure pojawia się w tej historii jako miejsce, w którym zazwyczaj przechowywane są Twoje dane, zanim trafią do raportu.
+
+00:12:06.320 --> 00:12:11.920
+Twoje wyniki sprzedaży mogą znajdować się w bazie danych Azure, w pliku na SharePoint lub w systemie działającym w Twojej własnej firmie.
+
+00:12:12.100 --> 00:12:15.680
+Fabric to warstwa, która łączy to wszystko w całość i hostuje model, który na tym budujesz.
+
+00:12:15.880 --> 00:12:17.540
+Jedno szczere ograniczenie na zakończenie.
+
+00:12:17.800 --> 00:12:21.680
+Większe modele wymagają większej pojemności, a pojemność to silnik, który napędza wszystko.
+
+00:12:21.980 --> 00:12:28.140
+Współdzielona pojemność Microsoftu może hostować modele do około 1 GB, a wszystko powyżej wymaga pojemności premium lub Fabric.
+
+00:12:28.140 --> 00:12:33.320
+To decyzja kosztowa, która zazwyczaj należy do osób na wyższych stanowiskach, więc na razie nie musisz się tym martwić.
+
+00:12:33.320 --> 00:12:39.640
+Musisz tylko wiedzieć, że nawyk wybierania między kolumną a miarą jest tym, co utrzymuje Twoje modele w dobrej kondycji, gdy się rozrastają.
+
+00:12:40.100 --> 00:12:42.340
+Szybkie podsumowanie i jedno pytanie do Ciebie.
+
+00:12:42.520 --> 00:12:44.400
+Krótka wersja wygląda następująco.
+
+00:12:44.560 --> 00:12:50.640
+Kolumna obliczeniowa jest wyliczana wiersz po wierszu, przechowywana w Twoim modelu i gotowa do fragmentowania, filtrowania lub sortowania.
+
+00:12:50.880 --> 00:12:56.320
+Miara jest obliczana, gdy ktoś patrzy na wykres, uwzględnia każdy filtr zastosowany przez widza i do tego momentu nic nie kosztuje.
+
+00:12:56.320 --> 00:13:00.460
+Jedno to wartość przynależna do wiersza, a drugie to wartość przynależna do widoku.
+
+00:13:00.700 --> 00:13:03.620
+Zasadą, którą warto zapamiętać, jest ta z wcześniejszej części.
+
+00:13:03.920 --> 00:13:07.120
+Jeśli liczba ma się zmieniać, gdy ktoś kliknie filtr, powinna być miarą.
+
+00:13:07.260 --> 00:13:11.440
+A jeśli musi znajdować się w wierszu, aby można ją było fragmentować, powinna być kolumną obliczeniową.
+
+00:13:11.640 --> 00:13:15.080
+Ta jedna zasada zaoszczędzi Ci więcej czasu niż jakikolwiek samouczek o formułach.
+
+00:13:15.220 --> 00:13:16.720
+Teraz czas na moje pytanie do Ciebie.
+
+00:13:16.860 --> 00:13:19.320
+Po które z tych dwóch rozwiązań sięgasz zazwyczaj bez dłuższego zastanowienia?
+
+00:13:19.320 --> 00:13:23.680
+Czy kosztowało Cię to kiedyś wolno działający raport lub liczbę, którą musiałeś tłumaczyć dwukrotnie?
+
+00:13:23.860 --> 00:13:26.660
+Daj znać w komentarzach, ponieważ tam pojawiają się najważniejsze lekcje.
+
+00:13:26.900 --> 00:13:33.780
+Jeśli dzięki temu temat stał się mniej onieśmielający, zasubskrybuj M365FM, aby opanować narzędzia i sposób myślenia kształtujące przyszłość pracy.

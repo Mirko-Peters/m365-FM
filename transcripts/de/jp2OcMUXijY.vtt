@@ -1,0 +1,676 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.160
+Willkommen beim M3455FM-Podcast, in dem wir Menschen Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.720 --> 00:00:09.800
+Docker ist das am häufigsten verwendete Tool in der Cloud-Entwicklung und das mit großem Abstand.
+
+00:00:10.060 --> 00:00:13.460
+Wahrscheinlich haben Sie den Begriff schon öfter gehört, als wäre es Grundwissen, das jeder andere bereits hat.
+
+00:00:14.000 --> 00:00:17.600
+Docker löst ein ganz spezielles, leidiges Problem und sobald man es versteht, ergibt das Gesamtbild ein Sinn.
+
+00:00:18.140 --> 00:00:21.800
+Es ist der Grund, warum eine App auf Ihrem Laptop perfekt läuft und auf dem Rechner eines anderen völlig versagt.
+
+00:00:22.320 --> 00:00:26.380
+Am Ende werden Sie Container, Images und Docker-Files verstehen, ohne eine einzige Zeile Code zu schreiben.
+
+00:00:26.380 --> 00:00:31.120
+Wir klären außerdem den Vergleich, der fast jeden Anfänger verwirrt, Container vs. virtuelle Maschinen.
+
+00:00:32.000 --> 00:00:33.340
+Das Problem des Docker tatsächlich löst.
+
+00:00:33.760 --> 00:00:36.160
+Stellen Sie sich den Moment vor, in dem Sie ein Projekt herunterladen, das jemand mit Ihnen getan hat.
+
+00:00:36.400 --> 00:00:42.240
+Sie befolgen die Einrichtungsanweisungen Zeile für Zeile, installieren alles, was gefordert wird und die App startet trotzdem nicht, nicht.
+
+00:00:42.900 --> 00:00:45.300
+Eine Bibliothek hat die falsche Version, eine Einstellung fehlt.
+
+00:00:45.640 --> 00:00:48.160
+Oder das Ganze lief nur auf dem Rechner der Person, die es erstellt hat.
+
+00:00:49.480 --> 00:00:51.440
+Entwickler gaben diesem Erlebnis seinen Spitznamen, der geblieben.
+
+00:00:51.800 --> 00:00:52.860
+Auf meinem Rechner funktioniert das nicht.
+
+00:00:52.860 --> 00:00:55.580
+Dieser Name ist die Pointe eines alten und teuren Problems.
+
+00:00:55.580 --> 00:00:57.320
+Ein Programm ist niemals nur Code.
+
+00:00:57.940 --> 00:01:04.040
+Es stützt sich auf eine spezifische Version eines Tools, eine Bibliothek eines anderen und eine Reihe von Einstellungen, die alle gleichzeitig stimmen müssen.
+
+00:01:04.660 --> 00:01:07.320
+Ändern Sie ein einziges Teil auf einem anderen Computer und die gesamte App stützt er.
+
+00:01:07.720 --> 00:01:09.400
+Die Details sind immer klein und immer nervig.
+
+00:01:10.120 --> 00:01:12.860
+Vielleicht benötigt die App eine ältere Sprachversion als die, die Sie installiert haben.
+
+00:01:13.440 --> 00:01:18.460
+Vielleicht erwartet Sie eine Datenbank, die bereits läuft, oder eine versteckte Einstellung in einer Datei, die in der Anleitung nie erwähnt wurde.
+
+00:01:18.460 --> 00:01:23.020
+Nichts davon ist exotisch und alles kann ein Projekt zum Scheitern bringen, das fünf Minuten zuvor in einem anderen Ordner funktioniert.
+
+00:01:23.360 --> 00:01:26.040
+Wenn Ihnen das bekannt vorkommt, dann deshalb war fast jeder schon einmal darauf gestoßen.
+
+00:01:26.640 --> 00:01:31.440
+Wenn sich dieselbe Software auf jedem Rechner anders verhält, verschwenden Teams Stunden mit dem Setup, anstatt produktiv zu sein.
+
+00:01:32.000 --> 00:01:36.420
+Ein neuer Entwickler verbringt seine ersten Tage damit, gegen seine Umgebung zu kämpfen, anstatt die Arbeit zu tun, für die eingestellt.
+
+00:01:36.760 --> 00:01:40.580
+Code, der in der Testphase perfekt läuft, kann sich plötzlich anders verhalten, sobald er einen echten Server erreicht.
+
+00:01:40.580 --> 00:01:47.060
+Multiplizieren Sie das nun mit einem ganzen Team, zehn Entwickler, jeder auf einem leicht anderen Rechner mit eigener Mischung aus Versionen und Einstellungen.
+
+00:01:47.560 --> 00:01:49.460
+Die Anzahl der Möglichkeiten, wie Dinge schief gehen können, wächst ab.
+
+00:01:49.820 --> 00:01:55.980
+Fügen Sie einen Testserver und einen Produktionsserver hinzu und dieselbe App soll plötzlich an einem Dutzend Orten gleichzeitig laufen, die alle ein wenig unterschiedlich sind.
+
+00:01:56.880 --> 00:02:01.740
+Das Team von Docker fasste das Problem bei der Einführung im Jahr 2013 zusammen und ihre Beschreibung war direkt.
+
+00:02:02.540 --> 00:02:03.920
+Code auf den Server zu bringen ist schwer.
+
+00:02:04.760 --> 00:02:06.780
+Genau diese Frustration sollten Container beseitigen.
+
+00:02:07.120 --> 00:02:09.940
+Die Lösung sind nicht bessere Anleitungen oder sorgfältige Setup-Notizen.
+
+00:02:09.940 --> 00:02:13.280
+Es ist eine Art, eine App so zu verpacken, dass die zugrunde liegende Maschine unwichtig wirkt.
+
+00:02:14.220 --> 00:02:15.160
+Was ein Container wirklich ist.
+
+00:02:15.720 --> 00:02:18.960
+Ein Container ist ein Paket, das Ihre App zusammen mit allem enthält, was Sie zum Laufen brauchen.
+
+00:02:19.580 --> 00:02:20.860
+Stellen Sie sich wie eine versiegelte Brottusik.
+
+00:02:21.380 --> 00:02:25.980
+Die Mahlzeit ist drin, das Besteck ist drin und es ist egal, welche Art von Küche die Person hat, die sie öffnet.
+
+00:02:26.800 --> 00:02:30.580
+Diese Idee klingt fast zu einfach, weshalb das Wort Container manche Leute verwirrt.
+
+00:02:31.180 --> 00:02:33.220
+Der Name lässt an etwas Schweres und Technisches denken.
+
+00:02:33.580 --> 00:02:37.940
+Dabei ist ein Container nur Ihre App plus Ihre Abhängigkeiten verpackt in eine kompakte Einheit.
+
+00:02:37.940 --> 00:02:41.780
+Ein Container ist kein Computer und er hat kein eigenes Betriebssystem dabei.
+
+00:02:43.300 --> 00:02:48.160
+Stattdessen nutzt er das Betriebssystem der Maschine, auf der er läuft und packt nur die App und ihre Abhängigkeiten ein.
+
+00:02:49.440 --> 00:02:51.400
+Das hält jeden Container klein und sorgt für einen schnellen Start.
+
+00:02:51.900 --> 00:02:55.280
+Sie können eine ganze Reihe davon auf einem einzigen Laptop ausführen, ohne dass das System extrem langsam ist.
+
+00:02:55.760 --> 00:02:59.260
+Was verhindert, dass ein Container mit allem anderen auf der Maschine kollidiert, ist die Isolierung.
+
+00:02:59.260 --> 00:03:03.500
+Im Inneren sieht die App eine kleine Welt, die so aussieht, als hätte sie den ganzen Computer für sich.
+
+00:03:04.160 --> 00:03:06.880
+Dieser Computer wird jedoch tatsächlich mit anderen Containern und Software geteilt?
+
+00:03:07.720 --> 00:03:12.620
+Diese Isolierung ermöglicht es, viele Container nebeneinander auf einer Maschine zu betreiben, ohne dass sie sich gegenseitig stören.
+
+00:03:13.220 --> 00:03:15.740
+Das bedeutet auch, dass ein Image so viele Container erzeugen kann, wie sie benötigen.
+
+00:03:16.320 --> 00:03:22.900
+Die erstellen den Bauplan einmal und können daraus fünf Kopien für fünf Kunden oder hundert Kopien bei Lastspitzen starten, ohne etwas zweimal zu bauen.
+
+00:03:22.900 --> 00:03:25.240
+Das Ergebnis ist das, was er meistens sieht.
+
+00:03:25.700 --> 00:03:30.660
+Derselbe Container verhält sich auf ihrem Laptop, auf der Maschine eines Kollegen und auf einem Server im Rechenzentrum identisch.
+
+00:03:31.480 --> 00:03:33.680
+Sie verpacken ihn einmal und es ist ihm egal, wo er landet.
+
+00:03:34.360 --> 00:03:37.440
+Zwei Begriffe tauchen dabei ständig auf und Anfänger verwechseln sie oft.
+
+00:03:37.960 --> 00:03:40.800
+Ein Image ist der Bauplan und Container ist die laufende Kopie dieses Bauplans.
+
+00:03:41.300 --> 00:03:46.580
+Wenn ein Container die Kopie ist, stellt sich die Frage, wovon genau er kopiert und die Antwort ist interessanter, als es klingt.
+
+00:03:48.260 --> 00:03:49.940
+Images, Dockerfiles und die Macht der Leer.
+
+00:03:50.220 --> 00:03:51.580
+Ein Image ist ein eingefundenes Rezept.
+
+00:03:51.580 --> 00:03:54.660
+Es ist schreibgeschützt, was bedeutet, dass sich nach dem Erstellen nichts mehr darin ändert.
+
+00:03:55.140 --> 00:03:58.660
+Es enthält deine App, die benötigten Dateien und die Anweisungen zum Starten der Anwendung.
+
+00:03:59.160 --> 00:04:02.060
+Diese schreibgeschützte Eigenschaft macht ein Image sicher für die gemeinsame Nutzung,
+
+00:04:02.140 --> 00:04:04.760
+da tausend Nutzer dasselbe Image ausführen und identische Ergebnisse erhalten können.
+
+00:04:04.980 --> 00:04:10.440
+Der Clou ist, dass Images in Ebenen aufgebaut sind, wobei jede Ebene eine Reihe von Änderungen auf der vorherigen darstellt.
+
+00:04:11.080 --> 00:04:13.760
+Stell dir einen Stapel Klarsichtfolien vor, bei dem jede Folie etwas Neues hinzufügt.
+
+00:04:14.140 --> 00:04:18.360
+Eine Folie bringt die Basisbetriebssystemkomponenten, die nächste fügt deinen App-Code hinzu und die darauf folgende.
+
+00:04:18.800 --> 00:04:19.560
+Deine Einstellungen.
+
+00:04:19.560 --> 00:04:21.800
+Stapel sie alle übereinander und du hast ein vollständiges Image.
+
+00:04:22.320 --> 00:04:26.300
+Der Grund, warum Images Ebenen anstelle einer riesigen Datei verwenden, ist die Effizienz beim Neuerstellen.
+
+00:04:26.660 --> 00:04:30.740
+Wenn du etwas änderst, baut Docker nur die geänderte Ebene und die darauf liegenden neu auf,
+
+00:04:30.920 --> 00:04:32.620
+während alles darunter unverändert bleibt.
+
+00:04:33.000 --> 00:04:33.280
+Bleibt.
+
+00:04:33.780 --> 00:04:36.160
+Deshalb kann ein Rebuild in Sekunden statt Minuten abgeschlossen werden
+
+00:04:36.160 --> 00:04:38.700
+und deshalb bleiben Images im Vergleich zu Alternativen klein.
+
+00:04:39.020 --> 00:04:39.200
+Äh.
+
+00:04:39.800 --> 00:04:41.080
+Images bauen zudem aufeinander auf.
+
+00:04:41.600 --> 00:04:44.440
+Ein Basis-Image, das bereits ein Linux-System und ein Web-Server enthält,
+
+00:04:44.440 --> 00:04:48.760
+kann die Grundlage für 100 verschiedene Projekte bilden, die jeweils nur ihre eigenen Ebenen hinzufügen.
+
+00:04:49.560 --> 00:04:53.240
+Dieses geteilte Fundament ist ein wesentlicher Grund dafür, warum Images erstaunlich klein bleiben.
+
+00:04:53.800 --> 00:04:55.720
+Diese Ebenen stammen aus einer Datei namens Dockerfile.
+
+00:04:56.100 --> 00:05:00.320
+Ein Dockerfile ist einfacher Text, der die Schritte zum Erstellen eines Images auflistet, eine Anweisung pro Zeile.
+
+00:05:00.800 --> 00:05:04.300
+Eine Anweisung startet vielleicht mit einem Basis-Image, die nächste kopiert deinen Code hinein,
+
+00:05:04.540 --> 00:05:08.280
+eine andere installiert eine Abhängigkeit und die letzte legt fest, wie die App gestartet wird.
+
+00:05:09.380 --> 00:05:11.840
+Lies es von oben nach unten und du liest das Rezept für das gesamte System.
+
+00:05:11.840 --> 00:05:14.680
+Die Reihenfolge dieser Zeilen ist wichtiger, als Anfänger war.
+
+00:05:15.260 --> 00:05:20.280
+Wenn du deinen App-Code änderst, verwendet Docker die früheren Ebenen wieder und wiederholt nur die letzten Schritte, was schnell geht.
+
+00:05:20.880 --> 00:05:25.380
+Änderst du die allererste Zeile, muss alles darüber von Grund auf neu gebaut werden, was langsam ist.
+
+00:05:25.880 --> 00:05:26.100
+Best.
+
+00:05:26.100 --> 00:05:31.860
+Deshalb platzieren erfahrene Entwickler die selten dir änderten Teile oben und die ständig bearbeiteten Teile unten.
+
+00:05:32.780 --> 00:05:35.160
+Wenn du dir eine Sache aus diesem ganzen Abschnitt merkst, dann dies.
+
+00:05:35.640 --> 00:05:38.560
+Das Image ist das Rezept und der Container ist das Gericht, das du daraus servierst.
+
+00:05:39.260 --> 00:05:40.640
+Alles andere ergibt sich aus dieser Trend.
+
+00:05:40.900 --> 00:05:42.800
+Hier wird auch das Versprechen der Portabilität eingelöst.
+
+00:05:43.220 --> 00:05:48.340
+Das Dockerfile ist die Quelle der Wahrheit und jeder, der diese Datei und den zugehörigen Code besitzt, kann exakt dasselbe Image neu erstellen.
+
+00:05:48.340 --> 00:05:51.020
+Es gibt kein Rätselrat und keine Unklarheit darüber, welche Version verwenden.
+
+00:05:51.460 --> 00:05:54.620
+Es gibt noch eine weitere Ebene, die man kennen sollte und genau die bringt viele Leute zum Stolpern.
+
+00:05:54.620 --> 00:06:01.320
+Wenn du einen Container aus einem Image startest, fügt Docker oben eine dünne beschreibbare Schicht hinzu, in der der laufende Container neue Dateien speichern kann.
+
+00:06:01.920 --> 00:06:03.200
+Diese Schicht ist jedoch temporär.
+
+00:06:03.720 --> 00:06:06.120
+Wenn du den Container entfernst, verschwindet alles darin mit ihm.
+
+00:06:06.920 --> 00:06:10.380
+Diese einfache Regel erklärt überraschend viele Probleme von Anfängern und begegnet uns später wieder.
+
+00:06:10.880 --> 00:06:12.360
+Zuerst müssen Images irgendwo gespeichert werden.
+
+00:06:13.220 --> 00:06:14.420
+Und dieses irgendwo nennt man eine Registry.
+
+00:06:15.520 --> 00:06:17.520
+Registries sind Orte, an denen Images leben und übertragen.
+
+00:06:17.860 --> 00:06:21.600
+Eine Registry ist ein Ort, der Images speichert, damit sie geteilt und heruntergeladen werden können.
+
+00:06:21.600 --> 00:06:26.940
+Wenn ein Image ein Rezept ist, dann ist eine Registry das Regal mit veröffentlichten Kochbüchern, aus dem jeder mit Zugriff eine Kopie ziehen kann.
+
+00:06:27.280 --> 00:06:30.100
+Die Standard-Registry ist Docker Hub, eine öffentliche Registry, die jeder nutzen kann.
+
+00:06:30.540 --> 00:06:35.300
+Docker schaut dort zuerst nach, wenn du ein Image anforderst, weshalb so viele Befehle einfach funktionieren, ohne dass du etwas angeben musst.
+
+00:06:36.120 --> 00:06:41.160
+Wenn du deine Images lieber privat halten möchtest, kannst du eine eigene Registry hinter deinen eigenen Mauern betreiben, was viele Unternehmen genauso tun.
+
+00:06:42.120 --> 00:06:44.320
+Images haben Tags, das sind einfach nur Bezeichnungen für Versionen.
+
+00:06:44.880 --> 00:06:50.800
+Dasselbe Image kann einen Tag für Version 3 haben, einen weiteren für Version 4 und einen dritten mit der Bezeichnung Latteste verweist, der auf das jeweils Neueste verweist.
+
+00:06:51.020 --> 00:06:54.400
+Dieser Lattest-Tag ist praktisch, aber auch eine Falle, auf die wir später noch zurückkommen werden.
+
+00:06:55.040 --> 00:06:56.480
+Zwei Befehle erledigen hier den Großteil der Arbeit.
+
+00:06:56.800 --> 00:07:02.260
+Pull lädt dein Image aus einer Registry auf deinen Rechner herunter und Push sendet ein von dir erstelltes Image an deine Registry, damit andere es nutzen können.
+
+00:07:02.600 --> 00:07:03.440
+Das ist der gesamte Kreislauf.
+
+00:07:03.700 --> 00:07:06.160
+Du erstellst dein Image, lädst es hoch und jemand anderes lädt es wieder herunter.
+
+00:07:06.720 --> 00:07:09.820
+Wenn du ein Image zum ersten Mal lädst, speichert Docker eine Kopie auf deinen Rechner.
+
+00:07:09.820 --> 00:07:12.480
+Ja, wenn du das nächste Mal nach dem selben Image fragst, ist es bereits verstanden.
+
+00:07:12.780 --> 00:07:15.360
+Daher dauert das Starten eines Containers nur einen Moment und erfordert keinen vollständigen.
+
+00:07:15.560 --> 00:07:17.420
+Hier wird das Versprechen der Portabilität Wirklichkeit.
+
+00:07:17.780 --> 00:07:23.220
+Ein Teamkollege braucht weder dein Laptop noch dein genaues Setup, da er dasselbe Image lädt und die gleiche App erhält und die gleiche App erhält.
+
+00:07:23.340 --> 00:07:31.040
+Einige dieser Images sind offiziell und werden von den Unternehmen hinter der Software gepflegt, weshalb es meist sicherer ist, ein bekanntes Image zu laden, als alles selbst zu bauen, als alles selbst zu bauen.
+
+00:07:31.040 --> 00:07:33.200
+Es lohnt sich auch zu wissen, wie groß dieses Regal mittlerweile ist.
+
+00:07:33.820 --> 00:07:39.360
+Nach Angaben von Docker verzeichnet der Docker Hub jeden Monat Milliarden von Image-Downloads und die Plattform zählt Millionen registrierte Entwickler.
+
+00:07:39.820 --> 00:07:42.540
+Wenn die Leute sagen, dass Container überall sind, meinen sie genau diesen Maßstab.
+
+00:07:43.920 --> 00:07:47.940
+Da nun alle Bausteine vorhanden sind, bleibt eine Frage offen, die fast jeden Anfänger stolpern lässt.
+
+00:07:49.680 --> 00:07:51.060
+Container versus virtuelle Maschinen.
+
+00:07:51.600 --> 00:07:54.980
+Diese Frage lautet Container versus virtuelle Maschinen und sie verdient eine sorgfältige Antwort.
+
+00:07:55.400 --> 00:07:59.120
+Vor Containern benutzte man eine virtuelle Maschine, wenn man Software isoliert ausführen wollte.
+
+00:07:59.460 --> 00:08:03.800
+Die Verwirrung ist verständlich, da beide Werkzeuge dazu dienen, Software von ihrer Umgebung zu trennen.
+
+00:08:04.320 --> 00:08:05.600
+Sie ziehen die Grenze lediglich in Stellen.
+
+00:08:06.320 --> 00:08:09.560
+Eine virtuelle Maschine ist ein vollständiger Computer, der in ihrem Computer simuliert wird.
+
+00:08:10.340 --> 00:08:16.120
+Sie hat ihr eigenes Betriebssystem, ihren eigenen Arbeitsspeicher und eigenen Speicherplatz und verhält sich wie ein separater Rechner, der in einem Größeren läuft.
+
+00:08:16.720 --> 00:08:18.300
+Der Name verrät bereits die Größe des Ganzen.
+
+00:08:18.860 --> 00:08:23.380
+Eine virtuelle Maschine umfasst ein komplettes Betriebssystem, was bei jeder Instanz eine große Datenlast bedeutet.
+
+00:08:23.800 --> 00:08:25.400
+Container verfolgen den umgekehrten Ansatz.
+
+00:08:25.680 --> 00:08:29.420
+Sie nutzen das Betriebssystem des Rechners, auf dem sie laufen und müssen daher kein eigenes mitführen.
+
+00:08:30.340 --> 00:08:32.960
+Dieser einzige Unterschied erklärt fast jeden praktischen Unterschied zwischen ihnen.
+
+00:08:33.600 --> 00:08:36.960
+Container werden in Megabyte gemessen, während virtuelle Maschinen in Gigabyte gemessen werden.
+
+00:08:36.960 --> 00:08:41.140
+Ein Container startet in Sekunden, während eine virtuelle Maschine benutzt zum Hochfahren benötigt.
+
+00:08:41.480 --> 00:08:47.460
+Auf derselben Hardware können Sie weit mehr Container als virtuelle Maschinen ausführen, da jeder Container im Hintergrund deutlich weniger Arbeit verrichtet.
+
+00:08:47.960 --> 00:08:49.780
+Der Kompromiss wird sofort deutlich, wenn man sie gegenüberstellt.
+
+00:08:50.340 --> 00:08:53.920
+Eine virtuelle Maschine bietet eine stärkere Trennung, erkauft dies jedoch mit Größe und Geschwindigkeit.
+
+00:08:54.580 --> 00:08:59.380
+Ein Container bietet Geschwindigkeit und einen geringen Platzbedarf, erkauft dies jedoch durch eine stärkere Nutzung des zugrunden liegenden System.
+
+00:08:59.380 --> 00:09:03.180
+Keine Seite schummelt, denn Sie lösen dasselbe Problem auf zwei verschiedene Arten.
+
+00:09:03.740 --> 00:09:07.180
+Bevor Sie virtuelle Maschinen jedoch abschreiben, Sie gewinnen immer noch in einigen wichtigen Punkten.
+
+00:09:07.780 --> 00:09:12.280
+Sie bieten eine stärkere Isolation, da Sie auf Hardware-Ebene statt auf Prozessebene abgeschottet sind.
+
+00:09:13.440 --> 00:09:17.940
+Sie können außerdem ein völlig anderes Betriebssystem als der Host-Rechner ausführen, was mit Container nicht möglich ist.
+
+00:09:18.700 --> 00:09:19.380
+Die beiden sind auch keine Rivalen.
+
+00:09:19.380 --> 00:09:26.940
+Ein sehr gängiges Setup lässt Container innerhalb virtueller Maschinen laufen und kombiniert so die Portabilität von Containern mit der stärkeren Isolation einer virtuellen Maschine.
+
+00:09:27.500 --> 00:09:31.060
+Wenn Sie schon einmal eine virtuelle Maschine benutzt haben, verstehen Sie bereits das Grundkonzept.
+
+00:09:31.860 --> 00:09:37.240
+Ein Container ist einfach der leichtere Cousin und Sie müssen sich nicht für eine Seite entscheiden, da moderne Systeme meist beides nutzen.
+
+00:09:38.460 --> 00:09:40.140
+Wo Docker tatsächlich eingesetzt wird, ist die Theorie.
+
+00:09:40.780 --> 00:09:46.380
+In der realen Welt taucht dieses Werkzeug bei fast jedem modernen Software-Team auf und die Gründe dafür sind eher praktischer als akademischer Natur.
+
+00:09:47.100 --> 00:09:49.300
+Der erste Grund ist eine konsistente Entwicklungsumgebung.
+
+00:09:50.200 --> 00:09:54.680
+Wenn ein neuer Entwickler in ein Team kommt, verbringt er nicht drei Tage damit, die richtigen Versionen für alles zu installieren.
+
+00:09:55.360 --> 00:10:00.620
+Er lädt den Container des Projekts, startet ihn und arbeitet ab Tag 1, was das Onboarding zu keiner Geduldsprobe mehr macht.
+
+00:10:01.500 --> 00:10:03.680
+Automatisierte Tests und Bereitstellungen sind der nächste große Punkt.
+
+00:10:04.400 --> 00:10:07.800
+Moderne Teams erstellen und testen ihren Code automatisch bei jeder Änderung.
+
+00:10:08.660 --> 00:10:14.920
+Container machen das zuverlässig, da der Test jedes Mal in derselben Umgebung läuft auf jedem Entwicklerrechner und auf dem Build-Server ein.
+
+00:10:15.460 --> 00:10:17.520
+Wenn er auf einem Rechner funktioniert, funktioniert er auf allen.
+
+00:10:17.520 --> 00:10:21.300
+Ein weiteres gängiges Muster ist die Aufteilung großer Anwendungen in kleinere Teile.
+
+00:10:22.240 --> 00:10:26.520
+Statt eines riesigen Programms unterteilen Teams es in kleine Dienste, von denen jeder eine Aufgabe erfüllt.
+
+00:10:27.480 --> 00:10:32.600
+Jeder Dienst erhält einen eigenen Container, damit er aktualisiert oder skaliert werden kann, ohne das restliche System zu beeinträchtigen.
+
+00:10:32.600 --> 00:10:37.380
+Stellen Sie sich einen Online-Shop vor, bei dem Kassesuche- und Benutzerprofile jeweils in einem eigenen Container liegen.
+
+00:10:38.380 --> 00:10:42.640
+Wenn die Kasse eine Fehlerbehebung benötigt, aktualisiert das Team nur diesen Container und lässt den Rest unangetastet.
+
+00:10:43.000 --> 00:10:44.920
+Portabilität zwischen verschiedenen Umgebungen ründet das Ganze ab.
+
+00:10:45.400 --> 00:10:48.940
+Derselbe Container läuft auf einem Laptop, auf einem Server, im Rechenzentrum oder in der Cloud.
+
+00:10:49.740 --> 00:10:52.380
+Das Team kann umziehen oder wachsen, ohne die Art und Weise der Paketierung anzupassen.
+
+00:10:52.380 --> 00:10:54.220
+Es gibt auch einen alltäglichen Nutzen.
+
+00:10:54.980 --> 00:10:58.900
+Entwickler nutzen Datenbanken, Message-Queues und andere Tools als Container auf ihren eigenen Laptops,
+
+00:10:59.140 --> 00:11:01.380
+ohne sie jemals manuell installieren oder konfigurieren zu müssen.
+
+00:11:02.720 --> 00:11:05.800
+Wenn sie fertig sind, löschen sie den Container und das System ist wieder sauber.
+
+00:11:06.320 --> 00:11:07.500
+Nichts davon ist ein Nischenanwendungsfall.
+
+00:11:08.060 --> 00:11:12.580
+In der Entwicklerumfrage von Stack Overflow ist Docker das meistgenutzte Tool in der Kategorie Cloud-Entwicklung,
+
+00:11:12.720 --> 00:11:15.860
+noch vor Kubernetes und jedem Cloud-Anbieters und jedem Cloud-Anbieter.
+
+00:11:16.420 --> 00:11:21.160
+Millionen Entwickler setzen täglich darauf, was zeigt, dass diese Fähigkeit in vielen Jobs und Projekten wertvoll ist.
+
+00:11:22.380 --> 00:11:23.880
+Die Fehler, die Anfänger machen.
+
+00:11:24.440 --> 00:11:28.740
+Bevor sie direkt loslegen, lohnt es sich, die Fehler zu kennen, die fast jedem in der ersten Woche unterlaufen.
+
+00:11:29.560 --> 00:11:31.800
+Keiner davon ist schwer zu vermeiden, sobald man sie kommen sieht.
+
+00:11:32.300 --> 00:11:34.740
+Der häufigste Fehler ist einfach, die als Laptest markierte Version zu nehmen.
+
+00:11:35.200 --> 00:11:36.680
+Das ist verlockend, weil Laptest nach aktuell klingt.
+
+00:11:37.380 --> 00:11:41.300
+Das Problem ist, dass sich Laptest mit der Zeit ändert, sodass derselbe Bild nächsten Monat anders aussehen kann.
+
+00:11:41.400 --> 00:11:43.460
+Eine feste Version hält ihre Bilds vorhersehbar.
+
+00:11:44.440 --> 00:11:46.360
+Dann gibt es noch das Datenthema und das überrascht viele.
+
+00:11:46.960 --> 00:11:51.560
+Ein Container ist kein Ort zum Speichern von Dateien, da die beschreibbare Ebene verschwindet, sobald der Container entfernt wird.
+
+00:11:51.560 --> 00:11:57.060
+Alles, was Sie behalten müssen, muss in einem Volume liegen, das ist Speicher, der außerhalb der kurzen Lebensdauer des Containers existiert.
+
+00:11:57.780 --> 00:12:01.400
+Verlieren Sie das aus den Augen, werden Sie beim ersten Aufräumen zusehen müssen, wie wichtige Daten verschwindet.
+
+00:12:01.700 --> 00:12:02.820
+Die Größe ist eine weitere Falle.
+
+00:12:03.120 --> 00:12:06.400
+Man kopiert leicht unnötige Dateien hinein oder startet mit einem aufgeblähten Image.
+
+00:12:06.620 --> 00:12:10.160
+Und jede dieser Entscheidungen macht das Image langsamer beim Übertragen und Starten und Starten.
+
+00:12:10.660 --> 00:12:11.720
+Auch Sicherheitsgewohnheiten wichtig.
+
+00:12:12.260 --> 00:12:14.600
+Alles als Root-Benutzer auszuführen, ist eine gängige Abkürzung.
+
+00:12:15.000 --> 00:12:18.940
+Root kann alles auf der Maschine tun, daher hat ein Problem innerhalb eines Root-Containers viel mehr Spielraum, um Schaden anzurichten.
+
+00:12:18.940 --> 00:12:22.240
+Ein geschränkter Benutzer innerhalb des Containers hält den Schadensradius klein.
+
+00:12:22.900 --> 00:12:26.700
+Und schließlich gibt es die Angewohnheit, einen laufenden Container manuell zu reparieren, anstatt das Image zu korrigieren.
+
+00:12:26.940 --> 00:12:31.860
+Jede Änderung an einem laufenden Container verschwindet beim nächsten Start und das Image ist die Quelle der Wahrheit, also gehört die Korrektur dorthin.
+
+00:12:31.860 --> 00:12:36.220
+Ein weniger offensichtlicher Fehler ist die Verwechslung von Image und Container.
+
+00:12:36.640 --> 00:12:39.100
+Das Image ist der unveränderliche Bauplan, den man erstellt und teilt.
+
+00:12:39.300 --> 00:12:41.280
+Und der Container ist die laufende Instanz, die man wieder verwirft.
+
+00:12:42.080 --> 00:12:47.300
+Diese Verwechslung führt dazu, dass Leute ein Einweg-Container wie etwas Dauerhaftes behandeln, was oft zu unnötigem Arbeitsaufwand führt.
+
+00:12:47.880 --> 00:12:49.320
+Eine weitere kleine Gewohnheit spart viel Zeit.
+
+00:12:49.780 --> 00:12:56.140
+Eine kurze Datei gibt dem Bild vor, welche Ordner weggelassen werden sollen, damit große Dateien nicht im Image landen und ihre Bilds schnell bleiben.
+
+00:12:56.140 --> 00:13:03.640
+Keiner dieser Fehler ist fatal und jeder ist leichter zu vermeiden, als später zu korrigieren, wann sie nicht zu Containern greifen sollen.
+
+00:13:04.140 --> 00:13:08.380
+Container sind mächtig und genau deshalb sollte man ehrlich benennen, wann sie das falsche Werkzeug sind.
+
+00:13:09.380 --> 00:13:13.800
+Wenn ihre Arbeitslast eine starke Isolierung auf Hardware-Ebene benötigt, ist eine virtuelle Maschine die sicherere wahr.
+
+00:13:14.540 --> 00:13:21.060
+Dasselbe gilt für Software, die ein völlig anderes Betriebssystem erfordert als die zugrunde liegende Maschine, da Container das Betriebssystem darunter teilen.
+
+00:13:21.800 --> 00:13:25.440
+Für eine kleine, einmalige Aufgabe kann ein Container zu viel Aufwand sein.
+
+00:13:25.440 --> 00:13:28.420
+Manchmal ist es einfach schneller, ein Skript oder eine normale App auszuführen.
+
+00:13:29.520 --> 00:13:33.380
+Sie könnten einen Nachmittag damit verbringen, das Tool für eine Aufgabe zu lernen, die ohne es in 10 Minuten erledigt gewesen ist.
+
+00:13:33.860 --> 00:13:37.100
+Schwere Arbeitslasten mit großen Datenmengen funktionieren oft besser mit anderen Ansätzen,
+
+00:13:37.540 --> 00:13:40.800
+da Container als Einweginstanzen konzipiert sind und nicht als langfristige Speicherorte.
+
+00:13:41.740 --> 00:13:43.060
+Es gibt auch eine Lernkurve, die man abwägen muss.
+
+00:13:43.520 --> 00:13:46.060
+Container zahlen sich aus, sobald man viele davon auf vielen Maschinen betreibt.
+
+00:13:46.820 --> 00:13:50.360
+Bei einem einzelnen kleinen Projekt auf einem Computer kann dieser Vorteil anfangs schwer zu erkennen sein.
+
+00:13:50.800 --> 00:13:52.440
+Nichts davon schmälert das, was Container so gut können.
+
+00:13:52.440 --> 00:13:56.680
+Es bedeutet nur, dass die wahre Kunst daran besteht, zu wissen, wann man zugreift und wann man zugreift und wann man sie bessert ist.
+
+00:13:57.180 --> 00:14:02.100
+Wenn man den Fachjargon weglässt, ist ein Container einfach ihre App gepackt mit allem, was sie benötigt, damit sie überall gleich läuft.
+
+00:14:03.120 --> 00:14:05.620
+Diese Idee ist der Grund, warum sie in so viel moderner Software vorkommen.
+
+00:14:06.160 --> 00:14:08.240
+Wenn Sie Container jetzt endlich verstehen, klicken Sie auf Abonnieren.
+
+00:14:08.320 --> 00:14:10.880
+Ich werde weiterhin die komplizierten Aspekte der Technik einfach erklären.
+
+00:14:10.880 --> 00:14:12.020
+Also, ich werde nicht die komplizierten Aspekte der Technik einfachen.
+
+00:14:12.020 --> 00:14:12.120
+Ich werde weiterhin die Karte auf dem Weg verpciónnen.
+
+00:14:12.120 --> 00:14:14.640
+Herr, ich werde weiterhin die Karte auf dem Weg geben.
+
+00:14:14.640 --> 00:14:16.560
+Ich werde weiterhin die Karte auf dem Weg geben.
+
+00:14:16.620 --> 00:14:17.980
+Ich werde weiterhin die Karte auf dem Weg geben.

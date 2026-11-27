@@ -1,0 +1,586 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:06.260
+Welkom bij de M365FM podcast waarin we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.400 --> 00:00:08.020
+Twee manieren om hetzelfde te doen.
+
+00:00:08.240 --> 00:00:13.480
+Je kunt exact hetzelfde getal op twee verschillende manieren opbouwen in Power BI en ze gedragen zich totaal anders.
+
+00:00:13.700 --> 00:00:17.060
+De ene wordt opgeslagen in je datamodel en volgt elke individuele rij.
+
+00:00:17.280 --> 00:00:22.400
+De andere bestaat pas zodra iemand op een grafiek klikt of een filter aanpast, waarna deze ter plekke opnieuw wordt berekend.
+
+00:00:22.620 --> 00:00:29.300
+Welkom bij de M365FM podcast waarin we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:29.300 --> 00:00:34.400
+Vandaag ontleden we berekende kolommen en metingen, de twee manieren om een getal op te bouwen in Power BI.
+
+00:00:34.560 --> 00:00:39.640
+Er is één simpele vraag die de keuze duidelijk maakt en aan het eind zul je die zonder na te denken gebruiken.
+
+00:00:40.200 --> 00:00:42.060
+Wat doet Power BI eigenlijk als je klikt?
+
+00:00:42.300 --> 00:00:46.180
+Voordat we naar de keuze kijken, helpt het om te zien wat Power BI onder je vingers doet.
+
+00:00:46.360 --> 00:00:51.460
+Je wijst het naar wat data, misschien een Excel-bestand of een database en het laat die data in iets wat een model heet.
+
+00:00:51.600 --> 00:00:54.200
+Een model is simpelweg een verzameling tabellen in het geheugen.
+
+00:00:54.200 --> 00:00:58.180
+Een tabel bestaat uit rijen en kolommen, precies zoals de spreadsheet die je al kent.
+
+00:00:58.180 --> 00:01:04.860
+Elke kolom bevat één soort gegevens, zoals een datum, een stad of een verkoopendrag en elke rij is één record, zoals een enkele verkoop.
+
+00:01:04.980 --> 00:01:09.760
+Zodra de data in het model staat, sliep je velden naar een grafiek en tekent Power BI een afbeelding voor je.
+
+00:01:09.980 --> 00:01:14.340
+Dat deel voelt eenvoudig en dat is het ook, totdat je een getal nodig hebt dat nog niet in je data staat.
+
+00:01:14.580 --> 00:01:17.140
+Misschien wil je winst weten en heb je alleen omzet en kosten.
+
+00:01:17.400 --> 00:01:20.160
+Misschien wil je de verkoop van volgend jaar en heb je alleen die van vorig jaar.
+
+00:01:20.160 --> 00:01:24.400
+Dan maak je je eigen berekening en Power BI biedt je daarvoor twee heel verschillende tools.
+
+00:01:24.720 --> 00:01:31.020
+Beide tools gebruiken dezelfde formule taal genaamd DAX en die naam is de moeite waard om te kennen omdat je hem overal in de Microsoft wereld tegenkomt.
+
+00:01:31.180 --> 00:01:36.060
+DAX lijkt veel op de Excel-formules die je waarschijnlijk al eens hebt geschreven met sommen, gemiddelde en eenvoudige wiskunde.
+
+00:01:36.260 --> 00:01:40.500
+Het bevat een bibliotheek met meer dan 200 functies, dus de taal zelf is niet het lastige deel.
+
+00:01:40.660 --> 00:01:44.180
+Het is de moeite waard om te benoemen wat er op het spel staat, want dit is geen academische kwestie.
+
+00:01:44.180 --> 00:01:49.440
+Een rapport dat 10 seconden nodig heeft om te openen, voelt voor de gebruiker kapot aan, zelfs als elk getal erin klopt.
+
+00:01:49.580 --> 00:01:55.180
+Een rapport dat direct opent maar een iets foutief percentage toont, is erger, omdat niemand een getal in twijfel trekt dat redelijk lijkt.
+
+00:01:55.320 --> 00:02:00.500
+Dus deze kleine beslissing ligt precies ten grondslag aan de twee dingen waarop mensen je rapport beoordelen, snelheid en vertrouwen.
+
+00:02:00.680 --> 00:02:05.660
+Het lastige is dat Power BI je twee tools geeft die uitwisselbaar lijken, maar zich op totaal verschillende manieren gedragen.
+
+00:02:05.880 --> 00:02:11.480
+De verkeerde kiezen is de meest voorkomende reden dat een beginner eindigt met een traag rapport of, erger nog, een cijfer dat ongemerkt fout is.
+
+00:02:11.480 --> 00:02:15.320
+Dat is de keuze waar je voor staat en die zul je bij elk rapport dat je ooit bouwt moeten maken.
+
+00:02:15.500 --> 00:02:17.380
+Wat een berekende kolom eigenlijk is?
+
+00:02:17.560 --> 00:02:21.320
+Een berekende kolom is makkelijker voor te stellen omdat het werkt als een kolom in een spreadsheet.
+
+00:02:21.620 --> 00:02:26.320
+Je neemt een tabel die je al hebt, voegt er een nieuwe kolom aan toe en schrijft één formule die voor elke rij wordt uitgevoerd.
+
+00:02:26.540 --> 00:02:30.200
+Stel, je hebt een verkooptabel met een kolom voor verkoopbedrag en een kolom voor totale kosten.
+
+00:02:30.400 --> 00:02:33.480
+Je voegt een kolom voor bruto marge toe die de kosten van de verkoop aftrekt.
+
+00:02:33.660 --> 00:02:36.760
+Elke rij krijgt een eigen antwoord en dat antwoord hoort voor goed bij die rij.
+
+00:02:37.180 --> 00:02:40.000
+Microsoft gebruikt een helder voorbeeld in de eigen documentatie.
+
+00:02:40.000 --> 00:02:45.800
+Een verzendmanager heeft een geografische tabel met aparte kolommen voor stad en staat en hij wil dat ze worden samengevoegd tot één veld.
+
+00:02:45.960 --> 00:02:51.240
+Hij voegt een berekende kolom toe die de stad en staat aan elkaar plakt en nu kan dat veld als elk ander veld op een kaart worden geplaatst.
+
+00:02:51.400 --> 00:02:55.160
+De stad en de staat blijven vastzitten aan dezelfde rij, wat precies is wat hij nodig heeft.
+
+00:02:55.340 --> 00:02:56.800
+Eén detail verandert later alles.
+
+00:02:57.020 --> 00:02:59.920
+Een berekende kolom wordt niet uitgerekend op het moment dat je naar het rapport kijkt.
+
+00:03:00.100 --> 00:03:03.620
+Het wordt één keer uitgerekend wanneer de gegevens worden vernieuwd en vervolgens opgeslagen in je model.
+
+00:03:03.860 --> 00:03:07.720
+Die opslag is de reden waarom een berekende kolom direct zichtbaar is, maar duur is om te onderhouden.
+
+00:03:07.720 --> 00:03:12.280
+Elke kolom die je toevoegt neemt geheugenruimte in beslag en blijft daar staan of iemand het nu gebruikt of niet.
+
+00:03:12.440 --> 00:03:14.100
+Er is ook een tweede consequentie.
+
+00:03:14.260 --> 00:03:18.780
+Een opgeslagen waarde verandert niet als iemand op een filter klikt omdat het al tijdens het vernieuwen is bepaald.
+
+00:03:18.960 --> 00:03:22.760
+Een op deze manier berekend percentage blijft gewoon staan, bevroren, ongeacht wat de kijker doet.
+
+00:03:22.900 --> 00:03:26.360
+En die bevroren kwaliteit is in sommige gevallen een functie en in andere een valstrik.
+
+00:03:26.540 --> 00:03:28.700
+Straks zullen we precies zien waar het fout kan gaan.
+
+00:03:28.700 --> 00:03:35.100
+Nog iets wat een berekende kolom kan, verrast mensen vaak en is echt nuttig omdat een berekende kolom zijn eigen rij kent.
+
+00:03:35.260 --> 00:03:38.620
+Het kan ook via een relatie een waarde uit een gekoppelde tabel ophalen.
+
+00:03:38.820 --> 00:03:45.560
+Je kunt een productcategorie naar een verkooprij halen en daar opslaan, wat berekende kolommen handig maakt voor het maken van labels en sleutels.
+
+00:03:45.820 --> 00:03:50.600
+Dit betekent ook dat al die opgeslagen waarden opnieuw moeten worden berekend zodra de gegevens veranderen.
+
+00:03:50.760 --> 00:03:52.180
+Wat een measure eigenlijk is.
+
+00:03:52.360 --> 00:03:53.700
+Een measure leeft niet op een rij.
+
+00:03:53.920 --> 00:03:56.940
+Het leeft op de grafiek en verschijnt alleen wanneer iemand ernaar kijkt.
+
+00:03:56.940 --> 00:04:02.500
+Je schrijft een formule die getallen optelt over vele rijen, waarbij het resultaat verandert op basis van wat de kijker heeft geselecteerd.
+
+00:04:02.680 --> 00:04:09.780
+Totale verkoop is een maatstaf omdat het elke verkoop optelt binnen het gegevenssegment op het scherm en de gemiddelde orderwaarde is om dezelfde reden een maatstaf.
+
+00:04:10.420 --> 00:04:14.200
+Microsoft's eigen voorbeeld is een salesmanager die de verkoop van volgend jaar moet voorspellen.
+
+00:04:14.440 --> 00:04:17.980
+Zij heeft de cijfers van vorig jaar en weet dat het bedrijf een groei van 6% plant.
+
+00:04:18.180 --> 00:04:22.520
+Dus schrijft ze één maatstaf die de som van de verkoop van vorig jaar neemt en die vermenigvuldigt met 1,06.
+
+00:04:22.900 --> 00:04:25.940
+Nu kan ze die prognose segmenteren op regio, product of maand.
+
+00:04:25.940 --> 00:04:28.020
+En het getal past zich elke keer opnieuw aan.
+
+00:04:28.220 --> 00:04:30.520
+Dat laatste onderdeel is precies de kern van een maatstaf.
+
+00:04:30.680 --> 00:04:34.960
+Het wordt berekend op het moment dat iemand naar de grafiek kijkt, gebaseerd op de filters die op dat moment zijn toegepast.
+
+00:04:35.160 --> 00:04:39.280
+Door op één regio te klikken wordt het herberekend voor die regio en door een jaar toe te voegen voor dat jaar.
+
+00:04:39.440 --> 00:04:44.820
+Er wordt niets vooraf opgeslagen, daarom neemt een maatstaf geen geheugen of schrijfruimte in beslag zoals een berekende kolom dat wel doet.
+
+00:04:45.000 --> 00:04:47.860
+Het wordt op verzoek berekend en alleen voor het segment dat voor je ligt.
+
+00:04:48.040 --> 00:04:51.360
+Er is een limiet die het kennen waard is en die een fout verklaart waar we later op terugkomen.
+
+00:04:51.360 --> 00:04:55.740
+Een maatstaf moet getallen optellen, dus je kunt er geen schrijven die simpelweg naar één cel in één rij verwijst.
+
+00:04:55.860 --> 00:04:59.460
+Het heeft geen actuele rij om op te staan, wat betekent dat het altijd moet samenvatten.
+
+00:04:59.640 --> 00:05:03.180
+Dat is een aanwijzing over hoe de twee tools denken en het is het volgende dat we moeten uitdiepen.
+
+00:05:03.320 --> 00:05:07.300
+Een maatstaf heeft wel een thuistabel in je model, wat eigenlijk gewoon de map is waaronder het verschijnt.
+
+00:05:07.440 --> 00:05:11.500
+Je kunt het naar een nettere plek verplaatsen zonder iets te breken en dat is een klein teken van iets groters.
+
+00:05:11.680 --> 00:05:13.820
+Een maatstaf is niet gebonden aan de rijen eronder.
+
+00:05:14.060 --> 00:05:17.980
+Het is gebonden aan de vraag en beantwoordt die vraag telkens opnieuw zodra iemand hem stelt.
+
+00:05:17.980 --> 00:05:20.540
+Het echte verschil zit in waar de berekening staat.
+
+00:05:20.740 --> 00:05:25.420
+Elke berekening in PowerBee draait binnen een soort context en er zijn er slechts twee die je hoeft te kennen.
+
+00:05:25.600 --> 00:05:29.360
+De eerste is de rijcontext, wat betekent de huidige rij waar de formule op staat.
+
+00:05:29.640 --> 00:05:34.700
+Wanneer je een berekende kolom schrijft, loopt PowerBee rij voor rij door de tabel en geeft die rij aan je formule.
+
+00:05:34.900 --> 00:05:39.040
+Het kent het verkoopbedrag voor deze rij en de kosten voor deze rij omdat het daar precies op staat.
+
+00:05:39.260 --> 00:05:43.380
+De tweede is de filtercontext, wat betekent het gegevenssegment dat de kijker heeft gekozen.
+
+00:05:43.600 --> 00:05:46.340
+Wanneer je een maatstaf schrijft, geeft PowerBee helemaal geen rij door.
+
+00:05:46.340 --> 00:05:51.120
+Het geeft alles door wat nog op het scherm staat nadat de filters zijn toegepast en je formule vat die hoop samen.
+
+00:05:51.320 --> 00:05:54.380
+Verander het filter, de selectie wijzigt en het antwoord verandert mee.
+
+00:05:54.600 --> 00:05:58.880
+Dit verschil verklaart de valkuil waar bijna elke beginner in trapt en waar je even bij stil moet staan.
+
+00:05:59.140 --> 00:06:04.720
+Stel je voor dat je een brutomarch-marchpercentage berekent als berekende kolom, waarbij je op elke rij de march door de omzet deelt.
+
+00:06:04.920 --> 00:06:08.280
+Elke rij krijgt een logisch percentage en het ziet er perfect uit in de tabel.
+
+00:06:08.500 --> 00:06:13.160
+Nu probeer je het gemiddelde marchpercentage voor het hele bedrijf te tonen, dus middelt je al die rijpercentages.
+
+00:06:13.160 --> 00:06:18.040
+Het getal dat je krijgt is fout en het ziet er volkomen aannemelijk uit terwijl het fout is, wat het zo gevaarlijk maakt.
+
+00:06:18.200 --> 00:06:20.780
+Het juiste antwoord is helemaal geen gemiddelde van percentages.
+
+00:06:21.160 --> 00:06:25.500
+Het is de totale march gedeeld door de totale omzet, wat betekent de som delen door de som.
+
+00:06:25.720 --> 00:06:29.460
+Dat moet een measure zijn omdat die in één keer op de hele selectie werkt in plaats van rij voor rij.
+
+00:06:29.660 --> 00:06:30.880
+Hou vast aan dat ene idee.
+
+00:06:31.180 --> 00:06:35.260
+Deel de som door de som, want het behoedt je voor het meest voorkomende foutieve getal in PowerBee.
+
+00:06:35.400 --> 00:06:37.820
+Er is een tweede helft die minstens zo belangrijk is.
+
+00:06:37.820 --> 00:06:44.220
+Filters stromen tussen tabellen in je model, dus een filter op je producttabel bereikt de verkooptabel en beperkt ook de verkoop.
+
+00:06:44.300 --> 00:06:46.140
+Een rijkontext reist niet op die manier.
+
+00:06:46.320 --> 00:06:51.640
+Een berekende kolom zit in zijn eigen tabel en ziet elders gefilterde waarden niet zonder extra werk,
+
+00:06:51.880 --> 00:06:55.620
+terwijl een measure in de filtercontext zit en het hele gefilterde model ziet.
+
+00:06:56.000 --> 00:07:00.920
+Daarom zijn measures de natuurlijke plek voor alles wat moet reageren op hoe het rapport wordt gebruikt.
+
+00:07:00.920 --> 00:07:04.160
+Waar elk onderdeel in je rapport thuis hoort.
+
+00:07:04.380 --> 00:07:08.540
+Nu wordt de keuze concreet omdat elk hulpmiddel zijn eigen plek op de pagina heeft.
+
+00:07:08.740 --> 00:07:13.460
+Een berekende kolom is nuttig wanneer een waarde op een rij moet staan en als data moet worden behandeld.
+
+00:07:13.700 --> 00:07:16.140
+Als je het in een slicer wilt, moet het een kolom zijn.
+
+00:07:16.340 --> 00:07:18.920
+Hetzelfde geldt voor een rijkop, kolomkop of gravieekas.
+
+00:07:19.660 --> 00:07:24.940
+Klanten indelen in leeftijdscategorieën of producten in prijskategorieën is ook kolomwerk omdat je rijen labelt,
+
+00:07:25.140 --> 00:07:27.420
+net als het bouwen van een sleutel die twee tabellen verbindt.
+
+00:07:27.420 --> 00:07:31.600
+Een measure is het juiste hulpmiddel wanneer een waarde moet veranderen terwijl de gebruiker rondklikt.
+
+00:07:32.140 --> 00:07:36.960
+Winstpercentage in de geselecteerde regio, groei in de geselecteerde maand, een cumulatief totaal tot de geselecteerde datum.
+
+00:07:37.160 --> 00:07:38.220
+Dat zijn allemaal measures.
+
+00:07:38.500 --> 00:07:42.360
+Ze staan in het waardegedeelte van een grafiek dat elke keer opnieuw wordt berekend als een filter verandert.
+
+00:07:42.540 --> 00:07:45.660
+De enige vraag die het beslist is deze, en die kun je altijd onthouden.
+
+00:07:45.860 --> 00:07:48.280
+Moet dit getal veranderen wanneer iemand op een filter klikt?
+
+00:07:48.460 --> 00:07:50.540
+Als het antwoord ja is, heb je een measure nodig.
+
+00:07:50.540 --> 00:07:56.420
+Als het antwoord nee is en de waarde op een rij moet staan zodat deze kan worden gefilterd of als sleutel kan dienen, dan wil je een berekende kolom.
+
+00:07:56.600 --> 00:07:58.180
+Twee voorbeelden maken het duidelijk.
+
+00:07:58.800 --> 00:08:02.620
+Leeftijdscategorieën zijn een berekende kolom, omdat elke klant één categorie krijgt en je daarop wilt filteren.
+
+00:08:02.740 --> 00:08:06.800
+Het margepercentage voor het geselecteerde kwartaal is een meting, omdat dit moet meebewegen met het kwartaal.
+
+00:08:06.940 --> 00:08:12.000
+Dezelfde tabel, dezelfde data, twee verschillende tools, en nu is de keuze een beslissing in plaats van een gok.
+
+00:08:12.880 --> 00:08:15.040
+De geheugenrekening achter je trage rapport.
+
+00:08:15.040 --> 00:08:18.780
+Eerder zei ik dat een berekende kolom wordt opgeslagen en die opslag heeft een prijs.
+
+00:08:19.000 --> 00:08:23.380
+Dit is het onderdeel dat een nette kleine keuze verandert in een rapport dat ofwel vliegt ofwel kruipt.
+
+00:08:23.580 --> 00:08:28.460
+Power B houdt geïmporteerde data in het geheugen en slaat die data per kolom op in plaats van per rij.
+
+00:08:28.680 --> 00:08:31.560
+Dat klinkt als een technisch detail, maar je kunt het effect voelen.
+
+00:08:31.740 --> 00:08:36.360
+Het optellen van één kolom leest alleen die kolom en daarom verschijnt een groot totaal in een oogwenk.
+
+00:08:36.440 --> 00:08:43.800
+Een berekende kolom staat in dat geheugen als een opgeslagen kolom en de richtlijnen van Microsoft zeggen dat deze kolommen minder goed comprimeren dan de kolommen die je eerder in Power Query bouwt.
+
+00:08:43.800 --> 00:08:47.540
+Power Query is de tool waarmee je je data vormgeeft voordat deze het model ooit bereikt.
+
+00:08:47.700 --> 00:08:49.540
+Er is hier ook een tweede kostenpost verborgen.
+
+00:08:49.740 --> 00:08:54.240
+Berekende kolommen worden uitgerekend nadat al je Power Query tabellen zijn geladen, wat de vernieuwing vertraagt.
+
+00:08:54.420 --> 00:08:57.660
+Dus de rekening komt twee keer één keer in geheugen en één keer in tijd.
+
+00:08:57.820 --> 00:09:06.580
+Om een beeld te krijgen van de schaal, Microsoft zegt dat Power B ongeveer 10 GB aan brondata kan comprimeren tot ongeveer 1 GB en er is nog een kleine besparing als het naar schijf wordt geschreven.
+
+00:09:06.740 --> 00:09:10.580
+Die compressie is de reden waarom een klein model een verrassende hoeveelheid data kan bevatten.
+
+00:09:10.580 --> 00:09:16.200
+Elke berekende kolom die je toevoegt, vreet echter aan die besparing en ze tellen stilletjes op omdat niemand merkt dat er één extra kolom is.
+
+00:09:16.360 --> 00:09:19.460
+Er is nog één eerlijke beperking en die hangt af van hoe je data verbonden is.
+
+00:09:19.640 --> 00:09:22.900
+Als je model de data importeert, wordt een berekende kolom opgeslagen.
+
+00:09:23.120 --> 00:09:28.220
+Als je model de data live opvraagt, wordt de kolom helemaal niet opgeslagen en pas tijdens de query berekend.
+
+00:09:28.380 --> 00:09:31.260
+Dit verplaatst de kosten van de vernieuwing naar de klik zonder ze weg te nemen.
+
+00:09:31.440 --> 00:09:36.720
+Hoe dan ook, de kolom verricht ergens werk en dat werk is de reden waarom modellers voorzichtig zijn met hoeveel ze er toevoegen.
+
+00:09:36.720 --> 00:09:39.900
+De praktische regel hier is simpel genoeg voor een beginner om te volgen.
+
+00:09:40.100 --> 00:09:45.180
+Als een nieuwe kolom een eenvoudige berekening per rij is en je kunt deze in Power Query bouwen, bouw hem daar dan.
+
+00:09:45.380 --> 00:09:51.280
+Bewaar je berekende DAX kolommen voor taken die ze echt nodig hebben, zoals een waarde die twee tabellen moet koppelen of rijen in groepen moet indelen.
+
+00:09:51.540 --> 00:09:57.300
+Wanneer de berekening eigenlijk een samenvatting is, gebruik dan een meting, want een meting kost je niets tot het moment dat iemand ernaar kijkt.
+
+00:09:57.500 --> 00:09:59.100
+Geen van beide tools is gratis.
+
+00:09:59.100 --> 00:10:05.120
+De rekening komt alleen op verschillende momenten, een opgeslagen kolom rekent af bij het vernieuwen, een live-meting bij het klikken.
+
+00:10:05.380 --> 00:10:07.140
+De fouten die beginners steeds maken.
+
+00:10:07.380 --> 00:10:10.200
+Nu de werking duidelijk is, beginnen de fouten bekend voor te komen.
+
+00:10:10.460 --> 00:10:13.960
+Vier daarvan duiken steeds weer op en elke fout is om een reden verleidelijk.
+
+00:10:14.120 --> 00:10:18.340
+De eerste is het maken van een percentage als berekende kolom en daar vervolgens het gemiddelde van te nemen.
+
+00:10:18.560 --> 00:10:22.320
+Dit is de pijnlijkste fout, omdat het rapport niet crash die en er niet kapot uitziet.
+
+00:10:22.480 --> 00:10:28.340
+Het toont simpelweg een fout getal met alle zelfvertrouwen en de oplossing is de eerdere regel, deel het totaal door het totaal.
+
+00:10:28.340 --> 00:10:32.600
+De tweede is het stapelen van tussenliggende berekende kolommen om tot één eindantwoord te komen.
+
+00:10:32.780 --> 00:10:37.340
+Je maakt een kolom, dan een tweede die de eerste gebruikt, dan een derde die de tweede gebruikt, en dat voelt georganiseerd.
+
+00:10:38.060 --> 00:10:40.380
+Tijdens de ontwikkeling kan het je zelfs helpen bij het denken.
+
+00:10:40.620 --> 00:10:45.740
+Elke stap in die keten wordt echter in het geheugen opgeslagen en blijft daar, dus het nette laddertje vergroot stilletjes je model.
+
+00:10:45.980 --> 00:10:49.780
+Een enkele meting met een paar variabelen kan hetzelfde werk doen zonder iets op te slaan.
+
+00:10:49.940 --> 00:10:53.880
+De derde is kiezen voor een berekende kolom wanneer een meting hetzelfde werk live zou kunnen doen.
+
+00:10:54.080 --> 00:10:57.180
+Aantal vermenigvuldigen met prijs op elke rij is het klassieke voorbeeld.
+
+00:10:57.180 --> 00:11:01.900
+Je kunt dit als een kolom bouwen en optellen, of één meting de vermenigvuldiging laten doen terwijl deze optelt.
+
+00:11:02.020 --> 00:11:03.400
+De tweede optie houdt je model lichter.
+
+00:11:03.560 --> 00:11:06.660
+De vierde is verwachten dat een opgeslagen kolom reageert op een slicer.
+
+00:11:06.840 --> 00:11:11.240
+Een berekende kolom wordt bepaald bij het vernieuwen, dus hij verandert niet als de gebruiker klikt, en dat is geen bak.
+
+00:11:11.400 --> 00:11:14.900
+Dat is de definitie van de tool, en zodra je het zo ziet, stop je met ertegenvechten.
+
+00:11:15.080 --> 00:11:18.980
+Een eerlijke opmerking voordat we verder gaan, want dit is waar beginners de neiging hebben om door te slaan.
+
+00:11:18.980 --> 00:11:21.900
+Berekende kolommen zijn niet fout en ze zijn niet verouderd.
+
+00:11:21.900 --> 00:11:26.840
+Er zijn taken die alleen zij kunnen uitvoeren, en als je model klein is, speelt het geheugenargument nauwelijks een rol.
+
+00:11:27.000 --> 00:11:33.040
+Als een berekende kolom ervoor zorgt dat je rapport vandaag werkt, gebruik hem dan, maar wees je bewust van de kosten zodat de keuze bij jou blijft.
+
+00:11:33.240 --> 00:11:36.700
+Waar dit in past? Microsoft 365, Fabric en Azure.
+
+00:11:36.920 --> 00:11:41.460
+Voordat we afsluiten, is het de moeite waard om te zien waar deze kleine keuze in het grotere Microsoft plaatje past.
+
+00:11:41.460 --> 00:11:47.840
+Power BI is de rapportagetool van Microsoft, en tegenwoordig maakt het deel uit van Microsoft Fabric, het bredere dataplatform van het bedrijf.
+
+00:11:48.000 --> 00:11:57.300
+Dezelfde twee tools die je aan het leren bent, kom je tegen in de hele familie in Power BI Desktop, in Excel via iets genaamd Power Pivot, en in een serverproduct genaamd Analysis Services.
+
+00:11:57.580 --> 00:12:01.600
+Dit is dus geen Power BI trucje dat je één keer leert en weer vergeet, het reist met je mee.
+
+00:12:01.800 --> 00:12:06.120
+Azure komt in het verhaal voor als de plek waar je data meestal staat voordat het je rapport bereikt.
+
+00:12:06.120 --> 00:12:11.940
+Je verkoopcijfers kunnen in een Azure database staan, in een bestand op SharePoint of in een systeem in je eigen pand.
+
+00:12:12.180 --> 00:12:15.560
+Fabric is de laag die het samenbrengt en het model host dat je erbovenop bouwt.
+
+00:12:15.680 --> 00:12:17.460
+Eén eerlijke beperking om mee af te sluiten.
+
+00:12:17.720 --> 00:12:21.720
+Grotere modellen hebben meer capaciteit nodig en capaciteit is de motor die alles draaiende houdt.
+
+00:12:22.060 --> 00:12:28.120
+Microsoft's gedeelde capaciteit kan modellen tot ongeveer 1 gigabyte hosten en alles wat groter is, heeft een premium of Fabric capaciteit nodig.
+
+00:12:28.340 --> 00:12:33.380
+Dat is een kostenbeslissing en die hoort meestal bij iemand boven het niveau van een beginner, dus daar hoef je je nu nog geen zorgen over te maken.
+
+00:12:33.380 --> 00:12:39.560
+Je hoeft alleen te weten dat de kleine gewoonte om te kiezen tussen een kolom en een measure ervoor zorgt dat je modellen slank blijven naarmate ze groeien.
+
+00:12:40.000 --> 00:12:42.340
+Een korte samenvatting en één vraag voor jou.
+
+00:12:42.540 --> 00:12:44.400
+De korte versie ziet er als volgt uit.
+
+00:12:44.580 --> 00:12:50.740
+Een berekende kolom wordt rij voor rij uitgerekend, opgeslagen in je model en is klaar om te slicen, filteren of sorteren.
+
+00:12:50.860 --> 00:12:56.360
+Een measure wordt uitgerekend wanneer iemand naar de grafiek kijkt, volgt elk filter dat de kijker toepast en kost niets tot dat moment.
+
+00:12:56.600 --> 00:13:00.620
+De een is een waarde die bij een rij hoort en de ander is een waarde die bij een weergave hoort.
+
+00:13:00.620 --> 00:13:03.380
+De regel die je moet onthouden is degene van eerder.
+
+00:13:03.540 --> 00:13:07.280
+Als een getal moet veranderen wanneer iemand op een filter klikt, moet het een measure zijn.
+
+00:13:07.480 --> 00:13:11.380
+En als het op een rij moet staan zodat het gesliced kan worden, moet het een berekende kolom zijn.
+
+00:13:11.620 --> 00:13:15.440
+Die ene regel zal je meer tijd besparen dan welke handleiding over formules dan ook.
+
+00:13:15.540 --> 00:13:16.580
+Nu mijn vraag aan jou.
+
+00:13:16.800 --> 00:13:19.700
+Naar welke van de twee heb je gegrepen zonder er echt bij na te denken?
+
+00:13:19.900 --> 00:13:23.520
+En heeft het je ooit een traag rapport gekost of een cijfer dat je twee keer moest uitleggen?
+
+00:13:23.680 --> 00:13:26.540
+Laat het me weten in de reacties, want daar komen de echte lessen naar voren.
+
+00:13:26.540 --> 00:13:31.340
+Als dit het onderwerp minder intimiderend maakte, abonneer je dan op M365FM om de tools en de
+
+00:13:31.340 --> 00:13:33.840
+mindset onder de knie te krijgen die de toekomst van werk vormgeven.

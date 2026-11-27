@@ -1,0 +1,691 @@
+WEBVTT
+
+00:00:00.440 --> 00:00:06.240
+Willkommen beim M365FM-Podcast, wo wir Menschen Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.820 --> 00:00:10.000
+Manche Teams liefern mehrmals täglich neuen Code an die Anwender aus, ohne dabei ein Auge zuzudrücken.
+
+00:00:10.360 --> 00:00:13.380
+Andere bereiten sich wochenlang auf ein einziges Release vor und der Unterschied liegt nicht am Talent.
+
+00:00:14.160 --> 00:00:19.520
+Willkommen beim M365FM-Podcast, wo wir Menschen Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:20.140 --> 00:00:26.400
+Das Thema ist CI-SYCD, ein Akronym, das in Stellenanzeigen überall auftaucht und das kaum jemand in einfachen Worten erklärt.
+
+00:00:26.400 --> 00:00:33.020
+Am Ende wissen Sie, wofür jeder Buchstabe steht, was in einer Pipeline passiert und warum häufiges Ausliefern eigentlich sicherer ist als seltenes.
+
+00:00:34.160 --> 00:00:35.600
+Was bedeuten CI und CD eigentlich?
+
+00:00:36.020 --> 00:00:38.760
+Beginnen wir mit dem Wort Integration, denn es trägt die gesamte Idee in sich.
+
+00:00:39.020 --> 00:00:42.300
+Wenn Menschen gemeinsam Software entwickeln, arbeitet jeder an seiner eigenen Kopie der Dateien.
+
+00:00:42.820 --> 00:00:45.240
+Früher oder später müssen all diese Kopien wieder zusammengeführt werden.
+
+00:00:45.720 --> 00:00:50.560
+Integration ist dieses Zusammenführen und hier wird es kompliziert, weil Ihre und meine Kopie selten bei allem übereinstimmen.
+
+00:00:51.140 --> 00:00:53.360
+Je länger man mit der Zusammenführung wartet, desto stärker weichen sie voneinander.
+
+00:00:53.360 --> 00:00:59.720
+Continuous Integration oder CI ist die Gewohnheit, dieses Zusammenführen ständig zu praktizieren, anstatt alles bis zum Ende aufzusparen.
+
+00:01:00.220 --> 00:01:03.600
+Jedes Mal, wenn jemand ein kleines Stück Arbeit abschließt, wird es in die gemeinsame Version integriert.
+
+00:01:04.400 --> 00:01:07.060
+Die Maschine erstellt darauf hin das gesamte Projekt und lässt die Tests darüber laufen.
+
+00:01:07.480 --> 00:01:11.600
+Wenn etwas kaputt geht, erfahren Sie es innerhalb von Minuten, während die Änderung bei allen nur frisch im Gedächtnis ist.
+
+00:01:11.860 --> 00:01:15.180
+Dieser kurze Abstand zwischen dem Fehler und dem Feedback ist der eigentliche Wert.
+
+00:01:16.120 --> 00:01:18.900
+Deshalb beschreiben Teams CI eher als schnelles Feedback, denn als bloße Geschwindigkeit.
+
+00:01:18.900 --> 00:01:24.240
+Dann gibt es noch den CD-Teil und hier stolpern Anfänger oft, weil diese zwei Buchstaben zwei verschiedene Dinge bedeuten können.
+
+00:01:24.700 --> 00:01:29.420
+Continuous Delivery bedeutet, dass sich die Software immer in einem Zustand befindet, in dem sie veröffentlicht werden könnte, auch wenn man sich entscheidet, noch zu warten.
+
+00:01:29.920 --> 00:01:31.420
+Continuous Deployment geht einen Schritt weiter.
+
+00:01:31.780 --> 00:01:35.560
+Jede Änderung, die die Prüfung besteht, geht direkt an die echten Nutzer, ohne dass jemand einen Knopf drücken muss.
+
+00:01:35.920 --> 00:01:39.220
+Gleiche Pipeline, gleiche Tests, nur eine andere Entscheidung darüber, wer das Startsignal gibt.
+
+00:01:39.700 --> 00:01:42.860
+Dieser einzelne Unterschied ist der Grund, warum die beiden Akronyme für so viel Verwirrung sorgen.
+
+00:01:42.860 --> 00:01:47.400
+Unter beidem liegt die Pipeline, ein Wort, das die Menschen mehr erschreckt, als es sollte.
+
+00:01:47.840 --> 00:01:49.340
+Die Pipeline ist ein Fließband für Software.
+
+00:01:50.500 --> 00:01:54.320
+Ein Ende geht roher Quellcode hinein und am anderen kommt eine getestete, auslieferungsbereite Version ab.
+
+00:01:54.680 --> 00:01:59.200
+Dazwischen passiert nichts Geheimnisvolles, ist nur eine Abfolge von Schritten, die ein Computer jedes Mal auf dieselbe Weise ausführt.
+
+00:01:59.640 --> 00:02:02.380
+Der Wert liegt hier in der ermüdungsfreien Wiederholung, nicht in Cleverness.
+
+00:02:02.980 --> 00:02:04.240
+Die Idee ist älter, als sie vielleicht vermuten.
+
+00:02:04.880 --> 00:02:07.980
+Grady Butch verwendete den Begriff kontinuierliche Integration erstmals im Jahr 1900.
+
+00:02:07.980 --> 00:02:13.480
+Extreme Programming griff ihn in den späten 1990er Jahren auf und 2001 erschien ein Open-Source-Tool namens Cruise Control.
+
+00:02:14.860 --> 00:02:21.640
+Die Praxis nahm 2010 richtig Gestalt an, als Jess Hamler und David Fahley das Buchschrieben des Continuous Delivery zum Standardwerk machte, dem folgenden Teams bis heute.
+
+00:02:22.220 --> 00:02:24.840
+Das Vokabular ist also klein und die dahinterstehende Logik sogar noch kleiner.
+
+00:02:25.600 --> 00:02:27.860
+Auf dem Papier simpel, doch Teams werten sich jahrelang.
+
+00:02:28.460 --> 00:02:30.480
+Dagegen, was zeigt, dass das Problem real war.
+
+00:02:31.340 --> 00:02:32.480
+Den Veröffentlichungstag behaupte es.
+
+00:02:32.740 --> 00:02:37.300
+Stellen Sie sich ein Team von acht Leuten vor, die alle am selben Produkt arbeiten und ihre Arbeit bis Monatsende speichern.
+
+00:02:37.980 --> 00:02:43.940
+Entwickler zogen sich tagelang oder wochenlang in ihre eigenen Branches zurück, bauten Funktionen isoliert und niemand sah das Gesamtergebnis bis zum Schluss.
+
+00:02:45.400 --> 00:02:48.900
+Jeder Branche war eine Wette darauf, dass der restliche Code sich nicht verändert, während sie weg waren.
+
+00:02:49.000 --> 00:02:50.100
+Eine Wette, die sie meist verloren.
+
+00:02:50.620 --> 00:02:51.480
+Dann kam der Veröffentlichungstag.
+
+00:02:52.000 --> 00:02:56.400
+Jemand musste die getrennte Arbeit aller zusammenführen und die zusammengefügte Version funktionierte fast nie beim ersten Versuch.
+
+00:02:57.520 --> 00:02:59.920
+Je weiter diese Branches auseinanderdrifteten, desto schlimmer wurde es so.
+
+00:03:00.580 --> 00:03:05.200
+Schließlich konnte die Zeit, um das Chaos zu entwirren, die Zeit übersteigen, die ursprünglich für das Schreiben des Codes nötig war.
+
+00:03:05.200 --> 00:03:07.680
+Die Leute gaben dem einen Namen und der Name sagt alles.
+
+00:03:07.820 --> 00:03:08.220
+Merge Hell.
+
+00:03:09.420 --> 00:03:10.980
+Der Rest des Prozesses war kaum besser.
+
+00:03:11.620 --> 00:03:16.180
+Builds erfolgten manuell auf dem Laptop von irgendwem mit speziellen Tools, die niemand dokumentiert hatte.
+
+00:03:16.880 --> 00:03:21.720
+Also funktionierte der Build auf diesem einen Rechner, scheiterte aber auf dem Server, weil Laptop und Server nie ganz identisch waren.
+
+00:03:22.680 --> 00:03:26.420
+Der Satz bei mir funktioniert, es wurde zum Running Gag und er war nur deshalb lustig, weil er weh tat.
+
+00:03:27.440 --> 00:03:28.500
+Dapeln machte alles nur noch schlimmer.
+
+00:03:28.920 --> 00:03:32.600
+Ein Monat lang Änderungen sammeln, alles auf einmal veröffentlichen und in der Produktion geht etwas schief.
+
+00:03:32.600 --> 00:03:36.240
+Nun starrt man auf einen Berg von Möglichkeiten und hat keine Ahnung, welche den Fehler verursacht hat.
+
+00:03:36.900 --> 00:03:42.100
+Ein Rollback bedeutet, gute Arbeit zusammen mit der Schlechten zunichtet zu machen und das Schuldzuweisungsspiel beginnt, bevor der Fehler gefunden wurde.
+
+00:03:42.540 --> 00:03:45.000
+Je größer die Menge, desto mehr Verstärke gibt es für einen einzigen Fehler.
+
+00:03:45.840 --> 00:03:47.160
+So wurde die Veröffentlichungsnacht zu einem Retro.
+
+00:03:48.160 --> 00:03:49.640
+Essen bestellen, lange bleiben, hoffen.
+
+00:03:50.880 --> 00:03:55.720
+Die Angst war begründet, denn ein einziger fehlerhafter Release konnte ein funktionierendes Produkt offline nehmen und das ganze Team ins Rampenlicht rücken.
+
+00:03:56.140 --> 00:03:57.840
+Niemand in diesem Team war faul oder nachlässig.
+
+00:03:57.840 --> 00:04:01.200
+Der Prozess bot ihn einfach keine Möglichkeit, Probleme früh zu erkennen.
+
+00:04:01.300 --> 00:04:04.080
+Daher kamen alle Probleme spät, teuer und auf einmal.
+
+00:04:04.800 --> 00:04:08.800
+Die Lösung für all das klang fast zu unbedeutend, um wichtig zu sein und genau das ist der Punkt, den es zu verstehen gilt.
+
+00:04:09.720 --> 00:04:10.980
+Was passiert eigentlich in einer Pipeline?
+
+00:04:11.700 --> 00:04:16.540
+Am besten versteht man die Pipeline, wenn man eine kleine Änderung auf ihrem Weg begleitet und dieser Weg ist kürzer, als man denkt.
+
+00:04:17.540 --> 00:04:18.400
+Alles beginnt mit einem Trigger.
+
+00:04:18.400 --> 00:04:24.680
+Jemand schließt eine Änderung ab, pusht sie in das gemeinsame Repository oder öffnet einen Merge-Request und die Pipeline startet von selbst.
+
+00:04:25.380 --> 00:04:29.180
+Niemand muss daran denken, sie zu starten, was wichtig ist, denn Menschen vergessen Dinge, Maschinen hingegen nicht.
+
+00:04:29.960 --> 00:04:34.500
+Von diesem Moment an kann jeder den Status der Änderung sehen, sodass niemand fragen muss, ob man darauf aufbauen kann.
+
+00:04:35.520 --> 00:04:39.540
+Der erste Stopp ist der Bild, bei dem der Computer den Quellcode in eine ausführbare Form umwandelt.
+
+00:04:40.300 --> 00:04:42.140
+Früher wurde dieser Schritt auf einem Laptop erledigt.
+
+00:04:42.640 --> 00:04:45.840
+Heute geschieht dies jedes Mal auf die gleiche Weise, auf einer Maschine, die speziell für diese Aufgabe ausgelegt.
+
+00:04:45.840 --> 00:04:50.180
+Wenn der Bild fehlschlägt, sieht das sofort jeder und die Änderung geht nicht weiter.
+
+00:04:51.120 --> 00:04:54.740
+Ein erfolgreicher Bild erzeugt die eine Version, die bis in die Produktion übernommen wird.
+
+00:04:55.400 --> 00:04:56.360
+Als nächstes kommen die Tests.
+
+00:04:57.040 --> 00:05:01.660
+Automatisierte Tests sind kleine Skripte, die prüfen, ob die Software wie vorwesehen funktioniert und sie laufen, ohne dass jemand zuschauen muss.
+
+00:05:02.440 --> 00:05:08.700
+Unit-Tests prüfen einzelne Teile isoliert, während Integrationstests bestätigen, dass alle Komponenten weiterhin reibungslos zusammenarbeiten.
+
+00:05:09.140 --> 00:05:12.560
+Wenn ein Test fehlschlägt, stoppt die Pipeline und die fehlerhafte Änderung erreicht niemanden.
+
+00:05:12.560 --> 00:05:17.720
+Die Tests, die sie nach dem Heben eines Bugs schreiben, sind am wichtigsten, da sie verhindern, dass derselbe Fehler Monate später wieder auftaucht.
+
+00:05:18.440 --> 00:05:22.940
+Wenn die Tests erfolgreich sind, wandert die Änderung in die Umgebungen und hier werden die vier Begriffe wichtig, die sie immer wieder hören werden.
+
+00:05:23.600 --> 00:05:27.040
+In der Entwicklung und Development entsteht die Arbeit und im Test-Test-Test wird sie gründlich überprüft.
+
+00:05:27.500 --> 00:05:30.880
+Staging ist ein Probenraum, der so realitätsnah wie möglich gestaltet ist.
+
+00:05:30.880 --> 00:05:35.220
+Die Produktion-Production ist dort, wo die echten Nutzer sind und das ist die einzige Umgebung, die für sie zählt.
+
+00:05:35.540 --> 00:05:37.320
+Branches und Trigger entscheiden, wann all dies abläuft.
+
+00:05:38.220 --> 00:05:40.920
+Der Main-Branch enthält die gemeinsam vereinbarte Version der Wahrheit.
+
+00:05:41.400 --> 00:05:44.720
+Und die meisten Pipelines starten, wenn eine Änderung dort landet oder vorgeschlagen wird.
+
+00:05:45.560 --> 00:05:50.120
+Manche Teams planen einen nächtlichen Lauf, damit umfangreiche Testräte fertiggestellt werden können, ohne jemanden bei der Arbeit aufzuhalten.
+
+00:05:50.580 --> 00:05:52.840
+Ein weiteres Element verdient hier seinen Platz, das Feature-Flag.
+
+00:05:52.840 --> 00:05:58.880
+Ein Flag ermöglicht, das Code in die Produktion zu bringen, während das neue Feature abgeschaltet bleibt, um es dann für einige oder alle Nutzer nach Wahl zu aktivieren.
+
+00:05:59.440 --> 00:06:05.440
+Das bedeutet, dass das Ausliefern des Codes und das Freischalten des Features nicht mehr dasselbe Ereignis sind, was dem Team enorme Entspannung verschafft.
+
+00:06:06.200 --> 00:06:08.600
+Fügt man diese Teile zusammen, wirkt die Pipeline plötzlich gar nicht mehr wie Magie.
+
+00:06:09.280 --> 00:06:11.840
+Man könnte meinen, es geht um Geschwindigkeit, aber eigentlich geht es um Vertrauen.
+
+00:06:12.280 --> 00:06:14.140
+Weil das gesamte Team sieht, was sicher ist und was nicht.
+
+00:06:15.620 --> 00:06:16.460
+Versus Deployment
+
+00:06:17.120 --> 00:06:22.680
+Viele verwenden Continuous Delivery und Continuous Deployment synonym, doch der Unterschied liegt in einer einzigen Entscheidung.
+
+00:06:23.040 --> 00:06:23.960
+Wer drückt den Knopf?
+
+00:06:25.020 --> 00:06:27.740
+Wenn man das falsch versteht, versteht man die Hälfte dessen nicht, worüber das Team spricht.
+
+00:06:28.620 --> 00:06:33.180
+Bei Continuous Delivery hält die Pipeline die Software jederzeit bereit und ein Mensch entscheidet, wann sie veröffentlicht wird.
+
+00:06:34.440 --> 00:06:39.260
+Der Knopf ist noch da und ein Mensch drückt ihn meist aus einem bestimmten Grund, etwa für einen Marketing-Launch oder einen ruhigen Freitagnachmittag.
+
+00:06:40.200 --> 00:06:43.640
+Die Arbeit zur Vorbereitung eines Releases entfällt, aber die Entscheidung über den Zeitpunkt bleibt.
+
+00:06:44.700 --> 00:06:46.460
+Bei Continuous Deployment verschwindet der Knopf.
+
+00:06:47.160 --> 00:06:49.680
+Jede Änderung, die die Prüfungen besteht, geht automatisch live.
+
+00:06:50.040 --> 00:06:51.960
+Nur ein fehlgeschlagener Test kann den Release stoppen.
+
+00:06:52.840 --> 00:06:56.360
+Das klingt leichtsinnig, bis man bedenkt, dass die Pipeline die Tests bereits durchgeführt hat.
+
+00:06:56.460 --> 00:06:58.800
+Ein Release, der etwas zerstören würde, verlässt also nie das Haus.
+
+00:06:59.720 --> 00:07:01.620
+Ein einfacher Weg, sich den Unterschied zu merken, ist dieser.
+
+00:07:02.520 --> 00:07:05.380
+Delivery ist ein Auto, das immer vollgetankt, gewaschen und startklar auf der Straße steht.
+
+00:07:06.140 --> 00:07:08.540
+Deployment ist dasselbe Auto, nur dass es auch noch von selbst fährt.
+
+00:07:08.880 --> 00:07:10.260
+Der Haken ist, der nächste Schritt kostet mehr.
+
+00:07:10.820 --> 00:07:13.560
+Beim Deployment steht niemand mehr am Gate, die Tests müssen also zuverlässig sein.
+
+00:07:13.620 --> 00:07:17.880
+Die Dokumentation muss Schritt halten und Features brauchen Flex, um kontrollierbar zu bleiben, um kontrollierbar zu bleiben.
+
+00:07:17.880 --> 00:07:21.260
+Lässt man das weg, automatisiert man nur den Prozess, Dinge schneller kaputt zu machen als zuvor.
+
+00:07:21.680 --> 00:07:23.860
+Deshalb bleiben viele Teams ganz bewusst beim Delivery stehen.
+
+00:07:24.580 --> 00:07:30.600
+Wenn ihre Software reguliert ist, über einen App Store vertrieben wird oder eine menschliche Abnahme erfordert, ist Delivery die sinnvolle Obergrenze.
+
+00:07:31.340 --> 00:07:33.260
+Weiterzugehen ist kein Ehrenabzeichen und auch nicht das Eigentliche.
+
+00:07:33.260 --> 00:07:36.600
+Es ist ein Abtausch, den man eingeht, sobald die Testqualität stark genug ist, um es zu rechtfertigen.
+
+00:07:36.960 --> 00:07:38.600
+Die nützliche Frage ist eine praktische.
+
+00:07:38.800 --> 00:07:40.440
+Was kann Ihr Team heute sicher leisten?
+
+00:07:42.180 --> 00:07:43.840
+Wie liefern Team-Software aus, ohne Dinge zu zerstören?
+
+00:07:44.260 --> 00:07:48.540
+Selbst mit einer sauberen Pipeline muss die neue Version zu den echten Nutzern, ohne dass alle offline gehen.
+
+00:07:49.500 --> 00:07:50.780
+Dafür gibt es drei bekannte Muster.
+
+00:07:51.540 --> 00:07:54.480
+Sie haben fast sicher schon Software genutzt, die mit allen drei gebaut wurde, ohne es zu merken.
+
+00:07:54.560 --> 00:07:56.200
+Und genau das ist der Punkt. Genau das.
+
+00:07:56.540 --> 00:07:58.900
+Eine Deployment-Strategie ist nur der Plan für den Austausch.
+
+00:07:58.900 --> 00:08:01.180
+Und jeder Plan tauscht etwas Kosten gegen ein wenig Sicherheit.
+
+00:08:01.380 --> 00:08:02.120
+Gegen ein wenig Sicherheit.
+
+00:08:02.120 --> 00:08:03.660
+Das Einfachste ist das Rolling Deployment.
+
+00:08:04.120 --> 00:08:07.520
+Man ersetzt die laufenden Instanzen nacheinander, sodass die App weiterhin erreichbar bleibt,
+
+00:08:07.640 --> 00:08:09.620
+während die neue Version parallel zur alten hochfährt.
+
+00:08:10.700 --> 00:08:13.620
+Nichts wird dunkel, obwohl für eine kurze Zeit zwei Versionen gleichzeitig laufen.
+
+00:08:14.560 --> 00:08:18.040
+Wenn Sie die neue Version fehlerhaft verhält, stoppen Sie die Einführung und die unberührten Kopien laufen weiter.
+
+00:08:19.420 --> 00:08:23.740
+Blue Green Deployment schlägt einen anderen Weg ein, den Martin Fowler bereits 2010 klar beschrieben hat.
+
+00:08:23.740 --> 00:08:28.880
+Sie unterhalten zwei Produktionsumgebungen, die so identisch wie möglich sind, wobei immer nur eine davon live ist.
+
+00:08:29.480 --> 00:08:31.920
+Sie stellen die neue Version in der inaktiven Umgebung bereit und testen sie.
+
+00:08:31.920 --> 00:08:34.100
+Dann schalten Sie den Router um, damit der gesamte Daten verkennigt.
+
+00:08:34.360 --> 00:08:37.120
+Wenn etwas schief geht, schalten Sie zurück und das Rollback erfolgt fast augenblicklich.
+
+00:08:37.720 --> 00:08:40.920
+Das dritte Muster ist das Canary Release, benannt nach dem Kanarienvogel im Bergwerk.
+
+00:08:41.560 --> 00:08:46.540
+Anstatt alle auf einmal umzustellen, leiten Sie einen kleinen Teil des echten Datenverkehrs zur neuen Version und beobachten, was passiert.
+
+00:08:47.260 --> 00:08:50.520
+Wenn alles gut läuft, vergrößern Sie den Anteil schrittweise, bis alle Nutzer umgestellt sind.
+
+00:08:51.320 --> 00:08:52.820
+Der Kanarienvogel ist Ihr Frühwarnsystem.
+
+00:08:52.960 --> 00:08:55.840
+Wenn er umkippt, brechen Sie die Einführung ab, bevor die meisten Nutzer etwas bemerkt haben.
+
+00:08:56.420 --> 00:08:59.060
+Beachten Sie, was alle drei gemeinsam haben, denn das ist die eigentliche Lektion.
+
+00:08:59.360 --> 00:09:01.460
+Keines von Ihnen verspricht, dass Releases niemals fehlschlagen.
+
+00:09:01.820 --> 00:09:04.180
+Sie gehen davon aus, dass Fehler normal sind und sorgen für eine schnelle Widerste.
+
+00:09:04.660 --> 00:09:07.880
+So wird aus einer fehlerhaften Bereitstellung eine fünfminütige Geschichte statt eines fünf Stüngers aus.
+
+00:09:08.280 --> 00:09:10.240
+Blue Green hat einen kleinen Haken, den man erwähnen sollte.
+
+00:09:10.500 --> 00:09:12.100
+Und der Übeltäter ist meist die Datenbank.
+
+00:09:12.940 --> 00:09:16.620
+Wenn eine neue Version eine andere Datenbankstruktur benötigt, kann man nicht immer beides gleichzeitig umstellen.
+
+00:09:17.000 --> 00:09:19.280
+Teams teilen die Arbeit normalerweise in zwei Schritte auf.
+
+00:09:19.280 --> 00:09:23.360
+Zuerst machen Sie die Datenbank mit beiden Versionen kompatibel, dann aktualisieren Sie die Anwendung.
+
+00:09:23.760 --> 00:09:27.640
+Das ist mehr Arbeit zu Beginn, aber das ist der Unterschied zwischen einem sauberen Rollback und einem Chaos, das niemand anfassen will.
+
+00:09:28.040 --> 00:09:32.180
+Außerdem bezahlen Sie für zwei vollständige Umgebungen, was der ehrliche Preis für diesen sofortigen Wechsel ist.
+
+00:09:33.220 --> 00:09:33.760
+Die vier Kennzahlen.
+
+00:09:34.080 --> 00:09:36.760
+Sie haben also die Komponenten und brauchen nun eine Methode, um zu wissen, ob sie funktionieren.
+
+00:09:37.100 --> 00:09:41.800
+Das lässt sich nicht allein nach Gefühl beurteilen, daher hat eine Forschungsgruppe namens DORA Teams vier Kennzahlen an die Hand gegeben.
+
+00:09:41.800 --> 00:09:50.380
+DORA erstellt den Accelerate State of DevOps Report, eine Umfrage, die über 32.000 Fachleute erreicht hat und deren Ergebnisse haben sich über Jahre hinweg bestätigt.
+
+00:09:50.980 --> 00:09:54.120
+Die erste Kennzahl ist die Bereitstellungshäufigkeit, also einfach wie oft die neue Versionen ausliefern.
+
+00:09:55.060 --> 00:09:58.940
+Die zweite ist die Durchlaufzeit für Änderungen, die Zeit vom Schreiben einer Codezeile bis zum Erreichen der Nutzer.
+
+00:09:59.700 --> 00:10:01.600
+Diese beiden messen die Geschwindigkeit, die anderen beiden messen die Stabilität.
+
+00:10:02.040 --> 00:10:04.720
+Die Änderungsfehlerrate ist der Anteil der Releases, die ein Problem verursacht.
+
+00:10:05.020 --> 00:10:09.260
+Die Wiederherstellungszeit bei fehlerhaften Bereitstellungen gibt an, wie lange es dauert, nach einem Fehler zum Normalzustand zurückzugehen.
+
+00:10:09.260 --> 00:10:13.720
+Das ist der spannende Punkt, denn die Kluft zwischen den besten Teams und dem Rest ist groß.
+
+00:10:14.320 --> 00:10:19.560
+An der Spitze setzen Teams auf Abruf ein und liefern mehrmals täglich, wobei etwa 5% ihrer Änderungen Fehler verursachen.
+
+00:10:20.220 --> 00:10:25.200
+Am unteren Ende setzen Teams wöchentlich oder monatlich ein und scheitern bei fast 64% ihrer Änderungen.
+
+00:10:26.080 --> 00:10:27.720
+Bei der Wiederherstellung zeigt sich dasselbe Bild.
+
+00:10:27.820 --> 00:10:31.140
+Die besten Teams sind in unter einer Stunde wieder einsatzbereit, die langsamsten brauchen Monate.
+
+00:10:31.720 --> 00:10:33.700
+Ein Warnhinweis sorgt dafür, dass diese Zahlen aussagekräftig sind.
+
+00:10:33.920 --> 00:10:39.060
+DORA selbst warnt davor, sie zum Vergleich von Teams zu nutzen, denn sobald eine Kennzahl zum Ziel wird, finden Leute Wege.
+
+00:10:39.260 --> 00:10:40.140
+Sie zu manipulieren.
+
+00:10:40.680 --> 00:10:42.940
+Die Zahlen sind ein Spiegel für die Entwicklung ihres eigenen Teams.
+
+00:10:43.160 --> 00:10:45.000
+Keine Anzeigetafel, um andere Teams schlecht zu machen.
+
+00:10:45.440 --> 00:10:46.800
+Der praktische Schritt ist kleiner, als er klingt.
+
+00:10:47.300 --> 00:10:50.240
+Wählen Sie eine Kennzahl, messen Sie sie einen Monat lang ehrlich und versuchen, sie zu verbessern.
+
+00:10:50.940 --> 00:10:52.760
+Geschwindigkeit und Stabilität gehören oft zusammen.
+
+00:10:53.100 --> 00:10:55.320
+Denn Teams, die häufig liefern, erholen sich auch am schnellsten.
+
+00:10:56.020 --> 00:10:57.860
+Sie brauchen nicht alle vier Zahlen am ersten Tag.
+
+00:10:58.080 --> 00:11:02.760
+Wer alles gleichzeitig verfolgt, manipuliert am Ende die Zahlen, statt die Arbeit zu verbessern, statt die Arbeit zu verbessern.
+
+00:11:02.760 --> 00:11:05.080
+Wo CI-CD schief geht
+
+00:11:05.080 --> 00:11:08.940
+Bisher klingt CI-CD nach einem gelösten Problem, doch das ist es nicht.
+
+00:11:09.940 --> 00:11:14.220
+Nichts davon läuft automatisch, nur weil Sie ein Tool gekauft haben und dieselben Fehler treten immer wieder auf.
+
+00:11:14.700 --> 00:11:18.540
+Beginnen wir mit dem Flaky-Test, einem Test, der bei gleichem Code ohne erkennbaren Grund mal besteht und mal scheitert.
+
+00:11:19.220 --> 00:11:22.860
+Es scheint harmlos, bis die Leute lernen, dass eine rote Pipeline nur bedeutet, nochmal ausführen.
+
+00:11:23.040 --> 00:11:25.340
+Und ab diesem Punkt ist Ihr Frühwarnsystem nur noch Hintergrundrauschen.
+
+00:11:25.340 --> 00:11:30.400
+Eine Pipeline, der niemand vertraut, ist schlimmer als gar keine, weil sie Sicherheit vorgaukelt, ohne sie zu bieten.
+
+00:11:31.000 --> 00:11:32.200
+Dann ist da noch die Geschwindigkeit derselben.
+
+00:11:32.680 --> 00:11:38.320
+Wenn ein Pipeline-Durchlauf eine Stunde dauert, warten die Leute nicht mehr darauf und schleusen Änderungen daran vorbei, was den Zweck leise untergräbt.
+
+00:11:39.180 --> 00:11:41.560
+Ein Bild, der zu lange dauert, ist fast so schlecht wie gar kein Bild.
+
+00:11:42.160 --> 00:11:45.200
+Zudem wird er meist langsamer, wenn ein Projekt wächst, sofern niemand ein Auge darauf hat.
+
+00:11:45.500 --> 00:11:46.960
+Eine dritte Falle ist die Umgebung, die täuscht.
+
+00:11:47.400 --> 00:11:50.320
+Wenn Ihre Testumgebung nicht der Produktion entspricht, besteht die Generalprobe.
+
+00:11:50.320 --> 00:11:51.780
+Doch in der Realität bricht alles zusammen.
+
+00:11:51.920 --> 00:11:53.460
+Sie haben für Sicherheit bezahlt, sie aber nicht erhalten.
+
+00:11:53.460 --> 00:11:55.100
+Das größte Problem ist subtiler.
+
+00:11:55.700 --> 00:11:59.600
+Man betrachtet CI-CCD als etwas, das man installiert, statt als etwas, das man praktiziert.
+
+00:12:00.220 --> 00:12:03.660
+Sie können die ausgefeilteste Plattform kaufen und trotzdem scheitern, weil die Gewohnheiten wichtiger sind, als sie es hoffen.
+
+00:12:04.580 --> 00:12:10.060
+Häufiges Zusammenführen, gewissenhafte Tests und kleine Änderungen sind tägliche Entscheidungen eines Teams, die kein Produkt auf einer Preisseite für Sie übernimmt.
+
+00:12:11.320 --> 00:12:14.260
+Die Pipeline selbst benötigt Pflege, genau wie jedes andere gemeinsame Genutzewerk.
+
+00:12:14.940 --> 00:12:16.380
+Und es gibt eine menschliche Ebene, die kein Tool abdeckt.
+
+00:12:16.380 --> 00:12:23.940
+Der DORA-Bericht 2024 ergab, dass Teams mit schwachen Grundlagen bei Continuous Integration und automatisierten Tests kaum von neuen KI-Coding-Tools profitierten.
+
+00:12:24.800 --> 00:12:26.920
+Teams mit starken Grundlagen bauten ihren Vorsprung weiter aus.
+
+00:12:27.720 --> 00:12:32.700
+Dokumentation, klare Verantwortlichkeiten und eine Kultur, in der man Probleme sicher ansprechen kann, sind genauso wichtig wie die Technologie.
+
+00:12:33.700 --> 00:12:37.700
+Automatisierung bringt einen guten Prozess weit voran, aber sie führt einen fehlerhaften Prozess ebenso bereitwillig vor.
+
+00:12:38.000 --> 00:12:41.480
+Nichts davon taucht in einem Diagramm auf und doch entscheidet es darüber, ob das Diagramm funktioniert.
+
+00:12:42.260 --> 00:12:43.200
+Warum das für Sie wichtig ist?
+
+00:12:43.720 --> 00:12:47.180
+Wenn Sie nicht beruflich programmieren, ist es verständlich, dass Sie sich fragen, warum das Ihr Problem sein soll.
+
+00:12:47.500 --> 00:12:48.600
+Es gibt zwei ehrliche Antworten darauf.
+
+00:12:48.960 --> 00:12:50.620
+Die erste ist, dass Sie näher dran sind, als Sie denken.
+
+00:12:51.180 --> 00:12:54.600
+In der Microsoft-Welt findet diese Arbeit meist in Azure Pipelines oder GitHub-Actions statt.
+
+00:12:55.600 --> 00:13:01.920
+Wenn Sie Power-Apps oder Power-Automate-Flows erstellen, hat die Power-Plattform eigene Pipelines, um Lösungen von der Entwicklung über den Test in die Produktion zu bringen.
+
+00:13:01.920 --> 00:13:07.540
+Es ist dieselbe Idee in einem Gewand und sie zu erkennen bedeutet, dass Sie nicht verloren sind, wenn das nächste Mal von einem Deployment die Rede ist.
+
+00:13:08.180 --> 00:13:11.340
+Die zweite Antwort betrifft die Art der Idee, denn sie reicht weit über Software hinaus.
+
+00:13:12.080 --> 00:13:18.720
+Kleine, häufig geprüfte und umkehrbare Änderungen sind dieselben Schritte, die jedes Projekt weniger beängstigend machen, egal ob Bericht, Migration oder Launch.
+
+00:13:19.520 --> 00:13:21.760
+Teams, die gelassen veröffentlichen, sind nicht mutiger als alle anderen.
+
+00:13:22.160 --> 00:13:24.200
+Die haben die Schritte nur klein genug gemacht, um sie zu bewältigen.
+
+00:13:24.340 --> 00:13:28.040
+Diese Gewohnheit ist erlernbar und eine der wenigen Fähigkeiten in der Tech-Welt, die Sie von Job zu Job mitnehmen.
+
+00:13:28.040 --> 00:13:31.980
+Und wenn berufliches Wachstum ein Grund für Ihre Anwesenheit hier ist, dieses Vokabular ist heute Grundvoraussetzung.
+
+00:13:32.700 --> 00:13:34.740
+Gellen-Beschreibungen erwähnen ständig CI, CCD.
+
+00:13:35.800 --> 00:13:41.440
+Zu wissen, was die Buchstaben bedeuten und warum die Pipeline existiert, ist der Unterschied zwischen bloßem Nicken im Meeting und dem tatsächlichen Verfolgen des Gesprächs.
+
+00:13:42.100 --> 00:13:44.240
+Sie müssen keine Pipeline bauen, um daran sicher zu klingen.
+
+00:13:44.660 --> 00:13:46.040
+Und diese Sicherheit öffnet Ihnen Türen.
+
+00:13:47.040 --> 00:13:47.720
+Eine Frage an Sie.
+
+00:13:48.200 --> 00:13:49.420
+Hier ist die Kurzfassung zum Mitnehmen.
+
+00:13:49.420 --> 00:13:59.760
+Integration bedeutet häufiges Zusammenführen, Delivery bedeutet ständige Einsatzbereitschaft, Deployment bedeutet automatisiertes Veröffentlichen und die Pipeline plus Strategien wie Blue-Green oder Canary halten alles sicher.
+
+00:14:00.320 --> 00:14:01.200
+Das ist also meine Frage an Sie.
+
+00:14:01.800 --> 00:14:05.760
+Wenn Sie eine wiederkehrende Aufgabe in Ihrer eigenen Arbeit an eine Pipeline übergeben könnten, übergeben könnten, welche wäre das?
+
+00:14:06.280 --> 00:14:10.280
+Abonniere den M35O6 CFM Podcast, damit wir gemeinsam die Zukunft der Arbeit gestalten können.
+
+00:14:11.140 --> 00:14:11.460
+Danke.
+
+00:14:11.460 --> 00:14:12.080
+Danke.
+
+00:14:12.080 --> 00:14:12.640
+Danke.
+
+00:14:12.640 --> 00:14:13.020
+Danke.

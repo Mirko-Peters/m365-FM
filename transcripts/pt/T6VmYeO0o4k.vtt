@@ -1,0 +1,1672 @@
+WEBVTT
+
+00:00:00.190 --> 00:00:05.810
+Bem-vindo ao podcast M3Z5FM, onde exploramos as pessoas, ideias e tecnologias que moldam o futuro do trabalho.
+
+00:00:06.410 --> 00:00:08.650
+Porque seus números ficam errados quando as tabelas não se comunicam.
+
+00:00:09.050 --> 00:00:11.970
+Você pode criar um relatório limpo no Power BI que lhe entrega números incorretos.
+
+00:00:12.330 --> 00:00:17.050
+Você tem cinco tabelas, colunas organizadas, um relatório que parece pronto, e cada linha ainda mostra o mesmo total.
+
+00:00:17.610 --> 00:00:20.410
+Os dados estão bons, mas as tabelas simplesmente não estão se comunicando.
+
+00:00:20.930 --> 00:00:24.390
+Um relacionamento é o fio entre duas tabelas, construído sobre uma coluna que elas compartilham.
+
+00:00:24.850 --> 00:00:28.190
+Aprenda a ler esse fio e você poderá prever exatamente o que um clique faz com seus números.
+
+00:00:28.190 --> 00:00:30.790
+Que é um relacionamento em termos simples.
+
+00:00:31.690 --> 00:00:34.530
+Existe uma cena que se repete para quase todos que abrem o Power BI pela primeira vez.
+
+00:00:35.110 --> 00:00:39.190
+E o gráfico das cinco tabelas arrasta alguns campos para um gráfico, e o gráfico mostra o mesmo número em cada linha.
+
+00:00:40.430 --> 00:00:44.330
+Seu primeiro instinto é culpar os dados, então você abre o arquivo de origem e os dados estão corretos.
+
+00:00:45.130 --> 00:00:48.670
+O problema está em outro lugar, e geralmente é o objeto mais entediante de todo o modelo.
+
+00:00:49.770 --> 00:00:52.210
+Um relacionamento é um caminho de filtro entre duas tabelas.
+
+00:00:52.790 --> 00:00:53.670
+Essa é a definição completa.
+
+00:00:53.670 --> 00:00:58.630
+Ele corre ao longo de uma coluna que ambas as tabelas compartilham, e permite que um filtro aplicado em uma tabela alcance a outra.
+
+00:00:59.650 --> 00:01:04.490
+Nada mais acontece nos bastidores, e é por isso que os relacionamentos parecem muito menos misteriosos quando você consegue visualizá-los.
+
+00:01:05.590 --> 00:01:08.690
+Considere um modelo simples, com quatro tabelas, categoria, produto, vendas e ano.
+
+00:01:09.090 --> 00:01:13.090
+Categoria conecta-se a produto, produto conecta-se a vendas, e ano também se conecta a vendas.
+
+00:01:13.650 --> 00:01:15.650
+Agora você clica uma categoria, digamos, CAT A.
+
+00:01:15.790 --> 00:01:20.330
+Esse clique viaja de categoria para produto, e produto diz ao Power BI quais dois produtos pertencem a essa categoria.
+
+00:01:20.330 --> 00:01:25.370
+A partir daí, o filtro viaja para vendas, e vendas se restringem apenas às linhas desses dois produtos.
+
+00:01:25.890 --> 00:01:28.430
+Se você também filtrar por um ano, vendas se restringem ainda mais.
+
+00:01:29.210 --> 00:01:33.270
+O próprio passo a passo da Microsoft chega a 11 unidades quando você filtra uma categoria em um ano juntos,
+
+00:01:33.530 --> 00:01:35.510
+e 14 unidades quando filtra apenas a categoria.
+
+00:01:36.650 --> 00:01:39.210
+A diferença vem de uma pequena regra que vale a pena guardar.
+
+00:01:39.970 --> 00:01:42.970
+Quando dois filtros incidem sobre a mesma tabela, ambos precisam ser verdadeiros.
+
+00:01:43.810 --> 00:01:48.810
+O Power BI combina filtros com um E todas as vezes, a menos que você escreva uma fórmula que indique o contrário.
+
+00:01:48.810 --> 00:01:52.270
+Por isso que um filtro extra pode reduzir um número muito mais do que você espera,
+
+00:01:52.410 --> 00:01:55.290
+e porque um gráfico vazio às vezes significa apenas que dois filtros discordam.
+
+00:01:55.710 --> 00:01:58.150
+Existe um caso em que uma tabela não tem relacionamento propositalmente.
+
+00:01:58.750 --> 00:02:00.590
+Uma tabela desconectada não filtra absolutamente nada.
+
+00:02:00.910 --> 00:02:04.130
+Ele apenas armazena um valor que você deseja usar como uma taxa de câmbio escolhida,
+
+00:02:04.470 --> 00:02:06.970
+em um menu suspenso, uma medida, lê esse valor e faz algo útil com ele.
+
+00:02:07.810 --> 00:02:10.210
+Parâmetro de o que aconteceria se o Power BI cria um desse para você.
+
+00:02:10.630 --> 00:02:13.910
+Tanto um relacionamento não é uma fórmula, não é uma decoração que você adiciona no final.
+
+00:02:14.310 --> 00:02:14.790
+É um caminho.
+
+00:02:14.790 --> 00:02:18.470
+Cada número no seu relatório é tão confiável quanto os caminhos que levam até ele.
+
+00:02:19.730 --> 00:02:21.410
+Cardinalidade é a palavra que decide qual a tabela lidera.
+
+00:02:22.110 --> 00:02:24.550
+Cardinalidade parece uma daquelas palavras criadas para assustar iniciantes.
+
+00:02:25.190 --> 00:02:28.590
+Trata-se de perguntar quantas vezes um valor pode se repetir em cada lado de uma conexão.
+
+00:02:29.250 --> 00:02:30.830
+Imagine uma tabela de produtos e uma tabela de vendas.
+
+00:02:31.130 --> 00:02:33.130
+A tabela de produtos contém uma linha por produto,
+
+00:02:33.230 --> 00:02:35.390
+então cada ID de produto aparece exatamente uma vez.
+
+00:02:36.110 --> 00:02:37.710
+A tabela de vendas contém milhares de linhas,
+
+00:02:37.830 --> 00:02:40.930
+e o mesmo ID de produto aparece várias vezes, uma para cada venda daquele produto.
+
+00:02:41.370 --> 00:02:42.270
+É só isso que é cardinalidade.
+
+00:02:42.270 --> 00:02:45.650
+Um lado mantém a lista única, e o outro lado mantém as repetições.
+
+00:02:46.150 --> 00:02:48.290
+Power BI oferece quatro maneiras de descrever esse vínculo.
+
+00:02:48.990 --> 00:02:51.910
+Um para muitos, muitos para um, um para um, e muitos para muitos.
+
+00:02:52.770 --> 00:02:55.250
+Os dois primeiros são o mesmo vínculo visto de extremidades opostas,
+
+00:02:55.330 --> 00:02:57.270
+então você não precisa memorizá-los como coisas separadas.
+
+00:02:57.910 --> 00:02:59.750
+Se a lista única estiver no lado dos produtos,
+
+00:03:00.030 --> 00:03:02.050
+o vínculo é um para muitos quando lido a partir de produtos,
+
+00:03:02.130 --> 00:03:03.650
+e muitos para um quando lido a partir de vendas.
+
+00:03:04.010 --> 00:03:05.530
+É o mesmo vínculo visto de qualquer uma das pontas.
+
+00:03:05.930 --> 00:03:08.450
+Um para um significa que ambas as colunas contêm valores únicos,
+
+00:03:08.530 --> 00:03:10.950
+e é raro o suficiente para que você possa tratá-lo como um sinal de alerta.
+
+00:03:10.950 --> 00:03:14.130
+Geralmente significa que você dividiu algo que estaria melhor como uma única tabela.
+
+00:03:14.690 --> 00:03:16.730
+Muito para muitos significa que ambas as colunas podem ter brilho.
+
+00:03:16.970 --> 00:03:17.170
+Real.
+
+00:03:17.670 --> 00:03:20.430
+Ele resolve alguns problemas difíceis, e cobra por esse privilégio.
+
+00:03:20.850 --> 00:03:22.890
+Portanto, recorra a ele intencionalmente em vez de ir para o padrão.
+
+00:03:23.370 --> 00:03:26.470
+Padrão principal ou um para muitos, e você construirá quase tudo com base nele.
+
+00:03:26.890 --> 00:03:29.390
+Uma lista limpa de itens de um lado e todas as transações do outro.
+
+00:03:30.170 --> 00:03:32.910
+Assim que você identificar qual tabela contém a lista única,
+
+00:03:33.150 --> 00:03:35.170
+terá encontrado o lado que lidera e o lado que segue.
+
+00:03:35.710 --> 00:03:37.210
+Power BI geralmente resolve isso para você.
+
+00:03:37.210 --> 00:03:40.570
+Ao carregar os dados, ele analisa as colunas, se adivinha a cardinalidade,
+
+00:03:40.770 --> 00:03:42.430
+e na maioria das vezes o palpite está correto.
+
+00:03:42.910 --> 00:03:44.010
+Duas coisas eu venho a pena sabendo então.
+
+00:03:44.390 --> 00:03:46.810
+Ele adivinha mal quando as tabelas ainda não carregaram dados,
+
+00:03:47.150 --> 00:03:49.550
+e adivinha mal quando uma coluna que deveria ter duplicatas
+
+00:03:49.550 --> 00:03:51.430
+acaba contendo apenas valores únicos hoje.
+
+00:03:52.030 --> 00:03:53.770
+Há também uma regra rígida por trás de tudo isso.
+
+00:03:54.330 --> 00:03:56.890
+Se uma atualização tentar carregar uma duplicata no lado único,
+
+00:03:57.290 --> 00:03:58.350
+todo o processo falha.
+
+00:04:00.710 --> 00:04:01.610
+Para onde os filtros viajam?
+
+00:04:02.050 --> 00:04:04.110
+Até um vínculo correto de um para muitos tem uma direção,
+
+00:04:04.230 --> 00:04:06.130
+e essa é a configuração que a maioria dos iniciantes nunca abre,
+
+00:04:06.130 --> 00:04:08.230
+chama-se direção do filtro cruzado,
+
+00:04:08.330 --> 00:04:10.250
+e ela decide qual tabela pode filtrar qual.
+
+00:04:11.030 --> 00:04:12.570
+O padrão é único e a escolha segura.
+
+00:04:13.130 --> 00:04:15.230
+Os filtros fluem do lado único para o lado repetido,
+
+00:04:15.790 --> 00:04:16.470
+e é lá que eles param.
+
+00:04:17.050 --> 00:04:18.790
+Sua lista de produtos pode filtrar suas vendas,
+
+00:04:18.890 --> 00:04:20.330
+mas suas vendas não podem filtrar sua de produto.
+
+00:04:20.710 --> 00:04:21.710
+Para a maioria dos relatórios,
+
+00:04:21.810 --> 00:04:23.550
+esse é exatamente o comportamento desejado,
+
+00:04:23.630 --> 00:04:24.790
+pois é previsível e rápido.
+
+00:04:25.390 --> 00:04:27.510
+A outra opção é ambos, que as pessoas chamam de bidirecional.
+
+00:04:28.190 --> 00:04:30.190
+Você a utiliza quando um filtro precisa voltar pelo vínculo,
+
+00:04:30.310 --> 00:04:32.950
+geralmente porque uma segmentação de dados está agindo de forma estranha.
+
+00:04:32.950 --> 00:04:35.430
+O exemplo bancário da Microsoft torna a razão clara.
+
+00:04:35.950 --> 00:04:37.950
+Clientes e contas estão vinculados por uma tabela intermediária,
+
+00:04:38.570 --> 00:04:41.150
+pois um cliente pode ter várias contas e uma conta pode ter vários donos.
+
+00:04:41.910 --> 00:04:43.750
+Com o filtro apontando apenas em uma direção,
+
+00:04:43.910 --> 00:04:45.690
+cada cliente acaba mostrando o mesmo saldo,
+
+00:04:45.770 --> 00:04:47.010
+o que é impossível na vida real.
+
+00:04:47.810 --> 00:04:49.290
+Alterne um vínculo para ambas as direções
+
+00:04:49.290 --> 00:04:50.690
+se os saldos dos clientes fazem sentido.
+
+00:04:51.210 --> 00:04:52.330
+Usar ambas as direções, no entanto,
+
+00:04:52.910 --> 00:04:54.690
+vínculos bidirecionais custam desempenho,
+
+00:04:54.730 --> 00:04:56.210
+e podem criar mais de um caminho válido
+
+00:04:56.210 --> 00:04:57.690
+para um filtro viajar entre duas tabelas.
+
+00:04:58.390 --> 00:04:59.970
+Quando dois caminhos parecem igualmente bons,
+
+00:04:59.970 --> 00:05:02.990
+o Power BI não consegue escolher e apresenta um erro de caminho ambíguo.
+
+00:05:03.510 --> 00:05:05.130
+A orientação da Microsoft é direta sobre isso.
+
+00:05:05.610 --> 00:05:07.490
+Mantenha os relacionamentos bidirecionais no mínimo
+
+00:05:07.490 --> 00:05:09.590
+e ative um apenas quando realmente precisar.
+
+00:05:10.310 --> 00:05:11.910
+Portanto, o hábito que vale a pena criar é simples.
+
+00:05:12.890 --> 00:05:14.010
+Deixe a direção como está
+
+00:05:14.010 --> 00:05:16.330
+até que um filtro realmente não consiga chegar onde precisa
+
+00:05:16.330 --> 00:05:18.370
+e só então abra a configuração e altere-a.
+
+00:05:18.930 --> 00:05:21.110
+Se você não conseguir lembrar para onde um filtro deve fluir,
+
+00:05:21.370 --> 00:05:22.710
+imagine a lista única como o chefe.
+
+00:05:23.110 --> 00:05:24.570
+Ela envia instruções para as transações
+
+00:05:24.570 --> 00:05:27.130
+e as transações raramente precisam enviar algo de volta.
+
+00:05:27.950 --> 00:05:29.390
+Lendo as linhas sólidas e tracejadas,
+
+00:05:29.550 --> 00:05:31.010
+abra a visualização de modelo no Power BI
+
+00:05:31.010 --> 00:05:32.450
+e você verá tabelas unidas por linhas.
+
+00:05:32.990 --> 00:05:34.490
+Essas linhas contêm informações úteis.
+
+00:05:34.570 --> 00:05:36.210
+E aprender a lê-las leva cerca de um minuto.
+
+00:05:36.650 --> 00:05:38.550
+E uma linha sólida significa que o acionamento está ativo,
+
+00:05:38.730 --> 00:05:40.330
+e uma linha tracejada significa que está inativo.
+
+00:05:40.750 --> 00:05:42.430
+Uma regra faz com que as linhas tracejadas façam assim.
+
+00:05:42.750 --> 00:05:45.530
+Entre duas tabelas, apenas um caminho pode estar ativo por vez,
+
+00:05:45.610 --> 00:05:47.370
+e quaisquer outros devem permanecer inativos
+
+00:05:47.370 --> 00:05:48.790
+até que uma fórmula os ative.
+
+00:05:49.450 --> 00:05:51.470
+Você pode se perguntar por que desejaria ter mais de um caminho.
+
+00:05:52.030 --> 00:05:53.710
+Uma única tabela pode significar várias coisas diferentes.
+
+00:05:53.710 --> 00:05:56.590
+Imagine uma tabela de datas que poderia filtrar suas vendas
+
+00:05:56.590 --> 00:05:58.910
+pela data do pedido, data de envio ou data de entrega.
+
+00:05:59.110 --> 00:06:01.010
+Isso são três tarefas para uma única tabela,
+
+00:06:01.210 --> 00:06:03.230
+e o Power BI permite que apenas uma delas fique ativa.
+
+00:06:03.710 --> 00:06:06.090
+A Microsoft chama isso de dimensão de função múltipla,
+
+00:06:06.130 --> 00:06:07.570
+e a solução costuma ser bem simples.
+
+00:06:08.370 --> 00:06:10.650
+Copie a tabela de datas para uma tabela de data de envio
+
+00:06:10.650 --> 00:06:11.650
+e uma de data de entrega,
+
+00:06:11.710 --> 00:06:13.270
+depois dê a cada cópia sua própria linha ativa.
+
+00:06:13.670 --> 00:06:14.830
+Tabelas de datas são pequenas,
+
+00:06:14.910 --> 00:06:16.270
+então a duplicação quase não tem custo.
+
+00:06:16.790 --> 00:06:18.370
+Existe um segundo caminho que evita a cópia.
+
+00:06:19.030 --> 00:06:20.610
+Uma fórmula chamada User Relationship
+
+00:06:20.610 --> 00:06:22.270
+pode ativar uma linha nativa para um cálculo
+
+00:06:22.270 --> 00:06:23.770
+sem que você precise duplicar uma tabela.
+
+00:06:23.990 --> 00:06:25.450
+Vale a pena saber o nome para que o tutorial
+
+00:06:25.450 --> 00:06:26.410
+pareça menos estranho,
+
+00:06:26.470 --> 00:06:28.030
+mas você não precisa disso no seu primeiro dia.
+
+00:06:28.730 --> 00:06:29.970
+O verdadeiro objetivo de tudo isso
+
+00:06:29.970 --> 00:06:30.810
+é que o diagrama é um mapa,
+
+00:06:30.870 --> 00:06:31.870
+e mapas podem ser lidos.
+
+00:06:33.210 --> 00:06:34.270
+Linha contínua significativa,
+
+00:06:34.350 --> 00:06:35.150
+tracejada significativa.
+
+00:06:35.790 --> 00:06:37.310
+Uma ponta de seta significa que o filtro
+
+00:06:37.310 --> 00:06:38.030
+segue uma direção,
+
+00:06:38.230 --> 00:06:39.810
+e duas pontas significam que ele segue ambas.
+
+00:06:40.450 --> 00:06:41.750
+Quando essas marcas fazem sentido,
+
+00:06:42.110 --> 00:06:43.390
+o modelo deixa de ser apenas uma imagem
+
+00:06:43.390 --> 00:06:44.810
+e passa a ser algo que você pode analisar.
+
+00:06:45.430 --> 00:06:46.790
+O formato de estrela mantém o modelo 5.
+
+00:06:46.790 --> 00:06:48.270
+Tudo isso fica mais fácil
+
+00:06:48.270 --> 00:06:49.670
+se suas tabelas estiverem estruturadas
+
+00:06:49.670 --> 00:06:51.250
+corretamente antes de você começar a vinculá-las.
+
+00:06:52.370 --> 00:06:54.290
+O formato que a Microsoft recomenda é estrela,
+
+00:06:54.390 --> 00:06:55.610
+e o nome já descreve a aparência.
+
+00:06:56.590 --> 00:06:58.350
+No centro fica uma grande tabela de eventos.
+
+00:06:58.790 --> 00:07:00.370
+Ao redor dela ficam várias tabelas menores
+
+00:07:00.370 --> 00:07:01.170
+que descrevem coisas.
+
+00:07:01.550 --> 00:07:02.390
+E elas são dimensões,
+
+00:07:02.650 --> 00:07:03.970
+e elas são as coisas que você descreve.
+
+00:07:04.530 --> 00:07:06.170
+Produtos, clientes, datas, regiões.
+
+00:07:06.690 --> 00:07:07.930
+A grande é uma tabela de fatos,
+
+00:07:07.990 --> 00:07:08.770
+ela contém o que aconteceu.
+
+00:07:09.310 --> 00:07:10.510
+Vendas, pedidos, saldos.
+
+00:07:11.230 --> 00:07:12.930
+Dimensões servem para filtrar e agrupar,
+
+00:07:13.030 --> 00:07:14.230
+e fatos servem para somar.
+
+00:07:14.230 --> 00:07:16.150
+Esta é a parte que surpresuas.
+
+00:07:16.650 --> 00:07:18.250
+Nada no Power BI tem uma caixa de seleção
+
+00:07:18.250 --> 00:07:19.530
+que diz esta é uma tabela de fatos.
+
+00:07:20.110 --> 00:07:21.550
+O relacionamento em si define a função.
+
+00:07:22.250 --> 00:07:24.370
+O lado único de um vínculo sempre se torna a dimensão,
+
+00:07:24.430 --> 00:07:26.150
+e o lado repetido sempre se torna o fato.
+
+00:07:26.750 --> 00:07:28.830
+Tanto o formato resulta dos vínculos que você cria,
+
+00:07:28.910 --> 00:07:30.090
+não de uma configuração que você escolhe.
+
+00:07:30.530 --> 00:07:31.990
+Formato de estrela vem se produz para aqui.
+
+00:07:32.410 --> 00:07:33.970
+Filtros percorrem distâncias curtas,
+
+00:07:34.010 --> 00:07:35.870
+o que mantém os relatórios rápidos,
+
+00:07:35.930 --> 00:07:37.990
+e você só pode criar uma hierarquia de detalhamento limpa
+
+00:07:37.990 --> 00:07:38.950
+dentro de uma única tabela,
+
+00:07:39.030 --> 00:07:40.630
+que é exatamente o que as tabelas de dimensão são.
+
+00:07:41.490 --> 00:07:43.230
+Uma alternativa comum é o Snowflake,
+
+00:07:43.230 --> 00:07:45.130
+onde você divide uma entidade em várias tabelas,
+
+00:07:45.250 --> 00:07:46.570
+como categoria para subcategoria,
+
+00:07:46.750 --> 00:07:47.550
+e depois produto.
+
+00:07:48.090 --> 00:07:49.190
+Parece organizado no papel,
+
+00:07:49.350 --> 00:07:51.050
+mas significa mais tabelas para gerenciar,
+
+00:07:51.150 --> 00:07:52.250
+cadeias de filtros mais longas,
+
+00:07:52.350 --> 00:07:53.850
+e nenhuma necessidade de detalhamento no final.
+
+00:07:54.470 --> 00:07:56.310
+Uma tabela de datas é algo que você encontrará
+
+00:07:56.310 --> 00:07:57.430
+em quase todo modelo estrela,
+
+00:07:57.530 --> 00:07:58.850
+pois quase toda questão de negócio
+
+00:07:58.850 --> 00:08:01.270
+é uma versão de como isso mudou ao longo do tempo.
+
+00:08:02.330 --> 00:08:03.790
+Vale a pena guardar um pequeno truque.
+
+00:08:03.790 --> 00:08:06.270
+Se uma tabela não possui uma coluna única de valores,
+
+00:08:06.390 --> 00:08:07.110
+você pode adicionar uma.
+
+00:08:07.530 --> 00:08:08.810
+Por exemplo, uma coluna de...
+
+00:08:08.810 --> 00:08:10.770
+Depois copie essa coluna para outra tabela,
+
+00:08:10.830 --> 00:08:11.690
+para que ambos os lados se eliem.
+
+00:08:12.050 --> 00:08:14.110
+Essa coluna adicionada é chamada de chave substituta,
+
+00:08:14.170 --> 00:08:16.010
+e é a maneira padrão de dar uma tabela de dimensão
+
+00:08:16.010 --> 00:08:16.650
+a algo para liderar.
+
+00:08:16.930 --> 00:08:18.930
+Acerte a estrutura e as conexões quase se criam sozinhas.
+
+00:08:19.310 --> 00:08:21.170
+Se errar, você enfrentará os mesmos erros
+
+00:08:21.170 --> 00:08:22.010
+em cada atualização.
+
+00:08:22.950 --> 00:08:24.950
+As regras que um relacionamento deve ser...
+
+00:08:24.950 --> 00:08:26.310
+Um relacionamento parece flexível
+
+00:08:26.310 --> 00:08:27.490
+até você tentar criar um manualmente
+
+00:08:27.490 --> 00:08:28.530
+e se deparar com as regras.
+
+00:08:29.150 --> 00:08:30.130
+Existem apenas algumas,
+
+00:08:30.210 --> 00:08:32.530
+e juntas elas explicam quase todas as mensagens de erro
+
+00:08:32.530 --> 00:08:33.290
+que você encontrará.
+
+00:08:33.730 --> 00:08:34.830
+Primeiro, um relacionamento ocorre
+
+00:08:34.830 --> 00:08:35.830
+entre uma coluna e outra coluna.
+
+00:08:36.470 --> 00:08:37.930
+Você não pode relacionar uma coluna a outra
+
+00:08:37.930 --> 00:08:38.830
+dentro da mesma tabela,
+
+00:08:38.910 --> 00:08:40.050
+por mais que isso faça sentido.
+
+00:08:40.710 --> 00:08:42.510
+Linhas, pai e filho que residem em uma mesma tabela
+
+00:08:42.510 --> 00:08:43.290
+precisam de uma fórmula,
+
+00:08:43.370 --> 00:08:43.970
+não de um relacionamento.
+
+00:08:44.350 --> 00:08:45.710
+Segundo, as duas colunas devem compartilhar
+
+00:08:45.710 --> 00:08:46.330
+o mesmo tipo de data.
+
+00:08:46.950 --> 00:08:48.450
+Você pode vincular uma coluna de texto
+
+00:08:48.450 --> 00:08:49.230
+a uma coluna numérica,
+
+00:08:49.290 --> 00:08:50.410
+e o Power BI não o impedirá.
+
+00:08:50.670 --> 00:08:51.770
+Mas nenhum valor corresponderá,
+
+00:08:51.830 --> 00:08:52.830
+então nada será filtrado
+
+00:08:52.830 --> 00:08:54.330
+e você ficará olhando para um gráfico em branco.
+
+00:08:55.510 --> 00:08:56.310
+Terceiro, lado único.
+
+00:08:56.410 --> 00:08:57.710
+Precisa ser genuinamente único.
+
+00:08:58.630 --> 00:08:59.870
+Esta é a regra por trás do erro
+
+00:08:59.870 --> 00:09:01.210
+que os iniciantes encontram primeiro,
+
+00:09:01.310 --> 00:09:02.570
+aquele que diz que uma das colunas
+
+00:09:02.570 --> 00:09:03.730
+deve ter valores únicos.
+
+00:09:04.470 --> 00:09:05.050
+Quando ele aparece,
+
+00:09:05.150 --> 00:09:06.070
+você tem duas opções simples.
+
+00:09:06.450 --> 00:09:07.810
+Você pode remover duplicadas,
+
+00:09:07.910 --> 00:09:08.890
+embora deva ter cuidado,
+
+00:09:09.250 --> 00:09:10.090
+pois chaves duplicadas
+
+00:09:10.090 --> 00:09:11.390
+geralmente estão lá por um bom motivo.
+
+00:09:11.670 --> 00:09:13.010
+Ou pode adicionar uma pequena tabela
+
+00:09:13.010 --> 00:09:14.410
+contendo apenas as chaves distintas
+
+00:09:14.410 --> 00:09:15.430
+e vinculá-la a ambos os lados.
+
+00:09:16.110 --> 00:09:17.390
+Depois, a armadilha de data e hora
+
+00:09:17.390 --> 00:09:18.150
+que pega quase todo mundo
+
+00:09:18.150 --> 00:09:18.810
+pelo menos uma vez.
+
+00:09:19.290 --> 00:09:20.710
+O Power BI armazena data e hora
+
+00:09:20.710 --> 00:09:21.730
+juntas em um único valor.
+
+00:09:22.010 --> 00:09:23.150
+A formatação que você vê na tela
+
+00:09:23.150 --> 00:09:24.110
+é apenas uma escolha de exibição.
+
+00:09:24.930 --> 00:09:26.210
+Portanto, uma data que parece idêntica
+
+00:09:26.210 --> 00:09:27.230
+a outra pode não corresponder,
+
+00:09:27.290 --> 00:09:28.850
+porque a parte oculta da hora é diferente.
+
+00:09:28.850 --> 00:09:31.430
+A solução é remover a hora no Power Query
+
+00:09:31.430 --> 00:09:32.830
+antes que os dados cheguem ao modelo.
+
+00:09:33.530 --> 00:09:34.510
+Por último, e este é o motivo
+
+00:09:34.510 --> 00:09:36.210
+dos relatórios com a aparência mais estranha,
+
+00:09:36.310 --> 00:09:37.270
+um relacionamento não verifica
+
+00:09:37.270 --> 00:09:37.970
+seus dados para você.
+
+00:09:38.390 --> 00:09:39.550
+Se uma venda aponta para um produto
+
+00:09:39.550 --> 00:09:40.770
+que não existe na tabela de produtos,
+
+00:09:40.850 --> 00:09:41.770
+o Power BI não a recusará.
+
+00:09:42.230 --> 00:09:43.570
+Ele coloca essa venda em um grupo em branco
+
+00:09:43.570 --> 00:09:44.610
+para que o número não seja perdido.
+
+00:09:45.190 --> 00:09:46.370
+Quando você vê uma linha vazia
+
+00:09:46.370 --> 00:09:47.350
+em um segmentador e a fonte
+
+00:09:47.350 --> 00:09:48.550
+não contiver espaço em branco,
+
+00:09:48.710 --> 00:09:49.290
+é isso que você está vendo.
+
+00:09:49.790 --> 00:09:51.010
+A correção real deve ser feita
+
+00:09:51.010 --> 00:09:51.850
+nos dados de origem,
+
+00:09:52.030 --> 00:09:52.430
+não no modelo.
+
+00:09:53.370 --> 00:09:54.410
+Vale terminar com um alento.
+
+00:09:55.050 --> 00:09:56.610
+Power BI geralmente cria esses relacionamentos
+
+00:09:56.610 --> 00:09:57.810
+para você ao carregar os dados.
+
+00:09:57.810 --> 00:09:59.570
+Ele lê os nomes das colunas
+
+00:09:59.570 --> 00:10:01.550
+e quando não encontra uma correspondência segura,
+
+00:10:01.710 --> 00:10:02.510
+não tenta adivinhar
+
+00:10:02.510 --> 00:10:04.590
+o que evita erros comuns de iniciantes.
+
+00:10:05.610 --> 00:10:06.830
+Você pode aprender todas as regras
+
+00:10:06.830 --> 00:10:07.750
+e ainda perder uma tarde,
+
+00:10:07.850 --> 00:10:08.970
+então ajuda a conhecer os sintomas
+
+00:10:08.970 --> 00:10:10.130
+e o que eles geralmente significam.
+
+00:10:10.790 --> 00:10:11.750
+O mais comum de longe
+
+00:10:11.750 --> 00:10:13.390
+é o mesmo número aparecendo em todas as linhas.
+
+00:10:13.810 --> 00:10:14.770
+A Microsoft aponta isso
+
+00:10:14.770 --> 00:10:15.490
+como o principal sinal
+
+00:10:15.490 --> 00:10:16.450
+de um relacionamento ausente.
+
+00:10:16.850 --> 00:10:17.650
+Significa que as tabelas
+
+00:10:17.650 --> 00:10:18.490
+não estão conectadas.
+
+00:10:18.550 --> 00:10:19.290
+Ou a conexão existe,
+
+00:10:19.410 --> 00:10:21.030
+mas não está transmitindo os filtros.
+
+00:10:21.590 --> 00:10:23.250
+Verifique se as tabelas estão relacionadas,
+
+00:10:23.390 --> 00:10:24.670
+em seguida se o vínculo está ativo
+
+00:10:24.670 --> 00:10:25.570
+e apontando para o lado certo.
+
+00:10:25.570 --> 00:10:27.270
+O conselho da Microsoft
+
+00:10:27.270 --> 00:10:28.010
+é mudar o visual
+
+00:10:28.010 --> 00:10:29.210
+para uma tabela simples primeiro,
+
+00:10:29.590 --> 00:10:30.490
+pois ver as linhas brutas
+
+00:10:30.490 --> 00:10:31.870
+torna um problema de relacionamento óbvio,
+
+00:10:31.950 --> 00:10:33.430
+de uma forma que um gráfico nunca faria.
+
+00:10:34.690 --> 00:10:36.050
+O próximo gráfico não mostra nada.
+
+00:10:36.610 --> 00:10:37.910
+Antes de mexer em um relacionamento,
+
+00:10:38.090 --> 00:10:39.070
+certifique-se de que a tabela
+
+00:10:39.070 --> 00:10:40.050
+tenha linhas carregadas
+
+00:10:40.050 --> 00:10:41.310
+e que haja algo nos seus filtros.
+
+00:10:41.810 --> 00:10:43.690
+O número surpreendente de gráficos em branco
+
+00:10:43.690 --> 00:10:44.630
+vem de uma tabela vazia
+
+00:10:44.630 --> 00:10:45.770
+ou de um filtro que exclui tudo,
+
+00:10:45.770 --> 00:10:46.930
+e não de um link quebrado.
+
+00:10:47.450 --> 00:10:48.650
+Há o relatório que parece certo,
+
+00:10:48.710 --> 00:10:49.650
+mas está incorreto por baixo.
+
+00:10:50.430 --> 00:10:51.230
+Na maioria das vezes,
+
+00:10:51.270 --> 00:10:52.730
+as colunas erradas estão relacionadas,
+
+00:10:52.810 --> 00:10:53.610
+como a ideia de cliente.
+
+00:10:54.410 --> 00:10:55.730
+O gráfico ainda é exibido
+
+00:10:55.730 --> 00:10:57.350
+e os números ainda somam algo,
+
+00:10:57.510 --> 00:10:58.210
+e é exatamente por isso
+
+00:10:58.210 --> 00:10:59.150
+que esse caso é perigoso.
+
+00:10:59.670 --> 00:11:00.250
+É também por isso
+
+00:11:00.250 --> 00:11:01.390
+que você deve sempre verificar
+
+00:11:01.390 --> 00:11:02.870
+quais colunas uma linha conecta,
+
+00:11:03.050 --> 00:11:03.910
+em vez de confiar apenas
+
+00:11:03.910 --> 00:11:04.530
+que uma linha existe.
+
+00:11:05.070 --> 00:11:05.770
+Você também encontrará
+
+00:11:05.770 --> 00:11:06.790
+o grupo vazio em seguida melódica.
+
+00:11:07.370 --> 00:11:08.090
+Essa é a linha em branco
+
+00:11:08.090 --> 00:11:08.730
+da seção anterior,
+
+00:11:08.810 --> 00:11:09.870
+um fato que aponta para algo
+
+00:11:09.870 --> 00:11:11.050
+faltando no lado exclusivo.
+
+00:11:11.590 --> 00:11:12.310
+É um sinal de qualidade
+
+00:11:12.310 --> 00:11:13.310
+de dados disfarçado.
+
+00:11:13.950 --> 00:11:15.030
+Vale mencionar mais duas armadilhas.
+
+00:11:15.610 --> 00:11:16.910
+Unir duas tabelas de fatos
+
+00:11:16.910 --> 00:11:17.870
+diretamente uma a outra
+
+00:11:17.870 --> 00:11:18.930
+com um link muitos para muitos
+
+00:11:18.930 --> 00:11:19.390
+funciona,
+
+00:11:19.510 --> 00:11:20.250
+mas permite filtrar
+
+00:11:20.250 --> 00:11:21.410
+por apenas uma das tabelas
+
+00:11:21.410 --> 00:11:22.230
+e problemas de dados.
+
+00:11:22.410 --> 00:11:23.910
+Podem ocultar linhas silenciosamente
+
+00:11:23.910 --> 00:11:26.050
+e recorrer a vínculos bidirecionais
+
+00:11:26.050 --> 00:11:26.930
+para forçar o comportamento
+
+00:11:26.930 --> 00:11:27.650
+de um segmentador,
+
+00:11:27.750 --> 00:11:28.530
+como as pessoas acabam
+
+00:11:28.530 --> 00:11:29.490
+com o erro de caminho ambíguo
+
+00:11:29.490 --> 00:11:30.610
+sem saber o porquê.
+
+00:11:30.650 --> 00:11:31.270
+O hábito que evita
+
+00:11:31.270 --> 00:11:31.950
+a maior parte disso
+
+00:11:31.950 --> 00:11:32.830
+não tem nada de glamouroso.
+
+00:11:33.350 --> 00:11:34.230
+Crie um esquema estrela.
+
+00:11:34.330 --> 00:11:35.030
+Mantenha o link ativo
+
+00:11:35.030 --> 00:11:35.570
+um para muitos
+
+00:11:35.570 --> 00:11:36.610
+entre cada par de tabelas
+
+00:11:36.610 --> 00:11:37.330
+e leia o diagrama
+
+00:11:37.330 --> 00:11:38.450
+antes de culpar os dados.
+
+00:11:39.590 --> 00:11:40.230
+Qual que um relacionamento
+
+00:11:40.230 --> 00:11:40.690
+não pode fazer?
+
+00:11:41.210 --> 00:11:41.790
+Vale ser honesto
+
+00:11:41.790 --> 00:11:42.570
+sobre as limitações,
+
+00:11:42.690 --> 00:11:43.310
+pois um relacionamento
+
+00:11:43.310 --> 00:11:44.190
+é uma ferramenta específica
+
+00:11:44.190 --> 00:11:44.670
+que faz um trabalho
+
+00:11:44.670 --> 00:11:45.570
+muito bem feito,
+
+00:11:46.070 --> 00:11:46.830
+ele não limpa seus dados.
+
+00:11:47.450 --> 00:11:48.370
+Um relacionamento aponta
+
+00:11:48.370 --> 00:11:48.970
+para uma coluna
+
+00:11:48.970 --> 00:11:49.550
+e se essa coluna
+
+00:11:49.550 --> 00:11:50.370
+estiver desorganizada
+
+00:11:50.370 --> 00:11:51.150
+o relacionamento espalha
+
+00:11:51.150 --> 00:11:51.970
+bagunça para onde quer
+
+00:11:51.970 --> 00:11:52.770
+que o filtro alcance.
+
+00:11:53.630 --> 00:11:54.430
+Ele também não impõe
+
+00:11:54.430 --> 00:11:54.970
+integridade,
+
+00:11:55.090 --> 00:11:55.810
+então nunca recusará
+
+00:11:55.810 --> 00:11:56.570
+uma linha inválida.
+
+00:11:56.990 --> 00:11:57.550
+Ele apenas coloca
+
+00:11:57.550 --> 00:11:58.570
+essa linha em um grupo vazio
+
+00:11:58.570 --> 00:11:58.930
+e continua.
+
+00:11:59.310 --> 00:12:00.410
+Ele não consegue conectar
+
+00:12:00.410 --> 00:12:00.970
+duas colunas
+
+00:12:00.970 --> 00:12:01.730
+dentro da mesma tabela
+
+00:12:01.730 --> 00:12:02.690
+e não pode ter mais
+
+00:12:02.690 --> 00:12:03.410
+de um caminho ativo
+
+00:12:03.410 --> 00:12:03.990
+entre as mesmas duas
+
+00:12:03.990 --> 00:12:05.010
+tabelas simultaneamente.
+
+00:12:05.750 --> 00:12:06.610
+Ambas as limitações
+
+00:12:06.610 --> 00:12:07.490
+são o motivo pelo qual
+
+00:12:07.490 --> 00:12:08.290
+o truque da tabela
+
+00:12:08.290 --> 00:12:09.210
+de datas duplicada
+
+00:12:09.210 --> 00:12:10.010
+e as fórmulas pai e filho
+
+00:12:10.010 --> 00:12:10.350
+existem.
+
+00:12:13.310 --> 00:12:13.870
+As metas são registradas
+
+00:12:13.870 --> 00:12:14.430
+por produto,
+
+00:12:14.510 --> 00:12:15.050
+mas suas metas
+
+00:12:15.050 --> 00:12:16.170
+são definidas por categoria.
+
+00:12:16.310 --> 00:12:17.030
+Um vínculo simples
+
+00:12:17.030 --> 00:12:17.550
+de um para muitos
+
+00:12:17.550 --> 00:12:18.650
+não contará uma história honesta
+
+00:12:18.650 --> 00:12:19.470
+pois as duas tabelas
+
+00:12:19.470 --> 00:12:20.350
+não estão no mesmo nível.
+
+00:12:20.990 --> 00:12:21.950
+Resolver isso exige medidas
+
+00:12:21.950 --> 00:12:22.670
+e um pouco de cuidado,
+
+00:12:22.770 --> 00:12:23.790
+não um vínculo mais inteligente.
+
+00:12:24.450 --> 00:12:25.070
+Cardinalidade de muitos
+
+00:12:25.070 --> 00:12:25.830
+para muitos é real
+
+00:12:25.830 --> 00:12:26.450
+e resolve alguns
+
+00:12:26.450 --> 00:12:26.870
+desse problema.
+
+00:12:27.330 --> 00:12:27.650
+No entanto,
+
+00:12:27.690 --> 00:12:28.230
+ela tem um custo.
+
+00:12:28.790 --> 00:12:29.770
+Esses vínculos não podem
+
+00:12:29.770 --> 00:12:30.730
+usar o atalho que extraia
+
+00:12:30.730 --> 00:12:31.530
+um valor diretamente
+
+00:12:31.530 --> 00:12:32.170
+do lado único
+
+00:12:32.170 --> 00:12:32.810
+e são mais lentos
+
+00:12:32.810 --> 00:12:33.510
+que um vínculo de um
+
+00:12:33.510 --> 00:12:34.210
+para muitos limpo.
+
+00:12:34.910 --> 00:12:35.490
+Isso é uma ferramenta,
+
+00:12:35.570 --> 00:12:35.970
+não um padrão.
+
+00:12:36.330 --> 00:12:37.230
+Uma coisa que um relacionamento
+
+00:12:37.230 --> 00:12:37.670
+nunca fará
+
+00:12:37.670 --> 00:12:38.350
+é te dizer que um número
+
+00:12:38.350 --> 00:12:38.810
+está errado.
+
+00:12:39.330 --> 00:12:39.970
+Ele não tem opinião
+
+00:12:39.970 --> 00:12:40.630
+sobre se um resultado
+
+00:12:40.630 --> 00:12:41.190
+faz sentido.
+
+00:12:42.150 --> 00:12:42.650
+Esse julgamento
+
+00:12:42.650 --> 00:12:43.350
+continua com você
+
+00:12:43.350 --> 00:12:44.510
+e é a parte deste trabalho
+
+00:12:44.510 --> 00:12:45.270
+que nenhuma configuração
+
+00:12:45.270 --> 00:12:45.750
+pode assumir.
+
+00:12:46.830 --> 00:12:47.910
+A maneira mais simples
+
+00:12:47.910 --> 00:12:48.730
+de entender tudo isso
+
+00:12:48.730 --> 00:12:49.450
+é em uma única frase.
+
+00:12:50.130 --> 00:12:51.030
+Relacionamentos movem filtros.
+
+00:12:51.830 --> 00:12:52.590
+Eles não corrigem fatos.
+
+00:12:53.230 --> 00:12:54.030
+Onde isso se encaixa
+
+00:12:54.030 --> 00:12:55.270
+no Microsoft 365
+
+00:12:55.270 --> 00:12:56.370
+e no Fabric,
+
+00:12:56.430 --> 00:12:56.870
+o Power BI,
+
+00:12:57.030 --> 00:12:57.770
+é onde você constrói
+
+00:12:57.770 --> 00:12:58.590
+o modelo relatório
+
+00:12:58.590 --> 00:12:59.210
+e os relacionamentos
+
+00:12:59.210 --> 00:13:00.110
+funcionam da mesma forma,
+
+00:13:00.210 --> 00:13:01.090
+seja no aplicativo desktop
+
+00:13:01.090 --> 00:13:01.770
+ou no navegador.
+
+00:13:02.330 --> 00:13:02.910
+A ideia não muda
+
+00:13:02.910 --> 00:13:03.750
+à medida que as ferramentas
+
+00:13:03.750 --> 00:13:04.470
+ao seu redor crescem.
+
+00:13:05.390 --> 00:13:06.490
+Uma mudança de nomenclatura
+
+00:13:06.490 --> 00:13:07.210
+vale a pena conhecer
+
+00:13:07.210 --> 00:13:07.990
+pois confunde as pessoas
+
+00:13:07.990 --> 00:13:08.510
+em tutoriais.
+
+00:13:09.230 --> 00:13:10.010
+O objeto que contém
+
+00:13:10.010 --> 00:13:11.170
+suas tabelas e relacionamentos
+
+00:13:11.170 --> 00:13:11.870
+costumava ser chamado
+
+00:13:11.870 --> 00:13:12.370
+de data semântico.
+
+00:13:13.030 --> 00:13:13.890
+Microsoft o renomeou
+
+00:13:13.890 --> 00:13:14.730
+para modelo semântico
+
+00:13:14.730 --> 00:13:15.290
+e o novo nome
+
+00:13:15.290 --> 00:13:15.750
+está se espalhando
+
+00:13:15.750 --> 00:13:16.270
+por toda parte.
+
+00:13:16.630 --> 00:13:16.910
+Portanto,
+
+00:13:16.990 --> 00:13:17.990
+se você vir modelo semântico
+
+00:13:17.990 --> 00:13:18.550
+em um vídeo recente
+
+00:13:18.550 --> 00:13:19.070
+é o mesmo objeto
+
+00:13:19.070 --> 00:13:19.750
+que você já conhece.
+
+00:13:20.390 --> 00:13:21.490
+No Microsoft Fabric
+
+00:13:21.490 --> 00:13:22.490
+esse modelo semântico
+
+00:13:22.490 --> 00:13:23.250
+é um item completo
+
+00:13:23.250 --> 00:13:23.810
+por si só
+
+00:13:23.810 --> 00:13:24.750
+ao lado de warehouses,
+
+00:13:24.910 --> 00:13:25.350
+lake houses
+
+00:13:25.350 --> 00:13:26.630
+e bancos de dados espelhados.
+
+00:13:27.450 --> 00:13:28.390
+É a plataforma de dados única
+
+00:13:28.390 --> 00:13:29.010
+da Microsoft
+
+00:13:29.010 --> 00:13:29.750
+e o Unlake
+
+00:13:29.750 --> 00:13:30.450
+é o armazenamento
+
+00:13:30.450 --> 00:13:31.670
+onde todos esses dados residem.
+
+00:13:32.810 --> 00:13:33.330
+Você não precisa
+
+00:13:33.330 --> 00:13:34.150
+de toda a plataforma
+
+00:13:34.150 --> 00:13:35.150
+para usar relacionamentos,
+
+00:13:35.250 --> 00:13:35.810
+mas ajuda a saber
+
+00:13:35.810 --> 00:13:36.470
+onde seu relatório
+
+00:13:36.470 --> 00:13:37.790
+se encaixa no panorama geral.
+
+00:13:38.650 --> 00:13:39.430
+Existem três maneiras
+
+00:13:39.430 --> 00:13:40.330
+pelas quais o Power BI
+
+00:13:40.330 --> 00:13:41.290
+pode armazenar seus dados
+
+00:13:41.290 --> 00:13:41.870
+e elas equilibram
+
+00:13:41.870 --> 00:13:42.770
+frescor contra a velocidade.
+
+00:13:43.430 --> 00:13:44.250
+A importação copia
+
+00:13:44.250 --> 00:13:44.970
+os dados para a memória,
+
+00:13:45.050 --> 00:13:46.170
+o que torna os relatórios rápidos,
+
+00:13:46.270 --> 00:13:46.750
+mas apenas estão
+
+00:13:46.750 --> 00:13:47.290
+a atualização,
+
+00:13:47.390 --> 00:13:47.850
+a atualização.
+
+00:13:48.870 --> 00:13:49.850
+Direct Query lê a fonte
+
+00:13:49.850 --> 00:13:50.350
+em tempo real,
+
+00:13:50.450 --> 00:13:51.110
+o que é sempre atual,
+
+00:13:51.190 --> 00:13:52.090
+mas geralmente mais lento.
+
+00:13:52.910 --> 00:13:53.790
+O Direct Lake carrega
+
+00:13:53.790 --> 00:13:54.150
+de um lake
+
+00:13:54.150 --> 00:13:54.730
+e chega perto
+
+00:13:54.730 --> 00:13:55.810
+da velocidade de importação,
+
+00:13:56.330 --> 00:13:56.910
+com uma atualização
+
+00:13:56.910 --> 00:13:58.010
+que copia apenas metadados
+
+00:13:58.010 --> 00:13:58.990
+e pode terminar em segundos.
+
+00:13:59.950 --> 00:14:00.510
+O Direct Lake
+
+00:14:00.510 --> 00:14:01.850
+precisa de capacidade do Fabric
+
+00:14:01.850 --> 00:14:02.910
+e Microsoft está aposentando
+
+00:14:02.910 --> 00:14:03.850
+a capacidade mais antiga
+
+00:14:03.850 --> 00:14:04.530
+do Power BI Premium
+
+00:14:04.530 --> 00:14:05.050
+em favor dele,
+
+00:14:05.150 --> 00:14:05.510
+então é para lá
+
+00:14:05.510 --> 00:14:06.270
+que as coisas estão indo.
+
+00:14:07.610 --> 00:14:08.770
+Import e Direct Query
+
+00:14:08.770 --> 00:14:09.930
+funcionam com qualquer licença
+
+00:14:09.930 --> 00:14:10.450
+do Power BI,
+
+00:14:10.590 --> 00:14:11.350
+incluindo a gratuita,
+
+00:14:11.430 --> 00:14:12.150
+então você pode aprender
+
+00:14:12.150 --> 00:14:13.050
+tudo neste episódio
+
+00:14:13.050 --> 00:14:14.270
+sem pagar por capacidade.
+
+00:14:15.330 --> 00:14:16.130
+Aqui está a versão resumida
+
+00:14:16.130 --> 00:14:16.570
+para você levar.
+
+00:14:17.070 --> 00:14:17.690
+Um relacionamento
+
+00:14:17.690 --> 00:14:18.510
+é um caminho de filtro
+
+00:14:18.510 --> 00:14:19.270
+construído em uma coluna
+
+00:14:19.270 --> 00:14:19.870
+compartilhada.
+
+00:14:20.390 --> 00:14:21.450
+O lado único lidera
+
+00:14:21.450 --> 00:14:22.830
+e o lado muito segue a direção
+
+00:14:22.830 --> 00:14:23.750
+e o estado ativo
+
+00:14:23.750 --> 00:14:24.710
+ou inativo decide
+
+00:14:24.710 --> 00:14:26.030
+até onde um filtro viaja
+
+00:14:26.030 --> 00:14:26.950
+e o formato de estrela
+
+00:14:26.950 --> 00:14:28.050
+mantém tudo simples.
+
+00:14:29.090 --> 00:14:30.130
+A ferramenta move filtros
+
+00:14:30.130 --> 00:14:30.850
+e não corrigir fatos.
+
+00:14:31.270 --> 00:14:32.170
+Vou deixar você com uma pergunta.
+
+00:14:32.610 --> 00:14:33.510
+No seu próprio relatório,
+
+00:14:33.510 --> 00:14:34.610
+qual tabela tem uma coluna
+
+00:14:34.610 --> 00:14:35.370
+cheia de repetições
+
+00:14:35.370 --> 00:14:36.510
+que ninguém nunca conectou
+
+00:14:36.510 --> 00:14:36.870
+a nada?
+
+00:14:37.650 --> 00:14:38.550
+Se isso tornou o tópico
+
+00:14:38.550 --> 00:14:39.290
+menos intimidador,
+
+00:14:39.410 --> 00:14:41.230
+inscreva-se no M365FM
+
+00:14:41.230 --> 00:14:42.350
+para dominar as ferramentas
+
+00:14:42.350 --> 00:14:42.930
+e a mentalidade
+
+00:14:42.930 --> 00:14:44.270
+que moldam o futuro do trabalho.

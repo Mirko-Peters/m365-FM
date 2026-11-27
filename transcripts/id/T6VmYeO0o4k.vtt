@@ -1,0 +1,919 @@
+WEBVTT
+
+00:00:00.250 --> 00:00:05.870
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:06.470 --> 00:00:08.510
+Mengapa angka Anda tidak akurat saat tabel tidak sendro?
+
+00:00:09.030 --> 00:00:11.910
+Anda bisa membuat laporan power B yang rapi namun memberikan angka yang salah.
+
+00:00:12.310 --> 00:00:17.310
+Anda punya 5 tabel, kolom yang bersih, laporan yang tampak selesai, namun setiap baris tetap menampilkan total yang sama.
+
+00:00:17.690 --> 00:00:20.410
+Datanya baik-baik saja, hanya saja tabel tersebut tidak saling berkomunikasi.
+
+00:00:20.910 --> 00:00:24.710
+Relationship hubungan adalah kabel penghubung antara 2 tabel yang dibangun berdasarkan 1 kolom yang salah.
+
+00:00:24.870 --> 00:00:28.450
+Belajari cara membaca kabel tersebut dan Anda bisa memprediksi tepat apa dampak klik pada angka Anda.
+
+00:00:28.450 --> 00:00:31.010
+Apa itu relationship dalam istilah yang sederhan?
+
+00:00:31.670 --> 00:00:34.470
+Ada satu kejadian yang dialami hampir semua orang saat pertama kali membuka power B.
+
+00:00:35.030 --> 00:00:39.930
+Anda memasukkan 5 tabel, menyerat beberapa bidang ke dalam bagan, dan bagan tersebut menampilkan angka yang sama di setiap baris.
+
+00:00:40.350 --> 00:00:44.450
+Insting pertama, Anda adalah menyalahkan data, jadi Anda membuka file sumbernya, dan ternyata datanya benar.
+
+00:00:45.110 --> 00:00:48.810
+Masalahnya ada di tempat lain, dan biasanya itu adalah objek yang paling membosankan di seluruh model.
+
+00:00:49.850 --> 00:00:52.290
+Relationship adalah jalur filter antara 2 tabel.
+
+00:00:52.730 --> 00:00:53.690
+Itu adalah definisi keseluruhan.
+
+00:00:54.110 --> 00:00:56.630
+Jalur ini berjalan di sepanjang 1 kolom yang dimiliki kedua tabel,
+
+00:00:56.630 --> 00:00:58.990
+dan memungkinkan filter yang Anda terapkan pada satu tabel pada satu tabel.
+
+00:00:59.650 --> 00:01:01.170
+Tidak ada hal lain yang terjadi di baliknya.
+
+00:01:01.390 --> 00:01:04.390
+Itulah sebabnya relationship terasa jauh tidak misterius setelah Anda bisa membayangkannya.
+
+00:01:05.610 --> 00:01:08.630
+Ambil contoh modal sederhana dengan 4 tabel kategori penjualan dan tahun.
+
+00:01:09.030 --> 00:01:13.090
+Kategori terhubung ke produk, produk terhubung ke penjualan, dan tahun juga terhubung ke penjualan.
+
+00:01:13.670 --> 00:01:15.590
+Sekarang Anda mengeklik satu kategori, misalnya cut A.
+
+00:01:15.750 --> 00:01:20.390
+Klik itu merambat dari kategori ke produk, dan produk memberitahu power PI 2 produk mana yang termasuk dalam kategori tersebut.
+
+00:01:20.390 --> 00:01:25.530
+Dari sana, filter merambat ke penjualan, dan penjualan mengerucut hanya pada baris untuk dua produk tersebut.
+
+00:01:25.970 --> 00:01:28.570
+Jika Anda juga mengerucut satu tahun, penjualan akan mengerucut kembang.
+
+00:01:29.110 --> 00:01:33.330
+Panduan dari Microsoft menunjukkan 11 unit saat Anda mengerucut satu kategori dan satu tahun sekaligus,
+
+00:01:33.650 --> 00:01:35.750
+serta 14 unit saat Anda mengerucut kategori itu sendiri.
+
+00:01:36.850 --> 00:01:39.250
+Perbedaan tersebut berasal dari aturan kecil yang penting untuk ingat.
+
+00:01:39.250 --> 00:01:42.850
+Saat dua filter mendarat di tabel yang sama, keduanya harus benar.
+
+00:01:43.950 --> 00:01:49.030
+Power BI menggabungkan filter dengan logika dan setiap saat, kecuali jika Anda menulis rumus yang menyatakan sebaliknya.
+
+00:01:49.510 --> 00:01:52.910
+Itulah sebabnya satu filter tambahan bisa mengecilkan angka jauh lebih banyak dari yang Anda duga,
+
+00:01:53.030 --> 00:01:55.470
+dan mengapa bagian yang kosong terkadang hanya berarti dua filter tersebut betul.
+
+00:01:55.710 --> 00:01:58.150
+Ada satu kasus di mana tabel sengaja tidak memiliki relationship.
+
+00:01:58.850 --> 00:02:00.450
+Tabel yang tidak terhubung tidak akan memfilter apapun.
+
+00:02:00.530 --> 00:02:04.670
+Ini hanyalah wadah nilai yang ingin Anda gunakan, seperti kurs mata uang yang Anda pilih dari menu tarik turun,
+
+00:02:04.730 --> 00:02:07.050
+dan ukuran akan membaca nilai itu untuk melakukan sesuatu yang berguna.
+
+00:02:07.050 --> 00:02:10.170
+Parameter what if di Power BI membuat salah satunya untuk Anda.
+
+00:02:10.570 --> 00:02:13.850
+Jadi, relasi bukanlah sebuah rumus, dan bukan hiasan yang Anda tambahkan di akhir.
+
+00:02:14.250 --> 00:02:18.710
+Ini adalah sebuah jalur yang setiap mengangka dalam laporan Anda hanya seakurat jalur yang mengarah ke angka tersebut.
+
+00:02:19.590 --> 00:02:21.430
+Kardinalitas kata yang menentukan tabel mana yang memimpin.
+
+00:02:21.910 --> 00:02:24.650
+Kardinalitas terdengar seperti salah satu kata yang dirancang untuk menakuti pemula.
+
+00:02:25.190 --> 00:02:28.770
+Sederhananya, ini sebenarnya menanyakan berapa kali sebuah nilai bisa berulang di setiap sisi tautan.
+
+00:02:29.290 --> 00:02:33.030
+Bayangkan tabel penjualan, tabel produk berisi satu baris per produk,
+
+00:02:33.430 --> 00:02:35.490
+jadi setiap ID produk hanya muncul tepat satu kali.
+
+00:02:35.490 --> 00:02:41.050
+Tabel penjualan berisi ribuan baris, dan ID produk yang sama muncul berulang kali untuk setiap penjualan produk tersebut.
+
+00:02:41.450 --> 00:02:42.290
+Hanya itu arti kardinalitas.
+
+00:02:42.890 --> 00:02:45.690
+Satu sisi berisi daftar unik, dan sisi lainnya berisi pengulangannya.
+
+00:02:46.190 --> 00:02:48.550
+Power BI memberi Anda empat cara untuk mendeskripsikan tautan tersebut.
+
+00:02:49.010 --> 00:02:52.330
+One to many, many to one, one to one, dan many to many.
+
+00:02:52.830 --> 00:02:55.450
+Dua yang pertama adalah tautan yang sama yang dilihat dari sisi berlawanan,
+
+00:02:55.450 --> 00:02:57.470
+jadi Anda tidak perlu menghafalnya sebagai hal terpisah.
+
+00:02:57.910 --> 00:02:59.430
+Jika daftar unik berada di sisi produk,
+
+00:02:59.890 --> 00:03:03.750
+tautannya adalah one to many jika dibaca dari produk, dan many to one jika dibaca dari penjualan.
+
+00:03:03.750 --> 00:03:05.610
+Ini adalah tautan yang sama yang dilihat dari kedua wujud.
+
+00:03:05.990 --> 00:03:07.830
+One to one berarti kedua kolom berisi nilai unik,
+
+00:03:07.970 --> 00:03:10.570
+dan ini cukup langka sehingga bisa dianggap sebagai tanda peringatan.
+
+00:03:11.130 --> 00:03:14.110
+Ini biasanya berarti Anda memisahkan sesuatu yang seharusnya lebih baik jika digabung dengan masalah.
+
+00:03:14.590 --> 00:03:16.470
+Many to many berarti kedua kolom bisa berulang.
+
+00:03:16.870 --> 00:03:17.230
+Ini nyata.
+
+00:03:17.650 --> 00:03:20.490
+Ini menyelesaikan beberapa masalah sulit, dan ada konsekuensi yang harus dibayar.
+
+00:03:20.850 --> 00:03:23.010
+Jadi gunakanlah dengan sengaja, bukan sebagai pilihan utama.
+
+00:03:23.210 --> 00:03:26.530
+Andalan utamanya adalah one to many, dan Anda akan membangun hampir semuanya di atasnya.
+
+00:03:26.890 --> 00:03:29.550
+Satu daftar bersih tentang sesuatu di satu sisi, dan semua transaksi di sisi lain.
+
+00:03:29.550 --> 00:03:35.270
+Setelah Anda bisa mengenali tabel mana yang memegang daftar unik, Anda telah menemukan sisi yang memimpin, dan sisi yang mengikuti.
+
+00:03:35.730 --> 00:03:37.270
+Power BI biasanya membersekannya untuk Anda.
+
+00:03:37.850 --> 00:03:42.250
+Saat data dimuat, ia mempelajari kolom-kolomnya, dan melembakkan dinalitasnya, dan sebagian besar tebakannya benar.
+
+00:03:42.850 --> 00:03:44.030
+Namun ada dua hal yang perlu diketahui.
+
+00:03:44.410 --> 00:03:48.970
+Tebakannya sering keliru saat tabel belum memuat data, dan keliru saat kolom yang seharusnya berisi duplikat.
+
+00:03:49.070 --> 00:03:51.230
+Kebetulan hanya berisi nilai unik hari ini.
+
+00:03:51.550 --> 00:03:53.770
+Ada juga aturan baku yang mendasari semua itu.
+
+00:03:53.770 --> 00:04:01.610
+Jika pembaruan mencoba memuat duplikat ke sisi unik, seluruh proses pembaruan akan gagal arah mana filter bergerak.
+
+00:04:02.130 --> 00:04:06.030
+Bahkan hubungan one to many yang benar pun memiliki arah, dan ini adalah pengaturan yang jarang dibuka oleh pemula.
+
+00:04:06.510 --> 00:04:10.290
+Ini disebut arah filter silang, yang menentukan tabel mana yang boleh memfilter tabel lainnya.
+
+00:04:10.910 --> 00:04:12.710
+Standarnya adalah tunggal, dan itu adalah pilihan yang aman.
+
+00:04:13.130 --> 00:04:16.450
+Filter mengalir dari sisi unik ke sisi berulang, dan disitulah filternya berhenti.
+
+00:04:16.690 --> 00:04:20.690
+Daftar produk Anda dapat memfilter penjualan, tetapi penjualan tidak dapat memfilter daftar produk.
+
+00:04:20.810 --> 00:04:24.910
+Untuk sebagian besar laporan, itulah perilaku yang Anda inginkan, karena dapat diprediksi dan tetap cepat.
+
+00:04:25.310 --> 00:04:27.870
+Pilihan lainnya adalah kedua arah, yang sering disebut dua arah bidirex.
+
+00:04:28.210 --> 00:04:32.870
+Anda menggunakannya saat filter perlu kembali ke atas melalui tautan, biasanya karena slicer berperilaku aneh.
+
+00:04:33.550 --> 00:04:35.330
+Contoh bang dari Microsoft memperjelas alasannya.
+
+00:04:35.950 --> 00:04:41.210
+Nasabah dan rekening dihubungkan melalui tabel perantara karena satu nasabah bisa memiliki beberapa rekening, dan satu rekening bisa memiliki beberapa pemilik.
+
+00:04:41.850 --> 00:04:47.110
+Dengan filter yang hanya mengarah ke satu sisi, setiap nasabah akhirnya menunjukkan saldo yang sama yang mustahil terjadi di kehidupan nyata.
+
+00:04:47.510 --> 00:04:50.810
+Ubah satu tautan ke kedua arah, dan saldo nasabah tiba-tiba menjadi masuk akang.
+
+00:04:51.110 --> 00:04:52.610
+Namun, menggunakan kedua arah tidaklah gratis.
+
+00:04:52.610 --> 00:04:57.970
+Tautan dua arah mengorbankan performa, dan bisa menciptakan lebih dari satu jalur valid untuk filter bergerak di antara dua tabel.
+
+00:04:58.350 --> 00:05:02.710
+Ketika dua jalur tampak sama baiknya, Power BI tidak bisa memilih, dan Anda akan mendapatkan kesalahan jalur amik.
+
+00:05:03.530 --> 00:05:04.730
+Panduan dari Microsoft sangat ini.
+
+00:05:05.670 --> 00:05:09.430
+Batasi hubungan dua arah seminimal mungkin dan aktifkan hanya saat Anda benar-benar membutuhkannya.
+
+00:05:10.270 --> 00:05:11.950
+Jadi kebiasaan yang perlu dibangun sangat sederhana.
+
+00:05:12.850 --> 00:05:18.410
+Biarkan arahnya apa adanya sampai filter benar-benar tidak bisa mencapai tujuannya, baru kemudian buka pengaturan dan ubahlah.
+
+00:05:18.410 --> 00:05:22.650
+Jika Anda lupa kemana arah aliran filter seharusnya, bayangkan daftar unik sebagai bosnya.
+
+00:05:23.150 --> 00:05:27.030
+Bos mengirimkan instruksi ke transaksi, dan transaksi jarang perlu mengirimkan apapun kembali.
+
+00:05:27.970 --> 00:05:29.450
+Membaca garis penuh dan putus-putus.
+
+00:05:29.610 --> 00:05:32.610
+Buka tampilan modal di Power BI, dan Anda akan melihat tabel-tabel yang dihubungkan oleh God.
+
+00:05:32.970 --> 00:05:36.830
+Garis-garis sebut membawa informasi berguna, dan mempelajarinya hanya butuh waktu sekitar satu menit.
+
+00:05:36.890 --> 00:05:39.810
+Garis penuh berarti hubungan aktif, dan garis putus-putus berarti hubungan tidak aktif.
+
+00:05:39.810 --> 00:05:42.370
+Satu aturan membuat garis putus-putus menjadi maswa.
+
+00:05:42.710 --> 00:05:48.990
+Di antara dua tabel, hanya satu jalur yang bisa aktif dalam satu waktu, dan jalur lainnya harus tetap tidak aktif sampai rumus mengaktifkannya.
+
+00:05:49.450 --> 00:05:51.690
+Anda mungkin bertanya-tanya mengapa Anda membutuhkan lebih dari satu jalur.
+
+00:05:52.050 --> 00:05:53.850
+Satu tabel bisa memiliki beberapa arti yang berbeda.
+
+00:05:54.210 --> 00:05:58.850
+Bayangkan satu tabel tanggal yang bisa memfilter penjualan Anda berdasarkan tanggal pesanan, tanggal pengiriman, atau tanggal pengat.
+
+00:05:58.850 --> 00:06:02.990
+Itu tiga tugas untuk satu tabel, dan Power BI hanya mengizinkan satu yang aktif.
+
+00:06:03.630 --> 00:06:07.530
+Microsoft menyebutnya dimensi peran ganda, dan solusi biasanya sangat sederhana.
+
+00:06:07.530 --> 00:06:13.250
+Salin tabel tanggal pengiriman, dan tabel tanggal pengiriman, dan tabel tanggal pengantaran, lalu berikan setiap salin dengan seaktifnya sendiri.
+
+00:06:13.670 --> 00:06:16.310
+Tabel tanggal itu kecil, jadi duplikasinya hampir tidak memakan biaya.
+
+00:06:16.750 --> 00:06:18.430
+Ada cara kedua yang menghindari penjualan tersebut.
+
+00:06:18.850 --> 00:06:23.910
+Rumus bernama User Relationship dapat mengaktifkan garis yang tidak aktif untuk satu perhitungan tanpa Anda perlu menduplikasi tabel.
+
+00:06:23.910 --> 00:06:28.130
+Penting untuk mengetahui namanya agar tutorial tidak terdengar asing, tetapi Anda tidak memerlukannya di hari pertama.
+
+00:06:28.710 --> 00:06:31.910
+Inti dari semua ini adalah bahwa diagram adalah peta, dan peta bisa dibaca.
+
+00:06:33.250 --> 00:06:34.970
+Garis tegas berarti aktif, garis putus-putus berarti.
+
+00:06:34.970 --> 00:06:39.870
+Satu mata panah berarti filter mengalir ke satu arah, dan dua mata panah berarti mengalir ke dua arah.
+
+00:06:40.530 --> 00:06:44.690
+Setelah tanda-tanda itu dipahami, model bukan sekadar gambar, melainkan sesuatu yang bisa Anda analisis.
+
+00:06:45.430 --> 00:06:46.930
+Bentuk bintang yang menjaga modal tetap sederhana.
+
+00:06:47.510 --> 00:06:51.110
+Semua ini menjadi lebih mudah jika tabel Anda dibentuk dengan benar sebelum mulai menghubungkannya.
+
+00:06:52.330 --> 00:06:55.770
+Bentuk yang direkomendasikan Microsoft adalah bintang, dan namanya menunjukkan seperti apa bentuknya.
+
+00:06:56.470 --> 00:06:58.310
+Di tengah terdapat satu tabel besar berisi peristiwa.
+
+00:06:58.730 --> 00:07:01.270
+Di sekelilingnya terdapat beberapa tabel lebih kecil yang mendeskripsikan sesuatu.
+
+00:07:01.270 --> 00:07:04.330
+Tabel kecil tersebut adalah dimensi, dan itulah hal-hal yang Anda deskripsikan.
+
+00:07:04.650 --> 00:07:06.370
+Produk, pelanggan, tanggal, wilayah.
+
+00:07:06.690 --> 00:07:09.050
+Tabel besar adalah tabel fakta, dan itu menyimpan apa yang terjadi.
+
+00:07:09.310 --> 00:07:10.530
+Penjualan, pesanan, saldo.
+
+00:07:11.070 --> 00:07:14.390
+Dimensi ada untuk memfilter, dan mengelompokkan, dan fakta ada untuk menjublahkan.
+
+00:07:15.030 --> 00:07:16.230
+Ini bagian yang mengejutkan banyak orang.
+
+00:07:16.650 --> 00:07:19.470
+Tidak ada kotak centang di Power BI yang menyatakan ini adalah tabel fakta.
+
+00:07:20.170 --> 00:07:21.510
+Hubungan itu sendiri yang menentukan peran.
+
+00:07:22.390 --> 00:07:26.230
+Sisi unik dari tautan selalu menjadi dimensi, dan sisi yang berulang selalu menjadi fakta.
+
+00:07:26.230 --> 00:07:30.550
+Jadi bentuk tersebut terbentuk dari tautan yang Anda buat, bukan dari pengaturan yang Anda pilih.
+
+00:07:30.610 --> 00:07:32.070
+Bentuk bintang unggul karena dua alasan praktis.
+
+00:07:32.390 --> 00:07:34.990
+Filter menempuh cara pendek, yang membuat laporan cepat,
+
+00:07:35.090 --> 00:07:38.710
+dan Anda hanya bisa membuat hirarki drill down yang rapi di dalam satu tabel,
+
+00:07:38.870 --> 00:07:40.450
+yang merupakan fungsi tabel dimensi.
+
+00:07:41.610 --> 00:07:45.730
+Alternatif umum adalah snowflake, di mana Anda memecah satu entitas menjadi beberapa tabel,
+
+00:07:45.850 --> 00:07:47.630
+seperti kategori ke subkategori ke produk.
+
+00:07:48.130 --> 00:07:52.530
+Terlihat rapi di atas kertas, tetapi berarti lebih banyak tabel untuk dikelola rantai filter lebih panjang,
+
+00:07:52.650 --> 00:07:53.910
+dan tidak ada drill down di akhirnya.
+
+00:07:53.910 --> 00:07:57.590
+Tabel tanggal adalah tabel yang akan Anda temukan di hampir setiap skema bintang,
+
+00:07:57.710 --> 00:08:01.330
+karena hampir setiap pertanyaan bisnis adalah variasi dari bagaimana hal ini berubah seiring waktu.
+
+00:08:02.290 --> 00:08:03.810
+Ada satu trik kecil yang layak untuk disimpan.
+
+00:08:04.450 --> 00:08:07.330
+Jika sebuah tabel tidak memiliki satu kolom pemberisi nilai unik, Anda bisa menambahkan.
+
+00:08:07.630 --> 00:08:08.650
+Sebagai contoh, kolom indeks.
+
+00:08:09.110 --> 00:08:11.610
+Lalu saling kolom tersebut ke tabel lain agar kedua sisi sejadi.
+
+00:08:12.010 --> 00:08:14.150
+Kolom tambahan itu disebut kunci pengganti, surget key,
+
+00:08:14.270 --> 00:08:16.650
+dan itu adalah cara standar untuk memberikan identitas utama pada datang.
+
+00:08:16.810 --> 00:08:18.930
+Dapatkan bentuk yang tepat dan tautannya hampir terbentuk dengan sendiri.
+
+00:08:18.930 --> 00:08:22.310
+Jika salah, Anda akan terus menghadapi kesalahan yang sama setiap kali pembaru.
+
+00:08:22.950 --> 00:08:24.370
+Aturan yang harus diikuti oleh sebuah relasi.
+
+00:08:24.910 --> 00:08:27.550
+Sebuah relasi tampak fleksibel sampai Anda mencoba membuatnya secara manual,
+
+00:08:27.690 --> 00:08:28.810
+saat itulah Anda akan menemui aturan.
+
+00:08:29.110 --> 00:08:33.370
+Hanya ada beberapa aturan, dan secara keseluruhan aturan tersebut menjelaskan hampir setiap pesan kesalahan yang Anda temukan.
+
+00:08:33.590 --> 00:08:35.850
+Pertama, relasi berjalan antara satu kolom dan satu kolom lain.
+
+00:08:36.410 --> 00:08:39.210
+Anda tidak bisa menghubungkan satu kolom ke kolom lain di dalam tabel yang sama,
+
+00:08:39.310 --> 00:08:40.430
+tidak peduli seberapa masuk akalnya.
+
+00:08:40.430 --> 00:08:43.630
+Baris induk dan anak yang berada dalam satu tabel memerlukan rumus, bukan relasi.
+
+00:08:44.430 --> 00:08:46.190
+Kedua kolom tersebut harus memiliki tipe data yang sama.
+
+00:08:46.750 --> 00:08:48.850
+Anda diperbolehkan menautkan kolom teks ke kolom angka,
+
+00:08:48.950 --> 00:08:50.370
+dan Power BI tidak akan menghentikan Anda,
+
+00:08:50.450 --> 00:08:51.670
+tetapi tidak akan ada nilai yang cocok,
+
+00:08:51.770 --> 00:08:52.870
+sehingga tidak ada penyaringan yang cocok,
+
+00:08:52.930 --> 00:08:53.630
+sehingga tidak ada penyaringan,
+
+00:08:53.670 --> 00:08:54.910
+dan Anda hanya akan melihat bagian kosong.
+
+00:08:55.450 --> 00:08:57.950
+Ketiga, sisi yang unik harus benar-benar unik.
+
+00:08:58.570 --> 00:09:01.370
+Ini adalah aturan dibalik kesalahan yang pertama kali ditemui pemula,
+
+00:09:01.510 --> 00:09:04.030
+yaitu pesan bahwa salah satu kolom harus memiliki nilai unik.
+
+00:09:04.390 --> 00:09:06.210
+Saat kesalahan itu muncul, Anda punya dua pilihan yang tepat.
+
+00:09:06.210 --> 00:09:08.890
+Anda bisa menghapus duplikat, meskipun harus berhati-hati,
+
+00:09:09.270 --> 00:09:11.530
+karena kunci duplikat seringkali ada karena alasan yang sah,
+
+00:09:11.750 --> 00:09:14.330
+atau Anda bisa menambahkan tabel kecil yang hanya berisi kunci unik
+
+00:09:14.330 --> 00:09:15.550
+dan menautkannya ke kedua sisi.
+
+00:09:16.170 --> 00:09:18.650
+Lalu menyebabkan tanggal dan waktu yang hampir menyebab semua orang sekali.
+
+00:09:19.290 --> 00:09:21.810
+Power BI menyimpan tanggal dan waktu bersama-sama dalam satu nilai,
+
+00:09:22.090 --> 00:09:24.250
+dan pemformatan yang Anda lihat di layar hanyalah pilihan tampilan.
+
+00:09:24.930 --> 00:09:27.430
+Jadi tanggal yang terlihat identik dengan tanggal lainnya bisa gagal cocok
+
+00:09:27.430 --> 00:09:29.050
+karena bagian waktu yang tersembunyi berbeda.
+
+00:09:29.530 --> 00:09:31.550
+Volusinya adalah menghapus bagian waktu di Power Query
+
+00:09:31.550 --> 00:09:33.590
+sebelum data mencapai modal sebelum menjalanku.
+
+00:09:33.590 --> 00:09:36.190
+Terakhir, dan ini adalah penyebab laporan yang terlihat paling aneh,
+
+00:09:36.310 --> 00:09:37.870
+sebuah relasi tidak memeriksa data Anda.
+
+00:09:38.330 --> 00:09:40.550
+Jika penjualan merujuk pada produk yang tidak ada di tabel produk,
+
+00:09:40.910 --> 00:09:41.890
+Power BI tidak akan menolak.
+
+00:09:42.190 --> 00:09:44.750
+Power BI menempatkan penjualan tersebut ke dalam grup kosong agar angkanya.
+
+00:09:45.090 --> 00:09:46.650
+Saat Anda melihat baris kosong di pemotong,
+
+00:09:46.750 --> 00:09:49.050
+slicer padahal sumbernya tidak memiliki nilai kosong sama sekali,
+
+00:09:49.150 --> 00:09:49.670
+itulah yang sedang ada.
+
+00:09:49.850 --> 00:09:52.590
+Perbaikan yang sesungguhnya ada pada data sumber, bukan di dalam modat.
+
+00:09:53.330 --> 00:09:54.550
+Satu hal yang melegakan layak untuk Anda.
+
+00:09:55.050 --> 00:09:57.850
+Power BI biasanya membangun relasi ini untuk Anda saat data dimuat.
+
+00:09:58.730 --> 00:09:59.630
+Ia membaca nama kolom,
+
+00:09:59.630 --> 00:10:01.550
+dan saat tidak menemukan kecocokan yang pasti,
+
+00:10:01.910 --> 00:10:04.790
+ia akan diam daripada menebak sembarangan yang sering membuat pemulat terjebak.
+
+00:10:05.650 --> 00:10:07.810
+Anda bisa mempelajari setiap aturan, namun tetap membuang waktu,
+
+00:10:08.050 --> 00:10:10.230
+jadi penting untuk mengetahui gejalannya dan apa arti biasa.
+
+00:10:10.810 --> 00:10:13.390
+Yang paling umum adalah angka yang sama muncul di setiap baris.
+
+00:10:13.850 --> 00:10:16.230
+Microsoft menyebut ini sebagai tanda utama hilangnya relasi.
+
+00:10:16.770 --> 00:10:17.950
+Ini berarti tabel tidak terhubung?
+
+00:10:18.350 --> 00:10:20.690
+Atau koneksi ada, tapi tidak meneruskan filter?
+
+00:10:21.410 --> 00:10:23.470
+Periksa apakah tabel tersebut memang berelasi,
+
+00:10:23.630 --> 00:10:25.610
+lalu pastikan tautan aktif dan mengarah ke arah yang menang.
+
+00:10:25.610 --> 00:10:29.270
+Saran dari Microsoft adalah ubah visual ke tabel biasa terlebih dahulu
+
+00:10:29.270 --> 00:10:33.270
+karena melihat baris mentah membuat masalah relasi terlihat jelas tidak seperti grafik.
+
+00:10:34.430 --> 00:10:35.950
+Berikutnya adalah grafik yang tidak menampilkan.
+
+00:10:36.390 --> 00:10:37.830
+Sebelum Anda mengubah relasi,
+
+00:10:38.170 --> 00:10:41.190
+pastikan tabel telah dimuat dengan baris dan ada sesuatu di filter Anda.
+
+00:10:42.050 --> 00:10:45.690
+Banyak grafik kosong yang ternyata berasal dari tabel kosong atau filter yang mengecualikan segalanya,
+
+00:10:45.910 --> 00:10:46.850
+bukan karena tautan rusak.
+
+00:10:47.470 --> 00:10:49.690
+Lalu ada laporan yang terlihat benar namun salah di dasarnya.
+
+00:10:50.470 --> 00:10:52.110
+Seringkali, kolom yang salah berelasi,
+
+00:10:52.290 --> 00:10:54.070
+seperti ID produk yang terhubung ke ID pelanggan.
+
+00:10:54.070 --> 00:10:57.130
+Grafik tetap muncul dan angka tetap berjumlah,
+
+00:10:57.310 --> 00:10:58.790
+itulah mengapa ini sangat berbahaya.
+
+00:10:59.730 --> 00:11:02.690
+Itulah sebabnya Anda harus selalu meriksa kolom mana yang dihubungkan oleh sebuah garis,
+
+00:11:02.930 --> 00:11:04.590
+alih percaya begitu saja bahwa garis itu ada.
+
+00:11:05.070 --> 00:11:06.650
+Anda juga akan menemui kelompok kosong berasal.
+
+00:11:07.010 --> 00:11:09.030
+Itu adalah baris kosong dari bagian sebelumnya,
+
+00:11:09.130 --> 00:11:11.170
+fakta yang menunjukkan ada sesuatu yang hilang di sisi unik.
+
+00:11:11.570 --> 00:11:13.370
+Itu adalah sinyal kualitas data yang sedang menyam.
+
+00:11:13.810 --> 00:11:14.910
+Saya coba kenegi layak untuk disebut.
+
+00:11:15.790 --> 00:11:19.090
+Menghubungkan dua tabel fakta secara langsung dengan tautan many-to-many memang berhasil,
+
+00:11:19.390 --> 00:11:22.210
+tetapi Anda hanya bisa memfilter berdasarkan satu tabel dan masalah data,
+
+00:11:22.210 --> 00:11:23.950
+bisa menghilangkan baris secara diam-diam.
+
+00:11:24.630 --> 00:11:27.070
+Dan menggunakan tautan dua arah untuk memaksa slicer bekerja
+
+00:11:27.070 --> 00:11:30.110
+adalah penyebab orang mengalami kesalahan jalur ambigu tanpa tahu alasannya.
+
+00:11:30.570 --> 00:11:32.690
+Kebiasaan yang menciptakan sebagian besar masalah ini memang tidak menarik.
+
+00:11:33.210 --> 00:11:34.070
+Bangun skema bintang,
+
+00:11:34.150 --> 00:11:36.670
+pertahankan satu tautan one-to-many aktif antar pasangan tabel,
+
+00:11:36.930 --> 00:11:38.650
+dan baca diagramnya sebelum menyalahkan data.
+
+00:11:39.610 --> 00:11:40.630
+Apa yang tidak bisa dilakukan relasi?
+
+00:11:41.150 --> 00:11:42.650
+Penting untuk jujur mengenai batasannya,
+
+00:11:42.830 --> 00:11:45.670
+karena relasi adalah alat sempit yang melakukan suatu tugas dengan sangat baik.
+
+00:11:46.170 --> 00:11:46.870
+Relasi kenata Anda.
+
+00:11:47.330 --> 00:11:48.310
+Relasi menunjuk ke kolom,
+
+00:11:48.310 --> 00:11:49.530
+dan jika kolom itu berantakan,
+
+00:11:49.630 --> 00:11:53.110
+relasi akan menyebarkan kekacauan itu kemanapun filter menjangkau kemanapun filter.
+
+00:11:53.530 --> 00:11:54.910
+Ini juga tidak menegakkan integritas,
+
+00:11:55.030 --> 00:11:56.610
+jadi ia tidak akan pernah menolak baris yang buruk.
+
+00:11:56.910 --> 00:11:58.950
+Ia hanya memarkir baris tersebut ke dalam grup kosong dan tersebut.
+
+00:11:59.390 --> 00:12:01.590
+Ia tidak bisa menghubungkan dua kolom di dalam tabel yang sama,
+
+00:12:02.110 --> 00:12:05.330
+dan tidak bisa memiliki lebih dari satu jalur aktif antara dua tabel yang sama sekaligus.
+
+00:12:05.870 --> 00:12:08.490
+Kedua batasan itulah alasan mengapa trik tabel tanggal ganda
+
+00:12:08.490 --> 00:12:10.390
+dan rumus induk anak ada sejak awal.
+
+00:12:10.830 --> 00:12:12.390
+Ia juga tidak bisa memperbaiki ketiak cocokan dalam.
+
+00:12:12.650 --> 00:12:14.150
+Jika penjualan Anda dicatat per produk,
+
+00:12:14.150 --> 00:12:16.030
+tetapi target Anda ditetapkan per kategori,
+
+00:12:16.150 --> 00:12:18.610
+tautan satu kebanyak biasa tidak akan memberikan gambaran yang jujur
+
+00:12:18.610 --> 00:12:20.450
+karena kedua tabel tidak berada pada level yang sama.
+
+00:12:21.010 --> 00:12:23.130
+Menyelesaikan hal itu membutuhkan ukuran dan sedikit ketelitian,
+
+00:12:23.250 --> 00:12:23.990
+bukan tautan yang lebih pintar.
+
+00:12:24.290 --> 00:12:26.890
+Kardinalitas banyak-kebanyak itu nyata dan memecahkan beberapa masalah ini.
+
+00:12:27.390 --> 00:12:28.210
+Namun itu ada harganya.
+
+00:12:28.770 --> 00:12:30.650
+Tautan tersebut tidak bisa menggunakan jalan pitas
+
+00:12:30.650 --> 00:12:32.150
+yang menarik nilai langsung dari sisi unik
+
+00:12:32.150 --> 00:12:34.370
+dan kinerjanya lebih lambat daripada satu kebanyak yang bersih.
+
+00:12:34.750 --> 00:12:35.890
+Itu adalah alat bukan pilihan standar.
+
+00:12:36.210 --> 00:12:37.930
+Satu hal yang tidak akan pernah dilakukan oleh sebuah relasi
+
+00:12:37.930 --> 00:12:39.270
+adalah memberitahu Anda bahwa suatu yang engkau.
+
+00:12:39.270 --> 00:12:41.430
+Ia tidak memiliki opini tentang apakah suatu hasil masuk akal.
+
+00:12:41.910 --> 00:12:43.270
+Penilaian itu tetap menjadi tugas Anda
+
+00:12:43.270 --> 00:12:45.950
+dan itu adalah bagian dari pekerjaan ini yang tidak bisa digentikan oleh pengaturan Anda.
+
+00:12:47.090 --> 00:12:49.470
+Cara paling sederhana untuk memahami semua ini adalah satu kalimat.
+
+00:12:50.090 --> 00:12:51.030
+Relasi memindahkan filter.
+
+00:12:51.750 --> 00:12:52.310
+Relasi itu baik-baik.
+
+00:12:53.050 --> 00:12:55.450
+Dalam konteks Microsoft 365 dan Fabric,
+
+00:12:55.870 --> 00:12:58.110
+Power BI adalah tempat Anda membangun model dan laporan
+
+00:12:58.110 --> 00:12:59.730
+dan relasi bekerja dengan cara yang sama
+
+00:12:59.730 --> 00:13:01.550
+baik di aplikasi desktop maupun di browser.
+
+00:13:02.350 --> 00:13:04.550
+Gagasannya tidak berubah meskipun alat-alat di sekitarnya berkembang.
+
+00:13:05.470 --> 00:13:06.810
+Satu perubahan pernah memperlu diketahui
+
+00:13:06.810 --> 00:13:08.370
+karena sering membuat orang bingung dalam tutorial.
+
+00:13:09.270 --> 00:13:12.170
+Objek yang menampung tabel dan relasi Anda dulunya disebut data set.
+
+00:13:12.930 --> 00:13:15.110
+Microsoft menamanya kembali menjadi model semantik
+
+00:13:15.110 --> 00:13:16.370
+dan nama baru itu tersebar di mana-mana.
+
+00:13:16.630 --> 00:13:18.490
+Jadi jika Anda melihat model semantik dalam video terbaru,
+
+00:13:18.570 --> 00:13:19.950
+itu adalah objek yang sama dengan yang sudah Anda kenal.
+
+00:13:20.470 --> 00:13:23.550
+Di Microsoft Fabric, model semantik tersebut adalah item penuh dengan sendirinya.
+
+00:13:23.810 --> 00:13:26.270
+Bersanding dengan warehouse, lake house, dan database termin.
+
+00:13:27.290 --> 00:13:29.330
+Fabric adalah platform data tunggal Microsoft
+
+00:13:29.330 --> 00:13:32.030
+dan One Lake adalah satu penyimpanan tempat semua data tersebut berada.
+
+00:13:32.630 --> 00:13:34.870
+Anda tidak memerlukan seluruh platform untuk menggunakan relasi
+
+00:13:34.870 --> 00:13:38.190
+tetapi sangat membantu untuk melihat di mana posisi laporan Anda dalam gambaran yang lebih besar.
+
+00:13:38.190 --> 00:13:40.530
+Ada tiga cara Power BI menyimpan data Anda
+
+00:13:40.530 --> 00:13:42.850
+dan ketiganya menukarkan kesegaran data dengan kecepatan.
+
+00:13:43.470 --> 00:13:45.810
+Impor menyalin data ke dalam memori yang membuat laporan cepat
+
+00:13:45.810 --> 00:13:47.850
+tetapi hanya seaktual penyegaran terakhir.
+
+00:13:48.890 --> 00:13:50.550
+Direct Query membaca sumber secara langsung
+
+00:13:50.550 --> 00:13:52.190
+yang selama terakhir tetapi biasanya lebih lama.
+
+00:13:52.950 --> 00:13:54.310
+Direct Lake dimuat dari satu danau
+
+00:13:54.310 --> 00:13:55.670
+dan merikati kecepatan import
+
+00:13:55.670 --> 00:13:57.790
+dengan penyegaran yang hanya menyalin metadata
+
+00:13:57.790 --> 00:13:59.330
+dan bisa selesai dalam hitungan detik.
+
+00:14:00.070 --> 00:14:01.750
+Direct Lake memerlukan kapasitas Fabric
+
+00:14:01.750 --> 00:14:04.410
+dan Microsoft menghentikan kapasitas Power BI Premium lama
+
+00:14:04.410 --> 00:14:06.350
+untuk beralih ke sana jadi itulah arah perkembangannya.
+
+00:14:06.350 --> 00:14:10.190
+Import dan Direct Query berfungsi dengan lisensi Power BI apapun
+
+00:14:10.190 --> 00:14:11.190
+termasuk yang gratis
+
+00:14:11.190 --> 00:14:14.350
+jadi Anda bisa mempelajari semua isi episode ini tanpa merekapasitas.
+
+00:14:15.330 --> 00:14:16.510
+Jadi inilah ringkasan yang bisa Anda ambil.
+
+00:14:17.070 --> 00:14:19.810
+Relasi adalah jalur filter yang dibangun berdasarkan satu kolom yang sama.
+
+00:14:20.410 --> 00:14:22.770
+Sisi unik memimpin dan sisi banyak mengikuti arahnya
+
+00:14:22.770 --> 00:14:26.070
+serta status aktif atau tidaknya menentukan seberapa jauh filter bergerak
+
+00:14:26.070 --> 00:14:28.430
+dan bentuk bintang menjaga semuanya tetap sederhana.
+
+00:14:28.430 --> 00:14:30.770
+Alat ini memindahkan filter dan tidak memperbaiki data apa-apa.
+
+00:14:31.210 --> 00:14:32.470
+Saya akan meninggalkan Anda dengan satu pertanyaan.
+
+00:14:32.710 --> 00:14:35.510
+Di laporan Anda sendiri, tabel mana yang memiliki kolom penuh pengulangan
+
+00:14:35.510 --> 00:14:37.350
+yang belum pernah dihubungkan ke apapun oleh siapapun.
+
+00:14:37.570 --> 00:14:39.930
+Jika ini membuat topik tersebut terasa tidak terlalu menakutkan,
+
+00:14:40.030 --> 00:14:42.550
+berlanggananlah ke M365FM untuk menguasai perangkat
+
+00:14:42.550 --> 00:14:44.490
+dan pola pikir yang membentuk masa depan pekerjaan.
+
+00:14:44.490 --> 00:15:14.470
+Terima kasih telah menonton!

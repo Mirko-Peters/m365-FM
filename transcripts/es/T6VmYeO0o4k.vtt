@@ -1,0 +1,706 @@
+WEBVTT
+
+00:00:00.360 --> 00:00:06.060
+Bienvenidos al podcast M365FM, donde exploramos las personas y tecnologías y tecnologías que dan forma al futuro del trabajo.
+
+00:00:06.520 --> 00:00:08.680
+¿Por qué sus números fallan cuando las tablas no se comunan?
+
+00:00:09.020 --> 00:00:12.020
+Puede crear un informe de Power BI impecable que le entregue números incorrectos.
+
+00:00:12.360 --> 00:00:17.160
+Tienes cinco tablas, columnas limpias, un informe que parece terminado, y cada fila sigue mostrando el mismo total.
+
+00:00:17.640 --> 00:00:20.520
+Los datos están bien, simplemente las tablas no se están comunicando entre sí.
+
+00:00:20.940 --> 00:00:24.360
+Una relación es el cable entre dos tablas construidos sobre una columna que comparten.
+
+00:00:24.900 --> 00:00:28.140
+Aprenda a leer ese cable y podrá predecir exactamente qué hace un clic en sus números.
+
+00:00:28.140 --> 00:00:30.900
+¿Qué es una relación en términos sencillos?
+
+00:00:31.620 --> 00:00:34.400
+Hay una escena que se repite para casi todos los que abren Power BI por primera vez.
+
+00:00:35.100 --> 00:00:39.880
+Importa cinco tablas, arrastra algunos campos a un gráfico y el gráfico muestra el mismo número en cada fila, fila.
+
+00:00:40.420 --> 00:00:44.400
+Su primer instinto es culpar los datos, así que abre el archivo de origen y los datos son correctos.
+
+00:00:45.140 --> 00:00:48.700
+El problema reside en otro lugar y suele ser el objeto más aburrido de todo el modelo.
+
+00:00:49.800 --> 00:00:53.600
+Una relación es una vía de filtrado entre dos tablas. Esa es toda la definición.
+
+00:00:53.600 --> 00:00:58.620
+Recorre una columna que ambas tablas comparten y permite que un filtro aplicado a una tabla llegue a la otra.
+
+00:00:59.640 --> 00:01:04.540
+No ocurre nada más bajo el capó, por eso las relaciones parecen mucho menos misteriosas cuando puede visualizarlas.
+
+00:01:05.620 --> 00:01:08.540
+Tome un modelo sencillo con cuatro tablas, categoría, producto, ventas y año.
+
+00:01:09.000 --> 00:01:13.200
+Categoría se conecta con producto, producto se conecta con ventas y el año también se conecta con ventas.
+
+00:01:13.740 --> 00:01:16.020
+Ahora hace clic en una categoría, digamos Cat A.
+
+00:01:16.240 --> 00:01:20.420
+Ese clic viaja de categoría producto y producto le dice Power BI que dos productos pertenecen a esa categoría.
+
+00:01:20.420 --> 00:01:25.440
+Desde ahí el filtro viaja a ventas y ventas. Se reduce solo a las filas de esos dos productos.
+
+00:01:26.020 --> 00:01:28.380
+Si también filtra por un año, ventas se reduce aún más.
+
+00:01:29.320 --> 00:01:35.380
+El propio tutorial de Microsoft llega a 11 unidades al filtrar una categoría y un año juntos y 14 unidades al filtrar la categoría por sí sola.
+
+00:01:36.760 --> 00:01:39.360
+La diferencia proviene de una pequeña regla que vale la pena tener en cuenta.
+
+00:01:40.000 --> 00:01:42.820
+Cuando dos filtros recaen sobre la misma tabla, ambos deben cumplirse.
+
+00:01:43.820 --> 00:01:49.380
+Power BI combina los filtros con un y cada vez, a menos que escriba una fórmula que indique lo contrario, que indique lo contrario.
+
+00:01:49.380 --> 00:01:55.220
+Por eso un filtro adicional puede reducir un número mucho más de lo esperado y porque un gráfico vacío a veces solo significa que dos filtros no coinciden.
+
+00:01:55.720 --> 00:01:58.260
+Hay un caso en el que una tabla no tiene relación a propósito.
+
+00:01:58.780 --> 00:02:00.660
+Una tabla desconectada no filtra absolutamente nada.
+
+00:02:00.980 --> 00:02:07.060
+Solo contiene un valor que deseas usar, como una tasa de cambio que eliges de un menú desplegable, y una medida lee ese valor y hace algo útil con él.
+
+00:02:07.880 --> 00:02:10.240
+Parámetro que pasaría así de Power BI crea uno de estos para ti.
+
+00:02:10.720 --> 00:02:13.920
+Así que una relación no es una fórmula, ni un adorno que añades al final.
+
+00:02:13.920 --> 00:02:18.560
+Es un camino, y cada número en tu informe es tan confiable como las rutas que conducen a él.
+
+00:02:19.660 --> 00:02:21.440
+Cardinalidad es la palabra que decide qué tabla lidera.
+
+00:02:22.080 --> 00:02:24.780
+Cardinalidad suena como una de esas palabras diseñadas para asustar a los principiantes.
+
+00:02:25.520 --> 00:02:28.780
+Simplificándolo, realmente pregunta cuántas veces puede repetirse un valor a cada lado de un enlace.
+
+00:02:29.260 --> 00:02:30.480
+Imagina la tabla de presentes de ventas.
+
+00:02:31.140 --> 00:02:35.420
+La tabla de productos contiene una fila por producto, por lo que cada ID de producto aparece exactamente una vez.
+
+00:02:36.120 --> 00:02:41.000
+La tabla de ventas contiene miles de filas, y el mismo ID de producto aparece una y otra vez, una vez por cada venta de ese producto.
+
+00:02:41.000 --> 00:02:42.420
+Eso es todo lo que es la cardinalidad.
+
+00:02:42.900 --> 00:02:45.820
+Un lado contiene la lista única, y el otro lado contiene las repeticiones.
+
+00:02:46.200 --> 00:02:48.300
+Power BI te ofrece cuatro formas de describir ese enlace.
+
+00:02:48.980 --> 00:02:52.120
+Uno a varios, varios a uno, uno a uno, y varios a varios.
+
+00:02:52.900 --> 00:02:57.280
+Los dos primeros son el mismo enlace visto desde extremos opuestos, así que no necesitas memorizarlos como cosa separada.
+
+00:02:57.860 --> 00:03:03.760
+Si la lista única está en lado de producto, el enlace es uno a varios cuando lo lees desde productos, y varios a uno cuando lo lees desde ventas.
+
+00:03:03.860 --> 00:03:05.760
+Es el mismo enlace visto desde cualquier dos dos extremos.
+
+00:03:05.760 --> 00:03:11.100
+Uno a uno significa que ambas columnas contienen valores únicos, y es lo suficientemente raro como para tratarlo como una señal de advertencia.
+
+00:03:11.200 --> 00:03:14.440
+Por lo general significa que dividiste algo que habría funcionado mejor con una sola tabla.
+
+00:03:14.900 --> 00:03:16.620
+Varios a varios significa cambios con un repetición.
+
+00:03:16.980 --> 00:03:20.440
+Real, resuelve algunos problemas difíciles, y te cobra por el privilegio.
+
+00:03:20.960 --> 00:03:23.100
+Así que úsalo a propósito en lugar de por defecto.
+
+00:03:23.420 --> 00:03:26.400
+El caballo de batalla es uno a varios, y construirás casi todo sobre él.
+
+00:03:26.860 --> 00:03:29.480
+Una lista clara de elementos en un lado y todas las transacciones en el otro.
+
+00:03:29.480 --> 00:03:35.200
+Una vez que puedes identificar qué tabla tiene la lista única, has encontrado el lado que guía y el lado que sigue.
+
+00:03:35.740 --> 00:03:37.280
+Power BI suele resolver esto por ti.
+
+00:03:37.820 --> 00:03:42.300
+Cuando se cargan los datos, estudia las columnas y adivina la cardinalidad, la mayoría de las veces acierta.
+
+00:03:42.880 --> 00:03:44.020
+Sin embargo, vale la pena saber dos.
+
+00:03:44.380 --> 00:03:51.100
+Adivina mal cuando las tablas aún no han cargado datos, y adivina mal cuando una columna que debería contener duplicados tiene valores únicos hoy.
+
+00:03:52.040 --> 00:03:53.820
+También hay una regla estricta subyacente de todo.
+
+00:03:53.820 --> 00:04:01.540
+Si una actualización intenta cargar un duplicado en el lado único, toda la actualización falla hacia donde viajan los filtros.
+
+00:04:02.080 --> 00:04:06.280
+Incluso un vínculo correcto de uno a varios tiene una dirección, y esta es la configuración que la mayoría de los principiantes nunca abren.
+
+00:04:06.560 --> 00:04:10.280
+Se llama dirección de filtro o cruzado, y decide qué tabla tiene permiso para filtrar a cuál.
+
+00:04:10.960 --> 00:04:12.680
+El valor predeterminado es único, ellos son seguros.
+
+00:04:13.080 --> 00:04:16.680
+Los filtros fluyen del lado único al lado repetido, y ahí es donde se detiene.
+
+00:04:17.080 --> 00:04:20.420
+Su lista de productos puede filtrar sus ventas, pero sus ventas no pueden filtrar su lista de productos.
+
+00:04:20.420 --> 00:04:24.900
+Para la mayoría de los informes, ese es exactamente el comportamiento que desea, porque es predecible y rápido.
+
+00:04:25.260 --> 00:04:27.640
+La otra opción es ambos, que la gente llama bidireccional.
+
+00:04:28.140 --> 00:04:33.100
+Se recurre a ella cuando un filtro necesita viajar hacia atrás por el vínculo, generalmente porque una segmentación se comporta de forma extraña.
+
+00:04:33.540 --> 00:04:35.340
+El ejemplo bancario de Microsoft deja claro la razón.
+
+00:04:35.940 --> 00:04:41.160
+Los clientes y las cuentas están vinculados a través de una tabla intermedia porque un cliente puede tener varias cuentas y una cuenta puede tener varios titulares.
+
+00:04:41.880 --> 00:04:47.080
+Con el filtro apuntando solo a una dirección, cada cliente termina mostrando el mismo saldo, lo cual es imposible en la vida real.
+
+00:04:47.580 --> 00:04:50.840
+Cambio un vínculo a ambas direcciones y los saldos de los clientes de repente cobran sentido.
+
+00:04:51.240 --> 00:04:52.940
+Sin embargo, ambas direcciones no es gratis.
+
+00:04:52.940 --> 00:04:57.640
+Los vínculos bidireccionales afectan el rendimiento y pueden crear más de una ruta válida para que un filtro viaje entre dos tablas.
+
+00:04:58.420 --> 00:05:02.720
+Cuando dos rutas parecen igualmente buenas, Power BI no puede elegir y le entrega un error de ruta ambigua.
+
+00:05:03.500 --> 00:05:04.760
+La guía de Microsoft directa al respecto.
+
+00:05:05.640 --> 00:05:09.500
+Mantenga las relaciones bidireccionales al mínimo y active una solo cuando realmente la necesite.
+
+00:05:10.280 --> 00:05:11.960
+Así que el hábito que vale la pena crear es simple.
+
+00:05:12.800 --> 00:05:18.640
+Deje la dirección como está hasta que un filtro realmente no pueda llegar a donde debe ir y solo entonces abra la configuración y cámbiela.
+
+00:05:18.640 --> 00:05:22.780
+Si alguna vez no recuerda hacia dónde debe fluir un filtro, imagine la lista única como el jefe.
+
+00:05:23.220 --> 00:05:27.180
+Envía instrucciones a las transacciones y las transacciones rara vez necesitan enviar algo de vuelta.
+
+00:05:27.940 --> 00:05:29.240
+Para leer las líneas continuas.
+
+00:05:29.560 --> 00:05:32.720
+Y discontinuas abra la vista del modelo de Power BI y verá tablas unidas por líneas.
+
+00:05:33.100 --> 00:05:36.300
+Esas líneas contienen información útil y aprender a leerlas toma alrededor de un minuto.
+
+00:05:36.680 --> 00:05:40.060
+Una línea continua significa que la ruta no está activa y una línea discontinua significa que está inactiva.
+
+00:05:41.000 --> 00:05:42.340
+Una regla hace que las líneas discontinuas tienen.
+
+00:05:42.340 --> 00:05:48.740
+Entre dos tablas cualesquiera, solo una ruta puede estar activa a la vez y cualquier otra debe permanecer inactiva hasta que una fórmula las active.
+
+00:05:49.440 --> 00:05:51.540
+Podría preguntarse por qué querría más de una ruta.
+
+00:05:52.100 --> 00:05:53.740
+Una sola tabla puede significar varias cosas diferentes.
+
+00:05:54.260 --> 00:05:58.700
+Imaginen una tabla de fechas que pueda filtrar sus ventas por fecha de pedido, por fecha de envío o por fecha de entrega.
+
+00:05:59.140 --> 00:06:02.440
+Son tres funciones para una sola tabla y Power BI solo permite que una esté activa.
+
+00:06:02.800 --> 00:06:07.440
+Microsoft llama esto una dimensión de rol y la solución habitual es sorprendentemente sencilla.
+
+00:06:07.440 --> 00:06:13.140
+Copia la tabla de fechas en una tabla de fecha de envío y una de entrega y luego asigne a cada copia su propia línea activa.
+
+00:06:13.640 --> 00:06:16.440
+Las tablas de fechas son pequeñas, así que duplicarlas no cuesta casi nada.
+
+00:06:16.800 --> 00:06:18.400
+Existe una segunda ruta que evita copiar.
+
+00:06:19.000 --> 00:06:23.740
+Una fórmula llamada User Relationship puede activar una relación inactiva para un cálculo específico sin necesidad de duplicarla.
+
+00:06:24.000 --> 00:06:28.080
+Vale la pena conocer el nombre para que el tutorial sea más comprensible, pero no es algo que necesite el primer D.
+
+00:06:28.540 --> 00:06:31.840
+El punto real de todo esto es que el diagrama es un mapa y el mapa se puede leer.
+
+00:06:33.040 --> 00:06:35.280
+Una línea continua significa activa o no dijo ni significaría.
+
+00:06:35.280 --> 00:06:40.020
+Una punta de flecha significa que el filtro viaja en una dirección y dos puntas significan que viaja en una.
+
+00:06:40.440 --> 00:06:44.720
+Una vez que esas marcas tienen sentido, un modelo deja de ser solo una imagen y pasa a ser algo que puedes analizar.
+
+00:06:45.380 --> 00:06:46.900
+La forma de estrella que mantiene un modelo simple.
+
+00:06:47.520 --> 00:06:51.040
+Todo esto se vuelve más fácil si sus tablas tienen la forma correcta antes de empezar a vincularla.
+
+00:06:52.140 --> 00:06:55.640
+La forma que Microsoft recomienda es la estrella y el nombre le indica cómo se ve.
+
+00:06:56.460 --> 00:06:58.460
+En el centro se ubica una tabla grande de eventos.
+
+00:06:58.820 --> 00:07:01.180
+Alrededor se sitúan varias tablas más pequeñas que describe el evento.
+
+00:07:01.180 --> 00:07:04.020
+Las pequeñas son dimensiones y son las cosas que usted escribe.
+
+00:07:04.780 --> 00:07:06.320
+Productos, clientes, fechas, regiones.
+
+00:07:06.680 --> 00:07:07.780
+La grande es una tabla de hechos.
+
+00:07:08.000 --> 00:07:08.820
+Contiene lo que sucedió.
+
+00:07:09.300 --> 00:07:10.480
+Ventas, pedidos, saldos.
+
+00:07:11.040 --> 00:07:14.380
+Las dimensiones sirven para filtrar y agrupar y los hechos para realizar sumas.
+
+00:07:15.040 --> 00:07:16.260
+Esta es la parte que sorprende a la gente.
+
+00:07:16.680 --> 00:07:19.440
+Nada en Power BI tiene una casilla que indique que esta es una tabla de hechos.
+
+00:07:20.100 --> 00:07:21.600
+La relación misma decide el rol.
+
+00:07:22.240 --> 00:07:26.500
+El lado único de un vínculo siempre se convierte en la dimensión y el lado repetitivo siempre en el hecho.
+
+00:07:26.500 --> 00:07:30.120
+Así que la forma surge de los vínculos que construye, no de una configuración que usted elija.
+
+00:07:30.660 --> 00:07:32.120
+La estrella gana por dos razones prácticas.
+
+00:07:32.400 --> 00:07:40.500
+Los filtros viajan distancias cortas, lo que mantiene los informes rápidos y solo puede construir una jerarquía de desglose clara dentro de una tabla única, que es exactamente lo que son las tablas de dimensión.
+
+00:07:41.460 --> 00:07:47.660
+Una alternativa común es el copo de nieve, donde se divide una entidad en varias tablas, como categoría en subcategoría y luego en producto.
+
+00:07:47.660 --> 00:07:53.840
+Se ve ordenado en papel, pero implica más tablas que gestionar, cadenas de filtros más largas y ninguna capacidad de desglose al final.
+
+00:07:54.560 --> 00:08:01.340
+Una tabla de fechas es la que encontrarás en casi todo esquema de estrella, porque casi cualquier pregunta de negocios es una versión de cómo cambió esto a lo largo del tiempo.
+
+00:08:02.320 --> 00:08:03.820
+Vale la pena tener en cuenta un pequeño truco.
+
+00:08:04.540 --> 00:08:07.140
+Si una tabla no tiene una sola columna de valores únicos, puedes añadirlo.
+
+00:08:07.580 --> 00:08:08.580
+Por ejemplo, una columna de índice.
+
+00:08:09.140 --> 00:08:11.680
+Luego, copia esa columna en la otra tabla para que ambos lados coinciden.
+
+00:08:12.080 --> 00:08:16.540
+Esa columna añadida se llama clave subrogada y es la forma estándar de dar a una tabla de dimensiones un punto de partida.
+
+00:08:16.540 --> 00:08:19.000
+Conseguir la forma correcta y los vínculos se crean casi solos.
+
+00:08:19.240 --> 00:08:22.140
+Si te equivocas, lucharás contra los mismos errores en cada actualización.
+
+00:08:23.020 --> 00:08:24.340
+Las reglas que debe seguir una relación
+
+00:08:24.340 --> 00:08:28.720
+Una relación parece flexible hasta que intentas crear una manualmente y entonces te topas con las reglas.
+
+00:08:29.260 --> 00:08:33.240
+Solo hay unas pocas y en conjunto explican casi todos los mensajes de error con los que te encontrarás.
+
+00:08:33.740 --> 00:08:36.040
+Primero, una relación se establece entre una columna y otra columna.
+
+00:08:36.420 --> 00:08:40.320
+No puedes relacionar una columna con otra dentro de la misma tabla sin importar cuánto sentido tenga.
+
+00:08:40.680 --> 00:08:44.100
+Las filas principales y secundarias que residen en la misma tabla necesitan una fórmula no larga.
+
+00:08:44.260 --> 00:08:46.460
+Segundo, las dos columnas deben compartir el mismo tipo de datos.
+
+00:08:46.920 --> 00:08:54.600
+Si te permite vincular una columna de texto con una de números y Power BI, no te detendrá, pero ningún valor coincidirá, por lo que nada se filtrará y te quedarás mirando un gráfico en blanco.
+
+00:08:55.420 --> 00:08:57.980
+Tercero, el lado único debe ser genuinamente único.
+
+00:08:58.640 --> 00:09:03.800
+Esta es la regla detrás del primer error con el que se topan los principiantes, el que dice que una de las columnas debe tener valores únicos.
+
+00:09:03.800 --> 00:09:06.100
+Cuando aparece, tienes dos opciones claras.
+
+00:09:06.560 --> 00:09:10.280
+Puedes eliminar duplicados, aunque debes tener cuidado porque a menudo están ahí por una buena razón.
+
+00:09:10.400 --> 00:09:15.280
+No puedes añadir una tabla pequeña que contenga solo las claves distintas y vincularla a ambos lados.
+
+00:09:16.120 --> 00:09:18.920
+Luego está la trampa de la fecha y hora, que atrapa a casi todo el mundo al menos una vez.
+
+00:09:19.360 --> 00:09:24.340
+Power BI almacena la fecha y la hora juntas en un solo valor, y el formato que ves en pantalla es solo una elección de visualización.
+
+00:09:24.900 --> 00:09:28.980
+Por eso, una fecha que parece idéntica a otra puede no coincidir, porque la parte oculta de la hora es diferente.
+
+00:09:29.580 --> 00:09:32.800
+La solución es eliminar la hora en Power Query antes de que los datos lleguen al modelo.
+
+00:09:32.800 --> 00:09:38.080
+Por último, y esta es la causa de los informes más extraños, una relación no verifica tus datos por ti.
+
+00:09:38.400 --> 00:09:41.980
+Si una venta apunta a un producto que no existe en la tabla de productos, Power BI no la rechazará.
+
+00:09:42.280 --> 00:09:44.580
+Coloca esa venta en un grupo en blanco para que la cifra no se pierda.
+
+00:09:45.200 --> 00:09:49.300
+Cuando veas una fila vacía en un segmentador y el origen no tenga espacios en blanco, eso es lo que estás viendo.
+
+00:09:49.780 --> 00:09:52.580
+La solución real está en los datos de origen, no en el modelo.
+
+00:09:53.380 --> 00:09:54.620
+Vale la pena terminar con un poco de consta.
+
+00:09:54.960 --> 00:09:57.940
+Power BI suele crear esas relaciones por usted al cargar los datos.
+
+00:09:58.480 --> 00:10:01.440
+Lee los nombres de las columnas y cuando no encuentre una coincidencia segura,
+
+00:10:01.440 --> 00:10:05.160
+no hace nada en lugar de adivinar que es donde los principiantes se equivocan, te equivoca.
+
+00:10:05.620 --> 00:10:08.120
+Puede aprenderse todas las reglas y aún así perder toda la tarde,
+
+00:10:08.280 --> 00:10:10.280
+por lo que ayuda a conocer los síntomas y lo que suelen significar.
+
+00:10:10.880 --> 00:10:13.420
+El más común con mucha diferencia es el mismo número en cada fila.
+
+00:10:13.880 --> 00:10:16.320
+Microsoft lo señala como la principal señal de una relación faltante.
+
+00:10:16.880 --> 00:10:20.920
+Significa que las tablas no están conectadas o que la conexión existe, pero no transmite los filtros.
+
+00:10:21.520 --> 00:10:25.720
+Compruebe si las tablas están relacionadas y luego verifique que el vínculo esté activo y apunte en la dirección correcta.
+
+00:10:26.060 --> 00:10:29.180
+El consejo de Microsoft es cambiar primero el objeto visual a una tabla simple,
+
+00:10:29.180 --> 00:10:33.440
+ya que ver las filas sin procesar hace que un problema de relación sea obvio de una forma que un gráfico nunca logra.
+
+00:10:34.500 --> 00:10:36.040
+Lo siguiente es un gráfico que no muestra nada.
+
+00:10:36.600 --> 00:10:41.300
+Antes de tocar una relación, asegúrese de que la tabla tenga filas cargadas y que haya algo en sus filtros.
+
+00:10:41.960 --> 00:10:45.860
+Un número sorprendente de gráficos en blanco proviene de una tabla vacía de un filtro que excluye todo,
+
+00:10:46.100 --> 00:10:46.980
+no de un vínculo roto.
+
+00:10:47.460 --> 00:10:49.740
+Luego está el informe que parece correcto pero que está mal en el fondo.
+
+00:10:50.320 --> 00:10:52.560
+La mayoría de las veces las columnas incorrectas están relacionadas,
+
+00:10:52.560 --> 00:10:54.180
+como una ID de producto vinculado a una ID de click.
+
+00:10:54.180 --> 00:10:59.380
+El gráfico se muestra y los números suman algo, que es exactamente por lo que este caso es peligroso, es peligroso.
+
+00:10:59.720 --> 00:11:02.820
+También es la razón por la que siempre debe verificar qué dos columnas conectan la línea,
+
+00:11:03.100 --> 00:11:04.660
+en lugar de confiar en que la línea existe.
+
+00:11:05.140 --> 00:11:06.840
+También se encontrará con el grupo vacío en una segmentación.
+
+00:11:07.320 --> 00:11:11.080
+Es esa fila en blanco de la sección anterior, un hecho que apunta a algo faltante en el lado único.
+
+00:11:11.640 --> 00:11:13.320
+Es una señal de calidad de datos disfrazado.
+
+00:11:13.940 --> 00:11:14.860
+Vale la pena mencionarlo eso.
+
+00:11:15.500 --> 00:11:19.000
+Unir dos tablas de hechos directamente entre sí con un vínculo de varios o varios funciona,
+
+00:11:19.000 --> 00:11:24.040
+pero le deja limitado a filtrar por solo una de las tablas y los problemas de datos pueden eliminar filas silenciosamente
+
+00:11:24.040 --> 00:11:27.920
+y recurrir a vínculos bidireccionales para forzar el comportamiento de unas segmentaciones
+
+00:11:27.920 --> 00:11:30.360
+como la gente termina con un error de ruta ambigua y sin saber por qué.
+
+00:11:30.640 --> 00:11:32.620
+El hábito que evita la mayor parte de esto no tiene nada de glámar.
+
+00:11:33.080 --> 00:11:36.620
+Crea una estructura de estrella, mantenga un vínculo activo de uno o varios entre cada par de tablas
+
+00:11:36.620 --> 00:11:38.520
+y lea el diagrama antes de culpar a los datos.
+
+00:11:39.700 --> 00:11:40.640
+Lo que una relación no puede hacer.
+
+00:11:41.180 --> 00:11:44.240
+Vale la pena ser honesto sobre el límite, ya que una relación es una herramienta limitada
+
+00:11:44.240 --> 00:11:46.820
+que hace un solo trabajo muy bien, no limpia sus datos.
+
+00:11:46.820 --> 00:11:50.920
+Una relación apunta a una columna y si esa columna es confusa, la relación extiende el desorden
+
+00:11:50.920 --> 00:11:53.200
+a donde sea que llegue el filtro a donde sea.
+
+00:11:53.620 --> 00:11:56.680
+Tampoco impone integridad, por lo que nunca rechazará una fila incorrecta.
+
+00:11:57.040 --> 00:11:58.720
+Simplemente coloca esa fila en grupo así y continúa.
+
+00:11:59.300 --> 00:12:01.540
+No puede conectar dos columnas dentro de la misma tabla
+
+00:12:01.540 --> 00:12:05.100
+y no puede tener más de una ruta activa entre las mismas dos tablas a la vez.
+
+00:12:05.780 --> 00:12:09.280
+Ambas limitaciones son la razón por la que existen el truco de la tabla de fechas duplicada
+
+00:12:09.280 --> 00:12:10.440
+y las fórmulas de padre e hijo.
+
+00:12:10.840 --> 00:12:12.440
+Tampoco puedes solucionar un desajuste en el telé.
+
+00:12:12.440 --> 00:12:16.320
+Si tus ventas se registran por producto, pero tus objetivos se establecen por categoría,
+
+00:12:16.400 --> 00:12:18.780
+un vínculo simple de uno a muchos no contará una historia honesta
+
+00:12:18.780 --> 00:12:20.380
+porque las dos tablas no están al mismo nivel.
+
+00:12:20.980 --> 00:12:23.800
+Resolver eso requiere medidas y un poco de cuidado, no un vínculo más inteligente.
+
+00:12:24.200 --> 00:12:27.140
+La cardinalidad de muchos a muchos es real y resuelve algunos de estos problemas.
+
+00:12:27.420 --> 00:12:28.300
+Sin embargo, tiene un costo.
+
+00:12:28.800 --> 00:12:31.980
+Sus vínculos no pueden usar el atajo que extrae un valor directamente del lado único
+
+00:12:31.980 --> 00:12:34.200
+y funciona más lento que uno simple de uno a muchos.
+
+00:12:34.760 --> 00:12:36.000
+Es una herramienta en un valor predeterminado.
+
+00:12:36.380 --> 00:12:38.980
+Una cosa que una relación nunca hará es decirte que un número es incorrecto.
+
+00:12:39.320 --> 00:12:41.200
+No tiene opinión sobre si un resultado tiene sentido.
+
+00:12:41.200 --> 00:12:45.840
+Ese juicio depende de ti y es la parte de este trabajo que ninguna configuración puede asumir.
+
+00:12:46.820 --> 00:12:49.340
+La forma más sencilla de entender todo esto es con una oración.
+
+00:12:50.080 --> 00:12:51.180
+Las relaciones mueven los filtros.
+
+00:12:51.800 --> 00:12:52.480
+No corrigen los hechos.
+
+00:12:53.340 --> 00:12:57.840
+En cuanto a dónde encaja esto en Microsoft 365 y Fabric Power BI es donde construyes el modelo
+
+00:12:57.840 --> 00:13:01.640
+y el informe y las relaciones funcionan igual, ya sea en la aplicación de escritorio o en el navegador.
+
+00:13:02.320 --> 00:13:04.580
+La idea no cambia a medida que las herramientas a su alrededor crecen.
+
+00:13:05.520 --> 00:13:09.200
+Vale la pena conocer un cambio de nombre porque confunde a las personas en los tutoriales.
+
+00:13:09.200 --> 00:13:12.060
+El objeto que contiene tus tablas y relaciones solía llamarse conjunto de datos.
+
+00:13:12.960 --> 00:13:16.180
+Microsoft lo renombró a modelo semántico y el nuevo nombre se está extendiendo por todas partes.
+
+00:13:16.620 --> 00:13:19.700
+Así que si ves modelo semántico en un video reciente, es el mismo objeto que ya conoces.
+
+00:13:20.560 --> 00:13:24.060
+En Microsoft Fabric, ese modelo semántico es un elemento completo por derecho propio.
+
+00:13:24.260 --> 00:13:26.540
+Junto a almacenes, lake houses y bases de datos reflejadas.
+
+00:13:27.540 --> 00:13:31.980
+Fabric es la plataforma de datos única de Microsoft y One Lake es el almacén donde viven todos esos datos.
+
+00:13:31.980 --> 00:13:37.700
+No necesitas toda la plataforma para usar relaciones, pero ayuda a ver dónde se sitúa tu informe en el panorama general.
+
+00:13:38.700 --> 00:13:42.840
+Hay tres formas en las que Power BI puede contener tus datos y estas intercambian frescura por velocidad.
+
+00:13:43.480 --> 00:13:48.020
+Importar copia los datos en la memoria, lo que hace que los informes sean rápidos, pero solo tan actuales como la última actualización.
+
+00:13:48.900 --> 00:13:52.180
+Direct Query es la fuente en vivo, lo cual siempre está al día, pero suele ser más lento.
+
+00:13:53.200 --> 00:13:58.880
+Direct Lake carga desde un lago y se acerca a la velocidad de importación con una actualización que solo copia metadatos y puede terminar en segundos.
+
+00:13:58.880 --> 00:14:06.240
+Direct Lake requiere capacidad de Fabric y Microsoft está retirando la capacidad anterior de Power BI Premium a su favor, así que hacia allá se dirige todo.
+
+00:14:07.760 --> 00:14:14.200
+Import y Direct Query funcionan con cualquier licencia de Power BI, incluida la gratuita, por lo que puedes aprender todo en este episodio sin pagar por capacidad.
+
+00:14:15.320 --> 00:14:16.820
+Así que aquí tienes la versión corta para recordar.
+
+00:14:17.160 --> 00:14:19.820
+Una relación es una ruta de filtrado construir una columna compartida.
+
+00:14:20.400 --> 00:14:22.320
+El lado único lidera y el lado múltiple sigue.
+
+00:14:22.320 --> 00:14:28.400
+La dirección y el estado activo o inactivo deciden qué tanto viaja un filtro y la forma de estrella mantiene todo simple.
+
+00:14:28.880 --> 00:14:30.780
+La herramienta mueve filtros y no corrige hecho.
+
+00:14:31.240 --> 00:14:32.200
+Te dejaré con una pregunta.
+
+00:14:32.620 --> 00:14:37.000
+En tu propio informe, ¿qué tabla tiene una columna llena de repeticiones que nadie ha conectado nunca con nada?
+
+00:14:37.540 --> 00:14:44.460
+Si esto hizo que el tema se sintiera menos intimidante, suscríbete a M365FM para dominar las herramientas y la mentalidad que dan forma al futuro del trabajo.

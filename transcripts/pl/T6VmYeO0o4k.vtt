@@ -1,0 +1,757 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.880
+Witamy w podcaście M365FM, w którym badamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:06.080 --> 00:00:08.940
+Dlaczego Twoje liczby są błędne, gdy tabele ze sobą nie rozmawiają?
+
+00:00:09.180 --> 00:00:12.300
+Możesz zbudować przejrzysty raport Power BI, który podaje niewłaściwe dane.
+
+00:00:12.540 --> 00:00:17.500
+Masz pięć tabel, czyste kolumny, raport, który wygląda na gotowy, a każdy wiersz nadal pokazuje tę samą sumę.
+
+00:00:17.720 --> 00:00:20.700
+Dane są w porządku, po prostu tabele nie komunikują się ze sobą.
+
+00:00:20.940 --> 00:00:24.620
+Relacja to połączenie między dwiema tabelami zbudowane na jednej wspólnej kolumnie.
+
+00:00:24.860 --> 00:00:29.040
+Naucz się czytać to połączenie, a przewidzisz dokładnie, co kliknięcie zrobi z Twoimi liczbami.
+
+00:00:29.040 --> 00:00:31.100
+Czym jest relacja w prostych słowach?
+
+00:00:31.260 --> 00:00:35.020
+Istnieje scenariusz, który zdarza się prawie każdemu, kto otwiera Power BI po raz pierwszy.
+
+00:00:35.260 --> 00:00:40.240
+Wczytujesz pięć tabel, przeciągasz kilka pól na wykres, a wykres pokazuje tę samą liczbę w każdym wierszu.
+
+00:00:40.460 --> 00:00:44.820
+Twój pierwszy odruch to wina danych, więc otwierasz plik źródłowy, a dane są poprawne.
+
+00:00:45.020 --> 00:00:49.300
+Problem leży gdzie indziej i zazwyczaj jest to najnudniejszy obiekt w całym modelu.
+
+00:00:49.680 --> 00:00:52.540
+Relacja to ścieżka filtrowania między dwiema tabelami.
+
+00:00:52.540 --> 00:00:53.800
+To cała definicja.
+
+00:00:54.040 --> 00:00:59.220
+Biegnie ona wzdłuż wspólnej kolumny obu tabel i pozwala, by filtr zastosowany w jednej tabeli dotarł do drugiej.
+
+00:00:59.440 --> 00:01:05.020
+Pod maską nie dzieje się nic więcej, dlatego relacje wydają się znacznie mniej tajemnicze, gdy potrafisz je sobie wyobrazić.
+
+00:01:05.240 --> 00:01:07.000
+Weźmy prosty model z czterema tabelami.
+
+00:01:07.140 --> 00:01:08.900
+Kategoria, produkt, sprzedaż i rok.
+
+00:01:09.080 --> 00:01:13.040
+Kategoria łączy się z produktem, produkt z sprzedażą, a rok również z sprzedażą.
+
+00:01:13.220 --> 00:01:15.600
+Teraz klikasz jedną kategorię, powiedzmy katolicki.
+
+00:01:15.600 --> 00:01:20.940
+A, to kliknięcie wędruje z kategorii do produktu, a produkt informuje Power B, które dwa produkty należą do tej kategorii.
+
+00:01:21.160 --> 00:01:25.820
+Stamtąd filtr wędruje do sprzedaży, a sprzedaż zawęża się tylko do wierszy dotyczących tych dwóch produktów.
+
+00:01:26.000 --> 00:01:28.960
+Jeśli dodatkowo przefiltrujesz rok, sprzedaż zawęzi się ponownie.
+
+00:01:29.180 --> 00:01:36.440
+Własny samouczek Microsoftu wskazuje na 11 jednostek przy filtrowaniu kategorii i roku razem oraz 14 jednostek przy filtrowaniu samej kategorii.
+
+00:01:36.660 --> 00:01:39.640
+Różnica wynika z małej zasady, którą warto zapamiętać.
+
+00:01:39.880 --> 00:01:43.440
+Gdy dwa filtry trafiają na tę samą tabelę, oba muszą być prawdziwe.
+
+00:01:43.440 --> 00:01:49.080
+Power B łączy filtry za pomocą operatora za każdym razem, chyba że napiszesz formułę, która mówi co innego.
+
+00:01:49.320 --> 00:01:55.380
+Dlatego jeden dodatkowy filtr może zmniejszyć liczbę znacznie bardziej niż oczekujesz, a pusty wykres czasem oznacza po prostu, że dwa filtry się wykluczają.
+
+00:01:55.620 --> 00:01:58.540
+Jest jeden przypadek, w którym tabela celowo nie ma żadnej relacji.
+
+00:01:58.740 --> 00:02:00.860
+Odłączona tabela nie filtruje zupełnie niczego.
+
+00:02:01.120 --> 00:02:07.360
+Przechowuje ona wartość, której chcesz użyć, na przykład kurs waluty wybrany z listy, a miara odczytuje tę wartość i wykonuje z nią coś pożytecznego.
+
+00:02:07.540 --> 00:02:10.520
+Parametr, co jeśli w Power B tworzy taką wartość za ciebie.
+
+00:02:10.520 --> 00:02:14.160
+Zatem relacja nie jest formułą ani dekoracją, którą dodajesz na końcu.
+
+00:02:14.320 --> 00:02:18.760
+To ścieżka, a każda liczba w raporcie jest tylko tak wiarygodna, jak ścieżki, które do niej prowadzą.
+
+00:02:19.060 --> 00:02:21.740
+Kardynalność słowo, które decyduje, która tabela jest nadrzędna.
+
+00:02:22.020 --> 00:02:25.000
+Kardynalność brzmi jak jedno z tych słów, które mają odstraszać początkujących.
+
+00:02:25.200 --> 00:02:28.940
+Upraszczając, to po prostu pytanie o to, ile razy wartość może powtórzyć się po każdej stronie powiązania.
+
+00:02:29.160 --> 00:02:31.300
+Wyobraź sobie tabelę produktów i tabelę sprzedaży.
+
+00:02:31.460 --> 00:02:35.820
+Tabela produktów zawiera jeden wiersz na produkt, więc każdy identyfikator produktu pojawia się dokładnie raz.
+
+00:02:35.820 --> 00:02:41.120
+Tabela sprzedaży zawiera tysiące wierszy, a ten sam identyfikator produktu pojawia się wielokrotnie raz dla każdej sprzedaży tego produktu.
+
+00:02:41.200 --> 00:02:42.800
+To wszystko, czym jest kardynalność.
+
+00:02:43.020 --> 00:02:46.060
+Jedna strona zawiera unikatową listę, a druga stronę z powtórzeniami.
+
+00:02:46.240 --> 00:02:48.940
+Power B daje cztery sposoby na opisanie tego powiązania.
+
+00:02:49.180 --> 00:02:52.520
+Jeden do wielu, wiele do jednego, jeden do jednego oraz wiele do wielu.
+
+00:02:52.780 --> 00:02:57.560
+Dwa pierwsze to to samo powiązanie widziane z przeciwnych stron, więc nie musisz uczyć się ich jako osobnych pojęć.
+
+00:02:57.760 --> 00:03:03.740
+Jeśli unikatowa lista znajduje się po stronie produktów, powiązanie to jeden do wielu, gdy czytasz je od produktów, wiele do jednego, gdy czytasz je od sprzedaży.
+
+00:03:03.740 --> 00:03:05.760
+To to samo powiązanie widziane z obu stron.
+
+00:03:06.000 --> 00:03:08.440
+Jeden do jednego oznacza, że obie kolumny zawierają unikatowe wartości.
+
+00:03:08.600 --> 00:03:10.960
+Jest to na tyle rzadkie, że można to traktować jako sygnał ostrzegawczy.
+
+00:03:11.180 --> 00:03:14.020
+Zwykle oznacza to, że rozdzielono coś, co byłoby lepsze jako jedna tabela.
+
+00:03:14.260 --> 00:03:16.680
+Wiele do wielu oznacza, że w obu kolumnach mogą występować powtórzenia.
+
+00:03:16.860 --> 00:03:17.900
+To realne rozwiązanie.
+
+00:03:18.100 --> 00:03:21.020
+Rozwiązuje kilka trudnych problemów, ale trzeba za ten przywilej zapłacić.
+
+00:03:21.180 --> 00:03:23.240
+Więc sięgaj po nie celowo, a nie domyślnie.
+
+00:03:23.460 --> 00:03:26.500
+Podstawą jest jeden do wielu i na nim będziesz budować niemal wszystko.
+
+00:03:26.500 --> 00:03:30.140
+Jedna czysta lista elementów po jednej stronie i wszystkie transakcje po drugiej.
+
+00:03:30.400 --> 00:03:35.320
+Gdy już wiesz, która tabela zawiera unikatową listę, znalazłeś stronę nadrzędną i stronę podrzędną.
+
+00:03:35.520 --> 00:03:37.540
+Power BI zazwyczaj zajmuje się tym za ciebie.
+
+00:03:37.760 --> 00:03:42.560
+Podczas ładowania danych analizuje kolumny i odgaduje kardynalność, a w większości przypadków robi to poprawnie.
+
+00:03:42.840 --> 00:03:44.500
+Warto jednak wiedzieć o dwóch rzeczach.
+
+00:03:44.680 --> 00:03:51.560
+Zgaduje błędnie, gdy tabele nie mają jeszcze załadowanych danych oraz gdy kolumna, która powinna zawierać duplikaty, akurat zawiera dziś unikatowe wartości.
+
+00:03:51.560 --> 00:03:54.080
+U podstaw tego wszystkiego leży również sztywna zasada.
+
+00:03:54.320 --> 00:03:59.620
+Jeśli odświeżanie kiedykolwiek spróbuje załadować duplikat do strony unikalnej, całe odświeżanie zakończy się niepowodzeniem.
+
+00:04:00.280 --> 00:04:01.600
+Kierunek działania filtrów.
+
+00:04:01.780 --> 00:04:06.380
+Nawet poprawne połączenie jeden do wielu ma swój kierunek, a to ustawienie, do którego większość początkujących nigdy nie zagląda.
+
+00:04:06.600 --> 00:04:10.380
+Nazywa się to kierunkiem filtrowania krzyżowego i decyduje o tym, która tabela może filtrować którą.
+
+00:04:10.660 --> 00:04:13.260
+Domyślnie ustawione jest pojedyncze i jest to bezpieczny wybór.
+
+00:04:13.460 --> 00:04:16.760
+Filtry przepływają od strony unikalnej do strony powtarzalnej i tam się zatrzymują.
+
+00:04:16.760 --> 00:04:20.640
+Twoja lista produktów może filtrować sprzedaż, ale sprzedaż nie może filtrować listy produktów.
+
+00:04:20.800 --> 00:04:25.240
+W większości raportów jest to dokładnie takie zachowanie, jakiego oczekujesz, ponieważ jest przewidywalne i zapewnia szybkość.
+
+00:04:25.420 --> 00:04:28.200
+Druga opcja to obiekt, co nazywa się filtrowaniem dwukierunkowym.
+
+00:04:28.440 --> 00:04:33.280
+Sięgasz po nią, gdy filtr musi powrócić w górę połączenia, zazwyczaj gdy fragmentator zachowuje się dziwnie.
+
+00:04:33.480 --> 00:04:35.660
+Przykład bankowy Microsoftu wyjaśnia powód.
+
+00:04:35.820 --> 00:04:41.660
+Klienci i konta są połączone przez tabelę pośrednią, ponieważ jeden klient może mieć wiele kont, a jedno konto może mieć wielu właścicieli.
+
+00:04:41.660 --> 00:04:47.280
+Przy filtrze działającym tylko w jedną stronę, każdy klient pokazuje to samo saldo, co w rzeczywistości jest niemożliwe.
+
+00:04:47.500 --> 00:04:50.780
+Zmień kierunek na obie strony, a salda klientów nagle nabierają sensu.
+
+00:04:50.960 --> 00:04:53.020
+Filtrowanie w obie strony nie jest jednak darmowe.
+
+00:04:53.200 --> 00:04:58.220
+Połączenia dwukierunkowe obciążają wydajność i mogą stworzyć więcej niż jedną poprawną ścieżkę dla filtra między dwiema tabelami.
+
+00:04:58.420 --> 00:05:03.000
+Gdy dwie ścieżki wyglądają równie dobrze, Power BI nie może dokonać wyboru i zwraca błąd niejednoznacznej ścieżki.
+
+00:05:03.220 --> 00:05:05.640
+Wskazówki Microsoftu są w tej kwestii bezpośrednie.
+
+00:05:05.820 --> 00:05:10.280
+Ogranicz relacje dwukierunkowe do minimum i włączaj je tylko wtedy, gdy rzeczywiście ich potrzebujesz.
+
+00:05:10.280 --> 00:05:12.480
+Warto więc wyrobić sobie prosty nawyk.
+
+00:05:12.680 --> 00:05:18.320
+Nie zmieniaj kierunku, dopóki filtr faktycznie nie może dotrzeć tam, gdzie powinien i dopiero wtedy zmień to ustawienie.
+
+00:05:18.520 --> 00:05:23.220
+Jeśli kiedykolwiek nie będziesz pamiętać, w którą stronę powinien płynąć filtr, wyobraź sobie unikalną listę jako szefa.
+
+00:05:23.460 --> 00:05:27.660
+Wysyła on instrukcje do transakcji, a transakcje rzadko muszą wysyłać cokolwiek z powrotem.
+
+00:05:27.820 --> 00:05:32.620
+Odczytywanie linii ciągłych i przerywanych otwórz widok modelu w Power BI, a zobaczysz tabele połączone liniami.
+
+00:05:32.820 --> 00:05:36.380
+Te linie niosą przydatne informacje, a nauczenie się ich odczytywania zajmuje około minuty.
+
+00:05:36.380 --> 00:05:40.440
+Linia ciągła oznacza, że relacja jest aktywna, a linia przerywana oznacza, że jest nieaktywna.
+
+00:05:40.600 --> 00:05:43.020
+Jedna zasada sprawia, że linie przerywane nabierają sensu.
+
+00:05:43.180 --> 00:05:48.800
+Między dwiema tabelami tylko jedna ścieżka może być aktywna jednocześnie, a pozostałe muszą pozostać nieaktywne, dopóki formuła ich nie włączy.
+
+00:05:49.020 --> 00:05:51.960
+Możesz się zastanawiać, dlaczego w ogóle miałbyś chcieć więcej niż jedną ścieżkę.
+
+00:05:52.120 --> 00:05:54.320
+Pojedyncza tabela może oznaczać kilka różnych rzeczy.
+
+00:05:54.580 --> 00:05:59.160
+Wyobraź sobie tabelę dat, która mogłaby filtrować sprzedaż według daty zamówienia, wysyłki lub dostawy.
+
+00:05:59.160 --> 00:06:03.220
+To trzy zadania dla jednej tabeli, a Power BI pozwoli na aktywność tylko jednego z nich.
+
+00:06:03.380 --> 00:06:07.920
+Microsoft nazywa to wymiarem pełniącym różne role, a typowe rozwiązanie jest niezwykle proste.
+
+00:06:08.120 --> 00:06:13.360
+Skopiuj tabelę dat do tabeli dat wysyłki i tabeli dat dostawy, a następnie nadaj każdej kopii własną aktywną linię.
+
+00:06:13.500 --> 00:06:16.320
+Tabele dat są małe, więc powielenie ich prawie nic nie kosztuje.
+
+00:06:16.560 --> 00:06:18.880
+Istnieje druga droga, która pozwala uniknąć kopiowania.
+
+00:06:19.140 --> 00:06:24.000
+Formuła o nazwie User Relationship potrafi aktywować nieaktywną linię na potrzeby jednego obliczenia bez konieczności powielania tabeli.
+
+00:06:24.000 --> 00:06:28.520
+Warto znać tę nazwę, aby samouczki przestały brzmieć obco, ale nie będziesz jej potrzebować pierwszego dnia.
+
+00:06:28.760 --> 00:06:32.420
+Sedno tego wszystkiego polega na tym, że diagram to mapa, a mapy można czytać.
+
+00:06:32.640 --> 00:06:35.540
+Linia ciągła oznacza aktywność, przerywana oznacza uśpienie.
+
+00:06:35.800 --> 00:06:40.080
+Jeden grot strzałki oznacza, że filtr działa w jednym kierunku, a dwa groty, że działa w obu.
+
+00:06:40.260 --> 00:06:44.960
+Gdy te oznaczenia stają się zrozumiałe, model przestaje być tylko obrazkiem, a staje się czymś, co można analizować.
+
+00:06:45.180 --> 00:06:47.460
+Gwiazda to kształt, który utrzymuje model w prostocie.
+
+00:06:47.460 --> 00:06:51.820
+Wszystko to staje się łatwiejsze, jeśli tabele mają odpowiedni kształt, zanim zaczniesz je łączyć.
+
+00:06:52.000 --> 00:06:55.880
+Kształt zalecany przez Microsoft to gwiazda, a nazwa wskazuje, jak ona wygląda.
+
+00:06:56.160 --> 00:06:58.340
+W centrum znajduje się jedna duża tabela zdarzeń.
+
+00:06:58.560 --> 00:07:01.680
+Wokół niej umieszczone są mniejsze tabele, które opisują poszczególne elementy.
+
+00:07:01.800 --> 00:07:04.320
+Te mniejsze to wymiary i są to rzeczy, które opisujesz.
+
+00:07:04.480 --> 00:07:06.360
+Produkty, klienci, daty, regiony.
+
+00:07:06.480 --> 00:07:09.400
+Ta duża to tabela faktów, która przechowuje dane o tym, co się wydarzyło.
+
+00:07:09.580 --> 00:07:11.080
+Sprzedaż, zamówienia, salda.
+
+00:07:11.320 --> 00:07:14.520
+Wymiary służą do filtrowania i grupowania, a fakty do sumowania.
+
+00:07:14.520 --> 00:07:16.420
+To część, która zaskakuje ludzi.
+
+00:07:17.460 --> 00:07:20.120
+Pola wyboru, które oznaczałoby, to jest tabela faktów.
+
+00:07:20.260 --> 00:07:21.780
+O roli decyduje sama relacja.
+
+00:07:22.040 --> 00:07:26.640
+Unikalna strona połączenia zawsze staje się wymiarem, a powtarzająca się strona zawsze staje się faktem.
+
+00:07:26.820 --> 00:07:30.200
+Zatem kształt wynika z tworzonych przez ciebie połączeń, a nie z wybranego ustawienia.
+
+00:07:30.480 --> 00:07:32.720
+Schemat gwiazdy wygrywa z dwóch praktycznych powodów.
+
+00:07:32.920 --> 00:07:35.900
+Filtry przesyłane są na krótkie dystanse, co przyspiesza raporty,
+
+00:07:35.960 --> 00:07:39.560
+a przejrzystą hierarchię drążenia można zbudować tylko wewnątrz pojedynczej tabeli,
+
+00:07:39.740 --> 00:07:41.100
+czym właśnie są tabele wymiarów.
+
+00:07:41.100 --> 00:07:45.660
+Częstą alternatywą jest schemat płatka śniegu, gdzie dzielisz jeden obiekt na kilka tabel,
+
+00:07:45.760 --> 00:07:47.860
+na przykład kategorie na podkategorie i produkt.
+
+00:07:48.060 --> 00:07:51.260
+Na papierze wygląda to porządnie, ale oznacza więcej tabel do zarządzania,
+
+00:07:51.440 --> 00:07:54.300
+dłuższe łańcuchy filtrów i brak potrzeby drążenia danych na końcu.
+
+00:07:54.500 --> 00:07:57.680
+Tabela dat to element, który znajdziesz w niemal każdym schemacie gwiazdy,
+
+00:07:57.760 --> 00:08:01.780
+ponieważ prawie każde pytanie biznesowe to wariant pytania o to, jak coś zmieniało się w czasie.
+
+00:08:02.080 --> 00:08:03.980
+Warto zapamiętać jedną małą sztuczkę.
+
+00:08:03.980 --> 00:08:07.420
+Jeśli tabela nie ma kolumny z unikalnymi wartościami, możesz ją dodać.
+
+00:08:07.520 --> 00:08:08.820
+Na przykład kolumnę indeksu.
+
+00:08:09.040 --> 00:08:12.060
+Następnie skopiuj te kolumny do drugiej tabeli, aby obie strony do siebie pasowały.
+
+00:08:12.220 --> 00:08:14.040
+Dodana w ten sposób kolumna nazywana jest kluczem zastępczym
+
+00:08:14.040 --> 00:08:16.560
+i jest standardowym sposobem na nadanie tabeli wymiaru unikalnego identyfikatora.
+
+00:08:16.720 --> 00:08:19.160
+Zadbaj o właściwy kształt danych, a relacje zbudują się niemal same.
+
+00:08:19.360 --> 00:08:22.620
+Jeśli zrobisz to źle, przy każdym odświeżaniu będziesz walczyć z tymi samymi błędami.
+
+00:08:22.840 --> 00:08:24.780
+Zasady, których musi przestrzegać relacja.
+
+00:08:25.020 --> 00:08:29.080
+Relacja wydaje się prosta, dopóki nie spróbujesz zbudować jej ręcznie, wtedy zderzysz się z zasadami.
+
+00:08:29.080 --> 00:08:33.380
+Jest ich tylko kilka i razem wyjaśniają niemal każdy komunikat o błędzie, na jaki natrafisz.
+
+00:08:33.500 --> 00:08:36.140
+Po pierwsze, relacja łączy jedną kolumnę z jedną kolumną.
+
+00:08:36.340 --> 00:08:40.500
+Nie można powiązać kolumny z inną kolumną wewnątrz tej samej tabeli, niezależnie od tego, jak bardzo miałoby to sens.
+
+00:08:40.720 --> 00:08:44.220
+Wiersze nadrzędne i podrzędne znajdujące się w jednej tabeli wymagają formuły, a nie relacji.
+
+00:08:44.400 --> 00:08:46.920
+Po drugie, obie kolumny powinny mieć ten sam typ danych.
+
+00:08:47.180 --> 00:08:50.440
+Możesz połączyć kolumnę tekstową z liczbową, a PowerBeat cię nie powstrzyma,
+
+00:08:50.560 --> 00:08:54.940
+ale żadne wartości nie będą pasować, więc nic się nie przefiltruje i zostaniesz z pustym wykresem.
+
+00:08:54.940 --> 00:08:58.140
+Po trzecie, strona unikalna musi być rzeczywiście unikalna.
+
+00:08:58.280 --> 00:09:01.840
+To zasada stojąca za błędem, który początkujący widzą najczęściej informacją,
+
+00:09:02.000 --> 00:09:04.220
+że jedna z kolumn musi zawierać unikalne wartości.
+
+00:09:04.480 --> 00:09:06.460
+Gdy się pojawi, masz dwie sensowne opcje.
+
+00:09:06.720 --> 00:09:09.340
+Możesz usunąć duplikaty, choć należy zachować ostrożność,
+
+00:09:09.440 --> 00:09:14.340
+bo powielone klucze często mają swoje uzasadnienie lub dodać małą tabelę zawierającą tylko unikalne klucze
+
+00:09:14.340 --> 00:09:15.820
+i połączyć ją z obiema stronami.
+
+00:09:16.040 --> 00:09:19.000
+Jest też pułapka daty i godziny, która łapie niemal każdego.
+
+00:09:19.180 --> 00:09:21.580
+PowerBeat przechowuje datę i godzinę w jednej wartości,
+
+00:09:21.580 --> 00:09:24.520
+a formatowanie widoczne na ekranie to tylko kwestia wyświetlania.
+
+00:09:24.740 --> 00:09:27.760
+Dlatego data, która wygląda identycznie jak inna, może nie pasować,
+
+00:09:27.880 --> 00:09:29.500
+bo ukryta część czasowa jest inna.
+
+00:09:29.820 --> 00:09:33.460
+Rozwiązaniem jest usunięcie godziny w PowerQuili, zanim dane trafią do modelu.
+
+00:09:33.620 --> 00:09:36.380
+Na koniec to powód najbardziej dziwacznie wyglądających raportów
+
+00:09:36.380 --> 00:09:37.980
+relacja nie weryfikuje Twoich danych.
+
+00:09:38.220 --> 00:09:41.020
+Jeśli sprzedaż wskazuje na produkt, którego nie ma w tabeli produktów,
+
+00:09:41.100 --> 00:09:42.060
+PowerBe jej nie odrzuci.
+
+00:09:42.240 --> 00:09:45.040
+Umieszcza taką sprzedaż w pustej grupie, aby liczba nie zaginęła.
+
+00:09:45.180 --> 00:09:46.720
+Kiedy widzisz pusty wiersz w ślicerze,
+
+00:09:46.760 --> 00:09:49.580
+a źródło nie ma żadnych pustych wartości, to właśnie na to patrzysz.
+
+00:09:49.580 --> 00:09:53.040
+Prawdziwa poprawka powinna znaleźć się w danych źródłowych, a nie w modelu.
+
+00:09:53.220 --> 00:09:54.880
+Warto zakończyć pewnym pocieszeniem.
+
+00:09:55.040 --> 00:09:58.460
+PowerBe zazwyczaj buduje te relacje automatycznie podczas ładowania danych.
+
+00:09:58.680 --> 00:10:01.600
+Odczytuje nazwy kolumn i gdy nie znajduje pewnego dopasowania,
+
+00:10:01.760 --> 00:10:05.060
+milczy zamiast zgadywać, na czym początkujący często się przejeżdżają.
+
+00:10:05.340 --> 00:10:07.660
+Możesz poznać wszystkie zasady i wciąż stracić popołudnie,
+
+00:10:07.780 --> 00:10:10.360
+dlatego warto znać objawy i wiedzieć, co zazwyczaj oznaczają.
+
+00:10:10.600 --> 00:10:13.780
+Najczęstszym z nich jest zdecydowanie ta sama liczba widoczna w każdym wierszu.
+
+00:10:14.000 --> 00:10:16.740
+Microsoft wskazuje to jako główny sygnał braku relacji.
+
+00:10:16.740 --> 00:10:21.260
+Oznacza to, że tabele nie są połączone lub połączenie istnieje, ale nie przekazuje filtrów.
+
+00:10:21.440 --> 00:10:26.100
+Sprawdź, czy tabele są w ogóle powiązane, a następnie czy połączenie jest aktywne i skierowane we właściwą stronę.
+
+00:10:26.280 --> 00:10:29.500
+Rada Microsoftu brzmi, aby najpierw przełączyć wizualizację na zwykłą tabelę,
+
+00:10:29.580 --> 00:10:34.020
+ponieważ widok surowych danych sprawia, że problem z relacją staje się oczywisty, czego wykres nigdy nie pokaże.
+
+00:10:34.180 --> 00:10:36.520
+Kolejną kwestią jest wykres, który nic nie pokazuje.
+
+00:10:36.820 --> 00:10:41.600
+Zanim zmienisz relację, upewnij się, że tabela jest załadowana danymi i że w filtrach coś jest ustawione.
+
+00:10:41.600 --> 00:10:46.880
+Zaskakująco wiele pustych wykresów wynika z pustej tabeli lub filtra, który odrzuca wszystko, a nie z zerwanego połączenia.
+
+00:10:47.140 --> 00:10:49.880
+Jest też raport, który wygląda poprawnie, ale wewnątrz jest błędny.
+
+00:10:50.080 --> 00:10:52.140
+Najczęściej powiązane są niewłaściwe kolumny, np.
+
+00:10:52.140 --> 00:10:54.960
+Identyfikator produktu połączony z identyfikatorem klienta.
+
+00:10:55.120 --> 00:10:59.520
+Wykres nadal się renderuje, a liczby sumują się do jakiejś wartości, co właśnie czyni to tak niebezpiecznym.
+
+00:10:59.740 --> 00:11:04.880
+Dlatego właśnie zawsze należy sprawdzać, które dwie kolumny łączy linia, zamiast ufać, że sama jej obecność wystarczy.
+
+00:11:05.080 --> 00:11:06.900
+Napotkasz także pustą grupę w ślicerze.
+
+00:11:07.060 --> 00:11:11.300
+To ten sam pusty wiersz z poprzedniej sekcji, wskazujący na brak danych po stronie unikalnych wartości.
+
+00:11:11.480 --> 00:11:13.620
+To sygnał o słabej jakości danych w przebraniu.
+
+00:11:13.620 --> 00:11:15.820
+Warto wspomnieć o dwóch kolejnych pułapkach.
+
+00:11:16.000 --> 00:11:19.700
+Łączenie dwóch tabel faktów bezpośrednio ze sobą za pomocą relacji wiele do wielu działa,
+
+00:11:22.140 --> 00:11:24.200
+problemy z danymi mogą cicho usuwać wiersze.
+
+00:11:24.400 --> 00:11:26.860
+Sięganie po dwukierunkowe relacje, aby wymusić działanie slicera,
+
+00:11:26.960 --> 00:11:30.280
+prowadzi do błędów niejednoznacznej ścieżki, których przyczyny użytkownicy nie rozumieją.
+
+00:11:30.480 --> 00:11:33.260
+Nawyk, który zapobiega większości tych problemów, nie jest efektowny.
+
+00:11:33.440 --> 00:11:37.280
+Buduj schemat gwiazdy, zachowaj jedną aktywną relację jeden do wielu między każdą parą tabel
+
+00:11:37.280 --> 00:11:39.180
+i czytaj diagram, zanim zaczniesz winić dane.
+
+00:11:39.380 --> 00:11:40.820
+Czego relacja nie potrafi zrobić?
+
+00:11:40.820 --> 00:11:44.360
+Warto uczciwie przyznać, jakie są jej ograniczenia, ponieważ relacja to wąskie narzędzie,
+
+00:11:44.480 --> 00:11:46.040
+które świetnie wykonuje tylko jedno zadanie.
+
+00:11:46.220 --> 00:11:47.280
+Nie czyści twoich danych.
+
+00:11:47.280 --> 00:11:50.520
+Relacja wskazuje na kolumnę i jeśli ta kolumna jest nieuporządkowana,
+
+00:11:50.680 --> 00:11:53.340
+relacja rozprzestrzenia ten bałagan wszędzie tam, gdzie sięga filtr.
+
+00:11:53.500 --> 00:11:56.660
+Nie wymusza też integralności, więc nigdy nie odrzuci błędnego wiersza.
+
+00:11:56.860 --> 00:11:59.360
+Po prostu umieszcza ten wiersz w pustej grupie i działa dalej.
+
+00:11:59.580 --> 00:12:01.760
+Nie może połączyć dwóch kolumn wewnątrz tej samej tabeli,
+
+00:12:01.840 --> 00:12:05.460
+ani mieć więcej niż jednej aktywnej ścieżki między tymi samymi dwiema tabelami jednocześnie.
+
+00:12:05.460 --> 00:12:10.560
+Oba te ograniczenia są powodem, dla którego istnieją sztuczki z duplikowaniem tabel dat i formuły nadrzędny-podrzędny.
+
+00:12:10.720 --> 00:12:12.860
+Nie potrafi też naprawić niedopasowania w szczegółach.
+
+00:12:12.860 --> 00:12:16.380
+Jeśli sprzedaż jest rejestrowana według produktów, ale cele wyznaczono według kategorii,
+
+00:12:16.520 --> 00:12:20.440
+zwykłe powiązanie jeden do wielu nie przedstawi rzetelnego obrazu, ponieważ tabele nie są na tym samym poziomie.
+
+00:12:20.640 --> 00:12:23.820
+Rozwiązanie tego wymaga miar i odrobiny uwagi, a nie bardziej sprytnego połączenia.
+
+00:12:24.080 --> 00:12:27.220
+Kardynalność wiele do wielu istnieje i rzeczywiście rozwiązuje niektóre z tych problemów.
+
+00:12:27.400 --> 00:12:28.860
+Wiąże się to jednak z pewnym kosztem.
+
+00:12:28.860 --> 00:12:32.440
+Takie połączenia nie mogą użyć skrótu pobierającego wartość bezpośrednio ze strony unikalnej
+
+00:12:32.440 --> 00:12:34.320
+i działają wolniej niż czyste relacje jeden do wielu.
+
+00:12:34.580 --> 00:12:36.460
+Są narzędziem, a nie ustawieniem domyślnym.
+
+00:12:36.680 --> 00:12:39.340
+Relacja nigdy nie powie Ci, że dana liczba jest błędna.
+
+00:12:39.540 --> 00:12:41.800
+Nie ma opinii na temat tego, czy wynik ma sens.
+
+00:12:42.000 --> 00:12:46.600
+Ta ocena należy do Ciebie i jest to część pracy, której żadne ustawienie nie może przejąć.
+
+00:12:47.400 --> 00:12:49.580
+Najprościej ująć to wszystko w jednym zdaniu.
+
+00:12:49.940 --> 00:12:52.920
+Relacje przenoszą filtry, nie naprawiają one faktów.
+
+00:12:52.920 --> 00:12:58.040
+Jeśli chodzi o miejsce w Microsoft 365 i Fabric, Powerbit to środowisko budowania modelu i raportu,
+
+00:12:58.100 --> 00:13:02.200
+a relacje działają tak samo niezależnie od tego, czy używasz aplikacji desktopowej czy przeglądarki.
+
+00:13:02.320 --> 00:13:05.120
+Ta idea nie zmienia się wraz z rozwojem narzędzi wokół niej.
+
+00:13:05.120 --> 00:13:08.740
+Warto znać jedną zmianę nazewnictwa, ponieważ myli ludzi w samouczkach.
+
+00:13:08.960 --> 00:13:12.500
+Obiekt, który przechowuje tabelę i relacje był kiedyś nazywany zbiorem danych.
+
+00:13:12.760 --> 00:13:16.360
+Microsoft zmienił jego nazwę na model semantyczny i nowa nazwa upowszechnia się wszędzie.
+
+00:13:16.560 --> 00:13:20.560
+Więc jeśli w nowszym filmie zobaczysz model semantyczny, to jest to ten sam obiekt, który już znasz.
+
+00:13:20.560 --> 00:13:25.020
+W Microsoft Fabric model semantyczny jest pełnoprawnym elementem obok magazynów danych,
+
+00:13:25.200 --> 00:13:27.040
+lakehouse'ów i zreplikowanych baz danych.
+
+00:13:27.240 --> 00:13:32.500
+Fabric to jednolita platforma danych Microsoftu, a One Lake to miejsce, w którym wszystkie te dane są przechowywane.
+
+00:13:32.500 --> 00:13:38.340
+Nie potrzebujesz całej platformy, aby korzystać z relacji, ale warto widzieć, gdzie twój raport znajduje się w szerszym kontekście.
+
+00:13:38.520 --> 00:13:43.040
+Power BI może przechowywać dane na trzy sposoby, które balansują między świeżością a szybkością.
+
+00:13:43.240 --> 00:13:48.360
+Import kopiuje dane do pamięci, co sprawia, że raporty działają szybko, ale są aktualne tylko do ostatniego odświeżenia.
+
+00:13:48.620 --> 00:13:52.780
+Direct Query odczytuje źródło na żywo, co zapewnia zawsze aktualne dane, ale zazwyczaj działa wolniej.
+
+00:13:52.980 --> 00:13:56.920
+Tryb Direct Lake wczytuje dane z jeziora danych, osiągając prędkość bliską importowi,
+
+00:13:57.000 --> 00:13:59.700
+a odświeżanie kopiuje tylko metadany i trwa zaledwie sekundy.
+
+00:13:59.700 --> 00:14:05.240
+Direct Lake wymaga pojemności Fabric, a Microsoft wycofuje starsze pojemności Power BI Premium na jego rzecz,
+
+00:14:05.360 --> 00:14:06.960
+więc w tym kierunku zmierzają zmiany.
+
+00:14:07.120 --> 00:14:10.900
+Import i Direct Query działają z każdą licencją Power BI, w tym darmową,
+
+00:14:11.020 --> 00:14:14.580
+więc możesz nauczyć się wszystkiego z tego odcinka bez płacenia za pojemność.
+
+00:14:14.740 --> 00:14:16.960
+Oto krótkie podsumowanie najważniejszych informacji.
+
+00:14:17.180 --> 00:14:20.520
+Relacja to ścieżka filtrowania zbudowana na podstawie jednej wspólnej kolumny.
+
+00:14:20.760 --> 00:14:26.060
+Strona unikalna prowadzi, strona wielokrotna podąża, kierunek oraz stan aktywny decydują o zasięgu filtra,
+
+00:14:26.180 --> 00:14:28.220
+a układ gwiazdy utrzymuje prostotę całości.
+
+00:14:28.220 --> 00:14:31.120
+To narzędzie przenosi filtry, ale nie naprawia błędnych danych.
+
+00:14:31.340 --> 00:14:32.700
+Zostawię Was z jednym pytaniem.
+
+00:14:32.880 --> 00:14:37.520
+W Twoim własnym raporcie, która tabela ma kolumnę pełną powtórzeń, której nikt nigdy z niczym nie połączył?
+
+00:14:37.680 --> 00:14:42.060
+Jeśli dzięki temu temat wydaje się mniej skomplikowany, zasubskrybuj M365FM,
+
+00:14:42.180 --> 00:14:45.140
+aby opanować narzędzia i sposób myślenia kształtujący przyszłość pracy.

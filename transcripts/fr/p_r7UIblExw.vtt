@@ -1,0 +1,706 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:05.880
+Bienvenue sur le podcast M365FM où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail ou travail.
+
+00:00:06.480 --> 00:00:07.620
+Deux façons de faire la même chose.
+
+00:00:08.160 --> 00:00:12.860
+Vous pouvez créer exactement le même nombre dans Power BI de deux manières différentes et ils se comportent très différemment.
+
+00:00:13.780 --> 00:00:16.740
+L'une d'elles est stockée dans votre modèle de données et suit chaque ligne individuellement.
+
+00:00:17.240 --> 00:00:21.760
+L'autre n'existe pas jusqu'à ce que quelqu'un clique sur un graphique ou modifie un filtre, puis elle se recalcule instantanément.
+
+00:00:22.980 --> 00:00:28.460
+Bienvenue sur le podcast M365FM où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:28.460 --> 00:00:33.700
+Aujourd'hui nous décortiquons les colonnes calculées et les mesures, les deux façons de créer un nombre dans Power BI.
+
+00:00:34.360 --> 00:00:39.200
+Il existe une question simple qui rend le choix évident et d'ici la fin vous l'utiliserez sans réfléchir, sans réfléchir.
+
+00:00:40.020 --> 00:00:42.560
+Que fait réellement Power BI quand vous cliquez ?
+
+00:00:42.560 --> 00:00:46.020
+Avant d'aborder ce choix, il est utile de voir ce que fait Power BI sous vos doigts.
+
+00:00:46.440 --> 00:00:51.260
+Vous le pointez vers des données, peut-être un fichier Excel ou une base de données, et il charge ces données dans ce qu'on appelle un modèle.
+
+00:00:51.780 --> 00:00:53.740
+Un modèle est simplement un ensemble de tables stockées en mémoire.
+
+00:00:53.940 --> 00:00:57.560
+Une table est composée de lignes et de colonnes, exactement comme le tableur que vous connaissez déjà.
+
+00:00:58.660 --> 00:01:04.340
+Chaque colonne contient un type d'élément, comme une date, une ville ou un montant de vente, et chaque ligne est un enregistrement, comme une vente unique.
+
+00:01:04.880 --> 00:01:08.900
+Une fois les données dans le modèle, vous faites glisser des champs sur un graphique et Power BI dessine une image pour vous.
+
+00:01:10.080 --> 00:01:14.280
+Cette partie semble simple, et elle l'est, jusqu'au moment où vous avez besoin d'un nombre qui ne figure pas encore dans vos données.
+
+00:01:14.820 --> 00:01:19.540
+Peut-être voulez-vous le profit alors que vous n'avez que le revenu et le coût, peut-être voulez-vous les ventes l'année prochaine alors que vous n'avez que celle de l'année dernière.
+
+00:01:19.540 --> 00:01:24.380
+C'est là que vous créez votre propre calcul, et Power BI vous propose deux outils très différents pour accomplir la tâche.
+
+00:01:24.800 --> 00:01:30.440
+Les deux outils utilisent le même langage de formule appelé DAX, un nom qu'il est utile de connaître car il apparaît partout dans l'univers Microsoft.
+
+00:01:31.260 --> 00:01:35.680
+DAX ressemble beaucoup aux formules Excel que vous avez probablement déjà écrites avec des sommes, des moyennes et des calculs simples.
+
+00:01:36.360 --> 00:01:40.320
+Il est accompagné d'une bibliothèque de plus de 200 fonctions, donc le langage lui-même n'est pas la partie difficile.
+
+00:01:40.860 --> 00:01:43.520
+Il est important de souligner ce qui est en jeu ici, car ce n'est pas un point purement théorique.
+
+00:01:43.520 --> 00:01:48.740
+Un rapport qui met 10 secondes à s'ouvrir semble défectueux pour son utilisateur, même si chaque nombre affiché est correct.
+
+00:01:49.580 --> 00:01:54.840
+Un rapport qui s'ouvre instantanément, mais affiche un pourcentage dégermant erroné est pire, car personne ne remet en question un nombre qui semble raisonnable.
+
+00:01:55.400 --> 00:02:00.000
+Cette petite décision se situe donc juste en dessous des deux critères, sur lesquels les gens jugent votre rapport, la vitesse et la confiance.
+
+00:02:00.640 --> 00:02:05.380
+La difficulté c'est que Power BI propose deux outils qui semblent interchangeables, mais qui fonctionnent de manière totalement différente.
+
+00:02:05.980 --> 00:02:11.160
+Choisir le mauvais est la raison la plus courante pour laquelle un débutant se retrouve avec un rapport lent, ou pire, un chiffre faux qui passe inaperçu.
+
+00:02:11.160 --> 00:02:14.660
+C'est le choix auquel vous êtes confronté et que vous devrez faire pour chaque rapport que vous créez.
+
+00:02:15.300 --> 00:02:17.160
+Qu'est-ce qu'une colonne calculée ?
+
+00:02:17.740 --> 00:02:20.980
+Une colonne calculée est plus facile à visualiser, car elle fonctionne comme une colonne dans un tableur.
+
+00:02:21.520 --> 00:02:26.260
+Vous prenez une table existante, y ajoutez une nouvelle colonne, écrivez une formule qui s'applique à chaque ligne.
+
+00:02:26.800 --> 00:02:29.660
+Disons que vous avez une table des ventes avec une colonne de montant des ventes et une colonne de coût total.
+
+00:02:30.480 --> 00:02:32.740
+Vous ajoutez une colonne de marge brute qui soustrait le coût des ventes.
+
+00:02:33.520 --> 00:02:36.580
+Chaque ligne obtient son propre résultat, et ce résultat reste attaché à cette ligne définitive.
+
+00:02:36.980 --> 00:02:39.440
+Microsoft utilise un exemple clair dans sa propre documentation.
+
+00:02:39.440 --> 00:02:43.840
+Un responsable logistique a une table géographique avec des colonnes villes et états séparés,
+
+00:02:44.140 --> 00:02:45.420
+et il souhaite les fusionner en un seul champ.
+
+00:02:45.800 --> 00:02:47.980
+Il ajoute une colonne calculée qui combine la ville et l'état,
+
+00:02:48.120 --> 00:02:50.680
+et ce champ peut désormais être placé sur une carte comme n'importe quelle autre.
+
+00:02:51.480 --> 00:02:54.700
+La ville et l'état restent verrouillées sur la même ligne, ce qui est exactement ce dont il a besoin.
+
+00:02:55.500 --> 00:02:56.680
+Un détail change tout par la suite.
+
+00:02:57.220 --> 00:02:59.440
+Une colonne calculée n'est pas calculée au moment où vous consultez le rapport.
+
+00:02:59.900 --> 00:03:03.060
+Elle est calculée une fois, lors de l'actualisation des données, puis stockée dans votre modèle.
+
+00:03:03.560 --> 00:03:07.220
+Ce stockage explique pourquoi une colonne calculée est instantanée à afficher, mais coûteuse à conserver.
+
+00:03:07.220 --> 00:03:12.100
+Chaque colonne ajoutée occupe de la mémoire, et il reste que quelqu'un l'utilise ou non.
+
+00:03:12.440 --> 00:03:13.680
+Il y a aussi une seconde conséquence.
+
+00:03:14.620 --> 00:03:18.180
+Une valeur stockée ne change pas lorsqu'on clique sur un filtre, car elle a été définie lors de l'actualisation.
+
+00:03:19.300 --> 00:03:22.240
+Un pourcentage calculé ainsi reste figé, peu importe les actions de l'utilisateur.
+
+00:03:23.100 --> 00:03:25.760
+Cette nature figée est un atout dans certains cas, mais un piège dans d'autres.
+
+00:03:26.420 --> 00:03:27.860
+Plus tard, nous verrons exactement où cela pose problème.
+
+00:03:27.860 --> 00:03:34.560
+Une autre capacité des colonnes calculées surprend souvent les utilisateurs, et elle est vraiment utile car une colonne calculée connaît sa propre ligne.
+
+00:03:35.400 --> 00:03:38.400
+Elle peut également utiliser une relation pour récupérer une valeur dans une table associée.
+
+00:03:39.200 --> 00:03:44.680
+Vous pouvez ajouter une catégorie de produits sur une ligne de vente et l'istocker, ce qui rend les colonnes calculées pratiques pour créer des libellés et des clés.
+
+00:03:45.860 --> 00:03:49.600
+Cela signifie aussi que chacune de ces valeurs stockées doit être recalculée à chaque modification des données.
+
+00:03:49.600 --> 00:03:52.540
+Qu'est-ce qu'une mesure ?
+
+00:03:52.540 --> 00:03:56.520
+Une mesure ne réside pas sur une ligne, elle réside sur le graphique, et n'apparaît que lorsque quelqu'un la consulte.
+
+00:03:57.000 --> 00:04:01.820
+Vous écrivez une formule qui additionne des éléments sur de nombreuses lignes, et le résultat change selon la sélection de l'utilisateur.
+
+00:04:02.500 --> 00:04:08.880
+Le total des ventes est une mesure, car il additionne chaque vente dans la tranche de données affichée, et la valeur moyenne des commandes est une mesure pour la même raison.
+
+00:04:10.240 --> 00:04:13.980
+L'exemple de Microsoft concerne un responsable commercial qui doit projeter les ventes de l'année prochaine.
+
+00:04:14.580 --> 00:04:17.760
+Elle dispose des chiffres de l'année dernière et sait que l'entreprise prévoit une augmentation de 6%.
+
+00:04:17.760 --> 00:04:22.240
+Elle crée donc une mesure qui prend la somme des ventes de l'année dernière et la multiplie par 1,06.
+
+00:04:22.920 --> 00:04:25.700
+Désormais, elle peut segmenter cette projection par région, par produit ou par mois.
+
+00:04:26.480 --> 00:04:27.760
+Et le chiffre s'ajuste à chaque fois.
+
+00:04:28.320 --> 00:04:29.880
+Cette dernière partie est tout l'intérêt d'une mesure.
+
+00:04:30.520 --> 00:04:33.840
+Elle est calculée au moment où quelqu'un regarde le graphique en fonction des filtres appliqués à ce moment-là.
+
+00:04:35.300 --> 00:04:38.760
+Cliquez sur une seule région, la recalcule pour cette région, et ajoutez une année, la recalcule pour cette année.
+
+00:04:39.440 --> 00:04:43.840
+Rien n'est stocké à l'avance, c'est pourquoi une mesure n'occupe pas de mémoire ou d'espace 10, comme le fait une colonne calculée.
+
+00:04:45.140 --> 00:04:47.560
+Elle est élaborée à la demande et uniquement pour la tranche de données affichée.
+
+00:04:48.180 --> 00:04:50.940
+Il existe une limite à connaître et elle explique une erreur sur laquelle nous reviendrons plus tard.
+
+00:04:51.500 --> 00:04:55.460
+Une mesure doit additionner des éléments, vous ne pouvez donc pas en écrire une qui pointe simplement vers une seule cellule sur une seule ligne.
+
+00:04:55.780 --> 00:04:59.020
+Elle ne repose sur aucune ligne actuelle, ce qui signifie qu'elle doit toujours effectuer une synthèse.
+
+00:04:59.780 --> 00:05:02.720
+C'est un indice sur la façon dont les deux outils fonctionnent et c'est le prochain point à approfondir.
+
+00:05:03.400 --> 00:05:06.880
+Une mesure possède bien une table d'origine dans votre modèle, qui n'est en fait que le dossier sous lequel elle apparaît.
+
+00:05:07.520 --> 00:05:11.020
+Vous pouvez la déplacer vers un endroit plus ordonné sans rien casser, ce qui témoigne d'un principe plus large.
+
+00:05:11.440 --> 00:05:13.560
+Une mesure n'est pas liée aux lignes qui se trouvent en dessous.
+
+00:05:14.480 --> 00:05:16.780
+Elle est liée à la question et y répond à chaque fois qu'elle est posée.
+
+00:05:18.140 --> 00:05:20.080
+La vraie différence réside dans l'emplacement du calcul.
+
+00:05:20.840 --> 00:05:24.960
+Chaque calcul dans Power BI s'exécute dans un certain type de contexte et il y en a deux à connaître.
+
+00:05:25.580 --> 00:05:29.080
+Le premier est le contexte de ligne, qui correspond à la ligne actuelle sur laquelle la formule se positionne.
+
+00:05:29.080 --> 00:05:34.360
+Lorsque vous créez une colonne calculée, Power BI parcourt la table ligne par ligne et transmet cette ligne à votre formule.
+
+00:05:34.940 --> 00:05:38.640
+Il connaît le montant des ventes pour cette ligne et le coût pour cette ligne car il est positionné exactement dessus.
+
+00:05:39.460 --> 00:05:43.020
+Le second est le contexte de filtre, qui correspond à la tranche de données choisie par l'utilisateur.
+
+00:05:43.800 --> 00:05:45.980
+Lorsque vous écrivez une mesure, Power BI ne lui transmet aucune ligne.
+
+00:05:46.380 --> 00:05:50.100
+Il lui transmet tout ce qui reste à l'écran après l'application des filtres et votre formule synthétise cet ensemble.
+
+00:05:51.200 --> 00:05:53.760
+Changer le filtre, le groupe change et le résultat change avec lui.
+
+00:05:53.760 --> 00:05:58.620
+Cette différence explique le piège dans lequel tombent presque tous les débutants et méritent que l'on s'y attarde.
+
+00:05:59.200 --> 00:06:04.380
+Imaginez que vous calculez une marge brute en pourcentage, via une colonne calculée, en divisant la marge par les ventes sur chaque ligne.
+
+00:06:04.940 --> 00:06:07.960
+Chaque ligne obtient un pourcentage logique et le résultat semble parfait dans le tableau.
+
+00:06:08.520 --> 00:06:12.780
+Maintenant vous essayez d'afficher le pourcentage de marge moyen pour toute l'entreprise en faisant la moyenne de ces pourcentages de ligne.
+
+00:06:13.580 --> 00:06:17.580
+Le chiffre obtenu est faux et semble pourtant tout à fait crédible, ce qui le rend dangereux.
+
+00:06:18.180 --> 00:06:20.440
+La bonne réponse n'est absolument pas une moyenne de pourcentage.
+
+00:06:20.440 --> 00:06:24.980
+C'est la marge au total divisé par les ventes totales, ce qui revient à diviser la somme par la somme.
+
+00:06:25.960 --> 00:06:29.020
+Cela doit être une mesure, car elle s'applique à l'ensemble du segment à la fois plutôt que ligne par ligne.
+
+00:06:29.660 --> 00:06:30.560
+Gardez bien cette idée en tête.
+
+00:06:31.080 --> 00:06:34.640
+Divisez la somme par la somme, car cela vous évitera l'erreur la plus fréquente dans Power BI.
+
+00:06:35.440 --> 00:06:37.040
+Il y a une seconde partie tout aussi importante.
+
+00:06:37.900 --> 00:06:39.580
+Les filtres circulent entre les tables de votre modèle.
+
+00:06:39.940 --> 00:06:43.860
+Un filtre sur votre table de produit atteint la table des ventes et réduit aussi les ventes.
+
+00:06:44.300 --> 00:06:45.760
+Un contexte de ligne ne se propage pas de cette manière.
+
+00:06:45.760 --> 00:06:51.080
+Une colonne calculée reste dans sa propre table et ne peut voir les valeurs filtrées ailleurs sans effort supplémentaire,
+
+00:06:51.220 --> 00:06:54.540
+alors qu'une mesure s'inscrit dans le contexte de filtres et voit tout modèle filtré.
+
+00:06:55.960 --> 00:07:00.460
+C'est pourquoi les mesures sont idéales pour tout ce qui doit réagir, à la manière dont le rapport est utilisé.
+
+00:07:02.200 --> 00:07:03.560
+Ou chacun d'eux se situe dans votre rapport.
+
+00:07:03.560 --> 00:07:08.040
+Le choix devient alors concret, car chaque outil a sa place attitré sur la page.
+
+00:07:08.780 --> 00:07:12.960
+Une colonne calculée est justifiée dès qu'une valeur doit figurer sur une ligne et être traitée comme une donne.
+
+00:07:13.740 --> 00:07:19.300
+Si vous la voulez dans un segment, il doit s'agir d'une colonne, tout comme pour un entête de ligne, deux colonnes ou un axe de graphique.
+
+00:07:20.060 --> 00:07:23.240
+Classer des clients par tranche d'âge ou des produits par tranche de prix est aussi le rôle d'une colonne,
+
+00:07:23.400 --> 00:07:26.400
+car vous étiquetez des lignes, tout comme créer une clé reliant deux tables.
+
+00:07:27.600 --> 00:07:31.380
+Une mesure est l'outil approprié dès qu'une valeur doit changer à mesure que l'utilisateur clique.
+
+00:07:31.380 --> 00:07:36.440
+Pourcentage de profit sur la région sélectionnée, croissant sur le mois choisi, cumule sur une date donnée.
+
+00:07:37.200 --> 00:07:38.020
+Tout cela relève des mesures.
+
+00:07:38.360 --> 00:07:41.600
+Elle réside dans la zone de valeur d'un graphique qui est recalculé à chaque modification de filtre.
+
+00:07:42.340 --> 00:07:45.420
+La question unique qui tranche est donc celle-ci, et vous pouvez la garder en tête en toute occasion.
+
+00:07:46.080 --> 00:07:48.660
+Ce chiffre soit-il changé quand quelqu'un clique sur un filtre ?
+
+00:07:48.660 --> 00:07:49.920
+Si la réponse est oui, il vous faut une mesure.
+
+00:07:50.620 --> 00:07:54.240
+Si la réponse est non et que la valeur doit figurer sur une ligne pour être segmentée ou utilisée comme clé,
+
+00:07:54.240 --> 00:07:56.080
+il vous faut une colonne calculée.
+
+00:07:56.880 --> 00:07:57.900
+Deux exemples, vous clarifiez les choses.
+
+00:07:57.900 --> 00:08:02.100
+Les tranches d'âge sont une colonne calculée car chaque client possède une tranche et vous souhaitez filtrer selon celle-ci.
+
+00:08:03.040 --> 00:08:06.100
+Le pourcentage de marge pour le trimestre sélectionné est une mesure, car il doit varier en fonction du trimestre.
+
+00:08:06.620 --> 00:08:11.140
+Même table, même données, deux outils différents, le choix devient une décision plutôt qu'une supposition.
+
+00:08:13.220 --> 00:08:15.120
+La facture de mémoire, derrière votre rapport-là.
+
+00:08:15.540 --> 00:08:18.280
+J'ai dit plus tôt qu'une colonne calculée est stockée, et ce stockage a un prix.
+
+00:08:18.780 --> 00:08:22.100
+C'est ce qui transforme un petit choix judicieux en un rapport qui vole ou qui rampe.
+
+00:08:22.100 --> 00:08:28.160
+Power BI conserve les données importées en mémoire et les stock colonne par colonne plutôt que ligne par ligne.
+
+00:08:28.700 --> 00:08:31.180
+Cela semble être un détail technique, mais vous pouvez en ressentir les effets.
+
+00:08:32.240 --> 00:08:33.680
+Sommer une seule colonne ne ligue cette colonne.
+
+00:08:33.800 --> 00:08:35.720
+C'est pourquoi un grand total s'affiche en un clin d'œil.
+
+00:08:36.620 --> 00:08:39.240
+Une colonne calculée réside dans cette mémoire en tant que colonne stockée,
+
+00:08:39.240 --> 00:08:43.340
+et les conseils de Microsoft indiquent qu'elle ne se compresse pas aussi bien que celle créée dans Power Query.
+
+00:08:44.040 --> 00:08:47.240
+Power Query est l'outil utilisé pour mettre en forme vos données avant qu'elle atteigne le modèle.
+
+00:08:47.920 --> 00:08:48.960
+Et aussi un deuxième coup caché ici.
+
+00:08:49.640 --> 00:08:52.520
+Les colonnes calculées sont calculées une fois toutes les tables Power Query chargées,
+
+00:08:52.620 --> 00:08:53.640
+ce qui rallonge l'actualisation.
+
+00:08:54.300 --> 00:08:56.820
+La facture arrive donc deux fois, une fois en mémoire et une fois en temps.
+
+00:08:57.840 --> 00:09:01.460
+Pour se donner une idée, Microsoft indique que Power BI peut compresser environ 10Go
+
+00:09:01.460 --> 00:09:04.020
+de données sources en 1Go avec des économies supplémentaires.
+
+00:09:04.020 --> 00:09:06.020
+A l'écriture sur disque, hum...
+
+00:09:06.880 --> 00:09:10.140
+Cette compression est la raison pour laquelle un petit modèle peut contenir une quantité surprenante de données.
+
+00:09:10.860 --> 00:09:13.380
+Cependant, chaque colonne calculée ajoutée grignote ses économies,
+
+00:09:13.500 --> 00:09:16.120
+et elle s'accumule discrètement car personne ne remarque une colonne supplémentaire.
+
+00:09:16.120 --> 00:09:19.060
+Il existe une autre limite honnête qui dépend de la manière dont vos données sont connectées.
+
+00:09:19.660 --> 00:09:22.440
+Si votre modèle importe ses données, une colonne calculée est stockée.
+
+00:09:22.960 --> 00:09:24.740
+Si votre modèle interroge les données en direct,
+
+00:09:25.040 --> 00:09:27.260
+la colonne n'est pas stockée et est calculée au moment de la requête,
+
+00:09:27.380 --> 00:09:30.380
+déplaçant le coût de l'actualisation vers le clic, sans le faire disparaître.
+
+00:09:31.440 --> 00:09:34.000
+Dans les deux cas, la colonne effectue un travail quelque part,
+
+00:09:34.160 --> 00:09:36.640
+et c'est pourquoi les modélisateurs font attention au nombre qu'ils ajoutent.
+
+00:09:37.220 --> 00:09:39.440
+La règle pratique ici est assez simple pour qu'un débutant puisse la suivre.
+
+00:09:40.460 --> 00:09:42.300
+Si une nouvelle colonne est un simple calcul ligne par ligne
+
+00:09:42.300 --> 00:09:44.000
+et que vous pouvez le créer dans Power Query, faites-le là.
+
+00:09:44.000 --> 00:09:47.860
+Gardez vos colonnes calculées d'axe pour les tâches qui en ont vraiment besoin,
+
+00:09:47.980 --> 00:09:50.780
+comme une valeur servant à joindre deux tables ou à trier des lignes par tranche.
+
+00:09:52.020 --> 00:09:53.360
+Lorsque le calcul est en fait un résumé,
+
+00:09:53.700 --> 00:09:56.740
+préférez une mesure, car elle ne vous coûte rien jusqu'au moment où quelqu'un la consulte.
+
+00:09:57.720 --> 00:09:58.600
+Aucun de ces outils n'est gratuit.
+
+00:09:59.040 --> 00:10:00.480
+Ils facturent simplement à des moments différents.
+
+00:10:00.840 --> 00:10:02.560
+Une colonne stockée vous facture lors de l'actualisation
+
+00:10:02.560 --> 00:10:03.960
+et une mesure dynamique lors du clic.
+
+00:10:03.960 --> 00:10:06.960
+Les erreurs que les débutants continuent quand même.
+
+00:10:07.540 --> 00:10:09.800
+Une fois les mécanismes compris, les erreurs deviennent familières.
+
+00:10:10.480 --> 00:10:13.380
+Quatre d'entre elles reviennent sans cesse et chacune est tentante pour une bonne raison.
+
+00:10:14.400 --> 00:10:17.520
+La première consiste à créer un pourcentage via une colonne calculée et puis en faire la moyenne.
+
+00:10:18.420 --> 00:10:22.020
+C'est la plus douloureuse, car le rapport ne plante pas et ne semble pas cassé.
+
+00:10:22.520 --> 00:10:24.580
+Il affiche simplement un chiffre faux avec une assurance totale
+
+00:10:24.580 --> 00:10:28.060
+et la solution est la règle vue plutôt divisé le total par le total par le total.
+
+00:10:28.060 --> 00:10:32.080
+La seconde consiste à empiler des colonnes calculées intermédiaires pour obtenir un résultat final.
+
+00:10:32.800 --> 00:10:34.880
+Vous créez une colonne, puis une deuxième qui utilise la première,
+
+00:10:35.020 --> 00:10:36.440
+puis une troisième qui utilise la seconde.
+
+00:10:36.580 --> 00:10:37.620
+Cela semble organisé.
+
+00:10:38.280 --> 00:10:40.000
+Pendant le développement, cela peut même faciliter votre réflexe.
+
+00:10:40.440 --> 00:10:42.300
+Chaque étape de cette chaîne est stockée en mémoire et il reste,
+
+00:10:42.400 --> 00:10:45.420
+ce qui fait que cette petite échelle bien ordonnée alourdit silencieusement votre modèle.
+
+00:10:46.040 --> 00:10:49.360
+Une seule mesure avec quelques variables peut effectuer le même travail sans rien stocker.
+
+00:10:50.000 --> 00:10:53.480
+La troisième consiste à utiliser une colonne calculée alors qu'une mesure ferait le même travail en temps réel.
+
+00:10:54.360 --> 00:10:56.840
+Multipliez la quantité par le prix sur chaque ligne, et en est le cas classique.
+
+00:10:56.840 --> 00:11:00.760
+Vous piquerez une colonne et l'assommez, ou laissez une mesure effectuer la multiplication lors de l'addition,
+
+00:11:00.860 --> 00:11:03.200
+cette seconde option garde votre modèle plus léger, cette seconde est plus.
+
+00:11:03.700 --> 00:11:06.280
+La quatrième consiste à s'attendre à ce qu'une colonne stockée réagisse à un segment.
+
+00:11:07.020 --> 00:11:08.600
+Une colonne calculée est figée à l'actualisation,
+
+00:11:08.720 --> 00:11:10.920
+donc elle ne bougera pas lors des clics de l'utilisateur, ce qui n'est pas un bug.
+
+00:11:11.380 --> 00:11:14.580
+C'est la définition même de l'outil, et une fois que vous le voyez ainsi, vous arrêtez de lutter contre.
+
+00:11:15.020 --> 00:11:18.360
+Une remarque honnête avant de continuer, car c'est ici que les débutants ont tendance à surcorriger.
+
+00:11:18.960 --> 00:11:21.460
+Les colonnes calculées ne sont ni mauvaises, ni obsolètes.
+
+00:11:21.460 --> 00:11:23.560
+Il y a des tâches qu'elles seules peuvent accomplir,
+
+00:11:23.660 --> 00:11:26.340
+et lorsque votre modèle est petit, l'argument de la mémoire a peu d'importance.
+
+00:11:26.940 --> 00:11:29.740
+Si une colonne calculée fait fonctionner votre rapport aujourd'hui, utilisez-la.
+
+00:11:30.100 --> 00:11:32.660
+Mais soyez conscient de son coût pour garder le contrôle de vos choix.
+
+00:11:33.600 --> 00:11:36.280
+Où cela s'inscrit-il ? Microsoft 365, fabrique et Azure.
+
+00:11:36.900 --> 00:11:40.960
+Avant de conclure, il est utile de voir où ce petit choix s'intègre dans le panorama plus large de Microsoft.
+
+00:11:41.900 --> 00:11:43.500
+Power BI est l'outil de reporting de Microsoft,
+
+00:11:43.620 --> 00:11:46.720
+et il fait désormais partie de Microsoft Fabrique, la plateforme de données étendue de l'entreprise.
+
+00:11:46.720 --> 00:11:50.920
+Les deux mêmes outils que vous apprenez sont présents dans toute la gamme,
+
+00:11:51.120 --> 00:11:53.580
+dans Power BI Desktop, dans Excel via Power Pivot,
+
+00:11:53.760 --> 00:11:56.360
+et dans un produit serveur appelé Analysis Services.
+
+00:11:57.740 --> 00:12:01.040
+Ce n'est donc pas une astuce Power BI que l'on apprend puis qu'on oublie, elle vous suit partout.
+
+00:12:01.680 --> 00:12:04.380
+Azure intervient dans l'histoire comme l'endroit où vos données résident généralement,
+
+00:12:04.740 --> 00:12:05.700
+avant d'atteindre votre rapport.
+
+00:12:06.580 --> 00:12:08.760
+Vos chiffres de vente peuvent se trouver dans une base de données Azure,
+
+00:12:08.920 --> 00:12:11.600
+dans un fichier sur SharePoint ou dans un système interne à votre entreprise.
+
+00:12:12.480 --> 00:12:15.520
+Fabrique est la couche qui rassemble le tout et héberge le modèle que vous construisez par-dessus.
+
+00:12:15.520 --> 00:12:17.000
+Une limite honnête pour conclure.
+
+00:12:17.460 --> 00:12:19.520
+Les modèles plus volumineux nécessitent une plus grande capacité,
+
+00:12:19.620 --> 00:12:21.120
+et la capacité est le moteur qui fait tout fonctionner.
+
+00:12:21.900 --> 00:12:25.200
+La capacité partagée de Microsoft peut héberger des modèles allant jusqu'à environ 1 giga.
+
+00:12:25.480 --> 00:12:27.600
+Au-delà, une capacité premium ou fabrique est nécessaire.
+
+00:12:28.400 --> 00:12:29.160
+C'est une décision de coût,
+
+00:12:29.360 --> 00:12:32.900
+qui incombe généralement à quelqu'un au-dessus du niveau débutant vous n'avez donc pas à vous en soucier pour le moment.
+
+00:12:33.380 --> 00:12:36.400
+Vous devez simplement savoir que la bonne habitude de choisir entre une colonne et une mesure
+
+00:12:36.400 --> 00:12:38.660
+permet de garder vos modèles légers à mesure qu'ils grandissent.
+
+00:12:40.160 --> 00:12:42.100
+Un récapitulatif rapide et une question pour vous.
+
+00:12:42.680 --> 00:12:43.940
+La version courte ressemble à ceci.
+
+00:12:43.940 --> 00:12:46.500
+Une colonne calculée est traitée ligne par ligne,
+
+00:12:46.640 --> 00:12:50.260
+stockée dans votre modèle et prête à être segmentée, filtrée ou triée.
+
+00:12:51.120 --> 00:12:53.440
+Une mesure est calculée lorsqu'un utilisateur regarde le graphique,
+
+00:12:53.560 --> 00:12:55.660
+suit chaque filtre appliqué et ne coûte rien jusqu'à ce moment-là.
+
+00:12:56.420 --> 00:12:57.820
+L'une est une valeur qui appartient à une ligne,
+
+00:12:58.000 --> 00:13:00.100
+l'autre est une valeur qui appartient à une vue.
+
+00:13:01.260 --> 00:13:03.000
+La règle à retenir est celle mentionnée plutôt.
+
+00:13:03.880 --> 00:13:05.640
+Si un chiffre doit changer lorsqu'on clique sur un filtre,
+
+00:13:05.760 --> 00:13:06.820
+il doit s'agir d'une mesure.
+
+00:13:07.360 --> 00:13:09.340
+S'il doit figurer sur une ligne pour pouvoir être segmenté,
+
+00:13:09.340 --> 00:13:11.200
+il doit s'agir d'une colonne calculée.
+
+00:13:11.200 --> 00:13:13.280
+Cette règle unique vous fera gagner plus de temps
+
+00:13:13.280 --> 00:13:14.800
+que n'importe quel tutoriel sur les formules.
+
+00:13:15.440 --> 00:13:16.300
+Place maintenant à ma question.
+
+00:13:16.780 --> 00:13:20.220
+Lequel des deux avez-vous eu tendance à utiliser sans vraiment y réfléchir ?
+
+00:13:20.220 --> 00:13:21.760
+Cela vous a-t-il déjà coûté un rapport lent
+
+00:13:21.760 --> 00:13:23.920
+ou un chiffre que vous avez dû expliquer deux fois ?
+
+00:13:23.920 --> 00:13:24.820
+Dites-le moi dans les commentaires,
+
+00:13:24.980 --> 00:13:26.080
+car c'est là que se trouvent les vraies leçons.
+
+00:13:26.660 --> 00:13:28.520
+Si ce sujet vous semble désormais moins intimidant,
+
+00:13:28.700 --> 00:13:31.080
+abonnez-vous à M365FM pour maîtriser les outils
+
+00:13:31.080 --> 00:13:32.760
+et l'état d'esprit qui façonnent le futur du travail.
+
+00:13:32.760 --> 00:13:34.840
+Sous-titrage ST' 501

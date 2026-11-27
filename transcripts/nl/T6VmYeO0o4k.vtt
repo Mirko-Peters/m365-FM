@@ -1,0 +1,673 @@
+WEBVTT
+
+00:00:00.100 --> 00:00:06.080
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.280 --> 00:00:08.860
+Waarom uw cijfers niet kloppen wanneer tabellen niet met elkaar praten?
+
+00:00:09.000 --> 00:00:12.360
+U kunt een overzichtelijk Power BI rapport bouwen dat u de verkeerde cijfers geeft.
+
+00:00:12.540 --> 00:00:17.540
+U heeft vijf tabellen, nette kolommen, een rapport dat aflijkt, en toch toont elke rij hetzelfde totaal.
+
+00:00:17.680 --> 00:00:20.760
+De data is in orde, de tabellen praten simpelweg niet met elkaar.
+
+00:00:20.980 --> 00:00:24.680
+Een relatie is de verbinding tussen twee tabellen, gebaseerd op een gedeelde kolom.
+
+00:00:24.920 --> 00:00:28.960
+Leer die verbinding begrijpen en u kunt precies voorspellen wat een klik met uw cijfers doet.
+
+00:00:28.960 --> 00:00:31.180
+Wat een relatie is in begrijpelijke taal.
+
+00:00:31.320 --> 00:00:34.860
+Er is een scenario dat bijna iedereen meemaakt die voor het eerst Power BI opent.
+
+00:00:35.020 --> 00:00:40.100
+U haalt vijf tabellen binnen, sleept een paar velden naar een grafiek, en de grafiek toont in elke rij hetzelfde getal.
+
+00:00:40.260 --> 00:00:45.040
+Uw eerste instinct is om de data de schuld te geven, dus opent u het brombestand en de data blijkt correct.
+
+00:00:45.220 --> 00:00:49.180
+Het probleem ligt ergens anders en is meestal het saaiste object in het hele model.
+
+00:00:49.840 --> 00:00:52.220
+Een relatie is een filterpad tussen twee tabellen.
+
+00:00:52.460 --> 00:00:54.020
+Dat is de volledige definitie.
+
+00:00:54.020 --> 00:00:59.460
+Het loopt via één kolom die beide tabellen delen en het zorgt ervoor dat een filter op de ene tabel de andere bereikt.
+
+00:00:59.640 --> 00:01:04.800
+Er gebeurt verder niets onder de motorkap, daarom zijn relaties veel minder mysterieus als u ze voor u ziet.
+
+00:01:05.040 --> 00:01:08.860
+Neem een simpel model met vier tabellen, categorie, product, verkoop en jaar.
+
+00:01:09.100 --> 00:01:13.500
+Categorie verbindt met product, product verbindt met verkoop en jaar verbindt ook met verkoop.
+
+00:01:13.600 --> 00:01:15.780
+Nu klikt u op één categorie, zeg categorie A.
+
+00:01:16.120 --> 00:01:20.900
+Die klik reist van categorie naar product en product vertelt Power BI welke twee producten bij die categorie horen.
+
+00:01:20.900 --> 00:01:25.740
+Vanaf daar reist het filter naar verkoop en verkoop beperkt zich tot alleen de rijen voor die twee producten.
+
+00:01:25.920 --> 00:01:28.940
+Als u ook filtert op één jaar, wordt de verkoop nog verder beperkt.
+
+00:01:29.280 --> 00:01:36.560
+Microsoft's eigen voorbeeld komt uit op elf eenheden wanneer u één categorie en één jaar samen filtert en veertien eenheden wanneer u alleen op de categorie filtert.
+
+00:01:36.680 --> 00:01:39.520
+Het verschil komt door een kleine regel die u goed moet onthouden.
+
+00:01:39.780 --> 00:01:43.500
+Wanneer twee filters op dezelfde tabel terechtkomen, moeten ze allebei waar zijn.
+
+00:01:43.700 --> 00:01:49.060
+Power BI combineert filters elke keer met een entlogica, tenzij u een formule schrijft die anders aangeeft.
+
+00:01:49.060 --> 00:01:55.500
+Daarom kan één extra filter een getal veel sterker verkleinen dan u verwacht en waarom een lege grafiek soms simpelweg betekent dat twee filters elkaar tegenspreken.
+
+00:01:55.640 --> 00:01:58.520
+Er is één geval waarbij een tabel opzettelijk geen relatie heeft.
+
+00:01:58.700 --> 00:02:00.980
+Een losgekoppelde tabel filtert helemaal niets.
+
+00:02:01.180 --> 00:02:07.360
+Het bevat simpelweg een waarde die je wilt gebruiken, zoals een wisselkoers uit een keuzelijst en een measure leest die waarde en doet er iets nuttigs mee.
+
+00:02:07.580 --> 00:02:10.620
+De WAD-IF-parameter van Power BI bouwt er zo hem voor je.
+
+00:02:10.780 --> 00:02:14.060
+Een relatie is dus geen formule en geen versiering die je achteraf toevoegt.
+
+00:02:14.060 --> 00:02:18.720
+Het is een pad en elk cijfer in je rapport is slechts zo betrouwbaar als de paden die ernaartoe leiden.
+
+00:02:19.220 --> 00:02:21.700
+Kardinaliteit, het woord dat bepaalt welke tabel de leiding heeft.
+
+00:02:22.100 --> 00:02:24.940
+Kardinaliteit klinkt als een van die woorden die bedoeld zijn om beginners af te schrikken.
+
+00:02:25.080 --> 00:02:29.040
+Als je het terugbrengt tot de kern, vraagt het simpelweg hoe vaak een waarde aan elke kant van een koppeling kan voorkomen.
+
+00:02:29.260 --> 00:02:31.280
+Stel je een producttabel en een verkooptabel voor.
+
+00:02:31.460 --> 00:02:35.740
+De producttabel bevat één rij per product, dus elk product-idee komt precies één keer voor.
+
+00:02:35.940 --> 00:02:40.940
+De verkooptabel bevat duizenden rijen en hetzelfde product-idee verschijnt telkens opnieuw voor elke verkoop van dat product.
+
+00:02:40.940 --> 00:02:46.280
+Dat is alles wat kardinaliteit is. De ene kant bevat de unieke lijst en de andere kant bevat de herhalingen.
+
+00:02:46.400 --> 00:02:49.140
+Power B biedt je vier manieren om die koppeling te beschrijven.
+
+00:02:49.320 --> 00:02:52.120
+Eén op veel, veel op één, één op één en veel op veel.
+
+00:02:52.340 --> 00:02:57.680
+De eerste twee zijn dezelfde koppeling vanuit tegengestelde kanten bekeken, dus die hoef je niet als aparte dingen te onthouden.
+
+00:02:57.860 --> 00:03:03.520
+Als de unieke lijst aan de productkant staat, is de koppeling één op veel wanneer je vanuit producten leest en veel op één vanuit verkopen.
+
+00:03:03.680 --> 00:03:05.940
+Het is dezelfde koppeling, bekeken vanuit beide kanten.
+
+00:03:05.940 --> 00:03:10.720
+Eén op één betekent dat beide kolommen unieke waarden bevatten en dat komt zo weinig voor dat je het als een waarschuwingsteken kunt zien.
+
+00:03:10.880 --> 00:03:14.360
+Het betekent meestal dat je iets hebt opgesplitst dat als één tabel beter tot zijn recht zou zijn gekomen.
+
+00:03:14.600 --> 00:03:16.880
+Veel op veel betekent dat beide kolommen waarden kunnen herhalen.
+
+00:03:17.020 --> 00:03:21.060
+Het is echt. Het lost een paar lastige problemen op, maar daar hangt wel een prijskaartje aan.
+
+00:03:21.300 --> 00:03:23.240
+Gebruik het dus bewust in plaats van standaard.
+
+00:03:23.400 --> 00:03:26.540
+Het werkpaard is één op veel en daar zul je vrijwel alles op bouwen.
+
+00:03:26.720 --> 00:03:30.140
+Eén schone lijst met items aan de ene kant en alle transacties aan de andere.
+
+00:03:30.400 --> 00:03:35.300
+Zodra je kunt zien welke tabel de unieke lijst bevat, heb je de leidende en de volgende kant gevonden.
+
+00:03:35.520 --> 00:03:37.320
+Power B regelt dit meestal voor je.
+
+00:03:37.540 --> 00:03:42.340
+Bij het laden van gegevens worden de kolommen geanalyseerd en de kardinaliteit geraden en meestal klopt die inschatting.
+
+00:03:42.520 --> 00:03:44.740
+Er zijn echter twee dingen die de moeite waard zijn om te weten.
+
+00:03:44.960 --> 00:03:51.700
+Het raadslegt als er nog geen data in de tabellen staat en het raadslegt wanneer een kolom die dubbelingen zou moeten bevatten, toevallig vandaag alleen unieke waarden heeft.
+
+00:03:51.880 --> 00:03:54.220
+Er is bovendien een harde regel die hieronder ligt.
+
+00:03:54.220 --> 00:03:59.060
+Als een vernieuwing ooit een duplicaat probeert te laden in de unieke kant, mislukt de gehele vernieuwing.
+
+00:04:00.140 --> 00:04:01.740
+Welke kant filters op reizen?
+
+00:04:02.020 --> 00:04:06.600
+Zelfs een correct 1 op veel koppeling heeft een richting en dit is de instelling die beginners nooit openen.
+
+00:04:06.780 --> 00:04:10.280
+Het heet kruisfilterrichting en bepaalt welke tabel welke mag filteren.
+
+00:04:10.440 --> 00:04:13.160
+De standaard is enkelvoudig en dat is de veilige keuze.
+
+00:04:13.400 --> 00:04:16.820
+Filters stromen van de unieke kant naar de herhalende kant en daar stoppen ze.
+
+00:04:17.000 --> 00:04:20.660
+Je productenlijst kan je verkoop filteren, maar je verkoop kan niet je productenlijst filteren.
+
+00:04:20.660 --> 00:04:25.220
+Voor de meeste rapporten is dat precies het gedrag dat je wilt, omdat het voorspelbaar is en snel blijft.
+
+00:04:25.380 --> 00:04:28.100
+De andere optie is beide, wat men bidirectioneel noemt.
+
+00:04:28.100 --> 00:04:33.220
+Je kiest hiervoor wanneer een filter terug moet reizen door de koppeling, meestal omdat een slicer vreemd reageert.
+
+00:04:33.680 --> 00:04:35.760
+Microsoft's bankvoorbeeld maakt de reden duidelijk.
+
+00:04:35.900 --> 00:04:41.640
+Klanten en rekeningen zijn gekoppeld via een tussentabel omdat één klant meerdere rekeningen kan hebben en één rekening meerdere eigenaren.
+
+00:04:41.860 --> 00:04:47.300
+Met de filter slechts één kant op, toont elke klant uiteindelijk hetzelfde saldo, wat onmogelijk is in het echt.
+
+00:04:47.300 --> 00:04:50.900
+Zet één koppeling op beide richtingen en de klant zal die kloppen plotseling wel.
+
+00:04:51.140 --> 00:04:52.860
+Beide richtingen is echter niet gratis.
+
+00:04:53.360 --> 00:04:58.200
+Bidirectionele koppelingen kosten prestaties en kunnen meer dan één geldig pad creëren voor een filter tussen twee tabellen.
+
+00:04:58.420 --> 00:05:02.940
+Wanneer twee paden even goed lijken, kan Power BI niet kiezen en krijg je een foutmelding over een ambigu pad.
+
+00:05:03.120 --> 00:05:05.600
+De richtlijnen van Microsoft zijn hier heel duidelijk over.
+
+00:05:05.840 --> 00:05:09.860
+Houd bidirectionele relaties tot een minimum en schakel er alleen in als je het echt nodig hebt.
+
+00:05:10.060 --> 00:05:12.820
+Dus de gewoonte die de moeite waard is om te vormen, is simpel.
+
+00:05:12.820 --> 00:05:18.640
+Laat de richting met rust totdat een filter echt niet kan komen waar het moet zijn en openpas dan de instelling om deze te wijzigen.
+
+00:05:18.820 --> 00:05:22.960
+Als je ooit niet meer weet welke kant een filter op moet stromen, zie de unieke lijst dan als de baas.
+
+00:05:23.200 --> 00:05:27.540
+Deze stuurt instructies naar de transacties en de transacties hoeven zelden iets terug te sturen.
+
+00:05:27.740 --> 00:05:32.820
+Het lezen van de doorgetrokken en stippenlijnen open de modelweergave in Power BI en je ziet tabellen verbonden door lijnen.
+
+00:05:33.000 --> 00:05:36.460
+Die lijnen bevatten nuttige informatie en het leren lezen ervan kost ongeveer een minuut.
+
+00:05:36.580 --> 00:05:40.720
+Een doorgetrokken lijn betekent dat de relatie actief is en een stippenlijn betekent dat deze inactief is.
+
+00:05:40.720 --> 00:05:42.800
+Eén regel maakt de stippenlijnen begrijpelijk.
+
+00:05:42.980 --> 00:05:48.940
+Tussen twee tabellen kan er maar één pad tegelijk actief zijn en alle anderen moeten inactief blijven totdat een formule ze inschakelt.
+
+00:05:49.080 --> 00:05:51.820
+Je vraagt je misschien af waarom je ooit meer dan één pad zou willen hebben.
+
+00:05:52.020 --> 00:05:54.220
+Een enkele tabel kan verschillende dingen betekenen.
+
+00:05:54.500 --> 00:05:59.200
+Stel je een datumtabel voor die je verkoopt kan filteren op besteldatum, verzendatum of leverdatum.
+
+00:05:59.400 --> 00:06:03.320
+Dat zijn drie taken voor één tabel en Power BI staat er maar één tegelijk toe.
+
+00:06:03.560 --> 00:06:07.760
+Microsoft noemt dit een role-playing dimension en de oplossing is verrassend simpel.
+
+00:06:07.760 --> 00:06:13.480
+Kopieer de datumtabel naar een verzendatumtabel en een leverdatumtabel en geef elke kopie zijn eigen actieve lijn.
+
+00:06:13.840 --> 00:06:16.480
+Datumtabellen zijn klein, dus dupliceren kost bijna niets.
+
+00:06:16.640 --> 00:06:18.840
+Er is een tweede route die het kopiëren vermijdt.
+
+00:06:18.920 --> 00:06:23.960
+Een formule genaamd User Relationship kan een inactieve lijn activeren voor één berekening zonder dat je een tabel hoeft te kopiëren.
+
+00:06:24.160 --> 00:06:28.500
+Het is handig de naam te kennen zodat de uitleg niet vreemd klinkt, maar je hebt het niet op je eerste dag nodig.
+
+00:06:28.700 --> 00:06:32.520
+De essentie hiervan is dat het diagram een kaart is en kaarten kunnen worden gelezen.
+
+00:06:32.520 --> 00:06:35.480
+Een doorgetrokken lijn is actief, een stippenlijn is inactief.
+
+00:06:35.640 --> 00:06:40.280
+Eén pijlpunt betekent dat een filter één kant op gaat, twee pijlpunten betekenen dat het beide kanten op gaat.
+
+00:06:40.520 --> 00:06:45.180
+Zodra die tekens logisch zijn, wordt een model geen plaatje meer, maar iets waarover je kunt nadenken.
+
+00:06:45.320 --> 00:06:47.480
+De stervorm die een model eenvoudig houdt.
+
+00:06:47.620 --> 00:06:51.380
+Dit alles wordt makkelijker als je tabellen de juiste vorm hebben voordat je ze koppelt.
+
+00:06:51.840 --> 00:06:55.960
+De vorm die Microsoft aanbeveelt is de ster en de naam zegt precies hoe die eruit ziet.
+
+00:06:56.140 --> 00:06:58.480
+In het midden staat één grote tabel met gebeurtenissen.
+
+00:06:58.720 --> 00:07:01.320
+Daaromheen staan verschillende kleinere tabellen die zaken beschrijven.
+
+00:07:01.320 --> 00:07:04.340
+De kleine tabellen zijn dimensies en dat zijn de dingen die je beschrijft.
+
+00:07:04.540 --> 00:07:06.580
+Producten, klanten, datums, regio's.
+
+00:07:06.700 --> 00:07:09.280
+De grote tabel is een feitentabel die bevat wat er is gebeurd.
+
+00:07:09.500 --> 00:07:11.060
+Verkoop, bestellingen, saldi.
+
+00:07:11.400 --> 00:07:14.720
+Dimensies dienen om te filteren en te groeperen, feiten dienen om op te tellen.
+
+00:07:14.880 --> 00:07:16.540
+Dit is het onderdeel dat mensen verrast.
+
+00:07:16.800 --> 00:07:20.020
+Niets in Power B heeft een vinkje met de tekst, dit is een feitentabel.
+
+00:07:20.220 --> 00:07:21.780
+De relatie zelf bepaalt de rol.
+
+00:07:22.020 --> 00:07:26.580
+De unieke kant van een koppeling wordt altijd de dimensie en de herhalende kant wordt altijd het feit.
+
+00:07:26.760 --> 00:07:30.380
+De vorm ontstaat dus uit de koppelingen die je bouwt, niet uit een instelling die je kiest.
+
+00:07:30.380 --> 00:07:32.520
+De ster wint om twee praktische redenen.
+
+00:07:32.700 --> 00:07:35.820
+Filters leggen korte afstanden af, wat rapporten snel houdt.
+
+00:07:35.840 --> 00:07:40.980
+En je kunt alleen een schone drill-down-hiërarchie bouwen binnen één tabel, wat precies is wat dimensietabellen zijn.
+
+00:07:41.160 --> 00:07:45.620
+Een veelgebruikt alternatief is de snowflake, waarbij je één entiteit splitst over meerdere tabellen,
+
+00:07:45.880 --> 00:07:47.800
+zoals categorie naar subcategorie naar product.
+
+00:07:48.040 --> 00:07:51.460
+Het ziet er netjes uit op papier, maar het betekent meer tabellen om te beheren,
+
+00:07:51.660 --> 00:07:54.420
+langere filterketens en geen mogelijkheid om door te klikken aan het einde.
+
+00:07:54.420 --> 00:07:57.660
+Een datumtabel is er een die je in bijna elk sterschema vindt,
+
+00:07:57.720 --> 00:08:01.840
+omdat bijna elke zakelijke vraag een variant is op hoe dit in de loop van de tijd is veranderd.
+
+00:08:01.940 --> 00:08:03.900
+Een klein trucje is het onthouden waard.
+
+00:08:04.080 --> 00:08:07.320
+Als een tabel geen enkele kolom met unieke waarde heeft, kun je er een toevoegen.
+
+00:08:07.560 --> 00:08:08.840
+Bijvoorbeeld een indexkolom.
+
+00:08:09.020 --> 00:08:12.200
+Kopieer die kolom vervolgens naar de andere tabel, zodat beide zijden overeenstemmen.
+
+00:08:12.360 --> 00:08:16.480
+Die toegevoegde kolom heet een surrogaatsleutel en is de standaard manier om een dimensietabel een leidend veld te geven.
+
+00:08:16.720 --> 00:08:19.220
+Zorg dat de structuur klopt en de koppelingen maken zichzelf bijna.
+
+00:08:19.220 --> 00:08:22.680
+Doe je het fout, dan zul je bij elke verversing tegen dezelfde fouten aanlopen.
+
+00:08:22.860 --> 00:08:24.720
+De regels waaraan een relatie moet voldoen.
+
+00:08:24.880 --> 00:08:29.000
+Een relatie lijkt vergevingsgezind totdat je er zelf een probeert te maken, dan kom je de regels tegen.
+
+00:08:29.220 --> 00:08:33.280
+Er zijn er maar een paar en samen verklaren ze bijna elke foutmelding die je zult tegenkomen.
+
+00:08:33.460 --> 00:08:36.240
+Ten eerste loopt een relatie tussen één kolom en één kolom.
+
+00:08:36.400 --> 00:08:40.380
+Je kunt een kolom niet relateren aan een andere kolom in dezelfde tabel, hoe logisch dat ook zou lijken.
+
+00:08:40.680 --> 00:08:44.200
+Bovenliggende en onderliggende rijen die in één tabel staan, hebben een formule nodig, geen relatie.
+
+00:08:44.380 --> 00:08:46.980
+Ten tweede moeten de twee kolommen hetzelfde gegevenstype hebben.
+
+00:08:46.980 --> 00:08:55.020
+Je mag een tekstkolom aan een getalkolom koppelen en PowerBee zal je niet tegenhouden, maar er zullen nooit waarden overeenkomen, dus er wordt niets gefilterd en je staat naar een lege grafiek.
+
+00:08:55.540 --> 00:08:58.040
+Ten derde moet de unieke kant ook echt uniek zijn.
+
+00:08:58.300 --> 00:09:04.060
+Dit is de regel achter de fout waar beginners als eerste tegenaan lopen, die zegt dat een van de kolommen een unieke waarde moet bevatten.
+
+00:09:04.280 --> 00:09:06.540
+Wanneer deze verschijnt, heb je twee nette opties.
+
+00:09:06.780 --> 00:09:11.300
+Je kunt duplicaten verwijderen, al moet je voorzichtig zijn omdat dubbele sleutels vaak een goede reden hebben,
+
+00:09:11.520 --> 00:09:15.600
+of je kunt een kleine tabel toevoegen met alleen de unieke sleutels en die aan beide kanten koppelen.
+
+00:09:15.600 --> 00:09:19.120
+Dan is er nog de datum en tijdval, waar bijna iedereen wel een keer intrapt.
+
+00:09:19.280 --> 00:09:24.460
+PowerBee slaat datum en tijd samen op in één waarde en de opmaak die je op het scherm ziet, is slechts een weergave keuze.
+
+00:09:24.640 --> 00:09:29.380
+Dus een datum die identiek lijkt aan een andere datum, kan toch niet overeenkomen omdat het verborgen tijdgedeelte anders is.
+
+00:09:29.560 --> 00:09:33.520
+De oplossing is om de tijd in Power Query te verwijderen voordat de gegevens het model bereiken.
+
+00:09:33.700 --> 00:09:38.080
+Als laatste, en dit is de oorzaak van de vreemdste rapporten, controleert een relatie je gegevens niet voor je.
+
+00:09:38.240 --> 00:09:42.040
+Als een verkoop verwijst naar een product dat niet in de producttabel staat, zal PowerBee dit niet weigeren.
+
+00:09:42.040 --> 00:09:45.100
+Het plaatst die verkoop in een lege groep zodat het getal niet verloren gaat.
+
+00:09:45.260 --> 00:09:49.760
+Wanneer je een legerij in een slicer ziet terwijl de bron helemaal geen lege waarde bevat, is dat waar je naar kijkt.
+
+00:09:49.920 --> 00:09:52.820
+De echte oplossing ligt in de brongegevens, niet in het model.
+
+00:09:53.040 --> 00:09:54.740
+Een geruststelling om mee af te sluiten.
+
+00:09:55.040 --> 00:09:58.520
+PowerBee bouwt deze relaties meestal voor je op wanneer gegevens worden geladen.
+
+00:09:58.700 --> 00:10:05.160
+Het leest de kolomnamen en als het geen zekere match kan vinden, blijft het stil in plaats van wild te gokken, waar beginners de mist in gaan.
+
+00:10:05.160 --> 00:10:10.300
+Je kunt alle regels leren en toch een middag verliezen, dus het helpt om de symptomen te kennen en wat ze meestal betekenen.
+
+00:10:10.480 --> 00:10:13.660
+De meest voorkomende is veruit hetzelfde getal dat in elke rij staat.
+
+00:10:13.960 --> 00:10:16.860
+Microsoft noemt dit als het belangrijkste teken van een ontbrekende relatie.
+
+00:10:17.040 --> 00:10:21.160
+Het betekent dat de tabellen niet zijn verbonden of dat de verbinding bestaat maar geen filters doorgeeft.
+
+00:10:21.400 --> 00:10:26.120
+Controleer of de tabellen überhaupt gerelateerd zijn en controleer vervolgens of de koppeling actief is en de juiste kant op wijst.
+
+00:10:26.280 --> 00:10:30.540
+Het eigen advies van Microsoft is om het visuele element eerst naar een eenvoudige tabel over te schakelen,
+
+00:10:30.720 --> 00:10:34.240
+omdat het zien van de ruwe rijen een relatieprobleem op een manier duidelijk maakt die een grafiek nooit doet.
+
+00:10:34.240 --> 00:10:36.400
+Vervolgens is er een grafiek die niets laat zien.
+
+00:10:36.620 --> 00:10:41.620
+Voordat je een relatie aanpast, moet je ervoor zorgen dat de tabel met rijen is geladen en dat er iets in je filters staat.
+
+00:10:41.820 --> 00:10:47.040
+Een verrassend aantal lege grafieken komt door een lege tabel of een filter dat alles uitsluit, niet door een kapotte koppeling.
+
+00:10:47.260 --> 00:10:50.180
+Dan is er het rapport dat er goed uitziet, maar aan de basis onjuist is.
+
+00:10:50.400 --> 00:10:54.320
+Meestal zijn de verkeerde kolommen gekoppeld, zoals een product-ID gekoppeld aan een klant-ID.
+
+00:10:54.580 --> 00:10:59.540
+De grafiek wordt nog steeds weergegeven en de cijfers stellen nog steeds ergens op uit wat precies de reden is waarom deze gevaarlijk is.
+
+00:10:59.540 --> 00:11:04.860
+Het is ook de reden waarom je altijd moet controleren welke twee kolommen een lijn verbindt in plaats van erop te vertrouwen dat er überhaupt een lijn bestaat.
+
+00:11:04.980 --> 00:11:07.100
+Je zult ook de lege groep in een slicer tegenkomen.
+
+00:11:07.320 --> 00:11:11.260
+Dat is de lege rij uit het voorrige deel, een feit dat wijst op iets dat ontbreekt aan de unieke kant.
+
+00:11:11.440 --> 00:11:13.720
+Het is een signaal voor datakwaliteit in een vermomming.
+
+00:11:13.900 --> 00:11:15.860
+Twee andere valkuilen zijn het benoemen waard.
+
+00:11:16.020 --> 00:11:19.640
+Twee feitentabellen direct aan elkaar koppelen met een veel-op-veel relatie werkt wel,
+
+00:11:19.740 --> 00:11:24.220
+maar je kunt dan slechts op een van de tabellen filteren en dataproblemen kunnen ongemerkt rijen verwijderen.
+
+00:11:24.220 --> 00:11:30.320
+En grijpen naar bidirectionele koppelingen om een slicer te dwingen te werken is hoe mensen eindigen met een foutmelding over een ambigu pad zonder te weten waarom.
+
+00:11:30.480 --> 00:11:33.300
+De gewoonte die het meeste hiervan voorkomt is niet erg glamoureus.
+
+00:11:33.500 --> 00:11:39.260
+Bouw een ster, hou één actieve één-op-veel koppeling tussen elk paar tabellen en lees het diagram voordat je de schuld aan de data geeft.
+
+00:11:39.480 --> 00:11:40.740
+Wat een relatie niet kan doen.
+
+00:11:40.960 --> 00:11:45.920
+Het is de moeite waard om eerlijk te zijn over de beperkingen, omdat een relatie een beperkt hulpmiddel is dat één taak heel goed uitvoert.
+
+00:11:46.100 --> 00:11:47.560
+Het maakt je gegevens niet schoon.
+
+00:11:47.560 --> 00:11:53.120
+Een relatie wijst naar een kolom en als die kolom rommelig is, verspreidt de relatie die rommel overal waar het filter rijkt.
+
+00:11:53.240 --> 00:11:56.740
+Het dwingt ook geen integriteit af, dus het zal nooit een foutieve rij weigeren.
+
+00:11:56.860 --> 00:11:59.520
+Het parkeert die rij simpelweg in een lege groep en gaat door.
+
+00:11:59.700 --> 00:12:05.420
+Het kan geen twee kolommen in dezelfde tabel verbinden en kan niet meer dan één actief pad tussen dezelfde twee tabellen tegelijk hebben.
+
+00:12:05.660 --> 00:12:10.460
+Beide beperkingen zijn precies de reden waarom de truc met de dubbele datumtabel en ouder-kindformules bestaan.
+
+00:12:10.640 --> 00:12:12.740
+Het kan ook geen mismatch in detailniveau herstellen.
+
+00:12:12.740 --> 00:12:20.520
+Als je verkopen per product worden geregistreerd, maar je doelen per categorie zijn ingesteld, vertelt een simpele 1 op veel koppeling geen eerlijk verhaal omdat de twee tabellen niet op hetzelfde niveau zitten.
+
+00:12:20.720 --> 00:12:23.820
+Dat oplossen vereist measures en wat zorgvuldigheid, geen slimmere koppeling.
+
+00:12:24.060 --> 00:12:27.240
+Veel op veel kardinaliteit is reëel en lost sommige van deze problemen inderdaad op.
+
+00:12:27.320 --> 00:12:28.860
+Het brengt echter wel kosten met zich mee.
+
+00:12:29.080 --> 00:12:34.220
+Die koppelingen kunnen niet de snel koppeling gebruiken die een waarde direct uit de unieke kant haalt en ze draaien trager dan een schone 1 op veel.
+
+00:12:34.380 --> 00:12:36.280
+Het is een hulpmiddel, geen standaard keuze.
+
+00:12:36.440 --> 00:12:39.280
+Een ding dat een relatie nooit zal doen, is je vertellen dat een getal onjuist is.
+
+00:12:39.280 --> 00:12:42.100
+Het heeft geen oordeel over de vraag of een resultaat logisch is.
+
+00:12:42.320 --> 00:12:46.540
+Dat oordeel blijft bij jou en dat is het deel van dit werk dat geen enkele instelling kan overnemen.
+
+00:12:46.720 --> 00:12:49.680
+De eenvoudigste manier om dit alles te begrijpen is in één zin.
+
+00:12:50.020 --> 00:12:51.400
+Relaties verplaatsen filters.
+
+00:12:51.680 --> 00:12:53.040
+Ze corrigeren geen feiten.
+
+00:12:53.300 --> 00:13:02.040
+Wat betreft de plek binnen Microsoft 365 en Fabric, Power BI is waar je het model en het rapport bouwt, en relaties werken hetzelfde of je nu in de desktop-app of in de browser werkt.
+
+00:13:02.200 --> 00:13:04.980
+Het concept verandert niet naarmate de tools eromheen groeien.
+
+00:13:05.160 --> 00:13:08.900
+Een naamswijziging is het waard om te kennen omdat het mensen in tutorials in de war brengt.
+
+00:13:08.900 --> 00:13:12.700
+Het object dat je tabellen en relaties bevat, werd voorheen een dataset genoemd.
+
+00:13:12.820 --> 00:13:16.440
+Microsoft heeft dit hernoemd naar een semantisch model en de nieuwe naam verspreidt zich overal.
+
+00:13:16.620 --> 00:13:20.460
+Dus als je semantisch model in een recente video ziet, is het hetzelfde object dat je al kent.
+
+00:13:20.620 --> 00:13:26.840
+In Microsoft Fabric is dat semantische model een volledig item op zich, naast warehouses, lakehouses en mirror databases.
+
+00:13:27.200 --> 00:13:32.660
+Fabric is het enige data-platform van Microsoft en OneLake is de opslaglocatie waar al die data leeft.
+
+00:13:32.820 --> 00:13:38.280
+Je hebt niet het hele platform nodig om relaties te gebruiken, maar het helpt om te zien waar je rapport in het grotere geheel past.
+
+00:13:38.280 --> 00:13:43.100
+Er zijn drie manieren waarop Powerbee je data kan bevatten en die ruilenversheid in tegensnelheid.
+
+00:13:43.300 --> 00:13:48.620
+Import kopieert de data naar het geheugen, wat rapporten snel maakt, maar slecht zo actueel is als de laatste verversing.
+
+00:13:48.840 --> 00:13:52.580
+Direct Query leest de bron live, wat altijd actueel is, maar meestal langzamer.
+
+00:13:52.860 --> 00:13:59.620
+Direct Lake laat vanuit één lake en haalt bijna de snelheid van import, met een vernieuwing die alleen metadata kopieert en in seconden klaar kan zijn.
+
+00:13:59.840 --> 00:14:06.960
+Direct Lake vereist Fabric capaciteit en Microsoft stopt met de oudere Powerbee premium capaciteit ten gunste daarvan, dus die kant gaat het op.
+
+00:14:06.960 --> 00:14:14.880
+Import en Direct Query werken met elke Powerbee licentie, inclusief de gratis versie, dus je kunt alles in deze aflevering leren zonder voor capaciteit te betalen.
+
+00:14:15.100 --> 00:14:17.100
+Dit is de korte samenvatting om mee te nemen.
+
+00:14:17.280 --> 00:14:20.180
+Een relatie is een filterpad gebouwd op één gedeelde kolom.
+
+00:14:20.380 --> 00:14:22.540
+De unieke kant leidt en de vele kant volgt.
+
+00:14:22.740 --> 00:14:26.420
+De richting en de actieve of inactieve status bepalen hoever een filter rijkt.
+
+00:14:26.640 --> 00:14:28.420
+En de stervorm houdt het geheel simpel.
+
+00:14:28.640 --> 00:14:31.080
+De tool verplaatst filters en corrigeert geen feiten.
+
+00:14:31.080 --> 00:14:32.700
+Ik laat je achter met één vraag.
+
+00:14:32.940 --> 00:14:37.280
+Welke tabel in jouw eigen rapport bevat een kolom vol dubbele waarden die nog nooit met iets is verbonden?
+
+00:14:37.460 --> 00:14:45.200
+Als dit het onderwerp minder intimiderend maakte, abonneer je dan op M365FM om de tools en de mindset die de toekomst van werk vormgeven onder de knie te krijgen.
