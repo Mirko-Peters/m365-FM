@@ -123,9 +123,9 @@ Reihenfolge, wenn PR #606 auf main ist:
   `data/pillars_i18n.json` `ui_h`) und erkennt eine versehentlich deutsche Oberfläche (pl, id) und fordert sie ganz neu an. Das läuft **nicht automatisch**
   beim Merge: Nach künftigen Textänderungen Workflow **„Pillar-Leitfaeden uebersetzen“** (`translate-pillars.yml`) mit `mode=run`, `ui_only=true` starten
   (Haiku-Batch, wenige Cent). Für PR #606 lief das einmalig auf dem Branch (siehe unten „Übersetzung“).
-- *Merge-Reihenfolge mit PR #527:* #527 nutzt ebenfalls die Nummer `0055` (`0055_orphan_handles.sql`, dazu `0054_person_entity.sql` neben main-`0054`) und ändert
-  `worker/src/identities.js`. Wird #606 zuerst gemergt, muss #527 vor seinem Merge auf `0056`/`0057` umnummerieren und `identities.js` mit dem Block zu
-  `learn_attempts`/`learn_certs` abgleichen.
+- *Merge-Reihenfolge mit PR #527:* erledigt am 27.11.2026 – #527 hat seine Migrationen auf `0057_person_entity.sql` und `0058_orphan_handles.sql`
+  umnummeriert (Sicherungstabellen `mig0057_backup`/`mig0058_backup`); `0054` und `0055` gehören main, `0056` ist für `0056_learn_progress.sql` (#617)
+  reserviert. `identities.js` ist mit dem Block zu `learn_attempts`/`learn_certs` zusammengeführt.
 - *Ausblenden in den ersten 3 Tagen:* Direkt nach dem ersten Push sind alle Fragen „neu“; in dieser Zeit kann eine manipulierte Seite je Leitfaden nur die
   höchsten Nummern weglassen (mindestens 4 bleiben) und höchstens 2 von 10 Leitfäden. Weil Lösungen erst nach dem Bestehen bzw. dem letzten Versuch
   kommen, lässt sich daraus keine planbare Auswahl bekannter Fragen bauen.

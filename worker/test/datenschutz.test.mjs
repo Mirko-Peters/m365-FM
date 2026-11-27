@@ -27,12 +27,12 @@ globalThis.fetch = async (u) => {
 };
 process.on("exit", () => { globalThis.fetch = realFetch; });
 
-// legacy(raw): Altzustand nach den Migrationen bis 0053 einspielen, danach laufen 0054 und folgende (Datenbestand vor dem Deploy)
+// legacy(raw): Altzustand nach den Migrationen bis 0056 einspielen, danach laufen 0057 und folgende (Datenbestand vor dem Deploy)
 async function setup(legacy = null) {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url), files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
-  for (const f of files.filter((f) => !legacy || f < "0054")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
-  if (legacy) { legacy(raw); for (const f of files.filter((f) => f >= "0054")) raw.exec(readFileSync(new URL(f, dir), "utf-8")); }
+  for (const f of files.filter((f) => !legacy || f < "0057")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  if (legacy) { legacy(raw); for (const f of files.filter((f) => f >= "0057")) raw.exec(readFileSync(new URL(f, dir), "utf-8")); }
   const db = {
     prepare(sql) { const st = raw.prepare(sql); let a = []; const o = { bind(...x) { a = x; return o; }, all: async () => ({ results: st.all(...a) }), first: async () => st.get(...a) ?? null, run: async () => { const r = st.run(...a); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; },
     batch: async (list) => { raw.exec("BEGIN"); try { const out = []; for (const s of list) out.push(await s.run()); raw.exec("COMMIT"); return out; } catch (e) { raw.exec("ROLLBACK"); throw e; } },
@@ -482,10 +482,10 @@ test("Anonymer Speaker-Eintrag bleibt anonym, wenn der Veranstalter die Session 
   assert.equal((await call(env, "POST", "/api/speaker/claim", mallory, { name: "Former member" })).s, 404);
 });
 
-test("Migration 0054: Rueckfuellung nur aus der ersten Fassung von ownedEntity, nicht aus spaeteren Vorschlaegen (K41)", async () => {
+test("Migration 0057: Rueckfuellung nur aus der ersten Fassung von ownedEntity, nicht aus spaeteren Vorschlaegen (K41)", async () => {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url), files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
-  for (const f of files.filter((f) => f < "0054")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  for (const f of files.filter((f) => f < "0057")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
   const ins = raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES (?,?,?,?,?,1)");
   ins.run("alice", JSON.stringify({ name: "Alice", type: "person" }), "Selbst verwaltet", 1, "old");
   ins.run("alice", JSON.stringify({ name: "Alice", type: "person", web: "https://a.example/" }), "Web", 1, "live");
@@ -494,7 +494,7 @@ test("Migration 0054: Rueckfuellung nur aus der ersten Fassung von ownedEntity, 
   ins.run("ev-conf", JSON.stringify({ name: "Conf", type: "person" }), "Selbst verwaltet", 3, "rejected");
   const cl = raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES (?,?,'verified','owner',1)");
   cl.run("alice", 1); cl.run("ev-conf", 2);
-  const m = readFileSync(new URL("0054_person_entity.sql", dir), "utf-8");
+  const m = readFileSync(new URL("0057_person_entity.sql", dir), "utf-8");
   raw.exec(m); raw.exec(m);   // idempotent
   assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => ({ ...r })), [{ eid: "alice", user_id: 1 }]);
 });
@@ -586,7 +586,7 @@ test("Pruef-Warteschlange: Vorschlag zu einer verborgenen Person gekennzeichnet,
   assert.ok(/it\.hiddenPerson \?/.test(ui), "Karte zeigt die Kennzeichnung");
 });
 
-test("Migration 0054: Altbestand - vor dem Deploy geloeschtes Konto (Fassung user_id 0, verwaister Owner-Anspruch) bleibt verborgen, Bob erbt nichts (Runde 7)", async () => {
+test("Migration 0057: Altbestand - vor dem Deploy geloeschtes Konto (Fassung user_id 0, verwaister Owner-Anspruch) bleibt verborgen, Bob erbt nichts (Runde 7)", async () => {
   const DESC = "Alice Example is a member of the Microsoft community: Senior Consultant at Contoso.";
   const { raw, env, user } = await setup((r) => {
     const ins = r.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES (?,?,?,?,?,1)");
@@ -600,13 +600,13 @@ test("Migration 0054: Altbestand - vor dem Deploy geloeschtes Konto (Fassung use
   assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => ({ ...r })), [{ eid: "alice", user_id: 0 }, { eid: "carol", user_id: 9 }]);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='alice'").get().n, 0, "verwaister Owner-Anspruch entfernt");
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid IN ('guest','carol')").get().n, 2, "andere Ansprueche bleiben");
-  // Runde 11: der entfernte Anspruch steht vollstaendig in mig0054_backup; ein zweiter Lauf aendert nichts
-  const bk54 = () => raw.prepare("SELECT tabelle,schluessel,wert FROM mig0054_backup ORDER BY id").all().map((r) => [r.tabelle, r.schluessel, JSON.parse(r.wert)]);
-  assert.deepEqual(bk54(), [["entity_claims", "alice", { eid: "alice", user_id: 7, status: "verified", via: "owner", created: 1, verified_via: "", verified_domain: "", fwd_mask: "" }]]);
-  const st = () => JSON.stringify([bk54(), raw.prepare("SELECT * FROM entity_claims ORDER BY eid").all(), raw.prepare("SELECT * FROM person_entity ORDER BY eid").all()]);
+  // Runde 11: der entfernte Anspruch steht vollstaendig in mig0057_backup; ein zweiter Lauf aendert nichts
+  const bk57 = () => raw.prepare("SELECT tabelle,schluessel,wert FROM mig0057_backup ORDER BY id").all().map((r) => [r.tabelle, r.schluessel, JSON.parse(r.wert)]);
+  assert.deepEqual(bk57(), [["entity_claims", "alice", { eid: "alice", user_id: 7, status: "verified", via: "owner", created: 1, verified_via: "", verified_domain: "", fwd_mask: "" }]]);
+  const st = () => JSON.stringify([bk57(), raw.prepare("SELECT * FROM entity_claims ORDER BY eid").all(), raw.prepare("SELECT * FROM person_entity ORDER BY eid").all()]);
   const st0 = st();
-  raw.exec(readFileSync(new URL("../migrations/0054_person_entity.sql", import.meta.url), "utf-8"));
-  assert.equal(st(), st0, "0054 idempotent");
+  raw.exec(readFileSync(new URL("../migrations/0057_person_entity.sql", import.meta.url), "utf-8"));
+  assert.equal(st(), st0, "0057 idempotent");
   const hidden = async () => {
     const exp = await call(env, "GET", "/api/entity/export");
     assert.ok(!exp.j.items.map((x) => x.id).includes("alice"), "nicht im Export");
@@ -648,11 +648,11 @@ test("Kontoloeschung: Abos einer frueheren Adresse, die inzwischen ein anderes K
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM profiles WHERE handle='alice' AND user_id=3").get().n, 1);
 });
 
-const MIG0055 = () => readFileSync(new URL("../migrations/0055_orphan_handles.sql", import.meta.url), "utf-8");
-const MIG0054 = () => readFileSync(new URL("../migrations/0054_person_entity.sql", import.meta.url), "utf-8");
-const backup = (raw, tabelle) => Object.fromEntries(raw.prepare("SELECT schluessel,wert FROM mig0055_backup WHERE tabelle=? ORDER BY schluessel").all(tabelle).map((r) => [r.schluessel, JSON.parse(r.wert)]));
+const MIG0058 = () => readFileSync(new URL("../migrations/0058_orphan_handles.sql", import.meta.url), "utf-8");
+const MIG0057 = () => readFileSync(new URL("../migrations/0057_person_entity.sql", import.meta.url), "utf-8");
+const backup = (raw, tabelle) => Object.fromEntries(raw.prepare("SELECT schluessel,wert FROM mig0058_backup WHERE tabelle=? ORDER BY schluessel").all(tabelle).map((r) => [r.schluessel, JSON.parse(r.wert)]));
 
-test("Migration 0055: Altbestand - Adresse ohne Profil verliert nur die Bindung, Name bleibt, Originale in mig0055_backup; der naechste Inhaber erbt nichts (Runde 8/10/12)", async () => {
+test("Migration 0058: Altbestand - Adresse ohne Profil verliert nur die Bindung, Name bleibt, Originale in mig0058_backup; der naechste Inhaber erbt nichts (Runde 8/10/12)", async () => {
   const sessions = [
     { h: "alice", n: "Alice Realname", s: "confirmed", e: "alice", r: 4 },   // geloeschtes Konto
     { n: "Name Only", s: "confirmed" },
@@ -692,10 +692,10 @@ test("Migration 0055: Altbestand - Adresse ohne Profil verliert nur die Bindung,
   assert.deepEqual(backup(raw, "blog_follows"), { '[5,"alice"]': { user_id: 5, handle: "alice", created: 11 }, '[5,"bea-old"]': { user_id: 5, handle: "bea-old", created: 13 } });
   assert.deepEqual(backup(raw, "speaker_ref"), { 4: { id: 4, handle: "alice" }, 7: { id: 7, handle: "bea-old" } });
   // idempotent: ein zweiter Lauf aendert nichts, auch nicht an der Sicherung
-  const before = JSON.stringify(sp()), bk = JSON.stringify(raw.prepare("SELECT * FROM mig0055_backup ORDER BY id").all());
-  raw.exec(MIG0055());
+  const before = JSON.stringify(sp()), bk = JSON.stringify(raw.prepare("SELECT * FROM mig0058_backup ORDER BY id").all());
+  raw.exec(MIG0058());
   assert.equal(JSON.stringify(sp()), before);
-  assert.equal(JSON.stringify(raw.prepare("SELECT * FROM mig0055_backup ORDER BY id").all()), bk);
+  assert.equal(JSON.stringify(raw.prepare("SELECT * FROM mig0058_backup ORDER BY id").all()), bk);
 
   // Carol uebernimmt die Adressen: erbt weder Link, Abonnenten noch Bearbeitungsrecht oder Einladungen
   const carol = await user(9, "Carol Newowner"), zoe = await user(8, "Zoe Newowner");
@@ -717,7 +717,7 @@ test("Migration 0055: Altbestand - Adresse ohne Profil verliert nur die Bindung,
   assert.deepEqual((await call(env, "GET", "/api/speaker/requests", bea)).j.items.map((x) => x.id), [20]);
 });
 
-test("Migration 0055: niemand erbt - weder ueber Merker (auch nicht bei lebendem Konto oder mehreren frueheren Inhabern) noch ueber Name oder Anspruch; nur Bindung loesen, mit Sicherung (Runde 9-12)", async () => {
+test("Migration 0058: niemand erbt - weder ueber Merker (auch nicht bei lebendem Konto oder mehreren frueheren Inhabern) noch ueber Name oder Anspruch; nur Bindung loesen, mit Sicherung (Runde 9-12)", async () => {
   const sessions = [
     { h: "dan-old", n: "Dan Living", s: "confirmed", e: "dan-old" },   // alter Adresswechsel, Merker person_entity -> Dan (lebend, dan-new): trotzdem kein Umzug
     { h: "dan-old", n: "Dan Living", s: "invited", t: "tok-dan" },
@@ -736,7 +736,7 @@ test("Migration 0055: niemand erbt - weder ueber Merker (auch nicht bei lebendem
     const u = (id, name, h) => { r.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(?,'github',?,?,'',1)").run(id, "s" + id, name); if (h) r.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(?,?,1,1)").run(id, h); };
     u(2, "Olga Organizer", "olga"); u(3, "Dan Living", "dan-new"); u(4, "Kim Claimer", "kim-new"); u(5, "Fan"); u(6, "Gina Gone", "gina-other"); u(7, "Sam Same", "sam-a"); u(8, "sam same", "sam-b");
     u(10, "Lea Living", "lea-new"); u(14, "Anna Schmidt", "anna-b"); u(15, "Kai Noaddr"); u(20, "Alice Earlier", "alice-now"); u(21, "Bea Later", "bea-now");
-    // Merker aus 0054: erste Fassung von ownedEntity (Selbst verwaltet, Typ person) und bestaetigter Owner-Anspruch desselben Kontos
+    // Merker aus 0057: erste Fassung von ownedEntity (Selbst verwaltet, Typ person) und bestaetigter Owner-Anspruch desselben Kontos
     const own = (eid, uid, name) => {
       r.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES (?,?,'Selbst verwaltet',?,'live',1)").run(eid, JSON.stringify({ name, type: "person" }), uid);
       r.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES (?,?,'verified','owner',1)").run(eid, uid);
@@ -758,7 +758,7 @@ test("Migration 0055: niemand erbt - weder ueber Merker (auch nicht bei lebendem
     r.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES (2,'creator','dan-new','en',1),(2,'creator','dan-old','en',1),(5,'creator','nobody','en',1),(5,'creator','anna-old','en',1),(5,'creator','contoso','en',1),(5,'creator','x','en',1)").run();
     r.prepare("INSERT INTO topic_queue(channel,recipient,lang,kind,topic_id,item_key,title,url,created,expires,sent) VALUES ('email','5','en','creator','ghost','article:alt','Alt','https://x',1,9999999999,1)").run();
   });
-  assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => [r.eid, r.user_id]), [["dan-old", 3], ["gone", 0], ["kai-old", 15], ["x", 20]], "Merker aus 0054");
+  assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => [r.eid, r.user_id]), [["dan-old", 3], ["gone", 0], ["kai-old", 15], ["x", 20]], "Merker aus 0057");
   const sp = () => JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=20").get().speakers);
   assert.deepEqual(sp(), [
     { n: "Dan Living", s: "confirmed" },
@@ -785,7 +785,7 @@ test("Migration 0055: niemand erbt - weder ueber Merker (auch nicht bei lebendem
     assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id=?").get(h).n, 0, h + " erbt keine Creator-Abos");
   }
   assert.deepEqual(col("SELECT eid,user_id,status FROM entity_claims WHERE eid='contoso'"), ["contoso|4|verified"], "Kims Anspruch selbst bleibt unberuehrt");
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE name IN ('mig0055_handle','mig0055_name')").get().n, 0, "keine Hilfstabellen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE name IN ('mig0058_handle','mig0058_name')").get().n, 0, "keine Hilfstabellen");
   // Sicherung: alle Originale, auch die entfernten Abos und Meldungen; Firmen-Abos und versandte Meldungen unberuehrt
   assert.deepEqual(backup(raw, "event_sessions"), { 20: sessions });
   assert.deepEqual(Object.keys(backup(raw, "blog_follows")), ['[2,"dan-old"]', '[5,"anna-old"]', '[5,"contoso"]', '[5,"dan-old"]', '[5,"kai-old"]', '[5,"lea-old"]', '[5,"nobody"]', '[5,"x"]']);
@@ -795,11 +795,11 @@ test("Migration 0055: niemand erbt - weder ueber Merker (auch nicht bei lebendem
   assert.deepEqual(backup(raw, "push_topics")['["https://push.example/5","creator","ghost"]'], { endpoint: "https://push.example/5", kind: "creator", topic_id: "ghost", lang: "en", timezone: "UTC", user_id: 5, created: 1 });
   assert.deepEqual(Object.keys(backup(raw, "email_topics")), ['[2,"creator","dan-old"]', '[5,"creator","anna-old"]', '[5,"creator","contoso"]', '[5,"creator","dan-old"]', '[5,"creator","ghost"]', '[5,"creator","nobody"]', '[5,"creator","x"]']);
   assert.deepEqual(Object.values(backup(raw, "topic_queue")).map((x) => [x.topic_id, x.sent, x.item_key, x.expires]).sort(), [["dan-old", 0, "article:x", 9999999999], ["ghost", 0, "article:x", 9999999999]]);
-  // idempotent: 0054 und 0055 erneut - nichts aendert sich, auch nicht an den Sicherungen
+  // idempotent: 0057 und 0058 erneut - nichts aendert sich, auch nicht an den Sicherungen
   const snap = () => JSON.stringify([sp(), col("SELECT * FROM blog_follows ORDER BY user_id,handle"), col("SELECT id,handle FROM speaker_ref ORDER BY id"), col("SELECT * FROM email_topics ORDER BY user_id,topic_id"),
-    col("SELECT * FROM entity_claims ORDER BY eid"), col("SELECT * FROM person_entity ORDER BY eid"), col("SELECT * FROM mig0055_backup ORDER BY id"), col("SELECT * FROM mig0054_backup ORDER BY id")]);
+    col("SELECT * FROM entity_claims ORDER BY eid"), col("SELECT * FROM person_entity ORDER BY eid"), col("SELECT * FROM mig0058_backup ORDER BY id"), col("SELECT * FROM mig0057_backup ORDER BY id")]);
   const before = snap();
-  raw.exec(MIG0054()); raw.exec(MIG0055());
+  raw.exec(MIG0057()); raw.exec(MIG0058());
   assert.equal(snap(), before, "zweiter Lauf aendert nichts und sichert nichts doppelt");
   // Dan (lebendes Konto mit Merker): Bindung geloest, Name bleibt, Original in der Sicherung; er bekommt nichts automatisch
   const dan = `m365s=${await makeSession(env, 3)}`;
@@ -848,8 +848,8 @@ test("Migration 0055: niemand erbt - weder ueber Merker (auch nicht bei lebendem
   assert.equal((await call(env, "POST", "/api/speaker/claim", dan, { name: "Dan Living" })).j.linked, 2);
   assert.deepEqual((await call(env, "GET", "/api/speaker/requests", dan)).j.items.map((x) => x.id), [20]);
   // Zurueckspielen nach der Anleitung im Kopf der Migration: Speaker-Liste und entferntes Abo sind wieder da
-  raw.exec("UPDATE event_sessions SET speakers = (SELECT b.wert FROM mig0055_backup b WHERE b.tabelle = 'event_sessions' AND b.schluessel = CAST(event_sessions.id AS TEXT)) WHERE CAST(id AS TEXT) IN (SELECT schluessel FROM mig0055_backup WHERE tabelle = 'event_sessions')");
-  raw.exec("INSERT OR IGNORE INTO blog_follows(user_id, handle, created) SELECT json_extract(wert, '$.user_id'), json_extract(wert, '$.handle'), json_extract(wert, '$.created') FROM mig0055_backup WHERE tabelle = 'blog_follows' AND schluessel = '[5,\"lea-old\"]'");
+  raw.exec("UPDATE event_sessions SET speakers = (SELECT b.wert FROM mig0058_backup b WHERE b.tabelle = 'event_sessions' AND b.schluessel = CAST(event_sessions.id AS TEXT)) WHERE CAST(id AS TEXT) IN (SELECT schluessel FROM mig0058_backup WHERE tabelle = 'event_sessions')");
+  raw.exec("INSERT OR IGNORE INTO blog_follows(user_id, handle, created) SELECT json_extract(wert, '$.user_id'), json_extract(wert, '$.handle'), json_extract(wert, '$.created') FROM mig0058_backup WHERE tabelle = 'blog_follows' AND schluessel = '[5,\"lea-old\"]'");
   assert.deepEqual(sp(), sessions);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_follows WHERE user_id=5 AND handle='lea-old'").get().n, 1);
 });
@@ -898,7 +898,7 @@ test("Kontoloeschung: Themen-Abos anderer auf die Personen-Entitaet gehen nicht 
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id='alice'").get().n, 0);
 });
 
-test("Migration 0054: verwaister bestaetigter manueller Anspruch eines vor dem Deploy geloeschten Kontos bekommt den Merker (Runde 8)", async () => {
+test("Migration 0057: verwaister bestaetigter manueller Anspruch eines vor dem Deploy geloeschten Kontos bekommt den Merker (Runde 8)", async () => {
   const { raw } = await setup((r) => {
     r.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES ('man',?,'Selbst verwaltet',0,'live',1)").run(JSON.stringify({ name: "Manual Person", type: "person" }));
     r.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES ('man',7,'verified','manual',1)").run();
@@ -907,13 +907,13 @@ test("Migration 0054: verwaister bestaetigter manueller Anspruch eines vor dem D
   });
   assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='man'").get()?.user_id, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='man'").get().n, 0);
-  // Zurueckspielen nach der Anleitung im Kopf von 0054 (Runde 11)
+  // Zurueckspielen nach der Anleitung im Kopf von 0057 (Runde 11)
   raw.exec(`INSERT OR IGNORE INTO entity_claims(eid, user_id, status, via, created, verified_via, verified_domain, fwd_mask)
     SELECT json_extract(wert, '$.eid'), json_extract(wert, '$.user_id'), json_extract(wert, '$.status'), json_extract(wert, '$.via'),
     json_extract(wert, '$.created'), json_extract(wert, '$.verified_via'), json_extract(wert, '$.verified_domain'), json_extract(wert, '$.fwd_mask')
-    FROM mig0054_backup WHERE tabelle = 'entity_claims'`);
+    FROM mig0057_backup WHERE tabelle = 'entity_claims'`);
   assert.deepEqual({ ...raw.prepare("SELECT eid,user_id,status,via FROM entity_claims WHERE eid='man'").get() }, { eid: "man", user_id: 7, status: "verified", via: "manual" });
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id='man'").get().n, 0, "Themen-Abos auf die Altdaten weg (0055)");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id='man'").get().n, 0, "Themen-Abos auf die Altdaten weg (0058)");
 });
 
 test("Exporte fuer den Seitenbau: Konto-Schluessel ak statt Konto-ID, neuer Inhaber der Adresse hat einen anderen Schluessel; pe kennzeichnet Profil-Entitaeten (Runde 8)", async () => {

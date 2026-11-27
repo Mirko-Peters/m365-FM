@@ -44,7 +44,7 @@ export async function profileExportGen(db) {
 }
 
 // Personen-Entitaeten aus dem eigenen Profil: genau die, die profiles.js ownedEntity mit Typ person angelegt hat (Tabelle person_entity,
-// Migration 0054; nur ownedEntity schreibt sie - keine Zusammenfassung oder kein Typ, den ein Mitglied in einem Vorschlag selbst setzen kann).
+// Migration 0057; nur ownedEntity schreibt sie - keine Zusammenfassung oder kein Typ, den ein Mitglied in einem Vorschlag selbst setzen kann).
 // Ausgeblendet, solange ihr Inhaber kein oeffentliches, nicht gesperrtes Profil mit genau dieser Adresse hat: privat gestellt, gesperrt, Adresse
 // geaendert, zusammengefuehrt (banned=2) oder geloescht (user_id 0, die Zeile bleibt dauerhaft als Merker: sonst holte importEntitiesFromSite die
 // Person aus dem letzten Seitenbau zurueck; aufheben nur per Admin, entities.js releasePersonEntity). Sie erscheinen in keinem oeffentlichen Weg; kommt das Profil zurueck, sind sie wieder da.
