@@ -1,0 +1,670 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:05.680
+Willkommen zum M356CFM-Podcast, in dem wir die Menschen, Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.440 --> 00:00:07.440
+Die Regeln, die Sie noch nie gesehen haben.
+
+00:00:07.820 --> 00:00:10.500
+Jede E-Mail in Ihrem Unternehmen wird anhand von Regeln geprüft, die Sie noch nie gesehen haben.
+
+00:00:10.820 --> 00:00:14.060
+Sie werden als Nachrichtenflussregeln bezeichnet und befinden sich zwischen der Schaltfläche Send im Brusteingang.
+
+00:00:14.440 --> 00:00:20.260
+Sie können eine Signatur hinzufügen, eine Warnung auf externe E-Mails, drucken eine Nachricht mit Verschlüsselung, sperren oder Sie stoppen, bevor sie überhaupt eintrifft.
+
+00:00:20.760 --> 00:00:25.480
+Sie denken vielleicht, dass dies nur die Regeln sind, die Sie in Outlook erstellen, aber diese werden erst ausgeführt, nachdem eine Nachricht eingegangen ist.
+
+00:00:25.480 --> 00:00:31.040
+Am Ende wissen Sie, was eine Nachrichtenflussregel ist, wie sie entscheidet, was bearbeitet werden soll und welche Grenzen auch erfahrene Administratoren setzen.
+
+00:00:31.320 --> 00:00:37.120
+Willkommen zum M356CFM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:38.560 --> 00:00:40.260
+Was eine Nachrichtenflussregel wirklich ist
+
+00:00:40.260 --> 00:00:46.380
+Eine Nachrichtenflussregel ist eine Anweisung, die Ihre E-Mails während des Transports überwacht und eine Aktion für die übereinstimmenden Nachrichten ausführt.
+
+00:00:47.460 --> 00:00:54.980
+Microsoft nennt sie auch Transportregel und diese ältere Bezeichnung erklärt sie etwas besser, da sie sich auf den Transport bezieht, also auf den Weg, den eine Nachricht zwischen dem Absender und dem Posteingang zurückliegen.
+
+00:00:55.480 --> 00:00:59.740
+Sie schreiben die Regel einmal und sie wird dann automatisch für jede Nachricht ausgeführt, die ein- oder ausgeht.
+
+00:01:00.260 --> 00:01:04.140
+Den Unterschied spüren Sie am schnellsten, wenn Sie sie mit den Regeln vergleichen, die Sie in Ihrem eigenen Outlook einrichten.
+
+00:01:04.500 --> 00:01:08.760
+Eine Posteingangsregel befindet sich in einem Postfach und wird ausgeführt, nachdem die Nachricht bereits eingegangen ist.
+
+00:01:09.420 --> 00:01:14.500
+Eine Nachrichtenflussregel befindet sich auf der Ebene der gesamten Organisation und wird vor der Zustellung ausgeführt, während die Nachricht noch unterwegs ist.
+
+00:01:14.900 --> 00:01:19.420
+Genau dieser zeitliche Ablauf ist entscheidend und deshalb fühlen sich diese beiden Dinge ähnlich an, verhalten sich aber überhaupt nicht gleich.
+
+00:01:19.860 --> 00:01:22.560
+Stellen Sie sich als Warnwanderer vor, dass Sie in E-Mails von außerhalb Ihres Unternehmens gesehen haben.
+
+00:01:22.560 --> 00:01:27.840
+So etwas können Sie mit einer Outlook-Regel nicht erstellen, denn wenn Outlook die Nachricht zieht, befindet sie sich bereits im Postfach.
+
+00:01:28.360 --> 00:01:33.740
+Eine Nachrichtenflussregel befindet sich früher im Pfad, sodass Sie die Nachricht auf dem Weg nach innen abfangen, das Banner hinzufügen und weiterleiten kann.
+
+00:01:34.620 --> 00:01:37.580
+Niemand klickt auf etwas und die Regel wird für jedes Postfach gleichzeitig angewendet.
+
+00:01:37.840 --> 00:01:40.440
+Denken Sie jetzt an die Signatur, die auf allen E-Mails angezeigt wird, die Ihr Team senden.
+
+00:01:40.980 --> 00:01:41.620
+Es ist das Gleiche.
+
+00:01:42.060 --> 00:01:48.120
+Sie richten eine Regel einmal ein und sie wird einfach unten in ausgehenden E-Mails angezeigt, da die Regel den Weg und nicht das Postfach überwacht.
+
+00:01:48.120 --> 00:01:51.220
+Diese Konsistenz ist der eigentliche Grund für die Existenz dieser Regel.
+
+00:01:51.600 --> 00:01:56.140
+Ein Unternehmen mit 2000 Mitarbeitern kann nicht von allen verlangen, sich eine Formatierungsregel oder einen Warnhinweis zu merken.
+
+00:01:56.240 --> 00:01:58.300
+Es kann sich nicht darauf verlassen, dass die Mitarbeiter es jedes Mal richtig machen.
+
+00:01:58.680 --> 00:02:03.520
+Eine Nachrichtenflussregel merkt sich das einmal und gilt dann genauso an einem ruhigen Dienstag wie an einem geschäftigen Freitag.
+
+00:02:04.080 --> 00:02:05.320
+Die einfache Version lautet also.
+
+00:02:05.420 --> 00:02:11.680
+Eine Nachrichtenflussregel ist eine Hintergrundanweisung, die sich in den Pfad Ihrer E-Mails einfügen beeinflusst, was mit den Nachrichten passiert, während sie sie passiert, während sie sie passieren.
+
+00:02:11.680 --> 00:02:18.700
+Sie wird in Exchange Online ausgeführt, dem E-Mail-Modul in Microsoft 365 und funktioniert unabhängig davon, ob Sie Nachrichten senden, empfangen oder beides tun.
+
+00:02:19.380 --> 00:02:24.500
+Eine Einstellung im System kann alle Nachrichten in Ihrer Organisation löschen, wenn sie unachtsam verwendet wird und sie ist leicht zu übersehen.
+
+00:02:24.920 --> 00:02:25.720
+Wir kommen gleich darauf zurück.
+
+00:02:26.220 --> 00:02:27.720
+Das wirft die nächste naheliegende Frage auf.
+
+00:02:27.780 --> 00:02:30.860
+Wie entscheidet eine Regel, welche Nachrichten bearbeitet und welche nicht bearbeitet werden?
+
+00:02:31.700 --> 00:02:33.080
+Die drei Fragen, die jede Regel stellt.
+
+00:02:33.840 --> 00:02:36.480
+Jede Nachrichtenflussregel basiert auf drei einfachen Eingabeaufforderungen.
+
+00:02:37.100 --> 00:02:39.240
+Die erste lautet Regel anwenden, wenn die Bedingung.
+
+00:02:39.240 --> 00:02:42.640
+Die zweite lautet Akzeptieren, wenn die Ausnahme.
+
+00:02:43.540 --> 00:02:45.600
+Die dritte lautet Folgendes Ausführen die Aktion.
+
+00:02:46.220 --> 00:02:49.740
+Bedingungen und Ausnahmen beschreiben Nachrichten und die Aktion gibt an, was geschehen soll.
+
+00:02:50.100 --> 00:02:50.820
+Nehmen wir ein einfaches Beispiel.
+
+00:02:51.360 --> 00:02:56.120
+Angenommen, Sie möchten eine Warnung für Rechnungen erhalten, die von außerhalb des Unternehmens eingehen, Ihre genehmigten Partner jedoch nicht belästigen.
+
+00:02:56.560 --> 00:03:00.600
+Die Bedingung ist, dass sich der Absender außerhalb der Organisation befindet und er betrefft das Wort Rechnung enthält.
+
+00:03:01.080 --> 00:03:03.700
+Die Ausnahme ist, dass sich der Empfänger auf Ihrer Liste genehmigter Partner befindet.
+
+00:03:04.000 --> 00:03:06.140
+Die Aktion besteht darin, der Nachricht ein Warnbanner hinzuzufügen.
+
+00:03:06.140 --> 00:03:10.340
+Exchange überprüft die Bedingung, die Ausnahme und fügt das Banner hinzu, wenn alles übereinstimmt.
+
+00:03:11.080 --> 00:03:14.640
+Es lohnt sich, die Logik hinter diesen Eingabeaufforderungen zu kennen, da Anfänger hier oft überrascht werden.
+
+00:03:15.120 --> 00:03:19.140
+Wenn Sie mehrere Bedingungen einer Regel stapeln, müssen alle zutreffen, damit die Regel ausgelöst wird.
+
+00:03:19.580 --> 00:03:20.980
+Es handelt sich also um eine also nichts übereinstimmt.
+
+00:03:21.260 --> 00:03:24.720
+Wenn eine einzelne Bedingung mehrere Werte enthalten kann, reicht jeder einzelne davon aus.
+
+00:03:25.160 --> 00:03:27.940
+Wenn Sie mehrere Ausnahmen hinzufügen, bricht eine davon die Aktion ab.
+
+00:03:28.400 --> 00:03:29.560
+Aktionen funktionieren umgekehrt.
+
+00:03:29.560 --> 00:03:32.320
+Wenn eine Regel mehr als eine Aktion auflistet, werden alle ausgeführt.
+
+00:03:32.960 --> 00:03:38.200
+Eine einzelne Regel kann also einen Haftungsausschluss hinzufügen und jemanden stillschweigend in Kopie setzen, solange diese beiden Aktionen nicht kollidieren.
+
+00:03:38.540 --> 00:03:39.700
+Nun zu dem Teil, deine Warnung verliehen.
+
+00:03:40.160 --> 00:03:44.840
+Wenn Sie eine Regel ohne Bedingungen und ohne Ausnahmen erstellen, gilt die Aktion für jede Nachricht in der Organisation.
+
+00:03:45.940 --> 00:03:47.840
+Das ist in Ordnung, wenn Sie allem eine Signatur hinzufügen.
+
+00:03:47.840 --> 00:03:53.880
+Es ist eine Katastrophe, wenn die Aktion darin besteht, eine Nachricht zu löschen, weil Sie Exchange gerade angewiesen haben, alle Ihre ein- und ausgehenden E-Mails zu löschen.
+
+00:03:54.480 --> 00:03:59.740
+Microsoft sagt dies in seiner eigenen Dokumentation ganz klar und deutlich und das ist der Grund, warum jede Regel mit einer eindeutigen Bedingung beginnen sollte.
+
+00:04:00.100 --> 00:04:05.200
+Eine Nachrichtenflussregel besteht also im Grunde nur aus drei aufeinanderfolgenden Fragen, in denen die Fragwert was zutrifft, was weggelassen wird und was dagegen zu tun.
+
+00:04:05.720 --> 00:04:08.460
+Die Reihenfolge, in der Sie diese Regeln anordnen, ist wichtiger als Sie denken.
+
+00:04:08.580 --> 00:04:09.720
+Genau darum geht es als nächstes.
+
+00:04:10.440 --> 00:04:12.420
+Wann eine Regel ausgelöst wird und was als nächstes passiert.
+
+00:04:12.740 --> 00:04:13.920
+Regeln werden nicht willkürlich ausgelöst.
+
+00:04:13.920 --> 00:04:18.020
+Exchange schließt sie von oben nach unten und die Regel ganz oben in der Liste wird zuerst ausgeführt.
+
+00:04:18.400 --> 00:04:21.660
+Die oberste Regel hat die Priorität 0 und die Nummer steigt nach unten. Winner.
+
+00:04:22.880 --> 00:04:25.260
+Standardmäßig werden ältere Regeln über neueren Regeln gelistet.
+
+00:04:25.720 --> 00:04:28.980
+Daher kann eine Regel, die Sie vor zwei Jahren geschrieben haben, vor der ausgeführt werden, die Sie heute Morgen hinzugefügt haben.
+
+00:04:29.340 --> 00:04:32.320
+Das zweite Steuerelement, das Sie kennen sollten, heißt Verarbeitung weiterer Regeln beenden.
+
+00:04:32.620 --> 00:04:37.620
+Wenn eine Nachricht mit einer Regel übereinstimmt und diese Einstellung aktiviert ist, überspringt Exchange für diese Nachricht alle darunterliegenden Regeln.
+
+00:04:38.040 --> 00:04:40.920
+Das ist eine wirkungsvolle Maßnahme, die eine Menge verwirrender Verhaltensweisen erklärt.
+
+00:04:40.920 --> 00:04:45.880
+Wenn eine Nachricht mit fünf verschiedenen Regeln übereinstimmt, kann eine frühere Regel über das gesamte Ergebnis entscheiden,
+
+00:04:46.020 --> 00:04:47.980
+während die vier darunterliegenden Regeln nie eine Chance haben zu wirken.
+
+00:04:48.360 --> 00:04:50.240
+Die Reihenfolge entscheidet auch, wie die einzelnen Teile gestapelt.
+
+00:04:50.720 --> 00:04:55.800
+Eine Regel lehnt möglicherweise eine Nachricht ab, die wie ein Betrug aussieht und eine spätere Regel möchte möglicherweise allen Nachrichten einen Haftungsausschluss hinzu.
+
+00:04:56.020 --> 00:05:01.160
+Wenn die Ablehnungsregel zuerst ausgeführt wird und die Verarbeitung beendet, wird der Haftungsausschluss nie in dieser Nachricht angezeigt, was normalerweise gewünscht.
+
+00:05:01.160 --> 00:05:02.220
+Die Lektion ist einfach.
+
+00:05:02.780 --> 00:05:06.900
+Die Reihenfolge Ihrer Regeln ist selbst eine Entscheidung und verdient die gleiche Sorgfalt wie die darin enthaltenen Bedingungen.
+
+00:05:07.420 --> 00:05:09.980
+Verschieben Sie eine Regel nach oben, ändern Sie, welche Nachrichten Sie gewinnt.
+
+00:05:10.060 --> 00:05:12.440
+Verschieben Sie sie nach unten, lassen Sie die darüberliegenden Regeln zuerst wirken.
+
+00:05:12.720 --> 00:05:14.140
+Zwei praktische Details überraschen die Leute.
+
+00:05:14.600 --> 00:05:20.040
+Das erste ist das Timing, denn nachdem Sie eine Regel erstellt oder geändert haben, kann es bis zu einer halben Stunde dauern, bis Sie mit der Bearbeitung echter E-Mails beginnen.
+
+00:05:20.260 --> 00:05:22.660
+Die Nachricht, die Sie zum Testen senden, wird möglicherweise direkt durchgeschickt.
+
+00:05:22.660 --> 00:05:28.040
+Das zweite ist, dass neue Regeln im Admin-Center zunächst deaktiviert sind, sodass Sie sie überprüfen können, bevor Sie sie aktivieren.
+
+00:05:28.820 --> 00:05:32.480
+Sie können eine Regel auch deaktivieren, ohne sie zu löschen, was bei der Fehlerbehebung praktisch ist.
+
+00:05:33.100 --> 00:05:35.000
+Der letzte Punkt hier ist ein Punkt, über den es sich lohnt, ehrlich zu sein.
+
+00:05:36.000 --> 00:05:37.000
+Nachrichtenflussregeln speichern keinen Verlauf.
+
+00:05:37.360 --> 00:05:40.600
+Es gibt keine Schaltfläche zum Zurückspulen und Sie können eine Regel nicht auf den gestrigen Stand zurücksetzen.
+
+00:05:41.040 --> 00:05:42.420
+Sobald Sie sie ändern, ist die alte Version weg.
+
+00:05:42.940 --> 00:05:45.260
+Daher ist es ratsam, eine Kopie zu speichern, bevor Sie etwas anfassen.
+
+00:05:45.580 --> 00:05:46.760
+Die Mechanik ist nur die halbe Wahrheit.
+
+00:05:47.200 --> 00:05:49.480
+Die andere Hälfte ist, wofür die Leute diese Regeln tatsächlich verwenden.
+
+00:05:50.300 --> 00:05:51.680
+Welche Aufgaben die Leute diesen Regeln tatsächlich sind?
+
+00:05:51.680 --> 00:05:54.100
+Die häufigsten Aufgaben sind Haftungsausschluss und Signatur.
+
+00:05:54.680 --> 00:05:57.440
+Mithilfe einer Regel wird einer Nachricht ein Textblock vorangestellt oder angehängt.
+
+00:05:57.800 --> 00:06:01.340
+Ist die Nachricht verschlüsselt und kann nicht bearbeitet werden, können Sie festlegen, was stattdessen geschehen soll.
+
+00:06:01.900 --> 00:06:05.960
+Mithilfe dieser Rückfallebene kann die ursprüngliche Nachricht in der Neue eingeschlossen, die Regel ignoriert und die Nachricht ablehnen wird.
+
+00:06:06.340 --> 00:06:08.620
+Zu wissen, dass es diese Möglichkeit gibt, erspart viel Kopfzerbrechen.
+
+00:06:09.160 --> 00:06:12.440
+Der externe Warnhinweis ist derselbe Trick, der auch bei E-Mails von außerhalb Ihres Unternehmens angewendet.
+
+00:06:12.740 --> 00:06:18.900
+Sie fügen dem Betreff eine Zeile voran oder fügen oben im Textkörper eine Notiz hinzu, sodass jeder, die Nachricht liest, weiß, dass sie aus dem Internet stammt.
+
+00:06:18.900 --> 00:06:26.340
+Verschlüsseln weiterer wichtiger Aspekt. Sie können mithilfe einer Regel die Nachrichtenverschlüsselung oder eine rechte Vorlage vertrauliche E-Mails anwenden, sodass die Nachricht geschützt ist, bevor sie das Unternehmen verlässt.
+
+00:06:26.700 --> 00:06:30.080
+Finanzteams nutzen diese Funktion und sie geschieht automatisch für die Personen, die sie benötigen.
+
+00:06:30.480 --> 00:06:37.540
+Als nächstes folgen Genehmigung und Moderation. Dabei wird eine Nachricht mithilfe einer Regel zurückgehalten und vor der Zustellung an einen Moderator oder den Vorgesetzten des Absenders weitergeleitet wird.
+
+00:06:37.540 --> 00:06:41.380
+So kann jeder eine E-Mail an das gesamte Unternehmen senden, sodass sie zuerst von jemandem geprüft wird.
+
+00:06:42.020 --> 00:06:43.740
+Blockieren und umleiten runden die Liste ab.
+
+00:06:44.220 --> 00:06:50.180
+Hier kann eine Regel eine Nachricht ablehnen und eine Erklärung zurücksenden, sie stillschweigend löschen oder sie gänzlich an eine andere Stelle weiterleiten.
+
+00:06:50.540 --> 00:06:56.980
+Sie kann auch Empfänger hinzufügen und jemanden in das Feld ANCC oder PCC einfügen, ohne dass der Absender jemals seinen Namen eingeben muss.
+
+00:06:57.240 --> 00:06:58.940
+Die Szenarien sind meist kleiner, als sie klingen.
+
+00:06:59.600 --> 00:07:04.640
+Ein Support-Team könnte jede Nachricht, in der eine Rückerstattung erwähnt wird, an ein freigegebenes Postfach weiterleiten, damit nichts ungelesen bleibt.
+
+00:07:04.640 --> 00:07:07.920
+Eine Schule könnte verhindern, dass eine Klass-Mailing-Liste den Bezirk verlässt.
+
+00:07:08.340 --> 00:07:12.600
+Die Aktion ist fast immer einfach und der Wert liegt darin, dass sie jedes Mal ohne Erinnerung ausgeführt wird.
+
+00:07:13.180 --> 00:07:17.100
+Wenn Sie diese Dinge zusammenfassen, wird Ihnen klar, warum diese Regeln so viele E-Mails steuern, mit denen Sie es zu tun haben.
+
+00:07:17.420 --> 00:07:24.640
+Das Banner, die Signatur, der Genehmigungsschritt, das Blockieren eines verdächtigen Anhangs all, das kann auf eine E-Mail-Flussregel zurückgeführt werden, die jemand einmal eingerichtet und dann vergessen hat.
+
+00:07:25.360 --> 00:07:26.260
+Das ist der nützliche Teil.
+
+00:07:26.520 --> 00:07:29.160
+Als nächstes kommen die Grenzen, denn diese Regeln sind mit echten Grenzen verbunden.
+
+00:07:30.140 --> 00:07:31.180
+Grenzen, vor denen Sie niemand waren.
+
+00:07:31.720 --> 00:07:33.840
+Beginnen Sie mit den Zahlen, denn sie sind kleiner, als Sie vermuten würden.
+
+00:07:33.840 --> 00:07:37.360
+Eine Exchange-Online-Organisation kann 300 E-Mail-Flussregeln speichern.
+
+00:07:37.920 --> 00:07:40.000
+Das ist die Obergrenze für das gesamte Unternehmen, nicht pro Person.
+
+00:07:40.520 --> 00:07:46.560
+Eine einzelne Regel kann bis zu 8 KB groß sein und alle Ihre Regeln zusammen haben ein gemeinsames Budget von 20 KB für die verwendeten Textmuster.
+
+00:07:46.920 --> 00:07:49.840
+Bei einem stark ausgelasteten Mandanten werden diese Grenzen schneller erreicht als erwartet.
+
+00:07:50.280 --> 00:07:51.340
+Auch für Empfänger gelten Grenzen.
+
+00:07:51.880 --> 00:07:58.080
+Für alle Ihre Regeln können Sie einer Nachricht maximal 100 Empfänger hinzufügen und eine einzelne Umleitungsregel kann nur an 10 Empfänger weiterleiten.
+
+00:07:58.080 --> 00:08:02.320
+In Exchange-Online kann eine Nachricht einmal durch Transportregeln umgeleitet werden.
+
+00:08:02.860 --> 00:08:06.500
+Wenn dadurch eine Schleife entsteht, verwirft Exchange die Nachricht, anstatt sich endlos im Kreis zu drehen.
+
+00:08:06.940 --> 00:08:08.660
+Das Scannen von Anlagen ist enger gefasst, als ich anhört.
+
+00:08:09.140 --> 00:08:12.480
+Wenn eine Regel den Inhalt einer Anlage ließ, wird nur ein Teil des Textes untersucht.
+
+00:08:13.060 --> 00:08:17.140
+Eine Regel, die nach einer Phrase in einem Dokument sucht, kann diese also übersehen, wenn sich die Phrase tief in der Datei befindet.
+
+00:08:17.380 --> 00:08:18.620
+Verschlüsselte E-Mails sind eine echte Mauer.
+
+00:08:19.140 --> 00:08:22.040
+Regeln können immer die Außenseite einer verschlüsselten Nachricht lesen, den Umschlag.
+
+00:08:22.040 --> 00:08:25.920
+Um jedoch ins Innere zu sehen oder den Inhalt zu ändern, muss die Transportverschlüsselung aktiviert sein.
+
+00:08:26.700 --> 00:08:30.140
+Bei mit S-Meme signierten Nachrichten beschränkt sich die Regel auf den Umschlag und nichts weiter.
+
+00:08:30.580 --> 00:08:32.320
+Bei manchen Nachrichten werden Regeln komplett übersprungen.
+
+00:08:32.740 --> 00:08:37.880
+Die eigenen Unzustellbarkeitsberichte von Exchange, die Benachrichtigungen, die an den Genehmigungspostfach gehen und Journalberichte werden nie verarbeitet.
+
+00:08:38.700 --> 00:08:41.860
+Das ist so gewollt und verhindert, dass Regeln über die E-Mails des Systems selbst stolpern.
+
+00:08:42.240 --> 00:08:44.560
+Dann gibt es noch die Falle, in die Leute tappen, die in Gruppen denken.
+
+00:08:44.920 --> 00:08:47.920
+Wenn sie eine Empfängerbedingung auf eine Verteilergruppe richten, trifft die Regel nicht zu.
+
+00:08:47.920 --> 00:08:53.480
+Exchange erweitert die Gruppe vor der Ausführung der Regeln auf ihre einzelnen Mitglieder, sodass keine einzelne Gruppe mehr übrig ist, die abgeglichen werden kann.
+
+00:08:53.880 --> 00:08:57.660
+Um auf an eine Gruppe gesendet, die E-Mails zu reagieren, verwenden sie eine Bedingung, die stattdessen die beiden Felder berücksichtigt.
+
+00:08:57.820 --> 00:08:59.740
+Die Gruppenmitgliedschaft unterliegt ebenfalls einer Verzögerung.
+
+00:09:00.000 --> 00:09:04.460
+Regeln speichern im Cashwert sowas gehört und dieser Cash wird etwa alle drei Stunden ohne Garantie aktualisiert.
+
+00:09:04.840 --> 00:09:08.060
+Dynamische Gruppen, die aus einer Abfrage erstellt werden, aktualisieren ihre Mitgliedschaft einmal täglich.
+
+00:09:08.480 --> 00:09:11.580
+Wenn sie also jemanden zu einer Gruppe hinzufügen, kann es immer noch dazu kommen, dass die Regel diese Person erzeugen.
+
+00:09:11.920 --> 00:09:13.020
+Das ist normal und kein Fehler.
+
+00:09:13.540 --> 00:09:15.140
+Keines dieser Dinge schwächt die Regeln für die Nachrichten.
+
+00:09:15.140 --> 00:09:19.840
+Es bedeutet lediglich, dass Sie diese respektieren sollten, da eine einzige Regel mit der falschen Aktion dazu führen kann,
+
+00:09:19.920 --> 00:09:23.800
+dass echte Rechnungen, echte Bestellungen, echte Bestellungen, echte Gehaltschecks nicht im Posteingang an der Person sind.
+
+00:09:23.960 --> 00:09:25.680
+Behandeln Sie jede Regel wie eine Änderung an der Produktion.
+
+00:09:25.980 --> 00:09:27.160
+Testen Sie sie und behalten Sie eine Gruppe.
+
+00:09:27.460 --> 00:09:29.420
+Durch Testen finden Sie diese Hindernisse, bevor Sie sie finden.
+
+00:09:30.380 --> 00:09:31.660
+Testen Sie eine Regel, bevor sie zuschlägt.
+
+00:09:32.360 --> 00:09:35.800
+Exchange bietet drei Modi für eine Regel und der Unterschied besteht darin, wie viel Sie tun darf.
+
+00:09:36.360 --> 00:09:38.720
+Erzwingen bedeutet, dass die Regel aktiv ist und jede Aktion ausgeführt wird.
+
+00:09:39.380 --> 00:09:44.760
+Testen ohne Richtlinientipps bedeutet, dass die Regel zwar beobachtet wird, aber nur der Vorfallbericht ausgeführt wird, also keine Änderung an der Zustellung.
+
+00:09:45.340 --> 00:09:51.040
+Testen mit Richtlinientipps ist der Mittelweg, bei dem dem Absender in Outlook eine kleine Notiz mit dem Namen Richtlinientipp angezeigt werden kann,
+
+00:09:51.340 --> 00:09:52.980
+die Zustellungsaktion aber trotzdem zurückgehalten wird.
+
+00:09:53.720 --> 00:09:55.520
+Dieser Mittelweg ist der, auf den Sie sich verlassen sollten.
+
+00:09:56.180 --> 00:09:59.420
+Ein Richtlinientipp teilt dem Verfasser der Nachricht mit, dass eine Regel von Interesse ist,
+
+00:09:59.760 --> 00:10:02.460
+sodass er erfährt, dass die Regel existiert, bevor sie mit der Durchsetzung beginnt.
+
+00:10:03.100 --> 00:10:07.500
+Sie können eine Regel eine Woche lang im Testmodus ausführen, beobachten, was sie abgefangen hätte und sie erst dann auf Erzwingen umstellen.
+
+00:10:07.800 --> 00:10:09.260
+Der Testmodus ist jedoch kein Freifahrtschein.
+
+00:10:09.700 --> 00:10:12.580
+Hier erfahren Sie, was eine Regel bewirkt hätte, nicht wie sich ein aktiver Posteingang anfühlen würde.
+
+00:10:12.580 --> 00:10:15.720
+Behalten Sie den Bericht daher einige Tage lang im Auge, nachdem Sie die Regel erzwungen.
+
+00:10:16.320 --> 00:10:20.860
+Eine Regel, die in einer ruhigen Woche sauber aussah, kann sich bei einem Anstieg des Nachrichtenaufkommens anders verhalten.
+
+00:10:21.380 --> 00:10:23.920
+Nachdem eine Regel aktiv wurde, haben Sie zwei Möglichkeiten, um zu überbrütern.
+
+00:10:24.480 --> 00:10:28.960
+Die Nachrichtenablaufverfolgung verfolgt eine einzelne Nachricht auf Ihrem Weg und zeigt an, ob sie von einer Richtlinie für Datenverlust berührt wurde.
+
+00:10:28.960 --> 00:10:35.120
+Der Transportregelbericht zählt, wie oft jede Regel übereinstimmte, sodass Sie eine Regel erkennen können, die viel häufiger ausgelöst wird als erwartet.
+
+00:10:35.660 --> 00:10:39.340
+Die meisten dieser Daten werden innerhalb eines Tages angezeigt. Bei einigen kann es jedoch länger dauern.
+
+00:10:39.720 --> 00:10:42.660
+Eine einfache Angewohnheit rettet Karrieren, da Regeln keinen Verlauf speichern.
+
+00:10:42.980 --> 00:10:46.040
+Exportieren Sie eine Kopie Ihrer gesamten Regelsammlung, bevor Sie Änderungen vornehmen.
+
+00:10:46.440 --> 00:10:52.380
+Im Admin-Center können Sie auch eine einzelne Regel duplizieren und die Kopie bearbeiten, sodass Sie das alte Verhalten beibehalten können, während Sie das neue testen.
+
+00:10:53.180 --> 00:10:56.940
+Wenn etwas schief geht, können Sie auf eine Regel zurückgreifen, anstatt Sie erst im Gedächtnis neu erstellen zu müssen.
+
+00:10:57.540 --> 00:11:01.940
+So arbeiten Sie sicher. Das Gesamtbild zeigt, wo all dies in Microsoft 365 angesiedelt ist.
+
+00:11:02.480 --> 00:11:10.340
+Wo dies in Microsoft 365 und Azure angesiedelt ist, befinden sich Nachrichtenflussregeln in Exchange Online, dem E-Mail-Dienst, der sich in Microsoft 365 befindet.
+
+00:11:10.340 --> 00:11:17.860
+Sie verwalten sie über das Exchange Admin Center oder über PowerShell, wenn Sie lieber Befehle eingeben und die richtigen Nachrichtenflussberechtigungen benötigen, um Änderungen vorzunehmen.
+
+00:11:18.340 --> 00:11:21.480
+Dasselbe Konzept gibt es lokal in Exchange Server, aber die Grenzwerte sind anders.
+
+00:11:21.480 --> 00:11:24.980
+Übertragen Sie die Cloud-Nummern also nicht auf einen Server. Sie funktionieren nicht allein.
+
+00:11:25.560 --> 00:11:30.160
+Anti-Spam-Filter und Defender für Office 365 bekämpfen Bedrohungen wie Malware und Phishing.
+
+00:11:30.740 --> 00:11:33.440
+Microsoft Purview Data Loss Prevention überwacht vertrauliche Informationen.
+
+00:11:34.200 --> 00:11:36.620
+Connectors entscheiden über den ein- und ausgehenden Pfad von E-Mails.
+
+00:11:37.040 --> 00:11:39.020
+Eine Nachrichtenflussregel kann sich mit jeder dieser Regeln überschneiden.
+
+00:11:39.380 --> 00:11:45.000
+Wenn dies der Fall ist, werden die Teile zusammengetestet, da zwei Steuerelemente für dieselbe Nachricht zu einem Ergebnis führen können, es keiner allein liefern würde.
+
+00:11:45.560 --> 00:11:48.740
+Es ist hilfreich zu wissen, dass dies in den meisten Unternehmen separate Tools und separaten Besitzer sind.
+
+00:11:48.740 --> 00:11:55.840
+Der E-Mail-Administrator ist für die Regeln des Nachrichtenflusses zuständig, das Sicherheitsteam für die Richtlinien zu bedrohen und das Compliance-Team für die Verhinderung von Datenverlusten.
+
+00:11:56.180 --> 00:11:58.980
+Genau aus diesem Grund müssen Sie miteinander sprechen, bevor eine neue Regel eingeführt wird.
+
+00:11:59.320 --> 00:12:02.360
+Ihr kommt Azure tatsächlich zum Einsatz und zwar an den Rändern und nicht im Zentrum.
+
+00:12:02.920 --> 00:12:09.880
+Die Identität stammt vom Microsoft Enter ID, dem Dienst, den die Leute immer noch Azure ID nennen, und so weiß eine Regel, wer der Vorgesetzte einer Person ist oder wer zu einer Gruppe gehört.
+
+00:12:09.880 --> 00:12:16.200
+Die Aktionen stützen sich auf Azure Rights Management und Azure Information Protection, die Mechanismen, hinter dem Nachrichtenschutz.
+
+00:12:17.000 --> 00:12:17.940
+Die ehrliche Darstellung ist einfach.
+
+00:12:18.440 --> 00:12:21.420
+Dies ist eine E-Mail-Funktion in Microsoft 365 und kein Azure-Projekt.
+
+00:12:22.140 --> 00:12:24.340
+Azure ist in der Nähe, da Identität und Verschlüsselung dort vorhanden sind.
+
+00:12:24.840 --> 00:12:28.160
+Sie müssen die Azure-Infrastruktur jedoch nicht verstehen, um zu verstehen, was eine Regel bewirkt.
+
+00:12:28.960 --> 00:12:31.700
+Anhand der gezeichneten Karte sind die Fehler, die Anfänger machen, leichter zu benennen.
+
+00:12:31.700 --> 00:12:33.900
+Die Fehler, die Anfänger machen
+
+00:12:33.900 --> 00:12:36.900
+Ein Fehler ist das Verwechseln von Transportregeln und Posteingangsregeln.
+
+00:12:37.300 --> 00:12:40.020
+Sie klingen ähnlich, erfüllen unterschiedliche Aufgaben und sind an verschiedenen Orten fahren.
+
+00:12:40.560 --> 00:12:44.820
+Wenn ein Nutzer angibt, dass seine E-Mails verschwinden, müssen sie beide überprüfen, da ein Bericht aus der Anregel nicht, die der anderen anzeigt.
+
+00:12:45.480 --> 00:12:47.660
+Eine weitere Falle besteht darin, eine zu weit gefasste Regel zu tun.
+
+00:12:47.900 --> 00:12:51.020
+Wenn Ihre Bedingung das Wort Rechnung ist, fangen Sie nicht nur die Rechnung ab, die Sie meinten,
+
+00:12:51.220 --> 00:12:55.240
+sondern auch die Newsletter, die Support-Tickets und die Mittagessensbestellung einer Person, in der das Wort zufällig vorkommt.
+
+00:12:56.000 --> 00:12:58.980
+Weitgefasste Übereinstimmungen wirken beim Testen harmlos, sorgen aber in der Produktion für Verwirrung.
+
+00:12:58.980 --> 00:13:00.340
+Auch Bestellung bringt die Leute aus dem Konzept.
+
+00:13:00.660 --> 00:13:04.760
+Eine weit gefasste Regel ganz oben kann gewinnen und die sorgfältig geschriebene Regel, die Sie darunter geschrieben haben, wird mir ausgeführt.
+
+00:13:04.940 --> 00:13:08.960
+Bevor Sie eine Priorität ändern, sehen Sie sich die Regeln direkt über und unter der Regel an, die Sie verschieben.
+
+00:13:09.920 --> 00:13:11.880
+Testaktionen zu vergessen, ist eine weitere leicht zu übersehende Regel.
+
+00:13:12.300 --> 00:13:18.300
+Ein Vorfallbericht oder ein zusätzlicher Empfänger, der beim Testen sinnvoll war, wird zu einem Strom interner E-Mails, sobald die Regel live geht.
+
+00:13:18.900 --> 00:13:20.840
+Überprüfen Sie die Aktion also noch einmal, bevor Sie sich erzwingen.
+
+00:13:21.700 --> 00:13:28.220
+Das Vergessen von Ausnahmen ist der letzte Punkt, der sich am härtesten bei genehmigten Partnern und automatisierten Absendern wie Scannern und Abrechnungssysteme bemerkbar macht.
+
+00:13:28.220 --> 00:13:32.580
+Eine alte Ausnahme für einen Lieferanten, der vor zwei Jahren gegangen ist, kann zu einer Lieferlücke führen, die man bemerkt.
+
+00:13:32.880 --> 00:13:36.620
+Keine dieser Regelungen ist exotisch. Es handelt sich um ganz normale Situationen, in denen eine gute Idee schiefgehen kann.
+
+00:13:36.980 --> 00:13:40.400
+Jede dieser Situationen lässt sich beheben, indem man die Regel vor der Umsetzung in einfachen Worten niederschreibt.
+
+00:13:40.640 --> 00:13:43.540
+Eine gute Regel liest sich wie ein Satz, den man laut aussprechen könnte, etwa so.
+
+00:13:43.820 --> 00:13:48.720
+Wenn jemand außerhalb des Unternehmens eine Rechnung schickt, füge eine Warnung hinzu, es sei denn, der Empfänger steht auf der Liste der genehmigten Partner.
+
+00:13:49.220 --> 00:13:52.420
+Wenn man die Regel nicht so klar aussprechen kann, ist sie wahrscheinlich auch noch nicht klar.
+
+00:13:52.820 --> 00:13:52.960
+So.
+
+00:13:52.960 --> 00:13:54.960
+Was man sich merken sollte.
+
+00:13:55.580 --> 00:13:56.460
+Hier kommen wir also zum Punkt.
+
+00:13:56.900 --> 00:14:01.560
+Diese stille Anweisung befindet sich im Pfad ihrer E-Mails, entscheidet, was jede Nachricht benötigt und reagiert vor der Zustellung.
+
+00:14:01.860 --> 00:14:05.120
+Sie basiert auf drei Fragen dazu, was abgefangen, was übersprungen und was getan werden soll.
+
+00:14:05.400 --> 00:14:06.420
+Eine Frage noch, bevor Sie gehen?
+
+00:14:06.420 --> 00:14:14.960
+Wenn Sie morgen eine einzelne Regel einrichten könnten, wäre es das Warnbanner bei externen E-Mails, der Verschlüsselungsschritt für sensible Dateien oder die Regel, die eine Nachricht stoppt, bevor sie ankommt.
+
+00:14:16.120 --> 00:14:18.020
+Ihre Antwort sagt viel darüber aus, was Ihnen am meisten sorgenbereit.
+
+00:14:18.300 --> 00:14:25.120
+Wenn Ihnen das Thema jetzt weniger einschüchternd vorkommt, abonnieren Sie M365FM, um die Tools und die Denkweise zu erlernen, die die Zukunft der Arbeit prägen.

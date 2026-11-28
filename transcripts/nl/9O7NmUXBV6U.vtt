@@ -1,0 +1,5020 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.880
+40.000 documenten, elk daarvan is voorzien van een label en geen van alle is op een zinvolle manier beveiligd.
+
+00:00:06.040 --> 00:00:11.880
+Geen versleuteling, geen toegangsregel, geen markering die opvalt, slechts een klein woordje in de hoek van een bestand dat niemand leest.
+
+00:00:12.120 --> 00:00:15.840
+Zo ziet een mislukte uithol eruit en meestal ziet het er op het dashboard uit als een succes.
+
+00:00:16.100 --> 00:00:17.220
+Dit is waarom dat gebeurt.
+
+00:00:18.120 --> 00:00:19.680
+Vertrouwelijkheidslabels falen niet door de tools.
+
+00:00:19.960 --> 00:00:21.760
+Ze falen door het model dat erachter zit.
+
+00:00:21.960 --> 00:00:24.580
+Het oude model behandelt klassificatie als archiveren.
+
+00:00:24.700 --> 00:00:26.860
+Je sorteert een document in een map en loopt weg.
+
+00:00:26.860 --> 00:00:33.180
+Het nieuwe model behandelt klassificatie als context, een label dat met de data meer reist en elk systeem vertelt wat er mee moet gebeuren.
+
+00:00:33.380 --> 00:00:37.680
+Dit is dus het draaiboek, van pilot naar productie en het punt waarop Copilot de belangen verandert.
+
+00:00:37.860 --> 00:00:40.760
+Maar eerst een kort woordje over waarom deze aflevering bestaat.
+
+00:00:40.960 --> 00:00:43.180
+Intro, abonneerherinnering en sponsorblok.
+
+00:00:43.340 --> 00:00:46.780
+Als je hier nieuw bent, abonneer je dan op de M365FM podcast.
+
+00:00:47.000 --> 00:00:48.720
+En dit onderwerp is een goede reden waarom.
+
+00:00:48.920 --> 00:00:50.360
+Labels zijn geen eenmalig project.
+
+00:00:50.580 --> 00:00:54.440
+Functies veranderen, standaarden veranderen en Copilot blijft de regels onder je voeten vandaan halen.
+
+00:00:54.720 --> 00:00:56.220
+Bijblijven is een onderdeel van het werk.
+
+00:00:56.220 --> 00:00:59.500
+Nu een kort woordje over onze sponsor, Stella Migrator for Exchange.
+
+00:00:59.680 --> 00:01:01.760
+Denk na over wat er gebeurt tijdens een migratie.
+
+00:01:01.940 --> 00:01:05.540
+Postvakken verhuizen, mappen verhuizen, items worden op een nieuwe plek opnieuw opgebouwd.
+
+00:01:05.680 --> 00:01:10.480
+En als je klassificatie die reis niet overleeft, heb je zojuist de context gewist waar je zo hard aan hebt gewerkt.
+
+00:01:10.780 --> 00:01:14.300
+Gelabelde e-mail komt zonder label aan of versleutelde inhoud komt onleesbaar aan.
+
+00:01:14.520 --> 00:01:15.320
+Dat is de lay hier.
+
+00:01:16.160 --> 00:01:19.140
+Dataklassificatie moet onderdeel zijn van het migratieplan, niet een bijzaak.
+
+00:01:19.280 --> 00:01:22.980
+Stella Migrator for Exchange is gebouwd voor het verplaatsen van postvakken tussen exchange-omgevingen,
+
+00:01:23.100 --> 00:01:24.980
+dus het is de moeite waard als er een verhuizing op de planning staat.
+
+00:01:24.980 --> 00:01:26.460
+De link staat in de beschrijving.
+
+00:01:26.640 --> 00:01:27.980
+Oké, hier is de routekaart.
+
+00:01:28.140 --> 00:01:31.040
+We beginnen met taxonomie, welke labels maak je aan en wat betekent elk label.
+
+00:01:31.240 --> 00:01:34.960
+Dan versleuteling, de grootste beslissing in het programma en degene die de meeste pijn veroorzaakt.
+
+00:01:35.140 --> 00:01:38.880
+Vervolgens standaarden en verplichte labels, hoe je gedrag vormgeeft zonder trainingsmateriaal.
+
+00:01:39.040 --> 00:01:42.580
+Daarna automatisering, automatisch labelen en hoe je dit afstelt zonder vertrouwen te schaden.
+
+00:01:42.760 --> 00:01:44.940
+Vervolgens containers, teams, groepen en sites.
+
+00:01:45.240 --> 00:01:47.780
+Dan adoptie en training, want mensen bepalen of dit werkt.
+
+00:01:47.920 --> 00:01:51.280
+En tot slot Copilot, waar elke sluikroute die je hebt genomen weer boven water komt.
+
+00:01:51.280 --> 00:01:53.080
+Eén opmerking over hoe ik dit ga aanpakken.
+
+00:01:53.220 --> 00:01:55.320
+Eerst de strategische visie, daarna de technische diepgang.
+
+00:01:55.500 --> 00:01:57.460
+Dus als je dit financeert, weet je wat je moet vragen.
+
+00:01:57.600 --> 00:01:59.700
+En als je het bouwt, weet je wat je moet configureren.
+
+00:01:59.880 --> 00:02:04.080
+Maar eerst moeten we kijken naar de aanname die stilletjes de meeste uitholtrajecten om zeep helpt.
+
+00:02:04.300 --> 00:02:06.620
+Waarom falen de meeste labelprogramma's stilletjes?
+
+00:02:06.800 --> 00:02:09.220
+In de meeste organisaties verloopt het verhaal hetzelfde.
+
+00:02:09.400 --> 00:02:10.700
+Iemand organiseert een workshop.
+
+00:02:11.020 --> 00:02:14.100
+Een groep slimme mensen zit in een kamer en discussieert over wat vertrouwelijk is.
+
+00:02:14.300 --> 00:02:15.740
+Ze produceren een taxonomie.
+
+00:02:15.880 --> 00:02:17.100
+Er is een dia met kleurtjes.
+
+00:02:17.320 --> 00:02:19.060
+Dan worden de labels aangemaakt in de portal.
+
+00:02:19.060 --> 00:02:20.860
+Er wordt een lanceringsc-mail verstuurd.
+
+00:02:21.000 --> 00:02:23.640
+Misschien is er een korte video, misschien een pagina op het intranet.
+
+00:02:23.800 --> 00:02:24.420
+En dan stilte.
+
+00:02:24.600 --> 00:02:25.340
+Niemand klaagt.
+
+00:02:25.560 --> 00:02:26.520
+Niemand viert feest.
+
+00:02:26.680 --> 00:02:30.000
+De labels staan in het lint en mensen blijven bestanden opslaan zoals ze altijd al deden.
+
+00:02:30.140 --> 00:02:32.900
+Wat er meestal gebeurt, is dat het project als voltooid wordt gemarkeerd.
+
+00:02:33.060 --> 00:02:34.160
+De ticket wordt gesloten.
+
+00:02:34.360 --> 00:02:35.980
+De stuurgroep gaat door naar het volgende.
+
+00:02:36.220 --> 00:02:41.580
+En zes maanden later trekt iemand een rapport en ontdekt dat de meeste bestanden geen label hebben of dat hetzelfde label uit gewoonte is toegepast.
+
+00:02:41.820 --> 00:02:43.060
+Labels worden aangemaakt.
+
+00:02:43.240 --> 00:02:44.220
+Gedrag verandert niet.
+
+00:02:44.440 --> 00:02:45.240
+Dat is het patroon.
+
+00:02:45.360 --> 00:02:46.480
+En het is de moeite waard om te vragen.
+
+00:02:46.480 --> 00:02:48.860
+Waarom? Want de mensen die deze programma's runnen zijn niet slordig.
+
+00:02:49.000 --> 00:02:49.800
+Ze deden de workshop.
+
+00:02:50.140 --> 00:02:51.140
+Ze schreven het beleid.
+
+00:02:51.320 --> 00:02:52.260
+Ze stuurden de e-mail.
+
+00:02:52.440 --> 00:02:54.200
+Het probleem is de aanname die eronder ligt.
+
+00:02:54.380 --> 00:02:57.340
+De aanname is dat gebruikers correct zullen klassificeren omdat we het vriendelijk vragen.
+
+00:02:57.560 --> 00:02:59.280
+Denk eens na over wat dat werkelijk vereist.
+
+00:02:59.480 --> 00:03:01.820
+Iemand is om vijf uur smiddags een spreadsheet aan het afronden.
+
+00:03:02.060 --> 00:03:03.460
+Ze denken niet aan databeheer.
+
+00:03:03.660 --> 00:03:06.860
+Ze denken eraan om het bestand naar een collega te sturen zodat ze naar huis kunnen.
+
+00:03:07.020 --> 00:03:10.940
+En nu moeten ze stoppen, een lijst met labels lezen, zich een beleid herinneren dat ze één keer zagen.
+
+00:03:10.940 --> 00:03:17.160
+De inhoud van het bestand daaraan toetsen en elke keer de juiste kiezen, voor elk bestand, elke e-mail, elke presentatie, jarenlang.
+
+00:03:17.360 --> 00:03:18.360
+Dat is geen controle.
+
+00:03:18.660 --> 00:03:19.340
+Dat is een hoop.
+
+00:03:19.500 --> 00:03:20.540
+En hoop schaalt slecht.
+
+00:03:20.740 --> 00:03:23.180
+Dus waar je uiteindelijk op uitkomt zijn een van twee resultaten.
+
+00:03:23.400 --> 00:03:29.100
+Mensen negeren de labelkiezer volledig of ze kiezen wat het makkelijkst is, meestal de eerste in de lijst of degene die ze de vorige keer kozen.
+
+00:03:29.340 --> 00:03:32.660
+Beide uitkomsten zien er goed uit in een uitrolrapport dat gelabelde items stelt.
+
+00:03:32.900 --> 00:03:34.300
+Geen van beide beschermt iets.
+
+00:03:34.500 --> 00:03:35.800
+En hier wordt het ongemakkelijk.
+
+00:03:35.980 --> 00:03:37.800
+Een label zonder handhaving is een sticker.
+
+00:03:38.040 --> 00:03:39.580
+Er staat vertrouwelijk op het bestand.
+
+00:03:39.580 --> 00:03:41.900
+Je zou zelfs een koptekst over de pagina kunnen zetten.
+
+00:03:42.060 --> 00:03:50.060
+Maar als het bestand nog steeds naar een persoonlijk adres kan worden gemaild, gedeeld met iedereen die de link heeft en geopend door honderd mensen die geen reden hebben om het te zien, dan is het woord op de pagina versiering.
+
+00:03:50.240 --> 00:03:51.400
+Dat is compliance theater.
+
+00:03:51.640 --> 00:03:53.240
+Het levert bewijs dat je iets hebt gedaan.
+
+00:03:53.460 --> 00:03:54.800
+Het levert geen controle op.
+
+00:03:54.960 --> 00:03:56.740
+Aditors kunnen er een tijdje tevreden mee zijn.
+
+00:03:57.000 --> 00:03:58.080
+Dashboards kunnen groen zijn.
+
+00:03:58.280 --> 00:04:00.960
+Maar op de dag dat er iets lekt, vraag niemand of het bestand een label had.
+
+00:04:01.120 --> 00:04:02.420
+Ze vragen wat het label deed.
+
+00:04:02.580 --> 00:04:06.280
+Als het eerlijke antwoord niets is, heb je een probleem dat geen enkele hoeveelheid training oplost.
+
+00:04:06.280 --> 00:04:10.660
+Ik wil nu de term noemen voor wat hierachter zit, omdat die in deze aflevering steeds terugkomt.
+
+00:04:10.720 --> 00:04:11.580
+Ik noem het het model.
+
+00:04:11.820 --> 00:04:13.020
+Er zijn twee versies van.
+
+00:04:13.220 --> 00:04:16.000
+In de eerste versie is klassificatie een taak voor de gebruiker.
+
+00:04:16.200 --> 00:04:23.320
+Het systeem wacht tot een persoon een beslissing neemt en de kwaliteit van je beveiliging hangt af van hoeveel mensen onder druk de juiste beslissing op tijd nemen.
+
+00:04:23.540 --> 00:04:26.200
+In de tweede versie is klassificatiesysteem gedrag.
+
+00:04:26.400 --> 00:04:27.980
+Het platform neemt de meeste beslissingen.
+
+00:04:28.240 --> 00:04:29.840
+Standaarden passen een verstandig label toe.
+
+00:04:30.100 --> 00:04:31.920
+Detectie vindt gevoelige inhoud en labelt deze.
+
+00:04:32.300 --> 00:04:33.980
+Containers dragen hun eigen regels.
+
+00:04:34.180 --> 00:04:36.900
+De gebruiker handelt de uitzonderingen af en dat zijn er veel minder.
+
+00:04:37.180 --> 00:04:40.100
+Hetzelfde product, dezelfde labels, een totaal ander resultaat.
+
+00:04:40.280 --> 00:04:43.800
+De meeste mislukte programma's zijn gebaseerd op de eerste versie zonder dat er ooit voor gekozen is.
+
+00:04:44.020 --> 00:04:47.380
+Niemand is gaan zitten en heeft besloten dat beveiliging zou afhangen van vrijwillige inzet.
+
+00:04:47.520 --> 00:04:51.380
+Het gebeurde gewoon omdat de eerste versie de standaard manier is om over klassificatie na te denken.
+
+00:04:51.560 --> 00:04:52.740
+Je vraagt mensen om het te doen.
+
+00:04:52.960 --> 00:04:56.480
+De rest van dit draaiboek gaat over het doelgericht overstappen naar de tweede versie in fase.
+
+00:04:56.700 --> 00:05:00.300
+Maar voordat we het model kunnen repareren, moeten we nauwkeurig zijn over iets eenvoudigere zaken.
+
+00:05:00.300 --> 00:05:02.160
+Wat is een vertrouwelijkheidslabel eigenlijk?
+
+00:05:02.460 --> 00:05:04.380
+Wat een vertrouwelijkheidslabel werkelijk is?
+
+00:05:04.540 --> 00:05:07.740
+Een vertrouwelijkheidslabel bestaat uit twee onderdelen die zijn samengevoegd.
+
+00:05:07.840 --> 00:05:12.600
+Het eerste is metadata, een klein stukje informatie in het bestand dat zegt, dit is vertrouwelijk.
+
+00:05:12.820 --> 00:05:14.060
+Dat deel is slechts een label.
+
+00:05:14.300 --> 00:05:17.880
+Het tweede is optionele handhaving en het woord dat daar telt is optioneel.
+
+00:05:18.100 --> 00:05:22.460
+Het label kan ook een markering aanbrengen, zoals een koptekst, voetekst of watermerk.
+
+00:05:22.560 --> 00:05:24.000
+Het kan de inhoud versleutelen.
+
+00:05:24.200 --> 00:05:27.840
+Het kan bepalen wie het mag openen en wat ze kunnen doen zodra het geopend is.
+
+00:05:27.840 --> 00:05:31.300
+Dus een label kan alleen een label zijn of een label met tanden.
+
+00:05:31.580 --> 00:05:32.920
+Dat bepaal je per label.
+
+00:05:33.180 --> 00:05:36.820
+Dit is de eigenschap die dit anders maakt dan bijna al het andere dat je beheert.
+
+00:05:37.000 --> 00:05:39.780
+Het label reist mee met het bestand, niet met de locatie.
+
+00:05:40.040 --> 00:05:42.080
+Denk na over hoe de meeste beveiliging werkt.
+
+00:05:42.260 --> 00:05:47.980
+Je beveiligt de bibliotheek, de site, de mailbox en op het moment dat een bestand die plek verlaat, blijft de beveiliging achter.
+
+00:05:48.180 --> 00:05:49.260
+Een label werkt niet zo.
+
+00:05:49.460 --> 00:05:51.180
+Het is in het document zelf geschreven.
+
+00:05:51.180 --> 00:05:57.020
+Iemand download het bestand, kopieert het naar een USB-stick, voegt het toe aan een bericht, zet het in een persoonlijke cloudmap en het label gaat mee.
+
+00:05:57.160 --> 00:05:58.960
+De versleuteling gaat mee, de regels gaan mee.
+
+00:05:59.160 --> 00:06:01.480
+Dat is het hele idee van context die met de data mee reist.
+
+00:06:01.660 --> 00:06:03.780
+De data draagt zijn eigen instructies met zich mee.
+
+00:06:03.960 --> 00:06:07.160
+Maar ik wil hier voorzichtig zijn, want mensen verwachten meer van labels dan ze waarmaken.
+
+00:06:07.320 --> 00:06:08.800
+Een label vindt uit zichzelf niets.
+
+00:06:08.980 --> 00:06:11.880
+Het heeft geen idee welke bestanden gevoelig zijn totdat iets het vertelt.
+
+00:06:12.060 --> 00:06:15.840
+Een persoon past het toe, een standaardinstelling past het toe of een detectieregel past het toe.
+
+00:06:15.980 --> 00:06:18.220
+Tot die tijd blijft het bestand gewoon ongemerkt staan.
+
+00:06:18.220 --> 00:06:20.380
+En een label lost overmatig delen niet op.
+
+00:06:20.540 --> 00:06:26.340
+Als een site openstaat voor het hele bedrijf en een bestand daarin wordt gelabeld als vertrouwelijk zonder versleuteling, kan het hele bedrijf het nog steeds openen.
+
+00:06:26.460 --> 00:06:28.240
+Het label veranderde, de toegang niet.
+
+00:06:28.460 --> 00:06:33.540
+Dit is waar programma's in verwarring raken, dus laat me labels naast de andere controles plaatsen waarmee ze vaak op een hoop worden gegooid.
+
+00:06:33.740 --> 00:06:36.060
+Data loss prevention kijkt naar wat mensen met inhoud doen.
+
+00:06:36.260 --> 00:06:40.700
+Het kijkt naar een actie, zoals het versturen van een bestand buiten het bedrijf, en blokkeert dit of geeft een waarschuwing.
+
+00:06:40.940 --> 00:06:43.880
+Labels kunnen die beleidsregels voeden, maar het beleid is een afzonderlijke controle.
+
+00:06:43.880 --> 00:06:47.220
+Bewaarbeleid bepaalt hoe lang inhoud blijft bestaan en wanneer het wordt verwijderd.
+
+00:06:47.320 --> 00:06:48.340
+Een heel andere vraag.
+
+00:06:48.540 --> 00:06:50.340
+Het gaat om tijd, niet om geheimhouding.
+
+00:06:51.000 --> 00:06:54.440
+Informatiebarrières voorkomen dat specifieke groepen mensen met elkaar communiceren of samenwerken.
+
+00:06:54.640 --> 00:06:57.020
+Dat gaat over wie met wie praat, niet over de inhoud zelf.
+
+00:06:57.260 --> 00:06:58.580
+Labels bestaan naast deze drie.
+
+00:06:58.780 --> 00:07:00.620
+Elk van deze beantwoordt een andere vraag.
+
+00:07:00.880 --> 00:07:01.380
+Wat is dit?
+
+00:07:01.520 --> 00:07:02.580
+Hoe lang bewaren we dit?
+
+00:07:02.780 --> 00:07:03.960
+Wat kunnen mensen ermee doen?
+
+00:07:04.180 --> 00:07:05.020
+Wie kan wie bereiken?
+
+00:07:05.200 --> 00:07:11.020
+Het label is degene die de eerste vraag beantwoordt en het doet dat op een manier die de andere controles kunnen lezen, wat ons beide echte waarde brengt.
+
+00:07:11.020 --> 00:07:12.800
+Een label kan drie taken uitvoeren.
+
+00:07:12.960 --> 00:07:14.380
+De eerste taak is signaleren.
+
+00:07:14.560 --> 00:07:16.800
+Het vertelt een persoon, ga hier voorzichtig mee om.
+
+00:07:17.140 --> 00:07:17.940
+Markering doet dat.
+
+00:07:18.100 --> 00:07:22.780
+Het is de zwakste taak, maar het is nog steeds nuttig omdat het verwachtingen schept op het moment dat iemand iets wil delen.
+
+00:07:22.920 --> 00:07:24.260
+De tweede taak is beperken.
+
+00:07:24.500 --> 00:07:26.960
+Dit is waar versleuteling en gebruiksrechten om de hoek komen kijken.
+
+00:07:27.200 --> 00:07:31.240
+Het label zegt wie het bestand kan openen en of men het kan afdrukken, kopiëren of doorsturen.
+
+00:07:31.500 --> 00:07:32.900
+Dit is waar bescherming echt wordt.
+
+00:07:33.100 --> 00:07:35.580
+De derde taak is het activeren van andere controles.
+
+00:07:35.760 --> 00:07:38.660
+Een label kan de voorwaarden zijn waar een DLP-regel naar zoekt.
+
+00:07:38.660 --> 00:07:41.700
+Het kan de deelinstellingen van een werkruimte van een team bepalen.
+
+00:07:41.880 --> 00:07:44.460
+Het kan copilot vertellen hoe om te gaan met wat het vindt.
+
+00:07:44.540 --> 00:07:47.160
+Bij deze taak voert het label zelf de bescherming niet uit.
+
+00:07:47.320 --> 00:07:49.280
+Het is de schakelaar die andere systemen uitlezen.
+
+00:07:49.480 --> 00:07:51.400
+De meeste programma's gebruiken alleen de eerste taak.
+
+00:07:51.580 --> 00:07:53.260
+Ze zetten een woord op een bestand en stoppen daar.
+
+00:07:53.440 --> 00:07:56.320
+Volwassen programma's gebruiken alle drie en beslissen bewust welk label wat doet.
+
+00:07:56.500 --> 00:07:58.340
+Een openbaar label signaleert misschien alleen.
+
+00:07:58.520 --> 00:08:00.940
+Een top-label kan signaleren, beperken en triggeren.
+
+00:08:01.060 --> 00:08:02.380
+Maar merk op wat dat betekent.
+
+00:08:02.600 --> 00:08:04.980
+Die taken werken alleen als labels betekenis hebben.
+
+00:08:04.980 --> 00:08:09.120
+Als mensen het verschil tussen twee labels niet zien, komen beperkingen op verkeerde bestanden
+
+00:08:09.120 --> 00:08:10.620
+en triggers op verkeerde momenten.
+
+00:08:10.760 --> 00:08:14.980
+Dus voordat we instellingen configureren, moeten we praten over wat je hiermee eigenlijk koopt.
+
+00:08:15.200 --> 00:08:16.580
+Daarna bouwen we de structuur.
+
+00:08:16.760 --> 00:08:19.120
+De executive business case, wat koop je precies?
+
+00:08:19.360 --> 00:08:23.420
+Als jij het budget goedkeurt, vergeet het portaal even en stel een andere vraag.
+
+00:08:23.620 --> 00:08:25.060
+Voor welk resultaat betaal ik?
+
+00:08:25.200 --> 00:08:25.800
+Er zijn er drie.
+
+00:08:25.940 --> 00:08:29.560
+Minder blootstelling, bewijsbaar controle en een veilige manier om i te gebruiken.
+
+00:08:29.800 --> 00:08:34.080
+Minder blootstelling betekent minder plekken waar gevoelige data openstaat voor onbevoegde.
+
+00:08:34.080 --> 00:08:38.860
+Bewijsbaar controle betekent dat als een auditor, klant of bestuurslid vraagt hoe je informatie
+
+00:08:38.860 --> 00:08:42.160
+beschermt, je het kunt tonen, niet beschrijven, maar tonen.
+
+00:08:42.300 --> 00:08:46.960
+En veilige AI-adoptie betekent dat de assistentie die je medewerkers gaan gebruiken, geen verkeerde
+
+00:08:46.960 --> 00:08:48.080
+inhoud in een antwoord trekt.
+
+00:08:48.320 --> 00:08:49.480
+Dat zijn de resultaten.
+
+00:08:49.720 --> 00:08:51.300
+Al het andere is configuratie.
+
+00:08:51.560 --> 00:08:54.720
+Voordat je ergens in investeert, zijn er drie vragen voor je team.
+
+00:08:54.900 --> 00:08:58.200
+Ten eerste, wat doet een label echt met onze meest gevoelige inhoud?
+
+00:08:58.460 --> 00:09:00.020
+Niet wat er staat, maar wat het doet.
+
+00:09:00.220 --> 00:09:02.860
+Als het antwoord is dat het een banner toont, koop je een sticker.
+
+00:09:02.860 --> 00:09:06.040
+Ten tweede, hoeveel beslissingen vragen we nog van gebruikers?
+
+00:09:06.220 --> 00:09:09.860
+Als het antwoord allemaal is, ga terug naar het model waar we eerder over spraken.
+
+00:09:10.120 --> 00:09:13.640
+Dat plan leunt op perfect gedrag, en perfect gedrag is niet in te plannen.
+
+00:09:13.820 --> 00:09:17.220
+Ten derde, hoe weten we of het werkt als niemand dat in één zin kan beantwoorden?
+
+00:09:17.420 --> 00:09:19.260
+Het programma heeft geen eindstreep.
+
+00:09:19.360 --> 00:09:21.460
+Het loopt door tot mensen hun interesse verliezen.
+
+00:09:21.660 --> 00:09:23.560
+De kosten als dit misgaat zijn niet gering.
+
+00:09:23.820 --> 00:09:25.880
+Doe je het te streng, dan creëer je frictie.
+
+00:09:26.100 --> 00:09:30.240
+Mensen krijgen meldingen die ze niet begrijpen, kunnen bestanden niet openen, een partner kan het
+
+00:09:30.240 --> 00:09:32.060
+contract niet lezen, dus omzeilen ze je.
+
+00:09:32.240 --> 00:09:34.300
+Ze mailen bestanden via een persoonlijk account.
+
+00:09:34.540 --> 00:09:36.660
+Ze verplaatsen werk naar een tool die jij niet beheert.
+
+00:09:36.880 --> 00:09:40.160
+Dat is schaduw-IT, en je hebt het zelf gebouwd, bestand voor bestand.
+
+00:09:40.380 --> 00:09:42.900
+Doe je het te soepel, dan krijg je ongebruikte labels.
+
+00:09:43.200 --> 00:09:47.000
+Ze bestaan, niemand gebruikt ze, en je geld levert slechts een keuzemenu op.
+
+00:09:47.240 --> 00:09:49.380
+Beide mislukkingen lijken op een projectprobleem.
+
+00:09:49.600 --> 00:09:53.040
+Beide zijn in feite ontwerpproblemen, maar er is ook een prijs aan de andere kant, en dat
+
+00:09:53.040 --> 00:09:54.940
+is de prijs die het budgetgesprek zou moeten bepalen.
+
+00:09:55.100 --> 00:09:55.880
+De kosten van niets doen.
+
+00:09:55.880 --> 00:09:56.900
+Dit is de omslag.
+
+00:09:57.140 --> 00:09:59.440
+Jarenlang bleven slechte rechten onopgemerkt voor iedereen.
+
+00:09:59.620 --> 00:10:02.300
+Een bestand dat te breed gedeeld was, stond in een bibliotheek die niemand bekeek.
+
+00:10:02.460 --> 00:10:04.100
+Niemand vond het, dus niemand maakte zich zorgen.
+
+00:10:04.520 --> 00:10:06.140
+Onopvallendheid deed het werk dat beheer nooit deed.
+
+00:10:06.280 --> 00:10:07.520
+Copilot maakt daar een einde aan.
+
+00:10:07.660 --> 00:10:10.040
+Het brengt alles naar boven waar een gebruiker technisch al bij kon.
+
+00:10:10.200 --> 00:10:13.860
+Als een stagiair de salarisspreadsheet kan openen omdat iemand deze in 2019 met iedereen
+
+00:10:13.860 --> 00:10:16.620
+heeft gedeeld, kan de stagiair nu een vraag stellen en een antwoord krijgen dat daarop
+
+00:10:16.620 --> 00:10:17.100
+is gebaseerd.
+
+00:10:17.260 --> 00:10:18.460
+De toegang was er altijd al.
+
+00:10:18.620 --> 00:10:20.740
+De assistent maakt het alleen makkelijk om te gebruiken.
+
+00:10:20.900 --> 00:10:23.300
+Dus een labelprogramma draait niet meer alleen om compliance.
+
+00:10:23.300 --> 00:10:27.400
+Het is het voorbereidende werk voor een AI-uitrol en het overslaan ervan bespaart geen geld.
+
+00:10:27.560 --> 00:10:31.440
+Het verschuift de kosten naar de dag dat er iets gevoeligs in het chatvenster verschijnt,
+
+00:10:31.600 --> 00:10:35.200
+wat betekent dat je moet bepalen hoe je succes meet voordat je iets bouwt, niet erna.
+
+00:10:35.500 --> 00:10:38.240
+Achteraf kiest iedereen het getal dat hen er goed laat uitzien.
+
+00:10:38.400 --> 00:10:39.540
+Kiezer 3, dekking.
+
+00:10:39.820 --> 00:10:41.880
+Welk deel van je inhoud heeft überhaupt een label?
+
+00:10:42.120 --> 00:10:44.000
+Dat vertelt je hoe ver het programma reikt.
+
+00:10:44.280 --> 00:10:46.060
+Correctheid van de inhoud die is gelabeld.
+
+00:10:46.260 --> 00:10:47.740
+Hoeveel daarvan heeft het juiste label?
+
+00:10:47.940 --> 00:10:51.020
+Dat vertelt je of het bereik iets betekent en het is het moeilijkere getal om te verkrijgen,
+
+00:10:51.020 --> 00:10:52.500
+dus de meeste programma's slaan het over.
+
+00:10:52.500 --> 00:10:56.060
+Incidentreductie of minder gevoelige bestanden die belanden waar ze niet horen.
+
+00:10:56.260 --> 00:11:00.160
+Dat is het getal waar het directieteam echt om geeft, omdat het gekoppeld is aan reëel risico.
+
+00:11:00.380 --> 00:11:02.160
+Dekking zonder correctheid is ijdelheid.
+
+00:11:02.360 --> 00:11:04.680
+Correctheid zonder incidentreductie is slechts een mooi rapport.
+
+00:11:04.860 --> 00:11:07.220
+Je hebt ze alle drie nodig en je moet het er nu over eens zijn.
+
+00:11:07.400 --> 00:11:11.240
+Met het doel vastgesteld en de richting gekozen, kunnen we de structuur bouwen die het mogelijk maakt
+
+00:11:11.240 --> 00:11:12.960
+en dat begint met een afgeronde taxonomie.
+
+00:11:13.640 --> 00:11:14.800
+Ontwerpprincipes voor taxonomie.
+
+00:11:15.000 --> 00:11:17.240
+Begin met een regel die te simpel klinkt om ertoe te doen.
+
+00:11:17.460 --> 00:11:19.420
+Minder labels winnen het altijd van meer labels.
+
+00:11:19.420 --> 00:11:22.260
+Dit is wat er gebeurt in de ruimte waar de taxonomie wordt gebouwd.
+
+00:11:22.260 --> 00:11:23.880
+Elke afdeling heeft een verzoek.
+
+00:11:24.020 --> 00:11:26.060
+Legal wil een label voor vertrouwelijk materiaal.
+
+00:11:26.220 --> 00:11:27.780
+Hour wil een voor personeelsdossiers.
+
+00:11:28.040 --> 00:11:30.060
+Finance wil een voor cijfers voor aankondiging.
+
+00:11:30.220 --> 00:11:31.380
+Elk verzoek is redelijk.
+
+00:11:31.580 --> 00:11:35.740
+Op elk verzoek is het makkelijk om ja te zeggen en twintig verzoeken later heb je een menu dat niemand kan lezen.
+
+00:11:35.980 --> 00:11:36.880
+Dat is de valstrik.
+
+00:11:37.080 --> 00:11:41.260
+Elk nieuw label voelt als extra precisie, maar voor de gebruiker is elk label één keuze extra.
+
+00:11:41.500 --> 00:11:45.820
+En hoe meer keuzes er zijn, hoe groter de kans dat ze de beslissing overslaan of het eerste de beste kiezen.
+
+00:11:45.980 --> 00:11:47.480
+Je hebt geen controle toegevoegd.
+
+00:11:47.600 --> 00:11:48.740
+Je hebt ruis toegevoegd.
+
+00:11:48.860 --> 00:11:51.320
+Het tweede principe gaat over wat een label moet beschrijven.
+
+00:11:51.320 --> 00:11:55.660
+Een label moet beschrijven hoe je met de inhoud omgaat, niet wie de eigenaar is of bij welk project het hoort.
+
+00:11:55.880 --> 00:11:57.320
+Denk na over het doel van een label.
+
+00:11:57.540 --> 00:12:02.940
+Het vertelt het systeem en de gebruiker welke regels gelden, wie het mag openen, of het het bedrijf mag verlaten en of het versleuteld wordt.
+
+00:12:03.160 --> 00:12:04.360
+Dat is een verwerkingsregel.
+
+00:12:04.600 --> 00:12:06.140
+Financiën is geen verwerkingsregel.
+
+00:12:06.360 --> 00:12:07.160
+Dat is een afdeling.
+
+00:12:07.380 --> 00:12:13.260
+Twee financiële bestanden kunnen een totaal andere behandeling vereisen, terwijl een financieel bestand en een ouder bestand exact dezelfde behandeling nodig kunnen hebben.
+
+00:12:13.420 --> 00:12:19.000
+Als je labelt op afdeling, eindig je met vijf labels die hetzelfde doen en een berg bestanden die in de verkeerde categorie staan.
+
+00:12:19.000 --> 00:12:24.580
+Als je labelt op verwerking, verdient elk label zijn plek omdat elk label iets doet wat de anderen niet doen.
+
+00:12:25.140 --> 00:12:26.500
+Voor wie ontwerp je eigenlijk?
+
+00:12:26.780 --> 00:12:28.260
+Niet voor de architect met een diagram.
+
+00:12:28.600 --> 00:12:32.380
+Je ontwerpt voor iemand met een bestand open, een deadline en ongeveer drie seconden de tijd.
+
+00:12:32.580 --> 00:12:34.640
+Dat verandert de manier waarop je elke keuze toetst.
+
+00:12:34.800 --> 00:12:37.740
+Kan iemand de lijst lezen en het juiste label kiezen zonder na te hoeven denken?
+
+00:12:37.920 --> 00:12:39.520
+Kunnen ze het doen terwijl ze afgeleid zijn?
+
+00:12:39.700 --> 00:12:43.320
+Als het antwoord afhangt van het onthouden van een beleidspagina, dan is het ontwerp al mislukt.
+
+00:12:43.320 --> 00:12:47.240
+Het label moet zijn eigen betekenis dragen op het moment van beslissing, wat leidt tot naamgeving.
+
+00:12:47.420 --> 00:12:50.640
+Een nieuwe werknemer moet op de eerste dag elk label zonder training begrijpen.
+
+00:12:50.880 --> 00:12:51.820
+Dat is de standaard.
+
+00:12:52.020 --> 00:12:53.860
+Bekijk je conceptnamen met een frisse blik.
+
+00:12:54.020 --> 00:12:59.380
+Alles met een interne code, een juridische term of een niveaunummer dat alleen logisch is binnen je beleidsdocument, is een probleem.
+
+00:12:59.520 --> 00:13:01.640
+Niveau drie beperkt zegt een buitenstaander niets.
+
+00:13:02.040 --> 00:13:04.120
+Vertrouwelijk zegt ze iets, ook al is het imperfect.
+
+00:13:04.560 --> 00:13:05.500
+Duidelijke taal wint.
+
+00:13:05.660 --> 00:13:10.660
+En als je een alinea nodig hebt om het verschil tussen twee namen uit te leggen, zijn ze waarschijnlijk niet verschillend genoeg om twee labels te zijn.
+
+00:13:10.660 --> 00:13:12.840
+Voeg een korte omschrijving toe aan elk label.
+
+00:13:13.160 --> 00:13:17.820
+Gebruikers zien dit als een tooltip, één zin geschreven zoals iemand het zou zeggen, met een concreet voorbeeld.
+
+00:13:18.600 --> 00:13:23.160
+Bedrijfsinformatie die schade kan toebrengen als deze buiten het bedrijf wordt gedeeld, zoals contracten of prijzen.
+
+00:13:23.360 --> 00:13:25.220
+Die ene regel doet meer dan een presentatie.
+
+00:13:25.420 --> 00:13:28.200
+Het laatste principe, en dat is degene die de meeste teams overslaan.
+
+00:13:28.360 --> 00:13:31.000
+Test de taxonomie met echte documenten voordat je deze vastlegt.
+
+00:13:31.220 --> 00:13:33.840
+Neem een paar honderd echte bestanden, geen verzonnen voorbeelden.
+
+00:13:34.040 --> 00:13:37.680
+Echte contracten, echte spreadsheets, echte e-mail conversaties uit de bedrijfsvoering.
+
+00:13:37.680 --> 00:13:41.700
+Geef ze aan mensen die de labels daadwerkelijk gaan gebruiken en vraag hen om elk bestand te labelen.
+
+00:13:41.880 --> 00:13:43.200
+Vergelijk daarna de antwoorden.
+
+00:13:43.460 --> 00:13:44.600
+Waar zijn mensen het oneens?
+
+00:13:44.800 --> 00:13:46.440
+Dat is waar je taxonomie onduidelijk is.
+
+00:13:46.640 --> 00:13:51.240
+Als drie van de vijf mensen hetzelfde bestand op drie verschillende manieren labelen, ligt het probleem niet aan de mensen, maar aan de labels.
+
+00:13:51.440 --> 00:13:53.180
+En let op de bestanden die niemand kan indelen.
+
+00:13:53.440 --> 00:13:54.280
+Dat zijn de leemtes.
+
+00:13:54.480 --> 00:13:58.680
+Een taxonomie die er op een dia overzichtelijk uitziet, valt vaak uit elkaar bij de eerste echte stapel papierwerk.
+
+00:13:58.840 --> 00:14:00.220
+Deze test kost een paar dagen.
+
+00:14:00.220 --> 00:14:08.580
+Het overslaan ervan kost maanden, omdat je na de lancering dezelfde problemen ontdekt met duizenden bestanden die al het verkeerde label hebben, en elke wijziging betekent dat je ze allemaal moet aanpassen.
+
+00:14:08.800 --> 00:14:09.620
+Voer het vroeg uit.
+
+00:14:09.840 --> 00:14:11.700
+Voer het opnieuw uit nadat je aanpassingen hebt gedaan.
+
+00:14:11.940 --> 00:14:13.100
+Dat zijn dus de principes.
+
+00:14:13.340 --> 00:14:18.600
+Weinig labels, verwerkingsregels boven organogrammen, eenvoudige tests uit de praktijk, maar principes brengen je maar tot zover.
+
+00:14:18.780 --> 00:14:20.560
+Op een gegeven moment moet je de lijst opstellen.
+
+00:14:20.800 --> 00:14:24.120
+Dus dit is hoe een werkbare structuur eruit ziet wanneer deze wordt toegepast op een echt bedrijf.
+
+00:14:24.200 --> 00:14:26.620
+Een basis taxonomie die de confrontatie overleeft.
+
+00:14:26.780 --> 00:14:28.980
+Dit is een structuur die voor de meeste bedrijven werkt.
+
+00:14:28.980 --> 00:14:33.600
+Vier labels, maximaal vijf, openbaar, algemeen, vertrouwelijk, strikt vertrouwelijk.
+
+00:14:33.780 --> 00:14:35.280
+Openbaar is inhoud voor iedereen.
+
+00:14:35.580 --> 00:14:37.980
+Persberichten, gepubliceerde marketing, vacatures.
+
+00:14:38.320 --> 00:14:43.340
+Algemeen is het dagelijkse werkmateriaal dat binnen het bedrijf blijft, maar geen grote schade zou aanrichten als het naar buiten zou lekken.
+
+00:14:43.480 --> 00:14:46.400
+Notule van vergaderingen, interne handleidingen, projectupdates.
+
+00:14:46.620 --> 00:14:52.200
+Vertrouwelijk is bedrijfsinformatie die echte schade kan berokkenen als deze buiten de deur wordt gedeeld, zoals contracten, prijzen en klantlijsten.
+
+00:14:52.380 --> 00:14:55.620
+En strikt vertrouwelijk is materiaal waarbij een lek een ernstig incident wordt.
+
+00:14:55.620 --> 00:14:59.280
+Overname plannen, niet gepubliceerde financiële cijfers, beveiligingsarchitectuur.
+
+00:14:59.480 --> 00:15:00.460
+Let op wat die lijst doet.
+
+00:15:00.640 --> 00:15:02.820
+Elk label beantwoordt een vraag over de omgang met informatie.
+
+00:15:03.020 --> 00:15:04.100
+Mag dit het bedrijf verlaten?
+
+00:15:04.320 --> 00:15:05.720
+Wie heeft een reden nodig om het te zien?
+
+00:15:05.940 --> 00:15:08.920
+Vier stappen, en iemand kan een bestand in drie seconden op die ladder plaatsen.
+
+00:15:09.060 --> 00:15:10.620
+Nu, de vraag over sublabels.
+
+00:15:10.840 --> 00:15:12.700
+Want iemand in de workshop zal erom vragen.
+
+00:15:13.000 --> 00:15:16.940
+Sublabels helpen wanneer een enkel niveau op twee of drie specifieke manieren anders moet worden behandeld.
+
+00:15:17.180 --> 00:15:22.840
+Stel dat strikt vertrouwelijk wordt opgesplitst in één versie die beperkt is tot aangewezen ontvangers en een andere die beperkt is tot een specifieke groep.
+
+00:15:22.840 --> 00:15:25.680
+Dat zijn echte verschillen in handhaving, dus ze verdienen een plek.
+
+00:15:25.820 --> 00:15:28.640
+Ze zijn schadelijk wanneer ze worden gebruikt om het label meer smaak te geven.
+
+00:15:29.020 --> 00:15:30.280
+Vertrouwelijk financiën.
+
+00:15:30.680 --> 00:15:31.560
+Vertrouwelijk hour.
+
+00:15:32.260 --> 00:15:33.360
+Vertrouwelijke projecten.
+
+00:15:33.820 --> 00:15:38.780
+Nu krijgt een gebruiker een tweede menu binnen het eerste en de handhaving achter elke optie is identiek.
+
+00:15:38.940 --> 00:15:41.000
+Dat is keuzeverlamming vermond als precisie.
+
+00:15:41.160 --> 00:15:41.960
+Een goede test.
+
+00:15:42.180 --> 00:15:45.180
+Als twee sublabels precies hetzelfde doen, zijn het één label.
+
+00:15:45.180 --> 00:15:48.020
+Dan zijn er nog de speciale gevallen en elk bedrijf heeft die.
+
+00:15:48.340 --> 00:15:50.900
+Gereguleerde gegevens zoals medische dossiers of betaalkaartnummers.
+
+00:15:51.120 --> 00:15:55.020
+Juridisch bewaarmateriaal waarbij inhoud moet worden behouden en behandeld onder leiding van de juridische afdeling.
+
+00:15:55.620 --> 00:15:58.100
+Bestuursdocumenten die klein in aantal zijn, maar enorme gevolgen hebben.
+
+00:15:58.280 --> 00:16:01.640
+De instinctieve reactie is om elk item een eigen label op het hoogste niveau te geven.
+
+00:16:01.840 --> 00:16:02.640
+Weer sta die drang.
+
+00:16:02.860 --> 00:16:07.500
+De meeste passen binnen, zeer vertrouwelijk, met alleen een sublabel waar de handhaving echt verschilt.
+
+00:16:07.880 --> 00:16:10.480
+Bestuursstukken hebben wellicht een strikte lijst met geadresseerden nodig.
+
+00:16:10.780 --> 00:16:14.320
+Gereguleerde data heeft wellicht een specifieke markering nodig zodat beoordelaars weten waarom het is vergrendeld.
+
+00:16:14.520 --> 00:16:15.400
+Dat is een sublabel.
+
+00:16:15.600 --> 00:16:17.540
+Een compleet nieuwe laag is meestal overbodig.
+
+00:16:17.640 --> 00:16:21.060
+En een juridische bewaarplicht is meestal een beslissing over retentie, niet over vertrouwelijkheid.
+
+00:16:21.180 --> 00:16:25.240
+Een label kan daartoe bijdragen, maar maakt van je taxonomie geen verzamelbak voor elke controle die je bezit.
+
+00:16:25.400 --> 00:16:27.980
+Laat me nu uitleggen waarom afdelingslabels slecht verouderen.
+
+00:16:28.120 --> 00:16:30.160
+Je maakt een label genaamd Marketing Intern.
+
+00:16:30.420 --> 00:16:35.020
+18 maanden later fuseert marketing met communicatie en verhuist de helft van het team naar sales.
+
+00:16:35.300 --> 00:16:36.580
+Wat gebeurt er dan met het label?
+
+00:16:36.580 --> 00:16:41.600
+De naam klopt niet meer, de gebruikers zijn onjuist en de bestanden met dit label zijn verspreid over nieuwe eigenaren.
+
+00:16:41.780 --> 00:16:48.900
+Elke reorganisatie wordt een opschoningsklus voor labels en niemand budgetteert daarvoor, waardoor oude labels steeds verder van de realiteit afdrijven.
+
+00:16:49.120 --> 00:16:51.200
+Labels gebaseerd op afhandeling hebben dit probleem niet.
+
+00:16:51.700 --> 00:16:54.500
+Apostrof, vertrouwelijk, betekent hetzelfde voor en na de fusie.
+
+00:16:54.660 --> 00:16:57.600
+Het organogram kan eronder veranderen en het label blijft gewoon werken.
+
+00:16:57.800 --> 00:17:00.120
+Nog één punt, en dat is belangrijk voor wie er aan tafel zit.
+
+00:17:00.320 --> 00:17:03.820
+Stem je labels af op een bestaand bedrijfsclassificatiebeleid en niet andersom.
+
+00:17:03.820 --> 00:17:10.540
+De meeste bedrijven hebben er al een document ergens, waarschijnlijk ondertekend door een leidinggevende, dat definieert wat openbaar, intern of beperkt is.
+
+00:17:10.700 --> 00:17:12.420
+Je labels moeten daar direct op aansluiten.
+
+00:17:12.640 --> 00:17:15.940
+Dezelfde niveaus, dezelfde definities, dezelfde bewoordingen waar mogelijk.
+
+00:17:16.180 --> 00:17:17.940
+Andersom lopen programma's vaak vast.
+
+00:17:18.140 --> 00:17:25.460
+Als je eerst de labels maakt en daarna het beleid probeert aan te passen, vraag je juridische zaken en het directieteam om iets opnieuw goed te keuren wat ze al hadden goedgekeurd.
+
+00:17:25.680 --> 00:17:31.360
+Dat duurt maanden en ondertussen zien je gebruikers labels die in tegenspraak zijn met het beleid waar ze bij in dienstreding voor hebben getekend.
+
+00:17:31.360 --> 00:17:34.120
+Als er geen beleid bestaat, is dat je eerste prioriteit.
+
+00:17:34.300 --> 00:17:37.440
+Schrijf het kort op één pagina en bouw daarna de labels op basis daarvan.
+
+00:17:37.620 --> 00:17:40.200
+De namen zijn dus het makkelijke deel, vier woorden op een lijst.
+
+00:17:40.380 --> 00:17:45.700
+Wat ze gewicht geeft is wat elk label doet wanneer iemand het toepast en dat begint bij de vraag waar die labels überhaupt verschijnen.
+
+00:17:46.160 --> 00:17:48.020
+Labelbereik en waar labels worden toegepast.
+
+00:17:48.260 --> 00:17:51.240
+Voordat je configureert wat een label doet, moet je bepalen waar het zichtbaar is.
+
+00:17:51.480 --> 00:17:54.120
+Labels zijn van toepassing op twee soorten zaken, items en containers.
+
+00:17:54.380 --> 00:17:57.540
+Items zijn de inhoud zelf, bestanden, e-mails, vergaderuitnodigingen.
+
+00:17:57.540 --> 00:18:01.480
+Een label op een item zit in dat item en reist ermee mee, zoals we eerder bespraken.
+
+00:18:01.760 --> 00:18:06.720
+Containers zijn de plekken waar het werk gebeurt, Teams, Microsoft, 365 groepen en SharePoint sites.
+
+00:18:06.920 --> 00:18:13.360
+Een label op een container markeert geen enkel bestand, maar stelt regels in voor de hele werkruimte, zoals wie kan deelnemen en of gasten zijn toegestaan.
+
+00:18:13.560 --> 00:18:16.200
+Hetzelfde product, dezelfde portal, hetzelfde woord op het scherm.
+
+00:18:16.360 --> 00:18:20.080
+Twee heel verschillende taken en één label kan worden ingesteld om de ene, de andere of beide uit te voeren.
+
+00:18:20.240 --> 00:18:22.280
+We besteden later uitgebreid aandacht aan containers.
+
+00:18:22.540 --> 00:18:25.420
+Voor nu is het punt dat elk label een bereik heeft en dat kies je bewust.
+
+00:18:25.420 --> 00:18:28.180
+Waarom is dat belangrijk? Vanwege wat gebruikers zien.
+
+00:18:28.380 --> 00:18:32.360
+Stel je voor dat iemand een woorddocument opent en een label ziet met de naam, privéteam gasten geblokkeerd.
+
+00:18:32.540 --> 00:18:35.380
+Dat is een containerinstelling. Het betekent niets voor een bestand.
+
+00:18:35.580 --> 00:18:38.580
+Ze zullen het negeren of, erger nog, selecteren en zich afvragen waarom er niets gebeurt.
+
+00:18:38.760 --> 00:18:41.740
+Elk label dat op de verkeerde plek verschijnt, is een aanslag op het vertrouwen.
+
+00:18:41.880 --> 00:18:44.640
+De gebruiker leert dat de lijst rommel bevat en gaat er snel overheen kijken.
+
+00:18:44.860 --> 00:18:47.260
+Beperk daarom elk label tot de locaties waar het zinvol is.
+
+00:18:47.400 --> 00:18:51.060
+Labels voor bestanden en e-mails in de apps, containerlabels bij het maken van sites en Teams.
+
+00:18:51.060 --> 00:18:53.260
+Niets verschijnt op een plek waar het zijn werk niet kan doen.
+
+00:18:53.400 --> 00:18:56.260
+Maar wie ziet welke labels? Dat is de taak van labelbeleid.
+
+00:18:56.420 --> 00:18:59.400
+Een label op zichzelf is slechts een definitie in de beheerportal.
+
+00:18:59.600 --> 00:19:01.940
+Niemand ziet het totdat je het publiceert via een beleid.
+
+00:19:02.120 --> 00:19:05.420
+Het beleid bepaalt welke mensen het krijgen en wat de regels voor gebruik zijn.
+
+00:19:05.660 --> 00:19:10.040
+Standaard gedrag, verplichte prompts, rechtvaardigingsverrijsten, dat alles zit in het beleid.
+
+00:19:10.180 --> 00:19:13.160
+En dat maakt publiceren tot een ontwerpbeslissing, niet tot een laatste stap.
+
+00:19:13.320 --> 00:19:14.960
+Denk aan de pilot die we later gaan opzetten.
+
+00:19:15.160 --> 00:19:18.420
+Je wilt dat een kleine groep de nieuwe labels ziet terwijl de rest op de oude opzet blijft.
+
+00:19:18.420 --> 00:19:20.460
+Dat is een beleid dat is beperkt tot een groep.
+
+00:19:20.520 --> 00:19:24.320
+Denk aan een juridisch team dat een label voor vertrouwelijk materiaal nodig heeft dat niemand anders mag zien.
+
+00:19:24.600 --> 00:19:26.760
+Hetzelfde idee, ander publiek, ander beleid.
+
+00:19:26.980 --> 00:19:28.300
+Waar je op moet letten is overlapping.
+
+00:19:28.640 --> 00:19:34.580
+Wanneer iemand onder meer dan één beleid valt, kunnen instellingen botsen en krijgt de persoon een combinatie die niemand had geplant.
+
+00:19:34.780 --> 00:19:37.940
+Hou de lijst met beleidsregels kort en noteer wie in welke groep zit.
+
+00:19:38.120 --> 00:19:41.880
+Als je niet in één zin kunt uitleggen waarom een groep een eigen beleid heeft, moet dat waarschijnlijk niet.
+
+00:19:42.060 --> 00:19:44.800
+Dan is er nog de volgorde, wat zij klinkt maar voor echte verwarring zorgt.
+
+00:19:45.040 --> 00:19:46.960
+Labels verschijnen in een prioriteitsvolgorde.
+
+00:19:46.960 --> 00:19:49.440
+Het lint toont ze van laagste naar hoogste vertrouwelijkheid.
+
+00:19:49.560 --> 00:19:51.260
+En die volgorde is niet alleen cosmetisch.
+
+00:19:51.440 --> 00:19:54.320
+Het bepaalt welk label wint wanneer er twee van toepassing zijn op dezelfde inhoud.
+
+00:19:54.500 --> 00:19:59.600
+Een label met een hogere prioriteit kan een lagere vervangen en het systeem gebruikt die rangschikking wanneer het iemand vraagt een verlaging te rechtvaardigen.
+
+00:19:59.800 --> 00:20:01.360
+Sublabels voegen een extra laag toe.
+
+00:20:01.540 --> 00:20:04.700
+Ze bevinden zich onder een bovenliggend label, dat zelf meestal niet kan worden toegepast.
+
+00:20:04.940 --> 00:20:07.300
+Gebruikers zien een map, openen deze en kiezen een onderliggend label.
+
+00:20:07.520 --> 00:20:11.740
+Als de namen van je bovenliggende labels vaag zijn, klikken mensen op de verkeerde map en proberen ze nooit meer een andere.
+
+00:20:11.740 --> 00:20:14.300
+Kies de verkeerde volgorde en de lijst leest als een puzzel.
+
+00:20:14.440 --> 00:20:16.440
+Kies de juiste volgorde en het leest als een ladder.
+
+00:20:16.700 --> 00:20:19.880
+Dat is dus het bereik waar labels staan, wie ze ziet en in welke volgorde.
+
+00:20:20.060 --> 00:20:23.400
+Nu dat is geregeld, komen we bij de beslissing die alles in het programma vormgeeft.
+
+00:20:23.580 --> 00:20:27.220
+Degene die een label in bescherming verandert en ook degene die de meeste problemen veroorzaakt.
+
+00:20:27.680 --> 00:20:29.500
+Versleuteling, de beslissing over versleuteling.
+
+00:20:29.700 --> 00:20:31.840
+Tot nu toe was een label slechts een woord op een bestand.
+
+00:20:32.300 --> 00:20:33.300
+Versleuteling verandert dat.
+
+00:20:33.460 --> 00:20:35.540
+Het is de instelling die het woord in een slot verandert.
+
+00:20:35.780 --> 00:20:38.660
+Wanneer een label versleuteling toepast, wordt de inhoud van het bestand versleuteld.
+
+00:20:38.660 --> 00:20:40.980
+Alleen mensen die rechten hebben gekregen, kunnen deze lezen.
+
+00:20:41.100 --> 00:20:42.540
+Iedereen anders ziet alleen ruis.
+
+00:20:42.720 --> 00:20:44.560
+Het maakt niet uit waar het bestand terecht komt.
+
+00:20:44.740 --> 00:20:48.220
+Een persoonlijke schijf, een inbox in een ander land, een gestolen laptop.
+
+00:20:48.400 --> 00:20:49.400
+Het slot reist mee.
+
+00:20:49.680 --> 00:20:51.780
+Daarom is dit de beslissing die bescherming echt maakt.
+
+00:20:51.940 --> 00:20:55.880
+En het is ook waar de problemen beginnen, omdat een vergrendeld bestand door iets moet worden ontgrendeld.
+
+00:20:56.060 --> 00:20:58.800
+Elke app die dat bestand aanraakt, moet nu het slot begrijpen.
+
+00:20:59.000 --> 00:21:00.660
+Je eigen office apps doen dat meestal wel.
+
+00:21:00.920 --> 00:21:02.200
+Veel andere zaken doen dat niet.
+
+00:21:02.380 --> 00:21:03.260
+Dus wat gaat er mis?
+
+00:21:03.480 --> 00:21:04.940
+Oudere office clients als eerste.
+
+00:21:04.940 --> 00:21:10.460
+Een versie van voor de huidige beveiligingsbibliotheken opent het bestand mogelijk als een lege pagina of weigert het volledig te openen.
+
+00:21:10.620 --> 00:21:12.460
+Hulpmiddelen van derden zijn daarna aan de beurt.
+
+00:21:12.620 --> 00:21:14.480
+Een scanner die documenten leest op trefwoorden.
+
+00:21:14.700 --> 00:21:16.420
+Een backupproduct dat inhoud indexeert.
+
+00:21:16.640 --> 00:21:16.940
+Een migratieprogramma.
+
+00:21:17.820 --> 00:21:19.280
+Een workflow die bijlagen verwerkt.
+
+00:21:19.480 --> 00:21:21.700
+Ze stuiten op versleutelde inhoud en zien niets.
+
+00:21:21.940 --> 00:21:25.380
+Zoeken kan zich ook anders gedragen, afhankelijk van waar het bestand staat en wie de vraag stelt.
+
+00:21:25.520 --> 00:21:29.620
+En sommige automatisering stopt geruisloos omdat een script geen bestand kan lezen waarvoor het geen rechten heeft.
+
+00:21:29.840 --> 00:21:31.620
+Geen van deze fouten verschijnt in de portal.
+
+00:21:31.880 --> 00:21:33.600
+Ze verschijnen in de vorm van een telefoontje.
+
+00:21:33.600 --> 00:21:34.780
+Ik kan dit niet openen.
+
+00:21:34.920 --> 00:21:36.440
+Het rapport kwam leeg uit de bus.
+
+00:21:36.660 --> 00:21:38.900
+In ons archief ontbreekt alles van vorige maand.
+
+00:21:39.120 --> 00:21:41.700
+Nu een woord over sleutels, want iemand vraagt daar altijd naar.
+
+00:21:42.000 --> 00:21:44.600
+Standaard beheert Microsoft de versleutelingssleutels voor je.
+
+00:21:44.800 --> 00:21:47.340
+Dat is de eenvoudigste weg en prima voor de meeste bedrijven.
+
+00:21:47.560 --> 00:21:52.600
+Sommige gereguleerde organisaties willen meer controle, dus houden ze hun eigen sleutel of gebruiken ze een sleutel die ze meebrengen van hun eigen hardware.
+
+00:21:52.840 --> 00:21:54.980
+Dat is mogelijk, maar het brengt een reële afweging met zich mee.
+
+00:21:55.160 --> 00:21:57.960
+Als jij de sleutel beheert, ben je verantwoordelijk voor de gevolgen als je hem kwijtraakt.
+
+00:21:58.140 --> 00:22:00.000
+Herstel is het punt waar je goed over moet nadenken.
+
+00:22:00.000 --> 00:22:04.160
+Stel dat een medewerker vertrekt en een stapel van hun versleutelde bestanden was alleen voor hen toegankelijk.
+
+00:22:04.380 --> 00:22:07.580
+Stel dat een label wordt verwijderd of een groep met toegangsrechten verdwijnt.
+
+00:22:07.760 --> 00:22:09.220
+Wie kan die inhoud dan nog openen?
+
+00:22:09.360 --> 00:22:15.340
+Het eerlijke antwoord is alleen de personen die in het label staan, plus een kleine groep supergebruikers die je vooraf hebt ingesteld.
+
+00:22:15.540 --> 00:22:19.560
+Als je dat niet hebt geregeld, kun je je eigen bedrijf de toegang tot de eigen bestanden ontzeggen.
+
+00:22:19.740 --> 00:22:24.400
+Beslist dus voordat er iets wordt versleuteld wie je herstelpersonen zijn, leg dit vast en test of het werkt.
+
+00:22:24.540 --> 00:22:28.840
+De vuistregel, versleutel op het hoogste niveau, markeer zonder versleuteling in de middelste niveaus.
+
+00:22:28.840 --> 00:22:30.480
+Kijk nog eens naar de basis taxonomie.
+
+00:22:30.940 --> 00:22:33.920
+Apostrof, hoogst vertrouwelijk, is waar een lek verandert in een ernstig incident.
+
+00:22:34.240 --> 00:22:36.280
+Dat is het niveau waarop de versleuteling zijn kosten waard is.
+
+00:22:36.420 --> 00:22:39.120
+Een klein volume aan inhoud, grote gevolgen en mensen die rekening houden met enige frictie.
+
+00:22:39.540 --> 00:22:41.740
+Apostrof, vertrouwelijk, bevindt zich in de grijze zone.
+
+00:22:42.020 --> 00:22:45.100
+Veel inhoud, veel legitiem delen en talloze partners die het moeten kunnen lezen.
+
+00:22:45.300 --> 00:22:48.780
+Als je alles versleutelt, wordt elk contract dat naar een leverancier gaat een support ticket.
+
+00:22:49.040 --> 00:22:53.580
+Daarom gebruiken veel programma's voor dat niveau een zichtbare markering en laten ze andere controles, zoals DLP, de grenzen bewaken.
+
+00:22:54.120 --> 00:22:56.880
+Apostrof, algemeen en openbaar hebben helemaal geen versleuteling nodig.
+
+00:22:56.880 --> 00:22:59.040
+Zo krijg je een kostencurve die het risico volgt.
+
+00:22:59.220 --> 00:23:02.060
+Weinig frictie waar de schade laag is, echte bescherming waar de schade hoog is.
+
+00:23:02.220 --> 00:23:03.920
+En dit is het foutpatroon dat ik het meest zie.
+
+00:23:04.060 --> 00:23:05.080
+Een team wordt enthousiast.
+
+00:23:05.280 --> 00:23:07.580
+Ze hebben de mogelijkheid, dus ze versleutelen alles boven, openbaar.
+
+00:23:07.780 --> 00:23:08.920
+Dag 1 ziet er geweldig uit.
+
+00:23:09.080 --> 00:23:10.180
+De dekkingscijfers stijgen.
+
+00:23:10.360 --> 00:23:11.520
+De security lead is blij.
+
+00:23:11.740 --> 00:23:13.980
+Dan, in week 3, kunnen partners bijlagen niet openen.
+
+00:23:14.100 --> 00:23:17.080
+Een financieel proces dat inkomende facturen leest, stopt met werken.
+
+00:23:17.240 --> 00:23:21.880
+Het verkoopteam begint bestanden vanaf hun telefoon te sturen buiten de beheerde-appsom, omdat de beheerde-route kapot is.
+
+00:23:21.880 --> 00:23:26.900
+Tegen het einde van het kwartaal neemt iemand van het management een besluit en wordt de versleuteling voor de meeste labels uitgeschakeld.
+
+00:23:27.060 --> 00:23:28.500
+Nu ben je slechter af dan voorheen.
+
+00:23:28.660 --> 00:23:30.160
+Je hebt je geloofwaardigheid verspeeld.
+
+00:23:30.400 --> 00:23:34.120
+Mensen herinneren zich de storing en de volgende poging stuit vanaf de eerste melding op weerstand.
+
+00:23:34.460 --> 00:23:37.780
+Programma's waarbij alles wordt versleuteld, worden meestal binnen een kwartaal teruggedraaid.
+
+00:23:37.980 --> 00:23:42.600
+Niet omdat versleuteling verkeerd is, maar omdat het werd toegepast zonder cliëntmatrix en zonder strategische indeling.
+
+00:23:42.840 --> 00:23:47.560
+Dus als je hebt besloten dat bepaalde labels moeten versleutelen, is de volgende vraag, wie krijgt de sleutel?
+
+00:23:47.560 --> 00:23:51.340
+Dat is een beslissing over machtigingen en er zijn twee heel verschillende manieren om die te nemen.
+
+00:23:51.940 --> 00:23:54.960
+Machtigingsmodellen door beheerder gedefinieerd versus door gebruiker gedefinieerd.
+
+00:23:55.160 --> 00:23:58.440
+Wanneer een label een bestand versleutelt, moet iemand beslissen wie er toegang krijgt.
+
+00:23:58.580 --> 00:24:00.480
+Er zijn twee manieren om die beslissing te nemen.
+
+00:24:00.660 --> 00:24:04.320
+Je doet het vooraf als beheerder of je laat de persoon die het label toepast het per bestand bepalen.
+
+00:24:04.540 --> 00:24:06.700
+Begin met door de beheerder gedefinieerde instellingen.
+
+00:24:06.820 --> 00:24:08.760
+Je bouwt de toegangslijst in het label zelf in.
+
+00:24:08.940 --> 00:24:11.540
+Alle medewerkers kunnen het openen, of alleen de financiële afdeling,
+
+00:24:11.540 --> 00:24:15.640
+of alleen een specifieke groep mensen met alleenlezenrechten voor sommigen en volledige bewerkingsrechten voor anderen.
+
+00:24:15.820 --> 00:24:18.040
+De persoon die het label toepast, kiest niet zelf.
+
+00:24:18.260 --> 00:24:20.440
+Ze klikken erop en de regels worden direct toegepast.
+
+00:24:20.660 --> 00:24:21.980
+Dat zorgt voor consistentie.
+
+00:24:22.160 --> 00:24:25.340
+Elk bestand met dat label gedraagt zich hetzelfde, ongeacht wie het heeft gemaakt,
+
+00:24:25.540 --> 00:24:28.000
+en het is een model dat je in één zin aan een auditor kunt uitleggen,
+
+00:24:28.120 --> 00:24:30.920
+maar het leunt zwaar op iets waar de meeste bedrijven slecht in zijn, groepsbeheer.
+
+00:24:31.040 --> 00:24:34.280
+Als de groep genaamd Finance nog mensen bevat die de afdeling twee jaar geleden hebben verlaten,
+
+00:24:34.380 --> 00:24:36.220
+kunnen die mensen nog steeds de vergrendelde bestanden openen.
+
+00:24:36.220 --> 00:24:39.580
+Als een nieuwe medewerker ontbreekt in de groep, wordt die persoon vanaf de eerste dag geblokkeerd.
+
+00:24:39.740 --> 00:24:42.360
+Het label is slecht zo accuraat als het lidmaatschap dat erachter zit.
+
+00:24:42.520 --> 00:24:43.760
+Dus voordat je een label koppelt aan een groep,
+
+00:24:43.940 --> 00:24:46.320
+vraag je wie de eigenaar van die groep is en wanneer deze voor het laatst is gecontroleerd.
+
+00:24:46.460 --> 00:24:49.860
+Als niemand antwoord kan geven, bewaakt het slot een deur waarvoor de verkeerde sleutels zijn uitgedeeld.
+
+00:24:50.060 --> 00:24:52.180
+Nu de andere kant, door de gebruiker gedefinieerd.
+
+00:24:52.360 --> 00:24:55.640
+Hier zegt het label, de persoon die mij toepast, kiest wie er toegang krijgt.
+
+00:24:55.840 --> 00:24:58.700
+Ze kiezen de personen en de rechten op het moment dat ze het bestand opslaan.
+
+00:24:58.700 --> 00:25:01.100
+Het voelt flexibel en in een paar gevallen is dat ook zo.
+
+00:25:01.260 --> 00:25:03.640
+Een advocaat die een concept naar één externe raadsman stuurt,
+
+00:25:03.760 --> 00:25:05.600
+wil niet wachten tot een beheerder een groep heeft aangemaakt.
+
+00:25:05.760 --> 00:25:07.380
+De prijs is onvoorspelbaarheid.
+
+00:25:07.540 --> 00:25:10.680
+Twee bestanden met hetzelfde label kunnen een totaal ander publiek hebben.
+
+00:25:10.900 --> 00:25:13.340
+Niemand kan aan het label zien wie het bestand kan openen.
+
+00:25:13.460 --> 00:25:15.440
+En mensen maken fouten als ze snel moeten werken.
+
+00:25:15.640 --> 00:25:19.680
+Ze geven te veel rechten, typen een verkeerd adres of vergeten een collega toe te voegen die het wel nodig heeft.
+
+00:25:19.920 --> 00:25:22.400
+Gebruik door gebruiker gedefinieerd, daarom spaarzaam.
+
+00:25:22.700 --> 00:25:26.000
+Reserveer het voor de specifieke gevallen waarin het publiek echt elke keer anders is
+
+00:25:26.000 --> 00:25:29.120
+en waar de persoon die het toepast de inhoud beter kent dan welke beheerder dan ook.
+
+00:25:29.260 --> 00:25:32.200
+E-mail heeft zijn eigen varianten en er zijn er twee die je bijna moet kennen.
+
+00:25:33.020 --> 00:25:34.940
+Apostrof, niet doorsturen is de eerste.
+
+00:25:35.180 --> 00:25:38.860
+De ontvanger kan het bericht lezen, maar kan het niet doorsturen, kopiëren of afdrukken.
+
+00:25:39.020 --> 00:25:40.960
+Het is eenvoudig en mensen begrijpen het direct.
+
+00:25:41.180 --> 00:25:44.520
+Het is geschikt wanneer een bericht precies bedoeld is voor de mensen op de aanregel en niemand anders.
+
+00:25:45.320 --> 00:25:47.240
+Apostrof, alleen versleutelen is de tweede.
+
+00:25:47.440 --> 00:25:49.280
+Het bericht is vergrendeld tijdens verzending en opslag,
+
+00:25:49.440 --> 00:25:52.440
+zodat buitenstaanders het niet kunnen lezen, maar de ontvangers behouden hun normale rechten.
+
+00:25:52.680 --> 00:25:54.860
+Ze kunnen het doorsturen, kopiëren en printen.
+
+00:25:54.860 --> 00:25:58.220
+Dat is passend als het doel een beveiligd kanaal is, geen beperkt publiek.
+
+00:25:58.360 --> 00:26:01.860
+Denk aan een bericht met rekeninggegevens naar een klant die hiermee aan de slag moet.
+
+00:26:02.060 --> 00:26:05.920
+De fout is om overal, niet doorsturen, te gebruiken omdat dat veiliger klinkt.
+
+00:26:06.000 --> 00:26:10.920
+Dan kunnen mensen geen tabel in hun eigen notices plaatsen of een bericht delen met de collega die hen vervangt tijdens verlof.
+
+00:26:11.080 --> 00:26:13.520
+Ze gaan teksthandmatig in nieuwe berichten kopiëren.
+
+00:26:13.760 --> 00:26:16.080
+Dat is contraproductief en schaat het vertrouwen snel.
+
+00:26:16.300 --> 00:26:19.140
+Twee minder opvallende instellingen verdienen aandacht voordat je iets verstuurt.
+
+00:26:19.580 --> 00:26:20.580
+Vervaldatum is de eerste.
+
+00:26:20.580 --> 00:26:25.080
+Je kunt versleutelde inhoud zo instellen dat deze na een bepaalde datum of na een aantal dagen niet meer opent.
+
+00:26:25.260 --> 00:26:28.860
+Dat is nuttig voor materiaal met een beperkte houdbaarheid, zoals cijfers voor een aankondiging.
+
+00:26:29.000 --> 00:26:31.920
+Het is vervelend als je dit instelt op inhoud die mensen jarenlang nodig hebben.
+
+00:26:32.080 --> 00:26:34.940
+Een contract dat stilletjes onleesbaar wordt, is een nare verrassing.
+
+00:26:35.160 --> 00:26:36.520
+Offline toegang is de tweede.
+
+00:26:36.760 --> 00:26:40.900
+Dit bepaalt hoe lang iemand een beveiligd bestand kan openen zonder opnieuw verbinding te maken met de service.
+
+00:26:41.240 --> 00:26:46.020
+Stel je dit tekort in, dan verliest iemand tijdens een lange vlucht of in een gebouw met slecht bereik toegang tot zijn werk.
+
+00:26:46.020 --> 00:26:50.400
+Stel je dit te lang in, dan kan iemand die het bedrijf verlaat nog wekenlang bestanden openen.
+
+00:26:50.520 --> 00:26:54.000
+Het is een kleine instelling met een groot effect op hoe het label aanvoelt.
+
+00:26:54.200 --> 00:26:57.700
+En dan is er nog het moeilijkste publiek van allemaal, mensen buiten je bedrijf.
+
+00:26:57.860 --> 00:27:02.240
+Wanneer je inhoud versleutelt en naar een partner of klant stuurt, moeten zij kunnen bewijzen wie ze zijn.
+
+00:27:02.500 --> 00:27:05.280
+Sommigen kunnen inloggen met een werkaccount uit een ondersteunde directory.
+
+00:27:05.560 --> 00:27:08.740
+Anderen moeten een eenmalige toegangscode gebruiken die naar hun e-mail wordt gestuurd.
+
+00:27:08.940 --> 00:27:13.260
+Elke extra stap is een punt waarop iemand het opgeeft en terug mailt, kun je het niet gewoon als pdf sturen.
+
+00:27:13.260 --> 00:27:16.820
+Denk dus na over je externe verkeer voordat je besluit welke labels je vergrendelt.
+
+00:27:17.020 --> 00:27:18.940
+Wie ontvangt jouw vertrouwelijke materiaal?
+
+00:27:19.100 --> 00:27:20.360
+Hebben zij accounts die werken?
+
+00:27:20.520 --> 00:27:23.960
+Als het antwoord dat weten we niet is, dan heb je je eerste pilotvraag gevonden.
+
+00:27:24.180 --> 00:27:31.080
+En vergrendelde bestanden zorgen voor nog een probleem en dat zelden in de ontwerpvergadering aan bod komt of de tools rondom die bestanden er wel mee kunnen werken.
+
+00:27:31.700 --> 00:27:34.400
+Compatibiliteit, gezamenlijk bewerken en de realiteit van de client.
+
+00:27:34.660 --> 00:27:37.540
+Begin met gezamenlijk bewerken, want dat is het eerste waar mensen naar vragen.
+
+00:27:37.720 --> 00:27:41.920
+Twee mensen die tegelijkertijd hetzelfde versleutelde bestand bewerken, mogelijk, maar niet automatisch.
+
+00:27:41.920 --> 00:27:44.300
+Het bestand moet in SharePoint of OneDrive staan.
+
+00:27:44.460 --> 00:27:49.220
+Het label moet zo zijn ingesteld dat dit is toegestaan en de tenant moet de juiste beveiligingsinstellingen geactiveerd hebben.
+
+00:27:49.400 --> 00:27:52.420
+Als je er een mist, valt co-altering terug op het oude gedrag.
+
+00:27:52.600 --> 00:27:55.940
+Eén persoon bewerkt, alle anderen wachten of krijgen een vergrendelde kopie.
+
+00:27:56.120 --> 00:27:57.200
+De apps zijn ook van belang.
+
+00:27:57.400 --> 00:28:00.020
+Huidige Microsoft 365 apps ondersteunen dit.
+
+00:28:00.160 --> 00:28:02.420
+Oudere builds niet en ze geven niet altijd aan waarom.
+
+00:28:02.580 --> 00:28:06.520
+De gebruiker ziet dat het bestand vergrendeld is en denkt dat iemand anders is vergeten het te sluiten.
+
+00:28:06.760 --> 00:28:08.420
+Ze sturen een bericht en dan nog een.
+
+00:28:08.420 --> 00:28:11.500
+Uiteindelijk slaat iemand een kopie op en heb je nu twee versies van het budget.
+
+00:28:11.740 --> 00:28:13.520
+Dat is het patroon bij versleutelde inhoud.
+
+00:28:13.700 --> 00:28:16.180
+Het probleem verschijnt zelden als een duidelijke foutmelding.
+
+00:28:16.380 --> 00:28:20.420
+Het uitzicht als vreemd gedrag bij iemand anders, wat ons brengt bij jouw clientomgeving.
+
+00:28:20.600 --> 00:28:22.220
+En ik wil hier heel eerlijk over zijn.
+
+00:28:22.400 --> 00:28:24.140
+Je hebt niet de omgeving die je denkt te hebben.
+
+00:28:24.340 --> 00:28:26.440
+Op papier draait iedereen de huidige officebeeld.
+
+00:28:26.640 --> 00:28:30.400
+In de praktijk is er een financieel team op een versie van twee jaar geleden vanwege een macro.
+
+00:28:30.660 --> 00:28:33.000
+Er is een fabrieksvloer die nog oudere software draait.
+
+00:28:33.000 --> 00:28:37.140
+Er zijn Macs en de Mac-apps lopen achter op Windows-apps bij sommige labelfuncties.
+
+00:28:37.300 --> 00:28:41.360
+Er zijn telefoons en tablets waar de ervaring afhangt van de versie van de mobiele app.
+
+00:28:41.460 --> 00:28:45.060
+En dan is er het web, dat veel kan, maar niet alles wat een desktop-client kan.
+
+00:28:45.260 --> 00:28:48.220
+Elk daarvan kan hetzelfde gelabelde bestand anders behandelen.
+
+00:28:48.400 --> 00:28:53.400
+De een opent het, de ander opent het alleen lezen, de ander toont een banner om opnieuw in te loggen, de ander weigert.
+
+00:28:53.580 --> 00:28:56.820
+Dus voordat je het bedrijf iets belooft, moet je weten wat er echt in gebruik is.
+
+00:28:57.000 --> 00:29:01.000
+Haal de werkelijke client-inventaris op, niet de standaard-image, maar de echte inclusiefde uitzonderingen.
+
+00:29:01.000 --> 00:29:02.560
+Dan de tools rondom de bestanden.
+
+00:29:02.800 --> 00:29:04.720
+Scanners van derde zijn het klassieke voorbeeld.
+
+00:29:04.920 --> 00:29:09.680
+Een product dat documenten inspecteert op trefwoorden of malware, stuit op een versleuteld bestand en ziet niets.
+
+00:29:09.880 --> 00:29:12.480
+Dus of het slaat het over, of het markeert het als onleesbaar.
+
+00:29:12.740 --> 00:29:14.480
+Backup- en archieftools doen hetzelfde.
+
+00:29:14.660 --> 00:29:17.940
+Ze slaan het bestand op, wat prima is, maar ze kunnen de inhoud niet indexeren.
+
+00:29:18.160 --> 00:29:21.620
+De zoekopdrachten in het archief zijn blind voor precies de inhoud die het belangrijkst is.
+
+00:29:21.780 --> 00:29:22.780
+En dan e-discovery.
+
+00:29:23.080 --> 00:29:28.400
+Wanneer de juridische afdeling inhoud moet vinden en beoordelen, moet versleuteld materiaal leesbaar zijn voor de mensen die de zoekopdracht uitvoeren.
+
+00:29:28.400 --> 00:29:33.740
+Dat betekent de juiste rollen, de juiste machtigingen en een duidelijk beeld van hoe de zoektools beschermde bestanden afhandelen.
+
+00:29:33.900 --> 00:29:36.580
+Als je dit pas tijdens een onderzoek uitzoekt, ben je te laat.
+
+00:29:36.820 --> 00:29:38.820
+Dit is de oplossing en het is niet ingewikkeld.
+
+00:29:39.020 --> 00:29:40.040
+Bouw een testmatrix.
+
+00:29:40.300 --> 00:29:43.900
+Rijen zijn je clients, Windows Desktop, Mac Desktop, iOS, Android, web.
+
+00:29:44.020 --> 00:29:46.720
+Neem de oudste versie op die je nog ondersteunt, niet alleen de nieuwste.
+
+00:29:46.940 --> 00:29:48.400
+Kolommen zijn je scenario's.
+
+00:29:48.560 --> 00:29:49.700
+Open een versleuteld bestand.
+
+00:29:49.960 --> 00:29:50.360
+Bewerk het.
+
+00:29:50.540 --> 00:29:52.060
+Schrijf er samen met een tweede persoon aan.
+
+00:29:52.260 --> 00:29:53.500
+E-mail het naar een interne collega.
+
+00:29:53.780 --> 00:29:54.960
+E-mail het naar een externe partner.
+
+00:29:54.960 --> 00:30:01.500
+Print het, scan het, herstel het vanuit een backup, zoek ernaar in e-discovery en vul elke cel in met geslaagd, mislukt of werkt met een voorbehoud.
+
+00:30:01.720 --> 00:30:02.780
+Noteer het voorbehoud.
+
+00:30:03.020 --> 00:30:08.000
+Dat overzicht laat zien welke labels vandaag veilig kunnen versleutelen en welke moeten wachten tot er iets is geupgraded.
+
+00:30:08.120 --> 00:30:10.220
+En bouw dit voor de pilot, niet er tijdens.
+
+00:30:10.400 --> 00:30:18.040
+Als je deze hiëten ontdekt bij pilotgebruikers, verander je je leeroefening in een ondersteuningswachtrij en zijn de mensen die je het hardst nodig hebt juist degene die boze berichten sturen.
+
+00:30:18.040 --> 00:30:24.360
+Dus het ontwerp staat vast, taxonomie, bereik, versleuteling, rechten en een matrix die aangeeft wat er kapot zal gaan.
+
+00:30:24.580 --> 00:30:28.200
+Nu laten we echte mensen ermee werken en de vraag is wie die mensen moeten zijn.
+
+00:30:28.960 --> 00:30:31.060
+De pilot ontwerpen die je ook echt iets leert.
+
+00:30:31.320 --> 00:30:33.800
+De meeste teams behandelen de pilot als een soft launch.
+
+00:30:34.020 --> 00:30:38.940
+Kies een vriendelijke groep, zet de labels aan, wacht tot men zegt dat het goed ging, rol het daarna breder uit en noem dat vooruitgang.
+
+00:30:39.140 --> 00:30:41.240
+Dat is een pilot die bedoeld is om het project te beschermen.
+
+00:30:41.400 --> 00:30:44.820
+Wat je wilt is een pilot die ontworpen is om het ontwerp te breken terwijl het breken nog goedkoop is.
+
+00:30:44.980 --> 00:30:46.000
+Dus verander de vraag.
+
+00:30:46.000 --> 00:30:49.900
+Een pilot is een leermiddel. De taak ervan is om antwoorden te produceren die je nog niet hebt.
+
+00:30:50.060 --> 00:30:52.920
+Kiezen mensen het juiste label? Blokkeert versleuteling het echte werk?
+
+00:30:53.120 --> 00:30:57.260
+Welke instellingen zijn verwarrend? Als de pilot die niet kan beantwoorden, is het een demo met extra stappen.
+
+00:30:57.400 --> 00:30:58.400
+Dus, wie neemt er deel?
+
+00:30:58.560 --> 00:31:00.580
+De makkelijke weg is de mensen kiezen die je aardig vinden.
+
+00:31:00.720 --> 00:31:03.920
+De IT-afdeling, het beveiligingsteam, een paar nieuwsgierige early adapters.
+
+00:31:04.160 --> 00:31:06.400
+Ze zullen geduldig zijn en vriendelijke feedback sturen.
+
+00:31:06.620 --> 00:31:09.920
+Ze zullen je echter bijna niets vertellen omdat hun werk het ontwerp niet zwaar belast.
+
+00:31:10.080 --> 00:31:12.080
+Kies in plaats daarvan de groepen die het op de proef stellen.
+
+00:31:12.300 --> 00:31:15.320
+Juridische zaken als eerste. Zij werken met vertrouwelijk materiaal.
+
+00:31:15.500 --> 00:31:18.520
+Ze letten op elk woord en vinden binnen een week de gaten in je taxonomie.
+
+00:31:18.740 --> 00:31:19.560
+Financiën daarna.
+
+00:31:19.800 --> 00:31:24.460
+Zij beheren de inhoud waarbij een verkeerd label een prijskaartje heeft en ze draaienprocessen die andere systemen raken.
+
+00:31:24.700 --> 00:31:28.000
+Dat zijn precies de processen die vastlopen wanneer bestanden worden vergrendeld.
+
+00:31:28.200 --> 00:31:33.160
+Kies dan een team dat veel deelt met buitenstaanders, verkoop, inkoop of een projectgroep die met partners werkt.
+
+00:31:33.160 --> 00:31:41.420
+Wie de meeste bestanden verstuurt naar mensen buiten je tenant, laat je binnen enkele dagen zien hoe extern delen in de praktijk werkt en of ontvangers afhaken bij de aanmeldstap.
+
+00:31:41.560 --> 00:31:43.300
+Drie groepen, verschillende drukpunten.
+
+00:31:43.540 --> 00:31:47.220
+Samen zorgen ze ervoor dat je de meeste fouten tegenkomt nog voordat een leidinggevende het merkt.
+
+00:31:47.440 --> 00:31:49.780
+Voordat iemand begint, schrijf op hoe falen er uitziet.
+
+00:31:50.000 --> 00:31:53.160
+Dit klinkt contraproductief, maar het is de stap die de pilot eerlijk houdt.
+
+00:31:53.280 --> 00:31:55.880
+Zonder dat wordt elk resultaat achteraf geïnterpreteerd.
+
+00:31:56.140 --> 00:31:57.860
+Gemengde data wordt dan hoopgevend.
+
+00:31:58.040 --> 00:31:59.840
+Een stapel klachten wordt dan kinderziekte.
+
+00:32:00.080 --> 00:32:03.220
+Niemand kan zeggen dat de pilot is mislukt, dus niemand weet wat er moet worden verbeterd.
+
+00:32:03.380 --> 00:32:04.940
+Bepaal daarom vroegtijdig de grenzen.
+
+00:32:05.140 --> 00:32:09.560
+Als meer dan een bepaald deel van de steekproefbestanden het verkeerde label heeft, moet de taxonomie terug naar de tekentafel.
+
+00:32:09.740 --> 00:32:14.040
+Als een bedrijfsproces stopt en het langer dan een dag duurt om te herstellen, mag dat label nog niet versleutelen.
+
+00:32:14.040 --> 00:32:17.260
+Als mensen twee labels niet uit elkaar kunnen houden, verdwijnt er één.
+
+00:32:17.400 --> 00:32:22.060
+Kies cijfers die je stuurgroep echt accepteert en laat ze akkoord gaan voordat het eerste label verschijnt.
+
+00:32:22.260 --> 00:32:23.440
+Dan is er nog de beheersing.
+
+00:32:23.440 --> 00:32:27.060
+Publiceer de pilot labels via een beleidsbereik alleen voor de pilotgroepen.
+
+00:32:27.220 --> 00:32:32.220
+Niemand anders mag ze zien, niet per ongeluk, niet via een gedeelde mailbox, niet via een geneste groep die niemand zich herinnerde.
+
+00:32:32.420 --> 00:32:35.320
+Controleer het bereik dubbel en test het met een account dat er buiten zou moeten vallen.
+
+00:32:35.540 --> 00:32:36.360
+Waarom zo streng?
+
+00:32:36.520 --> 00:32:37.540
+Omdat labels reizen.
+
+00:32:37.540 --> 00:32:41.920
+Een pilotgebruiker slaat een versleuteld bestand op en e-mailt dit naar een collega die niet in de pilot zit.
+
+00:32:42.120 --> 00:32:45.360
+Nu heeft die collega inhoud die ze niet kunnen openen, zonder dat ze weten waarom.
+
+00:32:45.520 --> 00:32:49.040
+Zij hebben zich niet aangemeld voor een experiment en zullen er niet kulant mee omgaan.
+
+00:32:49.200 --> 00:32:50.740
+Hou de schadeomvang daarom klein.
+
+00:32:50.740 --> 00:32:55.520
+Als er iets misgaat, wil je dat het antwoord is, het trof slechts 40 mensen die wisten dat dit kon gebeuren.
+
+00:32:55.700 --> 00:32:56.840
+Nu de duur en het ritme.
+
+00:32:57.060 --> 00:32:58.980
+Vier tot zes weken is meestal voldoende.
+
+00:32:59.200 --> 00:33:00.940
+Korter en je ziet alleen de nieuwigheid.
+
+00:33:01.160 --> 00:33:04.200
+Mensen labelen in week één alles zorgvuldig omdat ze opletten.
+
+00:33:04.360 --> 00:33:07.700
+Tegen week vier komen gewoontes naar boven en gewoontes zijn wat je wilt meten.
+
+00:33:07.940 --> 00:33:09.960
+Langer dan zes weken en het momentum verdwijnt.
+
+00:33:10.100 --> 00:33:12.220
+De organisatie begint te vragen wanneer dit stopt.
+
+00:33:12.360 --> 00:33:13.740
+Plan binnen dat venster een wekelijkse evaluatie.
+
+00:33:14.460 --> 00:33:17.200
+Hetzelfde uur, dezelfde mensen, dezelfde korte lijst met vragen.
+
+00:33:17.200 --> 00:33:19.600
+Wat is er sinds vorige week veranderd in het labelgebruik?
+
+00:33:19.720 --> 00:33:21.760
+Welke tickets kwamen binnen en wat hadden ze gemeen?
+
+00:33:21.920 --> 00:33:23.340
+Liep er een bedrijfsproces vast?
+
+00:33:23.560 --> 00:33:26.060
+Heeft iemand een label gebruikt op een manier die je niet verwachtte?
+
+00:33:26.180 --> 00:33:29.220
+En is er iets dat we nu moeten aanpassen in plaats van het tot het einde te bewaren?
+
+00:33:29.320 --> 00:33:31.060
+Die laatste vraag is het belangrijkst.
+
+00:33:31.200 --> 00:33:32.700
+Een pilot moet niet bevroren zijn.
+
+00:33:32.940 --> 00:33:37.300
+Als een labelnaam iedereen op dag vijf verwart, hernoem het dan en kijk of de verwarring afneemt.
+
+00:33:37.480 --> 00:33:41.620
+Dat is het leerproces en dat gebeurt alleen als je bereid bent het ontwerp aan te passen terwijl mensen het gebruiken.
+
+00:33:41.780 --> 00:33:44.460
+Hou een logboek bij van elke wijziging met de datum en de reden.
+
+00:33:44.460 --> 00:33:49.540
+Uiteindelijk heb je een schriftelijke geschiedenis van wat het ontwerp nodig had, wat meer waard is dan welke score dan ook.
+
+00:33:49.660 --> 00:33:54.540
+De pilot zal veel materiaal opleveren, rapporten, tickets, klachten en een paar verrassende complimenten.
+
+00:33:54.720 --> 00:33:58.920
+Wat je ermee doet, hangt af van het weten welke cijfers je kunt vertrouwen en welke er alleen goed uitzien.
+
+00:33:59.080 --> 00:34:02.380
+Het lezen van pilot signalen, labels toegepast, labels correct.
+
+00:34:02.580 --> 00:34:04.260
+Twee tools doen het meeste leeswerk hier.
+
+00:34:04.500 --> 00:34:10.460
+Activity Explorer laat je zien wat er is gebeurd, wie een label heeft toegepast, wie er een heeft gewijzigd of verwijderd en wat de app op dat moment deed.
+
+00:34:10.600 --> 00:34:12.060
+Het is een tijdlijn van gedrag.
+
+00:34:12.060 --> 00:34:14.280
+Content Explorer laat je zien wat er zoal staat.
+
+00:34:14.440 --> 00:34:20.080
+Het geeft een lijst van bestanden en e-mails met een bepaald label en met de juiste rechten kun je een voorbeeld openen en de werkelijke inhoud bekijken.
+
+00:34:20.260 --> 00:34:23.080
+De een vertelt je wat mensen deden, de ander vertelt je wat er is achtergebleven.
+
+00:34:23.240 --> 00:34:26.160
+Je hebt ze beide nodig, want ze spreken elkaar vaker tegen dan je zou verwachten.
+
+00:34:26.380 --> 00:34:27.980
+Begin met het cijfer dat iedereen wil zien.
+
+00:34:28.140 --> 00:34:29.400
+Hoeveel items hebben een label?
+
+00:34:29.660 --> 00:34:31.120
+Dat cijfer zal er goed uitzien.
+
+00:34:31.120 --> 00:34:39.140
+Standaardinstellingen, aanbevelingen en een paar gemotiveerde mensen zullen het snel opstuwen en je in de verleiding brengen om de pilot in week 2 al een succes te noemen, maar dekking is geen juistheid.
+
+00:34:39.300 --> 00:34:41.980
+Een label-telling kan je niet vertellen of het label correct is.
+
+00:34:42.140 --> 00:34:48.220
+10.000 bestanden gemarkeerd als algemeen kunnen er een paar honderd bevatten die vertrouwelijk hadden moeten zijn en het dashboard zou nog steeds groen kleuren.
+
+00:34:48.380 --> 00:34:52.640
+Pak dus een steekproef, een paar honderd items verspreid over de drie pilotgroepen en open ze.
+
+00:34:52.820 --> 00:34:56.460
+Vraag de eigenaar van de inhoud of iemand die de inhoud kent of het label past.
+
+00:34:56.700 --> 00:34:59.540
+Dat is de controle op juistheid, het is traag en niets vervangt het.
+
+00:34:59.720 --> 00:35:03.220
+Vergelijk het resultaat met de foutmarge die je voor aanvang van de pilot hebt vastgesteld.
+
+00:35:03.420 --> 00:35:06.900
+Als het percentage onjuiste labels deze overschrijdt, heb je nog geen trainingsprobleem.
+
+00:35:07.040 --> 00:35:08.300
+Je hebt een ontwerpprobleem.
+
+00:35:08.480 --> 00:35:10.160
+Ga vervolgens op zoek naar downgrades.
+
+00:35:10.420 --> 00:35:14.480
+Elke keer als iemand een label verlaagt en je beleid om een reden vraagt, legt het systeem dit vast.
+
+00:35:14.480 --> 00:35:15.540
+Lees die redenen.
+
+00:35:15.700 --> 00:35:19.520
+Dat is de meest eerlijke feedback die je zult krijgen, omdat niemand zich voordoet voor een enquête.
+
+00:35:19.800 --> 00:35:21.440
+Patronen zullen snel zichtbaar worden.
+
+00:35:21.440 --> 00:35:25.580
+Als mensen blijven schrijven dat het label niet past bij dit type document, mis je een categorie.
+
+00:35:25.740 --> 00:35:29.520
+Als ze schrijven dat een partner het niet kon openen, belemmert versleuteling een echte workflow.
+
+00:35:29.760 --> 00:35:34.060
+Als ze schrijven dat het per ongeluk automatisch werd toegepast, hebben je standaarden of detectiewerk nodig.
+
+00:35:34.240 --> 00:35:38.800
+En als de redenen leeg zijn of slechts uit één letter bestaan, klikken mensen door de prompt heen om deze te laten verdwijnen.
+
+00:35:38.980 --> 00:35:40.820
+Elk thema wijst op een specifieke oplossing.
+
+00:35:41.100 --> 00:35:43.660
+Daarom zijn downgrades meer waard dan ruwe activiteitencijfers.
+
+00:35:43.880 --> 00:35:45.140
+Dan is er nog de helpdesk.
+
+00:35:45.260 --> 00:35:49.460
+Vraag het supportteam om elk ticket waarin labels, beveiligde bestanden of kan niet openen, worden genoemd.
+
+00:35:49.460 --> 00:35:53.100
+Label ze op oorzaak en lees ze daarna als een ontwerpbeoordeling, want dat is wat ze zijn.
+
+00:35:53.260 --> 00:35:56.480
+Een cluster aan tickets over één label vertelt je dat er een probleem is met dat label.
+
+00:35:56.660 --> 00:36:00.680
+Een cluster van één team vertelt je dat het proces van dat team voorrang nodig heeft op dat van anderen.
+
+00:36:00.880 --> 00:36:04.180
+Tickets over een ontbrekend label vertellen je dat de taxonomie een gat vertoont.
+
+00:36:04.340 --> 00:36:06.040
+En de stille gebruikers stellen ook mee.
+
+00:36:06.220 --> 00:36:10.600
+Als een groep nul tickets heeft ingediend en ook bijna geen labels heeft toegepast, zijn ze wellicht niet tevreden.
+
+00:36:10.760 --> 00:36:12.140
+Misschien vermijden ze de boel gewoon.
+
+00:36:12.400 --> 00:36:15.800
+Leg de drie bronnen naast elkaar activiteit, steek proef van inhoud en tickets.
+
+00:36:15.800 --> 00:36:18.440
+Waar ze overeenstemmen, kun je vertrouwen op de conclusie.
+
+00:36:18.620 --> 00:36:21.140
+Waar ze verschillen, heb je iets gevonden dat een gesprek waard is.
+
+00:36:21.340 --> 00:36:24.140
+Nu komt het deel dat teams overslaan, beslissen wat er moet veranderen.
+
+00:36:24.300 --> 00:36:28.640
+Voordat je de doelgroep vergroot, maak je een kort lijstje welke labels worden hernoemd, samengevoegd of verwijderd,
+
+00:36:28.820 --> 00:36:32.540
+welke instellingen wijzigen, zoals een te agressieve verloopdatum of een tekort offline venster,
+
+00:36:32.740 --> 00:36:35.980
+en welke bedrijfsprocessen moeten worden aangepast voordat er iets in de buurt wordt versleuteld.
+
+00:36:36.180 --> 00:36:37.260
+Wees bereid om te schrappen.
+
+00:36:37.500 --> 00:36:42.140
+Als twee labels voor dezelfde verwarring en dezelfde foute keuzes zorgen, was er voor één van beiden nooit een goede reden.
+
+00:36:42.140 --> 00:36:46.040
+Het is veel makkelijker om een label te verwijderen bij 40 proefgebruikers dan bij 40.000.
+
+00:36:46.220 --> 00:36:48.400
+Test wat je hebt verandert opnieuw, al is het maar kort.
+
+00:36:48.600 --> 00:36:53.120
+Een week met de aangepaste instellingen laat zien of de oplossing werkte of het probleem alleen maar heeft verplaatst.
+
+00:36:53.300 --> 00:36:58.040
+Zodra het ontwerp stand houdt bij echt gebruik, is de grootste overgebleven knop geen melding of beleidspagina.
+
+00:36:58.220 --> 00:37:04.420
+Het is wat er gebeurt als iemand helemaal niets doet, en dat wordt bepaald door de standaardinstelling, een standaard label, de krachtigste stille instelling.
+
+00:37:04.680 --> 00:37:07.940
+Dit is een instelling die zelden een eigen slide krijgt, een standaard label.
+
+00:37:07.940 --> 00:37:13.320
+Wanneer iemand een nieuw document maakt of een nieuwe e-mail start, kan het systeem een label toepassen voordat de persoon iets aanraakt.
+
+00:37:13.520 --> 00:37:14.760
+Geen klik, geen beslissing.
+
+00:37:14.940 --> 00:37:19.620
+Het label is er gewoon wanneer het bestand opent, en dat verandert gedrag meer dan elke trainingssessie die je ooit zult geven.
+
+00:37:19.880 --> 00:37:20.740
+Denk eens na waarom.
+
+00:37:20.920 --> 00:37:25.180
+Training vraagt mensen om zich iets te herinneren op het moment dat ze het druk hebben, weken nadat ze het gehoord hebben.
+
+00:37:25.340 --> 00:37:26.940
+Een standaardinstelling vraagt niets.
+
+00:37:27.120 --> 00:37:30.400
+Het handelt eerst, en de meeste mensen laten de meeste tijd gewoon staan wat er al staat.
+
+00:37:30.400 --> 00:37:31.540
+Dat is geen luiheid.
+
+00:37:31.760 --> 00:37:34.320
+Zo werken mensen nu eenmaal wanneer ze zich op iets anders concentreren.
+
+00:37:34.480 --> 00:37:36.900
+De standaard wordt dus het label voor het merendeel van je content.
+
+00:37:36.900 --> 00:37:41.420
+Wat je ook kiest, je kiest voor het grootste deel van het bestens totaal in het bedrijf, en daarom is die keuze erg belangrijk.
+
+00:37:41.620 --> 00:37:43.820
+De verleiding is groot om als standaard voor het laagste niveau te kiezen.
+
+00:37:44.020 --> 00:37:45.400
+Dat voelt politiek gezien veilig.
+
+00:37:45.600 --> 00:37:47.460
+Niemand klaagt over een label dat niets blokkeert.
+
+00:37:47.640 --> 00:37:48.740
+Maar kijk eens wat dat zegt.
+
+00:37:48.960 --> 00:37:53.780
+Elk nieuw bestand begint als het minst beveiligde dat je aanbiedt, en de verantwoordelijkheid om dit aan te passen ligt bij de persoon zelf.
+
+00:37:53.980 --> 00:37:56.260
+Dat is weer het oude model, alleen met een mooiere interface.
+
+00:37:56.500 --> 00:37:58.280
+Het gebruikelijke antwoord is het middelste niveau.
+
+00:37:58.280 --> 00:38:00.360
+In de basistaxonomie is dat algemeen.
+
+00:38:00.360 --> 00:38:05.240
+Inhoud blijft standaard binnen het bedrijf, en mensen zetten het hoger als het meer bescherming nodig heeft of lager als het voor het publiek is.
+
+00:38:05.420 --> 00:38:08.240
+Dat uitgangspunt is een redelijke inschatting van hoe het meeste werk eruit ziet.
+
+00:38:08.460 --> 00:38:10.640
+Nu moet voor elk platform een eigen afweging worden gemaakt.
+
+00:38:11.040 --> 00:38:12.380
+Documenten liggen het meest voor de hand.
+
+00:38:12.560 --> 00:38:15.200
+E-mails zijn anders, omdat een bericht een ander leven leidt aan een bestand.
+
+00:38:15.360 --> 00:38:18.920
+Een kort bericht aan een collega heeft niet hetzelfde uitgangspunt nodig als een conceptcontract.
+
+00:38:18.920 --> 00:38:24.200
+Sommige teams zetten de e-mailstandaard een stapje lager of laten deze even uit, zodat de mailbox niet vanaf dag 1 volstroomt met meldingen.
+
+00:38:24.280 --> 00:38:25.640
+Power B is een wereld op zich.
+
+00:38:25.880 --> 00:38:30.400
+Rapporten en datasets worden door een kleinere groep mensen gemaakt en de labels daar kunnen doorvloeien naar exports.
+
+00:38:30.620 --> 00:38:37.060
+Een standaard op dat platform kan data beschermen zodra deze het dashboard verlaat, maar alleen als de makers van de rapporten weten wat er gebeurt.
+
+00:38:37.280 --> 00:38:38.100
+Licht hen eerst in.
+
+00:38:38.500 --> 00:38:41.360
+Vergaderingen en agenda-uitnodigingen zijn wat de meeste teams vergeten.
+
+00:38:41.480 --> 00:38:44.940
+Een standaard daar kan de uitnodiging, de chat en de notities die eraan gekoppeld zijn markeren.
+
+00:38:45.120 --> 00:38:48.360
+Beslis of je dat wilt, anders vind je straks op elke staand app een algemeen stempel.
+
+00:38:48.360 --> 00:38:50.600
+Vier platforms, vier afzonderlijke beslissingen.
+
+00:38:50.800 --> 00:38:52.500
+Laat niet één instelling voor alles gelden.
+
+00:38:52.680 --> 00:38:55.620
+Nu het risico, en dat is een reëel risico, alles wordt algemeen.
+
+00:38:55.760 --> 00:38:59.200
+Je schakelt de standaard in en binnen een maand zien de labelaantallen er fantastisch uit.
+
+00:38:59.360 --> 00:39:02.280
+De dekking is hoog, maar achter dat getal schuilt een stilprobleem.
+
+00:39:02.480 --> 00:39:03.860
+Niemand maakt nog een eigen keuze.
+
+00:39:04.040 --> 00:39:08.460
+Het contract dat vertrouwelijk zou moeten zijn, krijgt het label algemeen omdat de auteur nooit naar de werkbalk heeft gekeken.
+
+00:39:08.640 --> 00:39:11.600
+Het label heeft zijn betekenis verloren omdat het geen beslissing meer weerspiegelt.
+
+00:39:11.740 --> 00:39:13.300
+Het weerspiegelt het ontbreken ervan.
+
+00:39:13.300 --> 00:39:14.640
+Dat kun je zien in de data.
+
+00:39:14.640 --> 00:39:19.940
+Controleer hoeveel algemeen labels handmatig zijn toegepast en hoeveel er standaard zijn toegevoegd en nooit zijn veranderd.
+
+00:39:20.080 --> 00:39:23.900
+Als er bijna niets is aangepast, beschrijft het label je instellingen, niet je inhoud.
+
+00:39:24.100 --> 00:39:25.720
+Een standaard kan dus niet alleen werken.
+
+00:39:25.920 --> 00:39:28.060
+Het heeft een partner nodig die de uitzonderingen opvangt.
+
+00:39:28.220 --> 00:39:29.660
+Die partner is meestal detectie.
+
+00:39:29.880 --> 00:39:32.840
+Iets dat naar de inhoud kijkt en zegt, dit bevat creditcardnummers.
+
+00:39:33.080 --> 00:39:34.680
+Dit zou niet algemeen moeten zijn.
+
+00:39:34.900 --> 00:39:38.740
+We komen in een paar secties bij automatisering, en dit is de reden waarom het belangrijk is.
+
+00:39:38.740 --> 00:39:40.680
+De standaard dekt alleen de luie weg.
+
+00:39:40.920 --> 00:39:43.520
+Detectie corrigeert waar de inhoud zichzelf verraadt.
+
+00:39:43.520 --> 00:39:46.480
+Een tweede partner is een lichte melding, geen blokkade.
+
+00:39:46.640 --> 00:39:52.080
+Een aanbeveling die verschijnt wanneer iemand iets typt dat gevoelig lijkt, en met één klik een hoger label biedt.
+
+00:39:52.160 --> 00:39:55.520
+Het kost de persoon twee seconden en verschijnt alleen als daar een reden voor is.
+
+00:39:55.720 --> 00:39:59.160
+Met deze drie heb je een systeem met zinnige uitgangspunten en echte correctie.
+
+00:39:59.360 --> 00:40:01.100
+Geen enkel onderdeel draagt de hele last.
+
+00:40:01.300 --> 00:40:03.540
+En er is nog één discipline die het waard is om toe te voegen.
+
+00:40:03.740 --> 00:40:05.760
+Vertel mensen wat de standaardinstelling is en waarom.
+
+00:40:05.900 --> 00:40:08.100
+Een kort bericht in de aankondiging van de pilot is voldoende.
+
+00:40:08.340 --> 00:40:09.940
+Nieuwe bestanden beginnen als algemeen.
+
+00:40:10.100 --> 00:40:12.040
+Verhoog het label als de inhoud meer vereist.
+
+00:40:12.040 --> 00:40:16.520
+Die ene zin verandert onzichtbaar gedrag in een verwachting en mensen reageren op verwachtingen.
+
+00:40:16.660 --> 00:40:18.780
+De standaardinstelling vangt de luie weg op.
+
+00:40:18.920 --> 00:40:21.640
+De persoon die niets doet eindigt nog steeds met iets zinnigs.
+
+00:40:21.840 --> 00:40:25.520
+Maar hoe zit het met de persoon die het verwijdert of het bestand dat zonder label binnenkomt?
+
+00:40:25.640 --> 00:40:28.600
+Dat is een ander probleem en daar is een steviger middel voor nodig.
+
+00:40:28.900 --> 00:40:30.840
+Verplichte labels en het wrijvingsbudget.
+
+00:40:31.040 --> 00:40:33.240
+Een standaardinstelling vangt de persoon op die niets doet.
+
+00:40:33.460 --> 00:40:36.460
+Verplichte labels vangen het bestand op dat helemaal zonder label binnenkomt.
+
+00:40:36.560 --> 00:40:37.780
+De instelling is eenvoudig.
+
+00:40:37.920 --> 00:40:40.860
+Je vereist een label voordat iemand een document kan opslaan of een e-mail kan verzenden.
+
+00:40:40.860 --> 00:40:42.380
+Geen label, niet opslaan.
+
+00:40:42.520 --> 00:40:43.800
+De app stopt en vraagt erom.
+
+00:40:43.940 --> 00:40:47.280
+Het is het krachtigste middel in het beleid en het eerste dat mensen echt merken.
+
+00:40:47.480 --> 00:40:48.320
+Dus wat kost het?
+
+00:40:48.460 --> 00:40:51.540
+Elke keer dat die melding verschijnt, stopt een persoon waar hij mee bezig is.
+
+00:40:51.740 --> 00:40:52.900
+Het zijn een paar seconden.
+
+00:40:53.120 --> 00:40:57.440
+Soms is het een verwaarde pauze omdat ze niet zeker weten welk label past en dat is de ergste vorm van kosten.
+
+00:40:57.940 --> 00:41:01.380
+Vermenigvuldig die paar seconden met elke opslagactie door duizenden mensen over een jaar.
+
+00:41:01.620 --> 00:41:04.960
+Dat is echt de tijd die wordt besteed aan een beslissing die ze steeds opnieuw moeten nemen.
+
+00:41:05.160 --> 00:41:06.320
+Daarom zie ik het als een budget.
+
+00:41:06.320 --> 00:41:08.540
+Elke melding die je toevoegt, kost goodwill.
+
+00:41:08.740 --> 00:41:11.540
+Goodwill is wat je in staat stelt om de volgende controle uit te rollen.
+
+00:41:11.700 --> 00:41:17.060
+Iemand die tien keer per dag wordt onderbroken door iets wat ze niet begrijpen, zal niet welwillend reageren als de volgende verandering komt.
+
+00:41:17.260 --> 00:41:19.380
+Ze zullen ervan uitgaan dat het weer hetzelfde is.
+
+00:41:19.520 --> 00:41:22.960
+Je hebt een beperkt budget en een verplichte melding spreekt dat elke dag aan.
+
+00:41:23.100 --> 00:41:24.980
+Dus besteed het daar waar het het meest oplevert.
+
+00:41:25.200 --> 00:41:29.240
+Verplichte labels werken het best voor documenten zodra je de pilotfase verlaat en overgaat naar algemeen gebruik.
+
+00:41:29.400 --> 00:41:31.140
+Tegen die tijd is de taxonomie getest.
+
+00:41:31.140 --> 00:41:32.480
+De namen zijn logisch.
+
+00:41:32.680 --> 00:41:42.660
+De standaardinstellingen doen het meeste werk, dus de prompt verschijnt alleen bij de resjes, een bestand van buitenaf, een document waarvan iemand het label heeft verwijderd of content gemaakt door een tool die de standaardinstelling oversloeg.
+
+00:41:42.780 --> 00:41:46.200
+In die gevallen is de prompt zeldzaam en doet deze iets wat niets anders kan.
+
+00:41:46.400 --> 00:41:47.660
+Maar waar werkt het averechts?
+
+00:41:47.960 --> 00:41:49.340
+Snelle e-mails om te beginnen.
+
+00:41:49.600 --> 00:41:52.900
+Iemand die antwoordt vanaf een telefoon in de gang met twee minuten tussen vergaderingen.
+
+00:41:53.040 --> 00:41:57.660
+Als je bij elk van die berichten een labelkeuze afdwingt, maak je de snelste vorm van communicatie traag.
+
+00:41:57.660 --> 00:42:03.020
+Mensen gaan antwoorden bundelen, sturen berichten vanuit apps buiten jouw beheer of schrijven kortere berichten met minder details.
+
+00:42:03.280 --> 00:42:04.240
+Dat was nooit het doel.
+
+00:42:04.440 --> 00:42:09.600
+Als je labels op e-mail verplicht stelt, vertrouw dan op een logische standaardinstelling zodat de prompt bijna nooit hoeft te verschijnen.
+
+00:42:10.080 --> 00:42:12.180
+Automatisering is de tweede valkuil en een stille.
+
+00:42:12.380 --> 00:42:17.040
+Scripts, flows en service accounts slaan bestanden op en versturen berichten zonder menselijke tussenkomst.
+
+00:42:17.200 --> 00:42:21.480
+Een regel die een label vereist, kan ze volledig blokkeren en de foutmelding is onopvallend.
+
+00:42:21.620 --> 00:42:23.220
+Een nachtelijk rapport komt niet aan.
+
+00:42:23.380 --> 00:42:25.100
+Een flow probeert het opnieuw en geeft het op.
+
+00:42:25.100 --> 00:42:30.960
+Iemand merkt het op donderdag op, voordat je het verplicht stelt, moet je de processen inventariseren die content maken zonder persoon en elk proces testen.
+
+00:42:31.140 --> 00:42:34.400
+Sommigen hebben een uitzondering nodig of een label dat door het proces zelf wordt toegepast.
+
+00:42:34.600 --> 00:42:36.400
+Dat brengt ons bij de downgrade prompt.
+
+00:42:36.660 --> 00:42:42.140
+Wanneer iemand een label verlaagt, kun je om een reden vragen, een kort invoerveld, soms een keuzelijst met opties, soms vrije tekst.
+
+00:42:42.300 --> 00:42:45.980
+Zoals we in de pilot zagen, zijn die redenen een van de beste vormen van feedback die het programma oplevert.
+
+00:42:46.200 --> 00:42:49.720
+Ze laten zien waar de taxonomie tekort schiet in de bewoordingen van de mensen voor wie het niet werkt.
+
+00:42:49.880 --> 00:42:51.120
+Maar de prompt heeft een limiet.
+
+00:42:51.120 --> 00:42:54.620
+Als je deze bij elke verlaging en elk label gebruikt, verandert het inruis.
+
+00:42:54.800 --> 00:42:58.020
+Mensen typen één enkel teken en gaan door, waardoor de waarde tot nul daalt.
+
+00:42:58.220 --> 00:43:02.340
+Alleen gebruik waar het ertoe doet, zoals bij het verplaatsen van een bestand uit de hoogste categorie, blijft het zinvol.
+
+00:43:02.560 --> 00:43:04.060
+Betere prompts, betere antwoorden.
+
+00:43:04.300 --> 00:43:06.740
+Behandel motivatie dus op dezelfde manier als verplichte labels.
+
+00:43:06.960 --> 00:43:08.960
+Een klein aantal goed geplaatste onderbrekingen.
+
+00:43:09.100 --> 00:43:12.140
+Elke onderbreking verdient zijn plek door iets op te leveren wat je ook echt zult lezen.
+
+00:43:12.320 --> 00:43:16.300
+Een praktische manier om dit in goede banen te leiden is door jezelf drie vragen te stellen voordat je een prompt toevoegt.
+
+00:43:16.300 --> 00:43:21.040
+Wie ziet het en hoe vaak? Wat vangt het op dat anders niet zou worden opgemerkt? En wat gaan we met het antwoord doen?
+
+00:43:21.200 --> 00:43:24.460
+Als je de derde vraag niet kunt beantwoorden, verspeelt de prompt goodwill voor niets.
+
+00:43:24.720 --> 00:43:29.780
+Want matige keuzes, of ze nu worden gestuurd door standaardinstellingen of afgedwongen door prompts, zijn slechts beperkt schaalbaar.
+
+00:43:29.940 --> 00:43:33.640
+Er staan miljoenen bestanden in je tenant en niemand gaat ze stuk voor stuk openen.
+
+00:43:33.840 --> 00:43:36.200
+Daarvoor heb je iets nodig dat de inhoud voor je leest.
+
+00:43:36.640 --> 00:43:39.180
+Automatische label toewijzing, clientzijden versus servicezijden.
+
+00:43:39.500 --> 00:43:41.340
+Automatische label toewijzing komt in twee vormen voor.
+
+00:43:41.520 --> 00:43:43.200
+Ze klinken hetzelfde, maar werken heel anders.
+
+00:43:43.200 --> 00:43:46.660
+De eerste draait op de client. Dat is de app op het scherm van de gebruiker.
+
+00:43:46.860 --> 00:43:48.260
+Word, Excel, Outlook.
+
+00:43:48.400 --> 00:43:50.820
+Terwijl iemand typt, houdt de app de inhoud in de gaten.
+
+00:43:51.020 --> 00:43:55.360
+Als het iets gevoelig opmerkt, zoals een kaartnummer of een nationaal idee, doet het een van twee dingen.
+
+00:43:55.520 --> 00:44:01.760
+Het beveelt een label aan met een kleine banner en een acceptatie met één klik, of het past het label zelf toe en laat het de persoon achteraf weten.
+
+00:44:01.960 --> 00:44:03.080
+De kracht hier is de timing.
+
+00:44:03.340 --> 00:44:06.860
+Het label verschijnt op het moment van creatie, voordat het bestand ergens heen gaat.
+
+00:44:07.040 --> 00:44:10.920
+De persoon ziet het gebeuren en leert na verloop van tijd wat het systeem als gevoelig beschouwt.
+
+00:44:10.920 --> 00:44:15.740
+De zwakte is het bereik. Clientzijde werkt alleen wanneer iemand het bestand opent in een ondersteunde app.
+
+00:44:15.800 --> 00:44:22.260
+Een bestand dat drie jaar onaangehoord blijft, wordt nooit geïnspecteerd en een bestand dat door een script is gemaakt of uit een ander systeem is geplaatst, slaat dit volledig over.
+
+00:44:22.500 --> 00:44:25.180
+Dat is waar de tweede vorm om de hoek komt kijken, servicezijde.
+
+00:44:25.580 --> 00:44:29.240
+Servicezijde automatische label toewijzing draait in de cloud tegen data die in rust staat.
+
+00:44:29.440 --> 00:44:33.160
+Het scant bestanden in SharePoint en OneDrive en e-mail die door Exchange beweegt.
+
+00:44:33.160 --> 00:44:36.040
+Geen app hoeft open te staan, geen gebruiker hoeft iets te doen.
+
+00:44:36.220 --> 00:44:42.920
+Een beleid zegt, zoek inhoud die overeenkomt met dit patroon op deze locaties en pas dit label toe en de service werkt dit op de achtergrond af.
+
+00:44:43.080 --> 00:44:46.920
+Dus de eenvangt inhoud op zodra deze wordt gemaakt, de ander ruimt op wat er al bestaat.
+
+00:44:47.080 --> 00:44:53.120
+Je zult beide willen en voor de meeste bedrijven dragen de servicezijde beleidsregels de grootste last vanwege alles wat al in de tenant staat.
+
+00:44:53.300 --> 00:44:55.200
+Hoe bepaalt een van beide nu wat gevoelig is?
+
+00:44:55.380 --> 00:44:59.120
+Er zijn drie detectieopties en ze verschillen in de hoeveelheid inspanning die ze vereisen.
+
+00:44:59.120 --> 00:45:07.740
+Type gevoelige informatie zijn het startpunt, ingebouwde patronen voor zaken als creditcardnummers, bankrekeningen, paspoortnummers en gezondheidsidees met varianten voor vele landen.
+
+00:45:07.900 --> 00:45:12.160
+Ze zijn snel in te schakelen en werken goed op gestructureerde gegevens die een vast formaat volgen.
+
+00:45:12.340 --> 00:45:17.560
+Trainware-classificaties verwerken inhoud die geen vast formaat heeft, zoals een contract, een cv of een broncodebestand.
+
+00:45:17.740 --> 00:45:22.320
+Je toont het systeem voorbeelden van de dingen die belangrijk voor je zijn en het leert vergelijkbare documenten herkennen.
+
+00:45:22.560 --> 00:45:27.280
+Dat vergt vooraf werk omdat je een goede voorbeeldzet nodig hebt, maar het bereikt inhoud die patronen niet kunnen.
+
+00:45:27.280 --> 00:45:29.700
+Exacte gegevensmatch is de meest nauwkeurige.
+
+00:45:29.860 --> 00:45:36.640
+In plaats van een patroon upload je een gehashte kopie van je eigen gevoelige gegevens, zeg een klantentabel en de service zoekt naar die exacte waarden in bestanden.
+
+00:45:36.820 --> 00:45:41.360
+Het vermindert valse positieven aanzienlijk omdat het overeenkomt met uw echte records, niet met iets dat er alleen op lijkt.
+
+00:45:41.540 --> 00:45:43.120
+Het vergt ook de meeste insteltijd.
+
+00:45:43.320 --> 00:45:49.860
+Een logische volgorde is beginnen met de ingebouwde type, klassificaties toevoegen waar patronen tekortschieten en exacte datamatch gebruiken wanneer preciesie cruciaal is.
+
+00:45:49.860 --> 00:45:52.340
+Nu, de regel die ik als ononderhandelbaar beschouw.
+
+00:45:52.440 --> 00:45:54.220
+Altijd eerst de simulatie modus.
+
+00:45:54.460 --> 00:45:57.940
+Wanneer u een surfersite beleid opstelt, kunt u dit in simulatie uitvoeren.
+
+00:45:58.120 --> 00:46:02.360
+De service scant de locaties en rapporteert wat het zou hebben gelabeld zonder een enkel bestand aan te raken.
+
+00:46:02.560 --> 00:46:03.500
+Er verandert niets.
+
+00:46:03.740 --> 00:46:04.680
+Niemand merkt iets.
+
+00:46:04.940 --> 00:46:07.880
+Vervolgens leest u de resultaten en opent u een steekproef van de matches.
+
+00:46:08.160 --> 00:46:13.400
+Zijn dit de bestanden die u wilde vangen of heeft uw regel een stapel onschadelijke spreadsheets verzameld die toevallig een langnummer bevatten?
+
+00:46:13.680 --> 00:46:15.420
+Controleer ook de aantallen per locatie.
+
+00:46:15.640 --> 00:46:20.340
+Als één site verantwoordelijk is voor de meeste treffers, zoek dan uit waarom voordat u het beleid daarop loslaat.
+
+00:46:20.480 --> 00:46:25.040
+Pas de regel aan, voer de simulatie opnieuw uit, herhaal totdat de matches kloppen voor iemand die de inhoud kent.
+
+00:46:25.200 --> 00:46:27.000
+Pas daarna schakelt u over naar handhaving.
+
+00:46:27.260 --> 00:46:31.440
+Deze stap overslaan is de snelste manier om in één weekend 10.000 bestanden verkeerd te labelen.
+
+00:46:31.440 --> 00:46:32.440
+Nog één stukje realiteit.
+
+00:46:32.440 --> 00:46:35.320
+Surfer site labeling heeft doorvoerlimieten.
+
+00:46:35.520 --> 00:46:39.420
+De service verwerkt een begrensd aantal bestanden per dag, per tenant en per beleid.
+
+00:46:39.620 --> 00:46:41.340
+Voor een klein bedrijf is dat onzichtbaar.
+
+00:46:41.540 --> 00:46:44.460
+Voor een bedrijf met tientallen miljoenen bestanden verandert het het hele plan.
+
+00:46:44.680 --> 00:46:45.840
+Maak de berekening vroeg.
+
+00:46:46.060 --> 00:46:50.240
+Neem uw bestens aantal, deel dit door de dagelijkse limiet en u ziet of u naar dagen of weken kijkt.
+
+00:46:50.400 --> 00:46:54.340
+Een grote achterstand kan een maand of langer duren om weg te werken en simulaties kosten ook tijd.
+
+00:46:54.560 --> 00:46:59.160
+Verwerk dit eens in de planning en informeer het bedrijf nu, zodat niemand op dag drie vraagt waarom nog niet alles gelabeld is.
+
+00:46:59.160 --> 00:47:00.920
+Maar snelheid is het kleinere probleem.
+
+00:47:00.920 --> 00:47:03.220
+Het grotere probleem is of de labels correct zijn.
+
+00:47:03.400 --> 00:47:09.560
+Een detectieregel die op de verkeerde bestanden afgaat, doet sneller schade dan goed en de schade treft het enige wat u niet kunt terugkopen, vertrouwen.
+
+00:47:09.780 --> 00:47:12.240
+Afstemming, automatisch labelen zonder het vertrouwen te schaden.
+
+00:47:12.400 --> 00:47:14.420
+Een vals positief ziet er klein uit op een dashboard.
+
+00:47:14.620 --> 00:47:16.800
+Eén bestand, verkeerd label, een getal in een rapport.
+
+00:47:17.060 --> 00:47:19.080
+Voor de persoon die dat bestand bezit, is het anders.
+
+00:47:19.300 --> 00:47:23.240
+Ze openen een conceptbudget en vinden het bestempeld als strikt vertrouwelijk met encryptie waar ze niet om vroegen.
+
+00:47:23.420 --> 00:47:27.580
+Ze kunnen het niet naar de leverancier sturen, beschrijven ze naar de helpdesk of ze verwijderen het label en gaan door.
+
+00:47:27.580 --> 00:47:30.340
+Doe dat bij genoeg mensen en ze stoppen met het lezen van labels.
+
+00:47:30.540 --> 00:47:37.580
+Elke melding verandert in achtergrondruis en dat is erger dan helemaal geen automatisering, want nu worden de echte labels genegeerd samen met de verkeerde.
+
+00:47:37.840 --> 00:47:42.040
+Afstemmen is dus geen extraatje, het is hoe je de geloofwaardigheid van de rest van je programma beschermt.
+
+00:47:42.200 --> 00:47:45.680
+Begin met drie knoppen, betrouwbaarheidsniveau, aantal instanties en nabijheid.
+
+00:47:45.680 --> 00:47:48.060
+Betrouwbaarheid vertelt de detector hoe zeker hij moet zijn.
+
+00:47:48.220 --> 00:47:50.360
+Een nummer van negen cijfers kan een burgerservice nummer zijn.
+
+00:47:50.520 --> 00:47:51.800
+Het kan ook een bestelnummer zijn.
+
+00:47:52.040 --> 00:47:55.980
+Hoge betrouwbaarheid betekent dat het nummer bij ondersteunend bewijs staat, zoals een trefwoord of een geboortedatum.
+
+00:47:56.180 --> 00:47:58.400
+Lage betrouwbaarheid betekent dat het er gewoon goed uitziet.
+
+00:47:58.600 --> 00:48:01.300
+Gebruik hoge betrouwbaarheid voor alles wat zelfstandig een label toekent.
+
+00:48:01.500 --> 00:48:04.820
+Hou lage betrouwbaarheid voor aanbevelingen waarbij een persoon de uiteindelijke beslissing neemt.
+
+00:48:04.920 --> 00:48:06.500
+Aantal instanties is de tweede knop.
+
+00:48:06.680 --> 00:48:09.680
+Een creditcard nummer in een lange e-mailwisseling is vaak een ongelukje.
+
+00:48:09.680 --> 00:48:12.100
+Vijftig stuks in een spreadsheet vormen een dataset.
+
+00:48:12.440 --> 00:48:17.360
+Stel de drempel zo in dat een enkele toevallige match geen blokkering activeert, maar een echte stapel records wel.
+
+00:48:17.780 --> 00:48:18.900
+Nabijheid is de derde.
+
+00:48:19.160 --> 00:48:21.800
+Het bepaalt hoe dicht het bewijs bij de match moet staan.
+
+00:48:22.860 --> 00:48:25.880
+Een nummer naast de woorden rekening en routering betekent iets.
+
+00:48:26.120 --> 00:48:29.720
+Hetzelfde nummer onderaan pagina 9 zonder tekst eromheen waarschijnlijk niet.
+
+00:48:29.920 --> 00:48:31.580
+Nu de werkwijze en die is simpel.
+
+00:48:31.840 --> 00:48:32.480
+Begin smal.
+
+00:48:32.720 --> 00:48:35.460
+Kies één detectietype met een regel voor hoge betrouwbaarheid.
+
+00:48:35.460 --> 00:48:41.280
+Richt het op één locatie, misschien een enkele financiële bibliotheek of een paar sites waarvan je weet dat ze gereguleerde gegevens bevatten.
+
+00:48:41.460 --> 00:48:44.200
+Draai het in simulatie, lees de matches en dwing het daarna af.
+
+00:48:44.420 --> 00:48:45.580
+Observeer het twee weken lang.
+
+00:48:45.780 --> 00:48:50.160
+Verbreed pas daarna de scope naar meer sites, verlaag dan de betrouwbaarheid een tandje en voeg een tweede detector toe.
+
+00:48:50.340 --> 00:48:53.560
+Elke stap is klein genoeg zodat je bij problemen precies weet welke wijziging de oorzaak was.
+
+00:48:53.740 --> 00:48:55.700
+Dan is er nog een vraag die voor echte discussies zorgt.
+
+00:48:55.880 --> 00:48:57.580
+Hoe zit het met labels die mensen al hebben toegepast?
+
+00:48:57.800 --> 00:48:59.840
+Stel dat een gebruiker een bestand als vertrouwelijk heeft gemarkeerd.
+
+00:49:00.040 --> 00:49:02.000
+Jouw beleid bepaalt dat het strikt vertrouwelijk moet zijn.
+
+00:49:02.000 --> 00:49:05.560
+Moet automatisering hun keuze overschrijven? Denk na over wie er meer weet.
+
+00:49:05.720 --> 00:49:11.900
+De persoon die het bestand schreef maakte een afweging met context die de scanner niet heeft, maar de scanner vond zojuist een stapel gereguleerde records daarin.
+
+00:49:12.100 --> 00:49:14.380
+Soms heeft de persoon gelijk en soms hebben ze iets gemist.
+
+00:49:14.540 --> 00:49:18.160
+Een werkbare regel is dat automatisering een label mag verhogen, maar nooit mag verlagen.
+
+00:49:18.360 --> 00:49:21.480
+Als een persoon een hoger label koos dan de regel zou doen, laat het dan met rust.
+
+00:49:21.660 --> 00:49:25.600
+Als de regel iets ergers vindt dan wat de persoon koos, verhoog het dan en laat hen zien waarom.
+
+00:49:25.800 --> 00:49:29.100
+Dat houdt menselijk oordeel in stand waar het ertoe doet en vangt toch de missers op.
+
+00:49:29.100 --> 00:49:38.340
+Wees voorzichtig met één geval. Een label dat door een persoon met een specifieke zakelijke reden wordt toegepast, zoals een juridisch team dat vertrouwelijk materiaal markeert, mag niet door een patroonovereenkomst worden overschreven.
+
+00:49:38.560 --> 00:49:40.940
+Sluit die labels bij voorbaat uit van automatisering.
+
+00:49:41.160 --> 00:49:42.620
+Het laatste onderdeel, feedback.
+
+00:49:42.940 --> 00:49:45.780
+Mensen zullen foutieve labels veel eerder vinden dan jouw rapporten.
+
+00:49:45.960 --> 00:49:47.900
+Geef ze een manier om dit in één stap te melden.
+
+00:49:48.040 --> 00:49:53.340
+Een link in de beleidstip, een gedeelde mailbox, een kort formulier, iets dat 10 seconden duurt, en sluit dan de cirkel.
+
+00:49:53.340 --> 00:50:00.200
+Wanneer iemand een verkeerd label meldt, leest een aangewezen persoon dit, beslist of de regel moet worden aangepast en laat de melder weten wat er is gebeurd.
+
+00:50:00.420 --> 00:50:02.420
+Zelfs een antwoord van één regel volstaat.
+
+00:50:02.560 --> 00:50:03.980
+We hebben de regel aangescherpt.
+
+00:50:04.160 --> 00:50:05.140
+Bedankt voor het melden.
+
+00:50:05.360 --> 00:50:08.480
+Mensen melden problemen wanneer ze zien dat rapporten ergens toe leiden.
+
+00:50:08.760 --> 00:50:14.380
+Zonder dat werken ze stilletjes om je heen en het eerste teken van problemen is dat een kwart van het bedrijf de labels negeert.
+
+00:50:14.380 --> 00:50:20.260
+Bestanden zijn één plek waar labels leven, maar een volledige werkruimte met eigen leden en eigen deelregels is een andere.
+
+00:50:20.460 --> 00:50:25.020
+En het label dat je op een team plakt, gedraagt zich totaal anders dan het label op een document.
+
+00:50:25.740 --> 00:50:27.680
+Containerlabels, teams, groepen en sites.
+
+00:50:27.940 --> 00:50:30.000
+Een label op een container markeert geen bestand.
+
+00:50:30.160 --> 00:50:31.680
+Het stelt de regels van de ruimte vast.
+
+00:50:31.860 --> 00:50:33.160
+Dus welke regels kan het vaststellen?
+
+00:50:33.360 --> 00:50:34.200
+Drie belangrijke.
+
+00:50:34.360 --> 00:50:36.860
+Privacy, dat bepaalt of een team openbaar of privé is.
+
+00:50:37.060 --> 00:50:40.960
+Extern delen, dat bepaalt of gasten kunnen worden toegevoegd en of links het bedrijf kunnen verlaten.
+
+00:50:40.960 --> 00:50:46.120
+En toegang vanaf onbeheerde apparaten, dat bepaalt wat iemand op een persoonlijke laptop in de werkruimte kan doen.
+
+00:50:46.340 --> 00:50:51.400
+Dat is het, geen versleuteling van inhoud, geen markeringen op documenten, alleen de regels van de werkruimte zelf.
+
+00:50:51.580 --> 00:50:53.540
+En dit is het deel dat bijna iedereen verrast.
+
+00:50:54.140 --> 00:50:56.120
+Containerlabels labelen de bestanden binnenin niet.
+
+00:50:56.260 --> 00:51:03.000
+Je zet, zeer vertrouwelijk, op een teamsite, dan open je een document op die site en er staat niets of het draagt nog het label van vorig jaar.
+
+00:51:03.200 --> 00:51:07.680
+De container en de inhoud zijn gescheiden zaken met gescheiden labels en geen van beide erft over van de ander.
+
+00:51:07.920 --> 00:51:09.960
+Mensen denken van wel omdat het woord hetzelfde is.
+
+00:51:09.960 --> 00:51:12.220
+Zelfde naam op het scherm dus hetzelfde effect, toch?
+
+00:51:12.400 --> 00:51:13.080
+Dat is niet zo.
+
+00:51:13.260 --> 00:51:15.160
+Het site label bepaalt wie de kamer in mag.
+
+00:51:15.340 --> 00:51:18.220
+Het bestens label bepaalt wat er met het papier gebeurt zodra het naar buiten gaat.
+
+00:51:18.380 --> 00:51:20.000
+Als je beide wilt, heb je beide nodig.
+
+00:51:20.180 --> 00:51:24.600
+Een site label voor de werkruimte plus een standaard label op de bibliotheek zodat nieuwe bestanden binnenin met iets zinnigs beginnen.
+
+00:51:24.780 --> 00:51:27.500
+We hebben standaarden eerder behandeld en dit is een goede plek om er een te gebruiken.
+
+00:51:27.700 --> 00:51:28.540
+Nu, de verrijste.
+
+00:51:28.780 --> 00:51:30.780
+Dit is waar uitroltrajecten in stilte vastlopen.
+
+00:51:31.340 --> 00:51:32.980
+Containerlabels werken niet standaard uit de doos.
+
+00:51:32.980 --> 00:51:39.220
+Iemand moet labels inschakelen voor Microsoft 365 groepen en sites in de tenant en vervolgens de labels synchroniseren zodat de groepservice ze kan zien.
+
+00:51:39.360 --> 00:51:43.840
+Totdat dat is gebeurd, verschijnen de opties simpelweg niet in het aanmaakproces en vertelt niemand je waarom.
+
+00:51:43.960 --> 00:51:47.600
+Het label bestaat in de portal, maar de site-eigenaar heeft geen manier om het te selecteren.
+
+00:51:47.920 --> 00:51:52.920
+Controleer dit vroegtijdig, test het, maak een testteam en kijk of het label verschijnt waar een echte gebruiker zou kijken.
+
+00:51:53.300 --> 00:51:54.620
+Vervolgens de ontwerpvraag.
+
+00:51:54.760 --> 00:51:58.120
+Hoe bouw je containerlabels zonder de volledige itemtaxonomie te kopiëren?
+
+00:51:58.260 --> 00:51:59.540
+De valkuil is duplicatie.
+
+00:51:59.720 --> 00:52:05.400
+Je hebt vier itemlabels, dus maak je vier containerlabels met dezelfde namen en nu komen gebruikers, vertrouwelijk, op twee plaatsen tegen die verschillende dingen doen.
+
+00:52:05.600 --> 00:52:06.400
+Dat is verwarrend.
+
+00:52:06.620 --> 00:52:07.140
+Doe het niet.
+
+00:52:07.360 --> 00:52:09.720
+Vraag je in plaats daarvan af wat een werkruimte moet weten.
+
+00:52:09.940 --> 00:52:14.460
+De meeste bedrijven ontdekken dat ze twee of drie containertypen nodig hebben, bepaald door hoe open de ruimte is.
+
+00:52:14.460 --> 00:52:18.260
+Een voor-interne samenwerking waarbij gasten worden geblokkeerd en het team privé is.
+
+00:52:18.440 --> 00:52:22.240
+Een voor-partnerwerk waarbij genoemde gasten kunnen deelnemen, maar links beperkt blijven.
+
+00:52:22.400 --> 00:52:28.540
+Een voor-het-meest gevoelige werk waarbij gasten worden geblokkeerd, delen strikt is en onbeheerde apparaten alleen browser toegang krijgen.
+
+00:52:28.780 --> 00:52:29.780
+Noem ze naar het gedrag.
+
+00:52:30.080 --> 00:52:33.420
+Alleen-intern, partnersamenwerking, beperkte werkruimte.
+
+00:52:33.960 --> 00:52:40.200
+Een nieuwe site-eigenaar moet de naam lezen en weten wat hij kiest zonder diagram en een losse link met de itemtaxonomie behouden.
+
+00:52:40.200 --> 00:52:44.920
+De beperkte werkruimte kan standaard, zeer vertrouwelijk, instellen op de hoofdbibliotheek.
+
+00:52:45.380 --> 00:52:47.640
+Partnersamenwerking kan standaard op vertrouwelijk staan.
+
+00:52:47.640 --> 00:52:51.120
+De container- en itemlabels werken als een paar, niet als kopieën van elkaar.
+
+00:52:51.340 --> 00:52:52.300
+Nu het lastige deel.
+
+00:52:52.700 --> 00:52:53.780
+Werkruimtes die al bestaan.
+
+00:52:53.940 --> 00:52:59.280
+Je hebt waarschijnlijk duizenden sites en teams die in de loop der jaren zijn gemaakt met deelinstellingen waarvan niemand zich herinnert waarom ze zijn gekozen.
+
+00:52:59.480 --> 00:53:04.460
+Ze labelen is het echte project en het toepassen van een label kan de werking van het delen direct veranderen zodra het wordt toegepast.
+
+00:53:04.680 --> 00:53:09.100
+Blokkeer gasten op een site met 40 actieve partners en 40 mensen verliezen op een dinsdagochtend een toegang.
+
+00:53:09.320 --> 00:53:10.460
+Doe het dus niet blindelings.
+
+00:53:10.720 --> 00:53:15.640
+Begin met het inventariseren van wat er is, welke sites hebben gasten, welke hebben externe links, welke zijn openbaar.
+
+00:53:15.640 --> 00:53:17.980
+Sorteer ze op risico en activiteit.
+
+00:53:18.120 --> 00:53:23.380
+Omdat een site die niemand in twee jaar heeft geopend makkelijker is dan een site met een live project, kun je ingolven werken.
+
+00:53:23.620 --> 00:53:27.640
+Label eerst de stille risicovolle sites waar een strengere regel bijna niets kost.
+
+00:53:27.880 --> 00:53:31.800
+Neem contact op met de eigenaren van de actieve sites voordat je ze wijzigt en spreek een datum af.
+
+00:53:31.960 --> 00:53:36.980
+Kies voor sites met legitieme gasten het partner label, niet het beperkte label, zodat de juiste mensen kunnen blijven werken.
+
+00:53:37.200 --> 00:53:40.540
+Scripts kunnen labels in bulk toepassen en voor een grote tenant zul je ze nodig hebben.
+
+00:53:40.540 --> 00:53:44.520
+Draai de eerste batch echter op een kleine groep, controleer wat er is veranderd en schaalpas daarna op.
+
+00:53:44.600 --> 00:53:46.720
+Een label op een site bepaalt de regels van de ruimte.
+
+00:53:46.880 --> 00:53:49.860
+Op zichzelf zorgt het er niet voor dat de rest van uw tenant deze respecteert.
+
+00:53:50.080 --> 00:53:54.760
+Daarvoor moet het label verbonden zijn met iets groters, de controles die beslissen wie er überhaupt binnenkomt.
+
+00:53:54.920 --> 00:53:58.120
+Labels koppelen aan voorwaardelijke toegang- en deelingscontroles.
+
+00:53:58.300 --> 00:54:00.840
+Een container label stelt regels in voorbinnen de ruimte.
+
+00:54:01.260 --> 00:54:03.140
+Voorwaardelijke toegang bepaalt wie er bij de deur komt.
+
+00:54:03.340 --> 00:54:04.900
+Het zijn afzonderlijke systemen.
+
+00:54:05.040 --> 00:54:07.460
+Het label dwingt op zichzelf geen inlogvereisten af.
+
+00:54:07.460 --> 00:54:10.160
+Wat het wel kan doen, is verwijzen naar een beleid dat dat wel doet.
+
+00:54:10.360 --> 00:54:12.860
+Die verwijzing wordt een authenticatiecontext genoemd.
+
+00:54:12.980 --> 00:54:13.880
+Dit is hoe het werkt.
+
+00:54:14.060 --> 00:54:20.220
+In Entra maakt u een authenticatiecontext aan, wat in feite een benoemde tag is, zoiets als vereist compliant apparaat en MFA.
+
+00:54:20.620 --> 00:54:23.660
+Vervolgens bouwt u een beleid voor voorwaardelijke toegang dat zich op die tag richt.
+
+00:54:23.860 --> 00:54:26.120
+Ten slotte koppelt u de tag aan een container label.
+
+00:54:26.380 --> 00:54:29.020
+Nu erft elke site met dat label de inlogvereisten over.
+
+00:54:29.240 --> 00:54:33.040
+Iemand opent de site, het beleid wordt geactiveerd en ze voldoen aan de norm of ze komen er niet in.
+
+00:54:33.200 --> 00:54:35.120
+Dat is een schone manier om een regel op te schalen.
+
+00:54:35.120 --> 00:54:36.920
+U hoeft niet per site een beleid te schrijven.
+
+00:54:36.920 --> 00:54:38.960
+U schrijft één beleid en het label levert het.
+
+00:54:39.120 --> 00:54:41.140
+Nu het tweede hulpmiddel, onbeheerde apparaten.
+
+00:54:41.300 --> 00:54:44.140
+Een laptop die u niet beheert, is een laptop waar u geen inzicht in heeft.
+
+00:54:44.320 --> 00:54:47.620
+U weet niet of deze gepatcht is, of de schijf versleuteld is of wie hem nog meer gebruikt.
+
+00:54:47.780 --> 00:54:50.080
+Voor een normale werkplek is dat een acceptabel risico.
+
+00:54:50.280 --> 00:54:51.860
+Voor een beperkte werkplek misschien niet.
+
+00:54:52.020 --> 00:54:53.760
+Dus het label kan een regel instellen voor die apparaten.
+
+00:54:53.920 --> 00:54:56.800
+Volledige toegang, alleen browser toegang zonder downloads of volledig geblokkeerd.
+
+00:54:56.980 --> 00:54:59.160
+Alleen browser toegang is waar de meeste teams voor kiezen.
+
+00:54:59.360 --> 00:55:02.280
+Mensen kunnen nog steeds lezen en werken in de site vanaf een persoonlijk apparaat,
+
+00:55:02.280 --> 00:55:04.700
+maar er wordt niets gekopieerd naar een schijf die u nooit meer ziet.
+
+00:55:04.860 --> 00:55:09.280
+Het is een middenweg en het houdt de aannemer op een thuislaptop productief zonder de bestanden over te dragen.
+
+00:55:09.460 --> 00:55:12.020
+Test die optie echter wel met een echt onbeheerd apparaat.
+
+00:55:12.160 --> 00:55:16.600
+Het gedrag in de browser kan mensen verrassen, vooral bij het openen van bestanden in desktop apps.
+
+00:55:16.760 --> 00:55:18.420
+Ten derde, het delen van koppelingen.
+
+00:55:18.580 --> 00:55:20.360
+Elke site heeft een standaard type koppeling.
+
+00:55:20.620 --> 00:55:23.620
+Wanneer iemand op delen klikt, kiest het systeem welk soort koppeling er wordt gemaakt.
+
+00:55:23.820 --> 00:55:27.040
+Iedereen met de koppeling, mensen in uw organisatie of alleen specifieke personen.
+
+00:55:27.180 --> 00:55:29.260
+De meeste tenants laten die standaardinstelling wijd openstaan,
+
+00:55:29.320 --> 00:55:30.940
+omdat dat vanaf dag één de makkelijkste instelling was.
+
+00:55:30.940 --> 00:55:32.760
+Label-instellingen kunnen dat veranderen.
+
+00:55:32.860 --> 00:55:35.820
+Een beperkte werkplek kan standaard ingesteld worden op specifieke personen,
+
+00:55:35.940 --> 00:55:37.960
+zodat de makkelijke klik de veilige koppeling produceert.
+
+00:55:38.140 --> 00:55:39.560
+Niemand hoeft ergens aan te denken.
+
+00:55:39.780 --> 00:55:42.420
+De handige weg en de voorzichtige weg worden één en hetzelfde,
+
+00:55:42.580 --> 00:55:45.160
+wat het patroon is dat tijdens deze hele uithol heeft gewerkt.
+
+00:55:45.340 --> 00:55:48.740
+Je kunt ook de meest toegankelijke koppeling die een site mag maken, beperken.
+
+00:55:48.900 --> 00:55:53.180
+Een site kan interne koppelingen toestaan, maar nooit anonieme, wat de gebruiker ook probeert.
+
+00:55:53.380 --> 00:55:54.880
+Wees nu eerlijk over waar dit eindigt.
+
+00:55:55.100 --> 00:55:57.460
+Labels beheersen de werkomgeving waaraan ze zijn gekoppeld.
+
+00:55:57.460 --> 00:55:59.000
+Ze beheersen niet de hele tenant.
+
+00:55:59.000 --> 00:56:02.680
+Een gebruiker met een link naar een bestand op een niet gelabelde site valt hier niet onder.
+
+00:56:02.920 --> 00:56:07.040
+Beleid voor voorwaardelijke toegang dat voor iedereen geldt, moet nog steeds voor iedereen worden opgesteld.
+
+00:56:07.360 --> 00:56:10.260
+Delingslimieten voor de gehele tenant moeten nog steeds op tenantniveau worden ingesteld,
+
+00:56:10.420 --> 00:56:13.760
+omdat een label een site alleen kan inperken en nooit ruimer kan maken dan de tenant toestaat.
+
+00:56:13.940 --> 00:56:18.280
+Dat is het benoemen waard, omdat mensen lezen dat labels delen beheersen en aannemen dat de tenant gedekt is.
+
+00:56:18.480 --> 00:56:19.200
+Dat is niet zo.
+
+00:56:19.380 --> 00:56:22.100
+Het label is een nauwkeurig instrument voor specifieke ruimtes.
+
+00:56:22.300 --> 00:56:26.080
+De basislijn voor alle andere ruimtes ligt elders, dus behandel beide als lagen.
+
+00:56:26.080 --> 00:56:31.320
+Stel eerst een verstandige basis voor de tenant in aanmeldnormen, standaard gedrag voor koppelingen, gastregels
+
+00:56:31.320 --> 00:56:34.460
+en gebruik dan labels om de lat hoger te leggen waar de inhoud dat rechtvaardigt.
+
+00:56:34.620 --> 00:56:39.300
+Als je het andersom doet, eindig je met een paar goed beveiligde sites in een tenant waar al het andere wagenwijd open staat
+
+00:56:39.300 --> 00:56:41.540
+en dat is precies waar Copilot als eerste zal kijken.
+
+00:56:41.760 --> 00:56:46.560
+De beheersmaatregelen zijn nu van kracht, beleid, labels, verificatiecontexten, delingsregels
+
+00:56:46.560 --> 00:56:49.640
+en niets daarvan doet ertoe als de mensen die ze gebruiken hun gedrag niet veranderen.
+
+00:56:49.800 --> 00:56:52.340
+Adoptie is een productprobleem, geen trainingsprobleem.
+
+00:56:52.340 --> 00:56:55.540
+De meeste uitrolplannen behandelen adoptie als een communicatietaak.
+
+00:56:55.680 --> 00:56:59.580
+Schrijf het bericht, verstuur het bericht, tel de openingen, maar een labelervaring is geen bericht.
+
+00:56:59.740 --> 00:57:03.760
+Het is een product, het heeft gebruikers, het heeft wrijving, het heeft baks en het heeft releases nodig.
+
+00:57:03.960 --> 00:57:07.600
+En als je het uitvoert als een eenmalige aankondiging, krijg je de resultaten van een eenmalige aankondiging.
+
+00:57:07.740 --> 00:57:08.920
+Dus verander het perspectief.
+
+00:57:09.100 --> 00:57:10.080
+Wie zijn de gebruikers?
+
+00:57:10.240 --> 00:57:12.260
+Iedereen die een bestand maakt of een e-mail verstuurt.
+
+00:57:12.460 --> 00:57:13.420
+Wat proberen ze te doen?
+
+00:57:13.580 --> 00:57:14.720
+Hun werk, niet het jouwe.
+
+00:57:14.920 --> 00:57:16.500
+Waar zit jouw product en daarbij in de weg?
+
+00:57:16.680 --> 00:57:17.900
+Dat is het eigenlijke werk.
+
+00:57:17.900 --> 00:57:22.720
+Niet hoe krijgen we mensen zover dat het ze boeit, maar waar kost ons ontwerp hen tijd en hoe lossen we dat op?
+
+00:57:23.320 --> 00:57:25.120
+Productteams stellen die vraag elke week.
+
+00:57:25.320 --> 00:57:29.000
+De meeste beveiligingsprogramma's vragen dit één keer bij de lancering en daarna nooit meer.
+
+00:57:29.180 --> 00:57:32.060
+De lanceringsmail, de Big Bang versie, gaat als volgt.
+
+00:57:32.220 --> 00:57:35.980
+Eén datum, één bericht naar het hele bedrijf, een link naar een pagina die niemand opent.
+
+00:57:36.160 --> 00:57:39.860
+En op maandagochtend zien 40.000 mensen op hetzelfde moment een nieuwe werkbalk.
+
+00:57:40.060 --> 00:57:41.760
+Wat er daarna gebeurt, is voorspelbaar.
+
+00:57:41.940 --> 00:57:43.720
+De helpdesk wordt op één dag overspoeld.
+
+00:57:43.880 --> 00:57:46.380
+De vragen zijn allemaal anders, dus niemand ziet een patroon.
+
+00:57:46.380 --> 00:57:49.500
+Leidinggevenden zien de gaals en vragen zich af of het wel klaar was.
+
+00:57:49.660 --> 00:57:52.600
+En de mensen die op de eerste dag in de war raakten, onthouden dat maandenlang,
+
+00:57:52.740 --> 00:57:55.760
+omdat de eerste indruk van een tool sterker blijft dan wat je later ook schrijft.
+
+00:57:55.940 --> 00:57:57.440
+Golven lossen het meeste daarvan op.
+
+00:57:57.600 --> 00:58:01.180
+Je geeft het vrij aan één groep, kijkt wat er misgaat, repareert het en gaat door naar de volgende.
+
+00:58:01.400 --> 00:58:05.820
+Elke golf is kleiner dan het voorrige probleem en elke golf profiteert van wat de voorrige je heeft geleerd.
+
+00:58:06.020 --> 00:58:11.160
+Tegen de tijd dat de grootste groepen aan de beurt zijn, zijn de scherpe randjes eraf en heeft het supportteam al antwoorden klaarstaan.
+
+00:58:11.160 --> 00:58:14.340
+Het gaat langzamer op de kalender, maar sneller naar een werkend resultaat.
+
+00:58:14.340 --> 00:58:18.180
+Maar wie beantwoordt de vragen tussendoor? Niet het centrale team, althans niet alleen.
+
+00:58:18.380 --> 00:58:24.500
+Een projectteam van vijf kan niet weten hoe inkoopleverancierscontracten afhandelt of wat een engineer bedoelt met een ontwerpdocument.
+
+00:58:25.160 --> 00:58:29.180
+Die vragen hebben context en de mensen die die context hebben, zitten in de business zelf.
+
+00:58:29.420 --> 00:58:34.340
+Werf dus ambassadeurs één of twee per bedrijfsonderdeel, bij voorkeur mensen aan wie anderen al hulp vragen.
+
+00:58:34.540 --> 00:58:38.320
+Ze hoeven niet technisch te zijn. Ze moeten nieuwsgierig, bereidwillig en betrouwbaar zijn.
+
+00:58:38.320 --> 00:58:42.820
+Geef ze vroege toegang, een directe lijn naar je team en een korte lijst met de antwoorden die je al hebt uitgewerkt.
+
+00:58:43.000 --> 00:58:44.340
+Laat ze vervolgens hun gang gaan.
+
+00:58:44.520 --> 00:58:49.080
+Een collega die zegt, oh, voor dat soort bestand kies ik gewoon deze, is beter dan welke beleidspagina ook.
+
+00:58:49.200 --> 00:58:53.700
+En in ruil daarvoor brengen ambassadeurs terug wat ze horen, wat na de pilot je beste bron voor ontwerpfeedback is.
+
+00:58:53.960 --> 00:58:54.700
+Behandel ze goed.
+
+00:58:54.900 --> 00:58:58.380
+Een ambassadeur die drie rapporten stuurt en niets terug hoort, stopt met het sturen van rapporten.
+
+00:58:58.540 --> 00:59:00.520
+Dit is het principe dat hieraan ten grondslag ligt.
+
+00:59:00.740 --> 00:59:02.580
+Maak de juiste keuze de makkelijke keuze.
+
+00:59:02.580 --> 00:59:07.620
+Als voor het juiste label iemand een regel moet onthouden, heb je ontworpen voor de beste dag van je beste werknemer.
+
+00:59:07.800 --> 00:59:14.640
+Als het juiste label al is geselecteerd en er alleen een gerichte aanbeveling verschijnt wanneer inhoud gevoelig lijkt, heb je ontworpen voor een gewone dinsdagmiddag.
+
+00:59:14.820 --> 00:59:17.280
+Standaard instellingen doen, zoals we zagen, het zware werk.
+
+00:59:17.720 --> 00:59:19.240
+Aanbevelingen vangen de uitzonderingen op.
+
+00:59:19.380 --> 00:59:20.740
+Training is wat erover blijft.
+
+00:59:20.920 --> 00:59:23.740
+Dus voordat je een sessie inplant, stel jezelf een moeilijkere vraag.
+
+00:59:23.940 --> 00:59:26.820
+Waar maken mensen de verkeerde keuze en had het systeem die voor hen kunnen maken?
+
+00:59:26.820 --> 00:59:31.620
+Elke keer dat het antwoord ja is, is dat een oplossing die meer waard is dan een extra dia, wat ons bij het meetprobleem brengt.
+
+00:59:31.980 --> 00:59:33.280
+Aanwezigheid is het makkelijke getal.
+
+00:59:33.480 --> 00:59:34.780
+Hoeveel mensen namen deel aan de call?
+
+00:59:34.940 --> 00:59:36.360
+Hoeveel mensen hebben de e-mail geopend?
+
+00:59:36.520 --> 00:59:37.900
+Hoeveel mensen hebben de module afgerond?
+
+00:59:38.080 --> 00:59:40.220
+Niets daarvan zegt iets over wat iemand werkelijk doet achter het toetsenbord.
+
+00:59:40.400 --> 00:59:41.560
+Meet in plaats daarvan gedrag.
+
+00:59:41.800 --> 00:59:44.520
+Welk deel van de nieuwe bestanden krijgt een bewust label in plaats van een standaard label?
+
+00:59:44.680 --> 00:59:46.400
+Hoe vaak accepteren mensen een aanbeveling?
+
+00:59:46.600 --> 00:59:48.000
+Waar concentreren downgrades zich?
+
+00:59:48.160 --> 00:59:50.880
+Hoeveel tickets vermelden labels deze maand in vergelijking met vorige maand?
+
+00:59:50.880 --> 00:59:55.240
+Deze cijfers veranderen als het product verbetert, maar blijven gelijk als alleen de boodschap verandert.
+
+00:59:55.400 --> 00:59:59.920
+Als de opkomst hoog is maar het gedrag niet verandert, ligt het probleem niet bij de bewustwording, maar bij het product.
+
+01:00:00.200 --> 01:00:04.440
+Sommige trainingen verdienen hun plek echter wel en ze werken beter als ze op het juiste doel gericht zijn.
+
+01:00:04.600 --> 01:00:06.380
+Training die mensen ook echt onthouden.
+
+01:00:06.620 --> 01:00:07.500
+Begin met de duur.
+
+01:00:07.640 --> 01:00:09.720
+Een presentatie van een uur voelt grondig aan.
+
+01:00:09.900 --> 01:00:15.460
+Het behandelt elk label, elke instelling, elk uitzonderingsgeval en de maandag daarna herinnert bijna niemand zich er iets van.
+
+01:00:15.460 --> 01:00:20.280
+Niet omdat mensen slordig zijn, maar omdat een uur aanregels zonder moment om ze toe te passen niet blijft hangen.
+
+01:00:20.280 --> 01:00:21.800
+Drie minuten blijft wel hangen.
+
+01:00:21.960 --> 01:00:29.980
+Eén scenario, één beslissing, een kort filmpje of één scherm dat aangeeft dat je een spreadsheet met bankgegevens van klanten naar een externe accountant wilt sturen.
+
+01:00:30.220 --> 01:00:31.120
+Wat kies je en waarom?
+
+01:00:31.380 --> 01:00:33.240
+Vervolgens het antwoord en de reden daarvoor.
+
+01:00:33.500 --> 01:00:34.380
+Dat is de hele lee.
+
+01:00:34.580 --> 01:00:38.180
+Mensen ronden het af tussen vergaderingen door en de keuze is vers genoeg om diezelfde dag nog toe te passen.
+
+01:00:38.380 --> 01:00:39.980
+Bouw een kleine bibliotheek hiervan op.
+
+01:00:40.080 --> 01:00:41.120
+10, misschien 15.
+
+01:00:41.380 --> 01:00:44.500
+Elke video behandelt één situatie en elke video kan afzonderlijk bekeken worden.
+
+01:00:44.720 --> 01:00:47.080
+Niemand hoeft door de video's heen te zitten die niet op hen van toepassing zijn.
+
+01:00:47.240 --> 01:00:48.660
+En dat leidt naar de volgende oplossing.
+
+01:00:48.860 --> 01:00:49.620
+Train per rol.
+
+01:00:49.620 --> 01:00:53.560
+Een financieel analist werkt met salarisbestanden, facturen en addedocumenten.
+
+01:00:53.660 --> 01:00:57.040
+Een ingenieur werkt met ontwerpdocumenten, broncode en klantlogboeken.
+
+01:00:57.200 --> 01:01:00.900
+Een verkoper werkt met voorstellen, prijslijsten en partnercontracten.
+
+01:01:01.040 --> 01:01:05.160
+Ieder van hen neemt andere beslissingen over labels op andere momenten met andere gevolgen.
+
+01:01:05.320 --> 01:01:09.280
+Alle drie dezelfde sessie geven betekent dat twee derde ruis is, dus splits het op.
+
+01:01:09.420 --> 01:01:11.420
+Stel elke groep eerst een simpele vraag.
+
+01:01:11.620 --> 01:01:13.880
+Wat zijn de vijf bestanden waar je het meest mee werkt?
+
+01:01:14.080 --> 01:01:16.160
+Bouw vervolgens de scenario's rondom die bestanden.
+
+01:01:16.160 --> 01:01:20.600
+Wanneer iemand van financiën een salarisspecificatie in het voorbeeld ziet, letten ze op, want dat is hun dagelijkse realiteit.
+
+01:01:20.820 --> 01:01:23.300
+Wanneer ze een algemene vertrouwelijke memo zien, dwalen ze af.
+
+01:01:23.460 --> 01:01:24.580
+Nu het materiaal zelf.
+
+01:01:24.820 --> 01:01:26.020
+Gebruik je eigen documenten.
+
+01:01:26.200 --> 01:01:28.680
+Algemene voorbeelden zijn makkelijk te schrijven en makkelijk te vergeten.
+
+01:01:28.840 --> 01:01:30.860
+Echte voorbeelden zijn lastiger, maar ze komen aan.
+
+01:01:31.060 --> 01:01:34.660
+Neem een handvol echte bestanden uit de pilot, verwijder de namen en cijfers en laat ze zien.
+
+01:01:34.660 --> 01:01:37.700
+Hier is een leveranciersprijslijst die iemand als algemeen heeft gelabeld.
+
+01:01:37.860 --> 01:01:39.920
+Hier is degene die vertrouwelijk had moeten zijn.
+
+01:01:40.140 --> 01:01:40.900
+Zie het verschil.
+
+01:01:41.140 --> 01:01:45.660
+Mensen herkennen de vorm van hun eigen werk en onthouden de correcties omdat de fouten bekend voorkomen.
+
+01:01:46.440 --> 01:01:48.820
+Vraag toestemming en anonimiseer zorgvuldig.
+
+01:01:48.980 --> 01:01:52.740
+Een trainingsdia die de inhoud lekt die hij juist moet beschermen, dat zou een slechte dag zijn.
+
+01:01:52.920 --> 01:01:57.720
+Er is nog één plek waar training kan plaatsvinden en het kost vrijwel niets, in de app op het moment van de keuze.
+
+01:01:58.080 --> 01:02:01.360
+Beleidstips zijn korte berichten die verschijnen in Word, Excel en Outlook.
+
+01:02:01.540 --> 01:02:04.680
+Een zin onder de labelkiezer, een banner wanneer iemand een kaartnummer toevoegt.
+
+01:02:04.900 --> 01:02:07.140
+Dit bestand bevat financiële gegevens van klanten.
+
+01:02:07.500 --> 01:02:08.820
+Vertrouwelijk wordt aanbevolen.
+
+01:02:09.000 --> 01:02:12.820
+Dat is training die precies wordt gegeven wanneer de vraag opkomt, zonder vergadering of module.
+
+01:02:13.040 --> 01:02:15.360
+Het is ook kort genoeg zodat mensen het daadwerkelijk lezen.
+
+01:02:15.620 --> 01:02:17.500
+Schrijf die tip zoals een collega ze zou zeggen.
+
+01:02:17.740 --> 01:02:20.820
+Eenvoudige woorden, één idee, geen beleidsnummers, geen juridische taal.
+
+01:02:20.960 --> 01:02:22.720
+Als het meer dan twee regels kost, kort het in.
+
+01:02:22.880 --> 01:02:24.840
+Het laatste punt, training heeft een houdbaarheidsdatum.
+
+01:02:24.840 --> 01:02:28.040
+Mensen vergeten dingen en er komen nieuwe mensen die de oorspronkelijke sessies nooit hebben gezien.
+
+01:02:28.200 --> 01:02:33.160
+Plan daarom voor beide een korte opfriscursus om de zes maanden, gebaseerd op wat er volgens de data misgaat.
+
+01:02:33.280 --> 01:02:40.120
+Als het aantal downgrades op één afdeling piekt, stuur die afdeling dan een nieuw scenario daarover en verwerk de clips van drie minuten in de onboarding,
+
+01:02:40.260 --> 01:02:43.800
+zodat een nieuwe medewerker ze in de eerste week ziet voordat er slechte gewoontes ontstaan.
+
+01:02:43.940 --> 01:02:45.380
+Hou de opfriscursus kort.
+
+01:02:45.560 --> 01:02:50.000
+Een bericht met één scenario is beter dan een hercertificeringscursus waar iedereen snel doorheen klikt.
+
+01:02:50.140 --> 01:02:53.920
+Training die op deze manier is gericht, ondersteunt het product in plaats van er excuses voor aan te bieden.
+
+01:02:53.920 --> 01:02:57.960
+De standaardinstellingen doen het zware werk, de tips vangen het moment en de korte lessen vullen de gaten.
+
+01:02:58.140 --> 01:03:01.660
+Maar dit alles gaat ervan uit dat de grootste bedreiging iemand is die het verkeerde label kiest.
+
+01:03:01.820 --> 01:03:04.580
+Er is een nieuwer risico dat helemaal niet afhangt van iemands keuze.
+
+01:03:04.780 --> 01:03:07.920
+Het hangt af van waar het platform bij kan namens degene die de vraag stelt.
+
+01:03:08.120 --> 01:03:09.600
+En dat brengt ons bij Copilot.
+
+01:03:09.860 --> 01:03:11.620
+Copilot en labels, wat verandert er?
+
+01:03:11.800 --> 01:03:13.500
+Copilot heeft geen eigen toegangsrechten.
+
+01:03:13.760 --> 01:03:15.340
+Dat is het eerste wat we duidelijk moeten hebben.
+
+01:03:15.560 --> 01:03:18.880
+Wanneer iemand Copilot een vraag stelt, zoekt het naar inhoud met de machtigingen van die persoon.
+
+01:03:19.100 --> 01:03:19.800
+Niets meer dan dat.
+
+01:03:19.800 --> 01:03:22.220
+Als jij een bestand kunt openen, kan Copilot het voor je lezen.
+
+01:03:22.360 --> 01:03:24.780
+Als jij dat niet kunt, kan Copilot dat ook niet, wat als goed nieuws klinkt.
+
+01:03:24.840 --> 01:03:26.260
+En in beperkte zin is dat ook zo.
+
+01:03:26.540 --> 01:03:27.840
+Copilot breekt nergens in.
+
+01:03:28.020 --> 01:03:31.000
+Maar denk eens aan wat dat betekent voor een tenant die al 10 jaar in gebruik is.
+
+01:03:31.160 --> 01:03:33.040
+In die tijd hebben mensen van alles gedeeld.
+
+01:03:33.240 --> 01:03:36.700
+Een map gedeeld met iedereen in het bedrijf omdat dat sneller was dan namens selecteren.
+
+01:03:36.880 --> 01:03:39.140
+Een team dat openbaar begon en openbaar bleef.
+
+01:03:39.300 --> 01:03:41.900
+Een groep met 400 leden die nooit is opgeschoond.
+
+01:03:42.120 --> 01:03:45.040
+Elk van die gevallen is een machtiging die technisch gezien bestaat.
+
+01:03:45.260 --> 01:03:47.740
+Niemand heeft de meeste gebruikt en niemand heeft ze opgemerkt.
+
+01:03:47.740 --> 01:03:49.200
+Copilot merkt ze wel op.
+
+01:03:49.380 --> 01:03:51.520
+Vraag het eens naar het compensatieplan van volgend jaar.
+
+01:03:51.700 --> 01:03:54.580
+En als een salarisoverzicht op een site staat die de helft van het bedrijf technisch gezien
+
+01:03:54.580 --> 01:03:56.320
+kan openen, kan het in het antwoord verschijnen.
+
+01:03:56.460 --> 01:03:58.520
+De persoon die de vraag stelt was er nooit naar op zoek.
+
+01:03:58.660 --> 01:04:01.840
+Het systeem deed simpelweg wat het mocht doen en sneller dan welk mens dan ook.
+
+01:04:01.960 --> 01:04:04.560
+Dus overmatig delen is niet langer een stilstaand beheerprobleem.
+
+01:04:04.680 --> 01:04:05.920
+Het wordt een zichtbaar probleem.
+
+01:04:06.120 --> 01:04:07.260
+Waar komen labels nu kijken?
+
+01:04:07.460 --> 01:04:08.220
+Op twee manieren.
+
+01:04:08.440 --> 01:04:10.240
+De eerste is degene waar we naartoe hebben gewerkt.
+
+01:04:10.420 --> 01:04:12.380
+Een label met versleuteling bevat gebruiksrechten.
+
+01:04:12.380 --> 01:04:16.080
+De machtigingen die bepalen wie inhoud kan bekijken, bewerken, kopiëren of extraheren.
+
+01:04:16.260 --> 01:04:17.620
+Copilot respecteert die rechten.
+
+01:04:17.820 --> 01:04:20.540
+Als iemand een bestand kan bekijken, maar niet het recht heeft om er iets uit te extraheren,
+
+01:04:20.640 --> 01:04:22.120
+wordt van Copilot verwacht dat dit wordt nageleefd.
+
+01:04:22.240 --> 01:04:25.460
+De beveiliging die op het bestand is ingesteld, reist mee naar de AI-ervaring, niet alleen
+
+01:04:25.460 --> 01:04:26.100
+in de mapweergave.
+
+01:04:26.260 --> 01:04:28.060
+De tweede is makkelijker over het hoofd te zien.
+
+01:04:28.320 --> 01:04:31.700
+Wanneer Copilot een antwoord opbouwt uit verschillende bronnen, neemt het antwoord het
+
+01:04:31.700 --> 01:04:34.260
+hoogste vertrouwelijkheidslabel over van de gebruikte inhoud.
+
+01:04:34.500 --> 01:04:38.260
+Gebruik een algemeen document en een zeer vertrouwelijk document en het antwoord krijgt het
+
+01:04:38.260 --> 01:04:39.460
+label zeer vertrouwelijk.
+
+01:04:39.620 --> 01:04:43.100
+Als dat antwoord in een nieuw woordbestand of een concept-email belandt, gaat het label
+
+01:04:43.100 --> 01:04:43.320
+mee.
+
+01:04:43.500 --> 01:04:46.640
+Dat is het label dat zijn derde taak uitvoert, die we aan het begin bespraken.
+
+01:04:46.840 --> 01:04:49.780
+Niet alleen markeren, niet alleen beperken, maar een signaal doorgeven.
+
+01:04:49.940 --> 01:04:53.120
+De nieuwe inhoud krijgt automatisch de vertrouwelijkheid van de bronbestanden mee, zonder dat iemand
+
+01:04:53.120 --> 01:04:53.700
+dit hoeft te kiezen.
+
+01:04:53.880 --> 01:04:55.700
+Labels zijn dus belangrijker dan ooit, niet minder.
+
+01:04:55.900 --> 01:04:58.820
+Ze zorgen ervoor dat beveiliging de data volgt naar plaatsen die u niet had voorzien.
+
+01:04:58.980 --> 01:05:02.060
+Maar hier is de fundamentele verschuiving en dit is het deel dat uw planning zou moeten
+
+01:05:02.060 --> 01:05:02.540
+veranderen.
+
+01:05:02.540 --> 01:05:05.680
+Jarenlang verborg zoekfunctionaliteit slechte machtigingen doordat het niet goed was in
+
+01:05:05.680 --> 01:05:06.280
+het vinden van dingen.
+
+01:05:06.500 --> 01:05:07.900
+Denk eens na over hoe dat werkte.
+
+01:05:08.120 --> 01:05:11.380
+Een bestand werd te ruim gedeeld, maar de enige manier om het te bereiken was weten
+
+01:05:11.380 --> 01:05:11.980
+waar het stond.
+
+01:05:12.180 --> 01:05:15.140
+De juiste trefwoorden raden of door vijf navigatieniveaus klikken.
+
+01:05:15.360 --> 01:05:16.360
+Bijna niemand deed dat.
+
+01:05:16.500 --> 01:05:19.100
+Het risico was reëel, maar het ging schuil onder de inspanning die nodig was.
+
+01:05:19.460 --> 01:05:21.500
+Onbekendheid deed een taak die niemand eraan had toegewezen.
+
+01:05:21.700 --> 01:05:23.180
+Copilot neemt die inspanning weg.
+
+01:05:23.340 --> 01:05:25.540
+Een vraag in duidelijke taal vervangt de vijf klikken.
+
+01:05:25.540 --> 01:05:29.100
+Alles wat binnen bereik ligt, komt binnen enkele seconden terug, samengevat en met de verbanden
+
+01:05:29.100 --> 01:05:29.680
+voor u gelegd.
+
+01:05:29.840 --> 01:05:31.280
+Dat is waar de oude aanname faalt.
+
+01:05:31.480 --> 01:05:34.540
+De aanname was dat technisch toegankelijk en praktisch blootgesteld twee verschillende
+
+01:05:34.540 --> 01:05:34.980
+dingen waren.
+
+01:05:35.220 --> 01:05:36.080
+Dat zijn ze niet meer.
+
+01:05:36.260 --> 01:05:39.620
+Het verschil tussen beiden was inspanning, en die inspanning is zojuist gedaald naar bijna
+
+01:05:39.620 --> 01:05:39.820
+nul.
+
+01:05:40.040 --> 01:05:43.400
+Dit is waarom ik zou zeggen dat Copilot geen nieuw risico creëert, maar eerder verwijdert
+
+01:05:43.400 --> 01:05:44.420
+wat een oud risico verborg.
+
+01:05:44.600 --> 01:05:46.500
+Uw machtigingenmodel was altijd al zo open.
+
+01:05:46.740 --> 01:05:49.840
+Niemand had een snelle manier gebouwd om dit aan te tonen, en dit verandert het doel van
+
+01:05:49.840 --> 01:05:50.660
+een labelprogramma.
+
+01:05:50.660 --> 01:05:54.740
+Als labels alleen bedoeld waren om documenten te markeren voor compliance, kon je ze als papierwerk
+
+01:05:54.740 --> 01:05:55.140
+behandelen.
+
+01:05:55.140 --> 01:05:59.420
+Zodra een AI-assistent alles leest waar een persoon bij kan, worden labels onderdeel van
+
+01:05:59.420 --> 01:06:01.020
+hoe je bepaalt wat die assistent mag zeggen.
+
+01:06:01.220 --> 01:06:04.240
+Ze zijn een input voor AI-gereedheid, geen bijzaak die ernaast loopt.
+
+01:06:04.440 --> 01:06:06.260
+Dat is de verschuiving in het model in één zin.
+
+01:06:06.800 --> 01:06:08.620
+Klassificatie beschreef voorheen alleen inhoud.
+
+01:06:08.860 --> 01:06:11.840
+Nu bepaalt het ook wat wordt getoond, samengevat en doorgezet.
+
+01:06:12.000 --> 01:06:14.520
+Als je dat begrijpt, zijn de tekortkomingen specifiek.
+
+01:06:14.520 --> 01:06:19.060
+Ze herhalen zich in organisaties in vergelijkbare patronen, en de meeste komen voort uit het label
+
+01:06:19.060 --> 01:06:20.420
+meer waarde toedichten dan het heeft.
+
+01:06:20.600 --> 01:06:22.660
+Copilot valkuilen en faalpatronen.
+
+01:06:22.820 --> 01:06:24.620
+Vijf patronen duiken steeds weer op.
+
+01:06:24.620 --> 01:06:26.460
+Elk begint met een redelijke aanname.
+
+01:06:26.680 --> 01:06:28.100
+De eerste is legacy content.
+
+01:06:28.380 --> 01:06:31.140
+De meeste tenants bevatten jaren aan bestanden die nooit gelabeld zijn.
+
+01:06:31.320 --> 01:06:35.620
+Oude projectmappen, gearchiveerde rapporten, exports die iemand in 2019 opsloeg en vergat.
+
+01:06:35.780 --> 01:06:38.060
+De gedachte is, het is oud, dus het risico is laag.
+
+01:06:38.220 --> 01:06:39.220
+Niemand kijkt er meer naar.
+
+01:06:39.400 --> 01:06:41.060
+Maar ouderdom is geen controle maatregel.
+
+01:06:41.200 --> 01:06:43.820
+Een oud bestand met salarisgegevens is precies zo leesbaar als een nieuw bestand.
+
+01:06:43.820 --> 01:06:46.120
+En het maakt Copilot niet uit wanneer een bestand is geschreven.
+
+01:06:46.260 --> 01:06:48.080
+Het gaat erom of de vrager het kan openen.
+
+01:06:48.200 --> 01:06:51.960
+Dus wordt ongelabelde legacy content standaard als veilig beschouwd, simpelweg omdat niets het
+
+01:06:51.960 --> 01:06:52.700
+tegendeel bewijst.
+
+01:06:52.700 --> 01:06:56.240
+Het tweede patroon is verwarrend en treft mensen die het encryptiewerk juist goed hebben
+
+01:06:56.240 --> 01:06:56.540
+gedaan.
+
+01:06:56.800 --> 01:07:00.460
+Stel dat een bestand versleuteld is en de gebruiker het wel mag bekijken, maar er niets uit mag
+
+01:07:00.460 --> 01:07:01.020
+kopiëren.
+
+01:07:01.220 --> 01:07:04.380
+Ze vragen Copilot om het samen te vatten of een cijfer in een concept te verwerken.
+
+01:07:04.560 --> 01:07:07.760
+Het resultaat is sumier, geblokkeerd of vreemd genoeg onvolledig.
+
+01:07:07.900 --> 01:07:09.980
+De gebruiker ziet geen duidelijke foutmelding.
+
+01:07:09.980 --> 01:07:13.460
+Ze zien een tool die kapot lijkt of erger, en die iets lijkt te verbergen.
+
+01:07:13.600 --> 01:07:15.100
+Het label doet gewoon zijn werk.
+
+01:07:15.300 --> 01:07:19.240
+Het gebruiksrecht wordt nageleefd, maar niemand heeft de gebruiker verteld waarom en de helpdesk
+
+01:07:19.240 --> 01:07:22.900
+herkent het symptoom niet. Dus worden de eerste tickets gesloten als Copilot-storing
+
+01:07:22.900 --> 01:07:25.860
+en blijft de echte oorzaak verborgen totdat iemand de link legt.
+
+01:07:26.020 --> 01:07:27.000
+Los dat vooraf op.
+
+01:07:27.200 --> 01:07:31.600
+Schrijf een korte uitleg over hoe een gebruiksbeperking er in Copilot uitziet en geef dit aan support
+
+01:07:31.600 --> 01:07:33.540
+voordat de eerste licentie wordt uitgegeven.
+
+01:07:33.720 --> 01:07:34.760
+Ten derde is er de timing.
+
+01:07:34.780 --> 01:07:37.840
+Teams rollen Copilot eerst uit omdat het bedrijf enthousiast is.
+
+01:07:38.040 --> 01:07:40.460
+Labels komen later, zodra het programma is bijgebeend.
+
+01:07:40.600 --> 01:07:44.280
+En in die tussentijd vragen mensen er vrij op los, worden concepten geschreven, samenvattingen
+
+01:07:44.280 --> 01:07:47.520
+gedeeld en vloeit content naar nieuwe bestanden zonder enige markering van de vertrouwelijkheid.
+
+01:07:47.660 --> 01:07:50.880
+Je kunt de bronbestanden achteraf labelen, maar de resultaten bestaan dan al.
+
+01:07:51.000 --> 01:07:54.620
+Een samenvatting die vorige maand in een presentatie is geplakt, krijgt geen label omdat je de bron
+
+01:07:54.620 --> 01:07:55.660
+deze week hebt aangepast.
+
+01:07:55.860 --> 01:07:59.440
+Die inhoud staat daar ongemerkt en niemand gaat die bestand voor bestand achtervolgen.
+
+01:07:59.440 --> 01:08:01.860
+Dus de volgorde is van belang en we komen er nog op terug.
+
+01:08:02.020 --> 01:08:05.120
+Onthoud voor nu dat labels die te laat worden toegepast alleen de toekomst beschermen.
+
+01:08:05.260 --> 01:08:06.580
+Ze herstellen het verleden niet.
+
+01:08:06.760 --> 01:08:09.900
+Ten vierde en degene met het grootste bereik overmatig delen.
+
+01:08:10.020 --> 01:08:12.740
+Een site met 400 leden en een map met bestuurstukken.
+
+01:08:12.740 --> 01:08:15.800
+Een team dat vanaf dag één openbaar was en nooit is veranderd.
+
+01:08:15.920 --> 01:08:19.700
+Een deling voor iedereen in het bedrijf, in haast aangemaakt voor een deadline.
+
+01:08:20.000 --> 01:08:23.540
+Geen van deze zaken werd ooit gemarkeerd omdat niemand de hele tenant doorzocht.
+
+01:08:23.740 --> 01:08:25.340
+Co-pilot doorzoekt de hele tenant.
+
+01:08:25.640 --> 01:08:28.460
+Het verandert al die open deuren in een potentieel antwoord.
+
+01:08:28.620 --> 01:08:32.980
+En het patroon is vervelend, want de eigenaar van de bestuurstukken heeft vandaag niets fout gedaan.
+
+01:08:33.240 --> 01:08:36.480
+Ze deden drie jaar geleden iets gemakkelijks en de prijs daarvan wordt nu pas betaald.
+
+01:08:36.640 --> 01:08:39.420
+De vijfde is degene die ik op een dia zou zetten als dit een presentatie was.
+
+01:08:39.600 --> 01:08:41.420
+Een label verwarren met een machtigingsherstel.
+
+01:08:41.420 --> 01:08:42.520
+Het gaat als volgt.
+
+01:08:42.660 --> 01:08:45.760
+Iemand vindt een overmatig gedeelde map, past, vertrouwelijk, toe en gaat verder.
+
+01:08:45.980 --> 01:08:46.840
+Probleem opgelost.
+
+01:08:47.020 --> 01:08:48.660
+Maar kijk eens naar wat het label daadwerkelijk deed.
+
+01:08:48.820 --> 01:08:51.180
+Als er geen versleuteling aan te pas komt, heeft het alleen het bestand gemarkeerd.
+
+01:08:51.400 --> 01:08:53.320
+Diezelfde 400 mensen kunnen het nog steeds openen.
+
+01:08:53.440 --> 01:08:54.600
+De deling werkt nog steeds.
+
+01:08:54.820 --> 01:08:57.500
+Het label is weer een sticker op een deur die nog steeds van het slot is.
+
+01:08:57.740 --> 01:09:00.760
+Zelfs met versleuteling beperkt het label alleen wat er met het bestand gebeurt.
+
+01:09:00.920 --> 01:09:05.180
+Het herstelt niet het lidmaatschap van de site, verwijdert geen oude gasten en sluit geen open links.
+
+01:09:05.420 --> 01:09:09.000
+Dat zijn aparte taken met aparte tools en het label kan dat niet zomaar even oplossen.
+
+01:09:09.000 --> 01:09:11.600
+Zet deze vijf naast elkaar en je zult iets opmerken.
+
+01:09:11.780 --> 01:09:13.580
+Geen van deze is een fout in Copilot.
+
+01:09:13.800 --> 01:09:18.840
+Elk is een oude leemte in het machtigings- en labelmodel waarvoor eindelijk een laser bestaat die snel genoeg is om het te vinden.
+
+01:09:19.060 --> 01:09:23.060
+De fouten ontstaan door het basiswerk over te slaan en vervolgens te verwachten dat het label het dekt.
+
+01:09:23.200 --> 01:09:24.480
+De oplossing is dus een volgorde.
+
+01:09:24.760 --> 01:09:28.000
+Doe het werk in de juiste volgorde en elk van deze patronen neemt af.
+
+01:09:28.180 --> 01:09:31.480
+Doe je het in de verkeerde volgorde, dan kom je ze alle vijf binnen de eerste maand tegen.
+
+01:09:31.660 --> 01:09:35.420
+De Copilot gereedheidsvolgorde, de volgorde van handelingen, dat is het hele antwoord.
+
+01:09:35.420 --> 01:09:39.540
+En het begint met een stap die de meeste teams willen overslaan omdat het helemaal niet over labels gaat.
+
+01:09:39.760 --> 01:09:41.300
+Zoek eerst het overmatig delen op.
+
+01:09:41.480 --> 01:09:46.340
+Voordat je een enkel bestand labelt voor Copilot, moet je weten wat open staat, welke sites brede toegang hebben,
+
+01:09:46.580 --> 01:09:51.720
+welke bestanden links hebben voor iedereen in het bedrijf en welke teams nog steeds openbaar zijn sinds de dag dat ze werden aangemaakt.
+
+01:09:51.940 --> 01:09:56.200
+Voer site-toegangsbeoordelingen uit en vraag de eigenaren om te bevestigen wie er echt toegang moet hebben.
+
+01:09:56.440 --> 01:10:02.360
+Gebruik de rapporten die uw tenant al heeft voor het delen van koppelingen en site-rechten en sorteer de resultaten op hoe gevoelig de inhoud lijkt.
+
+01:10:02.360 --> 01:10:06.560
+Ruim vervolgens op, verwijder verouderde gasten en vervan algemene koppelingen door specifieke.
+
+01:10:06.720 --> 01:10:09.840
+Breng de groep van 400 personen terug naar de 40 die er daadwerkelijk werken.
+
+01:10:10.040 --> 01:10:13.740
+Dit is langzaam en weinig glamoureus werk, maar het doet meer voor Copilot beveiliging dan welk label dan ook.
+
+01:10:13.900 --> 01:10:16.380
+Zoals we zagen, kan een label een deur die nog open staat niet beveiligen.
+
+01:10:16.600 --> 01:10:17.820
+Deze stap vergrendelt de deur.
+
+01:10:17.980 --> 01:10:21.460
+Ten tweede, label de opslaglocaties met het hoogste risico, niet alles, nog niet.
+
+01:10:21.640 --> 01:10:24.360
+Kies de plekken waar een fout antwoord het meeste pijn zou doen, financiële bibliotheken,
+
+01:10:25.180 --> 01:10:29.140
+our sites, juridische zaken, bestuursmateriaal, alles met gereguleerde gegevens.
+
+01:10:29.140 --> 01:10:33.660
+Pas daar eerst labels toe met behulp van de standaarden en het servicebeleid dat we eerder hebben besproken.
+
+01:10:33.860 --> 01:10:36.180
+Voer simulaties uit voordat u het beleid afdwingt.
+
+01:10:36.260 --> 01:10:42.600
+Het doel is geen dekking over de hele tenant, maar dat inhoud met de grootste risico's een label heeft een, waar nodig, encryptie met echte gebruiksrechten.
+
+01:10:42.860 --> 01:10:45.260
+Doe dit voordat uw Copilot toegang verbreedt, niet daarna.
+
+01:10:45.500 --> 01:10:48.440
+Labels die te laat worden toegepast, beschermen alleen de toekomst, weet u nog?
+
+01:10:48.540 --> 01:10:50.660
+U wilt ze dus op hun plek hebben voordat de prompts beginnen.
+
+01:10:50.880 --> 01:10:53.500
+Ten derde, voeg een controle toe voor de interactie zelf.
+
+01:10:53.740 --> 01:10:57.400
+Data loss prevention kan nu in ondersteunde scenario's op Copilot worden toegepast.
+
+01:10:57.400 --> 01:11:03.800
+Een beleid kan Copilot vertellen om geen inhoud met een specifiek label te verwerken, zodat een prompt die dat materiaal raakt, zonder resultaat terugkomt.
+
+01:11:04.000 --> 01:11:09.120
+Controleer wat er vandaag in uw tenant wordt ondersteund, want dit gebied verandert snel, en test het gedrag met een echt account.
+
+01:11:09.380 --> 01:11:12.540
+Ga er niet vanuit dat beleid werkt alleen omdat de portal het heeft geaccepteerd.
+
+01:11:12.740 --> 01:11:14.140
+Dit is het vangnet onder de labels.
+
+01:11:14.400 --> 01:11:18.940
+Het label markeert de inhoud, het beleid bepaalt wat de assistent doet wanneer deze die markering tegenkomt.
+
+01:11:19.060 --> 01:11:26.260
+Ten vierde, test Copilot met een schone groep, niet de hele tenant, een gedefinieerde populatie waarvan u de sites hebt beoordeeld en de belangrijkste inhoud is gelabeld.
+
+01:11:26.260 --> 01:11:30.920
+Kies mensen die u vertellen wat ze zien en neem er een paar op uit de teams wiens bestanden u het meest hebt beschermd.
+
+01:11:31.040 --> 01:11:33.260
+Vraag hen om bewust de moeilijke prompts te proberen.
+
+01:11:33.460 --> 01:11:35.660
+Vat de laatste wijzigingen in de beloningen samen.
+
+01:11:35.920 --> 01:11:37.240
+Wat zit er in de acquisitiemap?
+
+01:11:37.420 --> 01:11:41.140
+Als er iets gevoeligs terugkomt, hebt u een hiaat gevonden terwijl de groep nog klein is.
+
+01:11:41.300 --> 01:11:43.620
+En breng uw helpdesk op de hoogte voor de eerste dag.
+
+01:11:43.760 --> 01:11:47.440
+De verwarrende resultaten door gebruiksrechten, de beknopte samenvattingen, de geblokkeerde extracten.
+
+01:11:47.540 --> 01:11:49.420
+Voor dit alles moeten kant- en klare antwoorden klaar liggen.
+
+01:11:49.560 --> 01:11:53.980
+Anders leert de eerste week aan tickets u niets en leren de gebruikers dat Copilot onbetrouwbaar is.
+
+01:11:53.980 --> 01:11:56.620
+Ten vijfde, blijf monitoren na de release.
+
+01:11:56.800 --> 01:11:58.780
+Het einde van de pilot is niet de finishlijn.
+
+01:11:59.020 --> 01:12:02.520
+Schakel controle, auditing, info-copilot interacties en bekijk deze regelmatig.
+
+01:12:02.640 --> 01:12:07.700
+Kijk naar welke gelabelde inhoud wordt aangehaald, welke prompts worden geblokkeerd en welke sites steeds in antwoorden opduiken.
+
+01:12:07.900 --> 01:12:12.000
+Als een vertrouwelijk bestand op een onverwachte plek opduikt, achterhaal dan het rechte pad dat dit toeliet.
+
+01:12:12.140 --> 01:12:13.960
+Herstel dat pad en noteer wat je hebt geleerd.
+
+01:12:14.160 --> 01:12:17.020
+Verwerk dat vervolgens in de volgende reeks toegangsbeoordelingen.
+
+01:12:17.020 --> 01:12:21.440
+Elke release vergroot het publiek en elke vergroting kan iets blootleggen dat in de vorige ronde werd gemist.
+
+01:12:21.600 --> 01:12:26.080
+Behandel daarom elke uitbreiding als een klein project op zich, waarbij je dezelfde volgorde op kleinere schaal herhaalt.
+
+01:12:26.280 --> 01:12:29.640
+Voer het in deze volgorde uit en de vijf faalpatronen verliezen het grootste deel van hun kracht.
+
+01:12:29.900 --> 01:12:31.180
+Verouderde inhoud wordt gevonden.
+
+01:12:31.560 --> 01:12:33.400
+Versleutelde inhoud heeft uitleg klaarstaan.
+
+01:12:33.580 --> 01:12:35.180
+Labels bestaan al voordat de prompts er zijn.
+
+01:12:35.360 --> 01:12:37.940
+Open deuren worden gesloten en niemand verwart een sticker met een slot.
+
+01:12:38.160 --> 01:12:39.400
+Dat wekt het proces tot nu toe.
+
+01:12:39.580 --> 01:12:41.820
+Maar een volgorde werkt alleen als iemand het blijft uitvoeren.
+
+01:12:41.820 --> 01:12:48.080
+Labels verwateren, reorganisaties vinden plaats, nieuwe regels komen eraan en niemand moet verantwoordelijk zijn lang nadat de e-mail over de lancering is vergeten.
+
+01:12:48.220 --> 01:12:50.540
+En governance, eigenaarschap en lopende operaties.
+
+01:12:50.740 --> 01:12:53.000
+Elk labelprogramma heeft op de eerste dag een eigenaar.
+
+01:12:53.120 --> 01:12:55.740
+Tachtig maanden later is die persoon naar een ander team verhuisd.
+
+01:12:55.880 --> 01:12:57.600
+Niemand herinnert zich wie iets goedkeurt.
+
+01:12:57.820 --> 01:12:59.400
+Wijst de eigenaar daarom bewust aan.
+
+01:12:59.580 --> 01:13:00.940
+Eén persoon, geen commissie.
+
+01:13:01.100 --> 01:13:03.140
+Hun titel is minder belangrijk dan hun autoriteit.
+
+01:13:03.400 --> 01:13:07.600
+Ze hebben de macht nodig om nee te zeggen en ze moeten die gebruiken, want de druk op een taxonomie is altijd opwaarts.
+
+01:13:07.860 --> 01:13:09.780
+Legal wil een label voor bevoorrecht materiaal.
+
+01:13:09.780 --> 01:13:11.820
+Marketing wil er een voor embargo lanceringen.
+
+01:13:12.000 --> 01:13:13.680
+Een regiokantoor wil zijn eigen label.
+
+01:13:13.860 --> 01:13:15.160
+Elk verzoek klinkt redelijk.
+
+01:13:15.380 --> 01:13:17.460
+Voeg ze allemaal toe en je bent terug bij 20 labels.
+
+01:13:17.680 --> 01:13:19.960
+De beslissing van 3 seconden waarvoor we ontwierpen is verdwenen.
+
+01:13:20.140 --> 01:13:21.580
+Daarom bestaat wijzigingsbeheer.
+
+01:13:21.740 --> 01:13:25.800
+Niet om mensen te vertragen, maar om nee zeggen een proces te maken in plaats van een persoonlijkheidskenmerk.
+
+01:13:25.920 --> 01:13:26.620
+Hou het simpel.
+
+01:13:26.820 --> 01:13:28.800
+Een kort aanvraagformulier met 4 vragen.
+
+01:13:29.040 --> 01:13:32.060
+Welke verwerkingsregel dwingt dit label af die geen enkel bestaand label doet?
+
+01:13:32.260 --> 01:13:33.620
+Wie zal het toepassen en hoe vaak?
+
+01:13:33.820 --> 01:13:35.300
+Wat gebeurt er als we het niet aanmaken?
+
+01:13:35.440 --> 01:13:37.520
+En welk label zouden we schrappen om ruimte te maken?
+
+01:13:37.520 --> 01:13:39.660
+Die laatste vraag is degene die het werk doet.
+
+01:13:39.840 --> 01:13:42.960
+Als niemand iets kan noemen om te schrappen, is het label waarschijnlijk niet nodig.
+
+01:13:43.160 --> 01:13:47.060
+Als het antwoord een bestaand label is met een aangepaste instelling, heb je net een heel nieuw label bespaard.
+
+01:13:47.280 --> 01:13:49.140
+Geef de eigenaar vervolgens een beoordelingsritme.
+
+01:13:49.280 --> 01:13:50.900
+Per kwartaal werkt voor de meeste bedrijven.
+
+01:13:51.100 --> 01:13:52.260
+Maandelijks is te onrustig.
+
+01:13:52.480 --> 01:13:53.320
+Jaarlijks is te laat.
+
+01:13:53.520 --> 01:13:54.940
+Kijk elk kwartaal naar drie dingen.
+
+01:13:55.180 --> 01:13:56.300
+Label gebruik als eerste.
+
+01:13:56.580 --> 01:13:59.260
+Welke labels hebben echt gewicht en welke worden nauwelijks aangeraakt?
+
+01:13:59.400 --> 01:14:03.720
+Een label dat door 40 van de 40.000 mensen wordt gebruikt, is te smal of slecht benoemd.
+
+01:14:03.720 --> 01:14:05.100
+Degradatie als tweede.
+
+01:14:05.300 --> 01:14:09.720
+Zoals we in de pilot zagen, vertellen de thema's in die verantwoordingen je waar de taxonomie onder druk staat.
+
+01:14:09.900 --> 01:14:12.900
+Een cluster dat er vorig kwartaal niet was, betekent dat er iets is veranderd.
+
+01:14:12.980 --> 01:14:15.160
+En als derde, de nauwkeurigheid van automatische labels.
+
+01:14:15.440 --> 01:14:18.660
+Neem een steekpoef van de matches, tel de foutieven en kijk of dat percentage oploopt.
+
+01:14:18.840 --> 01:14:20.280
+Inhoud verandert in de loop van de tijd.
+
+01:14:20.480 --> 01:14:23.020
+Een regel die in maart nog scherp was, kan tegen de herfst zijn afgedwaald.
+
+01:14:23.200 --> 01:14:25.340
+Schrijf de bevindingen op, al is het maar één pagina.
+
+01:14:25.520 --> 01:14:27.220
+Anders begint de volgende eigenaar bij nul.
+
+01:14:27.220 --> 01:14:29.700
+Dan nu de gebeurtenissen die programma's van buitenaf doorbreken.
+
+01:14:29.700 --> 01:14:31.280
+Fusies komen op de eerste plaats.
+
+01:14:31.460 --> 01:14:34.640
+Twee bedrijven, twee taxonomieën, twee ideeën over wat vertrouwelijk betekent.
+
+01:14:34.800 --> 01:14:38.340
+De neiging is om beide sets samen te voegen en dan eindig je met acht niveaus en een puinhoop.
+
+01:14:38.460 --> 01:14:39.460
+Weer sta die verleiding.
+
+01:14:39.700 --> 01:14:43.600
+Map de verkregen labels op die van jou op basis van afhandelingsregels niet op naam.
+
+01:14:43.740 --> 01:14:47.180
+Een beperkt is wellicht jou zeer vertrouwelijk of iets daartussenin.
+
+01:14:47.320 --> 01:14:50.580
+De enige manier om daarachter te komen is door te vergelijken wat elk label afdwingt.
+
+01:14:50.720 --> 01:14:53.480
+Miegeer daarna in golven op dezelfde manier als waarop je iets anders zou uithollen.
+
+01:14:54.180 --> 01:14:55.540
+Reorganisaties zijn de stillere variant.
+
+01:14:55.760 --> 01:14:57.760
+Onthoud dat afdelingslabels slecht verouderen.
+
+01:14:57.760 --> 01:15:02.260
+Als je eerder het advies opvolgde om te labelen op afhandelingsregel, raakt een reorganisatie vrijwel niets.
+
+01:15:02.440 --> 01:15:05.240
+Het financiële team wordt twee teams en de labels blijven staan waar ze staan.
+
+01:15:05.440 --> 01:15:06.240
+Wat verandert er wel?
+
+01:15:06.420 --> 01:15:10.060
+Wie de eigenaar is van de containerlabels, de groepen erachter en de mensen op de lijst met ambassadeurs.
+
+01:15:10.240 --> 01:15:10.720
+Update die.
+
+01:15:10.960 --> 01:15:13.780
+Controleer of er geen site is achtergebleven met een eigenaar die er niet meer werkt.
+
+01:15:13.960 --> 01:15:15.440
+Nieuwe regelgeving is de derde.
+
+01:15:15.600 --> 01:15:18.920
+Er komt een privacywet of een klantencontract vereist iets specifieks.
+
+01:15:19.120 --> 01:15:21.380
+Weer sta de drang om direct een label toe te voegen.
+
+01:15:21.600 --> 01:15:24.740
+Vraag eerst of een bestaand label al afdwingt wat vereist is.
+
+01:15:24.740 --> 01:15:32.080
+Vaak is dat zo. Het enige ontbrekende stukje is een detectieregel, een type gevoelige informatie voor de nieuwe data die naar een bestaand label wijst.
+
+01:15:32.280 --> 01:15:34.540
+Dat is een beleidswijziging, een taxonomiewijziging.
+
+01:15:34.720 --> 01:15:35.940
+Het houdt de structuur stabiel.
+
+01:15:36.320 --> 01:15:37.280
+Stabiliteit is het doel.
+
+01:15:37.480 --> 01:15:39.140
+Gebruikers leren labels door herhaling.
+
+01:15:39.360 --> 01:15:42.860
+Elke wijziging die je doorvoert, zelfs een goede, verbruikt een deel van dat leerproces.
+
+01:15:43.100 --> 01:15:47.500
+Waffenen zorgt ervoor dat die stabiliteit overleeft als mensen vertrekken, bedrijven fuseren en regels veranderen.
+
+01:15:47.600 --> 01:15:50.540
+Maar een eigenaar die beslissingen neemt op basis van instinct, zal ook afdwalen.
+
+01:15:50.740 --> 01:15:51.780
+Zij hebben cijfers nodig.
+
+01:15:51.780 --> 01:15:54.000
+Ze moeten weten welke cijfers geloofwaardig zijn.
+
+01:15:54.220 --> 01:15:55.140
+Meten wat ertoe doet.
+
+01:15:55.340 --> 01:15:57.480
+Begin met het cijfer waar iedereen als eerste naar grijpt.
+
+01:15:57.660 --> 01:15:58.600
+Ruwe labelaantallen.
+
+01:15:58.800 --> 01:16:00.200
+40.000 bestanden gelabeld.
+
+01:16:00.360 --> 01:16:01.080
+Een groot getal.
+
+01:16:01.280 --> 01:16:02.120
+Staat mooi op een dia.
+
+01:16:02.360 --> 01:16:04.880
+Maar zoals we in de inleiding zagen, kan het nul echte bescherming bieden.
+
+01:16:05.020 --> 01:16:06.700
+Het aantal vertelt je dat het systeem druk was.
+
+01:16:06.900 --> 01:16:08.360
+Het vertelt je niet of het werk goed was.
+
+01:16:08.620 --> 01:16:10.000
+Meet daarom liever drie verhoudingen.
+
+01:16:10.260 --> 01:16:12.200
+Dekking, correctheid, beschermde inhoud.
+
+01:16:12.440 --> 01:16:16.120
+Bij dekking gaat het om hoeveel van de content die een label zou moeten hebben, dit ook daadwerkelijk heeft.
+
+01:16:16.360 --> 01:16:17.200
+Niet alle bestanden.
+
+01:16:17.200 --> 01:16:21.720
+Eerst de bestanden in uw risicovolle opslaglocaties, daarna de rest van de tenant in steeds grotere kringen.
+
+01:16:21.840 --> 01:16:26.420
+Hou het per locatie bij, want een gemiddelde verhult die ene financiële bibliotheek die op 10% blijft steken.
+
+01:16:26.720 --> 01:16:28.520
+Correctheid is lastiger en belangrijker.
+
+01:16:28.740 --> 01:16:33.100
+Van de bestanden met een label, hoeveel hebben het juiste label, dat kun je niet aflezen van een dashboard.
+
+01:16:33.320 --> 01:16:34.560
+Dat bepaal je door steekproeven.
+
+01:16:34.740 --> 01:16:36.520
+Pak elk kwartaal 100 gelabelde bestanden.
+
+01:16:36.780 --> 01:16:38.500
+Laat iemand die de content kent ze controleren.
+
+01:16:38.680 --> 01:16:39.740
+Noteer het fout percentage.
+
+01:16:40.220 --> 01:16:44.560
+Dat ene cijfer vertelt je of je standaardinstellingen en autolabelregels werken of alleen vakjes invullen.
+
+01:16:44.900 --> 01:16:46.420
+Beschermde content is het derde punt.
+
+01:16:46.660 --> 01:16:52.540
+Van de bestanden die echte handhaving vereisen, hoeveel zijn er daadwerkelijk versleuteld, staan ze in een gelabelde container of vallen ze onder een beleid.
+
+01:16:52.700 --> 01:16:55.580
+Dit is de verhouding die een programma onderscheidt van een verzamelingstickers.
+
+01:16:55.780 --> 01:16:59.640
+Een tenant kan 90% dekking hebben en een beschermingsratio van minder dan 20%.
+
+01:16:59.640 --> 01:17:01.960
+Het gat tussen die twee is je werkelijke blootstelling.
+
+01:17:02.160 --> 01:17:04.840
+Nu de signalen die aangeven of de taxonomie zelf gezond is.
+
+01:17:05.040 --> 01:17:06.560
+Eerst de degradatiepercentages.
+
+01:17:06.800 --> 01:17:08.440
+Tel hoe vaak mensen een label verlagen.
+
+01:17:08.700 --> 01:17:10.720
+Lees wat ze schrijven in het veld voor rechtvaardiging.
+
+01:17:10.720 --> 01:17:16.180
+Als de meeste verlagingen bij één label vandaan komen, staat dat label waarschijnlijk te strak of is het gericht op de verkeerde content.
+
+01:17:16.360 --> 01:17:22.480
+Als de redenen rond één zin clusteren, zoals nodig om naar de leverancier te sturen, heb je een verwerkingsregel gevonden die niet bij het werk past.
+
+01:17:22.700 --> 01:17:23.780
+Dat is een ontwerpfout.
+
+01:17:23.980 --> 01:17:26.600
+De oplossing hoort in het model thuis, niet in een herinneringsmail.
+
+01:17:26.860 --> 01:17:28.160
+Let meer op de trend dan op het niveau.
+
+01:17:28.420 --> 01:17:30.920
+Een stabiel degradatiepercentage is een achtergrondkostenpost.
+
+01:17:31.100 --> 01:17:33.240
+Een plotseling een sprong betekent dat er iets is veranderd.
+
+01:17:33.340 --> 01:17:38.520
+Een nieuw project, een nieuwe partner, een regel die onterecht afgaat op de verkeerde bestanden, dat is waar het management echt om geeft.
+
+01:17:38.520 --> 01:17:42.960
+Incidenten over de tijd zijn er minder gevallen waarin gevoelige content op plekken komt waar het niet hoort.
+
+01:17:43.160 --> 01:17:45.700
+Minder bevindingen over overmatig delen en toegangsbeoordelingen.
+
+01:17:45.880 --> 01:17:47.900
+Minder DLP-matches op ongelabelde data.
+
+01:17:48.140 --> 01:17:49.860
+Minder verrassingen in de co-pilot audit logs.
+
+01:17:50.100 --> 01:17:51.520
+Deze veranderen langzaam en zijn onauwkeurig.
+
+01:17:52.280 --> 01:17:57.720
+Geef ze twee of drie kwartalen voordat je een conclusie trekt, maar dit zijn de enige cijfers die de vraag beantwoorden waarvoor het budget is goedgekeurd.
+
+01:17:57.920 --> 01:17:58.980
+Neemt de blootstelling af?
+
+01:17:59.120 --> 01:18:01.620
+Pas op met ijdelheid statistieken, want die zijn verleidelijk.
+
+01:18:01.800 --> 01:18:04.920
+Labels toegepast per week, beleid gepubliceerd, gebruikers getraind.
+
+01:18:04.920 --> 01:18:07.800
+Elk daarvan is makkelijk te rapporteren en makkelijk te verbeteren.
+
+01:18:07.900 --> 01:18:10.080
+Elk kan stijgen terwijl de bescherming gelijk blijft.
+
+01:18:10.240 --> 01:18:11.340
+Een goede test is simpel.
+
+01:18:11.560 --> 01:18:13.760
+Vraag jezelf af welke beslissing het cijfer zou veranderen.
+
+01:18:13.880 --> 01:18:16.120
+Als het antwoord geen is, verwijder het dan van het dashboard.
+
+01:18:16.340 --> 01:18:21.880
+Geef de eigenaar een korte lijst, vijf of zes getallen die elk kwartaal op dezelfde dag worden beoordeeld met telkens dezelfde steekproefmethode.
+
+01:18:22.400 --> 01:18:24.380
+Consistentie is wat van een metriek een trend maakt.
+
+01:18:24.640 --> 01:18:31.800
+Zelfs met de juiste cijfers trappen goede programma's in dezelfde valkuilen, met dezelfde fouten in bijna dezelfde volgorde bij het ene na het andere bedrijf.
+
+01:18:31.800 --> 01:18:35.860
+Laten we ze daarom in één lijst zetten. De valkuilenlijst, fouten die zich herhalen.
+
+01:18:36.020 --> 01:18:39.660
+Zes fouten, dezelfde volgorde, dezelfde oorzaken, alleen andere bedrijfslogo's.
+
+01:18:39.820 --> 01:18:41.560
+Nummer 1, lanceren met teveel labels.
+
+01:18:41.800 --> 01:18:47.440
+Het gebeurt tijdens de workshop. Elke afdeling krijgt een zetel, elke zetel krijgt een label en niemand wil degene zijn die nee zegt.
+
+01:18:47.620 --> 01:18:52.400
+Dus opent de werkbalk met 14 keuzes en iemand met een spreadsheet en een deadline leest geen 14 keuzes.
+
+01:18:52.600 --> 01:18:54.940
+Ze kiezen de eerste die veilig klinkt of ze kiezen niets.
+
+01:18:55.140 --> 01:18:56.880
+De oplossing lag in de ontwerpfase.
+
+01:18:57.140 --> 01:19:01.160
+Minder labels benoemd naar verwerkingsregels en een aangewezen eigenaar die een verzoek kan weigeren.
+
+01:19:01.160 --> 01:19:04.080
+Nummer 2, versleutelen voordat de clientmatrix is getest.
+
+01:19:04.220 --> 01:19:08.380
+Het beveiligingsteam schakelt versleuteling in voor een brede laag, want daar wordt bescherming echt.
+
+01:19:08.560 --> 01:19:11.760
+Dan kan de oudere Excel-versie van het financiële team de bestanden niet openen.
+
+01:19:11.880 --> 01:19:15.920
+Een scanner loopt erop vast. Een partner op een Mac krijgt een foutmelding zonder uitleg.
+
+01:19:16.080 --> 01:19:21.040
+En binnen een paar weken vraagt iemand van hoger hand om het uit te schakelen en de terugreactie neemt de geloofwaardigheid mee.
+
+01:19:21.300 --> 01:19:27.580
+Bouw eerst de testmatrix, voer deze uit op de oudste client, het vreemdste apparaat en de lastigste externe ontvanger die je kunt vinden.
+
+01:19:27.760 --> 01:19:30.600
+Nummer 3, simulatie overslaan bij automatische labels.
+
+01:19:30.600 --> 01:19:35.320
+De regel lijkt op papier correct. De detector is bekend, dus het gaat direct naar handhaving.
+
+01:19:35.520 --> 01:19:39.000
+En tegen donderdag zijn er een paar duizend bestanden voorzien van een label dat ze vergrendelt.
+
+01:19:39.380 --> 01:19:44.420
+Simulatie kost je een week. Een slecht gehandhaafde regel kost je het vertrouwen dat we een heel hoofdstuk lang hebben leren beschermen.
+
+01:19:44.580 --> 01:19:47.580
+Draai het, lees de matches, controleer de missers en handhaaf dan.
+
+01:19:47.780 --> 01:19:50.880
+Nummer 4, container tags behandelen als item labels.
+
+01:19:50.880 --> 01:19:55.040
+Iemand past, zeer vertrouwelijk, toe op een teamsite en meldt dat de klus geklaard is.
+
+01:19:55.220 --> 01:19:57.840
+Maar zoals we zagen, erven de bestanden binnenin niets over.
+
+01:19:58.060 --> 01:20:00.400
+Ze behouden wat ze daarvoor hadden, wat vaak niets is.
+
+01:20:00.580 --> 01:20:04.020
+De kamer heeft nu regels en het papier erin is nog steeds ongemarkeerd.
+
+01:20:04.220 --> 01:20:10.120
+Koppel het container label aan de standaard bibliotheek en vermeld dit in het projectplan zodat niemand aanneemt dat het in het ander dekt.
+
+01:20:10.380 --> 01:20:13.500
+Nummer 5, legacy inhoud negeren omdat het oud is.
+
+01:20:13.500 --> 01:20:17.760
+Het voelt veilig om te beginnen met wat mensen vandaag maken en het is de juiste plek om te beginnen.
+
+01:20:17.960 --> 01:20:19.300
+De fout is om daar te stoppen.
+
+01:20:19.520 --> 01:20:25.760
+Jaren aan niet gelabelde bestanden staan in dezelfde tenant, leesbaar voor dezelfde mensen en een snelle leeser geeft niet om een aanmaakdatum.
+
+01:20:25.900 --> 01:20:30.720
+Plan de backlog in als een echte werkstroom met een eigenaar en een datum, zelfs als het maandenlang op de achtergrond draait.
+
+01:20:30.900 --> 01:20:33.360
+Nummer 6, de overwinning uitroepen bij de lancering.
+
+01:20:33.480 --> 01:20:34.840
+De ingebruikname verloopt soepel.
+
+01:20:35.000 --> 01:20:38.620
+Er is een bedankbericht, een dia met een groot getal en het projectteam wordt opnieuw ingezet.
+
+01:20:38.780 --> 01:20:40.140
+Dan begint het stille afdwalen.
+
+01:20:40.360 --> 01:20:41.940
+Nieuwe sites verschijnen zonder labels.
+
+01:20:41.940 --> 01:20:45.360
+Een reorganisatie laat een groep achter en de regel voor automatisch labelen veroudert.
+
+01:20:45.520 --> 01:20:49.360
+Niemand let op omdat het programma als afgerond is bestempeld en het eerste teken is meestal een incident.
+
+01:20:49.620 --> 01:20:50.060
+Geen rapport.
+
+01:20:50.320 --> 01:20:52.280
+Bekijk de zes samen en je zult het patroon zien.
+
+01:20:52.520 --> 01:20:54.080
+Geen van hen is een ontbrekende functie.
+
+01:20:54.260 --> 01:20:58.420
+Elk punt is een beslissing die te snel is genomen of een taak die als gedaan wordt beschouwd terwijl deze pas net was begonnen.
+
+01:20:58.620 --> 01:21:03.180
+En elk punt is goedkoop te voorkomen wanneer het op een lijst staat en duur om te herstellen wanneer het een verrassing is.
+
+01:21:03.360 --> 01:21:06.300
+Dus neem de lijst en zet deze om in een volgorde die een team kan volgen.
+
+01:21:06.520 --> 01:21:07.480
+Dat is de routekaart.
+
+01:21:07.640 --> 01:21:09.400
+De routekaart van pilot naar productie.
+
+01:21:09.520 --> 01:21:10.280
+Vijf fases.
+
+01:21:11.940 --> 01:21:13.880
+En niemand gaat door de poort zonder handtekening.
+
+01:21:14.120 --> 01:21:16.660
+Fase 1 is ontwerp en compatibiliteitstests.
+
+01:21:16.860 --> 01:21:21.880
+Hier wordt de taxonomie geschreven, de versleutelingsbeslissingen genomen en de client matrix gebouwd.
+
+01:21:22.060 --> 01:21:25.920
+Vier of vijf labels op het hoogste niveau met afhandelingsregels geschreven naast elk label.
+
+01:21:26.100 --> 01:21:30.500
+De oudste officebeeld, de Mac, de mobiele app, de scanner, de lastige externe partner.
+
+01:21:30.780 --> 01:21:33.740
+Allemaal getest met versleutelde bestanden voordat de gebruiker een label ziet.
+
+01:21:33.940 --> 01:21:37.620
+De output is een ontwerp van één pagina en een testrapport met daarin echte fouten.
+
+01:21:37.620 --> 01:21:40.540
+Als het rapport geen fouten bevat, was het testen niet zwaar genoeg.
+
+01:21:40.540 --> 01:21:43.580
+De poort hier is voor de taxonomie-eigenaar en de security lead.
+
+01:21:43.780 --> 01:21:49.340
+Zij tekenen dat de labels overeen komen met het bedrijfsbeleid en dat de versleutelingslaag is getest op de slechtste client die je hebt.
+
+01:21:49.540 --> 01:21:54.120
+Fase 2 is de pilot met beperkte scope, juridische zaken, financiën en 1-team dat veel extern deelt.
+
+01:21:54.260 --> 01:21:57.660
+Pilot labels bevinden zich in een beperkt beleid, dus er lekt niets naar productie.
+
+01:21:57.820 --> 01:22:00.700
+Je definieert falen voordat je begint en je evalueert wekelijks.
+
+01:22:00.940 --> 01:22:04.980
+Toegepaste labels, labelwijzigingen, redenen voor degradatie, helpdesk tickets.
+
+01:22:04.980 --> 01:22:09.860
+Zoals we zagen, bewijst dekking alleen niets, dus de correctheidssteekproef maakt deel uit van de exitcriteria.
+
+01:22:10.020 --> 01:22:11.700
+De poort is voor de zakelijke sponsor.
+
+01:22:12.060 --> 01:22:18.400
+Zij kijken naar de taxonomiewijzigingen die de pilot afdwong en beslissen of het ontwerp klaar is voor een breder publiek of dat er nog een ronde nodig is.
+
+01:22:18.600 --> 01:22:21.900
+Fase 3 is standaarden en vervolgens verplichte labelvorming in golven.
+
+01:22:22.160 --> 01:22:25.100
+Standaarden gaan eerst omdat ze gedrag veranderen tegen bijna nul kosten.
+
+01:22:25.360 --> 01:22:30.800
+Vervolgens vraag je om een label voor het opslaan of verzenden, één golf tegelijk, beginnend bij groepen die de label zou kennen uit de pilot.
+
+01:22:31.080 --> 01:22:32.300
+Let op het wrijvingsbudget.
+
+01:22:32.500 --> 01:22:35.980
+Als het aantal tickets in een golf piekt, pauzeer je, los je het op en pas daarna ga je door.
+
+01:22:36.160 --> 01:22:38.540
+De controle ligt bij de helpdeskmanager en de champions.
+
+01:22:38.920 --> 01:22:43.360
+Zij merken de problemen als eerste op, dus een golf wordt pas afgesloten als zij zeggen dat de vragen niet meer terugkeren.
+
+01:22:43.560 --> 01:22:45.560
+Fase 4 is automatische labelgeving.
+
+01:22:45.560 --> 01:22:49.380
+Eerst simuleren op een beperkte rijkwijte met regels die een hoge mate van zekerheid bieden.
+
+01:22:49.380 --> 01:22:55.600
+Controleer de matches, steekproof de missers, verfijn, dwingen dan af op die beperkte scope en breed pas uit wanneer het fout percentage stabiel blijft.
+
+01:22:55.820 --> 01:22:59.100
+Denk aan de doorvoerlimieten, dus plan de backlog in weken, niet in dagen.
+
+01:22:59.340 --> 01:23:02.520
+De controle ligt bij de data-eigenaren van de content die wordt gelabeld.
+
+01:23:02.740 --> 01:23:06.920
+Zij keuren de steekproefresultaten goed omdat alleen zij het verschil zien tussen een correct en een onjuist label.
+
+01:23:07.160 --> 01:23:13.620
+Fase 5 omvat drie gelijktijdige trajecten, containerlabels met gekoppelde standaardbibliotheekinstellingen en bestaande sites die in golven worden verplaatst.
+
+01:23:13.780 --> 01:23:16.240
+Co-pilot gereedheid in de volgorde die we hebben besproken.
+
+01:23:16.240 --> 01:23:29.200
+Opschonen van overmatig delen, labels op de locaties met het hoogste risico, DLP voor interacties, een schone pilotgroep, gevolgd door auditing en continu operaties met de kwartaalbeoordeling, het wijzigingsbeheer en de vijf of zes kerncijfers op het dashboard.
+
+01:23:29.440 --> 01:23:32.080
+Deze fase heeft geen einddatum en dat is bewust zo gekozen.
+
+01:23:32.240 --> 01:23:33.880
+De laatste controle is een permanente.
+
+01:23:34.100 --> 01:23:38.820
+Elke co-pilot uitbreiding, elke nieuwe containergolf, elke taxonomiewijziging gaat opnieuw via de sponsor en de eigenaar.
+
+01:23:38.960 --> 01:23:41.220
+Noteer de controlepunten met de namen van de verantwoordelijken erbij.
+
+01:23:41.380 --> 01:23:43.300
+Een controlepunt zonder naam is slechts een suggestie.
+
+01:23:43.300 --> 01:23:46.080
+Conclusie, verzoek om een recensie en een call to action voor LinkedIn.
+
+01:23:46.300 --> 01:23:48.000
+Hier is de omslag nog één laatste keer.
+
+01:23:48.460 --> 01:23:51.220
+Klassificatie is geen klusje dat je aan gebruikers overlaat in de hoop op het beste.
+
+01:23:51.420 --> 01:23:58.160
+Het is context die met de data meer reist, ingesteld via standaarden, verfijnd door automatisering, afgedwongen op woordniveau, met concrete gevolgen.
+
+01:23:58.320 --> 01:24:00.340
+Co-pilot vindt alles waarvoor je rechten hebt.
+
+01:24:00.580 --> 01:24:04.140
+Dat maakt labels tot een beslissing voor AI-gereedheid geen compliance taak.
+
+01:24:04.280 --> 01:24:07.520
+Als dit je manier van denken heeft veranderd, laat dan een recensie achter voor de podcast.
+
+01:24:07.520 --> 01:24:13.440
+Het helpt meer beheerders die voor een label uitrol staan om dit te vinden voordat ze live gaan met 14 labels en één enkele aankondigingsmail.
+
+01:24:13.620 --> 01:24:16.980
+En als je verder wilt praten, maak dan verbinding met mij, Meerkopeters, op LinkedIn.
+
+01:24:17.240 --> 01:24:20.540
+Laat me weten met welk uitrolprobleem je kampt en welk onderwerp als volgende aanbod moet komen.
+
+01:24:20.740 --> 01:24:23.260
+Nog één laatste opmerking over Stella Migrator for Exchange.
+
+01:24:23.460 --> 01:24:26.540
+Als er een mailbox migratie op de planning staat, plan dan eerst de labels.
+
+01:24:27.240 --> 01:24:28.840
+Klassificatie moet de verhuizing overleven.
+
+01:24:29.040 --> 01:24:31.920
+Het is veel makkelijker om het in het plan te beschermen dan achteraf te repareren,
+
+01:24:31.920 --> 01:24:35.320
+want de labels die je vandaag overslaat, zijn de labels die Co-pilot morgen leest.
+
+01:24:35.320 --> 01:25:05.300
+Bedankt voor het kijken.

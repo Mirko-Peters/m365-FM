@@ -1,0 +1,6436 @@
+WEBVTT
+
+00:00:00.050 --> 00:00:05.370
+40.000 documenti, ognuno dei quali possiede un'etichetta, e nessuno di essi è protetto in alcun modo rilevante.
+
+00:00:05.970 --> 00:00:09.290
+Nessuna criptografia, nessuna regola di accesso, nessuna marcatura che qualcuno noti.
+
+00:00:09.610 --> 00:00:11.790
+Solo una piccola parola in un angolo del file che nessuno legge.
+
+00:00:12.330 --> 00:00:15.790
+Ecco come appare un'implementazione fallimentare che solitamente sembra un successo sulla dashboard.
+
+00:00:16.250 --> 00:00:16.830
+Ecco perché accade.
+
+00:00:17.270 --> 00:00:19.510
+Le etichette di sensibilità non falliscono a causa degli strumenti.
+
+00:00:20.030 --> 00:00:21.510
+Falliscono a causa del modello che c'è dietro.
+
+00:00:21.950 --> 00:00:23.970
+Il vecchio modello tratta la classificazione come un'archiviazione.
+
+00:00:24.530 --> 00:00:26.190
+Inserisci un documento e una cartella e te ne vai.
+
+00:00:27.150 --> 00:00:29.370
+Il nuovo modello tratta la classificazione come contesto.
+
+00:00:29.370 --> 00:00:32.410
+Un'etichetta che viaggia con i dati e dice a ogni sistema cosa farne.
+
+00:00:33.390 --> 00:00:37.210
+Quindi questo è il manuale, dal pilota alla produzione, e il punto in cui Copilot cambia la posta in gioco.
+
+00:00:37.670 --> 00:00:40.090
+Prima, due parole su perché esiste questo episodio.
+
+00:00:41.390 --> 00:00:43.530
+Introduzione e promemoria per iscriversi al segmento dello sponsor.
+
+00:00:43.790 --> 00:00:46.690
+Se sei nuovo qui, iscriviti al podcast M365FM.
+
+00:00:47.230 --> 00:00:48.410
+Questo argomento è un ottimo motivo per farlo.
+
+00:00:48.730 --> 00:00:49.930
+Le etichette non sono un progetto notando.
+
+00:00:50.290 --> 00:00:54.250
+Le funzioni cambiano, i valori predefiniti cambiano, e Copilot continua a cambiare le regole sotto i tuoi piedi.
+
+00:00:54.590 --> 00:00:55.930
+Rimane aggiornati e parte del lavoro.
+
+00:00:56.170 --> 00:00:59.210
+Ora due parole sul nostro sponsor, Stella Migrator for Exchange.
+
+00:00:59.690 --> 00:01:01.270
+Pensa a cosa succede durante una migrazione.
+
+00:01:01.610 --> 00:01:05.190
+Le cassette postali si spostano, le cartelle si spostano, gli elementi vengono ricostruiti in un posto nuovo.
+
+00:01:05.610 --> 00:01:10.250
+E se la tua classificazione non sopravvive a quel viaggio, hai appena cancellato il contesto che hai lavorato così duramente per costruire.
+
+00:01:10.910 --> 00:01:13.790
+La posta etichettata arriva senza etichetta, il conto che il microfono arriva illegibile.
+
+00:01:14.290 --> 00:01:15.110
+Questa è la lezione da imparare.
+
+00:01:15.410 --> 00:01:19.030
+La classificazione dei dati deve essere parte del piano di migrazione, non lo ripensamento successivo.
+
+00:01:19.490 --> 00:01:22.770
+Stella Migrator for Exchange è progettato per spostare cassette postali tra ambienti exchange,
+
+00:01:22.770 --> 00:01:25.270
+quindi vale la pena darci un'occhiata se hai uno spostamento in programma.
+
+00:01:25.330 --> 00:01:26.230
+Il link è nella descrizione.
+
+00:01:26.230 --> 00:01:27.510
+Ecco la tabella di marcia.
+
+00:01:28.070 --> 00:01:30.490
+Iniziamo con la tassonomia, quali etichette creare e cosa significa ognuna.
+
+00:01:31.210 --> 00:01:34.690
+Poi la criptografia, la decisione più importante del programma e quella che causa più dolore.
+
+00:01:35.010 --> 00:01:38.850
+Poi i valori predefiniti e l'etichettatura obbligatoria, come plasmare il comportamento senza presentazione informazione.
+
+00:01:39.090 --> 00:01:42.310
+Poi l'automazione, l'etichettatura automatica e come regolarla senza perdere fiducia.
+
+00:01:42.790 --> 00:01:44.490
+Poi i container, i team, i gruppi e i siti.
+
+00:01:44.990 --> 00:01:47.690
+Poi l'adozione e la formazione, perché sono le persone a decidere se tutto questo funziona.
+
+00:01:47.690 --> 00:01:51.610
+E infine, co-pilot, dove ogni scorciatoio appresa torna a gallo.
+
+00:01:51.610 --> 00:01:52.850
+La nota su come gestirò la cosa.
+
+00:01:53.090 --> 00:01:55.110
+Prima la strategia esecutiva, poi l'approfondimento tecnico.
+
+00:01:55.310 --> 00:01:57.270
+Se sei tu a finanziare il progetto saprai cosa che...
+
+00:01:57.270 --> 00:01:59.150
+E se sei tu a costruirlo saprai cosa configurare.
+
+00:01:59.510 --> 00:02:03.710
+Ma prima di tutto dobbiamo esaminare il presupposto che silenziosamente rovina la maggior parte delle implementazioni.
+
+00:02:04.790 --> 00:02:06.810
+Perché la maggior parte dei programmi di etichettatura fallisce silenzio?
+
+00:02:07.050 --> 00:02:09.170
+Nella maggior parte delle aziende la storia si ripete sempre lo stesso modo.
+
+00:02:09.170 --> 00:02:10.430
+Qualcuno organizza un workshop.
+
+00:02:10.750 --> 00:02:14.410
+Un gruppo di persone intelligenti si siede in una stanza a discutere su cosa debba considerarsi riservato.
+
+00:02:14.650 --> 00:02:15.570
+Producono una tassonomia.
+
+00:02:15.910 --> 00:02:16.910
+C'è una slide con dei colori.
+
+00:02:17.230 --> 00:02:18.910
+Poi le etichette vengono create nel portale.
+
+00:02:19.310 --> 00:02:20.310
+Viene inviato nel mail di lancio.
+
+00:02:20.590 --> 00:02:22.950
+Forse c'è un breve video, forse una pagina sull'intranet.
+
+00:02:23.110 --> 00:02:23.990
+E poi silenzio.
+
+00:02:24.650 --> 00:02:25.330
+Nessuno si lamenta.
+
+00:02:25.530 --> 00:02:26.130
+Nessuno festeggia.
+
+00:02:26.430 --> 00:02:27.990
+Le etichette restano nella barra multifunzione.
+
+00:02:28.090 --> 00:02:29.810
+Le persone continuano a salvare i file come hanno sempre fatto.
+
+00:02:30.330 --> 00:02:32.730
+Ciò che accade tipicamente è che il progetto viene segnato come completato.
+
+00:02:32.970 --> 00:02:33.730
+Il ticket viene chiuso.
+
+00:02:34.150 --> 00:02:35.730
+Il comitato direttivo passa alla cosa successiva.
+
+00:02:35.730 --> 00:02:41.490
+E sei mesi dopo qualcuno estrae un report e scopre che la maggior parte dei file non ha alcuna etichetta o ha sempre la stessa per abitudine.
+
+00:02:41.870 --> 00:02:42.930
+Le etichette vengono create.
+
+00:02:43.350 --> 00:02:44.170
+Il comportamento non cambia.
+
+00:02:44.610 --> 00:02:45.090
+Questo è lo schema.
+
+00:02:45.490 --> 00:02:46.370
+Vale la pena chiedersi perché.
+
+00:02:46.730 --> 00:02:48.870
+Perché le persone che gestiscono questi programmi non sono negligenti.
+
+00:02:49.110 --> 00:02:49.770
+Hanno fatto workshop.
+
+00:02:50.090 --> 00:02:50.850
+Hanno scritto la policy.
+
+00:02:51.170 --> 00:02:51.910
+Hanno inviato l'email.
+
+00:02:52.230 --> 00:02:53.830
+Il problema è il presupposto alla base di tutto.
+
+00:02:54.270 --> 00:02:57.190
+Il presupposto è che gli utenti classificheranno correttamente perché lo chiediamo gentilmente.
+
+00:02:57.470 --> 00:02:58.750
+Pensate a ciò che questo richiedere al mail.
+
+00:02:59.210 --> 00:03:01.390
+Una persona sta finendo un foglio di calcolo alle 17.
+
+00:03:01.810 --> 00:03:03.550
+Non sta pensando alla governance dei dati.
+
+00:03:03.550 --> 00:03:06.170
+Sta pensando a inviare il file a un collega per poter andare a casa.
+
+00:03:06.710 --> 00:03:10.590
+E ora deve fermarsi, leggere un elenco di etichette, ricordare una policy vista una volta,
+
+00:03:10.910 --> 00:03:13.510
+giudicare il contenuto del file in base a essa e scegliere quella giusta.
+
+00:03:13.970 --> 00:03:14.770
+Ogni singola volta.
+
+00:03:15.010 --> 00:03:16.810
+Per ogni file, ogni email, ogni presentazione.
+
+00:03:16.890 --> 00:03:17.190
+Per anni.
+
+00:03:17.710 --> 00:03:18.410
+Questo non è un controllo.
+
+00:03:18.570 --> 00:03:19.170
+Questa è una speranza.
+
+00:03:19.430 --> 00:03:20.310
+E la speranza non è scalabile.
+
+00:03:20.810 --> 00:03:22.410
+Quindi ciò che si ottiene è uno dei due risultati.
+
+00:03:22.410 --> 00:03:26.170
+Le persone ignorano completamente il seletto di etichette oppure scelgono ciò che è più
+
+00:03:26.170 --> 00:03:28.950
+semplice, solitamente la prima della lista o quella scelta l'ultima volta.
+
+00:03:29.390 --> 00:03:32.090
+Entrambi i risultati sembrano corretti in un rapporto di implementazione che conta gli elementi
+
+00:03:32.090 --> 00:03:32.430
+etichettati.
+
+00:03:32.970 --> 00:03:34.090
+Nessuno dei due protegge nulla.
+
+00:03:34.530 --> 00:03:35.570
+Ed è qui che le cose si fanno scomode.
+
+00:03:36.110 --> 00:03:37.730
+Un'etichetta senza applicazione è solo un adesivo.
+
+00:03:38.150 --> 00:03:39.210
+Dice, è riservato sul file.
+
+00:03:39.870 --> 00:03:41.070
+Potreste persino inserire nella pagina.
+
+00:03:41.670 --> 00:03:45.050
+Ma se il file può comunque essere inviato a un indirizzo personale, condiviso con chiunque
+
+00:03:45.050 --> 00:03:48.230
+abbia il link e aperto da 100 persone che non hanno motivo di vederlo, allora quella parola
+
+00:03:48.230 --> 00:03:52.190
+sulla pagina è solo decorazione, questo è il teatro della conformità, produce prove
+
+00:03:52.190 --> 00:03:54.510
+del fatto che avete fatto qualcosa, non produce alcun controllo.
+
+00:03:54.870 --> 00:03:58.530
+Gli auditor possono essere insoddisfatti per me, i cuscotti possono apparire, ma il giorno
+
+00:03:58.530 --> 00:04:01.370
+in cui qualcosa trapera nessuno chiede se il file avessero un'etichetta, chiedono cosa
+
+00:04:01.370 --> 00:04:01.970
+abbia fatto l'etichetta.
+
+00:04:02.330 --> 00:04:05.410
+Se la risposta onesta è niente, hai un problema che nessuna formazione potrà risolvere.
+
+00:04:06.650 --> 00:04:09.570
+Ora voglio dare un nome a ciò che sta dietro tutto questo perché tornerà ricorrente
+
+00:04:09.570 --> 00:04:10.330
+in questo episodio.
+
+00:04:10.990 --> 00:04:11.610
+Lo chiamo il modello.
+
+00:04:11.970 --> 00:04:12.770
+Esistono due versioni.
+
+00:04:12.770 --> 00:04:15.270
+Nella prima versione la classificazione è un compito dell'utente.
+
+00:04:15.730 --> 00:04:17.970
+Il sistema attende che una persona prenda una decisione.
+
+00:04:17.970 --> 00:04:21.310
+E la qualità della tua protezione dipende da quante persone decidono correttamente
+
+00:04:21.310 --> 00:04:22.430
+in tempo sotto pressione.
+
+00:04:23.730 --> 00:04:26.070
+Nella seconda versione la classificazione è un comportamento del sistema.
+
+00:04:26.670 --> 00:04:28.350
+La piattaforma prende la maggior parte delle decisioni.
+
+00:04:28.470 --> 00:04:30.270
+I valori predefiniti applicano un'etichetta sensata.
+
+00:04:30.350 --> 00:04:31.970
+Il rilevamento trova i contenuti sensibili e l'etichetta.
+
+00:04:32.250 --> 00:04:33.790
+I contenitori portano con sé le proprie regole.
+
+00:04:34.350 --> 00:04:36.370
+L'utente gestisce le eccezioni, che sono molte meno.
+
+00:04:37.210 --> 00:04:39.710
+Stesso prodotto, stesse etichette, è risultato completamente diverso.
+
+00:04:39.710 --> 00:04:43.330
+La maggior parte dei programmi fallimentari è basata sulla prima versione, senza mai averci.
+
+00:04:43.790 --> 00:04:46.530
+Nessuno si è seduto a tavolino per decidere che la protezione dovesse dipendere
+
+00:04:46.530 --> 00:04:49.990
+dallo sforzo volontario. È successo e basta, perché la prima versione è in modo predefinito
+
+00:04:49.990 --> 00:04:52.430
+di pensare alla classificazione. Chiedi alle persone di farlo.
+
+00:04:52.690 --> 00:04:56.290
+Il resto di questo manuale riguarda il passaggio deliberato alla seconda versione per gradi.
+
+00:04:56.930 --> 00:04:59.890
+Prima di poter correggere il modello, dobbiamo essere precisi su qualcosa di più semplice.
+
+00:05:00.470 --> 00:05:01.890
+Cos'è effettivamente un'etichetta di sensibilità?
+
+00:05:02.390 --> 00:05:04.290
+Cosa sia effettivamente un'etichetta di sensibilità?
+
+00:05:04.830 --> 00:05:07.010
+Un'etichetta di sensibilità è l'unione di due elementi.
+
+00:05:07.250 --> 00:05:11.670
+Il primo è a metadato, una piccola informazione scritta nel file che dichiara questo riservato.
+
+00:05:12.590 --> 00:05:13.710
+Quella parte è solo un tag.
+
+00:05:13.710 --> 00:05:17.530
+Il secondo è l'applicazione facoltativa. La parola che conta qui è facoltativa.
+
+00:05:18.390 --> 00:05:21.890
+L'etichetta può anche applicare una marcatura come intestazione, un pdpagina o una filigrana.
+
+00:05:22.690 --> 00:05:23.650
+Può rettografare il contenuto.
+
+00:05:23.970 --> 00:05:27.270
+Può definire chi è autorizzato ad aprirlo e cosa può fare una volta aperto.
+
+00:05:27.830 --> 00:05:30.930
+Quindi un'etichetta può essere solo un tag oppure un tag con i denti.
+
+00:05:31.550 --> 00:05:32.710
+Lo decidi etichetta per etichetta.
+
+00:05:33.190 --> 00:05:36.390
+Ora ecco la proprietà che rende questo diverso da quasi tutto il resto che gestisci.
+
+00:05:37.430 --> 00:05:39.590
+L'etichetta viaggia con il file, non con la posizione.
+
+00:05:40.050 --> 00:05:41.950
+Pensa come funziona la maggior parte della sicurezza.
+
+00:05:41.950 --> 00:05:47.270
+Proteggi la libreria, il sito, la casella di posta, ma nel momento in cui un file lascia quel posto la protezione resta indietro.
+
+00:05:48.010 --> 00:05:49.070
+Un'etichetta non funziona così.
+
+00:05:49.430 --> 00:05:50.770
+È scritta all'interno del documento stesso.
+
+00:05:51.290 --> 00:05:56.110
+Qualcuno scarica il file, lo copia su una chiavetta USB, lo allega a un messaggio, lo inserisce in una cartella cloud personale.
+
+00:05:56.530 --> 00:05:59.530
+E l'etichetta lo segue, la criptografia lo segue, la criptografia lo segue, le regole lo seguono.
+
+00:05:59.630 --> 00:06:01.170
+Questa è l'intera idea di contesto che viaggia.
+
+00:06:01.670 --> 00:06:03.130
+I dati portano con sé le proprie istruzioni.
+
+00:06:03.130 --> 00:06:07.090
+Ma voglio essere cauto qui perché le persone si aspettano dalle etichette più di quanto offrono.
+
+00:06:07.490 --> 00:06:08.450
+Un'etichetta non trova nulla.
+
+00:06:08.770 --> 00:06:11.570
+Non ha idea di quali dei tuoi file siano sensibili finché qualcosa non glielo dice.
+
+00:06:12.270 --> 00:06:15.310
+Una persona la applica, un'impostazione predefinita la applica, una regola di arrivamento.
+
+00:06:15.930 --> 00:06:18.130
+Fino ad allora il file rimane lì senza contrassegni.
+
+00:06:18.430 --> 00:06:20.150
+E un'etichetta non risolve la condivisione eccessiva.
+
+00:06:20.150 --> 00:06:24.430
+Se un sito è aperto all'intera azienda e un file sul interno viene etichettato come riservato senza criptografia,
+
+00:06:24.490 --> 00:06:25.790
+l'intera azienda può comunque aprirlo.
+
+00:06:26.430 --> 00:06:27.770
+L'etichetta è cambiata, l'accesso no.
+
+00:06:28.490 --> 00:06:29.750
+È qui che i programmi creano confusione.
+
+00:06:30.030 --> 00:06:33.190
+Quindi lasciatemi collocare l'etichetta accanto agli altri controlli con cui vengono spesso raggruppati.
+
+00:06:33.630 --> 00:06:36.350
+La prevenzione della perdita di dati osserva cosa fanno le persone con i conti.
+
+00:06:36.430 --> 00:06:40.550
+Esamina un'azione come l'invio di un file all'esterno dell'azienda e la blocca o invia un avviso.
+
+00:06:41.030 --> 00:06:43.890
+Le etichette possono alimentare tali criteri, ma il criterio è un controllo separato.
+
+00:06:43.890 --> 00:06:46.830
+La conservazione decide quanto tempo vive un contenuto, quando viene eliminato.
+
+00:06:46.830 --> 00:06:50.030
+La questione è completamente diversa, riguarda il tempo e non la segretezza.
+
+00:06:50.390 --> 00:06:54.290
+Le barriere informative impediscono a specifici gruppi di persone di comunicare e collaborare tra loro.
+
+00:06:54.590 --> 00:06:56.770
+Si tratta di chi parla con chi, non del contenuto stesso.
+
+00:06:57.230 --> 00:06:58.470
+Le etichette si affiancano a tutti e tre.
+
+00:06:58.910 --> 00:07:00.210
+Ognuno risponde a una domanda diversa.
+
+00:07:00.590 --> 00:07:01.070
+Che cos'è questo?
+
+00:07:01.430 --> 00:07:02.330
+Lo tempo lo conserviamo.
+
+00:07:02.790 --> 00:07:03.690
+Cosa possono farci le persone?
+
+00:07:04.070 --> 00:07:04.730
+Chi può raggiungere chi?
+
+00:07:04.970 --> 00:07:09.070
+L'etichetta è quella che risponde alla prima domanda e lo fa in un modo leggibile dagli altri controlli
+
+00:07:09.070 --> 00:07:10.790
+e che ci porta al vero valore.
+
+00:07:11.070 --> 00:07:12.710
+Un'etichetta può svolgere tre compiti.
+
+00:07:13.110 --> 00:07:14.010
+Il primo compito è segnalare.
+
+00:07:14.490 --> 00:07:16.190
+Dice a una persona, gestisci questo con cura.
+
+00:07:16.190 --> 00:07:17.530
+La marcatura fa questo.
+
+00:07:17.850 --> 00:07:22.670
+È il compito più debole, ma è comunque utile perché definisce le aspettative nel momento in cui qualcuno sta per condividere.
+
+00:07:23.070 --> 00:07:24.170
+Il secondo compito è limitare.
+
+00:07:24.730 --> 00:07:26.190
+È qui che entra in gioco la crittografia e i diritti.
+
+00:07:26.710 --> 00:07:32.690
+L'etichetta dice chi può aprire il file, se può stamparlo, copiarlo o inoltrarlo, che la protezione diventa reale.
+
+00:07:33.330 --> 00:07:34.970
+Il terzo compito è attivare altri controlli.
+
+00:07:35.710 --> 00:07:38.030
+Un'etichetta può essere la condizione che una regola di LP cerca.
+
+00:07:38.810 --> 00:07:41.550
+Può decidere le impostazioni di condivisione nell'area di lavoro di un team.
+
+00:07:42.090 --> 00:07:43.810
+Può dire a Copilot come trattare ciò che trova.
+
+00:07:43.810 --> 00:07:47.050
+In questo compito l'etichetta non protegge di per sé.
+
+00:07:47.730 --> 00:07:49.070
+È l'interruttore che gli altri sistemi leggono.
+
+00:07:49.470 --> 00:07:51.170
+La maggior parte dei programmi usa solo il primo compito.
+
+00:07:51.470 --> 00:07:52.690
+Mettono una parola su un file e si fermano.
+
+00:07:53.030 --> 00:07:56.410
+I programmi maturi li usano tutti e tre e decidono deliberatamente quale etichetta fanno cosa.
+
+00:07:56.690 --> 00:07:58.070
+Un'etichetta pubblica potrebbe solo segnalare.
+
+00:07:58.370 --> 00:08:00.490
+Un'etichetta di alto livello può segnalare, limitare e attivare.
+
+00:08:00.930 --> 00:08:01.790
+Ma nota cosa significa.
+
+00:08:02.290 --> 00:08:04.510
+Quei compiti funzionano solo se le etichette significano qualcosa.
+
+00:08:04.510 --> 00:08:08.830
+Se le persone non distinguono due etichette, le restrizioni colpiscono i file sbagliati,
+
+00:08:08.890 --> 00:08:10.310
+gli inneschi scattano al momento errato.
+
+00:08:10.810 --> 00:08:12.710
+Quindi prima di configurare una singola impostazione,
+
+00:08:12.830 --> 00:08:14.850
+dobbiamo parlare di cosa state acquistando con tutto questo.
+
+00:08:15.290 --> 00:08:16.210
+Poi costruiamo la struttura.
+
+00:08:16.990 --> 00:08:18.510
+Caso aziendale, cosa state comprando?
+
+00:08:19.370 --> 00:08:21.890
+Se siete voi ad approvare il budget, dimenticate il portale per un attimo,
+
+00:08:21.970 --> 00:08:23.050
+ponetevi una domanda diversa.
+
+00:08:23.850 --> 00:08:24.970
+Per quale risultato sto pagando?
+
+00:08:25.330 --> 00:08:25.910
+Ce ne sono tre.
+
+00:08:26.250 --> 00:08:29.130
+Meno esposizione, controllo dimostrabile, un modo sicuro per adottare l'IA.
+
+00:08:29.270 --> 00:08:33.550
+Meno esposizione significa meno posti dove i dati sensibili restano aperti a chi non dovrebbe vederli.
+
+00:08:33.550 --> 00:08:38.010
+Controllo dimostrabile significa che quando un revisore, un cliente o un membro del consiglio
+
+00:08:38.010 --> 00:08:42.030
+chiede come proteggete queste informazioni, potete mostrarglielo, non descriverlo, mostrarlo.
+
+00:08:42.410 --> 00:08:45.570
+Un'adozione sicura dell'IA significa che l'assistenza che il vostro staff sta per usare
+
+00:08:45.570 --> 00:08:48.030
+non può inserire il contenuto sbagliato nella risposta sbagliata.
+
+00:08:48.490 --> 00:08:49.270
+Questi sono i risultati.
+
+00:08:49.590 --> 00:08:50.730
+Tutto il resto è configurazione.
+
+00:08:51.390 --> 00:08:54.150
+Ora, prima di finanziare qualsiasi cosa, tre domande da porre al vostro team.
+
+00:08:54.750 --> 00:08:57.990
+Primo, cosa farà davvero un'etichetta sui nostri contenuti più sensibili?
+
+00:08:58.650 --> 00:08:59.650
+Non cosa dice, cosa fa?
+
+00:09:00.150 --> 00:09:02.450
+Se la risposta è mostra un banner, state comprando un adesivo.
+
+00:09:02.450 --> 00:09:05.850
+Secondo, quante decisioni chiediamo ancora agli utenti di prendere?
+
+00:09:06.470 --> 00:09:09.510
+Se la risposta è tutte, tornate al modello di cui abbiamo parlato prima.
+
+00:09:10.030 --> 00:09:11.650
+Per piano dipende da un comportamento perfetto.
+
+00:09:11.710 --> 00:09:13.250
+Il comportamento perfetto non rispetta le scadenze.
+
+00:09:14.130 --> 00:09:17.170
+Terzo, come sapremo se funziona se nessuno sa rispondere in una sola frase?
+
+00:09:17.630 --> 00:09:18.910
+Il programma non ha un traguardo.
+
+00:09:19.410 --> 00:09:20.890
+Continua semplicemente finché le persone interessano.
+
+00:09:21.110 --> 00:09:22.990
+Ora il costo di sbagliare, non è piccolo.
+
+00:09:22.990 --> 00:09:25.710
+Se sbagliate per eccesso, create attrito.
+
+00:09:26.210 --> 00:09:29.330
+Le persone ricevono un avviso che non capiscono, non riescono ad aprire un file necessario.
+
+00:09:29.410 --> 00:09:31.050
+Un partner non può leggere il contratto inviato.
+
+00:09:31.290 --> 00:09:31.950
+Quindi vi aggirano.
+
+00:09:32.690 --> 00:09:34.130
+Inviano file da un account personale.
+
+00:09:34.650 --> 00:09:36.330
+Spostano il lavoro su uno strumento che non gestisce.
+
+00:09:36.510 --> 00:09:37.050
+È shadow.it?
+
+00:09:37.530 --> 00:09:38.290
+L'avete costruito voi.
+
+00:09:38.490 --> 00:09:39.570
+Un file bloccato alla volta.
+
+00:09:40.150 --> 00:09:42.330
+Se sbagliate per difetto, ottenete etichette abbandonate.
+
+00:09:43.130 --> 00:09:44.230
+Esistono, nessuno le usa.
+
+00:09:44.690 --> 00:09:46.710
+E i soldi spesi producono solo un menu a tendina.
+
+00:09:47.670 --> 00:09:49.330
+Entrambi i fallimenti sembrano un problema di progetto.
+
+00:09:49.630 --> 00:09:52.790
+Entrambi sono in realtà problemi di design, ma esiste un costo anche dall'altra parte.
+
+00:09:52.890 --> 00:09:54.790
+Ed è quello che dovrebbe orientare la discussione sul budget.
+
+00:09:54.910 --> 00:09:55.670
+Il costo dell'inazione.
+
+00:09:56.190 --> 00:09:56.730
+Ecco il cambiamento.
+
+00:09:57.070 --> 00:09:59.410
+Per anni le autorizzazioni errate sono rimaste nascoste in bella vista.
+
+00:09:59.710 --> 00:10:02.470
+Un file condiviso troppo ampiamente geceva in una libreria che nessuno consultava.
+
+00:10:02.630 --> 00:10:04.110
+Nessuno lo trovava, quindi a nessuno importe.
+
+00:10:04.150 --> 00:10:05.990
+L'oscurità faceva il lavoro che la governance non ha mai fatto.
+
+00:10:06.150 --> 00:10:07.150
+Ecco, valutamente fino a tutto questo.
+
+00:10:07.350 --> 00:10:09.790
+Fa emergere tutto ciò a cui un utente può già tecnicamente eccedere.
+
+00:10:09.790 --> 00:10:12.870
+Se un tirocinante può aprire il foglio di calcolo degli stipendi perché qualcuno
+
+00:10:12.870 --> 00:10:16.150
+l'ho condiviso con tutti nel 2019, ora il tirocinante può porne una domanda e ottenere
+
+00:10:16.150 --> 00:10:17.350
+una risposta basata su di esso.
+
+00:10:17.450 --> 00:10:18.310
+L'accesso c'era sempre.
+
+00:10:18.710 --> 00:10:20.370
+L'assistente lo rende solo facile da usare.
+
+00:10:20.870 --> 00:10:23.110
+Quindi un programma di etichettatura non riguarda più solo la conformità.
+
+00:10:23.470 --> 00:10:25.550
+È il lavoro preparatorio per un lancio dell'IA e saltarlo.
+
+00:10:25.630 --> 00:10:26.490
+Non fa risparmiare denaro.
+
+00:10:26.990 --> 00:10:30.490
+Sposta il costo al giorno in cui qualcosa di sensibile apparirà nella finestra della chat.
+
+00:10:30.490 --> 00:10:34.290
+Che significa che devi decidere come misurerai il successo prima di costruire qualsiasi cosa.
+
+00:10:34.690 --> 00:10:35.070
+Non dopo.
+
+00:10:35.590 --> 00:10:37.750
+Dopo ti scelgono il numero che li fa apparire sotto una luce migliore.
+
+00:10:37.750 --> 00:10:38.750
+Scegline tre.
+
+00:10:38.910 --> 00:10:39.310
+Copertura.
+
+00:10:40.110 --> 00:10:42.050
+Quale parte dei tuoi contenuti è effettivamente un'etichetta?
+
+00:10:42.370 --> 00:10:43.830
+Questo ti dice quanto lontano arriva il programma.
+
+00:10:44.310 --> 00:10:45.810
+Correttezza dei contenuti etichettati.
+
+00:10:46.330 --> 00:10:47.290
+Quanti hanno l'etichetta giusta?
+
+00:10:47.810 --> 00:10:51.070
+Questo ti dice se la copertura ha un significato ed è dato più difficile da ottenere, quindi
+
+00:10:51.070 --> 00:10:52.110
+la maggior parte dei programmi lo è.
+
+00:10:52.470 --> 00:10:55.790
+Riduzione degli incidenti, ovvero meno file sensibili che finiscono dove non dovrebbero.
+
+00:10:56.150 --> 00:10:59.430
+Questo è il numero che sta davvero a cuore al team esecutivo, perché è quello legato
+
+00:10:59.430 --> 00:11:00.190
+al rischio reale.
+
+00:11:00.630 --> 00:11:02.030
+La copertura senza correttezza è vanità.
+
+00:11:02.390 --> 00:11:04.230
+La correttezza senza riduzione degli incidenti è sombra.
+
+00:11:04.690 --> 00:11:06.630
+Ti servono tutti e tre e devi concordarli ora.
+
+00:11:06.630 --> 00:11:10.810
+Con l'obiettivo fissato e il comitato scelto possiamo costruire la struttura che lo rende
+
+00:11:10.810 --> 00:11:12.710
+possibile e tutto inizia con la tassonomia.
+
+00:11:13.370 --> 00:11:14.570
+Principi di progettazione della tassonomia.
+
+00:11:14.970 --> 00:11:17.050
+Inizia con una regola che sembra troppo semplice per essere importante.
+
+00:11:17.470 --> 00:11:19.010
+Mene etichette battono sempre più etichette.
+
+00:11:19.510 --> 00:11:22.070
+Ecco cosa succede nella stanza in cui viene costruita la tassonomia.
+
+00:11:22.370 --> 00:11:23.630
+Ogni dipartimento ha una richiesta.
+
+00:11:24.010 --> 00:11:25.830
+L'ufficio legale vuole un'etichetta per i materiali servizi.
+
+00:11:26.150 --> 00:11:27.930
+Delle sorse umane ne vogliono una per i fascicoli dei persone.
+
+00:11:28.070 --> 00:11:29.690
+L'amministrazione finanziaria ne vuole una per il nongio.
+
+00:11:30.050 --> 00:11:31.010
+Ogni richiesta è ragionevole.
+
+00:11:31.010 --> 00:11:35.230
+È facile dire di sì a ciascuna, ma dopo 20 richieste ti ritrovi con un menu che nessuno
+
+00:11:35.230 --> 00:11:35.830
+riesce a leggere.
+
+00:11:35.990 --> 00:11:36.530
+Questa è la trappola.
+
+00:11:36.890 --> 00:11:40.730
+Ogni nuova etichetta sembra aggiungere precisione, ma per chi la usa ogni etichetta è una scelta
+
+00:11:40.730 --> 00:11:41.010
+in più.
+
+00:11:41.770 --> 00:11:45.070
+E più scelte ci sono, più è probabile che saltino la decisione o prendano la prima
+
+00:11:45.070 --> 00:11:45.850
+cosa che vedano.
+
+00:11:46.530 --> 00:11:47.350
+Non è aggiunto controllo.
+
+00:11:47.610 --> 00:11:48.070
+È aggiunto rumore.
+
+00:11:48.410 --> 00:11:50.810
+Quindi il secondo principio riguarda ciò che un'etichetta dovrebbe descrivere.
+
+00:11:51.250 --> 00:11:54.730
+Un'etichetta dovrebbe descrivere come gestire il contenuto, non chi lo possiede o a quale
+
+00:11:54.730 --> 00:11:55.650
+progetto appartiene.
+
+00:11:55.950 --> 00:11:57.090
+Pensa a quale è lo scopo di un'etichetta.
+
+00:11:57.090 --> 00:12:01.250
+Dice al sistema e alla persona quali regole si applicano, chi può aprirlo, se può uscire
+
+00:12:01.250 --> 00:12:02.850
+dall'azienda, se viene crittografato.
+
+00:12:03.510 --> 00:12:04.330
+Questa è una regola di gestione.
+
+00:12:04.590 --> 00:12:06.630
+Finanza non è regola di gestione, è un dipartimento.
+
+00:12:07.110 --> 00:12:10.670
+Due file finanziari possono richiedere trattamenti diversi, mentre un file finanziario e uno delle
+
+00:12:10.670 --> 00:12:12.810
+risorse umane possono richiedere lo stesso trame.
+
+00:12:13.030 --> 00:12:16.210
+Quando si etichetta per dipartimento si finisce con cinque etichette che fanno tutte la stessa
+
+00:12:16.210 --> 00:12:18.030
+cosa e una pila di file nel posto sbagliato.
+
+00:12:18.950 --> 00:12:23.190
+Quando si etichetta per gestione ogni etichetta guadagna il suo posto perché ognuna fa qualcosa
+
+00:12:23.190 --> 00:12:24.110
+che le altre non fanno.
+
+00:12:25.250 --> 00:12:26.410
+Ora, per chi stai progettando?
+
+00:12:27.090 --> 00:12:28.210
+Non per l'architetto con un diagramma.
+
+00:12:28.770 --> 00:12:31.570
+Stai progettando per una persona con un file aperto, una scadenza e circa tre secondi
+
+00:12:31.570 --> 00:12:32.210
+a disposizione.
+
+00:12:32.710 --> 00:12:34.150
+Questo cambia il modo in cui metti la prova e inizia?
+
+00:12:34.570 --> 00:12:37.590
+Qualcuno può leggere l'elenco e scegliere l'etichetta giusta senza fermarsi a pensare?
+
+00:12:38.070 --> 00:12:39.190
+Può farlo mentre distratto.
+
+00:12:39.650 --> 00:12:42.970
+Se la risposta dipende da ricordare una pagina di policy, il design ha già fallito.
+
+00:12:43.850 --> 00:12:46.310
+L'etichetta deve avere un significato proprio al momento della decisione.
+
+00:12:47.210 --> 00:12:50.670
+Un nuovo assunto dovrebbe capire ogni nome di etichetta sin dal primo giorno, senza formazione.
+
+00:12:50.990 --> 00:12:51.510
+Questo è lo standard.
+
+00:12:51.850 --> 00:12:53.350
+Guarda le tue bozze di nomi con occhi nuovi.
+
+00:12:53.350 --> 00:12:57.230
+Qualsiasi cosa con un codice interno, un termine legale o un numero di livello che ha senso
+
+00:12:57.230 --> 00:12:58.910
+solo nel tuo documento di policy è un problema.
+
+00:12:59.630 --> 00:13:01.510
+Livello 3 limitato non dice nulla a un estraneo.
+
+00:13:02.250 --> 00:13:04.270
+Riservato dice qualcosa, anche se in modo imperfetto.
+
+00:13:04.470 --> 00:13:05.330
+Le parole semplici vincolano.
+
+00:13:05.530 --> 00:13:08.350
+E se hai bisogno di un paragrafo per spiegare la differenza tra due nomi, probabilmente non
+
+00:13:08.350 --> 00:13:10.170
+sono abbastanza diversi per essere due etichette.
+
+00:13:10.910 --> 00:13:12.150
+Aggiungi una breve descrizione a ciascuno.
+
+00:13:12.850 --> 00:13:16.350
+Gli utenti la vedono come un suggerimento, una frase scritta come la direbbe una persona con
+
+00:13:16.350 --> 00:13:17.270
+un esempio concreto.
+
+00:13:17.270 --> 00:13:21.670
+Formazioni aziendali che potrebbero causare danni se condivisi fuori dall'azienda, come
+
+00:13:21.670 --> 00:13:22.650
+contratti o prezzi.
+
+00:13:23.730 --> 00:13:25.070
+Quella sulla riga vale più di una presentazione.
+
+00:13:25.830 --> 00:13:27.610
+L'ultimo principio ed è quello che la maggior parte dei teams ha.
+
+00:13:28.290 --> 00:13:30.630
+Testa la tassonomia su documenti reali prima di bloccarla.
+
+00:13:30.970 --> 00:13:33.470
+Prendi alcune centinaia di file reali, non esempi inventati.
+
+00:13:34.070 --> 00:13:37.210
+Contratti veri, fogli di calcolo veri, tradi di mail reali dall'attività.
+
+00:13:38.170 --> 00:13:41.310
+Consegnale le persone che useranno davvero le etichette e chiedi loro di etichettarne
+
+00:13:41.310 --> 00:13:41.630
+ognuna.
+
+00:13:42.030 --> 00:13:42.970
+Poi confrontare le risposte.
+
+00:13:43.410 --> 00:13:44.510
+Dove le persone non sono d'accordo.
+
+00:13:44.710 --> 00:13:46.010
+E lì che la tua tassonomia non è chiara.
+
+00:13:46.410 --> 00:13:49.510
+Se tre persone su cinque etichettano lo stesso file in tre modi diversi, il problema non
+
+00:13:49.510 --> 00:13:51.390
+sono le persone, sono le etichette, sono le etichette.
+
+00:13:51.510 --> 00:13:53.230
+E fai attenzione ai file che nessuno sa dove collocano.
+
+00:13:53.450 --> 00:13:54.010
+Quelle sono le lacune.
+
+00:13:54.310 --> 00:13:57.570
+Una tassonomia che sembra chiara su una diapositiva spesso crolla davanti alla prima vera
+
+00:13:57.570 --> 00:13:58.330
+pila di documenti.
+
+00:13:58.710 --> 00:13:59.910
+Questo test richiede pochi giorni.
+
+00:13:59.910 --> 00:14:03.790
+Saltarlo costa mesi perché scoprirai gli stessi problemi dopo il lancio con migliaia
+
+00:14:03.790 --> 00:14:05.570
+di file già etichettati in modo errato.
+
+00:14:05.670 --> 00:14:06.690
+Ogni modifica comporterà.
+
+00:14:07.190 --> 00:14:08.330
+Doverli toccare tutti.
+
+00:14:09.150 --> 00:14:09.810
+Eseguilo presto.
+
+00:14:10.030 --> 00:14:11.370
+Eseguilo di nuovo dopo aver apportato modi.
+
+00:14:11.650 --> 00:14:12.650
+Questi sono dubbi principi.
+
+00:14:13.010 --> 00:14:16.130
+Poche etichette, regole di gestione invece di organigrammi, test pratici nel mondo
+
+00:14:16.130 --> 00:14:18.390
+reale, ma i principi ti portano solo fino a un certo punto.
+
+00:14:18.910 --> 00:14:20.330
+A un certo punto devi scrivere l'elenco.
+
+00:14:20.790 --> 00:14:23.570
+Ecco dunque come appare una struttura funzionante quando incontra un'azienda reale.
+
+00:14:24.270 --> 00:14:26.330
+Una tassonomia iniziale che sopravviva al contatto.
+
+00:14:26.810 --> 00:14:28.390
+Ecco una struttura che funziona per la maggior parte dell'azienda.
+
+00:14:28.390 --> 00:14:29.590
+Quattro etichette.
+
+00:14:29.790 --> 00:14:31.270
+Cinque come limite massimo assoluto.
+
+00:14:31.370 --> 00:14:33.630
+Pubblico, generale, riservato, altamente riservato.
+
+00:14:33.850 --> 00:14:35.310
+Pubblico e materiale per chiunque.
+
+00:14:35.410 --> 00:14:37.930
+Comunicati stampa, materiale di marketing pubblicato, offerte di lavoro.
+
+00:14:38.470 --> 00:14:41.310
+Generale e materiale aziendale quotidiano che rimane all'interno dell'azienda ma che
+
+00:14:41.310 --> 00:14:42.930
+non farebbe grossi danni se trappelasse.
+
+00:14:43.650 --> 00:14:45.930
+Note di riunione, guida interna e aggiornamenti di progetti.
+
+00:14:46.470 --> 00:14:50.090
+Riservato e l'informazione aziendale che potrebbe causare danni reali se condivisa all'esterno
+
+00:14:50.090 --> 00:14:51.730
+come contratti, prezzi e elenchi clienti.
+
+00:14:52.250 --> 00:14:55.490
+E' altamente riservato e materiale in cui una fuga di notizie diventa un evento grave.
+
+00:14:55.490 --> 00:14:59.410
+Piani di acquisizione, dati finanziari non ancora rilasciati, architettura di sicurezza.
+
+00:14:59.630 --> 00:15:00.570
+Nota cosa fa quell'elenco.
+
+00:15:00.890 --> 00:15:02.450
+Ogni etichetta risponde a una domanda sulla gestione.
+
+00:15:02.830 --> 00:15:03.610
+Questo può lasciare l'azienda.
+
+00:15:04.230 --> 00:15:05.210
+Chi ha bisogno di motivo per vedere?
+
+00:15:05.590 --> 00:15:06.250
+Quattro passaggi.
+
+00:15:06.310 --> 00:15:08.510
+Una persona può collocare un file su quella scala in tre secondi.
+
+00:15:08.930 --> 00:15:10.170
+Ora, la questione delle sottetichette.
+
+00:15:10.970 --> 00:15:12.470
+Perché qualcuno nel workshop le chiederà?
+
+00:15:12.750 --> 00:15:15.810
+Le sottetichette sono utili quando un singolo livello necessita di una gestione diversa
+
+00:15:15.810 --> 00:15:16.710
+in altri modi specifici.
+
+00:15:16.710 --> 00:15:20.890
+Supponiamo che, altamente riservato, si divide in una versione limitata a destinatari specifici
+
+00:15:20.890 --> 00:15:22.430
+e un'altra limitata a un gruppo specifico.
+
+00:15:22.910 --> 00:15:25.770
+Queste sono differenze reali nell'applicazione, quindi hanno motivo di esistere.
+
+00:15:26.350 --> 00:15:27.870
+Ma dovranno si conosciuti solo per raggiungere una cosa?
+
+00:15:28.530 --> 00:15:29.350
+Riservato finanza.
+
+00:15:30.250 --> 00:15:31.170
+Riservato risorse umane.
+
+00:15:32.130 --> 00:15:32.950
+Riservato progetto.
+
+00:15:34.150 --> 00:15:36.530
+Ora, l'utente si trova di fronte a un secondo menu dentro il primo
+
+00:15:36.530 --> 00:15:38.430
+e l'applicazione dietro ogni opzione è identica.
+
+00:15:38.570 --> 00:15:40.790
+Questa è paralisi decisionale travestita da precisi.
+
+00:15:41.370 --> 00:15:41.870
+Un buon test.
+
+00:15:42.210 --> 00:15:44.930
+Se due sottetichette fanno esattamente la stessa cosa, sono un'unica etichetta.
+
+00:15:44.930 --> 00:15:47.630
+Poi ci sono i casi speciali, e ogni azienda ne ha.
+
+00:15:48.050 --> 00:15:51.090
+Dati regolamentati, come cartelle cliniche o numeri di carte di pagamento,
+
+00:15:51.250 --> 00:15:54.950
+materiale sotto blocco legale che deve essere conservato e gestito secondo le direttive delegali,
+
+00:15:55.450 --> 00:15:58.230
+documenti del Consiglio di Amministrazione, pochi di numero ma enormi nelle conseguenze.
+
+00:15:58.590 --> 00:16:01.170
+L'istinto suggerisce di dare a ciascuno la propria etichetta di primo livello.
+
+00:16:01.510 --> 00:16:01.910
+Resistete.
+
+00:16:02.510 --> 00:16:07.510
+La maggior parte rientra in altamente riservato, con una sottocategoria solo dove l'applicazione differisce realmente.
+
+00:16:07.990 --> 00:16:10.630
+O documenti per il Consiglio potrebbero richiedere un elenco ristratto di destinata a te.
+
+00:16:10.630 --> 00:16:14.530
+Dati regolamentati potrebbero necessitare di un contrassegno specifico affinché i revisori sappiano perché sono bloccati.
+
+00:16:14.610 --> 00:16:15.350
+Questa è una sottocategoria.
+
+00:16:15.630 --> 00:16:20.610
+Un intero nuovo livello è solitamente eccessivo, e il blocco legale di solito è una decisione di conservazione e non di riservatezza.
+
+00:16:20.930 --> 00:16:25.130
+Un'etichetta può alimentarlo, ma non trasformate la vostra tassonomia in un deposito per ogni controllo che possedete.
+
+00:16:25.330 --> 00:16:27.650
+Ora lasciate che vi spieghi perché le etichette di partimentale imbecchiano male.
+
+00:16:28.030 --> 00:16:29.690
+Create un'etichetta chiamata marketing interno.
+
+00:16:29.690 --> 00:16:34.530
+18 mesi dopo, il marketing si fonde con la comunicazione e metà team passa alle vendite.
+
+00:16:35.670 --> 00:16:36.330
+Cosa succede all'etichetta?
+
+00:16:36.790 --> 00:16:41.130
+Il nome è sbagliato, le persone che possono usarla sono sbagliate, i file che la portano sono sparsi tra nuovi proprietari.
+
+00:16:41.830 --> 00:16:44.090
+Ogni riorganizzazione diventa un lavoro di pulizia delle etichette.
+
+00:16:44.090 --> 00:16:48.930
+E nessuno stanzia un budget, quindi le vecchie etichette restano allontanandosi lentamente dalla realtà.
+
+00:16:49.550 --> 00:16:51.490
+Le etichette basate sulla gestione non hanno questo problema.
+
+00:16:52.150 --> 00:16:54.330
+Riservato significa la stessa cosa prima e dopo la fusione.
+
+00:16:54.690 --> 00:16:57.250
+L'organigramma può cambiare al di sotto, ma l'etichetta continua a funzionare.
+
+00:16:57.250 --> 00:16:59.750
+Un altro punto è importante per chi è presente nella stanza.
+
+00:17:00.090 --> 00:17:03.550
+Allineate le vostre etichette a una politica aziendale di classificazione esistente, non il contrario.
+
+00:17:03.990 --> 00:17:05.090
+La maggior parte delle aziende ne è già un.
+
+00:17:05.430 --> 00:17:08.110
+Un documento da qualche parte, veramente firmato da qualcuno di alto livello,
+
+00:17:08.170 --> 00:17:10.350
+che definisce cosa conta come pubblico interno limitato.
+
+00:17:10.410 --> 00:17:15.590
+Le vostre etichette dovrebbero specchiare da stessi livelli, stesse definizioni, stesse parole dove possibile.
+
+00:17:16.050 --> 00:17:17.390
+Contrario al modo in cui i programmi si blocca.
+
+00:17:17.730 --> 00:17:21.230
+Se create prima le etichette e poi cercate di riscrivere la politica per farla corrispondere,
+
+00:17:21.350 --> 00:17:25.290
+chiedete all'ufficio legale, alla compliance e ai dirigenti di riapprovare qualcosa che hanno già approvato.
+
+00:17:25.870 --> 00:17:26.610
+Ci vogliono mesi.
+
+00:17:26.610 --> 00:17:31.030
+E nel frattempo gli utenti vedono etichette che contraddicono la politica firmata durante l'onboarding.
+
+00:17:31.810 --> 00:17:33.910
+Se non esiste una politica, quello è il vostro primo obiettivo.
+
+00:17:34.450 --> 00:17:37.190
+Scrivetela a breve, una pagina, poi create le etichette a partire da.
+
+00:17:37.490 --> 00:17:39.510
+Quindi non mi sono la parte facile quattro parole su una lista.
+
+00:17:40.130 --> 00:17:42.310
+Ciò che dà loro peso e cosa fa ciascuna quando viene applicata.
+
+00:17:42.890 --> 00:17:45.070
+E questo inizia da dove appaiono le etichette in primo luogo.
+
+00:17:45.930 --> 00:17:47.870
+Ambito dell'etichetta e dove si applicano.
+
+00:17:48.490 --> 00:17:51.170
+Prima di configurare cosa fa un'etichetta, decidete dove appare.
+
+00:17:51.630 --> 00:17:54.190
+Le etichette si applicano a due tipi di cose, elementi e contenitori.
+
+00:17:54.190 --> 00:17:56.750
+Gli elementi sono il contenuto stesso, file e mail, inviti a riunioni.
+
+00:17:57.410 --> 00:18:00.810
+Un'etichetta su un elemento si trova all'interno di esso, viaggia con esso, come abbiamo detto prima.
+
+00:18:01.830 --> 00:18:03.550
+I contenitori sono i luoghi in cui avviene il lavoro.
+
+00:18:03.790 --> 00:18:06.110
+Teams, gruppi di Microsoft 365, siti SharePoint.
+
+00:18:06.950 --> 00:18:09.410
+Un'etichetta su un contenitore non contrassegna un singolo file,
+
+00:18:09.490 --> 00:18:13.350
+ma definisce le regole per l'intero spazio di lavoro come chi può partecipare se gli ospiti sono ammessi.
+
+00:18:13.350 --> 00:18:15.830
+Stesso prodotto, stesso portale, stessa parola sullo schermo.
+
+00:18:16.250 --> 00:18:20.050
+Due compiti molto diversi e una singola etichetta può essere impostata per far l'uno o l'altro o entrambi.
+
+00:18:20.350 --> 00:18:21.970
+Dedicheremo del tempo ai contenitori più tardi.
+
+00:18:22.330 --> 00:18:25.410
+Per ora il punto è che ogni etichetta ha un ambito, lo scegli intenzionalmente.
+
+00:18:25.770 --> 00:18:26.390
+Perché è importante?
+
+00:18:26.750 --> 00:18:27.710
+Per quello che vedono gli utenti.
+
+00:18:28.230 --> 00:18:32.250
+Immagina qualcuno che apre un documento Word e trova un'etichetta chiamata Team Privato, ospiti bloccati.
+
+00:18:32.790 --> 00:18:33.610
+Quella è un'imposta zederica.
+
+00:18:34.050 --> 00:18:35.010
+Non significa nulla per un file.
+
+00:18:35.010 --> 00:18:38.210
+La ignoreranno o peggio la selezioneranno chiedendosi perché non succede nulla.
+
+00:18:38.210 --> 00:18:41.390
+Ogni etichetta che appare nel posto sbagliato ha una piccola tassa sulla fiducia.
+
+00:18:41.930 --> 00:18:44.570
+La persona impara che l'elenco contiene elementi inutili e inizia a ignorare.
+
+00:18:44.830 --> 00:18:46.770
+Quindi assegna ogni etichetta all'ambito in cui ha senso.
+
+00:18:47.350 --> 00:18:48.890
+Etichette per file ed email nelle app.
+
+00:18:49.070 --> 00:18:51.170
+Etichette per contenitori nel flusso di creazione di siti e team.
+
+00:18:51.510 --> 00:18:52.910
+Niente appare dove non può svolgere il suo lavoro.
+
+00:18:53.290 --> 00:18:54.150
+Ora, chi vede quell'etichetta?
+
+00:18:54.550 --> 00:18:55.870
+Questo è il compito dei criteri di etichettatura.
+
+00:18:56.190 --> 00:18:59.370
+Un'etichetta di per sé è solo una definizione che risiede nel portale di amministrazione.
+
+00:18:59.510 --> 00:19:01.810
+Nessuno la vede finché non la pubblichi tramite un criterio.
+
+00:19:01.810 --> 00:19:05.190
+Il criterio stabilisce a quali persone viene assegnate e quali sono le regole per utilizzare.
+
+00:19:05.630 --> 00:19:08.610
+Comportamento predefinito, prompti obbligatori, requisiti giustificazione.
+
+00:19:08.730 --> 00:19:09.970
+Tutto questo risiede nel criterio.
+
+00:19:10.390 --> 00:19:12.910
+Né questo rende la pubblicazione una decisione progettuale in un passaggio finale.
+
+00:19:13.270 --> 00:19:14.730
+Pensa al progetto pilota che costruirono più tardi.
+
+00:19:15.030 --> 00:19:18.210
+Vorrai che un piccolo gruppo veda le nuove etichette mentre tutti gli altri rimangono sulla vecchia configurazione.
+
+00:19:18.570 --> 00:19:20.250
+Questo è un criterio limitato a un gruppo.
+
+00:19:20.330 --> 00:19:24.270
+Pensa a un team legale che necessita di un'etichetta per materiale riservato che a nessun altro dovrebbe essere proposto.
+
+00:19:24.510 --> 00:19:26.370
+Stessa idea, pubblico diverso, criterio diverso.
+
+00:19:26.730 --> 00:19:27.970
+La cosa da monitorare è la sovrapposizione.
+
+00:19:27.970 --> 00:19:34.530
+Quando qualcuno è coperto da più di un criterio, le impostazioni possono entrare in conflitto e la persona finisce con una combinazione non pianificata.
+
+00:19:35.010 --> 00:19:37.710
+Mantieni breve l'elenco dei criteri e nota chi è incluso in ciascuno.
+
+00:19:38.510 --> 00:19:41.990
+Se non riesci a spiegare una frase perché un gruppo ha il suo criterio, probabilmente non dovrebbe averlo.
+
+00:19:42.410 --> 00:19:44.690
+Poi c'è l'ordine che sembra noioso ma causa vera confusione.
+
+00:19:45.070 --> 00:19:46.470
+Le etichette appaiono in ordine di priorità.
+
+00:19:46.870 --> 00:19:49.310
+La barra multifunzione l'elenca dalla sensibilità più bassa alla più.
+
+00:19:49.670 --> 00:19:50.870
+E quell'ordine non è solo estetico.
+
+00:19:51.350 --> 00:19:54.270
+Decide quale etichetta prevale quando due si applicano allo stesso contenuto.
+
+00:19:54.270 --> 00:19:56.610
+Un'etichetta con priorità più alta può sostituire una più bassa
+
+00:19:56.610 --> 00:19:59.450
+e il sistema usa tale classificazione quando chiede giustificare un declassamento.
+
+00:19:59.910 --> 00:20:00.950
+Le sue etichette aggiungono ulteriori.
+
+00:20:01.470 --> 00:20:04.470
+Si trovano sotto un elemento padre che di solito non può essere applicato direttamente.
+
+00:20:05.010 --> 00:20:06.750
+Gli utenti vedono una cartella, aprono e selezionano.
+
+00:20:07.170 --> 00:20:11.670
+Se i nomi degli elementi padre sono vaghi, le persone cliccheranno sulla cartella sbagliata e non tornano più a provare un'altra.
+
+00:20:12.250 --> 00:20:14.030
+Sbaglia l'ordine e l'elenco sembrerà un puzzle.
+
+00:20:14.490 --> 00:20:15.770
+Indovina l'ordine e sembrerà una scala.
+
+00:20:16.190 --> 00:20:19.330
+Dunque, questo è l'ambito dove risiedono le etichette e chi le vede in che ordine.
+
+00:20:20.090 --> 00:20:23.370
+Una volta stabilito ciò, arriviamo alla decisione che modella tutto il resto del programma.
+
+00:20:23.730 --> 00:20:25.170
+Quella che trasforma un tag in protezione.
+
+00:20:25.590 --> 00:20:26.950
+E anche quella che causa più problemi.
+
+00:20:27.870 --> 00:20:29.330
+Crittografia è la decisione sulla crittografia.
+
+00:20:29.770 --> 00:20:31.530
+Fino a questo punto un'etichetta è stata una parola su.
+
+00:20:31.990 --> 00:20:33.070
+La crittografia cambia le cose.
+
+00:20:33.330 --> 00:20:35.170
+È l'impostazione che trasforma la parola in un lucchetto.
+
+00:20:35.990 --> 00:20:38.690
+Quando un'etichetta applica la crittografia, il contenuto del file viene codificato.
+
+00:20:38.690 --> 00:20:40.930
+Solo le persone a cui sono stati concessi i diritti possono le.
+
+00:20:41.090 --> 00:20:42.210
+Tutti gli altri vedono solo rumore.
+
+00:20:42.570 --> 00:20:43.710
+Non importa dove finisca il file.
+
+00:20:44.430 --> 00:20:47.790
+Un'unità personale, una casella di poste in un altro paese, un portatile rubato.
+
+00:20:47.790 --> 00:20:49.270
+Il lucchetto viaggia insieme a essere.
+
+00:20:49.570 --> 00:20:51.790
+Ecco perché questa è la decisione che rende reale la protezione.
+
+00:20:52.170 --> 00:20:55.370
+Ed è anche dove iniziano i problemi perché un file bloccato deve essere sbloccato da qualcosa.
+
+00:20:56.150 --> 00:20:59.070
+Ogni app che accede a quel file ora deve comprendere il lucchetto.
+
+00:20:59.530 --> 00:21:00.630
+Le tue app di Office solo tu lo fanno.
+
+00:21:01.070 --> 00:21:01.910
+Molte altre cose invece no.
+
+00:21:02.270 --> 00:21:02.810
+Cosa si rompa?
+
+00:21:03.130 --> 00:21:04.470
+Per primi client Office meno recente.
+
+00:21:04.530 --> 00:21:08.490
+Una versione precedente alle attuali librerie di protezione potrebbe aprire il file come pagina vuota
+
+00:21:08.490 --> 00:21:09.890
+o rifiutarsi del tutto di aprirlo.
+
+00:21:10.770 --> 00:21:12.090
+Poi arrivano gli strumenti di terza pelle.
+
+00:21:12.450 --> 00:21:14.150
+Uno scanner che legge documenti per parole chiave.
+
+00:21:14.330 --> 00:21:16.070
+Un prodotto di backup che indicizza i contenuti.
+
+00:21:16.530 --> 00:21:17.470
+Un'utilità di migrazione.
+
+00:21:17.470 --> 00:21:18.970
+Un flusso di lavoro che passa a legati.
+
+00:21:19.470 --> 00:21:21.510
+Si scontrano con il contenuto crittografato e non vedono nulla.
+
+00:21:21.770 --> 00:21:25.590
+Anche la ricerca può comportarsi diversamente a seconda di dove risiede il file e chi l'ha effetto.
+
+00:21:25.650 --> 00:21:29.850
+Alcune automazioni si interrompono silenziosamente perché uno script non può leggere un file a cui non ha accesso.
+
+00:21:30.150 --> 00:21:31.630
+Nessuno di questi errori appare nel portale.
+
+00:21:32.030 --> 00:21:33.250
+Si presentano sotto forma di telefono.
+
+00:21:33.610 --> 00:21:34.470
+Non riesco ad aprire questo file.
+
+00:21:34.890 --> 00:21:35.810
+Il report è esultato vuoto.
+
+00:21:36.750 --> 00:21:38.430
+Al nostro archivio manca tutto il mese scorso.
+
+00:21:38.970 --> 00:21:40.010
+Ora due parole sulle chiavi.
+
+00:21:40.370 --> 00:21:41.350
+Perché qualcuno lo chiede sempre.
+
+00:21:41.750 --> 00:21:44.210
+Per impostazione predefinita Microsoft gestisce le chiavi di crittografia.
+
+00:21:44.210 --> 00:21:47.330
+È la strada più semplice ed è ottima per la maggior parte delle aziende.
+
+00:21:47.830 --> 00:21:50.450
+Alcune organizzazioni regolamentate desiderano maggiore controllo.
+
+00:21:50.530 --> 00:21:52.670
+Quindi gestiscono la propria chiave o ne usano la propria chiave o no.
+
+00:21:53.250 --> 00:21:54.670
+È possibile ma comporta un vero compromesso.
+
+00:21:55.030 --> 00:21:57.530
+Se controlli la chiave sei responsabile delle conseguenze e se la perdi.
+
+00:21:58.030 --> 00:21:59.470
+Il recupero è l'aspetto su cui riflette la tenata.
+
+00:21:59.470 --> 00:22:03.610
+Immagina che un dipendente se ne vada e molti dei suoi file crittografati siano accessibili solo a lui.
+
+00:22:04.190 --> 00:22:07.170
+O che un'etichetta venga eliminata o un gruppo con diritti di accesso scompaia.
+
+00:22:07.590 --> 00:22:08.650
+Chi può ancora aprire quel contenuto?
+
+00:22:09.490 --> 00:22:12.210
+La risposta onesta è solo le persone indicate dall'etichetta
+
+00:22:12.210 --> 00:22:15.210
+più un piccolo gruppo di super utenti configurati in anticipo.
+
+00:22:15.990 --> 00:22:18.850
+Se non lo hai previsto potresti escludere la tua stessa azienda dai propri file.
+
+00:22:19.350 --> 00:22:24.230
+Quindi prima di crittografare decidi chi sono i responsabili del recupero, documentalo e testa il funzionamento.
+
+00:22:24.850 --> 00:22:26.770
+La regola generale è crittografa i livelli più alti,
+
+00:22:26.850 --> 00:22:28.710
+contrassegna senza crittografare i livelli intermedi.
+
+00:22:29.290 --> 00:22:30.530
+Guarda di nuovo la tassonizia.
+
+00:22:31.110 --> 00:22:34.070
+Altamente riservato è il livello dove una fuga di dati diventa un evento grave.
+
+00:22:34.390 --> 00:22:35.890
+È il livello in cui la protezione giustifica su.
+
+00:22:36.310 --> 00:22:39.610
+Un volume ridotto di contenuti, conseguenze elevate e autentiche si aspettano un po' di attrito.
+
+00:22:39.990 --> 00:22:41.190
+Riservato si trova nel zona grigia.
+
+00:22:41.570 --> 00:22:44.730
+Molti contenuti, frequente condivisione legittima e numerosi partner che devono leggere.
+
+00:22:45.290 --> 00:22:48.590
+Se crittografi tutto, ogni contratto inviato a un fornitore diventa una richiesta di assistenza.
+
+00:22:49.150 --> 00:22:52.750
+Per quel livello molti programmi usano marcature visibili e lasciano che altri controlli come
+
+00:22:52.750 --> 00:22:54.330
+i DLP, monitorino i confini.
+
+00:22:54.890 --> 00:22:56.730
+Generale e pubblico non necessitano alcune protezioni.
+
+00:22:56.910 --> 00:22:58.630
+Questo crea una curva dei costi che segue il rischio.
+
+00:22:59.090 --> 00:23:01.990
+Poca difficoltà dove il danno è basso, protezione reale dove il danno è alto.
+
+00:23:02.250 --> 00:23:03.770
+Ecco il modello di fallimento che vedo più spesso.
+
+00:23:04.090 --> 00:23:04.850
+Un team si entusiasma.
+
+00:23:05.210 --> 00:23:07.630
+Avendo la funzionalità, crittografano tutto ciò che non è pubblico.
+
+00:23:07.830 --> 00:23:08.730
+Primo giorno sembra fantastico.
+
+00:23:08.970 --> 00:23:09.910
+I numeri della copertura sanno.
+
+00:23:10.290 --> 00:23:11.250
+Risposibili da sicurezza fin.
+
+00:23:11.610 --> 00:23:13.630
+Dalla terza settimana i partner non riescono ad aprire il legato.
+
+00:23:13.910 --> 00:23:16.570
+Un processo finanziario che legge le fatture in entrata smette di funzionare.
+
+00:23:16.570 --> 00:23:20.450
+Il team vendita inizia a inviare file cellulari fuori dalle app gestite perché il percorso
+
+00:23:20.450 --> 00:23:21.430
+gestito è rotto.
+
+00:23:22.030 --> 00:23:25.350
+Alla fine del trimestre qualcuno ai vertici decide e la crittografia viene disattivata
+
+00:23:25.350 --> 00:23:26.610
+per la maggior parte delle etichette.
+
+00:23:27.230 --> 00:23:28.430
+Però è la situazione peggiore di prima.
+
+00:23:28.890 --> 00:23:29.790
+Hai speso la tua credibilità.
+
+00:23:30.130 --> 00:23:33.470
+Le persone ricordano il disservizio e il tentativo successivo incontra resistenza fin dal primo
+
+00:23:33.470 --> 00:23:33.830
+avviso.
+
+00:23:34.410 --> 00:23:37.190
+I programmi che crittografano tutto vengono solitamente annullati entro un trimestre.
+
+00:23:37.950 --> 00:23:41.070
+Non perché la crittografia sia sbagliata, ma perché è applicata senza una matrix client,
+
+00:23:41.170 --> 00:23:42.130
+una strategia di livelli.
+
+00:23:42.130 --> 00:23:46.350
+Quindi se hai deciso che alcune etichette richiedono crittografia, la domanda successiva
+
+00:23:46.350 --> 00:23:47.270
+è chi ha la chiave.
+
+00:23:47.870 --> 00:23:50.710
+È una decisione sui permessi e ci sono due modi molto diversi per prenderla.
+
+00:23:51.890 --> 00:23:54.830
+Modelli di permessi, definiti dall'utente, definiti dall'utente.
+
+00:23:55.330 --> 00:23:58.330
+Quando un'etichetta crittografa un file qualcuno deve decidere a chi consentire accesso.
+
+00:23:58.710 --> 00:24:00.070
+Ci sono due modi per prendere questa decisione.
+
+00:24:00.330 --> 00:24:03.490
+Puoi farla in anticipo come amministratore, oppure lasciare che sia chi applica l'etichetta
+
+00:24:03.490 --> 00:24:04.430
+a decidere file per file.
+
+00:24:04.890 --> 00:24:05.830
+Iniziamo con l'impostazione da me.
+
+00:24:06.370 --> 00:24:08.510
+L'elenco di accesso viene integrato direttamente nell'etichetta.
+
+00:24:08.510 --> 00:24:11.910
+Tutti i dipendenti possono aprirlo, oppure solo il gruppo finanziario, o ancora un gruppo
+
+00:24:11.910 --> 00:24:15.550
+specifico di persone con diritti di sola lettura per alcuni e di modifica completa per altri.
+
+00:24:15.970 --> 00:24:17.830
+Chi applica l'etichetta non deve scegliere nulla.
+
+00:24:18.330 --> 00:24:19.990
+Fa clic, le regole vengono applicate automaticamente.
+
+00:24:20.490 --> 00:24:21.430
+Questo garantisce coerenza.
+
+00:24:21.730 --> 00:24:25.170
+Ogni file con quell'etichetta si comporta allo stesso modo, indipendentemente da chi
+
+00:24:25.170 --> 00:24:25.790
+l'abbia creato.
+
+00:24:25.910 --> 00:24:29.110
+È un modello spiegabile a un revisore in una sola frase, ma dipende molto da un aspetto
+
+00:24:29.110 --> 00:24:30.890
+in cui molte aziende peccano l'igiene dei gruppi.
+
+00:24:30.890 --> 00:24:34.190
+Se nel gruppo finanza ci sono ancora persone che hanno lasciato il dipartimento due anni
+
+00:24:34.190 --> 00:24:36.170
+fa, quelle persone possono o possono comunque aprire i file bloccati.
+
+00:24:36.430 --> 00:24:39.490
+Dal gruppo manca una nuova assunzione, quella persona verrà bloccata fin dal primo giorno.
+
+00:24:39.810 --> 00:24:42.170
+L'etichetta è efficace solo quanto lo è l'elenco dei membri associati.
+
+00:24:42.430 --> 00:24:44.870
+Prima di assegnare un'etichetta a un gruppo chiediti chi non è responsabile quando
+
+00:24:44.870 --> 00:24:46.070
+è stato revisionato l'ultima volta.
+
+00:24:46.490 --> 00:24:49.310
+Se nessuno sa rispondere, il lucchetto sta proteggendo una porta con le chiavi sbagliate
+
+00:24:49.310 --> 00:24:49.730
+in circolazione.
+
+00:24:49.950 --> 00:24:51.630
+Ora vediamo l'altra opzione, quella definita da lui.
+
+00:24:52.270 --> 00:24:55.410
+Qui l'etichetta indica che la persona che la applica sceglie chi avrà accesso.
+
+00:24:55.410 --> 00:24:58.390
+Sceglie le persone e i diritti nel momento esatto in cui salva il file.
+
+00:24:58.950 --> 00:25:00.630
+Sembra flessibile e in alcuni casi lo è.
+
+00:25:01.350 --> 00:25:04.850
+Un avvocato che invia una bozza a un consulente esterno non vuole aspettare che un amministratore
+
+00:25:04.850 --> 00:25:05.650
+crea un gruppo.
+
+00:25:05.730 --> 00:25:06.750
+Costa e l'imprevedibilità.
+
+00:25:07.470 --> 00:25:10.350
+Due file con la stessa etichetta possono avere destinatari completamente diversi.
+
+00:25:10.850 --> 00:25:13.130
+Nessuno può guardare l'etichetta a sapere chi sia in grado di aprirlo.
+
+00:25:13.950 --> 00:25:15.050
+E le persone commettono la fretta.
+
+00:25:15.450 --> 00:25:18.990
+Concedono troppi permessi, digitano un indirizzo errato o dimenticano di aggiungere un collega
+
+00:25:18.990 --> 00:25:19.670
+che ne avrebbe bisogno.
+
+00:25:19.930 --> 00:25:21.570
+Usa l'opzione definita dall'utente con parsimonia.
+
+00:25:21.570 --> 00:25:25.830
+Riservala a quei casi limitati, in cui il pubblico è davvero diverso ogni volta, in
+
+00:25:25.830 --> 00:25:28.890
+cui chi applica l'etichetta conosce il contenuto meglio di qualsiasi amministratore.
+
+00:25:29.730 --> 00:25:33.010
+L'email ha le sue peculiarità e si presenta in due forme che è bene conoscere per nome.
+
+00:25:33.570 --> 00:25:34.450
+Non inoltrare la prima.
+
+00:25:35.070 --> 00:25:37.250
+Destinatario può leggere il messaggio, ma non può inoltrarlo.
+
+00:25:37.610 --> 00:25:38.650
+Copiarlo, stamparlo.
+
+00:25:39.090 --> 00:25:40.650
+È semplice, gli utenti la comprendono immediatamente.
+
+00:25:41.130 --> 00:25:44.630
+È adatta quando un messaggio è destinato esclusivamente alle persone presenti nel campo A e a nessun
+
+00:25:44.630 --> 00:25:44.850
+altro.
+
+00:25:45.790 --> 00:25:46.950
+Solo crittografia è la seconda.
+
+00:25:46.950 --> 00:25:50.550
+Il messaggio è protetto durante il transito e a riposo, così che gli estranei non possano
+
+00:25:50.550 --> 00:25:52.630
+leggerlo, ma i destinatari mantengono i diritti normali.
+
+00:25:52.710 --> 00:25:54.470
+Possono inoltrarlo, copiarne il contenuto e stamparlo.
+
+00:25:54.770 --> 00:25:57.670
+Questo va bene quando l'obiettivo è un canale protetto, non un pubblico limitato.
+
+00:25:58.370 --> 00:26:01.550
+Si pensi a un messaggio con dettagli di un account inviato a un cliente che deve utilizzarli.
+
+00:26:02.290 --> 00:26:05.150
+L'errore è usare e non inoltrare ovunque perché sembra più sicuro.
+
+00:26:06.050 --> 00:26:09.190
+Così le persone non possono inserire una tabella nelle proprie note o condividere un messaggio
+
+00:26:09.190 --> 00:26:10.450
+con il collega che li sostituisce.
+
+00:26:11.030 --> 00:26:13.090
+Iniziano a copiare il testo a mano e i nuovi messaggi.
+
+00:26:13.870 --> 00:26:16.090
+Ciò vanifica lo scopo e compromette rapidamente la fiducia.
+
+00:26:16.090 --> 00:26:19.050
+Due impostazioni meno evidenti meritano attenzione per me di distribuire questi casi.
+
+00:26:19.050 --> 00:26:20.110
+La scadenza è la prima.
+
+00:26:20.570 --> 00:26:24.810
+Puoi impostare i contenuti crittografati affinché non si aprano più dopo una certa data o un certo numero di giorni.
+
+00:26:25.350 --> 00:26:28.530
+È utile per materiale con una durata naturale come i dati prima di un annuncio.
+
+00:26:29.250 --> 00:26:31.450
+È un problema se la imposti su contenuti che servono per anni.
+
+00:26:31.970 --> 00:26:34.550
+Un contratto che diventa illegibile all'improvviso è una brutta sorpresa.
+
+00:26:35.090 --> 00:26:36.130
+L'accesso offline è la seconda.
+
+00:26:36.590 --> 00:26:40.550
+Questa controlla per quanto tempo qualcuno può aprire un file protetto senza doversi riconnettere al servizio.
+
+00:26:40.910 --> 00:26:45.310
+Se è troppo breve, chi è in volo o in un edificio con poco segnale perde il proprio lavoro.
+
+00:26:45.310 --> 00:26:49.990
+Se è troppo lunga, chi lascia l'azienda può ancora aprire i file per settimane.
+
+00:26:50.750 --> 00:26:53.550
+È una piccola impostazione con un effetto concreto sull'esperienza dell'etichetta.
+
+00:26:54.350 --> 00:26:57.230
+E poi c'è il pubblico più difficile di tutti, le persone esterne alla tua azienda.
+
+00:26:57.890 --> 00:27:02.150
+Quando crittografi un contenuto e lo invia un partner o un cliente, questi devono poter provare la propria identità.
+
+00:27:02.710 --> 00:27:05.130
+Alcuni possono accedere con un account di lavoro da una directory supportata.
+
+00:27:05.690 --> 00:27:08.170
+Altri devono usare un codice monouso inviato alla propria email.
+
+00:27:08.170 --> 00:27:12.890
+Ogni passaggio in più è un punto in cui l'utente rinuncia e risponde e puoi inviarvelo, semplicemente come PDF.
+
+00:27:13.610 --> 00:27:16.310
+Quindi rifletti sul tuo traffico esterno prima di decidere quali etichette bloccare.
+
+00:27:17.130 --> 00:27:18.630
+Chi riceve il tuo materiale riservato?
+
+00:27:19.010 --> 00:27:19.790
+Hanno account che funziona?
+
+00:27:20.310 --> 00:27:23.570
+Se la risposta è non lo sappiamo, allora hai trovato il quesito per il tuo progetto pilota.
+
+00:27:24.130 --> 00:27:27.730
+E i file bloccati pongono un altro problema, che raramente arrivano in delle riunioni di progettazione.
+
+00:27:27.730 --> 00:27:30.390
+Se gli strumenti attorno a quei file possono raramente gestirli.
+
+00:27:32.410 --> 00:27:34.110
+Compatibilità, co-authoring e realtà del client.
+
+00:27:34.730 --> 00:27:37.090
+Iniziamo con il co-authoring perché è la prima cosa che la gente chiede.
+
+00:27:37.090 --> 00:27:40.290
+Due persone che modificano lo stesso file criptografato contemporaneamente.
+
+00:27:40.390 --> 00:27:41.570
+È possibile ma non è automatico.
+
+00:27:42.230 --> 00:27:43.930
+Il file deve risiedere su SharePoint o OneDrive.
+
+00:27:44.330 --> 00:27:46.330
+L'etichetta deve essere configurata per consentirlo.
+
+00:27:46.510 --> 00:27:48.490
+E il tenant deve avere le impostazioni corrette e attivate.
+
+00:27:49.210 --> 00:27:50.710
+Ne manca anche solo uno, la co-authoring.
+
+00:27:50.830 --> 00:27:51.990
+Torna al vecchio comportamento.
+
+00:27:52.970 --> 00:27:55.970
+Una persona modifica, tutti gli altri aspettano e ottengono una copia bloccata.
+
+00:27:56.090 --> 00:27:57.230
+Anche le app sono importanti.
+
+00:27:57.430 --> 00:27:59.450
+Le attori app di Microsoft 365 lo gestiscono.
+
+00:27:59.690 --> 00:28:00.610
+Le versioni precedenti no.
+
+00:28:01.090 --> 00:28:02.090
+E non sempre ti spiegano il perché.
+
+00:28:02.570 --> 00:28:06.090
+L'utente vede che il file è bloccato e pensa che qualcun altro abbia dimenticato di chiuderlo.
+
+00:28:07.090 --> 00:28:08.070
+Invia un messaggio, poi un altro.
+
+00:28:08.530 --> 00:28:11.230
+Alla fine qualcuno salva una copia e ora hai due versioni del budget.
+
+00:28:11.750 --> 00:28:13.350
+E questo è lo schema con i contenuti criptografati.
+
+00:28:13.670 --> 00:28:15.810
+Il problema raramente si presenta come un errore chiaro.
+
+00:28:15.910 --> 00:28:18.590
+Si manifesta come un comportamento strano nella giornata di qualcuno.
+
+00:28:18.730 --> 00:28:20.250
+Il che ci porta al tuo parco client.
+
+00:28:20.990 --> 00:28:22.150
+Voglio essere schietto su questo punto.
+
+00:28:22.450 --> 00:28:23.510
+Non hai il parco che pensi di avere.
+
+00:28:24.110 --> 00:28:26.250
+Sulla carta tutti eseguono la versione corrente di Office.
+
+00:28:26.590 --> 00:28:29.990
+In pratica c'è un team finanziario su una versione bloccata due anni fa a causa di una macro.
+
+00:28:29.990 --> 00:28:32.490
+C'è un reparto produzione che esegua qualcosa di ancora più.
+
+00:28:32.490 --> 00:28:36.590
+Ci sono i Mac e le app Mac sono indietro rispetto a quello Windows o alcune funzionalità delle etichette.
+
+00:28:37.250 --> 00:28:40.690
+Ci sono telefoni e tablet in cui l'esperienza dipende dalla versione dell'app mobile.
+
+00:28:41.630 --> 00:28:44.450
+E c'è il web che gestisce molto ma non tutto ciò che può fare un client desktop.
+
+00:28:45.650 --> 00:28:47.810
+Ognuno di questi potrà trattare lo stesso file etichettato in modo diverso.
+
+00:28:48.270 --> 00:28:50.010
+Uno lo apre, uno lo apre in sola lettura.
+
+00:28:50.190 --> 00:28:52.290
+Uno mostra un banner che chiede di accedere di nuovo.
+
+00:28:52.450 --> 00:28:53.110
+Uno rifiuta.
+
+00:28:53.530 --> 00:28:56.750
+Quindi prima di promettere qualsiasi cosa all'azienda scopri cosa c'è davvero in giro.
+
+00:28:57.130 --> 00:28:59.290
+Estrae il vero inventario dei client, non l'immagine standard.
+
+00:28:59.430 --> 00:29:00.830
+Quello reale inclusi gli angoli più remoti.
+
+00:29:00.830 --> 00:29:02.190
+Poi gli strumenti attorno ai file.
+
+00:29:02.610 --> 00:29:04.070
+Gli scanni di terze parti sono il caso così.
+
+00:29:04.950 --> 00:29:09.270
+Un prodotto che analizza i documenti per parole chiave o malware incontra un file crittografato e non vede nulla.
+
+00:29:09.810 --> 00:29:11.710
+Quindi lo salta o lo segnala come illegibile.
+
+00:29:12.470 --> 00:29:14.230
+Anche gli strumenti di backup e archiviazione fanno lo stesso.
+
+00:29:14.750 --> 00:29:17.830
+Memorizzano il file, il che va bene, ma non possono indicizzare il contenuto.
+
+00:29:17.930 --> 00:29:21.410
+Quindi la ricerca nell'archivio diventa cieca proprio per i contenuti che più ti interessano.
+
+00:29:21.810 --> 00:29:22.630
+E poi li discoveri.
+
+00:29:23.110 --> 00:29:25.190
+Quando l'ufficio legale deve trovare ed esaminare contenuti,
+
+00:29:25.390 --> 00:29:28.030
+il materiale crittografato deve essere leggibile da chi esegue la ricerca.
+
+00:29:28.030 --> 00:29:33.290
+Ciò significa i ruoli giusti, le autorizzazioni giuste e un quadro chiaro di come gli strumenti di ricerca gestiscono i file protetti.
+
+00:29:33.770 --> 00:29:36.390
+Se te ne occupi durante un'indagine, lo hai fatto troppo tardi?
+
+00:29:37.010 --> 00:29:38.570
+Ecco la soluzione e non è complicata.
+
+00:29:39.170 --> 00:29:39.890
+Era una matrice di test.
+
+00:29:40.230 --> 00:29:43.450
+Le righe sono i tuoi client Windows Desktop, Mac Desktop, iOS, Android, Web.
+
+00:29:43.890 --> 00:29:46.030
+Includi la versione più vecchia che supporti ancora, non solo la più recente.
+
+00:29:46.910 --> 00:29:47.870
+Le colonne sono i tuoi scenari.
+
+00:29:48.390 --> 00:29:49.510
+Apri un file crittografato.
+
+00:29:49.950 --> 00:29:50.350
+Modificalo.
+
+00:29:50.510 --> 00:29:51.870
+Lavoraci insieme a una seconda persona.
+
+00:29:52.170 --> 00:29:56.970
+Invialo per email a un collega interno, a un partner esterno, stampalo, scansionalo, ripristinalo da backup,
+
+00:29:57.110 --> 00:30:01.070
+cercalo nelle discovery e compila ogni cella con superato, fallito, funziona con riserva.
+
+00:30:01.850 --> 00:30:02.590
+Segno di riserva.
+
+00:30:03.070 --> 00:30:07.350
+Quella griglia ti dice quali etichette possono crittografare in sicurezza oggi e quali devono attendere un aggiornamento.
+
+00:30:08.130 --> 00:30:09.810
+E costruisci la prima del progetto pilota, non durante.
+
+00:30:10.410 --> 00:30:14.690
+Se scopri queste lacune con gli utenti pilota, hai trasformato un esercizio di apprendimento in una coda di assistenza
+
+00:30:14.690 --> 00:30:17.610
+e le persone di cui hai più bisogno sono proprio quelle che inviano messaggi di rabbia.
+
+00:30:18.330 --> 00:30:23.590
+Quindi il design è definito, tassonomia, ambito, crittografia, autorizzazione, una matrice che ti dice cosa non funzionerà.
+
+00:30:24.490 --> 00:30:27.590
+Ora mettiamoci delle persone reali davanti e la domanda è chi debbano essere.
+
+00:30:29.210 --> 00:30:31.050
+Progettare il pilota che ti insegni davvero qualcosa.
+
+00:30:31.610 --> 00:30:33.350
+La maggior parte dei team tratta il pilota come lancio so.
+
+00:30:34.010 --> 00:30:36.910
+Scegli un gruppo amichevole, attiva le etichette e aspetta che ti dicano che è andata bene.
+
+00:30:37.270 --> 00:30:38.850
+Poi estendilo e chiamalo progresso.
+
+00:30:39.310 --> 00:30:41.090
+Questo è un pilota creato per proteggere il progetto.
+
+00:30:41.090 --> 00:30:44.410
+Quello che ti serve è un pilota creato per rompere il design finché farlo costa ancora poco.
+
+00:30:44.690 --> 00:30:45.630
+Quindi cambia la domanda.
+
+00:30:46.290 --> 00:30:47.590
+Un pilota è uno strumento di apprendimento.
+
+00:30:47.950 --> 00:30:49.590
+Il suo compito è produrre risposte che ancora non ha.
+
+00:30:49.910 --> 00:30:51.170
+Le persone scegliono l'etichetta giusta.
+
+00:30:51.510 --> 00:30:52.590
+La crittografia blocca il lavoro reale.
+
+00:30:52.970 --> 00:30:53.910
+Quale impostazione creano uno?
+
+00:30:54.290 --> 00:30:56.550
+Se il pilota non può rispondere su una demo con passaggi in più.
+
+00:30:57.050 --> 00:30:57.830
+Ora, chi includere?
+
+00:30:58.530 --> 00:31:00.190
+La mossa facile è scegliere le persone a cui piaci.
+
+00:31:00.370 --> 00:31:03.410
+Il reparto IT, il team di sicurezza, pochi curiosi early adopter.
+
+00:31:04.310 --> 00:31:05.990
+Saranno pazienti e invieranno feedback gentili.
+
+00:31:06.530 --> 00:31:09.950
+Ma non ti diranno quasi nulla perché il loro lavoro non mette sotto stress il design.
+
+00:31:10.390 --> 00:31:12.070
+Scegli invece i gruppi che lo mettono alla prova.
+
+00:31:12.470 --> 00:31:13.250
+Prima il reparto legato.
+
+00:31:13.250 --> 00:31:14.570
+Gestiscono materiale riservato.
+
+00:31:14.850 --> 00:31:19.250
+Tengono ogni parola e troveranno le lacune nella tua tassonomia nel giro di una settimana per la finanza.
+
+00:31:19.630 --> 00:31:23.990
+Gestiscono contenuti dove un'etichetta sbagliata ha un costo e avviano processi che toccano altri sistemi.
+
+00:31:24.850 --> 00:31:27.390
+Sono esattamente i processi che si bloccano quando i file vengono protetti.
+
+00:31:27.950 --> 00:31:29.990
+Poi scegli un team che condivide molto con l'esterno.
+
+00:31:30.170 --> 00:31:32.750
+Vendite, approvvigionamento o un gruppo di progetto rivolto ai partner.
+
+00:31:32.750 --> 00:31:38.970
+Chiunque invii più file a persone esterne al tenant ti mostrerà in pochi giorni com'è la condivisione esterna nella realtà
+
+00:31:38.970 --> 00:31:41.370
+e se i destinatari rinunciano alla fase di accesso.
+
+00:31:41.770 --> 00:31:42.910
+Tre gruppi, pressioni diverse.
+
+00:31:43.530 --> 00:31:47.030
+Grazie a loro incontrerai maggior parte delle modalità di errore prima che un solo dirigente si racconta.
+
+00:31:47.290 --> 00:31:49.550
+Prima di iniziare scrivete cosa si intende per fallimento.
+
+00:31:50.070 --> 00:31:52.630
+Sembra controintuitivo ma è il passaggio che mantiene onesto il progetto pilota.
+
+00:31:52.630 --> 00:31:55.650
+Senza questo ogni risultato viene interpretato a posteriori.
+
+00:31:56.230 --> 00:31:57.410
+Dati contrastanti diventano problemi.
+
+00:31:58.150 --> 00:32:00.130
+Una montagna di lamentele diventa solo un problema inizio.
+
+00:32:00.550 --> 00:32:02.790
+Nessuno può dire che il pilota è fallito quindi nessuno può dire cosa corre.
+
+00:32:03.410 --> 00:32:04.510
+Stabilite quindi i limiti fin da su.
+
+00:32:04.770 --> 00:32:08.470
+Se oltre una certa quota di file campione l'etichetta sbagliata, la tassonomia va rivista,
+
+00:32:09.470 --> 00:32:12.410
+se un processo aziendale si blocca e richiede più di un giorno per ripristinarlo,
+
+00:32:12.590 --> 00:32:13.950
+quell'etichetta non crittografa ancora.
+
+00:32:14.370 --> 00:32:16.650
+Se le persone non sanno distinguere due etichette, una delle due va eliminare.
+
+00:32:16.990 --> 00:32:19.470
+Scegliete numeri che il vostro gruppo dirigente accetterà davvero
+
+00:32:19.470 --> 00:32:21.890
+e fatele approvare prima che appaia la prima etichetta.
+
+00:32:21.890 --> 00:32:23.210
+Ma c'è contenimento.
+
+00:32:23.790 --> 00:32:26.790
+Pubblicate l'etichetta del pilota tramite un ambito di policy e solo i gruppi pilota.
+
+00:32:27.230 --> 00:32:28.410
+Nessun altro dovrebbe vederle.
+
+00:32:28.570 --> 00:32:31.930
+Né per errore, né tramite una casella condivisa, né tramite un gruppo annidato dimenticato.
+
+00:32:32.430 --> 00:32:35.090
+Controllate l'ambito due volte e testatelo con un account che dovrebbe esserne fuori.
+
+00:32:35.430 --> 00:32:36.150
+Perché tanta severità?
+
+00:32:36.410 --> 00:32:37.390
+Perché le etichette si diffondono.
+
+00:32:37.690 --> 00:32:41.690
+Un utente pilota salva un file crittografato e le invia a un collega non coinvolto nel pilota.
+
+00:32:42.210 --> 00:32:44.830
+Ora quel collega ha dei contenuti che non può aprire e non sa perché.
+
+00:32:45.370 --> 00:32:48.430
+Non si sono iscritti per un esperimento e non saranno comprensivi a riguardo.
+
+00:32:48.990 --> 00:32:50.470
+Quindi mantenete limitato il raggio d'azione.
+
+00:32:50.470 --> 00:32:54.930
+Quando qualcosa va storto, volete che la risposta sia che ha colpito solo 40 persone che sapevano del rischio.
+
+00:32:55.810 --> 00:32:56.590
+Ora durata e ritmo.
+
+00:32:57.110 --> 00:32:58.710
+Da quattro a sei settimane sono solitamente sui film.
+
+00:32:59.090 --> 00:33:00.630
+Se è più breve vedrete solo la novità.
+
+00:33:01.170 --> 00:33:03.910
+Le persone etichettano tutto con cura nella prima settimana perché prestano attenzione.
+
+00:33:04.330 --> 00:33:07.470
+Entro la quarta settimana emergono le abitudini ed è proprio quello che cercate di misurare.
+
+00:33:08.110 --> 00:33:09.830
+Oltre le sei settimane lo slancio svanisce.
+
+00:33:10.370 --> 00:33:11.970
+L'azienda inizia a chiedere quando finirà tutto questo.
+
+00:33:12.410 --> 00:33:13.970
+All'interno di questo arco temporale è fissato nell'IFSI.
+
+00:33:13.970 --> 00:33:16.690
+Tessa ora, stesse persone, stessa breve lista di domande.
+
+00:33:17.170 --> 00:33:19.070
+Cosa è cambiato nell'uso dell'etichetta dall'ultima settimana?
+
+00:33:19.450 --> 00:33:21.370
+Quali ticket sono arrivati e cosa avevano in comune?
+
+00:33:21.770 --> 00:33:23.190
+Qualche processo aziendale si è bloccato?
+
+00:33:23.690 --> 00:33:25.430
+Qualcuno ha usato un'etichetta in modo imprevisto?
+
+00:33:26.370 --> 00:33:28.790
+C'è qualcosa che dovremmo modificare subito invece di aspettare la fine?
+
+00:33:29.210 --> 00:33:30.650
+Quest'ultima domanda è la più importante.
+
+00:33:31.070 --> 00:33:32.130
+Un pilota non dovrebbe essere stata.
+
+00:33:32.130 --> 00:33:37.110
+Se il nome di un'etichetta confonde tutti entro il quinto giorno, rinominate e rosservate se la confusione diminuisce.
+
+00:33:37.550 --> 00:33:41.310
+Questo è l'apprendimento, che avviene solo se siete disposti a modificare il design mentre le persone lo usano.
+
+00:33:41.610 --> 00:33:44.190
+Tenete un registro aggiornato di ogni modifica con data e motivazione.
+
+00:33:44.750 --> 00:33:49.050
+Alla fine avrai una storia scritta di ciò di cui il design aveva bisogno, che vale più di qualsiasi punteggio.
+
+00:33:49.570 --> 00:33:54.030
+Il progetto pilota produrrà molto materiale, report, ticket, reclami e qualche complimento sorprendente.
+
+00:33:54.710 --> 00:33:58.310
+Cosa farne dipende da sapere a quali numeri credere e quali hanno solo un bel aspetto.
+
+00:33:59.410 --> 00:34:02.010
+Interpretare i segnali del pilota, etichette applicate, etichette corrette.
+
+00:34:02.490 --> 00:34:04.050
+Due strumenti svolgono la maggior parte del lavoro di te.
+
+00:34:04.430 --> 00:34:10.110
+Activity Explorer ti mostra cosa è successo, chi ha applicato un'etichetta, chi ne ha cambiata una, chi l'ha rimossa e cosa stava facendo l'app in quel momento.
+
+00:34:10.650 --> 00:34:11.750
+Una cronologia del comportamento.
+
+00:34:12.290 --> 00:34:13.810
+Content Explorer ti mostra cosa è archiviato.
+
+00:34:14.270 --> 00:34:19.930
+Elenca i file e le email che portano una determinata etichetta e con le autorizzazioni giuste puoi aprire un campione ed esaminare il contenuto effettivo.
+
+00:34:20.470 --> 00:34:22.750
+Uno ti dice cosa hanno fatto le persone e l'altro ti dice cosa è rimasto.
+
+00:34:23.250 --> 00:34:25.990
+Ti servono entrambi perché spesso discordano più di quanto ti aspetteresti.
+
+00:34:26.210 --> 00:34:27.570
+Inizia con il numero che tutti vogliono.
+
+00:34:27.990 --> 00:34:28.990
+Quanti elementi parano un'etichetta?
+
+00:34:29.490 --> 00:34:30.430
+Quel numero verrà un bel aspetto.
+
+00:34:30.430 --> 00:34:34.950
+Impostazioni predefinite, suggerimenti e alcune persone motivate lo faranno salire velocemente.
+
+00:34:35.070 --> 00:34:38.870
+Sarai tentato di definire il pilota un successo nella seconda settimana ma la copertura non è correttezza.
+
+00:34:39.430 --> 00:34:41.630
+Un conteggio dell'etichetta non può dirti se l'etichetta è giusta.
+
+00:34:42.150 --> 00:34:48.050
+10.000 file contrassegnati come generali potrebbero includere alcune centinaia che avrebbero dovuto essere riservati e la dashboard mostrerebbe comunque il verde.
+
+00:34:48.350 --> 00:34:52.090
+Quindi prendi un campione, alcune centinaia di elementi distribuiti tra i tre gruppi pilota e aprili.
+
+00:34:52.090 --> 00:34:56.650
+Chiedi alla persona che possiede il contenuto o a qualcuno che lo conosce se l'etichetta è appropriata o appropriata.
+
+00:34:56.950 --> 00:34:59.150
+Questo è il controllo di correttezza, è lento e nulla lo sostituisce.
+
+00:34:59.150 --> 00:35:03.030
+Confronta il risultato con la soglia di errore che hai stabilito prima dell'inizio del pilota.
+
+00:35:03.470 --> 00:35:06.710
+Se il tasso di etichetta è errata e la supera, non è ancora un problema di formazione.
+
+00:35:07.190 --> 00:35:07.830
+Hai un problema di design.
+
+00:35:08.570 --> 00:35:09.630
+Successivamente vai a cercare di declassare.
+
+00:35:10.270 --> 00:35:13.930
+Ogni volta che qualcuno abbassa un'etichetta e la tua polli si richiede una motivazione e il sistema la registra,
+
+00:35:14.510 --> 00:35:15.310
+leggi quelle motivazioni.
+
+00:35:15.850 --> 00:35:18.830
+Sono il feedback più onesto che otterrai perché nessuno sta recitando per un sondaggio.
+
+00:35:19.890 --> 00:35:20.910
+Partner emergeranno rapidamente.
+
+00:35:21.490 --> 00:35:24.970
+Se le persone continuano a scrivere l'etichetta e non si adatta a questo tipo di documento, ti manca una categoria.
+
+00:35:24.970 --> 00:35:29.450
+Se scrivono il partner e non è riuscito ad aprirlo, la categoria sta ostacolando un flusso di lavororia.
+
+00:35:29.830 --> 00:35:33.810
+Se scrivono applicato automaticamente per errore, le tue impostazioni predefinite e il rilevamento devono essere migliorate.
+
+00:35:34.490 --> 00:35:38.770
+E se le motivazioni sono vuote o composte da una sola lettera, le persone stanno ignorando il prompt per farlo sparire.
+
+00:35:39.210 --> 00:35:40.750
+Ogni tema indica una soluzione specifica.
+
+00:35:41.050 --> 00:35:43.290
+Ecco perché i declassamenti valgono più dei conteggi grezzi della TV.
+
+00:35:43.790 --> 00:35:44.530
+Poi c'è l'Helpdesk.
+
+00:35:45.130 --> 00:35:49.010
+Chiedi al team di supporto ogni ticket che menzioni etichette, file protetti o impossibilità di apertura.
+
+00:35:49.650 --> 00:35:50.450
+Classificali per causa.
+
+00:35:50.690 --> 00:35:52.950
+Puoi leggili come una revisione del design perché è esattamente ciò che sono.
+
+00:35:52.950 --> 00:35:55.570
+Un insieme di ticket su una singola etichetta ha un problema.
+
+00:35:56.390 --> 00:36:00.450
+Un insieme proveniente da un unico team indica che il processo di quel team richiede attenzione prima di chiunque altro.
+
+00:36:01.190 --> 00:36:03.570
+I ticket su un'etichetta mancante indicano una falla nella tassonomia.
+
+00:36:04.550 --> 00:36:05.650
+Anche i casi silenziosi con.
+
+00:36:06.210 --> 00:36:10.050
+Se un gruppo ha inviato zero ticket e applicato quasi nessuna etichetta potrebbero non essere soddisfatti.
+
+00:36:10.710 --> 00:36:12.030
+Potrebbero semplicemente evitare lo strumento.
+
+00:36:12.430 --> 00:36:15.610
+Metti a confronto le tre fonti, attività, contenuti, campionati e ticket.
+
+00:36:16.270 --> 00:36:18.010
+Dove concordano puoi fidarti della conclusione.
+
+00:36:18.430 --> 00:36:20.770
+Dove discordano hai trovato qualcosa che merita una conversazione.
+
+00:36:20.950 --> 00:36:22.650
+Ora arriva la parte che i team saltano.
+
+00:36:22.950 --> 00:36:23.730
+Decidere cosa cambiare.
+
+00:36:23.970 --> 00:36:25.910
+Prima di ampliare il pubblico scrivi una breve lista.
+
+00:36:26.050 --> 00:36:27.010
+Quali etichette rinominare?
+
+00:36:27.390 --> 00:36:28.270
+Quali unire o eliminare?
+
+00:36:28.530 --> 00:36:32.590
+Quali impostazioni modificare come una scadenza troppo restrittiva o una finestra offline troppo breve?
+
+00:36:32.950 --> 00:36:36.210
+E quali processi aziendali necessitano di una correzione prima che vi si applichi la critografia?
+
+00:36:36.450 --> 00:36:37.070
+Si pronto a tagliare.
+
+00:36:37.430 --> 00:36:40.050
+Se due etichette generano la stessa confusione e le stesse scelte errate.
+
+00:36:40.430 --> 00:36:42.030
+Una delle due non meritava il suo posto.
+
+00:36:42.370 --> 00:36:45.390
+È molto più facile rimuovere un'etichetta da 40 utenti pilota che da 40.000.
+
+00:36:46.250 --> 00:36:47.790
+Ritesta ciò che hai cambiato, anche brevemente.
+
+00:36:48.590 --> 00:36:52.630
+Una settimana con le impostazioni modificate ti dirà se la correzione ha funzionato o ha solo spostato il problema.
+
+00:36:53.450 --> 00:36:57.450
+Una volta che il design regge nell'uso reale, la leva più grande è un unprompt o una pagina di policy.
+
+00:36:58.030 --> 00:36:59.770
+È ciò che accade quando una persona non fa nulla.
+
+00:36:59.990 --> 00:37:01.690
+E questo è determinato dal valore predefinito.
+
+00:37:01.790 --> 00:37:02.810
+Un'etichettatura automatica.
+
+00:37:03.050 --> 00:37:04.310
+L'impostazione silenziosa più potente.
+
+00:37:04.310 --> 00:37:07.610
+Ecco un'impostazione che raramente ha una sua slide, l'etichetta predefinita.
+
+00:37:08.210 --> 00:37:10.430
+Quando qualcuno crea un nuovo documento o avvia una nuova email,
+
+00:37:10.750 --> 00:37:13.230
+il sistema può applicare un'etichetta prima ancora che la persona tocchi qualcosa.
+
+00:37:13.690 --> 00:37:14.450
+Nessuna decisione.
+
+00:37:14.770 --> 00:37:17.130
+L'etichetta è già lì quando il file si apre e questo cambia il comportamento
+
+00:37:17.130 --> 00:37:19.250
+più di qualsiasi sessione di formazione che potrei mai fare.
+
+00:37:19.810 --> 00:37:20.330
+Pensa al perché.
+
+00:37:21.030 --> 00:37:22.950
+La formazione chiede alle persone di ricordare qualcosa
+
+00:37:22.950 --> 00:37:25.390
+nel momento in cui sono occupate, settimane dopo averlo sentito.
+
+00:37:25.390 --> 00:37:26.550
+Un'impostazione predefinita.
+
+00:37:26.910 --> 00:37:29.090
+Agisce per prima e la maggior parte delle persone quasi sempre.
+
+00:37:29.370 --> 00:37:30.270
+Lascia ciò che è già presente.
+
+00:37:30.790 --> 00:37:31.190
+Pigrizio.
+
+00:37:31.590 --> 00:37:33.650
+È il modo in cui le persone lavorano quando sono concentrate su qualcosa.
+
+00:37:33.650 --> 00:37:36.890
+Quindi l'impostazione predefinita diventa l'etichetta per la maggior parte dei tuoi condotti.
+
+00:37:37.290 --> 00:37:40.150
+Qualunque cosa tu scelga, la stai scegliendo per la maggior parte dei file dell'azienda,
+
+00:37:40.250 --> 00:37:41.510
+il che rende la scelta molto importante.
+
+00:37:41.850 --> 00:37:43.630
+La tentazione è di impostare come predefinito l'evaluolo.
+
+00:37:43.990 --> 00:37:45.130
+Praticamente sembra la scelta più sicura.
+
+00:37:45.450 --> 00:37:47.270
+Nessuno si lamenta di un'etichetta che non blocca nulla.
+
+00:37:47.430 --> 00:37:48.210
+Ma guarda cosa significa.
+
+00:37:48.770 --> 00:37:51.330
+Ogni nuovo file inizia come la cosa meno protetta che offri
+
+00:37:51.330 --> 00:37:53.770
+e l'onere di alzarne il livello ricade sulla persona.
+
+00:37:53.770 --> 00:37:56.250
+È di nuovo il vecchio modello, solo con un'interfaccia migliore.
+
+00:37:56.670 --> 00:37:57.810
+La risposta abituale è intermedio.
+
+00:37:57.810 --> 00:37:59.730
+Nella tassolomia iniziale questo è generale.
+
+00:38:00.290 --> 00:38:02.650
+Il contenuto rimane all'interno dell'azienda per impostazione predefinita
+
+00:38:02.650 --> 00:38:05.450
+e le persone lo alzano se serve più protezione e lo abbassano se è destinato al pubblico.
+
+00:38:05.570 --> 00:38:08.390
+Il punto di partenza è una supposizione ragionevole su come appare la maggior parte del lavoro.
+
+00:38:08.870 --> 00:38:10.370
+Ora ogni superficie richiede la sua valutazione.
+
+00:38:10.810 --> 00:38:11.810
+I documenti sono il caso ovvio.
+
+00:38:12.290 --> 00:38:14.710
+Le mail sono diverse perché un messaggio ha un ciclo di vita diverso da un file.
+
+00:38:15.110 --> 00:38:18.670
+Una nota veloce o un collega non necessita dallo stesso punto di partenza di una bozza di contratti.
+
+00:38:19.010 --> 00:38:21.610
+Acuni team impostano il valore predefinito dell'email in un gradino più in basso
+
+00:38:21.610 --> 00:38:23.930
+e lo lasciano disattivato per un po' per un po' così la passano sino a primavera.
+
+00:38:24.230 --> 00:38:25.270
+Power BI è un mondo a sé.
+
+00:38:25.670 --> 00:38:28.250
+Rapporte set di dati sono creati da un gruppo ristretto di persone
+
+00:38:28.250 --> 00:38:30.090
+e le etichette li possono confluire negli esportali.
+
+00:38:30.530 --> 00:38:34.510
+Un'impostazione predefinita su quella superficie può proteggere i dati nel momento in cui lasciano la dashboard
+
+00:38:34.510 --> 00:38:36.650
+ma solo se chi crea e report sa cosa sta succedendo.
+
+00:38:37.490 --> 00:38:38.070
+Formali prima.
+
+00:38:38.510 --> 00:38:41.050
+Le riunioni e inviti di calendario sono quelli che la maggior parte dei team li dimetti.
+
+00:38:41.390 --> 00:38:44.850
+Un'impostazione predefinita li può contrassegnare l'invito, la chat e le note adesso collegate.
+
+00:38:45.290 --> 00:38:48.250
+Decidi se è quello che vuoi altrimenti troverai generale timbrato su ogni stand-up.
+
+00:38:48.250 --> 00:38:50.050
+Quattro superfici, quattro decisioni separate.
+
+00:38:50.430 --> 00:38:52.390
+Non lasciare che un'unica impostazione valga per tutte.
+
+00:38:52.830 --> 00:38:54.990
+Ora il rischio ed è reale che tutto diventi generale.
+
+00:38:55.490 --> 00:38:58.930
+Attivi l'impostazione predefinita e nel giro di un mese il conteggio delle etichette sembra meraviglioso.
+
+00:38:59.350 --> 00:39:01.970
+La copertura è alta ma sepolto in quel numero c'è un problema silenzioso.
+
+00:39:02.670 --> 00:39:03.490
+Nessuno sta più scegliendo.
+
+00:39:04.070 --> 00:39:06.250
+Contratto che dovrebbe essere riservato rimane sotto generale
+
+00:39:06.250 --> 00:39:08.290
+perché l'autore non ha mai guardato la barra degli strumenti.
+
+00:39:08.850 --> 00:39:11.530
+L'etichetta ha perso il suo significato perché non riflette più una decisione.
+
+00:39:11.950 --> 00:39:12.770
+Riflette l'assenza di essa.
+
+00:39:13.190 --> 00:39:14.030
+Puoi vederlo nei dati.
+
+00:39:14.510 --> 00:39:17.050
+Controlla quante etichette generale sono state applicate da una persona
+
+00:39:18.250 --> 00:39:19.730
+impostazione predefinita senza mai essere cambiata.
+
+00:39:19.910 --> 00:39:24.150
+Se quasi nessuna è stata toccata, l'etichetta sta descrivendo le tue impostazioni, non il tuo contenuto.
+
+00:39:24.270 --> 00:39:25.950
+Un'impostazione predefinita non può funzionare da solo.
+
+00:39:26.210 --> 00:39:27.650
+Ha bisogno di un partner che intercetti le eccezioni.
+
+00:39:28.030 --> 00:39:29.230
+Quel partner di solito arriva a me.
+
+00:39:29.550 --> 00:39:32.530
+Qualcosa che guarda il contenuto e dice questo contiene il numero di carte di pagamento
+
+00:39:32.530 --> 00:39:33.990
+non dovrebbe essere generale.
+
+00:39:35.350 --> 00:39:38.190
+Arriveremo all'automazione tra qualche sezione ed è per questo che è importante.
+
+00:39:38.730 --> 00:39:40.430
+L'impostazione predefinita copre solo la strada più.
+
+00:39:40.770 --> 00:39:42.650
+Il rilevamento accorregge dove il contenuto si tradisce.
+
+00:39:43.970 --> 00:39:46.090
+Il secondo partner è un suggerimento leggero, non bloccante.
+
+00:39:46.090 --> 00:39:50.430
+Una raccomandazione che appare quando qualcuno scrive qualcosa di sensibile offrendo un'etichetta
+
+00:39:50.430 --> 00:39:55.030
+superiore con un click costa l'utente due secondi e appare solo quando c'è un motivo.
+
+00:39:55.570 --> 00:39:58.950
+Tra i tre ottieni un sistema con punti di partenza sensati e una reale correzione.
+
+00:39:59.590 --> 00:40:01.190
+Nessun singolo elemento porta tutto il peso.
+
+00:40:01.510 --> 00:40:03.270
+E c'è un'altra regola di disciplina che vale la pena aggiungere.
+
+00:40:03.630 --> 00:40:05.570
+Spiega alle persone quale è l'impostazione predefinita e perché.
+
+00:40:05.910 --> 00:40:07.910
+Una breve nota nell'annuncio del progetto pilota è sufficiente.
+
+00:40:08.170 --> 00:40:09.550
+I nuovi file iniziano come generici.
+
+00:40:09.890 --> 00:40:11.390
+Aumenta l'etichetta se il contenuto richiede di più.
+
+00:40:11.390 --> 00:40:15.830
+Quella frase trasforma un comportamento nascosto in un'aspettativa e le persone rispondono
+
+00:40:15.830 --> 00:40:16.430
+alle aspettative.
+
+00:40:16.670 --> 00:40:18.390
+L'impostazione predefinita gestisce il percorso visivo.
+
+00:40:18.730 --> 00:40:20.990
+Chi non fa nulla ottiene comunque qualcosa di sensato.
+
+00:40:22.270 --> 00:40:25.190
+Ma che dire di chi la elimina o del file che arriva senza alcuna etichetta?
+
+00:40:25.750 --> 00:40:28.170
+È un problema diverso e richiede uno strumento più deciso.
+
+00:40:28.910 --> 00:40:30.850
+Etichettatura obbligatoria e budget di attrito.
+
+00:40:31.250 --> 00:40:33.070
+Un'impostazione predefinita intercetta chi non fa nulla.
+
+00:40:33.070 --> 00:40:36.330
+L'etichettatura obbligatoria intercetta il file che arriva senza alcuna etichetta.
+
+00:40:36.630 --> 00:40:37.570
+L'impostazione è semplice.
+
+00:40:37.890 --> 00:40:40.930
+Richiede un'etichetta prima che qualcuno possa salvare un documento o inviare un'email.
+
+00:40:40.930 --> 00:40:41.850
+Niente salvataggio.
+
+00:40:42.290 --> 00:40:43.210
+L'applicazione si ferma e chiede.
+
+00:40:43.550 --> 00:40:46.810
+È lo strumento più rigido della policy ed è il primo che le persone percepiscono.
+
+00:40:47.330 --> 00:40:48.210
+Quindi cosa costa?
+
+00:40:48.870 --> 00:40:51.370
+Ogni volta che appare quel messaggio una persona interrompe ciò che sta facendo.
+
+00:40:51.710 --> 00:40:52.590
+Sono solo pochi secondi.
+
+00:40:53.030 --> 00:40:56.750
+A volte è una posa confusa perché non sanno quale etichetta scegliere e questo è il tipo di costo peggiore.
+
+00:40:57.530 --> 00:41:00.890
+Moltiplica pochi secondi per ogni salvataggio fatto da migliaia di persone in un anno.
+
+00:41:01.150 --> 00:41:06.010
+È tempo reale speso su una decisione che ha chiesto loro di prendere continuamente, motivo per cui lo considero un budget.
+
+00:41:06.610 --> 00:41:08.410
+Ogni suggerimento che aggiungi consuma fiducia.
+
+00:41:08.410 --> 00:41:11.030
+La fiducia è ciò che ti permette di implementare il controllo successivo.
+
+00:41:11.530 --> 00:41:16.990
+Una persona che viene interrotta dieci volte al giorno da qualcosa che non comprende non sarà ben disposta quando arriverà il prossimo cambiamento.
+
+00:41:17.630 --> 00:41:18.670
+Darà per scontato che sia la storia.
+
+00:41:19.030 --> 00:41:22.830
+Hai una quantità limitata da spendere e un suggerimento obbligatorio ne attinge ogni singolo giorno.
+
+00:41:23.450 --> 00:41:24.750
+Quindi spegnila dove rende di più.
+
+00:41:25.210 --> 00:41:26.950
+L'obbligatorietà funziona meglio per i documenti.
+
+00:41:27.010 --> 00:41:29.010
+Una volta terminato il progetto pilota è passato all'uso esteso.
+
+00:41:29.290 --> 00:41:30.970
+A quel punto la tassonomia è stata collauda.
+
+00:41:30.970 --> 00:41:31.930
+I nomi hanno senso.
+
+00:41:32.350 --> 00:41:37.910
+Le impostazioni predefinite svolgono gran parte del lavoro quindi il prompt si attiva solo per le eccezioni un file esterno,
+
+00:41:38.150 --> 00:41:42.270
+un documento a cui è stata rimossa l'etichetta o contenuti creati da strumenti che hanno saltato l'impostazione.
+
+00:41:42.890 --> 00:41:45.950
+In questi casi il prompt è raro e svolge un compito che nient'altro può fare.
+
+00:41:46.730 --> 00:41:47.730
+Ora quando è controducente?
+
+00:41:48.070 --> 00:41:48.930
+Innanzitutto con l'email abito.
+
+00:41:49.470 --> 00:41:52.410
+Qualcuno che risponde dal telefono in corridoio con due minuti tra una riunione in anno.
+
+00:41:52.410 --> 00:41:57.230
+Se imponi la scelta di un'etichetta su ognuna di queste, hai rallentato la forma di comunicazione più veloce.
+
+00:41:58.030 --> 00:42:02.830
+Le persone iniziano ad aggruppare le risposte, a usare app fuori controllo o a scrivere messaggi più brevi e meno dettagliati.
+
+00:42:03.130 --> 00:42:03.910
+Niente di tutto questo error.
+
+00:42:04.370 --> 00:42:09.050
+Se proprio richiede etichette per la posta, punta su un'impostazione predefinita sensata finché il prompt appaia il meno possibile.
+
+00:42:09.670 --> 00:42:11.910
+L'automazione è la seconda trappola ed è silenziosa.
+
+00:42:12.510 --> 00:42:16.510
+Script, flussi, account di servizio salvano file e inviano messaggi senza alcun utente alla tastiera.
+
+00:42:16.870 --> 00:42:20.890
+Una regola che richiede un'etichetta può bloccarli all'istante e il fallimento non è evidente.
+
+00:42:20.890 --> 00:42:23.150
+Eh, un rapporto notturno non arriva.
+
+00:42:23.470 --> 00:42:24.630
+Un flusso riprova e poi si arreda.
+
+00:42:24.930 --> 00:42:27.470
+Qualcuno se ne accorge giovedì, prima di attivare l'obbligatorietà.
+
+00:42:27.730 --> 00:42:30.590
+Elenca i processi che creano contenuti senza persone e testali tutti.
+
+00:42:31.270 --> 00:42:34.110
+Alcuni necessiteranno di un'eccezione o di un'etichetta applicata dal processo stesso.
+
+00:42:34.610 --> 00:42:35.830
+Questo ci porta al prompt di declassamento.
+
+00:42:36.390 --> 00:42:38.530
+Quando qualcuno abbassa un'etichetta puoi chiedere una motivazione.
+
+00:42:38.710 --> 00:42:41.570
+Una casella breve, a volte un melo a tendina, altre volte testo libero.
+
+00:42:42.450 --> 00:42:45.850
+Come abbiamo visto nel progetto pilota, queste motivazioni sono tra i migliori feedback prodotti da progetto.
+
+00:42:46.230 --> 00:42:49.330
+Ti mostrano dove la tassonomia fallisce con le parole delle persone che ne subiscono il fallimento.
+
+00:42:49.330 --> 00:42:50.830
+Tuttavia, il prompt ha un limite.
+
+00:42:51.370 --> 00:42:54.110
+Se usato per ogni declassamento su ogni etichetta, diventa solo rumore.
+
+00:42:54.610 --> 00:42:57.810
+Le persone digitano un singolo carattere, vanno avanti e il valore informativo scende a zero.
+
+00:42:58.450 --> 00:43:02.290
+Usato solo quando conta, ad esempio spostando un file fuori dal livello massimo, rimane significativo.
+
+00:43:03.050 --> 00:43:03.730
+Risposte migliori.
+
+00:43:04.090 --> 00:43:06.410
+Quindi, gestisci le giustificazioni come gestisci l'etichettere obbligatoria.
+
+00:43:07.050 --> 00:43:08.330
+Numero limitato di interruzionate.
+
+00:43:09.170 --> 00:43:11.630
+Ognuna si godagna il suo posto producendo qualcosa che leggerai davvero.
+
+00:43:12.230 --> 00:43:15.590
+Un modo pratico per gestire il tutto è per setere domande prima di aggiungere un prompt.
+
+00:43:16.130 --> 00:43:17.390
+Chi lo vede con quale frequenza?
+
+00:43:17.810 --> 00:43:19.270
+Cosa intercetta che nient'altro riuscirebbe a fare?
+
+00:43:19.650 --> 00:43:20.730
+Che cosa faremo con la risposta?
+
+00:43:21.090 --> 00:43:23.830
+Se non sai rispondere alla terza, il prompt sta sprecando fiducia inutilmente.
+
+00:43:24.510 --> 00:43:28.830
+Le scelte manuali spinte da impostazioni predefinite o forzate da prompt hanno comunque un limite di scalabilità.
+
+00:43:29.630 --> 00:43:33.390
+Ci sono milioni di file già presenti nel tuo tenant e nessuno li aprirà uno alla volta.
+
+00:43:34.050 --> 00:43:36.270
+Per questo ti serve qualcosa che lega il contenuto al posto tu.
+
+00:43:37.130 --> 00:43:39.370
+Etichettatura automatica, lato client contro lato servizio.
+
+00:43:39.730 --> 00:43:41.250
+Etichettatura automatica si presenta in due forme.
+
+00:43:41.470 --> 00:43:42.890
+Sembrano simili, ma funzionano in modo diverso.
+
+00:43:42.890 --> 00:43:44.250
+La prima viene inseguita su client.
+
+00:43:44.590 --> 00:43:46.150
+Si tratta dell'app sullo schermo dell'utente.
+
+00:43:46.530 --> 00:43:47.870
+Word, Excel, Outlook.
+
+00:43:47.870 --> 00:43:50.390
+Mentre qualcuno scrive, l'app monitora il contenuto.
+
+00:43:50.950 --> 00:43:54.990
+Se individua qualcosa di sensibile, come un numero di carta o un ID nazionale, fa una di due cose.
+
+00:43:55.630 --> 00:44:01.330
+Consiglia un'etichetta con un piccolo banner, l'accettazione con un click, oppure applica l'etichetta da sola e avvisa la persona in seguito.
+
+00:44:01.330 --> 00:44:06.190
+Il punto di forza qui è che l'etichetta appare al momento della creazione, prima che il file vada ovunque.
+
+00:44:07.070 --> 00:44:10.590
+La persona vede cosa succede e col tempo impara cosa il sistema considera sensibile.
+
+00:44:11.170 --> 00:44:11.930
+Molto debole l'ha portato.
+
+00:44:12.410 --> 00:44:15.110
+Il lato client funziona solo quando una persona apre il file in un'app supportata.
+
+00:44:16.090 --> 00:44:21.810
+Un file che resta intatto per tre anni non viene mai esaminato e un file creato da uno script o importato da un altro sistema salta tutto.
+
+00:44:22.550 --> 00:44:24.510
+È qui che entra in gioco la seconda forma, il lato servizio.
+
+00:44:24.510 --> 00:44:28.870
+L'etichettatura automatica lato servizio viene eseguita nel cloud, sui dati inattivi.
+
+00:44:29.350 --> 00:44:32.690
+Scansione i file in SharePoint e OneDrive e le email che transita nell'exchange.
+
+00:44:33.270 --> 00:44:35.670
+Non serve alcuna app aperta, nessun utente deve fare nulla.
+
+00:44:36.110 --> 00:44:41.030
+Una policy dice, trova contenuti che corrispondono a questo schema in queste posizioni e applica questa etichetta.
+
+00:44:41.430 --> 00:44:42.550
+Il servizio procede in background.
+
+00:44:43.170 --> 00:44:46.370
+Quindi uno rileva il contenuto alla nascita, l'altro pulisce ciò che già esiste.
+
+00:44:46.890 --> 00:44:52.650
+Vorrai entrambi e, per la maggior parte delle aziende, le policy lato servizio gestiscono il carico maggiore a causa di tutto ciò che è già presente nel tema.
+
+00:44:52.650 --> 00:44:55.130
+Ora, come fa uno dei due a decidere cose sensibili?
+
+00:44:55.530 --> 00:44:58.670
+Ci sono tre opzioni di rilevamento e differiscono per lo sforzo richiesto.
+
+00:44:59.250 --> 00:45:01.450
+Tipi di informazioni sensibili sono il punto di partenza.
+
+00:45:01.590 --> 00:45:07.470
+Schemi predefiniti per cose come numeri di carta di credito, conti bancari, numeri di passaporto e identificativi sanitari con varianti per molti paesi.
+
+00:45:08.070 --> 00:45:11.930
+Sono veloci da attivare e funzionano bene su dati strutturati che seguono un formato fisso.
+
+00:45:12.510 --> 00:45:16.770
+Classificatori addestrabili gestiscono contenuti senza un formato fisso, un contratto, un curriculum, un file di codice sorgente.
+
+00:45:17.750 --> 00:45:21.990
+Mostri al sistema esempi di ciò che ti interessa e lui impara a riconoscere documenti simili.
+
+00:45:21.990 --> 00:45:24.890
+Richiede lavoro iniziale, poiché serve un buon set di campioni.
+
+00:45:25.090 --> 00:45:27.170
+Raggiunge contenuti che gli schemi non possono rilevare.
+
+00:45:27.610 --> 00:45:29.130
+La corrispondenza esatta dei dati, quella precisa.
+
+00:45:29.710 --> 00:45:34.230
+Invece di uno schema, carichi una copia hash dei tuoi dati sensibili, ad esempio una tabella clienti e il servizio.
+
+00:45:34.390 --> 00:45:36.310
+Cerca quei valori esatti nei file.
+
+00:45:37.190 --> 00:45:41.370
+Riduce drasticamente i falsi positivi perché corrisponde ai tuoi record reali e non ha qualcosa che sembra solo tale.
+
+00:45:41.710 --> 00:45:42.530
+Richiede anche la config room.
+
+00:45:42.990 --> 00:45:47.090
+Un ordine sensato è iniziare con i tipi predefiniti, aggiungere classificatori dove i pattern non bastano
+
+00:45:47.090 --> 00:45:49.810
+e ricorrere alla corrispondenza dati esatta quando la precisione è fondamentale.
+
+00:45:49.810 --> 00:45:51.610
+Ora la regola che considererei non negoziabile.
+
+00:45:52.370 --> 00:45:53.890
+Sempre prima la modalità di simulazione.
+
+00:45:55.010 --> 00:45:57.550
+Quando crei una policy la tua servizio puoi eseguirla in simulazione.
+
+00:45:58.050 --> 00:46:02.070
+Il servizio scansiona le posizioni e segnala cosa avrebbe etichettato senza toccare un solo file.
+
+00:46:02.830 --> 00:46:03.090
+Nulla.
+
+00:46:03.630 --> 00:46:04.230
+Nessuno si è accorso.
+
+00:46:05.190 --> 00:46:06.130
+Poi leggi i risultati.
+
+00:46:06.450 --> 00:46:07.610
+Apri un campione delle corrispondenze.
+
+00:46:07.770 --> 00:46:12.850
+Sono i file che volevi intercettare o la tua regola ha incluso una pila di fogli di calcolo innocui che contengono casualmente un numero lungo?
+
+00:46:13.750 --> 00:46:15.070
+Controlla anche i conteggi per posizione.
+
+00:46:15.070 --> 00:46:24.930
+Se un sito rappresenta la maggior parte dei risultati scopri perché prima di applicarvi la policy regola alla regola esegui di nuovo la simulazione e ripeti finché le corrispondenze non sembrano corrette a chi conosce il contenuto.
+
+00:46:25.490 --> 00:46:26.750
+Solo allora passi all'applicazione effettiva.
+
+00:46:27.130 --> 00:46:31.230
+Saltare questo passaggio è il modo più rapido per etichettare erroneamente 10.000 file in un solo fine settimana.
+
+00:46:31.790 --> 00:46:32.590
+Un'ultima nota di realtà.
+
+00:46:33.290 --> 00:46:35.050
+L'etichettatura al lato server ha limiti di truppo.
+
+00:46:35.310 --> 00:46:39.150
+Il servizio elabora un numero limitato di file al giorno per tenant e per policy.
+
+00:46:39.150 --> 00:46:41.130
+Per una piccola azienda è invisibile.
+
+00:46:41.590 --> 00:46:44.130
+Per una con decine di milioni di file cambia completamente il piano?
+
+00:46:44.610 --> 00:46:45.610
+Fai i calcoli in anticipo.
+
+00:46:45.910 --> 00:46:49.830
+Prendi il numero di file, dividi per il limite giornaliero e vedrai se si tratta di giorni o settimane.
+
+00:46:50.470 --> 00:46:54.250
+Un grande arretrato può richiedere un mese o più per essere smaltito e anche le simulazioni richiedono tempo.
+
+00:46:54.490 --> 00:46:59.290
+Quindi includilo nel programma e comunicalo all'azienda ora così nessuno chiederà il terzo giorno perché non è ancora tutto etichettato.
+
+00:46:59.570 --> 00:47:00.550
+Alla velocità è il problema minore.
+
+00:47:00.990 --> 00:47:02.610
+Quello più grande è se le etichette sono corrette.
+
+00:47:02.610 --> 00:47:09.070
+Una regola di rilevamento che si attiva sui file sbagliati fa più danni che bene e il danno colpisce l'unica cosa che non puoi ricomprare è la fiducia.
+
+00:47:10.170 --> 00:47:12.070
+Ottimizzazione, etichettatura automatica senza compromettere.
+
+00:47:12.430 --> 00:47:14.190
+Un falso positivo sembra poca cosa su una dashboard.
+
+00:47:14.770 --> 00:47:16.630
+Un file, etichetta sbagliata, un numero e un report.
+
+00:47:17.070 --> 00:47:18.470
+Tra la persona che possiede quel file è diverso.
+
+00:47:18.870 --> 00:47:23.290
+Apre una bozza di budget e la trova timbrata come altamente riservata con una crittografia che non ha richiesto.
+
+00:47:23.290 --> 00:47:27.030
+Non puoi inviarla al fornitore quindi scrivi all'helpdesk e rimuove l'etichetta e va avanti.
+
+00:47:27.670 --> 00:47:29.970
+Fallo con abbastanza persone e smetteranno di leggere l'etichetta.
+
+00:47:29.970 --> 00:47:36.930
+Ogni banner diventa rumore di fondo e questo è peggio di non avere alcuna automazione perché ora le etichette corrette vengono ignorate insieme a quelle sbagliate.
+
+00:47:37.910 --> 00:47:41.870
+Quindi la calibrazione è una rifinitura, è il modo in cui proteggi la credibilità di tutto il resto del programma.
+
+00:47:42.530 --> 00:47:45.690
+Inizia con tre parametri, livello di confidenza, conteggio delle occorrenze e prossimità.
+
+00:47:46.050 --> 00:47:48.090
+La confidenza indica l'elevatore quanto deve essere sicuro.
+
+00:47:48.390 --> 00:47:50.110
+Un numero di nove cifre potrebbe essere un codice fiscato.
+
+00:47:50.190 --> 00:47:51.490
+Potrebbe anche essere un riferimento tuo.
+
+00:47:51.710 --> 00:47:56.010
+Una confidenza alta significa che il numero si trova vicino ai elementi di supporto, come una parola chiave o una data di nascita.
+
+00:47:56.330 --> 00:47:58.090
+Una confidenza bassa significa che sembra semplicolo.
+
+00:47:58.090 --> 00:48:01.110
+Usa un'alta confidenza per tutto ciò che applica un'etichetta autonomamente.
+
+00:48:01.450 --> 00:48:04.490
+Mantieni la confidenza bassa per i suggerimenti dove una persona prende la decisione finale.
+
+00:48:04.850 --> 00:48:06.530
+Il conteggio delle occorrenze è il secondo parametro.
+
+00:48:06.610 --> 00:48:09.370
+Un numero di carte in una lunga conversazione e-mail è spesso un incidente.
+
+00:48:09.950 --> 00:48:11.570
+50 in un foglio di calcolo rappresentano un 7.
+
+00:48:12.130 --> 00:48:16.550
+Imposta la soglia in modo che una singola corrispondenza isolata non attivi un blocco, ma una vera mole di record sì.
+
+00:48:17.230 --> 00:48:18.570
+La prossimità è il terzo parametro.
+
+00:48:19.030 --> 00:48:21.750
+Controva quanto vicino deve trovarsi l'elemento di prova rispetto alla corrispondenza.
+
+00:48:21.750 --> 00:48:25.790
+Un numero vicino alle parole è conto, è instradamento, ha un significato.
+
+00:48:26.490 --> 00:48:29.570
+Lo stesso numero in fondo a pagina 9 senza nulla intorno probabilmente non ne ha.
+
+00:48:30.010 --> 00:48:31.310
+Ora l'ordine di lavoro è semplice.
+
+00:48:31.650 --> 00:48:32.410
+Inizia in modo limitato.
+
+00:48:32.750 --> 00:48:34.970
+Scegli un tipo di rilevamento con una regola ad alta confidenza.
+
+00:48:35.430 --> 00:48:40.750
+Indirizzalo verso una posizione specifica, magari una singola libreria finanziaria o alcuni siti che sai già contenere dati regolamentati.
+
+00:48:41.750 --> 00:48:44.130
+Eseguilo in simulazione e leggi le corrispondenze, poi applicalo.
+
+00:48:44.470 --> 00:48:45.170
+Monitoralo per settimane.
+
+00:48:45.630 --> 00:48:49.730
+Solo allora estendi l'ambito ad altri siti, abbassa leggermente la confidenza e aggiungi un secondo rilevatore.
+
+00:48:50.370 --> 00:48:53.510
+Ogni passaggio è abbastanza piccolo da permetterti di sapere quale modifica ha causato eventuali problemi.
+
+00:48:53.750 --> 00:48:55.650
+Poi c'è una questione che scatena vere discussioni.
+
+00:48:55.910 --> 00:48:57.390
+Cosa fare con le etichette già applicate alle persone?
+
+00:48:57.750 --> 00:48:59.530
+Mettiamo che un utente abbia contrassegnato un file come riservo.
+
+00:48:59.710 --> 00:49:02.050
+La tua policy stabilisce che dovrebbe essere altamente riserva.
+
+00:49:02.190 --> 00:49:03.550
+L'automazione dovrebbe sovrascrivere lo chat?
+
+00:49:04.010 --> 00:49:04.890
+Pensa a chi ne sa di più.
+
+00:49:04.890 --> 00:49:08.870
+Chi ha scritto il file ha fatto una valutazione basata su un contesto che lo scanner non ha.
+
+00:49:09.270 --> 00:49:11.810
+Ma lo scanner ha appena trovato una mole di record e va lamentati al suo interno.
+
+00:49:12.050 --> 00:49:14.190
+A volte la persona ha ragione, a volte ha trascurato qualcosa.
+
+00:49:14.770 --> 00:49:18.010
+Una regola efficace è che l'automazione può alzare il livello di un'etichetta ma mai abbassarla.
+
+00:49:18.270 --> 00:49:21.050
+Se una persona ha scelto un'etichetta superiore a quella prevista dalla regola, non toccarla.
+
+00:49:21.550 --> 00:49:25.370
+Se la regola trova qualcosa di più critico di quanto ha scelto dalla persona, alza il livello e mostra loro il perché.
+
+00:49:25.890 --> 00:49:28.830
+Questo mantiene il giudizio umano dove conta e permette comunque di rilevare le sviste.
+
+00:49:29.310 --> 00:49:30.350
+Fai attenzione a un caso specifico.
+
+00:49:30.350 --> 00:49:35.730
+Un'etichetta applicata da una persona per un motivo aziendale specifico, come un team legale che contrassegna materiale riservato,
+
+00:49:35.790 --> 00:49:38.090
+non dovrebbe essere sovrascritto da una corrispondenza di pattern.
+
+00:49:38.670 --> 00:49:40.730
+Escludete tale etichetta dall'automazione fin dalla progettazione.
+
+00:49:41.230 --> 00:49:42.310
+Ultimo punto, il feedback.
+
+00:49:42.990 --> 00:49:45.330
+Le persone troveranno le etichette errate molto prima del vostro area.
+
+00:49:45.790 --> 00:49:47.610
+Date loro un modo per segnalarlo in un unico passato.
+
+00:49:47.850 --> 00:49:52.830
+Un link nel suggerimento sui criteri, una casella di posta condivisa, un breve modo, qualcosa che richieda 10 secondi, poi chiudete il cerchio.
+
+00:49:53.590 --> 00:49:56.330
+Quando qualcuno segnala un'etichetta errata a una persona designata la legge,
+
+00:49:56.330 --> 00:49:59.750
+decide se la regola deve essere modificata e informa chi ha effettuato la segnalazione.
+
+00:50:00.350 --> 00:50:02.310
+Ancora la risposta di una riga è sufficiente.
+
+00:50:02.610 --> 00:50:03.630
+Abbiamo reso più rigorosa la regola.
+
+00:50:03.910 --> 00:50:04.730
+Grazie per aver segnalato.
+
+00:50:05.190 --> 00:50:07.930
+Le persone segnano i problemi quando vedono che le segnalazioni portano a risultato.
+
+00:50:08.590 --> 00:50:14.150
+Senza questo vi aggireranno silenziosamente e il primo segnale di problemi sarà un quarto dell'azienda, che ignora le etichette.
+
+00:50:14.830 --> 00:50:19.670
+I file sono un luogo in cui risiedono le etichette, ma un intero spazio di lavoro con i propri membri e le proprie regole di condivisione un altro.
+
+00:50:20.370 --> 00:50:24.230
+E l'etichetta che applicata a un team non si comporta affatto come quella applicata a un documento.
+
+00:50:25.670 --> 00:50:27.810
+Etichette di contenitori team, gruppi e siti.
+
+00:50:28.330 --> 00:50:30.270
+Un'etichetta su un contenitore non contrassegna un file.
+
+00:50:30.590 --> 00:50:31.650
+Definisce le regole della stanza.
+
+00:50:31.970 --> 00:50:32.750
+Quindi quali può definire?
+
+00:50:33.090 --> 00:50:33.710
+Tre principali.
+
+00:50:34.190 --> 00:50:36.250
+Privacy, che decide se un team pubblico o privato.
+
+00:50:36.730 --> 00:50:40.290
+Condivisione esterna, che decide se si possono aggiungere ospiti e se i link possono lasciare all'azienda.
+
+00:50:40.930 --> 00:50:45.810
+E l'accesso da dispositivi non gestiti, che decide cosa può fare qualcuno su un portatile personale all'interno dello spazio di lavoro.
+
+00:50:46.290 --> 00:50:46.590
+Tutto qui.
+
+00:50:47.170 --> 00:50:51.110
+Nessuna criptografia dei contenuti, nessuna marcatura sui documenti, solo le regole dello spazio di lavoro stesso.
+
+00:50:51.530 --> 00:50:52.990
+Ed ecco la parte che sorprende quasi tutti.
+
+00:50:53.350 --> 00:50:55.290
+L'etichetta dei contenitori non etichettano i file.
+
+00:50:56.190 --> 00:51:00.030
+Applicate altamente riservato a un sito di team, poi aprite un documento in quel sito e non dice nulla.
+
+00:51:00.030 --> 00:51:02.530
+O mantiene l'etichetta che qualcuno ha applicato l'anno scorso.
+
+00:51:03.330 --> 00:51:07.550
+Il contenitore e il contenuto sono cose separate con etichette separate e nessuna delle due è eredita dall'altra.
+
+00:51:08.090 --> 00:51:10.030
+Le persone presumono il contrario perché la parola è stessa.
+
+00:51:10.450 --> 00:51:12.170
+Stesso nome sullo schermo, quindi stesso effetto, giusto?
+
+00:51:12.790 --> 00:51:14.930
+L'etichetta del sito controlla chi può entrare nella stanza.
+
+00:51:15.270 --> 00:51:17.790
+L'etichetta del file controlla cosa succede al foglio una volta che esce.
+
+00:51:18.270 --> 00:51:19.650
+Se volete entrambi le cose vi servono entrambi le etichette.
+
+00:51:19.810 --> 00:51:24.710
+Un'etichetta di sito per lo spazio di lavoro più un'etichetta predefinita sulla raccolta così che i nuovi file all'interno partano con qualcosa di senso.
+
+00:51:24.710 --> 00:51:27.390
+Abbiamo già trattato i valori predefiniti e questo è un ottimo punto in cui usarne.
+
+00:51:27.610 --> 00:51:28.410
+Ora i prerequisiti.
+
+00:51:28.830 --> 00:51:30.570
+È qui che le implementazioni si bloccano silenziosamente.
+
+00:51:30.790 --> 00:51:32.590
+L'etichetta dei contenitori non funzionano subito senza con te.
+
+00:51:32.930 --> 00:51:36.590
+Qualcuno deve abilitare le etichette per i gruppi e i siti di Microsoft 305 nel tenant,
+
+00:51:36.730 --> 00:51:39.110
+poi sincronizzarle affinché il servizio di gruppo possa vederle.
+
+00:51:39.290 --> 00:51:43.570
+Finché non viene fatto, le opzioni non appaiono semplicemente nel flusso di creazione e nessuno spiega il perché.
+
+00:51:44.070 --> 00:51:47.130
+L'etichetta esiste nel portale, ma il proprietario del sito non ha modo di selezionare.
+
+00:51:47.710 --> 00:51:52.410
+Verificate presto, fate un test, create un team di prova e vedete se l'etichetta appare dove una persona reale guarderebbe.
+
+00:51:53.270 --> 00:51:54.310
+Passiamo alla questione del design.
+
+00:51:54.810 --> 00:51:58.050
+Come si creano le etichette per i contenitori senza copiare l'intera tassonomia degli elementi?
+
+00:51:58.290 --> 00:51:59.110
+La troppa è la duplicazione.
+
+00:51:59.550 --> 00:52:03.410
+Avete quattro etichette per gli elementi, quindi create quattro etichette per i contenitori con gli stessi nomi e con gli stessi nomi
+
+00:52:03.410 --> 00:52:05.530
+e ora gli utenti trovano confidenziali in due posti quando funzioni diverse.
+
+00:52:05.670 --> 00:52:06.110
+È confuso.
+
+00:52:06.490 --> 00:52:06.830
+Non fatelo.
+
+00:52:07.210 --> 00:52:09.550
+Invece chiedetevi cosa deve essere comunicato a uno spazio di lavoro.
+
+00:52:09.550 --> 00:52:14.030
+La maggior parte delle aziende scopre di aver bisogno di due o tre tipi di contenitori definiti da quanto è aperto l'ambiente.
+
+00:52:14.650 --> 00:52:17.970
+Uno per la collaborazione interna, dove gli ospiti sono bloccati e il team è privato.
+
+00:52:18.490 --> 00:52:21.910
+Uno per il lavoro con partner, dove gli ospiti nominati possono unirsi ma il link restano limitati.
+
+00:52:22.470 --> 00:52:25.730
+Uno per il lavoro più sensibile, dove gli ospiti sono bloccati e la condivisione è ristretta.
+
+00:52:25.810 --> 00:52:29.530
+I dispositivi non gestiti hanno accesso solo tramite browser, nominateli in base al comportamento.
+
+00:52:30.050 --> 00:52:33.150
+Solo interno, collaborazione con partner, spazio di lavoro riservato.
+
+00:52:33.150 --> 00:52:37.910
+Un nuovo proprietario di sito dovrebbe leggere il nome e capire cosa sta scegliendo senza bisogno di diagrammi,
+
+00:52:37.970 --> 00:52:39.970
+mantenendo un legame elastico con la tassonomia degli elementi.
+
+00:52:40.750 --> 00:52:44.970
+Spazio di lavoro riservato potrebbe impostare un valore predefinito di altamente confidenziale sulla sua libreria principale.
+
+00:52:45.270 --> 00:52:47.570
+Collaborazione con partner potrebbe avere confidenziale come presidimento.
+
+00:52:47.870 --> 00:52:51.310
+Le etichette dei contenitori e degli elementi funzionano in coppia, non come coppia della...
+
+00:52:51.310 --> 00:52:51.950
+La parte difficile.
+
+00:52:52.310 --> 00:52:53.470
+Gli spazi di lavoro già esistenti.
+
+00:52:53.910 --> 00:52:58.810
+Probabilmente avete migliaia di siti e team creati negli anni con impostazioni di condivisione di cui nessuno ricorda la scelta.
+
+00:52:59.470 --> 00:53:03.030
+Etichettare il libero progetto e applicare un etichetto può cambiare il funzionamento della condivisione,
+
+00:53:03.030 --> 00:53:04.090
+nel momento in cui viene attivata.
+
+00:53:04.610 --> 00:53:06.950
+Bloccate gli ospiti su un sito che ha 40 partner attivi.
+
+00:53:07.070 --> 00:53:08.970
+40 persone perdono l'accesso un martedì mattina.
+
+00:53:09.410 --> 00:53:10.170
+Lì non fatelo alla scelta.
+
+00:53:10.630 --> 00:53:15.050
+Iniziate facendo l'inventario di ciò che c'è, quali siti hanno ospiti, quali hanno link esterni, quali sono pubblici.
+
+00:53:16.030 --> 00:53:17.410
+Ordinatevi per rischio e attività.
+
+00:53:18.430 --> 00:53:22.270
+Poiché un sito che nessuno apre da due anni è più semplice di uno con un progetto attivo, lavorate e andate.
+
+00:53:23.590 --> 00:53:27.590
+Etichettate prima i siti silenziosi ad alto rischio, dove una regola più rigida non costa quasi nulla.
+
+00:53:28.570 --> 00:53:31.430
+Contattate i proprietari di quegli attivi prima di intervenire e concordate una data.
+
+00:53:31.430 --> 00:53:36.610
+Per i siti con ospiti legittimi, scegliete l'etichetta partner, non quella riservata, così le persone giuste continuano a lavorare.
+
+00:53:37.130 --> 00:53:40.390
+Gli iscritti possono applicare etichette in blocco e per un tenant di grandi dimensioni avrete bisogno.
+
+00:53:41.030 --> 00:53:44.210
+Ma esegui il primo gruppo su un piccolo insieme di utenti e verifichi i cambiamenti solo dopo scatto.
+
+00:53:44.690 --> 00:53:46.330
+Un'etichetta su un sito definisce le regole della stanza.
+
+00:53:46.970 --> 00:53:49.250
+Da sola non fa sì che il resto del tuo tenant le rispetti.
+
+00:53:49.850 --> 00:53:53.970
+Per questo l'etichetta deve collegarsi a qualcosa di più grande, i controlli che decidono chi può entrare.
+
+00:53:53.970 --> 00:53:58.370
+Abbinare l'etichetta, l'accesso condizionale e i controlli di condivisione.
+
+00:53:58.850 --> 00:54:00.910
+Un'etichetta di contenitore imposta le regole entrando la stanza.
+
+00:54:01.250 --> 00:54:02.990
+L'accesso condizionale decide chi arriva alla porta.
+
+00:54:03.610 --> 00:54:04.370
+Sono sistemi separati.
+
+00:54:04.650 --> 00:54:06.850
+L'etichetta non impone i requisiti di accesso da sola.
+
+00:54:07.590 --> 00:54:09.730
+Ciò che può fare è contenere un riferimento, una policy che lo fa.
+
+00:54:10.510 --> 00:54:12.430
+Quello riferimento è chiamato contesto di autenticazione.
+
+00:54:12.810 --> 00:54:13.310
+E' come funziona.
+
+00:54:13.790 --> 00:54:17.570
+Inentra crea un contesto di autenticazione, che è fondamentalmente un tag nominativo,
+
+00:54:17.830 --> 00:54:19.910
+come richiede dispositivo conforme MFA.
+
+00:54:19.910 --> 00:54:23.150
+Poi crea una policy di accesso condizionale che punta a quel tag.
+
+00:54:23.870 --> 00:54:25.670
+Colleghi il tag o un'etichetta di contenitore.
+
+00:54:26.410 --> 00:54:28.890
+Ora ogni sito che usa quell'etichetta è reddita e requisiti di accesso.
+
+00:54:29.290 --> 00:54:33.170
+Qualcuno apre il sito, la policy si attiva e o soddisfa i requisiti o non entra.
+
+00:54:33.610 --> 00:54:34.830
+E' un modo pulito per scalare una regola.
+
+00:54:35.250 --> 00:54:36.510
+Non devi scrivere una policy per ogni sito.
+
+00:54:36.870 --> 00:54:38.410
+Scrivi una sola policy e l'etichetta la distribuisce.
+
+00:54:39.110 --> 00:54:40.630
+Ora il secondo strumento è dispositivi non gestiti.
+
+00:54:41.230 --> 00:54:43.710
+Un portatile che non gestisce è un portatile su cui non hai visibilità.
+
+00:54:44.230 --> 00:54:47.250
+Non sai se è aggiornato, se il disco è criptografato, chi altro lo usa.
+
+00:54:47.970 --> 00:54:49.810
+Per un'area di lavoro normale è un rischio accettabile.
+
+00:54:50.330 --> 00:54:51.310
+Per una riservata forse no.
+
+00:54:51.730 --> 00:54:53.810
+Quindi l'etichetta può imporre una regola per quei dispositivi.
+
+00:54:53.870 --> 00:54:56.110
+Accesso completo, solo bra senza download, blocco totale.
+
+00:54:56.790 --> 00:54:58.850
+Solo browser è l'opzione che la maggior parte di team sceglie.
+
+00:54:59.330 --> 00:55:02.050
+Le persone possono leggere e lavorare sul sito da un computer personale,
+
+00:55:02.150 --> 00:55:04.170
+ma nulla viene copiato sull'unità che non vedrai mai più.
+
+00:55:04.850 --> 00:55:09.010
+E' una via di mezzo e permette al consulente sul proprio laptop di essere produttivo senza cedere i file.
+
+00:55:09.490 --> 00:55:11.670
+Tuttavia testa questa opzione con un vero dispositivo non gestito.
+
+00:55:12.230 --> 00:55:15.950
+Comportamento nel browser può sorprendere, specialmente riguardo all'apertura dei file nelle app desktop.
+
+00:55:17.130 --> 00:55:18.350
+Terzo è il link di condivisione.
+
+00:55:18.350 --> 00:55:20.130
+Ogni sito ha un tipo di link predefinito.
+
+00:55:20.570 --> 00:55:23.510
+Quando qualcuno clicca su condividi, il sistema sceglie che tipo di link creato.
+
+00:55:23.790 --> 00:55:26.710
+Chiunque abbia il link, persone in organizzazione o solo persone specifiche.
+
+00:55:27.130 --> 00:55:30.930
+La maggior parte dei tenant lascia l'impostazione predefinita aperta perché era la più facile fin da primo giorno.
+
+00:55:30.930 --> 00:55:32.290
+Le impostazioni delle etichette possono arrivare.
+
+00:55:32.690 --> 00:55:37.350
+Un'area di lavoro riservata può avere come predefinito persone specifiche, così il clic rapido genera il link sicuro.
+
+00:55:38.210 --> 00:55:39.290
+Nessuno deve ricordare nulla.
+
+00:55:39.750 --> 00:55:44.630
+Il percorso più comodo e quello più prudente coincidono, ed è questo lo schema che ha funzionato durante l'intera implementazione.
+
+00:55:45.490 --> 00:55:48.570
+E' anche possibile limitare il tipo di collegamento più permissivo che un sito può creare.
+
+00:55:48.890 --> 00:55:53.130
+Un sito potrebbe consentire collegamenti interni ma mai anonimi, indipendentemente dai tentativi dell'utente.
+
+00:55:53.130 --> 00:55:54.870
+Ora, siate onesti su dove si arriva.
+
+00:55:55.330 --> 00:55:57.310
+Le etichette regolano lo spazio di lavoro a cui sono associati.
+
+00:55:57.470 --> 00:55:58.190
+Non regolano il tenant.
+
+00:55:58.790 --> 00:56:02.210
+Un utente con un collegamento a un file, un sito senza etichetta, non è soggetto a nulla di tutto ciò.
+
+00:56:03.070 --> 00:56:06.490
+Le policy di accesso condizionato valide per tutti devono comunque essere scritte per tutti.
+
+00:56:07.050 --> 00:56:10.210
+I limiti di condivisione a livello di tenant devono ancora essere impostati sul tenant
+
+00:56:10.210 --> 00:56:13.490
+perché un'etichetta può solo restringere un sito ma è allentare ciò che il tenant permette.
+
+00:56:13.810 --> 00:56:18.490
+Vale la pena ribadirlo perché le persone leggono che le etichette controllano la condivisione e presumono che il tenant sia protetto.
+
+00:56:18.990 --> 00:56:21.550
+L'etichetta è uno strumento preciso per ambienti specifici.
+
+00:56:21.550 --> 00:56:25.570
+La base per tutti gli altri ambienti si trova altrove, quindi considerate i due elementi come livelli distinti.
+
+00:56:26.210 --> 00:56:30.770
+Definite prima una base sensata per il tenant, standard di accesso, comportamento predefinito dei collegamenti,
+
+00:56:30.870 --> 00:56:34.270
+regole per gli ospiti, poi usate le etichette per alzare l'asticella dove il contenuto lo richiede.
+
+00:56:34.630 --> 00:56:38.590
+Se procedete al contrario, avrete pochi siti ben protetti in un tenant dove tutto il resto è spalancato
+
+00:56:38.590 --> 00:56:40.670
+ed è esattamente lì che Copilot guarderà per primo.
+
+00:56:41.710 --> 00:56:42.730
+I controlli sono pronti.
+
+00:56:43.090 --> 00:56:46.290
+Policy, etichette, contesti di autenticazione, regole di condivisione.
+
+00:56:46.290 --> 00:56:49.210
+Ma nulla di tutto ciò ha valore se le persone che li usano non cambiano le proprie abitudini.
+
+00:56:49.210 --> 00:56:52.170
+L'adozione è un problema di prodotto, non di formazione.
+
+00:56:52.510 --> 00:56:55.450
+La maggior parte dei piani di implementazione tratta l'adozione come un'attività di comunicazione.
+
+00:56:55.690 --> 00:57:00.490
+Scrivere il messaggio, inviarlo, contare le aperture, ma l'esperienza dell'etichetta non è un messaggio, è un prodotto.
+
+00:57:00.750 --> 00:57:03.210
+A utenti, a triti, a bug, a necessità di rilasci...
+
+00:57:03.870 --> 00:57:07.650
+Se lo gestite come un annuncio o una tantum, otterrete i risultati di un annuncio o una tantum.
+
+00:57:08.010 --> 00:57:08.790
+Quindi cambiate prospettiva.
+
+00:57:09.050 --> 00:57:09.670
+Chi sono gli utenti?
+
+00:57:09.930 --> 00:57:11.910
+Ogni persona che crea un file o invia un'email?
+
+00:57:12.290 --> 00:57:13.270
+Cosa stanno cercando di fare?
+
+00:57:13.270 --> 00:57:14.510
+Il proprio lavoro, non il vostro.
+
+00:57:14.750 --> 00:57:16.170
+Dove il vostro prodotto è di intrarci a questo?
+
+00:57:16.170 --> 00:57:17.190
+Il lavoro è tutto qui.
+
+00:57:17.650 --> 00:57:22.030
+Non come facciamo a farli interessare, ma dove il nostro design fa perdere il loro tempo e come possiamo rimediare.
+
+00:57:23.050 --> 00:57:25.270
+I team di prodotto si pongono questa domanda ogni settimana.
+
+00:57:25.610 --> 00:57:28.250
+La maggior parte dei programmi di sicurezza se lo chiedono una volta al lancio e mai più.
+
+00:57:29.410 --> 00:57:31.730
+Ora, l'email di lancio, la versione Big Bang, funziona così.
+
+00:57:32.430 --> 00:57:35.530
+Una data, un messaggio per tutta l'azienda, un link, una pagina che nessuno apre.
+
+00:57:35.930 --> 00:57:39.670
+E lunedì mattina, 40.000 persone vedono una nuova barra degli strumenti nello stesso momento.
+
+00:57:40.170 --> 00:57:41.410
+Ciò che accade dopo è prevedibile.
+
+00:57:41.410 --> 00:57:43.610
+L'helpdesk viene inondato di richieste in un solo giorno.
+
+00:57:43.930 --> 00:57:46.190
+Le domande sono tutte diverse, quindi nessuno riesce a individuare uno scritto.
+
+00:57:46.550 --> 00:57:49.070
+I dirigenti notano il caos e si chiedono se il sistema fosse pronto.
+
+00:57:49.510 --> 00:57:51.910
+E chi si è confuso il primo giorno ne manterrà il ricordo per mesi,
+
+00:57:51.970 --> 00:57:55.390
+perché le prime impressioni su uno strumento contano più di qualsiasi istruzione scritta in seguito.
+
+00:57:55.750 --> 00:57:57.610
+Le implementazioni andate risolvono un gran parte di questo gruppo.
+
+00:57:57.830 --> 00:58:00.990
+Si rilascia un gruppo, si osserva cosa non funziona, si corregge e si passa al successivo.
+
+00:58:01.330 --> 00:58:05.310
+Ogni ondata è meno problematica della precedente e trae vantaggio da ciò che si è imparato prima.
+
+00:58:05.310 --> 00:58:10.930
+Quando arrivano i gruppi più numerosi, le imperfezioni sono sparite e il team di supporto ha già le risposte pronte.
+
+00:58:11.490 --> 00:58:14.090
+È più lento sul calendario, ma è più rapido ottenere un risultato funzionante.
+
+00:58:14.350 --> 00:58:15.690
+Ora, chi risponde alle domande nel frattempo?
+
+00:58:16.090 --> 00:58:17.470
+Non il team centrale, o almeno non da solo.
+
+00:58:18.010 --> 00:58:22.330
+Un team di progetto di 5 persone non può sapere come l'ufficio acquisti gestisca i contratti con il fornitorio
+
+00:58:22.330 --> 00:58:24.310
+e cosa intende un ingegnere per documento di progettazione.
+
+00:58:25.230 --> 00:58:28.830
+Quelle domande richiedono un contesto, e chi possiede quel contesto lavora all'interno dell'azienda.
+
+00:58:28.830 --> 00:58:34.170
+Quindi reclutate dei champion, uno o due per business unit, idealmente persone a cui gli altri chiedono già aiuto.
+
+00:58:34.610 --> 00:58:37.830
+Non devono essere esperti di tecnologie, devono essere curiosi e disponibili a godere di fiducia.
+
+00:58:38.290 --> 00:58:42.750
+Date loro un accesso anticipato, una linea diretta con il vostro team e un breve elenco delle risposte che avete già preparato.
+
+00:58:42.910 --> 00:58:43.970
+Poi lasciate che facciano loro l'op.
+
+00:58:44.610 --> 00:58:48.310
+Un collega che diceva, per quel tipo di file scelgo sempre questo, vale più di qualsiasi pagina di policy.
+
+00:58:49.250 --> 00:58:53.570
+E in cambio, champion riferisce con ciò che sentono che è la vostra migliore fonte di feedback sulla progettazione dopo il pilota.
+
+00:58:54.010 --> 00:58:54.530
+Tratteli bene.
+
+00:58:54.530 --> 00:58:58.210
+Un champion che invia tre segnalazioni e non riceve risposta smetterà di inviarne.
+
+00:58:58.210 --> 00:59:00.050
+Ecco il principio e la base di tutto questo.
+
+00:59:00.610 --> 00:59:02.010
+Rendere la scelta giusta e la scelta più semplice.
+
+00:59:02.290 --> 00:59:07.230
+Se l'etichetta corretta richiede che una persona ricordi una regola, avete progettato per la giornata ideale del vostro miglior dipendente.
+
+00:59:07.950 --> 00:59:14.370
+Se l'etichetta corretta è già selezionata e appare un consiglio mirato solo quando il contenuto sembra sensibile, avete progettato per un normale martedì pomeriggio.
+
+00:59:15.370 --> 00:59:17.130
+I valori predefiniti come abbiamo visto fanno il loro pesante.
+
+00:59:17.530 --> 00:59:18.830
+I suggerimenti gestiscono l'eccezione.
+
+00:59:19.290 --> 00:59:20.310
+La formazione è ciò che resta.
+
+00:59:20.370 --> 00:59:23.250
+Prima di programmare una singola sessione, ponetevi una domanda più difficile.
+
+00:59:23.250 --> 00:59:26.750
+Dove le persone sbagliano scelte e il sistema avrebbe potuto scegliere il posto loro?
+
+00:59:27.050 --> 00:59:31.670
+Ogni volta che la risposta è sì, quella è una correzione che vale più di un'altra slide e più di un'altra slide e che ci porta al problema delle misurazioni.
+
+00:59:31.950 --> 00:59:33.190
+La partecipazione è il dato più facile da ottenere.
+
+00:59:33.570 --> 00:59:34.850
+Quante persone si sono collegate alla chiamata?
+
+00:59:35.230 --> 00:59:36.130
+Quante hanno aperto l'email?
+
+00:59:36.550 --> 00:59:37.450
+Quante hanno completato il modulo?
+
+00:59:37.850 --> 00:59:39.830
+Nessuno di questi dati dice cosa faccia realmente qualcuno da testa.
+
+00:59:40.270 --> 00:59:41.190
+Misura invece il comportamento.
+
+00:59:41.590 --> 00:59:44.330
+Qual è la percentuale di nuovi file con un'etichetta deliberata non predefinita?
+
+00:59:44.330 --> 00:59:46.230
+Quanto spesso le persone accettano un consiglio?
+
+00:59:46.630 --> 00:59:47.670
+Dove si concentrano i decressamenti?
+
+00:59:47.670 --> 00:59:50.190
+Quanti ticket menzionano le ticket questo mese rispetto al precedente?
+
+00:59:50.690 --> 00:59:54.790
+Questi numeri cambiano quando il prodotto migliora e restano fermi quando cambia solo la comunicazione.
+
+00:59:55.490 --> 00:59:59.650
+Se la partecipazione è alta ma il comportamento non cambia, il problema non è la consapevolezza, è il prodotto.
+
+01:00:00.130 --> 01:00:03.550
+Tuttavia un po' di formazione è necessaria, funziona meglio se punta all'obiettivo giusto.
+
+01:00:04.750 --> 01:00:07.370
+Formazione che la gente ricorda davvero parte dalla durata.
+
+01:00:07.710 --> 01:00:09.490
+Una presentazione di un'ora sembra esaustiva.
+
+01:00:09.850 --> 01:00:12.250
+Copre ogni etichetta, ogni impostazione, ogni caso limite.
+
+01:00:12.490 --> 01:00:15.370
+E il lunedì successivo quasi nessuno ricorda nulla.
+
+01:00:15.370 --> 01:00:19.890
+Non perché le persone siano disattente, ma perché un'ora di regole senza il momento per usarle non rimane impresso.
+
+01:00:20.390 --> 01:00:21.490
+Tre minuti rimangano impresso.
+
+01:00:21.830 --> 01:00:29.210
+Uno scenario, una decisione, una breve clip o una sola schermata che dice che stai per inviare un foglio di calcolo con i dati bancari dei clienti a un contabile esterno.
+
+01:00:30.150 --> 01:00:30.890
+Cosa scegli e perché?
+
+01:00:31.610 --> 01:00:33.050
+Poi la risposta è il motivo alla base.
+
+01:00:33.510 --> 01:00:34.190
+Questa è l'intera lezione.
+
+01:00:34.590 --> 01:00:38.250
+La gente la finisce tra una riunione e l'altra e la scelta è abbastanza fresca ad essere usata allo stesso gioco.
+
+01:00:38.590 --> 01:00:39.490
+Crea una piccola raccolta di questo.
+
+01:00:40.110 --> 01:00:40.910
+Dieci, forse quindici.
+
+01:00:41.290 --> 01:00:44.310
+Ognuno copre una singola situazione e ognuno può essere guardato da solo.
+
+01:00:44.310 --> 01:00:46.810
+Nessuno deve assorbirsi quelli che non lo riguardano.
+
+01:00:47.150 --> 01:00:48.310
+Questo porta alla soluzione successiva.
+
+01:00:48.650 --> 01:00:49.370
+Insegna per l'uomo.
+
+01:00:49.690 --> 01:00:52.810
+Un analista finanziario gestisce file di buste paga, fatture e documenti di audit.
+
+01:00:53.530 --> 01:00:56.710
+Un ingegnere gestisce documenti di progettazione, codice sorgente e log di clienti.
+
+01:00:57.250 --> 01:01:00.210
+Un venditore gestisce proposte, prezzi e contratti con i partner.
+
+01:01:00.970 --> 01:01:05.070
+Ognuno di loro prende decisioni di etichettatura diverse, con conseguenze diverse, con conseguenze diverse.
+
+01:01:05.390 --> 01:01:08.470
+Dare a tutti e tre la stessa sessione significa che due terzi sono rumore, quindi dividila.
+
+01:01:08.470 --> 01:01:11.090
+Fai prima una domanda semplice a ogni gruppo.
+
+01:01:12.050 --> 01:01:13.610
+Quali sono i cinque file che utilizzi di più?
+
+01:01:14.230 --> 01:01:15.730
+Poi costruisci gli scenari attorno a quei file.
+
+01:01:16.510 --> 01:01:20.630
+Quando un responsabile finanziario vede un export di buste paga nell'esempio, presta attenzione perché la sua quotidianità,
+
+01:01:21.030 --> 01:01:23.090
+quando vede un memo generico riservato, si distrae.
+
+01:01:23.450 --> 01:01:24.390
+Per il materiale vero e proprio.
+
+01:01:25.010 --> 01:01:25.730
+Usa i tuoi documenti.
+
+01:01:25.990 --> 01:01:28.330
+Gli esempi generici sono facili da scrivere e facili da dimenticare.
+
+01:01:28.690 --> 01:01:30.270
+Quelli reali sono più complessi, ma lascia di sé.
+
+01:01:30.630 --> 01:01:32.770
+Prendi alcuni file reali dal progetto pilota.
+
+01:01:33.070 --> 01:01:34.430
+Rimuovi nomi e numeri e mostrali.
+
+01:01:34.430 --> 01:01:37.610
+Ecco un listino a prezzi fornitori che qualcuno ha etichettato come genera.
+
+01:01:37.810 --> 01:01:39.370
+Ecco quello che avrebbe dovuto essere riservato.
+
+01:01:39.690 --> 01:01:40.330
+Trova la differenza.
+
+01:01:40.950 --> 01:01:45.750
+Le persone riconoscono la struttura del proprio lavoro e ricordano le correzioni perché gli errori sembrano familiari.
+
+01:01:46.930 --> 01:01:48.450
+Chiedi permesso e rendi le anonimi concure.
+
+01:01:48.990 --> 01:01:52.250
+Una diapositiva di formazione che rivela il contenuto che dovrebbe proteggere sarebbe un vero disastro.
+
+01:01:52.790 --> 01:01:57.470
+C'è un altro posto dove la formazione può aver luogo a costo quasi zero, direttamente nell'app al momento della scelta.
+
+01:01:57.730 --> 01:02:01.170
+I suggerimenti sulle policy sono per i messaggi che appaiono in Word, Excel e Outlook,
+
+01:02:01.270 --> 01:02:02.970
+una frase sotto il selettore di etichette e un banner,
+
+01:02:02.970 --> 01:02:04.510
+quando qualcuno inserisce il numero di una carta.
+
+01:02:05.270 --> 01:02:06.890
+Questo file contiene i dati finanziari dei clienti.
+
+01:02:07.310 --> 01:02:08.110
+Si consiglia riservato.
+
+01:02:08.950 --> 01:02:12.750
+Questa è formazione fornita esattamente quando sorge il dubbio, senza riunioni, senza moduli.
+
+01:02:13.250 --> 01:02:15.130
+È anche abbastanza breve da essere letta davvero dalle persone.
+
+01:02:15.570 --> 01:02:17.290
+Crivi questi suggerimenti come li direbbe un collega.
+
+01:02:17.870 --> 01:02:20.850
+Parole semplici, un'idea sola, niente numeri di policy, niente linguaggio legale.
+
+01:02:21.290 --> 01:02:22.390
+Se richiede più di due righe tagliarò.
+
+01:02:22.870 --> 01:02:24.110
+Ultimo punto, la formazione è inerite.
+
+01:02:24.530 --> 01:02:27.610
+Le persone dimenticano e arrivano nuovi dipendenti che non hanno mai visto le sessioni origini.
+
+01:02:27.610 --> 01:02:32.250
+Quindi pianificata da entrambi, un breve ripasso ogni sei mesi legato a ciò che i dati mostrano che non sta funzionando.
+
+01:02:33.750 --> 01:02:37.970
+Se i declassamenti sono aumentati in un reparto, invia a quel reparto un nuovo scenario proprio su questo.
+
+01:02:38.070 --> 01:02:43.410
+Integra i clip da tre minuti nell'onboarding, così un nuovo assunto rivedrà nella prima settimana prima che si formino cattive abitudini.
+
+01:02:44.090 --> 01:02:44.870
+Mantieni il ripasso breve.
+
+01:02:44.870 --> 01:02:50.050
+Un messaggio con un singolo scenario è meglio di un corso di ricertificazione che tutti cliccano solo per passare ora.
+
+01:02:50.450 --> 01:02:53.510
+La formazione mirata in questo modo supporta il prodotto invece di scusarsi per esso.
+
+01:02:53.930 --> 01:02:57.830
+Le impostazioni predefinite sostengono il carico, i suggerimenti colgono il momento e le brevi lezioni colmano l'euro.
+
+01:02:58.250 --> 01:03:01.370
+Ma tutto questo presuppone che la minaccia principale sia una persona che sceglie l'etichetta sbagliata.
+
+01:03:01.810 --> 01:03:04.150
+Esiste un rischio più recente che non dipende affatto dalla scelta di qualcuno.
+
+01:03:04.790 --> 01:03:07.930
+Dipende da ciò che la piattaforma può raggiungere per conto di chiunque stia facendo la domanda.
+
+01:03:08.470 --> 01:03:09.330
+E questo ci porta a Copilot.
+
+01:03:10.010 --> 01:03:11.370
+Copilot e le etichette cosa cambia?
+
+01:03:11.970 --> 01:03:13.270
+Copilot non ha un proprio accesso.
+
+01:03:13.270 --> 01:03:14.750
+Questa è la prima cosa da chiarire.
+
+01:03:15.250 --> 01:03:18.810
+Quando qualcuno pone una domanda a Copilot, questo accede al contenuto utilizzando i permessi di quella persona.
+
+01:03:19.210 --> 01:03:19.650
+Niente di più.
+
+01:03:20.090 --> 01:03:21.990
+Se tu puoi aprire un file, Copilot può leggerlo per te.
+
+01:03:22.410 --> 01:03:24.330
+Se tu non puoi, lui non puoi, che sembra una buona notizia.
+
+01:03:24.790 --> 01:03:25.730
+In senso stretto lo è.
+
+01:03:26.090 --> 01:03:27.310
+Copilot non scardina nulla.
+
+01:03:27.870 --> 01:03:30.230
+Ma pensa cosa significa per un tenant attivo da dieci anni.
+
+01:03:30.910 --> 01:03:32.790
+Nel corso del tempo le persone hanno condiviso cose.
+
+01:03:33.270 --> 01:03:36.370
+Una cartella condivisa con tutti in azienda perché era più veloce che selezionare i nomi.
+
+01:03:36.950 --> 01:03:38.450
+Un team nato pubblico è rimasto tale.
+
+01:03:38.690 --> 01:03:41.650
+Un gruppo con 400 membri che nessuno ha mai ripulito.
+
+01:03:41.650 --> 01:03:44.710
+Ognuno di questi è un permesso che tecnicamente esiste.
+
+01:03:45.370 --> 01:03:47.690
+Nessuno ha usato la maggior parte di esse e nessuno li ha notati.
+
+01:03:48.270 --> 01:03:48.970
+Copilot li nota.
+
+01:03:49.370 --> 01:03:50.990
+Chiedi del piano di compensi del prossimo anno.
+
+01:03:51.470 --> 01:03:54.810
+E se un riepilogo buste paga si trova in un sito che metà azienda può tecnicamente aprire,
+
+01:03:55.030 --> 01:03:56.190
+potrebbe apparire una risposta.
+
+01:03:56.510 --> 01:03:57.950
+La persona che ha chiesto è nemmeno andata a cercare.
+
+01:03:58.310 --> 01:04:00.350
+Il sistema ha semplicemente fatto ciò che l'autorizzato a fare
+
+01:04:00.350 --> 01:04:01.890
+lo ha fatto più velocemente di quanto farebbe più.
+
+01:04:02.170 --> 01:04:04.690
+Quindi l'eccessiva condivisione smette di essere un problema silenzioso di gestione.
+
+01:04:04.930 --> 01:04:05.690
+Diventa un problema visibile.
+
+01:04:05.690 --> 01:04:07.290
+Ora, dove entrano in gioco le etichette?
+
+01:04:07.550 --> 01:04:08.030
+In due modi.
+
+01:04:08.350 --> 01:04:09.710
+Il primo è quello verso cui stavamo lavorando.
+
+01:04:10.110 --> 01:04:12.170
+Un'etichetta con critografia comporta diritti di utilizzo.
+
+01:04:12.390 --> 01:04:15.830
+Le autorizzazioni che stabiliscono chi può visualizzare, modificare, copiare o estrarre contenuto.
+
+01:04:16.250 --> 01:04:17.250
+Copilot rispetta tali diritti.
+
+01:04:17.590 --> 01:04:20.630
+Se una persona può visualizzare un file ma non ha il diritto di estrarre il contenuto,
+
+01:04:20.710 --> 01:04:21.830
+Copilot deve rispettarlo.
+
+01:04:22.170 --> 01:04:24.390
+La protezione impostata sul file segue l'esperienza dell'IA,
+
+01:04:24.610 --> 01:04:25.910
+non solo la visualizzazione della cartella.
+
+01:04:26.270 --> 01:04:27.210
+Secondo è più difficile da notare.
+
+01:04:27.210 --> 01:04:30.210
+Quando Copilot crea una risposta da diverse fonti,
+
+01:04:30.270 --> 01:04:33.930
+la risposta eredita l'etichetta di sensibilità più alta tra i contenuti utilizzati.
+
+01:04:34.890 --> 01:04:37.670
+Se attingi da un documento generale e da uno altamente riservato,
+
+01:04:37.750 --> 01:04:39.290
+la risposta sarà altamente riservata.
+
+01:04:39.670 --> 01:04:42.170
+Se quella risposta finisce in un nuovo file Word o in una bozza di mail,
+
+01:04:42.270 --> 01:04:43.170
+l'etichetta viene mantenuta.
+
+01:04:43.710 --> 01:04:45.330
+È l'etichetta che svolge il suo terzo compito,
+
+01:04:45.430 --> 01:04:46.530
+quello di cui abbiamo parlato all'inizio.
+
+01:04:46.530 --> 01:04:49.530
+Non solo contrassegnare, non solo limitare, ma trasmettere un segnale a val.
+
+01:04:50.110 --> 01:04:52.590
+Nuovo contenuto nasce con la sensibilità dei suoi ingredienti
+
+01:04:52.590 --> 01:04:53.690
+senza che nessuno debba scegliere.
+
+01:04:53.950 --> 01:04:55.490
+Quindi le etichette contano di più o non di meno.
+
+01:04:55.490 --> 01:04:58.370
+Sono il modo in cui la protezione segue i dati in luoghi che non avevi previsto.
+
+01:04:58.650 --> 01:05:00.330
+Ma ecco il cambiamento alla base di tutto questo
+
+01:05:00.330 --> 01:05:02.330
+ed è la parte che modifica il modo in cui dovresti pianificare.
+
+01:05:02.770 --> 01:05:04.670
+Per anni la ricerca ha nascosto autorizzazioni errate
+
+01:05:04.670 --> 01:05:05.690
+essendo inefficiente nel trovare.
+
+01:05:06.330 --> 01:05:07.330
+Pensa come funzionava.
+
+01:05:07.750 --> 01:05:09.250
+Un file era condiviso troppo ampiamente,
+
+01:05:09.490 --> 01:05:11.630
+ma l'unico modo per raggiungerlo era sapere dove si trovava,
+
+01:05:11.970 --> 01:05:13.110
+indovinare le parole chiave giuste
+
+01:05:13.110 --> 01:05:15.150
+o cliccare attraverso cinque livelli di navigazione.
+
+01:05:15.630 --> 01:05:16.450
+Quasi nessuno lo faceva.
+
+01:05:16.710 --> 01:05:18.910
+L'esposizione era reale, ma sepolta sotto lo sforzo necessario.
+
+01:05:19.070 --> 01:05:21.210
+L'oscurità svolgeva un lavoro che nessuno le aveva assegnato.
+
+01:05:21.210 --> 01:05:22.810
+Copilot elimina lo sforzo.
+
+01:05:23.090 --> 01:05:25.170
+Una domanda in linguaggio naturale sostituisce cinque clic.
+
+01:05:25.690 --> 01:05:26.890
+Qualsiasi cosa sia a portata di mano
+
+01:05:26.890 --> 01:05:29.430
+torna in pochi secondi riassunta con i collegamenti già tracciati per te.
+
+01:05:29.730 --> 01:05:31.010
+È qui che la vecchia ipotesi crolla.
+
+01:05:31.430 --> 01:05:32.990
+L'ipotesi era che tecnicamente accessibile
+
+01:05:32.990 --> 01:05:34.890
+e praticamente esposto fossero due cose diverse.
+
+01:05:35.190 --> 01:05:35.710
+Non lo sono più.
+
+01:05:36.130 --> 01:05:37.510
+Il divario tra le due era lo sforzo.
+
+01:05:37.910 --> 01:05:39.350
+Lo sforzo è appena sceso quasi a zero.
+
+01:05:39.910 --> 01:05:41.770
+Ecco perché direi che Copilot non crea un nuovo rischio,
+
+01:05:41.850 --> 01:05:44.110
+quanto piuttosto rimuove ciò che nascondeva un rischio vecchio.
+
+01:05:44.610 --> 01:05:46.210
+Il tuo modello di autorizzazione è sempre stato così aperto.
+
+01:05:46.650 --> 01:05:48.690
+Nessuno aveva creato un modo abbastanza veloce per dimostrarlo.
+
+01:05:51.210 --> 01:05:53.250
+Se le etichette servissero solo a contrassegnare i documenti per la conformità,
+
+01:05:53.350 --> 01:05:54.750
+potresti trattare come semplice burocrazia.
+
+01:05:55.010 --> 01:05:57.890
+Una volta che un assistente IA legge tutto ciò a cui una persona può accedere,
+
+01:05:58.030 --> 01:06:01.170
+le etichette diventano parte del modo in cui decidi cosa quell'assistente dovrebbe poter dire.
+
+01:06:01.510 --> 01:06:04.370
+Sono un input per la preparazione all'IA, non un progetto secondario ad esso.
+
+01:06:04.610 --> 01:06:05.830
+Questo è il cambiamento di modelli in marino.
+
+01:06:06.170 --> 01:06:07.990
+La classificazione serviva a descrivere il contenuto.
+
+01:06:08.690 --> 01:06:11.270
+Ora governa anche ciò che viene mostrato, riassunto e trasmesso.
+
+01:06:12.230 --> 01:06:14.190
+Comprendendo questo, i fallimenti sono specifici.
+
+01:06:14.790 --> 01:06:16.850
+Si ripetono in tutte le organizzazioni con schemi simili
+
+01:06:16.850 --> 01:06:19.970
+e la maggior parte deriva dal trattare un'etichetta come qualcosa di più di ciò che è.
+
+01:06:20.710 --> 01:06:22.190
+Insidie e modelli di fallimento di Copail.
+
+01:06:22.710 --> 01:06:24.490
+Cinque modelli si presentano ripetutamente.
+
+01:06:24.810 --> 01:06:26.690
+Ognuno inizia con un presupposto ragionevole.
+
+01:06:26.830 --> 01:06:27.810
+Primo il contenuto legacy.
+
+01:06:28.330 --> 01:06:30.590
+La maggior parte di tenant conserva anni di file che nessuno ha mai etichettato.
+
+01:06:31.230 --> 01:06:33.010
+Vecchie cartelle di progetto, rapporto archiviati,
+
+01:06:33.110 --> 01:06:35.690
+esportazioni che qualcuno ha salvato nel 2019 e dimenticato.
+
+01:06:36.250 --> 01:06:37.810
+Il ragionamento è che sia vecchio, quindi a basso rischio.
+
+01:06:38.330 --> 01:06:39.050
+Nessuno guarda più.
+
+01:06:39.630 --> 01:06:40.430
+L'età non è un controllo.
+
+01:06:40.430 --> 01:06:43.510
+Un vecchio file con dati sulle buste paga, leggibile esattamente come il nuovo.
+
+01:06:43.870 --> 01:06:45.650
+L'acopilot non importa quando è stato scritto un file.
+
+01:06:46.070 --> 01:06:47.590
+Importa solo se chi lo richiede può aprirlo.
+
+01:06:47.830 --> 01:06:50.230
+Quindi il contenuto legacy non etichettato viene trattato come sicuro
+
+01:06:50.230 --> 01:06:52.530
+per impostazione predefinita semplicemente perché nulla dice il controllo.
+
+01:06:52.670 --> 01:06:54.070
+Il secondo modello è fonte di confusione.
+
+01:06:54.270 --> 01:06:56.270
+Colpisce chi ha eseguito correttamente il lavoro di crittografia.
+
+01:06:56.810 --> 01:06:58.350
+Metti il caso che un file sia crittografato
+
+01:06:58.350 --> 01:07:00.890
+e l'utente abbia il diritto di visualizzarlo, ma non quello di estrarne dati.
+
+01:07:01.530 --> 01:07:03.750
+Chiedono a Copilot di riassumerlo, di inserire una bozza.
+
+01:07:04.470 --> 01:07:07.590
+Il risultato arriva scarso, bloccato o stranamente incompleto.
+
+01:07:07.590 --> 01:07:09.390
+L'utente non vede un errore chiaro.
+
+01:07:09.790 --> 01:07:13.070
+Vede uno strumento che sembra rotto, o peggio, che sembra nascondere qualcosa.
+
+01:07:13.890 --> 01:07:14.930
+L'etichetta sta facendo il suo lavoro.
+
+01:07:15.270 --> 01:07:18.050
+Il diritto di utilizzo viene rispettato, ma nessuno ha spiegato il perché all'utente.
+
+01:07:18.130 --> 01:07:19.510
+L'updesk non riconosce il sintomo.
+
+01:07:20.050 --> 01:07:22.530
+Così i primi ticket vengono chiusi come glitch di Copilot
+
+01:07:22.530 --> 01:07:25.530
+e la causa reale resta sepolta finché qualcuno non collega le due cose.
+
+01:07:25.850 --> 01:07:26.690
+Rissolvi l'anticipo.
+
+01:07:27.330 --> 01:07:30.630
+Scrivi una breve spiegazione di come appare un limite ai diritti di utilizzo in Copilot
+
+01:07:30.630 --> 01:07:33.510
+e consegnale all'assistenza prima che venga rilasciata la prima licenza.
+
+01:07:33.870 --> 01:07:34.830
+Terzo punto è la tempistica.
+
+01:07:34.830 --> 01:07:37.570
+I team lanciano Copilot per primi perché l'azienda è entusiasta.
+
+01:07:37.910 --> 01:07:39.950
+L'etichetta arrivano più tardi, una volta che il programma si è messo in via.
+
+01:07:40.510 --> 01:07:42.610
+E nel frattempo le persone inviano prompt liberamente,
+
+01:07:42.710 --> 01:07:44.390
+si scrivono bozze, si condividono riassunti,
+
+01:07:44.450 --> 01:07:47.270
+il contenuto fluisce in nuovi file senza alcuna indicazione della sua sensibilità.
+
+01:07:47.850 --> 01:07:50.630
+Puoi etichettare le fonti in seguito, ma gli output esistono già.
+
+01:07:51.170 --> 01:07:53.110
+Un riepilogo incollato in una presentazione del mese scorso
+
+01:07:53.110 --> 01:07:55.290
+non riceve un'etichetta solo perché corretto la fonte di questa stima.
+
+01:07:55.670 --> 01:07:57.270
+Quel contenuto è là fuori senza etichetta
+
+01:07:57.270 --> 01:07:59.290
+e nessuno andrà a cercarlo file per file.
+
+01:07:59.930 --> 01:08:01.370
+Quindi l'ordine è importante e ci arriveremo.
+
+01:08:01.370 --> 01:08:04.690
+Per ora tieni presente che le etichette applicate in ritardo proteggono il futuro.
+
+01:08:05.090 --> 01:08:05.950
+Non riparano il passato.
+
+01:08:06.730 --> 01:08:09.530
+Quarto punto, quello con il raggio d'azione più ampio, la condivisione eccessiva.
+
+01:08:09.870 --> 01:08:12.410
+Un sito con 400 membri e una cartella di documenti del Consiglio di Amministrazione.
+
+01:08:12.910 --> 01:08:15.030
+Un team pubblico fin dal primo giorno è mai cambiato.
+
+01:08:15.690 --> 01:08:17.970
+Un link di condivisione impostato su chiunque in azienda,
+
+01:08:18.170 --> 01:08:19.690
+creato in fretta prima di una scadenza.
+
+01:08:20.410 --> 01:08:23.230
+Nessuno di questi è mai stato segnalato perché nessuno leggeva l'intero tenant.
+
+01:08:23.690 --> 01:08:24.910
+Copilot legge l'intero tenant.
+
+01:08:24.910 --> 01:08:27.990
+Trasforma ognuna di quelle porte aperte in una potenziale risposta.
+
+01:08:29.090 --> 01:08:32.690
+D'è uno schema spiacevole perché il proprietario dei documenti non ha fatto nulla di sbagliato oggi.
+
+01:08:33.650 --> 01:08:36.270
+Fatto qualcosa di comodo tre anni fa e il conto è arrivato solo ora.
+
+01:08:36.930 --> 01:08:39.190
+Il quinto è quello che metterei su una slide se questa fosse una slide.
+
+01:08:39.710 --> 01:08:41.310
+Scambiare un'etichetta per una correzione dei permessi.
+
+01:08:41.710 --> 01:08:42.150
+Funziona così.
+
+01:08:42.670 --> 01:08:44.290
+Qualcuno trova una cartella sovracondivisa,
+
+01:08:44.430 --> 01:08:45.790
+applica riservato e va avanti.
+
+01:08:46.210 --> 01:08:46.850
+Problema risolto.
+
+01:08:47.090 --> 01:08:48.290
+Guarda cosa ha fatto davvero l'etichetta.
+
+01:08:48.290 --> 01:08:50.870
+Se non comporta crittografia ha solo contrassegnato il file in realtà.
+
+01:08:51.170 --> 01:08:52.990
+Le stesse 400 persone possono ancora aprirlo.
+
+01:08:53.170 --> 01:08:54.050
+Il link di condivisione è ancora.
+
+01:08:54.050 --> 01:08:57.190
+L'etichetta è diventata di nuovo un adesivo su una porta che resta sbloccata.
+
+01:08:57.890 --> 01:09:00.410
+Anche con la crittografia l'etichetta limita solo ciò che accade al file.
+
+01:09:00.950 --> 01:09:04.710
+Non corregge l'appartenenza al sito, non rimuove l'ospite, non aggiornato né chiude il link aperto.
+
+01:09:05.370 --> 01:09:06.990
+Sono lavori separati con strumenti separati.
+
+01:09:07.390 --> 01:09:08.890
+L'etichetta non può risolverli per prossimità.
+
+01:09:09.290 --> 01:09:11.250
+Metti questi 5 punti accanto all'altro e noterai qualcosa.
+
+01:09:11.970 --> 01:09:13.150
+Nessuno di esse è un bug di Copelo.
+
+01:09:13.470 --> 01:09:16.190
+Ognuno ha una vecchia lacuna nel modello di permessi di etichettatura
+
+01:09:16.190 --> 01:09:18.490
+che finalmente ha un lettore abbastanza veloce da trovarla.
+
+01:09:18.490 --> 01:09:22.090
+I fallimenti devono saltare le basi per poi aspettarsi che l'etichetta ripari tutto
+
+01:09:22.090 --> 01:09:23.930
+il che significa che la soluzione segua una sequenza.
+
+01:09:24.770 --> 01:09:27.730
+Fai il lavoro nell'ordine giusto e ognuno di questi schemi si ridurrà.
+
+01:09:28.490 --> 01:09:31.010
+Fallo fuori ordine e li incontrerai tutti e cinque entro il primo mese.
+
+01:09:31.830 --> 01:09:34.190
+La sequenza di preparazione per Copilot è l'ordine delle operazioni.
+
+01:09:34.310 --> 01:09:35.030
+Ecco la risposta completa.
+
+01:09:35.030 --> 01:09:37.790
+E inizia con un passaggio che molti team non vogliono saltare
+
+01:09:37.790 --> 01:09:39.190
+perché non riguarda affatto le etichette.
+
+01:09:39.710 --> 01:09:40.930
+Trova prima la condivisione eccessiva.
+
+01:09:41.170 --> 01:09:42.890
+Prima di etichettare un singolo file per Copilot,
+
+01:09:43.070 --> 01:09:45.870
+devi sapere cosa è aperto, quali siti hanno un'appartenenza ampia,
+
+01:09:46.130 --> 01:09:48.050
+quali file contengono link per chiunque in azienda
+
+01:09:48.050 --> 01:09:51.330
+e quali team sono ancora pubblici dal giorno in cui sono stati creati.
+
+01:09:52.110 --> 01:09:54.050
+Esegui revisioni dell'accesso ai siti e chiedi ai proprietari
+
+01:09:54.050 --> 01:09:55.730
+di confermare chi debba davvero farne parte.
+
+01:09:56.410 --> 01:09:58.830
+Usa i report che è il tuo tenant già per i link di condivisione
+
+01:09:58.830 --> 01:10:02.290
+e i permessi dei siti, ordinando i risultati in base alla sensibilità del contenuto.
+
+01:10:02.290 --> 01:10:04.670
+Poi fai pulizia, rimuovi gli utenti non più attivi
+
+01:10:04.670 --> 01:10:06.870
+e sostituisci i link generici con quelli specifici.
+
+01:10:06.950 --> 01:10:09.590
+Riduci il gruppo di 400 persone a quelle 40 che lavorano in FTV.
+
+01:10:10.090 --> 01:10:11.390
+È un lavoro lento e poco appariscente,
+
+01:10:11.470 --> 01:10:13.750
+ma garantisce la sicurezza di Copilot più di qualsiasi etichetta.
+
+01:10:14.130 --> 01:10:16.130
+Noi abbiamo visto che un etichetta non può chiudere una porta rimasta aperta.
+
+01:10:16.450 --> 01:10:17.210
+Questo passaggio è la chiave.
+
+01:10:17.670 --> 01:10:20.570
+Secondo, etichetta agli archivi a rischio più elevato, non tutto, non ancora.
+
+01:10:21.530 --> 01:10:23.690
+Punta ai settori in cui una risposta erata farebbe più danni.
+
+01:10:24.050 --> 01:10:26.190
+Ibrerie finanziarie, siti HR, questioni legali,
+
+01:10:26.190 --> 01:10:28.930
+materiali per il consiglio di amministrazione e qualsiasi dato regolamentato.
+
+01:10:28.930 --> 01:10:31.910
+Applica le etichette prima lì, usando le impostazioni predefinite
+
+01:10:31.910 --> 01:10:33.510
+e le policy lato servizio viste in precedenza.
+
+01:10:34.110 --> 01:10:35.730
+Esegui una simulazione prima di applicare le restrizioni.
+
+01:10:36.110 --> 01:10:37.810
+L'obiettivo non è la copertura totale,
+
+01:10:37.930 --> 01:10:39.670
+ma che i contenuti più critici abbiano un'etichetta
+
+01:10:39.670 --> 01:10:42.270
+e ove necessario la criptografia con diritti di utilizzo reali.
+
+01:10:43.030 --> 01:10:45.430
+Fallo prima di estendere l'accesso a Copilot, non tutto.
+
+01:10:45.810 --> 01:10:47.910
+Le etichette applicate in ritardo proteggono solo il futuro, ricordi?
+
+01:10:48.270 --> 01:10:50.110
+Quindi devono essere attive prima che inizioni i prompt.
+
+01:10:50.790 --> 01:10:52.850
+Terzo, aggiungi un controllo per le interazioni stesse.
+
+01:10:53.570 --> 01:10:57.270
+La prevenzione della perdita di dati di LP ora può essere applicata a Copilot in scena risupportata.
+
+01:10:57.270 --> 01:11:00.870
+Una policy può impedire a Copilot di elaborare contenuti con un'etichetta specifica
+
+01:11:00.870 --> 01:11:03.230
+così che un prompt che coinvolge quel materiale non restituisca nulla.
+
+01:11:03.950 --> 01:11:05.790
+Verifica cosa è supportato nel tuo tenant oggi,
+
+01:11:05.950 --> 01:11:07.330
+poiché questo ambito evolve rapidamente,
+
+01:11:07.570 --> 01:11:09.070
+e testa il comportamento con un account real.
+
+01:11:09.510 --> 01:11:12.210
+Non dare per scontato che una policy funzioni solo perché il portale l'ha accettato.
+
+01:11:12.510 --> 01:11:13.930
+Questa è l'area di risicurezza sotto l'etichetta.
+
+01:11:14.510 --> 01:11:15.870
+L'etichetta è a contrassegna del contenuto.
+
+01:11:16.090 --> 01:11:18.270
+La policy decide cosa fa l'assistente quando la incontra.
+
+01:11:18.930 --> 01:11:22.290
+Quarto, avvia un pilota di Copilot con un gruppo ristretto, non l'intero tenant.
+
+01:11:22.430 --> 01:11:24.350
+Una popolazione definita, i cui siti ha revisionato
+
+01:11:24.350 --> 01:11:25.990
+e i cui contenuti chiave sono etichettati.
+
+01:11:26.630 --> 01:11:28.250
+Scegli persone disposte a riferire cosa vedono
+
+01:11:28.250 --> 01:11:30.630
+e includi alcune dei team in cui il file è protetto maggiormente.
+
+01:11:31.070 --> 01:11:32.950
+Chiedi loro di provare intenzionalmente i prompti difficili.
+
+01:11:33.610 --> 01:11:35.270
+Riassumi le ultime modifiche e le retribuzioni.
+
+01:11:35.770 --> 01:11:36.970
+Cosa c'è nella cartella dell'acquisizione?
+
+01:11:37.550 --> 01:11:39.770
+Se emerge qualcosa di sensibile, hai trovato una falla,
+
+01:11:39.930 --> 01:11:41.110
+mentre il pubblico è ancora limitato.
+
+01:11:41.510 --> 01:11:43.210
+E istruisci il tuo helpdesk prima del giorno di lancio.
+
+01:11:43.730 --> 01:11:45.090
+Risultati confusi dei diritti d'uso,
+
+01:11:45.190 --> 01:11:46.790
+riassunti scarni e stratti bloccati,
+
+01:11:46.870 --> 01:11:48.550
+per tutto questo devono esserci risposte pronte.
+
+01:11:49.250 --> 01:11:51.550
+Altrimenti la prima settimana di ticket non ti insegnerà nulla
+
+01:11:51.550 --> 01:11:53.650
+e farà credere agli utenti che Copilot sia affidabile.
+
+01:11:54.850 --> 01:11:56.210
+Quinto, monitora dopo il rilascio.
+
+01:11:56.890 --> 01:11:58.610
+La fine del progetto pilota non è il traguardo.
+
+01:11:59.270 --> 01:12:01.830
+Attiva il controllo per le interazioni di Copilot e rivedilo periodicamente.
+
+01:12:02.430 --> 01:12:04.450
+Osserva quali contenuti etichettati vengono citati,
+
+01:12:04.550 --> 01:12:05.670
+quali prompt vengono bloccati
+
+01:12:05.670 --> 01:12:07.390
+e quali siti continuano ad apparire nelle risposte.
+
+01:12:07.870 --> 01:12:10.930
+Se un file è riservato appare dove non dovrebbe traccia il percorso di autorizzazione
+
+01:12:10.930 --> 01:12:12.030
+che lo ha permesso, correggilo
+
+01:12:12.030 --> 01:12:13.610
+e prendi nota di ciò che hai imparato.
+
+01:12:14.130 --> 01:12:16.750
+Poi integra queste informazioni nella successiva serie di revisioni di accessi.
+
+01:12:17.330 --> 01:12:18.350
+Ogni rilascio ampia l'audience
+
+01:12:18.350 --> 01:12:21.250
+a sé ogni ampliamento può esporre qualcosa che il round precedente ha tralasciato.
+
+01:12:21.750 --> 01:12:24.070
+Quindi tratta ogni espansione come un piccolo progetto a sé
+
+01:12:24.070 --> 01:12:25.790
+ripetendo la stessa sequenza su scala ridò.
+
+01:12:26.330 --> 01:12:27.190
+Eseguilo in quest'ordine
+
+01:12:27.190 --> 01:12:29.650
+e i cinque modelli di fallimento perterranno gran parte della loro forma.
+
+01:12:29.890 --> 01:12:31.150
+I contenuti legacy vengono ritrovati.
+
+01:12:31.430 --> 01:12:33.170
+I contenuti crittografati hanno spiegazioni in attesa.
+
+01:12:33.530 --> 01:12:34.830
+Le etichette esistono prima dei prompt.
+
+01:12:35.110 --> 01:12:36.290
+Le porte aperte vengono chiuse
+
+01:12:36.290 --> 01:12:37.990
+e nessuno scambia un'etichetta per una seratura.
+
+01:12:37.990 --> 01:12:39.110
+Questo copre il percorso fin qui.
+
+01:12:39.390 --> 01:12:41.450
+Ma una sequenza funziona solo se qualcuno continua a eseguire.
+
+01:12:41.710 --> 01:12:43.710
+Le etichette cambiano, avvengono riorganizzazioni,
+
+01:12:43.810 --> 01:12:44.730
+arrivano nuove normative
+
+01:12:44.730 --> 01:12:48.050
+e qualcuno deve gestire tutto ciò molto tempo dopo che l'immel di lancio è stata dimenticata.
+
+01:12:48.530 --> 01:12:50.390
+E governance, responsabilità e operazioni continuative.
+
+01:12:50.670 --> 01:12:52.570
+Ogni programma di etichettatura ha un responsabile fin del primo.
+
+01:12:52.970 --> 01:12:55.310
+80 mesi dopo quella persona si è spostata in un altro team.
+
+01:12:55.890 --> 01:12:57.290
+Nessuno ricorda chi approvi cosa.
+
+01:12:57.850 --> 01:12:59.130
+Quindi non mi è una responsabile intenzione a me.
+
+01:12:59.490 --> 01:13:00.690
+Una persona sola non comitato.
+
+01:13:01.110 --> 01:13:02.570
+Il titolo conta meno della sua autorità.
+
+01:13:02.790 --> 01:13:04.250
+Deve avere il potere di dire di no
+
+01:13:04.250 --> 01:13:07.490
+e deve usarlo perché la pressione su una tassonomia è sempre al rialzo.
+
+01:13:07.910 --> 01:13:09.850
+L'ufficio legale vuole un'etichetta per il materiale privilegiato.
+
+01:13:10.150 --> 01:13:11.770
+Il marketing ne vuole una per i lanci sotto embargo.
+
+01:13:12.190 --> 01:13:13.330
+Un ufficio regionale ne vuole una prova.
+
+01:13:13.330 --> 01:13:14.750
+Ogni richiesta sembra ragioniva.
+
+01:13:15.290 --> 01:13:17.370
+Somma le tutte e ti ritroverai di nuovo con 20 etichette.
+
+01:13:17.630 --> 01:13:19.710
+La decisione in 3 secondi per cui abbiamo progettato il sistema è sbagliato.
+
+01:13:19.890 --> 01:13:21.110
+Ecco perché esiste il controllo delle modelle.
+
+01:13:21.450 --> 01:13:22.610
+Non per rallentare le persone
+
+01:13:22.610 --> 01:13:25.530
+ma per rendere il dire di no un processo invece di un tratto della personalità.
+
+01:13:25.930 --> 01:13:26.570
+Ventilo leggero.
+
+01:13:26.790 --> 01:13:28.450
+Un breve modulo di richiesta con 4 domande.
+
+01:13:28.970 --> 01:13:31.890
+Quale regola di gestione impone questa etichetta che nessuna di quelli esistenti prevede?
+
+01:13:32.210 --> 01:13:33.510
+Chi la applicherà e con quale frequenza?
+
+01:13:33.870 --> 01:13:34.990
+Cosa succede se non la creiamo?
+
+01:13:35.450 --> 01:13:37.170
+E quale etichetta ritireremo per fare spazio?
+
+01:13:37.570 --> 01:13:39.370
+Quest'ultima domanda è quella che fa il lavoro sporco.
+
+01:13:39.370 --> 01:13:42.730
+Se nessuno sa indicare qualcosa da ritirare, l'etichetta probabilmente non è necessaria.
+
+01:13:43.290 --> 01:13:45.890
+Se la risposta a un'etichetta esistente con un'impostazione modificata
+
+01:13:45.890 --> 01:13:47.150
+è appena risparmiata una nuova etichetta.
+
+01:13:47.590 --> 01:13:49.170
+Poi dia il responsabile a un ritmo di revisione.
+
+01:13:49.250 --> 01:13:50.750
+La cadenza trimestrale funziona per la maggior parte.
+
+01:13:51.130 --> 01:13:52.090
+Non si è troppo confusionale.
+
+01:13:52.370 --> 01:13:53.130
+Annuale è troppo tardi.
+
+01:13:53.430 --> 01:13:54.570
+Ogni trimestre osserva tre aspetti.
+
+01:13:54.970 --> 01:13:55.910
+Innanzitutto l'utilizzo delle etichette.
+
+01:13:56.370 --> 01:13:57.530
+Quali etichette hanno un peso reale?
+
+01:13:57.590 --> 01:13:58.670
+Quali sono malapena utilizzate?
+
+01:13:59.370 --> 01:14:01.490
+Un'etichetta usata da 40 persone su 40.000
+
+01:14:01.490 --> 01:14:03.210
+è troppo specifica o chiamata male?
+
+01:14:03.950 --> 01:14:04.970
+Secondo luogo gli acclassamenti.
+
+01:14:04.970 --> 01:14:06.390
+Come abbiamo visto nel progetto pilota,
+
+01:14:06.450 --> 01:14:09.430
+i temi in quelle giustificazioni indicano dove la tassonomia è sotto stress.
+
+01:14:10.010 --> 01:14:11.730
+Un gruppo che non era presente lo scorso trimestre
+
+01:14:11.730 --> 01:14:13.170
+significa che qualcosa è cambiato.
+
+01:14:13.250 --> 01:14:14.770
+E al terzo posto l'accuratezza della domanda.
+
+01:14:15.210 --> 01:14:16.910
+Campiona le corrispondenze e conta quelle errate
+
+01:14:16.910 --> 01:14:18.550
+e controlla se il tasso sta aumentando.
+
+01:14:19.070 --> 01:14:19.970
+Il contenuto cambia nel tempo.
+
+01:14:20.450 --> 01:14:22.650
+Una regola efficace a marzo può perdere precisione entro lo tu.
+
+01:14:23.050 --> 01:14:25.130
+Metti per iscritto i risultati anche solo in una pagina.
+
+01:14:25.530 --> 01:14:27.150
+Altrimenti il prossimo responsabile partirà da zero.
+
+01:14:27.550 --> 01:14:29.670
+Passiamo ora agli eventi esterni che mettono in crisi il programma.
+
+01:14:29.830 --> 01:14:30.790
+Le fusi nel primo posto.
+
+01:14:30.790 --> 01:14:33.990
+Due aziende, due tassonomie, due idee diverse di cosa significhi riservato.
+
+01:14:34.710 --> 01:14:37.890
+La tentazione a unire i due set finendo con otto livelli è un disastro.
+
+01:14:38.650 --> 01:14:39.010
+Resisti.
+
+01:14:39.590 --> 01:14:42.450
+Mappa le etichette acquisite sulle tue in base alla regola di gestione e non al nome.
+
+01:14:43.610 --> 01:14:47.170
+Il loro riservato potrebbe essere il tuo altamente confidenziale o qualcosa nel mezzo.
+
+01:14:48.010 --> 01:14:50.250
+L'unico modo per saperlo è confrontare ciò che ciascuno impone.
+
+01:14:50.810 --> 01:14:53.170
+Poi procedi con la migrazione ondate come faresti con qualsiasi altrimenti.
+
+01:14:53.530 --> 01:14:55.350
+Le riorganizzazioni sono la versione più silenziale.
+
+01:14:55.610 --> 01:14:57.350
+Ricorda che le etichette dipartimentali invecchiano male.
+
+01:14:57.350 --> 01:15:02.230
+Se hai seguito il consiglio precedente di etichettare per regola di gestione, una riorganizzazione non tocca quasi nulla.
+
+01:15:02.610 --> 01:15:05.050
+Team finanziario diventa due team e le etichette restano dove sono.
+
+01:15:05.430 --> 01:15:05.970
+Cosa cambia qui?
+
+01:15:06.310 --> 01:15:09.810
+Chi possiede le etichette dei contenitori, gruppi di supporto e le persone nell'elenco dei referenti?
+
+01:15:10.110 --> 01:15:10.550
+Aggiorna qui.
+
+01:15:10.970 --> 01:15:13.430
+Verifica che nessun sito sia rimasto con un proprietario che non lavora più lì.
+
+01:15:13.710 --> 01:15:14.910
+Le nuove normative sono il terzo punto.
+
+01:15:15.350 --> 01:15:18.530
+Riva una legge sulla privacy o un contratto con un cliente richiede qualcosa di specifico.
+
+01:15:19.110 --> 01:15:20.790
+Resiste all'impulso di aggiungere subito un etichetto.
+
+01:15:20.790 --> 01:15:24.450
+Chiediti prima se un'etichetta esistente impone già ciò che è richiesto.
+
+01:15:25.190 --> 01:15:25.630
+Spesso è così.
+
+01:15:26.250 --> 01:15:28.430
+L'unico elemento mancante è una regola di rilevamento,
+
+01:15:28.550 --> 01:15:32.150
+un tipo di informazione sensibile per i nuovi dati indirizzati a un'etichetta esistente.
+
+01:15:32.670 --> 01:15:34.310
+Questa è una modifica alla policy, non alla tassone.
+
+01:15:34.730 --> 01:15:35.710
+Mantiene una struttura stabile.
+
+01:15:36.050 --> 01:15:36.930
+La stabilità è l'obiettivo.
+
+01:15:37.210 --> 01:15:38.730
+Gli utenti imparano le etichette per ripetizione.
+
+01:15:39.130 --> 01:15:42.650
+Ogni modifica che apporti, anche se positiva, consuma parte di quell'apprendimento.
+
+01:15:42.650 --> 01:15:45.730
+La governance è il modo in cui tale stabilità sopravvive ad abbandoni,
+
+01:15:45.830 --> 01:15:47.430
+fusioni aziendali e cambiamenti delle regole.
+
+01:15:47.430 --> 01:15:50.590
+Ma anche un responsabile che decide distinto finirà per andare fuori rotte.
+
+01:15:50.910 --> 01:15:51.550
+Hanno bisogno di nulla.
+
+01:15:51.890 --> 01:15:53.270
+Devono sapere a quali numeri credere.
+
+01:15:54.150 --> 01:15:55.110
+Misurare ciò che conto.
+
+01:15:55.570 --> 01:15:57.250
+Inizia con il numero che tutti guardano per primo.
+
+01:15:57.910 --> 01:15:58.550
+Conteggio che etichetta.
+
+01:15:58.930 --> 01:16:00.050
+40.000 file etichettati.
+
+01:16:00.850 --> 01:16:01.750
+Fa un'ottima figura su una slide.
+
+01:16:01.970 --> 01:16:05.030
+Ma come abbiamo visto nell'introduzione può nascondere una protezione reale per a zero.
+
+01:16:05.150 --> 01:16:06.670
+Conteggio ti dice solo che il sistema era attivo.
+
+01:16:06.850 --> 01:16:08.010
+Non ti dice che il lavoro è stato fatto bene.
+
+01:16:08.350 --> 01:16:09.590
+Quindi misura invece tre rapporti.
+
+01:16:09.990 --> 01:16:11.050
+Copertura, correttezza.
+
+01:16:11.430 --> 01:16:12.030
+Non te lo proteggo.
+
+01:16:12.390 --> 01:16:14.790
+La copertura indica quanto del contenuto che dovrebbe avere un'etichetta
+
+01:16:14.790 --> 01:16:16.030
+ne sia effettivamente dotato.
+
+01:16:16.350 --> 01:16:16.850
+Non tutti i file.
+
+01:16:17.430 --> 01:16:18.890
+Prima i file negli archivi ad alto rischio.
+
+01:16:18.970 --> 01:16:21.270
+Poi il resto del tenant in cerchi sempre più ampi.
+
+01:16:21.810 --> 01:16:22.890
+Monitora la preposizione.
+
+01:16:23.010 --> 01:16:26.050
+Perché una media nasconde la singola libreria finanziaria ferma il 10%.
+
+01:16:26.050 --> 01:16:28.050
+La correttezza è più difficile e conta di più.
+
+01:16:29.010 --> 01:16:30.010
+Dei file che hanno l'etichetta.
+
+01:16:30.130 --> 01:16:31.170
+Quanti hanno quella giusta?
+
+01:16:31.850 --> 01:16:32.890
+Non puoi leggerlo da una dashboard.
+
+01:16:33.370 --> 01:16:34.310
+L'obtieni tramite il campionamento.
+
+01:16:34.670 --> 01:16:36.230
+Estrai 100 file etichettati ogni trimestre.
+
+01:16:36.570 --> 01:16:38.330
+Falli controllare da qualcuno che conosca il contenuto.
+
+01:16:38.590 --> 01:16:39.390
+Registra il tasso di error.
+
+01:16:39.390 --> 01:16:41.450
+Quel numero ti dice se i tuoi valori predefiniti
+
+01:16:41.450 --> 01:16:43.230
+e le regole di etichettatura automatica funzionano
+
+01:16:43.230 --> 01:16:44.230
+o sono solo riempitivi.
+
+01:16:44.690 --> 01:16:45.990
+Contenuto protetto è il terzo elemento.
+
+01:16:45.990 --> 01:16:48.390
+Di tutti i file che necessitano di una protezione reale
+
+01:16:48.390 --> 01:16:49.870
+quanti sono effettivamente crittografati
+
+01:16:49.870 --> 01:16:51.850
+in un contenitore etichettato coperti da policy?
+
+01:16:52.850 --> 01:16:54.350
+Questo è il rapporto che distingue un programma
+
+01:16:54.350 --> 01:16:55.330
+da una raccolta di adesivi.
+
+01:16:55.730 --> 01:16:57.490
+Un tenant può avere il 90% di copertura
+
+01:16:57.490 --> 01:16:59.230
+e un rapporto di protezione inferiore al 20%.
+
+01:16:59.230 --> 01:17:01.710
+Divario tra i due è la tua esposizione reale.
+
+01:17:02.510 --> 01:17:03.750
+Passiamo ora ai segnali che indicano
+
+01:17:03.750 --> 01:17:04.730
+che la tassolomia è sana.
+
+01:17:05.450 --> 01:17:06.230
+Innanzitutto i tassi...
+
+01:17:06.230 --> 01:17:07.710
+Conta quanto spesso il livello di un'etichetta.
+
+01:17:08.450 --> 01:17:10.230
+Leggi cosa scrivono nel campo della giustificazione.
+
+01:17:10.630 --> 01:17:12.770
+Se la maggior parte dei declassamenti riguarda un'etichetta
+
+01:17:12.770 --> 01:17:14.150
+probabilmente è troppo restrittiva
+
+01:17:14.150 --> 01:17:15.690
+applicata al contenuto sbagliato.
+
+01:17:16.450 --> 01:17:18.210
+Se le motivazioni si concentrano su una frase
+
+01:17:18.210 --> 01:17:19.970
+come necessario per l'invio al fornitore
+
+01:17:19.970 --> 01:17:22.210
+hai trovato una regola che non si adatta al lavoro.
+
+01:17:22.810 --> 01:17:23.630
+È un difetto di progettazione.
+
+01:17:24.070 --> 01:17:25.330
+La soluzione va portata al modello
+
+01:17:25.330 --> 01:17:26.470
+non in un email di promemoria.
+
+01:17:26.890 --> 01:17:28.150
+Osserva la tendenza più che livello solo.
+
+01:17:28.570 --> 01:17:29.770
+Un tasso di declassamento costante
+
+01:17:29.770 --> 01:17:30.290
+ha un costo di fondo.
+
+01:17:30.810 --> 01:17:32.530
+Un salto improvviso significa che qualcosa è cambiato.
+
+01:17:32.850 --> 01:17:34.090
+Un nuovo progetto, un nuovo partner.
+
+01:17:34.290 --> 01:17:35.930
+Una regola che è iniziata a scattare sui file sbagliati.
+
+01:17:36.150 --> 01:17:37.410
+Ecco ciò che interessa davvero ai dirigenti.
+
+01:17:37.490 --> 01:17:38.650
+Ecco ciò che interessa davvero ai dirigenti.
+
+01:17:38.650 --> 01:17:39.630
+Incidenti nel tempo.
+
+01:17:39.630 --> 01:17:41.410
+Ci sono meno casi di contenuto sensibile
+
+01:17:41.410 --> 01:17:42.390
+che finisce dove non dovrebbe.
+
+01:17:43.150 --> 01:17:44.550
+Meno risultati di condivisione eccessiva
+
+01:17:44.550 --> 01:17:45.550
+nell'eccessiva negli accessi.
+
+01:17:45.670 --> 01:17:47.830
+Meno corrispondenze di LP su dati non etichettati.
+
+01:17:47.950 --> 01:17:49.810
+Meno sorprese nei log di audit e di copilot.
+
+01:17:50.290 --> 01:17:51.050
+Si muovono lentamente.
+
+01:17:51.150 --> 01:17:51.770
+Sono dati rumorosi.
+
+01:17:52.110 --> 01:17:53.190
+Attendi due o tre trimestri
+
+01:17:53.190 --> 01:17:54.210
+per mani trarre conclusioni.
+
+01:17:54.250 --> 01:17:54.990
+Ma sono gli unici numeri
+
+01:17:54.990 --> 01:17:55.750
+che rispondono alla domanda
+
+01:17:55.750 --> 01:17:56.890
+per cui è stato approvato il budget.
+
+01:17:57.950 --> 01:17:59.010
+L'esposizione sta diminuendo.
+
+01:17:59.250 --> 01:18:00.450
+Attenzione alle metriche di vanità
+
+01:18:00.450 --> 01:18:01.150
+perché sono all'età.
+
+01:18:01.690 --> 01:18:02.810
+Etichette applicate a settimana.
+
+01:18:03.110 --> 01:18:03.890
+Policy pubblicate.
+
+01:18:04.230 --> 01:18:04.810
+Utenti formati.
+
+01:18:04.810 --> 01:18:07.250
+Ognuna è facile da riportare e da migliorare.
+
+01:18:07.990 --> 01:18:08.590
+Ognuna può salire
+
+01:18:08.590 --> 01:18:09.930
+mentre la protezione rimane piatta.
+
+01:18:10.350 --> 01:18:11.110
+Un buon test è semplice.
+
+01:18:11.650 --> 01:18:13.130
+Chiediti quale decisione cambierebbe quel numero.
+
+01:18:13.690 --> 01:18:14.590
+Se la risposta è nessuna
+
+01:18:14.590 --> 01:18:15.430
+eliminalo dalla dashboard.
+
+01:18:15.950 --> 01:18:16.670
+Fornisci al proprietario
+
+01:18:16.670 --> 01:18:18.110
+un breve elenco 5 o 6 numeri
+
+01:18:18.110 --> 01:18:19.810
+revisionati lo stesso giorno ogni trimestre
+
+01:18:19.810 --> 01:18:21.250
+con lo stesso metodo di campionamento.
+
+01:18:21.910 --> 01:18:23.290
+La coerenza è ciò che trasforma una metrica
+
+01:18:23.290 --> 01:18:23.870
+in una tendenza.
+
+01:18:24.870 --> 01:18:26.010
+Anche con i numeri giusti
+
+01:18:26.010 --> 01:18:28.110
+i buoni programmi cadono negli stessi buchi
+
+01:18:28.110 --> 01:18:29.130
+negli stessi errori
+
+01:18:29.130 --> 01:18:30.270
+quasi nello stesso ordine
+
+01:18:30.270 --> 01:18:31.630
+in azienda dopo azienda.
+
+01:18:32.170 --> 01:18:33.170
+Quindi mettiamoli in unico elenco.
+
+01:18:33.170 --> 01:18:34.850
+L'elenco delle insidie
+
+01:18:34.850 --> 01:18:35.890
+errori che si ripetono.
+
+01:18:36.270 --> 01:18:36.730
+Sei errori
+
+01:18:36.730 --> 01:18:37.630
+stesso ordine
+
+01:18:37.630 --> 01:18:38.190
+stesse cause
+
+01:18:38.190 --> 01:18:39.750
+solo loghi aziendali diversi.
+
+01:18:39.870 --> 01:18:40.210
+Numero 1
+
+01:18:40.210 --> 01:18:41.350
+lanciare con troppe etichette
+
+01:18:41.350 --> 01:18:42.730
+succede durante il workshop.
+
+01:18:43.150 --> 01:18:44.490
+Ogni dipartimento ha un posto a sedere
+
+01:18:44.490 --> 01:18:45.370
+ogni posto ha un etichetta
+
+01:18:45.370 --> 01:18:46.750
+e nessuno vuole essere quello che dice di no.
+
+01:18:47.390 --> 01:18:48.370
+Così la barra degli strumenti
+
+01:18:48.370 --> 01:18:49.510
+si apre con 14 scelte
+
+01:18:49.510 --> 01:18:50.710
+e una persona con un foglio di calcolo
+
+01:18:50.710 --> 01:18:52.170
+e una scadenza non legge 14 scelte.
+
+01:18:52.830 --> 01:18:54.070
+Sceglie la prima che sembra sicura
+
+01:18:54.070 --> 01:18:54.810
+o non sceglie nessuno.
+
+01:18:55.250 --> 01:18:56.630
+La soluzione è nella fase di progettazione.
+
+01:18:57.190 --> 01:18:58.870
+Meno etichette basate sulle regole di gestione
+
+01:18:58.870 --> 01:18:59.790
+e un proprietario designato
+
+01:18:59.790 --> 01:19:00.810
+che può rifiutare una richiesta.
+
+01:19:01.390 --> 01:19:01.790
+Numero 2
+
+01:19:01.790 --> 01:19:04.050
+Crittografare prima di testare la matrice cliente.
+
+01:19:04.110 --> 01:19:05.530
+Il team di sicurezza attiva la crittografia
+
+01:19:05.530 --> 01:19:06.630
+per un livello ampio
+
+01:19:06.630 --> 01:19:08.210
+perché lì che la protezione diventa reale.
+
+01:19:08.790 --> 01:19:09.710
+Poi il vecchio file Excel
+
+01:19:09.710 --> 01:19:10.350
+del team finanziario
+
+01:19:10.350 --> 01:19:11.290
+non riesce ad aprire i file?
+
+01:19:11.970 --> 01:19:12.970
+Un scanner si blocca con loro.
+
+01:19:13.270 --> 01:19:13.950
+Un partner su Mac
+
+01:19:13.950 --> 01:19:15.130
+riceve un errore senza spiegazioni.
+
+01:19:15.750 --> 01:19:16.830
+E nel giro di poche settimane
+
+01:19:16.830 --> 01:19:17.730
+qualcuno di alto livello
+
+01:19:17.730 --> 01:19:18.650
+chiede di disattivarla
+
+01:19:18.650 --> 01:19:20.530
+e il ripristino si porta via la credibilità.
+
+01:19:21.150 --> 01:19:22.690
+Costruisci prima la matrice di test
+
+01:19:22.690 --> 01:19:24.030
+eseguila sul client più vecchio
+
+01:19:24.030 --> 01:19:25.190
+sul dispositivo più strano
+
+01:19:25.190 --> 01:19:26.750
+e sul destinatario esterno più scomodo
+
+01:19:26.750 --> 01:19:27.530
+che riesci a trovare.
+
+01:19:27.970 --> 01:19:28.430
+Numero 3
+
+01:19:28.430 --> 01:19:29.610
+Saltare la simulazione
+
+01:19:29.610 --> 01:19:30.670
+sull'etichettatura automatica.
+
+01:19:30.910 --> 01:19:32.090
+La regola sembra corretta sulla carta.
+
+01:19:32.530 --> 01:19:33.410
+Il rilevatore è ben noto
+
+01:19:33.410 --> 01:19:35.010
+quindi passa direttamente all'applicazione
+
+01:19:35.010 --> 01:19:36.450
+e entro giovedì
+
+01:19:36.450 --> 01:19:37.330
+alcune migliaia di file
+
+01:19:37.330 --> 01:19:38.710
+portano un'etichetta che li blocca.
+
+01:19:39.210 --> 01:19:40.230
+La simulazione ti costa una settimana.
+
+01:19:40.510 --> 01:19:41.430
+Una regola applicata male
+
+01:19:41.430 --> 01:19:42.130
+ti costa la fiducia
+
+01:19:42.130 --> 01:19:43.290
+che abbiamo speso un'intera sezione
+
+01:19:43.290 --> 01:19:43.910
+per proteggere.
+
+01:19:44.410 --> 01:19:45.670
+Eseguila, legge le corrispondenze
+
+01:19:45.670 --> 01:19:46.670
+campione mancati di rilevamenti
+
+01:19:46.670 --> 01:19:47.150
+e poi applica.
+
+01:19:47.490 --> 01:19:48.010
+Numero 4
+
+01:19:48.010 --> 01:19:49.810
+Trattare l'etichetta dei contenitori
+
+01:19:49.810 --> 01:19:50.690
+come etichetta di rilevamenti.
+
+01:19:50.690 --> 01:19:52.970
+Qualcuno applica altamente riservato
+
+01:19:52.970 --> 01:19:53.690
+a un sito del team
+
+01:19:53.690 --> 01:19:54.870
+e dichiara il lavoro completato.
+
+01:19:55.450 --> 01:19:56.110
+Ma come abbiamo visto
+
+01:19:56.110 --> 01:19:57.570
+i file all'interno non ereditano uno.
+
+01:19:57.950 --> 01:19:59.030
+Portano quello che portavano prima
+
+01:19:59.030 --> 01:19:59.890
+che ha spesso niente.
+
+01:20:00.530 --> 01:20:01.530
+La stanza ora ha delle regole
+
+01:20:01.530 --> 01:20:02.390
+ma il foglio all'interno
+
+01:20:02.390 --> 01:20:03.270
+è ancora privo di segni.
+
+01:20:04.270 --> 01:20:05.470
+Abbina l'etichetta del contenitore
+
+01:20:05.470 --> 01:20:06.830
+al valore predefinito della libreria
+
+01:20:06.830 --> 01:20:08.190
+e specificano nel piano del progetto
+
+01:20:08.190 --> 01:20:09.210
+così nessuno non darà per scontato
+
+01:20:09.210 --> 01:20:09.870
+che l'una copra l'acqua.
+
+01:20:10.410 --> 01:20:10.950
+Numero 5
+
+01:20:10.950 --> 01:20:12.510
+Ignorare i contenuti legacy
+
+01:20:12.510 --> 01:20:13.310
+perché sono vecchi.
+
+01:20:13.850 --> 01:20:14.710
+Sembra sicuro iniziare
+
+01:20:14.710 --> 01:20:16.030
+con ciò che le persone creano oggi
+
+01:20:16.030 --> 01:20:17.590
+ed è il punto giusto da cui partire.
+
+01:20:17.590 --> 01:20:18.970
+L'errore è fermarsi lì.
+
+01:20:19.290 --> 01:20:20.510
+Anni di file senza etichetta
+
+01:20:20.510 --> 01:20:21.650
+restano nello stesso talent
+
+01:20:21.650 --> 01:20:23.070
+leggibili dalle stesse persone.
+
+01:20:23.650 --> 01:20:24.290
+È un lettore veloce
+
+01:20:24.290 --> 01:20:25.550
+e non importa la data di creazione.
+
+01:20:25.970 --> 01:20:26.790
+Pianifica il retratto
+
+01:20:26.790 --> 01:20:27.810
+come un vero flusso di lavoro
+
+01:20:27.810 --> 01:20:29.070
+con un responsabile a una data
+
+01:20:29.070 --> 01:20:30.690
+anche se prosegue per mesi in background.
+
+01:20:31.150 --> 01:20:31.610
+Numero 6
+
+01:20:31.610 --> 01:20:32.850
+Dichiarare il vittore all'aggio.
+
+01:20:33.290 --> 01:20:34.290
+La messa in produzione va gonfiare.
+
+01:20:34.630 --> 01:20:35.990
+Arriva un messaggio di ringraziamento
+
+01:20:35.990 --> 01:20:37.070
+una slide con un bel numero
+
+01:20:37.070 --> 01:20:38.690
+e il team di progetto viene riassegnato.
+
+01:20:39.010 --> 01:20:39.850
+Inizia il lento declino.
+
+01:20:40.370 --> 01:20:41.570
+Compaiono nuovi siti senza etichetta.
+
+01:20:41.990 --> 01:20:42.730
+Una riorganizzazione
+
+01:20:42.730 --> 01:20:43.510
+lascia un gruppo isolato
+
+01:20:43.510 --> 01:20:44.910
+e la regola di etichettatura automatica di uno.
+
+01:20:45.110 --> 01:20:45.770
+Nessuno controlla
+
+01:20:45.770 --> 01:20:46.850
+perché il programma è stato archiviato
+
+01:20:46.850 --> 01:20:47.590
+come concluso
+
+01:20:47.590 --> 01:20:49.430
+e il primo segnale è solitamente un incidente
+
+01:20:49.430 --> 01:20:50.170
+non un report.
+
+01:20:50.430 --> 01:20:51.310
+Osserva i 6 punti insieme
+
+01:20:51.310 --> 01:20:52.310
+e vedrai modello ricorreggio.
+
+01:20:52.570 --> 01:20:53.030
+Nessuno di questi
+
+01:20:53.030 --> 01:20:53.870
+ha una funzionalità mancata.
+
+01:20:54.210 --> 01:20:54.890
+Ognuno ha una decisione
+
+01:20:54.890 --> 01:20:55.710
+presa troppo in fretta
+
+01:20:55.710 --> 01:20:56.790
+a un lavoro considerato finito
+
+01:20:56.790 --> 01:20:57.770
+quando era solo all'inizio.
+
+01:20:58.670 --> 01:20:59.470
+E ognuno è economico
+
+01:20:59.470 --> 01:21:00.610
+da prevenire quando è in lista
+
+01:21:00.610 --> 01:21:01.750
+ma costoso da correggere
+
+01:21:01.750 --> 01:21:02.890
+quando arriva come sorpresa.
+
+01:21:03.510 --> 01:21:04.290
+Quindi prendi l'elenco
+
+01:21:04.290 --> 01:21:05.270
+e trasformalo in una sequenza
+
+01:21:05.270 --> 01:21:06.050
+che il team può seguire.
+
+01:21:06.630 --> 01:21:08.210
+La tabella di marcia
+
+01:21:08.210 --> 01:21:08.810
+è la produzione.
+
+01:21:08.810 --> 01:21:09.910
+5 fasi
+
+01:21:09.910 --> 01:21:11.610
+Ognuna termina con un controllo
+
+01:21:11.610 --> 01:21:12.650
+e nessuno supera il controllo
+
+01:21:12.650 --> 01:21:13.330
+senza una firma.
+
+01:21:14.090 --> 01:21:14.550
+La fase 1
+
+01:21:14.550 --> 01:21:15.270
+è la progettazione
+
+01:21:15.270 --> 01:21:16.290
+dei testi compatibilità.
+
+01:21:17.190 --> 01:21:18.390
+È qui che viene scritta la tassonomia
+
+01:21:18.390 --> 01:21:19.370
+vengono prese le decisioni
+
+01:21:19.370 --> 01:21:20.110
+sulla criptografia
+
+01:21:20.110 --> 01:21:21.650
+e viene costruita la matrice client.
+
+01:21:22.310 --> 01:21:23.830
+4 o 5 etichette di alto livello
+
+01:21:23.830 --> 01:21:25.210
+con le regole scritte accanto ciascuna.
+
+01:21:26.090 --> 01:21:27.210
+La build di office più vecchia
+
+01:21:27.210 --> 01:21:27.630
+il Mac
+
+01:21:27.630 --> 01:21:28.170
+l'app mobile
+
+01:21:28.170 --> 01:21:28.750
+lo scanner
+
+01:21:28.750 --> 01:21:30.390
+quel partner esterno complicato
+
+01:21:30.390 --> 01:21:30.990
+tutto testato
+
+01:21:30.990 --> 01:21:31.830
+con file criptografati
+
+01:21:31.830 --> 01:21:32.550
+prima che un solo utente
+
+01:21:32.550 --> 01:21:33.370
+veda un'etichetta.
+
+01:21:34.210 --> 01:21:34.970
+L'output è un design
+
+01:21:34.970 --> 01:21:35.450
+di una pagina
+
+01:21:35.450 --> 01:21:36.090
+un report di test
+
+01:21:36.090 --> 01:21:37.290
+con i fallimenti reali inclusi.
+
+01:21:37.290 --> 01:21:38.770
+Se il report non ha fallimenti
+
+01:21:38.770 --> 01:21:40.170
+il test non è stato abbastanza severo.
+
+01:21:40.470 --> 01:21:41.030
+Il controllo qui
+
+01:21:41.030 --> 01:21:41.730
+spetta il responsabile
+
+01:21:41.730 --> 01:21:42.330
+della tassonomia
+
+01:21:42.330 --> 01:21:43.290
+e il responsabile della sicurezza.
+
+01:21:43.770 --> 01:21:44.490
+Firmano che le etichette
+
+01:21:44.490 --> 01:21:45.710
+corrispondano alla polisi aziendale
+
+01:21:45.710 --> 01:21:46.750
+e che il livello di criptografia
+
+01:21:46.750 --> 01:21:47.450
+è stato testato
+
+01:21:47.450 --> 01:21:48.270
+sul client peggiore
+
+01:21:48.270 --> 01:21:49.150
+in vostro possesso.
+
+01:21:49.710 --> 01:21:50.190
+La fase 2
+
+01:21:50.190 --> 01:21:51.410
+è il progetto pilota mirato
+
+01:21:51.410 --> 01:21:52.190
+legale, finanza
+
+01:21:52.190 --> 01:21:52.930
+e un team che gestisce
+
+01:21:52.930 --> 01:21:53.990
+molte condivisioni esterne.
+
+01:21:54.310 --> 01:21:55.030
+Le etichette del pilota
+
+01:21:55.030 --> 01:21:56.050
+vivono in una polisi limitata
+
+01:21:56.050 --> 01:21:57.310
+così nulla trappina in produzione.
+
+01:21:57.710 --> 01:21:58.430
+Definisce il fallimento
+
+01:21:58.430 --> 01:21:59.150
+prima di iniziare
+
+01:21:59.150 --> 01:21:59.870
+e rivede i risultati
+
+01:21:59.870 --> 01:22:00.210
+e settimane
+
+01:22:00.210 --> 01:22:01.750
+etichette applicate
+
+01:22:01.750 --> 01:22:02.590
+le scritture delle etichette
+
+01:22:02.590 --> 01:22:03.450
+motivi di classamento
+
+01:22:03.450 --> 01:22:04.370
+e ticchette del helpdesk.
+
+01:22:05.170 --> 01:22:05.870
+Come abbiamo visto
+
+01:22:05.870 --> 01:22:06.610
+la copertura da sola
+
+01:22:06.610 --> 01:22:07.190
+non prova nulla
+
+01:22:07.190 --> 01:22:08.150
+quindi un campione di correttezza
+
+01:22:08.150 --> 01:22:09.350
+fa parte dei criteri di uscita.
+
+01:22:09.950 --> 01:22:10.390
+Il controllo
+
+01:22:10.390 --> 01:22:11.570
+spetta lo sponsor aziendale.
+
+01:22:12.230 --> 01:22:13.090
+Esaminano le modifiche
+
+01:22:13.090 --> 01:22:13.650
+e la tassonomia
+
+01:22:13.650 --> 01:22:14.850
+rese necessarie dal pilota
+
+01:22:14.850 --> 01:22:15.830
+e decidono se il design
+
+01:22:15.830 --> 01:22:17.130
+è pronto per un pubblico più ampio
+
+01:22:17.130 --> 01:22:18.050
+o se serve un altro a giro.
+
+01:22:18.890 --> 01:22:19.270
+La fase 3
+
+01:22:19.270 --> 01:22:20.470
+prevede le impostazioni predefinite
+
+01:22:20.470 --> 01:22:21.670
+e poi l'etichettatura obbligatoria 1.
+
+01:22:21.990 --> 01:22:22.990
+Le impostazioni predefinite
+
+01:22:22.990 --> 01:22:23.570
+vanno per prima
+
+01:22:23.570 --> 01:22:24.510
+perché cambiano il comportamento
+
+01:22:24.510 --> 01:22:25.110
+quasi a costo zero.
+
+01:22:25.230 --> 01:22:26.110
+Poi richiede un'etichetta
+
+01:22:26.110 --> 01:22:27.190
+prima di salvare o inviare
+
+01:22:27.190 --> 01:22:27.910
+un'ondata alla volta
+
+01:22:27.910 --> 01:22:28.750
+iniziando dai gruppi
+
+01:22:28.750 --> 01:22:29.410
+che conoscono già
+
+01:22:29.410 --> 01:22:30.650
+l'etichetta da progetto pilota.
+
+01:22:31.290 --> 01:22:32.190
+Tieni d'occhio il budget attrito.
+
+01:22:32.590 --> 01:22:33.430
+Se i ticket aumentano
+
+01:22:33.430 --> 01:22:33.970
+in un'ondata
+
+01:22:33.970 --> 01:22:34.530
+metti in pausa
+
+01:22:34.530 --> 01:22:35.970
+e risolvi solo a loro procedere.
+
+01:22:36.070 --> 01:22:36.390
+Controllo
+
+01:22:36.390 --> 01:22:37.210
+spetta il responsabile
+
+01:22:37.210 --> 01:22:38.190
+dell'helpdesk e i champion.
+
+01:22:38.850 --> 01:22:39.430
+Sono loro i primi
+
+01:22:39.430 --> 01:22:40.230
+a vedere le difficoltà
+
+01:22:40.230 --> 01:22:40.770
+quindi un'ondata
+
+01:22:40.770 --> 01:22:41.230
+non si chiude
+
+01:22:41.230 --> 01:22:42.030
+finché non confermano
+
+01:22:42.030 --> 01:22:42.790
+che le domande ripetitive
+
+01:22:42.790 --> 01:22:43.330
+sono cessate.
+
+01:22:43.610 --> 01:22:44.170
+La fase 4
+
+01:22:44.170 --> 01:22:45.110
+l'etichettatura automatica.
+
+01:22:45.750 --> 01:22:46.590
+Prima una simulazione
+
+01:22:46.590 --> 01:22:47.470
+su un ambito ristretto
+
+01:22:47.470 --> 01:22:48.770
+con regole ad alta confidenza.
+
+01:22:49.450 --> 01:22:50.370
+Leggi le corrispondenze
+
+01:22:50.370 --> 01:22:51.590
+campione mancati abbinamenti
+
+01:22:51.590 --> 01:22:51.990
+ottimizza
+
+01:22:51.990 --> 01:22:53.110
+applica su quell'ambito ristretto
+
+01:22:53.110 --> 01:22:53.910
+ed estendi solo quando
+
+01:22:53.910 --> 01:22:54.990
+il tasso di errore si stabilizza.
+
+01:22:55.770 --> 01:22:56.890
+Ricorda i limiti dei throughput
+
+01:22:56.890 --> 01:22:57.570
+quindi pianifica
+
+01:22:57.570 --> 01:22:58.230
+il carico di lavoro
+
+01:22:58.230 --> 01:22:58.770
+in settimane
+
+01:22:58.770 --> 01:22:59.530
+e non in giorni.
+
+01:22:59.630 --> 01:23:00.370
+Appartiene ai proprietari
+
+01:23:00.370 --> 01:23:00.770
+dei dati
+
+01:23:00.770 --> 01:23:01.430
+per il contenuto
+
+01:23:01.430 --> 01:23:02.110
+da etichettare.
+
+01:23:02.710 --> 01:23:03.410
+Firmano i risultati
+
+01:23:03.410 --> 01:23:03.890
+del campione
+
+01:23:03.890 --> 01:23:04.610
+perché sono gli unici
+
+01:23:04.610 --> 01:23:05.250
+in grado di distinguere
+
+01:23:05.250 --> 01:23:05.930
+un'etichetta corretta
+
+01:23:05.930 --> 01:23:06.430
+da una errata.
+
+01:23:06.970 --> 01:23:07.550
+La fase 5
+
+01:23:07.550 --> 01:23:08.870
+gestisce tre percorsi insieme
+
+01:23:08.870 --> 01:23:09.970
+etichette dei contenitori
+
+01:23:09.970 --> 01:23:10.910
+con i valori predefiniti
+
+01:23:10.910 --> 01:23:11.790
+della libreria abbinati
+
+01:23:11.790 --> 01:23:12.450
+ai siti esistenti
+
+01:23:12.450 --> 01:23:13.210
+e spostati in ondate.
+
+01:23:13.210 --> 01:23:14.710
+Preparazione a Copilot
+
+01:23:14.710 --> 01:23:15.710
+nell'ordine che abbiamo trattato.
+
+01:23:16.510 --> 01:23:18.030
+Pulizia della condivisione eccessiva
+
+01:23:18.030 --> 01:23:18.950
+etichette sugli archivi
+
+01:23:18.950 --> 01:23:19.750
+a rischio maggiore
+
+01:23:19.750 --> 01:23:21.330
+DLP per le interazioni
+
+01:23:21.330 --> 01:23:22.470
+un gruppo pilota pulito
+
+01:23:22.470 --> 01:23:23.450
+poi auditing
+
+01:23:23.450 --> 01:23:24.790
+e operazioni continue
+
+01:23:24.790 --> 01:23:26.250
+con la revisione trimestrale
+
+01:23:26.250 --> 01:23:27.610
+il controllo delle modifiche
+
+01:23:27.610 --> 01:23:28.670
+e i 5 o 6 numeri
+
+01:23:28.670 --> 01:23:29.270
+sulla dashboard.
+
+01:23:29.770 --> 01:23:30.190
+Questa fase
+
+01:23:30.190 --> 01:23:31.030
+non ha una data di fine
+
+01:23:31.030 --> 01:23:31.850
+ed è intenzionale.
+
+01:23:32.350 --> 01:23:33.470
+L'ultimo controllo è permanente
+
+01:23:33.470 --> 01:23:34.950
+ogni espansione di Copilot
+
+01:23:34.950 --> 01:23:35.670
+ogni nuova ondata
+
+01:23:35.670 --> 01:23:36.390
+di contenitori
+
+01:23:36.390 --> 01:23:36.970
+ogni modifica
+
+01:23:36.970 --> 01:23:37.510
+alla tassonomia
+
+01:23:37.510 --> 01:23:37.990
+deve passare
+
+01:23:37.990 --> 01:23:38.530
+dal promotore
+
+01:23:38.530 --> 01:23:39.030
+e dal proprietario.
+
+01:23:39.370 --> 01:23:39.890
+Scrivi i controlli
+
+01:23:39.890 --> 01:23:40.710
+con i nomi dei responsabili
+
+01:23:40.710 --> 01:23:40.970
+a casa.
+
+01:23:40.970 --> 01:23:42.190
+Un controllo senza un nome
+
+01:23:42.190 --> 01:23:42.790
+è solo un suggerimento.
+
+01:23:43.370 --> 01:23:44.690
+Conclusione richiesta di recensione
+
+01:23:44.690 --> 01:23:45.710
+e invito all'azione su LinkedIn.
+
+01:23:46.250 --> 01:23:47.050
+Ecco quindi il cambiamento
+
+01:23:47.050 --> 01:23:47.570
+un'ultima volta.
+
+01:23:48.050 --> 01:23:48.650
+La classificazione
+
+01:23:48.650 --> 01:23:49.170
+è un compito
+
+01:23:49.170 --> 01:23:49.930
+da affidare agli utenti
+
+01:23:49.930 --> 01:23:50.670
+sperando che vada bene.
+
+01:23:50.990 --> 01:23:51.470
+È un contesto
+
+01:23:51.470 --> 01:23:52.250
+che viaggia con i dati
+
+01:23:52.250 --> 01:23:53.490
+impostato da valori predefiniti
+
+01:23:53.490 --> 01:23:54.670
+ottimizzato dall'automazione
+
+01:23:54.670 --> 01:23:56.110
+con conteggio parole applicato
+
+01:23:56.110 --> 01:23:57.670
+e le conseguenze sono concrete.
+
+01:23:58.190 --> 01:23:58.950
+Copilot trova tutto
+
+01:23:58.950 --> 01:24:00.110
+ciò che le tue autorizzazioni consentono.
+
+01:24:00.650 --> 01:24:01.370
+Questo rende l'etichetta
+
+01:24:01.370 --> 01:24:02.390
+una decisione di preparazione
+
+01:24:02.390 --> 01:24:02.670
+all'IA
+
+01:24:02.670 --> 01:24:03.950
+non un compito di conformità.
+
+01:24:04.590 --> 01:24:05.190
+Se questo ha cambiato
+
+01:24:05.190 --> 01:24:06.030
+il tuo modo di pensare
+
+01:24:06.030 --> 01:24:07.310
+lascia una recensione del podcast.
+
+01:24:10.970 --> 01:24:12.090
+con 14 etichette
+
+01:24:12.090 --> 01:24:13.290
+e una singola email di lancio.
+
+01:24:14.030 --> 01:24:14.750
+E se vuoi continuare
+
+01:24:14.750 --> 01:24:15.450
+connettiti con me
+
+01:24:15.450 --> 01:24:16.030
+a Mirko Peters
+
+01:24:16.030 --> 01:24:16.590
+su LinkedIn.
+
+01:24:17.170 --> 01:24:17.810
+Dimmi su quale problemi
+
+01:24:17.810 --> 01:24:18.790
+di implementazione sei bloccato
+
+01:24:18.790 --> 01:24:19.330
+e quale argomento
+
+01:24:19.330 --> 01:24:20.370
+dovremo trattare prossimo.
+
+01:24:20.870 --> 01:24:21.430
+Un'ultima nota
+
+01:24:21.430 --> 01:24:22.810
+su Stella Migrator for Exchange.
+
+01:24:23.350 --> 01:24:23.970
+Se hai una migrazione
+
+01:24:23.970 --> 01:24:24.730
+di caselle di posta
+
+01:24:24.730 --> 01:24:25.270
+in calendario
+
+01:24:25.270 --> 01:24:26.410
+pianifica prima le etichette.
+
+01:24:26.810 --> 01:24:27.370
+La classificazione
+
+01:24:27.370 --> 01:24:28.330
+deve sopravvivere allo spostamento.
+
+01:24:28.710 --> 01:24:29.330
+È molto più facile
+
+01:24:29.330 --> 01:24:30.110
+proteggerlo nel piano
+
+01:24:30.110 --> 01:24:30.970
+che ripararlo in seguito
+
+01:24:30.970 --> 01:24:31.590
+perché le etichette
+
+01:24:31.590 --> 01:24:32.150
+che ignori oggi
+
+01:24:32.150 --> 01:24:33.090
+sono quelle che Copilot
+
+01:24:33.090 --> 01:24:34.170
+leggerà domani.

@@ -1,0 +1,673 @@
+WEBVTT
+
+00:00:00.310 --> 00:00:06.030
+Willkommen beim M365FM-Podcast, in dem wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:06.590 --> 00:00:08.290
+Warum fühlen sich Cloud-Kosten außer Kontrolle an?
+
+00:00:08.690 --> 00:00:13.490
+Die meisten Unternehmen bemerken ihre Cloud-Mehrausgaben erst, wenn die Rechnung eintrifft und dann ist das Geld bereits weg.
+
+00:00:14.470 --> 00:00:20.790
+Willkommen beim M365FM-Podcast, in dem wir Menschen, Ideen und Technologien erkunden, die die Zukunft der Arbeit gestalten.
+
+00:00:21.590 --> 00:00:27.330
+FinOps klingt wie ein weiteres Fachwort, aber eigentlich ist es der fehlende Dialog zwischen denen, die mit Technologie bauen und denen, die dafür bezahlen.
+
+00:00:27.330 --> 00:00:33.610
+Cloud-Rechnungen wachsen im Stillen durch kleine Entscheidungen und niemand bemerkt es, bis jemand fragt, wer eigentlich für die Summe verantwortlich ist.
+
+00:00:34.310 --> 00:00:42.330
+Am Ende dieser Folge werden Sie verstehen, was FinOps ist, wie es funktioniert, wo es bei Microsoft 365 und Azure passt und welche Fehler fast jeden treffen, der es versucht.
+
+00:00:43.110 --> 00:00:47.550
+Cloud-Computing hat verändert, wie Unternehmen für Technologie bezahlen und dieser Wandel liegt dem gesamten Problem zugrunde.
+
+00:00:47.950 --> 00:00:52.490
+Früher kaufte man einmal einen Server und verteilte die Kosten über mehrere Jahre, sodass man den Betrag im Voraus kannte.
+
+00:00:52.490 --> 00:00:57.490
+Heute mietet man Rechenleistung sekundengenau. Die Rechnung schreibt sich jeden Tag neu und niemand fühlt sich allein dafür verantwortlich.
+
+00:00:58.610 --> 00:01:02.430
+Stellen Sie sich einen Entwickler vor, der an einem Dienstagnachmittag eine virtuelle Maschine startet, um eine Idee zu testen.
+
+00:01:03.010 --> 00:01:07.870
+Ein Meeting kommt dazwischen, der Test wird vergessen und die Maschine läuft weiter und verursacht monatelang Kosten.
+
+00:01:08.550 --> 00:01:12.410
+Niemand wollte dieses Geld verschwenden und genau dieses unbemerkte Versehen macht das Leck so schwer erkennbar.
+
+00:01:13.130 --> 00:01:14.890
+Die Kluft zeigt sich in der Sprache, die verwendet wird.
+
+00:01:14.890 --> 00:01:20.610
+Die Finanzabteilung verlangt eine Prognose zum Abgleich und die Technik antwortet mit einem Diagramm von Diensten, die bei Bedarf skalieren.
+
+00:01:21.210 --> 00:01:26.310
+Keine Seite hat Unrecht und keine Seite kann allein das Gesamtbild sehen, weshalb die Rechnung immer weiter steigt, während alle beschäftigt sind.
+
+00:01:27.030 --> 00:01:31.630
+So fließt das Geld in Dutzenden kleinen Momenten in fast jedem Unternehmen ab, das die Cloud nutzt.
+
+00:01:32.310 --> 00:01:35.470
+Dieses Leck hat einen Namen und was noch wichtiger ist, es gibt eine Methode, um es zu stoppen.
+
+00:01:36.050 --> 00:01:37.430
+Was bedeutet FinOps eigentlich?
+
+00:01:38.010 --> 00:01:40.830
+Fangen wir beim Namen an, denn er verrät mehr, als man vermuten würde.
+
+00:01:41.290 --> 00:01:44.650
+FinOps ist eine Mischung aus Finance und DevOps und genau diese Paarung ist die gesamte Idee.
+
+00:01:45.210 --> 00:01:51.150
+Es beschreibt den Dialog zwischen den Erbauern und den Geldgebern, was offensichtlich klingt, bis man merkt, wie selten diese beiden Gruppen tatsächlich miteinander sprechen.
+
+00:01:51.790 --> 00:01:53.430
+Hier ist der Teil, der die meisten Anfänger überrascht.
+
+00:01:54.010 --> 00:01:57.450
+FinOps ist kein Produkt, das man kaufen kann und es ist kein einzelner Jobtitel, für den man ihn einstellen kann.
+
+00:01:57.970 --> 00:02:03.050
+Die FinOps Foundation, die gemeinnützige Organisation dahinter, nennt es einen operativen Rahmen und eine kulturelle Praxis.
+
+00:02:03.630 --> 00:02:06.770
+Das ist eine formelle Art zu sagen, dass es eine gemeinsame Gewohnheit ist und keine Software.
+
+00:02:07.270 --> 00:02:08.970
+Das Ziel ist nicht einfach, die Rechnung zu kürzen.
+
+00:02:09.370 --> 00:02:10.650
+Die Foundation drückt es deutlich aus.
+
+00:02:10.650 --> 00:02:15.850
+Wer denkt, bei FinOps ginge es nur ums Sparen, hört sich, denn es geht darum, den maximalen Wert aus Technologie zu ziehen.
+
+00:02:16.510 --> 00:02:21.490
+Manchmal ist es klüger, mehr für etwas auszugeben, das auch mehr einbringt und die Methode liefert die Zahlen, um das sicher zu entscheiden.
+
+00:02:21.490 --> 00:02:26.450
+Man hört für dasselbe Konzept auch Begriffe wie Cloud-Kosten-Management oder Cloud-Finanz-Management.
+
+00:02:27.170 --> 00:02:34.870
+Diese Bezeichnungen beschreiben eine Aufgabe, während FinOps eine Kultur beschreibt, die alle Teams durchdringt und dieser Unterschied ist wichtiger, als es klingt, denn sie sich den Unterschied in der Praxis holen.
+
+00:02:35.170 --> 00:02:36.930
+Ein Team möchte jede Nacht einen Analysejob ausführen.
+
+00:02:37.650 --> 00:02:41.810
+Die günstige Option dauert sechs Stunden auf einer langsamen Maschine, die teurere ist in 20 Minuten fertig.
+
+00:02:42.570 --> 00:02:44.590
+FinOps wählt nicht automatisch die günstigere Variante.
+
+00:02:45.270 --> 00:02:49.210
+Man fragt, was die gesparten Stunden wert sind und trifft dann die Entscheidung bewusst statt zufällig.
+
+00:02:49.210 --> 00:02:52.150
+Diese Angewohnheit, bewusst zu entscheiden, ist der Kern der ganzen Sache.
+
+00:02:52.890 --> 00:02:55.870
+Deshalb gehört diese Praxis dem Unternehmen und nicht einer einzelnen Abteilung.
+
+00:02:56.350 --> 00:02:59.650
+Behalten Sie diesen Gedanken im Kopf, denn er erklärt etwas Seltsames, das Sie später sehen werden.
+
+00:03:00.130 --> 00:03:04.030
+Die größten Einsparungen entstehen durch Entscheidungen über Menschen, nicht durch Entscheidungen über Technologie.
+
+00:03:04.730 --> 00:03:07.350
+Die Praxis entstand aus einem echten Wandel bei der Finanzierung von Technologie.
+
+00:03:07.890 --> 00:03:12.110
+Früher behandelten Unternehmen dies als eine große jährliche Anschaffung, was Buchhalter Investitionsausgaben nennen.
+
+00:03:12.550 --> 00:03:18.430
+Die Cloud wandelte dies in laufende Kosten um, die sich ständig ändern, was Finanzteams ohne feste Planungsgrundlage zurückließ.
+
+00:03:18.430 --> 00:03:26.670
+FinOps entstand, um diese Lücke zu schließen und hat sich längst über die Cloud hinaus auf Softwareabos, Lizenzen, Rechenzentren und jetzt KI ausgeweitet.
+
+00:03:27.730 --> 00:03:29.710
+Heute zeigen die Zahlen, wie weit es verbreitet ist.
+
+00:03:30.290 --> 00:03:35.430
+In der neuesten Umfrage der FinOps Foundation gaben 98% der Teams an, KI-Ausgaben in irgendeiner Form zu verwalten.
+
+00:03:36.010 --> 00:03:38.290
+90% erwalten oder planen die Verwaltung von Softwareabonnements.
+
+00:03:39.150 --> 00:03:43.030
+Was als Cloud-Kosten-Club begann, betrifft heute fast jede Art von Technologie, die ein Unternehmen kauft.
+
+00:03:43.030 --> 00:03:45.210
+Nichts davon erfordert einen Ingenieursabschluss.
+
+00:03:45.610 --> 00:03:47.630
+Die Praxis ist für jeden gemacht, der neu in diesem Bereich ist.
+
+00:03:48.530 --> 00:03:51.590
+Der erste Schritt ist einfach zu fragen, wohin das Geld fließt und wer es überwacht.
+
+00:03:52.430 --> 00:03:54.470
+Die sechs Gewohnheiten, die jedes FinOps-Team teilt.
+
+00:03:55.190 --> 00:03:59.990
+Die Foundation legt sechs Prinzipien fest, die am meisten Sinn ergeben, wenn man sie als Gewohnheiten statt als Regeln liest.
+
+00:03:59.990 --> 00:04:01.990
+Erstens müssen Teams zusammenarbeiten.
+
+00:04:02.890 --> 00:04:08.450
+Was bedeutet, dass Finanzen, Technik und Business dieselben Zahlen betrachten, statt über eine Mauer hinweg zu streiten.
+
+00:04:09.530 --> 00:04:12.190
+Die zweite Gewohnheit ist, dass der Geschäftswert die Entscheidungen bestimmt.
+
+00:04:12.730 --> 00:04:16.990
+Sie jagen nicht der niedrigsten Zahl hinterher, denn ein Dienst, der billig ist und jede Woche ausfällt, ist überhaupt nicht günstig.
+
+00:04:17.470 --> 00:04:20.110
+Der dritte Punkt ist, dass jeder für seine eigene Nutzung verantwortlich ist.
+
+00:04:20.210 --> 00:04:22.250
+Wer eine Ressource erstellt hat, behält auch deren Kosten im Blick.
+
+00:04:22.830 --> 00:04:24.430
+Die vierte Gewohnheit betrifft die Daten selbst.
+
+00:04:25.150 --> 00:04:28.130
+Kosteninformationen müssen zeitnah, präzise und für die Personen verfügbar sein, die sie benötigen.
+
+00:04:28.130 --> 00:04:31.810
+Ein Bericht, der drei Wochen zu spät kommt, kann eine bereits getroffene Entscheidung nicht mehr ändern.
+
+00:04:32.630 --> 00:04:37.430
+Der fünfte Punkt ist, dass ein kleines zentrales Team die gesamte Praxis ermöglicht, bewährte Methoden teilt und Standards wahrt.
+
+00:04:38.610 --> 00:04:40.250
+Die eigentliche Arbeit bei den Teams, die sie ausführen.
+
+00:04:40.950 --> 00:04:42.210
+Die sechste Gewohnheit wird oft vergessen.
+
+00:04:42.610 --> 00:04:45.170
+Es geht darum, die Flexibilität zu nutzen, für die sie ohnehin bereits bezahlen.
+
+00:04:45.650 --> 00:04:48.570
+Die Cloud erlaubt es, bei sinkender Nachfrage zu verkleinern und bei Spitzen zu wachsen.
+
+00:04:48.810 --> 00:04:51.190
+Das Ziel ist also, Zahlungen mit der tatsächlichen Nutzung abzugleichen.
+
+00:04:51.610 --> 00:04:54.970
+Diese Mischung aus einem zentralen Kern und lokaler Verantwortung ist die Norm, nicht die Ausnahme.
+
+00:04:54.970 --> 00:05:01.450
+In der Umfrage der Foundation von 2026 nutzten 81% der Teams entweder ein zentrales Enablement-Modell oder ein Hub-in-Spoke-Modell.
+
+00:05:01.730 --> 00:05:04.510
+Das ist eine formelle Art, eine kleine Kerngruppe zu beschreiben, die Island coacht.
+
+00:05:04.850 --> 00:05:07.030
+Das bedeutet nicht, dass das zentrale Team die Arbeit selbst erledigt.
+
+00:05:07.490 --> 00:05:10.350
+Es bedeutet, dass das zentrale Team die Karte zeichnet und Kompasse verteilt.
+
+00:05:10.410 --> 00:05:13.850
+Denn 100 Leute, die auf ihre eigenen Kosten achten, sind immer besser als 5, die auf alle anderen achten.
+
+00:05:14.590 --> 00:05:17.250
+Die Gewohnheit der Eigenverantwortung klingt abstrakt, bis man sieht, wie sie funktioniert.
+
+00:05:17.970 --> 00:05:22.750
+Ein Team, das seine Ressourcen tagt und seine monatlichen Zahlen selbst prüft, wählt von sich aus kleinere Instanzen.
+
+00:05:22.750 --> 00:05:27.150
+Niemand muss ein Memo schreiben, weil die Kosten nun einer Person gehören, statt einer Tabellenkalkulation.
+
+00:05:27.470 --> 00:05:29.410
+Die Gewohnheit der Zusammenarbeit funktioniert auf dieselbe Weise.
+
+00:05:29.850 --> 00:05:35.850
+Wenn Finanz- und Technikabteilungen dasselbe Dashboard nutzen, wird der Streit um die Rechnung zur gemeinsamen Frage, welche Dienste ihren Wert erbringen.
+
+00:05:37.030 --> 00:05:38.990
+Die sechs Gewohnheiten funktionieren nur gemeinsam.
+
+00:05:39.110 --> 00:05:41.530
+Das Auslassen einer Gewohnheit führt meist an anderer Stelle zu einer Schwachstelle.
+
+00:05:41.970 --> 00:05:43.670
+Wenn die Daten langsam sind, schwindet die Eigenverantwortung.
+
+00:05:44.070 --> 00:05:47.330
+Wenn Eigenverantwortung fehlt, wird das zentrale Team vom Coach zum Schiedsrichter.
+
+00:05:48.410 --> 00:05:50.170
+Wie FinObs in 30 wiederholenden Phasen abläuft.
+
+00:05:50.170 --> 00:05:55.650
+Die Praxis läuft in einer Schleife mit drei Phasen ab, die Sie schnell durchlaufen, anstatt sie als einmaliges Projekt zu behandeln.
+
+00:05:56.410 --> 00:05:58.930
+Die erste Phase ist in Form, deren Aufgabe die Transparenz ist.
+
+00:05:59.650 --> 00:06:04.030
+Sie sammeln Kosten und Nutzungsdaten und teilen diese auf, damit jedes Team seinen eigenen Anteil an der Rechnung sehen kann.
+
+00:06:04.470 --> 00:06:08.450
+Die zweite Phase ist, Optimize, in der Sie Wege suchen, mehr aus Ihren bestehenden Ausgaben herauszuholen.
+
+00:06:08.810 --> 00:06:10.110
+Es gibt hier zwei Arten von Einsparung.
+
+00:06:10.910 --> 00:06:15.830
+Nutzungsoptimierung bedeutet, weniger Ressourcen für das gleiche Ergebnis zu verwenden, wie etwa das Abschalten einer Maschine, die niemand braucht.
+
+00:06:16.590 --> 00:06:19.550
+Tarifoptimierung bedeutet, einen besseren Preis für die Ressourcen zu zahlen, die Sie wirklich behalten.
+
+00:06:19.870 --> 00:06:21.110
+Die dritte Phase ist der Betrieb.
+
+00:06:21.510 --> 00:06:22.670
+Und hier wird aus Reden handeln.
+
+00:06:23.510 --> 00:06:26.910
+Sie nehmen die Änderungen vor, messen das Ergebnis und kehren dann direkt zur Information zurück.
+
+00:06:27.510 --> 00:06:33.210
+Kleine, häufige Schritte sind besser als eine riesige Aufräumaktion, da sich die Cloud schneller ändert, als jedes jährliche Projekt mithalten kann.
+
+00:06:33.950 --> 00:06:37.910
+Neue Teams beginnen meist in der Krabbelfase, in der sie auf Probleme reagieren, nachdem diese aufgetreten sind.
+
+00:06:37.910 --> 00:06:41.010
+Wenn sich die Gewohnheit festigt, gehen sie zur Geh- und schließlich zur Laufhase.
+
+00:06:41.690 --> 00:06:46.570
+Die Kosten werden von Anfang an Teil ihres Designs, anstatt etwas, dem sie später hinterherlaufen.
+
+00:06:47.530 --> 00:06:49.030
+Eine ganze Reihe von Leuten macht dies möglich.
+
+00:06:49.570 --> 00:06:57.250
+Führungskräfte setzen Prioritäten, Ingenieure verantworten ihre Nutzung, das Finanzwesen sorgt für korrekte Zahlen, der Einkauf kümmert sich um Verträge und ein FinOps-Experte führt alles zusammen.
+
+00:06:57.910 --> 00:07:00.970
+Niemand betreibt FinOps allein, weshalb das Wort Kultur immer wieder fällt.
+
+00:07:01.490 --> 00:07:03.510
+Die Rollen können anfangs viel erscheinen, daher hier die Kurzfassung.
+
+00:07:03.510 --> 00:07:10.130
+Führungskräfte entscheiden, was wichtig ist, Ingenieure, wie man es baut, Finanzen, wie man es abrechnet und der Einkauf, was unterzeichnet wird.
+
+00:07:11.050 --> 00:07:15.230
+Ein FinOps-Praktiker ist die Person, die alle vier im Gespräch hält, was meist Übersetzungsarbeit bedeutet.
+
+00:07:16.250 --> 00:07:18.770
+Eine kleine Warnung vorab, denn der Kreislauf hat eine Bedingung.
+
+00:07:19.310 --> 00:07:22.630
+Die Optimierungsphase hilft nur, wenn Leute ihren eigenen Namen auf der Rechnung sehen.
+
+00:07:23.330 --> 00:07:26.950
+Diese Sichtbarkeit hängt von der Tagging- und Zuordnungsarbeit der Informationsphase ab.
+
+00:07:27.810 --> 00:07:30.430
+Überspringen Sie den langweiligen Einrichtungsschritt und die cleveren Einsparungen lang.
+
+00:07:31.130 --> 00:07:32.950
+Wie FinOps dann am normalen Dienstag aussieht.
+
+00:07:33.510 --> 00:07:37.610
+So sieht der Kreislauf im echten Leben aus und er ist weit weniger dramatisch, als die Theorie vermuten lässt.
+
+00:07:38.310 --> 00:07:42.030
+Stellen Sie sich ein Marketing-Team vor, dessen Cloud-Ausgaben eines Wochen ohne erkennbaren Grund sprunghaft ansteigen.
+
+00:07:42.550 --> 00:07:47.510
+Ein automatischer Alarm geht im Posteingang des Teams ein und jemand stellt endlich die naheliegende Frage, was sich geändert hat.
+
+00:07:48.070 --> 00:07:50.550
+Da die Ressourcen getaggt waren, ist die Antwort innerhalb von Minuten da.
+
+00:07:50.990 --> 00:07:55.090
+Eine Testumgebung, die nur einen Tag laufen sollte, verursachte zwei Monate lang stillschweigend Kosten.
+
+00:07:55.170 --> 00:07:57.850
+Und eine fünfminütige Bereinigung lässt den Anstieg verschwinden.
+
+00:07:58.890 --> 00:08:01.950
+Das gesparte Geld ist gering, aber die Gewohnheit, die es aufgedeckt hat, ist der eigentliche Gewinn.
+
+00:08:01.950 --> 00:08:05.430
+Jetzt sieht das Team jeden Monat seine eigenen Zahlen und das verändert das Verhalten der Leute.
+
+00:08:05.990 --> 00:08:09.450
+Manche Unternehmen gehen einen Schritt weiter und stellen jedem Team seine Nutzung tatsächlich in Rechnung.
+
+00:08:09.590 --> 00:08:10.970
+Eine Praxis namens Chargeback.
+
+00:08:11.430 --> 00:08:11.850
+Chargeback.
+
+00:08:11.850 --> 00:08:15.470
+Andere zeigen den Teams ihre Kosten einfach nur in einem Prozessnamen Showback.
+
+00:08:15.890 --> 00:08:20.650
+Showback ist der sanftere Einstieg, da es das Bewusstsein schärft, bevor Budgets tatsächlich verschoben werden.
+
+00:08:21.170 --> 00:08:23.650
+Beachten Sie, wie wenig für diese Geschichte an neuen Produkten nötig war.
+
+00:08:24.170 --> 00:08:24.590
+Ein Tag.
+
+00:08:24.970 --> 00:08:28.890
+Ein Alarm und eine neugierige Person haben gereicht und Sie können dieses Muster am Montagmorgen kopieren.
+
+00:08:29.390 --> 00:08:30.810
+Der Rhythmus ist wichtiger als die Werkzeuge.
+
+00:08:30.810 --> 00:08:37.170
+Eine kurze monatliche Überprüfung, ein paar klare Entscheidungen und ein Verantwortlicher für jede Maßnahme sind jedes Mal besser als ein riesiges Quartalsordid.
+
+00:08:37.570 --> 00:08:39.370
+Das Ziel ist eine Gewohnheit, die auch arbeitsreich übersteht.
+
+00:08:39.690 --> 00:08:41.810
+Der Alarm selbst leistet dabei im Hintergrund stille Arbeit.
+
+00:08:42.330 --> 00:08:45.130
+Er macht aus einer Zahl, die niemand beachtete, eine Frage, die jemand beantworten muss.
+
+00:08:45.870 --> 00:08:50.710
+Dieser kleine Anstoß ist oft der entscheidende Unterschied zwischen einer stabilen Rechnung und einer, die sich bis Jahresende verdoppelt.
+
+00:08:51.170 --> 00:08:53.330
+Um dorthin zu gelangen, braucht es kein großes Meeting oder ein neues System.
+
+00:08:53.330 --> 00:08:57.510
+Es braucht nur einen Alarm, einen Verantwortlichen und jeden Monat einen ehrlichen Blick auf die Zahlen.
+
+00:08:57.630 --> 00:08:59.590
+Genau deshalb kann ein kleines Team schon diese Woche beginnen.
+
+00:09:00.150 --> 00:09:02.510
+Der Sinn von Showback und Chargeback ist, niemals jemanden zu bestrafen.
+
+00:09:03.250 --> 00:09:07.670
+Es geht darum, die Kosten einer Entscheidung für den Entscheider sichtbar zu machen, damit die nächste Wahl etwas klüger ausfällt.
+
+00:09:08.730 --> 00:09:11.230
+Ihr findet FinOps in Microsoft 365 und Azure Start.
+
+00:09:11.790 --> 00:09:16.190
+Microsoft macht den Einstieg leicht, da die Tools bereits in den Produkten enthalten sind, die sie ohnehin nutzen.
+
+00:09:16.970 --> 00:09:21.030
+Die Basis ist Microsoft Cost Management, das Microsoft als eine Suite von FinOps-Tools beschreibt,
+
+00:09:21.030 --> 00:09:23.930
+die ihnen helfen, ihre Cloud-Kosten zu analysieren, zu überwachen und zu optimieren.
+
+00:09:24.570 --> 00:09:27.850
+Sie finden es im Azure-Portal und im Microsoft 365 Admin Center,
+
+00:09:28.130 --> 00:09:31.550
+sodass ihre Cloud-Rechnungen und ihre Software-Lizenzen endlich am selben Ort zu finden sind.
+
+00:09:32.710 --> 00:09:36.190
+Innerhalb von Cost Management können sie mittels Kostenanalyse untersuchen, wohin das Geld fließt
+
+00:09:36.190 --> 00:09:38.650
+und mit Budgets-Limits setzen, bei deren Überschreitung sie gewarnt werden.
+
+00:09:39.370 --> 00:09:42.570
+Normalerweise überwachen Alarme ungewöhnliche Spitzen und geplante Benachrichtigungen
+
+00:09:42.570 --> 00:09:44.810
+senden ihnen täglich oder wöchentlich eine Zusammenfassung per E-Mail.
+
+00:09:45.490 --> 00:09:48.430
+Exporte übertragen die Rohdaten in Power BI oder ein anderes System,
+
+00:09:48.430 --> 00:09:50.250
+damit sie ihre eigenen Dashboards erstellen können.
+
+00:09:51.030 --> 00:09:54.090
+Azure Advisor ist der kostenlose Helfer, den die meisten Anfänger nie öffnen.
+
+00:09:54.890 --> 00:09:57.250
+Microsoft nennt ihn einen personalisierten Cloud-Berater.
+
+00:09:57.510 --> 00:10:00.770
+Er analysiert ihr Setup und empfiehlt täglich Änderungen von der Größenanpassung
+
+00:10:00.770 --> 00:10:03.690
+überdimensionierter Maschinen bis zum Herunterfahren ungenutzter Ressourcen.
+
+00:10:04.770 --> 00:10:08.810
+Er ist kostenlos, bereits aktiviert und kommt einer Aufgabenliste zum Geldsparen in Azure am nächsten.
+
+00:10:09.690 --> 00:10:11.670
+Dann kommen die Preishebel, bei denen es die Rabatte gibt.
+
+00:10:12.290 --> 00:10:14.830
+Ein Azure Savingsplan kann die Rechenkosten bei gleichbleibender Nutzung
+
+00:10:14.830 --> 00:10:17.450
+um bis zu 65 Prozent gegenüber den PSU-Go-Preisen senken.
+
+00:10:17.450 --> 00:10:22.250
+Eine Reservierung kann bis zu 72 Prozent einsparen, wenn Sie sich für eine bestimmte Laufzeit zu einer festen Nutzung verpflichten.
+
+00:10:22.390 --> 00:10:26.810
+Der Azure Hybrid Benefit geht noch weiter und erlaubt Ihnen, Windows-Server oder SQL-Server-Lizenzen,
+
+00:10:26.830 --> 00:10:31.470
+die Sie bereits besitzen, weiterzuverwenden, was laut Microsoft bei virtuellen Maschinen bis zu 40 Prozent Einsparung bedeuten kann.
+
+00:10:31.770 --> 00:10:36.110
+Betrachten Sie jede dieser Zahlen eher als Obergrenze, denn als Versprechen, da Sie es nur auszahlen, wenn Ihre Nutzung vorhersehbar ist.
+
+00:10:36.990 --> 00:10:39.890
+Ein weiteres Konzept verbindet all dies und trägt einen etwas sperrigen Namen.
+
+00:10:39.890 --> 00:10:46.210
+Fokus. Die FinOps Open Cost & Usage Specification ist ein gemeinsames Format für Abrechnungsdaten und Microsoft ist ein Gründungsmitglied.
+
+00:10:46.730 --> 00:10:51.710
+Das bedeutet, dass ein Kostenbericht von Azure, einer anderen Cloud oder einem Softwareanbieter endlich in derselben Sprache gelesen werden kann.
+
+00:10:52.190 --> 00:10:54.590
+Das ist eine große Sache, sobald Sie diese zum ersten Mal direkt miteinander vergleichen.
+
+00:10:55.070 --> 00:10:57.430
+Und denken Sie daran, dass Software-Lizenzen in den selben Bereich gehören.
+
+00:10:58.270 --> 00:11:03.450
+Eine Microsoft 3065 Co-Pilot-Lizenz kostet etwa 30 Dollar pro Benutzer im Monat als Add-on zu einem qualifizierten Plan.
+
+00:11:03.710 --> 00:11:08.370
+Sobald Sie dies auf einige hundert Personen hochrechnen, verdient es dieselbe genaue Prüfung, die Sie jedem Server widmen würden.
+
+00:11:08.370 --> 00:11:12.130
+Auf der Microsoft 365-Seite gilt für Lizenzen dieselbe Denkweise.
+
+00:11:12.610 --> 00:11:17.710
+Es kommt häufig vor, dass Leute eine Prämien-Lizenz besitzen, die sie nie nutzen oder zwei sich überschneidende Abonnements haben, die fast dasselbe leisten.
+
+00:11:18.110 --> 00:11:20.610
+Diese zu bereinigen ist oft die schnellste Einsparung im gesamten Mandant.
+
+00:11:21.090 --> 00:11:26.610
+Das Microsoft 365 Admin Center zeigt, wer etwas zugewiesen bekommen hat, sodass die Frage kein Rätsel mehr ist, sondern zu einer Aufgabe wird.
+
+00:11:27.250 --> 00:11:30.890
+Diese Tools verschaffen Ihnen die Sichtbarkeit und die Rabatte. Dieser Teil steht Ihnen bereits heute zur Verfügung.
+
+00:11:31.570 --> 00:11:36.490
+Was Ihnen kein Tool abnehmen kann, ist die Disziplin, sie weiterhin zu nutzen, was uns zu den Fehlern führt, die fast jede Praxis zunichte machen.
+
+00:11:36.490 --> 00:11:39.350
+Die Fehler, die eine FinOps-Praxis scheitern lassen.
+
+00:11:40.070 --> 00:11:43.070
+Der erste Fehler ist, FinOps als reine Übung zur Kostensenkung zu betrachten.
+
+00:11:43.710 --> 00:11:47.610
+Wenn Einsparungen der einzige Maßstab sind, lernen Teams, ihre Ausgaben zu verstecken, anstatt darüber zu sprechen.
+
+00:11:47.890 --> 00:11:49.210
+Und die Zahlen werden schlechter statt besser.
+
+00:11:49.970 --> 00:11:52.530
+Der zweite Fehler ist, die Praxis ohne Verantwortlichkeiten oder Tags zu betreiben.
+
+00:11:52.930 --> 00:11:58.750
+Wenn niemand sagen kann, welches Projekt die Kosten verursacht hat, wird jedes Gespräch über Kosten zum Rates spielen und die Lösung hält nie lange an.
+
+00:11:58.750 --> 00:12:01.910
+Der dritte Fehler ist, ein Tool zu kaufen und die Arbeit als erledigt zu betrachten.
+
+00:12:02.410 --> 00:12:06.030
+Software kann Ihnen die Zahlen zeigen, aber sie kann kein Gespräch ersetzen, das niemand führen will.
+
+00:12:06.450 --> 00:12:09.070
+Der vierte Fehler ist, die gesamte Arbeit in einem zentralen Team zu belassen.
+
+00:12:09.430 --> 00:12:13.770
+Wenn Entwickler ihre eigenen Kosten nie sehen, entwickeln sie kein Gespür dafür, kostenbewusst zu designen.
+
+00:12:13.770 --> 00:12:16.710
+Und das zentrale Team wird zum Flaschenhals statt zum Ermöglicher.
+
+00:12:17.490 --> 00:12:21.410
+Der fünfte Fehler ist, den letzten paar Prozent an Einsparungen nachzujagen, während man die großen Posten ignoriert.
+
+00:12:21.830 --> 00:12:24.590
+Der Bericht der Foundation für 2026 hat dies gut auf den Punkt gebracht.
+
+00:12:24.670 --> 00:12:27.470
+Und ein Praktiker zitiert, der sagte, die großen Brocken der Verschwendung seien bereits beseitig.
+
+00:12:27.470 --> 00:12:32.310
+Was bleibt, sind Ihren Worten nach eine Vielzahl kleinerer Gelegenheiten, deren Nutzung deutlich mehr Aufwand erfordert.
+
+00:12:32.650 --> 00:12:35.910
+Der sechste Fehler ist der Versuch, Wert zu messen, ohne sich darauf zu einigen, was Wert bedeutet.
+
+00:12:36.430 --> 00:12:41.650
+Teams streiten sich darüber, ob ein Tool sein Geld wert ist, obwohl sie nie definiert haben, welches Ergebnis sie damit eigentlich erzielen wollten.
+
+00:12:42.470 --> 00:12:43.990
+Fehler wie diese kündigen sich selten von selbst an.
+
+00:12:44.530 --> 00:12:45.670
+Sie zeigen sich als schleichender Prozess.
+
+00:12:46.130 --> 00:12:50.710
+Die Dashboards sehen gut aus, die Meetings finden statt und die Rechnung steigt weiter, weil niemand das zugrunde liegende Verhalten geändert hat.
+
+00:12:52.050 --> 00:12:57.310
+Die gute Nachricht ist, dass die gleichen Gewohnheiten von vorhin die meisten davon beheben, was bedeutet, dass die Heilung meist einfacher ist als die Krankheit.
+
+00:12:58.050 --> 00:12:59.090
+Was FinOps nicht beheben kann.
+
+00:12:59.170 --> 00:13:01.270
+FinOps ist ehrlich in Bezug auf seine Grenzen und das sollten Sie auch sagen.
+
+00:13:02.230 --> 00:13:07.130
+Es kann Ihnen noch nichts sagen, ob Sie Ihre KI-Investitionen auszahlt, da die gesamte Branche noch mit dieser Frage kämpft.
+
+00:13:07.830 --> 00:13:13.650
+Die Umfrage von 2026 brachte es auf den Punkt und zitierte einen Praktiker, wonach niemand beantworten könne, ob KI bereits einen Mehrwert bietet.
+
+00:13:14.250 --> 00:13:16.990
+Es ist genauso schwierig, das Geld zu messen, dass Sie gespart haben, indem Sie die Fehler gemacht haben.
+
+00:13:17.750 --> 00:13:21.010
+Wie es ein anderer Praktiker im selben Bericht ausdrückte, wenn man ein Problem gelöst hat, ist es weg.
+
+00:13:21.530 --> 00:13:24.590
+Wie also erkennt man die Leistung eines Entwicklers für Kosten, an die nie entstanden sind?
+
+00:13:25.010 --> 00:13:31.070
+Es kann auch keine schlechte Architektur oder unklare Verantwortlichkeiten reparieren, denn das sind Design- und Kulturprobleme, die ein Bericht nur aufdeckt.
+
+00:13:32.070 --> 00:13:37.690
+Kann auch nicht versprechen, dass die einfachen Erfolge noch warten, der erfahrene Teams berichten, dass die offensichtliche Verschwendung weitgehend beseitigt ist.
+
+00:13:37.690 --> 00:13:40.790
+Und es kann ein Commitment-Rabatt nicht in kostenloses Geld verwandeln.
+
+00:13:41.270 --> 00:13:43.870
+Eine Reservierung oder ein Sparplan helfen nur bei gleichbleibender Nutzung.
+
+00:13:44.230 --> 00:13:47.510
+Der Kauf für eine Workload, die Sie abschalten wollen, kann daher mehr Kosten als einsparen.
+
+00:13:48.190 --> 00:13:51.530
+Die Kostendaten selbst treffen zudem erst nachträglich ein, das sollte man kurz sacken lassen.
+
+00:13:52.190 --> 00:13:53.550
+Sie lesen immer die Zahlen von gestern.
+
+00:13:54.010 --> 00:13:56.950
+Phenops ist also eine Methode zum Steuern, kein Schalter, den man einmal umlegt und dann vergisst.
+
+00:13:57.430 --> 00:13:59.450
+Die harte Wahrheit ist, dass Phenops Geduld erfordert.
+
+00:13:59.950 --> 00:14:02.970
+Der erste Durchlauf findet meist ein paar offensichtliche Erfolge, der zweite weniger.
+
+00:14:02.970 --> 00:14:05.650
+Das ist normal und kein Zeichen dafür, dass die Methode nicht funktioniert.
+
+00:14:05.650 --> 00:14:07.710
+Das macht die Methode keineswegs schwach.
+
+00:14:08.170 --> 00:14:11.390
+Es bedeutet nur, dass Phenops eine Art ist, bessere Fragen zu Technologieausgaben zu stellen.
+
+00:14:11.550 --> 00:14:13.010
+Keine Maschine, die Ersparnisse druckt.
+
+00:14:13.570 --> 00:14:18.230
+Zu wissen, was es nicht kann, bewahrt sie davor, Magie zu erwarten und aufzugeben, wenn diese ausbleibt.
+
+00:14:19.430 --> 00:14:20.730
+Was man über Phenops wissen sollte.
+
+00:14:21.310 --> 00:14:22.830
+Hier ist also die Kurzfassung für Sie zum Mitnehmen.
+
+00:14:23.430 --> 00:14:27.990
+Phenops ist eine gemeinsame Gewohnheit, die Kosten der Technologie im Blick zu behalten und gemeinsam zu entscheiden, was sie wert ist.
+
+00:14:28.350 --> 00:14:31.710
+Es basiert auf einem einfachen Kreislauf aus Informieren, Optimieren und Betreiben.
+
+00:14:32.110 --> 00:14:35.430
+Microsoft gibt Ihnen die nötigen Start-Tools direkt in den Produkten an die Hand, die Sie bereits nutzen.
+
+00:14:35.910 --> 00:14:37.550
+Jetzt eine Frage, auf die ich wirklich eine Antwort von Ihnen möchte.
+
+00:14:38.390 --> 00:14:41.150
+Wann hat das letzte Mal jemand aus Ihrem Team gefragt, wer eigentlich die Cloud-Rechnung bezahlt?
+
+00:14:41.830 --> 00:14:48.610
+Wenn das Thema dadurch weniger einschüchternd wirkt, abonnieren Sie M335FM, um die Tools und Denkweisen zu meistern, die die Zukunft der Arbeit gestalten.

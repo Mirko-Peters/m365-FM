@@ -1,0 +1,763 @@
+WEBVTT
+
+00:00:00.450 --> 00:00:04.930
+Willkommen zum M3355FM-Podcast, in dem wir die Menschen, Ideen und Technologien untersuchen,
+
+00:00:05.030 --> 00:00:08.430
+die die Zukunft der Arbeit prägen. Eröffnung, die Kosten für das Kopieren von Daten.
+
+00:00:09.070 --> 00:00:12.410
+Stellen Sie sich Folgendes vor, ein Verkaufstisch befindet sich in einem Lagerhaus, einem Haus am
+
+00:00:12.410 --> 00:00:16.650
+See, einem Power BI Import Modell und drei Teamordnern. Diese erste Kopie wurde aus praktischen
+
+00:00:16.650 --> 00:00:19.570
+Gründen erstellt, aber schon bald stimmen die Zahlen nicht mehr überein. Berichte veralten
+
+00:00:19.570 --> 00:00:23.630
+und jemand übernimmt einen anderen aktualisierten Job. Das Problem liegt nicht im Speicher,
+
+00:00:23.730 --> 00:00:29.170
+sondern im Vertrauen. Willkommen zum M3355FM-Podcast, in dem wir die Menschen, Ideen und Technologien
+
+00:00:29.170 --> 00:00:33.190
+untersuchen, die die Zukunft der Arbeit prägen. Wir befassen uns mit OneLake und dieser Idee
+
+00:00:33.190 --> 00:00:36.530
+gemeinsam genutzter Daten, da eine gespeicherte Kopie weiterhin die bevorzugte Arbeitsweise
+
+00:00:36.530 --> 00:00:40.210
+jedes Teams unterstützen kann, ohne dass es zu einem Chaos kommt. Das Chaos des OneLake
+
+00:00:40.210 --> 00:00:43.650
+beenden sollte. Die meisten Unternehmen haben nie geplant, dieses Labyrinth aus Datenkopien
+
+00:00:43.650 --> 00:00:47.630
+zu erstellen. Es beginnt ganz harmlos. Ein Team versucht, ein echtes Problem schnell zu
+
+00:00:47.630 --> 00:00:51.110
+lösen. Die Finanzabteilung benötigt einen Verkaufsbericht, also zieht sie die Daten in
+
+00:00:51.110 --> 00:00:54.610
+ihren eigenen Arbeitsbereich. Die Betriebsabteilung benötigt eine Tagesübersicht, also richtet sie
+
+00:00:54.610 --> 00:00:58.990
+eine weitere Pipeline an. Das Produktteam möchte das Kundenverhalten untersuchen und erstellt dafür
+
+00:00:58.990 --> 00:01:03.010
+einen Datenpool. Jede dieser Entscheidungen erscheint für sich genommen sinnvoll, doch
+
+00:01:03.010 --> 00:01:06.650
+bei genauerem Hinsehen ergeben sich separate Datenpools, separate Pipelines, separate Pipelines,
+
+00:01:06.770 --> 00:01:09.910
+separate Berechtigungen und separate Versionen desselben geschäftlichen Fakts. Nehmen wir
+
+00:01:09.910 --> 00:01:13.190
+eine einfache Frage, wie viel haben wir im letzten Monat verkauft? Das SQL-Team ruft die Zahl
+
+00:01:13.190 --> 00:01:16.710
+möglicherweise aus einem Warehouse ab. Ein Datentechniker ruft nach einem Transformationsauftrag
+
+00:01:16.710 --> 00:01:20.110
+Daten aus einer Spark-Tabelle an. Ein Analyst öffnet einen Power BI-Bericht, der über Nacht
+
+00:01:20.110 --> 00:01:23.530
+aktualisiert wurde. Eine Geschäftsanwendung ließ Daten aus ihrem eigenen extrahierten
+
+00:01:23.530 --> 00:01:28.170
+Datens. Diese Antworten sollten übereinstimmen, doch manchmal tun sie es nicht. Stellen Sie sich folgendes
+
+00:01:28.170 --> 00:01:30.750
+vor, eine Pipeline wird um sechs Uhr morgens ausgeführt, eine andere schlägt fehlt und
+
+00:01:30.750 --> 00:01:34.230
+versucht es um zwölf erneut. Das Warehouse schließt stornierte Bestellungen aus, doch
+
+00:01:34.230 --> 00:01:38.010
+der Bericht verwendet eine ältere Regel. Das Vertriebsteam korrigiert den Datensatz im
+
+00:01:38.010 --> 00:01:42.290
+Quellsystem, doch nur eine von fünf nachgelagerten Kopien erhält die Änderung. Plötzlich geht
+
+00:01:42.290 --> 00:01:45.630
+es in dem Meeting nicht mehr um den Vertrieb. Es wird zu einer Debatte darüber, welchen Zahlen
+
+00:01:45.630 --> 00:01:49.890
+man vertrauen kann. Diese Debatte kostet mehr als nur Speicherplatz. Mitarbeiter verschwenden
+
+00:01:49.890 --> 00:01:53.490
+Stunden, damit Spalten über Pipelines zu verfolgen, Aktualisierungszeitstempel zu vergleichen und die
+
+00:01:53.490 --> 00:01:56.110
+Person ausfindig zu machen, der eine Tabelle gehört, an deren Erstellung sich niemand mehr
+
+00:01:56.110 --> 00:01:59.830
+ändert. In der Zwischenzeit erfordert jede zusätzliche Kopie-Zugriffskontrollen, Überwachung,
+
+00:01:59.910 --> 00:02:03.270
+Backup-Pläne und jemanden, der in Bereitschaft ist, wenn die Last zusammenbricht. Die technischen
+
+00:02:03.270 --> 00:02:06.670
+Schulden türmen sich still und heimlich ab. Eine Pipeline ist von einer Tabelle abhängig. Diese
+
+00:02:06.670 --> 00:02:10.110
+Tabelle ist wiederum von einer Kopie abhängig. Jemand ändert einen Spalten namen Strom aufwärts und
+
+00:02:10.110 --> 00:02:13.950
+einem Bericht bricht zwei Systeme weiter zusammen. Die Behebung dauert zehn Minuten. Die Suche nach der
+
+00:02:13.950 --> 00:02:17.790
+verantwortlichen Person kann Tage dauern. Sie denken vielleicht, die Lösung sei, alle zu zwingen, ein Tool
+
+00:02:17.790 --> 00:02:21.890
+zu verwenden, jedes Team an SQL zu binden, Spark für jeden Ingenieur vorzuschreiben oder ein Modell für
+
+00:02:21.890 --> 00:02:25.810
+alle Berichte zu erzwingen oder ein Modell. Aber hier liegt der Knackpunkt. Das löst nicht das
+
+00:02:25.810 --> 00:02:30.350
+eigentliche Problem. Es verlagert nur die Frustration von der Datenbewegung auf die Mitte. Ein SQL-Entwickler
+
+00:02:30.350 --> 00:02:34.970
+benötigt SQL-Erfahrung, der damit Daten erstellt und abfragt. Ein Dateningenieur benötigt Spark für
+
+00:02:34.970 --> 00:02:38.830
+umfangreiche Verarbeitung und Notebooks. Analysten benötigen Berichte, die geschäftliche Fragen
+
+00:02:38.830 --> 00:02:42.550
+beantworten, ohne dass Dateien geprüft oder Code geschrieben werden müssen. Anwendungen benötigen einen
+
+00:02:42.550 --> 00:02:46.630
+zuverlässigen Zugriff im erwarteten Format. Und die Erfahrung kann sich unterscheiden, ohne dass eine weitere
+
+00:02:46.630 --> 00:02:50.950
+physische Kopie erstellt wird. Und diese Trennung ist wichtig. Der Speicher beantwortet die Frage, wo die Daten gespeichert
+
+00:02:50.950 --> 00:02:56.530
+sind. Das Tool beantwortet die Frage, wie diese Person damit arbeitet. Sobald wir diese beiden Fragen trennen,
+
+00:02:56.590 --> 00:03:00.490
+scheint das Chaos behebbar zu sein. Ein einzelner gemeinsam genutzter Ort kann jedoch wie eine drohende
+
+00:03:00.490 --> 00:03:04.690
+Katastrophe wirken. Ein riesiger Ordner und klare Besitzverhältnisse. Jeder tritt auf die Arbeit des
+
+00:03:04.690 --> 00:03:08.670
+anderen ein. Fabric löst dieses Problem durch Struktur, sodass Teams eine gemeinsame Grundlage
+
+00:03:08.670 --> 00:03:14.530
+nutzen können, ohne ihre Grenzen aufzugeben. Ein Datensee, ein logischer Datensee, viele Teams. Sie denken
+
+00:03:14.530 --> 00:03:17.550
+vielleicht, dass der schwierigste Teil der Datenspeicherung darin besteht, einfach einen Ort zu finden, an dem alles
+
+00:03:17.550 --> 00:03:20.930
+abgelegt wird. Die eigentliche Spannung besteht jedoch darin, dass jedes Team seine eigene Speicherplatz
+
+00:03:20.930 --> 00:03:24.690
+benötigt und dennoch dieselben Daten muss. Ein Datensee löst dieses Problem, indem er ihrem gesamten
+
+00:03:24.690 --> 00:03:28.210
+Unternehmer einen logischen Datensee in Microsoft Fabric zur Verfügung stellt. Das Wort logisch ist
+
+00:03:28.210 --> 00:03:33.450
+hier von Bedeutung. Sie sehen nicht eine physische Festplatte in einem einzelnen Serverraum. Stattdessen
+
+00:03:33.450 --> 00:03:37.110
+erhalten sie eine zusammenhängende Ansicht aller ihrer Organisationsdaten Fabric, die über Konten und
+
+00:03:37.110 --> 00:03:41.470
+Abteilungen verteilt sind, aber wie ein einziger Datensee aussehen. Und genau hier kommen die Leute auf den
+
+00:03:41.470 --> 00:03:45.990
+falschen Fuß. Wenn Fabric in ihrem Mandanten verfügbar ist, ist bereits ein Lake vorhanden. Sie müssen kein
+
+00:03:45.990 --> 00:03:49.850
+Speicherkonto bereitstellen. Sie erstellen keinen Lake, wählen seine Infrastruktur nicht aus und bitten
+
+00:03:49.850 --> 00:03:53.930
+niemanden, die Basisplattform zu verwalten. Jeder Fabrik-Mandant verfügt über genau einen Lake.
+
+00:03:54.290 --> 00:03:58.110
+Diese Einfachregel erspart überraschend viele anfängliche Architekturdebatten. Teams verbringen
+
+00:03:58.110 --> 00:04:01.330
+weniger Zeit mit der Frage, wo der nächste Lake untergebracht werden soll, da die gemeinsam genutzte
+
+00:04:01.330 --> 00:04:05.450
+Speicherebene bereits war. Die Frage verlagert sich von der Frage, wo wir die Daten ablegen, zur Frage,
+
+00:04:05.530 --> 00:04:09.330
+wie wir die eingehenden Daten organisieren und steuern. Microsoft vergleicht ein Lake häufig mit
+
+00:04:09.330 --> 00:04:14.130
+OneDrive für Daten. Der Vergleich ist hilfreich, wenn man ihn wörtlich nennt. OneDrive zwingt nicht jede
+
+00:04:14.130 --> 00:04:18.890
+Abteilung in ein Dokument oder einen Ordner. Bietet der Organisation einen gemeinsamen Dienst, während die
+
+00:04:18.890 --> 00:04:23.710
+Mitarbeiter weiterhin in Bereichen arbeiten, die sie verstehen und kontrollieren können. Ein Lake folgt
+
+00:04:23.710 --> 00:04:27.930
+demselben Datei- und Ordnermodell. Unter der Mandantengrenze organisieren sie Daten über Domänen,
+
+00:04:28.070 --> 00:04:31.170
+dann über Arbeitsbereiche, dann über Fabrikelemente und dann über die Dateien und Tabellen in diesen
+
+00:04:31.170 --> 00:04:34.890
+Elementen. Jede Ebene bietet den Mitarbeitern einen übersichtlichen Ort zum Nachschlagen und eine
+
+00:04:34.890 --> 00:04:39.310
+klare Abgrenzung der Zuständigkeit. Die Arbeit einer Domänengruppe umgibt einen Geschäftsbereich wie
+
+00:04:39.310 --> 00:04:44.030
+Finanzenbetrieb oder Produkt. Innerhalb dieser Domäne ermöglichen Arbeitsbereiche den Teams, die benötigten
+
+00:04:44.030 --> 00:04:48.710
+Fabrikelemente zu erstellen und zu verwalten. Zu diesen Elementen kann ein Haus am See oder ein Lager gehören. Darunter befinden sich
+
+00:04:48.710 --> 00:04:52.850
+die eigentlichen Tabellen. Stellen Sie sich vor, was sich dadurch für ein Finanzteam endet. Die Finanzabteilung
+
+00:04:52.850 --> 00:04:56.050
+besitzt ihren Arbeitsbereich, legt fest, wer darauf zugreifen darf und ist für die veröffentlichten
+
+00:04:56.050 --> 00:05:00.190
+Datenprodukte verantwortlich. Das operative Team muss diesen Arbeitsbereich nicht übernehmen, um dieselbe
+
+00:05:00.190 --> 00:05:03.670
+allgemeine Speichergrundlage zu verwenden. Das Produktteam behält seinen eigenen Arbeitsbereich, seine
+
+00:05:03.670 --> 00:05:06.910
+eigenen Regeln und seine eigene tägliche Arbeit. Hierbei handelt es sich also nicht um eine zentralisierte
+
+00:05:06.910 --> 00:05:10.050
+Steuerung, die vorgibt, zusammenzuarbeiten. Es handelt sich um verteilte Besitzverhältnisse innerhalb einer
+
+00:05:10.050 --> 00:05:14.830
+Gemeinsationsgrenze. Der Mandantenadministrator kontrolliert die äußere Grenze, aber nicht jedes Team muss darauf warten,
+
+00:05:14.930 --> 00:05:17.970
+dass eine zentrale Datengruppe jeden Ordner, jede Tabelle oder jedes Element erstellt.
+
+00:05:18.770 --> 00:05:22.290
+Das ist wichtig, da der Datenbesitz am besten bei den Personen funktioniert, die die dahinterstehenden
+
+00:05:22.290 --> 00:05:26.770
+Geschäftsprozesse verstehen. Die Finanzabteilung weiß, was eine genehmigte Umsatzzahl bedeutet. Das
+
+00:05:26.770 --> 00:05:30.750
+operative Team weiß, wie sich der Lagerstatus im Laufe des Tages ändert. Das Produktteam weiß, welche
+
+00:05:30.750 --> 00:05:35.110
+Kundenereignisse in eine Nutzungstabelle gehören. Ein Datensee gibt diesen Teams den Freiraum, ihren Teil
+
+00:05:35.110 --> 00:05:40.190
+zu besitzen, ohne ihn von allen anderen zu isolieren. Innerhalb eines Arbeitsbereichs sorgen Fabrikelemente für die
+
+00:05:40.190 --> 00:05:44.270
+zur jeweiligen Aufgabe passende Umgebung. Ein Haus am See bietet Ingenieuren einen Ort, an dem sie mit Dateien und
+
+00:05:44.270 --> 00:05:48.510
+Tabellen arbeiten. Ein Warehouse bietet SQL-fokussierten Teams Schemata und Tabellen in einer vertrauten
+
+00:05:48.510 --> 00:05:53.270
+Umgebung. Sie fühlen sich anders an, weil die Arbeit anders ist. Aber hier liegt der Clou. Im Grunde sind
+
+00:05:53.270 --> 00:05:56.330
+beide im einzigen See verbunden. Sie entscheiden sich nicht zwischen einem Haus am See in einer
+
+00:05:56.330 --> 00:06:00.130
+Speicherwelt und einem anderen Ort. Sie entscheiden, die Personen mit Daten interagieren, die im selben
+
+00:06:00.130 --> 00:06:03.990
+organisatorischen See gespeichert sind. Das ist der Teil, den viele Leute übersehen. Einziger See erfordert
+
+00:06:03.990 --> 00:06:08.070
+nicht, dass jeder auf die gleiche Weise arbeitet. Er schafft eine gemeinsame Speicherebene, während Fabrik jedem Team
+
+00:06:08.070 --> 00:06:11.890
+eine Schnittstelle bietet, die seinen Fähigkeiten und Anforderungen entspricht. Aber gemeinsam benutzt der Speicher
+
+00:06:11.890 --> 00:06:15.170
+allein wird nicht viel bringen, wenn jeder Engine ihre eigene konvertierte Version benötigt, bevor sie
+
+00:06:15.170 --> 00:06:19.770
+die Daten lesen kann. Die nächste Frage ist, wie ein gespeicherter Datensatz für SQL, Spark und Power BI
+
+00:06:19.770 --> 00:06:23.590
+verwendet werden kann, ohne einen weiteren Kopierzyklus zu starten, ohne einen weiteren Kopierzyklus zu
+
+00:06:23.590 --> 00:06:28.650
+starten. Eine Kopie mehrerer Arbeitsweisen. Eine Kopie der Daten kann zunächst einschränkend klingen. Sie hören
+
+00:06:28.650 --> 00:06:32.070
+das vielleicht und denken, dass ein Team die Tabelle besitzt, ein Tool sie liest und alle anderen sich
+
+00:06:32.070 --> 00:06:37.070
+einstellen müssen. Das ist aber nicht das Modell. Eine Kopie bedeutet, dass ein gespeicherter Datensatz viele Arten von
+
+00:06:37.070 --> 00:06:41.750
+Arbeit unterstützen kann, während die Teams, die ihn verwenden, die Tools behalten, die für ihre Aufgaben geeignet sind. Die freigegebene
+
+00:06:41.750 --> 00:06:46.350
+Tabelle befindet sich unter Fabrikelementen in einem offenen Format namens Deltapack. Mit Deltapack können
+
+00:06:46.350 --> 00:06:50.770
+verschiedene Engines dieselbe Tabelle erkennen, ohne dass jedes Team sie exportieren, konvertieren und eine
+
+00:06:50.770 --> 00:06:54.530
+andere Version an einem anderen Ort speichern muss. Die Daten bleiben an Ort und Stelle, aber die Art und Weise, wie
+
+00:06:54.530 --> 00:06:59.050
+Mitarbeiter damit arbeiten, sind sie. Für einen SQL-Techniker bedeutet dies, dass sie ein Warehouse anfühlen kann. Sie
+
+00:06:59.050 --> 00:07:03.310
+verwenden TSQL, arbeiten mit Schemas und Tabellen, laden Daten und führen die Abfragen aus, die sie bereits
+
+00:07:03.310 --> 00:07:09.310
+kennen. Hinter dieser vertrauten Erfahrung befindet sich die Tabelle in einem See. Das SQL-Team muss sich nicht in ein Spark-Team
+
+00:07:09.310 --> 00:07:13.810
+verwandeln, nur um an einem freigegebenen Datenmodell teilzunehmen. Gleichzeitig öffnet ein Datentechniker
+
+00:07:13.810 --> 00:07:18.190
+dieselben Daten über Apache Spark. Spark bietet Technikern und Datenwissenschaftlern die Tools, die sie für
+
+00:07:18.190 --> 00:07:22.650
+größere Transformationen, Notebooks und Open-Source-Bibliotheken benötigen, benötigen. Sie lesen die Delta-Tabelle,
+
+00:07:22.930 --> 00:07:26.670
+schreiben Änderungen im gleichen Format zurück und übergeben das Ergebnis an die nächste Person, ohne dass
+
+00:07:26.670 --> 00:07:30.270
+ein weiterer Exportauftakt dazwischen liegt. Das klingt unbedeutend, bis man sich die übliche Alternative
+
+00:07:30.270 --> 00:07:35.350
+ansieht. Ein Spark-Prozess erstellt eine transformierte Tabelle. Jemand kopiert sie in ein SQL-Spray. Dann importiert
+
+00:07:35.350 --> 00:07:39.810
+Analysts sie in Power BI. Jede Übergabe erzeugt eine Verzögerung und einen neuen Ort, an die Daten von der
+
+00:07:39.810 --> 00:07:45.330
+Quelle abweichen. Bei einem Lake ändert sich auch die Power BI-Seite. Ein semantisches Modell verwendet
+
+00:07:45.330 --> 00:07:49.950
+Direct Lake, um auf Daten in einem Lake zuzugreifen, ohne eine separate Importkopie zu erstellen. Für den
+
+00:07:49.950 --> 00:07:53.670
+Geschäftsanwender fühlt sich der Bericht immer noch schnell und vertraut an. Sie öffnen ein Dashboard,
+
+00:07:53.770 --> 00:07:57.870
+filtern die Umsätze nach Region und fragen, warum sich eine Zahl geändert hat. Wir müssen nicht wissen, ob Spark oder
+
+00:07:57.870 --> 00:08:02.310
+SQL die Tabelle vorbereitet hat. Die eigentliche Spannung besteht hier darin, dass Teams Flexibilität oft mit
+
+00:08:02.310 --> 00:08:06.230
+Duplizierung verwechseln. Sie gehen davon aus, dass jeder Engine ihre eigene gespeicherte Version der
+
+00:08:06.230 --> 00:08:10.490
+Daten benötigt, da Plattformen in der Vergangenheit oft so funktionierten. Fabric trennt die Engine von
+
+00:08:10.490 --> 00:08:14.130
+der gespeicherten Tabelle. Sie wählen die Engine für die Aufgabe aus und behalten dabei eine genehmigte
+
+00:08:14.130 --> 00:08:17.790
+Quelle bei. Stellen Sie sich einen Umsatzdatensatz vor, das ist ein Quellsteamend. Es landet einem im
+
+00:08:17.790 --> 00:08:22.350
+Data Lake. Ein Data Engineer bereinigt mit Spark-Kunden-IDs, behandelt fehlende Werte und bereitet die
+
+00:08:22.350 --> 00:08:27.510
+Tabelle für die Analyse vor. Das Warehouse-Team fragt dann dieselbe vorbereitete Tabelle mit TSQL ab, um detaillierte
+
+00:08:27.510 --> 00:08:31.690
+Vertriebsfragen zu beantworten. Power BI ließt die Daten mithilfe von Direct Lake über ein semantisches
+
+00:08:31.690 --> 00:08:35.170
+Verkaufsmodell und die Geschäftsleitung sieht die Ergebnisse in einem Bericht. Ein Datensatz, andere
+
+00:08:35.170 --> 00:08:38.890
+Arbeit, keine Kette von Kopien, die von Team zu Team weitergegeben werden. Das bedeutet nicht, dass
+
+00:08:38.890 --> 00:08:43.650
+jeder die Tabelle jederzeit ändern kann. Eine Kopie hebt nicht die Besitzrechte auf. Sie entfernt nicht die
+
+00:08:43.650 --> 00:08:47.470
+Datenqualitätsprüfungen, Genehmigungsschritte oder Zugriffsregeln. Tatsächlich werden diese Dinge
+
+00:08:47.470 --> 00:08:51.430
+wichtiger, wenn mehrere Personen auf dieselbe Quelle angewiesen sind. Jemand muss immer noch definieren,
+
+00:08:51.530 --> 00:08:55.050
+was ein Verkaufsdatensatz bedeutet. Jemand muss entscheiden, wie stornierte Bestellungen angezeigt werden.
+
+00:08:55.550 --> 00:08:58.970
+Jemand muss überprüfen, ob der Ladevorgang abgeschlossen ist und ob die Tabelle für die Berichterstellung
+
+00:08:58.970 --> 00:09:03.330
+geeignet ist. Der Zugriff muss immer noch dem Auftrag entsprechen, sodass eine Person, die einen
+
+00:09:03.330 --> 00:09:06.450
+Bericht anzeigen kann, nicht automatisch die Berechtigung erhält, die dahinterstehenden Daten
+
+00:09:06.450 --> 00:09:10.530
+zu erinnern. Ein Data Lake reduziert Duplikate, entbindet nicht von der Verantwortung. Und es gibt
+
+00:09:10.530 --> 00:09:13.810
+noch eine weitere Einschränkung, die man im Auge behalten. Eine in Fabrik gespeicherte Kopie ist
+
+00:09:13.810 --> 00:09:16.830
+sehr hilfreich, aber die meisten Unternehmen speichern ihre Daten bereits in anderen Systemen
+
+00:09:16.830 --> 00:09:20.870
+Clouds und Geschäftsplattformen. Würde man all diese Daten nach Fabrik kopieren, nur um sie sichtbar zu
+
+00:09:20.870 --> 00:09:23.190
+machen, würde das an einer neuen Stelle dasselbe Problem verursachen.
+
+00:09:23.190 --> 00:09:28.130
+Verknüpfung an Daten dort, wo sie sind. Eine Verknüpfung löst das Problem von Daten, die
+
+00:09:28.130 --> 00:09:31.610
+überhaupt nicht verschoben werden sollen. Denken Sie darüber nach. Daten, die dem Vertrieb gehören,
+
+00:09:31.830 --> 00:09:35.170
+sollten in dessen Besitz bleiben, aber die Finanzabteilung benötigt sie auch. Der Instinkt
+
+00:09:35.170 --> 00:09:38.470
+sagt einem, man solle sie kopieren, eine weitere Kopie erstellen und eine weitere Aktualisierungszeitplanung.
+
+00:09:38.590 --> 00:09:42.310
+Aber hier liegt der Clou. Man braucht keine Kopie. Eine Verknüpfung ist ein virtueller Verweis auf
+
+00:09:42.310 --> 00:09:46.590
+eine Datei, einen Ordner oder eine Tabelle an einem anderen Speicherort. Sie wird genau dort angezeigt,
+
+00:09:46.650 --> 00:09:49.830
+wo Ihr Team arbeiten muss, während die Daten an Ihrer Quelle verbleiben. Fabrik bietet Ihnen lediglich
+
+00:09:49.830 --> 00:09:53.130
+einen Vater zu. Nehmen wir als Beispiel die Finanzabteilung. Das Vertriebsteam besitzt
+
+00:09:53.130 --> 00:09:56.570
+eine genehmigte Vertriebstabelle in seinem eigenen Arbeitsbereich mit allen Regeln und Prüfungen,
+
+00:09:56.650 --> 00:10:00.910
+die roh oft Regeln akzeptierte Zahlen umwandeln. Die Finanzabteilung benötigt diese Tabelle für
+
+00:10:00.910 --> 00:10:03.850
+die Prognose, aber die Neuerstellung der Vertriebspipeline in einem Finanzarbeitsbereich
+
+00:10:03.850 --> 00:10:06.750
+bedeutet, dass eine weitere Kopie und ein weiterer Zeitplan einzuhalten sind. Stattdessen
+
+00:10:06.750 --> 00:10:10.450
+erstellt die Finanzabteilung eine Verknüpfung zu dieser genehmigten Tabelle. Aus Ihrer Sicht wird
+
+00:10:10.450 --> 00:10:14.270
+die Tabelle in Ihrem Arbeitsbereich angezeigt und kann mit Budgets und Prognosen kombiniert werden.
+
+00:10:14.910 --> 00:10:18.290
+Der Vertrieb besitzt nach wie vor die Quelltabelle und niemand muss eine zweite Pipeline erstellen,
+
+00:10:18.290 --> 00:10:21.490
+nur um Vertriebsdaten über eine interne Grenze zu verschieben. Das ist eine interne
+
+00:10:21.490 --> 00:10:25.010
+Verknüpfung. Sie ermöglicht es einem Arbeitsbereich, eine Tabelle oder einen Ordner aus einem anderen
+
+00:10:25.010 --> 00:10:27.630
+Arbeitsbereich wieder zu verwenden, selbst wenn sich die Teams in verschiedenen Geschäftsbereichen
+
+00:10:27.630 --> 00:10:30.970
+befinden. Die Daten bleiben im Besitz des Teams, das sie versteht, während andere Teams sie dort
+
+00:10:30.970 --> 00:10:34.750
+verwenden, wo sie für ihre Arbeit erforderlich sind. Wo sind? Verknüpfungen gehen auch über
+
+00:10:34.750 --> 00:10:39.390
+Fabric hinaus. Ein Team kann Verweise auf Daten in Azure Data Lake Storage, Amazon S3 oder
+
+00:10:39.390 --> 00:10:43.290
+Dataverse erstellen. Wenn sich also Kundendaten bereits in Dataverse befinden oder eine vorhandene
+
+00:10:43.290 --> 00:10:47.290
+Datenplattformdateien in ADLS oder S3 speichert, benötigen sie nicht automatisch eine Kopie in einem
+
+00:10:47.290 --> 00:10:50.870
+Lake, bevor Benutzer damit arbeiten können. Sie denken vielleicht, dass dies bedeutet, dass ein Lake jedes externe
+
+00:10:50.870 --> 00:10:54.270
+System in Fabric zieht. Das ist nicht der Fall. Die Quelle bleibt dort, wo sie sich befindet. Die
+
+00:10:54.270 --> 00:10:58.010
+Verknüpfung macht diese Quelle über einen Lake sichtbar, was den Druck verringert, Daten zu
+
+00:10:58.010 --> 00:11:02.550
+verschieben, weil ein anderes Team sie benötigt. Das ändert die Konversation. Anstatt zu fragen, wann
+
+00:11:02.550 --> 00:11:05.650
+wir diese Tabelle kopieren können, stellt sich die Frage, ob wir die genehmigte Quelle, in der sie sich
+
+00:11:05.650 --> 00:11:10.950
+bereits befindet, sicher verwenden können. Weniger Kopien bedeuten weniger geplante Ladevorgänge,
+
+00:11:11.070 --> 00:11:14.510
+weniger fehlgeschlagene Aktualisierungsketten und weniger Situationen, in denen zwei Teams zwei Versionen
+
+00:11:14.510 --> 00:11:18.630
+derselben Verkaufszahlen betraten. Aber hier kommt der Clou ins Spiel. Eine Verknüpfung ist kein magischer
+
+00:11:18.630 --> 00:11:22.310
+Berechtigung. Durch das Erstellen einer Verknüpfung erhält niemand pauschalen Zugriff auf alles, was
+
+00:11:22.310 --> 00:11:25.830
+sich dahinter findet. Zugriffsregeln sind nach wie vor wichtig und Personen können nur Daten anzeigen
+
+00:11:25.830 --> 00:11:30.190
+oder verwenden, deren Berechtigungen dies zulassen. Diese Grenze ist wichtig, da der gemeinsame Zugriff
+
+00:11:30.190 --> 00:11:33.670
+die Verwendung vertrauenswürdiger Daten erweitern und nicht stillschweigend sensible Daten für das
+
+00:11:33.670 --> 00:11:37.670
+gesamte Unternehmen zugänglich machen soll. Die Verknüpfung hängt auch von der Quelle ab. Wenn die
+
+00:11:37.670 --> 00:11:41.570
+Quelldaten verspätet eintreffen, ihre Struktur ohne Vorwarnung ändert oder Datensätze von schlechter
+
+00:11:41.570 --> 00:11:46.010
+Qualität enthält, behebt die Verknüpfung dies nicht. Sie verhindert unnötige Bewegungen, kann aber keinen
+
+00:11:46.010 --> 00:11:49.490
+Besitzer ersetzen, der die Tabelle definiert, ihre Aktualität überwacht und den Verbrauchern
+
+00:11:49.490 --> 00:11:52.770
+mitteilt, was sie vertrauen können. Verwenden Sie da Verknüpfungen, um zu vermeiden, dass
+
+00:11:52.770 --> 00:11:56.490
+standardmäßig Kopien erstellt werden. Überprüfen Sie dann, wer in die Quelle gehört, wer darauf
+
+00:11:56.490 --> 00:11:59.810
+zugreifen kann, was passiert, wenn sie sich ändert und wie die Verbraucher wissen, ob die Daten
+
+00:11:59.810 --> 00:12:03.890
+aktuell sind. Eine Abkürzung verschafft Ihnen einen saubereren Pfad zu den Daten, beseitigt aber nicht
+
+00:12:03.890 --> 00:12:07.910
+die Notwendigkeit, diesen Pfad zu verwalten. Gemeinsamer Zugriff ist nur dann hilfreich, wenn die Mitarbeiter die
+
+00:12:07.910 --> 00:12:11.790
+richtigen Daten finden, verstehen, was sie bedeuten und steuern können, wer sie verwenden darf. Wie macht Fabric den
+
+00:12:11.790 --> 00:12:15.610
+Data Lake nutzbar? Ein gemeinsam genutzter Data Lake funktioniert nur, wenn die Mitarbeiter tatsächlich
+
+00:12:15.610 --> 00:12:19.310
+damit arbeiten können. Der Clou dabei ist, dass Fabric dies bewältigt, indem es verschiedenen Teams
+
+00:12:19.310 --> 00:12:23.050
+vertraute Möglichkeiten zur Interaktion mit derselben Speicherebene bietet, anstatt dass jeder zum
+
+00:12:23.050 --> 00:12:28.290
+Data Engineer werden muss. Für die technische Arbeit bietet Ihnen ein Lakehouse zwei Bereiche. Dateien für
+
+00:12:28.290 --> 00:12:33.170
+Rohmaterial wie CSV, JSON, Bilder oder Protokolle und Tabellen für Data-Tabellen, die Spark lesen und
+
+00:12:33.170 --> 00:12:37.610
+schreiben kann, die Spark lesen und schreiben kann. Ein Ingenieur kann Rohdaten importieren, bereinigen und
+
+00:12:37.610 --> 00:12:43.070
+in Tabellen umwandeln, ohne die Lakehouse-Oberfläche zu verlassen. SQL-Teams in anderer Ansicht. Ein Fabric-Warehouse
+
+00:12:43.070 --> 00:12:47.610
+bietet Ihnen Schemata, Tabellen und TSQL, damit Sie Daten auf die Ihnen vertraute Weise abfragen und
+
+00:12:47.610 --> 00:12:50.830
+verwalten können. Das Warehouse fühlt sich vertraut an, aber die Daten befinden sich immer
+
+00:12:50.830 --> 00:12:54.650
+noch in einem darunterliegenden Lake. Sie benötigen keinen separaten Speicherplan, nur weil ein Team
+
+00:12:54.650 --> 00:13:00.630
+SQL spricht und ein anderes mit Spark arbeitet. Hier ist der Trick. Ein Lakehouse und ein Warehouse sind
+
+00:13:00.630 --> 00:13:04.970
+keine konkurrierenden Speicherinseln. Sie sind unterschiedliche Arbeitsflächen für dieselben Daten.
+
+00:13:05.350 --> 00:13:08.370
+Wählen Sie die Oberfläche, die am besten zu Ihrer Aufgabe passt. Manche Leute bleiben überhaupt nicht
+
+00:13:08.370 --> 00:13:12.190
+bei Fabric stehen. Mit dem OneLake File Explorer können berechtigte Benutzerarbeitsbereiche und
+
+00:13:12.190 --> 00:13:15.870
+Datendateien über den Windows-Dateiexplorer durchsuchen. Sie können durch Ordner navigieren,
+
+00:13:15.970 --> 00:13:19.350
+auf die Sie Zugriff haben und Dateien in einer vertrauten Oberfläche behaupten. Das senkt die
+
+00:13:19.350 --> 00:13:22.610
+Hemmschwelle für Benutzer, die sich mit Geschäftsdaten auskennen, aber nicht mit einem
+
+00:13:22.610 --> 00:13:26.410
+Notebook oder einer Befehlszeile beginnen möchten. Bleibt auch offen für Tools außerhalb der eigenen
+
+00:13:26.410 --> 00:13:31.970
+Oberfläche. OneLake unterstützt dieselben ADLS-Scantor-IPIs und ABFS-Pfade, die von kompatiblen
+
+00:13:31.970 --> 00:13:36.750
+Tools wie Azure Databricks verwendet werden. Wenn Ihr Team bereits über einen Prozess verfügt, der über diese
+
+00:13:36.750 --> 00:13:40.510
+Pfade lesen und schreiben kann, kann es eine Verbindung mit einem Lake herstellen, anstatt einen weiteren
+
+00:13:40.510 --> 00:13:44.710
+Export an einen separaten Speicherort zu erzwingen. Zugriff bedeutet nicht, dass jeder alles sehen
+
+00:13:44.710 --> 00:13:48.450
+sollte. Die Suche nach dem richtigen Dataset beginnt mit der Struktur. Arbeitsbereiche gruppieren die
+
+00:13:48.450 --> 00:13:52.230
+Arbeit einstieg. Domänen gruppieren die Arbeit nach Geschäftsbereichen. Elementberechtigungen schränken
+
+00:13:52.230 --> 00:13:55.790
+den Zugriff auf das bestimmte Datenprodukt oder Tool eines eine Person benötigt. Mithilfe von
+
+00:13:55.790 --> 00:13:59.610
+Datenkatalog-Sichten können Benutzer verfügbare Elemente durchsuchen und verstehen, was sie sich ansehen,
+
+00:13:59.710 --> 00:14:04.930
+bevor sie etwas Neues erstellen, wo sie etwas Neues erstellen. Halten Sie den Zugriff standardmäßig immer. Wenn ein Analyst nur eine
+
+00:14:04.930 --> 00:14:08.690
+genehmigte Tabelle benötigt, gewähren Sie ihm Zugriff auf diese Tabelle oder dieses Element, anstatt
+
+00:14:08.690 --> 00:14:13.230
+ihm einen umfassenden Zugriff auf den Arbeitsbereich zu gewähren. Eine umfassende Rolle kann sich im Moment
+
+00:14:13.230 --> 00:14:16.970
+schneller anfühlen, führt aber oft später zu Bereinigungsarbeiten und erschwert den Überblick
+
+00:14:16.970 --> 00:14:20.910
+darüber, wer auf vertrauliche Daten zugreifen kann. Eine weitere Trennung ist hilfreich. Ein
+
+00:14:20.910 --> 00:14:24.970
+Datenspeicher enthält die Daten. Fabrikkapazitäten stellen die Rechenleistung bereit, die Workloads dafür
+
+00:14:24.970 --> 00:14:28.870
+ausführen. Eine Kapazität ermöglicht die Ausführung von Sparkaufträgen, Folgeaktivitäten, Berichten und
+
+00:14:28.870 --> 00:14:32.070
+anderen Verarbeitungsverfahren. Speicher und Rechenleistung sind miteinander verbunden, aber es handelt
+
+00:14:32.070 --> 00:14:35.790
+sich nicht um diese Adventure. Sie können die Workload-Leistung verwalten, ohne jeden Datenspeicher
+
+00:14:35.790 --> 00:14:39.930
+als separatetes Infrastrukturprojekt zu behandeln. Die Technologie kann viele unnötige Kopien
+
+00:14:39.930 --> 00:14:43.530
+einsparen. Die Mitarbeiter müssen immer noch die Gewohnheiten ändern, mit denen diese Kopien
+
+00:14:43.530 --> 00:14:47.550
+überhaupt erst erstellt wurden. Aber genau hier liegt die eigentliche Chance. Wenn Sie aufhören,
+
+00:14:47.630 --> 00:14:50.810
+jeden Datenbedarf als neues Kopierprojekt zu behandeln, können Sie Ihrem Team die Möglichkeit
+
+00:14:50.810 --> 00:14:55.970
+geben, sich auf die tatsächliche Bedeutung der Daten. Eine Kopie in die Praxis umsetzen. Die eigentliche
+
+00:14:55.970 --> 00:15:00.010
+Spannung besteht hier nicht darin, alles auf einmal zu migrieren. Es geht um einen häufig verwendeten
+
+00:15:00.010 --> 00:15:03.430
+Datensatz, bei dem doppelte Pipelines bereits zu Verzögerungen, fehlgeschlagenen Aktualisierungen
+
+00:15:03.430 --> 00:15:08.110
+und Streitigkeiten darüber führen, welcher Bericht der richtige ist. Bei Vertriebskunden, Bestands- oder
+
+00:15:08.110 --> 00:15:12.650
+Finanzdaten wird das Problem oft schnell deutlich, da sich mehrere Teams darüber streiten, dessen Version
+
+00:15:12.650 --> 00:15:16.790
+aktuell ist. Sie denken vielleicht, die Lösung sei ein umfangreicher Migrationsplan, aber das ist
+
+00:15:16.790 --> 00:15:20.570
+nur ein Täuschungsspiel. Der eigentliche erste Schritt ist viel einfacher. Wählen Sie einen einzelnen
+
+00:15:20.570 --> 00:15:24.310
+Datensatz aus und beginnen Sie. Vor Sie jedoch eine Verknüpfung erstellen, benötigen Sie einen Besitzer. Dieser
+
+00:15:24.310 --> 00:15:27.810
+Besitzer muss die genehmigte Quelle veröffentlichen, definieren, was sie bedeutet und den Verbrauchern
+
+00:15:27.810 --> 00:15:31.550
+mitteilen, wann sie ihr vertrauen können. Ohne diese Entscheidung wird eine freigegebene Tabelle nur zu
+
+00:15:31.550 --> 00:15:36.090
+einer Quelle der Verwirrung, da sie nicht gut vernetzt ist. Hier wird es jetzt interessant. Jedes Team kann
+
+00:15:36.090 --> 00:15:39.590
+das Tool behalten, das zu seiner Arbeit passt, während freigegebene Tabellen in einem Lake in Richtung
+
+00:15:39.590 --> 00:15:43.310
+Delta-Paket verschoben werden. Das Ziel besteht nicht darin, den Workflowler zu standardisieren. Das Ziel
+
+00:15:43.310 --> 00:15:46.850
+besteht darin, keine separaten gespeicherten Versionen mehr zu erstellen, nur weil ein anderes Team eine
+
+00:15:46.850 --> 00:15:50.610
+andere Benutzeroberfläche benötigt. Fragen Sie also vor dem Einrichten einer neuen Pipeline, ob eine
+
+00:15:50.610 --> 00:15:54.270
+Verknüpfung das Team mit der genehmigten Quelle verbinden kann. Überprüfen Sie die Zugriffsregeln,
+
+00:15:54.270 --> 00:15:57.570
+denen die Quelle gehört und wie die Aktualität überwacht wird. Wenn diese Antworten nicht klar
+
+00:15:57.570 --> 00:16:01.530
+sind, verstecken Sie das Problem nicht hinter einer anderen Kopie. Verfolgen Sie die praktischen
+
+00:16:01.530 --> 00:16:05.030
+Ergebnisse, zählen Sie die doppelten Pipelines, die verschwinden, die gespeicherten Kopien, die nicht
+
+00:16:05.030 --> 00:16:08.070
+mehr aktualisiert werden müssen und wie lange ein Team braucht, um genehmigte Daten zu erhalten.
+
+00:16:08.950 --> 00:16:12.090
+Achten Sie darauf, dass weniger Meetings damit verbracht werden, konkurrierende Zahlen zu verteilen.
+
+00:16:12.430 --> 00:16:16.070
+Das Kopieren von Daten kann sich sicher anfühlen, da jedes Team seine eigene Version kontrolliert,
+
+00:16:16.130 --> 00:16:20.010
+aber eine neue Version wird zu einer weiteren Sache, die jemand aktualisieren, sichern, erklären und
+
+00:16:20.010 --> 00:16:23.610
+schließlich beheben muss. Fazit, hören Sie auf, Kopien zu erstellen.
+
+00:16:24.270 --> 00:16:28.150
+Hier ist, worauf es letztendlich hinausläuft. One Lake ändert die Frage, von wo soll dieses Team
+
+00:16:28.150 --> 00:16:31.290
+die Daten kopieren, hin zu wem gehört die vertrauenswürdige Quelle, die jedes Team
+
+00:16:31.290 --> 00:16:36.310
+verwenden kann. Aber hier ist das wesentlich. Diese Verschiebung ist der Schlüssel, um den
+
+00:16:36.310 --> 00:16:40.430
+Kreislauf der technischen Schulden zu stoppen. Und genau deshalb sollten Sie App3Trimmle 65FM
+
+00:16:40.430 --> 00:16:44.030
+abonnieren, um praktische Möglichkeiten zur Verwendung der Fabric-Power-Plattform und KI zu erhalten,
+
+00:16:44.150 --> 00:16:46.670
+ohne mehr technische Schulden in die Arbeit einzubauen, auf die Ihre Teams angewiesen sind.
