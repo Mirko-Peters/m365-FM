@@ -1,8 +1,8 @@
 ---
 title: "SharePoint Advanced Management: what it covers and what it does not"
 summary: "SharePoint Advanced Management adds governance tools for content sprawl, lifecycle and oversharing, but it does not replace the policies, roles and ownership an organization still has to define itself."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-28
 topics: [sharepoint-advanced-management, sharepoint-governance, oversharing]
