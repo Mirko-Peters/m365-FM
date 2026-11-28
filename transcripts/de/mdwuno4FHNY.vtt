@@ -1,0 +1,844 @@
+WEBVTT
+
+00:00:00.280 --> 00:00:05.780
+Willkommen zum M345 und 60FM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.220 --> 00:00:09.020
+Derzeit befinden sich mehr als 10.000 vorgefertigte Bausteine auf GitHub.
+
+00:00:09.560 --> 00:00:14.720
+Sie werden als Aktion bezeichnet und in ein Tool namens GitHub Actions eingebunden, das ihre Arbeit für sie ausführt, wenn in ihrem Projekt etwas passiert.
+
+00:00:15.260 --> 00:00:20.240
+Die meisten Leute denken, dass eine solche Automatisierungsserver und DevOps-Team benötigt, aber im Grunde genommen läuft das auf eine kleine Textarteil hinaus.
+
+00:00:20.640 --> 00:00:26.500
+Dies ist der M345 und 60FM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:26.500 --> 00:00:30.280
+Und heute erklären wir GitHub Actions in einfachen Worten für absolute Anfänger.
+
+00:00:30.960 --> 00:00:34.420
+Am Ende werden sie in der Lage sein, eine Workflow-Datei zu lesen und laut zu sagen, was sie tun.
+
+00:00:35.360 --> 00:00:36.460
+Was GitHub Actions wirklich ist.
+
+00:00:37.140 --> 00:00:40.680
+Beginnen wir mit der einfachen Definition. In der Name erledigt ein Großteil der einschüchternde Arbeit von selbst.
+
+00:00:41.260 --> 00:00:43.760
+GitHub Actions ist ein Automatisierungsdienst, der in GitHub lebt.
+
+00:00:44.240 --> 00:00:47.500
+Seine Aufgabe ist es, Aufgaben für sie auszuführen, wenn sich in ihrem Projekt etwas ändert.
+
+00:00:47.900 --> 00:00:49.420
+Und im Grunde ist das alles, was es wirklich ist.
+
+00:00:49.960 --> 00:00:54.440
+GitHub bezeichnet sich selbst als eine Plattform für Continuous Integration und Continuous Delivery, was sich komplizierter anhört, als es sein müsste.
+
+00:00:54.440 --> 00:01:01.040
+Continuous Integration ist die Gewohnheit, die eigene Arbeit jedes Mal zu testen, wenn man sie ändert, anstatt alle Tests bis zum Schluss aufzusparen.
+
+00:01:01.560 --> 00:01:07.340
+A. Continuous Delivery ist das, was passiert, nachdem diese Tests bestanden sind, wenn das fertige Projekt an den richtigen Ort geschickt wird.
+
+00:01:07.840 --> 00:01:09.880
+Fügt man diese beiden Begriffe zusammen, erhält man ein einfaches Versprechen.
+
+00:01:10.340 --> 00:01:13.780
+Dein Projekt kann sich selbst prüfen und ausliefern, anstatt darauf zu warten, dass sich jemand daran erinnert.
+
+00:01:14.700 --> 00:01:17.940
+Ein Repository, falls dir dieses Wort neu ist, ist einfach der Ordner deines Projekts auf GitHub.
+
+00:01:17.940 --> 00:01:21.600
+Jedes Mal, wenn du eine Änderung in diesem Ordner speicherst, erstellst du einen sogenannten Push.
+
+00:01:22.300 --> 00:01:24.500
+Ein Push ist einer dieser Momente, in denen die Automatisierung eingreift.
+
+00:01:24.900 --> 00:01:27.840
+Bevor es solche Tools gab, musste jemand daran denken, die Tests auszuführen.
+
+00:01:28.680 --> 00:01:31.860
+Andernfalls stand eine separate Bildmaschine in der Ecke und wartete auf Anweisungen.
+
+00:01:32.500 --> 00:01:37.840
+GitHub Actions wandelt diese in schriftliche Anweisungen um, die ein Computer jedes Mal selbstständig befolgt, ohne dass jemand daneben steht.
+
+00:01:38.380 --> 00:01:41.560
+Das ist wichtig für dein Endergebnis, denn in manuellen Schritten verstecken sich Fehler.
+
+00:01:42.280 --> 00:01:44.520
+Jemand vergisst zum Beispiel, die Tests am Freitagnachmittag auszuführen.
+
+00:01:44.940 --> 00:01:48.380
+Eine fehlerhafte Änderung rutscht durch und das gesamte Team verbringt den Montag, damit die Produktion zu reparieren.
+
+00:01:48.860 --> 00:01:53.660
+Wenn die Anweisungen in einer Datei und nicht im Gedächtnis einer Person bespeichert sind, werden sie nicht müde, sie überspringen keinen Schritt und sie vergessen nichts.
+
+00:01:54.200 --> 00:01:57.760
+Was die Leute überrascht ist, wie viel dieser Arbeit bereits für einen geschrieben wurde und dazu kommen wir gleich.
+
+00:01:58.460 --> 00:02:01.160
+Wenn man diese Dateien zum ersten Mal schreibt, ist es normalerweise ein kleines Durcheinander.
+
+00:02:02.100 --> 00:02:04.920
+Das ist nicht schlimm, denn man kann jeden Schritt verfolgen und ihn sofort beheben.
+
+00:02:06.220 --> 00:02:07.260
+Dort, wo die Anweisungen gespeichert sind.
+
+00:02:07.720 --> 00:02:10.460
+Jetzt kommen wir zum praktischen Teil, denn das ist der Teil, den man tatsächlich sehen kann.
+
+00:02:10.460 --> 00:02:14.500
+Diese Anweisungen werden als Workflow bezeichnet und ein Workflow ist eine reine Textdatei.
+
+00:02:14.960 --> 00:02:18.300
+Er ist nicht in einem Einstellungsbildschirm versteckt und nicht hinter einem Admin-Portal gesperrt.
+
+00:02:18.880 --> 00:02:23.540
+Er befindet sich in deinem Repository, in einem Ordner namens .github und darin in einem Ordner namens Workflows.
+
+00:02:24.340 --> 00:02:26.780
+Der Ordnername ist wichtiger, als man denkt, denn GitHub sucht nur dort.
+
+00:02:27.520 --> 00:02:29.740
+Speichere deinen Workflow an einem anderen Ort und GitHub wird ihn nicht verfolgen.
+
+00:02:30.020 --> 00:02:32.140
+Daher wird nichts ausgeführt und es gibt keine Informationen darüber, warum.
+
+00:02:32.140 --> 00:02:36.880
+Die Datei selbst kann fast beliebig benannt werden, solange sie auf .jml oder .jml endet.
+
+00:02:37.540 --> 00:02:39.200
+Das sind zwei Schreibweisen für denselben Dateitüge.
+
+00:02:39.200 --> 00:02:42.880
+In die Datei schreiben Sie eine kurze Liste mit Anweisungen in einem Format namens .jml.
+
+00:02:43.980 --> 00:02:47.320
+.jml achtet auf Abstände und Einrückungen, aber die Idee dahinter ist benutzerfreundlich.
+
+00:02:47.700 --> 00:02:49.420
+Sie lässt sich von oben nach unten wie ein Rezept lesen.
+
+00:02:49.660 --> 00:02:52.740
+Eine Zeile gibt dem Workflow einen Namen, damit Sie ihn später in einer Liste wiedererkennen.
+
+00:02:53.120 --> 00:02:55.240
+Eine weitere Zeile listet die Ereignisse auf, die ihn auslösen sollen.
+
+00:02:55.580 --> 00:02:58.620
+Dann kommt die eigentliche Arbeit in einem Abschnitt namens Aufträge, in dem Sie festlegen,
+
+00:02:58.620 --> 00:03:00.680
+was passieren soll und welche Art von Computer dies tun soll.
+
+00:03:00.680 --> 00:03:04.360
+Sobald ein Lauf abgeschlossen ist, können Sie den gesamten Vorgang auf der Registerkarte Aktion verfolgen,
+
+00:03:04.360 --> 00:03:06.360
+wo für jeden Auftrag und jeden Schritt dann angezeigt wird.
+
+00:03:06.360 --> 00:03:09.560
+So finden Sie heraus, warum etwas fehlgeschlagen ist und es ist eine entspannte Möglichkeit,
+
+00:03:09.560 --> 00:03:11.680
+einen Prozess zu debuggen, den Sie sonst nie beaufsichtigen müssen.
+
+00:03:11.680 --> 00:03:14.360
+Wenn Sie schon einmal eine Automatisierung im Power Automate erstellt haben, wird Ihnen das bekannt vorkommen.
+
+00:03:14.360 --> 00:03:18.860
+Sie wählen einen Trigger aus, fügen die folgenden Aktionen hinzu und das Ganze wird ohne Ihr Zutun ausgeführt.
+
+00:03:18.860 --> 00:03:24.020
+GitHub-Actions basiert auf dem gleichen Prinzip, nur dass das Rezept als Text in deinem Projekt vorliegt
+
+00:03:24.020 --> 00:03:25.480
+und nicht auf einer Zeichenfläche in einem Browser.
+
+00:03:25.480 --> 00:03:29.480
+Dieser Unterschied klingt klein, bedeutet aber, dass die Anweisungen wie jede andere Datei geprüft,
+
+00:03:29.480 --> 00:03:30.740
+kopiert und nachverfolgt werden können.
+
+00:03:30.740 --> 00:03:32.460
+Warum das wichtig ist, erfährst du später.
+
+00:03:32.460 --> 00:03:33.860
+Wodurch wird es ausgelöst?
+
+00:03:33.860 --> 00:03:34.860
+Durch Ereignis.
+
+00:03:34.860 --> 00:03:36.860
+Jeder Workflow benötigt ein Startsignal.
+
+00:03:36.860 --> 00:03:39.360
+In GitHub-Actions wird dieses Signal als Ereignis bezeichnet.
+
+00:03:39.360 --> 00:03:41.960
+Du listest deine Ereignisse unter einer Zeile mit dem Namen auf.
+
+00:03:41.960 --> 00:03:45.040
+Wenn eines davon eintritt, liest GitHub deine Datei und macht sich an die Arbeit.
+
+00:03:45.040 --> 00:03:48.680
+Das häufigste Ereignis ist der Push-Vorgang, der ausgelöst wird, wenn du Änderungen im Brunch breiten.
+
+00:03:48.680 --> 00:03:52.220
+Als nächstes kommt der Pull-Request, der ausgelöst wird, wenn jemand eine Änderung vorschlägt
+
+00:03:52.220 --> 00:03:54.220
+und darum bittet, dass diese geprüft und zusammengeführt wird.
+
+00:03:54.220 --> 00:03:57.620
+Diese beiden Ereignisse decken den Großteil der täglichen Arbeit ab, sind aber bei weitem wichtiges.
+
+00:03:57.620 --> 00:04:01.560
+Ein Zeitplan kann das Ereignis mithilfe der gleichen Zeitregeln auslösen, die ältere Planungstools
+
+00:04:01.560 --> 00:04:02.560
+seit Jahren verwenden.
+
+00:04:02.560 --> 00:04:06.180
+Du kannst ein solches Ereignis auch manuell über eine Schaltfläche in der GitHub-Oberfläche
+
+00:04:06.180 --> 00:04:08.680
+starten und dieser Schaltfläche einige Optionen zur Auswahl vorgeben.
+
+00:04:08.680 --> 00:04:11.680
+Darüber hinaus kann es ausgelöst werden, wenn jemand ein Problem öffnet, ein Pull-Request
+
+00:04:11.680 --> 00:04:13.680
+kommentiert, ein Release erstellt und eine Wiki-Seite bearbeitet.
+
+00:04:13.680 --> 00:04:15.680
+Dieser Bereich wird von den Leuten unterschätzt.
+
+00:04:15.680 --> 00:04:19.020
+Viele Teams verwenden dieses Tool zunächst für Tests und enden damit, um Probleme zu
+
+00:04:19.020 --> 00:04:22.060
+kennzeichnen, neue Mitwirkende zu begrüßen und jeden Montagmorgen eine Erinnerung zu
+
+00:04:22.060 --> 00:04:23.060
+posten.
+
+00:04:23.060 --> 00:04:26.340
+Das Event ist im Grunde eine Türklingel und wenn man weiß, wie man es einrichtet, kann
+
+00:04:26.340 --> 00:04:28.340
+man fast alles mit dem Klang verbinden.
+
+00:04:28.340 --> 00:04:31.440
+Eine Regel sollte man sich merken, denn sie bringt die Leute schon früh in Stolz.
+
+00:04:31.440 --> 00:04:35.680
+Die Workflow-Datei muss in einem Branch oder Commit vorhanden sein, in dem das Event stattfindet.
+
+00:04:35.680 --> 00:04:38.800
+Manche Events werden nur ausgelöst, wenn die Datei auch in deinem Standardbranche vorhanden
+
+00:04:38.800 --> 00:04:39.800
+ist.
+
+00:04:39.800 --> 00:04:42.800
+Wenn ein Workflow also tot zu sein scheint, solltest du zuerst auch nachsehen.
+
+00:04:42.800 --> 00:04:43.800
+Jobs, Schritte und Runner.
+
+00:04:43.800 --> 00:04:48.140
+Sobald ein Workflow startet, muss er wissen, was er tun soll und hier kommen die Jobs ins
+
+00:04:48.140 --> 00:04:49.140
+Spiel.
+
+00:04:49.140 --> 00:04:52.140
+Ein Job ist eine Aufgabe, ein Bündel von Arbeiten, das von Anfang bis Ende auf einem einzelnen
+
+00:04:52.140 --> 00:04:53.140
+Computer ausgeführt wird.
+
+00:04:53.140 --> 00:04:56.540
+Jobs werden standardmäßig parallel ausgeführt, was bedeutet, dass zwei Jobs, die nichts miteinander
+
+00:04:56.540 --> 00:04:58.140
+zu tun haben, gleichzeitig ausgeführt werden.
+
+00:04:58.140 --> 00:05:02.620
+Wenn ein Job tatsächlich von einem anderen abhängt, sagst du das, der zweite wartet, bis
+
+00:05:02.620 --> 00:05:03.620
+er an der Reihe ist.
+
+00:05:03.620 --> 00:05:07.800
+In einem Job schreibst du Schritte, die dann nacheinander ausgeführt werden.
+
+00:05:07.800 --> 00:05:10.680
+Da jeder Schritt auf demselben Rechner ausgeführt wird, können die Schritte gemeinsam nutzen,
+
+00:05:10.680 --> 00:05:11.680
+was sie erstellen.
+
+00:05:11.680 --> 00:05:15.340
+Ein erster Schritt könnte deine Tools installieren, ein zweiter das Projekt erstellen und ein dritter
+
+00:05:15.340 --> 00:05:19.020
+die Tests mit dem ausführen, was der zweite Schritt gerade produziert hat.
+
+00:05:19.020 --> 00:05:21.020
+Diese Reihenfolge ist wichtig und GitHub stoppt den Job.
+
+00:05:21.020 --> 00:05:24.020
+Sobald ein Schritt fehlschlägt, genau das willst du, wenn ein Test abbricht.
+
+00:05:24.020 --> 00:05:27.020
+Du wählst den Rechner mit einer Zeile namens Runson aus.
+
+00:05:27.020 --> 00:05:30.020
+Ein für Linux geschriebener Job und ein anderer für Windows können sich also beide in der
+
+00:05:30.020 --> 00:05:31.020
+selben Datei befinden.
+
+00:05:31.020 --> 00:05:34.680
+So bleibt ein Workflow für das gesamte Team nützlich, selbst wenn jeder zu Hause an einem
+
+00:05:34.680 --> 00:05:36.360
+anderen Rechner arbeitet.
+
+00:05:36.360 --> 00:05:39.360
+Hier gibt es noch einen weiteren Trick eines sogenannten Matrix, die enorm viel Tipparbeit
+
+00:05:39.360 --> 00:05:40.360
+spart.
+
+00:05:40.360 --> 00:05:43.360
+Mit einer Matrix kannst du einen einzelnen Job nehmen und ihn mehrmals mit unterschiedlichen
+
+00:05:43.360 --> 00:05:44.360
+Einstellungen auswählen.
+
+00:05:44.360 --> 00:05:48.740
+Eine Definition kann drei Betriebssysteme oder vier Sprachversionen abdecken, ohne dass du
+
+00:05:48.740 --> 00:05:49.740
+etwas kopieren musst.
+
+00:05:49.740 --> 00:05:52.180
+Es ist ein kleines Feature, das aus einer unübersichtlichen Datei eine übersichtliche
+
+00:05:52.180 --> 00:05:53.180
+macht.
+
+00:05:53.180 --> 00:05:56.360
+Jetzt kommen wir zu dem Wort, das Anfänger raubend zum Verzweifeln bringt.
+
+00:05:56.360 --> 00:05:57.360
+Runner.
+
+00:05:57.360 --> 00:06:00.020
+Ein Runner ist der Computer, der die eigentliche Arbeit erledigt.
+
+00:06:00.020 --> 00:06:03.660
+GitHub bietet dir Maschinen mit Ubuntu Linux, Windows und macOS und jeder einzelne Lauf
+
+00:06:03.660 --> 00:06:07.060
+beginnt auf einer neuen Maschine, die gerade erst für diesen Auftrag erstellt wurde.
+
+00:06:07.060 --> 00:06:09.560
+Wenn der Auftrag abgeschlossen ist, wird diese Maschine verworfen.
+
+00:06:09.560 --> 00:06:12.520
+So bleibt nichts zurück und es geht zwischen den Läufen nichts verloren.
+
+00:06:12.520 --> 00:06:16.120
+Jeder Runner bearbeitet jeweils einen Auftrag, weshalb zwei Aufträge auf zwei Runner nebeneinander
+
+00:06:16.120 --> 00:06:17.120
+laufen können.
+
+00:06:17.120 --> 00:06:19.120
+Die Maschinengrößen sind bescheiden, aber real.
+
+00:06:19.120 --> 00:06:22.660
+Ein Standard-Linux-Runner für ein öffentliches Projekt verfügt über etwa vier Prozessoren,
+
+00:06:22.660 --> 00:06:25.620
+16 GB Arbeitsspeicher und 14 GB Festplatte.
+
+00:06:25.620 --> 00:06:27.380
+Das reicht für die meisten alltäglichen Bilder.
+
+00:06:27.380 --> 00:06:31.060
+Es gibt auch eine winzige Einzelprozessor-Option für leichte Aufgaben, die mit einem 15-Minuten-Limit
+
+00:06:31.060 --> 00:06:33.800
+ausgestattet ist, sodass sie sich eher für kleine Aufgaben als für umfangreiche
+
+00:06:33.800 --> 00:06:35.120
+Builds eignet.
+
+00:06:35.120 --> 00:06:38.760
+Wenn vier Prozessoren nicht ausreichen, gibt es größere Runner mit mehr Arbeitsspeicher, mehr Festplatte
+
+00:06:38.760 --> 00:06:41.320
+und Optionen wie eine Festadresse oder eine Grafik hat.
+
+00:06:41.320 --> 00:06:43.720
+Wir müssen auch nicht unbedingt die Maschinen von GitHub verwenden.
+
+00:06:43.720 --> 00:06:46.680
+Wenn Sie ein bestimmtes Betriebssystem oder eine Hardware benötigen, die GitHub nicht
+
+00:06:46.680 --> 00:06:50.320
+anbietet, können Sie Ihren eigenen Computer als selbst gehosteten Runner anschließen.
+
+00:06:50.320 --> 00:06:53.320
+Dieser Service ist einfach zu beschreiben und wird leicht unterschätzt.
+
+00:06:53.320 --> 00:06:56.400
+Gehostete Runner bedeuten, dass Sie nichts warten oder patchen müssen.
+
+00:06:56.400 --> 00:06:59.360
+Selbst gehostete Runner bedeuten, dass Sie die Maschine und alles, was damit schief geht,
+
+00:06:59.360 --> 00:07:03.160
+besitzen und die Rechnung in Ingenieurstunden und nicht in Geld bezahlt wird.
+
+00:07:03.160 --> 00:07:05.360
+Der Marktplatz und wiederverwendbare Workflows.
+
+00:07:05.360 --> 00:07:07.980
+Hier ist der Teil, der dafür sorgt, dass sich GitHub-Aktionen weniger wie Hausaufgaben
+
+00:07:07.980 --> 00:07:08.980
+an.
+
+00:07:08.980 --> 00:07:11.580
+Sie schreiben selten alle diese Schritte selbst, da eine Aktion ein vorgefertigter
+
+00:07:11.580 --> 00:07:15.460
+Codeblock ist, der eine Aufgabe für Sie erledigt, den Code Ihres Projekts auf den Runner
+
+00:07:15.460 --> 00:07:19.100
+zu ziehen, die richtige Version einer Programmiersprache einzurichten und sich bei einem Cloud-Anbieter
+
+00:07:19.100 --> 00:07:20.300
+anzumelden.
+
+00:07:20.300 --> 00:07:22.740
+Jeder dieser Schritte ist bereits der getestete Code von jemand anderem.
+
+00:07:22.740 --> 00:07:26.140
+Sie fügen eine einzelne Zeile in Ihren Workflow ein und die Arbeit wird für Sie erledigt.
+
+00:07:26.140 --> 00:07:29.580
+Deshalb sind die meisten Workflows für Anfänger kurz, oft weniger als 20 Zeilen, da die
+
+00:07:29.580 --> 00:07:31.860
+schwere Arbeit jemand anderem überlassen wird.
+
+00:07:31.860 --> 00:07:36.460
+Diese Blöcke befinden sich im GitHub-Marktplatz, der bereits 2021 die Marke von 10.000 veröffentlichten
+
+00:07:36.460 --> 00:07:38.460
+Aktionen überschritten hat.
+
+00:07:38.460 --> 00:07:40.620
+Jede Aktion im Marktplatz ist Open Source, sodass Sie genau lesen können, was sie bewirkt,
+
+00:07:40.620 --> 00:07:41.620
+bevor Sie ihr vertrauen.
+
+00:07:41.620 --> 00:07:44.220
+Sie können sie forken und ändern, wenn sie nicht ganz passt.
+
+00:07:44.220 --> 00:07:47.460
+GitHub kennzeichnet einige Aktionen außerdem mit einem Abzeichen verifizierter Ersteller,
+
+00:07:47.460 --> 00:07:50.460
+das Ihnen anzeigt, dass der Herausgeber eine von GitHub überprüfte Partnerorganisation
+
+00:07:50.460 --> 00:07:51.460
+ist.
+
+00:07:51.460 --> 00:07:53.460
+Hier gibt es einen ehrlichen Vorbehalt, der sich auf Ihr Endergebnis auswirkt.
+
+00:07:53.460 --> 00:07:56.740
+Eine Marktplatz-Aktion ist der Code von jemand anderem, der in Ihrem Workflow ausgeführt
+
+00:07:56.740 --> 00:07:58.740
+wird und Zugriff auf alles hat, was Sie ihm übergeben.
+
+00:07:58.740 --> 00:08:02.660
+Das Abzeichen und die Open Source Lizenz sind die Gründe, einer solchen Aktion zu vertrauen und eine
+
+00:08:02.660 --> 00:08:06.660
+zufällige Aktion von einem unbekannten Konto verdient einen genauen Blick, bevor Sie Ihr Projekt
+
+00:08:06.660 --> 00:08:07.660
+berührt.
+
+00:08:07.660 --> 00:08:09.660
+Der zweite Wiederverwendungstrick löst ein anderes Problem.
+
+00:08:09.660 --> 00:08:12.660
+Angenommen, 20 Repositories benötigen alle dieselbe Bild- und Testroutine.
+
+00:08:12.660 --> 00:08:16.660
+Das Kopieren derselben Datei an 20 Stellen funktioniert so lange, bis Sie eine Zeile ändern
+
+00:08:16.660 --> 00:08:17.660
+müssen.
+
+00:08:17.660 --> 00:08:20.660
+Dann bearbeiten Sie 20 Dateien und hoffen, dass Sie keine übersehen haben.
+
+00:08:20.660 --> 00:08:23.660
+Mit einem wiederverwendbaren Workflow können Sie diese Routine einmal an einer Stelle schreiben
+
+00:08:23.660 --> 00:08:25.660
+und von überall aus aufrufen.
+
+00:08:25.660 --> 00:08:27.660
+Sie markieren sie mit einer Einstellung namens Workflow aufrufen.
+
+00:08:27.660 --> 00:08:31.660
+Andere Workflows rufen Sie dann mit Namen auf und übergeben die Einstellungen und die benötigten
+
+00:08:31.660 --> 00:08:32.660
+Werte.
+
+00:08:32.660 --> 00:08:34.660
+Sie können sie sogar bis zu 10 Ebenen tief stapeln.
+
+00:08:34.660 --> 00:08:37.660
+Am einfachsten lassen sich diese beiden Ideen wie folgt auseinander halten.
+
+00:08:37.660 --> 00:08:38.660
+Eine Aktion ist ein Werkzeug in Ihrem Werkzeugkasten.
+
+00:08:38.660 --> 00:08:42.660
+Ein wiederverwendbarer Workflow ist das gesamte Rezept und kann an jede Küche weitergegeben
+
+00:08:42.660 --> 00:08:44.660
+werden, die dasselbe Gericht kochen muss.
+
+00:08:44.660 --> 00:08:46.660
+Geheimnisse, Passwörter aus dem Code heraushalten.
+
+00:08:46.660 --> 00:08:48.660
+All dies läuft unbemerkt ab.
+
+00:08:48.660 --> 00:08:52.660
+Das wirft eine berechtigte Frage auf, denn früher oder später benötigt ein Workflow
+
+00:08:52.660 --> 00:08:55.660
+ein Passwort, ein API-Schlüssel oder ein Zugriffstoken.
+
+00:08:55.660 --> 00:08:58.660
+Diese Werte gehören niemals in die Workflow-Datei und dieser Teil ist nicht optional.
+
+00:08:58.660 --> 00:09:01.660
+Sie befinden sich an einer anderen Stelle in einem Feature-Name-Secrets.
+
+00:09:01.660 --> 00:09:05.660
+GitHub bietet Ihnen die Möglichkeit, Geheimnisse auf drei Ebenen zu speichern, je nachdem wie
+
+00:09:05.660 --> 00:09:06.660
+weit sie geteilt werden sollen.
+
+00:09:06.660 --> 00:09:08.660
+Repository-Geheimnisse gehören zu einem Projekt.
+
+00:09:08.660 --> 00:09:12.660
+Organisationsgeheimnisse können projekteübergreifend geteilt werden, wobei Regeln darüber gelten,
+
+00:09:12.660 --> 00:09:13.660
+welche Repository sie verwenden dürfen.
+
+00:09:13.660 --> 00:09:17.660
+Umgebungsgeheimnisse gehören zu einem bestimmten Bereitstellungsziel wie Staging oder Produktion.
+
+00:09:17.660 --> 00:09:20.660
+Auf dieser Ebene werden die Anmeldedaten für ein Live-System abgelegt.
+
+00:09:20.660 --> 00:09:24.660
+Geheimnisse werden verschlüsselt, bevor sie GitHub erreichen und bleiben nach dem Eintreffen verborgen.
+
+00:09:24.660 --> 00:09:28.660
+Ein Workflow kann ein Geheimnis nur dann lesen, wenn Sie es explizit namentlich übergeben.
+
+00:09:28.660 --> 00:09:31.660
+Das bedeutet, dass eine unbeabsichtigte Aktion nicht an alle Ihre Anmeldedaten gelangen kann.
+
+00:09:31.660 --> 00:09:34.660
+GitHub versteckt außerdem geheime Werte in dem Protokoll.
+
+00:09:34.660 --> 00:09:37.660
+Die Dokumentation gibt jedoch ehrlicherweise an, dass dieses Verstecken nicht garantiert ist,
+
+00:09:37.660 --> 00:09:39.660
+da ein Wert vor dem Drucken neu angeordnet werden kann.
+
+00:09:39.660 --> 00:09:42.660
+Umgebungsgeheimnisse können noch einen Schritt weiter gehen und erfordern,
+
+00:09:42.660 --> 00:09:45.660
+dass ein Mensch einen Auftrag genehmigt, bevor das Geheimnis überhaupt verfügbar wird.
+
+00:09:45.660 --> 00:09:48.660
+Ein weiteres Detail unterscheidet ein sorgfältiges von einem schlampigen Setup.
+
+00:09:48.660 --> 00:09:52.660
+Geheimnisse sind für Werte gedacht, die Sie nicht teilen können, wie Passwörter und Zugriffstoken.
+
+00:09:52.660 --> 00:09:56.660
+Wenn ein Wert nur eine Einstellung, wie eine Website-Adresse oder eine Versionsnummer ist,
+
+00:09:56.660 --> 00:10:00.660
+gehört er in den Klartext, wo jeder, der die Datei liest, sehen kann, was vor sich geht.
+
+00:10:00.660 --> 00:10:03.660
+Wenn man beides vermischt, wird ein Workflow schwerer zu verstehen und zu beheben.
+
+00:10:03.660 --> 00:10:06.660
+Die Gewohnheit, die man sich aneignen sollte, ist leicht gesagt und leicht wieder.
+
+00:10:06.660 --> 00:10:09.660
+Weisen Sie jedem Geheimnis nur die kleinstmöglichen Berechtigungen zu, die es benötigt
+
+00:10:09.660 --> 00:10:12.660
+und fügen Sie die Anmeldedaten jemals direkt in eine Workflow-Datei an.
+
+00:10:12.660 --> 00:10:14.660
+Stellen Sie es sich wie einen verschlossenen Kasten vor, den Sie mit Namen übergeben
+
+00:10:14.660 --> 00:10:18.660
+und nicht wie ein Schlüssel, der an die Haustür geklebt ist, was die Leute tatsächlich automatisieren.
+
+00:10:18.660 --> 00:10:21.660
+In der realen Welt taucht dieses Tool zuerst als Testläufer auf.
+
+00:10:21.660 --> 00:10:24.660
+Jedes Mal, wenn jemand eine Änderung vorschlägt, checkt der Workflow den Code aus,
+
+00:10:24.660 --> 00:10:26.660
+installiert die Tools und führt die Test-Tweet aus.
+
+00:10:26.660 --> 00:10:28.660
+Wenn etwas kaputt geht, sieht es die Person innerhalb von Minuten,
+
+00:10:28.660 --> 00:10:32.660
+bevor ein menschlicher Prüfer ein menschlicher Prüfer eine Stunde mit einer fehlerhaften Änderung verbringt.
+
+00:10:32.660 --> 00:10:35.660
+Diese eine Gewohnheit fängt eine enorme Anzahl von Fehlern ab und ist der Grund,
+
+00:10:35.660 --> 00:10:37.660
+warum die meisten Teams dieses Tool überhaupt aktivieren.
+
+00:10:37.660 --> 00:10:39.660
+Der Versand ist der nächste große Anwendungsort.
+
+00:10:39.660 --> 00:10:42.660
+Wenn die Tests erfolgreich sind und ein Release erstellt wird,
+
+00:10:42.660 --> 00:10:45.660
+kann dasselbe Tool das fertige Paket erstellen und an den Speicherort senden.
+
+00:10:45.660 --> 00:10:48.660
+Das kann ein Appstore, ein Webserver oder eine Paketregistrierung sein.
+
+00:10:48.660 --> 00:10:51.660
+Was früher eine lästige manuelle Checkliste war, wird zu einer wiederholbaren Sequenz,
+
+00:10:51.660 --> 00:10:53.660
+die jedes Mal auf die gleiche Weise abläuft.
+
+00:10:53.660 --> 00:10:56.660
+Wenn Sie bei der Arbeit schon einmal einer schriftlichen Vorgehensweise gefolgt sind
+
+00:10:56.660 --> 00:10:59.660
+und gehofft haben, keinen Schritt zu verpassen, dann wissen Sie bereits, was daran so toll ist.
+
+00:10:59.660 --> 00:11:01.660
+Dann gibt es noch die Aufgaben, die überhaupt nichts mit Code zu tun haben.
+
+00:11:01.660 --> 00:11:04.660
+Ein Workflow kann ein neues Problem automatisch kennzeichnen,
+
+00:11:04.660 --> 00:11:08.660
+einen erstmaligen Mitwirkenden mit einem Kommentar begrüßen oder einem Zeitplan posten.
+
+00:11:08.660 --> 00:11:11.660
+Aufgrund dieser Bandbreite taucht das Tool an so vielen Stellen auf
+
+00:11:11.660 --> 00:11:14.660
+und es folgt das gleiche Muster, das Sie von Power Automate kennen.
+
+00:11:14.660 --> 00:11:17.660
+Etwas passiert und etwas anderes folgt, ohne dass eine Person etwas anklicken muss.
+
+00:11:17.660 --> 00:11:20.660
+Es ist auch hilfreich zu wissen, dass Sie kein Nischen-Tool erlernen.
+
+00:11:20.660 --> 00:11:25.660
+In einer JetBrains-Umfrage von 2025 unter 805 Personen, die mit diesen Tools arbeiten,
+
+00:11:25.660 --> 00:11:28.660
+war GitHub Actions die am häufigsten verwendete Option für persönliche Projekte,
+
+00:11:28.660 --> 00:11:33.660
+die von 62% der Befragten genannt wurde und 41% der Befragten genannt wurde und eine Station ist verwendet.
+
+00:11:33.660 --> 00:11:37.660
+Gleichzeitig betreiben 32% der Organisationen zwei dieser Tools nebeneinander,
+
+00:11:37.660 --> 00:11:39.660
+was zeigt, dass sich diese Fähigkeit gut von Job zu Job übertragen lässt.
+
+00:11:39.660 --> 00:11:44.660
+Für jemanden, der eine Karriere in der Microsoft-Welt aufbaut, ist das ein echter Vorteil.
+
+00:11:44.660 --> 00:11:47.660
+Man muss es nicht über Nacht beherrschen und das erwartet auch niemand von einem.
+
+00:11:47.660 --> 00:11:50.660
+Eine Workflow-Datei öffnen und erklären zu können, was sie bewirkt,
+
+00:11:50.660 --> 00:11:54.660
+ist eine einfache, übertragbare Fähigkeit und kommt in mehr Gesprächen vor, als man denkt.
+
+00:11:54.660 --> 00:11:55.660
+Was es kostet?
+
+00:11:55.660 --> 00:11:58.660
+Bevor man sich zu irgendetwas verpflichtet, sollte man den Preis wissen.
+
+00:11:58.660 --> 00:11:59.660
+Gehen wir das also direkt an.
+
+00:11:59.660 --> 00:12:02.660
+GitHub Actions ist für öffentliche Repositories auf den Standard-GitHub-Rechnern kostenlos
+
+00:12:02.660 --> 00:12:04.660
+und es gibt keine Minutenbeschränkung.
+
+00:12:04.660 --> 00:12:08.660
+Wenn dein Projekt öffentlich zugänglich ist, kannst du den ganzen Monat lang so viele Workflows ausfüllen, wie du möchtest
+
+00:12:08.660 --> 00:12:10.660
+und der Zähler wird sich nicht bewegen.
+
+00:12:10.660 --> 00:12:12.660
+Private Repositories arbeiten stattdessen mit einem Kontingent.
+
+00:12:12.660 --> 00:12:15.660
+Im kostenlosen Tarif erhältst du 2.000 Minuten pro Monat.
+
+00:12:15.660 --> 00:12:19.660
+In den Tarifen pro und team sind es 3.000 Minuten und in der Enterprise Cloud erhältst du 50.000 Minuten.
+
+00:12:19.660 --> 00:12:21.660
+Diese Minuten werden jeden Monat zurückgesetzt.
+
+00:12:21.660 --> 00:12:23.660
+Sobald du sie aufgebraucht hast, zahlst du pro Minute.
+
+00:12:23.660 --> 00:12:25.660
+Es sei denn, du hast keine Zahlungsmethode hinterlegt.
+
+00:12:25.660 --> 00:12:28.660
+In diesem Fall werden deine Ausführungen einfach bis zum nächsten Zyklus angehalten.
+
+00:12:28.660 --> 00:12:30.660
+Die Minutenpreise sind so niedrig, dass man sie nicht vergessen kann.
+
+00:12:30.660 --> 00:12:35.660
+Linux kostet etwa 6 Cent Cent pro Minute, Windows 1 Cent und macOS etwas mehr als 6 Cent,
+
+00:12:35.660 --> 00:12:38.660
+da die Anmietung von Apple Hardware in großem Umfang teuer ist.
+
+00:12:38.660 --> 00:12:40.660
+Ein Detail übersieht man leicht.
+
+00:12:40.660 --> 00:12:42.660
+Die enthaltenen Minuten werden in Linux-Begriffen gemessen.
+
+00:12:42.660 --> 00:12:45.660
+Ein umfangreiches Betriebssystem verbraucht also ihr Kontingent schneller
+
+00:12:45.660 --> 00:12:50.660
+und ein 10-minütiger macOS-Build kann weit mehr als 10 Minuten ihrer monatlichen Gesamtzeit ausmachen.
+
+00:12:50.660 --> 00:12:52.660
+Zwei weitere Regeln runden das Ganze.
+
+00:12:52.660 --> 00:12:55.660
+Die größeren Runner werden immer auch in öffentlichen Repositories erstellt.
+
+00:12:55.660 --> 00:12:59.660
+Und selbst gehostete Runner verbrauchen überhaupt keine Minuten, wer der Rechner ihnen gehört.
+
+00:12:59.660 --> 00:13:03.660
+Sie bezahlen jedoch trotzdem für diesen Rechner und für die Zeit, die benötigt wird, um ihn am Laufen zu halten.
+
+00:13:03.660 --> 00:13:05.660
+Ein kleiner Vorteil ist, es erwähnt zu werden.
+
+00:13:05.660 --> 00:13:07.660
+Werden für die Zeit gezählt, in der ein Job tatsächlich ausgeführt wird.
+
+00:13:07.660 --> 00:13:12.660
+Ein Job, der nach 5 Minuten fehlschlägt, kostet Sie also 5 Minuten und nicht den vollständigen Bild, den Sie geplant hatten.
+
+00:13:12.660 --> 00:13:14.660
+Eine kurze Zusammenfassung in Frage.
+
+00:13:14.660 --> 00:13:18.660
+Lassen Sie uns das Ganze auf die einfache Version zurückführen, denn das ist der Sinn dieser Reihe.
+
+00:13:18.660 --> 00:13:22.660
+GitHub Actions ist eine in GitHub integrierte Automatisierung, die die von dir notierten Aufgaben ausführt,
+
+00:13:22.660 --> 00:13:24.660
+sobald sich in deinem Projekt etwas ändert.
+
+00:13:24.660 --> 00:13:28.660
+Diese Anweisungen befinden sich in einer Textdatei in einem Ordner namens .ithub slash Workflows
+
+00:13:28.660 --> 00:13:31.660
+und ein Trigger, der aufgerufen wird, entscheidet, wodurch sie aktiviert werden.
+
+00:13:31.660 --> 00:13:34.660
+Jeder Job wird auf dem übersichtlichen Computer ausgeführt oder so einer bezeichnet.
+
+00:13:34.660 --> 00:13:39.660
+Die Schritte in einem Job werden der Reihe nach ausgeführt und die Bausteine stammen von einem Marktplatz mit tausenden von Optionen.
+
+00:13:39.660 --> 00:13:43.660
+Passwörter werden in Geheimnissen gespeichert, niemals in der Datei und das Ganze ist bei öffentlichen Projekten kostenlos.
+
+00:13:43.660 --> 00:13:45.660
+Es ist also die Frage, die ich dir mit auf den Weg gebe.
+
+00:13:45.660 --> 00:13:50.660
+Wenn du eine wiederkehrende, langweilige Aufgabe an einen Computer delegieren könntest, der nie etwas vergisst und sich nie beschwert,
+
+00:13:50.660 --> 00:13:53.660
+welche Aufgabe würdest du auswählen und warum diese?

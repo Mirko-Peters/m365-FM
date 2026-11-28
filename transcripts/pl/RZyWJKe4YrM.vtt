@@ -1,0 +1,571 @@
+WEBVTT
+
+00:00:00.060 --> 00:00:06.120
+Witamy w podcaście M365FM, w którym zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:06.340 --> 00:00:08.700
+Dlaczego Twoje dane znajdują się w zbyt wielu miejscach?
+
+00:00:08.880 --> 00:00:14.020
+Dane Twoich klientów prawdopodobnie znajdują się obecnie w kilku różnych miejscach i nikt nie jest w stanie powiedzieć, które dane są prawdziwe.
+
+00:00:14.180 --> 00:00:19.480
+Twoje dane sprzedaży znajdują się w jednej chmurze pliki marketingowe w innej, a lista klientów znajduje się w aplikacji Microsoft.
+
+00:00:19.740 --> 00:00:25.400
+Skróty Microsoft Fabric zostały stworzone, aby rozwiązać właśnie ten problem i działają w sposób, który zaskakuje większość początkujących.
+
+00:00:25.400 --> 00:00:31.580
+Witamy w podcaście M365FM, w którym zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:31.800 --> 00:00:36.660
+W ciągu następnych 20 minut wyjaśnię, czym tak naprawdę jest skrót, gdzie się znajduje i do czego może wskazywać.
+
+00:00:36.820 --> 00:00:42.860
+Omówię również ograniczenia, o których nikt Cię nie ostrzega i jak pasuje on do narzędzi Microsoft 365 i Azure, z których już korzystasz.
+
+00:00:43.000 --> 00:00:44.720
+Czym tak naprawdę jest skrót Fabric?
+
+00:00:44.900 --> 00:00:48.520
+Aby zrozumieć skrót, najpierw musisz napisać jedno zdanie o jego miejscu umieszczenia.
+
+00:00:48.520 --> 00:00:55.200
+Microsoft Fabric to kompleksowa platforma firmy Microsoft do pracy z danymi, a każda konfiguracja Fabric zawiera pojedynczą warstwę pamięci masowej,
+
+00:00:55.200 --> 00:00:55.920
+o nazwie One Lake.
+
+00:00:56.100 --> 00:01:00.900
+One Lake można porównać do jednego, gigantycznego, zorganizowanego dysku dla wszystkich danych analitycznych firmy.
+
+00:01:01.140 --> 00:01:05.180
+Jest on włączony od razu po zainstalowaniu Fabric, więc nie trzeba go budować ani usuwać.
+
+00:01:05.380 --> 00:01:07.280
+Nie można też przypadkowo utworzyć drugiego.
+
+00:01:07.560 --> 00:01:10.660
+Działa w usłudze Azure Storage i przechowuje tabelę w otwartych formatach.
+
+00:01:10.760 --> 00:01:14.720
+To ważne, ponieważ dane nie są przechowywane w formacie, który może odczytać tylko jedna firma.
+
+00:01:14.840 --> 00:01:17.040
+Wewnątrz tego dysku skrót to po prostu wskaźnik.
+
+00:01:17.180 --> 00:01:20.660
+To obiekt, który wskazuje, że prawdziwe dane znajdują się właśnie tam, więc należy je stamtąd pobrać.
+
+00:01:20.660 --> 00:01:24.480
+Microsoft używa dwóch nazw, które warto zapamiętać, ponieważ pojawiają się wszędzie w dokumentacji.
+
+00:01:24.700 --> 00:01:29.340
+Ścieżka docelowa to miejsce, w którym faktycznie znajdują się dane, a ścieżka skrótu to miejsce, w którym pojawia się skrót.
+
+00:01:29.440 --> 00:01:32.740
+Tworząc skrót w swoim Lake House umieszczasz drogowskaz na ścieżce skrótu.
+
+00:01:32.880 --> 00:01:36.600
+Ten drogowskaz wskazuje ścieżkę docelową, a same dane nigdy się nie przemieszczają.
+
+00:01:36.900 --> 00:01:41.000
+Weźmy na przykład ikonę na pulpicie, która otwiera zdjęcie zapisane w innym folderze.
+
+00:01:41.200 --> 00:01:43.580
+Ikona nie jest ani zdjęciem, ani jego kopią.
+
+00:01:43.840 --> 00:01:47.440
+Jest to odniesienie do zdjęcia i działa, ponieważ komputer wie, gdzie szukać.
+
+00:01:47.440 --> 00:01:49.360
+Skrót Fabric działa w ten sam sposób.
+
+00:01:49.580 --> 00:01:55.120
+Inżynierowie, którzy go stworzyli, opisują skróty jako zachowujące się jak dowiązania symboliczne, co jest technicznym terminem opisującym tę samą ideę.
+
+00:01:55.240 --> 00:01:57.220
+Usuwasz ikonę, a zdjęcie nadal tam jest.
+
+00:01:57.400 --> 00:02:02.200
+To właśnie ta część zaskakuje, ponieważ możesz usunąć skrót bez obawy o utratę danych, które się za nim kryją.
+
+00:02:02.400 --> 00:02:05.800
+Ma to znaczenie z prostego powodu, kopiowanie danych jest kosztowne i czasochłonne.
+
+00:02:06.060 --> 00:02:10.180
+Jeśli dwa zespoły przechowują własne kopie danych klientów, płacisz za ich przechowywanie dwa razy.
+
+00:02:10.180 --> 00:02:15.240
+Co gorsza, powstają dwie wersje, które rozpadają się w momencie, gdy ktoś zaktualizuje jedną kopię, a zapomni o drugiej.
+
+00:02:15.520 --> 00:02:17.420
+Skrót pozwala uniknąć obu tych problemów.
+
+00:02:17.560 --> 00:02:21.180
+W jednym miejscu znajduje się jedna kopia i każdy zespół, który jej potrzebuje, wskazuje na nią.
+
+00:02:21.380 --> 00:02:27.140
+Gdy źródło ulega zmianie, zmiana jest widoczna za pośrednictwem skrótu, więc nikt nie musi uruchamiać co noc zadania, aby dwie kopie były ze sobą zgodne.
+
+00:02:27.340 --> 00:02:33.060
+Definicje tabel również pozostają zsynchronizowane, więc jeśli ktoś doda kolumnę w źródle, skrót ją przejmie bez konieczności przebudowywania czegokolwiek.
+
+00:02:33.060 --> 00:02:37.960
+Skrót to wskaźnik, a nie kopia i ta pojedyncza koncepcja stanowi fundament wszystkiego innego.
+
+00:02:38.200 --> 00:02:42.580
+Reszta tego odcinka dotyczy tego, gdzie mogą znajdować się te wskaźniki i do czego mogą dotrzeć.
+
+00:02:42.740 --> 00:02:44.360
+Gdzie znajduje się skrót w fabrik?
+
+00:02:44.540 --> 00:02:48.720
+Obecnie można tworzyć skróty w dwóch głównych miejscach, a oba znajdują się w fabrik.
+
+00:02:48.900 --> 00:02:53.400
+Pierwszym z nich jest Lakehouse, czyli przestrzeń robocza fabrik do przechowywania i analizowania dużych ilości danych.
+
+00:02:53.640 --> 00:02:59.000
+Drugim jest baza danych KQL, która jest przeznaczona do przetwarzania danych w czasie rzeczywistym i zostawimy ją w spokoju, ponieważ jest to bardziej zaawansowany temat.
+
+00:02:59.000 --> 00:03:02.320
+Jeśli dopiero zaczynasz przygodę z fabrik, Lakehouse to miejsce, w którym spędzisz czas.
+
+00:03:02.500 --> 00:03:05.340
+Lakehouse ma dwa foldery najwyższego poziomu, które zachowują się inaczej.
+
+00:03:05.560 --> 00:03:09.720
+Jest folder, tabele dla danych strukturalnych i folder pliki dla danych surowych lub półstrukturalnych.
+
+00:03:09.920 --> 00:03:13.460
+Miejsce utworzenia skrótu decyduje o jego zachowaniu, więc warto dobrze omówić tę część.
+
+00:03:13.680 --> 00:03:18.060
+Jeśli utworzysz skrót w sekcji tabele, poinformujesz program Fabrik, że obiekt, na który wskazujesz, jest prawdziwą tabelą.
+
+00:03:18.280 --> 00:03:22.220
+Skróty w tym folderze muszą znajdować się na najwyższym poziomie, więc nie można ich umieścić w podfolderze.
+
+00:03:22.220 --> 00:03:28.940
+Jeśli dane w miejscu docelowym są w formacie Delta, Lakehouse rozpoznaje je jako tabelę, którą można przeszukiwać za pomocą SQL i używać w usłudze PowerB.
+
+00:03:29.100 --> 00:03:33.540
+Definicja tabeli synchronizuje się sama, więc nowe kolumny w miejscu źródłowym pojawiają się bez konieczności ręcznej pracy.
+
+00:03:33.760 --> 00:03:37.740
+Jest jedna mała ciekawostka, o której warto wiedzieć, Delta nie zezwala na spację w nazwach tabel.
+
+00:03:37.900 --> 00:03:41.720
+Jeśli skrót zostanie nazwany spacją, program Fabrik nie potraktuje go jako tabeli Delta.
+
+00:03:41.960 --> 00:03:45.220
+Jeśli zamiast tego umieścisz skrót w sekcji pliki, reguły się rozluźniają.
+
+00:03:45.220 --> 00:03:51.020
+Możesz umieścić go na dowolnym poziomie hierarchii folderów i może on wskazywać na dowolny format pliku od arkuszy kalkulacyjnych po obrazy.
+
+00:03:51.180 --> 00:03:54.220
+Problem polega na tym, że nic tutaj nie staje się tabelą automatycznie.
+
+00:03:54.460 --> 00:03:58.620
+Skróty plików są świetne dla inżynierów, którzy planują odczytywać surowe pliki za pomocą platformy Spark,
+
+00:03:58.760 --> 00:04:02.260
+ale nie pojawią się one samodzielnie w zapytaniach SQL ani raportach usługi PowerB.
+
+00:04:02.420 --> 00:04:05.960
+Prosta reguła obejmuje większość przypadków i ustawia kolejne pytanie.
+
+00:04:06.200 --> 00:04:10.340
+Używaj tabel, gdy potrzebujesz czegoś, co możesz przeszukać za pomocą SQL i umieścić w raporcie,
+
+00:04:10.340 --> 00:04:14.240
+a plików, gdy masz do czynienia z surowymi danymi, które planujesz przetworzyć w pierwszej kolejności.
+
+00:04:14.500 --> 00:04:18.820
+Gdy wiesz, gdzie znajduje się skrót, oczywistym kolejnym pytaniem jest, gdzie możesz go wskazać.
+
+00:04:18.980 --> 00:04:20.240
+Na co możesz go wskazać?
+
+00:04:20.400 --> 00:04:24.540
+Właśnie tutaj skróty stają się przydatne, ponieważ lista miejsc, na które możesz wskazać, jest długa.
+
+00:04:24.740 --> 00:04:28.040
+Niektóre z tych miejsc znajdują się w środowisku Fabric, a inne poza nim.
+
+00:04:28.260 --> 00:04:29.480
+Najpierw są te wewnętrzne.
+
+00:04:29.740 --> 00:04:34.540
+Możesz wskazać skrót na inny obiekt typu Lakehouse Magazine, bazę danych KQL, bazę danych lustrzaną,
+
+00:04:34.540 --> 00:04:40.200
+lustrzany katalog Azure Databricks, bazę danych SQL lub model semantyczny, który czyta się jak ściana nazw produktów.
+
+00:04:40.340 --> 00:04:41.900
+Prosta wersja wygląda następująco.
+
+00:04:41.980 --> 00:04:48.180
+Jeśli dane znajdują się już gdzieś w środowisku Fabric, skrót pozwala na ich użycie z innego miejsca w środowisku Fabric bez konieczności kopiowania.
+
+00:04:48.440 --> 00:04:53.480
+Dane jednego zespołu pojawiają się w Twojej przestrzeni roboczej, a użytkownicy nigdy nie muszą wiedzieć, że znajdują się tuż obok.
+
+00:04:53.680 --> 00:04:55.660
+Źródła zewnętrzne to ekscytująca część.
+
+00:04:55.660 --> 00:05:04.860
+Lista obejmuje Azure Data Lake Storage Gen2, Azure Blob Storage, magazyn zgodny z Amazon S3 i S3, Google Cloud Storage, Dataverse, OneDrive i SharePoint,
+
+00:05:05.020 --> 00:05:08.780
+a nawet lokalizacje lokalne lub z ograniczeniami sieciowymi za pośrednictwem bramy.
+
+00:05:09.060 --> 00:05:12.080
+Obsługiwane są również tabele Iceberg, do których wrócimy za chwilę.
+
+00:05:12.240 --> 00:05:14.640
+Przeczytaj tę listę ponownie i zwróć uwagę na jej znaczenie.
+
+00:05:14.840 --> 00:05:18.560
+Twoje dane nie muszą być przenoszone do świata Microsoftu, aby były w nim użyteczne.
+
+00:05:18.560 --> 00:05:25.900
+Jeśli Twoja firma przechowuje pliki w kontenerach Amazon i Google Cloud, możesz je połączyć w Fabrik bez konieczności przeciągania żadnego z nich przez internet.
+
+00:05:26.100 --> 00:05:28.620
+Po utworzeniu skrótu wiele narzędzi może go odczytać.
+
+00:05:28.800 --> 00:05:34.240
+Notatniki Spark mogą go odczytać, SQL może wykonać zapytanie, gdy jest w tabeli, a narzędzia czasu rzeczywistego również mogą go używać.
+
+00:05:34.380 --> 00:05:39.040
+Power BI może je odczytać za pomocą modelu semantycznego, również w trybie Direct Lake, do którego wrócimy później.
+
+00:05:39.260 --> 00:05:43.120
+Nawet aplikacje spoza platformy Fabrik mogą uzyskać do niego dostęp za pośrednictwem interfejsu API OneLake,
+
+00:05:43.200 --> 00:05:46.480
+ponieważ OneLake posługuje się tym samym językiem pamięci masowej, co Azure Data Lake Storage.
+
+00:05:46.480 --> 00:05:50.280
+Iceberg zasługuje na proste wyjaśnienie, ponieważ jest to nazwa, którą często się słyszy.
+
+00:05:50.420 --> 00:05:54.980
+Iceberg to kolejny otwarty format tabel, z którego korzystają niektóre firmy, w tym Snowflake.
+
+00:05:55.160 --> 00:06:03.800
+OneLake może generować tak zwany wirtualne metadane, co pozwala Fabrik odczytywać obsługiwaną tabelę Iceberg tak, jakby była zwykłą tabelą, bez przepisywania danych źródłowych.
+
+00:06:04.040 --> 00:06:09.240
+Snowflake może pozostać systemem rekordów i głównym autorem, podczas gdy Fabrik odczytuje te same dane za pomocą skrótu.
+
+00:06:09.500 --> 00:06:12.220
+Zasięg jest więc szeroki i wykracza poza dostawców chmury.
+
+00:06:12.220 --> 00:06:17.480
+Właśnie dlatego ważne jest kolejne pytanie, a mianowicie, jak to wszystko wygląda w prawdziwej firmie?
+
+00:06:17.880 --> 00:06:19.560
+Jak to wygląda w prawdziwej firmie?
+
+00:06:19.760 --> 00:06:23.040
+Wyobraź sobie firmę z czterema oddzielnymi obszarami roboczymi w platformie Fabrik.
+
+00:06:23.240 --> 00:06:26.100
+Dział sprzedaży zarządza transakcjami sprzedaży, dział finansów zarządza budżetami,
+
+00:06:26.160 --> 00:06:30.900
+a współdzielony obszar roboczy danych zarządza wspólnymi tabelami, których wszyscy potrzebują, takimi jak tabele klientów, produktów i dat.
+
+00:06:31.060 --> 00:06:35.920
+Następnie istnieje czwarty obszar roboczy o nazwie Executive Analytics, a pracownicy potrzebują tam wszystkiego po trochu.
+
+00:06:35.920 --> 00:06:39.920
+Oczywistym rozwiązaniem byłoby skopiowanie wszystkich tych danych do obszaru roboczego Executive.
+
+00:06:40.240 --> 00:06:47.880
+To działa, ale tworzy drugi zestaw danych do przechowywania, drugi zestaw potoków do nadzorowania i drugie miejsce, w którym liczby mogą się zdezaktualizować.
+
+00:06:48.080 --> 00:06:50.240
+Lepszym rozwiązaniem jest tworzenie skrótów.
+
+00:06:50.400 --> 00:06:57.400
+Executive Analytics wskazuje na autorytatywne tabele sprzedaży, tabele finansowe i współdzielone tabele referencyjne i prezentuje je razem w swoim własnym jeziorze.
+
+00:06:57.600 --> 00:07:01.480
+Dla programisty raportów w tym zespole wynik wygląda jak jeden, czysty zbiór tabel.
+
+00:07:01.480 --> 00:07:08.920
+Mogą nawet nie wiedzieć, które tabele są fizycznie przechowywane w ich obszarze roboczym, a które są skrótami wskazującymi gdzie indziej i w dobrze zbudowanej konfiguracji, której nie muszą znać.
+
+00:07:09.100 --> 00:07:10.840
+Fabrik rozwiązuje te problemy w tle.
+
+00:07:11.060 --> 00:07:15.080
+Raport zostaje utworzony, liczby się układają i nikt nie musi przenosić ani jednego pliku.
+
+00:07:15.320 --> 00:07:18.240
+Jest to lekcja projektowania, którą warto wykorzystać w swojej pracy.
+
+00:07:18.460 --> 00:07:24.880
+Przechowuj prawdziwie współdzielone dane, takie jak współdzielona lista klientów, lista produktów i tabela dat w jednym obszarze roboczym, który działa jako źródło prawdy.
+
+00:07:25.040 --> 00:07:28.400
+Przechowuj specjalistyczne dane u zespołu, który jest ich właścicielem, ponieważ rozumie je najlepiej.
+
+00:07:28.400 --> 00:07:30.960
+Następnie pozwól wszystkim innym wskazać, czego potrzebują.
+
+00:07:31.140 --> 00:07:36.860
+Pokusą jest zbudowanie jednego gigantycznego obszaru roboczego, który pomieści wszystko, a który zwykle zamienia się w bałagan, którego nikt nie chce utrzymywać.
+
+00:07:36.980 --> 00:07:38.360
+Tak więc schemat jest prosty.
+
+00:07:38.520 --> 00:07:43.980
+Przechowujesz jedną autorytatywną kopię, wszystko inne jest skrótem, a osoba tworząca raport otrzymuje jedno czyste doświadczenie.
+
+00:07:44.220 --> 00:07:46.840
+Brzmi to schludnie i w dobrze zarządzanej konfiguracji tak jest.
+
+00:07:47.020 --> 00:07:51.560
+Schludny to jednak nie to samo, co darmowy i istnieją tutaj kompromisy, które większość wprowadzeń pomija.
+
+00:07:51.820 --> 00:07:53.640
+Kompromisy, o których nikt nie wspomina.
+
+00:07:53.920 --> 00:07:57.040
+Zacznij od szybkości, ponieważ to pierwsza rzecz, którą zauważysz.
+
+00:07:57.040 --> 00:07:59.760
+Skrót nie kopiuje danych i nie wczytuje ich wstępnie.
+
+00:07:59.980 --> 00:08:05.560
+Nic się nie dzieje, dopóki coś nie poprosi o dane, a następnie struktura nie pobierze ich z miejsca, w którym faktycznie się znajdują.
+
+00:08:05.760 --> 00:08:12.960
+Oznacza to, że pierwszy odczyt może być wolniejszy niż odczyt lokalnej kopii, zwłaszcza gdy źródło znajduje się w innej chmurze lub za lokalną bramą.
+
+00:08:13.860 --> 00:08:20.080
+Wydajność zależy od kilku czynników, w tym od odległości źródła opóźnienia sieciowego i organizacji plików.
+
+00:08:20.340 --> 00:08:25.380
+Zależy to również od tego, czy źródło jest dostępne w danym momencie i od tego, który silnik wykonuje odczyt.
+
+00:08:25.380 --> 00:08:29.300
+Firma Microsoft oferuje sposób na złagodzenie tego problemu, nazywany buforowaniem skrótów.
+
+00:08:29.460 --> 00:08:35.100
+Gdy jedno jezioro odczytuje plik za pomocą obsługiwanego skrótu, może przechowywać kopię tego pliku w pamięci podręcznej dla obszaru roboczego.
+
+00:08:35.320 --> 00:08:39.040
+Późniejsze żądania są obsługiwane z pamięci podręcznej zamiast ponownie przechodzić przez sieć.
+
+00:08:39.180 --> 00:08:45.740
+Ustawiasz, jak długo pliki w pamięci podręcznej pozostają w pamięci podręcznej od 1 dnia do 28 dni, a za każdym razem, gdy ktoś dotknie pliku, zegar jest resetowany.
+
+00:08:45.740 --> 00:08:47.680
+Warto pamiętać o dwóch ograniczeniach.
+
+00:08:47.800 --> 00:08:49.740
+Pliki większe niż 1 GB nie są buforowane.
+
+00:08:50.440 --> 00:08:56.160
+Pamięć podręczna zapełnia się plik po pliku, gdy ludzie korzystają z danych, więc nie pomaga pierwszej osobie, która coś otworzy.
+
+00:08:56.340 --> 00:09:02.980
+Buforowanie jest obsługiwane przez Google Cloud Storage, pamięć masową zgodną z Amazon S3 S3 oraz skróty przesyłane przez bramę lokalną.
+
+00:09:03.160 --> 00:09:10.120
+To realna poprawa w przypadku powtarzających się odczytów i może obniżyć koszty przenoszenia danych między chmurami, ale nie zmienia skrótu w tabelę lokalną.
+
+00:09:10.120 --> 00:09:12.160
+Większym kompromisem jest zależność.
+
+00:09:12.400 --> 00:09:20.020
+Skrót opiera się na obiekcie, na który wskazuje, jeśli ktoś przeniesie lub usunie obiekt docelowy, skrót ulegnie awarii, a raport zbudowany na nim również ulegnie awarii.
+
+00:09:20.180 --> 00:09:26.800
+Jeśli źródło zmieni swoją strukturę, ta zmiana zostanie przeniesiona na wszystkich użytkowników znajdujących się poniżej, co zazwyczaj jest pożądane, a czasami nie.
+
+00:09:26.800 --> 00:09:31.500
+Nie masz też takiej samej kontroli nad utrzymaniem tabeli, jaką miałbyś w przypadku tabeli, której jesteś właścicielem.
+
+00:09:31.640 --> 00:09:36.600
+Istnieją oczywiste przypadki, w których kopia jest mądrzejszym wyborem, co zostało wyraźnie opisane w wytycznych firmy Microsoft.
+
+00:09:36.600 --> 00:09:40.540
+Kopiuj dane, gdy wymagają one dużej transformacji, zanim ktokolwiek będzie mógł z nich skorzystać.
+
+00:09:40.640 --> 00:09:44.460
+Kopiuj je, gdy reguła lub rozporządzenie stanowi, że dane muszą pozostać w określonym regionie.
+
+00:09:44.680 --> 00:09:48.600
+Skopiuj go, gdy potrzebujesz pełnej kontroli nad ewolucją tabeli i sposobem jej utrzymania.
+
+00:09:48.900 --> 00:09:52.500
+Skrót to wspaniałe domyślne rozwiązanie, ale nie zawsze jest to właściwe rozwiązanie.
+
+00:09:52.760 --> 00:09:56.120
+Znajomość różnicy oddziela uporządkowaną konfigurację od kruchej.
+
+00:09:56.300 --> 00:09:58.000
+Błędy, które powodują problemy.
+
+00:09:58.140 --> 00:10:02.120
+Pierwszy błąd to ten, który może naprawdę zaszkodzić, więc zwraca się na niego najwięcej uwagi.
+
+00:10:02.360 --> 00:10:04.940
+Skróty nie usuwają kaskadowo, co działa w obie strony.
+
+00:10:04.940 --> 00:10:10.800
+Jeśli usuniesz sam skrót, dane znajdujące się w miejscu docelowym pozostaną całkowicie bezpieczne, co jest oczekiwanym zachowaniem.
+
+00:10:11.020 --> 00:10:17.460
+Jeśli jednak usuniesz plik lub folder wewnątrz skrótu z możliwością zapisu i masz uprawnienia do usuwania w miejscu docelowym, usuniesz go również w miejscu docelowym.
+
+00:10:17.700 --> 00:10:21.340
+Skrót był drzwiami, a ty po prostu przez nie przeszedłeś i zburzyłeś ścianę.
+
+00:10:21.780 --> 00:10:28.700
+Zanim posprzątasz każdy folder, który może zawierać skrót, ponieważ to jest błąd, który zamienia uporządkowane popołudnie w bardzo długi wieczór.
+
+00:10:28.920 --> 00:10:32.840
+Drugim błędem jest założenie, że pliki i tabele są wymienne, a tak nie jest.
+
+00:10:32.840 --> 00:10:39.560
+Folder pełen zwykłych plików Parke nie jest tabelą Delta, a skrót umieszczony pod plikami nie pojawi się jako tabela, na której można uruchomić SQL.
+
+00:10:39.840 --> 00:10:44.140
+Jeśli potrzebujesz, aby była możliwa do zapytania, albo transformujesz dane, albo ładujesz je do Delta.
+
+00:10:44.380 --> 00:10:49.060
+Łatwo jest utworzyć skrót do pliku, otworzyć Power BI, a potem zastanawiać się, dlaczego danych tam nie ma.
+
+00:10:49.260 --> 00:10:52.640
+Trzecim błędem jest oczekiwanie, że surowe pliki same staną się tabelami.
+
+00:10:52.840 --> 00:10:56.160
+Nie staną się, ale Fabrik oferuje skrótową transformację, która to umożliwia.
+
+00:10:56.160 --> 00:11:04.620
+Wystarczy wskazać folder z plikami CSV, Parke, JSON lub Excel, a Fabrik skopiuje je i przekonwertuje na zarządzaną tabelę Delta, która jest zsynchronizowana, sprawdzając kod źródłowy co dwie minuty.
+
+00:11:04.780 --> 00:11:09.580
+To wygodne i warto wiedzieć, że ta ścieżka nie jest w pełni kopią zerową, ponieważ tworzona jest tabela Delta.
+
+00:11:09.800 --> 00:11:16.080
+To również inne narzędzie niż zwykły skrót i nie obejmuje złożonych połączeń ani reguł biznesowych, które nadal należą do prawidłowego potoku.
+
+00:11:16.280 --> 00:11:18.460
+Czwartym błędem jest ignorowanie ograniczeń.
+
+00:11:18.460 --> 00:11:23.680
+Pojedynczy element Fabrik może pomieścić do 100 tysięcy skrótów i do 100 unikalnych połączeń danych.
+
+00:11:23.900 --> 00:11:27.140
+Pojedyncza ścieżka One Lake może pomieścić do 10 skrótów.
+
+00:11:27.320 --> 00:11:33.460
+Nazwy skrótów nie mogą zawierać znaku procenta ani znaku plus, a skróty schematów działają tylko w domach Lake House, w których schematy są włączone.
+
+00:11:33.680 --> 00:11:36.940
+Żaden z nich nie będzie dla ciebie problemem od pierwszego dnia, ale będzie problemem na większą skalę.
+
+00:11:37.060 --> 00:11:39.800
+Piątym błędem jest założenie, że twoje uprawnienia są zawsze z tobą.
+
+00:11:39.800 --> 00:11:43.720
+Skróty wewnętrzne korzystają z twojej własnej tożsamości, więc potrzebujesz dostępu w miejscu docelowym.
+
+00:11:43.720 --> 00:11:49.800
+Skróty zewnętrzne korzystają z przechowywanej tożsamości połączenia, co oznacza, że każdy, kto ma dostęp do domu Lake House, może ją odczytać.
+
+00:11:50.000 --> 00:11:54.860
+Gdy w grę wchodzi zarówno ścieżka skrótu, jak i ścieżka docelowa, wygrywa bardziej rygorystyczne z dwóch uprawnień.
+
+00:11:54.980 --> 00:11:59.560
+To szczegół projektu, a nie problem pierwszego dnia, ale wyjaśnia wiele mylących błędów dostępu.
+
+00:11:59.720 --> 00:12:02.440
+Jak to się ma do Microsoft 365 i Azure?
+
+00:12:02.700 --> 00:12:06.280
+Zacznij od strony Microsoft 365, ponieważ to tam zobaczysz korzyści.
+
+00:12:06.500 --> 00:12:08.080
+Widocznym sukcesem jest Power BI.
+
+00:12:08.300 --> 00:12:12.700
+Gdy skrót znajduje się w folderze tabel, może on zostać przeniesiony do modelu semantycznego, a następnie do raportu.
+
+00:12:12.700 --> 00:12:18.080
+Może to zrobić nawet w trybie bezpośredniego jeziora, który pobiera dane bezpośrednio do pamięci raportów bez osobnego kroku importu.
+
+00:12:18.280 --> 00:12:22.120
+Dla kogoś, kto chciał mieć dane tylko w raporcie, to jest ta część, która ma znaczenie.
+
+00:12:22.380 --> 00:12:25.500
+Wskazujesz dane, a one pojawiają się tam, gdzie już pracujesz.
+
+00:12:25.700 --> 00:12:30.140
+Istnieje również połączenie, które wiele osób już rozumie, czyli OneDrive i SharePoint.
+
+00:12:30.380 --> 00:12:38.500
+Fabrik pozwala wskazać skrót bezpośrednio do plików znajdujących się w SharePoint lub OneDrive, co jest dobrym rozwiązaniem, ponieważ to właśnie tam znajdują się codzienne dokumenty.
+
+00:12:38.500 --> 00:12:44.160
+Jeśli twój zespół przechowuje arkusz kalkulacyjny w SharePoint, może on pojawić się w Fabrik bez konieczności kopiowania go.
+
+00:12:44.360 --> 00:12:45.400
+Jest też Dataverse.
+
+00:12:45.620 --> 00:12:51.800
+Jeśli twój zespół tworzy rzeczy za pomocą Power Apps lub szerszej platformy Power, Dataverse prawdopodobnie jest miejscem, w którym znajdują się te dane i skrót może do nich dotrzeć.
+
+00:12:51.860 --> 00:12:58.560
+To łączy Fabrik z narzędziami, które ten kanał omawia co tydzień, a to oznacza, że dane z twoich aplikacji biznesowych mogą być przechowywane obok wszystkich innych.
+
+00:12:58.760 --> 00:12:59.820
+Podobnie jest z Azure.
+
+00:12:59.820 --> 00:13:08.320
+One Lake jest oparte na usłudze Azure Data Lake Storage, dlatego narzędzia platformy Azure, takie jak Synapse i Databricks, mogą się do niego dostać za pomocą tych samych interfejsów API, z których już korzystają.
+
+00:13:08.580 --> 00:13:16.900
+Sama pojemność Fabrik jest kupowana za pośrednictwem platformy Azure i jest budowana sekundowo, z minimalnym czasem jednej minuty, a dodatkowo dostępna jest opcja rocznej rezerwacji, co pozwala zaoszczędzić pieniądze.
+
+00:13:17.020 --> 00:13:24.580
+To prowadzi do praktycznego pytania o koszty, a szczerą odpowiedzią jest to, że Fabrik działa na określonej pojemności, a sama licencja na użytkownika jej nie odblokuje.
+
+00:13:24.580 --> 00:13:33.220
+Dobra wiadomość jest taka, że można to wypróbować. Wersja prób na Fabrik trwa 60 dni i zapewnia pojemność równą pojemności F64, co daje mnóstwo możliwości.
+
+00:13:33.460 --> 00:13:36.880
+Bezpłatna licencja Fabrik jest przyznawana automatycznie po pierwszym zalogowaniu.
+
+00:13:37.080 --> 00:13:42.600
+Pozwala ona na tworzenie domów i notatników Lake tylko wtedy, gdy obszar roboczy znajduje się na określonej pojemności lub w okresie próbnym.
+
+00:13:42.840 --> 00:13:50.260
+Jedną z rzeczy, która może być myląca, jest to, że licencja premium na użytkownika nie zapewnia samej pojemności Fabrik, więc nie odblokuje obciążeń, o których mówiliśmy.
+
+00:13:50.260 --> 00:13:54.140
+Twoja kolej. Skrócona wersja wszystkiego, co omówiliśmy, wygląda tak.
+
+00:13:54.140 --> 00:14:03.620
+Skrót Fabrik to wskaźnik, a nie kopia. Może dotrzeć do danych wewnątrz Fabrik i poza nim w Azure, Amazon, Google Cloud, Dataverse i SharePoint i pozostaje zsynchronizowany ze źródłem.
+
+00:14:03.880 --> 00:14:09.620
+Wiąże się to również z realnymi kompromisami dotyczącymi szybkości, zależności i kontroli, które warto rozważyć przed podjęciem decyzji o jego wykorzystaniu.
+
+00:14:09.840 --> 00:14:14.540
+Moje pytanie jest proste. Gdzie obecnie znajdują się Twoje dane i czy można do nich dotrzeć za pomocą skrótu?
+
+00:14:14.760 --> 00:14:18.840
+Daj znać w komentarzach, ponieważ je czytam, a Twoje odpowiedzi kształtują to, co będę omawiać dalej.
+
+00:14:18.840 --> 00:14:25.960
+Jeśli dzięki temu temat stał się mniej onieśmielający, zasubskrybuj M365FM, aby poznać narzędzia i sposób myślenia kształtujące przyszłość pracy.

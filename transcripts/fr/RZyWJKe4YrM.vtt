@@ -1,0 +1,775 @@
+WEBVTT
+
+00:00:00.380 --> 00:00:05.940
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:06.680 --> 00:00:08.800
+Pourquoi vos données sont-elles éparpillées partout ?
+
+00:00:08.800 --> 00:00:13.500
+Vos données clients sont probablement stockées à plusieurs endroits en ce moment, et personne ne peut vous dire qu'elles copier est la bonne.
+
+00:00:14.160 --> 00:00:18.820
+Vos chiffres de vente sont dans un cloud, vos fichiers marketing dans un autre, et votre liste de clients se trouve dans une application Microsoft.
+
+00:00:19.560 --> 00:00:24.840
+Des raccourcis Microsoft Fabric ont été créés pour résoudre ce problème précis, et ils fonctionnent d'une manière qui surprend la plupart des débutants.
+
+00:00:24.840 --> 00:00:31.320
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:31.980 --> 00:00:36.420
+Au cours des 20 prochaines minutes, je vous expliquerai ce qu'est vraiment un raccourci, où il se trouve, et vers quoi il peut pointer.
+
+00:00:36.980 --> 00:00:42.080
+J'aborderai également les limites dont personne ne vous parle, et la manière dont il s'intègre aux outils Microsoft 365 et Azure que vous utilisez déjà.
+
+00:00:43.000 --> 00:00:45.180
+Qu'est-ce qu'un raccourci fabrique en réalité ?
+
+00:00:45.180 --> 00:00:47.840
+Pour comprendre un raccourci, il faut d'abord une phrase sur son emplacement.
+
+00:00:48.580 --> 00:00:51.780
+Microsoft fabrique la plateforme tout en un de Microsoft pour travailler avec les données,
+
+00:00:51.780 --> 00:00:55.780
+et chaque configuration fabrique inclut une couche de stockage unique appelée One Lake, appelée One Lake.
+
+00:00:56.460 --> 00:01:00.460
+Considérez One Lake comme un immense disque organisé pour toutes les données analytiques de votre entreprise.
+
+00:01:01.240 --> 00:01:04.860
+Il est activé dès que vous obtenez Fabric, donc vous n'avez pas à le créer et vous ne pouvez pas le supprimer.
+
+00:01:05.500 --> 00:01:07.120
+Vous ne pouvez pas non plus en créer un second par accident.
+
+00:01:07.660 --> 00:01:10.060
+Il fonctionne sur le stockage Azure et conserve vos tables dans des formats ouverts.
+
+00:01:10.840 --> 00:01:14.340
+C'est important, car vos données ne sont pas piégées dans un format qu'une seule entreprise peut lire.
+
+00:01:15.140 --> 00:01:16.960
+A l'intérieur de ce disque, un raccourci n'est qu'un pointeur.
+
+00:01:17.600 --> 00:01:20.140
+C'est un objet qui indique que les vraies données sont là-bas et qu'il faut aller les chercher là-bas.
+
+00:01:20.140 --> 00:01:24.080
+Microsoft utilise deux noms qu'il vaut la peine d'apprendre, car ils apparaissent partout dans la documentation.
+
+00:01:24.620 --> 00:01:26.580
+Le chemin cible est l'endroit où se trouvent réellement les données,
+
+00:01:26.800 --> 00:01:28.800
+et le chemin du raccourci est l'endroit où le raccourci apparaît.
+
+00:01:29.180 --> 00:01:32.480
+Lorsque vous créez un raccourci dans votre lake house, vous placez un panneau indicateur au niveau du chemin du raccourci.
+
+00:01:32.920 --> 00:01:36.240
+Ce panneau pointe vers le chemin cible, et les données elles-mêmes ne bougent jamais.
+
+00:01:36.920 --> 00:01:40.060
+Prenez l'icône sur votre bureau qui ouvre une photo stockée dans un dossier situé ailleurs.
+
+00:01:41.220 --> 00:01:43.260
+L'icône n'est pas la photo, et ce n'est pas une copie de la photo.
+
+00:01:44.020 --> 00:01:47.220
+C'est une référence à la photo, et cela fonctionne parce que votre ordinateur sait où chercher.
+
+00:01:47.220 --> 00:01:49.080
+Un raccourci fabrique fonctionne de la même manière.
+
+00:01:49.540 --> 00:01:52.660
+Les ingénieurs qui l'ont conçu décrivent les raccourcis comme se comportant comme des liens symboliques,
+
+00:01:52.760 --> 00:01:55.160
+ce qui est le terme technique pour cette même idée, ce qui est le terme des...
+
+00:01:55.160 --> 00:01:56.920
+Supprimez l'icône, et la photo est toujours là.
+
+00:01:57.560 --> 00:02:01.540
+C'est ce qui surprend les gens, car vous pouvez supprimer un raccourci sans craindre de perdre les données qui se cachent derrière.
+
+00:02:02.440 --> 00:02:05.520
+C'est important pour une raison simple, copier des données coûte cher et crée de la confusion.
+
+00:02:06.140 --> 00:02:09.800
+Si deux équipes conservent chacune leur propre copie des dossiers clients, vous payez deux fois le stockage.
+
+00:02:10.280 --> 00:02:15.040
+Pire encore, vous vous retrouvez avec deux versions qui divergent dès que quelqu'un met à jour une copie et oublie l'autre.
+
+00:02:15.040 --> 00:02:17.000
+Un raccourci permet d'éviter ces deux problèmes.
+
+00:02:17.640 --> 00:02:20.480
+Il n'y a qu'une seule copie à un seul endroit, et chaque équipe qui en a besoin s'y réfère.
+
+00:02:21.480 --> 00:02:23.640
+Lorsque la source change, le changement apparaît via le raccourci,
+
+00:02:23.740 --> 00:02:26.400
+donc personne n'a besoin d'exécuter une tâche nocturne pour synchroniser deux copies.
+
+00:02:27.360 --> 00:02:30.360
+Les définitions des tables restent également synchronisées si quelqu'un ajoute une colonne à la source,
+
+00:02:30.460 --> 00:02:32.680
+le raccourci l'intègre sans que vous ayez à reconstruire quoi que ce soit.
+
+00:02:33.640 --> 00:02:37.140
+Un raccourci est un pointeur, pas une copie, et cette idée simple est la base de tout le reste.
+
+00:02:38.260 --> 00:02:41.740
+Le reste de cet épisode porte sur l'emplacement de ces pointeurs et ce à quoi ils peuvent accéder.
+
+00:02:41.740 --> 00:02:44.700
+Où un raccourci réside-t-il dans Fabrique ?
+
+00:02:44.700 --> 00:02:47.140
+Vous pouvez créer des raccourcis à deux endroits principaux aujourd'hui,
+
+00:02:47.420 --> 00:02:48.620
+et tous deux se trouvent dans Fabrique.
+
+00:02:49.180 --> 00:02:53.080
+Le premier est un lake house, l'espace de travail de Fabrique pour stocker et analyser de grandes quantités de données.
+
+00:02:53.760 --> 00:02:56.580
+Le second est une base de données CQL, conçue pour les données en temps réel,
+
+00:02:56.660 --> 00:02:58.800
+que nous laisserons de côté car c'est un sujet plus avancé.
+
+00:02:59.380 --> 00:03:01.880
+Si vous débutez avec Fabrique, c'est dans le lake house que vous passerez votre temps.
+
+00:03:02.400 --> 00:03:04.900
+Un lake house possède deux dossiers de premier niveau qui se comportent différemment,
+
+00:03:05.440 --> 00:03:06.840
+et un dossier tables pour les données structurées,
+
+00:03:06.940 --> 00:03:08.740
+et un dossier files pour les données brutes ou semi-structurées.
+
+00:03:08.740 --> 00:03:12.060
+L'endroit où vous créez votre raccourci détermine son comportement,
+
+00:03:12.280 --> 00:03:13.460
+il est donc important de bien le choisir.
+
+00:03:13.900 --> 00:03:17.740
+Si vous créez un raccourci dans tables, vous indiquez à Fabrique que la cible est une véritable table.
+
+00:03:18.240 --> 00:03:19.940
+Les raccourcis dans ce dossier doivent se trouver au niveau racine,
+
+00:03:20.000 --> 00:03:21.580
+vous ne pouvez donc pas en placer un dans un sous-dossier.
+
+00:03:22.380 --> 00:03:24.580
+Si les données cibles sont au format delta, le lake house,
+
+00:03:24.920 --> 00:03:28.620
+les reconnaît comme une table interrogeable avec SQL et utilisable dans Power BI.
+
+00:03:29.220 --> 00:03:30.860
+La définition de la table se synchronise d'elle-même,
+
+00:03:30.940 --> 00:03:33.040
+ainsi les nouvelles colonnes à la source apparaissent sans intervention manuelle.
+
+00:03:33.600 --> 00:03:35.380
+Il existe une petite particularité à connaître,
+
+00:03:35.380 --> 00:03:37.420
+delta n'autorise pas les espaces dans les noms de tables.
+
+00:03:37.420 --> 00:03:41.480
+Si vous nommez un raccourci avec un espace, Fabrique ne le traitera pas comme une table delta.
+
+00:03:42.020 --> 00:03:44.900
+Si vous placez plutôt le raccourci dans files, les règles sont plus souples.
+
+00:03:45.460 --> 00:03:47.520
+Vous pouvez le placer à n'importe quel niveau de la hiérarchie des dossiers,
+
+00:03:47.840 --> 00:03:50.540
+et il peut pointer vers n'importe quel format de fichier, des feuilles de calcul aux images.
+
+00:03:51.340 --> 00:03:53.600
+Le piège est qu'ici, rien ne devient automatiquement une table.
+
+00:03:54.500 --> 00:03:56.580
+Les raccourcis vers des fichiers sont parfaits pour les ingénieurs
+
+00:03:56.580 --> 00:03:58.260
+qui prévoient de lire des fichiers bruts avec Spark,
+
+00:03:58.400 --> 00:04:01.240
+mais ils n'apparaîtront pas de même dans vos requêtes SQL ou vos rapports Power BI.
+
+00:04:01.240 --> 00:04:05.880
+Une règle simple couvre la plupart des cas et permet d'aborder la question suivante.
+
+00:04:06.640 --> 00:04:10.060
+Utilisez des tables si vous voulez quelque chose que vous pouvez interroger avec SQL et inclure dans un rapport,
+
+00:04:10.420 --> 00:04:13.500
+et utilisez des fichiers lorsque vous traitez des données brutes que vous prévoyez d'abord de transformer.
+
+00:04:14.580 --> 00:04:15.960
+Une fois que vous savez où se trouve un raccourci,
+
+00:04:16.160 --> 00:04:18.100
+la question évidente suivante est de savoir vers quoi il peut pointer.
+
+00:04:19.160 --> 00:04:20.880
+Vers quoi vous pouvez diriger un raccourci ?
+
+00:04:20.880 --> 00:04:24.100
+C'est là que les raccourcis deviennent utiles, car la liste des emplacements vers lesquels pointer est longue.
+
+00:04:24.640 --> 00:04:27.620
+Certains de ces emplacements se trouvent dans Fabrique, et d'autres dans le monde extérieur.
+
+00:04:28.060 --> 00:04:29.040
+Les emplacements internes premiers.
+
+00:04:29.460 --> 00:04:31.920
+Vous pouvez diriger un raccourci vers un autre lake house, un warehouse,
+
+00:04:32.240 --> 00:04:35.700
+une base de données KQL, une base de données Miroir, un catalogue Azure Databricks Miroir,
+
+00:04:36.080 --> 00:04:37.780
+une base de données SQL ou un modèle sémantique,
+
+00:04:38.120 --> 00:04:39.600
+une liste qui ressemble à un mur de noms de produits.
+
+00:04:40.280 --> 00:04:41.340
+Voici donc la version simple.
+
+00:04:42.160 --> 00:04:43.900
+Si les données résident déjà quelque part dans Fabrique,
+
+00:04:44.100 --> 00:04:47.720
+un raccourci vous permet de les utiliser depuis un autre endroit dans Fabrique sans avoir à les copier.
+
+00:04:48.580 --> 00:04:50.800
+Les données d'une équipe apparaissent dans votre espace de travail.
+
+00:04:50.980 --> 00:04:53.220
+Et vos utilisateurs n'ont jamais besoin de savoir qu'elles se trouvent juste à côté.
+
+00:04:53.580 --> 00:04:55.280
+Les sources externes sont la partie la plus intéressante.
+
+00:04:55.900 --> 00:04:59.120
+La liste comprend Azure Data Lake Storage Gen 2, Azure Blob Storage,
+
+00:04:59.560 --> 00:05:03.260
+Amazon S3 et les stockages compatibles S3, Google Cloud Storage, Dataverse,
+
+00:05:03.500 --> 00:05:08.340
+OneDrive et SharePoint, et même des emplacements sur site ou restreints par le réseau via une passerelle.
+
+00:05:09.240 --> 00:05:12.140
+Il existe également une prise en charge des tables icebergs, sur lesquelles nous reviendrons dans un instant.
+
+00:05:12.560 --> 00:05:14.160
+Lisez à nouveau cette liste et remarquez ce qu'elle implique.
+
+00:05:14.340 --> 00:05:17.880
+Vos données n'ont pas besoin d'être déplacées dans le monde Microsoft pour être utilisables dans le monde Microsoft.
+
+00:05:18.520 --> 00:05:20.780
+Si votre entreprise conserve des fichiers dans un bucket Amazon,
+
+00:05:20.980 --> 00:05:25.680
+et un bucket Google Cloud, vous pouvez les réunir dans Fabrique sans avoir à transférer l'un ou l'autre via Internet au préalable.
+
+00:05:26.300 --> 00:05:28.460
+Une fois qu'un raccourci existe, de nombreux outils peuvent le lire.
+
+00:05:28.980 --> 00:05:31.900
+Les notebooks Spark peuvent le lire, SQL peut l'interroger lorsqu'il s'agit d'une table,
+
+00:05:32.060 --> 00:05:33.620
+et les outils en temps réel peuvent également l'utiliser.
+
+00:05:34.500 --> 00:05:38.540
+Power BI peut le lire via un modèle sémantique, y compris en mode Direct Lake, sur lequel nous reviendrons plus tard.
+
+00:05:38.540 --> 00:05:45.900
+Même les applications en dehors de Fabrique peuvent l'atteindre via l'API OneLake, car OneLake parle le même langage de stockage qu'Azure Data Lake Storage.
+
+00:05:47.120 --> 00:05:49.460
+Mérite une explication simple car c'est un nom que vous entendrez souvent.
+
+00:05:50.280 --> 00:05:54.560
+Iceberg est un autre format de table ouvert, et certaines entreprises, dont Snowflake, s'appuient fortement sur lui.
+
+00:05:55.380 --> 00:05:57.600
+OneLake peut générer ce qu'il appelle des métadonnées virtuelles,
+
+00:05:57.720 --> 00:06:03.300
+ce qui permet à Fabrique de lire une table Iceberg prise en charge comme s'il s'agissait d'une table ordinaire, sans réécrire les données sous-jacentes.
+
+00:06:03.300 --> 00:06:09.160
+Snowflake peut rester le système d'enregistrement et l'écrivain principal, tandis que Fabrique lisse ces mêmes données via un raccourci.
+
+00:06:09.480 --> 00:06:11.640
+La portée est donc étendue et traverse les fournisseurs de cloud.
+
+00:06:12.020 --> 00:06:14.520
+Cette envergure explique précisément pourquoi la question suivante est importante.
+
+00:06:14.760 --> 00:06:17.300
+A quoi cela ressemble-t-il lorsqu'une vraie entreprise met tout cela en place ?
+
+00:06:18.300 --> 00:06:20.140
+A quoi cela ressemble dans une entreprise réelle ?
+
+00:06:20.140 --> 00:06:22.540
+Imaginez une entreprise avec 4 espaces de travail Fabrique d'Istain.
+
+00:06:23.140 --> 00:06:25.720
+Les ventes gèrent les transactions commerciales, la finance gère les budgets,
+
+00:06:26.320 --> 00:06:30.360
+et un espace de données partagées contient les tables communes dont tout le monde a besoin, comme les clients, les produits et les dates.
+
+00:06:30.360 --> 00:06:35.580
+Il y a ensuite un quatrième espace de travail appelé analyse exécutive, et les personnes qui y travaillent ont besoin d'un peu de tout.
+
+00:06:36.160 --> 00:06:39.440
+Solution évidente serait de copier toutes ces données dans l'espace de travail exécutif.
+
+00:06:40.040 --> 00:06:44.540
+Cela fonctionne, mais cela crée un second jeu de données à stocker, un second jeu de pipeline à surveiller,
+
+00:06:44.640 --> 00:06:47.520
+et un second endroit où les chiffres peuvent devenir obsolètes.
+
+00:06:48.420 --> 00:06:49.860
+La meilleure approche consiste à créer des raccourcis.
+
+00:06:50.400 --> 00:06:54.680
+L'analyse exécutive pointe vers l'étape de vente faisant autorité, l'étape financière et l'étape de référence partagée,
+
+00:06:54.860 --> 00:06:56.740
+et les présente ensemble dans son propre lay-caos.
+
+00:06:56.740 --> 00:07:01.280
+Pour un développeur de rapport au sein de cette équipe, le résultat ressemble à une collection propre de tables.
+
+00:07:01.960 --> 00:07:04.780
+Il se peut même qu'il ne sache pas quelles tables sont physiquement stockées dans son espace de travail,
+
+00:07:04.880 --> 00:07:08.200
+et lesquelles sont des raccourcis pointant ailleurs, et dans une configuration bien conçue, n'a pas besoin de savoir.
+
+00:07:09.000 --> 00:07:10.720
+Fabrique résout ses chemins en arrière-plan.
+
+00:07:11.380 --> 00:07:14.820
+Un rapport est généré, les chiffres correspondent et personne n'a eu à déplacer un seul fichier.
+
+00:07:15.400 --> 00:07:17.820
+Il y a ici une leçon de conception qui mérite d'être intégrée à votre propre travail.
+
+00:07:17.820 --> 00:07:22.240
+Conservez les données véritablement partagées, comme la liste des clients, la liste des produits et la table des dates,
+
+00:07:22.700 --> 00:07:24.800
+dans un espace de travail unique qui sert de source de vérité.
+
+00:07:25.440 --> 00:07:28.300
+Gardez les données spécialisées avec l'équipe qui les possède car elle est la mieux placée pour les comprendre.
+
+00:07:28.720 --> 00:07:30.440
+Laissez ensuite tout le monde pointer vers ce dont il a besoin.
+
+00:07:31.320 --> 00:07:35.980
+La tentation est de créer un espace de travail géant qui contient tout ce qui se transforme généralement en un désordre que personne ne veut maintenir.
+
+00:07:36.980 --> 00:07:37.820
+Le modèle est donc simple.
+
+00:07:37.820 --> 00:07:43.860
+Vous conservez une copie faisant autorité, tout le reste est un raccourci et la personne qui crée le rapport bénéficie d'une expérience claire et simple.
+
+00:07:44.460 --> 00:07:46.660
+Cela semble ordonné et dans une configuration bien gérée celle-là.
+
+00:07:46.800 --> 00:07:51.360
+Cependant, ordonné que ne signifie pas gratuit qu'à gratuit que, et il existe ici des compromis que la plupart des présentations mettent compte.
+
+00:07:52.060 --> 00:07:53.280
+Les compromis dont personne ne parle.
+
+00:07:54.000 --> 00:07:56.320
+Commençons par la vitesse, car c'est la première chose que vous remarquerez.
+
+00:07:56.980 --> 00:07:59.460
+Un raccourci ne copie pas les données et ne les précharge pas non plus.
+
+00:08:00.120 --> 00:08:05.080
+Rien ne se passe tant que quelqu'un ne demande pas les données, puis Fabrique va les chercher là où elles se trouvent réellement.
+
+00:08:05.080 --> 00:08:08.460
+Cela signifie que la première lecture peut être plus lente que la lecture d'une copie locale,
+
+00:08:08.680 --> 00:08:12.120
+surtout lorsque la source se trouve dans un autre cloud ou derrière une passerelle sur site.
+
+00:08:13.440 --> 00:08:19.680
+Les performances dépendent de plusieurs facteurs, notamment l'éloignement de la source, la latence réseau intermédiaire et l'organisation des fichiers.
+
+00:08:20.800 --> 00:08:25.020
+Cela dépend également de la disponibilité de la source à ce moment précis et du moteur utilisé pour la lecture.
+
+00:08:25.860 --> 00:08:28.680
+Microsoft propose une solution pour atténuer cela, appelée mise en cache des raccourcis.
+
+00:08:29.220 --> 00:08:34.460
+Lorsqu'un lac lit un fichier via un raccourci pris en charge, il peut en conserver une copie dans un cache pour l'espace de travail.
+
+00:08:35.520 --> 00:08:38.460
+Les requêtes ultérieures sont servies à partir du cache au lieu de repasser par le réseau.
+
+00:08:39.440 --> 00:08:45.220
+Vous définissez la durée de conservation des fichiers en cache entre 1 et 28 jours, et chaque accès au fichier réinitialise ce délai.
+
+00:08:46.020 --> 00:08:47.140
+Il y a deux limites à garder à l'esprit.
+
+00:08:47.820 --> 00:08:49.420
+Les fichiers de plus de 1 giga ne sont pas mis en cache.
+
+00:08:50.300 --> 00:08:53.340
+Le cache se remplit également fichier par fichier à mesure que les données sont utilisées,
+
+00:08:53.500 --> 00:08:55.740
+il n'est donc pas la toute première personne qui accède à un élément.
+
+00:08:55.740 --> 00:09:00.220
+La mise en cache est prise en charge pour Google Cloud Storage, le stockage compatible Amazon S3,
+
+00:09:00.360 --> 00:09:02.260
+et les raccourcis passant par la passerelle locale.
+
+00:09:03.200 --> 00:09:07.360
+C'est une amélioration réelle pour les lectures répétées, et cela réduit les coûts de transfert de données entre clouds,
+
+00:09:07.580 --> 00:09:10.020
+mais cela ne transforme pas un raccourci en table locale.
+
+00:09:10.620 --> 00:09:12.040
+Le compromis le plus important est la dépendance.
+
+00:09:12.400 --> 00:09:13.900
+Un raccourci dépend de l'élément qui le pointe.
+
+00:09:14.640 --> 00:09:17.240
+Si quelqu'un déplace ou supprime la cible, le raccourci est rompu,
+
+00:09:17.780 --> 00:09:19.520
+et les rapports basés sur celui-ci le sont également.
+
+00:09:19.520 --> 00:09:23.460
+Si la source change de structure, cette modification se répercute en aval,
+
+00:09:23.560 --> 00:09:26.060
+ce qui est généralement souhaité, mais parfois non.
+
+00:09:27.240 --> 00:09:29.640
+Vous ne disposez pas non plus du même contrôle sur la maintenance de la table
+
+00:09:29.640 --> 00:09:31.080
+que pour une table que vous possédez entièrement.
+
+00:09:31.860 --> 00:09:34.220
+Il existe des cas évidents où la copie est un choix plus judicieux,
+
+00:09:34.540 --> 00:09:36.280
+et les directives de Microsoft sont explicites.
+
+00:09:36.880 --> 00:09:40.100
+Copiez les données lorsqu'elles nécessitent une transformation importante avant de pouvoir être utilisées.
+
+00:09:40.600 --> 00:09:43.820
+Copiez-les lorsqu'une règle ou une réglementation imposent que les données restent dans une région spécifique.
+
+00:09:44.640 --> 00:09:48.180
+Copiez-les lorsque vous avez besoin d'un contrôle total sur l'évolution et la maintenance de la table.
+
+00:09:48.180 --> 00:09:51.680
+Un raccourci est une excellente valeur par défaut, mais ce n'est pas toujours la bonne réponse.
+
+00:09:52.500 --> 00:09:55.580
+Connaître la différence est ce qui sépare une configuration saine d'une configuration fragile.
+
+00:09:56.480 --> 00:09:58.420
+Les erreurs qui piègent les utilisateurs ?
+
+00:09:58.420 --> 00:10:01.500
+La première erreur est celle qui peut réellement porter préjudice, elle reçoit donc le plus d'attention.
+
+00:10:02.100 --> 00:10:04.860
+Les raccourcis n'effectuent pas de suppression en cascade, et cela fonctionne dans les deux sens.
+
+00:10:05.440 --> 00:10:09.140
+Si vous supprimez le raccourci lui-même, les données situées à la cible restent totalement en sécurité,
+
+00:10:09.460 --> 00:10:10.580
+ce qui est le comportement attendu.
+
+00:10:11.000 --> 00:10:13.440
+Si vous supprimez un fichier ou un dossier dans un raccourci inscriptible
+
+00:10:13.440 --> 00:10:16.600
+et que vous disposez de l'autorisation de suppression sur la cible, vous le supprimez également à la cible.
+
+00:10:16.600 --> 00:10:20.600
+Le raccourci était une porte, vous venez de la franchir et d'abattre un mur.
+
+00:10:21.840 --> 00:10:24.620
+Avant de nettoyer un dossier susceptible de contenir un raccourci,
+
+00:10:24.760 --> 00:10:27.880
+car c'est l'erreur qui transforme un après-midi calme en une très longue soirée.
+
+00:10:28.900 --> 00:10:32.380
+La deuxième erreur consiste à supposer que les fichiers et les tables sont interchangeables, ce qui n'est pas le cas.
+
+00:10:33.320 --> 00:10:35.540
+Un dossier rempli de simples fichiers parquet n'est pas une table delta,
+
+00:10:35.700 --> 00:10:39.020
+et un raccourci placé dans les fichiers n'apparaîtra pas comme une table interrogeable en SQL.
+
+00:10:40.060 --> 00:10:43.320
+Si vous avez besoin de pouvoir l'interroger, vous devez transformer les données ou les charger dans delta.
+
+00:10:43.320 --> 00:10:48.320
+Il est facile de créer un raccourci de fichier, d'ouvrir Power BI, puis de se demander pourquoi les données ne sont pas là.
+
+00:10:49.340 --> 00:10:52.360
+La troisième erreur est d'espérer que des fichiers bruts deviennent des tables par eux-mêmes.
+
+00:10:53.040 --> 00:10:55.540
+Ils ne le feront pas, mais Fabrique propose une transformation de raccourci qui lui permet.
+
+00:10:56.060 --> 00:10:58.920
+Pointez-le vers un dossier de fichier CSV, parquet, JSON ou Excel,
+
+00:10:59.040 --> 00:11:01.880
+et Fabrique les copies et les convertit en une table delta gérée qui reste synchronisée,
+
+00:11:02.060 --> 00:11:04.580
+vérifiant la source toutes les deux minutes, vérifiant la source toutes les deux minutes.
+
+00:11:04.580 --> 00:11:09.400
+C'est pratique, et il est bon de savoir que cette méthode n'est pas totalement en zéro copier car une table delta est créée.
+
+00:11:09.840 --> 00:11:13.140
+C'est également un outil différent d'un simple raccourci qui ne couvrira pas les jointures complexes
+
+00:11:13.140 --> 00:11:15.500
+ou les règles métiers lesquelles relèvent toujours d'un pipeline approprié.
+
+00:11:16.340 --> 00:11:17.700
+La quatrième erreur est d'ignorer les limites.
+
+00:11:18.700 --> 00:11:23.120
+Un seul élément Fabrique peut contenir jusqu'à 100 0 0 raccourcis et jusqu'à 100 connexions de données uniques.
+
+00:11:24.140 --> 00:11:26.720
+Un seul chemin One Lake peut contenir jusqu'à 10 raccourcis.
+
+00:11:27.520 --> 00:11:30.680
+Les noms de raccourcis ne peuvent pas contenir de signes pourcentage ou plus et les raccourcis de schéma.
+
+00:11:30.680 --> 00:11:33.320
+Ne fonctionnent que dans les lake house où les schémas sont activés.
+
+00:11:33.320 --> 00:11:36.740
+Rien de tout cela ne vous affectera le premier jour, mais cela vous posera problème à grande échelle.
+
+00:11:37.160 --> 00:11:39.560
+Cinquième erreur consiste à supposer que vos autorisations vous suivent partout.
+
+00:11:39.980 --> 00:11:42.920
+Les raccourcis internes utilisent votre propre identité, vous avez donc besoin d'un accès à la cible.
+
+00:11:44.140 --> 00:11:46.420
+Les raccourcis externes utilisent une identité de connexion stockée,
+
+00:11:46.520 --> 00:11:48.840
+ce qui signifie que toute personne ayant accès au lake house peut les lire.
+
+00:11:49.980 --> 00:11:52.400
+Lorsque le chemin du raccourci et le chemin de la cible sont tous deux impliqués,
+
+00:11:52.480 --> 00:11:54.420
+ce sont les autorisations les plus strictes qui prévalent.
+
+00:11:55.000 --> 00:11:57.280
+C'est un détail de conception plutôt qu'une préoccupation immédiate,
+
+00:11:57.280 --> 00:11:59.300
+mais cela explique bien des erreurs d'accès déroutantes.
+
+00:11:59.940 --> 00:12:02.880
+Comment cela s'articule-t-il avec Microsoft 365 et Azure ?
+
+00:12:02.880 --> 00:12:06.000
+Commencez par le côté Microsoft 365, car c'est là que vous verrez le bénéfice.
+
+00:12:06.480 --> 00:12:07.680
+L'avantage visible est Power BI.
+
+00:12:08.260 --> 00:12:09.920
+Lorsqu'un raccourci se trouve dans le dossier des tables,
+
+00:12:10.020 --> 00:12:11.800
+il peut alimenter un modèle sémantique, puis un rapport.
+
+00:12:12.660 --> 00:12:14.000
+Il peut même le faire en mode direct lake,
+
+00:12:14.200 --> 00:12:17.520
+qui extrait les données directement dans la mémoire du rapport sans étapes d'importation distinctes.
+
+00:12:18.240 --> 00:12:21.100
+Pour quelqu'un qui voulait simplement voir ces données dans un rapport, c'est ce qui compte.
+
+00:12:22.140 --> 00:12:24.960
+Vous pointez vers les données, et elles apparaissent là où vous travaillez déjà.
+
+00:12:25.160 --> 00:12:29.300
+Il existe aussi une connexion que beaucoup connaissent bien, OneDrive et SharePoint.
+
+00:12:29.300 --> 00:12:34.400
+Fabrique vous permet de créer un raccourci direct vers les fichiers stockés dans SharePoint ou OneDrive,
+
+00:12:34.800 --> 00:12:37.920
+ce qui est très pratique puisque ce sont les emplacements où résident vos documents courants.
+
+00:12:38.960 --> 00:12:40.620
+Si votre équipe conserve un tableur dans SharePoint,
+
+00:12:40.940 --> 00:12:43.720
+celui-ci peut apparaître dans Fabrique sans que personne n'ait besoin de le copier.
+
+00:12:44.420 --> 00:12:45.220
+Ensuite, il y a Dataverse.
+
+00:12:45.620 --> 00:12:48.140
+Si votre équipe utilise PowerApp sous la plateforme Power au sens large,
+
+00:12:48.640 --> 00:12:51.340
+vos données se trouvent probablement dans Dataverse, et un raccourci peut les atteindre.
+
+00:12:51.800 --> 00:12:54.340
+Cela voit les Fabrique aux outils abordés chaque semaine sur cette chaîne,
+
+00:12:54.900 --> 00:12:57.620
+permettant aux données de vos applications métiers de côtoyer tout le reste.
+
+00:12:57.620 --> 00:12:59.940
+Le côté Azure s'intègre de la même manière.
+
+00:13:00.520 --> 00:13:02.520
+OneLake est bâti sur Azure Data Lake Storage,
+
+00:13:02.760 --> 00:13:07.840
+c'est pourquoi les outils Azure comme Synapse et Databricks peuvent y accéder via les API qu'ils utilisent déjà.
+
+00:13:08.820 --> 00:13:11.820
+La capacité Fabrique s'achète via Azure et est facturée à la seconde,
+
+00:13:12.040 --> 00:13:15.920
+avec un minimum d'une minute et l'option d'une réservation annuelle pour faire des économies.
+
+00:13:17.320 --> 00:13:18.960
+Cela nous amène à la question pratique du coût.
+
+00:13:19.500 --> 00:13:21.700
+La réponse honnête est que Fabrique fonctionne sur une capacité,
+
+00:13:22.160 --> 00:13:24.300
+et qu'une licence par utilisateur ne suffit pas à l'activer.
+
+00:13:25.140 --> 00:13:26.780
+La bonne nouvelle, c'est qu'il existe un moyen de l'essayer.
+
+00:13:26.780 --> 00:13:30.640
+L'essai Fabrique dure 60 jours et vous donne l'équivalent d'une capacité F64,
+
+00:13:30.840 --> 00:13:32.920
+ce qui offre une grande liberté pour explorer.
+
+00:13:33.600 --> 00:13:36.500
+Une licence Fabrique gratuite est attribuée automatiquement lors de votre première connexion.
+
+00:13:37.220 --> 00:13:39.140
+Elle vous permet seulement de créer des Lake Houses et des notebooks
+
+00:13:39.140 --> 00:13:42.120
+lorsque l'espace de travail est associé à une capacité ou à un essai.
+
+00:13:42.740 --> 00:13:45.240
+Ce qui piège souvent les utilisateurs, c'est qu'une licence Premium par utilisateur
+
+00:13:45.240 --> 00:13:46.860
+ne fournit pas de capacité Fabrique à elle seule,
+
+00:13:46.940 --> 00:13:50.400
+elle ne débloquera donc pas les charges de travail dont nous avons parlé des charges de travail longues ans.
+
+00:13:50.700 --> 00:13:50.780
+A vous de jouer !
+
+00:13:50.780 --> 00:13:53.480
+La version courte de tout ce que nous avons couvert ressemble à ceci.
+
+00:13:53.980 --> 00:13:56.140
+Un raccourci Fabrique est un pointeur, pas une copie.
+
+00:13:56.820 --> 00:14:00.500
+Il peut accéder aux données internes et externes à Fabrique à travers Azure, Amazon, Google Cloud,
+
+00:14:00.580 --> 00:14:03.220
+Dataverse et SharePoint tout en restant synchronisé avec la source.
+
+00:14:04.040 --> 00:14:06.460
+Cela implique également de vrais compromis en matière de vitesse,
+
+00:14:06.580 --> 00:14:09.280
+de dépendance et de contrôle qu'il vaut la peine d'évaluer avant de se lancer.
+
+00:14:09.820 --> 00:14:10.700
+Ma question pour vous est simple.
+
+00:14:11.300 --> 00:14:14.740
+Où vivent vos données aujourd'hui et est-ce un endroit accessible par un raccourci ?
+
+00:14:14.740 --> 00:14:18.340
+Dites-le moi dans les commentaires, je les lis et vos réponses orientent le contenu de mes prochaines vidéos.
+
+00:14:18.960 --> 00:14:20.700
+Si ce sujet vous semble désormais moins intimidant,
+
+00:14:21.020 --> 00:14:24.980
+abonnez-vous à M365FM pour maîtriser les outils et l'état d'esprit qui façonnent le futur du travail.

@@ -1,0 +1,883 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:06.120
+Selamat datang di podcast M365FM, tempat kami menjelajahi orang-orang, ide, dan teknologi yang membentuk masa depan pekerjaan.
+
+00:00:06.660 --> 00:00:08.260
+Mengapa data Anda berada di terlalu banyak tempat?
+
+00:00:08.720 --> 00:00:13.680
+Data pelanggan Anda mungkin berada di beberapa tempat berbeda saat ini, dan tidak ada yang dapat memberitahu Anda salingan maneng asal.
+
+00:00:14.100 --> 00:00:19.320
+Angka penjualan Anda berada di satu cloud, file pemasaran Anda berada di cloud lain, dan daftar pelanggan Anda berada di dalam aplikasi Microsoft.
+
+00:00:19.800 --> 00:00:24.780
+Pintasan Microsoft Fabric dibuat untuk memperbaiki hal itu, dan cara kerjanya mengejutkan sebagian besar pemula.
+
+00:00:24.780 --> 00:00:31.320
+Selamat datang di podcast M365FM, tempat kami menjelajahi orang-orang, ide, dan teknologi yang membentuk masa depan pekerjaan.
+
+00:00:31.940 --> 00:00:36.560
+Selama 20 menit ke depan, saya akan menjelaskan apa sebenarnya pintasan itu, di mana letaknya, dan apa yang dapat ditunjukkan.
+
+00:00:36.920 --> 00:00:42.280
+Saya juga akan membahas batasan yang tidak diperingatkan siapapun kepada Anda dan bagaimana pintasan itu sesuai dengan alat Microsoft yang digunakan.
+
+00:00:43.060 --> 00:00:44.240
+Apa sebenarnya pintasan Fabric itu?
+
+00:00:45.120 --> 00:00:48.180
+Untuk memahami pintasan, pertama-tama Anda perlu satu kalimat tentang di mana pintasan itu.
+
+00:00:48.180 --> 00:00:55.360
+Microsoft Fabric adalah platform lengkap Microsoft untuk mengolah data dan setiap mengatur Fabric dilengkapi dengan satu lapisan penyimpanan yang disebut OneLake.
+
+00:00:56.260 --> 00:01:00.500
+Bayangkan OneLake sebagai satu draft besar yang terorganisasi untuk semua data analitik perusahaan Anda.
+
+00:01:01.020 --> 00:01:05.060
+OneLake sudah aktif saat Anda mendapatkan Fabric, jadi Anda tidak perlu membuatnya dan tidak dapat menghapusnya.
+
+00:01:05.400 --> 00:01:07.240
+Anda juga tidak dapat membuat yang kedua secara tidak sengaja.
+
+00:01:07.660 --> 00:01:10.260
+OneLake berjalan di penyimpanan Azure dan menyimpan tampilan dalam format.
+
+00:01:10.700 --> 00:01:14.480
+Itu penting, karena data Anda tidak terperangkap dalam format yang hanya dapat dibaca oleh satu perusahaan.
+
+00:01:15.040 --> 00:01:17.000
+Di dalam draft tersebut, pintasan hanyalah penunjuk.
+
+00:01:17.000 --> 00:01:20.280
+Itu adalah objek yang menyatakan berdata sebenarnya dari sana, jadi pergilah dan dapatkan dari sana.
+
+00:01:20.600 --> 00:01:24.500
+Microsoft menggunakan dua nama yang layak dipelajari, karena keduanya muncul di mana-mana dalam dokumentasi.
+
+00:01:24.920 --> 00:01:28.360
+Jalur target adalah tempat data sebenarnya berada, dan jarur pintasan muncul.
+
+00:01:29.180 --> 00:01:32.540
+Saat Anda membuat pintasan di rumah denau Anda, Anda meletakkan papan penunjuk di jalur pintasan.
+
+00:01:32.920 --> 00:01:36.120
+Papan penunjuk itu menunjuk ke jarur target, dan data itu sendiri tidak pernah bergerak.
+
+00:01:36.920 --> 00:01:40.060
+Ambil ikon di desktop Anda yang membuka foto yang disimpan dalam folder di tempat lain.
+
+00:01:41.220 --> 00:01:43.220
+Ikon tersebut bukan foto dan bukan salinan foto.
+
+00:01:43.220 --> 00:01:47.400
+Itu adalah referensi ke foto, dan berfungsi karena komputer Anda tahu di mana mencarinya.
+
+00:01:47.820 --> 00:01:48.820
+Pintasan fabric bagi yang sama.
+
+00:01:49.540 --> 00:01:54.760
+Para insinyur yang membuatnya menggambarkan pintasan berperilaku seperti tautan simbolis yang merupakan istilah teknis untuk ide yang sama.
+
+00:01:55.280 --> 00:01:56.660
+Hapus ikon dan fotonya masih ada.
+
+00:01:57.620 --> 00:02:01.860
+Itulah bagian yang mengejutkan orang, karena Anda dapat menghapusnya tanpa takut kehilangan data di baliknya.
+
+00:02:02.500 --> 00:02:05.640
+Ini penting karena alasan sederhana, karena menyalin data itu mahal dan berantakan.
+
+00:02:05.640 --> 00:02:09.980
+Jika dua tim masing-masing menyimpan salinan catatan pelanggan mereka sendiri, Anda membayar untuk menyimpannya doang.
+
+00:02:10.320 --> 00:02:15.300
+Lebih buruk lagi, Anda berakhir dengan dua versi yang terpisah saat seseorang memperbarui satu salinan dan melupakan yang lain.
+
+00:02:15.700 --> 00:02:17.040
+Pintasan menghindari kedua mesara tersebut.
+
+00:02:17.620 --> 00:02:20.680
+Ada satu salinan di satu tempat, dan setiap tim yang membutuhkannya menunjuknya.
+
+00:02:21.160 --> 00:02:23.400
+Saat sumber berubah, perubahan tersebut muncul melalui pintasan,
+
+00:02:23.500 --> 00:02:26.980
+jadi tidak ada yang harus menjalankan pekerjaan malam hari untuk menjalankan hari untuk menyimpan dua salinan sederhana berurusan.
+
+00:02:27.360 --> 00:02:28.820
+Definisi tabel juga tetap sinkron,
+
+00:02:28.820 --> 00:02:32.860
+Jadi jika seseorang menambahkan kolom di sumbernya, pintasan akan mengambilnya tanpa Anda membangun ulang apapun.
+
+00:02:33.080 --> 00:02:34.720
+Pintasan adalah penunjuk, bukan salinan.
+
+00:02:35.160 --> 00:02:37.760
+Dan ide tunggal itu adalah fondasi untuk semua hal lainnya.
+
+00:02:38.360 --> 00:02:41.980
+Sisa episode ini benar-benar tentang di mana penunjuk tersebut dapat berada dan apa yang dapat dijangka.
+
+00:02:42.660 --> 00:02:44.080
+Di mana pintasan berada di dalam fabrik.
+
+00:02:44.700 --> 00:02:48.820
+Anda dapat membuat pintasan di dua tempat utama saat ini, dan keduanya berada di dalam fabrik.
+
+00:02:49.100 --> 00:02:53.280
+Yang pertama adalah leghouse, yang merupakan ruang kerja fabrik untuk menyimpan dan menganalisis data dalam jumlah besar.
+
+00:02:53.620 --> 00:02:56.520
+Yang kedua adalah basis data KQL, yang dibuat untuk data waktu nyata,
+
+00:02:56.520 --> 00:02:58.860
+dan kami akan mengabaikannya karena ini adalah topik yang lebih maju.
+
+00:02:59.380 --> 00:03:01.860
+Jika Anda baru mengenal fabrik, leghouse adalah tempat Anda akan menghabiskan lo.
+
+00:03:02.360 --> 00:03:05.160
+Leghouse memiliki dua folder tingkat atas, dan keduanya berperilaku berbeda.
+
+00:03:05.560 --> 00:03:09.120
+Ada folder tabel untuk data terstruktur, dan folder file untuk data mentah atau smiter struktur.
+
+00:03:09.760 --> 00:03:13.480
+Tempat Anda membuat pintasan menentukan bagaimana perilakunya, jadi bagian ini perlu dilakukan kan.
+
+00:03:13.820 --> 00:03:17.760
+Jika Anda membuat pintasan di bawah tabel, Anda memberitahu fabrik bahwa hal yang Anda tunjuk adalah tabel zoom.
+
+00:03:18.100 --> 00:03:21.860
+Pintasan di folder ini harus berada di tingkat teratas, jadi Anda tidak dapat memasukkannya ke dalam subfolder.
+
+00:03:21.860 --> 00:03:28.340
+Jika data ditarget dalam format delta, leghouse mengenalinya sebagai tabel yang dapat Anda query dengan SQL dan gunakan di Power BI.
+
+00:03:29.240 --> 00:03:33.180
+Definisi tabel disinkronkan dengan sendirinya, sehingga kolom baru disumber muncul tanpa pekerja manual.
+
+00:03:33.600 --> 00:03:37.480
+Ada satu keadaan kecil yang perlu diketahui, yaitu delta tidak mengizinkan spasi dalam nama tabel.
+
+00:03:37.900 --> 00:03:41.760
+Jika Anda memberi nama pintasan dengan spasi di dalamnya, fabrik tidak akan memperlakukannya sebagai tabel del.
+
+00:03:41.960 --> 00:03:44.680
+Jika Anda menempatkan pintasan di bawah file, aturannya menjadi longgar.
+
+00:03:45.320 --> 00:03:50.620
+Anda dapat meletakkannya di tingkat hirarki folder manapun, dan dapat menunjuk ke format file apapun, dari spreadsheet hingga gambar.
+
+00:03:50.620 --> 00:03:53.800
+Masalahnya adalah tidak ada yang menjadi tabel secara otomatis disini.
+
+00:03:54.400 --> 00:03:57.680
+Pintasan file sangat bagus untuk teknisi yang berencana membaca file mentah dengan SPAC,
+
+00:03:57.940 --> 00:04:01.580
+tetapi pintasan tersebut tidak akan muncul dalam query SQL atau laporan Power BI Anda sendiri.
+
+00:04:02.520 --> 00:04:05.920
+Aturan sederhana mencakup sebagian besar kasus, dan juga menyiapkan pertanyaan berikutnya.
+
+00:04:06.440 --> 00:04:09.740
+Gunakan tabel saat Anda menginginkan sesuatu yang dapat Anda query dengan SQL,
+
+00:04:09.740 --> 00:04:13.860
+dan masukkan ke dalam laporan serta gunakan file saat Anda berurusan dengan data mentah yang ingin Anda proses terlebih dahulu.
+
+00:04:14.560 --> 00:04:18.100
+Setelah Anda mengetahui di mana pintasan berada, pertanyaan berikutnya yang jelas adalah kemana rakan.
+
+00:04:18.100 --> 00:04:20.300
+Kemana Anda dapat mengarahkan pintasan?
+
+00:04:20.880 --> 00:04:24.120
+Disinilah pintasan menjadi berguna karena daftar tempat yang dapat Anda arahkan sangat panjang.
+
+00:04:24.560 --> 00:04:29.060
+Beberapa tempat tersebut berada di dalam Fabric, dan beberapa berada di dunia yang lebih luar, yang internal didahulukan.
+
+00:04:29.540 --> 00:04:34.060
+Anda dapat mengarahkan pintasan ke lake house lain, gudang, basis data KQL, basis data cermin,
+
+00:04:34.060 --> 00:04:39.600
+katalog Azure Data Big Cermin, basis data SQL, atau model semantik, yang terbaca seperti dinding nama produk.
+
+00:04:40.180 --> 00:04:41.340
+Dan versi sederhananya adalah ini.
+
+00:04:41.340 --> 00:04:47.720
+Jika data sudah berada di suatu tempat di dalam Fabric, pintasan memungkinkan Anda menggunakannya dari tempat lain di Fabric tanpa menyalinnya.
+
+00:04:48.860 --> 00:04:53.340
+Data satu tim muncul di ruang kerja Anda, dan pengguna Anda tidak perlu tahu bahwa data tersebut berada di sebelahnya.
+
+00:04:53.700 --> 00:04:55.140
+Sumber eksternal adalah bagian yang menarik.
+
+00:04:55.140 --> 00:05:01.660
+Daftar tersebut mencakup Azure Data Lake Storage Game 2, Azure Bob Storage, penyimpanan yang kompatibel dengan Amazon S3 dan S3,
+
+00:05:02.140 --> 00:05:08.260
+Google Cloud Storage, Dataverse, OneDrive, dan SharePoint, dan bahkan lokasi lokal atau yang dibatasi jaringan melalui Gateway.
+
+00:05:09.320 --> 00:05:12.000
+Ada juga dukungan untuk tabel Iceberg yang akan dipahas nanti.
+
+00:05:12.600 --> 00:05:14.220
+Baca daftar itu lagi dan perhatikan artinya.
+
+00:05:14.600 --> 00:05:17.860
+Data Anda tidak harus dipindahkan ke dunia Microsoft agar dapat digunakan di dunia Microsoft.
+
+00:05:17.860 --> 00:05:21.700
+Jika perusahaan Anda menyimpan file di bucket Amazon dan bucket Google Cloud, Anda dapat
+
+00:05:21.700 --> 00:05:25.440
+menyatukannya di Fabric tanpa menyeret salah satunya melalui internet terlebih dahulu.
+
+00:05:26.360 --> 00:05:28.540
+Setelah pintasan ada, banyak alat yang dapat membaca.
+
+00:05:28.980 --> 00:05:33.640
+Buku catatan Spark dapat membacanya, SQL dapat menanyakannya saat berupa tabel, dan alat waktu nyata juga dapat menggunakan.
+
+00:05:34.200 --> 00:05:38.620
+Power BI dapat membacanya melalui model semantik termasuk dalam model Direct Lake yang akan kita bahas nanti.
+
+00:05:39.420 --> 00:05:46.180
+Bahkan aplikasi di luar Fabric dapat mengaksesnya melalui API One Lake karena One Lake menggunakan bahasa penyimpanan yang sama dengan Azure Data Lake Storage.
+
+00:05:46.180 --> 00:05:49.680
+Iceberg layak mendapat penjelasan yang gamblang karena ini adalah nama yang sering ada.
+
+00:05:50.160 --> 00:05:54.600
+Iceberg adalah format tabel terbuka lainnya, dan beberapa perusahaan termasuk Snowflake sangat bergantung padanya.
+
+00:05:55.260 --> 00:05:57.860
+One Lake dapat menghasilkan apa yang disebutnya metadata virtual,
+
+00:05:58.160 --> 00:06:03.580
+yang mungkinkan Fabric membaca tabel Iceberg yang didukung seolah-olah itu adalah tabel biasa tanpa menulis ulang data yang mendasarinya.
+
+00:06:04.320 --> 00:06:06.880
+Snowflake dapat tetap menjadi sistem catatan dan penulis utama,
+
+00:06:07.000 --> 00:06:09.220
+sementara Fabric membaca data yang sama melalui jalan pintas.
+
+00:06:09.220 --> 00:06:11.540
+Jadi jangkauannya luas dan melintasi penyedia cloud.
+
+00:06:11.920 --> 00:06:14.640
+Rentang itulah yang menjadi alasan mengapa pertanyaan berikutnya penting,
+
+00:06:14.640 --> 00:06:17.120
+yaitu seperti apa semua ini ketika perusahaan sungguhan menyatukannya.
+
+00:06:18.140 --> 00:06:19.520
+Seperti apa ini di perusahaan sungguhan?
+
+00:06:20.140 --> 00:06:22.540
+Bayangkan sebuah perusahaan dengan empat ruang kerja Fabric terpis.
+
+00:06:23.120 --> 00:06:25.820
+Penjualan memiliki transaksi penjualan, keuangan memiliki anggaran,
+
+00:06:26.260 --> 00:06:30.360
+dan ruang kerja data bersama memiliki tabel umum yang dibutuhkan semua orang seperti pelanggan, produk, dan tanggal.
+
+00:06:31.340 --> 00:06:33.560
+Lalu ada ruang kerja keempat yang disebut analitik eksekutif,
+
+00:06:33.640 --> 00:06:35.520
+dan orang-orang di sana membutuhkan sedikit dari semuanya.
+
+00:06:36.060 --> 00:06:39.320
+Langkah yang jelas adalah menyalin semua data itu ke ruang kerja eksekutif.
+
+00:06:39.320 --> 00:06:43.160
+Itu berhasil, tetapi ia menciptakan kumpulan data kedua untuk disimpan,
+
+00:06:43.640 --> 00:06:47.640
+kumpulan alur kedua untuk diurus, dan tempat kedua tempat angka-angka dapat menjadi basi.
+
+00:06:48.520 --> 00:06:49.820
+Langkah yang lebih baik adalah membuat pintasan.
+
+00:06:50.360 --> 00:06:53.000
+Analisis eksekutif menunjuk pada tabel penjualan yang bermenang,
+
+00:06:53.160 --> 00:06:54.960
+tabel keuangan, dan tabel referensi bersama,
+
+00:06:55.140 --> 00:06:56.940
+lalu menyajikannya bersama-sama di rumah danangnya sendiri.
+
+00:06:57.580 --> 00:07:01.200
+Bagi pengembang laporan di tim itu, hasilnya tampak seperti satu kumpulan tabel yang bersih.
+
+00:07:01.680 --> 00:07:04.660
+Mereka bahkan mungkin tidak tahu tabel mana yang secara fisik disimpan di ruang kerja mereka,
+
+00:07:04.660 --> 00:07:06.420
+dan mana yang merupakan pintasan yang menunjuk ke tempat lain,
+
+00:07:06.420 --> 00:07:08.920
+dan dalam pengaturan yang dibuat dengan baik, mereka tidak perlu mengetahuinya.
+
+00:07:09.040 --> 00:07:10.880
+Fabrik menyelesaikan jalur tersebut di balik layak.
+
+00:07:11.360 --> 00:07:14.880
+Laporan dibuat, angka-angkanya sejajar, dan tidak seorang pun harus memindahkan satu berkes.
+
+00:07:15.120 --> 00:07:17.920
+Ada pelajaran desain di sini yang layak untuk diterapkan dalam pekerjaan anda.
+
+00:07:18.180 --> 00:07:20.880
+Simpan data yang benar-benar dibagikan seperti daftar pelanggan bersama,
+
+00:07:21.020 --> 00:07:24.320
+daftar produk, dan tabel tanggal dalam satu ruang kerja yang berfungsi sebagai sumber kebenaran.
+
+00:07:25.460 --> 00:07:28.300
+Simpan data khusus dengan tim yang memilikinya karena mereka paling memahaminya.
+
+00:07:28.680 --> 00:07:30.340
+Kemudian biarkan semua orang menunjuk apa yang mereka butuh.
+
+00:07:30.780 --> 00:07:33.400
+Godaannya adalah membangun satu ruang kerja raksasa yang menampung semuanya,
+
+00:07:33.400 --> 00:07:36.420
+dan itu biasanya berubah menjadi kekacauan yang tidak ingin dipelihara oleh siapapun.
+
+00:07:37.080 --> 00:07:37.820
+Jadi polanya sederhana.
+
+00:07:38.500 --> 00:07:39.760
+Anda menyimpan satu salin resmi,
+
+00:07:40.000 --> 00:07:43.780
+yang lainnya adalah jalan pintas dan orang yang membuat laporan mendapatkan satu pengalaman yang bersih.
+
+00:07:44.400 --> 00:07:46.180
+Dengan rapi dengan pengaturan yang berjalan baik yang memiliki.
+
+00:07:46.640 --> 00:07:48.220
+Namun rapi tidak sama dengan gratis,
+
+00:07:48.300 --> 00:07:51.180
+dan ada beberapa pengorbanan di sini yang diabaikan begitu saja oleh sebagian besar pengorbanan.
+
+00:07:52.000 --> 00:07:53.360
+Pengorbanan yang tidak disebutkan siapapun.
+
+00:07:54.020 --> 00:07:56.440
+Mulai dengan kecepatan, karena itu adalah hal pertama yang akan anda perhatikan.
+
+00:07:57.140 --> 00:07:59.680
+Jalan pintas tidak menyalin data dan juga tidak memuatnya terlebih dahulu.
+
+00:08:00.320 --> 00:08:02.260
+Tidak ada yang terjadi sampai sesuatu meminta data,
+
+00:08:02.260 --> 00:08:04.880
+dan kemudian mengambil data dari tempat data itu berada.
+
+00:08:05.500 --> 00:08:08.840
+Itu berarti pembacaan pertama bisa lebih lambat daripada membaca salinan lokal,
+
+00:08:08.960 --> 00:08:12.400
+terutama ketika sumbernya berada di cloudline atau berada di belakang gateway lokal.
+
+00:08:13.660 --> 00:08:15.080
+Performa bergantung pada beberapa hal,
+
+00:08:15.200 --> 00:08:16.440
+termasuk seberapa jauh sumbernya,
+
+00:08:16.600 --> 00:08:18.460
+seberapa banyak latensi jaringan ada di antaranya,
+
+00:08:18.560 --> 00:08:19.720
+dan bagaimana file diatur.
+
+00:08:20.680 --> 00:08:23.380
+Itu juga bergantung pada apakah sumbernya tersedia pada saat itu,
+
+00:08:23.640 --> 00:08:25.360
+dan pada mesin mana yang melakukan pembacaan.
+
+00:08:25.880 --> 00:08:28.640
+Microsoft menawarkan cara untuk memperlunakan hal ini disebut dengan shortcut catching.
+
+00:08:28.940 --> 00:08:31.920
+Ketika satu lag membaca sebuah berkas melalui shortcut yang didukung,
+
+00:08:31.920 --> 00:08:34.880
+ia dapat menyimpan salinan berkas tersebut dalam cacu untuk uang kerja.
+
+00:08:35.480 --> 00:08:38.500
+Permintaan selanjutnya dilayani dari cacu alih-alih melewati jaringan lagi.
+
+00:08:39.240 --> 00:08:41.460
+Anda mengatur berapa lama berkas yang di cacu akan bertahan,
+
+00:08:41.560 --> 00:08:43.100
+mulai dari 1 hari hingga 28 hari,
+
+00:08:43.200 --> 00:08:44.600
+dan setiap kali seseorang menyentuh berkas,
+
+00:08:44.740 --> 00:08:45.520
+waktu akan diatur ulang.
+
+00:08:46.040 --> 00:08:47.180
+Ada dua batasan yang perlu diingat.
+
+00:08:47.720 --> 00:08:49.620
+Berkas yang lebih besar dari 1GB tidak dicacu.
+
+00:08:50.260 --> 00:08:53.240
+Cacu juga mengisi berkas demi berkas saat orang menggunakan data tersebut,
+
+00:08:53.380 --> 00:08:55.680
+jadi hal ini tidak membantu orang pertama yang membuka sesuatu.
+
+00:08:56.240 --> 00:08:58.200
+Cacing didukung untuk Google Cloud Storage,
+
+00:08:58.300 --> 00:09:00.560
+penyimpanan yang kompatibel dengan Amazon S3S3,
+
+00:09:00.560 --> 00:09:02.480
+dan pintasan yang datang melalui gateway lokal.
+
+00:09:03.220 --> 00:09:05.340
+Ini merupakan peningkatan nyata untuk pembacaan berulang,
+
+00:09:05.460 --> 00:09:07.420
+dan dapat memangkas biaya pemindahan data antar cloud,
+
+00:09:07.540 --> 00:09:09.800
+tetapi tidak mengubah pintasan menjadi tabel lokal.
+
+00:09:10.720 --> 00:09:12.100
+Pertukaran yang lebih besar adalah ketergantung.
+
+00:09:12.480 --> 00:09:13.980
+Pintasan bergantung pada hal yang ditunjuknya.
+
+00:09:14.560 --> 00:09:16.800
+Jika seseorang memindahkan atau menghapus target,
+
+00:09:16.900 --> 00:09:17.700
+pintasan akan rusak,
+
+00:09:17.960 --> 00:09:19.800
+dan laporan yang dibuat di atasnya juga akan rusak.
+
+00:09:20.080 --> 00:09:21.400
+Jika sumber mengubah strukturnya,
+
+00:09:21.560 --> 00:09:23.480
+perubahan tersebut akan mengalir ke semua orang di bawahnya,
+
+00:09:23.560 --> 00:09:25.160
+yang biasanya merupakan hal yang Anda inginkan,
+
+00:09:25.260 --> 00:09:26.360
+dan terkadang tidak Anda inginkan.
+
+00:09:26.360 --> 00:09:29.500
+Anda juga tidak mendapatkan kontrol yang sama atas pemeliharaan tabel
+
+00:09:29.500 --> 00:09:31.400
+seperti yang Anda miliki jika memiliki tabel yang Anda miliki.
+
+00:09:31.580 --> 00:09:34.500
+Ada kasus yang jelas di mana salinan adalah pilihan yang lebih cerdas,
+
+00:09:34.600 --> 00:09:36.300
+dan panduan Microsoft sendiri menjelaskannya,
+
+00:09:36.860 --> 00:09:38.980
+salin data saat data memerlukan transformasi besar
+
+00:09:38.980 --> 00:09:40.220
+sebelum siapapun dapat menggunakannya.
+
+00:09:40.660 --> 00:09:43.880
+Salin data saat adoregulasi menyatakan data harus tetap berada di wilayah tertentu.
+
+00:09:44.540 --> 00:09:46.480
+Salin data saat Anda memerlukan kontrol penuh
+
+00:09:46.480 --> 00:09:48.540
+atas cara tabel berkembang dan cara pemeliharaannya.
+
+00:09:49.100 --> 00:09:50.460
+Pintasan adalah pilihan default yang bagus,
+
+00:09:50.460 --> 00:09:51.960
+tetapi tidak selalu merupakan jawabannya tepat.
+
+00:09:52.520 --> 00:09:54.400
+Mengetahui perbedaannya adalah hal yang membedakan
+
+00:09:54.400 --> 00:09:55.720
+pengaturan yang rapi dari yang rap.
+
+00:09:56.400 --> 00:09:57.660
+Kesalahan yang membuat orang tersandung.
+
+00:09:58.520 --> 00:10:00.440
+Kesalahan pertama adalah kesalahan yang benar-benar dapat merugikan,
+
+00:10:00.540 --> 00:10:01.700
+jadi kesalahan ini mendapat perhatian berimu.
+
+00:10:02.100 --> 00:10:03.780
+Pintasan tidak melakukan penghapusan berjenjang,
+
+00:10:04.100 --> 00:10:04.980
+dan itu berlaku dua arah.
+
+00:10:05.340 --> 00:10:07.020
+Jika Anda menghapus pintasan itu sendiri,
+
+00:10:07.140 --> 00:10:09.140
+data yang ada di target akan tetap aman sepenuhnya,
+
+00:10:09.440 --> 00:10:10.700
+yang merupakan perilaku yang Anda harap.
+
+00:10:11.000 --> 00:10:12.760
+Namun, jika Anda menghapus file atau folder
+
+00:10:12.760 --> 00:10:14.080
+di dalam pintasan yang dapat ditulis,
+
+00:10:14.260 --> 00:10:15.760
+dan Anda memiliki izin menghapus di target,
+
+00:10:15.860 --> 00:10:16.780
+Anda juga menghapus yang di target.
+
+00:10:17.280 --> 00:10:18.620
+Pintasan itu adalah pintu masuk,
+
+00:10:18.980 --> 00:10:20.940
+dan Anda baru saja melewatinya dan merobohkan dini.
+
+00:10:20.940 --> 00:10:24.560
+Sebelum Anda merusihkan folder apapun yang mungkin berisi pintasan,
+
+00:10:24.980 --> 00:10:26.560
+karena ini adalah kesalahan yang mengubah sore
+
+00:10:26.560 --> 00:10:28.120
+yang rapi menjadi malam yang sangat panjang.
+
+00:10:29.200 --> 00:10:30.540
+Kesalahan kedua adalah menganggap bahwa
+
+00:10:30.540 --> 00:10:32.340
+file dan tabel dapat dipertukarkan, padahal tidak.
+
+00:10:33.180 --> 00:10:35.440
+Folder yang penuh dengan file parket biasa bukanlah tabel delta,
+
+00:10:35.580 --> 00:10:37.020
+dan pintasan yang ditempatkan di bawah file
+
+00:10:37.020 --> 00:10:38.820
+tidak akan muncul sebagai tabel yang dapat Anda gunakan
+
+00:10:38.820 --> 00:10:39.580
+untuk menjalankan escape.
+
+00:10:40.120 --> 00:10:41.400
+Jika Anda ingin agar dapat di query,
+
+00:10:41.500 --> 00:10:43.500
+Anda dapat mengubah data atau memuatnya ke delta.
+
+00:10:44.540 --> 00:10:46.080
+Sangat mudah untuk membuat pintasan file,
+
+00:10:46.320 --> 00:10:46.980
+membuka power BI,
+
+00:10:47.140 --> 00:10:48.620
+lalu bertanya-tanya mengapa datanya tidak di sana.
+
+00:10:48.620 --> 00:10:51.200
+Kesalahan ketiga adalah mengharapkan file mentah
+
+00:10:51.200 --> 00:10:52.320
+menjadi tabel dengan sendirinya.
+
+00:10:53.000 --> 00:10:53.620
+Itu tidak akan terjadi,
+
+00:10:53.740 --> 00:10:55.780
+tetapi Fabric menawarkan transformasi pintasan yang anggap.
+
+00:10:56.260 --> 00:10:59.120
+Arahkan ke folder berisi file csvparket, json, atau excel,
+
+00:10:59.300 --> 00:11:00.320
+lalu Fabric akan menyalin,
+
+00:11:00.440 --> 00:11:02.160
+dan mengonversinya menjadi tabel delta terkelola
+
+00:11:02.160 --> 00:11:02.840
+yang tetap sinkron,
+
+00:11:02.940 --> 00:11:04.100
+memeriksa sumbernya setiap 2 menit.
+
+00:11:04.900 --> 00:11:05.420
+Itu mudah,
+
+00:11:05.620 --> 00:11:06.580
+dan perlu diketahui bahwa
+
+00:11:06.580 --> 00:11:08.100
+rute ini tidak sepenuhnya no salinan,
+
+00:11:08.100 --> 00:11:09.420
+karena tabel delta sedang dibuat.
+
+00:11:09.780 --> 00:11:11.960
+Ini juga merupakan alat yang berbeda di pintasan biasa,
+
+00:11:12.080 --> 00:11:13.620
+dan tidak akan mencakup gabungan kompleks
+
+00:11:13.620 --> 00:11:15.740
+atau aturan bisnis yang masih termasuk dalam alur yang tepat.
+
+00:11:15.740 --> 00:11:17.740
+Kesalahan keempat adalah mengabaikan pertasan.
+
+00:11:18.560 --> 00:11:21.300
+Satu item Fabric dapat menampung hingga 100 ribu pintasan,
+
+00:11:21.720 --> 00:11:23.300
+dan hingga 100 koneksi data unik.
+
+00:11:24.080 --> 00:11:26.780
+Satu jalur danau tunggal dapat menampung hingga 10 pintasan.
+
+00:11:27.580 --> 00:11:29.880
+Nama pintasan tidak boleh berisi tanda persen atau tanda tambah,
+
+00:11:29.980 --> 00:11:33.160
+dan pintasan skema hanya berfungsi di rumah danau tempat skema diaktifkan.
+
+00:11:34.020 --> 00:11:35.520
+Tidak ada yang akan mengganggu Anda pada hari pertama,
+
+00:11:35.520 --> 00:11:36.700
+tetapi akan mengganggu Anda dan sekarang.
+
+00:11:37.260 --> 00:11:39.460
+Kesalahan kelima adalah menganggap izin Anda ikut serta.
+
+00:11:39.920 --> 00:11:41.720
+Pintasan internal menggunakan identitas Anda sendiri,
+
+00:11:41.840 --> 00:11:42.980
+jadi Anda memerlukan akses di target.
+
+00:11:42.980 --> 00:11:46.280
+Pintasan eksternal menggunakan identitas koneksi yang tersimpan,
+
+00:11:46.380 --> 00:11:49.020
+yang berarti siapapun yang memiliki akses ke rumah danau dapat membacanya.
+
+00:11:50.420 --> 00:11:52.580
+Jika jalur pintasan dan jalur target terlibat,
+
+00:11:52.700 --> 00:11:53.940
+izin yang lebih ketatlah yang menang.
+
+00:11:55.000 --> 00:11:56.880
+Itu adalah detail desain, bukan masalah hari pertama,
+
+00:11:57.000 --> 00:11:59.300
+tetapi menjelaskan banyak kesalahan akses yang membingungkan.
+
+00:12:00.100 --> 00:12:01.920
+Bagaimana ini cocok dengan Microsoft 365 Azure?
+
+00:12:02.700 --> 00:12:04.400
+Mulailah dengan sisi Microsoft 365,
+
+00:12:04.620 --> 00:12:06.080
+karena disitulah Anda akan melihat hasilnya.
+
+00:12:06.560 --> 00:12:07.820
+Kemenangan yang terlihat adalah Power BI.
+
+00:12:08.220 --> 00:12:09.640
+Saat pintasan berada di folder tabel,
+
+00:12:09.760 --> 00:12:12.240
+pintasan tersebut dapat mengalir ke model semantik lalu ke laporan.
+
+00:12:12.240 --> 00:12:14.660
+Bahkan dapat dilakukan dalam model ek langsung,
+
+00:12:14.780 --> 00:12:17.660
+yang menarik data langsung ke memori laporan tanpa langkah impor terpisah.
+
+00:12:18.220 --> 00:12:20.460
+Bagi seseorang yang hanya menginginkan datanya dalam laporan,
+
+00:12:20.620 --> 00:12:21.580
+itulah bagian yang penting.
+
+00:12:22.180 --> 00:12:23.160
+Anda mengarahkan ke data,
+
+00:12:23.380 --> 00:12:25.080
+dan data tersebut muncul di tempat Anda sudah bekerja.
+
+00:12:25.580 --> 00:12:27.980
+Ada juga koneksi yang sudah dipahami banyak orang,
+
+00:12:28.180 --> 00:12:29.700
+yaitu OneDrive dan SharePoint.
+
+00:12:30.600 --> 00:12:34.400
+Fabric memungkinkan Anda mengarahkan pintasan langsung ke file yang berada di SharePoint atau OneDrive,
+
+00:12:34.400 --> 00:12:37.740
+dan itu cocok karena disanalah dokumen sehari-hari sudah berada.
+
+00:12:37.740 --> 00:12:40.640
+Jika tim Anda menyimpan spreadsheet di SharePoint,
+
+00:12:40.760 --> 00:12:43.960
+spreadsheet tersebut dapat muncul di dalam Fabric tanpa ada yang menyalinnya.
+
+00:12:44.440 --> 00:12:45.080
+Lalu ada Dataverse.
+
+00:12:45.540 --> 00:12:48.540
+Jika tim Anda membuat sesuatu dengan Power Apps atau platform Power yang lebih luas,
+
+00:12:48.620 --> 00:12:51.540
+Dataverse kemungkinan adalah tempat data tersebut berada dan pintasan dapat mengakses
+
+00:12:51.540 --> 00:12:54.640
+atau menghubungkan Fabric kembali ke alat yang dibahas saluran ini setiap minggu.
+
+00:12:54.820 --> 00:12:57.820
+Dan itu berarti data dari aplikasi bisnis Anda dapat berada di samping yang lainnya.
+
+00:12:58.280 --> 00:13:00.000
+Sisi Azure juga cocok dengan cara yang sama.
+
+00:13:00.480 --> 00:13:02.180
+OneDrive dibangun di Azure Data Lake Storage,
+
+00:13:02.180 --> 00:13:07.840
+Itulah sebabnya alat Azure seperti Synapse dan Databricks dapat mengaksesnya menggunakan api yang sama yang telah mereka gunakan.
+
+00:13:08.820 --> 00:13:12.980
+Kapasitas Fabric sendiri dibeli melalui Azure dan dibangun per detik dengan minimum 1 menit
+
+00:13:12.980 --> 00:13:15.820
+ditambah opsi reservasi tahunan untuk menghemat uang.
+
+00:13:17.220 --> 00:13:19.080
+Itu mengarah ke pertanyaan praktis tentang biaya,
+
+00:13:19.320 --> 00:13:22.040
+dan jawaban jujurnya adalah bahwa Fabric berjalan pada kapasitas,
+
+00:13:22.320 --> 00:13:24.240
+dan lisensi per pengguna saja tidak akan membukanya.
+
+00:13:25.280 --> 00:13:26.800
+Kabar baiknya adalah ada cara untuk mencobanya.
+
+00:13:26.800 --> 00:13:31.180
+Uji coba Fabric berjalan selama 60 hari dan memberi Anda kapasitas yang setara dengan F64
+
+00:13:31.180 --> 00:13:32.960
+yang merupakan banyak uang untuk dijelajahi.
+
+00:13:33.580 --> 00:13:36.520
+Lisensi Fabric gratis diberikan secara otomatis saat pertama kali Anda masuk.
+
+00:13:36.800 --> 00:13:38.840
+Lisensi ini hanya memungkinkan Anda membuat rumah lek
+
+00:13:38.840 --> 00:13:41.860
+dan buku catatan saat ruang kerja berada pada kapasitas atau uji coba.
+
+00:13:42.840 --> 00:13:44.320
+Satu hal yang membingungkan orang adalah,
+
+00:13:44.540 --> 00:13:47.080
+lisensi premium per pengguna tidak memberi Anda kapasitas Fabric sendiri,
+
+00:13:47.220 --> 00:13:49.920
+jadi lisensi ini tidak akan membuka beban kerja yang telah kita bicarakan.
+
+00:13:50.720 --> 00:13:53.440
+Iriran, versi singkat dari semua yang telah kita bahas seperti ini.
+
+00:13:54.000 --> 00:13:56.200
+Pintasan Fabric adalah penunjuk, bukan selena.
+
+00:13:56.200 --> 00:13:58.860
+Pintasan ini dapat menjangkau data di dalam Fabric dan data di luarnya,
+
+00:13:58.980 --> 00:14:00.960
+di Azure, Amazon, Google Cloud, Dataverse, dan SharePoint,
+
+00:14:01.080 --> 00:14:04.060
+serta tetap sinkron dengan sumbernya, serta tetap sinkron dengan sumbernya.
+
+00:14:04.200 --> 00:14:06.940
+Pintasan ini juga disertai dengan pengorban nyata seputar kecepatan,
+
+00:14:07.000 --> 00:14:09.680
+ketergantungan, dan kontrol, dan semua itu perlu dipertimbangkan sebelum memakai itu berambut.
+
+00:14:09.840 --> 00:14:10.740
+Tanya saya untuk Anda sederhana.
+
+00:14:11.220 --> 00:14:12.500
+Di mana data Anda berada saat ini?
+
+00:14:12.700 --> 00:14:14.320
+Dan apakah pintasan tersebut dapat menjangkauannya?
+
+00:14:14.700 --> 00:14:16.620
+Beritahu saya di kolom komentar karena saya membacanya,
+
+00:14:16.720 --> 00:14:18.500
+dan jawaban Anda akan memengaruhi pembahasan saya selanjutnya.
+
+00:14:18.840 --> 00:14:20.820
+Jika ini membuat topik ini tidak terlalu menakutkan,
+
+00:14:20.820 --> 00:14:25.300
+berlanggananlah M365MM untuk menguasai berbagai alat dan pola pikir yang membentuk masa depan pekerjaan.

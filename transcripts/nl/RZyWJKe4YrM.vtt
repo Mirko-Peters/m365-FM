@@ -1,0 +1,574 @@
+WEBVTT
+
+00:00:00.100 --> 00:00:06.580
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.800 --> 00:00:08.480
+Waarom staat je data op te veel plekken?
+
+00:00:08.640 --> 00:00:13.900
+Je klantgegevens staan momenteel waarschijnlijk op verschillende plekken en niemand kan je vertellen welke kopie de juiste is.
+
+00:00:14.080 --> 00:00:19.580
+Je verkoopcijfers staan in de ene cloud, je marketingbestanden in een andere en je klantenlijst zit in een Microsoft app.
+
+00:00:19.860 --> 00:00:25.140
+Microsoft Fabric snelkoppelingen zijn precies hiervoor gemaakt en ze werken op een manier die de meeste beginners verrast.
+
+00:00:25.140 --> 00:00:31.760
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:31.940 --> 00:00:36.680
+De komende 20 minuten leg ik uit wat een snelkoppeling echt is, waar deze staat en waar hij naar kan verwijzen.
+
+00:00:36.860 --> 00:00:42.860
+Ik behandel ook de beperkingen waar niemand je voor waarschuwt en hoe het past bij de Microsoft 365 en Azure tools die je al gebruikt.
+
+00:00:43.040 --> 00:00:44.760
+Wat is een Fabric snelkoppeling eigenlijk?
+
+00:00:44.760 --> 00:00:48.360
+Om een snelkoppeling te begrijpen moet je eerst weten waar deze staat.
+
+00:00:48.360 --> 00:00:55.980
+Microsoft Fabric is Microsoft's alles-in-één platform voor databeheer en elke Fabric-opstelling bevat één opslaglaag genaamd OneLake.
+
+00:00:56.160 --> 00:01:00.760
+Zie OneLake als één gigantische, georganiseerde schijf voor alle analysedata van je bedrijf.
+
+00:01:00.940 --> 00:01:05.120
+Deze is direct actief zodra je Fabric krijgt, dus je hoeft hem niet te bouwen en je kunt hem niet verwijderen.
+
+00:01:05.240 --> 00:01:07.600
+Je kunt ook niet per ongeluk een tweede exemplaar aanmaken.
+
+00:01:07.600 --> 00:01:10.540
+Het draait op Azure-opslag en bewaart je tabellen in open formaten.
+
+00:01:10.740 --> 00:01:14.720
+Dat is belangrijk, want zo zit je data niet vast in een formaat dat slechts door één bedrijf gelezen kan worden.
+
+00:01:14.940 --> 00:01:17.240
+Binnen die schijf is een snelkoppeling slechts een verwijzing.
+
+00:01:17.240 --> 00:01:20.480
+Het is een object dat zegt, de echte data staat daar, dus haal het daar maar op.
+
+00:01:20.640 --> 00:01:24.620
+Microsoft gebruikt twee namen die de moeite waard zijn om te leren, omdat ze overal in de documentatie opduiken.
+
+00:01:24.780 --> 00:01:29.020
+Het doelpad is waar de data daadwerkelijk staat en het snelkoppelingpad is waar de snelkoppeling verschijnt.
+
+00:01:29.200 --> 00:01:32.980
+Wanneer je een snelkoppeling in je lakehouse aanmaakt, plaats je een wegwijzer op het snelkoppelingpad.
+
+00:01:33.200 --> 00:01:36.560
+Die wegwijzer wijst naar het doelpad en de data zelf verplaatst nooit.
+
+00:01:36.840 --> 00:01:40.640
+Denk aan het icoon op je bureaublad dat een foto opent die ergens anders in een map staat.
+
+00:01:40.840 --> 00:01:43.580
+Het icoon is niet de foto zelf en ook geen kopie van de foto.
+
+00:01:43.580 --> 00:01:47.240
+Het is een verwijzing naar de foto en het werkt omdat je computer weet waar hij moet kijken.
+
+00:01:47.440 --> 00:01:49.780
+Een Fabric snelkoppeling werkt op precies dezelfde manier.
+
+00:01:49.960 --> 00:01:54.920
+De ingenieurs die het bouwden, beschrijven snelkoppelingen als symbolische links, de technische term voor datzelfde idee.
+
+00:01:55.160 --> 00:01:57.280
+Verwijder het icoon en de foto staat er nog steeds.
+
+00:01:57.560 --> 00:02:02.160
+Dat is wat mensen verrast, want je kunt een snelkoppeling verwijderen zonder bang te zijn de data erachter te verliezen.
+
+00:02:02.360 --> 00:02:05.960
+Dit is om een simpele reden belangrijk, gegevens kopiëren is duur en rommelig.
+
+00:02:06.120 --> 00:02:10.280
+Als twee teams elk hun eigen kopie van klantgegevens bijhouden, betaal je dubbel voor de opslag.
+
+00:02:10.280 --> 00:02:15.260
+Erger nog, je eindigt met twee versies die uit elkaar lopen zodra iemand één kopie bijwerkt en de andere vergeet.
+
+00:02:15.420 --> 00:02:17.440
+Een snelkoppeling voorkomt bij de problemen.
+
+00:02:17.580 --> 00:02:21.120
+Er is één kopie op één plek en elk team dat het nodig heeft, verwijst ernaar.
+
+00:02:21.300 --> 00:02:27.140
+Wanneer de bron verandert, is de wijziging zichtbaar via de snelkoppeling, dus niemand hoeft s'nacht zijn taak uit te voeren om kopieën gelijk te houden.
+
+00:02:27.640 --> 00:02:33.060
+Tabeldefinities blijven ook synchroon, dus als iemand een kolom toevoegt bij de bron, pikt de snelkoppeling dat op zonder dat je iets hoeft op te bouwen.
+
+00:02:33.200 --> 00:02:37.880
+Een snelkoppeling is een verwijzing, geen kopie en dat enkele idee vormt de basis voor al het overige.
+
+00:02:37.880 --> 00:02:42.280
+De rest van deze aflevering gaat eigenlijk over waar die verwijzingen kunnen staan en wat ze kunnen bereiken.
+
+00:02:42.500 --> 00:02:44.380
+Waar een snelkoppeling binnen Fabric staat.
+
+00:02:44.600 --> 00:02:48.940
+Je kunt tegenwoordig op twee belangrijke plekken snelkoppelingen maken en beide bevinden zich binnen Fabric.
+
+00:02:49.100 --> 00:02:53.440
+De eerste is een lakehouse, de werkruimte van Fabric voor het opslaan en analyseren van grote hoeveelheden data.
+
+00:02:53.660 --> 00:02:59.000
+De tweede is een KQL database die gebouwd is voor realtime data en die laten we even voor wat het is omdat het een geavanceerder onderwerp is.
+
+00:02:59.140 --> 00:03:02.240
+Als je nieuw bent bij Fabric, dan is het lakehouse de plek waar je tijd zult doorbrengen.
+
+00:03:02.360 --> 00:03:05.380
+Een lakehouse heeft twee mappen op het hoogste niveau en die gedragen zich verschillend.
+
+00:03:05.380 --> 00:03:09.620
+Er is een tabellenmap voor gestructureerde data en een bestandenmap voor onbewerkte of semi-gestructureerde data.
+
+00:03:09.780 --> 00:03:13.660
+Waar je jouw snelkoppeling maakt, bepaalt hoe deze zich gedraagt, dus dit deel is belangrijk om goed te doen.
+
+00:03:13.820 --> 00:03:18.040
+Als je een snelkoppeling onder tabellen aanmaakt, vertel je Fabric dat hetgeen waarnaar je verwijst een echte tabel is.
+
+00:03:18.560 --> 00:03:22.320
+Snelkoppelingen in deze map moeten op het hoogste niveau staan, dus je kunt er geen in een submap plaatsen.
+
+00:03:22.480 --> 00:03:28.760
+Als de data in het doel in het deltaformaat is, herkent het lakehouse het als een tabel die je kunt bevragen met SQL en gebruiken in Power BI.
+
+00:03:28.920 --> 00:03:33.400
+De tabeldefinitie synchroniseert vanzelf, dus nieuwe kolommen bij de bron verschijnen zonder handmatig werk.
+
+00:03:33.400 --> 00:03:37.720
+Er is één klein eigenaardigheidje dat het waard is om te weten, delta staat geen spaties toe in tabelnamen.
+
+00:03:37.860 --> 00:03:41.740
+Als je een snelkoppeling een naam geeft met een spatie erin, zal Fabric deze niet behandelen als een delta-tabel.
+
+00:03:41.920 --> 00:03:45.420
+Als je de snelkoppeling in plaats daarvan onder bestanden plaatst, zijn de regels minder streng.
+
+00:03:45.560 --> 00:03:51.060
+Je kunt het op elk niveau van de mappenstructuur plaatsen en het kan verwijzen naar elk bestandsformaat, van spreadsheets tot afbeeldingen.
+
+00:03:51.200 --> 00:03:54.220
+Het addertje onder het gras is dat niet zeer automatisch een tabel wordt.
+
+00:03:54.460 --> 00:03:58.420
+Bestands snelkoppelingen zijn geweldig voor engineers die de ruwe bestanden met Spark willen lezen,
+
+00:03:58.420 --> 00:04:02.160
+maar ze verschijnen niet uit zichzelf in je SQL-queries of Power BI-rapporten.
+
+00:04:02.280 --> 00:04:06.180
+Een eenvoudige regel dekt de meeste gevallen en leidt ook naar de volgende vraag.
+
+00:04:06.380 --> 00:04:10.300
+Gebruik tabellen als je iets wilt queryen met SQL of in een rapport wilt plaatsen,
+
+00:04:10.560 --> 00:04:13.860
+en gebruik bestanden als je werkt met ruwe data die je eerst nog moet verwerken.
+
+00:04:14.080 --> 00:04:18.520
+Zodra je weet waar een snelkoppeling staat, is de logische volgende vraag waar je deze naar kunt laten verwijzen.
+
+00:04:18.720 --> 00:04:20.680
+Waar je een snelkoppeling naar kunt laten verwijzen.
+
+00:04:20.880 --> 00:04:24.340
+Dit is waar snelkoppelingen nuttig worden, want de lijst met locaties waar ze naar kunnen verwijzen is lang.
+
+00:04:24.340 --> 00:04:27.940
+Sommige van die locaties bevinden zich binnen Fabric en andere in de bredere buitenwereld.
+
+00:04:28.080 --> 00:04:29.700
+De interne locaties komen eerst.
+
+00:04:29.880 --> 00:04:33.320
+Je kunt een snelkoppeling naar een ander lakehouse, een warehouse, een KQL-database,
+
+00:04:33.480 --> 00:04:36.320
+een gespiegelde database, een gespiegelde Azure Databricks catalogus,
+
+00:04:36.500 --> 00:04:40.160
+een SQL-database of een semantisch model laten wijzen dat leest als een hele lijst productnamen.
+
+00:04:40.280 --> 00:04:41.700
+De simpele versie is dus dit.
+
+00:04:41.860 --> 00:04:48.400
+Als de data al ergens binnen Fabric staat, kun je deze via een snelkoppeling vanaf een andere plek in Fabric gebruiken zonder de data te kopiëren.
+
+00:04:48.580 --> 00:04:53.320
+De data van het ene team verschijnt in jouw workspace en je gebruikers hoeven nooit te weten dat het bij de buren staat.
+
+00:04:53.320 --> 00:04:55.560
+De externe bronnen zijn het meest interessant.
+
+00:04:55.760 --> 00:05:01.860
+De lijst bevat Azure Data Lake Storage Gen 2, Azure Blob Storage, Amazon S3 en S3-compatibele opslag,
+
+00:05:02.020 --> 00:05:08.660
+Google Cloud Storage, Dataverse, OneDrive en SharePoint en zelfs on-premises of netwerkbeperkte locaties via een gateway.
+
+00:05:08.920 --> 00:05:12.180
+Er is ook ondersteuning voor Iceberg-tabellen, waar we zo op terugkomen.
+
+00:05:12.420 --> 00:05:14.440
+Lees die lijst nog eens en merk op wat het betekent.
+
+00:05:14.620 --> 00:05:18.620
+Je data hoeft niet naar de wereld van Microsoft te verhuizen om in de wereld van Microsoft bruikbaar te zijn.
+
+00:05:18.620 --> 00:05:25.780
+Als je bedrijf bestanden in een Amazon Bucket en een Google Cloud Bucket bewaart, kun je ze in Fabric samenbrengen zonder ze eerst over het internet te hoeven verplaatsen.
+
+00:05:25.980 --> 00:05:28.920
+Zodra een snelkoppeling bestaat, kunnen talloze tools deze lezen.
+
+00:05:29.120 --> 00:05:34.200
+Spark Notebooks kunnen het lezen, SQL kan het queryen als het een tabel is en de real-time tools kunnen het ook gebruiken.
+
+00:05:34.360 --> 00:05:39.180
+Power BI kan het lezen via een semantisch model, inclusief in direct lake-modus, waar we later op terugkomen.
+
+00:05:39.180 --> 00:05:46.540
+Zelfs applicaties buiten Fabric kunnen erbij via de OneLake API, omdat OneLake dezelfde opslagtaal spreekt als Azure Data Lake Storage.
+
+00:05:46.760 --> 00:05:49.980
+Iceberg verdient een eenvoudige uitleg omdat je de naam vaak zult horen.
+
+00:05:50.200 --> 00:05:55.120
+Iceberg is een ander open tabelformaat waar sommige bedrijven, waaronder Snowflake, zwaar op leunen.
+
+00:05:55.280 --> 00:06:03.760
+OneLake kan zogenaamde virtuele metadata genereren, waarmee Fabric een ondersteunde Iceberg-tabel kan lezen alsof het een normale tabel is, zonder de onderliggende data te herschrijven.
+
+00:06:03.760 --> 00:06:09.240
+Snowflake kan het systeem van record en de hoofdschrijver blijven, terwijl Fabric exact dezelfde gegevens leest via een snelkoppeling.
+
+00:06:09.440 --> 00:06:11.920
+Het bereik is dus groot en overstijgt cloud providers.
+
+00:06:12.260 --> 00:06:17.760
+Dat bereik is precies de reden waarom de volgende vraag belangrijk is, hoe ziet dit eruit als een echt bedrijf dit samenstelt?
+
+00:06:17.920 --> 00:06:19.860
+Hoe dit eruit ziet bij een echt bedrijf?
+
+00:06:20.020 --> 00:06:22.920
+Stel je een bedrijf voor met vier afzonderlijke Fabric-werkruimtes.
+
+00:06:23.180 --> 00:06:30.880
+Sales beheert de verkooptransacties, Finance beheert de budgetten en een gedeelde gegevenswerkruimte bevat de algemene tabellen die iedereen nodig heeft, zoals klant, product en datum.
+
+00:06:30.880 --> 00:06:35.840
+Dan is er nog een vierde werkruimte genaamd, Executive Analytics, en de mensen daar hebben van alles een beetje nodig.
+
+00:06:36.040 --> 00:06:40.140
+De voor de hand liggende stap zou zijn om al die gegevens naar de Executive-werkruimte te kopiëren.
+
+00:06:40.360 --> 00:06:47.860
+Dat werkt, maar het creëert een tweede set gegevens om op te slaan, een tweede set pipelines om te onderhouden en een tweede plek waar de cijfers kunnen verouderen.
+
+00:06:48.020 --> 00:06:50.140
+De betere stap is om snelkoppelingen te maken.
+
+00:06:50.500 --> 00:06:57.140
+Executive Analytics verwijst naar de officiële verkoop- en financiële tabellen en de gedeelde referentietabellen en presenteert deze samen in hun eigen lakehouse.
+
+00:06:57.140 --> 00:07:01.740
+Voor een rapportontwikkelaar in dat team ziet het resultaat eruit als één overzichtelijke verzameling tabellen.
+
+00:07:01.920 --> 00:07:08.740
+Ze weten misschien niet eens welke tabellen fysiek in hun werkruimte zijn opgeslagen en welke snelkoppelingen naar elders zijn, en in een goed gebouwde opzet hoeven ze dat ook niet te weten.
+
+00:07:08.980 --> 00:07:11.020
+Fabric lost die paden achter de schermen op.
+
+00:07:11.140 --> 00:07:15.140
+Een rapport wordt gebouwd, de cijfers kloppen en niemand hoefde een enkel bestand te verplaatsen.
+
+00:07:15.240 --> 00:07:18.220
+Er zit hier een ontwerpels in die het waard is om mee te nemen in je eigen werk.
+
+00:07:18.220 --> 00:07:24.940
+Hou de echt gedeelde gegevens, zoals de gedeelde klantenlijst, de productlijst en de datumtabel, in één werkruimte die fungeert als de bron van waarheid.
+
+00:07:25.080 --> 00:07:28.440
+Hou gespecialiseerde gegevens bij het team dat ze beheert, omdat zij die het beste begrijpen.
+
+00:07:28.640 --> 00:07:30.980
+Laat vervolgens iedereen naar de benodigde gegevens verwijzen.
+
+00:07:31.160 --> 00:07:36.740
+De verleiding is groot om één gigantische werkruimte te bouwen die alles bevat en dat verandert meestal in een puinhoop die niemand wil onderhouden.
+
+00:07:36.900 --> 00:07:38.360
+Het patroon is dus eenvoudig.
+
+00:07:38.540 --> 00:07:44.020
+Je houdt één officieel exemplaar, al het andere is een snelkoppeling en degene die het rapport bouwt, krijgt één schone ervaring.
+
+00:07:44.020 --> 00:07:51.720
+Het klinkt netjes en in een goed beheerde opzet is dat het ook. Netjes is echter niet hetzelfde als gratis en er zijn hier afwegingen die de meeste introducties direct overslaan.
+
+00:07:51.880 --> 00:07:53.760
+De afwegingen waar niemand over spreekt.
+
+00:07:53.980 --> 00:07:56.620
+Begin met snelheid, want dat is het eerste wat je zult merken.
+
+00:07:56.820 --> 00:08:00.080
+Een snelkoppeling kopieert de gegevens niet en laat ze ook niet vooraf.
+
+00:08:00.220 --> 00:08:05.340
+Er gebeurt niets totdat er om de gegevens wordt gevraagd en dan haalt Fabric ze op vanaf de plek waar ze daadwerkelijk staan.
+
+00:08:05.580 --> 00:08:13.140
+Dat betekent dat de eerste lezing trager kan zijn dan het lezen van een lokale kopie, vooral wanneer de bron zich in een andere cloud bevindt of achter een on-premises gateway staat.
+
+00:08:13.700 --> 00:08:20.360
+Prestaties hangen af van een aantal factoren, waaronder de afstand tot de bron, de netwerklatentie en hoe de bestanden zijn georganiseerd.
+
+00:08:20.500 --> 00:08:25.440
+Het hangt ook af van de beschikbaarheid van de bron op dat moment en welke engine de leesactie uitvoert.
+
+00:08:25.780 --> 00:08:29.000
+Microsoft biedt een manier om dit te verzachten, genaamd shortcut caching.
+
+00:08:29.280 --> 00:08:35.080
+Wanneer een leken bestand leest via een ondersteunde shortcut, kan het een kopie van dat bestand in een cache voor de workspace bewaren.
+
+00:08:35.260 --> 00:08:39.020
+Latere aanvragen worden vanuit de cache afgehandeld in plaats van opnieuw over het netwerk te gaan.
+
+00:08:39.020 --> 00:08:45.480
+U bepaalt hoe langgekachte bestanden bewaard blijven, van 1 tot 28 dagen, en telkens wanneer iemand een bestand opent, wordt de timer gereset.
+
+00:08:45.620 --> 00:08:47.600
+Er zijn twee limieten om rekening mee te houden.
+
+00:08:47.800 --> 00:08:50.240
+Bestanden groter dan 1 gigabyte worden niet gecachet.
+
+00:08:50.380 --> 00:08:56.260
+De cache vult zich bovendien bestand voor bestand naarmate mensen de data gebruiken, dus de eerste persoon die iets opent heeft hier niets aan.
+
+00:08:56.460 --> 00:09:02.880
+Caching wordt ondersteund voor Google Cloud Storage, Amazon S3-compatibele opslag en shortcuts die via de on-premises gateway verlopen.
+
+00:09:02.880 --> 00:09:09.960
+Het is een echte verbetering voor herhaaldelijk lezen en kan de kosten voor dataverplaatsing tussen clouds verlagen, maar het maakt van een shortcut geen lokale tabel.
+
+00:09:10.120 --> 00:09:12.100
+De grotere afweging is afhankelijkheid.
+
+00:09:12.280 --> 00:09:14.820
+Een shortcut is afhankelijk van het object waarnaar deze verwijst.
+
+00:09:14.980 --> 00:09:20.160
+Als iemand het doel verplaatst of verwijderd, raakt de shortcut defect en werkt het rapport dat daarop is gebouwd ook niet meer.
+
+00:09:20.340 --> 00:09:26.700
+Als de bron van structuur verandert, vloeit die wijziging door naar iedereen die er gebruik van maakt, wat meestal gewenst is en soms niet.
+
+00:09:26.880 --> 00:09:31.360
+U heeft ook niet dezelfde controle over tabelonderhoud als bij een tabel die volledig van u is.
+
+00:09:31.360 --> 00:09:36.560
+Er zijn duidelijke gevallen waarin een kopie de slimmere keuze is en de richtlijnen van Microsoft beschrijven deze.
+
+00:09:36.700 --> 00:09:40.400
+Kopieer de data wanneer deze zware transformatie vereist voordat iemand het kan gebruiken.
+
+00:09:40.560 --> 00:09:44.480
+Kopieer deze wanneer een regel of verordening vereist dat de data in een specifieke regio blijft.
+
+00:09:44.640 --> 00:09:48.780
+Kopieer deze wanneer u volledige controle nodig heeft over de evolutie en het onderhoud van de tabel.
+
+00:09:48.940 --> 00:09:52.340
+Een shortcut is een geweldige standaardoptie, maar niet altijd het juiste antwoord.
+
+00:09:52.520 --> 00:09:56.080
+Het kennen van dit verschil onderscheidt een overzichtelijke opzet van een kwetsbare.
+
+00:09:56.320 --> 00:09:57.900
+Fouten waar mensen over struikelen.
+
+00:09:57.900 --> 00:10:01.840
+De eerste fout is de fout die echt schade kan aanrichten, dus krijgt deze de meeste aandacht.
+
+00:10:02.080 --> 00:10:05.360
+Shortcuts voeren geen trapsgewijze verwijderingen uit en dat werkt aan twee kanten.
+
+00:10:05.580 --> 00:10:10.800
+Als u de shortcut zelf verwijdert, blijft de data in het doelsysteem volledig veilig, wat het verwachte gedrag is.
+
+00:10:11.000 --> 00:10:17.160
+Als u echter een bestand of map binnen een beschrijfbare shortcut verwijdert en u heeft verwijderingsrechten op de doelmap, verwijdert u dit ook in het doelsysteem.
+
+00:10:17.320 --> 00:10:21.820
+De snelkoppeling was een deuropening en je bent er zojuist doorheen gelopen en hebt de muur omver gehaald.
+
+00:10:21.820 --> 00:10:28.500
+Voordat je een map opschoont die een snelkoppeling kan bevatten, want dit is de fout die van een opgeruimde middag een erg lange avond maakt.
+
+00:10:28.680 --> 00:10:32.880
+De tweede fout is aannemen dat bestanden en tabellen uitwisselbaar zijn, en dat zijn ze niet.
+
+00:10:33.040 --> 00:10:39.860
+Een map vol gewone parquet bestanden is geen delta-tabel en een snelkoppeling onder bestanden verschijnt niet als een tabel waarop je SQL kunt uitvoeren.
+
+00:10:40.000 --> 00:10:43.880
+Als je wilt dat het doorzoekbaar is, moet je de gegevens transformeren of in delta laden.
+
+00:10:43.880 --> 00:10:49.220
+Het is makkelijk om een snelkoppeling naar een bestand te maken, power b te openen en je dan af te vragen waarom de gegevens er niet zijn.
+
+00:10:49.380 --> 00:10:52.600
+De derde fout is verwachten dat onbewerkte bestanden van zelftabellen worden.
+
+00:10:52.840 --> 00:10:56.120
+Dat doen ze niet, maar Fabric biedt een snelkoppelings transformatie die dat wel doet.
+
+00:10:56.340 --> 00:11:04.500
+Wijs naar een map met CSV, parquet, JSON of Excel bestanden en Fabric kopieert en converteert ze naar een beheerde delta-tabel die synchroon blijft door de bron elke twee minuten te controleren.
+
+00:11:04.660 --> 00:11:09.740
+Dat is handig en het is goed om te weten dat deze route niet volledig, zero copy, is omdat er een delta-tabel wordt aangemaakt.
+
+00:11:09.740 --> 00:11:16.060
+Het is ook een ander hulpmiddel dan een gewone snelkoppeling en het dekt geen complexe joints of bedrijfsregels die nog steeds in een juiste pipeline thuishoren.
+
+00:11:16.220 --> 00:11:18.320
+De vierde fout is het negeren van de limieten.
+
+00:11:18.540 --> 00:11:23.920
+Een Fabric item kan maximaal 100.000 snelkoppelingen en maximaal 100 unieke gegevensverbindingen bevatten.
+
+00:11:24.100 --> 00:11:27.000
+Een One Lake pad kan maximaal 10 snelkoppelingen bevatten.
+
+00:11:27.600 --> 00:11:33.660
+Snelkoppelingsnamen mogen geen procent teken of plus teken bevatten en schema snelkoppelingen werken alleen in lake houses waar schema's zijn ingeschakeld.
+
+00:11:33.860 --> 00:11:36.920
+Niets hiervan zal je op de eerste dag hinderen, maar op schaal gaat dat wel gebeuren.
+
+00:11:36.920 --> 00:11:39.720
+De vijfde fout is aannemen dat je machtigingen met je meer reizen.
+
+00:11:39.900 --> 00:11:43.560
+Interne snelkoppelingen gebruiken je eigen identiteit, dus je hebt toegang nodig bij het doel.
+
+00:11:43.700 --> 00:11:49.920
+Externe snelkoppelingen gebruiken in plaats daarvan een opgeslagen verbindingsidentiteit, wat betekent dat iedereen met toegang tot het lake house er doorheen kan lezen.
+
+00:11:50.120 --> 00:11:54.680
+Wanneer zowel een snelkoppelingspad als een doelpad betrokken zijn, wint de strengste van de twee machtigingen.
+
+00:11:54.920 --> 00:11:59.620
+Dat is een ontwerpdetail in plaats van een zorg voor de eerste dag, maar het verklaart veel verwarrende toegangsfouten.
+
+00:11:59.760 --> 00:12:02.420
+Hoe past dit bij Microsoft 365 en Azure?
+
+00:12:02.660 --> 00:12:06.320
+Begin bij de kant van Microsoft 365, want daar zul je het resultaat zien.
+
+00:12:06.320 --> 00:12:08.040
+De zichtbare winst is Power B.
+
+00:12:08.240 --> 00:12:12.620
+Wanneer een snelkoppeling in de tabellenmap staat, kan deze doorstromen naar een semantisch model en vervolgens naar een rapport.
+
+00:12:12.840 --> 00:12:18.160
+Dit kan zelfs in direct lake modus, die de gegevens direct in het geheugen van het rapport haalt zonder een afzonderlijke importstap.
+
+00:12:18.300 --> 00:12:22.340
+Voor iemand die alleen maar zijn gegevens in een rapport wilde hebben, is dat het deel dat ertoe doet.
+
+00:12:22.520 --> 00:12:25.140
+Je wijst naar de data en het verschijnt waar je al werkt.
+
+00:12:25.580 --> 00:12:30.100
+Er is ook een verbinding die veel mensen al begrijpen, namelijk OneDrive en SharePoint.
+
+00:12:30.100 --> 00:12:38.280
+Fabric laat je een snelkoppeling direct naar bestanden in SharePoint of OneDrive verwijzen, en dat is handig omdat dat de plekken zijn waar dagelijkse documenten al staan.
+
+00:12:38.480 --> 00:12:44.100
+Als je team een spreadsheet in SharePoint heeft staan, kan die spreadsheet in Fabric verschijnen zonder dat iemand hem hoeft te kopiëren.
+
+00:12:44.320 --> 00:12:45.480
+Dan is er nog dataverse.
+
+00:12:45.700 --> 00:12:51.700
+Als je team dingen bouwt met Power Apps of het bredere Power Platform, dan staat die data waarschijnlijk in dataverse en kan een snelkoppeling erbij.
+
+00:12:51.700 --> 00:12:58.080
+Dat verbindt Fabric met de tools die dit kanaal elke week behandelt, en het betekent dat de data uit je bedrijfsapps naast al het andere kan staan.
+
+00:12:58.260 --> 00:13:00.460
+De Azure kant sluit op dezelfde manier aan.
+
+00:13:00.700 --> 00:13:08.220
+OneLake is gebouwd op Azure Data Lake Storage, en daarom kunnen Azure tools zoals Synapse en Databricks erbij met de APIs die ze al gebruiken.
+
+00:13:08.500 --> 00:13:16.600
+Fabric capaciteit wordt gekocht via Azure en wordt per seconde afgerekend met een minimum van één minuut, plus de optie voor een jaarreservering om kosten te besparen.
+
+00:13:16.600 --> 00:13:24.600
+Dat leidt tot de praktische vraag over kosten, en het eerlijke antwoord is dat Fabric op een capaciteit draait en een licentie per gebruiker alleen het niet ontgrendelt.
+
+00:13:24.780 --> 00:13:27.060
+Het goede nieuws is dat er een manier is om het te proberen.
+
+00:13:27.240 --> 00:13:33.240
+De Fabric proefversie duurt 60 dagen en geeft je het equivalent van een F64 capaciteit, wat meer dan genoeg ruimte is om te verkennen.
+
+00:13:33.240 --> 00:13:37.240
+Een gratis Fabric licentie wordt automatisch verstrekt wanneer je voor het eerst inlogt.
+
+00:13:37.320 --> 00:13:42.380
+Hiermee kun je alleen leekhouses en notebooks maken als de werkruimte op een capaciteit of proefversie staat.
+
+00:13:42.380 --> 00:13:50.120
+Iets waar mensen over struikelen is dat een premium per gebruiker licentie op zichzelf geen Fabric capaciteit geeft, dus het ontgrendelt de workloads waar we het over hebben gehad niet.
+
+00:13:50.280 --> 00:13:51.140
+Aan jou de beurt.
+
+00:13:51.360 --> 00:13:53.980
+De korte versie van alles wat we hebben besproken ziet er zo uit.
+
+00:13:54.140 --> 00:13:56.760
+Een Fabric snelkoppeling is een verwijzing, geen kopie.
+
+00:13:56.760 --> 00:14:03.720
+Het kan data bereiken binnen Fabric en daarbuiten via Azure, Amazon, Google Cloud, Dataverse en SharePoint en het blijft synchroon met de bron.
+
+00:14:03.880 --> 00:14:09.520
+Er zijn ook echte afwegingen wat betreft snelheid, afhankelijkheid en controle, en die zijn het waard om te overwegen voordat je besluit erop te bouwen.
+
+00:14:09.520 --> 00:14:14.580
+Mijn vraag aan jou is simpel, waar staat je data vandaag de dag en is dat een plek die een snelkoppeling kan bereiken?
+
+00:14:14.800 --> 00:14:18.820
+Laat het me weten in de reacties, want ik lees ze en jullie antwoorden bepalen wat ik de volgende keer behandel.
+
+00:14:18.820 --> 00:14:25.940
+Als dit het onderwerp minder intimiderend heeft gemaakt, abonneer je dan op M365FM om de tools en de mindset te beheersen die de toekomst van werk vormgeven.

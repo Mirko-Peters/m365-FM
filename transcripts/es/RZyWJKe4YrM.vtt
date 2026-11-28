@@ -1,0 +1,634 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:05.150
+Bienvenidos al podcast M365FM, donde exploramos a las personas, ideas y tecnologías que dan
+
+00:00:05.150 --> 00:00:09.410
+forma al futuro del trabajo. Porque sus datos viven en demasiado lugar. Probablemente sus
+
+00:00:09.410 --> 00:00:12.730
+datos de clientes viven en varios lugares diferentes ahora mismo y nadie puede decirle
+
+00:00:12.730 --> 00:00:16.270
+cuál copia es la real. Sus cifras de ventas están en una nube, sus archivos de marketing
+
+00:00:16.270 --> 00:00:20.310
+en otra y su lista de clientes vive dentro de una aplicación de Microsoft. Los accesos
+
+00:00:20.310 --> 00:00:23.550
+directos de Microsoft Fabric se crearon precisamente para solucionar eso y funcionan de una forma
+
+00:00:23.550 --> 00:00:28.530
+que sorprende a la mayoría de los principiantes. Bienvenidos al podcast M365FM, donde exploramos
+
+00:00:28.530 --> 00:00:32.530
+a las personas, ideas y tecnologías que dan forma al futuro del trabajo. En los próximos
+
+00:00:32.530 --> 00:00:36.530
+20 minutos explicaré qué es realmente un acceso directo, dónde vive y a qué puede apuntar.
+
+00:00:36.950 --> 00:00:40.190
+También cubriré los límites de los que nadie le advierte y cómo encaja con las herramientas
+
+00:00:40.190 --> 00:00:44.450
+de Microsoft 365 y Azure que ya utiliza. ¿Qué es realmente un acceso directo de Fabric?
+
+00:00:45.110 --> 00:00:49.390
+Para entender un acceso directo, primero necesito una frase sobre dónde vive. Microsoft Fabric
+
+00:00:49.390 --> 00:00:52.930
+es la plataforma todo en uno de Microsoft para trabajar con datos y cada configuración
+
+00:00:52.930 --> 00:00:57.370
+de Fabric viene con una capa de almacenamiento única llamada OneLake. Piense en OneLake como
+
+00:00:57.370 --> 00:01:01.570
+una unidad gigante y organizada para todos los datos analíticos de su empresa. Ya está
+
+00:01:01.570 --> 00:01:04.590
+activada desde el momento en que obtiene Fabric así que usted no la construye y no puede
+
+00:01:04.590 --> 00:01:08.690
+eliminarlo. Tampoco puede crear accidentalmente una segunda. Funciona sobre almacenamiento
+
+00:01:08.690 --> 00:01:11.910
+de Azure y mantiene sus tablas en formato severo. Eso es importante porque sus datos
+
+00:01:11.910 --> 00:01:15.810
+no están atrapados en un formato que solo una empresa puede leer. Dentro de esa unidad
+
+00:01:15.810 --> 00:01:18.970
+un acceso directo es solo un puntero. Es un objeto que dice que los datos reales están
+
+00:01:18.970 --> 00:01:22.430
+allá así que vaya y búlquelos allí. Microsoft utiliza dos nombres que vale la pena aprender
+
+00:01:22.430 --> 00:01:26.110
+porque aparecen en todas partes en la documentación. La ruta de destino es donde residen realmente
+
+00:01:26.110 --> 00:01:29.530
+los datos. La ruta del acceso directo es donde aparece el acceso directo. Cuando crea
+
+00:01:29.530 --> 00:01:32.630
+un acceso directo en su Lakehouse está colocando una señal en la ruta del acceso directo.
+
+00:01:32.930 --> 00:01:37.470
+Esa señal apunta a la ruta de destino y los datos en sí nunca se mueven. Tome el icono
+
+00:01:37.470 --> 00:01:41.850
+en su escritorio que abre una foto almacenada en una carpeta en otro lugar. El icono no es
+
+00:01:41.850 --> 00:01:45.870
+la foto y no es una copia de la foto. Es una referencia a la foto y funciona porque su
+
+00:01:45.870 --> 00:01:50.170
+computadora sabe dónde buscar. Un acceso directo de Fabric funciona de manera. Los ingenieros
+
+00:01:50.170 --> 00:01:53.370
+que lo crearon describan los accesos directos como enlaces simbólicos que es el término
+
+00:01:53.370 --> 00:01:57.970
+técnico para esa misma idea. Elimine el icono y la foto seguirá allí. Esa es la parte
+
+00:01:57.970 --> 00:02:01.370
+que sorprende a la gente porque puede eliminar un acceso directo sin miedo a perder los datos
+
+00:02:01.370 --> 00:02:05.170
+detrás de él. Esto es importante por una razón sencilla. Copiar datos es costoso y
+
+00:02:05.170 --> 00:02:09.090
+complicado. Si dos equipos mantienen su propia copia de registros de clientes, págase el
+
+00:02:09.090 --> 00:02:13.110
+almacenamiento dos veces. Peor aún, terminas con dos versiones que se desvían en cuanto
+
+00:02:13.110 --> 00:02:17.830
+alguien actualiza una copia y olvida la otra. Un acceso directo a ambos problemas. Hay una
+
+00:02:17.830 --> 00:02:21.650
+sola copia en un lugar y todos los equipos que la necesitan apuntan hacia ahí. Cuando el origen
+
+00:02:21.650 --> 00:02:24.690
+cambia, el cambio se refleja en el acceso directo, así que nadie tiene que ejecutar procesos
+
+00:02:24.690 --> 00:02:28.850
+nocturnos para mantener ambas copias al día. Las definiciones de tabla también se mantienen
+
+00:02:28.850 --> 00:02:31.930
+sincronizadas. Si alguien añade una columna en el origen, el acceso directo la detecta
+
+00:02:31.930 --> 00:02:35.890
+sin que tengas que ver un instrumento. Un acceso directo es un puntero, no una copia. Y esa
+
+00:02:35.890 --> 00:02:37.210
+idea es la base de todo lo demás.
+
+00:02:38.390 --> 00:02:41.510
+El resto de este episodio trata sobre dónde pueden residir esos punteros y qué pueden
+
+00:02:41.510 --> 00:02:45.950
+alcanzar. Dónde recibe un acceso directo dentro de Fabric. Hoy en día puedes crear accesos
+
+00:02:45.950 --> 00:02:49.850
+directos en dos lugares principales y ambos residen dentro de Fabric. El primero es un
+
+00:02:49.850 --> 00:02:53.030
+Lakehouse, que es el espacio de trabajo de Fabric para almacenar y analizar grandes volúmenes
+
+00:02:53.030 --> 00:02:56.970
+de datos. El segundo es una base de datos KQL, diseñada para datos en tiempo real, pero
+
+00:02:56.970 --> 00:03:00.890
+la dejaremos de lado por ser un tema más avanzado. Si eres nuevo en Fabric, pasarás
+
+00:03:00.890 --> 00:03:04.530
+tu tiempo en el Lakehouse. Un Lakehouse tiene dos carpetas de nivel superior y funcionan
+
+00:03:04.530 --> 00:03:08.150
+de manera diferente. Existe una carpeta Tables para datos estructurados y una carpeta Files
+
+00:03:08.150 --> 00:03:11.790
+para datos sin procesar o sin mesura. Dónde creas tu acceso directo determina cómo se
+
+00:03:11.790 --> 00:03:15.750
+comporta, así que vale la pena hacerlo bien. Si creas un acceso directo en Tables, le indicas
+
+00:03:15.750 --> 00:03:19.450
+a Fabric que aquello a lo que apuntas es una tabla real. Los accesos directos en esta carpeta
+
+00:03:19.450 --> 00:03:22.470
+deben estar a nivel superior, así que no puedes guardarlos en una subcarpeta.
+
+00:03:22.470 --> 00:03:25.950
+Si los datos en el destino están en formato Delta, el Lakehouse los reconoce como una tabla
+
+00:03:25.950 --> 00:03:30.670
+que puedes consultar con SQL y usar en Power BI. La definición de la tabla se sincroniza
+
+00:03:30.670 --> 00:03:33.550
+sola, por lo que las nuevas columnas en el origen aparecen sin trabajo humano.
+
+00:03:33.550 --> 00:03:37.150
+Hay un pequeño detalle que vale la pena conocer. Delta no permite espacios en los nombres de
+
+00:03:37.150 --> 00:03:41.030
+las tablas. Si nombras un acceso directo con un espacio, Fabric no lo tratará como una
+
+00:03:41.030 --> 00:03:45.790
+tabla Delta. Si colocas el acceso directo en Files, las reglas son más flexibles. Puedes ponerlo
+
+00:03:45.790 --> 00:03:48.930
+en cualquier nivel de la jerarquía de carpetas y puedes apuntar a cualquier formato de archivo
+
+00:03:48.930 --> 00:03:52.730
+desde hojas de cálculo hasta imágenes. El inconveniente es que aquí nada se convierta
+
+00:03:52.730 --> 00:03:56.810
+en tabla automáticamente. Los accesos directos a archivos son ideales para ingenieros que
+
+00:03:56.810 --> 00:04:00.090
+planean el archivo sin procesar con Spark, pero no aparecerán por sí solos en sus consultas
+
+00:04:00.090 --> 00:04:04.310
+de SQL ni en sus informes de Power BI. Una regla sencilla cubre la mayoría de los casos
+
+00:04:04.310 --> 00:04:08.490
+y también prepara la siguiente pregunta. Use tablas cuando desea algo que pueda consultar
+
+00:04:08.490 --> 00:04:12.850
+con SQL y poner en un informe y use archivos cuando trabaje con datos sin procesar que planea
+
+00:04:12.850 --> 00:04:17.130
+procesar primero. Una vez que sabe dónde recibe un acceso directo, la siguiente pregunta
+
+00:04:17.130 --> 00:04:20.770
+obvia es a qué puede apuntar. ¿A qué puede apuntar un acceso directo?
+
+00:04:20.770 --> 00:04:23.670
+Aquí es donde los accesos directos se vuelven útiles porque la lista de lugares a los que
+
+00:04:23.670 --> 00:04:27.150
+puede apuntar es larga. Algunos de esos lugares se encuentran dentro de Fabric y otros están
+
+00:04:27.150 --> 00:04:29.570
+en el mundo exterior. Los internos en los primeros.
+
+00:04:29.570 --> 00:04:33.370
+Puede apuntar un acceso directo a otro lighthouse, un warehouse, una base de datos KQL, una base
+
+00:04:33.370 --> 00:04:37.050
+de datos reflejada, un catálogo de Azure Databricks reflejado, una base de datos SQL o
+
+00:04:37.050 --> 00:04:40.750
+modelo semántico que parece una lista interminable de nombres de producto. Así que la versión
+
+00:04:40.750 --> 00:04:44.790
+sencilla es esta. Si los datos ya viven en algún lugar dentro de Fabric, un acceso directo
+
+00:04:44.790 --> 00:04:49.030
+le permite usarlos desde cualquier otra parte de Fabric sin tener que copiarlos.
+
+00:04:49.030 --> 00:04:51.990
+Los datos de un equipo aparecen en su área de trabajo y sus usuarios nunca tienen que
+
+00:04:51.990 --> 00:04:56.290
+saber que viven en la puerta de al lado. Las fuentes externas son una parte emocionante.
+
+00:04:56.290 --> 00:05:00.870
+La lista incluye Azure Data Lake Storage Gen 2, Azure Blob Storage, Amazon S3 y almacenamiento
+
+00:05:00.870 --> 00:05:05.470
+compatible con S3, Google Cloud Storage, Dataverse, OneDrive y SharePoint, e incluso ubicaciones
+
+00:05:05.470 --> 00:05:10.490
+locales o restringidas por red mediante una puerta de enlace. También hay soporte para tablas
+
+00:05:10.490 --> 00:05:14.690
+Iceberg, al cual volveremos en un momento. Lea esa lista de nuevo y note lo que significa.
+
+00:05:14.690 --> 00:05:17.550
+Sus datos no tienen que moverse al mundo de Microsoft para ser utilizables en el mundo
+
+00:05:17.550 --> 00:05:22.450
+de Microsoft. Si su empresa mantiene archivos en un bucket de Amazon y uno de Google Cloud,
+
+00:05:22.450 --> 00:05:26.450
+puede reunirlos en Fabric sin tener que transferir ninguno a través de Internet primero. Una
+
+00:05:26.450 --> 00:05:29.930
+vez que existe un acceso directo, muchas herramientas pueden leerlo. Los cuadernos de Spark pueden
+
+00:05:29.930 --> 00:05:33.290
+leerlo, SQL puede consultarlo cuando es una tabla, y las herramientas en tiempo real también
+
+00:05:33.290 --> 00:05:37.650
+pueden usarlo. Power BI puede leerlo a través de un modelo semántico, incluso en modo DirectLake,
+
+00:05:37.650 --> 00:05:41.910
+al que volveremos más adelante. Incluso las aplicaciones fuera de Fabric pueden alcanzarlo a través
+
+00:05:41.910 --> 00:05:45.690
+de la API de OneLake, porque OneLake habla el mismo lenguaje de almacenamiento que Azure Data
+
+00:05:45.690 --> 00:05:49.290
+Lake Storage. Iceberg merece una explicación sencilla, porque es un nombre que escuchar
+
+00:05:49.290 --> 00:05:53.670
+a menudo. Iceberg es otro formato de tabla abierto, y algunas empresas, Snowflake entre
+
+00:05:53.670 --> 00:05:58.270
+ellas, dependen mucho de él. OneLake puede generar lo que llama metadatos virtuales, lo
+
+00:05:58.270 --> 00:06:02.070
+que permite a Fabric leer una tabla Iceberg compatible como si fuera una tabla normal, sin
+
+00:06:02.070 --> 00:06:06.410
+reescribir los datos subyacentes. Snowflake puede seguir siendo el sistema de registro y el
+
+00:06:06.410 --> 00:06:10.150
+escritor principal, mientras que Fabric lee esos mismos datos a través de un acceso directo. Así que su alcance
+
+00:06:10.150 --> 00:06:13.490
+es amplio y cruza entre proveedores de nudo. Ese rango es precisamente la razón por la que
+
+00:06:13.490 --> 00:06:16.810
+importa la siguiente pregunta. ¿Cómo se ve todo esto cuando una empresa real lo implementa?
+
+00:06:18.150 --> 00:06:21.990
+¿Cómo se ve esto en una empresa real? Imaginen una empresa con cuatro áreas de trabajo de
+
+00:06:21.990 --> 00:06:26.110
+Fabric separado. Ventas posee las transacciones de ventas, finanzas posee los presupuestos,
+
+00:06:26.470 --> 00:06:29.450
+y un área de datos compartida posee las tablas comunes que todos necesitan como cliente,
+
+00:06:29.550 --> 00:06:34.150
+producto y fecha. Luego hay una cuarta área de trabajo llamada análisis ejecutivo, donde
+
+00:06:34.150 --> 00:06:38.210
+el personal necesita un poco de todo. El movimiento obvio sería copiar todos esos datos al
+
+00:06:38.210 --> 00:06:42.690
+área de trabajo ejecutiva. Eso funciona, pero crea un segundo conjunto de datos que almacenar,
+
+00:06:42.770 --> 00:06:46.330
+un segundo grupo, tuverías que supervisar y un segundo lugar, donde los números pueden
+
+00:06:46.330 --> 00:06:51.710
+quedar obsoletos. La mejor opción es crear accesos directos. El análisis ejecutivo apunta
+
+00:06:51.710 --> 00:06:55.050
+a las tablas de ventas autorizadas, las tablas de finanzas y las tablas de referencia compartidas,
+
+00:06:55.190 --> 00:06:59.250
+presentándolas juntas en su propio lake house. Para un desarrollador de informes en ese equipo,
+
+00:06:59.370 --> 00:07:03.130
+el resultado parece una colección limpia de tablas. Puede que ni siquiera sepan qué tablas
+
+00:07:03.130 --> 00:07:06.670
+están almacenadas físicamente en su área de trabajo y cuáles son accesos directos que apuntan a otro
+
+00:07:06.670 --> 00:07:09.790
+lugar y en una configuración bien hecha en una configuración en saberlo. Fabric resuelve esas
+
+00:07:09.790 --> 00:07:14.450
+rutas detrás de escena. Se construye un informe, los números coinciden y nadie tuvo que mover ni
+
+00:07:14.450 --> 00:07:17.770
+un solo archivo. Hay una lección de diseño aquí que vale la pena llevar a su propio trabajo.
+
+00:07:18.370 --> 00:07:21.670
+Mantengan los datos verdaderamente compartidos, como la lista de clientes, la lista de productos
+
+00:07:21.670 --> 00:07:24.350
+y la tabla de fechas en un área de trabajo que actúe como fuente de verdad.
+
+00:07:25.430 --> 00:07:28.290
+Mantengan los datos especializados con el equipo que los posea, porque son quienes mejor los entienden.
+
+00:07:28.630 --> 00:07:31.870
+Luego permitan que todos los demás apunten a lo que necesiten. La tentación es construir una
+
+00:07:31.870 --> 00:07:35.850
+gran área de trabajo que contenga todo y eso usualmente se convierte en un desorden que nadie quiere mantener.
+
+00:07:35.850 --> 00:07:41.810
+Así que el patrón es simple. Se mantiene una copia autorizada, lo demás es un acceso directo y la
+
+00:07:41.810 --> 00:07:45.690
+persona que construye un informe tiene una experiencia limpia. Suena ordenado y una configuración bien
+
+00:07:45.690 --> 00:07:49.950
+gestionada lo es. Sin embargo, ordenado no es sinónimo de gratuito y existen compensaciones que
+
+00:07:49.950 --> 00:07:53.370
+la mayoría de las introducciones pasan por. Las compensaciones que nadie menciona.
+
+00:07:54.070 --> 00:07:58.970
+Comencemos con la velocidad, porque es lo primero que notarán. Un acceso directo no copia los datos ni los
+
+00:07:58.970 --> 00:08:04.150
+precarga. Nada sucede hasta que alguien solicita los datos, entonces Fabric los busca donde sea que
+
+00:08:04.150 --> 00:08:08.490
+residan realmente. Eso significa que la primera lectura puede ser más lenta que leer una copia
+
+00:08:08.490 --> 00:08:12.330
+local, especialmente cuando la fuente está en otra nube o detrás de una puerta de enlace local.
+
+00:08:13.650 --> 00:08:18.190
+El rendimiento depende de varios factores, como la distancia de la fuente, la tendencia de red existente
+
+00:08:18.190 --> 00:08:22.710
+y cómo están organizados los archivos. También depende de si la fuente está disponible en ese
+
+00:08:22.710 --> 00:08:27.050
+momento y de qué motor sea el que realiza la lectura. Microsoft ofrece una forma de mitigar esto,
+
+00:08:27.110 --> 00:08:30.970
+llamada en un caché de acceso directo a shortcut. Cuando un leg lee un archivo a través de un acceso
+
+00:08:30.970 --> 00:08:34.830
+directo compatible, puede mantener una copia de ese archivo en la caché del área de trabajo.
+
+00:08:35.450 --> 00:08:38.610
+Las solicitudes posteriores se sirven desde la caché en lugar de volver a cruzar la red.
+
+00:08:39.450 --> 00:08:43.470
+Usted configura cuánto tiempo permanecen los archivos en caché de 1 a 28 días y cada vez
+
+00:08:43.470 --> 00:08:47.390
+que alguien acceda a un archivo, el reloj se reinicia. Hay dos límites que vale la pena recordar.
+
+00:08:47.750 --> 00:08:51.710
+Sus archivos de más de un giga no se almacenan en caché. La caché también se llena archivo por
+
+00:08:51.710 --> 00:08:55.750
+archivo a medida que se usan los datos, por lo que no ayuda a la primera persona que abre algo.
+
+00:08:56.430 --> 00:08:59.830
+El almacenamiento en caché es compatible con Google Cloud Storage, almacenamiento compatible
+
+00:08:59.830 --> 00:09:04.070
+con Amazon S3 y accesos directos a través de una puerta de enlace local. Es una mejora real para
+
+00:09:04.070 --> 00:09:07.930
+lecturas repetidas y puede reducir el costo de mover datos entre nubes, pero no convierte un
+
+00:09:07.930 --> 00:09:13.330
+acceso directo en una tabla local. El inconveniente más importante es un acceso directo depende de
+
+00:09:13.330 --> 00:09:18.530
+aquello de lo que apongo. Si alguien mueve o elimina el destino, el acceso directo se rompe y el informe
+
+00:09:18.530 --> 00:09:23.130
+creado sobre él también falla. Si la fuente cambia su estructura, ese cambio se transmite a todos los
+
+00:09:23.130 --> 00:09:28.850
+procesos posteriores, lo cual suele ser deseable, pero a veces no. Tampoco se obtiene el mismo control sobre
+
+00:09:28.850 --> 00:09:33.090
+el mantenimiento de la tabla que se tendría con una tabla propia. Hay casos claros en los que copiar
+
+00:09:33.090 --> 00:09:37.650
+es la opción más inteligente y las directrices de Microsoft los detallan. Copielos datos cuando
+
+00:09:37.650 --> 00:09:41.490
+requieren una transformación compleja antes de que alguien pueda usarlos. Copielos cuando una norma
+
+00:09:41.490 --> 00:09:45.850
+o regulación exija que los datos permanezcan en una región específica. Copielos cuando necesite un
+
+00:09:45.850 --> 00:09:50.650
+control total sobre cómo evoluciona y se mantiene la tabla. Un acceso directo es una opción predeterminada
+
+00:09:50.650 --> 00:09:54.510
+maravillosa, pero no simple es la respuesta. Conocer la diferencia es lo que separa una configuración
+
+00:09:54.510 --> 00:09:59.250
+ordenada de una frágil. Errores que suelen confundir a los usuarios. El primer error es el que
+
+00:09:59.250 --> 00:10:03.170
+realmente puede causar problemas, por lo que recibe la mayor atención. Sus accesos directos no realizan
+
+00:10:03.170 --> 00:10:07.390
+eliminaciones en cascada y eso funciona en Amosén. Si elimina el acceso directo en sí, los datos
+
+00:10:07.390 --> 00:10:11.150
+ubicados en el destino permanecen completamente seguros, que es el comportamiento esperado. Sin
+
+00:10:11.150 --> 00:10:14.530
+embargo, si elimina archivo carpeta dentro de un acceso directo con permisos de escritura y tiene
+
+00:10:14.530 --> 00:10:18.130
+permisos de eliminación en el destino, también los destinos también los en el Alli. El acceso directo
+
+00:10:18.130 --> 00:10:23.570
+a una puerta y acabas de atravesarla y derribar un muro antes de limpiar cualquier carpeta que pueda
+
+00:10:23.570 --> 00:10:28.010
+contener un acceso directo, porque este es el error que convierte una tarde ordenada en una noche muy larga.
+
+00:10:28.010 --> 00:10:32.510
+El segundo error es asumir que los archivos y las tablas son intercambiables, y no lo son.
+
+00:10:33.230 --> 00:10:37.110
+Una carpeta llena de archivos parques simples no es una tabla Delta y un acceso directo colocado en
+
+00:10:37.110 --> 00:10:41.090
+archivos no aparecerá como una tabla sobre la que puedas ejecutar ese. Si necesitas que se pueda
+
+00:10:41.090 --> 00:10:46.030
+consultar, destransformar los datos o cargarlos en Delta. Es fácil crear un acceso directo de archivo,
+
+00:10:46.330 --> 00:10:50.630
+abrir Power BI y luego preguntarse por qué los datos no están allí. El tercer error es esperar que los
+
+00:10:50.630 --> 00:10:54.150
+archivos sin procesar se conviertan en tablas precisos. No lo harán, pero Fabric ofrece una
+
+00:10:54.150 --> 00:10:57.910
+transformación de acceso directo que sí lo hará. Apúntale a una carpeta de archivos CSV,
+
+00:10:58.130 --> 00:11:01.850
+Parquet, JSON o Excel y Fabric los copia y convierte en una tabla Delta administrada que
+
+00:11:01.850 --> 00:11:06.110
+se mantiene sincronizada verificando la fuente cada dos minutos. Es conveniente y vale la pena
+
+00:11:06.110 --> 00:11:09.950
+saber que esta ruta no es totalmente sin copia porque se está creando una tabla Delta. También
+
+00:11:09.950 --> 00:11:13.490
+es una herramienta diferente a un acceso directo simple y no cubrirá unas complejas o reglas de
+
+00:11:13.490 --> 00:11:17.690
+negocio que aún pertenecen a una canalización adecuada. El cuarto error es ignorar los límites.
+
+00:11:18.650 --> 00:11:22.350
+Un solo elemento de Fabric puede contener hasta 100.000 accesos directos y hasta 100 conexiones
+
+00:11:22.350 --> 00:11:27.530
+de datos únicas. Una sola ruta de One Lake puede contener hasta 10 accesos directos. Los
+
+00:11:27.530 --> 00:11:30.790
+nombres de los accesos directos no pueden contener un signo porcentaje o un signo más y los accesos
+
+00:11:30.790 --> 00:11:34.490
+directos de esquemas solo funcionan en Lake Houses donde los esquemas están activados. Ninguno de
+
+00:11:34.490 --> 00:11:38.690
+estos te afectará el primer día, pero te afectará en escala. El quinto error es asumir que tus permisos
+
+00:11:38.690 --> 00:11:42.990
+viajan contigo. Los accesos directos internos usan tu propia identidad porque necesitas acceso en el
+
+00:11:42.990 --> 00:11:46.790
+destino. Los accesos directos externos usan una identidad de conexión almacenada en su lugar,
+
+00:11:46.790 --> 00:11:50.230
+lo que significa que cualquiera con acceso al Lake House puede leer a través de él. Cuando están
+
+00:11:50.230 --> 00:11:53.990
+involucrados tanto una ruta de acceso directo como una ruta de destino, prevalecen los permisos más
+
+00:11:53.990 --> 00:11:58.010
+estrictos de los... Eso es un detalle de diseño más que una preocupación del primer día, pero explica
+
+00:11:58.010 --> 00:12:03.490
+muchos errores de acceso confusos. ¿Cómo encaja esto con Microsoft 365 y Azure? Comienza con el lado
+
+00:12:03.490 --> 00:12:08.450
+de Microsoft 365 porque es ahí donde verás los resultados. La victoria visible es Power BI. Cuando un
+
+00:12:08.450 --> 00:12:11.950
+acceso directo se encuentra en la carpeta de tablas, puede fluir hacia un modelo semántico y luego hacia un
+
+00:12:11.950 --> 00:12:15.990
+informe. Incluso puede hacerlo en modo Direct Lake, que extrae los datos directamente a la memoria de los
+
+00:12:15.990 --> 00:12:19.770
+informes sin un paso de importación separado. Para alguien que sólo quería sus datos en un
+
+00:12:19.770 --> 00:12:25.830
+informe, esa es la parte que importa. Tú señala los datos y aparece en donde ya trabajas. También
+
+00:12:25.830 --> 00:12:32.110
+hay una conexión que mucha gente ya entiende, OneDrive y SharePoint. Fabric te permite crear un acceso
+
+00:12:32.110 --> 00:12:36.250
+directo directamente a archivos en SharePoint o OneDrive, lo cual es ideal porque ahí es donde ya
+
+00:12:36.250 --> 00:12:41.550
+viven los documentos cotidianos. Si tu equipo guarda una hoja de cálculo en SharePoint, esa hoja puede
+
+00:12:41.550 --> 00:12:45.930
+aparecer dentro de Fabric sin que nadie tenga que copiarla. Luego está Dataverse. Si tu equipo
+
+00:12:45.930 --> 00:12:49.630
+creas soluciones con Power Apps o la plataforma Power en general, es probable que los datos vivan en
+
+00:12:49.630 --> 00:12:53.410
+Dataverse y un acceso directo puede alcanzarlos. Esto conecta Fabric con las herramientas que este
+
+00:12:53.410 --> 00:12:57.030
+canal cubre cada semana, lo que significa que los datos de tus aplicaciones empresariales pueden
+
+00:12:57.030 --> 00:13:01.430
+convivir con todo lo demás. El lado de Azure encaja de la misma manera. OneLake está construido
+
+00:13:01.430 --> 00:13:05.950
+sobre Azure Data Lake Storage, por lo que herramientas de Azure como Synapse y Databricks pueden acceder
+
+00:13:05.950 --> 00:13:11.810
+usando las mismas API que ya utilizan. La capacidad de Fabric se compra a través de Azure y se factura por
+
+00:13:11.810 --> 00:13:15.730
+segundo con un mínimo de un minuto, además de la opción de reserva anual para ahorrar dinero.
+
+00:13:17.290 --> 00:13:21.130
+Eso nos lleva a la pregunta práctica sobre el costo, y la respuesta honesta es que Fabric funcione con
+
+00:13:21.130 --> 00:13:26.190
+capacidad y una licencia por usuario por sí sola no lo desbloqueará. La buena noticia es que hay una
+
+00:13:26.190 --> 00:13:31.890
+forma de probar. La prueba de Fabric dura 60 días y te da la equivalente a una capacidad F64, lo cual es
+
+00:13:31.890 --> 00:13:36.270
+mucho espacio para explorar. Se otorga una licencia gratuita de Fabric automáticamente la primera vez que
+
+00:13:36.270 --> 00:13:41.070
+iniciación. Solo te permite crear late houses y notebooks cuando el área de trabajo está en la capacidad,
+
+00:13:41.070 --> 00:13:46.270
+o una prueba. Algo que confunde a la gente es que una licencia Premium por usuario no te da capacidad
+
+00:13:46.270 --> 00:13:49.790
+de Fabric por sí misma, así que no desbloqueará las caras de trabajo de las que hemos estado hablando.
+
+00:13:50.670 --> 00:13:55.230
+Es tu turno. La versión resumida de todo lo que cubrimos se ve así. Un acceso directo de Fabric es
+
+00:13:55.230 --> 00:13:59.510
+un puntero, no una copia. Puede acceder a datos dentro de Fabric y fuera de él a través de Azure,
+
+00:13:59.630 --> 00:14:04.330
+Amazon, Google Cloud, Dataverse y SharePoint, y se mantiene sincronizado con la fuente. También
+
+00:14:04.330 --> 00:14:08.170
+conlleva concesiones reales en cuanto a velocidad, dependencia y control que vale la pena evaluar antes
+
+00:14:08.170 --> 00:14:12.490
+de comprometerte a construir sobre esto. Pregunta para ti sencilla. ¿Dónde viven tus datos hoy y es
+
+00:14:12.490 --> 00:14:16.530
+un lugar que un acceso directo podría llegar? Dímelo en los comentarios porque los leo y tus
+
+00:14:16.530 --> 00:14:20.810
+respuestas moldean lo que cubriré después. Si esto hizo que el tema se sienta menos intimidante,
+
+00:14:20.950 --> 00:14:25.230
+suscríbete a M365FM para dominar las herramientas y la mentalidad que dan forma al futuro del trabajo.
