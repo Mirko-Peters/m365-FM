@@ -1,0 +1,2419 @@
+WEBVTT
+
+00:00:00.260 --> 00:00:06.040
+Willkommen zum M365FM-Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:06.860 --> 00:00:08.040
+Eröffnung, Dynamik im Moment.
+
+00:00:09.960 --> 00:00:11.820
+365 muss sie mit 100 Wertem Gehör verschaffen.
+
+00:00:12.600 --> 00:00:16.400
+Was passiert, wenn eine Bestellung bestätigt, eine Zahlung gebucht oder eine Genehmigung abgeschlossen wird?
+
+00:00:17.060 --> 00:00:18.720
+Jemand außerhalb von deiner Mixed-I-Fuhr muss Bescheid wissen.
+
+00:00:19.300 --> 00:00:23.780
+Doch allzu oft hängt der nächste Schritt davon ab, dass jemand ein Bildschirm überprüft, eine E-Mail, sendet oder nachfragt.
+
+00:00:23.940 --> 00:00:24.660
+Ist das schon passiert?
+
+00:00:25.740 --> 00:00:26.620
+So ist es bisher.
+
+00:00:27.280 --> 00:00:28.420
+Geschäftsereignisse verändern das Grundleg.
+
+00:00:28.420 --> 00:00:32.320
+Stellen Sie sich diese so vor, dass Dynamics 365 seine Hand hebt, sobald sich die Arbeit endet.
+
+00:00:32.580 --> 00:00:34.400
+Ich bin Mirko Peters von M365FM.
+
+00:00:34.760 --> 00:00:36.820
+Und in diesem Wissenshäppchen erklären wir das in einfachen Worten.
+
+00:00:37.440 --> 00:00:38.420
+Was löst ein Ereignis aus?
+
+00:00:38.500 --> 00:00:39.160
+Wohin geht die Nachricht?
+
+00:00:39.240 --> 00:00:40.080
+Was enthält diese Nachricht?
+
+00:00:40.200 --> 00:00:42.300
+Und wie kann ein anderes Team oder System darauf reagieren?
+
+00:00:43.200 --> 00:00:44.360
+Warum gibt es Geschäftsereignisse?
+
+00:00:45.020 --> 00:00:45.500
+Printforditzer.
+
+00:00:46.200 --> 00:00:48.580
+Stellen Sie sich ein Lagersystem vor, das auf eine bestätigte Bestellung wartet.
+
+00:00:49.100 --> 00:00:54.580
+Ohne Geschäftsereignisse würde dieses Lagersystem Dynamics 365 möglicherweise immer wieder nach neuen bestätigten Bestellungen fragen.
+
+00:00:54.580 --> 00:00:57.360
+Ein paar Minuten später wird erneut nachgefragt und dann den ganzen Tag über.
+
+00:00:57.740 --> 00:00:58.400
+Das nennt man Abruf.
+
+00:00:58.800 --> 00:00:59.780
+Abrufe sind nicht immer falsch.
+
+00:01:00.540 --> 00:01:05.640
+Manchmal hat ein System keine andere Möglichkeit, nach Änderungen zu suchen, aber es entsteht eine unnötige Unterhaltung, wenn nichts passiert.
+
+00:01:06.920 --> 00:01:08.060
+Ein System fragt nach.
+
+00:01:09.200 --> 00:01:10.720
+Ein paar Minuten vergehen, dann wird erneut nachgefragt.
+
+00:01:11.220 --> 00:01:14.520
+In der Zwischenzeit werden im Hintergrund Batch-Prozesse ausgeführt, um diese Prüfung durchzuführen.
+
+00:01:15.080 --> 00:01:18.100
+Jemand muss sie einrichten, überwachen und untersuchen, wann sie nicht mehr funktionieren.
+
+00:01:18.660 --> 00:01:22.720
+Das Lager wartet möglicherweise auf die nächste geplante Prüfung, obwohl die Auftragsbestätigung vor wenigen Augenblicken erfolgt ist.
+
+00:01:22.800 --> 00:01:26.540
+Es ist, als würde man alle fünf Minuten in einem Geschäft anrufen, um zu fragen, ob die Lieferung eingetroffen ist.
+
+00:01:26.540 --> 00:01:29.480
+Die meisten Anrufe enden mit der gleichen Antwort, noch nicht.
+
+00:01:30.560 --> 00:01:31.700
+Geschäftsereignisse folgen einem anderen Muster.
+
+00:01:31.700 --> 00:01:37.760
+Anstatt, dass das externe System ständig nachfragt, sendet Dynamics 365, wenn die Geschäftsaktion tatsächlich stattfindet.
+
+00:01:38.380 --> 00:01:40.040
+Der Auftrag bestätigt, also wird eine Nachricht gesendet.
+
+00:01:40.400 --> 00:01:42.700
+Eine Workflow-Genehmigung wird abgeschlossen, also wird eine Nachricht gesendet.
+
+00:01:43.000 --> 00:01:44.780
+Eine Zahlung wird gebucht, also wird eine Nachricht gesendet.
+
+00:01:45.120 --> 00:01:46.780
+Das ist ereignisgesteuerte Arbeit im Klartext.
+
+00:01:47.140 --> 00:01:48.740
+Das Ereignis ist die abgeschlossene Geschäftsaktion.
+
+00:01:49.060 --> 00:01:52.660
+Es fungiert als Signal, das einem anderen System oder Prozess mitteilt, dass es nun seinen Teil tun kann.
+
+00:01:52.820 --> 00:01:54.240
+Hier ist eine einfache Möglichkeit, sich das vorzustellen.
+
+00:01:54.460 --> 00:01:56.820
+Stellen Sie sich Dynamics 365 als ein großes Bürogebäude vor.
+
+00:01:57.120 --> 00:02:00.280
+Drinnen arbeiten Mitarbeiter in den Bereichen Einkauf, Finanzen, Vertrieb und Produktion.
+
+00:02:00.280 --> 00:02:06.620
+Außerhalb des Gebäudes befindet sich möglicherweise ein Lagersystem, ein Lieferantenportal, eine Versand-App oder ein Tool, das Nachrichten an Teams sendet.
+
+00:02:07.540 --> 00:02:12.700
+Vor Geschäftsereignissen geht jede externe Gruppe möglicherweise ständig zum Empfang und fragt, ob es etwas Neues gegeben hat.
+
+00:02:13.260 --> 00:02:14.060
+Das wird schnell langweilig.
+
+00:02:14.380 --> 00:02:16.740
+Bei Geschäftsereignissen erhält der Empfang eine klare Anweisung.
+
+00:02:17.140 --> 00:02:19.560
+Wenn eine Lieferung für das Lager eintrifft, rufen Sie das Lager an.
+
+00:02:20.040 --> 00:02:22.320
+Wenn ein Dokument für die Finanzabteilung genehmigt wird, Finanzabteilung.
+
+00:02:22.780 --> 00:02:24.620
+Niemand muss ständig zurückkommen, nur um nachzusehen.
+
+00:02:25.060 --> 00:02:27.320
+Die Nachricht verlässt das Gebäude nur, wenn es etwas Berichtenswertes gibt.
+
+00:02:27.320 --> 00:02:32.400
+Das bedeutet nicht, dass Geschäftsereignisse alle Daten aus Dynamics 365 in ein anderes System verschieben.
+
+00:02:33.140 --> 00:02:37.500
+Sie ersetzen keinen vollständigen Datenexport und sind nicht für das Senden großer Informationsmengen gedacht.
+
+00:02:37.980 --> 00:02:39.120
+Ihre Aufgabe ist viel zielgerichteter.
+
+00:02:39.680 --> 00:02:41.280
+Sie kündigen an, dass eine Geschäftsaktion stattgefunden hat.
+
+00:02:41.620 --> 00:02:43.620
+Ein empfangendes System kann dann entscheiden, was zu tun ist.
+
+00:02:43.880 --> 00:02:48.880
+Es kann eine Warnung senden, ein Workflow starten, weitere Details abrufen oder die Arbeit an ein anderes Geschäftssystem übergeben.
+
+00:02:48.880 --> 00:02:53.020
+Verwechseln Sie ein Geschäftsereignis nicht mit einer normalen Benachrichtigung in Dynamics 365.
+
+00:02:53.680 --> 00:02:56.960
+Eine Benutzerbenachrichtigung ist für eine Person bestimmt, die Dynamics 365 verwert.
+
+00:02:57.220 --> 00:03:01.060
+Sie kann Sie darüber informieren, dass eine Aufgabe Ihre Aufmerksamkeit erfordert oder sein Workflow in Ihre Wartschlange.
+
+00:03:01.620 --> 00:03:04.160
+Sie wird in der App oder möglicherweise als vertraute Warnung angezeigt.
+
+00:03:04.620 --> 00:03:05.940
+Ein Geschäftsereignis spricht nach außen.
+
+00:03:06.200 --> 00:03:10.080
+Seine Zielgruppe ist ein externer Dienst, eine andere Anwendung oder ein automatisierter Prozess.
+
+00:03:10.480 --> 00:03:12.340
+Es versucht nicht nur die Aufmerksamkeit von jemandem zu erregen.
+
+00:03:12.740 --> 00:03:15.020
+Es gibt einem anderen System ein klares Signal, auf das es reagieren kann.
+
+00:03:15.020 --> 00:03:16.820
+Dieser Unterschied ändert die Frage, die Sie stellen.
+
+00:03:17.180 --> 00:03:20.840
+Anstatt zu fragen, wie erinnere ich jemanden daran, dies zu überprüfen, können Sie fragen,
+
+00:03:21.040 --> 00:03:23.480
+was soll automatisch passieren, wenn diese Geschäftsaktion abgeschlossen ist.
+
+00:03:24.260 --> 00:03:27.880
+Möglicherweise sollte eine bestätigte Bestellung das Lager anweisen, sich auf den Wareneingang vorzubehalten.
+
+00:03:28.160 --> 00:03:30.980
+Möglicherweise sollte eine genehmigte Anforderung einer Aufgabe in einem anderen System stattfinden.
+
+00:03:31.640 --> 00:03:34.180
+Möglicherweise sollte eine gebuchte Zahlung ein Kundendienstteam benachrichtigen,
+
+00:03:34.240 --> 00:03:37.060
+ohne dass jemand Dynamics 365 öffnen und Details in eine E-Mail kopieren muss.
+
+00:03:37.720 --> 00:03:39.640
+Die menschliche Arbeit verschwindet nicht auf magische Weise,
+
+00:03:39.640 --> 00:03:43.000
+aber das wiederholte Überprüfen, Nachverfolgen und die manuelle Übergabe können entfallen,
+
+00:03:43.000 --> 00:03:45.140
+da das System die Benachrichtigung im richtigen Moment sendet.
+
+00:03:46.040 --> 00:03:49.180
+Was genau wird also aus Dynamics 365 übertragen, wenn ein Ereignis ausgelöst wird?
+
+00:03:49.740 --> 00:03:50.560
+Das behandeln wir als nächstes.
+
+00:03:51.160 --> 00:03:52.780
+Was ist eigentlich in einem Geschäftsereignis enthalten?
+
+00:03:53.540 --> 00:03:55.180
+Was genau ist in einem Geschäftsereignis enthalten?
+
+00:03:55.780 --> 00:03:56.780
+Das ist die einfachste Definition.
+
+00:03:57.180 --> 00:03:59.120
+Ein Geschäftsereignis ist eine strukturierte Nachricht,
+
+00:03:59.180 --> 00:04:01.420
+die einem anderen System mitteilt, dass eine Geschäftsaktion abgeschlossen ist.
+
+00:04:01.800 --> 00:04:03.840
+Der Ausdruck abgeschlossene Geschäftsaktion ist wichtig,
+
+00:04:04.100 --> 00:04:05.940
+da er die Bedeutung klar und fokussiert hält.
+
+00:04:06.160 --> 00:04:10.620
+Die Nachricht versucht nicht, Ihnen den vollständigen Überblick über Ihre Einkaufs-, Finanz- oder Produktionsprozesse zu geben.
+
+00:04:10.620 --> 00:04:13.440
+Sie berichtet nur über einen bestimmten Moment innerhalb dieses Prozesses.
+
+00:04:14.080 --> 00:04:17.040
+Eine Workflow-Genehmigung wird abgeschlossen, eine Bestellung wird bestätigt,
+
+00:04:17.100 --> 00:04:19.860
+eine Rechnung wird gebucht oder ein Produktionsauftrag ändert den Status.
+
+00:04:21.240 --> 00:04:23.340
+Jeder dieser Momente kann zu einem Geschäftsereignis werden,
+
+00:04:23.420 --> 00:04:26.660
+wenn Dynamics 365 dieses Ereignis enthält und Sie es aktivieren.
+
+00:04:27.360 --> 00:04:28.660
+Stellen Sie sich für ihn kurz einen Lieferschein vor.
+
+00:04:29.060 --> 00:04:31.160
+Der Hinweis sendet nicht den vollständigen Inhalt des Lagers.
+
+00:04:31.440 --> 00:04:33.240
+Es wird angegeben, welche Lieferung wann eingetroffen ist
+
+00:04:33.240 --> 00:04:34.400
+und es werden genügend Details angegeben,
+
+00:04:34.480 --> 00:04:37.160
+damit die richtige Person oder das richtige System die zugehörigen Datensätze finden kann.
+
+00:04:37.460 --> 00:04:39.380
+Dieser Fokus macht Geschäftsereignisse nützlich.
+
+00:04:39.380 --> 00:04:42.680
+Wenn ein anderes System eine vollständige Kopie von tausenden von Bestellungen,
+
+00:04:42.760 --> 00:04:44.640
+großen Dateien oder einer gesamten Kundenliste benötigt,
+
+00:04:44.700 --> 00:04:45.680
+brauchen Sie eine andere Art der Integration.
+
+00:04:46.360 --> 00:04:48.780
+Geschäftsereignisse sind nicht als allgemeines Datenexport-Tool konzipiert.
+
+00:04:49.120 --> 00:04:52.320
+Sie senden eine kleine, zeitnahe Nachricht, mit der der nächste Prozess sofort beginnen kann.
+
+00:04:52.920 --> 00:04:56.000
+Wo finden Sie nun die Ereignisse, die Dynamics 365 bereits senden kann?
+
+00:04:57.060 --> 00:04:58.540
+Sie beginnen im Geschäftsereigniskatalog,
+
+00:04:58.600 --> 00:05:01.900
+den Sie unter Systemadministration, dann unter Einrichtung und dann unter Geschäftsereignisse finden.
+
+00:05:02.460 --> 00:05:03.700
+Der Katalog ist Ihr schwarzes Brett.
+
+00:05:04.080 --> 00:05:06.380
+Er listet die in Ihrer Finanz- und Betriebsumgebung verfügbaren Geschäftsereignisse
+
+00:05:06.380 --> 00:05:10.280
+zusammen mit der Beschreibung und den Feldern auf, die jedes Ereignis senden kann, kann.
+
+00:05:10.600 --> 00:05:12.040
+Sie müssen Ereignisnamen nicht erwarten,
+
+00:05:12.140 --> 00:05:15.220
+da Sie den Katalog nach Kategorie, Ereignis-ID oder Name filtern können.
+
+00:05:15.720 --> 00:05:17.880
+Workflow-Ereignisse befinden sich in der Kategorie Workflow,
+
+00:05:18.120 --> 00:05:19.680
+während Ereignisse aus anderen Teilen von Dynamics 365
+
+00:05:19.680 --> 00:05:21.860
+unter dem zugehörigen Modul gespeichert sind.
+
+00:05:22.160 --> 00:05:23.760
+So können Sie praktisch suchen, wenn jemand fragt,
+
+00:05:23.760 --> 00:05:24.820
+können wir eine Nachricht senden.
+
+00:05:24.820 --> 00:05:28.940
+Wenn dies geschieht, beginnen Sie mit der Geschäftsaktion
+
+00:05:28.940 --> 00:05:30.440
+und suchen Sie dann im Katalog danach.
+
+00:05:31.000 --> 00:05:32.780
+Ein im Katalog angezeigtes Ereignis bedeutet nicht,
+
+00:05:32.900 --> 00:05:34.700
+dass Dynamics 365 sofort mit dem Senden beginnt.
+
+00:05:35.120 --> 00:05:36.700
+Ereignisse sind standardmäßig inaktiv.
+
+00:05:37.140 --> 00:05:39.700
+Das gibt Ihnen die Kontrolle, da Ihr System keine Nachrichten senden sollte,
+
+00:05:39.800 --> 00:05:41.720
+nur weil jemand einen interessanten Ereignisnamen bemerkt hat.
+
+00:05:42.340 --> 00:05:44.520
+Sie willen das Ereignis aus und aktivieren es dann für die Unternehmen,
+
+00:05:44.600 --> 00:05:45.140
+zu denen es gehört.
+
+00:05:46.120 --> 00:05:49.880
+In Dynamics 365 Finance & Operations ist eine juristische Person
+
+00:05:49.880 --> 00:05:51.740
+in der Regel ein Unternehmen in ihrer Umgebung.
+
+00:05:51.740 --> 00:05:54.160
+Möglicherweise benötigt Ihr britisches Unternehmen
+
+00:05:54.160 --> 00:05:55.600
+ein Ereignis für bestätigte Bestellungen,
+
+00:05:55.720 --> 00:05:56.980
+während Ihr US-amerikanisches Unternehmen
+
+00:05:56.980 --> 00:05:57.820
+einen anderen Prozess verfolgt.
+
+00:05:58.240 --> 00:06:00.580
+Sie können das Ereignis für ausgewählte juristische Personen aktivieren.
+
+00:06:00.960 --> 00:06:02.820
+Wenn jedes Unternehmen denselben Prozess verfolgt,
+
+00:06:02.900 --> 00:06:04.740
+können Sie es für alle juristischen Personen aktivieren.
+
+00:06:05.320 --> 00:06:06.620
+Nachdem Sie ein Ereignis aktiviert haben,
+
+00:06:06.720 --> 00:06:09.200
+kann Dynamics 365 jedes Mal eine Nachricht vorbereiten,
+
+00:06:09.260 --> 00:06:10.620
+wenn diese Geschäftsaktion im ausgewählten Unternehmen
+
+00:06:10.620 --> 00:06:11.460
+oder den ausgewählten Unternehmern.
+
+00:06:11.460 --> 00:06:12.800
+Diese Nachricht wird als Nutzlast bezeichnet.
+
+00:06:13.260 --> 00:06:14.220
+Nutzlast klingt technisch,
+
+00:06:14.300 --> 00:06:16.240
+aber stellen Sie sich einen Umschlag mit einem Formular darin vor.
+
+00:06:16.800 --> 00:06:18.680
+Der Umschlag wird an das empfangende System gesendet
+
+00:06:18.680 --> 00:06:20.260
+und das Formular enthält benannte Felder,
+
+00:06:20.460 --> 00:06:21.700
+die das empfangende System lesen kann.
+
+00:06:22.040 --> 00:06:23.760
+Dynamics 365 sendet diese Information
+
+00:06:23.760 --> 00:06:25.540
+in JSON JavaScript Object Notation.
+
+00:06:26.060 --> 00:06:27.300
+Sie müssen JSON nicht von Hand schreiben,
+
+00:06:27.360 --> 00:06:28.220
+um das Konzept zu verstehen.
+
+00:06:28.960 --> 00:06:30.240
+JSON kennzeichnet jede Information,
+
+00:06:30.480 --> 00:06:31.340
+sodass eine andere App
+
+00:06:31.340 --> 00:06:33.080
+einen Wert von einem anderen unterscheiden kann.
+
+00:06:33.440 --> 00:06:34.860
+Eine Nachricht kann den Namen des Ereignisses,
+
+00:06:34.980 --> 00:06:35.740
+die juristische Person,
+
+00:06:35.860 --> 00:06:37.080
+eine Uhrzeit, eine Auftragsreferenz
+
+00:06:37.080 --> 00:06:38.100
+und eine Kontrollnummer enthalten,
+
+00:06:38.100 --> 00:06:39.000
+die der empfangenden App hilft.
+
+00:06:39.060 --> 00:06:39.700
+Eine empfangende App hilft,
+
+00:06:39.760 --> 00:06:40.840
+eine doppelte Zustellung zu erkennen.
+
+00:06:41.020 --> 00:06:42.400
+Die genauen Felder hängen vom Ereignis ab.
+
+00:06:42.820 --> 00:06:43.980
+Aus diesem Grund können Sie im Katalog
+
+00:06:43.980 --> 00:06:45.240
+ein JSON-Schema herunterladen.
+
+00:06:45.660 --> 00:06:47.220
+Ein Schema ist das vereinbarte Format für den App.
+
+00:06:48.680 --> 00:06:49.500
+Eine Verbindung herstellt,
+
+00:06:49.600 --> 00:06:50.780
+mit welchen Feldern eintreffen können
+
+00:06:50.780 --> 00:06:51.840
+und wie die Nachricht aufgebaut ist.
+
+00:06:52.320 --> 00:06:53.280
+Dadurch entfällt für Rätselaar.
+
+00:06:53.680 --> 00:06:54.640
+Ein Power Automate Flow,
+
+00:06:54.740 --> 00:06:55.740
+eine benutzerdefinierte App
+
+00:06:55.740 --> 00:06:56.920
+oder ein Azure-basierter Prozess
+
+00:06:56.920 --> 00:06:57.860
+kann dieses Schema verwenden,
+
+00:06:57.920 --> 00:06:58.640
+um die eingehende Nachricht
+
+00:06:58.640 --> 00:06:59.480
+ordnungsgemäß zu lesen,
+
+00:06:59.540 --> 00:07:00.120
+anstatt darauf zu hoffen,
+
+00:07:00.220 --> 00:07:01.460
+dass eine Auftragsnummer oder Genehmigungs-ID
+
+00:07:01.460 --> 00:07:02.620
+an der erwarteten Stelle angezeigt wird.
+
+00:07:02.960 --> 00:07:04.220
+Das Ereignis stellt die Tatsache bereit
+
+00:07:04.220 --> 00:07:05.560
+und den Nutzler stellt die Details bereit,
+
+00:07:05.620 --> 00:07:07.100
+die zur Verarbeitung dieser Tatsache erforderlich sind.
+
+00:07:07.400 --> 00:07:08.460
+Eine Nachricht ist nur dann hilfreich,
+
+00:07:08.520 --> 00:07:09.320
+wenn Sie den richtigen Ort erhalten.
+
+00:07:10.000 --> 00:07:11.680
+Endpunkte, an die die Nachricht gesendet wird.
+
+00:07:12.560 --> 00:07:13.840
+Ein Endpunkt ist die Zustelleradresse
+
+00:07:13.840 --> 00:07:14.780
+für ein Geschäftsereignis.
+
+00:07:15.260 --> 00:07:16.500
+Dynamics 365 weiß,
+
+00:07:16.580 --> 00:07:17.580
+dass eine Aktion stattgefunden hat
+
+00:07:17.580 --> 00:07:18.340
+und bereitet die Nachricht vor.
+
+00:07:18.640 --> 00:07:19.700
+Sie benötigt jedoch noch ein Ziel.
+
+00:07:20.620 --> 00:07:21.860
+Ein Endpunkt teilt dem System mit,
+
+00:07:21.900 --> 00:07:22.880
+wohin diese Nachricht gehen soll,
+
+00:07:22.960 --> 00:07:23.920
+ähnlich wie ein Versandetikett
+
+00:07:23.920 --> 00:07:24.680
+einem Spediteur mitteilt,
+
+00:07:24.720 --> 00:07:26.060
+an welche Tür ein Paket gelangen soll.
+
+00:07:26.940 --> 00:07:28.440
+Das Paket trägt dieselbe Bestellnummer
+
+00:07:28.440 --> 00:07:29.580
+und dieselben Ereignis-Details,
+
+00:07:29.680 --> 00:07:30.520
+aber die Tür ändert sich,
+
+00:07:30.600 --> 00:07:31.560
+je nachdem, wer handeln muss.
+
+00:07:32.560 --> 00:07:33.800
+Für viele Teams ist Power Automate
+
+00:07:33.800 --> 00:07:34.840
+die einfachste erste Tür.
+
+00:07:35.540 --> 00:07:37.480
+Sie verbindet Dynamics 365 mit Tools,
+
+00:07:37.540 --> 00:07:38.340
+die bereits verwendet werden,
+
+00:07:38.420 --> 00:07:39.500
+wie Outlook, Teams, SharePoint
+
+00:07:39.500 --> 00:07:40.560
+und Genehmigungsanforderungen.
+
+00:07:40.560 --> 00:07:41.820
+Stellen Sie sich vor,
+
+00:07:41.880 --> 00:07:42.860
+eine Bestellung wird bestätigt
+
+00:07:42.860 --> 00:07:43.860
+und der Einkaufsleiter
+
+00:07:43.860 --> 00:07:45.220
+muss sofort darüber informiert werden.
+
+00:07:45.800 --> 00:07:46.660
+Ein Power Automate Flow
+
+00:07:46.660 --> 00:07:47.860
+kann das Geschäftsereignis empfangen
+
+00:07:47.860 --> 00:07:49.860
+und eine Nachricht in einem Teams-Kanal posten,
+
+00:07:49.920 --> 00:07:50.480
+eine E-Mail senden,
+
+00:07:50.540 --> 00:07:51.240
+eine Aufgabe erstellen
+
+00:07:51.240 --> 00:07:52.120
+oder eine Genehmigung starten.
+
+00:07:52.220 --> 00:07:53.620
+Sie müssen nicht für jede einfache Übergabe
+
+00:07:53.620 --> 00:07:54.460
+eine separate App erstellen.
+
+00:07:54.780 --> 00:07:56.040
+Power Automate funktioniert gut,
+
+00:07:56.100 --> 00:07:57.100
+wenn der nächste Schritt Person
+
+00:07:57.100 --> 00:07:58.260
+gängige Microsoft-Tools
+
+00:07:58.260 --> 00:07:59.840
+oder eine einfache Regel umfasst.
+
+00:08:00.560 --> 00:08:02.160
+Ein Flow kann die eingehenden Daten lesen,
+
+00:08:02.240 --> 00:08:03.340
+entscheiden, wer sie erhalten soll
+
+00:08:03.340 --> 00:08:05.020
+und eine Nachricht mit den Details senden,
+
+00:08:05.080 --> 00:08:06.040
+die diese Person benötigt.
+
+00:08:06.120 --> 00:08:06.760
+Er kann auch eine Verbindung
+
+00:08:06.760 --> 00:08:07.580
+zu anderen Diensten herstellen.
+
+00:08:07.580 --> 00:08:09.580
+Beispielsweise kann ein Workflow-Ereignis
+
+00:08:09.580 --> 00:08:11.220
+von Dynamics 365 eintreffen.
+
+00:08:11.560 --> 00:08:12.540
+Dann kann Power Automate
+
+00:08:12.540 --> 00:08:13.300
+eine Genehmigungskarte
+
+00:08:13.300 --> 00:08:14.240
+an einen Manager senden.
+
+00:08:14.640 --> 00:08:15.540
+Der Manager antwortet
+
+00:08:15.540 --> 00:08:16.460
+über Teams oder E-Mail
+
+00:08:16.460 --> 00:08:17.920
+und der Prozess kann fortgesetzt werden,
+
+00:08:18.000 --> 00:08:18.700
+ohne dass diese Person
+
+00:08:18.700 --> 00:08:20.560
+in Dynamics 365 Menüs suchen muss.
+
+00:08:20.960 --> 00:08:21.760
+Dadurch bleibt die Übergabe
+
+00:08:21.760 --> 00:08:22.400
+in der Nähe des Ortes,
+
+00:08:22.480 --> 00:08:23.200
+an dem die Mitarbeiter liegen.
+
+00:08:23.440 --> 00:08:24.180
+Einige Verbindungen
+
+00:08:24.180 --> 00:08:25.500
+benötigen einen stärkeren Zustellungsweg,
+
+00:08:25.560 --> 00:08:26.220
+da sie nicht nur Personen,
+
+00:08:26.340 --> 00:08:27.420
+sondern Geschäftssysteme miteinander verbinden.
+
+00:08:27.480 --> 00:08:28.920
+Hier kommt Azure Service Bus ins Spiel.
+
+00:08:29.500 --> 00:08:30.260
+Azure Service Bus
+
+00:08:30.260 --> 00:08:31.460
+bietet Ihnen Warteschlangen und Themen.
+
+00:08:31.980 --> 00:08:33.020
+Eine Warteschlange funktioniert
+
+00:08:33.020 --> 00:08:34.080
+wie eine einzelne Warteschlange,
+
+00:08:34.180 --> 00:08:35.080
+in der Dynamics 365
+
+00:08:35.080 --> 00:08:36.280
+von Gächt sich eine Nachricht ablegt
+
+00:08:36.280 --> 00:08:37.120
+und die empfangende Anwendung
+
+00:08:37.120 --> 00:08:38.080
+sie abruft, wenn sie bereit ist.
+
+00:08:38.500 --> 00:08:39.100
+Dies ist hilfreich,
+
+00:08:39.180 --> 00:08:39.900
+wenn ein Lagersystem,
+
+00:08:40.020 --> 00:08:40.820
+ein Lieferantenportal
+
+00:08:40.820 --> 00:08:41.780
+oder eine andere Geschäfts-App
+
+00:08:41.780 --> 00:08:42.320
+Zeit benötigt,
+
+00:08:42.380 --> 00:08:43.280
+um jede Nachricht zu verarbeiten,
+
+00:08:43.360 --> 00:08:44.060
+ohne sie zu verlieren.
+
+00:08:44.560 --> 00:08:45.320
+Die empfangende App
+
+00:08:45.320 --> 00:08:46.560
+muss nicht in der Sekunde antworten,
+
+00:08:46.640 --> 00:08:47.700
+in der Dynamics 365
+
+00:08:47.700 --> 00:08:48.720
+das Ereignis sendet.
+
+00:08:49.300 --> 00:08:50.360
+Ein Thema funktioniert anders,
+
+00:08:50.720 --> 00:08:52.180
+da es eine eingehende Nachricht ermöglicht,
+
+00:08:52.260 --> 00:08:53.260
+mehr als einen interessierten Empfänger
+
+00:08:53.260 --> 00:08:53.700
+zu erreichen.
+
+00:08:54.480 --> 00:08:56.320
+Ein System kann auf Einkaufsereignisse achten,
+
+00:08:56.580 --> 00:08:57.080
+während ein anderes
+
+00:08:57.080 --> 00:08:58.100
+auf Finanzereignisse wartet.
+
+00:08:58.580 --> 00:08:59.500
+Und jedes System kann nur
+
+00:08:59.500 --> 00:09:00.200
+die Nachrichten empfangen,
+
+00:09:00.280 --> 00:09:00.780
+die es benötigt.
+
+00:09:00.780 --> 00:09:02.100
+Stellen Sie sich einen Paketraum
+
+00:09:02.100 --> 00:09:03.160
+in einem großen Bürogebäude vor.
+
+00:09:03.480 --> 00:09:04.800
+Eine Warteschlange stellt ein Paket
+
+00:09:04.800 --> 00:09:05.260
+für ein Team
+
+00:09:05.260 --> 00:09:06.220
+in ein beschriftetes Schließfach,
+
+00:09:06.320 --> 00:09:06.800
+während ein Thema
+
+00:09:06.800 --> 00:09:07.800
+eine Zustellbenachrichtigung
+
+00:09:07.800 --> 00:09:08.640
+auf einem Board platziert,
+
+00:09:08.740 --> 00:09:09.460
+auf der verschiedene Teams
+
+00:09:09.460 --> 00:09:10.340
+basierende Teams basierend
+
+00:09:10.340 --> 00:09:11.440
+auf dem, für den sie es registriert haben,
+
+00:09:11.500 --> 00:09:12.340
+ihre eigene Kopie eignen kann.
+
+00:09:13.020 --> 00:09:13.760
+Azure Service Bus
+
+00:09:13.760 --> 00:09:14.620
+eignet sich für die Arbeit
+
+00:09:14.620 --> 00:09:15.240
+zwischen Systemen,
+
+00:09:15.280 --> 00:09:16.520
+bei denen eine zuverlässige Zustellung
+
+00:09:16.520 --> 00:09:17.840
+und eine kontrollierte Verarbeitung wichtig ist.
+
+00:09:17.980 --> 00:09:18.420
+Dann gibt es noch
+
+00:09:18.420 --> 00:09:18.880
+Azure Event Grid.
+
+00:09:19.320 --> 00:09:20.480
+Event Grid hilft bei der Verteilung
+
+00:09:20.480 --> 00:09:21.420
+von Ereignisbenachrichtigungen
+
+00:09:21.420 --> 00:09:21.800
+an Dienste,
+
+00:09:21.800 --> 00:09:22.460
+die darauf reagieren.
+
+00:09:22.940 --> 00:09:23.660
+Es kann ein Ereignis
+
+00:09:23.660 --> 00:09:24.840
+basierend auf Filtern weiterleiten,
+
+00:09:24.940 --> 00:09:25.920
+sodass ein Empfang der Prozesse
+
+00:09:25.920 --> 00:09:26.660
+nur Nachrichten sieht,
+
+00:09:26.740 --> 00:09:27.460
+die seinen Regeln entsprechen.
+
+00:09:28.100 --> 00:09:29.180
+Behe Ereignisse von einer
+
+00:09:29.180 --> 00:09:30.160
+bestimmten juristischen Person
+
+00:09:30.160 --> 00:09:30.700
+oder einem bestimmten
+
+00:09:30.700 --> 00:09:31.600
+Geschäftsereignistyp.
+
+00:09:32.420 --> 00:09:33.140
+Azure Event Hubs
+
+00:09:33.140 --> 00:09:34.080
+hat eine andere Aufgabe
+
+00:09:34.080 --> 00:09:34.760
+bei der Verarbeitung
+
+00:09:34.760 --> 00:09:36.180
+großer Mengen eingehender Ereignisdaten
+
+00:09:36.180 --> 00:09:36.640
+für Dienste,
+
+00:09:36.740 --> 00:09:37.560
+die einen Nachrichtenstrom
+
+00:09:37.560 --> 00:09:38.720
+lesen müssen, müssen.
+
+00:09:39.360 --> 00:09:39.960
+Dies ist der Fall,
+
+00:09:40.040 --> 00:09:40.660
+wenn viele Ereignisse
+
+00:09:40.660 --> 00:09:42.060
+einen verbundenen Prozess durchlaufen
+
+00:09:42.060 --> 00:09:42.780
+und andere Dienste
+
+00:09:42.780 --> 00:09:43.440
+diesen Datenstrom
+
+00:09:43.440 --> 00:09:44.540
+in großem Umfang nutzen müssen.
+
+00:09:45.320 --> 00:09:46.300
+Sie benötigen Event Hubs
+
+00:09:46.300 --> 00:09:47.200
+nicht für eine Teamswarnung,
+
+00:09:47.300 --> 00:09:48.300
+da Sie es nur dann auswählen,
+
+00:09:48.580 --> 00:09:49.480
+wenn die Menge und Geschwindigkeit
+
+00:09:49.480 --> 00:09:50.020
+der Nachrichten
+
+00:09:50.020 --> 00:09:50.720
+einen für diese Art
+
+00:09:50.720 --> 00:09:51.900
+von Datenverkehr entwickelten Dienst
+
+00:09:51.900 --> 00:09:52.300
+erfordern.
+
+00:09:53.020 --> 00:09:54.000
+Ein HTTPS-Endpunkt
+
+00:09:54.000 --> 00:09:54.780
+bietet Ihnen eine andere Route.
+
+00:09:55.660 --> 00:09:57.080
+HTTPS ist die Webadressmethode,
+
+00:09:57.200 --> 00:09:58.520
+die Ihre benutzerdefinierte Anwendung
+
+00:09:58.520 --> 00:09:59.080
+verwenden kann,
+
+00:09:59.140 --> 00:09:59.640
+um eine Nachricht
+
+00:09:59.640 --> 00:10:00.760
+direkt über das Internet zu empfangen.
+
+00:10:01.140 --> 00:10:01.740
+Wenn Ihr Unternehmen
+
+00:10:01.740 --> 00:10:03.320
+über ein eigenes Lieferantenportal,
+
+00:10:03.400 --> 00:10:04.180
+eine eigene Lagerapp
+
+00:10:04.180 --> 00:10:05.320
+oder einen internen Dienst verfügt,
+
+00:10:05.380 --> 00:10:05.900
+können die Entwickler
+
+00:10:05.900 --> 00:10:06.580
+eine Adresse erstellen,
+
+00:10:06.640 --> 00:10:07.620
+die die Geschäftsereignisnachricht
+
+00:10:07.620 --> 00:10:08.100
+akzeptiert.
+
+00:10:08.720 --> 00:10:10.560
+Dynamics 365 sendet die Nachricht
+
+00:10:10.560 --> 00:10:11.160
+an diese Adresse
+
+00:10:11.160 --> 00:10:12.280
+und die benutzerdefinierte App
+
+00:10:12.280 --> 00:10:13.060
+liest sie und antwortet
+
+00:10:13.060 --> 00:10:14.100
+gemäß ihren eigenen Regeln.
+
+00:10:14.600 --> 00:10:15.740
+Dieser Weg bietet Entwicklern
+
+00:10:15.740 --> 00:10:16.520
+Flexibilität,
+
+00:10:16.640 --> 00:10:17.320
+bedeutet aber auch,
+
+00:10:20.020 --> 00:10:20.360
+bleiben muss,
+
+00:10:20.420 --> 00:10:21.720
+wenn Dynamics 365 sendet.
+
+00:10:22.300 --> 00:10:23.160
+Ein Geschäftsereignis
+
+00:10:23.160 --> 00:10:24.200
+muss nicht nur eine Tür auswählen,
+
+00:10:24.280 --> 00:10:25.140
+da dasselbe Ereignis
+
+00:10:25.140 --> 00:10:26.060
+an mehr als einen Endpunkt
+
+00:10:26.060 --> 00:10:26.500
+gehen kann.
+
+00:10:27.080 --> 00:10:28.040
+Eine bestätigte Bestellung
+
+00:10:28.040 --> 00:10:29.120
+kann eine Teams-Benachrichtigung
+
+00:10:29.120 --> 00:10:30.300
+über Power Automate senden
+
+00:10:30.300 --> 00:10:31.340
+und gleichzeitig eine Nachricht
+
+00:10:31.340 --> 00:10:32.080
+über Azure Service Bus
+
+00:10:32.080 --> 00:10:32.840
+an ein Lagersystem.
+
+00:10:33.900 --> 00:10:34.600
+Jeder Empfänger erhält
+
+00:10:34.600 --> 00:10:35.500
+die benötigten Informationen.
+
+00:10:36.060 --> 00:10:37.920
+Standardmäßig lässt Dynamics 365 zu,
+
+00:10:38.020 --> 00:10:39.000
+dass bis zu 10 Endpunkte
+
+00:10:39.000 --> 00:10:39.940
+dasselbe Geschäftsereignis
+
+00:10:39.940 --> 00:10:41.020
+innerhalb einer juristischen Person
+
+00:10:41.020 --> 00:10:41.420
+abonnieren.
+
+00:10:41.900 --> 00:10:42.900
+Diese Beschränkung hilft Ihnen,
+
+00:10:42.960 --> 00:10:43.580
+die richtigen Personen
+
+00:10:43.580 --> 00:10:44.440
+und Systeme zu verbinden,
+
+00:10:44.520 --> 00:10:45.600
+ohne dass aus einer Geschäftsaktion
+
+00:10:45.600 --> 00:10:46.240
+eine Geschäftsaktion
+
+00:10:46.240 --> 00:10:47.500
+eine konkurrente Flut von Nachrichten wird.
+
+00:10:47.500 --> 00:10:48.340
+Wählen Sie Ihren Endpunkt
+
+00:10:48.340 --> 00:10:48.840
+also basierend
+
+00:10:48.840 --> 00:10:49.560
+auf dem nächsten Schritt ab.
+
+00:10:49.880 --> 00:10:50.960
+Verwenden Sie Power Automate,
+
+00:10:51.020 --> 00:10:51.960
+wenn Personen eine Warnung
+
+00:10:51.960 --> 00:10:53.000
+oder Genehmigung benötigen,
+
+00:10:53.180 --> 00:10:53.740
+Azure Messaging,
+
+00:10:53.880 --> 00:10:54.580
+wenn ein Geschäftssystem
+
+00:10:54.580 --> 00:10:56.040
+eine zuverlässige Verarbeitung benötigt
+
+00:10:56.040 --> 00:10:56.800
+und HTTPS,
+
+00:10:56.900 --> 00:10:57.920
+wenn eine benutzerdefinierte App
+
+00:10:57.920 --> 00:10:58.920
+die Nachricht direkt empfangen muss.
+
+00:10:59.620 --> 00:11:00.740
+Verfolgen wir nun ein Ereignis
+
+00:11:00.740 --> 00:11:01.780
+von einer echten Geschäftsaktion
+
+00:11:01.780 --> 00:11:02.800
+bis hin zu einer automatisierten An.
+
+00:11:03.600 --> 00:11:04.460
+Ein echtes Beispiel
+
+00:11:04.460 --> 00:11:05.660
+von der Bestätigung
+
+00:11:05.660 --> 00:11:06.520
+einer Bestellung zur Aktion.
+
+00:11:07.260 --> 00:11:07.800
+Ich führe Sie durch
+
+00:11:07.800 --> 00:11:08.480
+ein echtes Szenario.
+
+00:11:09.040 --> 00:11:10.100
+Dellen Sie sich vor ein Einkaufsteam
+
+00:11:10.100 --> 00:11:10.660
+schließt die Prüfung
+
+00:11:10.660 --> 00:11:11.280
+einer Bestellung ab.
+
+00:11:11.280 --> 00:11:13.460
+Lieferant, Mengen, Preise, Lieferung
+
+00:11:13.460 --> 00:11:15.280
+Und wenn alles in Ordnung ist,
+
+00:11:15.360 --> 00:11:16.160
+bestätigt jemand dies
+
+00:11:16.160 --> 00:11:18.300
+in Dynamics 365 Finance and Operations.
+
+00:11:18.880 --> 00:11:19.480
+Diese Bestätigung
+
+00:11:19.480 --> 00:11:20.140
+wandelt die Bestellung
+
+00:11:20.140 --> 00:11:20.580
+von einem Entwurf
+
+00:11:20.580 --> 00:11:21.000
+in etwas um,
+
+00:11:21.060 --> 00:11:21.980
+ob das Unternehmen reagieren kann.
+
+00:11:22.760 --> 00:11:24.180
+Jetzt erwartet das Einkaufsteam Waren,
+
+00:11:24.360 --> 00:11:25.460
+das Lager muss Platz einplanen
+
+00:11:25.460 --> 00:11:26.440
+und das Lieferantenportal
+
+00:11:26.440 --> 00:11:27.860
+sollte die neue Bestellung anzeigen.
+
+00:11:28.960 --> 00:11:29.780
+Vor Geschäftsereignissen
+
+00:11:29.780 --> 00:11:30.820
+sah diese Übergabe so aus.
+
+00:11:31.420 --> 00:11:32.860
+Ein Einkäufer bestätigt die Bestellung
+
+00:11:32.860 --> 00:11:34.200
+und sendet dann eine E-Mail an das Lager,
+
+00:11:34.700 --> 00:11:35.400
+wobei er möglicherweise
+
+00:11:35.400 --> 00:11:36.400
+den Lieferanten in Kopie setzt
+
+00:11:36.400 --> 00:11:36.940
+oder es vergisst,
+
+00:11:37.020 --> 00:11:37.660
+weil der Tag zu voll war.
+
+00:11:37.660 --> 00:11:40.200
+Das Lagerteam prüft Dynamics 365 später
+
+00:11:40.200 --> 00:11:41.680
+oder wartet auf einen geplanten Auftrag,
+
+00:11:41.760 --> 00:11:42.600
+um die Bestellung zu finden.
+
+00:11:43.000 --> 00:11:43.880
+An der Bestellung selbst
+
+00:11:43.880 --> 00:11:44.800
+ändert das jedoch nichts.
+
+00:11:45.680 --> 00:11:46.260
+Es verzögert nur,
+
+00:11:46.380 --> 00:11:46.860
+wer davon erfährt.
+
+00:11:48.080 --> 00:11:49.220
+Wenn also ein Geschäftsereignis
+
+00:11:49.220 --> 00:11:50.760
+für die Bestellbestätigung aktiviert ist,
+
+00:11:50.880 --> 00:11:51.900
+bemerkt Dynamics 365
+
+00:11:51.900 --> 00:11:53.520
+die abgeschlossene Bestätigung
+
+00:11:53.520 --> 00:11:54.540
+und erstellt eine Nachricht
+
+00:11:54.540 --> 00:11:55.340
+für die mit diesem Ereignis
+
+00:11:55.340 --> 00:11:56.120
+verbundenen Endpunkte.
+
+00:11:57.240 --> 00:11:57.860
+Hier ist der Clou.
+
+00:11:58.040 --> 00:11:59.100
+Der Käufer wird nicht angehalten,
+
+00:11:59.180 --> 00:12:00.360
+um eine verfasste Notiz zu bitten.
+
+00:12:00.820 --> 00:12:01.880
+Der Käufer bestellt ihn wie gewohnt.
+
+00:12:02.460 --> 00:12:03.900
+Im Hintergrund erstellt Dynamics 365
+
+00:12:03.900 --> 00:12:04.840
+die Ereignisnachricht
+
+00:12:04.840 --> 00:12:05.760
+und sendet sie an die von Ihnen
+
+00:12:05.760 --> 00:12:06.600
+konfigurierten Ziele.
+
+00:12:06.600 --> 00:12:07.720
+Nehmen wir ein Unternehmen
+
+00:12:07.720 --> 00:12:08.500
+namens Northwind Park.
+
+00:12:08.820 --> 00:12:09.780
+Ein Käufer dort bestätigt
+
+00:12:09.780 --> 00:12:10.800
+die Bestellung PO in Sands 365
+
+00:12:10.800 --> 00:12:12.220
+für eine Lieferung von Teilen,
+
+00:12:12.260 --> 00:12:13.300
+die diese Woche benötigt werden.
+
+00:12:13.720 --> 00:12:14.520
+Und genau in diesem Moment
+
+00:12:14.520 --> 00:12:15.320
+sendet das Ereignis
+
+00:12:15.320 --> 00:12:16.200
+bestätigte Bestellung
+
+00:12:16.200 --> 00:12:16.940
+seine Benachrichtigung.
+
+00:12:17.400 --> 00:12:18.260
+Wohin geht diese Benachrichtigung?
+
+00:12:18.640 --> 00:12:20.320
+Ein Ziel könnte Power Automate sein,
+
+00:12:20.560 --> 00:12:22.000
+wo der Flow das Ereignis empfängt,
+
+00:12:22.260 --> 00:12:22.940
+die Details liest
+
+00:12:22.940 --> 00:12:23.740
+und eine Teamwarnung
+
+00:12:23.740 --> 00:12:25.060
+im Lagerkanal veröffentlicht.
+
+00:12:26.100 --> 00:12:27.300
+Bestellung PO in Sands 365
+
+00:12:27.300 --> 00:12:28.500
+wurde bestätigt.
+
+00:12:29.120 --> 00:12:30.240
+Voraussichtliche Lieferung nächste Woche.
+
+00:12:31.320 --> 00:12:32.520
+Diese Nachricht fordert das Lagerteam
+
+00:12:32.520 --> 00:12:33.120
+zum Handeln auf,
+
+00:12:33.200 --> 00:12:34.060
+ohne nach Änderungen suchen
+
+00:12:34.060 --> 00:12:34.960
+oder darauf warten zu müssen,
+
+00:12:34.960 --> 00:12:36.920
+dass sich jemand an eine E-Mail erinnert.
+
+00:12:37.440 --> 00:12:38.460
+Derselbe Flow könnte stattdessen
+
+00:12:38.460 --> 00:12:39.580
+eine Genehmigungsaufgabe starten.
+
+00:12:40.100 --> 00:12:40.660
+Wenn die Bestellung
+
+00:12:40.660 --> 00:12:41.900
+einen internen Ausgabenschwellenwert
+
+00:12:41.900 --> 00:12:42.420
+überschreitet,
+
+00:12:42.680 --> 00:12:43.340
+muss das Finanzteam
+
+00:12:43.340 --> 00:12:44.420
+die Bestätigung möglicherweise
+
+00:12:44.420 --> 00:12:45.600
+vor dem nächsten Schritt überprüfen.
+
+00:12:46.140 --> 00:12:47.020
+Power Automate sendet
+
+00:12:47.020 --> 00:12:48.040
+mithilfe der Ereignisdaten
+
+00:12:48.040 --> 00:12:49.040
+eine Genehmigungsanforderung
+
+00:12:49.040 --> 00:12:49.720
+an die richtige Person.
+
+00:12:49.920 --> 00:12:50.760
+Achten Sie, was hier passiert ist.
+
+00:12:51.140 --> 00:12:52.120
+Dynamics 3 in 65
+
+00:12:52.120 --> 00:12:52.900
+die Bestellung gemeldet.
+
+00:12:53.420 --> 00:12:54.420
+Power Automate hat die folgende
+
+00:12:54.420 --> 00:12:55.300
+menschliche Aktion ausgewählt.
+
+00:12:55.660 --> 00:12:56.800
+Das sind separate Aufträge
+
+00:12:56.800 --> 00:12:58.140
+und wenn sie getrennt ausgeführt werden,
+
+00:12:58.220 --> 00:12:59.360
+ist der Prozess leichter verständlich.
+
+00:12:59.960 --> 00:13:01.300
+Fügen wir nun ein weiteres Ziel hinzu.
+
+00:13:01.300 --> 00:13:02.500
+Northwind verwendet
+
+00:13:02.500 --> 00:13:03.480
+ein Lieferantenportal
+
+00:13:03.480 --> 00:13:04.100
+oder möglicherweise
+
+00:13:04.100 --> 00:13:04.800
+ein Lagersystem,
+
+00:13:04.920 --> 00:13:05.800
+das außerhalb von Dynamics
+
+00:13:05.800 --> 00:13:07.000
+365 ausgeführt wird.
+
+00:13:07.440 --> 00:13:08.480
+Dieses System muss ebenfalls
+
+00:13:08.480 --> 00:13:09.060
+über die Bestellung
+
+00:13:09.060 --> 00:13:10.080
+zahm sich informiert werden,
+
+00:13:10.240 --> 00:13:10.720
+benötigt jedoch
+
+00:13:10.720 --> 00:13:11.460
+keine Teams-Nachricht.
+
+00:13:12.020 --> 00:13:13.100
+Benötigt eine zuverlässige
+
+00:13:13.100 --> 00:13:13.780
+Systemnachricht,
+
+00:13:13.940 --> 00:13:14.960
+die es in seinem eigenen Tempo
+
+00:13:14.960 --> 00:13:15.620
+verarbeiten kann
+
+00:13:15.620 --> 00:13:16.860
+und der Azure Messaging Endpunkt
+
+00:13:16.860 --> 00:13:17.520
+kann dasselbe
+
+00:13:17.520 --> 00:13:19.040
+Bestellbestätigungsereignis empfangen.
+
+00:13:19.940 --> 00:13:20.680
+Das externe System
+
+00:13:20.680 --> 00:13:21.460
+liest also die eingehende
+
+00:13:21.460 --> 00:13:22.040
+Benachrichtigung,
+
+00:13:22.140 --> 00:13:23.300
+findet die Bestellungsham C85
+
+00:13:23.300 --> 00:13:24.060
+und führt seinen eigenen
+
+00:13:24.060 --> 00:13:24.640
+nächsten Schritt aus.
+
+00:13:25.120 --> 00:13:25.940
+Möglicherweise zeigt das
+
+00:13:25.940 --> 00:13:27.420
+Lieferantenportal eine neue Bestellung an
+
+00:13:27.420 --> 00:13:28.180
+oder das Lagersystem
+
+00:13:28.180 --> 00:13:29.320
+erstellt eine Wareneingangsaufgabe.
+
+00:13:29.660 --> 00:13:30.420
+Seine Aktionen hängen
+
+00:13:30.420 --> 00:13:30.880
+von den Regeln
+
+00:13:30.880 --> 00:13:31.720
+in diesem System ab.
+
+00:13:32.480 --> 00:13:32.940
+Hier ist der Clou.
+
+00:13:33.400 --> 00:13:34.060
+Dynamics 365
+
+00:13:34.060 --> 00:13:35.380
+diktiert diese Regeln nicht.
+
+00:13:35.840 --> 00:13:36.320
+Es wird lediglich
+
+00:13:36.320 --> 00:13:37.040
+ein Fakt verkündet.
+
+00:13:37.400 --> 00:13:38.540
+Diese Bestellung wurde bestätigt.
+
+00:13:39.180 --> 00:13:39.820
+Die Nachricht enthält
+
+00:13:39.820 --> 00:13:40.680
+ausreichend Details,
+
+00:13:40.800 --> 00:13:41.740
+damit das Empfang des System
+
+00:13:41.740 --> 00:13:42.620
+den richtigen Datensatz
+
+00:13:42.620 --> 00:13:43.540
+identifizieren und sicher
+
+00:13:43.540 --> 00:13:44.120
+reagieren kann.
+
+00:13:44.580 --> 00:13:45.540
+B. Die Bestellreferenz,
+
+00:13:45.680 --> 00:13:46.380
+die juristische Person,
+
+00:13:46.480 --> 00:13:47.100
+den Ereignistyp,
+
+00:13:47.160 --> 00:13:48.360
+die Uhrzeit und eine Kontrollnummer.
+
+00:13:48.980 --> 00:13:49.460
+Sie enthält nicht
+
+00:13:49.460 --> 00:13:50.580
+den gesamten Einkaufsprozess.
+
+00:13:51.320 --> 00:13:52.360
+Diese Abgrenzung ist wichtig,
+
+00:13:52.480 --> 00:13:53.280
+da ein Geschäftsereignis
+
+00:13:53.280 --> 00:13:54.080
+keine vollständige
+
+00:13:54.080 --> 00:13:54.920
+kopierende Bestellung
+
+00:13:54.920 --> 00:13:55.800
+und kein Befehl ist,
+
+00:13:55.860 --> 00:13:56.360
+der einer anderen App
+
+00:13:56.360 --> 00:13:56.820
+genau mitteilt,
+
+00:13:56.880 --> 00:13:57.480
+was zu tun ist.
+
+00:13:58.240 --> 00:13:59.060
+Wenn das Lagersystem
+
+00:13:59.060 --> 00:14:00.360
+weitere Informationen benötigt,
+
+00:14:00.460 --> 00:14:01.240
+kann es diese Mithilfe
+
+00:14:01.240 --> 00:14:02.040
+der Bestellreferenz
+
+00:14:02.040 --> 00:14:03.020
+über die dafür vorgesehene
+
+00:14:03.020 --> 00:14:03.720
+Verbindung abrufen.
+
+00:14:04.240 --> 00:14:05.000
+Eine kurze Nachricht
+
+00:14:05.000 --> 00:14:06.000
+leitet die Übergabe ein
+
+00:14:06.000 --> 00:14:06.900
+und das empfangende System
+
+00:14:06.900 --> 00:14:07.860
+ist für seine Antwort zuständig.
+
+00:14:08.280 --> 00:14:08.900
+Es kann eine Person
+
+00:14:08.900 --> 00:14:09.440
+benachrichtigen,
+
+00:14:09.540 --> 00:14:10.260
+eine Aufgabe erstellen,
+
+00:14:10.340 --> 00:14:11.280
+weitere Bestellinformationen
+
+00:14:11.280 --> 00:14:11.900
+abrufen oder anhand
+
+00:14:11.900 --> 00:14:12.500
+seiner eigenen Regeln
+
+00:14:12.500 --> 00:14:12.820
+entscheiden,
+
+00:14:12.900 --> 00:14:13.540
+dass das eigene Regeln
+
+00:14:13.540 --> 00:14:13.840
+entscheiden,
+
+00:14:13.920 --> 00:14:14.380
+dass das Ereignis
+
+00:14:14.380 --> 00:14:15.620
+keine weiteren Maßnahmen erfordert.
+
+00:14:15.760 --> 00:14:16.600
+Dies schützt sie auch davor,
+
+00:14:16.700 --> 00:14:17.740
+einen riesigen Prozess zu erstellen,
+
+00:14:17.800 --> 00:14:18.960
+den später niemand mehr erklären kann.
+
+00:14:18.960 --> 00:14:20.300
+Ist also das Gesamtel.
+
+00:14:20.760 --> 00:14:21.600
+Dynamics 365
+
+00:14:21.600 --> 00:14:23.040
+ist für die Geschäftsaktion zuständig.
+
+00:14:23.240 --> 00:14:23.600
+Geschäftsereignisse
+
+00:14:23.600 --> 00:14:24.860
+teilen die abgeschlossene Tatsache mit
+
+00:14:24.860 --> 00:14:25.560
+und Power Automate,
+
+00:14:25.900 --> 00:14:26.420
+Azure Services
+
+00:14:26.420 --> 00:14:27.340
+und benutzerdefinierte Apps
+
+00:14:27.340 --> 00:14:28.300
+erledigen ihre eigene Arbeit,
+
+00:14:28.360 --> 00:14:29.260
+nachdem sie diese erhalten haben.
+
+00:14:29.860 --> 00:14:30.320
+Für die Personen,
+
+00:14:30.400 --> 00:14:30.900
+die die Arbeit erledigen,
+
+00:14:30.960 --> 00:14:31.520
+fühlt sich das einfach an.
+
+00:14:31.820 --> 00:14:32.540
+Der Einkäufer muss nicht
+
+00:14:32.540 --> 00:14:33.380
+dem Lager hinterherrennen,
+
+00:14:33.440 --> 00:14:34.320
+das Lager muss nicht wiederholt
+
+00:14:34.320 --> 00:14:35.520
+nach bestätigten Bestellungen suchen
+
+00:14:35.520 --> 00:14:36.560
+und das Lieferantenportal
+
+00:14:36.560 --> 00:14:37.200
+wartet nicht darauf,
+
+00:14:37.280 --> 00:14:38.220
+dass jemand Details kopiert.
+
+00:14:39.320 --> 00:14:40.480
+Jedes Team erfährt von der Änderung,
+
+00:14:40.560 --> 00:14:41.200
+bevor sie stattfindet,
+
+00:14:41.240 --> 00:14:42.060
+sodass die nächste Übergabe
+
+00:14:42.060 --> 00:14:42.820
+früher beginnen kann.
+
+00:14:43.400 --> 00:14:44.000
+Das klingt einfach,
+
+00:14:44.000 --> 00:14:45.040
+aber ein paar Einschränkungen
+
+00:14:45.040 --> 00:14:45.880
+und Sicherheitsüberprüfungen
+
+00:14:45.880 --> 00:14:46.140
+bestimmen,
+
+00:14:46.220 --> 00:14:47.060
+wie es in der Praxis funktioniert.
+
+00:14:48.260 --> 00:14:48.620
+Aktivierung,
+
+00:14:48.780 --> 00:14:50.140
+Zuverlässigkeit und Sicherheit
+
+00:14:50.140 --> 00:14:51.580
+Beginnen Sie im Katalog
+
+00:14:51.580 --> 00:14:52.360
+für Geschäftsereignisse,
+
+00:14:52.660 --> 00:14:53.440
+aber behandeln Sie ihn nicht
+
+00:14:53.440 --> 00:14:54.140
+wie eine Liste von Dingen,
+
+00:14:54.200 --> 00:14:54.880
+die aktiviert werden müssen.
+
+00:14:55.280 --> 00:14:56.100
+Wählen Sie Ereignisse aus,
+
+00:14:56.120 --> 00:14:56.540
+die mit einem echten
+
+00:14:56.540 --> 00:14:57.440
+Geschäftsbedarf verknüpft sind.
+
+00:14:57.840 --> 00:14:58.900
+Jemand sollte in der Lage sein,
+
+00:14:58.960 --> 00:15:00.460
+den Bedarf in einem klaren Satz zu erläutern.
+
+00:15:01.900 --> 00:15:03.340
+Wenn sich ein Produktionsauftrag ändert,
+
+00:15:03.420 --> 00:15:04.800
+muss die Produktion darüber informiert werden.
+
+00:15:05.520 --> 00:15:06.540
+Oder wenn ein Bericht fertig ist,
+
+00:15:06.600 --> 00:15:07.540
+benötigen Manager eine Nachricht.
+
+00:15:08.160 --> 00:15:08.940
+Wenn niemand die Person
+
+00:15:08.940 --> 00:15:09.760
+oder das System nennen kann,
+
+00:15:09.800 --> 00:15:10.760
+die auf das Ereignis reagieren,
+
+00:15:10.760 --> 00:15:11.680
+lassen Sie es inaktiv.
+
+00:15:12.420 --> 00:15:13.440
+Das erspart Ihnen Aufsehen,
+
+00:15:13.520 --> 00:15:14.540
+das später ignoriert wird.
+
+00:15:15.800 --> 00:15:16.240
+Sie müssen auch
+
+00:15:16.240 --> 00:15:17.360
+an juristische Personen denken,
+
+00:15:17.500 --> 00:15:18.220
+separate Unternehmen
+
+00:15:18.220 --> 00:15:20.340
+innerhalb Ihrer Dynamics 365 Umgebung.
+
+00:15:20.960 --> 00:15:21.680
+Separate Unternehmen
+
+00:15:21.680 --> 00:15:22.820
+folgen oft unterschiedlichen Regeln.
+
+00:15:23.400 --> 00:15:24.540
+Möglicherweise sendet ein Unternehmen
+
+00:15:24.540 --> 00:15:25.360
+bestätigte Bestellungen
+
+00:15:25.360 --> 00:15:26.300
+an ein externes Lager,
+
+00:15:26.640 --> 00:15:27.760
+während ein anderes den Wareneingang
+
+00:15:27.760 --> 00:15:29.480
+innerhalb von Dynamics 365 abwickelt.
+
+00:15:29.820 --> 00:15:30.820
+Aktivieren Sie das Ereignis
+
+00:15:30.820 --> 00:15:31.560
+nur für das Unternehmen,
+
+00:15:31.640 --> 00:15:32.860
+das die externe Übergabe benötigt.
+
+00:15:33.180 --> 00:15:34.080
+Wenn jedoch jedes Unternehmen
+
+00:15:34.080 --> 00:15:35.120
+demselben Prozess folgt,
+
+00:15:35.220 --> 00:15:35.880
+können Sie ihn für alle
+
+00:15:35.880 --> 00:15:37.100
+juristischen Personen aktivieren.
+
+00:15:37.980 --> 00:15:39.340
+Richten Sie als nächstes das Ziel ein
+
+00:15:39.340 --> 00:15:40.480
+und testen Sie dann die Nachricht,
+
+00:15:40.480 --> 00:15:41.120
+bevor Sie einen großen
+
+00:15:41.120 --> 00:15:42.280
+Empfangsprozess darum aufbauen.
+
+00:15:42.700 --> 00:15:43.360
+Das klingt einfach,
+
+00:15:43.460 --> 00:15:44.620
+vermeidet aber ein häufiges Problem.
+
+00:15:45.200 --> 00:15:46.720
+Aktivieren Sie ein geeignetes Ereignis,
+
+00:15:46.800 --> 00:15:47.720
+verbinden Sie den Endpunkt,
+
+00:15:47.820 --> 00:15:49.200
+lösen Sie eine echte Testaktion aus
+
+00:15:49.200 --> 00:15:49.900
+und überprüfen Sie,
+
+00:15:49.980 --> 00:15:50.700
+ob der empfangende Dienst
+
+00:15:50.700 --> 00:15:51.660
+die erwartete Nachricht erhält.
+
+00:15:52.080 --> 00:15:52.960
+Erst danach sollten Sie
+
+00:15:52.960 --> 00:15:53.840
+die Power Automate-Schritte,
+
+00:15:53.980 --> 00:15:55.240
+die benutzerdefinierte App-Logik
+
+00:15:55.240 --> 00:15:56.080
+oder den umfassenderen
+
+00:15:56.080 --> 00:15:56.940
+Azure-Prozess erstellen,
+
+00:15:57.000 --> 00:15:57.520
+der darauf reagiert.
+
+00:15:57.780 --> 00:15:58.700
+Sie möchten einen Nachweis,
+
+00:15:58.760 --> 00:15:59.560
+dass die Nachricht eintrifft,
+
+00:15:59.620 --> 00:16:00.500
+bevor Sie sich darauf verlassen.
+
+00:16:00.980 --> 00:16:02.140
+Sprechen wir nun über Zuverlässigkeit.
+
+00:16:02.820 --> 00:16:04.060
+Nachrichten können aus ganz normalen Gründen
+
+00:16:04.060 --> 00:16:04.480
+fehlschlagen.
+
+00:16:05.360 --> 00:16:06.220
+Ein Dienst geht offline,
+
+00:16:06.220 --> 00:16:07.080
+wenn eine Berechtigung fehlt
+
+00:16:07.080 --> 00:16:07.920
+oder eine empfangende App
+
+00:16:07.920 --> 00:16:08.560
+lehnt die Nachricht ab,
+
+00:16:08.600 --> 00:16:09.500
+weil sie ein Feld nicht versteht.
+
+00:16:10.000 --> 00:16:11.480
+Dynamics 365 gibt nicht
+
+00:16:11.480 --> 00:16:13.020
+nach einem fehlgeschlagenen Versuch auf.
+
+00:16:13.540 --> 00:16:14.680
+Standardmäßig versucht es dreimal,
+
+00:16:14.760 --> 00:16:15.880
+das Geschäftsereignis zu senden,
+
+00:16:15.980 --> 00:16:16.780
+wobei zwischen den Versuchen
+
+00:16:16.780 --> 00:16:17.660
+eine Sekunde gewartet wird.
+
+00:16:18.000 --> 00:16:19.080
+Dadurch kann ein Netzwerkproblem
+
+00:16:19.080 --> 00:16:19.580
+behoben werden,
+
+00:16:19.680 --> 00:16:20.660
+ohne dass jemand eingreift.
+
+00:16:21.880 --> 00:16:22.980
+Dennoch lösen Wiederholungsversuche
+
+00:16:22.980 --> 00:16:23.580
+nicht jedes Problem.
+
+00:16:24.100 --> 00:16:25.320
+Bei einem HTTPS-Endpunkt
+
+00:16:25.320 --> 00:16:26.540
+wartet Dynamics 365
+
+00:16:26.540 --> 00:16:28.280
+standardmäßig bis zu 10 Sekunden,
+
+00:16:28.360 --> 00:16:29.580
+bis der empfangende Dienst antwortet.
+
+00:16:30.280 --> 00:16:32.000
+Wenn Ihre benutzerdefinierte App länger braucht,
+
+00:16:32.120 --> 00:16:33.080
+kann es zu einem Timeout kommen,
+
+00:16:33.080 --> 00:16:33.960
+selbst wenn sie Ihre Arbeit
+
+00:16:33.960 --> 00:16:34.640
+schließlich beendet.
+
+00:16:34.640 --> 00:16:36.200
+Die empfangende App muss die Nachricht
+
+00:16:36.200 --> 00:16:36.940
+schnell akzeptieren
+
+00:16:36.940 --> 00:16:37.880
+und danach der Antwort
+
+00:16:37.880 --> 00:16:39.080
+längere Aufgaben bearbeiten.
+
+00:16:39.640 --> 00:16:41.160
+Wenn alle Zustellungsversuche fehlschlagen,
+
+00:16:41.260 --> 00:16:41.880
+behandeln Sie den Fehler
+
+00:16:41.880 --> 00:16:42.560
+als nützliche Information.
+
+00:16:43.140 --> 00:16:44.340
+Überprüfen Sie die Verfügbarkeit
+
+00:16:44.340 --> 00:16:44.980
+des Endpunkts,
+
+00:16:45.380 --> 00:16:45.960
+die Berechtigungen
+
+00:16:45.960 --> 00:16:46.640
+und ob der Empfänger
+
+00:16:46.640 --> 00:16:47.820
+das Nachrichtenformat akzeptiert
+
+00:16:47.820 --> 00:16:48.360
+und die Nutzlast
+
+00:16:48.360 --> 00:16:49.280
+ordnungsgemäß verarbeitet.
+
+00:16:49.860 --> 00:16:51.380
+Dynamics 365 speichert
+
+00:16:51.380 --> 00:16:52.220
+Fehler in seinen Protokollen
+
+00:16:52.220 --> 00:16:52.940
+und Sie können einen Fehler
+
+00:16:52.940 --> 00:16:53.460
+erneut senden,
+
+00:16:53.520 --> 00:16:54.380
+nachdem Sie das Problem behoben.
+
+00:16:54.880 --> 00:16:56.300
+Sie können die Nutzlast auch herunterladen,
+
+00:16:56.360 --> 00:16:56.860
+um zu überprüfen,
+
+00:16:56.920 --> 00:16:57.980
+was der Empfänger hätte erhalten sollen.
+
+00:16:58.280 --> 00:16:59.140
+Dadurch wird die Fehlerbehebung
+
+00:16:59.140 --> 00:17:00.220
+deutlich weniger zu einem Rätsel rein.
+
+00:17:00.220 --> 00:17:01.360
+Die Sicherheit erfordert
+
+00:17:01.360 --> 00:17:02.500
+denselben durchdachten Ansatz.
+
+00:17:03.620 --> 00:17:04.520
+Rollenbasierte Sicherheit
+
+00:17:04.520 --> 00:17:05.360
+für Geschäftsereignisse
+
+00:17:05.360 --> 00:17:05.960
+ist vorhanden,
+
+00:17:06.060 --> 00:17:07.400
+aber standardmäßig deaktiviert.
+
+00:17:08.220 --> 00:17:09.240
+Sobald Sie sie aktivieren
+
+00:17:09.240 --> 00:17:09.880
+und konfigurieren,
+
+00:17:09.980 --> 00:17:10.360
+steuern Sie,
+
+00:17:10.440 --> 00:17:11.360
+wie den Katalog anzeigen,
+
+00:17:11.600 --> 00:17:12.400
+Ereignisse aktivieren,
+
+00:17:12.640 --> 00:17:13.340
+Endpunkte verwalten
+
+00:17:13.340 --> 00:17:13.960
+und über Dienste
+
+00:17:13.960 --> 00:17:15.360
+wie Power Automate abonnieren kann.
+
+00:17:16.320 --> 00:17:16.660
+Nicht jeder,
+
+00:17:16.760 --> 00:17:18.220
+der Dynamics 365 verwendet,
+
+00:17:18.260 --> 00:17:18.980
+sollte kontrollieren können,
+
+00:17:19.040 --> 00:17:19.880
+wohin Geschäftsnachrichten gelangen.
+
+00:17:20.580 --> 00:17:21.800
+Halten Sie bei benutzerdefinierten
+
+00:17:21.800 --> 00:17:22.820
+HTTPS-Verbindungen
+
+00:17:22.820 --> 00:17:24.060
+vertrauliche Details geheim,
+
+00:17:24.180 --> 00:17:25.020
+da Ihr Schlüssel Tresor
+
+00:17:25.020 --> 00:17:25.940
+die von diesen Verbindungen
+
+00:17:25.940 --> 00:17:27.280
+verwendeten Geheimnisse speichert.
+
+00:17:28.000 --> 00:17:28.600
+Endpunktinformationen
+
+00:17:28.600 --> 00:17:30.160
+liegen also nicht in einem Einrichtungsfeld offen,
+
+00:17:30.220 --> 00:17:30.840
+wo Sie nicht hingehören.
+
+00:17:31.680 --> 00:17:32.700
+Bevor Sie irgendetwas erstellen,
+
+00:17:32.920 --> 00:17:34.220
+sollten Sie einige häufige Fehler vermeiden.
+
+00:17:35.220 --> 00:17:35.880
+Auswahl des richtigen
+
+00:17:35.880 --> 00:17:36.580
+ersten Anwendungsfalls.
+
+00:17:37.080 --> 00:17:37.760
+Folgendes ist wichtig.
+
+00:17:37.880 --> 00:17:39.200
+Sie sollten mit einer Übergabe beginnen,
+
+00:17:39.300 --> 00:17:40.360
+die jemand jeden Tag wiederholt.
+
+00:17:40.720 --> 00:17:41.480
+Stellen Sie sich Folgendes vor,
+
+00:17:41.540 --> 00:17:42.320
+jemand bestätigt die Arbeit
+
+00:17:42.320 --> 00:17:43.320
+und sendet dann ein E-Mail an uns.
+
+00:17:43.600 --> 00:17:44.600
+Ein Manager prüft ständig,
+
+00:17:44.680 --> 00:17:45.460
+ob ein Bericht fertig ist.
+
+00:17:45.780 --> 00:17:46.640
+Ein Produktionsupdate
+
+00:17:46.640 --> 00:17:48.020
+befindet sich in Dynamics 365,
+
+00:17:48.520 --> 00:17:49.060
+während die Mitarbeiter
+
+00:17:49.060 --> 00:17:49.960
+in der Werkstatt darauf warten,
+
+00:17:50.040 --> 00:17:50.680
+dass ihn jemand mithat.
+
+00:17:51.080 --> 00:17:51.880
+Genau in dieser Lücke
+
+00:17:51.880 --> 00:17:52.680
+zwischen den Systemen
+
+00:17:52.680 --> 00:17:53.660
+können Sie die Verzögerung sehen.
+
+00:17:54.080 --> 00:17:55.380
+Hier sind Geschäftsereignisse sinnvoll.
+
+00:17:56.180 --> 00:17:56.500
+Genehmigungsbenachrichtigungen
+
+00:17:56.500 --> 00:17:57.200
+funktionieren ebenso
+
+00:17:57.200 --> 00:17:57.960
+wie Produktionsupdates
+
+00:17:57.960 --> 00:17:58.800
+und benachrichtige Berichte.
+
+00:17:59.320 --> 00:18:00.340
+Sogar eine Bonitätsprüfung,
+
+00:18:00.380 --> 00:18:01.260
+die ein Eingreifen erfordert,
+
+00:18:01.340 --> 00:18:01.960
+passt in dieses Muster.
+
+00:18:02.320 --> 00:18:03.060
+Aber seien Sie vorsichtig.
+
+00:18:03.640 --> 00:18:04.600
+Aktivieren Sie kein Ereignis,
+
+00:18:04.660 --> 00:18:05.780
+nur weil es im Katalog aufgeführt ist.
+
+00:18:06.240 --> 00:18:06.720
+Beginnen Sie mit dem,
+
+00:18:06.800 --> 00:18:07.720
+was die Mitarbeiter tatsächlich lieben.
+
+00:18:08.120 --> 00:18:09.340
+Stellen Sie sich drei einfache Fragen.
+
+00:18:09.720 --> 00:18:10.260
+Was ist passiert?
+
+00:18:10.640 --> 00:18:11.260
+Muss Bescheid wissen?
+
+00:18:11.660 --> 00:18:12.520
+Welche Maßnahme sollte er voll?
+
+00:18:12.920 --> 00:18:14.040
+Wenn diese Antworten klar sind,
+
+00:18:14.140 --> 00:18:15.060
+beginnen Sie mit Power Automate.
+
+00:18:15.360 --> 00:18:16.440
+Erstellen Sie einen kleinen Proof of Concept.
+
+00:18:16.840 --> 00:18:17.620
+B. Eine Teams-Warnung
+
+00:18:17.620 --> 00:18:18.600
+oder Genehmigungsanforderung
+
+00:18:18.600 --> 00:18:19.580
+und lassen Sie dann die Mitarbeiter,
+
+00:18:19.660 --> 00:18:20.460
+die mit der Arbeit befasst sind,
+
+00:18:20.460 --> 00:18:21.940
+testen, ob dies tatsächlich hilfreich ist.
+
+00:18:22.020 --> 00:18:23.160
+Halten Sie die erste Version eng gefasst.
+
+00:18:23.540 --> 00:18:24.780
+Sobald ein anderes Geschäftssystem
+
+00:18:24.780 --> 00:18:25.640
+die Nachricht abrufen
+
+00:18:25.640 --> 00:18:26.760
+und selbstständig reagieren muss,
+
+00:18:26.820 --> 00:18:28.140
+ist Azure Messaging die bessere Wahl.
+
+00:18:28.600 --> 00:18:29.360
+Dieser Schritt ist sinnvoll,
+
+00:18:29.440 --> 00:18:30.240
+wenn ein Lagersystem,
+
+00:18:30.760 --> 00:18:31.660
+ein Lieferantenportal
+
+00:18:31.660 --> 00:18:32.400
+oder eine interne App
+
+00:18:32.400 --> 00:18:33.580
+eine zuverlässige Übergabe
+
+00:18:33.580 --> 00:18:35.000
+ohne dazwischen geschaltete Person benötigt.
+
+00:18:36.180 --> 00:18:37.580
+Geschäftsereignisse ersetzen nicht Ihre Prozesse.
+
+00:18:37.920 --> 00:18:38.940
+Sie lassen diese Prozesse sprechen.
+
+00:18:39.740 --> 00:18:40.640
+Fazit einer Nachricht,
+
+00:18:40.720 --> 00:18:41.460
+eine zeitnahe Antwort.
+
+00:18:42.400 --> 00:18:43.080
+Geschäftsereignisse wandeln
+
+00:18:43.080 --> 00:18:44.620
+in abgeschlossene Dynamics 305,
+
+00:18:44.720 --> 00:18:46.100
+an 60 Aktionen in Nachrichten um,
+
+00:18:46.180 --> 00:18:46.740
+auf die Mitarbeiter
+
+00:18:46.740 --> 00:18:48.260
+und verbundene Systeme reagieren können,
+
+00:18:48.260 --> 00:18:49.080
+sobald Sie die Arbeit ändern.
+
+00:18:49.440 --> 00:18:50.620
+Das ist der Wissenshäbchen für heute.
+
+00:18:51.240 --> 00:18:52.020
+Abonnieren Sie den Podcast
+
+00:18:52.020 --> 00:18:53.120
+auf Ihrer bevorzugten Plattform,
+
+00:18:53.240 --> 00:18:54.260
+um weitere Informationen von mir,
+
+00:18:54.360 --> 00:18:56.140
+Neuco Peters, unter M360 zu erhalten.
+
+00:18:56.760 --> 00:18:57.940
+Teilen Sie diese Folge mit allen,
+
+00:18:58.040 --> 00:18:59.340
+die Dynamics 365
+
+00:18:59.340 --> 00:19:00.500
+mit Power Automate, Azure
+
+00:19:00.500 --> 00:19:02.120
+oder einem externen Geschäftssystem verbinden.
+
+00:19:02.520 --> 00:19:03.080
+Bis zum nächsten Mal.

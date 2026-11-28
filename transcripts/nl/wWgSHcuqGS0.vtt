@@ -1,0 +1,5599 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.320
+Het overgrote deel van de Microsoft 365 kosten is geen prijsprobleem, maar een toewijzingsprobleem.
+
+00:00:04.440 --> 00:00:05.860
+Je betaalt niet te veel per licentie.
+
+00:00:06.020 --> 00:00:09.040
+Je betaalt voor licenties die niemand hoort te hebben en waar niemand toezicht op houdt.
+
+00:00:09.160 --> 00:00:13.100
+Wil je dat de modellen achter de Microsoft 365 kosten per systeem worden uitgelegd?
+
+00:00:13.280 --> 00:00:15.460
+Abonneer je dan. Dat is wat deze show doet.
+
+00:00:15.680 --> 00:00:21.140
+Vandaag een volledig auditraamwerk, toewijzingshygiëne, groepsgebaseerde licenties, E3 versus E5,
+
+00:00:21.320 --> 00:00:25.000
+het ons, co-pilot, het terugvorderen van ongebruikte licenties en verlengingstactieken.
+
+00:00:25.160 --> 00:00:27.460
+Maar voor de audit, eerst een woord van onze sponsor.
+
+00:00:28.300 --> 00:00:28.740
+Sponsorsegment.
+
+00:00:28.740 --> 00:00:32.000
+Deze aflevering wordt ondersteund door Stella Migrator for Exchange.
+
+00:00:32.200 --> 00:00:34.140
+Dit is waarom dat belangrijk is voor dit onderwerp.
+
+00:00:34.200 --> 00:00:37.300
+Een migratie is niet alleen een technisch project, het is een licentiegebeurtenis.
+
+00:00:37.540 --> 00:00:39.620
+Denk na over wat er gebeurt tijdens een tenantverhuizing.
+
+00:00:39.800 --> 00:00:42.940
+Je zet een nieuwe tenant op en koopt daar abonnementen terwijl de oude nog doorlopen.
+
+00:00:43.220 --> 00:00:45.200
+Gebruikers krijgen op beide plekken een licentie.
+
+00:00:45.400 --> 00:00:47.920
+Postvakken bestaan enkele weken, soms maanden, dubbel.
+
+00:00:48.100 --> 00:00:51.840
+Het project eindigt, het feestje wordt gevierd en het oude abonnement wordt gewoon verlengd.
+
+00:00:51.980 --> 00:00:54.380
+Niemand zegt het op, omdat niemand verantwoordelijk is voor die stap.
+
+00:00:54.380 --> 00:00:57.140
+Zo ontstaat licentieverspilling niet tijdens de dagelijkse werkzaamheden,
+
+00:00:57.140 --> 00:01:00.060
+maar tijdens de grote veranderingen wanneer iedereen gefocust is op dataverplaatsing
+
+00:01:00.060 --> 00:01:01.220
+en niet op het tellen van licenties.
+
+00:01:01.440 --> 00:01:04.240
+Stella Migrator for Exchange is gebouwd voor dat soort verhuizingen.
+
+00:01:04.400 --> 00:01:07.560
+Exchange migraties, verplaatsingen van postvakken, tenant-na-tenantwerk
+
+00:01:07.560 --> 00:01:09.280
+met een helder overzicht van wat waarheen gaat.
+
+00:01:09.480 --> 00:01:13.660
+Die helderheid zorgt ervoor dat je de oude omgeving op tijd afsluit in plaats van voor twee te betalen.
+
+00:01:13.820 --> 00:01:17.140
+Als je een migratieplantoffer middenin zit, vind je de link in de beschrijving.
+
+00:01:17.360 --> 00:01:18.080
+Bekijk het is.
+
+00:01:18.320 --> 00:01:20.380
+Nu, het model dat de verspilling veroorzaakt.
+
+00:01:20.580 --> 00:01:22.620
+Deel 1, het model achter de te hoge kosten.
+
+00:01:22.620 --> 00:01:26.420
+Zo gaan de meeste organisaties om met Microsoft 365 licenties.
+
+00:01:26.600 --> 00:01:28.680
+Eén keer per jaar koopt iemand een aantal licenties.
+
+00:01:28.880 --> 00:01:32.700
+Dat aantal komt voort uit een prognose, een budgetpost of het aantal van vorig jaar plus 10%.
+
+00:01:32.700 --> 00:01:34.400
+Daarna worden de licenties toegewezen.
+
+00:01:34.580 --> 00:01:37.220
+Iemand komt in dienst, een manager vraagt erom en IT wijst een licentie toe.
+
+00:01:37.360 --> 00:01:39.600
+Iemand heeft Visio nodig, dus IT voegt Visio toe.
+
+00:01:39.740 --> 00:01:41.940
+Iemand wisselt van afdeling en krijgt een andere licentie.
+
+00:01:42.080 --> 00:01:42.860
+En dan niets meer.
+
+00:01:43.100 --> 00:01:45.800
+Niemand kijkt er meer naar tot aan de verlenging, als er al iemand kijkt.
+
+00:01:46.000 --> 00:01:49.540
+Dat is het oude model, licenties als een eenmalige aankoop die je daarna vergeet.
+
+00:01:49.540 --> 00:01:53.060
+Maar in werkelijkheid is licentiebeheer geen eenmalige actie, het is een continu systeem.
+
+00:01:53.220 --> 00:01:54.700
+Denk aan de drie klokken die erin tikken.
+
+00:01:54.880 --> 00:01:55.960
+Toewijzing gebeurt continu.
+
+00:01:56.160 --> 00:01:58.260
+Elke dag wordt er iemand toegevoegd, verplaatst of verwijderd.
+
+00:01:58.600 --> 00:01:59.700
+Facturati gebeurt ook continu.
+
+00:01:59.920 --> 00:02:01.580
+Elke toewijzing vertaalt zich direct in kosten.
+
+00:02:01.800 --> 00:02:02.380
+En governance?
+
+00:02:02.640 --> 00:02:04.280
+Governance gebeurt eens per jaar, als het al gebeurt.
+
+00:02:04.440 --> 00:02:05.720
+Twee klokken die elke dag doortikken.
+
+00:02:05.860 --> 00:02:07.280
+Eén klok die één keer per jaar verzet wordt.
+
+00:02:07.460 --> 00:02:08.180
+Dat is de kloof.
+
+00:02:08.300 --> 00:02:09.680
+En daarbinnen drijven de uitgaven weg.
+
+00:02:09.820 --> 00:02:11.480
+Dit is hoe dat wegdrijven er in de praktijk uitziet.
+
+00:02:11.600 --> 00:02:13.180
+Een externe medewerker vertrekt in maart.
+
+00:02:13.180 --> 00:02:16.320
+Het account blijft actief omdat het verzoek tot deactivering de juiste persoon niet bereikte.
+
+00:02:16.500 --> 00:02:17.920
+De licentie blijft eraan gekoppeld.
+
+00:02:18.060 --> 00:02:19.860
+Het wordt in april, mei en juni gefactureerd.
+
+00:02:20.020 --> 00:02:22.340
+Niemand merkt het, want één licentie is slechts een afrondingsverschil.
+
+00:02:22.480 --> 00:02:23.740
+Maar het is nooit één licentie.
+
+00:02:23.900 --> 00:02:27.340
+Het is die externe medewerker, de persoon die van rol veranderde en beide licenties behield.
+
+00:02:27.520 --> 00:02:29.940
+En het projectteam dat Premium at ons kreeg voor een pilot van zes weken.
+
+00:02:30.100 --> 00:02:31.660
+En de accounts die niemand kan verklaren.
+
+00:02:31.860 --> 00:02:34.000
+Elk op zich klein, samen een aanzienlijke kostenpost.
+
+00:02:34.160 --> 00:02:37.400
+Wat er meestal gebeurt, is dat het wegdrijven nooit als een enkele gebeurtenis zichtbaar wordt.
+
+00:02:37.400 --> 00:02:40.340
+Er is geen waarschuwing, geen factuur waarop verspilling staat.
+
+00:02:40.500 --> 00:02:46.140
+Er is alleen een totaalbedrag dat elk kwartaal iets oploopt en een verlenging waarbij het bedrag hoger is dan vorig jaar omdat we zijn gegroeid.
+
+00:02:46.340 --> 00:02:48.540
+Bent u gegroeid of heeft u gewoon niets verwijderd?
+
+00:02:48.680 --> 00:02:50.460
+Dus hoe ziet die verspilling er eigenlijk uit?
+
+00:02:51.100 --> 00:02:55.820
+Industrieanalyse schatten dat ongebruikte of onderbenutte softwarelicenties tussen de 10 en 30% van de uitgaven beslaan.
+
+00:02:55.980 --> 00:02:57.860
+Ik zie dat als een richtlijn, niet als een belofte.
+
+00:02:58.060 --> 00:02:59.580
+Uw tenant kan aan de lage kant zitten.
+
+00:02:59.740 --> 00:03:00.860
+Het kan er ook boven zitten.
+
+00:03:01.080 --> 00:03:02.600
+Het punt is niet het exacte cijfer.
+
+00:03:02.780 --> 00:03:06.400
+Het punt is dat niemand het meet- en leidinggevende hetzelfde zien door een structurele reden.
+
+00:03:06.400 --> 00:03:07.580
+Zij zien de factuur.
+
+00:03:07.760 --> 00:03:09.560
+De factuur toont producten en aantallen.
+
+00:03:09.740 --> 00:03:13.720
+Het laat niet zien wie elke licentie heeft, of ze dit jaar zijn ingelogd of dat ze nog in dienst zijn.
+
+00:03:14.060 --> 00:03:17.860
+Financiën ziet een getal, IT ziet toewijzingen, geen van beide ziet de kloof ertussen.
+
+00:03:18.020 --> 00:03:20.200
+En het beheerscentrum dicht die kloof standaard niet.
+
+00:03:20.380 --> 00:03:23.420
+Het vertelt u hoeveel licenties u heeft gekocht en hoeveel er zijn toegewezen.
+
+00:03:23.600 --> 00:03:26.360
+Het vertelt u niet hoeveel van die toegewezen plekken daadwerkelijk iets doen.
+
+00:03:26.580 --> 00:03:28.200
+De oorzaak is dus geen slordigheid.
+
+00:03:28.420 --> 00:03:29.240
+Niemand is hier lui.
+
+00:03:29.440 --> 00:03:33.800
+Het is het model erachter, een model gebouwd rondom, inkopen, terwijl de kosten zitten in het toewijzen.
+
+00:03:33.800 --> 00:03:39.700
+Om dat op te lossen, moet u eerst begrijpen hoe Microsoft een licentie echt structureert, want dat is niet wat de meeste mensen denken.
+
+00:03:39.920 --> 00:03:44.000
+Deel 2. Hoe Microsoft 365 licenties daadwerkelijk zijn gestructureerd.
+
+00:03:44.180 --> 00:03:48.760
+De meeste mensen zien een Microsoft 365 licentie als één ding, een badge, een stoel.
+
+00:03:48.980 --> 00:03:49.840
+Joe heeft E3.
+
+00:03:50.280 --> 00:03:51.520
+Dat is het mentale beeld.
+
+00:03:51.720 --> 00:03:53.720
+En het is onjuist op een manier die geld kost.
+
+00:03:53.960 --> 00:03:56.060
+Wat er werkelijk onder zit, zijn vier lagen.
+
+00:03:56.260 --> 00:03:59.120
+Product SKU, serviceplannen, add-ons en toewijzing.
+
+00:03:59.340 --> 00:04:00.500
+Begin bij de bovenkant.
+
+00:04:00.680 --> 00:04:02.340
+De product SKU is wat u koopt.
+
+00:04:02.340 --> 00:04:07.900
+Microsoft 365 E3, Microsoft 365 E5, Business Premium, F3.
+
+00:04:08.080 --> 00:04:10.020
+Het heeft een naam, een prijs en een aantal.
+
+00:04:10.280 --> 00:04:11.820
+Dit is de laag die financiën ziet.
+
+00:04:12.060 --> 00:04:13.320
+Laten we een niveau dieper gaan.
+
+00:04:13.520 --> 00:04:15.660
+In elke SKU zit een lijst met serviceplannen.
+
+00:04:15.860 --> 00:04:20.080
+Exchange Online, SharePoint, Teams, Intune, Entra ID, Defender componenten.
+
+00:04:20.200 --> 00:04:21.040
+Teamtallen, stuks.
+
+00:04:21.300 --> 00:04:24.640
+Elk een afzonderlijke schakelaar die voor een bepaalde gebruiker aan of uit kan staan.
+
+00:04:24.840 --> 00:04:26.220
+Een licentie is dus geen seed.
+
+00:04:26.220 --> 00:04:31.600
+Het is een bundel serviceplannen en je betaalt voor de hele bundel of de gebruiker nu alles gebruikt of alleen e-mail opent.
+
+00:04:31.600 --> 00:04:34.220
+Dat is het structurele feit dat de meeste budgetten negeren.
+
+00:04:34.340 --> 00:04:39.100
+De prijs is gekoppeld aan de bundel, het gebruik aan de plannen en niemand brengt die twee met elkaar in overeenstemming.
+
+00:04:39.340 --> 00:04:40.780
+Derde laag, add-ons.
+
+00:04:41.140 --> 00:04:44.560
+Dit zijn afzonderlijke SKU's die bovenop een basislicentie zitten.
+
+00:04:44.760 --> 00:04:49.220
+Teams Phone, Audio Conferencing, Power B Pro, Visio, Project.
+
+00:04:49.460 --> 00:04:53.260
+Elk heeft zijn eigen prijs, eigen aantal en eigen regel op de factuur.
+
+00:04:53.260 --> 00:04:55.180
+En de vierde laag is toewijzing.
+
+00:04:55.420 --> 00:05:00.320
+Dit is waar een SKU of add-on wordt gekoppeld aan een persoon, direct per gebruiker of via een groep.
+
+00:05:00.440 --> 00:05:02.320
+Dit is het addertje onder het gras bij toewijzing.
+
+00:05:02.520 --> 00:05:04.520
+Het is de enige laag die elke dag verandert.
+
+00:05:04.720 --> 00:05:09.440
+De SKU verandert niet, de serviceplannen veranderen niet, maar toewijzing wel en daarom lekt daar het geld weg.
+
+00:05:09.620 --> 00:05:12.320
+Nu een woord over hoe de facturering werkt, want die is niet uniform.
+
+00:05:12.660 --> 00:05:14.700
+Het meeste waar we het over hebben is per gebruiker.
+
+00:05:14.900 --> 00:05:17.820
+Eén benoemde gebruiker, één licentie, één tarief, maar niet alles.
+
+00:05:18.100 --> 00:05:19.620
+Sommige zaken zijn op tenantniveau.
+
+00:05:19.780 --> 00:05:22.760
+Je betaalt eenmalig voor de tenant of voor een functionaliteit die daarvoor geldt.
+
+00:05:22.760 --> 00:05:27.980
+Sommige zaken zijn per apparaat, zoals bepaalde kiosken of gedeelde apparaten, en andere zijn gebaseerd op verbruik.
+
+00:05:28.060 --> 00:05:30.220
+Je betaalt voor wat er draait, niet voor wie de seat bezit.
+
+00:05:30.440 --> 00:05:36.060
+Denk aan de gemeten facturering rondom activiteit van co-pilot agents of pay-as-you-go-services gekoppeld aan een Azure-abonnement.
+
+00:05:36.300 --> 00:05:40.220
+Vier factureringsvormen, soms binnen dezelfde tenant, soms op dezelfde factuur.
+
+00:05:40.400 --> 00:05:45.180
+En die mix is waar onze intuïtie tekort schiet, omdat de meeste van ons softwareposten ergens anders hebben geleerd.
+
+00:05:45.340 --> 00:05:46.220
+Tools per seat.
+
+00:05:46.440 --> 00:05:48.200
+Je koopt 100 seats van een projectapp.
+
+00:05:48.300 --> 00:05:49.640
+100 mensen kunnen het gebruiken.
+
+00:05:49.640 --> 00:05:52.800
+Als iemand vertrekt, maak je een seat vrij en geef je die aan de volgende persoon.
+
+00:05:52.960 --> 00:05:54.800
+1 seat, 1 persoon, 1 prijs.
+
+00:05:55.020 --> 00:05:56.260
+Dat model is eenvoudig.
+
+00:05:56.400 --> 00:06:00.700
+Het is ook het model dat de meeste beheerders meenemen naar Microsoft 365, maar hier valt het om drie redenen.
+
+00:06:00.820 --> 00:06:03.380
+Ten eerste is de seat geen enkelvoudig ding, het is een bundel.
+
+00:06:03.540 --> 00:06:07.360
+Dus twee gebruikers met dezelfde seat kunnen heel verschillende mogelijkheden en kosten hebben.
+
+00:06:07.540 --> 00:06:08.780
+Ten tweede, seat stacking.
+
+00:06:09.040 --> 00:06:11.620
+Een gebruiker kan een basis SKU plus 3 addons hebben.
+
+00:06:11.820 --> 00:06:16.120
+Elk onderdeel bouwt voort op het andere, dus de werkelijke kosten van 1 persoon zijn geen getal, maar een som van delen.
+
+00:06:16.220 --> 00:06:18.700
+Ten derde volgen sommige functies de licentie helemaal niet.
+
+00:06:18.700 --> 00:06:20.420
+Ze volgen de tenant of het gebruik.
+
+00:06:20.560 --> 00:06:22.000
+Tel de hele dag door je licenties.
+
+00:06:22.180 --> 00:06:26.200
+Je hebt nog steeds niet geteld waar je voor betaalt, dus de gewoonte om per licentie te kijken geeft een vals gevoel van controle.
+
+00:06:26.400 --> 00:06:29.440
+Je denkt dat je één variabele beheert, maar eigenlijk beheer je meerdere lagen.
+
+00:06:29.620 --> 00:06:35.540
+En daarom verschijnt het probleem eerst in de toewijzingslaag, want dat is de enige laag waar een persoon, een bundel en een factuur samenkomen.
+
+00:06:35.720 --> 00:06:41.320
+Eén klik in het beheercentrum koppelt een hele set serviceplannen aan één persoon en die klik wordt zelden ongedaan gemaakt.
+
+00:06:41.520 --> 00:06:46.220
+Dit betekent dat je eerst precies moet weten wat je bezit en wie het gebruikt voordat je iets anders kunt optimaliseren.
+
+00:06:46.220 --> 00:06:47.560
+Daar gaan we nu naartoe.
+
+00:06:47.920 --> 00:06:48.560
+Seksie 3.
+
+00:06:49.220 --> 00:06:50.980
+Toewijzingshygiëne begint bij weten wat je bezit.
+
+00:06:51.100 --> 00:06:53.740
+Begin met een vraag die de meeste beheerders niet snel kunnen beantwoorden.
+
+00:06:53.900 --> 00:06:55.640
+Hoeveel licenties heb je op dit moment eigenlijk?
+
+00:06:55.840 --> 00:06:57.060
+Niet hoeveel hebben we er gekocht.
+
+00:06:57.220 --> 00:06:59.040
+Hoeveel zijn er vandaag toegewezen aan echte mensen?
+
+00:06:59.240 --> 00:07:02.060
+Dat zijn verschillende getallen en Microsoft houdt er drie afzonderlijk bij.
+
+00:07:02.220 --> 00:07:03.620
+Ten eerste, abonnementsunits.
+
+00:07:03.860 --> 00:07:04.820
+Dat is wat je hebt gekocht.
+
+00:07:04.980 --> 00:07:05.820
+Het totaal op het contract.
+
+00:07:05.960 --> 00:07:07.400
+Het aantal dat door financiën is goedgekeurd.
+
+00:07:07.560 --> 00:07:09.020
+Ten tweede, toegewezen units.
+
+00:07:09.260 --> 00:07:12.860
+Dat is hoeveel van die licenties zijn gekoppeld aan een gebruiker via directe toewijzing of via een groep.
+
+00:07:12.860 --> 00:07:14.440
+Ten derde, beschikbare units.
+
+00:07:14.700 --> 00:07:15.480
+Dat is het verschil.
+
+00:07:15.780 --> 00:07:17.500
+Licenties waar je voor betaalt die niemand gebruikt.
+
+00:07:17.780 --> 00:07:19.320
+Abonnement min toegewezen is beschikbaar.
+
+00:07:19.540 --> 00:07:21.740
+Eenvoudige wiskunde, maar het verbergt een valstrik in beide richtingen.
+
+00:07:21.880 --> 00:07:24.340
+Een hoog aantal beschikbare licenties betekent dat je meer hebt gekocht dan je gebruikt.
+
+00:07:24.500 --> 00:07:26.760
+Dat zijn ongebruikte kosten die elke maand in rekening worden gebracht.
+
+00:07:26.940 --> 00:07:28.840
+Een nul als beschikbaar aantal voelt verantwoord.
+
+00:07:28.980 --> 00:07:33.160
+Het oogt als een strakke, efficiënte tenant, maar het vertelt je alleen dat elke licentie aan iemand is gekoppeld.
+
+00:07:33.300 --> 00:07:37.480
+Het vertelt je niet of die persoon hier nog werkt, nog inlogt, of nog steeds nodig heeft wat er in de bundel zit.
+
+00:07:37.480 --> 00:07:40.180
+Dus volledig toegewezen is niet hetzelfde als goed benut.
+
+00:07:40.340 --> 00:07:41.180
+Onthoud dat goed.
+
+00:07:41.440 --> 00:07:42.420
+Waar kijk je dit nu in?
+
+00:07:42.580 --> 00:07:46.840
+De meeste mensen beginnen in het Microsoft 365 beheerscentrum, bij facturering en dan licenties.
+
+00:07:47.020 --> 00:07:48.440
+Je krijgt een overzichtelijke tabel.
+
+00:07:48.740 --> 00:07:51.280
+Productnaam, beschikbare licenties, toegewezen licenties.
+
+00:07:51.460 --> 00:07:53.440
+Het is een prima startpunt voor een snelle blik.
+
+00:07:53.640 --> 00:07:55.120
+Dan is er het entra beheerscentrum.
+
+00:07:55.360 --> 00:07:58.700
+Onder facturering en licenties zie je dezelfde producten vanuit het identiteitsperspectief.
+
+00:07:58.860 --> 00:08:01.600
+En hier kun je inzoomen op een product om te zien welke gebruikers en groepen het hebben.
+
+00:08:01.760 --> 00:08:05.480
+Dat is de weergave die laat zien of de toewijzing direct is of geërfd van een groep.
+
+00:08:05.480 --> 00:08:07.140
+En dan is er nog Microsoft Graph.
+
+00:08:07.800 --> 00:08:12.980
+Licentiegegevens worden getoond via het subscribe-at-sk-us-eindpunt en bij elke gebruiker kun je de toegewezen licenties uitlezen.
+
+00:08:13.180 --> 00:08:15.800
+Dat is de laag waar je stopt met klikken en begint met het ophalen van data.
+
+00:08:16.000 --> 00:08:19.260
+Je kunt tellen, filteren en opslaan en PowerShell draait bovenop Graph.
+
+00:08:19.420 --> 00:08:25.200
+Met de Microsoft Graph PowerShell module kun je elke gebruiker, licentie en serviceplan in een paar regels in één tabel krijgen.
+
+00:08:25.420 --> 00:08:27.640
+Die tabel is het dichtst bij de waarheid dat je zult komen.
+
+00:08:27.880 --> 00:08:28.840
+Waarom de extra tools?
+
+00:08:29.060 --> 00:08:31.120
+Omdat het overzicht in het beheercentrum details verbergt.
+
+00:08:31.240 --> 00:08:32.840
+Kijk eens naar wat die eerste tabel niet laat zien.
+
+00:08:33.000 --> 00:08:34.400
+Hij toont een product en twee getallen.
+
+00:08:34.400 --> 00:08:37.280
+Hij laat niet zien welke serviceplannen voor elke gebruiker zijn uitgeschakeld.
+
+00:08:37.360 --> 00:08:40.280
+Hij laat niet zien of een licentie uit een groep kwam of handmatig is aangeklikt.
+
+00:08:40.420 --> 00:08:42.660
+Hij laat niet zien wanneer het account voor het laatst is ingelogd.
+
+00:08:42.780 --> 00:08:45.120
+Hij laat niet eens zien of de gebruiker überhaupt is ingeschakeld.
+
+00:08:45.400 --> 00:08:46.660
+Bovendien groepeert het op product.
+
+00:08:46.880 --> 00:08:51.720
+Dus als iemand E3 heeft plus een Visio-addon en een Teams-telefoonlicentie, staan die op drie verschillende rijen.
+
+00:08:51.900 --> 00:08:53.500
+Niets koppelt ze terug aan één persoon.
+
+00:08:53.720 --> 00:08:55.700
+Het overzicht beantwoordt de vraag hoeveel.
+
+00:08:55.880 --> 00:08:58.160
+Het kan niet beantwoorden wie, waarom en waarvoor.
+
+00:08:58.160 --> 00:09:03.560
+En verspilling schuilt in het wie, waarom en waarvoor.
+
+00:09:04.100 --> 00:09:06.580
+Dus voordat je iets verandert, leg een nulmeting vast.
+
+00:09:06.800 --> 00:09:10.800
+Maak een momentopname die je over 30, 90 en 365 dagen kunt vergelijken.
+
+00:09:11.060 --> 00:09:13.140
+Zonder dat kun je geen enkele bespaarde euro aantonen.
+
+00:09:13.380 --> 00:09:14.880
+Dit is het minimum dat ik zou vastleggen.
+
+00:09:15.320 --> 00:09:18.100
+Geabonneerde, toegewezen en beschikbare eenheden voor elke SKU.
+
+00:09:18.240 --> 00:09:22.800
+Dat is je inventaris, de maandelijkse kosten per SKU gebaseerd op wat je echt betaalt, niet de katalogesprijs.
+
+00:09:22.980 --> 00:09:24.340
+Dat zet eenheden om in geld.
+
+00:09:24.560 --> 00:09:28.860
+Het aantal gebruikers met elke SKU uitgesplitst naar directe toewijzing versus groepstoewijzing.
+
+00:09:29.060 --> 00:09:31.640
+Dat vertelt je hoeveel van je tenant op handmatige klikken draait.
+
+00:09:31.820 --> 00:09:34.440
+Het aantal uitgeschakelde accounts dat nog steeds een licentie heeft.
+
+00:09:34.660 --> 00:09:35.920
+Dat is je eerste duidelijke lek.
+
+00:09:36.100 --> 00:09:39.160
+Het aantal gelicentieerde gebruikers dat de afgelopen 90 dagen niet is ingelogd.
+
+00:09:39.280 --> 00:09:41.580
+We verfijnen dat later wel, maar pak nu eerst een ruw getal.
+
+00:09:41.580 --> 00:09:45.340
+Het aantal gebruikers met meer dan één basis SKU en het aantal met add-ons.
+
+00:09:45.520 --> 00:09:48.360
+En het aantal licentiefouten in je groepen, als je die gebruikt.
+
+00:09:48.720 --> 00:09:51.920
+Exporteer alles, voorzie het van een datum en sla het op buiten iemands laptop.
+
+00:09:52.200 --> 00:09:53.140
+Nu, een waarschuwing.
+
+00:09:53.480 --> 00:09:54.320
+Repareer nog niets.
+
+00:09:54.500 --> 00:09:55.560
+De aandrang is groot.
+
+00:09:55.760 --> 00:09:59.000
+Je ziet een uitgeschakeld account met E5 en wilt die direct intrekken.
+
+00:09:59.160 --> 00:09:59.960
+Weer sta die drang.
+
+00:10:00.140 --> 00:10:02.880
+Een nulmeting na opschoning is een meting die niets bewijst.
+
+00:10:03.080 --> 00:10:06.900
+Maak eerst de momentopname, want zodra de getallen op één pagina staan, gebeurt er iets.
+
+00:10:07.120 --> 00:10:09.700
+De licenties zien er dan niet meer uit als een stapel toewijzingen.
+
+00:10:09.700 --> 00:10:13.640
+Ze beginnen zichzelf in patronen te sorteren, telkens weer dezelfde paar soorten verspilling.
+
+00:10:13.880 --> 00:10:14.660
+En het zijn er vijf.
+
+00:10:14.840 --> 00:10:17.340
+Sexy 4, de vijf patronen van licentieverspilling.
+
+00:10:17.540 --> 00:10:20.320
+Open je baseline export en sorteer deze op een paar verschillende manieren.
+
+00:10:20.580 --> 00:10:24.480
+Steeds weer verschijnen dezelfde vijf vormen, verschillende huurders, verschillende sectoren, dezelfde vormen.
+
+00:10:24.580 --> 00:10:27.120
+Ik zal ze benoemen, want een benoemd probleem is makkelijker op te sporen.
+
+00:10:27.320 --> 00:10:28.440
+De eerste is de wees.
+
+00:10:28.640 --> 00:10:31.160
+Een wees is een licentie die toebehoort aan iemand die weg is.
+
+00:10:31.340 --> 00:10:35.320
+De werknemer vertrok, het project van de aannemer eindigde, de stagiair ging terug naar school,
+
+00:10:35.320 --> 00:10:38.840
+de persoon is uit het pand, maar het account is nog actief en de licentie is nog steeds gekoppeld.
+
+00:10:39.000 --> 00:10:41.460
+Dit is de meest eenvoudige vorm van verspilling om te begrijpen.
+
+00:10:41.600 --> 00:10:44.400
+Je betaalt voor een plek waar niemand zit, en dit is het makkelijkst te vinden.
+
+00:10:44.640 --> 00:10:46.560
+Filter op uitgeschakelde accounts die nog een licentie hebben,
+
+00:10:46.720 --> 00:10:49.200
+filter op accounts die gekoppeld zijn aan mensen die maanden geleden zijn vertrokken.
+
+00:10:49.320 --> 00:10:50.680
+Een query en je hebt een lijst.
+
+00:10:50.820 --> 00:10:52.360
+Het tweede patroon is de geest.
+
+00:10:52.520 --> 00:10:53.480
+Een geest is anders.
+
+00:10:53.700 --> 00:10:55.100
+Het account is ingeschakeld.
+
+00:10:55.260 --> 00:10:57.780
+De persoon werkt hier misschien nog wel, maar het account locht nooit in.
+
+00:10:57.940 --> 00:10:59.940
+Misschien werd het aangemaakt voor iemand die nooit is begonnen.
+
+00:11:00.180 --> 00:11:02.420
+Misschien was het opgezet voor een project dat werd geannuleerd.
+
+00:11:02.420 --> 00:11:06.540
+Misschien gebruikt de persoon een andere account en is dit een restant van een naamswijziging of fusie.
+
+00:11:06.700 --> 00:11:08.200
+Geesten zijn lastiger dan wezen.
+
+00:11:08.440 --> 00:11:09.660
+Niets markeert ze als dood.
+
+00:11:09.800 --> 00:11:13.160
+Op papier lijken ze levend en de licentie lijkt gerechtvaardigd omdat het account actief is.
+
+00:11:13.280 --> 00:11:15.340
+Dus je kunt een geest niet vangen door de status te controleren,
+
+00:11:15.420 --> 00:11:16.720
+je vangt hem door gedrag te controleren.
+
+00:11:16.820 --> 00:11:19.220
+En gedrag is waar het ingewikkeld wordt, waar we zo op terugkomen.
+
+00:11:19.380 --> 00:11:20.740
+Ten derde, het duplicaat.
+
+00:11:20.740 --> 00:11:23.400
+Een duplicaat is een gebruiker met overlappende licenties,
+
+00:11:23.600 --> 00:11:26.960
+twee basis SKU's bij één persoon, E3 en E5 tegelijk,
+
+00:11:27.180 --> 00:11:28.860
+business premium plus een enterprise plan,
+
+00:11:28.980 --> 00:11:30.940
+een add-on die al is inbegrepen in de bundel eronder.
+
+00:11:30.940 --> 00:11:33.220
+Hoe gebeurt dit? Meestal door verandering.
+
+00:11:33.420 --> 00:11:36.360
+Iemand krijgt een nieuwe licentie voor een nieuwe rol en de oude blijft staan.
+
+00:11:36.540 --> 00:11:39.400
+Iemand krijgt een proefversie die bovenop wat ze al hadden wordt geactiveerd.
+
+00:11:39.540 --> 00:11:42.340
+Iemand voert een migratie uit en beide omgevingen wijzen iets toe.
+
+00:11:42.480 --> 00:11:44.020
+De serviceplannen overlappen elkaar.
+
+00:11:44.440 --> 00:11:47.740
+Microsoft regelt dat vaak door de hoogste te laten winnen of door een conflict te markeren.
+
+00:11:47.920 --> 00:11:49.660
+Maar de facturering geeft niets om de overlapping.
+
+00:11:49.940 --> 00:11:51.340
+Beide SKU's worden gefactureerd.
+
+00:11:51.460 --> 00:11:53.800
+Je betaalt twee keer voor functionaliteit die maar één keer wordt geleverd.
+
+00:11:53.900 --> 00:11:55.440
+Het vierde patroon is overinkoop.
+
+00:11:55.640 --> 00:11:58.540
+Dit gaat niet over een gebruiker, het gaat over de hoeveelheid die je hebt gekocht.
+
+00:11:58.540 --> 00:12:02.300
+Iemand voorspelde groei, een aannameplan, een overname, een grote uitrol.
+
+00:12:02.460 --> 00:12:05.300
+De plekken werden gekocht om hierop aan te sluiten, daarna vertraagde de werving.
+
+00:12:05.520 --> 00:12:06.740
+De overname bleek kleiner.
+
+00:12:06.980 --> 00:12:08.300
+De uitrol krompt tot een pilot.
+
+00:12:08.520 --> 00:12:10.080
+De licenties bleven in het contract staan.
+
+00:12:10.260 --> 00:12:12.300
+Je ziet het in je basislijn als een groot beschikbaar aantal.
+
+00:12:12.540 --> 00:12:14.320
+Betaal de eenheden die aan niemand zijn gekoppeld.
+
+00:12:14.520 --> 00:12:16.640
+Dit is geen hygiëneprobleem op gebruikersniveau.
+
+00:12:16.800 --> 00:12:19.640
+Het is een besluit dat maanden eerder is genomen en nooit meer is herzien.
+
+00:12:19.820 --> 00:12:21.940
+En het vijfde patroon is over licentiering.
+
+00:12:22.120 --> 00:12:25.340
+Hier is de licentie echt, de persoon is echt en de persoon is actief.
+
+00:12:25.340 --> 00:12:27.260
+Maar de licentie is groter dan de functie.
+
+00:12:27.400 --> 00:12:30.420
+Een premium SKU voor iemand die alleen e-mail en een browser nodig heeft.
+
+00:12:30.600 --> 00:12:35.000
+E5 voor iemand die nooit een beveiligingstool, compliance functie of analyse app gebruikt.
+
+00:12:35.160 --> 00:12:38.500
+Een volledig desktop pakket voor iemand die vanaf een gedeelde terminal werkt.
+
+00:12:38.740 --> 00:12:40.580
+Niets is kapot, niets is inactief.
+
+00:12:40.760 --> 00:12:44.460
+De persoon heeft simpelweg meer dan nodig en elke maand betaal je het verschil.
+
+00:12:44.680 --> 00:12:47.880
+Over licentiering is het lastigst te zien omdat het nooit op verspilling lijkt.
+
+00:12:48.040 --> 00:12:49.580
+Het ziet eruit als standaardisatie.
+
+00:12:49.800 --> 00:12:50.840
+Iedereen krijgt E5.
+
+00:12:51.020 --> 00:12:51.960
+Het is eenvoudiger.
+
+00:12:52.340 --> 00:12:53.160
+Eenvoudiger, ja.
+
+00:12:53.480 --> 00:12:54.280
+Goedkoper, nee.
+
+00:12:54.500 --> 00:12:55.440
+Dat is dus de lijst.
+
+00:12:55.600 --> 00:12:58.480
+Wezen, spoken, duplicaten, over inkoop, over licentiering.
+
+00:12:58.640 --> 00:13:00.400
+Let op hoe ze zijn gerangschikt op moeilijkheidsgraad.
+
+00:13:00.560 --> 00:13:02.200
+Wezen zijn mechanisch, een statuscontrole.
+
+00:13:02.420 --> 00:13:03.800
+Spoken vereisen gedragsgegevens.
+
+00:13:04.100 --> 00:13:05.600
+Duplicaten vereisen een kruiscontrole.
+
+00:13:05.800 --> 00:13:07.780
+Over inkoop vereist een gesprek met financiën.
+
+00:13:07.900 --> 00:13:10.880
+Over licentiering vereist een gesprek over wat mensen de hele dag echt doen.
+
+00:13:11.120 --> 00:13:12.420
+Begin bij het makkelijke einde.
+
+00:13:12.660 --> 00:13:17.200
+Het mechanische deel betaalt de moeite voor alles wat volgt en het leert je waar je proces gebrekkig is.
+
+00:13:17.200 --> 00:13:19.580
+En de wezen komen bijna altijd uit één bron.
+
+00:13:19.580 --> 00:13:22.980
+Het moment dat iemand vertrekt en niemand verantwoordelijk is voor de vervolgstap.
+
+00:13:23.200 --> 00:13:23.900
+Sectie 5.
+
+00:13:24.100 --> 00:13:26.140
+Nieuwe medewerkers, verplaatsingen, vertrekkers.
+
+00:13:26.340 --> 00:13:27.740
+Verspilling komt niet voort uit de tenant.
+
+00:13:27.980 --> 00:13:29.040
+Het komt voort uit mensen.
+
+00:13:29.300 --> 00:13:32.040
+Elke licentie heeft een levensloop die een persoon volgt door drie momenten.
+
+00:13:32.200 --> 00:13:33.920
+Ze komen, ze verplaatsen, ze vertrekken.
+
+00:13:34.100 --> 00:13:36.140
+Nieuwe medewerkers, verplaatsingen, vertrekkers.
+
+00:13:36.320 --> 00:13:40.100
+De meeste beheerders behandelen dit als drie aparte tickets, maar in werkelijkheid is het één levenscyclus.
+
+00:13:40.280 --> 00:13:42.560
+En die levenscyclus is waar bijna al het geld weglekt.
+
+00:13:42.760 --> 00:13:45.220
+Begin bij de nieuwe medewerker, want dat is het deel dat werkt.
+
+00:13:45.220 --> 00:13:48.600
+Iemand wordt aangenomen, een manager dient een verzoek in, IT wijst een licentie toe.
+
+00:13:48.740 --> 00:13:51.620
+Er is een duidelijke trigger, een duidelijke eigenaar en een duidelijk resultaat.
+
+00:13:51.780 --> 00:13:55.000
+Niemand vergeet een nieuwe medewerker te licentiëren, want die klaagt binnen een uur.
+
+00:13:55.160 --> 00:13:56.500
+Dat is het patroon om op te merken.
+
+00:13:56.700 --> 00:13:59.060
+De stap voor nieuwe medewerkers werkt omdat iemand erop wacht.
+
+00:13:59.200 --> 00:14:00.340
+Kijk nu naar de verrekker.
+
+00:14:00.540 --> 00:14:03.000
+De werknemer neemt ontslag, ouwer verwerkt het vertrek.
+
+00:14:03.180 --> 00:14:04.340
+De laatste dag breekt aan.
+
+00:14:04.560 --> 00:14:09.800
+Ergens in die keten hoort een ticket bij IT terecht te komen met het verzoek het account uit te schakelen en de licentie te verwijderen.
+
+00:14:10.000 --> 00:14:11.860
+Soms gebeurt dat, soms komt het te laat aan.
+
+00:14:11.860 --> 00:14:19.060
+Soms komt het voor dat het account is uitgeschakeld, maar de licentie ongemoeid blijft omdat de checklist zegt, schakel account uit en niet, verwijder licentie.
+
+00:14:19.220 --> 00:14:20.940
+En daar zit het structurele probleem.
+
+00:14:21.140 --> 00:14:22.020
+Niemand wacht erop.
+
+00:14:22.200 --> 00:14:25.000
+Niemand klaagt als een licentie op een vertrokken gebruiker blijft staan.
+
+00:14:25.240 --> 00:14:27.260
+Geen alarm gaat af, geen manager merkt het op.
+
+00:14:27.420 --> 00:14:32.780
+De kosten belanden een maand later op het budget van een ander team als één regel op een factuur die niemand op individueel niveau controleert.
+
+00:14:32.940 --> 00:14:35.860
+Dus de licentie blijft staan omdat niemand verantwoordelijk is voor de verwijdering.
+
+00:14:36.060 --> 00:14:37.380
+Niet omdat mensen slordig zijn.
+
+00:14:37.560 --> 00:14:40.560
+Ouwer regelt het vertrek, IT het account, finance de factuur.
+
+00:14:40.560 --> 00:14:44.280
+Ieder van hen behandelt één onderdeel en de licentie blijft in het gat tussen die drie.
+
+00:14:44.440 --> 00:14:49.220
+Wat er meestal gebeurt, is dat de afboording in alle haast rond de laatste dag wordt afgehandeld door wie er maar tijd heeft.
+
+00:14:49.400 --> 00:14:51.360
+Het account wordt uitgeschakeld voor de beveiliging.
+
+00:14:51.600 --> 00:14:52.760
+Dat onderdeel voelt urgent.
+
+00:14:52.960 --> 00:14:55.340
+Het licentiedeel voelt als administratie en administratie kan wachten.
+
+00:14:55.560 --> 00:14:56.680
+Dan is er nog een complicatie.
+
+00:14:56.940 --> 00:14:58.420
+Soms wordt de licentie bewust behouden.
+
+00:14:58.600 --> 00:15:01.060
+Een manager vraagt om de mailbox 90 dagen te bewaren.
+
+00:15:01.200 --> 00:15:05.560
+Iemand heeft toegang nodig tot de bestanden van de vertrokken gebruiker, dus blijft de licentie een tijdje staan.
+
+00:15:05.560 --> 00:15:10.600
+En een tijdje wordt een jaar, omdat de tijdelijke uitzondering geen einddatum had en niemand verantwoordelijk was voor het einde.
+
+00:15:10.800 --> 00:15:13.220
+Nu het derde moment, dat stiller is en meer kost.
+
+00:15:13.440 --> 00:15:18.820
+De verschuiver, een persoon verandert van rol, van marketing naar sales, sales naar finance, finance naar een leidinggevend team.
+
+00:15:19.000 --> 00:15:22.700
+Elke nieuwe rol brengt nieuwe behoeften met zich mee, dus elke rol brengt een nieuwe licentie of add-on.
+
+00:15:22.880 --> 00:15:24.320
+De nieuwe licentie wordt toegevoegd.
+
+00:15:24.440 --> 00:15:26.920
+Dat is weer de logica van een nieuwe medewerker, waarbij iemand erop wacht.
+
+00:15:27.080 --> 00:15:28.300
+Maar de oude verdwijnt nooit.
+
+00:15:28.580 --> 00:15:31.560
+Niemand vraagt om verwijdering omdat de persoon niet vraagt om iets in te leveren.
+
+00:15:31.700 --> 00:15:33.640
+De manager van het oude team denkt er niet aan.
+
+00:15:33.640 --> 00:15:36.460
+De manager van het nieuwe team vroeg alleen om wat er ontbrak.
+
+00:15:36.600 --> 00:15:39.900
+En IT doet precies wat gevraagd wordt, ze voegen toe zonder af te trekken.
+
+00:15:40.060 --> 00:15:43.120
+Dus de persoon eindigt met de som van elke rol die ze ooit hebben gehad.
+
+00:15:43.280 --> 00:15:47.020
+De visio van het project van drie jaar geleden, de power be uit de analistenfase,
+
+00:15:47.340 --> 00:15:51.800
+de teamtelefoon van een bureau waar ze niet meer zitten, geteld over een paar honderd verschuivers in een paar jaar tijd.
+
+00:15:52.020 --> 00:15:55.340
+Dat is je duplicatiepatroon, opgebouwd via één redelijk verzoek per keer.
+
+00:15:55.560 --> 00:15:56.800
+Dus wat is de echte oplossing?
+
+00:15:57.060 --> 00:16:01.960
+Geen betere herinnering, geen e-mail naar managers met de vraag om elk kwartaal de licenties van hun team te controleren.
+
+00:16:01.960 --> 00:16:06.140
+Herinneringen hangen af van of iemand het onthoudt, en het hele probleem is juist dat niemand eigenaar is van die stap.
+
+00:16:06.260 --> 00:16:09.220
+De oplossing is om de oude gebeurtenis te koppelen aan de licentie gebeurtenis.
+
+00:16:09.440 --> 00:16:11.260
+Denk na over waar de bron van waarheid al ligt.
+
+00:16:11.420 --> 00:16:14.000
+Ouer weet wie er kwam, wie er veranderde van rol en wie er vertrok.
+
+00:16:14.140 --> 00:16:17.100
+Het kent de datum, de afdeling, de functie, de manager.
+
+00:16:17.380 --> 00:16:20.380
+Dat dossier bestaat al omdat de salarisadministratie ervan afhangt.
+
+00:16:20.480 --> 00:16:23.260
+De licentie moet reageren op dat dossier, niet op een ticket.
+
+00:16:23.260 --> 00:16:29.080
+Wanneer het oude systeem iemand als vertrekkend markeert, moet de account status veranderen en de licenties meegaan.
+
+00:16:29.260 --> 00:16:34.720
+Wanneer het dossier een nieuwe afdeling toont, moet het recht die nieuwe afdeling volgen en het oude direct vervallen.
+
+00:16:34.940 --> 00:16:38.320
+Geen ticket, geen herinnering, geen ruimte waar de licentie zich kan verstoppen.
+
+00:16:38.540 --> 00:16:43.540
+Dat is de verschuiving van iemand die er aan moet denken om te verwijderen, naar een systeem dat verwijdert omdat het dossier is gewijzigd.
+
+00:16:43.540 --> 00:16:48.980
+En dat werkt alleen als toewijzing zelf automatisch wordt, wat betekent dat het antwoord geen betere checklist is, maar automatisering.
+
+00:16:49.240 --> 00:16:52.200
+Gedeelde postbussen, service accounts en resource accounts.
+
+00:16:52.500 --> 00:16:54.280
+Niet elke account heeft een licentie nodig.
+
+00:16:54.540 --> 00:16:59.340
+Dat klinkt logisch, maar een deel van de meest onopvallende verspilling in een tenant zit in accounts die nooit personen waren.
+
+00:16:59.580 --> 00:17:00.980
+Begin met gedeelde postbussen.
+
+00:17:01.160 --> 00:17:05.460
+Een gedeelde postbus is de support inbox, het factuuradres, het infoadres dat door vijf mensen wordt bekeken.
+
+00:17:05.700 --> 00:17:08.660
+Deze heeft standaard geen licentie en in de meeste gevallen is die ook niet nodig.
+
+00:17:08.900 --> 00:17:12.500
+Gebruikers krijgen toegang via machtigingen en gebruiken hun eigen licentie om deze te openen.
+
+00:17:12.500 --> 00:17:15.960
+Dus als je een betaalde licentie ziet op een gedeelde postbus, vraag je dan af waarom.
+
+00:17:16.080 --> 00:17:18.220
+Er zijn echter limieten en daar gaan mensen de mist in.
+
+00:17:18.380 --> 00:17:21.560
+Een licentievrije gedeelde postbus is beperkt tot 50 gigabyte.
+
+00:17:21.780 --> 00:17:27.400
+Voorbij die grote is een Exchange Online Plan 2 licentie nodig, of een licentie die dit bevat, om te groeien naar 100 gigabyte.
+
+00:17:27.580 --> 00:17:29.160
+Het archief werkt op dezelfde manier.
+
+00:17:29.380 --> 00:17:32.780
+Als je het online archief voor een gedeelde postbus inschakelt, is er een licentie nodig om het te ondersteunen.
+
+00:17:32.920 --> 00:17:34.900
+Hetzelfde geldt voor een juridische bewaarplicht, litigation hall.
+
+00:17:35.060 --> 00:17:36.500
+Die functies vereisen weer een licentie.
+
+00:17:36.660 --> 00:17:38.680
+De regel is dus niet dat gedeelde postbussen gratis zijn.
+
+00:17:38.680 --> 00:17:41.160
+De regel is dat ze gratis zijn totdat ze een drempel overschrijden.
+
+00:17:41.280 --> 00:17:44.400
+Tot 50 gigabyte, geen archief, geen bewaarplicht, geen licentie.
+
+00:17:44.560 --> 00:17:49.240
+Wat meestal gebeurt is dat iemand de grote waarschuwing ziet, in paniek raakt en een volledig E3 toewijst om het op te lossen.
+
+00:17:49.400 --> 00:17:53.940
+De postbus werkt nu, maar een lichter Exchange Abonnement had hetzelfde gedaan voor een fractie van de prijs.
+
+00:17:54.080 --> 00:17:57.040
+Eén postbus, één bundel serviceplannen die niemand nodig heeft.
+
+00:17:57.420 --> 00:17:59.380
+Controleer je gedeelde postbussen op die grote.
+
+00:17:59.600 --> 00:18:04.580
+Alles wat een licentie heeft en onder de 50 gigabyte is, zonder archief of bewaarplicht, is een kandidaat om te strippen.
+
+00:18:04.760 --> 00:18:06.540
+Nu de tweede groep, serviceaccounts.
+
+00:18:06.540 --> 00:18:08.600
+Dit zijn de accounts die zaken draaiende houden.
+
+00:18:08.720 --> 00:18:14.160
+Een scanner die pdf's mailt, een bedrijfsapplicatie die notificaties verstuurt, een script dat met SharePoint communiceert.
+
+00:18:14.280 --> 00:18:16.480
+Iemand heeft ze jaren geleden gemaakt, meestal gehaast.
+
+00:18:16.680 --> 00:18:18.560
+Vaak met de licentie die op dat moment voor handen was.
+
+00:18:18.740 --> 00:18:21.560
+En wat voor handen was, is vaak E3, soms E5.
+
+00:18:21.800 --> 00:18:23.680
+Denk eens na over wat dat account werkelijk doet.
+
+00:18:23.880 --> 00:18:25.420
+Het verstuurt e-mail via een connector.
+
+00:18:25.700 --> 00:18:27.240
+Misschien leest het een documentbibliotheek.
+
+00:18:27.320 --> 00:18:28.420
+Het heeft geen teams nodig.
+
+00:18:28.660 --> 00:18:30.060
+Het heeft geen desktop apps nodig.
+
+00:18:30.280 --> 00:18:33.220
+Het heeft geen beveiligingssuite nodig voor een postvak dat niemand opent.
+
+00:18:33.220 --> 00:18:38.320
+Toch behoudt het de volledige bundel en dat blijft voor altijd zo, omdat niemand een account durft aan te raken dat ze niet kunnen verklaren.
+
+00:18:38.480 --> 00:18:44.120
+Als er iets stuk gaat, is degene die de licentie verwijderde verantwoordelijk voor de storing, dus de licentie blijft en de kosten blijven ermee verbonden.
+
+00:18:44.320 --> 00:18:48.060
+De eerlijke oplossing is om te achterhalen wat elk serviceaccount echt doet en daarop aan te passen.
+
+00:18:48.240 --> 00:18:51.600
+Sommigen hebben helemaal geen licentie nodig omdat de app een ander authenticatiepad gebruikt.
+
+00:18:51.820 --> 00:18:53.720
+Sommigen hebben alleen een exchange postvak nodig.
+
+00:18:53.960 --> 00:18:57.980
+Zeer weinig hebben een volledige gebruikers-sku nodig en sommigen zouden helemaal geen gebruikersaccounts meer moeten zijn.
+
+00:18:57.980 --> 00:19:00.980
+Het zouden app-registraties moeten zijn die geen licentieplek innemen.
+
+00:19:01.140 --> 00:19:06.240
+Derde groep, resourceaccounts, vergaderruimtes, materiaalpostvakken en de accounts achter Teams Rooms apparaten.
+
+00:19:06.400 --> 00:19:10.960
+Postvakken voor ruimtes en apparatuur hebben helemaal geen licentie nodig omdat het slechts resources zijn die mensen boeken.
+
+00:19:11.140 --> 00:19:15.100
+Maar een Teams Rooms apparaat logt in als een account en dat account heeft het juiste recht nodig.
+
+00:19:15.340 --> 00:19:19.560
+Microsoft verkoopt daarvoor specifieke SKU's, Teams Rooms Basic en Teams Rooms Pro.
+
+00:19:19.820 --> 00:19:25.060
+Deze dekken de vergaderfuncties voor een vast bedrag per apparaat en kosten veel minder dan een gebruikersbundel op het account.
+
+00:19:25.300 --> 00:19:26.760
+Dus hier is de veelgemaakte fout.
+
+00:19:26.760 --> 00:19:30.260
+Een ruimte wordt ingericht met een overgebleven E5 omdat de installateur die toevallig had.
+
+00:19:30.400 --> 00:19:31.240
+De ruimte werkt.
+
+00:19:31.400 --> 00:19:33.080
+De rekening is vijf keer zo hoog als zou moeten.
+
+00:19:33.240 --> 00:19:34.700
+Herhaalt voor elke ruimte in het gebouw.
+
+00:19:34.760 --> 00:19:38.040
+Tel je ruimtes en vergelijk de licentie van elk exemplaar met een specifieke SKU.
+
+00:19:38.240 --> 00:19:39.980
+Dat is een korte lijst met een duidelijk antwoord.
+
+00:19:40.140 --> 00:19:42.240
+Maar dit alles behandelt accounts nog steeds als objecten.
+
+00:19:42.360 --> 00:19:43.520
+Wie heeft wat en welk type zijn ze?
+
+00:19:43.660 --> 00:19:45.180
+De moeilijkere vraag is gedrag.
+
+00:19:45.400 --> 00:19:49.120
+Welke van deze accounts en welke van je medewerkers gebruiken daadwerkelijk waarvoor betaald wordt?
+
+00:19:49.320 --> 00:19:52.740
+Dan sectie 7 inactieve gebruikers vinden zonder dingen kapot te maken.
+
+00:19:53.060 --> 00:19:54.640
+Inactief klinkt als een simpel woord.
+
+00:19:54.640 --> 00:19:58.220
+Dat is het niet, want er zijn twee manieren om het te meten en die geven verschillende antwoorden.
+
+00:19:58.400 --> 00:19:59.820
+De ene is aanmeldactiviteit.
+
+00:20:00.060 --> 00:20:01.520
+De andere is workloadactiviteit.
+
+00:20:02.280 --> 00:20:03.800
+Aanmeldactiviteit stelt een beperkte vraag.
+
+00:20:04.020 --> 00:20:05.880
+Heeft dit account ergens op geauthenticeerd?
+
+00:20:06.060 --> 00:20:11.180
+Die data staat in Entra ID en het accountrecord bevat een tijdstempel van de laatste aanmelding die je via Graph kunt ophalen.
+
+00:20:11.920 --> 00:20:13.320
+Workloadactiviteit stelt een andere vraag.
+
+00:20:13.540 --> 00:20:16.820
+Heeft deze persoon exchange SharePoint Teams of OneDrive daadwerkelijk gebruikt?
+
+00:20:16.980 --> 00:20:20.120
+Dat haal je uit de gebruiksrapporten in het beheercentrum die vertellen wat ze deden.
+
+00:20:20.180 --> 00:20:21.280
+Niet alleen of ze aanwezig waren.
+
+00:20:21.480 --> 00:20:22.580
+Waarom is dat verschil belangrijk?
+
+00:20:22.580 --> 00:20:24.200
+Omdat een aanmelding leeg kan zijn.
+
+00:20:24.380 --> 00:20:27.060
+Een telefoon die op de achtergrond e-mail synchroniseert, meldt zich elke dag aan.
+
+00:20:27.200 --> 00:20:29.480
+De persoon erachter heeft misschien al een jaar geen bericht gelezen.
+
+00:20:29.660 --> 00:20:31.100
+En het omgekeerde gebeurt ook.
+
+00:20:31.240 --> 00:20:35.860
+Iemand kan echt werk verzetten in een gedeeld kanaal via een andere weg zonder dat jouw controle dit opmerkt.
+
+00:20:36.000 --> 00:20:39.920
+Je hebt dus zowel aanmeldingen nodig om kandidaten te vinden, als workload om ze te bevestigen.
+
+00:20:40.120 --> 00:20:43.700
+Nu een niveau dieper wat betreft aanmeldingen, Entra splitst deze in twee soorten.
+
+00:20:43.860 --> 00:20:48.600
+Een interactieve aanmelding is een mens die een wachtwoord typt, een verzoek goedkeurt of een toets indrukt.
+
+00:20:48.600 --> 00:20:54.160
+Een niet-interactieve aanmelding is software die namens de gebruiker handelt met een bestaand token.
+
+00:20:54.420 --> 00:21:01.020
+Vernieuwingen op de achtergrond en mobiele e-mailapps die zichzelf verversen, worden gebundeld in de laatste aanmelding, eigenschap, wat je kan misleiden.
+
+00:21:01.200 --> 00:21:04.840
+Als je alleen de interactieve leest, markeer je mensen die de hele dag in een mobiele app zitten.
+
+00:21:05.060 --> 00:21:09.600
+Als je alles gecombineerd leest, laat een verouderd apparaat dat een server pinkt een inactieve account levend lijken.
+
+00:21:09.600 --> 00:21:10.960
+Lees ze dus afzonderlijk.
+
+00:21:11.280 --> 00:21:13.380
+Interactief vertelt je of een persoon aanwezig is.
+
+00:21:13.600 --> 00:21:16.240
+Niet-interactief vertelt je of er nog iets draait onder die naam.
+
+00:21:16.380 --> 00:21:19.000
+Een account met geen van beide is een duidelijke kandidaat.
+
+00:21:19.120 --> 00:21:22.860
+Een account met alleen niet-interactieve aanmeldingen behoeft een vraag, geen verwijdering.
+
+00:21:23.080 --> 00:21:24.300
+Dan de gebruiksrapporten.
+
+00:21:24.440 --> 00:21:27.420
+Ze zijn nuttig, maar hebben beperkingen die je moet kennen voordat je ze vertrouwt.
+
+00:21:27.560 --> 00:21:32.000
+Ze bestrijken een voortschrijdend venster van 7, 30, 90 en 180 dagen, niets langer.
+
+00:21:32.160 --> 00:21:35.520
+Je kunt ze dus niet gebruiken om te bewijzen dat iemand een jaarlange dienst niet heeft aangeraakt.
+
+00:21:35.520 --> 00:21:38.920
+En in veel tenhets zijn gebruikersnamen in die rapporten standaard geanonimiseerd.
+
+00:21:38.920 --> 00:21:41.140
+Je ziet een versleuteld idee in plaats van een persoon.
+
+00:21:41.300 --> 00:21:45.940
+Een globale beheerder kan die instelling uitschakelen, en voor dit werk wil je dat ook, maar het is een privacybesluit.
+
+00:21:46.140 --> 00:21:49.880
+Doe het bewust en informeer je security- en ondernemingsraadmedewerkers voordat je het wijzigt.
+
+00:21:50.060 --> 00:21:52.340
+Ook lopen rapportage gegevens een dag of twee achter.
+
+00:21:52.560 --> 00:21:56.000
+Prima voor een maandelijkse evaluatie, niet geschikt voor een besluit dat je vandaag wilt nemen.
+
+00:21:56.200 --> 00:21:58.920
+Dus met de gegevens in handen is de echte vraag, waar trek je de grens?
+
+00:21:59.080 --> 00:22:00.620
+Hier laten schablonen je in de steek.
+
+00:22:00.760 --> 00:22:03.100
+Iemand online zegt 90 dagen niet aangemeld?
+
+00:22:03.380 --> 00:22:04.460
+Verwijder de licentie.
+
+00:22:04.680 --> 00:22:07.220
+Schoon, eenvoudig en voor veel bedrijven fout.
+
+00:22:07.220 --> 00:22:11.920
+90 dagen is niets voor een seizoensgebonden winkel, een school, een boerderij of een belastingkantoor.
+
+00:22:12.060 --> 00:22:16.400
+Dit is veel te lang voor een callcenter met een hoog verloop, waar een vertrekkende medewerker na twee weken al weg is.
+
+00:22:16.600 --> 00:22:18.800
+Kies de drempelwaarde op basis van je eigen patroon.
+
+00:22:18.940 --> 00:22:24.580
+Kijk hoe je mensen echt werken en stel dan een getal vast dat je kunt verdedigen tegenover een manager die boos is over het verlies van een licentie.
+
+00:22:24.720 --> 00:22:26.940
+En waarschijnlijk wil je meer dan één drempelwaarde.
+
+00:22:27.240 --> 00:22:31.080
+Frontline personeel met korte contracten krijgt een korte, kantoormedewerkers een langere.
+
+00:22:31.080 --> 00:22:33.180
+Dan komt het onderdeel dat jou beschermt.
+
+00:22:33.720 --> 00:22:34.080
+Uitzonderingen.
+
+00:22:34.280 --> 00:22:38.540
+Mensen met ouderschapsverlof, langdurig ziekteverlof of sabbatical lijken inactief en vreemd.
+
+00:22:39.040 --> 00:22:40.260
+Seizoenswerkers zijn bewust stil.
+
+00:22:40.400 --> 00:22:43.600
+Verwijder hun licentie in het laagseizoen en je hebt in de lente extra werk.
+
+00:22:43.780 --> 00:22:46.720
+En dan zijn er nog de accounts die nooit door een aanmeldregel mogen worden geraakt.
+
+00:22:46.880 --> 00:22:48.000
+Break glass accounts.
+
+00:22:48.260 --> 00:22:52.160
+Die noodbeheerders accounts zijn bedoeld om ongebruikt te blijven tot de dag dat al het andere faalt.
+
+00:22:52.320 --> 00:22:53.840
+Hun stilte is precies de bedoeling.
+
+00:22:54.060 --> 00:22:58.020
+Ontneem een licentie of schakel er een uit en je hebt een valstrik opgezet voor de slechtste dag van het jaar.
+
+00:22:58.020 --> 00:23:02.500
+Hou dus een uitzonderingslijst bij met accountnamen, een reden, een eigenaar en een evaluatiedatum.
+
+00:23:02.660 --> 00:23:06.380
+Want een uitzondering zonder einddatum is gewoon het weesprobleem in een nieuw jasje.
+
+00:23:06.580 --> 00:23:11.100
+Zodra je een betrouwbare lijst hebt, is de volgende vraag hoe je ernaar handelt zonder een storing te veroorzaken.
+
+00:23:11.320 --> 00:23:12.900
+Dat is het terugvorderingsproces.
+
+00:23:13.180 --> 00:23:15.220
+Sectie 8, het terugvorderingsproces.
+
+00:23:15.460 --> 00:23:20.460
+Je hebt een lijst, namen, laatste aanmelddatums, gebruikcijfers en gemarkeerde uitzonderingen.
+
+00:23:20.620 --> 00:23:22.480
+Nu het gevaarlijke deel, ernaar handelen.
+
+00:23:22.700 --> 00:23:26.340
+Want een licentieverwijdering ziet er in het beheercentrum klein uit één klik.
+
+00:23:26.340 --> 00:23:31.020
+Maar aan de andere kant van die klik zit iemand die maandagochtend iets nodig had en het nu niet kan openen.
+
+00:23:31.160 --> 00:23:32.860
+Het proces kent dus vier stappen.
+
+00:23:33.240 --> 00:23:35.880
+Verwittigen, wachten, verwijderen, bewaren.
+
+00:23:36.040 --> 00:23:37.000
+Begin met de melding.
+
+00:23:37.240 --> 00:23:40.380
+Vertel de gebruiker en hun manager ervan voordat er iets verandert.
+
+00:23:40.540 --> 00:23:42.140
+Kort bericht, duidelijke taal.
+
+00:23:42.360 --> 00:23:43.840
+Deze licentie lijkt ongebruikt.
+
+00:23:44.060 --> 00:23:45.840
+Dit is de datum waarop deze wordt verwijderd.
+
+00:23:45.960 --> 00:23:47.280
+Antwoord als je hem nog nodig hebt.
+
+00:23:47.500 --> 00:23:48.840
+Die ene e-mail doet twee dingen.
+
+00:23:49.040 --> 00:23:50.400
+Het vangt fouten in je data op.
+
+00:23:50.540 --> 00:23:51.960
+De persoon met verlof die je miste.
+
+00:23:52.120 --> 00:23:54.080
+Of het stille account dat een maandelijks rapport draait.
+
+00:23:54.080 --> 00:23:57.100
+En het verlegt de beslissing naar de mensen die het antwoord daadwerkelijk kennen.
+
+00:23:57.340 --> 00:24:02.960
+Vervolgens de respijtperiode, 14 tot 30 dagen, werkt voor de meeste tenants lang genoeg om terug te zijn van een reis en het bericht te zien.
+
+00:24:03.100 --> 00:24:05.520
+Kort genoeg zodat de lijst niet veroudert terwijl je wacht.
+
+00:24:05.720 --> 00:24:07.340
+Tijdens die periode gebeurt er niets.
+
+00:24:07.560 --> 00:24:10.680
+Geen verwijdering, geen uitschakeling, alleen een klok en een manier om bezwaar te maken.
+
+00:24:10.900 --> 00:24:11.760
+Dan verwijderen.
+
+00:24:11.900 --> 00:24:13.780
+En hier moet je weten waar je precies aan zit.
+
+00:24:13.960 --> 00:24:16.080
+Want mensen vrezen deze stap met een goede reden.
+
+00:24:16.340 --> 00:24:19.180
+Wanneer je een licentie verwijderd, verdwijnt de data niet direct.
+
+00:24:19.180 --> 00:24:21.160
+Wat er gebeurt, hangt af van de workload.
+
+00:24:21.420 --> 00:24:26.040
+Neem de mailbox, verwijder de Exchange Online licentie en de mailbox komt in een soft-deleted status.
+
+00:24:26.360 --> 00:24:31.340
+E-mail komt niet meer aan, de gebruiker verliest toegang, maar de inhoud blijft 30 dagen herstelbaar.
+
+00:24:31.520 --> 00:24:35.060
+Herstel de licentie binnen die periode en de mailbox is weer zoals hij was.
+
+00:24:35.400 --> 00:24:38.260
+OneDrive volgt een ander pad en is wat vergevingsgezinder.
+
+00:24:38.560 --> 00:24:44.020
+Wanneer het gebruikersaccount wordt verwijderd, wordt de OneDrive vastgehouden voor een bewaartermijn, standaard 90 dagen.
+
+00:24:44.020 --> 00:24:49.720
+En de manager krijgt toegang tot die bestanden, maar alleen een licentie verwijderen bij een bestaandaccount verwijderd de bestanden niet.
+
+00:24:49.860 --> 00:24:50.940
+De data blijft staan.
+
+00:24:51.120 --> 00:24:53.700
+De gebruiker kan er simpelweg niet bij zodra het recht is vervallen.
+
+00:24:53.880 --> 00:24:55.040
+Teams is het buitenbeentje.
+
+00:24:55.200 --> 00:24:58.020
+De chats en kanaalberichten die iemand schreef, horen niet bij hun licentie.
+
+00:24:58.400 --> 00:24:59.820
+Kanaalberichten staan in het team zelf.
+
+00:25:00.220 --> 00:25:05.240
+Chatgeschiedenis wordt opgeslagen in verborgen mailboxmappen, dus die volgt de mailboxregels en je bewaarbeleid bepaalt hoe lang het blijft staan.
+
+00:25:05.420 --> 00:25:06.700
+Het patroon is dus als volgt.
+
+00:25:06.880 --> 00:25:08.260
+Verwijder een licentie en de toegang stopt snel.
+
+00:25:08.440 --> 00:25:09.900
+De data verdwijnt langzaam, als dat al gebeurt.
+
+00:25:10.120 --> 00:25:11.700
+Daarom is die termijn van 30 dagen belangrijk.
+
+00:25:14.020 --> 00:25:15.720
+Verwijder een verkeerde beslissing je slechts enkele minuten.
+
+00:25:15.860 --> 00:25:20.680
+Daarna kan een verkeerde beslissing je een mailbox kosten en daarom beschouw ik 30 dagen als ondergrens, niet als doel.
+
+00:25:20.840 --> 00:25:23.800
+Verwijder accounts niet definitief in dezelfde week als je de licenties intrekt.
+
+00:25:23.960 --> 00:25:26.360
+Trek de licentie in, wacht en beslist dan over het account.
+
+00:25:26.600 --> 00:25:29.200
+Nu is er één geval dat mensen vaak overvalt, de inactieve mailbox.
+
+00:25:29.540 --> 00:25:33.140
+Stel dat iemand vertrekt en je organisatie moet de mail bewaren om juridische redenen of beleid.
+
+00:25:33.280 --> 00:25:37.340
+Je kunt een bewaarbeleid of een hold op de mailbox plaatsen en daarna het gebruikersaccount verwijderen.
+
+00:25:37.480 --> 00:25:38.780
+De mailbox verdwijnt dan niet.
+
+00:25:38.780 --> 00:25:43.800
+Het wordt een inactieve mailbox die behouden blijft dankzij de hold en een inactieve mailbox heeft geen licentie nodig.
+
+00:25:44.040 --> 00:25:45.000
+Dat is het goede nieuws.
+
+00:25:45.220 --> 00:25:48.560
+Je behoudt de data en stopt met betalen voor de gebruiker, maar de voorwaarden zijn strikt.
+
+00:25:48.740 --> 00:25:51.260
+De hold moet actief zijn voordat het account wordt verwijderd.
+
+00:25:51.380 --> 00:25:56.000
+Als de hold er niet is wanneer de licentie vervalt, wordt de mailbox simpelweg verwijderd na de periode van 30 dagen.
+
+00:25:56.200 --> 00:26:01.760
+En als je wilt dat de inactieve mailbox groter wordt dan 50 gigabyte of als je er een archief bij wilt, dan is de licentie weer vereist.
+
+00:26:01.940 --> 00:26:03.760
+De volgorde van de stappen is dus van belang.
+
+00:26:03.960 --> 00:26:05.600
+Eerste hold, dan pas verwijderen.
+
+00:26:05.600 --> 00:26:08.380
+Sla de eerste stap over en je bent kwijt wat je wilde bewaren.
+
+00:26:08.500 --> 00:26:12.020
+Dit is het onderdeel van het proces dat een geschreven handleiding verdient, geen mondelingenoverdracht.
+
+00:26:12.140 --> 00:26:18.720
+Een pagina die zegt, voor een medewerker, plaats indien nodig een blokkering, bevestig deze, verwijder de licentie, wacht de termijn af en verwijder vervolgens.
+
+00:26:18.960 --> 00:26:21.560
+Voer het proces één keer uit en je hebt de achterstand weggewerkt.
+
+00:26:21.760 --> 00:26:27.720
+Dat bespaart echt geld en is de moeite waard, maar kijk wat je hebt gebouwd, een handmatige actie op basis van een lijst, uitgevoerd door iemand met een agenda.
+
+00:26:27.980 --> 00:26:28.940
+Het werkt één keer.
+
+00:26:29.200 --> 00:26:32.780
+Volgend kwartaal keren dezelfde patronen terug omdat de oorzaak nog steeds aanwezig is.
+
+00:26:32.780 --> 00:26:35.840
+Om dit permanent te maken, is een ander soort controle nodig.
+
+00:26:36.040 --> 00:26:38.880
+Een waarbij de licentie een regel volgt in plaats van een klik.
+
+00:26:39.060 --> 00:26:42.480
+Sectie 9, licenties op basis van groepen, de structurele oplossing.
+
+00:26:42.720 --> 00:26:44.540
+Directe toewijzing heeft één ontwerpfout.
+
+00:26:44.740 --> 00:26:46.080
+Het is afhankelijk van een persoon.
+
+00:26:46.280 --> 00:26:49.740
+Elke directe licentie is een beslissing die iemand op een dag met de hand heeft genomen om één reden.
+
+00:26:49.920 --> 00:26:53.160
+En die reden staat in een ticket, zit in iemands geheugen of is nergens te vinden.
+
+00:26:53.400 --> 00:26:56.300
+Zes maanden later is de licentie er nog steeds, maar de reden is verdwenen.
+
+00:26:56.500 --> 00:26:57.920
+Dat is waarom het niet schaalbaar is.
+
+00:26:58.120 --> 00:27:01.020
+Niet omdat klikken langzaam is, maar omdat een klik geen regel achterlaat.
+
+00:27:01.020 --> 00:27:05.040
+Vraag waarom iemand een E5-licentie heeft en het enige eerlijke antwoord is dat iemand deze heeft toegewezen.
+
+00:27:05.480 --> 00:27:07.220
+Vermenigvuldig dat met 5000 gebruikers.
+
+00:27:07.380 --> 00:27:08.540
+Je hebt geen licentiemodel.
+
+00:27:08.760 --> 00:27:12.000
+Je hebt 5000 afzonderlijke beslissingen en geen manier om die te controleren.
+
+00:27:12.140 --> 00:27:13.700
+De oplossing is dus niet sneller klikken.
+
+00:27:13.880 --> 00:27:15.720
+De oplossing is de klik vervangen door een regel.
+
+00:27:15.980 --> 00:27:17.840
+Dat is wat licenties op basis van groepen doen.
+
+00:27:18.040 --> 00:27:21.560
+In Entra ID wijs je een licentie toe aan een beveiligingsgroep in plaats van aan een persoon.
+
+00:27:21.760 --> 00:27:23.340
+Elk lid van de groep krijgt de licentie.
+
+00:27:23.540 --> 00:27:25.680
+Voeg iemand toe aan de groep en de licentie wordt direct toegewezen.
+
+00:27:25.860 --> 00:27:27.660
+Verwijder ze uit de groep en de licentie wordt ingetrokken.
+
+00:27:27.780 --> 00:27:29.200
+Het proces verloopt automatisch.
+
+00:27:29.400 --> 00:27:32.760
+Entra houdt de groep in de gaten en zodra het lidmaatschap verandert, worden de licenties voor je bijgewerkt.
+
+00:27:32.920 --> 00:27:34.600
+Geen ticket, geen beheerdersessie nodig.
+
+00:27:34.840 --> 00:27:35.860
+Wat heb je hiervoor nodig?
+
+00:27:36.060 --> 00:27:42.020
+Je tenant heeft Entra IDP1 of hoger nodig en in de praktijk dekken de meeste Microsoft 365 Business & Enterprise bundels dit al.
+
+00:27:42.160 --> 00:27:46.780
+De groep moet een beveiligingsgroep zijn of een Microsoft 365 groep met ingeschakelde beveiligingsfuncties.
+
+00:27:46.780 --> 00:27:50.180
+E-mail ingeschakelde beveiligingsgroepen en distributielijsten werken hier niet voor.
+
+00:27:50.340 --> 00:27:52.800
+Elke gebruiker moet ook een gebruikslocatie hebben ingesteld.
+
+00:27:52.800 --> 00:27:56.940
+Dat is het landkenmerk en Microsoft vereist dit voordat er een licentie kan worden toegewezen.
+
+00:27:57.100 --> 00:27:59.780
+Daar komen we op terug, want dit verstoort meer uitholprojecten dan wat dan ook.
+
+00:27:59.860 --> 00:28:04.220
+En de groep kan alleen gebruikers bevatten, geen apparaten, geen contactpersonen, alleen gebruikersaccounts.
+
+00:28:04.360 --> 00:28:06.560
+Dit is de verschuiving die ertoe doet en die je makkelijk mist.
+
+00:28:06.760 --> 00:28:09.860
+Wanneer de licentie het lidmaatschap volgt, wordt het lidmaatschap het controlepunt.
+
+00:28:10.080 --> 00:28:11.580
+Denk eens na over wat dat betekent.
+
+00:28:11.780 --> 00:28:13.620
+Voorheen was de vraag, wie heeft er geklikt?
+
+00:28:13.840 --> 00:28:15.620
+Nu is de vraag, wie zit er in de groep?
+
+00:28:15.700 --> 00:28:18.160
+En die tweede vraag is veel makkelijker te beheren.
+
+00:28:18.340 --> 00:28:19.560
+Een groep heeft een eigenaar.
+
+00:28:19.560 --> 00:28:22.140
+Een groep heeft leden die je in seconden kunt exporteren.
+
+00:28:22.260 --> 00:28:27.120
+Een groep kan toegangsbeoordelingen hebben, zodat iemand elke paar maanden moet bevestigen of de mensen er nog bij horen.
+
+00:28:27.280 --> 00:28:30.920
+Je verplaatst het besluit van duizend verspreiden klikken naar één plek die je kunt inzien.
+
+00:28:31.100 --> 00:28:32.560
+En die plek kan automatisch zijn.
+
+00:28:32.780 --> 00:28:34.760
+Dit is waar dynamische groepen om de hoek komen kijken.
+
+00:28:34.940 --> 00:28:37.180
+Een dynamische groep heeft geen leden die je handmatig toevoegt.
+
+00:28:37.340 --> 00:28:39.640
+Er is een regel opgesteld op basis van gebruikerskenmerken.
+
+00:28:39.800 --> 00:28:42.520
+Entra evalueert de regel en iedereen die eraan voldoet, zit erin.
+
+00:28:42.660 --> 00:28:44.640
+Iedereen die er niet meer aan voldoet, gaat eruit.
+
+00:28:44.640 --> 00:28:49.280
+Dus je schrijft zoiets als afdeling is finance of functie bevat, engineer of land is Duitsland.
+
+00:28:49.520 --> 00:28:53.160
+Combineer ze met en of en niet en je kunt een persona in één regel beschrijven.
+
+00:28:53.320 --> 00:28:55.980
+Koppel dat nu terug aan het levenscyclusprobleem dat we eerder bespraken.
+
+00:28:56.160 --> 00:28:58.360
+Entmover verandert van afdeling in het ouder systeem.
+
+00:28:58.480 --> 00:29:00.380
+Het kenmerk voor de afdeling wordt bijgewerkt in Entra.
+
+00:29:00.560 --> 00:29:02.380
+De dynamische regel wordt opnieuw geëvalueerd.
+
+00:29:02.540 --> 00:29:04.580
+De persoon valt uit de oude groep en belandt in de nieuwe.
+
+00:29:04.780 --> 00:29:07.600
+De oude licentie verdwijnt en de nieuwe komt in dezelfde beweging aan.
+
+00:29:07.780 --> 00:29:11.140
+Entmover wordt gemarkeerd als uitgeschakeld of verliest het kenmerk waar je regel van afhangt.
+
+00:29:11.140 --> 00:29:13.240
+Ze vallen uit elke groep die die regel heeft opgebouwd.
+
+00:29:13.340 --> 00:29:14.400
+De licentie gaat met hen mee.
+
+00:29:14.600 --> 00:29:15.700
+Niemand hoefde iets te onthouden.
+
+00:29:15.860 --> 00:29:17.840
+De registratie veranderde en de licentie volgde automatisch.
+
+00:29:18.020 --> 00:29:19.900
+Dat is de structurele oplossing, niet een beter proces.
+
+00:29:20.120 --> 00:29:23.100
+Een systeem waarbij de verwijderstap niet vergeten kan worden omdat het nooit een aparte stap was.
+
+00:29:23.260 --> 00:29:24.640
+Maar let op wat er zojuist gebeurde.
+
+00:29:24.800 --> 00:29:26.320
+De regel is nu de volledige controle.
+
+00:29:26.560 --> 00:29:29.320
+Als de regel fout is, is het direct voor iedereen op grote schaal fout.
+
+00:29:29.520 --> 00:29:31.800
+Een slecht filter geeft niet één persoon een verkeerde licentie.
+
+00:29:31.960 --> 00:29:36.040
+Het geeft een hele afdeling een verkeerde licentie en de regel werkt alleen als de onderliggende kenmerken kloppen.
+
+00:29:36.040 --> 00:29:41.120
+Een afdelingsveld dat leeg is, verouderd of op drie verschillende manieren is getypt, plaatst mensen stilletjes op de verkeerde plek.
+
+00:29:41.220 --> 00:29:45.800
+De kracht is dus reëel, maar het brengt een ontwerpprobleem met zich mee, want een slordig gebouwde groep lost de rommel niet op.
+
+00:29:45.880 --> 00:29:47.100
+Het automatiseert het.
+
+00:29:47.260 --> 00:29:47.780
+Sectie 10
+
+00:29:47.780 --> 00:29:50.060
+Het ontwerpen van licentiegroepen die niet instorten.
+
+00:29:50.220 --> 00:29:53.080
+De eerste ontwerpkeuze komt voordat je ook maar één regel schrijft.
+
+00:29:53.260 --> 00:29:54.560
+Wat vertegenwoordigt één groep?
+
+00:29:54.720 --> 00:29:58.240
+Er zijn twee veel voorkomende antwoorden, één groep per SKU of één groep per persona.
+
+00:29:58.520 --> 00:29:59.780
+Begin met de SKU-versie.
+
+00:29:59.780 --> 00:30:03.200
+Je maakt een groep genaamd E3-gebruikers, en iedereen die E3 nodig heeft, gaat erin.
+
+00:30:03.320 --> 00:30:04.460
+Dat is makkelijk uit te leggen.
+
+00:30:04.620 --> 00:30:07.000
+Het komt één op één overeen met wat de financiële afdeling inkoopt.
+
+00:30:07.140 --> 00:30:09.460
+Als je wilt weten wie E3 heeft, open je één groep.
+
+00:30:09.580 --> 00:30:11.300
+Maar kijk naar wat de groep daadwerkelijk weet.
+
+00:30:11.460 --> 00:30:12.340
+Hij kent een product.
+
+00:30:12.540 --> 00:30:13.440
+Het kent geen reden.
+
+00:30:13.680 --> 00:30:14.900
+Waarom zit Pria in de E3-groep?
+
+00:30:15.020 --> 00:30:16.200
+Omdat ze bij financiën werkt?
+
+00:30:16.320 --> 00:30:17.320
+Omdat iemand erom vroeg?
+
+00:30:17.460 --> 00:30:19.060
+Omdat ze twee jaar geleden bij marketing zat?
+
+00:30:19.200 --> 00:30:20.300
+De groep kan het je niet vertellen.
+
+00:30:20.480 --> 00:30:23.560
+Dus je bent terug bij hetzelfde probleem als directe toewijzing, maar dan met een tussenpersoon.
+
+00:30:23.560 --> 00:30:27.020
+Iemand beslist nog steeds handmatig wie wordt toegevoegd en de regel zit in hun hoofd.
+
+00:30:27.160 --> 00:30:28.320
+Nu de persona-versie.
+
+00:30:28.520 --> 00:30:34.600
+Je maakt een groep genaamd standaard kantoormedewerker, en de groep wordt gedefinieerd door een functiebeschrijving, afdeling, type baan, locatie.
+
+00:30:34.800 --> 00:30:37.740
+De licentie is een eigenschap van de persona, niet andersom.
+
+00:30:37.960 --> 00:30:39.060
+Dat draait de vraag om.
+
+00:30:39.240 --> 00:30:43.120
+In plaats van wie krijgt E3, vraag je, wat heeft een financieel analist nodig?
+
+00:30:46.700 --> 00:30:48.740
+En het antwoord wordt het recht op licenties.
+
+00:30:48.960 --> 00:30:51.540
+Eenmaal geschreven, toegepast op iedereen die erbij hoort.
+
+00:30:51.540 --> 00:30:56.480
+Wanneer het bedrijf van gedachten verandert, en dat zullen ze, verander je één toewijzing op één groep, niet duizend gebruikers.
+
+00:30:56.660 --> 00:30:58.400
+Dus persona wint wat betreft betekenis.
+
+00:30:58.580 --> 00:31:00.060
+SKU wint wat betreft eenvoud.
+
+00:31:00.280 --> 00:31:03.600
+De meeste volwassen tenants eindigen met persona's bovenaan en SKU's daaronder.
+
+00:31:03.820 --> 00:31:05.280
+Dit is hoe dat in de praktijk werkt.
+
+00:31:05.480 --> 00:31:06.900
+Splits je groepen in twee lagen.
+
+00:31:07.100 --> 00:31:12.280
+De eerste laag is de basislicentiegroep, één per persona, frontline, standaard, power user, bevoorrecht.
+
+00:31:12.500 --> 00:31:15.700
+Elk bevat de enkele basis SKU die de persona nodig heeft en niets anders.
+
+00:31:15.920 --> 00:31:17.440
+De tweede laag is de add-on groep.
+
+00:31:17.440 --> 00:31:22.520
+Dit zijn kleine, specifieke en optionele groepen, een groep voor Visio, een groep voor Power Bipro, een groep voor Teams Phone.
+
+00:31:22.680 --> 00:31:24.140
+Elk bevat precies één add-on.
+
+00:31:24.360 --> 00:31:25.100
+Waarom splitsen?
+
+00:31:25.240 --> 00:31:27.200
+Omdat add-ons niet netjes de persona's volgen.
+
+00:31:27.400 --> 00:31:29.160
+Niet elke power user heeft Visio nodig.
+
+00:31:29.400 --> 00:31:31.360
+Misschien hebben acht mensen in het hele bedrijf dat nodig.
+
+00:31:31.560 --> 00:31:35.360
+Als je Visio in de persona opneemt, heb je 400 mensen gelicentieerd om er acht te dekken.
+
+00:31:35.520 --> 00:31:41.740
+Dus de add-on blijft apart met zijn eigen lidmaatschap, vaak een kleine, handmatig beheerde groep of een dynamische regel met een strakkere filter.
+
+00:31:41.920 --> 00:31:43.820
+En het voordeel wordt zichtbaar tijdens een audit.
+
+00:31:43.820 --> 00:31:47.840
+Je kunt de add-on kosten, de ledenlijst en de eigenaar allemaal op één plek zien.
+
+00:31:48.040 --> 00:31:51.680
+Nu het deel dat saai klinkt en bepaalt of dit blijft werken, namen en eigenaren.
+
+00:31:51.840 --> 00:31:55.720
+Een groep zonder NAA-MG-Evingsconventie wordt binnen een jaar een rommelbak.
+
+00:31:56.240 --> 00:31:59.660
+Licentiegroep 2, test E5, kopie van sales standaard.
+
+00:32:00.340 --> 00:32:03.100
+Niemand weet welke actief zijn en niemand durft er een te verwijderen.
+
+00:32:03.260 --> 00:32:05.000
+Kies een patroon en hou je eraan vast.
+
+00:32:05.220 --> 00:32:08.240
+Iets als een voorvoegsel voor het doel, dan het niveau, dan de scope.
+
+00:32:08.480 --> 00:32:13.320
+LIC basis standaard, LIC basis frontline, LIC add-on Visio.
+
+00:32:13.320 --> 00:32:17.720
+Je kunt de functie van de groep uit de naam aflezen en je kunt ze sorteren en filteren met een script.
+
+00:32:17.960 --> 00:32:21.480
+Geef vervolgens elke groep een eigenaar, een specifiek persoon, geen team mailbox,
+
+00:32:21.780 --> 00:32:24.600
+iemand die verantwoordelijk is voor de inhoud van de groep en of deze nog moet bestaan.
+
+00:32:24.820 --> 00:32:28.740
+Zet de eigenaar en een korte beschrijving in de eigenschappen van de groep, zodat dit bij het object hoort.
+
+00:32:28.900 --> 00:32:31.160
+Een groep zonder eigenaar is een wees die wacht om te gebeuren.
+
+00:32:31.380 --> 00:32:35.500
+Hetzelfde patroon, nieuw object, en dan hetgeen dat de meeste ontwerpen breekt, de kwaliteit van kenmerken.
+
+00:32:35.660 --> 00:32:38.700
+Een dynamische regel is slechts zo betrouwbaar als de data die deze uitleest.
+
+00:32:38.700 --> 00:32:42.220
+Stel dat je standaard personaregel is afdeling is gelijk aan finance.
+
+00:32:42.380 --> 00:32:45.460
+Klinkt precies, maar wat staat er in het afdelingsveld in jouw tenant?
+
+00:32:45.920 --> 00:32:48.020
+Finance, finance en accounting.
+
+00:32:48.520 --> 00:32:51.200
+Fin, finance geweldig met een spatie aan het einde.
+
+00:32:51.440 --> 00:32:54.320
+Vier schrijfwijzen, één team, en je regel vangt er slechts één.
+
+00:32:54.500 --> 00:32:56.580
+De mensen die worden gemist, krijgen geen licentie.
+
+00:32:56.760 --> 00:32:59.620
+Ze openen een ticket en de snelste oplossing is een directe toewijzing,
+
+00:32:59.840 --> 00:33:02.160
+die stilletjes het probleem herstelt dat je net had verwijderd.
+
+00:33:02.160 --> 00:33:03.620
+Het omgekeerde is erger.
+
+00:33:03.820 --> 00:33:07.140
+Een leeg veld, een gekopieerde titel, een contractant gelabeld als werknemer,
+
+00:33:07.340 --> 00:33:09.520
+en iemand belandt in een persona die hen veel te veel geeft.
+
+00:33:09.680 --> 00:33:11.940
+Dus de regel is niet het moeilijke deel, de bron is dat wel.
+
+00:33:12.140 --> 00:33:13.880
+Welk systeem is eigenaar van het afdelingsveld?
+
+00:33:14.020 --> 00:33:15.680
+Wie werkt het bij als iemand van functie verandert?
+
+00:33:15.820 --> 00:33:17.080
+Hoe snel synchroniseert het?
+
+00:33:17.200 --> 00:33:21.040
+Als ouwer de bron van waarheid is, dan is de datakwaliteit van ouwer nu een licentiecontrole,
+
+00:33:21.220 --> 00:33:22.320
+of ouwer dat nu weet of niet.
+
+00:33:22.540 --> 00:33:25.340
+Leg die afspraak schriftelijk vast voordat je ook maar één regel bouwt,
+
+00:33:25.340 --> 00:33:29.500
+want zelfs met schone kenmerken, goede namen en duidelijke eigenaren falen groepen nog steeds
+
+00:33:29.500 --> 00:33:32.040
+niet willekeurig, maar steeds weer op dezelfde paar manieren.
+
+00:33:32.320 --> 00:33:33.800
+Faalmodief voor groepslicenties
+
+00:33:33.800 --> 00:33:35.340
+Groepslicenties falen niet luidruchtig.
+
+00:33:36.120 --> 00:33:37.620
+Dat is het eerste wat je moet accepteren.
+
+00:33:37.780 --> 00:33:40.320
+Een foutieve directe toewijzing geeft je een foutmelding op het scherm.
+
+00:33:40.500 --> 00:33:42.480
+Een foutieve groepstoewijzing kan wekenlang blijven staan,
+
+00:33:42.680 --> 00:33:44.800
+en het enige teken is een gebruiker die iets niet kan openen.
+
+00:33:44.980 --> 00:33:46.000
+Begin met conflicten
+
+00:33:46.000 --> 00:33:48.640
+Sommige licenties kunnen niet samen op één persoon staan.
+
+00:33:48.880 --> 00:33:51.560
+Bepaalde SKU's delen serviceplannen die elkaar uitsluiten.
+
+00:33:51.560 --> 00:33:55.720
+Twee producten die beide dezelfde service claimen en Microsoft staat niet toe dat beide voor dezelfde
+
+00:33:55.720 --> 00:33:56.960
+gebruiker worden ingeschakeld.
+
+00:33:57.160 --> 00:34:00.700
+Stel dat een gebruiker in je standaardgroep belandt, die één basis SKU bevat,
+
+00:34:00.840 --> 00:34:02.580
+en ook in een legacygroep die een andere bevat.
+
+00:34:02.740 --> 00:34:04.240
+De tweede toewijzing mislukt,
+
+00:34:04.380 --> 00:34:06.120
+Entra markeert een conflict en gaat door.
+
+00:34:06.300 --> 00:34:08.220
+De gebruiker behoudt wat hij eerst had, of niets.
+
+00:34:08.380 --> 00:34:10.280
+Het hangt af van de volgorde waarin de dingen aankwamen,
+
+00:34:10.440 --> 00:34:11.840
+en de groep zelf ziet er prima uit.
+
+00:34:12.020 --> 00:34:13.780
+Het toont leden, het toont een licentie.
+
+00:34:13.900 --> 00:34:17.700
+Pas als je de ledenlijst opent en naar de status kijkt, zie je de fout bij één persoon staan.
+
+00:34:17.700 --> 00:34:20.600
+Dan is er nog het simpele wiskundige probleem, onvoldoende eenheden.
+
+00:34:20.760 --> 00:34:24.260
+Je wijst een licentie toe aan een groep van 400, je bezit 380 plekken.
+
+00:34:24.440 --> 00:34:25.620
+Entra weigert de groep niet.
+
+00:34:25.780 --> 00:34:28.500
+Het voorziet mensen van licenties totdat de plekken op zijn, dan stopt het.
+
+00:34:28.620 --> 00:34:31.320
+Twintig gebruikers hebben uiteindelijk geen licentie en niemand krijgt bericht.
+
+00:34:31.500 --> 00:34:32.840
+Geen e-mail, geen waarschuwing.
+
+00:34:33.060 --> 00:34:34.480
+Dit is wat ik bedoel met stilzwijgend.
+
+00:34:34.640 --> 00:34:36.680
+Het systeem deed precies waarvoor het gebouwd is.
+
+00:34:36.860 --> 00:34:38.780
+Het vertelde alleen niemand dat het resultaat fout is,
+
+00:34:38.900 --> 00:34:40.800
+wat betekent dat een nieuwe medewerker maandag kan beginnen,
+
+00:34:40.800 --> 00:34:44.760
+in de juiste groep valt en alsnog zonder mailbox zit omdat de badge van vorige week de laatste plek gebruikte.
+
+00:34:44.940 --> 00:34:47.420
+Nu degene die meer uitholtrajecten verstoort dan enige andere.
+
+00:34:47.920 --> 00:34:48.320
+Gebruikslocatie.
+
+00:34:48.560 --> 00:34:51.580
+Microsoft wijst geen licentie toe aan een gebruiker zonder landinstelling.
+
+00:34:51.860 --> 00:34:54.100
+Sommige diensten worden niet in elk land verkocht,
+
+00:34:54.180 --> 00:34:56.780
+dus het platform moet weten waar de persoon is voordat het iets toekent.
+
+00:34:56.960 --> 00:35:00.800
+Als dat kenmerk leeg is, geeft de toewijzing een foutmelding over de gebruikslocatie.
+
+00:35:00.980 --> 00:35:04.700
+Je kunt het per gebruiker oplossen, maar de nettere oplossing zit stroomopwaarts in de bron.
+
+00:35:04.920 --> 00:35:10.180
+Stel de gebruikslocatie in wanneer het account wordt aangemaakt vanuit hetzelfde oude bestand dat afdeling een functie voedt.
+
+00:35:10.180 --> 00:35:13.220
+Anders is elke nieuwe aanwerving een kleine, voorspelbare fout.
+
+00:35:13.680 --> 00:35:14.600
+Vervolgens, nesting.
+
+00:35:14.860 --> 00:35:18.500
+Je bouwt een structuur, een oudergroep voor het hele bedrijf, kindergroepen voor elke regio
+
+00:35:18.500 --> 00:35:21.300
+en je wijst de licentie bovenaan toe in de verwachting dat deze doorstroomt.
+
+00:35:21.420 --> 00:35:22.120
+Dat doet het niet.
+
+00:35:22.640 --> 00:35:25.120
+Groepsgebaseerde licentieverlening werkt niet via geneste groepen.
+
+00:35:25.260 --> 00:35:27.920
+Alleen directe leden van de gelicentieerde groep krijgen de licentie.
+
+00:35:28.120 --> 00:35:29.740
+Leden van een groep daarbinnen krijgen niets.
+
+00:35:29.980 --> 00:35:31.720
+Menig ontwerp strand op dat ene punt.
+
+00:35:31.980 --> 00:35:32.580
+Maak het plat.
+
+00:35:33.000 --> 00:35:35.060
+Licentieer de groep waar de mensen daadwerkelijk in zitten.
+
+00:35:35.260 --> 00:35:36.440
+Dus wat doe je aan dit alles?
+
+00:35:36.440 --> 00:35:39.940
+Je behandelt de foutenwachtrij als een lopende taak, niet als een opruimproject.
+
+00:35:40.120 --> 00:35:43.980
+In het Entra-beheerscentrum toont elke gelicentieerde groep zijn leden met een foutstatus.
+
+00:35:44.200 --> 00:35:48.160
+Verv legt hetzelfde bloot, dus een script kan de fouten in elke groep tellen en het getal
+
+00:35:48.160 --> 00:35:49.520
+elke ochtend voor je neus zetten.
+
+00:35:49.720 --> 00:35:51.040
+Dat getal zou nul moeten zijn.
+
+00:35:51.240 --> 00:35:53.620
+Als dat niet zo is, wil je het weten voordat de gebruiker het weet.
+
+00:35:53.840 --> 00:35:56.540
+Controleer het minimaal wekelijks, dagelijks als je midden in een migratie zit.
+
+00:35:56.760 --> 00:35:58.220
+Behandel elke fout als een symptoom.
+
+00:35:58.360 --> 00:36:01.100
+Een stapel fouten over de gebruikslocatie betekent dat je provisioning kapot is.
+
+00:36:01.100 --> 00:36:05.040
+Een stapel eenheidsfouten betekent dat de financiële afdeling te weinig plekken heeft gekocht of dat iemand overlicentieert.
+
+00:36:05.200 --> 00:36:06.480
+De wachtrij is geen ruis.
+
+00:36:06.660 --> 00:36:12.560
+Het is de enige plek waar groepslicenties je de waarheid vertellen en dat is belangrijk nu, want de volgende stap is de risicovolle.
+
+00:36:12.700 --> 00:36:17.100
+Je staat op het punt mensen die al directe licenties hebben in een live tenant naar groepen te verplaatsen.
+
+00:36:17.260 --> 00:36:22.460
+Als je dit onzorgvuldig doet, veroorzaak je bij echte mensen midden op de werkdag precies de fouten die we zojuist bespraken.
+
+00:36:22.460 --> 00:36:27.500
+De meeste tenants beginnen niet met een schone lei.
+
+00:36:27.680 --> 00:36:31.660
+Ze beginnen met jaren aan directe toewijzingen, duizenden stuks, waarbij elke toewijzing een kleine beslissing was die niemand heeft opgeschreven.
+
+00:36:31.800 --> 00:36:34.200
+De overstap naar groepen is dus geen nieuwe opbouw, maar een migratie.
+
+00:36:34.360 --> 00:36:35.900
+En de eerste stap is met opzet saai.
+
+00:36:36.620 --> 00:36:36.980
+Inventarisatie.
+
+00:36:37.200 --> 00:36:40.740
+Haal elke gebruiker op, elke licentie en nog één veld hoe deze was toegewezen.
+
+00:36:40.960 --> 00:36:42.880
+Bref houdt dat bij in elk licentierecord.
+
+00:36:43.060 --> 00:36:45.500
+Als de toewijzing uit een groep kwam, toont het een groepsidee.
+
+00:36:45.500 --> 00:36:49.080
+Als het handmatig is aangeklikt, is dat veld leeg, dus filter op de lege velden.
+
+00:36:49.080 --> 00:36:52.720
+Die lijst bevat je directe toewijzingen en vormt de volledige omvang van het project.
+
+00:36:53.060 --> 00:36:54.240
+Sorteer het nu op patroon.
+
+00:36:54.420 --> 00:36:57.520
+Groep eer mensen op basis van de exacte combinatie van licenties die ze bezitten.
+
+00:36:57.680 --> 00:37:00.420
+Je zult ontdekken dat een paar combinaties het grootste deel van je tenant dekken.
+
+00:37:00.560 --> 00:37:06.300
+Misschien E3 voor de meerderheid, E3 plus Visio voor een klein deel, E5 voor een paar honderd en daarna een lange reeks vreemde uitzonderingen.
+
+00:37:06.440 --> 00:37:08.740
+De veel voorkomende combinaties worden je persona's.
+
+00:37:08.900 --> 00:37:10.500
+De vreemde combinaties worden vragen.
+
+00:37:10.700 --> 00:37:13.620
+Heeft deze persoon die stack echt nodig of is het een overblijfsel van een oude rol?
+
+00:37:13.900 --> 00:37:17.080
+Beantwoord die vragen nu, want tijdens de migratie is het goedkoopste moment om ze op te lossen.
+
+00:37:17.240 --> 00:37:18.520
+Bouw vervolgens de doelgroepen.
+
+00:37:18.700 --> 00:37:23.820
+Maak de basisgroep voor elk persona en de aanvullende groepen daarnaast, met de namen en eigenaren waarover je al overeenstemming hebt bereikt.
+
+00:37:24.000 --> 00:37:26.440
+Wijs de licentie toe aan de groep en voeg daarna de gebruikers toe.
+
+00:37:26.720 --> 00:37:28.680
+Importeer bij een statische groep de ledenlijst.
+
+00:37:28.880 --> 00:37:31.480
+Schrijf bij een dynamische groep de regel en laat entra de rest doen.
+
+00:37:31.660 --> 00:37:35.260
+Voordat je een dynamische regel vertrouwt, controleer je het voorbeeld van het lidmaatschap tegen je inventaris.
+
+00:37:35.260 --> 00:37:39.840
+Als de regel 400 mensen vindt en jouw lijst er 440 bevat, hebben die 40 een verklaring nodig.
+
+00:37:40.020 --> 00:37:41.620
+En dit is het deel dat mensen verbaast.
+
+00:37:41.840 --> 00:37:45.980
+Zodra de groep de licentie bezit en de gebruikers erin staan, voert entra zelf de afstemming uit.
+
+00:37:46.140 --> 00:37:49.580
+Het ziet dat de gebruiker die licentie al direct heeft en wijst er geen tweede toe.
+
+00:37:49.740 --> 00:37:54.060
+Het registreert alleen dat dezelfde licentie nu twee bronnen heeft, één direct en één vanuit de groep.
+
+00:37:54.140 --> 00:37:56.520
+Geen dubbele kosten, geen onderbreking van de dienstverlening.
+
+00:37:56.720 --> 00:37:59.080
+De gebruiker merkt niets omdat de licentie nooit is verlopen.
+
+00:37:59.280 --> 00:38:01.220
+Die overlap is het hele veiligheidsmechanisme.
+
+00:38:01.400 --> 00:38:04.360
+Een tijdje is de gebruiker dubbel gedekt, dus haast je niet met de volgende stap.
+
+00:38:04.360 --> 00:38:05.340
+Bevestig eerst.
+
+00:38:05.520 --> 00:38:07.960
+Open de groep, controleer de ledenlijst en zoek naar fouten.
+
+00:38:08.080 --> 00:38:12.700
+Je wilt dat elk lid een actieve licentie vanuit de groep toont met nul conflicten en nul tekorten aan licenties.
+
+00:38:12.940 --> 00:38:16.620
+Voer je script uit op de gehele tenant en tel de gebruikers waarbij de groep onnaamwezig is.
+
+00:38:16.760 --> 00:38:21.080
+Pas als dat aantal overeenkomt met je inventaris, verwijder je de directe toewijzingen en doe dit op volgorde.
+
+00:38:21.340 --> 00:38:22.840
+Deze volgorde biedt je bescherming.
+
+00:38:23.040 --> 00:38:27.080
+Begin met een pilot, één kleine groep, misschien 50 mensen op een afdeling waar je de manager kent.
+
+00:38:27.280 --> 00:38:30.560
+Verwijder hun directe licenties, wacht een paar dagen en hou de tickets in de gaten.
+
+00:38:30.560 --> 00:38:32.500
+Als er niets binnenkomt, breed het dan uit.
+
+00:38:32.500 --> 00:38:36.620
+Verwerk grote badges buiten werktijden en hou elke badge op een formaat dat je handmatig kunt herstellen.
+
+00:38:36.820 --> 00:38:38.300
+Een paar honderd, niet een paar duizend.
+
+00:38:38.480 --> 00:38:43.680
+Bewaar bevoorrechte accounts voor het laatst, admins, directieleden, iedereen wiens uitval leidt tot een telefoontje.
+
+00:38:43.820 --> 00:38:46.720
+Tegen die tijd heb je het proces 20 keer doorlopen en ken je het.
+
+00:38:46.880 --> 00:38:48.040
+Pas op voor één valkuil.
+
+00:38:48.260 --> 00:38:52.800
+Als je een directe licentie van een gebruiker verwijdert voordat de groepslicentie is geactiveerd, heb je ze zojuist ontdaan van hun toegang.
+
+00:38:52.940 --> 00:38:56.340
+De mailbox gaat in die status van 30 dagen, soft the lead, die we hebben besproken.
+
+00:38:56.740 --> 00:39:00.980
+Controleer dus altijd de groepsbron op die specifieke gebruiker, niet alleen op de groep als geheel.
+
+00:39:01.180 --> 00:39:01.960
+Nu, rollback.
+
+00:39:02.160 --> 00:39:04.680
+Denk hierover na voordat je begint, niet pas nadat er iets kapot gaat.
+
+00:39:04.840 --> 00:39:08.120
+Je rollback is de baseline export, die vermeldt precies wie wat had en hoe.
+
+00:39:08.280 --> 00:39:11.580
+Als een badge misgaat, kun je vanuit dat bestand binnen enkele minuten direct opnieuw toewijzen.
+
+00:39:11.760 --> 00:39:13.300
+Hou het bestand gedateerd en bij de hand.
+
+00:39:13.500 --> 00:39:15.280
+Verwijder ook niet op dag 1 je oude proces.
+
+00:39:15.540 --> 00:39:19.840
+Hou de mogelijkheid om direct toe te wijzen de eerste maand open, zodat een verrassing geen nieuwe medewerker laat wachten.
+
+00:39:20.020 --> 00:39:21.360
+En onthoud één ding over de timing.
+
+00:39:21.360 --> 00:39:23.400
+Verwijdering is binnen de periode omkeerbaar.
+
+00:39:23.580 --> 00:39:24.820
+Een verwijderde groep is dat niet.
+
+00:39:25.020 --> 00:39:26.840
+Ruim groepen dus passen pas als het stof is neergedaald.
+
+00:39:27.040 --> 00:39:28.900
+Wanneer dit klaar is, ziet de tenant er anders uit.
+
+00:39:29.080 --> 00:39:30.340
+Toewijzing volgt regels.
+
+00:39:30.560 --> 00:39:32.040
+Fouten verschijnen in één wachtrij.
+
+00:39:32.220 --> 00:39:34.520
+Het levenscyclusprobleem heeft de mechanisme erachter.
+
+00:39:34.680 --> 00:39:37.720
+Dat is hygiëne en het is de basis, maar het regelt alleen wie de licentie heeft.
+
+00:39:37.880 --> 00:39:40.400
+Het stelt niet de vraag of de licentie zelf de juiste is.
+
+00:39:40.560 --> 00:39:45.240
+We gaan nu dus een niveau hoger, van hoe licenties worden toegewezen naar welke licenties je überhaupt koopt.
+
+00:39:45.460 --> 00:39:47.580
+Sectie 13 E3 vs E5
+
+00:39:47.580 --> 00:39:48.700
+De verkeerde vraag.
+
+00:39:48.900 --> 00:39:51.720
+Vroeg of laat belandt elk licentiegesprek bij dezelfde zin.
+
+00:39:51.940 --> 00:39:53.040
+Hebben we E5 nodig?
+
+00:39:53.240 --> 00:39:55.300
+Het komt van een CEO na een security briefing.
+
+00:39:55.560 --> 00:39:57.320
+Het komt van een partner tijdens de vernieuwing.
+
+00:39:57.500 --> 00:40:01.060
+Het komt van een leverancier die net een dia liet zien met veel schild-iconen en wie het ook vraagt.
+
+00:40:01.200 --> 00:40:02.020
+Verwacht een ja of een nee?
+
+00:40:02.220 --> 00:40:02.980
+Dat is het probleem.
+
+00:40:03.180 --> 00:40:04.600
+De vraag heeft slechts twee antwoorden.
+
+00:40:04.860 --> 00:40:05.580
+Denk na over wat het veronderstelt.
+
+00:40:06.320 --> 00:40:09.400
+Het veronderstelt dat de tenant één ding is, één doelgroep, één behoefte, één prijs.
+
+00:40:09.580 --> 00:40:11.140
+Kies een pakket en iedereen krijgt het.
+
+00:40:11.140 --> 00:40:13.160
+Maar in werkelijkheid heb je niet één doelgroep.
+
+00:40:13.280 --> 00:40:15.620
+Je hebt een finance team dat overschrijvingen goedkeurt.
+
+00:40:15.620 --> 00:40:18.080
+Je hebt beheerders die alles in de tenant kunnen aanpassen.
+
+00:40:18.280 --> 00:40:23.600
+Je hebt een magazijnploeg die twee keer per dag e-mail opent en honderden mensen daartussenin die documenten schrijven en vergaderen.
+
+00:40:23.840 --> 00:40:26.660
+Geef ze allemaal hetzelfde pakket en voor sommigen is het de verkeerde keuze.
+
+00:40:26.840 --> 00:40:30.880
+Als je ja zegt, betaal je voor beveiligingsstoels voor duizenden mensen die de dreiging nooit zullen ervaren.
+
+00:40:31.060 --> 00:40:34.720
+Als je nee zegt, laat je de meest risicovolle accounts zonder de bescherming die ze echt nodig hebben.
+
+00:40:34.980 --> 00:40:36.300
+Beide antwoorden kosten geld.
+
+00:40:36.520 --> 00:40:38.320
+Het ene kost het elke maand op de factuur.
+
+00:40:38.520 --> 00:40:40.240
+Het andere kost het later bij een incident.
+
+00:40:40.580 --> 00:40:44.000
+Dit kader dwingt tot een alles of niets keuze en die keuze zelf is de ondergrens.
+
+00:40:44.000 --> 00:40:48.260
+Om daaruit te komen, moet je kijken naar wat E5 werkelijk is, niet de presentatie, maar de inhoud.
+
+00:40:48.440 --> 00:40:49.420
+E3 is de basis.
+
+00:40:49.780 --> 00:40:54.100
+Office apps, Exchange, SharePoint, Teams en een solide set aan identiteits- en apparaatbeheer.
+
+00:40:54.260 --> 00:40:56.020
+De meeste mensen doen hun hele werk daarin.
+
+00:40:56.160 --> 00:40:58.860
+E5 is E3 plus vier blokken erbovenop gestapeld.
+
+00:40:59.000 --> 00:41:00.000
+Het eerste blok is beveiliging.
+
+00:41:00.720 --> 00:41:09.340
+Microsoft Defender for Endpoint, Office 365, Identiteit en Cloud apps, plus het hogere niveau van Entra ID, wat identiteitsbescherming en Privileged Identity Management toevoegt.
+
+00:41:09.540 --> 00:41:12.880
+Dat is detectie van bedreigingen, respons en risicogebaseerde toegang.
+
+00:41:12.880 --> 00:41:14.580
+Het tweede blok is Compliance.
+
+00:41:14.780 --> 00:41:20.300
+De geavanceerde Purview Tools, Premium e-Discovery, geavanceerde Audit, Insider Risk Management en Communicatie Compliance.
+
+00:41:20.540 --> 00:41:23.180
+Deze zijn voor juridische teams, toezichthouders en onderzoeken.
+
+00:41:23.340 --> 00:41:24.740
+Het derde blok is telefonie.
+
+00:41:24.920 --> 00:41:29.160
+Teams, phone en audioconferenties zodat mensen kunnen bellen vanuit teams en kunnen inbellen bij vergaderingen.
+
+00:41:29.280 --> 00:41:30.560
+En het vierde is Analytics.
+
+00:41:30.800 --> 00:41:33.980
+Power B Pro inbegrepen samen met de bijbehorende rapportagetools.
+
+00:41:34.260 --> 00:41:36.760
+Vier blokken, vier verschillende kopers binnen je bedrijf.
+
+00:41:36.760 --> 00:41:42.700
+Beveiliging geeft om de eerste, juridische zaken om de tweede, facilitaire en telecom om de derde, analisten om de vierde.
+
+00:41:42.860 --> 00:41:44.240
+Kijk nu nog eens naar die lijst.
+
+00:41:44.440 --> 00:41:46.340
+Bijna niemand heeft ze alle vier tegelijk nodig.
+
+00:41:46.580 --> 00:41:50.780
+Voor al hun medewerkers heeft een bank misschien de beveiligings- en complianceblokken nodig voor het grootste deel van het personeel.
+
+00:41:50.920 --> 00:41:54.500
+Een fabrikant heeft misschien bijna niets aan het complianceblok, maar veel aan telefonie.
+
+00:41:54.640 --> 00:41:57.340
+Een adviesbureau wil misschien alleen Analytics en niets anders.
+
+00:41:57.340 --> 00:42:01.580
+Toch verkoopt het pakket ze als één geheel voor één prijs en die prijs is de som van alle vier.
+
+00:42:01.800 --> 00:42:03.100
+Dat is de ontslag die je moet maken.
+
+00:42:03.100 --> 00:42:05.900
+Stop met het kopen van pakketten, begin met het kopen van mogelijkheden.
+
+00:42:06.040 --> 00:42:09.460
+Een pakket is een bundel die iemand anders heeft ontworpen voor een gemiddelde klant die niet bestaat.
+
+00:42:09.620 --> 00:42:13.560
+Een functionaliteit is iets specifieks dat een bepaalde groep mensen nodig heeft om veilig hun werk te doen.
+
+00:42:13.780 --> 00:42:16.460
+Wanneer je vanuit de functionaliteit vertrekt, verandert de vraagstelling.
+
+00:42:16.640 --> 00:42:18.440
+Het is niet langer E3 of E5.
+
+00:42:18.640 --> 00:42:23.000
+Het is, welke van deze blokken heeft deze groep mensen nodig en wat is de goedkoopste manier om dit af te dekken?
+
+00:42:23.240 --> 00:42:26.020
+Soms is de goedkoopste manier het volledige E5-pakket.
+
+00:42:26.240 --> 00:42:31.040
+Wanneer een groep drie van de vier blokken nodig heeft, wint het pakket meestal omdat de onderdelen losduurder zijn dan samen.
+
+00:42:31.040 --> 00:42:36.040
+Soms is het E3 met één add-on en soms is het E3 voor 10.000 mensen en E5 voor 300.
+
+00:42:36.320 --> 00:42:42.680
+Je kunt daar alleen achterkomen door elke functionaliteit afzonderlijk te bekijken wat het doet, wie het echt nodig heeft en wat het kost als je het loskoopt.
+
+00:42:42.900 --> 00:42:47.680
+Laten we de doos blok voor blok openen, te beginnen met degene die het zwaarst weegt in elke E5-pitch.
+
+00:42:48.100 --> 00:42:51.300
+Beveiliging, sectie 14, wat E5 toevoegt aan beveiliging.
+
+00:42:51.560 --> 00:42:55.400
+Beveiliging is het blok met het grootste prijskaartje, dus het is degene die vanuit angst wordt gekocht.
+
+00:42:55.580 --> 00:42:57.820
+Open de doos en je zult zien dat het niet één product is.
+
+00:42:57.820 --> 00:43:01.880
+Het zijn vier Defender Tools en één identiteitsupgrade die elk een andere deur beschermen.
+
+00:43:01.980 --> 00:43:03.600
+Begin met Defender 4 Endpoint.
+
+00:43:03.780 --> 00:43:07.080
+Het houdt de apparaten in de gaten, laptops, surfers, soms telefoons.
+
+00:43:07.280 --> 00:43:13.720
+Het spot malware, vreemd gedrag en aanvallers die tussen machines bewegen en kan een gecompromitteerd apparaat binnen enkele minuten van het netwerk isoleren.
+
+00:43:13.920 --> 00:43:23.560
+Defender 4 Office 365 Plan 2 controleert de inbox en de samenwerkingstools, veilige koppelingen, veilige bijlagen en de onderzoekstools die een phishingbericht herleiden naar iedereen die het heeft ontvangen.
+
+00:43:23.560 --> 00:43:29.000
+Plan 1 zit al in Business Premium. E3 krijgt alleen de basisfiltering, dus plan 2 is de echte upgrade.
+
+00:43:29.160 --> 00:43:35.560
+Defender 4 Identity controleert je on-premises Active Directory. Het zoekt naar gestolen inloggegevens, zijdelingse bewegingen en verkenning.
+
+00:43:35.720 --> 00:43:38.940
+Als je geen on-prem directory hebt, heeft die tool bijna niets om naar te kijken.
+
+00:43:39.160 --> 00:43:45.740
+En Defender 4 Cloud Apps houdt in de gaten hoe mensen clouddiensten gebruiken, met welke apps ze verbinden, welke data eruit vloeit en welke niemand heeft goedgekeurd.
+
+00:43:45.740 --> 00:43:55.260
+Dan het identiteitsonderdeel. Entra IDP2 voegt twee dingen toe. Identity Protection scoort aanmoldingen en gebruikers op risico en kan een wachtwoordwijziging afdwingen of toegang blokkeren wanneer een score stijgt.
+
+00:43:55.440 --> 00:44:02.380
+Privileged Identity Management maakt beheerdersrechten tijdelijk. Niemand blijft de hele dag een globale beheerder. Ze vragen de rol aan, gebruiken deze en deze verloopt vervolgens.
+
+00:44:02.600 --> 00:44:05.760
+Nu, wie heeft wat nodig? Niet iedereen. Dat is precies het punt.
+
+00:44:06.000 --> 00:44:09.900
+Privileged Identity Management is vooral belangrijk voor je beheerders, hooguit een paar dozijn mensen.
+
+00:44:09.900 --> 00:44:13.860
+Identity Protection is belangrijk voor iedereen van wie het account schade zou aanrichten als het gestolen wordt.
+
+00:44:14.240 --> 00:44:17.860
+Directieleden, financiën, iedereen die een betaling kan goedkeuren of bij een klantendatabase kan.
+
+00:44:18.060 --> 00:44:21.920
+Defender 4 Endpoint is belangrijk waar apparaten gevoelige gegevens bevatten of echt gevaarlopen.
+
+00:44:22.080 --> 00:44:28.040
+Een laptop van een ontwikkelaar, ja. Een gedeelde kiosk in een magazijn, veel minder. Maar dit is de verborgen kost, overlap.
+
+00:44:28.360 --> 00:44:34.640
+Veel tenants hebben al een beveiligingstoel die een deel hiervan doet. Een endpoint product van een andere leverancier op elke machine.
+
+00:44:34.860 --> 00:44:39.360
+Een mailfilter for exchange. Een cloud access broker die drie jaar geleden is aangeschaft.
+
+00:44:39.360 --> 00:44:44.660
+Koop E5 erbij en je betaalt dubbel voor hetzelfde werk, met twee agents die om dezelfde bestanden vechten.
+
+00:44:44.880 --> 00:44:47.300
+Noteer dus eerst wat je al gebruikt voordat je iets toevoegt.
+
+00:44:47.480 --> 00:44:51.180
+Kijk naar de vernieuwingsdatum en vergelijk blok voor blok wat E5 zou vervangen.
+
+00:44:51.380 --> 00:44:54.380
+De besparing zie je pas echt als de oude tool ook daadwerkelijk verdwijnt.
+
+00:44:54.520 --> 00:44:57.220
+Overlap zit ook verstopt in de eigen catalogus van Microsoft.
+
+00:44:57.540 --> 00:45:00.920
+Business Premium bevat al Defender 4 Business en Plan 1 Mail Protection.
+
+00:45:01.300 --> 00:45:06.640
+Sommige E3-klanten hebben Entra IDP1 en beseffen niet dat het P2-verschil kleiner is dan de pitch suggereert.
+
+00:45:06.640 --> 00:45:10.020
+Kijk vervolgens naar het alternatief. Je hoeft niet het hele pakket af te nemen.
+
+00:45:10.240 --> 00:45:12.260
+Microsoft verkoopt deze onderdelen ook los.
+
+00:45:12.420 --> 00:45:18.740
+Defender 4 Endpoint Plan 2, Defender 4 Office 365 Plan 2 en Entra IDP2 kunnen elk apart aan E3 worden toegevoegd.
+
+00:45:18.820 --> 00:45:24.600
+Er is ook de E5 Security Add-on die het beveiligingsblok aan E3 toevoegt zonder compliance, voice en analytics.
+
+00:45:24.940 --> 00:45:29.320
+De afweging is simpel. Voeg één of twee onderdelen toe en losse licenties zijn meestal goedkoper.
+
+00:45:29.540 --> 00:45:34.200
+Voeg het merendeel van het beveiligingsblok toe en de add-on of volledige E5 is vaak goedkoper dan de losse delen.
+
+00:45:34.200 --> 00:45:37.180
+Ergens tussen twee en vier componenten kruisen de lijnen elkaar.
+
+00:45:37.480 --> 00:45:40.280
+Prijslijsten wijzigen, vertrouw dus niet op een getal uit een video.
+
+00:45:40.600 --> 00:45:44.460
+Reken het zelf uit met jouw eigen aantallen en overeenkomst en onthoud voor wie het is.
+
+00:45:44.660 --> 00:45:47.400
+Bereken de kosten voor bevoorrechten en risicovolle persona's apart.
+
+00:45:47.600 --> 00:45:51.800
+Een paar honderd E5 Security licenties is een heel andere rekening dan een upgrade voor het hele bedrijf.
+
+00:45:51.940 --> 00:45:54.200
+Beveiliging is echter maar de helft van wat deze laag toevoegt.
+
+00:45:54.400 --> 00:45:58.120
+De andere helft bedient een totaal andere koper en valt zelden binnen het IT-budget.
+
+00:45:58.540 --> 00:45:58.980
+Compliance
+
+00:45:58.980 --> 00:46:00.020
+Sectie 15
+
+00:46:00.020 --> 00:46:02.920
+Wat E5 toevoegt op het gebied van compliance en analytics.
+
+00:46:03.260 --> 00:46:04.940
+Compliance is een ander soort aankoop.
+
+00:46:05.460 --> 00:46:06.640
+Beveiligingstools stoppen aanvallen.
+
+00:46:06.860 --> 00:46:08.380
+Compliance tools beantwoorden vragen.
+
+00:46:08.580 --> 00:46:09.640
+Wie heeft dit bestand gezien?
+
+00:46:09.840 --> 00:46:11.000
+Wat heeft deze persoon gezegd?
+
+00:46:11.140 --> 00:46:13.320
+Kun je het bewijzen aan een toezichthouder, een rechter of een bestuur?
+
+00:46:13.460 --> 00:46:15.000
+De koper is dus niet het beveiligingsteam.
+
+00:46:15.140 --> 00:46:17.580
+Het is dus juridische afdeling, ouwer, Risk of an Records Manager.
+
+00:46:17.780 --> 00:46:20.560
+En zij komen meestal met een specifieke behoefte, niet met een algemene zorg.
+
+00:46:20.760 --> 00:46:22.880
+Begin bij de Purview tools die E5 toevoegt.
+
+00:46:22.880 --> 00:46:26.000
+E-Discovery Premium is de uitgebreide versie voor juridisch onderzoek.
+
+00:46:26.000 --> 00:46:31.040
+E3 biedt je als standaard e-discovery, waarmee je inhoud kunt zoeken en exporteren in postvakken en sites.
+
+00:46:31.260 --> 00:46:37.880
+Premium voegt custodien, beheer toe, revisie sets, analyses die bijna dubbele documenten groeperen en workflows voor echte rechtszaken.
+
+00:46:38.080 --> 00:46:40.660
+Als je nog nooit bent aangeklaagd, open je het misschien nooit.
+
+00:46:41.040 --> 00:46:42.920
+Geavanceerde audit breidt het audit logboek uit.
+
+00:46:43.160 --> 00:46:45.340
+Standaard audit bewaart gegevens 180 dagen.
+
+00:46:45.580 --> 00:46:49.960
+Geavanceerde audit bewaart ze langer en registreert gedetailleerdere gebeurtenissen, zoals wanneer iemand een specifiek e-mailbericht leest.
+
+00:46:49.960 --> 00:46:54.080
+Dat detail is cruciaal na een inbreuk, wanneer iemand vraagt wat een aanvaller precies heeft bekeken.
+
+00:46:54.080 --> 00:46:57.040
+Insider Risk Management zoekt naar patronen binnen het bedrijf.
+
+00:46:57.200 --> 00:47:00.740
+Iemand downloadt een ongebruikelijk aantal bestanden en neemt twee weken later ontslag.
+
+00:47:00.900 --> 00:47:04.300
+Het beoordeelt dat gedrag en stuurt de zaak door naar een klein beoordelingsteam.
+
+00:47:04.420 --> 00:47:12.620
+En communicatiecompliance scant berichten in Teams, Exchange en Viva Engage op beleidsproblemen, intimidatie, gelekte financiële data of gereguleerd advies.
+
+00:47:12.860 --> 00:47:15.140
+Financiële instellingen moeten vaak zoiets gebruiken.
+
+00:47:15.360 --> 00:47:16.740
+De meeste andere bedrijven niet.
+
+00:47:16.740 --> 00:47:19.620
+Nu het Analytics-blok dat kleiner en makkelijker te beoordelen is.
+
+00:47:19.780 --> 00:47:21.280
+E5 bevat Power B Pro.
+
+00:47:21.540 --> 00:47:24.480
+Dat is de licentie waarmee iemand rapporten kan publiceren en delen met anderen.
+
+00:47:24.660 --> 00:47:27.620
+Prima als je analisten hebt die dashboards bouwen, maar hoeveel heb je er daarvan?
+
+00:47:27.800 --> 00:47:28.760
+50? 200?
+
+00:47:29.080 --> 00:47:32.000
+Vergelijk dat met de 5000 licenties die je mogelijk aan het upgraden bent.
+
+00:47:32.160 --> 00:47:37.860
+En vergeet niet dat voor het bekijken van een gedeeld rapport niet altijd Pro nodig is, aangezien rapporten op capaciteit door gratis gebruikers gelezen kunnen worden.
+
+00:47:38.020 --> 00:47:39.560
+Hier kan de bundel tegen je werken.
+
+00:47:39.740 --> 00:47:44.740
+Je betaalt voor Power B Pro bij elke E5-licentie, terwijl de rapportbouwers slechts een klein deel daarvan zijn.
+
+00:47:44.740 --> 00:47:49.220
+Pro los kopen voor die paar mensen is vaak goedkoper dan het voor de hele populatie te dragen.
+
+00:47:49.420 --> 00:47:50.120
+Dan spraak.
+
+00:47:50.260 --> 00:47:52.860
+E5 bevat een telefoonsysteem en audioconferenties.
+
+00:47:53.040 --> 00:47:57.980
+Het telefoonsysteem verandert teams in een zakelijke telefoon, inkomende gesprekken, uitgaande gesprekken, voicemail, wachtrijen.
+
+00:47:58.560 --> 00:48:02.220
+Audioconferenties geeft vergaderingen een inbelnummer, zodat iemand die rijdt via de telefoon kan deelnemen.
+
+00:48:02.420 --> 00:48:04.460
+Of dat waardevol is, hangt af van hoe je werkt.
+
+00:48:04.640 --> 00:48:09.160
+Als je bedrijf draait op mobiele telefoons en vaste toestellen van een andere leverancier, heb je niets aan dit blok.
+
+00:48:09.320 --> 00:48:12.520
+Als je een centrale PBX vervangt, bespaar je hier echt geld mee.
+
+00:48:12.520 --> 00:48:16.600
+Let op een belangrijk punt bij het bellen. Het telefoonsysteem alleen is geen volledig telefoonabonnement.
+
+00:48:16.740 --> 00:48:20.000
+Je hebt nog steeds een belplan of een providerverbinding nodig om normale telefoonnummers te bereiken.
+
+00:48:20.200 --> 00:48:23.300
+De licentie is de software kant. De belminuten zijn een aparte factuur.
+
+00:48:23.500 --> 00:48:27.700
+Dus nu de vraag die je aantal licenties bepaalt, welke van deze functies vereisen dat elke gebruiker een licentie heeft en welke niet.
+
+00:48:27.860 --> 00:48:28.900
+Het antwoord is verdeeld.
+
+00:48:29.160 --> 00:48:30.720
+Sommige zaken zijn gekoppeld aan de persoon.
+
+00:48:30.900 --> 00:48:33.300
+Het telefoonsysteem werkt alleen voor gebruikers die er een licentie voor hebben.
+
+00:48:33.460 --> 00:48:35.920
+Power B Pro geldt alleen voor mensen die publiceren of delen.
+
+00:48:36.080 --> 00:48:38.820
+Insider Risk beleidsregels gelden voor de gebruikers aan wie je ze toewijst.
+
+00:48:38.820 --> 00:48:41.500
+Andere functies hebben betrekking op meer mensen dan je hebt gelicentieerd.
+
+00:48:41.800 --> 00:48:43.960
+Auditlogging is er één, retentiegedrag een andere.
+
+00:48:44.160 --> 00:48:49.620
+Of ze de hele tenant bereiken of alleen gelicentieerde gebruikers, bepaalt hoeveel licenties je moet kopen om aan de regels te voldoen.
+
+00:48:49.860 --> 00:48:52.960
+Zit je er in de ene richting naast, dan koop je te veel licenties voor het hele bedrijf.
+
+00:48:53.120 --> 00:48:56.340
+Zit je er in de andere richting naast, dan gebruik je functies voor mensen die je nooit hebt gelicentieerd.
+
+00:48:56.520 --> 00:48:58.880
+Dus de volgende stap is niet de prijsstelling, maar de scope.
+
+00:48:59.040 --> 00:49:00.700
+Wie moet er een licentie hebben voor een functie?
+
+00:49:00.880 --> 00:49:02.820
+Elke premium functie heeft een scope regel.
+
+00:49:02.920 --> 00:49:05.720
+Niemand leest die bij aankoop, iedereen heeft die nodig bij een audit.
+
+00:49:05.900 --> 00:49:09.500
+De regel beantwoordt één vraag, wie moet de licentie hebben om deze functie legaal te gebruiken?
+
+00:49:09.660 --> 00:49:11.400
+En het antwoord valt uit één in twee kampen.
+
+00:49:11.580 --> 00:49:13.460
+Het eerste kamp is de scope per gebruiker.
+
+00:49:13.680 --> 00:49:17.180
+De functie werkt alleen voor mensen met een licentie en is alleen op hen van toepassing.
+
+00:49:17.440 --> 00:49:20.920
+Wijs Phone System toe aan 400 mensen en 400 mensen kunnen bellen.
+
+00:49:21.120 --> 00:49:22.740
+De andere 4000 kunnen dat niet.
+
+00:49:22.920 --> 00:49:24.660
+Power B Pro werkt op dezelfde manier.
+
+00:49:24.880 --> 00:49:29.120
+Insider Risk beleidt ook, omdat je kiest welke gebruikers een beleid dekt en die gebruikers hebben het recht nodig.
+
+00:49:29.360 --> 00:49:30.640
+Dit kamp is gebruiksvriendelijk.
+
+00:49:30.640 --> 00:49:35.100
+Je koopt precies het aantal licenties dat je gebruikt en de grens van de functie komt overeen met de grens van de licentie.
+
+00:49:35.240 --> 00:49:36.960
+Het tweede kamp is waar het lastiger wordt.
+
+00:49:37.220 --> 00:49:41.020
+Sommige functies draaien op tenantniveau of raken mensen buiten degene die je hebt gelicentieerd.
+
+00:49:41.240 --> 00:49:42.640
+Denk na over wat dat betekent.
+
+00:49:42.820 --> 00:49:46.920
+Je schakelt een mogelijkheid in voor de hele organisatie en deze verwerkt gegevens van iedereen.
+
+00:49:47.140 --> 00:49:50.800
+Een beleid dat geldt voor alle mailboxen, een audit-instelling die elke gebruiker logt,
+
+00:49:50.860 --> 00:49:54.980
+een scan die elk bericht in een kanaal leest, inclusief berichten van mensen zonder premium licentie.
+
+00:49:55.140 --> 00:49:58.740
+De licentievoorwaarden van Microsoft zeggen over het algemeen hetzelfde over deze zaken.
+
+00:49:58.740 --> 00:50:01.560
+Als de functie een gebruiker raakt, heeft die gebruiker de licentie nodig,
+
+00:50:01.740 --> 00:50:04.740
+niet de beheerder die het heeft geconfigureerd, maar de persoon op wie het van toepassing is.
+
+00:50:04.900 --> 00:50:09.400
+Het echte werk is dus om je functies in die twee kampen te sorteren en dat kun je niet doen vanaf de marketingpagina.
+
+00:50:09.560 --> 00:50:12.840
+Je doet dit aan de hand van de servicebeschrijving en de licentierichtlijnen voor elke functie,
+
+00:50:13.000 --> 00:50:15.060
+stuk voor stuk, omdat het antwoord per product verschilt.
+
+00:50:15.300 --> 00:50:17.240
+Waarom is gedeeltelijke licentiering nu van belang?
+
+00:50:17.400 --> 00:50:19.360
+Omdat het een gat creëert dat op besparingen lijkt.
+
+00:50:19.580 --> 00:50:23.400
+Stel dat je E5-compliance functies koopt voor het juridische team en de directie, 200 personen.
+
+00:50:23.640 --> 00:50:26.960
+Vervolgens schakel je een communicatiebeleid in dat geldt voor iedereen in het bedrijf.
+
+00:50:27.040 --> 00:50:29.800
+Op papier bespaar je de kosten van 4800 licenties.
+
+00:50:29.980 --> 00:50:33.500
+In de praktijk gebruik je een functie voor 4800 mensen die er geen recht op hebben.
+
+00:50:33.640 --> 00:50:34.720
+Er gaat niets kapot.
+
+00:50:34.900 --> 00:50:36.200
+De portal blokkeert je niet.
+
+00:50:36.400 --> 00:50:39.580
+De functie draait, het dashboard vult zich en de factuur blijft laag.
+
+00:50:39.720 --> 00:50:40.520
+Dat is het gevaar.
+
+00:50:40.700 --> 00:50:43.680
+Het platform dwingt sommige regels af en vertrouwt je bij de rest.
+
+00:50:43.940 --> 00:50:47.060
+Wanneer het je vertrouwt, blijft het gat onzichtbaar tot een leveranciersbeoordeling.
+
+00:50:47.280 --> 00:50:50.460
+Een software-added of een toezichthouder vraagt hoe een controle was gelicentieerd.
+
+00:50:50.460 --> 00:50:54.000
+En de kosten zijn niet alleen nabetalingen, het is de compliance claim zelf.
+
+00:50:54.140 --> 00:50:57.660
+Als je een toezichthouder vertelt dat alle communicatie van werknemers wordt gecontroleerd
+
+00:50:57.660 --> 00:51:01.900
+en slechts een fractie heeft het recht, heb je een bewering gedaan die je eigen gegevens niet kunnen ondersteunen.
+
+00:51:02.040 --> 00:51:04.000
+Dus de veilige Z werkt in beide richtingen.
+
+00:51:04.380 --> 00:51:07.200
+Licentieer voor functies per gebruiker alleen de mensen die ze nodig hebben.
+
+00:51:07.480 --> 00:51:10.780
+Licentieer voor ten ent brede functies de volledige populatie of beperkte functie
+
+00:51:10.780 --> 00:51:13.040
+zodat deze alleen geldt voor mensen die je hebt gelicentieerd.
+
+00:51:13.280 --> 00:51:14.800
+Beperken is vaak de betere weg.
+
+00:51:15.000 --> 00:51:17.100
+De meeste van deze tools laten je richten op een groep.
+
+00:51:17.100 --> 00:51:20.540
+Je past het beleid alleen toe op de gelicentieerde groep en het stopt bij die grens.
+
+00:51:20.680 --> 00:51:21.880
+De functie werkt nog steeds.
+
+00:51:22.080 --> 00:51:23.780
+De scope komt overeen met de licenties.
+
+00:51:24.020 --> 00:51:26.020
+Dan komt de stap die bijna iedereen overslaat.
+
+00:51:26.200 --> 00:51:26.860
+Schrijf het op.
+
+00:51:27.020 --> 00:51:30.100
+Hou voor elke premium functie die je gebruikt een kort overzicht bij wat het is,
+
+00:51:30.220 --> 00:51:33.100
+welke scope regel van toepassing is, aan welke groep het is toegewezen,
+
+00:51:33.240 --> 00:51:35.420
+hoeveel mensen die groep bevat en welke licentie hen dekt.
+
+00:51:35.600 --> 00:51:39.240
+Voeg de datum toe, het brondocument dat je hebt gecontroleerd en de naam van degene die het heeft goedgekeurd.
+
+00:51:39.400 --> 00:51:40.900
+Eén pagina per functie is voldoende.
+
+00:51:41.100 --> 00:51:42.440
+Die pagina vervult drie taken.
+
+00:51:42.440 --> 00:51:45.200
+Het bewijst aan een auditor dat je een wel overwogen beslissing hebt genomen.
+
+00:51:45.360 --> 00:51:47.880
+Het voorkomt dat de volgende beheerder per ongeluk een beleid verruimt
+
+00:51:47.880 --> 00:51:50.240
+en het geeft je een overzichtelijke plek om bij verlenging te controleren
+
+00:51:50.240 --> 00:51:52.420
+wanneer iemand vraagt of je een functie kunt verwijderen of toevoegen.
+
+00:51:52.640 --> 00:51:54.620
+Zonder dat zit de scope in het hoofd van één persoon.
+
+00:51:54.840 --> 00:51:56.900
+Wanneer die persoon vertrekt, verdwijnt ook het antwoord.
+
+00:51:57.040 --> 00:51:59.040
+En kijk eens wat deze gegevens beginnen te laten zien.
+
+00:51:59.280 --> 00:52:02.160
+Verschillende groepen mensen hebben verschillende functies nodig met verschillende scopes.
+
+00:52:02.420 --> 00:52:05.680
+Sommigen hebben beveiliging nodig, sommigen compliance, sommigen niets meer dan de basis,
+
+00:52:05.680 --> 00:52:08.100
+wat betekent dat de grootste hefboom niet het kiezen van een tier is.
+
+00:52:08.220 --> 00:52:09.380
+Het is het mixen ervan.
+
+00:52:09.660 --> 00:52:11.160
+Strategie van gemengde licenties.
+
+00:52:11.380 --> 00:52:14.620
+Mixen is de echte hefboom, niet E3 voor iedereen, niet E5 voor iedereen.
+
+00:52:14.800 --> 00:52:17.360
+Een bewuste splitsing opgebouwd rond wat mensen daadwerkelijk doen.
+
+00:52:17.540 --> 00:52:19.560
+De eenheid waar je omheen ontwerpt is de persona.
+
+00:52:19.840 --> 00:52:21.420
+Vier daarvan dekken de meeste tenants.
+
+00:52:21.720 --> 00:52:23.840
+Frontline, mensen die e-mail en een paar apps aanraken,
+
+00:52:24.080 --> 00:52:26.100
+vaak op een gedeeld apparaat voor een paar uur per dienst.
+
+00:52:26.360 --> 00:52:27.800
+Standaard, de grote middenmoot.
+
+00:52:28.000 --> 00:52:30.660
+Zij schrijven, vergaderen, delen bestanden en leven in teams.
+
+00:52:30.840 --> 00:52:33.240
+Power, analisten, engineers, projectleiders.
+
+00:52:33.240 --> 00:52:35.840
+Dezelfde basis als standaard plus een paar zwaardere tools.
+
+00:52:36.180 --> 00:52:38.280
+Privileged, beheerders, directie, finance.
+
+00:52:38.520 --> 00:52:40.000
+Minder mensen, veel hoger risico.
+
+00:52:40.200 --> 00:52:43.620
+Elke persona krijgt een eigen basislicentie en elke persona beantwoordt een andere vraag.
+
+00:52:43.840 --> 00:52:46.180
+Frontline vraagt wat het goedkoopste is dat nog steeds werkt.
+
+00:52:46.380 --> 00:52:48.960
+Privileged vraagt wat de kosten zijn als dit account gestolen wordt.
+
+00:52:49.120 --> 00:52:53.120
+De premium laag, E5, hoort in de eerste plaats en vaak uitsluitend bij de privileged persona.
+
+00:52:53.400 --> 00:52:54.940
+Denk na over wie een aanvaller wil hebben.
+
+00:52:55.140 --> 00:52:56.820
+De beheerder die elk wachtwoord kan resetten.
+
+00:52:57.040 --> 00:52:59.180
+De leidinggevende wiens mailbox onderhandelingen bevat.
+
+00:52:59.180 --> 00:53:01.360
+De financieel manager die overboekingen goedkeurt.
+
+00:53:01.360 --> 00:53:03.340
+Een gestolen account in die rollen is een incident.
+
+00:53:03.600 --> 00:53:05.880
+Een gestolen account in een magazijn is een overlast.
+
+00:53:06.080 --> 00:53:10.840
+Dus de identiteitsbeveiliging, risicoanalyse en tijdelijke beheerdersrechten gaan daarin waar de schade zou vallen.
+
+00:53:11.020 --> 00:53:12.800
+Misschien 300 mensen, geen 3000.
+
+00:53:13.160 --> 00:53:15.980
+Iedereen anders blijft op een lagere basis en kiest wat ze daarbovenop nodig hebben.
+
+00:53:16.160 --> 00:53:18.100
+Dat is de add-on laag die we eerder hebben opgebouwd.
+
+00:53:18.260 --> 00:53:20.280
+Visio voor de 8 mensen die diagrammen tekenen.
+
+00:53:20.420 --> 00:53:22.420
+Power Bipro voor de analisten die publiceren.
+
+00:53:22.600 --> 00:53:24.200
+Teams, telefonie voor de receptie.
+
+00:53:24.360 --> 00:53:28.140
+Elk is een kleine groep, een genoemde eigenaar en een regel op de factuur die je kunt verdedigen.
+
+00:53:28.140 --> 00:53:29.580
+Laten we er getallen aan hangen.
+
+00:53:29.720 --> 00:53:33.160
+Beschouw dit als honden, illustratieve prijzen en vervang ze door je eigen overeenkomst.
+
+00:53:33.320 --> 00:53:34.940
+Stel dat je 5000 gebruikers hebt.
+
+00:53:35.140 --> 00:53:38.420
+Vandaag hebben ze allemaal E5 voor ongeveer 57 dollar per gebruiker per maand.
+
+00:53:38.600 --> 00:53:40.680
+Dat is 285.000 dollar per maand.
+
+00:53:40.900 --> 00:53:41.980
+Splits het nu per persona.
+
+00:53:42.240 --> 00:53:45.000
+800 frontline gebruikers gaan naar F3 voor ongeveer 8 dollar.
+
+00:53:45.260 --> 00:53:46.700
+Dat is 6400 dollar.
+
+00:53:46.980 --> 00:53:50.000
+3000 standaard gebruikers gaan naar E3 voor ongeveer 36 dollar.
+
+00:53:50.300 --> 00:53:51.600
+Dat is 108.000 dollar.
+
+00:53:51.860 --> 00:53:55.120
+700 power users krijgen E3 plus 1 of 2 specifieke add-ons.
+
+00:53:55.120 --> 00:53:56.700
+Noem het gemiddeld 46 dollar.
+
+00:53:56.960 --> 00:53:58.300
+Dat is 32.200.
+
+00:53:58.540 --> 00:54:00.900
+En 500 privilege gebruikers behouden E5 voor 57.
+
+00:54:01.140 --> 00:54:02.920
+Dat is 28,5.000 voor de 500.
+
+00:54:03.160 --> 00:54:04.060
+Tel het bij elkaar op.
+
+00:54:04.200 --> 00:54:07.300
+Ongeveer 175.000 dollar per maand tegenover 285.000 dollar.
+
+00:54:07.460 --> 00:54:09.340
+Het verschil is 110.000 dollar per maand.
+
+00:54:09.540 --> 00:54:11.760
+Over een jaar is dat ongeveer 1,3 miljoen dollar.
+
+00:54:11.980 --> 00:54:13.100
+Is elk getal perfect?
+
+00:54:13.340 --> 00:54:13.560
+Nee.
+
+00:54:13.780 --> 00:54:15.040
+Cataloges prijzen veranderen.
+
+00:54:15.180 --> 00:54:16.640
+Kortingen beïnvloeden de rekensom.
+
+00:54:16.740 --> 00:54:19.700
+En sommige persona's hebben extra onderdelen nodig die je niet had voorzien.
+
+00:54:19.880 --> 00:54:21.100
+De structuur is wat telt.
+
+00:54:21.100 --> 00:54:25.200
+Het meeste geld zit in de standaard en frontline groepen omdat daar de meeste mensen zitten.
+
+00:54:25.440 --> 00:54:26.660
+Let op nog iets aan dat model.
+
+00:54:26.860 --> 00:54:30.100
+De privileged groep is de kleinste en daar geef je ook het meeste uit per licentie.
+
+00:54:30.300 --> 00:54:31.340
+Dat is precies het punt.
+
+00:54:31.540 --> 00:54:32.880
+Je bezuinigt niet op beveiliging.
+
+00:54:33.020 --> 00:54:34.880
+Je verplaatst het naar waar het zijn kosten terugverdient.
+
+00:54:35.040 --> 00:54:37.080
+Er zijn kosten aan de andere kant en wees daar eerlijk over.
+
+00:54:37.260 --> 00:54:40.500
+Een gemengd model vereist meer werk, meer groepen, meer regels, meer uitzonderingen.
+
+00:54:40.640 --> 00:54:43.080
+Iemand moet beslissen in welke persona een externe kracht past.
+
+00:54:43.280 --> 00:54:46.660
+Iemand moet de persoon afhandelen die op een dinsdag wordt gepromoveerd naar een risicovolle rol.
+
+00:54:46.820 --> 00:54:49.580
+Maar dat werk is precies waarvoor groepslicenties zijn ontworpen.
+
+00:54:49.580 --> 00:54:54.880
+De persona is een regel, de regel is een groep en een mover verandert van persona zodra het kenmerk verandert.
+
+00:54:55.040 --> 00:54:56.000
+En nog één fangrail.
+
+00:54:56.260 --> 00:54:59.980
+Voer de bereikcontrole uit de voorrige sectie uit voor elke premiumfunctie die je behoudt.
+
+00:55:00.040 --> 00:55:03.880
+Als een compliancebeleid de hele tenant raakt, dekt een licentie met alleen privileges dat niet.
+
+00:55:04.080 --> 00:55:06.960
+Beperk het bereik van het beleid of licentieer de hele groep die het bereikt.
+
+00:55:07.120 --> 00:55:12.320
+Tot nu toe komt de mix voort uit het verplaatsen van mensen van E5 naar beneden, maar kijk waar het aantal werknemers in dat voorbeeld echt ligt.
+
+00:55:12.500 --> 00:55:16.280
+800 gebruikers onderaan en een basisprijs die een fractie is van het volgende niveau.
+
+00:55:16.280 --> 00:55:22.460
+Daar zitten de grootste besparingen per licentie en het is de groep die de meeste tenants het slechtst licentiëren, eerste lijns en lichte gebruikers.
+
+00:55:22.620 --> 00:55:25.000
+Begin met het feit waar de meeste tenants nooit bij stilstaan.
+
+00:55:25.160 --> 00:55:28.180
+Microsoft verkoopt licenties die zijn gebouwd voor mensen die niet achter een bureau zitten.
+
+00:55:28.340 --> 00:55:30.080
+Er zijn drie echte opties aan de lichte kant.
+
+00:55:30.280 --> 00:55:33.960
+Microsoft 365 F1, Microsoft 365 F3 en Business Basic.
+
+00:55:34.160 --> 00:55:37.040
+Ze kosten een fractie van E3 en voor de juiste persoon doen ze het hele werk.
+
+00:55:37.200 --> 00:55:38.500
+F1 is de lichtste versie.
+
+00:55:38.660 --> 00:55:42.400
+Het biedt web en mobiele versies van de Office apps, Teams en een kleine mailbox van 2 gigabyte.
+
+00:55:42.400 --> 00:55:44.420
+Geen desktop apps, beperkte bestandsopslag.
+
+00:55:44.620 --> 00:55:48.660
+Denk aan iemand die een planning bekijkt, een bedrijfsupdate leest en deelneemt aan een teamchat vanaf een telefoon.
+
+00:55:48.820 --> 00:55:50.160
+F3 is een stap omhoog.
+
+00:55:50.340 --> 00:55:52.240
+De mailbox groeit naar 50 gigabyte.
+
+00:55:52.440 --> 00:55:55.920
+Je krijgt meer opslag plus de identiteits- en apparaatbeheertools die E3 ook heeft.
+
+00:55:56.120 --> 00:55:59.660
+Nog steeds geen geïnstalleerde desktop office, maar de webapps dekken het meeste lichte bewerkingswerk.
+
+00:55:59.800 --> 00:56:01.620
+De meeste eerste lijnstellens komen hier terecht.
+
+00:56:01.900 --> 00:56:03.640
+Business Basic zit iets anders in elkaar.
+
+00:56:03.860 --> 00:56:08.000
+Het komt uit de businessfamilie, dus het heeft de gebruikerslimiet en abonnementsregels waar we zo op terugkomen.
+
+00:56:08.000 --> 00:56:12.260
+Maar als product geeft het je een volledige 50 gigabyte mailbox, Teams en webapps voor een lage prijs.
+
+00:56:12.420 --> 00:56:15.440
+Voor kleine groepen of lichtoffice personeel is het een prima oplossing.
+
+00:56:15.700 --> 00:56:17.180
+Wat laten deze licenties nu weg?
+
+00:56:17.340 --> 00:56:19.800
+Dat is het onderdeel dat je moet controleren voordat je iemand overzet.
+
+00:56:20.000 --> 00:56:25.880
+Geen van deze bevatte geïnstalleerde desktop apps, geen volledige Outlook op een PC, geen Word of Excel die lokaal draaien met alle functies.
+
+00:56:26.080 --> 00:56:30.840
+Als iemand zware spreadsheets bouwt of veel met macro's werkt, zal de webversie hen binnen een week frustreren.
+
+00:56:31.040 --> 00:56:36.800
+De opslag is ook krapper, vooral bij F1 en sommige geavanceerde tools die aan de hogere niveaus zijn gekoppeld, zijn er simpelweg niet.
+
+00:56:36.800 --> 00:56:40.900
+Controleer dus elke premium functie waar je op vertrouwt tegen de SKU voordat je je vastlegt.
+
+00:56:41.120 --> 00:56:43.320
+Maar kijk naar wat de uitsluitingen daadwerkelijk dekken.
+
+00:56:43.520 --> 00:56:47.160
+Zwaar bewerkingswerk, offline werken, grote mailboxen, lokale installaties.
+
+00:56:47.360 --> 00:56:50.460
+Vraag jezelf af wie in je magazijn, winkel of callcenter zoiets doet.
+
+00:56:50.680 --> 00:56:51.240
+Bijna niemand.
+
+00:56:51.540 --> 00:56:56.200
+En daar zit de veelgemaakte fout, iedereen die een gedeeld apparaat aanraakt, een E3 licentie geven.
+
+00:56:56.440 --> 00:56:58.180
+Dat gebeurt om begrijpelijke redenen.
+
+00:56:58.340 --> 00:57:03.060
+Iemand richt een tenant in, kiest E3 als standaard en past dit overal toe omdat het simpel is.
+
+00:57:03.060 --> 00:57:08.100
+Niemand vraagt zich af of iemand die inlogt op een gedeelde terminal wel een desktop installatie nodig heeft die hij nooit gebruikt.
+
+00:57:08.260 --> 00:57:11.360
+Je betaalt uiteindelijk de volle prijs voor functies die het werk niet kan benutten.
+
+00:57:11.540 --> 00:57:15.720
+Een gedeelde tablet draait webapps, een kiosk draait een browser, een telefoon draait een mobiele app.
+
+00:57:15.840 --> 00:57:18.920
+De licentie belooft een desktop suite, maar het apparaat kan die niet draaien.
+
+00:57:19.120 --> 00:57:22.300
+Dat is over licentieren en het blijft onopgemerkt omdat de gebruiker niet klaagt.
+
+00:57:22.520 --> 00:57:24.600
+Zij weten niet wat ze missen en niemand anders ook.
+
+00:57:24.800 --> 00:57:27.060
+Laten we dus kijken hoe de light patronen echt werken.
+
+00:57:27.280 --> 00:57:30.400
+Begin bij de kiosk, een gedeeld apparaat in een kantine of op de werkvloer.
+
+00:57:30.400 --> 00:57:33.360
+Mensen loggen in, bekijken een rooster of bericht en loggen weer uit.
+
+00:57:33.560 --> 00:57:36.640
+F1 volstaat meestal omdat het werk vooral uit lezen bestaat en kort is.
+
+00:57:36.860 --> 00:57:42.440
+Dan de ploegendienstmedewerker, iemand met een persoonlijke telefoon en een account die inklokt, berichten checkt en deelneemt aan een teamoverleg.
+
+00:57:42.620 --> 00:57:48.620
+Vaak past F3 beter omdat zij een volwaardige mailbox nodig hebben en wat meer beheer over het account dan een parttimer of seizoenskracht.
+
+00:57:48.800 --> 00:57:52.540
+Hier heeft de licentiekeuze invloed op hoe snel je mensen kunt toevoegen en verwijderen.
+
+00:57:52.700 --> 00:57:57.060
+Met groepslicenties komt een seizoenskracht op de eerste dag in de frontlijn groep en vertrekt op de laatste.
+
+00:57:57.060 --> 00:58:00.940
+Geen ongebruikte licenties. Merk op hoe dit aansluit bij wat we eerder hebben gebouwd.
+
+00:58:01.080 --> 00:58:04.380
+De frontlijn persona is een groep met een basislicentie die via regels is toegewezen.
+
+00:58:04.580 --> 00:58:08.380
+Het kiezen van de juiste SKU voor die ene groep wijzigt honderden of duizenden licenties tegelijk.
+
+00:58:08.560 --> 00:58:10.240
+Eén controle voordat je iemand overzet.
+
+00:58:10.460 --> 00:58:16.840
+Start eerst een pilot met een kleine groep, controleer of hun apps in de browser en op mobiel werken en of niemand afhankelijk is van een functie die in het lichtere plan ontbreekt.
+
+00:58:17.060 --> 00:58:20.680
+Doe dat en de besparingen zijn echt zonder dat iemand zijn vermogen om te werken verliest.
+
+00:58:20.680 --> 00:58:23.700
+Maar lichte licenties roepen een andere vraag over omvang op.
+
+00:58:23.820 --> 00:58:33.080
+Niet over de laag, maar over de familie, want sommige van deze goedkope plannen vallen onder een heel andere productlijn met eigen regels over hoe groot een tenant mag zijn en daar schuilt de volgende mismatch.
+
+00:58:33.320 --> 00:58:35.880
+Business versus enterprise plannen en tenant grenzen.
+
+00:58:36.120 --> 00:58:38.020
+Microsoft verkoopt twee planfamilies.
+
+00:58:38.260 --> 00:58:39.620
+Ze werken niet op dezelfde manier.
+
+00:58:39.880 --> 00:58:41.920
+Business plannen zijn gemaakt voor kleinere organisaties.
+
+00:58:42.120 --> 00:58:43.860
+Enterprise plannen zijn gemaakt voor alle anderen.
+
+00:58:44.080 --> 00:58:45.440
+De namen klinken als een maatlabel.
+
+00:58:45.640 --> 00:58:46.980
+Het zijn in feit en zetregels.
+
+00:58:47.180 --> 00:58:48.360
+De eerste regel is een limiet.
+
+00:58:48.360 --> 00:58:50.500
+Business abonnementen stoppen bij 300 gebruikers.
+
+00:58:50.680 --> 00:58:53.900
+Die limiet geldt per abonnement en is de reden waarom deze familie überhaupt bestaat.
+
+00:58:54.160 --> 00:58:56.600
+Overschrijd je die grens, dan verwacht Microsoft dat je overstapt.
+
+00:58:56.740 --> 00:59:01.040
+Je kunt niet zomaar licenties blijven toevoegen in de hoop dat niemand het merkt, want het platform blokkeert dit bij de aankoop.
+
+00:59:01.160 --> 00:59:04.000
+De limiet is een plafond, maar het creëert een valstrik die daaronder ligt.
+
+00:59:04.200 --> 00:59:06.440
+Stel, je runt een bedrijf met 280 medewerkers.
+
+00:59:06.640 --> 00:59:08.540
+Business standard voelt goed aan en dat is het ook.
+
+00:59:08.660 --> 00:59:11.660
+Dan neem je een klein bedrijf over en kom je uit op 340 medewerkers.
+
+00:59:11.660 --> 00:59:15.660
+De toewijzing mislukt, niet alleen door de nieuwe gebruikers, maar door de gehele abonnementstructuur.
+
+00:59:15.660 --> 00:59:19.860
+Plotseling past een abonnement dat je jarenlang hebt gebruikt niet meer en moet je onder druk licenties migreren.
+
+00:59:20.060 --> 00:59:22.600
+Hou het aantal dus goed in de gaten, lang voordat je die grens bereikt.
+
+00:59:22.820 --> 00:59:26.500
+Groeiplannen, overnames en seizoensgebonden personeel duwen je allemaal richting die lijn.
+
+00:59:26.600 --> 00:59:29.320
+En het beste moment om te beslissen is ruim voordat je die grens raakt.
+
+00:59:29.520 --> 00:59:30.300
+Volgende vraag.
+
+00:59:30.480 --> 00:59:32.620
+Kun je beide families in één tenant combineren?
+
+00:59:32.760 --> 00:59:35.380
+Ja, en dit is nuttiger dan de meeste beheerders beseffen.
+
+00:59:35.620 --> 00:59:40.460
+Microsoft laat je Business en Enterprise abonnementen naast elkaar gebruiken met verschillende gebruikers per licentie.
+
+00:59:40.640 --> 00:59:42.400
+De tenant is de grens, niet het abonnement.
+
+00:59:42.400 --> 00:59:47.540
+Een gebruiker met Business Basic en een gebruiker met E3 kunnen één directory, één teams en één set groepen delen.
+
+00:59:47.640 --> 00:59:49.280
+Maar er zit een beperking aan die vrijheid.
+
+00:59:49.460 --> 00:59:52.220
+De limiet van 300 gebruikers volgt de business familie, niet de tenant.
+
+00:59:52.480 --> 00:59:56.900
+Zodra het totaal aantal business licenties die grens overschrijdt, zit de familie vol en moeten extra gebruikers naar Enterprise.
+
+00:59:57.180 --> 00:59:59.220
+Bovendien verschillen sommige functies tussen de families.
+
+00:59:59.440 --> 01:00:02.580
+Een gemengde tenant kan zich dus ongelijk gedragen als je dit niet vooraf controleert.
+
+01:00:02.800 --> 01:00:04.600
+Daarom zijn persona groepen weer van belang.
+
+01:00:04.780 --> 01:00:08.700
+Een frontlinie groep op Business Basic en een power gebruikersgroep op E3 kunnen naast elkaar bestaan,
+
+01:00:08.900 --> 01:00:10.360
+zolang je weet waar het plafond van elk ligt.
+
+01:00:10.360 --> 01:00:12.400
+Nu, de vergelijking die mensen zelden maken.
+
+01:00:12.620 --> 01:00:15.020
+Wanneer wint Business Premium het van een Enterprise pakket?
+
+01:00:15.200 --> 01:00:17.060
+Business Premium is de interessante optie.
+
+01:00:17.260 --> 01:00:20.420
+Het bundelt Office Apps, Exchange, Teams en een echte beveiligingslaag,
+
+01:00:20.580 --> 01:00:24.440
+inclusief Defender for Business, Intune en Entra IDP1, voor één prijs.
+
+01:00:24.600 --> 01:00:28.020
+Het komt dichter bij E3 plus een beveiligingszat-an dan bij een basisabonnement.
+
+01:00:28.220 --> 01:00:30.840
+Voor een groep onder de 300 kan de rekensom opvallend zijn.
+
+01:00:31.040 --> 01:00:35.380
+Koop je E3 en voeg je daarna een po in beveiliging, apparaatbeheer en identiteitscontrole los toe,
+
+01:00:35.500 --> 01:00:38.440
+dan krijg je iets dat lijkt op Business Premium tegen een hogere totaalprijs.
+
+01:00:38.440 --> 01:00:42.320
+Koop je Business Premium, dan krijg je dezelfde functionaliteiten in één licentie.
+
+01:00:42.460 --> 01:00:45.780
+Dat maakt het een sterke keuze voor een kleine divisie, een dochteronderneming of een bedrijf
+
+01:00:45.780 --> 01:00:48.020
+dat nooit verwachtte voor bij de paar honderd medewerkers te groeien.
+
+01:00:48.180 --> 01:00:51.740
+Je krijgt de bescherming zonder de volledige stek op te bouwen, maar er zijn ook beperkingen.
+
+01:00:51.880 --> 01:00:55.780
+Het mist enkele van de zwaardere compliance- en analyse-tools uit de hoogste enterprise laag
+
+01:00:55.780 --> 01:00:57.020
+en schaalt niet voorbij het maximum.
+
+01:00:57.300 --> 01:01:01.600
+Dus voor een volwassen tenant met duizenden gebruikers is het een gerichte keuze, geen standaardoptie.
+
+01:01:01.600 --> 01:01:05.220
+De test is simpel, tel de mensen, som de functies op die ze los zouden moeten kopen
+
+01:01:05.220 --> 01:01:07.880
+en berekend de prijs van beide paden in je eigen overeenkomst.
+
+01:01:08.140 --> 01:01:11.140
+Licenties en plannen vormen het grootste deel van de factuur, maar niet alles.
+
+01:01:11.400 --> 01:01:15.420
+Daaronder bevindt zich een tweede laag, opgebouwd uit kleine posten die zelden opnieuw worden bekeken,
+
+01:01:15.600 --> 01:01:17.120
+addons, en die groeien stilletjes.
+
+01:01:17.320 --> 01:01:18.940
+Addons en de stille kostenstapel.
+
+01:01:19.140 --> 01:01:22.000
+Niemand keurt in één vergadering voor 100.000 dollar aan addons goed.
+
+01:01:22.180 --> 01:01:24.640
+Ze keuren 11 dollar goed, dan 15, en dan nog een paar.
+
+01:01:24.860 --> 01:01:26.200
+Zo wordt de stapel opgebouwd.
+
+01:01:26.380 --> 01:01:28.480
+Elke post is klein genoeg om onopgemerkt te blijven,
+
+01:01:28.480 --> 01:01:30.820
+en elke post heeft een goede reden op de dag van aankoop.
+
+01:01:30.920 --> 01:01:32.600
+Laten we dus benoemen wat daar meestal in zit.
+
+01:01:32.760 --> 01:01:35.460
+Teams Phone, waarmee Teams verandert in een zakelijke telefoon.
+
+01:01:35.600 --> 01:01:38.500
+Audio vergadering, wat een inbelnummer toevoegt aan vergaderingen.
+
+01:01:38.600 --> 01:01:41.280
+Power B Pro voor mensen die rapporten publiceren en delen.
+
+01:01:41.460 --> 01:01:42.620
+Visio voor diagrammen.
+
+01:01:42.820 --> 01:01:44.480
+Project voor het plannen van werkzaamheden.
+
+01:01:44.660 --> 01:01:46.460
+En de Defender addons die we eerder bespraken,
+
+01:01:46.660 --> 01:01:49.460
+zoals plan 2 voor Office 365 of voor Endpoint,
+
+01:01:49.600 --> 01:01:51.680
+gekocht bovenop een basis die al een lichtere versie bevat.
+
+01:01:51.840 --> 01:01:53.740
+Elk van deze producten is een echt product.
+
+01:01:53.960 --> 01:01:56.400
+Elk van deze producten lost een echt probleem op voor iemand.
+
+01:01:56.660 --> 01:01:57.660
+Maar dit is het patroon.
+
+01:01:57.660 --> 01:02:00.400
+De add-on wordt gekocht voor een persoon, een project of een moment,
+
+01:02:00.660 --> 01:02:01.720
+en dat moment gaat voorbij.
+
+01:02:01.900 --> 01:02:04.540
+Een consultant heeft project nodig voor een uitrol van 6 maanden.
+
+01:02:04.740 --> 01:02:05.780
+Iemand licentieert het.
+
+01:02:05.940 --> 01:02:08.760
+De uitrol is klaar, het team gaat verder, maar de licentie blijft.
+
+01:02:08.940 --> 01:02:10.740
+Niemand van het project is verantwoordelijk voor de factuur,
+
+01:02:11.000 --> 01:02:12.740
+en niemand van de factuur weet dat het project bestond.
+
+01:02:12.900 --> 01:02:16.120
+Of een afdelingshoofd vraagt om Power B Pro voor een kwartaaloverzicht.
+
+01:02:16.300 --> 01:02:18.800
+Het wordt handmatig toegewezen in het admin center.
+
+01:02:19.040 --> 01:02:21.660
+Twee jaar later is die persoon twee keer van team veranderd,
+
+01:02:21.840 --> 01:02:23.120
+en de licentie is meegegaan.
+
+01:02:23.280 --> 01:02:24.920
+Dat is hetzelfde weespatroon als voorheen,
+
+01:02:24.920 --> 01:02:26.400
+maar dan met een kleiner prijskaartje.
+
+01:02:26.400 --> 01:02:29.400
+En een kleiner prijskaartje betekent een kleinere kans dat iemand ernaar kijkt.
+
+01:02:29.560 --> 01:02:32.240
+Nu de tweede valkuil, losse licenties versus gebundelde licenties.
+
+01:02:32.440 --> 01:02:33.200
+Neem Teams Phone.
+
+01:02:33.400 --> 01:02:35.240
+Je kunt het los kopen als add-on bij E3,
+
+01:02:35.460 --> 01:02:36.860
+of het zit inbegrepen bij E5.
+
+01:02:37.100 --> 01:02:39.140
+Stel dat je het toevoegt aan 200 E3-gebruikers,
+
+01:02:39.320 --> 01:02:41.720
+en later upgradet iemand een paar van diezelfde mensen naar E5.
+
+01:02:41.920 --> 01:02:43.840
+Nu hebben ze E5, waar Teams Phone bij zit,
+
+01:02:44.000 --> 01:02:46.020
+en de losse add-on staat er nog steeds onder toegewezen.
+
+01:02:46.180 --> 01:02:48.140
+Je betaalt twee keer voor dezelfde functionaliteit.
+
+01:02:48.340 --> 01:02:49.840
+Het systeem maakt er geen bezwaar tegen.
+
+01:02:50.100 --> 01:02:52.140
+Beide licenties staan daar, maar slechts één doet iets.
+
+01:02:52.140 --> 01:02:53.680
+Het werkt ook de andere kant op.
+
+01:02:53.680 --> 01:02:55.560
+Een team krijgt te horen dat het pakket goedkoper is,
+
+01:02:55.660 --> 01:02:57.520
+dus verhuizen ze iedereen naar E5 voor telefonie,
+
+01:02:57.660 --> 01:02:59.060
+maar alleen de receptie gebruikt telefonie.
+
+01:02:59.220 --> 01:03:01.880
+Nu heb je beveiligings-, compliance- en analyseblokken gekocht
+
+01:03:01.880 --> 01:03:03.380
+voor mensen die maar één ding nodig hadden.
+
+01:03:03.520 --> 01:03:06.520
+Dus koop het pakket of koop de losse onderdelen is geen vaste regel.
+
+01:03:06.720 --> 01:03:08.180
+Het is een berekening die verandert telkens
+
+01:03:08.180 --> 01:03:10.080
+wanneer je personeelsaantal per onderdeel wijzigt,
+
+01:03:10.260 --> 01:03:11.320
+wat ons bij de audit brengt,
+
+01:03:11.460 --> 01:03:13.580
+en dat is een andere audit dan degene die je tot nu toe hebt gedaan.
+
+01:03:13.780 --> 01:03:15.060
+Het eerdere werk ging over mensen,
+
+01:03:15.180 --> 01:03:17.600
+wie is weg, wie is inactief, wie heeft twee licenties.
+
+01:03:17.600 --> 01:03:19.180
+Deze gaat over regelitems.
+
+01:03:19.400 --> 01:03:21.160
+Bij elke add-on stel je twee vragen.
+
+01:03:21.320 --> 01:03:22.480
+Ten eerste, toewijzing.
+
+01:03:22.720 --> 01:03:23.620
+Wie heeft hem vandaag?
+
+01:03:23.780 --> 01:03:25.720
+Haal de lijst rechtstreeks uit de groep of uit graph
+
+01:03:25.720 --> 01:03:27.120
+als deze handmatig is toegewezen.
+
+01:03:27.300 --> 01:03:29.460
+Tel de licenties en vergelijk ze met waarvoor je betaalt.
+
+01:03:29.620 --> 01:03:30.720
+Ten tweede, gebruik.
+
+01:03:30.880 --> 01:03:32.900
+Wie heeft het de afgelopen 90 dagen daadwerkelijk gebruikt?
+
+01:03:33.060 --> 01:03:35.180
+Voor Powerbee betekent dat iemand heeft gepubliceerd of gedeeld.
+
+01:03:35.340 --> 01:03:37.680
+Voor Teams telefonie iemand heeft gebeld of een gesprek aangenomen.
+
+01:03:37.880 --> 01:03:40.060
+Voor Visio en Project iemand heeft de app geopend.
+
+01:03:40.220 --> 01:03:42.020
+De gebruiksrapporten in het admincentrum
+
+01:03:42.020 --> 01:03:44.520
+dekken de meeste hiervan met dezelfde beperkingen als voorheen.
+
+01:03:44.520 --> 01:03:47.260
+Dus zie ze als een sterk signaal, niet als een eindoordeel.
+
+01:03:47.460 --> 01:03:49.040
+Zet nu de twee lijsten naast elkaar.
+
+01:03:49.240 --> 01:03:50.780
+Het gat daartussen is je verspilling.
+
+01:03:51.020 --> 01:03:53.260
+Iemand heeft de licentie en heeft de tool nooit aangeraakt.
+
+01:03:53.440 --> 01:03:55.140
+Dat is de licentie die je kunt terugvorderen,
+
+01:03:55.200 --> 01:03:56.380
+meestal zonder ook maar één klacht.
+
+01:03:56.540 --> 01:03:58.120
+En het andere gat is ook belangrijk.
+
+01:03:58.320 --> 01:04:00.360
+Iemand gebruikt een functie via een pakket of proefversie
+
+01:04:00.360 --> 01:04:01.760
+zonder dat daar een licentie achter zit.
+
+01:04:01.960 --> 01:04:04.100
+Dat is degene die opduikt bij een leverancierscontrole.
+
+01:04:04.320 --> 01:04:06.360
+Noteer vervolgens een eigenaar voor elke add-on een naam,
+
+01:04:06.460 --> 01:04:08.960
+een reden waarom deze bestaat en een datum om het opnieuw te controleren.
+
+01:04:08.960 --> 01:04:11.480
+Een add-on zonder die drie dingen is een toekomstig regelitem
+
+01:04:11.480 --> 01:04:12.480
+dat niemand kan verklaren.
+
+01:04:12.680 --> 01:04:15.060
+Voer dit één keer uit en je vindt waarschijnlijk een paar honderd dollar
+
+01:04:15.060 --> 01:04:17.140
+per maand die verborgen zat op plekken waar niemand keek.
+
+01:04:17.300 --> 01:04:19.580
+Voer het bij elke verlenging uit en je stack blijft in balans.
+
+01:04:19.760 --> 01:04:21.800
+Maar er is één add-on die zich niet als de rest gedraagt.
+
+01:04:21.980 --> 01:04:24.400
+Hij kost per licentie meer dan bijna alles op deze lijst.
+
+01:04:24.540 --> 01:04:26.460
+Hij hangt af van zaken buiten de licentie zelf
+
+01:04:26.460 --> 01:04:28.240
+en iedereen staat onder druk om hem te kopen.
+
+01:04:28.640 --> 01:04:29.000
+Copilot.
+
+01:04:29.300 --> 01:04:31.360
+Copilot licenties, wat je daadwerkelijk koopt.
+
+01:04:31.540 --> 01:04:33.480
+Copilot wordt verkocht als een licentie per gebruiker.
+
+01:04:33.640 --> 01:04:34.920
+Het gedraagt zich als een systeem.
+
+01:04:34.920 --> 01:04:36.520
+Dat gat is waar het geld naartoe lekt.
+
+01:04:36.720 --> 01:04:37.880
+Begin bij de aankoop zelf.
+
+01:04:37.880 --> 01:04:40.660
+Microsoft 365 Copilot is een add-on per gebruiker.
+
+01:04:40.820 --> 01:04:41.740
+Je koopt het niet los.
+
+01:04:41.940 --> 01:04:43.820
+Het wordt toegevoegd aan een geschikte basislicentie
+
+01:04:43.820 --> 01:04:45.260
+en die basis moet eerst aanwezig zijn.
+
+01:04:45.480 --> 01:04:47.620
+Voor de meeste tenants betekent dit E3, E5,
+
+01:04:47.820 --> 01:04:49.160
+businessstandard of businesspremium.
+
+01:04:49.340 --> 01:04:50.880
+Als iemand een frontline licentie heeft,
+
+01:04:50.980 --> 01:04:52.520
+kan de add-on mogelijk niet worden gekoppeld.
+
+01:04:52.820 --> 01:04:54.680
+Controleer dus de geschiktheid voordat je een aankoop
+
+01:04:54.680 --> 01:04:55.780
+plant voor een specifieke rol.
+
+01:04:55.960 --> 01:04:58.020
+De prijs is een vast bedrag per gebruiker per maand
+
+01:04:58.020 --> 01:04:59.660
+en is een van de hoogste posten op je factuur,
+
+01:04:59.660 --> 01:05:02.100
+hoger dan de meeste basislicenties in de lichtere pakketten,
+
+01:05:02.180 --> 01:05:04.160
+wat betekent dat één toegewezen plek meer kan kosten
+
+01:05:04.160 --> 01:05:05.780
+dan de licentie waarvan deze afhankelijk is.
+
+01:05:05.780 --> 01:05:08.460
+Wat krijg je er nu voor? Een assistent in Word, Excel,
+
+01:05:08.680 --> 01:05:10.220
+PowerPoint, Outlook en Teams.
+
+01:05:10.420 --> 01:05:13.160
+Het schrijft concepten, vat samen en beantwoord vragen
+
+01:05:13.160 --> 01:05:14.060
+over je eigen werk.
+
+01:05:14.340 --> 01:05:16.480
+Maar de assistent bevat zelf de kennis niet.
+
+01:05:16.680 --> 01:05:19.060
+Hij leent die, dat is het deel dat vaak wordt gemist.
+
+01:05:19.240 --> 01:05:20.940
+Copilot werkt via Microsoft Graph,
+
+01:05:21.140 --> 01:05:23.300
+de laag die je e-mail, bestanden, vergaderingen,
+
+01:05:23.480 --> 01:05:24.600
+chats en agenda verbindt.
+
+01:05:24.740 --> 01:05:27.040
+Vraag het om het project van vorige week samen te vatten
+
+01:05:27.040 --> 01:05:28.760
+en het doorzoekt wat je al kunt bereiken.
+
+01:05:28.980 --> 01:05:30.700
+Het leest namens jou met jouw rechten.
+
+01:05:30.960 --> 01:05:33.100
+De waarde van de licentie hangt dus af van drie zaken
+
+01:05:33.100 --> 01:05:34.220
+buiten de licentie zelf.
+
+01:05:34.400 --> 01:05:35.680
+Ten eerste, Graph zelf.
+
+01:05:35.780 --> 01:05:37.120
+Als je inhoudt op een bestand share,
+
+01:05:37.300 --> 01:05:39.420
+een verouderd systeem of iemands persoonlijke schijf staat,
+
+01:05:39.580 --> 01:05:40.660
+kan Copilot deze niet zien.
+
+01:05:40.840 --> 01:05:43.600
+Het kan alleen werken met wat in Microsoft 365 staat
+
+01:05:43.600 --> 01:05:44.540
+of daarmee verbonden is.
+
+01:05:44.700 --> 01:05:45.740
+Ten tweede, rechten.
+
+01:05:45.980 --> 01:05:48.560
+Copilot respecteert deze en dat werkt twee kanten op.
+
+01:05:48.680 --> 01:05:50.600
+Als een gebruiker technisch gezien een gevoelig bestand
+
+01:05:50.600 --> 01:05:52.800
+kan openen omdat een site jaren geleden te ruim is gedeeld,
+
+01:05:52.960 --> 01:05:54.600
+kan Copilot dit in een antwoord naar voren halen.
+
+01:05:54.740 --> 01:05:56.100
+Het heeft geen regel overtreden.
+
+01:05:56.300 --> 01:05:57.520
+De regel was al overtreden.
+
+01:05:57.680 --> 01:05:58.460
+Nu is het zichtbaar.
+
+01:05:58.620 --> 01:05:59.940
+Ten derde, datakwaliteit.
+
+01:06:00.140 --> 01:06:02.240
+Verouderde documenten, vijf versies van dezelfde presentatie,
+
+01:06:02.240 --> 01:06:03.580
+mappen die niemand in tien jaar heeft opgeschoond.
+
+01:06:05.780 --> 01:06:08.200
+Voed het met rommel, en de antwoorden zijn ook rommelig.
+
+01:06:08.320 --> 01:06:10.200
+De betaalde licentie is dus niet het eindproduct.
+
+01:06:10.460 --> 01:06:12.160
+Het is het laatste stukje dat wordt vastgeschroefd
+
+01:06:12.160 --> 01:06:13.860
+op een fundament dat je wel of niet hebt gebouwd.
+
+01:06:14.020 --> 01:06:16.000
+Nu een andere vraag die voor veel verwarring zorgt.
+
+01:06:16.260 --> 01:06:18.700
+Niet elke Copilot-ervaring vereist de betaalde licentie.
+
+01:06:18.860 --> 01:06:19.920
+Er is Copilot-chat.
+
+01:06:20.140 --> 01:06:22.620
+Dit is een webgebaseerde chat-ervaring die gebaseerd is op het internet,
+
+01:06:22.820 --> 01:06:24.620
+beschikbaar voor gebruikers met een geschikt entra-account
+
+01:06:24.620 --> 01:06:25.920
+zonder extra kosten voor een licentie.
+
+01:06:26.080 --> 01:06:28.740
+Het kan niet bij je graph inhoud zoals de betaalde versie dat doet.
+
+01:06:28.920 --> 01:06:31.100
+Het antwoord op basis van openbare bronnen en bestanden
+
+01:06:31.100 --> 01:06:32.220
+die een gebruiker erin plakt.
+
+01:06:32.400 --> 01:06:34.140
+Nuttig, maar gewoon niet hetzelfde product.
+
+01:06:34.340 --> 01:06:35.540
+En dan zijn er nog agents.
+
+01:06:35.780 --> 01:06:37.900
+Dit zijn aangepaste assistenten die specifieke taken uitvoeren,
+
+01:06:38.080 --> 01:06:40.260
+zoals het beantwoorden van oude vragen of het ophalen van een statusrapport.
+
+01:06:40.460 --> 01:06:42.440
+Sommigen werken met facturatie op basis van gebruik.
+
+01:06:42.580 --> 01:06:44.120
+In plaats van een vast tarief per gebruiker,
+
+01:06:44.300 --> 01:06:47.040
+betaal je naar gebruik via berichten of consumptie in een Azure-factuuromgeving.
+
+01:06:47.260 --> 01:06:48.340
+Dat is een aparte meter.
+
+01:06:48.600 --> 01:06:50.280
+Iemand in je bedrijf kan een agent bouwen,
+
+01:06:50.560 --> 01:06:52.560
+deze koppelen aan een team en kosten genereren
+
+01:06:52.560 --> 01:06:54.380
+zonder dat er een nieuwe licentie is toegewezen.
+
+01:06:54.540 --> 01:06:55.680
+De factuur laat dit zien.
+
+01:06:55.680 --> 01:06:57.860
+De licentieteller in het admincenter niet.
+
+01:06:58.020 --> 01:06:59.980
+Je hebt nu dus twee kostenmodellen naast elkaar.
+
+01:06:59.980 --> 01:07:04.160
+Een vast tarief dat je altijd betaalt en een variabele meter die alleen loopt als er iets gebeurt.
+
+01:07:04.360 --> 01:07:05.760
+Ze falen elk op een andere manier.
+
+01:07:05.960 --> 01:07:07.640
+De vaste licentie faalt door ongebruikt te blijven.
+
+01:07:07.780 --> 01:07:09.580
+De variabele meter faalt doordat de kosten uit de hand lopen.
+
+01:07:09.720 --> 01:07:11.840
+En dat brengt ons bij wat de meeste uitholtrajecten verkeerd doen.
+
+01:07:12.020 --> 01:07:13.560
+Ze zien de licentie als het startpunt.
+
+01:07:13.840 --> 01:07:16.800
+Licenties kopen, toewijzen, aankondigen en wachten op resultaten.
+
+01:07:16.980 --> 01:07:19.820
+Maar een licentie zonder voorbereiding is enkele maandelijkse kostenpost.
+
+01:07:20.000 --> 01:07:23.320
+Als content verspreid is, rechtenruim zijn en niemand weet wat hij moet vragen.
+
+01:07:23.500 --> 01:07:27.480
+Probeert de gebruiker het twee keer, krijgt een matig antwoord en keert terug naar de oude werkwijze.
+
+01:07:27.480 --> 01:07:32.240
+De licentie blijft elke maand stilzwijgend doorlopen tegen een hoger tarief dan de basislicentie.
+
+01:07:32.440 --> 01:07:37.620
+Dat is verspild geld en het is makkelijk te missen omdat de licentie als toegewezen staat en er technisch niet stuk is.
+
+01:07:38.020 --> 01:07:39.160
+Voorbereiding komt dus eerst.
+
+01:07:39.420 --> 01:07:43.780
+Duidelijke rechten, een logische contentstructuur en een heldere reden om het op een dinsdagmiddag te gebruiken.
+
+01:07:43.960 --> 01:07:49.120
+De echte vraag is dan niet of je co-pilot moet kopen, maar wie een licentie moet krijgen en hoe je bewijst dat het de moeite waard was.
+
+01:07:49.380 --> 01:07:52.660
+Sectie 22, co-pilot uitrollen zonder licenties te verspillen.
+
+01:07:52.660 --> 01:07:59.660
+De meeste co-pilot uitroltrajecten beginnen met een lijst namen eerst leidinggevende, dan hun assistenten en daarna wie het hardstriep, die lijst wordt de pilotgroep.
+
+01:07:59.760 --> 01:08:02.100
+Maar een pilot gebaseerd op enthousiasme bewijst niets.
+
+01:08:02.280 --> 01:08:05.540
+Het laat alleen zien wie van nieuwe tools houdt, niet of de tool zichzelf terugverdient.
+
+01:08:05.760 --> 01:08:07.080
+Richt het de zin rondom het werk.
+
+01:08:07.300 --> 01:08:15.760
+Kies rollen met een meetbare taaklast, mensen die veel status updates schrijven, lange email, threads samenvatten, zes vergaderingen per dag hebben of elke maandag hetzelfde rapport maken.
+
+01:08:16.000 --> 01:08:21.560
+Sales operations, projectmanagers, klantenservice leads, die banen hebben een telbaar volume aan herhaalbaar werk dat je kunt timen.
+
+01:08:21.560 --> 01:08:23.100
+Meet het daarom voordat je begint.
+
+01:08:23.260 --> 01:08:25.160
+Hoe lang duurt het wekelijkse rapport momenteel?
+
+01:08:25.320 --> 01:08:28.240
+Hoeveel minuten gaan er zitten in het bijpraten na een dag vol vergaderingen?
+
+01:08:28.380 --> 01:08:31.840
+Noteer de cijfers, want zonder nulmeting wordt elk resultaat een mening.
+
+01:08:32.080 --> 01:08:36.580
+Hou de groep klein, 50 tot 100 licenties verdeeld over een paar verschillende rollen, zodat je kunt vergelijken.
+
+01:08:36.800 --> 01:08:38.340
+Draai de pilot minimaal twee maanden.
+
+01:08:38.560 --> 01:08:41.880
+De eerste twee weken is het nieuwsgierigheid, pas daarna ontstaan de echte gewoontes.
+
+01:08:42.060 --> 01:08:43.320
+Hoe beoordeel je nu de adoptie?
+
+01:08:43.500 --> 01:08:45.940
+Vraag mensen niet of ze het leuk vinden, raadpleeg de data.
+
+01:08:45.940 --> 01:08:52.520
+Het co-pilot gebruiksrapport in het beheercentrum toont per gebruiker de laatste activiteitsdatum in elke app Word, Excel, Teams, Outlook.
+
+01:08:52.660 --> 01:08:55.580
+Het toont ook het aantal actieve gebruikers over een bepaalde periode.
+
+01:08:55.860 --> 01:08:58.700
+Dat vertelt je wie het heeft gebruikt, waar en hoe recentelijk.
+
+01:08:58.980 --> 01:08:59.760
+Lees het met zorg.
+
+01:08:59.960 --> 01:09:03.340
+Een prompt in 30 dagen telt als actief, en dat is een magere vorm van activiteit.
+
+01:09:03.560 --> 01:09:04.980
+Kijk daarom liever naar het patroon.
+
+01:09:05.200 --> 01:09:07.300
+Wekelijks gebruik in meer dan één app duidt op een gewoonte.
+
+01:09:07.500 --> 01:09:10.980
+Een eenmalige piek in de eerste week gevolgd door stilte, betekent een gebruiker die het probeerde en afhaakte.
+
+01:09:11.200 --> 01:09:13.480
+Combineer de cijfers met een korte enquête en een paar gesprekken.
+
+01:09:13.480 --> 01:09:16.380
+Het rapport laat zien wat er is gebeurd. Mensen leggen uit waarom.
+
+01:09:16.580 --> 01:09:18.540
+Dan de regel die de meeste tenants nooit opstellen.
+
+01:09:18.780 --> 01:09:20.680
+Wat gebeurt er met een licentie die niemand gebruikt?
+
+01:09:20.880 --> 01:09:23.080
+Bepaal dat voordat je de eerste licentie uitgeeft.
+
+01:09:23.320 --> 01:09:27.440
+Bijvoorbeeld, geen co-pilot activiteit gedurende 45 dagen en de licentie gaat terug.
+
+01:09:27.660 --> 01:09:32.560
+Stel de gebruiker op de hoogte, geef ze twee weken om te reageren, verwijder het daarna en geef het terug aan de pool.
+
+01:09:32.780 --> 01:09:34.780
+Dat klinkt streng totdat je naar de prijs kijkt.
+
+01:09:34.960 --> 01:09:38.080
+Een ongebruikte licentie kost per maand meer dan de basislicentie eronder.
+
+01:09:38.280 --> 01:09:41.860
+Een termijn van 45 dagen is ruim en de gebruiker kan altijd opnieuw aanvragen.
+
+01:09:41.860 --> 01:09:44.940
+En met een wachtlijst gaat de licentie naar iemand die hem wel gebruikt.
+
+01:09:45.300 --> 01:09:50.200
+Automatiseer de controle, haal de gebruiksgegevens op volgens planning, vergelijk die met toegewezen licenties en signaleer het gat.
+
+01:09:50.380 --> 01:09:54.620
+Hetzelfde patroon als bij elk ander terugnameproces in deze audit, maar met een hogere prijs per fout.
+
+01:09:54.840 --> 01:09:57.240
+Nu de aankoop zelf, gefaseerd of alles tegelijk.
+
+01:09:57.420 --> 01:10:03.180
+Een gefaseerde aankoop betekent dat je in golven koopt, eerst een pilot, dan een tweede groep op basis van de resultaten, dan een derde.
+
+01:10:03.340 --> 01:10:05.020
+Elke golf moet de volgende verdienen.
+
+01:10:05.020 --> 01:10:11.960
+Een bedrijfsbrede verbintenis betekent dat je voor iedereen tekent, meestal voor een betere prijs per licentie of een soepeler gesprek bij verlenging.
+
+01:10:12.140 --> 01:10:15.720
+Die korting is reëel, maar het zet je uitgaven vast voordat je de adoptiegraad kent.
+
+01:10:15.880 --> 01:10:19.280
+En een korting op een licentie die niemand opent, blijft een licentie die niemand opent.
+
+01:10:19.600 --> 01:10:22.100
+Controleer dus of je overeenkomst toestaat dat je soepel op schaalt.
+
+01:10:22.260 --> 01:10:24.220
+Als dat zo is, wint facering bijna altijd.
+
+01:10:24.420 --> 01:10:29.500
+Als je groots moet inkopen voor een prijs, committeer je dan aan het aantal dat je pilot ondersteunt, niet het aantal dat de roadmap belooft.
+
+01:10:29.640 --> 01:10:32.060
+En dan is er nog het gesprek met de mensen die de cheque ondertekenen.
+
+01:10:32.060 --> 01:10:35.600
+Kom niet aan met kosten per licentie. Dat getal ziet er altijd alleen maar groot uit.
+
+01:10:35.800 --> 01:10:37.660
+Breng de kosten per teruggewonnen uur ter sprake.
+
+01:10:37.840 --> 01:10:42.480
+Als een licentie 30 dollar per maand kost en de persoon in die maand 3 uur werk bespaart, verandert de vraag.
+
+01:10:42.700 --> 01:10:44.560
+Wat is een uur van die persoon zijn tijd waard?
+
+01:10:44.700 --> 01:10:49.560
+Voor een projectmanager of analist is de kostprijs van de licentie vaak al voor de launch op de eerste dag terugverdiend.
+
+01:10:49.720 --> 01:10:56.220
+En als de pilot laat zien dat een licentie 10 minuten per week bespaart, dan klopt de berekening niet en heb je dat geleerd voor een paar duizend dollar in plaats van een paar ton.
+
+01:10:56.380 --> 01:10:59.880
+Dat is het model. Licenties verdienen hun plek met bewijs en verliezen die zonder.
+
+01:10:59.880 --> 01:11:01.380
+Maar er zit een gat in dit alles.
+
+01:11:01.380 --> 01:11:04.120
+Alles tot nu toe controleert alleen wie een licentie krijgt toegewezen.
+
+01:11:04.280 --> 01:11:05.900
+Het zegt niets over wie er een mag kopen.
+
+01:11:06.100 --> 01:11:08.200
+Opmerking bij de preview van sectie 23.
+
+01:11:08.500 --> 01:11:11.160
+Doverness gaat over wie mag kopen, niet alleen over wie mag toewijzen.
+
+01:11:11.940 --> 01:11:13.700
+Zelfbedieningsaankopen en proefversies controleren.
+
+01:11:13.840 --> 01:11:16.480
+Elke controle die we tot nu toe hebben gebouwd, heeft één manco.
+
+01:11:16.660 --> 01:11:22.320
+Het gaat ervan uit dat de licentie van jou kwam, maar Microsoft laat eindgebruikers dingen kopen zonder inkoopafdeling of ticket.
+
+01:11:22.540 --> 01:11:27.360
+Iemand klikt op een knop, voert een kaart in of accepteert een proefversie en er verschijnt een abonnement in je tenant.
+
+01:11:27.360 --> 01:11:31.400
+Dit heet self-service en voor verschillende producten staat dit standaard ingeschakeld.
+
+01:11:31.620 --> 01:11:33.040
+Denk na over wat dat creëert.
+
+01:11:33.220 --> 01:11:36.720
+Een manager wil PowerBee Pro, Visio of een Teams Premium proefversie.
+
+01:11:36.900 --> 01:11:42.280
+Ze vinden een link, ze melden zich aan en nu is er een abonnement dat je niet hebt goedgekeurd met licenties voor mensen die je niet hebt gekozen.
+
+01:11:42.460 --> 01:11:44.780
+Het is nooit langs je groepen of je eigenaarslijst gegaan.
+
+01:11:44.980 --> 01:11:47.700
+Dat is een schaduwlicentie en deze wordt gefactureerd als elke andere.
+
+01:11:47.920 --> 01:11:49.080
+Dus waar vind je die instelling?
+
+01:11:49.300 --> 01:11:52.580
+In het admincentrum onder facturering is er een sectie voor self-service aankopen.
+
+01:11:52.580 --> 01:11:55.720
+Daar staan producten, elk met een schakelaar voor wel of niet toegestaan.
+
+01:11:55.860 --> 01:12:00.100
+De meeste tenants hebben die pagina nooit geopend, maar het admincentrum toont slechts een deel van het plaatje.
+
+01:12:00.240 --> 01:12:03.340
+De volledige lijst staat in PowerShell via de MS Commerce module.
+
+01:12:03.560 --> 01:12:08.200
+Je maakt verbinding, kunt elk product zien dat self-service aankoop ondersteunt en het beleid bekijken.
+
+01:12:08.440 --> 01:12:13.020
+Vervolgens stel je het beleid in op uitgeschakeld per product of je doorloopt ze allemaal in één keer.
+
+01:12:13.280 --> 01:12:15.360
+Voer dat één keer uit en de deur gaat dicht.
+
+01:12:15.620 --> 01:12:20.960
+Gebruikers die proberen te kopen, krijgen een bericht om hun beheerder te vragen wat precies het gesprek is dat je wilde voeren.
+
+01:12:20.960 --> 01:12:23.200
+Nu is de deur dichtgooien niet altijd het antwoord.
+
+01:12:23.420 --> 01:12:26.980
+Sommige bedrijven willen dat een paar mensen sneltools uitproberen, dus er is een middenweg.
+
+01:12:27.120 --> 01:12:31.140
+Hou de instelling uit voor de tenant en handelverzoeken af via een kort formulier dat naar een eigenaar gaat.
+
+01:12:31.300 --> 01:12:34.060
+Je behoudt de snelheid en hebt een overzicht van wie er vroeg en waarom.
+
+01:12:34.240 --> 01:12:35.200
+Nu, proefversies.
+
+01:12:35.440 --> 01:12:37.920
+Ze lijken gratis, dus niemand beschouwt ze als een aankoop.
+
+01:12:38.100 --> 01:12:39.020
+Dit is wat er gebeurt.
+
+01:12:39.200 --> 01:12:40.860
+Iemand start een proefversie voor een add-on.
+
+01:12:41.040 --> 01:12:44.780
+Het loopt 30 dagen, mensen raken gewend aan de functie en een paar teams worden er afhankelijk van.
+
+01:12:44.980 --> 01:12:47.800
+Dan eindigt de proefperiode en wordt het abonnement omgezet naar betaald.
+
+01:12:47.800 --> 01:12:51.140
+Soms wordt het automatisch verlengd tegen de volledige prijs en soms verloopt het simpelweg,
+
+01:12:51.260 --> 01:12:54.300
+waardoor een workflow wordt onderbroken en er acute druk ontstaat om het nu meteen te kopen.
+
+01:12:54.440 --> 01:12:56.620
+Hoe dan ook, je hebt de controle over de beslissing verloren.
+
+01:12:56.820 --> 01:13:00.520
+Het product bepaalde zijn eigen timing, dus controleer hoe proefversies worden afgehandeld voordat ze beginnen.
+
+01:13:00.760 --> 01:13:05.680
+Sommige proefabonnementen worden volgens schema omgezet en de einddatum en factuurstatus zijn zichtbaar op de abonnementspagina.
+
+01:13:05.960 --> 01:13:09.880
+Controleer die pagina op alles wat als proef is gelabeld en noteer de vervaldatum in je agenda.
+
+01:13:10.200 --> 01:13:13.560
+Beter nog, blokkeer proefaanmeldingen voor dezelfde producten waarvoor je aankopen blokkeert,
+
+01:13:13.560 --> 01:13:15.600
+zodat de toegang aan beide kanten gesloten blijft.
+
+01:13:15.780 --> 01:13:17.500
+Stel daarna de vraag die hieronder ligt.
+
+01:13:17.700 --> 01:13:19.640
+Wie in jouw organisatie heeft aankooprechten?
+
+01:13:19.900 --> 01:13:20.820
+Daar is een rol voor.
+
+01:13:21.160 --> 01:13:23.880
+Facturati-beheerders kunnen abonnementen aanschaffen en beheren.
+
+01:13:24.060 --> 01:13:26.460
+Globale beheerders kunnen dit ook, samen met al het andere.
+
+01:13:26.660 --> 01:13:30.220
+En in een door partners beheerde omgeving kan de partner rechten hebben waar je niet meer aan denkt.
+
+01:13:30.420 --> 01:13:34.360
+Haal de lijst met mensen in die rollen op, tel ze, vraag of ze die rol nog steeds nodig hebben
+
+01:13:34.360 --> 01:13:36.460
+en of ze weten dat de bovenstaande instellingen bestaan.
+
+01:13:36.620 --> 01:13:41.060
+In veel tenants is het antwoord een voormalig projectleider en een beheerder die het bedrijf vorig jaar heeft verlaten.
+
+01:13:41.060 --> 01:13:44.200
+Minder mensen met aankooprechten betekent minder verrassingen op de factuur.
+
+01:13:44.380 --> 01:13:49.280
+Nu heb je het volledige controleoppervlak, wie kan toewijzen, wie kan kopen en wat er gebeurt wanneer een proefperiode afloopt.
+
+01:13:49.460 --> 01:13:51.480
+Wat ontbreekt is het bewijs dat het allemaal werkt.
+
+01:13:51.680 --> 01:13:55.800
+Daarvoor heb je gegevens nodig die volgens schema worden opgehaald, zonder dat iemand eraan hoeft te denken om erom te vragen.
+
+01:13:55.960 --> 01:13:59.380
+De rapportage- en automatiseringstapel, een licentie-addit die je handmatig uitvoert,
+
+01:13:59.560 --> 01:14:02.920
+is een addit die je één keer doet, waarna het spreadsheet veroudert en de verspilling weer toeneemt.
+
+01:14:03.000 --> 01:14:05.780
+Het laatste onderdeel is dus niet nog een beoordeling, maar een pijplijn.
+
+01:14:05.980 --> 01:14:11.320
+Gegevens worden volgens schema opgehaald, komen ergens terecht waar mensen ze kunnen zien en signaleren problemen voordat iemand erom vraagt.
+
+01:14:11.480 --> 01:14:12.320
+Begin bij de bron.
+
+01:14:12.500 --> 01:14:13.820
+Twee tools doen het meeste werk.
+
+01:14:14.020 --> 01:14:15.600
+De eerste is Microsoft Graph.
+
+01:14:15.820 --> 01:14:20.040
+Dit is de API achter bijna alles in het beheercentrum en het stelt de licentiegegevens direct beschikbaar.
+
+01:14:20.200 --> 01:14:23.780
+Je kunt het aanroepen om elke geabonneerde SKU met gekochte en toegewezen eenheden weer te geven.
+
+01:14:23.980 --> 01:14:28.220
+Je kunt elke gebruiker ophalen met hun toegewezen licenties, hun serviceplannen en hun aanmeldingsactiviteit.
+
+01:14:28.220 --> 01:14:31.020
+Een query, hele tenant, elke keer dezelfde structuur.
+
+01:14:31.200 --> 01:14:34.600
+De tweede is PowerShell, die Graph verpakt in opdrachten die je kunt lezen.
+
+01:14:34.600 --> 01:14:41.700
+Met de Microsoft Graph PowerShell module kun je een kort script schrijven dat gebruikers doorloopt, controleert wat ze hebben en het resultaat naar een bestand schrijft.
+
+01:14:41.900 --> 01:14:45.880
+Geen geklik, geen paginering door een portaal, de output is belangrijker dan de methode.
+
+01:14:46.120 --> 01:14:53.940
+Bouw één overzichtelijke tabel, bron van licentietoewijzing, laatste aanmelding, afdeling, accountstatus, al het andere dat je tijdens deze altijd hebt geleerd, is een filter op die tabel.
+
+01:14:54.140 --> 01:14:56.800
+Wezen uitgeschakelde accounts die nog steeds een licentie hebben.
+
+01:14:57.020 --> 01:14:59.280
+Geesten, geen aanmelding binnen je drempelperiode.
+
+01:14:59.520 --> 01:15:01.840
+Dubbelingen, twee overlappende SKU's op één rij.
+
+01:15:01.840 --> 01:15:04.680
+Groepsfouten, elke gebruiker wiens licentiestatus een probleem vertoont.
+
+01:15:04.800 --> 01:15:07.600
+Om het nu zonder jou te laten draaien, zijn er drie gebruikelijke locaties voor de taak.
+
+01:15:07.760 --> 01:15:09.580
+Elke locatie past bij een ander type team.
+
+01:15:09.740 --> 01:15:14.520
+Een Azure Automation runboek voert je PowerShell script uit op een timer, dagelijks, wekelijks, wat je maar nodig hebt.
+
+01:15:14.700 --> 01:15:18.560
+Het is eenvoudig en gebruikt een beheerde identiteit, dus je hoeft nergens een wachtwoord op te slaan.
+
+01:15:18.720 --> 01:15:21.180
+Logic Apps doen hetzelfde werk met een visuele designers.
+
+01:15:21.180 --> 01:15:25.440
+Je maakt verbinding met Graph, voert de query uit en stuurt het resultaat door, grotendeels zonder code.
+
+01:15:25.640 --> 01:15:28.480
+Ze zijn geschikt voor teams die meer in workflows denken dan in scripts.
+
+01:15:28.720 --> 01:15:33.800
+En Power Automate is geschikt voor lichtere gevallen, een wekelijkse flow die een licentietelling ophaalt en in een teamskanaal plaatst,
+
+01:15:33.940 --> 01:15:38.160
+of een trigger die afgaat wanneer iemands account wordt uitgeschakeld en een ticket opent om hun licenties te controleren.
+
+01:15:38.280 --> 01:15:41.180
+Het is het juiste hulpmiddel wanneer de output een bericht aan een mens is.
+
+01:15:41.340 --> 01:15:41.940
+Kies er één.
+
+01:15:42.200 --> 01:15:44.320
+Bouw geen drie pipelines die elkaar tegenspreken.
+
+01:15:44.520 --> 01:15:45.860
+Nu, waar gaan de gegevens naartoe?
+
+01:15:46.000 --> 01:15:47.600
+Naar een plek waar mensen ook echt kijken.
+
+01:15:47.820 --> 01:15:49.360
+Een dashboard is meestal het antwoord.
+
+01:15:49.360 --> 01:15:55.060
+Power B werkt hier goed omdat het direct leest uit een bestand, een SharePoint-lijst of een database waar je script naar schrijft.
+
+01:15:55.180 --> 01:15:56.700
+En het dashboard moet klein blijven.
+
+01:15:56.940 --> 01:15:58.900
+Vier getallen verdienen een permanente plek.
+
+01:15:59.140 --> 01:16:01.900
+Ongebruikte eenheden, gekocht minus toegewezen per SKU.
+
+01:16:02.100 --> 01:16:03.680
+Dat is geld dat op de plank blijft liggen.
+
+01:16:03.860 --> 01:16:07.740
+Inactieve gebruikers, accounts met een betaalde licentie zonder activiteit na je drempelwaarde.
+
+01:16:07.980 --> 01:16:12.060
+Dubbelingen, gebruikers met overlappende licenties met de kosten van de overlap ernaast.
+
+01:16:12.220 --> 01:16:15.360
+En het aantal fouten, mislukte groepslicenties die in de wachtrij staan.
+
+01:16:15.580 --> 01:16:17.140
+Elk getal heeft een trendlijn nodig.
+
+01:16:17.140 --> 01:16:19.380
+Een enkele momentopname vertelt je waar je staat.
+
+01:16:19.560 --> 01:16:21.460
+Twaalf maanden laten zien of het proces werkt.
+
+01:16:21.640 --> 01:16:24.780
+Als het aantal inactieve gebruikers elk kwartaal stijgt, lekt je terugvorderingsregel.
+
+01:16:24.960 --> 01:16:26.980
+Zet vervolgens de naam van een eigenaar naast elke tegel.
+
+01:16:27.220 --> 01:16:28.460
+Anders is het slechts decoratie.
+
+01:16:28.680 --> 01:16:30.740
+Nu, de vraag of je voor dit alles een tool moet kopen.
+
+01:16:30.920 --> 01:16:33.560
+Er bestaan externe licentiebeheerproducten en sommige zijn goed.
+
+01:16:33.760 --> 01:16:38.360
+Ze maken verbinding met je tenant, normaliseren de gegevens en voegen functies toe waar je weken aan zou besteden om ze zelf te bouwen.
+
+01:16:38.500 --> 01:16:41.880
+Cross-tenant-overzichten, kosten-toewijzing per afdeling, standaardwaarschuwingen.
+
+01:16:41.880 --> 01:16:45.320
+Sommigen houden ook andere leveranciers bij, zodat je Microsoft naast de rest ziet.
+
+01:16:45.500 --> 01:16:47.040
+Wanneer verdienen ze zichzelf terug?
+
+01:16:47.260 --> 01:16:48.220
+Doe een snelle test.
+
+01:16:48.480 --> 01:16:55.220
+Neem de jaarlijkse kosten van de tool en schat de beheerdersoeren die je kwijt bent aan het bouwen en onderhouden, plus de besparingen die je anders zou missen.
+
+01:16:55.360 --> 01:16:58.320
+Voor een tenant met een paar honderd gebruikers is het antwoord meestal nee.
+
+01:16:58.500 --> 01:17:00.340
+Een script en een dashboard volstaan dan.
+
+01:17:00.540 --> 01:17:06.820
+Voor duizenden gebruikers, meerdere tenants of een financiële afdeling die verrekening per kosten plaats wil, verandert de berekening snel.
+
+01:17:07.020 --> 01:17:09.920
+Maar zelfs dan is een tool slechts een snellere manier om het probleem te zien.
+
+01:17:09.920 --> 01:17:11.640
+Het lost het probleem niet zelf op.
+
+01:17:11.780 --> 01:17:19.620
+En daar beginnen de rapporten hun waarde echt te bewijzen, want heldere cijfers over ongebruikte licenties, inactieve seats en overlappende SKU's zijn meer dan een interne overwinning.
+
+01:17:19.840 --> 01:17:24.080
+Het is het bewijsmateriaal dat je meeneemt naar de vergadering waar echt over licentiebudgetten wordt beslist.
+
+01:17:24.260 --> 01:17:26.900
+De verlenging, verlengingstactieken en commerciële hefbomen.
+
+01:17:27.120 --> 01:17:29.100
+De meeste verlengingsgesprekken beginnen te laat.
+
+01:17:29.300 --> 01:17:32.780
+Iemand krijgt een e-mail van de partner, 60 dagen van tevoren, misschien 30.
+
+01:17:32.980 --> 01:17:36.980
+De offerte komt binnen, het bedrag lijkt hoog en de enige reële optie is tekenen.
+
+01:17:36.980 --> 01:17:41.220
+Tegen die tijd is de onderhandelingsmacht weg. Niet omdat de data slecht is, maar door de planning.
+
+01:17:41.480 --> 01:17:45.420
+Begin daarom 180 dagen voor de verlengingsdatum, uiterlijk 120 dagen van tevoren.
+
+01:17:45.640 --> 01:17:51.760
+Dan heb je nog tijd om seats terug te winnen, een lichtere SKU te testen bij een pilotgroep en de cijfers bij te werken voordat er om een toezegging wordt gevraagd.
+
+01:17:51.920 --> 01:17:55.460
+Zet de datum in een gedeelde agenda en voeg het dashboard dat we net hebben gebouwd toe aan de uitnodiging.
+
+01:17:55.660 --> 01:17:58.980
+Waarom zo vroeg? Omdat elke wijziging die we hebben besproken weken nodig heeft om doorgevoerd te worden.
+
+01:17:59.180 --> 01:18:03.300
+Frontline gebruikers naar een lichter plan verplaatsen, inactieve co-pilot seats intrekken, overbodige add-ons stopzetten.
+
+01:18:03.300 --> 01:18:08.980
+Als je dat pas doet nadat de offerte er is, is de offerte al achterhaald. Wat je bij verlenging kunt doen, hangt af van hoe je inkoopt.
+
+01:18:09.200 --> 01:18:11.060
+Drie contract-typen dekken de meeste tenants.
+
+01:18:11.300 --> 01:18:15.300
+Het Enterprise Agreement, EA, is een direct contract met Microsoft, meestal voor grotere organisaties.
+
+01:18:16.060 --> 01:18:21.120
+Het loopt drie jaar. De prijzen staan voor die termijn vast en je rekent één keer per jaar af voor toegevoegde seats.
+
+01:18:21.320 --> 01:18:25.040
+Het Microsoft Customer Agreement, MCA, is het nieuwere directe model.
+
+01:18:25.300 --> 01:18:30.160
+Het is gebouwd op online inkoop op een flexibelere manier, met minder verplichtingen in het contract zelf.
+
+01:18:30.160 --> 01:18:35.840
+En bij CSP, de Cloud Solution Provider route, koop je via een partner die de facturatie en vaak ook de support beheert.
+
+01:18:35.980 --> 01:18:40.180
+De looptijden zijn korter en de partner bepaalt grotendeels hoe de commerciële relatie eruit ziet.
+
+01:18:40.400 --> 01:18:42.560
+Dit is het verschil dat ertoe doet, flexibiliteit.
+
+01:18:42.780 --> 01:18:45.640
+Een EA biedt prijszekerheid, maar beperkt je bewegingsruimte.
+
+01:18:45.820 --> 01:18:48.660
+Je committeert je aan een aantal en het contract verwacht dat je dat aanhoudt.
+
+01:18:48.800 --> 01:18:51.920
+CSP biedt wel bewegingsruimte, maar brengt daar op andere manieren kosten voor inrekening.
+
+01:18:52.040 --> 01:18:54.560
+De MCA zit daartussenin, afhankelijk van hoe je eronder inkoopt.
+
+01:18:54.700 --> 01:18:56.960
+Het type overeenkomst is dus geen onbeduidend inkoopdetail.
+
+01:18:56.960 --> 01:18:59.920
+Het bepaalt welke van de gevonden besparingen daadwerkelijk kunnen worden gerealiseerd.
+
+01:19:00.160 --> 01:19:02.360
+Vervolgens de looptijd zelf, jaarlijks versus maandelijks.
+
+01:19:02.540 --> 01:19:05.080
+Veel abonnementen zijn beschikbaar in verschillende facturatie-vormen.
+
+01:19:05.180 --> 01:19:09.500
+Een jaarverplichting die vooraf of maandelijks wordt betaald, of een maandelijkse termijn zonder enige verplichting.
+
+01:19:09.660 --> 01:19:12.220
+De maandelijkse optie bestaat met een reden en daar betaal je voor.
+
+01:19:12.400 --> 01:19:15.680
+De prijs ligt vaak zo'n 5 tot 20 procent hoger, afhankelijk van het product.
+
+01:19:15.900 --> 01:19:17.620
+Die premie is de prijs voor een nooduitgang.
+
+01:19:17.820 --> 01:19:20.860
+Of het de moeite waard is om te betalen, hangt af van hoe zeker je bent van je cijfers.
+
+01:19:20.860 --> 01:19:23.700
+Een licentie die je drie jaar lang nodig hebt, hoort bij een jaarcontract.
+
+01:19:23.860 --> 01:19:28.380
+Een licentie voor een pilot, een seizoensgebonden team of een groep die nog moet bewijzen wat ze waard is, hoort wellicht bij een maandelijks contract.
+
+01:19:28.580 --> 01:19:30.340
+De fout kan aan beide kanten worden gemaakt.
+
+01:19:30.580 --> 01:19:34.460
+Zet alles op jaarbasis voor de lagere prijs en je zit vast aan licenties die je misschien wilt opzeggen.
+
+01:19:34.640 --> 01:19:38.680
+Zet alles op maandbasis voor de zekerheid en je betaalt de premie voor licenties die nooit veranderen.
+
+01:19:38.840 --> 01:19:41.340
+Dan de term die de meeste beheerders graag zien, true down.
+
+01:19:41.540 --> 01:19:45.980
+Een true down is het recht om je aantal licenties tijdens de looptijd of op de volgende verjaardag van het contract te verlagen.
+
+01:19:45.980 --> 01:19:47.380
+En dat is niet universeel.
+
+01:19:47.560 --> 01:19:54.200
+Onder een EA kun je het aantal doorgaans niet tussentijds verlagen, verminderingen vinden plaats bij verlenging of de contractverjaardag volgens de regels van dat contract.
+
+01:19:54.380 --> 01:19:58.360
+Onder CSP hangt de flexibiliteit af van de gekozen looptijd en het beleid van de partner.
+
+01:19:58.620 --> 01:20:02.540
+Sommige licenties kunnen binnen een kort tijdsbestek na aankoop worden geannuleerd, daarna helemaal niet meer.
+
+01:20:02.740 --> 01:20:05.440
+Lees dus de daadwerkelijke overeenkomst, niet de samenvatting van de verkoper.
+
+01:20:05.660 --> 01:20:12.240
+Zoek de clausule over verminderingen op en noteer de data waarop deze van toepassing is, want als je tussentijds niet kunt verlagen, zit je aan elke licentie die je vandaag toevoegt vast tot het volgende venster.
+
+01:20:12.240 --> 01:20:14.220
+Dat verandert de manier waarop je de aankoop bepaalt.
+
+01:20:14.340 --> 01:20:15.480
+Tot slot, de prijs.
+
+01:20:15.660 --> 01:20:16.400
+Twee vragen.
+
+01:20:16.560 --> 01:20:17.940
+Ten eerste, prijsbescherming.
+
+01:20:18.100 --> 01:20:21.140
+Zet je overeenkomst de tarief vast voor de volledige looptijd of alleen voor het eerste jaar?
+
+01:20:21.300 --> 01:20:23.660
+Een EA houdt de prijzen doorgaans vast voor de gehele looptijd.
+
+01:20:23.860 --> 01:20:25.280
+Andere routes doen dat mogelijk niet.
+
+01:20:25.460 --> 01:20:27.580
+Ten tweede, wijzigingen in de catalogusprijs.
+
+01:20:27.840 --> 01:20:32.640
+Microsoft werkt prijzen bij volgens een eigen schema en heeft ze voor specifieke producten met voorafgaande kennisgeving verhoogd.
+
+01:20:32.760 --> 01:20:37.140
+Als je voorwaarden je niet beschermen, kan een verlenging komen met een hoger tarief voor een licentie die helemaal niet is veranderd.
+
+01:20:37.360 --> 01:20:39.260
+Controleer dus beide zaken voor de eerste bespreking.
+
+01:20:39.260 --> 01:20:42.040
+Je kunt niet onderhandelen over een prijs waarvan je niet weet dat deze verandert.
+
+01:20:42.240 --> 01:20:44.500
+Dat is het overzicht van wat vaststaat en wat open is.
+
+01:20:44.740 --> 01:20:47.200
+Daarna volgt het gesprek waarin je probeert dat te veranderen.
+
+01:20:47.520 --> 01:20:48.640
+Onderhandelen met bewijs.
+
+01:20:48.840 --> 01:20:52.060
+Loop de kamer binnen met een spreadsheet en je bent een klant die om een gunst vraagt.
+
+01:20:52.260 --> 01:20:56.080
+Loop binnen met gebruiksgegevens en je bent een klant die precies weet wat het contract waard is.
+
+01:20:56.300 --> 01:20:57.400
+Dat is het hele verschil.
+
+01:20:57.580 --> 01:20:59.540
+En dat bouw je maanden voor de afspraak op.
+
+01:20:59.660 --> 01:21:01.200
+Dus hoe ziet schone data eruit?
+
+01:21:01.400 --> 01:21:06.240
+Geen screenshot van het admincenter, maar een tabel met gekochte, toegewezen en actieve eenheden per SKU,
+
+01:21:06.240 --> 01:21:10.220
+inclusief de trend van de laatste 12 maanden, inactieve licenties met bijbehorende data,
+
+01:21:10.440 --> 01:21:14.480
+add-ons met eigenaar en gebruikstatistieken en copilot licenties naast het activiteitenrapport.
+
+01:21:14.660 --> 01:21:17.340
+Geef een getal dat je kunt onderbouwen en het gesprek verandert.
+
+01:21:17.560 --> 01:21:21.180
+De andere partij stopt met gokken naar je personeelsaantal en werkt voortaan met jouw cijfers.
+
+01:21:21.380 --> 01:21:23.520
+Maar de data helpt alleen als je er eerst naar handelt.
+
+01:21:24.020 --> 01:21:25.820
+Optimaliseer voordat je tekent, niet erna.
+
+01:21:26.020 --> 01:21:27.300
+Dit is wat er meestal gebeurt.
+
+01:21:27.300 --> 01:21:32.200
+Een team vindt 15% verspilling bij de audit, voelt zich goed over de besparing en tekent vervolgens de verlenging voor het oude aantal.
+
+01:21:32.380 --> 01:21:33.920
+Het plan was om het later aan te passen.
+
+01:21:34.060 --> 01:21:36.720
+En later betekent bij de meeste overeenkomsten, bij het volgende venster.
+
+01:21:36.900 --> 01:21:38.520
+Misschien over een jaar, misschien over drie.
+
+01:21:38.700 --> 01:21:45.640
+Dus ruim eerst op verplaats frontline gebruikers, trek inactieve licenties in, schrap overbodige add-ons en laat de offerte de nieuwe vorm van de tenant weer spiegelen.
+
+01:21:45.760 --> 01:21:48.960
+Elke licentie die je schrapt voor het tekenen, hoef je nooit te betalen.
+
+01:21:49.240 --> 01:21:50.800
+Dezelfde logica geldt voor groei.
+
+01:21:51.000 --> 01:21:56.320
+Koop niet op basis van de prognose, koop op basis van wat vandaag is toegewezen en actief is, plus een kleine buffer die je kunt verantwoorden.
+
+01:21:56.320 --> 01:22:00.480
+Mocht het bedrijf echt groeien, dan is licenties toevoegen makkelijk, ze verwijderen is dat niet.
+
+01:22:00.640 --> 01:22:01.640
+Nu, de hefbomen.
+
+01:22:01.860 --> 01:22:03.260
+Er zijn er een paar die je moet kennen.
+
+01:22:03.520 --> 01:22:04.500
+Bundelen is de eerste.
+
+01:22:04.840 --> 01:22:09.320
+Microsoft verkoopt graag meer in één deal, dus het toevoegen van een product kan een beter tarief ontgrendelen voor wat je al hebt.
+
+01:22:09.520 --> 01:22:11.680
+Dat klinkt als een overwinning, en soms is dat het ook.
+
+01:22:11.780 --> 01:22:13.340
+Maar reken het hele pakket goed door.
+
+01:22:13.520 --> 01:22:17.600
+Een korting op E5 betekent weinig als de bundel ook een aantal licenties bevat dat je niet kunt gebruiken.
+
+01:22:17.960 --> 01:22:19.380
+Meerjarige contracten zijn de tweede.
+
+01:22:19.560 --> 01:22:22.800
+Een langere verbintenis betekent meestal een lager tarief en prijszekerheid.
+
+01:22:22.960 --> 01:22:24.940
+Het neemt ook je ruimte weg om fouten te herstellen.
+
+01:22:24.940 --> 01:22:26.940
+Stem de looptijd dus af op je vertrouwen.
+
+01:22:27.120 --> 01:22:30.860
+Drie jaar voor de standaardgebruiker waar het personeelsaantal stabiel is en de SKU vaststaat.
+
+01:22:30.960 --> 01:22:34.840
+Kortere looptijden of maandelijkse facturatie voor onderdelen die zich nog moeten bewijzen, zoals Copilot.
+
+01:22:35.020 --> 01:22:36.120
+En dan is er nog de partner.
+
+01:22:36.360 --> 01:22:40.780
+In een CSP-constructie is de partner onderdeel van de onderhandeling, of je dat nu zo geplant had of niet.
+
+01:22:40.980 --> 01:22:44.240
+Ze hanteren hun eigen march, hun eigen voorwaarden en soms hun eigen prikkels.
+
+01:22:44.460 --> 01:22:45.800
+Stel daarom direct de vragen.
+
+01:22:46.000 --> 01:22:46.780
+Wat is de opslag?
+
+01:22:46.940 --> 01:22:49.720
+Welke flexibiliteit bieden zij bij kortingen die Microsoft niet biedt?
+
+01:22:49.800 --> 01:22:51.360
+Kunnen ze een rechtstreekse prijs matchen?
+
+01:22:51.520 --> 01:22:53.760
+Als je via een EA koopt, draait de vraag om.
+
+01:22:53.760 --> 01:22:56.240
+Wat doet de partner daadwerkelijk voor de vergoeding die je betaalt?
+
+01:22:56.360 --> 01:22:58.880
+Een goede partner verdient de march door zaken op te vangen die jij mist.
+
+01:22:59.040 --> 01:23:00.880
+Een zwakke partner stuurt alleen de offerten door.
+
+01:23:01.100 --> 01:23:03.120
+Nu het onderdeel dat het meeste kost als het misgaat.
+
+01:23:03.280 --> 01:23:06.980
+Wat je niet moet toegeven, de klassieke ruil is flexibiliteit voor een kleine korting.
+
+01:23:07.160 --> 01:23:11.000
+De verkoper biedt 3% korting voor een vast aantal licenties gedurende de gehele looptijd.
+
+01:23:11.200 --> 01:23:16.560
+Het klinkt als een deal, maar 3% van een factuur is weinig en het recht om in een slecht jaar licenties te verminderen is veel meer waard.
+
+01:23:16.780 --> 01:23:18.680
+Bepaal dus de prijs van de flexibiliteit zelf.
+
+01:23:18.680 --> 01:23:23.860
+Als een recht op vermindering, een kortere looptijd of een maandelijkse optie je 2 of 3% kost, is dat wellicht een goedkope verzekering.
+
+01:23:24.060 --> 01:23:27.960
+Betaal er voorwaarde aantallen onzeker zijn en pas op voor de stille varianten van de zelfde ruil.
+
+01:23:28.140 --> 01:23:35.920
+Een korting gekoppeld aan een minimale uitgave, een prijsgarantie die alleen geldt bij een specifiek pakket, of een concessie op Copilot met een minimum aantal licenties.
+
+01:23:36.160 --> 01:23:39.480
+Lees elke voorwaarde van de korting, want de voorwaarde is meestal de prijs.
+
+01:23:39.700 --> 01:23:42.760
+Loop weg van alles wat jouw opties inruilt voor een verwaarloosbaar bedrag.
+
+01:23:42.760 --> 01:23:48.060
+Dat dekt de onderhandeling, maar een goede verlenging is één evenement en alles wat we tot nu toe hebben opgebouwd is een proces.
+
+01:23:48.280 --> 01:23:54.560
+De audit, de groepen, de regels voor terugvordering, de dashboards, de commerciële data, niets daarvan blijft stand houden tenzij iemand het volgende week opnieuw uitvoert.
+
+01:23:54.700 --> 01:23:57.400
+Dus hoe ziet dat eruit als een ritme met eigenaren en een kalender?
+
+01:23:57.600 --> 01:23:59.060
+Het operationele ritme.
+
+01:23:59.240 --> 01:24:00.740
+Een audit vertelt je waar je staat.
+
+01:24:00.940 --> 01:24:01.940
+Een ritme houdt je daar.
+
+01:24:02.180 --> 01:24:06.260
+Zonder dat begint alles wat je hebt opgebouwd te vervallen volgens een schema dat je bijna kunt voorspellen.
+
+01:24:06.500 --> 01:24:11.800
+Vertrekkers stapelen zich op, groepen geven fouten die niemand leest, een nieuwe add-on verschijnt op de factuur zonder naam,
+
+01:24:11.960 --> 01:24:16.620
+en twaalf maanden later voer je dezelfde audit weer vanaf nul uit, afvragend hoe de verspilling is teruggekeerd.
+
+01:24:16.800 --> 01:24:21.060
+De oplossing is dus een kalender, vier slagen, elk met een taak, een metriek en een verantwoordelijke.
+
+01:24:21.300 --> 01:24:22.660
+Begin wekelijks en hou het kort.
+
+01:24:22.900 --> 01:24:24.040
+Vijftien minuten, niet meer.
+
+01:24:24.220 --> 01:24:25.520
+Twee zaken worden gecontroleerd.
+
+01:24:25.680 --> 01:24:27.560
+Ten eerste, de wachtrij voor groepslicentiefouten.
+
+01:24:27.720 --> 01:24:31.100
+Iedereen die zonder licentie zit, iedereen met een conflict, iedereen die een gebruikslocatie mist.
+
+01:24:31.320 --> 01:24:34.300
+Dit zijn mensen die nu niet goed kunnen werken, dus dit kan niet tot de maand wachten.
+
+01:24:34.300 --> 01:24:36.180
+Ten tweede, nieuwe weeslicenties.
+
+01:24:36.340 --> 01:24:40.660
+Pak de lijst met uitgeschakelde of verwijderde accounts die nog steeds een betaalde licentie hebben en verwijder deze.
+
+01:24:40.860 --> 01:24:43.900
+Als je automatisering het grootste deel opvangt, is de lijst erg kort.
+
+01:24:44.080 --> 01:24:46.560
+Als dat niet zo is, dan lekt er iets in je levenscyclusproces.
+
+01:24:47.020 --> 01:24:47.920
+Vervolgens maandelijks.
+
+01:24:48.120 --> 01:24:49.420
+Dit kost een uur, misschien twee.
+
+01:24:49.620 --> 01:24:52.400
+Je controleert inactieve gebruikers tegen de drempelwaarde die je eerder hebt ingesteld.
+
+01:24:52.580 --> 01:24:53.620
+Wie is er overheen gegaan?
+
+01:24:53.740 --> 01:24:54.940
+Wie zit er al in de respijtperiode?
+
+01:24:55.140 --> 01:24:56.120
+Wie kan er verwijderd worden?
+
+01:24:56.320 --> 01:24:57.540
+Dan de controle van add-ons.
+
+01:24:57.740 --> 01:24:58.580
+Open de lijst met add-ons.
+
+01:24:58.580 --> 01:25:02.380
+Vergelijk toegewezen licenties met het gebruik van de laatste 90 dagen en stel elke eigenaar één vraag.
+
+01:25:02.540 --> 01:25:03.520
+Is dit nog steeds nodig?
+
+01:25:03.700 --> 01:25:05.760
+Als een eigenaar geen antwoord heeft, heb je je antwoord.
+
+01:25:05.940 --> 01:25:07.420
+Merk op wat het maandelijkse ritme doet.
+
+01:25:07.620 --> 01:25:09.560
+Het voorkomt dat de stek in het donker groeit.
+
+01:25:09.720 --> 01:25:12.060
+Elke kleine post wordt bekeken terwijl deze nog klein is.
+
+01:25:12.260 --> 01:25:13.440
+Daarna, per kwartaal.
+
+01:25:13.560 --> 01:25:14.860
+Hier worden de vragen groter.
+
+01:25:15.240 --> 01:25:16.520
+Beoordeel de persona's zelf.
+
+01:25:16.760 --> 01:25:18.560
+Zijn de niveaus nog steeds logisch ingedeeld?
+
+01:25:18.760 --> 01:25:20.940
+Misschien is de werkwijze van een afdeling veranderd?
+
+01:25:21.140 --> 01:25:24.820
+Past de nieuwe rol nergens bij of is het personeelsbestand verdubbeld na een aannamegolf?
+
+01:25:24.820 --> 01:25:27.300
+Persona's veranderen omdat het bedrijf verandert.
+
+01:25:27.460 --> 01:25:31.360
+Als je ze nooit herziet, beschrijven de groepen langzaam een bedrijf dat niet meer bestaat.
+
+01:25:31.560 --> 01:25:32.440
+Dan co-pilot.
+
+01:25:32.660 --> 01:25:34.680
+Haal het gebruiksrapport op voor toegewezen licenties.
+
+01:25:34.900 --> 01:25:36.040
+Past de terugvorderingsregel toe.
+
+01:25:36.240 --> 01:25:38.360
+Bekijk wie actief is in meer dan één app en wie is gestopt.
+
+01:25:38.500 --> 01:25:40.680
+En vergelijk de resultaten met de basislijn van je pilot.
+
+01:25:40.920 --> 01:25:43.040
+Want dat is het getal waar het financiële team naar zal vragen.
+
+01:25:43.360 --> 01:25:45.240
+Licenties die hun plek verdienen, blijven behouden.
+
+01:25:45.540 --> 01:25:47.600
+Licenties die dat niet doen, gaan terug naar de wachtlijst.
+
+01:25:47.600 --> 01:25:49.880
+Per kwartaal lees je ook de trends in het dashboard.
+
+01:25:50.080 --> 01:25:51.600
+Eén enkele maand kan misleidend zijn.
+
+01:25:51.820 --> 01:25:53.140
+Drie maanden laten de richting zien.
+
+01:25:53.360 --> 01:25:54.020
+Nu jaarlijks.
+
+01:25:54.200 --> 01:25:56.480
+Dit is de grote klus en die begint eerder dan mensen verwachten.
+
+01:25:56.680 --> 01:25:59.660
+De voorbereiding op verlenging begint 180 dagen van tevoren, zoals besproken.
+
+01:25:59.860 --> 01:26:03.000
+Dat betekent de volledige benuttingstabel ophalen, het juiste formaat bepalen,
+
+01:26:03.220 --> 01:26:06.780
+rechten voor vermindering en prijsbescherming controleren en de aantallen vaststellen die je gaat verdedigen.
+
+01:26:06.920 --> 01:26:10.380
+Maar combineer dit met iets wat de meeste teams overslaan, een architectuurbeoordeling.
+
+01:26:10.580 --> 01:26:13.680
+Kijk verder dan de aantallen licenties en vraag of het model nog steeds past.
+
+01:26:13.680 --> 01:26:18.120
+Is E5 nog de juiste keuze voor het bevoorrechtenniveau of heeft een losstaand product het ingehaald?
+
+01:26:18.260 --> 01:26:20.640
+Heeft Microsoft de inhoud van een pakket gewijzigd?
+
+01:26:20.640 --> 01:26:23.760
+Is het bedrijf gegroeid voorbij een limiet of gefuseerd met een andere tenant?
+
+01:26:23.980 --> 01:26:28.340
+De verlenging is het enige moment in het jaar waarop het wijzigen van de structuur bijna niets kost, dus maak daar gebruik van.
+
+01:26:28.560 --> 01:26:29.340
+Dat is de kalender.
+
+01:26:29.540 --> 01:26:33.980
+Maar een kalender zonder eigenaren is slechts een suggestie, dus wijs namen toe en koppel elke naam aan een cijfer.
+
+01:26:34.200 --> 01:26:38.320
+Iemand van Identity beheert de foute wachtrij en de metriek is openstaande fouten ouder dan een week.
+
+01:26:38.320 --> 01:26:43.440
+Iemand van de Service Desk of Our Operations beheert twee accounts, gemeten aan uitgeschakelde accounts met een licentie.
+
+01:26:43.440 --> 01:26:49.360
+Wie het platform beheert, is verantwoordelijk voor de inactieve controle en de add-on-lijst, gemeten aan teruggewonnen licenties en onbeheerde add-ons.
+
+01:26:49.520 --> 01:26:58.600
+De business owner van elk persona tekent per kwartaal af wie erin zit en iemand met budgetverantwoordelijkheid beheert de verlenging, gemeten aan het verschil tussen toegewezen en actieve licenties op de dag van ondertekening.
+
+01:26:58.780 --> 01:27:00.880
+Eén persoon, één metriek, één controledatum.
+
+01:27:01.060 --> 01:27:03.020
+Als een cijfer twee eigenaren heeft, heeft het er geen.
+
+01:27:03.200 --> 01:27:05.420
+Voeg deze vier punten samen en kijk wat er is veranderd.
+
+01:27:05.560 --> 01:27:09.140
+Het oude model behandelde licenties als een eenmalige jaarlijkse aankoop die daarna werd vergeten.
+
+01:27:09.140 --> 01:27:12.680
+Dit model ziet het als een draaiend systeem met inputs, controles en feedback.
+
+01:27:12.920 --> 01:27:15.380
+Toewijzing is continu, dus toezicht is ook continu.
+
+01:27:15.660 --> 01:27:16.620
+Dat is de verschuiving.
+
+01:27:16.860 --> 01:27:20.520
+En als het eenmaal draait, is de enige vraag hoe je de eerste 30 dagen begint.
+
+01:27:20.760 --> 01:27:23.000
+30 dagen kunnen de richting van de factuur veranderen.
+
+01:27:23.120 --> 01:27:25.180
+Het lost niet alles op en niemand zou dat moeten beloven.
+
+01:27:25.400 --> 01:27:26.660
+Week 1 is inventarisatie.
+
+01:27:26.840 --> 01:27:28.020
+Er wordt nog niets verwijderd.
+
+01:27:28.180 --> 01:27:30.780
+Haal elke geabonneerde SKU op met het aantal gekochte en toegewezen eenheden.
+
+01:27:30.960 --> 01:27:34.300
+Haal elke gebruiker op met hun licenties, hun toewijzingsbron en hun laatste aanmelding.
+
+01:27:34.520 --> 01:27:36.980
+Zet alles in één tabel en bevries vervolgens de nulmeting.
+
+01:27:36.980 --> 01:27:42.740
+Totale maandelijkse uitgaven, ongebruikte eenheden per SKU, uitgeschakelde accounts met licentie, inactieve gebruikers voor beide drempelwaarden,
+
+01:27:42.940 --> 01:27:45.200
+etons zonder eigenaar, co-pilot licenties zonder activiteit.
+
+01:27:45.400 --> 01:27:47.040
+Deze cijfers vormen je uitgangspunt.
+
+01:27:47.260 --> 01:27:50.220
+Zonder deze cijfers is elke besparing die je later rapporteert slechts een gok.
+
+01:27:50.360 --> 01:27:52.300
+Week 2 richt zich op de voor de hand liggende verspilling.
+
+01:27:52.500 --> 01:27:54.580
+En, voor de hand liggend, heeft hier een nauwe betekenis.
+
+01:27:54.780 --> 01:27:58.420
+Accounts met licenties die zijn uitgeschakeld of verwijderd, dubbele SKU's bij dezelfde gebruiker,
+
+01:27:58.420 --> 01:28:02.360
+etons die al in een bundel van de gebruiker zitten, niet toegewezen eenheden die je bij het volgende venster kunt opzeggen.
+
+01:28:02.500 --> 01:28:04.600
+Sla de beslissingen die interpretatie vereisen voor nu over.
+
+01:28:04.760 --> 01:28:08.420
+Alles wat echte mensen betreft doorloopt het proces van melding en respijt dat we eerder hebben besproken.
+
+01:28:08.640 --> 01:28:10.620
+Start die klokken dus deze week en laat ze lopen.
+
+01:28:10.860 --> 01:28:11.940
+Week 3 is ontwerp.
+
+01:28:12.120 --> 01:28:16.040
+Schets eerst de persona's op papier, frontlinie, standaard, power user, bevoorrecht.
+
+01:28:16.240 --> 01:28:19.240
+Koppel elk persona aan een basislicentie en de bijbehorende etons.
+
+01:28:19.500 --> 01:28:24.820
+Bouw vervolgens de groepen, geef ze een naam, wijs eigenaren toe en controleer de kwaliteit van de kenmerken achter de dynamische regels.
+
+01:28:24.820 --> 01:28:29.340
+Zet nog niemand over, voeg een kleine testgroep toe, laat het systeem synchroniseren en bekijk de foutenwachtrij.
+
+01:28:29.500 --> 01:28:31.540
+Een regel corrigeren voor 10 gebruikers is goedkoop.
+
+01:28:31.620 --> 01:28:33.520
+Een regel corrigeren voor 5000 gebruikers niet.
+
+01:28:33.680 --> 01:28:35.060
+Week 4 is de pilot en het rapport.
+
+01:28:35.300 --> 01:28:38.480
+Verplaats één echte populatie naar groepen, misschien een afdeling, misschien een regio.
+
+01:28:38.700 --> 01:28:42.540
+Bevestig dat de licenties goed zijn aangekomen, verwijder de directe toewijzingen en let op klachten.
+
+01:28:42.760 --> 01:28:46.500
+Als je co-pilot test, stel dan nu de pilot nulmeting in voordat de eerste licentie wordt uitgegeven.
+
+01:28:46.720 --> 01:28:48.880
+Draai daarna de tabel van week 1 opnieuw en vergelijk.
+
+01:28:49.060 --> 01:28:50.140
+Dus wat kun je verwachten?
+
+01:28:50.360 --> 01:28:52.480
+Wees eerlijk tegen jezelf en tegen de directie.
+
+01:28:52.480 --> 01:28:57.920
+Een tenant die nog nooit een audit heeft uitgevoerd, vindt vaak 5 tot 15 procent van de licentiekosten aan verspilling.
+
+01:28:58.120 --> 01:29:01.360
+De eerste maand vangt daar meestal een deel van op, vooral het mechanische deel.
+
+01:29:01.540 --> 01:29:04.460
+De rest hangt af van SKU-wijzigingen en de timing van verlengingen.
+
+01:29:04.620 --> 01:29:06.700
+Het spreidt zich dus over kwartalen, niet weken.
+
+01:29:06.940 --> 01:29:11.820
+Meet het op drie manieren, maandelijkse terugkerende kosten voor en na, teruggewonnen eenheden in dollars per SKU,
+
+01:29:11.960 --> 01:29:14.940
+en het gat tussen toegewezen en actieve seats, dat elke maand kleiner moet worden.
+
+01:29:15.240 --> 01:29:18.660
+Rapporteer de besparingen die al op de factuur staan apart van de besparingen die geplant zijn.
+
+01:29:19.120 --> 01:29:21.620
+Directieleden vertrouwen op een getal dat ze op een factuur terugzien.
+
+01:29:21.620 --> 01:29:24.820
+Dat is het begin. Wat overblijft is het totaalresultaat.
+
+01:29:25.220 --> 01:29:27.280
+Conclusie. Hier is de omslag in één zin.
+
+01:29:27.640 --> 01:29:29.940
+Licenties zijn niet iets dat je koopt, maar iets dat je beheert.
+
+01:29:30.080 --> 01:29:32.160
+Het oude model zag het als een eenmalige aankoop.
+
+01:29:32.300 --> 01:29:35.320
+Kopen in het voorjaar, toewijzen op verzoek, opnieuw kijken bij verlenging.
+
+01:29:35.460 --> 01:29:37.800
+Maar toewijzen stopt nooit en factureren ook niet.
+
+01:29:37.980 --> 01:29:39.380
+Alleen het toezicht was jaarlijks.
+
+01:29:39.600 --> 01:29:41.840
+Alles in deze audit is een manier om dat gat te dichten.
+
+01:29:42.120 --> 01:29:45.680
+Lifecycle-automatisering, groepen, persona's, eigenaren, een kalender.
+
+01:29:45.840 --> 01:29:47.900
+De kosten van het openlaten van dat gat zijn concreet.
+
+01:29:47.900 --> 01:29:52.120
+Elke maand zonder lifecycle-proces is een maand aan betaalde functionaliteit die niemand gebruikt.
+
+01:29:52.280 --> 01:29:55.040
+Seeds voor vertrokken mensen, add ons voor projecten die zijn beëindigd.
+
+01:29:55.160 --> 01:29:56.900
+Een co-pilot seat die twee keer is geopend.
+
+01:29:57.120 --> 01:29:58.900
+Niets gaat stuk, dus niets wordt opgemerkt.
+
+01:29:59.060 --> 01:30:01.480
+Als dit raamwerk nuttig was, laat dan een beoordeling achter.
+
+01:30:01.680 --> 01:30:05.440
+Het helpt meer beheerders het te vinden, en de meesten betalen voor iets wat ze nooit gecontroleerd hebben.
+
+01:30:05.600 --> 01:30:08.820
+En als je door wilt gaan, maak dan verbinding met mij, meer copeters, op LinkedIn.
+
+01:30:09.080 --> 01:30:12.980
+Vertel me welk deel van het Microsoft 365 model je als volgende onder de loep wilt nemen,
+
+01:30:12.980 --> 01:30:16.680
+want op dit moment wordt er ergens in jouw tenant gefactureerd voor een licentie van iemand die er niet meer is.
+
+01:30:16.900 --> 01:30:18.640
+Volgende maand wordt het weer gefactureerd.

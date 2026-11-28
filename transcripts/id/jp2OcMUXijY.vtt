@@ -1,0 +1,760 @@
+WEBVTT
+
+00:00:00.250 --> 00:00:06.230
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan kerja.
+
+00:00:06.770 --> 00:00:09.770
+Docker adalah alat yang paling banyak digunakan dalam pengembangan cloud, bahkan tidak ada saingan.
+
+00:00:10.050 --> 00:00:13.550
+Anda mungkin sering mendengar istilah ini seolah-olah itu adalah pengetahuan dasar yang sudah diketahui semua orang.
+
+00:00:13.870 --> 00:00:17.810
+Docker memecahkan satu masalah spesifik yang menyebalkan, dan begitu Anda melihatnya, semuanya akan langsung-langsung.
+
+00:00:18.150 --> 00:00:21.970
+Itulah alasan mengapa sebuah aplikasi berjalan sempurna di laptop Anda lulusan saat dicelangkan di mesin orang lain.
+
+00:00:22.310 --> 00:00:26.290
+Pada akhirnya, Anda akan memahami konten, image, dan Docker file tanpa menulis satu baris kode pun.
+
+00:00:26.290 --> 00:00:31.190
+Kami juga akan menetaskan perbandingan yang membingungkan hampir semua pemula, container versus mesin virtual.
+
+00:00:32.010 --> 00:00:33.310
+Masalah yang sebenarnya diselesaikan oleh dok.
+
+00:00:33.790 --> 00:00:36.050
+Bayangkan momen saat Anda mengunduh proyek yang dibagikan seseorang kepada Anda.
+
+00:00:36.470 --> 00:00:41.970
+Anda mengikuti catatan pengaturan baris, demi baris menginstal semua yang diminta, namun aplikasi tetap menolak untuk berjalan.
+
+00:00:42.870 --> 00:00:48.510
+Ada versi pustaka yang salah, pengaturan yang hilang, atau aplikasi itu memang hanya pernah berjalan di mesin si pembuatnya.
+
+00:00:49.430 --> 00:00:51.590
+Para pengembang memberi jurukan untuk pengalaman ini yang kemudian salah.
+
+00:00:51.590 --> 00:00:52.730
+Itu berjalan di mesin saya.
+
+00:00:53.090 --> 00:00:55.670
+Jurukan tersebut adalah banyolan dari masalah lama yang memakan banyak biaya.
+
+00:00:55.670 --> 00:00:57.470
+Sebuah program tidak pernah hanya sekadar kode.
+
+00:00:58.050 --> 00:01:03.850
+Program bergantung pada versi alat tertentu, pustaka, dari pihak lain, dan tumpukan pengaturan yang harus laras di saat yang sama.
+
+00:01:04.650 --> 00:01:07.350
+Ubah satu bagian kecil saja di komputer lain, maka seluruh aplikasi akan berantakan.
+
+00:01:07.830 --> 00:01:09.290
+Detailnya selalu kecil, namun selalu menjengkelkan.
+
+00:01:10.150 --> 00:01:12.710
+Mungkin aplikasi membutuhkan versi bahasa lebih lama daripada yang sudah Anda install.
+
+00:01:13.470 --> 00:01:18.470
+Mungkin aplikasi mengharapkan database yang sudah berjalan, atau pengaturan tersembunyi yang tidak disebutkan dalam petunjuk.
+
+00:01:18.670 --> 00:01:23.050
+Semuanya tampak biasa, namun bisa merusak proyek yang baru saja berjalan lancar 5 menit sebelumnya di tempat lain.
+
+00:01:23.050 --> 00:01:25.910
+Jika terdengar akrab, itu karena hampir semua orang pernah mengalaminya.
+
+00:01:26.470 --> 00:01:31.750
+Ketika perantah tunak yang sama berperilaku berbeda di setiap mesin, tim membuang waktu berjam-jam untuk pengaturan, bukan membangun aplikasi.
+
+00:01:32.170 --> 00:01:36.450
+Pengembang baru menghabiskan hari-hari pertama mereka berjuang dengan lingkungan kerja, bukan mengejarkan tugas yang sama.
+
+00:01:36.730 --> 00:01:40.450
+Kode yang berjalan sempurna saat pengujian bisa bertindak berbeda saat mencapai server yang sebenarnya.
+
+00:01:41.170 --> 00:01:47.070
+Sekarang kalikan dengan seluruh tim, 10 pengembang masing-masing dengan mesin yang sedikit berbeda, dengan campuran versi dan pengaturan sendiri.
+
+00:01:47.070 --> 00:01:49.490
+Jumlah kemungkinan hal-hal bisa rusak tumbuh dengan cepat.
+
+00:01:49.910 --> 00:01:55.930
+Tambahkan server pengujian dan server produksi, maka aplikasi yang sama tiba-tiba harus berjalan di belasan tempat sekaligus yang semuanya sedikit berbeda.
+
+00:01:56.870 --> 00:02:01.830
+Tim Docker sendiri merangkum masalah ini saat mereka meluncurkannya di tahun 2013, dan deskripsi mereka sangat lugas.
+
+00:02:02.610 --> 00:02:03.970
+Mengirim kode ke server itu sulit.
+
+00:02:04.690 --> 00:02:06.810
+Terasa frustrasi itulah yang ingin dihapus oleh kontainer.
+
+00:02:07.390 --> 00:02:09.890
+Solusinya bukanlah instruksi yang lebih baik atau catatan pengaturan yang lebih telit.
+
+00:02:10.270 --> 00:02:13.290
+Ini adalah cara untuk membungkus aplikasi agar mesin dibawanya tidak lagi menjadi masalah.
+
+00:02:14.070 --> 00:02:15.190
+Apa sebenarnya kontainer itu?
+
+00:02:15.190 --> 00:02:19.170
+Kontainer adalah paket yang menyatukan aplikasi Anda dengan semua yang dibutuhkan aplikasi untuk berjalan.
+
+00:02:19.630 --> 00:02:20.750
+Anggap saja jadi sebagai kotak makan seger.
+
+00:02:21.190 --> 00:02:26.110
+Makanannya ada di dalam, peralatan makannya ada di dalam, dan tidak peduli dapur seperti apa yang dimiliki orang yang membukanya.
+
+00:02:26.750 --> 00:02:28.270
+Ide itu terdengar hampir terlalu sederhana.
+
+00:02:28.470 --> 00:02:30.710
+Itulah sebabnya istilah kontainer sering membuat orang bingung.
+
+00:02:31.190 --> 00:02:38.190
+Namanya membuat Anda membayangkan sesuatu yang berat dan teknis, padahal kontainer sebenarnya hanyalah aplikasi Anda beserta dependensinya yang disegel menjadi satu unit yang mudah dipindahkan.
+
+00:02:38.910 --> 00:02:41.790
+Kontainer bukanlah komputer dan tidak membawa sistem operasinya sendiri.
+
+00:02:41.790 --> 00:02:48.770
+Tapi, sebaliknya, ia meminjam sistem operasi dari mesin tempatnya berjalan, dan hanya mengemas aplikasi serta komponen yang dibutuhkan aplikasi tersebut.
+
+00:02:49.390 --> 00:02:51.410
+Itulah yang membuat setiap kontainer berukuran kecil dan cepat.
+
+00:02:51.650 --> 00:02:54.990
+Anda bisa menjalankan sekumpulan kontainer di satu laptop tanpa membesar melambat.
+
+00:02:55.830 --> 00:02:59.090
+Hal yang mencegah kontainer mengganggu hal lain di dalam mesin adalah isolasi.
+
+00:02:59.610 --> 00:03:03.810
+Di dalamnya, aplikasi melihat dunia kecil yang seolah-olah menguasai seluruh komputer tersebut.
+
+00:03:04.230 --> 00:03:07.010
+Komputer itu sebenarnya digunakan bersama dengan kontainer lain dan perangkat gunak lain.
+
+00:03:07.010 --> 00:03:12.890
+Isolasi itulah yang memungkinkan Anda menjalankan banyak kontainer secara berdampingan di satu mesin tanpa mereka saling merebut sumber daya.
+
+00:03:13.250 --> 00:03:16.070
+Itu juga berarti satu image bisa menghasilkan kontainer sebanyak yang Anda butuhkan.
+
+00:03:16.250 --> 00:03:23.290
+Anda membuat cetak birunya sekali, dan darinya Anda bisa memulai lima salinan untuk lima pelanggan atau seratus salinan saat trafik melonjak tanpa membangun apapun dua kali.
+
+00:03:23.730 --> 00:03:25.270
+Hasilnya adalah bagian yang paling penting.
+
+00:03:25.670 --> 00:03:30.670
+Kontainer yang sama akan berperiwaku dengan cara yang sama di laptop Anda, di mesin rekan kerja, dan di server pusat data.
+
+00:03:30.670 --> 00:03:33.930
+Anda mengemasnya sekali, dan ia tidak lagi mempedulikan dimana ikangnya tempat.
+
+00:03:34.310 --> 00:03:37.350
+Dua kata sering muncul dalam semua ini, dan pemula sering tertukar menggunakannya.
+
+00:03:37.890 --> 00:03:40.850
+Image adalah cetak biru, dan kontainer adalah salinan yang berjalan dari cetak bit.
+
+00:03:41.210 --> 00:03:47.130
+Jika kontainer adalah salinannya, pertanyaan berikutnya yang muncul adalah dari mana ia disalin, dan jawabannya lebih menarik daripada kedengaran.
+
+00:03:48.130 --> 00:03:50.030
+Image docker file dan kekuatan dari layar.
+
+00:03:50.490 --> 00:03:51.570
+Image adalah resep yang dibukukan.
+
+00:03:52.210 --> 00:03:54.690
+Sifatnya hanya baca, yang berarti tidak ada yang berubah di dalamnya setelah dibangun.
+
+00:03:55.130 --> 00:03:58.710
+Ini menyimpan aplikasi Anda, file yang dibutuhkan aplikasi, dan instruksi cara menjalankannya.
+
+00:03:58.710 --> 00:04:04.910
+Sifat adit only kelaninlah yang membuat image aman dibagikan karena ribuan orang bisa menjalankankan hasil identik sama dengan hasil identik.
+
+00:04:04.970 --> 00:04:07.170
+Bagian cerdasnya adalah yang mengalih dibuat dalam lapisan,
+
+00:04:07.630 --> 00:04:10.610
+dimana setiap lapisan adalah kumpulan perubahan yang ditumpuk di atas lapisan sebelumnya.
+
+00:04:11.010 --> 00:04:13.850
+Bayangkan tumpukan lembaran bereng, dimana setiap lembaran menambahkan sesuatu yang berarti.
+
+00:04:14.150 --> 00:04:17.810
+Satu lembar membawa komponen sistem operasi dasar, berikutnya menambahkan kode aplikasi Anda,
+
+00:04:17.990 --> 00:04:19.970
+lalu menambahkan pengaturan Anda, lalu menambahkan tumpukan.
+
+00:04:20.130 --> 00:04:21.510
+Tumpuk semuanya dan Anda mendapatkan lengkap.
+
+00:04:21.510 --> 00:04:26.310
+Alasan kering menggunakan lapisan alih-alih satu file raksasa adalah efisiensi pembangunan ulang.
+
+00:04:26.810 --> 00:04:31.010
+Saat Anda mengubah sesuatu, docker hanya membangun ulang lapisan yang diubah dan lapisan di atasnya,
+
+00:04:31.310 --> 00:04:32.890
+sementara bagian bawahnya tetap sama.
+
+00:04:33.870 --> 00:04:37.070
+Itulah sebabnya pembangunan ulang bisa selesai dalam hitungan detik, bukan menit,
+
+00:04:37.190 --> 00:04:39.170
+dan mengapa ukuran image at it tetap kecil.
+
+00:04:39.850 --> 00:04:40.890
+Dibangun di atas satu sama lain.
+
+00:04:41.330 --> 00:04:44.790
+Dimage kelas dasar yang sudah berisi sistem Linux dan web server bisa menjadi fondasi.
+
+00:04:44.990 --> 00:04:48.730
+Bagi ratusan proyek berbeda dengan setiap proyek menambahkan lapisannya sendiri di atasnya.
+
+00:04:48.730 --> 00:04:53.050
+Fondasi bersama itulah alasan utama mengapa ukuran image kelas tetap sangat kecil.
+
+00:04:53.830 --> 00:04:55.750
+Lapisan tersebut berasal dari file yang disebut docker file.
+
+00:04:56.130 --> 00:05:00.390
+Docker file adalah teks biasa yang mencantumkan langkah-langkah membangun image kali satu instruksi per baris.
+
+00:05:01.070 --> 00:05:04.430
+Satu instruksi mungkin memulai dari kemegasar, berikutnya menyalin kode,
+
+00:05:04.670 --> 00:05:08.310
+lalu menginstal dependensi, dan terakhir cara meluncurkan aplikasi.
+
+00:05:09.410 --> 00:05:11.970
+Bacalah di atas ke bawah dan Anda sedang membaca resep untuk kesuruhannya.
+
+00:05:12.730 --> 00:05:15.090
+Urutan baris tersebut jauh lebih penting daripada perkirian pembangunan.
+
+00:05:15.090 --> 00:05:20.610
+Jika Anda mengubah kode aplikasi, docker menggunakan kembali lapisan awal dan hanya mengulang langkah terakhir sehingga prosesnya cepat.
+
+00:05:20.910 --> 00:05:26.090
+Jika Anda mengubah baris pertama, semua yang ada di atasnya harus dibangun ulang dari awal yang membuatnya lambat.
+
+00:05:27.070 --> 00:05:32.190
+Itulah mengapa pengguna berpengalaman menaruh bagian yang jarang berubah di atas dan bagian yang sering diubah di bawah.
+
+00:05:32.190 --> 00:05:35.250
+Jika Anda hanya mengingat satu hal dari bagian ini, ingatlah hal ini.
+
+00:05:35.710 --> 00:05:38.630
+Setelah resepnya dan kontainer adalah hidangan yang Anda sajikan darinya.
+
+00:05:39.230 --> 00:05:40.630
+Segala hal lain yang mengikuti pemisahan tersebut.
+
+00:05:40.950 --> 00:05:42.730
+Disinilah janji portabilitas benar-benar ditepati.
+
+00:05:43.310 --> 00:05:48.290
+Dockerfile adalah sumber kebenaran, dan siapapun yang memiliki file serta kode tersebut bisa membangun ambits yang persis sama.
+
+00:05:48.610 --> 00:05:51.110
+Tidak ada tebak-tebakan atau misteri mengenai versi mana yang digunakan sesok.
+
+00:05:51.510 --> 00:05:54.550
+Ada satu lapisan lagi yang perlu diketahui, dan itulah yang sering membuat orang terkejok.
+
+00:05:54.770 --> 00:05:59.210
+Saat Anda memulai kontainer dari sebuah image, docker menambahkan lapisan tipis yang bisa ditulisi di atasnya.
+
+00:05:59.210 --> 00:06:01.470
+Dan disitulah kontainer yang berjalan dapat menulis file baru.
+
+00:06:01.950 --> 00:06:03.070
+Lapisan itu bersifat sementara.
+
+00:06:03.350 --> 00:06:06.390
+Jadi saat Anda menghapus kontainer, semua yang ada di sana akan hilang bersamanya.
+
+00:06:06.950 --> 00:06:10.370
+Aturan tunggal itu menjelaskan banyak masalah pemula yang mengejutkan, dan akan muncul lagi nantinya.
+
+00:06:10.850 --> 00:06:12.350
+Pertama, image harus disimpan di suatu tempat.
+
+00:06:13.210 --> 00:06:14.410
+Dan tempat ini disebut sebagai registri.
+
+00:06:15.450 --> 00:06:17.470
+Registri adalah tempat di mana image hidup dan berpindah.
+
+00:06:18.170 --> 00:06:21.330
+Registri adalah tempat penyimpanan image agar bisa dibagikan dan diunduh.
+
+00:06:21.610 --> 00:06:25.010
+Jika image adalah resep, maka registri adalah rak buku masa yang diterbitkan.
+
+00:06:25.190 --> 00:06:26.990
+Dan siapapun yang memiliki akses bisa mengambil salinan.
+
+00:06:26.990 --> 00:06:30.070
+Yang utama adalah docker hub registri pabrik yang bisa digunakan oleh siapa saja.
+
+00:06:30.510 --> 00:06:32.690
+Docker mencarinya terlebih dahulu saat Anda meminta image.
+
+00:06:32.790 --> 00:06:35.610
+Itulah sebabnya banyak perintah langsung berfungsi tanpa Anda perlu mengarahkannya kemana.
+
+00:06:36.050 --> 00:06:41.510
+Jika Anda lebih suka menjaga image, tetap pribadi Anda bisa menjalankan registri sendiri di balik perlindungan Anda dan banyak perusahaan melakukan hal itu.
+
+00:06:42.150 --> 00:06:44.530
+Image dilengkapi dengan tag yang hanyalah label untuk versi tertentu.
+
+00:06:44.910 --> 00:06:50.610
+Image yang sama mungkin membawa satu tag untuk versi tiga, yang lain untuk versi empat, dan yang ketiga berlabel latest yang menunjuk ke apapun yang terbaru.
+
+00:06:51.010 --> 00:06:54.450
+Tag latest itu praktis sekaligus jebakan, dan itu adalah hal yang akan kita bahas kembali nanti.
+
+00:06:54.450 --> 00:06:56.270
+Dua perintah melakukan sebagian mesin nasib.
+
+00:06:56.850 --> 00:07:02.090
+Pool mengunduh image dari registri ke mesin Anda, dan push mengirimkan image yang Anda buat ke registri agar orang lain bisa menggunakannya.
+
+00:07:02.610 --> 00:07:03.290
+Itulah seluruh siklusnya.
+
+00:07:03.830 --> 00:07:06.190
+Anda membuat image mengunggahnya, dan orang lain mengunduhnya.
+
+00:07:06.730 --> 00:07:10.330
+Saat pertama kali Anda menarik image, docker mengunduhnya, dan menyimpan salinannya di mesin Anda.
+
+00:07:10.750 --> 00:07:12.510
+Setelah Anda minta image yang sama lagi, image itu sudah ada di sana.
+
+00:07:12.810 --> 00:07:15.210
+Jadi, memulai kontainer hanya butuh sesaat, bukan unduhan penuh.
+
+00:07:15.570 --> 00:07:17.390
+Disinilah janji portabilitas menjadi kenyataan.
+
+00:07:17.790 --> 00:07:22.750
+Rekan tim tidak butuh laptop atau pengaturan persis milik Anda, karena mereka menarik image yang sama dan mendapatkan aplikasi yang sama.
+
+00:07:22.750 --> 00:07:26.710
+Beberapa image tersebut dikelola secara resmi oleh perusahaan dibalik perangkat lunak tersebut.
+
+00:07:26.850 --> 00:07:30.670
+Itulah sebabnya menarik image yang dikenal luas biasanya lebih aman daripada membangun semuanya sendiri.
+
+00:07:31.190 --> 00:07:33.270
+Penting juga untuk mengetahui seberapa besar rakyat ini telah berkembang.
+
+00:07:33.750 --> 00:07:39.450
+Menurut perhitungan docker sendiri, docker hub melayani miliaran unduhan image setiap bulan dan platform ini mencatat jutaan pengembang kedaftar.
+
+00:07:40.330 --> 00:07:42.690
+Ketika orang mengatakan kontainer ada di mana-mana, inilah skala yang mereka menarik.
+
+00:07:42.690 --> 00:07:48.370
+Dengan setiap blok bangunan sekarang tersedia, satu pertanyaan masih tersisa dan itulah yang sering menjepak hampir setiap pemula.
+
+00:07:49.730 --> 00:07:51.010
+Container versus mesin virtual
+
+00:07:51.010 --> 00:07:55.130
+Pertanyaan itu adalah container versus mesin virtual dan pertanyaannya pantas mendapatkan coba yang cermat.
+
+00:07:55.390 --> 00:07:59.390
+Sebelum ada container, jika Anda ingin menjalankan perangkat lunak secara terisolasi, Anda menggunakan mesin virtual.
+
+00:07:59.770 --> 00:08:03.990
+Kebingungan ini bisa dimaklumi karena kedua alat tersebut ada untuk memisahkan perangkat lunak dari segala hal di sekitarnya.
+
+00:08:04.430 --> 00:08:05.730
+Hanya saja mereka menetapkan berbeda.
+
+00:08:06.410 --> 00:08:09.490
+Mesin virtual adalah komputer lengkap yang disimulasikan di dalam komputer Anda.
+
+00:08:09.490 --> 00:08:16.170
+Ia memiliki sistem operasi, memori, dan penyimpanannya sendiri, serta berperilaku layaknya mesin terpisah yang berada di dalam mesin yang lebih besar.
+
+00:08:16.730 --> 00:08:18.330
+Namanya sendiri sudah menunjukkan ukuran dari hal tersebut.
+
+00:08:18.910 --> 00:08:23.210
+Mesin virtual membawa sistem operasi penuh, yang merupakan beban berat untuk disalin di setiap instansi.
+
+00:08:23.730 --> 00:08:29.530
+Container mengambil pendekatan sebaliknya, meminjam sistem operasi dari mesin tempatnya berjalan, sehingga mereka tidak perlu membawa sistem operasi sendiri.
+
+00:08:30.330 --> 00:08:33.010
+Satu perbedaan itulah yang menjelaskan hampir setiap celah praktis di antara keduanya.
+
+00:08:33.770 --> 00:08:37.050
+Container diukur dalam megabita, sementara mesin virtual diukur dalam gigabita.
+
+00:08:37.050 --> 00:08:41.350
+Container dimulai dalam hitungan detik, sedangkan mesin virtual bisa memakan waktu bermenit-menit untuk putih.
+
+00:08:41.530 --> 00:08:45.250
+Pada perangkat keras yang sama, Anda dapat menjalankan jauh lebih banyak container daripada mesin virtual,
+
+00:08:45.390 --> 00:08:47.710
+karena setiap container melakukan jauh lebih sedikit tugas di latar belakang.
+
+00:08:48.010 --> 00:08:49.870
+Pertukarannya menjadi jelas saat Anda membandingkannya secara berbeda.
+
+00:08:50.370 --> 00:08:53.970
+Mesin virtual memberi Anda pengisahan yang lebih kuat dan membayarnya dengan ukuran serta kecepatan.
+
+00:08:54.630 --> 00:08:59.450
+Container memberi Anda kecepatan dan ukuran yang ringan, namun membayarnya dengan berbagi lebih banyak sumber daya pada mesin di bawah.
+
+00:08:59.610 --> 00:09:03.330
+Tidak ada pihak yang curang, karena mereka menyelesaikan masalah yang sama dengan dua cara berbeda.
+
+00:09:03.330 --> 00:09:07.130
+Namun sebelum Anda mengabaikan mesin virtual, mereka masih unggul di beberapa aspek.
+
+00:09:07.870 --> 00:09:12.510
+Mereka memberikan isolasi yang lebih kuat karena masing-masing tersegel di tingkat perangkat keras, bukan di tingkat proses.
+
+00:09:13.510 --> 00:09:17.950
+Mereka juga bisa menjalankan sistem operasi yang benar-benar berbeda dari mesin inangnya, sesuatu yang tidak bisa dilakukan container.
+
+00:09:18.670 --> 00:09:19.530
+Keduanya juga bukan rival.
+
+00:09:20.150 --> 00:09:23.350
+Pengaturan yang sangat umum adalah menjalankan container di dalam mesin virtual,
+
+00:09:23.350 --> 00:09:27.050
+mengambil portabilitas container dan membungkusnya dalam isolasi mesin virtual yang lebih kuat.
+
+00:09:27.450 --> 00:09:31.190
+Jika Anda pernah menggunakan mesin virtual, Anda sudah memahami bentuk dasar dari gagasan ini.
+
+00:09:31.190 --> 00:09:35.010
+Kontainer hanyalah sepupunya yang lebih ringan, dan Anda tidak perlu memilih salah satu,
+
+00:09:35.150 --> 00:09:37.190
+karena sebagian besar sistem modern menggunakan keduanya.
+
+00:09:38.410 --> 00:09:40.230
+Di mana orang benar-benar menggunakan docker, itulah teori.
+
+00:09:41.110 --> 00:09:44.230
+Di dunia nyata, alat ini muncul di hampir setiap tim perangkat lunak modern,
+
+00:09:44.450 --> 00:09:46.490
+dan alasannya bersifat praktis, bukan akademis.
+
+00:09:47.830 --> 00:09:48.670
+Alasan pertama adalah,
+
+00:09:50.190 --> 00:09:54.750
+ketika pengembang baru bergabung dengan tim, mereka tidak perlu menghabiskan tiga hari untuk menginstal versi yang tepat dari segala.
+
+00:09:55.090 --> 00:09:58.470
+Mereka mengambil container poyek, menjalankannya, dan mulai bekerja di hari pertama,
+
+00:09:58.470 --> 00:10:01.070
+yang berarti proses orientasi tidak lagi menjadi ujian kesabat.
+
+00:10:01.390 --> 00:10:03.570
+Pengujian dan pengiriman otomatis adalah hal besar berikut.
+
+00:10:04.270 --> 00:10:07.970
+Tim modern membangun dan menguji kode mereka secara otomatis setiap kali seseorang membuat perubahan.
+
+00:10:08.630 --> 00:10:13.090
+Container membuat hal itu dapat diandalkan karena pengujian berjalan di lingkungan yang sama persis setiap saat,
+
+00:10:13.270 --> 00:10:14.890
+baik di mesin pengembang maupun di server build.
+
+00:10:15.530 --> 00:10:17.610
+Jika berhasil di satu mesin, maka akan berhasil di semua.
+
+00:10:18.090 --> 00:10:21.350
+Pola umum lainnya adalah, memecah aplikasi besar menjadi bagian-bagian yang lebih kecil.
+
+00:10:22.170 --> 00:10:26.830
+Alih-alih satu program raksasa, tim membaginya menjadi layanan kecil yang masing-masing melakukan satu tugas.
+
+00:10:26.830 --> 00:10:33.250
+Setiap layanan mendapatkan kontenernya sendiri, sehingga bisa diperbarui atau ditingkatkan skalanya tanpa mengganggu sistem lainnya, tanpa mengganggu sistem lainnya.
+
+00:10:33.330 --> 00:10:37.550
+Bayangkan toko daring di mana fitur checkout, pencarian, dan profil pengguna masing-masing berada di kontaknya sendiri.
+
+00:10:38.510 --> 00:10:42.590
+Saat fitur checkout perlu diperbaiki, tim hanya memperbarui satu kontenernya itu dan membiarkan yang lainnya tetap butuh.
+
+00:10:42.930 --> 00:10:44.710
+Portabilitas di berbagai tempat melengkapi semuanya.
+
+00:10:45.430 --> 00:10:49.210
+Kontenernya yang sama dapat berjalan di laptop, di server pusat data, atau di cloud.
+
+00:10:49.750 --> 00:10:52.490
+Tim dapat berpindah atau berkembang tanpa harus menulis ulang cara aplikasi dikemas.
+
+00:10:52.490 --> 00:10:54.230
+Ada juga kegunaan seliar yang lebih serahan.
+
+00:10:54.850 --> 00:10:59.050
+Pengembang menjalankan basis data, antrean pesan, dan alat lain sebagai kontener di laptop mereka sendiri,
+
+00:10:59.190 --> 00:11:01.590
+agar tidak perlu menginstal dan memonfigurasi alat tersebut secara manual.
+
+00:11:02.730 --> 00:11:05.810
+Telah selesai, mereka menghapus kontener tersebut dan mesin mereka kembali bersih.
+
+00:11:06.310 --> 00:11:07.590
+Semua ini bukanlah kasus penggunaan yang langsung.
+
+00:11:08.170 --> 00:11:13.250
+Dalam survei pengembang Stack Overflow, Docker muncul sebagai alat yang paling banyak digunakan dalam kategori pengembangan cloud,
+
+00:11:13.430 --> 00:11:15.650
+mengungguli Kubernetes, dan setiap penyedia cloud dalam daftar.
+
+00:11:16.370 --> 00:11:18.090
+Jutaan pengembang mengandalkannya setiap hari,
+
+00:11:18.090 --> 00:11:21.350
+yang merupakan sinyal kuat bahwa keahlian ini relevan di berbagai pekerjaan dan proyek.
+
+00:11:22.770 --> 00:11:23.990
+Kesalahan yang dilakukan pemula.
+
+00:11:24.490 --> 00:11:25.930
+Sebelum Anda terburu-buru mulai membangun,
+
+00:11:26.110 --> 00:11:28.870
+ada baiknya mengetahui kesalahan yang dialami hampir semua orang di minggu pertama.
+
+00:11:29.210 --> 00:11:32.030
+Tidak ada satupun yang sulit dihindari begitu Anda tahu apa yang harus diwaspadai.
+
+00:11:32.270 --> 00:11:34.770
+Yang paling umum adalah mengambil versi apapun yang diberi label Letters.
+
+00:11:35.210 --> 00:11:36.830
+Hal ini menggoda karena Letters terdengar paling mengetahui.
+
+00:11:37.270 --> 00:11:39.970
+Masalahnya adalah Letters berubah seiring waktu sehingga pengaturan yang sama
+
+00:11:39.970 --> 00:11:41.630
+bisa menghasilkan build yang berbeda pada depan
+
+00:11:41.630 --> 00:11:43.930
+dan mengunci versi tertentu menjaga build Anda tetap dapat di sini.
+
+00:11:43.930 --> 00:11:46.510
+Lalu ada masalah data dan hal ini sering mengejutkan orang.
+
+00:11:47.190 --> 00:11:48.930
+Kontainer bukanlah tempat untuk menyimpan file
+
+00:11:48.930 --> 00:11:51.630
+karena lapisan yang dapat ditulis akan hilang saat kontainer dihapus.
+
+00:11:52.210 --> 00:11:54.210
+Apapun yang perlu Anda simpan harus berada di volume,
+
+00:11:54.430 --> 00:11:57.370
+yaitu penyimpanan yang berada di luar masa pakai singkat kontainer tersebut.
+
+00:11:57.870 --> 00:12:01.130
+Jika Anda mengabaikannya, Anda akan melihat data penting menghilang saat bertamakan pembesian.
+
+00:12:01.770 --> 00:12:02.710
+Ukuran darah jebakan lainnya.
+
+00:12:03.150 --> 00:12:05.470
+Sangat mudah untuk menyalin file yang tidak Anda butuhkan
+
+00:12:05.470 --> 00:12:07.050
+dan memulai dari basis yang membengkak
+
+00:12:07.050 --> 00:12:10.270
+dan setiap pilihan tersebut membuat image lebih lambat untuk dipindahkan dan dijalankan.
+
+00:12:10.710 --> 00:12:11.790
+Kebiasaan keamanan juga penting.
+
+00:12:11.790 --> 00:12:14.490
+Menjalankan semuanya sebagai pengguna root adalah jalan pintas yang umum.
+
+00:12:14.870 --> 00:12:16.310
+Root dapat melakukan apa saja di mesin
+
+00:12:16.310 --> 00:12:19.270
+sehingga masalah di dalam kontainer root memiliki peluang jauh lebih besar untuk menyebabkan.
+
+00:12:19.390 --> 00:12:22.210
+Pengguna terbatas di dalam kontainer menjaga dampak kerusakan tetap kecil.
+
+00:12:22.890 --> 00:12:24.530
+Dan terakhir, ada kebiasaan memperbaiki kontainer
+
+00:12:24.530 --> 00:12:26.570
+yang sedang berjalan secara manual alih-alih memperbaiki imaging.
+
+00:12:27.030 --> 00:12:28.870
+Setiap perubahan yang Anda buat pada kontainer yang berjalan
+
+00:12:28.870 --> 00:12:30.330
+akan hilang saat Anda memulai kembali
+
+00:12:30.330 --> 00:12:32.830
+dan image adalah sumber kebenaran, jadi perbaikan harus dilakukan di sana.
+
+00:12:34.010 --> 00:12:36.290
+Salah yang lebih jarang disadari adalah tertukar antara image dengan.
+
+00:12:36.290 --> 00:12:38.750
+Image adalah cetak virus statis yang Anda bangun dan bagikan
+
+00:12:38.750 --> 00:12:41.330
+sedangkan kontainer adalah instans berjalan yang akan Anda hapus.
+
+00:12:42.030 --> 00:12:44.650
+Mencampur adukan keduanya membuat orang memperlakukan kontainer sekali
+
+00:12:44.650 --> 00:12:47.470
+pakai seolah-olah permanen dan kebingungan itu menyebabkan banyak pekerjaan yang hilang.
+
+00:12:47.910 --> 00:12:49.510
+Satu lagi kebiasaan kecil yang menghemat banyak waktu.
+
+00:12:49.770 --> 00:12:52.430
+File singkat memberitahu proses build folder mana yang harus dilewati
+
+00:12:52.430 --> 00:12:55.250
+sehingga file besar yang tidak ingin disertakan tetap berada di luar image
+
+00:12:55.250 --> 00:12:56.410
+dan build Anda tetap cepat.
+
+00:12:57.230 --> 00:12:58.370
+Tidak ada kesalahan ini yang fatal
+
+00:12:58.370 --> 00:13:01.610
+dan setiap kesalahan lebih mudah dihindari daripada diurai di kemudian hari.
+
+00:13:02.030 --> 00:13:03.630
+Kenapa Anda sebaiknya tidak menggunakan guna?
+
+00:13:03.950 --> 00:13:05.250
+Kontainer sangat hebat dan itulah
+
+00:13:05.250 --> 00:13:08.810
+Mengapa penting untuk jujur tentang kapan waktu yang tepat saat alat ini tidak cocok digunakan?
+
+00:13:09.450 --> 00:13:12.190
+Jika beban kerja Anda memerlukan isolasi yang kuat di tingkat perangkat keras,
+
+00:13:12.290 --> 00:13:13.750
+mesin virtual adalah pilihan yang lebih aman.
+
+00:13:14.470 --> 00:13:17.210
+Hal yang sama berlaku untuk perangkat lunak yang memerlukan sistem operasi
+
+00:13:17.210 --> 00:13:19.130
+yang benar-benar berbeda dari mesin tempatnya berjalan
+
+00:13:19.130 --> 00:13:21.430
+karena kontainer berbagi sistem operasi di bawahnya.
+
+00:13:22.070 --> 00:13:23.950
+Jika Anda memiliki tugas kecil sekali pakai,
+
+00:13:24.230 --> 00:13:26.030
+menggunakan kontainer bisa terasa berlebihan
+
+00:13:26.030 --> 00:13:28.850
+dan terkadang menjalankan skrip atau aplikasi biasa jauh lebih cepat.
+
+00:13:29.570 --> 00:13:31.890
+Anda bisa menghabiskan waktu seharian untuk mempelajari alat tersebut
+
+00:13:31.890 --> 00:13:33.150
+demi pekerjaan yang seharusnya hanya makan.
+
+00:13:33.150 --> 00:13:35.350
+Beban kerja berat yang menyimpan banyak data
+
+00:13:35.350 --> 00:13:37.430
+seringkali lebih baik ditangani dengan pendekatan lain
+
+00:13:37.430 --> 00:13:39.230
+karena kontainer dibangun untuk sekali pakai
+
+00:13:39.230 --> 00:13:41.090
+bukan sebagai tempat penyimpanan data jangka panjang.
+
+00:13:41.750 --> 00:13:43.210
+Ada juga kurva belajaran yang harus seperti itu.
+
+00:13:43.530 --> 00:13:46.250
+Kontainer memberikan keuntungan saat Anda menjalankan banyak kontainer di berbagai mesin.
+
+00:13:46.890 --> 00:13:48.250
+Untuk satu proyek kecil di satu komputer,
+
+00:13:48.370 --> 00:13:50.190
+keuntungan itu mungkin sulit dirasakan pada awalnya.
+
+00:13:50.910 --> 00:13:52.550
+Semua itu tidak mengurangi keunggulan dari kontainer.
+
+00:13:52.850 --> 00:13:54.110
+Hanya berarti keahlian yang sesungguhnya adalah
+
+00:13:54.110 --> 00:13:56.390
+mengetahui kapan harus menggunakannya dan kapan harus menyimpan.
+
+00:13:56.830 --> 00:13:58.330
+Setelah menyingkirkan istilah teknis,
+
+00:13:58.330 --> 00:14:00.890
+kontainer hanyalah aplikasi Anda yang dikemas dengan semua yang dibutuhkannya
+
+00:14:00.890 --> 00:14:02.650
+sehingga berjalan dengan cara yang sama kemanapun ia pergi.
+
+00:14:03.230 --> 00:14:05.550
+Ide itulah yang membuatnya muncul di banyak perangkat lunak modern.
+
+00:14:06.090 --> 00:14:07.850
+Jika perjelasan ini membuat Anda paham kontainer,
+
+00:14:07.950 --> 00:14:09.970
+klik subscribe dan saya akan terus mengambil bagian teknologi
+
+00:14:09.970 --> 00:14:11.010
+yang menakutkan dan menjelaskannya.

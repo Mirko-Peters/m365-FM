@@ -1,0 +1,652 @@
+WEBVTT
+
+00:00:00.220 --> 00:00:04.880
+Willkommen zum M35560FM-Podcast, in dem wir uns mit Menschen, Ideen und Technologien befassen,
+
+00:00:04.960 --> 00:00:09.940
+die die Zukunft der Arbeit gestalten. Warum rät Ihr KI-Assistent immer weiter? Der KI-Assistent
+
+00:00:09.940 --> 00:00:13.960
+Ihres Unternehmens hat noch nie ein einziges Dokument Ihres Unternehmens gelesen. Er antwortet
+
+00:00:13.960 --> 00:00:18.620
+trotzdem mit absoluter Sicherheit. Und so stirbt das Vertrauen in KI. Microsoft hat ein Mittel
+
+00:00:18.620 --> 00:00:23.360
+entwickelt, um das zu beheben, und zwar Foundry IQ. Foundry IQ ist eine verwaltete Wissensschicht,
+
+00:00:23.440 --> 00:00:26.420
+die verstreute Unternehmensinformationen in berechtigungsbasierte Wissensdatenbanken
+
+00:00:26.420 --> 00:00:31.000
+umwandelt, aus denen ein KI-Agent sicher lesen kann. Sie setzt auf der Azure AI Search auf und
+
+00:00:31.000 --> 00:00:35.040
+gehört zu einer Produktfamilie, die Microsoft als IQs bezeichnet. Am Ende werden Sie wissen,
+
+00:00:35.120 --> 00:00:38.520
+was es ist, wie es funktioniert und welche Grenzen damit verbunden sind. Beginnen Sie damit,
+
+00:00:38.520 --> 00:00:42.640
+wie ein Modell tatsächlich lernt. Es liest einen riesigen Berg an öffentlichem Text. Es lernt die
+
+00:00:42.640 --> 00:00:47.520
+in diesem Text verborgene Muster und dann stoppt es. Der Tag, an dem es stoppt, wird als Wissensgrenze
+
+00:00:47.520 --> 00:00:51.240
+bezeichnet. Und alles nach diesem Tag ist für das Modell unsichtbar. Denken Sie nun an die
+
+00:00:51.240 --> 00:00:54.520
+Informationen, die es nie in einem öffentlichen Text geschafft hat. Ihre Urlaubsrichtlinie,
+
+00:00:54.520 --> 00:00:57.520
+ihre Rückerstattungsregeln und die Preisliste, die Sie letzten Dienstag aktualisiert haben,
+
+00:00:57.600 --> 00:01:00.700
+befinden sich alle hinter den Morden ihres Unternehmens. Nichts davon ist im Modell enthalten.
+
+00:01:01.100 --> 00:01:04.320
+Wenn Sie diesem Modell einen Auftrag erteilen, wird das Problem noch schärfer. Die höfliche
+
+00:01:04.320 --> 00:01:07.840
+Bezeichnung für diesen Auftrag ist, Agent war schlicht eine Software, bedeutet die Mithilfe eines
+
+00:01:07.840 --> 00:01:11.680
+zugrundeliegend KI-Modells Fragen beantwortet, Maßnahmen ergreifen. Niemand aus der Finanzabteilung
+
+00:01:11.680 --> 00:01:15.980
+fragt den Agenten, wie viele Tage Elternzeit er bekommt. Das Modell hat das Handbuch noch nie gesehen und
+
+00:01:15.980 --> 00:01:20.320
+erfindet daher eine Antwort, die absolut vernünftig klingt. Eine mit Sicherheit gegebene falsche Antwort ist
+
+00:01:20.320 --> 00:01:23.380
+schlimmer als ein ehrliches Achselzucken, denn sie führt dazu, dass die Leute dem Tool nicht mehr
+
+00:01:23.380 --> 00:01:27.220
+vertrauen. Diese Lücke ist der eigentliche Grund für die Existenz von Foundry IQ. Sie zu schließen
+
+00:01:27.220 --> 00:01:30.680
+hat weniger mit einem intelligenteren Modell zu tun, sondern vielmehr damit, dem Modell etwas
+
+00:01:30.680 --> 00:01:36.660
+Reales zum Lesen zu geben. Was ist Foundry IQ eigentlich? Microsoft beschreibt es als eine
+
+00:01:36.660 --> 00:01:40.240
+verwaltete Wissensschicht, die Unternehmensdaten in wiederverwendbare, berechtigungsbewusste
+
+00:01:40.240 --> 00:01:45.180
+Wissensdatenbanken für KI-Agenten umwandelt. Dieser Satz ist zutreffend und sagt dem Anfänger so gut
+
+00:01:45.180 --> 00:01:49.480
+wie nichts. Ja, also die einfache Version. Eine Wissensdatenbank ist das Herzstück. Stellen Sie sich ein
+
+00:01:49.480 --> 00:01:52.760
+Regal vor, in dem die vertrauenswürdigen Informationen Ihres Unternehmens so angeordnet sind,
+
+00:01:52.760 --> 00:01:56.360
+dass eine KI Sie schnell durchsuchen kann. Dieses Regal bezeichnet Microsoft als Wissensdatenbank.
+
+00:01:56.860 --> 00:02:00.360
+Sie ist keine Kopie Ihres gesamten Besitzes. Sie ist eine kuratierte Sammlung der Orte, an denen
+
+00:02:00.360 --> 00:02:04.120
+Ihre Informationen bereits vorhanden sind. Diese Verknüpfungen haben ebenfalls einen. Eine
+
+00:02:04.120 --> 00:02:08.620
+Wissensquelle ist ein Link zu einem Ort, zum B, einem Ordner, einem Cloud-Speicher, einer Sharepoint-Website
+
+00:02:08.620 --> 00:02:12.500
+oder einem Data Lake. Die Wissensdatenbank kann bis zu zehn davon gleichzeitig enthalten und hier
+
+00:02:12.500 --> 00:02:16.940
+spart das Design echte Arbeit. Viele Agenten können dieselbe Wissensdatenbank gemeinsam nutzen,
+
+00:02:17.040 --> 00:02:21.060
+anstatt dass jeder Agent seine eigene private Pipeline aufbaut. Dann kommt der Berechtigungsteil und der ist
+
+00:02:21.060 --> 00:02:24.720
+wichtiger als alles andere. Die Wissensdatenbank ist berechtigungsbewusst, was bedeutet, dass die
+
+00:02:24.720 --> 00:02:28.600
+KI nur das sieht, was die anfragende Person sehen darf. Fragen Sie nach einer Gehaltsspanne, auf die
+
+00:02:28.600 --> 00:02:32.500
+Sie keinen Zugriff haben und Sie erhalten überhaupt keine Antwort. Microsoft stellte Foundry IQ auf
+
+00:02:32.500 --> 00:02:37.260
+seiner Ignite-Konferenz im Jahr 2025 vor. Auf derselben Veranstaltung wurde Azure AI Foundry
+
+00:02:37.260 --> 00:02:42.080
+und Microsoft Foundry umbenannt, weshalb der Name so ähnlich klingt. Unter all dem befindet sich Azure AI
+
+00:02:42.080 --> 00:02:46.320
+Search, die Engine, die die eigentliche Indizierung und Suche vornimmt. Der Name ist ein kleiner Hinweis.
+
+00:02:46.860 --> 00:02:50.340
+Foundry ist die Plattform, auf der Sie entwickeln und IQ ist das Wissen, mit dem Sie sie füttern.
+
+00:02:50.340 --> 00:02:55.180
+Aufgrund dieser Trennung spricht Microsoft von einer ganzen Familie dieser IQs. Sie müssen
+
+00:02:55.180 --> 00:02:58.500
+kein Entwickler sein, um all das nachvollziehen zu können. Der Aufbau einer Wissensdatenbank
+
+00:02:58.500 --> 00:03:01.240
+erfordert zwar einige Einrichtungsschritte, aber es ist nicht so, dass Sie verstehen, was eine
+
+00:03:01.240 --> 00:03:04.260
+Wissensdatenbank ist und wozu Sie denken. Dieses Verständnis ist entscheidend, wenn Sie
+
+00:03:04.260 --> 00:03:07.940
+entscheiden, ob Sie Ihre Zeit in das Erlernen investieren möchten. Ein weiterer Punkt unterscheidet
+
+00:03:07.940 --> 00:03:12.000
+Sie von einem Ordner mit Dokument. Die Wissensdatenbank ist wiederverwendbar. Sie wird einmal erstellt
+
+00:03:12.000 --> 00:03:15.100
+und eine beliebige Anzahl von Agenten kann sich damit verbinden, wodurch aus verstreuten
+
+00:03:15.100 --> 00:03:19.440
+Informationen eine gemeinsam genutzte Infrastruktur wird, aus der das Wissen stammt. Zwei Arten von Verbindungen
+
+00:03:19.440 --> 00:03:22.660
+speisen eine Wissensdatenbank ein. Und der Unterschied ist zehn Minuten Ihrer Aufmerksamkeit
+
+00:03:22.660 --> 00:03:27.940
+wert, da die Aktualität der Antworten beeinflusst, der Anfluss. Die erste Art wird diese indizierte
+
+00:03:27.940 --> 00:03:31.900
+Quelle bezeichnen. Indizierung bedeutet, dass der Inhalt in einen Suchindex kopiert, in kleine
+
+00:03:31.900 --> 00:03:35.740
+Stücke zerlegt, in Zahlen umgewandelt wird, die ein Computer vergleichen kann und mit zusätzlichen
+
+00:03:35.740 --> 00:03:39.640
+Details versehen wird. Azure AI Search übernimmt all diese Aufgaben für Sie nach einem von Ihnen
+
+00:03:39.640 --> 00:03:43.680
+festgelegten Zeitplan, sodass der Index einigermaßen aktuell wird. Blob Storage, One Lake, SharePoint
+
+00:03:43.680 --> 00:03:47.480
+und vorhandene Suchindizes können alle auf diese Weise indiziert werden. Die zweite
+
+00:03:47.480 --> 00:03:51.260
+Art ist eine remote Quelle, die zu keinem Zeitpunkt kopiert wird. Die Engine fragt Sie
+
+00:03:51.260 --> 00:03:55.260
+live ab, sobald jemand eine Frage stellt. Die Daten sind immer aktuell, während die Inhalte
+
+00:03:55.260 --> 00:03:59.820
+an Ihrem Speicherort bleiben. SharePoint funktioniert über die Copilot Retrieval API auf diese Weise
+
+00:03:59.820 --> 00:04:03.520
+ebenso wie das Open Web über Bing. Stellen Sie sich ein Support Team vor, dass dies einrichtet.
+
+00:04:03.920 --> 00:04:08.300
+Sie verweisen eine einzige Wissensdatenbank auf Ihre Hilfe-Center-Artikel und Ihre SharePoint-FAQ-Website.
+
+00:04:08.620 --> 00:04:11.960
+Eine Quelle ist indiziert und eine Quelle ist live und der Agent kann von beiden aus antworten,
+
+00:04:11.960 --> 00:04:14.680
+ohne dass jemand für jedes System einen benutzerdefinierten Connector schreiben muss.
+
+00:04:14.940 --> 00:04:18.020
+Der Kompromiss ist es wertlaut ausgesprochen zu werden. Indizierte Quellen sind schnell und
+
+00:04:18.020 --> 00:04:21.020
+kostengünstig zu durchsuchen, aber sie sind nur so aktuell wie der letzte Indizierungslauf.
+
+00:04:21.360 --> 00:04:24.920
+Remote Quellen sind immer aktuell, aber jede Frage fügt einem anderen System einen Live-Aufruf hinzu.
+
+00:04:25.660 --> 00:04:28.400
+Zu wissen, wo das Wissen gespeichert ist, ist nur die eine Hälfte. Die andere Hälfte ist das,
+
+00:04:28.460 --> 00:04:29.900
+was in dem Moment passiert, indem man eine Frage eingebaut.
+
+00:04:30.780 --> 00:04:34.180
+Was passiert, wenn Sie eine Frage stellen? Hier hört es auf, sich wie eine Suche anzufügen.
+
+00:04:34.680 --> 00:04:38.140
+Microsoft nennt diese Maschinerie Agentic Retrieval, was nach Marketing klingt,
+
+00:04:38.240 --> 00:04:41.760
+aber tatsächlich etwas Konkretes beschreibt. Nehmen wir an, Sie fragen in einfachen Worten,
+
+00:04:41.760 --> 00:04:44.960
+was Ihr Unternehmen tut, wenn ein Kunde nach 30 Tagen eine Rückerstattung wünscht und wünscht.
+
+00:04:45.400 --> 00:04:48.080
+Eine einzelne Suche würde ein paar Dokumente erfassen und auf das Beste hoppen.
+
+00:04:48.880 --> 00:04:51.820
+Agentic Retrieval funktioniert eher wie ein sorgfältiger Rechercheur und beginnt mit der
+
+00:04:51.820 --> 00:04:57.180
+Planung der Frage. Es zerlegt Ihre eine Frage in mehrere kleinere. Eine fragt, wie lang das
+
+00:04:57.180 --> 00:05:00.380
+Standardfenster für Rückerstattung ist, eine andere fragt, was die Ausnahmen sind und eine dritte
+
+00:05:00.380 --> 00:05:04.320
+fragt, wer eine verspätete Rückerstattung genehmigen muss. Diese kleineren Suchvorgänge werden dann
+
+00:05:04.320 --> 00:05:08.060
+gleichzeitig für jede Quelle in der Wissensdatumbank ausgeführt. Jede Suche kann eine Stichwortsuche,
+
+00:05:08.140 --> 00:05:11.740
+eine bedeutungsbasierte Suche oder eine Mischung aus beidem sind. Jeder Ergebnissatz wird
+
+00:05:11.740 --> 00:05:15.440
+neu eingestuft, sodass die stärksten Treffer ganz oben stehen. Die besten Teile werden dann
+
+00:05:15.440 --> 00:05:18.840
+zu einer Antwort zusammengeführt, wobei die Zitate auf die Originaldokumente zurückverweisen.
+
+00:05:19.280 --> 00:05:23.000
+Die Engine kann sich auch auf die bisherige Konversation stützen. Stellen Sie eine Folgefrage
+
+00:05:23.000 --> 00:05:26.160
+wie UND für internationale Bestellungen und die Engine weiß bereits, wovon Sie sprechen,
+
+00:05:26.260 --> 00:05:30.740
+anstatt bei Null anzufangen. Die Zitate sorgen für Vertrauen. Sie ermöglichen es einer Person,
+
+00:05:30.820 --> 00:05:33.980
+die Antwort zu überprüfen, anstatt sie einfach so zu nehmen. Und bei allem, was mit Politik oder Geld
+
+00:05:33.980 --> 00:05:36.680
+zu tun hat, ist diese Überprüfung der Unterschied zwischen einem Spielzeug und einem Werkzeug.
+
+00:05:36.740 --> 00:05:40.860
+Hier gibt es einen cleveren Zusatzlichen. Wenn die ersten Ergebnisse schwach aussehen, kann die Engine
+
+00:05:40.860 --> 00:05:44.180
+einen zweiten Durchlauf mit einem besseren Plan durchführen. Genau hier verdient das Wort
+
+00:05:44.180 --> 00:05:49.520
+Agentic seinen Platz. Microsofts eigene Benchmarks bescheinigen diesen Multi-Search-Ansatz eine um
+
+00:05:49.520 --> 00:05:53.480
+etwa 36 Prozent höhere Antwortqualität als einer einzelnen Suche. Das ist die Zahl des
+
+00:05:53.480 --> 00:05:56.600
+Unternehmens und kein unabhängiger Test. Betrachten Sie sie also eher als eine Richtung,
+
+00:05:56.680 --> 00:06:00.060
+denn es ist eine Garantie. Die Cleverness hat ihren Preis und ich möchte lieber, dass Sie es jetzt hören.
+
+00:06:00.720 --> 00:06:03.760
+Mehrere Suchen plus eine Planung Schritt durchzuführen dauert länger als eine Abfrage,
+
+00:06:03.760 --> 00:06:08.100
+sodass die Antwort einen Takt später eintrifft. Diese zusätzliche Sekunde ist der Preis für die Bearbeitung einer
+
+00:06:08.100 --> 00:06:11.500
+Frage, die bei einer einfachen Suche vermasselt werden. Der Regler, der entscheidet, wie intensiv
+
+00:06:11.500 --> 00:06:15.720
+nachgedacht wird, wird von Microsoft als Retrieval Reasoning Effort bezeichnet und lässt sich auf drei
+
+00:06:15.720 --> 00:06:19.280
+Einstellungen reduzieren, über die Sie tatsächlich nachdenken können. Die erste Einstellung ist minimal.
+
+00:06:19.740 --> 00:06:22.720
+Die Engine überspringt den Planungsschritt vollständig und führt Ihre Wörter direkt in den
+
+00:06:22.720 --> 00:06:26.580
+Quellen aus. Das macht Sie zur kostengünstigsten und schnellsten Option und reicht für einfache
+
+00:06:26.580 --> 00:06:30.240
+Nachschlagevorgänge bis zu zehn Quellen völlig aus. Die mittlere Einstellung mit der Bezeichnung
+
+00:06:30.240 --> 00:06:33.820
+niedrig ist die Standardeinstellung. Sie fügt den Planungsschritt hinzu und kann eine kurze Antwort für Sie
+
+00:06:33.820 --> 00:06:37.920
+schreiben, wenn Sie mehrere Quellen und Unterabfragen gleichzeitig bearbeiten. Die höchste Einstellung
+
+00:06:37.920 --> 00:06:42.140
+ist Mittel und fügt einen zweiten Versuch hinzu, wenn die ersten Ergebnisse nicht gut genug sind.
+
+00:06:42.700 --> 00:06:45.920
+Sie verarbeitet mehr Quellen und Unterabfragen und ist nur in einigen Regionen verfügbar.
+
+00:06:46.440 --> 00:06:49.200
+Dann ist da noch das Geld und es ist einfacher als es aussieht. Zwei Zähler werden gleichzeitig
+
+00:06:49.200 --> 00:06:53.240
+ausgefügt. Azure AI Search erstellt Builds für die Abrufarbeit nach Token und nicht nach Abfragen
+
+00:06:53.240 --> 00:06:58.340
+und wird mit einem kostenlosen monatlichen Kontingent geliefert. Azure Open AI erstellt separate Builds
+
+00:06:58.340 --> 00:07:03.220
+für das Modell, das die Suchvorgänge plant und die Antworten schreiben. Microsofts eigene Dokumentation
+
+00:07:03.220 --> 00:07:07.060
+führt durch ein Beispiel mit einem kleinen Modell. Und die Gesamtkosten belaufen sich auf etwa 4,32
+
+00:07:07.060 --> 00:07:10.600
+US-Dollar für 2.000 Abrufe. Das ist das Beispiel von Microsoft. Kein Versprechen bezüglich
+
+00:07:10.600 --> 00:07:13.140
+Ihrer Rechnung, denn Ihre tatsächlichen Kosten hängen davon ab, wie viele Inhalte Sie
+
+00:07:13.140 --> 00:07:16.600
+indizieren, wie indizieren Sie sie, an die Sie nachdenken anregen. In der Praxis ist es
+
+00:07:16.600 --> 00:07:19.820
+üblich, mit einer niedrigen Einstellung zu Beginn das Aktivitätsprotokoll zu beobachten,
+
+00:07:19.880 --> 00:07:22.340
+das mit jeder Antwort zurückgesendet wird und den Regeln nur dann zu erhöhen, wenn die
+
+00:07:22.340 --> 00:07:24.780
+Qualität, die es wirklich erfordert, verglich erfordert, verglichen mit dem Erstellen eine
+
+00:07:24.780 --> 00:07:28.200
+eigene Lösung. Vor Foundry IQ mussten Sie die Abrufpipeline selbst erstellen, wenn Sie wollten,
+
+00:07:28.200 --> 00:07:32.760
+dass ein Agent aus Ihren eigenen Inhalten antwortet. Sie wählten die Datenbank aus, schrieben Code,
+
+00:07:32.760 --> 00:07:36.140
+um die Dokumente in Einzelteile zu zerlegen, generierten die Einbettungen und verwalteten
+
+00:07:36.140 --> 00:07:40.080
+die Berechtigungen Ihrer eigenen Anwendung. Jedes Team tat dies und keine zwei Teams machten
+
+00:07:40.080 --> 00:07:44.300
+es auf die gleiche Weise. Microsofts Argument ist, dass diese Arbeit geteilt wird. Eine einzige
+
+00:07:44.300 --> 00:07:47.620
+Wissensdatenbank dient vielen Agenten, sodass das Team, das den Abruf gleich beim ersten Mal
+
+00:07:47.620 --> 00:07:51.320
+richtig hinbekommt, alle anderen Teams davor bewahrt, ihn neu zu erstellen. Zwei ältere Optionen
+
+00:07:51.320 --> 00:07:55.260
+sollten Sie kennen, da sie Ihnen möglicherweise immer noch begegnen. Die erste war das Azure AI
+
+00:07:55.260 --> 00:07:59.740
+Suchtool, das einen einzelnen Index an einen einzelnen Agenten anhängte. Es war leistungsstark,
+
+00:07:59.740 --> 00:08:03.400
+sie mussten jedoch die Abfragelogik und die Zitate selbst schreiben. Das zweite war das
+
+00:08:03.400 --> 00:08:06.880
+Tool zur Dateisuche, mit dem Sie eine Handvoll Dateien in einen Agenten ablegen konnten. Für
+
+00:08:06.880 --> 00:08:09.920
+eine Demo war das schnell, aber es entstand ein privates Silo, das kein anderer Agent wieder
+
+00:08:09.920 --> 00:08:14.460
+erwähnen konnte. Foundry IQ steht über beiden. Es behält die Stärke des Suchindexes bei, fügt
+
+00:08:14.460 --> 00:08:18.720
+die Planung und Neubewertung hinzu und macht das Ganze wieder verwendbar. Das Tool zur Dateisuche
+
+00:08:18.720 --> 00:08:21.380
+ist jetzt nur noch eine weitere Art von Quelle, die Sie in eine Wissensdatenbank integrieren
+
+00:08:21.380 --> 00:08:24.140
+können, die einen Aufschluss darüber gibt, wohin Microsoft dafür weht. Der ehrliche Kompromiss
+
+00:08:24.140 --> 00:08:28.540
+ist die Komplexität. Eine Wissensdatenbank hat mehr bewegliche Teile als ein einfacher Index und einige
+
+00:08:28.540 --> 00:08:31.860
+dieser Teile befinden sich noch in der Forschung. Sie tauschen ein wenig Einrichtung gegen eine
+
+00:08:31.860 --> 00:08:35.180
+Menge Wiederverwendung und dieser Kompromiss zahlt sich nur aus, wenn Sie über mehrere Quellen oder
+
+00:08:35.180 --> 00:08:40.600
+mehrere Agenten verfügen, die sich in Microsoft 365 und Azure befinden. Foundry IQ ist eines von
+
+00:08:40.600 --> 00:08:44.500
+vier Dingen, die Microsoft jetzt unter dem Banner Microsoft IQ zusammenfasst. Wenn Sie die Struktur
+
+00:08:44.500 --> 00:08:49.060
+dieser Familie kennen, erspart Ihnen das viel Verwirrung. Work IQ deckt ab, wie Benutzer in Microsoft
+
+00:08:49.060 --> 00:08:53.600
+365 zusammenarbeiten, indem Sie auf Signale in E-Mails, Besprechungen, Chats und Dateien zugreifen.
+
+00:08:54.500 --> 00:08:58.480
+Fabric IQ deckt Ihre Geschäftsdaten ab und bietet Agenten ein Modell der Entitäten und Zahlen
+
+00:08:58.480 --> 00:09:03.420
+in Microsoft Fabric und Power BI. Foundry IQ deckt Wissen, Dokumente, Richtlinien und
+
+00:09:03.420 --> 00:09:07.580
+verlässliche Inhalte ab, auf die ein Agent zugreifen können sollte. Web IQ durchsucht das
+
+00:09:07.580 --> 00:09:11.640
+offene Web nach allem, was die Außenwelt besser weiß als sie. Ein einzelner Agent kann auf mehr
+
+00:09:11.640 --> 00:09:15.160
+als eine dieser Quellen zugreifen. Eine Frage zu einer verspäteten Lieferung könnte gleichzeitig
+
+00:09:15.160 --> 00:09:17.940
+auf Live-Geschäftszahlen aus Fabric IQ und die schriftlichen Rückgaberichtlinien aus
+
+00:09:17.940 --> 00:09:22.660
+Foundry IQ zurückgreifen. Genau aus diesem Grund hat Microsoft sie als separate Komponenten
+
+00:09:22.660 --> 00:09:25.940
+entwickelt, die sie kombinieren können. Jede Komponente ist eigenständig und diese Details
+
+00:09:25.940 --> 00:09:29.180
+machen das Ganze aus. Ein Agent sieht nur die Komponenten, mit denen sie ihn verbinden.
+
+00:09:29.760 --> 00:09:32.540
+Die Karte ist also etwas, das sie selbst zusammensetzen und nicht etwas, das Microsoft
+
+00:09:32.540 --> 00:09:35.740
+für sie zusammenstellt. Die Frage, die Anfänger am häufigsten stellen, ist, wie sich dies
+
+00:09:35.740 --> 00:09:39.360
+von Copilot unterscheidet. Bei Copilot arbeiten sie mit dem Assistenten in den Apps, die sie
+
+00:09:39.360 --> 00:09:43.980
+bereits täglich öffnen. Foundry IQ hingegen ist Wissen, das sie für Agenten aufbauen und
+
+00:09:43.980 --> 00:09:47.520
+beide Lösungen nutzen ihre Quellen nicht gemeinsam. Eine Verbindung, die sie für Copilot einrichten,
+
+00:09:47.620 --> 00:09:51.820
+kann in Foundry IQ nicht wiederverwendet werden. Das gilt auch umgekehrt. Wählen Sie also die richtige
+
+00:09:51.820 --> 00:09:55.320
+Verbindung aus, bevor Sie darauf aufbauen. Auf der Azure-Seite ist Foundry IQ in Microsoft
+
+00:09:55.320 --> 00:09:59.800
+Foundry angesiedelt und stützt sich auf Azure AI Search. Sie können es über einen Foundry-Agenten
+
+00:09:59.800 --> 00:10:02.800
+an einen Copilot-Studio-Agenten anfügen, wenn Sie möchten, dass Ihr eigenes Wissen dort
+
+00:10:02.800 --> 00:10:06.020
+verfügbar ist. Berechtigungen schreiben in dasselbe Identitätssystem, das Sie bereits
+
+00:10:06.020 --> 00:10:10.640
+führen. Abfragen werden unter der Identität Abfragen in Microsoft Entra ausgeführt. Wenn eine
+
+00:10:10.640 --> 00:10:13.640
+Quelle diese unterstützt, werden auch Microsoft Purview-Vertraulichkeitsbezeichnungen
+
+00:10:13.640 --> 00:10:17.440
+berücksichtigt. Ein als vertraulich gekennzeichnetes Dokument bleibt also vertraut.
+
+00:10:17.440 --> 00:10:22.200
+Der ehrliche Statushinweis lautet wie folgt, auf Microsoft sind Teile von Foundry IQ allgemein
+
+00:10:22.200 --> 00:10:24.760
+verfügbar und anderer verfügbar und anderer der Vorschau-Fassen. Welche davon Sie erhalten,
+
+00:10:24.860 --> 00:10:28.840
+hängt von der von Ihnen verwendeten Programmierschnittstelle. Die Wissensdatenbanken selbst sind allgemein
+
+00:10:28.840 --> 00:10:31.820
+verfügbar, während verschiedene Quelltypen und die intelligenteren Planungsfunktionen noch
+
+00:10:31.820 --> 00:10:35.760
+als Vorschau gekennzeichnet sind. Die Portale befinden sich vor das flächendeckende Vorschau-Fassen.
+
+00:10:36.300 --> 00:10:40.060
+Wie sieht ein echtes Setup aus? Abstrakte Erklärungen sind nur bis dann gerade zielführend. Hier sehen Sie,
+
+00:10:40.100 --> 00:10:42.960
+was ein kleines Team tatsächlich tut, um von einem leeren Bildschirm zu einem funktionierenden Agenten
+
+00:10:42.960 --> 00:10:46.800
+auszuhören. Sie wählen zunächst eine Quelle aus, in der Regel einen einzelnen Ordner mit Dokumenten,
+
+00:10:46.860 --> 00:10:50.680
+denen bereits alle vertrauen. Sie erstellen den Suchdienst an eine Wissensdatenbank und hängen
+
+00:10:50.680 --> 00:10:54.820
+diese eine Quelle an, sodass das System die Indizierungspipeline für Sie generiert. Als nächstes
+
+00:10:54.820 --> 00:10:58.200
+verbinden Sie einen Agenten mit der Wissensdatenbank und testen ihn im integrierten Spieltum. Sie
+
+00:10:58.200 --> 00:11:01.720
+stellen dieselben drei oder vier Fragen, die Ihre echten Benutzer stellen würden, und Sie überprüfen
+
+00:11:01.720 --> 00:11:05.700
+nicht nur die Antworten, sondern auch die darunterliegenden Zitate, da ein Zitat, das auf das falsche Dokument
+
+00:11:05.700 --> 00:11:09.940
+verweist, ein stiller Fehlerfehler ist. Sobald die Antworten stimmen, fügen Sie eine zweite Quelle hinzu,
+
+00:11:09.940 --> 00:11:13.580
+möglicherweise eine SharePoint-Website, und beobachten, ob sich die Qualität verbessert oder ob die
+
+00:11:13.580 --> 00:11:17.100
+zusätzliche Quelle nur Rauschen verursacht. Sie behalten dieses Protokoll die ganze Zeit im Auge,
+
+00:11:17.220 --> 00:11:20.780
+da es genau zeigt, welche Suchvorgänge ausgeführt wurden und was sie gekostet. Erst danach ändern
+
+00:11:20.780 --> 00:11:24.580
+Sie die Argumentationseinstellung von minimal auf niedrig, und erst danach verbinden Sie den Agenten
+
+00:11:24.580 --> 00:11:29.280
+mit den Tools, die die Benutzer bereits verwenden. Der gesamte Bogen ist absichtlich klein, und genau das ist
+
+00:11:29.280 --> 00:11:33.660
+der Sinn der Sache. Die Fehler, die Leute zu Fall bringen. Das ist der Abschnitt, den die meisten Videos
+
+00:11:33.660 --> 00:11:38.340
+überspringen, und er entscheidet darüber, ob Ihr Projekt reibungslos verläuft oder mühsam ist. Der erste Fehler besteht darin,
+
+00:11:38.340 --> 00:11:42.040
+davon auszugehen, dass Berechtigungen automatisch sind. Microsoft stellt klar, dass Zugriffskontrollen
+
+00:11:42.040 --> 00:11:44.920
+auf Dokumentebene nur dann erzwungen werden, wenn die Quelle diese unterstützt und jemand die
+
+00:11:44.920 --> 00:11:48.340
+Berechtigungssynchronisierung konfiguriert hat. Richten Sie eine Wissensdatenbank auf einen Ordner
+
+00:11:48.340 --> 00:11:51.420
+voller sensibler Dateien. Überspringen Sie die Synchronisierung, und der Agent kann Dinge ans Licht
+
+00:11:51.420 --> 00:11:55.440
+bringen, die niemand sehen soll. Berechtigungen sind ein Feature, das Sie aktivieren, und kein kostenloses
+
+00:11:55.440 --> 00:12:00.060
+Sicherheitsnetz. Der zweite Fehler besteht darin, Webquellen wie Ihre eigenen Dateien zu behandeln. Eine Webquelle
+
+00:12:00.060 --> 00:12:04.100
+wird von einem Modell zusammengefasst, bevor Sie Ihre Ergebnisse erreicht. Was Sie also zurückbekommen, ist eine
+
+00:12:04.100 --> 00:12:07.940
+zitierte Zusammenfassung und nicht der genaue Wortlaut auf der Seite. Das ist für eine allgemeine Frage in
+
+00:12:07.940 --> 00:12:12.080
+Ordnung, aber nutzlos, wenn Sie eine präzise Rechtsklausel benötigen. Der Fehler besteht darin, die
+
+00:12:12.080 --> 00:12:17.040
+Grundlagen zu bearbeiten. Wenn Sie einen Speicherordner verbinden, generiert Azure AI Search die gesamte
+
+00:12:17.040 --> 00:12:22.020
+Pipeline für Sie, von der Datenquelle bis zum Index aus einer festen Vorlage. Ändern Sie diese generierten
+
+00:12:22.020 --> 00:12:26.040
+Teile, und die nächste Synchronisierung bricht ab. Dann gibt es noch die praktischen Grenzen. Eine
+
+00:12:26.040 --> 00:12:30.640
+Wissensdatenbank und Ihre Quellen müssen sich im selben Suchdienst befinden. Eine einzelne Wissensdatenbank ist
+
+00:12:30.640 --> 00:12:34.380
+auf zehn Quellen begrenzt, und diese Obergrenze ist real. Klaren Sie daher, wie Sie Ihre Inhalte aufteilen,
+
+00:12:34.460 --> 00:12:37.700
+bevor Sie mit dem Hinzufügen beginnen. Eine weitere Falle besteht darin, ein Vorschau-Feature wie ein
+
+00:12:37.700 --> 00:12:41.120
+fertiges Feature zu behandeln. Microsoft weist ausdrücklich darauf hin, dass Vorschau-Features
+
+00:12:41.120 --> 00:12:45.020
+nicht dieselben Service-Garantien bieten und nicht für die Produktion empfohlen werden. Daher sollten Sie
+
+00:12:45.020 --> 00:12:48.980
+sich bei allen echten Entwicklungen auf die allgemein verfügbaren Teile beschränken. Eine weitere Falle
+
+00:12:48.980 --> 00:12:53.020
+besteht darin, zu schnell zu viele Quellen hinzuzufügen. Jede zusätzliche Quelle erweitert die Suche und verursacht
+
+00:12:53.020 --> 00:12:58.040
+höhere Kosten. Mehr ist also nicht automatisch besser. Der größte Fehler von allen ist, zu groß anzufangen. Diejenigen,
+
+00:12:58.040 --> 00:13:01.240
+die dies gut gemacht haben, beginnen mit einer Quelle und der günstigsten Argumentationseinstellung.
+
+00:13:01.840 --> 00:13:05.440
+Sie messen die Antworten, die sie erhalten, und erst dann fügen sie Quellen hinzu und erhöhen den
+
+00:13:05.440 --> 00:13:09.880
+Regler. Das Versprechen einer gemeinsam genutzten Wissensdatenbank für alles ist real, und die
+
+00:13:09.880 --> 00:13:14.120
+Disziplin besteht darin, es sich Quelle für Quelle zu verdienen. Was bedeutet das für Sie? Hier ist die
+
+00:13:14.120 --> 00:13:18.440
+Kurzfassung. Foundry IQ ist die verwaltete Wissensschicht von Microsoft. Sie bietet eine
+
+00:13:18.440 --> 00:13:21.840
+Möglichkeit einem KI-Agenten, die tatsächlichen Informationen ihres Unternehmens unter Berücksichtigung
+
+00:13:21.840 --> 00:13:25.120
+aller Berechtigungen, alle Berechtigungen bereitzustellen und Antworten in Form von Zitaten anstelle von
+
+00:13:25.120 --> 00:13:29.100
+Sicherung von Toten. Foundry IQ bündelt ihre Datenverbindungen in einer Wissensdatenbank
+
+00:13:29.100 --> 00:13:32.380
+und durchsucht diese Datenbank dann mit einer intelligenteren Pipeline als mit einer einzelnen
+
+00:13:32.380 --> 00:13:37.810
+Abfrage oder mit einem Regler für die Denkintensität und zwei Messkassetten für die Kosten. Die Idee,
+
+00:13:37.870 --> 00:13:40.970
+die es sich zu bewahren lohnt, ist folgende. Wenn sich eine KI etwas ausdehnt, ist besseres Wissen in
+
+00:13:40.970 --> 00:13:45.530
+der Regel frecheres Modell. Und besseres Wissen ist etwas, das man sich selbst aufbauen kann. Daher meine
+
+00:13:45.530 --> 00:13:49.970
+Frage an Sie, welches Dokument erklärt Ihr Team jedem neuen Mitarbeiter immer wieder neu? Welche Sache
+
+00:13:49.970 --> 00:13:54.130
+sollte eine KI einfach schon wissen? Wenn Ihnen das Thema jetzt etwas weniger einschüchternd vorkommt,
+
+00:13:54.130 --> 00:13:58.210
+abonnieren Sie M365FM, um die Tools und die Denkweise zu erlernen, die die Zukunft der Arbeit prägen.

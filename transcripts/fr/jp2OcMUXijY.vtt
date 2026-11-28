@@ -1,0 +1,1468 @@
+WEBVTT
+
+00:00:00.380 --> 00:00:05.180
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies
+
+00:00:05.180 --> 00:00:06.320
+qui façonnent l'avenir du travail.
+
+00:00:06.880 --> 00:00:09.640
+Docker est l'outil le plus utilisé dans le développement cloud, et de loin.
+
+00:00:09.960 --> 00:00:12.640
+Vous avez probablement entendu ce mot être utilisé comme s'il s'agissait d'une connaissance
+
+00:00:12.640 --> 00:00:13.700
+de base que tout le monde possède déjà.
+
+00:00:14.120 --> 00:00:16.860
+Docker résout un problème précis et frustrant, et une fois que vous l'aurez compris, tout
+
+00:00:16.860 --> 00:00:17.480
+deviendra clair.
+
+00:00:18.160 --> 00:00:20.660
+C'est la raison pour laquelle une application fonctionne parfaitement sur votre ordinateur
+
+00:00:20.660 --> 00:00:21.700
+mais plante sur celui de quelqu'un d'autre.
+
+00:00:22.300 --> 00:00:25.580
+A la fin, vous comprendrez les conteneurs, les images et les Dockerfiles sans écrire
+
+00:00:25.580 --> 00:00:26.380
+une seule ligne de code.
+
+00:00:26.380 --> 00:00:30.200
+Nous réglerons également la comparaison qui perturbe presque tous les débutants, conteneurs,
+
+00:00:30.260 --> 00:00:33.280
+contre machines virtuelles, le problème que Docker résout réellement.
+
+00:00:33.860 --> 00:00:36.040
+Imaginez le moment où vous téléchargez un projet que quelqu'un a partagé avec vous.
+
+00:00:36.440 --> 00:00:39.220
+Vous suivez les notes d'installation ligne par ligne, vous installez tout ce qui est
+
+00:00:39.220 --> 00:00:42.160
+demandé et l'application refuse toujours de démarrer.
+
+00:00:42.960 --> 00:00:46.300
+Une bibliothèque n'a pas la bonne version, un paramètre est manquant, où le projet ne
+
+00:00:46.300 --> 00:00:48.120
+tournait que sur la machine de celui qui l'a créé.
+
+00:00:49.480 --> 00:00:52.340
+Les développeurs ont donné un surnom à cette expérience et il reste, ça marche en ma
+
+00:00:52.340 --> 00:00:52.600
+machine.
+
+00:00:52.600 --> 00:00:55.440
+Ce surnom est la chute d'un vieux problème coûteux.
+
+00:00:56.060 --> 00:00:57.380
+Un programme n'est jamais juste du code.
+
+00:00:58.320 --> 00:01:01.780
+Il dépend d'une version spécifique d'un outil, d'une bibliothèque d'un autre et d'une
+
+00:01:01.780 --> 00:01:03.660
+pile de paramètres qui doivent tous concorder.
+
+00:01:04.620 --> 00:01:07.460
+Changer un seul élément sur un ordinateur différent et toute l'application s'effondre.
+
+00:01:07.800 --> 00:01:09.380
+Les détails sont toujours minimes et toujours agaçants.
+
+00:01:10.140 --> 00:01:12.160
+Peut-être que l'application nécessite une version plus ancienne d'un langage que celle
+
+00:01:12.160 --> 00:01:15.520
+installée sur votre machine ? Peut-être a-t-on-t-elle une base de données déjà active
+
+00:01:15.520 --> 00:01:19.480
+ou un paramètre caché dans un fichier non mentionné dans les instructions ? Rien de tout cela
+
+00:01:19.480 --> 00:01:22.480
+n'est exotique et pourtant cela peut briser un projet qui fonctionnait parfaitement 5 minutes
+
+00:01:22.480 --> 00:01:22.980
+plutôt ailleurs.
+
+00:01:23.400 --> 00:01:25.860
+Si cela vous semble familier, c'est parce que presque tout le monde y est confronté.
+
+00:01:26.520 --> 00:01:29.460
+Quand le même logiciel se comporte différemment sur chaque machine, les équipes perdent
+
+00:01:29.460 --> 00:01:31.580
+des heures en configuration au lieu de construire.
+
+00:01:32.180 --> 00:01:34.620
+Un nouveau développeur passe ses premiers jours à lutter contre son environnement,
+
+00:01:34.740 --> 00:01:36.340
+plutôt qu'à faire le travail pour lequel il a été embauché.
+
+00:01:36.700 --> 00:01:39.260
+Un code qui tourne parfaitement en phase de test peut se comporter différemment.
+
+00:01:39.360 --> 00:01:43.360
+Dès qu'il atteint un vrai serveur, multiplier cela par une équipe entière de 10 développeurs,
+
+00:01:43.440 --> 00:01:46.520
+chacun sur une machine légèrement différente avec ses propres versions et paramètres.
+
+00:01:46.520 --> 00:01:49.500
+Le nombre de façons dont les choses peuvent échouer augmente rapidement.
+
+00:01:50.240 --> 00:01:53.180
+Ajouter un serveur de test et un serveur de production et la même application doit
+
+00:01:53.180 --> 00:01:55.720
+soudainement fonctionner à 12 endroits à la fois tous légèrement différents.
+
+00:01:57.060 --> 00:02:00.740
+L'équipe de Docker a bien résumé le problème lors du lancement en 2013 et leur description
+
+00:02:00.740 --> 00:02:01.660
+était sans détour.
+
+00:02:02.580 --> 00:02:04.080
+Déployer du code sur un serveur est difficile.
+
+00:02:04.660 --> 00:02:07.040
+Cette frustration est précisément ce que les conteneurs ont été conçus pour éliminer.
+
+00:02:07.500 --> 00:02:10.000
+La solution n'est pas de meilleures instructions ou des notes d'installation plus précises.
+
+00:02:10.320 --> 00:02:13.160
+C'est une façon de packager une application pour que la machine en dessous n'ait plus d'importance.
+
+00:02:13.160 --> 00:02:15.140
+Ce qui est réellement un conteneur.
+
+00:02:15.700 --> 00:02:18.220
+Un conteneur est un package qui contient votre application ainsi que tout ce dont elle
+
+00:02:18.220 --> 00:02:19.000
+a besoin pour fonctionner.
+
+00:02:19.580 --> 00:02:20.740
+Imaginez cela comme une boîte à déjeuner.
+
+00:02:21.400 --> 00:02:24.660
+Le repas est à l'intérieur, les couverts aussi et peu importe le type de cuisine dont
+
+00:02:24.660 --> 00:02:25.780
+dispose la personne qui l'ouvre.
+
+00:02:26.840 --> 00:02:30.040
+Cette idée semble presque trop simple, ce qui explique pourquoi le terme conteneur
+
+00:02:30.040 --> 00:02:30.800
+déroute les gens.
+
+00:02:31.240 --> 00:02:34.260
+Le nom fait penser à quelque chose de lourd et technique alors qu'un conteneur est juste
+
+00:02:34.260 --> 00:02:37.840
+votre application et ses dépendances scellées en une unité facile à transporter.
+
+00:02:38.840 --> 00:02:41.980
+Un conteneur n'est pas un ordinateur et ne transporte pas son propre système d'exploitation.
+
+00:02:41.980 --> 00:02:45.620
+Au lieu de cela, il emprunte le système d'exploitation de la machine sur laquelle
+
+00:02:45.620 --> 00:02:48.440
+il tourne et n'embarque que l'application et les éléments dont elle dépend.
+
+00:02:49.440 --> 00:02:51.480
+C'est ce qui rend chaque conteneur léger et rapide à démarrer.
+
+00:02:51.940 --> 00:02:54.420
+Vous pouvez en faire tourner tout un ensemble sur un seul ordinateur portable sans que
+
+00:02:54.420 --> 00:02:55.160
+la machine ne ralentisse.
+
+00:02:55.800 --> 00:02:59.220
+Ce qui empêche un conteneur d'interférer avec le reste sur la machine, c'est l'isolation.
+
+00:02:59.960 --> 00:03:02.740
+A l'intérieur, l'application voit un petit monde qui semble disposer de l'ordinateur
+
+00:03:02.740 --> 00:03:03.580
+entier pour elle seule.
+
+00:03:04.220 --> 00:03:06.960
+Cet ordinateur est en fait partagé avec d'autres conteneurs et d'autres logiciels.
+
+00:03:06.960 --> 00:03:10.720
+Cette isolation permet de faire tourner de nombreux conteneurs côte à côte sur une
+
+00:03:10.720 --> 00:03:13.160
+seule machine sans qu'il ne se gêne, sans qu'il ne se gêne.
+
+00:03:13.280 --> 00:03:15.760
+Cela signifie aussi qu'une image peut générer autant de conteneurs que nécessaire.
+
+00:03:16.360 --> 00:03:19.660
+Vous créez le plan une fois et à partir de là, vous pouvez lancer 5 copies pour 5 clients
+
+00:03:19.660 --> 00:03:21.840
+ou 100 copies en cas de pic de trafic sans rien.
+
+00:03:22.600 --> 00:03:22.960
+Reconstruire à...
+
+00:03:23.520 --> 00:03:25.260
+Le bénéfice est la partie qui importe le plus.
+
+00:03:25.680 --> 00:03:28.120
+Le même conteneur se comporte de la même manière sur votre ordinateur portable,
+
+00:03:28.340 --> 00:03:30.820
+celui d'un collègue et sur un serveur dans un centre de données.
+
+00:03:31.460 --> 00:03:33.640
+Vous le packagez une fois et il n'a plus besoin de savoir où il atterrit.
+
+00:03:33.640 --> 00:03:37.400
+Deux mots reviennent constamment et les débutants les confondent souvent.
+
+00:03:37.980 --> 00:03:40.760
+Une image est le plan et un conteneur est l'instance en cours d'exécution de ce plan.
+
+00:03:41.320 --> 00:03:44.960
+Si le conteneur est la copie, la question évidente suivante est de quoi s'agit-il exactement
+
+00:03:44.960 --> 00:03:47.020
+et la réponse est plus intéressante qu'il n'y paraît.
+
+00:03:48.260 --> 00:03:50.040
+Images, fichiers docker et la puissance des couches.
+
+00:03:50.480 --> 00:03:51.460
+Une image est une recette figée.
+
+00:03:52.140 --> 00:03:54.780
+Elle est en lecture seule, ce qui signifie que rien d'intérieur ne change une fois qu'elle est construite.
+
+00:03:55.160 --> 00:03:57.580
+Il contient votre application, les fichiers nécessaires à son fonctionnement
+
+00:03:57.580 --> 00:03:58.740
+et les instructions pour la lancer.
+
+00:03:59.320 --> 00:04:01.500
+Cette propriété de lecture seule rend une image sûre à partager
+
+00:04:01.500 --> 00:04:04.520
+car 1 000 personnes peuvent exécuter la même image et obtenir des résultats identiques.
+
+00:04:05.080 --> 00:04:07.400
+L'astuce réside dans le fait que les images sont construites en couches,
+
+00:04:07.620 --> 00:04:10.480
+chaque couche étant un ensemble de modifications superposées à la précédente.
+
+00:04:11.180 --> 00:04:13.600
+Imaginez une pile de feuilles transparentes où chaque feuille apporte un nouvel élément.
+
+00:04:14.140 --> 00:04:16.260
+Une feuille apporte les composantes de base du système d'exploitation,
+
+00:04:16.680 --> 00:04:19.640
+la suivante, le code de votre application et la dernière, vos paramètres.
+
+00:04:20.060 --> 00:04:21.740
+Empilez-les toutes et vous obtenez une image complète.
+
+00:04:22.460 --> 00:04:24.760
+Si les images utilisent des couches plutôt qu'un seul fichier géant,
+
+00:04:24.900 --> 00:04:26.160
+c'est pour faciliter la reconstruction.
+
+00:04:26.160 --> 00:04:29.720
+Lorsque vous modifiez quelque chose, Docker ne reconstruit que la couche modifiée
+
+00:04:29.720 --> 00:04:32.820
+et celle située au-dessus, tandis que tout ce qui se trouve en dessous reste intact.
+
+00:04:33.720 --> 00:04:36.300
+C'est pourquoi une reconstruction peut prendre quelques secondes au lieu de quelques minutes
+
+00:04:36.300 --> 00:04:38.860
+et pourquoi les images restent légères par rapport aux alternatives.
+
+00:04:39.760 --> 00:04:41.320
+Les images se construisent également les unes sur les autres.
+
+00:04:41.980 --> 00:04:44.580
+Une image de base contenant déjà un système Linux et un serveur web
+
+00:04:44.580 --> 00:04:48.360
+peut servir de socle à 100 projets différents, chacun ajoutant ses propres couches.
+
+00:04:49.580 --> 00:04:53.280
+Cette base partagée explique en grande partie pourquoi les images restent étonnamment légères.
+
+00:04:53.280 --> 00:04:59.000
+Dockerfile est un fichier texte simple qui liste les étapes de construction d'une image
+
+00:04:59.000 --> 00:05:00.180
+à raison d'une instruction par ligne.
+
+00:05:01.020 --> 00:05:02.760
+Une instruction peut partir d'une image de base,
+
+00:05:03.320 --> 00:05:04.540
+une autre copier votre code,
+
+00:05:04.960 --> 00:05:06.500
+une troisième installée, une dépendance
+
+00:05:06.500 --> 00:05:08.500
+et la dernière indiquer comment lancer l'application.
+
+00:05:09.420 --> 00:05:11.960
+Lisez-le de haut en bas et vous obtenez la recette complète de l'ensemble.
+
+00:05:12.780 --> 00:05:14.680
+L'ordre de ces lignes compte plus que ce que les débutants imaginent.
+
+00:05:15.360 --> 00:05:16.440
+Si vous modifiez votre code,
+
+00:05:16.840 --> 00:05:18.360
+Docker réutilise les couches précédentes
+
+00:05:18.360 --> 00:05:20.240
+et ne refait que les dernières étapes, ce qui est rapide.
+
+00:05:20.920 --> 00:05:22.320
+Si vous modifiez la toute première ligne,
+
+00:05:22.660 --> 00:05:25.000
+tout ce qui est empilé au-dessus doit être reconstruit à partir de zéro,
+
+00:05:25.000 --> 00:05:25.540
+ce qui est lent.
+
+00:05:26.060 --> 00:05:27.320
+Hé !
+
+00:05:27.320 --> 00:05:28.900
+C'est pourquoi les experts placent les éléments
+
+00:05:28.900 --> 00:05:30.120
+qui changent rarement en haut
+
+00:05:30.120 --> 00:05:31.900
+et ceux qu'ils modifient constamment en bas.
+
+00:05:32.840 --> 00:05:34.540
+Si vous ne devez retenir qu'une seule chose de cette section,
+
+00:05:34.700 --> 00:05:35.280
+que ce soit celle-ci,
+
+00:05:35.660 --> 00:05:37.420
+l'image est la recette et le conteneur est le plat
+
+00:05:37.420 --> 00:05:38.580
+vous servez à partir de celle-ci.
+
+00:05:39.240 --> 00:05:40.460
+Tout le reste découle de cette distinction.
+
+00:05:41.000 --> 00:05:42.880
+C'est aussi là que la promesse de portabilité est tenue.
+
+00:05:43.340 --> 00:05:44.620
+Le Dockerfile est la source de vérité
+
+00:05:44.620 --> 00:05:45.980
+et quiconque possède ce fichier
+
+00:05:45.980 --> 00:05:48.200
+et le code associé peut reconstruire exactement la même image.
+
+00:05:48.580 --> 00:05:49.700
+Il n'y a pas de devinette ni de mystère
+
+00:05:49.700 --> 00:05:50.840
+sur la version utilisée par quelqu'un d'autre.
+
+00:05:51.580 --> 00:05:52.820
+Il reste une dernière couche à connaître
+
+00:05:52.820 --> 00:05:54.400
+et c'est celle qui piège souvent les utilisateurs.
+
+00:05:55.060 --> 00:05:56.720
+Lorsque vous lancez un conteneur à partir d'une image,
+
+00:05:56.900 --> 00:05:58.600
+Docker ajoute une fine couche inscriptible par-dessus
+
+00:05:58.600 --> 00:06:00.380
+et c'est là que le conteneur en cours d'exécution
+
+00:06:00.380 --> 00:06:01.400
+peut écrire de nouveaux fichiers.
+
+00:06:02.060 --> 00:06:03.220
+Cette couche est cependant temporaire,
+
+00:06:03.460 --> 00:06:04.720
+donc lorsque vous supprimez le conteneur,
+
+00:06:05.040 --> 00:06:06.340
+tout ce qui s'y trouve disparaît avec lui.
+
+00:06:06.960 --> 00:06:07.900
+Cette règle simple explique
+
+00:06:07.900 --> 00:06:09.380
+un nombre surprenant de problèmes de débutants
+
+00:06:09.380 --> 00:06:10.420
+et elle revient plus tard.
+
+00:06:10.860 --> 00:06:12.320
+Tout d'abord, les images doivent être stockées quelque part.
+
+00:06:13.320 --> 00:06:14.480
+Cet endroit s'appelle un registre.
+
+00:06:15.560 --> 00:06:16.280
+Les registres sont les endroits
+
+00:06:16.280 --> 00:06:17.480
+où les images vivent et transitent.
+
+00:06:18.160 --> 00:06:19.500
+Un registre est un lieu qui stocke des images
+
+00:06:19.500 --> 00:06:21.400
+afin qu'elles puissent être partagées et téléchargées.
+
+00:06:22.080 --> 00:06:23.020
+Si une image est une recette,
+
+00:06:23.120 --> 00:06:24.820
+un registre est l'étagère de livres de cuisine publiés
+
+00:06:24.820 --> 00:06:26.860
+et toute personne y ayant accès peut en tirer une copie.
+
+00:06:27.380 --> 00:06:28.560
+Celui par défaut est Docker Hub,
+
+00:06:28.760 --> 00:06:30.240
+un registre public que tout le monde peut utiliser.
+
+00:06:30.640 --> 00:06:32.320
+Docker y cherche en premier lorsque vous demandez une image,
+
+00:06:32.420 --> 00:06:33.920
+c'est pourquoi tant de commandes fonctionnent simplement
+
+00:06:33.920 --> 00:06:35.200
+sans que vous ayez à pointer nulle part.
+
+00:06:36.140 --> 00:06:37.480
+Si vous préférez garder vos images privées,
+
+00:06:37.560 --> 00:06:39.820
+vous pouvez gérer votre propre registre derrière vos propres murs
+
+00:06:39.820 --> 00:06:41.400
+et beaucoup d'entreprises font exactement cela.
+
+00:06:42.040 --> 00:06:43.260
+Les images sont accompagnées de balises
+
+00:06:43.260 --> 00:06:44.620
+qui sont simplement des étiquettes pour les versions.
+
+00:06:44.960 --> 00:06:46.880
+La même image peut porter une étiquette pour la version 3,
+
+00:06:47.020 --> 00:06:47.780
+une autre pour la version 4
+
+00:06:47.780 --> 00:06:49.160
+et une troisième étiquette qu'elle atteste aiguë
+
+00:06:49.160 --> 00:06:50.380
+qui pointe vers la nouveauté la plus récente.
+
+00:06:51.100 --> 00:06:52.460
+Cette étiquette qu'elle atteste une gai pratique,
+
+00:06:52.580 --> 00:06:53.340
+mais c'est aussi un piège,
+
+00:06:53.540 --> 00:06:54.440
+ce sur quoi nous reviendrons.
+
+00:06:55.020 --> 00:06:56.460
+Deux commandes effectuent la majeure partie du travail ici.
+
+00:06:56.880 --> 00:06:57.820
+Plus l'une télécharge une image
+
+00:06:57.820 --> 00:06:58.900
+depuis un registre sur votre machine
+
+00:06:58.900 --> 00:07:00.100
+et puis que plus envoie une image
+
+00:07:00.100 --> 00:07:01.100
+que vous avez construite vers un registre
+
+00:07:01.100 --> 00:07:02.220
+pour que d'autres puissent l'utiliser.
+
+00:07:02.640 --> 00:07:03.260
+C'est toute la boucle.
+
+00:07:03.780 --> 00:07:04.900
+Vous construisez une image, vous l'envoyez,
+
+00:07:05.080 --> 00:07:06.140
+et quelqu'un d'autre la télécharge.
+
+00:07:06.760 --> 00:07:08.060
+La première fois que vous téléchargez une image,
+
+00:07:08.280 --> 00:07:10.140
+Docker la récupère et en garde une copie sur votre machine.
+
+00:07:10.660 --> 00:07:12.020
+La fois suivante où vous demandez cette même image
+
+00:07:17.780 --> 00:07:19.380
+un coéquipier n'a pas besoin de votre ordinateur
+
+00:07:19.380 --> 00:07:20.520
+ou de votre configuration exacte
+
+00:07:20.520 --> 00:07:21.560
+car il télécharge la même image
+
+00:07:21.560 --> 00:07:22.520
+et obtient la même application.
+
+00:07:23.460 --> 00:07:25.240
+Certaines de ces images sont officiellement maintenues
+
+00:07:25.240 --> 00:07:26.620
+par les entreprises derrière le logiciel.
+
+00:07:26.860 --> 00:07:28.580
+C'est pourquoi télécharger une image bien connue
+
+00:07:28.580 --> 00:07:30.480
+est généralement plus sûr que de tout construire vous-même.
+
+00:07:31.220 --> 00:07:32.160
+Il est également utile de savoir
+
+00:07:32.160 --> 00:07:33.320
+à quel point cet état gère s'est agrandi.
+
+00:07:33.840 --> 00:07:34.980
+Selon les propres chiffres de Docker,
+
+00:07:35.160 --> 00:07:37.380
+le Docker Hub sert des milliards de téléchargements d'images chaque mois
+
+00:07:37.380 --> 00:07:39.360
+et la plateforme compte des millions de développeurs enregistrés.
+
+00:07:40.200 --> 00:07:41.600
+Quand les gens disent que les conteneurs sont partout,
+
+00:07:41.700 --> 00:07:42.540
+c'est de cette échelle qu'ils parlent.
+
+00:07:43.740 --> 00:07:45.360
+Avec chaque bloc de construction maintenant en place,
+
+00:07:45.460 --> 00:07:46.520
+une question reste sur la table
+
+00:07:46.520 --> 00:07:48.100
+et c'est celle qui piège presque tous les débutants.
+
+00:07:49.740 --> 00:07:51.580
+Conteneurs contre machines virtuelles
+
+00:07:51.580 --> 00:07:53.820
+Cette question est celle des conteneurs face aux machines virtuelles
+
+00:07:53.820 --> 00:07:55.040
+et elle mérite une réponse attentive.
+
+00:07:55.420 --> 00:07:56.060
+Avant les conteneurs,
+
+00:07:56.220 --> 00:07:58.060
+si vous vouliez exécuter un logiciel de manière isolée,
+
+00:07:58.140 --> 00:07:59.160
+vous utilisez une machine virtuelle.
+
+00:07:59.800 --> 00:08:00.900
+La confusion est compréhensible
+
+00:08:00.900 --> 00:08:03.780
+car les deux outils servent à séparer un logiciel de tout ce qui l'entoure.
+
+00:08:04.280 --> 00:08:05.840
+Ils placent simplement la limite à des endroits différents.
+
+00:08:06.380 --> 00:08:07.900
+Une machine virtuelle est un ordinateur complet
+
+00:08:07.900 --> 00:08:09.400
+simulé à l'intérieur de votre ordinateur.
+
+00:08:10.320 --> 00:08:11.980
+Elle possède son propre système d'exploitation,
+
+00:08:12.120 --> 00:08:13.640
+sa propre mémoire et son propre stockage
+
+00:08:13.640 --> 00:08:15.220
+et se comporte comme une machine distincte
+
+00:08:15.220 --> 00:08:16.240
+qui vit dans une machine plus grande.
+
+00:08:16.520 --> 00:08:18.080
+Le nom révèle la taille de la chose.
+
+00:08:18.920 --> 00:08:21.140
+Une machine virtuelle embarque un système d'exploitation complet,
+
+00:08:21.300 --> 00:08:23.340
+ce qui représente une lourde charge à copier pour chaque instance.
+
+00:08:23.760 --> 00:08:25.180
+Les conteneurs adoptent l'approche inverse.
+
+00:08:25.580 --> 00:08:27.600
+Ils empruntent le système d'exploitation de la machine haute
+
+00:08:27.600 --> 00:08:29.520
+et n'ont donc jamais à transporter le leur...
+
+00:08:29.520 --> 00:08:32.900
+Cette seule différence explique presque tous les écarts pratiques entre eux.
+
+00:08:33.780 --> 00:08:35.020
+Les conteneurs se mesurent en mégaoctets
+
+00:08:35.020 --> 00:08:37.020
+tandis que les machines virtuelles se mesurent en gigaoctets.
+
+00:08:37.800 --> 00:08:39.300
+Un conteneur démarre en quelques secondes
+
+00:08:39.300 --> 00:08:40.920
+alors qu'une machine virtuelle peut mettre plusieurs minutes.
+
+00:08:41.720 --> 00:08:42.400
+Sur le même matériel,
+
+00:08:42.460 --> 00:08:44.620
+vous pouvez faire tourner bien plus de conteneurs que de machines virtuelles
+
+00:08:44.620 --> 00:08:47.180
+car chaque conteneur effectue beaucoup moins de tâches en arrière-plan.
+
+00:08:48.020 --> 00:08:49.680
+Le compromis devient évident dès qu'on les compare.
+
+00:08:50.460 --> 00:08:52.400
+Une machine virtuelle vous offre une séparation plus forte
+
+00:08:52.400 --> 00:08:53.620
+au prix de sa taille et de sa vitesse.
+
+00:08:54.620 --> 00:08:56.660
+Un conteneur vous offre vitesse et légèreté
+
+00:08:56.660 --> 00:08:58.760
+au prix d'un partage accru avec la machine sous-jacente.
+
+00:08:59.900 --> 00:09:00.880
+Aucun des deux ne triche
+
+00:09:00.880 --> 00:09:03.120
+car ils résolvent le même problème de deux manières différentes.
+
+00:09:03.760 --> 00:09:04.980
+Avant d'écarter les machines virtuelles,
+
+00:09:05.100 --> 00:09:07.240
+sachez qu'elles restent supérieures sur quelques points importants.
+
+00:09:07.800 --> 00:09:08.980
+Elles offrent une isolation plus forte
+
+00:09:08.980 --> 00:09:10.960
+car chacune est cloisonnée au niveau matériel
+
+00:09:10.960 --> 00:09:12.700
+plutôt qu'au niveau du processus.
+
+00:09:13.520 --> 00:09:15.180
+Elles peuvent aussi faire tourner un système d'exploitation
+
+00:09:15.180 --> 00:09:16.840
+totalement différent de la machine haute,
+
+00:09:17.000 --> 00:09:18.180
+ce que les conteneurs ne peuvent pas faire.
+
+00:09:18.780 --> 00:09:19.620
+Ils ne sont pas non plus rivaux.
+
+00:09:20.180 --> 00:09:21.360
+Une configuration très courante
+
+00:09:21.360 --> 00:09:23.500
+consiste à exécuter des conteneurs dans des machines virtuelles,
+
+00:09:23.660 --> 00:09:25.220
+combinant ainsi la portabilité des conteneurs
+
+00:09:25.220 --> 00:09:26.980
+et l'isolation forte d'une machine virtuelle.
+
+00:09:27.520 --> 00:09:29.500
+Si vous avez déjà utilisé une machine virtuelle,
+
+00:09:29.580 --> 00:09:31.200
+vous comprenez déjà le principe de base.
+
+00:09:31.860 --> 00:09:33.460
+Le conteneur en est simplement le cousin plus léger
+
+00:09:33.460 --> 00:09:34.860
+et vous n'avez pas à choisir de camp
+
+00:09:34.860 --> 00:09:37.000
+car la plupart des systèmes modernes utilisent les deux.
+
+00:09:38.200 --> 00:09:39.400
+Pour ce qui est de l'usage réel de Docker,
+
+00:09:39.780 --> 00:09:40.340
+voilà pour la théorie.
+
+00:09:40.960 --> 00:09:41.880
+Dans le monde réel,
+
+00:09:42.060 --> 00:09:43.540
+cet outil est présent dans presque toutes les équipes
+
+00:09:43.540 --> 00:09:44.500
+de développement modernes
+
+00:09:44.500 --> 00:09:46.180
+pour des raisons pratiques plutôt qu'académiques.
+
+00:09:46.780 --> 00:09:48.260
+La première raison est la cohérence
+
+00:09:48.260 --> 00:09:49.420
+de l'environnement de développement.
+
+00:09:50.640 --> 00:09:52.200
+Quand un nouveau développeur rejoint une équipe,
+
+00:09:52.300 --> 00:09:53.480
+il ne passe pas trois jours à installer
+
+00:09:53.480 --> 00:09:54.540
+les bonnes versions de tout.
+
+00:09:55.240 --> 00:09:56.520
+Il télécharge le conteneur du projet,
+
+00:09:56.720 --> 00:09:58.580
+le lance et commence à travailler dès le premier jour,
+
+00:09:58.680 --> 00:10:00.740
+ce qui rend l'intégration bien moins fastidieuse.
+
+00:10:01.280 --> 00:10:02.540
+Les tests et la livraison automatisée
+
+00:10:02.540 --> 00:10:03.740
+constituent un autre avantage majeur.
+
+00:10:04.340 --> 00:10:05.980
+Les équipes modernes créent et testent leur code
+
+00:10:05.980 --> 00:10:07.420
+automatiquement à chaque modification.
+
+00:10:08.320 --> 00:10:09.820
+Les compteurs assurent cette fiabilité
+
+00:10:09.820 --> 00:10:11.460
+car les tests s'exécutent exactement
+
+00:10:11.460 --> 00:10:12.260
+dans le même environnement,
+
+00:10:12.380 --> 00:10:13.980
+que ce soit sur la machine du développeur
+
+00:10:13.980 --> 00:10:14.920
+ou sur le serveur de build.
+
+00:10:15.580 --> 00:10:16.620
+Si ça fonctionne sur une machine,
+
+00:10:16.720 --> 00:10:17.740
+ça fonctionne sur toutes les autres.
+
+00:10:18.220 --> 00:10:19.740
+Une autre approche courante consiste à diviser
+
+00:10:19.740 --> 00:10:21.240
+les grosses applications en plus petits morceaux.
+
+00:10:22.080 --> 00:10:23.100
+Au lieu d'un programme massif,
+
+00:10:23.220 --> 00:10:24.840
+les équipes le scindent en petits services
+
+00:10:24.840 --> 00:10:27.040
+dédiés à une tâche précise, dédiés à une tâche précise.
+
+00:10:27.440 --> 00:10:29.200
+Chaque service dispose de son propre conteneur,
+
+00:10:29.440 --> 00:10:30.420
+permettant ainsi des mises à jour
+
+00:10:30.420 --> 00:10:31.160
+ou des montées en charge,
+
+00:10:31.260 --> 00:10:32.440
+sans affecter le reste du système.
+
+00:10:33.280 --> 00:10:34.240
+Imaginez une boutique en ligne
+
+00:10:34.240 --> 00:10:35.140
+où le paiement, la recherche
+
+00:10:35.140 --> 00:10:36.080
+et les profils utilisateurs
+
+00:10:36.080 --> 00:10:37.680
+vivent chacun dans leur propre conteneur.
+
+00:10:38.380 --> 00:10:39.960
+Si le paiement nécessite une correction,
+
+00:10:40.120 --> 00:10:41.360
+l'équipe met à jour ce conteneur
+
+00:10:41.360 --> 00:10:42.180
+sans toucher au reste.
+
+00:10:42.960 --> 00:10:44.640
+La portabilité complète le tableau.
+
+00:10:45.400 --> 00:10:46.440
+Le même conteneur s'exécute
+
+00:10:46.440 --> 00:10:47.420
+sur un ordinateur portable,
+
+00:10:47.500 --> 00:10:48.480
+un serveur en centre de données
+
+00:10:48.480 --> 00:10:49.180
+ou dans le cloud.
+
+00:10:49.760 --> 00:10:50.760
+L'équipe peut migrer ou évoluer
+
+00:10:50.760 --> 00:10:51.460
+sans avoir à repenser
+
+00:10:51.460 --> 00:10:52.320
+l'empaquetage de l'application.
+
+00:10:52.900 --> 00:10:54.380
+Il existe aussi un usage quotidien plus simple.
+
+00:10:55.040 --> 00:10:55.860
+Les développeurs exécutent
+
+00:10:55.860 --> 00:10:56.460
+des bases de données,
+
+00:10:56.580 --> 00:10:57.160
+des files d'attente
+
+00:10:57.160 --> 00:10:57.760
+et d'autres outils
+
+00:10:57.760 --> 00:10:58.860
+dans des conteneurs sur leur PC,
+
+00:10:59.300 --> 00:11:00.360
+évitant ainsi toute installation
+
+00:11:00.360 --> 00:11:01.500
+ou configuration manuelle.
+
+00:11:01.500 --> 00:11:03.820
+Une fois leur travail terminé,
+
+00:11:03.900 --> 00:11:04.740
+ils suppriment le conteneur
+
+00:11:04.740 --> 00:11:05.880
+et leur machine est à nouveau propre.
+
+00:11:06.340 --> 00:11:06.700
+Rien de tout cela
+
+00:11:06.700 --> 00:11:07.520
+n'est d'un cas d'usage marginal.
+
+00:11:08.220 --> 00:11:09.000
+Dans l'enquête développeur
+
+00:11:09.000 --> 00:11:09.700
+de Stack Overflow,
+
+00:11:09.960 --> 00:11:10.580
+Docker apparaît
+
+00:11:10.580 --> 00:11:11.920
+comme l'outil le plus utilisé
+
+00:11:11.920 --> 00:11:12.740
+en développement cloud
+
+00:11:12.740 --> 00:11:13.720
+devant Kubernetes
+
+00:11:13.720 --> 00:11:15.260
+et tous les fournisseurs cloud.
+
+00:11:16.440 --> 00:11:17.100
+Des millions de développeurs
+
+00:11:17.100 --> 00:11:17.760
+l'utilisent chaque jour
+
+00:11:17.760 --> 00:11:18.880
+ce qui prouve que cette compétence
+
+00:11:18.880 --> 00:11:19.660
+est transférable
+
+00:11:19.660 --> 00:11:20.160
+d'un emploi
+
+00:11:20.160 --> 00:11:21.040
+ou d'un projet à l'autre.
+
+00:11:22.820 --> 00:11:23.940
+Les erreurs des débutants
+
+00:11:23.940 --> 00:11:25.160
+Avant de vous lancer,
+
+00:11:25.340 --> 00:11:26.080
+il est utile de connaître
+
+00:11:26.080 --> 00:11:26.460
+les pièges
+
+00:11:26.460 --> 00:11:27.440
+dans lesquels presque tout le monde
+
+00:11:27.440 --> 00:11:28.640
+tombe la première semaine.
+
+00:11:29.580 --> 00:11:30.020
+Aucun d'entre eux
+
+00:11:30.020 --> 00:11:30.740
+est difficile à éviter
+
+00:11:30.740 --> 00:11:31.840
+une fois qu'on les a identifiés.
+
+00:11:32.280 --> 00:11:32.960
+L'erreur la plus courante
+
+00:11:32.960 --> 00:11:34.040
+est de récupérer systématiquement
+
+00:11:34.040 --> 00:11:34.700
+la version étiquetée,
+
+00:11:34.780 --> 00:11:35.020
+la test.
+
+00:11:35.240 --> 00:11:35.600
+C'est tentant
+
+00:11:35.600 --> 00:11:36.900
+car la test suggère la nouveauté.
+
+00:11:37.300 --> 00:11:38.600
+Le problème est que la test évolue,
+
+00:11:38.720 --> 00:11:39.980
+ce qui peut rendre vos builds instables
+
+00:11:39.980 --> 00:11:40.620
+d'un mois à l'autre.
+
+00:11:40.800 --> 00:11:41.620
+Fixer une version précise
+
+00:11:41.620 --> 00:11:42.940
+garantit des builds prévisibles.
+
+00:11:43.280 --> 00:11:43.780
+Garantie des builds.
+
+00:11:44.480 --> 00:11:45.480
+Ensuite, il y a la question des données
+
+00:11:45.480 --> 00:11:46.520
+qui surprend souvent les débutants.
+
+00:11:47.320 --> 00:11:48.120
+Un conteneur n'est pas fait
+
+00:11:48.120 --> 00:11:48.920
+pour stocker des fichiers
+
+00:11:48.920 --> 00:11:49.900
+car la couche inscriptible
+
+00:11:49.900 --> 00:11:50.860
+disparaît dès que le conteneur
+
+00:11:50.860 --> 00:11:51.440
+est supprimé.
+
+00:11:52.200 --> 00:11:53.020
+Tout ce que vous devez conserver
+
+00:11:53.020 --> 00:11:54.120
+doit être placé dans un volume
+
+00:11:54.120 --> 00:11:55.480
+qui est un stockage indépendant
+
+00:11:55.480 --> 00:11:57.140
+de la courte vie du conteneur.
+
+00:11:57.840 --> 00:11:58.500
+Si vous oubliez cela,
+
+00:11:58.580 --> 00:11:59.680
+vous verrez vos données importantes
+
+00:11:59.680 --> 00:12:01.220
+s'effacer dès votre premier nettoyage.
+
+00:12:01.760 --> 00:12:02.860
+La taille est un autre pioche courante.
+
+00:12:03.700 --> 00:12:04.500
+Il est facile d'ajouter
+
+00:12:04.500 --> 00:12:05.380
+des fichiers inutiles
+
+00:12:05.380 --> 00:12:06.520
+et de partir d'une image lourde,
+
+00:12:06.920 --> 00:12:07.800
+mais ces choix ralentissent
+
+00:12:07.800 --> 00:12:09.180
+le transfert et le démarrage
+
+00:12:09.180 --> 00:12:09.640
+de l'image.
+
+00:12:10.520 --> 00:12:11.200
+Les habitudes de sécurité
+
+00:12:11.200 --> 00:12:11.980
+sont également cruciales.
+
+00:12:12.220 --> 00:12:13.180
+Exécuter tous les processus
+
+00:12:13.180 --> 00:12:13.760
+avec les droits route
+
+00:12:13.760 --> 00:12:14.720
+est un raccourci très fréquent.
+
+00:12:15.000 --> 00:12:15.700
+L'utilisateur route
+
+00:12:15.700 --> 00:12:16.600
+peut tout faire sur une machine.
+
+00:12:16.700 --> 00:12:17.720
+Un problème dans un conteneur route
+
+00:12:17.720 --> 00:12:18.560
+a donc bien plus de marge
+
+00:12:18.560 --> 00:12:19.180
+pour causer des dégâts.
+
+00:12:19.180 --> 00:12:20.700
+Un utilisateur limité dans le conteneur
+
+00:12:20.700 --> 00:12:21.340
+permet de réduire
+
+00:12:21.340 --> 00:12:22.140
+le périmètre des risques.
+
+00:12:23.020 --> 00:12:23.860
+Fournez l'habitude de corriger
+
+00:12:23.860 --> 00:12:24.920
+un conteneur en cours d'exécution
+
+00:12:24.920 --> 00:12:25.260
+manuellement
+
+00:12:25.260 --> 00:12:26.240
+au lieu de modifier l'image.
+
+00:12:26.980 --> 00:12:28.000
+Toute modification apportée
+
+00:12:28.000 --> 00:12:28.700
+à un conteneur actif
+
+00:12:28.700 --> 00:12:29.560
+disparaît au redémarrage.
+
+00:12:29.640 --> 00:12:30.560
+L'image est la source de vérité.
+
+00:12:30.620 --> 00:12:31.320
+La correction doit donc
+
+00:12:31.320 --> 00:12:31.900
+y être faite.
+
+00:12:32.420 --> 00:12:33.000
+La correction donc.
+
+00:12:33.920 --> 00:12:34.780
+Une erreur plus discrète
+
+00:12:34.780 --> 00:12:35.480
+consiste à confondre
+
+00:12:35.480 --> 00:12:36.200
+l'image et le conteneur.
+
+00:12:36.640 --> 00:12:37.680
+L'image est le modèle figé
+
+00:12:37.680 --> 00:12:38.900
+que vous construisez et partagez,
+
+00:12:39.160 --> 00:12:40.520
+le conteneur est l'instance active
+
+00:12:40.520 --> 00:12:41.380
+que vous pouvez supprimer.
+
+00:12:42.200 --> 00:12:42.840
+Confondre les deux
+
+00:12:42.840 --> 00:12:44.200
+pousse à traiter un conteneur jetable
+
+00:12:44.200 --> 00:12:45.100
+comme s'il était permanent,
+
+00:12:45.300 --> 00:12:46.140
+ce qui entraîne souvent
+
+00:12:46.140 --> 00:12:47.240
+des pertes de travail.
+
+00:12:47.820 --> 00:12:48.760
+Petite habitude supplémentaire
+
+00:12:48.760 --> 00:12:49.360
+permet de gagner beaucoup.
+
+00:12:49.780 --> 00:12:51.120
+Un fichier court indique à la build
+
+00:12:51.120 --> 00:12:52.120
+quel dossier ignorer,
+
+00:12:52.300 --> 00:12:53.120
+ainsi les fichiers lourds,
+
+00:12:53.240 --> 00:12:54.420
+inutiles restent hors de l'image.
+
+00:12:54.700 --> 00:12:56.180
+Et vos builds restent rapides.
+
+00:12:57.300 --> 00:12:58.560
+Aucune de ces erreurs n'est fatale
+
+00:12:58.560 --> 00:13:00.240
+et chacune est plus facile à éviter
+
+00:13:00.240 --> 00:13:01.500
+qu'à résoudre plus tard.
+
+00:13:02.340 --> 00:13:03.660
+Quand éviter d'utiliser des conteneurs.
+
+00:13:04.180 --> 00:13:05.080
+Les conteneurs sont puissants,
+
+00:13:05.500 --> 00:13:06.200
+c'est justement pour cela
+
+00:13:06.200 --> 00:13:06.700
+qu'il faut admettre
+
+00:13:06.700 --> 00:13:07.520
+quand ils ne sont pas l'outil,
+
+00:13:07.760 --> 00:13:08.160
+adaptés.
+
+00:13:09.500 --> 00:13:10.380
+Si votre charge de travail
+
+00:13:10.380 --> 00:13:11.540
+nécessite une isolation forte
+
+00:13:11.540 --> 00:13:12.200
+au niveau matériel,
+
+00:13:12.420 --> 00:13:13.060
+une machine virtuelle
+
+00:13:13.060 --> 00:13:13.720
+est le choix le plus sûr.
+
+00:13:14.520 --> 00:13:15.160
+Il en va de même
+
+00:13:15.160 --> 00:13:15.940
+pour les logiciels
+
+00:13:15.940 --> 00:13:16.800
+nécessitant un système
+
+00:13:16.800 --> 00:13:17.820
+d'exploitation différent
+
+00:13:17.820 --> 00:13:18.680
+de la machine haute
+
+00:13:18.680 --> 00:13:19.920
+car les conteneurs partagent
+
+00:13:19.920 --> 00:13:21.100
+le système sous-jacent.
+
+00:13:21.940 --> 00:13:23.360
+Pour une petite tâche ponctuelle,
+
+00:13:23.560 --> 00:13:24.480
+un conteneur peut être
+
+00:13:24.480 --> 00:13:25.100
+trop complexe,
+
+00:13:25.200 --> 00:13:25.920
+exécuter un script
+
+00:13:25.920 --> 00:13:27.020
+ou une application classique
+
+00:13:27.020 --> 00:13:28.380
+est parfois plus rapide.
+
+00:13:29.720 --> 00:13:30.200
+Vous pourriez passer
+
+00:13:30.200 --> 00:13:30.640
+un après-midi
+
+00:13:30.640 --> 00:13:31.220
+à apprendre l'outil
+
+00:13:31.220 --> 00:13:31.700
+pour un travail
+
+00:13:31.700 --> 00:13:32.220
+qui n'en aurait pris
+
+00:13:32.220 --> 00:13:32.960
+que 10 minutes sans lui.
+
+00:13:34.020 --> 00:13:34.600
+Les charges lourdes
+
+00:13:34.600 --> 00:13:35.640
+manipulant beaucoup de données
+
+00:13:35.640 --> 00:13:36.900
+bénéficient d'autres approches
+
+00:13:36.900 --> 00:13:37.480
+car les conteneurs
+
+00:13:37.480 --> 00:13:38.740
+sont conçus pour être jetables
+
+00:13:38.740 --> 00:13:39.700
+et non pour stocker
+
+00:13:39.700 --> 00:13:40.680
+des données à long terme.
+
+00:13:41.760 --> 00:13:42.000
+Il y a aussi
+
+00:13:42.000 --> 00:13:42.700
+une courbe d'apprentissage
+
+00:13:42.700 --> 00:13:42.920
+à prendre.
+
+00:13:43.340 --> 00:13:44.500
+Les conteneurs deviennent rentables
+
+00:13:44.500 --> 00:13:45.400
+quand vous en exécutez beaucoup
+
+00:13:45.400 --> 00:13:46.020
+sur plusieurs machines.
+
+00:13:46.840 --> 00:13:47.680
+Pour un petit projet unique
+
+00:13:47.680 --> 00:13:48.580
+sur un seul ordinateur,
+
+00:13:48.700 --> 00:13:49.480
+cet avantage est difficile
+
+00:13:49.480 --> 00:13:50.300
+à percevoir au début.
+
+00:13:50.860 --> 00:13:51.360
+Rien de tout cela
+
+00:13:51.360 --> 00:13:51.920
+n'enlève quoi que ce soit
+
+00:13:51.920 --> 00:13:52.640
+aux qualités des conteneurs.
+
+00:13:52.980 --> 00:13:53.820
+Cela signifie simplement
+
+00:13:53.820 --> 00:13:54.580
+que le vrai savoir-faire
+
+00:13:54.580 --> 00:13:54.900
+est de savoir
+
+00:13:54.900 --> 00:13:55.520
+quand s'en servir
+
+00:13:55.520 --> 00:13:56.260
+et quand s'en passer.
+
+00:13:57.180 --> 00:13:57.780
+Au-delà du jargon,
+
+00:13:57.860 --> 00:13:58.340
+un conteneur
+
+00:13:58.340 --> 00:13:59.620
+est simplement votre application
+
+00:13:59.620 --> 00:14:00.660
+avec tout ce dont elle a besoin
+
+00:14:00.660 --> 00:14:02.000
+pour fonctionner à l'identique
+
+00:14:02.000 --> 00:14:02.420
+partout.
+
+00:14:03.220 --> 00:14:03.820
+C'est pour cette raison
+
+00:14:03.820 --> 00:14:04.660
+qu'ils sont omniprésents
+
+00:14:04.660 --> 00:14:05.680
+dans les logiciels modernes.
+
+00:14:06.220 --> 00:14:06.740
+Si les conteneurs
+
+00:14:06.740 --> 00:14:07.620
+vous semblent enfin clairs,
+
+00:14:07.880 --> 00:14:08.300
+abonnez-vous
+
+00:14:08.300 --> 00:14:09.240
+et je continuerai à expliquer
+
+00:14:09.240 --> 00:14:10.060
+simplement les aspects
+
+00:14:10.060 --> 00:14:10.840
+complexes de la tech.

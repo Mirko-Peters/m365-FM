@@ -1,0 +1,709 @@
+WEBVTT
+
+00:00:00.420 --> 00:00:06.320
+Bienvenidos al podcast M365FM, donde exploramos a las personas, las ideas y las tecnologías que dan forma al futuro del trabajo.
+
+00:00:06.880 --> 00:00:09.720
+Docker es la herramienta más usada en el desarrollo en la nube, y no hay ninguna que se le hace.
+
+00:00:10.100 --> 00:00:13.460
+Probablemente has oído el término usado como si fuera un conocimiento básico que todos los demás ya tienen.
+
+00:00:13.980 --> 00:00:17.640
+Docker resuelve un problema específico y doloroso, y una vez que lo ves, todo cobra sentido.
+
+00:00:18.180 --> 00:00:21.760
+La razón por la que una aplicación funciona perfecto en tu laptop y luego falla en la computadora de alguien más.
+
+00:00:22.300 --> 00:00:26.420
+Al final entenderás los contenedores, las imágenes y los archivos Docker sin escribir una sola línea de código.
+
+00:00:26.420 --> 00:00:31.340
+También aclararemos la comparación que confunde a casi todos los principiantes contenedores frente a máquinas virtuales.
+
+00:00:32.060 --> 00:00:33.340
+El problema quedó que realmente resuelve.
+
+00:00:33.820 --> 00:00:36.140
+Imagina el momento en que descargas un proyecto que alguien comparte con ti.
+
+00:00:36.500 --> 00:00:38.200
+Sigue las notas de instalación línea por línea.
+
+00:00:38.580 --> 00:00:42.120
+Instalas todo lo que piden las instrucciones y la aplicación sigue sin arrancar.
+
+00:00:42.900 --> 00:00:48.420
+Una librería tiene la versión incorrecta o falta una configuración, o todo solo funcionaba en la máquina de quien lo creó.
+
+00:00:49.620 --> 00:00:51.520
+Desarrolladores le dieron a esta experiencia un apodo que se quede.
+
+00:00:51.820 --> 00:00:52.680
+Funciona en mi máquina.
+
+00:00:52.680 --> 00:00:55.540
+Ese apodo es el remate de un problema antiguo y costoso.
+
+00:00:56.160 --> 00:00:57.380
+Un programa nunca es solo código.
+
+00:00:58.060 --> 00:01:04.020
+Depende de una versión específica de una herramienta, una librería de otra y una pila de ajustes que deben coincidir al mismo tiempo.
+
+00:01:04.680 --> 00:01:07.260
+Cambia una sola pieza a una computada diferente y toda la aplicación se viene abajo.
+
+00:01:07.720 --> 00:01:09.600
+Los detalles siempre son pequeños y siempre son úlidos.
+
+00:01:10.200 --> 00:01:12.800
+Quita la aplicación y pide una versión de un lenguaje más antiguo que la que tienes instalada.
+
+00:01:13.400 --> 00:01:18.640
+Tal vez espera una base de datos que ya esté corriendo o un ajuste oculto en un archivo que las instrucciones nunca mencionaron.
+
+00:01:18.640 --> 00:01:22.980
+Nada de esto es exótico y todo puede arruinar un proyecto que funcionaba bien 5 minutos antes en otro lado.
+
+00:01:23.380 --> 00:01:25.920
+Si algo de esto te suena familiar es porque casi todo el mundo se topa con ello.
+
+00:01:26.540 --> 00:01:31.620
+Cuando el mismo software se comporta diferente en cada máquina, los equipos pierden horas en la configuración en lugar de construir.
+
+00:01:32.120 --> 00:01:36.380
+Un nuevo desarrollador pasa sus primeros días luchando con su entorno en lugar de hacer el trabajo para el que fue contratado.
+
+00:01:36.380 --> 00:01:40.500
+El código que funciona perfecto en pruebas puede comportarse diferente en cuanto llega a un servidor real.
+
+00:01:41.440 --> 00:01:46.520
+Ahora multiplica y soporta un equipo, 10 desarrolladores cada uno en una máquina distinta con su propia mezcla de versiones y ajustes.
+
+00:01:47.260 --> 00:01:49.540
+La cantidad de fornos en las que algo puede fallar crece rápidamente.
+
+00:01:49.900 --> 00:01:56.060
+Añade un servidor de pruebas y uno de producción y de repente se espera que la misma aplicación corra en una docena de lugares a la vez todos un poco diferentes.
+
+00:01:56.900 --> 00:02:01.360
+El equipo de Docker resumió el problema cuando lo lanzaron en 2013 y su descripción fue directa.
+
+00:02:02.380 --> 00:02:04.040
+Enviar código al servidor es difícil.
+
+00:02:04.040 --> 00:02:07.020
+Esa frustración es lo que los contenedores fueron creados para eliminar.
+
+00:02:07.420 --> 00:02:09.920
+Solución no son mejores instrucciones ni notas de configuración master.
+
+00:02:10.240 --> 00:02:13.380
+Es una forma de empaquetar una aplicación para que la máquina debajo de ella deje de importar.
+
+00:02:14.220 --> 00:02:15.080
+Es realmente un contenedor.
+
+00:02:15.660 --> 00:02:19.020
+Un contenedor es un paquete que mantiene tu aplicación junto con todo lo que necesita para ejecutarse.
+
+00:02:19.600 --> 00:02:20.800
+Piénsalo como una lonchera sellada.
+
+00:02:21.380 --> 00:02:26.120
+La comida está adentro, los utensilios están adentro y no importa qué tipo de cocina tenga la persona que la abre.
+
+00:02:26.720 --> 00:02:30.760
+Esa idea suena casi demasiado simple que es precisamente por lo que la palabra contenedor confunde a la gente.
+
+00:02:30.760 --> 00:02:37.940
+El nombre te hace imaginar algo pesado y técnico cuando un contenedor es realmente solo tu aplicación más sus dependencias selladas en una unidad que viaja bien.
+
+00:02:38.860 --> 00:02:42.020
+Un contenedor no es una computadora y no lleva su propio sistema operativo.
+
+00:02:42.820 --> 00:02:48.460
+En cambio, toma prestado el sistema operativo de la máquina donde se ejecuta y empaquetas solo la aplicación y las piezas de las que depende.
+
+00:02:49.380 --> 00:02:51.580
+Eso es lo que mantiene a cada contenedor pequeño y rápido de iniciar.
+
+00:02:51.920 --> 00:02:55.440
+Puedes ejecutar un conjunto completo de ellos en una sola computadora portátil sin que la máquina se ralentice.
+
+00:02:55.440 --> 00:02:59.320
+Lo que impide que un contenedor interfiera con todo lo demás en la máquina es el aislamiento.
+
+00:03:00.000 --> 00:03:03.640
+Dentro de la aplicación veo un pequeño mundo que parece tener toda la computadora para sí misma.
+
+00:03:04.280 --> 00:03:06.880
+Esa computadora en realidad se comparte con otros contenedores y otro software.
+
+00:03:07.760 --> 00:03:12.340
+Ese aislamiento es lo que te permite ejecutar muchos contenedores lado a lado en una máquina sin que luchen por nada.
+
+00:03:13.120 --> 00:03:16.040
+También significa que una imagen puede generar tantos contenedores como necesites.
+
+00:03:16.300 --> 00:03:23.200
+Construyes el plan una vez y desde él puedes iniciar 5 copias para 5 clientes o 100 copias cuando el tráfico aumenta sin construir nada dos veces.
+
+00:03:23.440 --> 00:03:25.260
+La recompensa es la parte que más importa.
+
+00:03:25.660 --> 00:03:30.820
+El mismo contenedor se comporta de la misma manera en tu laptop, en la máquina de un colega y en un servidor en un centro de datos.
+
+00:03:31.480 --> 00:03:33.680
+Lo empaquetas una vez y deja de importar dónde aterrice.
+
+00:03:34.320 --> 00:03:37.440
+Dos palabras surgen constantemente en todo esto y los principiantes las confunden.
+
+00:03:37.960 --> 00:03:40.780
+Una imagen es el plano y un contenedor es la copia en ejecución de ese plano.
+
+00:03:41.300 --> 00:03:47.020
+Si un contenedor es la copia, la siguiente pregunta obvia es de qué está copiando exactamente y la respuesta es más interesante de lo que parece.
+
+00:03:48.240 --> 00:03:50.080
+Imágenes, Dockerfiles y el poder de las capas.
+
+00:03:50.180 --> 00:03:51.700
+Una imagen es una receta congelada.
+
+00:03:52.160 --> 00:03:54.920
+Es de solo lectura lo que significa que nada dentro de ella cambia una vez que se construye.
+
+00:03:55.200 --> 00:03:58.900
+Contiene tu aplicación, los archivos que ésta necesita y las instrucciones para iniciarla.
+
+00:03:59.240 --> 00:04:04.760
+Esa cualidad de solo lectura es lo que hace que una imagen sea segura de compartir porque mil personas pueden ejecutar la misma imagen y obtener resultados idénticos.
+
+00:04:05.060 --> 00:04:10.240
+Lo ingenioso es que las imágenes se construyen en capas y cada capa es un conjunto de cambios apilados sobre la anterior.
+
+00:04:10.240 --> 00:04:13.800
+Imagina una pila de hojas transparentes donde cada hoja añade algo nuevo.
+
+00:04:14.120 --> 00:04:16.120
+Una hoja aporta los elementos base del sistema operativo.
+
+00:04:16.260 --> 00:04:19.660
+La siguiente añade el código de tu aplicación y la otra a tus configuraciones.
+
+00:04:20.080 --> 00:04:21.740
+Apílalas todas y tendrás una imagen completa.
+
+00:04:22.420 --> 00:04:26.360
+La razón por la que las imágenes usan capas en lugar de un archivo gigante se reduce en la reconstrucción.
+
+00:04:26.720 --> 00:04:33.120
+Cuando cambias algo, Docker reconstruye solo la capa que modificaste y las que están encima, mientras que todo de abajo permanece exactamente igual.
+
+00:04:33.120 --> 00:04:36.460
+Es por eso que una reconstrucción puede terminar en segundos en lugar de minutos.
+
+00:04:36.600 --> 00:04:39.320
+Y es por eso que las imágenes se mantienen pequeñas comparadas con otras alternativas.
+
+00:04:39.840 --> 00:04:41.200
+Las imágenes se construyen unas sobre otras.
+
+00:04:41.600 --> 00:04:48.500
+Una imagen base que ya contiene un sistema Linux y un servidor web puede servir de base para 100 proyectos diferentes y cada proyecto solo añade sus propias capas encima.
+
+00:04:49.620 --> 00:04:53.280
+Esa base compartida es una gran parte de por qué las imágenes se mantienen sorprendentemente pequeñas.
+
+00:04:53.840 --> 00:04:55.820
+Esas capas provienen de un archivo llamado Dockerfile.
+
+00:04:56.160 --> 00:05:00.100
+Un Dockerfile es texto plano que enumera los pasos para construir una imagen, una instrucción por línea.
+
+00:05:00.100 --> 00:05:08.440
+Una instrucción podría comenzar desde una imagen base, la siguiente podría copiar tu código, otra instalar una dependencia y la última indica cómo lanzar la aplicación.
+
+00:05:09.380 --> 00:05:12.060
+Léelo de principio a fin y estarás leyendo la receta de todo el conjunto.
+
+00:05:12.700 --> 00:05:14.780
+El orden de esas líneas importa más de lo que los principiantes guan.
+
+00:05:15.180 --> 00:05:20.440
+Si editas el código de tu aplicación, Docker reutiliza las capas anteriores y solo rehace los últimos pasos, lo cual es rápido.
+
+00:05:20.940 --> 00:05:26.080
+Si editas la primera línea, lo apilado sobre ella debe reconstruirse desde cero, lo cual es lento.
+
+00:05:26.080 --> 00:05:31.640
+Por eso los expertos colocan las partes que rara vez cambian al principio y las que editan constantemente al final.
+
+00:05:32.220 --> 00:05:32.320
+Ya.
+
+00:05:32.840 --> 00:05:35.160
+Si vas a recordar una sola cosa de toda esta sección, que sea esta.
+
+00:05:35.640 --> 00:05:38.720
+La imagen es la receta y el contenedor es la comida que sirves a partir de ella.
+
+00:05:39.220 --> 00:05:40.620
+Todo lo demás se deriva de esa división.
+
+00:05:40.980 --> 00:05:43.060
+Aquí es también donde se cumple la promesa de portabilidad.
+
+00:05:43.360 --> 00:05:48.380
+Dockerfile es la fuente de la verdad y cualquiera con ese archivo y el código al que apunta puede reconstruir la misma imagen exacta.
+
+00:05:48.620 --> 00:05:50.840
+No hay conjeturas ni misterios sobre qué versión utilizó alguien.
+
+00:05:51.560 --> 00:05:54.480
+Hay una capa más que vale la pena conocer y es la que suele confundir a la gente.
+
+00:05:54.480 --> 00:05:58.720
+Cuando inicias un contenedor a partir de una imagen, Docker añade una capa fina y grabable encima,
+
+00:05:59.100 --> 00:06:01.500
+que es donde el contenedor en ejecución puede escribir nuevos archivos.
+
+00:06:01.980 --> 00:06:06.420
+Sin embargo, esa capa es temporal, así que cuando eliminas el contenedor, todo lo que hay allí desaparece con él.
+
+00:06:06.860 --> 00:06:10.520
+Esa única regla explica una cantidad sorprendente de problemas de principiantes y vuelve a aparecer más tarde.
+
+00:06:10.920 --> 00:06:12.460
+Primero, las imágenes deben vivir en algún lugar.
+
+00:06:13.240 --> 00:06:14.400
+Y ese lugar se llama registro.
+
+00:06:15.480 --> 00:06:17.480
+Los registros son donde las imágenes viven y viajan.
+
+00:06:18.180 --> 00:06:21.360
+Un registro es un lugar que almacena imágenes para que puedan ser compartidas y descargadas.
+
+00:06:21.360 --> 00:06:26.960
+Si una imagen es una receta, un registro es la estantería de libros de cocina publicados y cualquiera con acceso puede sacar una copia.
+
+00:06:27.320 --> 00:06:30.140
+El predeterminado es Docker Hub, un registro público que cualquiera puede usar.
+
+00:06:30.600 --> 00:06:35.240
+Docker busca allí primero cuando pides una imagen, por eso tantos comandos funcionan sin que indiques nada.
+
+00:06:36.200 --> 00:06:41.180
+Si prefieres mantener tus imágenes privadas, puedes ejecutar tu propio registro tras tus muros y muchas empresas hacen exactamente eso.
+
+00:06:42.080 --> 00:06:44.680
+Las imágenes vienen como etiquetas que son solo nombres para las versiones.
+
+00:06:44.680 --> 00:06:50.380
+La misma imagen puede llevar una etiqueta para la versión 3, otra para la 4 y una tercera llamada Latest que apunta a lo más reciente.
+
+00:06:51.040 --> 00:06:53.260
+Esa etiqueta Latest es conveniente y también una trampa.
+
+00:06:53.680 --> 00:06:54.480
+Algo a lo que volveremos.
+
+00:06:55.020 --> 00:06:56.260
+Dos comandos hacen la mayor parte del draw.
+
+00:06:56.840 --> 00:07:02.200
+Pull descarga una imagen de un registro a tu máquina y Push envía una imagen que creaste a un registro para que otros puedan usarla.
+
+00:07:02.680 --> 00:07:03.340
+Ese es todo el ciclo.
+
+00:07:03.820 --> 00:07:06.100
+Creas una imagen, la subes y alguien más la descarga.
+
+00:07:06.760 --> 00:07:10.060
+La primera vez que descargas una imagen, Docker la obtiene y guarda una copia en tu máquina.
+
+00:07:10.620 --> 00:07:12.360
+La próxima vez que pidas la misma imagen ya estará allí.
+
+00:07:12.360 --> 00:07:15.480
+Por lo tanto, iniciar un contenedor toma un momento en lugar de una descarga completa.
+
+00:07:15.700 --> 00:07:17.480
+Aquí es donde la promesa de portabilidad se vuelve real.
+
+00:07:17.820 --> 00:07:22.900
+Un compañero de equipo no necesita tu laptop ni tu configuración exacta porque descargan la misma imagen y obtienen la misma aplicación.
+
+00:07:23.380 --> 00:07:26.640
+Algunas de esas imágenes son oficiales, mantenidas por las empresas detrás del software,
+
+00:07:26.840 --> 00:07:30.520
+por lo que descargar una imagen conocida suele ser más seguro que construir todo tú mismo.
+
+00:07:31.240 --> 00:07:33.160
+También vale la pena saber cuánto ha crecido esta estantería.
+
+00:07:33.800 --> 00:07:39.400
+Según el conteo de Docker, Docker Hub sirve miles de millones de descargas al mes y la plataforma cuenta con millones de desarrolladores registrados.
+
+00:07:39.400 --> 00:07:42.760
+Cuando la gente dice que los contenedores están en todas partes, a esta escala se refiere.
+
+00:07:43.600 --> 00:07:48.160
+Con cada componente en su lugar queda una pregunta sobre la mesa que es la que confunde a casi todo principiante.
+
+00:07:49.820 --> 00:07:51.160
+Contenedores frente a máquinas virtuales.
+
+00:07:51.640 --> 00:07:53.920
+Esa pregunta es, ¿contenedores frente a máquinas virtuales?
+
+00:07:53.920 --> 00:07:55.140
+Y merece una respuesta cuidadosa.
+
+00:07:55.400 --> 00:07:59.100
+Antes de los contenedores, si querías ejecutar software de forma aislada, usabas una máquina virtual.
+
+00:07:59.780 --> 00:08:03.900
+La confusión es comprensible porque ambas herramientas existen para mantener el software separado de todo lo que le rodea.
+
+00:08:04.340 --> 00:08:05.900
+Simplemente trazan la línea en lugares distintos.
+
+00:08:05.900 --> 00:08:09.640
+Una máquina virtual es una computadora completa simulada dentro de tu propia computadora.
+
+00:08:10.480 --> 00:08:13.100
+Tiene su propio sistema operativo, su propia memoria y su propio almacenamiento.
+
+00:08:13.280 --> 00:08:16.120
+Y se comporta como una máquina independiente que vive dentro de una más grande.
+
+00:08:16.800 --> 00:08:18.200
+El nombre revela el tamaño de la cosa.
+
+00:08:18.640 --> 00:08:23.200
+Una máquina virtual conlleva un sistema operativo completo, lo cual es una carga pesada de copiar para cada instancia.
+
+00:08:23.720 --> 00:08:29.600
+Los contenedores se adoptan en el enfoque opuesto, tomando prestado el sistema operativo de la máquina en la que ya se ejecutan por lo que no necesitan cargar con uno propio.
+
+00:08:30.320 --> 00:08:33.020
+Esa única diferencia explica casi todas las brechas prácticas entre ellos.
+
+00:08:33.020 --> 00:08:37.420
+Los contenedores se miden en megabytes, mientras que las máquinas virtuales se miden en gigabytes se miden.
+
+00:08:38.040 --> 00:08:41.100
+Un contenedor inicia en segundos, mientras que una máquina virtual puede tardar minutos en arrancar.
+
+00:08:41.520 --> 00:08:47.300
+En el mismo hardware puedes ejecutar muchos más contenedores que máquinas virtuales, porque cada contenedor hace mucho menos trabajo en segundo plano.
+
+00:08:48.000 --> 00:08:49.780
+El intercambio se vuelve obvio en el momento en que los comparas.
+
+00:08:50.400 --> 00:08:53.780
+Una máquina virtual te ofrece una separación más fuerte y la paga con tamaño y velocidad.
+
+00:08:53.780 --> 00:08:59.240
+Un contenedor te ofrece velocidad y un tamaño reducido y lo paga compartiendo más con la máquina subyacente.
+
+00:08:59.960 --> 00:09:03.200
+Ninguno hace trampa, ya que están resolviendo el mismo problema de dos maneras diferentes.
+
+00:09:03.740 --> 00:09:07.320
+Sin embargo, antes de descartar las máquinas virtuales, todavía ganan en algunos aspectos importantes.
+
+00:09:07.840 --> 00:09:12.720
+Te brindan un aislamiento más fuerte porque cada una está sellada a nivel de hardware en lugar del nivel de procesos.
+
+00:09:13.420 --> 00:09:16.980
+También pueden ejecutar un sistema operativo completamente diferente de la máquina que las aloja,
+
+00:09:17.120 --> 00:09:19.740
+lo cual los contenedores no pueden hacer, tampoco son rivales entre sí.
+
+00:09:19.740 --> 00:09:23.240
+Una configuración muy común ejecuta contenedores dentro de máquinas virtuales,
+
+00:09:23.340 --> 00:09:27.060
+aprovechando la portabilidad de los contenedores y envolviéndola en el aislamiento más fuerte de una máquina virtual.
+
+00:09:27.460 --> 00:09:31.100
+Si alguna vez has usado una máquina virtual, ya entiendes la forma básica de la idea.
+
+00:09:31.800 --> 00:09:33.640
+Un contenedor es simplemente el primo más ligero.
+
+00:09:33.920 --> 00:09:36.620
+No tienes que elegir un bando, porque la mayoría de los sistemas modernos usan ambos.
+
+00:09:36.860 --> 00:09:37.340
+Usan ambos.
+
+00:09:38.400 --> 00:09:40.260
+No hay la gente realmente usa Docker. Esa es la teoría.
+
+00:09:41.180 --> 00:09:44.500
+En el mundo real, esta herramienta aparece en casi todos los equipos de software modernos.
+
+00:09:44.500 --> 00:09:46.400
+Las razones son prácticas en lugar de académicas.
+
+00:09:47.100 --> 00:09:49.480
+La primera razón es un entorno de desarrollo consistente.
+
+00:09:50.560 --> 00:09:54.680
+Cuando un nuevo desarrollador se une a un equipo, no pierde tres días instalando las versiones correctas de todo.
+
+00:09:55.200 --> 00:09:58.520
+Descargan el contenedor del proyecto, lo ejecutan y comienzan a trabajar el primer día,
+
+00:09:58.660 --> 00:10:00.860
+lo que significa que la integración deja de ser una prueba de paciencia.
+
+00:10:01.360 --> 00:10:03.640
+Las pruebas y la entrega automatizadas son la siguiente gran ventana.
+
+00:10:04.320 --> 00:10:07.980
+Los equipos modernos crean y prueban su código automáticamente cada vez que alguien realiza un cabo.
+
+00:10:08.480 --> 00:10:10.140
+Los contenedores hacen que esto sea confiable,
+
+00:10:10.140 --> 00:10:12.220
+porque la prueba se ejecuta en el mismo entorno exacto cada vez,
+
+00:10:12.320 --> 00:10:15.120
+tanto en la computadora de cada desarrollador como en el servidor de compilación.
+
+00:10:15.620 --> 00:10:17.640
+Si funciona en una máquina, funciona en todas.
+
+00:10:17.640 --> 00:10:21.440
+Otro patrón común es dividir las grandes aplicaciones en piezas más pequeñas.
+
+00:10:22.220 --> 00:10:26.460
+En lugar de un programa enorme, los equipos lo dividen en pequeños servicios que cumplen una sola función.
+
+00:10:27.560 --> 00:10:32.520
+Cada servicio obtiene su propio contenedor para que pueda actualizarse o escalarse sin afectar al resto del sistema.
+
+00:10:32.520 --> 00:10:37.800
+Imagina una tienda en línea donde el proceso de pago, la búsqueda y los perfiles de usuario viven en sus propios contenedores.
+
+00:10:38.580 --> 00:10:42.620
+Cuando el sistema de pago necesita una regla, el equipo actualiza solo ese contenedor y deja todo lo demás intacto.
+
+00:10:42.860 --> 00:10:44.760
+La portabilidad entre diferentes lugares completa el panorama.
+
+00:10:45.400 --> 00:10:49.240
+El mismo contenedor funciona en la laptop, en un servidor de centro de datos o en la nube.
+
+00:10:49.640 --> 00:10:52.480
+El equipo puede moverse o crecer sin tener que reprogramar cómo se empaqueta la aplicación.
+
+00:10:52.940 --> 00:10:54.420
+También hay un uso cotidiano más sencillo.
+
+00:10:54.900 --> 00:10:59.720
+Los desarrolladores ejecutan bases de datos, colas de mensajes y otras herramientas como contenedores en sus propias laptops
+
+00:10:59.720 --> 00:11:01.820
+para no tener que instalarlas y configurarlas manualmente.
+
+00:11:02.720 --> 00:11:05.840
+Cuando terminan, borran el contenedor y la máquina queda limpia nuevamente.
+
+00:11:06.280 --> 00:11:07.560
+Nada de esto es un caso de uso especializado.
+
+00:11:08.220 --> 00:11:13.140
+En la encuesta de desarrolladores de Stack Overflow, Docker aparece como la herramienta más utilizada en la categoría de desarrollo de nubes,
+
+00:11:13.220 --> 00:11:15.440
+superando a Kubernetes y a cualquier proveedor de nube de la lista.
+
+00:11:16.320 --> 00:11:18.280
+Millones de desarrolladores confían en ella cada día,
+
+00:11:18.500 --> 00:11:21.360
+lo cual es una señal clara de que esta habilidad es útil en diversos trabajos y proyectos.
+
+00:11:22.660 --> 00:11:23.980
+Los errores que cometen los principios
+
+00:11:23.980 --> 00:11:28.860
+Antes de apresurarse a empezar, vale la pena conocer los errores en los que casi todos caen durante su primera semana.
+
+00:11:28.860 --> 00:11:31.840
+No son difíciles de evitar una vez que sabes identificarlos.
+
+00:11:32.380 --> 00:11:34.840
+El más común es tomar cualquier versión etiquetada como Latest.
+
+00:11:35.180 --> 00:11:36.760
+Es tentador porque Latest suena lo más...
+
+00:11:36.760 --> 00:11:39.020
+El problema es que Latest cambia con el tiempo,
+
+00:11:39.140 --> 00:11:41.940
+por lo que la misma configuración puede compilarse de forma diferente el próximo mes,
+
+00:11:42.060 --> 00:11:43.760
+fijar una versión específica o una versión específica.
+
+00:11:44.480 --> 00:11:46.320
+Luego están los datos y esto suele sorprender a la gente.
+
+00:11:47.200 --> 00:11:48.980
+Un contenedor no es un lugar para almacenar archivos,
+
+00:11:49.060 --> 00:11:51.640
+porque esa capa de escritura desaparece en el momento en que se elimina el contenedor.
+
+00:11:52.300 --> 00:11:54.480
+Todo lo que necesites conservar debe vivir en un volumen,
+
+00:11:54.700 --> 00:11:57.200
+que es almacenamiento que reside fuera de la corta vida del contenedor.
+
+00:11:57.200 --> 00:12:01.320
+Si olvidas esto, verás desaparecer datos importantes la primera vez que hagas una limpieza.
+
+00:12:01.760 --> 00:12:02.680
+La maña es otra trampa.
+
+00:12:03.160 --> 00:12:06.160
+Es fácil copiar archivos innecesarios y comenzar desde una base pesada,
+
+00:12:06.460 --> 00:12:09.900
+y cada una de esas selecciones hace que la imagen sea más lenta de mover y de iniciar.
+
+00:12:10.700 --> 00:12:11.880
+Los hábitos de seguridad también importan.
+
+00:12:12.260 --> 00:12:14.480
+Ejecutar todo como usuario root es un atajo común.
+
+00:12:14.960 --> 00:12:16.180
+Root puede hacer cualquier cosa en la máquina,
+
+00:12:16.280 --> 00:12:19.080
+así que un problema dentro de un contenedor raíz tiene mucho más margen para causar daño.
+
+00:12:19.320 --> 00:12:22.300
+Un usuario limitado dentro del contenedor mantiene el radio de impacto pequeño.
+
+00:12:22.900 --> 00:12:26.620
+Por último está el hábito de arreglar un contenedor en ejecución manualmente en lugar de corregir la imagen.
+
+00:12:27.200 --> 00:12:30.220
+Cualquier cambio que hagas a un contenedor en ejecución desaparece la próxima vez que lo inicias.
+
+00:12:30.500 --> 00:12:32.600
+La imagen es la fuente de verdad, así que la corrección pertenece ahí.
+
+00:12:33.940 --> 00:12:36.200
+Un error más silencioso es confundir la imagen con el contenedor.
+
+00:12:36.640 --> 00:12:39.120
+La imagen es el plano congelado que construyes y compartes,
+
+00:12:39.240 --> 00:12:41.360
+y el contenedor es la instancia en ejecución que desechas.
+
+00:12:42.080 --> 00:12:45.400
+Confundir ambos lleva a la gente a tratar un contenedor desechable como si fuera permanente,
+
+00:12:45.460 --> 00:12:47.400
+y esa confusión causa mucha pérdida de trabajo.
+
+00:12:47.580 --> 00:12:49.340
+Un hábito pequeño más ahorra mucho tiempo.
+
+00:12:49.760 --> 00:12:52.180
+Un archivo corto le dice a la compilación qué carpetas omitir,
+
+00:12:52.240 --> 00:12:55.180
+así que los archivos grandes que nunca quisiste incluir se quedan fuera de la imagen
+
+00:12:55.180 --> 00:12:56.480
+y tus compilaciones siguiendo rápidas.
+
+00:12:57.240 --> 00:13:01.560
+Ninguno de estos errores es fatal, y cada uno de ellos es más fácil de evitar que de desenredar después.
+
+00:13:02.300 --> 00:13:03.720
+¿Cuándo no deberías recurrir a los contenedores?
+
+00:13:03.940 --> 00:13:07.340
+Los contenedores son poderosos, y es precisamente por eso que vale la pena ser honestos
+
+00:13:07.340 --> 00:13:08.980
+sobre las ocasiones en que son herramienta equivocada.
+
+00:13:08.980 --> 00:13:13.680
+Si tu carga de trabajo necesita un aislamiento fuerte a nivel de hardware, una máquina virtual es la opción más segura.
+
+00:13:14.420 --> 00:13:18.920
+Lo mismo ocurre con el software que necesita un sistema operativo completamente diferente al de la máquina en la que corre,
+
+00:13:19.140 --> 00:13:21.460
+ya que los contenedores comparten el sistema operativo subyacente.
+
+00:13:22.040 --> 00:13:25.600
+Si tienes una tarea pequeña y única, un contenedor puede ser más complicación de lo que vale,
+
+00:13:25.720 --> 00:13:28.760
+y a veces ejecutar un script o una aplicación normal es simplemente más rápido.
+
+00:13:29.600 --> 00:13:33.120
+Podrías pasar una tarde aprendiendo la herramienta para un trabajo que habría tomado 10 minutos sin aquí.
+
+00:13:33.700 --> 00:13:37.320
+Las cargas de trabajo pesadas que retienen muchos datos a menudo funcionan mejor con otros enfoques
+
+00:13:37.320 --> 00:13:41.080
+porque los contenedores están hechos para ser desechables en lugar de ser hogares a largo plazo para el estado.
+
+00:13:41.780 --> 00:13:43.200
+También hay una curva de aprendizaje que considera.
+
+00:13:43.540 --> 00:13:46.140
+Los contenedores te recompensan una vez que ejecutas muchos de ellos en muchas máquinas.
+
+00:13:46.760 --> 00:13:50.340
+Para un solo proyecto pequeño en la computadora, esa recompensa puede ser difícil de percibir al principio.
+
+00:13:50.780 --> 00:13:52.500
+Nada de eso resta valor a lo que los contenedores hacen.
+
+00:13:52.900 --> 00:13:56.480
+Solo significa que la verdadera habilidad es saber cuándo recurrir a uno y cuándo dejarlo en el estante.
+
+00:13:57.080 --> 00:14:00.860
+Una vez que eliminas la jerga, un contenedor es solo tu aplicación empaquetada con todo lo que necesita
+
+00:14:00.860 --> 00:14:02.640
+para que se ejecute de la misma manera donde quiera que vaya.
+
+00:14:03.120 --> 00:14:05.680
+Esa idea es la razón por la que aparece en gran parte del software moderno.
+
+00:14:06.000 --> 00:14:10.300
+Si esto finalmente te aclara los contenedores, haz clic en suscribirse y seguiré tomando las partes aterradoras de la tecnología
+
+00:14:10.300 --> 00:14:11.480
+y explicándolas de forma sencilla.
