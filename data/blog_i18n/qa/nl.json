@@ -1,75 +1,5 @@
 [
  {
-  "slug": "conquering-the-5000-item-limit-sharepoint-list-architecture-that-scales",
-  "seg": "D",
-  "fehler": "laenge",
-  "src": "Welcome back to the blog! If you have ever built a custom enterprise solution inside Microsoft 365, you have likely run face-first into an invisible wall. Your ",
-  "out": "Welkom terug bij de blog! Als je ooit een maatwerkoplossing voor de enterprise hebt gebouwd binnen Microsoft 365, ben je waarschijnlijk tegen een onzichtbare mu"
- },
- {
-  "slug": "copilot-governance-vs-security-explained-what-it-leaders-need-to-know",
-  "seg": "60",
-  "fehler": "html-tags",
-  "src": "<strong>Complete data and user inventory:</strong> Catalog users, groups, and content repositories Copilot will connect with; clarify who “needs” access, not ju",
-  "out": "<strong>Volledige inventaris van gegevens en gebruikers:</strong> Breng gebruikers, groepen en contentrepositories in kaart waarmee Copilot verbinding gaat make"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "25",
-  "fehler": "unuebersetzt",
-  "src": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo",
-  "out": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "28",
-  "fehler": "unuebersetzt",
-  "src": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t",
-  "out": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "30",
-  "fehler": "unuebersetzt",
-  "src": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;",
-  "out": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "33",
-  "fehler": "unuebersetzt",
-  "src": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has",
-  "out": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "35",
-  "fehler": "unuebersetzt",
-  "src": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let",
-  "out": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "38",
-  "fehler": "unuebersetzt",
-  "src": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end",
-  "out": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end"
- },
- {
-  "slug": "beyond-the-portal-why-manual-microsoft-365-administration-is-costing-you-15-hours-a-week",
-  "seg": "213",
-  "fehler": "unuebersetzt",
-  "src": "GET <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/beta",
-  "out": "GET <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/beta"
- },
- {
-  "slug": "beyond-the-portal-why-manual-microsoft-365-administration-is-costing-you-15-hours-a-week",
-  "seg": "215",
-  "fehler": "unuebersetzt",
-  "src": "PATCH <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/be",
-  "out": "PATCH <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/be"
- },
- {
   "slug": "beyond-the-portal-why-manual-microsoft-365-administration-is-costing-you-15-hours-a-week",
   "seg": "217",
   "fehler": "unuebersetzt",
@@ -3462,5 +3392,75 @@
   "fehler": "unuebersetzt",
   "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: App Attach in Azure Virtua",
   "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: App Attach in Azure Virtua"
+ },
+ {
+  "slug": "content/how-to-enable-screen-capture-protection-with-group-policy-or-intune",
+  "seg": "58",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Screen capture prote",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Screen capture prote"
+ },
+ {
+  "slug": "content/how-to-enable-screen-capture-protection-with-group-policy-or-intune",
+  "seg": "60",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Using Azure Vir",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Using Azure Vir"
+ },
+ {
+  "slug": "content/microsoft-365-adoption-problems-why-rollouts-stall-and-what-to-do",
+  "seg": "61",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/microsoftteams/change-management-strategy\" rel=\"noopener\" target=\"_blank\">Create a change management strategy for Mic",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/microsoftteams/change-management-strategy\" rel=\"noopener\" target=\"_blank\">Create a change management strategy for Mic"
+ },
+ {
+  "slug": "content/microsoft-365-adoption-problems-why-rollouts-stall-and-what-to-do",
+  "seg": "63",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/microsoft_365blog/four-success-factors-for-driving-microsoft-365-adoption/125098\" rel=\"noopener\" target=\"_blan",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/microsoft_365blog/four-success-factors-for-driving-microsoft-365-adoption/125098\" rel=\"noopener\" target=\"_blan"
+ },
+ {
+  "slug": "content/will-ai-replace-power-bi-developers-dax-and-reports",
+  "seg": "54",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-prepare-data-ai\" rel=\"noopener\" target=\"_blank\">Prepare your data for AI in Power BI ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-prepare-data-ai\" rel=\"noopener\" target=\"_blank\">Prepare your data for AI in Power BI "
+ },
+ {
+  "slug": "content/intune-compliance-policies-common-mistakes-and-fixes",
+  "seg": "A1",
+  "fehler": "html-tags",
+  "src": "Microsoft Learn explains that the tenant-wide setting Mark devices with no compliance policy assigned as is set to Compliant by default. Devices without any ass",
+  "out": "Microsoft Learn legt uit dat de instelling op tenantniveau <strong>Apparaten zonder toegewezen nalevingsbeleid markeren als</strong> standaard op Compliant staa"
+ },
+ {
+  "slug": "content/intune-compliance-policies-common-mistakes-and-fixes",
+  "seg": "A2",
+  "fehler": "html-tags",
+  "src": "Change the schedule of the built-in action Mark device noncompliant. Microsoft Learn says the default is 0 days and that a value above 0 creates a grace period.",
+  "out": "Wijzig de planning van de ingebouwde actie <strong>Apparaat markeren als niet-compliant</strong>. Volgens Microsoft Learn is de standaard 0 dagen en creëert een"
+ },
+ {
+  "slug": "content/intune-compliance-policies-common-mistakes-and-fixes",
+  "seg": "A3",
+  "fehler": "html-tags",
+  "src": "No. Microsoft Learn states that the actions for noncompliance do not block access by themselves. Blocking comes from a Microsoft Entra Conditional Access policy",
+  "out": "Nee. Microsoft Learn stelt dat de acties voor niet-naleving op zichzelf de toegang niet blokkeren. Blokkeren gebeurt via een beleid voor Microsoft Entra Voorwaa"
+ },
+ {
+  "slug": "content/screen-capture-protection-in-azure-virtual-desktop-what-it-blocks-and-what-it-doesnt",
+  "seg": "67",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Screen capture prote",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Screen capture prote"
+ },
+ {
+  "slug": "content/choosing-a-display-protection-level-per-host-pool",
+  "seg": "62",
+  "fehler": "html-tags",
+  "src": "Check <a href=\"https://www.m365.fm/entity/intune/\" rel=\"noopener\" target=\"_blank\">Intune</a> Cloud PC monitoring (preview) under <strong>Reports</strong> &gt; <",
+  "out": "Controleer de Intune Cloud PC-monitoring (preview) via <strong>Rapporten</strong> &gt; <strong>Cloud PC monitoring (preview)</strong> &gt; <strong>Connection he"
  }
 ]
