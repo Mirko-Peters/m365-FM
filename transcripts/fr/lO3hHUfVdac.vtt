@@ -1,0 +1,886 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:03.340
+Catalogue Foundry, Microsoft contient désormais plus de 10 ébriens modèles d'IA.
+
+00:00:04.020 --> 00:00:06.900
+Ce chiffre n'a d'importance que si vous pouvez transformer un modèle en outil opérationnel.
+
+00:00:07.620 --> 00:00:10.180
+Vous pourriez penser que cela implique d'embaucher des développeurs et de configurer des serveurs.
+
+00:00:11.120 --> 00:00:15.560
+Le service Foundry Agent permet à Microsoft de créer ses agents fonctionnels sans les contraintes serveurs.
+
+00:00:17.140 --> 00:00:22.520
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent le futur du travail.
+
+00:00:22.960 --> 00:00:25.340
+A la fin, vous saurez ce que c'est, comment cela fonctionne et si vous pouvez l'utiliser.
+
+00:00:25.340 --> 00:00:31.180
+Ce qu'est réellement un agent d'IA. Commençons par ce que vous connaissez déjà, car cela facilitera la suite.
+
+00:00:31.800 --> 00:00:35.160
+Un chatbot attend votre question, vous donne une réponse, puis s'arrête là.
+
+00:00:35.860 --> 00:00:40.440
+Un agent prend votre demande et continue de travailler pour effectuer une recherche, modifie un enregistrement et vous rende compte de ses actions.
+
+00:00:41.080 --> 00:00:43.360
+Imaginez un assistant qui gère vos réservations de voyage à votre place.
+
+00:00:43.880 --> 00:00:48.620
+Vous dites que vous avez besoin d'un voyage le mois prochain. L'assistant vérifie votre calendrier, trouve un vol, le réserve et vous envoie les détails.
+
+00:00:49.480 --> 00:00:52.500
+Chatbot se contenterait d'expliquer comment réserver ce vol, tandis qu'un agent procède d'invasion.
+
+00:00:52.500 --> 00:00:56.300
+L'automatisation simple est différente, et il est utile de bien distinguer les deux.
+
+00:00:56.820 --> 00:01:00.920
+L'automatisation suit une série d'étapes fixes à chaque fois, elle échoue donc dès qu'un imprévu survient.
+
+00:01:02.020 --> 00:01:08.280
+Un agent décide de la prochaine étape en fonction de ce qu'il découvre, ce qui lui permet de mieux gérer la complexité du monde réel.
+
+00:01:09.160 --> 00:01:13.520
+Si cela semble être une mince différence, pensez autant que vous passez chaque jour à rechercher des informations.
+
+00:01:14.160 --> 00:01:17.220
+Quelqu'un demande une mise à jour et vous devez consulter trois systèmes pour répondre.
+
+00:01:17.400 --> 00:01:22.020
+Un agent peut effectuer cette ouverture et cette vérification pour vous, et vous fournir la réponse avec le travail déjà accompli.
+
+00:01:22.500 --> 00:01:23.900
+Chaque agent a besoin de trois éléments simples.
+
+00:01:24.560 --> 00:01:28.120
+Premier est un modèle, l'IA qui lie votre demande et décide de la suite des opérations.
+
+00:01:28.880 --> 00:01:32.420
+Le deuxième est constitué d'instructions qui servent de fiches de poste et définissent le rôle de l'agent.
+
+00:01:33.300 --> 00:01:37.880
+Le troisième comprend les outils, c'est-à-dire les moyens d'action de l'agent, comme naviguer sur le web ou mettre à jour une donnée.
+
+00:01:38.540 --> 00:01:43.640
+Combiner ces trois parties, et vous obtenez un outil capable d'exécuter une tâche en plusieurs étapes au lieu de s'arrêter à une simple réponse.
+
+00:01:43.640 --> 00:01:48.160
+C'est le concept fondamental de tous les agents que vous découvrirez aujourd'hui, peu importe leur nom.
+
+00:01:48.820 --> 00:01:50.300
+Le modèle, en fin de compte, est la partie la plus simple.
+
+00:01:50.680 --> 00:01:54.620
+Tout ce qui l'entoure constitue le véritable travail, et nous reviendrons sur cette idée dans quelques minutes.
+
+00:01:55.660 --> 00:01:57.640
+Ce qu'est le service Microsoft Fondry Agent ?
+
+00:01:57.640 --> 00:01:58.800
+À présent, donnons un nom au produit.
+
+00:01:59.600 --> 00:02:04.120
+Microsoft est la plateforme, et Fondry Agent Service est la partie conçue pour créer et exécuter des agents.
+
+00:02:04.800 --> 00:02:07.080
+Il réside dans Azure, qui est simplement le cloud Microsoft,
+
+00:02:07.360 --> 00:02:10.920
+l'endroit où les entreprises louent de la puissance de calcul au lieu d'acheter et d'entretenir leur propre machine.
+
+00:02:10.920 --> 00:02:12.680
+Le nom est aussi un petit indice.
+
+00:02:13.600 --> 00:02:17.020
+Une fonderie est un endroit où entrent des matières premières et d'où sortent des produits finis.
+
+00:02:17.320 --> 00:02:18.500
+Et c'est à peu près l'idée ici.
+
+00:02:19.120 --> 00:02:21.620
+Des modèles et des outils entrent, et des agents opérationnels sortent de l'autre côté.
+
+00:02:22.240 --> 00:02:23.660
+Le mot qui compte le plus ici est Calas.
+
+00:02:24.240 --> 00:02:27.980
+Lorsqu'une solution est gérée, Microsoft s'occupe des serveurs, de la mise à l'échelle et des mises à jour,
+
+00:02:28.100 --> 00:02:30.680
+afin que vous consacriez votre temps à l'agent, plutôt qu'à l'infrastructure.
+
+00:02:31.300 --> 00:02:34.820
+Vous payez toujours pour ce que vous utilisez, mais vous ne restez pas debout à 2h du matin pour redémarrer une machine.
+
+00:02:34.920 --> 00:02:38.440
+Ce seul mot explique pourquoi un débutant peut rendre quelque chose opérationnel en une après-midi.
+
+00:02:38.440 --> 00:02:41.200
+Foundry vous accueille également quel que soit votre niveau de confort.
+
+00:02:41.880 --> 00:02:45.440
+D'un côté, vous construisez un agent avec seulement des paramètres et des instructions écrites simples,
+
+00:02:45.660 --> 00:02:47.440
+ce qui signifie aucune programmation.
+
+00:02:48.240 --> 00:02:52.380
+De l'autre côté, vous apportez votre propre code et votre propre framework, et Foundry les exécute pour vous.
+
+00:02:52.840 --> 00:02:57.140
+Vous pouvez commencer par le côté simple et évoluer vers le code plus tard, sans jeter ce que vous avez construit.
+
+00:02:58.060 --> 00:03:00.960
+Il existe trois types d'agents à connaître, et leurs noms sont plus conviviaux qu'ils n'en ont l'air.
+
+00:03:01.440 --> 00:03:05.480
+Un agent de prompt est construit à partir de paramètres et d'instructions, et c'est le point de départ le plus rapide.
+
+00:03:06.360 --> 00:03:08.260
+Un agent vocal est conçu pour les conversations orales.
+
+00:03:08.440 --> 00:03:10.440
+Il peut donc répondre au téléphone ou dans un navigateur.
+
+00:03:11.060 --> 00:03:16.080
+Un agent hébergé est votre propre code encapsulé et exécuté par Foundry, avec les serveurs et la mise à l'échelle gérée pour vous.
+
+00:03:16.440 --> 00:03:19.760
+La plupart des gens commencent avec le premier type et n'ont jamais besoin des deux autres, ce qui est parfaitement acceptable.
+
+00:03:20.840 --> 00:03:26.200
+Tous ces trois types, Foundry réunit agents, modèles et outils en un seul endroit, avec un contrôle d'accès et une surveillance partagée.
+
+00:03:26.200 --> 00:03:32.040
+En pratique, cela signifie un seul endroit pour se connecter, définir les permissions et surveiller ce que font vos agents.
+
+00:03:32.840 --> 00:03:37.200
+C'est important plus tard, lorsque vous voulez savoir qui peut modifier un agent et ce que cet agent a fait.
+
+00:03:38.100 --> 00:03:39.460
+Les modèles, le cerveau que vous pouvez changer.
+
+00:03:40.240 --> 00:03:43.100
+Chaque agent fonctionne sur un modèle, et le modèle est la partie qui réfléchit.
+
+00:03:43.100 --> 00:03:48.980
+Considérez-le comme le cerveau de l'agent, car il décide quoi dire ou faire, tandis que les outils gèrent l'exécution.
+
+00:03:49.620 --> 00:03:51.520
+L'échelle ici est plus vaste que ce que la plupart des gens imaginent.
+
+00:03:52.080 --> 00:03:57.760
+Le catalogue Foundry propose plus de 10 et 8 modèles créés par Microsoft, OpenAI, Anthropic, Meta et bien d'autres.
+
+00:03:58.540 --> 00:04:01.540
+Avoir autant d'options peut sembler intimidant, mais vous n'avez pas besoin de chercher longtemps,
+
+00:04:01.680 --> 00:04:04.880
+car vous commencez avec une valeur par défaut judicieuse et pouvez changer d'avis plus tard.
+
+00:04:05.660 --> 00:04:09.040
+L'aspect pratique pour vous, c'est que vous pouvez changer de modèle sans avoir à réécrire votre agent.
+
+00:04:09.040 --> 00:04:11.640
+Si un modèle rapide et peu coûteux suffit, vous utilisez celui-là.
+
+00:04:12.540 --> 00:04:15.800
+Si une tâche plus complexe nécessite un modèle plus puissant, vous modifiez un seul paramètre,
+
+00:04:15.900 --> 00:04:17.040
+et gardez tout le reste tel quel.
+
+00:04:17.780 --> 00:04:21.220
+Cette liberté est importante, car elle signifie que vous n'êtes pas enfermé dans un choix fait dès le premier jour.
+
+00:04:21.640 --> 00:04:25.440
+Différents travaux conviennent à différents modèles, tout comme différentes courses nécessitent différents véhicules.
+
+00:04:26.060 --> 00:04:29.160
+Une réponse rapide est une petite course, tandis qu'une longue chaîne de raisonnement minutieux en est une grande.
+
+00:04:29.800 --> 00:04:32.260
+Le modèle que vous choisissez doit correspondre au poids de la tâche qui lui est confiée.
+
+00:04:32.840 --> 00:04:35.640
+Le catalogue couvre également un large éventail, des modèles minuscules,
+
+00:04:35.640 --> 00:04:38.840
+qui ne coûtent presque rien aux modèles larges qui résolvent des problèmes difficiles étape par étape.
+
+00:04:39.940 --> 00:04:43.280
+Vous n'avez pas besoin de tout mémoriser, car l'essentiel est simplement que vous ayez des options
+
+00:04:43.280 --> 00:04:45.260
+et que vous puissiez changer d'avis sans reconstruire l'agent.
+
+00:04:46.160 --> 00:04:48.920
+Vous avez donc un cerveau interchangeable, ce qui est déjà très utile en soi.
+
+00:04:49.460 --> 00:04:51.540
+Le problème est qu'un cerveau ne peut pas lever le petit doigt tout seul,
+
+00:04:51.640 --> 00:04:53.880
+et c'est exactement ce manque que la partie suivante comble.
+
+00:04:54.920 --> 00:04:55.740
+Outils et connaissances.
+
+00:04:56.000 --> 00:04:57.720
+Comment les agents passent à l'action ?
+
+00:04:57.720 --> 00:05:00.820
+Un modèle seul ne peut que parler, et parler n'est pas la même chose qu'agir.
+
+00:05:01.540 --> 00:05:03.440
+Pour accomplir un vrai travail, un agent a besoin d'outils.
+
+00:05:03.440 --> 00:05:06.220
+Et un outil est simplement une capacité que l'agent est autorisé à utiliser.
+
+00:05:06.740 --> 00:05:09.120
+Si le modèle est le cerveau, les outils sont les mains.
+
+00:05:09.620 --> 00:05:11.620
+Fandry est livré avec des outils intégrés que vous pouvez activer.
+
+00:05:12.460 --> 00:05:15.380
+La recherche web trouve des informations, la recherche de fichiers et de vos documents.
+
+00:05:15.820 --> 00:05:18.340
+Et un interpréteur de code exécute des calculs et de petits programmes.
+
+00:05:18.800 --> 00:05:22.720
+La mémoire est le quatrième élément, et elle permet à l'agent de conserver des détails utiles entre les conversations.
+
+00:05:23.160 --> 00:05:26.420
+Tous sont prêts à l'emploi, vous obtenez donc une vraie valeur avant même de connecter vos propres ressources.
+
+00:05:26.900 --> 00:05:29.560
+Vous n'êtes pas limité à ceci, car vous pouvez également ajouter vos propres outils.
+
+00:05:29.560 --> 00:05:38.000
+Vous pouvez connecter un outil via une fonction, une définition d'API ouverte ou via MCP, un standard de connexion partagée qui permet aux outils d'IA de se relier à d'autres systèmes.
+
+00:05:39.440 --> 00:05:44.120
+L'appellation importe moins qu'idée, votre agent peut accéder au système que votre entreprise utilise déjà.
+
+00:05:45.240 --> 00:05:46.520
+La connaissance est l'autre moitié de l'histoire.
+
+00:05:47.020 --> 00:05:52.760
+Vous pouvez orienter un agent vers votre propre contenu, comme des fichiers SharePoint, des données dans Microsoft Fabric ou des résultats actuels de Bing.
+
+00:05:52.760 --> 00:06:00.560
+Lorsqu'un agent répond à partir de vos données réelles au lieu de deviner, on appelle cela le grounding, et c'est la différence entre une réponse confiante et une réponse confiante et une réponse correcte.
+
+00:06:01.180 --> 00:06:03.200
+Il reste un élément important à connaître, la boîte à outils.
+
+00:06:03.800 --> 00:06:11.560
+Une boîte à outils vous permet de rassembler vos outils, de les exposer via une connexion unique, et de les réutiliser sur plusieurs agents, avec une connexion et des contrôles partagés.
+
+00:06:12.160 --> 00:06:15.080
+Cela vous évite de devoir intégrer le même outil dans chaque nouvel agent que vous créez.
+
+00:06:15.080 --> 00:06:17.980
+Pour rendre cela concret, imaginez un agent qui aide à intégrer un nouvel employé.
+
+00:06:18.760 --> 00:06:25.900
+En une seule requête, il pourrait extraire les consignes d'intégration d'une base de connaissances, créer le compte, rédiger un email de bienvenue et publier un message dans le canal de l'équipe.
+
+00:06:26.580 --> 00:06:29.620
+Il s'agit de plusieurs outils et systèmes travaillant ensemble pour une seule requête.
+
+00:06:30.240 --> 00:06:33.640
+Et c'est à ce moment qu'un agent cesse d'être une curiosité pour devenir vraiment utile.
+
+00:06:34.400 --> 00:06:36.020
+Vous comprenez maintenant pourquoi le modèle était la partie facile.
+
+00:06:36.640 --> 00:06:42.260
+Le travail réside dans les outils, les données et les autorisations associées, et la boîte à outils est la solution de Microsoft pour rendre ce travail gérable.
+
+00:06:42.260 --> 00:06:52.340
+La mémoire est ce qui fait qu'un agent ressemble moins à une barre de recherche qu'à un collègue et tout repose sur quelques termes qui confondaient tout le monde.
+
+00:06:53.680 --> 00:06:56.600
+La bonne nouvelle est que ces termes se simplifient, donc cette partie est plus facile qu'il n'y paraît.
+
+00:06:57.840 --> 00:07:00.040
+Auparavant, une conversation était appelée un fil de discussion.
+
+00:07:00.800 --> 00:07:04.140
+Un fil de discussion contenait vos messages, qui représentaient les échanges entre vous et l'agent.
+
+00:07:04.720 --> 00:07:09.660
+Chaque fois que l'agent intervenait, c'était une exécution, et vous pouviez suivre son passage de l'attente au traitement puis à la finalisation.
+
+00:07:09.660 --> 00:07:12.340
+La nouvelle méthode conserve le concept tout en changeant les noms.
+
+00:07:12.960 --> 00:07:17.660
+Une conversation contient désormais l'historique, et une réponse est ce que l'agent produit, qu'il s'agisse d'une réponse textuelle ou d'une action.
+
+00:07:18.460 --> 00:07:23.620
+Les fils de discussion sont devenus des conversations, et les exécutions des réponses, voilà tout le changement en une ligne.
+
+00:07:24.220 --> 00:07:26.040
+Ce changement va au-delà d'une simple clarification terminologique.
+
+00:07:26.340 --> 00:07:32.040
+Une conversation peut stocker plus que des messages, car elle garde aussi une trace des outils appelés par l'agent et de leurs résultats.
+
+00:07:32.620 --> 00:07:36.540
+L'agent bénéficie d'une mémoire plus riche, ce qui lui permet de mieux reprendre là où vous vous étiez arrêté.
+
+00:07:36.540 --> 00:07:38.280
+L'historique est important pour une raison pratique.
+
+00:07:38.700 --> 00:07:44.220
+La plupart des tâches utiles nécessitent plus d'un message, et un agent qui oublie la première moitié d'une requête n'est pas très utile.
+
+00:07:44.880 --> 00:07:49.600
+Conserver la conversation permet à l'agent de suivre un fil de pensée au fil des échanges, comme le ferait une personne.
+
+00:07:50.080 --> 00:07:52.280
+C'est ce que vous avez ressenti dans tous les bons outils de chat que vous avez utilisés.
+
+00:07:52.540 --> 00:07:57.780
+Vous posez une question complémentaire sans vous répéter, et l'outil comprend, car il a gardé les échanges précédents en mémoire.
+
+00:07:58.720 --> 00:08:02.020
+Conversation confère à un agent cette même capacité, c'est pourquoi elles sont au cœur de son fonctionnement.
+
+00:08:02.020 --> 00:08:08.560
+Une remarque pratique, si vous avez consulté d'anciens guides, sachez que l'ancien système de thread et d'exécution est remplacé par celui-ci.
+
+00:08:09.380 --> 00:08:12.080
+Si vous apprenez aujourd'hui, retenez donc les termes conversation et coréconsuc.
+
+00:08:12.520 --> 00:08:13.840
+C'est vers là que la plateforme évolue.
+
+00:08:14.780 --> 00:08:16.560
+L'hébergement et la mise à l'échelle sont essentielles.
+
+00:08:17.160 --> 00:08:20.760
+Un agent doit s'exécuter quelque part, et ce lieu doit rester disponible pour les utilisateurs.
+
+00:08:21.520 --> 00:08:24.440
+C'est ce que signifie l'hébergement, et c'est une tâche que vous préférez confier à quelqu'un d'autre.
+
+00:08:25.280 --> 00:08:27.180
+Pour un agent avec prompt, l'hébergement n'est quasiment pas un sujet.
+
+00:08:27.700 --> 00:08:31.280
+Microsoft s'en occupe pour vous, il n'y a donc rien à installer, à corriger ou à redémarrer.
+
+00:08:31.520 --> 00:08:34.780
+Vous rédigez les instructions, choisissez les outils, et l'agent est simplement là quand on l'appelle.
+
+00:08:35.440 --> 00:08:38.600
+Les agents hébergés demandent un peu plus d'explications, car vous apportez votre propre code.
+
+00:08:39.880 --> 00:08:42.780
+Foundry exécute ce code dans un espace isolé pour chaque session,
+
+00:08:43.360 --> 00:08:45.900
+ce qui signifie que le travail de chacun reste séparé.
+
+00:08:47.240 --> 00:08:49.680
+Lorsque davantage de personnes utilisent l'agent, il évolue automatiquement,
+
+00:08:49.680 --> 00:08:51.460
+et il se réduit quand l'usage diminue.
+
+00:08:51.980 --> 00:08:55.140
+Le comportement au repos mérite qu'on s'y attarde, car il répond à la question du coût.
+
+00:08:55.140 --> 00:08:59.500
+Quand personne n'utilise un agent, il se met en veille et son état est conservé en toute sécurité.
+
+00:09:00.640 --> 00:09:03.680
+Lorsqu'un utilisateur revient, il se réveille exactement là où il s'était arrêté,
+
+00:09:03.960 --> 00:09:05.240
+sans que vous payiez pour les heures creuses.
+
+00:09:06.800 --> 00:09:10.000
+Chaque agent hébergé reçoit automatiquement sa propre identité et sa propre adresse,
+
+00:09:10.140 --> 00:09:11.220
+ce qui prépare la suite.
+
+00:09:12.200 --> 00:09:15.500
+Cette identité permet à l'agent de prouver qui il est lorsqu'il accède à vos systèmes.
+
+00:09:16.440 --> 00:09:19.020
+Dernier détail mérite d'être connu, même s'il reste invisible pour vous.
+
+00:09:19.020 --> 00:09:22.280
+Les agents hébergés tournent dans de nombreuses régions azur,
+
+00:09:22.380 --> 00:09:26.020
+permettant aux entreprises de garder leurs agents proches, de leur donner un...
+
+00:09:26.780 --> 00:09:30.080
+Pour vous, la version courte et que la mise à l'échelle est un problème déjà résolu par la plateforme.
+
+00:09:31.780 --> 00:09:33.240
+Sécurité, identité et évaluation.
+
+00:09:33.780 --> 00:09:36.240
+Dès qu'un agent accède à vos systèmes, la confiance devient primordiale,
+
+00:09:36.360 --> 00:09:38.760
+et c'est là que la plateforme gérée justifie sa place.
+
+00:09:39.760 --> 00:09:40.600
+Commençons par l'identité.
+
+00:09:40.980 --> 00:09:42.760
+Chaque agent peut avoir sa propre connexion,
+
+00:09:42.900 --> 00:09:45.460
+ce qui signifie qu'il n'accède qu'à ce que vous autorisez.
+
+00:09:45.460 --> 00:09:48.580
+Vous pouvez également voir ce qu'il a fait, ce qui rend l'agent responsable,
+
+00:09:48.680 --> 00:09:50.100
+contrairement à un mot de passe partagé.
+
+00:09:51.000 --> 00:09:52.240
+Les garde-fous constituent la deuxième couche.
+
+00:09:52.540 --> 00:09:54.900
+Il s'agit de filtres intégrés qui aident à bloquer les contenus non sécurisés.
+
+00:09:55.320 --> 00:09:58.120
+Elles réduisent également le risque que quelqu'un trompe l'agent via une requête.
+
+00:09:58.380 --> 00:10:01.860
+Une pratique consistant à glisser des instructions cachées dans ce que l'agent lit.
+
+00:10:02.540 --> 00:10:04.800
+Vous pouvez également maintenir un agent au sein de votre réseau privé,
+
+00:10:05.180 --> 00:10:07.220
+afin que ces données ne circulent pas là où vous ne l'avez pas autorisé.
+
+00:10:07.660 --> 00:10:10.940
+L'évaluation est la partie qui surprend les utilisateurs, car elle fonctionne exactement comme un test.
+
+00:10:11.500 --> 00:10:14.480
+Foundry inclut des vérificateurs qui notent si l'agent a terminé la tâche,
+
+00:10:14.480 --> 00:10:17.940
+s'il a suivi vos instructions et s'il a utilisé les bons outils en cours de route.
+
+00:10:18.940 --> 00:10:20.960
+Vous pouvez les considérer comme des tests unitaires pour un agent,
+
+00:10:21.180 --> 00:10:23.060
+qui s'exécute avant que de vraies personnes ne doivent s'y fiers.
+
+00:10:23.720 --> 00:10:25.400
+L'observabilité est le dernier élément,
+
+00:10:26.320 --> 00:10:29.000
+et cela signifie simplement que vous pouvez retracer chaque étape franchie par l'agent.
+
+00:10:29.320 --> 00:10:30.980
+En cas de problème, vous suivez la trace au lieu de deviner,
+
+00:10:31.080 --> 00:10:32.760
+c'est ainsi que la confiance se construit au fil du temps.
+
+00:10:33.580 --> 00:10:35.460
+Rien de tout cela ne signifie que vous pouvez vous passer de votre propre joueur.
+
+00:10:35.840 --> 00:10:37.220
+Une plateforme gérée vous donne les commandes,
+
+00:10:37.300 --> 00:10:39.320
+mais c'est vous qui décidez de ce qu'un agent est autorisé à faire
+
+00:10:39.320 --> 00:10:40.740
+et du degré de confiance à lui accorder.
+
+00:10:40.740 --> 00:10:44.360
+L'approche censée consiste à commencer par une petite tâche à faible risque,
+
+00:10:44.780 --> 00:10:45.960
+à observer le comportement de l'agent,
+
+00:10:46.080 --> 00:10:48.380
+et à étendre son périmètre à mesure que votre confiance grandit.
+
+00:10:48.880 --> 00:10:49.620
+Lorsqu'un agent est prêt,
+
+00:10:49.680 --> 00:10:52.440
+vous pouvez le publier sur Microsoft Teams et Microsoft 365 Copilot
+
+00:10:52.440 --> 00:10:55.120
+afin que les utilisateurs le rencontrent dans les outils qu'ils utilisaient quotidiennement.
+
+00:10:55.680 --> 00:10:57.500
+C'est ce qui distingue une expérience ingénieuse d'un outil
+
+00:10:57.500 --> 00:10:59.000
+sur lequel votre équipe peut réellement s'appuyer.
+
+00:10:59.680 --> 00:11:01.580
+Quel est le lien avec Copilot Studio ?
+
+00:11:01.580 --> 00:11:03.340
+A ce stade, une question légitime se pose,
+
+00:11:03.420 --> 00:11:05.420
+car Microsoft propose plusieurs façons de créer un agent,
+
+00:11:05.540 --> 00:11:07.080
+et les noms commencent à se confondre.
+
+00:11:07.080 --> 00:11:08.340
+Clarifions les choses.
+
+00:11:08.680 --> 00:11:10.160
+Copilot Studio est la porte d'entrée Low-Code.
+
+00:11:10.780 --> 00:11:12.800
+Il est conçu pour les utilisateurs métiers et les créateurs,
+
+00:11:12.960 --> 00:11:14.960
+et se connecte rapidement aux outils Microsoft 365
+
+00:11:14.960 --> 00:11:17.480
+et aux connecteurs Power Platform que votre entreprise possède déjà.
+
+00:11:18.280 --> 00:11:19.020
+Pour de nombreuses équipes,
+
+00:11:19.100 --> 00:11:20.860
+c'est le chemin le plus rapide vers un agent opérationnel.
+
+00:11:21.400 --> 00:11:23.540
+Si votre objectif est d'obtenir un assistant utile dans Teams,
+
+00:11:23.700 --> 00:11:24.820
+c'est généralement par là qu'il faut commencer.
+
+00:11:25.300 --> 00:11:26.480
+Fandry est la porte d'entrée Pro-Code.
+
+00:11:26.940 --> 00:11:28.080
+Il vous donne le contrôle sur le modèle,
+
+00:11:28.220 --> 00:11:28.960
+sur vos propres données,
+
+00:11:28.960 --> 00:11:30.320
+et sur les configurations complexes
+
+00:11:30.320 --> 00:11:31.620
+où plusieurs agents travaillent ensemble.
+
+00:11:32.320 --> 00:11:33.960
+Lorsqu'un projet nécessite une logique personnalisée,
+
+00:11:34.060 --> 00:11:35.680
+un modèle spécifique ou une montée en charge importante,
+
+00:11:35.680 --> 00:11:36.780
+c'est la porte qu'il faut franchir.
+
+00:11:37.200 --> 00:11:38.960
+Il s'agit de deux portes menant à la même maison, pas de rival.
+
+00:11:39.700 --> 00:11:41.380
+De nombreuses équipes commencent par Copilot Studio
+
+00:11:41.380 --> 00:11:42.200
+pour une victoire rapide
+
+00:11:42.200 --> 00:11:43.820
+et se tournent vers Fandry lorsque les besoins augmentent.
+
+00:11:44.520 --> 00:11:45.860
+Les deux peuvent même fonctionner côte à côte,
+
+00:11:46.000 --> 00:11:46.780
+l'un gérant la conversation
+
+00:11:46.780 --> 00:11:48.200
+et l'autre effectuant le travail de fond,
+
+00:11:48.580 --> 00:11:50.000
+partagent également la même stratégie de gouvernance.
+
+00:11:50.380 --> 00:11:52.040
+Tous deux sont soumis au même contrôle d'identité
+
+00:11:52.040 --> 00:11:52.720
+et donné Microsoft
+
+00:11:52.720 --> 00:11:54.060
+de sorte que votre équipe de sécurité
+
+00:11:54.060 --> 00:11:56.000
+conserve une méthode unique de surveillance des agents
+
+00:11:56.000 --> 00:11:56.640
+au lieu d'eux.
+
+00:11:57.440 --> 00:11:59.060
+Repose même sur la même plateforme sous-jacente,
+
+00:11:59.180 --> 00:12:00.380
+pourquoi les compétences acquises sur l'un
+
+00:12:00.380 --> 00:12:02.420
+sont directement transférables à l'autre ?
+
+00:12:02.420 --> 00:12:03.780
+La leçon pratique est simple comme en s'élégé
+
+00:12:03.780 --> 00:12:04.840
+et développée à votre rythme
+
+00:12:04.840 --> 00:12:06.420
+lorsque le besoin s'en fait réellement sentir
+
+00:12:06.420 --> 00:12:08.820
+ce que les gens construisent réellement avec.
+
+00:12:09.420 --> 00:12:10.860
+Il est utile de voir à quoi cela ressemble
+
+00:12:10.860 --> 00:12:11.860
+dans une vraie entreprise,
+
+00:12:12.080 --> 00:12:13.900
+car quelques modèles reviennent sans cesse.
+
+00:12:14.480 --> 00:12:15.800
+Le support client arrive en premier
+
+00:12:15.800 --> 00:12:17.160
+où un agent se connecte au système
+
+00:12:17.160 --> 00:12:18.140
+contenant vos données clients,
+
+00:12:18.380 --> 00:12:19.720
+appelé CRM pour traiter
+
+00:12:19.720 --> 00:12:21.240
+les questions courantes en temps réel.
+
+00:12:22.140 --> 00:12:23.520
+Le travail répétitif est un autre domaine
+
+00:12:23.520 --> 00:12:24.580
+où un agent planifie des réunions,
+
+00:12:24.800 --> 00:12:26.020
+envoie des rappels et génère des rapports
+
+00:12:26.020 --> 00:12:27.220
+pour que vous n'ayez plus à tout faire manuellement.
+
+00:12:28.180 --> 00:12:29.540
+Il y a ensuite une victoire plus discrète
+
+00:12:29.540 --> 00:12:30.980
+où un agent lit les données actuelles
+
+00:12:30.980 --> 00:12:33.080
+et revient avec une analyse ou une recommandation.
+
+00:12:33.480 --> 00:12:34.340
+Il est plus facile d'imaginer
+
+00:12:34.340 --> 00:12:35.460
+des exemples concrets que des catégories.
+
+00:12:36.060 --> 00:12:37.460
+BMW utilise l'IA multi-agents
+
+00:12:37.460 --> 00:12:38.400
+afin que ses ingénieurs obtiennent
+
+00:12:38.400 --> 00:12:39.740
+des informations exploitables immédiatement
+
+00:12:39.740 --> 00:12:41.180
+à partir des données de mesure des véhicules.
+
+00:12:41.860 --> 00:12:43.460
+KPMG opère dans un secteur réglementé
+
+00:12:43.460 --> 00:12:44.420
+et s'appuie sur la gouvernance
+
+00:12:44.420 --> 00:12:45.560
+et l'observabilité de la plateforme
+
+00:12:45.560 --> 00:12:47.040
+pour que ses agents restent responsables.
+
+00:12:47.560 --> 00:12:49.140
+Les mêmes modèles apparaissent dans tous les secteurs,
+
+00:12:49.360 --> 00:12:51.040
+d'une banque traitant des questions de compte courante
+
+00:12:51.040 --> 00:12:52.560
+à un fabricant extrayant des informations
+
+00:12:52.560 --> 00:12:54.020
+de données machine, machine.
+
+00:12:54.560 --> 00:12:55.280
+Les détails changent,
+
+00:12:55.600 --> 00:12:56.860
+mais la nature du travail reste la même.
+
+00:12:57.500 --> 00:12:58.500
+Il y a ensuite la question du coût
+
+00:12:58.500 --> 00:12:59.720
+et la réponse est plus avantageuse
+
+00:13:00.980 --> 00:13:02.500
+Microsoft ne facture pas de frais supplémentaires
+
+00:13:02.500 --> 00:13:03.440
+pour la création ou l'exécution
+
+00:13:03.440 --> 00:13:04.160
+d'agents natifs Fondry
+
+00:13:04.160 --> 00:13:05.320
+avec des invites et des flux de travail.
+
+00:13:06.220 --> 00:13:07.880
+Vous payez pour l'utilisation du modèle sous-jacent
+
+00:13:07.880 --> 00:13:09.320
+ainsi que pour les outils et les données connectées,
+
+00:13:09.400 --> 00:13:10.400
+ce qui signifie que le coût correspond
+
+00:13:10.400 --> 00:13:11.760
+au travail réellement effectué par l'agent.
+
+00:13:13.780 --> 00:13:14.820
+Récapitulatif et une question pour vous.
+
+00:13:15.520 --> 00:13:16.560
+Faisons une synthèse rapide.
+
+00:13:17.280 --> 00:13:18.880
+Un agent est un modèle associé à des instructions
+
+00:13:18.880 --> 00:13:19.400
+et des outils,
+
+00:13:19.560 --> 00:13:21.400
+capable d'accomplir une tâche en plusieurs étapes
+
+00:13:21.400 --> 00:13:23.000
+plutôt que de s'arrêter à une seule réponse.
+
+00:13:23.920 --> 00:13:25.360
+Microsoft Fondry Agent Service
+
+00:13:25.360 --> 00:13:26.720
+est la plateforme qui gère les éléments
+
+00:13:26.720 --> 00:13:27.440
+entourant le modèle,
+
+00:13:27.760 --> 00:13:28.980
+notamment les outils, la mémoire,
+
+00:13:28.980 --> 00:13:30.340
+l'identité, l'hébergement
+
+00:13:30.340 --> 00:13:31.640
+et le contrôle du travail
+
+00:13:31.640 --> 00:13:32.700
+et le contrôle du travail.
+
+00:13:32.800 --> 00:13:33.780
+Vous pouvez commencer sans code
+
+00:13:33.780 --> 00:13:35.120
+et passer au code quand vous vous sentirez pris.
+
+00:13:35.860 --> 00:13:37.100
+Copilot Studio est la porte d'entrée
+
+00:13:37.100 --> 00:13:37.880
+au code au Géphandry
+
+00:13:37.880 --> 00:13:39.240
+et Fondry la porte pro-code au Géphandry.
+
+00:13:39.440 --> 00:13:40.640
+Mais les deux mènent à la même maison.
+
+00:13:41.020 --> 00:13:42.080
+Ce qu'il faut retenir, c'est ceci.
+
+00:13:42.920 --> 00:13:44.680
+Le cerveau de l'IA n'a jamais été la partie difficile,
+
+00:13:44.800 --> 00:13:45.760
+c'est tout ce qui l'entoure qui l'était
+
+00:13:45.760 --> 00:13:47.640
+et c'est exactement ce que la plateforme vous épargne.
+
+00:13:48.220 --> 00:13:49.220
+Voici donc ma question pour vous.
+
+00:13:49.620 --> 00:13:50.520
+J'aimerais beaucoup connaître votre réponse.
+
+00:13:51.140 --> 00:13:52.220
+Si vous pouviez confier une tâche
+
+00:13:52.220 --> 00:13:52.820
+à un agent de main,
+
+00:13:52.820 --> 00:13:54.640
+laquelle délégriez-vous en priorité
+
+00:13:54.640 --> 00:13:57.100
+et laquelle préfériez-vous qu'il ignore ?
+
+00:13:57.100 --> 00:13:58.480
+Si cette question vous a fait réfléchir,
+
+00:13:58.740 --> 00:14:00.140
+laissez votre réponse dans les commentaires
+
+00:14:00.140 --> 00:14:02.540
+et abonnez-vous au podcast M365FM
+
+00:14:02.540 --> 00:14:04.420
+pour plus d'épisodes simplement expliqués
+
+00:14:04.420 --> 00:14:06.220
+qui rendent ce monde un peu moins intimidant.

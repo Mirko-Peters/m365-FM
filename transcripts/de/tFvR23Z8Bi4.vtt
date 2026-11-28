@@ -1,0 +1,1549 @@
+WEBVTT
+
+00:00:00.020 --> 00:00:03.540
+Ein externes Unternehmen kann die Azure Setup verwalten, ohne jemals ihr Kennwort zu kennen.
+
+00:00:04.060 --> 00:00:07.360
+Genau das leistet Azure Lighthouse und damit hat Microsoft ein wöchentliches Problem gelöst.
+
+00:00:07.880 --> 00:00:12.480
+Ein Unternehmen, das die Cloud für andere Unternehmen verwaltet, benötigte früher für jedes Kundenkonto einen separaten Login.
+
+00:00:12.900 --> 00:00:17.100
+Lighthouse ersetzt dies durch eine einzige signierte Tür, die sich nur in eine Richtung öffnen lässt und über die Kontrolle hat.
+
+00:00:17.620 --> 00:00:23.320
+Willkommen zum M3FM vom WasteFM Podcast, in dem wir die Menschen Ideen und Technologien vorstellen, die die Zukunft der Arbeit gestalten.
+
+00:00:23.940 --> 00:00:27.780
+Am Ende können Sie erklären, wie der Handschlag dahinter funktioniert und welche Grenze Anfänger übersehen.
+
+00:00:27.780 --> 00:00:30.220
+Das Problem der zwei Häuser.
+
+00:00:30.720 --> 00:00:33.560
+Wenn sich ein Unternehmen für die Cloud von Microsoft anmeldet, hält es keine gemeinsame Lobby.
+
+00:00:33.920 --> 00:00:36.780
+Es erhält seine eigene private Welt und Microsoft bezeichnet diese Welt als Mieter.
+
+00:00:37.240 --> 00:00:40.640
+Stellen Sie sich ein Mieter wie ein Haus mit eigenen Schlössern, eigenen Räumen und eigener Gästeliste vor.
+
+00:00:41.060 --> 00:00:44.760
+Alles, was das Unternehmen Azure oder Microsoft 365 betreibt, befindet sich innerhalb dieser Mauer.
+
+00:00:45.200 --> 00:00:47.880
+Sinn und Zweck dieses Designs ist, dass kein anderes Unternehmen eindringen kann.
+
+00:00:48.940 --> 00:00:53.960
+Diese Trennung ist gut für die Sicherheit, aber unerträglich für alle, deren Job es ist, die Cloud im Auftrag anderer zu betreiben.
+
+00:00:54.420 --> 00:00:55.620
+Stellen Sie sich die alte Realität vor.
+
+00:00:55.620 --> 00:00:59.640
+Angenommen, Sie leiten ein IT-Unternehmen und kümmern sich um das Azure-Setup für 40 kleine Unternehmen.
+
+00:01:00.120 --> 00:01:02.900
+Um auf deren Ressourcen zuzugreifen, konnten Sie nicht einfach Ihr eigenes Konto verwenden.
+
+00:01:03.280 --> 00:01:07.200
+Sie mussten sich mit einem Konto anmelden, das tatsächlich im Mandanten des jeweiligen Kunden vorhanden war.
+
+00:01:07.760 --> 00:01:11.960
+Das bedeutete, dass ein Administrator in jedem dieser 40 Unternehmen ein Konto für Sie erstellen,
+
+00:01:12.060 --> 00:01:15.800
+die richtigen Berechtigungen erteilen und daran denken musste, dieses später zu entfernen.
+
+00:01:17.580 --> 00:01:20.400
+Multiplizieren Sie das mit jeder Person in Ihrem Team, die Zugriff benötigt,
+
+00:01:20.400 --> 00:01:23.780
+und dann mit jedem Kunden erhalten Sie eine Tabelle, die niemand mehr ehrlich führen kann.
+
+00:01:23.780 --> 00:01:26.420
+Das eigentliche Problem dabei ist, dass es umso schwieriger wurde,
+
+00:01:26.500 --> 00:01:30.020
+legitime Arbeit über diese Mauern hinweg zu erledigen, je sicherer Microsoft diese Mauern machte.
+
+00:01:30.380 --> 00:01:31.480
+Das war kein kleines Ärgernis.
+
+00:01:32.000 --> 00:01:34.120
+Für einen Managed Service Provider, also ein externes Unternehmen,
+
+00:01:34.180 --> 00:01:36.000
+das ein Unternehmen mit dem Betrieb seiner Cloud beauftragt,
+
+00:01:36.060 --> 00:01:37.600
+war dies der Punkt, der das Wachstum erschwerte.
+
+00:01:38.160 --> 00:01:40.380
+Man konnte nicht innerhalb eines Nachmittags einen neuen Kunden gewinnen,
+
+00:01:40.520 --> 00:01:43.120
+denn man musste erst den Administrator ausfindig machen und warten,
+
+00:01:43.200 --> 00:01:44.420
+bis die Konten manuell eingerichtet wurden.
+
+00:01:45.340 --> 00:01:47.460
+Große Unternehmen stießen von innen heraus auf die gleiche Wand.
+
+00:01:47.680 --> 00:01:51.840
+Wenn ein Unternehmen ein anderes kauft, hat es am Ende oft zwei oder drei separate Mandanten anstelle von nur einem.
+
+00:01:51.840 --> 00:01:56.700
+Plötzlich muss das eigene IT-Team denselben umständlichen Tanz in der gesamten Organisation aufführen.
+
+00:01:56.980 --> 00:01:59.680
+Während wir uns mit Definitionen befassen, werden immer wieder zwei weitere Begriffe auftauchen.
+
+00:01:59.940 --> 00:02:01.200
+Daher sollten Sie sie in einfachen Worten austauschen.
+
+00:02:01.540 --> 00:02:03.960
+Ein Abonnement ist der Abrechnungs- und Verwaltungscontainer,
+
+00:02:04.220 --> 00:02:07.040
+den ein Unternehmen verwendet, um seine Azure-Ressourcen zu organisieren und zu bezahlen.
+
+00:02:07.520 --> 00:02:09.860
+Eine Ressourcengruppe ist lediglich ein Ordner in diesem Container,
+
+00:02:09.960 --> 00:02:12.080
+in dem zusammengehörige Ressourcen zusammengefasst werden.
+
+00:02:12.680 --> 00:02:14.260
+Behalten Sie diese beiden Begriffe im Hinterkopf,
+
+00:02:14.260 --> 00:02:16.260
+denn Sie werden zu den Kennungen, die der Kunde später verwendet,
+
+00:02:16.300 --> 00:02:17.760
+um zu entscheiden, was genau freigegeben wird.
+
+00:02:17.760 --> 00:02:19.260
+Das Problem hatte also zwei Seiten.
+
+00:02:19.640 --> 00:02:21.600
+Die eine Seite war der Zugriff, der zu schwer zu erlangen war
+
+00:02:21.600 --> 00:02:24.200
+und die andere Seite war der Zugriff, den niemand sauber entfernen konnte.
+
+00:02:24.520 --> 00:02:26.500
+Jede temporäre Anmeldung, die Sie für einen Kunden erstellt haben,
+
+00:02:26.560 --> 00:02:28.360
+wurde zu einem weiteren Objekt, das nachverfolgt werden musste
+
+00:02:28.360 --> 00:02:30.560
+und zu einem weiteren Objekt, das lange nach Abschluss des Projekts unbemerkt,
+
+00:02:30.560 --> 00:02:33.060
+das lange nach Abschluss des Projekts unbemerkt im System eines anderen Unternehmens lagerte.
+
+00:02:33.200 --> 00:02:35.020
+Genau dieses Problem wurde mit Azure Lighthouse gelöst.
+
+00:02:35.920 --> 00:02:37.420
+Was Azure Lighthouse eigentlich ist,
+
+00:02:37.420 --> 00:02:40.760
+mit Azure Lighthouse kann eine Organisation die Azure-Ressourcen einer anderen Organisation
+
+00:02:40.760 --> 00:02:42.200
+aus ihrer eigenen Umgebung verwalten,
+
+00:02:42.320 --> 00:02:45.500
+ohne dass ein Konto im Verzeichnis der anderen Organisation erforderlich ist.
+
+00:02:45.500 --> 00:02:46.860
+Das ist die einfache Version.
+
+00:02:47.480 --> 00:02:49.280
+In der Beschreibung von Microsoft selbst ist die Rede davon,
+
+00:02:49.380 --> 00:02:52.100
+viele Mandanten gleichzeitig mit mehr Automatisierung stärkerer Governance zu verwalten.
+
+00:02:52.560 --> 00:02:54.240
+Aber diesen Satz können Sie jetzt erst immer beiseite legen.
+
+00:02:54.640 --> 00:02:55.820
+Was Sie eigentlich brauchen, ist das Bild.
+
+00:02:56.440 --> 00:02:57.520
+Behalten Sie die beiden Häuser im Auge.
+
+00:02:57.960 --> 00:03:00.120
+Lighthouse führt Sie nicht zusammen und reißt auch keine Mauer ein.
+
+00:03:00.540 --> 00:03:02.620
+Es baut eine Tür und diese Tür ist das, was die Leute meinen,
+
+00:03:02.660 --> 00:03:04.300
+wenn sie von delegierter Ressourcenverwaltung sprechen.
+
+00:03:04.880 --> 00:03:06.960
+Eine delegierte Ressource ist einfach eine Kundenressource,
+
+00:03:07.020 --> 00:03:09.740
+die der Kunde zugestimmt hat, zur Verwaltung eine andere Person zu übergeben.
+
+00:03:10.440 --> 00:03:13.640
+Der Clou daran ist das, was Microsoft eine logische Projektion nennt.
+
+00:03:13.640 --> 00:03:17.620
+Die Abonnements- und Ressourcengruppen des Kunden werden in der Ansicht des Anbieters
+
+00:03:17.620 --> 00:03:20.840
+fast so angezeigt, als gehörten sie ihm, obwohl die Ressourcen,
+
+00:03:21.060 --> 00:03:22.460
+das Haus des Kunden nie verlassen.
+
+00:03:23.500 --> 00:03:25.140
+Nichts wird kopiert und nichts wird verschoben.
+
+00:03:25.840 --> 00:03:27.760
+Sie blicken durch eine Tür und starren nicht auf ein Duplikat.
+
+00:03:28.400 --> 00:03:30.560
+Nehmen wir an, Anbieter verwaltet die virtuellen Computer eines Kunden.
+
+00:03:31.320 --> 00:03:33.620
+Mit Lighthouse werden diese Computer im Portal des Anbieters
+
+00:03:33.620 --> 00:03:34.960
+direkt neben den eigenen angezeigt
+
+00:03:34.960 --> 00:03:38.340
+und das Team des Anbieters kann sie patchen, sichern und ihren Zustand überprüfen,
+
+00:03:38.400 --> 00:03:39.500
+ohne das Haus verlassen zu müssen.
+
+00:03:39.500 --> 00:03:42.900
+Der Kunde hingegen besitzt weiterhin jeden dieser Computer,
+
+00:03:43.220 --> 00:03:46.460
+bezahlt weiterhin die Rechnung und entscheidet weiterhin, wer durch die Tür darf.
+
+00:03:47.380 --> 00:03:50.300
+Die Richtung ist in dieser Folge wichtiger als alles andere, also behalten sie im Hintergrund.
+
+00:03:50.820 --> 00:03:53.520
+Der Zugriff erfolgt immer nur in eine Richtung von der verwaltenden Organisation
+
+00:03:53.520 --> 00:03:54.660
+zur verwalteten Organisation.
+
+00:03:55.560 --> 00:03:57.740
+Der Kunde greift nie auf die Umgebung des Anbieters zu
+
+00:03:57.740 --> 00:04:00.840
+und der Anbieter kann diesen Zugriff nicht einfach so an jemand anderen weitergeben.
+
+00:04:01.700 --> 00:04:03.460
+Zwei weitere Fakten machen es leichter, damit zu leben.
+
+00:04:03.540 --> 00:04:06.280
+Für die Verwendung von Azure Lighthouse zur Verwaltung von Azure Ressourcen
+
+00:04:06.280 --> 00:04:07.520
+fallen keine zusätzlichen Kosten an
+
+00:04:07.520 --> 00:04:09.340
+und jeder Azure-Kunde oder Partner kann es verwenden.
+
+00:04:09.420 --> 00:04:11.420
+Es ist außerdem nicht an eine einzelne Region gebunden,
+
+00:04:11.720 --> 00:04:13.600
+was bedeutet, dass ein Anbieter in einem Teil der Welt
+
+00:04:13.600 --> 00:04:15.700
+Ressourcen verwalten kann, die über viele andere verstreut sind.
+
+00:04:16.540 --> 00:04:18.740
+Der Unterschied zur einfachen Weitergabe des Passworts an jemanden
+
+00:04:18.740 --> 00:04:20.320
+besteht darin, dass die Tür aufgeschrieben wird.
+
+00:04:21.280 --> 00:04:23.560
+Sie hat einen Namen, einen Bereich und eine Rolle und alle drei.
+
+00:04:23.920 --> 00:04:26.280
+Dinge sind in ihrem Konto vorhanden und nicht in dem des anderen.
+
+00:04:26.820 --> 00:04:28.020
+Sie vertrauen nicht darauf, dass sie eine Person.
+
+00:04:28.580 --> 00:04:30.880
+Sie vertrauen einem Dokument, das sie lesen und später widerrufen können.
+
+00:04:31.280 --> 00:04:33.220
+Das Konzept läuft also auf eine signierte Tür
+
+00:04:33.220 --> 00:04:34.580
+zwischen zwei getrennten Welten hinaus,
+
+00:04:34.680 --> 00:04:36.840
+die für die Verwaltung gebaut wurde und in eine Richtung zeigt.
+
+00:04:36.840 --> 00:04:39.040
+Lebt eine ehrliche Grenze, an der fast jeder scheitert
+
+00:04:39.040 --> 00:04:39.940
+und wäre ihm leichter daraus zu sprechen.
+
+00:04:40.240 --> 00:04:42.540
+Aber zuerst müssen Sie sich ansehen, wie die Tür tatsächlich aufgebaut ist.
+
+00:04:42.700 --> 00:04:44.480
+Der Handschlag. Wie die Tür aufgebaut wird.
+
+00:04:45.100 --> 00:04:46.780
+Die Tür ist keine Zauberei und das ist gut so,
+
+00:04:46.860 --> 00:04:48.340
+denn sie besteht aus genau zwei kleinen Teilen,
+
+00:04:48.360 --> 00:04:49.740
+die Sie benennen können, die Sie benennen können.
+
+00:04:50.140 --> 00:04:52.220
+Das erste Teil wird als Registrierungsdefinition bezeichnet.
+
+00:04:52.500 --> 00:04:54.620
+Es ist ein Datensatz, der sich im Konto des Kunden befindet
+
+00:04:54.620 --> 00:04:55.600
+und zwei Fragen beantwortet.
+
+00:04:56.260 --> 00:04:58.920
+Welche Organisation wird die Verwaltung dieser Ressourcen anvertraut
+
+00:04:58.920 --> 00:05:01.420
+und was genau darf diese Organisation tun?
+
+00:05:02.480 --> 00:05:04.240
+Der zweite Teil trägt einen ähnlichen Namen,
+
+00:05:04.240 --> 00:05:05.500
+die Registrierungszuweisung.
+
+00:05:05.980 --> 00:05:07.320
+Wenn die Definition der Vertrag ist,
+
+00:05:07.400 --> 00:05:09.080
+ist die Zuweisung die Adresse, für die sie gilt.
+
+00:05:09.720 --> 00:05:11.400
+Sie ordnet diesem Vertrag einen bestimmten Ort zu,
+
+00:05:11.560 --> 00:05:13.140
+bei dem es sich entweder um ein gesamtes Abonnement
+
+00:05:13.140 --> 00:05:14.960
+oder eine einzelne Ressourcengruppe daran handelt.
+
+00:05:15.420 --> 00:05:17.500
+In der Definition befindet sich das, worauf es wirklich ankommt.
+
+00:05:17.960 --> 00:05:19.240
+Und das wird als Autorisierung bezeichnet.
+
+00:05:19.820 --> 00:05:22.360
+Eine Autorisierung ist eine Person oder häufiger ein Team
+
+00:05:22.360 --> 00:05:24.960
+oder ein Dienstkonto, das für die Automatisierung verwendet wird,
+
+00:05:25.040 --> 00:05:27.340
+gepaart mit einer integrierten Rolle, die die Grenze festlegt.
+
+00:05:27.740 --> 00:05:29.060
+Ein Leser kann Informationen einsehen,
+
+00:05:29.100 --> 00:05:30.660
+aber nicht bearbeiten wie an den mitwirkenden Änderungen.
+
+00:05:30.660 --> 00:05:33.180
+Die Rolle ist die Leine und der Kunde entscheidet,
+
+00:05:33.260 --> 00:05:34.420
+wie lange sie an der Leine bleibt.
+
+00:05:35.320 --> 00:05:37.980
+In der Praxis übergibt ein Anbieter selten einen einzelnen Namen.
+
+00:05:38.640 --> 00:05:40.080
+Er baut eine kleine Struktur von Teams auf.
+
+00:05:40.740 --> 00:05:42.460
+Eine Supportgruppe erhält schreibgeschützten Zugriff,
+
+00:05:42.580 --> 00:05:43.940
+eine Migrationsgruppe erhält die Berechtigung,
+
+00:05:44.020 --> 00:05:44.740
+Änderungen vorzunehmen
+
+00:05:44.740 --> 00:05:46.520
+und ein Automatisierungskonto erhält genau das,
+
+00:05:46.580 --> 00:05:47.220
+was ein Skript benötigt.
+
+00:05:48.220 --> 00:05:49.860
+Jede davon gilt als eigene Autorisierung,
+
+00:05:50.060 --> 00:05:51.800
+was bedeutet, dass der Kunde die Liste lesen
+
+00:05:51.800 --> 00:05:53.180
+und zeilenweise sehen kann,
+
+00:05:53.360 --> 00:05:55.180
+wer hinzukommt und wie viel er übertragen darf.
+
+00:05:55.660 --> 00:05:57.020
+Was die Leute am meisten überrascht,
+
+00:05:57.080 --> 00:05:58.540
+ist das, was bei jeder einzelnen Anforderung geschieht.
+
+00:05:58.540 --> 00:06:00.240
+Microsoft verlässt sich nicht darauf,
+
+00:06:00.320 --> 00:06:01.920
+dass der Kunde daran denkt, irgendetwas zu überprüfen.
+
+00:06:02.420 --> 00:06:04.120
+Jedes Mal, wenn ein Benutzer des Anbieters versucht,
+
+00:06:04.200 --> 00:06:05.460
+als ihr Ressourcenmanager zu fungieren,
+
+00:06:05.520 --> 00:06:08.100
+wird die Ebene, die jede Anforderung in Azure genehmigt oder ablehnt,
+
+00:06:08.540 --> 00:06:09.380
+angehalten und bestätigt,
+
+00:06:09.440 --> 00:06:11.120
+dass beide Teile im Konto des Kunden vorhanden sind.
+
+00:06:12.200 --> 00:06:14.460
+Wenn die Definition und die Zuweisung nicht beide vorhanden sind,
+
+00:06:14.540 --> 00:06:15.680
+schlägt die Anforderung schlicht fehl.
+
+00:06:16.160 --> 00:06:18.160
+Bedeutet, dass der Zugriff kein einmaliger Handshake ist,
+
+00:06:18.180 --> 00:06:19.500
+von dem man hofft, dass er korrekt durchgeführt wurde.
+
+00:06:19.940 --> 00:06:21.720
+Er wird bei jeder Aktion immer wieder überprüft,
+
+00:06:21.720 --> 00:06:22.860
+solange die Tür existiert.
+
+00:06:23.580 --> 00:06:24.600
+Es gibt auch eine Dokumentation,
+
+00:06:24.600 --> 00:06:26.060
+die sich auf der Kundenseite der Mauer befindet.
+
+00:06:26.740 --> 00:06:28.220
+Jede Aktion, die der Anbieter vornimmt,
+
+00:06:28.300 --> 00:06:30.160
+wird in das Aktivitätsprotokoll des Kunden geschrieben,
+
+00:06:30.280 --> 00:06:31.640
+sodass der Kunde es öffnen und sehen kann,
+
+00:06:31.680 --> 00:06:33.140
+was sich geändert hat und wer es geändert hat.
+
+00:06:33.640 --> 00:06:35.160
+Der Kunde ist bei all dem niemals nur Passagier.
+
+00:06:35.780 --> 00:06:36.660
+Sein eigener Administrator,
+
+00:06:36.720 --> 00:06:38.060
+die Person mit der höchsten Berechtigungsebene
+
+00:06:38.060 --> 00:06:38.720
+für dieses Abonnement,
+
+00:06:38.920 --> 00:06:39.900
+muss die Bereitstellung ausführen,
+
+00:06:39.960 --> 00:06:41.480
+die die Definition und die Zuweisung erstellt.
+
+00:06:41.760 --> 00:06:43.060
+Die Definition und die Zuweisung erstellt.
+
+00:06:43.140 --> 00:06:44.100
+Wenn diese Person nicht reagiert,
+
+00:06:44.180 --> 00:06:44.840
+existiert die Tür nicht.
+
+00:06:45.500 --> 00:06:47.580
+Ein kleines Detail erspart später viel Verwirrung.
+
+00:06:48.040 --> 00:06:49.280
+Wenn das Onboarding läuft,
+
+00:06:49.380 --> 00:06:50.700
+aktiviert Microsoft im Hintergrund
+
+00:06:50.700 --> 00:06:51.580
+eine Maschine namens
+
+00:06:51.580 --> 00:06:53.720
+Managed Services Resource Provider, Manit.
+
+00:06:54.280 --> 00:06:55.580
+Kann bis zu 15 Minuten dauern,
+
+00:06:55.720 --> 00:06:57.140
+bis die Änderung im Portal angezeigt wird.
+
+00:06:57.940 --> 00:06:59.580
+Wenn Sie ihn bereitstellen und zunächst nichts sehen,
+
+00:06:59.780 --> 00:07:01.400
+sind Sie wahrscheinlich eher zu früh als zu falsch.
+
+00:07:02.100 --> 00:07:03.720
+Eine weitere Option verdient Ihre Aufmerksamkeit.
+
+00:07:04.200 --> 00:07:05.200
+Wenn ein Kunde delegiert,
+
+00:07:05.480 --> 00:07:07.020
+muss er nicht das gesamte Konto übergeben.
+
+00:07:07.720 --> 00:07:09.540
+Er kann auf eine einzelne Ressourcengruppe verweisen,
+
+00:07:09.740 --> 00:07:11.200
+so wie Sie jemandem einen Schlüssel für ein Zimmer
+
+00:07:11.200 --> 00:07:12.160
+statt für die Haustür geben.
+
+00:07:12.640 --> 00:07:13.940
+Der Handschlag hat also eine klare Form.
+
+00:07:14.860 --> 00:07:16.180
+Der Anbieter schlägt die Bedingungen vor,
+
+00:07:16.180 --> 00:07:17.380
+die Definition zeichnet sie auf,
+
+00:07:17.460 --> 00:07:18.620
+die Zuweisung weist sie an eine Stelle
+
+00:07:18.620 --> 00:07:20.480
+und Azure überprüft die Unterlagen bei jedem Schritt.
+
+00:07:21.580 --> 00:07:23.840
+Wer verwendet sie und wer genehmigt sie?
+
+00:07:24.380 --> 00:07:26.020
+Drei Arten von Organisation setzen darauf
+
+00:07:26.020 --> 00:07:27.900
+und Sie haben wahrscheinlich schon eine davon kennengelernt,
+
+00:07:27.960 --> 00:07:28.460
+ohne sie zu wissen.
+
+00:07:28.900 --> 00:07:30.380
+Die erste ist der Managed Service Provider,
+
+00:07:30.720 --> 00:07:31.540
+das externe Unternehmen,
+
+00:07:31.620 --> 00:07:33.220
+das die Cloud für viele andere Unternehmen betreibt.
+
+00:07:33.800 --> 00:07:34.820
+Für sie verwandelt Lighthouse
+
+00:07:34.820 --> 00:07:36.720
+40 separate Anmeldungen in einen Bildschirm.
+
+00:07:37.400 --> 00:07:38.600
+Der zweite ist das Großunternehmen,
+
+00:07:38.860 --> 00:07:40.260
+das am Ende mehr als eine Kontowelt hatte.
+
+00:07:41.040 --> 00:07:42.580
+Nach einer Fusion oder einer Übernahme
+
+00:07:42.580 --> 00:07:44.980
+behält ein Unternehmen oft absichtlich getrennte Mandanten bei,
+
+00:07:44.980 --> 00:07:46.340
+vielleicht aufgrund rechtlicher Vorschriften
+
+00:07:46.340 --> 00:07:47.360
+oder weil die beiden Unternehmen
+
+00:07:47.360 --> 00:07:48.860
+tatsächlich unabhängig voneinander agieren.
+
+00:07:48.860 --> 00:07:50.960
+Mit Lighthouse kann eine dieser Welten
+
+00:07:50.960 --> 00:07:52.080
+als Manager für die anderen fungieren.
+
+00:07:52.620 --> 00:07:53.380
+Dieselben Richtlinien,
+
+00:07:53.480 --> 00:07:54.140
+dieselben Sicherungen
+
+00:07:54.140 --> 00:07:55.120
+und derselbe Sicherheitsprozess
+
+00:07:55.120 --> 00:07:56.180
+können dann überall angewendet werden,
+
+00:07:56.260 --> 00:07:57.480
+ohne dass eine mühsame Zusammenführung
+
+00:07:57.480 --> 00:07:58.040
+erzwungen werden muss.
+
+00:07:58.660 --> 00:07:59.900
+Der dritte ist der Softwarehersteller,
+
+00:08:00.000 --> 00:08:00.920
+der einen Dienst für viele Kunden
+
+00:08:00.920 --> 00:08:01.820
+gleichzeitig bereitstellt.
+
+00:08:02.480 --> 00:08:04.120
+Wenn Sie jemals ein Cloud-Produkt verwendet haben,
+
+00:08:04.160 --> 00:08:05.700
+das mit Ihrem eigenen Azure-Konto verbunden ist,
+
+00:08:05.780 --> 00:08:06.500
+besteht eine gute Chance,
+
+00:08:06.580 --> 00:08:07.600
+dass Lighthouse ein Teil davon ist,
+
+00:08:07.660 --> 00:08:08.040
+wie sie erreicht.
+
+00:08:08.460 --> 00:08:09.400
+Stellen Sie sich einen Anbieter
+
+00:08:09.400 --> 00:08:10.060
+mit drei Kunden vor,
+
+00:08:10.100 --> 00:08:10.500
+um zu verstehen,
+
+00:08:10.500 --> 00:08:11.600
+warum die Flexibilität wichtig ist.
+
+00:08:12.220 --> 00:08:13.520
+Einer möchte die vollständige Verwaltung
+
+00:08:13.520 --> 00:08:14.600
+einer einzelnen Anwendung,
+
+00:08:14.680 --> 00:08:15.940
+ein anderer möchte nur die Überwachung.
+
+00:08:18.860 --> 00:08:23.300
+Mit Lighthouse existieren alle drei Beziehungen
+
+00:08:23.300 --> 00:08:24.740
+nebeneinander im Portal des Anbieters,
+
+00:08:24.860 --> 00:08:26.180
+wobei jeder auf ihren eigenen Bereich
+
+00:08:26.180 --> 00:08:27.580
+und ihre eigene Rolle beschränkt ist.
+
+00:08:28.280 --> 00:08:28.800
+Die Art und Weise,
+
+00:08:28.900 --> 00:08:29.640
+wie eine Beziehung beginnt,
+
+00:08:29.680 --> 00:08:30.660
+ist einen genaueren Blick wert,
+
+00:08:30.740 --> 00:08:32.220
+da es zwei Möglichkeiten für die Anmeldung gibt,
+
+00:08:32.300 --> 00:08:33.700
+die für unterschiedliche Situationen geeignet sind.
+
+00:08:34.000 --> 00:08:35.260
+Die erste Tür ist eine Vorlage,
+
+00:08:35.360 --> 00:08:37.100
+die im Konto des Kunden bereitgestellt wird.
+
+00:08:37.620 --> 00:08:38.900
+Der Anbieter bereitet die Datei vor,
+
+00:08:38.940 --> 00:08:39.800
+die der Kunde dann ausführt.
+
+00:08:40.260 --> 00:08:41.140
+Dies eignet sich am besten
+
+00:08:41.140 --> 00:08:42.380
+für eine direkt bekannte Beziehung,
+
+00:08:42.440 --> 00:08:43.260
+bei der die beiden Unternehmen
+
+00:08:43.260 --> 00:08:44.260
+bereits einen Vertrag haben
+
+00:08:44.260 --> 00:08:45.380
+und nur die Verbindung herstellen müssen.
+
+00:08:45.720 --> 00:08:47.580
+Die zweite Tür ist ein verwaltetes Dienstangebot,
+
+00:08:47.580 --> 00:08:49.060
+das im Microsoft Marketplace aufgeführt ist.
+
+00:08:49.320 --> 00:08:50.140
+Der Kunde will das aus,
+
+00:08:50.280 --> 00:08:51.640
+entscheidet, welche Abonnements er übergeben möchte
+
+00:08:51.640 --> 00:08:53.420
+und die Verbindung wird im Rahmen des Kaufs hergestellt.
+
+00:08:54.160 --> 00:08:55.400
+Dies eignet sich für einen Anbieter,
+
+00:08:55.460 --> 00:08:57.600
+der denselben Dienst an eine lange Liste von Kunden verkauft
+
+00:08:57.600 --> 00:08:58.920
+und eine wiederholbare Möglichkeit,
+
+00:08:59.040 --> 00:09:00.000
+für deren Onboarding sucht.
+
+00:09:00.420 --> 00:09:01.120
+In beiden Fällen gilt,
+
+00:09:01.160 --> 00:09:01.860
+eine Regel ändert sich nie.
+
+00:09:02.320 --> 00:09:03.380
+Der Administrator des Kunden
+
+00:09:03.380 --> 00:09:04.580
+muss die Bereitstellung genehmigen
+
+00:09:04.580 --> 00:09:06.180
+und diese Person benötigt die Berechtigung
+
+00:09:06.180 --> 00:09:06.880
+auf oberster Ebene
+
+00:09:06.880 --> 00:09:07.900
+für das betreffende Abonnement.
+
+00:09:08.580 --> 00:09:09.480
+Hinter dem Rücken des Kunden
+
+00:09:09.480 --> 00:09:10.320
+geschieht nichts an der Kunde,
+
+00:09:10.560 --> 00:09:11.620
+derjenige ist, der das Sagen hat.
+
+00:09:11.620 --> 00:09:14.240
+Es gibt noch einen weiteren wichtigen Unterschied
+
+00:09:14.240 --> 00:09:14.980
+und zwar die Fairness.
+
+00:09:15.820 --> 00:09:16.740
+Ein öffentliches Angebot
+
+00:09:16.740 --> 00:09:17.860
+gewährt jedem Kunden, der es kauft,
+
+00:09:17.960 --> 00:09:18.840
+genau dieselben Berechtigungen,
+
+00:09:18.940 --> 00:09:19.960
+was einfach aber deutlich ist.
+
+00:09:20.260 --> 00:09:21.100
+Ein privates Angebot
+
+00:09:21.100 --> 00:09:22.020
+wird die genauen Anforderungen
+
+00:09:22.020 --> 00:09:22.680
+eines Kunden erstellen.
+
+00:09:23.300 --> 00:09:23.920
+Wenn ein Anbieter
+
+00:09:23.920 --> 00:09:25.560
+zwei Kunden unterschiedlich behandeln möchte,
+
+00:09:25.820 --> 00:09:27.000
+benötigt er private Angebote
+
+00:09:27.000 --> 00:09:28.140
+oder benutzerdefinierte Vorlagen,
+
+00:09:28.240 --> 00:09:28.920
+da ein öffentlicher Plan
+
+00:09:28.920 --> 00:09:30.340
+nicht nachträglich angepasst werden kann.
+
+00:09:30.900 --> 00:09:31.820
+Sobald alles verbunden ist,
+
+00:09:31.860 --> 00:09:33.140
+erhalten beide Seiten eine Basis.
+
+00:09:33.980 --> 00:09:34.780
+Der Kunde überprüft
+
+00:09:34.780 --> 00:09:35.900
+und verwaltet seine Anbieter
+
+00:09:35.900 --> 00:09:36.460
+auf einer Seite
+
+00:09:36.460 --> 00:09:37.280
+in seinem eigenen Portal
+
+00:09:37.280 --> 00:09:38.300
+und der Anbieter sieht
+
+00:09:38.300 --> 00:09:38.820
+jeden Kunden
+
+00:09:38.820 --> 00:09:39.720
+auf einer eigenen Seite.
+
+00:09:40.740 --> 00:09:41.760
+Jeder kann die Beziehung sehen
+
+00:09:41.760 --> 00:09:43.100
+und genau so sollte es sein.
+
+00:09:44.060 --> 00:09:44.840
+Die Sicherheitsgeschichte.
+
+00:09:45.360 --> 00:09:46.140
+Wer hat wirklich die Schlüssel?
+
+00:09:47.060 --> 00:09:47.960
+Nennen wir die Angst direkt,
+
+00:09:48.000 --> 00:09:48.940
+denn es ist die richtige Angst.
+
+00:09:49.520 --> 00:09:50.600
+Diese ganze Vereinbarung klingt,
+
+00:09:50.700 --> 00:09:51.420
+als würde man einem Fremden
+
+00:09:51.420 --> 00:09:52.620
+die Kontrolle über sein Haus übertragen.
+
+00:09:52.900 --> 00:09:53.400
+Der Kunde behält
+
+00:09:53.400 --> 00:09:54.560
+aus einem einfachen Grund die Kontrolle.
+
+00:09:55.000 --> 00:09:56.100
+Er wählt den Umfang, der festlegt,
+
+00:09:56.180 --> 00:09:56.860
+ob es sich um einen Raum
+
+00:09:56.860 --> 00:09:57.920
+oder das gesamte Gebäude handelt.
+
+00:09:58.360 --> 00:09:58.980
+Er wählt die Rolle,
+
+00:09:59.280 --> 00:09:59.760
+die festlegt,
+
+00:09:59.840 --> 00:10:00.980
+ob der Anbieter Dinge einsehen
+
+00:10:00.980 --> 00:10:01.760
+oder ändern kann.
+
+00:10:02.340 --> 00:10:03.740
+Diese Kontrolle endet auch nicht beim Setup.
+
+00:10:04.240 --> 00:10:05.900
+Sie können das Aktivitätsprotokoll öffnen
+
+00:10:05.900 --> 00:10:07.640
+und jede jemals durchgeführte Aktion prüfen
+
+00:10:07.640 --> 00:10:08.580
+und sie können den Zugriff
+
+00:10:08.580 --> 00:10:09.860
+jederzeit vollständig entfernen,
+
+00:10:09.940 --> 00:10:11.400
+ohne jemanden um Erlaubnis bitten zu müssen.
+
+00:10:12.200 --> 00:10:13.700
+Microsofts eigene Anleitung für Anbieter
+
+00:10:13.700 --> 00:10:14.620
+beginnt mit dem Prinzip
+
+00:10:14.620 --> 00:10:15.400
+der geringsten Rechte.
+
+00:10:15.860 --> 00:10:16.700
+Das ist eine einfache Art zu sagen,
+
+00:10:16.780 --> 00:10:17.560
+es den Leuten nur das zu geben,
+
+00:10:17.620 --> 00:10:18.640
+was der Job tatsächlich benötigt.
+
+00:10:19.240 --> 00:10:20.320
+In der Praxis bedeutet dies,
+
+00:10:20.400 --> 00:10:21.480
+dass Berechtigungen eher Teams
+
+00:10:21.480 --> 00:10:22.140
+und Dienstkonten
+
+00:10:22.140 --> 00:10:23.400
+als Einzelpersonen zugewiesen werden,
+
+00:10:23.540 --> 00:10:24.580
+sodass Zugriffe hinzugefügt
+
+00:10:24.580 --> 00:10:25.440
+oder entzogen werden können,
+
+00:10:25.560 --> 00:10:26.560
+ohne die gesamte Vereinbarung
+
+00:10:26.560 --> 00:10:27.680
+von Grund auf neu erstellen zu müssen.
+
+00:10:28.400 --> 00:10:29.760
+Die Multifaktor-Authentifizierung
+
+00:10:29.760 --> 00:10:31.240
+wird auf beiden Seiten dringend empfohlen.
+
+00:10:31.700 --> 00:10:32.540
+Hierbei gibt es einen Haken,
+
+00:10:32.600 --> 00:10:33.520
+den Anfänger deutlich hören sollten.
+
+00:10:33.520 --> 00:10:34.880
+Die eigenen Anmelderegeln
+
+00:10:34.880 --> 00:10:35.720
+eines Kunden, die steuern,
+
+00:10:35.840 --> 00:10:37.080
+wo und wie sich Personen anmelden dürfen,
+
+00:10:37.180 --> 00:10:38.600
+gelten nicht für die Benutzer des Anbieters.
+
+00:10:39.340 --> 00:10:40.300
+Für sie gelten nur die Regeln
+
+00:10:40.300 --> 00:10:41.300
+der verwaltenden Organisation.
+
+00:10:41.840 --> 00:10:42.460
+Das ist eine echte Lücke.
+
+00:10:42.840 --> 00:10:43.440
+Aus diesem Grund
+
+00:10:43.440 --> 00:10:45.040
+fordert Microsoft beide Seiten auf,
+
+00:10:45.120 --> 00:10:46.760
+einen stärkeren Anmeldeschutz zu aktivieren.
+
+00:10:47.320 --> 00:10:48.520
+Es gibt eine intelligentere Möglichkeit,
+
+00:10:48.620 --> 00:10:49.360
+Befugnisse zu vergeben.
+
+00:10:49.840 --> 00:10:51.320
+Anstatt eine Rolle dauerhaft zu gewähren,
+
+00:10:51.400 --> 00:10:53.060
+kann ein Anbieter sie als berechtigt vermarkten.
+
+00:10:53.540 --> 00:10:53.940
+Das bedeutet,
+
+00:10:54.020 --> 00:10:55.580
+dass die Person sie für ein begrenztes Zeitfenster
+
+00:10:55.580 --> 00:10:56.380
+bewusst aktivieren muss,
+
+00:10:56.440 --> 00:10:57.540
+bevor sie sich wieder deaktiviert.
+
+00:10:58.420 --> 00:11:00.020
+Dies stützt sich auf eine Microsoft-Funktion
+
+00:11:00.020 --> 00:11:01.600
+namens Privileged Identity Management
+
+00:11:01.600 --> 00:11:02.980
+und unterlegt Lizenzanforderungen.
+
+00:11:03.340 --> 00:11:04.440
+Da ist sie nicht in jedem Plan kostenlos.
+
+00:11:04.960 --> 00:11:05.940
+Dort, wo sie verfügbar ist,
+
+00:11:06.020 --> 00:11:07.140
+verringert sie die Anzahl der Personen,
+
+00:11:07.240 --> 00:11:08.660
+die über dauerhafte Befugnisse verfügen.
+
+00:11:08.940 --> 00:11:09.620
+Bei den Beschränkungen,
+
+00:11:09.680 --> 00:11:10.520
+die den Kunden schützen,
+
+00:11:10.780 --> 00:11:12.220
+wird die Rolle des vollständigen Besitzers
+
+00:11:12.220 --> 00:11:13.700
+in einer Delegierung nicht unterstützt,
+
+00:11:13.800 --> 00:11:14.840
+sodass ein Anbieter niemals
+
+00:11:14.840 --> 00:11:15.940
+die Schlüssel zu allem erhält.
+
+00:11:16.680 --> 00:11:17.760
+Rollen, die Zugriff auf die Daten
+
+00:11:17.760 --> 00:11:18.640
+in einem Dienst gewähren,
+
+00:11:18.700 --> 00:11:19.900
+werden ebenfalls nicht unterstützt
+
+00:11:19.900 --> 00:11:21.440
+und benutzerdefinierte Rollen sind vom Tisch,
+
+00:11:21.540 --> 00:11:22.380
+sodass nur die von Microsoft
+
+00:11:22.380 --> 00:11:23.900
+definierten integrierten Rollen zulässig sind.
+
+00:11:24.660 --> 00:11:25.680
+Es gibt noch ein Sicherheitsventil,
+
+00:11:25.720 --> 00:11:26.200
+das man kennen soll.
+
+00:11:26.780 --> 00:11:28.460
+Wenn der Anbieter beim Einrichten der Vereinbarung
+
+00:11:28.460 --> 00:11:30.000
+eine bestimmte Bereinigungsrolle einbezieht,
+
+00:11:30.120 --> 00:11:31.620
+kann er seinen eigenen Zugriff später entfernen.
+
+00:11:32.120 --> 00:11:33.540
+Dies ist nützlich, wenn ein Vertrag endet.
+
+00:11:34.120 --> 00:11:36.100
+Ohne diese Rolle kann nur der Kunde sie entfernen.
+
+00:11:36.560 --> 00:11:38.120
+Das Entfernen ist genauso sauber wie das Einrichten.
+
+00:11:38.480 --> 00:11:40.000
+Eine Delegierung kann aktualisiert werden,
+
+00:11:40.060 --> 00:11:40.840
+wenn sich eine Rolle ändert
+
+00:11:40.840 --> 00:11:42.200
+oder gelöscht werden, wenn die Beziehung endet.
+
+00:11:42.540 --> 00:11:44.020
+Beides kann der Kunde entscheiden.
+
+00:11:44.940 --> 00:11:45.520
+Das ist wichtig,
+
+00:11:45.620 --> 00:11:46.860
+da der problematische Teil des Zugriffs
+
+00:11:46.860 --> 00:11:48.040
+selten darin besteht, ihn zu erhalten,
+
+00:11:48.160 --> 00:11:49.420
+sondern fast immer darin, ihn zu beseitigen.
+
+00:11:49.780 --> 00:11:51.340
+Auch die Überwachung ist kein nachträglicher Gedanke,
+
+00:11:51.560 --> 00:11:52.460
+da das Aktivitätsprotokoll
+
+00:11:52.460 --> 00:11:53.300
+die Aktion des Anbieters
+
+00:11:53.300 --> 00:11:54.440
+im Mandanten des Kunden aufzeichnet.
+
+00:11:54.440 --> 00:11:56.280
+Ein Kunde kann die Frage beantworten,
+
+00:11:56.320 --> 00:11:57.260
+die die Leute nachts wach hält.
+
+00:11:57.740 --> 00:11:59.040
+Er kann sehen, wer etwas berührt hat,
+
+00:11:59.120 --> 00:11:59.740
+wann er es berührt hat
+
+00:11:59.740 --> 00:12:00.680
+und was er geändert hat.
+
+00:12:01.620 --> 00:12:02.460
+Die Schlüssel bleiben also dort,
+
+00:12:02.540 --> 00:12:02.960
+wo sie hingehören.
+
+00:12:03.280 --> 00:12:04.240
+Der Kunde besitzt das Haus,
+
+00:12:04.520 --> 00:12:05.280
+schreibt die Gästeliste,
+
+00:12:05.660 --> 00:12:06.180
+bewacht die Tür
+
+00:12:06.180 --> 00:12:07.900
+und kann die Schlüssel jederzeit austauschen,
+
+00:12:08.760 --> 00:12:09.740
+was Azure Lighthouse nicht ist.
+
+00:12:10.240 --> 00:12:11.140
+Nach all dieser Zusicherung
+
+00:12:11.140 --> 00:12:11.800
+ist Ehrlichkeit wichtig.
+
+00:12:12.240 --> 00:12:13.220
+Hier ist, was dieses Tool nicht kann.
+
+00:12:13.640 --> 00:12:14.340
+Die größte Verwirrung,
+
+00:12:14.420 --> 00:12:15.200
+die es zu beseitigen gilt,
+
+00:12:15.280 --> 00:12:16.440
+ist, dass Lighthouse ein Verwaltungstool
+
+00:12:16.440 --> 00:12:17.360
+und kein Datentool ist.
+
+00:12:18.320 --> 00:12:19.500
+Es verarbeitet die Anforderungen,
+
+00:12:19.500 --> 00:12:20.640
+die über Azure Resource Manager
+
+00:12:20.640 --> 00:12:21.360
+übertragen werden,
+
+00:12:21.360 --> 00:12:23.520
+den Dienst der Ressourcen erstellt und ändert
+
+00:12:23.520 --> 00:12:24.860
+und greift nicht auf die Daten
+
+00:12:24.860 --> 00:12:26.020
+in diesen Ressourcen zu.
+
+00:12:27.180 --> 00:12:28.460
+Einfach ausgedrückt ist es kein Weg,
+
+00:12:28.560 --> 00:12:30.160
+um ein Geheimnis aus einem Schlüsseltresor zu lesen
+
+00:12:30.160 --> 00:12:31.860
+oder eine Datei in einem Speicherkonto zu öffnen.
+
+00:12:32.340 --> 00:12:33.180
+Diese Anforderungen werden
+
+00:12:33.180 --> 00:12:34.320
+auf einem anderen Weg ausgeführt
+
+00:12:34.320 --> 00:12:35.220
+und Lighthouse ist nicht dabei.
+
+00:12:35.940 --> 00:12:37.120
+Zweitens ist es wichtig zu erwähnen,
+
+00:12:37.200 --> 00:12:38.360
+dass nichts verschoben oder kopiert wird.
+
+00:12:39.060 --> 00:12:39.960
+Wir haben es bereits gesagt
+
+00:12:39.960 --> 00:12:41.140
+und es lohnt sich, es zu wiederholen,
+
+00:12:41.180 --> 00:12:41.560
+weil der Begriff
+
+00:12:41.560 --> 00:12:42.640
+Delegierte Ressourcenverwaltung
+
+00:12:42.640 --> 00:12:43.340
+bei manchen Leuten
+
+00:12:43.340 --> 00:12:44.860
+an eine Übertragung des Besitzes erinnert.
+
+00:12:45.360 --> 00:12:46.240
+Es gibt keine Übertragung,
+
+00:12:46.240 --> 00:12:46.920
+nur eine Verknüpfung
+
+00:12:46.920 --> 00:12:48.300
+und diese Verknüpfung verläuft in eine Richtung.
+
+00:12:48.940 --> 00:12:50.460
+Der dritte Punkt ist der Haken an der Sache.
+
+00:12:50.900 --> 00:12:51.660
+Es lohnt sich, das zu wissen,
+
+00:12:51.740 --> 00:12:52.480
+bevor man davon ausgeht,
+
+00:12:52.520 --> 00:12:53.580
+dass ein Sicherheitsnetz in der Mauer ist.
+
+00:12:53.940 --> 00:12:55.380
+Wenn ein Kunde seine Ressourcen sperrt,
+
+00:12:55.440 --> 00:12:55.900
+um zu verhindern,
+
+00:12:55.980 --> 00:12:57.240
+dass Dinge geändert oder gelöscht werden,
+
+00:12:57.320 --> 00:12:57.980
+hindert diese Sperre
+
+00:12:57.980 --> 00:12:58.860
+die Nutzer eines Anbieters
+
+00:12:58.860 --> 00:12:59.760
+nicht daran zu handeln.
+
+00:13:00.460 --> 00:13:01.360
+Das ist eine echte Lücke
+
+00:13:01.360 --> 00:13:02.300
+und überrascht Leute,
+
+00:13:02.380 --> 00:13:02.940
+die davon ausgehen,
+
+00:13:03.020 --> 00:13:04.480
+dass jede Leitplanke für alle gilt.
+
+00:13:05.140 --> 00:13:06.460
+Es gibt auch eine regionale Regel,
+
+00:13:06.540 --> 00:13:07.160
+die eine Grenze wert ist.
+
+00:13:07.360 --> 00:13:08.580
+Lighthouse ist regionsübergreifend,
+
+00:13:08.640 --> 00:13:09.380
+kann aber keine Verbindung
+
+00:13:09.380 --> 00:13:10.400
+zwischen einer nationalen Cloud
+
+00:13:10.400 --> 00:13:11.080
+und der öffentlichen Cloud
+
+00:13:11.080 --> 00:13:12.700
+oder zwei separaten nationalen Clouds herstellen.
+
+00:13:13.220 --> 00:13:14.080
+Eine nationale Cloud
+
+00:13:14.080 --> 00:13:15.140
+ist eine eigene Version von Azure,
+
+00:13:15.220 --> 00:13:15.720
+die von einem Land
+
+00:13:15.720 --> 00:13:16.680
+nach eigenen Regeln betrieben wird.
+
+00:13:17.060 --> 00:13:18.020
+Diese Grenze kann die Tür
+
+00:13:18.020 --> 00:13:18.780
+einfach nicht überschreiten.
+
+00:13:19.300 --> 00:13:20.160
+Eine weitere Einschränkung
+
+00:13:20.160 --> 00:13:20.980
+betrifft die Sichtbarkeit
+
+00:13:20.980 --> 00:13:21.860
+und darüber kann man leicht steuern.
+
+00:13:22.660 --> 00:13:23.700
+Für Personen auf Kundenseite
+
+00:13:23.700 --> 00:13:25.280
+werden in der üblichen Zugriffsliste
+
+00:13:25.280 --> 00:13:25.740
+im Portal
+
+00:13:25.740 --> 00:13:27.240
+und in den Standardbefehlzeilen-Tools
+
+00:13:27.240 --> 00:13:28.160
+nicht die Rollen angezeigt,
+
+00:13:28.260 --> 00:13:29.380
+die über Lighthouse vergeben wurden.
+
+00:13:30.140 --> 00:13:31.460
+Diese Zuweisungen befinden sich stattdessen
+
+00:13:31.460 --> 00:13:32.700
+im Lighthouse-Bereich des Portals.
+
+00:13:33.380 --> 00:13:34.520
+Das ist keine Sicherheitslücke,
+
+00:13:34.820 --> 00:13:35.360
+aber es bedeutet,
+
+00:13:35.480 --> 00:13:36.220
+dass Sie an der richtigen Stelle
+
+00:13:36.220 --> 00:13:36.900
+nachsehen sollten,
+
+00:13:37.000 --> 00:13:37.760
+bevor Sie zu dem Schluss kommen,
+
+00:13:37.840 --> 00:13:38.640
+dass niemand Zugriff hat.
+
+00:13:38.640 --> 00:13:40.640
+Zu guter Letzt gibt es noch eine Namenswelle.
+
+00:13:40.980 --> 00:13:41.560
+Azure Lighthouse
+
+00:13:41.560 --> 00:13:43.180
+und Microsoft 365 Lighthouse
+
+00:13:43.180 --> 00:13:44.160
+klingen wie dasselbe Produkt,
+
+00:13:44.240 --> 00:13:44.880
+sind es aber nicht.
+
+00:13:45.520 --> 00:13:46.400
+Azure Lighthouse ist das,
+
+00:13:46.480 --> 00:13:47.420
+worüber wir gerade gesprochen haben
+
+00:13:47.420 --> 00:13:48.660
+und es verwaltet Azure-Ressourcen.
+
+00:13:49.360 --> 00:13:50.880
+Microsoft 365 Lighthouse
+
+00:13:50.880 --> 00:13:51.820
+ist ein separates Tool,
+
+00:13:52.120 --> 00:13:52.800
+das Anbietern hilft,
+
+00:13:52.880 --> 00:13:54.500
+Microsoft 365 Kunden zu integrieren,
+
+00:13:54.580 --> 00:13:55.340
+zu überwachen und zu verwalten.
+
+00:13:55.680 --> 00:13:56.620
+Sie teilen sich einen Namen,
+
+00:13:56.820 --> 00:13:57.800
+lösen aber unterschiedliche Bogen.
+
+00:13:58.600 --> 00:13:59.720
+Die Zusammenfassung ohne Frage.
+
+00:14:00.380 --> 00:14:01.300
+Fassen wir also die Fäden zusammen.
+
+00:14:01.900 --> 00:14:02.760
+Zwei Organisationen
+
+00:14:02.760 --> 00:14:04.360
+unterhalten zwei separate Cloud-Welten
+
+00:14:04.360 --> 00:14:06.240
+und Lighthouse baut eine signierte Tür zwischen ihnen.
+
+00:14:06.520 --> 00:14:07.920
+Die Verbindung wird über eine Definition
+
+00:14:07.920 --> 00:14:08.960
+und eine Zuweisung hergestellt,
+
+00:14:09.040 --> 00:14:10.660
+die auf einen vom Kunden gewählten Bereich abzielt,
+
+00:14:10.720 --> 00:14:12.240
+die bei jeder einzelnen Aktion überprüft wird.
+
+00:14:12.880 --> 00:14:13.820
+Der Kunde behält die Schlüssel.
+
+00:14:14.360 --> 00:14:16.460
+Er kann alles über das Aktivitätsprotokoll verfolgen
+
+00:14:16.460 --> 00:14:18.080
+und diesen Zugriff jederzeit abrufen,
+
+00:14:18.180 --> 00:14:20.160
+ohne dass zusätzliche Kosten für die Nutzung anfallen.
+
+00:14:20.720 --> 00:14:22.080
+Der wahre Wert liegt hier in der Kontrolle,
+
+00:14:22.160 --> 00:14:23.100
+die mit dem Zugriff einhergeht.
+
+00:14:23.540 --> 00:14:24.480
+Stellen Sie sich nun diese Frage vor.
+
+00:14:25.020 --> 00:14:26.480
+Stellen Sie sich einen externen Anbieter vor,
+
+00:14:26.540 --> 00:14:28.100
+der genau das richtige Maß an Zugriff erhält,
+
+00:14:28.180 --> 00:14:28.960
+die ganze Zeit überwacht
+
+00:14:28.960 --> 00:14:30.440
+und nach Vertragsende wieder entzogen wird.
+
+00:14:30.820 --> 00:14:31.920
+Wo sonst in Ihrer Arbeit
+
+00:14:31.920 --> 00:14:33.000
+werden Zugriffe einmal gewährt
+
+00:14:33.000 --> 00:14:33.860
+und nie wieder zurückgenommen?
+
+00:14:33.860 --> 00:14:36.480
+Wenn Sie Asher Lighthouse jetzt entdeckt haben,
+
+00:14:36.560 --> 00:14:38.240
+sollten Sie M35 von WestCFM abonnieren.
+
+00:14:38.420 --> 00:14:39.020
+Denn beim nächsten Mal
+
+00:14:39.020 --> 00:14:40.500
+werden wir einen weiteren Teil der Microsoft Cloud
+
+00:14:40.500 --> 00:14:41.500
+auf die gleiche Weise aufschlüsseln.

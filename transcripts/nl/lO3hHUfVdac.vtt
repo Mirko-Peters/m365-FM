@@ -1,0 +1,565 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.660
+De Foundry-catalogus van Microsoft bevat nu meer dan 10.000 AI-modellen.
+
+00:00:03.880 --> 00:00:07.300
+Dat getal is alleen relevant als je een model kunt omzetten in iets dat echt werk verricht.
+
+00:00:07.460 --> 00:00:11.160
+Je denkt misschien dat daarvoor ontwikkelaars moeten worden ingehuurd en servers moeten worden opgezet.
+
+00:00:11.360 --> 00:00:16.100
+Foundry-agent-service is hoe Microsoft je die werkende agents laat bouwen zonder het servergedoe.
+
+00:00:16.480 --> 00:00:22.880
+Welkom bij de M365FM-podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:23.060 --> 00:00:26.080
+Aan het eind weet je wat het is, hoe het werkt en of je het kunt gebruiken.
+
+00:00:26.280 --> 00:00:28.100
+Wat een AI-agent daadwerkelijk is.
+
+00:00:28.100 --> 00:00:31.660
+Begin bij wat je al weet, want dat maakt de rest van dit verhaal makkelijker.
+
+00:00:31.840 --> 00:00:35.180
+Een chatbot wacht op je vraag, geeft je een antwoord en stopt daar direct.
+
+00:00:35.380 --> 00:00:40.800
+Een agent neemt je verzoek aan en blijft werken om iets op te zoeken, een record te wijzigen en je daarna te vertellen wat hij heeft gedaan.
+
+00:00:41.060 --> 00:00:43.620
+Stel je een assistent voor die je reisboekingen voor je regelt.
+
+00:00:43.800 --> 00:00:49.020
+Je zegt dat je volgende maand een reis nodig hebt en de assistent checkt je agenda, vindt een vlucht, boekt deze en stuurt je de details.
+
+00:00:49.260 --> 00:00:52.880
+Een chatbot zou alleen beschrijven hoe je die vlucht boekt, terwijl een agent het daadwerkelijk boekt.
+
+00:00:53.080 --> 00:00:56.840
+Gewone automatisering is weer anders en het is de moeite waard om de twee uit elkaar te houden.
+
+00:00:56.840 --> 00:01:02.180
+Automatisering volgt elke keer een vaste reeks stappen, dus het loopt vast zodra er iets onverwachts gebeurt.
+
+00:01:02.340 --> 00:01:08.960
+Een agent beslist welke stap hij daarna neemt op basis van wat hij onderweg tegenkomt, waardoor hij beter standhoudt als de werkelijkheid complex wordt.
+
+00:01:09.120 --> 00:01:13.860
+Als dat als een klein verschil klinkt, denk dan eens aan hoeveel van je dag verloren gaat aan het uitzoeken van zaken.
+
+00:01:14.060 --> 00:01:17.400
+Iemand vraagt om een update en jij opent drie systemen om antwoord te kunnen geven.
+
+00:01:17.600 --> 00:01:22.060
+Een agent kan dat openen en controleren voor je doen en je vervolgens het antwoord geven terwijl het werk al gedaan is.
+
+00:01:22.060 --> 00:01:28.540
+Elke agent heeft drie eenvoudige onderdelen nodig. Het eerste deel is een model, de AI die je verzoek leest en beslist wat de volgende stap is.
+
+00:01:28.720 --> 00:01:33.200
+Het tweede deel zijn instructies, die fungeren als een functiebeschrijving en de agent vertellen waarvoor hij dient.
+
+00:01:33.380 --> 00:01:38.360
+Het derde deel zijn tools, de manieren waarop de agent kan handelen, zoals zoeken op het web of een record bijwerken.
+
+00:01:38.580 --> 00:01:43.960
+Voeg die drie delen samen en je krijgt iets dat een taak in meerdere stappen kan afwerken in plaats van te stoppen na één antwoord.
+
+00:01:44.180 --> 00:01:48.380
+Dat is het hele idee achter elke agent die je vandaag tegenkomt, hoe groot de naam ook klinkt.
+
+00:01:48.380 --> 00:01:55.060
+Het model, zo blijkt, is het makkelijke gedeelte. Alles eromheen is waar het echte werk zit en op dat idee komen we over een paar minuten terug.
+
+00:01:55.240 --> 00:01:59.300
+Wat Microsoft Foundry Agent Service is. Laten we nu een naam op het product plakken.
+
+00:01:59.560 --> 00:02:04.560
+Microsoft is het platform en de Foundry Agent Service is het onderdeel dat is gebouwd voor het maken en draaien van agents.
+
+00:02:04.780 --> 00:02:11.400
+Het bevindt zich in Azure, wat simpelweg de cloud van Microsoft is, de plek waar bedrijven rekenkracht huren in plaats van zelf machines te kopen en te onderhouden.
+
+00:02:11.400 --> 00:02:18.540
+De naam is ook een kleine aanwijzing. Een gieterij is een plek waar grondstoffen ingaan en eindproducten uitkomen en dat is ongeveer het idee hier.
+
+00:02:18.720 --> 00:02:21.940
+Modellen en tools gaan erin en werkende agents komen er aan de andere kant uit.
+
+00:02:22.120 --> 00:02:24.280
+Het woord dat hier het belangrijkst is, is beheerd.
+
+00:02:24.480 --> 00:02:31.000
+Wanneer iets wordt beheerd, zorgt Microsoft voor de servers, de schaalbaarheid en de updates, zodat jij je tijd aan de agent besteedt in plaats van aan het technische beheer.
+
+00:02:31.140 --> 00:02:35.200
+Je betaalt nog steeds voor wat je gebruikt, maar je hoeft er niet om twee uur s'nachts uit om een machine opnieuw op te starten.
+
+00:02:35.400 --> 00:02:38.720
+Dat ene woord verklaart waarom een beginner in een middag iets werkends kan krijgen.
+
+00:02:38.720 --> 00:02:41.720
+Foundry sluit ook aan op het niveau waar jij je prettig bij voelt.
+
+00:02:41.920 --> 00:02:47.820
+Aan de ene kant bouw je een agent met niets meer dan instellingen en eenvoudige geschreven instructies, wat betekent geen code.
+
+00:02:48.040 --> 00:02:52.560
+Aan de andere kant breng je je eigen code en je eigen framework mee en Foundry draait het voor je.
+
+00:02:52.740 --> 00:02:57.660
+Je kunt bij de eenvoudige kant beginnen en later naar de code kant opschuiven zonder weg te gooien wat je hebt gebouwd.
+
+00:02:57.820 --> 00:03:01.380
+Er zijn drie soorten agents om te kennen en de namen zijn vriendelijker dan ze lijken.
+
+00:03:01.540 --> 00:03:05.940
+Een prompt agent wordt gebouwd op basis van instellingen en instructies en is het snelste startpunt.
+
+00:03:05.940 --> 00:03:10.760
+Een voice agent is gebouwd voor gesproken gesprekken, zodat deze kan antwoorden via een telefoonlijn of in een browser.
+
+00:03:10.980 --> 00:03:16.140
+Een hosted agent is je eigen code, verpakt en uitgevoerd door Foundry, waarbij de servers en de schaalbaarheid voor je worden geregeld.
+
+00:03:16.340 --> 00:03:20.380
+De meeste mensen beginnen met het eerste type en hebben de andere twee nooit nodig, wat volkomen prima is.
+
+00:03:20.580 --> 00:03:26.840
+Onder de drie types brengt Foundry agents modellen en tools samen op één plek met gedeelde toegangscontrole en gedeelde monitoring.
+
+00:03:27.140 --> 00:03:32.860
+In de praktijk betekent dit één plek om in te loggen, één plek om rechten in te stellen en één plek om te zien wat je agents doen.
+
+00:03:32.860 --> 00:03:37.560
+Dat is later van belang wanneer je wilt weten wie een agent mag aanpassen en wat die agent heeft gedaan.
+
+00:03:37.780 --> 00:03:39.720
+Modellen, het brein dat je kunt wisselen.
+
+00:03:39.880 --> 00:03:43.660
+Elke agent draait op een model en het model is het onderdeel dat het denkwerk doet.
+
+00:03:43.900 --> 00:03:49.300
+Zie het als het brein van de agent, want het beslist wat er gezegd of gedaan moet worden, terwijl de tools het handelen afhandelen.
+
+00:03:49.480 --> 00:03:51.800
+De schaal is hier groter dan de meeste mensen verwachten.
+
+00:03:52.040 --> 00:03:58.300
+De Foundry catalogus biedt meer dan 10.000 modellen, gebouwd door Microsoft, OpenAI, Enfripic, Meta en vele anderen.
+
+00:03:58.300 --> 00:04:05.440
+Zo veel opties klinkt misschien overweldigend, maar je hoeft niet lang te zoeken omdat je met een verstandige standaardinstelling begint en later altijd kunt veranderen.
+
+00:04:05.560 --> 00:04:09.220
+Het nuttige voor jou is dat je het model kunt wisselen zonder je agent te herschrijven.
+
+00:04:09.420 --> 00:04:12.200
+Als een goedkoop en snel model de klus klaart, gebruik je die.
+
+00:04:12.360 --> 00:04:17.400
+Als een moeilijkere taak een sterker model vereist, verander je één instelling en blijf de rest precies zoals het was.
+
+00:04:17.620 --> 00:04:21.300
+Die vrijheid is belangrijk omdat je niet vastzit aan een keuze die je op de eerste dag hebt gemaakt.
+
+00:04:21.560 --> 00:04:25.720
+Verschillende taken vragen om verschillende modellen, net zoals verschillende ritten om verschillende voertuigen vragen.
+
+00:04:25.880 --> 00:04:29.660
+Een snel antwoord is een kleine klus, terwijl een lange reeks van zorgvuldige redeneringen een grote is.
+
+00:04:29.840 --> 00:04:32.780
+Het model dat je kiest moet passen bij de zwaarte van de taak die voor ligt.
+
+00:04:32.980 --> 00:04:39.560
+De catalogus omvat ook een breed scala van kleine modellen die bijna niets kosten tot grote modellen die stap voor stap complexe problemen oplossen.
+
+00:04:39.760 --> 00:04:45.780
+Je hoeft dit allemaal niet uit je hoofd te leren, want het punt is simpelweg dat je opties hebt en van gedachten kunt veranderen zonder de agent opnieuw op te bouwen.
+
+00:04:45.940 --> 00:04:49.440
+Je hebt dus een brein dat je kunt verwisselen en dat is op zichzelf al ontzettend nuttig.
+
+00:04:49.440 --> 00:04:54.660
+Het probleem is dat een brein zelf niets kan uitvoeren en dat gat is precies wat het volgende onderdeel opvult.
+
+00:04:54.840 --> 00:04:57.260
+Tools en kennis, hoe agents actie ondernemen.
+
+00:04:57.480 --> 00:05:01.200
+Een model op zichzelf kan alleen praten en praten is niet hetzelfde als doen.
+
+00:05:01.380 --> 00:05:03.780
+Om echt werk te verzetten heeft een agent tools nodig.
+
+00:05:03.980 --> 00:05:06.660
+Een tool is simpelweg een mogelijkheid die de agent mag gebruiken.
+
+00:05:06.840 --> 00:05:09.140
+Als het model het brein is, zijn de tools te handen.
+
+00:05:09.340 --> 00:05:12.200
+Foundry wordt geleverd met ingebouwde tools die je kunt inschakelen.
+
+00:05:12.720 --> 00:05:18.580
+Webzoekopdrachten zoeken dingen op, bestandszoekopdrachten lezen je documenten en een code interpreter voert berekeningen en kleine programma's uit.
+
+00:05:18.580 --> 00:05:22.720
+Geheugen is de vierde en hiermee kan de agent nuttige details onthouden tussen gesprekken door.
+
+00:05:22.920 --> 00:05:26.860
+Deze zijn allemaal direct klaar voor gebruik, zodat je al waarde ervaart voordat je je eigen zaken koppelt.
+
+00:05:27.000 --> 00:05:30.140
+Je bent niet beperkt tot deze opties, want je kunt ook je eigen tools toevoegen.
+
+00:05:30.320 --> 00:05:38.960
+Je kunt een tool verbinden via een functie, een open API definitie of via MCP, een gedeelde standaard waarmee AI tools verbinding maken met andere systemen.
+
+00:05:39.120 --> 00:05:44.800
+De precieze benamingen zijn minder belangrijk dan het idee, je agent kan de systemen bereiken waar je bedrijf al op draait.
+
+00:05:44.800 --> 00:05:53.620
+Kennis is de andere helft van het verhaal. Je kunt een agent laten verwijzen naar je eigen inhoud, zoals bestanden in SharePoint, gegevens in Microsoft Fabric of actuele resultaten van Bing.
+
+00:05:53.820 --> 00:06:00.640
+Wanneer een agent antwoordt op basis van je echte data in plaats van te gokken, noemen we dat grounding en dat is het verschil tussen een zelfverzekerd antwoord en een correct antwoord.
+
+00:06:00.800 --> 00:06:03.820
+Er is nog één ding dat de moeite waard is om te weten en dat heet een toolbox.
+
+00:06:03.820 --> 00:06:11.520
+Met een toolbox verzamel je je tools, stel je ze beschikbaar via één verbinding en hergebruik je ze voor vele agents met gedeelde aanmeldingen en gedeelde instellingen.
+
+00:06:11.700 --> 00:06:15.300
+Zo hoef je niet elke keer dezelfde tool opnieuw te koppelen aan elke nieuwe agent die je bouwt.
+
+00:06:15.420 --> 00:06:18.880
+Om dit concreet te maken, stel je een agent voor die helpt bij het inwerken van een nieuwe werknemer.
+
+00:06:19.100 --> 00:06:26.360
+In één verzoek kan deze de inwerkinstructies uit een kennisbank halen, het account aanmaken, een welkomstmail opstellen en een bericht plaatsen in het teamkanaal.
+
+00:06:26.360 --> 00:06:33.940
+Dat zijn verschillende tools en systemen die samenwerken achter één enkel verzoek en dat is het moment waarop een agent meer wordt dan een speeltje en echt nuttig begint te worden.
+
+00:06:34.180 --> 00:06:36.420
+Nu zie je waarom het model het makkelijke gedeelte was.
+
+00:06:36.660 --> 00:06:43.260
+Het echte werk zit in de tools, de data en de bijbehorende machtigingen en een toolbox is Microsoft's manier om dat werk beheersbaar te maken.
+
+00:06:43.700 --> 00:06:46.080
+Threads, runs, gesprekken en antwoorden.
+
+00:06:46.340 --> 00:06:53.060
+Geheugen is wat een agent minder als een zoekbalk en meer als een collega laat voelen en het draait om een paar termen die voorheen iedereen verwarming arden.
+
+00:06:53.060 --> 00:06:57.380
+Het goede nieuws is dat die termen eenvoudiger worden, dus dit deel is makkelijker dan het klinkt.
+
+00:06:57.480 --> 00:07:00.640
+In de oudere werkwijze werd een gesprekken, thread, genoemd.
+
+00:07:00.760 --> 00:07:04.280
+Een thread bevatte je berichten, wat de interactie was tussen jou en de agent.
+
+00:07:04.480 --> 00:07:09.720
+Elke keer dat de agent een actie ondernam, heette dat een run en je kon die run zien veranderen van wachtend naar werkend naar voltooid.
+
+00:07:09.880 --> 00:07:13.040
+De nieuwe werkwijze behoudt hetzelfde idee, maar gebruikt andere namen.
+
+00:07:13.160 --> 00:07:18.380
+Een gesprek bevat nu de geschiedenis en een antwoord is wat de agent produceert, wat een antwoord of een actie kan zijn.
+
+00:07:18.380 --> 00:07:23.540
+De threads werden gesprekken en runs werden antwoorden en dat is de hele naamswijziging in één zin.
+
+00:07:23.720 --> 00:07:26.340
+De verandering doet meer dan alleen de terminologie opschonen.
+
+00:07:26.520 --> 00:07:32.140
+Een gesprek kan meer opslaan dan alleen berichten, omdat het ook de tools kan bijhouden die de agent heeft aangeroepen en wat die tools terugbrachten.
+
+00:07:32.360 --> 00:07:36.620
+De agent krijgt zo een rijker geheugen van wat er is gebeurd, waardoor hij beter kan oppakken waar je was gebleven.
+
+00:07:36.960 --> 00:07:38.760
+Geschiedenis is om een praktische reden van belang.
+
+00:07:38.980 --> 00:07:44.560
+De meeste nuttige taken vereisen meer dan één bericht en een agent die de eerste helft van een verzoek vergeet, is voor niemand nuttig.
+
+00:07:44.560 --> 00:07:49.860
+Het bijhouden van het gesprek stelt de agent in staat om een gedachtegang over vele beurten heen te volgen, zoals een mens dat zou doen.
+
+00:07:50.020 --> 00:07:52.600
+Je hebt dit gevoeld bij elke goede chatool die je hebt gebruikt.
+
+00:07:52.760 --> 00:07:58.220
+Je stelt een vervolgvraag zonder jezelf te herhalen en de tool begrijpt het omdat deze de eerdere beurten in beeld heeft gehouden.
+
+00:07:58.480 --> 00:08:02.500
+Gesprekken geven een agent datzelfde vermogen en daarom vormen ze de kern van de werking.
+
+00:08:02.660 --> 00:08:09.160
+Een praktische opmerking, aangezien u misschien oudere handleidingen hebt gelezen, de oude opzet met threads en runs wordt vervangen door deze nieuwe.
+
+00:08:09.340 --> 00:08:12.360
+Dus als u vandaag iets leert, leer dan de woordengesprek en reactie.
+
+00:08:12.360 --> 00:08:14.420
+Dat is waar het platform naartoe is gegaan.
+
+00:08:14.560 --> 00:08:21.060
+Hosting en schalen, waar de agent verblijft, een agent moet ergens draaien en die plek moet beschikbaar blijven wanneer mensen er daadwerkelijk gebruik van maken.
+
+00:08:21.300 --> 00:08:24.980
+Dat is wat hosting betekent en het is een van die taken die u liever aan iemand anders overlaat.
+
+00:08:25.140 --> 00:08:27.500
+Voor een prompt agent is hosting nauwelijks een onderwerp.
+
+00:08:27.660 --> 00:08:31.460
+Microsoft regelt dit voor u, dus er hoeft niets te worden geïnstalleerd, gepatcht of opnieuw opgestart.
+
+00:08:31.600 --> 00:08:35.340
+U schrijft de instructies, kiest de tools en de agent is er simpelweg wanneer iemand hem aanroept.
+
+00:08:35.580 --> 00:08:39.140
+Gehoste agents vereisen wat meer uitleg omdat u uw eigen code meebrengt.
+
+00:08:39.140 --> 00:08:46.640
+Foundry voert die code uit in een eigen geïsoleerde omgeving voor elke sessie, wat een nette manier is om te zeggen dat iemands werk gescheiden blijft van dat van anderen.
+
+00:08:46.860 --> 00:08:51.720
+Wanneer meer mensen de agent gebruiken, schaalt hij automatisch op en wanneer er minder gebruikers zijn, schaalt hij weer af.
+
+00:08:51.860 --> 00:08:56.100
+Het gedrag in ruststand is de moeite waard om bij stil te staan, omdat het de vraag over de kosten beantwoordt.
+
+00:08:56.240 --> 00:09:00.160
+Wanneer niemand een agent gebruikt, gaat deze in slaapstand en wordt de status veilig bewaard.
+
+00:09:00.360 --> 00:09:05.960
+Wanneer de volgende persoon arriveert, wordt hij precies waar hij gebleven was weer wakker en u betaalt niet voor de stille uren daartussen.
+
+00:09:05.960 --> 00:09:12.020
+Elke gehoste agent krijgt automatisch een eigen identiteit en adres en dat vormt het begin van het volgende deel van het verhaal.
+
+00:09:12.220 --> 00:09:15.960
+Die identiteit is hoe de agent bewijst wie hij is wanneer hij uw systemen benadert.
+
+00:09:16.180 --> 00:09:19.560
+Nog een detail is de moeite waard om te weten, ook al blijft het voor u onzichtbaar.
+
+00:09:19.780 --> 00:09:26.520
+Gehoste agents draaien in een lange lijst van Azure regio's over de hele wereld, zodat een bedrijf zijn agents vaak dicht bij de data kan houden waar deze al staat.
+
+00:09:26.520 --> 00:09:31.120
+Voor het publiek hier is de korte versie, schalen is een probleem dat het platform al voor u heeft opgelost.
+
+00:09:31.520 --> 00:09:33.440
+Veiligheid, identiteit en evaluatie.
+
+00:09:33.680 --> 00:09:39.420
+Zodra een agent toegang heeft tot uw systemen, draait alles om vertrouwen en dit is waar een beheerd platform zijn waarde bewijst.
+
+00:09:39.600 --> 00:09:40.700
+Begin met identiteit.
+
+00:09:40.900 --> 00:09:45.940
+Elke agent kan zijn eigen aanmeldgegevens krijgen, wat betekent dat hij alleen de zaken aanraakt die u hebt toegestaan en niets anders.
+
+00:09:46.120 --> 00:09:50.580
+U kunt ook zien wat hij heeft gedaan, waardoor een agent verantwoordelijk blijft op een manier die met een gedeeld wachtwoord nooit kan.
+
+00:09:50.900 --> 00:09:52.340
+Guardrails vormen de tweede laag.
+
+00:09:52.500 --> 00:09:55.560
+Dit zijn ingebouwde filters die helpen om onveilige output te blokkeren.
+
+00:09:55.560 --> 00:10:02.160
+Ze verkleinen ook het risico dat iemand de agent misleidt via een prompt, wat de praktijk is van het verstoppen van instructies in tekst die de agent leest.
+
+00:10:02.320 --> 00:10:07.620
+Je kunt een agent ook binnen je eigen privé-netwerk houden, zodat de gegevens niet terechtkomen op plekken die je niet hebt goedgekeurd.
+
+00:10:08.080 --> 00:10:11.360
+Evaluatie is het onderdeel dat mensen verrast, omdat het veel lijkt op testen.
+
+00:10:11.560 --> 00:10:18.560
+Foundry bevat checkers die beoordelen of de agent de taak heeft voltooid, of deze je instructies heeft gevolgd en of de juiste tools zijn gebruikt.
+
+00:10:18.720 --> 00:10:23.540
+Je kunt ze zien als unit tests voor een agent, die worden uitgevoerd voordat echte mensen ervan afhankelijk zijn.
+
+00:10:23.540 --> 00:10:28.860
+Observability is het laatste onderdeel, wat simpelweg betekent dat je elke stap die de agent heeft gezet kunt volgen.
+
+00:10:29.080 --> 00:10:33.260
+Wanneer er iets misgaat, volg je het spoor in plaats van te gissen, en zo groeit het vertrouwen in de loop van de tijd.
+
+00:10:33.500 --> 00:10:35.880
+Dit betekent niet dat je je eigen oordeel kunt uitschakelen.
+
+00:10:36.060 --> 00:10:41.360
+Een beheerd platform geeft je de controle, maar jij beslist nog steeds wat een agent mag doen en in hoeverre deze wordt vertrouwd.
+
+00:10:41.360 --> 00:10:48.560
+De verstandige aanpak is om te beginnen met een kleine taak met een laag risico, te kijken hoe de agent zich gedraagt en het bereik pas te vergroten naarmate je vertrouwen groeit.
+
+00:10:48.740 --> 00:10:55.500
+Wanneer een agent klaar is, kun je deze publiceren in Microsoft Teams en Microsoft 365 Copilot, zodat mensen er gebruik van maken in de tools die ze al dagelijks gebruiken.
+
+00:10:55.700 --> 00:10:59.400
+Dat is wat een slim experiment onderscheidt van iets waar je team daadwerkelijk op vertrouwt.
+
+00:10:59.500 --> 00:11:01.240
+Hoe dit zich verhoudt tot Copilot Studio.
+
+00:11:01.240 --> 00:11:07.240
+Inmiddels reist er een terechte vraag, omdat Microsoft meer dan één manier heeft om een agent te bouwen en de namen door elkaar gaan lopen.
+
+00:11:07.500 --> 00:11:08.620
+Laten we dat ophelderen.
+
+00:11:08.740 --> 00:11:10.680
+Copilot Studio is de low-code ingang.
+
+00:11:10.880 --> 00:11:18.160
+Het is gebouwd voor zakelijke gebruikers en makers, en het maakt snel verbinding met de Microsoft 365 tools en power platform connectors die je bedrijf al bezit.
+
+00:11:18.320 --> 00:11:21.020
+Voor veel teams is dit de snelste weg naar een werkende agent.
+
+00:11:21.020 --> 00:11:24.920
+Als je doel een behulpzame assistent in Teams is, is dit meestal waar je begint.
+
+00:11:25.140 --> 00:11:26.660
+Foundry is de pro-code ingang.
+
+00:11:26.660 --> 00:11:32.000
+Het geeft je controle over het model, je eigen gegevens en complexe opstellingen waarbij meerdere agents samenwerken.
+
+00:11:32.200 --> 00:11:36.960
+Wanneer een taak aangepaste logica, een specifiek model of serieuze schaalbaarheid vereist, is dit de ingang die je kiest.
+
+00:11:37.180 --> 00:11:39.620
+Dit zijn twee deuren naar hetzelfde huis, geen rivalen.
+
+00:11:39.800 --> 00:11:44.180
+Veel teams beginnen in Copilot Studio voor een snel resultaat en schakelen over naar Foundry wanneer de eisen groeien.
+
+00:11:44.340 --> 00:11:48.340
+De twee kunnen zelfs naast elkaar werken, waarbij de een het gesprek voert en de ander het zware werk verricht.
+
+00:11:48.340 --> 00:11:50.380
+Ze delen ook hetzelfde governance verhaal.
+
+00:11:50.560 --> 00:11:53.600
+Beiden vallen onder dezelfde Microsoft identiteits- en gegevensbeveiliging,
+
+00:11:53.600 --> 00:11:56.980
+zodat je security team op één manier toezicht houdt op agents in plaats van op twee.
+
+00:11:57.180 --> 00:11:59.380
+Ze bevinden zich zelfs op hetzelfde onderliggende platform,
+
+00:11:59.620 --> 00:12:02.520
+waardoor de vaardigheden die je in het een leert, direct toepasbaar zijn op het andere.
+
+00:12:02.720 --> 00:12:06.900
+De praktische lee is simpel, begin klein en schaal pas op wanneer dat echt nodig is.
+
+00:12:07.300 --> 00:12:09.160
+Wat mensen er daadwerkelijk mee bouwen.
+
+00:12:09.340 --> 00:12:14.320
+Het helpt om te zien hoe dit er binnen een echt bedrijf uitziet, omdat een aantal patronen steeds weer terugkomt.
+
+00:12:14.660 --> 00:12:16.040
+Klantenservice is er een die direct opvalt.
+
+00:12:16.180 --> 00:12:21.480
+Een agent maakt verbinding met het CRM-systeem waarin klantgegevens staan en beantwoord veel voorkomende vragen in realtime.
+
+00:12:21.480 --> 00:12:24.540
+Routine-clussen zijn een ander voorbeeld, waarbij een agent vergaderingen plant,
+
+00:12:24.720 --> 00:12:27.980
+herinneringen verstuurt en rapporten genereert, zodat mensen dit niet meer handmatig hoeven te doen.
+
+00:12:28.180 --> 00:12:33.140
+Dan is er nog de meer subtiele winst, waarbij een agent actuele gegevens leest en met een inzicht of aanbeveling komt.
+
+00:12:33.340 --> 00:12:35.900
+Echte voorbeelden zijn makkelijker voor te stellen dan categorieën.
+
+00:12:36.080 --> 00:12:41.480
+BMW gebruikt multi-agent AI, waardoor ingenieurs direct inzichten uit voertuigmeetgegevens krijgen waar ze meteen op kunnen handelen.
+
+00:12:41.860 --> 00:12:45.640
+KPMG werkt in een gereguleerde sector en vertrouwt op het bestuur en de waarneembaarheid van het platform,
+
+00:12:45.840 --> 00:12:47.520
+zodat hun agents verantwoording kunnen afleggen.
+
+00:12:47.520 --> 00:12:51.920
+Dezelfde patronen komen in alle sectoren voor, van een bank die routine vragen over rekeningen afhandeld
+
+00:12:51.920 --> 00:12:54.240
+tot een fabrikant die inzichten haalt uit machinegegevens.
+
+00:12:54.440 --> 00:12:57.280
+De details veranderen, maar de vorm van het werk blijft hetzelfde.
+
+00:12:57.480 --> 00:13:00.740
+Dan is er nog de geldkwestie en het antwoord is vriendelijker dan je misschien zou verwachten.
+
+00:13:01.000 --> 00:13:05.540
+Microsoft rekent geen extra kosten voor het maken of draaien van Foundry Native Agents met prompts en workflows.
+
+00:13:05.540 --> 00:13:09.300
+Je betaalt voor het modelgebruik erachter en voor de tools en data die je koppelt,
+
+00:13:09.500 --> 00:13:12.880
+wat betekent dat de kosten gelijk zijn aan het werk dat de agent daadwerkelijk doet.
+
+00:13:12.880 --> 00:13:16.980
+Een samenvatting en één vraag voor jou. Laten we dit kort samenvatten.
+
+00:13:17.160 --> 00:13:23.620
+Een agent is een model plus instructies plus tools en kan een taak in meerdere stappen uitvoeren in plaats van te stoppen bij één antwoord.
+
+00:13:23.860 --> 00:13:27.720
+Microsoft Foundry Agentservice is het platform dat de zaken rondom het model regelt,
+
+00:13:27.940 --> 00:13:32.220
+waaronder de tools, het geheugen, de identiteit, de hosting en het controleren van het werk.
+
+00:13:32.220 --> 00:13:35.660
+Je kunt beginnen zonder code en overstappen op code wanneer je er klaar voor bent.
+
+00:13:35.820 --> 00:13:40.940
+Copilot Studio is de low-code ingang en Foundry is de pro-code ingang en beide leiden naar hetzelfde huis.
+
+00:13:40.940 --> 00:13:48.000
+Dit is wat je moet onthouden. Het AI-brein was nooit het lastige deel, want alles eromheen was dat wel en dat is precies wat het platform voor je uit handen neemt.
+
+00:13:48.120 --> 00:13:50.900
+Dus hier is mijn vraag aan jou en ik hoor heel graag je antwoord.
+
+00:13:51.080 --> 00:13:56.980
+Als je morgen één taak aan een agent zou kunnen overdragen, wat zou je dan als eerste uit handen geven en wat zou je juist liever zelf willen blijven doen?
+
+00:13:56.980 --> 00:14:07.120
+Als die vraag je aan het denken heeft gezet, laat je antwoord dan achter in de reacties en abonneer je op de M365FM podcast voor meer eenvoudig uitgeverijenlegde afleveringen die deze wereld een stuk minder intimiderend maken.

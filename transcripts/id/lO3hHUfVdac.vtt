@@ -1,0 +1,961 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:03.340
+Katalog Foundry Microsoft kini menampung lebih dari 10.000 model AI.
+
+00:00:03.880 --> 00:00:07.460
+Jumlah itu hanya berarti jika Anda bisa mengubah model menjadi sesuatu yang benar-benar bekerja.
+
+00:00:07.500 --> 00:00:10.160
+Anda mungkin berasumsi bahwa itu berarti menekrut pengembang dan menyiapkan server.
+
+00:00:10.800 --> 00:00:15.680
+Foundry Agent Service adalah cara Microsoft agar Anda dapat membangun agen yang berfungsi tanpa pusing memikirkan server.
+
+00:00:17.140 --> 00:00:22.440
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan kerja.
+
+00:00:22.820 --> 00:00:25.540
+Di akhir nanti Anda akan tahu apa itu cara kerjanya dan apakah Anda bisa menggunakan.
+
+00:00:26.360 --> 00:00:27.700
+Apa sebenarnya agen AI itu?
+
+00:00:28.340 --> 00:00:31.320
+Mulai dari hal yang sudah Anda ketahui karena itu membuat sisanya lebih mudah.
+
+00:00:31.760 --> 00:00:35.180
+Chatbot menunggu pertanyaan Anda, memberi jawaban, lalu berhenti tepat di situ.
+
+00:00:35.320 --> 00:00:40.740
+Agen menerima permintaan Anda dan terus bekerja agar ia dapat mencari sesuatu mengubah catatan lalu memberitahu apa yang dilakukannya.
+
+00:00:41.040 --> 00:00:43.360
+Bayangkan seorang asisten yang menangani pemesanan perjalanan Anda.
+
+00:00:43.800 --> 00:00:48.840
+Anda mengatakan butuh perjalanan bulan depan dan asisten itu memeriksa kalender mencari penerbangan, pemesannya dan mengirim di tanya.
+
+00:00:49.380 --> 00:00:52.560
+Chatbot hanya akan menjelaskan cara memesan penerbangan itu sementara agen akan langsung mesai.
+
+00:00:53.100 --> 00:00:56.200
+Otomatisasi biasa tentu berbeda dan ada baiknya membedakan keduanya.
+
+00:00:56.200 --> 00:01:01.720
+Otomatisasi mengikuti serangkaian langkah tetap setiap saat, jadi ia akan rusak saat ada hal tak terduga terjadi.
+
+00:01:02.380 --> 00:01:08.540
+Agen memutuskan langkah selanjutnya, berdasarkan apa yang ia temukan itulah mengapa ia lebih tangguh saat dunia nyata menjadi kacau.
+
+00:01:09.180 --> 00:01:13.680
+Jika ia terdengar seperti perbedaan kecil, pikirkan berapa banyak waktu Anda yang habis untuk mengejar berbagai hal.
+
+00:01:14.160 --> 00:01:17.260
+Seseorang meminta pembaruan dan Anda harus membuka tiga sistem untuk menjawabnya.
+
+00:01:17.680 --> 00:01:21.900
+Agen dapat membuka dan meriksa sistem tersebut untuk Anda, lalu memberikan jawaban yang sudah selesai dikerjakan.
+
+00:01:21.900 --> 00:01:23.860
+Setiap agen membutuhkan tiga bagian sederhana.
+
+00:01:24.460 --> 00:01:28.720
+Bagian pertama adalah model, yaitu yang membaca permintaan Anda dan memutuskan apa yang harus dilakukan selanjutnya.
+
+00:01:28.820 --> 00:01:32.780
+Bagian kedua adalah instruksi yang bertindak seperti deskripsi pekerja Anda memberitahu agen apa fungsi.
+
+00:01:33.200 --> 00:01:37.900
+Bagian ketiga adalah alat, yaitu cara agen bertindak seperti mencari di web atau memperbarui catatan.
+
+00:01:38.380 --> 00:01:43.900
+Gabungkan ketiga bagian itu dan Anda mendapatkan sesuatu yang bisa menyelesaikan tugas dalam beberapa langkah alih-alih berhenti pada satu balasan.
+
+00:01:43.900 --> 00:01:48.300
+Itulah gagasan utama dibalik setiap agen yang akan Anda temui hari ini tidak peduli seberapa besar namanya.
+
+00:01:48.740 --> 00:01:50.080
+Ternyata model adalah bagian yang mudah.
+
+00:01:50.620 --> 00:01:52.600
+Gual di sekitarnya adalah tempat pekerjaan sebenarnya yang berada.
+
+00:01:53.020 --> 00:01:54.760
+Dan gagasan itu akan kembali dibahas dalam beberapa.
+
+00:01:55.260 --> 00:01:57.020
+Apa itu Microsoft Foundry Agent Service?
+
+00:01:57.560 --> 00:01:58.860
+Sekarang mari kita beri nama pada perut tersebut.
+
+00:01:59.340 --> 00:02:04.220
+Microsoft adalah platformnya dan Foundry Agent Service adalah bagian yang dibangun untuk membuat serta menjalankan agen.
+
+00:02:04.540 --> 00:02:10.980
+Layanan ini berada di Azure, yaitu Cloud Microsoft, tempat perusahaan menyewa daya komputasi alih-alih membeli dan memelihara mesin mereka sendiri.
+
+00:02:11.580 --> 00:02:12.760
+Namanya juga merupakan petunjuk kecil.
+
+00:02:12.760 --> 00:02:16.820
+Foundry adalah tempat di mana bahan mentah masuk dan barang jadi keluar.
+
+00:02:17.300 --> 00:02:18.540
+Dan kira-kira itulah konsepnya di sini.
+
+00:02:19.040 --> 00:02:21.620
+Model dan alat masuk, lalu agen yang berfungsi keluar dari sisi lainnya.
+
+00:02:22.280 --> 00:02:23.500
+Kata yang paling penting di sini adalah terkelola.
+
+00:02:24.100 --> 00:02:27.660
+Saat sesuatu terkelola, Microsoft yang mengurus server, penskalaan, dan pembaruannya,
+
+00:02:27.880 --> 00:02:31.020
+sehingga Anda menghabiskan waktu pada agen, bukan pada infrastrukturnya.
+
+00:02:31.020 --> 00:02:34.880
+Anda tetap membayar apa yang Anda gunakan, tetapi Anda tidak perlu begadang jam 2 pagi untuk menangas.
+
+00:02:35.060 --> 00:02:38.820
+Satu kata itu menjelaskan mengapa seorang pemula bisa membuat sesuatu berfungsi hanya dalam satu sol.
+
+00:02:38.960 --> 00:02:41.200
+Foundry juga menyesuaikan diri dengan tingkat kenyamanan Anda.
+
+00:02:41.200 --> 00:02:45.680
+Di satu sisi, Anda membangun agen hanya dengan pengaturan instruksi tertulis sederhana,
+
+00:02:46.000 --> 00:02:47.340
+yang berarti sama sekali tanpa koding.
+
+00:02:48.080 --> 00:02:52.180
+Di sisi lain, Anda membawa kode dan framework Anda sendiri, lalu Foundry menjalankannya untuk Anda.
+
+00:02:52.780 --> 00:02:57.240
+Anda bisa memulai dari yang sederhana, dan beralih ke sisi koding nanti tanpa harus membuang apa yang sudah Anda buat.
+
+00:02:57.580 --> 00:03:01.100
+Ada tiga jenis agen yang perlu diketahui, dan namanya lebih ramah daripada kelihatan.
+
+00:03:01.600 --> 00:03:05.460
+From Agent dibangun dari pengaturan dan instruksi, dan ini adalah tempat tercepat untuk memulai.
+
+00:03:06.260 --> 00:03:10.560
+Voice Agent dibangun untuk percakapan lisan, sehingga bisa menjawab melalui saluran telepon atau diperam.
+
+00:03:10.560 --> 00:03:15.880
+Hosted Agent adalah kode Anda sendiri yang dikemas dan dijalankan oleh Foundry dengan server serta pensekalan yang ditangani untuk Anda.
+
+00:03:16.280 --> 00:03:20.100
+Kebanyakan orang memulai dengan jenis pertama dan tidak pernah membutuhkan dua jenis lainnya, yang mana tidak masalah sama sekali.
+
+00:03:20.640 --> 00:03:26.260
+Di balik ketiganya, Foundry menyatukan agen, model, dan alat di satu tempat dengan kontrol akses dan pemantauan bersama.
+
+00:03:27.120 --> 00:03:32.340
+Dalam prakteknya, itu berarti satu tempat untuk masuk, satu tempat untuk mengatur izin, dan satu tempat untuk mengantau apa yang dilakukan agen Anda.
+
+00:03:32.340 --> 00:03:37.280
+Itu penting nantinya ketika Anda yang tahu siapa saja yang bisa mengakses agen, dan apa yang telah dilakukan agen tersebut.
+
+00:03:38.060 --> 00:03:39.300
+Model, otak yang bisa Anda ganti.
+
+00:03:40.080 --> 00:03:43.260
+Tiap agen berjalan pada sebuah model, dan model adalah bagian yang melakukan pemikiran.
+
+00:03:43.680 --> 00:03:49.180
+Anggaplah itu sebagai otak agen karena ia memutuskan apa yang harus dikatakan atau dilakukan sementara alat-alat menangani tindakannya.
+
+00:03:49.620 --> 00:03:51.500
+Skala yang di sini lebih besar dari yang diperkirakan kebanyakan orang.
+
+00:03:51.500 --> 00:03:58.340
+Katalog Foundry menawarkan lebih dari 10.000 model yang dibuat oleh Microsoft, OpenAI, Antropic, Meta, dan banyak lainnya, dan banyak lainnya.
+
+00:03:58.460 --> 00:04:05.220
+Memiliki begitu banyak pilihan terdengar membebani, tetapi Anda tidak perlu lama mencari karena Anda bisa mulai dengan pilihan standar yang masuk akal dan mengubahnya nanti.
+
+00:04:05.640 --> 00:04:11.420
+Hal yang berguna bagi Anda adalah Anda bisa menukar model tanpa harus menulis ulang agen Anda, jika modelnya murah dan cepat bisa menyelesaikan tugasnya.
+
+00:04:12.220 --> 00:04:17.100
+Jika tugas yang lebih sulit membutuhkan model yang lebih kuat, Anda cukup mengubah satu pengaturan dan membiarkan semuanya tetap sama.
+
+00:04:17.640 --> 00:04:21.140
+Kebebasan itu penting, karena artinya Anda tidak terkunci pada pilihan yang Anda buat sejak awal.
+
+00:04:21.500 --> 00:04:25.820
+Pekerjaan yang berbeda cocok dengan model yang berbeda pula sama seperti keperluan berbeda yang membutuhkan kendaraan yang berbeda.
+
+00:04:25.820 --> 00:04:29.340
+Balasan cepat adalah keperluan kecil sedangkan rangkaian penalaran yang cuman adalah keperluan besar.
+
+00:04:29.840 --> 00:04:32.240
+Model yang Anda pilih harus sesuai dengan bobot tugas yang dihadapinya.
+
+00:04:32.660 --> 00:04:38.940
+Katalognya juga mencakup rentang yang luas, mulai dari model kecil yang hampir tanpa biaya hingga model besar yang menalar masalah rumit langkah demi langkah.
+
+00:04:39.920 --> 00:04:45.620
+Anda tidak perlu menghafal semuanya, karena poinnya hanyalah bahwa Anda memiliki pilihan dan bisa berubah pikiran tanpa harus membangun ulang agen tersebut.
+
+00:04:46.120 --> 00:04:49.040
+Jadi Anda memiliki otak yang bisa ditukar, dan itu sangat berguna dengan sendiri.
+
+00:04:49.040 --> 00:04:53.860
+Masalahnya adalah otak tidak bisa melakukan apapun sendiri, dan celah itulah yang diisi oleh bagian berikutnya.
+
+00:04:54.880 --> 00:04:55.740
+Alat dan pengetahuan
+
+00:04:55.740 --> 00:04:57.100
+Bagaimana agen mengambil tindakan?
+
+00:04:57.660 --> 00:05:00.960
+Model itu sendiri hanya bisa berbicara, dan berbicara tidak sama dengan melakukan.
+
+00:05:01.540 --> 00:05:03.680
+Untuk melakukan pekerjaan nyata, agen membutuhkan alat.
+
+00:05:03.980 --> 00:05:06.340
+Dan alat hanyalah kemampuan yang boleh digunakan oleh agen tersebut.
+
+00:05:06.740 --> 00:05:09.140
+Jika model adalah otaknya, maka alat adalah tangan.
+
+00:05:09.520 --> 00:05:11.460
+Pondri hadir dengan alat bawaan yang bisa Anda aktifkan.
+
+00:05:12.420 --> 00:05:15.480
+Pencarian web mencari informasi, pencarian file membaca dokumen Anda,
+
+00:05:15.600 --> 00:05:18.240
+dan interpreter kode menjalankan perhitungan serta program kecil.
+
+00:05:18.240 --> 00:05:22.520
+Memori adalah yang keempat, dan memungkinkan agen menyimpan data penting di antara percakapan.
+
+00:05:23.080 --> 00:05:26.640
+Semua ini siap digunakan, sehingga Anda mendapatkan nilai nyata sebelum menghubungkan apapun milik Anda sendiri.
+
+00:05:26.920 --> 00:05:29.560
+Anda tidak terbatas pada alat tersebut, karena Anda juga bisa menamakan alat Anda sendiri.
+
+00:05:30.260 --> 00:05:33.620
+Anda bisa menghubungkan alat melalui fungsi, melalui definisi api terbuka,
+
+00:05:33.900 --> 00:05:38.060
+atau melalui MCP, yaitu standar plug bersama yang memungkinkan alat air terhubung ke sistem lain.
+
+00:05:39.060 --> 00:05:41.580
+Label pastinya tidak sepenting idenya, yaitu bahwa
+
+00:05:41.580 --> 00:05:44.480
+agen Anda dapat menjangkau sistem yang sudah dijalankan bisnis Anda.
+
+00:05:45.200 --> 00:05:46.640
+Pengetahuan adalah sebuah bagian lain dari ceritanya.
+
+00:05:46.640 --> 00:05:48.740
+Anda bisa mengarahkan agen ke konten Anda sendiri,
+
+00:05:48.920 --> 00:05:53.000
+seperti file di SharePoint, data di Microsoft Fabric, atau hasil terkini dari pencarian Bing.
+
+00:05:54.080 --> 00:05:57.120
+Saat agen menjawab dari data nyata Anda alih-alih menebak, itu disebut grounding,
+
+00:05:57.320 --> 00:06:00.060
+dan itulah perbedaan antara jawaban yang percaya diri dan jawaban yang benar.
+
+00:06:01.160 --> 00:06:03.100
+Satu bagian lagi yang perlu diketahui, dan itu disebut toolbox.
+
+00:06:03.760 --> 00:06:05.660
+Toolbox memungkinkan Anda mengumpulkan alat,
+
+00:06:06.180 --> 00:06:07.580
+memaparkannya melalui satu koneksi,
+
+00:06:07.960 --> 00:06:11.380
+dan menggunakannya kembali di banyak agen dengan login dan kontrol bersama.
+
+00:06:12.020 --> 00:06:15.060
+Ini menghindarkan Anda dari harus menyambungkan alat yang sama ke setiap agen baru Anda buka.
+
+00:06:15.060 --> 00:06:18.140
+Agar lebih nyata, bayangkan agen yang membantu proses onboarding karyawan baru.
+
+00:06:18.840 --> 00:06:19.760
+Dalam satu permintaan,
+
+00:06:20.020 --> 00:06:22.240
+ia bisa menarik panduan onboarding dari basis pengetahuan,
+
+00:06:22.460 --> 00:06:24.540
+membuat akun, menyusun draft email selamat datang,
+
+00:06:24.680 --> 00:06:25.820
+dan mengirim pesan di kanal tim.
+
+00:06:26.540 --> 00:06:29.720
+Itu adalah beberapa alat dan sistem yang bekerja bersama dibalik satu permintaan,
+
+00:06:30.100 --> 00:06:32.020
+dan di saat itulah agen bukan lagi sekadar hal baru,
+
+00:06:32.160 --> 00:06:33.440
+mainkan menjadi benar-benar berguna.
+
+00:06:34.400 --> 00:06:36.040
+Sekarang Anda mengerti mengapa model hanya mudah.
+
+00:06:36.540 --> 00:06:39.340
+Pekerjaan sesungguhnya ada pada alat, data, dan izin di sekitarnya,
+
+00:06:39.340 --> 00:06:42.340
+dan toolbox adalah cara mengkrosok untuk membuat pekerjaan itu tetap terkelola.
+
+00:06:42.340 --> 00:06:45.720
+Trait, run, percakapan, dan respons.
+
+00:06:46.340 --> 00:06:49.060
+Memori adalah hal yang membuat agen terasa seperti rekan kerja,
+
+00:06:49.200 --> 00:06:50.260
+bukan sekadar kotak pencarian,
+
+00:06:50.400 --> 00:06:52.860
+dan ini bergantung pada beberapa istilah yang dulu membingungkan semua orang.
+
+00:06:53.420 --> 00:06:55.520
+Kabar baiknya adalah istilah-istilah tersebut menjadi lebih sederhana,
+
+00:06:55.640 --> 00:06:56.780
+jadi bagian ini lebih mudah kedengaran.
+
+00:06:57.780 --> 00:07:00.000
+Dalam cara lama, sebuah percakapan disebut sebagai threat.
+
+00:07:00.700 --> 00:07:02.040
+Sebuah threat menyimpan pesan Anda,
+
+00:07:02.220 --> 00:07:04.180
+yaitu komunikasi bolak-balik antara Anda dan agen.
+
+00:07:04.580 --> 00:07:05.880
+Setiap kali agen mengambil giliran,
+
+00:07:05.880 --> 00:07:06.600
+itu disebut run,
+
+00:07:06.960 --> 00:07:09.660
+dan Anda bisa melihat status run berubah dari menunggu ke bekerja lusas.
+
+00:07:09.660 --> 00:07:11.740
+Cara yang lebih baru tetap mempertahankan ide yang sama,
+
+00:07:11.900 --> 00:07:12.480
+namun mengubah nama.
+
+00:07:12.780 --> 00:07:14.060
+Percakapan kini menyimpan riwayat,
+
+00:07:14.460 --> 00:07:16.180
+dan respons adalah apa yang dihasilkan agen,
+
+00:07:16.480 --> 00:07:17.820
+yang bisa berupa jawaban atau tindak.
+
+00:07:18.360 --> 00:07:19.980
+Jadi threat menjadi percakapan dan run,
+
+00:07:20.160 --> 00:07:20.900
+menjadi respons,
+
+00:07:21.000 --> 00:07:23.660
+dan itulah seluruh perubahan nama dalam satu baris.
+
+00:07:24.220 --> 00:07:25.680
+Perubahan ini lebih dari sekadar menapikan istilah.
+
+00:07:26.340 --> 00:07:28.500
+Sebuah percakapan dapat menyimpan lebih dari sekadar pesan,
+
+00:07:28.600 --> 00:07:30.320
+karena juga dapat melacak alat yang dipanggil agen,
+
+00:07:30.420 --> 00:07:31.880
+serta hasil dari alat tersebut.
+
+00:07:32.140 --> 00:07:34.680
+Agen berakhir dengan memori yang lebih kaya tentang apa yang terjadi,
+
+00:07:34.800 --> 00:07:36.560
+yang membuatnya lebih baik dalam melanjutkan dari titik-titik.
+
+00:07:36.700 --> 00:07:38.140
+Riwayat penting karena alasan praktis.
+
+00:07:38.140 --> 00:07:41.140
+Sebagian besar tugas berguna membutuhkan lebih dari satu pesan,
+
+00:07:41.260 --> 00:07:43.180
+dan agen yang melupakan bagian pertama dari permintaan
+
+00:07:43.180 --> 00:07:44.400
+tidak akan berguna bagi siapapun.
+
+00:07:44.800 --> 00:07:47.440
+Menjaga percakapan memungkinkan agen mengikuti aluk mikiran
+
+00:07:47.440 --> 00:07:48.380
+melalui banyak giliran,
+
+00:07:48.540 --> 00:07:49.620
+seperti yang dilakukan manusia.
+
+00:07:50.220 --> 00:07:51.540
+Anda pasti merasakannya disipulkan digunakan.
+
+00:07:52.100 --> 00:07:54.020
+Anda mengajukan pertanyaan tindak lanjut
+
+00:07:54.020 --> 00:07:55.360
+tanpa perlu mengulang diri sendiri,
+
+00:07:55.480 --> 00:07:58.060
+dan alat tersebut mengerti karena ia tetap melihat giliran sebelumnya.
+
+00:07:58.400 --> 00:08:00.280
+Percakapan memberikan kemampuan yang sama kepada agen,
+
+00:08:00.420 --> 00:08:02.260
+itulah sebabnya percakapan menjadi pusat dari cara kerja.
+
+00:08:03.020 --> 00:08:03.880
+Satu catatan praktis,
+
+00:08:03.880 --> 00:08:05.420
+karena Anda mungkin pernah membaca panduan lama,
+
+00:08:05.420 --> 00:08:08.680
+pengaturan threads dan runs yang lama kini digantikan oleh yang lebih baru ini.
+
+00:08:09.320 --> 00:08:10.420
+Jadi, jika Anda belajar hari ini,
+
+00:08:10.520 --> 00:08:12.000
+pelajarilah istilah percakapan dan respons.
+
+00:08:12.640 --> 00:08:13.780
+Kesitulah platform ini telah berhali.
+
+00:08:14.500 --> 00:08:16.220
+Hosting dan penskalaan tempat agen berada,
+
+00:08:16.800 --> 00:08:18.180
+agen harus berjalan di suatu tempat,
+
+00:08:18.300 --> 00:08:20.660
+dan tempat itu harus tetap tersedia saat orang menggunakannya.
+
+00:08:21.380 --> 00:08:22.100
+Itulah arti hosting,
+
+00:08:22.180 --> 00:08:24.680
+dan itu adalah salah satu pekerjaan yang lebih baik Anda serahkan kepada orang lain.
+
+00:08:25.280 --> 00:08:27.240
+Untuk agen prom hosting yang berbuka topik yang perlu diubah.
+
+00:08:27.600 --> 00:08:28.840
+Microsoft menjalankannya untuk Anda,
+
+00:08:29.000 --> 00:08:31.220
+jadi tidak ada yang perlu diinstal, diperbarui, atau dimulai ulang.
+
+00:08:31.220 --> 00:08:33.000
+Anda menulis instruksi, memilih alat,
+
+00:08:33.000 --> 00:08:34.800
+dan agen akan langsung tersedia seseorang memanggil.
+
+00:08:35.240 --> 00:08:37.280
+Agen yang dihosting memerlukan penjelasan lebih lanjut,
+
+00:08:37.380 --> 00:08:38.560
+karena Anda membawa kode Anda sendiri.
+
+00:08:39.320 --> 00:08:42.160
+Fondry menjalankan kode tersebut di ruang terisolasi untuk setiap sesi.
+
+00:08:42.860 --> 00:08:46.220
+Cara yang rapi untuk mengatakan bahwa pekerjaan satu orang tetap terpisah dari yang lain.
+
+00:08:47.140 --> 00:08:48.380
+Saat lebih banyak orang menggunakan agen,
+
+00:08:48.520 --> 00:08:49.840
+sistem akan berskala naik secara otomatis,
+
+00:08:49.920 --> 00:08:51.620
+dan saat berkurang, sistem akan berskala turun kembali.
+
+00:08:52.080 --> 00:08:55.180
+Perilaku saat tidak aktif perlu diperhatikan karena menjawab pertanyaan tentang biaya.
+
+00:08:56.300 --> 00:08:57.420
+Saat tidak ada yang menggunakan agen,
+
+00:08:57.420 --> 00:08:59.600
+agen akan tertidur dan statusnya tetap tersimpan dengan aman.
+
+00:09:00.160 --> 00:09:01.160
+Saat orang berikutnya datang,
+
+00:09:01.160 --> 00:09:02.940
+agen bangun tepat di posisi terakhirnya,
+
+00:09:03.420 --> 00:09:05.660
+dan Anda tidak membayar untuk waktu tenang di antaranya.
+
+00:09:06.240 --> 00:09:09.780
+Setiap agen yang dihosting juga mendapatkan identitas dan alamatnya sendiri secara otomatis
+
+00:09:09.780 --> 00:09:11.840
+yang menjadi persiapan untuk bagian cerita berikutnya.
+
+00:09:12.180 --> 00:09:15.340
+Identitas itu adalah cara agen membuktikan siapa dirinya saat mengakses sistem Anda.
+
+00:09:16.300 --> 00:09:17.580
+Satu detail lagi yang perlu diketahui,
+
+00:09:17.820 --> 00:09:19.060
+meskipun tetap tidak terlihat oleh Anda.
+
+00:09:19.900 --> 00:09:23.060
+Agen yang dihosting berjalan di daftar panjang wilayah Azure di seluruh dunia,
+
+00:09:23.060 --> 00:09:26.000
+sehingga perusahaan dapat menjaga agen tetap dekat dengan tempat data mereka berada.
+
+00:09:26.800 --> 00:09:28.400
+Bagi audiens di sini, versi singkatnya adalah
+
+00:09:28.400 --> 00:09:30.720
+penskalan adalah masalah yang telah selesaikan oleh Platformlook.
+
+00:09:31.600 --> 00:09:33.000
+Keamanan, Identitas, dan Evaluasi
+
+00:09:33.000 --> 00:09:35.180
+Begitu agen dapat mengakses sistem Anda,
+
+00:09:35.420 --> 00:09:36.520
+kepercayaan menjadi segalanya,
+
+00:09:36.860 --> 00:09:38.860
+dan disinilah platform terkelola menunjukkan nilainya.
+
+00:09:39.640 --> 00:09:40.460
+Mulailah dengan identitas.
+
+00:09:41.000 --> 00:09:42.640
+Setiap agen bisa mendapatkan loginnya sendiri,
+
+00:09:42.780 --> 00:09:45.600
+artinya agen hanya menyentuh hal-hal yang telah Anda izinkan dan tidak yang lain.
+
+00:09:46.100 --> 00:09:47.700
+Anda juga dapat melihat apa yang dilakukannya,
+
+00:09:47.820 --> 00:09:50.500
+sehingga agen tetap akuntabel dengan cara yang tidak mungkin dilakukan oleh kata sandi bersama.
+
+00:09:50.500 --> 00:09:52.060
+Agar pengaman adalah lapisan kedua.
+
+00:09:52.400 --> 00:09:54.900
+Ini adalah filter bawaan yang membantu memblokir output yang tidak aman.
+
+00:09:55.320 --> 00:09:58.140
+Hal ini juga mengurangi risiko seseorang menipu agen melalui perintah,
+
+00:09:58.140 --> 00:10:01.680
+yaitu praktek menyisipkan instruksi tersembunyi ke dalam sesuatu yang dibaca agen.
+
+00:10:02.640 --> 00:10:05.140
+Anda juga dapat menjaga agen di dalam jaringan pribadi Anda sendiri,
+
+00:10:05.260 --> 00:10:07.300
+sehingga datanya tidak berpindah ke tempat yang tidak Anda setuju.
+
+00:10:07.620 --> 00:10:09.340
+Evaluasi adalah bagian yang mengejutkan orang,
+
+00:10:09.500 --> 00:10:11.040
+karena cara kerjanya sangat mirip dengan pengujian.
+
+00:10:11.400 --> 00:10:14.600
+Foundry menyertakan pemeriksa yang menilai apakah agen menyelesaikan tugas,
+
+00:10:14.860 --> 00:10:16.140
+apakah ia mengikuti instruksi Anda,
+
+00:10:16.140 --> 00:10:18.180
+dan apakah ia menggunakan alat yang tepat.
+
+00:10:19.020 --> 00:10:21.300
+Anda bisa menganggapnya sebagai pengujian unit untuk agen
+
+00:10:21.300 --> 00:10:23.140
+yang dijalankan sebelum orang sungguh harus bergantung pada.
+
+00:10:23.140 --> 00:10:25.620
+Observabilitas adalah bagian terakhir,
+
+00:10:26.400 --> 00:10:28.900
+yang berarti Anda dapat melacak setiap langkah yang diambil agen.
+
+00:10:29.280 --> 00:10:31.540
+Saat terjadi kesalahan, Anda mengikuti jejaknya alih-alih menebak,
+
+00:10:31.660 --> 00:10:33.100
+dan begitulah kepercayaan terbangun seiring waktu.
+
+00:10:33.500 --> 00:10:35.220
+Bukan berarti Anda bisa mengabaikan penilaian Anda sendiri.
+
+00:10:35.840 --> 00:10:37.400
+Platform terkelola memberi Anda kendali,
+
+00:10:37.600 --> 00:10:39.700
+namun Anda tetap memutuskan apa yang boleh dilakukan agen,
+
+00:10:39.820 --> 00:10:40.840
+dan sejauh mana ia dipercaya.
+
+00:10:41.480 --> 00:10:44.560
+Pendekatan yang masuk akal adalah memulai dengan tugas kecil berisiko rendah.
+
+00:10:44.760 --> 00:10:48.200
+Perhatikan perilaku agen dan perluas jangkauannya seiring meningkatnya kepercayaan Anda.
+
+00:10:48.800 --> 00:10:51.160
+Saat agen siap, Anda dapat memublikasikannya ke Microsoft Teams
+
+00:10:51.160 --> 00:10:54.100
+dan Microsoft 365 Copilot agar orang-orang dapat menggunakannya
+
+00:10:54.100 --> 00:10:55.420
+di perangkat yang sudah mereka pakai setiap hari.
+
+00:10:55.660 --> 00:10:57.020
+Itulah yang membedakan eksperimen cerdas
+
+00:10:57.020 --> 00:10:58.940
+dengan sesuatu yang benar-benar diandalkan oleh tim Anda.
+
+00:10:59.620 --> 00:11:00.900
+Bagaimana hubungannya dari Copilot Studio?
+
+00:11:01.580 --> 00:11:03.120
+Saat ini pertanyaan yang wajar muncul,
+
+00:11:03.320 --> 00:11:05.640
+karena Microsoft memiliki lebih dari satu cara untuk membangun agen,
+
+00:11:05.780 --> 00:11:06.940
+dan namanya mulai tampak mirip.
+
+00:11:07.780 --> 00:11:08.240
+Mari kita penjelas.
+
+00:11:08.600 --> 00:11:09.880
+Copilot Studio adalah Jalukonelit.
+
+00:11:10.660 --> 00:11:13.180
+Ini dibuat untuk pengguna bisnis dan pembuat aplikasi,
+
+00:11:13.280 --> 00:11:15.420
+serta terhubung dengan cepat ke alat Microsoft 365
+
+00:11:15.420 --> 00:11:17.620
+dan konektor power platform yang sudah dimiliki perusahaan Anda.
+
+00:11:17.620 --> 00:11:20.960
+Bagi banyak tim, ini adalah cara tercepat untuk mendapatkan agen yang berfungsi.
+
+00:11:21.320 --> 00:11:23.620
+Jika tujuan Anda adalah asisten yang membantu di dalam tim,
+
+00:11:23.680 --> 00:11:24.780
+biasanya disinilah Anda memulai.
+
+00:11:25.260 --> 00:11:26.260
+Foundry adalah Jalur Kotelit.
+
+00:11:26.800 --> 00:11:29.180
+Ini memberi Anda kendali atas model data Anda sendiri
+
+00:11:29.180 --> 00:11:31.700
+dan pengaturan rumit di mana beberapa agen bekerja bersama.
+
+00:11:32.300 --> 00:11:35.440
+Saat tugas memerlukan logika khusus, model spesifik, atau skala besar,
+
+00:11:35.800 --> 00:11:36.860
+inilah jalur yang Anda pilih.
+
+00:11:37.180 --> 00:11:39.020
+Keduanya adalah pintu menuju rumah yang sama, bukan pesaing.
+
+00:11:39.680 --> 00:11:41.800
+Banyak tim memulai di Copilot Studio untuk hasil cepat
+
+00:11:41.800 --> 00:11:43.840
+dan beralih ke Foundry ketika persyaratannya meningkat.
+
+00:11:44.380 --> 00:11:45.960
+Keduanya bahkan dapat bekerja berdampingan
+
+00:11:45.960 --> 00:11:48.420
+dengan satu menangani percakapan dan lain-lain yang melakukan pekerjaan berat.
+
+00:11:48.640 --> 00:11:49.940
+Keduanya juga memiliki tata kelola yang sama.
+
+00:11:50.340 --> 00:11:53.000
+Keduanya berada di bawah identitas dan kontrol data Microsoft yang sama,
+
+00:11:53.180 --> 00:11:56.540
+sehingga tim keamanan Anda tetap memiliki satu cara untuk mengawasi agen, bukan dua.
+
+00:11:57.260 --> 00:11:59.040
+Semuanya bahkan berada di platform dasar yang sama.
+
+00:11:59.280 --> 00:12:01.020
+Itulah sebabnya keterampilan Anda pelajari di satu sisi
+
+00:12:01.020 --> 00:12:02.160
+bisa langsung diterapkan di sisi lain.
+
+00:12:02.380 --> 00:12:04.820
+Pelajaran praktisnya sederhana, jadi mulailah dengan ringan
+
+00:12:04.820 --> 00:12:06.720
+dan lakukan peningkatan saat Anda benar-benar membutuhkan.
+
+00:12:07.540 --> 00:12:08.660
+Apa yang sebenarnya dibangun orang lain itu?
+
+00:12:08.960 --> 00:12:12.540
+Akan sangat membantu untuk melihat bagaimana wujudnya di dalam perusahaan nyata
+
+00:12:12.540 --> 00:12:14.180
+karena beberapa pola muncul berulang kali.
+
+00:12:14.440 --> 00:12:15.780
+Dukungan pelanggan adalah yang pertama,
+
+00:12:15.960 --> 00:12:18.300
+di mana agen terhubung ke sistem B menyimpan detail pelanggan Anda,
+
+00:12:18.600 --> 00:12:19.560
+yang dikenal sebagai CRM,
+
+00:12:19.900 --> 00:12:21.500
+dan menangani pertanyaan umum secara langsung.
+
+00:12:21.940 --> 00:12:23.140
+Pekerjaan rutin adalah contoh lain,
+
+00:12:23.240 --> 00:12:24.520
+di mana agen menjadwalkan rapat,
+
+00:12:24.600 --> 00:12:25.920
+mengirim pengingat, dan membuat laporan
+
+00:12:25.920 --> 00:12:27.560
+sehingga orang berhenti mengerjakannya secara manual.
+
+00:12:28.160 --> 00:12:29.540
+Lalu ada pencapaian yang lebih tenang,
+
+00:12:29.680 --> 00:12:31.120
+di mana agen membaca data terkini
+
+00:12:31.120 --> 00:12:32.940
+dan memberikan wawasan atau rekomendasi.
+
+00:12:33.500 --> 00:12:35.360
+Contohnya terlebih mudah dibayangkan daripada kategori.
+
+00:12:35.920 --> 00:12:37.120
+B menggunakan AI multi-agen
+
+00:12:37.120 --> 00:12:38.900
+sehingga para insinyurnya mendapatkan wawasan
+
+00:12:38.900 --> 00:12:40.580
+dari data pengukuran kendaraan yang dapat langsung
+
+00:12:40.580 --> 00:12:41.320
+mereka tindak lanjuti.
+
+00:12:41.740 --> 00:12:43.440
+KPMG bekerja di industri yang diatur ketat
+
+00:12:43.440 --> 00:12:44.720
+dan mereka mengandalkan tata kelola
+
+00:12:44.720 --> 00:12:45.800
+serta observabilitas platform
+
+00:12:45.800 --> 00:12:47.000
+agar agen mereka tetap akuntabel.
+
+00:12:47.640 --> 00:12:49.240
+Pola yang sama muncul di berbagai industri,
+
+00:12:49.620 --> 00:12:51.700
+mulai dari bank yang menangani pertanyaan akun rutin
+
+00:12:51.700 --> 00:12:53.720
+hingga produsen yang menarik wawasan dari data mesin.
+
+00:12:55.360 --> 00:12:56.140
+Detailnya berubah,
+
+00:12:57.460 --> 00:12:58.660
+lalu ada pertanyaan tentang uang
+
+00:12:58.660 --> 00:13:00.440
+dan jawabannya lebih ramah dari yang mungkin Anda kira.
+
+00:13:00.840 --> 00:13:02.300
+Microsoft tidak mengenakan biaya tambahan
+
+00:13:02.300 --> 00:13:04.180
+untuk membuat atau menjalankan agen asli foundry
+
+00:13:04.180 --> 00:13:05.200
+dengan perintah dan alur kerja.
+
+00:13:05.680 --> 00:13:07.560
+Anda membayar untuk pengguna model di belakangnya
+
+00:13:07.560 --> 00:13:09.380
+serta untuk alat dan data yang Anda hubungkan
+
+00:13:09.380 --> 00:13:10.820
+yang berarti biaya mengikuti pekerjaan
+
+00:13:10.820 --> 00:13:12.300
+yang benar-benar dilakukan agen tersebut.
+
+00:13:13.400 --> 00:13:14.680
+Rekap dan satu pertanyaan untuk Anda.
+
+00:13:15.460 --> 00:13:16.380
+Mari kita rangkum ini cepat.
+
+00:13:17.200 --> 00:13:19.220
+Agen adalah model ditambah instruksi dan alat
+
+00:13:19.220 --> 00:13:20.480
+serta dapat menjalankan tugas
+
+00:13:20.480 --> 00:13:21.400
+melalui beberapa langkah
+
+00:13:21.400 --> 00:13:23.220
+alih-alih berhenti pada satu jawaban.
+
+00:13:24.120 --> 00:13:26.000
+Microsoft Foundry Agent Service adalah platform
+
+00:13:26.000 --> 00:13:27.920
+yang menangani bagian-bagian di sekitar model
+
+00:13:27.920 --> 00:13:30.200
+termasuk alat, memori, identitas, hosting,
+
+00:13:30.680 --> 00:13:32.000
+dan pemeriksaan pekerjaan.
+
+00:13:32.720 --> 00:13:33.900
+Anda bisa memulai tanpa kode
+
+00:13:33.900 --> 00:13:35.100
+dan beralih ke kode seharian asli.
+
+00:13:35.100 --> 00:13:37.440
+Copelo Studio adalah pintu untuk kode rendah
+
+00:13:37.440 --> 00:13:38.620
+low-code dan Foundry adalah pintu
+
+00:13:38.620 --> 00:13:39.600
+untuk kode profesional low-code
+
+00:13:39.600 --> 00:13:40.680
+dan keduanya mengarah ke rumah yang sama.
+
+00:13:40.900 --> 00:13:42.100
+Hal yang patut dibawa pulang adalah ini.
+
+00:13:42.740 --> 00:13:44.060
+Otak air bukanlah bagian yang sulit
+
+00:13:44.060 --> 00:13:45.680
+karena segala sesuatu di sekitarnya yang sulit
+
+00:13:45.680 --> 00:13:46.980
+dan itulah yang sebenarnya diambil alih
+
+00:13:46.980 --> 00:13:47.960
+oleh platform ini dari bulan.
+
+00:13:48.180 --> 00:13:49.420
+Jadi inilah pertanyaan saya untuk Anda
+
+00:13:49.420 --> 00:13:50.540
+dan saya ingin sekali mendengar jawaban.
+
+00:13:51.000 --> 00:13:52.360
+Jika Anda bisa menyerahkan satu tugas
+
+00:13:52.360 --> 00:13:53.380
+kepada agen besok,
+
+00:13:53.480 --> 00:13:54.780
+apa yang akan Anda serahkan terlebih dahulu
+
+00:13:54.780 --> 00:13:55.840
+dan apa yang ingin Anda biarkan
+
+00:13:55.840 --> 00:13:56.540
+tetap Anda kerjakan?
+
+00:13:56.980 --> 00:13:58.820
+Jika pertanyaan itu membuat Anda berpikir,
+
+00:13:58.980 --> 00:14:00.620
+tuliskan jawaban Anda di kolom komentar
+
+00:14:00.620 --> 00:14:03.020
+dan berlangganan senior M365FM
+
+00:14:03.020 --> 00:14:04.980
+untuk episode-episode yang dijelaskan secara sederhana
+
+00:14:04.980 --> 00:14:06.600
+agar dunia ini tidak terlalu mengintimidasi.
